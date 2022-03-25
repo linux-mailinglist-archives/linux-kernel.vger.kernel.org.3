@@ -2,157 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4136B4E7480
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 14:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3DE4E748B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 14:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358600AbiCYNv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 09:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
+        id S1358639AbiCYN4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 09:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358499AbiCYNv1 (ORCPT
+        with ESMTP id S1358413AbiCYN4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 09:51:27 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97F1D0824;
-        Fri, 25 Mar 2022 06:49:52 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22PCwOrf012056;
-        Fri, 25 Mar 2022 13:49:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=SWB1fRPssbUSIoi+2GNNbJc4k5vldoJwJL0bBzN0E6U=;
- b=oZT6+piEVH9PDdlam8zzBQ7B7z4YqQg/n4GjO+hHUKnEMADLi+F/OSA/sbrEOyK/IKLg
- w+u7nJN7Hgj4B8VTMvhEkHC1aYPlCumZ1VrbGG9sTyAvxXM3g3E5tXvnR7Kr2Jvl331S
- JtNYDrHHk1CRYM7KfjQBzRFUDBlAst8+43JILgpOFmEOIYRD86c/vTdR2wiHnJhxboFs
- R3iJAoCYPl7OIW5SBUYMW0veer4iJ7/BTG2khTq8CNco7BmGHwvhYdqDvS/VXcn5d/Zg
- 7V4cPpFe6NZYndUKC0nXXr0rtgIRMYSleki/EvSz3mD5LcDXyn0Lvrfc5B62r71s5UlX QA== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f0sd4jvsr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Mar 2022 13:49:49 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22PDmS7K010791;
-        Fri, 25 Mar 2022 13:49:48 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma04dal.us.ibm.com with ESMTP id 3ew6tapqg4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Mar 2022 13:49:48 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22PDnkS134603268
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Mar 2022 13:49:47 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D166BAE06D;
-        Fri, 25 Mar 2022 13:49:46 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A3EA7AE062;
-        Fri, 25 Mar 2022 13:49:46 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 25 Mar 2022 13:49:46 +0000 (GMT)
-Message-ID: <dc791477-27cb-63c1-c9ee-11d7b1274c6c@linux.ibm.com>
-Date:   Fri, 25 Mar 2022 09:49:46 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v6 4/5] ima: support fs-verity file digest based version 3
- signatures
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220318182151.100847-1-zohar@linux.ibm.com>
- <20220318182151.100847-5-zohar@linux.ibm.com>
- <d79baf40-6bb7-d4f4-666d-91e1ad20be74@linux.ibm.com>
- <9bda9c8a9f161763f420bf8e7bd639fe0d7e1691.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <9bda9c8a9f161763f420bf8e7bd639fe0d7e1691.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: oasaLqmPZ2GsW3SElYDM0F7BGaZe7-sS
-X-Proofpoint-ORIG-GUID: oasaLqmPZ2GsW3SElYDM0F7BGaZe7-sS
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 25 Mar 2022 09:56:51 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0622D0802;
+        Fri, 25 Mar 2022 06:55:16 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 8F99E1F462D8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648216515;
+        bh=cqBWFRODBQioJaru9o4N5RpABHoeodsNoNfLh0sHduc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=S0abQe6xeVDmFRXZ3pzo7HAitzO23HAj9Vl0jicSCiBqMmrcNoc1MVRLrrEbXs3sH
+         MenwgpmO2A0QUdiwBEfs5fT92dU9nXNmAckNiUiLJf5WxLFSH+gswHbZuoKVu8UGAv
+         nT+xghOMz1XgbmpcfNQ8cSJJsdgIXhEU+PBh1dUPYYj7jpRMHZ/nnWyUO9PVx6JgLo
+         fr+gPdBFIwkIaMHN27yWpPNwWtMSwLrICzj5ezHUpdaLuSfu/UDWV4iqO8y32JJPYl
+         GGidz1UCD0Uq592UPYc6sNIJcPqVXymnnO1Pn8TnrdDu12jTjKS7xFvt240ihK8MIU
+         f7O017ZrmbS5Q==
+Message-ID: <a57af792-1eef-297c-176e-194757f3acc1@collabora.com>
+Date:   Fri, 25 Mar 2022 14:55:11 +0100
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-25_02,2022-03-24_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- suspectscore=0 mlxlogscore=999 bulkscore=0 priorityscore=1501
- clxscore=1015 impostorscore=0 phishscore=0 mlxscore=0 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203250076
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v4 19/22] arm64: dts: mt8192: Add the mmsys reset bit to
+ reset the dsi0
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>,
+        Hui Liu <hui.liu@mediatek.com>
+References: <20220318144534.17996-1-allen-kh.cheng@mediatek.com>
+ <20220318144534.17996-20-allen-kh.cheng@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220318144534.17996-20-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/25/22 08:31, Mimi Zohar wrote:
-> On Mon, 2022-03-21 at 09:10 -0400, Stefan Berger wrote:
->>
->> On 3/18/22 14:21, Mimi Zohar wrote:
->>> IMA may verify a file's integrity against a "good" value stored in the
->>> 'security.ima' xattr or as an appended signature, based on policy.  When
->>> the "good value" is stored in the xattr, the xattr may contain a file
->>> hash or signature.  In either case, the "good" value is preceded by a
->>> header.  The first byte of the xattr header indicates the type of data
->>> - hash, signature - stored in the xattr.  To support storing fs-verity
->>> signatures in the 'security.ima' xattr requires further differentiating
->>> the fs-verity signature from the existing IMA signature.
->>>
->>> In addition the signatures stored in 'security.ima' xattr, need to be
->>> disambiguated.  Instead of directly signing the fs-verity digest, a new
->>> signature version 3 is defined as the hash of the ima_file_id structure,
->>> which identifies the type of signature and the digest.
->>
->> Would it not be enough to just differentiat by the type of signature
->> rather than also bumping the version? It's still signature_v2_hdr but a
->> new type IMA_VERITY_DIGSIG is introduced there that shoud be sufficient
->> to indicate that a different method for calculating the hash is to be
->> used than for anything that existed before? sigv3 would then become the
->> more obvious veriftysig... ?
+Il 18/03/22 15:45, Allen-KH Cheng ha scritto:
+> Reset the DSI hardware is needed to prevent different settings between
+> the bootloader and the kernel.
 > 
-> One of Eric's concerns was that, "an attacker (who controls the file's
-> contents and IMA xattr) [could] replace the file with one with a
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Reference: 
-https://lore.kernel.org/linux-integrity/20220126000658.138345-1-zohar@linux.ibm.com/T/#m8929fa29fbdfc875dbf5f384a4c082d303d2040e
+Note: since there were some mtk-mmsys.c updates in the meanwhile, this patch
+requires [1] to be merged in order to work correctly.
 
-This seem to describe the root user. A restrictions of root's power 
-maybe that root may not have access to the file signing key use on the 
-local system... ?
+Aside from that:
 
-> differrent content and still be able to pass the IMA check."  His
-
-Is this a scenario of concern? : /usr/bin/foobar is signed by verity and 
-there's a rule in the IMA policy that would appraise this file. Can root 
-now remove /usr/bin/foobar and copy the regularly signed /usr/bin/bash 
-to /usr/bin/foobar along with bash's security.ima and have it execute 
-either since there's no appraise rule covering non-fsverity signatures 
-or due to a rule that covers non-fsverity signatures?
-
-Since the signature header of security.ima is not signed root could also 
-just rewrite the header and modify the signature type (and also version) 
-and circumvent appraisal rules specific to fsverity.
-
-> solution was to only allow one signature version on a running system.
-> For the complete description of the attack, refer to Eric's comments on
-> v3.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 
-I am trying to figure out a concrete scenario that one has to defend 
-against what seems to be the power of the root user. A more concrete 
-example may be helpful.
+[1]: 
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220323091932.10648-1-angelogioacchino.delregno@collabora.com/
 
+> ---
+>   include/dt-bindings/reset/mt8192-resets.h | 3 +++
+>   1 file changed, 3 insertions(+)
 > 
-> Instead of only allowing one signature version on a running system,
-> subsequent versions of this patch set addressed his concern, by
-> limiting the signature version based on policy.
-> 
+> diff --git a/include/dt-bindings/reset/mt8192-resets.h b/include/dt-bindings/reset/mt8192-resets.h
+> index be9a7ca245b9..764ca9910fa9 100644
+> --- a/include/dt-bindings/reset/mt8192-resets.h
+> +++ b/include/dt-bindings/reset/mt8192-resets.h
+> @@ -27,4 +27,7 @@
+>   
+>   #define MT8192_TOPRGU_SW_RST_NUM				23
+>   
+> +/* MMSYS resets */
+> +#define MT8192_MMSYS_SW0_RST_B_DISP_DSI0			15
+> +
+>   #endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8192 */
+
+

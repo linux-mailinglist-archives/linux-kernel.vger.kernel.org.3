@@ -2,112 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFB74E6E94
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 08:13:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEAF94E6E99
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 08:14:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355132AbiCYHOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 03:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34368 "EHLO
+        id S1354556AbiCYHPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 03:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238896AbiCYHOQ (ORCPT
+        with ESMTP id S232578AbiCYHPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 03:14:16 -0400
-X-Greylist: delayed 74847 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Mar 2022 00:12:42 PDT
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [104.207.131.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381D9BD898;
-        Fri, 25 Mar 2022 00:12:42 -0700 (PDT)
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 0402BE4C661;
-        Fri, 25 Mar 2022 08:12:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1648192359;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gcXLBP3mIfbGljUpsP//FsQOHOTfI0szjq2ialy/sIU=;
-        b=nTgcEEtgRJjs1kBrwhIgdlq/eHBdXP950twIufQRtgGI9t1yPmzXlHuARe5Mm4Ku1Wl+gj
-        J1qtm2C0WtQDcQ1vPPoPlPSxgR6hQ7w2kxF8mGOtYKwbxIJ1skLC/zf5LPO3fyjV3xW742
-        nilK7AS68nMA3cP9Tzef//M9aMfeDRo=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Maxime Bizon <mbizon@freebox.fr>,
-        Toke =?ISO-8859-1?Q?H=F8iland=2DJ=F8rgensen?= <toke@toke.dk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Olha Cherevyk <olha.cherevyk@gmail.com>,
-        iommu <iommu@lists.linux-foundation.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Fri, 25 Mar 2022 03:15:37 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2116.outbound.protection.outlook.com [40.107.223.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C29B715D;
+        Fri, 25 Mar 2022 00:14:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PcRireziNS3gclKefjPGdFSF45gZqP5xGIXTIHCSPM3c29CVAjqA2L32oZlD5exe+XLd84a95CRH4XFnVngDtXqld+lOqnEQA92Vqa02oAjCBySUjc0iLruITnFCu/M0j2UTf3E1+DCxz7V7mNCUZ2B2mYYQ12a8s+g7mOwwWPmleRxSAnCZjR0L7xcfuaZO5pdxTZ3a96ghMs2cU6gqdv8g9P3jJMdmmCZryIge7XLxp48QNPSrZ7PvRX2zydrxJgb+L36MzR9iMdymkLYBCOVftBs4AkaYgvZeF3vE2V5+8aEF8U52d4MaXz1EkIFCNkxcUKucvtT2f+kGKxFKug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/+rHPSWDbxtPst8YSxjh0RxwE13AyBRS+LbQSI1YrTk=;
+ b=Yuh/uQOB7dLCuUMCivn4sfygMW+Rms1RKtCcY6usPXKiPPpkKvUMGCmAuqz6FVw2d7YDGJ6CCMtXzlQ2QdeAaVWu0pd8mdSChZ/brEGNsJLP/dilaGAe7qUC838MLA6+DDdyyYDg5fw6cyMhj3g/GZwXuDQf6sIZB6XNlb3vKhCLbeZ1pmGZ32jTNOLubArKdxeuneW5vsU3a0oWVp7KXSreGFlif7MeL5PIBS1cnb0VoR1z4E+i1Sk0afy5caTDBSW4/H9hlmfoN8dmCO8ftYSb2Vk0HAGdmUIZS78BxSR2OwRr2ElonzEtdhJrCv1QeLhTqBVC0PbpQ1iUyR0PQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/+rHPSWDbxtPst8YSxjh0RxwE13AyBRS+LbQSI1YrTk=;
+ b=moaYhi3g7P35Npmw+FrlFrKPC/hqQM7/AEvIojfsLM+nFQvYQIyEe5lMZP/R3q3wvRptN2UjFOlqoE0mj/ab6amez17WMqn1z3tZNdddUrQWnTZO2o+hMDKQRc8VANfiFhSnwnlGeJKBtZ7Afk8PXZqi0RJUMPryXn1Js9fPVrY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
+ BYAPR01MB4086.prod.exchangelabs.com (2603:10b6:a03:56::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5081.17; Fri, 25 Mar 2022 07:14:01 +0000
+Received: from SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::cd24:39ed:7042:46d6]) by SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::cd24:39ed:7042:46d6%7]) with mapi id 15.20.5102.019; Fri, 25 Mar 2022
+ 07:14:01 +0000
+Message-ID: <449ef91b-42b1-804e-bc52-a85249b9da77@os.amperecomputing.com>
+Date:   Fri, 25 Mar 2022 14:13:45 +0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH v7 7/9] dt-bindings: mfd: Add bindings for Ampere Altra
+ SMPro MFD driver
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break ath9k-based AP
-Date:   Fri, 25 Mar 2022 08:12:37 +0100
-Message-ID: <4699073.GXAFRqVoOG@natalenko.name>
-In-Reply-To: <871qyr9t4e.fsf@toke.dk>
-References: <1812355.tdWV9SEqCh@natalenko.name> <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com> <871qyr9t4e.fsf@toke.dk>
+        Thu Nguyen <thu@os.amperecomputing.com>,
+        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Cc:     Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+References: <20220321081355.6802-1-quan@os.amperecomputing.com>
+ <20220321081355.6802-8-quan@os.amperecomputing.com>
+ <766931c9-6647-19c5-24d8-9b8fb3ab58d6@kernel.org>
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+In-Reply-To: <766931c9-6647-19c5-24d8-9b8fb3ab58d6@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI2P153CA0033.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:4:190::21) To SJ0PR01MB7282.prod.exchangelabs.com
+ (2603:10b6:a03:3f2::24)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cc01ccf1-ee1b-45dd-a16a-08da0e2f0917
+X-MS-TrafficTypeDiagnostic: BYAPR01MB4086:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR01MB40867984BF603875945DFBAFF21A9@BYAPR01MB4086.prod.exchangelabs.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kSgnyV24Ww5K1JmLvmrCL9Cjv4OmmNeR/bLhs9rQ2B077DmgPzhSQJV4CS2D9vSNI5LPugf0FgdUiByJ7EGbq9NfxGZDY+b5aH8IXkWgm4QNWuV8tblr4xGHc5Tw1i3LbHSlQjyHz2gpZwKI3E+TV84pQQ0gXb2ISYm5nJ9S65OhmKTkFYqV2wioI6F8J8yuXzgfVf9OKKU8ixkdygrlbLu8ij2rAO+EfCZ8FAWrG1DbjSuRi8JAQjLoYqG3kqmOSpATmZhoh2s8hUUDicqPgzyV+hwJ7KOyIoUXmCHHYMDHprYcQfcMIRtgygNxWk4Gj1hM/E0l0O9ieQtQs/1CaF8Mg/o7jW1eJKazIqdkxuQsd/IiaiPpwa0U4gfK5/BslWBGPQ0aS+AHOX7TkcEna4pSTdTKG3TDN3jbZ9GRwjGqP+aYPwforz5vd5nt5NpUZhtapXa/bVtUD2Fd5NuTPZ37ZsHdgOiazBdulPfkA/AZw2DrSpLovV4EzzIMjDT3sNDgVvFAlsuMqGpMdJUeh1pG5L5epOHbBOxeg0dXwOhgBJbMBlj/iea96WXPpg/O7CmhDRoFFm8FRQpeiHYM0fbc775vFcv02VL/MgP54mMwH/YOVMJoIgoHZLH8PxinFv5zobpEQLlnZZLcWz33LI4sp/ewbBwjfPMJHAmunOXV3SZvIn4TOcFAZSqaK6V7w6iABNepQ+8iMAJfvP/97Weg7wGZf0aXI8NHrLM3ub28iV/EvHh2xUzBJliAt5TDTHsq5GxDZNM3RPDoJLvjfe3lFdCl+ZOS1f/5GDjvtc/dWKA6Pp1wVlHT1dAn59Dq00rm+//NDbN/+zFABkDy3PtgLfuaTdGH21CBpAp8hROzulOF5Bd6QZQhMZwqjXO/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(8936002)(186003)(316002)(54906003)(2616005)(5660300002)(4326008)(7416002)(110136005)(38100700002)(38350700002)(31696002)(31686004)(66946007)(52116002)(53546011)(6486002)(107886003)(6512007)(66476007)(8676002)(66556008)(83380400001)(86362001)(966005)(921005)(2906002)(6666004)(508600001)(6506007)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y0t5dS81K0FITWtZK0xMbXlza2FtRnNPdDQwZlNCQWx6ZHE5SUR0M0lKQTB6?=
+ =?utf-8?B?c3FlaTFubVF5bm1DS2Y3R0ZIVC8yYlduUllYVW9zVUFHSmF3T3JOSDk2Q1A4?=
+ =?utf-8?B?U2VJK2NNWTdUY0oxZFZlelRQSWk5RmYwRHFUWm5nTXpGSURSYjF1UGRLUndo?=
+ =?utf-8?B?U21pZ1BwTnVWZkhxUDcycGJVUHIrRE9UUnE2N3ArdythMTFXbmNlTjFwQU9G?=
+ =?utf-8?B?V3JBdDVWMEN4VHE3MStLd1pYaXVJTlhUUWhqaVFuNTF6UDM0ZmtRNlJkYXRn?=
+ =?utf-8?B?QlF1dHJlcG9wUUJWamYrVzZLWXhBU0hHeitERXVlNDUwNmd5VEJ3c2VFWkgx?=
+ =?utf-8?B?Zm5LLzVGWE9PRzRxWStocUdwS2Q2eUdhZnJUdTBTSjRQbk5FSGpDaEdCOWE3?=
+ =?utf-8?B?VU02V3ppZk1obndjYTVRZk5TdnZaNE53bStPVEpkYU81dlZIeVVQMldBUzd6?=
+ =?utf-8?B?ZjNqTXZEczVKSlFQVXZCanQ5RlEwK1g5d2M1TXF1NDlrNE9VRWxkcVk3RitZ?=
+ =?utf-8?B?UEFZK2c3QU9pd0pKTmpyYjB6MXVGWUl2dEx5VHphWHhuOTZVc2NPSFcrSHFV?=
+ =?utf-8?B?TTZadVNjY2ZJbG1IaFJGYWZKQ0RzY0hCRUpnVXN4ZkZPU3BsK0xzWThHRi9L?=
+ =?utf-8?B?WU9ZQURucEtEbUxPeCtnRjZoRWwrVmxVOTdMOE1IdWVqRmZLOU9Ca3JRdFR1?=
+ =?utf-8?B?SG5GdFIyd09LNU10SDRob3BnRXVwdkNHUlBTaldWR1EzOWFIMEQyNnNyamh3?=
+ =?utf-8?B?bDBvUTg3QW9TcDhlNU5CKy9VN09laVZXajMwU0J2U0o1UGhnanFSOE8yRVFl?=
+ =?utf-8?B?V015L3Nmckt0K21BUjhHbExFMjd0aUh6cktXK0ZDa05ranVCaUJlRUtCYUx3?=
+ =?utf-8?B?ZC9CWU5LSjUyT05SOVBJa2kvNkVJVWVpU0VJckdKMDRQVHNLOWQyWEFsL2hz?=
+ =?utf-8?B?Z0xCWGlOSlRPM2g4c3ZvVVo2d1JoWml0NTFFTi9NTjV4MmxUTm9OWlI5UHJP?=
+ =?utf-8?B?REgyZ1UyOTFWQTZPeVUzM281c2ZoRGgvdU12KzdVaHN5RTZDd1FhREd4WS9t?=
+ =?utf-8?B?VTdTTFYxWUg1SmovcCtJVXp1aGExY2RQblN4M0N2T2ROcXVxcGFBT3pqR2Zv?=
+ =?utf-8?B?M2Vra05vWHF6WGVVazYxc2VITmxVUHI3Q3B5ck9iV0JLVE8rV1E5endQLzJH?=
+ =?utf-8?B?dGZYMThmMHJrL3YyWmF0cDk0Y1F3ekZHRjlhK2J5NmRTOWI1OGRTSnVza1l2?=
+ =?utf-8?B?V3JSM053TjJNZTllYXpZbDBlUzM4NDFYSDZvQ1hYZHEwMExjbmpXdnRINHhC?=
+ =?utf-8?B?ZCtKMmFXRHgva0ZEdHl0djR1bjhEUWEvTWZ0THdobTRsckNRNnhIUHp5MjZI?=
+ =?utf-8?B?M1NBbU1sZWI1eW1rSXFQbkpuYUMxZnJER3VlSmU1SnZiQlVRRHZ3eCtNYlJV?=
+ =?utf-8?B?NEJEZ0xvWGhobGh0dXdNVitSbEU5NEp6dDNnWG1ScndTeTdtVlc0bUpkRkZT?=
+ =?utf-8?B?ei9mZytzdmFpdG9TN1U2Tk01S24yUUhNSEZWU0VaSnE2SWFxV2MyMk1KSko1?=
+ =?utf-8?B?dGY1bDlwR2djSnkzY3pxVGF2RWo4RWVJWWJXSUhRZUVkVi9FL2huUmo2cU5a?=
+ =?utf-8?B?bzlIVktJSTFRYzdJNTNFSkg2MythU3NBdFJuOTNpaWN0MU81QUg0SEREWUtI?=
+ =?utf-8?B?UC91VFJEbis4eCsxd1FYdU9LcFRwcGxrSzlpVWl1QmhqNVFQOWk4bW1SYlNR?=
+ =?utf-8?B?NXgvbXJXWGlTRTNCV3d1dUJ5M2VBM3hxcnBSQ2xET2xUcC9ISWVQS0JvVHJY?=
+ =?utf-8?B?bklNK082WkVxS3BBSWk5WjRTdUlvNmRNdnBkMktmV3ZYTElxKzVBMXR5ZWps?=
+ =?utf-8?B?UHNWL0J5U0ZsSyt6aVREU1U5U3oyZFB3UVU2SGJneFBGRmxLRjZORzRPMWxL?=
+ =?utf-8?B?ekd6c3RNdi9Hd1d4NUw4c25lQUhsTEpsTmFJdWYrbVdrRStqOUpxL2FieHJI?=
+ =?utf-8?Q?go0oiFKO578pSBPTvn2oaW2s1opYtI=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cc01ccf1-ee1b-45dd-a16a-08da0e2f0917
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2022 07:14:01.3748
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hoDioqU6lvEyc5KBK+BlXwF0gkK/Lb2VjDF7gLMjsv3m3I1tD7VEQPOkMyeFDxEmsQ0AOrASl0BOfvoo0TT1OJbt7RyI52UYJOlgploZEHE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR01MB4086
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
-
-On =C4=8Dtvrtek 24. b=C5=99ezna 2022 18:07:29 CET Toke H=C3=B8iland-J=C3=B8=
-rgensen wrote:
-> Right, but is that sync_for_device call really needed? AFAICT, that
-> ath9k_hw_process_rxdesc_edma() invocation doesn't actually modify any of
-> the data when it returns EINPROGRESS, so could we just skip it? Like
-> the patch below? Or am I misunderstanding the semantics here?
->=20
-> -Toke
->=20
->=20
-> diff --git a/drivers/net/wireless/ath/ath9k/recv.c b/drivers/net/wireless=
-/ath/ath9k/recv.c
-> index 0c0624a3b40d..19244d4c0ada 100644
-> --- a/drivers/net/wireless/ath/ath9k/recv.c
-> +++ b/drivers/net/wireless/ath/ath9k/recv.c
-> @@ -647,12 +647,8 @@ static bool ath_edma_get_buffers(struct ath_softc *s=
-c,
->                                 common->rx_bufsize, DMA_FROM_DEVICE);
-> =20
->         ret =3D ath9k_hw_process_rxdesc_edma(ah, rs, skb->data);
-> -       if (ret =3D=3D -EINPROGRESS) {
-> -               /*let device gain the buffer again*/
-> -               dma_sync_single_for_device(sc->dev, bf->bf_buf_addr,
-> -                               common->rx_bufsize, DMA_FROM_DEVICE);
-> +       if (ret =3D=3D -EINPROGRESS)
->                 return false;
-> -       }
-> =20
->         __skb_unlink(skb, &rx_edma->rx_fifo);
->         if (ret =3D=3D -EINVAL) {
-
-With this patch and both ddbd89deb7d3+aa6f8dcbab47 in place the AP works fo=
-r me.
-
-Thanks.
-
-=2D-=20
-Oleksandr Natalenko (post-factum)
 
 
+On 21/03/2022 17:08, Krzysztof Kozlowski wrote:
+> On 21/03/2022 09:13, Quan Nguyen wrote:
+>> Adds device tree bindings for SMPro MFD driver found on the Mt.Jade
+>> hardware reference platform with Ampere's Altra Processor family.
+>>
+>> The SMpro co-processor on Ampere Altra processor family is to monitor
+>> and report various data included hwmon-related info, RAS errors, and
+>> other miscellaneous information.
+>>
+>> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> ---
+>> Changes in v7:
+>>    + None
+>>
+>> Changes in v6:
+>>    + None
+>>
+>>   .../devicetree/bindings/mfd/ampere,smpro.yaml | 48 +++++++++++++++++++
+>>   1 file changed, 48 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/mfd/ampere,smpro.yaml b/Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
+>> new file mode 100644
+>> index 000000000000..c29d975c1bc3
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
+>> @@ -0,0 +1,48 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/mfd/ampere,smpro.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Ampere Altra SMPro firmware driver
+>> +
+>> +maintainers:
+>> +  - Quan Nguyen <quan@os.amperecomputing.com>
+>> +
+>> +description: |
+>> +  Ampere Altra SMPro firmware may contain different blocks like hardware
+>> +  monitoring, error monitoring and other miscellaneous features.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - ampere,smpro
+>> +
+>> +  reg:
+>> +    description:
+>> +      I2C device address.
+>> +    maxItems: 1
+>> +
+>> +  "#address-cells":
+>> +    const: 1
+>> +
+>> +  "#size-cells":
+>> +    const: 0
+> 
+> Why do you need address/size cells? Is the binding not complete? The
+> commit description does not mention such case.
+> 
+
+Thanks Krzysztof for the comment.
+The address/size cells are indeed not used. The child drivers are 
+instantiated by the parent MFD and there is no child nodes in DT. This 
+part will be removed in my next version.
+
+- Quan

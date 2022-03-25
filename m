@@ -2,91 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B484E7CC8
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC834E7BE4
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232380AbiCYUxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 16:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
+        id S232362AbiCYUyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 16:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232328AbiCYUxt (ORCPT
+        with ESMTP id S232369AbiCYUyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 16:53:49 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CDD506F0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:52:14 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id o6so11801536ljp.3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:52:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XL7fBu7OlctI0zNy/cRZjH1z0Pexf4s0Ro6kC1bg2Jk=;
-        b=AjRN4k8UeL2cFoATtOl9IzjPGEPyOHgc88Tmu//hjPBbsK3rLRCNQdg2851c1HEIPC
-         xKcH0Ukwii4dYTVeW4/2KYbdP/m0owF7DP4+ATYYsLWBiEKXu27Z/3nvqHCpqgkpX5hl
-         KSqxiPB/26Mci+r/n2Q0/Qd+UvhHfRz3ATDek=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XL7fBu7OlctI0zNy/cRZjH1z0Pexf4s0Ro6kC1bg2Jk=;
-        b=jL8e+GD2Tg3UiEf6mzVrcQv0rhL4ho0SDU0XQvnAnC10HGEIfn7Nu8jesidCy5LN9M
-         aDT0CCCSORXdeWrUltzQ1Nf/A7XraN/JU7Mpy6IeQ6+c70oTf/FjNfXW01BKyahOPqmv
-         Ly7qNXePSVnVl2mwSQ+eCddFVlZgUmFC6YjtvqkrTkO4X0I5LVta0P90eDnM3azy1ezD
-         KkERvhCNZqPOGcVBNzl2SQ4X4r2fDPZnMnm3oXh/UCf+uFcO/FeEzNGp8bw5vtCwsD2g
-         etMbOmxX9wG5U0Pos+lQWwHVN1lQwtHTaE1Kq0dqbzrWmXzVTJEZuXRbVlT6ZFX7SD/H
-         Xz0Q==
-X-Gm-Message-State: AOAM5306AR8vEvinG6dZCpmBV+7kQS0vX/m12s17z6o7WwQS2MUmXobH
-        AVhvT144aFuVzPnB8wYUbNDmZJ0hWESeYnkldV4=
-X-Google-Smtp-Source: ABdhPJzdMLH+eHzBthtECbnvhHdsAYbhdYeUhAn++P+J2B/tJlOvoVwZFfJ17dUzZMpp/Cvz66eEdA==
-X-Received: by 2002:a2e:87d4:0:b0:249:a34a:2532 with SMTP id v20-20020a2e87d4000000b00249a34a2532mr9698635ljj.328.1648241532140;
-        Fri, 25 Mar 2022 13:52:12 -0700 (PDT)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
-        by smtp.gmail.com with ESMTPSA id w15-20020a05651c118f00b0024957c859dbsm803950ljo.50.2022.03.25.13.52.11
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 13:52:11 -0700 (PDT)
-Received: by mail-lf1-f46.google.com with SMTP id bu29so15389597lfb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:52:11 -0700 (PDT)
-X-Received: by 2002:ac2:4f92:0:b0:448:7eab:c004 with SMTP id
- z18-20020ac24f92000000b004487eabc004mr9360717lfs.27.1648241531008; Fri, 25
- Mar 2022 13:52:11 -0700 (PDT)
+        Fri, 25 Mar 2022 16:54:04 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17C550E16;
+        Fri, 25 Mar 2022 13:52:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648241549; x=1679777549;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=P3gwNXe0u8BsPFKCZRFA9VltWIcjiuRgNKGEuiruPN4=;
+  b=EpRaQlMnz3FJSTYspef0y0Z+QDbk3Hjm8KhHZVPY4BlRHstE14+DKenD
+   +74Q2LMPMLWmiJIHJuKrD9AjYRkIlY8wTxMrNe9gTwfTGezUfk/ltzlLE
+   9i9lkhaOMJlM0EDXUnT0BEm9r/IgJK8X8ieLtcUihYVaDTMeKCN9dWqVk
+   J9NXQ2dveElqz9hAkdNNC4Wamx6DVGawZwXXW8f1J3pJkYn0TI5jW4AOv
+   3BZd9gMsifVmxCHKI3hOewBBNdXrGO3J2GlgXlPvZl4WSoE2++BtiQ6MO
+   pJAnrGilI2WelGuOfjY73R6/WzYpEZISLR5y033RA0BJlU15J6e6+g4yq
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="238653260"
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="238653260"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 13:52:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="826145419"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 25 Mar 2022 13:52:24 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nXqv2-000Mad-9K; Fri, 25 Mar 2022 20:52:24 +0000
+Date:   Sat, 26 Mar 2022 04:52:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>, dhowells@redhat.com,
+        linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
+        linux-erofs@lists.ozlabs.org
+Cc:     kbuild-all@lists.01.org, torvalds@linux-foundation.org,
+        gregkh@linuxfoundation.org, willy@infradead.org,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org, luodaowen.backend@bytedance.com,
+        tianzichen@kuaishou.com, fannaihao@baidu.com
+Subject: Re: [PATCH v6 03/22] cachefiles: notify user daemon with anon_fd
+ when looking up cookie
+Message-ID: <202203260406.Ay5o7T9U-lkp@intel.com>
+References: <20220325122223.102958-4-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-References: <YjtZAvQnshp1pZIh@zn.tnic> <CAHk-=wgXbSa8yq8Dht8at+gxb_idnJ7X5qWZQWRBN4_CUPr=eQ@mail.gmail.com>
- <Yj4orVIbqcyTQcY7@zn.tnic>
-In-Reply-To: <Yj4orVIbqcyTQcY7@zn.tnic>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 25 Mar 2022 13:51:54 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whR6pCHwvAWQKZ88D1hBuRJsV66ucEnybBiOHskoPsPxQ@mail.gmail.com>
-Message-ID: <CAHk-=whR6pCHwvAWQKZ88D1hBuRJsV66ucEnybBiOHskoPsPxQ@mail.gmail.com>
-Subject: Re: [GIT PULL] RAS updates for 5.18
-To:     Borislav Petkov <bp@suse.de>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220325122223.102958-4-jefflexu@linux.alibaba.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 1:40 PM Borislav Petkov <bp@suse.de> wrote:
->
-> If I try to make it do a --ff, it still does a merge commit:
+Hi Jeffle,
 
-Oh, they indeed aren't fast-forwards of each other, they just looked
-superficially that way to me because when I did my
+Thank you for the patch! Yet something to improve:
 
-   gitk ORIG_HEAD..
+[auto build test ERROR on trondmy-nfs/linux-next]
+[also build test ERROR on rostedt-trace/for-next linus/master v5.17]
+[cannot apply to xiang-erofs/dev-test dhowells-fs/fscache-next next-20220325]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-after merging, the fact that I had already merged everything else in
-both of those branches.
+url:    https://github.com/0day-ci/linux/commits/Jeffle-Xu/fscache-erofs-fscache-based-on-demand-read-semantics/20220325-203555
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+config: csky-defconfig (https://download.01.org/0day-ci/archive/20220326/202203260406.Ay5o7T9U-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/ec8aa2f84eb47244377e4b822dd77d82ee54714a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jeffle-Xu/fscache-erofs-fscache-based-on-demand-read-semantics/20220325-203555
+        git checkout ec8aa2f84eb47244377e4b822dd77d82ee54714a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash
 
-So never mind. It wasn't a pointless fast-forward merge, it's just
-that neither of those branches had anything new in them as far as I
-was concerned any more.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-              Linus
+All errors (new ones prefixed by >>):
+
+   csky-linux-ld: fs/cachefiles/daemon.o: in function `cachefiles_ondemand_daemon_read':
+>> daemon.c:(.text+0x97c): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
+   csky-linux-ld: fs/cachefiles/interface.o: in function `cachefiles_ondemand_daemon_read':
+   interface.c:(.text+0x1ec): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
+   csky-linux-ld: fs/cachefiles/io.o: in function `cachefiles_ondemand_daemon_read':
+   io.c:(.text+0x720): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
+   csky-linux-ld: fs/cachefiles/key.o: in function `cachefiles_ondemand_daemon_read':
+   key.c:(.text+0x0): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
+   csky-linux-ld: fs/cachefiles/main.o: in function `cachefiles_ondemand_daemon_read':
+   main.c:(.text+0x0): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
+   csky-linux-ld: fs/cachefiles/namei.o: in function `cachefiles_ondemand_daemon_read':
+   namei.c:(.text+0xf8): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
+   csky-linux-ld: fs/cachefiles/security.o: in function `cachefiles_ondemand_daemon_read':
+   security.c:(.text+0x24): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
+   csky-linux-ld: fs/cachefiles/volume.o: in function `cachefiles_ondemand_daemon_read':
+   volume.c:(.text+0x0): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
+   csky-linux-ld: fs/cachefiles/xattr.o: in function `cachefiles_ondemand_daemon_read':
+   xattr.c:(.text+0x0): multiple definition of `cachefiles_ondemand_daemon_read'; fs/cachefiles/cache.o:cache.c:(.text+0x18): first defined here
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

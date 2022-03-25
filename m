@@ -2,159 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 199464E7036
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 10:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 828194E7041
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 10:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243772AbiCYJqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 05:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S1357039AbiCYJvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 05:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243192AbiCYJqm (ORCPT
+        with ESMTP id S243192AbiCYJvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 05:46:42 -0400
-Received: from out29-173.mail.aliyun.com (out29-173.mail.aliyun.com [115.124.29.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43E569CC5;
-        Fri, 25 Mar 2022 02:45:03 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.0745066|-1;BR=01201311R121S62rulernew998_84748_2000303;CH=blue;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.0264882-0.0159725-0.957539;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047194;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.NCJqz9-_1648201498;
-Received: from sunxibot.allwinnertech.com(mailfrom:kant@allwinnertech.com fp:SMTPD_---.NCJqz9-_1648201498)
-          by smtp.aliyun-inc.com(33.13.201.118);
-          Fri, 25 Mar 2022 17:44:59 +0800
-From:   Kant Fan <kant@allwinnertech.com>
-To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        javi.merino@kernel.org, edubezval@gmail.com, orjan.eide@arm.com
-Cc:     amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        allwinner-opensource-support@allwinnertech.com,
-        Kant Fan <kant@allwinnertech.com>, stable@vger.kernel.org
-Subject: [PATCH] thermal: devfreq_cooling: use local ops instead of global ops
-Date:   Fri, 25 Mar 2022 17:44:36 +0800
-Message-Id: <20220325094436.101419-1-kant@allwinnertech.com>
-X-Mailer: git-send-email 2.29.0
+        Fri, 25 Mar 2022 05:51:08 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAA4BD7F7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 02:49:34 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id r190-20020a1c2bc7000000b0038a1013241dso4053478wmr.1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 02:49:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=DfT5O8Gal4+cteaTC6rWY4ssizS/Flx63uxHthtaZDE=;
+        b=HcyOP/9CoQAcquBFsAeSDoqR3wXjrorMh7BT47PYb76YWB+7bM1eAcXCIJoX2LAy4z
+         vRuuqOEeg7TaWhnb/9vTrXEf5uukpQBog4cxrHTv0N6iXul/KCWbqCwzx3Yiuz2fpx8f
+         60i/hgm2Wpy3fx0alnq+XzOG2T/iTJmGWI6/g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=DfT5O8Gal4+cteaTC6rWY4ssizS/Flx63uxHthtaZDE=;
+        b=T5jNXwCxJqtXQHuK5kCt4ENNJleUzMUB8BFQ7s4f8uVulBfV8aUHlHeQTh+4KUF6Uc
+         4/WistIxku6o7QeFWcsTrN7UT/A/hV9IT3tpv+Q+GK5tk26zBVi5KNySI4ooo3rfvgUe
+         W2eu0gcrVZ/86vY+/k1zn+ZOLmwZiazZgfv8YwNZCvRpq1DOl/ZTtQK6kCaizRefrOiF
+         3y1/8ghpctYmM8yujfFOCMj+ftnFd8Er3NabT4BtTtc9OPHL4cx4f2xEjC5mxQ9ZiHh1
+         YURm/nKI/IZ9NdA0xTztVAAp1y/Rj6jf/jd7HuNSnI46PHFi3gaxJzpsBl+kLeXimvd8
+         l4ig==
+X-Gm-Message-State: AOAM531sIMYoVWSY7V5PxV33udxxKwWYb/cw1k0y7wqwCznXjU+hRddD
+        aYM5CgpnZlbC7IY/4sWtsOepog==
+X-Google-Smtp-Source: ABdhPJzexb0SxQohaHmXb/tTvBXEm7shj2YeTL8tbTdMeOO2VDv+ZelO4wFl7rK7qEDE7T5Ea4khLA==
+X-Received: by 2002:a05:600c:3d8d:b0:38c:82dc:cd58 with SMTP id bi13-20020a05600c3d8d00b0038c82dccd58mr8905906wmb.50.1648201772655;
+        Fri, 25 Mar 2022 02:49:32 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id 10-20020a5d47aa000000b00204012e4373sm5387913wrb.101.2022.03.25.02.49.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 02:49:32 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 10:49:30 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     "Lin, Tsung-hua (Ryan)" <Tsung-hua.Lin@amd.com>,
+        "Wentland, Harry" <Harry.Wentland@amd.com>,
+        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "David1.Zhou@amd.com" <David1.Zhou@amd.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "seanpaul@chromium.org" <seanpaul@chromium.org>,
+        "bas@basnieuwenhuizen.nl" <bas@basnieuwenhuizen.nl>,
+        "Kazlauskas, Nicholas" <Nicholas.Kazlauskas@amd.com>,
+        "sashal@kernel.org" <sashal@kernel.org>,
+        "markyacoub@google.com" <markyacoub@google.com>,
+        "victorchengchi.lu@amd.com" <victorchengchi.lu@amd.com>,
+        "ching-shih.li@amd.corp-partner.google.com" 
+        <ching-shih.li@amd.corp-partner.google.com>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        "ddavenport@chromium.org" <ddavenport@chromium.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Li, Leon" <Leon.Li@amd.com>
+Subject: Re: [PATCH v2 3/25] drm/amdgpu: Disable ABM when AC mode
+Message-ID: <Yj2QKsKet4/pHvvX@phenom.ffwll.local>
+Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Lin, Tsung-hua (Ryan)" <Tsung-hua.Lin@amd.com>,
+        "Wentland, Harry" <Harry.Wentland@amd.com>,
+        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "David1.Zhou@amd.com" <David1.Zhou@amd.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "seanpaul@chromium.org" <seanpaul@chromium.org>,
+        "bas@basnieuwenhuizen.nl" <bas@basnieuwenhuizen.nl>,
+        "Kazlauskas, Nicholas" <Nicholas.Kazlauskas@amd.com>,
+        "sashal@kernel.org" <sashal@kernel.org>,
+        "markyacoub@google.com" <markyacoub@google.com>,
+        "victorchengchi.lu@amd.com" <victorchengchi.lu@amd.com>,
+        "ching-shih.li@amd.corp-partner.google.com" <ching-shih.li@amd.corp-partner.google.com>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        "ddavenport@chromium.org" <ddavenport@chromium.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Li, Leon" <Leon.Li@amd.com>
+References: <20220325040515.4073706-1-tsung-hua.lin@amd.com>
+ <2125c5b2-b377-076a-4177-d5ef482eb657@amd.com>
+ <DM6PR12MB44177923FF4E05331A7B727FB21A9@DM6PR12MB4417.namprd12.prod.outlook.com>
+ <26042d92-0fb7-fadb-140e-b633f2979632@amd.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <26042d92-0fb7-fadb-140e-b633f2979632@amd.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 7b62935828266658714f81d4e9176edad808dc70 upstream.
+On Fri, Mar 25, 2022 at 08:22:29AM +0100, Christian König wrote:
+> Hi Ryan,
+> 
+> we should try to avoid that and if it isn't possible at least use some
+> constant like ACPI_AC_CLASS.
+> 
+> Could be that the information isn't available otherwise. Alex should know
+> more about that.
 
-Fix access illegal address problem in following condition:
-There are muti devfreq cooling devices in system, some of them register
-with dfc_power but other does not, power model ops such as state2power will
-append to global devfreq_cooling_ops when the cooling device with
-dfc_power register. It makes the cooling device without dfc_power
-also use devfreq_cooling_ops after appending when register later by
-of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
+I wonder whether we shouldn't need a more dedicated notification from acpi
+for power supply events instead of stitching this together ourselves. At
+least this kind of stuff feels more into the policy/tuning territory where
+a bit more careful interfaces might be good instead of just "hey there's
+this very funny acpi protocol we just have to take part in to not upset
+the hw/fw".
+-Daniel
 
-IPA governor regards the cooling devices without dfc_power as a power actor
-because they also have power model ops, and will access illegal address at
-dfc->power_ops when execute cdev->ops->get_requested_power or
-cdev->ops->power2state. As the calltrace below shows:
+> 
+> Regards,
+> Christian.
+> 
+> Am 25.03.22 um 08:09 schrieb Lin, Tsung-hua (Ryan):
+> > [AMD Official Use Only]
+> > 
+> > Hi Christian,
+> > 
+> > There is already a string comparison in the same function. I just reference that to port this solution.
+> > 
+> > 
+> > 
+> > #define ACPI_AC_CLASS           "ac_adapter"
+> > 
+> > 
+> > static int amdgpu_acpi_event(struct notifier_block *nb,
+> > 			     unsigned long val,
+> > 			     void *data)
+> > {
+> > 	struct amdgpu_device *adev = container_of(nb, struct amdgpu_device, acpi_nb);
+> > 	struct acpi_bus_event *entry = (struct acpi_bus_event *)data;
+> > 
+> > +	if (strcmp(entry->device_class, "battery") == 0) {
+> > +		adev->pm.ac_power = power_supply_is_system_supplied() > 0;
+> > +	}
+> > 
+> > 	if (strcmp(entry->device_class, ACPI_AC_CLASS) == 0) {      <-------------------here!
+> > 		if (power_supply_is_system_supplied() > 0)
+> > 			DRM_DEBUG_DRIVER("pm: AC\n");
+> > 		else
+> > 			DRM_DEBUG_DRIVER("pm: DC\n");
+> > 
+> > 		amdgpu_pm_acpi_event_handler(adev);
+> > 	}
+> > 
+> > 	/* Check for pending SBIOS requests */
+> > 	return amdgpu_atif_handler(adev, entry);
+> > }
+> > 
+> > Thanks,
+> > Ryan Lin.
+> > 
+> > -----Original Message-----
+> > From: Koenig, Christian <Christian.Koenig@amd.com>
+> > Sent: Friday, March 25, 2022 2:58 PM
+> > To: Lin, Tsung-hua (Ryan) <Tsung-hua.Lin@amd.com>; Wentland, Harry <Harry.Wentland@amd.com>; Li, Sun peng (Leo) <Sunpeng.Li@amd.com>; Deucher, Alexander <Alexander.Deucher@amd.com>; David1.Zhou@amd.com; airlied@linux.ie; daniel@ffwll.ch; seanpaul@chromium.org; bas@basnieuwenhuizen.nl; Kazlauskas, Nicholas <Nicholas.Kazlauskas@amd.com>; sashal@kernel.org; markyacoub@google.com; victorchengchi.lu@amd.com; ching-shih.li@amd.corp-partner.google.com; Siqueira, Rodrigo <Rodrigo.Siqueira@amd.com>; ddavenport@chromium.org; amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-kernel@vger.kernel.org; Li, Leon <Leon.Li@amd.com>
+> > Subject: Re: [PATCH v2 3/25] drm/amdgpu: Disable ABM when AC mode
+> > 
+> > Am 25.03.22 um 05:05 schrieb Ryan Lin:
+> > > Disable ABM feature when the system is running on AC mode to get the
+> > > more perfect contrast of the display.
+> > > 
+> > > Signed-off-by: Ryan Lin <tsung-hua.lin@amd.com>
+> > > 
+> > > ---
+> > >    drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c      |  4 ++
+> > >    drivers/gpu/drm/amd/amdgpu/amdgpu_device.c    |  1 +
+> > >    drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c | 58 ++++++++++++-------
+> > >    drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h       |  1 +
+> > >    4 files changed, 42 insertions(+), 22 deletions(-)
+> > > 
+> > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+> > > b/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+> > > index c560c1ab62ecb..bc8bb9aad2e36 100644
+> > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+> > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+> > > @@ -822,6 +822,10 @@ static int amdgpu_acpi_event(struct notifier_block *nb,
+> > >    	struct amdgpu_device *adev = container_of(nb, struct amdgpu_device, acpi_nb);
+> > >    	struct acpi_bus_event *entry = (struct acpi_bus_event *)data;
+> > > +	if (strcmp(entry->device_class, "battery") == 0) {
+> > String comparison in a hot path is not something we usually like to see in the kernel.
+> > 
+> > Isn't there any other way to detect that? Like a flag or similar?
+> > 
+> > Regards,
+> > Christian.
+> > 
+> > > +		adev->pm.ac_power = power_supply_is_system_supplied() > 0;
+> > > +	}
+> > > +
+> > >    	if (strcmp(entry->device_class, ACPI_AC_CLASS) == 0) {
+> > >    		if (power_supply_is_system_supplied() > 0)
+> > >    			DRM_DEBUG_DRIVER("pm: AC\n");
+> > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> > > b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> > > index abfcc1304ba0c..3a0afe7602727 100644
+> > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> > > @@ -3454,6 +3454,7 @@ int amdgpu_device_init(struct amdgpu_device
+> > > *adev,
+> > >    	adev->gfx.gfx_off_req_count = 1;
+> > >    	adev->pm.ac_power = power_supply_is_system_supplied() > 0;
+> > > +	adev->pm.old_ac_power = true;
+> > >    	atomic_set(&adev->throttling_logging_enabled, 1);
+> > >    	/*
+> > > diff --git a/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
+> > > b/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
+> > > index 54a1408c8015c..478a734b66926 100644
+> > > --- a/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
+> > > +++ b/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
+> > > @@ -23,6 +23,8 @@
+> > >     *
+> > >     */
+> > > +#include <linux/power_supply.h>
+> > > +#include "amdgpu.h"
+> > >    #include "dmub_abm.h"
+> > >    #include "dce_abm.h"
+> > >    #include "dc.h"
+> > > @@ -51,6 +53,7 @@
+> > >    #define DISABLE_ABM_IMMEDIATELY 255
+> > > +extern uint amdgpu_dm_abm_level;
+> > >    static void dmub_abm_enable_fractional_pwm(struct dc_context *dc)
+> > >    {
+> > > @@ -117,28 +120,6 @@ static void dmub_abm_init(struct abm *abm, uint32_t backlight)
+> > >    	dmub_abm_enable_fractional_pwm(abm->ctx);
+> > >    }
+> > > -static unsigned int dmub_abm_get_current_backlight(struct abm *abm)
+> > > -{
+> > > -	struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
+> > > -	unsigned int backlight = REG_READ(BL1_PWM_CURRENT_ABM_LEVEL);
+> > > -
+> > > -	/* return backlight in hardware format which is unsigned 17 bits, with
+> > > -	 * 1 bit integer and 16 bit fractional
+> > > -	 */
+> > > -	return backlight;
+> > > -}
+> > > -
+> > > -static unsigned int dmub_abm_get_target_backlight(struct abm *abm) -{
+> > > -	struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
+> > > -	unsigned int backlight = REG_READ(BL1_PWM_TARGET_ABM_LEVEL);
+> > > -
+> > > -	/* return backlight in hardware format which is unsigned 17 bits, with
+> > > -	 * 1 bit integer and 16 bit fractional
+> > > -	 */
+> > > -	return backlight;
+> > > -}
+> > > -
+> > >    static bool dmub_abm_set_level(struct abm *abm, uint32_t level)
+> > >    {
+> > >    	union dmub_rb_cmd cmd;
+> > > @@ -148,6 +129,9 @@ static bool dmub_abm_set_level(struct abm *abm, uint32_t level)
+> > >    	int edp_num;
+> > >    	uint8_t panel_mask = 0;
+> > > +	if (power_supply_is_system_supplied() > 0)
+> > > +		level = 0;
+> > > +
+> > >    	get_edp_links(dc->dc, edp_links, &edp_num);
+> > >    	for (i = 0; i < edp_num; i++) {
+> > > @@ -170,6 +154,36 @@ static bool dmub_abm_set_level(struct abm *abm, uint32_t level)
+> > >    	return true;
+> > >    }
+> > > +static unsigned int dmub_abm_get_current_backlight(struct abm *abm) {
+> > > +	struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
+> > > +	unsigned int backlight = REG_READ(BL1_PWM_CURRENT_ABM_LEVEL);
+> > > +	struct dc_context *dc = abm->ctx;
+> > > +	struct amdgpu_device *adev = dc->driver_context;
+> > > +
+> > > +	if (adev->pm.ac_power != adev->pm.old_ac_power) {
+> > > +		dmub_abm_set_level(abm, amdgpu_dm_abm_level);
+> > > +		adev->pm.ac_power = power_supply_is_system_supplied() > 0;
+> > > +		adev->pm.old_ac_power = adev->pm.ac_power;
+> > > +	}
+> > > +
+> > > +	/* return backlight in hardware format which is unsigned 17 bits, with
+> > > +	 * 1 bit integer and 16 bit fractional
+> > > +	 */
+> > > +	return backlight;
+> > > +}
+> > > +
+> > > +static unsigned int dmub_abm_get_target_backlight(struct abm *abm) {
+> > > +	struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
+> > > +	unsigned int backlight = REG_READ(BL1_PWM_TARGET_ABM_LEVEL);
+> > > +
+> > > +	/* return backlight in hardware format which is unsigned 17 bits, with
+> > > +	 * 1 bit integer and 16 bit fractional
+> > > +	 */
+> > > +	return backlight;
+> > > +}
+> > > +
+> > >    static bool dmub_abm_init_config(struct abm *abm,
+> > >    	const char *src,
+> > >    	unsigned int bytes,
+> > > diff --git a/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
+> > > b/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
+> > > index f6e0e7d8a0077..de459411a0e83 100644
+> > > --- a/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
+> > > +++ b/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
+> > > @@ -445,6 +445,7 @@ struct amdgpu_pm {
+> > >    	uint32_t                smu_prv_buffer_size;
+> > >    	struct amdgpu_bo        *smu_prv_buffer;
+> > >    	bool ac_power;
+> > > +	bool old_ac_power;
+> > >    	/* powerplay feature */
+> > >    	uint32_t pp_feature;
+> 
 
-Unable to handle kernel NULL pointer dereference at virtual address
-00000008
-...
-calltrace:
-[<c06e5488>] devfreq_cooling_power2state+0x24/0x184
-[<c06df420>] power_actor_set_power+0x54/0xa8
-[<c06e3774>] power_allocator_throttle+0x770/0x97c
-[<c06dd120>] handle_thermal_trip+0x1b4/0x26c
-[<c06ddb48>] thermal_zone_device_update+0x154/0x208
-[<c014159c>] process_one_work+0x1ec/0x36c
-[<c0141c58>] worker_thread+0x204/0x2ec
-[<c0146788>] kthread+0x140/0x154
-[<c01010e8>] ret_from_fork+0x14/0x2c
-
-Fixes: a76caf55e5b35 ("thermal: Add devfreq cooling")
-Cc: stable@vger.kernel.org # 4.4+
-Signed-off-by: Kant Fan <kant@allwinnertech.com>
----
- drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
-index dfab49a67252..d36f70513e6a 100644
---- a/drivers/thermal/devfreq_cooling.c
-+++ b/drivers/thermal/devfreq_cooling.c
-@@ -462,22 +462,29 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
- {
- 	struct thermal_cooling_device *cdev;
- 	struct devfreq_cooling_device *dfc;
-+	struct thermal_cooling_device_ops *ops;
- 	char dev_name[THERMAL_NAME_LENGTH];
- 	int err;
- 
--	dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
--	if (!dfc)
-+	ops = kmemdup(&devfreq_cooling_ops, sizeof(*ops), GFP_KERNEL);
-+	if (!ops)
- 		return ERR_PTR(-ENOMEM);
- 
-+	dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
-+	if (!dfc) {
-+		err = -ENOMEM;
-+		goto free_ops;
-+	}
-+
- 	dfc->devfreq = df;
- 
- 	if (dfc_power) {
- 		dfc->power_ops = dfc_power;
- 
--		devfreq_cooling_ops.get_requested_power =
-+		ops->get_requested_power =
- 			devfreq_cooling_get_requested_power;
--		devfreq_cooling_ops.state2power = devfreq_cooling_state2power;
--		devfreq_cooling_ops.power2state = devfreq_cooling_power2state;
-+		ops->state2power = devfreq_cooling_state2power;
-+		ops->power2state = devfreq_cooling_power2state;
- 	}
- 
- 	err = devfreq_cooling_gen_tables(dfc);
-@@ -497,8 +504,7 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
- 
- 	snprintf(dev_name, sizeof(dev_name), "thermal-devfreq-%d", dfc->id);
- 
--	cdev = thermal_of_cooling_device_register(np, dev_name, dfc,
--						  &devfreq_cooling_ops);
-+	cdev = thermal_of_cooling_device_register(np, dev_name, dfc, ops);
- 	if (IS_ERR(cdev)) {
- 		err = PTR_ERR(cdev);
- 		dev_err(df->dev.parent,
-@@ -522,6 +528,8 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
- 	kfree(dfc->freq_table);
- free_dfc:
- 	kfree(dfc);
-+free_ops:
-+	kfree(ops);
- 
- 	return ERR_PTR(err);
- }
-@@ -557,10 +565,12 @@ EXPORT_SYMBOL_GPL(devfreq_cooling_register);
- void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
- {
- 	struct devfreq_cooling_device *dfc;
-+	const struct thermal_cooling_device_ops *ops;
- 
- 	if (!cdev)
- 		return;
- 
-+	ops = cdev->ops;
- 	dfc = cdev->devdata;
- 
- 	thermal_cooling_device_unregister(dfc->cdev);
-@@ -570,5 +580,6 @@ void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
- 	kfree(dfc->freq_table);
- 
- 	kfree(dfc);
-+	kfree(ops);
- }
- EXPORT_SYMBOL_GPL(devfreq_cooling_unregister);
 -- 
-2.29.0
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

@@ -2,106 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7CB4E73F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 14:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A05D44E73FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 14:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359252AbiCYNJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 09:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
+        id S245078AbiCYNMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 09:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345586AbiCYNJP (ORCPT
+        with ESMTP id S238273AbiCYNMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 09:09:15 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC7BCC511
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 06:07:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648213659; x=1679749659;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=fzVMhp7e/Ge3em6NSiINd7rvzyurVsbQFQAPqNNDaAE=;
-  b=ldLc6K5J0eZUOxw9khXb+y1KmmerH0BlHBrIuQrzJfkgdNkavZ2nqtwN
-   xGqNG4FQfl1Sl/87q7o8F5ZtQQWudyeFNmii1H7ulAOMRUkDAL/JAqzD5
-   lq+zaBgglKEFlo9jyS1un5BKXl8fgYWHgo/SmUfzDdBlVRlGvp3PHFuJp
-   RGMlK5i97DGnMOMSBOOKYEAle0onHYGl2Yi3nV8Y6FLC2DGlH0Dp2gp0f
-   tG+utWf7i9+yPyx4plZA5xxoTGee2nusL8KkRp4kL5PusZszyyA80Xir6
-   ifNj1TcjG49ua2cVuMf9h7z6i7+3OjECqwSYdWX7FTmgjV/25Hdb3J697
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="283499976"
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="283499976"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 06:07:39 -0700
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="561830808"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.29.177]) ([10.255.29.177])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 06:07:37 -0700
-Subject: Re: [tip:sched/core] BUILD SUCCESS
- 3387ce4d8a5f2956fab827edf499fe6780e83faa
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        kernel test robot <lkp@intel.com>, x86-ml <x86@kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <6238fde0.Qe5umewxqwiDe2GE%lkp@intel.com>
- <YjkHkb7joeu5GCto@dev-arch.thelio-3990X>
- <24dd031a-8ea7-5f01-4d80-3fb30d212c8a@intel.com>
- <20220324175801.GJ8939@worktop.programming.kicks-ass.net>
- <2d37183b-e0d5-dd37-11c7-9b0e415daaf4@intel.com>
- <20220325115446.GP8939@worktop.programming.kicks-ass.net>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <513584ee-5247-fae1-4e5b-02f270d139f9@intel.com>
-Date:   Fri, 25 Mar 2022 21:07:35 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        Fri, 25 Mar 2022 09:12:02 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D753917D
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 06:10:28 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id g2-20020a056e02130200b002c837b25e60so4550911ilr.20
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 06:10:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=KosOGWYuEGV0sf8h8ACjx6c7aC3WaEJkx0os9Bmapfg=;
+        b=uOwS18i8lfJmrsHIZYimHrzjIijYS0C3DG/+lGDZc/1EmSPemlhcwDprmZnHDp0+nN
+         XLUtTN7t+64RlEClzWLivO31Oph0xyY7Lg95cUvxpt6v7p/alSu2dY36HUoIeeXGUTzs
+         dp9mH9R8nJ9VFhXD2rGorcaVTqzqCo+x8j6ZLI4/vk1+ZJG9z9pC2pE8UjV83gSAop9t
+         +8IpNQJkmfNRYaQvuFauqR4gLKdFDpNP+/nqxGk3Kotnqz6/j6FgEBsxJMf6o0nmkYXn
+         LX+34hrUaff6yThSyUWUwvxNFORu04QGiaFUjIjGOrQzXaXvG/boze4MhpvE4Vfs1fvz
+         FMDg==
+X-Gm-Message-State: AOAM530zS0LqP0KNEB3t/RBUhZNZzMf4u9ec6UGVq1Z0hNhPj8WdcoI2
+        dQM+TJwDW5kbqc31xQQOfrAEoeHa7A9nprLrzkLZHPjF0T9G
+X-Google-Smtp-Source: ABdhPJwQ5X+MQfNKFOQwNMsTy53/dAX5YJcxGhWsealzYCzZuW09tAa4Gyb2Ir1wBVWtVU+IN/lteS+zQndAqYqLWUhRAerS7rBA
 MIME-Version: 1.0
-In-Reply-To: <20220325115446.GP8939@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6638:1389:b0:323:1301:7d2e with SMTP id
+ w9-20020a056638138900b0032313017d2emr3393615jad.87.1648213826586; Fri, 25 Mar
+ 2022 06:10:26 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 06:10:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a5cb1305db0aaf48@google.com>
+Subject: [syzbot] general protection fault in kvm_mmu_uninit_tdp_mmu
+From:   syzbot <syzbot+717ed82268812a643b28@syzkaller.appspotmail.com>
+To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, seanjc@google.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    f9006d9269ea Add linux-next specific files for 20220321
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=101191bd700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c1619ffa2b0259a1
+dashboard link: https://syzkaller.appspot.com/bug?extid=717ed82268812a643b28
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=109e8f5d700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1666180b700000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+717ed82268812a643b28@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc0000000038: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x00000000000001c0-0x00000000000001c7]
+CPU: 0 PID: 3614 Comm: syz-executor358 Tainted: G        W         5.17.0-next-20220321-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:flush_workqueue+0xf8/0x1440 kernel/workqueue.c:2828
+Code: ff 89 de e8 ea 02 2c 00 84 db 0f 84 28 0f 00 00 e8 fd fe 2b 00 48 8b 85 e8 fe ff ff 48 8d b8 c0 01 00 00 48 89 f8 48 c1 e8 03 <42> 0f b6 04 20 84 c0 74 08 3c 03 0f 8e f9 12 00 00 48 8b 85 e8 fe
+RSP: 0018:ffffc90003affba8 EFLAGS: 00010202
+RAX: 0000000000000038 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff8880184b57c0 RSI: ffffffff814caa33 RDI: 00000000000001c0
+RBP: ffffc90003affd18 R08: 0000000000000002 R09: 0000000000000001
+R10: ffffffff814caa26 R11: 0000000000000000 R12: dffffc0000000000
+R13: ffffc90003affd70 R14: ffffc90003b29000 R15: ffffc90003b2a240
+FS:  00007f26eaecd700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020404030 CR3: 00000000246a9000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kvm_mmu_uninit_tdp_mmu+0x7f/0x170 arch/x86/kvm/mmu/tdp_mmu.c:51
+ kvm_arch_destroy_vm+0x350/0x470 arch/x86/kvm/x86.c:11799
+ kvm_create_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1144 [inline]
+ kvm_dev_ioctl_create_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:4736 [inline]
+ kvm_dev_ioctl+0x104d/0x1c00 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4791
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f26eaf5dac9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f26eaecd308 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f26eafe5448 RCX: 00007f26eaf5dac9
+RDX: 0000000000000000 RSI: 000000000000ae01 RDI: 0000000000000005
+RBP: 00007f26eafe5440 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f26eafe544c
+R13: 00007f26eafb3074 R14: 6d766b2f7665642f R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:flush_workqueue+0xf8/0x1440 kernel/workqueue.c:2828
+Code: ff 89 de e8 ea 02 2c 00 84 db 0f 84 28 0f 00 00 e8 fd fe 2b 00 48 8b 85 e8 fe ff ff 48 8d b8 c0 01 00 00 48 89 f8 48 c1 e8 03 <42> 0f b6 04 20 84 c0 74 08 3c 03 0f 8e f9 12 00 00 48 8b 85 e8 fe
+RSP: 0018:ffffc90003affba8 EFLAGS: 00010202
+
+RAX: 0000000000000038 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff8880184b57c0 RSI: ffffffff814caa33 RDI: 00000000000001c0
+RBP: ffffc90003affd18 R08: 0000000000000002 R09: 0000000000000001
+R10: ffffffff814caa26 R11: 0000000000000000 R12: dffffc0000000000
+R13: ffffc90003affd70 R14: ffffc90003b29000 R15: ffffc90003b2a240
+FS:  00007f26eaecd700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020404030 CR3: 00000000246a9000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	ff 89 de e8 ea 02    	decl   0x2eae8de(%rcx)
+   6:	2c 00                	sub    $0x0,%al
+   8:	84 db                	test   %bl,%bl
+   a:	0f 84 28 0f 00 00    	je     0xf38
+  10:	e8 fd fe 2b 00       	callq  0x2bff12
+  15:	48 8b 85 e8 fe ff ff 	mov    -0x118(%rbp),%rax
+  1c:	48 8d b8 c0 01 00 00 	lea    0x1c0(%rax),%rdi
+  23:	48 89 f8             	mov    %rdi,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 0f b6 04 20       	movzbl (%rax,%r12,1),%eax <-- trapping instruction
+  2f:	84 c0                	test   %al,%al
+  31:	74 08                	je     0x3b
+  33:	3c 03                	cmp    $0x3,%al
+  35:	0f 8e f9 12 00 00    	jle    0x1334
+  3b:	48                   	rex.W
+  3c:	8b                   	.byte 0x8b
+  3d:	85 e8                	test   %ebp,%eax
+  3f:	fe                   	.byte 0xfe
 
 
-On 3/25/2022 7:54 PM, Peter Zijlstra wrote:
-> On Fri, Mar 25, 2022 at 06:45:24PM +0800, Chen, Rong A wrote:
-> 
->>> Oh *PLEASE* never report a branch as building if there's errors.
->>> It could be I (force) push a branch multiple times before I get any
->>> 0day reports back (0day has gotten *soooo* slow) so I only ever look at
->>> the latest report -- possibly days later.
->>
->> Hi Peter,
->>
->> Sorry for the bad experience, I'm not sure the meaning of "a branch as
->> building", is there a way to know the branch is not ready, or we can
->> postpone the test for a branch by a day?
-> 
-> I was just commenting in general; never send a mail with "SUCCESS" in
-> the subject (as per this thread) when there are errors/warns with it,
-> supressed or otherwise.
-> 
-> If you do want to supress warnings (I'm not sure why; a few more emails
-> in my inbox really aren't going to make a difference) then please state
-> so explicitly with a link to the email with the report.
-> 
-> The thing I worry about is that I often wait for a SUCCESS mail from
-> 0day robot before I push code to tip. If the SUCCESS is unreliable, this
-> is not good.
-> 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Hi Peter,
-
-Thanks for your advice, we will fix the problem in the near future.
-
-Best Regards,
-Rong Chen
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

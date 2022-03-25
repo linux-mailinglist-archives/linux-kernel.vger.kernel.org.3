@@ -2,90 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2B54E7C4B
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B484E7CC8
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbiCYUz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 16:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
+        id S232380AbiCYUxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 16:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbiCYUz1 (ORCPT
+        with ESMTP id S232328AbiCYUxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 16:55:27 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BEE42EF4
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:53:52 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id pv16so17684730ejb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:53:52 -0700 (PDT)
+        Fri, 25 Mar 2022 16:53:49 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CDD506F0
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:52:14 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id o6so11801536ljp.3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:52:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=qTyIfzc6eWn8tPRbJvu4pItLGCLIkdX7GJakm9zDrl8=;
-        b=gm5AHFVvThRrK7sA/BQ6fJ/iDwpQq6O0/7tOPWKWfF0gNOKqop2SvIcH4r/OClE48L
-         VFW0eVhGjvjiyVqrrrPg6Q1OkP1qou04a5ugVipBYO9VTlVyEcQ7kokZzVjAoN7pS1Ch
-         +u+3DjL5YncJtUcCyN3Ju5WCdBaFHsUNObffo=
+        bh=XL7fBu7OlctI0zNy/cRZjH1z0Pexf4s0Ro6kC1bg2Jk=;
+        b=AjRN4k8UeL2cFoATtOl9IzjPGEPyOHgc88Tmu//hjPBbsK3rLRCNQdg2851c1HEIPC
+         xKcH0Ukwii4dYTVeW4/2KYbdP/m0owF7DP4+ATYYsLWBiEKXu27Z/3nvqHCpqgkpX5hl
+         KSqxiPB/26Mci+r/n2Q0/Qd+UvhHfRz3ATDek=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qTyIfzc6eWn8tPRbJvu4pItLGCLIkdX7GJakm9zDrl8=;
-        b=Wd5dPjmT3gZbcrDX5/uasFfaok6hHzSRbso203SIro/Bca1X8Dv1rGkB6ooybawBi3
-         Y6ELiIMLsLiyEzqfPMvJsrGLhzOW6tCy8c8PNmg4xGe3EGzaWhj1TacuH/iKc2pKudz9
-         0fXLLklbnhtLADDDDdBEgtbhKLSgeaBnBN3jqW/DhkepAVni1jgZQJwpfOUyafo4mp5j
-         krpYEFzmtGhSC3iR0IB+oAS2wvF3qQIcCxw9tDL1xOW5n9Js+rGzKDKDPCr4QLzhBfq/
-         I1zRgpShwx0be6HJksijf1FhL3d95rTMPFNkVCRMkWQWNL7A/8vfHtnYbeO0ue3Fhv7h
-         mXbg==
-X-Gm-Message-State: AOAM5301hHjAw1MbDpcPJ2TcDN1Hx+aZLG26EzwlimYEzpeX6IgZ7J7o
-        5DBmYT4F/zYTvf2/z8a10MOepFW8d2rBZg2TxVU=
-X-Google-Smtp-Source: ABdhPJyNBS0A97O5n1FjdRUbFzgDiVU6WLvPDroUQUQKD5ZSxZSQWRGT61hVePaV/V5pKzFgo2IUIw==
-X-Received: by 2002:a17:907:6296:b0:6da:745b:7b40 with SMTP id nd22-20020a170907629600b006da745b7b40mr13965423ejc.750.1648241630464;
-        Fri, 25 Mar 2022 13:53:50 -0700 (PDT)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id k12-20020aa7c38c000000b0041939d9ccd0sm3309169edq.81.2022.03.25.13.53.49
+        bh=XL7fBu7OlctI0zNy/cRZjH1z0Pexf4s0Ro6kC1bg2Jk=;
+        b=jL8e+GD2Tg3UiEf6mzVrcQv0rhL4ho0SDU0XQvnAnC10HGEIfn7Nu8jesidCy5LN9M
+         aDT0CCCSORXdeWrUltzQ1Nf/A7XraN/JU7Mpy6IeQ6+c70oTf/FjNfXW01BKyahOPqmv
+         Ly7qNXePSVnVl2mwSQ+eCddFVlZgUmFC6YjtvqkrTkO4X0I5LVta0P90eDnM3azy1ezD
+         KkERvhCNZqPOGcVBNzl2SQ4X4r2fDPZnMnm3oXh/UCf+uFcO/FeEzNGp8bw5vtCwsD2g
+         etMbOmxX9wG5U0Pos+lQWwHVN1lQwtHTaE1Kq0dqbzrWmXzVTJEZuXRbVlT6ZFX7SD/H
+         Xz0Q==
+X-Gm-Message-State: AOAM5306AR8vEvinG6dZCpmBV+7kQS0vX/m12s17z6o7WwQS2MUmXobH
+        AVhvT144aFuVzPnB8wYUbNDmZJ0hWESeYnkldV4=
+X-Google-Smtp-Source: ABdhPJzdMLH+eHzBthtECbnvhHdsAYbhdYeUhAn++P+J2B/tJlOvoVwZFfJ17dUzZMpp/Cvz66eEdA==
+X-Received: by 2002:a2e:87d4:0:b0:249:a34a:2532 with SMTP id v20-20020a2e87d4000000b00249a34a2532mr9698635ljj.328.1648241532140;
+        Fri, 25 Mar 2022 13:52:12 -0700 (PDT)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
+        by smtp.gmail.com with ESMTPSA id w15-20020a05651c118f00b0024957c859dbsm803950ljo.50.2022.03.25.13.52.11
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 13:53:50 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id j18so12352054wrd.6
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:53:49 -0700 (PDT)
-X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
- y3-20020ac24203000000b004488053d402mr9094484lfh.687.1648241278691; Fri, 25
- Mar 2022 13:47:58 -0700 (PDT)
+        Fri, 25 Mar 2022 13:52:11 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id bu29so15389597lfb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:52:11 -0700 (PDT)
+X-Received: by 2002:ac2:4f92:0:b0:448:7eab:c004 with SMTP id
+ z18-20020ac24f92000000b004487eabc004mr9360717lfs.27.1648241531008; Fri, 25
+ Mar 2022 13:52:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <1812355.tdWV9SEqCh@natalenko.name> <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
- <20220324055732.GB12078@lst.de> <4386660.LvFx2qVVIh@natalenko.name>
- <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com> <878rsza0ih.fsf@toke.dk>
- <4be26f5d8725cdb016c6fdd9d05cfeb69cdd9e09.camel@freebox.fr>
- <20220324163132.GB26098@lst.de> <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com>
- <871qyr9t4e.fsf@toke.dk> <CAHk-=whUQCCaQXJt3KUeQ8mtnLeVXEScNXCp+_DYh2SNY7EcEA@mail.gmail.com>
- <31434708dcad126a8334c99ee056dcce93e507f1.camel@freebox.fr>
- <CAHk-=wippum+MksdY7ixMfa3i1sZ+nxYPWLLpVMNyXCgmiHbBQ@mail.gmail.com> <298f4f9ccad7c3308d3a1fd8b4b4740571305204.camel@sipsolutions.net>
-In-Reply-To: <298f4f9ccad7c3308d3a1fd8b4b4740571305204.camel@sipsolutions.net>
+References: <YjtZAvQnshp1pZIh@zn.tnic> <CAHk-=wgXbSa8yq8Dht8at+gxb_idnJ7X5qWZQWRBN4_CUPr=eQ@mail.gmail.com>
+ <Yj4orVIbqcyTQcY7@zn.tnic>
+In-Reply-To: <Yj4orVIbqcyTQcY7@zn.tnic>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 25 Mar 2022 13:47:42 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whXAan2ExANMryPSFaBWeyzikPi+fPUseMoVhQAxR7cEA@mail.gmail.com>
-Message-ID: <CAHk-=whXAan2ExANMryPSFaBWeyzikPi+fPUseMoVhQAxR7cEA@mail.gmail.com>
-Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
- ath9k-based AP
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     Maxime Bizon <mbizon@freebox.fr>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Olha Cherevyk <olha.cherevyk@gmail.com>,
-        iommu <iommu@lists.linux-foundation.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable <stable@vger.kernel.org>
+Date:   Fri, 25 Mar 2022 13:51:54 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whR6pCHwvAWQKZ88D1hBuRJsV66ucEnybBiOHskoPsPxQ@mail.gmail.com>
+Message-ID: <CAHk-=whR6pCHwvAWQKZ88D1hBuRJsV66ucEnybBiOHskoPsPxQ@mail.gmail.com>
+Subject: Re: [GIT PULL] RAS updates for 5.18
+To:     Borislav Petkov <bp@suse.de>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -97,76 +73,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 1:38 PM Johannes Berg <johannes@sipsolutions.net> wrote:
+On Fri, Mar 25, 2022 at 1:40 PM Borislav Petkov <bp@suse.de> wrote:
 >
-> >  (2) The CPU now wants to see any state written by the device since
-> > the last sync
-> >
-> >     This is "dma_sync_single_for_cpu(DMA_FROM_DEVICE)".
-> >
-> >     A bounce-buffer implementation needs to copy *from* the bounce buffer.
-> >
-> >     A cache-coherent implementation needs to do nothing.
-> >
-> >     A non-coherent implementation maybe needs to do nothing (ie it
-> > assumes that previous ops have flushed the cache, and just accessing
-> > the data will bring the rigth thing back into it). Or it could just
-> > flush the cache.
->
-> Doesn't that just need to *invalidate* the cache, rather than *flush*
-> it?
+> If I try to make it do a --ff, it still does a merge commit:
 
-Yes.  I should have been more careful.
+Oh, they indeed aren't fast-forwards of each other, they just looked
+superficially that way to me because when I did my
 
-That said, I think "invalidate without writeback" is a really
-dangerous operation (it can generate some *really* hard to debug
-memory state), so on the whole I think you should always strive to
-just do "flush-and-invalidate".
+   gitk ORIG_HEAD..
 
-If the core has support for "invalidate clean cache lines only", then
-that's possibly a good alternative.
+after merging, the fact that I had already merged everything else in
+both of those branches.
 
-> >   A non-coherent implementation needs to flush the cache again, bot
-> > not necessarily do a writeback-flush if there is some cheaper form
-> > (assuming it does nothing in the "CPU now wants to see any state" case
-> > because it depends on the data not having been in the caches)
->
-> And similarly here, it would seem that the implementation can't _flush_
-> the cache as the device might be writing concurrently (which it does in
-> fact do in the ath9k case), but it must invalidate the cache?
+So never mind. It wasn't a pointless fast-forward merge, it's just
+that neither of those branches had anything new in them as far as I
+was concerned any more.
 
-Right, again, when I said "flush" I really should have said "invalidate".
-
-> I'm not sure about the (2) case, but here it seems fairly clear cut that
-> if you have a cache, don't expect the CPU to write to the buffer (as
-> evidenced by DMA_FROM_DEVICE), you wouldn't want to write out the cache
-> to DRAM?
-
-See above: I'd *really* want to avoid a pure "invalidate cacheline"
-model. The amount of debug issues that can cause is not worth it.
-
-So please flush-and-invalidate, or invalidate-non-dirty, but not just
-"invalidate".
-
-> Then, however, we need to define what happens if you pass
-> DMA_BIDIRECTIONAL to the sync_for_cpu() and sync_for_device() functions,
-> which adds two more cases? Or maybe we eventually just think that's not
-> valid at all, since you have to specify how you're (currently?) using
-> the buffer, which can't be DMA_BIDIRECTIONAL?
-
-Ugh. Do we actually have cases that do it? That sounds really odd for
-a "sync" operation. It sounds very reasonable for _allocating_ DMA,
-but for syncing I'm left scratching my head what the semantics would
-be.
-
-But yes, if we do and people come up with semantics for it, those
-semantics should be clearly documented.
-
-And if we don't - or people can't come up with semantics for it - we
-should actively warn about it and not have some code that does odd
-things that we don't know what they mean.
-
-But it sounds like you agree with my analysis, just not with some of
-my bad/incorrect word choices.
-
-            Linus
+              Linus

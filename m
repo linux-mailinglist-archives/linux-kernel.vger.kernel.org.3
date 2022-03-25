@@ -2,55 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B424C4E75FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1461F4E75D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359816AbiCYPJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36798 "EHLO
+        id S1359529AbiCYPId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359823AbiCYPIF (ORCPT
+        with ESMTP id S1359570AbiCYPHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:08:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B0CDA08C;
-        Fri, 25 Mar 2022 08:06:26 -0700 (PDT)
+        Fri, 25 Mar 2022 11:07:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A1ED9E93;
+        Fri, 25 Mar 2022 08:05:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A31CB828FD;
-        Fri, 25 Mar 2022 15:06:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D5F7C340E9;
-        Fri, 25 Mar 2022 15:06:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74A4761BF0;
+        Fri, 25 Mar 2022 15:05:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EACEC340E9;
+        Fri, 25 Mar 2022 15:05:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220784;
-        bh=uD6uTbeDquRq+y7iuvesdrXvoxryN+ZU0QBCk/fsDvA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=zlF4qQioY5QWEj46euQYGL+BW9Exxx9kJn6qvaL/jUHIaX6TupOzZ9oVsO9Og1FPw
-         20SN4OyV0w+30HsEKdQFz15c+mUajxrjNAgBQ0RomtX0p0CVwhBBxQaJrd1GM1T784
-         HNFSM39vm9qiIcc6wnblaWbhJwbD5YeRDCV3cWSk=
+        s=korg; t=1648220733;
+        bh=Ade0smQZ+bCgusLLhxdZ5bpFPwEb/r/6d9CpN5k5V98=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pHIozQs4P5+FJEbeQoaK2hxevHCrRrGhzApU8MNGSb8F/uIBJx6A30TL+ToI+Ijjt
+         Gv97g44hiud51F+Cs/Uj86ablo/Xd9pur1X6US5Rz/NSwUlahS8jkP7kPRxaHZT2LX
+         om3O/xSK7QjrrOQ7e/4Pey4x0lrwc/g21NlQ/bbY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 4.14 00/17] 4.14.274-rc1 review
-Date:   Fri, 25 Mar 2022 16:04:34 +0100
-Message-Id: <20220325150416.756136126@linuxfoundation.org>
+        stable@vger.kernel.org, Jordy Zomer <jordy@pwning.systems>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Denis Efremov <denis.e.efremov@oracle.com>
+Subject: [PATCH 4.14 01/17] nfc: st21nfca: Fix potential buffer overflows in EVT_TRANSACTION
+Date:   Fri, 25 Mar 2022 16:04:35 +0100
+Message-Id: <20220325150416.802200313@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
+In-Reply-To: <20220325150416.756136126@linuxfoundation.org>
+References: <20220325150416.756136126@linuxfoundation.org>
 User-Agent: quilt/0.66
 X-stable: review
 X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.274-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.14.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.14.274-rc1
-X-KernelTest-Deadline: 2022-03-27T15:04+00:00
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -63,108 +58,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.14.274 release.
-There are 17 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: Jordy Zomer <jordy@pwning.systems>
 
-Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
-Anything received after that time might be too late.
+commit 4fbcc1a4cb20fe26ad0225679c536c80f1648221 upstream.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.274-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
-and the diffstat can be found below.
+It appears that there are some buffer overflows in EVT_TRANSACTION.
+This happens because the length parameters that are passed to memcpy
+come directly from skb->data and are not guarded in any way.
 
-thanks,
+Signed-off-by: Jordy Zomer <jordy@pwning.systems>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Denis Efremov <denis.e.efremov@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/nfc/st21nfca/se.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.14.274-rc1
-
-Linus Lüssing <ll@simonwunderlich.de>
-    mac80211: fix potential double free on mesh join
-
-Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-    crypto: qat - disable registration of algorithms
-
-Werner Sembach <wse@tuxedocomputers.com>
-    ACPI: video: Force backlight native for Clevo NL5xRU and NL5xNU
-
-Maximilian Luz <luzmaximilian@gmail.com>
-    ACPI: battery: Add device HID and quirk for Microsoft Surface Go 3
-
-Mark Cilissen <mark@yotsuba.nl>
-    ACPI / x86: Work around broken XSDT on Advantech DAC-BJ01 board
-
-Pablo Neira Ayuso <pablo@netfilter.org>
-    netfilter: nf_tables: initialize registers in nft_do_chain()
-
-Stephane Graber <stgraber@ubuntu.com>
-    drivers: net: xgene: Fix regression in CRC stripping
-
-Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>
-    ALSA: pci: fix reading of swapped values from pcmreg in AC97 codec
-
-Jonathan Teh <jonathan.teh@outlook.com>
-    ALSA: cmipci: Restore aux vol on suspend/resume
-
-Lars-Peter Clausen <lars@metafoo.de>
-    ALSA: usb-audio: Add mute TLV for playback volumes on RODE NT-USB
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: pcm: Add stream lock during PCM reset ioctl operations
-
-Eric Dumazet <edumazet@google.com>
-    llc: fix netdevice reference leaks in llc_ui_bind()
-
-Chuansheng Liu <chuansheng.liu@intel.com>
-    thermal: int340x: fix memory leak in int3400_notify()
-
-Oliver Graute <oliver.graute@kococonnector.com>
-    staging: fbtft: fb_st7789v: reset display before initialization
-
-Steffen Klassert <steffen.klassert@secunet.com>
-    esp: Fix possible buffer overflow in ESP transformation
-
-Tadeusz Struk <tadeusz.struk@linaro.org>
-    net: ipv6: fix skb_over_panic in __ip6_append_data
-
-Jordy Zomer <jordy@pwning.systems>
-    nfc: st21nfca: Fix potential buffer overflows in EVT_TRANSACTION
-
-
--------------
-
-Diffstat:
-
- Makefile                                          |  4 +-
- arch/x86/kernel/acpi/boot.c                       | 24 ++++++++
- drivers/acpi/battery.c                            | 12 ++++
- drivers/acpi/video_detect.c                       | 75 +++++++++++++++++++++++
- drivers/crypto/qat/qat_common/qat_crypto.c        |  8 +++
- drivers/net/ethernet/apm/xgene/xgene_enet_main.c  | 12 ++--
- drivers/nfc/st21nfca/se.c                         | 10 +++
- drivers/staging/fbtft/fb_st7789v.c                |  2 +
- drivers/thermal/int340x_thermal/int3400_thermal.c |  4 ++
- include/net/esp.h                                 |  2 +
- include/net/sock.h                                |  3 +
- net/core/sock.c                                   |  3 -
- net/ipv4/esp4.c                                   |  5 ++
- net/ipv6/esp6.c                                   |  5 ++
- net/ipv6/ip6_output.c                             |  4 +-
- net/llc/af_llc.c                                  |  8 +++
- net/mac80211/cfg.c                                |  3 -
- net/netfilter/nf_tables_core.c                    |  2 +-
- sound/core/pcm_native.c                           |  4 ++
- sound/pci/ac97/ac97_codec.c                       |  4 +-
- sound/pci/cmipci.c                                |  3 +-
- sound/usb/mixer_quirks.c                          |  7 ++-
- 22 files changed, 181 insertions(+), 23 deletions(-)
+--- a/drivers/nfc/st21nfca/se.c
++++ b/drivers/nfc/st21nfca/se.c
+@@ -330,6 +330,11 @@ int st21nfca_connectivity_event_received
+ 			return -ENOMEM;
+ 
+ 		transaction->aid_len = skb->data[1];
++
++		/* Checking if the length of the AID is valid */
++		if (transaction->aid_len > sizeof(transaction->aid))
++			return -EINVAL;
++
+ 		memcpy(transaction->aid, &skb->data[2],
+ 		       transaction->aid_len);
+ 
+@@ -339,6 +344,11 @@ int st21nfca_connectivity_event_received
+ 			return -EPROTO;
+ 
+ 		transaction->params_len = skb->data[transaction->aid_len + 3];
++
++		/* Total size is allocated (skb->len - 2) minus fixed array members */
++		if (transaction->params_len > ((skb->len - 2) - sizeof(struct nfc_evt_transaction)))
++			return -EINVAL;
++
+ 		memcpy(transaction->params, skb->data +
+ 		       transaction->aid_len + 4, transaction->params_len);
+ 
 
 

@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889E34E77C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DF34E7720
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:25:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378618AbiCYPfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
+        id S1376663AbiCYPXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377733AbiCYPYc (ORCPT
+        with ESMTP id S1376270AbiCYPVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:24:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67135E72AE;
-        Fri, 25 Mar 2022 08:18:47 -0700 (PDT)
+        Fri, 25 Mar 2022 11:21:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907A3E338B;
+        Fri, 25 Mar 2022 08:16:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 015D660A1B;
-        Fri, 25 Mar 2022 15:18:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 065F9C340E9;
-        Fri, 25 Mar 2022 15:18:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39DEEB82903;
+        Fri, 25 Mar 2022 15:15:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CAB7C340F4;
+        Fri, 25 Mar 2022 15:15:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221526;
-        bh=dlt1A1biLcVDgMxTU/Y7y85mBaY6WRz6rpXrh1D3VB0=;
+        s=korg; t=1648221356;
+        bh=ZGqHvFAw8zYFl5sKx0Vfl0zk5smIKUztTYJffKlRplU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gc4oMGwu9b3SOgIM+oASxdmUHb0irdvugJ5Q8dtqu5dHJIEZzksFAQaI3DjF/Q5yQ
-         rFDhtU7VSCrEiSVsJDuSiJbsCEi+wh+cNJ4XtnGNk+8dpdq4yoq/f6oOTgrtDNOJdD
-         bEuigIJ73IJuaZSRlgFOlyVFUTbHY8V2GkZzaUR4=
+        b=S5jFVyvk7Xpa9laMGrjqoGkVSavZbsG/ecyhvQJyippC5TNnAgVUZ4xQ61T2ZQ5PZ
+         4s2mqa8+rQdKoE8kI1HM8hNvgVbz55FNbqTm+WMEct4oZ3aZEv+GFn4WD58+tYMDPH
+         S5/jOMOYcq1XXEOq4NWhNpnkb6Eodklidzs2PGas=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonathan Teh <jonathan.teh@outlook.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.17 17/39] ALSA: cmipci: Restore aux vol on suspend/resume
+        stable@vger.kernel.org, Tim Murray <timmurray@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Todd Kjos <tkjos@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH 5.15 31/37] rcu: Dont deboost before reporting expedited quiescent state
 Date:   Fri, 25 Mar 2022 16:14:32 +0100
-Message-Id: <20220325150420.736207240@linuxfoundation.org>
+Message-Id: <20220325150420.820554308@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150420.245733653@linuxfoundation.org>
-References: <20220325150420.245733653@linuxfoundation.org>
+In-Reply-To: <20220325150419.931802116@linuxfoundation.org>
+References: <20220325150419.931802116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +59,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Teh <jonathan.teh@outlook.com>
+From: Paul E. McKenney <paulmck@kernel.org>
 
-commit c14231cc04337c2c2a937db084af342ce704dbde upstream.
+commit 10c535787436d62ea28156a4b91365fd89b5a432 upstream.
 
-Save and restore CM_REG_AUX_VOL instead of register 0x24 twice on
-suspend/resume.
+Currently rcu_preempt_deferred_qs_irqrestore() releases rnp->boost_mtx
+before reporting the expedited quiescent state.  Under heavy real-time
+load, this can result in this function being preempted before the
+quiescent state is reported, which can in turn prevent the expedited grace
+period from completing.  Tim Murray reports that the resulting expedited
+grace periods can take hundreds of milliseconds and even more than one
+second, when they should normally complete in less than a millisecond.
 
-Tested on CMI8738LX.
+This was fine given that there were no particular response-time
+constraints for synchronize_rcu_expedited(), as it was designed
+for throughput rather than latency.  However, some users now need
+sub-100-millisecond response-time constratints.
 
-Fixes: cb60e5f5b2b1 ("[ALSA] cmipci - Add PM support")
-Signed-off-by: Jonathan Teh <jonathan.teh@outlook.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/DBAPR04MB7366CB3EA9C8521C35C56E8B920E9@DBAPR04MB7366.eurprd04.prod.outlook.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+This patch therefore follows Neeraj's suggestion (seconded by Tim and
+by Uladzislau Rezki) of simply reversing the two operations.
+
+Reported-by: Tim Murray <timmurray@google.com>
+Reported-by: Joel Fernandes <joelaf@google.com>
+Reported-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Reviewed-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+Tested-by: Tim Murray <timmurray@google.com>
+Cc: Todd Kjos <tkjos@google.com>
+Cc: Sandeep Patil <sspatil@google.com>
+Cc: <stable@vger.kernel.org> # 5.4.x
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/cmipci.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ kernel/rcu/tree_plugin.h |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/sound/pci/cmipci.c
-+++ b/sound/pci/cmipci.c
-@@ -298,7 +298,6 @@ MODULE_PARM_DESC(joystick_port, "Joystic
- #define CM_MICGAINZ		0x01	/* mic boost */
- #define CM_MICGAINZ_SHIFT	0
+--- a/kernel/rcu/tree_plugin.h
++++ b/kernel/rcu/tree_plugin.h
+@@ -554,16 +554,16 @@ rcu_preempt_deferred_qs_irqrestore(struc
+ 			raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+ 		}
  
--#define CM_REG_MIXER3		0x24
- #define CM_REG_AUX_VOL		0x26
- #define CM_VAUXL_MASK		0xf0
- #define CM_VAUXR_MASK		0x0f
-@@ -3265,7 +3264,7 @@ static int snd_cmipci_probe(struct pci_d
-  */
- static const unsigned char saved_regs[] = {
- 	CM_REG_FUNCTRL1, CM_REG_CHFORMAT, CM_REG_LEGACY_CTRL, CM_REG_MISC_CTRL,
--	CM_REG_MIXER0, CM_REG_MIXER1, CM_REG_MIXER2, CM_REG_MIXER3, CM_REG_PLL,
-+	CM_REG_MIXER0, CM_REG_MIXER1, CM_REG_MIXER2, CM_REG_AUX_VOL, CM_REG_PLL,
- 	CM_REG_CH0_FRAME1, CM_REG_CH0_FRAME2,
- 	CM_REG_CH1_FRAME1, CM_REG_CH1_FRAME2, CM_REG_EXT_MISC,
- 	CM_REG_INT_STATUS, CM_REG_INT_HLDCLR, CM_REG_FUNCTRL0,
+-		/* Unboost if we were boosted. */
+-		if (IS_ENABLED(CONFIG_RCU_BOOST) && drop_boost_mutex)
+-			rt_mutex_futex_unlock(&rnp->boost_mtx.rtmutex);
+-
+ 		/*
+ 		 * If this was the last task on the expedited lists,
+ 		 * then we need to report up the rcu_node hierarchy.
+ 		 */
+ 		if (!empty_exp && empty_exp_now)
+ 			rcu_report_exp_rnp(rnp, true);
++
++		/* Unboost if we were boosted. */
++		if (IS_ENABLED(CONFIG_RCU_BOOST) && drop_boost_mutex)
++			rt_mutex_futex_unlock(&rnp->boost_mtx.rtmutex);
+ 	} else {
+ 		local_irq_restore(flags);
+ 	}
 
 

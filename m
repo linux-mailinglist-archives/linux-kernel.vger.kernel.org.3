@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1804E7662
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78CCF4E75D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:07:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377173AbiCYPN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
+        id S1359588AbiCYPIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359855AbiCYPLW (ORCPT
+        with ESMTP id S1359540AbiCYPHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:11:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CFC5F276;
-        Fri, 25 Mar 2022 08:08:35 -0700 (PDT)
+        Fri, 25 Mar 2022 11:07:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81ECDD95FA;
+        Fri, 25 Mar 2022 08:05:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF29A61C12;
-        Fri, 25 Mar 2022 15:08:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5E64C340E9;
-        Fri, 25 Mar 2022 15:08:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19961B828FB;
+        Fri, 25 Mar 2022 15:05:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A872C340EE;
+        Fri, 25 Mar 2022 15:05:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220900;
-        bh=VxRB2LISnDDQcZScuENYf6qsl2GEU/YC1FvIF1AMrFc=;
+        s=korg; t=1648220739;
+        bh=nlE5/yk8Wh13HMpIBgKjw5YvNTdmuJ9LRCKl5GPXncI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jNbKg0eZE5lko5jKfHsScKXymn8JH9qwSwUlAORA4ufAuTUiOm0Z38T0AnuIjacAH
-         IYV4nPBkF3zNoeoL2tSH3BzpX/G6ZZZSIjMhJSsP6lUsBXt0egET61VBjXeVneSEl0
-         /8IYLW8Y9bDm7Ku6UlG5CuHJC7G36poM/erH0Ohk=
+        b=i/B+A2RwND+XIKCgMhUVupJkJL1D1ScW1Nio6gIywYt8nSWTVUp3pT0dZbQPPA7QB
+         WPPBrFDjkbPQQtorYhvqEXXuTQXrbzNmqDzqUcMi7rC3d3M8bULTyDe3NzNVDKnzOT
+         ku9yVv0AUJUXLm+fwoOdeR/OMim7YM8EjrOI0b2s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, valis <sec@valis.email>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Vaibhav Rustagi <vaibhavrustagi@google.com>
-Subject: [PATCH 5.4 05/29] esp: Fix possible buffer overflow in ESP transformation
+        stable@vger.kernel.org, Stephane Graber <stgraber@ubuntu.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.14 11/17] drivers: net: xgene: Fix regression in CRC stripping
 Date:   Fri, 25 Mar 2022 16:04:45 +0100
-Message-Id: <20220325150418.741528100@linuxfoundation.org>
+Message-Id: <20220325150417.091471376@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150418.585286754@linuxfoundation.org>
-References: <20220325150418.585286754@linuxfoundation.org>
+In-Reply-To: <20220325150416.756136126@linuxfoundation.org>
+References: <20220325150416.756136126@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,102 +54,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steffen Klassert <steffen.klassert@secunet.com>
+From: Stephane Graber <stgraber@ubuntu.com>
 
-commit ebe48d368e97d007bfeb76fcb065d6cfc4c96645 upstream.
+commit e9e6faeafaa00da1851bcf47912b0f1acae666b4 upstream.
 
-The maximum message size that can be send is bigger than
-the  maximum site that skb_page_frag_refill can allocate.
-So it is possible to write beyond the allocated buffer.
+All packets on ingress (except for jumbo) are terminated with a 4-bytes
+CRC checksum. It's the responsability of the driver to strip those 4
+bytes. Unfortunately a change dating back to March 2017 re-shuffled some
+code and made the CRC stripping code effectively dead.
 
-Fix this by doing a fallback to COW in that case.
+This change re-orders that part a bit such that the datalen is
+immediately altered if needed.
 
-v2:
-
-Avoid get get_order() costs as suggested by Linus Torvalds.
-
-Fixes: cac2661c53f3 ("esp4: Avoid skb_cow_data whenever possible")
-Fixes: 03e2a30f6a27 ("esp6: Avoid skb_cow_data whenever possible")
-Reported-by: valis <sec@valis.email>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
-Signed-off-by: Vaibhav Rustagi <vaibhavrustagi@google.com>
+Fixes: 4902a92270fb ("drivers: net: xgene: Add workaround for errata 10GE_8/ENET_11")
+Cc: stable@vger.kernel.org
+Signed-off-by: Stephane Graber <stgraber@ubuntu.com>
+Tested-by: Stephane Graber <stgraber@ubuntu.com>
+Link: https://lore.kernel.org/r/20220322224205.752795-1-stgraber@ubuntu.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/esp.h  |    2 ++
- include/net/sock.h |    3 +++
- net/core/sock.c    |    2 --
- net/ipv4/esp4.c    |    5 +++++
- net/ipv6/esp6.c    |    5 +++++
- 5 files changed, 15 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/apm/xgene/xgene_enet_main.c |   12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
---- a/include/net/esp.h
-+++ b/include/net/esp.h
-@@ -4,6 +4,8 @@
+--- a/drivers/net/ethernet/apm/xgene/xgene_enet_main.c
++++ b/drivers/net/ethernet/apm/xgene/xgene_enet_main.c
+@@ -707,6 +707,12 @@ static int xgene_enet_rx_frame(struct xg
+ 	buf_pool->rx_skb[skb_index] = NULL;
  
- #include <linux/skbuff.h>
- 
-+#define ESP_SKB_FRAG_MAXSIZE (PAGE_SIZE << SKB_FRAG_PAGE_ORDER)
+ 	datalen = xgene_enet_get_data_len(le64_to_cpu(raw_desc->m1));
 +
- struct ip_esp_hdr;
- 
- static inline struct ip_esp_hdr *ip_esp_hdr(const struct sk_buff *skb)
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -2583,6 +2583,9 @@ extern int sysctl_optmem_max;
- extern __u32 sysctl_wmem_default;
- extern __u32 sysctl_rmem_default;
- 
++	/* strip off CRC as HW isn't doing this */
++	nv = GET_VAL(NV, le64_to_cpu(raw_desc->m0));
++	if (!nv)
++		datalen -= 4;
 +
-+/* On 32bit arches, an skb frag is limited to 2^15 */
-+#define SKB_FRAG_PAGE_ORDER	get_order(32768)
- DECLARE_STATIC_KEY_FALSE(net_high_order_alloc_disable_key);
- 
- static inline int sk_get_wmem0(const struct sock *sk, const struct proto *proto)
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -2355,8 +2355,6 @@ static void sk_leave_memory_pressure(str
- 	}
- }
- 
--/* On 32bit arches, an skb frag is limited to 2^15 */
--#define SKB_FRAG_PAGE_ORDER	get_order(32768)
- DEFINE_STATIC_KEY_FALSE(net_high_order_alloc_disable_key);
- 
- /**
---- a/net/ipv4/esp4.c
-+++ b/net/ipv4/esp4.c
-@@ -277,6 +277,7 @@ int esp_output_head(struct xfrm_state *x
- 	struct page *page;
- 	struct sk_buff *trailer;
- 	int tailen = esp->tailen;
-+	unsigned int allocsz;
- 
- 	/* this is non-NULL only with UDP Encapsulation */
- 	if (x->encap) {
-@@ -286,6 +287,10 @@ int esp_output_head(struct xfrm_state *x
- 			return err;
+ 	skb_put(skb, datalen);
+ 	prefetch(skb->data - NET_IP_ALIGN);
+ 	skb->protocol = eth_type_trans(skb, ndev);
+@@ -728,12 +734,8 @@ static int xgene_enet_rx_frame(struct xg
+ 		}
  	}
  
-+	allocsz = ALIGN(skb->data_len + tailen, L1_CACHE_BYTES);
-+	if (allocsz > ESP_SKB_FRAG_MAXSIZE)
-+		goto cow;
-+
- 	if (!skb_cloned(skb)) {
- 		if (tailen <= skb_tailroom(skb)) {
- 			nfrags = 1;
---- a/net/ipv6/esp6.c
-+++ b/net/ipv6/esp6.c
-@@ -230,6 +230,11 @@ int esp6_output_head(struct xfrm_state *
- 	struct page *page;
- 	struct sk_buff *trailer;
- 	int tailen = esp->tailen;
-+	unsigned int allocsz;
-+
-+	allocsz = ALIGN(skb->data_len + tailen, L1_CACHE_BYTES);
-+	if (allocsz > ESP_SKB_FRAG_MAXSIZE)
-+		goto cow;
+-	nv = GET_VAL(NV, le64_to_cpu(raw_desc->m0));
+-	if (!nv) {
+-		/* strip off CRC as HW isn't doing this */
+-		datalen -= 4;
++	if (!nv)
+ 		goto skip_jumbo;
+-	}
  
- 	if (!skb_cloned(skb)) {
- 		if (tailen <= skb_tailroom(skb)) {
+ 	slots = page_pool->slots - 1;
+ 	head = page_pool->head;
 
 

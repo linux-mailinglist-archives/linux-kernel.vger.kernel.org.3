@@ -2,187 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D701F4E726D
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 468314E7270
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357221AbiCYLvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 07:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40224 "EHLO
+        id S1357290AbiCYLxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 07:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345320AbiCYLve (ORCPT
+        with ESMTP id S1356842AbiCYLxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 07:51:34 -0400
-Received: from out203-205-221-190.mail.qq.com (out203-205-221-190.mail.qq.com [203.205.221.190])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C52D3AFC;
-        Fri, 25 Mar 2022 04:49:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1648208996;
-        bh=IPtd5NBJKkBEY0L1pQtW4blGnh3srn/WBBwWRTexlrw=;
-        h=From:To:Cc:Subject:Date;
-        b=r+WJMRLGw2sGKSgekix4f2uFMbge+HYA0TlkB4dDAiBWo+DDAjTRmgE+NGvz+/9X5
-         rsPVWUq9HeH0xNEFQWW/W47Mx7gSZT05ui5IOecyz+zAI/kpRsbxaZ9ZrABUP04qRl
-         qxhijTneYrdHD0kosTf06f2NRhRko8uCBaBg8LF4=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
-        id C732ECB1; Fri, 25 Mar 2022 19:49:51 +0800
-X-QQ-mid: xmsmtpt1648208991turlnigp0
-Message-ID: <tencent_3E071B85643888D2C8BF388804334CAE2706@qq.com>
-X-QQ-XMAILINFO: MZ7OTbK+3aE5SaqPAIQeWKjDXnRL7UbB0WYL4yx1oTafA5+9iJBprA7gZQLM/c
-         Px2EHDjur6vcGFMz1zZzST7o0PemfNlrw3+G4fbJXUitmxn0SpQ/QpCOkDsQnQ2ZQEO4gU/Wx5sv
-         CnOncfyRJDWFilZxE//u+3/HLjPrZFDjV5pqDuPj6GELM61xA6Z9wiowoR/TdBAzs+++ydswqPlS
-         tuqxGPe5x/gnjAEWoqR/QU5+gk1IPmMeFh+7mZJ1fQ/on3TqG6qAp6hMjckhSbKC523IHyZzPYb+
-         anKXUKNVssZ2EjpQ849qAf+NBEmJfocABJlFATBspj+bfdCpQuOlcNdjrTJf5l6vrWxJRWW6SkKl
-         lwZGFfixdFw3kLvUhorn0ypHU6h0NQZ/3SOfSHfSSpSnxtyowWqnXVK9v37B2sU6r6NtaATEHqtF
-         qqucgY96CvGchHorApMW2vJfCLgiYHTf6srOH1/GvclsUNfw8CL9+iUaqt922zvRUsXXSrWDlhW/
-         67V1Qi7rqJR39VST2GOnHuYq+/ac8qzUCEKGJuLfdKJtnPbgixdN3D+3ga4z2uts/4w/ouuOlxpW
-         4Zf0Ii3a9dJiBJQDjtiU2bJVPFtw3ZLj1KPiqqjR+3kPAhxXiQJDKoMeqYDAbMru6gll4DYET1W+
-         5aFLW5BGIkMGvkfoWWN8OfHyL/rHhNpqdrpOyv+KmOXA3fv1+GiMh7H6FUaFh+sRx2mLt7+mbfl3
-         6kS+t/T6UjnRiGiEfemzc8e95Ccrq6we4xOGLO3Dd7K8CRyCW9bEzRpR6D3gOF/gXEE54pA017/G
-         qbYgvaE1Gz/Sc2PHk/5mSR+LZKYrfJcpDx5/5NiXOPzlQlMWhDutduEke4pQLJY4a1HvmPHmv7XD
-         XcpSb1G3pF8b7LRc/YxNUxQ9W8MtW+kVY0y5LAhkZ7Tw/yE+cFNL5ecPyUMuL16nwj5qMQvL3buB
-         pXgfYzh141TIT1StdOog==
-From:   xkernel.wang@foxmail.com
-To:     john@phrozen.org, tsbogend@alpha.franken.de
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] MIPS: lantiq: check the return value of kzalloc()
-Date:   Fri, 25 Mar 2022 19:49:41 +0800
-X-OQ-MSGID: <20220325114941.4648-1-xkernel.wang@foxmail.com>
+        Fri, 25 Mar 2022 07:53:35 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5DDD444A;
+        Fri, 25 Mar 2022 04:51:59 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id b24so8918609edu.10;
+        Fri, 25 Mar 2022 04:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9wI3U2BQFfRaggeAQmJJueKOAWP02S+tWNIFRTVWCtQ=;
+        b=Ve2/EcXK+GE8PfE3jvwOz03/V7oNmd4iL0dl15IPoF8aVVUUBnb/whTBCOssbM58Lf
+         GJtNXtFtm80ee9XfuattJC3F2W7UPNHfiW4rHvxBq05FIS2XqciGWm2UyqtbcCFnKlMd
+         UTYNkopJsMflFjXTv7DxBEXHnrUIHl0ML6ksLp6b6TSEjl/zxHfcZO/zAWqXw24KAl0w
+         H3/X7ZevqGFGTTnjxAwo8QpqT7EI8QD+/IF0Smrsl9MyaR5zTIBFQ7jDnlbWGaEhfTcM
+         4EeMHYCVTFUOR0sHdxze54mCjDRGE5KS1LizhHNh4jaAnw8Fkl67EPI9jQg8xqjx+8Kx
+         oMWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9wI3U2BQFfRaggeAQmJJueKOAWP02S+tWNIFRTVWCtQ=;
+        b=VD3jDGm9aKDMoyxDF132vdxAEJGy8X/kqDQ3NeR/u0JjIbO2ku3wF1/C/0+INvE0rn
+         OvtiM4l8Xgclxod7rE4NpvL51XnEtg4l894gaMh5P6zz0lv5EeGhv9PeVxq6GLF4JuDj
+         a7zOPjD+nnwxhPw2uNBuncXSKM835djdHr/6KreiFXMyQ40et5lzO5JacuNW4SFGPsUd
+         rdXq1JCAovYEnH/DSFzmbUZFSH+6XfV0Y+P8rhbRTEYW3l42HfE2LCQkMikkVv3x7Qob
+         40O3wzH+v9OWzRt5EMwl9Wll3SoywuA8Zq9ecse1/QHp1wR4unSWaTA8o73hNSwKra8w
+         u+Xg==
+X-Gm-Message-State: AOAM532zYK4kZiIXAhNkt2vRPcUoIiez0a7E5rTxf69/4Oi8Lv8W2OE+
+        dT4OuLUuLd6ExuMlHQfV+NE=
+X-Google-Smtp-Source: ABdhPJzr4CiKL3LUBhLOaYyi4c4PSg+Tr+p0g+SWLFgiEvZkhcR/ME2PFy/04g23T5TZDOmAMVZKdg==
+X-Received: by 2002:a50:9b11:0:b0:419:a8f:580c with SMTP id o17-20020a509b11000000b004190a8f580cmr12748888edi.292.1648209118222;
+        Fri, 25 Mar 2022 04:51:58 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id p14-20020a05640210ce00b00413211746d4sm2768361edu.51.2022.03.25.04.51.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 04:51:57 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 12:51:55 +0100
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        kernel-janitors@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH bpf-next 2/2] rethook: kprobes: x86: Replace kretprobe
+ with rethook on x86
+Message-ID: <Yj2s2zVjvfy0c/QA@krava>
+References: <164818251899.2252200.7306353689206167903.stgit@devnote2>
+ <164818254148.2252200.5054811796192907193.stgit@devnote2>
+ <20220325100940.GM8939@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220325100940.GM8939@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On Fri, Mar 25, 2022 at 11:09:40AM +0100, Peter Zijlstra wrote:
+> On Fri, Mar 25, 2022 at 01:29:01PM +0900, Masami Hiramatsu wrote:
+> > Replaces the kretprobe code with rethook on x86. With this patch,
+> > kretprobe on x86 uses the rethook instead of kretprobe specific
+> > trampoline code.
+> > 
+> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > ---
+> >  arch/x86/Kconfig                 |    1 
+> >  arch/x86/include/asm/unwind.h    |   23 +++----
+> >  arch/x86/kernel/Makefile         |    1 
+> >  arch/x86/kernel/kprobes/common.h |    1 
+> >  arch/x86/kernel/kprobes/core.c   |  107 ----------------------------------
+> >  arch/x86/kernel/rethook.c        |  121 ++++++++++++++++++++++++++++++++++++++
+> >  6 files changed, 135 insertions(+), 119 deletions(-)
+> >  create mode 100644 arch/x86/kernel/rethook.c
+> 
+> I'm thinking you'll find it builds much better with this on...
 
-kzalloc() is a memory allocation function which can return NULL when
-some internal memory errors happen. So it is better to check the
-return value of it to prevent potential wrong memory access or
-memory leak.
+I built it with Peter's fix and ran bpf selftests, looks good
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- arch/mips/lantiq/falcon/sysctrl.c |  2 ++
- arch/mips/lantiq/xway/gptu.c      |  2 ++
- arch/mips/lantiq/xway/sysctrl.c   | 46 ++++++++++++++++++++-----------
- 3 files changed, 34 insertions(+), 16 deletions(-)
+Tested-by: Jiri Olsa <jolsa@kernel.org>
 
-diff --git a/arch/mips/lantiq/falcon/sysctrl.c b/arch/mips/lantiq/falcon/sysctrl.c
-index 42222f8..446a253 100644
---- a/arch/mips/lantiq/falcon/sysctrl.c
-+++ b/arch/mips/lantiq/falcon/sysctrl.c
-@@ -167,6 +167,8 @@ static inline void clkdev_add_sys(const char *dev, unsigned int module,
- {
- 	struct clk *clk = kzalloc(sizeof(struct clk), GFP_KERNEL);
- 
-+	if (!clk)
-+		return;
- 	clk->cl.dev_id = dev;
- 	clk->cl.con_id = NULL;
- 	clk->cl.clk = clk;
-diff --git a/arch/mips/lantiq/xway/gptu.c b/arch/mips/lantiq/xway/gptu.c
-index 3d5683e..200fe9f 100644
---- a/arch/mips/lantiq/xway/gptu.c
-+++ b/arch/mips/lantiq/xway/gptu.c
-@@ -122,6 +122,8 @@ static inline void clkdev_add_gptu(struct device *dev, const char *con,
- {
- 	struct clk *clk = kzalloc(sizeof(struct clk), GFP_KERNEL);
- 
-+	if (!clk)
-+		return;
- 	clk->cl.dev_id = dev_name(dev);
- 	clk->cl.con_id = con;
- 	clk->cl.clk = clk;
-diff --git a/arch/mips/lantiq/xway/sysctrl.c b/arch/mips/lantiq/xway/sysctrl.c
-index 917fac1..084f6ca 100644
---- a/arch/mips/lantiq/xway/sysctrl.c
-+++ b/arch/mips/lantiq/xway/sysctrl.c
-@@ -315,6 +315,8 @@ static void clkdev_add_pmu(const char *dev, const char *con, bool deactivate,
- {
- 	struct clk *clk = kzalloc(sizeof(struct clk), GFP_KERNEL);
- 
-+	if (!clk)
-+		return;
- 	clk->cl.dev_id = dev;
- 	clk->cl.con_id = con;
- 	clk->cl.clk = clk;
-@@ -338,6 +340,8 @@ static void clkdev_add_cgu(const char *dev, const char *con,
- {
- 	struct clk *clk = kzalloc(sizeof(struct clk), GFP_KERNEL);
- 
-+	if (!clk)
-+		return;
- 	clk->cl.dev_id = dev;
- 	clk->cl.con_id = con;
- 	clk->cl.clk = clk;
-@@ -356,24 +360,28 @@ static void clkdev_add_pci(void)
- 	struct clk *clk_ext = kzalloc(sizeof(struct clk), GFP_KERNEL);
- 
- 	/* main pci clock */
--	clk->cl.dev_id = "17000000.pci";
--	clk->cl.con_id = NULL;
--	clk->cl.clk = clk;
--	clk->rate = CLOCK_33M;
--	clk->rates = valid_pci_rates;
--	clk->enable = pci_enable;
--	clk->disable = pmu_disable;
--	clk->module = 0;
--	clk->bits = PMU_PCI;
--	clkdev_add(&clk->cl);
-+	if (clk) {
-+		clk->cl.dev_id = "17000000.pci";
-+		clk->cl.con_id = NULL;
-+		clk->cl.clk = clk;
-+		clk->rate = CLOCK_33M;
-+		clk->rates = valid_pci_rates;
-+		clk->enable = pci_enable;
-+		clk->disable = pmu_disable;
-+		clk->module = 0;
-+		clk->bits = PMU_PCI;
-+		clkdev_add(&clk->cl);
-+	}
- 
- 	/* use internal/external bus clock */
--	clk_ext->cl.dev_id = "17000000.pci";
--	clk_ext->cl.con_id = "external";
--	clk_ext->cl.clk = clk_ext;
--	clk_ext->enable = pci_ext_enable;
--	clk_ext->disable = pci_ext_disable;
--	clkdev_add(&clk_ext->cl);
-+	if (clk_ext) {
-+		clk_ext->cl.dev_id = "17000000.pci";
-+		clk_ext->cl.con_id = "external";
-+		clk_ext->cl.clk = clk_ext;
-+		clk_ext->enable = pci_ext_enable;
-+		clk_ext->disable = pci_ext_disable;
-+		clkdev_add(&clk_ext->cl);
-+	}
- }
- 
- /* xway socs can generate clocks on gpio pins */
-@@ -393,9 +401,15 @@ static void clkdev_add_clkout(void)
- 		char *name;
- 
- 		name = kzalloc(sizeof("clkout0"), GFP_KERNEL);
-+		if (!name)
-+			continue;
- 		sprintf(name, "clkout%d", i);
- 
- 		clk = kzalloc(sizeof(struct clk), GFP_KERNEL);
-+		if (!clk) {
-+			kfree(name);
-+			continue;
-+		}
- 		clk->cl.dev_id = "1f103000.cgu";
- 		clk->cl.con_id = name;
- 		clk->cl.clk = clk;
--- 
+thanks,
+jirka
 
+> 
+> diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+> index 2de3c8c5eba9..794fdef2501a 100644
+> --- a/arch/x86/kernel/unwind_orc.c
+> +++ b/arch/x86/kernel/unwind_orc.c
+> @@ -550,15 +550,15 @@ bool unwind_next_frame(struct unwind_state *state)
+>  		}
+>  		/*
+>  		 * There is a small chance to interrupt at the entry of
+> -		 * __kretprobe_trampoline() where the ORC info doesn't exist.
+> -		 * That point is right after the RET to __kretprobe_trampoline()
+> +		 * arch_rethook_trampoline() where the ORC info doesn't exist.
+> +		 * That point is right after the RET to arch_rethook_trampoline()
+>  		 * which was modified return address.
+> -		 * At that point, the @addr_p of the unwind_recover_kretprobe()
+> +		 * At that point, the @addr_p of the unwind_recover_rethook()
+>  		 * (this has to point the address of the stack entry storing
+>  		 * the modified return address) must be "SP - (a stack entry)"
+>  		 * because SP is incremented by the RET.
+>  		 */
+> -		state->ip = unwind_recover_kretprobe(state, state->ip,
+> +		state->ip = unwind_recover_rethook(state, state->ip,
+>  				(unsigned long *)(state->sp - sizeof(long)));
+>  		state->regs = (struct pt_regs *)sp;
+>  		state->prev_regs = NULL;
+> @@ -573,7 +573,7 @@ bool unwind_next_frame(struct unwind_state *state)
+>  			goto err;
+>  		}
+>  		/* See UNWIND_HINT_TYPE_REGS case comment. */
+> -		state->ip = unwind_recover_kretprobe(state, state->ip,
+> +		state->ip = unwind_recover_rethook(state, state->ip,
+>  				(unsigned long *)(state->sp - sizeof(long)));
+>  
+>  		if (state->full_regs)

@@ -2,200 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF284E74D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:09:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BBB24E74D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359309AbiCYOKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 10:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
+        id S1359278AbiCYOLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 10:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357880AbiCYOKq (ORCPT
+        with ESMTP id S1349372AbiCYOLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 10:10:46 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76930D8F69
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 07:09:11 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id o10so15654118ejd.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 07:09:11 -0700 (PDT)
+        Fri, 25 Mar 2022 10:11:50 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6892664BF9;
+        Fri, 25 Mar 2022 07:10:15 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id q14so10442828ljc.12;
+        Fri, 25 Mar 2022 07:10:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7Y8Ke4EKJ+n0sWG8HfMTEQMTwBxHtm/aFE+FUw2Eq8I=;
-        b=QTkG7yzE0VA3tbHnhVo79rmLtyvMtgtPYvmp6iOr44D+sx3bfReMFLwxq2nCuKe96j
-         8mkk6oHj/B/yiFiuZ4E1cAyeeKJdY9uPKzpddu+F1rUF9EIOq7re8ZayVHSH/XgVHsM3
-         0P1bykV/XRv6wrvpXrOEBr1jKLBJnKVzzy1jM=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=vjMQKB7f98Z5J+/YkB4ittNRPhfVz3vZoLW+Mp/DFBM=;
+        b=b//i+uq5BpLjo7jrpuEtgpcU6FVbeJcxvGSJ5DGChh+zTG2S3gOkEcCRlYgdUM3xuP
+         W6995GNRJANIHrohgpH6+YbaYBE7qJFiA0Yrk7wiKug+9ERZD6nKHkoGM/mJpmUG2cup
+         ixeKH57/sFnDv0fDcv/eazgQsUM3zq0A5/36Hc70N7HiuueuGn9xk4E/gX3+LHfdO7sc
+         Yjcv5unAhx+vCt8pRr0uy30igInAsQmBZi3JVMhKx/DvgS8OU+1MYHqj0Bt1aCOP3GaE
+         Y8tE0slKyE6TUs4MbxKbQAlwaXt8VSW3bUuUI8fbrHeS914IlkD14MPTQKQrW4fq1Bw4
+         S/tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7Y8Ke4EKJ+n0sWG8HfMTEQMTwBxHtm/aFE+FUw2Eq8I=;
-        b=t82QZXh0ZEbvsTbhla/ymViP8QXXvtqf9q3NcuZqxznWvSWJQQaJ1VHvKljXRqy3EN
-         8Ka0MD1C3KOMzfcrn2R4PDnKVtaoZr3Gfm6BwQsUEY+nV4A9QwHvyCDrKQDDQAU5KnhS
-         eooizJgaWPWiZ5Ag6gQH1viJvebIEFL7rCZdWwtsueJXOGu7IkUAuY2X5Go0AOBbPQ9a
-         CnhFFuJAiDXhNyCnbi54wrMK+VPfOaw3yMXJsXSqTA+X4HeiV8Lupo+UMglbE32iqFiy
-         lxbIjdPF3AG5KhV+4c9FlWONRLDs2+y8i5OpTNLGxyaM3rraSEZzirua7smqQqmTpVEY
-         anlA==
-X-Gm-Message-State: AOAM531eKWjjK9gtxOJL9TaO/NmLHsEx8aWcWQ4YOean2ra24zNeuwJe
-        MiFuRgWRlm+kmqeZgCOHf+E7SA==
-X-Google-Smtp-Source: ABdhPJw1ItfY2GTfb7uKZb4wsLq5O6JtCDzlBoW9axGKsiN8kntiG06xG5p/w1ZtWRXklpS5iUODlw==
-X-Received: by 2002:a17:906:c307:b0:6df:c7d0:90e8 with SMTP id s7-20020a170906c30700b006dfc7d090e8mr11541350ejz.421.1648217349950;
-        Fri, 25 Mar 2022 07:09:09 -0700 (PDT)
-Received: from alco.corp.google.com ([2620:0:1059:10:c825:3420:d3ca:fdf1])
-        by smtp.gmail.com with ESMTPSA id u19-20020a17090617d300b006cea86ca384sm2328667eje.40.2022.03.25.07.09.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 07:09:09 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        senozhatsky@chromium.org, tfiga@chromium.org
-Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v3] media: uvcvideo: Fix handling on Bitmask controls
-Date:   Fri, 25 Mar 2022 15:09:06 +0100
-Message-Id: <20220325140906.482970-1-ribalda@chromium.org>
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vjMQKB7f98Z5J+/YkB4ittNRPhfVz3vZoLW+Mp/DFBM=;
+        b=iQLm3vVrcHMBruHYFmgG7IbF9Md4ThjribmRkaanQKrlL1pk0F84+PTExzv1hggHO3
+         stQkWX34iGqg2E8m9cEj2Qqdof40FP0JnJOJdOG+c0c9Y5mM+4mP5lGWyhthrU4CIorh
+         Vd8pRs1TLz70uN9UArIctS6/NtN+FDT8F9QhPBcpEnTT3pMDjPw6bcvfrVdPdY1bez2c
+         Pj0qw0Zj+oCqHCj7IerHW0D84mFBO+wJVDz0bRrHHvqjGlYRszhNRSqJnl5vl+NcxH+b
+         hxNOQp6Jx9U+N1Sb8Vva1Ma9+XyuDBwkg3pTQtMMRjhS2+idC1J64m9P7xCqBD7Lkj/n
+         s5CQ==
+X-Gm-Message-State: AOAM532xk09N+tz4jvwv8IbyaffKldoR5QdP/mXxA9QYUr25fF+juu2a
+        r2OxJGCaEFwmrVYsrJgtZpAswN7OYLmmkFttipjcV4eS
+X-Google-Smtp-Source: ABdhPJxRH3WembxAMMA6TLjnNrs1XxrqE0d6wcy+bOkpzaikLcMU+GfR6UNvb3yw2MRQMQBScX3kDOD6mEuWL+yH43U=
+X-Received: by 2002:a2e:888a:0:b0:249:8e84:65b8 with SMTP id
+ k10-20020a2e888a000000b002498e8465b8mr8241848lji.56.1648217413668; Fri, 25
+ Mar 2022 07:10:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1648170401-6351-1-git-send-email-u0084500@gmail.com>
+ <1648170401-6351-3-git-send-email-u0084500@gmail.com> <d2b431f8-9197-4a42-4ee2-4e771e20e0aa@kernel.org>
+In-Reply-To: <d2b431f8-9197-4a42-4ee2-4e771e20e0aa@kernel.org>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Fri, 25 Mar 2022 22:10:02 +0800
+Message-ID: <CADiBU39RGQj1-+yK18mZf3MR78KACKqb2kAxkCFKGXKpJ6Nqxw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] regulator: rt5759: Add support for Richtek RT5759
+ DCDC converter
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Minimum and step values for V4L2_CTRL_TYPE_BITMASK controls should be 0.
-There is no need to query the camera firmware about this and maybe get
-invalid results.
+Krzysztof Kozlowski <krzk@kernel.org> =E6=96=BC 2022=E5=B9=B43=E6=9C=8825=
+=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=888:17=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> On 25/03/2022 02:06, cy_huang wrote:
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > Add support for Richtek RT5759 high-performance DCDC converter.
+> >
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > ---
+> >  drivers/regulator/Kconfig            |  10 +
+> >  drivers/regulator/Makefile           |   1 +
+> >  drivers/regulator/rt5759-regulator.c | 372 +++++++++++++++++++++++++++=
+++++++++
+> >  3 files changed, 383 insertions(+)
+> >  create mode 100644 drivers/regulator/rt5759-regulator.c
+> >
+>
+> (...)
+>
+> > +static int rt5759_init_device_property(struct rt5759_priv *priv)
+> > +{
+> > +     unsigned int val =3D 0;
+> > +     bool wdt_enable;
+> > +
+> > +     /*
+> > +      * Only RT5759A support external watchdog input
+> > +      */
+> > +     if (priv->chip_type !=3D CHIP_TYPE_RT5759A)
+> > +             return 0;
+> > +
+> > +     wdt_enable =3D device_property_read_bool(priv->dev,
+> > +                                            "richtek,watchdog-enable")=
+;
+> > +     if (wdt_enable)
+>
+> No need for separate wdt_enable variable.
+>
+Ack in next.
+> > +             val =3D RT5759A_WDTEN_MASK;
+> > +
+> > +     return regmap_update_bits(priv->regmap, RT5759A_REG_WDTEN,
+> > +                               RT5759A_WDTEN_MASK, val);
+> > +}
+> > +
+> > +static int rt5759_manufacturer_check(struct rt5759_priv *priv)
+> > +{
+> > +     unsigned int vendor;
+> > +     int ret;
+> > +
+> > +     ret =3D regmap_read(priv->regmap, RT5759_REG_VENDORINFO, &vendor)=
+;
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     if (vendor !=3D RT5759_MANUFACTURER_ID) {
+> > +             dev_err(priv->dev, "vendor info not correct (%d)\n", vend=
+or);
+> > +             return -EINVAL;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static bool rt5759_is_accessible_reg(struct device *dev, unsigned int =
+reg)
+> > +{
+> > +     struct rt5759_priv *priv =3D dev_get_drvdata(dev);
+> > +
+> > +     if (reg <=3D RT5759_REG_DCDCSET)
+> > +             return true;
+> > +
+> > +     if (priv->chip_type =3D=3D CHIP_TYPE_RT5759A && reg =3D=3D RT5759=
+A_REG_WDTEN)
+> > +             return true;
+> > +
+> > +     return false;
+> > +}
+> > +
+> > +static const struct regmap_config rt5759_regmap_config =3D {
+> > +     .reg_bits =3D 8,
+> > +     .val_bits =3D 8,
+> > +     .max_register =3D RT5759A_REG_WDTEN,
+> > +     .readable_reg =3D rt5759_is_accessible_reg,
+> > +     .writeable_reg =3D rt5759_is_accessible_reg,
+> > +};
+> > +
+> > +static int rt5759_probe(struct i2c_client *i2c)
+> > +{
+> > +     struct rt5759_priv *priv;
+> > +     int ret;
+> > +
+> > +     priv =3D devm_kzalloc(&i2c->dev, sizeof(*priv), GFP_KERNEL);
+> > +     if (!priv)
+> > +             return -ENOMEM;
+> > +
+> > +     priv->dev =3D &i2c->dev;
+> > +     priv->chip_type =3D (unsigned long)of_device_get_match_data(&i2c-=
+>dev);
+> > +     i2c_set_clientdata(i2c, priv);
+> > +
+> > +     priv->regmap =3D devm_regmap_init_i2c(i2c, &rt5759_regmap_config)=
+;
+> > +     if (IS_ERR(priv->regmap)) {
+> > +             ret =3D PTR_ERR(priv->regmap);
+> > +             dev_err(&i2c->dev, "Failed to allocate regmap (%d)\n", re=
+t);
+> > +             return ret;
+> > +     }
+> > +
+> > +     ret =3D rt5759_manufacturer_check(priv);
+> > +     if (ret) {
+> > +             dev_err(&i2c->dev, "Failed to check device (%d)\n", ret);
+> > +             return ret;
+> > +     }
+> > +
+> > +     ret =3D rt5759_init_device_property(priv);
+> > +     if (ret) {
+> > +             dev_err(&i2c->dev, "Failed to init device (%d)\n", ret);
+> > +             return ret;
+> > +     }
+> > +
+> > +     return rt5759_regulator_register(priv);
+> > +}
+> > +
+> > +static const struct of_device_id __maybe_unused rt5759_device_table[] =
+=3D {
+>
+> I don't think this can be __maybe_unused. It is always referenced via
+> of_match_table, isn't it?
+>
+I think it can declared as '__maybe_unused'.
+If 'of_device_id' is unused, then in probe stage,
+'of_device_get_match_data' will return NULL.
+priv->chip_type will get zero as the return value. And it will be
+treated as rt5759, not rt5759a.
+The difference between these two are only watchdog function supported or no=
+t.
 
-Also value should be masked to the max value advertised by the
-hardware.
-
-Finally, handle uvc 1.5 mask controls that use MAX instead of RES to
-describe the valid bits.
-
-Fixes v4l2-compliane:
-Control ioctls (Input 0):
-                fail: v4l2-test-controls.cpp(97): minimum must be 0 for a bitmask control
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: FAIL
-
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
-v3: Changes requested by Laurent
-
-Support controls that use GET_RES for describing the valid bits.
-
- drivers/media/usb/uvc/uvc_ctrl.c | 53 ++++++++++++++++++++++++--------
- 1 file changed, 41 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index b4f6edf968bc..d474fe07de84 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -1078,6 +1078,25 @@ static const char *uvc_map_get_name(const struct uvc_control_mapping *map)
- 	return "Unknown Control";
- }
- 
-+static u32 uvc_get_ctrl_bitmap(struct uvc_control *ctrl,
-+			       struct uvc_control_mapping *mapping)
-+{
-+	/*
-+	 * Some controls, like CT_AE_MODE_CONTROL use GET_RES to
-+	 * represent the number of bits supported, those controls
-+	 * do not list GET_MAX as supported.
-+	 */
-+	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MAX)
-+		return mapping->get(mapping, UVC_GET_MAX,
-+				    uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MAX));
-+
-+	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES)
-+		return mapping->get(mapping, UVC_GET_RES,
-+				    uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
-+
-+	return ~0;
-+}
-+
- static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
- 	struct uvc_control *ctrl,
- 	struct uvc_control_mapping *mapping,
-@@ -1152,6 +1171,12 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
- 		v4l2_ctrl->step = 0;
- 		return 0;
- 
-+	case V4L2_CTRL_TYPE_BITMASK:
-+		v4l2_ctrl->minimum = 0;
-+		v4l2_ctrl->maximum = uvc_get_ctrl_bitmap(ctrl, mapping);
-+		v4l2_ctrl->step = 0;
-+		return 0;
-+
- 	default:
- 		break;
- 	}
-@@ -1253,19 +1278,14 @@ int uvc_query_v4l2_menu(struct uvc_video_chain *chain,
- 
- 	menu_info = &mapping->menu_info[query_menu->index];
- 
--	if (mapping->data_type == UVC_CTRL_DATA_TYPE_BITMASK &&
--	    (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES)) {
--		s32 bitmap;
--
-+	if (mapping->data_type == UVC_CTRL_DATA_TYPE_BITMASK) {
- 		if (!ctrl->cached) {
- 			ret = uvc_ctrl_populate_cache(chain, ctrl);
- 			if (ret < 0)
- 				goto done;
- 		}
- 
--		bitmap = mapping->get(mapping, UVC_GET_RES,
--				      uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
--		if (!(bitmap & menu_info->value)) {
-+		if (!(uvc_get_ctrl_bitmap(ctrl, mapping) & menu_info->value)) {
- 			ret = -EINVAL;
- 			goto done;
- 		}
-@@ -1745,6 +1765,18 @@ int uvc_ctrl_set(struct uvc_fh *handle,
- 		value = xctrl->value;
- 		break;
- 
-+	case V4L2_CTRL_TYPE_BITMASK:
-+		if (!ctrl->cached) {
-+			ret = uvc_ctrl_populate_cache(chain, ctrl);
-+			if (ret < 0)
-+				return ret;
-+		}
-+
-+		xctrl->value = max(0, xctrl->value);
-+		xctrl->value &= uvc_get_ctrl_bitmap(ctrl, mapping);
-+		value = xctrl->value;
-+		break;
-+
- 	case V4L2_CTRL_TYPE_BOOLEAN:
- 		xctrl->value = clamp(xctrl->value, 0, 1);
- 		value = xctrl->value;
-@@ -1758,17 +1790,14 @@ int uvc_ctrl_set(struct uvc_fh *handle,
- 		/* Valid menu indices are reported by the GET_RES request for
- 		 * UVC controls that support it.
- 		 */
--		if (mapping->data_type == UVC_CTRL_DATA_TYPE_BITMASK &&
--		    (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES)) {
-+		if (mapping->data_type == UVC_CTRL_DATA_TYPE_BITMASK) {
- 			if (!ctrl->cached) {
- 				ret = uvc_ctrl_populate_cache(chain, ctrl);
- 				if (ret < 0)
- 					return ret;
- 			}
- 
--			step = mapping->get(mapping, UVC_GET_RES,
--					uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
--			if (!(step & value))
-+			if (!(uvc_get_ctrl_bitmap(ctrl, mapping) & value))
- 				return -EINVAL;
- 		}
- 
--- 
-2.35.1.1021.g381101b075-goog
-
+> > +     { .compatible =3D "richtek,rt5759", .data =3D (void *)CHIP_TYPE_R=
+T5759 },
+> > +     { .compatible =3D "richtek,rt5759a", .data =3D (void *)CHIP_TYPE_=
+RT5759A },
+> > +     {}
+> > +};
+> > +MODULE_DEVICE_TABLE(of, rt5759_device_table);
+> > +
+> > +static struct i2c_driver rt5759_driver =3D {
+> > +     .driver =3D {
+> > +             .name =3D "rt5759",
+> > +             .of_match_table =3D rt5759_device_table,
+> > +     },
+> > +     .probe_new =3D rt5759_probe,
+> > +};
+> > +module_i2c_driver(rt5759_driver);
+> > +
+> > +MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
+> > +MODULE_DESCRIPTION("Richtek RT5759 Regulator Driver");
+> > +MODULE_LICENSE("GPL v2");
+>
+>
+> Best regards,
+> Krzysztof

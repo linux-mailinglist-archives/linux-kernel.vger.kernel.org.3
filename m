@@ -2,74 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E09E4E6C76
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 03:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC4F4E6C52
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 03:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357702AbiCYCUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 22:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
+        id S1357641AbiCYCFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 22:05:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350834AbiCYCUH (ORCPT
+        with ESMTP id S237272AbiCYCFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 22:20:07 -0400
-Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E633668F;
-        Thu, 24 Mar 2022 19:18:32 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
- (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 25 Mar
- 2022 10:18:25 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Fri, 25 Mar
- 2022 10:18:24 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     <trond.myklebust@hammerspace.com>, <anna@kernel.org>,
-        <chuck.lever@oracle.com>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-CC:     <linux-nfs@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Haowen Bai <baihaowen@meizu.com>
-Subject: [PATCH V2] SUNRPC: Increase size of servername string
-Date:   Fri, 25 Mar 2022 10:18:22 +0800
-Message-ID: <1648174702-461-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 24 Mar 2022 22:05:08 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BC26579A
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 19:03:34 -0700 (PDT)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KPlhQ2tjHzfZg5;
+        Fri, 25 Mar 2022 10:01:58 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by kwepemi500015.china.huawei.com
+ (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 25 Mar
+ 2022 10:03:32 +0800
+From:   Zheng Bin <zhengbin13@huawei.com>
+To:     <emma@anholt.net>, <mripard@kernel.org>, <maxime@cerno.tech>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+CC:     <zhengbin13@huawei.com>, <tangyizhou@huawei.com>
+Subject: [PATCH v2 -next] drm/vc4: Fix build error when CONFIG_DRM_VC4=y && CONFIG_RASPBERRYPI_FIRMWARE=m
+Date:   Fri, 25 Mar 2022 10:18:31 +0800
+Message-ID: <20220325021831.2812735-1-zhengbin13@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-125.meizu.com (172.16.1.125) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500015.china.huawei.com (7.221.188.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch will fix the warning from smatch:
+If CONFIG_DRM_VC4=y, CONFIG_RASPBERRYPI_FIRMWARE=m, CONFIG_COMPILE_TEST=n,
+bulding fails:
 
-net/sunrpc/clnt.c:562 rpc_create() error: snprintf() chops off
-the last chars of 'sun->sun_path': 108 vs 48
+drivers/gpu/drm/vc4/vc4_drv.o: In function `vc4_drm_bind':
+vc4_drv.c:(.text+0x320): undefined reference to `rpi_firmware_get'
+vc4_drv.c:(.text+0x320): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `rpi_firmware_get'
+vc4_drv.c:(.text+0x34c): undefined reference to `rpi_firmware_property'
+vc4_drv.c:(.text+0x34c): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `rpi_firmware_property'
+vc4_drv.c:(.text+0x354): undefined reference to `rpi_firmware_put'
+vc4_drv.c:(.text+0x354): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `rpi_firmware_put'
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+Make DRM_VC4 depends on RASPBERRYPI_FIRMWARE || COMPILE_TEST to fix this.
+
+Fixes: c406ad5e4a85 ("drm/vc4: Notify the firmware when DRM is in charge")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
 ---
-V1->V2: it would be much nicer to use UNIX_PATH_MAX
- net/sunrpc/clnt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2: follow Maxime's advise, add RASPBERRYPI_FIRMWARE as an additional depends
+ drivers/gpu/drm/vc4/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/sunrpc/clnt.c b/net/sunrpc/clnt.c
-index c83fe61..6e0209e 100644
---- a/net/sunrpc/clnt.c
-+++ b/net/sunrpc/clnt.c
-@@ -526,7 +526,7 @@ struct rpc_clnt *rpc_create(struct rpc_create_args *args)
- 		.servername = args->servername,
- 		.bc_xprt = args->bc_xprt,
- 	};
--	char servername[48];
-+	char servername[UNIX_PATH_MAX];
- 	struct rpc_clnt *clnt;
- 	int i;
- 
--- 
-2.7.4
+diff --git a/drivers/gpu/drm/vc4/Kconfig b/drivers/gpu/drm/vc4/Kconfig
+index de3424fed2fc..92d74ba7c449 100644
+--- a/drivers/gpu/drm/vc4/Kconfig
++++ b/drivers/gpu/drm/vc4/Kconfig
+@@ -2,6 +2,7 @@
+ config DRM_VC4
+ 	tristate "Broadcom VC4 Graphics"
+ 	depends on ARCH_BCM || ARCH_BCM2835 || COMPILE_TEST
++	depends on RASPBERRYPI_FIRMWARE || COMPILE_TEST
+ 	depends on DRM
+ 	depends on SND && SND_SOC
+ 	depends on COMMON_CLK
+--
+2.31.1
 

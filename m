@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E864E6B94
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 01:46:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F354E6B97
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 01:50:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357048AbiCYArq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 20:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
+        id S1357061AbiCYAuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 20:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239525AbiCYAro (ORCPT
+        with ESMTP id S239525AbiCYAuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 20:47:44 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8740EBB0BF
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 17:46:09 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id bc27so5177810pgb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 17:46:09 -0700 (PDT)
+        Thu, 24 Mar 2022 20:50:13 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D0A32078
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 17:48:40 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id b15so5236075pfm.5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 17:48:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=2nkViqy1agj/71jOYQ+PM1zeFUhV02kuQHgzXuik9Hg=;
-        b=jMr6QFeXlBUwzew7fY97yOO8MeafaZa/vjhxa6soYCujsXgOdiUg2FoclU5Hfg9JLE
-         G+fWf2HebBrROikkkEIdUHW+wQfs0Ww6HntkWJItExdbveJwQb2RcYDbGPiRyQLUlezC
-         sEKP2RcFNedu6xncRsPs+PYUypxltafNDzPAQb4B74ca91K3SzdvHqDovu/4IBTLdUD8
-         AMiFD6croBm66UsuaIyIMzsLRQVdsOQNi3Z6/9HhBWs6w0ZhVOiCSjeHN6nzfTTIwNT7
-         gBt2NnrWr6QGeQFmTmuA/DavpSjr5sCcMGRMJci8dOhX8A+DJyZZPl13/ZIR3IOqUZ/O
-         lp1g==
+        bh=zXg1tMAdUsVaG4xJrsonGJrizcZB7/gpq0IZD0yXp2k=;
+        b=fLf/em7TAEh+cdSfAJWuyiN8zD51JBfJx1WtWctYXyqvD4bcoqm1/PX4PIz6HrCgsp
+         Jp/DTCtyY1FTMrxoo34hAUWT/dgLcHUnotyhsaw1CjJX3u9v2EbPNHNdZvtqTh+W5f5P
+         p9iMyD7u9jA2BaY1gPZsu+r5m49+XaCaM92QwG3k94H0bZTZ1We0z1erLFFuyEL67BKm
+         RMV6H06VPmnhOa0Uu496iT0rtERL+MddmvacYMDr/8vRu+EBWEoznZaZuUKesDVIshcO
+         HNCQfRer40lrqDFDScfXz2IC6IBMwAUw/15T6t4gQGLxSCF7vMa4ynN0qq9Yd85nJCiD
+         gx/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=2nkViqy1agj/71jOYQ+PM1zeFUhV02kuQHgzXuik9Hg=;
-        b=giwwdDlDa7pI2vid5eq6LVLZZigcT0VbipirKZc6MfBNJl1TYOdrzcey4hOU172H2d
-         Mbvbwzqu0yPQ/hp8db5lyrzqfNcGno4GTTWnp9DhNIPxsZzcSWIrDg+W2sPkfVaxihx9
-         i55QlDIj5Xg3tE9emPYzJUQB0FjHZEmZX1vf0ImK/sgrFGAWAsJ9BQKW64eA8rfHgzKf
-         MRlOpOyWaTxWlGbTCpMxZNTDAGsDX78X5QentO5C4fzZqZ3kxbwWTXxntrdYauU+YVvV
-         Sh/N3t3PDgxWvhtMtcEqk2yGOgtOEeqllJg+c9AoyPDSsoFr0/GA38ArTI9/BBrmu3dJ
-         J7HA==
-X-Gm-Message-State: AOAM532ocxhmid1PI0sV9qdINm1TwdZqxrDei0cJzdUqtxw8uQ29Sdt4
-        MDhNAW6PU4t/+KUwaD4jgsE=
-X-Google-Smtp-Source: ABdhPJxgpqGwwX6AF+BW8rdJ2e5bfmFD+GAlBJJLG+H5L9NsDjC6ydYAGcRO2v+Oq1oABVbqnJEAsA==
-X-Received: by 2002:a05:6a00:13a9:b0:4fa:ae49:7c06 with SMTP id t41-20020a056a0013a900b004faae497c06mr7824018pfg.38.1648169168946;
-        Thu, 24 Mar 2022 17:46:08 -0700 (PDT)
+        bh=zXg1tMAdUsVaG4xJrsonGJrizcZB7/gpq0IZD0yXp2k=;
+        b=wrKK5lP+oE8DpuYpd/NQFYDITlIDoCHRnVli2Dv9fjXUKchiS2YyOuLi+bYcm03Kke
+         R54MRfHM9OeKflcb1eyX8NsISZObJtR2GQOtGvIfSjkum7z1ldb+pACbn3DlQZoEDzTP
+         L0DHfSGksi6zdHbRzE4tROSfB+RbCjffP8XOrBA1mP8QhloZCZz3xzchfMyUiw8Nedc+
+         mNWqW0R2uLLdCCMj3Fiw1qi4XHL1YUNRcs94wtWF8N7Nf6UVLvpiFLgIL7bw8Tbsg2vn
+         dlEAUEDVkU3NWrTFa3KSwvmzly02Fggs2tbfBQJEaGrrUo15/+597xExXF5ZFWIhxnlx
+         JFog==
+X-Gm-Message-State: AOAM531Ex7EX3PFK8+1ygmXEBVx7SooxWla+Bjvhq5NOcGayio/qbFUv
+        sVyu5cdFCW6F0NC+ZkjqBy4=
+X-Google-Smtp-Source: ABdhPJwY8Z8ZqFk2AKMFsNrz3gPdRDcQyu8GHVLdtB+flm261sH6gxGd7Ptp4FyTxdI4YajjDiNkFQ==
+X-Received: by 2002:a05:6a00:3486:b0:4fa:bb7e:b4c7 with SMTP id cp6-20020a056a00348600b004fabb7eb4c7mr7559822pfb.4.1648169319673;
+        Thu, 24 Mar 2022 17:48:39 -0700 (PDT)
 Received: from google.com ([2620:15c:211:201:a488:edc:4d69:56d3])
-        by smtp.gmail.com with ESMTPSA id k13-20020aa7820d000000b004fa72a52040sm4446600pfi.172.2022.03.24.17.46.07
+        by smtp.gmail.com with ESMTPSA id b14-20020a056a000cce00b004fabc39519esm4987158pfv.5.2022.03.24.17.48.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 17:46:08 -0700 (PDT)
+        Thu, 24 Mar 2022 17:48:39 -0700 (PDT)
 Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Thu, 24 Mar 2022 17:46:06 -0700
+Date:   Thu, 24 Mar 2022 17:48:37 -0700
 From:   Minchan Kim <minchan@kernel.org>
 To:     Charan Teja Kalla <quic_charante@quicinc.com>
 Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
@@ -58,7 +58,7 @@ Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
         linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>
 Subject: Re: [PATCH 2/2] mm: madvise: return exact bytes advised with
  process_madvise under error
-Message-ID: <Yj0QzhDAA3mz90ly@google.com>
+Message-ID: <Yj0RZU4JMXb0acCj@google.com>
 References: <cover.1648046642.git.quic_charante@quicinc.com>
  <0fa1bdb5009e898189f339610b90ecca16f243f4.1648046642.git.quic_charante@quicinc.com>
  <Yjxutr35QLGhjJ57@dhcp22.suse.cz>
@@ -170,14 +170,6 @@ On Thu, Mar 24, 2022 at 09:15:57PM +0530, Charan Teja Kalla wrote:
 > > really processed. I do not think that currently supported madvise modes
 > > for process_madvise support an early break out with return to the
 > > userspace (madvise_cold_or_pageout_pte_range bails on fatal signals for
-
-EINVAL due to can_madv_lru_vma since it countered VM_PFNMAP which is not
-rare in Android. User process could fiter them out via looking
-/proc/pid/smaps properly but it's too expensive.
-A idea to fiter them out from /proc/<pid>/maps is checking shared
-flags such as rw-s or ---s(even though it's not accurate, it would work
-effectively).
-
 > > example) but this can change in the future and then you are back to
 > > "imprecise" return value problem. Yes, this is a theoretical problem
 > 
@@ -189,9 +181,9 @@ effectively).
 > > would be better to live with imprecise return values reporting rather
 > > than aiming for perfection which would be fragile and add a future
 > > maintenance burden.
+> >
+> Hmm. Should atleast this imprecise return values be documented in man
+> page or in madvise.c file?
 
-Actually, I don't think the maintainace cost would be that big.
-Having said, I agree the patch should justify with number how it would
-be painful since it's more of optimization.
-
-Thanks.
+I don't think we need to document it in man page. madvice.c would be
+enough, IMHO.

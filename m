@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6A14E75E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CF24E763B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:10:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359620AbiCYPI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
+        id S1359447AbiCYPLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359638AbiCYPHo (ORCPT
+        with ESMTP id S1359852AbiCYPIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:07:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9012DA0BA;
-        Fri, 25 Mar 2022 08:05:52 -0700 (PDT)
+        Fri, 25 Mar 2022 11:08:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7073CDA09A;
+        Fri, 25 Mar 2022 08:06:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7237D61BAD;
-        Fri, 25 Mar 2022 15:05:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DD6BC340EE;
-        Fri, 25 Mar 2022 15:05:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CD3461BF0;
+        Fri, 25 Mar 2022 15:06:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16CC9C340EE;
+        Fri, 25 Mar 2022 15:06:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220751;
-        bh=66AdW8GcQDhDYieYXbj02QTCFM70zra0bL3GJGGU1Ls=;
+        s=korg; t=1648220792;
+        bh=akiRqBurFT5ZUVhYkdatTtHE8iL98ks0UPdwOlymuSU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e9lvTjf0YXfogpCAfL2mCHKCM8q1nQKfpchTpeAPLEnLN7agEaEwlG9n7x7UwgdS1
-         K8L/A1fBvTILZ+dzb0K/1FNyHymioHMCw4l2mYDMDdg/Nv/sINoB5CvtOWAIGMZrcK
-         AsKZWQ3scq5sCrvPLHJd03lX8Ip2hhbvIwbotVGo=
+        b=n4dXfO9QzNUNHeiUoE3EjNwUd/BX+h4FC8NJNGWcYJgn+ZkPPb/u/jXMnhGVRLxjx
+         qRYznDvwZoYJQ8mkA/hlCtpD273Ma9dvYXCfrct2/Xr/ePhpNQxIjwY8IrDIxTkpcW
+         2b1VxLbnb6LNc7uG6cCSV4i8U9NmA03ugouw/1x4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Werner Sembach <wse@tuxedocomputers.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 4.14 15/17] ACPI: video: Force backlight native for Clevo NL5xRU and NL5xNU
+        stable@vger.kernel.org, Jonathan Teh <jonathan.teh@outlook.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.19 11/20] ALSA: cmipci: Restore aux vol on suspend/resume
 Date:   Fri, 25 Mar 2022 16:04:49 +0100
-Message-Id: <20220325150417.205330098@linuxfoundation.org>
+Message-Id: <20220325150417.336233647@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150416.756136126@linuxfoundation.org>
-References: <20220325150416.756136126@linuxfoundation.org>
+In-Reply-To: <20220325150417.010265747@linuxfoundation.org>
+References: <20220325150417.010265747@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,110 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Werner Sembach <wse@tuxedocomputers.com>
+From: Jonathan Teh <jonathan.teh@outlook.com>
 
-commit c844d22fe0c0b37dc809adbdde6ceb6462c43acf upstream.
+commit c14231cc04337c2c2a937db084af342ce704dbde upstream.
 
-Clevo NL5xRU and NL5xNU/TUXEDO Aura 15 Gen1 and Gen2 have both a working
-native and video interface. However the default detection mechanism first
-registers the video interface before unregistering it again and switching
-to the native interface during boot. This results in a dangling SBIOS
-request for backlight change for some reason, causing the backlight to
-switch to ~2% once per boot on the first power cord connect or disconnect
-event. Setting the native interface explicitly circumvents this buggy
-behaviour by avoiding the unregistering process.
+Save and restore CM_REG_AUX_VOL instead of register 0x24 twice on
+suspend/resume.
 
-Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-Cc: All applicable <stable@vger.kernel.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Tested on CMI8738LX.
+
+Fixes: cb60e5f5b2b1 ("[ALSA] cmipci - Add PM support")
+Signed-off-by: Jonathan Teh <jonathan.teh@outlook.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/DBAPR04MB7366CB3EA9C8521C35C56E8B920E9@DBAPR04MB7366.eurprd04.prod.outlook.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/acpi/video_detect.c |   75 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ sound/pci/cmipci.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/acpi/video_detect.c
-+++ b/drivers/acpi/video_detect.c
-@@ -356,6 +356,81 @@ static const struct dmi_system_id video_
- 		DMI_MATCH(DMI_BOARD_NAME, "BA51_MV"),
- 		},
- 	},
-+	/*
-+	 * Clevo NL5xRU and NL5xNU/TUXEDO Aura 15 Gen1 and Gen2 have both a
-+	 * working native and video interface. However the default detection
-+	 * mechanism first registers the video interface before unregistering
-+	 * it again and switching to the native interface during boot. This
-+	 * results in a dangling SBIOS request for backlight change for some
-+	 * reason, causing the backlight to switch to ~2% once per boot on the
-+	 * first power cord connect or disconnect event. Setting the native
-+	 * interface explicitly circumvents this buggy behaviour, by avoiding
-+	 * the unregistering process.
-+	 */
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "AURA1501"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "EDUBOOK1502"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xNU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xNU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xNU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
-+		},
-+	},
+--- a/sound/pci/cmipci.c
++++ b/sound/pci/cmipci.c
+@@ -315,7 +315,6 @@ MODULE_PARM_DESC(joystick_port, "Joystic
+ #define CM_MICGAINZ		0x01	/* mic boost */
+ #define CM_MICGAINZ_SHIFT	0
  
- 	/*
- 	 * Desktops which falsely report a backlight and which our heuristics
+-#define CM_REG_MIXER3		0x24
+ #define CM_REG_AUX_VOL		0x26
+ #define CM_VAUXL_MASK		0xf0
+ #define CM_VAUXR_MASK		0x0f
+@@ -3326,7 +3325,7 @@ static void snd_cmipci_remove(struct pci
+  */
+ static unsigned char saved_regs[] = {
+ 	CM_REG_FUNCTRL1, CM_REG_CHFORMAT, CM_REG_LEGACY_CTRL, CM_REG_MISC_CTRL,
+-	CM_REG_MIXER0, CM_REG_MIXER1, CM_REG_MIXER2, CM_REG_MIXER3, CM_REG_PLL,
++	CM_REG_MIXER0, CM_REG_MIXER1, CM_REG_MIXER2, CM_REG_AUX_VOL, CM_REG_PLL,
+ 	CM_REG_CH0_FRAME1, CM_REG_CH0_FRAME2,
+ 	CM_REG_CH1_FRAME1, CM_REG_CH1_FRAME2, CM_REG_EXT_MISC,
+ 	CM_REG_INT_STATUS, CM_REG_INT_HLDCLR, CM_REG_FUNCTRL0,
 
 

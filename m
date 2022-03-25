@@ -2,98 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C9F4E7539
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89AD14E7546
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356877AbiCYOkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 10:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
+        id S1355000AbiCYOpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 10:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240425AbiCYOku (ORCPT
+        with ESMTP id S245230AbiCYOpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 10:40:50 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D33197284;
-        Fri, 25 Mar 2022 07:39:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648219156; x=1679755156;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=tGQr/XMGpfYl5XaqM3UKSbUCHx+0u+K3rYHZ2t5R3DI=;
-  b=evd/wI+SK65lFqBE/Yh8z4VrwSl7AT6BT7A2AIDpVCq36clmesmTdLM/
-   20wIADQUmRGE03YxJClcaP08ica/YsAR1nfy2uoDNeZQ+zUh7hzZXbLdq
-   XN44LK35VTLdOpUT9MTAXY57yCoonr+szin4Y49H6fMAgRLncatFn6wsO
-   cOa2br72kT3bgUE1uFrYwCRuJzXgCdCXxy9FwTmDHa14/F7S0/bGVpY4X
-   PFWk89UlogebOo0V17zjLpLgumzfi6SKs/DmgQrwZQiXuPIb7DD47IG04
-   bqjGVb+366+SKMMHIj2MthPzdktQLXEGVQMmYOQzyR5q+1eS4Ix8eK7Qy
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="240800603"
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="240800603"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 07:39:13 -0700
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="650256948"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 07:39:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nXl5F-006RgT-8c;
-        Fri, 25 Mar 2022 16:38:33 +0200
-Date:   Fri, 25 Mar 2022 16:38:32 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 8/9] i2c: mux: pinctrl: remove CONFIG_OF dependency
- and use fwnode API
-Message-ID: <Yj3T6Is9kJYLrPiC@smile.fi.intel.com>
-References: <20220325113148.588163-1-clement.leger@bootlin.com>
- <20220325113148.588163-9-clement.leger@bootlin.com>
+        Fri, 25 Mar 2022 10:45:18 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC23453E11;
+        Fri, 25 Mar 2022 07:43:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=cTgeBhPIbMY2V/22QHpipzHYQo1f8A2IaNn1vFaLLvc=; b=EEzOp9MMcWXnOV4bnHe7adlGGK
+        xzrNIZa61NM4/fZPJ6JyvG9dcjT/gauP0EYpnwcC/yxTaQmbXa/I5RPqc42jIVjG9gzX07iE1VY5V
+        gWS4FCAKfVQOziqea/TWGQ2Nf4aYsIOH9BWuurOC38DzprRD/zckDJjR8Yh6IJwvy7yu9hI3wPVhh
+        FbTwtVQZZyHyKaRes4s1LUuIoz7mLWmAEGtlD3M3yBTJV3hjlmP+riqZ3YQr3y5SJ75AxW5BxIlS3
+        J1VraOkrRotoV6yelwTxVNeVG2+BfME/k3Qy1TYEz6v06MV3K/1ORXzvQ/TzMuwb9Q3UIrVtOzZ4L
+        8OZb9Aig==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nXl9o-00ERDU-FZ; Fri, 25 Mar 2022 14:43:16 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 320563002BE;
+        Fri, 25 Mar 2022 15:43:15 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 12064206DBC36; Fri, 25 Mar 2022 15:43:15 +0100 (CET)
+Date:   Fri, 25 Mar 2022 15:43:14 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        kernel-janitors@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 0/4] kprobes: rethook: x86: Replace kretprobe
+ trampoline with rethook
+Message-ID: <Yj3VAsgGA9zJvxgs@hirez.programming.kicks-ass.net>
+References: <164821817332.2373735.12048266953420821089.stgit@devnote2>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220325113148.588163-9-clement.leger@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <164821817332.2373735.12048266953420821089.stgit@devnote2>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 12:31:47PM +0100, Clément Léger wrote:
-> In order to use i2c muxes with all types of nodes, switch to fwnode
-> API. The fwnode layer will allow to use this with both device_node and
-> software_node.
+On Fri, Mar 25, 2022 at 11:22:53PM +0900, Masami Hiramatsu wrote:
+
+> Masami Hiramatsu (3):
+>       kprobes: Use rethook for kretprobe if possible
+>       rethook: kprobes: x86: Replace kretprobe with rethook on x86
+>       x86,kprobes: Fix optprobe trampoline to generate complete pt_regs
 > 
-> This commits is simply replacing the use of "of_" prefixed functions
-> with there fwnode equivalent.
+> Peter Zijlstra (1):
+>       Subject: x86,rethook: Fix arch_rethook_trampoline() to generate a complete pt_regs
 
-What I meant by splitting to the patches is to be able to have first patch of
-a such split to be independent of this series. And I believe one or two (if
-you split to more logical pieces) may be done this way, means we have already
-available APIs.
+You fat-fingered the subject there ^
 
--- 
-With Best Regards,
-Andy Shevchenko
+Other than that:
 
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
+Hopefully the ftrace return trampoline can also be switched over..

@@ -2,98 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 849C24E7D7A
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4082A4E7C9B
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiCYT1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 15:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
+        id S229602AbiCYT0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 15:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiCYT0z (ORCPT
+        with ESMTP id S229520AbiCYT0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 15:26:55 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C0B1BB79A;
-        Fri, 25 Mar 2022 12:00:11 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id l128so9291210vsc.7;
-        Fri, 25 Mar 2022 12:00:11 -0700 (PDT)
+        Fri, 25 Mar 2022 15:26:17 -0400
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6EE2A1299;
+        Fri, 25 Mar 2022 11:58:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=r/95gP+62R+F7oCqZcO36nUxKx/3DFkpVOjIVjsUBb0=;
-        b=eTNMgQi4QHA7yaFi1tawBT56ZWrwQoj5d8R8CFDwLbR4lyM2iOILRXw5o0QhaWDFRH
-         oZBJG3yD9PPokIZDxBMWS8KwPGYaBOlBeTYW6//dRaa8gWYFVEOWuMHPmT36JGreufKl
-         M+Q5f5oDCfzMaodfq4ylynRFReak1rRk3DbagLD4ugt9lRZZsa6I2HQcB+qODAdEBBbF
-         8V7dEMCM+R9JB+Teh3y0qbvoaYCs52mL7K8rnuTPo15sP2xNQnEth+vliYfjng/1NF2A
-         9m67Jkvhxv4qbz7Zjeo6XRMMkthfd8rdbKz4/v6qXwHuahocrqOaw4fhOlJt6CvPnYQ+
-         Y2lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=r/95gP+62R+F7oCqZcO36nUxKx/3DFkpVOjIVjsUBb0=;
-        b=UTI4Axy0cHybyYYrBMrJvB8R8aE4nt84Xotka/47iZ76vl9bdwtnM9ZkrqgkFzO6qG
-         NORp3KpiWFvmJEkcDCWJQ8N3LB5Wq9A5VljqKMDzODOCcWuvLJdpiXq39dV25l7Ms2AD
-         HwERNF9I3WyGcg5EvxC960PR7qee8r0jvK+8eAoQ4TfNsAVFJuRE2ou4UM5ktQCgL33t
-         Bl3uDi3FzhhckksZCd76q94v6IVmKOK5WLmGpNGtf4S0q/9Gap4tO67419e7ZJUNeaoV
-         H/eutrjBOKBp/ntwbhAi92fbu6SyYS5CEBbpZhmUNqsX3kUY2DhPgcob8Dc/F15Lw9m0
-         wB/Q==
-X-Gm-Message-State: AOAM5302nK1tMbjRozBonDjBClRdTaPuaTAWoYoc4tAncrkP55fjxAsO
-        yaslnk9qBE7lPgxIiH2zvuTU9fIa+V3BPs1YKuw=
-X-Google-Smtp-Source: ABdhPJwJW2eMukNWeLEwwbk9MGN0sJuFKhXnpYB5Kjc6uxpm7d1SLS/nj3fMxyUiZLun/1Up/vNHNg==
-X-Received: by 2002:a17:902:6b0a:b0:154:6527:8ddf with SMTP id o10-20020a1709026b0a00b0015465278ddfmr13182065plk.154.1648234327008;
-        Fri, 25 Mar 2022 11:52:07 -0700 (PDT)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [71.19.144.195])
-        by smtp.gmail.com with ESMTPSA id u126-20020a637984000000b0038147b4f53esm5910455pgc.93.2022.03.25.11.52.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 11:52:06 -0700 (PDT)
-Message-ID: <623e0f56.1c69fb81.92164.1317@mx.google.com>
-Date:   Fri, 25 Mar 2022 11:52:06 -0700 (PDT)
-X-Google-Original-Date: Fri, 25 Mar 2022 18:51:59 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220325150419.931802116@linuxfoundation.org>
-Subject: RE: [PATCH 5.15 00/37] 5.15.32-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1648234717; x=1679770717;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=sP6GOjaZB5ZelmcgJTjP90zeki4v/xwCLzFSvg0IkWM=;
+  b=KlcwtdrOQF5Bwpz/DfMc3Xst1yP00HXatNDDRf7GG3J1BbjC1FflpgMf
+   Wsz/DmoZVP53WEjUfy1r9j10i675+LFIDaEWr6ddYVF/b0DEIDcId/ZG5
+   hsskWUy93/bgQylSGATerh1dA7PIFV+xzOjbqKjnIQjFqUhgovNpBayWt
+   0=;
+X-IronPort-AV: E=Sophos;i="5.90,211,1643673600"; 
+   d="scan'208";a="189252095"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-b48bc93b.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 25 Mar 2022 18:58:36 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-b48bc93b.us-east-1.amazon.com (Postfix) with ESMTPS id 4D930C09C0;
+        Fri, 25 Mar 2022 18:58:35 +0000 (UTC)
+Received: from EX13D02UWB002.ant.amazon.com (10.43.161.160) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Fri, 25 Mar 2022 18:58:34 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
+ EX13D02UWB002.ant.amazon.com (10.43.161.160) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Fri, 25 Mar 2022 18:58:34 +0000
+Received: from dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com
+ (172.19.181.128) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
+ Server id 15.0.1497.32 via Frontend Transport; Fri, 25 Mar 2022 18:58:34
+ +0000
+Received: by dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com (Postfix, from userid 5131138)
+        id 1352D2569; Fri, 25 Mar 2022 18:58:33 +0000 (UTC)
+From:   Ali Saidi <alisaidi@amazon.com>
+To:     <acme@kernel.org>
+CC:     <Nick.Forrington@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <alisaidi@amazon.com>, <andrew.kilroy@arm.com>,
+        <benh@kernel.crashing.org>, <german.gomez@arm.com>,
+        <james.clark@arm.com>, <john.garry@huawei.com>, <jolsa@kernel.org>,
+        <kjain@linux.ibm.com>, <leo.yan@linaro.org>,
+        <lihuafei1@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
+        <mingo@redhat.com>, <namhyung@kernel.org>, <peterz@infradead.org>,
+        <will@kernel.org>
+Subject: Re: [PATCH v4 1/4] tools: arm64: Import cputype.h
+Date:   Fri, 25 Mar 2022 18:58:28 +0000
+Message-ID: <20220325185828.25461-1-alisaidi@amazon.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <Yj4McMHsxtJ3PfKk@kernel.org>
+References: <Yj4McMHsxtJ3PfKk@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-13.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Mar 2022 16:14:01 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.15.32 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.32-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
 
-5.15.32-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+Hi Arnaldo,
+
+On Fri, 25 Mar 2022 18:39:44 -0000, Arnaldo Carvalho de Melo wrote:
+> Em Thu, Mar 24, 2022 at 06:33:20PM +0000, Ali Saidi escreveu:
+> > Bring-in the kernel's arch/arm64/include/asm/cputype.h into tools/
+> > for arm64 to make use of all the core-type definitions in perf.
+> >
+> > Replace sysreg.h with the version already imported into tools/.
+> 
+> You forgot to add it to tools/perf/check-headers.sh so that we get
+> notificed when the original file in the kernel sources gets updated, so
+> that we can check if this needs any tooling adjustments.
+
+Sorry.
+
+> ⬢[acme@toolbox perf]$ diff -u tools/arch/arm64/include/asm/cputype.h arch/arm64/include/asm/cputype.h
+> --- tools/arch/arm64/include/asm/cputype.h	2022-03-25 15:29:41.185173403 -0300
+> +++ arch/arm64/include/asm/cputype.h	2022-03-22 17:52:10.881311839 -0300
+> @@ -170,7 +170,7 @@
+> 
+>  #ifndef __ASSEMBLY__
+> 
+> -#include "sysreg.h"
+> +#include <asm/sysreg.h>
+> 
+>  #define read_cpuid(reg)			read_sysreg_s(SYS_ ## reg)
+> 
+> ⬢[acme@toolbox perf]$
+> 
+> 
+> I'll add the entry together with the waiver for this specific
+> difference.
+
+Thank you! 
+
+It looks like it's been missed several times:
+% find  tools/arch/arm64 -type f
+tools/arch/arm64/include/uapi/asm/unistd.h
+tools/arch/arm64/include/uapi/asm/bpf_perf_event.h
+tools/arch/arm64/include/uapi/asm/kvm.h
+tools/arch/arm64/include/uapi/asm/mman.h
+tools/arch/arm64/include/uapi/asm/perf_regs.h
+tools/arch/arm64/include/uapi/asm/bitsperlong.h
+tools/arch/arm64/include/asm/barrier.h
+tools/arch/arm64/include/asm/cputype.h
+tools/arch/arm64/include/asm/sysreg.h
+
+% grep arm64 tools/perf/check-headers.sh
+arch/arm64/include/uapi/asm/perf_regs.h
+arch/arm64/include/uapi/asm/kvm.h
+arch/arm64/include/uapi/asm/unistd.h
+
+
+Thanks,
+Ali
 

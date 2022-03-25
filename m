@@ -2,86 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A5D94E6C0E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 02:34:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C864E6C12
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 02:35:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353031AbiCYBgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 21:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
+        id S1357532AbiCYBgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 21:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357426AbiCYBfR (ORCPT
+        with ESMTP id S1357429AbiCYBgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 21:35:17 -0400
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38514C12FE;
-        Thu, 24 Mar 2022 18:33:00 -0700 (PDT)
-Received: by mail-oi1-f182.google.com with SMTP id 12so6724032oix.12;
-        Thu, 24 Mar 2022 18:33:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NoOzwpyI1Ds0dVyme/fVuHLFCjknM/Qs7UeN2WmSfX4=;
-        b=hCXYgVjWOU3sSk5uBiTISjANkwWhjea72HLTTLGxh91w0Z4Ga/MvsNw9SoDoHBP/S7
-         m5L8Gzz0DJs7Hw7HuOUZcflcrJNJ1HZwK2DTw3cvDca1sfLSxMgYDZeki2HFgJIWRfdZ
-         TynZw3EqdrBIpZwMAUul/q7SNC893fA2WSSKYNENBU1h8sIRx/DgUFkbc3KXMgAIh84q
-         S2Q/Fj1AYtJika2RLm8euLsO+CW1ECnSOpEX1A4ccFkeqdopfdH7VvmE9VJS1j3w8kEW
-         0XdfUxd5qWUll6NVFdL2H5jZOMpcuxFQuazD1jBlBM0WqCvGgR4NfNoLVJYBamshK1wL
-         EWBw==
-X-Gm-Message-State: AOAM530AfGgSLls5Ud/HKm0K/4/IFLLscD//W57uW2rErg0vaX888HDi
-        MSEFhE2LXU/r+4eSmoJDNw==
-X-Google-Smtp-Source: ABdhPJwE5Pa4e88ba6g42QV2RJNfidI9/etVdqKq0RQlgzPN/XyPBceq2bvtCosS4jT+Pyn5feZyMw==
-X-Received: by 2002:a05:6808:188a:b0:2da:5026:3663 with SMTP id bi10-20020a056808188a00b002da50263663mr4076928oib.79.1648171979571;
-        Thu, 24 Mar 2022 18:32:59 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w8-20020aca3008000000b002ef7e3ad3b8sm2089430oiw.29.2022.03.24.18.32.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 18:32:58 -0700 (PDT)
-Received: (nullmailer pid 2946043 invoked by uid 1000);
-        Fri, 25 Mar 2022 01:32:57 -0000
-Date:   Thu, 24 Mar 2022 20:32:57 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Biao Huang <biao.huang@mediatek.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        linux-mediatek@lists.infradead.org,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        linux-kernel@vger.kernel.org, macpaul.lin@mediatek.com,
-        Jakub Kicinski <kuba@kernel.org>, devicetree@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        srv_heupstream@mediatek.com
-Subject: Re: [PATCH net-next] dt-bindings: net: snps,dwmac: modify available
- values of PBL
-Message-ID: <Yj0byY2NZ6gQ5CBw@robh.at.kernel.org>
-References: <20220324012112.7016-1-biao.huang@mediatek.com>
- <20220324012112.7016-2-biao.huang@mediatek.com>
+        Thu, 24 Mar 2022 21:36:10 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BFA41305
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 18:34:37 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KPl4c6b3dz1GDBj
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:34:24 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 25 Mar 2022 09:34:35 +0800
+Received: from huawei.com (10.67.174.169) by dggpemm500001.china.huawei.com
+ (7.185.36.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 25 Mar
+ 2022 09:34:35 +0800
+From:   Chen Lifu <chenlifu@huawei.com>
+To:     <tglx@linutronix.de>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] irq: print depth in __enable_irq WARNING
+Date:   Fri, 25 Mar 2022 09:33:59 +0800
+Message-ID: <20220325013359.2691092-1-chenlifu@huawei.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324012112.7016-2-biao.huang@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.174.169]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Mar 2022 09:21:12 +0800, Biao Huang wrote:
-> PBL can be any of the following values: 1, 2, 4, 8, 16 or 32
-> according to the datasheet, so modify available values of PBL in
-> snps,dwmac.yaml.
-> 
-> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
-> ---
->  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
+Since case 0 and 1 of desc->depth may print same warning messages as follows,
+according to the messages, we do not know in which case the warning is generated.
+This patch prints extra desc->depth in the warning messages to distinguish
+these cases.
+This patch just does warning message changes，no functional changes.
 
-Applied, thanks!
+[20220314100142]------------[ cut here ]------------
+[20220314100142]WARNING: CPU: 1 PID: 10332 at kernel/irq/manage.c:723 __enable_irq+0x58/0xa4
+[20220314100142]Unbalanced enable for IRQ 38
+......
+
+Signed-off-by: Chen Lifu <chenlifu@huawei.com>
+---
+ kernel/irq/manage.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+index c03f71d5ec10..83bb9d9ee71a 100644
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -769,12 +769,12 @@ void disable_nmi_nosync(unsigned int irq)
+ void __enable_irq(struct irq_desc *desc)
+ {
+ 	switch (desc->depth) {
+ 	case 0:
+  err_out:
+-		WARN(1, KERN_WARNING "Unbalanced enable for IRQ %d\n",
+-		     irq_desc_get_irq(desc));
++		WARN(1, KERN_WARNING "depth %u: Unbalanced enable for IRQ %d\n",
++		     desc->depth, irq_desc_get_irq(desc));
+ 		break;
+ 	case 1: {
+ 		if (desc->istate & IRQS_SUSPENDED)
+ 			goto err_out;
+ 		/* Prevent probing on this irq: */
+-- 
+2.35.1
+

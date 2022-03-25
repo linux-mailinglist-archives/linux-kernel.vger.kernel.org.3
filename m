@@ -2,258 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D784E7D64
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E79F34E7C6A
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234103AbiCYXFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 19:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
+        id S234129AbiCYXNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 19:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234029AbiCYXF3 (ORCPT
+        with ESMTP id S234029AbiCYXNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 19:05:29 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2918722AC69
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 16:03:53 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id g145-20020a625297000000b004fb2cf9d380so140011pfb.22
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 16:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=vIZny/CAiv+ANOXSTnw9s080uSQEaVCa1l5Fcgc1E+w=;
-        b=Rb44Mwugw4jLeCPcJ8XmiEkJxqSQGlAZvT7J82evV17/LUbc5ZBMaJFePJXClt4Wz0
-         hl7x5t/82xJsJ8wDQXMZl8OjIX3pHssHP/i+pg9XmQH/DsDkj4hqhfL+twswvwpyzbC0
-         VtU6qaq4jYjo70TfXznFHaGNgqsIXzGR+dzIzPGtoowCJnkCMlIFJL3JsL/e4OBAIb+x
-         pggRVIt2cOSKRZwOIpP8OK03rU/gi31d6HFYU4zkaQKU6owzhw2NJSKoZVn+i5o7QLFK
-         f+mVMHae2CCMJAs76ycnkUZvfO/6ZLbc2arHUeWWYhOl12pelzotYp5vgjYZ+vS/kxE8
-         Ridg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=vIZny/CAiv+ANOXSTnw9s080uSQEaVCa1l5Fcgc1E+w=;
-        b=mNd5FmPv5++bty2qItIVYEsi/eRVATsB/LQt9g4H1FxY/HrFPVroyBw4w32YH821Xp
-         /rgwe067vJ/EdWIvmpuEvQTthjVvn5nXl1m9EWwNBQQyHBzMYytagrfZpawYHZB2yaEW
-         SvbQTeUL6NfXwQGZ9FX1hufmDUrsKdfLKpEYUHsRvSbciFkau59BwIFH2b6zm0uKrvIL
-         KMi+FJRZUoESYy0c4yQ+KA0rIOG/3UMfGOqUItlsGHiKUCK245UNUxHg6ZE7umCYw14a
-         gB3tmJlWV5W9qW+GCqnUqaJXQ1a+3KyvVcJ0JGS+RNCrGOWCfcGPhOC0UTHVHGhjhjul
-         nC+w==
-X-Gm-Message-State: AOAM533oAkTIoUuOyT5/NNvF5ONhMCmqLbE7xQWeXA1FA7JAOPX7j07y
-        5pAstFDU7dWTcDW857fBmU8Xz2iSEdA=
-X-Google-Smtp-Source: ABdhPJzPnngNKEJBH0DaKmfP4tX1bXr8Ad234yp3dVBNE/d9/Wux63kXd1L3alZF5q8TN0eEVvmycd8PWvM=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:e74a:b0:153:f956:1cf5 with SMTP id
- p10-20020a170902e74a00b00153f9561cf5mr13634773plf.138.1648249433032; Fri, 25
- Mar 2022 16:03:53 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 25 Mar 2022 23:03:48 +0000
-Message-Id: <20220325230348.2587437-1-seanjc@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH] KVM: x86/mmu: Zap only TDP MMU leafs in zap range and
- mmu_notifier unmap
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 25 Mar 2022 19:13:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF71522E4;
+        Fri, 25 Mar 2022 16:12:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00E7A61744;
+        Fri, 25 Mar 2022 23:12:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECE0AC2BBE4;
+        Fri, 25 Mar 2022 23:12:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648249925;
+        bh=rca50a/MBSKGcXibi+6OsSu/0GluBeVQE48yXlUn5Wo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ek59Z3uvGRyrKysXMw8xAX+tagCv00LsHDEQHKWoo7rLCFOZbpWGiXxfTCATZzISl
+         d+1ieHRRfPCVS2ImeDrqxvWebuoJdEt1NfC8YJ6VImsZQR+XGgoxNVXvUrFKQJM+KE
+         F0Stp4aK1LSQ4B+7NR5makSJTHf5I0ye4iJ0KZ7UFkuPb3F7JEw6br4fQsLCaPxSuu
+         PWoYUuF4WGN+f4cRC8DSuI21O0x+sObWbilAbqUwz9zM47AhjoxGKdpSVaTCMC+25x
+         MzZe/p6I5zcPh8t/BlxiuHnROYvz67z74cOjlJ+MpucQpk4AN6he4gFT7Q8UAM4imV
+         EagBhg5l+iChg==
+Date:   Fri, 25 Mar 2022 16:12:03 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Netdev <netdev@vger.kernel.org>
+Subject: Re: kselftest: net: tls: hangs
+Message-ID: <20220325161203.7000698c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <8c81e8ad-6741-b5ed-cf0a-5a302d51d40a@linuxfoundation.org>
+References: <CA+G9fYsntwPrwk39VfsAjRwoSNnb3nX8kCEUa=Gxit7_pfD6bg@mail.gmail.com>
+        <8c81e8ad-6741-b5ed-cf0a-5a302d51d40a@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Re-introduce zapping only leaf SPTEs in kvm_zap_gfn_range() and
-kvm_tdp_mmu_unmap_gfn_range(), this time without losing a pending TLB
-flush when processing multiple roots (including nested TDP shadow roots).
-Dropping the TLB flush resulted in random crashes when running Hyper-V
-Server 2019 in a guest with KSM enabled in the host (or any source of
-mmu_notifier invalidations, KSM is just the easiest to force).
+On Fri, 25 Mar 2022 16:13:33 -0600 Shuah Khan wrote:
+> > # #  RUN           tls.13_sm4_gcm.splice_cmsg_to_pipe ...
+> > # # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
+> > p[1], NULL, send_len, 0) (10) == -1 (-1)
+> > # # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
+> > # # splice_cmsg_to_pipe: Test terminated by timeout
+> > # #          FAIL  tls.13_sm4_gcm.splice_cmsg_to_pipe
+> > # not ok 217 tls.13_sm4_gcm.splice_cmsg_to_pipe
+> > # #  RUN           tls.13_sm4_gcm.splice_dec_cmsg_to_pipe ...
+> > # # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
+> > send_len, 0) (10) == -1 (-1)
+> > # # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
+> > [  661.901558] kworker/dying (49) used greatest stack depth: 10576 bytes left  
+> 
+> This seems to be the problem perhaps.
+>
+> Jakub, any thoughts. The last change to tls.c was a while back.
 
-This effectively revert commits 873dd122172f8cce329113cfb0dfe3d2344d80c0
-and fcb93eb6d09dd302cbef22bd95a5858af75e4156, and thus restores commit
-cf3e26427c08ad9015956293ab389004ac6a338e, plus this delta on top:
+Yes, sorry, kicked off a build and got distracted.
 
-bool kvm_tdp_mmu_zap_leafs(struct kvm *kvm, int as_id, gfn_t start, gfn_t end,
-        struct kvm_mmu_page *root;
+I can repro the failures, TLS=n in the config I must have not tested
+that in the new cases.
 
-        for_each_tdp_mmu_root_yield_safe(kvm, root, as_id)
--               flush = tdp_mmu_zap_leafs(kvm, root, start, end, can_yield, false);
-+               flush = tdp_mmu_zap_leafs(kvm, root, start, end, can_yield, flush);
+But I can't repro the hung, and we have a timer at the hardness level
+IIUC so IDK how this could "hang"?
 
-        return flush;
- }
-
-Cc: Ben Gardon <bgardon@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/mmu/mmu.c     |  4 +--
- arch/x86/kvm/mmu/tdp_mmu.c | 57 +++++++++++---------------------------
- arch/x86/kvm/mmu/tdp_mmu.h |  8 +-----
- 3 files changed, 19 insertions(+), 50 deletions(-)
-
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 1361eb4599b4..a7cb877f3784 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -5842,8 +5842,8 @@ void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
- 
- 	if (is_tdp_mmu_enabled(kvm)) {
- 		for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++)
--			flush = kvm_tdp_mmu_zap_gfn_range(kvm, i, gfn_start,
--							  gfn_end, flush);
-+			flush = kvm_tdp_mmu_zap_leafs(kvm, i, gfn_start,
-+						      gfn_end, true, flush);
- 	}
- 
- 	if (flush)
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index b3b6426725d4..c4333efb9e9c 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -906,10 +906,8 @@ bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
- }
- 
- /*
-- * Tears down the mappings for the range of gfns, [start, end), and frees the
-- * non-root pages mapping GFNs strictly within that range. Returns true if
-- * SPTEs have been cleared and a TLB flush is needed before releasing the
-- * MMU lock.
-+ * Zap leafs SPTEs for the range of gfns, [start, end). Returns true if SPTEs
-+ * have been cleared and a TLB flush is needed before releasing the MMU lock.
-  *
-  * If can_yield is true, will release the MMU lock and reschedule if the
-  * scheduler needs the CPU or there is contention on the MMU lock. If this
-@@ -917,44 +915,25 @@ bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
-  * the caller must ensure it does not supply too large a GFN range, or the
-  * operation can cause a soft lockup.
-  */
--static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
--			  gfn_t start, gfn_t end, bool can_yield, bool flush)
-+static bool tdp_mmu_zap_leafs(struct kvm *kvm, struct kvm_mmu_page *root,
-+			      gfn_t start, gfn_t end, bool can_yield, bool flush)
- {
--	bool zap_all = (start == 0 && end >= tdp_mmu_max_gfn_host());
- 	struct tdp_iter iter;
- 
--	/*
--	 * No need to try to step down in the iterator when zapping all SPTEs,
--	 * zapping the top-level non-leaf SPTEs will recurse on their children.
--	 * Do not do it above the 1GB level, to avoid making tdp_mmu_set_spte's
--	 * recursion too expensive and allow yielding.
--	 */
--	int min_level = zap_all ? PG_LEVEL_1G : PG_LEVEL_4K;
--
- 	end = min(end, tdp_mmu_max_gfn_host());
- 
- 	lockdep_assert_held_write(&kvm->mmu_lock);
- 
- 	rcu_read_lock();
- 
--	for_each_tdp_pte_min_level(iter, root, min_level, start, end) {
-+	for_each_tdp_pte_min_level(iter, root, PG_LEVEL_4K, start, end) {
- 		if (can_yield &&
- 		    tdp_mmu_iter_cond_resched(kvm, &iter, flush, false)) {
- 			flush = false;
- 			continue;
- 		}
- 
--		if (!is_shadow_present_pte(iter.old_spte))
--			continue;
--
--		/*
--		 * If this is a non-last-level SPTE that covers a larger range
--		 * than should be zapped, continue, and zap the mappings at a
--		 * lower level, except when zapping all SPTEs.
--		 */
--		if (!zap_all &&
--		    (iter.gfn < start ||
--		     iter.gfn + KVM_PAGES_PER_HPAGE(iter.level) > end) &&
-+		if (!is_shadow_present_pte(iter.old_spte) ||
- 		    !is_last_spte(iter.old_spte, iter.level))
- 			continue;
- 
-@@ -962,17 +941,13 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
- 		flush = true;
- 	}
- 
-+	rcu_read_unlock();
-+
- 	/*
--	 * Need to flush before releasing RCU.  TODO: do it only if intermediate
--	 * page tables were zapped; there is no need to flush under RCU protection
--	 * if no 'struct kvm_mmu_page' is freed.
-+	 * Because this flow zaps _only_ leaf SPTEs, the caller doesn't need
-+	 * to provide RCU protection as no 'struct kvm_mmu_page' will be freed.
- 	 */
--	if (flush)
--		kvm_flush_remote_tlbs_with_address(kvm, start, end - start);
--
--	rcu_read_unlock();
--
--	return false;
-+	return flush;
- }
- 
- /*
-@@ -981,13 +956,13 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
-  * SPTEs have been cleared and a TLB flush is needed before releasing the
-  * MMU lock.
-  */
--bool __kvm_tdp_mmu_zap_gfn_range(struct kvm *kvm, int as_id, gfn_t start,
--				 gfn_t end, bool can_yield, bool flush)
-+bool kvm_tdp_mmu_zap_leafs(struct kvm *kvm, int as_id, gfn_t start, gfn_t end,
-+			   bool can_yield, bool flush)
- {
- 	struct kvm_mmu_page *root;
- 
- 	for_each_tdp_mmu_root_yield_safe(kvm, root, as_id)
--		flush = zap_gfn_range(kvm, root, start, end, can_yield, flush);
-+		flush = tdp_mmu_zap_leafs(kvm, root, start, end, can_yield, flush);
- 
- 	return flush;
- }
-@@ -1235,8 +1210,8 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
- bool kvm_tdp_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range,
- 				 bool flush)
- {
--	return __kvm_tdp_mmu_zap_gfn_range(kvm, range->slot->as_id, range->start,
--					   range->end, range->may_block, flush);
-+	return kvm_tdp_mmu_zap_leafs(kvm, range->slot->as_id, range->start,
-+				     range->end, range->may_block, flush);
- }
- 
- typedef bool (*tdp_handler_t)(struct kvm *kvm, struct tdp_iter *iter,
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.h b/arch/x86/kvm/mmu/tdp_mmu.h
-index 5e5ef2576c81..54bc8118c40a 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.h
-+++ b/arch/x86/kvm/mmu/tdp_mmu.h
-@@ -15,14 +15,8 @@ __must_check static inline bool kvm_tdp_mmu_get_root(struct kvm_mmu_page *root)
- void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
- 			  bool shared);
- 
--bool __kvm_tdp_mmu_zap_gfn_range(struct kvm *kvm, int as_id, gfn_t start,
-+bool kvm_tdp_mmu_zap_leafs(struct kvm *kvm, int as_id, gfn_t start,
- 				 gfn_t end, bool can_yield, bool flush);
--static inline bool kvm_tdp_mmu_zap_gfn_range(struct kvm *kvm, int as_id,
--					     gfn_t start, gfn_t end, bool flush)
--{
--	return __kvm_tdp_mmu_zap_gfn_range(kvm, as_id, start, end, true, flush);
--}
--
- bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp);
- void kvm_tdp_mmu_zap_all(struct kvm *kvm);
- void kvm_tdp_mmu_invalidate_all_roots(struct kvm *kvm);
-
-base-commit: 19164ad08bf668bca4f4bfbaacaa0a47c1b737a6
--- 
-2.35.1.1021.g381101b075-goog
-
+Naresh, is there any stack trace in the logs? Can you repro on Linus's
+tree?

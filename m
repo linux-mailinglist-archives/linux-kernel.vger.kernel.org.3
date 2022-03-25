@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AEAF4E7B30
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4EA44E7BB0
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbiCYTrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 15:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42318 "EHLO
+        id S231659AbiCYTtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 15:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231699AbiCYTrX (ORCPT
+        with ESMTP id S232713AbiCYTsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 15:47:23 -0400
+        Fri, 25 Mar 2022 15:48:46 -0400
 Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68407209A6E;
-        Fri, 25 Mar 2022 12:29:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F0C2B2050;
+        Fri, 25 Mar 2022 12:32:13 -0700 (PDT)
 Received: from localhost (unknown [IPv6:2601:281:8300:35::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id DF6C2383;
-        Fri, 25 Mar 2022 19:29:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net DF6C2383
+        by ms.lwn.net (Postfix) with ESMTPSA id 158632C3;
+        Fri, 25 Mar 2022 19:32:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 158632C3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1648236552; bh=OP5hn5ciXGl/PVl0o086b4VCHPgP+xHupbIU6ILJ9h0=;
+        t=1648236733; bh=49jpW2WxwfDWgFFg2FEAQXR26EWHs8pIegLvOIkxseo=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=VreuZEvd8t3BGJb+nqihUFltBrtweMvoVOlmMw4ZGzmyWE6yq/+dIoO5pvz1bF1Tg
-         XTUGlGBaiEhsUfUZc3XYo8hmgBdRdolKNbkwPwU9TP+FBaFc858VsKWx+3S0qEm0KT
-         AtxpjJYFQ4S4MKyP5BUZ5h7MaKpBCNpXFfdZSdrjGzbZNStkOep0H6V6sHDmtbM9nP
-         gYc7GghsGKQu0rjUQCAOBg0cF0CpwTUKi7uMXhkPzfwYf0WuGwbV3wBrKt8Udo2pCd
-         sA6sMrwcdfxEvd5Jq1Og198D/+Y+AtjdAx3NcQ/0J/MruEJSn2kAZ1osjFWMkhC0y4
-         JwThMXOPQKZxg==
+        b=bAxEoivqRB+DOXFovPcLu/16Ktwh00jBNgPNhyGIbRappbFfTiVDnz18bGe2pbbvG
+         QDQ4bYVfnLlfSXAqzTtAEKlqSgabmb/JMxNHKmANeQ7DrtV+6UHg0UkTgMUsFCuT4v
+         zz2ydPArc9/TpTtrYbukEKfnVBzbbCYR2T09PNzn0RVS9RGs82kwVkNbuvLUES7Hq1
+         tpSKN8+FVzL9c24J8rNQ/Kqitxc7OncOrI+cS/Q4RrQE3ZnoHQLCHg4YPtXh2LUqhs
+         aRX0doy8aB0ckQk86IecEt/zAX6lzpy23lNkcMV2ZEr29OlEGskrq4sLEM3oVgw0U2
+         lSgxTC7Y6+E4w==
 From:   Jonathan Corbet <corbet@lwn.net>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] Documentation: add missing page title for
- kernel-doc.rst and sphinx.rst
-In-Reply-To: <20220322113645.502544-1-bagasdotme@gmail.com>
-References: <20220322113645.502544-1-bagasdotme@gmail.com>
-Date:   Fri, 25 Mar 2022 13:29:11 -0600
-Message-ID: <87v8w1esqg.fsf@meer.lwn.net>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, gpiccoli@igalia.com,
+        kernel@gpiccoli.net, Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] Documentation: Fix duplicate statement about
+ raw_spinlock_t type
+In-Reply-To: <20220321144133.49804-1-gpiccoli@igalia.com>
+References: <20220321144133.49804-1-gpiccoli@igalia.com>
+Date:   Fri, 25 Mar 2022 13:32:12 -0600
+Message-ID: <87r16peslf.fsf@meer.lwn.net>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -55,57 +53,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bagas Sanjaya <bagasdotme@gmail.com> writes:
+"Guilherme G. Piccoli" <gpiccoli@igalia.com> writes:
 
-> sphinx.rst and kernel-doc.rst are missing page title, thus top-level
-> headings in the respective documentation is displayed in the table of
-> contents for doc-guide.
+> Unless it was duplicate on purpose, to emphasize that a raw_spinlock_t
+> is always a spinning lock regardless of PREEMPT_RT or kernel config,
+> it's a bit odd that this text is duplicate. So, this patch just clean
+> it up, keeping the consistency with the other sections of the text.
 >
-> Add the title.
->
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Fixes: 919e9e6395cf ("Documentation: Add lock ordering and nesting documentation")
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
 > ---
->  Documentation/doc-guide/kernel-doc.rst | 4 ++++
->  Documentation/doc-guide/sphinx.rst     | 4 ++++
->  2 files changed, 8 insertions(+)
+>  Documentation/locking/locktypes.rst | 3 ---
+>  1 file changed, 3 deletions(-)
 >
-> diff --git a/Documentation/doc-guide/kernel-doc.rst b/Documentation/doc-guide/kernel-doc.rst
-> index 79aaa55d6bcf2b..de47b20c806acf 100644
-> --- a/Documentation/doc-guide/kernel-doc.rst
-> +++ b/Documentation/doc-guide/kernel-doc.rst
-> @@ -1,3 +1,7 @@
-> +==========================
-> +kernel-doc Comments Format
-> +==========================
-> +
->  Writing kernel-doc comments
->  ===========================
-
-Honestly, I think this is better fixed just by promoting the existing
-heading up a level.  It describes the file nicely, and we don't need two
-headers there.
-
-> diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-guide/sphinx.rst
-> index bb36f18ae9ac3e..140507de5a85e0 100644
-> --- a/Documentation/doc-guide/sphinx.rst
-> +++ b/Documentation/doc-guide/sphinx.rst
-> @@ -1,5 +1,9 @@
->  .. _sphinxdoc:
+> diff --git a/Documentation/locking/locktypes.rst b/Documentation/locking/locktypes.rst
+> index bfa75ea1b66a..9933faad4771 100644
+> --- a/Documentation/locking/locktypes.rst
+> +++ b/Documentation/locking/locktypes.rst
+> @@ -211,9 +211,6 @@ raw_spinlock_t and spinlock_t
+>  raw_spinlock_t
+>  --------------
 >  
-> +=============
-> +Sphinx Primer
-> +=============
-> +
->  Introduction
->  ============
+> -raw_spinlock_t is a strict spinning lock implementation regardless of the
+> -kernel configuration including PREEMPT_RT enabled kernels.
+> -
+>  raw_spinlock_t is a strict spinning lock implementation in all kernels,
+>  including PREEMPT_RT kernels.  Use raw_spinlock_t only in real critical
+>  core code, low-level interrupt handling and places where disabling
 
-Here, perhaps, replace "Introduction" with "Using Sphinx for kernel
-documentation" or some such and make that the document title?
+I don't think that was intentional.  Applied, thanks.
+
+For future reference, a far better changelog would have been something
+like:
+
+	Remove the duplicated sentence from locktypes.rst
 
 Thanks,
 

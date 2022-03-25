@@ -2,86 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CB24E7558
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C784E755A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359391AbiCYOsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 10:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45716 "EHLO
+        id S1359401AbiCYOss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 10:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359387AbiCYOsf (ORCPT
+        with ESMTP id S1359387AbiCYOsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 10:48:35 -0400
-Received: from smtp.tom.com (smtprz02.163.net [106.3.154.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB281D95DE
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 07:47:00 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by vip-app02.163.net (Postfix) with ESMTP id E26E04400B2
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 22:46:59 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
-        t=1648219619; bh=6HPXgfPP8+BOya1F5AkjcNxtjc44ThKa1XwWzyF2Nro=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dxfctSC8au/oUaM1rvmMG2AsvB+7G2K5obNmzilVRgZbsYn00zCDbX9v3feulM1GQ
-         G6xMVcuH28Y25nbTBCFNRfWPNb1nOIBM3c9M+cSQXjcwv/4ueESL5xKr2mqzlC6o8u
-         Sw418z9tIWnxJTIfEfaaEyVdO2BMO82nzMfO7xW4=
-Received: from localhost (HELO smtp.tom.com) ([127.0.0.1])
-          by localhost (TOM SMTP Server) with SMTP ID -694383563
-          for <linux-kernel@vger.kernel.org>;
-          Fri, 25 Mar 2022 22:46:59 +0800 (CST)
-X-Virus-Scanned: Debian amavisd-new at mxtest.tom.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
-        t=1648219619; bh=6HPXgfPP8+BOya1F5AkjcNxtjc44ThKa1XwWzyF2Nro=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dxfctSC8au/oUaM1rvmMG2AsvB+7G2K5obNmzilVRgZbsYn00zCDbX9v3feulM1GQ
-         G6xMVcuH28Y25nbTBCFNRfWPNb1nOIBM3c9M+cSQXjcwv/4ueESL5xKr2mqzlC6o8u
-         Sw418z9tIWnxJTIfEfaaEyVdO2BMO82nzMfO7xW4=
-Received: from localhost (unknown [101.93.196.13])
-        by antispamvip.163.net (Postfix) with ESMTPA id F135815414FE;
-        Fri, 25 Mar 2022 22:46:54 +0800 (CST)
-Date:   Fri, 25 Mar 2022 22:46:54 +0800
-From:   Mingbao Sun <sunmingbao@tom.com>
-To:     Sagi Grimberg <sagi@grimberg.me>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
-        libin.zhang@dell.com, ao.sun@dell.com
-Subject: Re: [PATCH v2 2/3] nvme-tcp: support specifying the
- congestion-control
-Message-ID: <20220325224654.00007cba@tom.com>
-In-Reply-To: <7121e4be-0e25-dd5f-9d29-0fb02cdbe8de@grimberg.me>
-References: <20220311103414.8255-1-sunmingbao@tom.com>
-        <20220311103414.8255-2-sunmingbao@tom.com>
-        <7121e4be-0e25-dd5f-9d29-0fb02cdbe8de@grimberg.me>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
+        Fri, 25 Mar 2022 10:48:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D7BD95D9;
+        Fri, 25 Mar 2022 07:47:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75F15B82865;
+        Fri, 25 Mar 2022 14:47:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F74C340F1;
+        Fri, 25 Mar 2022 14:47:09 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="e29jYBt5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1648219627;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r7mADfdfaorIen+c2NdaURScY/0cf8Ufs1ore6VUMAw=;
+        b=e29jYBt5BMK3Id1OJdZkzAo7GD2xNLM/W6AOpHe0d0p7U5r9wO5XiwmBt9PT6xVnjmUhGt
+        /nLqcSz6/zGQMP9PZmbcRY7p36vzpq9H8U8SBDeiAFUB4uPlUs5yhdIFVJf6ZfPY3R0ZtO
+        mrB9trfnO4jXdq15YgKwAFCnrZwZD/8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 173d7ea9 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 25 Mar 2022 14:47:07 +0000 (UTC)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2d07ae0b1c0so85596277b3.2;
+        Fri, 25 Mar 2022 07:47:07 -0700 (PDT)
+X-Gm-Message-State: AOAM532/Z2xVNCAxAnyKFaVOs1km3+PKtSBpkuCHv8HJ+tIOBE3VmpFL
+        xT6sBX4zl2L1BBbLZoaSRtWgqNDtm4Tev5BZHK0=
+X-Google-Smtp-Source: ABdhPJwxj9mfYcs4dcAt6tUFCKskMVxa7zReVBf5dKvFgxuwo4mx3BQh2NSD0QwY1Q9wAsGrGDsW9qSQpByR3DVcx7s=
+X-Received: by 2002:a81:5250:0:b0:2e6:af4d:22b1 with SMTP id
+ g77-20020a815250000000b002e6af4d22b1mr11078817ywb.396.1648219626122; Fri, 25
+ Mar 2022 07:47:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <CA+icZUXYH4xfWtR=P8jXQfks7=zh0Os45yDFOiHNtM_KNWrfiw@mail.gmail.com>
+In-Reply-To: <CA+icZUXYH4xfWtR=P8jXQfks7=zh0Os45yDFOiHNtM_KNWrfiw@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 25 Mar 2022 08:46:55 -0600
+X-Gmail-Original-Message-ID: <CAHmME9rPYOAZ2V660SbgbTvZgD7MDpn9r7ZzDEHzOPjjm8sFVA@mail.gmail.com>
+Message-ID: <CAHmME9rPYOAZ2V660SbgbTvZgD7MDpn9r7ZzDEHzOPjjm8sFVA@mail.gmail.com>
+Subject: Re: random: treat bootloader trust toggle the same way as cpu trust toggle
+To:     sedat.dilek@gmail.com
+Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        Graham Christensen <graham@grahamc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hope the 3 combinations can support the claims in the commit message.
+Hi Sedat,
 
-Since for the later 2 combinations, due to packet dropping and
-timeout-retransmission, the bandwidth of each TX node could suddenly
-drop a few hundred MB/S. 
-And on the RX node, the total bandwidth can not reach to the full link
-bandwidth (which is about 6 GB/S).
-.
-In contrast, for the first combination, the bandwidth of each TX node
-is stable at ~ 2GB/S.
-And on the RX node, the total bandwidth reached to the full link bandwidth.
-And no packet dropping occurs on the 2 switches.
-This is even competitive to the performance of RDMA.
+On Fri, Mar 25, 2022 at 5:46 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> I am not a security expert but following the exciting changes to
+> random/crng changes in upcoming v5.18 and using it on top of Linux
+> v5.17.
+>
+> Just saw this typo in [0]:
+
+Thanks. Will fix a the bug.
+
+Jason

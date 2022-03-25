@@ -2,45 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DFB4E7DC1
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1D14E7CE4
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233657AbiCYWAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 18:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
+        id S233617AbiCYWCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 18:02:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233635AbiCYWAS (ORCPT
+        with ESMTP id S233603AbiCYWCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 18:00:18 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9404C118F5A;
-        Fri, 25 Mar 2022 14:58:43 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:35::5f6])
+        Fri, 25 Mar 2022 18:02:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58023131F4D
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 15:00:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 454BB2C3;
-        Fri, 25 Mar 2022 21:58:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 454BB2C3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1648245523; bh=hsYCabDYG9BsnSr6aIERiuj385zksjChMI7/4113Z3I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VrC4nDK2COPGZVaDKnzQ0RIroS8+LdFo30Izn8Ow21Zvvjs6AqQjlDJVidAdf4GsO
-         SVp8q2DV2vdvwXDMXrYcOnCR+7JQcqksOye/BVL/VSsQ4ExGakHB5wDu7TI59QEntr
-         8Y0SN1IqWmveU5eCyRyg6JuBCyt0Ky9DQigJT0p1yfgjemOTeEdkMshz5qptfIODsq
-         Ba6yF7SNSH6EF5vft5y7yrnb5nDZDxAZ0keNFYmMyCfbsdVdSLRTKjfPxC+88NwKyG
-         Ljfm/tbMjb6OVuKq82e3Vm8m0gqjM95BaDh6rH+nDwdd5/4Ys1Ecka/FtELk6jcKQ8
-         jnqG8bh59RWMQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     linux-doc@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] docs: Add a document on how to fix a messy diffstat
-Date:   Fri, 25 Mar 2022 15:58:42 -0600
-Message-ID: <87wnghd78t.fsf@meer.lwn.net>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA4F561231
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 22:00:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5B450C2BBE4;
+        Fri, 25 Mar 2022 22:00:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648245641;
+        bh=4lwv51i7kdnJVIUkgE5H5qVu88oykl0a4+bTXHd5MQE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ZlSTxaALhW3K1mDIw6J4mpzyH/Z9q+4U0qiBJ2ISvQddet9/4/VJg5/ZN1pd+fmEB
+         aSd+gPUsEi9nmArnydmprgck9CdjrrJN+yz90W8L3777DzqSsLg7kT5xIsaUm+rssN
+         6czbJHOj/DPqwi0aHXw2zPDApOWkIZkuhHq0IgytdFFuO8YPI7YvSWOfVWk2YqhumU
+         dyLGhkupAj53mTenEuvDlWvE6qBG5ppvXapKNWCAbo3wiL2VHG61nz4mzyhcYYtgXt
+         +UX9WVfRjJgK5DbuZtxgpMLh0PQf1FkMQlSo+F0S9XsoPP8+EfDzUAULaXzzdU9924
+         SCc4fLl004rhA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 48877E6BBCA;
+        Fri, 25 Mar 2022 22:00:41 +0000 (UTC)
+Subject: Re: [git pull] drm fixes for 5.18-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAPM=9ty8CYpuQ05BjgB9_CBRUjiL5PMTF-irHRXKOWtOrgxxZA@mail.gmail.com>
+References: <CAPM=9ty8CYpuQ05BjgB9_CBRUjiL5PMTF-irHRXKOWtOrgxxZA@mail.gmail.com>
+X-PR-Tracked-List-Id: Direct Rendering Infrastructure - Development
+ <dri-devel.lists.freedesktop.org>
+X-PR-Tracked-Message-Id: <CAPM=9ty8CYpuQ05BjgB9_CBRUjiL5PMTF-irHRXKOWtOrgxxZA@mail.gmail.com>
+X-PR-Tracked-Remote: git://anongit.freedesktop.org/drm/drm tags/drm-next-2022-03-25
+X-PR-Tracked-Commit-Id: 2a81dba4b577099717cea86d429f053e85e74d96
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: cb7cbaae7fd9cee64f19cdfd89d097d807b884f5
+Message-Id: <164824564128.5018.4392403227348156976.pr-tracker-bot@kernel.org>
+Date:   Fri, 25 Mar 2022 22:00:41 +0000
+To:     Dave Airlie <airlied@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,136 +65,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A branch with merges in will sometimes create a diffstat containing a lot
-of unrelated work at "git request-pull" time.  Create a document based on
-Linus's advice (found in the links below) and add it to the maintainer
-manual in the hope of saving some wear on Linus's keyboard going forward.
+The pull request you sent on Fri, 25 Mar 2022 12:13:20 +1000:
 
-Link: https://lore.kernel.org/lkml/CAHk-=wg3wXH2JNxkQi+eLZkpuxqV+wPiHhw_Jf7ViH33Sw7PHA@mail.gmail.com/
-Link: https://lore.kernel.org/lkml/CAHk-=wgXbSa8yq8Dht8at+gxb_idnJ7X5qWZQWRBN4_CUPr=eQ@mail.gmail.com/
-Signed-off-by: Jonathan Corbet <corbet@lwn.net>
----
-[If this passes muster I'll likely toss a version onto LWN as well]
+> git://anongit.freedesktop.org/drm/drm tags/drm-next-2022-03-25
 
- Documentation/maintainer/index.rst          |  1 +
- Documentation/maintainer/messy-diffstat.rst | 96 +++++++++++++++++++++
- 2 files changed, 97 insertions(+)
- create mode 100644 Documentation/maintainer/messy-diffstat.rst
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/cb7cbaae7fd9cee64f19cdfd89d097d807b884f5
 
-diff --git a/Documentation/maintainer/index.rst b/Documentation/maintainer/index.rst
-index f0a60435b124..3e03283c144e 100644
---- a/Documentation/maintainer/index.rst
-+++ b/Documentation/maintainer/index.rst
-@@ -12,6 +12,7 @@ additions to this manual.
-    configure-git
-    rebasing-and-merging
-    pull-requests
-+   messy-diffstat
-    maintainer-entry-profile
-    modifying-patches
- 
-diff --git a/Documentation/maintainer/messy-diffstat.rst b/Documentation/maintainer/messy-diffstat.rst
-new file mode 100644
-index 000000000000..970eac087f67
---- /dev/null
-+++ b/Documentation/maintainer/messy-diffstat.rst
-@@ -0,0 +1,96 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=====================================
-+Handling messy pull-request diffstats
-+=====================================
-+
-+Subsystem maintainers routinely use ``git request-pull`` as part of the
-+process of sending work upstream.  Normally, the result includes a nice
-+diffstat listing showing which files will be touched and how much of each
-+will be changed.  Occasionally, though, a repository with a relatively
-+complicated development history will yield a massive diffstat containing a
-+great deal of unrelated work.  The result looks ugly and obscures what the
-+pull request is actually doing.  This document describes what is happening
-+and how to fix things up; it is derived from The Wisdom of Linus Torvalds,
-+found in Linus1_ and Linus2_.
-+
-+.. _Linus1: https://lore.kernel.org/lkml/CAHk-=wg3wXH2JNxkQi+eLZkpuxqV+wPiHhw_Jf7ViH33Sw7PHA@mail.gmail.com/
-+.. _Linus2: https://lore.kernel.org/lkml/CAHk-=wgXbSa8yq8Dht8at+gxb_idnJ7X5qWZQWRBN4_CUPr=eQ@mail.gmail.com/
-+
-+A Git development history proceeds as a series of commits.  In a simplified
-+manner, mainline kernel development looks like this::
-+
-+  ... vM --- vN-rc1 --- vN-rc2 --- vN-rc3 --- ... --- vN-rc7 --- vN
-+
-+If one wants to see what has changed between two points, a command like
-+will do the job::
-+
-+  $ git diff --stat --summary vN-rc2..vN-rc3
-+
-+Here, there are two clear points in the history; Git will essentially
-+"subtract" the beginning point from the end point and display the resulting
-+differences.  The requested operation is unambiguous and easy enough to
-+understand.
-+
-+When a subsystem maintainer creates a branch and commits changes to it, the
-+result in the simplest case is a history that looks like::
-+
-+  ... vM --- vN-rc1 --- vN-rc2 --- vN-rc3 --- ... --- vN-rc7 --- vN
-+                          |
-+                          +-- c1 --- c2 --- ... --- cN
-+
-+If that maintainer now uses ``git diff`` to see what has changed between
-+the mainline branch (let's call it "linus") and cN, there are still two
-+clear endpoints, and the result is as expected.  So a pull request
-+generated with ``git request-pull`` will also be as expected.  But now
-+consider a slightly more complex development history::
-+
-+  ... vM --- vN-rc1 --- vN-rc2 --- vN-rc3 --- ... --- vN-rc7 --- vN
-+                |         |
-+                |         +-- c1 --- c2 --- ... --- cN
-+                |                   /
-+                +-- x1 --- x2 --- x3
-+
-+Our maintainer has created one branch at vN-rc1 and another at vN-rc2; the
-+two were then subsequently merged into c2.  Now a pull request generated
-+for cN may end up being messy indeed, and developers often end up wondering
-+why.
-+
-+What is happening here is that there are no longer two clear end points for
-+the ``git diff`` operation to use.  The development culminating in cN
-+started in two different places; to generate the diffstat, ``git diff``
-+ends up having pick one of them and hoping for the best.  If the diffstat
-+starts at vN-rc1, it may end up including all of the changes between there
-+and the second origin end point (vN-rc2), which is certainly not what our
-+maintainer had in mind.  With all of that extra junk in the diffstat, it
-+may be impossible to tell what actually happened in the changes leading up
-+to cN.
-+
-+Maintainers often try to resolve this problem by, for example, rebasing the
-+branch or performing another merge with the linus branch, then recreating
-+the pull request.  This approach tends not to lead to joy at the receiving
-+end of that pull request; rebasing and/or merging just before pushing
-+upstream is a well-known way to get a grumpy response.
-+
-+So what is to be done?  The best response when confronted with this
-+situation is to indeed to a merge, but to do it privately, as if it were
-+the source of shame.  Create a new, throwaway branch and do the merge
-+there::
-+
-+  ... vM --- vN-rc1 --- vN-rc2 --- vN-rc3 --- ... --- vN-rc7 --- vN
-+                |         |                                      |
-+                |         +-- c1 --- c2 --- ... --- cN           |
-+                |                   /               |            |
-+                +-- x1 --- x2 --- x3                +------------+-- TEMP
-+
-+The merge operation resolves all of the complications resulting from the
-+multiple beginning points, yielding a coherent result that contains only
-+the differences from the mainline branch.  Now it will be possible to
-+generate a diffstat with the desired information::
-+
-+  $ git diff -C --stat --summary linus..TEMP
-+
-+Save the output from this command, then simply delete the TEMP branch;
-+definitely do not expose it to the outside world.  Take the saved diffstat
-+output and edit it into the messy pull request, yielding a result that
-+shows what is really going on.  That request can then be sent upstream.
+Thank you!
+
 -- 
-2.35.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,121 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 923244E73A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:39:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E984E73A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359136AbiCYMjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 08:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
+        id S1354117AbiCYMma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 08:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357600AbiCYMji (ORCPT
+        with ESMTP id S243507AbiCYMm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 08:39:38 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816B22AD9
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 05:38:02 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id pv16so15162425ejb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 05:38:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tfRCxH9/uoNXtWgRWX0fdM2M20zvzSKi6ZQUaCI8/Tw=;
-        b=moZNf82k4PSvCr9JvQF0xyYIXTQ+Mg7iw0IhkDLsNH5P4XX1npD+w81xQ00GaiEzC+
-         1vIo6IJ1nIRX0jh8/fOvYlXU5nAHK7EaBS57eVuzlQnU3Kz4LRykgxXtApWrbrBas5yk
-         m9eIKf1dIdKtwLOsHUvLu7ne7jzHnlxjR0sg4d2UKUK73cgpCJxYsj8FEQxSIZRMxzHB
-         C5VMpAw41BYmz6psWz+cF5itMoq9TJ6zNmWC32Lu4dd3WeD8yubRZFpTKul95gS+gJYV
-         oeA5ytPxEy8QwKeRYii24dheEmnIlyCfrUaih3NW3qXGE3kpey7USWnwiaJp5pxRfWD0
-         1APA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tfRCxH9/uoNXtWgRWX0fdM2M20zvzSKi6ZQUaCI8/Tw=;
-        b=nNo58AIy7aukjkeZzvXp5IyyEXc4tmxh2XN9hFY4cBJrg9ilNc9ktg3LUOLFHN1w9O
-         W+0tD8zWv5hES4cDjI7Ttfsi98Qrfxh9DlSd6O7I+9PcS63/FUxNiB5/tz/m09roe7jG
-         hQL/+MY6itjKxWeRpkRUod0vHI6VvX/9ivIaZfxsmhgi33sKbiRQXZ1pbeMpwUKuFZq6
-         5SByRTl0omUBQ11kbUmTrS7K/CBNHCvSKecPeQw7AhtJAhLMwXN4VM2Bp3koZqATn8BP
-         XsqNJeRIBzEsFUlOeS71CmOu8+axS2KLd8Ug+4Q+3kPTjd0Vrv/L5OiOBnKkX76t70Ja
-         R1LA==
-X-Gm-Message-State: AOAM531yLyfMBgxIsv6Liv3jdT9JPjwj5W/WkLxXvnByfWOUfBkZyEbZ
-        bk0ZcODC6901OkuFPswdC/A=
-X-Google-Smtp-Source: ABdhPJxgPKfxl4xOHxp27VuyTs/QRe8Q5kwMcIBQO1+3mFrvBxcCkah3EqqXiaGGnNY7wo62YGewXA==
-X-Received: by 2002:a17:907:7da6:b0:6e0:5b7c:e3f9 with SMTP id oz38-20020a1709077da600b006e05b7ce3f9mr11872382ejc.239.1648211881003;
-        Fri, 25 Mar 2022 05:38:01 -0700 (PDT)
-Received: from leap.localnet (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
-        by smtp.gmail.com with ESMTPSA id 27-20020a17090600db00b006df6b34d9b8sm2270193eji.211.2022.03.25.05.37.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 05:37:59 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Muchun Song <songmuchun@bytedance.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     syzbot <syzbot+f8c45ccc7d5d45fc5965@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: [syzbot] general protection fault in list_lru_add
-Date:   Fri, 25 Mar 2022 13:37:57 +0100
-Message-ID: <5818154.lOV4Wx5bFT@leap>
-In-Reply-To: <12984828.uLZWGnKmhe@leap>
-References: <CAMZfGtUr6V5pTrPhZukD2_KbB7BLPoKvF6H63HP4pykY36Ou9A@mail.gmail.com> <CAHk-=whxaFX4nqnE-SLHTGKyqejvbrhYx5sagcxWd+UWCMf8dg@mail.gmail.com> <12984828.uLZWGnKmhe@leap>
+        Fri, 25 Mar 2022 08:42:28 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D1E3616A
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 05:40:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648212054; x=1679748054;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=o2LFS03sDofrW+G9hmi3C61RnQvETQcPgiy633mrl5Y=;
+  b=XBP0VhFIhISsXV/4eF8KVaL26sErm4em/h0TZQk3vvewU1e0lut5r6br
+   dip6QeOvrpxJGNPlyoshQxWpit4QQXb0isBixPuXCLIeA5Z86Jx+LFhWf
+   GXRVc16Xftadscwp0yf+ukT5JbZKePrlcwtn1YZAZDWzYfos5MQgUqdvH
+   WL14IbTFZCkpgCWAKVPqo6EWcpVWF8MncKYradAy3qkmifVibSBXQbrAk
+   OPkj1fDI0zab0gPwEP7829GrKR9o4gmhnF/36MByb6X3628/tvBlx7QJG
+   x7fnbOhi9rkVVwOLoIECfda4+do4VIGH3e0H89ghSxaHC4saK4w+AnIkT
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="283494969"
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="283494969"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 05:40:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="718197765"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 25 Mar 2022 05:40:51 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nXjFK-000MBc-Rk; Fri, 25 Mar 2022 12:40:50 +0000
+Date:   Fri, 25 Mar 2022 20:40:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: arch/mips/crypto/crc32-mips.c:40:1: error: expected identifier or '('
+Message-ID: <202203252015.7q4sT1o2-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On venerd=C3=AC 25 marzo 2022 06:47:36 CET Fabio M. De Francesco wrote:
-> On gioved=C3=AC 24 marzo 2022 20:45:00 CET Linus Torvalds wrote:
-> > On Thu, Mar 24, 2022 at 12:41 PM syzbot
-> > <syzbot+f8c45ccc7d5d45fc5965@syzkaller.appspotmail.com> wrote:
-> > >
-> > > syzbot has tested the proposed patch and the reproducer did not trigg=
-er any issue:
-> >=20
-> > Heh, well that's unfortunate.
-> >=20
-> > I think the issue is that it triggered a new BUG() that didn't match
-> > the previous NULL pointer dereference, so it thinks things are
-> > "fixed".
-> >=20
-> >              Linus
-> >=20
-> > --=20
-> > You received this message because you are subscribed to the Google Grou=
-ps "syzkaller-bugs" group.
-> > To unsubscribe from this group and stop receiving emails from it, send =
-an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> > To view this discussion on the web visit https://groups.google.com/d/ms=
-gid/syzkaller-bugs/CAHk-%3DwhxaFX4nqnE-SLHTGKyqejvbrhYx5sagcxWd%2BUWCMf8dg%=
-40mail.gmail.com.
-> >=20
->=20
-> No, not at all, Linus!
->=20
-> Unless I'm still sleeping with wide open eyes (it's 6.30 AM here), you ar=
-e misunderstanding=20
-> this message from Syzbot :)
+Hi Paul,
 
-Oh sorry for the noise.
+FYI, the error/warning still remains.
 
-I hadn't read his changes, so I didn't know that they were a no-op patch th=
-at wasn't meant
-to fix the reported issue :(
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   34af78c4e616c359ed428d79fe4758a35d2c5473
+commit: 67512a8cf5a730938fdb1e48de33edfef6015e03 MIPS: Avoid macro redefinitions
+date:   6 months ago
+config: mips-randconfig-r001-20220324 (https://download.01.org/0day-ci/archive/20220325/202203252015.7q4sT1o2-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=67512a8cf5a730938fdb1e48de33edfef6015e03
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 67512a8cf5a730938fdb1e48de33edfef6015e03
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-Regards,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-=46abio
+All errors (new ones prefixed by >>):
+
+>> arch/mips/crypto/crc32-mips.c:40:1: error: expected identifier or '('
+   _ASM_MACRO_CRC32(crc32b,  0, 0);
+   ^
+   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
+   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
+                                                                             ^
+   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
+   _ASM_MACRO_3R'
+                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
+                   ^
+   arch/mips/crypto/crc32-mips.c:41:1: error: expected identifier or '('
+   _ASM_MACRO_CRC32(crc32h,  1, 0);
+   ^
+   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
+   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
+                                                                             ^
+   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
+   _ASM_MACRO_3R'
+                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
+                   ^
+   arch/mips/crypto/crc32-mips.c:42:1: error: expected identifier or '('
+   _ASM_MACRO_CRC32(crc32w,  2, 0);
+   ^
+   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
+   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
+                                                                             ^
+   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
+   _ASM_MACRO_3R'
+                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
+                   ^
+   arch/mips/crypto/crc32-mips.c:43:1: error: expected identifier or '('
+   _ASM_MACRO_CRC32(crc32d,  3, 0);
+   ^
+   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
+   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
+                                                                             ^
+   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
+   _ASM_MACRO_3R'
+                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
+                   ^
+   arch/mips/crypto/crc32-mips.c:44:1: error: expected identifier or '('
+   _ASM_MACRO_CRC32(crc32cb, 0, 1);
+   ^
+   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
+   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
+                                                                             ^
+   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
+   _ASM_MACRO_3R'
+                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
+                   ^
+   arch/mips/crypto/crc32-mips.c:45:1: error: expected identifier or '('
+   _ASM_MACRO_CRC32(crc32ch, 1, 1);
+   ^
+   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
+   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
+                                                                             ^
+   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
+   _ASM_MACRO_3R'
+                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
+                   ^
+   arch/mips/crypto/crc32-mips.c:46:1: error: expected identifier or '('
+   _ASM_MACRO_CRC32(crc32cw, 2, 1);
+   ^
+   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
+   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
+                                                                             ^
+   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
+   _ASM_MACRO_3R'
+                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
+                   ^
+   arch/mips/crypto/crc32-mips.c:47:1: error: expected identifier or '('
+   _ASM_MACRO_CRC32(crc32cd, 3, 1);
+   ^
+   arch/mips/crypto/crc32-mips.c:31:46: note: expanded from macro '_ASM_MACRO_CRC32'
+   #define _ASM_MACRO_CRC32(OP, SZ, TYPE)                                    \
+                                                                             ^
+   arch/mips/include/asm/mipsregs.h:1346:3: note: expanded from macro '\
+   _ASM_MACRO_3R'
+                   ".macro " #OP " " #R1 ", " #R2 ", " #R3 "\n\t"          \
+                   ^
+   8 errors generated.
 
 
+vim +40 arch/mips/crypto/crc32-mips.c
 
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  29  
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  30  #ifndef TOOLCHAIN_SUPPORTS_CRC
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  31  #define _ASM_MACRO_CRC32(OP, SZ, TYPE)					  \
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  32  _ASM_MACRO_3R(OP, rt, rs, rt2,						  \
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  33  	".ifnc	\\rt, \\rt2\n\t"					  \
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  34  	".error	\"invalid operands \\\"" #OP " \\rt,\\rs,\\rt2\\\"\"\n\t" \
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  35  	".endif\n\t"							  \
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  36  	_ASM_INSN_IF_MIPS(0x7c00000f | (__rt << 16) | (__rs << 21) |	  \
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  37  			  ((SZ) <<  6) | ((TYPE) << 8))			  \
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  38  	_ASM_INSN32_IF_MM(0x00000030 | (__rs << 16) | (__rt << 21) |	  \
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  39  			  ((SZ) << 14) | ((TYPE) << 3)))
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09 @40  _ASM_MACRO_CRC32(crc32b,  0, 0);
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  41  _ASM_MACRO_CRC32(crc32h,  1, 0);
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  42  _ASM_MACRO_CRC32(crc32w,  2, 0);
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  43  _ASM_MACRO_CRC32(crc32d,  3, 0);
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  44  _ASM_MACRO_CRC32(crc32cb, 0, 1);
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  45  _ASM_MACRO_CRC32(crc32ch, 1, 1);
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  46  _ASM_MACRO_CRC32(crc32cw, 2, 1);
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  47  _ASM_MACRO_CRC32(crc32cd, 3, 1);
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  48  #define _ASM_SET_CRC ""
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  49  #else /* !TOOLCHAIN_SUPPORTS_CRC */
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  50  #define _ASM_SET_CRC ".set\tcrc\n\t"
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  51  #endif
+4a5dc51e93e8046 Marcin Nowakowski 2018-02-09  52  
+
+:::::: The code at line 40 was first introduced by commit
+:::::: 4a5dc51e93e80463010ab4d8d00fc9cb6bc936fa MIPS: crypto: Add crc32 and crc32c hw accelerated module
+
+:::::: TO: Marcin Nowakowski <marcin.nowakowski@mips.com>
+:::::: CC: James Hogan <jhogan@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

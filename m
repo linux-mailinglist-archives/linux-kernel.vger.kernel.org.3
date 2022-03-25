@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85EE4E765C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:13:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C468E4E76BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:17:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376554AbiCYPNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
+        id S1376320AbiCYPTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359751AbiCYPJ0 (ORCPT
+        with ESMTP id S1376496AbiCYPNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:09:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9C8D9EAC;
-        Fri, 25 Mar 2022 08:07:22 -0700 (PDT)
+        Fri, 25 Mar 2022 11:13:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3045BD12;
+        Fri, 25 Mar 2022 08:09:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7081961C16;
-        Fri, 25 Mar 2022 15:07:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80400C340E9;
-        Fri, 25 Mar 2022 15:07:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BCB8B82889;
+        Fri, 25 Mar 2022 15:09:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A67C340E9;
+        Fri, 25 Mar 2022 15:09:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220841;
-        bh=2X/K4MSH7ZZ4y6OlqIljkiSvs87cao4yDt948RfwvFY=;
+        s=korg; t=1648220988;
+        bh=3blvbOJ/SC66Hgz1697krpEydocZp9jkAp2w2f2xFwc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D6hS6kNZwY4TkG1fu9q2cCp83i5gBPmkDNC4JfscQIAn4lUblhZhd/Ycwlc0RuMWa
-         ihtbQZMet3aydiQLySBFUxS+om7dLu8rh3ZfPMOY8I+jotpaAd1yRptt/B48Xk9zYk
-         tX6KFfmerDmP81IqiHREFr4zqt9s1HXpwA6UqGe8=
+        b=wZg4ID+/T3oItDohyEA56GfN7f/BxiDOSGJYUrH3hK7zMsyk53Gd+4BRyCHqS697l
+         NR440jPn2C1uXSqCudL14NxXaVijKY6bl0WWlS48LhedFp0vNmg0hvxa0JZpZNXfkO
+         s3b1KXv0n7kp0cu0+I1ie/lus9wu9437GClyfGDU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.19 09/20] ALSA: pcm: Add stream lock during PCM reset ioctl operations
+        stable@vger.kernel.org, Chen Li <chenli@uniontech.com>,
+        Namjae Jeon <namjae.jeon@samsung.com>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: [PATCH 5.10 03/38] exfat: avoid incorrectly releasing for root inode
 Date:   Fri, 25 Mar 2022 16:04:47 +0100
-Message-Id: <20220325150417.278924779@linuxfoundation.org>
+Message-Id: <20220325150419.858945508@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150417.010265747@linuxfoundation.org>
-References: <20220325150417.010265747@linuxfoundation.org>
+In-Reply-To: <20220325150419.757836392@linuxfoundation.org>
+References: <20220325150419.757836392@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,53 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Chen Li <chenli@uniontech.com>
 
-commit 1f68915b2efd0d6bfd6e124aa63c94b3c69f127c upstream.
+commit 839a534f1e853f1aec100d06040c0037b89c2dc3 upstream.
 
-snd_pcm_reset() is a non-atomic operation, and it's allowed to run
-during the PCM stream running.  It implies that the manipulation of
-hw_ptr and other parameters might be racy.
+In d_make_root, when we fail to allocate dentry for root inode,
+we will iput root inode and returned value is NULL in this function.
 
-This patch adds the PCM stream lock at appropriate places in
-snd_pcm_*_reset() actions for covering that.
+So we do not need to release this inode again at d_make_root's caller.
 
-Cc: <stable@vger.kernel.org>
-Reviewed-by: Jaroslav Kysela <perex@perex.cz>
-Link: https://lore.kernel.org/r/20220322171325.4355-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Chen Li <chenli@uniontech.com>
+Signed-off-by: Namjae Jeon <namjae.jeon@samsung.com>
+Cc: Tadeusz Struk <tadeusz.struk@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/pcm_native.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ fs/exfat/super.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/core/pcm_native.c
-+++ b/sound/core/pcm_native.c
-@@ -1648,21 +1648,25 @@ static int snd_pcm_do_reset(struct snd_p
- 	int err = substream->ops->ioctl(substream, SNDRV_PCM_IOCTL1_RESET, NULL);
- 	if (err < 0)
- 		return err;
-+	snd_pcm_stream_lock_irq(substream);
- 	runtime->hw_ptr_base = 0;
- 	runtime->hw_ptr_interrupt = runtime->status->hw_ptr -
- 		runtime->status->hw_ptr % runtime->period_size;
- 	runtime->silence_start = runtime->status->hw_ptr;
- 	runtime->silence_filled = 0;
-+	snd_pcm_stream_unlock_irq(substream);
+--- a/fs/exfat/super.c
++++ b/fs/exfat/super.c
+@@ -690,7 +690,7 @@ static int exfat_fill_super(struct super
+ 	if (!sb->s_root) {
+ 		exfat_err(sb, "failed to get the root dentry");
+ 		err = -ENOMEM;
+-		goto put_inode;
++		goto free_table;
+ 	}
+ 
  	return 0;
- }
- 
- static void snd_pcm_post_reset(struct snd_pcm_substream *substream, int state)
- {
- 	struct snd_pcm_runtime *runtime = substream->runtime;
-+	snd_pcm_stream_lock_irq(substream);
- 	runtime->control->appl_ptr = runtime->status->hw_ptr;
- 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK &&
- 	    runtime->silence_size > 0)
- 		snd_pcm_playback_silence(substream, ULONG_MAX);
-+	snd_pcm_stream_unlock_irq(substream);
- }
- 
- static const struct action_ops snd_pcm_action_reset = {
 
 

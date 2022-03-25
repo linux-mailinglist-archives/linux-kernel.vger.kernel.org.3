@@ -2,109 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B654E73DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F33174E73E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 14:01:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359202AbiCYNAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 09:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
+        id S1359216AbiCYNDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 09:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242241AbiCYNAU (ORCPT
+        with ESMTP id S1359211AbiCYNC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 09:00:20 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B0770916
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 05:58:46 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 2567F210DD;
-        Fri, 25 Mar 2022 12:58:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1648213125; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=j1OTytgc37TnxYn/42F/JXOrrT0mgLkreFQ2GEEDzWE=;
-        b=WckXdQMHBOwB6P7CFtPU3xE9SzUK9jNqYJfHOWAjWFyikgp5efNUPSKu8ux8xwturW4DOb
-        pCuTKhJsl2/ItW6dfv8/Dm2iYQP7tizc1/zw3pOTBA2e+M1tIj9tKltwoLd8S6s/ButTT8
-        QO3R+unU+hCvR+Bxi6JGEOxwWZsQzOM=
-Received: from suse.cz (unknown [10.100.201.86])
+        Fri, 25 Mar 2022 09:02:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9D86EC4B;
+        Fri, 25 Mar 2022 06:01:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 0A144A3B82;
-        Fri, 25 Mar 2022 12:58:45 +0000 (UTC)
-Date:   Fri, 25 Mar 2022 13:58:42 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>, Baoquan He <bhe@redhat.com>
-Cc:     John Donnelly <john.p.donnelly@oracle.com>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] dma/pool: do not complain if DMA pool is not allocated
-Message-ID: <Yj28gjonUa9+0yae@dhcp22.suse.cz>
-References: <20220325122559.14251-1-mhocko@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220325122559.14251-1-mhocko@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD1DAB81DEA;
+        Fri, 25 Mar 2022 13:01:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D78CC340E9;
+        Fri, 25 Mar 2022 13:01:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648213279;
+        bh=Y8XRkWJsjrQI0FowRsPE3U8uXwfLybylV/731J2THY0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CEv44hAOKB5GU5dNqASdeQ0Ua4a8DeaeuH1pF1deO/Ph54vfusbVvXnBEL3yCgtMD
+         Rn0uBG3cl1uCVydODRRSm+PTvWsZAA7uGny8sLEQPUP6dl6m6Cpj0Di+AuOY6EfxHk
+         Mz6mWpckCtKTkIsi+jksF2aEbMYkwlPyh24lzPX99sFgx2YWt+hgqZFYn2B9xwxBT2
+         KmpjjaCGax9Q598wDLPdcFsvPj72t4iKHz+9dyjz7vrGvNzAxnx/6Otrecu0zGb5Om
+         HAaX4/yWsUs2sWz6uTQOGcsxIZ5WAZmkQ5HJA61Cs6EGRyHmopcvRw9y/7Caoj85eq
+         prywNJyHVzQHw==
+Date:   Fri, 25 Mar 2022 22:01:13 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        kernel-janitors@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 3/2] x86,rethook: Fix arch_rethook_trampoline()
+ to generate a complete pt_regs
+Message-Id: <20220325220113.a80c05905b7633b105a7abe1@kernel.org>
+In-Reply-To: <20220325114012.GO8939@worktop.programming.kicks-ass.net>
+References: <164818251899.2252200.7306353689206167903.stgit@devnote2>
+        <20220325114012.GO8939@worktop.programming.kicks-ass.net>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 25-03-22 13:25:59, Michal Hocko wrote:
-> From: Michal Hocko <mhocko@suse.com>
-> 
-> we have a system complainging about order-5 allocation for the DMA pool.
-> This is something that a674e48c5443 ("dma/pool: create dma atomic pool
-> only if dma zone has managed pages") has already tried to achieve but I
-> do not think it went all the way to have it covered completely. In this
-> particular case has_managed_dma() will not work because:
-> [    0.678539][    T0] Initmem setup node 0 [mem 0x0000000000001000-0x000000027dffffff]
-> [    0.686316][    T0] On node 0, zone DMA: 1 pages in unavailable ranges
-> [    0.687093][    T0] On node 0, zone DMA32: 36704 pages in unavailable ranges
-> [    0.694278][    T0] On node 0, zone Normal: 53252 pages in unavailable ranges
-> [    0.701257][    T0] On node 0, zone Normal: 8192 pages in unavailable ranges
-
-Dang, I have just realized that I have misread the boot log and it has
-turned out that a674e48c5443 is covering my situation because the
-allocation failure message says:
-Node 0 DMA free:0kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:636kB managed:0kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
-
-I thought there are only few pages in the managed by the DMA zone. This
-is still theoretically possible so I think __GFP_NOWARN makes sense here
-but it would require to change the patch description.
-
-Is this really worth it?
+On Fri, 25 Mar 2022 12:40:12 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
 
 > 
-> The allocation failure on the DMA zone shouldn't be really critical for
-> the system operation so just silence the warning instead.
+> You lost the regs->ss bit again..
+
+Yeah, I planed to split it in another series with optprobe update
+because the optprobe also skips regs->ss. Anyway...
+
 > 
-> Signed-off-by: Michal Hocko <mhocko@suse.com>
+> Boot tested on tigerlake with IBT enabled -- passed the boot time
+> kretprobe selftests.
+> 
 > ---
->  kernel/dma/pool.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/kernel/dma/pool.c b/kernel/dma/pool.c
-> index 4d40dcce7604..1bf6de398986 100644
-> --- a/kernel/dma/pool.c
-> +++ b/kernel/dma/pool.c
-> @@ -205,7 +205,7 @@ static int __init dma_atomic_pool_init(void)
->  		ret = -ENOMEM;
->  	if (has_managed_dma()) {
->  		atomic_pool_dma = __dma_atomic_pool_init(atomic_pool_size,
-> -						GFP_KERNEL | GFP_DMA);
-> +						GFP_KERNEL | GFP_DMA | __GFP_NOWARN);
->  		if (!atomic_pool_dma)
->  			ret = -ENOMEM;
->  	}
-> -- 
-> 2.30.2
+> Subject: x86,rethook: Fix arch_rethook_trampoline() to generate a complete pt_regs
+> From: Peter Zijlstra <peterz@infradead.org>
+> Date: Fri Mar 25 10:25:56 CET 2022
+> 
+> Currently arch_rethook_trampoline() generates an almost complete
+> pt_regs on-stack, everything except regs->ss that is, that currently
+> points to the fake return address, which is not a valid segment
+> descriptor.
+> 
+> Since interpretation of regs->[sb]p should be done in the context of
+> regs->ss, and we have code actually doing that (see
+> arch/x86/lib/insn-eval.c for instance), complete the job by also
+> pushing ss.
+
+This looks good to me.
+
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+
+Thank you!
+
+> 
+> This ensures that anybody who does do look at regs->ss doesn't
+> mysteriously malfunction, avoiding much future pain.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  arch/x86/kernel/rethook.c |   24 +++++++++++++-----------
+>  1 file changed, 13 insertions(+), 11 deletions(-)
+> 
+> --- a/arch/x86/kernel/rethook.c
+> +++ b/arch/x86/kernel/rethook.c
+> @@ -25,29 +25,31 @@ asm(
+>  	/* Push a fake return address to tell the unwinder it's a kretprobe. */
+>  	"	pushq $arch_rethook_trampoline\n"
+>  	UNWIND_HINT_FUNC
+> -	/* Save the 'sp - 8', this will be fixed later. */
+> +	"       pushq $" __stringify(__KERNEL_DS) "\n"
+> +	/* Save the 'sp - 16', this will be fixed later. */
+>  	"	pushq %rsp\n"
+>  	"	pushfq\n"
+>  	SAVE_REGS_STRING
+>  	"	movq %rsp, %rdi\n"
+>  	"	call arch_rethook_trampoline_callback\n"
+>  	RESTORE_REGS_STRING
+> -	/* In the callback function, 'regs->flags' is copied to 'regs->sp'. */
+> -	"	addq $8, %rsp\n"
+> +	/* In the callback function, 'regs->flags' is copied to 'regs->ss'. */
+> +	"	addq $16, %rsp\n"
+>  	"	popfq\n"
+>  #else
+>  	/* Push a fake return address to tell the unwinder it's a kretprobe. */
+>  	"	pushl $arch_rethook_trampoline\n"
+>  	UNWIND_HINT_FUNC
+> -	/* Save the 'sp - 4', this will be fixed later. */
+> +	"	pushl %ss\n"
+> +	/* Save the 'sp - 8', this will be fixed later. */
+>  	"	pushl %esp\n"
+>  	"	pushfl\n"
+>  	SAVE_REGS_STRING
+>  	"	movl %esp, %eax\n"
+>  	"	call arch_rethook_trampoline_callback\n"
+>  	RESTORE_REGS_STRING
+> -	/* In the callback function, 'regs->flags' is copied to 'regs->sp'. */
+> -	"	addl $4, %esp\n"
+> +	/* In the callback function, 'regs->flags' is copied to 'regs->ss'. */
+> +	"	addl $8, %esp\n"
+>  	"	popfl\n"
+>  #endif
+>  	ASM_RET
+> @@ -69,8 +71,8 @@ __used __visible void arch_rethook_tramp
+>  #endif
+>  	regs->ip = (unsigned long)&arch_rethook_trampoline;
+>  	regs->orig_ax = ~0UL;
+> -	regs->sp += sizeof(long);
+> -	frame_pointer = &regs->sp + 1;
+> +	regs->sp += 2*sizeof(long);
+> +	frame_pointer = (long *)(regs + 1);
+>  
+>  	/*
+>  	 * The return address at 'frame_pointer' is recovered by the
+> @@ -80,10 +82,10 @@ __used __visible void arch_rethook_tramp
+>  	rethook_trampoline_handler(regs, (unsigned long)frame_pointer);
+>  
+>  	/*
+> -	 * Copy FLAGS to 'pt_regs::sp' so that arch_rethook_trapmoline()
+> +	 * Copy FLAGS to 'pt_regs::ss' so that arch_rethook_trapmoline()
+>  	 * can do RET right after POPF.
+>  	 */
+> -	regs->sp = regs->flags;
+> +	*(unsigned long *)&regs->ss = regs->flags;
+>  }
+>  NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
+>  
+> @@ -101,7 +103,7 @@ STACK_FRAME_NON_STANDARD_FP(arch_rethook
+>  void arch_rethook_fixup_return(struct pt_regs *regs,
+>  			       unsigned long correct_ret_addr)
+>  {
+> -	unsigned long *frame_pointer = &regs->sp + 1;
+> +	unsigned long *frame_pointer = (void *)(regs + 1);
+>  
+>  	/* Replace fake return address with real one. */
+>  	*frame_pointer = correct_ret_addr;
+
 
 -- 
-Michal Hocko
-SUSE Labs
+Masami Hiramatsu <mhiramat@kernel.org>

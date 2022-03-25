@@ -2,266 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D736C4E7B8E
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9524E7DC2
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbiCYTlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 15:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
+        id S229475AbiCYTRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 15:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233409AbiCYTjz (ORCPT
+        with ESMTP id S229379AbiCYTRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 15:39:55 -0400
-Received: from mail-oa1-x49.google.com (mail-oa1-x49.google.com [IPv6:2001:4860:4864:20::49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9AE1546AB
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 12:12:25 -0700 (PDT)
-Received: by mail-oa1-x49.google.com with SMTP id 586e51a60fabf-d71a106c50so1434376fac.17
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 12:12:25 -0700 (PDT)
+        Fri, 25 Mar 2022 15:17:08 -0400
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0961D4C3B
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 11:57:32 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id yy13so17152684ejb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 11:57:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Ls9it47eZWinX53APMUqdqAduomURMCMA1XbEoHFGsQ=;
-        b=jf7zMllek1mo+Nas3aa4rEhx43ZQ1waGsvpYfvNgwEiwCCAWoS9SZnLaJXQkmWB2M+
-         6ADBWCg++Y/FrbEy+5C39/gGLqcx4snlS9RYWJ/YGs3g5cvd3LI37DJwtxQaZrgvfsIK
-         DvPSTDXUlEcNrYFmc342Iei4ddki3i5mmID22YQNV1R2nOMGPMCxIwsMy8+VCjmW1WoK
-         11vn7pIxU1GZdIUQWGjR0RiLjnaMUHdJLeEZDc7rkurcAaVlTDWLpuwtdaO89njTL0TV
-         nAzkGxoPuCWzeOpRkJsR2dSBMbJCs3QsocLwAqkbEAcMh1p1+uXBZocYUtA08DLgKHTg
-         Y5xw==
+        bh=EgGZKxsD9TLt3F67gvL7glAxKY5LH/ALHfbJS10Unqo=;
+        b=Ifi0U+jMvGYK0BTqlDqJD7wDJnEG/YfUGRvZzfRr8j43WKraDG3cCjf0FFuimZ9VSg
+         Z0g9+NcUuKem/himXNWFu4jQmCzk/SXJEhcY5eS/wYwMyvOJB4gmBU/F0T+ou6Dqjoci
+         oWVtYazkM++O6R/PwREQdtdeDirieoe3APP1o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Ls9it47eZWinX53APMUqdqAduomURMCMA1XbEoHFGsQ=;
-        b=AVw3iV1V/PsV9+1JHZgCl+bTc7n0BeYMRWzVaneynDLiUl219qk7sn6nLvmlyMTmvt
-         7jY6qpwoVvK1/YU4UsOgUWgxv25DaWLITodIf9tFoVnXZhHOK4GqrOOK+kooLDZ4PTUk
-         xBFt3lj2z5/w/jKjLGD3E817LhvS6JSzbdqorTGTfshvxjVZtGI8YDdVdD3Axrj53kvy
-         rxJM5YJvN5hTs1eoJ3k1Ck4IJ3e7ZTclE3QqHcUovms9hp6y61OysxRbaiWVaxevx1xE
-         I9F7d1CBt+gxG1E7lcoXHHvPb3H9wAyWJd4LXu/anEpXOo+obljVGIS5fPC1OBW4Rrhi
-         5/0Q==
-X-Gm-Message-State: AOAM531S9XAjW8yg0aCIL3SqkkF06GnsV+WyO1Isiuz5JlAGhNdy+Iyk
-        DTf65snMFFo5EZjpbMOVOsgy8GmyA1GD
-X-Google-Smtp-Source: ABdhPJz4caM2/r37eNH0kp8MNsyvhq+I0iaYEcSsuTjltPrYwKcYHAUtmqHXJObuMsBQf4dmQ6rBvqb9FmsD
-X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:4cfc:6eaf:38d8:46d6])
- (user=rajatja job=sendgmr) by 2002:a81:36cf:0:b0:2e5:2597:a026 with SMTP id
- d198-20020a8136cf000000b002e52597a026mr12243252ywa.301.1648233976396; Fri, 25
- Mar 2022 11:46:16 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EgGZKxsD9TLt3F67gvL7glAxKY5LH/ALHfbJS10Unqo=;
+        b=gbrCxMO9l9JAdJWCfVZ7jlvM89LRmg26J1aT1OqIdzUZUfOpClaYefpgzZdLnSGHwA
+         C5thdC43n/gKaPPmuMi3oUS/lb8SgwRSxQE9k1MyqPtzynyALhVSjTs22GXt163tB9JC
+         GE63QN+z9Jjm2kZhLHQMWkpiYXTao3EDbj5fGF3o5brsJzDpx2m2hLJOAsP5McufiFL+
+         SXZvlsf7qEc8S+vzAz0FPGLzyHgRsunlfa+jZYGGxy0zt+FEL4+g8AzIvsEIuUUaMs+v
+         VPrD2HYgA0VI83iohHJtyrMS1fqHSs0725CHA/GbZyAZElS42cg91p3q5ifDrmsCjNTB
+         I8vw==
+X-Gm-Message-State: AOAM533IRhYYe5VAkOV1enC3DYRNSp8Fc+CEIvGe2J7tpxX572Z46/Cm
+        e/xKUR3UL94tXyd0Yu08KK9rUopys9IlcxumGjw=
+X-Google-Smtp-Source: ABdhPJwHcTy3Fgl+pukjWcZLVRMAHX+/sntk6i8XX7BvNEOehsXJuSjI5+3ljg7EKfNqhlkISwX/7Q==
+X-Received: by 2002:a05:6512:3402:b0:448:970:c3a5 with SMTP id i2-20020a056512340200b004480970c3a5mr8596688lfr.576.1648233989281;
+        Fri, 25 Mar 2022 11:46:29 -0700 (PDT)
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com. [209.85.208.179])
+        by smtp.gmail.com with ESMTPSA id w22-20020a2e9996000000b00249824260f8sm773699lji.25.2022.03.25.11.46.26
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 11:46:27 -0700 (PDT)
+Received: by mail-lj1-f179.google.com with SMTP id s25so11450137lji.5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 11:46:26 -0700 (PDT)
+X-Received: by 2002:a2e:6f17:0:b0:248:124:9c08 with SMTP id
+ k23-20020a2e6f17000000b0024801249c08mr9323690ljc.506.1648233985657; Fri, 25
+ Mar 2022 11:46:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <1812355.tdWV9SEqCh@natalenko.name> <CAHk-=wiwz+Z2MaP44h086jeniG-OpK3c=FywLsCwXV7Crvadrg@mail.gmail.com>
+ <27b5a287-7a33-9a8b-ad6d-04746735fb0c@arm.com> <CAHk-=wip7TCD_+2STTepuEZvGMg6wcz+o=kyFUvHjuKziTMixw@mail.gmail.com>
+ <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com> <20220324190216.0efa067f.pasic@linux.ibm.com>
+ <20220325163204.GB16426@lst.de> <87y20x7vaz.fsf@toke.dk> <e077b229-c92b-c9a6-3581-61329c4b4a4b@arm.com>
+In-Reply-To: <e077b229-c92b-c9a6-3581-61329c4b4a4b@arm.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
 Date:   Fri, 25 Mar 2022 11:46:09 -0700
-In-Reply-To: <20220325184609.4059963-1-rajatja@google.com>
-Message-Id: <20220325184609.4059963-2-rajatja@google.com>
-Mime-Version: 1.0
-References: <20220325184609.4059963-1-rajatja@google.com>
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v5 2/2] PCI: Rename pci_dev->untrusted to pci_dev->untrusted_dma
-From:   Rajat Jain <rajatja@google.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+X-Gmail-Original-Message-ID: <CAHk-=wgKF5GfLXyVGDQDifh0MpMccDdmBvJBG3dt2+idCa5DzQ@mail.gmail.com>
+Message-ID: <CAHk-=wgKF5GfLXyVGDQDifh0MpMccDdmBvJBG3dt2+idCa5DzQ@mail.gmail.com>
+Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
+ ath9k-based AP
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
+        Christoph Hellwig <hch@lst.de>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Olha Cherevyk <olha.cherevyk@gmail.com>,
+        iommu <iommu@lists.linux-foundation.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatxjain@gmail.com>,
-        Dmitry Torokhov <dtor@google.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Pavel Machek <pavel@denx.de>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        iommu@lists.linux-foundation.org
-Cc:     Rajat Jain <rajatja@google.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename the field to make it more clear, that the device can execute DMA
-attacks on the system, and thus the system may need protection from
-such attacks from this device.
+On Fri, Mar 25, 2022 at 11:42 AM Robin Murphy <robin.murphy@arm.com> wrote:
+>
+> Note that the current code is already a violation of the DMA
+> API (because the device keeps writing even when it doesn't have
+> ownership), so there's not a very strong argument in that regard.
 
-No functional change intended.
+See my other email. I actually think that the ath9k code is 100%
+correct, adn it's the dma-mapping code that is in violation of the
+rules.
 
-Signed-off-by: Rajat Jain <rajatja@google.com>
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
-v5: Use "untrusted_dma" as property name, based on feedback.
-    Reorder the patches in the series.
-v4: Initial version, created based on comments on other patch
+And a big part of the problem - I think - is that the rules are so
+badly documented and not explicitly listed.
 
- drivers/iommu/dma-iommu.c   | 6 +++---
- drivers/iommu/intel/iommu.c | 2 +-
- drivers/iommu/iommu.c       | 2 +-
- drivers/pci/ats.c           | 2 +-
- drivers/pci/pci-acpi.c      | 2 +-
- drivers/pci/pci.c           | 2 +-
- drivers/pci/probe.c         | 8 ++++----
- drivers/pci/quirks.c        | 2 +-
- include/linux/pci.h         | 5 +++--
- 9 files changed, 16 insertions(+), 15 deletions(-)
+I think my list of three different sync cases (not just two! It's not
+just about whether to sync for the CPU or the device, it's also about
+what direction the data itself is taking) is correct.
 
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index d85d54f2b549..7cbe300fe907 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -497,14 +497,14 @@ static int iova_reserve_iommu_regions(struct device *dev,
- 	return ret;
- }
- 
--static bool dev_is_untrusted(struct device *dev)
-+static bool dev_has_untrusted_dma(struct device *dev)
- {
--	return dev_is_pci(dev) && to_pci_dev(dev)->untrusted;
-+	return dev_is_pci(dev) && to_pci_dev(dev)->untrusted_dma;
- }
- 
- static bool dev_use_swiotlb(struct device *dev)
- {
--	return IS_ENABLED(CONFIG_SWIOTLB) && dev_is_untrusted(dev);
-+	return IS_ENABLED(CONFIG_SWIOTLB) && dev_has_untrusted_dma(dev);
- }
- 
- /**
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 92fea3fbbb11..9246b7c9ab46 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -5570,7 +5570,7 @@ intel_iommu_enable_nesting(struct iommu_domain *domain)
-  */
- static bool risky_device(struct pci_dev *pdev)
- {
--	if (pdev->untrusted) {
-+	if (pdev->untrusted_dma) {
- 		pci_info(pdev,
- 			 "Skipping IOMMU quirk for dev [%04X:%04X] on untrusted PCI link\n",
- 			 pdev->vendor, pdev->device);
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 8b86406b7162..79fb66af2e68 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -1522,7 +1522,7 @@ static int iommu_get_def_domain_type(struct device *dev)
- {
- 	const struct iommu_ops *ops = dev->bus->iommu_ops;
- 
--	if (dev_is_pci(dev) && to_pci_dev(dev)->untrusted)
-+	if (dev_is_pci(dev) && to_pci_dev(dev)->untrusted_dma)
- 		return IOMMU_DOMAIN_DMA;
- 
- 	if (ops->def_domain_type)
-diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
-index c967ad6e2626..477c16ba9341 100644
---- a/drivers/pci/ats.c
-+++ b/drivers/pci/ats.c
-@@ -42,7 +42,7 @@ bool pci_ats_supported(struct pci_dev *dev)
- 	if (!dev->ats_cap)
- 		return false;
- 
--	return (dev->untrusted == 0);
-+	return (dev->untrusted_dma == 0);
- }
- EXPORT_SYMBOL_GPL(pci_ats_supported);
- 
-diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-index 378e05096c52..1d5a284c3661 100644
---- a/drivers/pci/pci-acpi.c
-+++ b/drivers/pci/pci-acpi.c
-@@ -1362,7 +1362,7 @@ static void pci_acpi_check_for_dma_protection(struct pci_dev *dev)
- 		return;
- 
- 	if (val)
--		dev->untrusted = 1;
-+		dev->untrusted_dma = 1;
- }
- 
- void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 9ecce435fb3f..1fb0eb8646c8 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -958,7 +958,7 @@ static void pci_std_enable_acs(struct pci_dev *dev)
- 	ctrl |= (cap & PCI_ACS_UF);
- 
- 	/* Enable Translation Blocking for external devices and noats */
--	if (pci_ats_disabled() || dev->external_facing || dev->untrusted)
-+	if (pci_ats_disabled() || dev->external_facing || dev->untrusted_dma)
- 		ctrl |= (cap & PCI_ACS_TB);
- 
- 	pci_write_config_word(dev, pos + PCI_ACS_CTRL, ctrl);
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index 17a969942d37..d2a9b26fcede 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -1587,7 +1587,7 @@ static void set_pcie_thunderbolt(struct pci_dev *dev)
- 		dev->is_thunderbolt = 1;
- }
- 
--static void set_pcie_untrusted(struct pci_dev *dev)
-+static void pci_set_untrusted_dma(struct pci_dev *dev)
- {
- 	struct pci_dev *parent;
- 
-@@ -1596,8 +1596,8 @@ static void set_pcie_untrusted(struct pci_dev *dev)
- 	 * untrusted as well.
- 	 */
- 	parent = pci_upstream_bridge(dev);
--	if (parent && (parent->untrusted || parent->external_facing))
--		dev->untrusted = true;
-+	if (parent && (parent->untrusted_dma || parent->external_facing))
-+		dev->untrusted_dma = true;
- }
- 
- static void pci_set_removable(struct pci_dev *dev)
-@@ -1862,7 +1862,7 @@ int pci_setup_device(struct pci_dev *dev)
- 	/* Need to have dev->cfg_size ready */
- 	set_pcie_thunderbolt(dev);
- 
--	set_pcie_untrusted(dev);
-+	pci_set_untrusted_dma(dev);
- 
- 	/* "Unknown power state" */
- 	dev->current_state = PCI_UNKNOWN;
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 5f46fed01e6c..7ca3c2cdfb20 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -5134,7 +5134,7 @@ static int pci_quirk_enable_intel_spt_pch_acs(struct pci_dev *dev)
- 	ctrl |= (cap & PCI_ACS_CR);
- 	ctrl |= (cap & PCI_ACS_UF);
- 
--	if (pci_ats_disabled() || dev->external_facing || dev->untrusted)
-+	if (pci_ats_disabled() || dev->external_facing || dev->untrusted_dma)
- 		ctrl |= (cap & PCI_ACS_TB);
- 
- 	pci_write_config_dword(dev, pos + INTEL_SPT_ACS_CTRL, ctrl);
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 678fecdf6b81..b7c5fede0b93 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -444,13 +444,14 @@ struct pci_dev {
- 	unsigned int	shpc_managed:1;		/* SHPC owned by shpchp */
- 	unsigned int	is_thunderbolt:1;	/* Thunderbolt controller */
- 	/*
--	 * Devices marked being untrusted are the ones that can potentially
-+	 * Devices marked with untrusted_dma are the ones that can potentially
- 	 * execute DMA attacks and similar. They are typically connected
- 	 * through external ports such as Thunderbolt but not limited to
- 	 * that. When an IOMMU is enabled they should be getting full
- 	 * mappings to make sure they cannot access arbitrary memory.
- 	 */
--	unsigned int	untrusted:1;
-+	unsigned int	untrusted_dma:1;
-+
- 	/*
- 	 * Info from the platform, e.g., ACPI or device tree, may mark a
- 	 * device as "external-facing".  An external-facing device is
--- 
-2.35.1.1021.g381101b075-goog
+But maybe I'm wrong.
 
+I really want people to think about this, because right now my gut
+feel is that commit aa6f8dcbab47 was just absolutely incorrect.
+
+              Linus

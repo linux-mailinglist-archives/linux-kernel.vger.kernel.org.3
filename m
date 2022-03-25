@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE504E766F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 219664E76A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376758AbiCYPN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
+        id S1352363AbiCYPQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359787AbiCYPKg (ORCPT
+        with ESMTP id S1359838AbiCYPMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:10:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE8C6273;
-        Fri, 25 Mar 2022 08:08:06 -0700 (PDT)
+        Fri, 25 Mar 2022 11:12:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DC963BC6;
+        Fri, 25 Mar 2022 08:09:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C390E61C1A;
-        Fri, 25 Mar 2022 15:08:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D47BDC340E9;
-        Fri, 25 Mar 2022 15:08:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1604861BF5;
+        Fri, 25 Mar 2022 15:09:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F9E0C340EE;
+        Fri, 25 Mar 2022 15:09:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220885;
-        bh=KFdJg0u0Ss3Tzkf16u9n79i+nKiZd4QsLL/5VaEmHS4=;
+        s=korg; t=1648220960;
+        bh=Aguwb+9KguJ4/q4pa7ohP9HdU154UMOl/+9GBH2lNh0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RVg0PrlnkAUGtyOTEKDYRs9pdtyq5fmxcEw5GBN6XJJDgT8a3AuxJnW7ckH+ejGHA
-         K7ZNo1q8Vou4FuV6R8WXz8Jn0W3UP6LLy+P7RRpQN+mTPCpCMUsAqHhtCSJQDghJGA
-         aEocbyAyatVZsoILjihyq8D3VN7caok8cCKDkQQI=
+        b=GuL4eDB3oe6ge9famQAdsnuAZDmvguFNaKwS4fc+U4v+zvCElC0BE9SYkUCb27Qyv
+         BpZmLt4x74uam3ilvXbTHtUlqH42cZ7RfQq2MFNwukbinXDReryPyelbR+pTYaalhy
+         HNLmyHLweHllY5lz1SgwT6c0EfUh5tcZFK3aZcw0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.4 21/29] netfilter: nf_tables: initialize registers in nft_do_chain()
-Date:   Fri, 25 Mar 2022 16:05:01 +0100
-Message-Id: <20220325150419.196662736@linuxfoundation.org>
+        stable@vger.kernel.org, Jason Zheng <jasonzheng2004@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 18/38] ALSA: hda/realtek: Add quirk for ASUS GA402
+Date:   Fri, 25 Mar 2022 16:05:02 +0100
+Message-Id: <20220325150420.280540487@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150418.585286754@linuxfoundation.org>
-References: <20220325150418.585286754@linuxfoundation.org>
+In-Reply-To: <20220325150419.757836392@linuxfoundation.org>
+References: <20220325150419.757836392@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,29 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Jason Zheng <jasonzheng2004@gmail.com>
 
-commit 4c905f6740a365464e91467aa50916555b28213d upstream.
+commit b7557267c233b55d8e8d7ba4c68cf944fe2ec02c upstream.
 
-Initialize registers to avoid stack leak into userspace.
+ASUS GA402 requires a workaround to manage the routing of its 4 speakers
+like the other ASUS models. Add a corresponding quirk entry to fix it.
 
-Fixes: 96518518cc41 ("netfilter: add nftables")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Jason Zheng <jasonzheng2004@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220313092216.29858-1-jasonzheng2004@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nf_tables_core.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/net/netfilter/nf_tables_core.c
-+++ b/net/netfilter/nf_tables_core.c
-@@ -153,7 +153,7 @@ nft_do_chain(struct nft_pktinfo *pkt, vo
- 	struct nft_rule *const *rules;
- 	const struct nft_rule *rule;
- 	const struct nft_expr *expr, *last;
--	struct nft_regs regs;
-+	struct nft_regs regs = {};
- 	unsigned int stackptr = 0;
- 	struct nft_jumpstack jumpstack[NFT_JUMP_STACK_SIZE];
- 	bool genbit = READ_ONCE(net->nft.gencursor);
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -8801,6 +8801,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x1043, 0x1e51, "ASUS Zephyrus M15", ALC294_FIXUP_ASUS_GU502_PINS),
+ 	SND_PCI_QUIRK(0x1043, 0x1e8e, "ASUS Zephyrus G15", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x1f11, "ASUS Zephyrus G14", ALC289_FIXUP_ASUS_GA401),
++	SND_PCI_QUIRK(0x1043, 0x1d42, "ASUS Zephyrus G14 2022", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x16b2, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x3030, "ASUS ZN270IE", ALC256_FIXUP_ASUS_AIO_GPIO2),
+ 	SND_PCI_QUIRK(0x1043, 0x831a, "ASUS P901", ALC269_FIXUP_STEREO_DMIC),
 
 

@@ -2,45 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE07E4E7BB5
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A71D4E7CD3
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232201AbiCYU0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 16:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
+        id S232021AbiCYUR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 16:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbiCYU0p (ORCPT
+        with ESMTP id S231962AbiCYUR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 16:26:45 -0400
-X-Greylist: delayed 633 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Mar 2022 13:25:11 PDT
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477176EB1E;
-        Fri, 25 Mar 2022 13:25:10 -0700 (PDT)
-Received: from [2603:3005:d05:2b00:6e0b:84ff:fee2:98bb] (helo=imladris.surriel.com)
-        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <riel@shelob.surriel.com>)
-        id 1nXqKL-0000sb-7e; Fri, 25 Mar 2022 16:14:29 -0400
-Date:   Fri, 25 Mar 2022 16:14:28 -0400
-From:   Rik van Riel <riel@surriel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, kernel-team@fb.com,
-        Oscar Salvador <osalvador@suse.de>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org
-Subject: [PATCH] mm,hwpoison: unmap poisoned page before invalidation
-Message-ID: <20220325161428.5068d97e@imladris.surriel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Fri, 25 Mar 2022 16:17:26 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C245739154
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:15:51 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2e64a6b20eeso94502427b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:15:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vtp7+nDUHbkUKPJ586tHhPQHIGkVxn40OpnwYxUR31I=;
+        b=etfZ2To2AkmbDwdMb4CemT9IGY7lkeRqGgVivTwjfOQJoN9U9bZ5skarGYOO2Oq8I0
+         W85wxZ8MPSLmLidAYZCd3XG0GDfGOSJKpINCippQRZGUf7Nv9cZTqf84DSWa+YPREmgF
+         jJqjj7mlo2YiKvw3yAeMF21Nuy5X7hyehxeuuPotXyAenAXf0nNM4RHRLc8YQTULVjPA
+         FqvoJtQBRtjgVLv8zsO/m3D+DMyKzHyOdMJjXEHhIrWlkoWzla+aDSLA07y0aDgRaEER
+         CNMkNERYLMkcuoRK5l4y2xUCEszmqCFGPSwPFGBQV9Ds1A1YLeewOIjQAM+4kGkM0z4M
+         IPBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vtp7+nDUHbkUKPJ586tHhPQHIGkVxn40OpnwYxUR31I=;
+        b=WoN2/rULwhjqytIlftjAMipov/LRNI/VTdh+I34BKD/Xh8E99R6l2mMfEAKTM15Iqu
+         QKUsPGvdY8nRyKXC37O21et7/XbQzs3atvCl9Kc8wcgAYhfCZrUcapxHa2g0HL5X7dYm
+         +gvOF06dgQkDAKyBMA1qJs4tUlp8oitJf0XQ5FWGoKbj3OLf+Nig8DTK9PNFvd1uWcGM
+         iGRXBC7iCFW1BqLiV4Jn6Y+VkX8h7iTInSV4l1sQ74mpGFpq5Kxl9zlA9AF/HUCCnrmw
+         tNfrSL0qOH2FqDoodaznPCMg8mkx5boK0OOqzzvvrkooGER4MpNhMxqpJMQulbiKs95z
+         tc2A==
+X-Gm-Message-State: AOAM532x9oxhI6XevPm8SlD5nrT982n3vUA4k79W/yZxnqMytIgiPDnj
+        5BUqFMsZcsC6gEzdQ4Z1kEP3V+PpaBinYUurm0Li+A==
+X-Google-Smtp-Source: ABdhPJx9wqjoJz3ZPG5WcmFuaeeOXO7mos5GYyBTpymriLoOeZj41vkwrTWS/8NtQ2pgHGEGQWw5VikpO324lYovgig=
+X-Received: by 2002:a81:1182:0:b0:2dc:4e58:da41 with SMTP id
+ 124-20020a811182000000b002dc4e58da41mr12592447ywr.268.1648239351038; Fri, 25
+ Mar 2022 13:15:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Sender: riel@shelob.surriel.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220325074450.3228840-1-zhengbin13@huawei.com>
+In-Reply-To: <20220325074450.3228840-1-zhengbin13@huawei.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 25 Mar 2022 21:15:39 +0100
+Message-ID: <CACRpkdYHKq+aSHzm6wG3ETwob69gmmjFT5UV7EXL0rDxe4ZQ=Q@mail.gmail.com>
+Subject: Re: [PATCH -next] pinctrl: nuvoton: wpcm450: Fix build error without OF
+To:     Zheng Bin <zhengbin13@huawei.com>
+Cc:     j.neuschaefer@gmx.net, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tangyizhou@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,63 +66,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some cases it appears the invalidation of a hwpoisoned page
-fails because the page is still mapped in another process. This
-can cause a program to be continuously restarted and die when
-it page faults on the page that was not invalidated. Avoid that
-problem by unmapping the hwpoisoned page when we find it.
+On Fri, Mar 25, 2022 at 8:30 AM Zheng Bin <zhengbin13@huawei.com> wrote:
 
-Another issue is that sometimes we end up oopsing in finish_fault,
-if the code tries to do something with the now-NULL vmf->page.
-I did not hit this error when submitting the previous patch because
-there are several opportunities for alloc_set_pte to bail out before
-accessing vmf->page, and that apparently happened on those systems,
-and most of the time on other systems, too.
+> If OF is not set, bulding fails:
+>
+> drivers/pinctrl/nuvoton/pinctrl-wpcm450.o: In function `wpcm450_dt_node_to_map':
+> pinctrl-wpcm450.c:(.text+0x404): undefined reference to `pinconf_generic_dt_node_to_map'
+>
+> Make PINCTRL_WPCM450 depends on OF to fix this.
+>
+> Fixes: a1d1e0e3d80a ("pinctrl: nuvoton: Add driver for WPCM450")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
 
-However, across several million systems that error does occur a
-handful of times a day. It can be avoided by returning VM_FAULT_NOPAGE
-which will cause do_read_fault to return before calling finish_fault.
+Patch applied, thanks for fixing this so quickly Zheng!
 
-Fixes: e53ac7374e64 ("mm: invalidate hwpoison page cache page in fault path")
-Cc: Oscar Salvador <osalvador@suse.de>
-Cc: Miaohe Lin <linmiaohe@huawei.com>
-Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: stable@vger.kernel.org
----
- mm/memory.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/mm/memory.c b/mm/memory.c
-index be44d0b36b18..76e3af9639d9 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3918,14 +3918,18 @@ static vm_fault_t __do_fault(struct vm_fault *vmf)
- 		return ret;
- 
- 	if (unlikely(PageHWPoison(vmf->page))) {
-+		struct page *page = vmf->page;
- 		vm_fault_t poisonret = VM_FAULT_HWPOISON;
- 		if (ret & VM_FAULT_LOCKED) {
-+			if (page_mapped(page))
-+				unmap_mapping_pages(page_mapping(page),
-+						    page->index, 1, false);
- 			/* Retry if a clean page was removed from the cache. */
--			if (invalidate_inode_page(vmf->page))
--				poisonret = 0;
--			unlock_page(vmf->page);
-+			if (invalidate_inode_page(page))
-+				poisonret = VM_FAULT_NOPAGE;
-+			unlock_page(page);
- 		}
--		put_page(vmf->page);
-+		put_page(page);
- 		vmf->page = NULL;
- 		return poisonret;
- 	}
--- 
-2.35.1
-
-
+Yours,
+Linus Walleij

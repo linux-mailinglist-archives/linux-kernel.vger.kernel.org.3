@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA1F4E7679
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBC24E764F
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355420AbiCYPPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44606 "EHLO
+        id S1376939AbiCYPNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359846AbiCYPMC (ORCPT
+        with ESMTP id S1359762AbiCYPLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:12:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D38262A1C;
-        Fri, 25 Mar 2022 08:09:00 -0700 (PDT)
+        Fri, 25 Mar 2022 11:11:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FE25DE49;
+        Fri, 25 Mar 2022 08:08:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5080761C12;
-        Fri, 25 Mar 2022 15:08:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 580F5C340E9;
-        Fri, 25 Mar 2022 15:08:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A2DAB82900;
+        Fri, 25 Mar 2022 15:08:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94CEAC340E9;
+        Fri, 25 Mar 2022 15:08:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220934;
-        bh=HpMrrT0iEqnIkxkuVO3eAOfoFuIkIZpb3NvXqQMPGJE=;
+        s=korg; t=1648220903;
+        bh=+MRoTFyqPRTcrtTBKEJBUVfJX9Jn2E243Gb2KCdfed4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NelvXkk/pwHHcLHMNUWdxoflb9HA4e1IltpowvJVYPHOWf1uUqx/XTE3UxdVv7d43
-         2oCdEYOGNBt1KSbMnTffRJKSutgrMr1X+BdC8/ahnU4YqleXUIjHFymUv5rpQbg4s8
-         PzXvC9lciLlbmmgwdozTq/ETYwh9Pp0/+kdV1g8A=
+        b=qwWxZWVDiLyv2Zvmf9r64buJm5B4iCr/9Mf9b5NQ7g7E7zwQDJYmr4WDM63Wx/l1g
+         s1udEAYO4UsSpmcCQNP+tkbWuNFXbiO9Ifuxd8/KHvT7ury8Yr2hWjbfNzUfgKYmFx
+         rsOu/QXdaDe3HO4BQ4kHg9kxKtcXykvJi8wt6g9A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jordy Zomer <jordy@pwning.systems>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Denis Efremov <denis.e.efremov@oracle.com>
-Subject: [PATCH 5.10 01/38] nfc: st21nfca: Fix potential buffer overflows in EVT_TRANSACTION
-Date:   Fri, 25 Mar 2022 16:04:45 +0100
-Message-Id: <20220325150419.802038266@linuxfoundation.org>
+        stable@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, Tadeusz Struk <tstruk@gmail.com>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: [PATCH 5.4 06/29] tpm: Fix error handling in async work
+Date:   Fri, 25 Mar 2022 16:04:46 +0100
+Message-Id: <20220325150418.770152654@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150419.757836392@linuxfoundation.org>
-References: <20220325150419.757836392@linuxfoundation.org>
+In-Reply-To: <20220325150418.585286754@linuxfoundation.org>
+References: <20220325150418.585286754@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -58,48 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jordy Zomer <jordy@pwning.systems>
+From: Tadeusz Struk <tstruk@gmail.com>
 
-commit 4fbcc1a4cb20fe26ad0225679c536c80f1648221 upstream.
+commit 2e8e4c8f6673247e22efc7985ce5497accd16f88 upstream.
 
-It appears that there are some buffer overflows in EVT_TRANSACTION.
-This happens because the length parameters that are passed to memcpy
-come directly from skb->data and are not guarded in any way.
+When an invalid (non existing) handle is used in a TPM command,
+that uses the resource manager interface (/dev/tpmrm0) the resource
+manager tries to load it from its internal cache, but fails and
+the tpm_dev_transmit returns an -EINVAL error to the caller.
+The existing async handler doesn't handle these error cases
+currently and the condition in the poll handler never returns
+mask with EPOLLIN set.
+The result is that the poll call blocks and the application gets stuck
+until the user_read_timer wakes it up after 120 sec.
+Change the tpm_dev_async_work function to handle error conditions
+returned from tpm_dev_transmit they are also reflected in the poll mask
+and a correct error code could passed back to the caller.
 
-Signed-off-by: Jordy Zomer <jordy@pwning.systems>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Denis Efremov <denis.e.efremov@oracle.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: <linux-integrity@vger.kernel.org>
+Cc: <stable@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
+
+Fixes: 9e1b74a63f77 ("tpm: add support for nonblocking operation")
+Tested-by: Jarkko Sakkinen<jarkko@kernel.org>
+Signed-off-by: Tadeusz Struk <tstruk@gmail.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Tadeusz Struk <tadeusz.struk@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/nfc/st21nfca/se.c |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/char/tpm/tpm-dev-common.c |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
---- a/drivers/nfc/st21nfca/se.c
-+++ b/drivers/nfc/st21nfca/se.c
-@@ -320,6 +320,11 @@ int st21nfca_connectivity_event_received
- 			return -ENOMEM;
- 
- 		transaction->aid_len = skb->data[1];
+--- a/drivers/char/tpm/tpm-dev-common.c
++++ b/drivers/char/tpm/tpm-dev-common.c
+@@ -70,7 +70,13 @@ static void tpm_dev_async_work(struct wo
+ 	ret = tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
+ 			       sizeof(priv->data_buffer));
+ 	tpm_put_ops(priv->chip);
+-	if (ret > 0) {
 +
-+		/* Checking if the length of the AID is valid */
-+		if (transaction->aid_len > sizeof(transaction->aid))
-+			return -EINVAL;
-+
- 		memcpy(transaction->aid, &skb->data[2],
- 		       transaction->aid_len);
- 
-@@ -329,6 +334,11 @@ int st21nfca_connectivity_event_received
- 			return -EPROTO;
- 
- 		transaction->params_len = skb->data[transaction->aid_len + 3];
-+
-+		/* Total size is allocated (skb->len - 2) minus fixed array members */
-+		if (transaction->params_len > ((skb->len - 2) - sizeof(struct nfc_evt_transaction)))
-+			return -EINVAL;
-+
- 		memcpy(transaction->params, skb->data +
- 		       transaction->aid_len + 4, transaction->params_len);
- 
++	/*
++	 * If ret is > 0 then tpm_dev_transmit returned the size of the
++	 * response. If ret is < 0 then tpm_dev_transmit failed and
++	 * returned an error code.
++	 */
++	if (ret != 0) {
+ 		priv->response_length = ret;
+ 		mod_timer(&priv->user_read_timer, jiffies + (120 * HZ));
+ 	}
 
 

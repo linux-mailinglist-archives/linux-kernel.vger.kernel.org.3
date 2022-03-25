@@ -2,194 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62F04E7995
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 18:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E02644E79B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 18:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377066AbiCYRCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 13:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
+        id S1353372AbiCYRPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 13:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbiCYRCK (ORCPT
+        with ESMTP id S233371AbiCYRO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 13:02:10 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781E24D264;
-        Fri, 25 Mar 2022 10:00:35 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id d62so9551148iog.13;
-        Fri, 25 Mar 2022 10:00:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ko4mIxnXaw4yoPYh8PjrmsoS3HvZSH7ww79WhJnpMH4=;
-        b=RZcwA6fQAdjrf7FF2zVeX7H/SIgQ1V7SEWgnpQS/0BC3ukM/0D/WwG6gGAbQG5ImZc
-         UGmTvS87mlznXBvJ1kVI3hPtKqXgHOm0ptW8ycyayeL6iwlw++KIQrcRrAkOdqdTwBzr
-         alue6QBo0GDPgl00OiuO0Qx5tERXuLtAYW9RqQ5LR9KCGpkaqAPpcAD1wmEK9OIeQgHK
-         0Pva+Bl+da6MTyOaVyi9vgELNuIQBy6rUBK2Foqor5PgKGQPEPphLzveoreHurQ28Rxn
-         p6A472lXQuuSwzJVR6xaiWkMF2V9eAIf3VItaO3j6u22XpTetxZwZ9YfAFKzka+BEErN
-         XTvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ko4mIxnXaw4yoPYh8PjrmsoS3HvZSH7ww79WhJnpMH4=;
-        b=yjJCq26Tysas8gvKBu9614Xwjj8vuqiJzwifNceVnNlXtOt/A1uazSKgBFjOspoguT
-         +qi9AeFR/dCVxV711L3+O0UHSPzC1cO9+8ruVzUvnZBOmgZxGZANWAf3+Ex2eWJKqORq
-         yJk8ApDMokTerOdy79afxGpl2DfvAz77U2qqxwQWKU44VCsQVOgFd6QLyLf1lCOKaQQs
-         UL2+DPUlGX5yWsxP80u4r7uz07l9jGcfxEO6MUUFocDzR7NgYVOZVR9hLxcd1W8NqRM3
-         8KcZ1SlFlFlAV72rt9Zyoph738XwNNZlmci1c5/RJ/m3tZ23x1mgbwc1IpU4W5kpfoSg
-         hQJw==
-X-Gm-Message-State: AOAM533IlxBEkN6mHmA5yKoRoXIkNi70lLyDSLNHnn8prI4XUJmhExie
-        +JGpPJsUDiILE9iOY/x35TyrA5aO0KhU+7oX4YA=
-X-Google-Smtp-Source: ABdhPJwtmZHUYpe+l+4rcOPjK1FPYXhd0eg1b12cJ7I7RJnY7A8ZlX9X9KSb+nUZXQfEUq4sX7mt2noF9X8EP60JQSk=
-X-Received: by 2002:a05:6602:185a:b0:645:d914:35e9 with SMTP id
- d26-20020a056602185a00b00645d91435e9mr6152428ioi.154.1648227634763; Fri, 25
- Mar 2022 10:00:34 -0700 (PDT)
+        Fri, 25 Mar 2022 13:14:58 -0400
+Received: from 1.mo575.mail-out.ovh.net (1.mo575.mail-out.ovh.net [46.105.41.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE21C3467B
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 10:13:22 -0700 (PDT)
+Received: from player789.ha.ovh.net (unknown [10.109.138.52])
+        by mo575.mail-out.ovh.net (Postfix) with ESMTP id 414C521B3E
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 16:55:13 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player789.ha.ovh.net (Postfix) with ESMTPSA id D329128CEF96E;
+        Fri, 25 Mar 2022 16:55:06 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-100R00332e83cac-f456-466e-9f3b-ffe79ad02fc6,
+                    1702D5D0C6B5DF16716081994498F990499A02DA) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Lars-Peter Clausen <lars@metafoo.de>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        Stephen Kitt <steve@sk2.org>
+Subject: [PATCH] ASoC: ad1*, ada*, ssm*: use i2c_match_id and simple i2c probe
+Date:   Fri, 25 Mar 2022 17:54:52 +0100
+Message-Id: <20220325165452.1212975-1-steve@sk2.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
- <20220318161528.1531164-7-benjamin.tissoires@redhat.com> <CAADnVQLvhWxEtHETg0tasJ7Fp5JHNRYWdjhnxi1y1gBpXS=bvQ@mail.gmail.com>
- <CAO-hwJJXR3jtAvLF1phUa5pKZzVkDxAAHO5+7R50hL-fVhDYyA@mail.gmail.com>
-In-Reply-To: <CAO-hwJJXR3jtAvLF1phUa5pKZzVkDxAAHO5+7R50hL-fVhDYyA@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 25 Mar 2022 10:00:23 -0700
-Message-ID: <CAEf4BzYVu9JVJvKZK3S9HGwpyPiWrwKPGsTz3wXC_+vmRYGdNw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 06/17] HID: allow to change the report
- descriptor from an eBPF program
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 17577830821228611206
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudehuddgleehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejkeelrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 9:08 AM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> Hi Alexei,
->
-> On Tue, Mar 22, 2022 at 11:51 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Fri, Mar 18, 2022 at 9:16 AM Benjamin Tissoires
-> > <benjamin.tissoires@redhat.com> wrote:
-> > >
-> > > +u8 *hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size)
-> > > +{
-> > > +       int ret;
-> > > +       struct hid_bpf_ctx_kern ctx = {
-> > > +               .type = HID_BPF_RDESC_FIXUP,
-> > > +               .hdev = hdev,
-> > > +               .size = *size,
-> > > +       };
-> > > +
-> > > +       if (bpf_hid_link_empty(&hdev->bpf, BPF_HID_ATTACH_RDESC_FIXUP))
-> > > +               goto ignore_bpf;
-> > > +
-> > > +       ctx.data = kmemdup(rdesc, HID_MAX_DESCRIPTOR_SIZE, GFP_KERNEL);
-> > > +       if (!ctx.data)
-> > > +               goto ignore_bpf;
-> > > +
-> > > +       ctx.allocated_size = HID_MAX_DESCRIPTOR_SIZE;
-> > > +
-> > > +       ret = hid_bpf_run_progs(hdev, &ctx);
-> > > +       if (ret)
-> > > +               goto ignore_bpf;
-> > > +
-> > > +       if (ctx.size > ctx.allocated_size)
-> > > +               goto ignore_bpf;
-> > > +
-> > > +       *size = ctx.size;
-> > > +
-> > > +       if (*size) {
-> > > +               rdesc = krealloc(ctx.data, *size, GFP_KERNEL);
-> > > +       } else {
-> > > +               rdesc = NULL;
-> > > +               kfree(ctx.data);
-> > > +       }
-> > > +
-> > > +       return rdesc;
-> > > +
-> > > + ignore_bpf:
-> > > +       kfree(ctx.data);
-> > > +       return kmemdup(rdesc, *size, GFP_KERNEL);
-> > > +}
-> > > +
-> > >  int __init hid_bpf_module_init(void)
-> > >  {
-> > >         struct bpf_hid_hooks hooks = {
-> > >                 .hdev_from_fd = hid_bpf_fd_to_hdev,
-> > >                 .pre_link_attach = hid_bpf_pre_link_attach,
-> > > +               .post_link_attach = hid_bpf_post_link_attach,
-> > >                 .array_detach = hid_bpf_array_detach,
-> > >         };
-> > >
-> > > diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> > > index 937fab7eb9c6..3182c39db006 100644
-> > > --- a/drivers/hid/hid-core.c
-> > > +++ b/drivers/hid/hid-core.c
-> > > @@ -1213,7 +1213,8 @@ int hid_open_report(struct hid_device *device)
-> > >                 return -ENODEV;
-> > >         size = device->dev_rsize;
-> > >
-> > > -       buf = kmemdup(start, size, GFP_KERNEL);
-> > > +       /* hid_bpf_report_fixup() ensures we work on a copy of rdesc */
-> > > +       buf = hid_bpf_report_fixup(device, start, &size);
-> >
-> > Looking at this patch and the majority of other patches...
-> > the code is doing a lot of work to connect HID side with bpf.
-> > At the same time the evolution of the patch series suggests
-> > that these hook points are not quite stable. More hooks and
-> > helpers are being added.
-> > It tells us that it's way too early to introduce a stable
-> > interface between HID and bpf.
->
-> I understand that you might be under the impression that the interface
-> is changing a lot, but this is mostly due to my poor knowledge of all
-> the arcanes of eBPF.
-> The overall way HID-BPF works is to work on a single array, and we
-> should pretty much be sorted out. There are a couple of helpers to be
-> able to communicate with the device, but the API has been stable in
-> the kernel for those for quite some time now.
->
-> The variations in the hooks is mostly because I don't know what is the
-> best representation we can use in eBPF for those, and the review
-> process is changing that.
+As part of the ongoing i2c transition to the simple probe
+("probe_new"), this patch uses i2c_match_id to retrieve the
+driver_data for the probed device. The id parameter is thus no longer
+necessary and the simple probe can be used instead.
 
-I think such a big feature as this one, especially that most BPF folks
-are (probably) not familiar with the HID subsystem in the kernel,
-would benefit from a bit of live discussion during BPF office hours.
-Do you think you can give a short overview of what you are trying to
-achieve with some background context on HID specifics at one of the
-next BPF office hours? We have a meeting scheduled every week on
-Thursday, 9am Pacific time. But people need to put their topic onto
-the agenda, otherwise the meeting is cancelled. See [0] for
-spreadsheet and links to Zoom meeting, agenda, etc.
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+---
+ sound/soc/codecs/ad193x-i2c.c   | 6 +++---
+ sound/soc/codecs/adau1761-i2c.c | 8 +++++---
+ sound/soc/codecs/adau1781-i2c.c | 8 +++++---
+ sound/soc/codecs/adau1977-i2c.c | 8 +++++---
+ sound/soc/codecs/ssm2602-i2c.c  | 8 +++++---
+ 5 files changed, 23 insertions(+), 15 deletions(-)
 
-  [0] https://docs.google.com/spreadsheets/d/1LfrDXZ9-fdhvPEp_LHkxAMYyxxpwBXjywWa0AejEveU
+diff --git a/sound/soc/codecs/ad193x-i2c.c b/sound/soc/codecs/ad193x-i2c.c
+index 3d509a65e4ca..4cb8d87f9011 100644
+--- a/sound/soc/codecs/ad193x-i2c.c
++++ b/sound/soc/codecs/ad193x-i2c.c
+@@ -20,10 +20,10 @@ static const struct i2c_device_id ad193x_id[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, ad193x_id);
+ 
+-static int ad193x_i2c_probe(struct i2c_client *client,
+-			    const struct i2c_device_id *id)
++static int ad193x_i2c_probe(struct i2c_client *client)
+ {
+ 	struct regmap_config config;
++	const struct i2c_device_id *id = i2c_match_id(ad193x_id, client);
+ 
+ 	config = ad193x_regmap_config;
+ 	config.val_bits = 8;
+@@ -38,7 +38,7 @@ static struct i2c_driver ad193x_i2c_driver = {
+ 	.driver = {
+ 		.name = "ad193x",
+ 	},
+-	.probe    = ad193x_i2c_probe,
++	.probe_new = ad193x_i2c_probe,
+ 	.id_table = ad193x_id,
+ };
+ module_i2c_driver(ad193x_i2c_driver);
+diff --git a/sound/soc/codecs/adau1761-i2c.c b/sound/soc/codecs/adau1761-i2c.c
+index c8fce37e5cfa..0683caf86aea 100644
+--- a/sound/soc/codecs/adau1761-i2c.c
++++ b/sound/soc/codecs/adau1761-i2c.c
+@@ -14,10 +14,12 @@
+ 
+ #include "adau1761.h"
+ 
+-static int adau1761_i2c_probe(struct i2c_client *client,
+-	const struct i2c_device_id *id)
++static const struct i2c_device_id adau1761_i2c_ids[];
++
++static int adau1761_i2c_probe(struct i2c_client *client)
+ {
+ 	struct regmap_config config;
++	const struct i2c_device_id *id = i2c_match_id(adau1761_i2c_ids, client);
+ 
+ 	config = adau1761_regmap_config;
+ 	config.val_bits = 8;
+@@ -59,7 +61,7 @@ static struct i2c_driver adau1761_i2c_driver = {
+ 		.name = "adau1761",
+ 		.of_match_table = of_match_ptr(adau1761_i2c_dt_ids),
+ 	},
+-	.probe = adau1761_i2c_probe,
++	.probe_new = adau1761_i2c_probe,
+ 	.remove = adau1761_i2c_remove,
+ 	.id_table = adau1761_i2c_ids,
+ };
+diff --git a/sound/soc/codecs/adau1781-i2c.c b/sound/soc/codecs/adau1781-i2c.c
+index 1c476429ad99..e046de0ebcc7 100644
+--- a/sound/soc/codecs/adau1781-i2c.c
++++ b/sound/soc/codecs/adau1781-i2c.c
+@@ -14,10 +14,12 @@
+ 
+ #include "adau1781.h"
+ 
+-static int adau1781_i2c_probe(struct i2c_client *client,
+-	const struct i2c_device_id *id)
++static const struct i2c_device_id adau1781_i2c_ids[];
++
++static int adau1781_i2c_probe(struct i2c_client *client)
+ {
+ 	struct regmap_config config;
++	const struct i2c_device_id *id = i2c_match_id(adau1781_i2c_ids, client);
+ 
+ 	config = adau1781_regmap_config;
+ 	config.val_bits = 8;
+@@ -55,7 +57,7 @@ static struct i2c_driver adau1781_i2c_driver = {
+ 		.name = "adau1781",
+ 		.of_match_table = of_match_ptr(adau1781_i2c_dt_ids),
+ 	},
+-	.probe = adau1781_i2c_probe,
++	.probe_new = adau1781_i2c_probe,
+ 	.remove = adau1781_i2c_remove,
+ 	.id_table = adau1781_i2c_ids,
+ };
+diff --git a/sound/soc/codecs/adau1977-i2c.c b/sound/soc/codecs/adau1977-i2c.c
+index 82a49c85d536..9f137a0634d5 100644
+--- a/sound/soc/codecs/adau1977-i2c.c
++++ b/sound/soc/codecs/adau1977-i2c.c
+@@ -14,10 +14,12 @@
+ 
+ #include "adau1977.h"
+ 
+-static int adau1977_i2c_probe(struct i2c_client *client,
+-	const struct i2c_device_id *id)
++static const struct i2c_device_id adau1977_i2c_ids[];
++
++static int adau1977_i2c_probe(struct i2c_client *client)
+ {
+ 	struct regmap_config config;
++	const struct i2c_device_id *id = i2c_match_id(adau1977_i2c_ids, client);
+ 
+ 	config = adau1977_regmap_config;
+ 	config.val_bits = 8;
+@@ -40,7 +42,7 @@ static struct i2c_driver adau1977_i2c_driver = {
+ 	.driver = {
+ 		.name = "adau1977",
+ 	},
+-	.probe = adau1977_i2c_probe,
++	.probe_new = adau1977_i2c_probe,
+ 	.id_table = adau1977_i2c_ids,
+ };
+ module_i2c_driver(adau1977_i2c_driver);
+diff --git a/sound/soc/codecs/ssm2602-i2c.c b/sound/soc/codecs/ssm2602-i2c.c
+index afab81383d3a..3c85772901f5 100644
+--- a/sound/soc/codecs/ssm2602-i2c.c
++++ b/sound/soc/codecs/ssm2602-i2c.c
+@@ -13,15 +13,17 @@
+ 
+ #include "ssm2602.h"
+ 
++static const struct i2c_device_id ssm2602_i2c_id[];
++
+ /*
+  * ssm2602 2 wire address is determined by GPIO5
+  * state during powerup.
+  *    low  = 0x1a
+  *    high = 0x1b
+  */
+-static int ssm2602_i2c_probe(struct i2c_client *client,
+-			     const struct i2c_device_id *id)
++static int ssm2602_i2c_probe(struct i2c_client *client)
+ {
++	const struct i2c_device_id *id = i2c_match_id(ssm2602_i2c_id, client);
+ 	return ssm2602_probe(&client->dev, id->driver_data,
+ 		devm_regmap_init_i2c(client, &ssm2602_regmap_config));
+ }
+@@ -47,7 +49,7 @@ static struct i2c_driver ssm2602_i2c_driver = {
+ 		.name = "ssm2602",
+ 		.of_match_table = ssm2602_of_match,
+ 	},
+-	.probe = ssm2602_i2c_probe,
++	.probe_new = ssm2602_i2c_probe,
+ 	.id_table = ssm2602_i2c_id,
+ };
+ module_i2c_driver(ssm2602_i2c_driver);
+-- 
+2.27.0
 
-[...]

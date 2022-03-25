@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5184E780E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F052D4E7799
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354521AbiCYPct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
+        id S1356626AbiCYP3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376342AbiCYPWH (ORCPT
+        with ESMTP id S1377494AbiCYPYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:22:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1AC06C93F;
-        Fri, 25 Mar 2022 08:16:21 -0700 (PDT)
+        Fri, 25 Mar 2022 11:24:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF271606EF;
+        Fri, 25 Mar 2022 08:18:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD54360AE0;
-        Fri, 25 Mar 2022 15:15:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4069C340E9;
-        Fri, 25 Mar 2022 15:15:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34DFCB828F6;
+        Fri, 25 Mar 2022 15:18:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D573C340EE;
+        Fri, 25 Mar 2022 15:18:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221354;
-        bh=PVvpZe0gwx7cCv7/Tokda8oeLwGKuYAWw5qH3QerL9w=;
+        s=korg; t=1648221487;
+        bh=cm0RYyJQcXqUnVI7HNk8immc7/DDIPAlvRgVNobGzO0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qvn/GrczFNU1b47SvZkOXh61ieUfwNDdAGOx3/9kAIP9dSJurGaCfe1PwLf4rhPMH
-         tV1DeHtmUmy/Z9F1baJTCSsIeNNwwLKGyOrI4gDEgMllE/eTJcbSOhwyk4RIBi9DRu
-         UTrc1UZFRMafB3nDwK9gSAy5/zcNCnx/DIRL7IgM=
+        b=l3LYNGfOnBrolFZz6Wh+ht05zncb9GlGyauSp8WRNyeywxWUoy2OM8tD2SiXhWX3X
+         dhy6fJgSQ9qaGuiSAfkefeYcisa4QCEnSXUn3PnxSvunMWJFDOva1W5l4ImmTzmicm
+         qpgfm+woE2ijIpqM5VLCjiaTGTtlOUYINOTa4pOE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>,
-        syzbot+e9072e90624a31dfa85f@syzkaller.appspotmail.com,
-        Gerd Hoffmann <kraxel@redhat.com>
-Subject: [PATCH 5.15 30/37] drm/virtio: Ensure that objs is not NULL in virtio_gpu_array_put_free()
+        stable@vger.kernel.org, Stephane Graber <stgraber@ubuntu.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.16 21/37] drivers: net: xgene: Fix regression in CRC stripping
 Date:   Fri, 25 Mar 2022 16:14:31 +0100
-Message-Id: <20220325150420.791591767@linuxfoundation.org>
+Message-Id: <20220325150420.651376257@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150419.931802116@linuxfoundation.org>
-References: <20220325150419.931802116@linuxfoundation.org>
+In-Reply-To: <20220325150420.046488912@linuxfoundation.org>
+References: <20220325150420.046488912@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +54,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+From: Stephane Graber <stgraber@ubuntu.com>
 
-commit 6b79f96f4a23846516e5e6e4dd37fc06f43a60dd upstream.
+commit e9e6faeafaa00da1851bcf47912b0f1acae666b4 upstream.
 
-If virtio_gpu_object_shmem_init() fails (e.g. due to fault injection, as it
-happened in the bug report by syzbot), virtio_gpu_array_put_free() could be
-called with objs equal to NULL.
+All packets on ingress (except for jumbo) are terminated with a 4-bytes
+CRC checksum. It's the responsability of the driver to strip those 4
+bytes. Unfortunately a change dating back to March 2017 re-shuffled some
+code and made the CRC stripping code effectively dead.
 
-Ensure that objs is not NULL in virtio_gpu_array_put_free(), or otherwise
-return from the function.
+This change re-orders that part a bit such that the datalen is
+immediately altered if needed.
 
-Cc: stable@vger.kernel.org # 5.13.x
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Reported-by: syzbot+e9072e90624a31dfa85f@syzkaller.appspotmail.com
-Fixes: 377f8331d0565 ("drm/virtio: fix possible leak/unlock virtio_gpu_object_array")
-Link: http://patchwork.freedesktop.org/patch/msgid/20211213183122.838119-1-roberto.sassu@huawei.com
-Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
+Fixes: 4902a92270fb ("drivers: net: xgene: Add workaround for errata 10GE_8/ENET_11")
+Cc: stable@vger.kernel.org
+Signed-off-by: Stephane Graber <stgraber@ubuntu.com>
+Tested-by: Stephane Graber <stgraber@ubuntu.com>
+Link: https://lore.kernel.org/r/20220322224205.752795-1-stgraber@ubuntu.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/virtio/virtgpu_gem.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/ethernet/apm/xgene/xgene_enet_main.c |   12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
---- a/drivers/gpu/drm/virtio/virtgpu_gem.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_gem.c
-@@ -248,6 +248,9 @@ void virtio_gpu_array_put_free(struct vi
- {
- 	u32 i;
+--- a/drivers/net/ethernet/apm/xgene/xgene_enet_main.c
++++ b/drivers/net/ethernet/apm/xgene/xgene_enet_main.c
+@@ -696,6 +696,12 @@ static int xgene_enet_rx_frame(struct xg
+ 	buf_pool->rx_skb[skb_index] = NULL;
  
-+	if (!objs)
-+		return;
+ 	datalen = xgene_enet_get_data_len(le64_to_cpu(raw_desc->m1));
 +
- 	for (i = 0; i < objs->nents; i++)
- 		drm_gem_object_put(objs->objs[i]);
- 	virtio_gpu_array_free(objs);
++	/* strip off CRC as HW isn't doing this */
++	nv = GET_VAL(NV, le64_to_cpu(raw_desc->m0));
++	if (!nv)
++		datalen -= 4;
++
+ 	skb_put(skb, datalen);
+ 	prefetch(skb->data - NET_IP_ALIGN);
+ 	skb->protocol = eth_type_trans(skb, ndev);
+@@ -717,12 +723,8 @@ static int xgene_enet_rx_frame(struct xg
+ 		}
+ 	}
+ 
+-	nv = GET_VAL(NV, le64_to_cpu(raw_desc->m0));
+-	if (!nv) {
+-		/* strip off CRC as HW isn't doing this */
+-		datalen -= 4;
++	if (!nv)
+ 		goto skip_jumbo;
+-	}
+ 
+ 	slots = page_pool->slots - 1;
+ 	head = page_pool->head;
 
 

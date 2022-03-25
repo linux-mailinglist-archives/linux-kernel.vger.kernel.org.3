@@ -2,115 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C774E7167
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 11:38:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE4E4E716A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 11:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358413AbiCYKkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 06:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
+        id S1358927AbiCYKln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 06:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351631AbiCYKkB (ORCPT
+        with ESMTP id S1358919AbiCYKlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 06:40:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C789666637
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 03:38:26 -0700 (PDT)
+        Fri, 25 Mar 2022 06:41:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19829BD2F6
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 03:40:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648204705;
+        s=mimecast20190719; t=1648204805;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=k8Ww1TQL/x1udfrBe7ulqa+UDnc+QUOwf2wvM/b+uX8=;
-        b=VOYIqzgibAQoa7cn6YEyNMjko28wnZo9bPkI/vQlBYwGunGbB2BrmaIbqSbzgC6rHDqLxA
-        0eiBmaKxEuvJ66OwkgUlJHOTtHCUBcOSkqg8GiP7PXOzPMhaBFBRAhBlwqGWd47h2qZFq4
-        XdYf55mZSwSJi8Vp+dw/DOsOIDpi+0k=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=TrfAZ0qzao0ZEtbHRPfVRmwmNq2i/Jw+hPAR+QAaxzk=;
+        b=TgNjEyZ3HJmCbLXSeg6CyVAsQW7ilrbzAcd1Fjw5YbtLY8Cz+OR35Bgj/xIMj3keGUbUVf
+        tbMt/ziNu79j36ZunOKRnnMNqBrOfokBJwqsbbGg6xUpsRS5CMD2PEZviqGBIcu5gaCYoO
+        3riE4xAJ9tm1xVGDvPDaMen3aF6QtNk=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-426-N1ENZm-RO_ebOIIvhQ90xw-1; Fri, 25 Mar 2022 06:38:24 -0400
-X-MC-Unique: N1ENZm-RO_ebOIIvhQ90xw-1
-Received: by mail-wm1-f70.google.com with SMTP id v2-20020a05600c214200b0038c7c02deceso2551050wml.8
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 03:38:24 -0700 (PDT)
+ us-mta-617-JVCwtg9CNsOB5RYzjApq5w-1; Fri, 25 Mar 2022 06:40:04 -0400
+X-MC-Unique: JVCwtg9CNsOB5RYzjApq5w-1
+Received: by mail-ed1-f69.google.com with SMTP id b24-20020a50e798000000b0041631767675so4686554edn.23
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 03:40:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=k8Ww1TQL/x1udfrBe7ulqa+UDnc+QUOwf2wvM/b+uX8=;
-        b=YQNPiXAtPtbwlWPe70bWCZvkCmG3p0ExlC1MEsMA+QcNcyjSBACaaMixd8FGrEqhnj
-         6wC/t0akyvXe3YWWJTHOqo6WLRQFuYxWWdrMKISR+LZGOMf1HsEkSi/cZ8tGnbCiz8FI
-         Np+3LbTm6/Alghc0O8C1uAhFOaI2cHlbe8ZhfIX8IHwH+r9A+izo5TDP6in16FlFyfIk
-         WhpI1tiavbQDNyk9XN6ohoSMZuxc5Zjsz1YJv9nEhKb4+0qswkcsPphvErEEjNhH2RfO
-         arQFiw80VlPLC4WsNxPA5vdSmYhXYAI4FYkiAw+DdaR0A6gzEXLC7GYKrCzbM7qI+WB5
-         A5jQ==
-X-Gm-Message-State: AOAM532X7he8NfZFSAlRv1NDE79guuIkNF81TtWQk/zpRb2v7mbStA6Y
-        LhEE/gCFVgGD8S7Momura0uEBpiQxvkTbtEPCUeYxaqU/vqr46BWNzRZdb9MI1PaVU2MkwK1fXR
-        BH6YR9gn/l5LJd0owwayHbwzz
-X-Received: by 2002:a1c:ed01:0:b0:38b:5a39:220c with SMTP id l1-20020a1ced01000000b0038b5a39220cmr18244095wmh.167.1648204703467;
-        Fri, 25 Mar 2022 03:38:23 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyMj734PZyhmluPDLs9xmQ6pJD2H5U4RSrOcVOm06J/lWrAktgKtttWoMVSaRs+Ejoq5YeU5A==
-X-Received: by 2002:a1c:ed01:0:b0:38b:5a39:220c with SMTP id l1-20020a1ced01000000b0038b5a39220cmr18244075wmh.167.1648204703249;
-        Fri, 25 Mar 2022 03:38:23 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id q11-20020adfcd8b000000b001e320028660sm4551557wrj.92.2022.03.25.03.38.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 03:38:22 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [FYI PATCH] Revert "KVM: x86/mmu: Zap only TDP MMU leafs in
- kvm_zap_gfn_range()"
-In-Reply-To: <Yj0FYSC2sT4k/ELl@google.com>
-References: <20220318164833.2745138-1-pbonzini@redhat.com>
- <d6367754-7782-7c29-e756-ac02dbd4520b@redhat.com>
- <Yj0FYSC2sT4k/ELl@google.com>
-Date:   Fri, 25 Mar 2022 11:38:21 +0100
-Message-ID: <87tubmnwpu.fsf@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TrfAZ0qzao0ZEtbHRPfVRmwmNq2i/Jw+hPAR+QAaxzk=;
+        b=ns/dEFgUaL1mkLzaXBCRhn5xeiDe5dQlJ74NcK7Y1/nY3Fr3zmgrxBOZONjaGdtowZ
+         8Uk93U80fVcchWqjF0I736TT6bpEK65M3bmBmdG/6Qa9cU4IAq7GlEvG15sEXAkj1Fi5
+         1c/CDGlkOcZCft295Dl3cPwelXSI8Hs0a3EFg13X3OJ5H4k38YCTFpTzQH6fHu4GJw+y
+         1RO/AZ765Joq4nDIfoLRVBG8vxhInHqfp8ON7RMelJAl+/+yh3D6v0WfUI6wgamLNCXa
+         ponH+/yHmW+U0UuC4sTN5bkDhnUWZZ2b881KbLaQrgaik6KegMq1IeStke5WAyA3L3tK
+         0aog==
+X-Gm-Message-State: AOAM533QiuP0yWVvWtuGKNgNdebYjXAqqhdJt2Mp94twTZrZZhx9ri1N
+        nnqEEprzmRth2tZlT22UZDRhztsPfReKo76gNg1gkFlJgYVpPtwie3qSaOwoVdAPpV8ghLbNIJ+
+        UNKJqQtTtLu29gBRMA5CPmEJK
+X-Received: by 2002:a17:907:d2a:b0:6e0:963c:97d9 with SMTP id gn42-20020a1709070d2a00b006e0963c97d9mr4574201ejc.736.1648204802911;
+        Fri, 25 Mar 2022 03:40:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyMnCBBkEIFXU/Xo8yMmB+B0JwunTv09fo/5qHHm1J86glb+mcfRbtW0qcUumoVXxb2Wbrxzg==
+X-Received: by 2002:a17:907:d2a:b0:6e0:963c:97d9 with SMTP id gn42-20020a1709070d2a00b006e0963c97d9mr4574177ejc.736.1648204802679;
+        Fri, 25 Mar 2022 03:40:02 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:cdb2:2781:c55:5db0? (2001-1c00-0c1e-bf00-cdb2-2781-0c55-5db0.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:cdb2:2781:c55:5db0])
+        by smtp.gmail.com with ESMTPSA id d7-20020a50cd47000000b004187eacb4d6sm2717357edj.37.2022.03.25.03.40.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 03:40:02 -0700 (PDT)
+Message-ID: <5bbb34bc-0dbe-05b0-ea56-c37fca0db814@redhat.com>
+Date:   Fri, 25 Mar 2022 11:40:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 4/4] Documentation/ABI: sysfs-class-power: Fix Sphinx
+ error
+Content-Language: en-US
+To:     Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Pearson <markpearson@lenovo.com>,
+        "David E . Box" <david.e.box@linux.intel.com>,
+        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220324164737.21765-1-hdegoede@redhat.com>
+ <20220324164737.21765-5-hdegoede@redhat.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220324164737.21765-5-hdegoede@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+Hi,
 
-> On Mon, Mar 21, 2022, Paolo Bonzini wrote:
->> On 3/18/22 17:48, Paolo Bonzini wrote:
->> > This reverts commit cf3e26427c08ad9015956293ab389004ac6a338e.
->> > 
->> > Multi-vCPU Hyper-V guests started crashing randomly on boot with the
->> > latest kvm/queue and the problem can be bisected the problem to this
->> > particular patch.
+On 3/24/22 17:47, Hans de Goede wrote:
+> Fix the following error from "make htmldocs":
+> 
+> Documentation/ABI/testing/sysfs-class-power:459: ERROR:
+> No bottom table border found.
+> 
+> ================ ====================================
+> auto:            Charge normally, respect thresholds
+> inhibit-charge:  Do not charge while AC is attached
+> force-discharge: Force discharge while AC is attached
+> 
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+>  Documentation/ABI/testing/sysfs-class-power | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+> index fde21d900420..859501366777 100644
+> --- a/Documentation/ABI/testing/sysfs-class-power
+> +++ b/Documentation/ABI/testing/sysfs-class-power
+> @@ -468,6 +468,7 @@ Description:
+>  			auto:            Charge normally, respect thresholds
+>  			inhibit-charge:  Do not charge while AC is attached
+>  			force-discharge: Force discharge while AC is attached
+> +			================ ====================================
+>  
+>  What:		/sys/class/power_supply/<supply_name>/technology
+>  Date:		May 2007
 
-...
 
->
-> Vitaly, can you provide repro instructions?  A nearly-complete QEMU command line
-> would be wonderful :-)  
+I see a similar change has already landed in linux-power-supply/for-next, so
+I'll drop this patch from the set.
 
-The issue was observed with genuine Hyper-V guests, with or without any
-Hyper-V enlightenments (not with Linux using Hyper-V enlightenments)
-The QEMU command line is nothing special, e.g.
+Regards,
 
-~/qemu/build/qemu-system-x86_64 -machine
-q35,accel=kvm,kernel-irqchip=split -name guest=win2019 -cpu host -smp 16
--m 16384 -drive
-file=/home/VMs/ws2019_gen1.qcow2,format=qcow2,if=none,id=drive-ide0-0-0
--device
-ide-hd,bus=ide.0,unit=0,drive=drive-ide0-0-0,id=ide0-0-0,bootindex=1
--vnc :0 -rtc base=localtime,driftfix=slew --no-hpet -monitor stdio
---no-reboot
-
-I'm also pretty sure I saw this on both AMD and Intel hosts, I can try
-reproducing if needed.
-
--- 
-Vitaly
+Hans
 

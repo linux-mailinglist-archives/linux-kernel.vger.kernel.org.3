@@ -2,389 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 211A24E6E32
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 07:31:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48894E6E33
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 07:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358463AbiCYGcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 02:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
+        id S1354586AbiCYGdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 02:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358450AbiCYGcZ (ORCPT
+        with ESMTP id S244115AbiCYGdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 02:32:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31B6DC682E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:30:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648189850;
-        h=from:from:reply-to:subject:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=FekJb0Ebm4l1ZsloOXr/+liInOUzNlt88+iuPhIaLmA=;
-        b=YUp4ufFczLjXlpDd1t9EriU1Cu+oE0V1Q17PcFNfgY6m3rWlkod+yJ6+3mbHYLXnr69Gah
-        qaexHQcUMiFzMoYY6kVZAZrt5cc38EXsNuRAll+QX0TydSTZckMKKUab7M8oxAAhXtOLfV
-        HTyG9dhJQ6CSEBk31GjeWFTHClRxuNg=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-617-m7Nd8UpwMyqS3x1EhaxVFQ-1; Fri, 25 Mar 2022 02:30:48 -0400
-X-MC-Unique: m7Nd8UpwMyqS3x1EhaxVFQ-1
-Received: by mail-wm1-f71.google.com with SMTP id r9-20020a1c4409000000b0038c15a1ed8cso4820010wma.7
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:30:48 -0700 (PDT)
+        Fri, 25 Mar 2022 02:33:15 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C44C683A
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:31:41 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id e5so7083595pls.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 23:31:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gbWkfWp6J4H3XXyeKe68Z66N6YCdMtgzmMKex+e1KQI=;
+        b=k0iJTCPI3/Q9T3uqUAAEpTXkI1CbOQYZA9PZB0beey9FZseowzuPncHnFdzXZ+KOGs
+         /RYQCmjMkYfsWMqr6MeZHNZS8Ha93qdE5Tawk4NYoYk29cRyVnsjtPA/f3zF59jedHF9
+         1LwWECoevSHw5yGNFLp5j3mvw9rkoo/yTR5jgjFj2KWBGmZcw8ni/1cz4BYxY8dCxhBU
+         RXZ1Q679ievRu78ojmLY29Ob/+6PUmluqbGr/ELW+19QhDBshpB5Q5HWcAWnb8IW3+Eb
+         y0ctrNIaZb4xkhOXHrhTMwE6tRqbqqPwuOz4aQgXVa2hTDqsyVjEFcCu4V/z44+rFIkS
+         yOig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=FekJb0Ebm4l1ZsloOXr/+liInOUzNlt88+iuPhIaLmA=;
-        b=WSw8jZfazv+JlYRjF7IgSqev+2iy7TOw9x1ybkx6U33Gh3XDW1Jt2RXIvExpd+ddjG
-         1nfKZiOh+ircy23boYmsZiq4ZPvv1re8lWQ71lCWxJ9XJAvTALzMhXYS1pldObfMlpCP
-         QnsN0aH25lmJsgZkrs7gwghg3yL/JMYPNGyCWF3qfCHKLZ4AldhfMCMQ7zxP4lSm9G/g
-         4qc97wgthcqgamG9ot0UFlfaaLcv+K7/qn9DuP45B0X3XubIT9KLyoM4wn3o2dxFZnt7
-         Q1wOq1o6N2Ny7svteJVBOzIsPvJoHHaI6S1pOIyAdYMDZrnlgJutlspZ/rkTr24ptrJI
-         P19w==
-X-Gm-Message-State: AOAM5334U3njZvtlE62CZ+R2vbpsFuU5cn+8IcMxRaeLqM42xZQKZd7q
-        yV6R1qUXBAQXYR3AC+NLKvPKQpRVqWLmuTlgWCDvy6BVrI8Lcwkh2KTTC4/cNw+wBnT4YY5DpPI
-        8FdfJ3jjswsTtlZ3H/5mAyV0d
-X-Received: by 2002:adf:d1e5:0:b0:205:85f5:656c with SMTP id g5-20020adfd1e5000000b0020585f5656cmr7599592wrd.65.1648189847609;
-        Thu, 24 Mar 2022 23:30:47 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwlmRL2KmDhT7O5HEwayMNU+Neuw2JFbJ7HqKb4Oi9vYJr1vGDtSia4GxkjPPLcFpKBvhivgQ==
-X-Received: by 2002:adf:d1e5:0:b0:205:85f5:656c with SMTP id g5-20020adfd1e5000000b0020585f5656cmr7599564wrd.65.1648189847234;
-        Thu, 24 Mar 2022 23:30:47 -0700 (PDT)
-Received: from redhat.com ([2.55.151.118])
-        by smtp.gmail.com with ESMTPSA id l126-20020a1c2584000000b00387d4f35651sm7828385wml.10.2022.03.24.23.30.44
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gbWkfWp6J4H3XXyeKe68Z66N6YCdMtgzmMKex+e1KQI=;
+        b=asxyOaqIG+AM8Tg4kq06JnSuGbxGT02/pU531pXe0ChHK77WNhYAtYKsO1XnUcC2dE
+         /LquwWu4QPDxAOJ9PeC/c4M7BdXwkDDHl8q/JKl9vZ+W1SviD5SfWZYz76ITjStL4OBy
+         Ve0cJfRH+wrY7uCgDUWrWR38D3TL/w+QyRx5l7egETDfU1Y+Xj+cBFVGjUgMw+eDqXCG
+         0JtwUEtOo8M1YirjsVcPZ0AwEK9u6wlrMznYV9Nu4DP5UcuReConRU6V9SPoKrz9+pN+
+         1UEgqBUoK12UBVnF2wU1hWPTSNnsXAZ3ibAgDPJAbrgtuBOHahJRzVr7S3okpknueu7Y
+         fhpA==
+X-Gm-Message-State: AOAM531t/b2yq+xQfrBozWG2nTcFhzdQGDtCqCeEP46eM6p3SplVS62e
+        BvGkcbuxtjUCUxUfGInndgE9
+X-Google-Smtp-Source: ABdhPJz3O7K/qRxSRjgYVNbXxuj8AdvhXmK8k93ZkIp7BCn6JLj3whclf3/Av1m7VVs7GSGY4/Rj3w==
+X-Received: by 2002:a17:90b:1d82:b0:1c7:1d3:f4 with SMTP id pf2-20020a17090b1d8200b001c701d300f4mr23103147pjb.223.1648189900916;
+        Thu, 24 Mar 2022 23:31:40 -0700 (PDT)
+Received: from thinkpad ([27.111.75.218])
+        by smtp.gmail.com with ESMTPSA id y20-20020aa78054000000b004f6f267dcc9sm5270651pfm.187.2022.03.24.23.31.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 23:30:46 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 02:30:42 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org, tglx@linutronix.de,
-        peterz@infradead.org, sgarzare@redhat.com, keirf@google.com,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Message-ID: <Yj1hkpyUqJE9sQ2p@redhat.com>
+        Thu, 24 Mar 2022 23:31:40 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 12:01:33 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 16/25] dmaengine: dw-edma: Simplify the DebugFS context
+ CSRs init procedure
+Message-ID: <20220325063133.GC4675@thinkpad>
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324014836.19149-17-Sergey.Semin@baikalelectronics.ru>
+ <20220325062708.GB4675@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_SUBJECT,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220325062708.GB4675@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bcc: 
-Subject: Re: [PATCH 3/3] virtio: harden vring IRQ
-Message-ID: <20220325021422-mutt-send-email-mst@kernel.org>
-Reply-To: 
-In-Reply-To: <f7046303-7d7d-e39f-3c71-3688126cc812@redhat.com>
-
-On Fri, Mar 25, 2022 at 11:04:08AM +0800, Jason Wang wrote:
-> 
-> 在 2022/3/24 下午7:03, Michael S. Tsirkin 写道:
-> > On Thu, Mar 24, 2022 at 04:40:04PM +0800, Jason Wang wrote:
-> > > This is a rework on the previous IRQ hardening that is done for
-> > > virtio-pci where several drawbacks were found and were reverted:
-> > > 
-> > > 1) try to use IRQF_NO_AUTOEN which is not friendly to affinity managed IRQ
-> > >     that is used by some device such as virtio-blk
-> > > 2) done only for PCI transport
-> > > 
-> > > In this patch, we tries to borrow the idea from the INTX IRQ hardening
-> > > in the reverted commit 080cd7c3ac87 ("virtio-pci: harden INTX interrupts")
-> > > by introducing a global irq_soft_enabled variable for each
-> > > virtio_device. Then we can to toggle it during
-> > > virtio_reset_device()/virtio_device_ready(). A synchornize_rcu() is
-> > > used in virtio_reset_device() to synchronize with the IRQ handlers. In
-> > > the future, we may provide config_ops for the transport that doesn't
-> > > use IRQ. With this, vring_interrupt() can return check and early if
-> > > irq_soft_enabled is false. This lead to smp_load_acquire() to be used
-> > > but the cost should be acceptable.
-> > Maybe it should be but is it? Can't we use synchronize_irq instead?
-> 
-> 
-> Even if we allow the transport driver to synchornize through
-> synchronize_irq() we still need a check in the vring_interrupt().
-> 
-> We do something like the following previously:
-> 
->         if (!READ_ONCE(vp_dev->intx_soft_enabled))
->                 return IRQ_NONE;
-> 
-> But it looks like a bug since speculative read can be done before the check
-> where the interrupt handler can't see the uncommitted setup which is done by
-> the driver.
-
-I don't think so - if you sync after setting the value then
-you are guaranteed that any handler running afterwards
-will see the new value.
-
-Although I couldn't find anything about this in memory-barriers.txt
-which surprises me.
-
-CC Paul to help make sure I'm right.
-
-
-> 
+On Fri, Mar 25, 2022 at 11:57:16AM +0530, Manivannan Sadhasivam wrote:
+> On Thu, Mar 24, 2022 at 04:48:27AM +0300, Serge Semin wrote:
+> > DW eDMA v4.70a and older have the read and write channels context CSRs
+> > indirectly accessible. It means the CSRs like Channel Control, Xfer size,
+> > SAR, DAR and LLP address are accessed over at a fixed MMIO address, but
+> > their reference to the corresponding channel is determined by the Viewport
+> > CSR. In order to have a coherent access to these registers the CSR IOs are
+> > supposed to be protected with a spin-lock. DW eDMA v4.80a and newer
+> > normally have unrolled Read/Write channel context registers. That is all
+> > CSRs denoted before are directly mapped in the controller MMIO space.
 > > 
-> > > To avoid breaking legacy device which can send IRQ before DRIVER_OK, a
-> > > module parameter is introduced to enable the hardening so function
-> > > hardening is disabled by default.
-> > Which devices are these? How come they send an interrupt before there
-> > are any buffers in any queues?
-> 
-> 
-> I copied this from the commit log for 22b7050a024d7
-> 
-> "
-> 
->     This change will also benefit old hypervisors (before 2009)
->     that send interrupts without checking DRIVER_OK: previously,
->     the callback could race with driver-specific initialization.
-> "
-> 
-> If this is only for config interrupt, I can remove the above log.
-
-
-This is only for config interrupt.
-
-> 
+> > Since both normal and viewport-based registers are exposed via the DebugFS
+> > nodes, the original code author decided to implement an algorithm based on
+> > the unrolled CSRs mapping with the viewport addresses recalculation if
+> > it's required. The problem is that such implementation turned to be first
+> > unscalable (supports a platform with only single eDMA available since a
+> > base address statically preserved) and second needlessly overcomplicated
+> > (it loops over all Rd/Wr context addresses and re-calculates the viewport
+> > base address on each DebugFS node access). The algorithm can be greatly
+> > simplified just by adding the channel ID and it's direction fields in the
+> > eDMA DebugFS node descriptor. These new parameters can be used to find a
+> > CSR offset within the corresponding channel registers space. The DW eDMA
+> > DebugFS node getter afterwards will also use them in order to activate the
+> > respective context CSRs viewport before reading data from the specified
+> > register. In case of the unrolled version of the CSRs mapping there won't
+> > be any spin-lock taken/released, no viewport activation as before this
+> > modification.
 > > 
-> > > Note that the hardening is only done for vring interrupt since the
-> > > config interrupt hardening is already done in commit 22b7050a024d7
-> > > ("virtio: defer config changed notifications"). But the method that is
-> > > used by config interrupt can't be reused by the vring interrupt
-> > > handler because it uses spinlock to do the synchronization which is
-> > > expensive.
-> > > 
-> > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > Note this modification fixes the REGISTER() macros using an externally
+> > defined local variable. The same problem with the rest of the macro will
+> > be fixed in the next commit.
 > > 
-> > > ---
-> > >   drivers/virtio/virtio.c       | 19 +++++++++++++++++++
-> > >   drivers/virtio/virtio_ring.c  |  9 ++++++++-
-> > >   include/linux/virtio.h        |  4 ++++
-> > >   include/linux/virtio_config.h | 25 +++++++++++++++++++++++++
-> > >   4 files changed, 56 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
-> > > index 8dde44ea044a..85e331efa9cc 100644
-> > > --- a/drivers/virtio/virtio.c
-> > > +++ b/drivers/virtio/virtio.c
-> > > @@ -7,6 +7,12 @@
-> > >   #include <linux/of.h>
-> > >   #include <uapi/linux/virtio_ids.h>
-> > > +static bool irq_hardening = false;
-> > > +
-> > > +module_param(irq_hardening, bool, 0444);
-> > > +MODULE_PARM_DESC(irq_hardening,
-> > > +		 "Disalbe IRQ software processing when it is not expected");
-> > > +
-> > >   /* Unique numbering for virtio devices. */
-> > >   static DEFINE_IDA(virtio_index_ida);
-> > > @@ -220,6 +226,15 @@ static int virtio_features_ok(struct virtio_device *dev)
-> > >    * */
-> > >   void virtio_reset_device(struct virtio_device *dev)
-> > >   {
-> > > +	/*
-> > > +	 * The below synchronize_rcu() guarantees that any
-> > > +	 * interrupt for this line arriving after
-> > > +	 * synchronize_rcu() has completed is guaranteed to see
-> > > +	 * irq_soft_enabled == false.
-> > News to me I did not know synchronize_rcu has anything to do
-> > with interrupts. Did not you intend to use synchronize_irq?
-> > I am not even 100% sure synchronize_rcu is by design a memory barrier
-> > though it's most likely is ...
-> 
-> 
-> According to the comment above tree RCU version of synchronize_rcu():
-> 
-> """
-> 
->  * RCU read-side critical sections are delimited by rcu_read_lock()
->  * and rcu_read_unlock(), and may be nested.  In addition, but only in
->  * v5.0 and later, regions of code across which interrupts, preemption,
->  * or softirqs have been disabled also serve as RCU read-side critical
->  * sections.  This includes hardware interrupt handlers, softirq handlers,
->  * and NMI handlers.
-> """
-> 
-> So interrupt handlers are treated as read-side critical sections.
-> 
-> And it has the comment for explain the barrier:
-> 
-> """
-> 
->  * Note that this guarantee implies further memory-ordering guarantees.
->  * On systems with more than one CPU, when synchronize_rcu() returns,
->  * each CPU is guaranteed to have executed a full memory barrier since
->  * the end of its last RCU read-side critical section whose beginning
->  * preceded the call to synchronize_rcu().  In addition, each CPU having
-> """
-> 
-> So on SMP it provides a full barrier. And for UP/tiny RCU we don't need the
-> barrier, if the interrupt come after WRITE_ONCE() it will see the
-> irq_soft_enabled as false.
-> 
-
-You are right. So then
-1. I do not think we need load_acquire - why is it needed? Just
-   READ_ONCE should do.
-2. isn't synchronize_irq also doing the same thing?
-
-
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > ---
+> >  drivers/dma/dw-edma/dw-edma-v0-debugfs.c | 84 +++++++++++-------------
+> >  1 file changed, 38 insertions(+), 46 deletions(-)
 > > 
-> > > +	 */
-> > > +	WRITE_ONCE(dev->irq_soft_enabled, false);
-> > > +	synchronize_rcu();
-> > > +
-> > >   	dev->config->reset(dev);
-> > >   }
-> > >   EXPORT_SYMBOL_GPL(virtio_reset_device);
-> > Please add comment explaining where it will be enabled.
-> > Also, we *really* don't need to synch if it was already disabled,
-> > let's not add useless overhead to the boot sequence.
+> > diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> > index 7eb0147912fa..b34a68964232 100644
+> > --- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> > +++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> > @@ -15,9 +15,27 @@
+> >  
+> >  #define REGS_ADDR(name) \
+> >  	((void __iomem *)&regs->name)
+> > +
+> > +#define REGS_CH_ADDR(name, _dir, _ch)						\
+> > +	({									\
+> > +		struct dw_edma_v0_ch_regs __iomem *__ch_regs;			\
+> > +										\
+> > +		if ((dw)->chip->mf == EDMA_MF_EDMA_LEGACY)			\
+> > +			__ch_regs = &regs->type.legacy.ch;			\
+> > +		else if (_dir == EDMA_DIR_READ)					\
+> > +			__ch_regs = &regs->type.unroll.ch[_ch].rd;		\
+> > +		else								\
+> > +			__ch_regs = &regs->type.unroll.ch[_ch].wr;		\
+> > +										\
+> > +		(void __iomem *)&__ch_regs->name;				\
+> > +	})
+> > +
+> >  #define REGISTER(name) \
+> >  	{ #name, REGS_ADDR(name) }
+> >  
+> > +#define CTX_REGISTER(name, dir, ch) \
+> > +	{ #name, REGS_CH_ADDR(name, dir, ch), dir, ch }
 > 
+> What is the need of "dir, ch" at the end?
 > 
-> Ok.
+
+Ignore this comment. I failed to notice that your addition.
+
+Thanks,
+Mani
+
+> > +
+> >  #define WR_REGISTER(name) \
+> >  	{ #name, REGS_ADDR(wr_##name) }
+> >  #define RD_REGISTER(name) \
+> > @@ -41,14 +59,11 @@
+> >  static struct dw_edma				*dw;
+> >  static struct dw_edma_v0_regs			__iomem *regs;
+> >  
+> > -static struct {
+> > -	void					__iomem *start;
+> > -	void					__iomem *end;
+> > -} lim[2][EDMA_V0_MAX_NR_CH];
+> > -
+> >  struct dw_edma_debugfs_entry {
+> >  	const char				*name;
+> >  	void __iomem				*reg;
+> > +	enum dw_edma_dir			dir;
+> > +	u16					ch;
+> >  };
+> >  
+> >  static int dw_edma_debugfs_u32_get(void *data, u64 *val)
+> > @@ -58,33 +73,16 @@ static int dw_edma_debugfs_u32_get(void *data, u64 *val)
+> >  
+> >  	if (dw->chip->mf == EDMA_MF_EDMA_LEGACY &&
+> >  	    reg >= (void __iomem *)&regs->type.legacy.ch) {
+> > -		void __iomem *ptr = &regs->type.legacy.ch;
+> > -		u32 viewport_sel = 0;
+> >  		unsigned long flags;
+> > -		u16 ch;
+> > -
+> > -		for (ch = 0; ch < dw->wr_ch_cnt; ch++)
+> > -			if (lim[0][ch].start >= reg && reg < lim[0][ch].end) {
+> > -				ptr += (reg - lim[0][ch].start);
+> > -				goto legacy_sel_wr;
+> > -			}
+> > -
+> > -		for (ch = 0; ch < dw->rd_ch_cnt; ch++)
+> > -			if (lim[1][ch].start >= reg && reg < lim[1][ch].end) {
+> > -				ptr += (reg - lim[1][ch].start);
+> > -				goto legacy_sel_rd;
+> > -			}
+> > -
+> > -		return 0;
+> > -legacy_sel_rd:
+> > -		viewport_sel = BIT(31);
+> > -legacy_sel_wr:
+> > -		viewport_sel |= FIELD_PREP(EDMA_V0_VIEWPORT_MASK, ch);
+> > +		u32 viewport_sel;
+> > +
+> > +		viewport_sel = entry->dir == EDMA_DIR_READ ? BIT(31) : 0;
+> > +		viewport_sel |= FIELD_PREP(EDMA_V0_VIEWPORT_MASK, entry->ch);
+> >  
+> >  		raw_spin_lock_irqsave(&dw->lock, flags);
+> >  
+> >  		writel(viewport_sel, &regs->type.legacy.viewport_sel);
+> > -		*val = readl(ptr);
+> > +		*val = readl(reg);
+> >  
+> >  		raw_spin_unlock_irqrestore(&dw->lock, flags);
+> >  	} else {
+> > @@ -114,19 +112,19 @@ static void dw_edma_debugfs_create_x32(const struct dw_edma_debugfs_entry ini[],
+> >  	}
+> >  }
+> >  
+> > -static void dw_edma_debugfs_regs_ch(struct dw_edma_v0_ch_regs __iomem *regs,
+> > +static void dw_edma_debugfs_regs_ch(enum dw_edma_dir edma_dir, u16 ch,
+> >  				    struct dentry *dir)
 > 
+> Using "dir" for directory would be confusing since it could also refer
+> direction. I'd suggest to use "dentry".
 > 
+> Thanks,
+> Mani
+> 
+> >  {
+> > -	const struct dw_edma_debugfs_entry debugfs_regs[] = {
+> > -		REGISTER(ch_control1),
+> > -		REGISTER(ch_control2),
+> > -		REGISTER(transfer_size),
+> > -		REGISTER(sar.lsb),
+> > -		REGISTER(sar.msb),
+> > -		REGISTER(dar.lsb),
+> > -		REGISTER(dar.msb),
+> > -		REGISTER(llp.lsb),
+> > -		REGISTER(llp.msb),
+> > +	struct dw_edma_debugfs_entry debugfs_regs[] = {
+> > +		CTX_REGISTER(ch_control1, edma_dir, ch),
+> > +		CTX_REGISTER(ch_control2, edma_dir, ch),
+> > +		CTX_REGISTER(transfer_size, edma_dir, ch),
+> > +		CTX_REGISTER(sar.lsb, edma_dir, ch),
+> > +		CTX_REGISTER(sar.msb, edma_dir, ch),
+> > +		CTX_REGISTER(dar.lsb, edma_dir, ch),
+> > +		CTX_REGISTER(dar.msb, edma_dir, ch),
+> > +		CTX_REGISTER(llp.lsb, edma_dir, ch),
+> > +		CTX_REGISTER(llp.msb, edma_dir, ch),
+> >  	};
+> >  	int nr_entries;
+> >  
+> > @@ -191,10 +189,7 @@ static void dw_edma_debugfs_regs_wr(struct dentry *dir)
+> >  
+> >  		ch_dir = debugfs_create_dir(name, regs_dir);
+> >  
+> > -		dw_edma_debugfs_regs_ch(&regs->type.unroll.ch[i].wr, ch_dir);
+> > -
+> > -		lim[0][i].start = &regs->type.unroll.ch[i].wr;
+> > -		lim[0][i].end = &regs->type.unroll.ch[i].padding_1[0];
+> > +		dw_edma_debugfs_regs_ch(EDMA_DIR_WRITE, i, ch_dir);
+> >  	}
+> >  }
+> >  
+> > @@ -256,10 +251,7 @@ static void dw_edma_debugfs_regs_rd(struct dentry *dir)
+> >  
+> >  		ch_dir = debugfs_create_dir(name, regs_dir);
+> >  
+> > -		dw_edma_debugfs_regs_ch(&regs->type.unroll.ch[i].rd, ch_dir);
+> > -
+> > -		lim[1][i].start = &regs->type.unroll.ch[i].rd;
+> > -		lim[1][i].end = &regs->type.unroll.ch[i].padding_2[0];
+> > +		dw_edma_debugfs_regs_ch(EDMA_DIR_READ, i, ch_dir);
+> >  	}
+> >  }
+> >  
+> > -- 
+> > 2.35.1
 > > 
-> > 
-> > > @@ -427,6 +442,10 @@ int register_virtio_device(struct virtio_device *dev)
-> > >   	spin_lock_init(&dev->config_lock);
-> > >   	dev->config_enabled = false;
-> > >   	dev->config_change_pending = false;
-> > > +	dev->irq_soft_check = irq_hardening;
-> > > +
-> > > +	if (dev->irq_soft_check)
-> > > +		dev_info(&dev->dev, "IRQ hardening is enabled\n");
-> > >   	/* We always start by resetting the device, in case a previous
-> > >   	 * driver messed it up.  This also tests that code path a little. */
-> > one of the points of hardening is it's also helpful for buggy
-> > devices. this flag defeats the purpose.
-> 
-> 
-> Do you mean:
-> 
-> 1) we need something like config_enable? This seems not easy to be
-> implemented without obvious overhead, mainly the synchronize with the
-> interrupt handlers
-
-But synchronize is only on tear-down path. That is not critical for any
-users at the moment, even less than probe.
-
-> 2) enable this by default, so I don't object, but this may have some risk
-> for old hypervisors
-
-
-The risk if there's a driver adding buffers without setting DRIVER_OK.
-So with this approach, how about we rename the flag "driver_ok"?
-And then add_buf can actually test it and BUG_ON if not there  (at least
-in the debug build).
-
-And going down from there, how about we cache status in the
-device? Then we don't need to keep re-reading it every time,
-speeding boot up a tiny bit.
-
-> 
-> > 
-> > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> > > index 962f1477b1fa..0170f8c784d8 100644
-> > > --- a/drivers/virtio/virtio_ring.c
-> > > +++ b/drivers/virtio/virtio_ring.c
-> > > @@ -2144,10 +2144,17 @@ static inline bool more_used(const struct vring_virtqueue *vq)
-> > >   	return vq->packed_ring ? more_used_packed(vq) : more_used_split(vq);
-> > >   }
-> > > -irqreturn_t vring_interrupt(int irq, void *_vq)
-> > > +irqreturn_t vring_interrupt(int irq, void *v)
-> > >   {
-> > > +	struct virtqueue *_vq = v;
-> > > +	struct virtio_device *vdev = _vq->vdev;
-> > >   	struct vring_virtqueue *vq = to_vvq(_vq);
-> > > +	if (!virtio_irq_soft_enabled(vdev)) {
-> > > +		dev_warn_once(&vdev->dev, "virtio vring IRQ raised before DRIVER_OK");
-> > > +		return IRQ_NONE;
-> > > +	}
-> > > +
-> > >   	if (!more_used(vq)) {
-> > >   		pr_debug("virtqueue interrupt with no work for %p\n", vq);
-> > >   		return IRQ_NONE;
-> > > diff --git a/include/linux/virtio.h b/include/linux/virtio.h
-> > > index 5464f398912a..957d6ad604ac 100644
-> > > --- a/include/linux/virtio.h
-> > > +++ b/include/linux/virtio.h
-> > > @@ -95,6 +95,8 @@ dma_addr_t virtqueue_get_used_addr(struct virtqueue *vq);
-> > >    * @failed: saved value for VIRTIO_CONFIG_S_FAILED bit (for restore)
-> > >    * @config_enabled: configuration change reporting enabled
-> > >    * @config_change_pending: configuration change reported while disabled
-> > > + * @irq_soft_check: whether or not to check @irq_soft_enabled
-> > > + * @irq_soft_enabled: callbacks enabled
-> > >    * @config_lock: protects configuration change reporting
-> > >    * @dev: underlying device.
-> > >    * @id: the device type identification (used to match it with a driver).
-> > > @@ -109,6 +111,8 @@ struct virtio_device {
-> > >   	bool failed;
-> > >   	bool config_enabled;
-> > >   	bool config_change_pending;
-> > > +	bool irq_soft_check;
-> > > +	bool irq_soft_enabled;
-> > >   	spinlock_t config_lock;
-> > >   	spinlock_t vqs_list_lock; /* Protects VQs list access */
-> > >   	struct device dev;
-> > > diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
-> > > index dafdc7f48c01..9c1b61f2e525 100644
-> > > --- a/include/linux/virtio_config.h
-> > > +++ b/include/linux/virtio_config.h
-> > > @@ -174,6 +174,24 @@ static inline bool virtio_has_feature(const struct virtio_device *vdev,
-> > >   	return __virtio_test_bit(vdev, fbit);
-> > >   }
-> > > +/*
-> > > + * virtio_irq_soft_enabled: whether we can execute callbacks
-> > > + * @vdev: the device
-> > > + */
-> > > +static inline bool virtio_irq_soft_enabled(const struct virtio_device *vdev)
-> > > +{
-> > > +	if (!vdev->irq_soft_check)
-> > > +		return true;
-> > > +
-> > > +	/*
-> > > +	 * Read irq_soft_enabled before reading other device specific
-> > > +	 * data. Paried with smp_store_relase() in
-> > paired
-> 
-> 
-> Will fix.
-> 
-> Thanks
-> 
-> 
-> > 
-> > > +	 * virtio_device_ready() and WRITE_ONCE()/synchronize_rcu() in
-> > > +	 * virtio_reset_device().
-> > > +	 */
-> > > +	return smp_load_acquire(&vdev->irq_soft_enabled);
-> > > +}
-> > > +
-> > >   /**
-> > >    * virtio_has_dma_quirk - determine whether this device has the DMA quirk
-> > >    * @vdev: the device
-> > > @@ -236,6 +254,13 @@ void virtio_device_ready(struct virtio_device *dev)
-> > >   	if (dev->config->enable_cbs)
-> > >                     dev->config->enable_cbs(dev);
-> > > +	/*
-> > > +	 * Commit the driver setup before enabling the virtqueue
-> > > +	 * callbacks. Paried with smp_load_acuqire() in
-> > > +	 * virtio_irq_soft_enabled()
-> > > +	 */
-> > > +	smp_store_release(&dev->irq_soft_enabled, true);
-> > > +
-> > >   	BUG_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
-> > >   	dev->config->set_status(dev, status | VIRTIO_CONFIG_S_DRIVER_OK);
-> > >   }
-> > > -- 
-> > > 2.25.1
-

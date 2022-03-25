@@ -2,143 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F8D4E6FF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 10:24:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 375054E6FF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 10:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356869AbiCYJZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 05:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
+        id S1356924AbiCYJ0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 05:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243091AbiCYJZ4 (ORCPT
+        with ESMTP id S243091AbiCYJ0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 05:25:56 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB1EC6271;
-        Fri, 25 Mar 2022 02:24:22 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id t25so12325932lfg.7;
-        Fri, 25 Mar 2022 02:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=SSlLErNJDYMhv4sM1Ccd3PQZryIRODWgd2EpDE7WzJU=;
-        b=ImL22cgHLGRLQQxTNXhpXmDpiXyJG03HzVsLsMEkEtHc3oKTUje3duGQDbBq+V+Neh
-         tmPsIpdPpvQtTLdPpg2Lu0lcrXwOQvzbWvadlNb7yw5V4kMhpIY4YXykVkHCOILSnX96
-         JhgL+uZPAevLVwGZE2D782FRMRQoUY0iZ4g3J99icI/q32uPlkNr3WxpnJGOoJsrBua8
-         77kxf2YMTUq4IDc+TzyZHXVTj96S+jNl/uLu6AiRB8fhY3dJjmy2oFPYlEifrLwYbHaS
-         YOBEYOH2Y26DpmbXAB6sFoUw/AxPKgOSQfqvPS5Bx+XZt1SuKWw1jywskDS6lWllOrgj
-         PdRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=SSlLErNJDYMhv4sM1Ccd3PQZryIRODWgd2EpDE7WzJU=;
-        b=lUVZpCrsHLjxoFvfJG1fAYXVS0MB6kAI/hjcx5YZ35IgouV5LjpN6xcJY55OlPw7pX
-         LehD+U2UCGc+SOvpkdRiiCdE2/Ur3ymhQ1DRUjL5my3MIySrjnR9JolgRDwVJpzljRJq
-         1pkylPuPQJ1Q6IAqM6w8a1t+KTyg7SXHbgif9wuQ8mcRk/Cljf6kmh8ZaNcQM4wHrsgm
-         0NXBt9fN64hsP5X85HtH+QPbzZxQShM6bB/tQch1Eau5Ia7WMkkJdabHfsuK3D6yicJM
-         sMGU1f5UysfymOeEBAi3RqOc/j7xPTFPvg5HM5s/wL1LAqwV2W6MGW5E4Q8u6KScJVbg
-         mNZQ==
-X-Gm-Message-State: AOAM533Z3CTGko9QJ+dCh0TpbEbf+1GzFicffabjtFJVMPZ3fe5ZtjvE
-        8Ugz38u2hN4Qhn76B21lVQ32xVkP0iv+Ig==
-X-Google-Smtp-Source: ABdhPJxUl03eI7VIoMcm91yImWCR15ZIRnY2kcIx5G8CT1JoWCIArZwUr9kqUwyPTAjkH7G0HgV4pA==
-X-Received: by 2002:ac2:4477:0:b0:44a:55c6:155d with SMTP id y23-20020ac24477000000b0044a55c6155dmr7015681lfl.376.1648200261100;
-        Fri, 25 Mar 2022 02:24:21 -0700 (PDT)
-Received: from wse-c0127 ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id q20-20020a2e8754000000b002497cfaf36csm614439ljj.42.2022.03.25.02.24.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 02:24:20 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 2/4] net: switchdev: add support for
- offloading of fdb locked flag
-In-Reply-To: <20220324142749.la5til4ys6zva4uf@skbuf>
-References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
- <20220317093902.1305816-3-schultz.hans+netdev@gmail.com>
- <86o81whmwv.fsf@gmail.com> <20220323123534.i2whyau3doq2xdxg@skbuf>
- <86wngkbzqb.fsf@gmail.com> <20220323144304.4uqst3hapvzg3ej6@skbuf>
- <86lewzej4n.fsf@gmail.com> <20220324110959.t4hqale35qbrakdu@skbuf>
- <86v8w3vbk4.fsf@gmail.com> <20220324142749.la5til4ys6zva4uf@skbuf>
-Date:   Fri, 25 Mar 2022 10:24:17 +0100
-Message-ID: <865yo21j26.fsf@gmail.com>
+        Fri, 25 Mar 2022 05:26:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA8ECF4B1;
+        Fri, 25 Mar 2022 02:24:57 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 250B01F745;
+        Fri, 25 Mar 2022 09:24:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648200296; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dvN7myr0MDfmtMFkdZ1k/72coAzlBsKoPtLN6KtQ1CQ=;
+        b=v7ByO0o1ZIbFE5mwJyFIHpW2wINXiMWRB8n9NTThT5QJklwm6VB3tMgmaRuw+BNeQ0mIaN
+        Jra5pct2F+ssPqGHTFKPmuvlUlbIXuuHfP7ZhD13c++eR5WgQH6r+oHxYAsW3qQmYfS9EK
+        fRwHZZabz/9vqllHvpg8l/abeRokoCA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648200296;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dvN7myr0MDfmtMFkdZ1k/72coAzlBsKoPtLN6KtQ1CQ=;
+        b=QRumQzO+afwTgRwYz9SpOF+rQLK40HkIs3BRJSzs/Q2UZ3AYLDcTAHwYgb+zNjJPFOPBGT
+        mt53x2Wzp/5juLAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 12EAE132E9;
+        Fri, 25 Mar 2022 09:24:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TmabBGiKPWIRfwAAMHmgww
+        (envelope-from <bp@suse.de>); Fri, 25 Mar 2022 09:24:56 +0000
+Date:   Fri, 25 Mar 2022 10:24:50 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v12 40/46] x86/sev: add sev=debug cmdline option to dump
+ SNP CPUID table
+Message-ID: <Yj2KYsdvz7NOtF7w@zn.tnic>
+References: <20220307213356.2797205-1-brijesh.singh@amd.com>
+ <20220307213356.2797205-41-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220307213356.2797205-41-brijesh.singh@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On tor, mar 24, 2022 at 16:27, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Thu, Mar 24, 2022 at 12:23:39PM +0100, Hans Schultz wrote:
->> On tor, mar 24, 2022 at 13:09, Vladimir Oltean <olteanv@gmail.com> wrote:
->> > On Thu, Mar 24, 2022 at 11:32:08AM +0100, Hans Schultz wrote:
->> >> On ons, mar 23, 2022 at 16:43, Vladimir Oltean <olteanv@gmail.com> wrote:
->> >> > On Wed, Mar 23, 2022 at 01:49:32PM +0100, Hans Schultz wrote:
->> >> >> >> Does someone have an idea why there at this point is no option to add a
->> >> >> >> dynamic fdb entry?
->> >> >> >> 
->> >> >> >> The fdb added entries here do not age out, while the ATU entries do
->> >> >> >> (after 5 min), resulting in unsynced ATU vs fdb.
->> >> >> >
->> >> >> > I think the expectation is to use br_fdb_external_learn_del() if the
->> >> >> > externally learned entry expires. The bridge should not age by itself
->> >> >> > FDB entries learned externally.
->> >> >> >
->> >> >> 
->> >> >> It seems to me that something is missing then?
->> >> >> My tests using trafgen that I gave a report on to Lunn generated massive
->> >> >> amounts of fdb entries, but after a while the ATU was clean and the fdb
->> >> >> was still full of random entries...
->> >> >
->> >> > I'm no longer sure where you are, sorry..
->> >> > I think we discussed that you need to enable ATU age interrupts in order
->> >> > to keep the ATU in sync with the bridge FDB? Which means either to
->> >> > delete the locked FDB entries from the bridge when they age out in the
->> >> > ATU, or to keep refreshing locked ATU entries.
->> >> > So it seems that you're doing neither of those 2 things if you end up
->> >> > with bridge FDB entries which are no longer in the ATU.
->> >> 
->> >> Any idea why G2 offset 5 ATUAgeIntEn (bit 10) is set? There is no define
->> >> for it, so I assume it is something default?
->> >
->> > No idea, but I can confirm that the out-of-reset value I see for
->> > MV88E6XXX_G2_SWITCH_MGMT on 6190 and 6390 is 0x400. It's best not to
->> > rely on any reset defaults though.
->> 
->> I see no age out interrupts, even though the ports Age Out Int is on
->> (PAV bit 14) on the locked port, and the ATU entries do age out (HoldAt1
->> is off). Any idea why that can be?
->> 
->> I combination with this I think it would be nice to have an ability to
->> set the AgeOut time even though it is not per port but global.
->
-> Sorry, I just don't know. Looking at the documentation for IntOnAgeOut,
-> I see it says that for an ATU entry to trigger an age out interrupt, the
-> port it's associated with must have IntOnAgeOut set.
-> But your locked ATU entries aren't associated with any port, they have
-> DPV=0, right? So will they never trigger any age out interrupt according
-> to this? I'm not clear.
+On Mon, Mar 07, 2022 at 03:33:50PM -0600, Brijesh Singh wrote:
+> From: Michael Roth <michael.roth@amd.com>
+> 
+> For debugging purposes it is very useful to have a way to see the full
+> contents of the SNP CPUID table provided to a guest. Add an sev=debug
+> kernel command-line option to do so.
+> 
+> Also introduce some infrastructure so that additional options can be
+> specified via sev=option1[,option2] over time in a consistent manner.
+> 
+> Suggested-by: Borislav Petkov <bp@alien8.de>
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> ---
+>  .../admin-guide/kernel-parameters.txt         |  2 +
+>  Documentation/x86/x86_64/boot-options.rst     | 14 +++++
+>  arch/x86/kernel/sev.c                         | 58 +++++++++++++++++++
+>  3 files changed, 74 insertions(+)
 
-If it could be possible to add a dynamic entry to the bridge module from
-the driver, that would be a solution, and since in the ATU in this case
-ages out entries learned, I don't see why __br_fdb_add() insists that an
-external learned entry must be permanent?
+I simplified the string parsing:
+
+---
+From: Michael Roth <michael.roth@amd.com>
+Date: Mon, 7 Mar 2022 15:33:50 -0600
+Subject: [PATCH] x86/sev: Add a sev= cmdline option
+
+For debugging purposes it is very useful to have a way to see the full
+contents of the SNP CPUID table provided to a guest. Add an sev=debug
+kernel command-line option to do so.
+
+Also introduce some infrastructure so that additional options can be
+specified via sev=option1[,option2] over time in a consistent manner.
+
+  [ bp: Massage, simplify string parsing. ]
+
+Suggested-by: Borislav Petkov <bp@alien8.de>
+Signed-off-by: Michael Roth <michael.roth@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220307213356.2797205-41-brijesh.singh@amd.com
+---
+ .../admin-guide/kernel-parameters.txt         |  2 +
+ Documentation/x86/x86_64/boot-options.rst     | 14 ++++++
+ arch/x86/kernel/sev.c                         | 44 +++++++++++++++++++
+ 3 files changed, 60 insertions(+)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 7123524a86b8..5f7fa7c141dc 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5229,6 +5229,8 @@
+ 
+ 	serialnumber	[BUGS=X86-32]
+ 
++	sev=option[,option...] [X86-64] See Documentation/x86/x86_64/boot-options.rst
++
+ 	shapers=	[NET]
+ 			Maximal number of shapers.
+ 
+diff --git a/Documentation/x86/x86_64/boot-options.rst b/Documentation/x86/x86_64/boot-options.rst
+index ccb7e86bf8d9..eaecb5d89167 100644
+--- a/Documentation/x86/x86_64/boot-options.rst
++++ b/Documentation/x86/x86_64/boot-options.rst
+@@ -317,3 +317,17 @@ Miscellaneous
+     Do not use GB pages for kernel direct mappings.
+   gbpages
+     Use GB pages for kernel direct mappings.
++
++
++AMD SEV (Secure Encrypted Virtualization)
++=========================================
++Options relating to AMD SEV, specified via the following format:
++
++::
++
++   sev=option1[,option2]
++
++The available options are:
++
++   debug
++     Enable debug messages.
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index c8733725d8bf..70ecc6e2f251 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -112,6 +112,13 @@ DEFINE_STATIC_KEY_FALSE(sev_es_enable_key);
+ 
+ static DEFINE_PER_CPU(struct sev_es_save_area *, sev_vmsa);
+ 
++struct sev_config {
++	__u64 debug		: 1,
++	      __reserved	: 63;
++};
++
++static struct sev_config sev_cfg __read_mostly;
++
+ static __always_inline bool on_vc_stack(struct pt_regs *regs)
+ {
+ 	unsigned long sp = regs->sp;
+@@ -2042,6 +2049,23 @@ void __init snp_abort(void)
+ 	sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
+ }
+ 
++static void dump_cpuid_table(void)
++{
++	const struct snp_cpuid_table *cpuid_table = snp_cpuid_get_table();
++	int i = 0;
++
++	pr_info("count=%d reserved=0x%x reserved2=0x%llx\n",
++		cpuid_table->count, cpuid_table->__reserved1, cpuid_table->__reserved2);
++
++	for (i = 0; i < SNP_CPUID_COUNT_MAX; i++) {
++		const struct snp_cpuid_fn *fn = &cpuid_table->fn[i];
++
++		pr_info("index=%3d fn=0x%08x subfn=0x%08x: eax=0x%08x ebx=0x%08x ecx=0x%08x edx=0x%08x xcr0_in=0x%016llx xss_in=0x%016llx reserved=0x%016llx\n",
++			i, fn->eax_in, fn->ecx_in, fn->eax, fn->ebx, fn->ecx,
++			fn->edx, fn->xcr0_in, fn->xss_in, fn->__reserved);
++	}
++}
++
+ /*
+  * It is useful from an auditing/testing perspective to provide an easy way
+  * for the guest owner to know that the CPUID table has been initialized as
+@@ -2059,6 +2083,26 @@ static int __init report_cpuid_table(void)
+ 	pr_info("Using SNP CPUID table, %d entries present.\n",
+ 		cpuid_table->count);
+ 
++	if (sev_cfg.debug)
++		dump_cpuid_table();
++
+ 	return 0;
+ }
+ arch_initcall(report_cpuid_table);
++
++static int __init init_sev_config(char *str)
++{
++	char *s;
++
++	while ((s = strsep(&str, ","))) {
++		if (!strcmp(s, "debug")) {
++			sev_cfg.debug = true;
++			continue;
++		}
++
++		pr_info("SEV command-line option '%s' was not recognized\n", s);
++	}
++
++	return 1;
++}
++__setup("sev=", init_sev_config);
+-- 
+2.35.1
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

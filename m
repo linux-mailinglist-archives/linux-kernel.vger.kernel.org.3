@@ -2,107 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9EA4E751D
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:34:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCB94E751F
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354778AbiCYOgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 10:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
+        id S1359065AbiCYOgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 10:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237056AbiCYOgI (ORCPT
+        with ESMTP id S237056AbiCYOgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 10:36:08 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F079853E2C;
-        Fri, 25 Mar 2022 07:34:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648218875; x=1679754875;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=zUmqoASe1g47J7WaVh6lOsEwgkOYKF3XKkW5XTAmW/c=;
-  b=Ek2zmGs7TJya4TdRy9DsP71aKoUZXVcsI3dGHJL0+o3GeNb1JlccOfep
-   AGB+Luj2ELB7V2u3z/DTYRJJ9VKHES5KcHf9Bp4Y5PPRnfNijWPUf8b5x
-   RIaSEk/GOAk9dyDMSh7JuthXL0efePf/L5yZpNVWf3oUjZf6KKLkPyj5H
-   DxWKImmUiX+UB2s6SSvHQR+MoaCLMDPxJV9jsvtq3APcS9ITRmkGFx225
-   4mKTRWUGEFjHEAEt7uq73AqOtlf9sbZVATXMMEbK4znMNfBle0xNn427M
-   kgeEnqzaHtahRIZ03P4yib4uTUUDS3mCW3iV2fSg409vOFi2exzUt55Xc
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="246120474"
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="246120474"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 07:34:34 -0700
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="602067416"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 07:34:30 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nXl0k-006RYj-8d;
-        Fri, 25 Mar 2022 16:33:54 +0200
-Date:   Fri, 25 Mar 2022 16:33:54 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 4/9] device property: add
- fwnode_property_read_string_index()
-Message-ID: <Yj3S0g9kaykY6S+A@smile.fi.intel.com>
-References: <20220325113148.588163-1-clement.leger@bootlin.com>
- <20220325113148.588163-5-clement.leger@bootlin.com>
+        Fri, 25 Mar 2022 10:36:38 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450C854699;
+        Fri, 25 Mar 2022 07:35:03 -0700 (PDT)
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 22PEYoDA001738;
+        Fri, 25 Mar 2022 23:34:51 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 22PEYoDA001738
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1648218891;
+        bh=sosyWOYABfHivmikVkrJxLdgAyG42ZrPiILrb7k3JpI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=em2XlG/P0VJO+1mbSUGT9EzZ2/uvnEGuqK3OC3D+nwoGPp5VOoBWGNeN6rXwxwdOJ
+         eDAwgr/awPNiv06C43YC40W88RgdWK7ivQRITlzCXAebwLNhuNs4Ics8H+8t4TZ1op
+         /Mn4WZo2p6bMekAc8Vc/CLh5RRYEjTeLcsZkm5lihKqfn0Cds7Ba0hhScfZSxfvP9F
+         1bkP5MM+0GiMnFHbMRrKGuJ9odkQbSOuzKBSYGB9L7i+3xYQvZstmiY/qFqOjBKZVS
+         NVg21tLYrsjAeczPT7VNQYpnc0vPQ7fX0kXnap1bTcHfVz267QyNGqFvgEPPsBFqSX
+         gVGreE6PTBUYQ==
+X-Nifty-SrcIP: [209.85.216.52]
+Received: by mail-pj1-f52.google.com with SMTP id jx9so7720027pjb.5;
+        Fri, 25 Mar 2022 07:34:51 -0700 (PDT)
+X-Gm-Message-State: AOAM5304PJgUcmIHKfZu6xwvCBPFfu4tU9ScgJcX1DzFuxX7XYi/e4Az
+        ZtcpLMFY7mhBVP56G+0pLCmM0MmjqUevQViYt3o=
+X-Google-Smtp-Source: ABdhPJyJUFYzEdsl9QhQ2x/nN4ufj79OsmqAlSSTs1D9dGQn6408BAISmYDdWCOxYhCRERIM8jPdkO016xH3xxBs2HM=
+X-Received: by 2002:a17:902:b68c:b0:153:bd06:85ad with SMTP id
+ c12-20020a170902b68c00b00153bd0685admr11951253pls.99.1648218890237; Fri, 25
+ Mar 2022 07:34:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220325113148.588163-5-clement.leger@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220325131348.3995-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220325131348.3995-1-andriy.shevchenko@linux.intel.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 25 Mar 2022 23:34:06 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAR9HS7LK5D-07i8_tFcwd=uiHEFu05n0t_UuFZExcfBpw@mail.gmail.com>
+Message-ID: <CAK7LNAR9HS7LK5D-07i8_tFcwd=uiHEFu05n0t_UuFZExcfBpw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] Makefile.extrawarn: Turn off -Werror when extra
+ warnings are enabled
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 12:31:43PM +0100, Clément Léger wrote:
-> Add fwnode_property_read_string_index() function which allows to
-> retrieve a single string from an array by its index. This function is
-> the equivalent of of_property_read_string_index() but for fwnode
-> support.
+On Fri, Mar 25, 2022 at 10:13 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> When `make W=1 ...` is executed the level 1 warnings become errors,
+> due to recent change in some of the defconfigs, and fail the build.
+> Since there are a lot of warnings on the level 1 are still present
+> in the defconfigs at least for x86, let disable -Werror in such case.
 
-...
 
-> +	ret = fwnode_call_int_op(fwnode, property_read_string_array, propname,
-> +				 string, 1, index);
-> +	if (ret == -EINVAL && !IS_ERR_OR_NULL(fwnode) &&
-> +	    !IS_ERR_OR_NULL(fwnode->secondary))
-> +		ret = fwnode_call_int_op(fwnode->secondary,
-> +					 property_read_string_array, propname,
-> +					 string, 1, index);
+commit b339ec9c229aaf399296a120d7be0e34fbc355ca
+made WERROR default to COMPILE_TEST.
 
-This is not fully correct. See [1] for the details.
-I hope to send the new version just after the merge window ends.
+WERROR should not be enabled for regular builds.
 
-[1]: https://lore.kernel.org/lkml/20220308123712.18613-1-andriy.shevchenko@linux.intel.com/
+b9080ba4a6ec should be reverted.
+
+
+
+
+
+> Fixes: b9080ba4a6ec ("x86/defconfig: Enable WERROR")
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  scripts/Makefile.extrawarn | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> index 650d0b8ceec3..c81d74ef6c90 100644
+> --- a/scripts/Makefile.extrawarn
+> +++ b/scripts/Makefile.extrawarn
+> @@ -94,3 +94,10 @@ KBUILD_CFLAGS += $(call cc-option, -Wpacked-bitfield-compat)
+>  KBUILD_CPPFLAGS += -DKBUILD_EXTRA_WARN3
+>
+>  endif
+> +
+> +#
+> +# Turn off -Werror when extra warnings are enabled
+> +#
+> +ifneq ($(KBUILD_EXTRA_WARN),)
+> +       KBUILD_CFLAGS += -Wno-error
+> +endif
+> --
+> 2.35.1
+>
+
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Best Regards
+Masahiro Yamada

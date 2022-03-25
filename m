@@ -2,156 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB274E78E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:25:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6484E78ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376788AbiCYQ1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 12:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60676 "EHLO
+        id S1355297AbiCYQcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 12:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241341AbiCYQ1A (ORCPT
+        with ESMTP id S241341AbiCYQcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 12:27:00 -0400
-Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E72DA6C9;
-        Fri, 25 Mar 2022 09:25:24 -0700 (PDT)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-        t=1648225521; bh=CQVTQ0YWUyVqJTQIKyyy3fv+ewiFx6OvdfGg4mW6pTQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=dY6s8FZcGbx4M3Ov5kHFWbz37pKFj65G1OC6fBB8z/tVV+am88ZfoF14ED65xxRfy
-         fOLQlXZTlO9XnrrFbC9jdp9qP8CzWxIoIJ9tmfXHq2P/R5yHN396bTH6CKZYI5a8WW
-         DD3bdPHqaN8gCGW78pwoabnJBY2snukIyApgMIoAqaA9Vdl2OUjDqBtuq40B49gIBc
-         w+FVDx4iSZKjE/araq8XXw8Ex3/qMIjxUaNZ8Exy3fR+fRHCPfJikWMxuYW7fVYSRZ
-         iv5BKTJDyv5nkS+fmdfKnF9fqjQ8Q5kgi4mjFJqFWUv15ynkDAsA+TI670+ZfI4GOK
-         IWwWkpT3eVt0w==
-To:     mbizon@freebox.fr, Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Olha Cherevyk <olha.cherevyk@gmail.com>,
-        iommu <iommu@lists.linux-foundation.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Fri, 25 Mar 2022 12:32:09 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FF44E38B;
+        Fri, 25 Mar 2022 09:30:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648225835; x=1679761835;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=IsvoGIwKuaSZVlp8CRIX2eressldpJyF130eHQPZqvU=;
+  b=HkjH/sMgSOiN973AFECdoFopbBJCZlIq9xYMZN8xJda/9nUQwtoYPwsY
+   SFfAqkLVvau2vEnZ7nhX1Tof+yhVu6wn6WkTvjZYAvElsrHOckL2vg6+J
+   cLFCn1ZSABnvjDSValyZHq7HESZELE9sa+UgNazi/GoZ6EuaSraPIudWa
+   jnmS4QLzyZHk5BnAJD6dZuX7lRKr3zl3eQcT3U1TY+Jykbv3bxYXxWx5A
+   M10/eCtZgmMin0z9MrLAqEXfA1SAGhxTCMN9WeMsJz8oWS7Ny+ulLc7kU
+   x4UocNev4iRPjRExEMpUrol97dJXPFJVbv82Ox5RoZbRIh4JaZgWq4Br6
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="319375621"
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="319375621"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 09:30:34 -0700
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="520255143"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 09:30:29 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nXmoz-006Ugu-HS;
+        Fri, 25 Mar 2022 18:29:53 +0200
+Date:   Fri, 25 Mar 2022 18:29:53 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
- ath9k-based AP
-In-Reply-To: <31434708dcad126a8334c99ee056dcce93e507f1.camel@freebox.fr>
-References: <1812355.tdWV9SEqCh@natalenko.name>
- <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
- <20220324055732.GB12078@lst.de> <4386660.LvFx2qVVIh@natalenko.name>
- <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com> <878rsza0ih.fsf@toke.dk>
- <4be26f5d8725cdb016c6fdd9d05cfeb69cdd9e09.camel@freebox.fr>
- <20220324163132.GB26098@lst.de>
- <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com> <871qyr9t4e.fsf@toke.dk>
- <CAHk-=whUQCCaQXJt3KUeQ8mtnLeVXEScNXCp+_DYh2SNY7EcEA@mail.gmail.com>
- <31434708dcad126a8334c99ee056dcce93e507f1.camel@freebox.fr>
-Date:   Fri, 25 Mar 2022 17:25:21 +0100
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <87a6de80em.fsf@toke.dk>
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 6/9] i2c: fwnode: add fwnode_find_i2c_adapter_by_node()
+Message-ID: <Yj3uATh/pkTyYTUi@smile.fi.intel.com>
+References: <20220325113148.588163-1-clement.leger@bootlin.com>
+ <20220325113148.588163-7-clement.leger@bootlin.com>
+ <Yj3TSBEY/P7d8XJj@smile.fi.intel.com>
+ <20220325160927.30e5aef8@fixe.home>
+ <Yj3mO/Co/RdlZnV+@smile.fi.intel.com>
+ <20220325170439.75ce012d@fixe.home>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220325170439.75ce012d@fixe.home>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maxime Bizon <mbizon@freebox.fr> writes:
+On Fri, Mar 25, 2022 at 05:04:39PM +0100, Clément Léger wrote:
+> Le Fri, 25 Mar 2022 17:56:43 +0200,
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> a écrit :
 
-> On Thu, 2022-03-24 at 12:26 -0700, Linus Torvalds wrote:
->
->> 
->> It's actually very natural in that situation to flush the caches from
->> the CPU side again. And so dma_sync_single_for_device() is a fairly
->> reasonable thing to do in that situation.
->> 
->
-> In the non-cache-coherent scenario, and assuming dma_map() did an
-> initial cache invalidation, you can write this:
->
-> rx_buffer_complete_1(buf)
-> {
-> 	invalidate_cache(buf, size)
-> 	if (!is_ready(buf))
-> 		return;
-> 	<proceed with receive>
-> }
->
-> or 
->
-> rx_buffer_complete_2(buf)
-> {
-> 	if (!is_ready(buf)) {
-> 		invalidate_cache(buf, size)
-> 		return;
-> 	}
-> 	<proceed with receive>
-> }
->
-> The latter is preferred for performance because dma_map() did the
-> initial invalidate.
->
-> Of course you could write:
->
-> rx_buffer_complete_3(buf)
-> {
-> 	invalidate_cache(buf, size)
-> 	if
-> (!is_ready(buf)) {
-> 		invalidate_cache(buf, size)
-> 		return;
-> 	}
-> 	
-> <proceed with receive>
-> }
->
->
-> but it's a waste of CPU cycles
->
-> So I'd be very cautious assuming sync_for_cpu() and sync_for_device()
-> are both doing invalidation in existing implementation of arch DMA ops,
-> implementers may have taken some liberty around DMA-API to avoid
-> unnecessary cache operation (not to blame them).
+...
 
-I sense an implicit "and the driver can't (or shouldn't) influence
-this" here, right?
+> > P.S. Interesting enough that Mika is listed as I2C ACPI maintainer and his
+> > email is not in the Cc. Please, check how you form Cc list for this series
+> > and include all parties next time.
+> 
+> I'm using get_maintainers.pl which does not return Mika nor Jarkko. I
+> was using --nogit which probably ruled out some contributors but not
+> them apparently.
 
-> For example looking at arch/arm/mm/dma-mapping.c, for DMA_FROM_DEVICE
->
-> sync_single_for_device()
->   => __dma_page_cpu_to_dev()
->     => dma_cache_maint_page(op=dmac_map_area)
->       => cpu_cache.dma_map_area()
->
-> sync_single_for_cpu()
->   => __dma_page_dev_to_cpu()
->     =>
-> __dma_page_cpu_to_dev(op=dmac_unmap_area)
->       =>
-> cpu_cache.dma_unmap_area()
->
-> dma_map_area() always does cache invalidate.
->
-> But for a couple of CPU variant, dma_unmap_area() is a noop, so
-> sync_for_cpu() does nothing.
->
-> Toke's patch will break ath9k on those platforms (mostly silent
-> breakage, rx corruption leading to bad performance)
+Yeah, in this case it seems some heuristics has to be used...
 
-Okay, so that would be bad obviously. So if I'm reading you correctly
-(cf my question above), we can't fix this properly from the driver side,
-and we should go with the partial SWIOTLB revert instead?
+-- 
+With Best Regards,
+Andy Shevchenko
 
--Toke
+

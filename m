@@ -2,161 +2,372 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274C74E6F5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 09:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 098664E6F64
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 09:25:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354207AbiCYI0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 04:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50802 "EHLO
+        id S1354666AbiCYI1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 04:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241127AbiCYI0b (ORCPT
+        with ESMTP id S1354231AbiCYI1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 04:26:31 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78065B7157
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 01:24:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648196695; x=1679732695;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0Wx1h6e8sHp5XGHZUVFBH1EF/fnkJWCy6zP38gcfjUY=;
-  b=Ax6TqUryWBUWe6N2BfLnDitO3uqVofmBj5WWFfYjUtxkQoeysV6m8wTV
-   fZBNpBCGs1Yod1TmZRC3asIEDCLevp9a3KhaQ+uYch4Wi2MI1jzSaH64+
-   DjouVIjoaZIXhfYnAy7oocg2YI4XYFyf1qHnyiPq1lXwov0jW3SbkN1PY
-   zg0Y1Md3PDn7dspHXSHzoYOx+K53j9ssCI/UzhscJsUtQTJK+G3Bt6ZBX
-   bzikxdEhP0/cCVU1JHIfFPO70RBm4NiTIDUyysRzvtAFFsYYn2WXMGiLj
-   7w48/DN0RYmVw7OO0HV7HzAbuVJivE7iX7Nb9anIPFzupQEMyj9DhTSZ2
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="240741638"
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="240741638"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 01:24:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="584396422"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 25 Mar 2022 01:24:52 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nXfFb-000Ly0-UJ; Fri, 25 Mar 2022 08:24:51 +0000
-Date:   Fri, 25 Mar 2022 16:24:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: drivers/net/ethernet/smsc/smc91c92_cs.c:447: undefined reference to
- `ioremap'
-Message-ID: <202203251649.NgVhssp8-lkp@intel.com>
+        Fri, 25 Mar 2022 04:27:00 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0668BCC527
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 01:25:25 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id qx21so13807910ejb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 01:25:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=vxuEjt+x3FHatgD8gb0ERxw6gFeQLnKCXkVjQiYkkvo=;
+        b=UoZ7RxzG3BkXZSKrkriILIdVE3pUvEj2qzCzOPDl5a7OjO8B4QBLOTr6a3LDfWxcAm
+         HLvWWiWzJP2yK4lSo2Nr3/fKeiLGM5jcNpnHGCSPt2hsSw7eFeM5u7WuwkhBMOtpMije
+         ttOV8ssNwBAN5AXWqO0t98vth1/VT16efjk5s9j5eb5XaFPD/THCYV3NvMXPiCYhEPKp
+         t8eXs3j3DbpLU7+GFvK6AXM4Hx3rPhWnklIcrGVYvwURMU+oWMUhulTfK5KZI1SkbSWW
+         +N3awaot63tAIIefDdYlQobQKENCvtv+0gbS0kwTdLMa51E64dB/kVnk7J/VOeVo/rQc
+         asGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=vxuEjt+x3FHatgD8gb0ERxw6gFeQLnKCXkVjQiYkkvo=;
+        b=lORbp9rI1rblmdCn6KVwm79JMMVOikHg7xcoYNO+G4PoFV7A1zdwR1WhOpWCgRICTT
+         cK/GoGI/Hsy/b1ITiNl70MXAXhRVOiVQSaLUv0PjxoSXFGbzY5uXzTWNn8GAIFgynI3m
+         3Sdp6od+dfE7kK67W8WRg9JdfD3lNDNQWhKNZkucuHvfhBCjYllYGIFW4kwtIuAE5X7V
+         V6N2vkG5XSEufrFsvLGi554pgyXEhN/UTrHEah75IFjiD1QN+t3tPhkFPqnlvozXOpGU
+         v5Kgl63c/cGtsLEPt6iungwkZC4nsKVXqY2BdKNb9z8TnAiTykQLiQtML4kmLbYyC5RQ
+         RpNA==
+X-Gm-Message-State: AOAM532RsIizabXKmHC2c09tKguWAfr53O3wptkeOhsPNEUwjDP8ft5R
+        lKfHMz8INWoV6M4+edOdQupd83Z+rtPKrohaxqA=
+X-Google-Smtp-Source: ABdhPJyvDxlfqslKHwgFMqg391XIWsdAF/iAkQ7dANXTahtI83BnSK2dyFuHwuGlhCq0vIRqDPn4eFdMZ/8lu8oGMVI=
+X-Received: by 2002:a17:906:d555:b0:6db:148e:5cc with SMTP id
+ cr21-20020a170906d55500b006db148e05ccmr10001431ejc.63.1648196722540; Fri, 25
+ Mar 2022 01:25:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Fri, 25 Mar 2022 08:25:10 +0000
+Message-ID: <CAHpNFcPpO+hi3v4hpjqQyt0sfHVkOk=pcYwP9QmzWDv+=crGRA@mail.gmail.com>
+Subject: You both know console controllers need a lot more than basic
+ bluetooth or simply the security this code offers? offer more but implement
+ this! RS
+To:     mobile@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,PLING_QUERY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   34af78c4e616c359ed428d79fe4758a35d2c5473
-commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug: make DEBUG_INFO selectable from a choice
-date:   30 hours ago
-config: s390-randconfig-r022-20220325 (https://download.01.org/0day-ci/archive/20220325/202203251649.NgVhssp8-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f9b3cd24578401e7a392974b3353277286e49cee
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
+You both know console controllers need a lot more than basic bluetooth
+or simply the security this code offers? offer more but implement
+this! RS
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
 
-All errors (new ones prefixed by >>):
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
 
-   s390-linux-ld: drivers/net/ethernet/altera/altera_tse_main.o: in function `request_and_map':
-   drivers/net/ethernet/altera/altera_tse_main.c:1335: undefined reference to `devm_ioremap'
-   s390-linux-ld: drivers/net/ethernet/smsc/smc91c92_cs.o: in function `mhz_mfc_config':
->> drivers/net/ethernet/smsc/smc91c92_cs.c:447: undefined reference to `ioremap'
-   s390-linux-ld: drivers/net/ethernet/smsc/smc91c92_cs.o: in function `smc91c92_release':
->> drivers/net/ethernet/smsc/smc91c92_cs.c:962: undefined reference to `iounmap'
->> s390-linux-ld: drivers/net/ethernet/smsc/smc91c92_cs.c:962: undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/ethernet/xircom/xirc2ps_cs.o: in function `xirc2ps_release':
->> drivers/net/ethernet/xircom/xirc2ps_cs.c:929: undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/ethernet/xircom/xirc2ps_cs.o: in function `xirc2ps_config':
->> drivers/net/ethernet/xircom/xirc2ps_cs.c:838: undefined reference to `ioremap'
-   s390-linux-ld: drivers/net/ethernet/xircom/xirc2ps_cs.o: in function `xirc2ps_release':
->> drivers/net/ethernet/xircom/xirc2ps_cs.c:929: undefined reference to `iounmap'
-   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
-   drivers/pcmcia/cistpl.c:103: undefined reference to `ioremap'
-   s390-linux-ld: drivers/pcmcia/cistpl.c:110: undefined reference to `iounmap'
-   s390-linux-ld: drivers/pcmcia/cistpl.c:117: undefined reference to `iounmap'
-   s390-linux-ld: drivers/pcmcia/cistpl.c:118: undefined reference to `ioremap'
-   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
-   drivers/pcmcia/cistpl.c:72: undefined reference to `iounmap'
+https://science.n-helix.com/2022/03/ice-ssrtp.html
+
+https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
+https://science.n-helix.com/2021/11/wave-focus-anc.html
+https://science.n-helix.com/2021/12/3d-audio-plugin.html
+
+ICE-SSRTP GEA Replacement 2022 + (c)RS
+
+IiCE-SSR for digital channel infrastructure can help heal GPRS+ 3G+ 4G+ 5G+
+
+Time NTP Protocols : is usable in 2G+ <> 5G+LTE Network SIM
+
+ICE-SSRTP Encryption AES,Blake2, Poly ChaCha, SM4, SHA2, SHA3, GEA-1 and GEA-2
+'Ideal for USB Dongle & Radio' in Rust RS ' Ideal for Quality TPM
+Implementation'
+
+"GEA-1 and GEA-2, which are very similar (GEA-2 is just an extension
+of GEA-1 with a higher amount of processing, and apparently not
+weakened) are bit-oriented stream ciphers."
+
+IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
+
+Interleaved signals help Isolate noise from a Signal Send & Receive ...
+
+Overlapping inverted waves are a profile for complex audio & FFT is the result.
+
+Interleaved, Inverted & Compressed & a simple encryption?
+
+Example of use:
+
+Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade marker
+
+Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
+Interleaved channel BAND.
+
+Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
+Coprocessor digital channel selector &
+
+channel Key selection based on unique..
+
+Crystal time Quartz with Synced Tick (Regulated & modular)
+
+All digital interface and resistor ring channel & sync selector with
+micro band tuning firmware.
+
+(c)Rupert S
+
+*
+
+Good for cables ? and noise ?
+
+Presenting :  IiCE-SSR for digital channel infrastructure & cables
+<Yes Even The Internet &+ Ethernet 5 Band>
+
+So the question of interleaved Bands & or signal inversion is a simple
+question but we have,
+
+SSD & HDD Cables & does signal inversion help us? Do interleaving bands help us?
+
+In Audio inversion would be a strange way to hear! but the inversion
+does help alleviate ...
+
+Transistor emission fatigue...
+
+IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
+
+Interleaved signals help Isolate noise from a Signal Send & Receive ...
+
+Overlapping inverted waves are a profile for complex audio & FFT is the result.
+
+Interleaved, Inverted & Compressed & a simple encryption?
+
+Good for cables ? and noise ?
+
+Presenting : IiCE for digital channel infrastructure & cables <Yes
+Even The Internet &+ Ethernet 5 Band>
+
+(c) Rupert S
+
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
+
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+
+https://science.n-helix.com/2022/03/ice-ssrtp.html
+
+Integral to Telecoms Security TRNG
+
+*RAND OP Ubuntu :
+https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
+
+https://pollinate.n-helix.com
+
+*
+
+***** Dukes Of THRUST ******
+
+Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade markerz
+
+Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
+Interleaved channel BAND.
+
+Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
+Coprocessor digital channel selector &
+
+channel Key selection based on unique..
+
+Crystal time Quartz with Synced Tick (Regulated & modular)
+
+All digital interface and resistor ring channel & sync selector with
+micro band tuning firmware.
+
+(c)Rupert S
+
+Dev/Random : Importance
+
+Dev/Random : Importance : Our C/T/RNG Can Help GEA-2 Open Software
+implementation of 3 Bits (T/RNG) Not 1 : We need Chaos : GEA-1 and
+GEA-2 Implementations we will improve with our /Dev/Random
+
+Our C/T/RNG Can Help GEA-2 Open Software implementation of 3 Bits
+(T/RNG) Not 1 : We need Chaos : GEA-1 and GEA-2 Implementations we
+will improve with our /Dev/Random
+
+We can improve GPRS 2G to 5G networks still need to save power, GPRS
+Doubles a phones capacity to run all day,
+
+Code can and will be improved, Proposals include:
+
+Blake2
+ChaCha
+SM4
+SHA2
+SHA3
+
+Elliptic Encipher
+AES
+Poly ChaCha
+
+Firstly we need a good solid & stable /dev/random
+
+So we can examine the issue with a true SEED!
+
+Rupert S https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+TRNG Samples & Method DRAND Proud!
+
+https://drive.google.com/file/d/1b_Sl1oI7qTlc6__ihLt-N601nyLsY7QU/view?usp=drive_web
+https://drive.google.com/file/d/1yi4ERt0xdPc9ooh9vWrPY1LV_eXV-1Wc/view?usp=drive_web
+https://drive.google.com/file/d/11dKUNl0ngouSIJzOD92lO546tfGwC0tu/view?usp=drive_web
+https://drive.google.com/file/d/10a0E4Gh5S-itzBVh0fOaxS7JS9ru-68T/view?usp=drive_web
+
+https://github.com/P1sec/gea-implementation
+
+"GEA-1 and GEA-2, which are very similar (GEA-2 is just an extension
+of GEA-1 with a higher amount of processing, and apparently not
+weakened) are bit-oriented stream ciphers."
+
+"A stream cipher, such as the well-known RC4 or GEA-1, usually works
+through using the Xor operation against a plaintext. The Xor operation
+being symmetrical, this means that encrypting should be considered the
+same operation as decrypting: GEA-1 and GEA-2 are basically
+pseudo-random data generators, taking a seed (the key, IV and
+direction bit of the GPRS data, which are concatenated),
+
+The generated random data (the keystream) is xored with the clear-text
+data (the plaintext) for encrypting. Then, later, the keystream is
+xored with the encrypted data (the ciphertext) for decrypting. That is
+why the functions called in the target library for decrypting and
+encrypting are the same.
+
+GEA-1 and GEA-2 are bit-oriented, unlike RC4 which is byte-oriented,
+because their algorithms generate only one bit of pseudo-random data
+at once (derived from their internal state), while algorithms like RC4
+generate no less than one byte at once (in RC4's case, derived from
+
+permutation done in its internal state). Even though the keystream
+bits are put together by the current encryption / decryption C and
+Rust libraries into bytes in order to generate usable keystream,
+obviously.
+
+Based on this, you can understand that GEA-1 and GEA-2 are LFSR:
+Linear Feedback Shift Register-oriented ciphers, because their
+internal state is stored into fixed-size registers. This includes the
+S and W registers which serve for initialization / key scheduling
+purposes and are respectively 64 and 97-bit wide registers, and the A,
+B, C (and for GEA-2 only D) registers which serve for the purpose of
+keystream generation, which are respectively 31, 32, 33 and 29-bit
+wide registers.
+
+On each iteration of the keystream generation, each register is
+bit-wise rotated by one position, while the bit being rotated from the
+left towards the right side (or conversely depending on in which bit
+order you internally represent your registers) is fed back to the
+algorithm and mutated depending on given conditions. Hence, the
+
+shifted-out bit is derived from other processing, and reinserted,
+while being for this reason possibly flipped depending on conditions
+depending on bits present at the other side of the given register.
+
+This is the explanation for the name of linear feedback shift register
+(shift because of the shift operation required for the rotation, and
+linear feedback because of the constant-time transform operation
+involved).
+
+The rest of the register may also be mutated at each iteration steps,
+as in the case of the GEA-1 and 2, whole fixed Xor sequences (which
+differ for each register) may be applied depending on whether the
+rotated bit is a 0 or a 1.
+
+Note that a step where the register iterates is called clocking (the
+register is clocked), and that the fixed points where the register may
+be Xor'ed when the rotated bit becomes a 1 are called taps. The linear
+function which may transmute the rotated bit at the clocking step
+(taking several bits of the original register as an input) is called
+the F function.
+
+Those kind of bit-oriented LFSR algorithms, such as GEA-1 and 2 (for
+GPRS) and A5/1 and 2 (for GSM), were designed this way for optimal
+hardware implementations in the late 80's and early 90's."
+
+*****
+
+IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
+
+Interleaved signals help Isolate noise from a Signal Send & Receive ...
+
+Overlapping inverted waves are a profile for complex audio & FFT is the result.
+
+Interleaved, Inverted & Compressed & a simple encryption?
+
+Good for cables ? and noise ?
+
+Presenting :  IiCE-SSR for digital channel infrastructure & cables
+<Yes Even The Internet &+ Ethernet 5 Band>
+
+So the question of interleaved Bands & or signal inversion is a simple
+question but we have,
+
+SSD & HDD Cables & does signal inversion help us? Do interleaving bands help us?
+
+In Audio inversion would be a strange way to hear! but the inversion
+does help alleviate ...
+
+Transistor emission fatigue...
+
+IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
+
+Interleaved signals help Isolate noise from a Signal Send & Receive ...
+
+Overlapping inverted waves are a profile for complex audio & FFT is the result.
+
+Interleaved, Inverted & Compressed & a simple encryption?
+
+Good for cables ? and noise ?
+
+Presenting : IiCE for digital channel infrastructure & cables <Yes
+Even The Internet &+ Ethernet 5 Band>
+
+(c) Rupert S
 
 
-vim +447 drivers/net/ethernet/smsc/smc91c92_cs.c
+***** Dukes Of THRUST ******
 
-b54bf94bf91e4c drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-02  422  
-fba395eee7d3f3 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2006-03-31  423  static int mhz_mfc_config(struct pcmcia_device *link)
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  424  {
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  425      struct net_device *dev = link->priv;
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  426      struct smc_private *smc = netdev_priv(dev);
-b5cb259e7fac55 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-24  427      unsigned int offset;
-b54bf94bf91e4c drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-02  428      int i;
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  429  
-00990e7ce0b0e5 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-30  430      link->config_flags |= CONF_ENABLE_SPKR | CONF_ENABLE_IRQ |
-00990e7ce0b0e5 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-30  431  	    CONF_AUTO_SET_IO;
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  432  
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  433      /* The Megahertz combo cards have modem-like CIS entries, so
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  434         we have to explicitly try a bunch of port combinations. */
-b54bf94bf91e4c drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-02  435      if (pcmcia_loop_config(link, mhz_mfc_config_check, NULL))
-dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  436  	    return -ENODEV;
-dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  437  
-9a017a910346af drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-24  438      dev->base_addr = link->resource[0]->start;
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  439  
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  440      /* Allocate a memory window, for accessing the ISR */
-cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  441      link->resource[2]->flags = WIN_DATA_WIDTH_8|WIN_MEMORY_TYPE_AM|WIN_ENABLE;
-cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  442      link->resource[2]->start = link->resource[2]->end = 0;
-cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  443      i = pcmcia_request_window(link, link->resource[2], 0);
-4c89e88bfde6a3 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-03  444      if (i != 0)
-dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  445  	    return -ENODEV;
-dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  446  
-cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28 @447      smc->base = ioremap(link->resource[2]->start,
-cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  448  		    resource_size(link->resource[2]));
-7feabb6412ea23 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-29  449      offset = (smc->manfid == MANFID_MOTOROLA) ? link->config_base : 0;
-cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  450      i = pcmcia_map_mem_page(link, link->resource[2], offset);
-8e95a2026f3b43 drivers/net/pcmcia/smc91c92_cs.c Joe Perches       2009-12-03  451      if ((i == 0) &&
-8e95a2026f3b43 drivers/net/pcmcia/smc91c92_cs.c Joe Perches       2009-12-03  452  	(smc->manfid == MANFID_MEGAHERTZ) &&
-8e95a2026f3b43 drivers/net/pcmcia/smc91c92_cs.c Joe Perches       2009-12-03  453  	(smc->cardid == PRODID_MEGAHERTZ_EM3288))
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  454  	    mhz_3288_power(link);
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  455  
-dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  456      return 0;
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  457  }
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  458  
+Autism, Deafness & the hard of hearing : In need of ANC & Active audio
+clarification or correction 2022-01
 
-:::::: The code at line 447 was first introduced by commit
-:::::: cdb138080b78146d1cdadba9f5dadbeb97445b91 pcmcia: do not use win_req_t when calling pcmcia_request_window()
+Sony & a few others make noise cancelling headphones that are suitable
+for people with Acute disfunction to brain function for ear drums ...
+Attention deficit or Autism,
+The newer Sony headsets are theoretically enablers of a clear
+confusion free world for Autistic people..
+Reaching out to a larger audience of people simply annoyed by a
+confusing world; While they listen to music..
+Can and does protect a small percentage of people who are confused &
+harassed by major discord located in all jurisdictions of life...
 
-:::::: TO: Dominik Brodowski <linux@dominikbrodowski.net>
-:::::: CC: Dominik Brodowski <linux@dominikbrodowski.net>
+Crazy noise levels, Or simply drowned in HISSING Static:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Search for active voice enhanced noise cancellation today.
+
+Rupert S https://science.n-helix.com
+
+
+https://science.n-helix.com/2021/11/wave-focus-anc.html
+
+https://science.n-helix.com/2021/10/noise-violation-technology-bluetooth.html
+
+
+https://www.orosound.com/
+
+https://www.consumerreports.org/noise-canceling-headphone/best-noise-canceling-headphones-of-the-year-a1166868524/

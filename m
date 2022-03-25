@@ -2,145 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 792E14E7A03
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 18:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8662D4E79BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 18:15:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239351AbiCYRUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 13:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
+        id S1346701AbiCYRRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 13:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234622AbiCYRUs (ORCPT
+        with ESMTP id S229808AbiCYRRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 13:20:48 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DC4ECC73
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 10:19:07 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id i67-20020a1c3b46000000b0038ce25c870dso1296565wma.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 10:19:07 -0700 (PDT)
+        Fri, 25 Mar 2022 13:17:07 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E04E7F56
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 10:15:33 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id z12so662616lfu.10
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 10:15:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FaQcjw0Oe/ViCTTuFvcZ5DbpUtBdonZ5NoR4+x/b/mM=;
-        b=q02Yc/wGGHipHe+rqcIDczhkFTYBkCXNRcjEaizSrgSJSQk0FcBIVTvhOBAQ+15RPF
-         15EnZCNGxO/rh/t5Bptvfr1UKzXfH3o68t/uFyTZbvYxkGCMctksAnUHZdxSj6Ssx5sb
-         ZsWpd8V9SvZbYNVChxVyeCUJ1TvEnvNTUnKALgOwqoqKibmVvTN23VqehQN+Rnws1taU
-         e6bjFfjYSBVPOjRfsB/M7W8aQ1HW6ebobxCF4cGm+oqbJb7cgl9u0ZJRn9I4Hx3sQou+
-         pxi5mHjGkSf3wzIrzRLNklRbUzIyhq4YyxCGLnejv93i9TXyu3b5oP/AMswNQWByss5V
-         sCOA==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=j61R5L89u+/vfXXexWezMtO01q4KBgFfkSQElj7/TZs=;
+        b=bXxcEdoQ56AMcT9jO4mrCLjfMCMwff7lkz1uyivOhsc1yVQywFalef59YfGE+40Ib/
+         AvHTYwxImBGmO4Ft12aNmlHycRr7AUduqbdV6LHsmJuV/SmEUJm28rTySzOe4/2Z0R8o
+         vPpd9hHe8xTR+nRcALipQSmiYly4gC1NcO6w4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FaQcjw0Oe/ViCTTuFvcZ5DbpUtBdonZ5NoR4+x/b/mM=;
-        b=ylJFYZ1rILshXkmGrqP3dLA5UDhR6Ne06MSPO6wytJZaQHRrGo6GEpG/AZ14l60mVp
-         P3qpbZkm5aiDnF1nOmrd0y8Dq3gNWAbIHLhjGZDB/9qwyZKS7OXY7+xDuS/+FkpYEJwo
-         ANEdr7OqyAKMn+sZBn/ZyTbQz0FjVhTVHEc7ezq9W7lC63+/JnsEM/iI8rpuVcc8Jn7m
-         4jUMnDjNXuIH2SlAmsG/jlFkY+eL6L1UWi3z4SRQyouiexxHFVkO2XTM6UPWQ+gDYTKR
-         2XZupa8x0p2h9Icbqez4vih5n8eiFLl5i/VEYeMz8PhBqbjTiRPRFeeGuw3WdJZ4kUIJ
-         Ikvg==
-X-Gm-Message-State: AOAM531q7aqbmsmARLTcYd94ARTIuGczSqDGLuEbyva6qFtm8JX/zE88
-        fvveAAdQ9qKkpKzIUb3WMbSipg==
-X-Google-Smtp-Source: ABdhPJwePYYbDEL3jskId8G6Vh/wDKonckD8/zRMt2PuaJN41Er7Io1HePBcu1Tfj+Zb+ttXKPbZcw==
-X-Received: by 2002:a05:600c:3ac7:b0:38b:f9c6:27b8 with SMTP id d7-20020a05600c3ac700b0038bf9c627b8mr10822009wms.75.1648228630495;
-        Fri, 25 Mar 2022 10:17:10 -0700 (PDT)
-Received: from localhost.localdomain (2a02-8440-6240-cc41-3074-96af-9642-0003.rev.sfr.net. [2a02:8440:6240:cc41:3074:96af:9642:3])
-        by smtp.gmail.com with ESMTPSA id p16-20020a5d6390000000b00203ffebddf3sm7547464wru.99.2022.03.25.10.17.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 10:17:10 -0700 (PDT)
-From:   Guillaume Ranquet <granquet@baylibre.com>
-To:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, matthias.bgg@gmail.com,
-        chunfeng.yun@mediatek.com, kishon@ti.com, vkoul@kernel.org,
-        deller@gmx.de, ck.hu@mediatek.com, jitao.shi@mediatek.com,
-        angelogioacchino.delregno@collabora.com
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        markyacoub@google.com
-Subject: [PATCH 13/22] drm/mediatek: dpi: move the yuv422_en_bit to SoC config
-Date:   Fri, 25 Mar 2022 18:15:02 +0100
-Message-Id: <20220325171511.23493-14-granquet@baylibre.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220325171511.23493-1-granquet@baylibre.com>
-References: <20220325171511.23493-1-granquet@baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=j61R5L89u+/vfXXexWezMtO01q4KBgFfkSQElj7/TZs=;
+        b=688iyNLCMG2LF6yDwdjZPF0I/MUe3WxDgeGzurIap396gsWTz8n42QbqLOGKA1jxcr
+         6ZM1ra46Og6ov/Lctvm9LIHoL6Jj92wpLSkFAAPlJ3fF8mM+vjdvoZcoyocrOOYvU5vK
+         Ancb1/G42vhUF+11Pw9avHDv8+6UJcf0L+OSbWluNLVkp+LGvDojHVDu7kcKnSXiawCH
+         Wq7rt4PDq2KVRn5JMrO8D571+VDuXXMTP/NCgYuxR48mmF0EkTpzM+ww/zz6UBb0meE1
+         NglsON4cT80DtVsy3PlSVJqEHwr/3or6u84WKdS5Gh8USBlAVKQN3h2EQomg/Ei8cj9L
+         fE6g==
+X-Gm-Message-State: AOAM533jAextvXWi3lwNmAMv4jUaAr3IxA3BKxMobC1jBXHrq6mA8xYW
+        +HnA6wVbe9QXx6OlwcYdLnsPadheyesXpvWTxiM=
+X-Google-Smtp-Source: ABdhPJylM/T9xqRRwcUqh2mI0GZGWqbjVNgMEp440YPHlAMruCU5YZGp0hNikaBGGkXfTDF5ZPHHEQ==
+X-Received: by 2002:ac2:4315:0:b0:448:2bb9:f11d with SMTP id l21-20020ac24315000000b004482bb9f11dmr8361583lfh.212.1648228531509;
+        Fri, 25 Mar 2022 10:15:31 -0700 (PDT)
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
+        by smtp.gmail.com with ESMTPSA id d20-20020ac241d4000000b004484fcc5d2csm766388lfi.36.2022.03.25.10.15.29
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 10:15:30 -0700 (PDT)
+Received: by mail-lj1-f171.google.com with SMTP id r22so11167574ljd.4
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 10:15:29 -0700 (PDT)
+X-Received: by 2002:a2e:9b10:0:b0:247:f28c:ffd3 with SMTP id
+ u16-20020a2e9b10000000b00247f28cffd3mr8695253lji.152.1648228529533; Fri, 25
+ Mar 2022 10:15:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220325171059.111208-1-jcmvbkbc@gmail.com>
+In-Reply-To: <20220325171059.111208-1-jcmvbkbc@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 25 Mar 2022 10:15:13 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiBTJccj3i5u1LQ5JtUvdmgcG40HNT+XSOyGxCa3Gtc5w@mail.gmail.com>
+Message-ID: <CAHk-=wiBTJccj3i5u1LQ5JtUvdmgcG40HNT+XSOyGxCa3Gtc5w@mail.gmail.com>
+Subject: Re: [PULL v2 00/18] xtensa updates for v5.18
+To:     Max Filippov <jcmvbkbc@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, Chris Zankel <chris@zankel.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add flexibility by moving the yuv422 en bit to SoC specific config
+On Fri, Mar 25, 2022 at 10:11 AM Max Filippov <jcmvbkbc@gmail.com> wrote:
+>
+>   https://github.com/jcmvbkbc/linux-xtensa.git tags/xtensa-20220325
 
-Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/gpu/drm/mediatek/mtk_dpi.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Oh, I had already taken the "git@github.com" one and fixed it up
+manually, but thanks for re-sending anyway ;)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 6d4d8c6ec47d..40254cd9d168 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -132,6 +132,7 @@ struct mtk_dpi_conf {
- 	/* HSIZE and VSIZE mask (no shift) */
- 	u32 hvsize_mask;
- 	u32 channel_swap_shift;
-+	u32 yuv422_en_bit;
- 	const struct mtk_dpi_yc_limit *limit;
- };
- 
-@@ -356,7 +357,8 @@ static void mtk_dpi_config_channel_swap(struct mtk_dpi *dpi,
- 
- static void mtk_dpi_config_yuv422_enable(struct mtk_dpi *dpi, bool enable)
- {
--	mtk_dpi_mask(dpi, DPI_CON, enable ? YUV422_EN : 0, YUV422_EN);
-+	mtk_dpi_mask(dpi, DPI_CON, enable ? dpi->conf->yuv422_en_bit : 0,
-+		     dpi->conf->yuv422_en_bit);
- }
- 
- static void mtk_dpi_config_csc_enable(struct mtk_dpi *dpi, bool enable)
-@@ -824,6 +826,7 @@ static const struct mtk_dpi_conf mt8173_conf = {
- 	.dimension_mask = HPW_MASK,
- 	.hvsize_mask = HSIZE_MASK,
- 	.channel_swap_shift = CH_SWAP,
-+	.yuv422_en_bit = YUV422_EN,
- 	.limit = &mtk_dpi_limit,
- };
- 
-@@ -839,6 +842,7 @@ static const struct mtk_dpi_conf mt2701_conf = {
- 	.dimension_mask = HPW_MASK,
- 	.hvsize_mask = HSIZE_MASK,
- 	.channel_swap_shift = CH_SWAP,
-+	.yuv422_en_bit = YUV422_EN,
- 	.limit = &mtk_dpi_limit,
- };
- 
-@@ -853,6 +857,7 @@ static const struct mtk_dpi_conf mt8183_conf = {
- 	.dimension_mask = HPW_MASK,
- 	.hvsize_mask = HSIZE_MASK,
- 	.channel_swap_shift = CH_SWAP,
-+	.yuv422_en_bit = YUV422_EN,
- 	.limit = &mtk_dpi_limit,
- };
- 
-@@ -867,6 +872,7 @@ static const struct mtk_dpi_conf mt8192_conf = {
- 	.dimension_mask = HPW_MASK,
- 	.hvsize_mask = HSIZE_MASK,
- 	.channel_swap_shift = CH_SWAP,
-+	.yuv422_en_bit = YUV422_EN,
- 	.limit = &mtk_dpi_limit,
- };
- 
--- 
-2.34.1
-
+                 Linus

@@ -2,103 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A364E7BED
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2804E7BFC
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234192AbiCYX1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 19:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
+        id S234210AbiCYX2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 19:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234183AbiCYX1X (ORCPT
+        with ESMTP id S234199AbiCYX1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 19:27:23 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0189540A2A
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 16:25:46 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id z6so10687119iot.0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 16:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ush+s9e72Ld/mAMuujmuTcHI5KT9ZcUa2jg3wuiLwbs=;
-        b=YGDVk45Mn4QhdExXlf1xqehkXOhja9d69ZLfZO/vLrYTmoZjb2BiT2knoq455syiKm
-         F0uUMHnKsDLN6DCaSvC6PwJ22YNue6b2WYPt9KK95b/6ixUN6Oey8B+2zVxu9KM2mQ07
-         kv8nP1I73xXBuxyh9ZZpUXTd2GqZ4Sx23k+W4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ush+s9e72Ld/mAMuujmuTcHI5KT9ZcUa2jg3wuiLwbs=;
-        b=aXoHAmT8giV5gd+rM3C09GkvEIwJ5lG6oEfQ41hXdqZLODMsQia5FMigovvq437puP
-         YCly/a3dPoNfblDzWFyFCPE/sJQL9ba7ZLV05zz8d/MEjWYjDKk27kQ8IbXikcEdrniX
-         2aJwvAZbEcPDh+ny3kvpC+xt4Yyt+0vm3FWniM9LYTOUQXxfWL9wg9+ahL+a4C8cSA/F
-         erZySkXk2dhQdbiwDgv/Xg3aIFfC9i9NqFB9mAR1s7KWK8/nypKZEAapf8gCNBhEL0YR
-         +M9atspBU+7G8m154O1wh44HqW6/2wZ6H1/BNSVsDEuoL+sAwhdXmci7btmHi3VQnaIb
-         z9+A==
-X-Gm-Message-State: AOAM532bj7WYJkpzOxLOUUJXj3fbWM2CRR8gDbB2Q9b9t8GgFWemItGg
-        eAfsR16u0wNT+i5m1I6VxuaRwA==
-X-Google-Smtp-Source: ABdhPJz/pgywuLQjbgejzLB/PsGAOQo386eTbtBACW+HYdUqJkDla9f68UBSZSWFJUTZfXbNPdJ6Mw==
-X-Received: by 2002:a02:2715:0:b0:323:55f3:8ae6 with SMTP id g21-20020a022715000000b0032355f38ae6mr1084226jaa.192.1648250745999;
-        Fri, 25 Mar 2022 16:25:45 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id m14-20020a924b0e000000b002c851d50838sm3610334ilg.30.2022.03.25.16.25.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 16:25:45 -0700 (PDT)
-Subject: Re: [PATCH 4.19 00/20] 4.19.237-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220325150417.010265747@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <9a40c39b-552c-b362-a1dd-2d5f57c43a68@linuxfoundation.org>
-Date:   Fri, 25 Mar 2022 17:25:44 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 25 Mar 2022 19:27:54 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0BB4A3F0;
+        Fri, 25 Mar 2022 16:26:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648250778; x=1679786778;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XkoxMwHd9gW4bb7hINhoqrJqu4OqA0ycYEJM8nkG41Y=;
+  b=M7SEuDo02qJ92C1ljlz5RJHBSPVtnvmGGUEqquHcbAKADXfTTXlhLjoW
+   sAuUC1XAoHiFbkMA4V9bHVrk5t85kEJxHxWwYudV6n4kIEiJ6yH6TE98X
+   JDkNVbN+F7v7IUXIjw8y5aiTjbqGOvO26TCSCNo+3MG4BRnfowYtf9dfS
+   u0iOZhFoSa6L8UhBgxdrSDqy5khDVsTEffeUAOz2KS/PJgxPM4CQ8AVuz
+   YKelimFVjq8Skyfvma7v7vF2ITzVdcTDeOju5eSJKOk7BZpW4ZY4bnNIJ
+   vbqFIKdFzNLNvtMZBHJPo+IPG8up9EFhcWAzQdKSH21TZ7lr6HT8t/Y4k
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="283615523"
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="283615523"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 16:26:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="553371036"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 25 Mar 2022 16:26:11 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nXtJq-000Mii-Nz; Fri, 25 Mar 2022 23:26:10 +0000
+Date:   Sat, 26 Mar 2022 07:25:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>, dhowells@redhat.com,
+        linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
+        linux-erofs@lists.ozlabs.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        fannaihao@baidu.com
+Subject: Re: [PATCH v6 03/22] cachefiles: notify user daemon with anon_fd
+ when looking up cookie
+Message-ID: <202203260720.uA5o7k5w-lkp@intel.com>
+References: <20220325122223.102958-4-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-In-Reply-To: <20220325150417.010265747@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220325122223.102958-4-jefflexu@linux.alibaba.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/25/22 9:04 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.237 release.
-> There are 20 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.237-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Hi Jeffle,
 
-Compiled and booted on my test system. No dmesg regressions.
+Thank you for the patch! Yet something to improve:
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+[auto build test ERROR on trondmy-nfs/linux-next]
+[also build test ERROR on rostedt-trace/for-next linus/master v5.17]
+[cannot apply to xiang-erofs/dev-test dhowells-fs/fscache-next next-20220325]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-thanks,
--- Shuah
+url:    https://github.com/0day-ci/linux/commits/Jeffle-Xu/fscache-erofs-fscache-based-on-demand-read-semantics/20220325-203555
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220326/202203260720.uA5o7k5w-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/ec8aa2f84eb47244377e4b822dd77d82ee54714a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jeffle-Xu/fscache-erofs-fscache-based-on-demand-read-semantics/20220325-203555
+        git checkout ec8aa2f84eb47244377e4b822dd77d82ee54714a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from fs/cachefiles/cache.c:11:
+>> fs/cachefiles/internal.h:285:9: warning: no previous prototype for function 'cachefiles_ondemand_daemon_read' [-Wmissing-prototypes]
+   ssize_t cachefiles_ondemand_daemon_read(struct cachefiles_cache *cache,
+           ^
+   fs/cachefiles/internal.h:285:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   ssize_t cachefiles_ondemand_daemon_read(struct cachefiles_cache *cache,
+   ^
+   static 
+   1 warning generated.
+--
+>> ld.lld: error: duplicate symbol: cachefiles_ondemand_daemon_read
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/cache.o:(cachefiles_ondemand_daemon_read)
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/daemon.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: cachefiles_ondemand_daemon_read
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/cache.o:(cachefiles_ondemand_daemon_read)
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/interface.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: cachefiles_ondemand_daemon_read
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/cache.o:(cachefiles_ondemand_daemon_read)
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/io.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: cachefiles_ondemand_daemon_read
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/cache.o:(cachefiles_ondemand_daemon_read)
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/key.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: cachefiles_ondemand_daemon_read
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/cache.o:(cachefiles_ondemand_daemon_read)
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/main.o:(.text+0x38C0)
+--
+>> ld.lld: error: duplicate symbol: cachefiles_ondemand_daemon_read
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/cache.o:(cachefiles_ondemand_daemon_read)
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/namei.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: cachefiles_ondemand_daemon_read
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/cache.o:(cachefiles_ondemand_daemon_read)
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/security.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: cachefiles_ondemand_daemon_read
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/cache.o:(cachefiles_ondemand_daemon_read)
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/volume.o:(.text+0x0)
+--
+>> ld.lld: error: duplicate symbol: cachefiles_ondemand_daemon_read
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/cache.o:(cachefiles_ondemand_daemon_read)
+   >>> defined at internal.h:287 (fs/cachefiles/internal.h:287)
+   >>> fs/cachefiles/xattr.o:(.text+0x0)
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

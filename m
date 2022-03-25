@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F1A4E77F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB1F4E77E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378240AbiCYPeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:34:31 -0400
+        id S1376790AbiCYPcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:32:17 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377966AbiCYPYp (ORCPT
+        with ESMTP id S1378317AbiCYPZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:24:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987BBEACAC;
-        Fri, 25 Mar 2022 08:19:27 -0700 (PDT)
+        Fri, 25 Mar 2022 11:25:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5335CECDB4;
+        Fri, 25 Mar 2022 08:20:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D127260AD0;
-        Fri, 25 Mar 2022 15:19:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7912C340EE;
-        Fri, 25 Mar 2022 15:19:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B3D9B82906;
+        Fri, 25 Mar 2022 15:15:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCF94C340F3;
+        Fri, 25 Mar 2022 15:15:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221566;
-        bh=Y5pIaoEdFTFs9L/tDgexSz2P1Acwz8ZcBhY5B8L0/Ds=;
+        s=korg; t=1648221310;
+        bh=ZL+8ydCMGRKhWsfFAPutnN1aOnRs3fe+7ylbkThUBKE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=edbYk9AxBbTTTzMvrC3gpODfVB4+14WNAoW2b0xt0/ujDKEyZuPFyrBgc/Fi19Jvm
-         VNIF7lDcIp9Tnlmb4MxZTd/X1ZqPaHPTO4TVdRFf4pwUf/InRA4UsxxF6P0w0ajywN
-         An7KLIbtu2N9eY3ed2M3Fv70pTjZq9CnCVgbEqyQ=
+        b=ZR/boVMWAIQqgUcSad6uGAG1vdpWqeRnIGFvHxkeRfStUqjK147E/nh03FVavX13s
+         RQucHVT3+uTSWhF9eyYZ58AU3nhS8a9HgBSfm1NNUhWOmnkOpT491iXexVxrVjxhty
+         TH9ZnUN3nh3jVtJya+nnUsF7IQCixaebBUd2yKME=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        =?UTF-8?q?=E8=B5=B5=E5=AD=90=E8=BD=A9?= <beraphin@gmail.com>,
-        Stoyan Manolov <smanolov@suse.de>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.17 03/39] llc: fix netdevice reference leaks in llc_ui_bind()
+        stable@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 17/37] ALSA: pcm: Add stream lock during PCM reset ioctl operations
 Date:   Fri, 25 Mar 2022 16:14:18 +0100
-Message-Id: <20220325150420.345250175@linuxfoundation.org>
+Message-Id: <20220325150420.426531482@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150420.245733653@linuxfoundation.org>
-References: <20220325150420.245733653@linuxfoundation.org>
+In-Reply-To: <20220325150419.931802116@linuxfoundation.org>
+References: <20220325150419.931802116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 764f4eb6846f5475f1244767d24d25dd86528a4a upstream.
+commit 1f68915b2efd0d6bfd6e124aa63c94b3c69f127c upstream.
 
-Whenever llc_ui_bind() and/or llc_ui_autobind()
-took a reference on a netdevice but subsequently fail,
-they must properly release their reference
-or risk the infamous message from unregister_netdevice()
-at device dismantle.
+snd_pcm_reset() is a non-atomic operation, and it's allowed to run
+during the PCM stream running.  It implies that the manipulation of
+hw_ptr and other parameters might be racy.
 
-unregister_netdevice: waiting for eth0 to become free. Usage count = 3
+This patch adds the PCM stream lock at appropriate places in
+snd_pcm_*_reset() actions for covering that.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: 赵子轩 <beraphin@gmail.com>
-Reported-by: Stoyan Manolov <smanolov@suse.de>
-Link: https://lore.kernel.org/r/20220323004147.1990845-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Cc: <stable@vger.kernel.org>
+Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+Link: https://lore.kernel.org/r/20220322171325.4355-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/llc/af_llc.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ sound/core/pcm_native.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/net/llc/af_llc.c
-+++ b/net/llc/af_llc.c
-@@ -311,6 +311,10 @@ static int llc_ui_autobind(struct socket
- 	sock_reset_flag(sk, SOCK_ZAPPED);
- 	rc = 0;
- out:
-+	if (rc) {
-+		dev_put_track(llc->dev, &llc->dev_tracker);
-+		llc->dev = NULL;
-+	}
- 	return rc;
+--- a/sound/core/pcm_native.c
++++ b/sound/core/pcm_native.c
+@@ -1851,11 +1851,13 @@ static int snd_pcm_do_reset(struct snd_p
+ 	int err = snd_pcm_ops_ioctl(substream, SNDRV_PCM_IOCTL1_RESET, NULL);
+ 	if (err < 0)
+ 		return err;
++	snd_pcm_stream_lock_irq(substream);
+ 	runtime->hw_ptr_base = 0;
+ 	runtime->hw_ptr_interrupt = runtime->status->hw_ptr -
+ 		runtime->status->hw_ptr % runtime->period_size;
+ 	runtime->silence_start = runtime->status->hw_ptr;
+ 	runtime->silence_filled = 0;
++	snd_pcm_stream_unlock_irq(substream);
+ 	return 0;
  }
  
-@@ -408,6 +412,10 @@ static int llc_ui_bind(struct socket *so
- out_put:
- 	llc_sap_put(sap);
- out:
-+	if (rc) {
-+		dev_put_track(llc->dev, &llc->dev_tracker);
-+		llc->dev = NULL;
-+	}
- 	release_sock(sk);
- 	return rc;
+@@ -1863,10 +1865,12 @@ static void snd_pcm_post_reset(struct sn
+ 			       snd_pcm_state_t state)
+ {
+ 	struct snd_pcm_runtime *runtime = substream->runtime;
++	snd_pcm_stream_lock_irq(substream);
+ 	runtime->control->appl_ptr = runtime->status->hw_ptr;
+ 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK &&
+ 	    runtime->silence_size > 0)
+ 		snd_pcm_playback_silence(substream, ULONG_MAX);
++	snd_pcm_stream_unlock_irq(substream);
  }
+ 
+ static const struct action_ops snd_pcm_action_reset = {
 
 

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E624E760F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B59044E766B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356405AbiCYPKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
+        id S1359871AbiCYPMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349760AbiCYPI1 (ORCPT
+        with ESMTP id S1359789AbiCYPKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:08:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFB3A7745;
-        Fri, 25 Mar 2022 08:06:52 -0700 (PDT)
+        Fri, 25 Mar 2022 11:10:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925C9DB4B0;
+        Fri, 25 Mar 2022 08:07:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51CB1B828FB;
-        Fri, 25 Mar 2022 15:06:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B64D5C340E9;
-        Fri, 25 Mar 2022 15:06:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F15E361C14;
+        Fri, 25 Mar 2022 15:07:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0561EC340E9;
+        Fri, 25 Mar 2022 15:07:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220810;
-        bh=66AdW8GcQDhDYieYXbj02QTCFM70zra0bL3GJGGU1Ls=;
+        s=korg; t=1648220868;
+        bh=cm0RYyJQcXqUnVI7HNk8immc7/DDIPAlvRgVNobGzO0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BAxHvOLonIU959to/Zd1swF/RdV7CNwh925gT5fKbKI+pn3phktf2/AMRHChajjLn
-         TaIdZ8rpgseXYglSHn/FpRHjxV+CEEiGv9Pf+BjpDzHFI5yjAk4qeFSkCu+fKq3V5e
-         mx9br+UWaY9SueFHbA5rhr+bVq/clZ6WibbofQ7U=
+        b=J5Y6HjWZoB+RBh9fC7SBV+eqp+bPTYKGE3iYFWAjkwDfo8qyicAG3l2ZN09Ckyg+U
+         q22VI9EdL6Tb2Y90xjgZjK7I2rkWRmXM0b81XXLMNW/WkYABrSZ4AckTPYTByCjn3S
+         3+VkguTH5ID8y2ugWIpQaJdvDu+5GT6Zs895kIrU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Werner Sembach <wse@tuxedocomputers.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 4.19 17/20] ACPI: video: Force backlight native for Clevo NL5xRU and NL5xNU
-Date:   Fri, 25 Mar 2022 16:04:55 +0100
-Message-Id: <20220325150417.509236260@linuxfoundation.org>
+        stable@vger.kernel.org, Stephane Graber <stgraber@ubuntu.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 16/29] drivers: net: xgene: Fix regression in CRC stripping
+Date:   Fri, 25 Mar 2022 16:04:56 +0100
+Message-Id: <20220325150419.054217588@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150417.010265747@linuxfoundation.org>
-References: <20220325150417.010265747@linuxfoundation.org>
+In-Reply-To: <20220325150418.585286754@linuxfoundation.org>
+References: <20220325150418.585286754@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,110 +54,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Werner Sembach <wse@tuxedocomputers.com>
+From: Stephane Graber <stgraber@ubuntu.com>
 
-commit c844d22fe0c0b37dc809adbdde6ceb6462c43acf upstream.
+commit e9e6faeafaa00da1851bcf47912b0f1acae666b4 upstream.
 
-Clevo NL5xRU and NL5xNU/TUXEDO Aura 15 Gen1 and Gen2 have both a working
-native and video interface. However the default detection mechanism first
-registers the video interface before unregistering it again and switching
-to the native interface during boot. This results in a dangling SBIOS
-request for backlight change for some reason, causing the backlight to
-switch to ~2% once per boot on the first power cord connect or disconnect
-event. Setting the native interface explicitly circumvents this buggy
-behaviour by avoiding the unregistering process.
+All packets on ingress (except for jumbo) are terminated with a 4-bytes
+CRC checksum. It's the responsability of the driver to strip those 4
+bytes. Unfortunately a change dating back to March 2017 re-shuffled some
+code and made the CRC stripping code effectively dead.
 
-Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-Cc: All applicable <stable@vger.kernel.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+This change re-orders that part a bit such that the datalen is
+immediately altered if needed.
+
+Fixes: 4902a92270fb ("drivers: net: xgene: Add workaround for errata 10GE_8/ENET_11")
+Cc: stable@vger.kernel.org
+Signed-off-by: Stephane Graber <stgraber@ubuntu.com>
+Tested-by: Stephane Graber <stgraber@ubuntu.com>
+Link: https://lore.kernel.org/r/20220322224205.752795-1-stgraber@ubuntu.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/acpi/video_detect.c |   75 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ drivers/net/ethernet/apm/xgene/xgene_enet_main.c |   12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
---- a/drivers/acpi/video_detect.c
-+++ b/drivers/acpi/video_detect.c
-@@ -356,6 +356,81 @@ static const struct dmi_system_id video_
- 		DMI_MATCH(DMI_BOARD_NAME, "BA51_MV"),
- 		},
- 	},
-+	/*
-+	 * Clevo NL5xRU and NL5xNU/TUXEDO Aura 15 Gen1 and Gen2 have both a
-+	 * working native and video interface. However the default detection
-+	 * mechanism first registers the video interface before unregistering
-+	 * it again and switching to the native interface during boot. This
-+	 * results in a dangling SBIOS request for backlight change for some
-+	 * reason, causing the backlight to switch to ~2% once per boot on the
-+	 * first power cord connect or disconnect event. Setting the native
-+	 * interface explicitly circumvents this buggy behaviour, by avoiding
-+	 * the unregistering process.
-+	 */
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "AURA1501"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "EDUBOOK1502"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xNU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xNU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xNU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
-+		},
-+	},
+--- a/drivers/net/ethernet/apm/xgene/xgene_enet_main.c
++++ b/drivers/net/ethernet/apm/xgene/xgene_enet_main.c
+@@ -696,6 +696,12 @@ static int xgene_enet_rx_frame(struct xg
+ 	buf_pool->rx_skb[skb_index] = NULL;
  
- 	/*
- 	 * Desktops which falsely report a backlight and which our heuristics
+ 	datalen = xgene_enet_get_data_len(le64_to_cpu(raw_desc->m1));
++
++	/* strip off CRC as HW isn't doing this */
++	nv = GET_VAL(NV, le64_to_cpu(raw_desc->m0));
++	if (!nv)
++		datalen -= 4;
++
+ 	skb_put(skb, datalen);
+ 	prefetch(skb->data - NET_IP_ALIGN);
+ 	skb->protocol = eth_type_trans(skb, ndev);
+@@ -717,12 +723,8 @@ static int xgene_enet_rx_frame(struct xg
+ 		}
+ 	}
+ 
+-	nv = GET_VAL(NV, le64_to_cpu(raw_desc->m0));
+-	if (!nv) {
+-		/* strip off CRC as HW isn't doing this */
+-		datalen -= 4;
++	if (!nv)
+ 		goto skip_jumbo;
+-	}
+ 
+ 	slots = page_pool->slots - 1;
+ 	head = page_pool->head;
 
 

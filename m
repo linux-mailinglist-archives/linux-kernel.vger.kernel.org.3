@@ -2,258 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6B64E7905
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E47464E790A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:38:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376823AbiCYQhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 12:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
+        id S245512AbiCYQkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 12:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376830AbiCYQhe (ORCPT
+        with ESMTP id S243097AbiCYQkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 12:37:34 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43D46353E
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:35:59 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id j13so8599469plj.8
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:35:59 -0700 (PDT)
+        Fri, 25 Mar 2022 12:40:01 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B577321801;
+        Fri, 25 Mar 2022 09:38:22 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 5so14318991lfp.1;
+        Fri, 25 Mar 2022 09:38:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vuo48/5UjA2yQzB+PByGgiIu31mZpEWOqyTsnJLyEqQ=;
-        b=SzQxj8qNpsMaxeCLsWbqemfif+nS7Nx0yY3hFGwC+UVqnMu1eUnKrzuHJoXeDr8ZPx
-         lbWaddUi/hK/qGA80WoKkqwJKWbl4OV7hMUpwpChw2Z1dkM/DA1PMyHgWgjWIr+5d/jO
-         /jnajvyDobN+vohCnPYpKavXTpGA0BEBPAUbG697j8zOC0u/bkpA9PTbXu8esvdcyJ7W
-         eph+5DSq1uxDQEInxAYWsORbYsxdxihI4fQw/esq/Oz+YzITfftGcWet+ScAiuPdDpXD
-         0+7XUyCuW6192cgPd62C9bmEEA9ghTmB40DKVn919tlYmrnNRd+lG7692f2SM226TRbO
-         3mWw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0333UXko0p5skH7Gomva2kccUTt68Iz1OddCSPNf2js=;
+        b=jQgYuAem9ZYHlkccaCCJhjCW8khFDISSGHhsexNPblMgnhrPWV6cZ+LP1hWfT23Y2y
+         5XdcS34yhn+TTIdoXcW5n37aTxJrhg9KmsliYM6buKG7yHueuBWcc6ubWkcZECq7RgR8
+         uPrXcQ77KZEUNpiPyTNybauYdgNaJTXYWT99kJhv69uzeRMiiRvbw7VssZYC1APWkwWZ
+         NAi5JIW+JeT2wgnVsg2/HAxg/+sGpub5ezabhgD5XKOyMQvjJZmGBMstEoT9HeSw99Fv
+         VBiidvdDQ4IzS90KBbe2aAMrHgZFzjwdlC38Vvs2TvyHhRahzVgeViBLOqlDDuVDzPfq
+         NKZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vuo48/5UjA2yQzB+PByGgiIu31mZpEWOqyTsnJLyEqQ=;
-        b=NJc95F0MtpLxG14WzUajohvWA0lUbok8Dg6PrWiKprJsDwilN/9hReJUa6M1+u+Ceq
-         7tQP+gNJ3cYljClJ/digcV8Ezcl1iqsNYosikLU+SXqd9ETxitMBkfMC4cVrull0QKiL
-         n6c7OyoZadrBTXXsy5l6cywXAB+z3mms5o6KfsaWumdPjAvtCoJPwSqPcgVyUSNm3Wv0
-         uuMFTSRZERZaUVbk3Qzu3yI++mdHz/KcIBm2p5jBTGI2qnfTZgzfL92ASe0OhziIZwmA
-         iUyZqZAQ550HQ+pV1kqeH2uohSnzstlaWnyhTppI4QuT9DlglluXD+Gi7obLYvL6Q2DB
-         ESMg==
-X-Gm-Message-State: AOAM530DztKVZFxYKxlJdMruh4UeyT47RtjkLXIAWSxPBAOeR5Qg8vbX
-        1MY1GGH/Wd6REbL4JnI5Hk+Ilw==
-X-Google-Smtp-Source: ABdhPJyc4Y08PpVXzp2jSoMl0/csbbpfohBnNxo5otTm+e88v/sKaDnS0hjJO54UoHNd/DJKXKyt9g==
-X-Received: by 2002:a17:902:7405:b0:154:68e6:9bdb with SMTP id g5-20020a170902740500b0015468e69bdbmr12630282pll.15.1648226159061;
-        Fri, 25 Mar 2022 09:35:59 -0700 (PDT)
-Received: from localhost.localdomain ([223.233.78.42])
-        by smtp.gmail.com with ESMTPSA id j6-20020a17090a588600b001c699d77503sm6264948pji.2.2022.03.25.09.35.55
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0333UXko0p5skH7Gomva2kccUTt68Iz1OddCSPNf2js=;
+        b=79CvEfiISFdRKBTu/IKjoW1rnvKt42io+RyVYdXTOHkoHv6etbNRQvOHXBAMsund/T
+         +siMbwiYw86Dx/UNSvcvmRxvyseS5FVSo3ptpulfgPmd5yhSYCs7oTbtOXkoK5KKgYTc
+         wr3D+O3uN8ZSEtfUeWKMrVbUq2wO8v0ZX+TZ/4/Nmoq9r/5jq/P9MCJzGwVQXBlMnbAg
+         Vc2EpYK1F0eoyVzJLhYfqCaM5Cjlm4PP1TQxA/wEgeG6T9lrTg9J/GRnE9d/arxZvX+b
+         bQM3S3g2b87HhwWqNr7REXYWM6kd1uuWVBQFgseAHEh3ztCKRw8cX6S3/FTSgjmCyp+r
+         EWaw==
+X-Gm-Message-State: AOAM533ABP5KROJNUYsYKSFFFZQk8RETe67ODyw4gfmRFhxbUyZlt+Qq
+        TV93UdldLx4iCdWSgk2zHwM=
+X-Google-Smtp-Source: ABdhPJx8pJ6C1WooGaA1yRgGm+J6PwJoe8pUYUfcN8+tFB+qD+JiAjBTgkW/Y57geIMTolesj2+now==
+X-Received: by 2002:a05:6512:68d:b0:44a:cc2:78b5 with SMTP id t13-20020a056512068d00b0044a0cc278b5mr8057577lfe.43.1648226300542;
+        Fri, 25 Mar 2022 09:38:20 -0700 (PDT)
+Received: from localhost.localdomain ([94.103.225.225])
+        by smtp.gmail.com with ESMTPSA id i14-20020a198c4e000000b0044a279d25d2sm755352lfj.244.2022.03.25.09.38.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 09:35:58 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        bjorn.andersson@linaro.org, Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH v4 2/2] arm64: dts: qcom: sa8155p-adp: Enable ethernet node
-Date:   Fri, 25 Mar 2022 22:05:37 +0530
-Message-Id: <20220325163537.1579969-3-bhupesh.sharma@linaro.org>
+        Fri, 25 Mar 2022 09:38:20 -0700 (PDT)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+717ed82268812a643b28@syzkaller.appspotmail.com
+Subject: [RFC PATCH] KVM: x86/mmu: fix general protection fault in kvm_mmu_uninit_tdp_mmu
+Date:   Fri, 25 Mar 2022 19:38:15 +0300
+Message-Id: <20220325163815.3514-1-paskripkin@gmail.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325163537.1579969-1-bhupesh.sharma@linaro.org>
-References: <20220325163537.1579969-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vinod Koul <vkoul@kernel.org>
+Syzbot reported GPF in kvm_mmu_uninit_tdp_mmu(), which is caused by
+passing NULL pointer to flush_workqueue().
 
-Enable the ethernet node, add the phy node and pinctrl for ethernet.
+tdp_mmu_zap_wq is allocated via alloc_workqueue() which may fail. There
+is no error hanling and kvm_mmu_uninit_tdp_mmu() return value is simply
+ignored. Even all kvm_*_init_vm() functions are void, so the easiest
+solution is to check that tdp_mmu_zap_wq is valid pointer before passing
+it somewhere.
 
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-[bhsharma: Correct ethernet/rgmii related pinmuxs, specify multi-queues and
- plug in the PHY interrupt for WOL]
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Fixes: 22b94c4b63eb ("KVM: x86/mmu: Zap invalidated roots via asynchronous worker")
+Reported-and-tested-by: syzbot+717ed82268812a643b28@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/sa8155p-adp.dts | 146 +++++++++++++++++++++++
- 1 file changed, 146 insertions(+)
+ arch/x86/kvm/mmu/tdp_mmu.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-index 8756c2b25c7e..e7b527a1cf7f 100644
---- a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-@@ -47,6 +47,65 @@ vreg_s4a_1p8: smps4 {
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index e7e7876251b3..b3e8ff7ac5b0 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -48,8 +48,10 @@ void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm)
+ 	if (!kvm->arch.tdp_mmu_enabled)
+ 		return;
  
- 		vin-supply = <&vreg_3p3>;
- 	};
-+
-+	mtl_rx_setup: rx-queues-config {
-+		snps,rx-queues-to-use = <4>;
-+		snps,rx-sched-sp;
-+
-+		queue0 {
-+			snps,dcb-algorithm;
-+			snps,map-to-dma-channel = <0x0>;
-+			snps,route-up;
-+			snps,priority = <0x1>;
-+		};
-+
-+		queue1 {
-+			snps,dcb-algorithm;
-+			snps,map-to-dma-channel = <0x1>;
-+			snps,route-ptp;
-+		};
-+
-+		queue2 {
-+			snps,avb-algorithm;
-+			snps,map-to-dma-channel = <0x2>;
-+			snps,route-avcp;
-+		};
-+
-+		queue3 {
-+			snps,avb-algorithm;
-+			snps,map-to-dma-channel = <0x3>;
-+			snps,priority = <0xC>;
-+		};
-+	};
-+
-+	mtl_tx_setup: tx-queues-config {
-+		snps,tx-queues-to-use = <4>;
-+		snps,tx-sched-wrr;
-+
-+		queue0 {
-+			snps,weight = <0x10>;
-+			snps,dcb-algorithm;
-+			snps,priority = <0x0>;
-+		};
-+
-+		queue1 {
-+			snps,weight = <0x11>;
-+			snps,dcb-algorithm;
-+			snps,priority = <0x1>;
-+		};
-+
-+		queue2 {
-+			snps,weight = <0x12>;
-+			snps,dcb-algorithm;
-+			snps,priority = <0x2>;
-+		};
-+
-+		queue3 {
-+			snps,weight = <0x13>;
-+			snps,dcb-algorithm;
-+			snps,priority = <0x3>;
-+		};
-+	};
- };
+-	flush_workqueue(kvm->arch.tdp_mmu_zap_wq);
+-	destroy_workqueue(kvm->arch.tdp_mmu_zap_wq);
++	if (kvm->arch.tdp_mmu_zap_wq) {
++		flush_workqueue(kvm->arch.tdp_mmu_zap_wq);
++		destroy_workqueue(kvm->arch.tdp_mmu_zap_wq);
++	}
  
- &apps_rsc {
-@@ -317,6 +376,44 @@ &remoteproc_cdsp {
- 	firmware-name = "qcom/sa8155p/cdsp.mdt";
- };
+ 	WARN_ON(!list_empty(&kvm->arch.tdp_mmu_pages));
+ 	WARN_ON(!list_empty(&kvm->arch.tdp_mmu_roots));
+@@ -119,9 +121,11 @@ static void tdp_mmu_zap_root_work(struct work_struct *work)
  
-+&ethernet {
-+	status = "okay";
-+
-+	snps,reset-gpio = <&tlmm 79 GPIO_ACTIVE_LOW>;
-+	snps,reset-active-low;
-+	snps,reset-delays-us = <0 11000 70000>;
-+
-+	snps,ptp-ref-clk-rate = <250000000>;
-+	snps,ptp-req-clk-rate = <96000000>;
-+
-+	snps,mtl-rx-config = <&mtl_rx_setup>;
-+	snps,mtl-tx-config = <&mtl_tx_setup>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ethernet_defaults>;
-+
-+	phy-handle = <&rgmii_phy>;
-+	phy-mode = "rgmii";
-+	max-speed = <1000>;
-+
-+	mdio {
-+		#address-cells = <0x1>;
-+		#size-cells = <0x0>;
-+
-+		compatible = "snps,dwmac-mdio";
-+
-+		/* Micrel KSZ9031RNZ PHY */
-+		rgmii_phy: phy@7 {
-+			reg = <0x7>;
-+
-+			interrupt-parent = <&tlmm>;
-+			interrupts-extended = <&tlmm 124 IRQ_TYPE_EDGE_FALLING>; /* phy intr */
-+			device_type = "ethernet-phy";
-+			compatible = "ethernet-phy-ieee802.3-c22";
-+		};
-+	};
-+};
-+
- &uart2 {
- 	status = "okay";
- };
-@@ -407,4 +504,53 @@ mux {
- 			drive-strength = <2>;
- 		};
- 	};
-+
-+	ethernet_defaults: ethernet-defaults {
-+		mdc {
-+			pins = "gpio7";
-+			function = "rgmii";
-+			bias-pull-up;
-+		};
-+
-+		mdio {
-+			pins = "gpio59";
-+			function = "rgmii";
-+			bias-pull-up;
-+		};
-+
-+		rgmii-rx {
-+			pins = "gpio117", "gpio118", "gpio119", "gpio120", "gpio115", "gpio116";
-+			function = "rgmii";
-+			bias-disable;
-+			drive-strength = <2>;
-+		};
-+
-+		rgmii-tx {
-+			pins = "gpio122", "gpio4", "gpio5", "gpio6", "gpio114", "gpio121";
-+			function = "rgmii";
-+			bias-pull-up;
-+			drive-strength = <16>;
-+		};
-+
-+		phy-intr {
-+			pins = "gpio124";
-+			function = "emac_phy";
-+			bias-disable;
-+			drive-strength = <8>;
-+		};
-+
-+		pps {
-+			pins = "gpio81";
-+			function = "emac_pps";
-+			bias-disable;
-+			drive-strength = <8>;
-+		};
-+
-+		phy-reset {
-+			pins = "gpio79";
-+			function = "gpio";
-+			bias-pull-up;
-+			drive-strength = <16>;
-+		};
-+	};
- };
+ static void tdp_mmu_schedule_zap_root(struct kvm *kvm, struct kvm_mmu_page *root)
+ {
+-	root->tdp_mmu_async_data = kvm;
+-	INIT_WORK(&root->tdp_mmu_async_work, tdp_mmu_zap_root_work);
+-	queue_work(kvm->arch.tdp_mmu_zap_wq, &root->tdp_mmu_async_work);
++	if (kvm->arch.tdp_mmu_zap_wq) {
++		root->tdp_mmu_async_data = kvm;
++		INIT_WORK(&root->tdp_mmu_async_work, tdp_mmu_zap_root_work);
++		queue_work(kvm->arch.tdp_mmu_zap_wq, &root->tdp_mmu_async_work);
++	}
+ }
+ 
+ static inline bool kvm_tdp_root_mark_invalid(struct kvm_mmu_page *page)
 -- 
 2.35.1
 

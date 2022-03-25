@@ -2,66 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F7A4E74A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 302694E74A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356539AbiCYOBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 10:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
+        id S1359065AbiCYOB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 10:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358940AbiCYOBN (ORCPT
+        with ESMTP id S1359119AbiCYOBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 10:01:13 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3ED5F253;
-        Fri, 25 Mar 2022 06:59:38 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id j13so8095732plj.8;
-        Fri, 25 Mar 2022 06:59:38 -0700 (PDT)
+        Fri, 25 Mar 2022 10:01:51 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69EDB63390;
+        Fri, 25 Mar 2022 07:00:08 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id yy13so15577303ejb.2;
+        Fri, 25 Mar 2022 07:00:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=EV0wmNwRVxX8NQcoop+BEUS5js89FYD4nmxPHK49pWQ=;
-        b=MaTdW3To90ijPhW/yZNfIQWH8ozmuI4LzhKZZvBDJlsmUM8Q8KOcBH9ehtDzmtC3YW
-         eBh8n4j26HCJ6UIWcx/uCWY44xhL2PQ0sfAA1+jRChFcFazSPdkTIVADj9Dv0lsOLPG8
-         UI6O41pQBpGMsUUKkhL0jM5O/hLzOmYIEJMDkkVr9krBTgPBzhVDEh6+yZt7JQooPEVz
-         /pAkUQoqYT62KUT1s8stfPcwAp1cuKUBU4np52nZnrjZQZwV4kFEl9zVyssIJ+qwZFc+
-         sgY7F2ftMg5zXJ7ohNd1pPwnjmwomWxeC8VnAE0powpbiCvktOMAr80vds0yyEliKNyN
-         3zww==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=E3/UBDuXc/UMmAXiWRPwW4yrgBs5CuzWGxqSCJFk/HA=;
+        b=jWTwiuS5J1LrH6cNNWJ4K0NyE7bDgt9LgcQhvS3W40AjSY7EmaEqafmoyHMSa3VizF
+         VoEWDjJDMheSWhOWi+x5jJN2F5AFrOL/bVupo+noUKAbAoVJHeVH+wqHRazBsqnbCIH8
+         QKhnL2aSKn5nuHFty6ORYnsb7WsnVurJYPxNIjZcxTJPb4GqhBgc7Qcn7reHuH7jxI+M
+         wKHfKCOBuNk69pCNkRVrQ6s5keW2Wl49PGXgCkAzapgAW2/cNVJZcMNtc8xUxclNd28F
+         459h0EbhHdNZUZ+rohyB+u+7hR+x1bq5oZMWVyxwy5M3W7SWdewbgV9mY7tEFZbE/dCa
+         0kdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=EV0wmNwRVxX8NQcoop+BEUS5js89FYD4nmxPHK49pWQ=;
-        b=YELN5Lrk0E0oFZCpvqtW5YYzQesUqFNMWJwSBo8q2O+JfBgWeLOmPVJWTVU34EQK7A
-         6AfDYd1nZo6wOIZHNyrO+CkycXq4xM/vep5R99obENEN9fIZE9AyvKN+mkcmV5sq+mYL
-         DasVZAjawP5iWN8kNlB0xXW/Bm5fl0fUya2vB7Gdh0P1ekBt8aKPmoF4++rG31bcr7z6
-         5gRAbPbpU/GxWxkYh2CDYuEkEJrrHIk/hnZr8PTDlYovaD6xIKxUcDXU20e1mCBkPby1
-         2Ci/GY4+57P/Ze4zkGg5jcCyed+fVICsQIbtmiV9kvDHPPkD9OocWpFzi4Jwug/QQiXE
-         VHmA==
-X-Gm-Message-State: AOAM530lb9ID88TBVF4W42yiIU1Xk27QaYX6O0wH2xqqqQBDV8wUnf0x
-        Xh8u5K6UAlnFOBCY2On2e8Ga7rqAQn0=
-X-Google-Smtp-Source: ABdhPJzz7K+/5uo4/3em0DsU11ggYGjYid3uyziE4s7FG3CHnGx59o2D7meiWG5Ps8LDY3KfTEYf5g==
-X-Received: by 2002:a17:90b:1e43:b0:1c7:46bf:ba29 with SMTP id pi3-20020a17090b1e4300b001c746bfba29mr12861850pjb.100.1648216777881;
-        Fri, 25 Mar 2022 06:59:37 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.113])
-        by smtp.googlemail.com with ESMTPSA id lw4-20020a17090b180400b001c7327d09c3sm14470875pjb.53.2022.03.25.06.59.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 25 Mar 2022 06:59:37 -0700 (PDT)
-From:   Wanpeng Li <kernellwp@gmail.com>
-X-Google-Original-From: Wanpeng Li <wanpengli@tencent.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: [PATCH RESEND 5/5] KVM: X86: Expose PREEMT_COUNT CPUID feature bit to guest
-Date:   Fri, 25 Mar 2022 06:58:29 -0700
-Message-Id: <1648216709-44755-6-git-send-email-wanpengli@tencent.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1648216709-44755-1-git-send-email-wanpengli@tencent.com>
-References: <1648216709-44755-1-git-send-email-wanpengli@tencent.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=E3/UBDuXc/UMmAXiWRPwW4yrgBs5CuzWGxqSCJFk/HA=;
+        b=AGkLXktG+8i5a5zmuw0vclhCuKN8yjW0xETkGun6mooaxoiViNkyBZSzV4FyDdYLbP
+         c8+GBpG3mkYiYjHrECh7OARDxrDsSRZNow465p9iDNj0w6e2ZmNDJuXrYJFX0Hdu7aS0
+         661Fg33ztQ5jnjcSDscEMs/Na3ZLygpbow8ez9ANMV2yiAbbt5/9zXD1U8tDl2C+iGUO
+         mPGGnKcUXS1hG7aS3I70mkdXpMeJd+RBmSQDq5cHBxJGsGroX5FHctjkaKuwCcYmF6D7
+         vB2qISKTGaGpkY7ewtewWiunxBWcqeALwjPMZfKH2Dn1KW2+aSv+geS0USUFFmD6lwWu
+         yfbw==
+X-Gm-Message-State: AOAM5321EZ/4MLGCbucnhaw1XE2aZ0CEubr8Xdv4iIUvXgC+rZDZqtRm
+        RIwTv6BKgg3IcwCb/5eOI2Y=
+X-Google-Smtp-Source: ABdhPJyc2AGROsTgH7tBlOTLHPM9gCauyoGQNJXHixZDBfPKeV6KEk95m7F6VkXZKLLztYxtxjTSJw==
+X-Received: by 2002:a17:907:9956:b0:6b9:a6d9:a535 with SMTP id kl22-20020a170907995600b006b9a6d9a535mr11905555ejc.64.1648216806904;
+        Fri, 25 Mar 2022 07:00:06 -0700 (PDT)
+Received: from skbuf ([188.26.57.45])
+        by smtp.gmail.com with ESMTPSA id z1-20020a05640235c100b004192c7266f5sm2840616edc.16.2022.03.25.07.00.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 07:00:06 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 16:00:03 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 2/4] net: switchdev: add support for
+ offloading of fdb locked flag
+Message-ID: <20220325140003.a4w4hysqbzmrcxbq@skbuf>
+References: <20220323123534.i2whyau3doq2xdxg@skbuf>
+ <86wngkbzqb.fsf@gmail.com>
+ <20220323144304.4uqst3hapvzg3ej6@skbuf>
+ <86lewzej4n.fsf@gmail.com>
+ <20220324110959.t4hqale35qbrakdu@skbuf>
+ <86v8w3vbk4.fsf@gmail.com>
+ <20220324142749.la5til4ys6zva4uf@skbuf>
+ <86czia1ned.fsf@gmail.com>
+ <20220325132102.bss26plrk4sifby2@skbuf>
+ <86fsn6uoqz.fsf@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86fsn6uoqz.fsf@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,45 +90,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wanpeng Li <wanpengli@tencent.com>
+On Fri, Mar 25, 2022 at 02:48:36PM +0100, Hans Schultz wrote:
+> > If you'd cache the locked ATU entry in the mv88e6xxx driver, and you'd
+> > notify switchdev only if the entry is new to the cache, then you'd
+> > actually still achieve something major. Yes, the bridge FDB will contain
+> > locked FDB entries that aren't in the ATU. But that's because your
+> > printer has been silent for X seconds. The policy for the printer still
+> > hasn't changed, as far as the mv88e6xxx, or bridge, software drivers are
+> > concerned. If the unauthorized printer says something again after the
+> > locked ATU entry expires, the mv88e6xxx driver will find its MAC SA
+> > in the cache of denied addresses, and reload the ATU. What this
+> > achieves
+> 
+> The driver will in this case just trigger a new miss violation and add
+> the entry again I think.
+> The problem with all this is that a malicious attack that spams the
+> switch with random mac addresses will be able to DOS the device as any
+> handling of the fdb will be too resource demanding. That is why it is
+> needed to remove those fdb entries after a time out, which dynamic
+> entries would serve.
 
-Expose the PREEMPT_COUNT feature bit to the guest, the guest can check this
-feature bit before using MSR_KVM_PREEMPT_COUNT.
-
-Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
----
- Documentation/virt/kvm/cpuid.rst | 3 +++
- arch/x86/kvm/cpuid.c             | 3 ++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/virt/kvm/cpuid.rst b/Documentation/virt/kvm/cpuid.rst
-index bda3e3e737d7..c45158af98a7 100644
---- a/Documentation/virt/kvm/cpuid.rst
-+++ b/Documentation/virt/kvm/cpuid.rst
-@@ -103,6 +103,9 @@ KVM_FEATURE_HC_MAP_GPA_RANGE       16          guest checks this feature bit bef
- KVM_FEATURE_MIGRATION_CONTROL      17          guest checks this feature bit before
-                                                using MSR_KVM_MIGRATION_CONTROL
- 
-+KVM_FEATURE_PREEMPT_COUNT          18          guest checks this feature bit before
-+                                               using MSR_KVM_PREEMPT_COUNT
-+
- KVM_FEATURE_CLOCKSOURCE_STABLE_BIT 24          host will warn if no guest-side
-                                                per-cpu warps are expected in
-                                                kvmclock
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 58b0b4e0263c..4785f5a63d8d 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -1071,7 +1071,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 			     (1 << KVM_FEATURE_PV_SEND_IPI) |
- 			     (1 << KVM_FEATURE_POLL_CONTROL) |
- 			     (1 << KVM_FEATURE_PV_SCHED_YIELD) |
--			     (1 << KVM_FEATURE_ASYNC_PF_INT);
-+			     (1 << KVM_FEATURE_ASYNC_PF_INT) |
-+			     (1 << KVM_FEATURE_PREEMPT_COUNT);
- 
- 		if (sched_info_on())
- 			entry->eax |= (1 << KVM_FEATURE_STEAL_TIME);
--- 
-2.25.1
-
+An attacker sweeping through the 2^47 source MAC address range is a
+problem regardless of the implementations proposed so far, no?
+If unlimited growth of the mv88e6xxx locked ATU entry cache is a
+concern (which it is), we could limit its size, and when we purge a
+cached entry in software is also when we could emit a
+SWITCHDEV_FDB_DEL_TO_BRIDGE for it, right?

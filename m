@@ -2,335 +2,1067 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65794E74E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:11:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F406E4E74E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:12:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359316AbiCYONX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 10:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
+        id S1358825AbiCYONd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 10:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359381AbiCYONH (ORCPT
+        with ESMTP id S1359419AbiCYONO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 10:13:07 -0400
-Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.140.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FDCD8F70;
-        Fri, 25 Mar 2022 07:11:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
-  t=1648217493; x=1648822293;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=nyYHAptZ9wHGGxxi91RC5xcssYHocodn1Cn2MRGkWu8=;
-  b=aZPPYOAt+wi/x9mpzzye2BR+505hmbRR/qo0WkFzHqii43J7N6DNM6Us
-   1dFQ1NXiyjal3OQ4mvKFNZqv9Myd4b/UJ/+SILi7mAsJdpDdpFIjEFpwN
-   6hTlAJ9HvtE4uoWJAhP3wGPLof9PJ00auVm7yCUFWpNyE79TL6B3HULNj
-   w=;
-Received: from mail-dm6nam12lp2177.outbound.protection.outlook.com (HELO NAM12-DM6-obe.outbound.protection.outlook.com) ([104.47.59.177])
-  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 14:11:30 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZNDYYYcsz1n+0/Ra0mfIvvc3K1WeRvWw4f68a8PmEOahf7ZAHdd4uO8cTx/KUnTk5ZF5mr7+tXaqzWTY7JdhTY7kNzOM41svC7VpObhCz8wmdTtIFoMJdu+3Oj2r2uFptTe8jQpwE5VbgDJbZotmiOYEYupN9u+qi9nGFjvtLtBtwXTC8s2xZ4s6aVOCgfFQ/WkeiFu9zKQWXuxu09dm8OdiOGN59FBelxy9eF4Xyq7SWFwNuGHu2pizpfyUTNv1iFZ3gvEBT7DGMRV1W5vBgovddirfCQ4tf8Yve8mkE2OgZka8Su597nQXVGSPoRhNF5rYBSIWLGmhNqtNPmjpLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nyYHAptZ9wHGGxxi91RC5xcssYHocodn1Cn2MRGkWu8=;
- b=eivBP4PLneDKxFzL46cftlHoV5TbBKOtzcJSl9bhdfiIFnnyLHN+EAEccipNuO1GbtFVV/4XCUwElk/zz8dptT91jJ8OLfSZGUx0jG0zWbuJvDrHBPILSZkVLi7ii1PjND74x1Y9M/GzZIwgttTKTbrtKy/XfeM0NcMd6/XjDQnRWKZKrWgwEvD1FUZCgTbVOgROa5VgF8hr7cFIBA3VWD5BcQT3jsMboBuIE+AYl1VvOtmW9nQHl5qudJHy2M1qRs6c0MARjpOY5wESEN5VlLiZOJbGLJ6BfyfmnDjoTPm7NEyvGDjUOY5V9MNk+1uuJeLT+iUzNTFEWCoc72R4gA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
- dkim=pass header.d=quicinc.com; arc=none
-Received: from MW4PR02MB7186.namprd02.prod.outlook.com (2603:10b6:303:73::6)
- by BYAPR02MB4598.namprd02.prod.outlook.com (2603:10b6:a03:5f::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.19; Fri, 25 Mar
- 2022 14:11:26 +0000
-Received: from MW4PR02MB7186.namprd02.prod.outlook.com
- ([fe80::44bc:87fa:db04:78ff]) by MW4PR02MB7186.namprd02.prod.outlook.com
- ([fe80::44bc:87fa:db04:78ff%5]) with mapi id 15.20.5102.019; Fri, 25 Mar 2022
- 14:11:26 +0000
-From:   "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
-To:     Stephen Boyd <swboyd@chromium.org>,
-        "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "robdclark@gmail.com" <robdclark@gmail.com>,
-        "seanpaul@chromium.org" <seanpaul@chromium.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "dianders@chromium.org" <dianders@chromium.org>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "sean@poorly.run" <sean@poorly.run>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "sam@ravnborg.org" <sam@ravnborg.org>,
-        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        quic_vproddut <quic_vproddut@quicinc.com>
-Subject: RE: [PATCH v5 5/9] drm/msm/dp: Add eDP support via aux_bus
-Thread-Topic: [PATCH v5 5/9] drm/msm/dp: Add eDP support via aux_bus
-Thread-Index: AQHYOVx5zlRAzkyDcUaYsSlocjSps6zEG8QAgAwV6tA=
-Date:   Fri, 25 Mar 2022 14:11:25 +0000
-Message-ID: <MW4PR02MB718688EF42698851322BBF6DE11A9@MW4PR02MB7186.namprd02.prod.outlook.com>
-References: <1647452154-16361-1-git-send-email-quic_sbillaka@quicinc.com>
- <1647452154-16361-6-git-send-email-quic_sbillaka@quicinc.com>
- <CAE-0n50dmA0ETgNvaBGs+XmGu+r=6RbfbmnHqXAFqUBGjVGDvg@mail.gmail.com>
-In-Reply-To: <CAE-0n50dmA0ETgNvaBGs+XmGu+r=6RbfbmnHqXAFqUBGjVGDvg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=quicinc.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ef7dabe2-9ec6-464c-ad06-08da0e695979
-x-ms-traffictypediagnostic: BYAPR02MB4598:EE_
-x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
-x-microsoft-antispam-prvs: <BYAPR02MB4598CF38D3FEE468F01B21659D1A9@BYAPR02MB4598.namprd02.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bGtE30FiyDDKR83hOIk2V9Kndi3uzdTMIxxG8S3GwjFudgy75MvaPQgbBWeF2NNWB8/vIhIuRXPtohLjlkT2XMmrJU4L/hl2XM8w03rzXHWPCwRGGsEXVLxvuIQ4fIaCoOS2Yy7ne98Yn9oK45Cl7IvGlLyUQS41KFjB+tvNYQheygXMCfKd4LRFCR6i6vTDm/TDmUDKvVulHezUnxrh/klcQsUaj2I6+inKxYw5j9htZxmRGjgwRCQ639hY6BtS8toMO1RGvA+DdMSsDl00Z7a8PIYjBf1K0cZvar53BYEWserVEuMkwIJAlvOzxGrDimVshamC/CDNyUJIGHwTf+2tB28UmpsLdHQhJXsxrcWbcC6+Zkhx65Fx6gs/dwT31qeGQ65cIuDJDgIHXDdrkcprqaY6Kv09M4VlfQqEo7iwghn/au3WhGVRmKrgBo7Fe6zmBXbV2uAaoK9f3TqRZwhTUd8V9b8NoPAl7ynJEO0LMvKp0CglHGGXIpU7vnLjnzaXr+0UvgqEQIaCSKR5dBbJyYMtVckZcjB4NUuyLZLCYIMOFow73L5jjOi1tKG5e+/De+lpWN5C9haU1/y2XvBfKWbzXW9jXzWLZVJhpNGASe078uZettoZgOlPdWXJTEjgNIP6jUUfZFli0yUuZbOUeD8/PaDnQkx//WyBZAoSBjVHmQisDN/4fGDSmDHUbtwVGQuIwYQf79Trd3S7yQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR02MB7186.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52536014)(122000001)(38100700002)(86362001)(33656002)(38070700005)(8676002)(64756008)(4326008)(66476007)(316002)(66946007)(66556008)(76116006)(8936002)(54906003)(66446008)(2906002)(110136005)(5660300002)(107886003)(7416002)(186003)(26005)(83380400001)(508600001)(71200400001)(7696005)(6506007)(9686003)(53546011)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aU9XV0dwSEoyTzE0ejloa0dEd1FVeS9yL2J6Zmx6RnZFMnUxZlBnWVp4akpK?=
- =?utf-8?B?akpzR0VkdmZLWnJEWFI5NkZqZS9UYzl0TWN3M0NtZ3QyaWs0dVJMQlVLamlZ?=
- =?utf-8?B?ZmV0ZWJsTTFtNE1PUGxGaEwrN3YzeEdtUmdRWEVDYXp1bG9ibEt3cjhMQTJr?=
- =?utf-8?B?YzR0ck5xVHFKZnM0Uk55TFduZTRtVVFGYXVNNm14NUNJQjNWaDdaTlZFZnlV?=
- =?utf-8?B?emhIOFQ0Y2pHZG15Mk5PREQrL0RSU1dzNDNjNkYyQUhTSkRPMUFRc3NzL3kz?=
- =?utf-8?B?U055N2piS3pwcGpIYTJodkF5SUVISFNwWTl1d1g3YzNnNGhWQjFRUld6T3Uv?=
- =?utf-8?B?aG9pQVF2b0hBcEgvOEZYNk0rbzFYUFJIWThhN0VZbHIvMm5XOHF5aVVPTnBo?=
- =?utf-8?B?dzB1MGtFSmVzcEJwQWFXM2laZHRhdjloRGxLeU1iYmZXVWpZbGF3UTJkWC9m?=
- =?utf-8?B?TTlMUjRCMGJwalNvUjYwOHhtSWNUNGhHRUlpTVRKY2Vxa2dNWGxyZ3VObW1L?=
- =?utf-8?B?NndqTGN3LzFVSkJKWWhuNm41MDhTMUZyNzZRaFJHekxnTXlqQ1g2cE44NGtt?=
- =?utf-8?B?TmYyb2U5UzRCVzlNbnlRcGxWL2VoSHdnbkRBUEhMbXJWeDI2bUFaekM4SGtk?=
- =?utf-8?B?ZStuMnU4dnRuQ2dMcFRvZk9EaXF4ZnZ5TTRIeVdQc1ZIWFlHeVZFNUFBN09j?=
- =?utf-8?B?WWdmV055ejh4dW9DNng5aXZYY3IwZFRjV2ZxM0VnY2JMaXoxajRGNW5kcUt3?=
- =?utf-8?B?OXUxK2N3NzRneTk0OWlpaTFmeFovMGVBVSsxWGRjTjdUMUFRRnNmS0xyYjU3?=
- =?utf-8?B?MFdlMTlYRGNTWVJjeFVXL25TQ1l3TVF1OFphcFl4QnVEeUtSdFhKY3BBb3Fv?=
- =?utf-8?B?bWdzMmJZWHhLKzZjS2ZPUjQ4RGRFWFJ0bUZPa0ZlbENGT28wd1NQRzRobWRv?=
- =?utf-8?B?cnVoZDVEb1JERFdJTE1CbGJSSjdkVmZwS0tFdWpicXk3TXY4ZDIwaTZ6T2I5?=
- =?utf-8?B?WUxzYUlnTDJJOGJrejJWd1RheW9vVlFYZ1dUTTFDcUs1SW1YMDRjUjQyZ3o3?=
- =?utf-8?B?MnBYS252Q0lQSjJ6cTJxenJsaWFyMjhCQ25ncW94ZXlxUUU5cWFjS0NRem1H?=
- =?utf-8?B?QlNEcWNzckVNVmp0VDMwZTVJbW5NaHF3dnNzS0ZMUmxMeHJ1elpvZVJ6SUtm?=
- =?utf-8?B?T3BYZ0dFNEFCSXVJdS9oSSt5djBhMnhoeUZ4OERMM0NYU0szSkM5NU1WTkNQ?=
- =?utf-8?B?N2dtNUkzck43bEVkbFZBSTFKNWp1V0RSN2tRYWhFcXpLOS9JTXY2VmtXaWhY?=
- =?utf-8?B?cExCQUpSSVR0eHlIaXVkTHJDN0l0cEY1Vy9zZW1vdGs3WXFsUnFDYUpmVlNr?=
- =?utf-8?B?dzhhQVc2QjNaK29SOE82clNWUUlIeWxoSEx1Z1NqMEFETGRMUll0K05iZFdE?=
- =?utf-8?B?d2NTOE1sODRQQmQwT1Zqb3NiQTdJUHlUMkJUUTc5bzBYajFBREpwT3U4RURG?=
- =?utf-8?B?SmJLcmdReE9zZWxsaFpsWWJMNWpTQ1ZNNFJzbEVkWGpmYXlnNmEzMzl3VXFT?=
- =?utf-8?B?SnpKN0hOKzZaM3A0a1hlTFZ0azlGVEdROVJUZzJCOWdGWHNPdHcrUTNIWm9K?=
- =?utf-8?B?c0oydWVoMTUwZXZ5aG9KMEI1RllyVSttaXh3d05GeTUwK3p6Nytqa3Z3cWQy?=
- =?utf-8?B?UHBQQlE3NEhWM0dMeWcvV2crWG0zem9SUHZtazdlNjNYc3ZHbzNnSU5GOHVV?=
- =?utf-8?B?d3ppSTlId1hZWEJIaG9UUHlxa3VDTjRQSkhRa1d2ME1MdnA0M3pGcHQ3TXE1?=
- =?utf-8?B?cnZ4QjRJZFl6dEZJRTF3cXAvYzFybWw5R1ZqMVp1VkphcFl6TU11NlM5YjQx?=
- =?utf-8?B?L2JjaUtkMHdXTGhzRFQ5R0x6eXFJS2gybml5V0dIUHZRZEdXTlpER0xjOXhK?=
- =?utf-8?B?MWRUdjg1aXM5WFdiMmpXK1BBNTM4WkFzMmpxWTJQU2N5V3RPSk9oWnRaLzRa?=
- =?utf-8?B?U3B3OXJlR0VpaS9HTjNnOUo3QytBdE9nY1RyODRvd0k5Y0UwQXJhelVwZFBm?=
- =?utf-8?B?MTlXek1sNlNxYWtsWTJYNHBuUkZHNkpvQ1Y1UUhmK1Zic2JuTytWbTZjdzN6?=
- =?utf-8?B?dVFGZlVtSjdsQ2pBc0ljdzBnNU96NGJ3SGNQam9aU3ROcm1uWmNMQ2Rmcjdq?=
- =?utf-8?B?SGlXVG8zZFRGQ1FOYnVhdHdtTkplTlk4RkFCTzRqN3dxT1VBNVpaTzdqSUxO?=
- =?utf-8?B?dWUyRVpFYTg4M25MVzc0dUVqTHFxclVpYjNaaGc2VkhJTStqOEJweDhPOFJN?=
- =?utf-8?B?Rmh0a0pSdjgzUmlLWTNpQU5yZGtSdS9qMEFSY0J2VDJmS2MwNS8wdz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 25 Mar 2022 10:13:14 -0400
+Received: from smtp.tom.com (smtprz01.163.net [106.3.154.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 530E0D8F70
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 07:11:37 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by vip-app02.163.net (Postfix) with ESMTP id 93F214400C7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 22:11:36 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
+        t=1648217496; bh=/m2ybB/NjJ4UGfxo1AvnXEnKFTufKaHDdytJvZRdr6I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=n7CqYAH1y5B8o1gOBMGGo8E1vIxF+Sqtfr7ggOiQXk4XJacPzrPkllAzwjRlT+IJw
+         GHw9427JD1kbfDtvbqhqEk41hyroDNAX8tcbnuaO7XI7EfZ9gCljfI+jrA1al13zGv
+         YbNBsPJayfuhiB1w6RjrZZGEbVARe0+zC6R9Qvio=
+Received: from localhost (HELO smtp.tom.com) ([127.0.0.1])
+          by localhost (TOM SMTP Server) with SMTP ID 913834973
+          for <linux-kernel@vger.kernel.org>;
+          Fri, 25 Mar 2022 22:11:36 +0800 (CST)
+X-Virus-Scanned: Debian amavisd-new at mxtest.tom.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
+        t=1648217496; bh=/m2ybB/NjJ4UGfxo1AvnXEnKFTufKaHDdytJvZRdr6I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=n7CqYAH1y5B8o1gOBMGGo8E1vIxF+Sqtfr7ggOiQXk4XJacPzrPkllAzwjRlT+IJw
+         GHw9427JD1kbfDtvbqhqEk41hyroDNAX8tcbnuaO7XI7EfZ9gCljfI+jrA1al13zGv
+         YbNBsPJayfuhiB1w6RjrZZGEbVARe0+zC6R9Qvio=
+Received: from localhost (unknown [101.93.196.13])
+        by antispamvip.163.net (Postfix) with ESMTPA id 2A20215414FE;
+        Fri, 25 Mar 2022 22:11:30 +0800 (CST)
+Date:   Fri, 25 Mar 2022 22:11:29 +0800
+From:   Mingbao Sun <sunmingbao@tom.com>
+To:     Sagi Grimberg <sagi@grimberg.me>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
+        libin.zhang@dell.com, ao.sun@dell.com
+Subject: Re: [PATCH v2 2/3] nvme-tcp: support specifying the
+ congestion-control
+Message-ID: <20220325221129.00003cfc@tom.com>
+In-Reply-To: <7121e4be-0e25-dd5f-9d29-0fb02cdbe8de@grimberg.me>
+References: <20220311103414.8255-1-sunmingbao@tom.com>
+        <20220311103414.8255-2-sunmingbao@tom.com>
+        <7121e4be-0e25-dd5f-9d29-0fb02cdbe8de@grimberg.me>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-X-OriginatorOrg: quicinc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR02MB7186.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef7dabe2-9ec6-464c-ad06-08da0e695979
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Mar 2022 14:11:25.9973
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: m+/Nukl959hRvsd1iSrRvCxOwu4Z8j/x64pU/WbXZM6nvD3cL5MWjQ2u4IyNkea/uZCLXspce6Ftlqn/nUAZ1Ih0EkCRJAUI6MBqHMCP4lc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB4598
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogU3RlcGhlbiBCb3lkIDxz
-d2JveWRAY2hyb21pdW0ub3JnPg0KPiBTZW50OiBGcmlkYXksIE1hcmNoIDE4LCAyMDIyIDM6MDgg
-QU0NCj4gVG86IFNhbmtlZXJ0aCBCaWxsYWthbnRpIChRVUlDKSA8cXVpY19zYmlsbGFrYUBxdWlj
-aW5jLmNvbT47DQo+IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnOyBkcmktZGV2ZWxAbGlzdHMu
-ZnJlZWRlc2t0b3Aub3JnOw0KPiBmcmVlZHJlbm9AbGlzdHMuZnJlZWRlc2t0b3Aub3JnOyBsaW51
-eC1hcm0tbXNtQHZnZXIua2VybmVsLm9yZzsgbGludXgtDQo+IGtlcm5lbEB2Z2VyLmtlcm5lbC5v
-cmcNCj4gQ2M6IHJvYmRjbGFya0BnbWFpbC5jb207IHNlYW5wYXVsQGNocm9taXVtLm9yZzsgcXVp
-Y19rYWx5YW50DQo+IDxxdWljX2thbHlhbnRAcXVpY2luYy5jb20+OyBBYmhpbmF2IEt1bWFyIChR
-VUlDKQ0KPiA8cXVpY19hYmhpbmF2a0BxdWljaW5jLmNvbT47IGRpYW5kZXJzQGNocm9taXVtLm9y
-ZzsgS3VvZ2VlIEhzaWVoDQo+IChRVUlDKSA8cXVpY19raHNpZWhAcXVpY2luYy5jb20+OyBhZ3Jv
-c3NAa2VybmVsLm9yZzsNCj4gYmpvcm4uYW5kZXJzc29uQGxpbmFyby5vcmc7IHJvYmgrZHRAa2Vy
-bmVsLm9yZzsga3J6aytkdEBrZXJuZWwub3JnOw0KPiBzZWFuQHBvb3JseS5ydW47IGFpcmxpZWRA
-bGludXguaWU7IGRhbmllbEBmZndsbC5jaDsNCj4gdGhpZXJyeS5yZWRpbmdAZ21haWwuY29tOyBz
-YW1AcmF2bmJvcmcub3JnOw0KPiBkbWl0cnkuYmFyeXNoa292QGxpbmFyby5vcmc7IHF1aWNfdnBy
-b2RkdXQgPHF1aWNfdnByb2RkdXRAcXVpY2luYy5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0gg
-djUgNS85XSBkcm0vbXNtL2RwOiBBZGQgZURQIHN1cHBvcnQgdmlhIGF1eF9idXMNCj4gDQo+IFF1
-b3RpbmcgU2Fua2VlcnRoIEJpbGxha2FudGkgKDIwMjItMDMtMTYgMTA6MzU6NTApDQo+ID4gICAg
-ICAgICBUaGlzIHBhdGNoIGFkZHMgc3VwcG9ydCBmb3IgZ2VuZXJpYyBlRFAgc2luayB0aHJvdWdo
-IGF1eF9idXMuDQo+IA0KPiBQbGVhc2UgdW5pbmRlbnQgY29tbWl0IHRleHQgcGFyYWdyYXBocy4g
-VGhpcyBpc24ndCBhIGJvb2suDQo+IA0KDQpPa2F5LiBXaWxsIGNoYW5nZSBpdC4NCg0KPiA+IFRo
-ZSBlRFAvRFAgY29udHJvbGxlciBkcml2ZXIgc2hvdWxkIHN1cHBvcnQgYXV4IHRyYW5zYWN0aW9u
-cw0KPiA+IG9yaWdpbmF0aW5nIGZyb20gdGhlIHBhbmVsLWVkcCBkcml2ZXIgYW5kIGhlbmNlIHNo
-b3VsZCBiZSBpbml0aWFsaXplZCBhbmQNCj4gcmVhZHkuDQo+ID4NCj4gPiAgICAgICAgIFRoZSBw
-YW5lbCBicmlkZ2Ugc3VwcG9ydGluZyB0aGUgcGFuZWwgc2hvdWxkIGJlIHJlYWR5IGJlZm9yZQ0K
-PiA+IHRoZSBicmlkZ2UgY29ubmVjdG9yIGlzIGluaXRpYWxpemVkLiBUaGUgZ2VuZXJpYyBwYW5l
-bCBwcm9iZSBuZWVkcyB0aGUNCj4gPiBjb250cm9sbGVyIHJlc291cmNlcyB0byBiZSBlbmFibGVk
-IHRvIHN1cHBvcnQgYXV4IHRyYWN0aW9ucw0KPiA+IG9yaWdpbmF0aW5nDQo+IA0KPiBzL3RyYWN0
-aW9ucy90cmFuc2FjdGlvbnMvDQo+DQoNCldpbGwgY29ycmVjdCBpdA0KIA0KPiA+IGZyb20gaXQu
-IFNvLCB0aGUgaG9zdF9pbml0IGFuZCBwaHlfaW5pdCBhcmUgbW92ZWQgdG8gZXhlY3V0ZSBiZWZv
-cmUNCj4gPiB0aGUgcGFuZWwgcHJvYmUuDQo+ID4NCj4gPiAgICAgICAgIFRoZSBob3N0X2luaXQg
-aGFzIHRvIHJldHVybiBlYXJseSBpZiB0aGUgY29yZSBpcyBhbHJlYWR5DQo+ID4gaW5pdGlhbGl6
-ZWQgc28gdGhhdCB0aGUgcmVndWxhdG9yIGFuZCBjbG9jayB2b3RlcyBmb3IgdGhlIGNvbnRyb2xs
-ZXINCj4gPiByZXNvdXJjZXMgYXJlIGJhbGFuY2VkLg0KPiA+DQo+ID4gICAgICAgICBFVl9IUERf
-SU5JVF9TRVRVUCBuZWVkcyB0byBleGVjdXRlIGltbWVkaWF0ZWx5IHRvIGVuYWJsZSB0aGUNCj4g
-PiBpbnRlcnJ1cHRzIGZvciB0aGUgYXV4IHRyYW5zYWN0aW9ucyBmcm9tIHBhbmVsLWVkcCB0byBn
-ZXQgdGhlIG1vZGVzDQo+ID4gc3VwcG9ydGVkLg0KPiANCj4gVGhlcmUgYXJlIGEgbG90IG9mIHRo
-aW5ncyBnb2luZyBvbiBpbiB0aGlzIHBhdGNoLiBDYW4gaXQgYmUgc3BsaXQgdXA/DQo+DQoNCkkg
-Y2FuIHNwbGl0IHRoZW0gdXAuDQoNCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFNhbmtlZXJ0aCBC
-aWxsYWthbnRpIDxxdWljX3NiaWxsYWthQHF1aWNpbmMuY29tPg0KPiA+IC0tLQ0KPiA+ICBkcml2
-ZXJzL2dwdS9kcm0vbXNtL2RwL2RwX2Rpc3BsYXkuYyB8IDY1DQo+ICsrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrLS0NCj4gPiAgZHJpdmVycy9ncHUvZHJtL21zbS9kcC9kcF9kcm0u
-YyAgICAgfCAxMCArKystLS0NCj4gPiAgZHJpdmVycy9ncHUvZHJtL21zbS9kcC9kcF9wYXJzZXIu
-YyAgfCAyMSArLS0tLS0tLS0tLS0NCj4gPiBkcml2ZXJzL2dwdS9kcm0vbXNtL2RwL2RwX3BhcnNl
-ci5oICB8ICAxICsNCj4gPiAgNCBmaWxlcyBjaGFuZ2VkLCA3MCBpbnNlcnRpb25zKCspLCAyNyBk
-ZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vbXNtL2Rw
-L2RwX2Rpc3BsYXkuYw0KPiA+IGIvZHJpdmVycy9ncHUvZHJtL21zbS9kcC9kcF9kaXNwbGF5LmMN
-Cj4gPiBpbmRleCAzODJiM2FhLi42ODhiYmVkIDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvZ3B1
-L2RybS9tc20vZHAvZHBfZGlzcGxheS5jDQo+ID4gKysrIGIvZHJpdmVycy9ncHUvZHJtL21zbS9k
-cC9kcF9kaXNwbGF5LmMNCj4gPiBAQCAtMTAsNiArMTAsNyBAQA0KPiA+ICAjaW5jbHVkZSA8bGlu
-dXgvY29tcG9uZW50Lmg+DQo+ID4gICNpbmNsdWRlIDxsaW51eC9vZl9pcnEuaD4NCj4gPiAgI2lu
-Y2x1ZGUgPGxpbnV4L2RlbGF5Lmg+DQo+ID4gKyNpbmNsdWRlIDxkcm0vZHJtX2RwX2F1eF9idXMu
-aD4NCj4gPg0KPiA+ICAjaW5jbHVkZSAibXNtX2Rydi5oIg0KPiA+ICAjaW5jbHVkZSAibXNtX2tt
-cy5oIg0KPiA+IEBAIC0yNjUsOCArMjY2LDYgQEAgc3RhdGljIGludCBkcF9kaXNwbGF5X2JpbmQo
-c3RydWN0IGRldmljZSAqZGV2LCBzdHJ1Y3QNCj4gZGV2aWNlICptYXN0ZXIsDQo+ID4gICAgICAg
-ICAgICAgICAgIGdvdG8gZW5kOw0KPiA+ICAgICAgICAgfQ0KPiA+DQo+ID4gLSAgICAgICBkcC0+
-ZHBfZGlzcGxheS5uZXh0X2JyaWRnZSA9IGRwLT5wYXJzZXItPm5leHRfYnJpZGdlOw0KPiA+IC0N
-Cj4gPiAgICAgICAgIGRwLT5hdXgtPmRybV9kZXYgPSBkcm07DQo+ID4gICAgICAgICByYyA9IGRw
-X2F1eF9yZWdpc3RlcihkcC0+YXV4KTsNCj4gPiAgICAgICAgIGlmIChyYykgew0KPiA+IEBAIC00
-MjEsNiArNDIwLDExIEBAIHN0YXRpYyB2b2lkIGRwX2Rpc3BsYXlfaG9zdF9pbml0KHN0cnVjdA0K
-PiBkcF9kaXNwbGF5X3ByaXZhdGUgKmRwKQ0KPiA+ICAgICAgICAgICAgICAgICBkcC0+ZHBfZGlz
-cGxheS5jb25uZWN0b3JfdHlwZSwgZHAtPmNvcmVfaW5pdGlhbGl6ZWQsDQo+ID4gICAgICAgICAg
-ICAgICAgIGRwLT5waHlfaW5pdGlhbGl6ZWQpOw0KPiA+DQo+ID4gKyAgICAgICBpZiAoZHAtPmNv
-cmVfaW5pdGlhbGl6ZWQpIHsNCj4gPiArICAgICAgICAgICAgICAgRFJNX0RFQlVHX0RQKCJEUCBj
-b3JlIGFscmVhZHkgaW5pdGlhbGl6ZWRcbiIpOw0KPiA+ICsgICAgICAgICAgICAgICByZXR1cm47
-DQo+ID4gKyAgICAgICB9DQo+ID4gKw0KPiA+ICAgICAgICAgZHBfcG93ZXJfaW5pdChkcC0+cG93
-ZXIsIGZhbHNlKTsNCj4gPiAgICAgICAgIGRwX2N0cmxfcmVzZXRfaXJxX2N0cmwoZHAtPmN0cmws
-IHRydWUpOw0KPiA+ICAgICAgICAgZHBfYXV4X2luaXQoZHAtPmF1eCk7DQo+ID4gQEAgLTQzMyw2
-ICs0MzcsMTEgQEAgc3RhdGljIHZvaWQgZHBfZGlzcGxheV9ob3N0X2RlaW5pdChzdHJ1Y3QNCj4g
-ZHBfZGlzcGxheV9wcml2YXRlICpkcCkNCj4gPiAgICAgICAgICAgICAgICAgZHAtPmRwX2Rpc3Bs
-YXkuY29ubmVjdG9yX3R5cGUsIGRwLT5jb3JlX2luaXRpYWxpemVkLA0KPiA+ICAgICAgICAgICAg
-ICAgICBkcC0+cGh5X2luaXRpYWxpemVkKTsNCj4gPg0KPiA+ICsgICAgICAgaWYgKCFkcC0+Y29y
-ZV9pbml0aWFsaXplZCkgew0KPiA+ICsgICAgICAgICAgICAgICBEUk1fREVCVUdfRFAoIkRQIGNv
-cmUgbm90IGluaXRpYWxpemVkXG4iKTsNCj4gPiArICAgICAgICAgICAgICAgcmV0dXJuOw0KPiA+
-ICsgICAgICAgfQ0KPiA+ICsNCj4gPiAgICAgICAgIGRwX2N0cmxfcmVzZXRfaXJxX2N0cmwoZHAt
-PmN0cmwsIGZhbHNlKTsNCj4gPiAgICAgICAgIGRwX2F1eF9kZWluaXQoZHAtPmF1eCk7DQo+ID4g
-ICAgICAgICBkcF9wb3dlcl9kZWluaXQoZHAtPnBvd2VyKTsNCj4gPiBAQCAtMTUwMiw3ICsxNTEx
-LDcgQEAgdm9pZCBtc21fZHBfaXJxX3Bvc3RpbnN0YWxsKHN0cnVjdCBtc21fZHANCj4gPiAqZHBf
-ZGlzcGxheSkNCj4gPg0KPiA+ICAgICAgICAgZHBfaHBkX2V2ZW50X3NldHVwKGRwKTsNCj4gPg0K
-PiA+IC0gICAgICAgZHBfYWRkX2V2ZW50KGRwLCBFVl9IUERfSU5JVF9TRVRVUCwgMCwgMTAwKTsN
-Cj4gPiArICAgICAgIGRwX2FkZF9ldmVudChkcCwgRVZfSFBEX0lOSVRfU0VUVVAsIDAsIDApOw0K
-PiA+ICB9DQo+ID4NCj4gPiAgdm9pZCBtc21fZHBfZGVidWdmc19pbml0KHN0cnVjdCBtc21fZHAg
-KmRwX2Rpc3BsYXksIHN0cnVjdCBkcm1fbWlub3INCj4gPiAqbWlub3IpIEBAIC0xNTI0LDYgKzE1
-MzMsNTIgQEAgdm9pZCBtc21fZHBfZGVidWdmc19pbml0KHN0cnVjdA0KPiBtc21fZHAgKmRwX2Rp
-c3BsYXksIHN0cnVjdCBkcm1fbWlub3IgKm1pbm9yKQ0KPiA+ICAgICAgICAgfQ0KPiA+ICB9DQo+
-ID4NCj4gPiArc3RhdGljIGludCBkcF9kaXNwbGF5X2dldF9uZXh0X2JyaWRnZShzdHJ1Y3QgbXNt
-X2RwICpkcCkgew0KPiA+ICsgICAgICAgaW50IHJjID0gMDsNCj4gDQo+IERyb3AgaW5pdGlhbGl6
-YXRpb24uDQo+IA0KDQpPa2F5Lg0KDQo+ID4gKyAgICAgICBzdHJ1Y3QgZHBfZGlzcGxheV9wcml2
-YXRlICpkcF9wcml2Ow0KPiA+ICsgICAgICAgc3RydWN0IGRldmljZV9ub2RlICphdXhfYnVzOw0K
-PiA+ICsgICAgICAgc3RydWN0IGRldmljZSAqZGV2Ow0KPiA+ICsNCj4gPiArICAgICAgIGRwX3By
-aXYgPSBjb250YWluZXJfb2YoZHAsIHN0cnVjdCBkcF9kaXNwbGF5X3ByaXZhdGUsIGRwX2Rpc3Bs
-YXkpOw0KPiA+ICsgICAgICAgZGV2ID0gJmRwX3ByaXYtPnBkZXYtPmRldjsNCj4gPiArICAgICAg
-IGF1eF9idXMgPSBvZl9nZXRfY2hpbGRfYnlfbmFtZShkZXYtPm9mX25vZGUsICJhdXgtYnVzIik7
-DQo+ID4gKw0KPiA+ICsgICAgICAgaWYgKGF1eF9idXMpIHsNCj4gPiArICAgICAgICAgICAgICAg
-ZHBfZGlzcGxheV9ob3N0X2luaXQoZHBfcHJpdik7DQo+ID4gKyAgICAgICAgICAgICAgIGRwX2Nh
-dGFsb2dfY3RybF9ocGRfY29uZmlnKGRwX3ByaXYtPmNhdGFsb2cpOw0KPiA+ICsgICAgICAgICAg
-ICAgICBlbmFibGVfaXJxKGRwX3ByaXYtPmlycSk7DQo+ID4gKyAgICAgICAgICAgICAgIGRwX2Rp
-c3BsYXlfaG9zdF9waHlfaW5pdChkcF9wcml2KTsNCj4gPiArDQo+ID4gKyAgICAgICAgICAgICAg
-IGRldm1fb2ZfZHBfYXV4X3BvcHVsYXRlX2VwX2RldmljZXMoZHBfcHJpdi0+YXV4KTsNCj4gPiAr
-DQo+ID4gKyAgICAgICAgICAgICAgIGRpc2FibGVfaXJxKGRwX3ByaXYtPmlycSk7DQo+IA0KPiBX
-aHkgZG8gd2UgZGlzYWJsZSBpcnE/DQo+IA0KDQpUbyBzdXBwb3J0IHBhbmVsIHdpdGhvdXQgYXV4
-X2J1cy4NCg0KSWYgYXV4X2J1cyBpcyBub3QgcHJlc2VudCBhbmQgZURQIHBhbmVsIGlzIGVudW1l
-cmF0ZWQgYXMgYSBzaW5nbGUgbW9kZSBzaW1wbGUgc2hhcnAgcGFuZWwgKHBhbmVsLWVkcC5jKSwN
-CnRoZSBjbG9ja3MgYW5kIGF1eCByZXNvdXJjZXMgcmVxdWlyZWQgZm9yIHRoZSBwYW5lbCB3aWxs
-IGJlIGVuYWJsZWQgaW4gZHBfZGlzcGxheV9jb25maWdfaHBkIGFuZCBpcnEgd2lsbCBhbHNvDQpi
-ZSBlbmFibGVkIGZyb20gdGhlcmUgbGlrZSBleHRlcm5hbCBEUCBkaXNwbGF5LiBTbywgdGhlIGRw
-X2Rpc3BsYXlfY29uZmlnX2hwZCBpcyB0byBiZSBleGVjdXRlZCBmb3IgYm90aCBlRFAgYW5kIERQ
-Lg0KDQpXZSBkaXNhYmxlZCBpdCBoZXJlIHRvIGJhbGFuY2UgaXQgd2l0aCB0aGUgZW5hYmxlX2ly
-cSBpbiBkcF9kaXNwbGF5X2NvbmZpZ19ocGQsIHdoaWNoIGV4ZWN1dGVzIGZvciBib3RoIGVkcCBh
-bmQgZHAuDQogDQo+ID4gKyAgICAgICB9DQo+IA0KPiBUaGUgYXV4X2J1cyBub2RlIGxlYWtlZC4N
-Cj4NCg0KV2lsbCBhZGQgYSBvZl9ub2RlX3B1dC4NCiANCj4gPiArDQo+ID4gKyAgICAgICAvKg0K
-PiA+ICsgICAgICAgICogRXh0ZXJuYWwgYnJpZGdlcyBhcmUgbWFuZGF0b3J5IGZvciBlRFAgaW50
-ZXJmYWNlczogb25lIGhhcyB0bw0KPiA+ICsgICAgICAgICogcHJvdmlkZSBhdCBsZWFzdCBhbiBl
-RFAgcGFuZWwgKHdoaWNoIGdldHMgd3JhcHBlZCBpbnRvIHBhbmVsLQ0KPiBicmlkZ2UpLg0KPiA+
-ICsgICAgICAgICoNCj4gPiArICAgICAgICAqIEZvciBEaXNwbGF5UG9ydCBpbnRlcmZhY2VzIGV4
-dGVybmFsIGJyaWRnZXMgYXJlIG9wdGlvbmFsLCBzbw0KPiA+ICsgICAgICAgICogc2lsZW50bHkg
-aWdub3JlIGFuIGVycm9yIGlmIG9uZSBpcyBub3QgcHJlc2VudCAoLUVOT0RFVikuDQo+ID4gKyAg
-ICAgICAgKi8NCj4gPiArICAgICAgIHJjID0gZHBfcGFyc2VyX2ZpbmRfbmV4dF9icmlkZ2UoZHBf
-cHJpdi0+cGFyc2VyKTsNCj4gPiArICAgICAgIGlmIChyYyA9PSAtRU5PREVWKSB7DQo+ID4gKyAg
-ICAgICAgICAgICAgIGlmIChkcC0+Y29ubmVjdG9yX3R5cGUgPT0gRFJNX01PREVfQ09OTkVDVE9S
-X2VEUCkgew0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIERSTV9FUlJPUigiZURQOiBuZXh0
-IGJyaWRnZSBpcyBub3QgcHJlc2VudFxuIik7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
-cmV0dXJuIHJjOw0KPiA+ICsgICAgICAgICAgICAgICB9DQo+ID4gKyAgICAgICB9IGVsc2UgaWYg
-KHJjKSB7DQo+ID4gKyAgICAgICAgICAgICAgIGlmIChyYyAhPSAtRVBST0JFX0RFRkVSKQ0KPiA+
-ICsgICAgICAgICAgICAgICAgICAgICAgIERSTV9FUlJPUigiRFA6IGVycm9yIHBhcnNpbmcgbmV4
-dCBicmlkZ2U6ICVkXG4iLCByYyk7DQo+ID4gKyAgICAgICAgICAgICAgIHJldHVybiByYzsNCj4g
-PiArICAgICAgIH0NCj4gPiArDQo+ID4gKyAgICAgICBkcC0+bmV4dF9icmlkZ2UgPSBkcF9wcml2
-LT5wYXJzZXItPm5leHRfYnJpZGdlOw0KPiA+ICsNCj4gPiArICAgICAgIHJldHVybiAwOw0KPiA+
-ICt9DQo+ID4gKw0KPiA+ICBpbnQgbXNtX2RwX21vZGVzZXRfaW5pdChzdHJ1Y3QgbXNtX2RwICpk
-cF9kaXNwbGF5LCBzdHJ1Y3QgZHJtX2RldmljZQ0KPiAqZGV2LA0KPiA+ICAgICAgICAgICAgICAg
-ICAgICAgICAgIHN0cnVjdCBkcm1fZW5jb2RlciAqZW5jb2RlcikgIHsgQEAgLTE1NDcsNg0KPiA+
-ICsxNjAyLDEwIEBAIGludCBtc21fZHBfbW9kZXNldF9pbml0KHN0cnVjdCBtc21fZHAgKmRwX2Rp
-c3BsYXksDQo+IHN0cnVjdA0KPiA+IGRybV9kZXZpY2UgKmRldiwNCj4gPg0KPiA+ICAgICAgICAg
-ZHBfZGlzcGxheS0+ZW5jb2RlciA9IGVuY29kZXI7DQo+ID4NCj4gPiArICAgICAgIHJldCA9IGRw
-X2Rpc3BsYXlfZ2V0X25leHRfYnJpZGdlKGRwX2Rpc3BsYXkpOw0KPiANCj4gRGlkbid0IHdlIGp1
-c3QgbW92ZSBicmlkZ2UgYXR0YWNobWVudCBvdXQgb2YgbW9kZXNldD8gV2h5IGlzIGl0IGJlaW5n
-IGRvbmUNCj4gaGVyZT8NCj4gDQoNCkFmdGVyIERtaXRyeSdzIHBhdGNoZXMsIHRoZXJlIGlzIGEg
-bmVlZCB0byBnZXQgYWxsIHRoZSByZXF1aXJlZCBicmlkZ2VzIGJlZm9yZSB0aGUgYnJpZGdlX2Nv
-bm5lY3Rvcl9pbml0Lg0KVGhlIGJyaWRnZV9jb25uZWN0b3JfaW5pdCB3aWxsIGluc3RhbnRpYXRl
-IHRoZSBvcHMgZm9yIHRoZSBmYXJ0aGVzdCBicmlkZ2UuIElmIHdlIGRvIG5vdCBnZXQgdGhlIG5l
-eHRfYnJpZGdlIGhlcmUsDQp0aGVuIHRoZSBnZXRfbW9kZXMgZm9yIGVEUCB3aWxsIGJlIHVzaW5n
-IHRoZSBkcF9icmlkZ2UgZnVuY3Rpb24gaW5zdGVhZCBvZiB0aGUgcGFuZWwgYnJpZGdlIGZ1bmN0
-aW9uLg0KDQo+ID4gKyAgICAgICBpZiAocmV0KQ0KPiA+ICsgICAgICAgICAgICAgICByZXR1cm4g
-cmV0Ow0KPiA+ICsNCj4gPiAgICAgICAgIGRwX2Rpc3BsYXktPmJyaWRnZSA9IGRwX2JyaWRnZV9p
-bml0KGRwX2Rpc3BsYXksIGRldiwgZW5jb2Rlcik7DQo+ID4gICAgICAgICBpZiAoSVNfRVJSKGRw
-X2Rpc3BsYXktPmJyaWRnZSkpIHsNCj4gPiAgICAgICAgICAgICAgICAgcmV0ID0gUFRSX0VSUihk
-cF9kaXNwbGF5LT5icmlkZ2UpOyBkaWZmIC0tZ2l0DQo+ID4gYS9kcml2ZXJzL2dwdS9kcm0vbXNt
-L2RwL2RwX2RybS5jDQo+IGIvZHJpdmVycy9ncHUvZHJtL21zbS9kcC9kcF9kcm0uYw0KPiA+IGlu
-ZGV4IDdjZTFhY2EuLjUyNTRiZDYgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL21z
-bS9kcC9kcF9kcm0uYw0KPiA+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9tc20vZHAvZHBfZHJtLmMN
-Cj4gPiBAQCAtMTE0LDEwICsxMTQsMTIgQEAgc3RydWN0IGRybV9icmlkZ2UgKmRwX2JyaWRnZV9p
-bml0KHN0cnVjdA0KPiBtc21fZHAgKmRwX2Rpc3BsYXksIHN0cnVjdCBkcm1fZGV2aWNlICoNCj4g
-PiAgICAgICAgIGJyaWRnZS0+ZnVuY3MgPSAmZHBfYnJpZGdlX29wczsNCj4gPiAgICAgICAgIGJy
-aWRnZS0+dHlwZSA9IGRwX2Rpc3BsYXktPmNvbm5lY3Rvcl90eXBlOw0KPiA+DQo+ID4gLSAgICAg
-ICBicmlkZ2UtPm9wcyA9DQo+ID4gLSAgICAgICAgICAgICAgIERSTV9CUklER0VfT1BfREVURUNU
-IHwNCj4gPiAtICAgICAgICAgICAgICAgRFJNX0JSSURHRV9PUF9IUEQgfA0KPiA+IC0gICAgICAg
-ICAgICAgICBEUk1fQlJJREdFX09QX01PREVTOw0KPiA+ICsgICAgICAgaWYgKGJyaWRnZS0+dHlw
-ZSA9PSBEUk1fTU9ERV9DT05ORUNUT1JfRGlzcGxheVBvcnQpIHsNCj4gDQo+IFdoeSBjYW4ndCBl
-RFAgaGF2ZSBicmlkZ2Ugb3BzIHRoYXQgYXJlIHRoZSBzYW1lPw0KPiANCg0KZURQIG5lZWRzIHRv
-IGJlIHJlcG9ydGVkIGFzIGFsd2F5cyBjb25uZWN0ZWQuIFdoaWNoZXZlciBicmlkZ2UgaXMgc2V0
-dGluZyB0aGVzZSBvcHMgZmxhZ3Mgc2hvdWxkIHByb3ZpZGUgdGhlIG9wcy4NClRoZSBmYXJ0aGVz
-dCBicmlkZ2UgZnJvbSB0aGUgZW5jb2RlciB3aXRoIHRoZSBvcHMgZmxhZyBzZXQgc2hvdWxkIGlt
-cGxlbWVudCB0aGUgb3BzLg0KZHJtX2JyaWRnZV9jb25uZWN0b3JfZGV0ZWN0ICByZXBvcnRzIGFs
-d2F5cyBjb25uZWN0ZWQgZm9yIGVEUC4gU28sIHdlIGRvbid0IG5lZWQgRFJNX0JSSURHRV9PUF9E
-RVRFQ1QgDQplRFAgcGFuZWwgYnJpZGdlIHdpbGwgYWRkIERSTV9CUklER0VfT1BfTU9ERVMgaW4g
-ZHJtX3BhbmVsX2JyaWRnZV9hZGRfdHlwZWQgYW5kIHdpbGwgY2FsbCBwYW5lbF9lZHBfZ2V0X21v
-ZGVzLg0KQXMgd2UgYXJlIG5vdCBzdXBwb3J0aW5nIEhQRCBmb3IgRURQLCB3ZSBhcmUgbm90IHNl
-dHRpbmcgdGhlIEhQRCBvcHMgZmxhZy4NCg0KPiA+ICsgICAgICAgICAgICAgICBicmlkZ2UtPm9w
-cyA9DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgRFJNX0JSSURHRV9PUF9ERVRFQ1QgfA0K
-PiA+ICsgICAgICAgICAgICAgICAgICAgICAgIERSTV9CUklER0VfT1BfSFBEIHwNCj4gPiArICAg
-ICAgICAgICAgICAgICAgICAgICBEUk1fQlJJREdFX09QX01PREVTOw0KPiA+ICsgICAgICAgfQ0K
-PiA+DQo+ID4gICAgICAgICByYyA9IGRybV9icmlkZ2VfYXR0YWNoKGVuY29kZXIsIGJyaWRnZSwg
-TlVMTCwNCj4gRFJNX0JSSURHRV9BVFRBQ0hfTk9fQ09OTkVDVE9SKTsNCj4gPiAgICAgICAgIGlm
-IChyYykgew0K
+[Combination 3] dctcp + switch ECN-marking off
+
+This is a wrong usage of dctcp.
+Since the ECN-marking required by dctcp is disabled on the switch.
+The condition of the bandwidth is about as bad as [Combination 2].
+Since packet dropping occured.
+
+/*
+ * before loading traffic, disable ECN-marking and clear the
+ * counters on the 2 switches.
+ */
+
+hound-dirt# configure terminal
+hound-dirt(config)# wred LOSSLESS_ECN_5
+hound-dirt(config-wred)# no random-detect ecn
+hound-dirt(config-wred)# end
+hound-dirt# 
+hound-dirt# clear qos statistics type queuing interface ethernet 1/1/4
+hound-dirt# show queuing statistics interface ethernet 1/1/4
+Interface ethernet1/1/4
+Queue Packets                  Bytes                    Dropped-Packets          Dropped-Bytes            
+0     0                        0                        0                        0                        
+1     0                        0                        0                        0                        
+2     0                        0                        0                        0                        
+3     0                        0                        0                        0                        
+4     0                        0                        0                        0                        
+5     0                        0                        0                        0                        
+6     0                        0                        0                        0                        
+7     0                        0                        0                        0                        
+hound-dirt#
+
+fox-dirt# configure terminal
+fox-dirt(config)# wred LOSSLESS_ECN_5
+fox-dirt(config-wred)# no random-detect ecn
+fox-dirt(config-wred)# end
+fox-dirt# 
+fox-dirt# clear qos statistics type queuing interface ethernet 1/1/4
+fox-dirt# show queuing statistics interface ethernet 1/1/4
+Interface ethernet1/1/4
+Queue Packets                  Bytes                    Dropped-Packets          Dropped-Bytes            
+0     2                        128                      0                        0                        
+1     2                        196                      0                        0                        
+2     0                        0                        0                        0                        
+3     0                        0                        0                        0                        
+4     0                        0                        0                        0                        
+5     0                        0                        0                        0                        
+6     0                        0                        0                        0                        
+7     0                        0                        0                        0                        
+fox-dirt# 
+
+
+
+/*
+ * logs of RX node.
+ */
+
+ogden-dirt:/home/admin/tyler # echo dctcp >/proc/sys/net/ipv4/tcp_congestion_control 
+ogden-dirt:/home/admin/tyler # cat /proc/sys/net/ipv4/tcp_congestion_control
+dctcp
+
+ogden-dirt:/home/admin/tyler # date; ./tcp_perf.exe --server-ip 169.254.85.4  --server-port 10001 --msg-len 65536 --conn-num 24 -s -r  --data-random --svr-no-wait-all-conn-OK --show-bandwidth-only
+Fri Mar 25 09:53:47 EDT 2022
+
+DBG:/mnt/hgfs/src/linux-dev-framework-master/libs/app_utils/src/socket.c(104)-socket_init_2:
+bind socket fd 3 to 169.254.85.4:10001 succeed
+DBG:perf_frmwk.c(1472)-create_tcp_conns_start_load:
+start listen on fd 3
+conn [0] local 169.254.85.4:10001 peer 169.254.85.3:59692 created.
+rx thread of conn 0 started
+conn [1] local 169.254.85.4:10001 peer 169.254.85.3:59694 created.
+rx thread of conn 1 started
+conn [2] local 169.254.85.4:10001 peer 169.254.85.3:59696 created.
+rx thread of conn 2 started
+conn [3] local 169.254.85.4:10001 peer 169.254.85.3:59698 created.
+rx thread of conn 3 started
+conn [4] local 169.254.85.4:10001 peer 169.254.85.3:59700 created.
+conn [5] local 169.254.85.4:10001 peer 169.254.85.3:59702 created.
+rx thread of conn 4 started
+conn [6] local 169.254.85.4:10001 peer 169.254.85.3:59706 created.
+rx thread of conn 5 started
+conn [7] local 169.254.85.4:10001 peer 169.254.85.3:59708 created.
+rx thread of conn 6 started
+rx thread of conn 7 started
+conn [8] local 169.254.85.4:10001 peer 169.254.85.2:37992 created.
+rx thread of conn 8 started
+conn [9] local 169.254.85.4:10001 peer 169.254.85.2:37994 created.
+rx thread of conn 9 started
+conn [10] local 169.254.85.4:10001 peer 169.254.85.2:37996 created.
+rx thread of conn 10 started
+conn [11] local 169.254.85.4:10001 peer 169.254.85.2:37998 created.
+rx thread of conn 11 started
+conn [12] local 169.254.85.4:10001 peer 169.254.85.2:38000 created.
+rx thread of conn 12 started
+conn [13] local 169.254.85.4:10001 peer 169.254.85.2:38002 created.
+rx thread of conn 13 started
+conn [14] local 169.254.85.4:10001 peer 169.254.85.2:38004 created.
+conn [15] local 169.254.85.4:10001 peer 169.254.85.2:38006 created.
+rx thread of conn 14 started
+rx thread of conn 15 started
+
+[time lasts]: 1
+        rx_msg_succ_bytes                   0x15b4f0000       (5,826,871,296)
+conn [16] local 169.254.85.4:10001 peer 169.254.85.1:49500 created.
+rx thread of conn 16 started
+conn [17] local 169.254.85.4:10001 peer 169.254.85.1:49502 created.
+rx thread of conn 17 started
+conn [18] local 169.254.85.4:10001 peer 169.254.85.1:49504 created.
+rx thread of conn 18 started
+conn [19] local 169.254.85.4:10001 peer 169.254.85.1:49506 created.
+rx thread of conn 19 started
+conn [20] local 169.254.85.4:10001 peer 169.254.85.1:49508 created.
+rx thread of conn 20 started
+conn [21] local 169.254.85.4:10001 peer 169.254.85.1:49510 created.
+rx thread of conn 21 started
+conn [22] local 169.254.85.4:10001 peer 169.254.85.1:49512 created.
+rx thread of conn 22 started
+conn [23] local 169.254.85.4:10001 peer 169.254.85.1:49514 created.
+24 connection(s) created in total
+rx thread of conn 23 started
+
+[time lasts]: 2
+        rx_msg_succ_bytes                   0x159db0000       (5,802,491,904)
+
+[time lasts]: 3
+        rx_msg_succ_bytes                   0x15a770000       (5,812,715,520)
+
+[time lasts]: 4
+        rx_msg_succ_bytes                   0x159680000       (5,794,955,264)
+
+[time lasts]: 5
+        rx_msg_succ_bytes                   0x15b130000       (5,822,939,136)
+
+[time lasts]: 6
+        rx_msg_succ_bytes                   0x1574b0000       (5,759,500,288)
+
+[time lasts]: 7
+        rx_msg_succ_bytes                   0x159850000       (5,796,855,808)
+
+[time lasts]: 8
+        rx_msg_succ_bytes                   0x15ae60000       (5,819,990,016)
+
+[time lasts]: 9
+        rx_msg_succ_bytes                   0x15be90000       (5,836,963,840)
+
+[time lasts]: 10
+        rx_msg_succ_bytes                   0x158ef0000       (5,787,025,408)
+
+[time lasts]: 11
+        rx_msg_succ_bytes                   0x15ad30000       (5,818,744,832)
+
+[time lasts]: 12
+        rx_msg_succ_bytes                   0x159ee0000       (5,803,737,088)
+
+[time lasts]: 13
+        rx_msg_succ_bytes                   0x15bc00000       (5,834,276,864)
+
+[time lasts]: 14
+        rx_msg_succ_bytes                   0x1589d0000       (5,781,651,456)
+
+[time lasts]: 15
+        rx_msg_succ_bytes                   0x157f60000       (5,770,706,944)
+
+[time lasts]: 16
+        rx_msg_succ_bytes                   0x15a290000       (5,807,603,712)
+
+[time lasts]: 17
+        rx_msg_succ_bytes                   0x1582f0000       (5,774,442,496)
+
+[time lasts]: 18
+        rx_msg_succ_bytes                   0x15b3e0000       (5,825,757,184)
+
+[time lasts]: 19
+        rx_msg_succ_bytes                   0x15abc0000       (5,817,237,504)
+
+[time lasts]: 20
+        rx_msg_succ_bytes                   0x159010000       (5,788,205,056)
+
+[time lasts]: 21
+        rx_msg_succ_bytes                   0x15c080000       (5,838,995,456)
+
+[time lasts]: 22
+        rx_msg_succ_bytes                   0x159410000       (5,792,399,360)
+
+[time lasts]: 23
+        rx_msg_succ_bytes                   0x158fc0000       (5,787,877,376)
+
+[time lasts]: 24
+        rx_msg_succ_bytes                   0x1531c0000       (5,689,311,232)
+
+[time lasts]: 25
+        rx_msg_succ_bytes                   0x158520000       (5,776,736,256)
+
+[time lasts]: 26
+        rx_msg_succ_bytes                   0x15a720000       (5,812,387,840)
+
+[time lasts]: 27
+        rx_msg_succ_bytes                   0x157980000       (5,764,546,560)
+
+[time lasts]: 28
+        rx_msg_succ_bytes                   0x159660000       (5,794,824,192)
+
+[time lasts]: 29
+        rx_msg_succ_bytes                   0x157d30000       (5,768,413,184)
+
+[time lasts]: 30
+        rx_msg_succ_bytes                   0x15a890000       (5,813,895,168)
+
+[time lasts]: 31
+        rx_msg_succ_bytes                   0x159630000       (5,794,627,584)
+
+[time lasts]: 32
+        rx_msg_succ_bytes                   0x15cff0000       (5,855,182,848)
+
+[time lasts]: 33
+        rx_msg_succ_bytes                   0x15d700000       (5,862,588,416)
+
+[time lasts]: 34
+        rx_msg_succ_bytes                   0x158100000       (5,772,410,880)
+
+[time lasts]: 35
+        rx_msg_succ_bytes                   0x15ccf0000       (5,852,037,120)
+
+[time lasts]: 36
+        rx_msg_succ_bytes                   0x15b790000       (5,829,623,808)
+
+[time lasts]: 37
+        rx_msg_succ_bytes                   0x159570000       (5,793,841,152)
+
+[time lasts]: 38
+        rx_msg_succ_bytes                   0x15c070000       (5,838,929,920)
+
+[time lasts]: 39
+        rx_msg_succ_bytes                   0x158380000       (5,775,032,320)
+
+[time lasts]: 40
+        rx_msg_succ_bytes                   0x155d40000       (5,734,924,288)
+
+[time lasts]: 41
+        rx_msg_succ_bytes                   0x15af50000       (5,820,973,056)
+
+[time lasts]: 42
+        rx_msg_succ_bytes                   0x157c20000       (5,767,299,072)
+
+[time lasts]: 43
+        rx_msg_succ_bytes                   0x158530000       (5,776,801,792)
+
+[time lasts]: 44
+        rx_msg_succ_bytes                   0x15b2f0000       (5,824,774,144)
+
+[time lasts]: 45
+        rx_msg_succ_bytes                   0x15a660000       (5,811,601,408)
+
+[time lasts]: 46
+        rx_msg_succ_bytes                   0x158840000       (5,780,013,056)
+
+[time lasts]: 47
+        rx_msg_succ_bytes                   0x1585e0000       (5,777,522,688)
+
+[time lasts]: 48
+        rx_msg_succ_bytes                   0x158070000       (5,771,821,056)
+
+[time lasts]: 49
+        rx_msg_succ_bytes                   0x156ce0000       (5,751,308,288)
+
+[time lasts]: 50
+        rx_msg_succ_bytes                   0x158ed0000       (5,786,894,336)
+
+[time lasts]: 51
+        rx_msg_succ_bytes                   0x15a580000       (5,810,683,904)
+
+[time lasts]: 52
+        rx_msg_succ_bytes                   0x15adc0000       (5,819,334,656)
+
+[time lasts]: 53
+        rx_msg_succ_bytes                   0x1589d0000       (5,781,651,456)
+
+[time lasts]: 54
+        rx_msg_succ_bytes                   0x15b410000       (5,825,953,792)
+
+[time lasts]: 55
+        rx_msg_succ_bytes                   0x158890000       (5,780,340,736)
+
+[time lasts]: 56
+        rx_msg_succ_bytes                   0x153660000       (5,694,160,896)
+
+[time lasts]: 57
+        rx_msg_succ_bytes                   0x15a7a0000       (5,812,912,128)
+
+[time lasts]: 58
+        rx_msg_succ_bytes                   0x158ce0000       (5,784,862,720)
+
+[time lasts]: 59
+        rx_msg_succ_bytes                   0x157720000       (5,762,056,192)
+
+[time lasts]: 60
+        rx_msg_succ_bytes                   0x158d80000       (5,785,518,080)
+
+[time lasts]: 61
+        rx_msg_succ_bytes                   0x158440000       (5,775,818,752)
+
+[time lasts]: 62
+        rx_msg_succ_bytes                   0x157430000       (5,758,976,000)
+
+[time lasts]: 63
+        rx_msg_succ_bytes                   0x159c60000       (5,801,115,648)
+
+[time lasts]: 64
+        rx_msg_succ_bytes                   0x15a440000       (5,809,373,184)
+^Ccaught signal 2
+
+/*
+ * logs of TX node 1.
+ */
+
+provo-dirt:/home/admin/tyler # echo dctcp >/proc/sys/net/ipv4/tcp_congestion_control
+provo-dirt:/home/admin/tyler # cat /proc/sys/net/ipv4/tcp_congestion_control
+dctcp
+
+provo-dirt:/home/admin/tyler # date; ./tcp_perf.exe --server-ip 169.254.85.4  --server-port 10001 --msg-len 65536 --conn-num 8 -c -t --data-random --show-bandwidth-only
+Fri Mar 25 09:53:52 EDT 2022
+
+conn [0] local 169.254.85.1:49500 peer 169.254.85.4:10001 created.
+conn [1] local 169.254.85.1:49502 peer 169.254.85.4:10001 created.
+conn [2] local 169.254.85.1:49504 peer 169.254.85.4:10001 created.
+conn [3] local 169.254.85.1:49506 peer 169.254.85.4:10001 created.
+conn [4] local 169.254.85.1:49508 peer 169.254.85.4:10001 created.
+conn [5] local 169.254.85.1:49510 peer 169.254.85.4:10001 created.
+conn [6] local 169.254.85.1:49512 peer 169.254.85.4:10001 created.
+conn [7] local 169.254.85.1:49514 peer 169.254.85.4:10001 created.
+8 connection(s) created in total
+tx thread of conn 0 started
+tx thread of conn 1 started
+tx thread of conn 2 started
+tx thread of conn 3 started
+tx thread of conn 4 started
+tx thread of conn 5 started
+tx thread of conn 6 started
+tx thread of conn 7 started
+
+[time lasts]: 1
+        tx_succ_bytes                       0x82fd0000        (2,197,618,688)
+
+[time lasts]: 2
+        tx_succ_bytes                       0x7dbe0000        (2,109,603,840)
+
+[time lasts]: 3
+        tx_succ_bytes                       0x82120000        (2,182,217,728)
+
+[time lasts]: 4
+        tx_succ_bytes                       0x75890000        (1,971,912,704)
+
+[time lasts]: 5
+        tx_succ_bytes                       0x67040000        (1,728,315,392)
+
+[time lasts]: 6
+        tx_succ_bytes                       0x754d0000        (1,967,980,544)
+
+[time lasts]: 7
+        tx_succ_bytes                       0x74be0000        (1,958,608,896)
+
+[time lasts]: 8
+        tx_succ_bytes                       0x79670000        (2,036,793,344)
+
+[time lasts]: 9
+        tx_succ_bytes                       0x7fb00000        (2,142,240,768)
+
+[time lasts]: 10
+        tx_succ_bytes                       0x730d0000        (1,930,231,808)
+
+[time lasts]: 11
+        tx_succ_bytes                       0x6f9b0000        (1,872,429,056)
+
+[time lasts]: 12
+        tx_succ_bytes                       0x58d60000        (1,490,419,712)
+
+[time lasts]: 13
+        tx_succ_bytes                       0x72b40000        (1,924,399,104)
+
+[time lasts]: 14
+        tx_succ_bytes                       0x5f190000        (1,595,473,920)
+
+[time lasts]: 15
+        tx_succ_bytes                       0x66590000        (1,717,108,736)
+
+[time lasts]: 16
+        tx_succ_bytes                       0x72bc0000        (1,924,923,392)
+
+[time lasts]: 17
+        tx_succ_bytes                       0x69460000        (1,766,195,200)
+
+[time lasts]: 18
+        tx_succ_bytes                       0x7a8c0000        (2,055,995,392)
+
+[time lasts]: 19
+        tx_succ_bytes                       0x630c0000        (1,661,730,816)
+
+[time lasts]: 20
+        tx_succ_bytes                       0x608c0000        (1,619,787,776)
+
+[time lasts]: 21
+        tx_succ_bytes                       0x64680000        (1,684,537,344)
+
+[time lasts]: 22
+        tx_succ_bytes                       0x5d250000        (1,562,705,920)
+
+[time lasts]: 23
+        tx_succ_bytes                       0x7ba60000        (2,074,476,544)
+
+[time lasts]: 24
+        tx_succ_bytes                       0x76120000        (1,980,891,136)
+
+[time lasts]: 25
+        tx_succ_bytes                       0x5a2a0000        (1,512,701,952)
+
+[time lasts]: 26
+        tx_succ_bytes                       0x6e550000        (1,851,064,320)
+
+[time lasts]: 27
+        tx_succ_bytes                       0x60650000        (1,617,231,872)
+
+[time lasts]: 28
+        tx_succ_bytes                       0x78cb0000        (2,026,569,728)
+
+[time lasts]: 29
+        tx_succ_bytes                       0x71c80000        (1,908,932,608)
+
+[time lasts]: 30
+        tx_succ_bytes                       0x66190000        (1,712,914,432)
+
+[time lasts]: 31
+        tx_succ_bytes                       0x6c760000        (1,819,672,576)
+
+[time lasts]: 32
+        tx_succ_bytes                       0x77b20000        (2,008,154,112)
+
+[time lasts]: 33
+        tx_succ_bytes                       0x6eab0000        (1,856,700,416)
+
+[time lasts]: 34
+        tx_succ_bytes                       0x85160000        (2,232,811,520)
+
+[time lasts]: 35
+        tx_succ_bytes                       0x71f70000        (1,912,012,800)
+
+[time lasts]: 36
+        tx_succ_bytes                       0x6ec30000        (1,858,273,280)
+
+[time lasts]: 37
+        tx_succ_bytes                       0x7b1d0000        (2,065,498,112)
+
+[time lasts]: 38
+        tx_succ_bytes                       0x74eb0000        (1,961,558,016)
+
+[time lasts]: 39
+        tx_succ_bytes                       0x72eb0000        (1,928,003,584)
+
+[time lasts]: 40
+        tx_succ_bytes                       0x76700000        (1,987,051,520)
+
+[time lasts]: 41
+        tx_succ_bytes                       0x721a0000        (1,914,306,560)
+
+[time lasts]: 42
+        tx_succ_bytes                       0x69500000        (1,766,850,560)
+
+[time lasts]: 43
+        tx_succ_bytes                       0x70fe0000        (1,895,694,336)
+
+[time lasts]: 44
+        tx_succ_bytes                       0x7e640000        (2,120,482,816)
+
+[time lasts]: 45
+        tx_succ_bytes                       0x6a090000        (1,778,974,720)
+
+[time lasts]: 46
+        tx_succ_bytes                       0x6e2b0000        (1,848,311,808)
+
+[time lasts]: 47
+        tx_succ_bytes                       0x5e0f0000        (1,578,041,344)
+
+[time lasts]: 48
+        tx_succ_bytes                       0x670f0000        (1,729,036,288)
+
+[time lasts]: 49
+        tx_succ_bytes                       0x77390000        (2,000,224,256)
+
+[time lasts]: 50
+        tx_succ_bytes                       0x77360000        (2,000,027,648)
+
+[time lasts]: 51
+        tx_succ_bytes                       0x7c040000        (2,080,636,928)
+
+[time lasts]: 52
+        tx_succ_bytes                       0x678c0000        (1,737,228,288)
+
+[time lasts]: 53
+        tx_succ_bytes                       0x69720000        (1,769,078,784)
+
+[time lasts]: 54
+        tx_succ_bytes                       0x683a0000        (1,748,631,552)
+
+[time lasts]: 55
+        tx_succ_bytes                       0x769d0000        (1,990,000,640)
+
+[time lasts]: 56
+        tx_succ_bytes                       0x77270000        (1,999,044,608)
+
+[time lasts]: 57
+        tx_succ_bytes                       0x671a0000        (1,729,757,184)
+
+[time lasts]: 58
+        tx_succ_bytes                       0x6c4a0000        (1,816,788,992)
+
+[time lasts]: 59
+        tx_succ_bytes                       0x7c370000        (2,083,979,264)
+
+[time lasts]: 60
+        tx_succ_bytes                       0x82a00000        (2,191,523,840)
+
+[time lasts]: 61
+        tx_succ_bytes                       0x6f980000        (1,872,232,448)
+
+[time lasts]: 62
+        tx_succ_bytes                       0x75d50000        (1,976,893,440)
+
+[time lasts]: 63
+        tx_succ_bytes                       0x75a20000        (1,973,551,104)
+
+/*
+ * logs of TX node 2.
+ */
+
+sandy-dirt:/home/admin/tyler # echo dctcp >/proc/sys/net/ipv4/tcp_congestion_control
+sandy-dirt:/home/admin/tyler # cat /proc/sys/net/ipv4/tcp_congestion_control
+dctcp
+
+sandy-dirt:/home/admin/tyler # date; ./tcp_perf.exe --server-ip 169.254.85.4  --server-port 10001 --msg-len 65536 --conn-num 8 -c -t --data-random --show-bandwidth-only
+Fri Mar 25 09:53:51 EDT 2022
+
+conn [0] local 169.254.85.2:37992 peer 169.254.85.4:10001 created.
+conn [1] local 169.254.85.2:37994 peer 169.254.85.4:10001 created.
+conn [2] local 169.254.85.2:37996 peer 169.254.85.4:10001 created.
+conn [3] local 169.254.85.2:37998 peer 169.254.85.4:10001 created.
+conn [4] local 169.254.85.2:38000 peer 169.254.85.4:10001 created.
+conn [5] local 169.254.85.2:38002 peer 169.254.85.4:10001 created.
+conn [6] local 169.254.85.2:38004 peer 169.254.85.4:10001 created.
+conn [7] local 169.254.85.2:38006 peer 169.254.85.4:10001 created.
+8 connection(s) created in total
+tx thread of conn 0 started
+tx thread of conn 1 started
+tx thread of conn 2 started
+tx thread of conn 3 started
+tx thread of conn 4 started
+tx thread of conn 5 started
+tx thread of conn 6 started
+tx thread of conn 7 started
+
+[time lasts]: 1
+        tx_succ_bytes                       0x9acb0000        (2,596,995,072)
+
+[time lasts]: 2
+        tx_succ_bytes                       0x6d5b0000        (1,834,680,320)
+
+[time lasts]: 3
+        tx_succ_bytes                       0x77070000        (1,996,947,456)
+
+[time lasts]: 4
+        tx_succ_bytes                       0x5f3b0000        (1,597,702,144)
+
+[time lasts]: 5
+        tx_succ_bytes                       0x6f690000        (1,869,152,256)
+
+[time lasts]: 6
+        tx_succ_bytes                       0x80690000        (2,154,364,928)
+
+[time lasts]: 7
+        tx_succ_bytes                       0x6c880000        (1,820,852,224)
+
+[time lasts]: 8
+        tx_succ_bytes                       0x6a640000        (1,784,938,496)
+
+[time lasts]: 9
+        tx_succ_bytes                       0x6dc50000        (1,841,627,136)
+
+[time lasts]: 10
+        tx_succ_bytes                       0x694d0000        (1,766,653,952)
+
+[time lasts]: 11
+        tx_succ_bytes                       0x69ee0000        (1,777,205,248)
+
+[time lasts]: 12
+        tx_succ_bytes                       0x6e630000        (1,851,981,824)
+
+[time lasts]: 13
+        tx_succ_bytes                       0x79a50000        (2,040,856,576)
+
+[time lasts]: 14
+        tx_succ_bytes                       0x73f90000        (1,945,698,304)
+
+[time lasts]: 15
+        tx_succ_bytes                       0x79280000        (2,032,664,576)
+
+[time lasts]: 16
+        tx_succ_bytes                       0x743b0000        (1,950,023,680)
+
+[time lasts]: 17
+        tx_succ_bytes                       0x6be00000        (1,809,842,176)
+
+[time lasts]: 18
+        tx_succ_bytes                       0x63d10000        (1,674,641,408)
+
+[time lasts]: 19
+        tx_succ_bytes                       0x69570000        (1,767,309,312)
+
+[time lasts]: 20
+        tx_succ_bytes                       0x87ed0000        (2,280,456,192)
+
+[time lasts]: 21
+        tx_succ_bytes                       0x76730000        (1,987,248,128)
+
+[time lasts]: 22
+        tx_succ_bytes                       0x75fa0000        (1,979,318,272)
+
+[time lasts]: 23
+        tx_succ_bytes                       0x84760000        (2,222,325,760)
+
+[time lasts]: 24
+        tx_succ_bytes                       0x6de60000        (1,843,789,824)
+
+[time lasts]: 25
+        tx_succ_bytes                       0x701b0000        (1,880,817,664)
+
+[time lasts]: 26
+        tx_succ_bytes                       0x7d400000        (2,101,346,304)
+
+[time lasts]: 27
+        tx_succ_bytes                       0x77650000        (2,003,107,840)
+
+[time lasts]: 28
+        tx_succ_bytes                       0x71570000        (1,901,527,040)
+
+[time lasts]: 29
+        tx_succ_bytes                       0x798e0000        (2,039,349,248)
+
+[time lasts]: 30
+        tx_succ_bytes                       0x70490000        (1,883,832,320)
+
+[time lasts]: 31
+        tx_succ_bytes                       0x84820000        (2,223,112,192)
+
+[time lasts]: 32
+        tx_succ_bytes                       0x88690000        (2,288,582,656)
+
+[time lasts]: 33
+        tx_succ_bytes                       0x72a30000        (1,923,284,992)
+
+[time lasts]: 34
+        tx_succ_bytes                       0x79ae0000        (2,041,446,400)
+
+[time lasts]: 35
+        tx_succ_bytes                       0x6fce0000        (1,875,771,392)
+
+[time lasts]: 36
+        tx_succ_bytes                       0x69680000        (1,768,423,424)
+
+[time lasts]: 37
+        tx_succ_bytes                       0x65430000        (1,698,889,728)
+
+[time lasts]: 38
+        tx_succ_bytes                       0x84ff0000        (2,231,304,192)
+
+[time lasts]: 39
+        tx_succ_bytes                       0x7dd10000        (2,110,849,024)
+
+[time lasts]: 40
+        tx_succ_bytes                       0x70480000        (1,883,766,784)
+
+[time lasts]: 41
+        tx_succ_bytes                       0x7b8c0000        (2,072,772,608)
+
+[time lasts]: 42
+        tx_succ_bytes                       0x75a90000        (1,974,009,856)
+
+[time lasts]: 43
+        tx_succ_bytes                       0x83110000        (2,198,929,408)
+
+[time lasts]: 44
+        tx_succ_bytes                       0x739e0000        (1,939,734,528)
+
+[time lasts]: 45
+        tx_succ_bytes                       0x665a0000        (1,717,174,272)
+
+[time lasts]: 46
+        tx_succ_bytes                       0x6f0c0000        (1,863,057,408)
+
+[time lasts]: 47
+        tx_succ_bytes                       0x7b530000        (2,069,037,056)
+
+[time lasts]: 48
+        tx_succ_bytes                       0x850d0000        (2,232,221,696)
+
+[time lasts]: 49
+        tx_succ_bytes                       0x7c6c0000        (2,087,452,672)
+
+[time lasts]: 50
+        tx_succ_bytes                       0x72d60000        (1,926,627,328)
+
+[time lasts]: 51
+        tx_succ_bytes                       0x6f790000        (1,870,200,832)
+
+[time lasts]: 52
+        tx_succ_bytes                       0x65be0000        (1,706,950,656)
+
+[time lasts]: 53
+        tx_succ_bytes                       0x89470000        (2,303,131,648)
+
+[time lasts]: 54
+        tx_succ_bytes                       0x84290000        (2,217,279,488)
+
+[time lasts]: 55
+        tx_succ_bytes                       0x739a0000        (1,939,472,384)
+
+[time lasts]: 56
+        tx_succ_bytes                       0x60fb0000        (1,627,062,272)
+
+[time lasts]: 57
+        tx_succ_bytes                       0x82570000        (2,186,739,712)
+
+[time lasts]: 58
+        tx_succ_bytes                       0x76fb0000        (1,996,161,024)
+
+[time lasts]: 59
+        tx_succ_bytes                       0x71dc0000        (1,910,243,328)
+
+[time lasts]: 60
+        tx_succ_bytes                       0x73fd0000        (1,945,960,448)
+
+[time lasts]: 61
+        tx_succ_bytes                       0x710c0000        (1,896,611,840)
+
+[time lasts]: 62
+        tx_succ_bytes                       0x77ea0000        (2,011,824,128)
+
+[time lasts]: 63
+        tx_succ_bytes                       0x6b9b0000        (1,805,320,192)
+
+/*
+ * logs of TX node 3.
+ */
+
+orem-dirt:/home/admin/tyler # echo dctcp >/proc/sys/net/ipv4/tcp_congestion_control
+orem-dirt:/home/admin/tyler # cat /proc/sys/net/ipv4/tcp_congestion_control
+dctcp
+
+orem-dirt:/home/admin/tyler # date; ./tcp_perf.exe --server-ip 169.254.85.4  --server-port 10001 --msg-len 65536 --conn-num 8 -c -t --data-random --show-bandwidth-only
+Fri Mar 25 09:53:50 EDT 2022
+
+conn [0] local 169.254.85.3:59692 peer 169.254.85.4:10001 created.
+conn [1] local 169.254.85.3:59694 peer 169.254.85.4:10001 created.
+conn [2] local 169.254.85.3:59696 peer 169.254.85.4:10001 created.
+conn [3] local 169.254.85.3:59698 peer 169.254.85.4:10001 created.
+conn [4] local 169.254.85.3:59700 peer 169.254.85.4:10001 created.
+conn [5] local 169.254.85.3:59702 peer 169.254.85.4:10001 created.
+conn [6] local 169.254.85.3:59706 peer 169.254.85.4:10001 created.
+conn [7] local 169.254.85.3:59708 peer 169.254.85.4:10001 created.
+8 connection(s) created in total
+tx thread of conn 0 started
+tx thread of conn 1 started
+tx thread of conn 2 started
+tx thread of conn 3 started
+tx thread of conn 4 started
+tx thread of conn 5 started
+tx thread of conn 6 started
+tx thread of conn 7 started
+
+[time lasts]: 1
+        tx_succ_bytes                       0x123670000       (4,888,920,064)
+
+[time lasts]: 2
+        tx_succ_bytes                       0x83950000        (2,207,580,160)
+
+[time lasts]: 3
+        tx_succ_bytes                       0x76440000        (1,984,167,936)
+
+[time lasts]: 4
+        tx_succ_bytes                       0x69280000        (1,764,229,120)
+
+[time lasts]: 5
+        tx_succ_bytes                       0x79240000        (2,032,402,432)
+
+[time lasts]: 6
+        tx_succ_bytes                       0x79ab0000        (2,041,249,792)
+
+[time lasts]: 7
+        tx_succ_bytes                       0x70370000        (1,882,652,672)
+
+[time lasts]: 8
+        tx_succ_bytes                       0x79660000        (2,036,727,808)
+
+[time lasts]: 9
+        tx_succ_bytes                       0x7e170000        (2,115,436,544)
+
+[time lasts]: 10
+        tx_succ_bytes                       0x719f0000        (1,906,245,632)
+
+[time lasts]: 11
+        tx_succ_bytes                       0x69e20000        (1,776,418,816)
+
+[time lasts]: 12
+        tx_succ_bytes                       0x7bbd0000        (2,075,983,872)
+
+[time lasts]: 13
+        tx_succ_bytes                       0x89910000        (2,307,981,312)
+
+[time lasts]: 14
+        tx_succ_bytes                       0x7a750000        (2,054,488,064)
+
+[time lasts]: 15
+        tx_succ_bytes                       0x7c7e0000        (2,088,632,320)
+
+[time lasts]: 16
+        tx_succ_bytes                       0x88b00000        (2,293,235,712)
+
+[time lasts]: 17
+        tx_succ_bytes                       0x71d10000        (1,909,522,432)
+
+[time lasts]: 18
+        tx_succ_bytes                       0x897a0000        (2,306,473,984)
+
+[time lasts]: 19
+        tx_succ_bytes                       0x78cf0000        (2,026,831,872)
+
+[time lasts]: 20
+        tx_succ_bytes                       0x7cc80000        (2,093,481,984)
+
+[time lasts]: 21
+        tx_succ_bytes                       0x803f0000        (2,151,612,416)
+
+[time lasts]: 22
+        tx_succ_bytes                       0x77170000        (1,997,996,032)
+
+[time lasts]: 23
+        tx_succ_bytes                       0x7bf80000        (2,079,850,496)
+
+[time lasts]: 24
+        tx_succ_bytes                       0x686c0000        (1,751,908,352)
+
+[time lasts]: 25
+        tx_succ_bytes                       0x764b0000        (1,984,626,688)
+
+[time lasts]: 26
+        tx_succ_bytes                       0x78b80000        (2,025,324,544)
+
+[time lasts]: 27
+        tx_succ_bytes                       0x77d40000        (2,010,382,336)
+
+[time lasts]: 28
+        tx_succ_bytes                       0x86830000        (2,256,732,160)
+
+[time lasts]: 29
+        tx_succ_bytes                       0x761b0000        (1,981,480,960)
+
+[time lasts]: 30
+        tx_succ_bytes                       0x6d880000        (1,837,629,440)
+
+[time lasts]: 31
+        tx_succ_bytes                       0x74060000        (1,946,550,272)
+
+[time lasts]: 32
+        tx_succ_bytes                       0x74aa0000        (1,957,298,176)
+
+[time lasts]: 33
+        tx_succ_bytes                       0x61a60000        (1,638,268,928)
+
+[time lasts]: 34
+        tx_succ_bytes                       0x735b0000        (1,935,343,616)
+
+[time lasts]: 35
+        tx_succ_bytes                       0x6f220000        (1,864,499,200)
+
+[time lasts]: 36
+        tx_succ_bytes                       0x73240000        (1,931,739,136)
+
+[time lasts]: 37
+        tx_succ_bytes                       0x755c0000        (1,968,963,584)
+
+[time lasts]: 38
+        tx_succ_bytes                       0x6e0a0000        (1,846,149,120)
+
+[time lasts]: 39
+        tx_succ_bytes                       0x682f0000        (1,747,910,656)
+
+[time lasts]: 40
+        tx_succ_bytes                       0x676b0000        (1,735,065,600)
+
+[time lasts]: 41
+        tx_succ_bytes                       0x71ca0000        (1,909,063,680)
+
+[time lasts]: 42
+        tx_succ_bytes                       0x6d740000        (1,836,318,720)
+
+[time lasts]: 43
+        tx_succ_bytes                       0x6f9d0000        (1,872,560,128)
+
+[time lasts]: 44
+        tx_succ_bytes                       0x6cec0000        (1,827,405,824)
+
+[time lasts]: 45
+        tx_succ_bytes                       0x82ae0000        (2,192,441,344)
+
+[time lasts]: 46
+        tx_succ_bytes                       0x783b0000        (2,017,132,544)
+
+[time lasts]: 47
+        tx_succ_bytes                       0x73300000        (1,932,525,568)
+
+[time lasts]: 48
+        tx_succ_bytes                       0x6e580000        (1,851,260,928)
+
+[time lasts]: 49
+        tx_succ_bytes                       0x77ab0000        (2,007,695,360)
+
+[time lasts]: 50
+        tx_succ_bytes                       0x67a80000        (1,739,063,296)
+
+[time lasts]: 51
+        tx_succ_bytes                       0x7a490000        (2,051,604,480)
+
+[time lasts]: 52
+        tx_succ_bytes                       0x73d00000        (1,943,011,328)
+
+[time lasts]: 53
+        tx_succ_bytes                       0x74110000        (1,947,271,168)
+
+[time lasts]: 54
+        tx_succ_bytes                       0x6d360000        (1,832,255,488)
+
+[time lasts]: 55
+        tx_succ_bytes                       0x730c0000        (1,930,166,272)
+
+[time lasts]: 56
+        tx_succ_bytes                       0x6ed20000        (1,859,256,320)
+
+[time lasts]: 57
+        tx_succ_bytes                       0x73de0000        (1,943,928,832)
+
+[time lasts]: 58
+        tx_succ_bytes                       0x70660000        (1,885,732,864)
+
+[time lasts]: 59
+        tx_succ_bytes                       0x723e0000        (1,916,665,856)
+
+[time lasts]: 60
+        tx_succ_bytes                       0x7a4c0000        (2,051,801,088)
+
+[time lasts]: 61
+        tx_succ_bytes                       0x6d8a0000        (1,837,760,512)
+
+[time lasts]: 62
+        tx_succ_bytes                       0x5f650000        (1,600,454,656)
+
+[time lasts]: 63
+        tx_succ_bytes                       0x74180000        (1,947,729,920)
+
+/*
+ * counters on the switch.
+ * we can see, the rate of packet dropping is so high (~5%).
+ */
+
+hound-dirt# show queuing statistics interface ethernet 1/1/4
+Interface ethernet1/1/4
+Queue Packets                  Bytes                    Dropped-Packets          Dropped-Bytes            
+0     18                       1218                     0                        0                        
+1     36                       3528                     0                        0                        
+2     0                        0                        0                        0                        
+3     0                        0                        0                        0                        
+4     0                        0                        0                        0                        
+5     21037361                 189283361906             953632                   8583259654               
+6     0                        0                        0                        0                        
+7     0                        0                        0                        0                        
+hound-dirt#
+
+fox-dirt# show queuing statistics interface ethernet 1/1/4
+Interface ethernet1/1/4
+Queue Packets                  Bytes                    Dropped-Packets          Dropped-Bytes            
+0     41                       2666                     0                        0                        
+1     28                       2744                     0                        0                        
+2     0                        0                        0                        0                        
+3     0                        0                        0                        0                        
+4     0                        0                        0                        0                        
+5     21026196                 189216241992             962777                   8667910211               
+6     0                        0                        0                        0                        
+7     0                        0                        0                        0                        
+fox-dirt#

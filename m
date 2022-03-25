@@ -2,185 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 683704E78B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:11:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 250F44E78AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359165AbiCYQNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 12:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
+        id S1355420AbiCYQKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 12:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237175AbiCYQNS (ORCPT
+        with ESMTP id S238154AbiCYQKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 12:13:18 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E96981658
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:11:44 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id m3so14153022lfj.11
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:11:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yMwLgpBMsPacoyetf0Jh9z411mlnHCKLxH5G5J9Bol4=;
-        b=Y/hl4bV1BEodjTa26V56UFW7xKKqtQqV6DPIWr1GJnYIF/hoTalbgulB3gdkxC3WMu
-         XQSVwQKZUG2sZ3ETMy3ROt+OUqrF9D6QN04UTPaN6gbN3wyxUFGruTKWHtEDwcTGXgCT
-         NQ7DKJpWM/09QfTXA3AQLleirinBmBKZv4PFM=
+        Fri, 25 Mar 2022 12:10:20 -0400
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89571C93D;
+        Fri, 25 Mar 2022 09:08:45 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id lr4so7879766ejb.11;
+        Fri, 25 Mar 2022 09:08:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yMwLgpBMsPacoyetf0Jh9z411mlnHCKLxH5G5J9Bol4=;
-        b=acno8h+Uz7BV4jnFpY2n7SDjv3qLW0Fb6BtzKWuIC4fYHnKsa7MLeHVAHtYjVVUtLl
-         L/lqLGgRTnB8/Da4Bd7i8nsR3vCUwCjonFNmyMs5OrTH1b7Fyx2r8v2pfV8dJvenB3hT
-         bSmepOhH037yC0rQhpit1tYDv6ABdoFUaNOLBkYUufomVC5KomH9aXAunlOY7vQ7zqrx
-         Vi867Nt7KgCtL6X2OwjiTEofo7JVqEs3jQSQTaMvQi22zkXGPvYDA29AXd+kDnjf5/WS
-         YpBTtzIkOWavQ/yM5pjhuOadP8rWdH3KImwC/lC++vwSZDpfn6eC1uHzsXbGagid9992
-         1PMA==
-X-Gm-Message-State: AOAM533CNq3UuIosEE1hs6/hNWv+6YW9ge/HuHZMEU+wCX3AhrDIfBpb
-        Ai5WovNdaDmT2SVn8HSJF2czHC2WpON+MHQQ6a0=
-X-Google-Smtp-Source: ABdhPJzn9Udh2VlsvO9dQR+tCGATGiIU9SkACueVAdhRWyO7kO5FHJODgFAjA87/TJO6olkGLOvmGQ==
-X-Received: by 2002:a19:4306:0:b0:44a:599b:468 with SMTP id q6-20020a194306000000b0044a599b0468mr8418196lfa.481.1648224702154;
-        Fri, 25 Mar 2022 09:11:42 -0700 (PDT)
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
-        by smtp.gmail.com with ESMTPSA id 25-20020a2e0e19000000b002495d863173sm703950ljo.61.2022.03.25.09.11.41
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=E8h9Vcx1r3+TYbLDyB3dNi5M3emlCFoMC1PIDWwowIg=;
+        b=Z9h1VSD/jdPTSAKaHZ6bWwpPJJyE8444MImDckwj56OUMCIwepMBXz72xLtDADmxj6
+         MS2416KOJMsIHTCkGGyGapxkdUlHU+Lb1aVu08kGgCw2sH1kvRbV8SrZ38NaSphrWyZQ
+         lTN3oGl0IhiMiVYKZZthGZdWeIqiMNXIUCDJLky99hH6yvNpEOGE8otsoGgnPaz1kkDT
+         5MdcRmGdk4MwiE4W2H35zG1wlKeVxFDa3As1L/6AurtsEr1BfA59hSbTWVpJXbt51h5C
+         uZCqJuEAFGPi9MTLCu1eFHA2Tyqqhd4Qx/HZb/yxRus5T6lv3HWT3piud7/ERa8nHs9U
+         LO/Q==
+X-Gm-Message-State: AOAM532HbT75hM9CrFMBE22nBttGQvGUnQn+FJlNxdOi4pjcN2484f7z
+        wrmiSTtWDhqyC/G0Cxn/CRlBnwhdIvY=
+X-Google-Smtp-Source: ABdhPJySZU8DrN3ybcQC7IsQJ9q4cgJMasOskvk6TqCIczzHHuDx8NCUQ69DvxGKH8kg7GC8JsxqpQ==
+X-Received: by 2002:a17:907:6e04:b0:6e0:736b:d786 with SMTP id sd4-20020a1709076e0400b006e0736bd786mr11914606ejc.667.1648224524085;
+        Fri, 25 Mar 2022 09:08:44 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id c12-20020a05640227cc00b004192114e521sm3125418ede.60.2022.03.25.09.08.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 09:11:41 -0700 (PDT)
-Received: by mail-lf1-f43.google.com with SMTP id p15so14168990lfk.8
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:11:41 -0700 (PDT)
-X-Received: by 2002:adf:fc47:0:b0:203:dda1:4311 with SMTP id
- e7-20020adffc47000000b00203dda14311mr9797547wrs.301.1648224364037; Fri, 25
- Mar 2022 09:06:04 -0700 (PDT)
+        Fri, 25 Mar 2022 09:08:43 -0700 (PDT)
+Message-ID: <d2f220ae-c62c-a7f7-23cc-c33956c2eeaf@kernel.org>
+Date:   Fri, 25 Mar 2022 17:08:42 +0100
 MIME-Version: 1.0
-References: <1647452154-16361-1-git-send-email-quic_sbillaka@quicinc.com>
- <1647452154-16361-7-git-send-email-quic_sbillaka@quicinc.com>
- <CAE-0n520pQKM7mFSE_00ER+F9RKUPrN+y4U8fmsxi7FoFMyOrA@mail.gmail.com>
- <CAD=FV=UWF8K9JPJXFSGMRK-HmCi+2jM3aN6Uy7hyDSu1_azF+w@mail.gmail.com>
- <CAE-0n53U=bqPTGtPx2Ho5axtO6EL6WtOtmFisxSufC6OZERV1Q@mail.gmail.com>
- <CAD=FV=WaK8VFC-BvsFpnUv3mW4svGggQTw1hh+zRCEhGvbgYMQ@mail.gmail.com>
- <CAE-0n52v2m4U0wK6NYf4KBwXmp+TEVhjnGpW4rQHuZSf7TYfgA@mail.gmail.com>
- <CAD=FV=WFkXdXVdqhBcfa48JKcUcbUe2M0bW6-V8zjP8jgvjvHA@mail.gmail.com> <MW4PR02MB7186835E0D762E51EB9F9515E11A9@MW4PR02MB7186.namprd02.prod.outlook.com>
-In-Reply-To: <MW4PR02MB7186835E0D762E51EB9F9515E11A9@MW4PR02MB7186.namprd02.prod.outlook.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 25 Mar 2022 09:05:51 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UDXScN6vt9PTe0YnoDGQmY-cja3wVyV9D1zJxyPwCMRQ@mail.gmail.com>
-Message-ID: <CAD=FV=UDXScN6vt9PTe0YnoDGQmY-cja3wVyV9D1zJxyPwCMRQ@mail.gmail.com>
-Subject: Re: [PATCH v5 6/9] drm/msm/dp: wait for hpd high before any sink interaction
-To:     "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/2] regulator: rt5759: Add support for Richtek RT5759
+ DCDC converter
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     ChiYuan Huang <u0084500@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Sean Paul <seanpaul@chromium.org>, Sean Paul <sean@poorly.run>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Liam Girdwood <lgirdwood@gmail.com>,
+        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+References: <1648170401-6351-1-git-send-email-u0084500@gmail.com>
+ <1648170401-6351-3-git-send-email-u0084500@gmail.com>
+ <d2b431f8-9197-4a42-4ee2-4e771e20e0aa@kernel.org>
+ <CADiBU39RGQj1-+yK18mZf3MR78KACKqb2kAxkCFKGXKpJ6Nqxw@mail.gmail.com>
+ <e4a15ceb-c013-96be-48d1-e65267400463@kernel.org>
+ <CADiBU3-gwsh5v1NLUYr_ovXwpUxQqgR61f-Jpc3G-zHs_yV4uw@mail.gmail.com>
+ <03999953-77c5-0272-7477-ab8a069b3671@kernel.org>
+ <CADiBU38zYM1Rw2inTJ_Pu2eWKKqp2Ybb-_+JUJfxfmLNu=kYvw@mail.gmail.com>
+ <cf67f944-47a7-f3b5-9d83-f0f51dc4e954@kernel.org>
+ <Yj3oXuijuZY1gG9X@sirena.org.uk>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <Yj3oXuijuZY1gG9X@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 25/03/2022 17:05, Mark Brown wrote:
+> On Fri, Mar 25, 2022 at 04:55:25PM +0100, Krzysztof Kozlowski wrote:
+> 
+>> You mention board, some of_device_get_match_data() so you talk about
+>> runtime. maybe_unused is not about runtime. It is about build time.
+> 
+>> The code you sent cannot have this structure unused. If you think
+>> otherwise, please provide argument, but not about runtime (again). You
+>> can for example build it without OF and see...
+> 
+> If you use of_match_ptr() in the struct device (which is good practice,
+> didn't check if this driver does it) then that causes the ID table to be
+> unreferenced as of_match_ptr() compiles to NULL when !OF.
 
-On Fri, Mar 25, 2022 at 8:54 AM Sankeerth Billakanti (QUIC)
-<quic_sbillaka@quicinc.com> wrote:
->
-> > -----Original Message-----
-> > From: Doug Anderson <dianders@chromium.org>
-> > Sent: Saturday, March 19, 2022 5:26 AM
-> > To: Stephen Boyd <swboyd@chromium.org>
-> > Cc: Sankeerth Billakanti (QUIC) <quic_sbillaka@quicinc.com>; open list:OPEN
-> > FIRMWARE AND FLATTENED DEVICE TREE BINDINGS
-> > <devicetree@vger.kernel.org>; dri-devel <dri-devel@lists.freedesktop.org>;
-> > freedreno <freedreno@lists.freedesktop.org>; linux-arm-msm <linux-arm-
-> > msm@vger.kernel.org>; LKML <linux-kernel@vger.kernel.org>; Rob Clark
-> > <robdclark@gmail.com>; Sean Paul <seanpaul@chromium.org>;
-> > quic_kalyant <quic_kalyant@quicinc.com>; Abhinav Kumar (QUIC)
-> > <quic_abhinavk@quicinc.com>; Kuogee Hsieh (QUIC)
-> > <quic_khsieh@quicinc.com>; Andy Gross <agross@kernel.org>;
-> > bjorn.andersson@linaro.org; Rob Herring <robh+dt@kernel.org>;
-> > krzk+dt@kernel.org; Sean Paul <sean@poorly.run>; David Airlie
-> > <airlied@linux.ie>; Daniel Vetter <daniel@ffwll.ch>; Thierry Reding
-> > <thierry.reding@gmail.com>; Sam Ravnborg <sam@ravnborg.org>;
-> > dmitry.baryshkov@linaro.org; quic_vproddut <quic_vproddut@quicinc.com>
-> > Subject: Re: [PATCH v5 6/9] drm/msm/dp: wait for hpd high before any sink
-> > interaction
-> >
-> > Hi,
-> >
-> > On Fri, Mar 18, 2022 at 4:27 PM Stephen Boyd <swboyd@chromium.org>
-> > wrote:
-> > >
-> > > > > Pushing hpd state checking into aux transactions looks like the
-> > > > > wrong direction. Also, as I said up above I am concerned that even
-> > > > > checking the GPIO won't work and we need some way to ask the
-> > > > > bridge if HPD is asserted or not and then fallback to the GPIO
-> > > > > method if the display phy/controller doesn't have support to check
-> > > > > HPD internally. Something on top of DRM_BRIDGE_OP_HPD?
-> > > >
-> > > > If we could somehow get the HPD status from the bridge in the panel
-> > > > driver it definitely would be convenient. It does feel like that's
-> > > > an improvement that could be done later, though. We've already
-> > > > landed a few instances of doing what's done here, like for
-> > > > parade-ps8640 and analogix_dp. I suspect designing a new mechanism
-> > > > might not be the most trivial.
-> > >
-> > > What is done in the bridge drivers is to wait for a fixed timeout and
-> > > assume aux is ready? Or is it something else? If there's just a fixed
-> > > timeout for the eDP case it sounds OK to do that for now and we can
-> > > fine tune it later to actually check HPD status register before the
-> > > panel tries to read EDID.
-> >
-> > Right. For the parade chip (which is only used for eDP as far as I know--never
-> > DP) waits for up to 200 ms. See ps8640_ensure_hpd().
-> >
-> > So I guess tl;dr to Sankeerth that it's OK for his patch to have the wait in the
-> > aux transfer function, but only for eDP. Other discussions here are about
-> > how we could make it better in future patches.
-> >
-> >
->
-> The aux transactions for external DP are initiated by the dp_display driver only after the
-> display is hot plugged to the connector. The phy_init is necessary for the aux transactions
-> to take place. So, for the DP case, like Doug mentioned below, this patch is introducing
-> an overhead of three register reads to detect hpd_high before performing aux transactions.
-> So, we felt this was okay to do for DP.
+Yep, then the case is obvious, but the driver does not use it.
 
-Personally I'm not that upset about the 3 register reads. The problem
-Stephen pointed out is bigger. It's possible that a DP cable is
-unplugged _just_ as we started an AUX transaction. In that case we'll
-have a big delay here when we don't actually need one.
++static struct i2c_driver rt5759_driver = {
++	.driver = {
++		.name = "rt5759",
++		.of_match_table = rt5759_device_table,
 
+Therefore the of_device_id cannot be unused, so __maybe_unused is not
+correct. This can be fixed in two different ways, which we did not
+discuss yet...
 
-> On the other hand, for eDP, it is necessary to wait for panel ready through this hpd connect status.
-> Currently there is no way to know which type of connector it is in the dp_aux sub-module.
->
-> However, as the discussion suggested, to have the wait only for eDP, I am thinking to pass the
-> connector_type information to aux sub-module and register different aux_transfer functions
-> for eDP and DP. The eDP transfer function will wait for hpd_high and the DP transfer function
-> will be same as the one before this patch.
-
-Personally I wouldn't register two separate functions. You could just
-store a boolean in your structure and only wait for HPD if this is
-eDP. One extra "if" test doesn't seem like it justifies splitting off
-into two functions...
-
--Doug
+Best regards,
+Krzysztof

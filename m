@@ -2,218 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BDC4E7206
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:08:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 384294E720B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:10:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355968AbiCYLJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 07:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
+        id S1354358AbiCYLMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 07:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355038AbiCYLIr (ORCPT
+        with ESMTP id S1349575AbiCYLMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 07:08:47 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10310D370A;
-        Fri, 25 Mar 2022 04:07:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 53A6CCE2919;
-        Fri, 25 Mar 2022 11:07:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62E90C340F0;
-        Fri, 25 Mar 2022 11:07:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648206424;
-        bh=3vndtaE9MNcVANrvcQs3TL2U1JfkDsXtzSQ4Rkiht5I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MV/5KC/DfS/oKv0p32xd9jtqezJoFI/sI/305hwtJYCpMjg80G33R5xmOkM21XRUo
-         4Tf3IWyjgTRWqyr8WbK4LBP81nAAeOcgtQgBVjoDhDx+ftTKumdgnhgNRmwAavnv88
-         1cIO1vO+Ef+YM8fSjKTViBFVU44llxaDY+rzVeFEjtlIPviWtPT0Ad/kvBoOmwp73/
-         +Q305B4NPaGs9EFlucPHPcs7cls9vcBVh0DOrQyDZbXzFCkmezhTgsCooWGh9mz83I
-         LGF4N76RmanikH32HCpikapq2Yvqo+5+8zaOo+DmB/nhVJCHKan4EadtX5zVb+NZfq
-         pUdnh+RhPWREw==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-Subject: [PATCH v5 13/13] drm/msm/dsi: Add support for DSC configuration
-Date:   Fri, 25 Mar 2022 16:35:56 +0530
-Message-Id: <20220325110556.275490-14-vkoul@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220325110556.275490-1-vkoul@kernel.org>
-References: <20220325110556.275490-1-vkoul@kernel.org>
+        Fri, 25 Mar 2022 07:12:20 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB23CD31A;
+        Fri, 25 Mar 2022 04:10:46 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id r23so8861663edb.0;
+        Fri, 25 Mar 2022 04:10:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FSiOOkU7sO5vji/trWKQvNHznIcArcS/Lftm+0xLgLo=;
+        b=o4L6GV2hYjYJc6uJsu9XIm4VrSaBgEV2MOCycio7rJtxTUrHBfU2YAlcGNOVWCTtPw
+         dOq0zuqUYIFNM2578cqd8XgxJ7xjgbhlyhfAcM/K8gwKMESlkoIp3CiM1n25GrbgDYgw
+         tgf69Z4PQMvvHmiEky/DJN6S73ANugEdEWgIAoxCH7bVyW0NJR6UR3ZqWlaragZE+1WR
+         5i0NM7fb4bp2R+zSGCWNxSDCgusretpHgWzXqUZWYe3roNnosrmbmlcAJNlsksDwIme1
+         Qg57Ru8fbHN1JcWX240P0zcXlIuYvxDK8L3metIY1DoFYIZuXShd5LfTjTFmTn5IuH8o
+         Kt7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FSiOOkU7sO5vji/trWKQvNHznIcArcS/Lftm+0xLgLo=;
+        b=IKCOeM2cxOw21XLKOzHXrO3NSVZRjLXZzlFwnF0occT5ilfj2gClQhSjjwIKQsvilX
+         K4/qTVS78XU0JcV6Hqot7WVlaD4lL2YY94qhqFNvatWX0BR9/FKuH8QmgbRopMftXXaS
+         lrxqi4JHB7NwMNie5LGnsyprrz/p7VpJMSmmmWbA0qJUG8BBRYjjT+RC418n0Vs014Lo
+         r11eSifoIqhr3yhXbEvfuGk6S0E9IOorjyNePfHsrEdGlWAzz75dm4xvbwxgaFWg5MgF
+         STTfW1hiKbeq97v5cHtsf2vrDXJTcR83KFhvAxgXO1lSePV3xDY1HOiHkL8ea03V9Htl
+         nuSg==
+X-Gm-Message-State: AOAM5328Z3aQtkOBhxbajL05YXyRbYpZ7zuKEBsE0VXhancDssqLW7A0
+        Qrccnvf00OoNpvK1mX6V3l2lmg7VNZuzPn+otjk=
+X-Google-Smtp-Source: ABdhPJzWVEYhbVKfTJQgWSG/god4eGB6i4CUGRgQM61GnznP0+dVgdJfwE9zM4qj0pnx4TeMx8rmF9IjyYSOVyorjyI=
+X-Received: by 2002:aa7:d1ce:0:b0:419:19ed:725a with SMTP id
+ g14-20020aa7d1ce000000b0041919ed725amr12443160edp.270.1648206645126; Fri, 25
+ Mar 2022 04:10:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220323140215.2568-1-andriy.shevchenko@linux.intel.com>
+ <YjtNJe4Pgp3WIwOa@sirena.org.uk> <YjtXbDyCWZxKnf4Y@smile.fi.intel.com>
+ <YjtvsYs+x3LRaLVP@sirena.org.uk> <Yjw4yjgordnSo+7M@smile.fi.intel.com> <YjyAFNYpDjSQnIN1@sirena.org.uk>
+In-Reply-To: <YjyAFNYpDjSQnIN1@sirena.org.uk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 25 Mar 2022 13:09:36 +0200
+Message-ID: <CAHp75VdFjYepcQ82e4WgNP2nQMk6O_xOALkG1yHxWPbYuHTXHA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/4] spidev: Do not use atomic bit operations when
+ allocating minor
+To:     Mark Brown <broonie@kernel.org>, Yury Norov <yury.norov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When DSC is enabled, we need to configure DSI registers accordingly and
-configure the respective stream compression registers.
+On Thu, Mar 24, 2022 at 10:48 PM Mark Brown <broonie@kernel.org> wrote:
+> On Thu, Mar 24, 2022 at 11:24:26AM +0200, Andy Shevchenko wrote:
+> > On Wed, Mar 23, 2022 at 07:06:25PM +0000, Mark Brown wrote:
+>
+> > > Yes, it's not needed but what meaningful harm does it do?
+>
+> > There are basically two points:
+>
+> > 1) in one driver the additional lock may not be influential, but
+> >    if many drivers will do the same, it will block CPUs for no
+> >    purpose;
+>
+> > 2) derived from the above, if one copies'n'pastes the code, esp.
+> >    using spin locks, it may become an unneeded code and performance
+> >    degradation.
+>
+> I think if these are serious issues they need to be addressed in the API
+> so that code doing the fancy unlocked stuff that needs atomicity is the
+> code that has the __ and looks like it's doing something tricky and
+> peering into internals.
 
-Add support to calculate the register setting based on DSC params and
-timing information and configure these registers.
+I believe the issue you mainly pointed out is the __ in the name of
+the APIs, since it's case by case when you need one or the other. In
+case of spidev we need non-atomic versions, in case of, e.g.,
+drivers/dma/dw/core.c we need atomic, because spin locks used there do
+not (and IIRC may not) cover some cases where the bit operations are
+used against same bitmap.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
- drivers/gpu/drm/msm/dsi/dsi.xml.h  | 10 ++++
- drivers/gpu/drm/msm/dsi/dsi_host.c | 94 +++++++++++++++++++++++++++++-
- 2 files changed, 103 insertions(+), 1 deletion(-)
+Perhaps we might add the aliases as clear_bit_nonatomic() et al. Yury,
+what do you think?
 
-diff --git a/drivers/gpu/drm/msm/dsi/dsi.xml.h b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-index 49b551ad1bff..c1c85df58c4b 100644
---- a/drivers/gpu/drm/msm/dsi/dsi.xml.h
-+++ b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-@@ -706,4 +706,14 @@ static inline uint32_t DSI_VERSION_MAJOR(uint32_t val)
- #define REG_DSI_CPHY_MODE_CTRL					0x000002d4
- 
- 
-+#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL			0x0000029c
-+
-+#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL2			0x000002a0
-+
-+#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL			0x000002a4
-+
-+#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2			0x000002a8
-+
-+#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL3			0x000002ac
-+
- #endif /* DSI_XML */
-diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-index 438c80750682..0f33e678103f 100644
---- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-+++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-@@ -908,6 +908,61 @@ static void dsi_ctrl_config(struct msm_dsi_host *msm_host, bool enable,
- 		dsi_write(msm_host, REG_DSI_CPHY_MODE_CTRL, BIT(0));
- }
- 
-+static void dsi_update_dsc_timing(struct msm_dsi_host *msm_host, bool is_cmd_mode, u32 hdisplay)
-+{
-+	struct msm_display_dsc_config *dsc = msm_host->dsc;
-+	u32 reg, intf_width, reg_ctrl, reg_ctrl2;
-+	u32 slice_per_intf, total_bytes_per_intf;
-+
-+	/* first calculate dsc parameters and then program
-+	 * compress mode registers
-+	 */
-+	intf_width = hdisplay;
-+	slice_per_intf = DIV_ROUND_UP(intf_width, dsc->drm->slice_width);
-+
-+	/* If slice_per_pkt is greater than slice_per_intf
-+	 * then default to 1. This can happen during partial
-+	 * update.
-+	 */
-+	if (slice_per_intf > dsc->drm->slice_count)
-+		dsc->drm->slice_count = 1;
-+
-+	slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->drm->slice_width);
-+	dsc->bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width *
-+					   dsc->drm->bits_per_pixel, 8);
-+
-+	dsc->drm->slice_chunk_size = dsc->bytes_in_slice;
-+
-+	total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
-+
-+	dsc->eol_byte_num = total_bytes_per_intf % 3;
-+	dsc->pclk_per_line =  DIV_ROUND_UP(total_bytes_per_intf, 3);
-+	dsc->bytes_per_pkt = dsc->bytes_in_slice * dsc->drm->slice_count;
-+	dsc->pkt_per_line = slice_per_intf / dsc->drm->slice_count;
-+
-+	if (is_cmd_mode) /* packet data type */
-+		reg = MIPI_DSI_DCS_LONG_WRITE << 8;
-+	else
-+		reg = MIPI_DSI_COMPRESSED_PIXEL_STREAM << 8;
-+
-+	reg |= (dsc->pkt_per_line >> 1) << 6;
-+	reg |= dsc->eol_byte_num << 4;
-+	reg |= 1;
-+
-+	if (is_cmd_mode) {
-+		reg_ctrl = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL);
-+		reg_ctrl2 = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2);
-+
-+		reg_ctrl |= reg;
-+		reg_ctrl2 |= dsc->bytes_in_slice;
-+
-+		dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL, reg);
-+		dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2, reg_ctrl2);
-+	} else {
-+		dsi_write(msm_host, REG_DSI_VIDEO_COMPRESSION_MODE_CTRL, reg);
-+	}
-+}
-+
- static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
- {
- 	struct drm_display_mode *mode = msm_host->mode;
-@@ -940,7 +995,38 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
- 		hdisplay /= 2;
- 	}
- 
-+	if (msm_host->dsc) {
-+		struct msm_display_dsc_config *dsc = msm_host->dsc;
-+
-+		/* update dsc params with timing params */
-+		if (!dsc || !mode->hdisplay || !mode->vdisplay) {
-+			pr_err("DSI: invalid input: pic_width: %d pic_height: %d\n",
-+			       mode->hdisplay, mode->vdisplay);
-+			return;
-+		}
-+
-+		dsc->drm->pic_width = mode->hdisplay;
-+		dsc->drm->pic_height = mode->vdisplay;
-+		DBG("Mode %dx%d\n", dsc->drm->pic_width, dsc->drm->pic_height);
-+
-+		/* we do the calculations for dsc parameters here so that
-+		 * panel can use these parameters
-+		 */
-+		dsi_populate_dsc_params(dsc);
-+
-+		/* Divide the display by 3 but keep back/font porch and
-+		 * pulse width same
-+		 */
-+		h_total -= hdisplay;
-+		hdisplay /= 3;
-+		h_total += hdisplay;
-+		ha_end = ha_start + hdisplay;
-+	}
-+
- 	if (msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) {
-+		if (msm_host->dsc)
-+			dsi_update_dsc_timing(msm_host, false, mode->hdisplay);
-+
- 		dsi_write(msm_host, REG_DSI_ACTIVE_H,
- 			DSI_ACTIVE_H_START(ha_start) |
- 			DSI_ACTIVE_H_END(ha_end));
-@@ -959,8 +1045,14 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
- 			DSI_ACTIVE_VSYNC_VPOS_START(vs_start) |
- 			DSI_ACTIVE_VSYNC_VPOS_END(vs_end));
- 	} else {		/* command mode */
-+		if (msm_host->dsc)
-+			dsi_update_dsc_timing(msm_host, true, mode->hdisplay);
-+
- 		/* image data and 1 byte write_memory_start cmd */
--		wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
-+		if (!msm_host->dsc)
-+			wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
-+		else
-+			wc = mode->hdisplay / 2 + 1;
- 
- 		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
- 			DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
 -- 
-2.34.1
-
+With Best Regards,
+Andy Shevchenko

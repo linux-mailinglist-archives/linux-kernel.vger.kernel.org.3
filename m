@@ -2,172 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4E84E72CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:13:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 722994E72CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358016AbiCYMOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 08:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41164 "EHLO
+        id S1358932AbiCYMQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 08:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351392AbiCYMOq (ORCPT
+        with ESMTP id S241971AbiCYMQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 08:14:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89181344D4;
-        Fri, 25 Mar 2022 05:13:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 00CFF618F4;
-        Fri, 25 Mar 2022 12:13:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24922C340E9;
-        Fri, 25 Mar 2022 12:13:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648210391;
-        bh=Y/4il5PTv0k7vOpnOaFfNmWG5EFpXpTVGlg4uy6R8oM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=umEavdpR9nMKXOqjv3UBfB2vpGE9EKXBmhSPOxFTRwnXBOE0faELQkmG2eYQA8pw6
-         9b0UC2kikZnkN7IWjzUcjrFw5cGwWGl3uVzoIKwIlCE1pHKoTpCP+InrS/Pt0EMiKj
-         OD/6SujYAQJyeQIgrFCfrxrxUDmQ2BPjyTZ/3QkStNC6+fYNM9jHuBNE7yxsG63S99
-         m/u21mCwN8VDIkZvG/yAGjR22CD7WCk9dLJGDLj1LpEEJPuYoMTgWwVKCMj3dTGGSl
-         Uom3yIklhUtNaKMNAvlTkkSLTVu9bgvURvqfdgWPH1m+4T2Q2qllHWoXDzegUObvtj
-         g8SZrcHBGhoow==
-Message-ID: <85022bd4-52fb-d15c-cc47-8d891ae3a968@kernel.org>
-Date:   Fri, 25 Mar 2022 14:13:06 +0200
+        Fri, 25 Mar 2022 08:16:10 -0400
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04434D624;
+        Fri, 25 Mar 2022 05:14:36 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id pv16so15040595ejb.0;
+        Fri, 25 Mar 2022 05:14:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8V5ivikltya3vIFHgv4xionf1dAlc1QnsjDXk5/7sVU=;
+        b=QXnfFkH2//hgyHFOeUnOd0TCb2aFW+prNJ7T+iukI3pWRWIEc11uYRvPc8uqpuOMYR
+         JeVCv/CvXYANvnOwRuHa976rASHz/MdbAsr/0hM/jo8NyKh5UMdPXgDLeDYOhu7NQJ5z
+         CU3G0QoRJkKeksCUakqFKIz1U/5l4ak4Eu9PYvLhHThxFPfsTBYipFVt6yCYn0fMzl6u
+         IjldXaocbcSw0UM7Xdjuh0wFB+kUm7Z6au1DH7e7ib1tI/0Se3C/Rs4SxJk3oLTbZZYf
+         UVOfphDLlUvnNIvfke/OHWb+6iElc29ISB0sXFSJUNDcd7UK29nj0thhg/C1D6EY3yzg
+         tGQQ==
+X-Gm-Message-State: AOAM533FYzUNmbz7ocxJ7oRgVL3l3+ShzAokbp24JLsJjLZhJUfyN7Wk
+        +ZtOgMJ57F5fHNrYVEmuquY=
+X-Google-Smtp-Source: ABdhPJy8E5ALcm1XcsAwdMWd0q03ak98tgDhZsJLvOPk2ckVlPZmjqfKSCmL+g6/9BY00tyINQ8cGw==
+X-Received: by 2002:a17:907:168a:b0:6da:9167:47dc with SMTP id hc10-20020a170907168a00b006da916747dcmr11130921ejc.126.1648210475303;
+        Fri, 25 Mar 2022 05:14:35 -0700 (PDT)
+Received: from [192.168.0.160] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id p10-20020a17090664ca00b006df8869d58dsm2256573ejn.100.2022.03.25.05.14.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 05:14:34 -0700 (PDT)
+Message-ID: <d9b883d2-8269-8419-3bcd-3761074bea96@kernel.org>
+Date:   Fri, 25 Mar 2022 13:14:33 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 2/3] dt-bindings: mtd: ti,elm: Add support for AM64 ELM
+Subject: Re: [PATCH 1/2] dt-bindings: regulator: Add binding for Richtek
+ RT5759 DCDC converter
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzk@kernel.org>, miquel.raynal@bootlin.com,
+To:     cy_huang <u0084500@gmail.com>, broonie@kernel.org,
         robh+dt@kernel.org
-Cc:     richard@nod.at, vigneshr@ti.com, kishon@ti.com, nm@ti.com,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220323111851.4699-1-rogerq@kernel.org>
- <20220323111851.4699-3-rogerq@kernel.org>
- <a222efb1-4f95-d65d-919b-ed55c5448c9a@kernel.org>
- <abcbe390-45a8-6183-56a8-f9f751e84f49@kernel.org>
- <597e4bfb-383d-0f3b-dce8-ffc12f543b46@kernel.org>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <597e4bfb-383d-0f3b-dce8-ffc12f543b46@kernel.org>
+Cc:     lgirdwood@gmail.com, cy_huang@richtek.com, gene_chen@richtek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <1648170401-6351-1-git-send-email-u0084500@gmail.com>
+ <1648170401-6351-2-git-send-email-u0084500@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <1648170401-6351-2-git-send-email-u0084500@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 25/03/2022 14:08, Krzysztof Kozlowski wrote:
-> On 25/03/2022 13:05, Roger Quadros wrote:
->>
->>
->> On 24/03/2022 20:26, Krzysztof Kozlowski wrote:
->>> On 23/03/2022 12:18, Roger Quadros wrote:
->>>> TI's AM64 SoC has the Error Locator Module. Add compatible and
->>>> related properties to support ELM on AM64 SoC.
->>>>
->>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->>>> ---
->>>>  .../devicetree/bindings/mtd/ti,elm.yaml       | 27 ++++++++++++++++++-
->>>>  1 file changed, 26 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/mtd/ti,elm.yaml b/Documentation/devicetree/bindings/mtd/ti,elm.yaml
->>>> index 24ed0fb84204..bc01d35ce605 100644
->>>> --- a/Documentation/devicetree/bindings/mtd/ti,elm.yaml
->>>> +++ b/Documentation/devicetree/bindings/mtd/ti,elm.yaml
->>>> @@ -17,7 +17,9 @@ description:
->>>>  properties:
->>>>    compatible:
->>>>      items:
->>>> -      - const: ti,am3352-elm
->>>> +      - enum:
->>>> +          - ti,am3352-elm
->>>> +          - ti,am64-elm
->>>>  
->>>>    reg:
->>>>      maxItems: 1
->>>> @@ -25,6 +27,17 @@ properties:
->>>>    interrupts:
->>>>      maxItems: 1
->>>>  
->>>> +  clocks:
->>>> +    maxItems: 1
->>>> +    description: Functional clock.
->>>> +
->>>> +  clock-names:
->>>> +    items:
->>>> +      - const: fck
->>>> +
->>>> +  power-domains:
->>>> +    maxItems: 1
->>>> +
->>>>    ti,hwmods:
->>>>      description:
->>>>        Name of the HWMOD associated with ELM. This is for legacy
->>>> @@ -37,6 +50,18 @@ required:
->>>>    - reg
->>>>    - interrupts
->>>>  
->>>> +allOf:
->>>> +  - if:
->>>> +      properties:
->>>> +        compatible:
->>>> +          contains:
->>>> +            const: ti,am64-elm
->>>> +    then:
->>>> +      required:
->>>> +        - clocks
->>>> +        - clock-names
->>>> +        - power-domains
->>>
->>> Are these new properties also valid for am3352?
->>
->> No they are not required for am3352-elm. Only required for K3 based platforms like AM64.
->>
+On 25/03/2022 02:06, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
 > 
-> I understand they are not required, but I asked if they are valid. IOW,
-> whether ELM in am3352 also is part of power domain and has clock input?
+> Add bindings for Richtek RT5759 high-performance DCDC converter.
+> 
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+>  .../regulator/richtek,rt5759-regulator.yaml        | 90 ++++++++++++++++++++++
+>  1 file changed, 90 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt5759-regulator.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt5759-regulator.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt5759-regulator.yaml
+> new file mode 100644
+> index 00000000..c24b583
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/richtek,rt5759-regulator.yaml
+> @@ -0,0 +1,90 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/richtek,rt5759-regulator.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Richtek RT5759 High Performance DCDC Concverter
 
-Yes it does have power and clock domains but they are handled a bit differently
-on AM335x platform. i.e. in the parent node
+typo: Converter
 
-e.g.
+> +
+> +maintainers:
+> +  - ChiYuan Huang <cy_huang@richtek.com>
+> +
+> +description: |
+> +  The RT5759 is a high-performance, synchronous step-down DC-DC converter that
+> +  can deliver up to 9A output current from 3V to 6.5V input supply, The output
+> +  voltage can be programmable with I2C controlled 7-Bit VID.
+> +
+> +  Datasheet is available at
+> +  https://www.richtek.com/assets/product_file/RT5759/DS5759-00.pdf
+> +
+> +allOf:
+> +  - $ref: regulator.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - richtek,rt5759
+> +      - richtek,rt5759a
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  regulator-allowed-modes:
+> +    description: |
+> +      buck allowed operating mode
+> +        0: auto mode (PSKIP: pulse skipping)
+> +        1: force pwm mode
+> +    items:
+> +      enum: [0, 1]
+> +
+> +  richtek,watchdog-enable:
+> +    description: enable the external watchdog reset pin listening
+> +    type: boolean
+> +
+> +if:
 
-               target-module@80000 {                   /* 0x48080000, ap 38 18.0 */
-                        compatible = "ti,sysc-omap2", "ti,sysc";
-                        reg = <0x80000 0x4>,
-                              <0x80010 0x4>,
-                              <0x80014 0x4>;
-                        reg-names = "rev", "sysc", "syss";
-                        ti,sysc-mask = <(SYSC_OMAP2_CLOCKACTIVITY |
-                                         SYSC_OMAP2_SOFTRESET |
-                                         SYSC_OMAP2_AUTOIDLE)>;
-                        ti,sysc-sidle = <SYSC_IDLE_FORCE>,
-                                        <SYSC_IDLE_NO>,
-                                        <SYSC_IDLE_SMART>;
-                        ti,syss-mask = <1>;
-                        /* Domains (P, C): per_pwrdm, l4ls_clkdm */
-                        clocks = <&l4ls_clkctrl AM3_L4LS_ELM_CLKCTRL 0>;
-                        clock-names = "fck";
-                        #address-cells = <1>;
-                        #size-cells = <1>;
-                        ranges = <0x0 0x80000 0x10000>;
+This should be inside allOf. Move allOf here,
 
-                        elm: elm@0 {
-                                compatible = "ti,am3352-elm";
-                                reg = <0x0 0x2000>;
-                                interrupts = <4>;
-                                status = "disabled";
-                        };
-                };
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: richtek,rt5759
+> +then:
+> +  properties:
+> +    richtek,watchdog-enable: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  # example 1 for RT5759
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      rt5759@62 {
 
-cheers,
--roger
+Generic node name, so pmic.
+
+> +        compatible = "richtek,rt5759";
+> +        reg = <0x62>;
+> +        regulator-name = "rt5759-buck";
+> +        regulator-min-microvolt = <600000>;
+> +        regulator-max-microvolt = <1500000>;
+> +        regulator-boot-on;
+> +      };
+> +    };
+> +  # example 2 for RT5759A
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      rt5759a@62 {
+
+Ditto
+
+> +        compatible = "richtek,rt5759a";
+> +        reg = <0x62>;
+> +        regulator-name = "rt5759a-buck";
+> +        regulator-min-microvolt = <600000>;
+> +        regulator-max-microvolt = <1725000>;
+> +        regulator-boot-on;
+> +        richtek,watchdog-enable;
+> +      };
+> +    };
+
+
+Best regards,
+Krzysztof

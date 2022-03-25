@@ -2,66 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0478A4E7817
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F7E4E784A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242557AbiCYPi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33058 "EHLO
+        id S1357206AbiCYPq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376984AbiCYPiN (ORCPT
+        with ESMTP id S1376991AbiCYPmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:38:13 -0400
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D502642EEB;
-        Fri, 25 Mar 2022 08:34:57 -0700 (PDT)
-Received: by mail-pl1-f169.google.com with SMTP id x2so8402190plm.7;
-        Fri, 25 Mar 2022 08:34:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bbdgCmNtwzY2RLS376ybn/+3eTx3HqJcLP+kZSbonms=;
-        b=II646205Fe+H3Uj8+9+hWRuf7OkHp8NB6cGfzmJJqCmPoVZ1dA7ashLKAn+t2uT6qi
-         AGvNAmVfA/4tLXYU2AglDOyxUgwcEFmizD12oucdJfhJdiFtKwk50qsPTHQGCQ0ZDUPj
-         Iw9LCvM+BdnHeycV7y3ZRkdkH/qBvc3fba4DKZk+scOsrr2txuSaiHOCGD4xhBMdBIYU
-         rn+6sjH7dVjFlJp32GTumNR3JWDx7sgRdmz1R5b4701nVNjfEyQYEYZwib2UC47auEWC
-         r1sWCHBgiW2eQwsI0bcAhQgCppD/5IbjIYx/tBDnSg2Oq11mkE18BtJjqAH5o0VIC225
-         0YhA==
-X-Gm-Message-State: AOAM531bCEUEh9lVsrVR8vAKYr7iKhmqtC8xhXZhGRmg24QMNNvqCqAW
-        RNtaIYGimXfallenJFqS17v0eP52pz0=
-X-Google-Smtp-Source: ABdhPJylDRG/b4rWwQqiSjQYi+msf7VHn9E4kX9F42tOQD4859a6He0M7PZWCvqJkgeYBJhkGx0RPQ==
-X-Received: by 2002:a17:902:db0f:b0:154:665e:af75 with SMTP id m15-20020a170902db0f00b00154665eaf75mr12089337plx.147.1648222497062;
-        Fri, 25 Mar 2022 08:34:57 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id k18-20020a056a00135200b004fb18fc6c78sm2880862pfu.31.2022.03.25.08.34.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 08:34:56 -0700 (PDT)
-Message-ID: <e3654323-1880-d7b9-fba6-59b387b6fa77@acm.org>
-Date:   Fri, 25 Mar 2022 08:34:54 -0700
+        Fri, 25 Mar 2022 11:42:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5190D4A92D
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 08:37:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F119617B1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 15:37:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7953C340E9;
+        Fri, 25 Mar 2022 15:37:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648222640;
+        bh=z/tj9379s2brMQn0z0S3F/M1BsjmaTZ7Dhjo9GF9rsY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Uc02Fcd8vpsITGYBkaTuWcxMb3swn8zJ5k1vtS7Oqv0nOfa3FlEpj+NCBaNdntpZu
+         GAUApysYOGYkpOYvrby5Oky5Q/+CtUXik8/mIze4WQZqW1XtLd3DyaJ6FYq+cjHJHt
+         jsBX3Be+C5BmlvLSRTkZEgMXLYexaSRZA+dyAjJxTM/4e7iWofjPa9CTmT5Bt0Mzwi
+         YX/qF6NFIX3MyZ6gnzXIV5dX2IpAs1iBvqK/i/kTYIdFrK8+AhxuGvud4T/tBq2Avq
+         24jRIw5vf/mW36k1ZLCTxSeRVJ0KnpTM1EbSH+S7CkSuduUO1/71KTgxqVpVmmsQzm
+         bmOOiSey1UNVA==
+Date:   Fri, 25 Mar 2022 16:37:14 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Petr Vorel <pvorel@suse.cz>
+Cc:     linux-kernel@vger.kernel.org,
+        Christian Brauner <christian@brauner.io>,
+        Alexey Gladkov <legion@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 1/1] ns: Move MAX_PID_NS_LEVEL to ns_common.h, reuse it
+Message-ID: <20220325153714.eau4ja6pcr2a34sh@wittgenstein>
+References: <20220325112127.18026-1-pvorel@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] scsi: ufs: unipro: add to define HS-Gear5 mode
-Content-Language: en-US
-To:     SEO HOYOUNG <hy50.seo@samsung.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        asutoshd@codeaurora.org, cang@codeaurora.org,
-        bhoon95.kim@samsung.com, kwmad.kim@samsung.com
-References: <sc.suh@samsung.com;>
- <CGME20220325082858epcas2p41c0918b1cacce09eaa5f7ffe84d9f994@epcas2p4.samsung.com>
- <20220324201410.59187-1-hy50.seo@samsung.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220324201410.59187-1-hy50.seo@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220325112127.18026-1-pvorel@suse.cz>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,20 +59,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/22 13:14, SEO HOYOUNG wrote:
-> diff --git a/drivers/scsi/ufs/unipro.h b/drivers/scsi/ufs/unipro.h
-> index 8e9e486a4f7b..0d2131e1f027 100644
-> --- a/drivers/scsi/ufs/unipro.h
-> +++ b/drivers/scsi/ufs/unipro.h
-> @@ -231,6 +231,7 @@ enum ufs_hs_gear_tag {
->   	UFS_HS_G2,		/* HS Gear 2 */
->   	UFS_HS_G3,		/* HS Gear 3 */
->   	UFS_HS_G4,		/* HS Gear 4 */
-> +	UFS_HS_G5,		/* HS Gear 5 */
->   };
+On Fri, Mar 25, 2022 at 12:21:27PM +0100, Petr Vorel wrote:
+> Move MAX_PID_NS_LEVEL to ns_common.h and reuse it in check in
+> user_namespace.c.
+> 
+> Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> ---
+> Hi Christian, all,
+> 
+> I don't see putting MAX_PID_NS_LEVEL into ns_common.h as an elegant
+> solution but IMHO better than use a hardwired number or redefinition in
+> user_namespace.h.
 
-Where is the code that uses this new constant?
+Hey Petr,
 
-Thanks,
+Weird I either deleted that message by accident or didn't get it.
 
-Bart.
+> 
+> Kind regards,
+> Petr
+> 
+>  include/linux/ns_common.h     | 3 +++
+>  include/linux/pid_namespace.h | 3 ---
+>  kernel/user_namespace.c       | 2 +-
+>  3 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/ns_common.h b/include/linux/ns_common.h
+> index 0f1d024bd958..173fab9dadf7 100644
+> --- a/include/linux/ns_common.h
+> +++ b/include/linux/ns_common.h
+> @@ -4,6 +4,9 @@
+>  
+>  #include <linux/refcount.h>
+>  
+> +/* MAX_PID_NS_LEVEL is needed for limiting size of 'struct pid' */
+> +#define MAX_PID_NS_LEVEL 32
+
+The only two namespaces where this applies to have the same hard-coded
+limit. If you want to get rid of the raw number you should just
+introduce a generic define that expresses the limit for both pidns
+and userns. Using "MAX_PID_NS_LEVEL" in the userns case is very
+confusing. So if you wanted to do this introducing something like
+#define MAX_NS_LEVEL 32
+and using it in both places makes more sense.
+
+Christian

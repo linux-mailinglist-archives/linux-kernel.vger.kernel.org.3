@@ -2,49 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8BA4E6D60
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 05:44:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3054E6D59
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 05:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347352AbiCYEpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 00:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35854 "EHLO
+        id S1355153AbiCYElK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 00:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358282AbiCYEpJ (ORCPT
+        with ESMTP id S243070AbiCYElF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 00:45:09 -0400
-Received: from esa11.hc1455-7.c3s2.iphmx.com (esa11.hc1455-7.c3s2.iphmx.com [207.54.90.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB21569CDA;
-        Thu, 24 Mar 2022 21:43:25 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="46962374"
-X-IronPort-AV: E=Sophos;i="5.90,209,1643641200"; 
-   d="scan'208";a="46962374"
-Received: from unknown (HELO yto-r4.gw.nic.fujitsu.com) ([218.44.52.220])
-  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP; 25 Mar 2022 13:43:21 +0900
-Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
-        by yto-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 4FC39CD6C3;
-        Fri, 25 Mar 2022 13:43:22 +0900 (JST)
-Received: from oym-om3.fujitsu.com (oym-om3.o.css.fujitsu.com [10.85.58.163])
-        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 0639D169187;
-        Fri, 25 Mar 2022 13:43:21 +0900 (JST)
-Received: from localhost.localdomain (bakeccha.fct.css.fujitsu.com [10.126.195.136])
-        by oym-om3.fujitsu.com (Postfix) with ESMTP id B7510403F02E4;
-        Fri, 25 Mar 2022 13:43:20 +0900 (JST)
-From:   Shunsuke Nakamura <nakamura.shun@fujitsu.com>
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: [RFC PATCH v2 7/7] libperf test: Add test_stat_overflow_event()
-Date:   Fri, 25 Mar 2022 13:38:29 +0900
-Message-Id: <20220325043829.224045-8-nakamura.shun@fujitsu.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220325043829.224045-1-nakamura.shun@fujitsu.com>
-References: <20220325043829.224045-1-nakamura.shun@fujitsu.com>
+        Fri, 25 Mar 2022 00:41:05 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EB65F24C
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 21:39:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648183171; x=1679719171;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=B4UNeiimvHkiGX0TX7pHUeS94Z5SEfUqC5jUtfFxMYw=;
+  b=aAjS5EXedzWragHJs8lEOMe12YIwVCTNonw5/2k4GxG3oJKJlws9ygeE
+   +OmU8Vdm1ONuzZy3kzd/gMjyz899uw40UTnq9gxxZGvVLwtmf6Ahu6Te3
+   U0hUOHf2SOv7ydUVFLLzTgahUDjkck+HATVVho1m5QJ5/4AR8kglmEI1s
+   dRbrx5xO+2KWyBO4tRZdONoNiVTXm1dtUjY8iEaRExe9U6QreGYfO9lWP
+   U6rR0mJcndeV0RHkvlBdjbDusx1cKl1WcXgVbFDaV6o6of3/G9D+whTh0
+   hftMzepvWhmzDJy8hZGoxmJgpvSDPWrl04HXoIQQUbnVu8i+chgKcOBCA
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="319260656"
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="319260656"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 21:39:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="544932822"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 24 Mar 2022 21:39:29 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nXbjU-000Lnb-SY; Fri, 25 Mar 2022 04:39:28 +0000
+Date:   Fri, 25 Mar 2022 12:39:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [broonie-misc:for-kernelci 6/7] include/linux/kern_levels.h:5:25:
+ warning: format '%d' expects argument of type 'int', but argument 2 has type
+ 'long unsigned int'
+Message-ID: <202203251236.KA4YsYRe-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,218 +62,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a test to check overflowed events.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git for-kernelci
+head:   0265b10883453897a0ddcdbc21af5031ad5b4a7e
+commit: 94c6c005fd4c9113c44acb727292f0acd1434a11 [6/7] TEST - MCLK SETTING
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220325/202203251236.KA4YsYRe-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git/commit/?id=94c6c005fd4c9113c44acb727292f0acd1434a11
+        git remote add broonie-misc https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git
+        git fetch --no-tags broonie-misc for-kernelci
+        git checkout 94c6c005fd4c9113c44acb727292f0acd1434a11
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash sound/soc/codecs/
 
-Committer testing:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-  $ sudo make tests -C ./tools/lib/perf V=1
-  make: Entering directory '/home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/lib/perf'
-  make -f /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/build/Makefile.build dir=. obj=libperf
-  make -C /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/lib/api/ O= libapi.a
-  make -f /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/build/Makefile.build dir=./fd obj=libapi
-  make -f /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/build/Makefile.build dir=./fs obj=libapi
-  make -f /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/build/Makefile.build dir=. obj=tests
-  make -f /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/build/Makefile.build dir=./tests obj=tests
-  running static:
-  - running tests/test-cpumap.c...OK
-  - running tests/test-threadmap.c...OK
-  - running tests/test-evlist.c...
+All warnings (new ones prefixed by >>):
 
-  <SNIP>
+   In file included from include/asm-generic/bug.h:22,
+                    from arch/powerpc/include/asm/bug.h:149,
+                    from include/linux/bug.h:5,
+                    from arch/powerpc/include/asm/cmpxchg.h:8,
+                    from arch/powerpc/include/asm/atomic.h:11,
+                    from include/linux/atomic.h:7,
+                    from include/linux/mm_types_task.h:13,
+                    from include/linux/mm_types.h:5,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from sound/soc/codecs/wm8731.c:13:
+   sound/soc/codecs/wm8731.c: In function 'wm8731_set_dai_sysclk':
+>> include/linux/kern_levels.h:5:25: warning: format '%d' expects argument of type 'int', but argument 2 has type 'long unsigned int' [-Wformat=]
+       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+         |                         ^~~~~~
+   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
+     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+   include/linux/printk.h:479:9: note: in expansion of macro 'printk'
+     479 |         printk(KERN_CRIT pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~
+   include/linux/kern_levels.h:10:25: note: in expansion of macro 'KERN_SOH'
+      10 | #define KERN_CRIT       KERN_SOH "2"    /* critical conditions */
+         |                         ^~~~~~~~
+   include/linux/printk.h:479:16: note: in expansion of macro 'KERN_CRIT'
+     479 |         printk(KERN_CRIT pr_fmt(fmt), ##__VA_ARGS__)
+         |                ^~~~~~~~~
+   sound/soc/codecs/wm8731.c:394:25: note: in expansion of macro 'pr_crit'
+     394 |                         pr_crit("SET SYSCLK %d\n", clk_get_rate(wm8731->mclk));
+         |                         ^~~~~~~
+   sound/soc/codecs/wm8731.c: In function 'wm8731_i2c_probe':
+>> include/linux/kern_levels.h:5:25: warning: format '%d' expects argument of type 'int', but argument 2 has type 'long unsigned int' [-Wformat=]
+       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+         |                         ^~~~~~
+   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
+     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+   include/linux/printk.h:479:9: note: in expansion of macro 'printk'
+     479 |         printk(KERN_CRIT pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~
+   include/linux/kern_levels.h:10:25: note: in expansion of macro 'KERN_SOH'
+      10 | #define KERN_CRIT       KERN_SOH "2"    /* critical conditions */
+         |                         ^~~~~~~~
+   include/linux/printk.h:479:16: note: in expansion of macro 'KERN_CRIT'
+     479 |         printk(KERN_CRIT pr_fmt(fmt), ##__VA_ARGS__)
+         |                ^~~~~~~~~
+   sound/soc/codecs/wm8731.c:751:17: note: in expansion of macro 'pr_crit'
+     751 |                 pr_crit("WM8731 MCLK IS %d\n", clk_get_rate(wm8731->mclk));
+         |                 ^~~~~~~
 
-  Event  0 -- overflow flag = 0x1, POLL_UP = 1, other signal event = 0
-  Event  1 -- overflow flag = 0x2, POLL_UP = 1, other signal event = 0
-  Event  2 -- overflow flag = 0x4, POLL_UP = 1, other signal event = 0
-  Event  3 -- overflow flag = 0x8, POLL_UP = 1, other signal event = 0
-  OK
-  - running tests/test-evsel.c...
 
-  <SNIP>
+vim +5 include/linux/kern_levels.h
 
-  OK
-  running dynamic:
-  - running tests/test-cpumap.c...OK
-  - running tests/test-threadmap.c...OK
-  - running tests/test-evlist.c...
+314ba3520e513a Joe Perches 2012-07-30  4  
+04d2c8c83d0e3a Joe Perches 2012-07-30 @5  #define KERN_SOH	"\001"		/* ASCII Start Of Header */
+04d2c8c83d0e3a Joe Perches 2012-07-30  6  #define KERN_SOH_ASCII	'\001'
+04d2c8c83d0e3a Joe Perches 2012-07-30  7  
 
-  <SNIP>
+:::::: The code at line 5 was first introduced by commit
+:::::: 04d2c8c83d0e3ac5f78aeede51babb3236200112 printk: convert the format for KERN_<LEVEL> to a 2 byte pattern
 
-  Event  0 -- overflow flag = 0x1, POLL_UP = 1, other signal event = 0
-  Event  1 -- overflow flag = 0x2, POLL_UP = 1, other signal event = 0
-  Event  2 -- overflow flag = 0x4, POLL_UP = 1, other signal event = 0
-  Event  3 -- overflow flag = 0x8, POLL_UP = 1, other signal event = 0
-  OK
-  - running tests/test-evsel.c...
+:::::: TO: Joe Perches <joe@perches.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
-  <SNIP>
-
-  OK
-  make: Leaving directory '/home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/lib/perf'
-
-Signed-off-by: Shunsuke Nakamura <nakamura.shun@fujitsu.com>
----
- tools/lib/perf/tests/test-evlist.c | 127 +++++++++++++++++++++++++++++
- 1 file changed, 127 insertions(+)
-
-diff --git a/tools/lib/perf/tests/test-evlist.c b/tools/lib/perf/tests/test-evlist.c
-index ed616fc19b4f..ecfe35c64c40 100644
---- a/tools/lib/perf/tests/test-evlist.c
-+++ b/tools/lib/perf/tests/test-evlist.c
-@@ -6,6 +6,8 @@
- #include <stdarg.h>
- #include <unistd.h>
- #include <stdlib.h>
-+#include <string.h>
-+#include <fcntl.h>
- #include <linux/perf_event.h>
- #include <linux/limits.h>
- #include <sys/types.h>
-@@ -25,6 +27,13 @@
- #define EVENT_NUM 15
- #define WAIT_COUNT 100000000UL
- 
-+static unsigned int overflow_flag;
-+static struct signal_counts {
-+	int hup;
-+	int others;
-+} sig_count = { 0, 0 };
-+static struct perf_evlist *s_evlist;
-+
- static int libperf_print(enum libperf_print_level level,
- 			 const char *fmt, va_list ap)
- {
-@@ -571,6 +580,123 @@ static int test_stat_multiplexing(void)
- 	return 0;
- }
- 
-+static void sig_handler(int signo, siginfo_t *info, void *uc)
-+{
-+	struct perf_evsel *evsel;
-+	int idx = 0;
-+	bool overflow;
-+	int err;
-+
-+	switch (info->si_code) {
-+	case POLL_HUP:
-+		perf_evlist__for_each_evsel(s_evlist, evsel) {
-+			err = perf_evsel__check_overflow(evsel, info->si_fd, &overflow);
-+			if (err)
-+				fprintf(stderr, "failed to check evsel overflow %d\n", err);
-+
-+			if (overflow) {
-+				overflow_flag = (1U << idx);
-+				sig_count.hup++;
-+				break;
-+			}
-+			idx++;
-+		}
-+		break;
-+	default:
-+		perf_evlist__for_each_evsel(s_evlist, evsel) {
-+			err = perf_evsel__check_overflow(evsel, info->si_fd, &overflow);
-+			if (err)
-+				fprintf(stderr, "failed to check evsel overflow %d\n", err);
-+
-+			if (overflow) {
-+				overflow_flag = (1U << idx);
-+				sig_count.others++;
-+				break;
-+			}
-+			idx++;
-+		}
-+	}
-+}
-+
-+static int test_stat_overflow_event(void)
-+{
-+	static struct sigaction sig;
-+
-+	struct perf_thread_map *threads;
-+	struct perf_evsel *evsel;
-+	struct perf_event_attr attr = {
-+		.type		= PERF_TYPE_SOFTWARE,
-+		.config		= PERF_COUNT_SW_CPU_CLOCK,
-+		.sample_type	= PERF_SAMPLE_PERIOD,
-+		.sample_period	= 100000,
-+		.disabled	= 1,
-+	};
-+	int err, i, event_num = 4;
-+
-+	LIBPERF_OPTS(perf_evsel_open_opts, opts,
-+		     .open_flags = PERF_FLAG_FD_CLOEXEC,
-+		     .flags	 = (O_RDWR | O_NONBLOCK | O_ASYNC),
-+		     .signal	 = SIGIO,
-+		     .owner_type = F_OWNER_PID,
-+		     .sig	 = &sig);
-+
-+	/* setup signal handler */
-+	memset(&sig, 0, sizeof(struct sigaction));
-+	sig.sa_sigaction = (void *)sig_handler;
-+	sig.sa_flags = SA_SIGINFO;
-+
-+	threads = perf_thread_map__new_dummy();
-+	__T("failed to create threads", threads);
-+
-+	perf_thread_map__set_pid(threads, 0, 0);
-+
-+	s_evlist = perf_evlist__new();
-+	__T("failed to create evlist", s_evlist);
-+
-+	for (i = 0; i < event_num; i++) {
-+		evsel = perf_evsel__new(&attr);
-+		__T("failed to create evsel", evsel);
-+
-+		perf_evlist__add(s_evlist, evsel);
-+	}
-+
-+	perf_evlist__set_maps(s_evlist, NULL, threads);
-+
-+	err = perf_evlist__open_opts(s_evlist, &opts);
-+	__T("failed to open evlist", err == 0);
-+
-+	i = 0;
-+	perf_evlist__for_each_evsel(s_evlist, evsel) {
-+		volatile unsigned int wait_count = WAIT_COUNT;
-+
-+		err = perf_evsel__refresh(evsel, 1);
-+		__T("failed to refresh evsel", err == 0);
-+
-+		while (wait_count--)
-+			;
-+
-+		__T_VERBOSE("Event %2d -- overflow flag = %#x, ",
-+			    i, overflow_flag);
-+		__T_VERBOSE("POLL_UP = %d, other signal event = %d\n",
-+			    sig_count.hup, sig_count.others);
-+
-+		__T("unexpected event overflow detected", overflow_flag && (1U << i));
-+		__T("unexpected signal event detected",
-+		    sig_count.hup == 1 && sig_count.others == 0);
-+
-+		overflow_flag = 0;
-+		sig_count.hup = 0;
-+		sig_count.others = 0;
-+		i++;
-+	}
-+
-+	perf_evlist__close(s_evlist);
-+	perf_evlist__delete(s_evlist);
-+	perf_thread_map__put(threads);
-+
-+	return 0;
-+}
-+
- int test_evlist(int argc, char **argv)
- {
- 	__T_START;
-@@ -583,6 +709,7 @@ int test_evlist(int argc, char **argv)
- 	test_mmap_thread();
- 	test_mmap_cpus();
- 	test_stat_multiplexing();
-+	test_stat_overflow_event();
- 
- 	__T_END;
- 	return tests_failed == 0 ? 0 : -1;
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

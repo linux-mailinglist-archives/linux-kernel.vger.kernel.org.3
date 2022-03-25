@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44CD4E76FB
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AABCD4E780F
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376440AbiCYPWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
+        id S1356010AbiCYPcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376294AbiCYPTx (ORCPT
+        with ESMTP id S1377655AbiCYPYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:19:53 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBFAE1270;
-        Fri, 25 Mar 2022 08:15:33 -0700 (PDT)
+        Fri, 25 Mar 2022 11:24:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9855AE7F77;
+        Fri, 25 Mar 2022 08:18:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4AD5ACE2A47;
-        Fri, 25 Mar 2022 15:15:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57236C340E9;
-        Fri, 25 Mar 2022 15:15:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D67460AB7;
+        Fri, 25 Mar 2022 15:18:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C4BCC340E9;
+        Fri, 25 Mar 2022 15:18:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221330;
-        bh=RtcrWv71LawqW2gb4kXuopo9Py0Hrh53bhUlN+ns+ms=;
+        s=korg; t=1648221506;
+        bh=TQCFjAhdsKyZ7yg+szFGHHnNbG43OsViEk8ESlBL1dU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kbawVd5EofNASzoLhtzc4U9Q8CHjahKwpViaKSBE/zLdfAK6JAME9t5fA1CpjuEoY
-         fh2tc2CU44eOAmgb+pk2X02Jfyr9VDpP6cheNPkgGL53k13n/mc2XXzkJRjb27o1cg
-         TZP67BYpYSGz5L3Qtp4faxLvUI5EgDUwHXp9qNPU=
+        b=CS86dL2fzQzV48FX8IdOJimkb6FNvmEgmBQLJoPBD7EOcJxb7itLHL3cdisnGLJKR
+         XIjkw/dx/wBMRcnlkrs3gmsGnSkBe5221pYs4b7netQg3lYid/D0OMbDW0AdBi30QL
+         N0C4fb6DzK26DbseJBBI02uMzfvZeUow7ddk1IUU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.15 23/37] netfilter: nf_tables: validate registers coming from userspace.
-Date:   Fri, 25 Mar 2022 16:14:24 +0100
-Message-Id: <20220325150420.595572604@linuxfoundation.org>
+        stable@vger.kernel.org, Jason Zheng <jasonzheng2004@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.17 10/39] ALSA: hda/realtek: Add quirk for ASUS GA402
+Date:   Fri, 25 Mar 2022 16:14:25 +0100
+Message-Id: <20220325150420.539947560@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150419.931802116@linuxfoundation.org>
-References: <20220325150419.931802116@linuxfoundation.org>
+In-Reply-To: <20220325150420.245733653@linuxfoundation.org>
+References: <20220325150420.245733653@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,71 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Jason Zheng <jasonzheng2004@gmail.com>
 
-commit 6e1acfa387b9ff82cfc7db8cc3b6959221a95851 upstream.
+commit b7557267c233b55d8e8d7ba4c68cf944fe2ec02c upstream.
 
-Bail out in case userspace uses unsupported registers.
+ASUS GA402 requires a workaround to manage the routing of its 4 speakers
+like the other ASUS models. Add a corresponding quirk entry to fix it.
 
-Fixes: 49499c3e6e18 ("netfilter: nf_tables: switch registers to 32 bit addressing")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Jason Zheng <jasonzheng2004@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220313092216.29858-1-jasonzheng2004@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nf_tables_api.c |   22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -9208,17 +9208,23 @@ int nft_parse_u32_check(const struct nla
- }
- EXPORT_SYMBOL_GPL(nft_parse_u32_check);
- 
--static unsigned int nft_parse_register(const struct nlattr *attr)
-+static unsigned int nft_parse_register(const struct nlattr *attr, u32 *preg)
- {
- 	unsigned int reg;
- 
- 	reg = ntohl(nla_get_be32(attr));
- 	switch (reg) {
- 	case NFT_REG_VERDICT...NFT_REG_4:
--		return reg * NFT_REG_SIZE / NFT_REG32_SIZE;
-+		*preg = reg * NFT_REG_SIZE / NFT_REG32_SIZE;
-+		break;
-+	case NFT_REG32_00...NFT_REG32_15:
-+		*preg = reg + NFT_REG_SIZE / NFT_REG32_SIZE - NFT_REG32_00;
-+		break;
- 	default:
--		return reg + NFT_REG_SIZE / NFT_REG32_SIZE - NFT_REG32_00;
-+		return -ERANGE;
- 	}
-+
-+	return 0;
- }
- 
- /**
-@@ -9260,7 +9266,10 @@ int nft_parse_register_load(const struct
- 	u32 reg;
- 	int err;
- 
--	reg = nft_parse_register(attr);
-+	err = nft_parse_register(attr, &reg);
-+	if (err < 0)
-+		return err;
-+
- 	err = nft_validate_register_load(reg, len);
- 	if (err < 0)
- 		return err;
-@@ -9315,7 +9324,10 @@ int nft_parse_register_store(const struc
- 	int err;
- 	u32 reg;
- 
--	reg = nft_parse_register(attr);
-+	err = nft_parse_register(attr, &reg);
-+	if (err < 0)
-+		return err;
-+
- 	err = nft_validate_register_store(ctx, reg, data, type, len);
- 	if (err < 0)
- 		return err;
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9020,6 +9020,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x1043, 0x1e51, "ASUS Zephyrus M15", ALC294_FIXUP_ASUS_GU502_PINS),
+ 	SND_PCI_QUIRK(0x1043, 0x1e8e, "ASUS Zephyrus G15", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x1f11, "ASUS Zephyrus G14", ALC289_FIXUP_ASUS_GA401),
++	SND_PCI_QUIRK(0x1043, 0x1d42, "ASUS Zephyrus G14 2022", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x16b2, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x3030, "ASUS ZN270IE", ALC256_FIXUP_ASUS_AIO_GPIO2),
+ 	SND_PCI_QUIRK(0x1043, 0x831a, "ASUS P901", ALC269_FIXUP_STEREO_DMIC),
 
 

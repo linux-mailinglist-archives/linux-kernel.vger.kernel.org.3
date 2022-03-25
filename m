@@ -2,55 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F474E727E
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8744E727D
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357601AbiCYL4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 07:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
+        id S1357713AbiCYL4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 07:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349840AbiCYL4b (ORCPT
+        with ESMTP id S1357525AbiCYL4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 25 Mar 2022 07:56:31 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A894FAE75
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 04:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yQdKl6aB8FDFCTa+tk3Ng8QCZiooicWQwcAW+Sq6gwQ=; b=nxX/aztogBEnty8Lx3qvl6c8BK
-        dYtYdXzaK+xtAN6QiTn0OyKVqpihvk6n6P7BogdL+CrWNzkkUzLGZVQuEgzaEk06Q1SFemDyeIWqu
-        00rdDFKkz/zdX5UGRHkpf5xOS3noiLeR7AbC/QxqmavUnO+aCGFa8++reChoFVZzeJgQl6KsbfBIl
-        gOIgXH1wzcIrE620lJs/gAbJkz/Z+FoXZAhBe48ov6jTfflaGemaVA7LeksBUvKfc6jhqRWkQzuEg
-        zl+/TMZPUcTZcNxDgOwq0N7vvToA/4nSzzkO0tnyZ2Suhdk4G8dscotpzf1zPzeB+jCbQQPFXbMEQ
-        L4gN9N1g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nXiWm-004MZZ-1d; Fri, 25 Mar 2022 11:54:48 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 36F07987D26; Fri, 25 Mar 2022 12:54:46 +0100 (CET)
-Date:   Fri, 25 Mar 2022 12:54:46 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Chen, Rong A" <rong.a.chen@intel.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        kernel test robot <lkp@intel.com>, x86-ml <x86@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [tip:sched/core] BUILD SUCCESS
- 3387ce4d8a5f2956fab827edf499fe6780e83faa
-Message-ID: <20220325115446.GP8939@worktop.programming.kicks-ass.net>
-References: <6238fde0.Qe5umewxqwiDe2GE%lkp@intel.com>
- <YjkHkb7joeu5GCto@dev-arch.thelio-3990X>
- <24dd031a-8ea7-5f01-4d80-3fb30d212c8a@intel.com>
- <20220324175801.GJ8939@worktop.programming.kicks-ass.net>
- <2d37183b-e0d5-dd37-11c7-9b0e415daaf4@intel.com>
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36260BCB6;
+        Fri, 25 Mar 2022 04:54:57 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id r13so10520843wrr.9;
+        Fri, 25 Mar 2022 04:54:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wfO/NgKZ7H/qKA+QCI+ODq0tIwjvgLb32lCfr243Wio=;
+        b=PjQ72ppjZJv71Q7Lsc1DCsD3OBT8iqTJclAni1GB8mJK9rjfbf+zXcupuTU554blja
+         FEKWJw7In4hw4MOVjiUKiWE7gBN3h/X36neZVFv2TZ4rBfePUTsCERymzVc4KajSs2tC
+         /sH5hRGAjQAHOyj4veDG0+0szQOCXKj5U4om4dlPbhs3aQfuZYdxHTIhI8fxXhZ+PM5l
+         us6BJoRoTm+qEXFLdNuQ+vh6zn72RDa7uiX9f3hkaKVVzRT1hlqO7oY6g/IG8SOi7z5J
+         X3dJ6BZfV4i2PFgbEpL1S3kfSOUwslQ9FnOEgCL7Es1x5EUvVdVS34wtZ0Xf7wUXqfTQ
+         0EZA==
+X-Gm-Message-State: AOAM531heWHSszkjgUnWbdohoompHROB41pnU9XaT4/ETFs5WicqncqB
+        TsdNhDvAORr9r4ipe/2NIAk=
+X-Google-Smtp-Source: ABdhPJyqx1hl6cEgGobyDAh7rmlx2h8IO+ILO7En01TltDi+G500EhEPBMZCB2sr6uU1h34LFuv1pw==
+X-Received: by 2002:adf:fc06:0:b0:204:975:acfb with SMTP id i6-20020adffc06000000b002040975acfbmr8958788wrr.486.1648209295383;
+        Fri, 25 Mar 2022 04:54:55 -0700 (PDT)
+Received: from [192.168.0.159] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id p2-20020a1c7402000000b0038159076d30sm8261916wmc.22.2022.03.25.04.54.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 04:54:54 -0700 (PDT)
+Message-ID: <86f96cb1-aca4-2c55-fb34-ed35582af2f9@kernel.org>
+Date:   Fri, 25 Mar 2022 12:54:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2d37183b-e0d5-dd37-11c7-9b0e415daaf4@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 2/3] dt-bindings: mmc: xenon: Convert to JSON schema
+Content-Language: en-US
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        ulf.hansson@linaro.org, robh+dt@kernel.org, huziji@marvell.com,
+        andrew@lunn.ch, gregory.clement@bootlin.com,
+        sebastian.hesselbarth@gmail.com
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220325000745.1708610-1-chris.packham@alliedtelesis.co.nz>
+ <20220325000745.1708610-3-chris.packham@alliedtelesis.co.nz>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220325000745.1708610-3-chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,27 +68,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 06:45:24PM +0800, Chen, Rong A wrote:
-
-> > Oh *PLEASE* never report a branch as building if there's errors.
-> > It could be I (force) push a branch multiple times before I get any
-> > 0day reports back (0day has gotten *soooo* slow) so I only ever look at
-> > the latest report -- possibly days later.
+On 25/03/2022 01:07, Chris Packham wrote:
+> Convert the marvell,xenon-sdhci binding to JSON schema. Currently the
+> in-tree dts files don't validate because they use sdhci@ instead of mmc@
+> as required by the generic mmc-controller schema.
 > 
-> Hi Peter,
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
 > 
-> Sorry for the bad experience, I'm not sure the meaning of "a branch as
-> building", is there a way to know the branch is not ready, or we can
-> postpone the test for a branch by a day?
+> Notes:
+>     Changes in v3:
+>     - Don't accept ap807 without ap806
+>     - Add ref: string for pad-type
+>     Changes in v2:
+>     - Update MAINTAINERS entry
+>     - Incorporate feedback from Krzysztof
+> 
+>  .../bindings/mmc/marvell,xenon-sdhci.txt      | 173 -----------
+>  .../bindings/mmc/marvell,xenon-sdhci.yaml     | 272 ++++++++++++++++++
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 273 insertions(+), 174 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt
+>  create mode 100644 Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+> 
 
-I was just commenting in general; never send a mail with "SUCCESS" in
-the subject (as per this thread) when there are errors/warns with it,
-supressed or otherwise.
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-If you do want to supress warnings (I'm not sure why; a few more emails
-in my inbox really aren't going to make a difference) then please state
-so explicitly with a link to the email with the report.
-
-The thing I worry about is that I often wait for a SUCCESS mail from
-0day robot before I push code to tip. If the SUCCESS is unreliable, this
-is not good.
+Best regards,
+Krzysztof

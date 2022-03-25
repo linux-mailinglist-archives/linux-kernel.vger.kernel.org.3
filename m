@@ -2,155 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D824E6F7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 09:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B667A4E6F81
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 09:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352767AbiCYIer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 04:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
+        id S1355175AbiCYIfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 04:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347783AbiCYIep (ORCPT
+        with ESMTP id S1350008AbiCYIfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 04:34:45 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1BB17041
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 01:33:11 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id o6-20020a17090a9f8600b001c6562049d9so7636905pjp.3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 01:33:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2vwrQNfNFnmUwYH0dlT3PEmHOLC7uVtwRjd3bwzS04k=;
-        b=V8rwhr26dlZa9x4wMUV5jggdmXlskZVpyJshD464GTPpfdwQ/rz6qLWvk5OLpHdQpw
-         il7WcwQT+51VCqU/GPvXrd2QP5yIkznMp+MwFKlKpkGxlfRWZA5jHHeGXf7+hVKwH26u
-         KxjltpxtpOg9ZsHmoKZq3PxRPH30nQfPWiQcx3P1RadSzuFcTF3ZcKFsSKW9sDRA0VuH
-         LXSqAJvSawPP9PmH6Uj1f2tl/648yS7WjeNmOZM94i7Txa4KClNMxctXYsI2cSH++8Bo
-         m/vJmTWmxU0kSqURHoVi9b4cPygywW/6Y809OATZUIDAvDgmvEMExVEgJMiv/QmkDEks
-         Sz2g==
+        Fri, 25 Mar 2022 04:35:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86D433AA61
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 01:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648197241;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=saAk925KE4YTcVBlOMWQBhUVk1WAYvAJga7iRSwNkWA=;
+        b=HNXwiBS/2E7nYEWwYHxWiZi/Jw62McuqEjXuQtZQJLJ1WWeJXzgORx5oJMibIn+4gk+Sin
+        4CH20me2HRfIQCVtx9MBW7IX3KuvIHvOgMkOz2Ps+VyDPhDLGecatg6D97J9Oy/JSN+mLF
+        MCnzygiFlrRmdHSJ0qMhe0b14PzSaww=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-510--drrVPa6NkyJjv8hfPBNCA-1; Fri, 25 Mar 2022 04:34:00 -0400
+X-MC-Unique: -drrVPa6NkyJjv8hfPBNCA-1
+Received: by mail-wm1-f69.google.com with SMTP id l1-20020a1c2501000000b00389c7b9254cso3758800wml.1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 01:34:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2vwrQNfNFnmUwYH0dlT3PEmHOLC7uVtwRjd3bwzS04k=;
-        b=Sr9mFvbcbzWFItBgvBo39b3Zc+KWKHX1XS7W5lKiUV0vlu+4zNWF31NUVk8RvQvbT/
-         3Lbe5mHHjI3rbXy/ijon7uvS3OK6X01errKNdgb9YM+Wa/UMj97evZUg7W7FDHWm6wHm
-         dEKE6/0bpwC8BwL0tW/CWCb/d9WPY+vA0E+SWsNpSjVzv+0NwyT5r8t3C+7byvQJl+Bx
-         BPOmdRJaTfvlANoX4+WLgV2Kp52McepuXTeqIqd2Bw0ODYFJa2jcJ4Xc0omOF/qzva0X
-         f7HmK6BDpqvq72NBOnhJFz7EybAR1kfmj9QCBu0IKRHchiiduL5UQ7H1kYZa7QVzLu6E
-         cQRg==
-X-Gm-Message-State: AOAM532hh2GH/LMDT0fB5KDtpzN0LWbfNO/Fg9FZpYJ82engl5yiwyv3
-        2THkLCsDxnnaagfB8O+fi5r3
-X-Google-Smtp-Source: ABdhPJyqazmKZeq5C8bGQY4LGvQk1xi6h457kGB/Ke4kT3F22nZtMc4jl/KV3981qsN49JKVGnlLfQ==
-X-Received: by 2002:a17:902:d2d1:b0:154:45d2:a05d with SMTP id n17-20020a170902d2d100b0015445d2a05dmr10367179plc.74.1648197191383;
-        Fri, 25 Mar 2022 01:33:11 -0700 (PDT)
-Received: from thinkpad ([27.111.75.218])
-        by smtp.gmail.com with ESMTPSA id z23-20020a056a001d9700b004fa8f24702csm5060773pfw.85.2022.03.25.01.33.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 01:33:11 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 14:03:05 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 21/25] dmaengine: dw-edma: Drop DT-region allocation
-Message-ID: <20220325083305.GI4675@thinkpad>
-References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
- <20220324014836.19149-22-Sergey.Semin@baikalelectronics.ru>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=saAk925KE4YTcVBlOMWQBhUVk1WAYvAJga7iRSwNkWA=;
+        b=zDfeVcG3omoj/2EaUu5QB6Zi6Zc1+xpAoMbFmcoSfZTYf0WsFBvKd+LcoGK/0v0Gjf
+         +cUpzNQa7GImS2TjFmcQ+jLiaIGklxXh1BOaYDC7i1ioon4M5+lTfe69oKknFClPKVuR
+         q++/BbrajmCoQVRI14gOw2jMq6/8YqHXBqBgRagCk4T/Gg63relV33qVKFRJ3clNMAIs
+         Q3yjch0+GMFxoiwus/sgORn6ODFIKMhkVKiL/qK5N0G4SR/Mi99WBwK+mcv57eZviS31
+         drcwID8ZWr1v1RgJAilbLLzX3P6Um1e2J/30pwduLeLmbZHVNARzY0etaUTu2q/GNmeU
+         FGBg==
+X-Gm-Message-State: AOAM533gDgENEvETJ80YQEuJm+Dg93qMicFAb2gMb3YJyH33hOwnjTSM
+        xm+H8FuMLiWohSRukPS5VV3AP2ZrFRATiutlKIAQaXD+PrX+6AlIwDZbqJckeCHATfPBX99uuYY
+        Ss2MoTS5KkW1wtEBVbjiC+6xQ
+X-Received: by 2002:adf:ebc1:0:b0:1e6:1109:5a1c with SMTP id v1-20020adfebc1000000b001e611095a1cmr7979822wrn.228.1648197239011;
+        Fri, 25 Mar 2022 01:33:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz8GsEnvVVsBe7K8bvT5MIDoTV+RToKncLKw5H8I6Ep8Yar8zelHy4/ERbBduTX23N6Bxn9Ig==
+X-Received: by 2002:adf:ebc1:0:b0:1e6:1109:5a1c with SMTP id v1-20020adfebc1000000b001e611095a1cmr7979796wrn.228.1648197238720;
+        Fri, 25 Mar 2022 01:33:58 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:4200:6374:a71a:a88:a4b? (p200300cbc70542006374a71a0a880a4b.dip0.t-ipconnect.de. [2003:cb:c705:4200:6374:a71a:a88:a4b])
+        by smtp.gmail.com with ESMTPSA id g10-20020adfe40a000000b00203eb3551f0sm6341460wrm.117.2022.03.25.01.33.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 01:33:58 -0700 (PDT)
+Message-ID: <86947c1a-090d-e101-d536-69818e2e8f5d@redhat.com>
+Date:   Fri, 25 Mar 2022 09:33:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324014836.19149-22-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: zram corruption due to uninitialized do_swap_page fault
+Content-Language: en-US
+To:     Ivan Babrou <ivan@cloudflare.com>, Minchan Kim <minchan@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        kernel-team <kernel-team@cloudflare.com>
+References: <CABWYdi2a=Tc3dRfQ+037PG0GHKvZd5SEXJxBBbNspsrHK1zNpQ@mail.gmail.com>
+ <CABWYdi1PeNbgnM4qE001+_BzHJxQcaaY9sLOK=Y7gjqfXZO0=g@mail.gmail.com>
+ <YjA439FwajtHsahr@google.com> <YjEOiZCLBMgbw8oc@google.com>
+ <CABWYdi0jd_pG_qqAnnGK6otNNXeNoiAWtmC14Jv+tiSadJPw0w@mail.gmail.com>
+ <CABWYdi2gOzAK60gLYKx9gSoSfJRZaAjyAWm+55gLgcSKrDrP9Q@mail.gmail.com>
+ <YjTCF37cUNz9FwGi@google.com> <YjTVVxIAsnKAXjTd@google.com>
+ <CABWYdi0tgau=trCiGWULY88Wu1-=13ck8NikV0KxfDQHFCCiMA@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CABWYdi0tgau=trCiGWULY88Wu1-=13ck8NikV0KxfDQHFCCiMA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 04:48:32AM +0300, Serge Semin wrote:
-> There is no point in allocating an additional memory for the data target
-> regions passed then to the client drivers. Just use the already available
-> structures defined in the dw_edma_chip instance.
+On 25.03.22 03:10, Ivan Babrou wrote:
+> On Fri, Mar 18, 2022 at 11:54 AM Minchan Kim <minchan@kernel.org> wrote:
+>>
+>> On Fri, Mar 18, 2022 at 10:32:07AM -0700, Minchan Kim wrote:
+>>> On Fri, Mar 18, 2022 at 09:30:09AM -0700, Ivan Babrou wrote:
+>>>> On Wed, Mar 16, 2022 at 11:26 AM Ivan Babrou <ivan@cloudflare.com> wrote:
+>>>>> I'm making an internal build and will push it to some location to see
+>>>>> how it behaves, but it might take a few days to get any sort of
+>>>>> confidence in the results (unless it breaks immediately).
+>>>>>
+>>>>> I've also pushed my patch that disables SWP_SYNCHRONOUS_IO to a few
+>>>>> locations yesterday to see how it fares.
+>>>>
+>>>> I have some updates before the weekend. There are two experimental groups:
+>>>>
+>>>> * My patch that removes the SWP_SYNCHRONOUS_IO flag. There are 704
+>>>> machines in this group across 5 datacenters with cumulative uptime of
+>>>> 916 days.
+>>>> * Minchan's patch to remove swap_slot_free_notify. There are 376
+>>>> machines in this group across 3 datacenters with cumulative uptime of
+>>>> 240 days.
+>>>>
+>>>> Our machines take a couple of hours to start swapping anything after
+>>>> boot, and I discounted these two hours from the cumulative uptime.
+>>>>
+>>>> Neither of these two groups experienced unexpected coredumps or
+>>>> rocksdb corruptions.
+>>>>
+>>>> I think at this point it's reasonable to proceed with Minchan's patch
+>>>> (including a backport).
+>>>
+>>> Let me cook the patch and then will post it.
+>>>
+>>> Thanks for the testing as well as reporting, Ivan!
+>>
+>> From 1ede54d46f0b1958bfc624f17fe709637ef8f12a Mon Sep 17 00:00:00 2001
+>> From: Minchan Kim <minchan@kernel.org>
+>> Date: Tue, 15 Mar 2022 14:14:23 -0700
+>> Subject: [PATCH] mm: fix unexpected zeroed page mapping with zram swap
 > 
-> Note these regions are unused in normal circumstances since they are
-> specific to the case of eDMA being embedded into the DW PCIe End-point and
-> having it's CSRs accessible over a End-point' BAR. This case is only known
-> to be implemented as a part of the Synopsys PCIe EndPoint IP prototype
-> kit.
+> Is there any action needed from me to make sure that this lands into
+> the mm tree and eventually into stable releases?
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Sending it as a proper patch with a proper subject, not buried deep down
+in a conversation might help ;)
 
+-- 
 Thanks,
-Mani
 
-> ---
->  drivers/dma/dw-edma/dw-edma-core.c | 21 ++++-----------------
->  1 file changed, 4 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-> index bc530f0a2468..dbe1119fd1d2 100644
-> --- a/drivers/dma/dw-edma/dw-edma-core.c
-> +++ b/drivers/dma/dw-edma/dw-edma-core.c
-> @@ -744,7 +744,6 @@ static void dw_edma_free_chan_resources(struct dma_chan *dchan)
->  static int dw_edma_channel_setup(struct dw_edma_chip *chip, u32 wr_alloc,
->  				 u32 rd_alloc)
->  {
-> -	struct dw_edma_region *dt_region;
->  	struct device *dev = chip->dev;
->  	struct dw_edma *dw = chip->dw;
->  	struct dw_edma_chan *chan;
-> @@ -761,12 +760,6 @@ static int dw_edma_channel_setup(struct dw_edma_chip *chip, u32 wr_alloc,
->  	for (i = 0; i < ch_cnt; i++) {
->  		chan = &dw->chan[i];
->  
-> -		dt_region = devm_kzalloc(dev, sizeof(*dt_region), GFP_KERNEL);
-> -		if (!dt_region)
-> -			return -ENOMEM;
-> -
-> -		chan->vc.chan.private = dt_region;
-> -
->  		chan->dw = dw;
->  
->  		if (i < dw->wr_ch_cnt) {
-> @@ -814,17 +807,11 @@ static int dw_edma_channel_setup(struct dw_edma_chip *chip, u32 wr_alloc,
->  			 chan->msi.data);
->  
->  		chan->vc.desc_free = vchan_free_desc;
-> -		vchan_init(&chan->vc, dma);
-> +		chan->vc.chan.private = chan->dir == EDMA_DIR_WRITE ?
-> +					&dw->chip->dt_region_wr[chan->id] :
-> +					&dw->chip->dt_region_rd[chan->id];
->  
-> -		if (chan->dir == EDMA_DIR_WRITE) {
-> -			dt_region->paddr = chip->dt_region_wr[chan->id].paddr;
-> -			dt_region->vaddr = chip->dt_region_wr[chan->id].vaddr;
-> -			dt_region->sz = chip->dt_region_wr[chan->id].sz;
-> -		} else {
-> -			dt_region->paddr = chip->dt_region_rd[chan->id].paddr;
-> -			dt_region->vaddr = chip->dt_region_rd[chan->id].vaddr;
-> -			dt_region->sz = chip->dt_region_rd[chan->id].sz;
-> -		}
-> +		vchan_init(&chan->vc, dma);
->  
->  		dw_edma_v0_core_device_config(chan);
->  	}
-> -- 
-> 2.35.1
-> 
+David / dhildenb
+

@@ -2,112 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0363F4E71C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B70B4E71C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:01:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353183AbiCYLBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 07:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52608 "EHLO
+        id S1353376AbiCYLDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 07:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353174AbiCYLBc (ORCPT
+        with ESMTP id S1353832AbiCYLC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 07:01:32 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E19BF039
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 03:59:58 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id r13so10325551wrr.9
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 03:59:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding;
-        bh=QUuvuWx0AHdHxhKcNG871JJ4v7rlpXrie/P5Lhm5m3E=;
-        b=rGvEAxAvCYzcX7kzi5ONuWblQJjvcGKUJLNhXM8ImX3ZWHD9ozycr9q5EbHg+WIfKc
-         PZDJ5dFDCFmDzOjV7ZzTJps88Lhj8mGKcfJm5qjALFkwuN4XL6WITfIjN6r5Fx17LHm2
-         RD7UxuVkbTW7X9LCXng6KYG/TwgzfhnVjo698VKCIhBj/fMe3RAOme41Gqs1ncRjkUX9
-         5/YuMdDqCgYg7AssNh3jVevbeeJ0q/jxpYhMQYQR4l4+Iymax0W0+mYbt3sRqYfcS0z2
-         jqnSiiuSSEn/Nk0BPf2iNW7O8sKgSeGu8RMukM32dRUZlascCHPOrsuB4d0Qb/IbMsiG
-         15mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=QUuvuWx0AHdHxhKcNG871JJ4v7rlpXrie/P5Lhm5m3E=;
-        b=OACVNhqO9Jv7/SCc0kWvFLTLSOFnHc/xLIe6otIRCJBegu2W37UA73gDJpm2YLOfH3
-         Ty9Y58D1FXIg64C8QKPT3kFypE8eyDMuj4Q30/WdIh7FXQ1lHEzjraL7LTSVmi/8H+Va
-         TGGaGiIACk4nTXsBB4+OE/+PQvYf9tMtfIiWU0HopYzVNBxYniafA7PAQJfnrOUVSzt+
-         RUK081wp8oYvx1A1XirfhC6YOLOt3bx8O6H8O/k3OGmasfcT91PW9ifIKOPwoOc9wnq9
-         KIvvtYclODlFBgRtZUDgEO5T8XNby1IceJ0UUm0bqOtrwk6NrGasyudqqjescsaNF7lD
-         /Asw==
-X-Gm-Message-State: AOAM533z3TzqNYA9VjsQHvjlwGd69i8vcSeN90NmlES9+C6LOhsqqCu3
-        VZqpD1xiyn79ayDJKF6bIpK/vYG7ARApig==
-X-Google-Smtp-Source: ABdhPJwPJck71gv8SQqBQj01bgk7FX/y+SqznA2Ju0ewPebQcJEY89Z0oEkDGjw7zvjHDYjNzUfMcg==
-X-Received: by 2002:a5d:40c8:0:b0:205:2a3b:c2c with SMTP id b8-20020a5d40c8000000b002052a3b0c2cmr8510219wrq.13.1648205996880;
-        Fri, 25 Mar 2022 03:59:56 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id g16-20020a05600c4ed000b0038ceb0b21b4sm1003997wmq.24.2022.03.25.03.59.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 03:59:56 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 10:59:54 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] Backlight for v5.18
-Message-ID: <Yj2gqnIk6HY5WyKo@google.com>
+        Fri, 25 Mar 2022 07:02:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A521C4E0E
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 04:01:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648206084;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=djp5XNqFQfJvL9jvcJIBR71HYiBGzr7Bef+oNNFSL3RayS1xJGYRc6n3SvhfUzqMZ42rWQ
+        qWqi31U6SfpEiyg1x8Tn1881cblUBfT/uTeA2JnuoUEsrsKhnh0KD/2mAp5Ztx3CHiOq8X
+        ivRiHIV2lwGeE9bq6qIf02p9BtLpwVs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-507-Tkd3vQDpNSWCXk7xQWt1eg-1; Fri, 25 Mar 2022 07:01:21 -0400
+X-MC-Unique: Tkd3vQDpNSWCXk7xQWt1eg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6EBA7899ED2;
+        Fri, 25 Mar 2022 11:01:18 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2C1152166BB3;
+        Fri, 25 Mar 2022 11:01:06 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86: optimize PKU branching in kvm_load_{guest|host}_xsave_state
+Date:   Fri, 25 Mar 2022 07:01:00 -0400
+Message-Id: <20220325110100.2954008-1-pbonzini@redhat.com>
+In-Reply-To: <20220324004439.6709-1-jon@nutanix.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good morning Linus,
+Queued, thanks.
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+Paolo
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git backlight-next-5.18
-
-for you to fetch changes up to 023a8830a62846e1cecc8da07e00c801dd0d7598:
-
-  backlight: backlight: Slighly simplify devm_of_find_backlight() (2022-03-08 10:47:28 +0000)
-
-----------------------------------------------------------------
- - New Device Support
-   - Add support for PM6150L to Qualcomm WLED
-
- - Fix-ups
-   - Use kcalloc() to avoid open-coding; pwm_bl
-   - Device Tree changes (inc. YAML conversion); qcom-wled
-   - Cleanup or simplify code; backlight
-
-----------------------------------------------------------------
-Christophe JAILLET (2):
-      backlight: pwm_bl: Avoid open coded arithmetic in memory allocation
-      backlight: backlight: Slighly simplify devm_of_find_backlight()
-
-Luca Weiss (2):
-      dt-bindings: backlight: qcom-wled: Add PM6150L compatible
-      backlight: qcom-wled: Add PM6150L compatible
-
- .../devicetree/bindings/leds/backlight/qcom-wled.yaml          |  1 +
- drivers/video/backlight/backlight.c                            | 10 ++++------
- drivers/video/backlight/pwm_bl.c                               |  9 ++++-----
- drivers/video/backlight/qcom-wled.c                            |  1 +
- 4 files changed, 10 insertions(+), 11 deletions(-)
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog

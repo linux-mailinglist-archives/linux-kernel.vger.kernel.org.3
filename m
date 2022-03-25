@@ -2,103 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30FE4E7906
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E40284E78FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376503AbiCYQi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 12:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60940 "EHLO
+        id S1359708AbiCYQhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 12:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239020AbiCYQi1 (ORCPT
+        with ESMTP id S1343957AbiCYQh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 12:38:27 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88DE6210D
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:36:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648226212; x=1679762212;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8u6M+Dp7AiifeVlYkXZK/xg5RToRNGkPuFZ6N1+i/dc=;
-  b=ddvSHFAwpntmHQ9GwTdvfjaUymv9WMMErbZPj6oRJL626sCiJJqYUpGE
-   CQzERsZHYuFUS9SEHAcABZpusPOajLTrk99Bzgui5/T8oG+Unor6RCJDy
-   1NhV5b7oZ0URVJZApfshb2eLNjoG2pHf39+qqql3SMgfEvzKmDLMwY7OB
-   Q7cnqCUFZF6N/qB8yqEmMzj3pCgw5c07Jz455b/i+BL0rMu9U4NYiswYa
-   yTNKf3GOiAbjZvgxLI86mEd0uG44l0bff/+pO2ry0xChmciDTvaxaWovf
-   dwhV27E/lofriplh8MMvnNQYxRXeac75YIr1HY20gH+xDu/ZXhmXAYI/P
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="283547287"
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="283547287"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 09:35:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="520257175"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 25 Mar 2022 09:35:36 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nXmuV-000MNu-P0; Fri, 25 Mar 2022 16:35:35 +0000
-Date:   Sat, 26 Mar 2022 00:35:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Marcello Sylvester Bauer <sylv@sylv.io>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: drivers/hwmon/pmbus/xdpe12284.c:127:36: warning: unused variable
- 'xdpe122_reg_desc'
-Message-ID: <202203260059.nMMU6fdT-lkp@intel.com>
+        Fri, 25 Mar 2022 12:37:28 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D29A60A9D
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:35:52 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id b15so6855468pfm.5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:35:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=59DdM1OMuwdp9CVjs5LMT5Vj5xWvhECtRS/Ocfq4B1Q=;
+        b=OeMJ6CesmRYIII7XnopnggyoVqEsoanvgZspmVWHcn13nBPGB61sUAt+1nIikJT28a
+         U++VArf8YYxy97kp3clOgRBNCBNKz+8Cw58RCRUc2U4nCXH60c0AEw46or+Ii0MUpxgG
+         bSZ19ACwHJW+vwpKiPF+kOqklysC4UlrjdANGlKSd6Uq50wQRVRhFDI4fBH1B9HdG9FV
+         ZLsZNRC7IXcfLR2n/XtzvsqEw/pLP3Cpn0M5v4PqMpMC34z7hQakWZuNOycLT/kmsPrS
+         pJMhFcxrMvgwMb5A1r8xya+HKXppRXthH0d+6R3fheVMRflJxyqXR5DHGPpqVVqbOIhe
+         OTkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=59DdM1OMuwdp9CVjs5LMT5Vj5xWvhECtRS/Ocfq4B1Q=;
+        b=QxE/KTdy8cqfDA1Ak70VRAt3egc0SYOWRByp7YzFdkE+w/vGkjSI3C25b/DdOaUar5
+         ptDa892+o+7+ZnPlmu5/8XRbx3MDDHkmzTE/mItPJGLCvwkN/wHjFZ35ToQbcWCLTm9M
+         nniPng1kwRTGG0S+9Ssh4nNaIFO2zygEZAUhH3TqsZxbi+BWoQzxeWSVb8QIpu56JVq/
+         uVXypB/sReKIjpc/yGnEdzCH4BmTjuJZ+uy1WxE3JVUw4hpEPCvxrtRxFlx0VWN8B81u
+         3HU8ZZQawqSUBbu4SYY7Kr8aaDLYmo0pRNVWJV0evovonKSCRKs7ZkBrp9O3J6XF+TVc
+         0Fxw==
+X-Gm-Message-State: AOAM531sChmvmtnxe92TEoD8k3Rwk2ibyhuhGRuJqLIl4nZycgTMHPLC
+        efNSMuGfKDot2OChdDWsC+RGSg==
+X-Google-Smtp-Source: ABdhPJyRd0wOThIIONBwFapt4DjMaBqvYAaaNG1ntcedGtasnkDrMUT40oNbvBljkaaV3CvasQwthg==
+X-Received: by 2002:a05:6a00:16cd:b0:4e1:366:7ee8 with SMTP id l13-20020a056a0016cd00b004e103667ee8mr10889715pfc.9.1648226151493;
+        Fri, 25 Mar 2022 09:35:51 -0700 (PDT)
+Received: from localhost.localdomain ([223.233.78.42])
+        by smtp.gmail.com with ESMTPSA id j6-20020a17090a588600b001c699d77503sm6264948pji.2.2022.03.25.09.35.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 09:35:51 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        bjorn.andersson@linaro.org
+Subject: [PATCH v4 0/2] Add ethernet dts nodes for Qualcomm SA8155p-ADP board
+Date:   Fri, 25 Mar 2022 22:05:35 +0530
+Message-Id: <20220325163537.1579969-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   34af78c4e616c359ed428d79fe4758a35d2c5473
-commit: f53bfe4d698430bd602c37042db4021dc2603b8d hwmon: (xdpe12284) Add regulator support
-date:   3 weeks ago
-config: hexagon-randconfig-r041-20220325 (https://download.01.org/0day-ci/archive/20220326/202203260059.nMMU6fdT-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f53bfe4d698430bd602c37042db4021dc2603b8d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f53bfe4d698430bd602c37042db4021dc2603b8d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hwmon/pmbus/
+Changes since v3:
+-----------------
+- v3 can be seen here: https://lore.kernel.org/lkml/20220303084824.284946-4-bhupesh.sharma@linaro.org/T/
+- Bjorn has accepted a couple of patches from v3 already, so drop them
+  from this v4 version.
+- Dropped the EMAC GDSC quirk patch from this series, as Bjorn has
+  already submitted a fix via [1].
+- Keep only 'linux-arm-msm specific dts' patches in this subset, so that
+  they can be easily reviewed and merged.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Changes since v2:
+-----------------
+- v2 can be seen here: https://lore.kernel.org/linux-arm-msm/20220302110508.69053-1-bhupesh.sharma@linaro.org/T
+- Fixed review comments from Dmitry - created a new [PATCH 2/6]
+  to fix some identation issues with sm8150 gcc driver.
 
-All warnings (new ones prefixed by >>):
+Changes since v1:
+-----------------
+- v1 can be seen here: https://lore.kernel.org/netdev/20220126221725.710167-1-bhupesh.sharma@linaro.org/t/
+- Fixed review comments from Bjorn - broke the v1 series into two
+  separate series - one each for 'net' tree and 'arm clock/dts' tree
+  - so as to ease review of the same from the respective maintainers.
+- This series is intended for the 'arm msm clock/dts' tree.
+- Other changes:
+  - Dropped [PATCH 7/8] from v1.
+  - Added more background on the emac gdsc issue, requiring it to be in
+    ALWAYS_ON state in [PATCH 5/5].
+  - Collected Ack from Rob for [PATCH 1/5].
+  - Broke down v1's [PATCH 3/8] into 3 separate patches (one each for emac,
+    pci and ufs gdsc defines) - one of which is carried as [PATCH 2/5]
+    in this series, which is used to enable emac GDSC.
 
->> drivers/hwmon/pmbus/xdpe12284.c:127:36: warning: unused variable 'xdpe122_reg_desc' [-Wunused-const-variable]
-   static const struct regulator_desc xdpe122_reg_desc[] = {
-                                      ^
-   1 warning generated.
+The SA8155p-ADP board supports on-board ethernet (Gibabit Interface),
+with support for both RGMII and RMII buses.
 
+This patchset adds the support for the same.
 
-vim +/xdpe122_reg_desc +127 drivers/hwmon/pmbus/xdpe12284.c
+Note that this patchset is based on an earlier sent patchset
+for adding PDC controller support on SM8150 (see [2]).
 
-   126	
- > 127	static const struct regulator_desc xdpe122_reg_desc[] = {
-   128		PMBUS_REGULATOR("vout", 0),
-   129		PMBUS_REGULATOR("vout", 1),
-   130	};
-   131	
+[1]. https://lore.kernel.org/lkml/YjxkNzJMGt0f2XYF@kroah.com/T/
+[2]. https://lore.kernel.org/linux-arm-msm/20220226184028.111566-1-bhupesh.sharma@linaro.org/T/
+
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+Vinod Koul (2):
+  arm64: dts: qcom: sm8150: add ethernet node
+  arm64: dts: qcom: sa8155p-adp: Enable ethernet node
+
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts | 146 +++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8150.dtsi     |  27 +++++
+ 2 files changed, 173 insertions(+)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

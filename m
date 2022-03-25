@@ -2,110 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446514E7CA2
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC9F4E7E07
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbiCYUXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 16:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51022 "EHLO
+        id S232168AbiCYUYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 16:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232152AbiCYUXr (ORCPT
+        with ESMTP id S232152AbiCYUYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 16:23:47 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F59A62A1E;
-        Fri, 25 Mar 2022 13:22:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648239731; x=1679775731;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=c+Jo2f9qa8wqIGXPx9eITTauJDs5OOtXfRCmPSXzDLY=;
-  b=HWiaKIkq1uCSvEZ5+6YZk/rHoysxNAhkwUNpAhgBp9yx9+SzhdCKbaSC
-   U95Pbs0FUIcRakwOOImZh7n8pKqKoW5B8ESk1dfuuNCCeQ6TT7xMv6fOK
-   V84Hx8QfQPbxWi++auPIzuG//+Rjicj/VVBmr4bQiF6JUm7GKiKgLpiOd
-   vOvnKeZURBMFmAJ/TamlJMaxtZDzU8weqqZrhbKglnetCrAQcFl9bdF8Z
-   hnK8PPd01VllCkhmflRV4luyBvEao1jt1G6YFxy6OAMcK+UreqYANNo1b
-   iyzJnNdTOTskLNzSg1bEMrPYoDzeXycVjw2BPRREhb6hEUoJhcD6l+rIA
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="246198366"
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="246198366"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 13:22:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="545212190"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 25 Mar 2022 13:22:09 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nXqRl-000MZR-7R; Fri, 25 Mar 2022 20:22:09 +0000
-Date:   Sat, 26 Mar 2022 04:21:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h:35:6:
- warning: no previous prototype for 'fimc_isp_video_device_unregister'
-Message-ID: <202203260407.3uIXrNn4-lkp@intel.com>
+        Fri, 25 Mar 2022 16:24:17 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263DD66CB9
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:22:42 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id b130so5877329pga.13
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 13:22:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cSxVhb71z+Ee83vpaUYArlMABtaVLB8rzZSlwyaMw5Y=;
+        b=KOZWScWPx5LRthiYDgPnYHcm3/Fe4PAO4T9J+5Ol7Lm1rlbLvP/B0+KyVQD0rTaF4p
+         wv1DwFSBGhrVba45FhNgBzQR9lUWbJdjYBQFxGsFehV0gt2yQaxXxse/HodR5w2iwy3A
+         HXijCz6A3szsLmM4fRii8V1p21M+LerdSCjeJ6TLY6BTSHwXIF/eM81Hm54tc57e+vc7
+         RYZquCLfJGxGsk2HVd54V83PUA0kNwSwY8lXY4Yri9PDAMlQAjHnFHHh+sKoNVrjLLvm
+         bWUBTDaW95QQFMlT8iHYvpphTo4tRtUP2EFSiLdeeEiIJdX0sROyhBDyPYgj7qbhA+nP
+         Zu7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cSxVhb71z+Ee83vpaUYArlMABtaVLB8rzZSlwyaMw5Y=;
+        b=lmYM13ExuLRg+2RNQaSdmFADszIThteNXiRKLjoyYiTOhCIJ+bzBHi44VH7/Be1rO/
+         +JxlmgTypoeBraLp80HJoB7a9JL0KUAG1kBkXXC7We+Ymd9XiLb1ylRXfkyWUy0z3r06
+         ywmDuUOELLS12LSb7TPLOSIm4Zt5pRM1dY93NrNBfstixUKQTNz79wbnqo4M5V/crLUv
+         UVH0LoA8fpW0mBH85VueA2FfDK9J7sJcKxBfYw2Mv0GPVjqgU5fU+DKv8+cVLIdRNDfC
+         zYkwLyUQu4LBCcEV0C0LLBjumEcGB55Drz9D6WqqxnG1wGk7Q8EqXeG1b6vBqKwP2ANa
+         2wUQ==
+X-Gm-Message-State: AOAM532lojIIFZp82jSIIdwHF7R1Sg1ZvnmsNb/UWBCXiQNtztCNYxET
+        WHm3Z3wJ57beTgIltFwOfZbrLw==
+X-Google-Smtp-Source: ABdhPJzsYhW4Lj1IXnf4NIGQcY6MlWE3y8J/vp4aaF0mlpwG6vx59jXFeTzBbZah9AjymJqdXjJkyg==
+X-Received: by 2002:a63:4859:0:b0:381:ede3:9af0 with SMTP id x25-20020a634859000000b00381ede39af0mr1013244pgk.87.1648239761482;
+        Fri, 25 Mar 2022 13:22:41 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id gb5-20020a17090b060500b001c6d46f7e75sm13815829pjb.30.2022.03.25.13.22.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 13:22:40 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 20:22:37 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: Re: [FYI PATCH] Revert "KVM: x86/mmu: Zap only TDP MMU leafs in
+ kvm_zap_gfn_range()"
+Message-ID: <Yj4kjRSuBDfupRqW@google.com>
+References: <20220318164833.2745138-1-pbonzini@redhat.com>
+ <d6367754-7782-7c29-e756-ac02dbd4520b@redhat.com>
+ <Yj0FYSC2sT4k/ELl@google.com>
+ <78e3f054-829e-b00d-6c65-9ae622f301df@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <78e3f054-829e-b00d-6c65-9ae622f301df@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   aa5b537b0ecc16992577b013f11112d54c7ce869
-commit: 238c84f71120f41c45301359902a912a19370f3d media: platform: rename exynos4-is/ to samsung/exynos4-is/
-date:   8 days ago
-config: nios2-buildonly-randconfig-r006-20220325 (https://download.01.org/0day-ci/archive/20220326/202203260407.3uIXrNn4-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=238c84f71120f41c45301359902a912a19370f3d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 238c84f71120f41c45301359902a912a19370f3d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/media/
+On Fri, Mar 25, 2022, Paolo Bonzini wrote:
+> On 3/25/22 00:57, Sean Christopherson wrote:
+> > Can I have 1-2 weeks to try and root cause and fix the underlying issue before
+> > sending reverts to Linus?  I really don't want to paper over a TLB flushing bug
+> > or an off-by-one bug, and I really, really don't want to end up with another
+> > scenario where KVM zaps everything just because.
+> 
+> Well, too late...  I didn't want to send a pull request that was broken,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Ah, I didn't see that it was in the initial pull request, thought it was only in
+kvm/next.  I'll send a full patch.
 
-All warnings (new ones prefixed by >>):
+> Mingwei provided a convincing reason for the breakage.
 
-   In file included from drivers/media/platform/samsung/exynos4-is/fimc-isp.c:25:
->> drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h:35:6: warning: no previous prototype for 'fimc_isp_video_device_unregister' [-Wmissing-prototypes]
-      35 | void fimc_isp_video_device_unregister(struct fimc_isp *isp,
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/fimc_isp_video_device_unregister +35 drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h
-
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  34  
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20 @35  void fimc_isp_video_device_unregister(struct fimc_isp *isp,
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  36  				enum v4l2_buf_type type)
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  37  {
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  38  }
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  39  #endif /* !CONFIG_VIDEO_EXYNOS4_ISP_DMA_CAPTURE */
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  40  
-
-:::::: The code at line 35 was first introduced by commit
-:::::: 34947b8aebe3f2d4eceb65fceafa92bf8dc97d96 [media] exynos4-is: Add the FIMC-IS ISP capture DMA driver
-
-:::::: TO: Sylwester Nawrocki <s.nawrocki@samsung.com>
-:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+No, the side effects are completely benign, and arguably desirable.  The issue is
+that KVM loses a pending TLB flush if there are multiple roots.

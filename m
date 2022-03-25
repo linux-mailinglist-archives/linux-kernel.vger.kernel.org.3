@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8AC4E770B
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C884E779C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359149AbiCYP0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
+        id S1346979AbiCYP3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376521AbiCYPV6 (ORCPT
+        with ESMTP id S1377465AbiCYPYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:21:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADF56C905;
-        Fri, 25 Mar 2022 08:16:11 -0700 (PDT)
+        Fri, 25 Mar 2022 11:24:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D63DEA3;
+        Fri, 25 Mar 2022 08:18:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3070F60AB7;
-        Fri, 25 Mar 2022 15:15:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25AFCC340E9;
-        Fri, 25 Mar 2022 15:15:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE226B827DC;
+        Fri, 25 Mar 2022 15:18:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07766C340EE;
+        Fri, 25 Mar 2022 15:18:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221342;
-        bh=xB09mWxvdIPI9n6hFFKfaWkT0NX9SojhxvqtWd6DOqc=;
+        s=korg; t=1648221481;
+        bh=dlt1A1biLcVDgMxTU/Y7y85mBaY6WRz6rpXrh1D3VB0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RD+K2c8n7XjfHcZ6haOhh4GfYsm13h8jBMOlIdzkreebhztKlmz1V/c+DQLQpqDj7
-         hUl1OrOuqM/kqV9HGZmO8/TN/71FFcs5aazC9Mv5s8Ujoafui9o4K2xYpCTRrgYjk/
-         hZ6ZBg/4gygM6vk4Wth2MtTv2pa4hv+d88j+4D5Q=
+        b=0hhstwjCKrg7Lzh69/uqFyJqudTRbJD0eu8W+Cm6XAvzZ0K4WdS9zQeWxRlo2eyJj
+         4sl6xsJ0M0+gXxJ6xe4L8MB4MGxr/nOaKnx8gpUM6L/SGFP/O4DykFfFr6MMvcR42s
+         3aasYRC+ArXYbvA18EzpzW0TX+B2mICFDVqZR2oA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 5.15 27/37] crypto: qat - disable registration of algorithms
-Date:   Fri, 25 Mar 2022 16:14:28 +0100
-Message-Id: <20220325150420.707670625@linuxfoundation.org>
+        stable@vger.kernel.org, Jonathan Teh <jonathan.teh@outlook.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.16 19/37] ALSA: cmipci: Restore aux vol on suspend/resume
+Date:   Fri, 25 Mar 2022 16:14:29 +0100
+Message-Id: <20220325150420.595406186@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150419.931802116@linuxfoundation.org>
-References: <20220325150419.931802116@linuxfoundation.org>
+In-Reply-To: <20220325150420.046488912@linuxfoundation.org>
+References: <20220325150420.046488912@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,61 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+From: Jonathan Teh <jonathan.teh@outlook.com>
 
-commit 8893d27ffcaf6ec6267038a177cb87bcde4dd3de upstream.
+commit c14231cc04337c2c2a937db084af342ce704dbde upstream.
 
-The implementations of aead and skcipher in the QAT driver do not
-support properly requests with the CRYPTO_TFM_REQ_MAY_BACKLOG flag set.
-If the HW queue is full, the driver returns -EBUSY but does not enqueue
-the request.
-This can result in applications like dm-crypt waiting indefinitely for a
-completion of a request that was never submitted to the hardware.
+Save and restore CM_REG_AUX_VOL instead of register 0x24 twice on
+suspend/resume.
 
-To avoid this problem, disable the registration of all crypto algorithms
-in the QAT driver by setting the number of crypto instances to 0 at
-configuration time.
+Tested on CMI8738LX.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Fixes: cb60e5f5b2b1 ("[ALSA] cmipci - Add PM support")
+Signed-off-by: Jonathan Teh <jonathan.teh@outlook.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/DBAPR04MB7366CB3EA9C8521C35C56E8B920E9@DBAPR04MB7366.eurprd04.prod.outlook.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/crypto/qat/qat_4xxx/adf_drv.c      |    7 +++++++
- drivers/crypto/qat/qat_common/qat_crypto.c |    7 +++++++
- 2 files changed, 14 insertions(+)
+ sound/pci/cmipci.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/crypto/qat/qat_4xxx/adf_drv.c
-+++ b/drivers/crypto/qat/qat_4xxx/adf_drv.c
-@@ -52,6 +52,13 @@ static int adf_crypto_dev_config(struct
- 	if (ret)
- 		goto err;
+--- a/sound/pci/cmipci.c
++++ b/sound/pci/cmipci.c
+@@ -298,7 +298,6 @@ MODULE_PARM_DESC(joystick_port, "Joystic
+ #define CM_MICGAINZ		0x01	/* mic boost */
+ #define CM_MICGAINZ_SHIFT	0
  
-+	/* Temporarily set the number of crypto instances to zero to avoid
-+	 * registering the crypto algorithms.
-+	 * This will be removed when the algorithms will support the
-+	 * CRYPTO_TFM_REQ_MAY_BACKLOG flag
-+	 */
-+	instances = 0;
-+
- 	for (i = 0; i < instances; i++) {
- 		val = i;
- 		bank = i * 2;
---- a/drivers/crypto/qat/qat_common/qat_crypto.c
-+++ b/drivers/crypto/qat/qat_common/qat_crypto.c
-@@ -136,6 +136,13 @@ int qat_crypto_dev_config(struct adf_acc
- 	if (ret)
- 		goto err;
- 
-+	/* Temporarily set the number of crypto instances to zero to avoid
-+	 * registering the crypto algorithms.
-+	 * This will be removed when the algorithms will support the
-+	 * CRYPTO_TFM_REQ_MAY_BACKLOG flag
-+	 */
-+	instances = 0;
-+
- 	for (i = 0; i < instances; i++) {
- 		val = i;
- 		snprintf(key, sizeof(key), ADF_CY "%d" ADF_RING_ASYM_BANK_NUM, i);
+-#define CM_REG_MIXER3		0x24
+ #define CM_REG_AUX_VOL		0x26
+ #define CM_VAUXL_MASK		0xf0
+ #define CM_VAUXR_MASK		0x0f
+@@ -3265,7 +3264,7 @@ static int snd_cmipci_probe(struct pci_d
+  */
+ static const unsigned char saved_regs[] = {
+ 	CM_REG_FUNCTRL1, CM_REG_CHFORMAT, CM_REG_LEGACY_CTRL, CM_REG_MISC_CTRL,
+-	CM_REG_MIXER0, CM_REG_MIXER1, CM_REG_MIXER2, CM_REG_MIXER3, CM_REG_PLL,
++	CM_REG_MIXER0, CM_REG_MIXER1, CM_REG_MIXER2, CM_REG_AUX_VOL, CM_REG_PLL,
+ 	CM_REG_CH0_FRAME1, CM_REG_CH0_FRAME2,
+ 	CM_REG_CH1_FRAME1, CM_REG_CH1_FRAME2, CM_REG_EXT_MISC,
+ 	CM_REG_INT_STATUS, CM_REG_INT_HLDCLR, CM_REG_FUNCTRL0,
 
 

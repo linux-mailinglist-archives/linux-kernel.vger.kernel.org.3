@@ -2,121 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB014E7D85
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 936294E7B5B
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiCYTlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 15:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
+        id S230424AbiCYTgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 15:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233356AbiCYTjx (ORCPT
+        with ESMTP id S230233AbiCYTgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 15:39:53 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AD525A48F
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 12:12:21 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id f3so6963782qvz.10
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 12:12:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9q8qzRGX/I6ULeWXUH1e7URpHS7xgWEpM1Dcqq2f2Xg=;
-        b=VIV6EOoGovRECd7Q8Je2FHkHsxmfxfcDtmMxPiDEasKoLYO96QTKdfBLwUgp4vZCNZ
-         2SwHSNRvJ8kCbAb8QKH2mdUGcl8pmxq6nJe3NtKvRP1XtIBVd9I+vzOFlWHlMTDzexZs
-         LHTZEy8FMgc/LTFQG6+yzNPO7/dTk4b6tEMy2tUaYYpvbfKVyozycGNF14F458ciO/qA
-         Hudl/qVK/l+/4P+MuE06vNQPOew6KZHRy2ftPiWVgbCx06l0nPLFNpXrKkM6yB52h/G4
-         FzEW45C6V2FPjEzULfGPQeAOihyjCLvEd8wB05ntr660JJyqTjERwUpgDwQogNUEvHho
-         ICTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9q8qzRGX/I6ULeWXUH1e7URpHS7xgWEpM1Dcqq2f2Xg=;
-        b=YTP1hroKPvL3zzm4MJGjgiOvn9K+81EMWm0AeOs5t1wiGumLcEGIaGxVpnwkybumNa
-         GAtwoASAprT3gY95ZWCY+Zp0EjC+kdqkUqPueHrLgXLtQ/hQixNu4bdhxOPxfj9IytDw
-         zM/XUxB9cA3nk3lqNoACtWYwqvYL6StSschHBXTpsR96+lKNMvQJgCl95Zh81KQlVIqa
-         dPFi5dcYA49GqaDw0FyA5J+AxiV2ZlAYXPOk8LihNLijruNSehov1fkWG8aUbajd82Ou
-         rBzjdTw81kNzLcGfSoNvDlhzqcHrSxOuLp703lHdTFgnVQ7FZbMwhu4O/gZoeNMoydOe
-         ZmLA==
-X-Gm-Message-State: AOAM5334I1Eux2jkIck/Kq6G0vTXcWrWWmAyas6HnDz5sFM+/lIUXtG3
-        DUd26+hqFfMcrOHZgv7EbRKk/90BACjK
-X-Google-Smtp-Source: ABdhPJyjChuXch/nm5TN/atOUvcKrkFix1U4yQq6fMXElZzZXO0h/H5Tjb6RR0rnZEKwEglcxb4Jhg==
-X-Received: by 2002:a17:902:ea04:b0:154:54f0:172b with SMTP id s4-20020a170902ea0400b0015454f0172bmr13097636plg.149.1648232110725;
-        Fri, 25 Mar 2022 11:15:10 -0700 (PDT)
-Received: from thinkpad ([117.193.209.11])
-        by smtp.gmail.com with ESMTPSA id v8-20020a056a00148800b004fa9bd7ddc9sm7674093pfu.113.2022.03.25.11.15.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 11:15:10 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 23:45:03 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 24/25] dmaengine: dw-edma: Skip cleanup procedure if no
- private data found
-Message-ID: <20220325181503.GB12218@thinkpad>
-References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
- <20220324014836.19149-25-Sergey.Semin@baikalelectronics.ru>
+        Fri, 25 Mar 2022 15:36:19 -0400
+Received: from mail.toke.dk (mail.toke.dk [IPv6:2a0c:4d80:42:2001::664])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4635E2E5189;
+        Fri, 25 Mar 2022 12:09:37 -0700 (PDT)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
+        t=1648232133; bh=0utGQUdnredYmwlCMqdQtSEkBccDpSSgRbC0K8pIlyE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=w6KsBX3PIGQNPBEgDloGd557TP6k0E++rJTP9enh7kdXUK8fIxK8ftlFsszFTkDqJ
+         II+Y/Pgar/yJX6LDWXi3wvTO5jwnoNgZPUBUbZFGztXs4kAFdc5WiMPMD2h93vyAIV
+         sHpYer3QEiC1v7Dkqh+TuWhgznbszU65z6D+NJ9WsKaIjQHHAgsPnJZY2z8q70XmrP
+         onr1kPSQXO6u4FGkY6a53ST6TPH9eOX4hKDjTlEuDECQeSS3kUZihtZUFUgw131lWG
+         FJj7lbn92eVVKRfL+qOZXdNSYBzv9KrFNJYpt58jEkoUh7mbwjy6sxdeFvrhyLKA2L
+         qB6tWvUxyilfw==
+To:     Christoph Hellwig <hch@lst.de>, Halil Pasic <pasic@linux.ibm.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Olha Cherevyk <olha.cherevyk@gmail.com>,
+        iommu <iommu@lists.linux-foundation.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
+ ath9k-based AP
+In-Reply-To: <20220325163204.GB16426@lst.de>
+References: <1812355.tdWV9SEqCh@natalenko.name>
+ <CAHk-=wiwz+Z2MaP44h086jeniG-OpK3c=FywLsCwXV7Crvadrg@mail.gmail.com>
+ <27b5a287-7a33-9a8b-ad6d-04746735fb0c@arm.com>
+ <CAHk-=wip7TCD_+2STTepuEZvGMg6wcz+o=kyFUvHjuKziTMixw@mail.gmail.com>
+ <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
+ <20220324190216.0efa067f.pasic@linux.ibm.com>
+ <20220325163204.GB16426@lst.de>
+Date:   Fri, 25 Mar 2022 19:15:32 +0100
+X-Clacks-Overhead: GNU Terry Pratchett
+Message-ID: <87y20x7vaz.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324014836.19149-25-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 04:48:35AM +0300, Serge Semin wrote:
-> DW eDMA driver private data is preserved in the passed DW eDMA chip info
-> structure. If either probe procedure failed or for some reason the passed
-> info object doesn't have private data pointer initialized we need to halt
-> the DMA device cleanup procedure in order to prevent possible system
-> crashes.
-> 
+Christoph Hellwig <hch@lst.de> writes:
 
-How come remove() could happen when probe() failed? If you hit this issue then
-something else is utterly going wrong.
+> On Thu, Mar 24, 2022 at 07:02:16PM +0100, Halil Pasic wrote:
+>> > If 
+>> > ddbd89deb7d3 alone turns out to work OK then I'd be inclined to try a 
+>> > partial revert of just that one hunk.
+>> >
+>> 
+>> I'm not against being pragmatic and doing the partial revert. But as
+>> explained above, I do believe for correctness of swiotlb we ultimately
+>> do need that change. So if the revert is the short term solution,
+>> what should be our mid-term road-map?
+>
+> Unless I'm misunderstanding this thread we found the bug in ath9k
+> and have a fix for that now?
 
-Thanks,
-Mani
+According to Maxim's comment on the other subthread, that ath9k patch
+wouldn't work on all platforms (and constitutes a bit of a violation of
+the DMA API ownership abstraction). So not quite, I think?
 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> ---
->  drivers/dma/dw-edma/dw-edma-core.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-> index ca5cd7c99571..b932682a8ba8 100644
-> --- a/drivers/dma/dw-edma/dw-edma-core.c
-> +++ b/drivers/dma/dw-edma/dw-edma-core.c
-> @@ -1030,6 +1030,10 @@ int dw_edma_remove(struct dw_edma_chip *chip)
->  	struct dw_edma *dw = chip->dw;
->  	int i;
->  
-> +	/* Skip removal if no private data found */
-> +	if (!dw)
-> +		return -ENODEV;
-> +
->  	/* Disable eDMA */
->  	dw_edma_v0_core_off(dw);
->  
-> -- 
-> 2.35.1
-> 
+-Toke

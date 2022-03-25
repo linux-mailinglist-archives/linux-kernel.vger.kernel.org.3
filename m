@@ -2,87 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBD34E7157
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 11:35:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C954E7135
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 11:30:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358912AbiCYKgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 06:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
+        id S1358863AbiCYKc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 06:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356758AbiCYKg3 (ORCPT
+        with ESMTP id S245022AbiCYKc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 06:36:29 -0400
-Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51AFB6D3C
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 03:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1648204489;
-        bh=r7MTF35xCe4CtzCMUlH4AuHMMOLVBgWolF8Nu+I39t8=;
-        h=From:To:Cc:Subject:Date;
-        b=e5FazAwFDmuHogT0CQVByFlmkgCsCWPZOYvLaqVkODR8iSQM+ZIW+uWrPh07cMBdx
-         AhuJQm/5tZyIIaG/zy14Zf5bkR8yRmz3tqmyo1pA22krd2DY/HHdQqwNGe3SREpJ1V
-         iK792qqeD4GB2gG4PeupWvBhtbHu5qzljXm7B+KA=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrszc11.qq.com (NewEsmtp) with SMTP
-        id 6DFA0EBB; Fri, 25 Mar 2022 18:27:31 +0800
-X-QQ-mid: xmsmtpt1648204051tp1m08xmo
-Message-ID: <tencent_C0622B5C4209E83F1C6495D926979F239D05@qq.com>
-X-QQ-XMAILINFO: OOWntbL6xj16UYjmDCYdk3zdV6AkUlVJYVXvFXwyqwiwhHIj+QucYg/rjcEuOt
-         YO7j/eprBmyc4h2c06wgdcYMWSep4SXwq7n+QGxdcp6ICsFbd9yTBd2y9WzUKB2YwYvs/h8Mu+NF
-         3O/awHA4MLl1CeBeM8HFfgPZWH4/vqzvwiDrMgaZ1iu7C+gGmhfen9xCWY78+E9vsdumUiwchXp4
-         mJ73wtlnQeZQVQvB0aU6xAs+7niZUpJswpFFx/U+6co38r4urXkGPe7qIJSEtptS8cCk3XI76bTp
-         GBE+6cG8pXUfIhIIY9a7UwUFabdQ/611P/rXY4ZbxNXiy8imWSu0q73DKFp1Msl/Pa6B+f5RKrac
-         sSm5Px8sotmHtHcqLRGQL365aXb8G3bBusnZsNdweoK6RnKfba5j1ExXohhWM3FWaZVb01iUwIjO
-         pT0uKiE2iQVbdhmVfWnzg2WAg+6AXI+v+dsz4HXd4ir0CpdQyG4Mib4UAQ2w64jYH+G2tUmzeiO9
-         9N+Ovt6E8HcR0Tgr/s+oXNSDCJh9CgsVSGZnTQUqi93ePXrydTOfbWsoZ0bm/3w7cdnlXn6pNOF9
-         40+wNNghlHZdV0tlfWByU4qL02Q62qlEokvhYrJA08qEVbWsPgtdDnFlY2pEOyogx28ge0OdJ2+m
-         uVRokNyTXZOSXJFejgBRQH3MwBIxrMvlEuN81q5FUuHsBCfxmqKB3NrQcjYDGNjsWOA7q/UFbbU8
-         0RgF7ducb3U9hMY0DCyV5rs3grDP+0m82+2Fxk+Bgc47ZWsWcTGnKI23eMDlfDInZFmuP8CXDGfo
-         3F5LJfdBoqKuPXyuapA6uM02us/UpXvP6ex3EJV25oaVzPNcIvty5n3vPl95GMhOiXT+jqXPdXYX
-         uhv4HuJcsBQ3Sq8KD4AmLy27zc0kW4D6QVRKYYc1Ma8FrYOrL8GxLkNokTZ7YcnIA0Tdh2vAxPmH
-         erom5GfnM=
-From:   xkernel.wang@foxmail.com
-To:     mturquette@baylibre.com, sboyd@kernel.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] clk: pxa: add a check for the return value of kzalloc()
-Date:   Fri, 25 Mar 2022 18:27:20 +0800
-X-OQ-MSGID: <20220325102720.4155-1-xkernel.wang@foxmail.com>
+        Fri, 25 Mar 2022 06:32:26 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A039C55A9;
+        Fri, 25 Mar 2022 03:30:53 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: shreeya)
+        with ESMTPSA id 95DAF1F460E9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648204251;
+        bh=EiA1iDx9YmxE8MFwmqTLJfc1I076Y74pNJdixG290U0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RLRFeLfGDiY2fSDtenJv7SW8Npipip+CMwsDdOrTf1ABsLaGyTpLkM/9bBeZggOSm
+         1XUBSWn8/cJ6AFZi8aY1YRe2QlCtM3S/Oy1SNq2iL/nV4MyrXz57FZysOyO7GZj3QZ
+         PT4+4AGuVYmaNpESnvxkH42vZtTh2cHRhLcClVn8fJvc6vwvnZx10ZaBI+VvGX9reg
+         paAgNwLxwDX1Il29OHoSC5uP8lDki9a96fT03OS+Gym1M9FkgdDzjxoJh7U/jIMyaM
+         Iu/je90qHHAGDbJwhGR9E2UvUsN51lTZWxxfjpJGiuNYctzU81FTNmFM3r437dId63
+         4XN08CCp/wvBQ==
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+To:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
+        Zhigang.Shi@liteon.com, krisman@collabora.com
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        alvaro.soliverez@collabora.com,
+        Shreeya Patel <shreeya.patel@collabora.com>
+Subject: [PATCH 0/3] Add LTRF216A Driver
+Date:   Fri, 25 Mar 2022 16:00:11 +0530
+Message-Id: <20220325103014.6597-1-shreeya.patel@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+This patchset adds support for ltrf216a Ambient Light Sensor
+and documents the DT bindings for the same.
 
-kzalloc() is a memory allocation function which can return NULL when
-some internal memory errors happen. So it is better to check it to
-prevent potential wrong memory access.
+Shreeya Patel (3):
+  dt-bindings: vendor-prefixes: Add 'ltr' as deprecated vendor prefix
+  dt-bindings: Document ltrf216a light sensor bindings
+  iio: light: Add support for ltrf216a sensor
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/clk/pxa/clk-pxa.c | 2 ++
- 1 file changed, 2 insertions(+)
+ .../bindings/iio/light/liteon,ltrf216a.yaml   |  42 +++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   3 +
+ drivers/iio/light/Kconfig                     |  10 +
+ drivers/iio/light/Makefile                    |   1 +
+ drivers/iio/light/ltrf216a.c                  | 334 ++++++++++++++++++
+ 5 files changed, 390 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
+ create mode 100644 drivers/iio/light/ltrf216a.c
 
-diff --git a/drivers/clk/pxa/clk-pxa.c b/drivers/clk/pxa/clk-pxa.c
-index cfc79f9..d0df104 100644
---- a/drivers/clk/pxa/clk-pxa.c
-+++ b/drivers/clk/pxa/clk-pxa.c
-@@ -102,6 +102,8 @@ int __init clk_pxa_cken_init(const struct desc_clk_cken *clks, int nb_clks)
- 
- 	for (i = 0; i < nb_clks; i++) {
- 		pxa_clk = kzalloc(sizeof(*pxa_clk), GFP_KERNEL);
-+		if (!pxa_clk)
-+			continue;
- 		pxa_clk->is_in_low_power = clks[i].is_in_low_power;
- 		pxa_clk->lp = clks[i].lp;
- 		pxa_clk->hp = clks[i].hp;
 -- 
+2.30.2
+

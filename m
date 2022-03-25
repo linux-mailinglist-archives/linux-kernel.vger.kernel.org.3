@@ -2,121 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A13D4E74E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B744E74ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359334AbiCYORH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 10:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50026 "EHLO
+        id S1359339AbiCYOVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 10:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348556AbiCYORD (ORCPT
+        with ESMTP id S1348556AbiCYOVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 10:17:03 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A327EA3B;
-        Fri, 25 Mar 2022 07:15:29 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id A84E41F462FB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648217728;
-        bh=sja1g3dzc8qDBvEHxzgzRqMutttR4lk7hJeFs3aFMrQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FQJJSC26ejBDB4/+Qj6Xw8KwJ0hryubPf5gx4jsPamDol9B2J5wI+bWShxKmiLm79
-         z243gfsBJhWYvPmw6BJZhraJN8GqsGwSfeJ9bUGxOlGPe/U8kilRm5kCr3mesojUnm
-         mAGy8A+4ZgyAm0Ak+KSKY05/GEKw6A9xbf+4noxC+jUnhXhHlJwnnfLVCT7b2zZRL9
-         LToadUNgDwsrkuj0qbupuK286RoKE8GjDMwlT6pg1bPPDdqZmLv1uNthCHIXnt7QOf
-         c64ANQiFUXoTIk1cDEODx9OGNgZmH/Y0X6fK1VtQBIFNvNTLt/cMwnc8s8rybg1BR5
-         vAAQsFgoAdKJQ==
-Message-ID: <be06e57d-302e-e641-a134-c45ea89a6a6b@collabora.com>
-Date:   Fri, 25 Mar 2022 15:15:24 +0100
+        Fri, 25 Mar 2022 10:21:40 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255502D1F1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 07:20:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BC06721110;
+        Fri, 25 Mar 2022 14:20:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1648218004; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wwwyt1xK0HmXO1qRV3kfkubpFO7mwn/CtU9TCGfV+j0=;
+        b=PaPT8GekWg7B8tp64vOUqB7V3ysZ3fzCtptcXK5/u/61zcFo9wBl058YL6CPvQom00Eroj
+        3r0AP0nMj3iKhXN/U6bkubJY8ibdyLuACqUF//b2/+QknKPVDcZdCj4x2kTJKYjcDK+h6h
+        hnDpz4dK6YeHEJc2EC0LTQPiTf3TQCo=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6575B132E9;
+        Fri, 25 Mar 2022 14:20:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Dy1/F5TPPWL6EQAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 25 Mar 2022 14:20:04 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+Subject: [PATCH v2] xen: fix is_xen_pmu()
+Date:   Fri, 25 Mar 2022 15:20:02 +0100
+Message-Id: <20220325142002.31789-1-jgross@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v4 2/2] phy: mediatek: Add PCIe PHY driver
-Content-Language: en-US
-To:     Jianjun Wang <jianjun.wang@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Wei-Shun Chang <weishunc@google.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rex-bc.chen@mediatek.com, randy.wu@mediatek.com,
-        jieyy.yang@mediatek.com, chuanjia.liu@mediatek.com,
-        qizhong.cheng@mediatek.com, jian.yang@mediatek.com
-References: <20220323065608.27426-1-jianjun.wang@mediatek.com>
- <20220323065608.27426-3-jianjun.wang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220323065608.27426-3-jianjun.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/03/22 07:56, Jianjun Wang ha scritto:
-> Add PCIe GEN3 PHY driver support on MediaTek chipsets.
-> 
-> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> ---
->   drivers/phy/mediatek/Kconfig        |  11 ++
->   drivers/phy/mediatek/Makefile       |   1 +
->   drivers/phy/mediatek/phy-mtk-pcie.c | 272 ++++++++++++++++++++++++++++
->   3 files changed, 284 insertions(+)
->   create mode 100644 drivers/phy/mediatek/phy-mtk-pcie.c
-> 
+is_xen_pmu() is taking the cpu number as parameter, but it is not using
+it. Instead it just tests whether the Xen PMU initialization on the
+current cpu did succeed. As this test is done by checking a percpu
+pointer, preemption needs to be disabled in order to avoid switching
+the cpu while doing the test. While resuming from suspend() this seems
+not to be the case:
 
-..snip..
+[   88.082751] ACPI: PM: Low-level resume complete
+[   88.087933] ACPI: EC: EC started
+[   88.091464] ACPI: PM: Restoring platform NVS memory
+[   88.097166] xen_acpi_processor: Uploading Xen processor PM info
+[   88.103850] Enabling non-boot CPUs ...
+[   88.108128] installing Xen timer for CPU 1
+[   88.112763] BUG: using smp_processor_id() in preemptible [00000000] code: systemd-sleep/7138
+[   88.122256] caller is is_xen_pmu+0x12/0x30
+[   88.126937] CPU: 0 PID: 7138 Comm: systemd-sleep Tainted: G        W         5.16.13-2.fc32.qubes.x86_64 #1
+[   88.137939] Hardware name: Star Labs StarBook/StarBook, BIOS 7.97 03/21/2022
+[   88.145930] Call Trace:
+[   88.148757]  <TASK>
+[   88.151193]  dump_stack_lvl+0x48/0x5e
+[   88.155381]  check_preemption_disabled+0xde/0xe0
+[   88.160641]  is_xen_pmu+0x12/0x30
+[   88.164441]  xen_smp_intr_init_pv+0x75/0x100
 
-> diff --git a/drivers/phy/mediatek/phy-mtk-pcie.c b/drivers/phy/mediatek/phy-mtk-pcie.c
-> new file mode 100644
-> index 000000000000..44a2ad8d324e
-> --- /dev/null
-> +++ b/drivers/phy/mediatek/phy-mtk-pcie.c
-> @@ -0,0 +1,272 @@
+Fix that by replacing is_xen_pmu() by a simple boolean variable which
+reflects the Xen PMU initialization state on cpu 0.
 
-..snip..
+Modify xen_pmu_init() to return early in case it is being called for a
+cpu other than cpu 0 and the boolean variable not being set.
 
-> +/**
-> + * struct mtk_pcie_phy - PCIe phy driver main structure
-> + * @dev: pointer to device
-> + * @phy: pointer to generic phy
-> + * @sif_base: IO mapped register base address of system interface
-> + * @data: pointer to SoC dependent data
-> + * @sw_efuse_en: software eFuse enable status
-> + * @efuse_glb_intr: internal resistor selection of TX bias current data
-> + * @efuse: pointer to eFues data for each lane
+Fixes: bf6dfb154d93 ("xen/PMU: PMU emulation code")
+Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+---
+V2:
+- don't reset is_xen_pmu when suspending (Boris Ostrovsky)
+---
+ arch/x86/xen/pmu.c    | 10 ++++------
+ arch/x86/xen/pmu.h    |  3 ++-
+ arch/x86/xen/smp_pv.c |  2 +-
+ 3 files changed, 7 insertions(+), 8 deletions(-)
 
-Oops! There's a typo! "eFues" => "eFuse"
-
-After fixing this typo,
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-P.S.: Many thanks for the kerneldoc documentation!!!!
-
-> + */
-> +struct mtk_pcie_phy {
-> +	struct device *dev;
-> +	struct phy *phy;
-> +	void __iomem *sif_base;
-> +	const struct mtk_pcie_phy_data *data;
-> +
-> +	bool sw_efuse_en;
-> +	u32 efuse_glb_intr;
-> +	struct mtk_pcie_lane_efuse *efuse;
-> +};
+diff --git a/arch/x86/xen/pmu.c b/arch/x86/xen/pmu.c
+index 89dd6b1708b0..21ecbe754cb2 100644
+--- a/arch/x86/xen/pmu.c
++++ b/arch/x86/xen/pmu.c
+@@ -506,10 +506,7 @@ irqreturn_t xen_pmu_irq_handler(int irq, void *dev_id)
+ 	return ret;
+ }
+ 
+-bool is_xen_pmu(int cpu)
+-{
+-	return (get_xenpmu_data() != NULL);
+-}
++bool is_xen_pmu;
+ 
+ void xen_pmu_init(int cpu)
+ {
+@@ -520,7 +517,7 @@ void xen_pmu_init(int cpu)
+ 
+ 	BUILD_BUG_ON(sizeof(struct xen_pmu_data) > PAGE_SIZE);
+ 
+-	if (xen_hvm_domain())
++	if (xen_hvm_domain() || (cpu != 0 && !is_xen_pmu))
+ 		return;
+ 
+ 	xenpmu_data = (struct xen_pmu_data *)get_zeroed_page(GFP_KERNEL);
+@@ -541,7 +538,8 @@ void xen_pmu_init(int cpu)
+ 	per_cpu(xenpmu_shared, cpu).xenpmu_data = xenpmu_data;
+ 	per_cpu(xenpmu_shared, cpu).flags = 0;
+ 
+-	if (cpu == 0) {
++	if (!is_xen_pmu) {
++		is_xen_pmu = true;
+ 		perf_register_guest_info_callbacks(&xen_guest_cbs);
+ 		xen_pmu_arch_init();
+ 	}
+diff --git a/arch/x86/xen/pmu.h b/arch/x86/xen/pmu.h
+index 0e83a160589b..65c58894fc79 100644
+--- a/arch/x86/xen/pmu.h
++++ b/arch/x86/xen/pmu.h
+@@ -4,6 +4,8 @@
+ 
+ #include <xen/interface/xenpmu.h>
+ 
++extern bool is_xen_pmu;
++
+ irqreturn_t xen_pmu_irq_handler(int irq, void *dev_id);
+ #ifdef CONFIG_XEN_HAVE_VPMU
+ void xen_pmu_init(int cpu);
+@@ -12,7 +14,6 @@ void xen_pmu_finish(int cpu);
+ static inline void xen_pmu_init(int cpu) {}
+ static inline void xen_pmu_finish(int cpu) {}
+ #endif
+-bool is_xen_pmu(int cpu);
+ bool pmu_msr_read(unsigned int msr, uint64_t *val, int *err);
+ bool pmu_msr_write(unsigned int msr, uint32_t low, uint32_t high, int *err);
+ int pmu_apic_update(uint32_t reg);
+diff --git a/arch/x86/xen/smp_pv.c b/arch/x86/xen/smp_pv.c
+index 4a6019238ee7..688aa8b6ae29 100644
+--- a/arch/x86/xen/smp_pv.c
++++ b/arch/x86/xen/smp_pv.c
+@@ -129,7 +129,7 @@ int xen_smp_intr_init_pv(unsigned int cpu)
+ 	per_cpu(xen_irq_work, cpu).irq = rc;
+ 	per_cpu(xen_irq_work, cpu).name = callfunc_name;
+ 
+-	if (is_xen_pmu(cpu)) {
++	if (is_xen_pmu) {
+ 		pmu_name = kasprintf(GFP_KERNEL, "pmu%d", cpu);
+ 		rc = bind_virq_to_irqhandler(VIRQ_XENPMU, cpu,
+ 					     xen_pmu_irq_handler,
+-- 
+2.34.1
 

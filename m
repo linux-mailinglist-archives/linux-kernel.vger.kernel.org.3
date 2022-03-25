@@ -2,115 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F76F4E759F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA914E75A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353922AbiCYPDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
+        id S1359466AbiCYPE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346398AbiCYPD3 (ORCPT
+        with ESMTP id S237981AbiCYPEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:03:29 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6368395A1D;
-        Fri, 25 Mar 2022 08:01:55 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id lr4so7496778ejb.11;
-        Fri, 25 Mar 2022 08:01:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9VcDy2eNu6zj3ojAJOI8YY4Y8u6xcG4aGKHl4udgapM=;
-        b=g6i7bgOZsjWuNr4hEdvMpSFsyEgpVdKX352ZfiMam0a60mQ6mTwBUao8hi+iT7eTDH
-         HPhYBzpSMAAMp3XDwqHvLGxbRQK8meGGVGMbmfaOb/3gC0zbeOTZFUKQa1mbYbEtMvoC
-         DhADMEhBMzfZ2cvViMoKmZMmeZgrvo4SsLYcPE1uUQ/AlW4HmGMkjbc+TUVAuxN6LTZg
-         ommHf300SnoLf3tT3Rnj9v2qtr5Tq07D/xWPYnR4R2L7DsQjAb98GQH+XxmcpA54RPjx
-         6tkCcsW8Gz/6tvs6FqerfEI8vOkN7lkHOFg/jMJewvQo6B7cbAhoF/EolmUOwtwjcXDj
-         vXdg==
+        Fri, 25 Mar 2022 11:04:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8822BE03
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 08:03:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648220593;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=p+rP9gOSBTxLRSnxe4t4T/FVsOhdBct7MjxHdJUH/ew=;
+        b=YgbVu++o7tl8kx6yVrS0SZmK/iMLoruFNZrrSU26TfP1vp7WsG72c7Gl2Zm6GAGt5rDVc7
+        HHcA4h4hrv9YhTmOMIs8Z9/f+2YXTEfyW1djs71qzPBJlXusURydHmm2Lg+5pGHFemYxhy
+        wAFekw65JicZRXzDW8Y2DujanGVrqu4=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-538-Jg31CXQ0PD6nkCL3PwKZLw-1; Fri, 25 Mar 2022 11:03:12 -0400
+X-MC-Unique: Jg31CXQ0PD6nkCL3PwKZLw-1
+Received: by mail-wr1-f70.google.com with SMTP id 15-20020adf808f000000b00203e488fa4eso2797039wrl.3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 08:03:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9VcDy2eNu6zj3ojAJOI8YY4Y8u6xcG4aGKHl4udgapM=;
-        b=EjNh0G2adNuywCUoNtj0VMjuWaIXuVxcGWm5V3TK67DGytb15DeUVHiyUqx+9uwf9O
-         zGHMmMZIw5LZlNQjlVzylPbRMClNeVhhLQkOmx3Q5BHcezy6bBjZJpN03oU2ltNXF9ph
-         nK0U/D1hU0fUAZMmfjD7j5hZeR2MlqNkIGhz3N9DZxcAXE+x8WMYqVq/19LysOLgcmea
-         E2DDuQ5S0A8KUEsakhWzSqU3fMbK1WRhzrv4d6u0h2t2phRQ5dig46FbKTrAkFXeKIGf
-         tyKZPPvFCX+3hKoGIv4ZbW9ErYvxLD3MmR4cpyaI9bPiGZa9rjnCl5jDjS2M15VR6Mr+
-         5TCw==
-X-Gm-Message-State: AOAM530v9P8aWtf8vK4BmHX5bq6Xd8nnZaKYF+y+SZIX0/O/2Lk+YuAb
-        bNqVt1c4MfXDzNplHu0HZ4xomfCAviw=
-X-Google-Smtp-Source: ABdhPJzsVdo9AHcpYNGJZibiNrkNLA6X3+BJ9fjqdBvI4f/NNLrt06Uv679Ra/o4jQoqWJt+wtgDPA==
-X-Received: by 2002:a17:906:53c3:b0:6cf:742d:84de with SMTP id p3-20020a17090653c300b006cf742d84demr11800827ejo.576.1648220513889;
-        Fri, 25 Mar 2022 08:01:53 -0700 (PDT)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id w14-20020a170906d20e00b006cee22553f7sm2455714ejz.213.2022.03.25.08.01.53
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=p+rP9gOSBTxLRSnxe4t4T/FVsOhdBct7MjxHdJUH/ew=;
+        b=WsNeMtuidYskgsQHmfabvro1zBQ7TyrZXCybm9oWZRnyt680YMvwt8U/95+9hXdxdQ
+         v0OQQ/G03FYvu+5DwCyxM8N4f1M55mw81V9GOJDFuBtbHDblMn7Xu3lpr9CXpKNp7zYg
+         waE5y0taYNalGpqmz6a+N23BunOqXu/I5TTDBgBzwhpK9CL4rg17GYhKQcr2DTX/ZdGv
+         tjC01XBdjj74OA+F1MJyqynxxwO7/W0WNvDMzm9erZjHwRMIo/wYGhY5xETMjG/FfjR4
+         J4fas8YKzhP5MANe6WoCh0oCVp4YgVfIK7XMW3FfRQZwJuiM22mKbngPE9wO2vw9ivHf
+         x3Sw==
+X-Gm-Message-State: AOAM533WyIaiWdC8cV9KfQxqkyJarih/UgnfX5fT7xuuUwBJwjqcK3Es
+        L3D/lh5mdjCfqIy3sbtJFZhp052RsqXvOuaueXkvT8q3pBWv1fKKPzFgWmkC7XfjB2a28AH60J6
+        umllv9rTBoxHkpSjbO/EIiVCY
+X-Received: by 2002:a5d:64af:0:b0:205:8246:8316 with SMTP id m15-20020a5d64af000000b0020582468316mr9822851wrp.624.1648220589502;
+        Fri, 25 Mar 2022 08:03:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwqOZTSSevUNj57oorGfuqPziU84TMmmNL5hG6gbqHrYulEEbIgY/ihiHd+9r7R8oqM5cjtBg==
+X-Received: by 2002:a5d:64af:0:b0:205:8246:8316 with SMTP id m15-20020a5d64af000000b0020582468316mr9822682wrp.624.1648220587795;
+        Fri, 25 Mar 2022 08:03:07 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id m2-20020a056000024200b00205718e3a3csm5193603wrz.2.2022.03.25.08.03.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 08:01:53 -0700 (PDT)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] ARM: dts: rockchip: add clocks property to cru node rk3066a/rk3188
-Date:   Fri, 25 Mar 2022 16:01:46 +0100
-Message-Id: <20220325150146.18638-2-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220325150146.18638-1-jbx6244@gmail.com>
-References: <20220325150146.18638-1-jbx6244@gmail.com>
+        Fri, 25 Mar 2022 08:03:07 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [FYI PATCH] Revert "KVM: x86/mmu: Zap only TDP MMU leafs in
+ kvm_zap_gfn_range()"
+In-Reply-To: <Yj0FYSC2sT4k/ELl@google.com>
+References: <20220318164833.2745138-1-pbonzini@redhat.com>
+ <d6367754-7782-7c29-e756-ac02dbd4520b@redhat.com>
+ <Yj0FYSC2sT4k/ELl@google.com>
+Date:   Fri, 25 Mar 2022 16:03:06 +0100
+Message-ID: <87r16qnkgl.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add clocks property to rk3066a/rk3188 cru node to fix warnings like:
-'clocks' is a dependency of 'assigned-clocks'
+Sean Christopherson <seanjc@google.com> writes:
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- arch/arm/boot/dts/rk3066a.dtsi | 3 ++-
- arch/arm/boot/dts/rk3188.dtsi  | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+...
 
-diff --git a/arch/arm/boot/dts/rk3066a.dtsi b/arch/arm/boot/dts/rk3066a.dtsi
-index c25b9695d..de9915d94 100644
---- a/arch/arm/boot/dts/rk3066a.dtsi
-+++ b/arch/arm/boot/dts/rk3066a.dtsi
-@@ -202,8 +202,9 @@
- 	cru: clock-controller@20000000 {
- 		compatible = "rockchip,rk3066a-cru";
- 		reg = <0x20000000 0x1000>;
-+		clocks = <&xin24m>;
-+		clock-names = "xin24m";
- 		rockchip,grf = <&grf>;
--
- 		#clock-cells = <1>;
- 		#reset-cells = <1>;
- 		assigned-clocks = <&cru PLL_CPLL>, <&cru PLL_GPLL>,
-diff --git a/arch/arm/boot/dts/rk3188.dtsi b/arch/arm/boot/dts/rk3188.dtsi
-index a94321e90..cdd4a0bd5 100644
---- a/arch/arm/boot/dts/rk3188.dtsi
-+++ b/arch/arm/boot/dts/rk3188.dtsi
-@@ -195,8 +195,9 @@
- 	cru: clock-controller@20000000 {
- 		compatible = "rockchip,rk3188-cru";
- 		reg = <0x20000000 0x1000>;
-+		clocks = <&xin24m>;
-+		clock-names = "xin24m";
- 		rockchip,grf = <&grf>;
--
- 		#clock-cells = <1>;
- 		#reset-cells = <1>;
- 	};
+So I went back to "KVM: x86/mmu: Zap only TDP MMU leafs in
+kvm_zap_gfn_range()" and confirmed that with the patch in place Hyper-V
+always crashes, sooner or later. With the patch reverted (as well as
+with current 'kvm/queue') it boots.
+
+>
+> Actually, since this is apparently specific to kvm_zap_gfn_range(), can you add
+> printk "tracing" in update_mtrr(), kvm_post_set_cr0(), and __kvm_request_apicv_update()
+> to see what is actually triggering zaps?  Capturing the start and end GFNs would be very
+> helpful for the MTRR case.
+>
+> The APICv update seems unlikely to affect only Hyper-V guests, though there is the auto
+> EOI crud.  And the other two only come into play with non-coherent DMA.  In other words,
+> figuring out exactly what sequence leads to failure should be straightforward.
+
+The tricky part here is that Hyper-V doesn't crash immediately, the
+crash is always different (if you look at the BSOD) and happens at
+different times. Crashes mention various stuff like trying to execute
+non-executable memory, ...
+
+I've added tracing you've suggested:
+- __kvm_request_apicv_update() happens only once in the very beginning.
+
+- update_mtrr() never actually reaches kvm_zap_gfn_range()
+
+- kvm_post_set_cr0() happen in early boot but the crash happen much much
+  later. E.g.:
+...
+ qemu-system-x86-117525  [019] .....  4738.682954: kvm_post_set_cr0: vCPU 12 10 11
+ qemu-system-x86-117525  [019] .....  4738.682997: kvm_post_set_cr0: vCPU 12 11 80000011
+ qemu-system-x86-117525  [019] .....  4738.683053: kvm_post_set_cr0: vCPU 12 80000011 c0000011
+ qemu-system-x86-117525  [019] .....  4738.683059: kvm_post_set_cr0: vCPU 12 c0000011 80010031
+ qemu-system-x86-117526  [005] .....  4738.812107: kvm_post_set_cr0: vCPU 13 10 11
+ qemu-system-x86-117526  [005] .....  4738.812148: kvm_post_set_cr0: vCPU 13 11 80000011
+ qemu-system-x86-117526  [005] .....  4738.812198: kvm_post_set_cr0: vCPU 13 80000011 c0000011
+ qemu-system-x86-117526  [005] .....  4738.812205: kvm_post_set_cr0: vCPU 13 c0000011 80010031
+ qemu-system-x86-117527  [003] .....  4738.941004: kvm_post_set_cr0: vCPU 14 10 11
+ qemu-system-x86-117527  [003] .....  4738.941107: kvm_post_set_cr0: vCPU 14 11 80000011
+ qemu-system-x86-117527  [003] .....  4738.941218: kvm_post_set_cr0: vCPU 14 80000011 c0000011
+ qemu-system-x86-117527  [003] .....  4738.941235: kvm_post_set_cr0: vCPU 14 c0000011 80010031
+ qemu-system-x86-117528  [035] .....  4739.070338: kvm_post_set_cr0: vCPU 15 10 11
+ qemu-system-x86-117528  [035] .....  4739.070428: kvm_post_set_cr0: vCPU 15 11 80000011
+ qemu-system-x86-117528  [035] .....  4739.070539: kvm_post_set_cr0: vCPU 15 80000011 c0000011
+ qemu-system-x86-117528  [035] .....  4739.070557: kvm_post_set_cr0: vCPU 15 c0000011 80010031
+##### CPU 8 buffer started ####
+ qemu-system-x86-117528  [008] .....  4760.099532: kvm_hv_set_msr_pw: 15
+
+The debug patch for kvm_post_set_cr0() is:
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 4fa4d8269e5b..db7c5a05e574 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -870,6 +870,8 @@ EXPORT_SYMBOL_GPL(load_pdptrs);
+ 
+ void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned long cr0)
+ {
++       trace_printk("vCPU %d %lx %lx\n", vcpu->vcpu_id, old_cr0, cr0);
++
+        if ((cr0 ^ old_cr0) & X86_CR0_PG) {
+                kvm_clear_async_pf_completion_queue(vcpu);
+                kvm_async_pf_hash_reset(vcpu);
+
+kvm_hv_set_msr_pw() call is when Hyper-V writes to HV_X64_MSR_CRASH_CTL
+('hv-crash' QEMU flag is needed to enable the feature). The debug patch
+is:
+
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index a32f54ab84a2..59a72f6ced99 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -1391,6 +1391,7 @@ static int kvm_hv_set_msr_pw(struct kvm_vcpu *vcpu, u32 msr, u64 data,
+ 
+                        /* Send notification about crash to user space */
+                        kvm_make_request(KVM_REQ_HV_CRASH, vcpu);
++                       trace_printk("%d\n", vcpu->vcpu_id);
+                }
+                break;
+        case HV_X64_MSR_RESET:
+
+So it's 20 seconds (!) between the last kvm_post_set_cr0() call and the
+crash. My (disappointing) conclusion is: the problem can be anywhere and
+Hyper-V detects it much much later.
+
 -- 
-2.20.1
+Vitaly
 

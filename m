@@ -2,133 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7FC4E72BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9514F4E72BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 13:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358589AbiCYMIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 08:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54272 "EHLO
+        id S1358440AbiCYMJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 08:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358957AbiCYMII (ORCPT
+        with ESMTP id S1346793AbiCYMJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 08:08:08 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31DEBD4C9B
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 05:06:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC2DE12FC;
-        Fri, 25 Mar 2022 05:06:33 -0700 (PDT)
-Received: from [192.168.1.16] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5712E3F73B;
-        Fri, 25 Mar 2022 05:06:30 -0700 (PDT)
-Message-ID: <df54651e-ecd9-5812-70aa-138190fa7426@arm.com>
-Date:   Fri, 25 Mar 2022 13:06:28 +0100
+        Fri, 25 Mar 2022 08:09:41 -0400
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62DAE6563;
+        Fri, 25 Mar 2022 05:08:07 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id y10so8979136edv.7;
+        Fri, 25 Mar 2022 05:08:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=b6iLhHro7kUOfY74FDg49eYd66M0VSueSP9JBgp7E0o=;
+        b=6XfsnAsms0ONOdZDI/1UXW8dSUHbCFuxuCxXKOy1LZiZco3j//O2FAir5MUR0CckOf
+         +u5LrwBHNQVrY7lHTzGNQELrXtgFwH2EREYxAlEOfkcueAZzLx3qSPzoc2irjSOKcl1T
+         5BvSR8wXKrV92e/yZrWv8qP8UYi7ej8cHtLRD46io1kAPUe6EQM+WCUE7JT0kAf5Ukp1
+         mEx3XKjqigY+KfM8fTC9Ku5v2hv2epNDwIN9wByFdvaV5zuluLwpLjcxArEQiI3s6SjK
+         gMxzHw7101n189HDJwnVbKXavJx/17ZJFj+WdXdslZYG8xtxe5ytqaKpPhaFA06DV/1/
+         B7eg==
+X-Gm-Message-State: AOAM530LK9eQ5uJJYtSUqZiLPlmUJu9aOpNopK5oP6xAZKOw1F4ULS7o
+        lrN2+5SSnKGIQxOQMikvROo=
+X-Google-Smtp-Source: ABdhPJwKOAzzNPCen4oyPlN4ID736q0SuL/B1Zy1q8K8/75AKeWUd3gS6TR2tal50ctRSPp/hCPxEg==
+X-Received: by 2002:a05:6402:2707:b0:419:5b7d:fd21 with SMTP id y7-20020a056402270700b004195b7dfd21mr12872378edd.51.1648210085836;
+        Fri, 25 Mar 2022 05:08:05 -0700 (PDT)
+Received: from [192.168.0.159] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id r22-20020a17090638d600b006d584aaa9c9sm2239691ejd.133.2022.03.25.05.08.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 05:08:05 -0700 (PDT)
+Message-ID: <597e4bfb-383d-0f3b-dce8-ffc12f543b46@kernel.org>
+Date:   Fri, 25 Mar 2022 13:08:04 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH] sched: dynamic config sd_flags if described in DT
+Subject: Re: [PATCH 2/3] dt-bindings: mtd: ti,elm: Add support for AM64 ELM
 Content-Language: en-US
-To:     =?UTF-8?B?546L5pOO?= <wangqing@vivo.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-References: <1647331137-69890-1-git-send-email-wangqing@vivo.com>
- <68df2f49-9b74-7ea2-0178-be55824b3c89@arm.com>
- <SL2PR06MB3082DBB58303601F73FB77D3BD119@SL2PR06MB3082.apcprd06.prod.outlook.com>
- <73b491fe-b5e8-ebca-081e-fa339cc903e1@arm.com>
- <SL2PR06MB3082FAA7900ED3664838B48CBD189@SL2PR06MB3082.apcprd06.prod.outlook.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <SL2PR06MB3082FAA7900ED3664838B48CBD189@SL2PR06MB3082.apcprd06.prod.outlook.com>
+To:     Roger Quadros <rogerq@kernel.org>, miquel.raynal@bootlin.com,
+        robh+dt@kernel.org
+Cc:     richard@nod.at, vigneshr@ti.com, kishon@ti.com, nm@ti.com,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220323111851.4699-1-rogerq@kernel.org>
+ <20220323111851.4699-3-rogerq@kernel.org>
+ <a222efb1-4f95-d65d-919b-ed55c5448c9a@kernel.org>
+ <abcbe390-45a8-6183-56a8-f9f751e84f49@kernel.org>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <abcbe390-45a8-6183-56a8-f9f751e84f49@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2022 07:45, 王擎 wrote:
-
-[...]
-
->> Now, if you want to move ShPR from MC to DIE then a custom topology
->> table should do it, i.e. you don't have to change any generic task
->> scheduler code.
->>
->> static inline int cpu_cpu_flags(void)
->> {
->>        return SD_SHARE_PKG_RESOURCES;
->> }
->>
->> static struct sched_domain_topology_level custom_topology[] = {
->> #ifdef CONFIG_SCHED_SMT
->>         { cpu_smt_mask, cpu_smt_flags, SD_INIT_NAME(SMT) },
->> #endif
->>
->> #ifdef CONFIG_SCHED_CLUSTER
->>         { cpu_clustergroup_mask, cpu_cluster_flags, SD_INIT_NAME(CLS) },
->> #endif
->>
->> #ifdef CONFIG_SCHED_MC
->>         { cpu_coregroup_mask, SD_INIT_NAME(MC) },
->>                             ^^^^
->> #endif
->>         { cpu_cpu_mask, cpu_cpu_flags, SD_INIT_NAME(DIE) },
->>                         ^^^^^^^^^^^^^
->>         { NULL, },
->> };
->>
->> set_sched_topology(custom_topology);
+On 25/03/2022 13:05, Roger Quadros wrote:
 > 
-> However, due to the limitation of GKI, we cannot change the sd topology
-> by ourselves. But we can configure CPU and cache topology through DT.
-
-IMHO, mainline can't do anything here. You should talk to your Android
-platform provider in this case. Android concepts like Generic Kernel
-Image (GKI) are normally not discussed here.
-
-From mainline perspective we're OK with scheduling such a system flat,
-e.g. only with a single MC SD [CPU0..CPU7] for each CPU.
-It could be that the Phantom SD is still needed for additional
-proprietary or Android add-ons though?
-
-In case you would remove `clusterX` from your DT cpu-map (Phantom SD
-information, i.e. the reason for why you have e.g. for CPU0: `MC (ShPR)
-[CPU0..CPU3] and DIE [CPU0..CPU7]`) , you should see the natural
-topology: only `MC (ShPR) [CPU0..CPU7]`.
-
-> So why not get the ShPR from DT first? If not configured, use the default.
-
-I'm not convinced that mainline will accept a change which is necessary
-for a out-of-tree tweak (Phantom SD).
-
->>> *CLS[0-1][2-3](SD_SHARE_PKG_RESOURCES)
->>
->> But why do you want to have yet another SD underneath MC for CPU0-CPU3?
->> sd_llc is assigned to the highest ShPR SD, which would be DIE.
 > 
-> We want do something from the shared L2 cache(for complex, like walt), 
-> you can ignore it here and talk about it when we done.
+> On 24/03/2022 20:26, Krzysztof Kozlowski wrote:
+>> On 23/03/2022 12:18, Roger Quadros wrote:
+>>> TI's AM64 SoC has the Error Locator Module. Add compatible and
+>>> related properties to support ELM on AM64 SoC.
+>>>
+>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+>>> ---
+>>>  .../devicetree/bindings/mtd/ti,elm.yaml       | 27 ++++++++++++++++++-
+>>>  1 file changed, 26 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/mtd/ti,elm.yaml b/Documentation/devicetree/bindings/mtd/ti,elm.yaml
+>>> index 24ed0fb84204..bc01d35ce605 100644
+>>> --- a/Documentation/devicetree/bindings/mtd/ti,elm.yaml
+>>> +++ b/Documentation/devicetree/bindings/mtd/ti,elm.yaml
+>>> @@ -17,7 +17,9 @@ description:
+>>>  properties:
+>>>    compatible:
+>>>      items:
+>>> -      - const: ti,am3352-elm
+>>> +      - enum:
+>>> +          - ti,am3352-elm
+>>> +          - ti,am64-elm
+>>>  
+>>>    reg:
+>>>      maxItems: 1
+>>> @@ -25,6 +27,17 @@ properties:
+>>>    interrupts:
+>>>      maxItems: 1
+>>>  
+>>> +  clocks:
+>>> +    maxItems: 1
+>>> +    description: Functional clock.
+>>> +
+>>> +  clock-names:
+>>> +    items:
+>>> +      - const: fck
+>>> +
+>>> +  power-domains:
+>>> +    maxItems: 1
+>>> +
+>>>    ti,hwmods:
+>>>      description:
+>>>        Name of the HWMOD associated with ELM. This is for legacy
+>>> @@ -37,6 +50,18 @@ required:
+>>>    - reg
+>>>    - interrupts
+>>>  
+>>> +allOf:
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            const: ti,am64-elm
+>>> +    then:
+>>> +      required:
+>>> +        - clocks
+>>> +        - clock-names
+>>> +        - power-domains
+>>
+>> Are these new properties also valid for am3352?
+> 
+> No they are not required for am3352-elm. Only required for K3 based platforms like AM64.
+> 
 
-I assume you refer to the proprietary load-tracking mechanism `Window
-Assisted Load Tracking` (WALT) here? It's also not in mainline.
+I understand they are not required, but I asked if they are valid. IOW,
+whether ELM in am3352 also is part of power domain and has clock input?
+
+Best regards,
+Krzysztof

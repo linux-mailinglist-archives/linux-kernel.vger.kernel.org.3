@@ -2,181 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DD54E6C6C
+	by mail.lfdr.de (Postfix) with ESMTP id BE1E94E6C6D
 	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 03:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354529AbiCYCPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 22:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
+        id S1346477AbiCYCPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 22:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346712AbiCYCPG (ORCPT
+        with ESMTP id S232634AbiCYCPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 22:15:06 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FB94CD5D
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 19:13:33 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id a17so7668603edm.9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 19:13:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=x/SKwnS2wQi9dJJ6CWGROEW1ewpvhEn8StiIdhWUEWI=;
-        b=iDMYY7FwsUa++dMovFKpAJmACqJEFzXM6eEjeuDTd0+cClHJfPUKyh7ELo3liADDQ0
-         /NBQ9+Cu+un/PYWM8BKpXk7Kq/DoKsnMSDekvfwW9Yqu4XEfEAM0r6Ga8Qp0fauo5zq4
-         3ZtUSOqkOR5ovCNp4c1IE55cdeco21MLx9T1SKyW8RqP9FzjiAEFlNRYMz5rEj94b0o+
-         6M1sLAGijkffXKrDHia5CctnMQlNPjA1HT8ZMZEMpFO3n74T8TBzvbw1zeUQHupzneRD
-         0CysiYfcjx9NUGxEV1mIZJ63WEan1TDEEzitAKRafWOve4KAvJIwNfJQ7JITKVEmL16W
-         caQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=x/SKwnS2wQi9dJJ6CWGROEW1ewpvhEn8StiIdhWUEWI=;
-        b=YpnVp711H/Ay89QXZNkFxZV2wE2/nAg84V2ukuh6GHTzrFZJECOn1h7nAOCx4DV8Lj
-         z6oAJFl/TB9V/wKWQiMD6TPdmw+HLd0e15fl1J59kDY4GJOozNcKqAC123FZbswClaT8
-         TsAGH9NO0klLxkci+eKUAFxN95Tqa1ZPIkY7yTY/4I8eTi5MfAu3mGjAyePTvpaJxzMc
-         EzVHNPYslM8qckmTp4vPookVRBOtEh6jCCI1/7zvIryZBQPbugYhjsLLd5FkLzgR1x1g
-         DRbo55YWty6DiZjrn44pWNC0SrWRum9nTqJl12GQBar+PxBDOkFD6f1218ieXftzIoNt
-         ac8Q==
-X-Gm-Message-State: AOAM533OCj75GjMIlCHRIOlzEryPMXcj5te+aNVX8FOiwQRnXhgnjEog
-        5+P5OG4Kvw06OwxP5PFzwMoP1qrZfLWWchi8nzIgYuWOlFc=
-X-Google-Smtp-Source: ABdhPJyOinrH+nfJItL/ZWM2gMcQcwufOzrDZXE42o6EdU71rXSuPvg6bKQEeYRFLPshtt3PqR1zwwOFW1hzs85F9tA=
-X-Received: by 2002:a05:6402:354b:b0:419:4af8:c5c9 with SMTP id
- f11-20020a056402354b00b004194af8c5c9mr10326050edd.91.1648174411417; Thu, 24
- Mar 2022 19:13:31 -0700 (PDT)
+        Thu, 24 Mar 2022 22:15:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45791381AB;
+        Thu, 24 Mar 2022 19:13:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61F3661838;
+        Fri, 25 Mar 2022 02:13:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3CF0C340EC;
+        Fri, 25 Mar 2022 02:13:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648174407;
+        bh=KSmv2W04ESy8xjgxw9/zdilquFr90HllFqmRQJ3P4ME=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PZop9NZQCVfT4DS8ZOGW6FvqAw8xX+rgnSDQDrhjj1XVb7BkZ/NoQYB/sSwRwkGhb
+         XNiD0qXrJyQ9gUF8VZ7g06ONQ+8GF4OA34Pk7bSFavSOYbsm9Jz3GhpykdUDchaOH2
+         XCnOEy+80Yp6SO8o+9ZRNX3twEYn8MyrQfXtZK7FeaaljHjS36Gy4St3C8JpAjT6MS
+         /B2yxCsFFz7enyrDeCbPTDRGsk2sDWUdy+Ep4V3AFVKnkgd8dgWOpfd84rwy6bmkhy
+         mqSng19XSV3KRBS8NuzY4JL70MI6w/To5dWiZBcVU+7H16v239QbEzVEdubQwQ7dwx
+         IIXxkap9yz7+g==
+Date:   Fri, 25 Mar 2022 04:14:30 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Michael =?iso-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
+Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
+        jgg@ziepe.ca, stefanb@linux.vnet.ibm.com, stefanb@linux.ibm.com,
+        James.Bottomley@hansenpartnership.com, keescook@chromium.org,
+        jsnitsel@redhat.com, ml.linux@elloe.vision,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        twawrzynczak@chromium.org
+Subject: Re: [PATCH v3 0/4] Fixes for TPM interrupt handling
+Message-ID: <Yj0lhqTP1RoedxSc@iki.fi>
+References: <20210501135727.17747-1-LinoSanfilippo@gmx.de>
+ <20210501135727.17747-3-LinoSanfilippo@gmx.de>
+ <YJAby8mmiJ74qWAh@kernel.org>
+ <6722bf6f-1a3f-ee9c-55e2-cf63c64266a9@gmx.de>
+ <YJNKs8bUMGOzFre+@kernel.org>
+ <2a1a1cf61732eff1608aeae74054a0c135c1671f.camel@mniewoehner.de>
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 25 Mar 2022 12:13:20 +1000
-Message-ID: <CAPM=9ty8CYpuQ05BjgB9_CBRUjiL5PMTF-irHRXKOWtOrgxxZA@mail.gmail.com>
-Subject: [git pull] drm fixes for 5.18-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2a1a1cf61732eff1608aeae74054a0c135c1671f.camel@mniewoehner.de>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Thu, Mar 24, 2022 at 06:04:23PM +0100, Michael Niewöhner wrote:
+> Hi guys,
+> 
+> On Thu, 2021-05-06 at 04:47 +0300, Jarkko Sakkinen wrote:
+> > On Wed, May 05, 2021 at 01:15:29AM +0200, Lino Sanfilippo wrote:
+> > > Hi,
+> > > 
+> > > On 03.05.21 at 17:50, Jarkko Sakkinen wrote:
+> > > > What the heck is "simplification" and what that has to do with fixing
+> > > > anything? I don't understand your terminology.
+> > > 
+> > > 
+> > > The intention for this patch is not to fix anything. Please read the cover
+> > > letter and the commit message.
+> > > This patch is about making the locality handling easier by not
+> > > claiming/releasing
+> > > it multiple times over the driver life time, but claiming it once at driver
+> > > startup and only releasing it at driver shutdown.
+> > > 
+> > > Right now we have locality request/release combos in
+> > > 
+> > > - probe_itpm()
+> > > - tpm_tis_gen_interrupt()
+> > > - tpm_tis_core_init()
+> > > - tpm_chip_start()
+> > > 
+> > > and there is still one combo missing for
+> > > 
+> > > - tpm2_get_timeouts()
+> > > 
+> > > which is the reason why we get the "TPM returned invalid status" bug in case
+> > > of TPM2 (and this is the bug which is _incidentally_ fixed by this patch,
+> > > see
+> > > below).
+> > > 
+> > > And if we are going to enable interrupts, we have to introduce yet another
+> > > combo,
+> > > for accessing the status register in the interrupt handler, since TPM 2.0
+> > > requires holding the locality for writing to the status register. That makes
+> > > 6 different code places in which we take and release the locality.
+> > > 
+> > > With this patch applied we only take the locality at one place. Furthermore
+> > > with interrupts enabled we dont have to claim the locality for each handler
+> > > execution, saving us countless claim/release combinations at runtime.
+> > > 
+> > > Hence the term "simplification" which is perfectly justified IMO.
+> > > 
+> > > So again, this patch is "only" in preparation for the next patch when
+> > > interrupts
+> > > are actually enabled and we would have to take the locality in the interrupt
+> > > handler without this patch.
+> > 
+> > So: what problem this patch does solve?
+> > 
+> > /Jarkko
+> > 
+> 
+> first, thank you very much, Lino, for working on this! I've been debugging
+> issues with the tis driver in the last days and was about to start with the same
+> approach as yours when I luckily discovered your patch!
+> 
+> Jarkko, while I agree, that the commit message is not optimal, Lino tried hard
+> to explain what the problems with the current code are and how they are / can be
+> fixed. Further, I too don't see why simplification / optimization is such a bad
+> thing. This driver is actually a very good example. I had a hard time, too,
+> figuring out what's going on there. A clean rewrite is a very valid approach
+> here IMO. It's not "polishing for nothing", as you described it, but actually
+> solving problems.
+> 
+> Interrupt detection is broken for years now and finally a volunteer worked on a
+> solution. Don't you think this should be valued? Let's get this problem sorted
+> out :-)
+> 
+> Lino, I'd be happy to test the patches, when you have time and interest to work
+> on this again!
+> 
+> Thanks, Michael
 
-Some fixes were queued up in and in light of the fbdev regressions,
-I've pulled those in as well,
-I think the mediatek one is going to be a bit more painful, since now
-you have a merge and I need to have the mediatek stuff get rebased and
-retested onto that merge point, but I'll make sure they get to you
-ASAP.
+It's quite easy to test them out. Both fixes are in the mainline GIT tree.
+E.g. give a shot rc1, and please report if any issues persists to:
 
-Thomas, cc'ed, I pulled your fbdev fixes from patchwork, since they
-were a clear regression fix, don't bother queueing them up in our
-trees now.
+  linux-integrity@vger.kernel.org 
 
-Dave.
-
-drm-next-2022-03-25:
-drm fixes for 5.18-rc1
-
-core:
-- Make audio and color plane support checking only happen
-  when a CEA extension block is found.
-- Small selftest fix.
-
-fbdev:
-- two regressions fixes from speedup patches.
-
-ttm:
-- Fix a small regression from ttm_resource_fini()
-
-i915:
-- Reject unsupported TMDS rates on ICL+
-- Treat SAGV block time 0 as SAGV disabled
-- Fix PSF GV point mask when SAGV is not possible
-- Fix renamed INTEL_INFO->media.arch/ver field
-The following changes since commit c6e90a1c660874736bd09c1fec6312b4b4c2ff7b=
-:
-
-  Merge tag 'amd-drm-next-5.18-2022-03-18' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-next (2022-03-21
-13:48:20 +1000)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-next-2022-03-25
-
-for you to fetch changes up to 2a81dba4b577099717cea86d429f053e85e74d96:
-
-  fbdev: Fix cfb_imageblit() for arbitrary image widths (2022-03-25
-09:55:54 +1000)
-
-----------------------------------------------------------------
-drm fixes for 5.18-rc1
-
-core:
-- Make audio and color plane support checking only happen
-  when a CEA extension block is found.
-- Small selftest fix.
-
-fbdev:
-- two regressions fixes from speedup patches.
-
-ttm:
-- Fix a small regression from ttm_resource_fini()
-
-i915:
-- Reject unsupported TMDS rates on ICL+
-- Treat SAGV block time 0 as SAGV disabled
-- Fix PSF GV point mask when SAGV is not possible
-- Fix renamed INTEL_INFO->media.arch/ver field
-
-----------------------------------------------------------------
-Cooper Chiou (1):
-      drm/edid: check basic audio support on CEA extension block
-
-Dave Airlie (2):
-      Merge tag 'drm-intel-next-fixes-2022-03-24' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-next
-      Merge tag 'drm-misc-next-fixes-2022-03-24-1' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-next
-
-Jani Nikula (1):
-      drm/edid: fix CEA extension byte #3 parsing
-
-Lucas De Marchi (1):
-      drm/i915: Fix renamed struct field
-
-Nathan Chancellor (1):
-      drm/selftest: plane_helper: Put test structures in static storage
-
-Thomas Zimmermann (2):
-      fbdev: Fix sys_imageblit() for arbitrary image widths
-      fbdev: Fix cfb_imageblit() for arbitrary image widths
-
-Ville Syrj=C3=A4l=C3=A4 (3):
-      drm/i915: Reject unsupported TMDS rates on ICL+
-      drm/i915: Treat SAGV block time 0 as SAGV disabled
-      drm/i915: Fix PSF GV point mask when SAGV is not possible
-
-Zack Rusin (1):
-      drm/ttm: Fix a kernel oops due to an invalid read
-
- drivers/gpu/drm/drm_edid.c                        | 15 ++++++++----
- drivers/gpu/drm/i915/display/intel_bw.c           |  3 ++-
- drivers/gpu/drm/i915/display/intel_hdmi.c         |  9 +++++++
- drivers/gpu/drm/i915/i915_drv.h                   |  2 +-
- drivers/gpu/drm/i915/intel_pm.c                   | 10 ++++----
- drivers/gpu/drm/selftests/test-drm_plane_helper.c |  8 +++----
- drivers/gpu/drm/ttm/ttm_range_manager.c           |  2 +-
- drivers/video/fbdev/core/cfbimgblt.c              | 28 ++++++++++++++++++-=
----
- drivers/video/fbdev/core/sysimgblt.c              | 29 +++++++++++++++++++=
-----
- 9 files changed, 82 insertions(+), 24 deletions(-)
+BR, Jarkko

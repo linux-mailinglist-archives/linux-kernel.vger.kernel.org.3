@@ -2,93 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5684E7943
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A64FA4E7944
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376993AbiCYQvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 12:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37062 "EHLO
+        id S1377000AbiCYQvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 12:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376979AbiCYQvE (ORCPT
+        with ESMTP id S1356491AbiCYQvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 12:51:04 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8BFC12C4;
-        Fri, 25 Mar 2022 09:49:30 -0700 (PDT)
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2B58D1F38D;
-        Fri, 25 Mar 2022 16:49:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648226969; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=6ivythEboEDbL7GPUWVELN/Jqdcen7CCuBCXMVaFSDQ=;
-        b=dQjzWZf/421J0weNpwn9VYr6iqOVox3dhJuq7mBRiGWhM20NwS/n8X4GL/TfLi8tGzH4OS
-        tE4o8gKIILZD3dsTIbkehKJy5YcbcRV7SgZUDxOnUqtIiIbZHdfpC/Sv6jmNrP14tJBzjU
-        jJOuRBMFFLtsTl+Ha1JsIOlX/JPAdd8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648226969;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=6ivythEboEDbL7GPUWVELN/Jqdcen7CCuBCXMVaFSDQ=;
-        b=j4eG4F/BjRwQEejDcI5RXqzomGXrEGN2SQgLJgqvO3kd6Du5DYYIbPBFlMWTK7S/ELtAzH
-        b4If7RigS0rPcBDA==
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id B49C31392B;
-        Fri, 25 Mar 2022 16:49:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id LfP+KJjyPWJdQAAAGKfGzw
-        (envelope-from <lhenriques@suse.de>); Fri, 25 Mar 2022 16:49:28 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 453f7812;
-        Fri, 25 Mar 2022 16:49:49 +0000 (UTC)
-From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-To:     Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-Subject: [PATCH] ceph: support legacy v1 encryption policy keysetup
-Date:   Fri, 25 Mar 2022 16:49:47 +0000
-Message-Id: <20220325164947.22062-1-lhenriques@suse.de>
+        Fri, 25 Mar 2022 12:51:33 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF7BC12CF;
+        Fri, 25 Mar 2022 09:49:59 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id p8so6879533pfh.8;
+        Fri, 25 Mar 2022 09:49:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0kOdsZwrQL1XfPdlkXlj/9Xa+AzVdDQNepJd8esNMSA=;
+        b=RH/4wmzM1N3goA6fDZmEOIqtcFbnwVj6hl5sryG3LVcXbBaAg9OcTs0/mLXdIkBzIN
+         KoStwbD4ZY9nNn9EgZkemVf1m6GGtdopt2bFVM4viCuyBJRomC+f7npkNtNB0fCB/KB4
+         gvoZNLNQUKQI2VLfiNYQ7/C4/QdOLqYznSm6nM2jR3aMfDDTntAeCmuvwIezXqUbDHfy
+         pBQad0mQ0n3cJseK4nbrh610UoIoqXdFPu9AwgRu5nm7mLEzdEkSzIUUkM81ksnI6MLx
+         +vsIvtoxlIWvxM8xyEhQmDGBITfT4k6qkRN7BRv0aH/wP+jQLLWc17mqgQCJzVz+mHc9
+         55PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0kOdsZwrQL1XfPdlkXlj/9Xa+AzVdDQNepJd8esNMSA=;
+        b=YRXWdSBiWJT2UGH0wzFFudCzNVApWWKeLF5vXeNRlyv0IVmrd2cOUhyLNeiN8nrhSS
+         IKpaYOlCSgN2BZKhvnqhyK6FoSE23FW3/IUi2CKJ3C/G17fzyfuArcyxMNPQ/aQu7HG5
+         1UP8gZptuaegkpbFDcvcA5LxSkAn5eLYglDCCMIT8adIk4QVisA2y9ErFxrexy0asgZF
+         i4/IvyviY8+4bBvX6CkIzmM2tBxEEOTf3+WDjX4A325AOp0Q6uBAIOqx3M6p/dZU3rY3
+         kjkOKpMKf4DoXDunzhZxoDNM2FMCRVevw/zRpaHmBX02oSEaNmw9ZdH2SBIk6OlgnorB
+         Wb7Q==
+X-Gm-Message-State: AOAM531rRkfbZBsz0l46Lub7HFPl2A3jdewE9x/W+aQJGrV7g6gAZBn0
+        KFgeTgsdC/0KYA7qHgr+oKeb2hUbnX7GOkfRTWU=
+X-Google-Smtp-Source: ABdhPJyfhFBRXE5h3qte2x1DrZmNxncfozsOwJFINaTypXcQNRxAhkfoT3oCXvO/uJG6iEaiY9FupxTkU1CGWVRTEBo=
+X-Received: by 2002:a63:c00c:0:b0:37c:942e:6c3c with SMTP id
+ h12-20020a63c00c000000b0037c942e6c3cmr398099pgg.336.1648226998607; Fri, 25
+ Mar 2022 09:49:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <164821817332.2373735.12048266953420821089.stgit@devnote2> <Yj3VAsgGA9zJvxgs@hirez.programming.kicks-ass.net>
+In-Reply-To: <Yj3VAsgGA9zJvxgs@hirez.programming.kicks-ass.net>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 25 Mar 2022 09:49:47 -0700
+Message-ID: <CAADnVQLg0h7aJBPSfmQdL_M=S9QHWe+xLXZPL4gzMYejz=Mf0Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/4] kprobes: rethook: x86: Replace kretprobe
+ trampoline with rethook
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        X86 ML <x86@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        kernel-janitors@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fstests make use of legacy keysetup where the key description uses a
-filesystem-specific prefix.  Add this ceph-specific prefix to the
-fscrypt_operations data structure.
+On Fri, Mar 25, 2022 at 7:43 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Fri, Mar 25, 2022 at 11:22:53PM +0900, Masami Hiramatsu wrote:
+>
+> > Masami Hiramatsu (3):
+> >       kprobes: Use rethook for kretprobe if possible
+> >       rethook: kprobes: x86: Replace kretprobe with rethook on x86
+> >       x86,kprobes: Fix optprobe trampoline to generate complete pt_regs
+> >
+> > Peter Zijlstra (1):
+> >       Subject: x86,rethook: Fix arch_rethook_trampoline() to generate a complete pt_regs
+>
+> You fat-fingered the subject there ^
+>
+> Other than that:
+>
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>
+> Hopefully the ftrace return trampoline can also be switched over..
 
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
----
- fs/ceph/crypto.c | 1 +
- 1 file changed, 1 insertion(+)
+Thanks Peter. What's an ETA on landing endbr set?
+Did I miss a pull req?
+I see an odd error in linux-next with bpf selftests
+which may or may not be related. Planning to debug it
+when everything settles in Linus's tree.
 
-diff --git a/fs/ceph/crypto.c b/fs/ceph/crypto.c
-index c2e28ae54323..2a8f95885e7d 100644
---- a/fs/ceph/crypto.c
-+++ b/fs/ceph/crypto.c
-@@ -77,6 +77,7 @@ static const union fscrypt_policy *ceph_get_dummy_policy(struct super_block *sb)
- }
- 
- static struct fscrypt_operations ceph_fscrypt_ops = {
-+	.key_prefix		= "ceph:",
- 	.get_context		= ceph_crypt_get_context,
- 	.set_context		= ceph_crypt_set_context,
- 	.get_dummy_policy	= ceph_get_dummy_policy,
+Masami, could you do another respin?
+
+Also do you mind squashing patches 2,3,4 ?
+It's odd to have the same lines of code patched up 3 times.
+Just do it right once.

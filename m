@@ -2,116 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5354E7158
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 11:35:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A14A74E7162
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 11:36:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355979AbiCYKgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 06:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
+        id S1358913AbiCYKhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 06:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242067AbiCYKfy (ORCPT
+        with ESMTP id S244163AbiCYKhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 06:35:54 -0400
+        Fri, 25 Mar 2022 06:37:10 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A490BA8EDA;
-        Fri, 25 Mar 2022 03:34:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87CBBB6D33;
+        Fri, 25 Mar 2022 03:35:36 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C9C71570;
-        Fri, 25 Mar 2022 03:34:19 -0700 (PDT)
-Received: from [10.57.41.19] (unknown [10.57.41.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 519613F73D;
-        Fri, 25 Mar 2022 03:34:17 -0700 (PDT)
-Message-ID: <5ae774b7-f888-f201-d77d-0ab0cf0faed3@arm.com>
-Date:   Fri, 25 Mar 2022 10:34:13 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH devicetree 00/10] Do something about ls-extirq
- interrupt-map breakage
-Content-Language: en-GB
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 382B2D6E;
+        Fri, 25 Mar 2022 03:35:36 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AA3ED3F73D;
+        Fri, 25 Mar 2022 03:35:34 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 10:35:28 +0000
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     David Collins <quic_collinsd@quicinc.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Leo Li <leoyang.li@nxp.com>,
-        Biwen Li <biwen.li@nxp.com>, "Z.Q. Hou" <zhiqiang.hou@nxp.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-References: <20211214013800.2703568-1-vladimir.oltean@nxp.com>
- <87ilvrk1r0.wl-maz@kernel.org> <20211214095853.4emzycaxkuqr4tun@skbuf>
- <87czlzjxmz.wl-maz@kernel.org> <20220324171041.t5yoocinj6gizcc7@skbuf>
- <87lewz5kr5.wl-maz@kernel.org> <20220324173405.nusk6247ouvek46y@skbuf>
- <87k0cj5io4.wl-maz@kernel.org> <20220324190904.boo2izjc3mym2wkh@skbuf>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220324190904.boo2izjc3mym2wkh@skbuf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Liam Girdwood <lgirdwood@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Mike Tipton <quic_mdtipton@quicinc.com>
+Subject: Re: [PATCH v2 0/2] regulator: scmi: add support for registering SCMI
+ regulators by name
+Message-ID: <Yj2a8OqLxmLYpOGT@e120937-lin>
+References: <cover.1647909090.git.quic_collinsd@quicinc.com>
+ <Yjm1wpcMZsZJJCuy@bogus>
+ <eb03037b-e7c2-ea23-0bdb-27924ed54fa7@quicinc.com>
+ <Yjyo+Xk0txZs4T/Z@sirena.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yjyo+Xk0txZs4T/Z@sirena.org.uk>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-24 19:09, Vladimir Oltean wrote:
-> On Thu, Mar 24, 2022 at 06:06:51PM +0000, Marc Zyngier wrote:
->>> I was just raising this as what I thought would be a simple and
->>> non-controversial counter example to your remark "If you change something,
->>> you *must* guarantee forward *and* backward compatibility."
->>
->> If you change something *in the binding*, which was implicit in the
->> context, and makes no sense out of context.
->>
->>> Practically speaking, what has happened is that the board DT appeared in
->>> kernel N, the ls-extirq driver in kernel N+1, and the DT was updated to
->>> enable PHY interrupts in kernel N+2. That DT update practically broke
->>> kernel N from running correctly on DTs taken from kernel N+2 onwards.
->>> This is the observable behavior, we can find as many justifications for
->>> it as we wish.
->>
->> Well, you can also argue that the DT was broken at N and N+1 for not
->> describing the HW correctly and completely. No binding has changed
->> here. Your DT was incomplete, and someone fixed it for you.
->>
->> We can argue this things forever and a half. I've laid down the ground
->> rules for the stuff I maintain. If you're not happy with this, you can
->> fix it by either removing the NXP hardware from the tree, or taking
->> over from me as the irqchip maintainer. I'd be perfectly happy with
->> any (and even more, with both) of these outcomes.
+On Thu, Mar 24, 2022 at 05:23:05PM +0000, Mark Brown wrote:
+> On Tue, Mar 22, 2022 at 06:12:33PM -0700, David Collins wrote:
 > 
-> Ok, my intention wasn't to inflame you even though the way in which I
-> presented the problem might have suggested otherwise.
+> > Another problem is that, as with regulators, ID numbers could
+> > unknowingly get out of sync between the platform and the agent.  Using
+> > clock domain names for referencing fixes both issues.  This can be
 > 
-> With my developer hat I still don't agree with you even with the
-> additional clarification you've made that you were referring only to
-> bindings and not to any and all DT changes. The reason being that the DT
-> blob is a whole, and it doesn't matter if there's a regression because
-> of a binding change or something else, you still need to be prepared to
-> update it, sometimes in lockstep with the kernel, like it or not.
+> This is just saying that the hard coded IDs that the firmware and kernel
+> use to communicate can get out of sync which is true no matter if those
+> IDs are strings or if they're numerical, either way it's an ABI which
+> can be broken.
 > 
-> But as a user, I just wanted to get an opinion from you what can we do
-> to deal better with this situation: optional interrupt provided by
-> device with missing driver, which of_irq_get() doesn't seem to understand.
+> > > If the IDs are correct like the names, it is guaranteed. I see this
+> > > ID vs name is more for some maintenance convenience because somewhere
+> > > something else needs to changes or moved away from existing way of
+> > > maintenance.
+> 
+> > How do you quantify an ID number to physical regulator mapping as
+> > "correct"?  What happens if the mapping must be changed on the SCMI
+> > platform side (e.g. a PMIC was added or removed, or the order that
+> > regulators are listed in needs to change)?  If the SCMI agent is blindly
+> 
+> The whole point with the numbers being an ABI is that things must never
+> be renumbered, just as if names are used the names can't be changed.  If
+> the numbering is changing that just sounds like bugs on the platform
+> side.  There's an implicit assumption in what you've written above that
+> implementation details of the firmware should affect the IDs presented
+> through SCMI which simply shouldn't be true, and indeed if the firmware
+> can assign fixed strings it can just as well assign fixed numbers.
 
-FWIW, of_irq_get() absolutely understands how to handle a missing IRQ 
-provider driver; it returns -EPROBE_DEFER. If a caller considers the IRQ 
-optional, then it's up to that caller to decide how long to keep waiting 
-for the provider to appear until giving up and carrying on without it. 
-If your phy driver is making the dumb decision to wait for ever for 
-something which isn't critical, then you're free to fix it, or perhaps 
-even propose for of_irq_get() to opt in to the 
-driver_deferred_probe_check_state() mechanism if you believe it's a 
-sufficiently general case.
+Could not agree more with Mark here...I think all the problem boils down
+really to reduce maintenance burdain on the backend SCMI server as Sudeep
+hinted previusly in this thread, which I am not saying is not a valid
+concern, but maybe this is not the best way to address it.
 
-If a new DT with an additional new property (either on an existing 
-machine, or on a completely new machine which has the property from the 
-start) exposes a bug in a driver, that's unfortunate, but it is entirely 
-irrelevant to the ABI implications of changing the interpretation of an 
-existing property.
+My understanding, correct me if I'm wrong, is that the scenario here is one
+of a backend SCMI server fw that indeed potentially manages a greater number
+of resources (regulators,clocks...etc) than the ones effectively assigned to
+a single OSPM agent (real or virtual), so that you have, say, 100 resources
+and you are going to assign a different set of, say, 10 resources (maybe
+overlapping) to each different OSPM SCMI agent running in a guest: as a
+consequence you want to avoid to remap on the backend at build or
+run-time this different set of 10 resources into the 0-9 set, but instead
+serve these 10 different resources IDentified as they are in the backend
+(say Guest1: 0-9 G2:05-14 G3:1,2,20,24-30) and then match by name in
+the guest so that, say, "regulator_MAIN" is the well known regulator
+for all Guests but really it could be ID 0 or 05 or 20 in the real
+physical backend depending on which OSPM is askng (and similar kind of
+issues in a non virtualized platform which instead has to share the same
+FW between different versions of the HW)
 
-Robin.
+Is my understanding correct ?
+
+Beside these concerns expressed by Sudeep and Mark, talking specifically
+about the series, I see that in V2 you introduce a common binding with
+a very general 'scmi-domain-name' to be used in the above scenario with
+regulators, but then you also talk about the possible need to employ this
+scheme with other resources (clocks), so I was wondering, if this is the
+case and if this can fly despite the above concerns,  if it was not better
+to address this in a more general way at the SCMI core level, introducing
+some sort of common method to be able to query a resource by name from
+any SCMI driver no matter which protocol is used (perf/voltage/clock),
+like as an example:
+
+ void *.get_resource_by_node(struct scmi_protocol_handle *ph,
+ 			     struct device_node *np);
+
+used in scmi-regulators to retrieve a voltage domain info by number OR
+name transparently as:
+
+    vinfo = handle->get_resource_by_node(ph, np)
+
+so that all the logic you added in scmi-regulator to search DT and map
+resources can be buried in the core SCMI and shared between all drivers
+that can optionally use it.
+
+...this will require a bit of more work in the SCMI core on my side of
+course :D ...
+
+Thanks,
+Cristian

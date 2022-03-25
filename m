@@ -2,43 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7134E75C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:06:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 419904E75CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:07:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359532AbiCYPH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
+        id S1359524AbiCYPI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359571AbiCYPHC (ORCPT
+        with ESMTP id S1359497AbiCYPHJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:07:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCDDD9E83;
-        Fri, 25 Mar 2022 08:05:26 -0700 (PDT)
+        Fri, 25 Mar 2022 11:07:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E62DD95F3;
+        Fri, 25 Mar 2022 08:05:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BB0061BED;
-        Fri, 25 Mar 2022 15:05:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84761C340E9;
-        Fri, 25 Mar 2022 15:05:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41919B828FB;
+        Fri, 25 Mar 2022 15:05:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BBECC340E9;
+        Fri, 25 Mar 2022 15:05:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220725;
-        bh=0t6rOqqnZ4dHupbcVnNiXxZOIEusOi5qLvPWJONBqH8=;
+        s=korg; t=1648220728;
+        bh=TqXe9YFq23t1/gzrasVd1FhOgppT1K15PivWNvtui84=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NMSR32jgmlCpE1bk5LwTFRwB3VCRWCGGVyqvs587/EWe429lHXH/m4XOJc8CdRq0g
-         TMtt9fAe8H9nOm2F3+MsQPmXEkhOEvcXxVyqxJH8bwn2px9wnHmtPjhKJqV/zNHkmq
-         Jlk2H8MEy7jRmaHDT6jBtbubvbdjQMU4LkeXd6j4=
+        b=btyqAdj/mvr/d7vcov3wjm5yCt8fv3QSl10lVMWG0BRChHDqU4P3dEIpfoRDiM8b4
+         eE/e/X66kP4DtBHLB2da+nF8UBDc717i79fVTBuUnrsK18yghWjXilbLPCjZa62mRa
+         naGxGhNN0IPTuXqQC2JoE61l5dd5OMelnPqC+aXI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>,
-        Paolo Valente <paolo.valente@linaro.org>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.9 08/14] ALSA: pci: fix reading of swapped values from pcmreg in AC97 codec
-Date:   Fri, 25 Mar 2022 16:04:36 +0100
-Message-Id: <20220325150415.945058012@linuxfoundation.org>
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 4.9 09/14] netfilter: nf_tables: initialize registers in nft_do_chain()
+Date:   Fri, 25 Mar 2022 16:04:37 +0100
+Message-Id: <20220325150415.972515117@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220325150415.694544076@linuxfoundation.org>
 References: <20220325150415.694544076@linuxfoundation.org>
@@ -56,56 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-commit 17aaf0193392cb3451bf0ac75ba396ec4cbded6e upstream.
+commit 4c905f6740a365464e91467aa50916555b28213d upstream.
 
-Tests 72 and 78 for ALSA in kselftest fail due to reading
-inconsistent values from some devices on a VirtualBox
-Virtual Machine using the snd_intel8x0 driver for the AC'97
-Audio Controller device.
-Taking for example test number 72, this is what the test reports:
-"Surround Playback Volume.0 expected 1 but read 0, is_volatile 0"
-"Surround Playback Volume.1 expected 0 but read 1, is_volatile 0"
-These errors repeat for each value from 0 to 31.
+Initialize registers to avoid stack leak into userspace.
 
-Taking a look at these error messages it is possible to notice
-that the written values are read back swapped.
-When the write is performed, these values are initially stored in
-an array used to sanity-check them and write them in the pcmreg
-array. To write them, the two one-byte values are packed together
-in a two-byte variable through bitwise operations: the first
-value is shifted left by one byte and the second value is stored in the
-right byte through a bitwise OR. When reading the values back,
-right shifts are performed to retrieve the previously stored
-bytes. These shifts are executed in the wrong order, thus
-reporting the values swapped as shown above.
-
-This patch fixes this mistake by reversing the read
-operations' order.
-
-Signed-off-by: Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>
-Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220322200653.15862-1-guiduzzi.giacomo@gmail.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: 96518518cc41 ("netfilter: add nftables")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/ac97/ac97_codec.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/netfilter/nf_tables_core.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/pci/ac97/ac97_codec.c
-+++ b/sound/pci/ac97/ac97_codec.c
-@@ -958,8 +958,8 @@ static int snd_ac97_ad18xx_pcm_get_volum
- 	int codec = kcontrol->private_value & 3;
- 	
- 	mutex_lock(&ac97->page_mutex);
--	ucontrol->value.integer.value[0] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 0) & 31);
--	ucontrol->value.integer.value[1] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 8) & 31);
-+	ucontrol->value.integer.value[0] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 8) & 31);
-+	ucontrol->value.integer.value[1] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 0) & 31);
- 	mutex_unlock(&ac97->page_mutex);
- 	return 0;
- }
+--- a/net/netfilter/nf_tables_core.c
++++ b/net/netfilter/nf_tables_core.c
+@@ -127,7 +127,7 @@ nft_do_chain(struct nft_pktinfo *pkt, vo
+ 	const struct net *net = pkt->net;
+ 	const struct nft_rule *rule;
+ 	const struct nft_expr *expr, *last;
+-	struct nft_regs regs;
++	struct nft_regs regs = {};
+ 	unsigned int stackptr = 0;
+ 	struct nft_jumpstack jumpstack[NFT_JUMP_STACK_SIZE];
+ 	struct nft_stats *stats;
 
 

@@ -2,99 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5E04E7264
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 963934E7269
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 12:46:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356987AbiCYLnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 07:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
+        id S1357122AbiCYLrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 07:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345320AbiCYLni (ORCPT
+        with ESMTP id S1345320AbiCYLrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 07:43:38 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08204D110E
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 04:42:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648208524; x=1679744524;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fAuPCIxYwYRiStXmYr6H/J9NL4UCaX3dtU3zNedcnKI=;
-  b=Erzl4m6+f91Ui2ATexocVAEE0LgAGxS8CznErYVSNDyK/RasHZis38nC
-   KLKDtwqlx99DtFYRriTNYJyEk6OrjDx0DOqMGJQCA8gyn6TVhjHm+FqWu
-   4uhxp8Up7sY3Gdr7D7UkGjB34xvtXCsymXLd/1sWqoxX+at59mDnvjB8l
-   Kv+yNW+gly6eKQBYiixTRa3YUe6Zu3MnBjcgwVkvIXhRw4WpTxTd4XFEw
-   axUAPK41oDN8gMirG1ervlMCG1d+75lBuZ07zN/hVvsWYXgskJj6OdaOR
-   nreqj7rStkH7+R8DPeKkzZdRossvBUOaeqUCU31k/5Aj4qtHL6sYcrVlf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="258809513"
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="258809513"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 04:42:04 -0700
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="638194590"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 04:42:01 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1nXiJp-006MIY-Uz;
-        Fri, 25 Mar 2022 13:41:25 +0200
-Date:   Fri, 25 Mar 2022 13:41:25 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [GIT PULL] locking changes for v5.18
-Message-ID: <Yj2qZT6gdRYpkSIR@smile.fi.intel.com>
-References: <YjhdcJB4FaLfsoyO@gmail.com>
- <CAHk-=wjS6ptr5=JqmmyEb_qTjDz_68+S=h1o1bL1fEyArVOymA@mail.gmail.com>
- <YjpLiKRUIB4TGJm0@zn.tnic>
- <CAHk-=wifoM9VOp-55OZCRcO9MnqQ109UTuCiXeZ-eyX_JcNVGg@mail.gmail.com>
+        Fri, 25 Mar 2022 07:47:49 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA068D3AEF;
+        Fri, 25 Mar 2022 04:46:15 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id z6so8611230iot.0;
+        Fri, 25 Mar 2022 04:46:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to:cc;
+        bh=yuPZAq3ZYUPbLpLKOS/jc7hlwjV26RLWmc573RYnU2A=;
+        b=AkeJ80vJz9TspKKR1V78P6leNzy/zWt3X5qpCiokIarPrfRm7bP82VVl3kMz1L3xPW
+         wP1CvS+iVVTt8m6TcWOh8beWqc1ryAZm0iMgSnbIE/VwKaG4068+loX09vRs3upbCzci
+         H1nwMcOB1mLmKlng7NjrF760XD/XERztwOAMqIw2E2M2OWT9b5ytcqa8HIuD+WMkna+l
+         RoPTmNI00ntyc7KSk9FDQs06tboiYJ2LluJ3IbUc62ZjMk7hALHxdJZrCS99As/8GxXR
+         vusOHzXCaBtHR/MnmB2RX2h1+2rswETDl08D5LSLq5FfrMSqBm/W/dch9KlEQDi0jyrr
+         k+0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=yuPZAq3ZYUPbLpLKOS/jc7hlwjV26RLWmc573RYnU2A=;
+        b=BV9JQS3H9M1fvN2QlnXZAP+JdYCIdvfnaz59NXVZ79hOas3uO4QIuFFJzpUI/tFWNG
+         Dlwoy9nFPCqcdblt3Cu3tvUcocFCJeEAPfqMIFEnXaK64D7ISZITYS98b6exwWS+75Nv
+         mUVh3EayIFhrwNUy304JUQdSBGAAwUOrXY3jmjBjFseLagYPFsULgNIj4jQa6/p2BlFQ
+         vNMUoZ3kYI++aUYbgsakzCHQEVhToSIaJjTzb4RTlr41bCdajhwVNTb+6HMU4X27rqEI
+         olhbPRBG0AULFIGe9sgyYLkJqt3uDe68RANlMI7a4AOtu7qeZwYRgnPg4NayrrV3l6Yk
+         D1DQ==
+X-Gm-Message-State: AOAM53284Y1HUhoTnf+tSYhKs1z2EhOf/lLxw19xEb1KTXj49iMrsqK1
+        C05mbdlbwC5altWCzUhY6+d7M37e+4xxmWt8Jqg=
+X-Google-Smtp-Source: ABdhPJwdeHv9CSgNylB9p3HPspFmJpE7ZpiPMI+Ktns/h7A/ZsdB+qotNh75aLovra9ycEkVF/Pbu8Elb+rI7hb8WoM=
+X-Received: by 2002:a6b:f60d:0:b0:645:b224:8d45 with SMTP id
+ n13-20020a6bf60d000000b00645b2248d45mr5299614ioh.131.1648208775189; Fri, 25
+ Mar 2022 04:46:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wifoM9VOp-55OZCRcO9MnqQ109UTuCiXeZ-eyX_JcNVGg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 25 Mar 2022 12:45:39 +0100
+Message-ID: <CA+icZUXYH4xfWtR=P8jXQfks7=zh0Os45yDFOiHNtM_KNWrfiw@mail.gmail.com>
+Subject: Re: random: treat bootloader trust toggle the same way as cpu trust toggle
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        Graham Christensen <graham@grahamc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 03:58:47PM -0700, Linus Torvalds wrote:
-> On Tue, Mar 22, 2022 at 3:20 PM Borislav Petkov <bp@alien8.de> wrote:
-> >
-> > Ah, you say build error because you have CONFIG_WERROR=y.
-> 
-> EVERYBODY should have CONFIG_WERROR=y on at least x86-64 and other
-> serious architectures, unless you have some completely random
-> experimental (and broken) compiler.
-> 
-> New compiler warnings are not acceptable.
+[ Unsure which ML to CC - see [1] - so I used what was CCed in [3]]
 
-What about old one? I have already complained in the early discussion that
-`make W=1 ...` is broken by this change. Enabling it without fixing
-_existing_ warnings on W=1 is not suitable for somebody. Now, I have to
-modify my configs to disable WERROR because of inability to built at all.
+Hi,
 
-(Yes, I understand that I may drop W=1, but that's not the point. since I
- want to have clean builds of a new code on level 1 of warnings)
+I am not a security expert but following the exciting changes to
+random/crng changes in upcoming v5.18 and using it on top of Linux
+v5.17.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Just saw this typo in [0]:
 
+diff --git a/Documentation/admin-guide/kernel-parameters.txt
+b/Documentation/admin-guide/kernel-parameters.txt
+index c658e5d2d52c9..b9d764a492078 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4400,6 +4400,12 @@
+  fully seed the kernel's CRNG. Default is controlled
+  by CONFIG_RANDOM_TRUST_CPU.
 
++ random.trust_bootloader={on,off}
++ [KNL] Enable or disable trusting the use of the
++ a seed passed by the bootloader (if available) to
+
+What do you want to say: "the" or "a" seed :-)?
+
++ fully seed the kernel's CRNG. Default is controlled
++ by CONFIG_RANDOM_TRUST_BOOTLOADER.
++
+  randomize_kstack_offset=
+  [KNL] Enable or disable kernel stack offset
+  randomization, which provides roughly 5 bits of
+
+Thanks for your work!
+
+Regards,
+- Sedat -
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=3032aedb16c77747f6a97d216887daec2b44f273
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/MAINTAINERS#n16315
+[2] https://www.zx2c4.com/projects/linux-rng-5.17-5.18/
+[3] https://marc.info/?t=164797651800005&r=1&w=2

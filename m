@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413E54E7902
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6B64E7905
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 17:36:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376720AbiCYQhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 12:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
+        id S1376823AbiCYQhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 12:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356637AbiCYQha (ORCPT
+        with ESMTP id S1376830AbiCYQhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 12:37:30 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49A360A9D
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:35:55 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id gb19so7999655pjb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:35:55 -0700 (PDT)
+        Fri, 25 Mar 2022 12:37:34 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43D46353E
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:35:59 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id j13so8599469plj.8
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:35:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=04bZ9l2OKVtfN4Urve70oIr9AZ8XOtSj5lg9hqy/gnE=;
-        b=iFDs5Id5VD5k6hsPSJH29huaEDAR8cn8C3MwuTRBTIR0IpLn/rWnNtU4f2b3E7G4OC
-         InZOXxCieQdNzNhNTz4wg0bZ/pEKb5VMsxZbr7Xvelbs1t6m/fSrsEvXSZEGXmy+pPTm
-         K7DCl8ZDxDcTLDWrSfS45Ne7XRq/xY33KaMi0jJS/70m+kMWLt7FN8fAe/hawW+Z53mO
-         ALdMKn53561aYVc7DowPmx7eu7QhQ++MMq2n07gRaeZ6xs3fUZ/u2POmqlr35h4FQALt
-         +8JiVMFmXgnG+kaOqKGt6miiDAYaVr91eB2lUUtj1rJT8doCNRoJCFm4+N6kKsCmyniE
-         vnQw==
+        bh=vuo48/5UjA2yQzB+PByGgiIu31mZpEWOqyTsnJLyEqQ=;
+        b=SzQxj8qNpsMaxeCLsWbqemfif+nS7Nx0yY3hFGwC+UVqnMu1eUnKrzuHJoXeDr8ZPx
+         lbWaddUi/hK/qGA80WoKkqwJKWbl4OV7hMUpwpChw2Z1dkM/DA1PMyHgWgjWIr+5d/jO
+         /jnajvyDobN+vohCnPYpKavXTpGA0BEBPAUbG697j8zOC0u/bkpA9PTbXu8esvdcyJ7W
+         eph+5DSq1uxDQEInxAYWsORbYsxdxihI4fQw/esq/Oz+YzITfftGcWet+ScAiuPdDpXD
+         0+7XUyCuW6192cgPd62C9bmEEA9ghTmB40DKVn919tlYmrnNRd+lG7692f2SM226TRbO
+         3mWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=04bZ9l2OKVtfN4Urve70oIr9AZ8XOtSj5lg9hqy/gnE=;
-        b=V1YkPpyRiN0X5LlHzFsvOLTAkFb5oUYq/l8zq5r/MBu76w7I1AX7zdXU0tpzdMwzLy
-         6JVq5fQKhl92HZi2QiM/5Kc4uMr0xkiPKxioLfRzS59c9BN1f3a6sLPR963wtLhZnjYp
-         K4gKeiU1D3IBjrFyXT8a0/7VnaJPh5/ZHe/+j8qYFlJolgXB0Jbn6P+q1H6Z09TG2PHC
-         usV2gh9UOE9kLKcvtHzj/2FH2VnDH0WfPsNe6HoO1p6vre4/qI/wPAUDBiVnbJmCxnSQ
-         36eeVxOdjPP9yD88xF+97TF14CvDtXvS9tKkFtccEC0Sk7GgY7RaRf16UYSfGiEfciAZ
-         3BxQ==
-X-Gm-Message-State: AOAM530puw6lemGshzoCUk5DPNvWuXn839N9DReN/4mdxw0u9t+0wmcB
-        pXmUVXy3Z4zQBZR849ndnzMG7Q==
-X-Google-Smtp-Source: ABdhPJxO/yWk7yYNVZDfTf1TBINSbNDhDNnV/sXkdPgDHGtU4vUS5etlY89aEMtu1PjfCzfH5Zt1Pg==
-X-Received: by 2002:a17:902:f243:b0:154:57eb:c748 with SMTP id j3-20020a170902f24300b0015457ebc748mr12434732plc.164.1648226155153;
-        Fri, 25 Mar 2022 09:35:55 -0700 (PDT)
+        bh=vuo48/5UjA2yQzB+PByGgiIu31mZpEWOqyTsnJLyEqQ=;
+        b=NJc95F0MtpLxG14WzUajohvWA0lUbok8Dg6PrWiKprJsDwilN/9hReJUa6M1+u+Ceq
+         7tQP+gNJ3cYljClJ/digcV8Ezcl1iqsNYosikLU+SXqd9ETxitMBkfMC4cVrull0QKiL
+         n6c7OyoZadrBTXXsy5l6cywXAB+z3mms5o6KfsaWumdPjAvtCoJPwSqPcgVyUSNm3Wv0
+         uuMFTSRZERZaUVbk3Qzu3yI++mdHz/KcIBm2p5jBTGI2qnfTZgzfL92ASe0OhziIZwmA
+         iUyZqZAQ550HQ+pV1kqeH2uohSnzstlaWnyhTppI4QuT9DlglluXD+Gi7obLYvL6Q2DB
+         ESMg==
+X-Gm-Message-State: AOAM530DztKVZFxYKxlJdMruh4UeyT47RtjkLXIAWSxPBAOeR5Qg8vbX
+        1MY1GGH/Wd6REbL4JnI5Hk+Ilw==
+X-Google-Smtp-Source: ABdhPJyc4Y08PpVXzp2jSoMl0/csbbpfohBnNxo5otTm+e88v/sKaDnS0hjJO54UoHNd/DJKXKyt9g==
+X-Received: by 2002:a17:902:7405:b0:154:68e6:9bdb with SMTP id g5-20020a170902740500b0015468e69bdbmr12630282pll.15.1648226159061;
+        Fri, 25 Mar 2022 09:35:59 -0700 (PDT)
 Received: from localhost.localdomain ([223.233.78.42])
-        by smtp.gmail.com with ESMTPSA id j6-20020a17090a588600b001c699d77503sm6264948pji.2.2022.03.25.09.35.51
+        by smtp.gmail.com with ESMTPSA id j6-20020a17090a588600b001c699d77503sm6264948pji.2.2022.03.25.09.35.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 09:35:54 -0700 (PDT)
+        Fri, 25 Mar 2022 09:35:58 -0700 (PDT)
 From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
         agross@kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, robh+dt@kernel.org,
         bjorn.andersson@linaro.org, Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH v4 1/2] arm64: dts: qcom: sm8150: add ethernet node
-Date:   Fri, 25 Mar 2022 22:05:36 +0530
-Message-Id: <20220325163537.1579969-2-bhupesh.sharma@linaro.org>
+Subject: [PATCH v4 2/2] arm64: dts: qcom: sa8155p-adp: Enable ethernet node
+Date:   Fri, 25 Mar 2022 22:05:37 +0530
+Message-Id: <20220325163537.1579969-3-bhupesh.sharma@linaro.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220325163537.1579969-1-bhupesh.sharma@linaro.org>
 References: <20220325163537.1579969-1-bhupesh.sharma@linaro.org>
@@ -74,54 +74,186 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Vinod Koul <vkoul@kernel.org>
 
-SM8150 SoC supports ethqos ethernet controller so add the node for it
+Enable the ethernet node, add the phy node and pinctrl for ethernet.
 
 Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
-[bhsharma: Correct ethernet interrupt numbers and add power-domain]
+[bhsharma: Correct ethernet/rgmii related pinmuxs, specify multi-queues and
+ plug in the PHY interrupt for WOL]
 Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm8150.dtsi | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts | 146 +++++++++++++++++++++++
+ 1 file changed, 146 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-index 15f3bf2e7ea0..915c8353feb4 100644
---- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-@@ -915,6 +915,33 @@ gpi_dma0: dma-controller@800000 {
- 			status = "disabled";
- 		};
+diff --git a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
+index 8756c2b25c7e..e7b527a1cf7f 100644
+--- a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
++++ b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
+@@ -47,6 +47,65 @@ vreg_s4a_1p8: smps4 {
  
-+		ethernet: ethernet@20000 {
-+			compatible = "qcom,sm8150-ethqos";
-+			reg = <0x0 0x00020000 0x0 0x10000>,
-+			      <0x0 0x00036000 0x0 0x100>;
-+			reg-names = "stmmaceth", "rgmii";
-+			clock-names = "stmmaceth", "pclk", "ptp_ref", "rgmii";
-+			clocks = <&gcc GCC_EMAC_AXI_CLK>,
-+				<&gcc GCC_EMAC_SLV_AHB_CLK>,
-+				<&gcc GCC_EMAC_PTP_CLK>,
-+				<&gcc GCC_EMAC_RGMII_CLK>;
-+			interrupts = <GIC_SPI 689 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 699 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "macirq", "eth_lpi";
+ 		vin-supply = <&vreg_3p3>;
+ 	};
 +
-+			power-domains = <&gcc EMAC_GDSC>;
-+			resets = <&gcc GCC_EMAC_BCR>;
++	mtl_rx_setup: rx-queues-config {
++		snps,rx-queues-to-use = <4>;
++		snps,rx-sched-sp;
 +
-+			iommus = <&apps_smmu 0x3C0 0x0>;
-+
-+			snps,tso;
-+			rx-fifo-depth = <4096>;
-+			tx-fifo-depth = <4096>;
-+
-+			status = "disabled";
++		queue0 {
++			snps,dcb-algorithm;
++			snps,map-to-dma-channel = <0x0>;
++			snps,route-up;
++			snps,priority = <0x1>;
 +		};
 +
++		queue1 {
++			snps,dcb-algorithm;
++			snps,map-to-dma-channel = <0x1>;
++			snps,route-ptp;
++		};
 +
- 		qupv3_id_0: geniqup@8c0000 {
- 			compatible = "qcom,geni-se-qup";
- 			reg = <0x0 0x008c0000 0x0 0x6000>;
++		queue2 {
++			snps,avb-algorithm;
++			snps,map-to-dma-channel = <0x2>;
++			snps,route-avcp;
++		};
++
++		queue3 {
++			snps,avb-algorithm;
++			snps,map-to-dma-channel = <0x3>;
++			snps,priority = <0xC>;
++		};
++	};
++
++	mtl_tx_setup: tx-queues-config {
++		snps,tx-queues-to-use = <4>;
++		snps,tx-sched-wrr;
++
++		queue0 {
++			snps,weight = <0x10>;
++			snps,dcb-algorithm;
++			snps,priority = <0x0>;
++		};
++
++		queue1 {
++			snps,weight = <0x11>;
++			snps,dcb-algorithm;
++			snps,priority = <0x1>;
++		};
++
++		queue2 {
++			snps,weight = <0x12>;
++			snps,dcb-algorithm;
++			snps,priority = <0x2>;
++		};
++
++		queue3 {
++			snps,weight = <0x13>;
++			snps,dcb-algorithm;
++			snps,priority = <0x3>;
++		};
++	};
+ };
+ 
+ &apps_rsc {
+@@ -317,6 +376,44 @@ &remoteproc_cdsp {
+ 	firmware-name = "qcom/sa8155p/cdsp.mdt";
+ };
+ 
++&ethernet {
++	status = "okay";
++
++	snps,reset-gpio = <&tlmm 79 GPIO_ACTIVE_LOW>;
++	snps,reset-active-low;
++	snps,reset-delays-us = <0 11000 70000>;
++
++	snps,ptp-ref-clk-rate = <250000000>;
++	snps,ptp-req-clk-rate = <96000000>;
++
++	snps,mtl-rx-config = <&mtl_rx_setup>;
++	snps,mtl-tx-config = <&mtl_tx_setup>;
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&ethernet_defaults>;
++
++	phy-handle = <&rgmii_phy>;
++	phy-mode = "rgmii";
++	max-speed = <1000>;
++
++	mdio {
++		#address-cells = <0x1>;
++		#size-cells = <0x0>;
++
++		compatible = "snps,dwmac-mdio";
++
++		/* Micrel KSZ9031RNZ PHY */
++		rgmii_phy: phy@7 {
++			reg = <0x7>;
++
++			interrupt-parent = <&tlmm>;
++			interrupts-extended = <&tlmm 124 IRQ_TYPE_EDGE_FALLING>; /* phy intr */
++			device_type = "ethernet-phy";
++			compatible = "ethernet-phy-ieee802.3-c22";
++		};
++	};
++};
++
+ &uart2 {
+ 	status = "okay";
+ };
+@@ -407,4 +504,53 @@ mux {
+ 			drive-strength = <2>;
+ 		};
+ 	};
++
++	ethernet_defaults: ethernet-defaults {
++		mdc {
++			pins = "gpio7";
++			function = "rgmii";
++			bias-pull-up;
++		};
++
++		mdio {
++			pins = "gpio59";
++			function = "rgmii";
++			bias-pull-up;
++		};
++
++		rgmii-rx {
++			pins = "gpio117", "gpio118", "gpio119", "gpio120", "gpio115", "gpio116";
++			function = "rgmii";
++			bias-disable;
++			drive-strength = <2>;
++		};
++
++		rgmii-tx {
++			pins = "gpio122", "gpio4", "gpio5", "gpio6", "gpio114", "gpio121";
++			function = "rgmii";
++			bias-pull-up;
++			drive-strength = <16>;
++		};
++
++		phy-intr {
++			pins = "gpio124";
++			function = "emac_phy";
++			bias-disable;
++			drive-strength = <8>;
++		};
++
++		pps {
++			pins = "gpio81";
++			function = "emac_pps";
++			bias-disable;
++			drive-strength = <8>;
++		};
++
++		phy-reset {
++			pins = "gpio79";
++			function = "gpio";
++			bias-pull-up;
++			drive-strength = <16>;
++		};
++	};
+ };
 -- 
 2.35.1
 

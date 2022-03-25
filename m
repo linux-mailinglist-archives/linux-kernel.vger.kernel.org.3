@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0834E77A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 751E84E77DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376660AbiCYPap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
+        id S1378351AbiCYPeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377896AbiCYPYl (ORCPT
+        with ESMTP id S1377916AbiCYPYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:24:41 -0400
+        Fri, 25 Mar 2022 11:24:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57DCEA774;
-        Fri, 25 Mar 2022 08:19:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F44EAC8E;
+        Fri, 25 Mar 2022 08:19:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AF9060AD0;
-        Fri, 25 Mar 2022 15:19:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EAF3C340E9;
-        Fri, 25 Mar 2022 15:19:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10E9060AB7;
+        Fri, 25 Mar 2022 15:19:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F9D8C340E9;
+        Fri, 25 Mar 2022 15:19:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221554;
-        bh=UHuTRIEd2LNNFx2QtjGk2UYg+20KuN8pU3VeYu1LWXw=;
+        s=korg; t=1648221557;
+        bh=T3HgFM18vk7D6Ic08cOMwNAPMz3pNeri0STbdvJnGX8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c25Zo1ZFySfhD61GE1fUVzcBkb6TcK+MKNOWwlEWTAiHvRKOBTU8YsZg/r7oMnhQe
-         fqoEojWNh3lx98MJIjf+osiI8v4LQh8929nZYYLjIX3R/Guc+unyQEVqTvjEtNvkxD
-         ECH2Ik61cfDasDIunMqjTPxRjJf1yA2PaKBB2VEc=
+        b=AD1RQS6GnSBYCKgdPSRYTnn3b9cj7dI4TmtI41RULHebyS9LIzoNoLoO4pvHy5Pw+
+         yYWpV26Z32pzWjkPGlSY6UCBetlPSdWCv+0XdSk+O1sXsmPgOt+nBTC1HgROmGYo8h
+         qmrCCxb0ILJiIJr+H8skzxu4ZcwSVhmsGUiPi+HM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Larry Finger <Larry.Finger@lwfinger.net>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Ismael Ferreras Morezuelas <swyterzone@gmail.com>,
         Marcel Holtmann <marcel@holtmann.org>
-Subject: [PATCH 5.17 26/39] Bluetooth: btusb: Add one more Bluetooth part for the Realtek RTL8852AE
-Date:   Fri, 25 Mar 2022 16:14:41 +0100
-Message-Id: <20220325150420.990722539@linuxfoundation.org>
+Subject: [PATCH 5.17 27/39] Bluetooth: hci_sync: Add a new quirk to skip HCI_FLT_CLEAR_ALL
+Date:   Fri, 25 Mar 2022 16:14:42 +0100
+Message-Id: <20220325150421.019666191@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220325150420.245733653@linuxfoundation.org>
 References: <20220325150420.245733653@linuxfoundation.org>
@@ -54,65 +55,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Larry Finger <Larry.Finger@lwfinger.net>
+From: Ismael Ferreras Morezuelas <swyterzone@gmail.com>
 
-commit 2e7b4a328ed6ea57d22853939e69bc86c560996d upstream.
+commit 0eaecfb2e4814d51ab172df3823e35d7c488b6d2 upstream.
 
-This Realtek device has both wifi and BT components. The latter reports
-a USB ID of 0bda:2852, which is not in the table.
+Some controllers have problems with being sent a command to clear
+all filtering. While the HCI code does not unconditionally
+send a clear-all anymore at BR/EDR setup (after the state machine
+refactor), there might be more ways of hitting these codepaths
+in the future as the kernel develops.
 
-BT device description in /sys/kernel/debug/usb/devices contains the following entries:
-
-T: Bus=01 Lev=01 Prnt=01 Port=03 Cnt=02 Dev#= 3 Spd=12 MxCh= 0
-D: Ver= 1.00 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs= 1
-P: Vendor=0bda ProdID=2852 Rev= 0.00
-S: Manufacturer=Realtek
-S: Product=Bluetooth Radio
-S: SerialNumber=00e04c000001
-C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E: Ad=81(I) Atr=03(Int.) MxPS= 16 Ivl=1ms
-E: Ad=02(O) Atr=02(Bulk) MxPS= 64 Ivl=0ms
-E: Ad=82(I) Atr=02(Bulk) MxPS= 64 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E: Ad=03(O) Atr=01(Isoc) MxPS= 0 Ivl=1ms
-E: Ad=83(I) Atr=01(Isoc) MxPS= 0 Ivl=1ms
-I: If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E: Ad=03(O) Atr=01(Isoc) MxPS= 9 Ivl=1ms
-E: Ad=83(I) Atr=01(Isoc) MxPS= 9 Ivl=1ms
-I: If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E: Ad=03(O) Atr=01(Isoc) MxPS= 17 Ivl=1ms
-E: Ad=83(I) Atr=01(Isoc) MxPS= 17 Ivl=1ms
-I: If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E: Ad=03(O) Atr=01(Isoc) MxPS= 25 Ivl=1ms
-E: Ad=83(I) Atr=01(Isoc) MxPS= 25 Ivl=1ms
-I: If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E: Ad=03(O) Atr=01(Isoc) MxPS= 33 Ivl=1ms
-E: Ad=83(I) Atr=01(Isoc) MxPS= 33 Ivl=1ms
-I: If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E: Ad=03(O) Atr=01(Isoc) MxPS= 49 Ivl=1ms
-E: Ad=83(I) Atr=01(Isoc) MxPS= 49 Ivl=1ms
-
-The missing USB_ID was reported by user trius65 at https://github.com/lwfinger/rtw89/issues/122
-
-Signed-off-by: Larry Finger <Larry.Finger@lwfinger.net>
 Cc: stable@vger.kernel.org
+Cc: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Ismael Ferreras Morezuelas <swyterzone@gmail.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/bluetooth/btusb.c |    2 ++
- 1 file changed, 2 insertions(+)
+ include/net/bluetooth/hci.h |   10 ++++++++++
+ net/bluetooth/hci_sync.c    |   16 ++++++++++++++++
+ 2 files changed, 26 insertions(+)
 
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -405,6 +405,8 @@ static const struct usb_device_id blackl
- 						     BTUSB_WIDEBAND_SPEECH },
+--- a/include/net/bluetooth/hci.h
++++ b/include/net/bluetooth/hci.h
+@@ -255,6 +255,16 @@ enum {
+ 	 * during the hdev->setup vendor callback.
+ 	 */
+ 	HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER,
++
++	/* When this quirk is set, HCI_OP_SET_EVENT_FLT requests with
++	 * HCI_FLT_CLEAR_ALL are ignored and event filtering is
++	 * completely avoided. A subset of the CSR controller
++	 * clones struggle with this and instantly lock up.
++	 *
++	 * Note that devices using this must (separately) disable
++	 * runtime suspend, because event filtering takes place there.
++	 */
++	HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL,
+ };
  
- 	/* Realtek 8852AE Bluetooth devices */
-+	{ USB_DEVICE(0x0bda, 0x2852), .driver_info = BTUSB_REALTEK |
-+						     BTUSB_WIDEBAND_SPEECH },
- 	{ USB_DEVICE(0x0bda, 0xc852), .driver_info = BTUSB_REALTEK |
- 						     BTUSB_WIDEBAND_SPEECH },
- 	{ USB_DEVICE(0x0bda, 0x385a), .driver_info = BTUSB_REALTEK |
+ /* HCI device flags */
+--- a/net/bluetooth/hci_sync.c
++++ b/net/bluetooth/hci_sync.c
+@@ -2806,6 +2806,9 @@ static int hci_set_event_filter_sync(str
+ 	if (!hci_dev_test_flag(hdev, HCI_BREDR_ENABLED))
+ 		return 0;
+ 
++	if (test_bit(HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL, &hdev->quirks))
++		return 0;
++
+ 	memset(&cp, 0, sizeof(cp));
+ 	cp.flt_type = flt_type;
+ 
+@@ -2826,6 +2829,13 @@ static int hci_clear_event_filter_sync(s
+ 	if (!hci_dev_test_flag(hdev, HCI_EVENT_FILTER_CONFIGURED))
+ 		return 0;
+ 
++	/* In theory the state machine should not reach here unless
++	 * a hci_set_event_filter_sync() call succeeds, but we do
++	 * the check both for parity and as a future reminder.
++	 */
++	if (test_bit(HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL, &hdev->quirks))
++		return 0;
++
+ 	return hci_set_event_filter_sync(hdev, HCI_FLT_CLEAR_ALL, 0x00,
+ 					 BDADDR_ANY, 0x00);
+ }
+@@ -4825,6 +4835,12 @@ static int hci_update_event_filter_sync(
+ 	if (!hci_dev_test_flag(hdev, HCI_BREDR_ENABLED))
+ 		return 0;
+ 
++	/* Some fake CSR controllers lock up after setting this type of
++	 * filter, so avoid sending the request altogether.
++	 */
++	if (test_bit(HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL, &hdev->quirks))
++		return 0;
++
+ 	/* Always clear event filter when starting */
+ 	hci_clear_event_filter_sync(hdev);
+ 
 
 

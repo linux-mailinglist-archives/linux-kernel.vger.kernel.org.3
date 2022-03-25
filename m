@@ -2,155 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386724E6D86
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 06:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DDB4E6D87
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 06:10:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358313AbiCYFGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 01:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
+        id S1358319AbiCYFMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 01:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240824AbiCYFF7 (ORCPT
+        with ESMTP id S240824AbiCYFMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 01:05:59 -0400
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E5D3B3F1;
-        Thu, 24 Mar 2022 22:04:23 -0700 (PDT)
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 22P546wv019627;
-        Fri, 25 Mar 2022 14:04:06 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 22P546wv019627
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1648184646;
-        bh=+nbVLVe1bM7YnaTTi41MNR/HwHCFu6l63dF/H0TQ20Y=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Q8dMV36nheri5FTS95t4SbM8OYyEifTs8plSvxKgIjGv2+mfhAxW/s6tNOtHXGqGJ
-         tvZUoebnM9kWTXv8WJnXZLJ7P8l5u1099Jh/ZrtDUHtAQlFYOvbjtJKfodFYbFfmKO
-         YlywU8Hv5mncd1a0T+lQcLRlxzVEhqubZMMRgeQXMFefYV65b+SGvlr/1ReW/i3C42
-         ynkd1jnn3XrohC+s81YlGnJDG2gUyciq3rgKzRbK8UInpji1MJj5ai4VRaPnPaaBhu
-         nGFE92hD1BrZNDA4HakhjtceNcuk3IqGY4iZM9CTVWq+KesYCXN9U4yfbmc/uPSsPZ
-         qleuM5K8Wz2OQ==
-X-Nifty-SrcIP: [209.85.210.178]
-Received: by mail-pf1-f178.google.com with SMTP id s11so5557945pfu.13;
-        Thu, 24 Mar 2022 22:04:06 -0700 (PDT)
-X-Gm-Message-State: AOAM530uxzX85bDrN1YanBOnCsMevgvMa6KQlcjASDLEt1G4s8MqMiWm
-        a3Hpm+GLkyPwFRE3sX0kzFhTy3HwKe1a9nT3FWU=
-X-Google-Smtp-Source: ABdhPJz7MbyZrPoQrOu/v3LN46Zoprml0E0NqNBLNk21Ve5E7LNHIVqEM2P2PFg/Sda3I1GP/cfZ3v7cS60xonYvP3w=
-X-Received: by 2002:a63:dc53:0:b0:381:7f41:3a2d with SMTP id
- f19-20020a63dc53000000b003817f413a2dmr6709055pgj.126.1648184645660; Thu, 24
- Mar 2022 22:04:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220323125523.79254-1-songmuchun@bytedance.com> <YjuX5WCHNsjxgcCM@bombadil.infradead.org>
-In-Reply-To: <YjuX5WCHNsjxgcCM@bombadil.infradead.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 25 Mar 2022 14:03:22 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASSzXsRkgR=P56Xdpk7OtVeX+GnQ-WTwVWKfcKRc0z7Pw@mail.gmail.com>
-Message-ID: <CAK7LNASSzXsRkgR=P56Xdpk7OtVeX+GnQ-WTwVWKfcKRc0z7Pw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/4] add hugetlb_free_vmemmap sysctl
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, mike.kravetz@oracle.com,
+        Fri, 25 Mar 2022 01:12:15 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE8EC3340
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 22:10:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648185041; x=1679721041;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XDY853qZuhVljacwr/6rQGszK4wCR2ivJapIjVsEuHc=;
+  b=UHTMw1jyvWmQmFO0hpZNCKhazTd/WEC9aMCPwROpXsd2Qi2tXo3oYSJ5
+   iPk0fEqywikAzBIoOWawn+a7ClHeSOUO1R1iWEhQdCInOCOtxKSF5Oi0E
+   oh/Iira8IisYgx6jN+3H4WSeDPeC7OfGBXMBbDQ9sOLdx8+ZHwc73Ug4Y
+   54AZKgt7txjZB+MWjtYohTMNDVSYuZqUrcQgr53ITstHoso1x/HN2bgT8
+   4/YYMSxRdVo3nZ7msTtm+MtBJprVlIuPhfRW4xz9/5GNOt60MeYGD7qJx
+   Et16m59wAwf4CVWKknfMNcR5XPcQBB+9r/8L5oM0lT1G2HiWbCclhUBv3
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="283422748"
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="283422748"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 22:10:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="501661701"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 24 Mar 2022 22:10:38 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nXcDe-000Lou-3X; Fri, 25 Mar 2022 05:10:38 +0000
+Date:   Fri, 25 Mar 2022 13:09:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        David Hildenbrand <david@redhat.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        duanxiongchun@bytedance.com, smuchun@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: drivers/irqchip/irq-al-fic.c:252: undefined reference to `of_iomap'
+Message-ID: <202203251340.vhdRFCvH-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 6:58 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> Masahiro,
->
-> can I trouble you to help review the first patch here? I thought
-> something like this might be possible, and Muchun has done some good
-> work to try it. If anyone can find hole on that kconfig hack it would
-> be you. I'll bounce you a copy of the patches.
->
->   Luis
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   34af78c4e616c359ed428d79fe4758a35d2c5473
+commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug: make DEBUG_INFO selectable from a choice
+date:   27 hours ago
+config: s390-randconfig-r044-20220325 (https://download.01.org/0day-ci/archive/20220325/202203251340.vhdRFCvH-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f9b3cd24578401e7a392974b3353277286e49cee
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   s390-linux-ld: kernel/dma/coherent.o: in function `dma_init_coherent_memory':
+   kernel/dma/coherent.c:48: undefined reference to `memremap'
+   s390-linux-ld: kernel/dma/coherent.c:71: undefined reference to `memunmap'
+   s390-linux-ld: kernel/dma/coherent.o: in function `dma_release_coherent_memory':
+   kernel/dma/coherent.c:82: undefined reference to `memunmap'
+   s390-linux-ld: drivers/irqchip/irq-al-fic.o: in function `al_fic_init_dt':
+>> drivers/irqchip/irq-al-fic.c:252: undefined reference to `of_iomap'
+>> s390-linux-ld: drivers/irqchip/irq-al-fic.c:282: undefined reference to `iounmap'
 
 
-Now, I took a look at it.
-Please do not do such a horrible hack.
+vim +252 drivers/irqchip/irq-al-fic.c
 
-Thanks.
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  237  
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  238  static int __init al_fic_init_dt(struct device_node *node,
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  239  				 struct device_node *parent)
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  240  {
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  241  	int ret;
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  242  	void __iomem *base;
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  243  	unsigned int parent_irq;
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  244  	struct al_fic *fic;
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  245  
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  246  	if (!parent) {
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  247  		pr_err("%s: unsupported - device require a parent\n",
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  248  		       node->name);
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  249  		return -EINVAL;
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  250  	}
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  251  
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10 @252  	base = of_iomap(node, 0);
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  253  	if (!base) {
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  254  		pr_err("%s: fail to map memory\n", node->name);
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  255  		return -ENOMEM;
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  256  	}
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  257  
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  258  	parent_irq = irq_of_parse_and_map(node, 0);
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  259  	if (!parent_irq) {
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  260  		pr_err("%s: fail to map irq\n", node->name);
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  261  		ret = -EINVAL;
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  262  		goto err_unmap;
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  263  	}
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  264  
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  265  	fic = al_fic_wire_init(node,
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  266  			       base,
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  267  			       node->name,
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  268  			       parent_irq);
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  269  	if (IS_ERR(fic)) {
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  270  		pr_err("%s: fail to initialize irqchip (%lu)\n",
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  271  		       node->name,
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  272  		       PTR_ERR(fic));
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  273  		ret = PTR_ERR(fic);
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  274  		goto err_irq_dispose;
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  275  	}
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  276  
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  277  	return 0;
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  278  
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  279  err_irq_dispose:
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  280  	irq_dispose_mapping(parent_irq);
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  281  err_unmap:
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10 @282  	iounmap(base);
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  283  
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  284  	return ret;
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  285  }
+1eb77c3bcdb70f2 Talel Shenhar 2019-06-10  286  
 
+:::::: The code at line 252 was first introduced by commit
+:::::: 1eb77c3bcdb70f2501f419b3da45b19acaf01072 irqchip/al-fic: Introduce Amazon's Annapurna Labs Fabric Interrupt Controller Driver
 
-
-
-
-
-
-
-
-
-
->
-> On Wed, Mar 23, 2022 at 08:55:19PM +0800, Muchun Song wrote:
-> > This series is based on next-20220310.
-> >
-> > This series amis to add hugetlb_free_vmemmap sysctl to enable the feature
-> > of freeing vmemmap pages of HugeTLB pages.
-> >
-> > v5:
-> >   - Fix not working properly if one is workig off of a very clean build
-> >     reported by Luis Chamberlain.
-> >   - Add Suggested-by for Luis Chamberlain.
-> >
-> > Thanks.
-> >
-> > v4:
-> >   - Introduce STRUCT_PAGE_SIZE_IS_POWER_OF_2 inspired by Luis.
-> >
-> > v3:
-> >   - Add pr_warn_once() (Mike).
-> >   - Handle the transition from enabling to disabling (Luis)
-> >
-> > v2:
-> >   - Fix compilation when !CONFIG_MHP_MEMMAP_ON_MEMORY reported by kernel
-> >     test robot <lkp@intel.com>.
-> >   - Move sysctl code from kernel/sysctl.c to mm/hugetlb_vmemmap.c.
-> >
-> > Muchun Song (4):
-> >   mm: hugetlb_vmemmap: introduce STRUCT_PAGE_SIZE_IS_POWER_OF_2
-> >   mm: memory_hotplug: override memmap_on_memory when
-> >     hugetlb_free_vmemmap=on
-> >   sysctl: allow to set extra1 to SYSCTL_ONE
-> >   mm: hugetlb_vmemmap: add hugetlb_free_vmemmap sysctl
-> >
-> >  Documentation/admin-guide/sysctl/vm.rst |  14 +++++
-> >  Kbuild                                  |  14 +++++
-> >  fs/Kconfig                              |   1 +
-> >  include/linux/memory_hotplug.h          |   9 +++
-> >  include/linux/mm_types.h                |   2 +
-> >  kernel/sysctl.c                         |   2 +-
-> >  mm/Kconfig                              |   3 +
-> >  mm/hugetlb_vmemmap.c                    | 107 ++++++++++++++++++++++++--------
-> >  mm/hugetlb_vmemmap.h                    |   4 +-
-> >  mm/memory_hotplug.c                     |  27 ++++++--
-> >  mm/struct_page_size.c                   |  19 ++++++
-> >  scripts/check_struct_page_po2.sh        |   9 +++
-> >  12 files changed, 177 insertions(+), 34 deletions(-)
-> >  create mode 100644 mm/struct_page_size.c
-> >  create mode 100755 scripts/check_struct_page_po2.sh
-> >
-> > --
-> > 2.11.0
-> >
-
-
+:::::: TO: Talel Shenhar <talel@amazon.com>
+:::::: CC: Marc Zyngier <marc.zyngier@arm.com>
 
 -- 
-Best Regards
-Masahiro Yamada
+0-DAY CI Kernel Test Service
+https://01.org/lkp

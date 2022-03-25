@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E34954E765A
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 232B94E769C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359870AbiCYPMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
+        id S1344208AbiCYPQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359784AbiCYPKJ (ORCPT
+        with ESMTP id S1359631AbiCYPMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:10:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558F7DBD18;
-        Fri, 25 Mar 2022 08:07:48 -0700 (PDT)
+        Fri, 25 Mar 2022 11:12:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2833E63BCE;
+        Fri, 25 Mar 2022 08:09:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3DE3B82833;
-        Fri, 25 Mar 2022 15:07:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24EC0C340E9;
-        Fri, 25 Mar 2022 15:07:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B36AAB828FA;
+        Fri, 25 Mar 2022 15:09:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B322C340E9;
+        Fri, 25 Mar 2022 15:08:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220865;
-        bh=JCOVLHohscIa00QIH1ZFiQHu3Zt5Fac47pp88wkyeaI=;
+        s=korg; t=1648220940;
+        bh=uxWT+gpwfFvwIagwiF9yzcj0LTYfIYKfJxh3WqRuPQI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VBegQJ0vNjzPXPW9DmTFkm5pVsFkPYNj2yUGX1sIi/4o+laVA0lcLstbvV/YtZq40
-         4rbGYTmgw5CDknoMZuMEZ1XAC5mj/vAsGJLJ+ySZuhqRTeZc5JvvZ0oHn5tew3arMo
-         jVieTeUxArosyZkHhlMG/K3IZth6e3zF9ibjhHus=
+        b=Wrww1XxoWF18uxtA3CfMDQe1Xkd2+hH9Fnwt9z0UmjMI617RV2DZLbjGwvqyWDNvc
+         eSYpYj4zo+84dTj0J+yG5QKDfgqZC20nXbuPxXgJeleDvL1oxdxW2PYzddJI3wq88E
+         FYl/rHftI0PdRWmZXnBmSLZ0YM1i3r4HGMatsuEg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>,
-        Paolo Valente <paolo.valente@linaro.org>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.4 15/29] ALSA: pci: fix reading of swapped values from pcmreg in AC97 codec
+        stable@vger.kernel.org, Halil Pasic <pasic@linux.ibm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.10 11/38] swiotlb: rework "fix info leak with DMA_FROM_DEVICE"
 Date:   Fri, 25 Mar 2022 16:04:55 +0100
-Message-Id: <20220325150419.025542374@linuxfoundation.org>
+Message-Id: <20220325150420.085364078@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150418.585286754@linuxfoundation.org>
-References: <20220325150418.585286754@linuxfoundation.org>
+In-Reply-To: <20220325150419.757836392@linuxfoundation.org>
+References: <20220325150419.757836392@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,56 +55,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>
+From: Halil Pasic <pasic@linux.ibm.com>
 
-commit 17aaf0193392cb3451bf0ac75ba396ec4cbded6e upstream.
+commit aa6f8dcbab473f3a3c7454b74caa46d36cdc5d13 upstream.
 
-Tests 72 and 78 for ALSA in kselftest fail due to reading
-inconsistent values from some devices on a VirtualBox
-Virtual Machine using the snd_intel8x0 driver for the AC'97
-Audio Controller device.
-Taking for example test number 72, this is what the test reports:
-"Surround Playback Volume.0 expected 1 but read 0, is_volatile 0"
-"Surround Playback Volume.1 expected 0 but read 1, is_volatile 0"
-These errors repeat for each value from 0 to 31.
+Unfortunately, we ended up merging an old version of the patch "fix info
+leak with DMA_FROM_DEVICE" instead of merging the latest one. Christoph
+(the swiotlb maintainer), he asked me to create an incremental fix
+(after I have pointed this out the mix up, and asked him for guidance).
+So here we go.
 
-Taking a look at these error messages it is possible to notice
-that the written values are read back swapped.
-When the write is performed, these values are initially stored in
-an array used to sanity-check them and write them in the pcmreg
-array. To write them, the two one-byte values are packed together
-in a two-byte variable through bitwise operations: the first
-value is shifted left by one byte and the second value is stored in the
-right byte through a bitwise OR. When reading the values back,
-right shifts are performed to retrieve the previously stored
-bytes. These shifts are executed in the wrong order, thus
-reporting the values swapped as shown above.
+The main differences between what we got and what was agreed are:
+* swiotlb_sync_single_for_device is also required to do an extra bounce
+* We decided not to introduce DMA_ATTR_OVERWRITE until we have exploiters
+* The implantation of DMA_ATTR_OVERWRITE is flawed: DMA_ATTR_OVERWRITE
+  must take precedence over DMA_ATTR_SKIP_CPU_SYNC
 
-This patch fixes this mistake by reversing the read
-operations' order.
+Thus this patch removes DMA_ATTR_OVERWRITE, and makes
+swiotlb_sync_single_for_device() bounce unconditionally (that is, also
+when dir == DMA_TO_DEVICE) in order do avoid synchronising back stale
+data from the swiotlb buffer.
 
-Signed-off-by: Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>
-Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220322200653.15862-1-guiduzzi.giacomo@gmail.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Let me note, that if the size used with dma_sync_* API is less than the
+size used with dma_[un]map_*, under certain circumstances we may still
+end up with swiotlb not being transparent. In that sense, this is no
+perfect fix either.
+
+To get this bullet proof, we would have to bounce the entire
+mapping/bounce buffer. For that we would have to figure out the starting
+address, and the size of the mapping in
+swiotlb_sync_single_for_device(). While this does seem possible, there
+seems to be no firm consensus on how things are supposed to work.
+
+Signed-off-by: Halil Pasic <pasic@linux.ibm.com>
+Fixes: ddbd89deb7d3 ("swiotlb: fix info leak with DMA_FROM_DEVICE")
+Cc: stable@vger.kernel.org
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/ac97/ac97_codec.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/core-api/dma-attributes.rst |    8 --------
+ include/linux/dma-mapping.h               |    8 --------
+ kernel/dma/swiotlb.c                      |   25 ++++++++++++++++---------
+ 3 files changed, 16 insertions(+), 25 deletions(-)
 
---- a/sound/pci/ac97/ac97_codec.c
-+++ b/sound/pci/ac97/ac97_codec.c
-@@ -938,8 +938,8 @@ static int snd_ac97_ad18xx_pcm_get_volum
- 	int codec = kcontrol->private_value & 3;
- 	
- 	mutex_lock(&ac97->page_mutex);
--	ucontrol->value.integer.value[0] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 0) & 31);
--	ucontrol->value.integer.value[1] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 8) & 31);
-+	ucontrol->value.integer.value[0] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 8) & 31);
-+	ucontrol->value.integer.value[1] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 0) & 31);
- 	mutex_unlock(&ac97->page_mutex);
- 	return 0;
+--- a/Documentation/core-api/dma-attributes.rst
++++ b/Documentation/core-api/dma-attributes.rst
+@@ -130,11 +130,3 @@ accesses to DMA buffers in both privileg
+ subsystem that the buffer is fully accessible at the elevated privilege
+ level (and ideally inaccessible or at least read-only at the
+ lesser-privileged levels).
+-
+-DMA_ATTR_OVERWRITE
+-------------------
+-
+-This is a hint to the DMA-mapping subsystem that the device is expected to
+-overwrite the entire mapped size, thus the caller does not require any of the
+-previous buffer contents to be preserved. This allows bounce-buffering
+-implementations to optimise DMA_FROM_DEVICE transfers.
+--- a/include/linux/dma-mapping.h
++++ b/include/linux/dma-mapping.h
+@@ -62,14 +62,6 @@
+ #define DMA_ATTR_PRIVILEGED		(1UL << 9)
+ 
+ /*
+- * This is a hint to the DMA-mapping subsystem that the device is expected
+- * to overwrite the entire mapped size, thus the caller does not require any
+- * of the previous buffer contents to be preserved. This allows
+- * bounce-buffering implementations to optimise DMA_FROM_DEVICE transfers.
+- */
+-#define DMA_ATTR_OVERWRITE		(1UL << 10)
+-
+-/*
+  * A dma_addr_t can hold any valid DMA or bus address for the platform.  It can
+  * be given to a device to use as a DMA source or target.  It is specific to a
+  * given device and there may be a translation between the CPU physical address
+--- a/kernel/dma/swiotlb.c
++++ b/kernel/dma/swiotlb.c
+@@ -597,10 +597,14 @@ phys_addr_t swiotlb_tbl_map_single(struc
+ 		io_tlb_orig_addr[index + i] = slot_addr(orig_addr, i);
+ 
+ 	tlb_addr = slot_addr(io_tlb_start, index) + offset;
+-	if (!(attrs & DMA_ATTR_SKIP_CPU_SYNC) &&
+-	    (!(attrs & DMA_ATTR_OVERWRITE) || dir == DMA_TO_DEVICE ||
+-	    dir == DMA_BIDIRECTIONAL))
+-		swiotlb_bounce(orig_addr, tlb_addr, mapping_size, DMA_TO_DEVICE);
++	/*
++	 * When dir == DMA_FROM_DEVICE we could omit the copy from the orig
++	 * to the tlb buffer, if we knew for sure the device will
++	 * overwirte the entire current content. But we don't. Thus
++	 * unconditional bounce may prevent leaking swiotlb content (i.e.
++	 * kernel memory) to user-space.
++	 */
++	swiotlb_bounce(orig_addr, tlb_addr, mapping_size, DMA_TO_DEVICE);
+ 	return tlb_addr;
  }
+ 
+@@ -680,11 +684,14 @@ void swiotlb_tbl_sync_single(struct devi
+ 			BUG_ON(dir != DMA_TO_DEVICE);
+ 		break;
+ 	case SYNC_FOR_DEVICE:
+-		if (likely(dir == DMA_TO_DEVICE || dir == DMA_BIDIRECTIONAL))
+-			swiotlb_bounce(orig_addr, tlb_addr,
+-				       size, DMA_TO_DEVICE);
+-		else
+-			BUG_ON(dir != DMA_FROM_DEVICE);
++		/*
++		 * Unconditional bounce is necessary to avoid corruption on
++		 * sync_*_for_cpu or dma_ummap_* when the device didn't
++		 * overwrite the whole lengt of the bounce buffer.
++		 */
++		swiotlb_bounce(orig_addr, tlb_addr,
++			       size, DMA_TO_DEVICE);
++		BUG_ON(!valid_dma_direction(dir));
+ 		break;
+ 	default:
+ 		BUG();
 
 

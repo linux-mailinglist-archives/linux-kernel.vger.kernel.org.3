@@ -2,143 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18AA74E7C2B
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 777844E7BF1
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbiCYTk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 15:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
+        id S230177AbiCYTdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 15:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbiCYTh7 (ORCPT
+        with ESMTP id S231617AbiCYTdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 15:37:59 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993C0249C5C
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 12:21:09 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id c2so7176025pga.10
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 12:21:09 -0700 (PDT)
+        Fri, 25 Mar 2022 15:33:20 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E64D1E1128;
+        Fri, 25 Mar 2022 12:25:27 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id j18so12124947wrd.6;
+        Fri, 25 Mar 2022 12:25:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kZES9xIl6k9PvYS5MDCMcxY5BJubJIUmZOtDfDfAejs=;
-        b=G+VoHJsNN0ri/JzciH09IIMeE8UG5JI8cQ0Bi+n1qzT1U7e2FvdiZW70FLIX5LIbWI
-         svKvAmULBod057SqPwM+zCt9dYAp0E7Nh0JdjhTVG9zloKwBg15BPF4N174Yjl2eHqiU
-         Eja1GhgO6IYA3dYuZDm+hULboBb7ImzDwWP6ibLR81BotK0HFhHcQr7eqjGNAn/6QD8N
-         cf3yzF+3aj0A8W19SK7cffVZxlCEmuIOwoRdtYQx1DJA7VekL91I6RjMb0Ay0tlkCc4q
-         TOsdigNz7PpG5hQeE8+H3j5DcskDvPL6O6GKWgx8Ks4UFW60VUyt5A1nr+QDjQ5DAiRd
-         1Ocg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Sgbjug1G1pDZEKRwaUL1TQtnWkwNkNtU3IYL1gdFP3w=;
+        b=Db2kfa5wv+R/GAy5yAWKd3ZJyWZ//HsIphCEG1Q7xsFw3DOwgACCMqx5rQ/wCZ8P/n
+         FU+pqDPCyWVFe1SO55l1OqkO2H7mILfusI0LlqczO6QF0rF+dcG6yYlZWT9YI9iN2xvb
+         SrZylMvQ8AUbFU8VR96Ho09orEblh53iE4zIY8WQhhDcek3MxJrA4+WlGlTIgJ2Ox1fo
+         24yoso/arzV8rjED72V8UCmkbyr7W5S5+tkH+SutSt7RLoGdbhbyeGCpLh3nxHneaiwE
+         DEWYg2L997w7XbinNL1PC8av4ZOXpVWGWwTGKolwEB23+ukFj9OvHe+sMoXs8RNfy7Y/
+         28/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kZES9xIl6k9PvYS5MDCMcxY5BJubJIUmZOtDfDfAejs=;
-        b=qBWIMCE1b+6F9zvKyL7j0iX4wrVbafegDSn9Ho5aouJltw5TjNPUhQoTHdjk41FM9g
-         BWjIaXarW6/+VwePK8KkCeX6piA2cUQ9lqzlm5A0Vb9o4VJHg1pqI5MAbppz5bj9d75a
-         XrORPhDya0EWuNe3c9r8+YWHKJOYjZ/Ehj4qqt1BrUNuXeHfqKUeMniPQVvp/cqltxe8
-         Pyhj4vky3nGo9fiEwUBmpyyPNtAxAjJB7NubdnlmpVSIc8mdMDaIwja2FWBCHN/9nWK0
-         bJWNOdM+UqVtAN+oC4/HytPjHRP05OJMu75X46QKnJLqICTWYJdqzBTfo+auxplT4uO5
-         LM+g==
-X-Gm-Message-State: AOAM533fh3++WN0eJR6FoJTXaK5CPsTpGL4iZ/7dIkiCQxn9qfzKgrok
-        HIpi/gBlE+UOuhMK7GA7+Grq8vnUTT7H
-X-Google-Smtp-Source: ABdhPJxHEq9AiqyZOMWbqRFWmAZeorLFYNmf9U/rZ0ZkWmXSwUxDnbhzMAiXTxAo6JhPvOvZ4DYL7w==
-X-Received: by 2002:a63:77ca:0:b0:386:25a5:5ed with SMTP id s193-20020a6377ca000000b0038625a505edmr649866pgc.30.1648231848826;
-        Fri, 25 Mar 2022 11:10:48 -0700 (PDT)
-Received: from thinkpad ([117.193.209.11])
-        by smtp.gmail.com with ESMTPSA id b16-20020a056a000cd000b004fadb6f0290sm7420435pfv.11.2022.03.25.11.10.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 11:10:48 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 23:40:42 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 23/25] dmaengine: dw-edma: Bypass dma-ranges mapping for
- the local setup
-Message-ID: <20220325181042.GA12218@thinkpad>
-References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
- <20220324014836.19149-24-Sergey.Semin@baikalelectronics.ru>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Sgbjug1G1pDZEKRwaUL1TQtnWkwNkNtU3IYL1gdFP3w=;
+        b=dJLj7qsmlF239rgeZb2SP5If9T2D4KPo5jefpQjkk+iCerOHd1gClyIhlbtOpT66lr
+         VIojccLseaMdA0xXpTXxgQ83FzyhzjRaUQgtRwDwY8Xkst9dX3couemWmbbCa7kkGhZQ
+         ZbrIeaARsQ8+CYywJPt1lSYsH5Z+9SDe8jlPnNMo8Srdz+1lqiOdvl7es8hnWVwVSaWV
+         g8EWwIOcRaFYTiedVOyZZfKMb7voRWSTNxEQh/GSj/dscpFBL5t3Cn+xtHoUD/4YDbJY
+         N27x5nwj/QvNzHgIIAVZFKHQV3hGpKaXpsbizLmXiQ0tVnWiA6xb9jAGUvyuTG3sedza
+         Ak0g==
+X-Gm-Message-State: AOAM532MzbFkHFd7n6+Ri9mUriXxYFfZKg4r/Feh2F0OJKaUl6vXo01l
+        oNg/wovzbg8sS+n6RU9e1rqr9J2/B7c=
+X-Google-Smtp-Source: ABdhPJxcbxuTUqUJfWLwLUZezMhXUEn9uZCde44uBGEI83pW9cWU8hxCLi2F4ZA8o+fg61a9Y+FAdQ==
+X-Received: by 2002:ac2:4e71:0:b0:448:2f38:72ac with SMTP id y17-20020ac24e71000000b004482f3872acmr8810153lfs.594.1648231866812;
+        Fri, 25 Mar 2022 11:11:06 -0700 (PDT)
+Received: from [192.168.1.11] ([94.103.225.225])
+        by smtp.gmail.com with ESMTPSA id d13-20020a19384d000000b0044a20646b2bsm780687lfj.205.2022.03.25.11.11.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 11:11:06 -0700 (PDT)
+Message-ID: <e0e127c8-1515-2ebf-f473-acc38d60a122@gmail.com>
+Date:   Fri, 25 Mar 2022 21:11:03 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324014836.19149-24-Sergey.Semin@baikalelectronics.ru>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [RFC PATCH] KVM: x86/mmu: fix general protection fault in
+ kvm_mmu_uninit_tdp_mmu
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+717ed82268812a643b28@syzkaller.appspotmail.com
+References: <20220325163815.3514-1-paskripkin@gmail.com>
+ <53cc074f-350f-5fa8-1ee4-c33921f17cb1@redhat.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <53cc074f-350f-5fa8-1ee4-c33921f17cb1@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 04:48:34AM +0300, Serge Semin wrote:
-> DW eDMA doesn't perform any translation of the traffic generated on the
-> CPU/Application side. It just generates read/write AXI-bus requests with
-> the specified addresses. But in case if the dma-ranges DT-property is
-> specified for a platform device node, Linux will use it to map the CPU
-> memory regions into the DMAable bus ranges. This isn't what we want for
-> the eDMA embedded into the locally accessed DW PCIe Root Port and
-> End-point. In order to work that around let's set the chan_dma_dev flag
-> for each DW eDMA channel thus forcing the client drivers to getting a
-> custom dma-ranges-less parental device for the mappings.
+Hi Paolo,
+
+On 3/25/22 19:50, Paolo Bonzini wrote:
+> On 3/25/22 17:38, Pavel Skripkin wrote:
+>> Syzbot reported GPF in kvm_mmu_uninit_tdp_mmu(), which is caused by
+>> passing NULL pointer to flush_workqueue().
+>> 
+>> tdp_mmu_zap_wq is allocated via alloc_workqueue() which may fail. There
+>> is no error hanling and kvm_mmu_uninit_tdp_mmu() return value is simply
+>> ignored. Even all kvm_*_init_vm() functions are void, so the easiest
+>> solution is to check that tdp_mmu_zap_wq is valid pointer before passing
+>> it somewhere.
 > 
-> Note it will only work for the client drivers using the
-> dmaengine_get_dma_device() method to get the parental DMA device.
+> Thanks for the analysis, but not scheduling the work item in
+> tdp_mmu_schedule_zap_root is broken; you can't just let the roots
+> survive (KVM uses its own workqueue because it needs to work item to
+> complete has to flush it before kvm_mmu_zap_all_fast returns).
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> ---
->  drivers/dma/dw-edma/dw-edma-core.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-> index 72a51970bfba..ca5cd7c99571 100644
-> --- a/drivers/dma/dw-edma/dw-edma-core.c
-> +++ b/drivers/dma/dw-edma/dw-edma-core.c
-> @@ -716,6 +716,21 @@ static int dw_edma_alloc_chan_resources(struct dma_chan *dchan)
->  	if (chan->status != EDMA_ST_IDLE)
->  		return -EBUSY;
->  
-> +	/* Bypass the dma-ranges based memory regions mapping since the
-> +	 * inbound iATU only affects the traffic incoming from the
-> +	 * PCIe bus.
-> +	 */
 
-Bypass the dma-ranges based memory regions mapping since eDMA doesn't do any
-address translation for the CPU address?
+Ah, I see, thanks for explanation.
 
-Other than this,
+I thought about propagating an error up to callers, but 
+kvm_mmu_uninit_tdp_mmu() returns false with config disabled, so I 
+decided to implement easiest fix w/o digging into details
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+sorry about that
 
-Thanks,
-Mani
 
-> +	if (chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
-> +		dchan->dev->chan_dma_dev = true;
-> +
-> +		dchan->dev->device.dma_coherent = chan->dw->chip->dev->dma_coherent;
-> +		dma_coerce_mask_and_coherent(&dchan->dev->device,
-> +					     dma_get_mask(chan->dw->chip->dev));
-> +		dchan->dev->device.dma_parms = chan->dw->chip->dev->dma_parms;
-> +	} else {
-> +		dchan->dev->chan_dma_dev = false;
-> +	}
-> +
->  	pm_runtime_get(chan->dw->chip->dev);
->  
->  	return 0;
-> -- 
-> 2.35.1
-> 
+With regards,
+Pavel Skripkin

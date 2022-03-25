@@ -2,127 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13C74E76AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 543204E76D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376263AbiCYPRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
+        id S1376349AbiCYPUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376715AbiCYPNS (ORCPT
+        with ESMTP id S1377068AbiCYPNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:13:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B1FBD2FF;
-        Fri, 25 Mar 2022 08:10:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 279E461B97;
-        Fri, 25 Mar 2022 15:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BF10C340E9;
-        Fri, 25 Mar 2022 15:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648221018;
-        bh=3snGlK3kA7ZUY+R0MwdxzWSgKKQaA0DAwJcsXL42dfk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ezqu17IbjpB3Tz2lxf5Buo/Bow4ReUqmFLnVJrKwGI+GCZ9aymr5jJWYXbBxKAe8f
-         cqNVg2U0jX7BcUgQEPNWS/0HzAwHQsIdD/stgQDf6ODP2zK9ulAZM3MbRth0QUs/oU
-         Xx2j+uRQ745fksLjzwKJSrE5jRVI2XAxvtC4eZYE=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 5.10 38/38] nds32: fix access_ok() checks in get/put_user
-Date:   Fri, 25 Mar 2022 16:05:22 +0100
-Message-Id: <20220325150420.838401496@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150419.757836392@linuxfoundation.org>
-References: <20220325150419.757836392@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Fri, 25 Mar 2022 11:13:53 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE880DE096;
+        Fri, 25 Mar 2022 08:10:51 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 24EDD20013;
+        Fri, 25 Mar 2022 15:10:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1648221049;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mRSu3/wCSc0mFe5FcrRdKJwcESMddFQbMLzRELsBR8s=;
+        b=hMz7NELw0O7Eshl2v7fb3IkN3WvOyeshGV6GPeE/yPHTYYvRjZ578GsMwRojhMfu0kfX+D
+        sP30KveX3L7O/GzQOdGFTq+svSkt1sCW8XVzQ5WnsL7V0PfOXEhiLflowM5hZM2j47POuH
+        6beC1zmgcaBQnrqSgBgPO+v8wpfJvQB7m5vd/J31AJ+GAt9a+Qyeo/9xgpNrkp/CnZfIoO
+        rud839RjG+a4BQNKOsumBr1Agv3Nvl5H6XsFzt9cssfO7dtFYb4LRfLP2j0CvuCL3PLQdO
+        HssRZAKVO70ab9HM8VBv2KJzxdO5WQgyXlBf+biUKnkSG01Tax1baBX1QCkr9w==
+Date:   Fri, 25 Mar 2022 16:09:27 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 6/9] i2c: fwnode: add
+ fwnode_find_i2c_adapter_by_node()
+Message-ID: <20220325160927.30e5aef8@fixe.home>
+In-Reply-To: <Yj3TSBEY/P7d8XJj@smile.fi.intel.com>
+References: <20220325113148.588163-1-clement.leger@bootlin.com>
+        <20220325113148.588163-7-clement.leger@bootlin.com>
+        <Yj3TSBEY/P7d8XJj@smile.fi.intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Le Fri, 25 Mar 2022 16:35:52 +0200,
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> a =C3=A9crit :
 
-commit 8926d88ced46700bf6117ceaf391480b943ea9f4 upstream.
+> On Fri, Mar 25, 2022 at 12:31:45PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Add fwnode_find_i2c_adapter_by_node() which allows to retrieve a i2c
+> > adapter using a fwnode. Since dev_fwnode() uses the fwnode provided by
+> > the of_node member of the device, this will also work for devices were
+> > the of_node has been set and not the fwnode field.
+> > For acpi nodes, the check for parent node is skipped since
+> > i2c_acpi_find_adapter_by_handle() does not check it and we don't want
+> > to change this behavior. =20
+>=20
+> ...
+>=20
+> > +#include <linux/device.h>
+> > +#include <linux/i2c.h> =20
+>=20
+> Missed headers so far:
+> acpi.h
 
-The get_user()/put_user() functions are meant to check for
-access_ok(), while the __get_user()/__put_user() functions
-don't.
+Indeed, will check that.
 
-This broke in 4.19 for nds32, when it gained an extraneous
-check in __get_user(), but lost the check it needs in
-__put_user().
+>=20
+> ...
+>=20
+> > +static int fwnode_dev_or_parent_node_match(struct device *dev, const v=
+oid *data)
+> > +{
+> > +	if (device_match_fwnode(dev, data))
+> > +		return 1;
+> > +
+> > +	/*
+> > +	 * For ACPI device node, the behavior is to not match the parent (see
+> > +	 *  did not checked the )
+> > +	 */ =20
+>=20
+> Would it be harmful to drop this check?
 
-Fixes: 487913ab18c2 ("nds32: Extract the checking and getting pointer to a macro")
-Cc: stable@vger.kernel.org @ v4.19+
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/nds32/include/asm/uaccess.h |   22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+Can't tell, I would not want to introduce some behavior wrt to parent
+node for ACPI since it was not done this way. Might works in 99% of the
+case though.
 
---- a/arch/nds32/include/asm/uaccess.h
-+++ b/arch/nds32/include/asm/uaccess.h
-@@ -70,9 +70,7 @@ static inline void set_fs(mm_segment_t f
-  * versions are void (ie, don't return a value as such).
-  */
- 
--#define get_user	__get_user					\
--
--#define __get_user(x, ptr)						\
-+#define get_user(x, ptr)						\
- ({									\
- 	long __gu_err = 0;						\
- 	__get_user_check((x), (ptr), __gu_err);				\
-@@ -85,6 +83,14 @@ static inline void set_fs(mm_segment_t f
- 	(void)0;							\
- })
- 
-+#define __get_user(x, ptr)						\
-+({									\
-+	long __gu_err = 0;						\
-+	const __typeof__(*(ptr)) __user *__p = (ptr);			\
-+	__get_user_err((x), __p, (__gu_err));				\
-+	__gu_err;							\
-+})
-+
- #define __get_user_check(x, ptr, err)					\
- ({									\
- 	const __typeof__(*(ptr)) __user *__p = (ptr);			\
-@@ -165,12 +171,18 @@ do {									\
- 		: "r"(addr), "i"(-EFAULT)				\
- 		: "cc")
- 
--#define put_user	__put_user					\
-+#define put_user(x, ptr)						\
-+({									\
-+	long __pu_err = 0;						\
-+	__put_user_check((x), (ptr), __pu_err);				\
-+	__pu_err;							\
-+})
- 
- #define __put_user(x, ptr)						\
- ({									\
- 	long __pu_err = 0;						\
--	__put_user_err((x), (ptr), __pu_err);				\
-+	__typeof__(*(ptr)) __user *__p = (ptr);				\
-+	__put_user_err((x), __p, __pu_err);				\
- 	__pu_err;							\
- })
- 
+If ok with that, I can drop it.
 
 
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

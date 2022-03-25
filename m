@@ -2,36 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8224E755F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F44B4E7560
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 15:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359410AbiCYOtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 10:49:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
+        id S1359411AbiCYOtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 10:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359411AbiCYOs5 (ORCPT
+        with ESMTP id S1359412AbiCYOtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 10:48:57 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B6A3D95E8;
-        Fri, 25 Mar 2022 07:47:21 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nXlDj-0003ZS-00; Fri, 25 Mar 2022 15:47:19 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id CDE67C2ECE; Fri, 25 Mar 2022 15:47:06 +0100 (CET)
-Date:   Fri, 25 Mar 2022 15:47:06 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS changes for v5.18
-Message-ID: <20220325144706.GA9428@alpha.franken.de>
+        Fri, 25 Mar 2022 10:49:12 -0400
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52379D95FD;
+        Fri, 25 Mar 2022 07:47:38 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id qa43so15807077ejc.12;
+        Fri, 25 Mar 2022 07:47:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gz56oH53VZzDFL9nwMqJ3OglB/4woq4lsr+4YJOuZKU=;
+        b=0SFkkXQReq6RLDkwh55DXRVZQpE0+ze7/q4GF7/nRRlxITzxAEgHM5U5zI9/1y7L72
+         wDnspmyrBrnGZ7s1ZPU19xAZMwBY0wVUcASlkO3iF3DXaVaulVjj+JucViN/qjj0Dz17
+         St4fyeHr7gyZKCIDeEPGO0P+i0H6Xe8zNWpEZ6wrVcx1N1WKxxQ9YJvgYCwFyz+2g3+D
+         7Wiy8ukCdJ9GOyeFuphdXzha/Rg+txUUe+YWq2bbjwZ612eVQgRTupx9Qm/yNwUMxo7T
+         cnNhfxFgjQ6nuJp6AVr1S+al63ZLc5vQ8UFC5T2fXyg1NhvF1iSfq3xVa8vPJM/reUlU
+         nY+g==
+X-Gm-Message-State: AOAM531wPCrdaQ03m5jXQ5tTTyfiT3aFBHqIQnsWita4gdmNia+AgP0n
+        crTbXksn9vY+9T1sdhaOkpWP168XIwU=
+X-Google-Smtp-Source: ABdhPJwXRVSwpOkobO6nEICiwK3wRz6+Vh1WARLyW5Q8v14KrABwoldZYqhmD3OcSJAoCMuypqgJBQ==
+X-Received: by 2002:a17:907:6d9d:b0:6da:7d4c:287f with SMTP id sb29-20020a1709076d9d00b006da7d4c287fmr11459847ejc.741.1648219656785;
+        Fri, 25 Mar 2022 07:47:36 -0700 (PDT)
+Received: from [192.168.0.161] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id i30-20020a1709067a5e00b006df6f0d3966sm2347967ejo.189.2022.03.25.07.47.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 07:47:36 -0700 (PDT)
+Message-ID: <e4a15ceb-c013-96be-48d1-e65267400463@kernel.org>
+Date:   Fri, 25 Mar 2022 15:47:35 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/2] regulator: rt5759: Add support for Richtek RT5759
+ DCDC converter
+Content-Language: en-US
+To:     ChiYuan Huang <u0084500@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+References: <1648170401-6351-1-git-send-email-u0084500@gmail.com>
+ <1648170401-6351-3-git-send-email-u0084500@gmail.com>
+ <d2b431f8-9197-4a42-4ee2-4e771e20e0aa@kernel.org>
+ <CADiBU39RGQj1-+yK18mZf3MR78KACKqb2kAxkCFKGXKpJ6Nqxw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <CADiBU39RGQj1-+yK18mZf3MR78KACKqb2kAxkCFKGXKpJ6Nqxw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -39,228 +72,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
+On 25/03/2022 15:10, ChiYuan Huang wrote:
+> Krzysztof Kozlowski <krzk@kernel.org> 於 2022年3月25日 週五 下午8:17寫道：
+>>
+>> On 25/03/2022 02:06, cy_huang wrote:
+>>> From: ChiYuan Huang <cy_huang@richtek.com>
+>>>
+>>> Add support for Richtek RT5759 high-performance DCDC converter.
+>>>
+>>> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+>>> ---
+>>>  drivers/regulator/Kconfig            |  10 +
+>>>  drivers/regulator/Makefile           |   1 +
+>>>  drivers/regulator/rt5759-regulator.c | 372 +++++++++++++++++++++++++++++++++++
+>>>  3 files changed, 383 insertions(+)
+>>>  create mode 100644 drivers/regulator/rt5759-regulator.c
+>>>
+>>
+>> (...)
+>>
+>>> +static int rt5759_init_device_property(struct rt5759_priv *priv)
+>>> +{
+>>> +     unsigned int val = 0;
+>>> +     bool wdt_enable;
+>>> +
+>>> +     /*
+>>> +      * Only RT5759A support external watchdog input
+>>> +      */
+>>> +     if (priv->chip_type != CHIP_TYPE_RT5759A)
+>>> +             return 0;
+>>> +
+>>> +     wdt_enable = device_property_read_bool(priv->dev,
+>>> +                                            "richtek,watchdog-enable");
+>>> +     if (wdt_enable)
+>>
+>> No need for separate wdt_enable variable.
+>>
+> Ack in next.
+>>> +             val = RT5759A_WDTEN_MASK;
+>>> +
+>>> +     return regmap_update_bits(priv->regmap, RT5759A_REG_WDTEN,
+>>> +                               RT5759A_WDTEN_MASK, val);
+>>> +}
+>>> +
+>>> +static int rt5759_manufacturer_check(struct rt5759_priv *priv)
+>>> +{
+>>> +     unsigned int vendor;
+>>> +     int ret;
+>>> +
+>>> +     ret = regmap_read(priv->regmap, RT5759_REG_VENDORINFO, &vendor);
+>>> +     if (ret)
+>>> +             return ret;
+>>> +
+>>> +     if (vendor != RT5759_MANUFACTURER_ID) {
+>>> +             dev_err(priv->dev, "vendor info not correct (%d)\n", vendor);
+>>> +             return -EINVAL;
+>>> +     }
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static bool rt5759_is_accessible_reg(struct device *dev, unsigned int reg)
+>>> +{
+>>> +     struct rt5759_priv *priv = dev_get_drvdata(dev);
+>>> +
+>>> +     if (reg <= RT5759_REG_DCDCSET)
+>>> +             return true;
+>>> +
+>>> +     if (priv->chip_type == CHIP_TYPE_RT5759A && reg == RT5759A_REG_WDTEN)
+>>> +             return true;
+>>> +
+>>> +     return false;
+>>> +}
+>>> +
+>>> +static const struct regmap_config rt5759_regmap_config = {
+>>> +     .reg_bits = 8,
+>>> +     .val_bits = 8,
+>>> +     .max_register = RT5759A_REG_WDTEN,
+>>> +     .readable_reg = rt5759_is_accessible_reg,
+>>> +     .writeable_reg = rt5759_is_accessible_reg,
+>>> +};
+>>> +
+>>> +static int rt5759_probe(struct i2c_client *i2c)
+>>> +{
+>>> +     struct rt5759_priv *priv;
+>>> +     int ret;
+>>> +
+>>> +     priv = devm_kzalloc(&i2c->dev, sizeof(*priv), GFP_KERNEL);
+>>> +     if (!priv)
+>>> +             return -ENOMEM;
+>>> +
+>>> +     priv->dev = &i2c->dev;
+>>> +     priv->chip_type = (unsigned long)of_device_get_match_data(&i2c->dev);
+>>> +     i2c_set_clientdata(i2c, priv);
+>>> +
+>>> +     priv->regmap = devm_regmap_init_i2c(i2c, &rt5759_regmap_config);
+>>> +     if (IS_ERR(priv->regmap)) {
+>>> +             ret = PTR_ERR(priv->regmap);
+>>> +             dev_err(&i2c->dev, "Failed to allocate regmap (%d)\n", ret);
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     ret = rt5759_manufacturer_check(priv);
+>>> +     if (ret) {
+>>> +             dev_err(&i2c->dev, "Failed to check device (%d)\n", ret);
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     ret = rt5759_init_device_property(priv);
+>>> +     if (ret) {
+>>> +             dev_err(&i2c->dev, "Failed to init device (%d)\n", ret);
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     return rt5759_regulator_register(priv);
+>>> +}
+>>> +
+>>> +static const struct of_device_id __maybe_unused rt5759_device_table[] = {
+>>
+>> I don't think this can be __maybe_unused. It is always referenced via
+>> of_match_table, isn't it?
+>>
+> I think it can declared as '__maybe_unused'.
+> If 'of_device_id' is unused, then in probe stage,
+> 'of_device_get_match_data' will return NULL.
 
-  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
+But your of_device_id cannot be unused. It is always referenced.
 
-are available in the Git repository at:
+> priv->chip_type will get zero as the return value. And it will be
+> treated as rt5759, not rt5759a.
+> The difference between these two are only watchdog function supported or not.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.18
 
-for you to fetch changes up to f8f9f21c7848e63133c16c899f3d84aa54eb79fe:
-
-  MIPS: Fix build error for loongson64 and sgi-ip27 (2022-03-24 09:45:15 +0100)
-
-----------------------------------------------------------------
-- added support for QCN550x (ath79)
-- enabled KCSAN
-- removed TX39XX support
-- various cleanups and fixes
-
-----------------------------------------------------------------
-Alexander Lobakin (1):
-      MIPS: fix fortify panic when copying asm exception handlers
-
-Feiyang Chen (1):
-      MIPS: Fix build error for loongson64 and sgi-ip27
-
-Hangyu Hua (1):
-      mips: ralink: fix a refcount leak in ill_acc_of_setup()
-
-Kees Cook (4):
-      MIPS: Modernize READ_IMPLIES_EXEC
-      mips: Implement "current_stack_pointer"
-      MIPS: boot/compressed: Use array reference for image bounds
-      MIPS: Only use current_stack_pointer on GCC
-
-Krzysztof Kozlowski (1):
-      MIPS: ingenic: correct unit node address
-
-Maciej W. Rozycki (2):
-      DEC: Limit PMAX memory probing to R3k systems
-      MIPS: Sanitise Cavium switch cases in TLB handler synthesizers
-
-Miaoqian Lin (1):
-      mips: cdmm: Fix refcount leak in mips_cdmm_phys_base
-
-Nathan Chancellor (3):
-      MIPS: Loongson64: Clean up use of cc-ifversion
-      MIPS: Loongson{2ef,64}: Wrap -mno-branch-likely with cc-option
-      MIPS: Malta: Enable BLK_DEV_INITRD
-
-Nemanja Rakovic (2):
-      mips: Enable KCSAN
-      mips: Enable KCSAN
-
-Paul Cercueil (1):
-      mips: Always permit to build u-boot images
-
-Randy Dunlap (2):
-      mips: DEC: honor CONFIG_MIPS_FP_SUPPORT=n
-      MIPS: RB532: fix return value of __setup handler
-
-Rikard Falkeborn (3):
-      MIPS: OCTEON: Constify static irq_domain_ops
-      MIPS: ath25: Constify static irq_domain_ops
-      MIPS: pci-ar2315: Constify static irq_domain_ops
-
-Thomas Bogendoerfer (3):
-      MIPS: remove asm/war.h
-      MIPS: sibyte: Add missing __user annotations in sb_tbprof.c
-      MIPS: Remove TX39XX support
-
-Tiezhu Yang (3):
-      MIPS: Remove redundant check in device_tree_init()
-      MIPS: Remove redundant definitions of device_tree_init()
-      MIPS: Fix wrong comments in asm/prom.h
-
-Wenli Looi (1):
-      MIPS: ath79: add support for QCN550x
-
-Xi Ruoyao (1):
-      mips: remove reference to "newer Loongson-3"
-
-Yaliang Wang (1):
-      MIPS: pgalloc: fix memory leak caused by pgd_free()
-
- arch/mips/Kbuild.platforms                         |   1 -
- arch/mips/Kconfig                                  |  82 ++--
- arch/mips/Makefile                                 |   5 -
- arch/mips/ath25/ar2315.c                           |   2 +-
- arch/mips/ath25/ar5312.c                           |   2 +-
- arch/mips/ath79/early_printk.c                     |   1 +
- arch/mips/ath79/setup.c                            |  11 +-
- arch/mips/boot/compressed/Makefile                 |   1 +
- arch/mips/boot/compressed/decompress.c             |  10 +-
- arch/mips/boot/dts/ingenic/jz4780.dtsi             |   2 +-
- arch/mips/cavium-octeon/octeon-irq.c               |  10 +-
- arch/mips/configs/jmr3927_defconfig                |  50 ---
- arch/mips/configs/malta_defconfig                  |   1 +
- arch/mips/dec/int-handler.S                        |   6 +-
- arch/mips/dec/prom/Makefile                        |   2 +-
- arch/mips/dec/setup.c                              |   3 +-
- arch/mips/include/asm/cpu-features.h               |   3 -
- arch/mips/include/asm/cpu-type.h                   |   6 -
- arch/mips/include/asm/cpu.h                        |   6 -
- arch/mips/include/asm/dec/prom.h                   |  15 +-
- arch/mips/include/asm/futex.h                      |   1 -
- arch/mips/include/asm/isadep.h                     |   2 +-
- .../include/asm/mach-ath25/cpu-feature-overrides.h |   1 -
- arch/mips/include/asm/mach-ath79/ar71xx_regs.h     |   1 +
- .../include/asm/mach-ath79/cpu-feature-overrides.h |   1 -
- .../asm/mach-au1x00/cpu-feature-overrides.h        |   1 -
- .../asm/mach-bcm47xx/cpu-feature-overrides.h       |   1 -
- .../asm/mach-cavium-octeon/cpu-feature-overrides.h |   1 -
- .../asm/mach-cobalt/cpu-feature-overrides.h        |   1 -
- .../include/asm/mach-dec/cpu-feature-overrides.h   |   1 -
- .../asm/mach-ingenic/cpu-feature-overrides.h       |   1 -
- .../include/asm/mach-ip27/cpu-feature-overrides.h  |   1 -
- .../include/asm/mach-ip30/cpu-feature-overrides.h  |   1 -
- .../asm/mach-lantiq/falcon/cpu-feature-overrides.h |   1 -
- .../asm/mach-loongson2ef/cpu-feature-overrides.h   |   1 -
- .../asm/mach-loongson64/cpu-feature-overrides.h    |   1 -
- .../asm/mach-ralink/mt7620/cpu-feature-overrides.h |   1 -
- .../asm/mach-ralink/mt7621/cpu-feature-overrides.h |   1 -
- .../asm/mach-ralink/rt288x/cpu-feature-overrides.h |   1 -
- .../asm/mach-ralink/rt305x/cpu-feature-overrides.h |   1 -
- .../asm/mach-ralink/rt3883/cpu-feature-overrides.h |   1 -
- .../asm/mach-rc32434/cpu-feature-overrides.h       |   1 -
- arch/mips/include/asm/mach-tx39xx/ioremap.h        |  25 --
- arch/mips/include/asm/mach-tx39xx/mangle-port.h    |  24 --
- arch/mips/include/asm/mach-tx39xx/spaces.h         |  17 -
- arch/mips/include/asm/mipsmtregs.h                 |   1 -
- arch/mips/include/asm/mipsregs.h                   |   1 -
- arch/mips/include/asm/pgalloc.h                    |   6 +
- arch/mips/include/asm/prom.h                       |   4 +-
- arch/mips/include/asm/setup.h                      |   2 +-
- arch/mips/include/asm/stackframe.h                 |   6 +-
- arch/mips/include/asm/thread_info.h                |   4 +
- arch/mips/include/asm/txx9/boards.h                |   3 -
- arch/mips/include/asm/txx9/jmr3927.h               | 179 ---------
- arch/mips/include/asm/txx9/tx3927.h                | 341 -----------------
- arch/mips/include/asm/txx9irq.h                    |   4 -
- arch/mips/include/asm/txx9tmr.h                    |   4 -
- arch/mips/include/asm/vermagic.h                   |   2 -
- arch/mips/include/asm/war.h                        |  73 ----
- arch/mips/kernel/Makefile                          |   1 -
- arch/mips/kernel/cpu-probe.c                       |  23 --
- arch/mips/kernel/cpu-r3k-probe.c                   |  22 --
- arch/mips/kernel/elf.c                             |  16 +-
- arch/mips/kernel/entry.S                           |   3 +-
- arch/mips/kernel/genex.S                           |   5 +-
- arch/mips/kernel/idle.c                            |  10 -
- arch/mips/kernel/irq_txx9.c                        |  13 -
- arch/mips/kernel/proc.c                            |   2 -
- arch/mips/kernel/process.c                         |   2 +-
- arch/mips/kernel/prom.c                            |   5 +
- arch/mips/kernel/r4k-bugs64.c                      |   9 +-
- arch/mips/kernel/scall32-o32.S                     |   1 -
- arch/mips/kernel/scall64-n64.S                     |   1 -
- arch/mips/kernel/signal.c                          |   1 -
- arch/mips/kernel/signal_n32.c                      |   1 -
- arch/mips/kernel/traps.c                           |  22 +-
- arch/mips/lantiq/prom.c                            |   5 -
- arch/mips/lib/Makefile                             |   1 -
- arch/mips/lib/delay.c                              |   1 -
- arch/mips/lib/r3k_dump_tlb.c                       |   4 -
- arch/mips/loongson2ef/Platform                     |   3 +-
- arch/mips/loongson64/Platform                      |  24 +-
- arch/mips/loongson64/numa.c                        |  10 +
- arch/mips/loongson64/setup.c                       |   8 -
- arch/mips/mm/Makefile                              |   1 -
- arch/mips/mm/c-octeon.c                            |   1 -
- arch/mips/mm/c-r4k.c                               |   1 -
- arch/mips/mm/c-tx39.c                              | 414 ---------------------
- arch/mips/mm/cache.c                               |   5 -
- arch/mips/mm/page.c                                |   5 +-
- arch/mips/mm/tlb-r3k.c                             |  40 +-
- arch/mips/mm/tlbex.c                               |  24 +-
- arch/mips/mti-malta/Makefile                       |   1 -
- arch/mips/mti-malta/malta-dt.c                     |  15 -
- arch/mips/pci/Makefile                             |   2 -
- arch/mips/pci/fixup-jmr3927.c                      |  79 ----
- arch/mips/pci/ops-tx3927.c                         | 231 ------------
- arch/mips/pci/pci-ar2315.c                         |   2 +-
- arch/mips/pic32/pic32mzda/init.c                   |   8 -
- arch/mips/ralink/ill_acc.c                         |   1 +
- arch/mips/ralink/of.c                              |   5 -
- arch/mips/rb532/devices.c                          |   6 +-
- arch/mips/sgi-ip27/ip27-memory.c                   |  10 +
- arch/mips/sibyte/common/sb_tbprof.c                |   6 +-
- arch/mips/txx9/Kconfig                             |  18 -
- arch/mips/txx9/Makefile                            |   6 -
- arch/mips/txx9/Platform                            |   3 -
- arch/mips/txx9/generic/Makefile                    |   1 -
- arch/mips/txx9/generic/irq_tx3927.c                |  25 --
- arch/mips/txx9/generic/setup.c                     |  55 ---
- arch/mips/txx9/generic/setup_tx3927.c              | 136 -------
- arch/mips/txx9/jmr3927/Makefile                    |   6 -
- arch/mips/txx9/jmr3927/irq.c                       | 128 -------
- arch/mips/txx9/jmr3927/prom.c                      |  52 ---
- arch/mips/txx9/jmr3927/setup.c                     | 223 -----------
- arch/mips/vdso/Makefile                            |   3 +
- drivers/bus/mips_cdmm.c                            |   1 +
- drivers/dma/Kconfig                                |   2 +-
- drivers/watchdog/Kconfig                           |   2 +-
- 119 files changed, 194 insertions(+), 2455 deletions(-)
- delete mode 100644 arch/mips/configs/jmr3927_defconfig
- delete mode 100644 arch/mips/include/asm/mach-tx39xx/ioremap.h
- delete mode 100644 arch/mips/include/asm/mach-tx39xx/mangle-port.h
- delete mode 100644 arch/mips/include/asm/mach-tx39xx/spaces.h
- delete mode 100644 arch/mips/include/asm/txx9/jmr3927.h
- delete mode 100644 arch/mips/include/asm/txx9/tx3927.h
- delete mode 100644 arch/mips/include/asm/war.h
- delete mode 100644 arch/mips/mm/c-tx39.c
- delete mode 100644 arch/mips/mti-malta/malta-dt.c
- delete mode 100644 arch/mips/pci/fixup-jmr3927.c
- delete mode 100644 arch/mips/pci/ops-tx3927.c
- delete mode 100644 arch/mips/txx9/generic/irq_tx3927.c
- delete mode 100644 arch/mips/txx9/generic/setup_tx3927.c
- delete mode 100644 arch/mips/txx9/jmr3927/Makefile
- delete mode 100644 arch/mips/txx9/jmr3927/irq.c
- delete mode 100644 arch/mips/txx9/jmr3927/prom.c
- delete mode 100644 arch/mips/txx9/jmr3927/setup.c
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Best regards,
+Krzysztof

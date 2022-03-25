@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9920B4E7CFD
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C7B4E7D02
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiCYTh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 15:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59506 "EHLO
+        id S230040AbiCYThb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 15:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbiCYThG (ORCPT
+        with ESMTP id S230508AbiCYThG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 25 Mar 2022 15:37:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C229D262D61
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E5F262D6D
         for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 12:22:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 107F161C2F
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 18:26:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A865C2BBE4;
-        Fri, 25 Mar 2022 18:26:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6AB161C27
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 18:27:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 096C2C2BBE4;
+        Fri, 25 Mar 2022 18:27:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648232796;
-        bh=Yv5kugbiA+mRs3zFVL6eQ1YikXvFcsnugzO/02LilQE=;
+        s=k20201202; t=1648232874;
+        bh=uEuqD9UvUKQGZ5mLxpFhYM+SebgYEYrddzKoHyc3KGo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QrN/QO2Vcrz8iMwlWpwFaM0KVbTn1FAetMcvMtkj8CyVqkIQvEk1KXym5fc4uMz4l
-         JjW2blfCkc7uIIzHsPuYPeHL94LNdtLzMN1NZzvGRdFoRTVNRNwdt5oDJ0UEaRGLxq
-         yKhA+6DP2jFVSdKIE4nh2xvCwn0gIxGDjI59J3L/zH0irrEyDAA4RFO0VVD8vsLi9B
-         i6KWPHKTDjcMF5dPZXpF8fC+gFVcR8gkUntz3Ptfa8rvSBLQONeWfV/hNcSXvBeDL+
-         I8Sp2fla1+YEFK1pFvqXbAsksnYcM2qyxY2pBfki+aLhQMVxTJ5JqHr/8jcJWmCHEc
-         2r9+sxmaCf+bQ==
+        b=Tj2efp5+JqoJjev0O8XlYBWxGQ+eXsQBnPDtW5+oHbAnW3LPFA1UdZxK/wwszxFdJ
+         8F7S/vq1DHxNLHP0i/boJCxE3ANUBP+AYlNXr4tH5TpXa2sESIvQ5Y13C1MwlGdVkm
+         65lLE2BTXF6qqc/p2fu/UsOuT/anhKL7+2yD9ZUz+LH4uiWfU68fUiG1uZJ+TqP7PI
+         8CGwZtG9+T+E/j/pOzFOCDZo7Tg+B3SjmjgaccfSMoAHXXojecASbl4691YLe4scB5
+         RgyfwGHw9rji/U93GHFVYgVLYNKpDhGme7TkR3P0Zcj03SHadVjB/0r2YsyYZY3Y2d
+         3Jb6/KJYQgZrw==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id D572D40407; Fri, 25 Mar 2022 15:26:32 -0300 (-03)
-Date:   Fri, 25 Mar 2022 15:26:32 -0300
+        id 28F9940407; Fri, 25 Mar 2022 15:27:52 -0300 (-03)
+Date:   Fri, 25 Mar 2022 15:27:52 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>
-Subject: Re: [PATCH 1/3] perf lock: Add --synth=no option for record
-Message-ID: <Yj4JWOeiRUy4jlGd@kernel.org>
-References: <20220323230259.288494-1-namhyung@kernel.org>
+To:     Stephane Eranian <eranian@google.com>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        kim.phillips@amd.com, acme@redhat.com, jolsa@redhat.com,
+        songliubraving@fb.com, rafael@kernel.org, ravi.bangoria@amd.com,
+        sandipan.das@amd.com
+Subject: Re: [PATCH v7 10/13] perf tools: fix NULL point in evsel__env()
+Message-ID: <Yj4JqAimNd1INLjB@kernel.org>
+References: <20220322221517.2510440-1-eranian@google.com>
+ <20220322221517.2510440-11-eranian@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220323230259.288494-1-namhyung@kernel.org>
+In-Reply-To: <20220322221517.2510440-11-eranian@google.com>
 X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -60,36 +60,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Mar 23, 2022 at 04:02:57PM -0700, Namhyung Kim escreveu:
-> The perf lock command has nothing to symbolize and lock names come
-> from the tracepoint.  Moreover, kernel symbols are available even the
-> --synth=no option is given.
+Em Tue, Mar 22, 2022 at 03:15:14PM -0700, Stephane Eranian escreveu:
+> evsel_env() cannot return NULL. In case evsel->evlist->env is NULL default
+> to perf_env. Fixes crashes in evsel__open_strerror()
 > 
-> This will reduce the startup time by avoiding unnecessary synthesis.
+> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+> Reviewed-by: Stephane Eranian <eranian@google.com>
 
-Thanks, applied the series.
+I have this already in from a patch by Kim Phillips.
 
 - Arnaldo
 
- 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 > ---
->  tools/perf/builtin-lock.c | 2 +-
+>  tools/perf/util/evsel.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-> index 57b9ebd7118a..1ebff88bc5ba 100644
-> --- a/tools/perf/builtin-lock.c
-> +++ b/tools/perf/builtin-lock.c
-> @@ -990,7 +990,7 @@ static int __cmd_report(bool display_info)
->  static int __cmd_record(int argc, const char **argv)
+> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> index 22d3267ce294..14b0e7ffa2c7 100644
+> --- a/tools/perf/util/evsel.c
+> +++ b/tools/perf/util/evsel.c
+> @@ -2965,7 +2965,7 @@ int evsel__open_strerror(struct evsel *evsel, struct target *target,
+>  
+>  struct perf_env *evsel__env(struct evsel *evsel)
 >  {
->  	const char *record_args[] = {
-> -		"record", "-R", "-m", "1024", "-c", "1",
-> +		"record", "-R", "-m", "1024", "-c", "1", "--synth", "no",
->  	};
->  	unsigned int rec_argc, i, j, ret;
->  	const char **rec_argv;
+> -	if (evsel && evsel->evlist)
+> +	if (evsel && evsel->evlist && evsel->evlist->env)
+>  		return evsel->evlist->env;
+>  	return &perf_env;
+>  }
 > -- 
 > 2.35.1.894.gb6a874cedc-goog
 

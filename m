@@ -2,119 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C8634E6EFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 08:35:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 483934E6F06
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 08:38:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354019AbiCYHgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 03:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
+        id S1354282AbiCYHif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 03:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347483AbiCYHgu (ORCPT
+        with ESMTP id S243353AbiCYHid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 03:36:50 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A44553B5D
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 00:35:17 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id 9so4849719iou.5
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 00:35:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=F0MrQ+7f7irVz92hhE31+GxoOTRqqf7nkLXgWrnk+AY=;
-        b=QlXrQfFErm9nmqJuIwFNttHecBo8vtSI0dcbdc68Zk3dtp2UPzmZsdQftZMwROOvoW
-         kkx0SI0ZXdfz4nc11dMhHmK58CPlgtXAc5a13ZRfsAyVQ6KxUbdb8lmOgNR1KY0RZS/a
-         fqpSa1ocM2fByvmUMXbZLUHc/SBLhwS4/hp6Y7RtwV5/rRz7EyhoFRtwxUgJWR/Yu65e
-         cuEErTtkYIA4MEyhefLzSYJ9AElQaxu/UcBUJVneMkKIQpiQ6EtY57qFecDN8TVAwzDV
-         vnScHzjxBxlNFWsF4T0kJ8ivkVwvoLT/+CJqMHxpFr7RWmTxo+qQmVHflho1tlk0Uo0o
-         gPlw==
+        Fri, 25 Mar 2022 03:38:33 -0400
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68162C74BD;
+        Fri, 25 Mar 2022 00:37:00 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id lr4so5222563ejb.11;
+        Fri, 25 Mar 2022 00:37:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=F0MrQ+7f7irVz92hhE31+GxoOTRqqf7nkLXgWrnk+AY=;
-        b=Qdgd3WT8Av/XMVenwMIAF+CLTLba9g18pxX6FZ0SVa808wF34tPNm9PZXl3osG3wmy
-         r11oA9UOHWvoq+5upiiwXkhnsZEwFfPcEVQoAugGdzrNYTRoBXERApd82RZNaae7sy1y
-         FpH30M3tULS3otk63wACzfUkTVj6CV2fQaIoufGQ108aDShPkqPyTYOcWO94GGiU2QSV
-         5wfAbCWz0I2Ol2Za62cwWU7kxm68DLQp/Yq2Xok/z+Ru/VP1UuWACvIzePe+DMLTttA1
-         GtyKrhcMcZWtKQhVEFQ0O1eMnhymMr2yjJJZqYK1nsaAmIL0AlfQbXB/+DY/FaxcQ7VF
-         htEA==
-X-Gm-Message-State: AOAM5311wUzz4HdCmgTfbMuMN789Vaiy9sjX/CLEW25yM9/8G9/iVj5G
-        rN7M4PygmDGP6xwqRQcSV/7sVQ==
-X-Google-Smtp-Source: ABdhPJyKAib7ZXAHBesSLCUBmAkLGhgEYACYuNaz1pPMRtCTnlSY/nTkv48NvdxoTzqfEXv0OWtBuQ==
-X-Received: by 2002:a05:6638:1649:b0:31f:61f6:35f4 with SMTP id a9-20020a056638164900b0031f61f635f4mr5072950jat.205.1648193716120;
-        Fri, 25 Mar 2022 00:35:16 -0700 (PDT)
-Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id p22-20020a5d8d16000000b006115627b87csm2600602ioj.55.2022.03.25.00.35.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 00:35:15 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 07:35:12 +0000
-From:   Oliver Upton <oupton@google.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kvmarm@lists.cs.columbia.edu, maz@kernel.org,
-        linux-kernel@vger.kernel.org, eauger@redhat.com,
-        shan.gavin@gmail.com, Jonathan.Cameron@huawei.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org
-Subject: Re: [PATCH v5 18/22] KVM: arm64: Support SDEI ioctl commands on VM
-Message-ID: <Yj1wsIy2rsVczmCJ@google.com>
-References: <20220322080710.51727-1-gshan@redhat.com>
- <20220322080710.51727-19-gshan@redhat.com>
- <YjtYuk+Jx1dFPQQ9@google.com>
- <eae10132-a02d-b341-bdf5-be1b2096be4c@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6VyB3UYxWMO3tIrgEiCLozgnlezY4UO/iQgH0TlS3Ek=;
+        b=yzyXbWvoIiH8l/fYEhge/3jnKDAcFirGlnc1sw5Ey4Rwf1Z8YU6/xPqsE/6ebCyLG7
+         2wluVKZDjiUgoulA1WilrCsiQclcAai0VWwyTUcwcbf43SJql2A471UhSS4WCXX+wRkC
+         gFo4xYnnoLMYABEk2eKgH5zhbQapqDU9YV5Wyvpumi054ekA+fttCohkMhsFUMtM3zK8
+         3mNbXVHxV7WwognPui2p1noM/T7FB31bmbH8tV6wwmRwhxiZFW4r2yb3uWIdUH0WWdRZ
+         38taMU6na5HXmbB0erFH1gA5FG9EqwbkJA7azHWvLDGsgt6Q+89IVr54fnMsAFQnBT3E
+         Y9Xg==
+X-Gm-Message-State: AOAM530ALXDYvD3hfAgPp+9oEUoR68/bWYGHr7W8hVufhIe3wpLVvEB1
+        Z31M5ApfyQJMcfQUAOIK+TmlC06fgNQ=
+X-Google-Smtp-Source: ABdhPJye6CqOTuW/WLwG8QnXQHalgAOvoPopU/9m5KwtnnA+wXTM9UKgjiBBnOU8B4FUrtXiZR/+LQ==
+X-Received: by 2002:a17:906:1804:b0:6d6:dc46:d9ed with SMTP id v4-20020a170906180400b006d6dc46d9edmr9903089eje.288.1648193818924;
+        Fri, 25 Mar 2022 00:36:58 -0700 (PDT)
+Received: from [192.168.0.158] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id q16-20020a170906145000b006bdaf981589sm2011246ejc.81.2022.03.25.00.36.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 00:36:58 -0700 (PDT)
+Message-ID: <9fc72d19-1827-7681-4eb7-ba7c67f325fa@kernel.org>
+Date:   Fri, 25 Mar 2022 08:36:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eae10132-a02d-b341-bdf5-be1b2096be4c@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1] dt-bindings: clock: convert rockchip,rk3188-cru.txt to
+ YAML
+Content-Language: en-US
+To:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220324133229.24035-1-jbx6244@gmail.com>
+ <f7493d93-6c8a-efa9-1f2c-a0003a6d43b2@kernel.org>
+ <bf62ad40-6bcf-62ae-f56a-cdc8d17456ec@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <bf62ad40-6bcf-62ae-f56a-cdc8d17456ec@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 02:59:52PM +0800, Gavin Shan wrote:
-> > The PSCI implementation is a great example of how KVM has grown its
-> > implementation in line with a specification, all the while preserving
-> > backwards compatibility.
-> > 
+On 24/03/2022 20:51, Johan Jonker wrote:
+> Hi Heiko, Krzysztof,
 > 
-> The only information feed by VMM is the exposed events. The events
-> can't be registered from guest kernel, and raised from host to guest
-> kernel until it's exposed by VMM.
+> Question for the Rockchip clock maintainer:
+> What clock should be used here and other SoCs with several clock parents
+> in the tree?
+> 
+> The clock.yaml produces a lot off notifications like:
+> 
+> /arch/arm/boot/dts/rk3036-evb.dtb: clock-controller@20000000: 'clocks'
+> is a dependency of 'assigned-clocks'
+> 
+> Same for power-controller:
+> 
+> /arch/arm/boot/dts/rk3288-evb-rk808.dtb: power-controller: 'clocks' is a
+> dependency of 'assigned-clocks'
+> 
+> Just followed rk3399.yaml that got approved recent.
+> The current CRU nodes are in use for a long time this way.
+> Converting a simple .txt comes with a lot of extra work each time. :\
+> Please advise.
 
-I would suggest assuming that all SDEI events are exposed by default in
-KVM. We will not require a VMM change to enable events individually.
+Same for me, same for me...
 
-> Besides, the exposed events will
-> be defined staticly in host/KVM as we discussed on PATCH[02/22]. We
-> also discussed to eliminate those ioctl commands. So I think we needn't
-> to add KVM_SDEI_CMD_SET_VERSION. Further more, the version is only a
-> concern to host itself if the migration can be done through the
-> firmware pseudo system registers since the migration compatibility
-> is the only concern to VMM (QEMU).
+I replied to this part to Stephen's email. Here I'll reply to other parts:
 
-This all needs to work just like the KVM_REG_ARM_PSCI_VERSION version,
-I'd recommend taking a look at how we handle that register in KVM.
+(...)
 
-> Yes, Currently, 0.1/0.2/1.0 versions are supported by PSCI. 0.1 is
-> picked until VMM asks for 0.2 and 1.0 explicitly. However, it seems
-> QEMU isn't using 1.0 PSCI yet and maybe more patch is needed to enable
-> it.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - rockchip,rk3066a-cru
+>>> +      - rockchip,rk3188-cru
+>>> +      - rockchip,rk3188a-cru
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  "#clock-cells":
+>>> +    const: 1
+>>> +
+>>> +  "#reset-cells":
+>>> +    const: 1
+>>> +
+>>> +  clocks:
+>>> +    minItems: 1
+>>
+> 
+>> You need maxItems. Would be also nice to describe what should be here as
+>> input
+> 
+> Just followed rockchip,rk3399-cru.yaml that got rob+dt's ack.
+> 
+> Is this dependency only for simple clock consumers suitable for complex
+> clock trees with pll's, mux, etc? Shouldn't that be relaxed a bit?
 
-As far as how it interacts with KVM, QEMU looks fine. The name of the
-KVM_ARM_VCPU_PSCI_0_2 bit is quite frustrating. It actually implies that
-KVM will enable it highest supported PSCI version. If the feature bit is
-cleared then you only get PSCIv0.1
+minItems means that your clock controller can take any number of other
+clock inputs. This is not true, for sure. Your device probably has fixed
+number of external clocks (usually provided on the board if this is main
+SoC clock controller).
 
-However, the DT node that QEMU sets up looks a bit crusty. The
-properties for conveying PSCI function IDs were only ever necessary for
-PSCIv0.1. The only property of interest any more is 'method', to convey
-the SMCCC conduit instruction.
+> 
+>>
+>>
+>>> +
+>>> +  assigned-clock-rates:
+>>> +    minItems: 1
+>>> +    maxItems: 64
+>>> +
+>>> +  assigned-clocks:
+>>> +    minItems: 1
+>>> +    maxItems: 64
+>>
+>> Both assigned-xxx should not be necessary. Did you try validate the dtbs
+>> without these?
+> 
+> That's how it's currently done for Rockchip cru's.
 
---
-Thanks,
-Oliver
+I understand, but if you remove assigned-xxx from schema what happens?
+
+> 
+> 
+> ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make dtbs_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
+
+There is no such file in my tree...
+
+> 
+>>
+>> I guess you added "clocks" above because of these, so you need to
+>> correct the DTS because asigned-xxx depend on clocks property.
+> 
+> See comment above.
+> 
+>>
+>>> +
+>>> +  rockchip,grf:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>> +    description:
+>>> +      Phandle to the syscon managing the "general register files" (GRF),
+>>> +      if missing pll rates are not changeable, due to the missing pll lock status.
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - "#clock-cells"
+>>> +  - "#reset-cells"
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    cru: cru@20000000 {
+>>
+>> Node name: clock-controller
+> 
+> Which schema?
+
+Devicetree specification (see chapter for node naming). Nodes should
+have generic name. There is also list of example names to use.
+
+
+Best regards,
+Krzysztof

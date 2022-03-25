@@ -2,87 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C864E6C12
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 02:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A71684E6C1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 02:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357532AbiCYBgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 21:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40706 "EHLO
+        id S1346214AbiCYBke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 21:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357429AbiCYBgK (ORCPT
+        with ESMTP id S1357638AbiCYBiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 21:36:10 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BFA41305
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Mar 2022 18:34:37 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KPl4c6b3dz1GDBj
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 09:34:24 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 25 Mar 2022 09:34:35 +0800
-Received: from huawei.com (10.67.174.169) by dggpemm500001.china.huawei.com
- (7.185.36.107) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 25 Mar
- 2022 09:34:35 +0800
-From:   Chen Lifu <chenlifu@huawei.com>
-To:     <tglx@linutronix.de>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] irq: print depth in __enable_irq WARNING
-Date:   Fri, 25 Mar 2022 09:33:59 +0800
-Message-ID: <20220325013359.2691092-1-chenlifu@huawei.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.174.169]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 24 Mar 2022 21:38:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E40BF53E;
+        Thu, 24 Mar 2022 18:35:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E618060B2F;
+        Fri, 25 Mar 2022 01:35:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E0A4C340EC;
+        Fri, 25 Mar 2022 01:35:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648172142;
+        bh=NiMOmtM5IBbWeap3sQWWZvW/eoEk9Sp3PdJxVqKhSi8=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=gXgAnl4Wpxslb9ZuOIwFdF66hlQSe3ZZpFFFxb0eTRJnMsI/H6KaEdvkC9dRomD+/
+         /lHzmzOnHiKD0d99KrEB9KvRz3B//eWJqdX7HYSrtk6FG3NYc4vhYYkEP0Tf3NULcQ
+         kMgXRZzWaB4Z8XMmLahaubcRKqntT04k7co6u1l0dYCZ0Jbd7Sjz6trTvh8DURDosV
+         y+dTC8WtrkiKAEAAe8WX+MNao0Nn4lwt8ayOoaROlcU6eFT+imMo3793omzrvqQglW
+         FrxbxxX2OlFVmc6OLQRozYOOWgo6w0maYjtzEsDrPsjeMDsueZNDWtefhdciUYiSfc
+         ZpA4jvrF7Cobw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3B061E7BB0B;
+        Fri, 25 Mar 2022 01:35:42 +0000 (UTC)
+Subject: Re: [GIT PULL] xfs: new code for 5.18
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220323164821.GP8224@magnolia>
+References: <20220323164821.GP8224@magnolia>
+X-PR-Tracked-List-Id: <linux-xfs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220323164821.GP8224@magnolia>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.18-merge-2
+X-PR-Tracked-Commit-Id: 01728b44ef1b714756607be0210fbcf60c78efce
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b1b07ba356f04268230e16a8e1813fe1b19dac54
+Message-Id: <164817214223.9489.12483808836905609419.pr-tracker-bot@kernel.org>
+Date:   Fri, 25 Mar 2022 01:35:42 +0000
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        david@fromorbit.com, linux-kernel@vger.kernel.org,
+        sandeen@sandeen.net, hch@lst.de
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since case 0 and 1 of desc->depth may print same warning messages as follows,
-according to the messages, we do not know in which case the warning is generated.
-This patch prints extra desc->depth in the warning messages to distinguish
-these cases.
-This patch just does warning message changes，no functional changes.
+The pull request you sent on Wed, 23 Mar 2022 09:48:21 -0700:
 
-[20220314100142]------------[ cut here ]------------
-[20220314100142]WARNING: CPU: 1 PID: 10332 at kernel/irq/manage.c:723 __enable_irq+0x58/0xa4
-[20220314100142]Unbalanced enable for IRQ 38
-......
+> git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.18-merge-2
 
-Signed-off-by: Chen Lifu <chenlifu@huawei.com>
----
- kernel/irq/manage.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b1b07ba356f04268230e16a8e1813fe1b19dac54
 
-diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-index c03f71d5ec10..83bb9d9ee71a 100644
---- a/kernel/irq/manage.c
-+++ b/kernel/irq/manage.c
-@@ -769,12 +769,12 @@ void disable_nmi_nosync(unsigned int irq)
- void __enable_irq(struct irq_desc *desc)
- {
- 	switch (desc->depth) {
- 	case 0:
-  err_out:
--		WARN(1, KERN_WARNING "Unbalanced enable for IRQ %d\n",
--		     irq_desc_get_irq(desc));
-+		WARN(1, KERN_WARNING "depth %u: Unbalanced enable for IRQ %d\n",
-+		     desc->depth, irq_desc_get_irq(desc));
- 		break;
- 	case 1: {
- 		if (desc->istate & IRQS_SUSPENDED)
- 			goto err_out;
- 		/* Prevent probing on this irq: */
+Thank you!
+
 -- 
-2.35.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

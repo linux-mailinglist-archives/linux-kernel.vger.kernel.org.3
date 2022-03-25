@@ -2,55 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C54F44E7667
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3774E75F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377377AbiCYPOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43830 "EHLO
+        id S1355184AbiCYPJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359691AbiCYPLn (ORCPT
+        with ESMTP id S1359792AbiCYPID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:11:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B67D60DAB;
-        Fri, 25 Mar 2022 08:08:49 -0700 (PDT)
+        Fri, 25 Mar 2022 11:08:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7969D9EA4;
+        Fri, 25 Mar 2022 08:06:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B759361BF5;
-        Fri, 25 Mar 2022 15:08:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A35F7C36AF7;
-        Fri, 25 Mar 2022 15:08:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92865B828FB;
+        Fri, 25 Mar 2022 15:06:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E353FC340E9;
+        Fri, 25 Mar 2022 15:06:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220915;
-        bh=Wlq/oLzI08+KWmJ95ICd3mxc5cfHdv3bEqCAF5HDVwc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=np+zg3UdE868ZMztsBMlhKY4B5SJoeIjHEALIogEimXG4ZpzSbuXon0/mQ7ckURvA
-         j2t3eptIKtXH5PM7V9VY1zahnCaMOVJe98cOt49MC8ZcNssotX4QLwKVrPFoG41KPq
-         cm0soZCECcPf+si2ixre7LofjaOhz+CksRgBClJc=
+        s=korg; t=1648220775;
+        bh=T2w9Rgk56+o7Kq1HS/BtRz1ksRzT87ZESCNGzV+8pXQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=n3mN+hpwV+uxU9sRNm8HoZbSUBepBFT41XyEthntet1kJkajRAFYlRcKHcE8wgYaX
+         tiTkcLAmfznMGKk5RgssHhHZB0H/2M+4tlrYYyu4q5p4T1F43I40H5XQ6lj7XqRdnK
+         zAM1v5nJ+qOzRRPriY607cQiJ+TZYV0osNKfFaVM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 5.4 00/29] 5.4.188-rc1 review
-Date:   Fri, 25 Mar 2022 16:04:40 +0100
-Message-Id: <20220325150418.585286754@linuxfoundation.org>
+        stable@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.14 07/17] ALSA: pcm: Add stream lock during PCM reset ioctl operations
+Date:   Fri, 25 Mar 2022 16:04:41 +0100
+Message-Id: <20220325150416.977842219@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
+In-Reply-To: <20220325150416.756136126@linuxfoundation.org>
+References: <20220325150416.756136126@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.188-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.4.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.4.188-rc1
-X-KernelTest-Deadline: 2022-03-27T15:04+00:00
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -63,157 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.4.188 release.
-There are 29 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: Takashi Iwai <tiwai@suse.de>
 
-Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
-Anything received after that time might be too late.
+commit 1f68915b2efd0d6bfd6e124aa63c94b3c69f127c upstream.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.188-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-and the diffstat can be found below.
+snd_pcm_reset() is a non-atomic operation, and it's allowed to run
+during the PCM stream running.  It implies that the manipulation of
+hw_ptr and other parameters might be racy.
 
-thanks,
+This patch adds the PCM stream lock at appropriate places in
+snd_pcm_*_reset() actions for covering that.
 
-greg k-h
+Cc: <stable@vger.kernel.org>
+Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+Link: https://lore.kernel.org/r/20220322171325.4355-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ sound/core/pcm_native.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.4.188-rc1
-
-Arnd Bergmann <arnd@arndb.de>
-    nds32: fix access_ok() checks in get/put_user
-
-James Bottomley <James.Bottomley@HansenPartnership.com>
-    tpm: use try_get_ops() in tpm-space.c
-
-Linus Lüssing <ll@simonwunderlich.de>
-    mac80211: fix potential double free on mesh join
-
-Paul E. McKenney <paulmck@kernel.org>
-    rcu: Don't deboost before reporting expedited quiescent state
-
-Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-    crypto: qat - disable registration of algorithms
-
-Werner Sembach <wse@tuxedocomputers.com>
-    ACPI: video: Force backlight native for Clevo NL5xRU and NL5xNU
-
-Maximilian Luz <luzmaximilian@gmail.com>
-    ACPI: battery: Add device HID and quirk for Microsoft Surface Go 3
-
-Mark Cilissen <mark@yotsuba.nl>
-    ACPI / x86: Work around broken XSDT on Advantech DAC-BJ01 board
-
-Pablo Neira Ayuso <pablo@netfilter.org>
-    netfilter: nf_tables: initialize registers in nft_do_chain()
-
-Jason Zheng <jasonzheng2004@gmail.com>
-    ALSA: hda/realtek: Add quirk for ASUS GA402
-
-huangwenhui <huangwenhuia@uniontech.com>
-    ALSA: hda/realtek - Fix headset mic problem for a HP machine with alc671
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: oss: Fix PCM OSS buffer allocation overflow
-
-Takashi Iwai <tiwai@suse.de>
-    ASoC: sti: Fix deadlock via snd_pcm_stop_xrun() call
-
-Stephane Graber <stgraber@ubuntu.com>
-    drivers: net: xgene: Fix regression in CRC stripping
-
-Giacomo Guiduzzi <guiduzzi.giacomo@gmail.com>
-    ALSA: pci: fix reading of swapped values from pcmreg in AC97 codec
-
-Jonathan Teh <jonathan.teh@outlook.com>
-    ALSA: cmipci: Restore aux vol on suspend/resume
-
-Lars-Peter Clausen <lars@metafoo.de>
-    ALSA: usb-audio: Add mute TLV for playback volumes on RODE NT-USB
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: pcm: Add stream lock during PCM reset ioctl operations
-
-Halil Pasic <pasic@linux.ibm.com>
-    swiotlb: rework "fix info leak with DMA_FROM_DEVICE"
-
-Halil Pasic <pasic@linux.ibm.com>
-    swiotlb: fix info leak with DMA_FROM_DEVICE
-
-Eric Dumazet <edumazet@google.com>
-    llc: fix netdevice reference leaks in llc_ui_bind()
-
-Chuansheng Liu <chuansheng.liu@intel.com>
-    thermal: int340x: fix memory leak in int3400_notify()
-
-Oliver Graute <oliver.graute@kococonnector.com>
-    staging: fbtft: fb_st7789v: reset display before initialization
-
-Tadeusz Struk <tstruk@gmail.com>
-    tpm: Fix error handling in async work
-
-Steffen Klassert <steffen.klassert@secunet.com>
-    esp: Fix possible buffer overflow in ESP transformation
-
-Tadeusz Struk <tadeusz.struk@linaro.org>
-    net: ipv6: fix skb_over_panic in __ip6_append_data
-
-Jordy Zomer <jordy@pwning.systems>
-    nfc: st21nfca: Fix potential buffer overflows in EVT_TRANSACTION
-
-Trond Myklebust <trondmy@gmail.com>
-    nfsd: Containerise filecache laundrette
-
-Trond Myklebust <trondmy@gmail.com>
-    nfsd: cleanup nfsd_file_lru_dispose()
-
-
--------------
-
-Diffstat:
-
- Makefile                                           |   4 +-
- arch/nds32/include/asm/uaccess.h                   |  22 +-
- arch/x86/kernel/acpi/boot.c                        |  24 ++
- drivers/acpi/battery.c                             |  12 +
- drivers/acpi/video_detect.c                        |  75 +++++++
- drivers/char/tpm/tpm-dev-common.c                  |   8 +-
- drivers/char/tpm/tpm2-space.c                      |   8 +-
- drivers/crypto/qat/qat_common/qat_crypto.c         |   8 +
- drivers/net/ethernet/apm/xgene/xgene_enet_main.c   |  12 +-
- drivers/nfc/st21nfca/se.c                          |  10 +
- drivers/staging/fbtft/fb_st7789v.c                 |   2 +
- .../intel/int340x_thermal/int3400_thermal.c        |   4 +
- fs/nfsd/filecache.c                                | 247 +++++++++++++++++----
- fs/nfsd/filecache.h                                |   2 +
- fs/nfsd/nfssvc.c                                   |   9 +-
- include/net/esp.h                                  |   2 +
- include/net/sock.h                                 |   3 +
- kernel/dma/swiotlb.c                               |  24 +-
- kernel/rcu/tree_plugin.h                           |   9 +-
- net/core/sock.c                                    |   2 -
- net/ipv4/esp4.c                                    |   5 +
- net/ipv6/esp6.c                                    |   5 +
- net/ipv6/ip6_output.c                              |   4 +-
- net/llc/af_llc.c                                   |   8 +
- net/mac80211/cfg.c                                 |   3 -
- net/netfilter/nf_tables_core.c                     |   2 +-
- sound/core/oss/pcm_oss.c                           |  12 +-
- sound/core/oss/pcm_plugin.c                        |   5 +-
- sound/core/pcm_native.c                            |   4 +
- sound/pci/ac97/ac97_codec.c                        |   4 +-
- sound/pci/cmipci.c                                 |   3 +-
- sound/pci/hda/patch_realtek.c                      |   2 +
- sound/soc/sti/uniperif_player.c                    |   6 +-
- sound/soc/sti/uniperif_reader.c                    |   2 +-
- sound/usb/mixer_quirks.c                           |   7 +-
- 35 files changed, 459 insertions(+), 100 deletions(-)
+--- a/sound/core/pcm_native.c
++++ b/sound/core/pcm_native.c
+@@ -1616,21 +1616,25 @@ static int snd_pcm_do_reset(struct snd_p
+ 	int err = substream->ops->ioctl(substream, SNDRV_PCM_IOCTL1_RESET, NULL);
+ 	if (err < 0)
+ 		return err;
++	snd_pcm_stream_lock_irq(substream);
+ 	runtime->hw_ptr_base = 0;
+ 	runtime->hw_ptr_interrupt = runtime->status->hw_ptr -
+ 		runtime->status->hw_ptr % runtime->period_size;
+ 	runtime->silence_start = runtime->status->hw_ptr;
+ 	runtime->silence_filled = 0;
++	snd_pcm_stream_unlock_irq(substream);
+ 	return 0;
+ }
+ 
+ static void snd_pcm_post_reset(struct snd_pcm_substream *substream, int state)
+ {
+ 	struct snd_pcm_runtime *runtime = substream->runtime;
++	snd_pcm_stream_lock_irq(substream);
+ 	runtime->control->appl_ptr = runtime->status->hw_ptr;
+ 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK &&
+ 	    runtime->silence_size > 0)
+ 		snd_pcm_playback_silence(substream, ULONG_MAX);
++	snd_pcm_stream_unlock_irq(substream);
+ }
+ 
+ static const struct action_ops snd_pcm_action_reset = {
 
 

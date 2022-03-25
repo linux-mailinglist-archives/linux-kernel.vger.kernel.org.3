@@ -2,91 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B884E6C6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 03:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E09E4E6C76
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 03:18:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354034AbiCYCRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Mar 2022 22:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
+        id S1357702AbiCYCUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Mar 2022 22:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240632AbiCYCRN (ORCPT
+        with ESMTP id S1350834AbiCYCUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Mar 2022 22:17:13 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F068AC077;
-        Thu, 24 Mar 2022 19:15:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648174540; x=1679710540;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=o4sz/LKzGpYOK1X2HGP165kUrHUS9uWa1kxmjabLul8=;
-  b=KpLspLNqq4uUqa4thGGhgtILVofx4Ggwkbp1igLcTw2Aiz2LTOMC8E9o
-   q5PDf9tyzmsVhkgBBazjR88LW5TfxVGHXoKgarZaYzdYXlMv/jW558TPo
-   gDGP3ybCYhI1wUhty+/WljySyvpAl5+n9w4mwBjtYP3lvH+OfgygK9E04
-   SA3QI3lAMyqui4wGJDEqX188vGhGtfmY7m19E4b7isvkSmWqjOYGwwN5n
-   ifrCfW4p1pQHCTcM4be6tQb+oZAdLpCh6SrbXZZ3JDcuROFXZz/xxJKus
-   Slv8My/ByOWPqLGYsduuRa6WOUe9EdmCFUxXVtsTGPNnDNPSyk+o9y6fC
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="238475911"
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="238475911"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 19:15:40 -0700
-X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
-   d="scan'208";a="561639626"
-Received: from sijiali-mobl1.ccr.corp.intel.com ([10.255.28.92])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 19:15:37 -0700
-Message-ID: <1c5b8eb88d8c59949a6bbd3e763c820db462979f.camel@intel.com>
-Subject: Re: [PATCH 0/3] thermal: int340x: Misc acpi_buffer handling updates
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Davidlohr Bueso <dave@stgolabs.net>, rafael@kernel.org
-Cc:     daniel.lezcano@linaro.org, amitk@kernel.org,
-        srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 25 Mar 2022 10:15:34 +0800
-In-Reply-To: <20220324190950.70486-1-dave@stgolabs.net>
-References: <20220324190950.70486-1-dave@stgolabs.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 24 Mar 2022 22:20:07 -0400
+Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E633668F;
+        Thu, 24 Mar 2022 19:18:32 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
+ (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 25 Mar
+ 2022 10:18:25 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Fri, 25 Mar
+ 2022 10:18:24 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     <trond.myklebust@hammerspace.com>, <anna@kernel.org>,
+        <chuck.lever@oracle.com>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <pabeni@redhat.com>
+CC:     <linux-nfs@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Haowen Bai <baihaowen@meizu.com>
+Subject: [PATCH V2] SUNRPC: Increase size of servername string
+Date:   Fri, 25 Mar 2022 10:18:22 +0800
+Message-ID: <1648174702-461-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-125.meizu.com (172.16.1.125) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Acked-by: Zhang Rui <rui.zhang@intel.com>
+This patch will fix the warning from smatch:
 
-for the whole patch series.
+net/sunrpc/clnt.c:562 rpc_create() error: snprintf() chops off
+the last chars of 'sun->sun_path': 108 vs 48
 
-thanks,
-rui
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+V1->V2: it would be much nicer to use UNIX_PATH_MAX
+ net/sunrpc/clnt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, 2022-03-24 at 12:09 -0700, Davidlohr Bueso wrote:
-> Hello,
-> 
-> The following is a fallout of eyeballing _OSC handling in the driver.
-> These changes have only been compile-tested. Patch 1 is a fix and the
-> other two are cleanups.
-> 
-> Thanks!
-> 
-> Davidlohr Bueso (3):
->   thermal: int340x: Fix bogus acpi_buffer pointer freeing
->   thermal: int340x: Consolidate freeing of acpi_buffer pointer
->   thermal: int340x: Cleanup osc context init
-> 
->  .../intel/int340x_thermal/int3400_thermal.c   | 24 +++++++--------
-> ----
->  1 file changed, 9 insertions(+), 15 deletions(-)
-> 
-> --
-> 2.26.2
-> 
+diff --git a/net/sunrpc/clnt.c b/net/sunrpc/clnt.c
+index c83fe61..6e0209e 100644
+--- a/net/sunrpc/clnt.c
++++ b/net/sunrpc/clnt.c
+@@ -526,7 +526,7 @@ struct rpc_clnt *rpc_create(struct rpc_create_args *args)
+ 		.servername = args->servername,
+ 		.bc_xprt = args->bc_xprt,
+ 	};
+-	char servername[48];
++	char servername[UNIX_PATH_MAX];
+ 	struct rpc_clnt *clnt;
+ 	int i;
+ 
+-- 
+2.7.4
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA484E764D
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E03114E76C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Mar 2022 16:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376895AbiCYPNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 11:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
+        id S1359865AbiCYPTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 11:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359806AbiCYPLI (ORCPT
+        with ESMTP id S1376269AbiCYPMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 11:11:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9783FDA8;
-        Fri, 25 Mar 2022 08:08:13 -0700 (PDT)
+        Fri, 25 Mar 2022 11:12:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B9B652DB;
+        Fri, 25 Mar 2022 08:09:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 545AAB828FB;
-        Fri, 25 Mar 2022 15:08:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC548C340E9;
-        Fri, 25 Mar 2022 15:08:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CDF3961C12;
+        Fri, 25 Mar 2022 15:09:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCC5AC340E9;
+        Fri, 25 Mar 2022 15:09:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648220888;
-        bh=M4heo+CUHk+V0Mu9civQ10Jda8BOAP911dPRoZX1C2A=;
+        s=korg; t=1648220963;
+        bh=KsVLViOUT0y5FV3wSBv5NfGuKly7wNsnMNckZEs6iUI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qG/RTxxH75nsjOOORuuBwDYfYOCwpjfQCwbn3d3P1QP2IDV4U7YnoENSXRUVCs4ju
-         gN35XjRGqrO43schf9KBEOQnZEGwdpKdYz6HPGUTbQePYWwWHon84FtNv/aZE7KDAZ
-         gf2Xcw9EvXlVeVtT3uoot5OWUzV9/IsM89D9gkmI=
+        b=FwsPi1tdXQ2MxU/yf8nn6CVrS4pt0z8Vu3idpfe0RBWrQ2ug61xnUad1h+ZqJbW34
+         ARGKP/LiFNIjOhD3NdXU7872t4cbBRmMQiqpKq8WN830QDzy6yo9UONZwXstbsqrcA
+         QWCHjCOnvJGjnmVa+LmKItZ2Cy/dseYxZlLfv4tU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Cilissen <mark@yotsuba.nl>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.4 22/29] ACPI / x86: Work around broken XSDT on Advantech DAC-BJ01 board
-Date:   Fri, 25 Mar 2022 16:05:02 +0100
-Message-Id: <20220325150419.224248500@linuxfoundation.org>
+        stable@vger.kernel.org, Hu Jiahui <kirin.say@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 19/38] ALSA: pcm: Fix races among concurrent hw_params and hw_free calls
+Date:   Fri, 25 Mar 2022 16:05:03 +0100
+Message-Id: <20220325150420.308150711@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220325150418.585286754@linuxfoundation.org>
-References: <20220325150418.585286754@linuxfoundation.org>
+In-Reply-To: <20220325150419.757836392@linuxfoundation.org>
+References: <20220325150419.757836392@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,75 +54,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Cilissen <mark@yotsuba.nl>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit e702196bf85778f2c5527ca47f33ef2e2fca8297 upstream.
+commit 92ee3c60ec9fe64404dc035e7c41277d74aa26cb upstream.
 
-On this board the ACPI RSDP structure points to both a RSDT and an XSDT,
-but the XSDT points to a truncated FADT. This causes all sorts of trouble
-and usually a complete failure to boot after the following error occurs:
+Currently we have neither proper check nor protection against the
+concurrent calls of PCM hw_params and hw_free ioctls, which may result
+in a UAF.  Since the existing PCM stream lock can't be used for
+protecting the whole ioctl operations, we need a new mutex to protect
+those racy calls.
 
-  ACPI Error: Unsupported address space: 0x20 (*/hwregs-*)
-  ACPI Error: AE_SUPPORT, Unable to initialize fixed events (*/evevent-*)
-  ACPI: Unable to start ACPI Interpreter
+This patch introduced a new mutex, runtime->buffer_mutex, and applies
+it to both hw_params and hw_free ioctl code paths.  Along with it, the
+both functions are slightly modified (the mmap_count check is moved
+into the state-check block) for code simplicity.
 
-This leaves the ACPI implementation in such a broken state that subsequent
-kernel subsystem initialisations go wrong, resulting in among others
-mismapped PCI memory, SATA and USB enumeration failures, and freezes.
-
-As this is an older embedded platform that will likely never see any BIOS
-updates to address this issue and its default shipping OS only complies to
-ACPI 1.0, work around this by forcing `acpi=rsdt`. This patch, applied on
-top of Linux 5.10.102, was confirmed on real hardware to fix the issue.
-
-Signed-off-by: Mark Cilissen <mark@yotsuba.nl>
-Cc: All applicable <stable@vger.kernel.org>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reported-by: Hu Jiahui <kirin.say@gmail.com>
+Cc: <stable@vger.kernel.org>
+Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+Link: https://lore.kernel.org/r/20220322170720.3529-2-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/acpi/boot.c |   24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ include/sound/pcm.h     |    1 
+ sound/core/pcm.c        |    2 +
+ sound/core/pcm_native.c |   61 ++++++++++++++++++++++++++++++------------------
+ 3 files changed, 42 insertions(+), 22 deletions(-)
 
---- a/arch/x86/kernel/acpi/boot.c
-+++ b/arch/x86/kernel/acpi/boot.c
-@@ -1339,6 +1339,17 @@ static int __init disable_acpi_pci(const
+--- a/include/sound/pcm.h
++++ b/include/sound/pcm.h
+@@ -398,6 +398,7 @@ struct snd_pcm_runtime {
+ 	wait_queue_head_t tsleep;	/* transfer sleep */
+ 	struct fasync_struct *fasync;
+ 	bool stop_operating;		/* sync_stop will be called */
++	struct mutex buffer_mutex;	/* protect for buffer changes */
+ 
+ 	/* -- private section -- */
+ 	void *private_data;
+--- a/sound/core/pcm.c
++++ b/sound/core/pcm.c
+@@ -969,6 +969,7 @@ int snd_pcm_attach_substream(struct snd_
+ 	init_waitqueue_head(&runtime->tsleep);
+ 
+ 	runtime->status->state = SNDRV_PCM_STATE_OPEN;
++	mutex_init(&runtime->buffer_mutex);
+ 
+ 	substream->runtime = runtime;
+ 	substream->private_data = pcm->private_data;
+@@ -1002,6 +1003,7 @@ void snd_pcm_detach_substream(struct snd
+ 	} else {
+ 		substream->runtime = NULL;
+ 	}
++	mutex_destroy(&runtime->buffer_mutex);
+ 	kfree(runtime);
+ 	put_pid(substream->pid);
+ 	substream->pid = NULL;
+--- a/sound/core/pcm_native.c
++++ b/sound/core/pcm_native.c
+@@ -667,33 +667,40 @@ static int snd_pcm_hw_params_choose(stru
  	return 0;
  }
  
-+static int __init disable_acpi_xsdt(const struct dmi_system_id *d)
-+{
-+	if (!acpi_force) {
-+		pr_notice("%s detected: force use of acpi=rsdt\n", d->ident);
-+		acpi_gbl_do_not_use_xsdt = TRUE;
-+	} else {
-+		pr_notice("Warning: DMI blacklist says broken, but acpi XSDT forced\n");
-+	}
-+	return 0;
-+}
++#if IS_ENABLED(CONFIG_SND_PCM_OSS)
++#define is_oss_stream(substream)	((substream)->oss.oss)
++#else
++#define is_oss_stream(substream)	false
++#endif
 +
- static int __init dmi_disable_acpi(const struct dmi_system_id *d)
+ static int snd_pcm_hw_params(struct snd_pcm_substream *substream,
+ 			     struct snd_pcm_hw_params *params)
  {
- 	if (!acpi_force) {
-@@ -1463,6 +1474,19 @@ static const struct dmi_system_id acpi_d
- 		     DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 360"),
- 		     },
- 	 },
-+	/*
-+	 * Boxes that need ACPI XSDT use disabled due to corrupted tables
-+	 */
-+	{
-+	 .callback = disable_acpi_xsdt,
-+	 .ident = "Advantech DAC-BJ01",
-+	 .matches = {
-+		     DMI_MATCH(DMI_SYS_VENDOR, "NEC"),
-+		     DMI_MATCH(DMI_PRODUCT_NAME, "Bearlake CRB Board"),
-+		     DMI_MATCH(DMI_BIOS_VERSION, "V1.12"),
-+		     DMI_MATCH(DMI_BIOS_DATE, "02/01/2011"),
-+		     },
-+	 },
- 	{}
- };
+ 	struct snd_pcm_runtime *runtime;
+-	int err, usecs;
++	int err = 0, usecs;
+ 	unsigned int bits;
+ 	snd_pcm_uframes_t frames;
+ 
+ 	if (PCM_RUNTIME_CHECK(substream))
+ 		return -ENXIO;
+ 	runtime = substream->runtime;
++	mutex_lock(&runtime->buffer_mutex);
+ 	snd_pcm_stream_lock_irq(substream);
+ 	switch (runtime->status->state) {
+ 	case SNDRV_PCM_STATE_OPEN:
+ 	case SNDRV_PCM_STATE_SETUP:
+ 	case SNDRV_PCM_STATE_PREPARED:
++		if (!is_oss_stream(substream) &&
++		    atomic_read(&substream->mmap_count))
++			err = -EBADFD;
+ 		break;
+ 	default:
+-		snd_pcm_stream_unlock_irq(substream);
+-		return -EBADFD;
++		err = -EBADFD;
++		break;
+ 	}
+ 	snd_pcm_stream_unlock_irq(substream);
+-#if IS_ENABLED(CONFIG_SND_PCM_OSS)
+-	if (!substream->oss.oss)
+-#endif
+-		if (atomic_read(&substream->mmap_count))
+-			return -EBADFD;
++	if (err)
++		goto unlock;
+ 
+ 	snd_pcm_sync_stop(substream, true);
+ 
+@@ -780,16 +787,21 @@ static int snd_pcm_hw_params(struct snd_
+ 	if ((usecs = period_to_usecs(runtime)) >= 0)
+ 		cpu_latency_qos_add_request(&substream->latency_pm_qos_req,
+ 					    usecs);
+-	return 0;
++	err = 0;
+  _error:
+-	/* hardware might be unusable from this time,
+-	   so we force application to retry to set
+-	   the correct hardware parameter settings */
+-	snd_pcm_set_state(substream, SNDRV_PCM_STATE_OPEN);
+-	if (substream->ops->hw_free != NULL)
+-		substream->ops->hw_free(substream);
+-	if (substream->managed_buffer_alloc)
+-		snd_pcm_lib_free_pages(substream);
++	if (err) {
++		/* hardware might be unusable from this time,
++		 * so we force application to retry to set
++		 * the correct hardware parameter settings
++		 */
++		snd_pcm_set_state(substream, SNDRV_PCM_STATE_OPEN);
++		if (substream->ops->hw_free != NULL)
++			substream->ops->hw_free(substream);
++		if (substream->managed_buffer_alloc)
++			snd_pcm_lib_free_pages(substream);
++	}
++ unlock:
++	mutex_unlock(&runtime->buffer_mutex);
+ 	return err;
+ }
+ 
+@@ -829,26 +841,31 @@ static int do_hw_free(struct snd_pcm_sub
+ static int snd_pcm_hw_free(struct snd_pcm_substream *substream)
+ {
+ 	struct snd_pcm_runtime *runtime;
+-	int result;
++	int result = 0;
+ 
+ 	if (PCM_RUNTIME_CHECK(substream))
+ 		return -ENXIO;
+ 	runtime = substream->runtime;
++	mutex_lock(&runtime->buffer_mutex);
+ 	snd_pcm_stream_lock_irq(substream);
+ 	switch (runtime->status->state) {
+ 	case SNDRV_PCM_STATE_SETUP:
+ 	case SNDRV_PCM_STATE_PREPARED:
++		if (atomic_read(&substream->mmap_count))
++			result = -EBADFD;
+ 		break;
+ 	default:
+-		snd_pcm_stream_unlock_irq(substream);
+-		return -EBADFD;
++		result = -EBADFD;
++		break;
+ 	}
+ 	snd_pcm_stream_unlock_irq(substream);
+-	if (atomic_read(&substream->mmap_count))
+-		return -EBADFD;
++	if (result)
++		goto unlock;
+ 	result = do_hw_free(substream);
+ 	snd_pcm_set_state(substream, SNDRV_PCM_STATE_OPEN);
+ 	cpu_latency_qos_remove_request(&substream->latency_pm_qos_req);
++ unlock:
++	mutex_unlock(&runtime->buffer_mutex);
+ 	return result;
+ }
  
 
 

@@ -2,90 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAACD4E8057
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 11:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F854E805D
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 11:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232430AbiCZKUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 06:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48998 "EHLO
+        id S232450AbiCZKYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 06:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232395AbiCZKUA (ORCPT
+        with ESMTP id S232395AbiCZKYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 06:20:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035B6B95;
-        Sat, 26 Mar 2022 03:18:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E48B60AB4;
-        Sat, 26 Mar 2022 10:18:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 152A4C2BBE4;
-        Sat, 26 Mar 2022 10:18:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648289889;
-        bh=OZH7g2IpG6pK2wMxM9iGM7s18WiIbcFEqwaQDkLIJMw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A+4daBoM17fEB6UEwD338UFvlZtz7aDf+AyiXnXrtUx6xSXqSS0R4dTMQwLz90cus
-         A73pJA9vstoHKNfEhOkhMi9oWky6N2WTDtcMnIQlhfAvp5vJghfoyxtHiYNKw1b8q+
-         LjNxfFhgWkoAyHZ5HdynxTinUpt36awiPZ55DYCo=
-Date:   Sat, 26 Mar 2022 11:18:06 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH 5.10 11/38] swiotlb: rework "fix info leak with
- DMA_FROM_DEVICE"
-Message-ID: <Yj7oXgoCdhWAwFQt@kroah.com>
-References: <20220325150419.757836392@linuxfoundation.org>
- <20220325150420.085364078@linuxfoundation.org>
- <CAHk-=wiaeZKiEk87Sms1sy53m8tT3UCLOoeUBnX1c_1dZ78WjQ@mail.gmail.com>
+        Sat, 26 Mar 2022 06:24:11 -0400
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546D916BCD9;
+        Sat, 26 Mar 2022 03:22:34 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id h23so13804592wrb.8;
+        Sat, 26 Mar 2022 03:22:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=d3ncUlwyfN23LAHneA+x8RC86+EtUpdCtRwDExYqA3A=;
+        b=eumcFiw9W2vFL0tlWQF4whfsQk4CfpQ+ALZihxL4HnnBYwPaKX4KoFg2i/q0jQxsVV
+         iEcCmx7F7KIpxvQSm2YdE3boOiGi7BWoUTPJJMvZ00jmuruVtt/Ld/N3hsoZc0sh9d3E
+         Hqujj/m0kpmr4MvF/LdsbxbZdD7RagWvl5fKX7eMsv4EMK+ueQGmRfr9e9Kr9nSH69ia
+         0go9aMsCQm1NSK+mdnWZ4MLsxseJqMfWCp9xltdJNgQRthVYh4smXSz5M206QuplyZ7W
+         yXEFZWJCoHnXQn1Dmnn3TrObxOfDdDXjWsAv+M9aQy0Y1G5L7qkqa6o+Br0yAvdpUYsb
+         7c+A==
+X-Gm-Message-State: AOAM53214iIKW6J1JVuH/OykKdKnUsey7fNNe5BaO+H+pu/vPQiqNR+h
+        6zkj4Jql/ksBUab4ddceQqs=
+X-Google-Smtp-Source: ABdhPJzdOmzoCWz7kkm5nG90337ILbCEmW8zPe4Ns407o7zoP4CeAmc5ADHNH6TPDEncX+twTvWSYQ==
+X-Received: by 2002:a5d:5189:0:b0:205:9c7b:d374 with SMTP id k9-20020a5d5189000000b002059c7bd374mr9465343wrv.551.1648290152787;
+        Sat, 26 Mar 2022 03:22:32 -0700 (PDT)
+Received: from aryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net. [82.11.51.62])
+        by smtp.googlemail.com with ESMTPSA id l15-20020a05600c1d0f00b0038c8ff8e708sm6683057wms.13.2022.03.26.03.22.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Mar 2022 03:22:32 -0700 (PDT)
+From:   Lucas Tanure <tanure@linux.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Lucas Tanure <tanure@linux.com>
+Subject: [PATCH 0/3] Ensure Low period of SCL is correct
+Date:   Sat, 26 Mar 2022 10:22:26 +0000
+Message-Id: <20220326102229.421718-1-tanure@linux.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiaeZKiEk87Sms1sy53m8tT3UCLOoeUBnX1c_1dZ78WjQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 10:08:27AM -0700, Linus Torvalds wrote:
-> On Fri, Mar 25, 2022 at 8:09 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > From: Halil Pasic <pasic@linux.ibm.com>
-> >
-> > commit aa6f8dcbab473f3a3c7454b74caa46d36cdc5d13 upstream.
-> 
-> This one causes a regression on at least some wireless drivers
-> (ath9k). There's some active discussion about it, maybe it gets
-> reverted, maybe there are other options.
-> 
-> There's an ath9k patch that fixes the problem, so if this patch goes
-> into the stable tree the ath9k fix will follow.
-> 
-> But it might be a good idea to simply hold off on this patch a bit,
-> because that ath9k patch hasn't actually landed yet, there's some
-> discussion about it all, and it's not clear that other drivers might
-> not have the same issue.
-> 
-> So I'm not NAK'ing this patch from stable, but I also don't think it's
-> timing-critical, and it might be a good idea to delay it for a week or
-> two to both wait for the ath9k patch and to see if something else
-> comes up.
+The default duty cycle of 33% is less than the required
+by the I2C specs for the LOW period of the SCL clock.
 
-Yes, I've been watching that thread.  This change is already in 5.15 and
-5.16 kernels, and does solve one known security issue, so it's a tough
-call.  I'll drop them from 5.10 and 5.4 for now and save them to see how
-it plays out...
+So, for 100Khz or less, use 50%H/50%L duty cycle, and
+for the clock above 100Khz, use 40%H/60%L duty cycle.
+That ensures the low period of SCL is always more than
+the minimum required by the specs at any given frequency.
 
-thanks,
+Lucas Tanure (3):
+  i2c: meson: Use _SHIFT and _MASK for register definitions
+  i2c: meson: Use 50% duty cycle for I2C clock
+  i2c: meson: Remove meson_i2c_data
 
-greg k-h
+ drivers/i2c/busses/i2c-meson.c | 104 ++++++++++++++++++---------------
+ 1 file changed, 56 insertions(+), 48 deletions(-)
+
+-- 
+2.35.1
+

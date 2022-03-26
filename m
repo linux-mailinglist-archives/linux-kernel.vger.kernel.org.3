@@ -2,148 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE37C4E80FD
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 14:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 857B74E8100
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 14:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233034AbiCZNPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 09:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
+        id S233037AbiCZNRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 09:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbiCZNPO (ORCPT
+        with ESMTP id S230450AbiCZNRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 09:15:14 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195592610C;
-        Sat, 26 Mar 2022 06:13:34 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id c11so8619742pgu.11;
-        Sat, 26 Mar 2022 06:13:34 -0700 (PDT)
+        Sat, 26 Mar 2022 09:17:31 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5055F1EC9B4
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 06:15:55 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id v35so18481281ybi.10
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 06:15:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2+eIxZqOe1Mjhf8cNcbX7USgWsl2vUVVnTGEjRC7N0w=;
-        b=EhbOaNm9b/gV+8+y0Y/4ONHt1vg8NQxn1EYZZo5K3DIjtbs0J6QA+ODLeHVRk4XbEs
-         QXqdUi820CxbqTzTO0hrvxxrt34d8aKJuv0yj/1R85tnMzA7MhDXJnGQZ/jbTszN/BV2
-         Z8WfAgDMrVTkATtJiOfpgJoqi5Ws+Ui7XeIPGrxwZ0ZJHcBjphDofOm2Mv64zorRZcrF
-         k0X4qiDSdAe3IQyiMr6qNVrlLUd7+ezVVyyCeI7vi0IYC5+cDSPOiucNurnSfjjsZpYA
-         Meb5+PWZ9g6n++SXjSnOuJKRvVvCGk4WEkowL6/AeYynyL1ezQ4Pb67gdi4aYBpCetlF
-         7V5w==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=AikdSfXe4Ki+gU0Iq/j+kPAARq8zAHekqtyyVX0tRXQ=;
+        b=RQviT6fqIMAsoYwEAHbJat7HQtZQb2tSYfI0bzwD6jFcUFFDZwgzhY7+LUqaunSeXY
+         PxWo+AtRNBZCbsQTVFJYx3DB1HMHJxjQU030LdczHzyV7bMdhtVofJv/ZjS3cGEEmCVO
+         2LY61O0oVzKe4/lQgdNhhCyCyKau+t4aT5zZq3dFGu9L9kdQbBiFy3Ihomuzh/YeZynR
+         kd/PAFhtdzEwoAPx+u6LGaoE7fpF8a5QAHnBr/oNTnXqYLSLOkzD2OHExYeAWYHjrBCq
+         EUEit1BCsxaihDMvxbxQL9MC0lk5jAu5tOoGtUe2rrkle0mpDAk/Be8svDsUs/0uKtRi
+         AaKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2+eIxZqOe1Mjhf8cNcbX7USgWsl2vUVVnTGEjRC7N0w=;
-        b=L/YsAQ5GgYYspUkReocOkVGyOoKQFjm7bSbGwhbDSu2sAxbsuRnfjnMHrB3PoQUjxc
-         oGqrMdZhMGkhLYPMblBZPf8qeZlpTNo9Muqd3vv8QH2HAr9oIGpHXqc5mQB+KirHbRCI
-         NtazLbDu6XF2icjVSYizrdi3/IjHhd/ugGkVuLIpreXJOs1U4vvG95EsmmvGyA7PSlxk
-         7YcQNEf8kiyDK1Tnifsc3MIxB8E6E2XbVQyds0NL6CJYcRO9YLyTK4rR71IzprOXVwnc
-         ioVI3obyX9ixbSpDRQgh2nysrld3iV+QwVcaebzWp6+oZh+49v60eyRc7+xX9HXR9DUw
-         JW8g==
-X-Gm-Message-State: AOAM533y6np2aAWu70T093Ti2874OW7cF49lYGwCvP8GjOufC+sEh/WT
-        qusLk4aNdoTDAvgb+5bwgRZH52Zv4fkAq6b/
-X-Google-Smtp-Source: ABdhPJxITfRKtGZ+rCAWC+cPUlLWbvPlZgN4OMToB2Ca8oZRwme+PxNZWWOCjusVc5kHV4rHg1jMJw==
-X-Received: by 2002:a63:5014:0:b0:380:132:6b25 with SMTP id e20-20020a635014000000b0038001326b25mr3415576pgb.211.1648300413220;
-        Sat, 26 Mar 2022 06:13:33 -0700 (PDT)
-Received: from ubuntu.mate (subs32-116-206-28-2.three.co.id. [116.206.28.2])
-        by smtp.gmail.com with ESMTPSA id k3-20020a056a00168300b004f7e60da26csm10689421pfc.182.2022.03.26.06.13.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 06:13:32 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Documentation: arch_pgtable_helpers: demote pgtable list headings
-Date:   Sat, 26 Mar 2022 20:13:14 +0700
-Message-Id: <20220326131313.691027-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=AikdSfXe4Ki+gU0Iq/j+kPAARq8zAHekqtyyVX0tRXQ=;
+        b=5UJfkU1n9Dhb7Eb7yDcGxubok5tZbfLbOvTh69gN+FU3qF70880WEtaA810XFkEhNB
+         a36kM+ytZgPvZ7c49X1vr0jAkztnr0r0dZ5lgcVTdbVm0Bz9hIFmEc6Aw4qzpzKPuK8j
+         Mh0puE46cI8iRve0vjMxmUdM6UOxFdGiczXAM9tUt1ACozECluz1THwMpIJ7PdpfT1aT
+         t0RuYXX7pNwEW2BOFIZCI3Qxg9ClMWVo9uHNThEvtcwVhejNs7pOQCnx8np8zoOL/Ga2
+         gWzcDYNDtbNq45lncIL4hDRjXFn0I/dosl6d78JR5VUcPqh31psRJTG0XhoFJR5fXgzH
+         qepg==
+X-Gm-Message-State: AOAM531deDJ8QAGBFbbvsSUtKl+hmm4XjCJGd/vr1ScmbhxqctkGkIuT
+        1+YXOxC12rrlj8i8Nr7gYfM+p3UJn/62D4iKgFoDVQ==
+X-Google-Smtp-Source: ABdhPJzXhnH+ENU9AtT/qfaSGWiLN+Z5W88chmmcHqYfBDob0ZSbqwDnKTb0nvjPqxOJK2sdBrvu6QfSRIeQDwBNbs4=
+X-Received: by 2002:a25:2409:0:b0:634:15f4:2240 with SMTP id
+ k9-20020a252409000000b0063415f42240mr14270050ybk.88.1648300554229; Sat, 26
+ Mar 2022 06:15:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220325150419.757836392@linuxfoundation.org>
+In-Reply-To: <20220325150419.757836392@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 26 Mar 2022 18:45:42 +0530
+Message-ID: <CA+G9fYu9CjYCQwM3EO5eguRC0rq00HMuE7cEAG4E68shzw4OHA@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/38] 5.10.109-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Demote pgtable list headings from title heading to chapter heading.
+On Fri, 25 Mar 2022 at 20:40, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.109 release.
+> There are 38 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.109-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/vm/arch_pgtable_helpers.rst | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/Documentation/vm/arch_pgtable_helpers.rst b/Documentation/vm/arch_pgtable_helpers.rst
-index f8b225fc919047..cbaee9e592410f 100644
---- a/Documentation/vm/arch_pgtable_helpers.rst
-+++ b/Documentation/vm/arch_pgtable_helpers.rst
-@@ -13,7 +13,7 @@ Following tables describe the expected semantics which can also be tested during
- boot via CONFIG_DEBUG_VM_PGTABLE option. All future changes in here or the debug
- test need to be in sync.
- 
--======================
-+
- PTE Page Table Helpers
- ======================
- 
-@@ -79,7 +79,7 @@ PTE Page Table Helpers
- | ptep_set_access_flags     | Converts into a more permissive PTE              |
- +---------------------------+--------------------------------------------------+
- 
--======================
-+
- PMD Page Table Helpers
- ======================
- 
-@@ -153,7 +153,7 @@ PMD Page Table Helpers
- | pmdp_set_access_flags     | Converts into a more permissive PMD              |
- +---------------------------+--------------------------------------------------+
- 
--======================
-+
- PUD Page Table Helpers
- ======================
- 
-@@ -209,7 +209,7 @@ PUD Page Table Helpers
- | pudp_set_access_flags     | Converts into a more permissive PUD              |
- +---------------------------+--------------------------------------------------+
- 
--==========================
-+
- HugeTLB Page Table Helpers
- ==========================
- 
-@@ -235,7 +235,7 @@ HugeTLB Page Table Helpers
- | huge_ptep_set_access_flags  | Converts into a more permissive HugeTLB        |
- +---------------------------+--------------------------------------------------+
- 
--========================
-+
- SWAP Page Table Helpers
- ========================
- 
+## Build
+* kernel: 5.10.109-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.10.y
+* git commit: c02fc5f9e70f4aed2693f783a09af12c2ef87802
+* git describe: v5.10.108-39-gc02fc5f9e70f
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.108-39-gc02fc5f9e70f
 
-base-commit: f443e374ae131c168a065ea1748feac6b2e76613
--- 
-An old man doll... just what I always wanted! - Clara
+## Test Regressions (compared to v5.10.105)
+No test regressions found.
 
+## Metric Regressions (compared to v5.10.105)
+No metric regressions found.
+
+## Test Fixes (compared to v5.10.105)
+No test fixes found.
+
+## Metric Fixes (compared to v5.10.105)
+No metric fixes found.
+
+## Test result summary
+total: 95863, pass: 81602, fail: 589, skip: 12715, xfail: 957
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 291 total, 291 passed, 0 failed
+* arm64: 41 total, 41 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 39 total, 39 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 51 passed, 9 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 41 total, 41 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

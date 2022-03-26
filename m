@@ -2,77 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB934E848A
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 23:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D7A4E848B
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 23:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbiCZW2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 18:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
+        id S234985AbiCZWjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 18:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbiCZW2R (ORCPT
+        with ESMTP id S233055AbiCZWjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 18:28:17 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C927E5A6
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 15:26:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648333600; x=1679869600;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8198OJbTIn96uQxJ6LTp6Y/NyKKBmUGOW4+KIz7uyXM=;
-  b=C0yrihJo+BA4mH4CFTZxUoZN2MxjCLdhbri8QQS78Kms/ndqiwTPTDiZ
-   HAASEHpuPOmN9/5DUdxSw4drPwwfRPBQ62cEBgNotTrh/FR+ybI+J6kvF
-   ncrw0l1nCwwL6gWtrzIeeWmsp21+EzYBQtb6QLEHfuogiCvv1ArPXM8o3
-   HqHuAx8aH84j74oGewina1KoIT5Abu9BBoqOW3YDd1VH0/I23kXXaBODg
-   TlyZv75iHizG/TBw8bIVe37XeL3rHYhK/e2TIpCWcRG8lTXY1eaDGb9nD
-   K1ECsMZyXTwnhrm/70OXlhpRdhWTmXKjGqHFUlqlmPqS+lsLtBzjTzFIW
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="345244224"
-X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
-   d="scan'208";a="345244224"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 15:26:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
-   d="scan'208";a="584804407"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 26 Mar 2022 15:26:39 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nYErm-0000St-KG; Sat, 26 Mar 2022 22:26:38 +0000
-Date:   Sun, 27 Mar 2022 06:26:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nick Terrell <terrelln@fb.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: lib/zstd/common/debug.h: zstd_deps.h is included more than once.
-Message-ID: <202203270632.BdIMZ4Zs-lkp@intel.com>
+        Sat, 26 Mar 2022 18:39:37 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50514B7F5
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 15:37:58 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id h7so19006648lfl.2
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 15:37:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QdYgy+BZM/qprtUrSJtz2sLcoAPvMOpRAnQOyOkfks0=;
+        b=Jw6DrHMuxeWP0GsAMFasqVTu7gc9fm8+5bPEimBbfJItCEfvOpQ/SAoW7oVnVF8h1a
+         zyOY7FXwzMtDYPN/IqO7UjNlKkJDjQVO/UdkwXT3p6KGmfYsyTyFgPP620KyAmS8NxFK
+         XxdhThFmIC2+Ii7SVeQvHg685M9picsPpRRLA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QdYgy+BZM/qprtUrSJtz2sLcoAPvMOpRAnQOyOkfks0=;
+        b=l3ehxnMKwvVX3F4dx7T7+C+GrLBqZ+kZB0o/nIxCb0OEDbWv52Toicxp9suuepy305
+         51AVbzNTUQojQ4G4M8dGTCNrF4ViKTYPLfopkkRShZxgudkbjddN/E6hhcr4B0eNCKUu
+         mPc6NhHAt5wX3m1bVEF3yuavBpb/PJG4H4W5p+Iai0qnYftVx0/itx4DwJXsRpxJBnDK
+         CuOazgldlySDrF/oxGGObQ915iW+gk99Ei5rHuds7O482HuRyjRgVAYloXcV2+0Ei7Dc
+         bkWTlogUSAg5wYBlmCO3gSIB6WuCeaeyJ/r9sMoZcSGcXc/sa8OzDUUfbI524PSLWjH9
+         yrxw==
+X-Gm-Message-State: AOAM530svQCl8UFuJhnAalu3u4T0yX7E/pSUKK8EPMr7/l51sG1yLK7G
+        SEtOBynC3cGL1fc3WwVaMLqQsPmdsKRdfbqKQf0=
+X-Google-Smtp-Source: ABdhPJzyQqRcQvDvRZ4QZUwKiCrWn8Wixi42S7dCgrZepdru73zuYBO4MTnHIlmgusFoIH/iYELiNg==
+X-Received: by 2002:ac2:5485:0:b0:448:bc39:8d30 with SMTP id t5-20020ac25485000000b00448bc398d30mr13769706lfk.462.1648334276312;
+        Sat, 26 Mar 2022 15:37:56 -0700 (PDT)
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
+        by smtp.gmail.com with ESMTPSA id b36-20020a0565120ba400b0044a245f918esm1190396lfv.232.2022.03.26.15.37.54
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Mar 2022 15:37:55 -0700 (PDT)
+Received: by mail-lj1-f181.google.com with SMTP id a30so7135440ljq.13
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 15:37:54 -0700 (PDT)
+X-Received: by 2002:a2e:a790:0:b0:249:906a:c6f1 with SMTP id
+ c16-20020a2ea790000000b00249906ac6f1mr13650380ljf.164.1648334274351; Sat, 26
+ Mar 2022 15:37:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220326114009.1690-1-aissur0002@gmail.com> <c7fcaccf-7ac0-fae8-3f41-d6552b689a70@ispras.ru>
+ <CAHk-=wijnsoGpoXRvY9o-MYow_xNXxaHg5vWJ5Z3GaXiWeg+dg@mail.gmail.com>
+In-Reply-To: <CAHk-=wijnsoGpoXRvY9o-MYow_xNXxaHg5vWJ5Z3GaXiWeg+dg@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 26 Mar 2022 15:37:38 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgiTa-Cf+CyChsSHe-zrsps=GMwsEqFE3b_cgWUjxUSmw@mail.gmail.com>
+Message-ID: <CAHk-=wgiTa-Cf+CyChsSHe-zrsps=GMwsEqFE3b_cgWUjxUSmw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] file: Fix file descriptor leak in copy_fd_bitmaps()
+To:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     Fedor Pchelkin <aissur0002@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   710f5d627a98e86f821aceb840b8f2f1fcc6cf75
-commit: e0c1b49f5b674cca7b10549c53b3791d0bbc90a8 lib: zstd: Upgrade to latest upstream zstd version 1.4.10
-date:   5 months ago
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
+On Sat, Mar 26, 2022 at 3:15 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> but maybe I'm missing something.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Side note: the thing I'm _definitely_ missing is context for this patch.
 
+I'm seeing "4/4" in the subject, but I can't find 1-3.
 
-includecheck warnings: (new ones prefixed by >>)
->> lib/zstd/common/debug.h: zstd_deps.h is included more than once.
+And the patch most definitely doesn't apply as-is, because that
+'add_byte' logic that it removes lines around doesn't exist in my tree
+at least.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+And I _do_ think that regardless of anything else, having those
+calculations use BITS_PER_BYTE - as if byte level operations were
+valid - is misleading.
+
+I do find something dodgy: alloc_fdtable().
+
+That function very much tries to keep things to that multiple of
+BITS_PER_LONG, and even has a comment to that effect, but I wonder if
+it is broken.
+
+In particular, that
+
+  nr = ... | (BITS_PER_LONG - 1)) + 1;
+
+case is only done for the "nr > sysctl_nr_open" case. The other case
+*DOES* align things up, but not necessarily sufficiently, in that it
+does
+
+        nr /= (1024 / sizeof(struct file *));
+        nr = roundup_pow_of_two(nr + 1);
+        nr *= (1024 / sizeof(struct file *));
+
+and I think that despite the round-up, it could easily be a smaller
+power-of-two than BITS_PER_LONG.
+
+So I think that code _intended_ for things to always be a multiple of
+BITS_PER_LONG, but I'm not convinced it is.
+
+It would be a good idea to just make it very explicit that it's
+properly aligned, using
+
+    --- a/fs/file.c
+    +++ b/fs/file.c
+    @@ -111,7 +111,8 @@ static struct fdtable * alloc_fdtable(unsigned int nr)
+         * bitmaps handling below becomes unpleasant, to put it mildly...
+         */
+        if (unlikely(nr > sysctl_nr_open))
+    -           nr = ((sysctl_nr_open - 1) | (BITS_PER_LONG - 1)) + 1;
+    +           nr = sysctl_nr_open;
+    +   nr = ALIGN(nr, BITS_PER_LONG);
+
+        fdt = kmalloc(sizeof(struct fdtable), GFP_KERNEL_ACCOUNT);
+        if (!fdt)
+
+although that would perhaps break the whole "we try to allocate in
+comfortable page-tuned chunks" code, so that obvious patch may be
+doing non-obvious bad things.
+
+Maybe it's the roundup_pow_of_two() that should be fixed to be that
+proper BITS_PER_LONG alignment instead?
+
+And related to this all, we do have that BITS_PER_BYTE thing in a few
+places, and they are all a bit dodgy:
+
+ - copy_fd_bitmaps() uses BITS_PER_BYTE, but I do think that all the
+values it operates on _should_ be BITS_PER_LONG aligned
+
+ - alloc_fdtable() again does "2 * nr / BITS_PER_BYTE" for the bitmap
+allocations
+
+and we should make really really sure that we're always doing
+BITS_PER_LONG, and that alloc_fdtable() calculation should be checked.
+
+Hmm?
+
+                   Linus

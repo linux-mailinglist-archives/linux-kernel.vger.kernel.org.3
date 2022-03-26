@@ -2,100 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6E54E8171
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 15:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C21D4E8173
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 15:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233299AbiCZOk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 10:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
+        id S233309AbiCZOnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 10:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232561AbiCZOk4 (ORCPT
+        with ESMTP id S232561AbiCZOnK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 10:40:56 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5B517ECC6
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 07:39:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648305559; x=1679841559;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pCsHdo0R4JvWWSHvwAy7g2k+udGsLopzmt5/nsIAcCc=;
-  b=Uiwjv8RMBuSCqqG3cSOmptL+Gc0PLRHfpFCI6aJc1miUyoagdb5CR5cx
-   MkLROV6INBQbRb/tpCeDjk/b2juwSlSIix9wgAY/Z3Kt7eN3dEi6KJ6MJ
-   nECWLoDqAoCYeFOGXORuvOAb6HNrKq6n/6X7cfgi7Vu4dh71bns5wjttE
-   UPJ+/qngHdVfqVkiKx5L16XTrSwSwO6pUj2TeO9hzmYfeGv2nMbD/O0lz
-   gIS5roIaf05sBvaY1hGKokHJNJiOcAsVlLAcuQyimucvyK4tzRdqsk89f
-   idTzLTlcwFhgDCCZbedatqcFZViTreifJ67BGKaDy6+WoCQa9WNl83/9p
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="319489436"
-X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
-   d="scan'208";a="319489436"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 07:39:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
-   d="scan'208";a="520503426"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 26 Mar 2022 07:39:18 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nY7ZV-00005R-Ln; Sat, 26 Mar 2022 14:39:17 +0000
-Date:   Sat, 26 Mar 2022 22:38:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Gwendal Grignou <gwendal@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Subject: powerpc-linux-ld: warning: orphan section `.ftrace.tramp' from
- `drivers/platform/chrome/cros_ec_trace.o' being placed in section
- `.ftrace.tramp'
-Message-ID: <202203262233.4tgzPTZZ-lkp@intel.com>
+        Sat, 26 Mar 2022 10:43:10 -0400
+Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64E520288F
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 07:41:32 -0700 (PDT)
+Received: from cap.home.8bytes.org (p5b006cf2.dip0.t-ipconnect.de [91.0.108.242])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by theia.8bytes.org (Postfix) with ESMTPSA id 66E6F4ED;
+        Sat, 26 Mar 2022 15:41:30 +0100 (CET)
+From:   Joerg Roedel <joro@8bytes.org>
+To:     x86@kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH v3] x86/sev: Unroll string mmio with CC_ATTR_GUEST_UNROLL_STRING_IO
+Date:   Sat, 26 Mar 2022 15:41:27 +0100
+Message-Id: <20220326144127.15967-1-joro@8bytes.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gwendal,
+From: Joerg Roedel <jroedel@suse.de>
 
-FYI, the error/warning still remains.
+The io specific memcpy/memset functions use string mmio accesses to do
+their work. Under SEV the hypervisor can't emulate these instructions,
+because they read/write directly from/to encrypted memory.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   52d543b5497cf31d6baeb0bcfe5a5474c3238578
-commit: d453ceb6549af8798913de6a20444cb7200fdb69 platform/chrome: sensorhub: Add trace events for sample
-date:   8 months ago
-config: powerpc-randconfig-m031-20220326 (https://download.01.org/0day-ci/archive/20220326/202203262233.4tgzPTZZ-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d453ceb6549af8798913de6a20444cb7200fdb69
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d453ceb6549af8798913de6a20444cb7200fdb69
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
+KVM will inject a page fault exception into the guest when it is asked
+to emulate string mmio instructions for an SEV guest:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+	BUG: unable to handle page fault for address: ffffc90000065068
+	#PF: supervisor read access in kernel mode
+	#PF: error_code(0x0000) - not-present page
+	PGD 8000100000067 P4D 8000100000067 PUD 80001000fb067 PMD 80001000fc067 PTE 80000000fed40173
+	Oops: 0000 [#1] PREEMPT SMP NOPTI
+	CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc7 #3
 
-All warnings (new ones prefixed by >>):
+As string mmio for an SEV guest can not be supported by the
+hypervisor, unroll the instructions for CC_ATTR_GUEST_UNROLL_STRING_IO
+enabled kernels.
 
-   powerpc-linux-ld: warning: orphan section `.init.plt' from `drivers/platform/chrome/cros_ec_trace.o' being placed in section `.init.plt'
->> powerpc-linux-ld: warning: orphan section `.ftrace.tramp' from `drivers/platform/chrome/cros_ec_trace.o' being placed in section `.ftrace.tramp'
-   powerpc-linux-ld: warning: orphan section `.init.plt' from `drivers/platform/chrome/cros_ec_trace.o' being placed in section `.init.plt'
->> powerpc-linux-ld: warning: orphan section `.ftrace.tramp' from `drivers/platform/chrome/cros_ec_trace.o' being placed in section `.ftrace.tramp'
-   powerpc-linux-ld: warning: orphan section `.init.plt' from `drivers/platform/chrome/cros_ec_trace.o' being placed in section `.init.plt'
->> powerpc-linux-ld: warning: orphan section `.ftrace.tramp' from `drivers/platform/chrome/cros_ec_trace.o' being placed in section `.ftrace.tramp'
+This issue appears when kernels are launched in recent libvirt-managed
+SEV virtual machines, because libvirt started to add a tpm-crb device
+to the guest by default.
 
+The kernel driver for tpm-crb uses memcpy_to/from_io() functions to
+access MMIO memory, resulting in a page-fault injected by KVM and
+crashing the kernel at boot.
+
+Cc: stable@vger.kernel.org #4.15+
+Fixes: d8aa7eea78a1 ('x86/mm: Add Secure Encrypted Virtualization (SEV) support')
+Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+---
+Changes v2->v3:
+	- Fix sparse warnings introduced by v2
+
+ arch/x86/lib/iomem.c | 65 ++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 57 insertions(+), 8 deletions(-)
+
+diff --git a/arch/x86/lib/iomem.c b/arch/x86/lib/iomem.c
+index df50451d94ef..3e2f33fc33de 100644
+--- a/arch/x86/lib/iomem.c
++++ b/arch/x86/lib/iomem.c
+@@ -22,7 +22,7 @@ static __always_inline void rep_movs(void *to, const void *from, size_t n)
+ 		     : "memory");
+ }
+ 
+-void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
++static void string_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
+ {
+ 	if (unlikely(!n))
+ 		return;
+@@ -38,9 +38,8 @@ void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
+ 	}
+ 	rep_movs(to, (const void *)from, n);
+ }
+-EXPORT_SYMBOL(memcpy_fromio);
+ 
+-void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
++static void string_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
+ {
+ 	if (unlikely(!n))
+ 		return;
+@@ -56,14 +55,64 @@ void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
+ 	}
+ 	rep_movs((void *)to, (const void *) from, n);
+ }
++
++static void unrolled_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
++{
++	const volatile char __iomem *in = from;
++	char *out = to;
++	int i;
++
++	for (i = 0; i < n; ++i)
++		out[i] = readb(&in[i]);
++}
++
++static void unrolled_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
++{
++	volatile char __iomem *out = to;
++	const char *in = from;
++	int i;
++
++	for (i = 0; i < n; ++i)
++		writeb(in[i], &out[i]);
++}
++
++static void unrolled_memset_io(volatile void __iomem *a, int b, size_t c)
++{
++	volatile char __iomem *mem = a;
++	int i;
++
++	for (i = 0; i < c; ++i)
++		writeb(b, &mem[i]);
++}
++
++void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
++{
++	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO))
++		unrolled_memcpy_fromio(to, from, n);
++	else
++		string_memcpy_fromio(to, from, n);
++}
++EXPORT_SYMBOL(memcpy_fromio);
++
++void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
++{
++	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO))
++		unrolled_memcpy_toio(to, from, n);
++	else
++		string_memcpy_toio(to, from, n);
++}
+ EXPORT_SYMBOL(memcpy_toio);
+ 
+ void memset_io(volatile void __iomem *a, int b, size_t c)
+ {
+-	/*
+-	 * TODO: memset can mangle the IO patterns quite a bit.
+-	 * perhaps it would be better to use a dumb one:
+-	 */
+-	memset((void *)a, b, c);
++	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO)) {
++		unrolled_memset_io(a, b, c);
++	} else {
++		/*
++		 * TODO: memset can mangle the IO patterns quite a bit.
++		 * perhaps it would be better to use a dumb one:
++		 */
++		memset((void *)a, b, c);
++	}
+ }
+ EXPORT_SYMBOL(memset_io);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

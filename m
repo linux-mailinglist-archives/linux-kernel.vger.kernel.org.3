@@ -2,103 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD41E4E7CC0
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F0A4E7CFC
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiCYX7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 19:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
+        id S229938AbiCZABw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 20:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiCYX7v (ORCPT
+        with ESMTP id S229821AbiCZABu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 19:59:51 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5F94ECE8;
-        Fri, 25 Mar 2022 16:58:14 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id c2so7660659pga.10;
-        Fri, 25 Mar 2022 16:58:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HvxCf3iBrSFVUSs66FB91DG0UktB4J0Sg+YOQsWz7fk=;
-        b=Sx3Tvz+cKw4R5zZC4XIRSWbNij144XsxY3qYemBIob0BO8WV89v5fijUFP1JT+45cT
-         NMe/RM2tRaFK9TtUN5I/N6HL/Zl3B7yqShIjaNF2QDQPNbBamIWWiHzXOvR8pRJQ57VB
-         3n0D4OICMTCF/cqgG9cEFqfGImU+pqrGmLTrpW2C5DqlIQBYnJGdoJ4i3CFaGwYxUkn7
-         J9vRqBtKsh3Goh8w91yEqSaMkWFx5tykA95jbk/QTj84rt8Zzao7kFDBrKqyYrVq7Kqo
-         z55xF5InST0F3q/k2nup7B4bb08DYZGEqTeo7D/R5oX9SIH+g8jkW+2yJ/a53zDqn9oM
-         /LhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HvxCf3iBrSFVUSs66FB91DG0UktB4J0Sg+YOQsWz7fk=;
-        b=ahTOSkdQtGLP6G0TjY6wq6Wv0GhKw1v9adYVo0dIEpJ0Rn6CTp3j8kKqIIOwYi0o7M
-         hD+zmCxtlgWE5MCAHGrerRA1YfxYsMSJopkwgGDQAi4giRALrhefpFLXrk5XWmdhoJKw
-         nP20B+LUToXQELp5b3xE346Z08Rk+D3EuOx6ADPAsQeWNAzZ+TeZagkqwysTIbVIv9K8
-         UzDIlAEX4m9KOM2nEazbw4IUt1f0p93WYpR6aN4z23cosotf2L+U5o73YWD+ee1Z0Dv4
-         FXwalvNmn/uS379/NzImCVc2chzdY5heAf6JjdxAqvDxNTWpteTvNTTD5abiLVnsHBt8
-         0w/A==
-X-Gm-Message-State: AOAM5320QuV5bWH5iOwdSLG+f4ULRqPacFEp617tIpKMtO3huH9hBEfI
-        J0KslHgOpj90PKQwtrA5WI4=
-X-Google-Smtp-Source: ABdhPJyvphW1Yu/OQG67MhyMMjYVw58/xuAHy9Sq3Jg35cthYi6mc1b0ZkypUTKNTbT78bfldJaz2A==
-X-Received: by 2002:a62:38d1:0:b0:4fa:80ad:bf5e with SMTP id f200-20020a6238d1000000b004fa80adbf5emr12494004pfa.69.1648252693994;
-        Fri, 25 Mar 2022 16:58:13 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id rm5-20020a17090b3ec500b001c7559762e9sm13793727pjb.20.2022.03.25.16.58.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 16:58:13 -0700 (PDT)
-Message-ID: <17795ca5-fe40-1259-6b33-f1a09d6fcff2@gmail.com>
-Date:   Fri, 25 Mar 2022 16:58:06 -0700
+        Fri, 25 Mar 2022 20:01:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09165DA31;
+        Fri, 25 Mar 2022 17:00:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D5F3B82A9E;
+        Sat, 26 Mar 2022 00:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 44CD5C004DD;
+        Sat, 26 Mar 2022 00:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648252812;
+        bh=dX2SyFHr9niOTbQWNxyNk3ZjF15nVV76JJD1thEeLUI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=c5x8lsbi6a6ROo30II0pt50lV+AmdwJITLVEltrgAaWP9oN5pF/QjtdDs8EeGeJci
+         +ugQ59w4ouJaPuclIqw52Jco4qSwY1OeNjNuaEsU15BxGOfpWD0/ertKGdVvfbxvxo
+         QPY9N+DIOAEy+PpUF12SWIrhDbDdTrICutcdLl6hfzxy2mDqeshDkcbqnk9vV9ySWK
+         aTHViotMoejyYgFArGnJRV7xdmwy0p5nE2BEMnd9oBTXLc/9m6xaRqTvsH27Lwz8HF
+         chPIlK2fJwyFP8Lre7zn9mPvu0I0zTgpTd1+PhQ21jVBg9oE9NoOVHg0rCyz1OXH9r
+         t2/Zoi+o5YFCQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2A6BCE6BBCA;
+        Sat, 26 Mar 2022 00:00:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.16 00/37] 5.16.18-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220325150420.046488912@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220325150420.046488912@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/4] net: hns3: add some fixes for -net
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164825281217.29666.7213436242346733301.git-patchwork-notify@kernel.org>
+Date:   Sat, 26 Mar 2022 00:00:12 +0000
+References: <20220324125450.56417-1-huangguangbin2@huawei.com>
+In-Reply-To: <20220324125450.56417-1-huangguangbin2@huawei.com>
+To:     huangguangbin (A) <huangguangbin2@huawei.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lipeng321@huawei.com,
+        chenhao288@hisilicon.com
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/25/22 08:14, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.18 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.18-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Hello:
 
-On ARCH_BRCMSTB, using 32-bit and 64-bit ARM kernels:
+This series was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+On Thu, 24 Mar 2022 20:54:46 +0800 you wrote:
+> This series adds some fixes for the HNS3 ethernet driver.
+> 
+> Jian Shen (4):
+>   net: hns3: fix bug when PF set the duplicate MAC address for VFs
+>   net: hns3: fix port base vlan add fail when concurrent with reset
+>   net: hns3: add vlan list lock to protect vlan list
+>   net: hns3: refine the process when PF set VF VLAN
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,1/4] net: hns3: fix bug when PF set the duplicate MAC address for VFs
+    https://git.kernel.org/netdev/net/c/ccb18f05535c
+  - [net,2/4] net: hns3: fix port base vlan add fail when concurrent with reset
+    https://git.kernel.org/netdev/net/c/c0f46de30c96
+  - [net,3/4] net: hns3: add vlan list lock to protect vlan list
+    https://git.kernel.org/netdev/net/c/1932a624ab88
+  - [net,4/4] net: hns3: refine the process when PF set VF VLAN
+    https://git.kernel.org/netdev/net/c/190cd8a72b01
+
+You are awesome, thank you!
 -- 
-Florian
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

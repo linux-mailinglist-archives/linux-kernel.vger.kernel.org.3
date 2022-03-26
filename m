@@ -2,74 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 902F54E7F31
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 06:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 993EC4E7F38
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 06:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231326AbiCZFvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 01:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
+        id S231327AbiCZF7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 01:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiCZFvl (ORCPT
+        with ESMTP id S229852AbiCZF7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 01:51:41 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDBE210468
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 22:50:05 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id qa43so19004492ejc.12
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 22:50:05 -0700 (PDT)
+        Sat, 26 Mar 2022 01:59:39 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0A02194
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 22:58:03 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id e5so10295744pls.4
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 22:58:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2O4yXpqsURvfM5TB1UAWHWz+8FkEHYO0gCz767gxti8=;
-        b=Sod/FcT9Ks5jijNGSYWpQqzd2JM5VDQVU8LgvK+b5kJXeLJ7QA0CZcDCF05sYHAjYm
-         BVFzuU76IglUwI8JQsnzAKI3cuQXLirS7G9bp1t/al+3dw/TGAiv9wUpyabRDndtCgEP
-         eO4epxHuxmxlplL3zY2SC1wstRqM9gJiP1CpDnIP+s1YVx7Ynhpdr/E2brjy0fnY2Zii
-         4lBi4HZmW3pg92GjJuMNzCZagWrEPEWU2emY2IFElEotn5Mrat+h2gwXe9X00yEoNYJx
-         TKH0Se9JgX02mX7U7XEDoLLw6GUbFpSFdYFrw1wEbFV1onAQsWXAQD/ud+LGaASHvSeV
-         YQYQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hp0jNfOr8K57kc3PTbt73qfXMrfQ8MYWDBaHWdkvGpg=;
+        b=bMMS4xxwRsa9RGMVqHkndB9L/aMyleFkj5V5Q3fjshStbrZMLpyxo4J9D+/IflYkDM
+         pdDr0YpqmDVMtrf10YKJEWBCAg6mwlyRRfbzbhqNZ/E71KsYpcguIfVLT8haOWMwcNLI
+         33A2K9RgvaPiWagzhQFVvDh3sXdWyrT9NgLwwrrPQBy9HhJ/OsFbbhnz3HjJ8cbizWa1
+         lSoWyEpMyPazxiQonqyBtQk4iex02x0Fpco29sOAhwNA10u2bFJrQO2OOH0E151rKiwf
+         JvLm1FaHLB1UV9rQQ5Z13yfWpqfTb3I9ZT2PMHNFdimWB/AvOoacCKWk+eOQ0QkCENVv
+         GUUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2O4yXpqsURvfM5TB1UAWHWz+8FkEHYO0gCz767gxti8=;
-        b=mUJ5fkDBQ1JpmdSUIX7AlHWc1m2ntS1OXNZdV5Hmt9bz+Yrw4sMs8ot1O8JEGNpPHt
-         DAN7Drz9pho9AoqgBWPbGR4MDyyiSbmSPiW3qmCvQIFEKCDzcTwxETIwL5qNxyq2DAE2
-         luY0VA4dwhHVr4EXodbnO5mWV+2flyMhrRkLgoSvBekjApJJJTkdKpnjZ2+d+JUekJdX
-         6ZJQkgsq8TTSDuePCCoJZeDrDB2sVwwNiKdE+F5qkdZXB0wpUW1w6YjXBp+Cu/n2NrMz
-         VOtrgZ4KF4+wPA4PiK6WkgJcMWWIiIaCkOz0UI9qR+BUZrz12Hjnc6eL8ER1nxRECpOS
-         9THQ==
-X-Gm-Message-State: AOAM531Lnc+LIqRIaDtNO5a4ajyAZSCakG3NTPNAxts2BagFpKA3Xyvi
-        CFNYrBNlh0rurhq/J1lxOwqvGg==
-X-Google-Smtp-Source: ABdhPJz2DiccS9xVih0qkcsHHv/ejttJp0IsCc3Xakcv/Utb1G9VsI1XMGaRvbMGOYF83H//hNnB7g==
-X-Received: by 2002:a17:906:9751:b0:6e0:5cdd:cabf with SMTP id o17-20020a170906975100b006e05cddcabfmr15961766ejy.38.1648273803777;
-        Fri, 25 Mar 2022 22:50:03 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([104.245.96.34])
-        by smtp.gmail.com with ESMTPSA id c5-20020a170906d18500b006ce371f09d4sm3064171ejz.57.2022.03.25.22.49.58
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hp0jNfOr8K57kc3PTbt73qfXMrfQ8MYWDBaHWdkvGpg=;
+        b=15Dn6fnptBroZskxmbK3HVKbfocgp4TTAIF3S1l3FIZnAb/8JsvRKPu9+H6OHvm0z1
+         KxpGQXKxscaOjvcv0R22GNhp/CXYddjPcqnfpL1qVYticFEo/6Rr1I9UmT8EvsQhKPax
+         k5RhJdFkAqdbNEXzqi1vrS8K98veX9RmtoKNJnZ4J+H8VKOmotQ1xT/JACNSUl9FLoO1
+         mhuTJM0ERUMX452XKeuOdQCxkJzF7Fx6yhHa5Wg44nbexqhZ4lfdWKOO0Uwo0YuT1xM3
+         CUXt7Fefr/4BtYomm5bQVupCmb1gcpHIzsLHQVcDMKavNWGMMW5hZNgkwWUiHEyS6Ing
+         sS4A==
+X-Gm-Message-State: AOAM5300MKhKMWqyf9lpkukpCpffP29cZj7hxddpcnwZI8Z7Jo7dRIR2
+        lL8m+AHH2Bj5Qndq4dyyAsQtGA==
+X-Google-Smtp-Source: ABdhPJzQZZSOf1jPHjrBcwPyl6LygKsiZMtHXWnMYpIRw0h5BRz/GUBBLmwMca27506uMzRko74bDA==
+X-Received: by 2002:a17:90a:19d5:b0:1bc:a5db:b655 with SMTP id 21-20020a17090a19d500b001bca5dbb655mr28879529pjj.46.1648274283159;
+        Fri, 25 Mar 2022 22:58:03 -0700 (PDT)
+Received: from localhost.localdomain ([223.233.78.42])
+        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004e1414f0bb1sm9505067pfl.135.2022.03.25.22.58.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 22:50:03 -0700 (PDT)
-Date:   Sat, 26 Mar 2022 13:49:56 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ali Saidi <alisaidi@amazon.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, german.gomez@arm.com,
-        benh@kernel.crashing.org, Nick.Forrington@arm.com,
-        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
-        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
-        kjain@linux.ibm.com, lihuafei1@huawei.com, mark.rutland@arm.com,
-        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, will@kernel.org
-Subject: Re: [PATCH v4 1/4] tools: arm64: Import cputype.h
-Message-ID: <20220326054956.GB20556@leoy-ThinkPad-X240s>
-References: <20220324183323.31414-1-alisaidi@amazon.com>
- <20220324183323.31414-2-alisaidi@amazon.com>
- <Yj4McMHsxtJ3PfKk@kernel.org>
- <Yj4bKHrmKhujZdpj@kernel.org>
+        Fri, 25 Mar 2022 22:58:02 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        bjorn.andersson@linaro.org
+Subject: [PATCH v4 0/2] arm64: dts: Add PCIe support for SM8150 SoC
+Date:   Sat, 26 Mar 2022 11:27:52 +0530
+Message-Id: <20220326055754.1796146-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yj4bKHrmKhujZdpj@kernel.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -80,40 +70,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo, Ali,
+Changes since v3:
+-----------------
+- v3 can be found here: https://lore.kernel.org/linux-arm-msm/20220302203045.184500-1-bhupesh.sharma@linaro.org/
+- Broke down the patchset into 3 separate patchsets for each tree,
+  so that the patch(es) can be easily reviewed and merged by respective
+  maintainers.
+- This patchset adds the 'linux-arm-msm' related dts support for SM8150 SoC.
 
-On Fri, Mar 25, 2022 at 04:42:32PM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Fri, Mar 25, 2022 at 03:39:44PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Thu, Mar 24, 2022 at 06:33:20PM +0000, Ali Saidi escreveu:
-> > > Bring-in the kernel's arch/arm64/include/asm/cputype.h into tools/
-> > > for arm64 to make use of all the core-type definitions in perf.
-> 
-> > > Replace sysreg.h with the version already imported into tools/.
->  
-> > You forgot to add it to tools/perf/check-headers.sh so that we get
-> > notificed when the original file in the kernel sources gets updated, so
-> > that we can check if this needs any tooling adjustments.
->  
-> > I'll add the entry together with the waiver for this specific
-> > difference.
-> 
-> This:
-> 
-> diff --git a/tools/perf/check-headers.sh b/tools/perf/check-headers.sh
-> index 30ecf3a0f68b6830..6ee44b18c6b57cf1 100755
-> --- a/tools/perf/check-headers.sh
-> +++ b/tools/perf/check-headers.sh
-> @@ -146,6 +146,7 @@ done
->  check arch/x86/lib/memcpy_64.S        '-I "^EXPORT_SYMBOL" -I "^#include <asm/export.h>" -I"^SYM_FUNC_START\(_LOCAL\)*(memcpy_\(erms\|orig\))"'
->  check arch/x86/lib/memset_64.S        '-I "^EXPORT_SYMBOL" -I "^#include <asm/export.h>" -I"^SYM_FUNC_START\(_LOCAL\)*(memset_\(erms\|orig\))"'
->  check arch/x86/include/asm/amd-ibs.h  '-I "^#include [<\"]\(asm/\)*msr-index.h"'
-> +check arch/arm64/include/asm/cputype.h '-I "^#include [<\"]\(asm/\)*sysreg.h"'
->  check include/uapi/asm-generic/mman.h '-I "^#include <\(uapi/\)*asm-generic/mman-common\(-tools\)*.h>"'
->  check include/uapi/linux/mman.h       '-I "^#include <\(uapi/\)*asm/mman.h>"'
->  check include/linux/build_bug.h       '-I "^#\(ifndef\|endif\)\( \/\/\)* static_assert$"'
+Hi Bjorn,
 
-LGTM.  I did the testing on both my x86 and Arm64 platforms, thanks for
-the fixing up.
+This series adds dts support for PCIe controllers and PHYs found on 
+SA8155p ADP board from Qualcomm.
 
-Thanks,
-Leo
+This series has been tested on SA8155p ADP board with QCA6696 chipset connected
+onboard.
+
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+
+Bhupesh Sharma (2):
+  arm64: dts: qcom: sm8150: Add PCIe nodes
+  arm64: dts: qcom: sa8155: Enable PCIe nodes
+
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts |  15 ++
+ arch/arm64/boot/dts/qcom/sm8150.dtsi     | 243 +++++++++++++++++++++++
+ 2 files changed, 258 insertions(+)
+
+-- 
+2.35.1
+

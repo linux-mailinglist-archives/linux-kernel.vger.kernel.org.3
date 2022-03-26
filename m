@@ -2,78 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65754E8131
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 14:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A73C34E8136
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 14:56:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbiCZN4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 09:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
+        id S233121AbiCZN5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 09:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233098AbiCZN4M (ORCPT
+        with ESMTP id S233116AbiCZN4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 09:56:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4800E70;
-        Sat, 26 Mar 2022 06:54:34 -0700 (PDT)
+        Sat, 26 Mar 2022 09:56:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DFD27FCF;
+        Sat, 26 Mar 2022 06:54:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8593CB80978;
-        Sat, 26 Mar 2022 13:54:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5756CC340EE;
-        Sat, 26 Mar 2022 13:54:31 +0000 (UTC)
-Date:   Sat, 26 Mar 2022 09:54:20 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v2 2/3] bootconfig: Support embedding a bootconfig file
- in kernel
-Message-ID: <20220326095420.2060aae3@rorschach.local.home>
-In-Reply-To: <20220326214040.07d4c8b99d7b83229509340d@kernel.org>
-References: <164724890153.731226.1478494969800777757.stgit@devnote2>
-        <164724892075.731226.14103557516176115189.stgit@devnote2>
-        <20220316191649.GA11547@pswork>
-        <20220318101445.fdb151efe58c6c3a1c572500@kernel.org>
-        <CAK7LNAQKrybg7iAzPowqG5SuT6r5Y0v++96CKppM1=Ob4FG+bg@mail.gmail.com>
-        <20220326214040.07d4c8b99d7b83229509340d@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF5F1B8093C;
+        Sat, 26 Mar 2022 13:54:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A46C340EE;
+        Sat, 26 Mar 2022 13:54:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648302876;
+        bh=tpj4OYga0btXBeWUbbOyEBya0KUQhNIu70pMx0FFR+U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pC5bd1M8keEZTGI+g36EAA1WcN2uAqK19jpI/xZhwXA15rg3UfnQZdpwgsyKQBbT4
+         24eA+/wErB/sMcYeAuAae1HYusiC4azTxCGqn6UMNXs6ClCcz3yzq1Id0jeMTHV3lp
+         QvpPJ4RRof8D6qULdkt90wE3OH5Rcy8CW3xaCfPKKq65AUMeYLUXqGD85gBwIei8ne
+         GMIpg/6f490FxlFyDOxor3HCFXD6GUS2OqTiCCMZVodCErePotJ+6xOh4nzjxFPDUR
+         yR8z2ggLW9lLUtVUGsOS0H4UVO+LFHGggW4K8d10QvfM8+NjCUkfxKSE/qnFYV/nnZ
+         +ocLUG3Ej85qQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5930140407; Sat, 26 Mar 2022 10:54:34 -0300 (-03)
+Date:   Sat, 26 Mar 2022 10:54:34 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ali Saidi <alisaidi@amazon.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, german.gomez@arm.com,
+        leo.yan@linaro.org, benh@kernel.crashing.org,
+        Nick.Forrington@arm.com, alexander.shishkin@linux.intel.com,
+        andrew.kilroy@arm.com, james.clark@arm.com, john.garry@huawei.com,
+        jolsa@kernel.org, kjain@linux.ibm.com, lihuafei1@huawei.com,
+        mark.rutland@arm.com, mathieu.poirier@linaro.org, mingo@redhat.com,
+        namhyung@kernel.org, peterz@infradead.org, will@kernel.org
+Subject: Re: [PATCH v4 3/4] perf mem: Support mem_lvl_num in c2c command
+Message-ID: <Yj8bGiAlZL9mUW+c@kernel.org>
+References: <20220324183323.31414-1-alisaidi@amazon.com>
+ <20220324183323.31414-4-alisaidi@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324183323.31414-4-alisaidi@amazon.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 26 Mar 2022 21:40:40 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
-
-> > BTW, it is already possible to embed kernel parameters
-> > into the kernel.
-> > Is this another implementation of CONFIG_CMDLINE?
-
-If one changes CONFIG_CMDLINE, does it require a rebuild of vmlinux?
-
+Em Thu, Mar 24, 2022 at 06:33:22PM +0000, Ali Saidi escreveu:
+> In addition to summarizing data encoded in mem_lvl also support data
+> encoded in mem_lvl_num.
 > 
-> Yes, it is the bootconfig version of the CONFIG_CMDLINE.
-> Since some boot-time tracing feature depends on the bootconfig (those can
-> not be set via kernel cmdline), we need this feature for those features
-> on non-initrd boot system.
+> Since other architectures don't seem to populate the mem_lvl_num field
+> here there shouldn't be a change in functionality.
 
-Yes, the kernel command line has a fixed size, and with tracing
-options, we can easily go over it.
+I'm removing this one as well, will wait for further discussion as the
+other two got yanked out as per Leo's review comments.
 
-bootconfig is a way to have an unlimited size and also be able to have
-a better and more reasonable formatting to express options for things
-like tracing.
+The first patch is in with Leo's ack.
 
--- Steve
+- Arnaldo
+ 
+> Signed-off-by: Ali Saidi <alisaidi@amazon.com>
+> Tested-by: German Gomez <german.gomez@arm.com>
+> Reviewed-by: German Gomez <german.gomez@arm.com>
+> ---
+>  tools/perf/util/mem-events.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
+> index ed0ab838bcc5..e5e405185498 100644
+> --- a/tools/perf/util/mem-events.c
+> +++ b/tools/perf/util/mem-events.c
+> @@ -485,6 +485,7 @@ int c2c_decode_stats(struct c2c_stats *stats, struct mem_info *mi)
+>  	u64 daddr  = mi->daddr.addr;
+>  	u64 op     = data_src->mem_op;
+>  	u64 lvl    = data_src->mem_lvl;
+> +	u64 lnum   = data_src->mem_lvl_num;
+>  	u64 snoop  = data_src->mem_snoop;
+>  	u64 lock   = data_src->mem_lock;
+>  	u64 blk    = data_src->mem_blk;
+> @@ -527,16 +528,18 @@ do {				\
+>  			if (lvl & P(LVL, UNC)) stats->ld_uncache++;
+>  			if (lvl & P(LVL, IO))  stats->ld_io++;
+>  			if (lvl & P(LVL, LFB)) stats->ld_fbhit++;
+> -			if (lvl & P(LVL, L1 )) stats->ld_l1hit++;
+> -			if (lvl & P(LVL, L2 )) stats->ld_l2hit++;
+> -			if (lvl & P(LVL, L3 )) {
+> +			if (lvl & P(LVL, L1) || lnum == P(LVLNUM, L1))
+> +				stats->ld_l1hit++;
+> +			if (lvl & P(LVL, L2) || lnum == P(LVLNUM, L2))
+> +				stats->ld_l2hit++;
+> +			if (lvl & P(LVL, L3) || lnum == P(LVLNUM, L3)) {
+>  				if (snoop & P(SNOOP, HITM))
+>  					HITM_INC(lcl_hitm);
+>  				else
+>  					stats->ld_llchit++;
+>  			}
+>  
+> -			if (lvl & P(LVL, LOC_RAM)) {
+> +			if (lvl & P(LVL, LOC_RAM) || lnum == P(LVLNUM, RAM)) {
+>  				stats->lcl_dram++;
+>  				if (snoop & P(SNOOP, HIT))
+>  					stats->ld_shared++;
+> -- 
+> 2.32.0
+
+-- 
+
+- Arnaldo

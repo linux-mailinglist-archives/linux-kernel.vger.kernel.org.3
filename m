@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1600B4E847A
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 22:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 422244E847B
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 22:53:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235538AbiCZVtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 17:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
+        id S233340AbiCZVzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 17:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235526AbiCZVte (ORCPT
+        with ESMTP id S229752AbiCZVzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 17:49:34 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD8C6266
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 14:47:57 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id s25so14517865lji.5
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 14:47:57 -0700 (PDT)
+        Sat, 26 Mar 2022 17:55:04 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21048F47
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 14:53:27 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id q5so14509453ljb.11
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 14:53:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=NX7bAOmY7x0MoLl0kNG0UF4nmV2vnCe33qnopm43zcs=;
-        b=U7NMOr062DlW2MKQ75/GkAHDH+7/F80SnVlTJLEWg0OklNDB9vTCcrOaYmlJdeKfkz
-         8Jt0XRorb/+1SLb1HYJoeNF/W2OW8AB9hvUohjRgrGg5di5hnwpcjei+SBYBfmNCNl8V
-         I1T/I3gSTD+2gZlS0kIkV1fW4gTjeh+X3tgxM=
+        bh=P460qBR9qVCfobuQ79cK1V0yFKiu9kVeZ2foGTksCVY=;
+        b=c1rqYC+jwsqrDMMgqVOTKPytpzM5CVnx4yfphdce7HCiv+/+GnaK45XIouAqnrBlCK
+         m2hHCUVajze95venepizTWrorZNo+FV2fqjfWWNfc2dFTgmD7FPdRBx50cS3k0rHIyrg
+         WZYOB067EQzBpYZXsYQZZKqr3kfAaQ9SUQqU8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NX7bAOmY7x0MoLl0kNG0UF4nmV2vnCe33qnopm43zcs=;
-        b=oIBqFUkhtVeU3CuMUi17vyOxVWaH5xX0kuHNU30XLcn5f8cDcPVqXfC6jm/QX4KH1B
-         E031ZYhu6yFx9Ft2fIc9P8r+mmNV+dl329txt6MHkh+iNGrQwafNa7hBgqmFc61gGbPo
-         ojDaJabtnsfmv3LZ4CuxTGmdtaDIkTOSLHxhDwhUWbZK6603S7gOxY4b+rV5OIIQptUo
-         YCyI20XaZm8ITGmuCysi7ljyaQv6LHjV8olN1uiiMojpOMsAotFVAlG1bRxGUDe3WT9g
-         h4dUmnyBMc2H3tOOb5k3O3HCXMnbti2+XKXARSHtsZzV0JvXplB1IzbozlH5mF0oh6ug
-         1t4w==
-X-Gm-Message-State: AOAM531h/5ULHAQ9Jo+Vxufa9zV/fJjcrBWWroBZgnCmhR7hCci6X4Wa
-        PUU2L6DbdIt9jpsfxhFg9C5JHymSrYu1qLKv/FY=
-X-Google-Smtp-Source: ABdhPJzmFFpq/dauYinX5Azku5se3rvRUNGjeA9LdLXeCu613TqslOcQqfEjI4EPg2IeAqchf8hL0Q==
-X-Received: by 2002:a2e:96d9:0:b0:249:8257:74ca with SMTP id d25-20020a2e96d9000000b00249825774camr13762611ljj.105.1648331275192;
-        Sat, 26 Mar 2022 14:47:55 -0700 (PDT)
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
-        by smtp.gmail.com with ESMTPSA id g11-20020ac24d8b000000b0044a3454c858sm1182919lfe.81.2022.03.26.14.47.54
+        bh=P460qBR9qVCfobuQ79cK1V0yFKiu9kVeZ2foGTksCVY=;
+        b=sYniSGCaubMXZeLn6GCPa4tSbb0W5WhONPnhe4TeCv8sCtiMwsWUBU8NBaCj57i0q/
+         x6AV89ODXPblGvuXJfQysXw8olYXnF6UuXyOZvL5M6cgJ+wVh8+j+00QnbVLkjIHMZtR
+         OLmJu32idKd26siABTTl2kMQCJVheTTS/fF2oTCEuSrCPgYFsLDaT9FAtscxF6GR1l4U
+         BN8isdQKkpw9DlrGQlLnDyb07ts58awh+fN1Nrx8VZFXS5qAFtMD5Fd4FcA7+L2OPyMX
+         hm1oMIP7zTswnf4GD84kH0KKdLlcQoJQF/STQ8XrWfhGor1xLmK5Ekt6UNp3qj6ksD4U
+         2GLw==
+X-Gm-Message-State: AOAM530y9OpzUc5T45DOCne8F6AL3lEcC2mOSUAY0zyS/TDhBI4tecu7
+        tgTKHRciRwHgai6drGegwx7Gz5VRa8nw+MxZRPs=
+X-Google-Smtp-Source: ABdhPJzJIoQFzyWbEECTA343rRTDyPPgkS+YPncsmlEvL5ulQ4mibdBiN7voRCcwF+EgGJWkdSjPTw==
+X-Received: by 2002:a2e:9d08:0:b0:249:b8b6:8f7a with SMTP id t8-20020a2e9d08000000b00249b8b68f7amr7857536lji.310.1648331605111;
+        Sat, 26 Mar 2022 14:53:25 -0700 (PDT)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
+        by smtp.gmail.com with ESMTPSA id y22-20020a2e9796000000b00249b86a210bsm678197lji.91.2022.03.26.14.53.24
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Mar 2022 14:47:54 -0700 (PDT)
-Received: by mail-lj1-f170.google.com with SMTP id q5so14499861ljb.11
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 14:47:54 -0700 (PDT)
-X-Received: by 2002:a2e:a549:0:b0:249:9ec3:f2b with SMTP id
- e9-20020a2ea549000000b002499ec30f2bmr54585ljn.358.1648331273760; Sat, 26 Mar
- 2022 14:47:53 -0700 (PDT)
+        Sat, 26 Mar 2022 14:53:24 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id q5so14509410ljb.11
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 14:53:24 -0700 (PDT)
+X-Received: by 2002:a2e:9b10:0:b0:247:f28c:ffd3 with SMTP id
+ u16-20020a2e9b10000000b00247f28cffd3mr13307754lji.152.1648331603613; Sat, 26
+ Mar 2022 14:53:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <nycvar.YFH.7.76.2203231015060.24795@cbobk.fhfr.pm>
-In-Reply-To: <nycvar.YFH.7.76.2203231015060.24795@cbobk.fhfr.pm>
+References: <20220326152646.GT8939@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220326152646.GT8939@worktop.programming.kicks-ass.net>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 26 Mar 2022 14:47:37 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh20x4=SCahsGyKT5QHRgSWn+mnxppVqZ64LsMh+85tpA@mail.gmail.com>
-Message-ID: <CAHk-=wh20x4=SCahsGyKT5QHRgSWn+mnxppVqZ64LsMh+85tpA@mail.gmail.com>
-Subject: Re: [GIT PULL] HID for 5.18
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Sat, 26 Mar 2022 14:53:07 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whhG15HiqR+WM5M2mMy9F17yVdT8_M0ra0tGJS+5ibrdw@mail.gmail.com>
+Message-ID: <CAHk-=whhG15HiqR+WM5M2mMy9F17yVdT8_M0ra0tGJS+5ibrdw@mail.gmail.com>
+Subject: Re: [GIT PULL] x86/core for 5.18
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -73,15 +75,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 2:18 AM Jiri Kosina <jikos@kernel.org> wrote:
+On Sat, Mar 26, 2022 at 8:26 AM Peter Zijlstra <peterz@infradead.org> wrote:
 >
->   git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-linus
+> Hi Linus, my first pull request in like forever, so please bear with me.
+>
+> Boris talked me through it, so hopefully it isn't entirely insane :-)
 
-I'm going through my merges to check which ones were signed tags and
-which ones weren't, and this is on the latter short-list.
+Well, it's not exactly working too well:
 
-So just a note that I'd really like people to use signed tags. Yes,
-yes, kernel.org has strict security policies and I don't require them,
-but it would still be really nice..
+  fatal: couldn't find remote ref x86_core_for_5.18_rc1
 
-             Linus
+there is actually a branch called "x86/core" there that has the commit
+you mention as the top commit, but I'm _hoping_ you had a signed that
+you created, and just never pushed out.
+
+So I won't pull that branch I found, in the hope that there's a simple
+"Oh, let me push that tag out" solution that gets me the signature
+too.
+
+               Linus

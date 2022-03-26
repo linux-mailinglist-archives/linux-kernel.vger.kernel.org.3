@@ -2,57 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E474E8470
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 22:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453D54E846D
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 22:35:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235497AbiCZVio convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 26 Mar 2022 17:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
+        id S235472AbiCZVgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 17:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiCZVim (ORCPT
+        with ESMTP id S235468AbiCZVgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 17:38:42 -0400
-X-Greylist: delayed 136 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Mar 2022 14:37:03 PDT
-Received: from smtprelay03.ispgateway.de (smtprelay03.ispgateway.de [80.67.18.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A121610E1;
-        Sat, 26 Mar 2022 14:37:03 -0700 (PDT)
-Received: from [80.82.223.85] (helo=mail.piie.net)
-        by smtprelay03.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <peter@piie.net>)
-        id 1nYE3a-0001fZ-Kq; Sat, 26 Mar 2022 22:34:46 +0100
+        Sat, 26 Mar 2022 17:36:47 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5406367;
+        Sat, 26 Mar 2022 14:35:10 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 86F7D1C0BB0; Sat, 26 Mar 2022 22:35:08 +0100 (CET)
+Date:   Sat, 26 Mar 2022 22:35:08 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Pavel Machek <pavel@denx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        =?utf-8?B?6LW15a2Q6L2p?= <beraphin@gmail.com>,
+        Stoyan Manolov <smanolov@suse.de>
+Subject: Re: [PATCH 5.10 09/38] llc: fix netdevice reference leaks in
+ llc_ui_bind()
+Message-ID: <20220326213508.GA19319@duo.ucw.cz>
+References: <20220325150419.757836392@linuxfoundation.org>
+ <20220325150420.029041400@linuxfoundation.org>
+ <20220326200922.GA9262@duo.ucw.cz>
+ <20220326131325.397bc0e7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Date:   Sat, 26 Mar 2022 21:34:42 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Mailer: RainLoop/1.16.0
-From:   "=?utf-8?B?UGV0ZXIgS8Okc3RsZQ==?=" <peter@piie.net>
-Message-ID: <74c2ef3d81f12516f508af014027ec46@piie.net>
-Subject: Re: [PATCH] platform/x86: acerhdf: Cleanup str_starts_with()
-To:     "Wei Li" <liwei391@huawei.com>,
-        "Hans de Goede" <hdegoede@redhat.com>,
-        "Mark Gross" <markgross@kernel.org>
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.xiang@huawei.com
-In-Reply-To: <20220326020249.3266561-1-liwei391@huawei.com>
-References: <20220326020249.3266561-1-liwei391@huawei.com>
-X-Df-Sender: cGV0ZXJAcGlpZS5uZXQ=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="HcAYCG3uE/tztfnV"
+Content-Disposition: inline
+In-Reply-To: <20220326131325.397bc0e7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-26. März 2022 02:53, "Wei Li" <liwei391@huawei.com> schrieb:
 
-> Since there is already a generic function strstarts() that check if a
-> string starts with a given prefix, cleanup str_starts_with().
-> 
-> Signed-off-by: Wei Li <liwei391@huawei.com>
+--HcAYCG3uE/tztfnV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Peter Kästle <peter@piie.net>
+Hi!
 
-[...]
+> > Can someone check this? AFAICT this is buggy.
+> >=20
+> > static int llc_ui_autobind(struct socket *sock, struct sockaddr_llc *ad=
+dr)
+> > {
+> >         struct sock *sk =3D sock->sk;
+> >         struct llc_sock *llc =3D llc_sk(sk);
+> >         struct llc_sap *sap;
+> >         int rc =3D -EINVAL;
+> >=20
+> >         if (!sock_flag(sk, SOCK_ZAPPED))
+> >                 goto out;
+> >=20
+> > There are 'goto out's from both before dev_get() and after it,
+> > dev_put() will be called with NULL pointer. dev_put() can't handle
+> > NULL at least in the old kernels... this is simply confused.
+> >=20
+> > Mainline has dev_put_track() there, but I see same confusion.
+> >=20
+> > Best regards,
+>=20
+> commit 2d327a79ee17 ("llc: only change llc->dev when bind() succeeds"),
+> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=
+=3D2d327a79ee176930dc72c131a970c891d367c1dc
+>=20
+> Should be in mainline on Thursday, LMK if we need to accelerate.
+> IDK if anyone enables LLC2.
+
+Thank you, yes, that looks good at the fast glance.
+
+But this patch does more harm than good on its own, so I believe it
+should be dropped for now, and only queued when the fixes are
+available.
+
+Best regards,
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--HcAYCG3uE/tztfnV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYj+HDAAKCRAw5/Bqldv6
+8mq1AJ0bTNob2KnQ6EoqC7ZTKarL9RKpqACdFQheyFUb4iymIl7EtfgaH1hnpz4=
+=CQRa
+-----END PGP SIGNATURE-----
+
+--HcAYCG3uE/tztfnV--

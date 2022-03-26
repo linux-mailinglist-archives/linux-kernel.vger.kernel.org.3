@@ -2,84 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB784E7FFA
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 09:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4914E7FFE
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 09:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbiCZIP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 04:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
+        id S232039AbiCZIXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 04:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbiCZIPz (ORCPT
+        with ESMTP id S230032AbiCZIXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 04:15:55 -0400
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422D41CABD3;
-        Sat, 26 Mar 2022 01:14:19 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id p15so19361808ejc.7;
-        Sat, 26 Mar 2022 01:14:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=T8ebr2iFGoh7ryNOjBQ98YHXu8uvdUYMxvGrKpFpiQU=;
-        b=dpOqmcq7OTfTzp+vXSbWmrrPoyRh9tuAzAd3nhLaq/plb3IyK772zhhBvZj/mhLOpz
-         ylGlVK/NFISLKdLcc/57ruZrfHb73iI/tvNe/B7zytyoX3smRfGInIiPKX2zSMZffh1f
-         lYLylJZnJIqC9G9nc40+mIbrtcCe3gZc/AT3UIAy+LdGqwN1znny/YwHFcHYGC8WUS3m
-         CVadlzuPRPCrywOyi/+OSJMYCR/6/qt5KkJuH8mBovvhLsc9u4LIZi07RJ7BL+BoZ9hf
-         4nBjycQmuYPQwIQmXS5dfNQUO+XJu2CWgRkteUtzxrdl0tMswi0uIegaRYhqRaaXB3rG
-         w7kQ==
-X-Gm-Message-State: AOAM530GGv8m2fT/r7ocGSp43VXPqSk6q0yX1Y+MTqtqDpOFGgfvtGc+
-        RTLHlcmnVglTbuz21odHMgJOwJ1fRcfRMw==
-X-Google-Smtp-Source: ABdhPJziycJCmOI8ifnO12TtKmV3cON6H184IhBIaccU6Xwb1dxUxQjhgncFsXLalZs3koHg4AKxDg==
-X-Received: by 2002:a17:906:58d3:b0:6da:bdb2:2727 with SMTP id e19-20020a17090658d300b006dabdb22727mr15838125ejs.549.1648282457756;
-        Sat, 26 Mar 2022 01:14:17 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id hp12-20020a1709073e0c00b006e02924bf20sm3265161ejc.117.2022.03.26.01.14.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Mar 2022 01:14:17 -0700 (PDT)
-Message-ID: <c1e9175e-e33d-ec51-4d9a-ce5c441a0ba4@kernel.org>
-Date:   Sat, 26 Mar 2022 09:14:16 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 2/3] dt-bindings: mtd: ti,elm: Add support for AM64 ELM
-Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>, miquel.raynal@bootlin.com,
-        robh+dt@kernel.org
-Cc:     richard@nod.at, vigneshr@ti.com, kishon@ti.com, nm@ti.com,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        Sat, 26 Mar 2022 04:23:06 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224D82013E8
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 01:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648282890; x=1679818890;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fKP51Hr9tTThF36GJpjm8KGyUOWXgbSRjqfQB448bOI=;
+  b=SAXD+uQmv0NjffNlgnyC2jU31AOUJyiP8ZGdPVBVl6iwqgnktkcHA5nt
+   MTe4kJ9wlJQ0aDY3e6ozpEYSQaK6waTuKQiYxRoEMJN6DHjTBeCylp4JO
+   vkXsGOLVLo++1PR0XrM9e2X8wyhrW+NYPYV1MNxSOm0H8jgJd5F585z/V
+   gpOFiGJP3IbrdppoV0cR3gmaNEaFuKN9NdkAEHENkmt7bnG6tX9l/uMYI
+   2jp2LYaDV7B7FWzNGScUpaAOaDehx9LwVsxbhCTMxJyYJzpzPkYGAZCeY
+   +qGhAjJtGowygNjSAQqZMTOFSNXAeCAPyU9ceG5AWCT3yYiK944cYP8Yx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="283648734"
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="283648734"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 01:21:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="516777196"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 26 Mar 2022 01:21:28 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nY1fr-000NBo-Hp; Sat, 26 Mar 2022 08:21:27 +0000
+Date:   Sat, 26 Mar 2022 16:21:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-References: <20220326080726.30372-1-rogerq@kernel.org>
- <20220326080726.30372-3-rogerq@kernel.org>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220326080726.30372-3-rogerq@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Subject: [bvanassche:ufs-for-next-2022-03-25 32/32]
+ drivers/scsi/ufs-drivers/ufs-hisi.c:560:34: warning: unused variable
+ 'ufs_hisi_of_match'
+Message-ID: <202203261643.I7AyxLDj-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/03/2022 09:07, Roger Quadros wrote:
-> TI's AM64 SoC has the Error Locator Module. Add compatible and
-> related properties to support ELM on AM64 SoC.
-> 
-> Signed-off-by: Roger Quadros <rogerq@kernel.org>
-> ---
->  .../devicetree/bindings/mtd/ti,elm.yaml       | 24 +++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
+Hi Bart,
+
+First bad commit (maybe != root cause):
+
+tree:   https://github.com/bvanassche/linux ufs-for-next-2022-03-25
+head:   976ba17fe820846e56fb154b1ae35f5d90be192b
+commit: 976ba17fe820846e56fb154b1ae35f5d90be192b [32/32] scsi: ufs: Split the drivers/scsi/ufs directory
+config: hexagon-randconfig-r005-20220325 (https://download.01.org/0day-ci/archive/20220326/202203261643.I7AyxLDj-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/bvanassche/linux/commit/976ba17fe820846e56fb154b1ae35f5d90be192b
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche ufs-for-next-2022-03-25
+        git checkout 976ba17fe820846e56fb154b1ae35f5d90be192b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/scsi/ufs-drivers/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/scsi/ufs-drivers/ufs-hisi.c:560:34: warning: unused variable 'ufs_hisi_of_match' [-Wunused-const-variable]
+   static const struct of_device_id ufs_hisi_of_match[] = {
+                                    ^
+   1 warning generated.
 
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+vim +/ufs_hisi_of_match +560 drivers/scsi/ufs-drivers/ufs-hisi.c
 
+653fcb07d95eda5 drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  559  
+653fcb07d95eda5 drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05 @560  static const struct of_device_id ufs_hisi_of_match[] = {
+653fcb07d95eda5 drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  561  	{ .compatible = "hisilicon,hi3660-ufs", .data = &ufs_hba_hi3660_vops },
+653fcb07d95eda5 drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  562  	{ .compatible = "hisilicon,hi3670-ufs", .data = &ufs_hba_hi3670_vops },
+653fcb07d95eda5 drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  563  	{},
+653fcb07d95eda5 drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  564  };
+653fcb07d95eda5 drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  565  
 
-Best regards,
-Krzysztof
+:::::: The code at line 560 was first introduced by commit
+:::::: 653fcb07d95eda58b72a5e715230b582c4d6d69e scsi: ufs: Add HI3670 SoC UFS driver support
+
+:::::: TO: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

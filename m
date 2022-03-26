@@ -2,147 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEBC74E7F9A
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 07:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82EF54E7FA7
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 07:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbiCZGki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 02:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
+        id S231655AbiCZHAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 03:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiCZGke (ORCPT
+        with ESMTP id S231340AbiCZHAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 02:40:34 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B62710FE7;
-        Fri, 25 Mar 2022 23:38:57 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KQTlh0CLlzfZKb;
-        Sat, 26 Mar 2022 14:37:20 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
- (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Sat, 26 Mar
- 2022 14:38:55 +0800
-From:   Ye Bin <yebin10@huawei.com>
-To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
-        <lczerner@redhat.com>, Ye Bin <yebin10@huawei.com>
-Subject: [PATCH -next] ext4: fix warning in ext4_handle_inode_extension
-Date:   Sat, 26 Mar 2022 14:53:51 +0800
-Message-ID: <20220326065351.761952-1-yebin10@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Sat, 26 Mar 2022 03:00:38 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BE8237D7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 23:59:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648277942; x=1679813942;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pv9J0nX7QXZsyvuogfLKn3Ox66ThIHnRddtjZO0oGmA=;
+  b=mzxyEkbIJ+9P+HqXnWrd7OhS45NE4h2Ey5vnxmNPhPc24IgHrxaQHlhn
+   Bx0R6+80TFlXqJM0qI6kkscgNfcdSP06vaj8/LhmXsnBCWHLjH2IuWPRM
+   GoC8HZ0XA3ndz9bNWlbec+wk99QZf6kvA3My7K7yx2ut/XxS4cqAXWQW3
+   6JCp6cHBM96k/5UXPRAq162Z1OYOPKGdo50jezHZ09TME25EA9T5KPOsg
+   lbcappyp8HtBY02ZV1NftYFEBvGJJkw9ZQ70xO1vVevjj1X3xqGUzfNIu
+   +d9Fq0iJ5r4yecEJS0fzD919/qgXpkVy7GK3pza4/1VIqgJtJjACj8cjh
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="321955842"
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="321955842"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 23:59:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="516766456"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 25 Mar 2022 23:59:00 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nY0O3-000N6G-CQ; Sat, 26 Mar 2022 06:58:59 +0000
+Date:   Sat, 26 Mar 2022 14:58:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: [drm-misc:for-linux-next 2/3]
+ drivers/dma-buf/st-dma-fence-unwrap.c:125:13: warning: variable 'err' set
+ but not used
+Message-ID: <202203261449.ZA8GwHFt-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We got issue as follows:
-EXT4-fs error (device loop0) in ext4_reserve_inode_write:5741: Out of memory
-EXT4-fs error (device loop0): ext4_setattr:5462: inode #13: comm syz-executor.0: mark_inode_dirty error
-EXT4-fs error (device loop0) in ext4_setattr:5519: Out of memory
-EXT4-fs error (device loop0): ext4_ind_map_blocks:595: inode #13: comm syz-executor.0: Can't allocate blocks for non-extent mapped inodes with bigalloc
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 4361 at fs/ext4/file.c:301 ext4_file_write_iter+0x11c9/0x1220
-Modules linked in:
-CPU: 1 PID: 4361 Comm: syz-executor.0 Not tainted 5.10.0+ #1
-RIP: 0010:ext4_file_write_iter+0x11c9/0x1220
-RSP: 0018:ffff924d80b27c00 EFLAGS: 00010282
-RAX: ffffffff815a3379 RBX: 0000000000000000 RCX: 000000003b000000
-RDX: ffff924d81601000 RSI: 00000000000009cc RDI: 00000000000009cd
-RBP: 000000000000000d R08: ffffffffbc5a2c6b R09: 0000902e0e52a96f
-R10: ffff902e2b7c1b40 R11: ffff902e2b7c1b40 R12: 000000000000000a
-R13: 0000000000000001 R14: ffff902e0e52aa10 R15: ffffffffffffff8b
-FS:  00007f81a7f65700(0000) GS:ffff902e3bc80000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffff600400 CR3: 000000012db88001 CR4: 00000000003706e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- do_iter_readv_writev+0x2e5/0x360
- do_iter_write+0x112/0x4c0
- do_pwritev+0x1e5/0x390
- __x64_sys_pwritev2+0x7e/0xa0
- do_syscall_64+0x37/0x50
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
+tree:   git://anongit.freedesktop.org/drm/drm-misc for-linux-next
+head:   519f490db07e1a539490612f376487f61e48e39c
+commit: 64a8f92fd783e750cdb81af75942dcd53bbf61bd [2/3] dma-buf: add dma_fence_unwrap v2
+config: powerpc-randconfig-m031-20220326 (https://download.01.org/0day-ci/archive/20220326/202203261449.ZA8GwHFt-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
+        git fetch --no-tags drm-misc for-linux-next
+        git checkout 64a8f92fd783e750cdb81af75942dcd53bbf61bd
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/dma-buf/
 
-Above issue may happen as follows:
-Assume
-inode.i_size=4096
-EXT4_I(inode)->i_disksize=4096
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-step 1: set inode->i_isize = 8192
-ext4_setattr
-  if (attr->ia_size != inode->i_size)
-    EXT4_I(inode)->i_disksize = attr->ia_size;
-    rc = ext4_mark_inode_dirty
-       ext4_reserve_inode_write
-          ext4_get_inode_loc
-            __ext4_get_inode_loc
-              sb_getblk --> return -ENOMEM
-   ...
-   if (!error)  ->will not update i_size
-     i_size_write(inode, attr->ia_size);
-Now:
-inode.i_size=4096
-EXT4_I(inode)->i_disksize=8192
+All warnings (new ones prefixed by >>):
 
-step 2: Direct write 4096 bytes
-ext4_file_write_iter
- ext4_dio_write_iter
-   iomap_dio_rw ->return error
- if (extend)
-   ext4_handle_inode_extension
-     WARN_ON_ONCE(i_size_read(inode) < EXT4_I(inode)->i_disksize);
-->Then trigger warning.
+   drivers/dma-buf/st-dma-fence-unwrap.c: In function 'unwrap_array':
+>> drivers/dma-buf/st-dma-fence-unwrap.c:125:13: warning: variable 'err' set but not used [-Wunused-but-set-variable]
+     125 |         int err = 0;
+         |             ^~~
+   drivers/dma-buf/st-dma-fence-unwrap.c: In function 'unwrap_chain':
+   drivers/dma-buf/st-dma-fence-unwrap.c:167:13: warning: variable 'err' set but not used [-Wunused-but-set-variable]
+     167 |         int err = 0;
+         |             ^~~
+   drivers/dma-buf/st-dma-fence-unwrap.c: In function 'unwrap_chain_array':
+   drivers/dma-buf/st-dma-fence-unwrap.c:209:13: warning: variable 'err' set but not used [-Wunused-but-set-variable]
+     209 |         int err = 0;
+         |             ^~~
 
-To solve above issue, if mark inode dirty failed in ext4_setattr just
-set 'EXT4_I(inode)->i_disksize' with old value.
 
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- fs/ext4/inode.c | 4 ++++
- 1 file changed, 4 insertions(+)
+vim +/err +125 drivers/dma-buf/st-dma-fence-unwrap.c
 
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index 90fd6f7b6209..8adf1f802f6c 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -5384,6 +5384,7 @@ int ext4_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
- 	if (attr->ia_valid & ATTR_SIZE) {
- 		handle_t *handle;
- 		loff_t oldsize = inode->i_size;
-+		loff_t old_disksize;
- 		int shrink = (attr->ia_size < inode->i_size);
- 
- 		if (!(ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS))) {
-@@ -5455,6 +5456,7 @@ int ext4_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
- 					inode->i_sb->s_blocksize_bits);
- 
- 			down_write(&EXT4_I(inode)->i_data_sem);
-+			old_disksize = EXT4_I(inode)->i_disksize;
- 			EXT4_I(inode)->i_disksize = attr->ia_size;
- 			rc = ext4_mark_inode_dirty(handle, inode);
- 			if (!error)
-@@ -5466,6 +5468,8 @@ int ext4_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
- 			 */
- 			if (!error)
- 				i_size_write(inode, attr->ia_size);
-+			else
-+				EXT4_I(inode)->i_disksize = old_disksize;
- 			up_write(&EXT4_I(inode)->i_data_sem);
- 			ext4_journal_stop(handle);
- 			if (error)
+   120	
+   121	static int unwrap_array(void *arg)
+   122	{
+   123		struct dma_fence *fence, *f1, *f2, *array;
+   124		struct dma_fence_unwrap iter;
+ > 125		int err = 0;
+   126	
+   127		f1 = mock_fence();
+   128		if (!f1)
+   129			return -ENOMEM;
+   130	
+   131		f2 = mock_fence();
+   132		if (!f2) {
+   133			dma_fence_put(f1);
+   134			return -ENOMEM;
+   135		}
+   136	
+   137		array = mock_array(2, f1, f2);
+   138		if (!array)
+   139			return -ENOMEM;
+   140	
+   141		dma_fence_unwrap_for_each(fence, &iter, array) {
+   142			if (fence == f1) {
+   143				f1 = NULL;
+   144			} else if (fence == f2) {
+   145				f2 = NULL;
+   146			} else {
+   147				pr_err("Unexpected fence!\n");
+   148				err = -EINVAL;
+   149			}
+   150		}
+   151	
+   152		if (f1 || f2) {
+   153			pr_err("Not all fences seen!\n");
+   154			err = -EINVAL;
+   155		}
+   156	
+   157		dma_fence_signal(f1);
+   158		dma_fence_signal(f2);
+   159		dma_fence_put(array);
+   160		return 0;
+   161	}
+   162	
+
 -- 
-2.31.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

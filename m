@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B95AA4E807B
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 11:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 974554E806F
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 11:28:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232594AbiCZK3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 06:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
+        id S232603AbiCZK31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 06:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232527AbiCZK3F (ORCPT
+        with ESMTP id S232525AbiCZK3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 26 Mar 2022 06:29:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA9B4F44E;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636994F479;
         Sat, 26 Mar 2022 03:27:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C26DA60B8A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C274F60BA5;
         Sat, 26 Mar 2022 10:27:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85EAFC34100;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96547C3410F;
         Sat, 26 Mar 2022 10:27:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1648290447;
-        bh=+MIt+athm81UOKvOGZ5ZQcQ4L0fnD6TdonEeO/0FhQM=;
+        bh=4xYDm8jiOGCxidWbMBbnubCB80y407Lrcoc3O9x9bTc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dyyW0Q4+ZIt8W1n0J5Zg9uDJEsXLhDtBkhqVtrloMm5rBoY0azcmyRQRRH4xjmkYy
-         hxdjaxIixFqpIsSl45hZDImEXpz6BaqyRh63ZHMEI167tqUZ5AnMQ6I6fQ23MaatD5
-         5JOjnZ8E1Nb7B8g3ucNapkZdbVOnEwb0dLqGLNeN8QvpZc6cxn6uPDSQBZG1DW6LJZ
-         KYe0MZ2Sd6zbDRCJijvrGQtWG+6uWKEXy89V8cPhddONGxTz6ShcARMe+VOr+t6YQJ
-         7H4g54vPWEgJoZ+MAHdOYTsEZvrcbz/3B90oCmOK/IneGJDGASKxniIoW6wY5uBON/
-         rbsFtq38YWz0A==
+        b=XLn0aW4S35JWxm7QulfteOw5UXPdQW6wwkoUyPVUqB0Cv27GOnTzBSBmpXaZWnnq3
+         7Fw7rQn1+lmoe4lYFeMUMkHiV3S/mTandfR9G40O7bsxTyAZ8uoYHDYcindFUdugIZ
+         VXFhs+FLd4BMvAV9MzM2s8uCur22o0bQhAvi4+9iFVPegS9JtJnJzwQlZckSnC8Lk+
+         wc7y5UjKyftmuvIisK5608iy1b2CJpmd6hsUI/G2nBzAWTnZnZWvltZpJF8r/MtsEw
+         IhyChcKEFQFEAbh5j7lUZtgSdhizvApDwhRl9Vvqg7PMg/HoSDlcnXrizydSnfM1Ty
+         +8Te195rzKcrQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nY3dl-00Co0Y-3N; Sat, 26 Mar 2022 11:27:25 +0100
+        id 1nY3dl-00Co0c-4x; Sat, 26 Mar 2022 11:27:25 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         Jonathan Corbet <corbet@lwn.net>
@@ -43,9 +43,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         "Stephen Rothwell" <sfr@canb.auug.org.au>,
         Randy Dunlap <rdunlap@infradead.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/6] docs: kernel_feat.py: add build dependencies
-Date:   Sat, 26 Mar 2022 11:27:20 +0100
-Message-Id: <5cdf7a8300019129dcc09d4c2557f75908754445.1648290305.git.mchehab@kernel.org>
+Subject: [PATCH v3 3/6] docs: kernel_abi.py: add sphinx build dependencies
+Date:   Sat, 26 Mar 2022 11:27:21 +0100
+Message-Id: <10bc3d3bc74f514a539cd3b48b9d287d2b6f99e2.1648290305.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1648290305.git.mchehab@kernel.org>
 References: <cover.1648290305.git.mchehab@kernel.org>
@@ -61,64 +61,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ensure that the feature files will be regenerated if any
-changes happen at the Documentation/features files that were
-processed by gen_feat.pl.
+Ensure that Sphinx-build will handle the files parsed by
+get_abi.pl as dependencies. This way, if they are touched,
+the ABI output will be regenerated.
 
+Reported-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v3 0/6] at: https://lore.kernel.org/all/cover.1648290305.git.mchehab@kernel.org/
 
- Documentation/sphinx/kernel_feat.py | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+ Documentation/sphinx/kernel_abi.py | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/sphinx/kernel_feat.py b/Documentation/sphinx/kernel_feat.py
-index 8138d69a6987..27b701ed3681 100644
---- a/Documentation/sphinx/kernel_feat.py
-+++ b/Documentation/sphinx/kernel_feat.py
-@@ -33,6 +33,7 @@ u"""
+diff --git a/Documentation/sphinx/kernel_abi.py b/Documentation/sphinx/kernel_abi.py
+index 4392b3cb4020..efab9b14a9f5 100644
+--- a/Documentation/sphinx/kernel_abi.py
++++ b/Documentation/sphinx/kernel_abi.py
+@@ -128,6 +128,7 @@ class KernelCmd(Directive):
+         return out
  
- import codecs
- import os
-+import re
- import subprocess
- import sys
+     def nestedParse(self, lines, fname):
++        env = self.state.document.settings.env
+         content = ViewList()
+         node = nodes.section()
  
-@@ -82,7 +83,7 @@ class KernelFeat(Directive):
+@@ -154,6 +155,9 @@ class KernelCmd(Directive):
+                     self.do_parse(content, node)
+                     content = ViewList()
  
-         env = doc.settings.env
-         cwd = path.dirname(doc.current_source)
--        cmd = "get_feat.pl rest --dir "
-+        cmd = "get_feat.pl rest --enable-fname --dir "
-         cmd += self.arguments[0]
- 
-         if len(self.arguments) > 1:
-@@ -102,7 +103,22 @@ class KernelFeat(Directive):
-         shell_env["srctree"] = srctree
- 
-         lines = self.runCmd(cmd, shell=True, cwd=cwd, env=shell_env)
--        nodeList = self.nestedParse(lines, fname)
++                    # Add the file to Sphinx build dependencies
++                    env.note_dependency(os.path.abspath(f))
 +
-+        line_regex = re.compile("^\.\. FILE (\S+)$")
-+
-+        out_lines = ""
-+
-+        for line in lines.split("\n"):
-+            match = line_regex.search(line)
-+            if match:
-+                fname = match.group(1)
-+
-+                # Add the file to Sphinx build dependencies
-+                env.note_dependency(os.path.abspath(fname))
-+            else:
-+                out_lines += line + "\n"
-+
-+        nodeList = self.nestedParse(out_lines, fname)
-         return nodeList
+                 f = new_f
  
-     def runCmd(self, cmd, **kwargs):
+                 # sphinx counts lines from 0
 -- 
 2.35.1
 

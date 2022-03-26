@@ -2,105 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CEB4E7E32
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AAD94E7E35
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:36:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiCZAfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 20:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53322 "EHLO
+        id S229792AbiCZAiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 20:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiCZAfj (ORCPT
+        with ESMTP id S229493AbiCZAiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 20:35:39 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC8E21F767
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:34:04 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id z15-20020a25bb0f000000b00613388c7d99so7256519ybg.8
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:34:04 -0700 (PDT)
+        Fri, 25 Mar 2022 20:38:22 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111EC24059B
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:36:47 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id bt26so15933377lfb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:36:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=C7dMbml3WSQebbWw6NGPxmfuV7ri/a3Nzoj+G8yYBMI=;
-        b=d8nP+2b1uGAGXGMvUnqLB8+Y34lm4z5ta+Dx/nWyUkg5Nk8Nr5hvblVJ5Amvv5JbbM
-         8UzUDz7+iyr/l4XXNkeFhspC0LokUQnKtt4Un13iCxIqdPG6xdcMRNETArVDPVHn+lL7
-         ZPnedwzy2NoxUVxD7+acT2ZnfpQbgD5dJTxBIkT2AMow8VgLyOT+UCUcOns6Gfm4OIS4
-         chBINcQvyoxshZ3rnqPY4j78JNs8Cn7nINPbT0Sf68FPGWfRp3pdd2UQ36dV7e98J0KW
-         8+nZkncbtbBUJAwhzESjJH5Y61tXU4fXKRKehzFJ1z8kW5HlBb5OYMNEG7LKX3bQiqc5
-         uCcg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lcshdobGzILllMY3zNpnZ3Ex5ohCbZSLroaY3F9W/JA=;
+        b=dTex8E2DlnTcTjb24xecx3Rs17SSDlOTb2q2dyGoe4UMrbGwJxoqMFipPFX1dMVeta
+         WXHrs1YXfFuOjUXiXABz7YSdikeLsyKoFKm9th2ytRWjAyczdZsos502VTEaIp/Z+TxG
+         Bge3mQs/tQgKvKYn5r8VcKJQjSjngfGK4Akfw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=C7dMbml3WSQebbWw6NGPxmfuV7ri/a3Nzoj+G8yYBMI=;
-        b=WqHob1qcxR9Z5xe4CAiRp6ErJLTsG9/Hc+ieMGe5hgEx22vAZAUGEEUPOfkVlvjUeY
-         NjPYmHt6RZIBe2DmYG18Q+B4XVfAExFevK6mMQgclUiIKsV7XgLAFNHXVhYyJOLMv4W2
-         /+yW1fYVbcRmgcTdI0q8qoorwbktqBdKtXPWE8hJCMnO1edJskyjDV5jvOK4t/lbFyZI
-         8KJUiNBSnWreYjoKMKJiJJwVrVBhO8EKOPjMQkKGSyG4YvC8sf9uzyAPViZxSsrge7eU
-         ICxFmfA3fstxTkW++M+x0aTOsJMo7oRY7tilyz2WVcIuQc6pz4FOQs0dc3Uz++51GbJI
-         pHWw==
-X-Gm-Message-State: AOAM531Sa180mszctsTM0JGDMbvfjCNVUwDjo7dZtG3970LlqAGUBOHa
-        agigzfyZl9oy76WxNpTcgzxIBEn12zYlJA==
-X-Google-Smtp-Source: ABdhPJx/3aUkebGQoOX/jm9fWIotMlnaay4/O3bwaTV1+wfuG9arENwwL+nbeyxXoh0LyEwRJ3SIvp/wl/3GRg==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:be84:4a49:e731:f1fa])
- (user=dlatypov job=sendgmr) by 2002:a05:6902:1209:b0:637:cda:22c0 with SMTP
- id s9-20020a056902120900b006370cda22c0mr13018318ybu.358.1648254843840; Fri,
- 25 Mar 2022 17:34:03 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 17:33:56 -0700
-Message-Id: <20220326003356.487828-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH] Documentation: kunit: update kconfig options needed for UML coverage
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com,
-        keescook@chromium.org
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        maxime@cerno.tech, Daniel Latypov <dlatypov@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lcshdobGzILllMY3zNpnZ3Ex5ohCbZSLroaY3F9W/JA=;
+        b=hbhLLtyRJxweIIEKzWdbfoyuFLb5EJR8Q/VFo8GoA0hYWUGq8LDM0L1LfuO9kOrrQS
+         eeEHn48Ag5r61ebXxrPQV61zsMrJaagTDtaSIVoa5lTnk1zq8sq5sp7tcKQoGD4bjDBE
+         7eQKWnIbwt4BQpjf3MrkYMdg769g4rYTrI5NWG6POawzsP5OPZoB/W20Ui4sYdDgwix+
+         62n/EPeADnSBTKuRS/mPem0v4l64tVkc1pfmcgjBjkOvZKGYYw/YywneDEKPd8qqoARL
+         emd97uiM2psCqHbsOryEQv8J/w26/iik9WPtnEmCR7nON4B/4qBy9ZrDlqZFF1G90fbt
+         X58A==
+X-Gm-Message-State: AOAM532l2FwWWGjoVv45gMLwkvoPIbhUXAp6Wr2nQ1pCYpL3dJgNCVxB
+        j6lFQ+PVsrjlvE+nikFv7E7hkSIf//6oCOyO9Pk=
+X-Google-Smtp-Source: ABdhPJyrczGHBHi7+nwL6nj76K4sT4vLcQA2u0GAWMRJypPfclFhwiFrVG+4T7YZ3KbgZ720RcIG8w==
+X-Received: by 2002:a19:d61a:0:b0:43f:1a03:21ee with SMTP id n26-20020a19d61a000000b0043f1a0321eemr10085350lfg.152.1648255005038;
+        Fri, 25 Mar 2022 17:36:45 -0700 (PDT)
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
+        by smtp.gmail.com with ESMTPSA id j11-20020a056512108b00b0044a23c1e679sm868943lfg.18.2022.03.25.17.36.43
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 17:36:44 -0700 (PDT)
+Received: by mail-lj1-f181.google.com with SMTP id c15so12274746ljr.9
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:36:43 -0700 (PDT)
+X-Received: by 2002:a2e:a5c4:0:b0:249:9ec3:f2b with SMTP id
+ n4-20020a2ea5c4000000b002499ec30f2bmr10061179ljp.358.1648255003631; Fri, 25
+ Mar 2022 17:36:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220325172036.3f8f619e@gandalf.local.home>
+In-Reply-To: <20220325172036.3f8f619e@gandalf.local.home>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 25 Mar 2022 17:36:27 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjTL=vz2PC7=dFZVrT=9nuBtZ21j_qT8e=yHvVuXvhCdg@mail.gmail.com>
+Message-ID: <CAHk-=wjTL=vz2PC7=dFZVrT=9nuBtZ21j_qT8e=yHvVuXvhCdg@mail.gmail.com>
+Subject: Re: [PATCH] virtio: Workaround fix for hard hang on guest using fifos
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Amit Shah <amit@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        virtualization@lists.linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recent changes have made it so the current set is not sufficient.
-Namely, CONFIG_DEBUG_INFO is not being set even when explicitly asked.
+On Fri, Mar 25, 2022 at 2:20 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> With the updates to change the size being passed in the splice from
+> page_size to pipe_size, this never finished (it would copy around a meg or
+> so). And stopped. When I killed the agent-fifo task on the guest, the guest
+> hung hard.
 
-Specifying a version of the debug info fixes this.
-Pick CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT as an option that's
-hopefully less fragile (esp. given we're tied to GCC 6 and lower).
+Without knowing (or really caring) at all how virtqueue works, this
+sounds very much like the classic pipe deadlock where two processes
+communicate over a pair of pipes, sending each other commands, and
+replying to each other with status updates.
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- Documentation/dev-tools/kunit/running_tips.rst | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+And you absolutely cannot do that if one side can possibly want to up
+fill the whole pipe.
 
-diff --git a/Documentation/dev-tools/kunit/running_tips.rst b/Documentation/dev-tools/kunit/running_tips.rst
-index 7b6d26a25959..c36f6760087d 100644
---- a/Documentation/dev-tools/kunit/running_tips.rst
-+++ b/Documentation/dev-tools/kunit/running_tips.rst
-@@ -114,6 +114,7 @@ Instead of enabling ``CONFIG_GCOV_KERNEL=y``, we can set these options:
- 
- 	CONFIG_DEBUG_KERNEL=y
- 	CONFIG_DEBUG_INFO=y
-+	CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- 	CONFIG_GCOV=y
- 
- 
-@@ -122,7 +123,7 @@ Putting it together into a copy-pastable sequence of commands:
- .. code-block:: bash
- 
- 	# Append coverage options to the current config
--	$ echo -e "CONFIG_DEBUG_KERNEL=y\nCONFIG_DEBUG_INFO=y\nCONFIG_GCOV=y" >> .kunit/.kunitconfig
-+	$ echo -e "CONFIG_DEBUG_KERNEL=y\nCONFIG_DEBUG_INFO=y\nCONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y\nCONFIG_GCOV=y" >> .kunit/.kunitconfig
- 	$ ./tools/testing/kunit/kunit.py run
- 	# Extract the coverage information from the build dir (.kunit/)
- 	$ lcov -t "my_kunit_tests" -o coverage.info -c -d .kunit/
+Deadlock:
 
-base-commit: b14ffae378aa1db993e62b01392e70d1e585fb23
--- 
-2.35.1.1021.g381101b075-goog
+ - process A is trying to send data to process B (on 'pipe_A'), and
+blocks because the pipe is full
 
+ - process B is reads the data and everything is fine, and A gets to continue
+
+ - but then process B sends some stratus update the other way (on
+'pipe_B' - you can't use the same pipe for bidirectional, it's why you
+use a pair of pipes or a socketpair) and waits for the result.
+
+ - now A and B are both waiting for each other - A is waiting for B to
+empty the big bunch of data it's sending, and B is waiting for the
+result for the (small) command it sent.
+
+and neither makes any progress.
+
+You can find several mentions of these kinds of problems by just
+googling for "bidirectional pipe deadlock" or similar.
+
+The solution is invariably to either
+
+ (a) make sure that nobody writes even remotely close to enough data
+to fill a pipe before reading the other pipe (you can still fill up a
+pipe, but at least somebody is always going to succeed and make
+progress and do the read to make progress).
+
+ (b) make sure everybody who writes to a pipe will use nonblocking IO
+(and is willing to do reads in between to satisfy the other end).
+
+That first case is basically what one of the PIPE_BUF guarantees is
+all about (the other one is the atomicity it guarantees, ie you can
+write a "command packet" and be guaranteed that readers will see it
+without data mixed in from other writes).
+
+I have no idea what your client/agent does and how it interacts with
+the virtio pipes, but it really _sounds_ like a very similar issue,
+where it used to work (because PIPE_BUF) and now no longer does
+(because pipe filled).
+
+And that virtio_console __send_control_msg() pattern very much sounds
+like a "send data and wait for ACK" behavior of "process B".
+
+              Linus

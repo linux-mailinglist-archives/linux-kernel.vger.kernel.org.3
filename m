@@ -2,97 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946154E813D
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 14:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F22DA4E8141
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 14:59:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233169AbiCZOAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 10:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
+        id S233172AbiCZOBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 10:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233153AbiCZN7z (ORCPT
+        with ESMTP id S231318AbiCZOBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 09:59:55 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F5326FC
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 06:58:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648303099; x=1679839099;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qFiYEHnnDLkVTdCkYQf7DsZUgmu5gysW9RRE3CX95+Q=;
-  b=gvNeDdS1vJ4XX5FbrIXnXePDS22eUMzQC9ImCtOjIpgLW3zigWPIeMsN
-   o0pHvyZucP4IUlwxuJJpOT4j+ksqIBG0J/fa+UFOo0kQM6BtJ+E3WyFTr
-   LeAW0Bnb9tCBdr8ySvS4gy4B55S/eTj/DrkmBf0JTlvxWmGfcGDX4ZdYc
-   R+JQX27BUBIi2XsfF6tDD2ZbL5+fJmMV0AvnO3SViW5vsrrGLaNwsmAXz
-   ym1oGnJZMOrUPV3h/T8rBIAN8XmQoODwH9DmR6Zpr7UNlCxrL1pWD8t6C
-   BDIA2mpfo9nNO3Dj8LlyXgbZHZbu3Sb4nlW6jC/DFvXj1y0bPBTkZCD2e
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="258500369"
-X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
-   d="scan'208";a="258500369"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 06:58:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
-   d="scan'208";a="520497973"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 26 Mar 2022 06:58:17 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nY6vo-000NQR-UW; Sat, 26 Mar 2022 13:58:16 +0000
-Date:   Sat, 26 Mar 2022 21:57:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: sparx5_ptp.c:undefined reference to `ptp_clock_register'
-Message-ID: <202203262159.99fOYx0b-lkp@intel.com>
+        Sat, 26 Mar 2022 10:01:17 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF72C49921;
+        Sat, 26 Mar 2022 06:59:40 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id h4so14239468wrc.13;
+        Sat, 26 Mar 2022 06:59:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=j3g6QJXfHg8D2EN/cwexEeNaYf3LM23ijybrooX6Uek=;
+        b=JZ8fHpUzMBC973g28QZB+lGCDiFWaHhPM1AuGWDCiGkK7QqwSUGuN/5kg7YiSnj6/i
+         9H/nYmuofWBhFWpu7GkPsftXDvuX+gO3Qy9YX5wwagg2ZLbYI/dLxsMNUZvq2mnYsHb0
+         +ROivbmonSD6HN/hUhXkGN9SjSstSSwM4X8o6J/2jEYdPYM6aG1pINIE/opHyVgVtYo1
+         cNq0gBh3OeP1+PlAGunP+G5PejIqH7/FTfwFKPwQFolynaFn+cw1UA5CmhbucuPzaWdc
+         +EqgoPB/0phq3/aZmNuD8OId69KkyPFdfBHpyosiND70mOQrNs5xeZA6iIqLw2B7/jvh
+         9kPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=j3g6QJXfHg8D2EN/cwexEeNaYf3LM23ijybrooX6Uek=;
+        b=UpkKOSR/Qj85ros3L4pnP8Nc9U4N/UvUqy/basHrZecmp2Hcp92cVvlI+YjpV2ls6U
+         kHHX1yCk8/7HGb5kBjWusgKcJr9t4TZInw4HxwL8pOYZ9fDyUCjNoIKGEv5l0uw9N8Ov
+         itRlDMddZHoyxVqWV1p7bmwFkYIBQksZWSFrBAqvvrid8UQgSHtNe+QaW+ZOfK31ns+W
+         z4Cp9nHuudbCRdHyhnPJjC/2UG0MfZcii7hG4ZHwL389BIZmg/eWl7/+HGyglYaqA5IY
+         igfKvACRmHIIy7SYjj2FMOY3HA2wIJL8LBLi/z812HRIH6UMpgKgNbok5uOlIrDXZBox
+         Kfow==
+X-Gm-Message-State: AOAM53323ITXBloP0WZEcrmy7L8j/InIIf7oRkcdBj4gXmObI0ryvZ6a
+        CpGUm7EmNeIKzSS2T/B3kI4=
+X-Google-Smtp-Source: ABdhPJwebd82dMVAcszH9u4I9tjyk3K7gb96q37KDtxOR7u1oDeDwh4ngzxM6aD7v0MXoZkOjfU1Nw==
+X-Received: by 2002:adf:f24d:0:b0:203:ee8a:2160 with SMTP id b13-20020adff24d000000b00203ee8a2160mr13170330wrp.497.1648303179332;
+        Sat, 26 Mar 2022 06:59:39 -0700 (PDT)
+Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
+        by smtp.gmail.com with ESMTPSA id p8-20020a5d4e08000000b002054b5437f2sm7404602wrt.115.2022.03.26.06.59.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Mar 2022 06:59:38 -0700 (PDT)
+Date:   Sat, 26 Mar 2022 13:59:36 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 00/37] 5.15.32-rc1 review
+Message-ID: <Yj8cSFEiNtEYpRww@debian>
+References: <20220325150419.931802116@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220325150419.931802116@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   52d543b5497cf31d6baeb0bcfe5a5474c3238578
-commit: 0933bd04047c3b96ba49545a8f91e7e6f8f666ff net: sparx5: Add support for ptp clocks
-date:   3 weeks ago
-config: arc-randconfig-r013-20220324 (https://download.01.org/0day-ci/archive/20220326/202203262159.99fOYx0b-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0933bd04047c3b96ba49545a8f91e7e6f8f666ff
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 0933bd04047c3b96ba49545a8f91e7e6f8f666ff
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
+Hi Greg,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Fri, Mar 25, 2022 at 04:14:01PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.32 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
+> Anything received after that time might be too late.
 
-All errors (new ones prefixed by >>):
+Build test:
+mips (gcc version 11.2.1 20220314): 62 configs -> no new failure
+arm (gcc version 11.2.1 20220314): 100 configs -> no new failure
+arm64 (gcc version 11.2.1 20220314): 3 configs -> no failure
+x86_64 (gcc version 11.2.1 20220314): 4 configs -> no failure
 
-   arc-elf-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ptp.o: in function `sparx5_ptp_init':
->> sparx5_ptp.c:(.text+0x758): undefined reference to `ptp_clock_register'
->> arc-elf-ld: sparx5_ptp.c:(.text+0x758): undefined reference to `ptp_clock_register'
-   arc-elf-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ptp.o: in function `sparx5_ptp_deinit':
->> sparx5_ptp.c:(.text+0x8b2): undefined reference to `ptp_clock_unregister'
->> arc-elf-ld: sparx5_ptp.c:(.text+0x8b2): undefined reference to `ptp_clock_unregister'
-   arc-elf-ld: sparx5_ptp.c:(.text+0x8ba): undefined reference to `ptp_clock_unregister'
-   arc-elf-ld: sparx5_ptp.c:(.text+0x8ba): undefined reference to `ptp_clock_unregister'
-   arc-elf-ld: sparx5_ptp.c:(.text+0x8c6): undefined reference to `ptp_clock_unregister'
-   arc-elf-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ptp.o:sparx5_ptp.c:(.text+0x8c6): more undefined references to `ptp_clock_unregister' follow
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+[1]. https://openqa.qa.codethink.co.uk/tests/943
+[2]. https://openqa.qa.codethink.co.uk/tests/945
+[3]. https://openqa.qa.codethink.co.uk/tests/946
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
+
+

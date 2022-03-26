@@ -2,351 +2,778 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE674E804D
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 11:05:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 570B64E8053
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 11:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232313AbiCZKGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 06:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54062 "EHLO
+        id S232377AbiCZKOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 06:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbiCZKG3 (ORCPT
+        with ESMTP id S230031AbiCZKOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 06:06:29 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D679370F61;
-        Sat, 26 Mar 2022 03:04:50 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:57148.2145324903
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id BF4441002B2;
-        Sat, 26 Mar 2022 18:04:48 +0800 (CST)
-Received: from  ([172.27.8.53])
-        by gateway-151646-dep-b7fbf7d79-vjdjk with ESMTP id 0234fbac645941f997e9c113ad1bff80 for robh@kernel.org;
-        Sat, 26 Mar 2022 18:04:49 CST
-X-Transaction-ID: 0234fbac645941f997e9c113ad1bff80
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 172.27.8.53
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <165597c7-3ac3-9d32-a70f-95214b242e0b@189.cn>
-Date:   Sat, 26 Mar 2022 18:04:46 +0800
+        Sat, 26 Mar 2022 06:14:47 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF70A195;
+        Sat, 26 Mar 2022 03:13:10 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id r13so19682220ejd.5;
+        Sat, 26 Mar 2022 03:13:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yfdhHje1X8P8LyESh8+qspkurvk7nADN9V/PALkjJzw=;
+        b=LpcHIZARLtwnzVLX3KGUQw2QgmktZeJ+YmQrr3xW1472aS3F1OzzWjFyB23WVGywoZ
+         oSgLiPpAFpVSx8UeRfN3Bx48LLv26KBIzILlv4ybx4xR/zoYx9XDphkBZnQkBQ69Ygpz
+         JWK/TYPgvECK50v/sDTY1ZtmgBHXWzSK4RHVHmU1pL7bUzEapHBXIgmG67J3nr05jgBf
+         5Q3G+p6XH78LTZRwYq3cwoeKirPg/iPDUefbWmBU17lHwjl40YxytRqZaz4VdlBthky8
+         iEnEZ+jNatelg6hJuxF07rksVzGNTd6YTzieSdjG3Gxm9pYW6/ExOXsIR+5065X07sFr
+         ojkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yfdhHje1X8P8LyESh8+qspkurvk7nADN9V/PALkjJzw=;
+        b=Ajrk52tEqgeSwKKDnT52E3c9Rn6eBb8/4t9qW4I9KQ5SLdmjA/yidjEJDaVZujEnCu
+         /0ABE5UxSLTM1bzQfGSTbQnXb5jc6o/DxH4Pn/cT8yceBMyR8jhyUgd4sbWdBMT4Ygjc
+         zkjwOUUYFlFOD5SP25XgqUp5uwiaz5PDKV/9LzWUQ7BoJ9Gv+uwsLQ5egXp/LWk1RlPO
+         tgFGMRVPKhdMN19RropJJbBrXW9s7CzxAaBv85lta5SlnpQNlKx8Z9uCcUR3OLTWV6NA
+         Lw22/nz+0rI/e0qHV4PigeTl4J4nM81DRmOE/egZIdfQ33FtDB/iMH/K9Sp+ok1kM0WF
+         WRwQ==
+X-Gm-Message-State: AOAM533iJiencRdJdtDPBPqkygELwbUdpR0jEafa+B6hK1J2BOETjxQT
+        ctd1yqYYm3B6cKnxhq2T98gBJFU3xqLhKloG
+X-Google-Smtp-Source: ABdhPJzv6cHGG3712dWfdMQ8jF6W9gl5RX64f9rma6QrqYQuqbKH3J1NVomSNDFTG4dtBbi3y/H86A==
+X-Received: by 2002:a17:907:c0c:b0:6d1:8c46:6415 with SMTP id ga12-20020a1709070c0c00b006d18c466415mr16913716ejc.326.1648289588484;
+        Sat, 26 Mar 2022 03:13:08 -0700 (PDT)
+Received: from fedora.. ([95.180.24.23])
+        by smtp.gmail.com with ESMTPSA id mp19-20020a1709071b1300b006dfdfe15cf8sm3501053ejc.196.2022.03.26.03.13.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Mar 2022 03:13:08 -0700 (PDT)
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: (aquacomputer_d5next) Add support for Aquacomputer Octo
+Date:   Sat, 26 Mar 2022 11:12:50 +0100
+Message-Id: <20220326101250.8076-1-savicaleksa83@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v11 5/7] dt-bindings: display: Add Loongson display
- controller
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Qing Zhang <zhangqing@loongson.cn>,
-        David Airlie <airlied@linux.ie>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        devicetree@vger.kernel.org, suijingfeng <suijingfeng@loongson.cn>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        dri-devel@lists.freedesktop.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>
-References: <20220321162916.1116541-1-15330273260@189.cn>
- <20220321162916.1116541-6-15330273260@189.cn>
- <YjkITWpbnCmhKaX+@robh.at.kernel.org>
- <f7eb61bc-6784-c77a-083f-7408c0a17e05@189.cn>
- <Yjo3umi9bJ0xb2Gl@robh.at.kernel.org>
- <199a2869-cd83-d24e-0ad0-25d15d76fc13@189.cn>
- <YjsamuFslv6qlQMZ@robh.at.kernel.org>
- <ac75aeff-1fca-f46f-1043-8437ef845ff9@189.cn>
- <YjxxhNnmqteTIEOa@robh.at.kernel.org>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <YjxxhNnmqteTIEOa@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Extend aquacomputer_d5next driver to expose hardware temperature sensors
+and fans of the Aquacomputer Octo fan controller, which communicates
+through a proprietary USB HID protocol.
 
-On 2022/3/24 21:26, Rob Herring wrote:
-> On Thu, Mar 24, 2022 at 09:48:19AM +0800, Sui Jingfeng wrote:
->> On 2022/3/23 21:03, Rob Herring wrote:
->>> On Wed, Mar 23, 2022 at 11:38:55AM +0800, Sui Jingfeng wrote:
->>>> On 2022/3/23 04:55, Rob Herring wrote:
->>>>> On Tue, Mar 22, 2022 at 10:33:45AM +0800, Sui Jingfeng wrote:
->>>>>> On 2022/3/22 07:20, Rob Herring wrote:
->>>>>>> On Tue, Mar 22, 2022 at 12:29:14AM +0800, Sui Jingfeng wrote:
->>>>>>>> From: suijingfeng <suijingfeng@loongson.cn>
->>>>>>>>
->>>>>>> Needs a commit message.
->>>>>>>
->>>>>>>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->>>>>>>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->>>>>>> Same person? Don't need both emails.
->>>>>> Yes,  suijingfeng@loongson.cn is my company's email. But it can not be used
->>>>>> to send patches to dri-devel,
->>>>>>
->>>>>> when send patches with this email, the patch will not be shown on patch
->>>>>> works.
->>>>>>
->>>>>> Emails  are either blocked or got  rejected  by loongson's mail server.  It
->>>>>> can only receive emails
->>>>>>
->>>>>> from you and other people, but not dri-devel. so have to use my personal
->>>>>> email(15330273260@189.cn) to send patches.
->>>>>>
->>>>>>>> ---
->>>>>>>>      .../loongson/loongson,display-controller.yaml | 230 ++++++++++++++++++
->>>>>>>>      1 file changed, 230 insertions(+)
->>>>>>>>      create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->>>>>>>>
->>>>>>>> diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->>>>>>>> new file mode 100644
->>>>>>>> index 000000000000..7be63346289e
->>>>>>>> --- /dev/null
->>>>>>>> +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->>>>>>>> @@ -0,0 +1,230 @@
->>>>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>>>>>> +%YAML 1.2
->>>>>>>> +---
->>>>>>>> +$id: http://devicetree.org/schemas/display/loongson/loongson,display-controller.yaml#
->>>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>>>> +
->>>>>>>> +title: Loongson LS7A1000/LS2K1000/LS2K0500 Display Controller Device Tree Bindings
->>>>>>>> +
->>>>>>>> +maintainers:
->>>>>>>> +  - Sui Jingfeng <suijingfeng@loongson.cn>
->>>>>>>> +
->>>>>>>> +description: |+
->>>>>>>> +
->>>>>>>> +  Loongson display controllers are simple which require scanout buffers
->>>>>>>> +  to be physically contiguous. LS2K1000/LS2K0500 is a SOC, only system
->>>>>>>> +  memory is available. LS7A1000/LS7A2000 is bridge chip which is equipped
->>>>>>>> +  with a dedicated video RAM which is 64MB or more, precise size can be
->>>>>>>> +  read from the PCI BAR 2 of the GPU device(0x0014:0x7A15) in the bridge
->>>>>>>> +  chip.
->>>>>>>> +
->>>>>>>> +  LSDC has two display pipes, each way has a DVO interface which provide
->>>>>>>> +  RGB888 signals, vertical & horizontal synchronisations, data enable and
->>>>>>>> +  the pixel clock. LSDC has two CRTC, each CRTC is able to scanout from
->>>>>>>> +  1920x1080 resolution at 60Hz. Each CRTC has two FB address registers.
->>>>>>>> +
->>>>>>>> +  For LS7A1000, there are 4 dedicated GPIOs whose control register is
->>>>>>>> +  located at the DC register space. They are used to emulate two way i2c,
->>>>>>>> +  One for DVO0, another for DVO1.
->>>>>>>> +
->>>>>>>> +  LS2K1000 and LS2K0500 SoC grab i2c adapter from other module, either
->>>>>>>> +  general purpose GPIO emulated i2c or hardware i2c in the SoC.
->>>>>>>> +
->>>>>>>> +  LSDC's display pipeline have several components as below description,
->>>>>>>> +
->>>>>>>> +  The display controller in LS7A1000:
->>>>>>>> +     ___________________                                     _________
->>>>>>>> +    |            -------|                                   |         |
->>>>>>>> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
->>>>>>>> +    |  _   _     -------|        ^             ^            |_________|
->>>>>>>> +    | | | | |    -------|        |             |
->>>>>>>> +    | |_| |_|    | i2c0 <--------+-------------+
->>>>>>>> +    |            -------|
->>>>>>>> +    |   DC IN LS7A1000  |
->>>>>>>> +    |  _   _     -------|
->>>>>>>> +    | | | | |    | i2c1 <--------+-------------+
->>>>>>>> +    | |_| |_|    -------|        |             |             _________
->>>>>>>> +    |            -------|        |             |            |         |
->>>>>>>> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
->>>>>>>> +    |            -------|                                   |_________|
->>>>>>>> +    |___________________|
->>>>>>>> +
->>>>>>>> +  Simple usage of LS7A1000 with LS3A4000 CPU:
->>>>>>>> +
->>>>>>>> +    +------+            +-----------------------------------+
->>>>>>>> +    | DDR4 |            |  +-------------------+            |
->>>>>>>> +    +------+            |  | PCIe Root complex |   LS7A1000 |
->>>>>>>> +       || MC0           |  +--++---------++----+            |
->>>>>>>> +  +----------+  HT 3.0  |     ||         ||                 |
->>>>>>>> +  | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
->>>>>>>> +  |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
->>>>>>>> +  +----------+          | +--------+  +-+--+-+    +---------+   +------+
->>>>>>>> +       || MC1           +---------------|--|----------------+
->>>>>>>> +    +------+                            |  |
->>>>>>>> +    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
->>>>>>>> +    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
->>>>>>>> +                      +-------+                      +------+
->>>>>>>> +
->>>>>>>> +  The display controller in LS2K1000/LS2K0500:
->>>>>>>> +     ___________________                                     _________
->>>>>>>> +    |            -------|                                   |         |
->>>>>>>> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
->>>>>>>> +    |  _   _     -------|        ^              ^           |_________|
->>>>>>>> +    | | | | |           |        |              |
->>>>>>>> +    | |_| |_|           |     +------+          |
->>>>>>>> +    |                   <---->| i2c0 |<---------+
->>>>>>>> +    |   DC IN LS2K1000  |     +------+
->>>>>>>> +    |  _   _            |     +------+
->>>>>>>> +    | | | | |           <---->| i2c1 |----------+
->>>>>>>> +    | |_| |_|           |     +------+          |            _________
->>>>>>>> +    |            -------|        |              |           |         |
->>>>>>>> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
->>>>>>>> +    |            -------|                                   |_________|
->>>>>>>> +    |___________________|
->>>>>>>> +
->>>>>>>> +properties:
->>>>>>>> +  $nodename:
->>>>>>>> +    pattern: "^display-controller@[0-9a-f],[0-9a-f]$"
->>>>>>>> +
->>>>>>>> +  compatible:
->>>>>>>> +    oneOf:
->>>>>>>> +      - items:
->>>>>>>> +          - enum:
->>>>>>>> +              - loongson,ls7a1000-dc
->>>>>>>> +              - loongson,ls2k1000-dc
->>>>>>>> +              - loongson,ls2k0500-dc
->>>>>>>> +
->>>>>>>> +  reg:
->>>>>>>> +    maxItems: 1
->>>>>>>> +
->>>>>>>> +  interrupts:
->>>>>>>> +    maxItems: 1
->>>>>>>> +
->>>>>>>> +  '#address-cells':
->>>>>>>> +    const: 1
->>>>>>>> +
->>>>>>>> +  '#size-cells':
->>>>>>>> +    const: 0
->>>>>>>> +
->>>>>>>> +  i2c-gpio@0:
->>>>>>>> +    description: |
->>>>>>>> +      Built-in GPIO emulate i2c exported for external display bridge
->>>>>>> If you have i2c-gpio, that belongs at the DT top-level, not here.
->>>>>>>
->>>>>>>> +      configuration, onitor detection and edid read back etc, for ls7a1000
->>>>>>>> +      only. Its compatible must be lsdc,i2c-gpio-0. The reg property can be
->>>>>>> No, there's a defined i2c-gpio compatible already.
->>>>>> This is different from the i2c-gpio already defined under drivers/i2c/busses/i2c-gpio.c,
->>>>>> By design, my i2c-gpio is vendor specific properties, lsdc device driver create the i2c
->>>>>> adapter at runtime. These are 4 dedicated GPIOs whose control register is located at the
->>>>>> LSDC register space, not general purpose GPIOs with separate control register resource.
->>>>>> So i think it is the child node of display-controller@6,1, it belongs to LSDC.
->>>>>> It seems that put it at the DT top-level break the hierarchy and relationship.
->>>>> Okay, I see. Then just 'i2c' for the node names. You need a reference to
->>>>> i2c-controller.yaml for these nodes too.
->>>>>
->>>>> The compatible should not have an index in it.
->>>> OK, i will fix this at the next version. thanks.
->>>>>>>> +      used to specify a I2c adapter bus number, if you don't specify one
->>>>>>>> +      i2c driver core will dynamically assign a bus number. Please specify
->>>>>>> Bus numbers are a linux detail not relevant to DT binding.
->>>>>>>
->>>>>>>> +      it only when its bus number matters. Bus number greater than 6 is safe
->>>>>>>> +      because ls7a1000 bridge have 6 hardware I2C controller integrated.
->>>>>>>> +
->>>>>>>> +  i2c-gpio@1:
->>>>>>>> +    description: |
->>>>>>>> +      Built-in GPIO emulate i2c exported for external display bridge
->>>>>>>> +      configuration, onitor detection and edid read back etc, for ls7a1000
->>>>>>>> +      only. Its compatible must be lsdc,i2c-gpio-1.
->>>>>>>> +
->>>>>>>> +  ports:
->>>>>>>> +    $ref: /schemas/graph.yaml#/properties/ports
->>>>>>>> +
->>>>>>>> +    properties:
->>>>>>>> +      port@0:
->>>>>>>> +        $ref: /schemas/graph.yaml#/properties/port
->>>>>>>> +        description: output port node connected with DPI panels or external encoders, with only one endpoint.
->>>>>>>> +
->>>>>>>> +      port@1:
->>>>>>>> +        $ref: /schemas/graph.yaml#/properties/port
->>>>>>>> +        description: output port node connected with DPI panels or external encoders, with only one endpoint.
->>>>>>>> +
->>>>>>>> +    required:
->>>>>>>> +      - port@0
->>>>>>>> +      - port@1
->>>>>>>> +
->>>>>>>> +required:
->>>>>>>> +  - compatible
->>>>>>>> +  - reg
->>>>>>>> +  - interrupts
->>>>>>>> +  - ports
->>>>>>>> +
->>>>>>>> +additionalProperties: false
->>>>>>>> +
->>>>>>>> +examples:
->>>>>>>> +  - |
->>>>>>>> +    #include <dt-bindings/interrupt-controller/irq.h>
->>>>>>>> +    bus {
->>>>>>>> +
->>>>>>>> +        #address-cells = <3>;
->>>>>>>> +        #size-cells = <2>;
->>>>>>>> +        #interrupt-cells = <2>;
->>>>>>>> +
->>>>>>>> +        display-controller@6,1 {
->>>>>>>> +            compatible = "loongson,ls7a1000-dc";
->>>>>>>> +            reg = <0x3100 0x0 0x0 0x0 0x0>;
->>>>>>>> +            interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
->>>>>>>> +
->>>>>>>> +            #address-cells = <1>;
->>>>>>>> +            #size-cells = <0>;
->>>>>>>> +
->>>>>>>> +            i2c-gpio@0 {
->>>>>>>> +                compatible = "lsdc,i2c-gpio-0";
->>>>>>>> +                reg = <6>;
->>>>> 'reg' needs to be documented with some description of what 6 and 7
->>>>> represent. If they are the control register offset, then make the
->>>>> address translatable (use 'ranges' and define the size).
->>>> By design, the reg property is used to specify a I2c adapter bus number,
->>>> if we don't specify one, i2c driver core will dynamically assign a bus number.
->>>> then the nr of the i2c adapter will started from 0. I want is start from 6
->>>> to avoid potential conflict feature hardware I2C driver.
->>>>
->>>> Because LS7A1000 bridge chip have 6 hardware I2C controller integrated,
->>>> but its driver is not up-streamed yet. By default these hardware I2C controller's
->>>> nr is started from 0.
->>> Linux's numbering doesn't belong in DT. So no, you can't use 'reg' in
->>> that way.
->> Then,  can i use something like lsdc,nr = <6> ?
->>>> Even through i2c driver core can dynamically generate a number, i still want it
->>>> to be fixed and keep consistent and explicit. That is, i2c6 is for display pipe 0,
->>>> i2c7 is for display pipe 1. This follow the convention and flexible enough.
->>> You may want that, but that is not how the kernel works. Specific
->>> numbers are not guaranteed. I'm sure you've seen this for disks, network
->>> interfaces, etc.
->>>
->>> Rob
->> 2c_bit_add_numbered_bus() will guarantee it for you as long as If no devices
->> have pre-been declared for this bus.
->>
->> you can read the comment of 2c_bit_add_numbered_bus() at
->> drivers/i2c/i2c-core-base.c
-> I didn't say it wasn't possible. It is not best practice. Grep
-> i2c_bit_add_numbered_bus and see how many users there are.
+Four temperature sensors and eight PWM controllable fans are available.
+Additionally, serial number, firmware version and power-on count are
+exposed through debugfs.
 
-i2c-gpio.c at drivers/i2c/busses/ just do the same thing.
+This driver has been tested on x86_64.
 
+Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+---
+Changes in v2:
+- Fixed formatting
+- HID report values from device are now being converted sooner
+- aqc_pwm_to_percent() is now range checked
+- Put pointers to labels in aqc_data
+- Simplified checksum calculation call
+---
+ Documentation/hwmon/aquacomputer_d5next.rst |   4 +
+ drivers/hwmon/Kconfig                       |   7 +-
+ drivers/hwmon/aquacomputer_d5next.c         | 446 +++++++++++++++++---
+ 3 files changed, 404 insertions(+), 53 deletions(-)
 
-+ nvidia,bpmp-bus-id: + $ref: /schemas/types.yaml#/definitions/uint32 + 
-description: Indicates the I2C bus number this DT node represents, + as 
-defined by the BPMP firmware.
+diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
+index 3373e27b707d..e69f718caf5b 100644
+--- a/Documentation/hwmon/aquacomputer_d5next.rst
++++ b/Documentation/hwmon/aquacomputer_d5next.rst
+@@ -7,6 +7,7 @@ Supported devices:
+ 
+ * Aquacomputer D5 Next watercooling pump
+ * Aquacomputer Farbwerk 360 RGB controller
++* Aquacomputer Octo fan controller
+ 
+ Author: Aleksa Savic
+ 
+@@ -28,6 +29,9 @@ seems to require sending it a complete configuration. That includes addressable
+ RGB LEDs, for which there is no standard sysfs interface. Thus, that task is
+ better suited for userspace tools.
+ 
++The Octo exposes four temperature sensors and eight PWM controllable fans, along
++with their speed (in RPM), power, voltage and current.
++
+ The Farbwerk 360 exposes four temperature sensors. Depending on the device,
+ not all sysfs and debugfs entries will be available.
+ 
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index db8bc55e5f50..5beadd8a0932 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -256,11 +256,12 @@ config SENSORS_AHT10
+ 	  will be called aht10.
+ 
+ config SENSORS_AQUACOMPUTER_D5NEXT
+-	tristate "Aquacomputer D5 Next watercooling pump"
++	tristate "Aquacomputer D5 Next, Octo and Farbwerk 360"
+ 	depends on USB_HID
+ 	help
+-	  If you say yes here you get support for the Aquacomputer D5 Next
+-	  watercooling pump sensors.
++	  If you say yes here you get support for sensors and fans of
++	  the Aquacomputer D5 Next watercooling pump, Octo fan
++	  controller and Farbwerk 360 RGB controller, where available.
+ 
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called aquacomputer_d5next.
+diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+index 525809cf7c95..1711957a9ea7 100644
+--- a/drivers/hwmon/aquacomputer_d5next.c
++++ b/drivers/hwmon/aquacomputer_d5next.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0+
+ /*
+- * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk 360)
++ * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk 360, Octo)
+  *
+  * Aquacomputer devices send HID reports (with ID 0x01) every second to report
+  * sensor values.
+@@ -8,23 +8,27 @@
+  * Copyright 2021 Aleksa Savic <savicaleksa83@gmail.com>
+  */
+ 
++#include <linux/crc16.h>
+ #include <linux/debugfs.h>
+ #include <linux/hid.h>
+ #include <linux/hwmon.h>
+ #include <linux/jiffies.h>
+ #include <linux/module.h>
++#include <linux/mutex.h>
+ #include <linux/seq_file.h>
+ #include <asm/unaligned.h>
+ 
+ #define USB_VENDOR_ID_AQUACOMPUTER	0x0c70
+ #define USB_PRODUCT_ID_D5NEXT		0xf00e
+ #define USB_PRODUCT_ID_FARBWERK360	0xf010
++#define USB_PRODUCT_ID_OCTO		0xf011
+ 
+-enum kinds { d5next, farbwerk360 };
++enum kinds { d5next, farbwerk360, octo };
+ 
+ static const char *const aqc_device_names[] = {
+ 	[d5next] = "d5next",
+-	[farbwerk360] = "farbwerk360"
++	[farbwerk360] = "farbwerk360",
++	[octo] = "octo"
+ };
+ 
+ #define DRIVER_NAME			"aquacomputer_d5next"
+@@ -35,6 +39,18 @@ static const char *const aqc_device_names[] = {
+ #define SERIAL_SECOND_PART		5
+ #define FIRMWARE_VERSION		13
+ 
++#define CTRL_REPORT_ID			0x03
++
++/* The HID report that the official software always sends
++ * after writing values, currently same for all devices
++ */
++#define SECONDARY_CTRL_REPORT_ID	0x02
++#define SECONDARY_CTRL_REPORT_SIZE	0x0B
++
++static u8 secondary_ctrl_report[] = {
++	0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x34, 0xC6
++};
++
+ /* Register offsets for the D5 Next pump */
+ #define D5NEXT_POWER_CYCLES		24
+ 
+@@ -55,12 +71,38 @@ static const char *const aqc_device_names[] = {
+ 
+ /* Register offsets for the Farbwerk 360 RGB controller */
+ #define FARBWERK360_NUM_SENSORS		4
+-#define FARBWERK360_SENSOR_START		0x32
++#define FARBWERK360_SENSOR_START	0x32
+ #define FARBWERK360_SENSOR_SIZE		0x02
+ #define FARBWERK360_SENSOR_DISCONNECTED	0x7FFF
+ 
++/* Register offsets for the Octo fan controller */
++#define OCTO_POWER_CYCLES		0x18
++#define OCTO_NUM_FANS			8
++#define OCTO_FAN_PERCENT_OFFSET		0x00
++#define OCTO_FAN_VOLTAGE_OFFSET		0x02
++#define OCTO_FAN_CURRENT_OFFSET		0x04
++#define OCTO_FAN_POWER_OFFSET		0x06
++#define OCTO_FAN_SPEED_OFFSET		0x08
++
++static u8 octo_sensor_fan_offsets[] = { 0x7D, 0x8A, 0x97, 0xA4, 0xB1, 0xBE, 0xCB, 0xD8 };
++
++#define OCTO_NUM_SENSORS		4
++#define OCTO_SENSOR_START		0x3D
++#define OCTO_SENSOR_SIZE		0x02
++#define OCTO_SENSOR_DISCONNECTED	0x7FFF
++
++#define OCTO_CTRL_REPORT_SIZE			0x65F
++#define OCTO_CTRL_REPORT_CHECKSUM_OFFSET	0x65D
++#define OCTO_CTRL_REPORT_CHECKSUM_START		0x01
++#define OCTO_CTRL_REPORT_CHECKSUM_LENGTH	0x65C
++
++/* Fan speed registers in Octo control report (from 0-100%) */
++static u16 octo_ctrl_fan_offsets[] = { 0x5B, 0xB0, 0x105, 0x15A, 0x1AF, 0x204, 0x259, 0x2AE };
++
+ /* Labels for D5 Next */
+-#define L_D5NEXT_COOLANT_TEMP		"Coolant temp"
++static const char *const label_d5next_temp[] = {
++	"Coolant temp"
++};
+ 
+ static const char *const label_d5next_speeds[] = {
+ 	"Pump speed",
+@@ -83,7 +125,7 @@ static const char *const label_d5next_current[] = {
+ 	"Fan current"
+ };
+ 
+-/* Labels for Farbwerk 360 temperature sensors */
++/* Labels for Farbwerk 360 and Octo temperature sensors */
+ static const char *const label_temp_sensors[] = {
+ 	"Sensor 1",
+ 	"Sensor 2",
+@@ -91,32 +133,196 @@ static const char *const label_temp_sensors[] = {
+ 	"Sensor 4"
+ };
+ 
++/* Labels for Octo */
++static const char *const label_fan_speed[] = {
++	"Fan 1 speed",
++	"Fan 2 speed",
++	"Fan 3 speed",
++	"Fan 4 speed",
++	"Fan 5 speed",
++	"Fan 6 speed",
++	"Fan 7 speed",
++	"Fan 8 speed"
++};
++
++static const char *const label_fan_power[] = {
++	"Fan 1 power",
++	"Fan 2 power",
++	"Fan 3 power",
++	"Fan 4 power",
++	"Fan 5 power",
++	"Fan 6 power",
++	"Fan 7 power",
++	"Fan 8 power"
++};
++
++static const char *const label_fan_voltage[] = {
++	"Fan 1 voltage",
++	"Fan 2 voltage",
++	"Fan 3 voltage",
++	"Fan 4 voltage",
++	"Fan 5 voltage",
++	"Fan 6 voltage",
++	"Fan 7 voltage",
++	"Fan 8 voltage"
++};
++
++static const char *const label_fan_current[] = {
++	"Fan 1 current",
++	"Fan 2 current",
++	"Fan 3 current",
++	"Fan 4 current",
++	"Fan 5 current",
++	"Fan 6 current",
++	"Fan 7 current",
++	"Fan 8 current"
++};
++
+ struct aqc_data {
+ 	struct hid_device *hdev;
+ 	struct device *hwmon_dev;
+ 	struct dentry *debugfs;
++	struct mutex mutex;	/* Used for locking access when reading and writing PWM values */
+ 	enum kinds kind;
+ 	const char *name;
+ 
++	int buffer_size;
++	u8 *buffer;
++	int checksum_start;
++	int checksum_length;
++	int checksum_offset;
++
+ 	/* General info, same across all devices */
+ 	u32 serial_number[2];
+ 	u16 firmware_version;
+ 
+-	/* D5 Next specific - how many times the device was powered on */
++	/* How many times the device was powered on */
+ 	u32 power_cycles;
+ 
+ 	/* Sensor values */
+ 	s32 temp_input[4];
+-	u16 speed_input[2];
+-	u32 power_input[2];
+-	u16 voltage_input[3];
+-	u16 current_input[2];
++	u16 speed_input[8];
++	u32 power_input[8];
++	u16 voltage_input[8];
++	u16 current_input[8];
++
++	/* Label values */
++	const char *const *temp_label;
++	const char *const *speed_label;
++	const char *const *power_label;
++	const char *const *voltage_label;
++	const char *const *current_label;
+ 
+ 	unsigned long updated;
+ };
+ 
+-static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr,
+-			      int channel)
++static int aqc_percent_to_pwm(u16 val)
++{
++	return DIV_ROUND_CLOSEST(val * 255, 100 * 100);
++}
++
++static int aqc_pwm_to_percent(long val)
++{
++	if (val < 0 || val > 255)
++		return -EINVAL;
++
++	return DIV_ROUND_CLOSEST(val * 100 * 100, 255);
++}
++
++/* Expects the mutex to be locked */
++static int aqc_get_ctrl_data(struct aqc_data *priv)
++{
++	int ret;
++
++	memset(priv->buffer, 0x00, priv->buffer_size);
++	ret = hid_hw_raw_request(priv->hdev, CTRL_REPORT_ID, priv->buffer, priv->buffer_size,
++				 HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
++	if (ret < 0)
++		ret = -ENODATA;
++
++	return ret;
++}
++
++/* Expects the mutex to be locked */
++static int aqc_send_ctrl_data(struct aqc_data *priv)
++{
++	int ret;
++	u16 checksum;
++
++	/* Init and xorout value for CRC-16/USB is 0xffff */
++	checksum = crc16(0xffff, priv->buffer + priv->checksum_start, priv->checksum_length);
++	checksum ^= 0xffff;
++
++	/* Place the new checksum at the end of the report */
++	put_unaligned_be16(checksum, priv->buffer + priv->checksum_offset);
++
++	/* Send the patched up report back to the device */
++	ret = hid_hw_raw_request(priv->hdev, CTRL_REPORT_ID, priv->buffer, priv->buffer_size,
++				 HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
++	if (ret < 0)
++		goto exit;
++
++	/* The official software sends this report after every change, so do it here as well */
++	ret = hid_hw_raw_request(priv->hdev, SECONDARY_CTRL_REPORT_ID, secondary_ctrl_report,
++				 SECONDARY_CTRL_REPORT_SIZE, HID_FEATURE_REPORT,
++				 HID_REQ_SET_REPORT);
++exit:
++	return ret;
++}
++
++/* Refreshes the control buffer and returns value at offset */
++static int aqc_get_ctrl_val(struct aqc_data *priv, int offset)
++{
++	int ret;
++
++	mutex_lock(&priv->mutex);
++
++	ret = aqc_get_ctrl_data(priv);
++	if (ret < 0)
++		goto unlock_and_return;
++
++	ret = get_unaligned_be16(priv->buffer + offset);
++
++unlock_and_return:
++	mutex_unlock(&priv->mutex);
++	return ret;
++}
++
++static int aqc_set_ctrl_val(struct aqc_data *priv, int offset, long val, size_t size)
++{
++	int ret;
++
++	if (size < 1 || size > 4)
++		return -EINVAL;
++
++	mutex_lock(&priv->mutex);
++
++	ret = aqc_get_ctrl_data(priv);
++	if (ret < 0)
++		goto unlock_and_return;
++
++	switch (size) {
++	case 4:
++		put_unaligned_be32(val, priv->buffer + offset);
++		break;
++	case 2:
++		put_unaligned_be16((u16)val, priv->buffer + offset);
++		break;
++	case 1:
++		priv->buffer[offset] = val;
++		break;
++	default:
++		break;
++	}
++
++	ret = aqc_send_ctrl_data(priv);
++
++unlock_and_return:
++	mutex_unlock(&priv->mutex);
++	return ret;
++}
++
++static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr, int channel)
+ {
+ 	const struct aqc_data *priv = data;
+ 
+@@ -128,17 +334,47 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+ 				return 0444;
+ 			break;
+ 		case farbwerk360:
++		case octo:
+ 			return 0444;
+ 		default:
+ 			break;
+ 		}
+ 		break;
++	case hwmon_pwm:
++		switch (priv->kind) {
++		case octo:
++			switch (attr) {
++			case hwmon_pwm_input:
++				return 0644;
++			default:
++				break;
++			}
++			break;
++		default:
++			break;
++		}
++		break;
+ 	case hwmon_fan:
+ 	case hwmon_power:
+-	case hwmon_in:
+ 	case hwmon_curr:
+ 		switch (priv->kind) {
+ 		case d5next:
++			if (channel < 2)
++				return 0444;
++			break;
++		case octo:
++			return 0444;
++		default:
++			break;
++		}
++		break;
++	case hwmon_in:
++		switch (priv->kind) {
++		case d5next:
++			if (channel < 3)
++				return 0444;
++			break;
++		case octo:
+ 			return 0444;
+ 		default:
+ 			break;
+@@ -154,6 +390,7 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 		    int channel, long *val)
+ {
++	int ret;
+ 	struct aqc_data *priv = dev_get_drvdata(dev);
+ 
+ 	if (time_after(jiffies, priv->updated + STATUS_UPDATE_INTERVAL))
+@@ -172,6 +409,18 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 	case hwmon_power:
+ 		*val = priv->power_input[channel];
+ 		break;
++	case hwmon_pwm:
++		switch (priv->kind) {
++		case octo:
++			ret = aqc_get_ctrl_val(priv, octo_ctrl_fan_offsets[channel]);
++			if (ret < 0)
++				return ret;
++
++			*val = aqc_percent_to_pwm(ret);
++		default:
++			break;
++		}
++		break;
+ 	case hwmon_in:
+ 		*val = priv->voltage_input[channel];
+ 		break;
+@@ -192,49 +441,51 @@ static int aqc_read_string(struct device *dev, enum hwmon_sensor_types type, u32
+ 
+ 	switch (type) {
+ 	case hwmon_temp:
+-		switch (priv->kind) {
+-		case d5next:
+-			*str = L_D5NEXT_COOLANT_TEMP;
+-			break;
+-		case farbwerk360:
+-			*str = label_temp_sensors[channel];
+-			break;
+-		default:
+-			break;
+-		}
++		*str = priv->temp_label[channel];
+ 		break;
+ 	case hwmon_fan:
+-		switch (priv->kind) {
+-		case d5next:
+-			*str = label_d5next_speeds[channel];
+-			break;
+-		default:
+-			break;
+-		}
++		*str = priv->speed_label[channel];
+ 		break;
+ 	case hwmon_power:
+-		switch (priv->kind) {
+-		case d5next:
+-			*str = label_d5next_power[channel];
+-			break;
+-		default:
+-			break;
+-		}
++		*str = priv->power_label[channel];
+ 		break;
+ 	case hwmon_in:
+-		switch (priv->kind) {
+-		case d5next:
+-			*str = label_d5next_voltages[channel];
+-			break;
+-		default:
+-			break;
+-		}
++		*str = priv->voltage_label[channel];
+ 		break;
+ 	case hwmon_curr:
+-		switch (priv->kind) {
+-		case d5next:
+-			*str = label_d5next_current[channel];
+-			break;
++		*str = priv->current_label[channel];
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
++static int aqc_write(struct device *dev, enum hwmon_sensor_types type, u32 attr, int channel,
++		     long val)
++{
++	int ret, pwm_value;
++	struct aqc_data *priv = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_pwm:
++		switch (attr) {
++		case hwmon_pwm_input:
++			switch (priv->kind) {
++			case octo:
++				pwm_value = aqc_pwm_to_percent(val);
++				if (pwm_value < 0)
++					return pwm_value;
++
++				ret = aqc_set_ctrl_val(priv, octo_ctrl_fan_offsets[channel],
++						       pwm_value, 2);
++				if (ret < 0)
++					return ret;
++				break;
++			default:
++				break;
++			}
+ 		default:
+ 			break;
+ 		}
+@@ -250,6 +501,7 @@ static const struct hwmon_ops aqc_hwmon_ops = {
+ 	.is_visible = aqc_is_visible,
+ 	.read = aqc_read,
+ 	.read_string = aqc_read_string,
++	.write = aqc_write
+ };
+ 
+ static const struct hwmon_channel_info *aqc_info[] = {
+@@ -259,16 +511,48 @@ static const struct hwmon_channel_info *aqc_info[] = {
+ 			   HWMON_T_INPUT | HWMON_T_LABEL,
+ 			   HWMON_T_INPUT | HWMON_T_LABEL),
+ 	HWMON_CHANNEL_INFO(fan,
++			   HWMON_F_INPUT | HWMON_F_LABEL,
++			   HWMON_F_INPUT | HWMON_F_LABEL,
++			   HWMON_F_INPUT | HWMON_F_LABEL,
++			   HWMON_F_INPUT | HWMON_F_LABEL,
++			   HWMON_F_INPUT | HWMON_F_LABEL,
++			   HWMON_F_INPUT | HWMON_F_LABEL,
+ 			   HWMON_F_INPUT | HWMON_F_LABEL,
+ 			   HWMON_F_INPUT | HWMON_F_LABEL),
+ 	HWMON_CHANNEL_INFO(power,
++			   HWMON_P_INPUT | HWMON_P_LABEL,
++			   HWMON_P_INPUT | HWMON_P_LABEL,
++			   HWMON_P_INPUT | HWMON_P_LABEL,
++			   HWMON_P_INPUT | HWMON_P_LABEL,
++			   HWMON_P_INPUT | HWMON_P_LABEL,
++			   HWMON_P_INPUT | HWMON_P_LABEL,
+ 			   HWMON_P_INPUT | HWMON_P_LABEL,
+ 			   HWMON_P_INPUT | HWMON_P_LABEL),
++	HWMON_CHANNEL_INFO(pwm,
++			   HWMON_PWM_INPUT,
++			   HWMON_PWM_INPUT,
++			   HWMON_PWM_INPUT,
++			   HWMON_PWM_INPUT,
++			   HWMON_PWM_INPUT,
++			   HWMON_PWM_INPUT,
++			   HWMON_PWM_INPUT,
++			   HWMON_PWM_INPUT),
+ 	HWMON_CHANNEL_INFO(in,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
+ 			   HWMON_I_INPUT | HWMON_I_LABEL,
+ 			   HWMON_I_INPUT | HWMON_I_LABEL,
+ 			   HWMON_I_INPUT | HWMON_I_LABEL),
+ 	HWMON_CHANNEL_INFO(curr,
++			   HWMON_C_INPUT | HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_LABEL,
+ 			   HWMON_C_INPUT | HWMON_C_LABEL,
+ 			   HWMON_C_INPUT | HWMON_C_LABEL),
+ 	NULL
+@@ -326,6 +610,35 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
+ 				priv->temp_input[i] = sensor_value * 10;
+ 		}
+ 		break;
++	case octo:
++		priv->power_cycles = get_unaligned_be32(data + OCTO_POWER_CYCLES);
++
++		/* Fan speed and related readings */
++		for (i = 0; i < OCTO_NUM_FANS; i++) {
++			priv->speed_input[i] =
++			    get_unaligned_be16(data + octo_sensor_fan_offsets[i] +
++					       OCTO_FAN_SPEED_OFFSET);
++			priv->power_input[i] =
++			    get_unaligned_be16(data + octo_sensor_fan_offsets[i] +
++					       OCTO_FAN_POWER_OFFSET) * 10000;
++			priv->voltage_input[i] =
++			    get_unaligned_be16(data + octo_sensor_fan_offsets[i] +
++					       OCTO_FAN_VOLTAGE_OFFSET) * 10;
++			priv->current_input[i] =
++			    get_unaligned_be16(data + octo_sensor_fan_offsets[i] +
++					       OCTO_FAN_CURRENT_OFFSET);
++		}
++
++		/* Temperature sensor readings */
++		for (i = 0; i < OCTO_NUM_SENSORS; i++) {
++			sensor_value = get_unaligned_be16(data + OCTO_SENSOR_START +
++							  i * OCTO_SENSOR_SIZE);
++			if (sensor_value == OCTO_SENSOR_DISCONNECTED)
++				priv->temp_input[i] = -ENODATA;
++			else
++				priv->temp_input[i] = sensor_value * 10;
++		}
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -378,8 +691,13 @@ static void aqc_debugfs_init(struct aqc_data *priv)
+ 	debugfs_create_file("serial_number", 0444, priv->debugfs, priv, &serial_number_fops);
+ 	debugfs_create_file("firmware_version", 0444, priv->debugfs, priv, &firmware_version_fops);
+ 
+-	if (priv->kind == d5next)
++	switch (priv->kind) {
++	case d5next:
++	case octo:
+ 		debugfs_create_file("power_cycles", 0444, priv->debugfs, priv, &power_cycles_fops);
++	default:
++		break;
++	}
+ }
+ 
+ #else
+@@ -419,9 +737,30 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 	switch (hdev->product) {
+ 	case USB_PRODUCT_ID_D5NEXT:
+ 		priv->kind = d5next;
++
++		priv->temp_label = label_d5next_temp;
++		priv->speed_label = label_d5next_speeds;
++		priv->power_label = label_d5next_power;
++		priv->voltage_label = label_d5next_voltages;
++		priv->current_label = label_d5next_current;
+ 		break;
+ 	case USB_PRODUCT_ID_FARBWERK360:
+ 		priv->kind = farbwerk360;
++
++		priv->temp_label = label_temp_sensors;
++		break;
++	case USB_PRODUCT_ID_OCTO:
++		priv->kind = octo;
++		priv->buffer_size = OCTO_CTRL_REPORT_SIZE;
++		priv->checksum_start = OCTO_CTRL_REPORT_CHECKSUM_START;
++		priv->checksum_length = OCTO_CTRL_REPORT_CHECKSUM_LENGTH;
++		priv->checksum_offset = OCTO_CTRL_REPORT_CHECKSUM_OFFSET;
++
++		priv->temp_label = label_temp_sensors;
++		priv->speed_label = label_fan_speed;
++		priv->power_label = label_fan_power;
++		priv->voltage_label = label_fan_voltage;
++		priv->current_label = label_fan_current;
+ 		break;
+ 	default:
+ 		break;
+@@ -429,6 +768,12 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 
+ 	priv->name = aqc_device_names[priv->kind];
+ 
++	priv->buffer = devm_kzalloc(&hdev->dev, priv->buffer_size, GFP_KERNEL);
++	if (!priv->buffer)
++		return -ENOMEM;
++
++	mutex_init(&priv->mutex);
++
+ 	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, priv->name, priv,
+ 							  &aqc_chip_info, NULL);
+ 
+@@ -462,6 +807,7 @@ static void aqc_remove(struct hid_device *hdev)
+ static const struct hid_device_id aqc_table[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_D5NEXT) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_FARBWERK360) },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_OCTO) },
+ 	{ }
+ };
+ 
+-- 
+2.35.1
 
-> Even if the kernel allows specifying bus numbers,your Linux bus numbers don't
-> belong in DT.
-
-Again, Does does devicetree specification prohibit this?
-
-Nvidia also put i2c bus number in the DT, we learn that from nvidia. [1][2]
-
-[1] Documentation/devicetree/bindings/i2c/nvidia,tegra186-bpmp-i2c.yaml
-
-[2] 
-https://lore.kernel.org/all/20211208143306.534700-1-thierry.reding@gmail.com/
-
-
->
-> Rob

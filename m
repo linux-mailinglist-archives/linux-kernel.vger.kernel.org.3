@@ -2,60 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2554E83A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 20:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 035AE4E83A3
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 20:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234091AbiCZTJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 15:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
+        id S234264AbiCZTQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 15:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbiCZTJU (ORCPT
+        with ESMTP id S234184AbiCZTQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 15:09:20 -0400
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5A1C14
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 12:07:40 -0700 (PDT)
-Received: by mail-vk1-xa2b.google.com with SMTP id l184so5957045vkh.0
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 12:07:40 -0700 (PDT)
+        Sat, 26 Mar 2022 15:16:50 -0400
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0294F5C84D;
+        Sat, 26 Mar 2022 12:15:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9+ZMgF8rHzqNlDkErLZI/DheSIs9iRBaxXLkva+BiWM=;
-        b=MD7VvaQZmHal8Xv/fx01kI1KmByj2fQOUC5MgJ6KApMYVC8a8wU+KoSpFvPXYq0TGZ
-         zZ2tBixUPv0UFU5ecP4ePgSX6FGzi52qYj9VBVhnrhp4+XRO0qCg8aKY50WPgsneX8/c
-         105dltBOkBstFSRzmSwraSUeA6g4EIHpqMS2w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9+ZMgF8rHzqNlDkErLZI/DheSIs9iRBaxXLkva+BiWM=;
-        b=tS/1gv3VmN5HM4792CAWznjt6PGRRZ2344wFy9RpXnFCdePNkHiic3cPBME9wjsWcK
-         mRgmQRXGi6ncujxAGmVNd4VmgygxD01RzZOSbH1qK7uC3Jdv95P5uRDtCWkSjpR188A1
-         mSCMKiqdxrtF66ypHo3uP8oJNucluwTHhBlWOrUSLNtcUyPgEzYKRtYPz8VwrO9+L/DY
-         GyxbORm8vJk6nqmoeV3k3hvakdFFhkj+dEso8F/7ecyHrOeFmU0EeBIoTEVcrWBWnApK
-         zXUvilih88iXDAx1QK7Od5zx/5nVGq+suHaMLUAZfNjVOEbX/uqCeApUfQkU7EgvmopY
-         xwKw==
-X-Gm-Message-State: AOAM533AalWb7l5c5bVcKn1BzgtcbHpGMzTFRC1YZmibBO/5snQ/K0SK
-        7V6wm+0DtzpMTSb5qnAMsw3s/5vteNg/qQCjDTFMJvPkYzQ=
-X-Google-Smtp-Source: ABdhPJz7w1eEIH1Yjli6v9gw/q4r6yOcjoplh2ugVMhe4rGKmJyp/buoks/Yv7HcJOH7R6CVnmvS6bbI6l+0An3OS2U=
-X-Received: by 2002:a05:6122:1245:b0:33f:e889:f353 with SMTP id
- b5-20020a056122124500b0033fe889f353mr5624016vkp.17.1648321659222; Sat, 26 Mar
- 2022 12:07:39 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1648322113; x=1679858113;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=1qVgAAwGius5rPbM23I010ii9ouqb5CWP42FZkdIMuk=;
+  b=EYocjRGcBS/rd+9P46PAS1/+tcr9poT3XCVtQA6qEwTxDyl9Yn4WwpS6
+   DhiD3e8ybbdx4o50rB3Sm9jKa8Z197WNSWff2WgMkosuuscQlA6OGYC7d
+   Q4XCTRdKJIROuUpXuIn18I5KhTrMjaQlc3AYRJGa+w2VKWQcm6m6DOMx+
+   0=;
+X-IronPort-AV: E=Sophos;i="5.90,213,1643673600"; 
+   d="scan'208";a="189390323"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-54a073b7.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 26 Mar 2022 19:15:12 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-54a073b7.us-east-1.amazon.com (Postfix) with ESMTPS id AA33C9765A;
+        Sat, 26 Mar 2022 19:15:06 +0000 (UTC)
+Received: from EX13D02UWC004.ant.amazon.com (10.43.162.236) by
+ EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Sat, 26 Mar 2022 19:15:02 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX13D02UWC004.ant.amazon.com (10.43.162.236) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Sat, 26 Mar 2022 19:15:01 +0000
+Received: from dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com
+ (172.19.181.128) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ Server id 15.0.1497.32 via Frontend Transport; Sat, 26 Mar 2022 19:15:01
+ +0000
+Received: by dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com (Postfix, from userid 5131138)
+        id 1534917E0; Sat, 26 Mar 2022 19:15:00 +0000 (UTC)
+From:   Ali Saidi <alisaidi@amazon.com>
+To:     <leo.yan@linaro.org>
+CC:     <Nick.Forrington@arm.com>, <acme@kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <alisaidi@amazon.com>,
+        <andrew.kilroy@arm.com>, <benh@kernel.crashing.org>,
+        <german.gomez@arm.com>, <james.clark@arm.com>,
+        <john.garry@huawei.com>, <jolsa@kernel.org>, <kjain@linux.ibm.com>,
+        <lihuafei1@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
+        <mingo@redhat.com>, <namhyung@kernel.org>, <peterz@infradead.org>,
+        <will@kernel.org>
+Subject: Re: [PATCH v4 4/4] perf mem: Support HITM for when mem_lvl_num is any
+Date:   Sat, 26 Mar 2022 19:14:54 +0000
+Message-ID: <20220326191454.15084-1-alisaidi@amazon.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220326062303.GC20556@leoy-ThinkPad-X240s>
+References: <20220326062303.GC20556@leoy-ThinkPad-X240s>
 MIME-Version: 1.0
-References: <20220326073326.3389347-1-yangyingliang@huawei.com>
-In-Reply-To: <20220326073326.3389347-1-yangyingliang@huawei.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Sun, 27 Mar 2022 03:07:13 +0800
-Message-ID: <CAJMQK-hA+k8hsQiBq7v9QROQyDkrzy+J40b2uF4AcmrXDe0gKw@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: anx7625: add missing destroy_workqueue() in anx7625_i2c_probe()
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        xji@analogixsemi.com, robert.foss@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-12.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,41 +76,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 26, 2022 at 3:24 PM Yang Yingliang <yangyingliang@huawei.com> wrote:
->
-> Add the missing destroy_workqueue() before return from
-> anx7625_i2c_probe() in the error handling case.
->
-> Fixes: adca62ec370c ("drm/bridge: anx7625: Support reading edid through aux channel")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
-Reviewed-by: Hsin-Yi Wang <hsinyi@chromium.org>
+On Sat, 26 Mar 2022 22:23:03 +0000, Leo Yan wrote:
+> On Thu, Mar 24, 2022 at 06:33:23PM +0000, Ali Saidi wrote:
+> > For loads that hit in a the LLC snoop filter and are fulfilled from a
+> > higher level cache on arm64 Neoverse cores, it's not usually clear what
+> > the true level of the cache the data came from (i.e. a transfer from a
+> > core could come from it's L1 or L2). Instead of making an assumption of
+> > where the line came from, add support for incrementing HITM if the
+> > source is CACHE_ANY.A
+[snip]
+> 
+> This might break the memory profiling result for x86, see file
+> arch/x86/events/intel/ds.c:
+> 
+>   97 void __init intel_pmu_pebs_data_source_skl(bool pmem)
+>   98 {
+>   99         u64 pmem_or_l4 = pmem ? LEVEL(PMEM) : LEVEL(L4);
+>   ...
+>  105         pebs_data_source[0x0d] = OP_LH | LEVEL(ANY_CACHE) | REM | P(SNOOP, HITM);
+>  106 }
+> 
 
->  drivers/gpu/drm/bridge/analogix/anx7625.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> index 31ecf5626f1d..1895e3448c02 100644
-> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> @@ -2654,7 +2654,7 @@ static int anx7625_i2c_probe(struct i2c_client *client,
->         if (ret) {
->                 if (ret != -EPROBE_DEFER)
->                         DRM_DEV_ERROR(dev, "fail to parse DT : %d\n", ret);
-> -               return ret;
-> +               goto free_wq;
->         }
->
->         if (anx7625_register_i2c_dummy_clients(platform, client) != 0) {
-> @@ -2669,7 +2669,7 @@ static int anx7625_i2c_probe(struct i2c_client *client,
->         pm_suspend_ignore_children(dev, true);
->         ret = devm_add_action_or_reset(dev, anx7625_runtime_disable, dev);
->         if (ret)
-> -               return ret;
-> +               goto free_wq;
->
->         if (!platform->pdata.low_power_mode) {
->                 anx7625_disable_pd_protocol(platform);
-> --
-> 2.25.1
->
+Thanks for catching this Leo, I'll add your fix.
+
+Ali

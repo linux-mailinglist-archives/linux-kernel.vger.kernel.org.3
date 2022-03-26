@@ -2,135 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AAD94E7E35
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:36:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A7A4E7E29
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:29:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiCZAiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 20:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35996 "EHLO
+        id S229697AbiCZAbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 20:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiCZAiW (ORCPT
+        with ESMTP id S229456AbiCZAbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 20:38:22 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111EC24059B
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:36:47 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id bt26so15933377lfb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:36:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lcshdobGzILllMY3zNpnZ3Ex5ohCbZSLroaY3F9W/JA=;
-        b=dTex8E2DlnTcTjb24xecx3Rs17SSDlOTb2q2dyGoe4UMrbGwJxoqMFipPFX1dMVeta
-         WXHrs1YXfFuOjUXiXABz7YSdikeLsyKoFKm9th2ytRWjAyczdZsos502VTEaIp/Z+TxG
-         Bge3mQs/tQgKvKYn5r8VcKJQjSjngfGK4Akfw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lcshdobGzILllMY3zNpnZ3Ex5ohCbZSLroaY3F9W/JA=;
-        b=hbhLLtyRJxweIIEKzWdbfoyuFLb5EJR8Q/VFo8GoA0hYWUGq8LDM0L1LfuO9kOrrQS
-         eeEHn48Ag5r61ebXxrPQV61zsMrJaagTDtaSIVoa5lTnk1zq8sq5sp7tcKQoGD4bjDBE
-         7eQKWnIbwt4BQpjf3MrkYMdg769g4rYTrI5NWG6POawzsP5OPZoB/W20Ui4sYdDgwix+
-         62n/EPeADnSBTKuRS/mPem0v4l64tVkc1pfmcgjBjkOvZKGYYw/YywneDEKPd8qqoARL
-         emd97uiM2psCqHbsOryEQv8J/w26/iik9WPtnEmCR7nON4B/4qBy9ZrDlqZFF1G90fbt
-         X58A==
-X-Gm-Message-State: AOAM532l2FwWWGjoVv45gMLwkvoPIbhUXAp6Wr2nQ1pCYpL3dJgNCVxB
-        j6lFQ+PVsrjlvE+nikFv7E7hkSIf//6oCOyO9Pk=
-X-Google-Smtp-Source: ABdhPJyrczGHBHi7+nwL6nj76K4sT4vLcQA2u0GAWMRJypPfclFhwiFrVG+4T7YZ3KbgZ720RcIG8w==
-X-Received: by 2002:a19:d61a:0:b0:43f:1a03:21ee with SMTP id n26-20020a19d61a000000b0043f1a0321eemr10085350lfg.152.1648255005038;
-        Fri, 25 Mar 2022 17:36:45 -0700 (PDT)
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
-        by smtp.gmail.com with ESMTPSA id j11-20020a056512108b00b0044a23c1e679sm868943lfg.18.2022.03.25.17.36.43
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 17:36:44 -0700 (PDT)
-Received: by mail-lj1-f181.google.com with SMTP id c15so12274746ljr.9
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:36:43 -0700 (PDT)
-X-Received: by 2002:a2e:a5c4:0:b0:249:9ec3:f2b with SMTP id
- n4-20020a2ea5c4000000b002499ec30f2bmr10061179ljp.358.1648255003631; Fri, 25
- Mar 2022 17:36:43 -0700 (PDT)
+        Fri, 25 Mar 2022 20:31:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2F3130C10;
+        Fri, 25 Mar 2022 17:29:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0C56B82A72;
+        Sat, 26 Mar 2022 00:29:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB47C2BBE4;
+        Sat, 26 Mar 2022 00:29:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648254574;
+        bh=poGETAG+DQJ31NcrGPl7LcOyeM6AhqeGMqyfZs2gRLI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=epZOOWmcpDs0p9MOFj+cVMezAqejQAfLPEtWKpR0plyEvjeKH0kv7EHTIcKWwbTvy
+         bEMygfnBxIVJHkoaDhzo5Z+z1YFFa5hJVjcxerb3/f943HfDUAjbiw/65dvZrNPU7G
+         J5CMm9lDDJX8hF/wv9b7tQRQu+v0I/Yi0yytsJN862Gyg3501bbUo44a5YDP/ytRt+
+         EiSTq3kd7aaOxShfvfP5BuTWfXdZVAdyibXX07AoUvFfwhMKWpVz2PtNDSvP6+TbE8
+         1WaUkG41bs8RLlU2g3uSlVW4LTs/+y2LH3uLfLUfuXinUttHQ00rL+2DfDiVQt0Sv7
+         QD/fNp7kzVDng==
+Date:   Fri, 25 Mar 2022 19:38:43 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Luca Coelho <luciano.coelho@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] iwlwifi: fw: Replace zero-length arrays with
+ flexible-array members
+Message-ID: <20220326003843.GA2602091@embeddedor>
+References: <20220216195015.GA904148@embeddedor>
+ <202202161235.2FB20E6A5@keescook>
 MIME-Version: 1.0
-References: <20220325172036.3f8f619e@gandalf.local.home>
-In-Reply-To: <20220325172036.3f8f619e@gandalf.local.home>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 25 Mar 2022 17:36:27 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjTL=vz2PC7=dFZVrT=9nuBtZ21j_qT8e=yHvVuXvhCdg@mail.gmail.com>
-Message-ID: <CAHk-=wjTL=vz2PC7=dFZVrT=9nuBtZ21j_qT8e=yHvVuXvhCdg@mail.gmail.com>
-Subject: Re: [PATCH] virtio: Workaround fix for hard hang on guest using fifos
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Amit Shah <amit@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202202161235.2FB20E6A5@keescook>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 2:20 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> With the updates to change the size being passed in the splice from
-> page_size to pipe_size, this never finished (it would copy around a meg or
-> so). And stopped. When I killed the agent-fifo task on the guest, the guest
-> hung hard.
+On Wed, Feb 16, 2022 at 12:35:14PM -0800, Kees Cook wrote:
+> On Wed, Feb 16, 2022 at 01:50:15PM -0600, Gustavo A. R. Silva wrote:
+> > There is a regular need in the kernel to provide a way to declare
+> > having a dynamically sized set of trailing elements in a structure.
+> > Kernel code should always use “flexible array members”[1] for these
+> > cases. The older style of one-element or zero-length arrays should
+> > no longer be used[2].
+> > 
+> > [1] https://en.wikipedia.org/wiki/Flexible_array_member
+> > [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
+> > 
+> > Link: https://github.com/KSPP/linux/issues/78
+> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Without knowing (or really caring) at all how virtqueue works, this
-sounds very much like the classic pipe deadlock where two processes
-communicate over a pair of pipes, sending each other commands, and
-replying to each other with status updates.
+Hi all,
 
-And you absolutely cannot do that if one side can possibly want to up
-fill the whole pipe.
+Friendly ping: can someone take this, please?
 
-Deadlock:
+...I can take this in my -next tree in the meantime.
 
- - process A is trying to send data to process B (on 'pipe_A'), and
-blocks because the pipe is full
-
- - process B is reads the data and everything is fine, and A gets to continue
-
- - but then process B sends some stratus update the other way (on
-'pipe_B' - you can't use the same pipe for bidirectional, it's why you
-use a pair of pipes or a socketpair) and waits for the result.
-
- - now A and B are both waiting for each other - A is waiting for B to
-empty the big bunch of data it's sending, and B is waiting for the
-result for the (small) command it sent.
-
-and neither makes any progress.
-
-You can find several mentions of these kinds of problems by just
-googling for "bidirectional pipe deadlock" or similar.
-
-The solution is invariably to either
-
- (a) make sure that nobody writes even remotely close to enough data
-to fill a pipe before reading the other pipe (you can still fill up a
-pipe, but at least somebody is always going to succeed and make
-progress and do the read to make progress).
-
- (b) make sure everybody who writes to a pipe will use nonblocking IO
-(and is willing to do reads in between to satisfy the other end).
-
-That first case is basically what one of the PIPE_BUF guarantees is
-all about (the other one is the atomicity it guarantees, ie you can
-write a "command packet" and be guaranteed that readers will see it
-without data mixed in from other writes).
-
-I have no idea what your client/agent does and how it interacts with
-the virtio pipes, but it really _sounds_ like a very similar issue,
-where it used to work (because PIPE_BUF) and now no longer does
-(because pipe filled).
-
-And that virtio_console __send_control_msg() pattern very much sounds
-like a "send data and wait for ACK" behavior of "process B".
-
-              Linus
+Thanks
+--
+Gustavo

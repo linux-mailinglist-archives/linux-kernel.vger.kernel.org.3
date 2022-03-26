@@ -2,108 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453D54E846D
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 22:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F39374E8475
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 22:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235472AbiCZVgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 17:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        id S235474AbiCZVlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 17:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235468AbiCZVgr (ORCPT
+        with ESMTP id S234795AbiCZVlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 17:36:47 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5406367;
-        Sat, 26 Mar 2022 14:35:10 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 86F7D1C0BB0; Sat, 26 Mar 2022 22:35:08 +0100 (CET)
-Date:   Sat, 26 Mar 2022 22:35:08 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Pavel Machek <pavel@denx.de>,
+        Sat, 26 Mar 2022 17:41:20 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0555E647A;
+        Sat, 26 Mar 2022 14:39:41 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a02:3030:b:56bb:fa6d:7c35:3706:d2b9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 9D0C91F44384;
+        Sat, 26 Mar 2022 21:39:39 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648330779;
+        bh=slQoeK6b6StFtm2hZoQBdtzcrLQJWl5fg+7Pyg1mb9s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XP3jTwnq2dQ4WFzePRR5BCQvg6TQoPKzJAd3jhwVxaFIR9j5DhGq3qVlsB2ZNjBSR
+         m2zwaXKzALymE2rJ2uj3vcki3LGKGJqBzL/X0nFjGN6dpuJ0cTAGbouQDAWIxfkYjF
+         tL7WK6SrngyGm7SFqHK/qTEBToKwMpO+Ce/yHwUCvhw+6FOG38EzIaKeHkpDHjECEP
+         BHDpRHEgucQHFN1xKFtCDcAw5UuD84tiyJvrBLRzsR6rXpCf/sbLWVttRjjgu8L4LE
+         D2Lq/oQJHntAEjuBwE7o5WrcPlczL+L2+xUF7WHgfO2in8Xf0y4Ekir0PXpYmfmvXr
+         UNgv3GS6sU4vQ==
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     acourbot@chromium.org, tfiga@chromium.org,
+        hverkuil-cisco@xs4all.nl,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        =?utf-8?B?6LW15a2Q6L2p?= <beraphin@gmail.com>,
-        Stoyan Manolov <smanolov@suse.de>
-Subject: Re: [PATCH 5.10 09/38] llc: fix netdevice reference leaks in
- llc_ui_bind()
-Message-ID: <20220326213508.GA19319@duo.ucw.cz>
-References: <20220325150419.757836392@linuxfoundation.org>
- <20220325150420.029041400@linuxfoundation.org>
- <20220326200922.GA9262@duo.ucw.cz>
- <20220326131325.397bc0e7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-staging@lists.linux.dev (open list:STAGING SUBSYSTEM),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Allwinner
+        sunXi SoC support),
+        linux-sunxi@lists.linux.dev (open list:ARM/Allwinner sunXi SoC support),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [RFC PATCH v2 0/2] HEVC enhancements
+Date:   Sat, 26 Mar 2022 22:39:25 +0100
+Message-Id: <20220326213927.103680-1-sebastian.fricke@collabora.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="HcAYCG3uE/tztfnV"
-Content-Disposition: inline
-In-Reply-To: <20220326131325.397bc0e7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+While reading the definitions for codecs, I felt that the definition
+list could be appended with the term used in HEVC. This makes the list
+more complete from my point of view, but I see that this is a slippery
+slope as we surely don't want to add every term from every codec (Thus
+the RFC).
 
---HcAYCG3uE/tztfnV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Secondly, I renamed the H265 identifier found in the cedrus driver to
+HEVC. The idea here is mainly to align it with the other drivers like
+Hantro and RkVDEC, but also with the goal of using one identifier within
+the source tree (to simply searching for the term and also for less
+confusion).
 
-Hi!
+Changes since V1:
+- Kernel test robot reported some variables that had not replaced, I
+changed those.
 
-> > Can someone check this? AFAICT this is buggy.
-> >=20
-> > static int llc_ui_autobind(struct socket *sock, struct sockaddr_llc *ad=
-dr)
-> > {
-> >         struct sock *sk =3D sock->sk;
-> >         struct llc_sock *llc =3D llc_sk(sk);
-> >         struct llc_sap *sap;
-> >         int rc =3D -EINVAL;
-> >=20
-> >         if (!sock_flag(sk, SOCK_ZAPPED))
-> >                 goto out;
-> >=20
-> > There are 'goto out's from both before dev_get() and after it,
-> > dev_put() will be called with NULL pointer. dev_put() can't handle
-> > NULL at least in the old kernels... this is simply confused.
-> >=20
-> > Mainline has dev_put_track() there, but I see same confusion.
-> >=20
-> > Best regards,
->=20
-> commit 2d327a79ee17 ("llc: only change llc->dev when bind() succeeds"),
-> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=
-=3D2d327a79ee176930dc72c131a970c891d367c1dc
->=20
-> Should be in mainline on Thursday, LMK if we need to accelerate.
-> IDK if anyone enables LLC2.
+Sebastian Fricke (2):
+  media: docs-rst: Append HEVC specific term
+  staging: media: cedrus: Rename H265 to HEVC
 
-Thank you, yes, that looks good at the fast glance.
+ .../userspace-api/media/v4l/dev-decoder.rst   |   8 +-
+ drivers/staging/media/sunxi/cedrus/Makefile   |   2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.c   |  30 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.h   |  14 +-
+ .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
+ .../cedrus/{cedrus_h265.c => cedrus_hevc.c}   | 438 +++++++++---------
+ .../staging/media/sunxi/cedrus/cedrus_regs.h  | 394 ++++++++--------
+ .../staging/media/sunxi/cedrus/cedrus_video.c |   4 +-
+ 8 files changed, 453 insertions(+), 447 deletions(-)
+ rename drivers/staging/media/sunxi/cedrus/{cedrus_h265.c => cedrus_hevc.c} (53%)
 
-But this patch does more harm than good on its own, so I believe it
-should be dropped for now, and only queued when the fixes are
-available.
+-- 
+2.25.1
 
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---HcAYCG3uE/tztfnV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYj+HDAAKCRAw5/Bqldv6
-8mq1AJ0bTNob2KnQ6EoqC7ZTKarL9RKpqACdFQheyFUb4iymIl7EtfgaH1hnpz4=
-=CQRa
------END PGP SIGNATURE-----
-
---HcAYCG3uE/tztfnV--

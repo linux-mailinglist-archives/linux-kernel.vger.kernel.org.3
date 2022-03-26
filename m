@@ -2,85 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80DC4E7FBD
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 08:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F06474E7FC5
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 08:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231788AbiCZHQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 03:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
+        id S231831AbiCZH2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 03:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbiCZHQm (ORCPT
+        with ESMTP id S231389AbiCZH2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 03:16:42 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A1F8BBF;
-        Sat, 26 Mar 2022 00:15:03 -0700 (PDT)
-Received: by ajax-webmail-mail-app3 (Coremail) ; Sat, 26 Mar 2022 15:14:55
- +0800 (GMT+08:00)
-X-Originating-IP: [10.190.67.77]
-Date:   Sat, 26 Mar 2022 15:14:55 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5ZGo5aSa5piO?= <duoming@zju.edu.cn>
-To:     netdev@vger.kernel.org
-Cc:     linux-x25@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ms@dev.tdt.de, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, tanxin.ctf@gmail.com, linma@zju.edu.cn,
-        xiyuyang19@fudan.edu.cn
-Subject: Re: [PATCH net] net/x25: Fix null-ptr-deref caused by
- x25_disconnect
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.8 build 20200806(7a9be5e8)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <20220326065912.41077-1-duoming@zju.edu.cn>
-References: <20220326065912.41077-1-duoming@zju.edu.cn>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Sat, 26 Mar 2022 03:28:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C270D21805;
+        Sat, 26 Mar 2022 00:26:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E3E5B80E61;
+        Sat, 26 Mar 2022 07:26:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60363C340ED;
+        Sat, 26 Mar 2022 07:26:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648279607;
+        bh=xirFoJbRJSlOuSaLCipr97c50u9T+OQDwkkYd9o/BbY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RWUI0Z7zSaQzKUsR5q66Gy6XhKBH1SLdTrTJlAyKfnYD3ZBheK47uqVTFrjbl3aZ0
+         lmZkVYEgXUJFuDKm6s7TaFEmvCDkJ0iksda7/Ybt3ogQ6E/nG77EwpO1mbyqzTftkS
+         0f4l6mHvS9XR/kF7NKJzjmM/nc3M1GhDTnrSZZt7x2UizatXUCECv/3Fp8q5V4fP9W
+         stdd2L3Y6Y3/4uNeTYI8pgXp9apWfAPBg6v4w476hpD/j96mnowK9KsR+8eN/4kTJ2
+         vjWbN8fNDAsJVnFZVSYvkezZDI2EPw1uJtdYsvu627+umEivNWSzeB/oE8K1vzWerQ
+         1mqb2oQnmBLnw==
+Date:   Sat, 26 Mar 2022 15:18:25 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Atish Kumar Patra <atishp@rivosinc.com>
+Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v3 0/6] Provide a fraemework for RISC-V ISA extensions
+Message-ID: <Yj6+QZUgrzA9UK/J@xhacker>
+References: <20220215090211.911366-1-atishp@rivosinc.com>
+ <YgvNSeUekqEVS1yE@xhacker>
+ <CAHBxVyF65jC_wvxcD6bueqpCY8-Kbahu1yxsSoBmO1s15dGkSQ@mail.gmail.com>
 MIME-Version: 1.0
-Message-ID: <4569327b.1ae29.17fc513fb2f.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cC_KCgB3HwBvvT5iOb2hAA--.13036W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgwPAVZdtYygQQAEsX
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHBxVyF65jC_wvxcD6bueqpCY8-Kbahu1yxsSoBmO1s15dGkSQ@mail.gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CkkgYW0gc29ycnksIHRoaXMgcGF0Y2ggaGFzIGEgcHJvYmxlbS4gSSB3aWxsIHNlbmQgdGhlIGNv
-cnJlY3QgdmVyc2lvbiBsYXRlci4KCj4gVGhlIHByZXZpb3VzIGNvbW1pdCA0YmVjYjdlZTViM2Qg
-KCJuZXQveDI1OiBGaXggeDI1X25laWdoIHJlZmNudCBsZWFrIHdoZW4KPiB4MjUgZGlzY29ubmVj
-dCIpIGFkZHMgZGVjcmVtZW50IG9mIHJlZmNvdW50IG9mIHgyNS0+bmVpZ2hib3VyIGFuZCBzZXRz
-Cj4geDI1LT5uZWlnaGJvdXIgdG8gTlVMTCBpbiB4MjVfZGlzY29ubmVjdCgpLCBidXQgd2hlbiB0
-aGUgbGluayBsYXllciBpcwo+IHRlcm1pbmF0aW5nLCBpdCBjb3VsZCBjYXVzZSBudWxsLXB0ci1k
-ZXJlZiBidWdzIGluIHgyNV9zZW5kbXNnKCksCj4geDI1X3JlY3Ztc2coKSBhbmQgeDI1X2Nvbm5l
-Y3QoKS4gT25lIG9mIHRoZSBidWdzIGlzIHNob3duIGJlbG93Lgo+IAo+IHgyNV9saW5rX3Rlcm1p
-bmF0ZWQoKSAgICAgICAgICB8IHgyNV9yZWN2bXNnKCkKPiAgeDI1X2tpbGxfYnlfbmVpZ2goKSAg
-ICAgICAgICAgfCAgLi4uCj4gICB4MjVfZGlzY29ubmVjdCgpICAgICAgICAgICAgIHwgIGxvY2tf
-c29jayhzaykKPiAgICAuLi4gICAgICAgICAgICAgICAgICAgICAgICAgfCAgLi4uCj4gICAgeDI1
-LT5uZWlnaGJvdXIgPSBOVUxMIC8vKDEpIHwKPiAgICAuLi4gICAgICAgICAgICAgICAgICAgICAg
-ICAgfCAgeDI1LT5uZWlnaGJvdXItPmV4dGVuZGVkIC8vKDIpCj4gCj4gV2Ugc2V0IE5VTEwgdG8g
-eDI1LT5uZWlnaGJvdXIgaW4gcG9zaXRpb24gKDEpIGFuZCBkZXJlZmVyZW5jZQo+IHgyNS0+bmVp
-Z2hib3VyIGluIHBvc2l0aW9uICgyKSwgd2hpY2ggY291bGQgY2F1c2UgbnVsbC1wdHItZGVyZWYg
-YnVnLgo+IAo+IFRoaXMgcGF0Y2ggYWRkcyBsb2NrX3NvY2soc2spIGluIHgyNV9kaXNjb25uZWN0
-KCkgaW4gb3JkZXIgdG8gc3luY2hyb25pemUKPiB3aXRoIHgyNV9zZW5kbXNnKCksIHgyNV9yZWN2
-bXNnKCkgYW5kIHgyNV9jb25uZWN0KCkuIFdoYXRgcyBtb3JlLCB0aGUgc2sKPiBoZWxkIGJ5IGxv
-Y2tfc29jaygpIGlzIG5vdCBOVUxMLCBiZWNhdXNlIGl0IGlzIGV4dHJhY3RlZCBmcm9tIHgyNV9s
-aXN0Cj4gYW5kIHVzZXMgeDI1X2xpc3RfbG9jayB0byBzeW5jaHJvbml6ZS4KPiAKPiBGaXhlczog
-NGJlY2I3ZWU1YjNkICgibmV0L3gyNTogRml4IHgyNV9uZWlnaCByZWZjbnQgbGVhayB3aGVuIHgy
-NSBkaXNjb25uZWN0IikKPiBTaWduZWQtb2ZmLWJ5OiBEdW9taW5nIFpob3UgPGR1b21pbmdAemp1
-LmVkdS5jbj4KPiAtLS0KPiAgbmV0L3gyNS94MjVfc3Vici5jIHwgMiArKwo+ICAxIGZpbGUgY2hh
-bmdlZCwgMiBpbnNlcnRpb25zKCspCj4gCj4gZGlmZiAtLWdpdCBhL25ldC94MjUveDI1X3N1YnIu
-YyBiL25ldC94MjUveDI1X3N1YnIuYwo+IGluZGV4IDAyODVhYWExZTkzLi40ZTE5NzUyYmRkMCAx
-MDA2NDQKPiAtLS0gYS9uZXQveDI1L3gyNV9zdWJyLmMKPiArKysgYi9uZXQveDI1L3gyNV9zdWJy
-LmMKPiBAQCAtMzYwLDcgKzM2MCw5IEBAIHZvaWQgeDI1X2Rpc2Nvbm5lY3Qoc3RydWN0IHNvY2sg
-KnNrLCBpbnQgcmVhc29uLCB1bnNpZ25lZCBjaGFyIGNhdXNlLAo+ICAJaWYgKHgyNS0+bmVpZ2hi
-b3VyKSB7Cj4gIAkJcmVhZF9sb2NrX2JoKCZ4MjVfbGlzdF9sb2NrKTsKPiAgCQl4MjVfbmVpZ2hf
-cHV0KHgyNS0+bmVpZ2hib3VyKTsKPiArCQlsb2NrX3NvY2soc2spOwo+ICAJCXgyNS0+bmVpZ2hi
-b3VyID0gTlVMTDsKPiArCQlyZWxlYXNlX3NvY2soc2spOwo+ICAJCXJlYWRfdW5sb2NrX2JoKCZ4
-MjVfbGlzdF9sb2NrKTsKPiAgCX0KPiAgfQo+IC0tIAo+IDIuMTcuMQo=
+On Tue, Feb 15, 2022 at 11:06:24AM -0800, Atish Kumar Patra wrote:
+> On Tue, Feb 15, 2022 at 8:04 AM Jisheng Zhang <jszhang@kernel.org> wrote:
+> >
+> > On Tue, Feb 15, 2022 at 01:02:05AM -0800, Atish Patra wrote:
+> > > This series implements a generic framework to parse multi-letter ISA
+> > > extensions. This series is based on Tsukasa's v3 isa extension improvement
+> > > series[1]. I have fixed few bugs and improved comments from that series
+> > > (PATCH1-3). I have not used PATCH 4 from that series as we are not using
+> > > ISA extension versioning as of now. We can add that later if required.
+> > >
+> > > PATCH 4 allows the probing of multi-letter extensions via a macro.
+> > > It continues to use the common isa extensions between all the harts.
+> > > Thus hetergenous hart systems will only see the common ISA extensions.
+> > >
+> > > PATCH 6 improves the /proc/cpuinfo interface for the available ISA extensions
+> > > via /proc/cpuinfo.
+> > >
+> > > Here is the example output of /proc/cpuinfo:
+> > > (with debug patches in Qemu and Linux kernel)
+> > >
+> > > / # cat /proc/cpuinfo
+> > > processor     : 0
+> > > hart          : 0
+> > > isa           : rv64imafdcsu
+> > > isa-ext               : sstc,sscofpmf
+> > > mmu           : sv48
+> > >
+> > > processor     : 1
+> > > hart          : 1
+> > > isa           : rv64imafdcsu
+> > > isa-ext               : sstc,sscofpmf
+> > > mmu           : sv48
+> > >
+> > > processor     : 2
+> > > hart          : 2
+> > > isa           : rv64imafdcsu
+> > > isa-ext               : sstc,sscofpmf
+> > > mmu           : sv48
+> > >
+> > > processor     : 3
+> > > hart          : 3
+> > > isa           : rv64imafdcsu
+> > > isa-ext               : sstc,sscofpmf
+> > > mmu           : sv48
+> > >
+> > > Anybody adding support for any new multi-letter extensions should add an
+> > > entry to the riscv_isa_ext_id and the isa extension array.
+> > > E.g. The patch[2] adds the support for various ISA extensions.
+> >
+> > Hi Atish,
+> >
+> > Thanks for this series. I'm thinking cpu features VS ISA extenstions.
+> > I'm converting the sv48 to static key:
+> > https://lore.kernel.org/linux-riscv/20220125165036.987-1-jszhang@kernel.org/
+> >
+> > Previously, I thought the SV48 as a cpu feature, and there will be
+> > more and more cpu features, so I implemented an unified static key
+> > mechanism for CPU features. But after reading this series, I think
+> > I may need to rebase(even reimplement) the above patch to your series.
+> > But I'm a bit confused by CPU features VS ISA extenstions now:
+> >
+> > 1. Is cpu feature  == ISA extension?
+> >
+> > 2. Is SV48 considered as ISA extension?
+> > If yes, now SV48 or not is determined during runtime, but current ISA
+> > extensions seem parsed from DT. So how to support those ISA extensions
+> > which can be determined during runtime?
+> >
+> > Could you please share your thought?
+> >
+> 
+> Here are my two cents:
+> 
+> I think the cpu feature is a superset of the ISA extension.
+> cpu feature != ISA extension.
+> 
+> While all ISA extensions are cpu features, all CPU features may not be
+> an ISA extension.
+> e.g. sv48 is not a ISA extension but F/D are (used to set the
+> cpu_hwcap_fpu static key)
+> 
+> Moreover, not all cpu feature/ISA extension requires a static key.
+> e.g SSTC extension will require a static key because the check has to
+> happen in the hot path.
+> However, sscofpmf extension don't need a static key as the check
+> happens only one time during boot.
+> 
+> We should keep these two separate but a common static framework would
+> be very useful.
+> 
+> Here is the flow that I have in my mind.
+> 1. All ISA extensions will be parsed through riscv,isa DT property
+> 2. Any supported/enabled extension will be set in riscv_isa bitmap
+> 3. Any extension requiring a static key will invoke the cpus_set_cap.
+> 
+> cpus_set_cap will be invoked from a different code path that uses a
+> static key for a specific ISA
+> extension or a CPU feature.
+> 
+> The only problem I see here is that we have to set a bit in both
+> cpu_hwcaps & riscv_isa bitmap.
+> We also have to define the value of that bit for any extension
+> requiring a static key twice as well.
+> 
+> I think that should be okay. But I would like to hear what everybody
+> else thinks as well.
+> 
+
+Thank Atish's input. I notice that SV57 support is merged, I'll
+send a new version to apply static mechanism to both SV48 and SV57
+once rc1 is released.

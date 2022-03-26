@@ -2,93 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5D34E810E
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 14:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D90924E8113
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 14:30:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233037AbiCZN3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 09:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53882 "EHLO
+        id S233059AbiCZNcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 09:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiCZN3F (ORCPT
+        with ESMTP id S229667AbiCZNcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 09:29:05 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557C924314A;
-        Sat, 26 Mar 2022 06:27:29 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id o6-20020a17090a9f8600b001c6562049d9so11116034pjp.3;
-        Sat, 26 Mar 2022 06:27:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=r0pAApFv6gV2oaztpvw2JNdhvRxbJovm8RY3Df64j3E=;
-        b=b/xZszrTPZ6Sm2QPIxLJNnZcC6MPDOtbKM6iudqil2k2ZBxAPxg2RuX3+d0eTb2h3W
-         uC/KAKnjCYZyRnb+D2o5GVrMv691ZNjEOhUpnY90VpsQUAwJISB9Wh/IKPQnLnfV0MTZ
-         Nf3uD1UxxZ71BWSAjO97r0ehGh1HZQPJkQx6VGJFqxGDg0akaQbn7p5WysbEybAMeqKO
-         ZZ0/VKedej+2pYolhlwzqYuXBiHrEgD8JDRiDeS4nPY0JSgkAzXQiUgW1JtpscVRD2DH
-         9EfFYU9iG9dzgcRtKqXXkUbYXdlWlkHLcnXU/fJSAktOaZW6AlvsccE0QnnHV9yDAISx
-         2TcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=r0pAApFv6gV2oaztpvw2JNdhvRxbJovm8RY3Df64j3E=;
-        b=uQfCWPOlNpnJhx97R5IgRyj2wP44eTcE/HUmOj+gnPNfQ6rlh3ddMzsD9dl4lxVk7a
-         hfWanq2u8TGlM+0QqGLCIOTn3Li7flE68czLMb+fH7d8MzR8psIluskcY42iWEJygWyh
-         74OlllVdJEi0yBcewYNq1yj+hdG8BaZbnoBdMYNTnt6shx0doi7rsn2qyNLidWXXuJbB
-         aSXKiRXvPUzrxGiqF4EIhECzHXu5y+Rr/hjhuspQdYS/ELp/rDMocoR/ix5+GvKcvyJ3
-         3t/BPNG1sqPWc/wvJcICK1wVZY8qZe7TTwPmJTUwvGS34395nDDQb0j6UGHrSHA3ygri
-         xisQ==
-X-Gm-Message-State: AOAM531QoQEsO4nEnWJ8GwC0mVtZBA7QcMgF2ElAAhwZ4HUcb1I6ez5R
-        uVQ3D1D/2n8KzRpaO8y3JyaWP8Owbhmrep+M
-X-Google-Smtp-Source: ABdhPJwK6lHFr0MH+mikZW1I5iXp/JFL94cJcrXA4RwcCKBLL+mZVQm0fVZ2BwpnSe4zDELzMEfjuQ==
-X-Received: by 2002:a17:90b:1d04:b0:1c7:1174:56ae with SMTP id on4-20020a17090b1d0400b001c7117456aemr30308257pjb.153.1648301248915;
-        Sat, 26 Mar 2022 06:27:28 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-2.three.co.id. [116.206.28.2])
-        by smtp.gmail.com with ESMTPSA id s14-20020a056a0008ce00b004f66dcd4f1csm11094840pfu.32.2022.03.26.06.27.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Mar 2022 06:27:28 -0700 (PDT)
-Message-ID: <0d8f6004-93df-db06-778f-85e371d4ee35@gmail.com>
-Date:   Sat, 26 Mar 2022 20:27:22 +0700
+        Sat, 26 Mar 2022 09:32:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591D2DFB9;
+        Sat, 26 Mar 2022 06:30:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0EC1B802BD;
+        Sat, 26 Mar 2022 13:30:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37BE2C2BBE4;
+        Sat, 26 Mar 2022 13:30:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648301434;
+        bh=NyuGf8K5/oZMvDcUwcrdiQlO2P8PFwGIswM7cxqDaRE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fH3uZyYe9KXPYp3FSg7/S6FuQSWQ3zf8pUJdx/Me7vFSo2s6RJQ728FSEDLYDvTq1
+         GZyqR+NM3ZOlb2Z4mLWO4fj6lajqQNj3l37Kxh96qHfDQvuYBD1NkCpdbDmnhKOJtc
+         Nb20kJuszKUbtuAOOfmRr4d2XPSpDXoM1zs3ZVMOD57K2A1QQrtQkWxGryxbrNdbaQ
+         w7QKatxJTs5vBXzt+9WTnkY0TgVfNxpsGW2h6hI+TcrwNCmp32qi+49p4EJ+6vH6/l
+         2gH65j7rACTxgkhm+BGeGWe6KAtEijwEz+rXp+0/DH9M2EJNVrKwd/ecAg/D+bkKDf
+         3TmdUgaVEiB2Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 13E1840407; Sat, 26 Mar 2022 10:30:31 -0300 (-03)
+Date:   Sat, 26 Mar 2022 10:30:31 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Ali Saidi <alisaidi@amazon.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, german.gomez@arm.com,
+        benh@kernel.crashing.org, Nick.Forrington@arm.com,
+        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
+        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
+        kjain@linux.ibm.com, lihuafei1@huawei.com, mark.rutland@arm.com,
+        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
+        peterz@infradead.org, will@kernel.org
+Subject: Re: [PATCH v4 4/4] perf mem: Support HITM for when mem_lvl_num is any
+Message-ID: <Yj8Vd2vsw8yJ8b4x@kernel.org>
+References: <20220324183323.31414-1-alisaidi@amazon.com>
+ <20220324183323.31414-5-alisaidi@amazon.com>
+ <20220326062303.GC20556@leoy-ThinkPad-X240s>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 5.16 00/37] 5.16.18-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220325150420.046488912@linuxfoundation.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220325150420.046488912@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220326062303.GC20556@leoy-ThinkPad-X240s>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/03/22 22.14, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.18 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Em Sat, Mar 26, 2022 at 02:23:03PM +0800, Leo Yan escreveu:
+> On Thu, Mar 24, 2022 at 06:33:23PM +0000, Ali Saidi wrote:
+> > For loads that hit in a the LLC snoop filter and are fulfilled from a
+> > higher level cache on arm64 Neoverse cores, it's not usually clear what
+> > the true level of the cache the data came from (i.e. a transfer from a
+> > core could come from it's L1 or L2). Instead of making an assumption of
+> > where the line came from, add support for incrementing HITM if the
+> > source is CACHE_ANY.
+> > 
+> > Since other architectures don't seem to populate the mem_lvl_num field
+> > here there shouldn't be a change in functionality.
+> > 
+> > Signed-off-by: Ali Saidi <alisaidi@amazon.com>
+> > Tested-by: German Gomez <german.gomez@arm.com>
+> > Reviewed-by: German Gomez <german.gomez@arm.com>
+> > ---
+> >  tools/perf/util/mem-events.c | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> > 
+> > diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
+> > index e5e405185498..084977cfebef 100644
+> > --- a/tools/perf/util/mem-events.c
+> > +++ b/tools/perf/util/mem-events.c
+> > @@ -539,6 +539,15 @@ do {				\
+> >  					stats->ld_llchit++;
+> >  			}
+> >  
+> > +			/*
+> > +			 * A hit in another cores cache must mean a llc snoop
+> > +			 * filter hit
+> > +			 */
+> > +			if (lnum == P(LVLNUM, ANY_CACHE)) {
+> > +				if (snoop & P(SNOOP, HITM))
+> > +					HITM_INC(lcl_hitm);
+> > +			}
 > 
+> This might break the memory profiling result for x86, see file
+> arch/x86/events/intel/ds.c:
+> 
+>   97 void __init intel_pmu_pebs_data_source_skl(bool pmem)
+>   98 {
+>   99         u64 pmem_or_l4 = pmem ? LEVEL(PMEM) : LEVEL(L4);
+>   ...
+>  105         pebs_data_source[0x0d] = OP_LH | LEVEL(ANY_CACHE) | REM | P(SNOOP, HITM);
+>  106 }
+> 
+> Which means that it's possible that it's a remote access and the cache
+> level is ANY_CACHE, it's good to add checking for bit
+> PERF_MEM_REMOTE_REMOTE:
+> 
+> 	u64 remote = data_src->mem_remote;
+> 
+> 	/*
+> 	 * A hit in another cores cache must mean a llc snoop
+> 	 * filter hit
+> 	 */
+> 	if (lnum == P(LVLNUM, ANY_CACHE) && remote != P(REMOTE, REMOTE)) {
+> 	        if (snoop & P(SNOOP, HITM))
+> 	                HITM_INC(lcl_hitm);
+> 	}
+> 
+> Appreciate German's reviewing and testing, and sorry I jumped in very
+> late.
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0)
-and powerpc (ps3_defconfig, gcc 11.2.0).
+I have not published this on perf/core, its just in tmp.perf/core while
+tests ran, so I'll remove this specific patch and rerun tests, thanks
+for reviewing.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
--- 
-An old man doll... just what I always wanted! - Clara
+- Arnaldo

@@ -2,137 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225D74E801B
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 09:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 615644E8026
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 10:00:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232166AbiCZIwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 04:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
+        id S232217AbiCZJBo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 26 Mar 2022 05:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiCZIwM (ORCPT
+        with ESMTP id S231671AbiCZJBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 04:52:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EF3167D8;
-        Sat, 26 Mar 2022 01:50:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFCB2B800C1;
-        Sat, 26 Mar 2022 08:50:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48932C2BBE4;
-        Sat, 26 Mar 2022 08:50:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648284634;
-        bh=s9f5bnhBuCk46wN4ssaRjCDYFb2Vt9/9/gOzq5IqbM4=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=Wsse77TQPF6Ke+C1gwGny+B0XKyIweV6uyw2XgRapNZle2hcsN2dg8aDx9LXj4dAN
-         PBgKW2grATQi5ZyNEWpqzKZ6MPFEaHsQwcezvyaHc8vdwU0sOPnbuZvUhwwC1nxIbo
-         u1PPuhVSk/g20nvY8jYE6NBwWxZR4+yvC451ZqDInfSPsb5OR8BqfSUFywTb3lW0R7
-         fYgax0D8VE7OqsznQ9DK+wZPW07B2wLBBph9ALnjaHIs3KB6qrrbPAR3/QG8t6+rC/
-         fH7TK85liowzjgBSVuBp4MsLChL0z9cOn/59a1QKdbSMjuUrwHbG3VcEnSNrw6TZtT
-         79NjatLt1tMfQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc:     Edmond Gagnon <egagnon@squareup.com>,
-        Benjamin Li <benl@squareup.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        <wcn36xx@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] wcn36xx: Implement tx_rate reporting
-References: <20220323214533.1951791-1-egagnon@squareup.com>
-        <20220325224212.159690-1-egagnon@squareup.com>
-        <7ae9915d-98fc-efd4-4a1e-872c446aacca@quicinc.com>
-Date:   Sat, 26 Mar 2022 10:50:30 +0200
-In-Reply-To: <7ae9915d-98fc-efd4-4a1e-872c446aacca@quicinc.com> (Jeff
-        Johnson's message of "Fri, 25 Mar 2022 17:09:00 -0700")
-Message-ID: <87h77lnlm1.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Sat, 26 Mar 2022 05:01:43 -0400
+Received: from sender4-of-o58.zoho.com (sender4-of-o58.zoho.com [136.143.188.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACEA1A3B8;
+        Sat, 26 Mar 2022 02:00:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1648285180; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=U0KH9TtA849ZQpQgkzTQJHBLd+gA6KyKITRo6oId6yDEWJX/6mqwQi8g2N8k5yVs8+BpnR2MN7Pabu+CXap2KPcXYjX1T9sgLA0HCNT/lIDoB+UDhpvLg1ZZeihANwvHbGNhEFCjEneT+9UuFBk4RIdAQu2Cx4C6NF5VSpD/E0s=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1648285180; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=LOOCE7XdBN7XwT4sC/6xpw4M6jD70wZ1Ts5Ft73PBqA=; 
+        b=UQ3clG9XqqA9QAZiUAvMSN/i+xkw7yJ4DJAF1W0ItzksMWzFJzBxvNZqSK/bcTbhoIZ7bM1aTPNvjvDMRSKX4JQt73H7r9qi04beZMe4pEKZQunb18IGWsHrXufxFzJML6zPHYyZPHAumunbLG139mqcWgAWfApxjgXozVbsLU0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        spf=pass  smtp.mailfrom=linux@mniewoehner.de;
+        dmarc=pass header.from=<linux@mniewoehner.de>
+Received: from z3r0.lan (185.31.62.161 [185.31.62.161]) by mx.zohomail.com
+        with SMTPS id 1648285177777877.9724402004048; Sat, 26 Mar 2022 01:59:37 -0700 (PDT)
+Message-ID: <7028ffce7164986435e8bb9566f09bb79730c554.camel@mniewoehner.de>
+Subject: Re: [PATCH v3 0/4] Fixes for TPM interrupt handling
+From:   Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        stefanb@linux.ibm.com, James.Bottomley@hansenpartnership.com,
+        keescook@chromium.org, jsnitsel@redhat.com, ml.linux@elloe.vision,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        twawrzynczak@chromium.org
+In-Reply-To: <efdb99b3-6d33-38b1-64a0-671821101631@gmx.de>
+References: <20210501135727.17747-1-LinoSanfilippo@gmx.de>
+         <20210501135727.17747-3-LinoSanfilippo@gmx.de>
+         <YJAby8mmiJ74qWAh@kernel.org> <6722bf6f-1a3f-ee9c-55e2-cf63c64266a9@gmx.de>
+         <YJNKs8bUMGOzFre+@kernel.org>
+         <2a1a1cf61732eff1608aeae74054a0c135c1671f.camel@mniewoehner.de>
+         <Yj0lhqTP1RoedxSc@iki.fi>
+         <0d6c22b40a2f17d4b260f287d4c479a96a88b0b1.camel@mniewoehner.de>
+         <efdb99b3-6d33-38b1-64a0-671821101631@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+Date:   Sat, 26 Mar 2022 09:59:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.2 
+Content-Transfer-Encoding: 8BIT
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_ADSP_ALL,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeff Johnson <quic_jjohnson@quicinc.com> writes:
+Hi Lino,
 
-> On 3/25/2022 3:42 PM, Edmond Gagnon wrote:
->> Currently, the driver reports a tx_rate of 6.0 MBit/s no matter the true
->> rate:
->>
->> root@linaro-developer:~# iw wlan0 link
->> Connected to 6c:f3:7f:eb:9b:92 (on wlan0)
->>          SSID: SQ-DEVICETEST
->>          freq: 5200
->>          RX: 4141 bytes (32 packets)
->>          TX: 2082 bytes (15 packets)
->>          signal: -77 dBm
->>          rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
->>          tx bitrate: 6.0 MBit/s
->>
->>          bss flags:      short-slot-time
->>          dtim period:    1
->>          beacon int:     100
->>
->> This patch requests HAL_GLOBAL_CLASS_A_STATS_INFO via a hal_get_stats
->> firmware message and reports it via ieee80211_ops::sta_statistics.
->>
->> root@linaro-developer:~# iw wlan0 link
->> Connected to 6c:f3:7f:eb:73:b2 (on wlan0)
->>          SSID: SQ-DEVICETEST
->>          freq: 5700
->>          RX: 26788094 bytes (19859 packets)
->>          TX: 1101376 bytes (12119 packets)
->>          signal: -75 dBm
->>          rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
->>          tx bitrate: 108.0 MBit/s VHT-MCS 5 40MHz VHT-NSS 1
->>
->>          bss flags:      short-slot-time
->>          dtim period:    1
->>          beacon int:     100
->>
->> Tested on MSM8939 with WCN3680B running firmware CNSS-PR-2-0-1-2-c1-00083,
->> and verified by sniffing frames over the air with Wireshark to ensure the
->> MCS indices match.
->>
->> Signed-off-by: Edmond Gagnon <egagnon@squareup.com>
->> Reviewed-by: Benjamin Li <benl@squareup.com>
+On Sat, 2022-03-26 at 04:24 +0100, Lino Sanfilippo wrote:
+> 
+> Hi Michael,
+> 
+> On 25.03.22 at 13:32, Michael Niewöhner wrote:
+> > > > 
+> > > > Lino, I'd be happy to test the patches, when you have time and interest
+> > > > to
+> > > > work
+> > > > on this again!
+> > > > 
+> > > > Thanks, Michael
+> > > 
+> > > It's quite easy to test them out. Both fixes are in the mainline GIT tree.
+> > > E.g. give a shot rc1, and please report if any issues persists to:
+> > > 
+> > >   linux-integrity@vger.kernel.org 
+> > > 
+> > > BR, Jarkko
+> > 
+> > I don't see Linos patches on mainline. Also, the series included four
+> > patches:
+> > [PATCH v3 0/4] Fixes for TPM interrupt handling
+> > [PATCH v3 1/4] tpm: Use a threaded interrupt handler
+> > [PATCH v3 2/4] tpm: Simplify locality handling
+> > [PATCH v3 3/4] tpm: Fix test for interrupts
+> > [PATCH v3 4/4] tpm: Only enable supported irqs
+> > 
+> > Three of them are relevant for the interrupt problem, which is still present
+> > in
+> > mainline, as these patches were refused:
+> > [PATCH v3 1/4] tpm: Use a threaded interrupt handler
+> > [PATCH v3 2/4] tpm: Simplify locality handling
+> > [PATCH v3 3/4] tpm: Fix test for interrupts
+> > 
+> > Michael
+> > 
+> 
+> You are right, the interrupts are still not working in the mainline kernel.
+> I would gladly make another attempt to fix this but rather step by step
+> than in a series that tries to fix (different) things at once.
 
-[...]
+IMHO a series is perfectly fine, as it's easier to show *why* single changes are
+required (like already done in v3 0/4). One just has to actually *read* what's
+written there. Ahem. It's up to you, though.
 
->>   +static void wcn36xx_sta_statistics(struct ieee80211_hw *hw,
->> struct ieee80211_vif *vif,
->> +				   struct ieee80211_sta *sta, struct station_info *sinfo)
->> +{
->> +	struct wcn36xx *wcn;
->> +	u8 sta_index;
->> +	int status = 0;
->
-> remove initializer that is always overwritten
+> 
+> A first step could be to have a sleepable context for the interrupt handling,
+> since in case of SPI the accesses to the irq status register may sleep.
+> 
+> I sent a patch for this purpose once, but it seems to have gone lost:
+> 
+> https://lore.kernel.org/all/20210620023444.14684-1-LinoSanfilippo@gmx.de/
+> 
 
-I can fix that in the pending branch, no need to resend because of this.
+Jarkko, looks like you've already tested that patch on your NUC?
 
->>   +int wcn36xx_smd_get_stats(struct wcn36xx *wcn, u8 sta_index, u32
->> stats_mask,
->> +			  struct station_info *sinfo)
->> +{
->> +	struct wcn36xx_hal_stats_req_msg msg_body;
->> +	struct wcn36xx_hal_stats_rsp_msg *rsp;
->> +	void *rsp_body;
->> +	int ret = 0;
->
-> remove initializer that is always overwritten before use
+> 
+> Best regards,
+> Lino
+> 
 
-Ditto.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Michael

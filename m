@@ -2,365 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CADE4E81C7
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 16:32:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6267D4E81CC
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 16:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233605AbiCZP2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 11:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
+        id S233639AbiCZPrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 11:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233514AbiCZP2d (ORCPT
+        with ESMTP id S232713AbiCZPrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 11:28:33 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5641267FB8
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 08:26:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=O0VtKc6WFSc1XrR9kHmafS5p3UXLmcpn777jxh7QGhc=; b=vcuVNITPHCsWJxpOyPR297SHAC
-        oRKWbyDe095B17oyKxNNeo1BOBChEdD1BsOPujPNpltKPDL6S1ksRVAtp8dhbVv/6D35OTx0d++8b
-        PUtF4NgtHPsB8VnFcOFpHRsEJZ5LbOoie+5pcWP1vvFXqMdMQY72RckwGjkRftDb2uDbJdLybzb7y
-        dMvah4F9Bhu1v2l5/Lm43tfub6y2nIwL2MzlF6S1EHmAHA8Pc+vjcxHp9SBIMOqJ5U7OsvyTHcA2U
-        dDnkMNi6F1N4ri88STR8B+fRrt7KLNAcU4Py9DP575oVf43sS4xPfw42Shj7aCKT1KnwxGjIY/B2l
-        07gIeIvg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nY8JU-00FLFg-U0; Sat, 26 Mar 2022 15:26:49 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 977B59861FE; Sat, 26 Mar 2022 16:26:46 +0100 (CET)
-Date:   Sat, 26 Mar 2022 16:26:46 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        alexei.starovoitov@gmail.com, christophe.leroy@csgroup.eu
-Subject: [GIT PULL] x86/core for 5.18
-Message-ID: <20220326152646.GT8939@worktop.programming.kicks-ass.net>
+        Sat, 26 Mar 2022 11:47:15 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32BE6DEF2
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 08:45:39 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id r11so7112713ila.1
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 08:45:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/AI6srTwL5Cc8UTXFlaDV8kEwi4+NdYHhCe+vJb0ym8=;
+        b=f9Hvrxi4T6wHlX9wIe8AofFqx/aAZmZiAlnmqRzi4GfuENFsQIYYL+upfLXTTBfFWI
+         xXm/kbJaSnqGzjA26f3SmhnbBKFDR1PJqbvJ82SX+Rhp6GCEru+deVlcoT3t1HBNWDPh
+         gQPuMFGjyQ4aFhK6rfXOEaUDaSyYQwp4VIPAw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/AI6srTwL5Cc8UTXFlaDV8kEwi4+NdYHhCe+vJb0ym8=;
+        b=otAlOm7eQcCv5KkdZG9kgeJEHjCkJ9ysgwXSElmWlk4MVdIyddr8E3nQZUodGgRktf
+         7xLFwrHySks9aMYWvrqmYxu/VRWwWLTZz2fKdtcfXtBJcdmAjq13F0LygtAqFblb9DnJ
+         3lrlcw/LH7ZcTnw5d67DX/SdOwFZy23XogagRFaVIWRmg8SPvAWUXQCLKPgc1z/LF9Hm
+         uvex32+e4n1ys2f9w4ngWp8NnBhMm9LZeqIOo4eQ2QXksuQlOUPOwd+m9/Nbn7LLF1n7
+         cEnowGmib4LEmfjvZ+Ri0K0M+BhC88//cJSAjHNHVc8wGYckW3n0wIuyfgE53+Tt328z
+         MeSA==
+X-Gm-Message-State: AOAM530MA8uFTT7cPcJYtIDWRGBp1DsQJcH/7P7m9vtitXIFqtZwIPY4
+        vnaMC/7+LwvQadWh56vlcoVyhAGK8UoDtsGt5zi6mHgvK68tDw==
+X-Google-Smtp-Source: ABdhPJziYsztPyrx/p3/DHfv803VJ+ceWuch2mNwiAmCh/fucM2cFVJHu0F8xjeDLmdMdytMA/NOY2v4o4weynwQwd4=
+X-Received: by 2002:a05:6e02:2162:b0:2c8:47b8:d3e1 with SMTP id
+ s2-20020a056e02216200b002c847b8d3e1mr1894168ilv.59.1648309538534; Sat, 26 Mar
+ 2022 08:45:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220324222928.874522-1-swboyd@chromium.org>
+In-Reply-To: <20220324222928.874522-1-swboyd@chromium.org>
+From:   Gwendal Grignou <gwendal@chromium.org>
+Date:   Sat, 26 Mar 2022 08:45:27 -0700
+Message-ID: <CAPUE2uv9wBz72+BPHNWd-P46pxh66GiMs7ChpRfH6wv63avmAg@mail.gmail.com>
+Subject: Re: [PATCH v2] iio:proximity:sx9324: Fix hardware gain read/write
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi Linus, my first pull request in like forever, so please bear with me.
-
-Boris talked me through it, so hopefully it isn't entirely insane :-)
-
-There's two small conflicts, for which I've added a resolution, just in
-case that's needed, I know you like to see and do these things yourself.
-
----
-
-The following changes since commit fe83f5eae432ccc8e90082d6ed506d5233547473:
-
-  kvm/emulate: Fix SETcc emulation function offsets with SLS (2022-03-20 14:55:46 +0100)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86_core_for_5.18_rc1
-
-for you to fetch changes up to 3986f65d4f408ce9d0a361e3226a3246a5fb701c:
-
-  kvm/emulate: Fix SETcc emulation for ENDBR (2022-03-22 21:12:14 +0100)
-
-----------------------------------------------------------------
-
-Add support for Intel CET-IBT, available since Tigerlake (11th gen), which is a
-coarse grained, hardware based, forward edge Control-Flow-Integrity mechanism
-where any indirect CALL/JMP must target an ENDBR instruction or suffer #CP.
-
-Additionally, since Alderlake (12th gen)/Sapphire-Rapids, speculation is
-limited to 2 instructions (and typically fewer) on branch targets not starting
-with ENDBR. CET-IBT also limits speculation of the next sequential instruction
-after the indirect CALL/JMP [1].
-
-CET-IBT is fundamentally incompatible with retpolines, but provides, as
-described above, speculation limits itself.
-
-[1] https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/technical-documentation/branch-history-injection.html
-
-----------------------------------------------------------------
-
-    # Conflicts:
-    #       arch/powerpc/include/asm/livepatch.h
-    #       arch/x86/net/bpf_jit_comp.c
-
-diff --cc arch/powerpc/include/asm/livepatch.h
-index 6f10de6af6e3,7b9dcd51af32..1c60094ea0cd
---- a/arch/powerpc/include/asm/livepatch.h
-+++ b/arch/powerpc/include/asm/livepatch.h
-@@@ -14,21 -14,11 +14,11 @@@
-  #ifdef CONFIG_LIVEPATCH
-  static inline void klp_arch_set_pc(struct ftrace_regs *fregs, unsigned long ip)
-  {
- -	struct pt_regs *regs = ftrace_get_regs(fregs);
- -
- -	regs_set_return_ip(regs, ip);
- +	ftrace_instruction_pointer_set(fregs, ip);
-  }
-- 
-- #define klp_get_ftrace_location klp_get_ftrace_location
-- static inline unsigned long klp_get_ftrace_location(unsigned long faddr)
-- {
-- 	/*
-- 	 * Live patch works on PPC32 and only with -mprofile-kernel on PPC64. In
-- 	 * both cases, the ftrace location is always within the first 16 bytes.
-- 	 */
-- 	return ftrace_location_range(faddr, faddr + 16);
-- }
- +#endif /* CONFIG_LIVEPATCH */
-  
- +#ifdef CONFIG_LIVEPATCH_64
-  static inline void klp_init_thread_info(struct task_struct *p)
-  {
-  	/* + 1 to account for STACK_END_MAGIC */
-diff --cc arch/x86/net/bpf_jit_comp.c
-index 6efbb87f65ed,b592ea0fc150..8fe35ed11fd6
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@@ -380,7 -395,14 +391,14 @@@ int bpf_arch_text_poke(void *ip, enum b
-  		/* BPF poking in modules is not supported */
-  		return -EINVAL;
-  
-+ 	/*
-+ 	 * See emit_prologue(), for IBT builds the trampoline hook is preceded
-+ 	 * with an ENDBR instruction.
-+ 	 */
-+ 	if (is_endbr(*(u32 *)ip))
-+ 		ip += ENDBR_INSN_SIZE;
-+ 
- -	return __bpf_arch_text_poke(ip, t, old_addr, new_addr, true);
- +	return __bpf_arch_text_poke(ip, t, old_addr, new_addr);
-  }
-  
-  #define EMIT_LFENCE()	EMIT3(0x0F, 0xAE, 0xE8)
-
-----------------------------------------------------------------
-Fenghua Yu (1):
-      tools/objtool: Check for use of the ENQCMD instruction in the kernel
-
-Ingo Molnar (2):
-      Merge branch 'x86/pasid' into x86/core, to resolve conflicts
-      Merge branch 'x86/cpu' into x86/core, to resolve conflicts
-
-Masahiro Yamada (1):
-      x86: Remove toolchain check for X32 ABI capability
-
-Nathan Chancellor (3):
-      x86/Kconfig: Do not allow CONFIG_X86_X32_ABI=y with llvm-objcopy
-      x86/Kconfig: Only enable CONFIG_CC_HAS_IBT for clang >= 14.0.0
-      x86/Kconfig: Only allow CONFIG_X86_KERNEL_IBT with ld.lld >= 14.0.0
-
-Peter Zijlstra (50):
-      Merge branch 'arm64/for-next/linkage'
-      static_call: Avoid building empty .static_call_sites
-      objtool: Add --dry-run
-      objtool: Default ignore INT3 for unreachable
-      objtool,efi: Update __efi64_thunk annotation
-      objtool: Have WARN_FUNC fall back to sym+off
-      x86/ibt: Base IBT bits
-      x86/ibt: Add ANNOTATE_NOENDBR
-      x86/text-patching: Make text_gen_insn() play nice with ANNOTATE_NOENDBR
-      x86/ibt,paravirt: Use text_gen_insn() for paravirt_patch()
-      x86/entry: Cleanup PARAVIRT
-      x86/entry,xen: Early rewrite of restore_regs_and_return_to_kernel()
-      x86/ibt,xen: Sprinkle the ENDBR
-      x86/ibt,entry: Sprinkle ENDBR dust
-      x86/linkage: Add ENDBR to SYM_FUNC_START*()
-      x86/ibt,paravirt: Sprinkle ENDBR
-      x86/ibt,crypto: Add ENDBR for the jump-table entries
-      x86/ibt,kvm: Add ENDBR to fastops
-      x86/ibt,ftrace: Search for __fentry__ location
-      x86/livepatch: Validate __fentry__ location
-      x86/ibt,ftrace: Make function-graph play nice
-      x86/ibt,kprobes: Cure sym+0 equals fentry woes
-      x86/ibt,bpf: Add ENDBR instructions to prologue and trampoline
-      x86/ibt,ftrace: Add ENDBR to samples/ftrace
-      x86/ibt: Add IBT feature, MSR and #CP handling
-      x86/ibt,kexec: Disable CET on kexec
-      x86/alternative: Simplify int3_selftest_ip
-      x86/ibt: Disable IBT around firmware
-      x86/ibt: Annotate text references
-      x86/ibt,ftrace: Annotate ftrace code patching
-      x86/ibt,sev: Annotations
-      x86/ibt: Dont generate ENDBR in .discard.text
-      x86/ibt: Ensure module init/exit points have references
-      objtool: Rename --duplicate to --lto
-      objtool: Ignore extra-symbol code
-      x86: Mark stop_this_cpu() __noreturn
-      exit: Mark do_group_exit() __noreturn
-      x86: Mark __invalid_creds() __noreturn
-      objtool: Rework ASM_REACHABLE
-      x86: Annotate call_on_stack()
-      x86,objtool: Move the ASM_REACHABLE annotation to objtool.h
-      x86: Annotate idtentry_df()
-      objtool: Read the NOENDBR annotation
-      objtool: Add IBT/ENDBR decoding
-      objtool: Validate IBT assumptions
-      objtool: Find unused ENDBR instructions
-      x86/alternative: Use .ibt_endbr_seal to seal indirect calls
-      kbuild: Fixup the IBT kbuild changes
-      Merge branch 'kvm/kvm-sls-fix'
-      kvm/emulate: Fix SETcc emulation for ENDBR
-
- Documentation/ABI/stable/sysfs-devices-system-cpu  |   4 +
- Documentation/ABI/testing/sysfs-devices-system-cpu |   6 +
- Documentation/asm-annotations.rst                  |  11 +-
- Documentation/x86/sva.rst                          |  53 ++-
- arch/arm64/include/asm/linkage.h                   |  24 --
- arch/arm64/include/asm/module.lds.h                |   6 +-
- arch/arm64/kvm/hyp/nvhe/cache.S                    |   5 +-
- arch/arm64/lib/clear_page.S                        |   5 +-
- arch/arm64/lib/copy_page.S                         |   5 +-
- arch/arm64/lib/memchr.S                            |   5 +-
- arch/arm64/lib/memcmp.S                            |   6 +-
- arch/arm64/lib/memcpy.S                            |  21 +-
- arch/arm64/lib/memset.S                            |  12 +-
- arch/arm64/lib/strchr.S                            |   6 +-
- arch/arm64/lib/strcmp.S                            |   6 +-
- arch/arm64/lib/strlen.S                            |   6 +-
- arch/arm64/lib/strncmp.S                           |   6 +-
- arch/arm64/lib/strnlen.S                           |   6 +-
- arch/arm64/lib/strrchr.S                           |   5 +-
- arch/arm64/mm/cache.S                              |  35 +-
- arch/powerpc/include/asm/livepatch.h               |  10 -
- arch/powerpc/kernel/kprobes.c                      |  34 +-
- arch/um/kernel/um_arch.c                           |   4 +
- arch/x86/Kconfig                                   |  43 ++-
- arch/x86/Makefile                                  |  32 +-
- arch/x86/boot/compressed/head_32.S                 |   3 +-
- arch/x86/boot/compressed/head_64.S                 |   3 +-
- arch/x86/crypto/aesni-intel_asm.S                  |   4 +-
- arch/x86/crypto/crc32c-pcl-intel-asm_64.S          |   3 +
- arch/x86/entry/entry_64.S                          |  31 +-
- arch/x86/entry/entry_64_compat.S                   |   5 +
- arch/x86/entry/syscalls/Makefile                   |   2 +-
- arch/x86/include/asm/alternative.h                 |   1 +
- arch/x86/include/asm/bug.h                         |   1 +
- arch/x86/include/asm/cpu.h                         |   4 +
- arch/x86/include/asm/cpufeatures.h                 |   7 +-
- arch/x86/include/asm/disabled-features.h           |   7 +-
- arch/x86/include/asm/efi.h                         |   9 +-
- arch/x86/include/asm/ibt.h                         | 105 ++++++
- arch/x86/include/asm/idtentry.h                    |  25 +-
- arch/x86/include/asm/irq_stack.h                   |   4 +-
- arch/x86/include/asm/irqflags.h                    |   5 -
- arch/x86/include/asm/linkage.h                     |  31 ++
- arch/x86/include/asm/msr-index.h                   |  20 +-
- arch/x86/include/asm/paravirt.h                    |   1 +
- arch/x86/include/asm/paravirt_types.h              |   1 -
- arch/x86/include/asm/processor.h                   |   4 +-
- arch/x86/include/asm/qspinlock_paravirt.h          |   3 +
- arch/x86/include/asm/segment.h                     |   5 +-
- arch/x86/include/asm/setup.h                       |   3 +-
- arch/x86/include/asm/syscall_wrapper.h             |   6 +-
- arch/x86/include/asm/text-patching.h               |  30 +-
- arch/x86/include/asm/topology.h                    |   1 +
- arch/x86/include/asm/traps.h                       |   2 +
- arch/x86/include/asm/vdso.h                        |   2 +-
- arch/x86/include/uapi/asm/processor-flags.h        |   2 +
- arch/x86/kernel/alternative.c                      |  66 +++-
- arch/x86/kernel/apm_32.c                           |   7 +
- arch/x86/kernel/cpu/amd.c                          |  35 +-
- arch/x86/kernel/cpu/common.c                       | 138 ++++++-
- arch/x86/kernel/cpu/mce/amd.c                      |   7 +-
- arch/x86/kernel/cpu/mce/core.c                     |   7 +-
- arch/x86/kernel/cpu/mce/intel.c                    |  42 ---
- arch/x86/kernel/cpu/scattered.c                    |   1 +
- arch/x86/kernel/fpu/core.c                         |   7 +
- arch/x86/kernel/ftrace.c                           |   9 +-
- arch/x86/kernel/ftrace_64.S                        |  28 +-
- arch/x86/kernel/head_64.S                          |  14 +-
- arch/x86/kernel/idt.c                              |   9 +-
- arch/x86/kernel/kprobes/core.c                     |  29 +-
- arch/x86/kernel/kvm.c                              |   3 +-
- arch/x86/kernel/machine_kexec_64.c                 |   4 +-
- arch/x86/kernel/module.c                           |   8 +-
- arch/x86/kernel/paravirt.c                         |  29 +-
- arch/x86/kernel/process.c                          |   7 +-
- arch/x86/kernel/process_64.c                       |   2 +-
- arch/x86/kernel/relocate_kernel_64.S               |  10 +
- arch/x86/kernel/traps.c                            | 130 +++++++
- arch/x86/kernel/vmlinux.lds.S                      |   9 +
- arch/x86/kvm/emulate.c                             |  16 +-
- arch/x86/lib/error-inject.c                        |   2 +
- arch/x86/lib/memcpy_64.S                           |  10 +-
- arch/x86/lib/memmove_64.S                          |   4 +-
- arch/x86/lib/memset_64.S                           |   6 +-
- arch/x86/lib/retpoline.S                           |   1 +
- arch/x86/net/bpf_jit_comp.c                        |  26 +-
- arch/x86/platform/efi/Makefile                     |   1 -
- arch/x86/platform/efi/efi_thunk_64.S               |   6 +-
- arch/x86/xen/enlighten_pv.c                        |  10 +-
- arch/x86/xen/xen-asm.S                             |  10 +
- arch/x86/xen/xen-head.S                            |   9 +-
- drivers/base/topology.c                            |  20 +-
- drivers/iommu/Kconfig                              |   6 +-
- drivers/iommu/Makefile                             |   2 +-
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c    |   5 +-
- drivers/iommu/intel/Kconfig                        |   2 +-
- drivers/iommu/intel/iommu.c                        |   4 +-
- drivers/iommu/intel/svm.c                          |   9 -
- drivers/iommu/ioasid.c                             |  39 +-
- drivers/iommu/iommu-sva-lib.c                      |  39 +-
- drivers/iommu/iommu-sva-lib.h                      |   7 +-
- fs/fuse/ioctl.c                                    |   2 +-
- fs/xfs/xfs_ioctl32.c                               |   2 +-
- include/asm-generic/vmlinux.lds.h                  |   4 +
- include/linux/cfi.h                                |  11 +-
- include/linux/compiler.h                           |   7 -
- include/linux/cred.h                               |   2 +-
- include/linux/ioasid.h                             |  21 +-
- include/linux/kprobes.h                            |   3 +-
- include/linux/linkage.h                            |  67 ++--
- include/linux/mm_types.h                           |   2 +-
- include/linux/objtool.h                            |  32 ++
- include/linux/sched.h                              |   3 +
- include/linux/sched/mm.h                           |  26 ++
- include/linux/sched/task.h                         |   2 +-
- include/linux/topology.h                           |   3 +
- kernel/bpf/trampoline.c                            |  20 +-
- kernel/cred.c                                      |   2 +-
- kernel/exit.c                                      |   2 +-
- kernel/fork.c                                      |  15 +-
- kernel/kprobes.c                                   |  74 ++--
- kernel/livepatch/patch.c                           |  19 +-
- kernel/trace/ftrace.c                              |  48 ++-
- mm/init-mm.c                                       |   4 +
- samples/ftrace/ftrace-direct-modify.c              |   5 +
- samples/ftrace/ftrace-direct-multi-modify.c        |  10 +-
- samples/ftrace/ftrace-direct-multi.c               |   5 +-
- samples/ftrace/ftrace-direct-too.c                 |   3 +
- samples/ftrace/ftrace-direct.c                     |   3 +
- scripts/Makefile.build                             |  27 +-
- scripts/Makefile.lib                               |   4 +-
- scripts/link-vmlinux.sh                            |  12 +-
- scripts/mod/modpost.c                              |  12 +-
- sound/core/control_compat.c                        |  16 +-
- sound/core/pcm_compat.c                            |  20 +-
- tools/arch/x86/lib/memcpy_64.S                     |  10 +-
- tools/arch/x86/lib/memset_64.S                     |   6 +-
- tools/include/linux/objtool.h                      |  32 ++
- tools/objtool/arch/x86/decode.c                    |  43 ++-
- tools/objtool/builtin-check.c                      |   7 +-
- tools/objtool/check.c                              | 400 +++++++++++++++++++--
- tools/objtool/elf.c                                |  63 ++++
- tools/objtool/include/objtool/arch.h               |   1 +
- tools/objtool/include/objtool/builtin.h            |   3 +-
- tools/objtool/include/objtool/check.h              |  13 +-
- tools/objtool/include/objtool/elf.h                |   1 +
- tools/objtool/include/objtool/objtool.h            |   4 +
- tools/objtool/include/objtool/warn.h               |   2 +
- tools/objtool/objtool.c                            |   1 +
- tools/perf/util/include/linux/linkage.h            |  52 ++-
- 150 files changed, 1947 insertions(+), 700 deletions(-)
- create mode 100644 arch/x86/include/asm/ibt.h
+On Thu, Mar 24, 2022 at 3:29 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> There are four possible gain values according to 'sx9324_gain_vals[]':
+>
+>         1, 2, 4, and 8
+>
+> The values are off by one when writing and reading the register. The
+> bits should be set according to this equation:
+>
+>         ilog2(<gain>) + 1
+>
+> so that a gain of 8 is 0x3 in the register field and a gain of 4 is 0x2
+> in the register field, etc. Note that a gain of 0 is reserved per the
+> datasheet. The default gain (SX9324_REG_PROX_CTRL0_GAIN_1) is also
+> wrong. It should be 0x1 << 3, i.e. 0x8, not 0x80 which is setting the
+> reserved bit 7.
+>
+> Fix this all up to properly handle the hardware gain and return errors
+> for invalid settings.
+>
+> Fixes: 4c18a890dff8 ("iio:proximity:sx9324: Add SX9324 support")
+> Cc: Gwendal Grignou <gwendal@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Gwendal Grignou <gwendal@chromium.org>
+> ---
+>
+> Changes from v1 (https://lore.kernel.org/r/)20220318204808.3404542-1-swboyd@chromium.org:
+>  * Reject invalid settings
+>  * Fix default value
+>  * More commit text details
+>
+>  drivers/iio/proximity/sx9324.c | 26 +++++++++++++++++++++-----
+>  1 file changed, 21 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/iio/proximity/sx9324.c b/drivers/iio/proximity/sx9324.c
+> index 0d9bbbb50cb4..6e90917e3e36 100644
+> --- a/drivers/iio/proximity/sx9324.c
+> +++ b/drivers/iio/proximity/sx9324.c
+> @@ -76,7 +76,10 @@
+>
+>  #define SX9324_REG_PROX_CTRL0          0x30
+>  #define SX9324_REG_PROX_CTRL0_GAIN_MASK        GENMASK(5, 3)
+> -#define SX9324_REG_PROX_CTRL0_GAIN_1           0x80
+> +#define SX9324_REG_PROX_CTRL0_GAIN_SHIFT       3
+> +#define SX9324_REG_PROX_CTRL0_GAIN_RSVD                0x0
+> +#define SX9324_REG_PROX_CTRL0_GAIN_1           0x1
+> +#define SX9324_REG_PROX_CTRL0_GAIN_8           0x4
+>  #define SX9324_REG_PROX_CTRL0_RAWFILT_MASK     GENMASK(2, 0)
+>  #define SX9324_REG_PROX_CTRL0_RAWFILT_1P50     0x01
+>  #define SX9324_REG_PROX_CTRL1          0x31
+> @@ -379,7 +382,14 @@ static int sx9324_read_gain(struct sx_common_data *data,
+>         if (ret)
+>                 return ret;
+>
+> -       *val = 1 << FIELD_GET(SX9324_REG_PROX_CTRL0_GAIN_MASK, regval);
+> +       regval = FIELD_GET(SX9324_REG_PROX_CTRL0_GAIN_MASK, regval);
+> +       if (regval)
+> +               regval--;
+> +       else if (regval == SX9324_REG_PROX_CTRL0_GAIN_RSVD ||
+> +                regval > SX9324_REG_PROX_CTRL0_GAIN_8)
+> +               return -EINVAL;
+> +
+> +       *val = 1 << regval;
+>
+>         return IIO_VAL_INT;
+>  }
+> @@ -725,8 +735,12 @@ static int sx9324_write_gain(struct sx_common_data *data,
+>         unsigned int gain, reg;
+>         int ret;
+>
+> -       gain = ilog2(val);
+>         reg = SX9324_REG_PROX_CTRL0 + chan->channel / 2;
+> +
+> +       gain = ilog2(val) + 1;
+> +       if (val <= 0 || gain > SX9324_REG_PROX_CTRL0_GAIN_8)
+> +               return -EINVAL;
+> +
+>         gain = FIELD_PREP(SX9324_REG_PROX_CTRL0_GAIN_MASK, gain);
+>
+>         mutex_lock(&data->mutex);
+> @@ -784,9 +798,11 @@ static const struct sx_common_reg_default sx9324_default_regs[] = {
+>         { SX9324_REG_AFE_CTRL8, SX9324_REG_AFE_CTRL8_RESFILTN_4KOHM },
+>         { SX9324_REG_AFE_CTRL9, SX9324_REG_AFE_CTRL9_AGAIN_1 },
+>
+> -       { SX9324_REG_PROX_CTRL0, SX9324_REG_PROX_CTRL0_GAIN_1 |
+> +       { SX9324_REG_PROX_CTRL0,
+> +               SX9324_REG_PROX_CTRL0_GAIN_1 << SX9324_REG_PROX_CTRL0_GAIN_SHIFT |
+>                 SX9324_REG_PROX_CTRL0_RAWFILT_1P50 },
+> -       { SX9324_REG_PROX_CTRL1, SX9324_REG_PROX_CTRL0_GAIN_1 |
+> +       { SX9324_REG_PROX_CTRL1,
+> +               SX9324_REG_PROX_CTRL0_GAIN_1 << SX9324_REG_PROX_CTRL0_GAIN_SHIFT |
+>                 SX9324_REG_PROX_CTRL0_RAWFILT_1P50 },
+>         { SX9324_REG_PROX_CTRL2, SX9324_REG_PROX_CTRL2_AVGNEG_THRESH_16K },
+>         { SX9324_REG_PROX_CTRL3, SX9324_REG_PROX_CTRL3_AVGDEB_2SAMPLES |
+>
+> base-commit: a8ee3b32f5da6c77a5ccc0e42c2250d61ba54fe0
+> --
+> https://chromeos.dev
+>

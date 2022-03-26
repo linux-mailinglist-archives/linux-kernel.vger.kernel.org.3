@@ -2,71 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8192E4E7FB5
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 08:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB504E7FBA
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 08:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbiCZHLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 03:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
+        id S231776AbiCZHPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 03:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbiCZHLK (ORCPT
+        with ESMTP id S230024AbiCZHPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 03:11:10 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167FA26D124
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 00:09:35 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id bc27so8191591pgb.4
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 00:09:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aY7Qm3duZzz4/ANMI52LqTxkdMO5YlOW9+CWZKbNUDQ=;
-        b=I05Mab032aTpoTeimJ2ZOfF1xo8R9P0uXq5lBgIRm+2ywDCJ7TRBiojiTa2Sl4OyrW
-         ENUppUa56EY/52pmYjwVkvLFtLbIrXRiqjns6jQiDFovrx+lkvG4JwIweL0YU8mdQjko
-         42818OZdanjVU+H50AQcXJKz2sx+o0LKLoabM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aY7Qm3duZzz4/ANMI52LqTxkdMO5YlOW9+CWZKbNUDQ=;
-        b=2YlNK0LCsxwU5lB/EWiq0ZRG7F88GgCkchK45VN3Fr6cl8QVXzWMEH9SwSTgwQSVGb
-         r5KYYVCh5rcmOr63MgchwHH5H9EewiH2o6lMx9WTTgfv2VrO9SZ6VddxYSbTDlvI6pqA
-         U7x8OQF16GpJaabxVNjieswIVYGR1cHEfaumfBpOAKU95P4cSzj3Iw2lq4k+ry9y6JHo
-         UU1EtFCfgJ5XkyXEwnjh9QPjroJ4PUC0jgSnDLk2BqGdXtRf0A7Z8z9WdaZ1HQUOgLDb
-         e2XUXqvmfFhc56a5bgxmj8aUpUKlH9ykTDy8EOoCPkwzKwh9proxnMG50SSo3sxwUiXP
-         hFwA==
-X-Gm-Message-State: AOAM533madUaGSM1Mphu3k6WV6BSXq3wXOznxMzWg7/aAVIgkcGQZn7o
-        OoGqrTrHZ2HT6UPth1biFC/kjg==
-X-Google-Smtp-Source: ABdhPJxLT1yAk+YxicpfYCc3ehIfT2Bhk4TwGg5YlmuZKXxtcXZhn3FYsvFWkuU6byOwpgW5/SuX6g==
-X-Received: by 2002:a05:6a00:815:b0:4fb:e46:511c with SMTP id m21-20020a056a00081500b004fb0e46511cmr7185978pfk.54.1648278574592;
-        Sat, 26 Mar 2022 00:09:34 -0700 (PDT)
-Received: from localhost (0.223.81.34.bc.googleusercontent.com. [34.81.223.0])
-        by smtp.gmail.com with UTF8SMTPSA id j6-20020a17090a588600b001c699d77503sm7565679pji.2.2022.03.26.00.09.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Mar 2022 00:09:33 -0700 (PDT)
-From:   Ying Hsu <yinghsu@chromium.org>
-To:     marcel@holtmann.org
-Cc:     chromeos-bluetooth-upstreaming@chromium.org,
-        Ying Hsu <yinghsu@chromium.org>,
-        syzbot+2bef95d3ab4daa10155b@syzkaller.appspotmail.com,
-        Joseph Hwang <josephsih@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Desmond Cheong Zhi Xi <desmondcheongzx@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH v2] Bluetooth: fix dangling sco_conn and use-after-free in sco_sock_timeout
-Date:   Sat, 26 Mar 2022 07:09:28 +0000
-Message-Id: <20220326070853.v2.1.I67f8ad854ac2f48701902bfb34d6e2070011b779@changeid>
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
+        Sat, 26 Mar 2022 03:15:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4A7193F7;
+        Sat, 26 Mar 2022 00:13:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93F91B80E78;
+        Sat, 26 Mar 2022 07:13:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 303F4C340ED;
+        Sat, 26 Mar 2022 07:13:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648278813;
+        bh=SbCQiLcdpwK95EMOKB+awhm02w2+pKKQBhuDoxlYSak=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CgH7x0hb0EquZmt+J6V02nwP9Zff35QzQN2Of+aUA1U3b2QcokVApMfEUw03XjHKz
+         tVO8uQVnBw35cdO1LDed/vvQC7m1OOlOvSIkr6YApbQRtMF2O8mAijGRGkJ6i57bV7
+         VUuJfaSl8H5k1QH8MAs9jZrnjZFqCOmsH/5q4eEhEdf8KcfzpHnxyOfxFobJndnY5q
+         hxn1+uBWNSkrtuFoyV31jAFGeRnPjbeQfceXRWkAWNZbXy/zoOuDMVt6AXzb1eomek
+         pHaPkFZyiFq3rHPZUOsQX/hIzqkph9z1t78loEEefHYVTAV+qsbmfPsuQ9Opxmiqe7
+         hvJ2BDfFQYmpQ==
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-crypto@vger.kernel.org
+Cc:     Gilad Ben-Yossef <gilad@benyossef.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] crypto: testmgr - test in-place en/decryption with two sglists
+Date:   Sat, 26 Mar 2022 00:11:59 -0700
+Message-Id: <20220326071159.56056-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,84 +52,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Connecting the same socket twice consecutively in sco_sock_connect()
-could lead to a race condition where two sco_conn objects are created
-but only one is associated with the socket. If the socket is closed
-before the SCO connection is established, the timer associated with the
-dangling sco_conn object won't be canceled. As the sock object is being
-freed, the use-after-free problem happens when the timer callback
-function sco_sock_timeout() accesses the socket. Here's the call trace:
+From: Eric Biggers <ebiggers@google.com>
 
-dump_stack+0x107/0x163
-? refcount_inc+0x1c/
-print_address_description.constprop.0+0x1c/0x47e
-? refcount_inc+0x1c/0x7b
-kasan_report+0x13a/0x173
-? refcount_inc+0x1c/0x7b
-check_memory_region+0x132/0x139
-refcount_inc+0x1c/0x7b
-sco_sock_timeout+0xb2/0x1ba
-process_one_work+0x739/0xbd1
-? cancel_delayed_work+0x13f/0x13f
-? __raw_spin_lock_init+0xf0/0xf0
-? to_kthread+0x59/0x85
-worker_thread+0x593/0x70e
-kthread+0x346/0x35a
-? drain_workqueue+0x31a/0x31a
-? kthread_bind+0x4b/0x4b
-ret_from_fork+0x1f/0x30
+As was established in the thread
+https://lore.kernel.org/linux-crypto/20220223080400.139367-1-gilad@benyossef.com/T/#u,
+many crypto API users doing in-place en/decryption don't use the same
+scatterlist pointers for the source and destination, but rather use
+separate scatterlists that point to the same memory.  This case isn't
+tested by the self-tests, resulting in bugs.
 
-Link: https://syzkaller.appspot.com/bug?extid=2bef95d3ab4daa10155b
-Reported-by: syzbot+2bef95d3ab4daa10155b@syzkaller.appspotmail.com
-Fixes: e1dee2c1de2b ("Bluetooth: fix repeated calls to sco_sock_kill")
-Signed-off-by: Ying Hsu <yinghsu@chromium.org>
-Reviewed-by: Joseph Hwang <josephsih@chromium.org>
+This is the natural usage of the crypto API in some cases, so requiring
+API users to avoid this usage is not reasonable.
+
+Therefore, update the self-tests to start testing this case.
+
+Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
-Tested this commit using a C reproducer on qemu-x86_64 for 8 hours.
+ crypto/testmgr.c | 75 ++++++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 63 insertions(+), 12 deletions(-)
 
-Changes in v2:
-- Adding Link, Reported-by, and Fixes tags in comment.
+diff --git a/crypto/testmgr.c b/crypto/testmgr.c
+index 2d632a285869f..24a1f9365b9bb 100644
+--- a/crypto/testmgr.c
++++ b/crypto/testmgr.c
+@@ -232,6 +232,20 @@ enum finalization_type {
+ 	FINALIZATION_TYPE_DIGEST,	/* use digest() */
+ };
+ 
++/*
++ * Whether the crypto operation will occur in-place, and if so whether the
++ * source and destination scatterlist pointers will coincide (req->src ==
++ * req->dst), or whether they'll merely point to two separate scatterlists
++ * (req->src != req->dst) that reference the same underlying memory.
++ *
++ * This is only relevant for algorithm types that support in-place operation.
++ */
++enum inplace_mode {
++	OUT_OF_PLACE,
++	INPLACE_ONE_SGLIST,
++	INPLACE_TWO_SGLISTS,
++};
++
+ #define TEST_SG_TOTAL	10000
+ 
+ /**
+@@ -265,7 +279,7 @@ struct test_sg_division {
+  * crypto test vector can be tested.
+  *
+  * @name: name of this config, logged for debugging purposes if a test fails
+- * @inplace: operate on the data in-place, if applicable for the algorithm type?
++ * @inplace_mode: whether and how to operate on the data in-place, if applicable
+  * @req_flags: extra request_flags, e.g. CRYPTO_TFM_REQ_MAY_SLEEP
+  * @src_divs: description of how to arrange the source scatterlist
+  * @dst_divs: description of how to arrange the dst scatterlist, if applicable
+@@ -282,7 +296,7 @@ struct test_sg_division {
+  */
+ struct testvec_config {
+ 	const char *name;
+-	bool inplace;
++	enum inplace_mode inplace_mode;
+ 	u32 req_flags;
+ 	struct test_sg_division src_divs[XBUFSIZE];
+ 	struct test_sg_division dst_divs[XBUFSIZE];
+@@ -307,11 +321,16 @@ struct testvec_config {
+ /* Configs for skciphers and aeads */
+ static const struct testvec_config default_cipher_testvec_configs[] = {
+ 	{
+-		.name = "in-place",
+-		.inplace = true,
++		.name = "in-place (one sglist)",
++		.inplace_mode = INPLACE_ONE_SGLIST,
++		.src_divs = { { .proportion_of_total = 10000 } },
++	}, {
++		.name = "in-place (two sglists)",
++		.inplace_mode = INPLACE_TWO_SGLISTS,
+ 		.src_divs = { { .proportion_of_total = 10000 } },
+ 	}, {
+ 		.name = "out-of-place",
++		.inplace_mode = OUT_OF_PLACE,
+ 		.src_divs = { { .proportion_of_total = 10000 } },
+ 	}, {
+ 		.name = "unaligned buffer, offset=1",
+@@ -349,7 +368,7 @@ static const struct testvec_config default_cipher_testvec_configs[] = {
+ 		.key_offset = 3,
+ 	}, {
+ 		.name = "misaligned splits crossing pages, inplace",
+-		.inplace = true,
++		.inplace_mode = INPLACE_ONE_SGLIST,
+ 		.src_divs = {
+ 			{
+ 				.proportion_of_total = 7500,
+@@ -749,18 +768,39 @@ static int build_cipher_test_sglists(struct cipher_test_sglists *tsgls,
+ 
+ 	iov_iter_kvec(&input, WRITE, inputs, nr_inputs, src_total_len);
+ 	err = build_test_sglist(&tsgls->src, cfg->src_divs, alignmask,
+-				cfg->inplace ?
++				cfg->inplace_mode != OUT_OF_PLACE ?
+ 					max(dst_total_len, src_total_len) :
+ 					src_total_len,
+ 				&input, NULL);
+ 	if (err)
+ 		return err;
+ 
+-	if (cfg->inplace) {
++	/*
++	 * In-place crypto operations can use the same scatterlist for both the
++	 * source and destination (req->src == req->dst), or can use separate
++	 * scatterlists (req->src != req->dst) which point to the same
++	 * underlying memory.  Make sure to test both cases.
++	 */
++	if (cfg->inplace_mode == INPLACE_ONE_SGLIST) {
+ 		tsgls->dst.sgl_ptr = tsgls->src.sgl;
+ 		tsgls->dst.nents = tsgls->src.nents;
+ 		return 0;
+ 	}
++	if (cfg->inplace_mode == INPLACE_TWO_SGLISTS) {
++		/*
++		 * For now we keep it simple and only test the case where the
++		 * two scatterlists have identical entries, rather than
++		 * different entries that split up the same memory differently.
++		 */
++		memcpy(tsgls->dst.sgl, tsgls->src.sgl,
++		       tsgls->src.nents * sizeof(tsgls->src.sgl[0]));
++		memcpy(tsgls->dst.sgl_saved, tsgls->src.sgl,
++		       tsgls->src.nents * sizeof(tsgls->src.sgl[0]));
++		tsgls->dst.sgl_ptr = tsgls->dst.sgl;
++		tsgls->dst.nents = tsgls->src.nents;
++		return 0;
++	}
++	/* Out of place */
+ 	return build_test_sglist(&tsgls->dst,
+ 				 cfg->dst_divs[0].proportion_of_total ?
+ 					cfg->dst_divs : cfg->src_divs,
+@@ -995,9 +1035,19 @@ static void generate_random_testvec_config(struct testvec_config *cfg,
+ 
+ 	p += scnprintf(p, end - p, "random:");
+ 
+-	if (prandom_u32() % 2 == 0) {
+-		cfg->inplace = true;
+-		p += scnprintf(p, end - p, " inplace");
++	switch (prandom_u32() % 4) {
++	case 0:
++	case 1:
++		cfg->inplace_mode = OUT_OF_PLACE;
++		break;
++	case 2:
++		cfg->inplace_mode = INPLACE_ONE_SGLIST;
++		p += scnprintf(p, end - p, " inplace_one_sglist");
++		break;
++	default:
++		cfg->inplace_mode = INPLACE_TWO_SGLISTS;
++		p += scnprintf(p, end - p, " inplace_two_sglists");
++		break;
+ 	}
+ 
+ 	if (prandom_u32() % 2 == 0) {
+@@ -1034,7 +1084,7 @@ static void generate_random_testvec_config(struct testvec_config *cfg,
+ 					  cfg->req_flags);
+ 	p += scnprintf(p, end - p, "]");
+ 
+-	if (!cfg->inplace && prandom_u32() % 2 == 0) {
++	if (cfg->inplace_mode == OUT_OF_PLACE && prandom_u32() % 2 == 0) {
+ 		p += scnprintf(p, end - p, " dst_divs=[");
+ 		p = generate_random_sgl_divisions(cfg->dst_divs,
+ 						  ARRAY_SIZE(cfg->dst_divs),
+@@ -2085,7 +2135,8 @@ static int test_aead_vec_cfg(int enc, const struct aead_testvec *vec,
+ 	/* Check for the correct output (ciphertext or plaintext) */
+ 	err = verify_correct_output(&tsgls->dst, enc ? vec->ctext : vec->ptext,
+ 				    enc ? vec->clen : vec->plen,
+-				    vec->alen, enc || !cfg->inplace);
++				    vec->alen,
++				    enc || cfg->inplace_mode == OUT_OF_PLACE);
+ 	if (err == -EOVERFLOW) {
+ 		pr_err("alg: aead: %s %s overran dst buffer on test vector %s, cfg=\"%s\"\n",
+ 		       driver, op, vec_name, cfg->name);
 
- net/bluetooth/sco.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
-
-diff --git a/net/bluetooth/sco.c b/net/bluetooth/sco.c
-index 8eabf41b2993..380c63194736 100644
---- a/net/bluetooth/sco.c
-+++ b/net/bluetooth/sco.c
-@@ -574,19 +574,24 @@ static int sco_sock_connect(struct socket *sock, struct sockaddr *addr, int alen
- 	    addr->sa_family != AF_BLUETOOTH)
- 		return -EINVAL;
- 
--	if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND)
--		return -EBADFD;
-+	lock_sock(sk);
-+	if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND) {
-+		err = -EBADFD;
-+		goto done;
-+	}
- 
--	if (sk->sk_type != SOCK_SEQPACKET)
--		return -EINVAL;
-+	if (sk->sk_type != SOCK_SEQPACKET) {
-+		err = -EINVAL;
-+		goto done;
-+	}
- 
- 	hdev = hci_get_route(&sa->sco_bdaddr, &sco_pi(sk)->src, BDADDR_BREDR);
--	if (!hdev)
--		return -EHOSTUNREACH;
-+	if (!hdev) {
-+		err = -EHOSTUNREACH;
-+		goto done;
-+	}
- 	hci_dev_lock(hdev);
- 
--	lock_sock(sk);
--
- 	/* Set destination address and psm */
- 	bacpy(&sco_pi(sk)->dst, &sa->sco_bdaddr);
- 
+base-commit: 46f538bf2404ee9c32648deafb886f49144bfd5e
 -- 
-2.35.1.1021.g381101b075-goog
+2.35.1
 

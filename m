@@ -2,83 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79ACA4E7FF5
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 09:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6591A4E7FFC
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 09:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbiCZINE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 04:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33820 "EHLO
+        id S232095AbiCZIR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 04:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbiCZIM7 (ORCPT
+        with ESMTP id S230032AbiCZIRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 04:12:59 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7841E7461
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 01:11:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648282282; x=1679818282;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=P9dVB4ZZc42JPMXDf4ZXEuQtDerWHUFz5SIEYFiNzPs=;
-  b=b80mrgSUx38E3yD+vQ/B+m0Ig6UqGNxYk1mjqTNgZ+HGvgERQB69OXpk
-   feeTmjZEQj1ttvG7TFzTitJMKAKkdjAFgVUy+FHw+bIoJoCWVAqEaz45F
-   B5B4HKROCLfSBlKgLixbSVjjOD8Bs1G63GHz2PshbCu+7dxrBac7pPErV
-   a30STo+8Be5VivPeixYYFx12xla5/CCuCeyauwQM7vfjSLhYjLKSRNIHx
-   73RigE94S3pRtPbAWiKVkcocASFIvp54qKIOsvoYd2EPHFr8aAD57WfZ+
-   Z6W0J+qlCCsKYadmnB83srtpWXmBUWO81wS3/NeT79mwVgztfSN7I/JMn
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="258735866"
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="258735866"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 01:11:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="516776259"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 26 Mar 2022 01:11:21 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nY1W4-000NB8-KD; Sat, 26 Mar 2022 08:11:20 +0000
-Date:   Sat, 26 Mar 2022 16:10:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: [intel-tdx:guest-rebased 65/83] kernel/dma/swiotlb.c:433:15-33:
- WARNING: casting value returned by memory allocation function to (struct
- io_tlb_area *) is useless.
-Message-ID: <202203261644.zQlZ2Jw4-lkp@intel.com>
+        Sat, 26 Mar 2022 04:17:24 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4D81FF23E;
+        Sat, 26 Mar 2022 01:15:48 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KQWvQ3CF3zfZgW;
+        Sat, 26 Mar 2022 16:14:10 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Sat, 26 Mar
+ 2022 16:15:45 +0800
+From:   Zheng Yongjun <zhengyongjun3@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <lars.povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>
+Subject: [PATCH] net: sparx5: switchdev: fix possible NULL pointer dereference
+Date:   Sat, 26 Mar 2022 08:12:39 +0000
+Message-ID: <20220326081239.9168-1-zhengyongjun3@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git guest-rebased
-head:   4c095660b91dbdd18042456e395af0deeef93485
-commit: 4ab45cefa80f97ba2bdc31226523c891832d1080 [65/83] swiotlb: Split up single swiotlb lock
-config: s390-randconfig-c023-20220324 (https://download.01.org/0day-ci/archive/20220326/202203261644.zQlZ2Jw4-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
+As the possible failure of the allocation, devm_kzalloc() may return NULL
+pointer.
+Therefore, it should be better to check the 'db' in order to prevent
+the dereference of NULL pointer.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 10615907e9b51 ("net: sparx5: switchdev: adding frame DMA functionality")
+Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+---
+ drivers/net/ethernet/microchip/sparx5/sparx5_fdma.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
-cocci warnings: (new ones prefixed by >>)
->> kernel/dma/swiotlb.c:433:15-33: WARNING: casting value returned by memory allocation function to (struct io_tlb_area *) is useless.
-
-Please review and possibly fold the followup patch.
-
+diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_fdma.c b/drivers/net/ethernet/microchip/sparx5/sparx5_fdma.c
+index 7436f62fa152..174ad95e746a 100644
+--- a/drivers/net/ethernet/microchip/sparx5/sparx5_fdma.c
++++ b/drivers/net/ethernet/microchip/sparx5/sparx5_fdma.c
+@@ -420,6 +420,8 @@ static int sparx5_fdma_tx_alloc(struct sparx5 *sparx5)
+ 			db_hw->dataptr = phys;
+ 			db_hw->status = 0;
+ 			db = devm_kzalloc(sparx5->dev, sizeof(*db), GFP_KERNEL);
++			if (!db)
++				return -ENOMEM;
+ 			db->cpu_addr = cpu_addr;
+ 			list_add_tail(&db->list, &tx->db_list);
+ 		}
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+

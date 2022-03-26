@@ -2,131 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F924E7F2E
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 06:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C894E7F30
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 06:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbiCZFrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 01:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
+        id S231309AbiCZFvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 01:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbiCZFrG (ORCPT
+        with ESMTP id S229702AbiCZFvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 01:47:06 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69391D59CC
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 22:45:26 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id j6-20020a25ec06000000b00633c6f3e072so7613636ybh.12
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 22:45:26 -0700 (PDT)
+        Sat, 26 Mar 2022 01:51:33 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59CF20824E
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 22:49:57 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id v35so17390710ybi.10
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 22:49:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=qN7PPyAD3cWtp7y6x5pkKRSnvoKWxjZvZ2QYdbya07E=;
-        b=TBCh0di89ZfALXGMXBpUVGg0fAv8Gy28zwNUD40Z/FornCimph1nfwEBUOwacbauv+
-         kx61OsjhyZ/p36DoE4AsfEitgcSnqkEr4kA6VTJzesYYVlKlKXYuctOdJ8e8b9TeVqmW
-         RVCPRQ7vXbD8+sZzSkpBlA+4Nly/MjAcR24AsaQnRTTrmvkCh8/FAw/uM+43us8h8W8A
-         hICFKPfG7+ZkMPHnLBEFfpwGDu4/ka47padYJsCH95Mdt6gnrZNXVY2OEL7mNqOIy7mL
-         QaUd+uJJhJ8NfG01kqd9r6qQqpZUNhcDfWyC011g59bKk/pJ3ErgSlvquP3Ri4nIdfUK
-         07tQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=m5y3dmyCTMeUhyJ/TUJk+2Wdo01Owyg3EMB2TMG5W38=;
+        b=jsCGRS4GHxbFStvzfyR35DZR8Tk7le7FgAzWmsifTGmCjytiWtBh0VyiuJ6NBqSpTS
+         hcRo+EARXYJ/4Swc43a+c1W6QyPIpXxzFg3hg9IqfavFN18d+snqmUgJkbfYYJDXbUN2
+         YMsf9dczwLfmjVEX5BqKoM8UVnzLz2NaFoGplfZxxdJZN1USUFbyoexZkqDkOv6tPgGy
+         UjADIdXY5wN7XQsByN0yvEVz5dpeEuOc4voWsskTWQdkJBxkK3KOdGfnPNA2VGqFsthN
+         EXnzFGssJ6JJmjE5UpVWio/d3fBuCN4UaCetpiIjtoZf9+ifzJow7yIB+ASXk2RhV6Lx
+         O6Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=qN7PPyAD3cWtp7y6x5pkKRSnvoKWxjZvZ2QYdbya07E=;
-        b=pYW29zitbCPR38nnEyoabBFdSIZo4Xk6uwTGFlRloUt25Qg0oWiR6xRn6A4zuxpd/I
-         6d5cvgzuQlx5buey/M5bGb5/RV54CP/Z2J1/NfHY7WRElJ2hyEV3bY3EJEoo0ANhh2Hr
-         FYiE2gqtOPp6K1J9ML8On1q4HQzXxYoRA0NHdzih8BrUmzN2njiGhvohhbEx5f5OPamc
-         rAZi+oD8qd3fcpisTTgRMt5i8GAjeHqfJV+hEDstbW/ASimWP7jTtmf9YReYoFRG04gj
-         xfexl53IsEjIMP0rQWWwG6A1k9vYcYXbZ6ggXGV4CFag8otCu45gpfY493cQxX06mDgD
-         fkOA==
-X-Gm-Message-State: AOAM530Uj0fukN3n8icumOkwXPQqa/QpuJpf+47MEmrcbtOjMD/T66pf
-        3USoYeUMGfBMUrf6/Q+OhhqFrHdUPNBLaw==
-X-Google-Smtp-Source: ABdhPJytqTjPcEOZKK8Jgisj6nVlpurdGAlE5lcmf6T7OizSCc+ZaskC6et3Ca5PiLgrITBG5Yeui84nb2VLbg==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a81:3756:0:b0:2e3:3db4:7de1 with SMTP id
- e83-20020a813756000000b002e33db47de1mr15199705ywa.458.1648273525753; Fri, 25
- Mar 2022 22:45:25 -0700 (PDT)
-Date:   Sat, 26 Mar 2022 13:44:15 +0800
-Message-Id: <20220326054414.637293-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH] Documentation: kunit: Fix cross-referencing warnings
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     David Gow <davidgow@google.com>, Marco Elver <elver@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=m5y3dmyCTMeUhyJ/TUJk+2Wdo01Owyg3EMB2TMG5W38=;
+        b=QgTK5tcX3j+CeREglzEOC7I9UT1i0tSKQF/eCD03Xll9veLSPUy8vTkRSYDvD6VZyx
+         q4jDsk65iD7dEoypxfOo6tIpvUGqocl6VgAIURq0d0P0J1MM9FibMUTJhFXUqci2EQHL
+         kOBmAmZGY2hmgmEmpoUQuTQh58ywXbUBcW0ssi1MpP4a9FeQqPd7sYFqDIPq06wdHM9Q
+         n+bzFrMJ5WAC/jq2BXNFnIaMok5LMdFsC3OtSQuaGcCQ2ZGLcAqtsoazNa9yigenwhub
+         X64eNPV1L+OWczn5umS5Qgj0KfxeRlcMBoWYr4Cx9s9CGYBLj75I3MN0Vmprss3OBwiQ
+         Dy7w==
+X-Gm-Message-State: AOAM5312ZTkGrel57YpdigqrYJJ+ZExunfaVgSorWZAhaYbMS+etmV4J
+        5SOUNlmRYkFw00jvVMSxCSm742fQLHGhFXNM7gVx3g==
+X-Google-Smtp-Source: ABdhPJyT0L7N7Pgui08NCvn9g/BZXr/pN0RW4c9VcoTCj9GkBmwYh3ubWlz+jo9sPUsFey+qfN5Rl/3lDhG0oeSLYOM=
+X-Received: by 2002:a25:2409:0:b0:634:15f4:2240 with SMTP id
+ k9-20020a252409000000b0063415f42240mr13187835ybk.88.1648273796125; Fri, 25
+ Mar 2022 22:49:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220325150420.046488912@linuxfoundation.org>
+In-Reply-To: <20220325150420.046488912@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 26 Mar 2022 11:19:45 +0530
+Message-ID: <CA+G9fYuNg3=ig3A5J0oOojC4ywtf_yUeyMoPwYrFBGvzeexWZA@mail.gmail.com>
+Subject: Re: [PATCH 5.16 00/37] 5.16.18-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Architecture chapter of the KUnit documentation tried to include
-copies of the kernel-doc for a couple of things, despite these already
-existing in the API documentation. This lead to some warnings:
+On Fri, 25 Mar 2022 at 20:47, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.16.18 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.16.18-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-architecture:31: ./include/kunit/test.h:3: WARNING: Duplicate C declaration, also defined at dev-tools/kunit/api/test:66.
-Declaration is '.. c:struct:: kunit_case'.
-architecture:163: ./include/kunit/test.h:1217: WARNING: Duplicate C declaration, also defined at dev-tools/kunit/api/test:1217.
-Declaration is '.. c:macro:: KUNIT_ARRAY_PARAM'.
-architecture.rst:3: WARNING: Duplicate C declaration, also defined at dev-tools/kunit/api/test:66.
-Declaration is '.. c:struct:: kunit_case'.
-architecture.rst:1217: WARNING: Duplicate C declaration, also defined at dev-tools/kunit/api/test:1217.
-Declaration is '.. c:macro:: KUNIT_ARRAY_PARAM'.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Get rid of these, and cleanup the mentions of the struct and macro in
-question so that sphinx generates a link to the existing copy of the
-documentation in the api/test document.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Fixes: bc145b370c ("Documentation: KUnit: Added KUnit Architecture")
-Signed-off-by: David Gow <davidgow@google.com>
----
- Documentation/dev-tools/kunit/architecture.rst | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
+## Build
+* kernel: 5.16.18-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.16.y
+* git commit: f6cd6b12e190ef5b92d82a341e76d8a9cd7cd284
+* git describe: v5.16.17-38-gf6cd6b12e190
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.16.y/build/v5.16=
+.17-38-gf6cd6b12e190
 
-diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documentation/dev-tools/kunit/architecture.rst
-index aa2cea821e25..ff9c85a0bff2 100644
---- a/Documentation/dev-tools/kunit/architecture.rst
-+++ b/Documentation/dev-tools/kunit/architecture.rst
-@@ -26,10 +26,7 @@ The fundamental unit in KUnit is the test case. The KUnit test cases are
- grouped into KUnit suites. A KUnit test case is a function with type
- signature ``void (*)(struct kunit *test)``.
- These test case functions are wrapped in a struct called
--``struct kunit_case``. For code, see:
--
--.. kernel-doc:: include/kunit/test.h
--	:identifiers: kunit_case
-+struct kunit_case.
- 
- .. note:
- 	``generate_params`` is optional for non-parameterized tests.
-@@ -152,18 +149,12 @@ Parameterized Tests
- Each KUnit parameterized test is associated with a collection of
- parameters. The test is invoked multiple times, once for each parameter
- value and the parameter is stored in the ``param_value`` field.
--The test case includes a ``KUNIT_CASE_PARAM()`` macro that accepts a
-+The test case includes a KUNIT_CASE_PARAM() macro that accepts a
- generator function.
- The generator function is passed the previous parameter and returns the next
- parameter. It also provides a macro to generate common-case generators based on
- arrays.
- 
--For code, see:
--
--.. kernel-doc:: include/kunit/test.h
--	:identifiers: KUNIT_ARRAY_PARAM
--
--
- kunit_tool (Command Line Test Harness)
- ======================================
- 
--- 
-2.35.1.1021.g381101b075-goog
+## Test Regressions (compared to v5.16.17)
+No test regressions found.
 
+## Metric Regressions (compared to v5.16.17)
+No metric regressions found.
+
+## Test Fixes (compared to v5.16.17)
+No test fixes found.
+
+## Metric Fixes (compared to v5.16.17)
+No metric fixes found.
+
+## Test result summary
+total: 104880, pass: 88707, fail: 1055, skip: 13919, xfail: 1199
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 293 total, 293 passed, 0 failed
+* arm64: 43 total, 43 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 42 total, 42 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 54 passed, 6 failed
+* riscv: 27 total, 22 passed, 5 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 43 total, 43 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* timesync-off
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

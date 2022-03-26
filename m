@@ -2,154 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E60CD4E7E4A
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF03B4E7E45
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiCZBAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 21:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
+        id S229662AbiCZBAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 21:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiCZBAk (ORCPT
+        with ESMTP id S229451AbiCZBAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 21:00:40 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6128A49904
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:59:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648256345; x=1679792345;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TRUVCM/aMJLPA+tAMYWt4cWZ/SwbCEkOWrhrehVr6CY=;
-  b=e2JC1j0dQhHOYkztiHjS33S6svwAzDCHUXBdr9WNfXo2pLvZqs6KIGja
-   osle/U6YgL5YjLLbjlvd80NjvVDPepCIsovBCZvVWMmrax4q50ltMDLMi
-   DrCxk6IGXeNa2a96l4E9SxpxQYehHs9aXu15SavjnNEIGoK+TW7Nh/VtW
-   l7BWGJEyc5T5vtinrro2c9IDrxipTa/2IBAAtoXQ5s3RZ4woWXzk228dj
-   AfjUzL4w+4CqSmmEjEgz0vXU6D4eZGVSSgSz0fbuMZ++8tF3BjCAPXx6n
-   OAuAStqbFsIFRQQDl6+lewyxKIW8W/sdmrI81MkQZulg+rA4ad22dfpSJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="240901242"
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="240901242"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 17:59:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="584637760"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 25 Mar 2022 17:59:02 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nXulh-000Mp8-SB; Sat, 26 Mar 2022 00:59:01 +0000
-Date:   Sat, 26 Mar 2022 08:58:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org
-Cc:     kbuild-all@lists.01.org, Zhi Wang <zhi.a.wang@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Vivi Rodrigo <rodrigo.vivi@intel.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v7 1/3] i915/gvt: Separate the MMIO tracking table from
- GVT-g
-Message-ID: <202203260829.JUQaTzGt-lkp@intel.com>
-References: <20220325175251.167164-1-zhi.a.wang@intel.com>
+        Fri, 25 Mar 2022 21:00:36 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9C91C12D;
+        Fri, 25 Mar 2022 17:59:00 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id q5so12317927ljb.11;
+        Fri, 25 Mar 2022 17:59:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=BVtfYYgl1UiY9NrkHOYeYSomk3TpHw4O37jlKHosSiU=;
+        b=Th9DNt97HzvoKHP8lH45GNLnuJWlG0caZKOIXgV3PiZr0pI5BTWn00IwtBcJZoHFVv
+         D3josQ3GamCEloX40jBWStzTLse6JA9jkernLs/Pm0a5FQ16dvmn1lX62EPxgCVA5WvQ
+         KQ6qAMogJY/qDEvsXxD4qXlqCyOiatjkDyN3+Dk1tzkh31FDn/pE4YOV8dF6XUl0jO8X
+         ymEP1CAF2vkbLk3TWpQQix1UBtuEHlYKJK0TBrRQqPt6AbyLE685AkmhEBF5Wta+EOw0
+         wsjZLxdctv0mk0s4BVlODtxqtPCZaxKF92OOKpIQKGzYIGx62SE73/uZ/lvJYj5rdoTN
+         HbtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BVtfYYgl1UiY9NrkHOYeYSomk3TpHw4O37jlKHosSiU=;
+        b=k1PJV1pwdTPqNYe3Mlde2wAD/dK3+E3znyuvFJo55+K4YqChchT48uFSiFl9+zbUfy
+         IEc7UlOiP0Lek/D/4Suru0xyIO2/5zBGEzs9HajbcJ/dkusSJcguv1WH3IRK8dF+GCse
+         mQVRqurhBTHBZZjLvn8+/KDxRuOejLEuAm2DAKKS4aTXDGmPzrZL4BUpxij2DR8lZv6J
+         CdfP0O32BnznJ1k8F33XuFmD45X723qRMf18ktVDAGiC0BjYVMv+TFr1M+BDtBdUgGa9
+         9u7Ais2b2zYMsCMqTiNYuZNdPbQkWkD7546qEcBLJvAXbG4FFrKFOJZrCV/762msNWk8
+         xreQ==
+X-Gm-Message-State: AOAM5304SNhBCAz4R3FCejm67OGXVOI7gVNW7Lb2wzNVcuc3x7NtpDPf
+        iTd2HUs1fb1Lm2B10RLZOJFau5jz3S4bLlrjva8=
+X-Google-Smtp-Source: ABdhPJwW9UYq9zgWfSnh4zwUD8aTy+59ByBfInkR0bCYS67gQfGldlsfbRMYnds5gKIUKX9uhK3nhMWBwkPjtw3HM/w=
+X-Received: by 2002:a05:651c:1192:b0:246:1d6b:d323 with SMTP id
+ w18-20020a05651c119200b002461d6bd323mr10255003ljo.360.1648256338971; Fri, 25
+ Mar 2022 17:58:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220325175251.167164-1-zhi.a.wang@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <1648170401-6351-1-git-send-email-u0084500@gmail.com>
+ <1648170401-6351-3-git-send-email-u0084500@gmail.com> <d2b431f8-9197-4a42-4ee2-4e771e20e0aa@kernel.org>
+ <CADiBU39RGQj1-+yK18mZf3MR78KACKqb2kAxkCFKGXKpJ6Nqxw@mail.gmail.com>
+ <e4a15ceb-c013-96be-48d1-e65267400463@kernel.org> <CADiBU3-gwsh5v1NLUYr_ovXwpUxQqgR61f-Jpc3G-zHs_yV4uw@mail.gmail.com>
+ <03999953-77c5-0272-7477-ab8a069b3671@kernel.org> <CADiBU38zYM1Rw2inTJ_Pu2eWKKqp2Ybb-_+JUJfxfmLNu=kYvw@mail.gmail.com>
+ <cf67f944-47a7-f3b5-9d83-f0f51dc4e954@kernel.org> <Yj3oXuijuZY1gG9X@sirena.org.uk>
+ <d2f220ae-c62c-a7f7-23cc-c33956c2eeaf@kernel.org>
+In-Reply-To: <d2f220ae-c62c-a7f7-23cc-c33956c2eeaf@kernel.org>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Sat, 26 Mar 2022 08:58:47 +0800
+Message-ID: <CADiBU3-3QLi5PVUymk_VCbF+-uVSqjoP9jLGL+R=PQ-S=Y=_AA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] regulator: rt5759: Add support for Richtek RT5759
+ DCDC converter
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhi,
+Krzysztof Kozlowski <krzk@kernel.org> =E6=96=BC 2022=E5=B9=B43=E6=9C=8826=
+=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=8812:08=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> On 25/03/2022 17:05, Mark Brown wrote:
+> > On Fri, Mar 25, 2022 at 04:55:25PM +0100, Krzysztof Kozlowski wrote:
+> >
+> >> You mention board, some of_device_get_match_data() so you talk about
+> >> runtime. maybe_unused is not about runtime. It is about build time.
+> >
+> >> The code you sent cannot have this structure unused. If you think
+> >> otherwise, please provide argument, but not about runtime (again). You
+> >> can for example build it without OF and see...
+> >
+> > If you use of_match_ptr() in the struct device (which is good practice,
+> > didn't check if this driver does it) then that causes the ID table to b=
+e
+> > unreferenced as of_match_ptr() compiles to NULL when !OF.
+>
+> Yep, then the case is obvious, but the driver does not use it.
+>
+> +static struct i2c_driver rt5759_driver =3D {
+> +       .driver =3D {
+> +               .name =3D "rt5759",
+> +               .of_match_table =3D rt5759_device_table,
+>
+> Therefore the of_device_id cannot be unused, so __maybe_unused is not
+> correct. This can be fixed in two different ways, which we did not
+> discuss yet...
+>
+As my past experience, '__maybe_unused' must be added to fix W=3D1 build
+warning when OF=3Dn
+You can refer to the below link.
+https://lore.kernel.org/lkml/1598234713-8532-1-git-send-email-u0084500@gmai=
+l.com/
 
-I love your patch! Yet something to improve:
+And it's based on 'of_match_ptr' is used.
 
-[auto build test ERROR on drm-intel/for-linux-next]
-[also build test ERROR on drm-tip/drm-tip drm/drm-next next-20220325]
-[cannot apply to tegra-drm/drm/tegra/for-next airlied/drm-next v5.17]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I tried to remove only __maybe_unused and build with x86 config  that
+CONFIG_OF=3Dn.
+There's no warning or error message when compiling the rt5759 source code.
 
-url:    https://github.com/0day-ci/linux/commits/Zhi-Wang/i915-gvt-Separate-the-MMIO-tracking-table-from-GVT-g/20220326-015627
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-config: x86_64-randconfig-c002 (https://download.01.org/0day-ci/archive/20220326/202203260829.JUQaTzGt-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/8203f91121efdcc910bde0bc4fe5ea678bdaaa5b
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Zhi-Wang/i915-gvt-Separate-the-MMIO-tracking-table-from-GVT-g/20220326-015627
-        git checkout 8203f91121efdcc910bde0bc4fe5ea678bdaaa5b
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
+If so, I will remove only '__maybe_unused'.
+May I ask whether 'of_match_ptr'  need to be added or not?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/i915/i915_driver.c:92:
->> drivers/gpu/drm/i915/intel_gvt.h:66:15: error: no previous prototype for 'intel_gvt_get_device_type' [-Werror=missing-prototypes]
-      66 | unsigned long intel_gvt_get_device_type(struct drm_i915_private *i915)
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/intel_gvt.h:71:41: error: 'struct intel_gvt_mmio_table_iter' declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
-      71 | int intel_gvt_iterate_mmio_table(struct intel_gvt_mmio_table_iter *iter)
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/i915/intel_gvt.h:71:5: error: no previous prototype for 'intel_gvt_iterate_mmio_table' [-Werror=missing-prototypes]
-      71 | int intel_gvt_iterate_mmio_table(struct intel_gvt_mmio_table_iter *iter)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
---
-   In file included from drivers/gpu/drm/i915/gvt/gvt.h:39,
-                    from <command-line>:
->> drivers/gpu/drm/i915/intel_gvt.h:66:15: error: no previous prototype for 'intel_gvt_get_device_type' [-Werror=missing-prototypes]
-      66 | unsigned long intel_gvt_get_device_type(struct drm_i915_private *i915)
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/intel_gvt.h:71:41: error: 'struct intel_gvt_mmio_table_iter' declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
-      71 | int intel_gvt_iterate_mmio_table(struct intel_gvt_mmio_table_iter *iter)
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/i915/intel_gvt.h:71:5: error: no previous prototype for 'intel_gvt_iterate_mmio_table' [-Werror=missing-prototypes]
-      71 | int intel_gvt_iterate_mmio_table(struct intel_gvt_mmio_table_iter *iter)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/i915/gvt/gvt.h:43,
-                    from <command-line>:
->> drivers/gpu/drm/i915/gvt/mmio.h:74:15: error: conflicting types for 'intel_gvt_get_device_type'
-      74 | unsigned long intel_gvt_get_device_type(struct intel_gvt *gvt);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/i915/gvt/gvt.h:39,
-                    from <command-line>:
-   drivers/gpu/drm/i915/intel_gvt.h:66:15: note: previous definition of 'intel_gvt_get_device_type' was here
-      66 | unsigned long intel_gvt_get_device_type(struct drm_i915_private *i915)
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
-
-
-vim +/intel_gvt_get_device_type +66 drivers/gpu/drm/i915/intel_gvt.h
-
-    65	
-  > 66	unsigned long intel_gvt_get_device_type(struct drm_i915_private *i915)
-    67	{
-    68		return 0;
-    69	}
-    70	
-  > 71	int intel_gvt_iterate_mmio_table(struct intel_gvt_mmio_table_iter *iter)
-    72	{
-    73		return 0;
-    74	}
-    75	#endif
-    76	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Best regards,
+> Krzysztof

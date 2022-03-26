@@ -2,55 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98DD84E800D
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 09:41:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9E54E800F
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 09:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbiCZIm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 04:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
+        id S232156AbiCZInR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 04:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiCZImz (ORCPT
+        with ESMTP id S229491AbiCZInQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 04:42:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FE495A16
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 01:41:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 570DBB80159
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 08:41:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 362B5C2BBE4;
-        Sat, 26 Mar 2022 08:41:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648284076;
-        bh=MzvQcR96gyo7RqQQpE892/lFN19x54FxFHC5aLVYzKw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=rXVumBjYyJgGoDJQvG0zZZrIvOjRYcNSmF9H+qWFcfBXO6sc0IFlQKcEXJczfuhoH
-         1Zp/RMudRTfydYWOjbLhkv27ZlBT2GU6glq06x7b1SGqZwxb1gApbpNaYEIZJlcdJV
-         slSm3qQlpjDuC8UkzC7yBlA/QmaN87YCZQswSWnkm9hwekKL4z3CH/H3JIbjVTVz7t
-         tvvJfMXgCSzS6G+NVRn8ySnBT/hSw6tyfDtOcBY+7XjkqZ55K9hdZNaWDZXu5bmtBG
-         /vP+FuQD/cYo9HgLFnEfY3WoFyZB8DpJaH8gVrgbd6YBXXa26Izs4E9a8fVpLiOoRx
-         4J613z2NQZk3g==
-Message-ID: <c1101316-fd59-812c-aa4a-a0fa2d2004eb@kernel.org>
-Date:   Sat, 26 Mar 2022 16:41:10 +0800
+        Sat, 26 Mar 2022 04:43:16 -0400
+Received: from mxout03.lancloud.ru (mxout03.lancloud.ru [45.84.86.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC21DB6E7D;
+        Sat, 26 Mar 2022 01:41:35 -0700 (PDT)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru DA04E20A8247
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH v1 5/5] pinctrl: armada-37xx: Replace custom code by
+ gpiochip_count() call
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+CC:     Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+References: <20220325200338.54270-1-andriy.shevchenko@linux.intel.com>
+ <20220325200338.54270-5-andriy.shevchenko@linux.intel.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <3415996d-e8b5-2416-fb66-e65779a9b507@omp.ru>
+Date:   Sat, 26 Mar 2022 11:41:31 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [f2fs-dev] [PATCH] f2fs: remove unnecessary f2fs_lock_op in
- f2fs_new_inode
+In-Reply-To: <20220325200338.54270-5-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220325181850.513023-1-jaegeuk@kernel.org>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220325181850.513023-1-jaegeuk@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,15 +67,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/26 2:18, Jaegeuk Kim wrote:
-> This can be removed, since f2fs_alloc_nid() actually doesn't require to block
-> checkpoint and __f2fs_build_free_nids() is covered by nm_i->nat_tree_lock.
+Hello!
+
+On 3/25/22 11:03 PM, Andy Shevchenko wrote:
+
+> Since we have generic function to count GPIO controller nodes
+> under given device, there is no need to open code it. Replace
+> custom code by gpiochip_count() call.
 > 
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/pinctrl/mvebu/pinctrl-armada-37xx.c | 24 +++++++++------------
+>  1 file changed, 10 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
+> index 08cad14042e2..ba94125f6566 100644
+> --- a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
+> +++ b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
+> @@ -728,22 +728,18 @@ static int armada_37xx_irqchip_register(struct platform_device *pdev,
+>  	struct gpio_irq_chip *girq = &gc->irq;
+>  	struct device *dev = &pdev->dev;
+>  	struct device_node *np;
+> -	int ret = -ENODEV, i, nr_irq_parent;
+> +	unsigned int nr_child_nodes, i;
+> +	int ret;
+>  
+>  	/* Check if we have at least one gpio-controller child node */
+> -	for_each_child_of_node(dev->of_node, np) {
+> -		if (of_property_read_bool(np, "gpio-controller")) {
+> -			ret = 0;
+> -			break;
+> -		}
+> -	}
+> -	if (ret)
+> -		return dev_err_probe(dev, ret, "no gpio-controller child node\n");
+> +	nr_child_nodes = gpiochip_count(dev);
+> +	if (!nr_child_nodes)
+> +		return dev_err_probe(dev, -ENODEV, "no gpio-controller child node\n");
+>  
+> -	nr_irq_parent = of_irq_count(np);
+>  	spin_lock_init(&info->irq_lock);
+>  
+> -	if (!nr_irq_parent) {
+> +	nr_child_nodes = of_irq_count(np);
 
-Looks fine, but still it needs more test to check stability w/ the patch. ;)
+   Mhm, 'np' is no longer assigned to at this point...
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+> +	if (!nr_child_nodes) {
+>  		dev_err(dev, "invalid or no IRQ\n");
+>  		return 0;
+>  	}
+[...]
 
-Thanks,
+MBR, Sergey

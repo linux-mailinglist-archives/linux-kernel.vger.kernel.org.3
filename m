@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7806D4E8167
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 15:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B72E4E816A
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 15:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233260AbiCZO0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 10:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
+        id S233271AbiCZOa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 10:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233254AbiCZO0C (ORCPT
+        with ESMTP id S232561AbiCZOaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 10:26:02 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E728BDF2A
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 07:24:25 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id j2so18766675ybu.0
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 07:24:25 -0700 (PDT)
+        Sat, 26 Mar 2022 10:30:55 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213F533E2B
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 07:29:19 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id y38so16075149ybi.8
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 07:29:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=nsd9yIj1njT8T81VQFH5FbJtkddxsthtwMm7eiUPmAk=;
-        b=TBmaNVHDdEGroqXdWD1QFZPbmAAumrhvVIuQpohm28CjJmTWF+Q6dNXax7Ip+a7GW3
-         ay3hwWASN38U4401KTRCurPuFnK/HskKAGRe+2BLCSPCZSavq8JfrnJJG06pOXCpyNi7
-         1eiNKc0vgp0jYJPQWMDJCuLWhQ77RXafj0Ycya1mwP+rAWxGffCAGpoxHh8K4Qvti2mf
-         qm+nQJNmzi2SvYqQQosujfd0nzWzlqsZgHb036UFE4Nh3i3nLyRj8vjUYyj1OukyYXBT
-         hzSwqvFQG2YhALnWc1c19fGv3YiFepLIdjGVk+jvH4q6SRhr++c+PdKMAbNPwGMaAtGo
-         EUfg==
+        bh=PZO5k4b3iAg7dSwvTOe/zKIDAPMugArOIyYYeIpfEjs=;
+        b=vs+9p5MbrYunL1NdA2z9rHLYbjZwZT6lyGs8PMj1MXf2euTGnyZJN919GQF/POxC7c
+         4UG5aaCkwwJIEOp+QtVpZAp8QQJFKOpo3OmRMmFrQAODYk6recGAkTg5JmZWbz02G1dR
+         KHZziLDR7ci4Zx8JZtaKsFJApTAFCS3RfBPHH8n3yD29YNlNtC3joaxhDaDEEZt3TC/A
+         Srrk77YBJzlFIgwHyWjCcto6z/ybzkqxq9/Nv7Jfs6iauUaBDi9Y4SZLIFhY3Gw/24lK
+         pNrxAIjPAm3OJmaehoFreomK9hvDbu/tDMZ0spw91gD0AVSXc1+4ltutfTECge+iUlmf
+         O9+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nsd9yIj1njT8T81VQFH5FbJtkddxsthtwMm7eiUPmAk=;
-        b=abHrK7/DJJbH0GverxyGHhugnK68A7mtUXHNbqyzXro9pq8/Q0Cgaasx7z0sfUdTXu
-         gG1G3A8GLA6sumHlQbHXHb5txxDpABZhdaoph/KBAKu6kms2TCbTYuh/XLPZj0BEIABg
-         icaq2LjRvrDkaf24XXHpeA8vbz98yUFnrBHiuwbJBCM22u+xOqgwAgnq7E47VH5r8O4H
-         Z/sLX+Y+mAuiUtepdzBvqYvGQiW7fpPnUO8UiQdzsVGxzBfvIVMB9+119YcsUiCr2Zru
-         lii5c18ZWd4xLfwdRKselSlI8cUGH1x7colwt2BLRdwXEZq0hc/j9EZ1i2Ki3DCQyHPd
-         rk5Q==
-X-Gm-Message-State: AOAM531h886wfxVcSoIMhlYzmaxSx/dhlnTZIFXubZZL6D/b3hqYJg0K
-        efLu+lijpet1DHztn1pDC4JGp8NcFJgeeDICu72aUg==
-X-Google-Smtp-Source: ABdhPJwXCAmIiZyiFlvW4ctqK9cr9f8LOvWIMbg4ixgtIWEmsG03wQmbmXowVufblsJLdHGbxkug2rlY4HK7RW7bS50=
-X-Received: by 2002:a25:42c9:0:b0:634:1a46:e5c1 with SMTP id
- p192-20020a2542c9000000b006341a46e5c1mr15757173yba.474.1648304663867; Sat, 26
- Mar 2022 07:24:23 -0700 (PDT)
+        bh=PZO5k4b3iAg7dSwvTOe/zKIDAPMugArOIyYYeIpfEjs=;
+        b=FAWDOpwPbmKn3wZBlKECm+sfnm1UlJ+3ilQWdLr/8WCFXNiCHIvJuCIai1IUdiHoJI
+         OkV8y26yoYjOucO+h5wmouLnbnOHVXXDDtk2e7qmEIZrr6Fz2zIvI31tO7VqTWxlaQhS
+         3+okKdxDatZB1KaRhvyq7UvZOqj3tsDQX9q1rh+qLB6xMoWc8hiq+imbHnPmYLPtxNSy
+         BTzvBKDK3KfbDkH5h7hUZ3P24iQkDuxlwVeWS7dpAPScMh5yZhH3NDrQ3Vq0l9PSgR4y
+         ibgc+Ae9QqfRRII12fc9VMv0D4uVBYv56SJZkK8gXuX9smSbLj/jSmgq/8SVt5mfQUMP
+         +AsA==
+X-Gm-Message-State: AOAM533nOvLjyq+amyMOsyxjjXfgVTXteuXrn6iavPlNZPfKRwFpSOXL
+        2cEBrAbczsU2JI1twwbuIyh3VCtRyWIiEl3XYWx8RQ==
+X-Google-Smtp-Source: ABdhPJx9+tCMbyG/zZlmJz//iHM/DDoF2l/wEVtEJiWodr5joCJmmRHpTEDWqOYwZa9ndbNyJ3w7TraX/QYZX8hz8/A=
+X-Received: by 2002:a25:9909:0:b0:624:57e:d919 with SMTP id
+ z9-20020a259909000000b00624057ed919mr15454071ybn.494.1648304958239; Sat, 26
+ Mar 2022 07:29:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220325150417.010265747@linuxfoundation.org>
-In-Reply-To: <20220325150417.010265747@linuxfoundation.org>
+References: <20220325150416.756136126@linuxfoundation.org>
+In-Reply-To: <20220325150416.756136126@linuxfoundation.org>
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 26 Mar 2022 19:54:12 +0530
-Message-ID: <CA+G9fYtzUJLWFKjfe+vJMbjPV2jfThUr6vqFMb19B9om0MBSQQ@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/20] 4.19.237-rc1 review
+Date:   Sat, 26 Mar 2022 19:59:07 +0530
+Message-ID: <CA+G9fYumOmdTw=8pck4jt+r1VGej180d4xBjwT4jSm7E+0YrDw@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/17] 4.14.274-rc1 review
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
         torvalds@linux-foundation.org, akpm@linux-foundation.org,
@@ -63,7 +63,7 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,11 +71,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Mar 2022 at 20:37, Greg Kroah-Hartman
+On Fri, 25 Mar 2022 at 20:36, Greg Kroah-Hartman
 <gregkh@linuxfoundation.org> wrote:
 >
-> This is the start of the stable review cycle for the 4.19.237 release.
-> There are 20 patches in this series, all will be posted as a response
+> This is the start of the stable review cycle for the 4.14.274 release.
+> There are 17 patches in this series, all will be posted as a response
 > to this one.  If anyone has any issues with these being applied, please
 > let me know.
 >
@@ -84,10 +84,10 @@ On Fri, 25 Mar 2022 at 20:37, Greg Kroah-Hartman
 >
 > The whole patch series can be found in one patch at:
 >         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.237-rc1.gz
+4.14.274-rc1.gz
 > or in the git tree and branch at:
 >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
+-rc.git linux-4.14.y
 > and the diffstat can be found below.
 >
 > thanks,
@@ -100,49 +100,47 @@ No regressions on arm64, arm, x86_64, and i386.
 Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
 ## Build
-* kernel: 4.19.237-rc1
+* kernel: 4.14.274-rc1
 * git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
 rc.git
-* git branch: linux-4.19.y
-* git commit: 3a6a2212011395b420629a2d46310bd935d18c76
-* git describe: v4.19.236-21-g3a6a22120113
+* git branch: linux-4.14.y
+* git commit: 9907232a90d4b20f873c515dce363941cc1a43b0
+* git describe: v4.14.273-18-g9907232a90d4
 * test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.236-21-g3a6a22120113
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.273-18-g9907232a90d4
 
-## Test Regressions (compared to v4.19.234-31-g4a3043563aa9)
+## Test Regressions (compared to v4.14.273)
 No test regressions found.
 
-## Metric Regressions (compared to v4.19.234-31-g4a3043563aa9)
+## Metric Regressions (compared to v4.14.273)
 No metric regressions found.
 
-## Test Fixes (compared to v4.19.234-31-g4a3043563aa9)
+## Test Fixes (compared to v4.14.273)
 No test fixes found.
 
-## Metric Fixes (compared to v4.19.234-31-g4a3043563aa9)
+## Metric Fixes (compared to v4.14.273)
 No metric fixes found.
 
 ## Test result summary
-total: 84118, pass: 67440, fail: 1087, skip: 13378, xfail: 2213
+total: 76720, pass: 60907, fail: 917, skip: 12527, xfail: 2369
 
 ## Build Summary
-* arm: 281 total, 275 passed, 6 failed
-* arm64: 39 total, 39 passed, 0 failed
+* arm: 280 total, 270 passed, 10 failed
+* arm64: 35 total, 35 passed, 0 failed
 * dragonboard-410c: 1 total, 1 passed, 0 failed
 * hi6220-hikey: 1 total, 1 passed, 0 failed
 * i386: 19 total, 19 passed, 0 failed
 * juno-r2: 1 total, 1 passed, 0 failed
-* mips: 27 total, 27 passed, 0 failed
-* powerpc: 60 total, 54 passed, 6 failed
-* s390: 12 total, 12 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* powerpc: 60 total, 16 passed, 44 failed
 * sparc: 12 total, 12 passed, 0 failed
 * x15: 1 total, 1 passed, 0 failed
 * x86: 1 total, 1 passed, 0 failed
-* x86_64: 38 total, 38 passed, 0 failed
+* x86_64: 34 total, 34 passed, 0 failed
 
 ## Test suites summary
 * fwts
-* igt-gpu-tools
 * kselftest-android
 * kselftest-arm64
 * kselftest-bpf
@@ -169,11 +167,6 @@ total: 84118, pass: 67440, fail: 1087, skip: 13378, xfail: 2213
 * kselftest-lib
 * kselftest-livepatch
 * kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
 * kselftest-net
 * kselftest-netfilter
 * kselftest-nsfs

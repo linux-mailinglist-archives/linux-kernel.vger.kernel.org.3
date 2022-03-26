@@ -2,59 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C134E7FB7
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 08:10:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8192E4E7FB5
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 08:09:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231759AbiCZHLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 03:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
+        id S231646AbiCZHLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 03:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbiCZHLk (ORCPT
+        with ESMTP id S230024AbiCZHLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 03:11:40 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4BE126D124
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 00:10:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648278604; x=1679814604;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3XkKh4q0FSbrwEfEJ2bDjGkElgUoUsT2LDobzniVLOc=;
-  b=JQ4Z0e9WQpNDNCEGXQhL0Nfsw2f2f8kW7GLWAWPUF2GnLT/0SYWzN2zf
-   ZzqelFMfG8IcL5XVlXSb8Xj2DSch4L/iJ3KL7WcgxQc3W4/yxlNyIGWld
-   JjVHQHZB7eSfCXqQg/9gxe5NYDWeN/VsFzTsbyAaHGIgKOrFhXmm+7hoi
-   HUcJxBh/Px8vqqGeKP3sHGXu47TbWJ7zQZvaQ5xj+Qouw3BbJKar+dL8P
-   hFZM/vFkI6Ct4rgFzNIlh5YJUFwpsZFrsbZEDW4x+ZFvjwGPlvDvMB2rS
-   L01NGdEBWPJYX43fB2D/uOJcyXuQc5t+z1/XdfgzPjIDGHJIqw73woLmg
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="258953146"
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="258953146"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 00:10:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="520443144"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 26 Mar 2022 00:10:03 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nY0Yk-000N6r-Ha; Sat, 26 Mar 2022 07:10:02 +0000
-Date:   Sat, 26 Mar 2022 15:09:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     James Morse <james.morse@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: arch/arm64/kernel/proton-pack.c:953 this_cpu_set_vectors() warn:
- unsigned 'slot' is never less than zero.
-Message-ID: <202203261509.y4KJfZNv-lkp@intel.com>
+        Sat, 26 Mar 2022 03:11:10 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167FA26D124
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 00:09:35 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id bc27so8191591pgb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 00:09:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aY7Qm3duZzz4/ANMI52LqTxkdMO5YlOW9+CWZKbNUDQ=;
+        b=I05Mab032aTpoTeimJ2ZOfF1xo8R9P0uXq5lBgIRm+2ywDCJ7TRBiojiTa2Sl4OyrW
+         ENUppUa56EY/52pmYjwVkvLFtLbIrXRiqjns6jQiDFovrx+lkvG4JwIweL0YU8mdQjko
+         42818OZdanjVU+H50AQcXJKz2sx+o0LKLoabM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aY7Qm3duZzz4/ANMI52LqTxkdMO5YlOW9+CWZKbNUDQ=;
+        b=2YlNK0LCsxwU5lB/EWiq0ZRG7F88GgCkchK45VN3Fr6cl8QVXzWMEH9SwSTgwQSVGb
+         r5KYYVCh5rcmOr63MgchwHH5H9EewiH2o6lMx9WTTgfv2VrO9SZ6VddxYSbTDlvI6pqA
+         U7x8OQF16GpJaabxVNjieswIVYGR1cHEfaumfBpOAKU95P4cSzj3Iw2lq4k+ry9y6JHo
+         UU1EtFCfgJ5XkyXEwnjh9QPjroJ4PUC0jgSnDLk2BqGdXtRf0A7Z8z9WdaZ1HQUOgLDb
+         e2XUXqvmfFhc56a5bgxmj8aUpUKlH9ykTDy8EOoCPkwzKwh9proxnMG50SSo3sxwUiXP
+         hFwA==
+X-Gm-Message-State: AOAM533madUaGSM1Mphu3k6WV6BSXq3wXOznxMzWg7/aAVIgkcGQZn7o
+        OoGqrTrHZ2HT6UPth1biFC/kjg==
+X-Google-Smtp-Source: ABdhPJxLT1yAk+YxicpfYCc3ehIfT2Bhk4TwGg5YlmuZKXxtcXZhn3FYsvFWkuU6byOwpgW5/SuX6g==
+X-Received: by 2002:a05:6a00:815:b0:4fb:e46:511c with SMTP id m21-20020a056a00081500b004fb0e46511cmr7185978pfk.54.1648278574592;
+        Sat, 26 Mar 2022 00:09:34 -0700 (PDT)
+Received: from localhost (0.223.81.34.bc.googleusercontent.com. [34.81.223.0])
+        by smtp.gmail.com with UTF8SMTPSA id j6-20020a17090a588600b001c699d77503sm7565679pji.2.2022.03.26.00.09.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Mar 2022 00:09:33 -0700 (PDT)
+From:   Ying Hsu <yinghsu@chromium.org>
+To:     marcel@holtmann.org
+Cc:     chromeos-bluetooth-upstreaming@chromium.org,
+        Ying Hsu <yinghsu@chromium.org>,
+        syzbot+2bef95d3ab4daa10155b@syzkaller.appspotmail.com,
+        Joseph Hwang <josephsih@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Desmond Cheong Zhi Xi <desmondcheongzx@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH v2] Bluetooth: fix dangling sco_conn and use-after-free in sco_sock_timeout
+Date:   Sat, 26 Mar 2022 07:09:28 +0000
+Message-Id: <20220326070853.v2.1.I67f8ad854ac2f48701902bfb34d6e2070011b779@changeid>
+X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,43 +75,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   52d543b5497cf31d6baeb0bcfe5a5474c3238578
-commit: 558c303c9734af5a813739cd284879227f7297d2 arm64: Mitigate spectre style branch history side channels
-date:   4 weeks ago
-config: arm64-randconfig-m031-20220325 (https://download.01.org/0day-ci/archive/20220326/202203261509.y4KJfZNv-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
+Connecting the same socket twice consecutively in sco_sock_connect()
+could lead to a race condition where two sco_conn objects are created
+but only one is associated with the socket. If the socket is closed
+before the SCO connection is established, the timer associated with the
+dangling sco_conn object won't be canceled. As the sock object is being
+freed, the use-after-free problem happens when the timer callback
+function sco_sock_timeout() accesses the socket. Here's the call trace:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+dump_stack+0x107/0x163
+? refcount_inc+0x1c/
+print_address_description.constprop.0+0x1c/0x47e
+? refcount_inc+0x1c/0x7b
+kasan_report+0x13a/0x173
+? refcount_inc+0x1c/0x7b
+check_memory_region+0x132/0x139
+refcount_inc+0x1c/0x7b
+sco_sock_timeout+0xb2/0x1ba
+process_one_work+0x739/0xbd1
+? cancel_delayed_work+0x13f/0x13f
+? __raw_spin_lock_init+0xf0/0xf0
+? to_kthread+0x59/0x85
+worker_thread+0x593/0x70e
+kthread+0x346/0x35a
+? drain_workqueue+0x31a/0x31a
+? kthread_bind+0x4b/0x4b
+ret_from_fork+0x1f/0x30
 
-smatch warnings:
-arch/arm64/kernel/proton-pack.c:953 this_cpu_set_vectors() warn: unsigned 'slot' is never less than zero.
+Link: https://syzkaller.appspot.com/bug?extid=2bef95d3ab4daa10155b
+Reported-by: syzbot+2bef95d3ab4daa10155b@syzkaller.appspotmail.com
+Fixes: e1dee2c1de2b ("Bluetooth: fix repeated calls to sco_sock_kill")
+Signed-off-by: Ying Hsu <yinghsu@chromium.org>
+Reviewed-by: Joseph Hwang <josephsih@chromium.org>
+---
+Tested this commit using a C reproducer on qemu-x86_64 for 8 hours.
 
-vim +/slot +953 arch/arm64/kernel/proton-pack.c
+Changes in v2:
+- Adding Link, Reported-by, and Fixes tags in comment.
 
-   948	
-   949	static void this_cpu_set_vectors(enum arm64_bp_harden_el1_vectors slot)
-   950	{
-   951		const char *v = arm64_get_bp_hardening_vector(slot);
-   952	
- > 953		if (slot < 0)
-   954			return;
-   955	
-   956		__this_cpu_write(this_cpu_vector, v);
-   957	
-   958		/*
-   959		 * When KPTI is in use, the vectors are switched when exiting to
-   960		 * user-space.
-   961		 */
-   962		if (arm64_kernel_unmapped_at_el0())
-   963			return;
-   964	
-   965		write_sysreg(v, vbar_el1);
-   966		isb();
-   967	}
-   968	
+ net/bluetooth/sco.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
+diff --git a/net/bluetooth/sco.c b/net/bluetooth/sco.c
+index 8eabf41b2993..380c63194736 100644
+--- a/net/bluetooth/sco.c
++++ b/net/bluetooth/sco.c
+@@ -574,19 +574,24 @@ static int sco_sock_connect(struct socket *sock, struct sockaddr *addr, int alen
+ 	    addr->sa_family != AF_BLUETOOTH)
+ 		return -EINVAL;
+ 
+-	if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND)
+-		return -EBADFD;
++	lock_sock(sk);
++	if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND) {
++		err = -EBADFD;
++		goto done;
++	}
+ 
+-	if (sk->sk_type != SOCK_SEQPACKET)
+-		return -EINVAL;
++	if (sk->sk_type != SOCK_SEQPACKET) {
++		err = -EINVAL;
++		goto done;
++	}
+ 
+ 	hdev = hci_get_route(&sa->sco_bdaddr, &sco_pi(sk)->src, BDADDR_BREDR);
+-	if (!hdev)
+-		return -EHOSTUNREACH;
++	if (!hdev) {
++		err = -EHOSTUNREACH;
++		goto done;
++	}
+ 	hci_dev_lock(hdev);
+ 
+-	lock_sock(sk);
+-
+ 	/* Set destination address and psm */
+ 	bacpy(&sco_pi(sk)->dst, &sa->sco_bdaddr);
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1.1021.g381101b075-goog
+

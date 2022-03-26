@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12D64E7FED
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 09:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB49A4E7FEF
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 09:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbiCZIJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 04:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
+        id S232023AbiCZIJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 04:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232017AbiCZIJV (ORCPT
+        with ESMTP id S232019AbiCZIJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 04:09:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD72632EFE;
-        Sat, 26 Mar 2022 01:07:44 -0700 (PDT)
+        Sat, 26 Mar 2022 04:09:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193E232EF2;
+        Sat, 26 Mar 2022 01:07:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F1A9B81123;
-        Sat, 26 Mar 2022 08:07:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5255DC34111;
-        Sat, 26 Mar 2022 08:07:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BAC4DB8006F;
+        Sat, 26 Mar 2022 08:07:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A69E8C34116;
+        Sat, 26 Mar 2022 08:07:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648282062;
-        bh=gr9HchemhlHv/PQFsx5RRjuRl/DHTMwiXnwOfg3j+ec=;
+        s=k20201202; t=1648282065;
+        bh=aXm+/EMiPGTBOXkMG0o+LiBNARi0puGc3dM/fhCENmI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=It5KV9kPNYm7RhNQVTe7cIzRFDFdtthuOV8V4V004ekTLCBKbgBsDHEdVzqnRRCOK
-         a97Cs5YHsROi9+/708bNV9zzIjZC0xPuIhvrYZV2u0WRE/7b3JficOgxM8WfQtVmcs
-         ID1y62wPWqKzlI5ur+cm5EO0L+FUFh8r42iQt+RF0Grz7nNWXLKZCCz9utTnarMl9p
-         IPtBp+sbHXZaTKB04R1ndbJaS2C62gUD/phVtFMXTOW5PTilrpigikyqZElou1hvSF
-         9a+q4HtVpX/e8S1IXxbiBR3lLx154tL2Os17QY3wM1K3o1j80aQNjmE+Aku8mrLGyj
-         eYutuvq62H2wg==
+        b=d36AEMRsvicEHBnWgOclYD5tgBL4i/mWby4t9DVwnBmyBsXxBJa19rkyueP2W33n5
+         bvChsNzAbGWodlxH87GZhd4t/R896m4jWAVbvi+1JrgqPGwDCG6lEIzQ1R/BnlRfjW
+         Q5zKF+o0U8BMAw5l8tXsA8QcOPkbVhfCSVl26rjtJUcGRrh1dLktHQu7XziQqfO8TT
+         xarn8ifj5LpOen3bcVejgs5zBNdoVDdfX7O7zMybknAkpiGs3cIrCXa2x1GgZEn54O
+         +7smnn3ICeJfdkNcXPQuvfRf82y8UL5sd+0uFWSi2eR9e5yMDOOnNtPrUJ/GenJvvD
+         K49rIvqXucf3A==
 From:   Roger Quadros <rogerq@kernel.org>
 To:     miquel.raynal@bootlin.com, robh+dt@kernel.org
 Cc:     krzk@kernel.org, richard@nod.at, vigneshr@ti.com, kishon@ti.com,
         nm@ti.com, linux-mtd@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Roger Quadros <rogerq@kernel.org>
-Subject: [PATCH v3 2/3] dt-bindings: mtd: ti,elm: Add support for AM64 ELM
-Date:   Sat, 26 Mar 2022 10:07:25 +0200
-Message-Id: <20220326080726.30372-3-rogerq@kernel.org>
+Subject: [PATCH v3 3/3] mtd: rawnand: omap_elm: Add compatible for AM64 ELM
+Date:   Sat, 26 Mar 2022 10:07:26 +0200
+Message-Id: <20220326080726.30372-4-rogerq@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220326080726.30372-1-rogerq@kernel.org>
 References: <20220326080726.30372-1-rogerq@kernel.org>
@@ -54,63 +54,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TI's AM64 SoC has the Error Locator Module. Add compatible and
-related properties to support ELM on AM64 SoC.
+The AM64 SoC has the Error Locator Module. Add compatible id for it.
 
 Signed-off-by: Roger Quadros <rogerq@kernel.org>
 ---
- .../devicetree/bindings/mtd/ti,elm.yaml       | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/mtd/nand/raw/omap_elm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/mtd/ti,elm.yaml b/Documentation/devicetree/bindings/mtd/ti,elm.yaml
-index 1821395bbfb6..87128c004596 100644
---- a/Documentation/devicetree/bindings/mtd/ti,elm.yaml
-+++ b/Documentation/devicetree/bindings/mtd/ti,elm.yaml
-@@ -18,6 +18,7 @@ properties:
-   compatible:
-     enum:
-       - ti,am3352-elm
-+      - ti,am64-elm
- 
-   reg:
-     maxItems: 1
-@@ -25,6 +26,17 @@ properties:
-   interrupts:
-     maxItems: 1
- 
-+  clocks:
-+    maxItems: 1
-+    description: Functional clock.
-+
-+  clock-names:
-+    items:
-+      - const: fck
-+
-+  power-domains:
-+    maxItems: 1
-+
-   ti,hwmods:
-     description:
-       Name of the HWMOD associated with ELM. This is for legacy
-@@ -37,6 +49,18 @@ required:
-   - reg
-   - interrupts
- 
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: ti,am64-elm
-+    then:
-+      required:
-+        - clocks
-+        - clock-names
-+        - power-domains
-+
- additionalProperties: false
- 
- examples:
+diff --git a/drivers/mtd/nand/raw/omap_elm.c b/drivers/mtd/nand/raw/omap_elm.c
+index db105d9b560c..aa7f49c3f372 100644
+--- a/drivers/mtd/nand/raw/omap_elm.c
++++ b/drivers/mtd/nand/raw/omap_elm.c
+@@ -550,6 +550,7 @@ static SIMPLE_DEV_PM_OPS(elm_pm_ops, elm_suspend, elm_resume);
+ #ifdef CONFIG_OF
+ static const struct of_device_id elm_of_match[] = {
+ 	{ .compatible = "ti,am3352-elm" },
++	{ .compatible = "ti,am64-elm" },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, elm_of_match);
 -- 
 2.17.1
 

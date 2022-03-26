@@ -2,120 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23134E7E66
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 02:16:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECED4E7E5D
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 02:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiCZBSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 21:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
+        id S229945AbiCZBLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 21:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbiCZBSE (ORCPT
+        with ESMTP id S229938AbiCZBLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 21:18:04 -0400
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAACE1960A1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 18:16:27 -0700 (PDT)
-Received: by mail-vk1-xa2c.google.com with SMTP id m84so5121488vke.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 18:16:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sWh9Ea2SfYQLuMecAvYHl1bg2ANjarcukEX42J9T3Q4=;
-        b=Fw839jtTa+ujk4jaMx/ShkgCxzwfRNSxWAk1ruX8Ob/eJXDJFBhPGjXAAk+FVw/2LD
-         1kkvuDrQPXXVn+rumYNup3U6BtAAPWRoyhFcg0kO3hsunKH3VxtyTHPCFebKfCeW/CFk
-         QILcrPPXH7kIgjswUfQses1yTPTfPXbFXZZbnzzoLdyCofXYJ8VIlebS43mnBqVPD9k0
-         b6b5YwV40H+IPneGBDe0iuP3KmBalqQVuKTK4vUJ0NEf4u254ahc8xuxGXT97hG1V9q5
-         ft+V2omAMeXN+Ts1DHIoUOI9fawa+p36cwhJJno0y+ZmyXkVneFIfwc50mgyA3ckVAxI
-         K41Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sWh9Ea2SfYQLuMecAvYHl1bg2ANjarcukEX42J9T3Q4=;
-        b=q2u2zXFXtUDaHmy9pcPsYjTIweKD30o/fj9DgrI23X5WU8YWpNHWSETyKnSIKyaFdW
-         DfMU9qOTVICm9o8fPk+EI4lX/g7+TdgokAMg2UshqjrcF6reLF3zD0uBX8gHhS1g4TW6
-         9M0SWoFrUebnDgJLKx/yBn0Jr3Ss9/BfnjNbbVaXDaGvMHSkvm46/AtNTRxro6xKSIYF
-         JzdXkZ8uvdk3mVtTJc3nkVdyQHnWK58Ts2mltFzB9NJPQ7LunLx7NjkzswLHdmkLsjnC
-         glZZCtYulBAV17uiQnRcwvte0+hEf5yreshl3HuhqAy31lp8kTBII6lDlFVFvrbfWfg3
-         KB1g==
-X-Gm-Message-State: AOAM530y+Pew4GMXPyjgBLBIVd9DwxCu4W/1LrPKjGuakgDgjDMV++Uz
-        ZXFeflcTCGQTmqn8atM8RKkCvWk2jTv2wCnaE8RrFA==
-X-Google-Smtp-Source: ABdhPJzsZZY01w8F9FI02pR0G+qwcUxzDSqfau5PVajQtOT0uIUI+36L5FVD4NKAgdVasVtVUjzFr849CtqouiU0xZc=
-X-Received: by 2002:a1f:a9cb:0:b0:33e:d145:85f0 with SMTP id
- s194-20020a1fa9cb000000b0033ed14585f0mr6593027vke.7.1648257386623; Fri, 25
- Mar 2022 18:16:26 -0700 (PDT)
+        Fri, 25 Mar 2022 21:11:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF254170D95;
+        Fri, 25 Mar 2022 18:10:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5917360DF2;
+        Sat, 26 Mar 2022 01:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1E89C2BBE4;
+        Sat, 26 Mar 2022 01:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648257016;
+        bh=/EPB57cC1yNq7t3sg76uoL4Idh0mWrldx4Mk1K/mK3s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OM55TS0ZHEYo1QH7ZKJoH3h06Be0cvNDoNRJWx4xjrkBTSjYV8QO8+7WAQfaufUwL
+         XGFKuiqBskYyWpcw9DRK5+fSRdeUmpFpNxXHTAeTMz24EIh+RUvkXZraRPndBUJiPD
+         1zv7Wh9YL43sNKUIEU0hleyxU//8WW5IDIno4dIuJ+WiANLT0rKujOGASxK1ecx1zU
+         GTxS2PUEYiibCzo0JbtYcz+Qf6vtKdP8k9bR0kG+pvcAdz7wbZNTDJzZijtpoTsasD
+         bE+64NZ7Whd09JGCtXAy6Hq7FfKCvK0wMH8XtHzxBClbR7vag0fjYLk6Xr3LXlGd2c
+         bnX4ALQxMgVoA==
+Date:   Fri, 25 Mar 2022 20:19:25 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Hannes Reinecke <hare@suse.de>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Robert Love <robert.w.love@intel.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH][next] scsi: fcoe: Fix Wstringop-overflow warnings in
+ fcoe_wwn_from_mac()
+Message-ID: <20220326011925.GD2602091@embeddedor>
+References: <20220303235521.GA1745589@embeddedor>
 MIME-Version: 1.0
-References: <20220326010003.3155137-1-yuzhao@google.com> <CAHk-=wjp=jEhjvD9GPnHfuV5Kc1=rUnf84b_qscLJ8fkY74u3Q@mail.gmail.com>
-In-Reply-To: <CAHk-=wjp=jEhjvD9GPnHfuV5Kc1=rUnf84b_qscLJ8fkY74u3Q@mail.gmail.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Fri, 25 Mar 2022 19:16:15 -0600
-Message-ID: <CAOUHufbqum18T4kZ=d_hMehz=N=3iSuNfGrLof5tB8kjGkk8yw@mail.gmail.com>
-Subject: Re: [page-reclaim] Re: [GIT PULL] Multi-gen LRU for 5.18-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <baohua@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Donald Carr <d@chaos-reins.com>,
-        Hillf Danton <hdanton@sina.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Rik van Riel <riel@surriel.com>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220303235521.GA1745589@embeddedor>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 7:07 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, Mar 25, 2022 at 6:00 PM Yu Zhao <yuzhao@google.com> wrote:
-> >
-> > This is more of an option than a request for 5.18. I'm sending it to
-> > you directly because, in my judgement, it's now as ready as it'll ever
-> > be.
->
-> So I do expect to merge this, but I don't think it has been in
-> linux-next, has it?
+Hi all,
 
-No. I could ask Stephen to see if he is willing to take this series. I
-was hoping to go through Andrew since his tree is what most MM
-developers test. I haven't heard from Andrew, so I assume he has no
-strong opinion and I don't want to put him in a different position.
+Friendly ping: who can take this, please?
+
+... I can take this in my -next tree, in the meantime.
+
+Thanks
+--
+Gustavo
+
+On Thu, Mar 03, 2022 at 05:55:21PM -0600, Gustavo A. R. Silva wrote:
+> Fix the following Wstringop-overflow warnings when building with GCC-11:
+> 
+> drivers/scsi/fcoe/fcoe.c: In function ‘fcoe_netdev_config’:
+> drivers/scsi/fcoe/fcoe.c:744:32: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+>   744 |                         wwnn = fcoe_wwn_from_mac(ctlr->ctl_src_addr, 1, 0);
+>       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/scsi/fcoe/fcoe.c:744:32: note: referencing argument 1 of type ‘unsigned char *’
+> In file included from drivers/scsi/fcoe/fcoe.c:36:
+> ./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+>   252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+>       |     ^~~~~~~~~~~~~~~~~
+> drivers/scsi/fcoe/fcoe.c:747:32: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+>   747 |                         wwpn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
+>       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   748 |                                                  2, 0);
+>       |                                                  ~~~~~
+> drivers/scsi/fcoe/fcoe.c:747:32: note: referencing argument 1 of type ‘unsigned char *’
+> In file included from drivers/scsi/fcoe/fcoe.c:36:
+> ./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+>   252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+>       |     ^~~~~~~~~~~~~~~~~
+>   CC      drivers/scsi/bnx2fc/bnx2fc_io.o
+> In function ‘bnx2fc_net_config’,
+>     inlined from ‘bnx2fc_if_create’ at drivers/scsi/bnx2fc/bnx2fc_fcoe.c:1543:7:
+> drivers/scsi/bnx2fc/bnx2fc_fcoe.c:833:32: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+>   833 |                         wwnn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
+>       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   834 |                                                  1, 0);
+>       |                                                  ~~~~~
+> drivers/scsi/bnx2fc/bnx2fc_fcoe.c: In function ‘bnx2fc_if_create’:
+> drivers/scsi/bnx2fc/bnx2fc_fcoe.c:833:32: note: referencing argument 1 of type ‘unsigned char *’
+> In file included from drivers/scsi/bnx2fc/bnx2fc.h:53,
+>                  from drivers/scsi/bnx2fc/bnx2fc_fcoe.c:17:
+> ./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+>   252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+>       |     ^~~~~~~~~~~~~~~~~
+> In function ‘bnx2fc_net_config’,
+>     inlined from ‘bnx2fc_if_create’ at drivers/scsi/bnx2fc/bnx2fc_fcoe.c:1543:7:
+> drivers/scsi/bnx2fc/bnx2fc_fcoe.c:839:32: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+>   839 |                         wwpn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
+>       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   840 |                                                  2, 0);
+>       |                                                  ~~~~~
+> drivers/scsi/bnx2fc/bnx2fc_fcoe.c: In function ‘bnx2fc_if_create’:
+> drivers/scsi/bnx2fc/bnx2fc_fcoe.c:839:32: note: referencing argument 1 of type ‘unsigned char *’
+> In file included from drivers/scsi/bnx2fc/bnx2fc.h:53,
+>                  from drivers/scsi/bnx2fc/bnx2fc_fcoe.c:17:
+> ./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+>   252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+>       |     ^~~~~~~~~~~~~~~~~
+> drivers/scsi/qedf/qedf_main.c: In function ‘__qedf_probe’:
+> drivers/scsi/qedf/qedf_main.c:3520:30: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+>  3520 |                 qedf->wwnn = fcoe_wwn_from_mac(qedf->mac, 1, 0);
+>       |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/scsi/qedf/qedf_main.c:3520:30: note: referencing argument 1 of type ‘unsigned char *’
+> In file included from drivers/scsi/qedf/qedf.h:9,
+>                  from drivers/scsi/qedf/qedf_main.c:23:
+> ./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+>   252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+>       |     ^~~~~~~~~~~~~~~~~
+> drivers/scsi/qedf/qedf_main.c:3521:30: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+>  3521 |                 qedf->wwpn = fcoe_wwn_from_mac(qedf->mac, 2, 0);
+>       |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/scsi/qedf/qedf_main.c:3521:30: note: referencing argument 1 of type ‘unsigned char *’
+> In file included from drivers/scsi/qedf/qedf.h:9,
+>                  from drivers/scsi/qedf/qedf_main.c:23:
+> ./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+>   252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+>       |     ^~~~~~~~~~~~~~~~~
+> 
+> by changing the array size to the correct value of ETH_ALEN in the
+> argument declaration.
+> 
+> Also, fix a couple of checkpatch warnings:
+> WARNING: function definition argument 'unsigned int' should also have an identifier name
+> 
+> This helps with the ongoing efforts to globally enable
+> -Wstringop-overflow.
+> 
+> Link: https://github.com/KSPP/linux/issues/181
+> Fixes: 85b4aa4926a5 ("[SCSI] fcoe: Fibre Channel over Ethernet")
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>  drivers/scsi/fcoe/fcoe_ctlr.c | 2 +-
+>  include/scsi/libfcoe.h        | 3 ++-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/scsi/fcoe/fcoe_ctlr.c b/drivers/scsi/fcoe/fcoe_ctlr.c
+> index 1756a0ac6f08..558f3f4e1859 100644
+> --- a/drivers/scsi/fcoe/fcoe_ctlr.c
+> +++ b/drivers/scsi/fcoe/fcoe_ctlr.c
+> @@ -1969,7 +1969,7 @@ EXPORT_SYMBOL(fcoe_ctlr_recv_flogi);
+>   *
+>   * Returns: u64 fc world wide name
+>   */
+> -u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN],
+> +u64 fcoe_wwn_from_mac(unsigned char mac[ETH_ALEN],
+>  		      unsigned int scheme, unsigned int port)
+>  {
+>  	u64 wwn;
+> diff --git a/include/scsi/libfcoe.h b/include/scsi/libfcoe.h
+> index fac8e89aed81..310e0dbffda9 100644
+> --- a/include/scsi/libfcoe.h
+> +++ b/include/scsi/libfcoe.h
+> @@ -249,7 +249,8 @@ int fcoe_ctlr_recv_flogi(struct fcoe_ctlr *, struct fc_lport *,
+>  			 struct fc_frame *);
+>  
+>  /* libfcoe funcs */
+> -u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+> +u64 fcoe_wwn_from_mac(unsigned char mac[ETH_ALEN], unsigned int scheme,
+> +		      unsigned int port);
+>  int fcoe_libfc_config(struct fc_lport *, struct fcoe_ctlr *,
+>  		      const struct libfc_function_template *, int init_fcp);
+>  u32 fcoe_fc_crc(struct fc_frame *fp);
+> -- 
+> 2.27.0
+> 

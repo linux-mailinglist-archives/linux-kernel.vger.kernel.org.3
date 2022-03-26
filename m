@@ -2,93 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D41F4E80C2
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 13:19:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC9874E80C9
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 13:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiCZMU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 08:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
+        id S232894AbiCZM0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 08:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232803AbiCZMUx (ORCPT
+        with ESMTP id S230494AbiCZM0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 08:20:53 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B53267FBC;
-        Sat, 26 Mar 2022 05:19:17 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id j8so582954pll.11;
-        Sat, 26 Mar 2022 05:19:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=j8I12NKE7GCwX8ETG3CanhqtlnJT2sKn53KmOxi+4XY=;
-        b=bSZJch7t2yV7xvunKHliffwHi0kgRM4RBdIHp0/YuigY3ucme/UBMr3lglwkLFgyGf
-         BtcqoOXdOeL33hSUooLhnEqM1Z3+T+SSl2iVA8Yno6997S7IX7DGoPcvD1ILGPf4cvSq
-         ZC0HHjVRpvUEbu2olU0mDY78cFc59lcJ1L5ezPPHWOwVGcfo4I2oo+2DMCgheYB8S660
-         uDVY2HW4Ux6GTJGdNACAnyng/RsB1EthurHnfvJo8cKn95vknAIoJmlFVaThcfIvZebn
-         kvbq/nv77Q6D2IWwiSMJWeqsBdUdDnKlRM21AMNaKP6YJi+/TrWZWV2yzo7WRHMCw9d+
-         CTrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=j8I12NKE7GCwX8ETG3CanhqtlnJT2sKn53KmOxi+4XY=;
-        b=3MditiNyfaT8uC5Yfgu/pq01sK+b15cVQ/mKhzhjV0BHiSK/SmpZ9Wl8Y9oxv2FQoy
-         waDMO4mjrPhKl+PphTHs4HMLgQ0Hso/LWZTgMWFQuIp43vglwGMFZlDL+1FYgnZ0Z/zE
-         HDOuxzj9uaU6UNUTfGXLlA7tvBQqzt7BHGC49h5OF5VBjTK2wLyI6jE3Weg/oiywbpOE
-         jDvhqqtxi9CpfyJo32brLc85yfGe5X1Va/kpLaBog8l/NAdkt7ssC+5gsq1EZT8wqIHm
-         jojmnA3FNykKWM8gbjGGVLwQz9pihLqD51UxLvb+bGrYNHJ88sVFBppbNlW5VE+UeR20
-         sEIA==
-X-Gm-Message-State: AOAM530zAfXzOWBIK4Xnrodo1lFtgx9EVAs5PKT0czY5IJ+CvnX2XBw0
-        tsL6HgTylaWaK7KTsFBmq7c=
-X-Google-Smtp-Source: ABdhPJzFrGoZVEDskdXJHd55VGwfJbiTBCtGCwWHMCIEHMdZRvA6boe5ySvpR2OV+C+Zc1+EXPhJhg==
-X-Received: by 2002:a17:902:c948:b0:154:1e4f:9837 with SMTP id i8-20020a170902c94800b001541e4f9837mr16391540pla.115.1648297157221;
-        Sat, 26 Mar 2022 05:19:17 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-24.three.co.id. [180.214.233.24])
-        by smtp.gmail.com with ESMTPSA id a11-20020a056a000c8b00b004fade889fb3sm10805098pfv.18.2022.03.26.05.19.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Mar 2022 05:19:16 -0700 (PDT)
-Message-ID: <b584a068-e0bd-bf61-a622-6b081a4a30a5@gmail.com>
-Date:   Sat, 26 Mar 2022 19:19:11 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 5.17 00/39] 5.17.1-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220325150420.245733653@linuxfoundation.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220325150420.245733653@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Sat, 26 Mar 2022 08:26:13 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44594292BB4;
+        Sat, 26 Mar 2022 05:24:36 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id CB5B4C021; Sat, 26 Mar 2022 13:24:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1648297473; bh=J+rWcnu8yF7moh054Aw+8XHr3g7eD83siDQ/MkyTBjI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fMGFh1uJbcJcldQgmnJxIll8S+FwMV8Yav7DYp0Ttu8UGPN0eWvmzuI3WXZmxJDed
+         KcNdXofmrYQdnymnzjU/Xltw6xG8gZ08wTHYsJ2ko+Kvr9I6nPHIq8WAs+BZFV/fgx
+         ngpduVyNJvXiDcX5Bx1LQaDboa/g6T6Uyv/XxR6Uu5dyi+6uiQEk5nR+0l9KGxB6NL
+         0tlEUOE1841SaECbJ1VnWOItVEiFqcpBpZe1ReTj8SqCocJqd0GnLgkmPviq1maSNx
+         L8Lmds4tH7eovs/GPa//YYaes9YGnhKLgMLXd6wSJWp18ODxDqUusJsmd5eRFTyr0G
+         AnojQo6SajdHg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id C07DCC009;
+        Sat, 26 Mar 2022 13:24:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1648297472; bh=J+rWcnu8yF7moh054Aw+8XHr3g7eD83siDQ/MkyTBjI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bp2S0TjOym2RriaIq4Q1XLf+Az7nE22NgnsSp9Ixsfwed0OtIMB2UrLt2wm+8Cxfd
+         y/2CPT2Ah6NIRetxdVwix0c0l7Ava30y1r9eXbhIztXaFF93xDJqVh8Ay9NuVXtDqC
+         FKZ12TmjWf7EvNH0A3ZPR+tHbwsnrfy05WGCYeWe3Epdokk43fIQC4YjpM2/nOu8hG
+         Z5hboCFi/GSpfu8hJfkgol0EeL4axCfzEvGTfBKTLuj3KBm5rSOd9oOedhr4yko8pV
+         1OyLgdx9e3ErzM+pPBStOFFNor9sU/FMwqKjsHTPbG9Bq1CdVfDf1FWkt0j1u9WvwF
+         thne8LKrDEvxg==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 1cc6f6ba;
+        Sat, 26 Mar 2022 12:24:25 +0000 (UTC)
+Date:   Sat, 26 Mar 2022 21:24:10 +0900
+From:   asmadeus@codewreck.org
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     David Kahurani <k.kahurani@gmail.com>, davem@davemloft.net,
+        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        lucho@ionkov.net, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net,
+        syzbot+5e28cdb7ebd0f2389ca4@syzkaller.appspotmail.com
+Subject: Re: [syzbot] WARNING in p9_client_destroy
+Message-ID: <Yj8F6sQzx6Bvy+aZ@codewreck.org>
+References: <CAAZOf26g-L2nSV-Siw6mwWQv1nv6on8c0fWqB4bKmX73QAFzow@mail.gmail.com>
+ <3597833.OkAhqpS0b6@silver>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3597833.OkAhqpS0b6@silver>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/03/22 22.14, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.17.1 release.
-> There are 39 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
+Christian Schoenebeck wrote on Sat, Mar 26, 2022 at 12:48:26PM +0100:
+> [...]
+>
+> > Signed-off-by: David Kahurani <k.kahurani@gmail.com>
+> > Reported-by: syzbot+5e28cdb7ebd0f2389ca4@syzkaller.appspotmail.com
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0)
-and powerpc (ps3_defconfig, gcc 11.2.0).
+Looks good to me - it's pretty much what I'd have done if I hadn't
+forgotten!
+It doesn't strike me as anything critical and I don't have anything else
+for this cycle so I'll just queue it in -next for now, and submit it
+at the start of the 5.19 cycle in ~2months.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> I'm not absolutely sure that this will really fix this issue, but it seems to 
+> be a good idea to add a rcu_barrier() call here nevertheless.
+
+Yeah, I'm not really sure either but this is the only idea I have given
+the debug code doesn't list anything left in the cache, and David came
+to the same conclusion :/
+
+Can't hurt though, so let's try and see if syzbot complains
+again. Thanks for the review!
 
 -- 
-An old man doll... just what I always wanted! - Clara
+Dominique

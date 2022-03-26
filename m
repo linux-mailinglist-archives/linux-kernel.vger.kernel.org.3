@@ -2,104 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BB14E814E
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 15:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E45E44E8151
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 15:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233219AbiCZOGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 10:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54718 "EHLO
+        id S233234AbiCZOGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 10:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231482AbiCZOGC (ORCPT
+        with ESMTP id S231482AbiCZOGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 10:06:02 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2954C166658;
-        Sat, 26 Mar 2022 07:04:22 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id r64so5866146wmr.4;
-        Sat, 26 Mar 2022 07:04:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CwwTLudbisWt/D5C3X2/LW//Oe691NzSOMLmnZTsNlc=;
-        b=gZfsAH+zDHC0/Pg3z67Xjzp4LvBjBmYRv78pw89W8STqoGV5BbEqjW+GmqNPgl4YBB
-         M/pW95MPaYlfRNeldAfhVSq9yTYfR9P1zbjbKY8TaE6vxPnhbfBNgcUHPYg6lhOZgsIc
-         CSpC1mI55Wx5HCvSfUuoA/czkLq0LMaUoajkwFPctiCMVLtnPkj2VlW7z7ksc7C2KA8M
-         VbDRAbE/RAE5ScKsBOsgyM3Zajhz2Zmsd1AmRU+3/m6mdazvpBMGf98Pi1gkTj4gh5D6
-         Op5A8i3zSpKL+f+g/oDEqHQ4lEQs06Y/llrDHybQ9GiEa0w4tXdL+ybJtFlY+edn0pUJ
-         qViQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CwwTLudbisWt/D5C3X2/LW//Oe691NzSOMLmnZTsNlc=;
-        b=nL2NZpkTfWOSHl+m0gkw4gzroeKisdy6ltxZ/0l6juHFlRNBtzsr3PYHxX5flL4QJ0
-         M7P4Sy28aFHa3+kzZLxu6L03P9T2AmEgBzqtNHde84LzZuPHS5z53SkPAhL357Bg+7Vv
-         Xs/o5cZTtYZjEL5cmiAdFhRk2D+5HcYGixfzN4jDUpTyxoD3b/RdmR8eCdbpzSKd3YCR
-         gAerPV5XMi+hFLaSsYR8t9UdjOfXKc6uohY7DtrfV/eSetpRGJOa25lAz0W/in+ABsAt
-         P+OxZCry/cFqNUVJtTKfT/6kx06D7rFZyyp1gWSZ6zVCk9KqChNj4rW4VX7xn5hriVlU
-         dWIA==
-X-Gm-Message-State: AOAM5309YsT4ZaotgaJAxQznSqEnOACaNN2k67oJ3Lp6La/BRlUCBDEG
-        vA2bOe+lXcqUc3+L9oBolc0=
-X-Google-Smtp-Source: ABdhPJwcF1cbJl+jSj/bceDQBuIJsHSYJQYdPXrF/iSJ35NNNksV4RLF2ECgAVgbHkVb770IEGQzAg==
-X-Received: by 2002:a7b:c057:0:b0:37b:ebad:c9c8 with SMTP id u23-20020a7bc057000000b0037bebadc9c8mr24568909wmc.61.1648303460717;
-        Sat, 26 Mar 2022 07:04:20 -0700 (PDT)
-Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
-        by smtp.gmail.com with ESMTPSA id d20-20020a05600c34d400b0038caf684679sm15827798wmq.0.2022.03.26.07.04.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 07:04:20 -0700 (PDT)
-Date:   Sat, 26 Mar 2022 14:04:18 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/20] 4.19.237-rc1 review
-Message-ID: <Yj8dYkt9MPko849q@debian>
-References: <20220325150417.010265747@linuxfoundation.org>
+        Sat, 26 Mar 2022 10:06:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C43166E2D;
+        Sat, 26 Mar 2022 07:05:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47E6C60EF5;
+        Sat, 26 Mar 2022 14:05:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F896C340EE;
+        Sat, 26 Mar 2022 14:05:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648303500;
+        bh=YV78RkwSqUG0hLwgVwl5hr9tAbUXieZCvNBdqQm1qeE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T95ZysXDWz4DxLK2/bdoG2u1QAl1UMbT7gLNzWUboVeAHh7jV4bLRV+7JzYUWnhVn
+         2RXOBc7kF2oYb7VKWJi0rjrJGCCXpYO2D0DF8yaGNWQ6dI1IWiRoG8/ZJZARmAUe6c
+         LSuMIO8rhK6/YJYLAuAAm39D7HBhsO/esZNGlmXgUB0zi+Tv7o5/7kG/ShwleFC+JI
+         6WxUJhUBo/YVE/nHoXYCB/C8yin0zbjnDeGupOrvxXjpK37PYw57Ybed+JloBXKIu5
+         RM4pzu6u9qktN1YtmiGc4OScezfpAR1kXqfNj4y8EvHvTYhfrNofwopT2PIP8vuHQF
+         AE9Ts1e9JQf0g==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 6AF8D40407; Sat, 26 Mar 2022 11:04:58 -0300 (-03)
+Date:   Sat, 26 Mar 2022 11:04:58 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Ali Saidi <alisaidi@amazon.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, german.gomez@arm.com,
+        benh@kernel.crashing.org, Nick.Forrington@arm.com,
+        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
+        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
+        kjain@linux.ibm.com, lihuafei1@huawei.com, mark.rutland@arm.com,
+        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
+        peterz@infradead.org, will@kernel.org
+Subject: Re: [PATCH v4 2/4] perf arm-spe: Use SPE data source for neoverse
+ cores
+Message-ID: <Yj8ditXSBemA41Z3@kernel.org>
+References: <20220324183323.31414-1-alisaidi@amazon.com>
+ <20220324183323.31414-3-alisaidi@amazon.com>
+ <20220326134754.GD20556@leoy-ThinkPad-X240s>
+ <Yj8age/PSIouUiKy@kernel.org>
+ <20220326135653.GE20556@leoy-ThinkPad-X240s>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220325150417.010265747@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220326135653.GE20556@leoy-ThinkPad-X240s>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Em Sat, Mar 26, 2022 at 09:56:53PM +0800, Leo Yan escreveu:
+> On Sat, Mar 26, 2022 at 10:52:01AM -0300, Arnaldo Carvalho de Melo wrote:
+> > Em Sat, Mar 26, 2022 at 09:47:54PM +0800, Leo Yan escreveu:
+> > > On Thu, Mar 24, 2022 at 06:33:21PM +0000, Ali Saidi wrote:
+> > > > +static void arm_spe__synth_data_source_neoverse(const struct arm_spe_record *record,
+> > > > +						union perf_mem_data_src *data_src)
+> > > >  {
+> > > > -	union perf_mem_data_src	data_src = { 0 };
+> > > > +	/*
+> > > > +	 * Even though four levels of cache hierarchy are possible, no known
+> > > > +	 * production Neoverse systems currently include more than three levels
+> > > > +	 * so for the time being we assume three exist. If a production system
+> > > > +	 * is built with four the this function would have to be changed to
+> > > > +	 * detect the number of levels for reporting.
+> > > > +	 */
 
-On Fri, Mar 25, 2022 at 04:04:38PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.237 release.
-> There are 20 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
-> Anything received after that time might be too late.
+> > > > -	if (record->op == ARM_SPE_LD)
+> > > > -		data_src.mem_op = PERF_MEM_OP_LOAD;
+> > > > -	else
+> > > > -		data_src.mem_op = PERF_MEM_OP_STORE;
 
-Build test:
-mips (gcc version 11.2.1 20220314): 63 configs -> no new failure
-arm (gcc version 11.2.1 20220314): 116 configs -> no new failure
-arm64 (gcc version 11.2.1 20220314): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20220314): 4 configs -> no failure
+> > > Firstly, apologize that I didn't give clear idea when Ali sent patch sets
+> > > v2 and v3.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
+> > Ok, removing this as well.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/938
+> > Thanks for reviewing.
 
+> Thanks a lot, Arnaldo.  Yeah, it's good to give a bit more time to
+> dismiss the concerns in this patch.
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Sure, at least it was build tested on many distros/cross compilers and
+this part is ok 8-)
+ 
+> Sorry again for the inconvenience.
 
---
-Regards
-Sudip
+np.
 
+- Arnaldo

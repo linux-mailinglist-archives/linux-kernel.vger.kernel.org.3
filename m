@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73C34E8136
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 14:56:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 718C14E8137
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 14:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233121AbiCZN5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 09:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
+        id S233110AbiCZN56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 09:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233116AbiCZN4R (ORCPT
+        with ESMTP id S233098AbiCZN5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 09:56:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DFD27FCF;
-        Sat, 26 Mar 2022 06:54:39 -0700 (PDT)
+        Sat, 26 Mar 2022 09:57:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E857A9BD;
+        Sat, 26 Mar 2022 06:56:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF5F1B8093C;
-        Sat, 26 Mar 2022 13:54:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A46C340EE;
-        Sat, 26 Mar 2022 13:54:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1271B60E93;
+        Sat, 26 Mar 2022 13:56:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36476C340EE;
+        Sat, 26 Mar 2022 13:56:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648302876;
-        bh=tpj4OYga0btXBeWUbbOyEBya0KUQhNIu70pMx0FFR+U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pC5bd1M8keEZTGI+g36EAA1WcN2uAqK19jpI/xZhwXA15rg3UfnQZdpwgsyKQBbT4
-         24eA+/wErB/sMcYeAuAae1HYusiC4azTxCGqn6UMNXs6ClCcz3yzq1Id0jeMTHV3lp
-         QvpPJ4RRof8D6qULdkt90wE3OH5Rcy8CW3xaCfPKKq65AUMeYLUXqGD85gBwIei8ne
-         GMIpg/6f490FxlFyDOxor3HCFXD6GUS2OqTiCCMZVodCErePotJ+6xOh4nzjxFPDUR
-         yR8z2ggLW9lLUtVUGsOS0H4UVO+LFHGggW4K8d10QvfM8+NjCUkfxKSE/qnFYV/nnZ
-         +ocLUG3Ej85qQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5930140407; Sat, 26 Mar 2022 10:54:34 -0300 (-03)
-Date:   Sat, 26 Mar 2022 10:54:34 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ali Saidi <alisaidi@amazon.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, german.gomez@arm.com,
-        leo.yan@linaro.org, benh@kernel.crashing.org,
-        Nick.Forrington@arm.com, alexander.shishkin@linux.intel.com,
-        andrew.kilroy@arm.com, james.clark@arm.com, john.garry@huawei.com,
-        jolsa@kernel.org, kjain@linux.ibm.com, lihuafei1@huawei.com,
-        mark.rutland@arm.com, mathieu.poirier@linaro.org, mingo@redhat.com,
-        namhyung@kernel.org, peterz@infradead.org, will@kernel.org
-Subject: Re: [PATCH v4 3/4] perf mem: Support mem_lvl_num in c2c command
-Message-ID: <Yj8bGiAlZL9mUW+c@kernel.org>
-References: <20220324183323.31414-1-alisaidi@amazon.com>
- <20220324183323.31414-4-alisaidi@amazon.com>
+        s=k20201202; t=1648302972;
+        bh=epRNsHHCOQUrGWlx+/P8FKFWDZQ+vOazJEHJU5kW44U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Xbm3Gar8CrbVaQCKHxVrdEMK85rISLwByrpt3pWMi/AEEAmuhP9UPeNtYYHDGVjYl
+         Sfa+1Cn8l1jTKD9/LxQm4CQjnVq96V+R1N0GjcMV4WMl2R7WifdQZORvFQDE5mRSRJ
+         xpqqLLu1SyUkrCxKfYbWRh9SlGkeyH5+IuPUcWYWNaTI0LCBXRVzlDzdPmPHiMbeOt
+         /I4QmyNIAtPsdOBemHIJW/IgR4g1Db9bgDY4aXizfZbzfRNJIEtaCDN20TGYOFA2ie
+         KQsUOMGnKSpP+JO17hxQtmFuilemPCYjxshL3SzimV+ytumYYmLeh6wPs0czVWomw/
+         +HcKF4Kcw2FfQ==
+Date:   Sat, 26 Mar 2022 14:56:07 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] Documentation: kernel-doc: Promote "Writing
+ kernel-doc comments" to page title
+Message-ID: <20220326145332.0698a849@coco.lan>
+In-Reply-To: <20220326123337.642536-2-bagasdotme@gmail.com>
+References: <20220326123337.642536-1-bagasdotme@gmail.com>
+        <20220326123337.642536-2-bagasdotme@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324183323.31414-4-alisaidi@amazon.com>
-X-Url:  http://acmel.wordpress.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,65 +62,211 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Mar 24, 2022 at 06:33:22PM +0000, Ali Saidi escreveu:
-> In addition to summarizing data encoded in mem_lvl also support data
-> encoded in mem_lvl_num.
+Em Sat, 26 Mar 2022 19:33:37 +0700
+Bagas Sanjaya <bagasdotme@gmail.com> escreveu:
+
+> Promote the first heading from chapter heading to page title. While at
+> it, fix heading inconsistencies by promoting the appropriate headings.
 > 
-> Since other architectures don't seem to populate the mem_lvl_num field
-> here there shouldn't be a change in functionality.
-
-I'm removing this one as well, will wait for further discussion as the
-other two got yanked out as per Leo's review comments.
-
-The first patch is in with Leo's ack.
-
-- Arnaldo
- 
-> Signed-off-by: Ali Saidi <alisaidi@amazon.com>
-> Tested-by: German Gomez <german.gomez@arm.com>
-> Reviewed-by: German Gomez <german.gomez@arm.com>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> Cc: Akira Yokosawa <akiyks@gmail.com>
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 > ---
->  tools/perf/util/mem-events.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
+>  Documentation/doc-guide/kernel-doc.rst | 29 +++++++++++++-------------
+>  1 file changed, 15 insertions(+), 14 deletions(-)
 > 
-> diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
-> index ed0ab838bcc5..e5e405185498 100644
-> --- a/tools/perf/util/mem-events.c
-> +++ b/tools/perf/util/mem-events.c
-> @@ -485,6 +485,7 @@ int c2c_decode_stats(struct c2c_stats *stats, struct mem_info *mi)
->  	u64 daddr  = mi->daddr.addr;
->  	u64 op     = data_src->mem_op;
->  	u64 lvl    = data_src->mem_lvl;
-> +	u64 lnum   = data_src->mem_lvl_num;
->  	u64 snoop  = data_src->mem_snoop;
->  	u64 lock   = data_src->mem_lock;
->  	u64 blk    = data_src->mem_blk;
-> @@ -527,16 +528,18 @@ do {				\
->  			if (lvl & P(LVL, UNC)) stats->ld_uncache++;
->  			if (lvl & P(LVL, IO))  stats->ld_io++;
->  			if (lvl & P(LVL, LFB)) stats->ld_fbhit++;
-> -			if (lvl & P(LVL, L1 )) stats->ld_l1hit++;
-> -			if (lvl & P(LVL, L2 )) stats->ld_l2hit++;
-> -			if (lvl & P(LVL, L3 )) {
-> +			if (lvl & P(LVL, L1) || lnum == P(LVLNUM, L1))
-> +				stats->ld_l1hit++;
-> +			if (lvl & P(LVL, L2) || lnum == P(LVLNUM, L2))
-> +				stats->ld_l2hit++;
-> +			if (lvl & P(LVL, L3) || lnum == P(LVLNUM, L3)) {
->  				if (snoop & P(SNOOP, HITM))
->  					HITM_INC(lcl_hitm);
->  				else
->  					stats->ld_llchit++;
->  			}
+> diff --git a/Documentation/doc-guide/kernel-doc.rst b/Documentation/doc-guide/kernel-doc.rst
+> index 79aaa55d6bcf2b..ea41e05d0e8903 100644
+> --- a/Documentation/doc-guide/kernel-doc.rst
+> +++ b/Documentation/doc-guide/kernel-doc.rst
+> @@ -1,3 +1,4 @@
+> +===========================
+>  Writing kernel-doc comments
+>  ===========================
 >  
-> -			if (lvl & P(LVL, LOC_RAM)) {
-> +			if (lvl & P(LVL, LOC_RAM) || lnum == P(LVLNUM, RAM)) {
->  				stats->lcl_dram++;
->  				if (snoop & P(SNOOP, HIT))
->  					stats->ld_shared++;
-> -- 
-> 2.32.0
+> @@ -31,7 +32,7 @@ kernel source code layout. This is lower priority and at the discretion
+>  of the maintainer of that kernel source file.
+>  
+>  How to format kernel-doc comments
+> ----------------------------------
+> +=================================
 
--- 
+Hmm... I can't really see any differences... What this patch seems to be
+doing is to just change the markups for each level.
 
-- Arnaldo
+See, on Sphinx, the first markup (whatever it is) is level 1, level 2
+the second different markup and so on.
+
+So, before this patch, kernel-doc.rst had:
+
+	level 1: Writing kernel-doc comments
+	=====================================
+
+	level 2: How to format kernel-doc comments
+	------------------------------------------
+
+	level 3: Function parameters
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+And after it, it will have:
+
+	====================================
+	level 1: Writing kernel-doc comments
+	====================================
+
+	level 2: How to format kernel-doc comments
+	==========================================
+
+	level 3: Function parameters
+	----------------------------
+
+No semantic changes at all.
+
+The only (eventual) value of a change like that would be to make the
+levels more uniform, but IMO, it is not worth to apply a change like
+that, as:
+
+	1. There are a lot other documents that don't use the more commonly
+	   used level standard;
+
+	2. Making all .rst files to use the same definitions is hard;
+
+	3. Even if we place everything using identical markups for every
+	   level, as new stuff gets added, different (still valid)
+	   markups could be used on newer documents.
+
+Regards,
+Mauro
+
+
+>  
+>  The opening comment mark ``/**`` is used for kernel-doc comments. The
+>  ``kernel-doc`` tool will extract comments marked this way. The rest of
+> @@ -56,7 +57,7 @@ requested to perform extra gcc checks::
+>  	make W=n
+>  
+>  Function documentation
+> -----------------------
+> +======================
+>  
+>  The general format of a function and function-like macro kernel-doc comment is::
+>  
+> @@ -88,7 +89,7 @@ ends with an argument description, a blank comment line, or the end of the
+>  comment block.
+>  
+>  Function parameters
+> -~~~~~~~~~~~~~~~~~~~
+> +-------------------
+>  
+>  Each function argument should be described in order, immediately following
+>  the short function description.  Do not leave a blank line between the
+> @@ -116,7 +117,7 @@ be written in kernel-doc notation as::
+>        * @...: description
+>  
+>  Function context
+> -~~~~~~~~~~~~~~~~
+> +----------------
+>  
+>  The context in which a function can be called should be described in a
+>  section named ``Context``. This should include whether the function
+> @@ -134,7 +135,7 @@ Examples::
+>    * Context: Interrupt context.
+>  
+>  Return values
+> -~~~~~~~~~~~~~
+> +-------------
+>  
+>  The return value, if any, should be described in a dedicated section
+>  named ``Return``.
+> @@ -166,7 +167,7 @@ named ``Return``.
+>       effect.
+>  
+>  Structure, union, and enumeration documentation
+> ------------------------------------------------
+> +===============================================
+>  
+>  The general format of a struct, union, and enum kernel-doc comment is::
+>  
+> @@ -189,7 +190,7 @@ lines, and ends with a member description, a blank comment line, or the
+>  end of the comment block.
+>  
+>  Members
+> -~~~~~~~
+> +-------
+>  
+>  Members of structs, unions and enums should be documented the same way
+>  as function parameters; they immediately succeed the short description
+> @@ -223,7 +224,7 @@ Example::
+>    };
+>  
+>  Nested structs/unions
+> -~~~~~~~~~~~~~~~~~~~~~
+> +---------------------
+>  
+>  It is possible to document nested structs and unions, like::
+>  
+> @@ -274,7 +275,7 @@ It is possible to document nested structs and unions, like::
+>        should be documented as ``@bar:``
+>  
+>  In-line member documentation comments
+> -~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +-------------------------------------
+>  
+>  The structure members may also be documented in-line within the definition.
+>  There are two styles, single-line comments where both the opening ``/**`` and
+> @@ -311,7 +312,7 @@ on a line of their own, like all other kernel-doc comments::
+>    };
+>  
+>  Typedef documentation
+> ----------------------
+> +=====================
+>  
+>  The general format of a typedef kernel-doc comment is::
+>  
+> @@ -336,7 +337,7 @@ Typedefs with function prototypes can also be documented::
+>     typedef void (*type_name)(struct v4l2_ctrl *arg1, void *arg2);
+>  
+>  Highlights and cross-references
+> --------------------------------
+> +===============================
+>  
+>  The following special patterns are recognized in the kernel-doc comment
+>  descriptive text and converted to proper reStructuredText markup and `Sphinx C
+> @@ -385,7 +386,7 @@ Domain`_ references.
+>    instead. This is mostly for legacy comments.
+>  
+>  Cross-referencing from reStructuredText
+> -~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +=======================================
+>  
+>  No additional syntax is needed to cross-reference the functions and types
+>  defined in the kernel-doc comments from reStructuredText documents.
+> @@ -408,7 +409,7 @@ through the following syntax::
+>  For further details, please refer to the `Sphinx C Domain`_ documentation.
+>  
+>  Overview documentation comments
+> --------------------------------
+> +===============================
+>  
+>  To facilitate having source code and comments close together, you can include
+>  kernel-doc documentation blocks that are free-form comments instead of being
+> @@ -524,7 +525,7 @@ source.
+>  .. _kernel_doc:
+>  
+>  How to use kernel-doc to generate man pages
+> --------------------------------------------
+> +===========================================
+>  
+>  If you just want to use kernel-doc to generate man pages you can do this
+>  from the kernel git tree::
+
+
+
+Thanks,
+Mauro

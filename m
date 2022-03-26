@@ -2,181 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C21D4E8173
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 15:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B584E817A
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 15:43:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233309AbiCZOnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 10:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
+        id S233335AbiCZOpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 10:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232561AbiCZOnK (ORCPT
+        with ESMTP id S231485AbiCZOo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 10:43:10 -0400
-Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64E520288F
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 07:41:32 -0700 (PDT)
-Received: from cap.home.8bytes.org (p5b006cf2.dip0.t-ipconnect.de [91.0.108.242])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by theia.8bytes.org (Postfix) with ESMTPSA id 66E6F4ED;
-        Sat, 26 Mar 2022 15:41:30 +0100 (CET)
-From:   Joerg Roedel <joro@8bytes.org>
-To:     x86@kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Joerg Roedel <jroedel@suse.de>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH v3] x86/sev: Unroll string mmio with CC_ATTR_GUEST_UNROLL_STRING_IO
-Date:   Sat, 26 Mar 2022 15:41:27 +0100
-Message-Id: <20220326144127.15967-1-joro@8bytes.org>
-X-Mailer: git-send-email 2.35.1
+        Sat, 26 Mar 2022 10:44:58 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028AC208244;
+        Sat, 26 Mar 2022 07:43:21 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id 10so8792262qtz.11;
+        Sat, 26 Mar 2022 07:43:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4EjMh1BXc6L+8+2yCB/wSo589PUQ7VAWNTCQaSkJ5DQ=;
+        b=bX5hy0vhjxCbMhu+7P8AdpCsHwvPtkAzjWp8oIILb7PvQEqQPvSkMEtE8wD/zI+b4O
+         A1iLDSA6UOIia18J1ieodiovWaDGODX2GAmQ03CXwXeBvvVIzteKT79vqPh1bBzg5Ov8
+         1YeVjJgC+UlAujDFCZi/pcIqjXhKnbdFXi5V5ojTesq7e+tVoxZQXtTrPo6bzdprd0vh
+         0J6fco6DGwJU7HGK5Ll5duDmf3vyzmPGSbla+z5IQ9HSUs8IqBCwY4CYWV36fcevaecN
+         osbk0AMuA1eD9384huE9v64oB9jQDCGnctVakdgcHBnNVsj2O2hbDll3VrobpLyoLY/O
+         MZgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4EjMh1BXc6L+8+2yCB/wSo589PUQ7VAWNTCQaSkJ5DQ=;
+        b=ohUaS0XhB0gl7XMxzthdv/T9ycGIqDUKS5H7WRHkBjKcAxyOszLQ4QDZ7+UMiXdDe9
+         xGvN8YAImvYqSijfyjmjJ7nguRxieaFJPBKMMNAYda8tpZDVuZ5RX7B7s3VFQbrhLYfR
+         GISUBNBdL0PKP1IH7oAnrAj9q6XhaeMpq/D92tSin/Y0UiJJRDlF821eBrPgoOEcKaty
+         KC9NN9sdxM1tYwWU2Vilc6ndN8lqM12tP1B5qh6dExFHrcy5PBhemUolKjie9vbnIcEP
+         xeF2lme8/fJcbrijURxMchaL1kZWe1LRkrzyXjVWmiOC0MehrvmfXEB2zs8TUpYEG56N
+         sCrw==
+X-Gm-Message-State: AOAM532kVXEJAqE+odD1LBC8bndw7eHahXwFYzaFUy5Tu7iM9QHZHaPw
+        GRO9qIL3HP6Zaj2tSDLw1jM=
+X-Google-Smtp-Source: ABdhPJxlSMIB6q5kWqyaMQn/pan1GzoHN8bORyLMAqLixcIUaE8/0GbyYu4Eju9FJ1kveap/pQmo3Q==
+X-Received: by 2002:a05:622a:155:b0:2e1:cc60:8947 with SMTP id v21-20020a05622a015500b002e1cc608947mr13974558qtw.243.1648305800092;
+        Sat, 26 Mar 2022 07:43:20 -0700 (PDT)
+Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
+        by smtp.gmail.com with ESMTPSA id 70-20020a370649000000b0067b4cd8ffbasm4908918qkg.60.2022.03.26.07.43.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Mar 2022 07:43:18 -0700 (PDT)
+From:   Jesse Taube <mr.bossman075@gmail.com>
+X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
+To:     linux-imx@nxp.com
+Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, aisheng.dong@nxp.com, stefan@agner.ch,
+        linus.walleij@linaro.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        linux@armlinux.org.uk, abel.vesa@nxp.com, dev@lynxeye.de,
+        marcel.ziswiler@toradex.com, tharvey@gateworks.com,
+        leoyang.li@nxp.com, sebastian.reichel@collabora.com,
+        cniedermaier@dh-electronics.com, Mr.Bossman075@gmail.com,
+        clin@suse.com, giulio.benetti@benettiengineering.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org
+Subject: [PATCH v1 00/12] Add support for the i.MXRT1170-evk
+Date:   Sat, 26 Mar 2022 10:43:01 -0400
+Message-Id: <20220326144313.673549-1-Mr.Bossman075@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joerg Roedel <jroedel@suse.de>
+This patch continues support for the imxrt series now with the imxrt1170
 
-The io specific memcpy/memset functions use string mmio accesses to do
-their work. Under SEV the hypervisor can't emulate these instructions,
-because they read/write directly from/to encrypted memory.
+This patch contains:
+- Update to imxrt_defconfig
+- Devicetree
+- Clock driver
+- Pinctrl driver
+- New pll
 
-KVM will inject a page fault exception into the guest when it is asked
-to emulate string mmio instructions for an SEV guest:
+This patch also updates some documentation for both imxrt1170 an 1050.
 
-	BUG: unable to handle page fault for address: ffffc90000065068
-	#PF: supervisor read access in kernel mode
-	#PF: error_code(0x0000) - not-present page
-	PGD 8000100000067 P4D 8000100000067 PUD 80001000fb067 PMD 80001000fc067 PTE 80000000fed40173
-	Oops: 0000 [#1] PREEMPT SMP NOPTI
-	CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc7 #3
+The i.MXRT1170 has a vast array of fetures includeing two cores. 2 Ethernet, 2 USB phy, and a 2d gpu.
 
-As string mmio for an SEV guest can not be supported by the
-hypervisor, unroll the instructions for CC_ATTR_GUEST_UNROLL_STRING_IO
-enabled kernels.
+It also is fetured in a new google coral board
+https://coral.ai/products/dev-board-micro
+Not affiliated unfortunaly.
 
-This issue appears when kernels are launched in recent libvirt-managed
-SEV virtual machines, because libvirt started to add a tpm-crb device
-to the guest by default.
+Jesse Taube (12):
+  dt-bindings: arm: imx: Add i.MXRT compatible Documentation
+  dt-bindings: timer: gpt: Add i.MXRT compatible Documentation
+  dt-bindings: pinctrl: add i.MXRT1170 pinctrl Documentation
+  dt-bindings: clock: imx: Add documentation for i.MXRT1170 clock
+  ARM: mach-imx: Add support for i.MXRT1170
+  ARM: clk: imx: Update pllv3 to support i.MXRT1170
+  dt-bindings: imx: Add clock binding for i.MXRT1170
+  clk: imx: Add initial support for i.MXRT1170 clock driver
+  pinctrl: freescale: Add i.MXRT1170 pinctrl driver support
+  ARM: dts: imxrt1170-pinfunc: Add pinctrl binding header
+  ARM: dts: imx: Add i.MXRT1170-EVK support
+  ARM: imxrt_defconfig: Add i.MXRT1170
 
-The kernel driver for tpm-crb uses memcpy_to/from_io() functions to
-access MMIO memory, resulting in a page-fault injected by KVM and
-crashing the kernel at boot.
+ .../devicetree/bindings/arm/fsl.yaml          |   12 +
+ .../bindings/clock/imxrt1170-clock.yaml       |   59 +
+ .../bindings/pinctrl/fsl,imxrt1170.yaml       |   77 +
+ .../devicetree/bindings/timer/fsl,imxgpt.yaml |    2 +
+ arch/arm/boot/dts/Makefile                    |    3 +-
+ arch/arm/boot/dts/imxrt1170-evk.dts           |  126 ++
+ arch/arm/boot/dts/imxrt1170-pinfunc.h         | 1561 +++++++++++++++++
+ arch/arm/boot/dts/imxrt1170.dtsi              |  278 +++
+ arch/arm/configs/imxrt_defconfig              |   26 +
+ arch/arm/mach-imx/mach-imxrt.c                |    1 +
+ drivers/clk/imx/Kconfig                       |    7 +
+ drivers/clk/imx/Makefile                      |    1 +
+ drivers/clk/imx/clk-imxrt1170.c               |  391 +++++
+ drivers/clk/imx/clk-pllv3.c                   |   57 +-
+ drivers/clk/imx/clk.h                         |    4 +
+ drivers/pinctrl/freescale/Kconfig             |    7 +
+ drivers/pinctrl/freescale/Makefile            |    1 +
+ drivers/pinctrl/freescale/pinctrl-imxrt1170.c |  349 ++++
+ include/dt-bindings/clock/imxrt1170-clock.h   |  282 +++
+ 19 files changed, 3241 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/imxrt1170-clock.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,imxrt1170.yaml
+ create mode 100644 arch/arm/boot/dts/imxrt1170-evk.dts
+ create mode 100644 arch/arm/boot/dts/imxrt1170-pinfunc.h
+ create mode 100644 arch/arm/boot/dts/imxrt1170.dtsi
+ create mode 100644 drivers/clk/imx/clk-imxrt1170.c
+ create mode 100644 drivers/pinctrl/freescale/pinctrl-imxrt1170.c
+ create mode 100644 include/dt-bindings/clock/imxrt1170-clock.h
 
-Cc: stable@vger.kernel.org #4.15+
-Fixes: d8aa7eea78a1 ('x86/mm: Add Secure Encrypted Virtualization (SEV) support')
-Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
----
-Changes v2->v3:
-	- Fix sparse warnings introduced by v2
-
- arch/x86/lib/iomem.c | 65 ++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 57 insertions(+), 8 deletions(-)
-
-diff --git a/arch/x86/lib/iomem.c b/arch/x86/lib/iomem.c
-index df50451d94ef..3e2f33fc33de 100644
---- a/arch/x86/lib/iomem.c
-+++ b/arch/x86/lib/iomem.c
-@@ -22,7 +22,7 @@ static __always_inline void rep_movs(void *to, const void *from, size_t n)
- 		     : "memory");
- }
- 
--void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
-+static void string_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
- {
- 	if (unlikely(!n))
- 		return;
-@@ -38,9 +38,8 @@ void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
- 	}
- 	rep_movs(to, (const void *)from, n);
- }
--EXPORT_SYMBOL(memcpy_fromio);
- 
--void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
-+static void string_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
- {
- 	if (unlikely(!n))
- 		return;
-@@ -56,14 +55,64 @@ void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
- 	}
- 	rep_movs((void *)to, (const void *) from, n);
- }
-+
-+static void unrolled_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
-+{
-+	const volatile char __iomem *in = from;
-+	char *out = to;
-+	int i;
-+
-+	for (i = 0; i < n; ++i)
-+		out[i] = readb(&in[i]);
-+}
-+
-+static void unrolled_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
-+{
-+	volatile char __iomem *out = to;
-+	const char *in = from;
-+	int i;
-+
-+	for (i = 0; i < n; ++i)
-+		writeb(in[i], &out[i]);
-+}
-+
-+static void unrolled_memset_io(volatile void __iomem *a, int b, size_t c)
-+{
-+	volatile char __iomem *mem = a;
-+	int i;
-+
-+	for (i = 0; i < c; ++i)
-+		writeb(b, &mem[i]);
-+}
-+
-+void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
-+{
-+	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO))
-+		unrolled_memcpy_fromio(to, from, n);
-+	else
-+		string_memcpy_fromio(to, from, n);
-+}
-+EXPORT_SYMBOL(memcpy_fromio);
-+
-+void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
-+{
-+	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO))
-+		unrolled_memcpy_toio(to, from, n);
-+	else
-+		string_memcpy_toio(to, from, n);
-+}
- EXPORT_SYMBOL(memcpy_toio);
- 
- void memset_io(volatile void __iomem *a, int b, size_t c)
- {
--	/*
--	 * TODO: memset can mangle the IO patterns quite a bit.
--	 * perhaps it would be better to use a dumb one:
--	 */
--	memset((void *)a, b, c);
-+	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO)) {
-+		unrolled_memset_io(a, b, c);
-+	} else {
-+		/*
-+		 * TODO: memset can mangle the IO patterns quite a bit.
-+		 * perhaps it would be better to use a dumb one:
-+		 */
-+		memset((void *)a, b, c);
-+	}
- }
- EXPORT_SYMBOL(memset_io);
 -- 
-2.35.1
+2.34.1
 

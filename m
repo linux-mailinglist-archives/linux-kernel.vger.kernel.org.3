@@ -2,51 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB49A4E7FEF
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 09:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 006434E7FF2
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 09:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232023AbiCZIJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 04:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48000 "EHLO
+        id S232039AbiCZILD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 04:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232019AbiCZIJY (ORCPT
+        with ESMTP id S229556AbiCZIK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 04:09:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193E232EF2;
-        Sat, 26 Mar 2022 01:07:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BAC4DB8006F;
-        Sat, 26 Mar 2022 08:07:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A69E8C34116;
-        Sat, 26 Mar 2022 08:07:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648282065;
-        bh=aXm+/EMiPGTBOXkMG0o+LiBNARi0puGc3dM/fhCENmI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d36AEMRsvicEHBnWgOclYD5tgBL4i/mWby4t9DVwnBmyBsXxBJa19rkyueP2W33n5
-         bvChsNzAbGWodlxH87GZhd4t/R896m4jWAVbvi+1JrgqPGwDCG6lEIzQ1R/BnlRfjW
-         Q5zKF+o0U8BMAw5l8tXsA8QcOPkbVhfCSVl26rjtJUcGRrh1dLktHQu7XziQqfO8TT
-         xarn8ifj5LpOen3bcVejgs5zBNdoVDdfX7O7zMybknAkpiGs3cIrCXa2x1GgZEn54O
-         +7smnn3ICeJfdkNcXPQuvfRf82y8UL5sd+0uFWSi2eR9e5yMDOOnNtPrUJ/GenJvvD
-         K49rIvqXucf3A==
-From:   Roger Quadros <rogerq@kernel.org>
-To:     miquel.raynal@bootlin.com, robh+dt@kernel.org
-Cc:     krzk@kernel.org, richard@nod.at, vigneshr@ti.com, kishon@ti.com,
-        nm@ti.com, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roger Quadros <rogerq@kernel.org>
-Subject: [PATCH v3 3/3] mtd: rawnand: omap_elm: Add compatible for AM64 ELM
-Date:   Sat, 26 Mar 2022 10:07:26 +0200
-Message-Id: <20220326080726.30372-4-rogerq@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220326080726.30372-1-rogerq@kernel.org>
-References: <20220326080726.30372-1-rogerq@kernel.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Sat, 26 Mar 2022 04:10:58 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024354F9CB
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 01:09:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648282162; x=1679818162;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5Lo509evF0DkyV9oy2CvXO7pUDHwBMp/BuZnKCZ3CFY=;
+  b=GQbTKsTjgbcb2mccGZz4+4S81qaG7J5JZOZY/dLzegeg0fRcx4aWvbMi
+   EgnETC3MyoNM5pAt4yTuHV0sFDy6f3x2gsG2ykOFX1oYsak+jUSCS1yIm
+   C9YDB7F/c9A2Vh5Y9pXsbKciAXZ5reYlf0CVEJ+pHU01z+JSrPvw7nb08
+   oliRqGiif2HUqwO345JYKdtDvG28exm3V6AJB5K27UE8B9R042r20/0wL
+   AM7V1cvrieXDR5/1/bKi3hXqQmxtWL591hqAbbRgi0P9Ju2E/5lb2MVUk
+   ODofB0ZWkWcnq7eVYo1QYRtcwRFUgdg56Z6IU5X6Y7cLbQZwK6eV/UbC6
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="319471312"
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="319471312"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 01:09:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="718463852"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 26 Mar 2022 01:09:20 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nY1U7-000NAr-Ow; Sat, 26 Mar 2022 08:09:19 +0000
+Date:   Sat, 26 Mar 2022 16:09:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH] swiotlb: fix alloc_cast.cocci warnings
+Message-ID: <20220326080900.GA72334@bd57dd6d74fb>
+References: <202203261644.zQlZ2Jw4-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202203261644.zQlZ2Jw4-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,25 +65,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AM64 SoC has the Error Locator Module. Add compatible id for it.
+From: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
+kernel/dma/swiotlb.c:433:15-33: WARNING: casting value returned by memory allocation function to (struct io_tlb_area *) is useless.
+
+ Remove casting the values returned by memory allocation functions
+ like kmalloc, kzalloc, kmem_cache_alloc, kmem_cache_zalloc etc.
+
+Semantic patch information:
+ This makes an effort to find cases of casting of values returned by
+ kmalloc, kzalloc, kcalloc, kmem_cache_alloc, kmem_cache_zalloc,
+ kmem_cache_alloc_node, kmalloc_node and kzalloc_node and removes
+ the casting as it is not required. The result in the patch case may
+ need some reformatting.
+
+Generated by: scripts/coccinelle/api/alloc/alloc_cast.cocci
+
+Fixes: 4ab45cefa80f ("swiotlb: Split up single swiotlb lock")
+CC: Andi Kleen <ak@linux.intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
 ---
- drivers/mtd/nand/raw/omap_elm.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/mtd/nand/raw/omap_elm.c b/drivers/mtd/nand/raw/omap_elm.c
-index db105d9b560c..aa7f49c3f372 100644
---- a/drivers/mtd/nand/raw/omap_elm.c
-+++ b/drivers/mtd/nand/raw/omap_elm.c
-@@ -550,6 +550,7 @@ static SIMPLE_DEV_PM_OPS(elm_pm_ops, elm_suspend, elm_resume);
- #ifdef CONFIG_OF
- static const struct of_device_id elm_of_match[] = {
- 	{ .compatible = "ti,am3352-elm" },
-+	{ .compatible = "ti,am64-elm" },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, elm_of_match);
--- 
-2.17.1
+tree:   https://github.com/intel/tdx.git guest-rebased
+head:   4c095660b91dbdd18042456e395af0deeef93485
+commit: 4ab45cefa80f97ba2bdc31226523c891832d1080 [65/83] swiotlb: Split up single swiotlb lock
+:::::: branch date: 13 hours ago
+:::::: commit date: 3 days ago
 
+ kernel/dma/swiotlb.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/kernel/dma/swiotlb.c
++++ b/kernel/dma/swiotlb.c
+@@ -430,7 +430,7 @@ swiotlb_late_init_with_tbl(char *tlb, un
+ 		return -ENOMEM;
+ 	}
+ 
+-	mem->areas = (struct io_tlb_area *)kcalloc(num_areas,
++	mem->areas = kcalloc(num_areas,
+ 						   sizeof(struct io_tlb_area),
+ 						   GFP_KERNEL);
+ 	if (!mem->areas) {

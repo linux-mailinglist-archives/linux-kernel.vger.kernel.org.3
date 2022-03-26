@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAE24E81A6
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 15:44:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 272D54E81A8
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 15:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233561AbiCZOqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 10:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
+        id S230439AbiCZOqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 10:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233516AbiCZOpm (ORCPT
+        with ESMTP id S233607AbiCZOpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 10:45:42 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D0C21A8A8;
-        Sat, 26 Mar 2022 07:43:51 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id a5so8454839qvx.1;
-        Sat, 26 Mar 2022 07:43:51 -0700 (PDT)
+        Sat, 26 Mar 2022 10:45:43 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB9821592D;
+        Sat, 26 Mar 2022 07:43:54 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id k125so8130113qkf.0;
+        Sat, 26 Mar 2022 07:43:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vb2ZOaYsO4CyUWoU4mZse36oHT1LXfcvDTGWA9nha+g=;
-        b=ZNlH3G7sic6bbMTQsp4SV8085iOZMqssE3HV43C50KJy33XbR5vidkI3FAmis6UR+b
-         RagNkUet0iF2Y42wWL9ygEV6olNcAaDwTYyYGG/b1/dnEW89fgLrEMxsO0J/BMZLuAYW
-         37M5vOBiSewjXTBP6dFyLw201AGWDaHDWtRsZsmfOjO3gM6QY0NnXua2hOZ6P9kj9P9O
-         JzBdO85/SyAtV1Ay9xW4t8Me20yeEFcIahbO+TVLURnveCpSGnzQweANm7gxt18Je8mP
-         XZ8JXWQKQd3y0BGVPziFGMKEolcRjtoj8H44hTKydcp7oDbVv0W3C1g4sUa6+NbnrqCD
-         /8bg==
+        bh=2YlgMBSPmJUk0Rk6GLoONESlcILYtfMxn7a25rTaF2E=;
+        b=bRr0kfXyZWJKTCY0yDrgbVKgvL6NAnG92yYSh+ggecEex1QlemaMmbaWmC/tKPZoVO
+         E7NU0Kn33ukzhjWBrJ9bX43NPvXU3RiK3A4iifUmlAnyvlAqKWqjlm/aoIkRgNejJYlX
+         cJBsoxE6FxCit1CztX91Bn+6TP50wrBoqniJzt8qHXFUtA3Kj6GXBnAmjMqidEbW1eZK
+         3Kkn9k8bUl1Bs+U//+eCUloh32kwnty3NqGi1BM6PDTXqMnd6MEjvY2O3ty8/6ak18nb
+         oJ+4y/n/C2yj0nJ3HD0Jdk9J3ZJvOsvPLE/UbuqD2zi1LeW79ceLbIS14mFqxOTIS8t/
+         rijg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vb2ZOaYsO4CyUWoU4mZse36oHT1LXfcvDTGWA9nha+g=;
-        b=1kxUEKzSHIDTomH4ERe/VdkyNLT9UI1DxaRkKHcIdIm/VYNMfbWC/f660Wthhxtgm1
-         K5KMEd4FpnHyrHvzuTqzDa9sz+nRA5AYYzarBhn/qSeK4WGbMvOVmJ8xJz8DYqS0Orig
-         qqiOae99FTOx2NlcLmcbvXuoGYmpJxWZCc7UTYMp5Dlt/vyVMc5Yw4siexPB8yxs8Uy2
-         kgo5oYZf0s/24xUY+qccj/05Og7P11QUbJK9r4vrprac2pGnjjUR78k4iX36pMx7E1aH
-         ynYPPQNtqzY+mZQgDEvgjBipUA5oD2XMQX8QPx/fpuoSYKab/5wY6UVq+FopULjOy/Ol
-         jMfg==
-X-Gm-Message-State: AOAM530k48GXFgy3igm/K4MVWnAQSt6HWnjGFh6ZVvs3b89EbJgbjRQU
-        S5aLpavj4VuadFbU2J/tf4Y=
-X-Google-Smtp-Source: ABdhPJzoPEcKBhlObnABxMAkn3QVuUczHXUwTPLpPJvdyaaltd8pqj2J58Ved9sC2cuHZe0NJImR+Q==
-X-Received: by 2002:a0c:be89:0:b0:42c:38b2:9d17 with SMTP id n9-20020a0cbe89000000b0042c38b29d17mr13861381qvi.50.1648305830795;
-        Sat, 26 Mar 2022 07:43:50 -0700 (PDT)
+        bh=2YlgMBSPmJUk0Rk6GLoONESlcILYtfMxn7a25rTaF2E=;
+        b=KlDY92VyyW4vXMNFcdBYv4EUS/yDNp25h74Q/BLb8TsAjW+WLxWZRUfutxLl1Rse5D
+         j0mSXY00NV3NhQZ2reBsdAetAef4fzRrwziejR+qPsuKIQTKz1+Py0mSS5do7hl3Ko4+
+         v2Ae34csy2FJgh9ep3faQRaD7dEYiqNzaQD2TwPW2kREDfqwc0dNcWTmgMzNTkDqB1Rt
+         T80HfEUNsieJdjXjazvbpjfdVnvqJECBEaWzW1eZANBmkrks19MCJNqhsBkvRssxjMXA
+         Mp5YVicr1K5X6eBdJs9OlNl9tlHd6jBF+i/xn6D0XZsU0fSdrHzFV9Od0Jn9iKFi1qxb
+         bewQ==
+X-Gm-Message-State: AOAM532RklrlS0s6jYfnTCh1gOgDM5Q208o9ZP8x6jHngj6yCx49gI2v
+        YcHIrTKilXAAxI+x1q75Pu8=
+X-Google-Smtp-Source: ABdhPJxkICEugBg7oRpjNBUje7xtmOMgdsUqF2ijDNDcfDIaObRzldofvcB2xTgJFpnnOJMi5fl5LQ==
+X-Received: by 2002:a05:620a:318b:b0:67d:7f67:8e8c with SMTP id bi11-20020a05620a318b00b0067d7f678e8cmr9724912qkb.637.1648305833500;
+        Sat, 26 Mar 2022 07:43:53 -0700 (PDT)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id 70-20020a370649000000b0067b4cd8ffbasm4908918qkg.60.2022.03.26.07.43.48
+        by smtp.gmail.com with ESMTPSA id 70-20020a370649000000b0067b4cd8ffbasm4908918qkg.60.2022.03.26.07.43.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 07:43:49 -0700 (PDT)
+        Sat, 26 Mar 2022 07:43:52 -0700 (PDT)
 From:   Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To:     linux-imx@nxp.com
@@ -64,9 +64,9 @@ Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-gpio@vger.kernel.org
-Subject: [PATCH v1 11/12] ARM: dts: imx: Add i.MXRT1170-EVK support
-Date:   Sat, 26 Mar 2022 10:43:12 -0400
-Message-Id: <20220326144313.673549-12-Mr.Bossman075@gmail.com>
+Subject: [PATCH v1 12/12] ARM: imxrt_defconfig: Add i.MXRT1170
+Date:   Sat, 26 Mar 2022 10:43:13 -0400
+Message-Id: <20220326144313.673549-13-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220326144313.673549-1-Mr.Bossman075@gmail.com>
 References: <20220326144313.673549-1-Mr.Bossman075@gmail.com>
@@ -75,466 +75,67 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The NXP i.MXRT1170 Evaluation Kit (EVK) provides a platform for rapid
-evaluation of the i.MXRT, which features NXP's implementation of the Arm
-Cortex-M7 and M4 core.
-
-The EVK provides 64 MB SDRAM, 128 MB Quad SPI flash, Micro SD card socket,
-two USB 2.0 OTG, and two Ethernet ports.
-
-This patch aims to support the preliminary booting up features
-as follows:
-GPIO
-LPUART
-SD/MMC
+Add i.MXRT1170 pinctrl, clocks and USB to imxrt_defconfig.
 
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
 ---
- arch/arm/boot/dts/Makefile          |   3 +-
- arch/arm/boot/dts/imxrt1170-evk.dts | 126 +++++++++++++
- arch/arm/boot/dts/imxrt1170.dtsi    | 278 ++++++++++++++++++++++++++++
- 3 files changed, 406 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm/boot/dts/imxrt1170-evk.dts
- create mode 100644 arch/arm/boot/dts/imxrt1170.dtsi
+ arch/arm/configs/imxrt_defconfig | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 07acd6189cae..87ae30818f39 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -724,7 +724,8 @@ dtb-$(CONFIG_SOC_IMX7ULP) += \
- 	imx7ulp-com.dtb \
- 	imx7ulp-evk.dtb
- dtb-$(CONFIG_SOC_IMXRT) += \
--	imxrt1050-evk.dtb
-+	imxrt1050-evk.dtb \
-+	imxrt1170-evk.dtb
- dtb-$(CONFIG_SOC_LS1021A) += \
- 	ls1021a-moxa-uc-8410a.dtb \
- 	ls1021a-qds.dtb \
-diff --git a/arch/arm/boot/dts/imxrt1170-evk.dts b/arch/arm/boot/dts/imxrt1170-evk.dts
-new file mode 100644
-index 000000000000..fc3b41de8215
---- /dev/null
-+++ b/arch/arm/boot/dts/imxrt1170-evk.dts
-@@ -0,0 +1,126 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ * Copyright (C) 2022
-+ * Author(s):  Jesse Taube <Mr.Bossman075@gmail.com>
-+ */
-+
-+/dts-v1/;
-+#include "imxrt1170.dtsi"
-+#include "imxrt1170-pinfunc.h"
-+
-+/ {
-+	model = "NXP imxrt1170-evk board";
-+	compatible = "fsl,imxrt1170-evk", "fsl,imxrt1170";
-+
-+	chosen {
-+		stdout-path = &lpuart1;
-+	};
-+
-+	aliases {
-+		gpio0 = &gpio1;
-+		gpio1 = &gpio2;
-+		gpio2 = &gpio3;
-+		gpio3 = &gpio4;
-+		gpio4 = &gpio5;
-+		gpio5 = &gpio6;
-+		gpio6 = &gpio7;
-+		gpio7 = &gpio8;
-+		gpio8 = &gpio9;
-+		gpio9 = &gpio10;
-+		gpio10 = &gpio11;
-+		gpio11 = &gpio12;
-+		gpio12 = &gpio13;
-+		mmc0 = &usdhc1;
-+		serial0 = &lpuart1;
-+		usbphy0 = &usbphy1;
-+	};
-+
-+	memory@20240000 {
-+		device_type = "memory";
-+		reg = <0x20240000 0xf0000>;
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x4000000>;
-+	};
-+
-+	reg_usb_otg1_vbus: regulator-usb-otg1-vbus {
-+		compatible = "regulator-fixed";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_pwm0>;
-+		regulator-name = "usb_otg1_vbus";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		gpio = <&gpio9 9 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+};
-+
-+&lpuart1 { /* console */
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_lpuart1>;
-+	status = "okay";
-+};
-+
-+
-+&usbotg1 {
-+	vbus-supply = <&reg_usb_otg1_vbus>;
-+	dr_mode = "host";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usbotg1_id>;
-+	disable-over-current;
-+	status = "okay";
-+};
-+
-+&iomuxc {
-+	pinctrl_lpuart1: lpuart1grp {
-+		fsl,pins = <
-+			IOMUXC_GPIO_AD_24_LPUART1_TXD 0xf1
-+			IOMUXC_GPIO_AD_25_LPUART1_RXD 0xf1
-+		>;
-+	};
-+
-+	pinctrl_pwm0: pwm0grp {
-+		fsl,pins = <
-+			IOMUXC_GPIO_AD_11_USB_OTG1_OC 0xf1
-+		>;
-+	};
-+
-+	pinctrl_usbotg1_id: pinctrl_usbotg1_id {
-+		fsl,pins = <
-+			IOMUXC_GPIO_AD_09_USBPHY1_OTG_ID 0xf1
-+		>;
-+	};
-+
-+	pinctrl_usdhc0: usdhc0grp {
-+		fsl,pins = <
-+			IOMUXC_GPIO_AD_32_USDHC1_CD_B
-+				0x1B000
-+			IOMUXC_GPIO_AD_34_USDHC1_VSELECT
-+				0xB069
-+			IOMUXC_GPIO_SD_B1_00_USDHC1_CMD
-+				0x17061
-+			IOMUXC_GPIO_SD_B1_01_USDHC1_CLK
-+				0x17061
-+			IOMUXC_GPIO_SD_B1_05_USDHC1_DATA3
-+				0x17061
-+			IOMUXC_GPIO_SD_B1_04_USDHC1_DATA2
-+				0x17061
-+			IOMUXC_GPIO_SD_B1_03_USDHC1_DATA1
-+				0x17061
-+			IOMUXC_GPIO_SD_B1_02_USDHC1_DATA0
-+				0x17061
-+		>;
-+	};
-+};
-+
-+&usdhc1 {
-+	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
-+	pinctrl-0 = <&pinctrl_usdhc0>;
-+	pinctrl-1 = <&pinctrl_usdhc0>;
-+	pinctrl-2 = <&pinctrl_usdhc0>;
-+	pinctrl-3 = <&pinctrl_usdhc0>;
-+	status = "okay";
-+	broken-cd;
-+};
-diff --git a/arch/arm/boot/dts/imxrt1170.dtsi b/arch/arm/boot/dts/imxrt1170.dtsi
-new file mode 100644
-index 000000000000..fb53347571a9
---- /dev/null
-+++ b/arch/arm/boot/dts/imxrt1170.dtsi
-@@ -0,0 +1,278 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ * Copyright (C) 2022
-+ * Author(s):  Jesse Taube <Mr.Bossman075@gmail.com>
-+ */
-+
-+#include "armv7-m.dtsi"
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/clock/imxrt1170-clock.h>
-+#include <dt-bindings/gpio/gpio.h>
-+
-+/ {
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		linux,cma {
-+			compatible = "shared-dma-pool";
-+			size = <0x40000>;
-+			no-map;
-+			linux,dma-default;
-+		};
-+	};
-+
-+	clocks {
-+		osc: osc {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <24000000>;
-+		};
-+
-+		rcosc16M: rcosc16M {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <16000000>;
-+		};
-+
-+		osc32k: osc32k {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <32768>;
-+		};
-+
-+		osc3M: osc3M {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <3000000>;
-+		};
-+	};
-+
-+	soc {
-+		anatop: anatop@40c84000 {
-+			compatible = "fsl,imxrt-anatop";
-+			reg = <0x40c84000 0x4000>;
-+		};
-+
-+		clks: ccm@40cc0000 {
-+			compatible = "fsl,imxrt1170-ccm";
-+			reg = <0x40cc0000 0x4000>;
-+			clocks = <&osc>, <&rcosc16M>, <&osc32k>;
-+			clock-names = "osc", "rcosc16M", "osc32k";
-+			#clock-cells = <1>;
-+		};
-+
-+		edma1: dma-controller@40070000 {
-+			#dma-cells = <2>;
-+			compatible = "fsl,imx7ulp-edma";
-+			reg = <0x40070000 0x4000>,
-+				<0x40074000 0x4000>;
-+			dma-channels = <32>;
-+			interrupts = <0>, <1>, <2>, <3>, <4>, <5>, <6>, <7>, <8>,
-+				<9>, <10>, <11>, <12>, <13>, <14>, <15>, <16>;
-+			clock-names = "dma", "dmamux0";
-+			clocks = <&clks IMXRT1170_CLK_BUS>,
-+				 <&clks IMXRT1170_CLK_M4>;
-+		};
-+
-+		gpio1: gpio@4012c000 {
-+			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
-+			reg = <0x4012c000 0x4000>;
-+			interrupts = <100>, <101>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gpio2: gpio@40130000 {
-+			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
-+			reg = <0x40130000 0x4000>;
-+			interrupts = <102>, <103>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gpio3: gpio@40134000 {
-+			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
-+			reg = <0x40134000 0x4000>;
-+			interrupts = <104>, <105>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gpio4: gpio@40138000 {
-+			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
-+			reg = <0x40138000 0x4000>;
-+			interrupts = <106>, <107>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gpio5: gpio@4013c000 {
-+			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
-+			reg = <0x4013c000 0x4000>;
-+			interrupts = <108>, <109>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gpio6: gpio@40140000 {
-+			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
-+			reg = <0x40140000 0x4000>;
-+			interrupts = <61>, <62>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gpio7: gpio@40c5c000 {
-+			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
-+			reg = <0x40c5c000 0x4000>;
-+			interrupts = <99>, <99>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gpio8: gpio@40c60000 {
-+			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
-+			reg = <0x40c60000 0x4000>;
-+			interrupts = <99>, <99>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gpio9: gpio@40c64000 {
-+			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
-+			reg = <0x40c64000 0x4000>;
-+			interrupts = <99>, <99>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gpio10: gpio@40c68000 {
-+			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
-+			reg = <0x40c68000 0x4000>;
-+			interrupts = <99>, <99>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gpio11: gpio@40c6c000 {
-+			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
-+			reg = <0x40c6c000 0x4000>;
-+			interrupts = <99>, <99>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gpio12: gpio@40c70000 {
-+			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
-+			reg = <0x40c70000 0x4000>;
-+			interrupts = <61>, <62>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gpio13: gpio@40ca0000 {
-+			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
-+			reg = <0x40ca0000 0x4000>;
-+			interrupts = <93>, <93>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gpt: timer@400ec000 {
-+			compatible = "fsl,imxrt1170-gpt", "fsl,imx6dl-gpt", "fsl,imx6sl-gpt";
-+			reg = <0x400ec000 0x4000>;
-+			interrupts = <119>;
-+			clocks = <&osc3M>;
-+			clock-names = "per";
-+		};
-+
-+		iomuxc: iomuxc@400e8000 {
-+			compatible = "fsl,imxrt1170-iomuxc";
-+			reg = <0x400e8000 0x4000>;
-+			fsl,mux_mask = <0x7>;
-+		};
-+
-+		lpuart1: serial@4007c000 {
-+			compatible = "fsl,imxrt1170-lpuart", "fsl,imxrt1050-lpuart", "fsl,imx7ulp-lpuart";
-+			reg = <0x4007c000 0x4000>;
-+			interrupts = <20>;
-+			clocks = <&clks IMXRT1170_CLK_LPUART1>;
-+			clock-names = "ipg";
-+			status = "disabled";
-+		};
-+
-+		usdhc1: mmc@40418000 {
-+			compatible ="fsl,imxrt1050-usdhc", "fsl,imx6sl-usdhc";
-+			reg = <0x40418000 0x10000>;
-+			interrupts = <133>;
-+			clocks = <&clks IMXRT1170_CLK_BUS>,
-+				<&clks IMXRT1170_CLK_BUS>,
-+				<&clks IMXRT1170_CLK_USDHC1>;
-+			clock-names = "ipg", "ahb", "per";
-+			bus-width = <4>;
-+			fsl,wp-controller;
-+			no-1-8-v;
-+			max-frequency = <4000000>;
-+			fsl,tuning-start-tap = <20>;
-+			fsl,tuning-step= <2>;
-+			status = "disabled";
-+		};
-+
-+
-+		usbmisc1: usbmisc@40430200 {
-+			compatible = "fsl,imx7ulp-usbmisc";
-+			#index-cells = <1>;
-+			reg = <0x40430200 0x200>;
-+		};
-+
-+		usbotg1: usb@40430000 {
-+			compatible = "fsl,imx7ulp-usb";
-+			reg = <0x40430000 0x200>;
-+			interrupts = <136>;
-+			clocks = <&clks IMXRT1170_CLK_USB>;
-+			phys = <&usbphy1>;
-+			fsl,usbmisc = <&usbmisc1 0>;
-+			status = "disabled";
-+		};
-+
-+		usbphy1: usb-phy@40434000 {
-+			compatible = "fsl,imx7ulp-usbphy";
-+			reg = <0x40434000 0x1000>;
-+			interrupts = <90>;
-+			clocks = <&clks IMXRT1170_CLK_USB>;
-+			#phy-cells = <0>;
-+		};
-+
-+	};
-+};
+diff --git a/arch/arm/configs/imxrt_defconfig b/arch/arm/configs/imxrt_defconfig
+index 52dba3762996..bc0b8751956e 100644
+--- a/arch/arm/configs/imxrt_defconfig
++++ b/arch/arm/configs/imxrt_defconfig
+@@ -17,7 +17,32 @@ CONFIG_SERIAL_FSL_LPUART=y
+ CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
+ CONFIG_SERIAL_DEV_BUS=y
+ CONFIG_PINCTRL_IMXRT1050=y
++CONFIG_PINCTRL_IMXRT1170=y
+ CONFIG_GPIO_MXC=y
++CONFIG_USB=y
++CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
++CONFIG_USB_DYNAMIC_MINORS=y
++CONFIG_USB_OTG=y
++CONFIG_USB_OTG_FSM=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_FSL=y
++CONFIG_USB_EHCI_HCD_PLATFORM=y
++CONFIG_USB_CHIPIDEA=y
++CONFIG_USB_CHIPIDEA_UDC=y
++CONFIG_USB_CHIPIDEA_HOST=y
++CONFIG_NOP_USB_XCEIV=y
++CONFIG_USB_MXS_PHY=y
++CONFIG_USB_GADGET=y
++CONFIG_USB_CONFIGFS=y
++CONFIG_USB_CONFIGFS_SERIAL=y
++CONFIG_USB_CONFIGFS_ACM=y
++CONFIG_USB_CONFIGFS_OBEX=y
++CONFIG_USB_CONFIGFS_MASS_STORAGE=y
++CONFIG_USB_CONFIGFS_F_LB_SS=y
++CONFIG_USB_CONFIGFS_F_FS=y
++CONFIG_USB_CONFIGFS_F_HID=y
++CONFIG_USB_CONFIGFS_F_PRINTER=y
++CONFIG_USB_MASS_STORAGE=y
+ CONFIG_MMC=y
+ CONFIG_MMC_SDHCI=y
+ CONFIG_MMC_SDHCI_PLTFM=y
+@@ -25,6 +50,7 @@ CONFIG_MMC_SDHCI_ESDHC_IMX=y
+ CONFIG_DMADEVICES=y
+ CONFIG_FSL_EDMA=y
+ CONFIG_CLK_IMXRT1050=y
++CONFIG_CLK_IMXRT1170=y
+ CONFIG_EXT4_FS=y
+ CONFIG_EXT4_FS_POSIX_ACL=y
+ CONFIG_EXT4_FS_SECURITY=y
 -- 
 2.34.1
 

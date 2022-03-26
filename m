@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25244E7E96
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 03:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B724E7E9D
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 03:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiCZC30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 22:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52102 "EHLO
+        id S230361AbiCZCdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 22:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiCZC3Y (ORCPT
+        with ESMTP id S229647AbiCZCdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 22:29:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A858A1760D5;
-        Fri, 25 Mar 2022 19:27:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5EDCCB82B07;
-        Sat, 26 Mar 2022 02:27:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 188B7C004DD;
-        Sat, 26 Mar 2022 02:27:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648261666;
-        bh=GPBnrR38vldcM8pzwaRlh5Fu/HDIL2hc4on8+T36Er8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rI1w6cxa/iWXTDaYiPp+zlEqF/mtuZP77a/hESaNLrYovCEKe6tK6AHa9c6JKZuBj
-         1pIzbj2rRc4Qrf61oZDUW6EJNz5VJFiaFDf2SqNRR7oYJAUkQ3CYtcMKtpT5eEYsdz
-         AskptYEDy056t5SZNwoS8ta2kwij+myxmx3uoD0CuxzX6PMOlZ0aeBu+Vz4qiP5aI/
-         yTw30lhaZJLSQpEu1AD+KUdf6VnduH3dIVa/XJLWGx8grukC9qARqR8DLrESnoHa+G
-         g3Wopd3Lgtee3JaQ9xOfaGtr586ayQxik2ex5XNtGKiE1tzIZieIWJqDMqwexu0el6
-         S162RJgIqV9VQ==
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        kernel-janitors@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        Fri, 25 Mar 2022 22:33:50 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAED0593A5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 19:32:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648261934; x=1679797934;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=V331xQ5ByB0x2QMaL69g1ngRRXmUppECGTvzgEqID7k=;
+  b=jQeizwqrxLRTMs6spu9+KpcW2ZEtwIJqkuzGYfqiqpdfwiqiMlByky/h
+   +ZOMts/rc+UIfaCSqigki7vhOXVmmDmRsbtahRY6FLdq9ULzHf4zRPh4p
+   68TmpUpPARDK4KZqn9vT2UQGY494e/5lBJVXNGSPKC0exvxfLHkE7i4yz
+   MwrTcoMGN/144353OKnJ1k+EYXm6UyA4nzO/AXZw8aWLItnbnM7LC/yoC
+   Tfi4po8DKDMIkLQ8Hxsy0KJJZx6Ra6Pp2PaoauyKoGqBvUoJpjmTvUm0h
+   fOjBksoitPElMOnld+iHwpX8Umm/8jaldjcOBVhJY2lk25zHd9rRct/AS
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="258719577"
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="258719577"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 19:32:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="718406425"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 25 Mar 2022 19:32:13 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nXwDs-000MuS-Cr; Sat, 26 Mar 2022 02:32:12 +0000
+Date:   Sat, 26 Mar 2022 10:31:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 4/4] x86,kprobes: Fix optprobe trampoline to generate complete pt_regs
-Date:   Sat, 26 Mar 2022 11:27:40 +0900
-Message-Id: <164826166027.2455864.14759128090648961900.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <164826160914.2455864.505359679001055158.stgit@devnote2>
-References: <164826160914.2455864.505359679001055158.stgit@devnote2>
-User-Agent: StGit/0.19
+Subject: [ammarfaizi2-block:dhowells/linux-fs/afs-testing 44/44]
+ arch/sh/include/asm/cmpxchg-irq.h:24:14: sparse: sparse: cast truncates bits
+ from constant value (5e5ee5e5 becomes e5e5)
+Message-ID: <202203261033.hVE2K2SZ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,80 +64,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the optprobe trampoline template code ganerate an
-almost complete pt_regs on-stack, everything except regs->ss.
-The 'regs->ss' points to the top of stack, which is not a
-valid segment decriptor.
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/afs-testing
+head:   1eba43e7cea9100a3767c5a7212ec5f1db4db4fd
+commit: 1eba43e7cea9100a3767c5a7212ec5f1db4db4fd [44/44] Check for dead timer
+config: sh-randconfig-s032-20220325 (https://download.01.org/0day-ci/archive/20220326/202203261033.hVE2K2SZ-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/1eba43e7cea9100a3767c5a7212ec5f1db4db4fd
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/afs-testing
+        git checkout 1eba43e7cea9100a3767c5a7212ec5f1db4db4fd
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sh SHELL=/bin/bash kernel/time/
 
-As same as the rethook does, complete the job by also pushing ss.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- arch/x86/kernel/kprobes/opt.c |   25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/kernel/kprobes/opt.c b/arch/x86/kernel/kprobes/opt.c
-index b4a54a52aa59..e6b8c5362b94 100644
---- a/arch/x86/kernel/kprobes/opt.c
-+++ b/arch/x86/kernel/kprobes/opt.c
-@@ -106,7 +106,8 @@ asm (
- 			".global optprobe_template_entry\n"
- 			"optprobe_template_entry:\n"
- #ifdef CONFIG_X86_64
--			/* We don't bother saving the ss register */
-+			"       pushq $" __stringify(__KERNEL_DS) "\n"
-+			/* Save the 'sp - 8', this will be fixed later. */
- 			"	pushq %rsp\n"
- 			"	pushfq\n"
- 			".global optprobe_template_clac\n"
-@@ -121,14 +122,17 @@ asm (
- 			".global optprobe_template_call\n"
- 			"optprobe_template_call:\n"
- 			ASM_NOP5
--			/* Move flags to rsp */
-+			/* Copy 'regs->flags' into 'regs->ss'. */
- 			"	movq 18*8(%rsp), %rdx\n"
--			"	movq %rdx, 19*8(%rsp)\n"
-+			"	movq %rdx, 20*8(%rsp)\n"
- 			RESTORE_REGS_STRING
--			/* Skip flags entry */
--			"	addq $8, %rsp\n"
-+			/* Skip 'regs->flags' and 'regs->sp'. */
-+			"	addq $16, %rsp\n"
-+			/* And pop flags register from 'regs->ss'. */
- 			"	popfq\n"
- #else /* CONFIG_X86_32 */
-+			"	pushl %ss\n"
-+			/* Save the 'sp - 4', this will be fixed later. */
- 			"	pushl %esp\n"
- 			"	pushfl\n"
- 			".global optprobe_template_clac\n"
-@@ -142,12 +146,13 @@ asm (
- 			".global optprobe_template_call\n"
- 			"optprobe_template_call:\n"
- 			ASM_NOP5
--			/* Move flags into esp */
-+			/* Copy 'regs->flags' into 'regs->ss'. */
- 			"	movl 14*4(%esp), %edx\n"
--			"	movl %edx, 15*4(%esp)\n"
-+			"	movl %edx, 16*4(%esp)\n"
- 			RESTORE_REGS_STRING
--			/* Skip flags entry */
--			"	addl $4, %esp\n"
-+			/* Skip 'regs->flags' and 'regs->sp'. */
-+			"	addl $8, %esp\n"
-+			/* And pop flags register from 'regs->ss'. */
- 			"	popfl\n"
- #endif
- 			".global optprobe_template_end\n"
-@@ -179,6 +184,8 @@ optimized_callback(struct optimized_kprobe *op, struct pt_regs *regs)
- 		kprobes_inc_nmissed_count(&op->kp);
- 	} else {
- 		struct kprobe_ctlblk *kcb = get_kprobe_ctlblk();
-+		/* Adjust stack pointer */
-+		regs->sp += sizeof(long);
- 		/* Save skipped registers */
- 		regs->cs = __KERNEL_CS;
- #ifdef CONFIG_X86_32
+sparse warnings: (new ones prefixed by >>)
+   kernel/time/timer.c: note: in included file (through arch/sh/include/asm/cmpxchg.h, arch/sh/include/asm/atomic.h, include/linux/atomic.h, ...):
+>> arch/sh/include/asm/cmpxchg-irq.h:24:14: sparse: sparse: cast truncates bits from constant value (5e5ee5e5 becomes e5e5)
 
+vim +24 arch/sh/include/asm/cmpxchg-irq.h
+
+1efe4ce3ca126da include/asm-sh/cmpxchg-irq.h      Stuart Menefy      2007-11-30  17  
+3226aad81aa6700 arch/sh/include/asm/cmpxchg-irq.h Michael S. Tsirkin 2016-01-07  18  static inline unsigned long xchg_u16(volatile u16 *m, unsigned long val)
+3226aad81aa6700 arch/sh/include/asm/cmpxchg-irq.h Michael S. Tsirkin 2016-01-07  19  {
+3226aad81aa6700 arch/sh/include/asm/cmpxchg-irq.h Michael S. Tsirkin 2016-01-07  20  	unsigned long flags, retval;
+3226aad81aa6700 arch/sh/include/asm/cmpxchg-irq.h Michael S. Tsirkin 2016-01-07  21  
+3226aad81aa6700 arch/sh/include/asm/cmpxchg-irq.h Michael S. Tsirkin 2016-01-07  22  	local_irq_save(flags);
+3226aad81aa6700 arch/sh/include/asm/cmpxchg-irq.h Michael S. Tsirkin 2016-01-07  23  	retval = *m;
+3226aad81aa6700 arch/sh/include/asm/cmpxchg-irq.h Michael S. Tsirkin 2016-01-07 @24  	*m = val;
+3226aad81aa6700 arch/sh/include/asm/cmpxchg-irq.h Michael S. Tsirkin 2016-01-07  25  	local_irq_restore(flags);
+3226aad81aa6700 arch/sh/include/asm/cmpxchg-irq.h Michael S. Tsirkin 2016-01-07  26  	return retval;
+3226aad81aa6700 arch/sh/include/asm/cmpxchg-irq.h Michael S. Tsirkin 2016-01-07  27  }
+3226aad81aa6700 arch/sh/include/asm/cmpxchg-irq.h Michael S. Tsirkin 2016-01-07  28  
+
+:::::: The code at line 24 was first introduced by commit
+:::::: 3226aad81aa670015a59e51458a0deb2d3bcb600 sh: support 1 and 2 byte xchg
+
+:::::: TO: Michael S. Tsirkin <mst@redhat.com>
+:::::: CC: Michael S. Tsirkin <mst@redhat.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,259 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A714E7C01
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA70D4E7BFE
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbiCZAIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 20:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
+        id S230087AbiCZAKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 20:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiCZAIY (ORCPT
+        with ESMTP id S229567AbiCZAKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 20:08:24 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E2E3A70E;
-        Fri, 25 Mar 2022 17:06:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648253208; x=1679789208;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=QOw2dj4hoMPJnbvDq0L74Et1GMTzcDsPGoyiAaMy8JI=;
-  b=DCAMY4NCzFtG/mimoTfCa0YbQdX769NDMjnny95PHD4s+x6PkLDXPGht
-   MVNdnqujOGiJWn0fP9RKPd5Kivk3JjGC7fokqk9puP6X9pC45j5AJdlda
-   UmvOApc9oXKkwSukj/KtX4zJf6klVc66G8XJIrItqW5vGG16v4wjckl8w
-   3+bEIUeA9BcFtAiUrycAR5ggBl422kUfBvYtRLpaUAmpua3xlHNyZO8rq
-   PM0aOdq1gEXujcmKU43TwXKIho1/QuNGfDxLQMkdxuzn95ABcSHi/vvuA
-   qlz3hPw6CW6iDWA8K0WBiUWqxEMSqRsMlnWHBzJgVMlpztm9FRbG1lFRE
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="258456538"
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="258456538"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 17:06:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="826181199"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Mar 2022 17:06:47 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 25 Mar 2022 17:06:47 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 25 Mar 2022 17:06:47 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.42) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+        Fri, 25 Mar 2022 20:10:38 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDBFFD1A;
+        Fri, 25 Mar 2022 17:09:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648253342; x=1679789342;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/4/hLSPErMshZS/R4PQkE0KQWm7CKRIwCZX9uyxfrRo=;
+  b=K54t00u53qqfYGv9dRcqVZUmUjRIeMpE7KHFZ4ztbDHM+cLqst8MqI4R
+   kQnwEef9zddqGydMVqs+6316NdCDHaGo9tRDJwOojcj6VXW/aFPwGq9Zs
+   J2EDs+AUPMB253143oJYHWTK4XSHJCZlGkPDSmJVLqmks+ILUOBlUaQdo
+   Q=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 Mar 2022 17:09:02 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 17:09:01 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Fri, 25 Mar 2022 17:06:47 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TWxrHXtJUPa+vvGAkNcXfcoB7S+x3Wr7mLxGuWlCyTqM/1OSbf9PvIHgp8TfGNCSbFFDUrfTT84ChQLF8iGNchdsfKGfDMADDGELRrDAZVVazMNg38FQlXyohVaBCSNkbagqO2f6yHqebfbIkuBJ3/doPCZepAc+Cg9mkXbtakkJpHkgmLlIvWnM1dTHGmOuAclX1+ZNltxEygJOmRzkBaCwJBPGtkR2ywQLWNOBvRIbYed2p6gMDcxK9rtyW/H9ZrLqNkXzC1QHAxA4ooXE5F5JgkFUrgjf29VmJAxA7wuRXPNiwqPQFnr3BTAYNHqoce2nsvMa0n0mT2F5ees2PA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QOw2dj4hoMPJnbvDq0L74Et1GMTzcDsPGoyiAaMy8JI=;
- b=I0VmSXZBq3yrjEAp3U9PiM3vCwSMf5iU1SApNSQS/9zT6plKTWWhb7b3QkEQ+ZdwuOxcmU/ik4V/mMtFE0bTN2IMieD6j4LgUdLejVCAAMxFUHagNulnrhktM4moXtTCrLMUS4wErM+Rl2DzfXUkQEtb6LQN3yWdx3oQb1s4b2PlPw6CwuoWqeulRlvy4BQBMJ322gmWvM3o7Z8JAy+Gw1K2w9eHO5vKbYMXM/7fMyzF7fdKzBpLrgYwikI0ibGvkNIXtmKP4uh4aMZYDhM4uosmKbvyWerc/FiDz76kEAE4wa8y27P/KOUkxyllrEkLeRWUhuif6OOZe0k5G7mdug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by MWHPR11MB1870.namprd11.prod.outlook.com (2603:10b6:300:10f::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18; Sat, 26 Mar
- 2022 00:06:45 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::69:f7e:5f37:240b]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::69:f7e:5f37:240b%3]) with mapi id 15.20.5102.018; Sat, 26 Mar 2022
- 00:06:45 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "song@kernel.org" <song@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-CC:     "songliubraving@fb.com" <songliubraving@fb.com>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "kernel-team@fb.com" <kernel-team@fb.com>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "iii@linux.ibm.com" <iii@linux.ibm.com>
-Subject: Re: [PATCH v9 bpf-next 1/9] x86/Kconfig: select
- HAVE_ARCH_HUGE_VMALLOC with HAVE_ARCH_HUGE_VMAP
-Thread-Topic: [PATCH v9 bpf-next 1/9] x86/Kconfig: select
- HAVE_ARCH_HUGE_VMALLOC with HAVE_ARCH_HUGE_VMAP
-Thread-Index: AQHYQHSY+pR621m40EmnNhTft3vXEqzQydiA
-Date:   Sat, 26 Mar 2022 00:06:45 +0000
-Message-ID: <5bd16e2c06a2df357400556c6ae01bb5d3c5c32a.camel@intel.com>
-References: <20220204185742.271030-1-song@kernel.org>
-         <20220204185742.271030-2-song@kernel.org>
-In-Reply-To: <20220204185742.271030-2-song@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1cb0c354-effb-4d47-4140-08da0ebc840f
-x-ms-traffictypediagnostic: MWHPR11MB1870:EE_
-x-microsoft-antispam-prvs: <MWHPR11MB18700155CA587815B4015B34C91B9@MWHPR11MB1870.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: RhWpS9/43MKj7ITZJY5MvKfYEyd68D65QQ8cjHkWfu9dD9/FGABA44amgXv1vbVBmGjuDFqA9UYC5Y8huglcehk9GDywOyoFV3SO9LrMMazC3drGjHPpKk1sD1libX5y2WRkEvQVi3ggeGplIUsXSBqVMZSI762LxTPFTpK69382rW54FEWwR1u/Zq5RQlwkpMRJvIgcGfHhitzaSnZ5SFDxJq9Lz1GS2BhbvMEwdE5ooUwxgZgKByaVV4lXGzhVgnDgqm5JEX5Ukk0dK1yWtebfdEMNp2JVqbOYrutDvrAqhDF+bubbyv2Ue7+TzWxNHQrQ2VgPyCtHQnXr9o1LCxRX9R/d2Nn4yVv20+TtDGA1YNulLaLMxn5h0NsN1JX06T65al2mYyxbVLk6+WA7Io0jK2hWEfcDDsUb4hq4mfE1d7tUwRAL5j19RNOtuv1msEl/u4Iq5qm1WJTKRT0V05E1b64ddnIQLf7sASqMC6REdZ1ws2EvnZfdlEmDbnB1Pa2aWl8xFKlVICtInpwn6B3D66ay8y0QcWwHLzsp78eiIof9XHx0rhTS+KzAZBRhawCWeTScDA/tufeQSiiDUOGpmnVQMKZVBVobpmje7oTEZW7lG7dO3tK0frD/+J0o+SldXT/79Vw6jjmYcZCEqrCp0iqnJCjLtKHsr0zuZNwGu9WTOWntnv5anyl3+WcOIZobpM4kD0+WoIrD2UvRT8eUkjLgacdXLp/YHfWCEg2mhswbT/AiFrqyx+JAgeRbLbfsJYsboIbcZXg/z2YbvcD/KXbjwkTKToHACXGQXWbpZnvuLCrqz1MDvFK40Rmv2k8l6Mxe4ewDNqmplV8Fcw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8936002)(6486002)(76116006)(966005)(6512007)(86362001)(66446008)(66476007)(8676002)(64756008)(4326008)(110136005)(7416002)(5660300002)(66556008)(66946007)(38100700002)(2616005)(6506007)(82960400001)(54906003)(38070700005)(508600001)(122000001)(2906002)(36756003)(83380400001)(26005)(186003)(71200400001)(316002)(99106002)(14583001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UThQSW9MSWgrVG9ucTVOdzg3eGdmaDBoVTlRaTdpakw4VXRMQktZRUNtK3NW?=
- =?utf-8?B?TXd1eEQyOVRGZHI0UFM0dVhrQnlZb3ZSWXZXZURYT2k4QVJDemtlN0lXa1pM?=
- =?utf-8?B?RXpQbXl0NHVvSmphSWY5UUFUVFBWMjVkTldDU0RMbTBoM251Ylh3Kzd6OW1G?=
- =?utf-8?B?emZPZjdTL21wL2N4SEVKdzNQU1RGQVNWQy9vU2ZlRkwrVEVvR3o5UVFLSlZk?=
- =?utf-8?B?N0NYeVAzS2w3Z0pQMkJUUHJrdXQ1d0h4aGpYUytLU2tTTk9WMWtMWGVuV1Vx?=
- =?utf-8?B?cjllTU93cHlmTmlKWWJFWmcxOU9LUzFzZkR2K2hiYmNUYlpYbDFkcHhuZDZl?=
- =?utf-8?B?bDhLT2RIVzVkQnp3NjJDWlhublZTekFtQTduUVI2UUVzZVIwdWVScE56cEFn?=
- =?utf-8?B?VFo5VjhTeFY1NnNkVUorR2dsYUc2QXNiK0Y2WVNJY01weTBIRFpBTktUYTRT?=
- =?utf-8?B?L2dPVWsySjFLSEVwZ21hTVFzVDNNRWVGaURQSks5dFJTWGkrYkVkcmQvNW9S?=
- =?utf-8?B?Q2pLOUlRcmh6YkhEbWdmMGZ1eVdRZGE5Y1B1V0NSUU9UWnNGdFRMQ2NXWFh6?=
- =?utf-8?B?SUFnd1JOZjNzZVZxNCtEUzdtUlV0K2hVZm1qdk9WdFRRMnk0UXIwWWZHK0Nm?=
- =?utf-8?B?TUM4NkRiZXVXUUtlakF3Mkk4ZWQzOGxOdU9KRW91VmpuN2hMR1hpZkd3YnIx?=
- =?utf-8?B?T1VqRWtnb0tRNGt3cGJmbDRXbnFUUUVxRm1HQXo3T09kZGErakNRZHA4NGpH?=
- =?utf-8?B?V3MzQ3NWTnJlOVJLbW9QOEZXVmd6c2FBZFJZTU9GWnl3N0tPY21GTy9aVm92?=
- =?utf-8?B?L0EzVTgrdi9IMitqdkJGY2N5ZzBveFl1dHpXUUttcjJsc1JCVUNkcXdyaTli?=
- =?utf-8?B?eUxOUzNJZ0xlcXd2ZzF0QjZDaC9vazFiVFo1dUUySlVPLzQzSjBMU2g5dFlh?=
- =?utf-8?B?aWc4elpiVy9jaUh1K0wrZEZiNVV6bllva0VIbG1ZdytjZlJ0QmpScmd4Um16?=
- =?utf-8?B?MkxXL2UyWkJPN3JqMERBQmVjajhNKzl2dHUzUjBDaGtTRGlsakVLQVNmSSsy?=
- =?utf-8?B?SzRBeWlEejJ3RUZVUisxaVA1VkxNZHJTVkNXK0JINnl1UDF6dXlKYUx0eWYr?=
- =?utf-8?B?bEdPSXhudnEwTDl6YXQ4QURNc0xuQlpFd1AyNCs2eGdoaXZPcEJxTjhpL25a?=
- =?utf-8?B?NGhLM3ovc2FVZ1RqQlQ4N0hsVnNOMW5VMHdmNkxVWENlQjYyMXA3QmRQdy9l?=
- =?utf-8?B?WUkrV280ZXF5NXg3SWM0NGwxWFBrb0xNbGJ5YkdTOFd4NEJ2K0tmNjkyWW94?=
- =?utf-8?B?T3dZYUdHMWFKK1FFVGdEMVNIL2EvVDFOYXNnVW51ZGwzZzkyR21BaTZmOTZB?=
- =?utf-8?B?MnVDeVRubmVTOTg1RFlxMk5jbVEyTUc3MHdiam1MOTdBYjBodWg3Yk5KMnFz?=
- =?utf-8?B?WS8wcEpYcFdDd3dVamlId1BLTzR6eU4xYWZBUTIrV25icEZ4VlJQM1BKd3BJ?=
- =?utf-8?B?akY2eWZWRDkwY0VMcHRvOG1FenpCMFlPWThsUWtxRUJuOFFDNi9yM2JKVnY5?=
- =?utf-8?B?VHpCbzJlaGYrNFhmUjJKLy80ZVhuUGZLZG45UXBRWDV4WkwzU0h6b1ZZelZt?=
- =?utf-8?B?TFJqNzU1QW9qa0Q3T0V6bCtDeFg4RHkyY0ZtcThWZVR3U2gveTROd1BSajVu?=
- =?utf-8?B?Q1c3RzB3dUJRUlh0aFNoOCtVYTI5czhvMVJGanZmNkkxb1pXbU1SNEdqVXFJ?=
- =?utf-8?B?bCtPRjluTDF3ZXl4V0RYQjdsWU5qeW15a2pvR0Rhemg4bytIczJROVBGUlFw?=
- =?utf-8?B?UFAwSFhUMnkvWlBETENlRlRpNFo1SEpYbmNZWDJ4dU1MbzluSnl6LytubnYy?=
- =?utf-8?B?clZ2WFJVS2Rlc3BiZnpGM3daOFp1a2ZJVlVDRzVnU2Z4OW11a05FUjZzYVRC?=
- =?utf-8?B?N2d1TUpDR1gwVUkwSGpQcUNJb2xYVHJkUTlOWUNtRTJOQmRNaWQ4UU9jS1cz?=
- =?utf-8?Q?3dqRb7gKLC1JvSL+BAOIjlR5KyS8p8=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1DB01764C9759B408DEBB7A240DECA85@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ 15.2.986.22; Fri, 25 Mar 2022 17:09:01 -0700
+Received: from [10.110.27.134] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 25 Mar
+ 2022 17:09:00 -0700
+Message-ID: <7ae9915d-98fc-efd4-4a1e-872c446aacca@quicinc.com>
+Date:   Fri, 25 Mar 2022 17:09:00 -0700
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1cb0c354-effb-4d47-4140-08da0ebc840f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Mar 2022 00:06:45.7173
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: b1GhT66rJHBZgq9ymqXdVHBIIDV3BGLVhFvzMHTUMV1fQhq5bqjsjXUO1VCUdFyfadHqKPhGBJHKWeOiE3yvZzfuMii39v3MAiyzdwFmYPE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1870
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4] wcn36xx: Implement tx_rate reporting
+Content-Language: en-US
+To:     Edmond Gagnon <egagnon@squareup.com>,
+        Kalle Valo <kvalo@codeaurora.org>
+CC:     Benjamin Li <benl@squareup.com>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        <wcn36xx@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220323214533.1951791-1-egagnon@squareup.com>
+ <20220325224212.159690-1-egagnon@squareup.com>
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <20220325224212.159690-1-egagnon@squareup.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTAyLTA0IGF0IDEwOjU3IC0wODAwLCBTb25nIExpdSB3cm90ZToNCj4gRnJv
-bTogU29uZyBMaXUgPHNvbmdsaXVicmF2aW5nQGZiLmNvbT4NCj4gDQo+IFRoaXMgZW5hYmxlcyBt
-b2R1bGVfYWxsb2MoKSB0byBhbGxvY2F0ZSBodWdlIHBhZ2UgZm9yIDJNQisgcmVxdWVzdHMuDQo+
-IFRvIGNoZWNrIHRoZSBkaWZmZXJlbmNlIG9mIHRoaXMgY2hhbmdlLCB3ZSBuZWVkIGVuYWJsZSBj
-b25maWcNCj4gQ09ORklHX1BURFVNUF9ERUJVR0ZTLCBhbmQgY2FsbCBtb2R1bGVfYWxsb2MoMk1C
-KS4gQmVmb3JlIHRoZSBjaGFuZ2UsDQo+IC9zeXMva2VybmVsL2RlYnVnL3BhZ2VfdGFibGVzL2tl
-cm5lbCBzaG93cyBwdGUgZm9yIHRoaXMgbWFwLiBXaXRoIHRoZQ0KPiBjaGFuZ2UsIC9zeXMva2Vy
-bmVsL2RlYnVnL3BhZ2VfdGFibGVzLyBzaG93IHBtZCBmb3IgdGhpZSBtYXAuDQo+IA0KPiBTaWdu
-ZWQtb2ZmLWJ5OiBTb25nIExpdSA8c29uZ2xpdWJyYXZpbmdAZmIuY29tPg0KPiAtLS0NCj4gIGFy
-Y2gveDg2L0tjb25maWcgfCAxICsNCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQ0K
-DQpIaSwNCg0KSSBqdXN0IHNhdyB0aGlzIHVwc3RyZWFtIHRvZGF5LiBHbGFkIHRvIHNlZSB0aGlz
-IGZ1bmN0aW9uYWxpdHksIGJ1dCBJDQp0aGluayB0dXJuaW5nIG9uIGh1Z2Ugdm1hbGxvYyBwYWdl
-cyBmb3IgeDg2IG5lZWRzIGEgYml0IG1vcmUuIEnigJlsbA0KZGVzY3JpYmUgYSBjb3VwbGUgcG9z
-c2libGUgZmFpbHVyZSBtb2RlcyBJIGhhdmVu4oCZdCBhY3R1YWxseSB0ZXN0ZWQuDQoNCk9uZSBw
-cm9ibGVtIGlzIHRoYXQgdGhlIGRpcmVjdCBtYXAgcGVybWlzc2lvbiByZXNldCBwYXJ0IGluIHZt
-YWxsb2MNCmFzc3VtZXMgYW55IHNwZWNpYWwgcGVybWlzc2lvbmVkIHBhZ2VzIGFyZSBtYXBwZWQg
-NGsgb24gdGhlIGRpcmVjdCBtYXAuDQpPdGhlcndpc2UgdGhlIG9wZXJhdGlvbiBjb3VsZCBmYWls
-IHRvIHJlc2V0IGEgcGFnZSBSVyBpZiBhIFBURSBwYWdlDQphbGxvY2F0aW9uIGZhaWxzIHdoZW4g
-aXQgdHJpZXMgdG8gc3BsaXQgdGhlIHBhZ2UgdG8gdG9nZ2xlIGEgNGsgc2l6ZWQNCnJlZ2lvbiBO
-UC9QLiBJZiB5b3UgYXJlIG5vdCBmYW1pbGlhciwgeDg2IENQQSBnZW5lcmFsbHkgbGVhdmVzIHRo
-ZQ0KZGlyZWN0IG1hcCBwYWdlIHNpemVzIG1pcnJvcmluZyB0aGUgcHJpbWFyeSBhbGlhcyAodm1h
-bGxvYykuIFNvIG9uY2UNCnZtYWxsb2MgaGFzIGh1Z2UgcGFnZXMsIHRoZSBzcGVjaWFsIHBlcm1p
-c3Npb25lZCBkaXJlY3QgbWFwIGFsaWFzZXMNCndpbGwgaGF2ZSB0aGVtIHRvby4gVGhpcyBsaW1p
-dGF0aW9uIG9mIEhBVkVfQVJDSF9IVUdFX1ZNQUxMT0MgaXMNCmFjdHVhbGx5IGhpbnRlZCBhYm91
-dCBpbiB0aGUgS2NvbmZpZyBjb21tZW50cywgYnV0IEkgZ3Vlc3MgaXQgd2FzbuKAmXQNCnNwZWNp
-ZmljIHRoYXQgeDg2IGhhcyB0aGVzZSBwcm9wZXJ0aWVzLg0KDQpJIHRoaW5rIHRvIG1ha2UgdGhl
-IHZtYWxsb2MgcmVzZXR0aW5nIHBhcnQgc2FmZToNCjEuIHNldF9kaXJlY3RfbWFwX2ludmFsaWQv
-ZGVmYXVsdCgpIG5lZWRzIHRvIHN1cHBvcnQgbXVsdGlwbGUgcGFnZXMNCmxpa2UgdGhpc1swXS4N
-CjIuIHZtX3JlbW92ZV9tYXBwaW5ncygpIG5lZWRzIHRvIGNhbGwgdGhlbSB3aXRoIHRoZSBjb3Jy
-ZWN0IHBhZ2Ugc2l6ZQ0KaW4gdGhlIGhwYWdlIGNhc2Ugc28gdGhleSBkb24ndCBjYXVzZSBhIHNw
-bGl0WzFdLg0KMy4gVGhlbiBoaWJlcm5hdGUgbmVlZHMgdG8gYmUgYmxvY2tlZCBkdXJpbmcgdGhp
-cyBvcGVyYXRpb24gc28gaXQNCmRvZXNu4oCZdCBlbmNvdW50ZXIgdGhlIG5vdyBzb21ldGltZXMg
-aHVnZSBOUCBwYWdlcywgd2hpY2ggaXQgY2Fu4oCZdA0KaGFuZGxlLiBOb3Qgc3VyZSB3aGF0IHRo
-ZSByaWdodCB3YXkgdG8gZG8gdGhpcyBpcywgYnV0IHBvdGVudGlhbGx5IGxpa2UNCmluIHRoZSBk
-aWZmIGJlbG93WzFdLg0KDQpBbm90aGVyIHByb2JsZW0gaXMgdGhhdCBDUEEgd2lsbCBzb21ldGlt
-ZXMgbm93IHNwbGl0IHBhZ2VzIG9mIHZtYWxsb2MNCm1hcHBpbmdzIGluIGNhc2VzIHdoZXJlIGl0
-IHNldHMgYSByZWdpb24gb2YgYW4gYWxsb2NhdGlvbiB0byBhDQpkaWZmZXJlbnQgcGVybWlzc2lv
-biB0aGFuIHRoZSByZXN0IChmb3IgZXhhbXBsZSByZWd1bGFyIG1vZHVsZXMgY2FsbGluZw0Kc2V0
-X21lbW9yeV94KCkgb24gdGhlIHRleHQgc2VjdGlvbikuIEJlZm9yZSB0aGlzIGNoYW5nZSwgdGhl
-c2UgY291bGRu4oCZdA0KZmFpbCBzaW5jZSB0aGUgbW9kdWxlIHNwYWNlIG1hcHBpbmcgd291bGQg
-bmV2ZXIgcmVxdWlyZSBhIHNwbGl0Lg0KTW9kdWxlcyBkb2VzbuKAmXQgY2hlY2sgZm9yIGZhaWx1
-cmUgdGhlcmUsIHNvIEnigJltIHRoaW5raW5nIG5vdyBpdCB3b3VsZA0KcHJvY2VlZCB0byB0cnkg
-dG8gZXhlY3V0ZSBOWCBtZW1vcnkgaWYgdGhlIHNwbGl0IGZhaWxlZC4gSXQgY291bGQgb25seQ0K
-aGFwcGVuIG9uIGFsbG9jYXRpb24gb2YgZXNwZWNpYWxseSBsYXJnZSBtb2R1bGVzLiBNYXliZSBp
-dCBzaG91bGQganVzdA0KYmUgYXZvaWRlZCBmb3Igbm93IGJ5IGhhdmluZyByZWd1bGFyIG1vZHVs
-ZSBhbGxvY2F0aW9ucyBwYXNzDQpWTV9OT19IVUdFX1ZNQVAgb24geDg2LiBBbmQgQlBGIGNvdWxk
-IGNhbGwgX192bWFsbG9jX25vZGVfcmFuZ2UoKQ0KZGlyZWN0bHkgdG8gZ2V0IDJNQiB2bWFsbG9j
-cy4NCg0KWzBdIA0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGttbC8yMDIxMDIwODA4NDkyMC4y
-ODg0LTUtcnBwdEBrZXJuZWwub3JnLyN0DQoNClsxXSBVbnRlc3RlZCwgYnV0IHNvbWV0aGluZyBs
-aWtlIHRoaXMgcG9zc2libHk6DQpkaWZmIC0tZ2l0IGEvbW0vdm1hbGxvYy5jIGIvbW0vdm1hbGxv
-Yy5jDQppbmRleCA5OWUwZjNlOGQxYTUuLjk3YzRjYTNhMjliMSAxMDA2NDQNCi0tLSBhL21tL3Zt
-YWxsb2MuYw0KKysrIGIvbW0vdm1hbGxvYy5jDQpAQCAtNDIsNiArNDIsNyBAQA0KICNpbmNsdWRl
-IDxsaW51eC9zY2hlZC9tbS5oPg0KICNpbmNsdWRlIDxhc20vdGxiZmx1c2guaD4NCiAjaW5jbHVk
-ZSA8YXNtL3NobXBhcmFtLmg+DQorI2luY2x1ZGUgPGxpbnV4L3N1c3BlbmQuaD4NCiANCiAjaW5j
-bHVkZSAiaW50ZXJuYWwuaCINCiAjaW5jbHVkZSAicGdhbGxvYy10cmFjay5oIg0KQEAgLTIyNDEs
-NyArMjI0Miw3IEBAIEVYUE9SVF9TWU1CT0wodm1fbWFwX3JhbSk7DQogDQogc3RhdGljIHN0cnVj
-dCB2bV9zdHJ1Y3QgKnZtbGlzdCBfX2luaXRkYXRhOw0KIA0KLXN0YXRpYyBpbmxpbmUgdW5zaWdu
-ZWQgaW50IHZtX2FyZWFfcGFnZV9vcmRlcihzdHJ1Y3Qgdm1fc3RydWN0ICp2bSkNCitzdGF0aWMg
-aW5saW5lIHVuc2lnbmVkIGludCB2bV9hcmVhX3BhZ2Vfb3JkZXIoY29uc3Qgc3RydWN0IHZtX3N0
-cnVjdA0KKnZtKQ0KIHsNCiAjaWZkZWYgQ09ORklHX0hBVkVfQVJDSF9IVUdFX1ZNQUxMT0MNCiAg
-ICAgICAgcmV0dXJuIHZtLT5wYWdlX29yZGVyOw0KQEAgLTI1NjAsMTIgKzI1NjEsMTIgQEAgc3Ry
-dWN0IHZtX3N0cnVjdCAqcmVtb3ZlX3ZtX2FyZWEoY29uc3Qgdm9pZA0KKmFkZHIpDQogc3RhdGlj
-IGlubGluZSB2b2lkIHNldF9hcmVhX2RpcmVjdF9tYXAoY29uc3Qgc3RydWN0IHZtX3N0cnVjdCAq
-YXJlYSwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGludCAoKnNldF9k
-aXJlY3RfbWFwKShzdHJ1Y3QNCnBhZ2UgKnBhZ2UpKQ0KIHsNCisgICAgICAgdW5zaWduZWQgaW50
-IHBhZ2Vfb3JkZXIgPSB2bV9hcmVhX3BhZ2Vfb3JkZXIoYXJlYSk7DQogICAgICAgIGludCBpOw0K
-IA0KLSAgICAgICAvKiBIVUdFX1ZNQUxMT0MgcGFzc2VzIHNtYWxsIHBhZ2VzIHRvIHNldF9kaXJl
-Y3RfbWFwICovDQotICAgICAgIGZvciAoaSA9IDA7IGkgPCBhcmVhLT5ucl9wYWdlczsgaSsrKQ0K
-KyAgICAgICBmb3IgKGkgPSAwOyBpIDwgYXJlYS0+bnJfcGFnZXM7IGkgKz0gMVUgPDwgcGFnZV9v
-cmRlcikNCiAgICAgICAgICAgICAgICBpZiAocGFnZV9hZGRyZXNzKGFyZWEtPnBhZ2VzW2ldKSkN
-Ci0gICAgICAgICAgICAgICAgICAgICAgIHNldF9kaXJlY3RfbWFwKGFyZWEtPnBhZ2VzW2ldKTsN
-CisgICAgICAgICAgICAgICAgICAgICAgIHNldF9kaXJlY3RfbWFwKGFyZWEtPnBhZ2VzW2ldLCAx
-VSA8PA0KcGFnZV9vcmRlcik7DQogfQ0KIA0KIC8qIEhhbmRsZSByZW1vdmluZyBhbmQgcmVzZXR0
-aW5nIHZtIG1hcHBpbmdzIHJlbGF0ZWQgdG8gdGhlIHZtX3N0cnVjdC4NCiovDQpAQCAtMjU5Miw2
-ICsyNTkzLDEwIEBAIHN0YXRpYyB2b2lkIHZtX3JlbW92ZV9tYXBwaW5ncyhzdHJ1Y3Qgdm1fc3Ry
-dWN0DQoqYXJlYSwgaW50IGRlYWxsb2NhdGVfcGFnZXMpDQogICAgICAgICAgICAgICAgcmV0dXJu
-Ow0KICAgICAgICB9DQogDQorICAgICAgIC8qIEhpYmVybmF0ZSBjYW4ndCBoYW5kbGUgbGFyZ2Ug
-TlAgcGFnZXMgKi8NCisgICAgICAgaWYgKHBhZ2Vfb3JkZXIpDQorICAgICAgICAgICAgICAgbG9j
-a19zeXN0ZW1fc2xlZXAoKTsNCisNCiAgICAgICAgLyoNCiAgICAgICAgICogSWYgZXhlY3V0aW9u
-IGdldHMgaGVyZSwgZmx1c2ggdGhlIHZtIG1hcHBpbmcgYW5kIHJlc2V0IHRoZQ0KZGlyZWN0DQog
-ICAgICAgICAqIG1hcC4gRmluZCB0aGUgc3RhcnQgYW5kIGVuZCByYW5nZSBvZiB0aGUgZGlyZWN0
-IG1hcHBpbmdzIHRvDQptYWtlIHN1cmUNCkBAIC0yNjE3LDYgKzI2MjIsOSBAQCBzdGF0aWMgdm9p
-ZCB2bV9yZW1vdmVfbWFwcGluZ3Moc3RydWN0IHZtX3N0cnVjdA0KKmFyZWEsIGludCBkZWFsbG9j
-YXRlX3BhZ2VzKQ0KICAgICAgICBzZXRfYXJlYV9kaXJlY3RfbWFwKGFyZWEsIHNldF9kaXJlY3Rf
-bWFwX2ludmFsaWRfbm9mbHVzaCk7DQogICAgICAgIF92bV91bm1hcF9hbGlhc2VzKHN0YXJ0LCBl
-bmQsIGZsdXNoX2RtYXApOw0KICAgICAgICBzZXRfYXJlYV9kaXJlY3RfbWFwKGFyZWEsIHNldF9k
-aXJlY3RfbWFwX2RlZmF1bHRfbm9mbHVzaCk7DQorDQorICAgICAgIGlmIChwYWdlX29yZGVyKQ0K
-KyAgICAgICAgICAgICAgIHVubG9ja19zeXN0ZW1fc2xlZXAoKTsNCiB9DQogDQogc3RhdGljIHZv
-aWQgX192dW5tYXAoY29uc3Qgdm9pZCAqYWRkciwgaW50IGRlYWxsb2NhdGVfcGFnZXMpDQo=
+On 3/25/2022 3:42 PM, Edmond Gagnon wrote:
+> Currently, the driver reports a tx_rate of 6.0 MBit/s no matter the true
+> rate:
+> 
+> root@linaro-developer:~# iw wlan0 link
+> Connected to 6c:f3:7f:eb:9b:92 (on wlan0)
+>          SSID: SQ-DEVICETEST
+>          freq: 5200
+>          RX: 4141 bytes (32 packets)
+>          TX: 2082 bytes (15 packets)
+>          signal: -77 dBm
+>          rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
+>          tx bitrate: 6.0 MBit/s
+> 
+>          bss flags:      short-slot-time
+>          dtim period:    1
+>          beacon int:     100
+> 
+> This patch requests HAL_GLOBAL_CLASS_A_STATS_INFO via a hal_get_stats
+> firmware message and reports it via ieee80211_ops::sta_statistics.
+> 
+> root@linaro-developer:~# iw wlan0 link
+> Connected to 6c:f3:7f:eb:73:b2 (on wlan0)
+>          SSID: SQ-DEVICETEST
+>          freq: 5700
+>          RX: 26788094 bytes (19859 packets)
+>          TX: 1101376 bytes (12119 packets)
+>          signal: -75 dBm
+>          rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
+>          tx bitrate: 108.0 MBit/s VHT-MCS 5 40MHz VHT-NSS 1
+> 
+>          bss flags:      short-slot-time
+>          dtim period:    1
+>          beacon int:     100
+> 
+> Tested on MSM8939 with WCN3680B running firmware CNSS-PR-2-0-1-2-c1-00083,
+> and verified by sniffing frames over the air with Wireshark to ensure the
+> MCS indices match.
+> 
+> Signed-off-by: Edmond Gagnon <egagnon@squareup.com>
+> Reviewed-by: Benjamin Li <benl@squareup.com>
+> ---
+> 
+> Changes in v4:
+>   - Shortened very long line in smd.c
+>   - Fixed every checkpatch issue I could find:
+> 	scripts/checkpatch.pl --strict
+> 		0001-wcn36xx-Implement-tx_rate-reporting.patch
+> 	total: 0 errors, 0 warnings, 0 checks, 156 lines checked
+> Changes in v3:
+>   - Refactored to report tx_rate via ieee80211_ops::sta_statistics
+>   - Dropped get_sta_index patch
+>   - Addressed style comments
+> Changes in v2:
+>   - Refactored to use existing wcn36xx_hal_get_stats_{req,rsp}_msg structs.
+>   - Added more notes about testing.
+>   - Reduced reporting interval to 3000msec.
+>   - Assorted type and memory safety fixes.
+>   - Make wcn36xx_smd_get_stats friendlier to future message implementors.
+> 
+>   drivers/net/wireless/ath/wcn36xx/hal.h  |  7 ++-
+>   drivers/net/wireless/ath/wcn36xx/main.c | 16 +++++++
+>   drivers/net/wireless/ath/wcn36xx/smd.c  | 57 +++++++++++++++++++++++++
+>   drivers/net/wireless/ath/wcn36xx/smd.h  |  2 +
+>   drivers/net/wireless/ath/wcn36xx/txrx.c | 29 +++++++++++++
+>   drivers/net/wireless/ath/wcn36xx/txrx.h |  1 +
+>   6 files changed, 111 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/wireless/ath/wcn36xx/hal.h b/drivers/net/wireless/ath/wcn36xx/hal.h
+> index 2a1db9756fd5..46a49f0a51b3 100644
+> --- a/drivers/net/wireless/ath/wcn36xx/hal.h
+> +++ b/drivers/net/wireless/ath/wcn36xx/hal.h
+> @@ -2626,7 +2626,12 @@ enum tx_rate_info {
+>   	HAL_TX_RATE_SGI = 0x8,
+>   
+>   	/* Rate with Long guard interval */
+> -	HAL_TX_RATE_LGI = 0x10
+> +	HAL_TX_RATE_LGI = 0x10,
+> +
+> +	/* VHT rates */
+> +	HAL_TX_RATE_VHT20  = 0x20,
+> +	HAL_TX_RATE_VHT40  = 0x40,
+> +	HAL_TX_RATE_VHT80  = 0x80,
+>   };
+>   
+>   struct ani_global_class_a_stats_info {
+> diff --git a/drivers/net/wireless/ath/wcn36xx/main.c b/drivers/net/wireless/ath/wcn36xx/main.c
+> index b545d4b2b8c4..fc76b090c39f 100644
+> --- a/drivers/net/wireless/ath/wcn36xx/main.c
+> +++ b/drivers/net/wireless/ath/wcn36xx/main.c
+> @@ -1400,6 +1400,21 @@ static int wcn36xx_get_survey(struct ieee80211_hw *hw, int idx,
+>   	return 0;
+>   }
+>   
+> +static void wcn36xx_sta_statistics(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
+> +				   struct ieee80211_sta *sta, struct station_info *sinfo)
+> +{
+> +	struct wcn36xx *wcn;
+> +	u8 sta_index;
+> +	int status = 0;
+
+remove initializer that is always overwritten
+
+> +
+> +	wcn = hw->priv;
+> +	sta_index = get_sta_index(vif, wcn36xx_sta_to_priv(sta));
+> +	status = wcn36xx_smd_get_stats(wcn, sta_index, HAL_GLOBAL_CLASS_A_STATS_INFO, sinfo);
+> +
+> +	if (status)
+> +		wcn36xx_err("wcn36xx_smd_get_stats failed\n");
+> +}
+> +
+>   static const struct ieee80211_ops wcn36xx_ops = {
+>   	.start			= wcn36xx_start,
+>   	.stop			= wcn36xx_stop,
+> @@ -1423,6 +1438,7 @@ static const struct ieee80211_ops wcn36xx_ops = {
+>   	.set_rts_threshold	= wcn36xx_set_rts_threshold,
+>   	.sta_add		= wcn36xx_sta_add,
+>   	.sta_remove		= wcn36xx_sta_remove,
+> +	.sta_statistics		= wcn36xx_sta_statistics,
+>   	.ampdu_action		= wcn36xx_ampdu_action,
+>   #if IS_ENABLED(CONFIG_IPV6)
+>   	.ipv6_addr_change	= wcn36xx_ipv6_addr_change,
+> diff --git a/drivers/net/wireless/ath/wcn36xx/smd.c b/drivers/net/wireless/ath/wcn36xx/smd.c
+> index caeb68901326..a2188b41e308 100644
+> --- a/drivers/net/wireless/ath/wcn36xx/smd.c
+> +++ b/drivers/net/wireless/ath/wcn36xx/smd.c
+> @@ -2627,6 +2627,62 @@ int wcn36xx_smd_del_ba(struct wcn36xx *wcn, u16 tid, u8 direction, u8 sta_index)
+>   	return ret;
+>   }
+>   
+> +int wcn36xx_smd_get_stats(struct wcn36xx *wcn, u8 sta_index, u32 stats_mask,
+> +			  struct station_info *sinfo)
+> +{
+> +	struct wcn36xx_hal_stats_req_msg msg_body;
+> +	struct wcn36xx_hal_stats_rsp_msg *rsp;
+> +	void *rsp_body;
+> +	int ret = 0;
+
+remove initializer that is always overwritten before use
+
+> +
+> +	if (stats_mask & ~HAL_GLOBAL_CLASS_A_STATS_INFO) {
+> +		wcn36xx_err("stats_mask 0x%x contains unimplemented types\n",
+> +			    stats_mask);
+> +		return -EINVAL;
+> +	}
+> +
+> +	mutex_lock(&wcn->hal_mutex);
+> +	INIT_HAL_MSG(msg_body, WCN36XX_HAL_GET_STATS_REQ);
+> +
+> +	msg_body.sta_id = sta_index;
+> +	msg_body.stats_mask = stats_mask;
+> +
+> +	PREPARE_HAL_BUF(wcn->hal_buf, msg_body);
+> +
+> +	ret = wcn36xx_smd_send_and_wait(wcn, msg_body.header.len);
+> +	if (ret) {
+> +		wcn36xx_err("sending hal_get_stats failed\n");
+> +		goto out;
+> +	}
+> +
+> +	ret = wcn36xx_smd_rsp_status_check(wcn->hal_buf, wcn->hal_rsp_len);
+> +	if (ret) {
+> +		wcn36xx_err("hal_get_stats response failed err=%d\n", ret);
+> +		goto out;
+> +	}
+> +
+> +	rsp = (struct wcn36xx_hal_stats_rsp_msg *)wcn->hal_buf;
+> +	rsp_body = (wcn->hal_buf + sizeof(struct wcn36xx_hal_stats_rsp_msg));
+> +
+> +	if (rsp->stats_mask != stats_mask) {
+> +		wcn36xx_err("stats_mask 0x%x differs from requested 0x%x\n",
+> +			    rsp->stats_mask, stats_mask);
+> +		goto out;
+> +	}
+> +
+> +	if (rsp->stats_mask & HAL_GLOBAL_CLASS_A_STATS_INFO) {
+> +		struct ani_global_class_a_stats_info *stats_info = rsp_body;
+> +
+> +		wcn36xx_process_tx_rate(stats_info, &sinfo->txrate);
+> +		sinfo->filled |= BIT_ULL(NL80211_STA_INFO_TX_BITRATE);
+> +		rsp_body += sizeof(struct ani_global_class_a_stats_info);
+> +	}
+> +out:
+> +	mutex_unlock(&wcn->hal_mutex);
+> +
+> +	return ret;
+> +}
+> +
+>   static int wcn36xx_smd_trigger_ba_rsp(void *buf, int len, struct add_ba_info *ba_info)
+>   {
+>   	struct wcn36xx_hal_trigger_ba_rsp_candidate *candidate;
+> @@ -3316,6 +3372,7 @@ int wcn36xx_smd_rsp_process(struct rpmsg_device *rpdev,
+>   	case WCN36XX_HAL_ADD_BA_SESSION_RSP:
+>   	case WCN36XX_HAL_ADD_BA_RSP:
+>   	case WCN36XX_HAL_DEL_BA_RSP:
+> +	case WCN36XX_HAL_GET_STATS_RSP:
+>   	case WCN36XX_HAL_TRIGGER_BA_RSP:
+>   	case WCN36XX_HAL_UPDATE_CFG_RSP:
+>   	case WCN36XX_HAL_JOIN_RSP:
+> diff --git a/drivers/net/wireless/ath/wcn36xx/smd.h b/drivers/net/wireless/ath/wcn36xx/smd.h
+> index 957cfa87fbde..3fd598ac2a27 100644
+> --- a/drivers/net/wireless/ath/wcn36xx/smd.h
+> +++ b/drivers/net/wireless/ath/wcn36xx/smd.h
+> @@ -138,6 +138,8 @@ int wcn36xx_smd_add_ba_session(struct wcn36xx *wcn,
+>   int wcn36xx_smd_add_ba(struct wcn36xx *wcn, u8 session_id);
+>   int wcn36xx_smd_del_ba(struct wcn36xx *wcn, u16 tid, u8 direction, u8 sta_index);
+>   int wcn36xx_smd_trigger_ba(struct wcn36xx *wcn, u8 sta_index, u16 tid, u16 *ssn);
+> +int wcn36xx_smd_get_stats(struct wcn36xx *wcn, u8 sta_index, u32 stats_mask,
+> +			  struct station_info *sinfo);
+>   
+>   int wcn36xx_smd_update_cfg(struct wcn36xx *wcn, u32 cfg_id, u32 value);
+>   
+> diff --git a/drivers/net/wireless/ath/wcn36xx/txrx.c b/drivers/net/wireless/ath/wcn36xx/txrx.c
+> index df749b114568..8da3955995b6 100644
+> --- a/drivers/net/wireless/ath/wcn36xx/txrx.c
+> +++ b/drivers/net/wireless/ath/wcn36xx/txrx.c
+> @@ -699,3 +699,32 @@ int wcn36xx_start_tx(struct wcn36xx *wcn,
+>   
+>   	return ret;
+>   }
+> +
+> +void wcn36xx_process_tx_rate(struct ani_global_class_a_stats_info *stats, struct rate_info *info)
+> +{
+> +	/* tx_rate is in units of 500kbps; mac80211 wants them in 100kbps */
+> +	if (stats->tx_rate_flags & HAL_TX_RATE_LEGACY)
+> +		info->legacy = stats->tx_rate * 5;
+> +
+> +	info->flags = 0;
+> +	info->mcs = stats->mcs_index;
+> +	info->nss = 1;
+> +
+> +	if (stats->tx_rate_flags & (HAL_TX_RATE_HT20 | HAL_TX_RATE_HT40))
+> +		info->flags |= RATE_INFO_FLAGS_MCS;
+> +
+> +	if (stats->tx_rate_flags & (HAL_TX_RATE_VHT20 | HAL_TX_RATE_VHT40 | HAL_TX_RATE_VHT80))
+> +		info->flags |= RATE_INFO_FLAGS_VHT_MCS;
+> +
+> +	if (stats->tx_rate_flags & HAL_TX_RATE_SGI)
+> +		info->flags |= RATE_INFO_FLAGS_SHORT_GI;
+> +
+> +	if (stats->tx_rate_flags & (HAL_TX_RATE_HT20 | HAL_TX_RATE_VHT20))
+> +		info->bw = RATE_INFO_BW_20;
+> +
+> +	if (stats->tx_rate_flags & (HAL_TX_RATE_HT40 | HAL_TX_RATE_VHT40))
+> +		info->bw = RATE_INFO_BW_40;
+> +
+> +	if (stats->tx_rate_flags & HAL_TX_RATE_VHT80)
+> +		info->bw = RATE_INFO_BW_80;
+> +}
+> diff --git a/drivers/net/wireless/ath/wcn36xx/txrx.h b/drivers/net/wireless/ath/wcn36xx/txrx.h
+> index b54311ffde9c..fb0d6cabd52b 100644
+> --- a/drivers/net/wireless/ath/wcn36xx/txrx.h
+> +++ b/drivers/net/wireless/ath/wcn36xx/txrx.h
+> @@ -164,5 +164,6 @@ int  wcn36xx_rx_skb(struct wcn36xx *wcn, struct sk_buff *skb);
+>   int wcn36xx_start_tx(struct wcn36xx *wcn,
+>   		     struct wcn36xx_sta *sta_priv,
+>   		     struct sk_buff *skb);
+> +void wcn36xx_process_tx_rate(struct ani_global_class_a_stats_info *stats, struct rate_info *info);
+>   
+>   #endif	/* _TXRX_H_ */
+

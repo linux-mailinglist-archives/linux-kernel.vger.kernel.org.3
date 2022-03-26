@@ -2,152 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7E44E81BA
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 16:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3824E81BD
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 16:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233495AbiCZPGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 11:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
+        id S233502AbiCZPLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 11:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233466AbiCZPF6 (ORCPT
+        with ESMTP id S232535AbiCZPLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 11:05:58 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A402DEC0
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 08:04:20 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id h13-20020a056e021d8d00b002c7fb1ec601so6091800ila.6
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 08:04:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=EYEZxr3xgNJFrDST+od/u3rZ+S63Fdq6kvjuDpHy6dY=;
-        b=R/+nz4oild5nCWKWXPwlicAT3Qf4gDQU62uGgruMrf3J9Vm3q6K0sEeyPnPthSB+yq
-         OpFKlMZBvanzWpXUoYueldcNX5lLj4jSQCo7YOjBQAuk2hmLf+KDUyyaUBvyAf6kO2Ik
-         3Y3j0gfTRxKi1BtLNYbvt2dUunz5+FXpulXrHzYjkFNoadPFoDa8KvurnQoMrRYG1oem
-         OxdBSKmtxC16YhR1bnU4xgo0urQL4dQY+gF1NjLKkgEsvgva9G3C2ezfOckRHVZUctVu
-         G2l8f1GE3rPZlDv2KPJIJsRbW9YsEs4Z8r/xSTcSshyOCAmv0D25P4db83tM5og2MjPf
-         jaBA==
-X-Gm-Message-State: AOAM532lvQH9HzCU4YvmzZ1pFE1HLLxIoxADmwLX9rGSF2op31+OHpab
-        FFdkhHdk2lVg9rIpe0ly7MM6jEp5BHwmocHTRM7jyfmQSh11
-X-Google-Smtp-Source: ABdhPJwQxwbCI6pbXOEyJFxDsCns7Me89ZFWgsWFBdW6hq4uSvgbQ4DnHeLx4gIDxFUJgR8gwdip3XRGK5S0I1viXlhhIRBElN7k
+        Sat, 26 Mar 2022 11:11:34 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF296C905
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 08:09:57 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22QDEv88014371;
+        Sat, 26 Mar 2022 15:09:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=Olf3oAAddyZOaTnS0/Bj1ES9HeiSJ+pfiqGcQJt4SeE=;
+ b=zVLXv08vO71P0fy0DisBgeDZEBjhbyV9zwlIOLpvofPL67A/0mP0GhK53ySJNaxBXz2c
+ Pt2aFv0yjHF/zFEEQzXuBM4NXotu2OF1qmEvTrzBrw0eh2KUSCxX98G3bL+05kqFFAqD
+ bY00RpGYn12k4UrX42+A44FeKlGcJP15CORerzGa9OFVDxD5GBqPy6emTcgLRIztlPam
+ HK2qirk2kQbCqNSIkXb6q4R2EjMEqfSi8haxeK01bpKWcGTM1WEBy28JhA9j2tq4bztE
+ ColMpOAgamNjv2EUkQejkPBIIUsWUgxwNgAZJsD35GRN8kahIEEdxAvCRtn2CIZSacb8 Pw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80] (may be forged))
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f1s8cgm4s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 26 Mar 2022 15:09:34 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22QF9XiS110750;
+        Sat, 26 Mar 2022 15:09:33 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2107.outbound.protection.outlook.com [104.47.55.107])
+        by userp3030.oracle.com with ESMTP id 3f1qxq8qc4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 26 Mar 2022 15:09:32 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XRFq4+NIxQvNVIb5q8YUZPISyl5Q1V76+aFLZbWIpYWHM0D8LXIg1pxjft2k+Tx59fKRvYNfn5MG+oEaQ697Lqcs+CGX/E2fv9Kn24AVow1rEDnDPxUhqledcpH1c7iNh7ajL7IpIVSE9X1AKdZfuBplptZZT0fA6ehcaHmIWakISpA88b9ffHX/2O79hou/CDUkvOdoCyNmrV5Jpz0FKoLhft+ODqCxunHmRMmrXt2u/P78yIvkphx8LTda+7LYMwMdTfRr5AqEdvWa702mGF69jrmfUxBXCwwWAjr/irLkjG/wFVV0QXVjGP0y98pL3CwxoNrvvdiHjOZQmQ2ptA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Olf3oAAddyZOaTnS0/Bj1ES9HeiSJ+pfiqGcQJt4SeE=;
+ b=Jbs6HSsJXEfXJtK1C3t5UvDAUZFR7V3dSDBh3LGpNRx/NoU5FFEsReCaUkS5/ETs2zMl9fZOVWcWQwGKoDocPuRGW1oD9VL+KI9Vj/Mz48YgYhBzlNli6nu7toZ1V9o5A0k1D90QELNf6sxpxB/DifHRv4sLX8AoHSFwy7hhM3kkPtPEzKC5FZ5XicqqGygBHmgmUrKac+6mA7Yd/2wsrIDdb1DyJ5Mod5adp1kX/Wf1EVDNOTEfiqGSGajN48L1Rfda+mTQmAPInFDe8StYJfbSqOSle2sowFT1PjKBvbItjL8rHGuZOoRb0wPyYA/qvuFK+ODJW+zsehDdX8P0fQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Olf3oAAddyZOaTnS0/Bj1ES9HeiSJ+pfiqGcQJt4SeE=;
+ b=rKUd5Zs95j/XNrnQDEom3EPTGQG57WxAk2EZ4rUM40AmINOKBLYz77KIGTFwDU9XQcGSPh22Y/04eZpCC/6NTR8Lp5nX7GyhxIsJJjhb94XFwxOTFV0hxmXSIyzh4Y9gZ+DhEdBTF6SK+qVFn8cz1xYfnjKidlmi7i3xe431PdY=
+Received: from BLAPR10MB5009.namprd10.prod.outlook.com (2603:10b6:208:321::10)
+ by SJ0PR10MB4429.namprd10.prod.outlook.com (2603:10b6:a03:2d1::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Sat, 26 Mar
+ 2022 15:09:30 +0000
+Received: from BLAPR10MB5009.namprd10.prod.outlook.com
+ ([fe80::1b2:b41c:b2f0:c755]) by BLAPR10MB5009.namprd10.prod.outlook.com
+ ([fe80::1b2:b41c:b2f0:c755%9]) with mapi id 15.20.5102.022; Sat, 26 Mar 2022
+ 15:09:30 +0000
+Message-ID: <c41a7822-c4d3-3589-f39a-6a2afee67469@oracle.com>
+Date:   Sat, 26 Mar 2022 11:09:26 -0400
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH v2] xen: fix is_xen_pmu()
+Content-Language: en-US
+To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
+        <marmarek@invisiblethingslab.com>
+References: <20220325142002.31789-1-jgross@suse.com>
+From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
+In-Reply-To: <20220325142002.31789-1-jgross@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SN4PR0501CA0151.namprd05.prod.outlook.com
+ (2603:10b6:803:2c::29) To BLAPR10MB5009.namprd10.prod.outlook.com
+ (2603:10b6:208:321::10)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:20e9:b0:2c1:d845:1290 with SMTP id
- q9-20020a056e0220e900b002c1d8451290mr1795589ilv.226.1648307059608; Sat, 26
- Mar 2022 08:04:19 -0700 (PDT)
-Date:   Sat, 26 Mar 2022 08:04:19 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c4d02e05db206428@google.com>
-Subject: [syzbot] BUG: scheduling while atomic: syz-executor/ADDR (2)
-From:   syzbot <syzbot+baf0286916837266ff0e@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5e4384f2-cda6-47a3-4797-08da0f3aa06e
+X-MS-TrafficTypeDiagnostic: SJ0PR10MB4429:EE_
+X-Microsoft-Antispam-PRVS: <SJ0PR10MB44290F328EDEA4BEFCE6D3648A1B9@SJ0PR10MB4429.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IlBXwuy5DqEUORN4aP7S1pLLXxKixHUq9Kr1WvQB3RNJZ42nwDdHRozz498fmvJP8KCvP3q5vsYGgY0/Y4ZNyeD7uait+Bj9WagQdq6zAAN6nQBC2U24VDFYofn5kaAk5CniVfDWZm1AYTDctOoHZHgN+QCxM8g/PGsRCy5VBJbFDMitCDPBrkk9nVy5hN9uBZTbnpd2HlJTBrA682Z1HK6/1O5FiBSZiIdDssuOtexAqV8NXJrISBeuQgIuBVWM+c6erUUtzcvLa0cZPWr60e61pHvaBB8Hw6LY7zxn/iUbnLnK9jyW+ydAMS+0uEFWDNs9/Ec7qAkJUPZ7qIoDZGR/0vbH0udyPy7GgZvfuuxagNibMm9zawv36NFpjLejwusAKzHfYeJ0TiojYEOoFlZkgbyT/0NpTPWkPgIjR38TqE7rX/46UVZ/iLCYBTiNzlwVmmSJHZ8sp0NPGDb8PljssATm16xr1ypDGmgaDXuTK+eb5AUcG5WcPjWQsylwK6L/lPJ3ccaYYtS3LZrf7vGDnYah42f1raWulUqkBVCSrWu1xwpP3ssAIBZWMZIEKzT7fcfIlv0/EELMxHi0NKjlvB7PYSA0bDEJBSJ8sxUgs5dMxDOlAdqTHKkoxM+ZrfiJCLA73bw3bvauRqtnutM4ccp2TRq2ISVUcVszuIioJnGrrc41z0J9ADIailMSNIXlG1UsvkFGY9MxLP4ENN7xJSr5hbCJGxHtRx3R8ZiXczzEJ5EvTsW7papq5Pa8
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5009.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6512007)(36756003)(4326008)(26005)(6506007)(2906002)(6666004)(316002)(8676002)(53546011)(38100700002)(66476007)(54906003)(66556008)(8936002)(186003)(66946007)(6486002)(7416002)(5660300002)(508600001)(2616005)(44832011)(83380400001)(31686004)(31696002)(66574015)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UjJjakN2VFd2WHF2RjVNU21hMk9YL1BrcHc5dStWWnNnejFxZTZtMnVPcHBp?=
+ =?utf-8?B?UTBFZW9VMmFpNUVuN2tMN2VRWi9GTC9IdkVLS0R6TFI5QmxqVm03NW5EQWZt?=
+ =?utf-8?B?eFcxMnRySWhvem9sNTBJRDhwV2lqWVlBYXVLKzlWOEZtSFBMb2d1MTdpdDVs?=
+ =?utf-8?B?b3BjKzZXWEZRaStyRW1KQ2Y0R214R2dSdVI1T081d0hpa1BiWENkdnc0dXp1?=
+ =?utf-8?B?V1V5cmd2OXptV0I3eDUzeERoYU1JcVU0MHJBb1MwNU5UWnRKVjRUOEFTV092?=
+ =?utf-8?B?YnJSdWFrc09jT3RkZW9SV3RWbDZSVUZsQjV4OVkyeWNoZi9UVFkvdFBUc09r?=
+ =?utf-8?B?cE9LZGJ3RnFueUMvTzcvSEViUldDTnhQaHdtN1VVcm0yakVCL3VBZk53L05w?=
+ =?utf-8?B?ejdlbjBTOHlkTWt2WFFBc0ludjNnczEvL3ZtWE9oMXRoNS8zZkJLV1ZZNjcw?=
+ =?utf-8?B?V0xSOW1sYWhGVllaU2xwUDl4K2gvOVZBSkdvUnRjWTh5aW1nZU8yT01kcS9l?=
+ =?utf-8?B?Vldydm8vdXBsV1pKQWlSRnkvQTdrVVFYbEVvVXc3VEI0OVp2aWpXZEVLK0R3?=
+ =?utf-8?B?U3JFTWxHODJ1Sjg1bVVXQys0NFlzV1djS0xOWXJDWWhtYzNMY3FscEYxelhW?=
+ =?utf-8?B?TUNJUzBZNyt0WDRjWlV6Vk5YNk1ZeXd4anZXTmVJOFNKR29waXJKenZmS3Aw?=
+ =?utf-8?B?a0dJSFg4R1Z0WGY4WVJFQTFidkJYbGxDVzZnMEJGNEhMV3FvdmNQRVJ5ZmJW?=
+ =?utf-8?B?bG9vOE1CWVl0TENjMUZZaEd2SzlQMWlyeDUwQnVwQ01ZeVZxazJPbHRLWk84?=
+ =?utf-8?B?NVBtQ2ZqcGlnZzhCYjZDRWhZMGlPUll1L1o4dGRQamdnVVFaZ3NudVVCeS9P?=
+ =?utf-8?B?cVk3Ri80d29ZNVNtS3EzM0tUeUlyTi92d0k4Zm9jZFlDeCtkN0MvdkZZelg2?=
+ =?utf-8?B?elNRMmQwZXBnN0hyaG9BNElXd2JnL0RmT1lSSXpWdHJwR2ZWUVR2Y2V6Y213?=
+ =?utf-8?B?Um9xNVFLVnVQNGpSOEI0MVFrWHg0bHEvZ0M1dmtkMGg3QnlodzZ4KzEya0F1?=
+ =?utf-8?B?TVdDem1uSDBRUEkrR1JUQTYyYmNHUVV3QjgvVVFIR3pielFwbEpOemdFcWJ3?=
+ =?utf-8?B?NEwxS3BsUnhZYkxxVG5aWVBtUm5ESmI1eUxFRVFOdnBhbXd1YmozOG5oR08x?=
+ =?utf-8?B?YWJ0VjlGb0NZbGt6MDRNb0xVaGhFMXdDckRDVkM1dWxWRzRDMjczTnRDN3R6?=
+ =?utf-8?B?S1c2akg5NXdxNjNHSXNrTHRONWc0TFI4WVp2MGtlc3pwbk85dmpFMFJxY0k0?=
+ =?utf-8?B?SDhic3NPc1FoZEl4ZmZXbkw5dXBqM0FlRnRKbWxGd2FvY0ZGWUFtTkQzMFBV?=
+ =?utf-8?B?QWU4b3h6VS9sd2pCVlJxR21aMG85cXdIVmpCQWIxRU8xZ3NDTXJoSnpOVVFW?=
+ =?utf-8?B?cEgvbHNMZ2Z3N1FqUjZud0JiSXZQd1cwLy9NSVdTbFk4LzJGL09JWVIwRG05?=
+ =?utf-8?B?VG5wUW5uc1RLWnZPTEJUZjZnVXdWbkhzeThnbW1sN1FnbE9CaERjVEhWTUE3?=
+ =?utf-8?B?TEREWnlTOVJxZ2puV0M4M3ZJQWdxM3F4cDJ2MjNZQjVpNXF2UmNaN0hOWVMx?=
+ =?utf-8?B?T0ZuNHlvNTdyRGdjVENPNXhkdE94WFNubjdCVlk4UDZFQW5kZjQrWVFvWUZI?=
+ =?utf-8?B?VEJXZWtMNFRZTllhU0tNVDVuLzZ5Z0Z4ejdSOWMrb28rdDF1a2p3WHhodlhQ?=
+ =?utf-8?B?a0dUNkQwMjBzOGlkVXh0RTlPakFncEw0SitoQXRsQURPRUxZaWU0eDIwRnQy?=
+ =?utf-8?B?VmRuZE5IU3doTkNTQVA3eEVnYnhkVHFxa2dwdWJIZ01NZVlEM050ZHp5c3Nv?=
+ =?utf-8?B?Rjc2RWVzOURheEdudENJeFpBM05SMzlrRVhvR3dxdUFDakhKeVhxZU02b2pN?=
+ =?utf-8?B?MktDeGJPcHNGblpRem1URnF0cGU5MTVpdm5haXZMemo3U2JhSG5WUk9jOWIy?=
+ =?utf-8?B?VHl2VlFPWlRnPT0=?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e4384f2-cda6-47a3-4797-08da0f3aa06e
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5009.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2022 15:09:30.1229
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CgSwHRk3fGWC+AY8CQJnh/Edru3XqIULvkp+trZF8vklR9Q1glk7dRA28ht05R10+CsyDWJ7cuXyA6Tpd7z3QnOgc4FeXfpPyPHzFhUxHic=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4429
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10298 signatures=694973
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 bulkscore=0
+ adultscore=0 spamscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203260098
+X-Proofpoint-GUID: D2ydAiWTgQfOiztmLZK5d2FW-1klQXok
+X-Proofpoint-ORIG-GUID: D2ydAiWTgQfOiztmLZK5d2FW-1klQXok
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
-
-HEAD commit:    cb7cbaae7fd9 Merge tag 'drm-next-2022-03-25' of git://anon..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=135a5bed700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9e6050011f4821d6
-dashboard link: https://syzkaller.appspot.com/bug?extid=baf0286916837266ff0e
-compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+baf0286916837266ff0e@syzkaller.appspotmail.com
-
-BUG: scheduling while atomic: syz-executor.1/23656/0x00000101
-Modules linked in:
-CPU: 1 PID: 23656 Comm: syz-executor.1 Not tainted 5.17.0-syzkaller-10734-gcb7cbaae7fd9 #0
-Hardware name: linux,dummy-virt (DT)
-Call trace:
- dump_backtrace.part.0+0xcc/0xe0 arch/arm64/kernel/stacktrace.c:184
- dump_backtrace arch/arm64/kernel/stacktrace.c:190 [inline]
- show_stack+0x18/0x6c arch/arm64/kernel/stacktrace.c:191
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x68/0x84 lib/dump_stack.c:106
- dump_stack+0x18/0x34 lib/dump_stack.c:113
- __schedule_bug+0x60/0x80 kernel/sched/core.c:5617
- schedule_debug kernel/sched/core.c:5644 [inline]
- __schedule+0x74c/0x7f0 kernel/sched/core.c:6273
- schedule+0x54/0xd0 kernel/sched/core.c:6454
- rwsem_down_write_slowpath+0x29c/0x5a0 kernel/locking/rwsem.c:1142
- __down_write_common kernel/locking/rwsem.c:1259 [inline]
- __down_write_common kernel/locking/rwsem.c:1256 [inline]
- __down_write kernel/locking/rwsem.c:1268 [inline]
- down_write+0x58/0x64 kernel/locking/rwsem.c:1515
- inode_lock include/linux/fs.h:778 [inline]
- simple_recursive_removal+0x124/0x270 fs/libfs.c:288
- debugfs_remove fs/debugfs/inode.c:732 [inline]
- debugfs_remove+0x5c/0x80 fs/debugfs/inode.c:726
- blk_release_queue+0x7c/0xf0 block/blk-sysfs.c:784
- kobject_cleanup lib/kobject.c:705 [inline]
- kobject_release lib/kobject.c:736 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x98/0x114 lib/kobject.c:753
- blk_put_queue+0x14/0x20 block/blk-core.c:270
- blkg_free.part.0+0x54/0x80 block/blk-cgroup.c:86
- blkg_free block/blk-cgroup.c:78 [inline]
- __blkg_release+0x44/0x70 block/blk-cgroup.c:102
- rcu_do_batch kernel/rcu/tree.c:2535 [inline]
- rcu_core+0x324/0x590 kernel/rcu/tree.c:2786
- rcu_core_si+0x10/0x20 kernel/rcu/tree.c:2803
- _stext+0x124/0x2a0
- do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
- invoke_softirq kernel/softirq.c:439 [inline]
- __irq_exit_rcu+0xe4/0x100 kernel/softirq.c:637
- irq_exit_rcu+0x10/0x1c kernel/softirq.c:649
- __el1_irq arch/arm64/kernel/entry-common.c:459 [inline]
- el1_interrupt+0x38/0x64 arch/arm64/kernel/entry-common.c:473
- el1h_64_irq_handler+0x18/0x24 arch/arm64/kernel/entry-common.c:478
- el1h_64_irq+0x64/0x68 arch/arm64/kernel/entry.S:577
- walk_stackframe arch/arm64/kernel/stacktrace.c:153 [inline]
- arch_stack_walk+0x68/0x280 arch/arm64/kernel/stacktrace.c:211
- stack_trace_save+0x50/0x80 kernel/stacktrace.c:122
- kasan_save_stack+0x2c/0x5c mm/kasan/common.c:38
- kasan_set_track+0x2c/0x40 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/tags.c:36
- ____kasan_slab_free.constprop.0+0x190/0x1e4 mm/kasan/common.c:366
- __kasan_slab_free+0x10/0x1c mm/kasan/common.c:374
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1728 [inline]
- slab_free_freelist_hook+0xc4/0x230 mm/slub.c:1754
- slab_free mm/slub.c:3510 [inline]
- kmem_cache_free+0xb0/0x3d4 mm/slub.c:3527
- put_io_context+0xbc/0xe0 block/blk-ioc.c:213
- exit_io_context+0xdc/0xf0 block/blk-ioc.c:229
- do_exit+0x52c/0x930 kernel/exit.c:827
- do_group_exit+0x34/0xa0 kernel/exit.c:924
- __do_sys_exit_group kernel/exit.c:935 [inline]
- __se_sys_exit_group kernel/exit.c:933 [inline]
- __arm64_sys_exit_group+0x18/0x20 kernel/exit.c:933
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
- el0_svc_common.constprop.0+0x44/0xec arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x6c/0x84 arch/arm64/kernel/syscall.c:181
- el0_svc+0x44/0xb0 arch/arm64/kernel/entry-common.c:616
- el0t_64_sync_handler+0x1a4/0x1b0 arch/arm64/kernel/entry-common.c:634
- el0t_64_sync+0x198/0x19c arch/arm64/kernel/entry.S:581
+On 3/25/22 10:20 AM, Juergen Gross wrote:
+> is_xen_pmu() is taking the cpu number as parameter, but it is not using
+> it. Instead it just tests whether the Xen PMU initialization on the
+> current cpu did succeed. As this test is done by checking a percpu
+> pointer, preemption needs to be disabled in order to avoid switching
+> the cpu while doing the test. While resuming from suspend() this seems
+> not to be the case:
+>
+> [   88.082751] ACPI: PM: Low-level resume complete
+> [   88.087933] ACPI: EC: EC started
+> [   88.091464] ACPI: PM: Restoring platform NVS memory
+> [   88.097166] xen_acpi_processor: Uploading Xen processor PM info
+> [   88.103850] Enabling non-boot CPUs ...
+> [   88.108128] installing Xen timer for CPU 1
+> [   88.112763] BUG: using smp_processor_id() in preemptible [00000000] code: systemd-sleep/7138
+> [   88.122256] caller is is_xen_pmu+0x12/0x30
+> [   88.126937] CPU: 0 PID: 7138 Comm: systemd-sleep Tainted: G        W         5.16.13-2.fc32.qubes.x86_64 #1
+> [   88.137939] Hardware name: Star Labs StarBook/StarBook, BIOS 7.97 03/21/2022
+> [   88.145930] Call Trace:
+> [   88.148757]  <TASK>
+> [   88.151193]  dump_stack_lvl+0x48/0x5e
+> [   88.155381]  check_preemption_disabled+0xde/0xe0
+> [   88.160641]  is_xen_pmu+0x12/0x30
+> [   88.164441]  xen_smp_intr_init_pv+0x75/0x100
+>
+> Fix that by replacing is_xen_pmu() by a simple boolean variable which
+> reflects the Xen PMU initialization state on cpu 0.
+>
+> Modify xen_pmu_init() to return early in case it is being called for a
+> cpu other than cpu 0 and the boolean variable not being set.
+>
+> Fixes: bf6dfb154d93 ("xen/PMU: PMU emulation code")
+> Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+> Signed-off-by: Juergen Gross <jgross@suse.com>
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Applied to for-linus-5.18.
+

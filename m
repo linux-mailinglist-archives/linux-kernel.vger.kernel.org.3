@@ -2,74 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19014E7F5A
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 07:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20654E7F8F
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 07:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbiCZGYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 02:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
+        id S231462AbiCZGdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 02:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbiCZGYt (ORCPT
+        with ESMTP id S230025AbiCZGdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 02:24:49 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E369143C7E
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 23:23:13 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id pv16so19175454ejb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 23:23:13 -0700 (PDT)
+        Sat, 26 Mar 2022 02:33:11 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D3A2E68F
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 23:31:34 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id t7so8239922qta.10
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 23:31:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=37O0AYItxghfYWnKQlivNC6Xp9Toxjb2BI+nsltZzhQ=;
-        b=CwUrdrvAuRf7f33Y/4O2+rR/vmPAan2Zmp0E93oVa45QdykqpaP7aWEjmCFIV8CsYB
-         qeFbEh4tJXJflAcQFfKZ/3Z7dfPX7PGWShXxatZaNl8wkMal0830Z5nbbBXRoKwK6eD6
-         NinlvYWoQVsbgM5wEG4AIBbkQ4m+LGNJXK4RI2E8t4hien/rt6Inqa6kiR2YiuGF/HoP
-         kawb9Z5QBGfxzJOGupveCi0STAsQYFf9CvqWxjWrkuf9OQj/QueLzUnFq02WtKzw1jg+
-         wHoiiSS8TbjX9lotffc/iO4jGdMlYSIdHYe4Gj9kWkPV4G0I7FI081IH6xIMIIJfm5RW
-         OrWg==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PTLKNJ1HHVa/CC/OMIeEXrqEsVbWaZOp7AFQBATXJDQ=;
+        b=lUQtPiSM3Sqlxdd43fL+DfdNXAvAAY1bKNTHEfSflmKVRuwGdp6JHLhjUjDv6nQq+g
+         0/+YIxlNQvlXokJXnrkraDIf4Q9elqAoG4z+oUBHynRN61oKnnJ3Z9oHJQKmMoCclCE3
+         Jt9kSWDc+ZfmZRkWINyz0I50DPIYgmEScNspI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=37O0AYItxghfYWnKQlivNC6Xp9Toxjb2BI+nsltZzhQ=;
-        b=o6c0oEMJKuK1RKXQPNwMWdqO9zmy3LWHvxAOufpf/M8aNsI95y6CABgDRxlPUvWpsi
-         7RqV82xCmzVbGEbiqc00LbBYoe/AksSlaHRowugXw2s/baphyKp6h61ad7uyx/irUgoK
-         ylZIykMA2hdS/DAUxxFjBIejWwC36AvbAKetMJOD0Pdd5EwLJB2Oo1H1jU4ZZ8A2WLwR
-         SVdON8jQYHjeKLoFeGlDz2gxC7Mc1K/7pXm1B2Jly+YAXM1+IAfuSbN+ZmP2xxR2RMYq
-         K5JGy+Nuzjd+Q2GeOxN0elnoj0CpTxDp1tnYG7IdE+F9o0jD0aT6qqYhZGZUc3dBKqJV
-         GEQA==
-X-Gm-Message-State: AOAM532HfI/SSV5HQUdYKOvlxHmSzcSKUyfKcmka1/HlNqn5St14xxvf
-        ohtYtfC/yTB83mKSNsZcQBfLiw==
-X-Google-Smtp-Source: ABdhPJyeJVE+VuyNNDf/Dr02K0PzUGNnNvbj4gDDnLaT8JRbsjQK4M7tbtuLGeuODzu/Ar5XlsHwuQ==
-X-Received: by 2002:a17:906:b052:b0:6ce:88a5:e42a with SMTP id bj18-20020a170906b05200b006ce88a5e42amr16105124ejb.237.1648275791887;
-        Fri, 25 Mar 2022 23:23:11 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([104.245.96.34])
-        by smtp.gmail.com with ESMTPSA id q11-20020a170906144b00b006cf61dfb03esm3121673ejc.62.2022.03.25.23.23.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 23:23:11 -0700 (PDT)
-Date:   Sat, 26 Mar 2022 14:23:03 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Ali Saidi <alisaidi@amazon.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, german.gomez@arm.com,
-        acme@kernel.org, benh@kernel.crashing.org, Nick.Forrington@arm.com,
-        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
-        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
-        kjain@linux.ibm.com, lihuafei1@huawei.com, mark.rutland@arm.com,
-        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, will@kernel.org
-Subject: Re: [PATCH v4 4/4] perf mem: Support HITM for when mem_lvl_num is any
-Message-ID: <20220326062303.GC20556@leoy-ThinkPad-X240s>
-References: <20220324183323.31414-1-alisaidi@amazon.com>
- <20220324183323.31414-5-alisaidi@amazon.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PTLKNJ1HHVa/CC/OMIeEXrqEsVbWaZOp7AFQBATXJDQ=;
+        b=DrB1+Wh6GkIZQN/uMp9b5lvqYSSW3G6bQ8nzxjVQuzLPSJTEDMccu6wHIhxIELJDUJ
+         3zZnb5JHHi/Mi/CzRJaNQItbN8dMh5rORetB55ZnL+8JUlrURmSM4oPReTmIzFC1Fo7k
+         zXKKIeeN4KEgK/d2nY7xtXx1IsCpfZS7wCYG+y7pb07BN/uCLGY4ira6y21PkSX+7gvj
+         gXbxx4i5tcPBrIKnP4DradMuhtxN2OcvyyAWTjJ+9/WrnLM3l3xZj+hXMaMtxpcE2vmh
+         9XO4bviSHaZEbHw6uw42bvOW1rvIa5MTzN4BepwV1+qpY56aOgzDQIoC4wj3ldQCSihG
+         EeYg==
+X-Gm-Message-State: AOAM533QyWAZv16tVtRmn11n9k32cWnOJNkPAorUpRwyvwhIlF6gW0z2
+        2cLdOE6+UdcOxmx1is7iDlix//AwviTYELoV83lcsA==
+X-Google-Smtp-Source: ABdhPJyNXpv93V1BfrqoR6BPPZvt8TozB6bISb7ecXAcBKX5At5yoq8MUmWtanB+ci+O2oyb/CoairlaOa698avJc2c=
+X-Received: by 2002:ac8:7ee3:0:b0:2e1:a508:c500 with SMTP id
+ r3-20020ac87ee3000000b002e1a508c500mr12523470qtc.117.1648276293617; Fri, 25
+ Mar 2022 23:31:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324183323.31414-5-alisaidi@amazon.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220325033028.1.I67f8ad854ac2f48701902bfb34d6e2070011b779@changeid>
+ <CABBYNZKF1Ye6D130XgaFmqN6JAssf78-FaQh_AEkwigy8qaVjw@mail.gmail.com>
+In-Reply-To: <CABBYNZKF1Ye6D130XgaFmqN6JAssf78-FaQh_AEkwigy8qaVjw@mail.gmail.com>
+From:   Ying Hsu <yinghsu@chromium.org>
+Date:   Sat, 26 Mar 2022 14:31:22 +0800
+Message-ID: <CADwQ6b6cCrKGfS-zhh5KnSNdxm_n_krwpZ=s68WYdoJ-XCHH-Q@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: fix dangling sco_conn and use-after-free in sco_sock_timeout
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        ChromeOS Bluetooth Upstreaming 
+        <chromeos-bluetooth-upstreaming@chromium.org>,
+        Joseph Hwang <josephsih@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,76 +73,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 06:33:23PM +0000, Ali Saidi wrote:
-> For loads that hit in a the LLC snoop filter and are fulfilled from a
-> higher level cache on arm64 Neoverse cores, it's not usually clear what
-> the true level of the cache the data came from (i.e. a transfer from a
-> core could come from it's L1 or L2). Instead of making an assumption of
-> where the line came from, add support for incrementing HITM if the
-> source is CACHE_ANY.
-> 
-> Since other architectures don't seem to populate the mem_lvl_num field
-> here there shouldn't be a change in functionality.
-> 
-> Signed-off-by: Ali Saidi <alisaidi@amazon.com>
-> Tested-by: German Gomez <german.gomez@arm.com>
-> Reviewed-by: German Gomez <german.gomez@arm.com>
-> ---
->  tools/perf/util/mem-events.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
-> index e5e405185498..084977cfebef 100644
-> --- a/tools/perf/util/mem-events.c
-> +++ b/tools/perf/util/mem-events.c
-> @@ -539,6 +539,15 @@ do {				\
->  					stats->ld_llchit++;
->  			}
->  
-> +			/*
-> +			 * A hit in another cores cache must mean a llc snoop
-> +			 * filter hit
-> +			 */
-> +			if (lnum == P(LVLNUM, ANY_CACHE)) {
-> +				if (snoop & P(SNOOP, HITM))
-> +					HITM_INC(lcl_hitm);
-> +			}
+Hi Luiz,
 
-This might break the memory profiling result for x86, see file
-arch/x86/events/intel/ds.c:
+I compiled and ran the c-reproducer:
+https://syzkaller.appspot.com/x/repro.c?x=152b93e8700000
+I will add relevant links in the commit message. Thanks for the reminder.
 
-  97 void __init intel_pmu_pebs_data_source_skl(bool pmem)
-  98 {
-  99         u64 pmem_or_l4 = pmem ? LEVEL(PMEM) : LEVEL(L4);
-  ...
- 105         pebs_data_source[0x0d] = OP_LH | LEVEL(ANY_CACHE) | REM | P(SNOOP, HITM);
- 106 }
+While fixing the use-after-free problem , I also found a possible
+deadlock in sco_sock_connect() and sco_sock_getsockopt() :
+sco_sock_connect() {
+  hci_dev_lock(hdev);
+  lock_sock(sk);
+}
 
-Which means that it's possible that it's a remote access and the cache
-level is ANY_CACHE, it's good to add checking for bit
-PERF_MEM_REMOTE_REMOTE:
+sco_sock_getsockopt() {
+  lock_sock(sk);
+  case BT_CODEC:
+    hci_dev_lock(hdev);
+}
 
-	u64 remote = data_src->mem_remote;
+So, adjusting the locking order in sco_sock_connect() can also avoid
+the possible deadlock.
 
-	/*
-	 * A hit in another cores cache must mean a llc snoop
-	 * filter hit
-	 */
-	if (lnum == P(LVLNUM, ANY_CACHE) && remote != P(REMOTE, REMOTE)) {
-	        if (snoop & P(SNOOP, HITM))
-	                HITM_INC(lcl_hitm);
-	}
+Ying
 
-Appreciate German's reviewing and testing, and sorry I jumped in very
-late.
-
-Thanks,
-Leo
-
-> +
->  			if (lvl & P(LVL, LOC_RAM) || lnum == P(LVLNUM, RAM)) {
->  				stats->lcl_dram++;
->  				if (snoop & P(SNOOP, HIT))
-> -- 
-> 2.32.0
-> 
+On Sat, Mar 26, 2022 at 2:50 AM Luiz Augusto von Dentz
+<luiz.dentz@gmail.com> wrote:
+>
+> Hi Ying,
+>
+> On Thu, Mar 24, 2022 at 8:31 PM Ying Hsu <yinghsu@chromium.org> wrote:
+> >
+> > Connecting the same socket twice consecutively in sco_sock_connect()
+> > could lead to a race condition where two sco_conn objects are created
+> > but only one is associated with the socket. If the socket is closed
+> > before the SCO connection is established, the timer associated with the
+> > dangling sco_conn object won't be canceled. As the sock object is being
+> > freed, the use-after-free problem happens when the timer callback
+> > function sco_sock_timeout() accesses the socket. Here's the call trace:
+> >
+> > dump_stack+0x107/0x163
+> > ? refcount_inc+0x1c/
+> > print_address_description.constprop.0+0x1c/0x47e
+> > ? refcount_inc+0x1c/0x7b
+> > kasan_report+0x13a/0x173
+> > ? refcount_inc+0x1c/0x7b
+> > check_memory_region+0x132/0x139
+> > refcount_inc+0x1c/0x7b
+> > sco_sock_timeout+0xb2/0x1ba
+> > process_one_work+0x739/0xbd1
+> > ? cancel_delayed_work+0x13f/0x13f
+> > ? __raw_spin_lock_init+0xf0/0xf0
+> > ? to_kthread+0x59/0x85
+> > worker_thread+0x593/0x70e
+> > kthread+0x346/0x35a
+> > ? drain_workqueue+0x31a/0x31a
+> > ? kthread_bind+0x4b/0x4b
+> > ret_from_fork+0x1f/0x30
+> >
+> > Signed-off-by: Ying Hsu <yinghsu@chromium.org>
+> > Reviewed-by: Joseph Hwang <josephsih@chromium.org>
+> > ---
+> > Tested this commit using a C reproducer on qemu-x86_64 for 8 hours.
+>
+> We should probably add a link or something to the reproducer then, was
+> it syzbot? It does have some instructions on how to link its issues.
+>
+> >  net/bluetooth/sco.c | 21 +++++++++++++--------
+> >  1 file changed, 13 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/net/bluetooth/sco.c b/net/bluetooth/sco.c
+> > index 8eabf41b2993..380c63194736 100644
+> > --- a/net/bluetooth/sco.c
+> > +++ b/net/bluetooth/sco.c
+> > @@ -574,19 +574,24 @@ static int sco_sock_connect(struct socket *sock, struct sockaddr *addr, int alen
+> >             addr->sa_family != AF_BLUETOOTH)
+> >                 return -EINVAL;
+> >
+> > -       if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND)
+> > -               return -EBADFD;
+> > +       lock_sock(sk);
+> > +       if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND) {
+> > +               err = -EBADFD;
+> > +               goto done;
+> > +       }
+> >
+> > -       if (sk->sk_type != SOCK_SEQPACKET)
+> > -               return -EINVAL;
+> > +       if (sk->sk_type != SOCK_SEQPACKET) {
+> > +               err = -EINVAL;
+> > +               goto done;
+> > +       }
+> >
+> >         hdev = hci_get_route(&sa->sco_bdaddr, &sco_pi(sk)->src, BDADDR_BREDR);
+> > -       if (!hdev)
+> > -               return -EHOSTUNREACH;
+> > +       if (!hdev) {
+> > +               err = -EHOSTUNREACH;
+> > +               goto done;
+> > +       }
+> >         hci_dev_lock(hdev);
+> >
+> > -       lock_sock(sk);
+> > -
+>
+> Also are we sure we are not introducing a locking hierarchy problem
+> here? Previously we had hci_dev_lock then sock_lock now it is the
+> opposite, or perhaps we never want to have them at the same time?
+>
+> >         /* Set destination address and psm */
+> >         bacpy(&sco_pi(sk)->dst, &sa->sco_bdaddr);
+> >
+> > --
+> > 2.35.1.1021.g381101b075-goog
+> >
+>
+>
+> --
+> Luiz Augusto von Dentz

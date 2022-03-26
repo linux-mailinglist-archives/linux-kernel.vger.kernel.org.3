@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D764E806D
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 11:28:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 863D14E8072
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 11:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbiCZK3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 06:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
+        id S232586AbiCZK3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 06:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232498AbiCZK3D (ORCPT
+        with ESMTP id S232524AbiCZK3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 06:29:03 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143852F008;
-        Sat, 26 Mar 2022 03:27:24 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id pv16so19793609ejb.0;
-        Sat, 26 Mar 2022 03:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gJNCNvpGXaKqAIHCO4xhB5jgrMlxJtcGqvg3RJwepb0=;
-        b=e5zTOtzJnmdhJkaAaFuUx/AE7i2r+pjg25hvt7Q9BAm0aLXz+Pya5CERaYqqHGe/U4
-         m33dcJci2qtdSm06qzqu2A7KnvKd6A3hVj6+orDhWN3ZS3hZ/vhSMy7ZkB/ICDhdYBel
-         e54GubObSnz6MFNTiIs7JBh9Tycvf0LKiLvVTn/cPvyM762L6vTf5EOi02nTcy4cb/ys
-         qdESkukJXCQjvSWoRkb32/ZQHb6geFATHurqumVCr+iIMUrBbyVOdePlFA17WpUgc2HH
-         0FtsX4YWiokgo/+1qArfyU1pdMeMbozO/pOIPV1kB+m3KNfMa71XiBJwMbyYuSRiuo+x
-         8lDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gJNCNvpGXaKqAIHCO4xhB5jgrMlxJtcGqvg3RJwepb0=;
-        b=1y69HvImrInVPx3bSAAm9vf3YImotZ8rf151tMNEPykKyfXy39TWde/HI9UWoIp5Vj
-         TX1c15IJam6Y2CDJawcjRag4XM2GmIyod6rQhjDZT7LBkSOs5swXgJjOEOpq3o3jFNva
-         mCnzYN6JQEGJhXFDAPb9h4kIDHrVM04+WF1zycnOPkMVIdolhQJuuEUAl5+/uyCXWV9p
-         5t4hY4QuVWU5ewxydlY2pVQSWOnG2Owj4y9GUpUVz8Bo+F4fB37YsLgWuyfLQKCQe6yP
-         VHPb87utV82QwAnsEp83rqtB9a9sWoJjVCsgzJv6aVLdZ+5acxMAIJxJavxAX/u0KPIB
-         r8IA==
-X-Gm-Message-State: AOAM531Par1vYIxbJYuhcekzrDwg3naTLCsyrrtI4/erwLRt/y8Fb+eB
-        yi0k+bdfe2gyPEvK4ANvRos=
-X-Google-Smtp-Source: ABdhPJy0S/ltddHS/J3q+F7pW5ZG5TpKypxxoNl0N8StWaIdHuTYgh2FBFDRufdwyts3L1HsOZiD8A==
-X-Received: by 2002:a17:907:1c10:b0:6da:6316:d009 with SMTP id nc16-20020a1709071c1000b006da6316d009mr16427209ejc.621.1648290442568;
-        Sat, 26 Mar 2022 03:27:22 -0700 (PDT)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id g23-20020a17090670d700b006ccfd4163f7sm3209021ejk.206.2022.03.26.03.27.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 03:27:22 -0700 (PDT)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/3] arm64: dts: rockchip: add clocks property to cru node rk3399
-Date:   Sat, 26 Mar 2022 11:27:12 +0100
-Message-Id: <20220326102712.20906-3-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220326102712.20906-1-jbx6244@gmail.com>
-References: <20220326102712.20906-1-jbx6244@gmail.com>
+        Sat, 26 Mar 2022 06:29:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F7F2F008;
+        Sat, 26 Mar 2022 03:27:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EB6A60B84;
+        Sat, 26 Mar 2022 10:27:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83BAAC340F3;
+        Sat, 26 Mar 2022 10:27:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648290447;
+        bh=gkLuPChh/62HzYG8JNKGaCyt+9mhI4s5dURFTooh/lk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RTiVsOW4NGyhKP6jdrcOqAswGCTi0l8FGIBZTPOcnAxcbuLtX0iG/u/dHqPEsmMCg
+         7w4V0q2kA4zwCT43jwVzBqko0U9mxVQKKBAvmbSjlKSoz9MFNiBnR6h1Q2tT4ew9tQ
+         aPYkbyQsaU6SZUoUKv9ErCRdVeGclQq0/3euHhy7f7EzFY7LynjAYPmutDsNM2Vw48
+         i9WM2yu4+a0/ST3P64NZOGuhrypwTkZWcD5Kr0L4A2rKSCFPGw1AcUefpR+SJwglHz
+         K1qoiXb3BNsvCfc3plLl8PVEmroHrbZqFnCvZU+Pf1qQ2QFCRH8VCIDR75V+qMh3qf
+         02bzbtbeFYBzQ==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1nY3dl-00Co0R-0e; Sat, 26 Mar 2022 11:27:25 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH v3 0/6] Better handle dependencies on Sphinx extensions
+Date:   Sat, 26 Mar 2022 11:27:18 +0100
+Message-Id: <cover.1648290305.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add clocks property to rk3399 cru node to fix warnings like:
-'clocks' is a dependency of 'assigned-clocks'.
+Sphinx has its own way to identify the need of rebuilding the documentation.
+It means that extensions need to use an internal API in order to notify about
+the need to consider other files.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+The kerneldoc.py extension already does that, maintainers_include.py doesn't
+need (as it uses an API that internally does that), and kfigure.py does it on a
+different way.  So, those are already safe.
+
+However, other extensions don't notify nor implement their own checks,
+so, when a file that was parsed by them is changed, the corresponding 
+documentation won't be rebuilt.
+
+This series add support for it for ABI, features and kernel-include.
+
 ---
- arch/arm64/boot/dts/rockchip/rk3399.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-index 01c08a2aa..16fc6e5f1 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-@@ -1426,6 +1426,8 @@
- 	cru: clock-controller@ff760000 {
- 		compatible = "rockchip,rk3399-cru";
- 		reg = <0x0 0xff760000 0x0 0x1000>;
-+		clocks = <&xin24m>;
-+		clock-names = "xin24m";
- 		rockchip,grf = <&grf>;
- 		#clock-cells = <1>;
- 		#reset-cells = <1>;
+v3:
+  - Changed the meta-tag used when --enable-lineno and --enable-fname
+    are used at the scripts that generate ReST output.
+
+Mauro Carvalho Chehab (6):
+  scripts/get_feat.pl: allow output the parsed file names
+  docs: kernel_feat.py: add build dependencies
+  docs: kernel_abi.py: add sphinx build dependencies
+  docs: kernel_include.py: add sphinx build dependencies
+  scripts/get_abi: change the file/line number meta info
+  scripts/kernel-doc: change the line number meta info
+
+ Documentation/sphinx/kernel_abi.py     |  6 +++++-
+ Documentation/sphinx/kernel_feat.py    | 20 ++++++++++++++++++--
+ Documentation/sphinx/kernel_include.py |  3 +++
+ Documentation/sphinx/kerneldoc.py      |  2 +-
+ scripts/get_abi.pl                     |  4 ++--
+ scripts/get_feat.pl                    | 11 +++++++++++
+ scripts/kernel-doc                     |  4 ++--
+ 7 files changed, 42 insertions(+), 8 deletions(-)
+
 -- 
-2.20.1
+2.35.1
+
 

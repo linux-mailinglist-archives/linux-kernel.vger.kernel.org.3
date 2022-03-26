@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960B64E81E9
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 17:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC084E81EF
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 17:29:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233777AbiCZQKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 12:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
+        id S233796AbiCZQVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 12:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbiCZQKV (ORCPT
+        with ESMTP id S231758AbiCZQVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 12:10:21 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E2221DF1B
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 09:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=xPQjxfvtCg/ErDgrvCxeRn6ULOMr1Vws1bbyrP0AKkQ=; b=iTUkLxtP0i2Um/lVfMEDvvWS+w
-        ehjcrJXgls+Zfse1s6ycmdH+av/iBhTslJngYubclvfA5Y7M3VqKiYLnupHvLLipzlxilXw7Prr5H
-        ry85f/P6ceIufu6tyrKPA+TvULnJaY7Zb/k0AQ41hpBgo8/q1HPnYdDGo/cKuQXTdyxN2XBqTiuX/
-        0qF0Lwf7a8JKf3uekB5whY6k+10QFjheZD6JPQf23nsnewdLRvDGmgL2ff+amobl4tc+09Mr3mbPh
-        zvEEfgnst2KRRSdyXZLSxR9/pmjmYft5BSTPKghzOKLWCfy0tiFABKptWqapwC3zxdlVLjJJcf1wt
-        VG+VPkgw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nY8xy-004miw-U7; Sat, 26 Mar 2022 16:08:39 +0000
-Message-ID: <41a3daf2-a4e0-5eab-8c66-6db6b0dbcf70@infradead.org>
-Date:   Sat, 26 Mar 2022 09:08:32 -0700
+        Sat, 26 Mar 2022 12:21:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB0E36173;
+        Sat, 26 Mar 2022 09:20:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 158BF60A1C;
+        Sat, 26 Mar 2022 16:20:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5A24EC340EE;
+        Sat, 26 Mar 2022 16:20:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648311611;
+        bh=gLQ6lcM7EF3zjKaulJF5GfsvuJbldNZJplW99hjrbOA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ecua63kYhUbCDbp6yse9D7A/x4y7xrlqlEKFGrU1OO9H9/xBfCcVD0S0R4rlJdKIa
+         6rvAigl5ZMoPQ+1bP086OCWCGZptxOxqn2IIFmysSyhU4wmJ103KHzIW+h/Bt8Yu3E
+         Dma6i//zAGLA/2OC6Tq80ITx5FEfU1ZnpmAQkUl8pp/bo7zhWhe9jTplQuEwajYA+e
+         xRjq1XeXgM/JJVNpDtpfIDJrmwpnGBcrBXJEOCIPyMpg0U6VVaox+CDGubqZhQ7G3n
+         ltqOw2c6XZZVv3/aFSTxEslkoNFNiIcGP9mlbfXQuFoIHrTtABQXd7ltfqkgR/aXyx
+         kZJMcK52qi8Nw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3F636E6D402;
+        Sat, 26 Mar 2022 16:20:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Kernel 5.16.11 r8169 ethernet module do not build
-Content-Language: en-US
-To:     Hatim Muhammed <hatimmohammed369@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <Yj8kj23N6ugwnpFY@fedora>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Yj8kj23N6ugwnpFY@fedora>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/6] net: hns3: add some fixes for -net
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164831161125.22978.5795474197257933400.git-patchwork-notify@kernel.org>
+Date:   Sat, 26 Mar 2022 16:20:11 +0000
+References: <20220326095105.54075-1-huangguangbin2@huawei.com>
+In-Reply-To: <20220326095105.54075-1-huangguangbin2@huawei.com>
+To:     Guangbin Huang <huangguangbin2@huawei.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lipeng321@huawei.com,
+        chenhao288@hisilicon.com
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,70 +58,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+Hello:
 
-On 3/26/22 07:34, Hatim Muhammed wrote:
-> 
-> Hello everyone
-> 
-> I'm Hatim, I use Ubuntu 20.4.3 Kernel 5.11
-> I downloaded kernel 5.16.11 and installed it as follow:
-> 
-> make defconfig
-> make
-> sudo make modules_install
+This series was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-In defconfig, I see
-CONFIG_R8169=y
-
-so the r8169 driver is built-in in the kernel binary image. It is not
-being built as a loadable module (not as a .ko file).
-
-> and now I can't connect to Ethernet
-> I tried again (make defconfig => make => sudo make modules_install)
-> But before make, I (make menuconfig) and set r8169 to <M>
-> and tried again, But no, it did not build, there's no .ko file
+On Sat, 26 Mar 2022 17:50:59 +0800 you wrote:
+> This series adds some fixes for the HNS3 ethernet driver.
 > 
-> Actually when I (lsmod) I see nothing, NO MODULES ARE LOADED
-> I'm must be a fool to think things will be easy, but why r8169 driver
-> refused to build?
-
-The binary (.o) files are listed in the 'ls' output below.
-That is normal for built-in drivers (CONFIG_R8169=y).
-
-> Here are some diagnostics:
+> Guangbin Huang (1):
+>   net: hns3: fix phy can not link up when autoneg off and reset
 > 
-> $ dmesg | grep -i eth
-> [ 1.000377] r8169 0000:01:00.0 eth0: RTL8168e/8111e, 9c:8e:99:47:c7:0d, XID 2c2,
-> IRQ 26
-> [ 1.000385] r8169 0000:01:00.0 eth0: jumbo features [frames: 9194 bytes, tx
-> checksumming: ko]
-> [ 1.538290] r8169 0000:01:00.0 eno1: renamed from eth0
-> [ 4.182471] RTL8211DN Gigabit Ethernet r8169-0-100:00: attached PHY driver
-> (mii_bus:phy_addr=r8169-0-100:00, irq=MAC)
+> Hao Chen (4):
+>   net: hns3: fix ethtool tx copybreak buf size indicating not aligned
+>     issue
+>   net: hns3: add max order judgement for tx spare buffer
+>   net: hns3: add netdev reset check for hns3_set_tunable()
+>   net: hns3: add NULL pointer check for hns3_set/get_ringparam()
 > 
+> [...]
 
-I don't see any problems there...
+Here is the summary with links:
+  - [net,1/6] net: hns3: fix ethtool tx copybreak buf size indicating not aligned issue
+    https://git.kernel.org/netdev/net/c/877837211802
+  - [net,2/6] net: hns3: add max order judgement for tx spare buffer
+    https://git.kernel.org/netdev/net/c/a89cbb16995b
+  - [net,3/6] net: hns3: clean residual vf config after disable sriov
+    https://git.kernel.org/netdev/net/c/671cb8cbb9c9
+  - [net,4/6] net: hns3: add netdev reset check for hns3_set_tunable()
+    https://git.kernel.org/netdev/net/c/f5cd60169f98
+  - [net,5/6] net: hns3: add NULL pointer check for hns3_set/get_ringparam()
+    https://git.kernel.org/netdev/net/c/4d07c5936c25
+  - [net,6/6] net: hns3: fix phy can not link up when autoneg off and reset
+    https://git.kernel.org/netdev/net/c/ad0ecaef6a2c
 
-> 
-> $ ls ~/Desktop/Kernel/linux-5.16.11/drivers/net/ethernet/realtek
-> 
-> 8139cp.c
-> 8139too.o
-> Makefile atp.h
-> modules.order
-> r8169_firmware.c
-> r8169_firmware.o
-> r8169_main.o
-> r8169_phy_config.o
-> 8139too.c
-> Kconfig atp.c
-> built-in.a
-> r8169.h
-> r8169_firmware.h
-> r8169_main.c
-> r8169_phy_config.c
-> 
-
+You are awesome, thank you!
 -- 
-~Randy
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

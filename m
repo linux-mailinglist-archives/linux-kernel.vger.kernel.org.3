@@ -2,77 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 588434E8139
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 14:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDDB4E813B
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 14:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233136AbiCZN6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 09:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
+        id S233148AbiCZN7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 09:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232543AbiCZN6m (ORCPT
+        with ESMTP id S232543AbiCZN7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 09:58:42 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5112BBF942
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 06:57:03 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id yy13so20367431ejb.2
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 06:57:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lhQ/9h3aosfO3hPFwJIQJoDRXgFc3ALySqBJ9aeA3do=;
-        b=jyR0QQpIv1pg8DLBKyUy57SsVcfgSSBWKVzhDzjtO1U+ttf/UmmhpEGrcPwSWnPWUB
-         K3CrdQpHrvLgAiaZqPst5VfazuoT4mL+Y3RjAsK4a74bzgj/LuBVvywd5EHRp67tQS7/
-         SjdVHJHRnie6Blf/LzHv7mYE1iz6lmsS6mdhCdt8Ez6ewb2KoU18OU7CFWTdJtDQNKDu
-         j0QHKVR2Dc02WGDhzmdJzatS8LCIQMPHfnNdkkY+Mh/KtkYpyfBRiiJPXDHnYI4XxesX
-         r7lPJ+sitmDjD9+0L4hqyj52EAjO03ozG2/huWdzaV2aCPidPDp/QEGzhTdXPvT/Akay
-         5Zxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lhQ/9h3aosfO3hPFwJIQJoDRXgFc3ALySqBJ9aeA3do=;
-        b=XHabuc4lRsCWKJYA2VPWgAtYSqveo5onL27hFZIzy0q9EVtk9f6psgeDDXOAj1GgEt
-         arNtLKC8d/kvUjrZFyCBP8t/DigBv8JpmjTo+GMjltz4l1n5jWsyPoX+DQcsiywpb1r5
-         wJwbldyEma7fW81iI4o8DVpq+qPSUgnw5HjnwlKv5N0F3bY6doafy3TvT3KSs6tTO702
-         QkyNAFoKOIOdtyJrg2KudB0aPp8ss/7H2PgmS0U4VEjTtjGNLIYisrxpj6rUQR4ItRsL
-         4ZHp6Cewus0IXuMrKN7PUkeTzfHqQ1h//PXNFxYepFGxxEC3537Lj7SiMI975H5ayEyF
-         q/KA==
-X-Gm-Message-State: AOAM530auNw7hk4xjICFYm0B4JhRf2XFAqdHpMarkWjdOmR5EpYZPr2r
-        oL0HFKWlTbwPZHYRBsGZiKMAbA==
-X-Google-Smtp-Source: ABdhPJy565DNLBwcL4ofm0QqI01C5J8RZSuRoOAEPeLrdhwPpMVxtyG9K+e/ftRtB2/L3v1kX0iCRg==
-X-Received: by 2002:a17:907:3f86:b0:6db:b745:f761 with SMTP id hr6-20020a1709073f8600b006dbb745f761mr16698723ejc.610.1648303021647;
-        Sat, 26 Mar 2022 06:57:01 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([104.245.96.34])
-        by smtp.gmail.com with ESMTPSA id bs7-20020a056402304700b004197e5d2350sm4092657edb.54.2022.03.26.06.56.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 06:57:01 -0700 (PDT)
-Date:   Sat, 26 Mar 2022 21:56:53 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ali Saidi <alisaidi@amazon.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, german.gomez@arm.com,
-        benh@kernel.crashing.org, Nick.Forrington@arm.com,
-        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
-        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
-        kjain@linux.ibm.com, lihuafei1@huawei.com, mark.rutland@arm.com,
-        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, will@kernel.org
-Subject: Re: [PATCH v4 2/4] perf arm-spe: Use SPE data source for neoverse
- cores
-Message-ID: <20220326135653.GE20556@leoy-ThinkPad-X240s>
-References: <20220324183323.31414-1-alisaidi@amazon.com>
- <20220324183323.31414-3-alisaidi@amazon.com>
- <20220326134754.GD20556@leoy-ThinkPad-X240s>
- <Yj8age/PSIouUiKy@kernel.org>
+        Sat, 26 Mar 2022 09:59:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDDCDF4BC;
+        Sat, 26 Mar 2022 06:57:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0998A60ECC;
+        Sat, 26 Mar 2022 13:57:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38069C340EE;
+        Sat, 26 Mar 2022 13:57:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648303046;
+        bh=HOkf7BpuW7qajUziuSzll9yU+W0M8a5zkgH+oxR3DWg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=U6Wj317tVd3AyMzFoTmf+nKzV4OKlWThsgcIwY5E0UM/pDcJzNS9yCA5JS7otIYw7
+         frT1XFE+94ZF087u+xjRV9nG4/fMhI7iSwToRH8QOq3sGffKU7LwDtT+BjqVQGbGus
+         8pkkFKc5yIqmJ4EC+PWPHdqwJ4cyPpb1NklemlrNahuj5Sv1yBOH3rB4KtRWWXFQV8
+         qmK3kAClKQXQncYsi1mRHJB8szWmgHqFWV39sPENg7JCFcE6erM9pr71OGeHMxMOIW
+         auDzVWxZqMAKTyOGbZGjzPIBoSji8SaVWgNViIejLpzLAp4e9SnEUU2wlhSS7sjrzx
+         Eb+MsaFjaOvIA==
+Date:   Sat, 26 Mar 2022 14:57:21 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] Documentation: sphinx: replace "Introduction"
+ chapter heading with page title
+Message-ID: <20220326145708.7926b29d@coco.lan>
+In-Reply-To: <20220326123337.642536-3-bagasdotme@gmail.com>
+References: <20220326123337.642536-1-bagasdotme@gmail.com>
+        <20220326123337.642536-3-bagasdotme@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yj8age/PSIouUiKy@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,41 +62,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 26, 2022 at 10:52:01AM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Sat, Mar 26, 2022 at 09:47:54PM +0800, Leo Yan escreveu:
-> > Hi Ali, German,
-> > 
-> > On Thu, Mar 24, 2022 at 06:33:21PM +0000, Ali Saidi wrote:
-> > 
-> > [...]
-> > 
-> > > +static void arm_spe__synth_data_source_neoverse(const struct arm_spe_record *record,
-> > > +						union perf_mem_data_src *data_src)
-> > >  {
-> > > -	union perf_mem_data_src	data_src = { 0 };
-> > > +	/*
-> > > +	 * Even though four levels of cache hierarchy are possible, no known
-> > > +	 * production Neoverse systems currently include more than three levels
-> > > +	 * so for the time being we assume three exist. If a production system
-> > > +	 * is built with four the this function would have to be changed to
-> > > +	 * detect the number of levels for reporting.
-> > > +	 */
-> > >  
-> > > -	if (record->op == ARM_SPE_LD)
-> > > -		data_src.mem_op = PERF_MEM_OP_LOAD;
-> > > -	else
-> > > -		data_src.mem_op = PERF_MEM_OP_STORE;
-> > 
-> > Firstly, apologize that I didn't give clear idea when Ali sent patch sets
-> > v2 and v3.
+Em Sat, 26 Mar 2022 19:33:38 +0700
+Bagas Sanjaya <bagasdotme@gmail.com> escreveu:
+
+> Replace first chapter heading ("Introduction") with page title named
+> "Using Sphinx for kernel documentation". This way, the first-level TOC
+> for doc-guide contains title instead of chapter headings for this page.
 > 
-> Ok, removing this as well.
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> Cc: Akira Yokosawa <akiyks@gmail.com>
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+Reviewed-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+
+> ---
+>  Documentation/doc-guide/sphinx.rst | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> Thanks for reviewing.
+> diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-guide/sphinx.rst
+> index bb36f18ae9ac3e..2ff1ab4158d48e 100644
+> --- a/Documentation/doc-guide/sphinx.rst
+> +++ b/Documentation/doc-guide/sphinx.rst
+> @@ -1,7 +1,8 @@
+>  .. _sphinxdoc:
+>  
+> -Introduction
+> -============
+> +=====================================
+> +Using Sphinx for kernel documentation
+> +=====================================
+>  
+>  The Linux kernel uses `Sphinx`_ to generate pretty documentation from
+>  `reStructuredText`_ files under ``Documentation``. To build the documentation in
 
-Thanks a lot, Arnaldo.  Yeah, it's good to give a bit more time to
-dismiss the concerns in this patch.
 
-Sorry again for the inconvenience.
 
-Leo
+Thanks,
+Mauro

@@ -2,74 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 538D04E7E87
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 03:23:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E26154E7E8A
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 03:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbiCZCZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 22:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
+        id S230241AbiCZC2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 22:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiCZCZK (ORCPT
+        with ESMTP id S230225AbiCZC2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 22:25:10 -0400
-Received: from relay5.hostedemail.com (relay5.hostedemail.com [64.99.140.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFC59D
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 19:23:25 -0700 (PDT)
-Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay06.hostedemail.com (Postfix) with ESMTP id EE77621E63;
-        Sat, 26 Mar 2022 02:23:23 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf15.hostedemail.com (Postfix) with ESMTPA id A04FB1E;
-        Sat, 26 Mar 2022 02:23:17 +0000 (UTC)
-Message-ID: <0641d577f58f836a6c14a73e78d4545e44e61631.camel@perches.com>
-Subject: Re: [PATCH] platform/x86: acerhdf: Cleanup str_starts_with()
-From:   Joe Perches <joe@perches.com>
-To:     Wei Li <liwei391@huawei.com>, Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.xiang@huawei.com
-Date:   Fri, 25 Mar 2022 19:23:16 -0700
-In-Reply-To: <20220326020249.3266561-1-liwei391@huawei.com>
-References: <20220326020249.3266561-1-liwei391@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Fri, 25 Mar 2022 22:28:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26F017587B;
+        Fri, 25 Mar 2022 19:27:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CACCA6192B;
+        Sat, 26 Mar 2022 02:27:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1E8CC004DD;
+        Sat, 26 Mar 2022 02:26:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648261620;
+        bh=cEglIADM0ElTnrN0MKu6BxGtirnD7NT5oa3/G7079pU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ccf5vFr+EOw+GqI3PwdjNMhMY+wzOaALKumvV0Z5O1roUV32yWALYURJXLI4WxPM+
+         XWfnjdmChTjGysG9hg+AWDc2S5rBNfPN0PlMBoix5Fotr/LHT8ZE8aUYyv8BDyVww7
+         ZxC+qVv6wt7HlBAIWcPECyJSW38Uf9+FrSKt8zMyigRCRhEpLljDaB9Oxd0ic10+87
+         nL4YJz/kyt362bh3pl+k1d3yxj8iCJ3gI3Kdlz7dURkpnPiVv2/EZhp8YUFBnTnwbe
+         Vws7QiAqbbrJqnb+HeyLcjHYRpWyUa6RFtvLM+R1Z7jAnKEsIIG9gekc4OLWFjsu0u
+         WMyxGgAysP0ZQ==
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        kernel-janitors@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3 0/4] kprobes: rethook: x86: Replace kretprobe trampoline with rethook
+Date:   Sat, 26 Mar 2022 11:26:49 +0900
+Message-Id: <164826160914.2455864.505359679001055158.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: A04FB1E
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Stat-Signature: hk4j7joqepxzxtriwinaxhpxtan9t6fk
-X-Rspamd-Server: rspamout03
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18Xtu31bFcK6k4cm2+mxix8XAv5THAQtxo=
-X-HE-Tag: 1648261397-942810
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-03-26 at 10:02 +0800, Wei Li wrote:
-> Since there is already a generic function strstarts() that check if a
-> string starts with a given prefix, cleanup str_starts_with().
-[]
-> diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
-> @@ -651,9 +636,9 @@ static int __init acerhdf_check_hardware(void)
->  		 * check if actual hardware BIOS vendor, product and version
->  		 * IDs start with the strings of BIOS table entry
->  		 */
-> -		if (str_starts_with(vendor, bt->vendor) &&
-> -				str_starts_with(product, bt->product) &&
-> -				str_starts_with(version, bt->version)) {
-> +		if (strstarts(vendor, bt->vendor) &&
-> +				strstarts(product, bt->product) &&
-> +				strstarts(version, bt->version)) {
+Hi,
 
-IMO: It'd be easier for humans to read if aligned like:
+Here are the 3rd version for generic kretprobe and kretprobe on x86 for
+replacing the kretprobe trampoline with rethook. The previous version
+is here[1]
 
-		if (strstarts(vendor, bt->vendor) &&
-		    strstarts(product, bt->product) &&
-		    strstarts(version, bt->version)) {
+[1] https://lore.kernel.org/all/164821817332.2373735.12048266953420821089.stgit@devnote2/T/#u
+
+This version fixed typo and build issues for bpf-next and CONFIG_RETHOOK=y
+error. I also add temporary mitigation lines for ANNOTATE_NOENDBR macro
+issue for bpf-next tree [2/4].
+
+#ifndef ANNOTATE_NOENDBR
+#define ANNOTATE_NOENDBR
+#endif
+
+This will be removed after merging kernel IBT series.
+
+Background:
+
+This rethook came from Jiri's request of multiple kprobe for bpf[2].
+He tried to solve an issue that starting bpf with multiple kprobe will
+take a long time because bpf-kprobe will wait for RCU grace period for
+sync rcu events.
+
+Jiri wanted to attach a single bpf handler to multiple kprobes and
+he tried to introduce multiple-probe interface to kprobe. So I asked
+him to use ftrace and kretprobe-like hook if it is only for the
+function entry and exit, instead of adding ad-hoc interface
+to kprobes.
+For this purpose, I introduced the fprobe (kprobe like interface for
+ftrace) with the rethook (this is a generic return hook feature for
+fprobe exit handler)[3].
+
+[2] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
+[3] https://lore.kernel.org/all/164191321766.806991.7930388561276940676.stgit@devnote2/T/#u
+
+The rethook is basically same as the kretprobe trampoline. I just made
+it decoupled from kprobes. Eventually, the all arch dependent kretprobe
+trampolines will be replaced with the rethook trampoline instead of
+cloning and set HAVE_RETHOOK=y.
+When I port the rethook for all arch which supports kretprobe, the
+legacy kretprobe specific code (which is for CONFIG_KRETPROBE_ON_RETHOOK=n)
+will be removed eventually.
 
 
+Thank you,
+
+---
+
+Masami Hiramatsu (3):
+      kprobes: Use rethook for kretprobe if possible
+      x86,rethook,kprobes: Replace kretprobe with rethook on x86
+      x86,kprobes: Fix optprobe trampoline to generate complete pt_regs
+
+Peter Zijlstra (1):
+      x86,rethook: Fix arch_rethook_trampoline() to generate a complete pt_regs
+
+
+ arch/Kconfig                     |    8 ++
+ arch/x86/Kconfig                 |    1 
+ arch/x86/include/asm/unwind.h    |   23 +++----
+ arch/x86/kernel/Makefile         |    1 
+ arch/x86/kernel/kprobes/common.h |    1 
+ arch/x86/kernel/kprobes/core.c   |  106 --------------------------------
+ arch/x86/kernel/kprobes/opt.c    |   25 +++++--
+ arch/x86/kernel/rethook.c        |  127 ++++++++++++++++++++++++++++++++++++++
+ arch/x86/kernel/unwind_orc.c     |   10 +--
+ include/linux/kprobes.h          |   51 +++++++++++++++
+ kernel/Makefile                  |    1 
+ kernel/kprobes.c                 |  124 +++++++++++++++++++++++++++++++------
+ kernel/trace/trace_kprobe.c      |    4 +
+ 13 files changed, 325 insertions(+), 157 deletions(-)
+ create mode 100644 arch/x86/kernel/rethook.c
+
+--
+Masami Hiramatsu (Linaro) <mhiramat@kernel.org>

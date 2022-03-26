@@ -2,134 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B464E81B8
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 16:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7E44E81BA
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 16:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233273AbiCZPCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 11:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
+        id S233495AbiCZPGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 11:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbiCZPB6 (ORCPT
+        with ESMTP id S233466AbiCZPF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 11:01:58 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EC11ED
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 08:00:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648306821; x=1679842821;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=y8kIx4My/06TL0nQFY6hwQHcnmCTvA4S9aA9GzqM9+E=;
-  b=fXJRBIUW8qCUXMUaQu1p6bhQM6DCCBoEw7DDrb7FpphKuCP3+HyI73Fg
-   WPMlEK/LX1OL/r9HwhfnScJ9vQYExx06rnLE8uno874eIrQhZd4cyXpJQ
-   02Kk3Uteh47P2UWIsAhuShgDSWQZHV0ehz5lyo4OFckmbAIQUTubWcowh
-   Jh9nsI1BgeQ6qAhCDbFkY3nKaeJXLKm+qvfZh5Awzk7MmF5VLMuzMOPsu
-   ZUdz4lwuVFCF7kNTGrGD4bKS8I1T1ZDk3Qzo98C2tyFafKEtq82NJYLlW
-   vrT+zM2MxanE2dDA4PCUyde6MJLGoEd5akd2MDTjBl1kQ44keYZRcJZs8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="240942590"
-X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
-   d="scan'208";a="240942590"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 08:00:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
-   d="scan'208";a="520506890"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 26 Mar 2022 08:00:18 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nY7tq-00006Q-8B; Sat, 26 Mar 2022 15:00:18 +0000
-Date:   Sat, 26 Mar 2022 22:59:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Fangzhi Zuo <Jerry.Zuo@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_apg.c:117:18:
- warning: variable 'channels' set but not used
-Message-ID: <202203262252.GRTBgzPR-lkp@intel.com>
+        Sat, 26 Mar 2022 11:05:58 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A402DEC0
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 08:04:20 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id h13-20020a056e021d8d00b002c7fb1ec601so6091800ila.6
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 08:04:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=EYEZxr3xgNJFrDST+od/u3rZ+S63Fdq6kvjuDpHy6dY=;
+        b=R/+nz4oild5nCWKWXPwlicAT3Qf4gDQU62uGgruMrf3J9Vm3q6K0sEeyPnPthSB+yq
+         OpFKlMZBvanzWpXUoYueldcNX5lLj4jSQCo7YOjBQAuk2hmLf+KDUyyaUBvyAf6kO2Ik
+         3Y3j0gfTRxKi1BtLNYbvt2dUunz5+FXpulXrHzYjkFNoadPFoDa8KvurnQoMrRYG1oem
+         OxdBSKmtxC16YhR1bnU4xgo0urQL4dQY+gF1NjLKkgEsvgva9G3C2ezfOckRHVZUctVu
+         G2l8f1GE3rPZlDv2KPJIJsRbW9YsEs4Z8r/xSTcSshyOCAmv0D25P4db83tM5og2MjPf
+         jaBA==
+X-Gm-Message-State: AOAM532lvQH9HzCU4YvmzZ1pFE1HLLxIoxADmwLX9rGSF2op31+OHpab
+        FFdkhHdk2lVg9rIpe0ly7MM6jEp5BHwmocHTRM7jyfmQSh11
+X-Google-Smtp-Source: ABdhPJwQxwbCI6pbXOEyJFxDsCns7Me89ZFWgsWFBdW6hq4uSvgbQ4DnHeLx4gIDxFUJgR8gwdip3XRGK5S0I1viXlhhIRBElN7k
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6e02:20e9:b0:2c1:d845:1290 with SMTP id
+ q9-20020a056e0220e900b002c1d8451290mr1795589ilv.226.1648307059608; Sat, 26
+ Mar 2022 08:04:19 -0700 (PDT)
+Date:   Sat, 26 Mar 2022 08:04:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c4d02e05db206428@google.com>
+Subject: [syzbot] BUG: scheduling while atomic: syz-executor/ADDR (2)
+From:   syzbot <syzbot+baf0286916837266ff0e@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   52d543b5497cf31d6baeb0bcfe5a5474c3238578
-commit: 61452908a79ec936660494fb4b9f2a35ee42e6e0 drm/amd/display: Add DP 2.0 Audio Package Generator
-date:   7 months ago
-config: powerpc64-randconfig-r015-20220325 (https://download.01.org/0day-ci/archive/20220326/202203262252.GRTBgzPR-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=61452908a79ec936660494fb4b9f2a35ee42e6e0
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 61452908a79ec936660494fb4b9f2a35ee42e6e0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/gpu/drm/
+Hello,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+syzbot found the following issue on:
 
-All warnings (new ones prefixed by >>):
+HEAD commit:    cb7cbaae7fd9 Merge tag 'drm-next-2022-03-25' of git://anon..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=135a5bed700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9e6050011f4821d6
+dashboard link: https://syzkaller.appspot.com/bug?extid=baf0286916837266ff0e
+compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_apg.c: In function 'apg31_se_audio_setup':
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_apg.c:117:18: warning: variable 'channels' set but not used [-Wunused-but-set-variable]
-     117 |         uint32_t channels = 0;
-         |                  ^~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_apg.c:116:18: warning: variable 'speakers' set but not used [-Wunused-but-set-variable]
-     116 |         uint32_t speakers = 0;
-         |                  ^~~~~~~~
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+baf0286916837266ff0e@syzkaller.appspotmail.com
+
+BUG: scheduling while atomic: syz-executor.1/23656/0x00000101
+Modules linked in:
+CPU: 1 PID: 23656 Comm: syz-executor.1 Not tainted 5.17.0-syzkaller-10734-gcb7cbaae7fd9 #0
+Hardware name: linux,dummy-virt (DT)
+Call trace:
+ dump_backtrace.part.0+0xcc/0xe0 arch/arm64/kernel/stacktrace.c:184
+ dump_backtrace arch/arm64/kernel/stacktrace.c:190 [inline]
+ show_stack+0x18/0x6c arch/arm64/kernel/stacktrace.c:191
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x68/0x84 lib/dump_stack.c:106
+ dump_stack+0x18/0x34 lib/dump_stack.c:113
+ __schedule_bug+0x60/0x80 kernel/sched/core.c:5617
+ schedule_debug kernel/sched/core.c:5644 [inline]
+ __schedule+0x74c/0x7f0 kernel/sched/core.c:6273
+ schedule+0x54/0xd0 kernel/sched/core.c:6454
+ rwsem_down_write_slowpath+0x29c/0x5a0 kernel/locking/rwsem.c:1142
+ __down_write_common kernel/locking/rwsem.c:1259 [inline]
+ __down_write_common kernel/locking/rwsem.c:1256 [inline]
+ __down_write kernel/locking/rwsem.c:1268 [inline]
+ down_write+0x58/0x64 kernel/locking/rwsem.c:1515
+ inode_lock include/linux/fs.h:778 [inline]
+ simple_recursive_removal+0x124/0x270 fs/libfs.c:288
+ debugfs_remove fs/debugfs/inode.c:732 [inline]
+ debugfs_remove+0x5c/0x80 fs/debugfs/inode.c:726
+ blk_release_queue+0x7c/0xf0 block/blk-sysfs.c:784
+ kobject_cleanup lib/kobject.c:705 [inline]
+ kobject_release lib/kobject.c:736 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x98/0x114 lib/kobject.c:753
+ blk_put_queue+0x14/0x20 block/blk-core.c:270
+ blkg_free.part.0+0x54/0x80 block/blk-cgroup.c:86
+ blkg_free block/blk-cgroup.c:78 [inline]
+ __blkg_release+0x44/0x70 block/blk-cgroup.c:102
+ rcu_do_batch kernel/rcu/tree.c:2535 [inline]
+ rcu_core+0x324/0x590 kernel/rcu/tree.c:2786
+ rcu_core_si+0x10/0x20 kernel/rcu/tree.c:2803
+ _stext+0x124/0x2a0
+ do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
+ invoke_softirq kernel/softirq.c:439 [inline]
+ __irq_exit_rcu+0xe4/0x100 kernel/softirq.c:637
+ irq_exit_rcu+0x10/0x1c kernel/softirq.c:649
+ __el1_irq arch/arm64/kernel/entry-common.c:459 [inline]
+ el1_interrupt+0x38/0x64 arch/arm64/kernel/entry-common.c:473
+ el1h_64_irq_handler+0x18/0x24 arch/arm64/kernel/entry-common.c:478
+ el1h_64_irq+0x64/0x68 arch/arm64/kernel/entry.S:577
+ walk_stackframe arch/arm64/kernel/stacktrace.c:153 [inline]
+ arch_stack_walk+0x68/0x280 arch/arm64/kernel/stacktrace.c:211
+ stack_trace_save+0x50/0x80 kernel/stacktrace.c:122
+ kasan_save_stack+0x2c/0x5c mm/kasan/common.c:38
+ kasan_set_track+0x2c/0x40 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/tags.c:36
+ ____kasan_slab_free.constprop.0+0x190/0x1e4 mm/kasan/common.c:366
+ __kasan_slab_free+0x10/0x1c mm/kasan/common.c:374
+ kasan_slab_free include/linux/kasan.h:200 [inline]
+ slab_free_hook mm/slub.c:1728 [inline]
+ slab_free_freelist_hook+0xc4/0x230 mm/slub.c:1754
+ slab_free mm/slub.c:3510 [inline]
+ kmem_cache_free+0xb0/0x3d4 mm/slub.c:3527
+ put_io_context+0xbc/0xe0 block/blk-ioc.c:213
+ exit_io_context+0xdc/0xf0 block/blk-ioc.c:229
+ do_exit+0x52c/0x930 kernel/exit.c:827
+ do_group_exit+0x34/0xa0 kernel/exit.c:924
+ __do_sys_exit_group kernel/exit.c:935 [inline]
+ __se_sys_exit_group kernel/exit.c:933 [inline]
+ __arm64_sys_exit_group+0x18/0x20 kernel/exit.c:933
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
+ el0_svc_common.constprop.0+0x44/0xec arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x6c/0x84 arch/arm64/kernel/syscall.c:181
+ el0_svc+0x44/0xb0 arch/arm64/kernel/entry-common.c:616
+ el0t_64_sync_handler+0x1a4/0x1b0 arch/arm64/kernel/entry-common.c:634
+ el0t_64_sync+0x198/0x19c arch/arm64/kernel/entry.S:581
 
 
-vim +/channels +117 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_apg.c
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-   108	
-   109	static void apg31_se_audio_setup(
-   110		struct apg *apg,
-   111		unsigned int az_inst,
-   112		struct audio_info *audio_info)
-   113	{
-   114		struct dcn31_apg *apg31 = DCN31_APG_FROM_APG(apg);
-   115	
- > 116		uint32_t speakers = 0;
- > 117		uint32_t channels = 0;
-   118	
-   119		ASSERT(audio_info);
-   120		/* This should not happen.it does so we don't get BSOD*/
-   121		if (audio_info == NULL)
-   122			return;
-   123	
-   124		speakers = audio_info->flags.info.ALLSPEAKERS;
-   125		channels = speakers_to_channels(audio_info->flags.speaker_flags).all;
-   126	
-   127		/* DisplayPort only allows for one audio stream with stream ID 0 */
-   128		REG_UPDATE(APG_CONTROL2, APG_DP_AUDIO_STREAM_ID, 0);
-   129	
-   130		/* When running in "pair mode", pairs of audio channels have their own enable
-   131		 * this is for really old audio drivers */
-   132		REG_UPDATE(APG_DBG_GEN_CONTROL, APG_DBG_AUDIO_CHANNEL_ENABLE, 0xF);
-   133		// REG_UPDATE(APG_DBG_GEN_CONTROL, APG_DBG_AUDIO_CHANNEL_ENABLE, channels);
-   134	
-   135		/* Disable forced mem power off */
-   136		REG_UPDATE(APG_MEM_PWR, APG_MEM_PWR_FORCE, 0);
-   137	
-   138		apg31_enable(apg);
-   139	}
-   140	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

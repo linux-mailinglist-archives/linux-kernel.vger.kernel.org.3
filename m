@@ -2,161 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C9A4E807E
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 11:41:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 278A54E8080
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 11:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbiCZKnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 06:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37134 "EHLO
+        id S232556AbiCZKpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 06:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiCZKn3 (ORCPT
+        with ESMTP id S229745AbiCZKpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 06:43:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CEF17C428;
-        Sat, 26 Mar 2022 03:41:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA22AB80092;
-        Sat, 26 Mar 2022 10:41:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C8A9C340E8;
-        Sat, 26 Mar 2022 10:41:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648291310;
-        bh=xZlqMQzbCehxyiw/2qVRxOkQ4fbRXjYYQYkq9DJvrmk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=qiAsocXDmguA8lIiNPnNwP9a4acGqVo5i7MA3DdFFEsdMoOsR12SIOv6lQdzXaduL
-         DzJ41+2ktcMf0VQ6cirHh/7iEoCGlgieIW7Gzv49tGi/Zfl4NV20G9AVzLFjf9kcwj
-         oLzKmrsrSvuDNEEbrgrQinXAfJne1/w9N6uOxsxW8uFbs289+i5K0qzCeKGj9iFiJ7
-         mk2AWHu4+ssUM6sP8Y21Ttd5YTR1PCB5j5uAaotsj0fDvdOD+JUHd/2hgsIAHVhbC0
-         HSL8akFCiRrvM8UOkgGIvDDkfn6xJ7/ReifxKuHzuQnXHwZ+nqdrDYxvJkz3VMg4G/
-         JSxxqizXeva9w==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1nY3rg-00CpK6-4G; Sat, 26 Mar 2022 11:41:48 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Yury Norov <yury.norov@gmail.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] lib/bitmap.c make bitmap_print_bitmask_to_buf parseable
-Date:   Sat, 26 Mar 2022 11:41:46 +0100
-Message-Id: <f6372a2f880c6e8597a8f070eb031d4cd451d37e.1648291287.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 26 Mar 2022 06:45:39 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAB6649937;
+        Sat, 26 Mar 2022 03:44:01 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app4 (Coremail) with SMTP id cS_KCgD3eRBi7j5i6ERWAA--.8796S2;
+        Sat, 26 Mar 2022 18:43:51 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-x25@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ms@dev.tdt.de, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, tanxin.ctf@gmail.com, xiyuyang19@fudan.edu.cn,
+        linma@zju.edu.cn, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH net V2] net/x25: Fix null-ptr-deref caused by x25_disconnect
+Date:   Sat, 26 Mar 2022 18:43:46 +0800
+Message-Id: <20220326104346.91790-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgD3eRBi7j5i6ERWAA--.8796S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw1rXF1xtryfWFyUtr13Arb_yoW8CrW5pF
+        W7KrWkGrWDJrsYvrsrCaykuFnYvw1vgrW7XFWa9340kryDGrZYvr95KrZIgr1agFs3XFyj
+        9345Ww43JF4qkFUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvl1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r10
+        6r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+        cxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JUZa9-UUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgwPAVZdtYygQQANse
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The documentation of such function is not on a proper ReST format,
-as reported by Sphinx:
+When the link layer is terminating, x25->neighbour will be set to NULL
+in x25_disconnect(). As a result, it could cause null-ptr-deref bugs in
+x25_sendmsg(),x25_recvmsg() and x25_connect(). One of the bugs is
+shown below.
 
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:532: WARNING: Unexpected indentation.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:526: WARNING: Inline emphasis start-string without end-string.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:532: WARNING: Inline emphasis start-string without end-string.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:532: WARNING: Inline emphasis start-string without end-string.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:533: WARNING: Block quote ends without a blank line; unexpected unindent.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:536: WARNING: Definition list ends without a blank line; unexpected unindent.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:542: WARNING: Unexpected indentation.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:536: WARNING: Inline emphasis start-string without end-string.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:536: WARNING: Inline emphasis start-string without end-string.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:543: WARNING: Block quote ends without a blank line; unexpected unindent.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:552: WARNING: Unexpected indentation.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:545: WARNING: Inline emphasis start-string without end-string.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:545: WARNING: Inline emphasis start-string without end-string.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:552: WARNING: Inline emphasis start-string without end-string.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:552: WARNING: Inline emphasis start-string without end-string.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:554: WARNING: Block quote ends without a blank line; unexpected unindent.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:556: WARNING: Definition list ends without a blank line; unexpected unindent.
-    Documentation/core-api/kernel-api:81: ./lib/bitmap.c:580: WARNING: Unexpected indentation.
+    (Thread 1)                 |  (Thread 2)
+x25_link_terminated()          | x25_recvmsg()
+ x25_kill_by_neigh()           |  ...
+  x25_disconnect()             |  lock_sock(sk)
+   ...                         |  ...
+   x25->neighbour = NULL //(1) |
+   ...                         |  x25->neighbour->extended //(2)
 
-So, the produced output at:
+The code sets NULL to x25->neighbour in position (1) and dereferences
+x25->neighbour in position (2), which could cause null-ptr-deref bug.
 
-	https://www.kernel.org/doc/html/latest/core-api/kernel-api.html?#c.bitmap_print_bitmask_to_buf
+This patch adds lock_sock() in x25_kill_by_neigh() in order to synchronize
+with x25_sendmsg(), x25_recvmsg() and x25_connect(). What`s more, the
+sock held by lock_sock() is not NULL, because it is extracted from x25_list
+and uses x25_list_lock to synchronize.
 
-is broken. Fix it by adding spaces and marking the literal blocks.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 4becb7ee5b3d ("net/x25: Fix x25_neigh refcnt leak when x25 disconnect")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Reviewed-by: Lin Ma <linma@zju.edu.cn>
 ---
- lib/bitmap.c | 33 ++++++++++++++++++++-------------
- 1 file changed, 20 insertions(+), 13 deletions(-)
+Changes in V2:
+  - Add lock_sock() in x25_kill_by_neigh().
+  - Make commit message more clearer.
 
-diff --git a/lib/bitmap.c b/lib/bitmap.c
-index 0d5c2ece0bcb..8ebe508580ea 100644
---- a/lib/bitmap.c
-+++ b/lib/bitmap.c
-@@ -527,33 +527,39 @@ static int bitmap_print_to_buf(bool list, char *buf, const unsigned long *maskp,
-  * cpumap_print_to_pagebuf() or directly by drivers to export hexadecimal
-  * bitmask and decimal list to userspace by sysfs ABI.
-  * Drivers might be using a normal attribute for this kind of ABIs. A
-- * normal attribute typically has show entry as below:
-- * static ssize_t example_attribute_show(struct device *dev,
-+ * normal attribute typically has show entry as below::
-+ *
-+ *   static ssize_t example_attribute_show(struct device *dev,
-  * 		struct device_attribute *attr, char *buf)
-- * {
-+ *   {
-  * 	...
-  * 	return bitmap_print_to_pagebuf(true, buf, &mask, nr_trig_max);
-- * }
-+ *   }
-+ *
-  * show entry of attribute has no offset and count parameters and this
-  * means the file is limited to one page only.
-  * bitmap_print_to_pagebuf() API works terribly well for this kind of
-- * normal attribute with buf parameter and without offset, count:
-- * bitmap_print_to_pagebuf(bool list, char *buf, const unsigned long *maskp,
-+ * normal attribute with buf parameter and without offset, count::
-+ *
-+ *   bitmap_print_to_pagebuf(bool list, char *buf, const unsigned long *maskp,
-  * 			   int nmaskbits)
-- * {
-- * }
-+ *   {
-+ *   }
-+ *
-  * The problem is once we have a large bitmap, we have a chance to get a
-  * bitmask or list more than one page. Especially for list, it could be
-  * as complex as 0,3,5,7,9,... We have no simple way to know it exact size.
-  * It turns out bin_attribute is a way to break this limit. bin_attribute
-- * has show entry as below:
-- * static ssize_t
-- * example_bin_attribute_show(struct file *filp, struct kobject *kobj,
-+ * has show entry as below::
-+ *
-+ *   static ssize_t
-+ *   example_bin_attribute_show(struct file *filp, struct kobject *kobj,
-  * 		struct bin_attribute *attr, char *buf,
-  * 		loff_t offset, size_t count)
-- * {
-+ *   {
-  * 	...
-- * }
-+ *   }
-+ *
-  * With the new offset and count parameters, this makes sysfs ABI be able
-  * to support file size more than one page. For example, offset could be
-  * >= 4096.
-@@ -577,6 +583,7 @@ static int bitmap_print_to_buf(bool list, char *buf, const unsigned long *maskp,
-  * This function is not a replacement for sprintf() or bitmap_print_to_pagebuf().
-  * It is intended to workaround sysfs limitations discussed above and should be
-  * used carefully in general case for the following reasons:
-+ *
-  *  - Time complexity is O(nbits^2/count), comparing to O(nbits) for snprintf().
-  *  - Memory complexity is O(nbits), comparing to O(1) for snprintf().
-  *  - @off and @count are NOT offset and number of bits to print.
+ net/x25/af_x25.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/net/x25/af_x25.c b/net/x25/af_x25.c
+index 3583354a7d7..3a171828638 100644
+--- a/net/x25/af_x25.c
++++ b/net/x25/af_x25.c
+@@ -1765,10 +1765,15 @@ void x25_kill_by_neigh(struct x25_neigh *nb)
+ 
+ 	write_lock_bh(&x25_list_lock);
+ 
+-	sk_for_each(s, &x25_list)
+-		if (x25_sk(s)->neighbour == nb)
++	sk_for_each(s, &x25_list) {
++		if (x25_sk(s)->neighbour == nb) {
++			write_unlock_bh(&x25_list_lock);
++			lock_sock(s);
+ 			x25_disconnect(s, ENETUNREACH, 0, 0);
+-
++			release_sock(s);
++			write_lock_bh(&x25_list_lock);
++		}
++	}
+ 	write_unlock_bh(&x25_list_lock);
+ 
+ 	/* Remove any related forwards */
 -- 
-2.35.1
+2.17.1
 

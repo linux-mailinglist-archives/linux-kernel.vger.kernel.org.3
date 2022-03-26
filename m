@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA204E7E7C
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 02:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF514E7E83
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 03:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbiCZBzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 21:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
+        id S230183AbiCZCTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 22:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiCZBzQ (ORCPT
+        with ESMTP id S229447AbiCZCTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 21:55:16 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB5B972C2;
-        Fri, 25 Mar 2022 18:53:41 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KQMPs3W3KzCrDl;
-        Sat, 26 Mar 2022 09:51:29 +0800 (CST)
-Received: from localhost.localdomain (10.175.103.91) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Sat, 26 Mar 2022 09:53:38 +0800
-From:   Wei Li <liwei391@huawei.com>
-To:     Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>
-CC:     <platform-driver-x86@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <rui.xiang@huawei.com>
-Subject: [PATCH] platform/x86: acerhdf: Cleanup str_starts_with()
-Date:   Sat, 26 Mar 2022 10:02:49 +0800
-Message-ID: <20220326020249.3266561-1-liwei391@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 25 Mar 2022 22:19:09 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73ED32645;
+        Fri, 25 Mar 2022 19:17:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=VVmNfLvytWC951S/CtUzoyGXxk5OGkxlr9n9Bf7nR3w=; b=N6SqGZ1XcSlQGe38Kc13cyzli4
+        B7INNI1gSE4ASEyyowTzT75QEWAsysDH5KSH3culOmIRXntvcNvapOOsPw/yhbk4iQCEZdDu0CjZp
+        cOJF3edhTOOH4dFS1EVv+jhbMadJkTPfg6rFrt1Qk8HtIz/kmLMD2fF+NxWWAnBlY8/g=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nXvzS-00Cilr-BM; Sat, 26 Mar 2022 03:17:18 +0100
+Date:   Sat, 26 Mar 2022 03:17:18 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Horatiu Vultur <horatiu.vultur@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, UNGLinuxDriver@microchip.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net: lan966x: fix kernel oops on ioctl when I/F is
+ down
+Message-ID: <Yj53rrvg4+DN68W4@lunn.ch>
+References: <20220326000251.2687897-1-michael@walle.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220326000251.2687897-1-michael@walle.cc>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,53 +51,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since there is already a generic function strstarts() that check if a
-string starts with a given prefix, cleanup str_starts_with().
+On Sat, Mar 26, 2022 at 01:02:51AM +0100, Michael Walle wrote:
+> A SIOCGMIIPHY ioctl will cause a kernel oops when the interface is down.
+> Fix it by checking the state and if it's no running, return an error.
 
-Signed-off-by: Wei Li <liwei391@huawei.com>
----
- drivers/platform/x86/acerhdf.c | 21 +++------------------
- 1 file changed, 3 insertions(+), 18 deletions(-)
+s/no/not/
 
-diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
-index 6b8b3ab8db48..3c589437b41e 100644
---- a/drivers/platform/x86/acerhdf.c
-+++ b/drivers/platform/x86/acerhdf.c
-@@ -584,21 +584,6 @@ static struct platform_driver acerhdf_driver = {
- 	.remove = acerhdf_remove,
- };
- 
--/* checks if str begins with start */
--static int str_starts_with(const char *str, const char *start)
--{
--	unsigned long str_len = 0, start_len = 0;
--
--	str_len = strlen(str);
--	start_len = strlen(start);
--
--	if (str_len >= start_len &&
--			!strncmp(str, start, start_len))
--		return 1;
--
--	return 0;
--}
--
- /* check hardware */
- static int __init acerhdf_check_hardware(void)
- {
-@@ -651,9 +636,9 @@ static int __init acerhdf_check_hardware(void)
- 		 * check if actual hardware BIOS vendor, product and version
- 		 * IDs start with the strings of BIOS table entry
- 		 */
--		if (str_starts_with(vendor, bt->vendor) &&
--				str_starts_with(product, bt->product) &&
--				str_starts_with(version, bt->version)) {
-+		if (strstarts(vendor, bt->vendor) &&
-+				strstarts(product, bt->product) &&
-+				strstarts(version, bt->version)) {
- 			found = 1;
- 			break;
- 		}
--- 
-2.25.1
+I don't think it is just SIOCGMIIPHY. phy_has_hwtstamp(dev->phydev) is
+probably also an issue. The phy is connected in open, and disconnected
+in stop. So dev->phydev is not valid outside of that time.
 
+But i'm also not sure it is guaranteed to be valid while the interface
+is up. The driver uses phylink, so there could be an SFP attached to a
+port, in which case, dev->phydev will not be set.
+
+So rather than testing of running, it would be better to test if the
+phydev is NULL or not.
+
+       Andrew
+
+> 
+> Fixes: 735fec995b21 ("net: lan966x: Implement SIOCSHWTSTAMP and SIOCGHWTSTAMP")
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> index ec42e526f6fb..0adf49d19142 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> @@ -399,6 +399,9 @@ static int lan966x_port_ioctl(struct net_device *dev, struct ifreq *ifr,
+>  {
+>  	struct lan966x_port *port = netdev_priv(dev);
+>  
+> +	if (!netif_running(dev))
+> +		return -EINVAL;
+> +
+>  	if (!phy_has_hwtstamp(dev->phydev) && port->lan966x->ptp) {
+>  		switch (cmd) {
+>  		case SIOCSHWTSTAMP:
+> -- 
+> 2.30.2
+> 

@@ -2,168 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3134E8481
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 23:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C8924E8483
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 23:16:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiCZWRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 18:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
+        id S235558AbiCZWSD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 26 Mar 2022 18:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiCZWRQ (ORCPT
+        with ESMTP id S229752AbiCZWRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 18:17:16 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3487CE20
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 15:15:39 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id t25so18934357lfg.7
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 15:15:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=646eEJy3R0M/KTVuEwo8ILglC9PMb/NEGSld3GpAxEM=;
-        b=VmaZt/FdSU9IxWnJT+n7WMNSAm9QhaWnXKkwGBa+wTkkHVbNrq8oqd2DQI4iCl0wG/
-         iy7E3AujkyX5NaVU4BcnOT1fn+xKdpfC9DwBzr+NshauWtc6lfNeDSfelnnG9h7FbBG8
-         I7KA+6jENZZ4Gnz9h8WRtq8IQ0/ZxgCw4o6Ug=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=646eEJy3R0M/KTVuEwo8ILglC9PMb/NEGSld3GpAxEM=;
-        b=3EQJGZ94lK/DxUPJlk9PR8rrwRbFzCsp+LONeYvHfBsC+irTLxMkeM6YY1/05xlTkM
-         p+xUI1g7tThctWHbB6KyyJ7FsyFo2FKijM1QiYbVwxvFSwM39M+pS/rC2tU8a/IIeRmk
-         /KSDHjLTcwublUGlbiI1bPLicga4WEhKINZrK7zoPL8WTfYrKsiFJNzfFmfDH1PTMkr3
-         87ZsCPZP+zdi3oRj5yPIEcjm4HN5DfSBTiVRmlqEp1gQBaJCsbqwVZPZGCF51RtDkz6j
-         K4tHTLrBX68D9grjKORdmS++zklZaLa+1WBPIjDdHm8XwqG7cXeejxh+HO/BvnOy9xqs
-         xvWw==
-X-Gm-Message-State: AOAM530TISop6v6Djcwj1eGx1ICTqcEc1u83tY/4QpIFNSq0Dcvw5TWu
-        Qu10g28Jo1SJOI8JNtxQcj3RocYlbuWkgS1OU1Q=
-X-Google-Smtp-Source: ABdhPJxFyIWjeQP6YO+0CSsTBV3yu3Y+jSiLStvbxgs4nxWgwskvrsG3b/6QYAM6WJCt0fYwzI1YVg==
-X-Received: by 2002:a05:6512:6c1:b0:448:6291:f135 with SMTP id u1-20020a05651206c100b004486291f135mr13437489lff.451.1648332937042;
-        Sat, 26 Mar 2022 15:15:37 -0700 (PDT)
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
-        by smtp.gmail.com with ESMTPSA id o7-20020ac24c47000000b0044a15c4e0aesm1182821lfk.272.2022.03.26.15.15.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Mar 2022 15:15:36 -0700 (PDT)
-Received: by mail-lj1-f177.google.com with SMTP id v12so1836831ljd.3
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 15:15:35 -0700 (PDT)
-X-Received: by 2002:a2e:9b10:0:b0:247:f28c:ffd3 with SMTP id
- u16-20020a2e9b10000000b00247f28cffd3mr13362606lji.152.1648332935415; Sat, 26
- Mar 2022 15:15:35 -0700 (PDT)
+        Sat, 26 Mar 2022 18:17:47 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 387C42F003
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 15:16:09 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-221-RimintWePiOs3iKZRZSi5g-1; Sat, 26 Mar 2022 22:16:06 +0000
+X-MC-Unique: RimintWePiOs3iKZRZSi5g-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Sat, 26 Mar 2022 22:16:03 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Sat, 26 Mar 2022 22:16:03 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Joerg Roedel' <joro@8bytes.org>, "x86@kernel.org" <x86@kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH v3] x86/sev: Unroll string mmio with
+ CC_ATTR_GUEST_UNROLL_STRING_IO
+Thread-Topic: [PATCH v3] x86/sev: Unroll string mmio with
+ CC_ATTR_GUEST_UNROLL_STRING_IO
+Thread-Index: AQHYQR+Ze4D1k2sivEGZy3Tw8cJv76zSOd1g
+Date:   Sat, 26 Mar 2022 22:16:03 +0000
+Message-ID: <b89b59753ee4439c8b9ea7413dab66c0@AcuMS.aculab.com>
+References: <20220326144127.15967-1-joro@8bytes.org>
+In-Reply-To: <20220326144127.15967-1-joro@8bytes.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20220326114009.1690-1-aissur0002@gmail.com> <c7fcaccf-7ac0-fae8-3f41-d6552b689a70@ispras.ru>
-In-Reply-To: <c7fcaccf-7ac0-fae8-3f41-d6552b689a70@ispras.ru>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 26 Mar 2022 15:15:19 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wijnsoGpoXRvY9o-MYow_xNXxaHg5vWJ5Z3GaXiWeg+dg@mail.gmail.com>
-Message-ID: <CAHk-=wijnsoGpoXRvY9o-MYow_xNXxaHg5vWJ5Z3GaXiWeg+dg@mail.gmail.com>
-Subject: Re: [PATCH 4/4] file: Fix file descriptor leak in copy_fd_bitmaps()
-To:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     Fedor Pchelkin <aissur0002@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, quoting everything below to bring in Eric Biggers because he
-touched that particular code last.
+From: Joerg Roedel <joro@8bytes.org>
+> Sent: 26 March 2022 14:41
+> 
+> The io specific memcpy/memset functions use string mmio accesses to do
+> their work. Under SEV the hypervisor can't emulate these instructions,
+> because they read/write directly from/to encrypted memory.
+> 
+> KVM will inject a page fault exception into the guest when it is asked
+> to emulate string mmio instructions for an SEV guest:
+> 
+> 	BUG: unable to handle page fault for address: ffffc90000065068
+> 	#PF: supervisor read access in kernel mode
+> 	#PF: error_code(0x0000) - not-present page
+> 	PGD 8000100000067 P4D 8000100000067 PUD 80001000fb067 PMD 80001000fc067 PTE 80000000fed40173
+> 	Oops: 0000 [#1] PREEMPT SMP NOPTI
+> 	CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc7 #3
+> 
+> As string mmio for an SEV guest can not be supported by the
+> hypervisor, unroll the instructions for CC_ATTR_GUEST_UNROLL_STRING_IO
+> enabled kernels.
+> 
+> This issue appears when kernels are launched in recent libvirt-managed
+> SEV virtual machines, because libvirt started to add a tpm-crb device
+> to the guest by default.
+> 
+> The kernel driver for tpm-crb uses memcpy_to/from_io() functions to
+> access MMIO memory, resulting in a page-fault injected by KVM and
+> crashing the kernel at boot.
+> 
+> Cc: stable@vger.kernel.org #4.15+
+> Fixes: d8aa7eea78a1 ('x86/mm: Add Secure Encrypted Virtualization (SEV) support')
+> Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
+> Signed-off-by: Joerg Roedel <jroedel@suse.de>
+> ---
+> Changes v2->v3:
+> 	- Fix sparse warnings introduced by v2
+> 
+>  arch/x86/lib/iomem.c | 65 ++++++++++++++++++++++++++++++++++++++------
+>  1 file changed, 57 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/x86/lib/iomem.c b/arch/x86/lib/iomem.c
+> index df50451d94ef..3e2f33fc33de 100644
+> --- a/arch/x86/lib/iomem.c
+> +++ b/arch/x86/lib/iomem.c
+> @@ -22,7 +22,7 @@ static __always_inline void rep_movs(void *to, const void *from, size_t n)
+>  		     : "memory");
+>  }
+> 
+> -void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
+> +static void string_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
+>  {
+>  	if (unlikely(!n))
+>  		return;
+> @@ -38,9 +38,8 @@ void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
+>  	}
+>  	rep_movs(to, (const void *)from, n);
+>  }
+> -EXPORT_SYMBOL(memcpy_fromio);
+> 
+> -void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
+> +static void string_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
+>  {
+>  	if (unlikely(!n))
+>  		return;
+> @@ -56,14 +55,64 @@ void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
+>  	}
+>  	rep_movs((void *)to, (const void *) from, n);
+>  }
+> +
+> +static void unrolled_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
+> +{
+> +	const volatile char __iomem *in = from;
+> +	char *out = to;
+> +	int i;
+> +
+> +	for (i = 0; i < n; ++i)
+> +		out[i] = readb(&in[i]);
+> +}
 
-And Christian Brauner, because he worked on all teh bitmap code with
-the whole close_range thing.
+Wait a minute....
+Aren't these functions supposed to be doing 'memory' copies?
+In which case they need to be using 64bit IO accesses where
+appropriate - otherwise the performance is horrid.
 
-I think this is all ok because the number of files aren't just
-byte-aligned, they are long-aligned:
+I thought the x86 memcpy_to/from_io() had been changed to
+always use a software loop rather than using whatever memcpy()
+ended up using.
+In particular the 'rep movsb' ERMS (EMRS?) copy that is fast
+(on some cpu) for memory-memory copies is always a byte copy
+on uncached locations typical for io addresses.
 
-         * We make sure that nr remains a multiple of BITS_PER_LONG - otherwise
-         * bitmaps handling below becomes unpleasant, to put it mildly...
+PIO reads from PCIe can be spectacularly slow.
+You really do want to use the largest register available.
 
-but maybe I'm missing something.
+	David
 
-The fact that there's a
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-     Found by Syzkaller (https://github.com/google/syzkaller).
-
-thing in that suggested commit message makes me think there _is_
-something I'm missing.
-
-Certainly NR_OPEN_DEFAULT, sane_fdtable_size() and max_fds should
-always be a multiple of BITS_PER_LONG.
-
-So I don't _think_ there is any bug here, although it might be good to
-
- (a) document that "we explicitly do things in BITS_PER_LONG chunks"
-even more in places
-
- (b) have people double-check my thinking because clearly that
-syzcaller thing implies I'm full of crap
-
-Eric, Christian?
-
-Can somebody point to the actual syzkaller report?
-
-                Linus
-
-On Sat, Mar 26, 2022 at 7:17 AM Alexey Khoroshilov
-<khoroshilov@ispras.ru> wrote:
->
-> Looks like bfp has a set of macro suitable for such cases:
->
-> #define BITS_PER_BYTE_MASKED(bits) ((bits) & BITS_PER_BYTE_MASK)
-> #define BITS_ROUNDDOWN_BYTES(bits) ((bits) >> 3)
-> #define BITS_ROUNDUP_BYTES(bits) \
->         (BITS_ROUNDDOWN_BYTES(bits) + !!BITS_PER_BYTE_MASKED(bits))
->
-> May be it makes sense to move them to a generic header and to use here?
->
-> --
-> Alexey Khoroshilov
->
->
-> On 26.03.2022 14:40, Fedor Pchelkin wrote:
-> > If count argument in copy_fd_bitmaps() is not a multiple of
-> > BITS_PER_BYTE, then one byte is lost and is not used in further
-> > manipulations with cpy value in memcpy() and memset()
-> > causing a leak. The leak was introduced with close_range() call
-> > using CLOSE_RANGE_UNSHARE flag.
-> >
-> > The patch suggests implementing an indicator (named add_byte)
-> > of count being multiple of BITS_PER_BYTE and adding it to the
-> > cpy value.
-> >
-> > Found by Syzkaller (https://github.com/google/syzkaller).
-> >
-> > Signed-off-by: Fedor Pchelkin <aissur0002@gmail.com>
-> > Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-> > ---
-> >  fs/file.c | 2 --
-> >  1 file changed, 2 deletions(-)
-> >
-> > diff --git a/fs/file.c b/fs/file.c
-> > index 3ef1479df203..3c64a6423604 100644
-> > --- a/fs/file.c
-> > +++ b/fs/file.c
-> > @@ -56,10 +56,8 @@ static void copy_fd_bitmaps(struct fdtable *nfdt, struct fdtable *ofdt,
-> >  {
-> >       unsigned int cpy, set;
-> >       unsigned int add_byte = 0;
-> > -
-> >       if (count % BITS_PER_BYTE != 0)
-> >               add_byte = 1;
-> > -
-> >       cpy = count / BITS_PER_BYTE + add_byte;
-> >       set = (nfdt->max_fds - count) / BITS_PER_BYTE;
-> >       memcpy(nfdt->open_fds, ofdt->open_fds, cpy);
-> >
->

@@ -2,112 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E32E4E7E2B
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:32:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58CEB4E7E32
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiCZAdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 20:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45428 "EHLO
+        id S229771AbiCZAfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 20:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiCZAdd (ORCPT
+        with ESMTP id S229763AbiCZAfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 20:33:33 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B0D21C05D
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:31:57 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id g24so12270103lja.7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:31:57 -0700 (PDT)
+        Fri, 25 Mar 2022 20:35:39 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC8E21F767
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:34:04 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id z15-20020a25bb0f000000b00613388c7d99so7256519ybg.8
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:34:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=w7nzRz+ku1xVPbthIr1h39WQkWceMAxSsziZ479N8l8=;
-        b=T9smYeqdyIJTv6bWc//YVfgGAAsxoJ1B2JntMbZoPtAgrdrB3YMq0Okkl/hpg7UGmf
-         7GoNIAta8CxY6NI6vnKrTPhKXJaYYW3Xr93Irer2PFiQTfwxOwLggMk9dsT+jYHaDVDA
-         R3wNPAnOAk/NIvNd9yDEtLQezX8xzKR7Q9qHDmDio9lLTYhhBFQhgHn6F19BEWgA6TJV
-         wNzWudL98d9oXkJpcEIWpxjWwLkrMch8ZDbLx074TGiQB0o+M26pC9/fhAyHTQ8EYJTa
-         t1kdAsEyS3A/LgDNfYXbXjuHgx7GH4ZDk9hAXGMSWbL/vkC8L4BmNoAAJLRXdQ7uVTpV
-         rJ8Q==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=C7dMbml3WSQebbWw6NGPxmfuV7ri/a3Nzoj+G8yYBMI=;
+        b=d8nP+2b1uGAGXGMvUnqLB8+Y34lm4z5ta+Dx/nWyUkg5Nk8Nr5hvblVJ5Amvv5JbbM
+         8UzUDz7+iyr/l4XXNkeFhspC0LokUQnKtt4Un13iCxIqdPG6xdcMRNETArVDPVHn+lL7
+         ZPnedwzy2NoxUVxD7+acT2ZnfpQbgD5dJTxBIkT2AMow8VgLyOT+UCUcOns6Gfm4OIS4
+         chBINcQvyoxshZ3rnqPY4j78JNs8Cn7nINPbT0Sf68FPGWfRp3pdd2UQ36dV7e98J0KW
+         8+nZkncbtbBUJAwhzESjJH5Y61tXU4fXKRKehzFJ1z8kW5HlBb5OYMNEG7LKX3bQiqc5
+         uCcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w7nzRz+ku1xVPbthIr1h39WQkWceMAxSsziZ479N8l8=;
-        b=6+9JLEQdRnclYCf2NPROKYSvDS1T35AIg5mvEqtEmqViA3fthYkjp2OfSYfCAJPWoM
-         DidMNoqIwKrNi5DAeuJYvaPEoK5fFV9vX1XEA5nSetWvff/lLRpjcjFmC8JxB86Ur2gb
-         OQ3xLbuUBLQd0DozEBr3E5wDrpK3tnUrNJD3fVd6V+LV4ngfLHPFjQQ8meeOyWAbhfhK
-         dM235kl9btMJtO/Pq1c86zX6Z+eVk21ZYUp7Nk2iclLcSBMszP/VpjqmUz/Dz7y6XAdJ
-         fe8LMz188GN1DtfvDV6LenfyIz6DVK20Z9xWNe6z2R87khdWZHaGiwl250YrSkg33+y2
-         Y1AA==
-X-Gm-Message-State: AOAM53175NPZ9/VSoU4pV9IYRaOgFXho4z+MR6sFJWnKkk2xpwW7W0Br
-        Nq41oGsRAsIAWdYt5r9+KeyuTYU5k4790Q16eNlNAA==
-X-Google-Smtp-Source: ABdhPJxJX22CS6ZYAgZkVPhd+qpK+eO9wSNpPsFs7fZEtjWujgCv/T4rt0TjJSfvJsUAjbLFf6XXQYAic3y8VVgdfdg=
-X-Received: by 2002:a2e:a881:0:b0:249:6f85:d4a4 with SMTP id
- m1-20020a2ea881000000b002496f85d4a4mr10145003ljq.231.1648254715708; Fri, 25
- Mar 2022 17:31:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220325233125.413634-1-vipinsh@google.com> <CALzav=e6W2VSp=btmqTpQJ=3bH+Bw3D8sLApkTTvMMKAnw_LAw@mail.gmail.com>
-In-Reply-To: <CALzav=e6W2VSp=btmqTpQJ=3bH+Bw3D8sLApkTTvMMKAnw_LAw@mail.gmail.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Fri, 25 Mar 2022 17:31:19 -0700
-Message-ID: <CAHVum0dOfJ5HuscNq0tA6BnUJK34v4CPCTkD4piHc7FObZOsng@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Speed up slot_rmap_walk_next for sparsely
- populated rmaps
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=C7dMbml3WSQebbWw6NGPxmfuV7ri/a3Nzoj+G8yYBMI=;
+        b=WqHob1qcxR9Z5xe4CAiRp6ErJLTsG9/Hc+ieMGe5hgEx22vAZAUGEEUPOfkVlvjUeY
+         NjPYmHt6RZIBe2DmYG18Q+B4XVfAExFevK6mMQgclUiIKsV7XgLAFNHXVhYyJOLMv4W2
+         /+yW1fYVbcRmgcTdI0q8qoorwbktqBdKtXPWE8hJCMnO1edJskyjDV5jvOK4t/lbFyZI
+         8KJUiNBSnWreYjoKMKJiJJwVrVBhO8EKOPjMQkKGSyG4YvC8sf9uzyAPViZxSsrge7eU
+         ICxFmfA3fstxTkW++M+x0aTOsJMo7oRY7tilyz2WVcIuQc6pz4FOQs0dc3Uz++51GbJI
+         pHWw==
+X-Gm-Message-State: AOAM531Sa180mszctsTM0JGDMbvfjCNVUwDjo7dZtG3970LlqAGUBOHa
+        agigzfyZl9oy76WxNpTcgzxIBEn12zYlJA==
+X-Google-Smtp-Source: ABdhPJx/3aUkebGQoOX/jm9fWIotMlnaay4/O3bwaTV1+wfuG9arENwwL+nbeyxXoh0LyEwRJ3SIvp/wl/3GRg==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:be84:4a49:e731:f1fa])
+ (user=dlatypov job=sendgmr) by 2002:a05:6902:1209:b0:637:cda:22c0 with SMTP
+ id s9-20020a056902120900b006370cda22c0mr13018318ybu.358.1648254843840; Fri,
+ 25 Mar 2022 17:34:03 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 17:33:56 -0700
+Message-Id: <20220326003356.487828-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
+Subject: [PATCH] Documentation: kunit: update kconfig options needed for UML coverage
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com,
+        keescook@chromium.org
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        maxime@cerno.tech, Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 4:53 PM David Matlack <dmatlack@google.com> wrote:
->
-> On Fri, Mar 25, 2022 at 4:31 PM Vipin Sharma <vipinsh@google.com> wrote:
-> >
-> > Avoid calling handlers on empty rmap entries and skip to the next non
-> > empty rmap entry.
-> >
-> > Empty rmap entries are noop in handlers.
-> >
-> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> > Suggested-by: Sean Christopherson <seanjc@google.com>
-> > Change-Id: I8abf0f4d82a2aae4c5d58b80bcc17ffc30785ffc
->
-> nit: Omit Change-Id tags from upstream commits.
+Recent changes have made it so the current set is not sufficient.
+Namely, CONFIG_DEBUG_INFO is not being set even when explicitly asked.
 
-Thanks for catching it.
+Specifying a version of the debug info fixes this.
+Pick CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT as an option that's
+hopefully less fragile (esp. given we're tied to GCC 6 and lower).
 
->
-> > ---
-> >  arch/x86/kvm/mmu/mmu.c | 9 ++++++---
-> >  1 file changed, 6 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 51671cb34fb6..f296340803ba 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -1499,11 +1499,14 @@ static bool slot_rmap_walk_okay(struct slot_rmap_walk_iterator *iterator)
-> >         return !!iterator->rmap;
-> >  }
-> >
-> > -static void slot_rmap_walk_next(struct slot_rmap_walk_iterator *iterator)
-> > +static noinline void
->
-> What is the reason to add noinline?
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ Documentation/dev-tools/kunit/running_tips.rst | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-My understanding is that since this method is called from
-__always_inline methods, noinline will avoid gcc inlining the
-slot_rmap_walk_next in those functions and generate smaller code.
+diff --git a/Documentation/dev-tools/kunit/running_tips.rst b/Documentation/dev-tools/kunit/running_tips.rst
+index 7b6d26a25959..c36f6760087d 100644
+--- a/Documentation/dev-tools/kunit/running_tips.rst
++++ b/Documentation/dev-tools/kunit/running_tips.rst
+@@ -114,6 +114,7 @@ Instead of enabling ``CONFIG_GCOV_KERNEL=y``, we can set these options:
+ 
+ 	CONFIG_DEBUG_KERNEL=y
+ 	CONFIG_DEBUG_INFO=y
++	CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ 	CONFIG_GCOV=y
+ 
+ 
+@@ -122,7 +123,7 @@ Putting it together into a copy-pastable sequence of commands:
+ .. code-block:: bash
+ 
+ 	# Append coverage options to the current config
+-	$ echo -e "CONFIG_DEBUG_KERNEL=y\nCONFIG_DEBUG_INFO=y\nCONFIG_GCOV=y" >> .kunit/.kunitconfig
++	$ echo -e "CONFIG_DEBUG_KERNEL=y\nCONFIG_DEBUG_INFO=y\nCONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y\nCONFIG_GCOV=y" >> .kunit/.kunitconfig
+ 	$ ./tools/testing/kunit/kunit.py run
+ 	# Extract the coverage information from the build dir (.kunit/)
+ 	$ lcov -t "my_kunit_tests" -o coverage.info -c -d .kunit/
+
+base-commit: b14ffae378aa1db993e62b01392e70d1e585fb23
+-- 
+2.35.1.1021.g381101b075-goog
+

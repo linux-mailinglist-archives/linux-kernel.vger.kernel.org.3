@@ -2,89 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C004E8460
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 22:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45AD34E8465
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 22:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235432AbiCZVVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 17:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
+        id S235469AbiCZVXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 17:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234586AbiCZVVt (ORCPT
+        with ESMTP id S230002AbiCZVXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 17:21:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346645576F;
-        Sat, 26 Mar 2022 14:20:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55C7460E8C;
-        Sat, 26 Mar 2022 21:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AC3C1C34110;
-        Sat, 26 Mar 2022 21:20:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648329610;
-        bh=0uIKyawOLoHLm394PBEW9HSFN9iKeMVQMYPJNL5EEfo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=QRWtOB8X+n+tNJyT813j4O4KjEvNscKDBDZXoo+mVYdnNM06tWh2+qREZYbW+Jgwo
-         98FMcDt87x2y8jvYiR44ERmIyvLRgV5SJUwLpSZteib35Ly56G98muBE6+2j54o2q4
-         lkUnBzOe7fy9VTuQdWB9P2EPW13GUekfxG7LnfC/t85bAh8sK4oUcIUW6emXXcwcEf
-         8DhqlYJocO5D5Hc3SFbSy7kd9n0ObT8mpVX1VD7dzlfZyOJEH0h6sPiBVaol/sMli6
-         /4cO+to8It906fVj58HQuCdJYVqHvrQS7sCzUPIEms+0zaXmGychYv8GozYw02Tgoj
-         796fDx+Ajla3w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8B88AF03849;
-        Sat, 26 Mar 2022 21:20:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 26 Mar 2022 17:23:18 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3AD9BADE;
+        Sat, 26 Mar 2022 14:21:41 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id gp15-20020a17090adf0f00b001c7cd11b0b3so6410227pjb.3;
+        Sat, 26 Mar 2022 14:21:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TyBK01jrf008SVfLFXsPXvWmiecmsTzyMmbOyqtInlc=;
+        b=B+Rs+UWSLybpeZxAWtBcyyOMx+iqm7JPyXuSA6lt+6RQT7a8CHeOWPxYl1myiqbrVi
+         OgBRl04RQZrCkJ2I9UB8/T9oyew6SOxURlztEhUtW9t4K9BOrO62JLVsU4k5ZLTLH3qo
+         b1TJj/v/RODWbP8A5lk+gQU513XV+lRGNTDS5+9jeMJC3PJ7niyh0ccAkYctI9S38UtA
+         WVXBujilYAy0ivwZLTbxuQoGxn8UqHd3ldHx2AP9JifyXE+1lQFWDqA8HaaZuXCzBwiX
+         4tVAxPVZ2qsYwt4rd6IjiLYiJPF7vrwrySuARZqwnNAb0c/1yCWM/OLsptR2AjWcyeHI
+         jYAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TyBK01jrf008SVfLFXsPXvWmiecmsTzyMmbOyqtInlc=;
+        b=mQEgydLWre/SAM9Q1mPgiAiDwecCYYKBMDc4tMZWCNxkButu3oReNdDHqCIgoWst/Z
+         dzm2ffI2Cp54ecOYVTWFGA9LKpVPfnbveq/Be1Qg6NZBs/jiWtyYhZEHKpyd5Q0k7M8j
+         fSbI9sCsIMb8rHpOkh2XzvHLdQkZ0xmcm4T91RPRaZzxmXRm7rboNRMzTKGsUMr77f4N
+         7ddjYteqROZK3Z1eFpeltB13RJUknybViq8e54oa8BNrcpeXs/C4tZ/tEg0nsAXUqD/s
+         cytZUnt1e68Eu6yVqTYz9FeGIHg5Ihy8T6iNZ7wJpOvF4sYZZhNYL/HffDUKXzwM5kui
+         E2IA==
+X-Gm-Message-State: AOAM533QDZ9uLTi6+6Yi5ZaJT9khxXIdTXtHOuHEsvg4c6weGTt3ukiF
+        MR58fNrmY524mYqGwCpUAE3TD4CbtI0ueQ==
+X-Google-Smtp-Source: ABdhPJxASVZuRWBucF6JwS8GEH1In6Rw/XlhRogRmB8w2a5HB4Y+oEEdOfDA3E7L8hV16/fuivgCoQ==
+X-Received: by 2002:a17:90b:4c49:b0:1c7:d6c1:bb0f with SMTP id np9-20020a17090b4c4900b001c7d6c1bb0fmr14322401pjb.230.1648329700957;
+        Sat, 26 Mar 2022 14:21:40 -0700 (PDT)
+Received: from localhost.localdomain ([122.161.51.18])
+        by smtp.gmail.com with ESMTPSA id d5-20020a056a0024c500b004fae56b2921sm10669697pfv.167.2022.03.26.14.21.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Mar 2022 14:21:40 -0700 (PDT)
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mukesh Savaliya <msavaliy@codeaurora.org>,
+        Akash Asthana <akashast@codeaurora.org>
+Cc:     Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: spi: qcom-qspi: Add minItems to interconnect-names
+Date:   Sun, 27 Mar 2022 02:51:34 +0530
+Message-Id: <20220326212134.45759-1-singh.kuldeep87k@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] octeontx2-af: initialize action variable
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164832961056.3419.13458141974807020265.git-patchwork-notify@kernel.org>
-Date:   Sat, 26 Mar 2022 21:20:10 +0000
-References: <20220326160306.2900822-1-trix@redhat.com>
-In-Reply-To: <20220326160306.2900822-1-trix@redhat.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     sgoutham@marvell.com, lcherian@marvell.com, gakula@marvell.com,
-        jerinj@marvell.com, hkelam@marvell.com, sbhatta@marvell.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        nathan@kernel.org, ndesaulniers@google.com,
-        Sunil.Goutham@marvell.com, naveenm@marvell.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Qualcomm QSPI DT spec says interconnects has minimum length 1 and
+maximum length 2. Same configuration will be applicable for
+interconnect-names. Schema currently depicts interconnects length
+correctly but not interconnect-names. It can have a single entry, which
+is a valid case yet to be incorporated in the current configuration. The
+schema tries to look for 2 names and fail for DTs with a single entry.
+Thus, add minItems property to interconnect-names to fix it.
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+With the change applied, below interconnect-names values are possible:
+['qspi-config'], ['qspi-config', 'qspi-memory']
 
-On Sat, 26 Mar 2022 09:03:06 -0700 you wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Clang static analysis reports this representative issue
-> rvu_npc.c:898:15: warning: Assigned value is garbage
->   or undefined
->   req.match_id = action.match_id;
->                ^ ~~~~~~~~~~~~~~~
-> 
-> [...]
+Fixes: 8f9c291558ea ("dt-bindings: spi: Add interconnect binding for QSPI")
+Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+---
+ Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Here is the summary with links:
-  - octeontx2-af: initialize action variable
-    https://git.kernel.org/netdev/net/c/33b5bc9e7033
-
-You are awesome, thank you!
+diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
+index 055524fe8327..116f3746c1e6 100644
+--- a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
++++ b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
+@@ -49,6 +49,7 @@ properties:
+     maxItems: 2
+ 
+   interconnect-names:
++    minItems: 1
+     items:
+       - const: qspi-config
+       - const: qspi-memory
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 

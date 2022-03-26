@@ -2,107 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 125E74E7F76
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 07:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5198C4E7FA4
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 07:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbiCZG3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 02:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53812 "EHLO
+        id S231641AbiCZGsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 02:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbiCZG3Q (ORCPT
+        with ESMTP id S230061AbiCZGsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 02:29:16 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB4527CFF;
-        Fri, 25 Mar 2022 23:27:40 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KQTVg3DKnzfZK8;
-        Sat, 26 Mar 2022 14:26:03 +0800 (CST)
-Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+        Sat, 26 Mar 2022 02:48:07 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774062220C1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 23:46:31 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KQTy147rbz1GCwq;
+        Sat, 26 Mar 2022 14:46:17 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Sat, 26 Mar 2022 14:27:38 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Sat, 26 Mar 2022 14:27:37 +0800
-From:   Wupeng Ma <mawupeng1@huawei.com>
-To:     <akpm@linux-foundation.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <corbet@lwn.net>
-CC:     <ardb@kernel.org>, <tglx@linutronix.de>, <mingo@redhat.com>,
-        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zyccr.com>, <dvhart@infradead.org>, <andy@infradead.org>,
-        <rppt@kernel.org>, <paulmck@kernel.org>, <peterz@infradead.org>,
-        <jroedel@suse.de>, <songmuchun@bytedance.com>, <macro@orcam.me.uk>,
-        <frederic@kernel.org>, <W_Armin@gmx.de>, <john.garry@huawei.com>,
-        <seanjc@google.com>, <tsbogend@alpha.franken.de>,
-        <anshuman.khandual@arm.com>, <chenhuacai@kernel.org>,
-        <david@redhat.com>, <gpiccoli@igalia.com>, <mark.rutland@arm.com>,
-        <wangkefeng.wang@huawei.com>, <mawupeng1@huawei.com>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-efi@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>, <linux-mm@kvack.org>
-Subject: [PATCH 4/9] arm64/mirror: arm64 enabling - find mirrored memory ranges
-Date:   Sat, 26 Mar 2022 14:46:27 +0800
-Message-ID: <20220326064632.131637-5-mawupeng1@huawei.com>
-X-Mailer: git-send-email 2.18.0.huawei.25
-In-Reply-To: <20220326064632.131637-1-mawupeng1@huawei.com>
-References: <20220326064632.131637-1-mawupeng1@huawei.com>
+ 15.1.2308.21; Sat, 26 Mar 2022 14:46:29 +0800
+Subject: Re: [PATCH v3] mm/mempolicy: fix mpol_new leak in
+ shared_policy_replace
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     <mhocko@suse.com>, <kosaki.motohiro@jp.fujitsu.com>,
+        <mgorman@suse.de>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220322104345.36379-1-linmiaohe@huawei.com>
+ <20220325172907.57dd381b746563be5dc77097@linux-foundation.org>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <c8625168-4a40-1f6c-47b1-2c9194d3d4b3@huawei.com>
+Date:   Sat, 26 Mar 2022 14:46:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500014.china.huawei.com (7.185.36.153)
+In-Reply-To: <20220325172907.57dd381b746563be5dc77097@linux-foundation.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ma Wupeng <mawupeng1@huawei.com>
+On 2022/3/26 8:29, Andrew Morton wrote:
+> On Tue, 22 Mar 2022 18:43:45 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+> 
+>> If mpol_new is allocated but not used in restart loop, mpol_new will be
+>> freed via mpol_put before returning to the caller.  But refcnt is not
+>> initialized yet, so mpol_put could not do the right things and might leak
+>> the unused mpol_new. This would happen if mempolicy was updated on the
+>> shared shmem file while the sp->lock has been dropped during the memory
+>> allocation.
+>>
+>> This issue could be triggered easily with the below code snippet if there
+>> are many processes doing the below work at the same time:
+>>
+>>   shmid = shmget((key_t)5566, 1024 * PAGE_SIZE, 0666|IPC_CREAT);
+>>   shm = shmat(shmid, 0, 0);
+>>   loop many times {
+>>     mbind(shm, 1024 * PAGE_SIZE, MPOL_LOCAL, mask, maxnode, 0);
+>>     mbind(shm + 128 * PAGE_SIZE, 128 * PAGE_SIZE, MPOL_DEFAULT, mask,
+>>           maxnode, 0);
+>>   }
+>>
+>> ...
+>>
+>> --- a/mm/mempolicy.c
+>> +++ b/mm/mempolicy.c
+>> @@ -2733,6 +2733,7 @@ static int shared_policy_replace(struct shared_policy *sp, unsigned long start,
+>>  	mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
+>>  	if (!mpol_new)
+>>  		goto err_out;
+>> +	refcount_set(&mpol_new->refcnt, 1);
+>>  	goto restart;
+>>  }
+> 
+> Two other sites in this file do
+> 
+> 	atomic_set(&policy->refcnt, 1);
+> 
+> 
+> Could we please instead have a little helper function which does the
+> kmem_cache_alloc()+refcount_set()?> .
 
-Commit b05b9f5f9dcf ("x86, mirror: x86 enabling - find mirrored memory ranges")
-introduced mirrored memory support for x86 and this could be used on arm64.
+There are usecases like below:
 
-So efi_find_mirror() is added in efi_init() so on EFI enabled systems scan
-the memory map and tell memblock about any mirrored ranges.
+	struct mempolicy *new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
+	*new = *old;
+	^^^^^^^^^^^^
+	refcount_set(&new->refcnt, 1);
 
-Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
----
- Documentation/admin-guide/kernel-parameters.txt | 2 +-
- arch/arm64/kernel/setup.c                       | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+If we use helper function to do kmem_cache_alloc()+refcount_set() above, separate
+refcount_set(&new->refcnt, 1) is still needed as old is copied to new and overwrites
+the refcnt field. So that little helper function might not work. Or am I miss something?
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index e064839895ee..0af91e0aafea 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2270,7 +2270,7 @@
- 
- 	keepinitrd	[HW,ARM]
- 
--	kernelcore=	[KNL,X86,IA-64,PPC]
-+	kernelcore=	[KNL,X86,IA-64,PPC,ARM64]
- 			Format: nn[KMGTPE] | nn% | "mirror"
- 			This parameter specifies the amount of memory usable by
- 			the kernel for non-movable allocations.  The requested
-diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
-index daade64889ff..3957290d9ade 100644
---- a/arch/arm64/kernel/setup.c
-+++ b/arch/arm64/kernel/setup.c
-@@ -345,6 +345,7 @@ void __init __no_sanitize_address setup_arch(char **cmdline_p)
- 	arm64_memblock_init();
- 
- 	efi_fake_memmap();
-+	efi_find_mirror();
- 
- 	paging_init();
- 
--- 
-2.18.0.huawei.25
+Many thanks.
+
+> 
 

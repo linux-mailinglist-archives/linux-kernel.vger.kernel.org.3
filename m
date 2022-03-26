@@ -2,159 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833074E8452
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 22:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6C64E8459
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 22:18:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235349AbiCZVPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 17:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
+        id S235376AbiCZVTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 17:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiCZVPe (ORCPT
+        with ESMTP id S229921AbiCZVTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 17:15:34 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC982111;
-        Sat, 26 Mar 2022 14:13:55 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648329233;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mbQY8BdXJSy15or2VA0tthqhZce+ka6Ne142NTDmrFU=;
-        b=4aNofIJ68CTv6Fd4K2Nl6TSsQKoNzeMdxmM2m3PYRmewpGKcv2kT1L7Hog7bBoXEgMr2Fk
-        mXyCQFLjsq1n9SmidzOETuKlZOx5tLMpgLoD1iRRTLSELh4gHcvtROAEP2toaTgMXo0rIX
-        5Z4eLVscxWRxga2P/atYD8MtLS7AtNKW6rCR5KX8YIq1SUCeyUvjTS1OCHVk+ityZwKufR
-        T5DlmJQhIa/jEErMD0+lZKXFXtyig3MWNHm7zsUMIkpG/D7+r1ZMxw857n/EPD6We4axTW
-        3yii6RCQJzlMs9MbwQLlxvQrr1/hjCrOsHu7qSmAJEBLUiGEurleY9/lutjvFA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648329233;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mbQY8BdXJSy15or2VA0tthqhZce+ka6Ne142NTDmrFU=;
-        b=+Ie63okd/iD/11vBwRhZQXmJI5KcIkd/7JvhH8IluJISuYdX4+L/CiTb/8u+dM26la1z7i
-        B7KKrwbQgPzJ7TDw==
-To:     Artem Savkov <asavkov@redhat.com>, jpoimboe@redhat.com,
-        netdev@vger.kernel.org
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        linux-kernel@vger.kernel.org, Artem Savkov <asavkov@redhat.com>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>
-Subject: Re: [PATCH 1/2] timer: introduce upper bound timers
-In-Reply-To: <87tubn8rgk.ffs@tglx>
-References: <20220323111642.2517885-1-asavkov@redhat.com>
- <20220323111642.2517885-2-asavkov@redhat.com> <87tubn8rgk.ffs@tglx>
-Date:   Sat, 26 Mar 2022 22:13:52 +0100
-Message-ID: <87zglcfmcv.ffs@tglx>
+        Sat, 26 Mar 2022 17:19:32 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AC662FF;
+        Sat, 26 Mar 2022 14:17:55 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id m3so18776847lfj.11;
+        Sat, 26 Mar 2022 14:17:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=dorKyWKnXy7IlU5rrn/oj/4eomYs0ghYVJYTP+RQhwU=;
+        b=YRqFWEWAZ28v076CK4im5SsXJvYcIfTGKam4+0bSK2o/aS6vIDYE9Y18URClNg/GqB
+         RCIrT5/7wf+CDsHlQvI4o8cs9ZDgVgyG09UsPOCxV7FV/be8bWIFNAdFHLt232AT/u/R
+         9tApWuES+tn6MKrH+Rd0XeuBjp3pfNrH9xiShEbuRChEEcxs22tXOEpjgP9sHh12IhF7
+         pyRZ7G5XJCDBc28A619jRNMmcBnapRF4g8eyBhjm8NHdarSvsB1s9EOVtGA7U+e2x7Z+
+         SqPOCtfjyDxdl+qszxJZ2uetnejw9VLLWyenYM/+BHW6jmXH/0j8qsRyJ0oRFmob/5Oz
+         E37g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=dorKyWKnXy7IlU5rrn/oj/4eomYs0ghYVJYTP+RQhwU=;
+        b=OWtiosIj/h7OB969mbqPDwL32NnFGh+IdR5T+kFRrgdcDsCPaYcBF2jaw1TVndYTI1
+         gI6Zz/2j8a9NWwLkqi/riLMGSqwqbWH1VPnM5/KDzf+J0GUTkpKImYqNDB+gS2Erz2uS
+         Nc9ZP8ahIcEheGpLr8oIUivl2nw5pQEDU1b/S+WtwoKMy1krKIKr/GCDPhR2mcvUDa3N
+         KV1+N0UpLYZG6SL8LeMgfGtTPHDAlbG5+0b4djxAvVigIm4JaU+rwkWJhYD+p/xXL6IH
+         3FzxUyMmlChbgLE+uYPNG2K+5SfTbgkVue/bDu/XBwGC/+hg7VWXs8uOr1tnBK50RDBw
+         Dphg==
+X-Gm-Message-State: AOAM533wnbmlWFwTFFPbwpbCK8kPmcrR3BMNlkNZDboD+y/BlxtKDJoQ
+        FwqVkJWRKPgiYxAqTzoOlPS2rTYWiyvaEg==
+X-Google-Smtp-Source: ABdhPJwR/+ymjQZpTMAtiHGRcZti14dQruOjPpTxdcJTz7Y/Kj/+bGyN0Cae9N+tEUxHtv4Zv8OG9Q==
+X-Received: by 2002:ac2:434a:0:b0:443:e48d:50b7 with SMTP id o10-20020ac2434a000000b00443e48d50b7mr13484093lfl.45.1648329472824;
+        Sat, 26 Mar 2022 14:17:52 -0700 (PDT)
+Received: from dell.intranet (178235254230.gdansk.vectranet.pl. [178.235.254.230])
+        by smtp.gmail.com with ESMTPSA id h8-20020ac25d68000000b00447b5cad2a7sm1174015lft.228.2022.03.26.14.17.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Mar 2022 14:17:52 -0700 (PDT)
+From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
+To:     Aaro Koskinen <aaro.koskinen@iki.fi>
+Cc:     Tony Lindgren <tony@atomide.com>, Paul Walmsley <paul@pwsan.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Felipe Balbi <balbi@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-mmc@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2] ARM: OMAP1: Prepare for conversion of OMAP1 clocks to CCF
+Date:   Sat, 26 Mar 2022 22:17:49 +0100
+Message-ID: <1810824.tdWV9SEqCh@dell>
+In-Reply-To: <20220322190753.GF297526@darkstar.musicnaut.iki.fi>
+References: <20220310233307.99220-3-jmkrzyszt@gmail.com> <20220322163646.GD297526@darkstar.musicnaut.iki.fi> <20220322190753.GF297526@darkstar.musicnaut.iki.fi>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Artem,
+Hi Aaro,
 
-On Thu, Mar 24 2022 at 13:28, Thomas Gleixner wrote:
-> On Wed, Mar 23 2022 at 12:16, Artem Savkov wrote:
->>  	 * Round up with level granularity to prevent this.
->> +	 * Do not perform round up in case of upper bound timer.
->>  	 */
->> -	expires = (expires + LVL_GRAN(lvl)) >> LVL_SHIFT(lvl);
->> +	if (upper_bound)
->> +		expires = expires >> LVL_SHIFT(lvl);
->> +	else
->> +		expires = (expires + LVL_GRAN(lvl)) >> LVL_SHIFT(lvl);
->
-> While this "works", I fundamentally hate this because it adds an extra
+Dnia wtorek, 22 marca 2022 20:07:53 CET Aaro Koskinen pisze:
+> Hi,
+> 
+> On Tue, Mar 22, 2022 at 06:36:48PM +0200, Aaro Koskinen wrote:
+> > On Mon, Mar 21, 2022 at 10:54:16PM +0100, Janusz Krzysztofik wrote:
+> > > In preparation for conversion of OMAP1 clocks to common clock framework,
+> > > identify users of those clocks which don't call clk_prepare/unprepare()
+> > > and update them to call clk_prepare_enable/clk_disable_unprepare() instead
+> > > of just clk_enable/disable(), as required by CCF implementation of clock
+> > > API.
+> > > 
+> > > v2: update still a few more OMAP specific drivers missed in v1,
+> > >   - call clk_prepare/unprepare() just after/before clk_get/put() where it
+> > >     can make more sense than merging prepare/unprepare with enable/disable.
+> > 
+> > Something is still broken. When doing kexec (using CCF kernel), the
+> > kexec'ed kernel now hangs early (on 770):
+> [...]
+> > [    0.928863] calling  omap1_init_devices+0x0/0x2c @ 1
+> 
+> It hangs in omap_sram_reprogram_clock() (<- omap1_select_table_rate()
+> <- omap1_clk_late_init()).
 
-actually it cannot not work. At least not in a realiable and predictable
-way.
-
-The timer wheel is fundamentaly relying on moving the timer one bucket
-out. Let's look how this all works.
-
-The wheel has N levels of bucket arrays. Each level has 64 buckets and
-the granularity increases by a factor of 8 per level, i.e. the worst
-case deviation is 12.5% per level.
-
-The original timer wheel was able to fire the timer at expiry time + one
-tick for the price of cascading timers every so often from one level to
-the next lower level. Here are a few pointers:
-
-    https://lwn.net/Articles/152436/
-    https://lwn.net/Articles/646950/
-
-The accuracy of the original wheel implementation was weakened already
-in course of the NOHZ development where the concept of slack
-(algorithmic batching at enqueue time for the price of overhead) was
-introduced. It had the same 12.5% worst case deviation of the resulting
-granularity level, though the batching was not enforced and only worked
-most of the time. So in theory the same issue could have been seen back
-then already.
-
-The enqueue placement and the expiry is driven by base::clock, which
-is nothing else than jiffies. When a timer is queued then base::clock is
-the time on which the next tick and expiry check happens.
-
-Now let's look how the expiry mechanism works. The first level (0) is
-obviously expired every tick. On every eigth tick the second level (1) is
-expired, on every 64th tick the third level (2)...
-
-IOW, the expiry events of a level happen at 8^index(level) intervals.
-
-Let's assume that base::clk is 0. That means at the next tick (which
-could be imminent) in _all_ levels bucket[0] is due for expiry.
-
-Now let's enqueue a timer with expiry value of 64:
-
-    delta = 64 - 0 = 64
-
-That means the timer ends up in the second level in bucket[0], which
-makes it eligible for expiry at the next tick. The same is true for any
-expiry value of 8^N.
-
-Not what you are trying to achieve, right? You try to enforce an upper
-bound, but you expect that the timer does not fire earlier than 12.5% of
-the granularity level of that upper bound, right?
-
-IOW, you created a expiry lottery and there is no way to prevent that
-except with more conditionals and heuristics which are hardely welcomed.
-
-You've also seen the outcome of a timer firing unexpectedly due to the
-bit abuse, right?
-
-Now let's take a step back and look at the problem at hand.
-
-TCP alive timer, which is affected by the batching and the resulting
-inaccuracy, is (re)armed with a relative timeout, which is known
-upfront, right?
-
-The important part is *relative* timeout. Why?
-
-Because the timeout is relative it's trivial to calculate a relative
-timeout value from the given accurate relative timeout value, which is
-guaranteed to not expire late and within the timerwheel's error margin,
-and use that for the actual rearming.
-
-I'm pretty sure that you can come up with a conversion function for that
-and use this function in the TCP code at the point where the TCP
-keepalive timer is configured.
-
-Hint 1: The output of calc_wheel_index() should be good enough to figure
-        that out.
-
-Hint 2: If you get frustrated, try
-
-        git grep johnstul arch/x86/ | awk '{ $1=$2=$3=""; print $0 }'
-
-Hint 3: Feel free to ask questions anytime
+I've reviewed my changes but haven't found anything suspicious.  Could you 
+please provide:
+- dmesg from both cold start and kexec, both non-CCF and CCF version, 
+- contents of /sys/kernel/debug/clock/summary (non-CCF) after boot/kexec,
+- contents of /sys/kernel/debug/clk/clk_summary (CCF) after boot?
 
 Thanks,
+Janusz
 
-        tglx
+> 
+> A.
+> 
+
+
+
+

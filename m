@@ -2,116 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0064E80A0
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 12:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A51AA4E80A4
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 12:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbiCZLrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 07:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
+        id S232747AbiCZLsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 07:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232715AbiCZLrr (ORCPT
+        with ESMTP id S232178AbiCZLss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 07:47:47 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01olkn2033.outbound.protection.outlook.com [40.92.53.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F338C5044D;
-        Sat, 26 Mar 2022 04:46:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kWqhRkXSo+oP3qbWI3cR2rlScWAm7rfFjVdlYSk5XuVHwL12Yba30n3UCv+0K1MCC1mwyLxuNfGReovY4lbghLMPaxnAuCzA+SiYJU/PG8e/PAviC3+nxnQfpFYGrGdY79MTcfL2cT95Nga9MccQnPzfobjJPHl/husQNjnOKMPqtyZrkiSd9ykaeFU9Bv4jScLcfZJvm+vrMOU/a4zttgFE1UIE2SeNmSplY/ddJp2cu+KCp1qv/kambLADwAT5HWiUvDlADVSh3eRvMbdoNYAbclM+rbQbikQ7AeVN2tQpXPuiRxjNWnRA2BTgP6htM0TXCLlyE8V0k0tLpc9SFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iyKrp7I82f3wYzsbQR/1Jeu1cFgJoa6hSbBVeuarAhw=;
- b=BvFw5UxNDqBhKPc1RMKVtTyQDbOCxrp6du/oQ6tLwWQxFlpGg+2P5VORgvgZzxU0ZwFk1ylwx9Jiy1k0iEs6OxcdaTuFsb9V13gnYBXCqtmzWknqJCXsi7b5ePPpO4i8s1CMirFb8ry8avemo8JCsmj8/9SdQ2tj9bdVXv1YSUka0dZ3mU2/BxuCqF6h+ejsY/9sday2waVN69s1a5oITY98eqL2Mk5bJIOuGiCyInGWLcf34x7MOhf+MxTTCfiWysgByV9SCTzJdPD3P6fzfAxpr5/1DmCe7gwZqLFy/sxC/iGaBzQhIlq+I1M2nkZoOu/N5SxpTJsz6rmd/WGc+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iyKrp7I82f3wYzsbQR/1Jeu1cFgJoa6hSbBVeuarAhw=;
- b=hjxvWUn6bGhMky47CgB0umFijQNAN7lN22XPrTNgSWeOGyjstQF86/fsj8SwvmjLgVzqpSBwpi3k/A0+sy7L0UAxOPurmapEnJ9lXubwa9XV8syaTkJ+oM/F4d6voT94cUVOCQm3DKh2YaYN1sCS/parmjeaw8dKlIMb1IEp55bGIFii8CJNtMPxklThbFpXpXSXOaB+XTkEkDZzo58Bk5ugvGcKJoWiI9aoo7RjI2voH/QM5IZWP3/QZvAuAbSkyzDvtGNszsRcZHNsJBtdEoOEVG8Orq1nzi1G+j24m10Ncc0mPNd8w0JP62CZtQl0tFmCZ67XvHYgZIDFpEjgSQ==
-Received: from TYZPR01MB3935.apcprd01.prod.exchangelabs.com
- (2603:1096:400:8::7) by SG2PR01MB2061.apcprd01.prod.exchangelabs.com
- (2603:1096:3:21::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.22; Sat, 26 Mar
- 2022 11:46:03 +0000
-Received: from TYZPR01MB3935.apcprd01.prod.exchangelabs.com
- ([fe80::8dd1:e105:311a:ce51]) by TYZPR01MB3935.apcprd01.prod.exchangelabs.com
- ([fe80::8dd1:e105:311a:ce51%3]) with mapi id 15.20.5102.022; Sat, 26 Mar 2022
- 11:46:03 +0000
-Message-ID: <TYZPR01MB39356D38FACC73ACB99B47BEF81B9@TYZPR01MB3935.apcprd01.prod.exchangelabs.com>
-Subject: [ PATCH ] Documentation: fixed some doc-build warnings
-From:   kushagra765@outlook.com
-To:     linux-doc@vger.kernel.org, corbet@lwn.net
-Cc:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
-        balbi@kernel.org, gregkh@linuxfoundation.org, dhowells@redhat.com,
-        mcgrof@kernel.org, viro@zeniv.linux.org.uk,
-        akpm@linux-foundation.org, arnd@arndb.de,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-cachefs@redhat.com
-Date:   Sat, 26 Mar 2022 17:15:50 +0530
-Content-Type: text/plain
-User-Agent: Evolution 3.36.5-0ubuntu1 
-Content-Transfer-Encoding: base64
-X-TMN:  [2essGCoMYUavK24/KHylj7OZS/k1rlk3giwXyI4m6gM=]
-X-ClientProxiedBy: BM1PR01CA0081.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:b00:1::21) To TYZPR01MB3935.apcprd01.prod.exchangelabs.com
- (2603:1096:400:8::7)
-X-Microsoft-Original-Message-ID: <2f72251802e01eb81e5ef71e16b55f71728a0a5b.camel@outlook.com>
+        Sat, 26 Mar 2022 07:48:48 -0400
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0894417F3E1;
+        Sat, 26 Mar 2022 04:47:11 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id t123so10904022vst.13;
+        Sat, 26 Mar 2022 04:47:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=AwGfCDdeyQ+p9Uid1LMIBBkjPaMge2URdDRd/US86Ko=;
+        b=U0HdjiY5/8MQnC8fQR1O5Fsdtg1XgHbybvVazsS20WJSKnEjnyqGDSJ9B1uemyayla
+         1tLjApoH3EiiflF3DnLqbXTUJaMi3zUfopv6UE4WJM41AxVCXq4hFHGgJR15W513Ye9e
+         rOovhd1IqFXg74F8nDrninqV2gAt6UK/XpExdTCHWc+q2jbuQoVcT1AQPyFLNkyeOfM4
+         wdky+kZr1H1QD+/QIzz/Y9uGhCaIBB/gNMQ6FauykXzVZE6QdvYGZIUfq5oNZjpOb0ep
+         OZ1sW8RvB6WACeByGCoomTJfc+mjB2DyVKCndU7CZyQVdO5ZI5NFH30lm8Ra2AlYbojl
+         HhcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=AwGfCDdeyQ+p9Uid1LMIBBkjPaMge2URdDRd/US86Ko=;
+        b=33Oel8zQeMJkHP88zg2X9IHowUOif9vbQrEEToDBhYzDxt7/ya5yszTdrCCIr4BQRb
+         xr5iF5rdk9xqXBrAabapdTMM/ZtNgmk82tYhmO41ccat5ZkmRsMGzszsLQskXKGDfh69
+         SZFn3J8gQqM1nm+rbtg/br/IqjQLhTgXWLwuPLyHpFqYCtP4eGJnqtWxDJm/GrVGCSiy
+         Xz1ApjhAyACPPGO/+a0Gw1w5ZtqD6dVYsnl++1WlN98R+a4pTFUzAqx1LvcgRK6luudo
+         2RVBVFHPEa9NZVkoT2l6dk19pK6+mM9zPwJj3xrJ9u9E6kvACDTR82NjezTwNXEctf/f
+         UzpA==
+X-Gm-Message-State: AOAM532XrU54GhEfgvwTE4LxZcxNS0w2ksZ0yG6Hyd4wuCek6Sr7GPQb
+        dG1TaKtzREYSfcvLmIqn+s+baOuzQ68yhlsLcv0=
+X-Google-Smtp-Source: ABdhPJweo8NW3/NfMduBu/ygi9oM6ECjJgbbulxFQTwNgqLVqNI/T0vkSYDq4KOluUhealYvcgONOs7GSOn+888XHbQ=
+X-Received: by 2002:a05:6102:2339:b0:325:880f:62f5 with SMTP id
+ b25-20020a056102233900b00325880f62f5mr622277vsa.36.1648295230062; Sat, 26 Mar
+ 2022 04:47:10 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 939fb3c8-71c9-4d2f-39b7-08da0f1e346e
-X-MS-TrafficTypeDiagnostic: SG2PR01MB2061:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CY46gVzwVdWJBqm9rKtymP4igUWXQfhNJDKoKpItVrrYmwAHBrXKPxArzjSQLhZh5XIuZe1LMzkEGCU26r6RRMHmAGLp+heXXCyLP2aErN5ql9PBhlHNTaJa63m3XCexYgDpk852uNtfF4laLhq2GOUVOhOJYC28fDrv9ANhQTE4yJ32rhvhrMLsi/vdS93C+7/SObqNPWE7Q/UbY4QXi3DjiFKw2cXs8y/4I+fPAXMV8uJa1RiH9bB2ApeLjvJ2pYBKmIJnb81XlQ7mN7PrOP36Y1JbyE7SARum28kqrIOYj9qLohft29c+VL9b1Qc5
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?60JgILX2rR0fqEQ8P/HL0e8Oo7D9h11fb762lcww7FwPQ27Qr4kh2+JVlyy1?=
- =?us-ascii?Q?wdPv0htp0dFd50Rnmb+D4Jpt0fIS0yZVSN0o1nKcTdlrf+RcxMXU5Y7SH7Ap?=
- =?us-ascii?Q?6PnYq16gk4/j8zmH4mx2PGfBQWqrnJXqANFOvHQ+cxkcQM7Lb8/iWIo0htIe?=
- =?us-ascii?Q?KXOPY68zUoL6UMzmCpgIsEU/rR23uyP+c7PcpZsQ3qE2PSTe3PeMaS0pOJWw?=
- =?us-ascii?Q?/m03Hb7MkKR8oThVEqtKbl8yF4ri82BR+vQiTXt5AV4RYetfZzxjtxjO1v/Z?=
- =?us-ascii?Q?qQ8lhpJSTG+m/Rwv+qkqjPi7y2040X8PN416e74Y+AytoWVpuJlevfuiu1MF?=
- =?us-ascii?Q?EkeagogTN0BwBy1iIOsP08mOpWKrfDs8TH+xT7AzWQuj7UU7kb0dxEW8yesQ?=
- =?us-ascii?Q?fCTfDvmHvfeYjb2G6KyIUxS7W+Sb9F63VXH8kz72/xGCWEeBXvXwTe1HHBdT?=
- =?us-ascii?Q?bd1WnJmiHVL6YwNocVuS6FD8DMjC/R4q3FvW/9XWHCYNB0jLGJgoAoxK4tiF?=
- =?us-ascii?Q?mukaYpQoxxhBqOFZSlV1Jkt4Pm1Wzd0vE55qTKlSiWRfiVX8QmCD+Pklpn48?=
- =?us-ascii?Q?Ik2NUlrDMG2Fzhd2TZ5MOInHUele1LbI4eFjJ/8Iga9iWqbj+VfkiV97H1eF?=
- =?us-ascii?Q?OwY+uDZwLSWUCtACCuyKP/iw4Hn4x6iOr60iP0Z10Bpduu3e7yT2pJ6RGWUR?=
- =?us-ascii?Q?AamkSszZAJDJoXS5fo29WXjmd1ljECjhMB05gmHc6vWERMgVbKe6q2AXc2QD?=
- =?us-ascii?Q?MbO8RVayZCGgRyPZfUFZ5fEiXXeRYOulYSLVBxE1of4+DZfPf7OaJpxTkvS1?=
- =?us-ascii?Q?KfzFox9hbmq2crifs7jhUgsLCL2tCSa//PkURvBM1ZbDz41BgdAoHbIcOJ7Q?=
- =?us-ascii?Q?Ghk+cd1KzRUJgQjtFV+3gG8wtpL3FYsbGa/ETZpHkoa4BR4+q8mExBKCQRQB?=
- =?us-ascii?Q?uyyni0ZbAqxiexj53dOJoyF6W49X3RRWOYMdRw3l486J60eldcMuht7qFXlj?=
- =?us-ascii?Q?qBZl71UbJZqgBo3QTF+fn5A7lKdUQwOtv87cGoAoX5EwL6VlhxPGQUNADpAz?=
- =?us-ascii?Q?JEDzyBmbbZvRpIAb25ZaGQNOAwXq5q2Dxv5lcSAigmfPnno5ABuMHT6qRUfn?=
- =?us-ascii?Q?eG5dFoT+aCKGlU2tIKwQ8AKBlRMuH3M1ZzbrM68mvtHIhMWTlSVPWgurZY6F?=
- =?us-ascii?Q?diGJOGQbLZGV12+rYz1AqqejGRFoJ1cJS/5rodxrG/phDNb5jWeBhDHi8v/B?=
- =?us-ascii?Q?UPdU2Rq9yiiu8KD7dx67hxFzMKBIc99Lf0G+llFhnhIwgxVInndz8bksJ/qF?=
- =?us-ascii?Q?ThUdoZY1G/JDGV/vphjo6IRVr9AtHyUAavVs2DKtyx9NgDlw62WeqoYVbEYN?=
- =?us-ascii?Q?/qaykQjntHLcpZ1whmVM4+Zd41uh4x5fNdq6USo7Iagx5wrddpHWIjuadZz8?=
- =?us-ascii?Q?h470LTZX0aUNLD12ze1nYsx4KV97tx1G?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 939fb3c8-71c9-4d2f-39b7-08da0f1e346e
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR01MB3935.apcprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2022 11:46:03.3482
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR01MB2061
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,BODY_EMPTY,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,MIME_BASE64_TEXT,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <CAAZOf26g-L2nSV-Siw6mwWQv1nv6on8c0fWqB4bKmX73QAFzow@mail.gmail.com>
+In-Reply-To: <CAAZOf26g-L2nSV-Siw6mwWQv1nv6on8c0fWqB4bKmX73QAFzow@mail.gmail.com>
+From:   David Kahurani <k.kahurani@gmail.com>
+Date:   Sat, 26 Mar 2022 14:46:59 +0300
+Message-ID: <CAAZOf244uk2jKsFmDgkEAw1JSFWf8r8VWGNTt-Q4xDDf1uMfKg@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in p9_client_destroy
+To:     davem@davemloft.net, ericvh@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux_oss@crudebyte.com,
+        lucho@ionkov.net, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net,
+        syzbot+5e28cdb7ebd0f2389ca4@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo=
+Sorry, got to resend this in plain text. It doesn't look like it is
+getting through to the mailing lists.
 
-
+On Thu, Mar 24, 2022 at 3:13 PM David Kahurani <k.kahurani@gmail.com> wrote:
+>
+> On Monday, February 28, 2022 at 4:38:57 AM UTC+3 asmadeus@codewreck.org wrote:
+>>
+>> syzbot wrote on Sun, Feb 27, 2022 at 04:53:29PM -0800:
+>> > kmem_cache_destroy 9p-fcall-cache: Slab cache still has objects when
+>> > called from p9_client_destroy+0x213/0x370 net/9p/client.c:1100
+>>
+>> hmm, there is no previous "Packet with tag %d has still references"
+>> (sic) message, so this is probably because p9_tag_cleanup only relies on
+>> rcu read lock for consistency, so even if the connection has been closed
+>> above (clnt->trans_mode->close) there could have been a request sent
+>> (= tag added) just before that which isn't visible on the destroying
+>> side?
+>>
+>> I guess adding an rcu_barrier() is what makes most sense here to protect
+>> this case?
+>> I'll send a patch in the next few days unless it was a stupid idea.
+>
+>
+> Looking at this brought me to the same conclusion.
+>
+> ---------------------
+>
+> From cd5a11207a140004bf55005fac7f7e4cec2fd075 Mon Sep 17 00:00:00 2001
+> From: David Kahurani <k.kahurani@gmail.com>
+> Date: Thu, 24 Mar 2022 15:00:23 +0300
+> Subject: [PATCH] net/9p: Flush any delayed rce free
+>
+> As is best practice
+>
+> kmem_cache_destroy 9p-fcall-cache: Slab cache still has objects when called from p9_client_destroy+0x213/0x370 net/9p/client.c:1100
+> WARNING: CPU: 1 PID: 3701 at mm/slab_common.c:502 kmem_cache_destroy mm/slab_common.c:502 [inline]
+> WARNING: CPU: 1 PID: 3701 at mm/slab_common.c:502 kmem_cache_destroy+0x13b/0x140 mm/slab_common.c:490
+> Modules linked in:
+> CPU: 1 PID: 3701 Comm: syz-executor.3 Not tainted 5.17.0-rc5-syzkaller-00021-g23d04328444a #0
+> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+> RIP: 0010:kmem_cache_destroy mm/slab_common.c:502 [inline]
+> RIP: 0010:kmem_cache_destroy+0x13b/0x140 mm/slab_common.c:490
+> Code: da a8 0e 48 89 ee e8 44 6e 15 00 eb c1 c3 48 8b 55 58 48 c7 c6 60 cd b6 89 48 c7 c7 30 83 3a 8b 48 8b 4c 24 18 e8 9b 30 60 07 <0f> 0b eb a0 90 41 55 49 89 d5 41 54 49 89 f4 55 48 89 fd 53 48 83
+> RSP: 0018:ffffc90002767cf0 EFLAGS: 00010282
+> RAX: 0000000000000000 RBX: 1ffff920004ecfa5 RCX: 0000000000000000
+> RDX: ffff88801e56a280 RSI: ffffffff815f4b38 RDI: fffff520004ecf90
+> RBP: ffff888020ba8b00 R08: 0000000000000000 R09: 0000000000000000
+> R10: ffffffff815ef1ce R11: 0000000000000000 R12: 0000000000000001
+> R13: ffffc90002767d68 R14: dffffc0000000000 R15: 0000000000000000
+> FS:  00005555561b0400(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000555556ead708 CR3: 0000000068b97000 CR4: 0000000000150ef0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  p9_client_destroy+0x213/0x370 net/9p/client.c:1100
+>  v9fs_session_close+0x45/0x2d0 fs/9p/v9fs.c:504
+>  v9fs_kill_super+0x49/0x90 fs/9p/vfs_super.c:226
+>  deactivate_locked_super+0x94/0x160 fs/super.c:332
+>  deactivate_super+0xad/0xd0 fs/super.c:363
+>  cleanup_mnt+0x3a2/0x540 fs/namespace.c:1173
+>  task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+>  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+>  exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
+>  exit_to_user_mode_prepare+0x27e/0x290 kernel/entry/common.c:207
+>  __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+>  syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+>  do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7f5ff63ed4c7
+> Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007fff01862e98 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f5ff63ed4c7
+> RDX: 00007fff01862f6c RSI: 000000000000000a RDI: 00007fff01862f60
+> RBP: 00007fff01862f60 R08: 00000000ffffffff R09: 00007fff01862d30
+> R10: 00005555561b18b3 R11: 0000000000000246 R12: 00007f5ff64451ea
+> R13: 00007fff01864020 R14: 00005555561b1810 R15: 00007fff01864060
+>  </TASK>
+>
+> Signed-off-by: David Kahurani <k.kahurani@gmail.com>
+> Reported-by: syzbot+5e28cdb7ebd0f2389ca4@syzkaller.appspotmail.com
+> ---
+>  net/9p/client.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/net/9p/client.c b/net/9p/client.c
+> index 8bba0d9cf..67c51913a 100644
+> --- a/net/9p/client.c
+> +++ b/net/9p/client.c
+> @@ -1097,6 +1097,7 @@ void p9_client_destroy(struct p9_client *clnt)
+>
+>   p9_tag_cleanup(clnt);
+>
+> + rcu_barrier();
+>   kmem_cache_destroy(clnt->fcall_cache);
+>   kfree(clnt);
+>  }
+> --
+> 2.25.1
+>
+>

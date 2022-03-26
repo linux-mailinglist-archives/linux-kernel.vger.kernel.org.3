@@ -2,126 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2394E828E
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 18:04:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D114E8290
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 18:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234120AbiCZRFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 13:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48214 "EHLO
+        id S234203AbiCZRGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 13:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233931AbiCZRFY (ORCPT
+        with ESMTP id S232632AbiCZRFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 13:05:24 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1413178687
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 10:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648314149; x=1679850149;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uJUCOLKORHZmEOmOVwjW1Uu2iAq6H2ypEnt67xM6ujc=;
-  b=EH86DJTepJujW2JYFw+FZ0nsyP49Lbae1EQ86dLzaWugIt9AC480/tFO
-   Zb3+HuL9CHmHShUVc77RrYYHUSAGbQ3/DkitOpF2rUlpAGy7QCXFWILk1
-   0cs8d6SgVLfycEdh01I8h7avxV6dIn99m752pAba+zAFl1Rt3KsDg6kk0
-   O0Td6GyKhN3RTscgiuBuug3s3iSt1OD+XCKSX/QikbqjdmZxVrin1MXPU
-   vMHkdpHynBCcs7OVlsxsWYAjx5n3BULrLu0+tf5uMGP0efFsQtc0MW7OA
-   DZEWTMax+BbVFI0LsukGT+Cv/XyrcVGXf+tjWh7GLI2GHlDqo5uFkSZjk
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="345230823"
-X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
-   d="scan'208";a="345230823"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 10:02:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
-   d="scan'208";a="502081273"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 26 Mar 2022 10:02:27 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nY9o2-0000D1-GF; Sat, 26 Mar 2022 17:02:26 +0000
-Date:   Sun, 27 Mar 2022 01:01:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yannick Fertre <yannick.fertre@st.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Eric Anholt <eric@anholt.net>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: drivers/video/fbdev/core/fbmem.c:1496:15: warning: no previous
- declaration for 'get_fb_unmapped_area'
-Message-ID: <202203270028.vzpaWr13-lkp@intel.com>
+        Sat, 26 Mar 2022 13:05:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7DBAA1B84CE
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 10:03:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648314191;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vQR8RjJS9udIj9TsBa8hT8U7MRFrUtkfl1FbA2elR8Y=;
+        b=Wk496mND/0m56sDVGQpYJhVoevi4zEr+8clkiqtihI8gSPfoMbaPCKTv7fZb4t+TwetmSz
+        SVaO0YL0DFznDowrDnGXcZU2eA6RRCBiph2LIDqj6Kw1gbXu8wdKRDj3+7R8UxI60J+DKV
+        i7cGsjjuQPWLFVOxOCOxJLEMev/sArs=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-411-omxYygBvP1aaySWGLrOFRw-1; Sat, 26 Mar 2022 13:03:09 -0400
+X-MC-Unique: omxYygBvP1aaySWGLrOFRw-1
+Received: by mail-qt1-f200.google.com with SMTP id a24-20020ac81098000000b002e1e06a72aeso8349428qtj.6
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 10:03:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=vQR8RjJS9udIj9TsBa8hT8U7MRFrUtkfl1FbA2elR8Y=;
+        b=ICogXCVLysVGsvGoP0OfEAaRgecTMSLwCBAOseFzKpjvGv2GnI3vJS+P3s9FMAstSP
+         OTwAU+uguLrI9WscZUUiHV7aKTA2Lbj19BuIvIHEdefmXztC4jB3m1102NFfKmMkvDTj
+         eIFqENMDiAOAVCRWzOGFKwaNWetPPDcTGYH8G7HS6kukHpNzuDGN5vVvETpccTYYrpTe
+         XvSnb2xedKn5yUpTPI0TUmbFiXHQW/z1pxSnjCUwMvHdv74Ef6BukIemP9vPDaA6l+Od
+         uNXZkOWa0b/cLL64WeUG61dOitWIhkWFKEvP9JW1YyR3l3J3TITh6PBAR4+t+WtPGIE3
+         tFTQ==
+X-Gm-Message-State: AOAM531VyYlujb1L8Sd5Ooa1Pm6nijlrcsfYZFrM1oUmSixY0Z/jpGue
+        LM7AzXA0Gx5A4xChEmoJX8uj/nGNReSnTj8AFDXdClORj9zWLU+rRX/7svK9RZzGYMHeFYAR+wv
+        IVc08T32/HTuMHs4+PK855VMT
+X-Received: by 2002:a05:6214:252d:b0:441:58fc:9b99 with SMTP id gg13-20020a056214252d00b0044158fc9b99mr14494055qvb.92.1648314189195;
+        Sat, 26 Mar 2022 10:03:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyCxUwi1tgfvEUWPfrDRTyVS5dQ7qqsESoGESaEZLEpLn5lNc7tx+wiw9YKnK5EHhSOSqi8yQ==
+X-Received: by 2002:a05:6214:252d:b0:441:58fc:9b99 with SMTP id gg13-20020a056214252d00b0044158fc9b99mr14494032qvb.92.1648314188842;
+        Sat, 26 Mar 2022 10:03:08 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id h8-20020ac87d48000000b002e1c6faae9csm7777946qtb.28.2022.03.26.10.03.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Mar 2022 10:03:08 -0700 (PDT)
+Subject: Re: [PATCH v2 2/5] fpga: fpga-mgr: fix for coding style issues
+To:     Nava kishore Manne <nava.manne@xilinx.com>, mdf@kernel.org,
+        hao.wu@intel.com, yilun.xu@intel.com, michal.simek@xilinx.com,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, git@xilinx.com
+References: <20220322082202.2007321-1-nava.manne@xilinx.com>
+ <20220322082202.2007321-3-nava.manne@xilinx.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <8d6100a8-4c5f-20d9-6c94-f08379e989ec@redhat.com>
+Date:   Sat, 26 Mar 2022 10:03:06 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220322082202.2007321-3-nava.manne@xilinx.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yannick,
 
-FYI, the error/warning still remains.
+On 3/22/22 1:21 AM, Nava kishore Manne wrote:
+> fixes the below checks reported by checkpatch.pl
+> Lines should not end with a '('
+> Alignment should match open parenthesis
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   52d543b5497cf31d6baeb0bcfe5a5474c3238578
-commit: b759012c5fa761ee08998c80fc4ad6343c258487 drm/stm: Add STM32 LTDC driver
-date:   4 years, 11 months ago
-config: arm-randconfig-r023-20220326 (https://download.01.org/0day-ci/archive/20220327/202203270028.vzpaWr13-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 7.5.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b759012c5fa761ee08998c80fc4ad6343c258487
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b759012c5fa761ee08998c80fc4ad6343c258487
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-7.5.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash M=drivers/video/fbdev/core
+There are more than a few similar alignments to clean up in drivers/fpga
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Instead of just one, in a separate patchset, clean up all of them.
 
-All warnings (new ones prefixed by >>):
+Tom
 
->> drivers/video/fbdev/core/fbmem.c:1496:15: warning: no previous declaration for 'get_fb_unmapped_area' [-Wmissing-declarations]
-    unsigned long get_fb_unmapped_area(struct file *filp,
-                  ^~~~~~~~~~~~~~~~~~~~
-   drivers/video/fbdev/core/fbmem.c:719:37: warning: 'fb_proc_fops' defined but not used [-Wunused-const-variable=]
-    static const struct file_operations fb_proc_fops = {
-                                        ^~~~~~~~~~~~
+>
+> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+> ---
+> Changes for v2:
+> 		-None.
+>
+>   drivers/fpga/fpga-mgr.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+> index d49a9ce34568..a699cc8e2fa6 100644
+> --- a/drivers/fpga/fpga-mgr.c
+> +++ b/drivers/fpga/fpga-mgr.c
+> @@ -151,8 +151,8 @@ static int fpga_mgr_write_init_buf(struct fpga_manager *mgr,
+>   	if (!mgr->mops->initial_header_size)
+>   		ret = fpga_mgr_write_init(mgr, info, NULL, 0);
+>   	else
+> -		ret = fpga_mgr_write_init(
+> -		    mgr, info, buf, min(mgr->mops->initial_header_size, count));
+> +		ret = fpga_mgr_write_init(mgr, info, buf,
+> +					  min(mgr->mops->initial_header_size, count));
+>   
+>   	if (ret) {
+>   		dev_err(&mgr->dev, "Error preparing FPGA for writing\n");
 
-
-vim +/get_fb_unmapped_area +1496 drivers/video/fbdev/core/fbmem.c
-
-^1da177e4c3f415 drivers/video/fbmem.c            Linus Torvalds    2005-04-16  1494  
-82f42e4cc164ed4 drivers/video/fbdev/core/fbmem.c Benjamin Gaignard 2017-01-04  1495  #ifdef CONFIG_FB_PROVIDE_GET_FB_UNMAPPED_AREA
-82f42e4cc164ed4 drivers/video/fbdev/core/fbmem.c Benjamin Gaignard 2017-01-04 @1496  unsigned long get_fb_unmapped_area(struct file *filp,
-82f42e4cc164ed4 drivers/video/fbdev/core/fbmem.c Benjamin Gaignard 2017-01-04  1497  				   unsigned long addr, unsigned long len,
-82f42e4cc164ed4 drivers/video/fbdev/core/fbmem.c Benjamin Gaignard 2017-01-04  1498  				   unsigned long pgoff, unsigned long flags)
-82f42e4cc164ed4 drivers/video/fbdev/core/fbmem.c Benjamin Gaignard 2017-01-04  1499  {
-82f42e4cc164ed4 drivers/video/fbdev/core/fbmem.c Benjamin Gaignard 2017-01-04  1500  	struct fb_info * const info = filp->private_data;
-82f42e4cc164ed4 drivers/video/fbdev/core/fbmem.c Benjamin Gaignard 2017-01-04  1501  	unsigned long fb_size = PAGE_ALIGN(info->fix.smem_len);
-82f42e4cc164ed4 drivers/video/fbdev/core/fbmem.c Benjamin Gaignard 2017-01-04  1502  
-82f42e4cc164ed4 drivers/video/fbdev/core/fbmem.c Benjamin Gaignard 2017-01-04  1503  	if (pgoff > fb_size || len > fb_size - pgoff)
-82f42e4cc164ed4 drivers/video/fbdev/core/fbmem.c Benjamin Gaignard 2017-01-04  1504  		return -EINVAL;
-82f42e4cc164ed4 drivers/video/fbdev/core/fbmem.c Benjamin Gaignard 2017-01-04  1505  
-82f42e4cc164ed4 drivers/video/fbdev/core/fbmem.c Benjamin Gaignard 2017-01-04  1506  	return (unsigned long)info->screen_base + pgoff;
-82f42e4cc164ed4 drivers/video/fbdev/core/fbmem.c Benjamin Gaignard 2017-01-04  1507  }
-82f42e4cc164ed4 drivers/video/fbdev/core/fbmem.c Benjamin Gaignard 2017-01-04  1508  #endif
-82f42e4cc164ed4 drivers/video/fbdev/core/fbmem.c Benjamin Gaignard 2017-01-04  1509  
-
-:::::: The code at line 1496 was first introduced by commit
-:::::: 82f42e4cc164ed486c9e2b1b74e65b176830d947 fbmem: add a default get_fb_unmapped_area function
-
-:::::: TO: Benjamin Gaignard <benjamin.gaignard@linaro.org>
-:::::: CC: Daniel Vetter <daniel.vetter@ffwll.ch>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,227 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C94B4E81AE
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 15:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A00514E81AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 15:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231818AbiCZOwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 10:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44454 "EHLO
+        id S232849AbiCZOwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 10:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbiCZOwV (ORCPT
+        with ESMTP id S232561AbiCZOw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 10:52:21 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4FC2467D2
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 07:50:44 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id y38so16137270ybi.8
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 07:50:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=fb5kGuUvvdUK4XMy1yH8Sc2VVKSMt6SqLVzOmZhik8k=;
-        b=KWWi/LGkiZKg8vN7EGtbsW3GeWnIXFu3Ck7FMstxFyR3Y3+PwUXdl50txsL9/FESpX
-         /wIX/cwXdwz5JnnkqIx1t3ttnwPloBSaY5x9hJ5GAVocBjwOCHaDuzowA8GxVvfNmPD9
-         NUBuo+w23SBYWcMQgyrZG4E+wLK3YlQjWDTf6KC3qHdwxafMNSwp5zZkvx8MXfrCM0T3
-         UyMGuCiioYEkwq4T4WCH7SyTqCplDYNslTkOMKWIXA+WsthVRttJkaGlm5s7bFRokhbB
-         BWQbWowMTGpiDbfezdEIkO74VEIOTQWNIl8W848Xnrrx/dJpSIzEcZ/XLQb1hj2wk1yE
-         vZog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=fb5kGuUvvdUK4XMy1yH8Sc2VVKSMt6SqLVzOmZhik8k=;
-        b=i9Hzk28e9PPsSIiIhgGTZc5530G3nWyGkg7ANF0ZacJjC4BoSlKSAulnnRJk9Agqbn
-         yQezvIs8fcss+9UPVneQzBec5bnmIPLy5VryFUpMGY1bYJq+xN24oxEdTzbCyqf7+drQ
-         sKaM6ePqLAP2ydTBS9SqBhOrgjbsKvbU0UadaU0DvciABciLFkGXleIHJ1oLMk2qZPJ/
-         iC8nu0Ux8NRQnW5AC+7y+2BFdb/7wyY8wieJaeBI1bcNHSRaqEyUkXmA0Ln/8Pib85kk
-         gKQd1yFmIb4XtSAugPdFSFCjpF4kk0zO/vxSD1uAKyC3Zh5qKhEDt3+kpAg7dye7oXNU
-         ITQQ==
-X-Gm-Message-State: AOAM533R7yJEmYnZmG5i/NmSRAWt5xtWPfERg+6I9Zi+aGaH3QVXYxX5
-        ybn0Hz083+98egeYtGVVQNysFQCIStrVWWY8ud7nzA==
-X-Google-Smtp-Source: ABdhPJzXg2Vgn6zZmpmBOIY6w2mTDofy+P+b6rmMjh9oax5UPFQhT18hRYDZ2+QY8cq6aTmhK4AIVteRCSncc/EM274=
-X-Received: by 2002:a5b:892:0:b0:633:ba98:d566 with SMTP id
- e18-20020a5b0892000000b00633ba98d566mr15065304ybq.128.1648306243354; Sat, 26
- Mar 2022 07:50:43 -0700 (PDT)
+        Sat, 26 Mar 2022 10:52:28 -0400
+Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F732467EC
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 07:50:51 -0700 (PDT)
+Received: from pop-os.home ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id Y7kdn2IzuxHdTY7kdnd4rD; Sat, 26 Mar 2022 15:50:49 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 26 Mar 2022 15:50:49 +0100
+X-ME-IP: 90.126.236.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
+        Jan Kara <jack@suse.cz>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-block@vger.kernel.org
+Subject: [PATCH] block: Fix the maximum minor value is blk_alloc_ext_minor()
+Date:   Sat, 26 Mar 2022 15:50:46 +0100
+Message-Id: <cc17199798312406b90834e433d2cefe8266823d.1648306232.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220325150415.694544076@linuxfoundation.org>
-In-Reply-To: <20220325150415.694544076@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 26 Mar 2022 20:20:32 +0530
-Message-ID: <CA+G9fYs22ySD63HYqcLtqgWt=E9h9avGeT3eiY6e36Gq+6Yv=w@mail.gmail.com>
-Subject: Re: [PATCH 4.9 00/14] 4.9.309-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Mar 2022 at 20:34, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.9.309 release.
-> There are 14 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.9.309-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.9.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+ida_alloc_range(..., min, max, ...) returns values from min to max,
+inclusive.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+So, NR_EXT_DEVT is a valid idx returned by blk_alloc_ext_minor().
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+This is an issue because in device_add_disk(), this value is used in:
+   ddev->devt = MKDEV(disk->major, disk->first_minor);
+and NR_EXT_DEVT is '(1 << MINORBITS)'.
 
-## Build
-* kernel: 4.9.309-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.9.y
-* git commit: ebc053b844b704373fb74ff8f019e29785bed7e9
-* git describe: v4.9.308-15-gebc053b844b7
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.3=
-08-15-gebc053b844b7
+So, should 'disk->first_minor' be NR_EXT_DEVT, it would overflow.
 
-## Test Regressions (compared to v4.9.308)
-No test regressions found.
+Fixes: 22ae8ce8b892 ("block: simplify bdev/disk lookup in blkdev_get")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+#define MKDEV(ma,mi)	(((ma) << MINORBITS) | (mi))
 
-## Metric Regressions (compared to v4.9.308)
-No metric regressions found.
+This patch is completely speculative, but it seems that idr_alloc() and
+ida_alloc_range() don't have the same semantic regarding the upper bound.
+idr_alloc() looks exclusive, while ida_alloc_range() is inclusive.
 
-## Test Fixes (compared to v4.9.308)
-No test fixes found.
+We changed from the first one to the other one in the commit in Fixes:.
+---
+ block/genhd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-## Metric Fixes (compared to v4.9.308)
-No metric fixes found.
+diff --git a/block/genhd.c b/block/genhd.c
+index c9a4fc90d3e9..b8b6759d670f 100644
+--- a/block/genhd.c
++++ b/block/genhd.c
+@@ -335,7 +335,7 @@ int blk_alloc_ext_minor(void)
+ {
+ 	int idx;
+ 
+-	idx = ida_alloc_range(&ext_devt_ida, 0, NR_EXT_DEVT, GFP_KERNEL);
++	idx = ida_alloc_range(&ext_devt_ida, 0, NR_EXT_DEVT - 1, GFP_KERNEL);
+ 	if (idx == -ENOSPC)
+ 		return -EBUSY;
+ 	return idx;
+-- 
+2.32.0
 
-## Test result summary
-total: 60629, pass: 47943, fail: 552, skip: 10058, xfail: 2076
-
-## Build Summary
-* arm: 254 total, 238 passed, 16 failed
-* arm64: 32 total, 32 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 31 total, 31 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

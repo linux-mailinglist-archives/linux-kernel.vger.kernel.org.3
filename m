@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0D84E7FCF
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 08:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FF24E7FD1
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 08:48:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbiCZHqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 03:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
+        id S231879AbiCZHuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 03:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiCZHqn (ORCPT
+        with ESMTP id S229869AbiCZHuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 03:46:43 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214D433E;
-        Sat, 26 Mar 2022 00:45:04 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id b8so9494709pjb.4;
-        Sat, 26 Mar 2022 00:45:04 -0700 (PDT)
+        Sat, 26 Mar 2022 03:50:20 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29F838790;
+        Sat, 26 Mar 2022 00:48:44 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id gp15-20020a17090adf0f00b001c7cd11b0b3so5342226pjb.3;
+        Sat, 26 Mar 2022 00:48:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=ttQHNeY3MOxG84rURJzpKfkNMVpHm0nxtM9wAM2eeko=;
-        b=jeRDXzJjY+26qU3Ek0UvfVTSD3cvcAoc2ogtzq84soO/OyK9gkg4NcQDnYcltpAe0m
-         DmBbHBDoZbxj7OyS/ioqNYc1tE9fwP3V+ijTiM0zlxR9AiZHy2and8BgVaDjTboBQYjM
-         ytl02ZwDYcvTybmct0HO2WcXowV0reRbcGoocMB+pUBjhWBaEITLWa7ogIlM+oa0KOoa
-         acxKm7UgARyHA7pJJ7qqsVHzuKmHWddHCGRcNjkBkO+XYlknyoUDeLpHGVIQAVgSY4bh
-         AbHoOfq7rgfYI6mz6USNsfxbNk610L0Jf8G8U7dhf736ASAsT7iKXq1YAQT0n0Og8Ljs
-         coQA==
+        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
+         :subject:content-transfer-encoding;
+        bh=PB4B3Q2t4krcia/xZSMmf20XfdxsFQb3TO6OQonmIyY=;
+        b=KDoVmiJENQtFD1yizaT91CW9z8QYVtNf3BJ/LqR891rZGZ78PuLoqRTceZabRQsiyc
+         IQJFYCt+xuSgZebRIMJI6f+LnvFpBN5hAAJ8vEcqv/K2Xnbtb3ffnosm/ziKR6JV1Grq
+         9MMeFVsvZ3kcldVeFwE4ID4j3x94vN6wFek3R6AyCCjfaydjUy9AN+xk3Srs7RtzJSEd
+         JlQVGasPgEZr8+oZ8fPoS2UUX4MExIWqxQ8enkjXeHQisBmOFsUzlJAqxkbp/xdrzeLO
+         ibH/zgnN++rW4b1wXcBQyqpw5up6m2f8+5dlfn7J5Nq63osHiFSoiWzegLIeGfo74wWY
+         yXKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=ttQHNeY3MOxG84rURJzpKfkNMVpHm0nxtM9wAM2eeko=;
-        b=bhI48nv988aOz4pc1MUONGeV8/K/Yq9stloNT5/1vJvB68t0U3Crutg5iQ0wpqwbdp
-         YUMtloVSZLGJB8MN6IKeGs4/Zd30rXJacEx3B6Qie6SandXeD6164Bn8PuMwqQYtNng2
-         C2n1BHIpUb6vakEXORrMckClOf5vyrdQh92Elg+sPxZBKOXfuFLlz6T35YLCMz+4Gbcv
-         5PgwFP/eOYdABmG2lAHRVIb6A8Yl/a72EIcIu3fb/heCmKvY/jZuUxNv7ns7VU7OYTwy
-         AzTdcOAozTewf3kXh8YwZ9TAOJproUQke0Zp6D5ezaK0NYFil9/VHJ+vxsuKtZb3snve
-         m4Ag==
-X-Gm-Message-State: AOAM530UdpRb0IeH47HNjPnggsBIQ1iSfC71tapx1qvWLVn8nyjQsinQ
-        wjuR0zWa7BahkX75RD0Go38brXly2vY=
-X-Google-Smtp-Source: ABdhPJwCEHE9AzHK74QFs9C6mgx8FlBWNHbnxU8JJm5/Cv+ffA2e6YQ0Q+qZ985bk0ybE5qIt1OsCA==
-X-Received: by 2002:a17:90b:1a8a:b0:1c7:c60b:f12 with SMTP id ng10-20020a17090b1a8a00b001c7c60b0f12mr13216160pjb.139.1648280703721;
-        Sat, 26 Mar 2022 00:45:03 -0700 (PDT)
-Received: from ubuntu.huawei.com ([119.3.119.18])
-        by smtp.googlemail.com with ESMTPSA id y15-20020a17090a1f4f00b001c7ecaf9e13sm4009723pjy.35.2022.03.26.00.45.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 00:45:03 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     mchehab@kernel.org
-Cc:     hverkuil-cisco@xs4all.nl, yangyingliang@huawei.com,
-        v4l@cerqueira.org, akpm@osdl.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [PATCH v3] saa7134: fix incorrect check to determine if list is empty
-Date:   Sat, 26 Mar 2022 15:44:54 +0800
-Message-Id: <20220326074454.13813-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=PB4B3Q2t4krcia/xZSMmf20XfdxsFQb3TO6OQonmIyY=;
+        b=KAJ+3vWRlpeL6tGFAzjmd3DmyjJQnG/b7zERCWaYXl3Yff04MwM4zp8aGEX6ARuwE8
+         AOJ12lgmnF7Lhsr1GmGmmxO9uMT0z9/QlCU8SI++abvVwj3tJPQ3xHzCN+aJSfRpDllA
+         h1qvIPs2uSpzAw10DRa99ywzenXK9ycae+qP9H64eMhb5DCQ1LC9/2qD1wtCEMOEvElN
+         Dgz5oIyWayBtqzPqgdmSr6qyKtw69/rcJkEwBaIRVHwnK7MWOgy8FIYOqO25ecUOkoB6
+         70dSYMJsc7XZV8fhJUc4XasAzWNDnBYu+iHd7aABWEfaatzsi1a9LTGZa85as77d1Ot1
+         FlUg==
+X-Gm-Message-State: AOAM530J/k+fU6Rawmf6dtetmrUXh0pRO1+cFRmkqMbuVSk3u+9lMohJ
+        eSiwh2HMWSjvklGepy1ZrCE=
+X-Google-Smtp-Source: ABdhPJwTY1dPoG1ypktHA40mcGloYaxjCqTmKixz82zdr/+EPQ0cUxWgmlcocF5duzQ8yRODkokSfQ==
+X-Received: by 2002:a17:902:ea03:b0:154:4af3:bb5e with SMTP id s3-20020a170902ea0300b001544af3bb5emr16204554plg.95.1648280924291;
+        Sat, 26 Mar 2022 00:48:44 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id u10-20020a6540ca000000b0037445e95c93sm7232265pgp.15.2022.03.26.00.48.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Mar 2022 00:48:43 -0700 (PDT)
+Message-ID: <c80e1481-10d4-7151-fe59-e846259eb0d4@gmail.com>
+Date:   Sat, 26 Mar 2022 16:48:39 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Akira Yokosawa <akiyks@gmail.com>
+From:   Akira Yokosawa <akiyks@gmail.com>
+Subject: [PATCH] docs: kfigure.py: Don't warn of missing PDF converter in
+ 'make htmldocs'
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -66,61 +73,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bug is here: "if (dev == NULL)".
+SVG -> PDF conversion is not required in "make htmldocs".
+It is pointless to always warn of a missing converter.
+Demote the log message in setupTools() to verbose.
 
-The list iterator value will *always* be set and non-NULL by
-list_for_each_entry(), so it is incorrect to assume that the iterator
-value will be NULL if the list is empty. Instead, check with list_empty()
-to fix this bug, and move the 'if' ahead to make the logic clearer.
+For "make pdfdocs" (or "make latexdocs"), promote the dynamic
+message of "include SVG raw" to a warn.
+Expand the message and recommend installing Inkscape or
+ImageMagick.
 
-Fixes: 4aabf6331f89c ("[PATCH] v4l: (951) Make saa7134-oss as a stand-alone module")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Fixes: 8ccd05697a9d ("docs: sphinx/kfigure.py: Use inkscape(1) for SVG -> PDF conversion")
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-doc@vger.kernel.org
 ---
-changes since v2:
- - add return (Xiaomeng Tong)
-changes since v1:
- - check with list_empty() (Jakob Koschel)
- - and move the 'if' ahead (Xiaomeng Tong)
-v1:https://lore.kernel.org/all/20220320025718.10053-1-xiam0nd.tong@gmail.com/
-v2:https://lore.kernel.org/all/20220326073301.12949-1-xiam0nd.tong@gmail.com/
----
- drivers/media/pci/saa7134/saa7134-alsa.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ Documentation/sphinx/kfigure.py | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/pci/saa7134/saa7134-alsa.c b/drivers/media/pci/saa7134/saa7134-alsa.c
-index fb24d2ed3621..1eb2e8da8950 100644
---- a/drivers/media/pci/saa7134/saa7134-alsa.c
-+++ b/drivers/media/pci/saa7134/saa7134-alsa.c
-@@ -1214,13 +1214,18 @@ static int alsa_device_exit(struct saa7134_dev *dev)
+diff --git a/Documentation/sphinx/kfigure.py b/Documentation/sphinx/kfigure.py
+index 24d2b2addcce..cefdbb7e7523 100644
+--- a/Documentation/sphinx/kfigure.py
++++ b/Documentation/sphinx/kfigure.py
+@@ -212,7 +212,7 @@ def setupTools(app):
+         if convert_cmd:
+             kernellog.verbose(app, "use convert(1) from: " + convert_cmd)
+         else:
+-            kernellog.warn(app,
++            kernellog.verbose(app,
+                 "Neither inkscape(1) nor convert(1) found.\n"
+                 "For SVG to PDF conversion, "
+                 "install either Inkscape (https://inkscape.org/) (preferred) or\n"
+@@ -296,8 +296,10 @@ def convert_image(img_node, translator, src_fname=None):
  
- static int saa7134_alsa_init(void)
- {
--	struct saa7134_dev *dev = NULL;
-+	struct saa7134_dev *dev;
- 
- 	saa7134_dmasound_init = alsa_device_init;
- 	saa7134_dmasound_exit = alsa_device_exit;
- 
- 	pr_info("saa7134 ALSA driver for DMA sound loaded\n");
- 
-+	if (list_empty(&saa7134_devlist)) {
-+		pr_info("saa7134 ALSA: no saa7134 cards found\n");
-+		return 0;
-+	}
-+
- 	list_for_each_entry(dev, &saa7134_devlist, devlist) {
- 		if (dev->pci->device == PCI_DEVICE_ID_PHILIPS_SAA7130)
- 			pr_info("%s/alsa: %s doesn't support digital audio\n",
-@@ -1229,9 +1234,6 @@ static int saa7134_alsa_init(void)
- 			alsa_device_init(dev);
- 	}
- 
--	if (dev == NULL)
--		pr_info("saa7134 ALSA: no saa7134 cards found\n");
--
- 	return 0;
- 
- }
+         if translator.builder.format == 'latex':
+             if not inkscape_cmd and convert_cmd is None:
+-                kernellog.verbose(app,
+-                                  "no SVG to PDF conversion available / include SVG raw.")
++                kernellog.warn(app,
++                                  "no SVG to PDF conversion available / include SVG raw."
++                                  "\nIncluding large raw SVGs can cause xelatex error."
++                                  "\nInstall Inkscape (preferred) or ImageMagick.")
+                 img_node.replace_self(file2literal(src_fname))
+             else:
+                 dst_fname = path.join(translator.builder.outdir, fname + '.pdf')
+
+base-commit: 8d6451b9a51b555be2c9a6c326a980b2de00741a
 -- 
-2.17.1
+2.25.1
 

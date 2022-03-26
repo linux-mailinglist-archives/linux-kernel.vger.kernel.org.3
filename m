@@ -2,154 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F1A4E7FA0
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 07:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 347E24E7F96
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 07:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbiCZGoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 02:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
+        id S231318AbiCZGiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 02:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbiCZGoG (ORCPT
+        with ESMTP id S231613AbiCZGiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 02:44:06 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3A417FD0C
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 23:42:29 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id w7so5624689pfu.11
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 23:42:29 -0700 (PDT)
+        Sat, 26 Mar 2022 02:38:02 -0400
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24946FEB;
+        Fri, 25 Mar 2022 23:36:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DzmW1EwXib0HEBL5ioOFxuUKPvj/IW7QJoaVVg8+xH0=;
-        b=k94K+4orcgP8kDrhyw/hF4hSopr8E4xGvyHDrqmV3/AETXXKBicOS4bD6VEdw0a1rk
-         fhuEs9Biymqy6AHdhF5pzSmXa5ciGqejQRnrQLgx+SNgTm/KSr+Q2OPuHqp9haPiNsxN
-         wWrIRxjQUk6PDVquYpGEneQwQulpcj2oVxdyE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DzmW1EwXib0HEBL5ioOFxuUKPvj/IW7QJoaVVg8+xH0=;
-        b=CG9lVnsQ8S6zHSGLfdnTFzAlWco+HzLyx8mZUsyiXBpcfH5t68RxIgA57ZdL6OCJYm
-         /P81JRHfQIMHZMPm2b7+mXTGkdIUyQsTKrKsxEGFbaU9g9kAfDR7gQSg71Y1jQwX3Lj1
-         CACxr+VgthjZwKqU20Umx7tgKSoIF7eeBGeGkOt12kkW5v3BPe8OSyNtshBbesajd26o
-         8CpmiBnE1Fm07rPEm+p/YxFdeS+ZRyi2nvCTOBuhZorGFeV4ytz4v/wqsO2yiba9KshZ
-         TCKRqbZ7d06VovPA9iObqIpH5hnxiWza7qCcqJAu4Mlz3ObxrusQdm917cY1kLX+GBXk
-         URqA==
-X-Gm-Message-State: AOAM5304jma/q01H5CoxkefmBkubeyQsyrsUYtISVKVrRBs7Nqril0re
-        YdOHlh+Hs+eQ4Z5uWJiiijkLjg==
-X-Google-Smtp-Source: ABdhPJwXINhn4isrhWwq6UFZEvwUcMk+1i2H2+Yb705ZRLHFhy/5zUzg6kvPyFIyPtyDuoEF4KjUNQ==
-X-Received: by 2002:a05:6a00:98e:b0:4fb:1162:b2a5 with SMTP id u14-20020a056a00098e00b004fb1162b2a5mr6604055pfg.12.1648276949326;
-        Fri, 25 Mar 2022 23:42:29 -0700 (PDT)
-Received: from localhost (0.223.81.34.bc.googleusercontent.com. [34.81.223.0])
-        by smtp.gmail.com with UTF8SMTPSA id d80-20020a621d53000000b004fae1119955sm8960061pfd.213.2022.03.25.23.42.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 23:42:29 -0700 (PDT)
-From:   Ying Hsu <yinghsu@chromium.org>
-To:     marcel@holtmann.org
-Cc:     chromeos-bluetooth-upstreaming@chromium.org,
-        Ying Hsu <yinghsu@chromium.org>,
-        syzbot+2bef95d3ab4daa10155b@syzkaller.appspotmail.com,
-        Joseph Hwang <josephsih@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Desmond Cheong Zhi Xi <desmondcheongzx@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH] Bluetooth: fix dangling sco_conn and use-after-free in sco_sock_timeout
-Date:   Sat, 26 Mar 2022 06:35:17 +0000
-Message-Id: <20220326063415.1.I67f8ad854ac2f48701902bfb34d6e2070011b779@changeid>
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
+  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
+  s=amazon201209; t=1648276585; x=1679812585;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6PEhA6oGECn3FrZ2m6dP23u1ukbFy/X2U/ncH/ZyHIg=;
+  b=k4Rwe03Q7Qi0zQXE8OT8JIxDQd7nnM/Ksvvs/QfgMtFnZ+G/TXrJ5xIS
+   /AMU8I75DoTqi6iCDoVpBd1XHH+qsXmofk19yr8nLV4hrAQPdC+l4fm+d
+   1a5qCv2YXUbDHfwtGI6ZIgdPYH5ebZWhL/06dYp9XFcJo1JX15+eZoKi1
+   s=;
+X-IronPort-AV: E=Sophos;i="5.90,211,1643673600"; 
+   d="scan'208";a="184695645"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-ca048aa0.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP; 26 Mar 2022 06:36:24 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1d-ca048aa0.us-east-1.amazon.com (Postfix) with ESMTPS id 1A29981466;
+        Sat, 26 Mar 2022 06:36:21 +0000 (UTC)
+Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Sat, 26 Mar 2022 06:36:20 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.162.228) by
+ EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Sat, 26 Mar 2022 06:36:17 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+CC:     Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Kuniyuki Iwashima <kuni1840@gmail.com>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <syzbot+19480160ef25c9ffa29d@syzkaller.appspotmail.com>,
+        "Soheil Hassas Yeganeh" <soheil@google.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Sridhar Samudrala" <sridhar.samudrala@intel.com>,
+        Alexander Duyck <alexander.h.duyck@intel.com>
+Subject: [PATCH] list: Fix another data-race around ep->rdllist.
+Date:   Sat, 26 Mar 2022 15:35:58 +0900
+Message-ID: <20220326063558.89906-1-kuniyu@amazon.co.jp>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.43.162.228]
+X-ClientProxiedBy: EX13D23UWC003.ant.amazon.com (10.43.162.81) To
+ EX13D04ANC001.ant.amazon.com (10.43.157.89)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Connecting the same socket twice consecutively in sco_sock_connect()
-could lead to a race condition where two sco_conn objects are created
-but only one is associated with the socket. If the socket is closed
-before the SCO connection is established, the timer associated with the
-dangling sco_conn object won't be canceled. As the sock object is being
-freed, the use-after-free problem happens when the timer callback
-function sco_sock_timeout() accesses the socket. Here's the call trace:
+syzbot had reported another race around ep->rdllist.  ep_poll() calls
+list_empty_careful() locklessly to check if the list is empty or not
+by testing rdllist->prev == rdllist->next.
 
-dump_stack+0x107/0x163
-? refcount_inc+0x1c/
-print_address_description.constprop.0+0x1c/0x47e
-? refcount_inc+0x1c/0x7b
-kasan_report+0x13a/0x173
-? refcount_inc+0x1c/0x7b
-check_memory_region+0x132/0x139
-refcount_inc+0x1c/0x7b
-sco_sock_timeout+0xb2/0x1ba
-process_one_work+0x739/0xbd1
-? cancel_delayed_work+0x13f/0x13f
-? __raw_spin_lock_init+0xf0/0xf0
-? to_kthread+0x59/0x85
-worker_thread+0x593/0x70e
-kthread+0x346/0x35a
-? drain_workqueue+0x31a/0x31a
-? kthread_bind+0x4b/0x4b
-ret_from_fork+0x1f/0x30
+When the list does not have any nodes, the next and prev arguments of
+__list_add() is the same head pointer.  Thus the write to head->prev
+there is racy with lockless list_empty_careful() and needs WRITE_ONCE()
+to avoid store-tearing.
 
-Link: https://syzkaller.appspot.com/bug?extid=2bef95d3ab4daa10155b
-Reported-by: syzbot+2bef95d3ab4daa10155b@syzkaller.appspotmail.com
-Fixes: e1dee2c1de2b ("Bluetooth: fix repeated calls to sco_sock_kill")
-Signed-off-by: Ying Hsu <yinghsu@chromium.org>
-Reviewed-by: Joseph Hwang <josephsih@chromium.org>
+Note that the reader side is already fixed in the patch [0].
+
+[0]: https://lore.kernel.org/mm-commits/20220326031647.DD24EC004DD@smtp.kernel.org/
+
+BUG: KCSAN: data-race in do_epoll_ctl / do_epoll_wait
+
+write to 0xffff888103e43058 of 8 bytes by task 1799 on cpu 0:
+ __list_add include/linux/list.h:72 [inline]
+ list_add_tail include/linux/list.h:102 [inline]
+ ep_insert fs/eventpoll.c:1542 [inline]
+ do_epoll_ctl+0x1331/0x1880 fs/eventpoll.c:2141
+ __do_sys_epoll_ctl fs/eventpoll.c:2192 [inline]
+ __se_sys_epoll_ctl fs/eventpoll.c:2183 [inline]
+ __x64_sys_epoll_ctl+0xc2/0xf0 fs/eventpoll.c:2183
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+read to 0xffff888103e43058 of 8 bytes by task 1802 on cpu 1:
+ list_empty_careful include/linux/list.h:329 [inline]
+ ep_events_available fs/eventpoll.c:381 [inline]
+ ep_poll fs/eventpoll.c:1797 [inline]
+ do_epoll_wait+0x279/0xf40 fs/eventpoll.c:2234
+ do_epoll_pwait fs/eventpoll.c:2268 [inline]
+ __do_sys_epoll_pwait fs/eventpoll.c:2281 [inline]
+ __se_sys_epoll_pwait+0x12b/0x240 fs/eventpoll.c:2275
+ __x64_sys_epoll_pwait+0x74/0x80 fs/eventpoll.c:2275
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+value changed: 0xffff888103e43050 -> 0xffff88812d515498
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 PID: 1802 Comm: syz-fuzzer Not tainted 5.17.0-rc8-syzkaller-00003-g56e337f2cf13-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+
+Fixes: e59d3c64cba6 ("epoll: eliminate unnecessary lock for zero timeout")
+Fixes: c5a282e9635e ("fs/epoll: reduce the scope of wq lock in epoll_wait()")
+Fixes: bf3b9f6372c4 ("epoll: Add busy poll support to epoll with socket fds.")
+Reported-by: syzbot+19480160ef25c9ffa29d@syzkaller.appspotmail.com
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
 ---
-Tested this commit using a C reproducer on qemu-x86_64 for 8 hours.
+CC: Soheil Hassas Yeganeh <soheil@google.com>
+CC: Davidlohr Bueso <dave@stgolabs.net>
+CC: Sridhar Samudrala <sridhar.samudrala@intel.com>
+CC: Alexander Duyck <alexander.h.duyck@intel.com>
+---
+ include/linux/list.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- net/bluetooth/sco.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
-
-diff --git a/net/bluetooth/sco.c b/net/bluetooth/sco.c
-index 8eabf41b2993..380c63194736 100644
---- a/net/bluetooth/sco.c
-+++ b/net/bluetooth/sco.c
-@@ -574,19 +574,24 @@ static int sco_sock_connect(struct socket *sock, struct sockaddr *addr, int alen
- 	    addr->sa_family != AF_BLUETOOTH)
- 		return -EINVAL;
+diff --git a/include/linux/list.h b/include/linux/list.h
+index dd6c2041d..2eaadc84a 100644
+--- a/include/linux/list.h
++++ b/include/linux/list.h
+@@ -69,10 +69,10 @@ static inline void __list_add(struct list_head *new,
+ 	if (!__list_add_valid(new, prev, next))
+ 		return;
  
--	if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND)
--		return -EBADFD;
-+	lock_sock(sk);
-+	if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND) {
-+		err = -EBADFD;
-+		goto done;
-+	}
+-	next->prev = new;
+ 	new->next = next;
+ 	new->prev = prev;
+ 	WRITE_ONCE(prev->next, new);
++	WRITE_ONCE(next->prev, new);
+ }
  
--	if (sk->sk_type != SOCK_SEQPACKET)
--		return -EINVAL;
-+	if (sk->sk_type != SOCK_SEQPACKET) {
-+		err = -EINVAL;
-+		goto done;
-+	}
- 
- 	hdev = hci_get_route(&sa->sco_bdaddr, &sco_pi(sk)->src, BDADDR_BREDR);
--	if (!hdev)
--		return -EHOSTUNREACH;
-+	if (!hdev) {
-+		err = -EHOSTUNREACH;
-+		goto done;
-+	}
- 	hci_dev_lock(hdev);
- 
--	lock_sock(sk);
--
- 	/* Set destination address and psm */
- 	bacpy(&sco_pi(sk)->dst, &sa->sco_bdaddr);
- 
+ /**
 -- 
-2.35.1.1021.g381101b075-goog
+2.30.2
 

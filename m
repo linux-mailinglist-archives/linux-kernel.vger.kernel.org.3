@@ -2,92 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627B24E83CE
+	by mail.lfdr.de (Postfix) with ESMTP id D64514E83CF
 	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 20:40:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234743AbiCZTmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 15:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
+        id S234752AbiCZTmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 15:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiCZTmP (ORCPT
+        with ESMTP id S234745AbiCZTmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 15:42:15 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F43712E149
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 12:40:38 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id d5so18574808lfj.9
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 12:40:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Eo+NI/ZY6vwsGX0YbjboRUexcl2mfDPwhfiG8UnYnwk=;
-        b=BnS1v48fprKmSRXFjcrnsMCOkSZvYZQKHkA3LVRLp/DQnYYFla62uXIfXJRAbLMigi
-         bFCZxlifzHg0dE0dAEH4xtBlMhLSpHZdPD89nlH9F7pdl3UwkeWWhnSQ/WTlG5C7cq9x
-         p3SeW6+eqS57A/bUxi4swECZhDIttG9TD9X6Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Eo+NI/ZY6vwsGX0YbjboRUexcl2mfDPwhfiG8UnYnwk=;
-        b=VAqgvHV+Vp35xBdDDqS4Z2YJory5WzvQ3CTS0YWc7CP7T2qAoNZiyne4ZzSJnLTF/8
-         gRSE4EjpWtEWpnLp3VKuEuQBVdvv+tw3oQz6vQ7dXvpqGmI3GiHWwmrpzZ7Fz5L9FVxY
-         nKdBZThpCmVFUnjnFgfG36fFUtBEAmQIf3rU6tBDLjvz5s13Obh0yeSTahMF+nXsXTtK
-         iPHcHFck2JJRVrQzms1Subx4Xk+nCWBOf3/d4cjtErd1grswVxiUtKWNzHKjA8Jqyw5+
-         ltLmRp/lWlr4wdVQmn7Nqau5i9ZvqUfvv6joq6qpDnVUuS0UxtR3tyNZubkLQ/3wFc0+
-         O1jQ==
-X-Gm-Message-State: AOAM5307J4y2H6buVT1FFQ/R4LsIm+Dagd5A4e20/Y3izTIqByuvt1KB
-        PuYYO6da40vQGTvmeNsSGcglSwbu2w3RXhruXa0=
-X-Google-Smtp-Source: ABdhPJx7BuXLdNeQ5k7WyoxV5/MGZerTWFe8l6G5YV+hRrmgVlPf3yVs7OYn+GGUHVavzSc3BVmeHw==
-X-Received: by 2002:a05:6512:3c92:b0:448:392d:af85 with SMTP id h18-20020a0565123c9200b00448392daf85mr12826114lfv.511.1648323636219;
-        Sat, 26 Mar 2022 12:40:36 -0700 (PDT)
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
-        by smtp.gmail.com with ESMTPSA id h7-20020ac25d67000000b0044836d7c475sm1147556lft.147.2022.03.26.12.40.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Mar 2022 12:40:35 -0700 (PDT)
-Received: by mail-lf1-f43.google.com with SMTP id bq24so2636403lfb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 12:40:35 -0700 (PDT)
-X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
- y3-20020ac24203000000b004488053d402mr12881072lfh.687.1648323634830; Sat, 26
- Mar 2022 12:40:34 -0700 (PDT)
+        Sat, 26 Mar 2022 15:42:17 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0ED412E74B;
+        Sat, 26 Mar 2022 12:40:40 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id E4F5A22246;
+        Sat, 26 Mar 2022 20:40:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1648323635;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZKJiQOoIfnoR4SoBeTOO/J+vFzjnMtA36ogD7pHyfFE=;
+        b=hiCCJuqLV5S9qnCI9uFM8gL/mao1h+3FgGcseLa1IGb7UKjAhNhlF4CidvZNJkQAvD8cnh
+        FvmEsBZzymbsr8DH4aMP6OsOuRuSHLhN39bzdYlLQG/rjHAOe42B45bf/BLm+FEAvPCCI8
+        cwl2Cutu5cpWmxcfvJU1rUHQlHEWTUY=
+From:   Michael Walle <michael@walle.cc>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH] ARM: dts: lan966x: fix sys_clk frequency
+Date:   Sat, 26 Mar 2022 20:40:28 +0100
+Message-Id: <20220326194028.2945985-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <202203251443.9BBADFD98@keescook> <CAHk-=wjeGc-BjkDWTYkXzyQu-vf9EEujuT-6=U7Od0DvCUfb8w@mail.gmail.com>
-In-Reply-To: <CAHk-=wjeGc-BjkDWTYkXzyQu-vf9EEujuT-6=U7Od0DvCUfb8w@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 26 Mar 2022 12:40:18 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wid1da7CONOA4ia++vKe5pCFda6gwdafjFP4HXJQcjcsA@mail.gmail.com>
-Message-ID: <CAHk-=wid1da7CONOA4ia++vKe5pCFda6gwdafjFP4HXJQcjcsA@mail.gmail.com>
-Subject: Re: [GIT PULL] FORTIFY_SOURCE updates for v5.18-rc1
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        George Burgess IV <gbiv@google.com>,
-        linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 26, 2022 at 12:29 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Because if all the compiler issues and warnings have been sorted out,
-> it sounds to me like the compile-time side could/should be done
-> unconditionally if there are no runtime downsides.
+The sys_clk frequency is 165.625MHz. The register reference of the
+Generic Clock controller lists the CPU clock as 600MHz, the DDR clock as
+300MHz and the SYS clock as 162.5MHz. This is wrong. It was first
+noticed during the fan driver development and it was measured and
+verified via the CLK_MON output of the SoC which can be configured to
+output sys_clk/64.
 
-.. or do the existing compiler warnings for the builtins already cover
-all cases, and the only reason the fortify-source code has
-compile-time warnings is that the option takes over the builtins?
+The core PLL settings (which drives the SYS clock) seems to be as
+follows:
+  DIVF = 52
+  DIVQ = 3
+  DIVR = 1
 
-So maybe there's no upside to the fortify-source code for that case?
+With a refernce clock of 25MHz, this means we have a post divider clock
+  Fpfd = Fref / (DIVR + 1) = 25MHz / (1 + 1) = 12.5MHz
 
-              Linus
+The resulting VCO frequency is then
+  Fvco = Fpfd * (DIVF + 1) * 2 = 12.5MHz * (52 + 1) * 2 = 1325MHz
+
+And the output frequency is
+  Fout = Fvco / 2^DIVQ = 1325MHz / 2^3 = 165.625Mhz
+
+This all adds up to the constrains of the PLL:
+    10MHz <= Fpfd <= 200MHz
+    20MHz <= Fout <= 1000MHz
+  1000MHz <= Fvco <= 2000MHz
+
+Fixes: 290deaa10c50 ("ARM: dts: add DT for lan966 SoC and 2-port board pcb8291")
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ arch/arm/boot/dts/lan966x.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
+index 14c9cb3c0f3b..03045ec4aca4 100644
+--- a/arch/arm/boot/dts/lan966x.dtsi
++++ b/arch/arm/boot/dts/lan966x.dtsi
+@@ -38,7 +38,7 @@ clocks {
+ 		sys_clk: sys_clk {
+ 			compatible = "fixed-clock";
+ 			#clock-cells = <0>;
+-			clock-frequency = <162500000>;
++			clock-frequency = <165625000>;
+ 		};
+ 
+ 		cpu_clk: cpu_clk {
+-- 
+2.30.2
+

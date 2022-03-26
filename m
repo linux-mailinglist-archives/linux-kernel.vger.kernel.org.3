@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422244E847B
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 22:53:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3134E8481
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 23:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233340AbiCZVzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 17:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
+        id S229700AbiCZWRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 18:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiCZVzE (ORCPT
+        with ESMTP id S229539AbiCZWRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 17:55:04 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21048F47
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 14:53:27 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id q5so14509453ljb.11
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 14:53:27 -0700 (PDT)
+        Sat, 26 Mar 2022 18:17:16 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3487CE20
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 15:15:39 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id t25so18934357lfg.7
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 15:15:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=P460qBR9qVCfobuQ79cK1V0yFKiu9kVeZ2foGTksCVY=;
-        b=c1rqYC+jwsqrDMMgqVOTKPytpzM5CVnx4yfphdce7HCiv+/+GnaK45XIouAqnrBlCK
-         m2hHCUVajze95venepizTWrorZNo+FV2fqjfWWNfc2dFTgmD7FPdRBx50cS3k0rHIyrg
-         WZYOB067EQzBpYZXsYQZZKqr3kfAaQ9SUQqU8=
+        bh=646eEJy3R0M/KTVuEwo8ILglC9PMb/NEGSld3GpAxEM=;
+        b=VmaZt/FdSU9IxWnJT+n7WMNSAm9QhaWnXKkwGBa+wTkkHVbNrq8oqd2DQI4iCl0wG/
+         iy7E3AujkyX5NaVU4BcnOT1fn+xKdpfC9DwBzr+NshauWtc6lfNeDSfelnnG9h7FbBG8
+         I7KA+6jENZZ4Gnz9h8WRtq8IQ0/ZxgCw4o6Ug=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=P460qBR9qVCfobuQ79cK1V0yFKiu9kVeZ2foGTksCVY=;
-        b=sYniSGCaubMXZeLn6GCPa4tSbb0W5WhONPnhe4TeCv8sCtiMwsWUBU8NBaCj57i0q/
-         x6AV89ODXPblGvuXJfQysXw8olYXnF6UuXyOZvL5M6cgJ+wVh8+j+00QnbVLkjIHMZtR
-         OLmJu32idKd26siABTTl2kMQCJVheTTS/fF2oTCEuSrCPgYFsLDaT9FAtscxF6GR1l4U
-         BN8isdQKkpw9DlrGQlLnDyb07ts58awh+fN1Nrx8VZFXS5qAFtMD5Fd4FcA7+L2OPyMX
-         hm1oMIP7zTswnf4GD84kH0KKdLlcQoJQF/STQ8XrWfhGor1xLmK5Ekt6UNp3qj6ksD4U
-         2GLw==
-X-Gm-Message-State: AOAM530y9OpzUc5T45DOCne8F6AL3lEcC2mOSUAY0zyS/TDhBI4tecu7
-        tgTKHRciRwHgai6drGegwx7Gz5VRa8nw+MxZRPs=
-X-Google-Smtp-Source: ABdhPJzJIoQFzyWbEECTA343rRTDyPPgkS+YPncsmlEvL5ulQ4mibdBiN7voRCcwF+EgGJWkdSjPTw==
-X-Received: by 2002:a2e:9d08:0:b0:249:b8b6:8f7a with SMTP id t8-20020a2e9d08000000b00249b8b68f7amr7857536lji.310.1648331605111;
-        Sat, 26 Mar 2022 14:53:25 -0700 (PDT)
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
-        by smtp.gmail.com with ESMTPSA id y22-20020a2e9796000000b00249b86a210bsm678197lji.91.2022.03.26.14.53.24
+        bh=646eEJy3R0M/KTVuEwo8ILglC9PMb/NEGSld3GpAxEM=;
+        b=3EQJGZ94lK/DxUPJlk9PR8rrwRbFzCsp+LONeYvHfBsC+irTLxMkeM6YY1/05xlTkM
+         p+xUI1g7tThctWHbB6KyyJ7FsyFo2FKijM1QiYbVwxvFSwM39M+pS/rC2tU8a/IIeRmk
+         /KSDHjLTcwublUGlbiI1bPLicga4WEhKINZrK7zoPL8WTfYrKsiFJNzfFmfDH1PTMkr3
+         87ZsCPZP+zdi3oRj5yPIEcjm4HN5DfSBTiVRmlqEp1gQBaJCsbqwVZPZGCF51RtDkz6j
+         K4tHTLrBX68D9grjKORdmS++zklZaLa+1WBPIjDdHm8XwqG7cXeejxh+HO/BvnOy9xqs
+         xvWw==
+X-Gm-Message-State: AOAM530TISop6v6Djcwj1eGx1ICTqcEc1u83tY/4QpIFNSq0Dcvw5TWu
+        Qu10g28Jo1SJOI8JNtxQcj3RocYlbuWkgS1OU1Q=
+X-Google-Smtp-Source: ABdhPJxFyIWjeQP6YO+0CSsTBV3yu3Y+jSiLStvbxgs4nxWgwskvrsG3b/6QYAM6WJCt0fYwzI1YVg==
+X-Received: by 2002:a05:6512:6c1:b0:448:6291:f135 with SMTP id u1-20020a05651206c100b004486291f135mr13437489lff.451.1648332937042;
+        Sat, 26 Mar 2022 15:15:37 -0700 (PDT)
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
+        by smtp.gmail.com with ESMTPSA id o7-20020ac24c47000000b0044a15c4e0aesm1182821lfk.272.2022.03.26.15.15.35
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Mar 2022 14:53:24 -0700 (PDT)
-Received: by mail-lj1-f180.google.com with SMTP id q5so14509410ljb.11
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 14:53:24 -0700 (PDT)
+        Sat, 26 Mar 2022 15:15:36 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id v12so1836831ljd.3
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 15:15:35 -0700 (PDT)
 X-Received: by 2002:a2e:9b10:0:b0:247:f28c:ffd3 with SMTP id
- u16-20020a2e9b10000000b00247f28cffd3mr13307754lji.152.1648331603613; Sat, 26
- Mar 2022 14:53:23 -0700 (PDT)
+ u16-20020a2e9b10000000b00247f28cffd3mr13362606lji.152.1648332935415; Sat, 26
+ Mar 2022 15:15:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220326152646.GT8939@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220326152646.GT8939@worktop.programming.kicks-ass.net>
+References: <20220326114009.1690-1-aissur0002@gmail.com> <c7fcaccf-7ac0-fae8-3f41-d6552b689a70@ispras.ru>
+In-Reply-To: <c7fcaccf-7ac0-fae8-3f41-d6552b689a70@ispras.ru>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 26 Mar 2022 14:53:07 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whhG15HiqR+WM5M2mMy9F17yVdT8_M0ra0tGJS+5ibrdw@mail.gmail.com>
-Message-ID: <CAHk-=whhG15HiqR+WM5M2mMy9F17yVdT8_M0ra0tGJS+5ibrdw@mail.gmail.com>
-Subject: Re: [GIT PULL] x86/core for 5.18
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
+Date:   Sat, 26 Mar 2022 15:15:19 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wijnsoGpoXRvY9o-MYow_xNXxaHg5vWJ5Z3GaXiWeg+dg@mail.gmail.com>
+Message-ID: <CAHk-=wijnsoGpoXRvY9o-MYow_xNXxaHg5vWJ5Z3GaXiWeg+dg@mail.gmail.com>
+Subject: Re: [PATCH 4/4] file: Fix file descriptor leak in copy_fd_bitmaps()
+To:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     Fedor Pchelkin <aissur0002@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -75,22 +77,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 26, 2022 at 8:26 AM Peter Zijlstra <peterz@infradead.org> wrote:
+Sorry, quoting everything below to bring in Eric Biggers because he
+touched that particular code last.
+
+And Christian Brauner, because he worked on all teh bitmap code with
+the whole close_range thing.
+
+I think this is all ok because the number of files aren't just
+byte-aligned, they are long-aligned:
+
+         * We make sure that nr remains a multiple of BITS_PER_LONG - otherwise
+         * bitmaps handling below becomes unpleasant, to put it mildly...
+
+but maybe I'm missing something.
+
+The fact that there's a
+
+     Found by Syzkaller (https://github.com/google/syzkaller).
+
+thing in that suggested commit message makes me think there _is_
+something I'm missing.
+
+Certainly NR_OPEN_DEFAULT, sane_fdtable_size() and max_fds should
+always be a multiple of BITS_PER_LONG.
+
+So I don't _think_ there is any bug here, although it might be good to
+
+ (a) document that "we explicitly do things in BITS_PER_LONG chunks"
+even more in places
+
+ (b) have people double-check my thinking because clearly that
+syzcaller thing implies I'm full of crap
+
+Eric, Christian?
+
+Can somebody point to the actual syzkaller report?
+
+                Linus
+
+On Sat, Mar 26, 2022 at 7:17 AM Alexey Khoroshilov
+<khoroshilov@ispras.ru> wrote:
 >
-> Hi Linus, my first pull request in like forever, so please bear with me.
+> Looks like bfp has a set of macro suitable for such cases:
 >
-> Boris talked me through it, so hopefully it isn't entirely insane :-)
-
-Well, it's not exactly working too well:
-
-  fatal: couldn't find remote ref x86_core_for_5.18_rc1
-
-there is actually a branch called "x86/core" there that has the commit
-you mention as the top commit, but I'm _hoping_ you had a signed that
-you created, and just never pushed out.
-
-So I won't pull that branch I found, in the hope that there's a simple
-"Oh, let me push that tag out" solution that gets me the signature
-too.
-
-               Linus
+> #define BITS_PER_BYTE_MASKED(bits) ((bits) & BITS_PER_BYTE_MASK)
+> #define BITS_ROUNDDOWN_BYTES(bits) ((bits) >> 3)
+> #define BITS_ROUNDUP_BYTES(bits) \
+>         (BITS_ROUNDDOWN_BYTES(bits) + !!BITS_PER_BYTE_MASKED(bits))
+>
+> May be it makes sense to move them to a generic header and to use here?
+>
+> --
+> Alexey Khoroshilov
+>
+>
+> On 26.03.2022 14:40, Fedor Pchelkin wrote:
+> > If count argument in copy_fd_bitmaps() is not a multiple of
+> > BITS_PER_BYTE, then one byte is lost and is not used in further
+> > manipulations with cpy value in memcpy() and memset()
+> > causing a leak. The leak was introduced with close_range() call
+> > using CLOSE_RANGE_UNSHARE flag.
+> >
+> > The patch suggests implementing an indicator (named add_byte)
+> > of count being multiple of BITS_PER_BYTE and adding it to the
+> > cpy value.
+> >
+> > Found by Syzkaller (https://github.com/google/syzkaller).
+> >
+> > Signed-off-by: Fedor Pchelkin <aissur0002@gmail.com>
+> > Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+> > ---
+> >  fs/file.c | 2 --
+> >  1 file changed, 2 deletions(-)
+> >
+> > diff --git a/fs/file.c b/fs/file.c
+> > index 3ef1479df203..3c64a6423604 100644
+> > --- a/fs/file.c
+> > +++ b/fs/file.c
+> > @@ -56,10 +56,8 @@ static void copy_fd_bitmaps(struct fdtable *nfdt, struct fdtable *ofdt,
+> >  {
+> >       unsigned int cpy, set;
+> >       unsigned int add_byte = 0;
+> > -
+> >       if (count % BITS_PER_BYTE != 0)
+> >               add_byte = 1;
+> > -
+> >       cpy = count / BITS_PER_BYTE + add_byte;
+> >       set = (nfdt->max_fds - count) / BITS_PER_BYTE;
+> >       memcpy(nfdt->open_fds, ofdt->open_fds, cpy);
+> >
+>

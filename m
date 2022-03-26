@@ -2,106 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDDB4E813B
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 14:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 946154E813D
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 14:58:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233148AbiCZN7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 09:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
+        id S233169AbiCZOAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 10:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232543AbiCZN7D (ORCPT
+        with ESMTP id S233153AbiCZN7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 09:59:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDDCDF4BC;
-        Sat, 26 Mar 2022 06:57:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0998A60ECC;
-        Sat, 26 Mar 2022 13:57:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38069C340EE;
-        Sat, 26 Mar 2022 13:57:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648303046;
-        bh=HOkf7BpuW7qajUziuSzll9yU+W0M8a5zkgH+oxR3DWg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=U6Wj317tVd3AyMzFoTmf+nKzV4OKlWThsgcIwY5E0UM/pDcJzNS9yCA5JS7otIYw7
-         frT1XFE+94ZF087u+xjRV9nG4/fMhI7iSwToRH8QOq3sGffKU7LwDtT+BjqVQGbGus
-         8pkkFKc5yIqmJ4EC+PWPHdqwJ4cyPpb1NklemlrNahuj5Sv1yBOH3rB4KtRWWXFQV8
-         qmK3kAClKQXQncYsi1mRHJB8szWmgHqFWV39sPENg7JCFcE6erM9pr71OGeHMxMOIW
-         auDzVWxZqMAKTyOGbZGjzPIBoSji8SaVWgNViIejLpzLAp4e9SnEUU2wlhSS7sjrzx
-         Eb+MsaFjaOvIA==
-Date:   Sat, 26 Mar 2022 14:57:21 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] Documentation: sphinx: replace "Introduction"
- chapter heading with page title
-Message-ID: <20220326145708.7926b29d@coco.lan>
-In-Reply-To: <20220326123337.642536-3-bagasdotme@gmail.com>
-References: <20220326123337.642536-1-bagasdotme@gmail.com>
-        <20220326123337.642536-3-bagasdotme@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Sat, 26 Mar 2022 09:59:55 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F5326FC
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 06:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648303099; x=1679839099;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qFiYEHnnDLkVTdCkYQf7DsZUgmu5gysW9RRE3CX95+Q=;
+  b=gvNeDdS1vJ4XX5FbrIXnXePDS22eUMzQC9ImCtOjIpgLW3zigWPIeMsN
+   o0pHvyZucP4IUlwxuJJpOT4j+ksqIBG0J/fa+UFOo0kQM6BtJ+E3WyFTr
+   LeAW0Bnb9tCBdr8ySvS4gy4B55S/eTj/DrkmBf0JTlvxWmGfcGDX4ZdYc
+   R+JQX27BUBIi2XsfF6tDD2ZbL5+fJmMV0AvnO3SViW5vsrrGLaNwsmAXz
+   ym1oGnJZMOrUPV3h/T8rBIAN8XmQoODwH9DmR6Zpr7UNlCxrL1pWD8t6C
+   BDIA2mpfo9nNO3Dj8LlyXgbZHZbu3Sb4nlW6jC/DFvXj1y0bPBTkZCD2e
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="258500369"
+X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
+   d="scan'208";a="258500369"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 06:58:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
+   d="scan'208";a="520497973"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 26 Mar 2022 06:58:17 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nY6vo-000NQR-UW; Sat, 26 Mar 2022 13:58:16 +0000
+Date:   Sat, 26 Mar 2022 21:57:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: sparx5_ptp.c:undefined reference to `ptp_clock_register'
+Message-ID: <202203262159.99fOYx0b-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sat, 26 Mar 2022 19:33:38 +0700
-Bagas Sanjaya <bagasdotme@gmail.com> escreveu:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   52d543b5497cf31d6baeb0bcfe5a5474c3238578
+commit: 0933bd04047c3b96ba49545a8f91e7e6f8f666ff net: sparx5: Add support for ptp clocks
+date:   3 weeks ago
+config: arc-randconfig-r013-20220324 (https://download.01.org/0day-ci/archive/20220326/202203262159.99fOYx0b-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0933bd04047c3b96ba49545a8f91e7e6f8f666ff
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 0933bd04047c3b96ba49545a8f91e7e6f8f666ff
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
 
-> Replace first chapter heading ("Introduction") with page title named
-> "Using Sphinx for kernel documentation". This way, the first-level TOC
-> for doc-guide contains title instead of chapter headings for this page.
-> 
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> Cc: Akira Yokosawa <akiyks@gmail.com>
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+All errors (new ones prefixed by >>):
 
-> ---
->  Documentation/doc-guide/sphinx.rst | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-guide/sphinx.rst
-> index bb36f18ae9ac3e..2ff1ab4158d48e 100644
-> --- a/Documentation/doc-guide/sphinx.rst
-> +++ b/Documentation/doc-guide/sphinx.rst
-> @@ -1,7 +1,8 @@
->  .. _sphinxdoc:
->  
-> -Introduction
-> -============
-> +=====================================
-> +Using Sphinx for kernel documentation
-> +=====================================
->  
->  The Linux kernel uses `Sphinx`_ to generate pretty documentation from
->  `reStructuredText`_ files under ``Documentation``. To build the documentation in
+   arc-elf-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ptp.o: in function `sparx5_ptp_init':
+>> sparx5_ptp.c:(.text+0x758): undefined reference to `ptp_clock_register'
+>> arc-elf-ld: sparx5_ptp.c:(.text+0x758): undefined reference to `ptp_clock_register'
+   arc-elf-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ptp.o: in function `sparx5_ptp_deinit':
+>> sparx5_ptp.c:(.text+0x8b2): undefined reference to `ptp_clock_unregister'
+>> arc-elf-ld: sparx5_ptp.c:(.text+0x8b2): undefined reference to `ptp_clock_unregister'
+   arc-elf-ld: sparx5_ptp.c:(.text+0x8ba): undefined reference to `ptp_clock_unregister'
+   arc-elf-ld: sparx5_ptp.c:(.text+0x8ba): undefined reference to `ptp_clock_unregister'
+   arc-elf-ld: sparx5_ptp.c:(.text+0x8c6): undefined reference to `ptp_clock_unregister'
+   arc-elf-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ptp.o:sparx5_ptp.c:(.text+0x8c6): more undefined references to `ptp_clock_unregister' follow
 
-
-
-Thanks,
-Mauro
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

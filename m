@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 190CE4E7E79
+	by mail.lfdr.de (Postfix) with ESMTP id E49A14E7E7B
 	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 02:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbiCZBxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 21:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
+        id S230106AbiCZBx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 21:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiCZBx2 (ORCPT
+        with ESMTP id S229456AbiCZBx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 25 Mar 2022 21:53:28 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037BF217970
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF306217967
         for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 18:51:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648259512; x=1679795512;
+  t=1648259511; x=1679795511;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=S6P/CQ0wkhzL5Vune8foNB5LvsIHO4zHgoHvl/Uw4PM=;
-  b=a/zEeTGixUAtQj06Eh9tsoQXGOPF00jFg9BYq7pCDW/wMLi0hBevIqfF
-   3jUOn4bEYxugGQnfpOvYaMBghkDD/96w1jUjzjjMeADDbvmLz7kIA5IuI
-   Q4Bpn4y8uKAyu+S3y6qXxlCo2Rz1liHxQGLPN2efjTUHegkT9DrXD48fH
-   3C7EjossXConEgHdi+V5pDUtxsD//4FP0eqkdVJ3Ix/8ZRzMfjwCjW7Xu
-   yt95Q9sIjHxG/WgHiExY5zOhGGBeOl31RoXDx7Fham13HsCU6XhE2NcJ0
-   bQELG70/9ZRuXCecyu2dMritlZkojg6+KJ93LpcsmOeGuDDC/nQ5Z5yvV
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="239348380"
+  bh=XKeDtx+e7Z6XXOcCQX3+ybtBW979kFPfT0nbtssEJFg=;
+  b=e5vY0FtJtlaQEkDUSiwR+Cj5jFudiIV6WIWDfNcCR1DMI63seAQC6yp5
+   T9x5M5d0G8vOiIaiDvbfIEeQE7ebyoPV+rv+vw3WY1ZVXWWw7Qt5Dwt44
+   U4d/B5AqeS+WMUN6iUlHutlkMCcq/VYHHDqejynqsDIAxa6pCzhh7w36Z
+   nK1xR+SzXSl9LVXO4J279YBWFtT1G7eih+gPZbtN5hsIiVWfrAKPlUgAs
+   CJH6SJi2iX8JsvnhNMzpTN7UwGRKdRNyONRzTlJjP3xKOByHgEh3kuVX7
+   SvUW0TIh27MMhU9m4TkIyhc9r8fq32nqyhqwfqkNdNgaYm/1m9P3kdya2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="258716874"
 X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="239348380"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 18:51:51 -0700
+   d="scan'208";a="258716874"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 18:51:51 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="584646340"
+   d="scan'208";a="650425845"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 25 Mar 2022 18:51:49 -0700
+  by orsmga004.jf.intel.com with ESMTP; 25 Mar 2022 18:51:50 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nXvan-000MrG-34; Sat, 26 Mar 2022 01:51:49 +0000
-Date:   Sat, 26 Mar 2022 09:50:47 +0800
+        id 1nXvan-000MrJ-4M; Sat, 26 Mar 2022 01:51:49 +0000
+Date:   Sat, 26 Mar 2022 09:50:50 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
-Subject: [gfs2:for-next 16/17] fs/gfs2/file.c:1073:14: warning: comparison of
- distinct pointer types ('typeof ((1UL << 18) - ((unsigned
- long)(iocb->ki_pos) & ~(~((1 << 18) - 1)))) *' (aka 'unsigned long *') and
- 'typeof (iov_iter_count(from)) *' (aka 'unsigned int *'))
-Message-ID: <202203260944.DMj6xxB2-lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/afs-testing 44/44]
+ include/asm-generic/cmpxchg.h:35:39: sparse: sparse: cast truncates bits
+ from constant value (5e5ee5e5 becomes e5)
+Message-ID: <202203260941.OiKX28fM-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,141 +64,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git for-next
-head:   3d7b481b8a996e68339268487c0d3c8e54a2c274
-commit: 32c8d6969d43c1bce394f75e9bcf32697146a773 [16/17] gfs2: Don't get stuck on partial buffered writes
-config: hexagon-randconfig-r022-20220325 (https://download.01.org/0day-ci/archive/20220326/202203260944.DMj6xxB2-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/afs-testing
+head:   1eba43e7cea9100a3767c5a7212ec5f1db4db4fd
+commit: 1eba43e7cea9100a3767c5a7212ec5f1db4db4fd [44/44] Check for dead timer
+config: nios2-randconfig-s032-20220324 (https://download.01.org/0day-ci/archive/20220326/202203260941.OiKX28fM-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git/commit/?id=32c8d6969d43c1bce394f75e9bcf32697146a773
-        git remote add gfs2 https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git
-        git fetch --no-tags gfs2 for-next
-        git checkout 32c8d6969d43c1bce394f75e9bcf32697146a773
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/1eba43e7cea9100a3767c5a7212ec5f1db4db4fd
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/afs-testing
+        git checkout 1eba43e7cea9100a3767c5a7212ec5f1db4db4fd
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/gfs2/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 SHELL=/bin/bash kernel/time/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
 
->> fs/gfs2/file.c:1073:14: warning: comparison of distinct pointer types ('typeof ((1UL << 18) - ((unsigned long)(iocb->ki_pos) & ~(~((1 << 18) - 1)))) *' (aka 'unsigned long *') and 'typeof (iov_iter_count(from)) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-                   min_size = min(PAGE_SIZE - offset_in_page(iocb->ki_pos),
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
+sparse warnings: (new ones prefixed by >>)
+   kernel/time/timer.c: note: in included file (through arch/nios2/include/generated/asm/cmpxchg.h, include/asm-generic/atomic.h, arch/nios2/include/generated/asm/atomic.h, ...):
+>> include/asm-generic/cmpxchg.h:35:39: sparse: sparse: cast truncates bits from constant value (5e5ee5e5 becomes e5)
+>> include/asm-generic/cmpxchg.h:46:40: sparse: sparse: cast truncates bits from constant value (5e5ee5e5 becomes e5e5)
 
+vim +35 include/asm-generic/cmpxchg.h
 
-vim +1073 fs/gfs2/file.c
+b4816afa3986704 David Howells 2012-03-28  22  
+b4816afa3986704 David Howells 2012-03-28  23  static inline
+82b993e8249ae3c Mark Rutland  2021-05-25  24  unsigned long __generic_xchg(unsigned long x, volatile void *ptr, int size)
+b4816afa3986704 David Howells 2012-03-28  25  {
+b4816afa3986704 David Howells 2012-03-28  26  	unsigned long ret, flags;
+b4816afa3986704 David Howells 2012-03-28  27  
+b4816afa3986704 David Howells 2012-03-28  28  	switch (size) {
+b4816afa3986704 David Howells 2012-03-28  29  	case 1:
+b4816afa3986704 David Howells 2012-03-28  30  #ifdef __xchg_u8
+b4816afa3986704 David Howells 2012-03-28  31  		return __xchg_u8(x, ptr);
+b4816afa3986704 David Howells 2012-03-28  32  #else
+b4816afa3986704 David Howells 2012-03-28  33  		local_irq_save(flags);
+b4816afa3986704 David Howells 2012-03-28  34  		ret = *(volatile u8 *)ptr;
+b4816afa3986704 David Howells 2012-03-28 @35  		*(volatile u8 *)ptr = x;
+b4816afa3986704 David Howells 2012-03-28  36  		local_irq_restore(flags);
+b4816afa3986704 David Howells 2012-03-28  37  		return ret;
+b4816afa3986704 David Howells 2012-03-28  38  #endif /* __xchg_u8 */
+b4816afa3986704 David Howells 2012-03-28  39  
+b4816afa3986704 David Howells 2012-03-28  40  	case 2:
+b4816afa3986704 David Howells 2012-03-28  41  #ifdef __xchg_u16
+b4816afa3986704 David Howells 2012-03-28  42  		return __xchg_u16(x, ptr);
+b4816afa3986704 David Howells 2012-03-28  43  #else
+b4816afa3986704 David Howells 2012-03-28  44  		local_irq_save(flags);
+b4816afa3986704 David Howells 2012-03-28  45  		ret = *(volatile u16 *)ptr;
+b4816afa3986704 David Howells 2012-03-28 @46  		*(volatile u16 *)ptr = x;
+b4816afa3986704 David Howells 2012-03-28  47  		local_irq_restore(flags);
+b4816afa3986704 David Howells 2012-03-28  48  		return ret;
+b4816afa3986704 David Howells 2012-03-28  49  #endif /* __xchg_u16 */
+b4816afa3986704 David Howells 2012-03-28  50  
+b4816afa3986704 David Howells 2012-03-28  51  	case 4:
+b4816afa3986704 David Howells 2012-03-28  52  #ifdef __xchg_u32
+b4816afa3986704 David Howells 2012-03-28  53  		return __xchg_u32(x, ptr);
+b4816afa3986704 David Howells 2012-03-28  54  #else
+b4816afa3986704 David Howells 2012-03-28  55  		local_irq_save(flags);
+b4816afa3986704 David Howells 2012-03-28  56  		ret = *(volatile u32 *)ptr;
+b4816afa3986704 David Howells 2012-03-28  57  		*(volatile u32 *)ptr = x;
+b4816afa3986704 David Howells 2012-03-28  58  		local_irq_restore(flags);
+b4816afa3986704 David Howells 2012-03-28  59  		return ret;
+b4816afa3986704 David Howells 2012-03-28  60  #endif /* __xchg_u32 */
+b4816afa3986704 David Howells 2012-03-28  61  
 
-  1005	
-  1006	static ssize_t gfs2_file_buffered_write(struct kiocb *iocb,
-  1007						struct iov_iter *from,
-  1008						struct gfs2_holder *gh)
-  1009	{
-  1010		struct file *file = iocb->ki_filp;
-  1011		struct inode *inode = file_inode(file);
-  1012		struct gfs2_inode *ip = GFS2_I(inode);
-  1013		struct gfs2_sbd *sdp = GFS2_SB(inode);
-  1014		struct gfs2_holder *statfs_gh = NULL;
-  1015		size_t prev_count = 0, window_size = 0;
-  1016		size_t read = 0;
-  1017		ssize_t ret;
-  1018	
-  1019		/*
-  1020		 * In this function, we disable page faults when we're holding the
-  1021		 * inode glock while doing I/O.  If a page fault occurs, we indicate
-  1022		 * that the inode glock may be dropped, fault in the pages manually,
-  1023		 * and retry.
-  1024		 */
-  1025	
-  1026		if (inode == sdp->sd_rindex) {
-  1027			statfs_gh = kmalloc(sizeof(*statfs_gh), GFP_NOFS);
-  1028			if (!statfs_gh)
-  1029				return -ENOMEM;
-  1030		}
-  1031	
-  1032		gfs2_holder_init(ip->i_gl, LM_ST_EXCLUSIVE, 0, gh);
-  1033	retry:
-  1034		ret = gfs2_glock_nq(gh);
-  1035		if (ret)
-  1036			goto out_uninit;
-  1037	retry_under_glock:
-  1038		if (inode == sdp->sd_rindex) {
-  1039			struct gfs2_inode *m_ip = GFS2_I(sdp->sd_statfs_inode);
-  1040	
-  1041			ret = gfs2_glock_nq_init(m_ip->i_gl, LM_ST_EXCLUSIVE,
-  1042						 GL_NOCACHE, statfs_gh);
-  1043			if (ret)
-  1044				goto out_unlock;
-  1045		}
-  1046	
-  1047		current->backing_dev_info = inode_to_bdi(inode);
-  1048		pagefault_disable();
-  1049		ret = iomap_file_buffered_write(iocb, from, &gfs2_iomap_ops);
-  1050		pagefault_enable();
-  1051		current->backing_dev_info = NULL;
-  1052		if (ret > 0) {
-  1053			iocb->ki_pos += ret;
-  1054			read += ret;
-  1055		}
-  1056	
-  1057		if (inode == sdp->sd_rindex)
-  1058			gfs2_glock_dq_uninit(statfs_gh);
-  1059	
-  1060		if (should_fault_in_pages(ret, from, &prev_count, &window_size)) {
-  1061			size_t min_size, leftover;
-  1062	
-  1063			/*
-  1064			 * Make sure to fault in enough memory to fill at least one
-  1065			 * page cache page.  Otherwise, we could end up with a partial
-  1066			 * write that __iomap_write_end() treats as a zero-length
-  1067			 * write, and we would get stuck.
-  1068			 *
-  1069			 * Note that we assume that after fault_in_iov_iter_readable(),
-  1070			 * at least min_size bytes of memory will be readable.  This
-  1071			 * could change with sub-page pointer color probing.
-  1072			 */
-> 1073			min_size = min(PAGE_SIZE - offset_in_page(iocb->ki_pos),
-  1074				       iov_iter_count(from));
-  1075			if (window_size < min_size)
-  1076				window_size = min_size;
-  1077	
-  1078			gfs2_holder_allow_demote(gh);
-  1079			leftover = fault_in_iov_iter_readable(from, window_size);
-  1080			gfs2_holder_disallow_demote(gh);
-  1081			if (window_size - leftover >= min_size) {
-  1082				if (gfs2_holder_queued(gh))
-  1083					goto retry_under_glock;
-  1084				if (read && !(iocb->ki_flags & IOCB_DIRECT))
-  1085					goto out_uninit;
-  1086				goto retry;
-  1087			}
-  1088		}
-  1089	out_unlock:
-  1090		if (gfs2_holder_queued(gh))
-  1091			gfs2_glock_dq(gh);
-  1092	out_uninit:
-  1093		gfs2_holder_uninit(gh);
-  1094		if (statfs_gh)
-  1095			kfree(statfs_gh);
-  1096		return read ? read : ret;
-  1097	}
-  1098	
+:::::: The code at line 35 was first introduced by commit
+:::::: b4816afa3986704d1404fc48e931da5135820472 Move the asm-generic/system.h xchg() implementation to asm-generic/cmpxchg.h
+
+:::::: TO: David Howells <dhowells@redhat.com>
+:::::: CC: David Howells <dhowells@redhat.com>
 
 -- 
 0-DAY CI Kernel Test Service

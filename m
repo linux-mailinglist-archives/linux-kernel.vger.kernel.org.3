@@ -2,140 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E55E4E80CF
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 13:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDE14E80D4
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 13:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232911AbiCZM2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 08:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
+        id S232917AbiCZMfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 08:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231702AbiCZM2W (ORCPT
+        with ESMTP id S231702AbiCZMfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 08:28:22 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE58292BBA
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 05:26:45 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2ea1b9b3813so1771847b3.2
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 05:26:45 -0700 (PDT)
+        Sat, 26 Mar 2022 08:35:41 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8722980D;
+        Sat, 26 Mar 2022 05:34:04 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id mp11-20020a17090b190b00b001c79aa8fac4so5766604pjb.0;
+        Sat, 26 Mar 2022 05:34:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OdubKKvS/+X0BvpWnZIvBTVXh6dxmTwBC2Wu9k+snYg=;
-        b=jBgNXZZx6q9gdohsCwdJ4HBLS6sr0rP60NUIa7V3mjojEaA/2kDjYWtqg81greawOj
-         ZsrpSX1UwCsj5J2r0rAvtT7+7tJm8jmWrl56rbr/+7ieIusSwJ0H6Gqhh+eFj2aRwl/L
-         BYny4ibB/edCt7Q9pyKAJbS8ddRZlHEChfQu86kbsaqKa09WQeJQmrJzHruwd/tnqys+
-         2HoZYE/GE1TY1E8jN1xcNoxZL5LQM0N1kX7BijxwK9S7X+7DwW3+62eogPed+5kdFoDo
-         yOcSmYG458boaJqkqvkvLumal9UHHD9Euf+wrihRti8pboTYsayU6SdqnPltv0L/JrOj
-         XYgg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=JX2HoafCqLBV8D/Av/3GafxcwR1VS5PL4ltoAzY1ZZc=;
+        b=iJn02XuuXfCvrx5ULmVc2BnaJyESRKS08GEH+8zYCu0L+EhSG1ylZzTofQubEpkitA
+         0aoghiugn5Is8+Rm7P9Lc1DsY3fMjQq/Hr5LANX3LDxNVJm+GFgNn1+mb8t8pY0y+SfD
+         k7tsQT4dGionx0RoAI9TfFY0M1GAKmsq52eR2M03QtgaUAOb/N9en+8tF2ENJrTwL7+i
+         GU1nNfFWErNSkH3aO8dr1/+R5jcCgzqqpBEKKarqQphNAHFGePGJV1BRmp/Cmb2/29r6
+         sXoHhlW3QGbgiqd1GCS6mEqDgLMhkMBNMfVWkfVC1u5CksW0bPemJFNa6WzSmFKNJ/mV
+         WS5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OdubKKvS/+X0BvpWnZIvBTVXh6dxmTwBC2Wu9k+snYg=;
-        b=pfzPxfJE61k+8JvUacyk2k2LoqGw50QXX3FM9A5oKaR44zFprQXXmbCXlGeQ82lvZW
-         FrGB3XTGGNng6kaXCqICAFff5qQ6z23Anv95BjMK7C1kNGI4AAJn456p6DRWC+ybFkP+
-         wUTskx+cPM4TCaoqEcPc6R1HBxeDCvrDCM3QgmXwgtZlkBPdI+rq0v7Fz/hU00fTpSvN
-         OFBwKqP4C6tI4cU39zJzG5qO2UqWr2NJswPzJ3bm/EQtZF86K6MrXe2SUHlzWejy9VSI
-         obLhiY4XIolTwJyitnG84t2T+xlwZrYp80RLYd+sjbRpHJeC+VRCvOmY7UaoFB9se4AT
-         hKQw==
-X-Gm-Message-State: AOAM532CPjcZhk7UeaDAUeNcfc3/l9jh/LfhQAT8uWGFxUQzBE6CuhFA
-        uFLnzj8dGcWRn/tqbw2a6IUTxl68iXX02z+uK6W7rA==
-X-Google-Smtp-Source: ABdhPJxJPXfPKtL3qIa8/Z/N1nIFDO7fGX3OlnFLcDsUZA88jJu9u2HRZgihQXw8nh4aVVyeBKwcWFnNn3sosQuPbac=
-X-Received: by 2002:a81:591:0:b0:2e5:cdb0:9363 with SMTP id
- 139-20020a810591000000b002e5cdb09363mr15970162ywf.265.1648297604618; Sat, 26
- Mar 2022 05:26:44 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=JX2HoafCqLBV8D/Av/3GafxcwR1VS5PL4ltoAzY1ZZc=;
+        b=y6Fyoy0LYrkuWdCB3UNgxLc8FtTEfd81SbBSxZzCkW6hCqJTntqxXeSoohK60IvIYs
+         9wqY5ESX9luKBQ1xLglsFPSLGG1gxvSi2/VxwoZxNxgsuOb3E6Gtx+6oidyR9khUQ6XE
+         XMd8vimfkSB6KSgSFlSNjdL/7xd2BkSR6GaAe8rkY52Uj+OK5YDuD6c76y7GikKkdd5L
+         36hV54yUGps57Jf7znozthY7SZmBXdmY4+CsdO2hvQi35gp/nItE0MP/3usW5BhMPI/d
+         i5ZFG4QbjFyI7O3oSEnd9HGYThjKvODMJXgAhDctIREjvqPc6wjgqdivLbPTK436zcyt
+         Yjyw==
+X-Gm-Message-State: AOAM530DEeJVGN9dxw2wy7XI/oKQYqLiE45f2IFsaz3E7A673jJZRfHR
+        DU4gd+I2ASabMxkIdk+QNx0lok1MYiR2mrJD
+X-Google-Smtp-Source: ABdhPJyjxL0mrFQx/wQf4pb0MaUt0NIe+E6Wo5AwkrdFrv5MtAAWGcTxSkDdxoz3ms4cXi32n465wg==
+X-Received: by 2002:a17:902:a616:b0:154:abdd:50bb with SMTP id u22-20020a170902a61600b00154abdd50bbmr16362764plq.33.1648298043313;
+        Sat, 26 Mar 2022 05:34:03 -0700 (PDT)
+Received: from ubuntu.mate (subs32-116-206-28-2.three.co.id. [116.206.28.2])
+        by smtp.gmail.com with ESMTPSA id k62-20020a17090a4cc400b001c7ea7f487asm4872920pjh.39.2022.03.26.05.33.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Mar 2022 05:34:02 -0700 (PDT)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] Documentation: kernel-doc: Promote "Writing kernel-doc comments" to page title
+Date:   Sat, 26 Mar 2022 19:33:37 +0700
+Message-Id: <20220326123337.642536-2-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220326123337.642536-1-bagasdotme@gmail.com>
+References: <20220326123337.642536-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
-References: <20220325150420.245733653@linuxfoundation.org> <CA+G9fYtayz_X5tjiCT4gWZNNG=O-zx6-GTLgtqH855RoYw_5xw@mail.gmail.com>
- <Yj7jI6uEtZDC5mQS@kroah.com>
-In-Reply-To: <Yj7jI6uEtZDC5mQS@kroah.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 26 Mar 2022 17:56:32 +0530
-Message-ID: <CA+G9fYuPJyH4V1tJEt5P8FrF5w-NF470ZKOBM01nDeHczATqDA@mail.gmail.com>
-Subject: Re: [PATCH 5.17 00/39] 5.17.1-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Clark <robdclark@chromium.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 26 Mar 2022 at 15:25, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Sat, Mar 26, 2022 at 10:24:39AM +0530, Naresh Kamboju wrote:
-> > On Fri, 25 Mar 2022 at 20:50, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > This is the start of the stable review cycle for the 5.17.1 release.
-> > > There are 39 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > >
-> > > Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
-> > > Anything received after that time might be too late.
-> > >
-> > > The whole patch series can be found in one patch at:
-> > >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.1-rc1.gz
-> > > or in the git tree and branch at:
-> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> > > and the diffstat can be found below.
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> >
-> > arm64 qcom db410c device crashed [1]
-> >
-> > [   10.823905] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-> > [   10.876029] CPU: 1 PID: 193 Comm: kworker/1:2 Not tainted 5.17.1-rc1 #1
-> > [   10.876047] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-> > [   10.876054] Workqueue: pm pm_runtime_work
-> > [   10.876076] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [   10.876087] pc : hrtimer_active+0x14/0x80
-> > [   10.876102] lr : hrtimer_cancel+0x28/0x70
-> >
-> >
-> > The following patch fixes the problem.
-> >
-> > >From 05afd57f4d34602a652fdaf58e0a2756b3c20fd4 Mon Sep 17 00:00:00 2001
-> > From: Rob Clark <robdclark@chromium.org>
-> > Date: Tue, 8 Mar 2022 10:48:44 -0800
-> > Subject: drm/msm/gpu: Fix crash on devices without devfreq support (v2)
-> >
-> > Avoid going down devfreq paths on devices where devfreq is not
-> > initialized.
-> >
-> > v2: Change has_devfreq() logic [Dmitry]
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > Reported-by: Anders Roxell <anders.roxell@linaro.org>
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > Fixes: 6aa89ae1fb04 ("drm/msm/gpu: Cancel idle/boost work on suspend")
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Link: https://lore.kernel.org/r/20220308184844.1121029-1-robdclark@gmail.com
-> > ---
-> >  drivers/gpu/drm/msm/msm_gpu_devfreq.c | 30 +++++++++++++++++++++++++-----
-> >  1 file changed, 25 insertions(+), 5 deletions(-)
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
->
-> Now queued up, but note, this problem was already present in 5.17.0,
-> right?
+Promote the first heading from chapter heading to page title. While at
+it, fix heading inconsistencies by promoting the appropriate headings.
 
-Yeah.
-This problem was there and then later it got fixed.
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Akira Yokosawa <akiyks@gmail.com>
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Documentation/doc-guide/kernel-doc.rst | 29 +++++++++++++-------------
+ 1 file changed, 15 insertions(+), 14 deletions(-)
 
-- Naresh
+diff --git a/Documentation/doc-guide/kernel-doc.rst b/Documentation/doc-guide/kernel-doc.rst
+index 79aaa55d6bcf2b..ea41e05d0e8903 100644
+--- a/Documentation/doc-guide/kernel-doc.rst
++++ b/Documentation/doc-guide/kernel-doc.rst
+@@ -1,3 +1,4 @@
++===========================
+ Writing kernel-doc comments
+ ===========================
+ 
+@@ -31,7 +32,7 @@ kernel source code layout. This is lower priority and at the discretion
+ of the maintainer of that kernel source file.
+ 
+ How to format kernel-doc comments
+----------------------------------
++=================================
+ 
+ The opening comment mark ``/**`` is used for kernel-doc comments. The
+ ``kernel-doc`` tool will extract comments marked this way. The rest of
+@@ -56,7 +57,7 @@ requested to perform extra gcc checks::
+ 	make W=n
+ 
+ Function documentation
+-----------------------
++======================
+ 
+ The general format of a function and function-like macro kernel-doc comment is::
+ 
+@@ -88,7 +89,7 @@ ends with an argument description, a blank comment line, or the end of the
+ comment block.
+ 
+ Function parameters
+-~~~~~~~~~~~~~~~~~~~
++-------------------
+ 
+ Each function argument should be described in order, immediately following
+ the short function description.  Do not leave a blank line between the
+@@ -116,7 +117,7 @@ be written in kernel-doc notation as::
+       * @...: description
+ 
+ Function context
+-~~~~~~~~~~~~~~~~
++----------------
+ 
+ The context in which a function can be called should be described in a
+ section named ``Context``. This should include whether the function
+@@ -134,7 +135,7 @@ Examples::
+   * Context: Interrupt context.
+ 
+ Return values
+-~~~~~~~~~~~~~
++-------------
+ 
+ The return value, if any, should be described in a dedicated section
+ named ``Return``.
+@@ -166,7 +167,7 @@ named ``Return``.
+      effect.
+ 
+ Structure, union, and enumeration documentation
+------------------------------------------------
++===============================================
+ 
+ The general format of a struct, union, and enum kernel-doc comment is::
+ 
+@@ -189,7 +190,7 @@ lines, and ends with a member description, a blank comment line, or the
+ end of the comment block.
+ 
+ Members
+-~~~~~~~
++-------
+ 
+ Members of structs, unions and enums should be documented the same way
+ as function parameters; they immediately succeed the short description
+@@ -223,7 +224,7 @@ Example::
+   };
+ 
+ Nested structs/unions
+-~~~~~~~~~~~~~~~~~~~~~
++---------------------
+ 
+ It is possible to document nested structs and unions, like::
+ 
+@@ -274,7 +275,7 @@ It is possible to document nested structs and unions, like::
+       should be documented as ``@bar:``
+ 
+ In-line member documentation comments
+-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++-------------------------------------
+ 
+ The structure members may also be documented in-line within the definition.
+ There are two styles, single-line comments where both the opening ``/**`` and
+@@ -311,7 +312,7 @@ on a line of their own, like all other kernel-doc comments::
+   };
+ 
+ Typedef documentation
+----------------------
++=====================
+ 
+ The general format of a typedef kernel-doc comment is::
+ 
+@@ -336,7 +337,7 @@ Typedefs with function prototypes can also be documented::
+    typedef void (*type_name)(struct v4l2_ctrl *arg1, void *arg2);
+ 
+ Highlights and cross-references
+--------------------------------
++===============================
+ 
+ The following special patterns are recognized in the kernel-doc comment
+ descriptive text and converted to proper reStructuredText markup and `Sphinx C
+@@ -385,7 +386,7 @@ Domain`_ references.
+   instead. This is mostly for legacy comments.
+ 
+ Cross-referencing from reStructuredText
+-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++=======================================
+ 
+ No additional syntax is needed to cross-reference the functions and types
+ defined in the kernel-doc comments from reStructuredText documents.
+@@ -408,7 +409,7 @@ through the following syntax::
+ For further details, please refer to the `Sphinx C Domain`_ documentation.
+ 
+ Overview documentation comments
+--------------------------------
++===============================
+ 
+ To facilitate having source code and comments close together, you can include
+ kernel-doc documentation blocks that are free-form comments instead of being
+@@ -524,7 +525,7 @@ source.
+ .. _kernel_doc:
+ 
+ How to use kernel-doc to generate man pages
+--------------------------------------------
++===========================================
+ 
+ If you just want to use kernel-doc to generate man pages you can do this
+ from the kernel git tree::
+-- 
+An old man doll... just what I always wanted! - Clara
+

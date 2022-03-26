@@ -2,173 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 740364E83F5
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 20:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EDB4E83FB
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 20:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232824AbiCZTx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 15:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
+        id S234860AbiCZUAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 16:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232511AbiCZTxx (ORCPT
+        with ESMTP id S234415AbiCZUAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 15:53:53 -0400
-Received: from relay4.hostedemail.com (relay4.hostedemail.com [64.99.140.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647882E682;
-        Sat, 26 Mar 2022 12:52:16 -0700 (PDT)
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay11.hostedemail.com (Postfix) with ESMTP id D198880C9A;
-        Sat, 26 Mar 2022 19:52:14 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id AC5446000E;
-        Sat, 26 Mar 2022 19:51:45 +0000 (UTC)
-Message-ID: <63a5e3143e904d1391490f27cc106be894b52ca2.camel@perches.com>
-Subject: Re: [PATCH 16/22] dvb-usb: Replace comments with C99 initializers
-From:   Joe Perches <joe@perches.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Benjamin =?ISO-8859-1?Q?St=FCrz?= <benni@stuerz.xyz>
-Cc:     andrew@lunn.ch, sebastian.hesselbarth@gmail.com,
-        gregory.clement@bootlin.com, linux@armlinux.org.uk,
-        linux@simtec.co.uk, krzk@kernel.org, alim.akhtar@samsung.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, robert.moore@intel.com,
-        rafael.j.wysocki@intel.com, lenb@kernel.org, 3chas3@gmail.com,
-        laforge@gnumonks.org, arnd@arndb.de, gregkh@linuxfoundation.org,
-        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
-        linus.walleij@linaro.org, brgl@bgdev.pl,
-        mike.marciniszyn@cornelisnetworks.com,
-        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
-        pali@kernel.org, dmitry.torokhov@gmail.com, isdn@linux-pingi.de,
-        benh@kernel.crashing.org, fbarrat@linux.ibm.com, ajd@linux.ibm.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        nico@fluxnic.net, loic.poulain@linaro.org, kvalo@kernel.org,
-        pkshih@realtek.com, bhelgaas@google.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-input@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-media@vger.kernel.org,
-        wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Date:   Sat, 26 Mar 2022 12:51:44 -0700
-In-Reply-To: <20220326192720.0fddd6dd@coco.lan>
-References: <20220326165909.506926-1-benni@stuerz.xyz>
-         <20220326165909.506926-16-benni@stuerz.xyz>
-         <20220326192454.14115baa@coco.lan> <20220326192720.0fddd6dd@coco.lan>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Sat, 26 Mar 2022 16:00:34 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7BB47044
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 12:58:57 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 17so14330317lji.1
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 12:58:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=Xq0aLjK8mlWyJ0CXnoW648bxQRycwPWS0yoFwkrlVOo=;
+        b=dFLDy7O2LZUcd7uoEP7FY3qmy3tSFS+MBFI1YigIfXCjrAowsTXSKLadzM4QtBSBXT
+         z7SwY4RXCNcKvubpwS0SlVWOxK4BadrgxNayuVoBbUyF+lprdZAKjQVo2khFs8fMrZ2t
+         MlXNsy5nBVSJXUdrlhXUDhKpxa+AoSGNzooEQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=Xq0aLjK8mlWyJ0CXnoW648bxQRycwPWS0yoFwkrlVOo=;
+        b=zU+kYAXo8s7xaq40g0ZjeIunafIIyr81x0Az0iBcHaZgE7TXc/IUatZOGQa5GWBJTZ
+         4KjwOwuEaS+Ms/VipZX7k2LYN7cKfPYFZXKXqB2NhIIWth0g/4pkEpixeCrx7GfSr7zm
+         tAVqUfgDT9gos5vISZuwbr9oGaqH0oOZT6MkaXs+htLscow1hoA9qWrm7IO2R7VXrKRF
+         CCfGag7fjEGtEDUuSqm6hDOnkXxuDroxWCl8461vcNWXXICsDLUIHp1fT01FmyVH3S2+
+         JwIgy2iO40y6eGrMlfLmTHk84KqsJ68qQWv3ArAN0pCStG3kertC++w4aqOkVR9GOq+B
+         XKZQ==
+X-Gm-Message-State: AOAM531QbkCSfn2e98LEP5NGZZvkZCAwarHXtRDrRYBSNzophaANAy5u
+        83ChmKPTKlUZnDsdn8xBVAWdYBo904hIj24C78Y=
+X-Google-Smtp-Source: ABdhPJw0koveMwEET94IvYMGxdtSrVJo7YOvLRb+YoPiFJf+G2kfUD6MQ5xphq4HtslHmms+uQe/Qg==
+X-Received: by 2002:a05:651c:104b:b0:249:b46c:c32b with SMTP id x11-20020a05651c104b00b00249b46cc32bmr9433800ljm.227.1648324735467;
+        Sat, 26 Mar 2022 12:58:55 -0700 (PDT)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
+        by smtp.gmail.com with ESMTPSA id u16-20020ac25190000000b004433b80c1d3sm1148476lfi.182.2022.03.26.12.58.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Mar 2022 12:58:54 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id e16so18576248lfc.13
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 12:58:53 -0700 (PDT)
+X-Received: by 2002:a05:6512:b13:b0:448:90c6:dc49 with SMTP id
+ w19-20020a0565120b1300b0044890c6dc49mr13374071lfu.542.1648324733085; Sat, 26
+ Mar 2022 12:58:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: AC5446000E
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
-X-Stat-Signature: r3baboadgyrzf5ohpo734it1c55f35b4
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+HneiPuDhf7afikiha+wr4gJKHMUaJQO0=
-X-HE-Tag: 1648324305-593106
+References: <Yj19RH3qpzQsIV/O@shikoro>
+In-Reply-To: <Yj19RH3qpzQsIV/O@shikoro>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 26 Mar 2022 12:58:36 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgoeUc15-8Wu8U=4FnwhgmyU3C13R107oigbmJRpi_sZA@mail.gmail.com>
+Message-ID: <CAHk-=wgoeUc15-8Wu8U=4FnwhgmyU3C13R107oigbmJRpi_sZA@mail.gmail.com>
+Subject: Re: [PULL REQUEST] i2c for v5.18
+To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Terry Bowman <terry.bowman@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-03-26 at 19:27 +0100, Mauro Carvalho Chehab wrote:
-> Em Sat, 26 Mar 2022 19:24:54 +0100
-> Mauro Carvalho Chehab <mchehab@kernel.org> escreveu:
-> 
-> > Em Sat, 26 Mar 2022 17:59:03 +0100
-> > Benjamin Stürz <benni@stuerz.xyz> escreveu:
-> > 
-> > > This replaces comments with C99's designated
-> > > initializers because the kernel supports them now.
-> > > 
-> > > Signed-off-by: Benjamin Stürz <benni@stuerz.xyz>
-> > > ---
-> > >  drivers/media/usb/dvb-usb/dibusb-mb.c | 62 +++++++++++++--------------
-> > >  drivers/media/usb/dvb-usb/dibusb-mc.c | 34 +++++++--------
-> > >  2 files changed, 48 insertions(+), 48 deletions(-)
-> > > 
-> > > diff --git a/drivers/media/usb/dvb-usb/dibusb-mb.c b/drivers/media/usb/dvb-usb/dibusb-mb.c
-> > > index e9dc27f73970..f188e07f518b 100644
-> > > --- a/drivers/media/usb/dvb-usb/dibusb-mb.c
-> > > +++ b/drivers/media/usb/dvb-usb/dibusb-mb.c
-> > > @@ -122,40 +122,40 @@ static int dibusb_probe(struct usb_interface *intf,
-> > >  
-> > >  /* do not change the order of the ID table */
-> > >  static struct usb_device_id dibusb_dib3000mb_table [] = {
-> > > -/* 00 */	{ USB_DEVICE(USB_VID_WIDEVIEW,		USB_PID_AVERMEDIA_DVBT_USB_COLD) },
-> > > -/* 01 */	{ USB_DEVICE(USB_VID_WIDEVIEW,		USB_PID_AVERMEDIA_DVBT_USB_WARM) },
-> > > -/* 02 */	{ USB_DEVICE(USB_VID_COMPRO,		USB_PID_COMPRO_DVBU2000_COLD) },
-> > > -/* 03 */	{ USB_DEVICE(USB_VID_COMPRO,		USB_PID_COMPRO_DVBU2000_WARM) },
-> > > -/* 04 */	{ USB_DEVICE(USB_VID_COMPRO_UNK,	USB_PID_COMPRO_DVBU2000_UNK_COLD) },
-> > > -/* 05 */	{ USB_DEVICE(USB_VID_DIBCOM,		USB_PID_DIBCOM_MOD3000_COLD) },
-> > > -/* 06 */	{ USB_DEVICE(USB_VID_DIBCOM,		USB_PID_DIBCOM_MOD3000_WARM) },
-> > > -/* 07 */	{ USB_DEVICE(USB_VID_EMPIA,		USB_PID_KWORLD_VSTREAM_COLD) },
-> > > -/* 08 */	{ USB_DEVICE(USB_VID_EMPIA,		USB_PID_KWORLD_VSTREAM_WARM) },
-> > > -/* 09 */	{ USB_DEVICE(USB_VID_GRANDTEC,		USB_PID_GRANDTEC_DVBT_USB_COLD) },
-> > > -/* 10 */	{ USB_DEVICE(USB_VID_GRANDTEC,		USB_PID_GRANDTEC_DVBT_USB_WARM) },
-> > > -/* 11 */	{ USB_DEVICE(USB_VID_GRANDTEC,		USB_PID_DIBCOM_MOD3000_COLD) },
-> > > -/* 12 */	{ USB_DEVICE(USB_VID_GRANDTEC,		USB_PID_DIBCOM_MOD3000_WARM) },
-> > > -/* 13 */	{ USB_DEVICE(USB_VID_HYPER_PALTEK,	USB_PID_UNK_HYPER_PALTEK_COLD) },
-> > > -/* 14 */	{ USB_DEVICE(USB_VID_HYPER_PALTEK,	USB_PID_UNK_HYPER_PALTEK_WARM) },
-> > > -/* 15 */	{ USB_DEVICE(USB_VID_VISIONPLUS,	USB_PID_TWINHAN_VP7041_COLD) },
-> > > -/* 16 */	{ USB_DEVICE(USB_VID_VISIONPLUS,	USB_PID_TWINHAN_VP7041_WARM) },
-> > > -/* 17 */	{ USB_DEVICE(USB_VID_TWINHAN,		USB_PID_TWINHAN_VP7041_COLD) },
-> > > -/* 18 */	{ USB_DEVICE(USB_VID_TWINHAN,		USB_PID_TWINHAN_VP7041_WARM) },
-> > > -/* 19 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,	USB_PID_ULTIMA_TVBOX_COLD) },
-> > > -/* 20 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,	USB_PID_ULTIMA_TVBOX_WARM) },
-> > > -/* 21 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,	USB_PID_ULTIMA_TVBOX_AN2235_COLD) },
-> > > -/* 22 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,	USB_PID_ULTIMA_TVBOX_AN2235_WARM) },
-> > > -/* 23 */	{ USB_DEVICE(USB_VID_ADSTECH,		USB_PID_ADSTECH_USB2_COLD) },
-> > > +[0]  =	{ USB_DEVICE(USB_VID_WIDEVIEW,		USB_PID_AVERMEDIA_DVBT_USB_COLD) },
-> > > +[1]  =	{ USB_DEVICE(USB_VID_WIDEVIEW,		USB_PID_AVERMEDIA_DVBT_USB_WARM) },  
-> > 
-> > While here, please properly indent this table, and respect the 80-columns limit,
-> > e. g.:
-> > 
-> > static struct usb_device_id dibusb_dib3000mb_table [] = {
-> > 	[0] = { USB_DEVICE(USB_VID_WIDEVIEW 
-> > 			   USB_PID_AVERMEDIA_DVBT_USB_COLD) 
-> > 	},
-> > 	[1]  =	{ USB_DEVICE(USB_VID_WIDEVIEW,
-> > 			     USB_PID_AVERMEDIA_DVBT_USB_WARM)
-> > 	},
-> > 	...
-> 
-> Err.... something went wrong with my space bar and I ended hitting send to
-> soon... I meant:
-> 
-> static struct usb_device_id dibusb_dib3000mb_table [] = {
->  	[0] = { USB_DEVICE(USB_VID_WIDEVIEW 
->  			   USB_PID_AVERMEDIA_DVBT_USB_COLD) 
->  	},
->  	[1] = { USB_DEVICE(USB_VID_WIDEVIEW,
->  			   USB_PID_AVERMEDIA_DVBT_USB_WARM)
->  	},
-> 	...
-> };
+On Fri, Mar 25, 2022 at 1:28 AM Wolfram Sang <wsa@kernel.org> wrote:
+>
+> I2C has for 5.18: tracepoints when Linux acts as an I2C client, added
+> support for AMD PSP, whole subsytsem now uses generic_handle_irq_safe(),
+> piix4 driver gained MMIO access enabling so far missed controllers with
+> AMD chipsets, plus a bulk of device driver updates, refactorization, and
+> fixes.
 
-maybe static const too
+It feels odd/wrong to use the piix4 driver for the AMD MMIO case on SB800.
 
-and
+Would it not have made more sense to just make that a separate driver?
 
-maybe
+It feels like now the piix4 driver has a lot of "if SB800" for the
+probing code, and then a lot of "if (mmio)" at runtime.
 
-#define DIB_DEVICE(vid, pid)	\
-	{ USB_DEVICE(USB_VID_ ## vid, USB_PID_ ## pid) }
+I've pulled this, but just wanted to mention this "that looks a bit
+odd". How much code is actually _shared_ in the SB800 case?
 
-so maybe
+I'm not insisting on splitting this up - maybe it all makes sense. I'm
+just questioning it.
 
-static const struct usb_device_id dibusb_dib3000mb_table[] = {
-	[0] = DIB_DEVICE(WIDEVIEW, AVERMEDIA_DVBT_USB_COLD),
-	[1] = DIB_DEVICE(WIDEVIEW, AVERMEDIA_DVBT_USB_WARM),
-	...
-};
-
-though I _really_ doubt the value of the specific indexing.
-
-I think this isn't really worth changing at all.
-
-
+             Linus

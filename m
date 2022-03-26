@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C598F4E7FDB
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 08:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F12D04E7FDD
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 08:51:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbiCZHxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 03:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
+        id S231956AbiCZHxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 03:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbiCZHw5 (ORCPT
+        with ESMTP id S231892AbiCZHw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 03:52:57 -0400
-Received: from mx.msync.work (mx.msync.work [51.91.38.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E07154484;
-        Sat, 26 Mar 2022 00:51:21 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0AAA733E46;
-        Sat, 26 Mar 2022 07:51:19 +0000 (UTC)
+        Sat, 26 Mar 2022 03:52:59 -0400
+Received: from mx.msync.work (mx.msync.work [IPv6:2001:41d0:d:357f:aaaa::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1AE71544AE;
+        Sat, 26 Mar 2022 00:51:22 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id DC36F33EE9;
+        Sat, 26 Mar 2022 07:51:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lexina.in; s=dkim;
-        t=1648281080; h=from:subject:date:message-id:to:mime-version:
+        t=1648281081; h=from:subject:date:message-id:to:mime-version:
          content-transfer-encoding:in-reply-to:references;
-        bh=lMkPsT9wmYQRWVhCSgEyUxO6l9DD/Z5L18efF0PKVNA=;
-        b=kpVE8K/GUTEr29vPglh/NXLZr1GTnRwE0ju4MrsUyJyWE2jDnjtYEm6O7UP3I7zVNzajby
-        bd7oUCvhof40NcyGIbyH+f2U1d1xcOR3X6FOiuRQaHM7xjm+um6ffxnI5jmPJkLVi5mnGs
-        Bf4YEDqO2TsmjpFD+a+stv8z1Us5RSag1vLuERF5CAyU+FS2nw4ybmNRBHqxM2BStTXbBK
-        dduZhRQDd20Zb9Pc1gcFg5ZRzWjIx7KlZohzdI9txEFuTqJjsdUXtTgxx8kOxufbPbYkn5
-        +pbN39yl4vRT3A80X8o5CPFpJ8G8u6b0pe+oMu+7nTTetTEtUavklIRwE8aErg==
+        bh=2zutAK5IyrmEYXJesAiAG/QGzAOVj6jiOeg39kr9PHM=;
+        b=WOCGB16/EuN01Uq92kXi9yNwwNdHk54bKstwjHM8cmY749WF+lhncuEzuwzxG3PKmoK8Mn
+        yoUct+LwFEFwIGrp/Fc0p6PWz8ae22KsU4ZdbrnIvhfVVfp0Y7kU9WeZQ44kBvZui0IWkr
+        rPJruhQyaVM/01YzvJ4MBwenSaCEmje56cIahbjpgVtlfrFw4sJb1uUG3HY2oBy91LvlTy
+        NptGI1CA82jKAwwKSpaKrV7moo6k4Tu3kHy1E0IB3P7JeuUa3kDtLXdobK+ZH0OuKuDrS/
+        nU50jCl/HK8Ha4Tdw2SaVNT6GS0iKkvj5T2MpDJGbbfqwsqtIWy/vNmYmd7KnA==
 From:   Vyacheslav Bocharov <adeep@lexina.in>
 To:     Neil Armstrong <narmstrong@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>,
         linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v2 2/4] arm64: meson: dts: update serial alias in dts for JetHub D1
-Date:   Sat, 26 Mar 2022 10:51:08 +0300
-Message-Id: <20220326075110.1462301-3-adeep@lexina.in>
+Subject: [PATCH v2 3/4] arm64: meson: update SDIO voltage in dts for JetHub D1
+Date:   Sat, 26 Mar 2022 10:51:09 +0300
+Message-Id: <20220326075110.1462301-4-adeep@lexina.in>
 In-Reply-To: <20220326075110.1462301-1-adeep@lexina.in>
 References: <20220326075110.1462301-1-adeep@lexina.in>
 MIME-Version: 1.0
@@ -49,26 +49,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change zigbee serial port alias to ttyAML2 for backward compatibility.
+Fix the dts to match board's reference design:
+- update vddio_boot regulator to 3.3v (Wi-Fi SDIO module)
+- add vccq_1v8 regulator with 1.8v for eMMC SDIO
+
+In the first revision of JetHub D1 the vccq_1v8 regulator was 3.3v.
+All installed eMMC modules were tested to work in HS200 mode at 3.3v
+supply voltage. In the next revisions of the board eMMC will be
+powered with 1.8v according to the standard.
 
 Signed-off-by: Vyacheslav Bocharov <adeep@lexina.in>
 ---
- arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../dts/amlogic/meson-axg-jethome-jethub-j100.dts     | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts b/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts
-index 52ebe371df26..66c1eeba8f48 100644
+index 66c1eeba8f48..e52abffdf8cf 100644
 --- a/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts
 +++ b/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts
-@@ -18,7 +18,7 @@ / {
- 	model = "JetHome JetHub J100";
- 	aliases {
- 		serial0 = &uart_AO;   /* Console */
--		serial1 = &uart_AO_B; /* External UART (Wireless Module) */
-+		serial2 = &uart_AO_B; /* External UART (Wireless Module) */
- 		ethernet0 = &ethmac;
- 	};
+@@ -81,6 +81,15 @@ vddio_ao18: regulator-vddio_ao18 {
+ 	vddio_boot: regulator-vddio_boot {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "VDDIO_BOOT";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		vin-supply = <&vddao_3v3>;
++		regulator-always-on;
++	};
++
++	vccq_1v8: regulator-vccq_1v8 {
++		compatible = "regulator-fixed";
++		regulator-name = "VCCQ_1V8";
+ 		regulator-min-microvolt = <1800000>;
+ 		regulator-max-microvolt = <1800000>;
+ 		vin-supply = <&vddao_3v3>;
+@@ -282,7 +291,7 @@ &sd_emmc_c {
+ 	mmc-pwrseq = <&emmc_pwrseq>;
  
+ 	vmmc-supply = <&vcc_3v3>;
+-	vqmmc-supply = <&vddio_boot>;
++	vqmmc-supply = <&vccq_1v8>;
+ };
+ 
+ /* UART Bluetooth */
 -- 
 2.30.2
 

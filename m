@@ -2,107 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45AD34E8465
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 22:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E31544E846A
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 22:30:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235469AbiCZVXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 17:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
+        id S235431AbiCZVbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 17:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiCZVXS (ORCPT
+        with ESMTP id S229890AbiCZVbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 17:23:18 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3AD9BADE;
-        Sat, 26 Mar 2022 14:21:41 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id gp15-20020a17090adf0f00b001c7cd11b0b3so6410227pjb.3;
-        Sat, 26 Mar 2022 14:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TyBK01jrf008SVfLFXsPXvWmiecmsTzyMmbOyqtInlc=;
-        b=B+Rs+UWSLybpeZxAWtBcyyOMx+iqm7JPyXuSA6lt+6RQT7a8CHeOWPxYl1myiqbrVi
-         OgBRl04RQZrCkJ2I9UB8/T9oyew6SOxURlztEhUtW9t4K9BOrO62JLVsU4k5ZLTLH3qo
-         b1TJj/v/RODWbP8A5lk+gQU513XV+lRGNTDS5+9jeMJC3PJ7niyh0ccAkYctI9S38UtA
-         WVXBujilYAy0ivwZLTbxuQoGxn8UqHd3ldHx2AP9JifyXE+1lQFWDqA8HaaZuXCzBwiX
-         4tVAxPVZ2qsYwt4rd6IjiLYiJPF7vrwrySuARZqwnNAb0c/1yCWM/OLsptR2AjWcyeHI
-         jYAQ==
+        Sat, 26 Mar 2022 17:31:40 -0400
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101FC15FCC;
+        Sat, 26 Mar 2022 14:30:03 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id h1so12927695edj.1;
+        Sat, 26 Mar 2022 14:30:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=TyBK01jrf008SVfLFXsPXvWmiecmsTzyMmbOyqtInlc=;
-        b=mQEgydLWre/SAM9Q1mPgiAiDwecCYYKBMDc4tMZWCNxkButu3oReNdDHqCIgoWst/Z
-         dzm2ffI2Cp54ecOYVTWFGA9LKpVPfnbveq/Be1Qg6NZBs/jiWtyYhZEHKpyd5Q0k7M8j
-         fSbI9sCsIMb8rHpOkh2XzvHLdQkZ0xmcm4T91RPRaZzxmXRm7rboNRMzTKGsUMr77f4N
-         7ddjYteqROZK3Z1eFpeltB13RJUknybViq8e54oa8BNrcpeXs/C4tZ/tEg0nsAXUqD/s
-         cytZUnt1e68Eu6yVqTYz9FeGIHg5Ihy8T6iNZ7wJpOvF4sYZZhNYL/HffDUKXzwM5kui
-         E2IA==
-X-Gm-Message-State: AOAM533QDZ9uLTi6+6Yi5ZaJT9khxXIdTXtHOuHEsvg4c6weGTt3ukiF
-        MR58fNrmY524mYqGwCpUAE3TD4CbtI0ueQ==
-X-Google-Smtp-Source: ABdhPJxASVZuRWBucF6JwS8GEH1In6Rw/XlhRogRmB8w2a5HB4Y+oEEdOfDA3E7L8hV16/fuivgCoQ==
-X-Received: by 2002:a17:90b:4c49:b0:1c7:d6c1:bb0f with SMTP id np9-20020a17090b4c4900b001c7d6c1bb0fmr14322401pjb.230.1648329700957;
-        Sat, 26 Mar 2022 14:21:40 -0700 (PDT)
-Received: from localhost.localdomain ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id d5-20020a056a0024c500b004fae56b2921sm10669697pfv.167.2022.03.26.14.21.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 14:21:40 -0700 (PDT)
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mukesh Savaliya <msavaliy@codeaurora.org>,
-        Akash Asthana <akashast@codeaurora.org>
-Cc:     Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: spi: qcom-qspi: Add minItems to interconnect-names
-Date:   Sun, 27 Mar 2022 02:51:34 +0530
-Message-Id: <20220326212134.45759-1-singh.kuldeep87k@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=7H//OQ3peeZo6cFkBAqd2bvidUOeWSddr0qVAjJHEkk=;
+        b=ToKx5GFSWbdebqWwDP5bXXXoseEHeeq+9zfq1GCuStROox2Wq1AXIH7Vpbc31ZtVlW
+         1hTI1gSW2PCcMVFwUkW12Vi89+YE0gFQ0Sxk6FooqIkC3gDu2Qc64v6jltJaUDRJ2zs1
+         BLD7pw1DN+Og6ClNX1low0b1vP/rOHGnA9xo5S7ie9oPUETvqRVictrWqIfxZ+EA3RCV
+         VP9jzqGQSwOBevMTU0oZMfPj4DEtpaYrSTZSptgWAEgG+7i2hHuMC0yXDwwq/N+shnKU
+         8aCRsa0iz9JW/9BcBVUhUjWlhwu4M5zBG/NSVj1Tts+ZYjgdUiN3qNpFo0Zk444j5bIl
+         tatw==
+X-Gm-Message-State: AOAM530jjYx8xC8PJ3gHB+EC9+0hFM3U8+f/CnyDzMTqa34lFWTIkAJk
+        7gzEUDy0L81Y1Aujrxot5GE=
+X-Google-Smtp-Source: ABdhPJwdup7W+e8oCpUfyH1DfPFRegqIKYsj2TkC1DZLAN5hn9CCubKrNb7IkbBYOsLudYhnXw3P3Q==
+X-Received: by 2002:aa7:d58e:0:b0:419:c121:ea33 with SMTP id r14-20020aa7d58e000000b00419c121ea33mr5846197edq.256.1648330201522;
+        Sat, 26 Mar 2022 14:30:01 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id pk9-20020a170906d7a900b006e05b7ce40csm3864675ejb.221.2022.03.26.14.29.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Mar 2022 14:30:00 -0700 (PDT)
+Message-ID: <a6d8ab4e-c863-1dce-249b-e3971cdaf930@kernel.org>
+Date:   Sat, 26 Mar 2022 22:29:56 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 1/2] dt-bindings: clock: convert
+ rockchip,rk3288-cru.txt to YAML
+Content-Language: en-US
+To:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220326120942.24008-1-jbx6244@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220326120942.24008-1-jbx6244@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qualcomm QSPI DT spec says interconnects has minimum length 1 and
-maximum length 2. Same configuration will be applicable for
-interconnect-names. Schema currently depicts interconnects length
-correctly but not interconnect-names. It can have a single entry, which
-is a valid case yet to be incorporated in the current configuration. The
-schema tries to look for 2 names and fail for DTs with a single entry.
-Thus, add minItems property to interconnect-names to fix it.
+On 26/03/2022 13:09, Johan Jonker wrote:
+> Current dts files with RK3288 'cru' nodes are manually verified.
+> In order to automate this process rockchip,rk3288-cru.txt has to be
+> converted to YAML.
+> 
+> Changed:
+>   Add properties to fix notifications by clocks.yaml for example:
+>     clocks
+>     clock-names
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  .../bindings/clock/rockchip,rk3288-cru.txt    | 67 ---------------
+>  .../bindings/clock/rockchip,rk3288-cru.yaml   | 83 +++++++++++++++++++
+>  2 files changed, 83 insertions(+), 67 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3288-cru.txt
+>  create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3288-cru.yaml
+> 
 
-With the change applied, below interconnect-names values are possible:
-['qspi-config'], ['qspi-config', 'qspi-memory']
 
-Fixes: 8f9c291558ea ("dt-bindings: spi: Add interconnect binding for QSPI")
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
----
- Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-index 055524fe8327..116f3746c1e6 100644
---- a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-@@ -49,6 +49,7 @@ properties:
-     maxItems: 2
- 
-   interconnect-names:
-+    minItems: 1
-     items:
-       - const: qspi-config
-       - const: qspi-memory
--- 
-2.25.1
 
+Best regards,
+Krzysztof

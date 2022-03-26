@@ -2,158 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D34B24E843E
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 21:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 504474E8443
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 22:04:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235303AbiCZU5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 16:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
+        id S233055AbiCZVE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 17:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232514AbiCZU5T (ORCPT
+        with ESMTP id S230308AbiCZVEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 16:57:19 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB3674DE5
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 13:55:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648328141; x=1679864141;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6QaBuzK9xzxNTQw6dxJrzISS6d9uJyAB2wH4iKGnYhE=;
-  b=kORKOkFL7OPwT2KG/7+kaAWY+GIIK5TNBmaadd8iyVdpX55OFopNarhH
-   osDz8xrTr59ttPCUbDcMWoR2bRyGrnTv82OHwp3wsDHKnwuCOsvF20YDC
-   7iar+U+EZf6DR4B4lk93ndTdbJ3G7O0XqtgEKYvhiN7KcnGKuZGTUMgBR
-   Z+Te7503CgaiSIuET7guQ+uDMVwOhxk6pwPDGo+P3/7eykJi1eLoHtfZe
-   KLTQYWcD9QsO2r+O6+v8K5mjX4GOICV3AeCf+dVXu6L+3IyvDRbqI2L3y
-   Sh6IAWvAdeCdkN6JcPGwcRPtyOi8oVLsUwa+Zq9/CHWzqj7vKt6C3TynW
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="258772418"
-X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
-   d="scan'208";a="258772418"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 13:55:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
-   d="scan'208";a="520556971"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 26 Mar 2022 13:55:37 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nYDRh-0000PE-7A; Sat, 26 Mar 2022 20:55:37 +0000
-Date:   Sun, 27 Mar 2022 04:55:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     cgel.zte@gmail.com, paul@paul-moore.com, eparis@redhat.com,
-        linux-audit@redhat.com
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] audit: do a quick exit when syscall number is invalid
-Message-ID: <202203270449.WBYQF9X3-lkp@intel.com>
-References: <20220326094654.2361956-1-yang.yang29@zte.com.cn>
+        Sat, 26 Mar 2022 17:04:54 -0400
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70391102
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 14:03:16 -0700 (PDT)
+Received: by mail-vk1-xa34.google.com with SMTP id p143so6022518vkf.5
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 14:03:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=J8s39Hf+0zr8egKm//Mqpb+5/kH7X9BGZ05be3kJ96k=;
+        b=cOVN4o+wgdD7dvKIYdB98sVRw16J+6jzP953f8PKKcHbIu7AgloP8MACx5VtPZm5+k
+         sHDebP5KI0MEGXzKdpagdhmL9ec0ZIp0XSko3YKKQoJSR47669gqTTk+3whwAsVMzRIb
+         cX7MuHhqhJOuPYojwwuxD/ifznzZCfMujTx1hTBOBXGKKrMHcvbfxlE8qrY7jnqg4FSk
+         LanKficLPing2dBDIU3ydpVrdwgNgl50JFncIP1pOy/F76W3tZBx42zDZWFDNjTwVeCU
+         8736ztS7wIO72EtxaxJ0lh9K53yF+n07XUFgmOcl2i4NLyBgHXaXEgCuqw/NO/p/6Rd3
+         GllA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J8s39Hf+0zr8egKm//Mqpb+5/kH7X9BGZ05be3kJ96k=;
+        b=l9tLaddvBd6qk1/vZviUuAuDASGZ3PqUlPxQxLBngfi1bjlfKi9pQUUz5EJ2+G3ssl
+         3iwl+FTHgI0uqlbhOirOHNd0jpAlDeRHaHcT0g9Xmxe2OOr61NpBr5nOcczYGJMbEYrP
+         1GDilaAP/UrQGPCxI+nMFc2GTEvuk600psWvHLJXZWW08VDtH+J+ssuHHJy9k50D7vLV
+         FqtVacxVWqIDa+WGVGUnZ45b3uaZdQAdDWaYh+cVIK3FkV7iJnCGIru3E+EXXClfvj/Q
+         /veBkXKpaxqDXDzJl1TkywvE8gFpmU9hABA5eUWVjPc8G0q/Hh9bKWkowt+k7tEl0vfQ
+         ZYOQ==
+X-Gm-Message-State: AOAM533gx7cUjrTl3ys1XmF9faQj9u4cutF3eiOAEUjGd0zO+5PKS08u
+        hGItAHTUbeKu36oURntm4hlwlW4gX+Fc3aUjrcFV4w==
+X-Google-Smtp-Source: ABdhPJwagl7oEUUX31C3s4tj4gQK/i+pmRpDRgvmBdJJLJAvyM7y8gSo5aR2CqsTEOZb6pMz6zw8hoW9RMAq4c+uORg=
+X-Received: by 2002:a1f:a9cb:0:b0:33e:d145:85f0 with SMTP id
+ s194-20020a1fa9cb000000b0033ed14585f0mr7726646vke.7.1648328595748; Sat, 26
+ Mar 2022 14:03:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220326094654.2361956-1-yang.yang29@zte.com.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220326010003.3155137-1-yuzhao@google.com> <CAHk-=wjp=jEhjvD9GPnHfuV5Kc1=rUnf84b_qscLJ8fkY74u3Q@mail.gmail.com>
+ <CAOUHufbqum18T4kZ=d_hMehz=N=3iSuNfGrLof5tB8kjGkk8yw@mail.gmail.com> <20220326134928.ad739eeecd5d0855dbdc6257@linux-foundation.org>
+In-Reply-To: <20220326134928.ad739eeecd5d0855dbdc6257@linux-foundation.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Sat, 26 Mar 2022 15:03:04 -0600
+Message-ID: <CAOUHufYU2m5UFbcvLDK7vNdqmh2utbwGK+fvDKYHz4rhw4WYXw@mail.gmail.com>
+Subject: Re: [page-reclaim] Re: [GIT PULL] Multi-gen LRU for 5.18-rc1
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <baohua@kernel.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Donald Carr <d@chaos-reins.com>,
+        Hillf Danton <hdanton@sina.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Rik van Riel <riel@surriel.com>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, Mar 26, 2022 at 2:49 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Fri, 25 Mar 2022 19:16:15 -0600 Yu Zhao <yuzhao@google.com> wrote:
+>
+> > On Fri, Mar 25, 2022 at 7:07 PM Linus Torvalds
+> > <torvalds@linux-foundation.org> wrote:
+> > >
+> > > On Fri, Mar 25, 2022 at 6:00 PM Yu Zhao <yuzhao@google.com> wrote:
+> > > >
+> > > > This is more of an option than a request for 5.18. I'm sending it to
+> > > > you directly because, in my judgement, it's now as ready as it'll ever
+> > > > be.
+> > >
+> > > So I do expect to merge this, but I don't think it has been in
+> > > linux-next, has it?
+> >
+> > No. I could ask Stephen to see if he is willing to take this series. I
+> > was hoping to go through Andrew since his tree is what most MM
+> > developers test. I haven't heard from Andrew, so I assume he has no
+> > strong opinion and I don't want to put him in a different position.
+>
+> hm, sorry, something in the headers here fooled my (elaborate) procmail
+> rules :(
+>
+> Please yes, let's have a cycle in -next.  I thought we decided to do
+> that in discussion with Matthew Wilcox?
 
-Thank you for the patch! Yet something to improve:
+Will do.
 
-[auto build test ERROR on pcmoore-audit/next]
-[also build test ERROR on v5.17 next-20220325]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> Also, sorry, but I'm not seeing many commonly-seen names amongst the
+> reviewers.  I'd be more comfortable if people who have done most work on
+> page reclaim up to this time have had time to review and comment.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/audit-do-a-quick-exit-when-syscall-number-is-invalid/20220326-174904
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220327/202203270449.WBYQF9X3-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/052b1a11a0bec23358ecc22ad9b085590efd3057
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/audit-do-a-quick-exit-when-syscall-number-is-invalid/20220326-174904
-        git checkout 052b1a11a0bec23358ecc22ad9b085590efd3057
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/init.h:5,
-                    from kernel/auditsc.c:34:
-   kernel/auditsc.c: In function '__audit_syscall_exit':
->> kernel/auditsc.c:2081:61: error: 'NR_syscalls' undeclared (first use in this function); did you mean 'si_syscall'?
-    2081 |             unlikely(context->major < 0 || context->major > NR_syscalls))
-         |                                                             ^~~~~~~~~~~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   kernel/auditsc.c:2081:61: note: each undeclared identifier is reported only once for each function it appears in
-    2081 |             unlikely(context->major < 0 || context->major > NR_syscalls))
-         |                                                             ^~~~~~~~~~~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-
-
-vim +2081 kernel/auditsc.c
-
-  2063	
-  2064	/**
-  2065	 * __audit_syscall_exit - deallocate audit context after a system call
-  2066	 * @success: success value of the syscall
-  2067	 * @return_code: return value of the syscall
-  2068	 *
-  2069	 * Tear down after system call.  If the audit context has been marked as
-  2070	 * auditable (either because of the AUDIT_STATE_RECORD state from
-  2071	 * filtering, or because some other part of the kernel wrote an audit
-  2072	 * message), then write out the syscall information.  In call cases,
-  2073	 * free the names stored from getname().
-  2074	 */
-  2075	void __audit_syscall_exit(int success, long return_code)
-  2076	{
-  2077		struct audit_context *context = audit_context();
-  2078	
-  2079		if (!context || context->dummy ||
-  2080		    context->context != AUDIT_CTX_SYSCALL ||
-> 2081		    unlikely(context->major < 0 || context->major > NR_syscalls))
-  2082			goto out;
-  2083	
-  2084		/* this may generate CONFIG_CHANGE records */
-  2085		if (!list_empty(&context->killed_trees))
-  2086			audit_kill_trees(context);
-  2087	
-  2088		/* run through both filters to ensure we set the filterkey properly */
-  2089		audit_filter_syscall(current, context);
-  2090		audit_filter_inodes(current, context);
-  2091		if (context->current_state < AUDIT_STATE_RECORD)
-  2092			goto out;
-  2093	
-  2094		audit_return_fixup(context, success, return_code);
-  2095		audit_log_exit();
-  2096	
-  2097	out:
-  2098		audit_reset_context(context);
-  2099	}
-  2100	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Me too :) Unfortunately I can't dictate others' priorities or
+methodologies. So I have reset my expectations from getting their
+reviewed-by's to not getting their NAKs.

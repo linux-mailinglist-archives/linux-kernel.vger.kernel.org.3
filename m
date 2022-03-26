@@ -2,96 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A184E8095
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 12:39:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B244E8098
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 12:40:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232684AbiCZLlF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 26 Mar 2022 07:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
+        id S232697AbiCZLld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 07:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiCZLlE (ORCPT
+        with ESMTP id S229498AbiCZLlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 07:41:04 -0400
-X-Greylist: delayed 96494 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Mar 2022 04:39:27 PDT
-Received: from mail.sysgo.com (mail.sysgo.com [159.69.174.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E174E3B5
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 04:39:26 -0700 (PDT)
-From:   Matthias Welwarsky <matthias.welwarsky@sysgo.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86-ml <x86@kernel.org>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: x86, possible bug in __memmove() alternatives patching
-Date:   Sat, 26 Mar 2022 12:39:23 +0100
-Message-ID: <3346653.QJadu78ljV@linux-3513>
-Organization: SYSGO GmbH
-In-Reply-To: <d9d0405e-b118-b028-d26f-fbb8de4e7a0e@intel.com>
-References: <3422754.iIbC2pHGDl@linux-3513> <Yj49F1pnehy3ga5U@zn.tnic> <d9d0405e-b118-b028-d26f-fbb8de4e7a0e@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 26 Mar 2022 07:41:32 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813B74EA2C;
+        Sat, 26 Mar 2022 04:39:56 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id j13so10711072plj.8;
+        Sat, 26 Mar 2022 04:39:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=tia7fK4nc/ANrfG8lyg/ABwGBOiv7qC/2FHjWGl9d/8=;
+        b=O2HpT1g/76KqlcnfA8zcoSg92GyPGII5TRrUJivHd58veRfeL5Z3M4MYOt/oy48nc4
+         xAfJdsi+8SHZm++eAT362IKZrjElK7niOXYZ0ttVK6UWd97CZeoZmpTc2w8WBjAuIvgR
+         +nLMLz3zViX3++38C98TudKnSpyk1vWGJz+ZI7Ka8Swr8QIyM0g8vX+F9x2veA9i3hhX
+         A672sxIthWWsbtMRQH/JcQgP7LBl9jwaoyv2KWwawSj3NIN1mZG8j3f2j3869NZTGPeG
+         uCOHYrPT6x5y+BoDgtW9Nf1INHr9CGnleMZxfEEqW54KkG4KZer5C7Ut1vy3QL5pq4ez
+         vfzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=tia7fK4nc/ANrfG8lyg/ABwGBOiv7qC/2FHjWGl9d/8=;
+        b=vkv2YZpPeIQedZSmsxXbi2Z5W3TgVTupGOdiHjNR8CJBoLoa3Vmp9HK2B6ULx0kHoA
+         TXss3RcUNZn6s9gO1kFc4kgWcSLRCFheUbXUsTqnqQBoCdV/TKyEfT+dR39FjTOlHoEU
+         piu7A/NQ2dky8UTQ8ETsHm/1C7P36O6AxLO0uxVb+2sdlZ2wi88e8UaZs2JlZr7cVaOZ
+         YTyl4+G1bALfE8NEjVdn73OaCGKrswhP/RFhAPdU43JoYZ2KxknKX9ot4GN2GGjNZl1h
+         7l4vEuRFxTzBx1iYhlv7UarelLexMZoi9zGKNo5B9Nof5hVPSFYr9iy4uTX7Ui3zDen0
+         ng5g==
+X-Gm-Message-State: AOAM533T/Bgjew79FIM977BN+YgBKyMRxIKZTMgRtC534n2QUM6slBIV
+        TBhMTuwURMGTAJm+9BZeQ42P3DqC5jk=
+X-Google-Smtp-Source: ABdhPJzWorglYLMrgJbfU8duaTDY2yB2zqS+A0F08KUCi0s04JZrkIN9Q+pCa6AdV0pVuYes2mSdbA==
+X-Received: by 2002:a17:902:c64b:b0:153:f75d:253e with SMTP id s11-20020a170902c64b00b00153f75d253emr16554380pls.48.1648294795784;
+        Sat, 26 Mar 2022 04:39:55 -0700 (PDT)
+Received: from RD-1129-20047.dynamic.kbronet.com.tw (180-176-43-246.dynamic.kbronet.com.tw. [180.176.43.246])
+        by smtp.gmail.com with ESMTPSA id s1-20020a056a00178100b004f731a1a952sm9884926pfg.168.2022.03.26.04.39.53
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 26 Mar 2022 04:39:55 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     broonie@kernel.org, robh+dt@kernel.org
+Cc:     lgirdwood@gmail.com, cy_huang@richtek.com, gene_chen@richtek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v2 0/2] Add Richtek RT5759 buck converter support
+Date:   Sat, 26 Mar 2022 19:39:46 +0800
+Message-Id: <1648294788-11758-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Samstag, 26. März 2022 05:45:24 CET Dave Hansen wrote:
-> On 3/25/22 15:07, Borislav Petkov wrote:
-> > I know it's is probably a very rare case and Intel recommends having fast
-> > string ops enabled, hence the question: would this be considered a bug in
-> > the kernel that should be fixed? A potential fix could be to clear FSRM
-> > together with ERMS depending on IA32_MISC_ENABLE.
-> 
-> I'd consider it a bug in the hypervisor, personally. ;)
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-Of course, no doubt about that.
+This patch series add Richtek RT5759 buck converter support.
 
-> But, we do try to make the kernel work even the face of funky
-> hypervisors that do things that never occur on real hardware.  If a nice
-> patch to fix this up showed up, I'd definitely take a look.
+since V2
+- Fix typo in title description.
+- Put allOf and if/then to be together.
+- Change node name to generic 'regulator'.
+- Remove seperate wdt_enable variable.
+- Add of_match_ptr in struct driver of_match_table declaration.
 
-The question is whether a sequence like this could be relevant:
+ChiYuan Huang (2):
+  dt-bindings: regulator: Add binding for Richtek RT5759 DCDC converter
+  regulator: rt5759: Add support for Richtek RT5759 DCDC converter
 
-0) CPU announces feature FSRM through cpuid
-1) BIOS/firmware disables fast string ops through IA32_MISC_ENABLE before 
-loading kernel (for whatever reason)
-2) Kernel populates features from cpuid
-3) Kernel clears ERMS based on IA32_MISC_ENABLE
-4) "alternatives" patching destroys __memmove()
-
-That depends on whether a cpuid instruction after step 1) would still announce 
-FSRM. If not, then the whole point is moot and no patch needed (unless we want 
-to guard against hypervisor bugs).
+ .../regulator/richtek,rt5759-regulator.yaml        |  90 +++++
+ drivers/regulator/Kconfig                          |  10 +
+ drivers/regulator/Makefile                         |   1 +
+ drivers/regulator/rt5759-regulator.c               | 369 +++++++++++++++++++++
+ 4 files changed, 470 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt5759-regulator.yaml
+ create mode 100644 drivers/regulator/rt5759-regulator.c
 
 -- 
-Mit freundlichen Grüßen/Best regards,
-
-Matthias Welwarsky
-Project Engineer
-
-SYSGO GmbH
-Office Mainz
-Am Pfaffenstein 8 / D-55270 Klein-Winternheim / Germany
-Phone: +49-6136-9948-0 / Fax: +49-6136-9948-10
-E-mail: matthias.welwarsky@sysgo.com
-_________________________________________________________________________________
-Web: https://www.sysgo.com
-Blog: https://www.sysgo.com/blog
-Events: https://www.sysgo.com/events
-Newsletter: https://www.sysgo.com/newsletter
-_________________________________________________________________________________
-Handelsregister/Commercial Registry: HRB Mainz 90 HRB 48884 
-Geschäftsführung/Managing Directors: Etienne Butery (CEO), Kai Sablotny (COO) 
-USt-Id-Nr./VAT-Id-No.: DE 149062328 
-
-The protection of your personal data is important to us. Under the following 
-link 
-you can see the information in accordance with article 13 GDPR: 
-https://www.sysgo.com/privacy_policy
-
+2.7.4
 

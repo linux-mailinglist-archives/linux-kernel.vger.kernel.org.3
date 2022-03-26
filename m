@@ -2,68 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C894E7F30
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 06:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 902F54E7F31
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 06:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbiCZFvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 01:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
+        id S231326AbiCZFvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 01:51:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiCZFvd (ORCPT
+        with ESMTP id S231318AbiCZFvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 01:51:33 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59CF20824E
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 22:49:57 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id v35so17390710ybi.10
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 22:49:57 -0700 (PDT)
+        Sat, 26 Mar 2022 01:51:41 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDBE210468
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 22:50:05 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id qa43so19004492ejc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 22:50:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=m5y3dmyCTMeUhyJ/TUJk+2Wdo01Owyg3EMB2TMG5W38=;
-        b=jsCGRS4GHxbFStvzfyR35DZR8Tk7le7FgAzWmsifTGmCjytiWtBh0VyiuJ6NBqSpTS
-         hcRo+EARXYJ/4Swc43a+c1W6QyPIpXxzFg3hg9IqfavFN18d+snqmUgJkbfYYJDXbUN2
-         YMsf9dczwLfmjVEX5BqKoM8UVnzLz2NaFoGplfZxxdJZN1USUFbyoexZkqDkOv6tPgGy
-         UjADIdXY5wN7XQsByN0yvEVz5dpeEuOc4voWsskTWQdkJBxkK3KOdGfnPNA2VGqFsthN
-         EXnzFGssJ6JJmjE5UpVWio/d3fBuCN4UaCetpiIjtoZf9+ifzJow7yIB+ASXk2RhV6Lx
-         O6Hw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2O4yXpqsURvfM5TB1UAWHWz+8FkEHYO0gCz767gxti8=;
+        b=Sod/FcT9Ks5jijNGSYWpQqzd2JM5VDQVU8LgvK+b5kJXeLJ7QA0CZcDCF05sYHAjYm
+         BVFzuU76IglUwI8JQsnzAKI3cuQXLirS7G9bp1t/al+3dw/TGAiv9wUpyabRDndtCgEP
+         eO4epxHuxmxlplL3zY2SC1wstRqM9gJiP1CpDnIP+s1YVx7Ynhpdr/E2brjy0fnY2Zii
+         4lBi4HZmW3pg92GjJuMNzCZagWrEPEWU2emY2IFElEotn5Mrat+h2gwXe9X00yEoNYJx
+         TKH0Se9JgX02mX7U7XEDoLLw6GUbFpSFdYFrw1wEbFV1onAQsWXAQD/ud+LGaASHvSeV
+         YQYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=m5y3dmyCTMeUhyJ/TUJk+2Wdo01Owyg3EMB2TMG5W38=;
-        b=QgTK5tcX3j+CeREglzEOC7I9UT1i0tSKQF/eCD03Xll9veLSPUy8vTkRSYDvD6VZyx
-         q4jDsk65iD7dEoypxfOo6tIpvUGqocl6VgAIURq0d0P0J1MM9FibMUTJhFXUqci2EQHL
-         kOBmAmZGY2hmgmEmpoUQuTQh58ywXbUBcW0ssi1MpP4a9FeQqPd7sYFqDIPq06wdHM9Q
-         n+bzFrMJ5WAC/jq2BXNFnIaMok5LMdFsC3OtSQuaGcCQ2ZGLcAqtsoazNa9yigenwhub
-         X64eNPV1L+OWczn5umS5Qgj0KfxeRlcMBoWYr4Cx9s9CGYBLj75I3MN0Vmprss3OBwiQ
-         Dy7w==
-X-Gm-Message-State: AOAM5312ZTkGrel57YpdigqrYJJ+ZExunfaVgSorWZAhaYbMS+etmV4J
-        5SOUNlmRYkFw00jvVMSxCSm742fQLHGhFXNM7gVx3g==
-X-Google-Smtp-Source: ABdhPJyT0L7N7Pgui08NCvn9g/BZXr/pN0RW4c9VcoTCj9GkBmwYh3ubWlz+jo9sPUsFey+qfN5Rl/3lDhG0oeSLYOM=
-X-Received: by 2002:a25:2409:0:b0:634:15f4:2240 with SMTP id
- k9-20020a252409000000b0063415f42240mr13187835ybk.88.1648273796125; Fri, 25
- Mar 2022 22:49:56 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2O4yXpqsURvfM5TB1UAWHWz+8FkEHYO0gCz767gxti8=;
+        b=mUJ5fkDBQ1JpmdSUIX7AlHWc1m2ntS1OXNZdV5Hmt9bz+Yrw4sMs8ot1O8JEGNpPHt
+         DAN7Drz9pho9AoqgBWPbGR4MDyyiSbmSPiW3qmCvQIFEKCDzcTwxETIwL5qNxyq2DAE2
+         luY0VA4dwhHVr4EXodbnO5mWV+2flyMhrRkLgoSvBekjApJJJTkdKpnjZ2+d+JUekJdX
+         6ZJQkgsq8TTSDuePCCoJZeDrDB2sVwwNiKdE+F5qkdZXB0wpUW1w6YjXBp+Cu/n2NrMz
+         VOtrgZ4KF4+wPA4PiK6WkgJcMWWIiIaCkOz0UI9qR+BUZrz12Hjnc6eL8ER1nxRECpOS
+         9THQ==
+X-Gm-Message-State: AOAM531Lnc+LIqRIaDtNO5a4ajyAZSCakG3NTPNAxts2BagFpKA3Xyvi
+        CFNYrBNlh0rurhq/J1lxOwqvGg==
+X-Google-Smtp-Source: ABdhPJz2DiccS9xVih0qkcsHHv/ejttJp0IsCc3Xakcv/Utb1G9VsI1XMGaRvbMGOYF83H//hNnB7g==
+X-Received: by 2002:a17:906:9751:b0:6e0:5cdd:cabf with SMTP id o17-20020a170906975100b006e05cddcabfmr15961766ejy.38.1648273803777;
+        Fri, 25 Mar 2022 22:50:03 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([104.245.96.34])
+        by smtp.gmail.com with ESMTPSA id c5-20020a170906d18500b006ce371f09d4sm3064171ejz.57.2022.03.25.22.49.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 22:50:03 -0700 (PDT)
+Date:   Sat, 26 Mar 2022 13:49:56 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ali Saidi <alisaidi@amazon.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, german.gomez@arm.com,
+        benh@kernel.crashing.org, Nick.Forrington@arm.com,
+        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
+        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
+        kjain@linux.ibm.com, lihuafei1@huawei.com, mark.rutland@arm.com,
+        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
+        peterz@infradead.org, will@kernel.org
+Subject: Re: [PATCH v4 1/4] tools: arm64: Import cputype.h
+Message-ID: <20220326054956.GB20556@leoy-ThinkPad-X240s>
+References: <20220324183323.31414-1-alisaidi@amazon.com>
+ <20220324183323.31414-2-alisaidi@amazon.com>
+ <Yj4McMHsxtJ3PfKk@kernel.org>
+ <Yj4bKHrmKhujZdpj@kernel.org>
 MIME-Version: 1.0
-References: <20220325150420.046488912@linuxfoundation.org>
-In-Reply-To: <20220325150420.046488912@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 26 Mar 2022 11:19:45 +0530
-Message-ID: <CA+G9fYuNg3=ig3A5J0oOojC4ywtf_yUeyMoPwYrFBGvzeexWZA@mail.gmail.com>
-Subject: Re: [PATCH 5.16 00/37] 5.16.18-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yj4bKHrmKhujZdpj@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,182 +80,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Mar 2022 at 20:47, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.16.18 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.16.18-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi Arnaldo, Ali,
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+On Fri, Mar 25, 2022 at 04:42:32PM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Fri, Mar 25, 2022 at 03:39:44PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Thu, Mar 24, 2022 at 06:33:20PM +0000, Ali Saidi escreveu:
+> > > Bring-in the kernel's arch/arm64/include/asm/cputype.h into tools/
+> > > for arm64 to make use of all the core-type definitions in perf.
+> 
+> > > Replace sysreg.h with the version already imported into tools/.
+>  
+> > You forgot to add it to tools/perf/check-headers.sh so that we get
+> > notificed when the original file in the kernel sources gets updated, so
+> > that we can check if this needs any tooling adjustments.
+>  
+> > I'll add the entry together with the waiver for this specific
+> > difference.
+> 
+> This:
+> 
+> diff --git a/tools/perf/check-headers.sh b/tools/perf/check-headers.sh
+> index 30ecf3a0f68b6830..6ee44b18c6b57cf1 100755
+> --- a/tools/perf/check-headers.sh
+> +++ b/tools/perf/check-headers.sh
+> @@ -146,6 +146,7 @@ done
+>  check arch/x86/lib/memcpy_64.S        '-I "^EXPORT_SYMBOL" -I "^#include <asm/export.h>" -I"^SYM_FUNC_START\(_LOCAL\)*(memcpy_\(erms\|orig\))"'
+>  check arch/x86/lib/memset_64.S        '-I "^EXPORT_SYMBOL" -I "^#include <asm/export.h>" -I"^SYM_FUNC_START\(_LOCAL\)*(memset_\(erms\|orig\))"'
+>  check arch/x86/include/asm/amd-ibs.h  '-I "^#include [<\"]\(asm/\)*msr-index.h"'
+> +check arch/arm64/include/asm/cputype.h '-I "^#include [<\"]\(asm/\)*sysreg.h"'
+>  check include/uapi/asm-generic/mman.h '-I "^#include <\(uapi/\)*asm-generic/mman-common\(-tools\)*.h>"'
+>  check include/uapi/linux/mman.h       '-I "^#include <\(uapi/\)*asm/mman.h>"'
+>  check include/linux/build_bug.h       '-I "^#\(ifndef\|endif\)\( \/\/\)* static_assert$"'
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+LGTM.  I did the testing on both my x86 and Arm64 platforms, thanks for
+the fixing up.
 
-## Build
-* kernel: 5.16.18-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.16.y
-* git commit: f6cd6b12e190ef5b92d82a341e76d8a9cd7cd284
-* git describe: v5.16.17-38-gf6cd6b12e190
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.16.y/build/v5.16=
-.17-38-gf6cd6b12e190
-
-## Test Regressions (compared to v5.16.17)
-No test regressions found.
-
-## Metric Regressions (compared to v5.16.17)
-No metric regressions found.
-
-## Test Fixes (compared to v5.16.17)
-No test fixes found.
-
-## Metric Fixes (compared to v5.16.17)
-No metric fixes found.
-
-## Test result summary
-total: 104880, pass: 88707, fail: 1055, skip: 13919, xfail: 1199
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 293 total, 293 passed, 0 failed
-* arm64: 43 total, 43 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 42 total, 42 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 54 passed, 6 failed
-* riscv: 27 total, 22 passed, 5 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 43 total, 43 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* timesync-off
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Thanks,
+Leo

@@ -2,77 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76794E7BD1
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B83D4E7E15
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 01:23:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbiCZAQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 20:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60194 "EHLO
+        id S230321AbiCZAWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 20:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbiCZAQs (ORCPT
+        with ESMTP id S230316AbiCZAWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 20:16:48 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A8D205968
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:15:12 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id c2so7685427pga.10
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:15:12 -0700 (PDT)
+        Fri, 25 Mar 2022 20:22:06 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0A0B35
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:20:24 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id b16-20020a253410000000b00633b9e71eecso7189793yba.14
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 17:20:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FQC7h1s3zGX5GsUNU5SzN2ybagH0IG2NIZcge3j4zR8=;
-        b=cX0k5vpCCINgqk/XWr7uhcEBno8PpNyK3xCVWey4nAgzH3x7TjTqPgtCnn9eNmOtOx
-         dj598b5tiak3WM/RgD6OXJrvcb+VwYMN6vypMLGvDGpYIXXwRvBABhhfBiVnMvYrVcKs
-         ZrbczYRTRW3kq4Jkt2hIqtPAMfdsDQsbLHEwrvNktQUgobgH0TWAytBeMbWW+M/19MPE
-         JcmyfRTUncHfaNXhjXVukeFEnrMAFHG17jB4+AnmxRb+7HrNj9M+2mbEZBejg/rTMRAz
-         09kqtCu5DNd1KwmQdqmUvEz3h7rehEviLOISQtWWiNzafgH2q+AbVobcRhFg4l+AjbAs
-         3srQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=C0K5LeS3BASADYBIxGKhgSo/whyn0R2Pt5cL1x5OXu4=;
+        b=A2DQdYTYXWNiRmxLBNYY2lkD47ugy3eDFZ0cABTFPs3WGxNYUudh3k3h1bn49AHR7D
+         voChmj9RwVykOxRV2r5DFu5QOHaOJkk3b9ep4CJ13tVuXnitfzNz1cTGdzSFTfgNJ5W/
+         p8Kg+Y7ZvrmHZ1LZcrBIgGOY7hyRXY0mjbNFIhhurHHgaQD5kGMDzfyUPV7PcvsgcCYt
+         nr5zcf7S+RgY5sbu4eumu2b9Udg8UaJQdTMa+f+bOMQzmiRdTYFuqvZ3YAugbCewtMTJ
+         aKO64urgDABygFt1RqRhODOlmPBLkbqpd2WMPuILJd6c89POqq5Pr+p8dq+msbCu9KTc
+         VUhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FQC7h1s3zGX5GsUNU5SzN2ybagH0IG2NIZcge3j4zR8=;
-        b=z/HLLQTEdigC6rwH5ZUWs165ORQBtuKzykPxI1tFNakrERWkYt/FamUX5FhVEZ+0jM
-         7f/LYDKWaz99rmQyK/4VlqfporFY/KO1yvUwY+gXga+Diss1yxRRDfUMtsW1/I3g570B
-         mfqs5TRFyY8DBxeKu2PIdRVx0oBD4x/dD9vW6iOWOqf0TXo9hF1O3epldICyqtyHz6TO
-         PtPG5nEL116FS69QX/SoI8m16oRlmaSDG5Hm/abwAsWYd4h2vWiba0mMa5Xf/mLcswok
-         E3BOfkvf4Qw/85j6EKppGpF8jahvENZuxtaEwsdcMMWXckNrCdVstxkYMZVowzTUK6b7
-         O6Qg==
-X-Gm-Message-State: AOAM531TsLvjoPbHQnokvf4UveWz4hpHbr9mNLMU+ipjKWtwcQji0rhu
-        sKM6pMf04nvj0oWlH48cF6duwg==
-X-Google-Smtp-Source: ABdhPJz7Zd+S4ualUAy9FGz5K65CXMsHQ4ZW4z+SUIX3w3/c+14i5OyEW+DZJt0AjOPrSGJeheWkSQ==
-X-Received: by 2002:a63:742:0:b0:382:2684:dd41 with SMTP id 63-20020a630742000000b003822684dd41mr1611016pgh.38.1648253711595;
-        Fri, 25 Mar 2022 17:15:11 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id l23-20020a17090a071700b001c67a95e7fbsm6987733pjl.47.2022.03.25.17.15.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 17:15:10 -0700 (PDT)
-Date:   Sat, 26 Mar 2022 00:15:07 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86: optimize PKU branching in
- kvm_load_{guest|host}_xsave_state
-Message-ID: <Yj5bCw0q5n4ZgSuU@google.com>
-References: <20220324004439.6709-1-jon@nutanix.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324004439.6709-1-jon@nutanix.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=C0K5LeS3BASADYBIxGKhgSo/whyn0R2Pt5cL1x5OXu4=;
+        b=QQr6kIOT914xl3LgO9zW2FRM79+7I+CwjNOgmtui0AJt6UDNfJ/R3i6b5wGFF51tFX
+         s/5LsA054oeFUuAu8xHRXe65oUD7+auOp+CoL64yu7o09RHcfGnzwHVJBYDw2bqIGTFb
+         ksRPAaO+t9vWFzQJ7izxKoPxleYJeLi84MSFBBFt+6bvSi53addB7bFaVItbW/f9PJdD
+         jQJ2UkGP3qhMdEM2ZiZL2rk7jP2OnAtdz2SL8W4m5FsOXVUV0VNxBvtw5A109kPLQn6x
+         i2NnPODBXUhQyUWfw/DOQ/Ui8M242wD7ntU+2pE573+FQ85OIO+EnOO5LGH8GKsINn7A
+         st1Q==
+X-Gm-Message-State: AOAM531XUVx3/nYNTHR3NmGx4WPpVMhBrlsiwB1uxIOjnmlB5D3Lge51
+        2qiuaNEoGzJKOa6kqmb86Vkcl2ajeC/+Fg==
+X-Google-Smtp-Source: ABdhPJy9eEJFpKaqjA/Gu7GgrIH2iefLTuNOwefZAfM2U3iTQM+0GLEOCNm05C3b/8hGe7GAa3ckdjw+SRttOA==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:be84:4a49:e731:f1fa])
+ (user=dlatypov job=sendgmr) by 2002:a25:9846:0:b0:61a:3deb:4d39 with SMTP id
+ k6-20020a259846000000b0061a3deb4d39mr12938439ybo.537.1648254024016; Fri, 25
+ Mar 2022 17:20:24 -0700 (PDT)
+Date:   Fri, 25 Mar 2022 17:20:12 -0700
+Message-Id: <20220326002013.483394-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
+Subject: [PATCH v2 1/2] kunit: split resource API from test.h into new resource.h
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,94 +65,744 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022, Jon Kohler wrote:
-> kvm_load_{guest|host}_xsave_state handles xsave on vm entry and exit,
-> part of which is managing memory protection key state. The latest
-> arch.pkru is updated with a rdpkru, and if that doesn't match the base
-> host_pkru (which about 70% of the time), we issue a __write_pkru.
-> 
-> To improve performance, implement the following optimizations:
->  1. Reorder if conditions prior to wrpkru in both
->     kvm_load_{guest|host}_xsave_state.
-> 
->     Flip the ordering of the || condition so that XFEATURE_MASK_PKRU is
->     checked first, which when instrumented in our environment appeared
->     to be always true and less overall work than kvm_read_cr4_bits.
+Background:
+Currently, a reader looking at kunit/test.h will find the file is quite
+long, and the first meaty comment is a doc comment about struct
+kunit_resource.
 
-If it's always true, then it should be checked last, not first.  And if
-kvm_read_cr4_bits() is more expensive then we should address that issue, not
-try to micro-optimize this stuff.  X86_CR4_PKE can't be guest-owned, and so
-kvm_read_cr4_bits() should be optimized down to:
+Most users will not ever use the KUnit resource API directly.
+They'll use kunit_kmalloc() and friends, or decide it's simpler to do
+cleanups via labels (it often can be) instead of figuring out how to use
+the API.
 
-	return vcpu->arch.cr4 & X86_CR4_PKE;
+It's also logically separate from everything else in test.h.
+Removing it from the file doesn't cause any compilation errors (since
+struct kunit has `struct list_head resources` to store them).
 
-If the compiler isn't smart enough to do that on its own then we should rework
-kvm_read_cr4_bits() as that will benefit multiple code paths.
+This commit:
+Let's move it into a kunit/resource.h file and give it a separate page
+in the docs, kunit/api/resource.rst.
 
->     For kvm_load_guest_xsave_state, hoist arch.pkru != host_pkru ahead
->     one position. When instrumented, I saw this be true roughly ~70% of
->     the time vs the other conditions which were almost always true.
->     With this change, we will avoid 3rd condition check ~30% of the time.
+We include resource.h at the bottom of test.h since
+* don't want to force existing users to add a new include if they use the API
+* it accesses `lock` inside `struct kunit` in a inline func
+  * so we can't just forward declare, and the alternatives require
+    uninlining the func, adding hepers to lock/unlock, or other more
+    invasive changes.
 
-If the guest uses PKRU...  If PKRU is used by the host but not the guest, the
-early comparison is pure overhead because it will almost always be true (guest
-will be zero, host will non-zero), 
+Now the first big comment in test.h is about kunit_case, which is a lot
+more relevant to what a new user wants to know.
 
->  2. Wrap PKU sections with CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS,
->     as if the user compiles out this feature, we should not have
->     these branches at all.
+A side effect of this is git blame won't properly track history by
+default, users need to run
+$ git blame -L ,1 -C17 include/kunit/resource.h
 
-Not that it really matters, since static_cpu_has() will patch out all the branches,
-and in practice who cares about a JMP or NOP(s)?  But...
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+---
+v1 -> v2: add TODO to make users #include resource.h, drop redundant fwd
+decl of struct kunit in resource.h
+---
+ Documentation/dev-tools/kunit/api/index.rst   |   5 +
+ .../dev-tools/kunit/api/resource.rst          |  13 +
+ include/kunit/resource.h                      | 318 ++++++++++++++++++
+ include/kunit/test.h                          | 303 +----------------
+ 4 files changed, 340 insertions(+), 299 deletions(-)
+ create mode 100644 Documentation/dev-tools/kunit/api/resource.rst
+ create mode 100644 include/kunit/resource.h
 
-#ifdeffery is the wrong way to handle this.  Replace static_cpu_has() with
-cpu_feature_enabled(); that'll boil down to a '0' and omit all the code when
-CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS=n, without the #ifdef ugliness.
+diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentation/dev-tools/kunit/api/index.rst
+index 3006cadcf44a..45ce04823f9f 100644
+--- a/Documentation/dev-tools/kunit/api/index.rst
++++ b/Documentation/dev-tools/kunit/api/index.rst
+@@ -6,6 +6,7 @@ API Reference
+ .. toctree::
+ 
+ 	test
++	resource
+ 
+ This section documents the KUnit kernel testing API. It is divided into the
+ following sections:
+@@ -13,3 +14,7 @@ following sections:
+ Documentation/dev-tools/kunit/api/test.rst
+ 
+  - documents all of the standard testing API
++
++Documentation/dev-tools/kunit/api/resource.rst
++
++ - documents the KUnit resource API
+diff --git a/Documentation/dev-tools/kunit/api/resource.rst b/Documentation/dev-tools/kunit/api/resource.rst
+new file mode 100644
+index 000000000000..0a94f831259e
+--- /dev/null
++++ b/Documentation/dev-tools/kunit/api/resource.rst
+@@ -0,0 +1,13 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++============
++Resource API
++============
++
++This file documents the KUnit resource API.
++
++Most users won't need to use this API directly, power users can use it to store
++state on a per-test basis, register custom cleanup actions, and more.
++
++.. kernel-doc:: include/kunit/resource.h
++   :internal:
+diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+new file mode 100644
+index 000000000000..7ab1fd83972b
+--- /dev/null
++++ b/include/kunit/resource.h
+@@ -0,0 +1,318 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * KUnit resource API for test managed resources (allocations, etc.).
++ *
++ * Copyright (C) 2022, Google LLC.
++ * Author: Daniel Latypov <dlatypov@google.com>
++ */
++
++#ifndef _KUNIT_RESOURCE_H
++#define _KUNIT_RESOURCE_H
++
++#include <kunit/test.h>
++
++#include <linux/kref.h>
++#include <linux/list.h>
++#include <linux/slab.h>
++#include <linux/spinlock.h>
++
++struct kunit_resource;
++
++typedef int (*kunit_resource_init_t)(struct kunit_resource *, void *);
++typedef void (*kunit_resource_free_t)(struct kunit_resource *);
++
++/**
++ * struct kunit_resource - represents a *test managed resource*
++ * @data: for the user to store arbitrary data.
++ * @name: optional name
++ * @free: a user supplied function to free the resource. Populated by
++ * kunit_resource_alloc().
++ *
++ * Represents a *test managed resource*, a resource which will automatically be
++ * cleaned up at the end of a test case.
++ *
++ * Resources are reference counted so if a resource is retrieved via
++ * kunit_alloc_and_get_resource() or kunit_find_resource(), we need
++ * to call kunit_put_resource() to reduce the resource reference count
++ * when finished with it.  Note that kunit_alloc_resource() does not require a
++ * kunit_resource_put() because it does not retrieve the resource itself.
++ *
++ * Example:
++ *
++ * .. code-block:: c
++ *
++ *	struct kunit_kmalloc_params {
++ *		size_t size;
++ *		gfp_t gfp;
++ *	};
++ *
++ *	static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
++ *	{
++ *		struct kunit_kmalloc_params *params = context;
++ *		res->data = kmalloc(params->size, params->gfp);
++ *
++ *		if (!res->data)
++ *			return -ENOMEM;
++ *
++ *		return 0;
++ *	}
++ *
++ *	static void kunit_kmalloc_free(struct kunit_resource *res)
++ *	{
++ *		kfree(res->data);
++ *	}
++ *
++ *	void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
++ *	{
++ *		struct kunit_kmalloc_params params;
++ *
++ *		params.size = size;
++ *		params.gfp = gfp;
++ *
++ *		return kunit_alloc_resource(test, kunit_kmalloc_init,
++ *			kunit_kmalloc_free, &params);
++ *	}
++ *
++ * Resources can also be named, with lookup/removal done on a name
++ * basis also.  kunit_add_named_resource(), kunit_find_named_resource()
++ * and kunit_destroy_named_resource().  Resource names must be
++ * unique within the test instance.
++ */
++struct kunit_resource {
++	void *data;
++	const char *name;
++	kunit_resource_free_t free;
++
++	/* private: internal use only. */
++	struct kref refcount;
++	struct list_head node;
++};
++
++/*
++ * Like kunit_alloc_resource() below, but returns the struct kunit_resource
++ * object that contains the allocation. This is mostly for testing purposes.
++ */
++struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
++						    kunit_resource_init_t init,
++						    kunit_resource_free_t free,
++						    gfp_t internal_gfp,
++						    void *context);
++
++/**
++ * kunit_get_resource() - Hold resource for use.  Should not need to be used
++ *			  by most users as we automatically get resources
++ *			  retrieved by kunit_find_resource*().
++ * @res: resource
++ */
++static inline void kunit_get_resource(struct kunit_resource *res)
++{
++	kref_get(&res->refcount);
++}
++
++/*
++ * Called when refcount reaches zero via kunit_put_resource();
++ * should not be called directly.
++ */
++static inline void kunit_release_resource(struct kref *kref)
++{
++	struct kunit_resource *res = container_of(kref, struct kunit_resource,
++						  refcount);
++
++	/* If free function is defined, resource was dynamically allocated. */
++	if (res->free) {
++		res->free(res);
++		kfree(res);
++	}
++}
++
++/**
++ * kunit_put_resource() - When caller is done with retrieved resource,
++ *			  kunit_put_resource() should be called to drop
++ *			  reference count.  The resource list maintains
++ *			  a reference count on resources, so if no users
++ *			  are utilizing a resource and it is removed from
++ *			  the resource list, it will be freed via the
++ *			  associated free function (if any).  Only
++ *			  needs to be used if we alloc_and_get() or
++ *			  find() resource.
++ * @res: resource
++ */
++static inline void kunit_put_resource(struct kunit_resource *res)
++{
++	kref_put(&res->refcount, kunit_release_resource);
++}
++
++/**
++ * kunit_add_resource() - Add a *test managed resource*.
++ * @test: The test context object.
++ * @init: a user-supplied function to initialize the result (if needed).  If
++ *        none is supplied, the resource data value is simply set to @data.
++ *	  If an init function is supplied, @data is passed to it instead.
++ * @free: a user-supplied function to free the resource (if needed).
++ * @res: The resource.
++ * @data: value to pass to init function or set in resource data field.
++ */
++int kunit_add_resource(struct kunit *test,
++		       kunit_resource_init_t init,
++		       kunit_resource_free_t free,
++		       struct kunit_resource *res,
++		       void *data);
++
++/**
++ * kunit_add_named_resource() - Add a named *test managed resource*.
++ * @test: The test context object.
++ * @init: a user-supplied function to initialize the resource data, if needed.
++ * @free: a user-supplied function to free the resource data, if needed.
++ * @res: The resource.
++ * @name: name to be set for resource.
++ * @data: value to pass to init function or set in resource data field.
++ */
++int kunit_add_named_resource(struct kunit *test,
++			     kunit_resource_init_t init,
++			     kunit_resource_free_t free,
++			     struct kunit_resource *res,
++			     const char *name,
++			     void *data);
++
++/**
++ * kunit_alloc_resource() - Allocates a *test managed resource*.
++ * @test: The test context object.
++ * @init: a user supplied function to initialize the resource.
++ * @free: a user supplied function to free the resource.
++ * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
++ * @context: for the user to pass in arbitrary data to the init function.
++ *
++ * Allocates a *test managed resource*, a resource which will automatically be
++ * cleaned up at the end of a test case. See &struct kunit_resource for an
++ * example.
++ *
++ * Note: KUnit needs to allocate memory for a kunit_resource object. You must
++ * specify an @internal_gfp that is compatible with the use context of your
++ * resource.
++ */
++static inline void *kunit_alloc_resource(struct kunit *test,
++					 kunit_resource_init_t init,
++					 kunit_resource_free_t free,
++					 gfp_t internal_gfp,
++					 void *context)
++{
++	struct kunit_resource *res;
++
++	res = kzalloc(sizeof(*res), internal_gfp);
++	if (!res)
++		return NULL;
++
++	if (!kunit_add_resource(test, init, free, res, context))
++		return res->data;
++
++	return NULL;
++}
++
++typedef bool (*kunit_resource_match_t)(struct kunit *test,
++				       struct kunit_resource *res,
++				       void *match_data);
++
++/**
++ * kunit_resource_instance_match() - Match a resource with the same instance.
++ * @test: Test case to which the resource belongs.
++ * @res: The resource.
++ * @match_data: The resource pointer to match against.
++ *
++ * An instance of kunit_resource_match_t that matches a resource whose
++ * allocation matches @match_data.
++ */
++static inline bool kunit_resource_instance_match(struct kunit *test,
++						 struct kunit_resource *res,
++						 void *match_data)
++{
++	return res->data == match_data;
++}
++
++/**
++ * kunit_resource_name_match() - Match a resource with the same name.
++ * @test: Test case to which the resource belongs.
++ * @res: The resource.
++ * @match_name: The name to match against.
++ */
++static inline bool kunit_resource_name_match(struct kunit *test,
++					     struct kunit_resource *res,
++					     void *match_name)
++{
++	return res->name && strcmp(res->name, match_name) == 0;
++}
++
++/**
++ * kunit_find_resource() - Find a resource using match function/data.
++ * @test: Test case to which the resource belongs.
++ * @match: match function to be applied to resources/match data.
++ * @match_data: data to be used in matching.
++ */
++static inline struct kunit_resource *
++kunit_find_resource(struct kunit *test,
++		    kunit_resource_match_t match,
++		    void *match_data)
++{
++	struct kunit_resource *res, *found = NULL;
++	unsigned long flags;
++
++	spin_lock_irqsave(&test->lock, flags);
++
++	list_for_each_entry_reverse(res, &test->resources, node) {
++		if (match(test, res, (void *)match_data)) {
++			found = res;
++			kunit_get_resource(found);
++			break;
++		}
++	}
++
++	spin_unlock_irqrestore(&test->lock, flags);
++
++	return found;
++}
++
++/**
++ * kunit_find_named_resource() - Find a resource using match name.
++ * @test: Test case to which the resource belongs.
++ * @name: match name.
++ */
++static inline struct kunit_resource *
++kunit_find_named_resource(struct kunit *test,
++			  const char *name)
++{
++	return kunit_find_resource(test, kunit_resource_name_match,
++				   (void *)name);
++}
++
++/**
++ * kunit_destroy_resource() - Find a kunit_resource and destroy it.
++ * @test: Test case to which the resource belongs.
++ * @match: Match function. Returns whether a given resource matches @match_data.
++ * @match_data: Data passed into @match.
++ *
++ * RETURNS:
++ * 0 if kunit_resource is found and freed, -ENOENT if not found.
++ */
++int kunit_destroy_resource(struct kunit *test,
++			   kunit_resource_match_t match,
++			   void *match_data);
++
++static inline int kunit_destroy_named_resource(struct kunit *test,
++					       const char *name)
++{
++	return kunit_destroy_resource(test, kunit_resource_name_match,
++				      (void *)name);
++}
++
++/**
++ * kunit_remove_resource() - remove resource from resource list associated with
++ *			     test.
++ * @test: The test context object.
++ * @res: The resource to be removed.
++ *
++ * Note that the resource will not be immediately freed since it is likely
++ * the caller has a reference to it via alloc_and_get() or find();
++ * in this case a final call to kunit_put_resource() is required.
++ */
++void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
++
++#endif /* _KUNIT_RESOURCE_H */
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 00b9ff7783ab..d04f9e2fd5e7 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -27,78 +27,6 @@
+ 
+ #include <asm/rwonce.h>
+ 
+-struct kunit_resource;
+-
+-typedef int (*kunit_resource_init_t)(struct kunit_resource *, void *);
+-typedef void (*kunit_resource_free_t)(struct kunit_resource *);
+-
+-/**
+- * struct kunit_resource - represents a *test managed resource*
+- * @data: for the user to store arbitrary data.
+- * @name: optional name
+- * @free: a user supplied function to free the resource. Populated by
+- * kunit_resource_alloc().
+- *
+- * Represents a *test managed resource*, a resource which will automatically be
+- * cleaned up at the end of a test case.
+- *
+- * Resources are reference counted so if a resource is retrieved via
+- * kunit_alloc_and_get_resource() or kunit_find_resource(), we need
+- * to call kunit_put_resource() to reduce the resource reference count
+- * when finished with it.  Note that kunit_alloc_resource() does not require a
+- * kunit_resource_put() because it does not retrieve the resource itself.
+- *
+- * Example:
+- *
+- * .. code-block:: c
+- *
+- *	struct kunit_kmalloc_params {
+- *		size_t size;
+- *		gfp_t gfp;
+- *	};
+- *
+- *	static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
+- *	{
+- *		struct kunit_kmalloc_params *params = context;
+- *		res->data = kmalloc(params->size, params->gfp);
+- *
+- *		if (!res->data)
+- *			return -ENOMEM;
+- *
+- *		return 0;
+- *	}
+- *
+- *	static void kunit_kmalloc_free(struct kunit_resource *res)
+- *	{
+- *		kfree(res->data);
+- *	}
+- *
+- *	void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
+- *	{
+- *		struct kunit_kmalloc_params params;
+- *
+- *		params.size = size;
+- *		params.gfp = gfp;
+- *
+- *		return kunit_alloc_resource(test, kunit_kmalloc_init,
+- *			kunit_kmalloc_free, &params);
+- *	}
+- *
+- * Resources can also be named, with lookup/removal done on a name
+- * basis also.  kunit_add_named_resource(), kunit_find_named_resource()
+- * and kunit_destroy_named_resource().  Resource names must be
+- * unique within the test instance.
+- */
+-struct kunit_resource {
+-	void *data;
+-	const char *name;
+-	kunit_resource_free_t free;
+-
+-	/* private: internal use only. */
+-	struct kref refcount;
+-	struct list_head node;
+-};
+-
+ struct kunit;
+ 
+ /* Size of log associated with test. */
+@@ -385,233 +313,6 @@ static inline int kunit_run_all_tests(void)
+ 
+ enum kunit_status kunit_suite_has_succeeded(struct kunit_suite *suite);
+ 
+-/*
+- * Like kunit_alloc_resource() below, but returns the struct kunit_resource
+- * object that contains the allocation. This is mostly for testing purposes.
+- */
+-struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
+-						    kunit_resource_init_t init,
+-						    kunit_resource_free_t free,
+-						    gfp_t internal_gfp,
+-						    void *context);
+-
+-/**
+- * kunit_get_resource() - Hold resource for use.  Should not need to be used
+- *			  by most users as we automatically get resources
+- *			  retrieved by kunit_find_resource*().
+- * @res: resource
+- */
+-static inline void kunit_get_resource(struct kunit_resource *res)
+-{
+-	kref_get(&res->refcount);
+-}
+-
+-/*
+- * Called when refcount reaches zero via kunit_put_resources();
+- * should not be called directly.
+- */
+-static inline void kunit_release_resource(struct kref *kref)
+-{
+-	struct kunit_resource *res = container_of(kref, struct kunit_resource,
+-						  refcount);
+-
+-	/* If free function is defined, resource was dynamically allocated. */
+-	if (res->free) {
+-		res->free(res);
+-		kfree(res);
+-	}
+-}
+-
+-/**
+- * kunit_put_resource() - When caller is done with retrieved resource,
+- *			  kunit_put_resource() should be called to drop
+- *			  reference count.  The resource list maintains
+- *			  a reference count on resources, so if no users
+- *			  are utilizing a resource and it is removed from
+- *			  the resource list, it will be freed via the
+- *			  associated free function (if any).  Only
+- *			  needs to be used if we alloc_and_get() or
+- *			  find() resource.
+- * @res: resource
+- */
+-static inline void kunit_put_resource(struct kunit_resource *res)
+-{
+-	kref_put(&res->refcount, kunit_release_resource);
+-}
+-
+-/**
+- * kunit_add_resource() - Add a *test managed resource*.
+- * @test: The test context object.
+- * @init: a user-supplied function to initialize the result (if needed).  If
+- *        none is supplied, the resource data value is simply set to @data.
+- *	  If an init function is supplied, @data is passed to it instead.
+- * @free: a user-supplied function to free the resource (if needed).
+- * @res: The resource.
+- * @data: value to pass to init function or set in resource data field.
+- */
+-int kunit_add_resource(struct kunit *test,
+-		       kunit_resource_init_t init,
+-		       kunit_resource_free_t free,
+-		       struct kunit_resource *res,
+-		       void *data);
+-
+-/**
+- * kunit_add_named_resource() - Add a named *test managed resource*.
+- * @test: The test context object.
+- * @init: a user-supplied function to initialize the resource data, if needed.
+- * @free: a user-supplied function to free the resource data, if needed.
+- * @res: The resource.
+- * @name: name to be set for resource.
+- * @data: value to pass to init function or set in resource data field.
+- */
+-int kunit_add_named_resource(struct kunit *test,
+-			     kunit_resource_init_t init,
+-			     kunit_resource_free_t free,
+-			     struct kunit_resource *res,
+-			     const char *name,
+-			     void *data);
+-
+-/**
+- * kunit_alloc_resource() - Allocates a *test managed resource*.
+- * @test: The test context object.
+- * @init: a user supplied function to initialize the resource.
+- * @free: a user supplied function to free the resource.
+- * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
+- * @context: for the user to pass in arbitrary data to the init function.
+- *
+- * Allocates a *test managed resource*, a resource which will automatically be
+- * cleaned up at the end of a test case. See &struct kunit_resource for an
+- * example.
+- *
+- * Note: KUnit needs to allocate memory for a kunit_resource object. You must
+- * specify an @internal_gfp that is compatible with the use context of your
+- * resource.
+- */
+-static inline void *kunit_alloc_resource(struct kunit *test,
+-					 kunit_resource_init_t init,
+-					 kunit_resource_free_t free,
+-					 gfp_t internal_gfp,
+-					 void *context)
+-{
+-	struct kunit_resource *res;
+-
+-	res = kzalloc(sizeof(*res), internal_gfp);
+-	if (!res)
+-		return NULL;
+-
+-	if (!kunit_add_resource(test, init, free, res, context))
+-		return res->data;
+-
+-	return NULL;
+-}
+-
+-typedef bool (*kunit_resource_match_t)(struct kunit *test,
+-				       struct kunit_resource *res,
+-				       void *match_data);
+-
+-/**
+- * kunit_resource_instance_match() - Match a resource with the same instance.
+- * @test: Test case to which the resource belongs.
+- * @res: The resource.
+- * @match_data: The resource pointer to match against.
+- *
+- * An instance of kunit_resource_match_t that matches a resource whose
+- * allocation matches @match_data.
+- */
+-static inline bool kunit_resource_instance_match(struct kunit *test,
+-						 struct kunit_resource *res,
+-						 void *match_data)
+-{
+-	return res->data == match_data;
+-}
+-
+-/**
+- * kunit_resource_name_match() - Match a resource with the same name.
+- * @test: Test case to which the resource belongs.
+- * @res: The resource.
+- * @match_name: The name to match against.
+- */
+-static inline bool kunit_resource_name_match(struct kunit *test,
+-					     struct kunit_resource *res,
+-					     void *match_name)
+-{
+-	return res->name && strcmp(res->name, match_name) == 0;
+-}
+-
+-/**
+- * kunit_find_resource() - Find a resource using match function/data.
+- * @test: Test case to which the resource belongs.
+- * @match: match function to be applied to resources/match data.
+- * @match_data: data to be used in matching.
+- */
+-static inline struct kunit_resource *
+-kunit_find_resource(struct kunit *test,
+-		    kunit_resource_match_t match,
+-		    void *match_data)
+-{
+-	struct kunit_resource *res, *found = NULL;
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&test->lock, flags);
+-
+-	list_for_each_entry_reverse(res, &test->resources, node) {
+-		if (match(test, res, (void *)match_data)) {
+-			found = res;
+-			kunit_get_resource(found);
+-			break;
+-		}
+-	}
+-
+-	spin_unlock_irqrestore(&test->lock, flags);
+-
+-	return found;
+-}
+-
+-/**
+- * kunit_find_named_resource() - Find a resource using match name.
+- * @test: Test case to which the resource belongs.
+- * @name: match name.
+- */
+-static inline struct kunit_resource *
+-kunit_find_named_resource(struct kunit *test,
+-			  const char *name)
+-{
+-	return kunit_find_resource(test, kunit_resource_name_match,
+-				   (void *)name);
+-}
+-
+-/**
+- * kunit_destroy_resource() - Find a kunit_resource and destroy it.
+- * @test: Test case to which the resource belongs.
+- * @match: Match function. Returns whether a given resource matches @match_data.
+- * @match_data: Data passed into @match.
+- *
+- * RETURNS:
+- * 0 if kunit_resource is found and freed, -ENOENT if not found.
+- */
+-int kunit_destroy_resource(struct kunit *test,
+-			   kunit_resource_match_t match,
+-			   void *match_data);
+-
+-static inline int kunit_destroy_named_resource(struct kunit *test,
+-					       const char *name)
+-{
+-	return kunit_destroy_resource(test, kunit_resource_name_match,
+-				      (void *)name);
+-}
+-
+-/**
+- * kunit_remove_resource() - remove resource from resource list associated with
+- *			     test.
+- * @test: The test context object.
+- * @res: The resource to be removed.
+- *
+- * Note that the resource will not be immediately freed since it is likely
+- * the caller has a reference to it via alloc_and_get() or find();
+- * in this case a final call to kunit_put_resource() is required.
+- */
+-void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
+-
+ /**
+  * kunit_kmalloc_array() - Like kmalloc_array() except the allocation is *test managed*.
+  * @test: The test context object.
+@@ -1526,4 +1227,8 @@ do {									       \
+ 		return NULL;									\
+ 	}
+ 
++// TODO(dlatypov@google.com): consider eventually migrating users to explicitly
++// include resource.h themselves if they need it.
++#include <kunit/resource.h>
++
+ #endif /* _KUNIT_TEST_H */
 
-> Signed-off-by: Jon Kohler <jon@nutanix.com>
-> ---
->  arch/x86/kvm/x86.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 6db3a506b402..2b00123a5d50 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -950,11 +950,13 @@ void kvm_load_guest_xsave_state(struct kvm_vcpu *vcpu)
->  			wrmsrl(MSR_IA32_XSS, vcpu->arch.ia32_xss);
->  	}
-> 
-> +#ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
->  	if (static_cpu_has(X86_FEATURE_PKU) &&
-> -	    (kvm_read_cr4_bits(vcpu, X86_CR4_PKE) ||
-> -	     (vcpu->arch.xcr0 & XFEATURE_MASK_PKRU)) &&
-> -	    vcpu->arch.pkru != vcpu->arch.host_pkru)
-> +	    vcpu->arch.pkru != vcpu->arch.host_pkru &&
-> +	    ((vcpu->arch.xcr0 & XFEATURE_MASK_PKRU) ||
-> +	     kvm_read_cr4_bits(vcpu, X86_CR4_PKE)))
->  		write_pkru(vcpu->arch.pkru);
-> +#endif /* CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS */
->  }
->  EXPORT_SYMBOL_GPL(kvm_load_guest_xsave_state);
-> 
-> @@ -963,13 +965,15 @@ void kvm_load_host_xsave_state(struct kvm_vcpu *vcpu)
->  	if (vcpu->arch.guest_state_protected)
->  		return;
-> 
-> +#ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
->  	if (static_cpu_has(X86_FEATURE_PKU) &&
-> -	    (kvm_read_cr4_bits(vcpu, X86_CR4_PKE) ||
-> -	     (vcpu->arch.xcr0 & XFEATURE_MASK_PKRU))) {
-> +	    ((vcpu->arch.xcr0 & XFEATURE_MASK_PKRU) ||
-> +	     kvm_read_cr4_bits(vcpu, X86_CR4_PKE))) {
->  		vcpu->arch.pkru = rdpkru();
->  		if (vcpu->arch.pkru != vcpu->arch.host_pkru)
->  			write_pkru(vcpu->arch.host_pkru);
->  	}
-> +#endif /* CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS */
-> 
->  	if (kvm_read_cr4_bits(vcpu, X86_CR4_OSXSAVE)) {
-> 
-> --
-> 2.30.1 (Apple Git-130)
-> 
+base-commit: b14ffae378aa1db993e62b01392e70d1e585fb23
+-- 
+2.35.1.1021.g381101b075-goog
+

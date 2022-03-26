@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F29C4E7FD9
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 08:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3AE94E7FF1
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 09:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbiCZHxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 03:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
+        id S232025AbiCZIKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 04:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbiCZHw7 (ORCPT
+        with ESMTP id S229742AbiCZIKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 03:52:59 -0400
-Received: from mx.msync.work (mx.msync.work [51.91.38.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B9E1546A3;
-        Sat, 26 Mar 2022 00:51:23 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A4D4B33E47;
-        Sat, 26 Mar 2022 07:51:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lexina.in; s=dkim;
-        t=1648281082; h=from:subject:date:message-id:to:mime-version:
-         content-transfer-encoding:in-reply-to:references;
-        bh=nuCjbgkU9FFpQwTWnRL3j5RAJbuDiSRCb5bADP8wamo=;
-        b=Uyzw46ZaXuX2GlvUkyn5RWpWLU/TQ8AOYG5L3ufiVVi14LOIZwxQAwQLt+xVlZfL6XzBo0
-        haRhz3LBv1Cbw5p3EI/6u1CQlu4eSMgAslOj8griWdCNGQCQYyS+/vItqwTelU3BOyoK9+
-        WG+3mHDccZA2QV5WsvhCyd6b7zMbGcB4iN32KBZYfiwT1MgJSCMO2CgKRPSAWKVwsMNcra
-        N3GHbllUqbE7bcHFx/26WvorwIWMLKvj+/p5N2mie1IIH8/ttO7O+1EelavxFb1QOhnSSB
-        0rng3zxgojYJqDo4sCIzOV+oM29DZZnarzCpeMdj260Iu8pHmuTitFM2wJpK7g==
-From:   Vyacheslav Bocharov <adeep@lexina.in>
-To:     Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v2 4/4] arm64: meson: update WiFi SDIO in dts for JetHub D1
-Date:   Sat, 26 Mar 2022 10:51:10 +0300
-Message-Id: <20220326075110.1462301-5-adeep@lexina.in>
-In-Reply-To: <20220326075110.1462301-1-adeep@lexina.in>
-References: <20220326075110.1462301-1-adeep@lexina.in>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 26 Mar 2022 04:10:32 -0400
+Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2681393F0;
+        Sat, 26 Mar 2022 01:08:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=j21A406LuZH2VcNGPx
+        2U8V/L22keGEarWkTFzGFG/vQ=; b=TPR7DKpRgj5qfu24gIBM26o3VUe/d09F85
+        rCagLSLHYDeiwWpMDtI7w7txymO6bpBeh6Yu4MZ7SoxEnFXRt+1Y20ZYH7uyhPQF
+        fZyySVza6YHNeBgfhDZUVS1w0Uo/pehW6H4z5rgnaUVn5Kb2jvtNfwPXZQafD3NP
+        /JHUDV1PU=
+Received: from localhost.localdomain.localdomain (unknown [36.111.64.85])
+        by smtp8 (Coremail) with SMTP id DMCowACHE2wvxj5iXbnXBw--.5014S2;
+        Sat, 26 Mar 2022 15:52:23 +0800 (CST)
+From:   daihuaigang129@163.com
+To:     colyli@suse.de, kent.overstreet@gmail.com
+Cc:     linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org,
+        daihuaigang <daihuaigang129@163.com>
+Subject: [PATCH v1] mmc: core: fix AB-BA deadlock between cache register and cache_set_free
+Date:   Sat, 26 Mar 2022 15:52:07 +0800
+Message-Id: <1648281127-9389-1-git-send-email-daihuaigang129@163.com>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID: DMCowACHE2wvxj5iXbnXBw--.5014S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GFy5JFyxZw45tw4rWF45KFg_yoWfKFX_uF
+        WxXFyIg3yrKr1Ygr13CayfZ3yqvF1q9an3XFWIyrnxAa45WFnFkryfZr18Z34rZa1SkFnx
+        Gr1vkF1F93W8KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUD7aUUUUUU==
+X-Originating-IP: [36.111.64.85]
+X-CM-SenderInfo: xgdlx3pdljt0jjrsmqqrwthudrp/1tbiNBfPMlaD-NpCoAAAsP
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the dts to match board's reference design:
-- update the maximum SDIO frequency to match 3.3v regulator (Wi-Fi SDIO module)
+From: daihuaigang <daihuaigang129@163.com>
 
-Signed-off-by: Vyacheslav Bocharov <adeep@lexina.in>
+fix AB-BA deadlock between cache register and cache_set_free.
+
+Signed-off-by: daihuaigang <daihuaigang129@163.com>
 ---
- arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/md/bcache/super.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts b/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts
-index e52abffdf8cf..9d6d6dcb562c 100644
---- a/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts
-@@ -257,8 +257,7 @@ &sd_emmc_b {
+diff --git a/drivers/md/bcache/super.c b/drivers/md/bcache/super.c
+index bf3de14..f17953c 100644
+--- a/drivers/md/bcache/super.c
++++ b/drivers/md/bcache/super.c
+@@ -1690,10 +1690,8 @@ static void cache_set_free(struct closure *cl)
+ 	if (ca) {
+ 		ca->set = NULL;
+ 		c->cache = NULL;
+-		kobject_put(&ca->kobj);
+ 	}
  
- 	bus-width = <4>;
- 	cap-sd-highspeed;
--	sd-uhs-sdr104;
--	max-frequency = <200000000>;
-+	max-frequency = <50000000>;
- 	non-removable;
- 	disable-wp;
+-
+ 	if (c->moving_gc_wq)
+ 		destroy_workqueue(c->moving_gc_wq);
+ 	bioset_exit(&c->bio_split);
+@@ -1704,6 +1702,8 @@ static void cache_set_free(struct closure *cl)
  
+ 	list_del(&c->list);
+ 	mutex_unlock(&bch_register_lock);
++	if (ca)
++		kobject_put(&ca->kobj);
+ 
+ 	pr_info("Cache set %pU unregistered\n", c->set_uuid);
+ 	wake_up(&unregister_wait);
 -- 
-2.30.2
+1.8.3.1
 

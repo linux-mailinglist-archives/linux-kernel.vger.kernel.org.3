@@ -2,100 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC104E7FAC
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 07:59:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AED74E7FA9
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 07:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbiCZHBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 03:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49104 "EHLO
+        id S231689AbiCZHBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 03:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231687AbiCZHBS (ORCPT
+        with ESMTP id S231687AbiCZHBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 03:01:18 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 005D658E76;
-        Fri, 25 Mar 2022 23:59:40 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app2 (Coremail) with SMTP id by_KCgCXOZTDuT5iK3SBAA--.58940S2;
-        Sat, 26 Mar 2022 14:59:28 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     netdev@vger.kernel.org
-Cc:     linux-x25@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ms@dev.tdt.de, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, tanxin.ctf@gmail.com, linma@zju.edu.cn,
-        xiyuyang19@fudan.edu.cn, Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH net] net/x25: Fix null-ptr-deref caused by x25_disconnect
-Date:   Sat, 26 Mar 2022 14:59:12 +0800
-Message-Id: <20220326065912.41077-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: by_KCgCXOZTDuT5iK3SBAA--.58940S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7urWfZr1xJw43Wr4UCw17Wrg_yoW8WrW8pF
-        y2yrWkW34DJ3909rs7CFykurn2vwsFgw18Xr15u34Skr9xGrWqvryrKrZIgw13WFs3AFyj
-        vr1UWwsxJF4kCFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvl1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
-        cxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-        DU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgwPAVZdtYygQQACsR
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 26 Mar 2022 03:01:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD6758808;
+        Fri, 25 Mar 2022 23:59:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F145560B8E;
+        Sat, 26 Mar 2022 06:59:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8553FC340E8;
+        Sat, 26 Mar 2022 06:59:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648277971;
+        bh=hcnH4+UMQw++oX3xHdLZbQDMciOJal1V9edqfc5pFT0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0IQwESLLFrZUE8bD36nlPhVsNI0+Ss1+wcGYvi8aO06GXd9Z8DFyrIag5O/pKZ08T
+         AZyJ0pqst8d7HyaafTG6X4RzIg/7caK9KbdvzW5EOjHzxdIqGkipCtoVaW5V+78c6i
+         P2a0Ro/dviLeMpKAT6TyY20QUEBLkGXqts+7ncW0=
+Date:   Sat, 26 Mar 2022 07:59:29 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 4.9 00/14] 4.9.309-rc1 review
+Message-ID: <Yj650YKy7UG+enlA@kroah.com>
+References: <20220325150415.694544076@linuxfoundation.org>
+ <15268a27-5386-45d8-5c55-1095251331f7@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <15268a27-5386-45d8-5c55-1095251331f7@gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The previous commit 4becb7ee5b3d ("net/x25: Fix x25_neigh refcnt leak when
-x25 disconnect") adds decrement of refcount of x25->neighbour and sets
-x25->neighbour to NULL in x25_disconnect(), but when the link layer is
-terminating, it could cause null-ptr-deref bugs in x25_sendmsg(),
-x25_recvmsg() and x25_connect(). One of the bugs is shown below.
+On Fri, Mar 25, 2022 at 02:31:59PM -0700, Florian Fainelli wrote:
+> On 3/25/22 08:04, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 4.9.309 release.
+> > There are 14 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
+> > Anything received after that time might be too late.
+> > 
+> > The whole patch series can be found in one patch at:
+> > 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.309-rc1.gz
+> > or in the git tree and branch at:
+> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> > and the diffstat can be found below.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> 
+> On ARCH_BRCMSTB, using 32-bit and 64-bit ARM kernels:
+> 
+> Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> PS: is there any reason why the Spectre BHB patches from here are not part
+> of linux-stable/linux-4.9.y?
 
-x25_link_terminated()          | x25_recvmsg()
- x25_kill_by_neigh()           |  ...
-  x25_disconnect()             |  lock_sock(sk)
-   ...                         |  ...
-   x25->neighbour = NULL //(1) |
-   ...                         |  x25->neighbour->extended //(2)
-
-We set NULL to x25->neighbour in position (1) and dereference
-x25->neighbour in position (2), which could cause null-ptr-deref bug.
-
-This patch adds lock_sock(sk) in x25_disconnect() in order to synchronize
-with x25_sendmsg(), x25_recvmsg() and x25_connect(). What`s more, the sk
-held by lock_sock() is not NULL, because it is extracted from x25_list
-and uses x25_list_lock to synchronize.
-
-Fixes: 4becb7ee5b3d ("net/x25: Fix x25_neigh refcnt leak when x25 disconnect")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- net/x25/x25_subr.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/net/x25/x25_subr.c b/net/x25/x25_subr.c
-index 0285aaa1e93..4e19752bdd0 100644
---- a/net/x25/x25_subr.c
-+++ b/net/x25/x25_subr.c
-@@ -360,7 +360,9 @@ void x25_disconnect(struct sock *sk, int reason, unsigned char cause,
- 	if (x25->neighbour) {
- 		read_lock_bh(&x25_list_lock);
- 		x25_neigh_put(x25->neighbour);
-+		lock_sock(sk);
- 		x25->neighbour = NULL;
-+		release_sock(sk);
- 		read_unlock_bh(&x25_list_lock);
- 	}
- }
--- 
-2.17.1
-
+Because they were not submitted for inclusion :(

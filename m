@@ -2,283 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7414E7FA5
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 07:59:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC104E7FAC
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 07:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231674AbiCZHAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 03:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
+        id S231718AbiCZHBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 03:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbiCZHAj (ORCPT
+        with ESMTP id S231687AbiCZHBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 03:00:39 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A5731927
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 23:59:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648277942; x=1679813942;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AYrf/B8kMTsq/PiS31xCTD9BYAirC6JhFSYdYCzH648=;
-  b=ERxpXrPkJRd7X+k8amqB8YzFCXgFYt1NJHF0pkZuL4eeGuu8PhwC/NR9
-   Dfp3A5LuVyJWpmBvNYViXv6cOLPhGbC4TjN80deiPps84bhQH5aiFBL4Z
-   hurmpB1s4hGHJvE+u9KkRZjjZEthctvf4V23XWQy4koXG/B3FGlJrjCt6
-   fzW7AcdYR4WUF/0qjJyZVmnus+t+y+xbZgmWggcVKKVTIf7GZ78OrUTjL
-   gVMHSM7l7zGkwzqXRhX40RQwbktUiqzAiYnZ35b/Ns5t3ZgNXFvGR7UMR
-   7nFejCE64BDli1TUkVY6azIZCcC0/ZREwM3uOJs/71NcTZRzk9caIA4gZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="319467077"
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="319467077"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 23:59:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="520440911"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 25 Mar 2022 23:58:59 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nY0O2-000N6A-W5; Sat, 26 Mar 2022 06:58:59 +0000
-Date:   Sat, 26 Mar 2022 14:58:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: WARNING: modpost: vmlinux.o(.data+0x10816c): Section mismatch in
- reference from the variable sensor_dev_attr_fan1_min to the function
- .init.text:set_reset_devices()
-Message-ID: <202203261403.MQr5HvWs-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 26 Mar 2022 03:01:18 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 005D658E76;
+        Fri, 25 Mar 2022 23:59:40 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app2 (Coremail) with SMTP id by_KCgCXOZTDuT5iK3SBAA--.58940S2;
+        Sat, 26 Mar 2022 14:59:28 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     netdev@vger.kernel.org
+Cc:     linux-x25@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ms@dev.tdt.de, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, tanxin.ctf@gmail.com, linma@zju.edu.cn,
+        xiyuyang19@fudan.edu.cn, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH net] net/x25: Fix null-ptr-deref caused by x25_disconnect
+Date:   Sat, 26 Mar 2022 14:59:12 +0800
+Message-Id: <20220326065912.41077-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgCXOZTDuT5iK3SBAA--.58940S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7urWfZr1xJw43Wr4UCw17Wrg_yoW8WrW8pF
+        y2yrWkW34DJ3909rs7CFykurn2vwsFgw18Xr15u34Skr9xGrWqvryrKrZIgw13WFs3AFyj
+        vr1UWwsxJF4kCFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvl1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+        cxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgwPAVZdtYygQQACsR
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   52d543b5497cf31d6baeb0bcfe5a5474c3238578
-commit: f334f5668bedf7307f6df1d98b14f55902931926 ilog2: force inlining of __ilog2_u32() and __ilog2_u64()
-date:   2 days ago
-config: riscv-randconfig-r031-20220325 (https://download.01.org/0day-ci/archive/20220326/202203261403.MQr5HvWs-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f334f5668bedf7307f6df1d98b14f55902931926
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f334f5668bedf7307f6df1d98b14f55902931926
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+The previous commit 4becb7ee5b3d ("net/x25: Fix x25_neigh refcnt leak when
+x25 disconnect") adds decrement of refcount of x25->neighbour and sets
+x25->neighbour to NULL in x25_disconnect(), but when the link layer is
+terminating, it could cause null-ptr-deref bugs in x25_sendmsg(),
+x25_recvmsg() and x25_connect(). One of the bugs is shown below.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+x25_link_terminated()          | x25_recvmsg()
+ x25_kill_by_neigh()           |  ...
+  x25_disconnect()             |  lock_sock(sk)
+   ...                         |  ...
+   x25->neighbour = NULL //(1) |
+   ...                         |  x25->neighbour->extended //(2)
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+We set NULL to x25->neighbour in position (1) and dereference
+x25->neighbour in position (2), which could cause null-ptr-deref bug.
 
->> WARNING: modpost: vmlinux.o(.data+0x10816c): Section mismatch in reference from the variable sensor_dev_attr_fan1_min to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_fan1_min references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
+This patch adds lock_sock(sk) in x25_disconnect() in order to synchronize
+with x25_sendmsg(), x25_recvmsg() and x25_connect(). What`s more, the sk
+held by lock_sock() is not NULL, because it is extracted from x25_list
+and uses x25_list_lock to synchronize.
 
---
->> WARNING: modpost: vmlinux.o(.data+0x10820c): Section mismatch in reference from the variable sensor_dev_attr_fan2_div to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_fan2_div references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
+Fixes: 4becb7ee5b3d ("net/x25: Fix x25_neigh refcnt leak when x25 disconnect")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+ net/x25/x25_subr.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---
->> WARNING: modpost: vmlinux.o(.data+0x106cf0): Section mismatch in reference from the variable sensor_dev_attr_in2_min to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_in2_min references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
---
->> WARNING: modpost: vmlinux.o(.data+0x10da34): Section mismatch in reference from the variable sensor_dev_attr_in2_input to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_in2_input references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
---
->> WARNING: modpost: vmlinux.o(.data+0x10e468): Section mismatch in reference from the variable sensor_dev_attr_temp1_alarm to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_temp1_alarm references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
---
->> WARNING: modpost: vmlinux.o(.data+0x10e488): Section mismatch in reference from the variable sensor_dev_attr_temp2_alarm to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_temp2_alarm references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
---
->> WARNING: modpost: vmlinux.o(.data+0x10e4a8): Section mismatch in reference from the variable sensor_dev_attr_temp3_alarm to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_temp3_alarm references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
---
->> WARNING: modpost: vmlinux.o(.data+0x101ed0): Section mismatch in reference from the variable dev_attr_w1_seq to the function .init.text:set_reset_devices()
-The variable dev_attr_w1_seq references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
---
->> WARNING: modpost: vmlinux.o(.data+0x10e528): Section mismatch in reference from the variable sensor_dev_attr_in3_max to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_in3_max references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
---
->> WARNING: modpost: vmlinux.o(.data+0x10e5a8): Section mismatch in reference from the variable sensor_dev_attr_in7_max to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_in7_max references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
---
->> WARNING: modpost: vmlinux.o(.data+0x10eb88): Section mismatch in reference from the variable sensor_dev_attr_in2_alarm to the function .init.text:set_reset_devices()
-The variable sensor_dev_attr_in2_alarm references
-the function __init set_reset_devices()
-If the reference is valid then annotate the
-variable with or __refdata (see linux/init.h) or name the variable:
-
-..
-
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.data+0xff0ac): Section mismatch in reference from the variable af9033_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x104ff0): Section mismatch in reference from the variable twl4030_bci_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108408): Section mismatch in reference from the variable sensor_dev_attr_fan5_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108428): Section mismatch in reference from the variable sensor_dev_attr_fan5_div to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108448): Section mismatch in reference from the variable sensor_dev_attr_fan5_alarm to the variable .init.text:.LBB58_27
-<< WARNING: modpost: vmlinux.o(.data+0x108488): Section mismatch in reference from the variable sensor_dev_attr_pwm5_mode to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084a8): Section mismatch in reference from the variable sensor_dev_attr_fan6_input to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084c8): Section mismatch in reference from the variable sensor_dev_attr_fan6_min to the variable .init.text:.LBB58_28
-<< WARNING: modpost: vmlinux.o(.data+0x108508): Section mismatch in reference from the variable sensor_dev_attr_fan6_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108528): Section mismatch in reference from the variable sensor_dev_attr_pwm6 to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0xff0ac): Section mismatch in reference from the variable af9033_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x104ff0): Section mismatch in reference from the variable twl4030_bci_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108408): Section mismatch in reference from the variable sensor_dev_attr_fan5_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108428): Section mismatch in reference from the variable sensor_dev_attr_fan5_div to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108448): Section mismatch in reference from the variable sensor_dev_attr_fan5_alarm to the variable .init.text:.LBB58_27
-<< WARNING: modpost: vmlinux.o(.data+0x108488): Section mismatch in reference from the variable sensor_dev_attr_pwm5_mode to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084a8): Section mismatch in reference from the variable sensor_dev_attr_fan6_input to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084c8): Section mismatch in reference from the variable sensor_dev_attr_fan6_min to the variable .init.text:.LBB58_28
-<< WARNING: modpost: vmlinux.o(.data+0x108508): Section mismatch in reference from the variable sensor_dev_attr_fan6_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108528): Section mismatch in reference from the variable sensor_dev_attr_pwm6 to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0xff0ac): Section mismatch in reference from the variable af9033_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x104ff0): Section mismatch in reference from the variable twl4030_bci_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108408): Section mismatch in reference from the variable sensor_dev_attr_fan5_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108428): Section mismatch in reference from the variable sensor_dev_attr_fan5_div to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108448): Section mismatch in reference from the variable sensor_dev_attr_fan5_alarm to the variable .init.text:.LBB58_27
-<< WARNING: modpost: vmlinux.o(.data+0x108488): Section mismatch in reference from the variable sensor_dev_attr_pwm5_mode to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084a8): Section mismatch in reference from the variable sensor_dev_attr_fan6_input to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084c8): Section mismatch in reference from the variable sensor_dev_attr_fan6_min to the variable .init.text:.LBB58_28
-<< WARNING: modpost: vmlinux.o(.data+0x108508): Section mismatch in reference from the variable sensor_dev_attr_fan6_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108528): Section mismatch in reference from the variable sensor_dev_attr_pwm6 to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0xff0ac): Section mismatch in reference from the variable af9033_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x104ff0): Section mismatch in reference from the variable twl4030_bci_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108408): Section mismatch in reference from the variable sensor_dev_attr_fan5_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108428): Section mismatch in reference from the variable sensor_dev_attr_fan5_div to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108448): Section mismatch in reference from the variable sensor_dev_attr_fan5_alarm to the variable .init.text:.LBB58_27
-<< WARNING: modpost: vmlinux.o(.data+0x108488): Section mismatch in reference from the variable sensor_dev_attr_pwm5_mode to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084a8): Section mismatch in reference from the variable sensor_dev_attr_fan6_input to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084c8): Section mismatch in reference from the variable sensor_dev_attr_fan6_min to the variable .init.text:.LBB58_28
-<< WARNING: modpost: vmlinux.o(.data+0x108508): Section mismatch in reference from the variable sensor_dev_attr_fan6_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108528): Section mismatch in reference from the variable sensor_dev_attr_pwm6 to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0xff0ac): Section mismatch in reference from the variable af9033_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x104ff0): Section mismatch in reference from the variable twl4030_bci_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108408): Section mismatch in reference from the variable sensor_dev_attr_fan5_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108428): Section mismatch in reference from the variable sensor_dev_attr_fan5_div to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108448): Section mismatch in reference from the variable sensor_dev_attr_fan5_alarm to the variable .init.text:.LBB58_27
-<< WARNING: modpost: vmlinux.o(.data+0x108488): Section mismatch in reference from the variable sensor_dev_attr_pwm5_mode to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084a8): Section mismatch in reference from the variable sensor_dev_attr_fan6_input to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084c8): Section mismatch in reference from the variable sensor_dev_attr_fan6_min to the variable .init.text:.LBB58_28
-<< WARNING: modpost: vmlinux.o(.data+0x108508): Section mismatch in reference from the variable sensor_dev_attr_fan6_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108528): Section mismatch in reference from the variable sensor_dev_attr_pwm6 to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0xff0ac): Section mismatch in reference from the variable af9033_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x104ff0): Section mismatch in reference from the variable twl4030_bci_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108408): Section mismatch in reference from the variable sensor_dev_attr_fan5_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108428): Section mismatch in reference from the variable sensor_dev_attr_fan5_div to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108448): Section mismatch in reference from the variable sensor_dev_attr_fan5_alarm to the variable .init.text:.LBB58_27
-<< WARNING: modpost: vmlinux.o(.data+0x108488): Section mismatch in reference from the variable sensor_dev_attr_pwm5_mode to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084a8): Section mismatch in reference from the variable sensor_dev_attr_fan6_input to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084c8): Section mismatch in reference from the variable sensor_dev_attr_fan6_min to the variable .init.text:.LBB58_28
-<< WARNING: modpost: vmlinux.o(.data+0x108508): Section mismatch in reference from the variable sensor_dev_attr_fan6_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108528): Section mismatch in reference from the variable sensor_dev_attr_pwm6 to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0xff0ac): Section mismatch in reference from the variable af9033_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x104ff0): Section mismatch in reference from the variable twl4030_bci_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108408): Section mismatch in reference from the variable sensor_dev_attr_fan5_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108428): Section mismatch in reference from the variable sensor_dev_attr_fan5_div to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108448): Section mismatch in reference from the variable sensor_dev_attr_fan5_alarm to the variable .init.text:.LBB58_27
-<< WARNING: modpost: vmlinux.o(.data+0x108488): Section mismatch in reference from the variable sensor_dev_attr_pwm5_mode to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084a8): Section mismatch in reference from the variable sensor_dev_attr_fan6_input to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084c8): Section mismatch in reference from the variable sensor_dev_attr_fan6_min to the variable .init.text:.LBB58_28
-<< WARNING: modpost: vmlinux.o(.data+0x108508): Section mismatch in reference from the variable sensor_dev_attr_fan6_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108528): Section mismatch in reference from the variable sensor_dev_attr_pwm6 to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0xff0ac): Section mismatch in reference from the variable af9033_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x104ff0): Section mismatch in reference from the variable twl4030_bci_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108408): Section mismatch in reference from the variable sensor_dev_attr_fan5_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108428): Section mismatch in reference from the variable sensor_dev_attr_fan5_div to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108448): Section mismatch in reference from the variable sensor_dev_attr_fan5_alarm to the variable .init.text:.LBB58_27
-<< WARNING: modpost: vmlinux.o(.data+0x108488): Section mismatch in reference from the variable sensor_dev_attr_pwm5_mode to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084a8): Section mismatch in reference from the variable sensor_dev_attr_fan6_input to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084c8): Section mismatch in reference from the variable sensor_dev_attr_fan6_min to the variable .init.text:.LBB58_28
-<< WARNING: modpost: vmlinux.o(.data+0x108508): Section mismatch in reference from the variable sensor_dev_attr_fan6_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108528): Section mismatch in reference from the variable sensor_dev_attr_pwm6 to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0xff0ac): Section mismatch in reference from the variable af9033_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x104ff0): Section mismatch in reference from the variable twl4030_bci_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108408): Section mismatch in reference from the variable sensor_dev_attr_fan5_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108428): Section mismatch in reference from the variable sensor_dev_attr_fan5_div to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108448): Section mismatch in reference from the variable sensor_dev_attr_fan5_alarm to the variable .init.text:.LBB58_27
-<< WARNING: modpost: vmlinux.o(.data+0x108488): Section mismatch in reference from the variable sensor_dev_attr_pwm5_mode to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084a8): Section mismatch in reference from the variable sensor_dev_attr_fan6_input to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084c8): Section mismatch in reference from the variable sensor_dev_attr_fan6_min to the variable .init.text:.LBB58_28
-<< WARNING: modpost: vmlinux.o(.data+0x108508): Section mismatch in reference from the variable sensor_dev_attr_fan6_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108528): Section mismatch in reference from the variable sensor_dev_attr_pwm6 to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0xff0ac): Section mismatch in reference from the variable af9033_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x104ff0): Section mismatch in reference from the variable twl4030_bci_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108408): Section mismatch in reference from the variable sensor_dev_attr_fan5_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108428): Section mismatch in reference from the variable sensor_dev_attr_fan5_div to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108448): Section mismatch in reference from the variable sensor_dev_attr_fan5_alarm to the variable .init.text:.LBB58_27
-<< WARNING: modpost: vmlinux.o(.data+0x108488): Section mismatch in reference from the variable sensor_dev_attr_pwm5_mode to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084a8): Section mismatch in reference from the variable sensor_dev_attr_fan6_input to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084c8): Section mismatch in reference from the variable sensor_dev_attr_fan6_min to the variable .init.text:.LBB58_28
-<< WARNING: modpost: vmlinux.o(.data+0x108508): Section mismatch in reference from the variable sensor_dev_attr_fan6_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108528): Section mismatch in reference from the variable sensor_dev_attr_pwm6 to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0xff0ac): Section mismatch in reference from the variable af9033_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x104ff0): Section mismatch in reference from the variable twl4030_bci_driver to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108408): Section mismatch in reference from the variable sensor_dev_attr_fan5_min to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108428): Section mismatch in reference from the variable sensor_dev_attr_fan5_div to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108448): Section mismatch in reference from the variable sensor_dev_attr_fan5_alarm to the variable .init.text:.LBB58_27
-<< WARNING: modpost: vmlinux.o(.data+0x108488): Section mismatch in reference from the variable sensor_dev_attr_pwm5_mode to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084a8): Section mismatch in reference from the variable sensor_dev_attr_fan6_input to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x1084c8): Section mismatch in reference from the variable sensor_dev_attr_fan6_min to the variable .init.text:.LBB58_28
-<< WARNING: modpost: vmlinux.o(.data+0x108508): Section mismatch in reference from the variable sensor_dev_attr_fan6_alarm to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.data+0x108528): Section mismatch in reference from the variable sensor_dev_attr_pwm6 to the function .init.text:set_reset_devices()
-
+diff --git a/net/x25/x25_subr.c b/net/x25/x25_subr.c
+index 0285aaa1e93..4e19752bdd0 100644
+--- a/net/x25/x25_subr.c
++++ b/net/x25/x25_subr.c
+@@ -360,7 +360,9 @@ void x25_disconnect(struct sock *sk, int reason, unsigned char cause,
+ 	if (x25->neighbour) {
+ 		read_lock_bh(&x25_list_lock);
+ 		x25_neigh_put(x25->neighbour);
++		lock_sock(sk);
+ 		x25->neighbour = NULL;
++		release_sock(sk);
+ 		read_unlock_bh(&x25_list_lock);
+ 	}
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+

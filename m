@@ -2,149 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 347E24E7F96
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 07:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 730914E7F9C
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 07:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbiCZGiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 02:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
+        id S231596AbiCZGl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 02:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbiCZGiC (ORCPT
+        with ESMTP id S231283AbiCZGlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 02:38:02 -0400
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24946FEB;
-        Fri, 25 Mar 2022 23:36:25 -0700 (PDT)
+        Sat, 26 Mar 2022 02:41:53 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D37C13A
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 23:40:16 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id t11so17524614ybi.6
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 23:40:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
-  s=amazon201209; t=1648276585; x=1679812585;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=6PEhA6oGECn3FrZ2m6dP23u1ukbFy/X2U/ncH/ZyHIg=;
-  b=k4Rwe03Q7Qi0zQXE8OT8JIxDQd7nnM/Ksvvs/QfgMtFnZ+G/TXrJ5xIS
-   /AMU8I75DoTqi6iCDoVpBd1XHH+qsXmofk19yr8nLV4hrAQPdC+l4fm+d
-   1a5qCv2YXUbDHfwtGI6ZIgdPYH5ebZWhL/06dYp9XFcJo1JX15+eZoKi1
-   s=;
-X-IronPort-AV: E=Sophos;i="5.90,211,1643673600"; 
-   d="scan'208";a="184695645"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-ca048aa0.us-east-1.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP; 26 Mar 2022 06:36:24 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1d-ca048aa0.us-east-1.amazon.com (Postfix) with ESMTPS id 1A29981466;
-        Sat, 26 Mar 2022 06:36:21 +0000 (UTC)
-Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.32; Sat, 26 Mar 2022 06:36:20 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.162.228) by
- EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
- id 15.0.1497.32; Sat, 26 Mar 2022 06:36:17 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-CC:     Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <syzbot+19480160ef25c9ffa29d@syzkaller.appspotmail.com>,
-        "Soheil Hassas Yeganeh" <soheil@google.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Sridhar Samudrala" <sridhar.samudrala@intel.com>,
-        Alexander Duyck <alexander.h.duyck@intel.com>
-Subject: [PATCH] list: Fix another data-race around ep->rdllist.
-Date:   Sat, 26 Mar 2022 15:35:58 +0900
-Message-ID: <20220326063558.89906-1-kuniyu@amazon.co.jp>
-X-Mailer: git-send-email 2.30.2
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=dOzwhJyzRkh873kWXrwFFU98UINOxha+ssjImeuuWo0=;
+        b=IwSZ+wnlfqfcXBAUyo/4qRqEJU6g+2OvNpjwjosGZAMbHJMQwSRTdIPL4nTBksvjDv
+         3qT5Mj2jW7MdQfOjyUH8Cy4R3uFamergjuRyRUnaVWwdSmEAUTkaOJOR+1sZABuwG+1P
+         IOvO19fyLgi/R+o6RUuKlU+doO+JydKD615XqLZKqBaLktegKq41S8vUFfZIY/hEBdhO
+         0aPGrks027kuqm4LlUgJ1Wgu+JGUB8Uz9K7FBqwjhcGXVuY1FjhZXoXD9YXNQ+ZZcT3s
+         i7yMw1+DcmZt7YP0fh8FQVydkIKlYxCbjxiUAvoEz0rpsecN6Ky/h682d4/AOAmeUYjI
+         DDfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=dOzwhJyzRkh873kWXrwFFU98UINOxha+ssjImeuuWo0=;
+        b=0KYBgeteFo+th3+ZgL1hfVpcXC037A9ZQP16a5BMO+jlWLTvvIadCNi0Hx/oS0HrXG
+         udAM/eQKx866wXpG8YWqxOUoO9CRo33Ykc8uwIzahCDVncgcOHA7Dzh+ICX1FJtDdAoW
+         Hqy1SD/9ElS6E1oQ8i/79aFz/xlpgNyQdBBWGlSDDwWDrR9eI9fhKcYVuTEv7/I9xG2w
+         t1DBAxocxEKnugiD7d2FdcsfG7zmfbflwDV3ZagRge4WrWF1dhH723DN5ghKoSfP8jtl
+         HFxqr20xHiPd+0rfMLQvbp/0swUpsQGP1YCY/L+ASKZ//WRIfpE7Edkoa2xKBpvkjQjv
+         71qw==
+X-Gm-Message-State: AOAM5333j1qczckQd2/IrUKvqb2k3Mnn4mOwOdNsHb6PDhD0qOLEBHZA
+        fWzBRYihF7dJmTdLUkvZfFU+TgZDpPpv3TFtMZJdxw==
+X-Google-Smtp-Source: ABdhPJygcLFxa+YpCKtDHjwPpF9hbbn3TFmvpi9vY3jhE66N+zVYAiBtPUFO8L2uxUHokpCWYx1/H5QjmcNm1IxeXAA=
+X-Received: by 2002:a25:42c9:0:b0:634:1a46:e5c1 with SMTP id
+ p192-20020a2542c9000000b006341a46e5c1mr14433984yba.474.1648276815086; Fri, 25
+ Mar 2022 23:40:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.162.228]
-X-ClientProxiedBy: EX13D23UWC003.ant.amazon.com (10.43.162.81) To
- EX13D04ANC001.ant.amazon.com (10.43.157.89)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220325150419.931802116@linuxfoundation.org>
+In-Reply-To: <20220325150419.931802116@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 26 Mar 2022 12:10:04 +0530
+Message-ID: <CA+G9fYutvyS3wny2WhdkxVmpvEJjgsZuW9vug5eCWc=378+Gig@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/37] 5.15.32-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot had reported another race around ep->rdllist.  ep_poll() calls
-list_empty_careful() locklessly to check if the list is empty or not
-by testing rdllist->prev == rdllist->next.
+On Fri, 25 Mar 2022 at 20:44, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.32 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.32-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-When the list does not have any nodes, the next and prev arguments of
-__list_add() is the same head pointer.  Thus the write to head->prev
-there is racy with lockless list_empty_careful() and needs WRITE_ONCE()
-to avoid store-tearing.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Note that the reader side is already fixed in the patch [0].
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-[0]: https://lore.kernel.org/mm-commits/20220326031647.DD24EC004DD@smtp.kernel.org/
+## Build
+* kernel: 5.15.32-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.15.y
+* git commit: 6b524190f92f3150d5305eaad0c35fdc063a965f
+* git describe: v5.15.31-38-g6b524190f92f
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.31-38-g6b524190f92f
 
-BUG: KCSAN: data-race in do_epoll_ctl / do_epoll_wait
+## Test Regressions (compared to v5.15.30-33-gca23d8a1f1ca)
+No test regressions found.
 
-write to 0xffff888103e43058 of 8 bytes by task 1799 on cpu 0:
- __list_add include/linux/list.h:72 [inline]
- list_add_tail include/linux/list.h:102 [inline]
- ep_insert fs/eventpoll.c:1542 [inline]
- do_epoll_ctl+0x1331/0x1880 fs/eventpoll.c:2141
- __do_sys_epoll_ctl fs/eventpoll.c:2192 [inline]
- __se_sys_epoll_ctl fs/eventpoll.c:2183 [inline]
- __x64_sys_epoll_ctl+0xc2/0xf0 fs/eventpoll.c:2183
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+## Metric Regressions (compared to v5.15.30-33-gca23d8a1f1ca)
+No metric regressions found.
 
-read to 0xffff888103e43058 of 8 bytes by task 1802 on cpu 1:
- list_empty_careful include/linux/list.h:329 [inline]
- ep_events_available fs/eventpoll.c:381 [inline]
- ep_poll fs/eventpoll.c:1797 [inline]
- do_epoll_wait+0x279/0xf40 fs/eventpoll.c:2234
- do_epoll_pwait fs/eventpoll.c:2268 [inline]
- __do_sys_epoll_pwait fs/eventpoll.c:2281 [inline]
- __se_sys_epoll_pwait+0x12b/0x240 fs/eventpoll.c:2275
- __x64_sys_epoll_pwait+0x74/0x80 fs/eventpoll.c:2275
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+## Test Fixes (compared to v5.15.30-33-gca23d8a1f1ca)
+No test fixes found.
 
-value changed: 0xffff888103e43050 -> 0xffff88812d515498
+## Metric Fixes (compared to v5.15.30-33-gca23d8a1f1ca)
+No metric fixes found.
 
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 1802 Comm: syz-fuzzer Not tainted 5.17.0-rc8-syzkaller-00003-g56e337f2cf13-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+## Test result summary
+total: 107180, pass: 90309, fail: 988, skip: 14719, xfail: 1164
 
-Fixes: e59d3c64cba6 ("epoll: eliminate unnecessary lock for zero timeout")
-Fixes: c5a282e9635e ("fs/epoll: reduce the scope of wq lock in epoll_wait()")
-Fixes: bf3b9f6372c4 ("epoll: Add busy poll support to epoll with socket fds.")
-Reported-by: syzbot+19480160ef25c9ffa29d@syzkaller.appspotmail.com
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
----
-CC: Soheil Hassas Yeganeh <soheil@google.com>
-CC: Davidlohr Bueso <dave@stgolabs.net>
-CC: Sridhar Samudrala <sridhar.samudrala@intel.com>
-CC: Alexander Duyck <alexander.h.duyck@intel.com>
----
- include/linux/list.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 291 total, 291 passed, 0 failed
+* arm64: 41 total, 41 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 40 total, 40 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 54 passed, 6 failed
+* riscv: 27 total, 22 passed, 5 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 41 total, 41 passed, 0 failed
 
-diff --git a/include/linux/list.h b/include/linux/list.h
-index dd6c2041d..2eaadc84a 100644
---- a/include/linux/list.h
-+++ b/include/linux/list.h
-@@ -69,10 +69,10 @@ static inline void __list_add(struct list_head *new,
- 	if (!__list_add_valid(new, prev, next))
- 		return;
- 
--	next->prev = new;
- 	new->next = next;
- 	new->prev = prev;
- 	WRITE_ONCE(prev->next, new);
-+	WRITE_ONCE(next->prev, new);
- }
- 
- /**
--- 
-2.30.2
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-ca[
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
 
+--
+Linaro LKFT
+https://lkft.linaro.org

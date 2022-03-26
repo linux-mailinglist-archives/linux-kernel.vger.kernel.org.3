@@ -2,235 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857B74E8100
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 14:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9161D4E8101
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 14:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233037AbiCZNRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 09:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
+        id S233043AbiCZNSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 09:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbiCZNRb (ORCPT
+        with ESMTP id S230450AbiCZNSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 09:17:31 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5055F1EC9B4
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 06:15:55 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id v35so18481281ybi.10
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 06:15:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=AikdSfXe4Ki+gU0Iq/j+kPAARq8zAHekqtyyVX0tRXQ=;
-        b=RQviT6fqIMAsoYwEAHbJat7HQtZQb2tSYfI0bzwD6jFcUFFDZwgzhY7+LUqaunSeXY
-         PxWo+AtRNBZCbsQTVFJYx3DB1HMHJxjQU030LdczHzyV7bMdhtVofJv/ZjS3cGEEmCVO
-         2LY61O0oVzKe4/lQgdNhhCyCyKau+t4aT5zZq3dFGu9L9kdQbBiFy3Ihomuzh/YeZynR
-         kd/PAFhtdzEwoAPx+u6LGaoE7fpF8a5QAHnBr/oNTnXqYLSLOkzD2OHExYeAWYHjrBCq
-         EUEit1BCsxaihDMvxbxQL9MC0lk5jAu5tOoGtUe2rrkle0mpDAk/Be8svDsUs/0uKtRi
-         AaKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=AikdSfXe4Ki+gU0Iq/j+kPAARq8zAHekqtyyVX0tRXQ=;
-        b=5UJfkU1n9Dhb7Eb7yDcGxubok5tZbfLbOvTh69gN+FU3qF70880WEtaA810XFkEhNB
-         a36kM+ytZgPvZ7c49X1vr0jAkztnr0r0dZ5lgcVTdbVm0Bz9hIFmEc6Aw4qzpzKPuK8j
-         Mh0puE46cI8iRve0vjMxmUdM6UOxFdGiczXAM9tUt1ACozECluz1THwMpIJ7PdpfT1aT
-         t0RuYXX7pNwEW2BOFIZCI3Qxg9ClMWVo9uHNThEvtcwVhejNs7pOQCnx8np8zoOL/Ga2
-         gWzcDYNDtbNq45lncIL4hDRjXFn0I/dosl6d78JR5VUcPqh31psRJTG0XhoFJR5fXgzH
-         qepg==
-X-Gm-Message-State: AOAM531deDJ8QAGBFbbvsSUtKl+hmm4XjCJGd/vr1ScmbhxqctkGkIuT
-        1+YXOxC12rrlj8i8Nr7gYfM+p3UJn/62D4iKgFoDVQ==
-X-Google-Smtp-Source: ABdhPJzXhnH+ENU9AtT/qfaSGWiLN+Z5W88chmmcHqYfBDob0ZSbqwDnKTb0nvjPqxOJK2sdBrvu6QfSRIeQDwBNbs4=
-X-Received: by 2002:a25:2409:0:b0:634:15f4:2240 with SMTP id
- k9-20020a252409000000b0063415f42240mr14270050ybk.88.1648300554229; Sat, 26
- Mar 2022 06:15:54 -0700 (PDT)
+        Sat, 26 Mar 2022 09:18:08 -0400
+Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1071320037F
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 06:16:31 -0700 (PDT)
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id 928711B4426
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 08:16:30 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id Y6HOn26ygRnrrY6HOnHxhw; Sat, 26 Mar 2022 08:16:30 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=DEVWh3k1tzSFjzVItEHtWw3rtg9fugVFhCv5VfMBq24=; b=5YHM5ynr5A/lRUUAjl7R/X93X1
+        fAFyTO/Mx5Qp28hu4p4nwvQWVk0CzCTUaXnQsiGXoOrLEi5ee3FG20aLwcGqFg1g+EW2XNBxrokaK
+        Z4ZOk9nxSJnsQ1X0cfPThkPuWO//+f85VVEoJXkV2ZASENwPH6pNAqKDFlXiUUKNUhn57F2NrFKxZ
+        EhiTV7DDdbSzTGVQRqqR+x3YkmYEPUj1uRGPMfvfpDbrfZqVh204ndnMtSdEh4cKvVlURxNc7DYhg
+        XVDgYPAMGSJcmUTuQd4N9vJ7E/UneqyHBUzn+yfG//qQSP2u9oVcaV8QSnPX1DlhtFxzgiL19Wlaz
+        dLVqxqIA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57670 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nY6HO-002EmQ-2q; Sat, 26 Mar 2022 13:16:30 +0000
+Date:   Sat, 26 Mar 2022 06:16:29 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Ohad Sharabi <osharabi@habana.ai>
+Subject: Re: [PATCH 1/2] habanalabs: make sure device mem alloc is page
+ aligned
+Message-ID: <20220326131629.GA198653@roeck-us.net>
+References: <20220221084914.493784-1-ogabbay@kernel.org>
 MIME-Version: 1.0
-References: <20220325150419.757836392@linuxfoundation.org>
-In-Reply-To: <20220325150419.757836392@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 26 Mar 2022 18:45:42 +0530
-Message-ID: <CA+G9fYu9CjYCQwM3EO5eguRC0rq00HMuE7cEAG4E68shzw4OHA@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/38] 5.10.109-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220221084914.493784-1-ogabbay@kernel.org>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nY6HO-002EmQ-2q
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57670
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 8
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Mar 2022 at 20:40, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.109 release.
-> There are 38 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.109-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+On Mon, Feb 21, 2022 at 10:49:13AM +0200, Oded Gabbay wrote:
+> From: Ohad Sharabi <osharabi@habana.ai>
+> 
+> Working with MMU that supports multiple page sizes requires that mapping
+> of a page of a certain size will be aligned to the same size (e.g. the
+> physical address of 32MB page shall be aligned to 32MB).
+> 
+> To achieve this the gen_poll allocation is now using the "align" variant
+> to comply with the alignment requirements.
+> 
+> Signed-off-by: Ohad Sharabi <osharabi@habana.ai>
+> Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+> Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+> ---
+>  drivers/misc/habanalabs/common/memory.c | 19 ++++++++++++++-----
+>  1 file changed, 14 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+> index 385bf3448c73..0b76f40e9930 100644
+> --- a/drivers/misc/habanalabs/common/memory.c
+> +++ b/drivers/misc/habanalabs/common/memory.c
+> @@ -90,8 +90,8 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
+>  	struct hl_vm_phys_pg_pack *phys_pg_pack;
+>  	u64 paddr = 0, total_size, num_pgs, i;
+>  	u32 num_curr_pgs, page_size;
+> -	int handle, rc;
+>  	bool contiguous;
+> +	int handle, rc;
+>  
+>  	num_curr_pgs = 0;
+>  
+> @@ -110,7 +110,11 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
+>  	contiguous = args->flags & HL_MEM_CONTIGUOUS;
+>  
+>  	if (contiguous) {
+> -		paddr = (u64) gen_pool_alloc(vm->dram_pg_pool, total_size);
+> +		if (is_power_of_2(page_size))
+> +			paddr = (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool, total_size, NULL,
+> +							page_size);
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+I see that this is fixed in -next, but ...
 
-## Build
-* kernel: 5.10.109-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.10.y
-* git commit: c02fc5f9e70f4aed2693f783a09af12c2ef87802
-* git describe: v5.10.108-39-gc02fc5f9e70f
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.108-39-gc02fc5f9e70f
+> +		else
+> +			paddr = (u64) gen_pool_alloc(vm->dram_pg_pool, total_size);
 
-## Test Regressions (compared to v5.10.105)
-No test regressions found.
+... this has an unnecessary typecast in -next (gen_pool_alloc() returns
+unsigned long, not a pointer), and ...
 
-## Metric Regressions (compared to v5.10.105)
-No metric regressions found.
+>  		if (!paddr) {
+>  			dev_err(hdev->dev,
+>  				"failed to allocate %llu contiguous pages with total size of %llu\n",
+> @@ -144,9 +148,14 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
+>  			phys_pg_pack->pages[i] = paddr + i * page_size;
+>  	} else {
+>  		for (i = 0 ; i < num_pgs ; i++) {
+> -			phys_pg_pack->pages[i] = (u64) gen_pool_alloc(
+> -							vm->dram_pg_pool,
+> -							page_size);
+> +			if (is_power_of_2(page_size))
+> +				phys_pg_pack->pages[i] =
+> +						(u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> +										page_size, NULL,
+> +										page_size);
 
-## Test Fixes (compared to v5.10.105)
-No test fixes found.
+... this still causes a compile error when building 32-bit test images.
 
-## Metric Fixes (compared to v5.10.105)
-No metric fixes found.
+Building mips:allmodconfig ... failed
+--------------
+Error log:
+drivers/misc/habanalabs/common/memory.c: In function 'alloc_device_memory':
+drivers/misc/habanalabs/common/memory.c:153:49: error: cast from pointer to integer of different size
 
-## Test result summary
-total: 95863, pass: 81602, fail: 589, skip: 12715, xfail: 957
+Guenter
 
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 291 passed, 0 failed
-* arm64: 41 total, 41 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 39 total, 39 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 51 passed, 9 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 41 total, 41 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> +			else
+> +				phys_pg_pack->pages[i] = (u64) gen_pool_alloc(vm->dram_pg_pool,
+> +										page_size);
+>  			if (!phys_pg_pack->pages[i]) {
+>  				dev_err(hdev->dev,
+>  					"Failed to allocate device memory (out of memory)\n");
+> -- 
+> 2.25.1
+> 

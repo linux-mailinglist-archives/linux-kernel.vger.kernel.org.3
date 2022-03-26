@@ -2,144 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49A14E7E7B
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 02:53:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F70C4E7E7E
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 02:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbiCZBx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 21:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
+        id S230171AbiCZB6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 21:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiCZBx2 (ORCPT
+        with ESMTP id S230080AbiCZB6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 21:53:28 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF306217967
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 18:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648259511; x=1679795511;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XKeDtx+e7Z6XXOcCQX3+ybtBW979kFPfT0nbtssEJFg=;
-  b=e5vY0FtJtlaQEkDUSiwR+Cj5jFudiIV6WIWDfNcCR1DMI63seAQC6yp5
-   T9x5M5d0G8vOiIaiDvbfIEeQE7ebyoPV+rv+vw3WY1ZVXWWw7Qt5Dwt44
-   U4d/B5AqeS+WMUN6iUlHutlkMCcq/VYHHDqejynqsDIAxa6pCzhh7w36Z
-   nK1xR+SzXSl9LVXO4J279YBWFtT1G7eih+gPZbtN5hsIiVWfrAKPlUgAs
-   CJH6SJi2iX8JsvnhNMzpTN7UwGRKdRNyONRzTlJjP3xKOByHgEh3kuVX7
-   SvUW0TIh27MMhU9m4TkIyhc9r8fq32nqyhqwfqkNdNgaYm/1m9P3kdya2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="258716874"
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="258716874"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 18:51:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="650425845"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 25 Mar 2022 18:51:50 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nXvan-000MrJ-4M; Sat, 26 Mar 2022 01:51:49 +0000
-Date:   Sat, 26 Mar 2022 09:50:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/afs-testing 44/44]
- include/asm-generic/cmpxchg.h:35:39: sparse: sparse: cast truncates bits
- from constant value (5e5ee5e5 becomes e5)
-Message-ID: <202203260941.OiKX28fM-lkp@intel.com>
+        Fri, 25 Mar 2022 21:58:18 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8842C1C9B;
+        Fri, 25 Mar 2022 18:56:38 -0700 (PDT)
+X-UUID: 13a92cc6e8ee4622a5c2a0918b44ec45-20220326
+X-UUID: 13a92cc6e8ee4622a5c2a0918b44ec45-20220326
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <jianjun.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1780893580; Sat, 26 Mar 2022 09:56:28 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Sat, 26 Mar 2022 09:56:27 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 26 Mar 2022 09:56:26 +0800
+Message-ID: <2ceb84aec51252cfb254525900480cc380fc2c03.camel@mediatek.com>
+Subject: Re: [PATCH v4 2/2] phy: mediatek: Add PCIe PHY driver
+From:   Jianjun Wang <jianjun.wang@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Chen-Yu Tsai" <wenst@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+CC:     Wei-Shun Chang <weishunc@google.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <rex-bc.chen@mediatek.com>,
+        <randy.wu@mediatek.com>, <jieyy.yang@mediatek.com>,
+        <chuanjia.liu@mediatek.com>, <qizhong.cheng@mediatek.com>,
+        <jian.yang@mediatek.com>
+Date:   Sat, 26 Mar 2022 09:56:26 +0800
+In-Reply-To: <be06e57d-302e-e641-a134-c45ea89a6a6b@collabora.com>
+References: <20220323065608.27426-1-jianjun.wang@mediatek.com>
+         <20220323065608.27426-3-jianjun.wang@mediatek.com>
+         <be06e57d-302e-e641-a134-c45ea89a6a6b@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/afs-testing
-head:   1eba43e7cea9100a3767c5a7212ec5f1db4db4fd
-commit: 1eba43e7cea9100a3767c5a7212ec5f1db4db4fd [44/44] Check for dead timer
-config: nios2-randconfig-s032-20220324 (https://download.01.org/0day-ci/archive/20220326/202203260941.OiKX28fM-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/1eba43e7cea9100a3767c5a7212ec5f1db4db4fd
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/afs-testing
-        git checkout 1eba43e7cea9100a3767c5a7212ec5f1db4db4fd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 SHELL=/bin/bash kernel/time/
+On Fri, 2022-03-25 at 15:15 +0100, AngeloGioacchino Del Regno wrote:
+> Il 23/03/22 07:56, Jianjun Wang ha scritto:
+> > Add PCIe GEN3 PHY driver support on MediaTek chipsets.
+> > 
+> > Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+> > ---
+> >   drivers/phy/mediatek/Kconfig        |  11 ++
+> >   drivers/phy/mediatek/Makefile       |   1 +
+> >   drivers/phy/mediatek/phy-mtk-pcie.c | 272
+> > ++++++++++++++++++++++++++++
+> >   3 files changed, 284 insertions(+)
+> >   create mode 100644 drivers/phy/mediatek/phy-mtk-pcie.c
+> > 
+> 
+> ..snip..
+> 
+> > diff --git a/drivers/phy/mediatek/phy-mtk-pcie.c
+> > b/drivers/phy/mediatek/phy-mtk-pcie.c
+> > new file mode 100644
+> > index 000000000000..44a2ad8d324e
+> > --- /dev/null
+> > +++ b/drivers/phy/mediatek/phy-mtk-pcie.c
+> > @@ -0,0 +1,272 @@
+> 
+> ..snip..
+> 
+> > +/**
+> > + * struct mtk_pcie_phy - PCIe phy driver main structure
+> > + * @dev: pointer to device
+> > + * @phy: pointer to generic phy
+> > + * @sif_base: IO mapped register base address of system interface
+> > + * @data: pointer to SoC dependent data
+> > + * @sw_efuse_en: software eFuse enable status
+> > + * @efuse_glb_intr: internal resistor selection of TX bias current
+> > data
+> > + * @efuse: pointer to eFues data for each lane
+> 
+> Oops! There's a typo! "eFues" => "eFuse"
+> 
+> After fixing this typo,
+> 
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks!
 
+> 
+> P.S.: Many thanks for the kerneldoc documentation!!!!
+> 
+> > + */
+> > +struct mtk_pcie_phy {
+> > +	struct device *dev;
+> > +	struct phy *phy;
+> > +	void __iomem *sif_base;
+> > +	const struct mtk_pcie_phy_data *data;
+> > +
+> > +	bool sw_efuse_en;
+> > +	u32 efuse_glb_intr;
+> > +	struct mtk_pcie_lane_efuse *efuse;
+> > +};
+> 
+> 
 
-sparse warnings: (new ones prefixed by >>)
-   kernel/time/timer.c: note: in included file (through arch/nios2/include/generated/asm/cmpxchg.h, include/asm-generic/atomic.h, arch/nios2/include/generated/asm/atomic.h, ...):
->> include/asm-generic/cmpxchg.h:35:39: sparse: sparse: cast truncates bits from constant value (5e5ee5e5 becomes e5)
->> include/asm-generic/cmpxchg.h:46:40: sparse: sparse: cast truncates bits from constant value (5e5ee5e5 becomes e5e5)
-
-vim +35 include/asm-generic/cmpxchg.h
-
-b4816afa3986704 David Howells 2012-03-28  22  
-b4816afa3986704 David Howells 2012-03-28  23  static inline
-82b993e8249ae3c Mark Rutland  2021-05-25  24  unsigned long __generic_xchg(unsigned long x, volatile void *ptr, int size)
-b4816afa3986704 David Howells 2012-03-28  25  {
-b4816afa3986704 David Howells 2012-03-28  26  	unsigned long ret, flags;
-b4816afa3986704 David Howells 2012-03-28  27  
-b4816afa3986704 David Howells 2012-03-28  28  	switch (size) {
-b4816afa3986704 David Howells 2012-03-28  29  	case 1:
-b4816afa3986704 David Howells 2012-03-28  30  #ifdef __xchg_u8
-b4816afa3986704 David Howells 2012-03-28  31  		return __xchg_u8(x, ptr);
-b4816afa3986704 David Howells 2012-03-28  32  #else
-b4816afa3986704 David Howells 2012-03-28  33  		local_irq_save(flags);
-b4816afa3986704 David Howells 2012-03-28  34  		ret = *(volatile u8 *)ptr;
-b4816afa3986704 David Howells 2012-03-28 @35  		*(volatile u8 *)ptr = x;
-b4816afa3986704 David Howells 2012-03-28  36  		local_irq_restore(flags);
-b4816afa3986704 David Howells 2012-03-28  37  		return ret;
-b4816afa3986704 David Howells 2012-03-28  38  #endif /* __xchg_u8 */
-b4816afa3986704 David Howells 2012-03-28  39  
-b4816afa3986704 David Howells 2012-03-28  40  	case 2:
-b4816afa3986704 David Howells 2012-03-28  41  #ifdef __xchg_u16
-b4816afa3986704 David Howells 2012-03-28  42  		return __xchg_u16(x, ptr);
-b4816afa3986704 David Howells 2012-03-28  43  #else
-b4816afa3986704 David Howells 2012-03-28  44  		local_irq_save(flags);
-b4816afa3986704 David Howells 2012-03-28  45  		ret = *(volatile u16 *)ptr;
-b4816afa3986704 David Howells 2012-03-28 @46  		*(volatile u16 *)ptr = x;
-b4816afa3986704 David Howells 2012-03-28  47  		local_irq_restore(flags);
-b4816afa3986704 David Howells 2012-03-28  48  		return ret;
-b4816afa3986704 David Howells 2012-03-28  49  #endif /* __xchg_u16 */
-b4816afa3986704 David Howells 2012-03-28  50  
-b4816afa3986704 David Howells 2012-03-28  51  	case 4:
-b4816afa3986704 David Howells 2012-03-28  52  #ifdef __xchg_u32
-b4816afa3986704 David Howells 2012-03-28  53  		return __xchg_u32(x, ptr);
-b4816afa3986704 David Howells 2012-03-28  54  #else
-b4816afa3986704 David Howells 2012-03-28  55  		local_irq_save(flags);
-b4816afa3986704 David Howells 2012-03-28  56  		ret = *(volatile u32 *)ptr;
-b4816afa3986704 David Howells 2012-03-28  57  		*(volatile u32 *)ptr = x;
-b4816afa3986704 David Howells 2012-03-28  58  		local_irq_restore(flags);
-b4816afa3986704 David Howells 2012-03-28  59  		return ret;
-b4816afa3986704 David Howells 2012-03-28  60  #endif /* __xchg_u32 */
-b4816afa3986704 David Howells 2012-03-28  61  
-
-:::::: The code at line 35 was first introduced by commit
-:::::: b4816afa3986704d1404fc48e931da5135820472 Move the asm-generic/system.h xchg() implementation to asm-generic/cmpxchg.h
-
-:::::: TO: David Howells <dhowells@redhat.com>
-:::::: CC: David Howells <dhowells@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,128 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E494E7E56
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 02:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBA14E7E58
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 02:08:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiCZBJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 21:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
+        id S229933AbiCZBJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 21:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiCZBJX (ORCPT
+        with ESMTP id S229515AbiCZBJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 21:09:23 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEA914FFF9
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 18:07:48 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id c15so12326522ljr.9
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 18:07:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NseqcOErFtU1LljXK411YTLgt9GH8dQMTY4dlb6RFSk=;
-        b=LNgmEMCn1XnxX/EFBHUQ2zGxHvMCFBgu+ZpE3CiC2daiCLlILuCJLO7tuHRQ4w19+G
-         zouO12+LwuYUNeyDQXrfeVBAI4OThT+BsSQLmjTA4r/9D4Ajgbdmr5vbulOZz7lXV5yM
-         ZTs47phBmakG6v9VF47l0+hTPTc3c8ssjfmXs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NseqcOErFtU1LljXK411YTLgt9GH8dQMTY4dlb6RFSk=;
-        b=1XMSJZwm5607TadlIQ0EeW6DofIOh1b8A4xnfq2733x6ojURtQ1Mzu90GT7yh/IMYh
-         etC3mpVNW0FvSmY7UZ9BpEJEPJ58eviv6TamzUUlSpqKCpK429LBa58jQ0x1FcDeb2dU
-         qAdfUiS+rQaCSqqE56I7QnRBx2v7PU4zD5v4MilacgMR7IaYvDcLZWcgCiDWOs2pZa61
-         Ei4y/GmOyvuUVP4Bx4KYq48bimfp0sXCbhVMrcTLIWKykrhKnDEeuuVKZNlJLJknHK7p
-         AulTZ28IoyDqYsJPaGuatuPsXdC17JZb2z3j/Zn6K3RG8OzRQTZzBT9gvlTQkYxuP/vT
-         dlrA==
-X-Gm-Message-State: AOAM531/37ndEXvRGknTXy0bbGtVfX0v6QDateylfqkAJ1bP711poSoG
-        RSzNfJjROakZ5xfjZgHEoAgPJE+TCEfMB3f0KH8=
-X-Google-Smtp-Source: ABdhPJyv+66JpBoZR4mTrmwOfJEryTrdFEf5Ov2ABjFQQ8RwelTJRi8zqmoTLwnI4ahHDpOp7S70ZQ==
-X-Received: by 2002:a05:651c:1725:b0:248:6c4:29d6 with SMTP id be37-20020a05651c172500b0024806c429d6mr10142843ljb.394.1648256866546;
-        Fri, 25 Mar 2022 18:07:46 -0700 (PDT)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
-        by smtp.gmail.com with ESMTPSA id k9-20020a192d09000000b004487dfc9d9csm871181lfj.260.2022.03.25.18.07.45
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 18:07:46 -0700 (PDT)
-Received: by mail-lf1-f49.google.com with SMTP id w7so16010989lfd.6
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 18:07:45 -0700 (PDT)
-X-Received: by 2002:a2e:9904:0:b0:247:ec95:fdee with SMTP id
- v4-20020a2e9904000000b00247ec95fdeemr10483376lji.291.1648256855004; Fri, 25
- Mar 2022 18:07:35 -0700 (PDT)
+        Fri, 25 Mar 2022 21:09:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D7D15AACA;
+        Fri, 25 Mar 2022 18:07:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D95DB82AC9;
+        Sat, 26 Mar 2022 01:07:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A5EEC340F3;
+        Sat, 26 Mar 2022 01:07:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648256869;
+        bh=TIGvi3NJoXI4BDEsPWY9lofzwK2or8+/7/y/4eCc4hY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mQIdq0/fEGsYHcR5YP4RYOjabvCiuT170bwmJJdm2m9AlK07akRPdgTSF7Mr6Jpmp
+         E/aV2KNE+IDpnJUigkDdDz4NgwfaiLd488baaBGkseNYhJ0PpTjdBhbvedV+Q9BqwP
+         U6O7F8YPF46LlAI0c9Y757XE2fE9QW7WNdIGQVJ4U59AXflDkOI48xZknjqlV/x5Nw
+         Y+8j5LUuudkGkI33GEjQ5wQrCcPX2NyQVbohgr3TOslC4CJt+X/FzNW/QqiPjrae3E
+         +B3iWlC/Bh0GM/40RLbYERV0bDtAl3ylDEGCxfMQeFVrDVxFq2ponIm9oz+S+UvGGV
+         5i9qTaAaf9/gg==
+Date:   Sat, 26 Mar 2022 01:07:45 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     ChiYuan Huang <u0084500@gmail.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        cy_huang <cy_huang@richtek.com>, gene_chen@richtek.com,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 2/2] regulator: rt5759: Add support for Richtek RT5759
+ DCDC converter
+Message-ID: <Yj5nYUeizlmlbX4O@sirena.org.uk>
+References: <d2b431f8-9197-4a42-4ee2-4e771e20e0aa@kernel.org>
+ <CADiBU39RGQj1-+yK18mZf3MR78KACKqb2kAxkCFKGXKpJ6Nqxw@mail.gmail.com>
+ <e4a15ceb-c013-96be-48d1-e65267400463@kernel.org>
+ <CADiBU3-gwsh5v1NLUYr_ovXwpUxQqgR61f-Jpc3G-zHs_yV4uw@mail.gmail.com>
+ <03999953-77c5-0272-7477-ab8a069b3671@kernel.org>
+ <CADiBU38zYM1Rw2inTJ_Pu2eWKKqp2Ybb-_+JUJfxfmLNu=kYvw@mail.gmail.com>
+ <cf67f944-47a7-f3b5-9d83-f0f51dc4e954@kernel.org>
+ <Yj3oXuijuZY1gG9X@sirena.org.uk>
+ <d2f220ae-c62c-a7f7-23cc-c33956c2eeaf@kernel.org>
+ <CADiBU3-3QLi5PVUymk_VCbF+-uVSqjoP9jLGL+R=PQ-S=Y=_AA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220326010003.3155137-1-yuzhao@google.com>
-In-Reply-To: <20220326010003.3155137-1-yuzhao@google.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 25 Mar 2022 18:07:18 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjp=jEhjvD9GPnHfuV5Kc1=rUnf84b_qscLJ8fkY74u3Q@mail.gmail.com>
-Message-ID: <CAHk-=wjp=jEhjvD9GPnHfuV5Kc1=rUnf84b_qscLJ8fkY74u3Q@mail.gmail.com>
-Subject: Re: [GIT PULL] Multi-gen LRU for 5.18-rc1
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <baohua@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Donald Carr <d@chaos-reins.com>,
-        Hillf Danton <hdanton@sina.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Rik van Riel <riel@surriel.com>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="V/BI/lkc+CDzOVUK"
+Content-Disposition: inline
+In-Reply-To: <CADiBU3-3QLi5PVUymk_VCbF+-uVSqjoP9jLGL+R=PQ-S=Y=_AA@mail.gmail.com>
+X-Cookie: <Omnic> another .sig addition
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 6:00 PM Yu Zhao <yuzhao@google.com> wrote:
->
-> This is more of an option than a request for 5.18. I'm sending it to
-> you directly because, in my judgement, it's now as ready as it'll ever
-> be.
 
-So I do expect to merge this, but I don't think it has been in
-linux-next, has it?
+--V/BI/lkc+CDzOVUK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I would really like to see it get that linux-next workout with various
-automation bots going after it.
+On Sat, Mar 26, 2022 at 08:58:47AM +0800, ChiYuan Huang wrote:
 
-I'd also like to see explicit acks from the usual suspects, or at
-least make sure we don't have any explicit NAK's coming in.
+> I tried to remove only __maybe_unused and build with x86 config  that
+> CONFIG_OF=n.
+> There's no warning or error message when compiling the rt5759 source code.
 
-Andrew & co?
+> If so, I will remove only '__maybe_unused'.
+> May I ask whether 'of_match_ptr'  need to be added or not?
 
-                   Linus
+If you add of_match_ptr() (which is a little better, though it's
+a tiny different either way) then you shouldn't remove
+__maybe_unused - the thing here is that the __maybe_unused is
+needed because of_match_ptr() is used.
+
+--V/BI/lkc+CDzOVUK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmI+Z2AACgkQJNaLcl1U
+h9A8sgf+JM/GnGsh3SVVaRW5txEsbM9CDUDAOWyw0CTnyFLRdM4ufVz+2b13t9dz
+NtHUqEso2RiwWuoIihvgsD9u/cpjtSumnTkL17VXjdQBkoJThnYum1kpYtTNWSgU
+tjBv+dy6H6FMjkjwEwFEFpneA9bmHLM6bZbVSVFUzS4dWI8tRt8QkydAno9ZG+cN
+KiKIcqHeovCLQ5rxxg7o3pruR0EhDw5+Q/XPLGVktaA0+zUczrXq8w4Yq/X9Bp4O
+wFpM/viaW5t8GT6HiwXjH4yo10Mw/tBdJsZLgJdrK50QMEd+9uH+igIiphKdCfsm
+zmRJTlcu86kg0NJ3izdat6MIPfZQWA==
+=88Yr
+-----END PGP SIGNATURE-----
+
+--V/BI/lkc+CDzOVUK--

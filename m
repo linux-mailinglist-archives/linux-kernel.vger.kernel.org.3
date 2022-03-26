@@ -2,57 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F044E7E74
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 02:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 190CE4E7E79
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 02:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiCZBnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 21:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
+        id S230120AbiCZBxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 21:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiCZBnW (ORCPT
+        with ESMTP id S229556AbiCZBx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 21:43:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6A12DC0;
-        Fri, 25 Mar 2022 18:41:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96F0361917;
-        Sat, 26 Mar 2022 01:41:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB6BAC004DD;
-        Sat, 26 Mar 2022 01:41:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648258906;
-        bh=jGW6PmBImEhptd1gLKtaCQuGjGNEySz4ZTmfr35uDDo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WOoSOxA7eJ5a2mSatazhUFrvSoihLmhSyReNqGit9f/GcWRVva/v1hsFislZCcvHm
-         tuYJnVgbexMaxODUx+v+5uweMEVu2bZDL2gP037u7297bkqVtGEY7SabVtrIhWlnid
-         g8MrsWm0ZrMlp2k1DIYsQZDSbRWurNMLwe3+mvJwV5eQ3tiDi0DRweNgkX8iTLf9f2
-         J7IQ+QpAjHVU+p8o5EoiZGj/lKd5yG/BznDQ//S7FRNEblI19fOZrlgVMT9lwsf0pw
-         LDCsP2DwPAYQL0bc2HrPafUGlnLySv6lO7dhqiUEPOybIWjg5fZHOrfzANR9YGSZTs
-         Z0cPEpuIq7hAg==
-Date:   Fri, 25 Mar 2022 18:41:45 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
+        Fri, 25 Mar 2022 21:53:28 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037BF217970
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 18:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648259512; x=1679795512;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=S6P/CQ0wkhzL5Vune8foNB5LvsIHO4zHgoHvl/Uw4PM=;
+  b=a/zEeTGixUAtQj06Eh9tsoQXGOPF00jFg9BYq7pCDW/wMLi0hBevIqfF
+   3jUOn4bEYxugGQnfpOvYaMBghkDD/96w1jUjzjjMeADDbvmLz7kIA5IuI
+   Q4Bpn4y8uKAyu+S3y6qXxlCo2Rz1liHxQGLPN2efjTUHegkT9DrXD48fH
+   3C7EjossXConEgHdi+V5pDUtxsD//4FP0eqkdVJ3Ix/8ZRzMfjwCjW7Xu
+   yt95Q9sIjHxG/WgHiExY5zOhGGBeOl31RoXDx7Fham13HsCU6XhE2NcJ0
+   bQELG70/9ZRuXCecyu2dMritlZkojg6+KJ93LpcsmOeGuDDC/nQ5Z5yvV
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="239348380"
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="239348380"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 18:51:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="584646340"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 25 Mar 2022 18:51:49 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nXvan-000MrG-34; Sat, 26 Mar 2022 01:51:49 +0000
+Date:   Sat, 26 Mar 2022 09:50:47 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        cluster-devel <cluster-devel@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [GIT PULL] fs/iomap: Fix buffered write page prefaulting
-Message-ID: <20220326014145.GE8182@magnolia>
-References: <20220325143701.144731-1-agruenba@redhat.com>
- <20220326000337.GD8182@magnolia>
- <CAHc6FU6ys6gQjqpT-p0b+9pRzQPGemvviAMJNgBvmXaM27k7jA@mail.gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
+Subject: [gfs2:for-next 16/17] fs/gfs2/file.c:1073:14: warning: comparison of
+ distinct pointer types ('typeof ((1UL << 18) - ((unsigned
+ long)(iocb->ki_pos) & ~(~((1 << 18) - 1)))) *' (aka 'unsigned long *') and
+ 'typeof (iov_iter_count(from)) *' (aka 'unsigned int *'))
+Message-ID: <202203260944.DMj6xxB2-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHc6FU6ys6gQjqpT-p0b+9pRzQPGemvviAMJNgBvmXaM27k7jA@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,43 +64,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 26, 2022 at 01:22:17AM +0100, Andreas Gruenbacher wrote:
-> On Sat, Mar 26, 2022 at 1:03 AM Darrick J. Wong <djwong@kernel.org> wrote:
-> > On Fri, Mar 25, 2022 at 03:37:01PM +0100, Andreas Gruenbacher wrote:
-> > > Hello Linus,
-> > >
-> > > please consider pulling the following fix, which I've forgotten to send
-> > > in the previous merge window.  I've only improved the patch description
-> > > since.
-> > >
-> > > Thank you very much,
-> > > Andreas
-> > >
-> > > The following changes since commit 42eb8fdac2fc5d62392dcfcf0253753e821a97b0:
-> > >
-> > >   Merge tag 'gfs2-v5.16-rc2-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2 (2021-11-17 15:55:07 -0800)
-> > >
-> > > are available in the Git repository at:
-> > >
-> > >   https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git tags/write-page-prefaulting
-> > >
-> > > for you to fetch changes up to 631f871f071746789e9242e514ab0f49067fa97a:
-> > >
-> > >   fs/iomap: Fix buffered write page prefaulting (2022-03-25 15:14:03 +0100)
-> >
-> > When was this sent to fsdevel for public consideration?  The last time I
-> > saw any patches related to prefaulting in iomap was November.
-> 
-> On November 23, exact same patch:
-> 
-> https://lore.kernel.org/linux-fsdevel/20211123151812.361624-1-agruenba@redhat.com/
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git for-next
+head:   3d7b481b8a996e68339268487c0d3c8e54a2c274
+commit: 32c8d6969d43c1bce394f75e9bcf32697146a773 [16/17] gfs2: Don't get stuck on partial buffered writes
+config: hexagon-randconfig-r022-20220325 (https://download.01.org/0day-ci/archive/20220326/202203260944.DMj6xxB2-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git/commit/?id=32c8d6969d43c1bce394f75e9bcf32697146a773
+        git remote add gfs2 https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git
+        git fetch --no-tags gfs2 for-next
+        git checkout 32c8d6969d43c1bce394f75e9bcf32697146a773
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/gfs2/
 
-Ah, ok, so I just missed it then.  Sorry about that, I seem to suck as
-maintainer more and more by the day. :( :(
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-(Hey, at least you got the other maintainer to RVB it...)
+All warnings (new ones prefixed by >>):
 
---D
+>> fs/gfs2/file.c:1073:14: warning: comparison of distinct pointer types ('typeof ((1UL << 18) - ((unsigned long)(iocb->ki_pos) & ~(~((1 << 18) - 1)))) *' (aka 'unsigned long *') and 'typeof (iov_iter_count(from)) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+                   min_size = min(PAGE_SIZE - offset_in_page(iocb->ki_pos),
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
 
-> Andreas
-> 
+
+vim +1073 fs/gfs2/file.c
+
+  1005	
+  1006	static ssize_t gfs2_file_buffered_write(struct kiocb *iocb,
+  1007						struct iov_iter *from,
+  1008						struct gfs2_holder *gh)
+  1009	{
+  1010		struct file *file = iocb->ki_filp;
+  1011		struct inode *inode = file_inode(file);
+  1012		struct gfs2_inode *ip = GFS2_I(inode);
+  1013		struct gfs2_sbd *sdp = GFS2_SB(inode);
+  1014		struct gfs2_holder *statfs_gh = NULL;
+  1015		size_t prev_count = 0, window_size = 0;
+  1016		size_t read = 0;
+  1017		ssize_t ret;
+  1018	
+  1019		/*
+  1020		 * In this function, we disable page faults when we're holding the
+  1021		 * inode glock while doing I/O.  If a page fault occurs, we indicate
+  1022		 * that the inode glock may be dropped, fault in the pages manually,
+  1023		 * and retry.
+  1024		 */
+  1025	
+  1026		if (inode == sdp->sd_rindex) {
+  1027			statfs_gh = kmalloc(sizeof(*statfs_gh), GFP_NOFS);
+  1028			if (!statfs_gh)
+  1029				return -ENOMEM;
+  1030		}
+  1031	
+  1032		gfs2_holder_init(ip->i_gl, LM_ST_EXCLUSIVE, 0, gh);
+  1033	retry:
+  1034		ret = gfs2_glock_nq(gh);
+  1035		if (ret)
+  1036			goto out_uninit;
+  1037	retry_under_glock:
+  1038		if (inode == sdp->sd_rindex) {
+  1039			struct gfs2_inode *m_ip = GFS2_I(sdp->sd_statfs_inode);
+  1040	
+  1041			ret = gfs2_glock_nq_init(m_ip->i_gl, LM_ST_EXCLUSIVE,
+  1042						 GL_NOCACHE, statfs_gh);
+  1043			if (ret)
+  1044				goto out_unlock;
+  1045		}
+  1046	
+  1047		current->backing_dev_info = inode_to_bdi(inode);
+  1048		pagefault_disable();
+  1049		ret = iomap_file_buffered_write(iocb, from, &gfs2_iomap_ops);
+  1050		pagefault_enable();
+  1051		current->backing_dev_info = NULL;
+  1052		if (ret > 0) {
+  1053			iocb->ki_pos += ret;
+  1054			read += ret;
+  1055		}
+  1056	
+  1057		if (inode == sdp->sd_rindex)
+  1058			gfs2_glock_dq_uninit(statfs_gh);
+  1059	
+  1060		if (should_fault_in_pages(ret, from, &prev_count, &window_size)) {
+  1061			size_t min_size, leftover;
+  1062	
+  1063			/*
+  1064			 * Make sure to fault in enough memory to fill at least one
+  1065			 * page cache page.  Otherwise, we could end up with a partial
+  1066			 * write that __iomap_write_end() treats as a zero-length
+  1067			 * write, and we would get stuck.
+  1068			 *
+  1069			 * Note that we assume that after fault_in_iov_iter_readable(),
+  1070			 * at least min_size bytes of memory will be readable.  This
+  1071			 * could change with sub-page pointer color probing.
+  1072			 */
+> 1073			min_size = min(PAGE_SIZE - offset_in_page(iocb->ki_pos),
+  1074				       iov_iter_count(from));
+  1075			if (window_size < min_size)
+  1076				window_size = min_size;
+  1077	
+  1078			gfs2_holder_allow_demote(gh);
+  1079			leftover = fault_in_iov_iter_readable(from, window_size);
+  1080			gfs2_holder_disallow_demote(gh);
+  1081			if (window_size - leftover >= min_size) {
+  1082				if (gfs2_holder_queued(gh))
+  1083					goto retry_under_glock;
+  1084				if (read && !(iocb->ki_flags & IOCB_DIRECT))
+  1085					goto out_uninit;
+  1086				goto retry;
+  1087			}
+  1088		}
+  1089	out_unlock:
+  1090		if (gfs2_holder_queued(gh))
+  1091			gfs2_glock_dq(gh);
+  1092	out_uninit:
+  1093		gfs2_holder_uninit(gh);
+  1094		if (statfs_gh)
+  1095			kfree(statfs_gh);
+  1096		return read ? read : ret;
+  1097	}
+  1098	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

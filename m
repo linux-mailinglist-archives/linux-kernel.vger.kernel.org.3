@@ -2,393 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCDC54E7EEE
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 05:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F073A4E7EF2
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 05:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbiCZE3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 00:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49966 "EHLO
+        id S230153AbiCZErE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 00:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiCZE3f (ORCPT
+        with ESMTP id S229660AbiCZErB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 00:29:35 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3559F5A09A
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 21:27:59 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id i67-20020a1c3b46000000b0038ce25c870dso1916880wma.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 21:27:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wXjQomr6Ua4s3PfVrkfMx69oLfa65TadzK4GjLZb12k=;
-        b=Uoan5FLW5aJ/AKTslmBZagRi1tYDmzDv3sYMU5/xS7rsUTI7XhkwrLKETpfoO2H14w
-         ou3v9kWudprahOUJ9UyJzbJROUgCsdwSyG7EHIYJlPycrLpREbwIZAd4jZ8MrtaXwupF
-         zw7MxWk+AZmV6vXxZBQWNITt5rdYU7IRVm1IRyMpch2DGWG0D14sYASm+lp+l8rFjHWP
-         Qmpbi2IvIK5/wu8yO94ERx90iwnexfL+lN7poY6I8tL8QcWHwxLZ9aUeVwk54XI33Oxm
-         ItsI5z5qoYe/t5zLXR+8qqD/RBzMxDR6hR9Ri2sgEpmWrvaa+PACFDgDVeeLBg3+mnm8
-         YsSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wXjQomr6Ua4s3PfVrkfMx69oLfa65TadzK4GjLZb12k=;
-        b=uAN2cEWv1Zx7V7xJPEUbbliVjW7dX3efDGyYuGKuW9uAyPTft8hmMDfnHjLe0Vx45X
-         m6X0yuG+rPgZ1HSjct7RTfsh99P7H4e7tAtm5mpyNbs91rd2IvjidImiigDVkMe7+HQr
-         E2Nh4Iy1fWXm/NJXcupDaoY2udocVCjPWX9fhBhE55OBd7DhrxFcC9B7SuUj3B7wu6vC
-         MKD+zC4x2AutbEAVrfOIwSEHHRuemtR4t0Yxn6OGTAyyCQADVsbuvGvvQfW2KX880oLO
-         BQfBDp5gQjh6MNLOw/XCKPIDk0vRMyqC2yNFylCc72DUaZmo2BGxLkKYRD5qQTB0l4rg
-         QdOg==
-X-Gm-Message-State: AOAM530R78Ob/zfBeUlo0UIKabRlvPCNo5qFrAl6cuDoVs3suBOe0zrD
-        XyZ7BruzqhIB69BLsRIVxrN7tqXE9gNToTAvi5rBFA==
-X-Google-Smtp-Source: ABdhPJwARGDiTO39yg6O9KNmUsWTzj/6mLa4Hh2JdflHE8NFPWrdc9eBxiXEOHA3S+RoWuPvYJueYFcpWb+kqg1g/tg=
-X-Received: by 2002:a05:600c:4f48:b0:38c:a460:cb6 with SMTP id
- m8-20020a05600c4f4800b0038ca4600cb6mr13577299wmq.96.1648268877617; Fri, 25
- Mar 2022 21:27:57 -0700 (PDT)
+        Sat, 26 Mar 2022 00:47:01 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56523205E2
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 21:45:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648269926; x=1679805926;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=WkqhRloa6zdmS38sBFcU8W77ESxORgQffG9pQv+1Hbs=;
+  b=OCLAMEWSia4McweRHy5M4rBtpyoDNz8Am2pXuwXaOZXTYl4MWZO9DBAs
+   F2PEBrENChuZXcTlsk0K7R3w1ltZgLupcRnOVJZO7Jr37pSSQ+wDmtY8L
+   lKwRnUXULFmg4j3s7rXr8Tmp6qRcQ7fFyh2dc0h7JwvOz0yhHqv1Y45+U
+   XtjqDpr3t4Qkr9K7tx8jtADb0up8aXXQNI1Ypaaz4zGQnLfRmZCHYsgn8
+   KRvmN1uHwo1BfTkciARm/JA6ycHDlaKvcm1dSsHh2dy6HDd93XHYjrnrn
+   j+gaC0wiLTG6R9kq20mXGpXXZkuXN3/utIG+Uj/pR9Vqo9Q8DLIGkWDOA
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="283637346"
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="283637346"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 21:45:25 -0700
+X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
+   d="scan'208";a="718429718"
+Received: from blphilo-mobl.amr.corp.intel.com (HELO [10.255.231.82]) ([10.255.231.82])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 21:45:25 -0700
+Message-ID: <d9d0405e-b118-b028-d26f-fbb8de4e7a0e@intel.com>
+Date:   Fri, 25 Mar 2022 21:45:24 -0700
 MIME-Version: 1.0
-References: <20220326002013.483394-1-dlatypov@google.com> <20220326002013.483394-2-dlatypov@google.com>
-In-Reply-To: <20220326002013.483394-2-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 26 Mar 2022 12:27:46 +0800
-Message-ID: <CABVgOSm+o=t=8hgR=T676rHJjWp0p-VXeoZt28G0kVqURqCGMg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] kunit: split resource API impl from test.c into
- new resource.c
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>,
+        Matthias Welwarsky <matthias.welwarsky@sysgo.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86-ml <x86@kernel.org>
+References: <3422754.iIbC2pHGDl@linux-3513> <Yj49F1pnehy3ga5U@zn.tnic>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: x86, possible bug in __memmove() alternatives patching
+In-Reply-To: <Yj49F1pnehy3ga5U@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 26, 2022 at 8:20 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> We've split out the declarations from include/kunit/test.h into
-> resource.h.
-> This patch splits out the definitions as well for consistency.
->
-> A side effect of this is git blame won't properly track history by
-> default, users need to run
-> $ git blame -L ,1 -C13 lib/kunit/resource.c
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+On 3/25/22 15:07, Borislav Petkov wrote:
+> I know it's is probably a very rare case and Intel recommends having fast 
+> string ops enabled, hence the question: would this be considered a bug in the 
+> kernel that should be fixed? A potential fix could be to clear FSRM together 
+> with ERMS depending on IA32_MISC_ENABLE.
 
-Looks good and works fine here. I'm going to try to rebase most of the
-other resource system stuff I'm working on on top of these (which will
-likely end up moving a bunch of code _again_, but is probably the
-least terrible of all the available options).
+I'd consider it a bug in the hypervisor, personally. ;)
 
-One nitpick (newline at end of file) below, otherwise this is good.
-
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
->  lib/kunit/Makefile   |   1 +
->  lib/kunit/resource.c | 126 +++++++++++++++++++++++++++++++++++++++++++
->  lib/kunit/test.c     | 116 +--------------------------------------
->  3 files changed, 128 insertions(+), 115 deletions(-)
->  create mode 100644 lib/kunit/resource.c
->
-> diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-> index c49f4ffb6273..29aff6562b42 100644
-> --- a/lib/kunit/Makefile
-> +++ b/lib/kunit/Makefile
-> @@ -1,6 +1,7 @@
->  obj-$(CONFIG_KUNIT) +=                 kunit.o
->
->  kunit-objs +=                          test.o \
-> +                                       resource.o \
->                                         string-stream.o \
->                                         assert.o \
->                                         try-catch.o \
-> diff --git a/lib/kunit/resource.c b/lib/kunit/resource.c
-> new file mode 100644
-> index 000000000000..b8bced246217
-> --- /dev/null
-> +++ b/lib/kunit/resource.c
-> @@ -0,0 +1,126 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit resource API for test managed resources (allocations, etc.).
-> + *
-> + * Copyright (C) 2022, Google LLC.
-> + * Author: Daniel Latypov <dlatypov@google.com>
-> + */
-> +
-> +#include <kunit/resource.h>
-> +#include <kunit/test.h>
-> +#include <linux/kref.h>
-> +
-> +/*
-> + * Used for static resources and when a kunit_resource * has been created by
-> + * kunit_alloc_resource().  When an init function is supplied, @data is passed
-> + * into the init function; otherwise, we simply set the resource data field to
-> + * the data value passed in.
-> + */
-> +int kunit_add_resource(struct kunit *test,
-> +                      kunit_resource_init_t init,
-> +                      kunit_resource_free_t free,
-> +                      struct kunit_resource *res,
-> +                      void *data)
-> +{
-> +       int ret = 0;
-> +       unsigned long flags;
-> +
-> +       res->free = free;
-> +       kref_init(&res->refcount);
-> +
-> +       if (init) {
-> +               ret = init(res, data);
-> +               if (ret)
-> +                       return ret;
-> +       } else {
-> +               res->data = data;
-> +       }
-> +
-> +       spin_lock_irqsave(&test->lock, flags);
-> +       list_add_tail(&res->node, &test->resources);
-> +       /* refcount for list is established by kref_init() */
-> +       spin_unlock_irqrestore(&test->lock, flags);
-> +
-> +       return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_add_resource);
-> +
-> +int kunit_add_named_resource(struct kunit *test,
-> +                            kunit_resource_init_t init,
-> +                            kunit_resource_free_t free,
-> +                            struct kunit_resource *res,
-> +                            const char *name,
-> +                            void *data)
-> +{
-> +       struct kunit_resource *existing;
-> +
-> +       if (!name)
-> +               return -EINVAL;
-> +
-> +       existing = kunit_find_named_resource(test, name);
-> +       if (existing) {
-> +               kunit_put_resource(existing);
-> +               return -EEXIST;
-> +       }
-> +
-> +       res->name = name;
-> +
-> +       return kunit_add_resource(test, init, free, res, data);
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_add_named_resource);
-> +
-> +struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
-> +                                                   kunit_resource_init_t init,
-> +                                                   kunit_resource_free_t free,
-> +                                                   gfp_t internal_gfp,
-> +                                                   void *data)
-> +{
-> +       struct kunit_resource *res;
-> +       int ret;
-> +
-> +       res = kzalloc(sizeof(*res), internal_gfp);
-> +       if (!res)
-> +               return NULL;
-> +
-> +       ret = kunit_add_resource(test, init, free, res, data);
-> +       if (!ret) {
-> +               /*
-> +                * bump refcount for get; kunit_resource_put() should be called
-> +                * when done.
-> +                */
-> +               kunit_get_resource(res);
-> +               return res;
-> +       }
-> +       return NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
-> +
-> +void kunit_remove_resource(struct kunit *test, struct kunit_resource *res)
-> +{
-> +       unsigned long flags;
-> +
-> +       spin_lock_irqsave(&test->lock, flags);
-> +       list_del(&res->node);
-> +       spin_unlock_irqrestore(&test->lock, flags);
-> +       kunit_put_resource(res);
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_remove_resource);
-> +
-> +int kunit_destroy_resource(struct kunit *test, kunit_resource_match_t match,
-> +                          void *match_data)
-> +{
-> +       struct kunit_resource *res = kunit_find_resource(test, match,
-> +                                                        match_data);
-> +
-> +       if (!res)
-> +               return -ENOENT;
-> +
-> +       kunit_remove_resource(test, res);
-> +
-> +       /* We have a reference also via _find(); drop it. */
-> +       kunit_put_resource(res);
-> +
-> +       return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_destroy_resource);
-> +
-
-.git/rebase-apply/patch:151: new blank line at EOF.
-
-+
-
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 3bca3bf5c15b..0f66c13d126e 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -6,10 +6,10 @@
->   * Author: Brendan Higgins <brendanhiggins@google.com>
->   */
->
-> +#include <kunit/resource.h>
->  #include <kunit/test.h>
->  #include <kunit/test-bug.h>
->  #include <linux/kernel.h>
-> -#include <linux/kref.h>
->  #include <linux/moduleparam.h>
->  #include <linux/sched/debug.h>
->  #include <linux/sched.h>
-> @@ -592,120 +592,6 @@ void __kunit_test_suites_exit(struct kunit_suite **suites)
->  }
->  EXPORT_SYMBOL_GPL(__kunit_test_suites_exit);
->
-> -/*
-> - * Used for static resources and when a kunit_resource * has been created by
-> - * kunit_alloc_resource().  When an init function is supplied, @data is passed
-> - * into the init function; otherwise, we simply set the resource data field to
-> - * the data value passed in.
-> - */
-> -int kunit_add_resource(struct kunit *test,
-> -                      kunit_resource_init_t init,
-> -                      kunit_resource_free_t free,
-> -                      struct kunit_resource *res,
-> -                      void *data)
-> -{
-> -       int ret = 0;
-> -       unsigned long flags;
-> -
-> -       res->free = free;
-> -       kref_init(&res->refcount);
-> -
-> -       if (init) {
-> -               ret = init(res, data);
-> -               if (ret)
-> -                       return ret;
-> -       } else {
-> -               res->data = data;
-> -       }
-> -
-> -       spin_lock_irqsave(&test->lock, flags);
-> -       list_add_tail(&res->node, &test->resources);
-> -       /* refcount for list is established by kref_init() */
-> -       spin_unlock_irqrestore(&test->lock, flags);
-> -
-> -       return ret;
-> -}
-> -EXPORT_SYMBOL_GPL(kunit_add_resource);
-> -
-> -int kunit_add_named_resource(struct kunit *test,
-> -                            kunit_resource_init_t init,
-> -                            kunit_resource_free_t free,
-> -                            struct kunit_resource *res,
-> -                            const char *name,
-> -                            void *data)
-> -{
-> -       struct kunit_resource *existing;
-> -
-> -       if (!name)
-> -               return -EINVAL;
-> -
-> -       existing = kunit_find_named_resource(test, name);
-> -       if (existing) {
-> -               kunit_put_resource(existing);
-> -               return -EEXIST;
-> -       }
-> -
-> -       res->name = name;
-> -
-> -       return kunit_add_resource(test, init, free, res, data);
-> -}
-> -EXPORT_SYMBOL_GPL(kunit_add_named_resource);
-> -
-> -struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
-> -                                                   kunit_resource_init_t init,
-> -                                                   kunit_resource_free_t free,
-> -                                                   gfp_t internal_gfp,
-> -                                                   void *data)
-> -{
-> -       struct kunit_resource *res;
-> -       int ret;
-> -
-> -       res = kzalloc(sizeof(*res), internal_gfp);
-> -       if (!res)
-> -               return NULL;
-> -
-> -       ret = kunit_add_resource(test, init, free, res, data);
-> -       if (!ret) {
-> -               /*
-> -                * bump refcount for get; kunit_resource_put() should be called
-> -                * when done.
-> -                */
-> -               kunit_get_resource(res);
-> -               return res;
-> -       }
-> -       return NULL;
-> -}
-> -EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
-> -
-> -void kunit_remove_resource(struct kunit *test, struct kunit_resource *res)
-> -{
-> -       unsigned long flags;
-> -
-> -       spin_lock_irqsave(&test->lock, flags);
-> -       list_del(&res->node);
-> -       spin_unlock_irqrestore(&test->lock, flags);
-> -       kunit_put_resource(res);
-> -}
-> -EXPORT_SYMBOL_GPL(kunit_remove_resource);
-> -
-> -int kunit_destroy_resource(struct kunit *test, kunit_resource_match_t match,
-> -                          void *match_data)
-> -{
-> -       struct kunit_resource *res = kunit_find_resource(test, match,
-> -                                                        match_data);
-> -
-> -       if (!res)
-> -               return -ENOENT;
-> -
-> -       kunit_remove_resource(test, res);
-> -
-> -       /* We have a reference also via _find(); drop it. */
-> -       kunit_put_resource(res);
-> -
-> -       return 0;
-> -}
-> -EXPORT_SYMBOL_GPL(kunit_destroy_resource);
-> -
->  struct kunit_kmalloc_array_params {
->         size_t n;
->         size_t size;
-> --
-> 2.35.1.1021.g381101b075-goog
->
+But, we do try to make the kernel work even the face of funky
+hypervisors that do things that never occur on real hardware.  If a nice
+patch to fix this up showed up, I'd definitely take a look.

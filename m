@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9749F4E7FC3
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 08:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBFCB4E7FC9
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 08:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbiCZH1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 03:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58584 "EHLO
+        id S231847AbiCZHeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 03:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiCZH1M (ORCPT
+        with ESMTP id S231389AbiCZHeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 03:27:12 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2E2DD8
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 00:25:35 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22Q7PLXa017135;
-        Sat, 26 Mar 2022 02:25:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1648279521;
-        bh=Hv7YXBe/2Y0lpaGXGu39vfIikytNrKb6clLyKYiPggU=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=tLFm8MjbdrQDDUzjlnMHvoS+Azkt1QBJcjYrv2pVqa//9QjEKRWlayS4KoHCikB7I
-         JZCvr0nZO4prSu9xORsevEDlOGpaUySCTy8SBnzz2G3dMIFbl1SqKnaVIo2IP8t+vt
-         f0Ne2omzh1YqnTHfKoeVsjGDZoCRp7pZbPRFYGe4=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22Q7PLTA001882
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 26 Mar 2022 02:25:21 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Sat, 26
- Mar 2022 02:25:21 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Sat, 26 Mar 2022 02:25:20 -0500
-Received: from [10.250.235.115] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22Q7PHMk018492;
-        Sat, 26 Mar 2022 02:25:18 -0500
-Message-ID: <7f160e8f-f3a3-33ff-3471-72978d0b34bc@ti.com>
-Date:   Sat, 26 Mar 2022 12:55:17 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] soc: ti: replace usage of found with dedicated list
- iterator variable
-Content-Language: en-US
-To:     Jakob Koschel <jakobkoschel@gmail.com>, Nishanth Menon <nm@ti.com>
-CC:     Santosh Shilimkar <ssantosh@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-References: <20220324072503.63244-1-jakobkoschel@gmail.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20220324072503.63244-1-jakobkoschel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Sat, 26 Mar 2022 03:34:46 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB51AE01D;
+        Sat, 26 Mar 2022 00:33:10 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id w8so10404291pll.10;
+        Sat, 26 Mar 2022 00:33:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=rZDP/4Mhjr1+TUZZk1Co3Aep1xOdAOYrejqBkqWY1xw=;
+        b=fgPctAjAt/0RF+09t2VHyDDhikM33mm6GdoqZvSkcngivFbWaUMAALXNyCiZV0Nrk8
+         PpU6sUl/Vv+7CH/SisgnE2ISWvHUNMuyuR8FAfXo9+V5jtRl+Eoo5HQA3z0Yy1ZwGzVW
+         oVdq/cXmAK1RxUMyx60cLOcx2+HIgGYez4j+6kbXefXHDkez35hsF3VCrSHs2zJBFxpA
+         musGPPtWizeSCH8ifqy2BPZCXYJq6zq6qdU37QLy4QmYi+tu3i2lo+sduvig70NIEaYI
+         UHPrHUPL3VeVmhzCfBvFnEO38Nom9N2grkgGKNvGoxd01+VvoqnowI0yVN8NBpa78phu
+         n4Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=rZDP/4Mhjr1+TUZZk1Co3Aep1xOdAOYrejqBkqWY1xw=;
+        b=w+uLCZVxPP2/VSF6jFi6DVyjy1IU8cI5I7RwvYmCpxrS4FTGl2/SC8vQRPOr+3wqh9
+         mHb8xq3ns8wJeQeG941uwMU9+RAzZJrZjKU+w18XwRjpUR5NdWCQZdWEzE2MFClxZ3NT
+         Gb9gFiRA2Jw4nsYpsvZZw6BHVtlkdsXIgCZTAdocdhRvkt3OG8Cuu53HBIzDyoqzsQHQ
+         OmKNTk2IAiAVm/TE0ayXrvqqUDpAApIiTfqllAB0ZjMZrz6MiBOD+MeLCdUFj6pkpDPQ
+         tDLG4hBQ5j0ILctM7AsdRVFvuNPXXJeZmbPWQa06tHd1sqzZFNt2aHItHBMbKuL3MwLG
+         fs3A==
+X-Gm-Message-State: AOAM531hUtPY3d1vK9h+Qm98y6GZhStul1WYy0FuRv5AE653EFnFnhvd
+        ZkfKd4NjxKa5EGRRyR/vzl8=
+X-Google-Smtp-Source: ABdhPJwanJsoFAHQzvCaqlw4iCK3WmBega0/mc4LjcKG+hVGnkRFMN2BWh4fSIMusIBevJ6sMDo18Q==
+X-Received: by 2002:a17:90b:4c0a:b0:1c6:90be:1e03 with SMTP id na10-20020a17090b4c0a00b001c690be1e03mr29580678pjb.7.1648279990376;
+        Sat, 26 Mar 2022 00:33:10 -0700 (PDT)
+Received: from ubuntu.huawei.com ([119.3.119.18])
+        by smtp.googlemail.com with ESMTPSA id l9-20020a655609000000b0037589f4337dsm7345377pgs.78.2022.03.26.00.33.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Mar 2022 00:33:09 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     mchehab@kernel.org
+Cc:     hverkuil-cisco@xs4all.nl, yangyingliang@huawei.com,
+        v4l@cerqueira.org, akpm@osdl.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Subject: [PATCH v2] saa7134: fix incorrect check to determine if list is empty
+Date:   Sat, 26 Mar 2022 15:33:01 +0800
+Message-Id: <20220326073301.12949-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,27 +66,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The bug is here: "if (dev == NULL)".
 
+The list iterator value will *always* be set and non-NULL by
+list_for_each_entry(), so it is incorrect to assume that the iterator
+value will be NULL if the list is empty. Instead, check with list_empty()
+and move the 'if' ahead, to fix this bug.
 
-On 24/03/22 12:55 pm, Jakob Koschel wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
-> 
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
-> 
-> This removes the need to use a found variable and simply checking if
-> the variable was set, can determine if the break/goto was hit.
-> 
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-> ---
+Fixes: 4aabf6331f89c ("[PATCH] v4l: (951) Make saa7134-oss as a stand-alone module")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+---
+changes from v1:
+ - check with list_empty() (Jakob Koschel)
+ - move the 'if' ahead (Xiaomeng Tong)
+v1:https://lore.kernel.org/all/20220320025718.10053-1-xiam0nd.tong@gmail.com/
+sorry for the wrong PATCH v2:
+https://lore.kernel.org/all/20220326072215.11608-1-xiam0nd.tong@gmail.com/
+just skip it.
+---
+ drivers/media/pci/saa7134/saa7134-alsa.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
+diff --git a/drivers/media/pci/saa7134/saa7134-alsa.c b/drivers/media/pci/saa7134/saa7134-alsa.c
+index fb24d2ed3621..f0318617197c 100644
+--- a/drivers/media/pci/saa7134/saa7134-alsa.c
++++ b/drivers/media/pci/saa7134/saa7134-alsa.c
+@@ -1214,13 +1214,16 @@ static int alsa_device_exit(struct saa7134_dev *dev)
+ 
+ static int saa7134_alsa_init(void)
+ {
+-	struct saa7134_dev *dev = NULL;
++	struct saa7134_dev *dev;
+ 
+ 	saa7134_dmasound_init = alsa_device_init;
+ 	saa7134_dmasound_exit = alsa_device_exit;
+ 
+ 	pr_info("saa7134 ALSA driver for DMA sound loaded\n");
+ 
++	if (list_empty(&saa7134_devlist))
++		pr_info("saa7134 ALSA: no saa7134 cards found\n");
++
+ 	list_for_each_entry(dev, &saa7134_devlist, devlist) {
+ 		if (dev->pci->device == PCI_DEVICE_ID_PHILIPS_SAA7130)
+ 			pr_info("%s/alsa: %s doesn't support digital audio\n",
+@@ -1229,9 +1232,6 @@ static int saa7134_alsa_init(void)
+ 			alsa_device_init(dev);
+ 	}
+ 
+-	if (dev == NULL)
+-		pr_info("saa7134 ALSA: no saa7134 cards found\n");
+-
+ 	return 0;
+ 
+ }
+-- 
+2.17.1
 
-[...]
-
-Regards
-Vignesh

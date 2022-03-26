@@ -2,99 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F72C4E7E5A
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 02:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF314E7E60
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 02:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiCZBLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 21:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53400 "EHLO
+        id S229965AbiCZBNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 21:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiCZBLk (ORCPT
+        with ESMTP id S229446AbiCZBNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 21:11:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A15416D8E6;
-        Fri, 25 Mar 2022 18:10:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C463B82ACC;
-        Sat, 26 Mar 2022 01:10:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 223E1C2BBE4;
-        Sat, 26 Mar 2022 01:09:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648257002;
-        bh=2xiQISCsw2cy2y6MHShJ4Jqd9uPswPsIo+/nl7cHzog=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=u7TxL5wBkuAlU15aDeVXpEFVdmxwEHp9frlni9CwXVreMtiz/irA1vVwyeRfo8ZcY
-         LgzdQEGx5vleNMqyJT636GsqvBAyJWNAty7wo0SvCvrzgqEXnn448oe3ZU7eLsPCP4
-         9s5U6EjoL8yNonMtnWKR5Z2A6mo/QiM54lpmJOlypIMt7GBKCdRq71PXmdu/jn2KbL
-         tBAow0/9xo7PXG2lpo4FlKLMdQXua4ZdoHqfgm7dDp//t2LLlUSPJp8U0zlPENnP0j
-         tiO/b5rh/zvV1onpmurAETgfzGg2DwRExU/CpMrxf0kmbZxpusON8bgTgwKY3SD3EZ
-         pynU1B70Q8MxA==
-Date:   Sat, 26 Mar 2022 10:09:56 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        kernel-janitors@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 0/4] kprobes: rethook: x86: Replace
- kretprobe trampoline with rethook
-Message-Id: <20220326100956.2d8acf1df409a890403eefcc@kernel.org>
-In-Reply-To: <Yj3VAsgGA9zJvxgs@hirez.programming.kicks-ass.net>
-References: <164821817332.2373735.12048266953420821089.stgit@devnote2>
-        <Yj3VAsgGA9zJvxgs@hirez.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 25 Mar 2022 21:13:15 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03FC170D97;
+        Fri, 25 Mar 2022 18:11:39 -0700 (PDT)
+Received: from kwepemi100025.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KQLTN49pKzCrC1;
+        Sat, 26 Mar 2022 09:09:28 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100025.china.huawei.com (7.221.188.158) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 26 Mar 2022 09:11:37 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Sat, 26 Mar 2022 09:11:37 +0800
+Subject: Re: [PATCH 2/3] block: factor out common code for part_stat_show()
+ and diskstats_show()
+To:     Christoph Hellwig <hch@infradead.org>
+CC:     <axboe@kernel.dk>, <mpatocka@redhat.com>, <snitzer@redhat.com>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20220317112653.1019490-1-yukuai3@huawei.com>
+ <20220317112653.1019490-3-yukuai3@huawei.com>
+ <Yj2BTUIEooYX/IaA@infradead.org>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <c6a80995-7af9-3daa-9d5b-ba73f75788be@huawei.com>
+Date:   Sat, 26 Mar 2022 09:11:36 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <Yj2BTUIEooYX/IaA@infradead.org>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Mar 2022 15:43:14 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
-
-> On Fri, Mar 25, 2022 at 11:22:53PM +0900, Masami Hiramatsu wrote:
+ÔÚ 2022/03/25 16:46, Christoph Hellwig Ð´µÀ:
+> On Thu, Mar 17, 2022 at 07:26:52PM +0800, Yu Kuai wrote:
+>> part_stat_show() and diskstats_show() are very similar, just factor out
+>> common code.
 > 
-> > Masami Hiramatsu (3):
-> >       kprobes: Use rethook for kretprobe if possible
-> >       rethook: kprobes: x86: Replace kretprobe with rethook on x86
-> >       x86,kprobes: Fix optprobe trampoline to generate complete pt_regs
-> > 
-> > Peter Zijlstra (1):
-> >       Subject: x86,rethook: Fix arch_rethook_trampoline() to generate a complete pt_regs
+> Well, it doesn't really "factor" much, but creates a big and pretty
+> unmaintainble macro.  I don't really see the benefit here.
+
+Hi,
+
+Thanks for your advice, I'll remove this patch.
+
+BTW, do you have any suggestion about patch 3 ?
+
+Thanks,
+Kuai
+> .
 > 
-> You fat-fingered the subject there ^
-> 
-
-Oops, I missed to import the patch...
-
-> Other than that:
-> 
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-
-Thanks!
-
-> 
-> Hopefully the ftrace return trampoline can also be switched over..
-
-The rethook clarifies the interfaces for the return trampoline, so
-I think this can step the integration forward.
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>

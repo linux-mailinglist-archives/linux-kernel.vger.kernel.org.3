@@ -2,86 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D6314E81C3
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 16:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C684E81C9
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 16:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233538AbiCZPSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 11:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32882 "EHLO
+        id S233593AbiCZPZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 11:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233514AbiCZPSi (ORCPT
+        with ESMTP id S233514AbiCZPZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 11:18:38 -0400
-Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A158E972F2
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 08:16:59 -0700 (PDT)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id B513610041227
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 15:16:58 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id Y89yn0h5xY8ycY89yncYa5; Sat, 26 Mar 2022 15:16:58 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=ff9od2cF c=1 sm=1 tr=0 ts=623f2e6a
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=o8Y5sQTvuykA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=0GrwrlF9F252gKFgHFlhwQaRrJ1X0rjwML0ApM3lEhI=; b=kr9UxhAXtp2fdYoE0TIZ+ThciT
-        xBlg39v4mSuKB+T6fWeRNaScF7o45kXjMjJWGrthwk3Bj0rVkysdCdunLxeByqf9y4Xbeud9Sd1tV
-        yOOSPhelHdf/NeALIHvfXtW7V;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:34414 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nY89x-000V1J-FE; Sat, 26 Mar 2022 09:16:57 -0600
-Subject: Re: [PATCH 5.16 00/37] 5.16.18-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220325150420.046488912@linuxfoundation.org>
-In-Reply-To: <20220325150420.046488912@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <833d3637-c61d-d9a4-f07c-83084d8d560a@w6rz.net>
-Date:   Sat, 26 Mar 2022 08:16:55 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sat, 26 Mar 2022 11:25:56 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786C217869B
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 08:24:19 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id q6-20020a056e0215c600b002c2c4091914so6105273ilu.14
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 08:24:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=ehHlyDD1Ax9d6dBcDvspX/anqL9VjAX13Tn0MVg1m4o=;
+        b=q3uhQ00Ol9omcKjZZ7V3f3QaGdGKY7bg+EcweyavkC+Gk8d/R8QY+VABrDIqphTdbF
+         CPPDiUJ+meIjzMkJALZnK4eq0OMTdrLZmEXjtNVpBDzCi2GLOQxYPkBFHooQHxUfvq3k
+         uIALtv9nJZNhp2TYj2tCP+igO3/lHkdl2twU796Hj4ojIWqTEKL7kw5BFcyxtTAcQO5Z
+         y9JQCp6rvJV1BfDDRovF68Q+504XFusWvv726nFk1bmgntc4cEvrPy3Vb/lu6SPEE77j
+         K/kpk2KBu5oRCd2/jJdIlnprdeMKTuQK61LYVVNZ5NXksmw6iioXos81Rbg45MPuSyI3
+         qi3g==
+X-Gm-Message-State: AOAM530fOtJnXmu9hNpKbP0FbrHfnRpaL4NXrooN2e1oaWlJT1D/1J1A
+        7eMokHcqO/0WXx7xSbD72PtPmygthV11c13agUL6WD5MPGmP
+X-Google-Smtp-Source: ABdhPJyckeL0JxPJvjKNb41SRwKUGr3V1jKKpzrPvf6W/hHjgV2c5cTRf8b7t0O13CRLSepXS5luiCAiTNgZc17RHAB95xwO5Z9d
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nY89x-000V1J-FE
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:34414
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a05:6638:2401:b0:31a:1f1a:3523 with SMTP id
+ z1-20020a056638240100b0031a1f1a3523mr8762165jat.249.1648308258843; Sat, 26
+ Mar 2022 08:24:18 -0700 (PDT)
+Date:   Sat, 26 Mar 2022 08:24:18 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003fb2e905db20ac96@google.com>
+Subject: [syzbot] WARNING in ext4_dirty_folio
+From:   syzbot <syzbot+ecab51a4a5b9f26eeaa1@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,26 +54,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/25/22 8:14 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.18 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.18-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hello,
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+syzbot found the following issue on:
 
-Tested-by: Ron Economos <re@w6rz.net>
+HEAD commit:    34af78c4e616 Merge tag 'iommu-updates-v5.18' of git://git...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=176c1bb3700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6190c85675271e4a
+dashboard link: https://syzkaller.appspot.com/bug?extid=ecab51a4a5b9f26eeaa1
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ecab51a4a5b9f26eeaa1@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 7386 at fs/ext4/inode.c:3600 ext4_dirty_folio+0xf4/0x120 fs/ext4/inode.c:3600
+Modules linked in:
+CPU: 1 PID: 7386 Comm: syz-executor.1 Tainted: G        W         5.17.0-syzkaller-09727-g34af78c4e616 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:ext4_dirty_folio+0xf4/0x120 fs/ext4/inode.c:3600
+Code: 1b 31 ff 48 c1 eb 03 83 e3 01 89 de e8 25 c5 5d ff 84 db 0f 85 72 ff ff ff e8 38 c1 5d ff 0f 0b e9 66 ff ff ff e8 2c c1 5d ff <0f> 0b eb 88 48 89 df e8 a0 62 a9 ff e9 3d ff ff ff e8 96 62 a9 ff
+RSP: 0018:ffffc90004dc7a48 EFLAGS: 00010246
+RAX: 0000000000040000 RBX: 0000000000000001 RCX: ffffc9000c2b5000
+RDX: 0000000000040000 RSI: ffffffff821b50c4 RDI: ffffea00018ac0a8
+RBP: ffffea00018ac080 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff821b5021 R11: 0000000000000000 R12: ffff888044c34b10
+R13: dffffc0000000000 R14: ffffea00018ac000 R15: ffffea00018ac080
+FS:  00007f35859cb700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000200001c0 CR3: 000000001ceb7000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ folio_mark_dirty+0xc1/0x140 mm/page-writeback.c:2632
+ unpin_user_pages_dirty_lock mm/gup.c:299 [inline]
+ unpin_user_pages_dirty_lock+0x404/0x4c0 mm/gup.c:263
+ process_vm_rw_single_vec mm/process_vm_access.c:126 [inline]
+ process_vm_rw_core.constprop.0+0x7bb/0x990 mm/process_vm_access.c:215
+ process_vm_rw+0x29c/0x300 mm/process_vm_access.c:283
+ __do_sys_process_vm_writev mm/process_vm_access.c:303 [inline]
+ __se_sys_process_vm_writev mm/process_vm_access.c:298 [inline]
+ __x64_sys_process_vm_writev+0xdf/0x1b0 mm/process_vm_access.c:298
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f3584889049
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f35859cb168 EFLAGS: 00000246 ORIG_RAX: 0000000000000137
+RAX: ffffffffffffffda RBX: 00007f358499c030 RCX: 00007f3584889049
+RDX: 0000000000000001 RSI: 0000000020c22000 RDI: 000000000000012e
+RBP: 00007f35848e308d R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000020c22fa0 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffeca831cef R14: 00007f35859cb300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

@@ -2,75 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED1E4E8334
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 19:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9359D4E8336
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 19:23:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234491AbiCZSWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 14:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
+        id S234502AbiCZSZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 14:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231789AbiCZSWM (ORCPT
+        with ESMTP id S231789AbiCZSZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 14:22:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BED32058;
-        Sat, 26 Mar 2022 11:20:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98AEF60AB1;
-        Sat, 26 Mar 2022 18:20:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7F7CC340ED;
-        Sat, 26 Mar 2022 18:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648318835;
-        bh=a9PM8ugoPHcLZbjkxJVPg7uQdblZc8OHq1uRNBRh9Yo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=s7P5sH3ynxDq9DOZZbVd1rpChas+Vz68Xeb96Ar1owhXSRM34zCpvoKdOzTUzoebR
-         BR360GyHKwlEGTC5p52ZTxUc0HpVmY6DeayFlcrfta83zmO0Js3lqZL49AuLjXdOKm
-         6XIj1+zSSRhGdfyyo7NkaAMxFBpUbU6STck0ztGAHeBC+wgBV/SWf8JFGo4VffABB7
-         0a3+EHc7ze3dtRBlbeDGvb9G5alVaEIB6iP+lEi6u2oTYJtnewnepqbNDs0hX56ZwQ
-         fiOegfAmH6kZWXcesJSvQZ0GIf7zJlIGhnxRaHWz1CoWd9psPYt6KvQv/1XFM/8Ea9
-         JoiZWG0bHc/KQ==
-Date:   Sat, 26 Mar 2022 19:20:20 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Benjamin =?UTF-8?B?U3TDvHJ6?= <benni@stuerz.xyz>
-Cc:     andrew@lunn.ch, sebastian.hesselbarth@gmail.com,
-        gregory.clement@bootlin.com, linux@armlinux.org.uk,
-        linux@simtec.co.uk, krzk@kernel.org, alim.akhtar@samsung.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, robert.moore@intel.com,
-        rafael.j.wysocki@intel.com, lenb@kernel.org, 3chas3@gmail.com,
-        laforge@gnumonks.org, arnd@arndb.de, gregkh@linuxfoundation.org,
-        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
-        linus.walleij@linaro.org, brgl@bgdev.pl,
-        mike.marciniszyn@cornelisnetworks.com,
-        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
-        pali@kernel.org, dmitry.torokhov@gmail.com, isdn@linux-pingi.de,
-        benh@kernel.crashing.org, fbarrat@linux.ibm.com, ajd@linux.ibm.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        nico@fluxnic.net, loic.poulain@linaro.org, kvalo@kernel.org,
-        pkshih@realtek.com, bhelgaas@google.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-input@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-media@vger.kernel.org,
-        wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH 01/22] orion5x: Replace comments with C99 initializers
-Message-ID: <20220326192020.670e0b2f@coco.lan>
-In-Reply-To: <20220326165909.506926-1-benni@stuerz.xyz>
-References: <20220326165909.506926-1-benni@stuerz.xyz>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Sat, 26 Mar 2022 14:25:08 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7009618B25D
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 11:23:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648319011; x=1679855011;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=enFmCdwCdCJeADzJVzSf/8+DS0xxg/52aeuzCXGPE70=;
+  b=ZaqmWPBGoi7sxrVPARoVxPY9x0OuZ/9QRVjOqLsqHQi9moV7dSF3H+wa
+   el2+i5UbRtOg/ptwEZ2ezEq+9OUFqO1V+CY9KR47UXZq4Ljq6LCd6bd6J
+   0J9bZ3SSPo7MTAVfy68GoTT1A71BSV+azSwHHeNOH5rgCrHGHDZ7+7V5U
+   yR4vwC/epBxhHjZm2lsvueIGviM770b95bhwkfkxity81RExFR9odHBqg
+   Mj85d8yjpfhyx0vLkYqJDDLVEutMJZCRwy8XV8QFFAYt0NqRCmmQvWoIt
+   b6zGc7ZBdgh2kmLgRwC77DIDBSqBy/ZlbqEBGSRsJCnGNNkQ2dkuL1VXg
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="239397712"
+X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
+   d="scan'208";a="239397712"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 11:23:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
+   d="scan'208";a="553506531"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 26 Mar 2022 11:23:29 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nYB4T-0000HK-30; Sat, 26 Mar 2022 18:23:29 +0000
+Date:   Sun, 27 Mar 2022 02:22:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Fangzhi Zuo <Jerry.Zuo@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c:439:14:
+ warning: variable 'sdp_stream_enable' set but not used
+Message-ID: <202203270212.a3XLb3nU-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,48 +63,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sat, 26 Mar 2022 17:58:48 +0100
-Benjamin St=C3=BCrz <benni@stuerz.xyz> escreveu:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   52d543b5497cf31d6baeb0bcfe5a5474c3238578
+commit: 83228ebb82e4fe2e5513f35d9b0b0eded3c44cbc drm/amd/display: Add DP 2.0 HPO Stream Encoder
+date:   7 months ago
+config: powerpc64-randconfig-r015-20220325 (https://download.01.org/0day-ci/archive/20220327/202203270212.a3XLb3nU-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=83228ebb82e4fe2e5513f35d9b0b0eded3c44cbc
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 83228ebb82e4fe2e5513f35d9b0b0eded3c44cbc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/gpu/drm/
 
-> This replaces comments with C99's designated
-> initializers because the kernel supports them now.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Please:
+All warnings (new ones prefixed by >>):
 
-1. Split this series per sub-system. It makes no sense to mailbomb all
-   subsystems for things that won't belong there;
-
-2. Add a patch 00 to the series, in order to make easier to do reviews
-   like this that are meant to the series as a hole.
-
-Regards,
-Mauro
->=20
-> Signed-off-by: Benjamin St=C3=BCrz <benni@stuerz.xyz>
-> ---
->  arch/arm/mach-orion5x/dns323-setup.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/arch/arm/mach-orion5x/dns323-setup.c b/arch/arm/mach-orion5x=
-/dns323-setup.c
-> index 87cb47220e82..d762248c6512 100644
-> --- a/arch/arm/mach-orion5x/dns323-setup.c
-> +++ b/arch/arm/mach-orion5x/dns323-setup.c
-> @@ -61,9 +61,9 @@
-> =20
->  /* Exposed to userspace, do not change */
->  enum {
-> -	DNS323_REV_A1,	/* 0 */
-> -	DNS323_REV_B1,	/* 1 */
-> -	DNS323_REV_C1,	/* 2 */
-> +	DNS323_REV_A1 =3D 0,
-> +	DNS323_REV_B1 =3D 1,
-> +	DNS323_REV_C1 =3D 2,
->  };
-> =20
-> =20
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c: In function 'dcn31_hpo_dp_stream_enc_update_dp_info_packets':
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c:439:14: warning: variable 'sdp_stream_enable' set but not used [-Wunused-but-set-variable]
+     439 |         bool sdp_stream_enable = false;
+         |              ^~~~~~~~~~~~~~~~~
 
 
+vim +/sdp_stream_enable +439 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hpo_dp_stream_encoder.c
 
-Thanks,
-Mauro
+   432	
+   433	static void dcn31_hpo_dp_stream_enc_update_dp_info_packets(
+   434			struct hpo_dp_stream_encoder *enc,
+   435			const struct encoder_info_frame *info_frame)
+   436	{
+   437		struct dcn31_hpo_dp_stream_encoder *enc3 = DCN3_1_HPO_DP_STREAM_ENC_FROM_HPO_STREAM_ENC(enc);
+   438		uint32_t dmdata_packet_enabled = 0;
+ > 439		bool sdp_stream_enable = false;
+   440	
+   441		if (info_frame->vsc.valid) {
+   442			enc->vpg->funcs->update_generic_info_packet(
+   443					enc->vpg,
+   444					0,  /* packetIndex */
+   445					&info_frame->vsc);
+   446			sdp_stream_enable = true;
+   447		}
+   448		if (info_frame->spd.valid) {
+   449			enc->vpg->funcs->update_generic_info_packet(
+   450					enc->vpg,
+   451					2,  /* packetIndex */
+   452					&info_frame->spd);
+   453			sdp_stream_enable = true;
+   454		}
+   455		if (info_frame->hdrsmd.valid) {
+   456			enc->vpg->funcs->update_generic_info_packet(
+   457					enc->vpg,
+   458					3,  /* packetIndex */
+   459					&info_frame->hdrsmd);
+   460			sdp_stream_enable = true;
+   461		}
+   462		/* enable/disable transmission of packet(s).
+   463		 * If enabled, packet transmission begins on the next frame
+   464		 */
+   465		REG_UPDATE(DP_SYM32_ENC_SDP_GSP_CONTROL0, GSP_VIDEO_CONTINUOUS_TRANSMISSION_ENABLE, info_frame->vsc.valid);
+   466		REG_UPDATE(DP_SYM32_ENC_SDP_GSP_CONTROL2, GSP_VIDEO_CONTINUOUS_TRANSMISSION_ENABLE, info_frame->spd.valid);
+   467		REG_UPDATE(DP_SYM32_ENC_SDP_GSP_CONTROL3, GSP_VIDEO_CONTINUOUS_TRANSMISSION_ENABLE, info_frame->hdrsmd.valid);
+   468	
+   469		/* check if dynamic metadata packet transmission is enabled */
+   470		REG_GET(DP_SYM32_ENC_SDP_METADATA_PACKET_CONTROL,
+   471				METADATA_PACKET_ENABLE, &dmdata_packet_enabled);
+   472	
+   473		/* Enable secondary data path */
+   474		REG_UPDATE(DP_SYM32_ENC_SDP_CONTROL,
+   475				SDP_STREAM_ENABLE, 1);
+   476	}
+   477	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

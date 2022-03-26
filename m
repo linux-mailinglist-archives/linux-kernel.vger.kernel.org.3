@@ -2,169 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8924E8483
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 23:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB934E848A
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 23:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235558AbiCZWSD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 26 Mar 2022 18:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
+        id S231822AbiCZW2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 18:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiCZWRr (ORCPT
+        with ESMTP id S232686AbiCZW2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 18:17:47 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 387C42F003
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 15:16:09 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-221-RimintWePiOs3iKZRZSi5g-1; Sat, 26 Mar 2022 22:16:06 +0000
-X-MC-Unique: RimintWePiOs3iKZRZSi5g-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Sat, 26 Mar 2022 22:16:03 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Sat, 26 Mar 2022 22:16:03 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Joerg Roedel' <joro@8bytes.org>, "x86@kernel.org" <x86@kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v3] x86/sev: Unroll string mmio with
- CC_ATTR_GUEST_UNROLL_STRING_IO
-Thread-Topic: [PATCH v3] x86/sev: Unroll string mmio with
- CC_ATTR_GUEST_UNROLL_STRING_IO
-Thread-Index: AQHYQR+Ze4D1k2sivEGZy3Tw8cJv76zSOd1g
-Date:   Sat, 26 Mar 2022 22:16:03 +0000
-Message-ID: <b89b59753ee4439c8b9ea7413dab66c0@AcuMS.aculab.com>
-References: <20220326144127.15967-1-joro@8bytes.org>
-In-Reply-To: <20220326144127.15967-1-joro@8bytes.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sat, 26 Mar 2022 18:28:17 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C927E5A6
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 15:26:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648333600; x=1679869600;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8198OJbTIn96uQxJ6LTp6Y/NyKKBmUGOW4+KIz7uyXM=;
+  b=C0yrihJo+BA4mH4CFTZxUoZN2MxjCLdhbri8QQS78Kms/ndqiwTPTDiZ
+   HAASEHpuPOmN9/5DUdxSw4drPwwfRPBQ62cEBgNotTrh/FR+ybI+J6kvF
+   ncrw0l1nCwwL6gWtrzIeeWmsp21+EzYBQtb6QLEHfuogiCvv1ArPXM8o3
+   HqHuAx8aH84j74oGewina1KoIT5Abu9BBoqOW3YDd1VH0/I23kXXaBODg
+   TlyZv75iHizG/TBw8bIVe37XeL3rHYhK/e2TIpCWcRG8lTXY1eaDGb9nD
+   K1ECsMZyXTwnhrm/70OXlhpRdhWTmXKjGqHFUlqlmPqS+lsLtBzjTzFIW
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="345244224"
+X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
+   d="scan'208";a="345244224"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 15:26:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
+   d="scan'208";a="584804407"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 26 Mar 2022 15:26:39 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nYErm-0000St-KG; Sat, 26 Mar 2022 22:26:38 +0000
+Date:   Sun, 27 Mar 2022 06:26:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nick Terrell <terrelln@fb.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: lib/zstd/common/debug.h: zstd_deps.h is included more than once.
+Message-ID: <202203270632.BdIMZ4Zs-lkp@intel.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joerg Roedel <joro@8bytes.org>
-> Sent: 26 March 2022 14:41
-> 
-> The io specific memcpy/memset functions use string mmio accesses to do
-> their work. Under SEV the hypervisor can't emulate these instructions,
-> because they read/write directly from/to encrypted memory.
-> 
-> KVM will inject a page fault exception into the guest when it is asked
-> to emulate string mmio instructions for an SEV guest:
-> 
-> 	BUG: unable to handle page fault for address: ffffc90000065068
-> 	#PF: supervisor read access in kernel mode
-> 	#PF: error_code(0x0000) - not-present page
-> 	PGD 8000100000067 P4D 8000100000067 PUD 80001000fb067 PMD 80001000fc067 PTE 80000000fed40173
-> 	Oops: 0000 [#1] PREEMPT SMP NOPTI
-> 	CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc7 #3
-> 
-> As string mmio for an SEV guest can not be supported by the
-> hypervisor, unroll the instructions for CC_ATTR_GUEST_UNROLL_STRING_IO
-> enabled kernels.
-> 
-> This issue appears when kernels are launched in recent libvirt-managed
-> SEV virtual machines, because libvirt started to add a tpm-crb device
-> to the guest by default.
-> 
-> The kernel driver for tpm-crb uses memcpy_to/from_io() functions to
-> access MMIO memory, resulting in a page-fault injected by KVM and
-> crashing the kernel at boot.
-> 
-> Cc: stable@vger.kernel.org #4.15+
-> Fixes: d8aa7eea78a1 ('x86/mm: Add Secure Encrypted Virtualization (SEV) support')
-> Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
-> Signed-off-by: Joerg Roedel <jroedel@suse.de>
-> ---
-> Changes v2->v3:
-> 	- Fix sparse warnings introduced by v2
-> 
->  arch/x86/lib/iomem.c | 65 ++++++++++++++++++++++++++++++++++++++------
->  1 file changed, 57 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/x86/lib/iomem.c b/arch/x86/lib/iomem.c
-> index df50451d94ef..3e2f33fc33de 100644
-> --- a/arch/x86/lib/iomem.c
-> +++ b/arch/x86/lib/iomem.c
-> @@ -22,7 +22,7 @@ static __always_inline void rep_movs(void *to, const void *from, size_t n)
->  		     : "memory");
->  }
-> 
-> -void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
-> +static void string_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
->  {
->  	if (unlikely(!n))
->  		return;
-> @@ -38,9 +38,8 @@ void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
->  	}
->  	rep_movs(to, (const void *)from, n);
->  }
-> -EXPORT_SYMBOL(memcpy_fromio);
-> 
-> -void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
-> +static void string_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
->  {
->  	if (unlikely(!n))
->  		return;
-> @@ -56,14 +55,64 @@ void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
->  	}
->  	rep_movs((void *)to, (const void *) from, n);
->  }
-> +
-> +static void unrolled_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
-> +{
-> +	const volatile char __iomem *in = from;
-> +	char *out = to;
-> +	int i;
-> +
-> +	for (i = 0; i < n; ++i)
-> +		out[i] = readb(&in[i]);
-> +}
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   710f5d627a98e86f821aceb840b8f2f1fcc6cf75
+commit: e0c1b49f5b674cca7b10549c53b3791d0bbc90a8 lib: zstd: Upgrade to latest upstream zstd version 1.4.10
+date:   5 months ago
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
 
-Wait a minute....
-Aren't these functions supposed to be doing 'memory' copies?
-In which case they need to be using 64bit IO accesses where
-appropriate - otherwise the performance is horrid.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I thought the x86 memcpy_to/from_io() had been changed to
-always use a software loop rather than using whatever memcpy()
-ended up using.
-In particular the 'rep movsb' ERMS (EMRS?) copy that is fast
-(on some cpu) for memory-memory copies is always a byte copy
-on uncached locations typical for io addresses.
 
-PIO reads from PCIe can be spectacularly slow.
-You really do want to use the largest register available.
+includecheck warnings: (new ones prefixed by >>)
+>> lib/zstd/common/debug.h: zstd_deps.h is included more than once.
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

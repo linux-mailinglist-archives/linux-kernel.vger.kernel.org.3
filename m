@@ -2,98 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF72D4E839E
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 19:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2554E83A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 20:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234051AbiCZS5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 14:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
+        id S234091AbiCZTJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 15:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbiCZS5P (ORCPT
+        with ESMTP id S231192AbiCZTJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 14:57:15 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C63241B69;
-        Sat, 26 Mar 2022 11:55:38 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id 12so11626132oix.12;
-        Sat, 26 Mar 2022 11:55:38 -0700 (PDT)
+        Sat, 26 Mar 2022 15:09:20 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5A1C14
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 12:07:40 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id l184so5957045vkh.0
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 12:07:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=od8p5pl2U97jeU4B5zrg7n+5mCzeV+pC/ksqgi0ZrCg=;
-        b=FLgjPZbpsRgixevsWBrkzNi6JX+0JOdLVae2WiE33dW2CYOkn5xqbMkUlVUP8W2wu7
-         GkxJRlQBc9JikV5LxxH776y/rCGduf9iWPHNwF2JwC98xLaDJOBMG8veU5JxGQ7nOAvJ
-         m/+JrXhLeGunBEipRoADOWS5rGjDCc6Gz4IggFgtvunK5yE88pyhHsgbZfGiHbN0KDJE
-         NB8NTlDVtPBrxk4PUIVxhTUnFKrA8WccJDTDtm7JqRWvIiRfCooKnwEhY3aTmayCwMpQ
-         V3hyLVfO0DlGQFzspBvlHmqHXQ6R9+E5kFXKetAYpzKWkBQUTmJFethoAMM1paiNI8zm
-         YaGw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9+ZMgF8rHzqNlDkErLZI/DheSIs9iRBaxXLkva+BiWM=;
+        b=MD7VvaQZmHal8Xv/fx01kI1KmByj2fQOUC5MgJ6KApMYVC8a8wU+KoSpFvPXYq0TGZ
+         zZ2tBixUPv0UFU5ecP4ePgSX6FGzi52qYj9VBVhnrhp4+XRO0qCg8aKY50WPgsneX8/c
+         105dltBOkBstFSRzmSwraSUeA6g4EIHpqMS2w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=od8p5pl2U97jeU4B5zrg7n+5mCzeV+pC/ksqgi0ZrCg=;
-        b=r4k/ZLMSm2hGaZp0BJolxckS67SFML0s78RsE+8NiRJtTIJjiR7iTUcsPn2boAz2Vv
-         ybz7IlRpirjSR8WbZcmDUi67Wcdi/CEzM6IC75FzjbT5nPLL5uTrMwJ4OsKlNa4JEuV7
-         6kdnURfSa8SzqlfjT2hUHF2o46YRSK/+FU7aTVgoSqiwpoHmYmttls0pWSo8pEGumHfo
-         VJahmxfnNxAiHJtGzGQEfZkToklM6Hkq7P71exK6vCC8vpz1uiMqqs26cOr8wMZflN/v
-         PWEstBAt2MWu3qzuSeCYUKmLcIwynnKFScUNbwqPhMENULFQvDB4S2ey95MG6cdsR2IG
-         iviA==
-X-Gm-Message-State: AOAM530nuM0l5w3i2NKx96h5mNEYhFz/NwcMZWQRJgsZ9MFzEF3DaqbJ
-        oDO63FLHbDAVpIwc7lRXkd8=
-X-Google-Smtp-Source: ABdhPJwENpqHi0yoebC6ynBYdoBH1ZAUKF4tDj7px8PfwrXlpK2apNGv6Udv3OPe7ze8luScmr+hMg==
-X-Received: by 2002:a05:6808:118c:b0:2d4:4194:70db with SMTP id j12-20020a056808118c00b002d4419470dbmr8444758oil.93.1648320937799;
-        Sat, 26 Mar 2022 11:55:37 -0700 (PDT)
-Received: from [192.168.1.103] (cpe-24-31-246-181.kc.res.rr.com. [24.31.246.181])
-        by smtp.gmail.com with ESMTPSA id k4-20020a9d4b84000000b005b2310ebdffsm4697502otf.54.2022.03.26.11.55.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Mar 2022 11:55:37 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <f7bb9164-2f66-8985-5771-5f31ee5740b7@lwfinger.net>
-Date:   Sat, 26 Mar 2022 13:55:33 -0500
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9+ZMgF8rHzqNlDkErLZI/DheSIs9iRBaxXLkva+BiWM=;
+        b=tS/1gv3VmN5HM4792CAWznjt6PGRRZ2344wFy9RpXnFCdePNkHiic3cPBME9wjsWcK
+         mRgmQRXGi6ncujxAGmVNd4VmgygxD01RzZOSbH1qK7uC3Jdv95P5uRDtCWkSjpR188A1
+         mSCMKiqdxrtF66ypHo3uP8oJNucluwTHhBlWOrUSLNtcUyPgEzYKRtYPz8VwrO9+L/DY
+         GyxbORm8vJk6nqmoeV3k3hvakdFFhkj+dEso8F/7ecyHrOeFmU0EeBIoTEVcrWBWnApK
+         zXUvilih88iXDAx1QK7Od5zx/5nVGq+suHaMLUAZfNjVOEbX/uqCeApUfQkU7EgvmopY
+         xwKw==
+X-Gm-Message-State: AOAM533AalWb7l5c5bVcKn1BzgtcbHpGMzTFRC1YZmibBO/5snQ/K0SK
+        7V6wm+0DtzpMTSb5qnAMsw3s/5vteNg/qQCjDTFMJvPkYzQ=
+X-Google-Smtp-Source: ABdhPJz7w1eEIH1Yjli6v9gw/q4r6yOcjoplh2ugVMhe4rGKmJyp/buoks/Yv7HcJOH7R6CVnmvS6bbI6l+0An3OS2U=
+X-Received: by 2002:a05:6122:1245:b0:33f:e889:f353 with SMTP id
+ b5-20020a056122124500b0033fe889f353mr5624016vkp.17.1648321659222; Sat, 26 Mar
+ 2022 12:07:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 21/22] rtw89: Replace comments with C99 initializers
-Content-Language: en-US
-To:     =?UTF-8?Q?Benjamin_St=c3=bcrz?= <benni@stuerz.xyz>, andrew@lunn.ch
-Cc:     sebastian.hesselbarth@gmail.com, gregory.clement@bootlin.com,
-        linux@armlinux.org.uk, linux@simtec.co.uk, krzk@kernel.org,
-        alim.akhtar@samsung.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        robert.moore@intel.com, rafael.j.wysocki@intel.com,
-        lenb@kernel.org, 3chas3@gmail.com, laforge@gnumonks.org,
-        arnd@arndb.de, gregkh@linuxfoundation.org, mchehab@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
-        linus.walleij@linaro.org, brgl@bgdev.pl,
-        mike.marciniszyn@cornelisnetworks.com,
-        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
-        pali@kernel.org, dmitry.torokhov@gmail.com, isdn@linux-pingi.de,
-        benh@kernel.crashing.org, fbarrat@linux.ibm.com, ajd@linux.ibm.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        nico@fluxnic.net, loic.poulain@linaro.org, kvalo@kernel.org,
-        pkshih@realtek.com, bhelgaas@google.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-input@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-media@vger.kernel.org,
-        wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20220326165909.506926-1-benni@stuerz.xyz>
- <20220326165909.506926-21-benni@stuerz.xyz>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <20220326165909.506926-21-benni@stuerz.xyz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220326073326.3389347-1-yangyingliang@huawei.com>
+In-Reply-To: <20220326073326.3389347-1-yangyingliang@huawei.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Sun, 27 Mar 2022 03:07:13 +0800
+Message-ID: <CAJMQK-hA+k8hsQiBq7v9QROQyDkrzy+J40b2uF4AcmrXDe0gKw@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: anx7625: add missing destroy_workqueue() in anx7625_i2c_probe()
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        xji@analogixsemi.com, robert.foss@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,74 +63,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/26/22 11:59, Benjamin Stürz wrote:
-> This replaces comments with C99's designated
-> initializers because the kernel supports them now.
-> 
-> Signed-off-by: Benjamin Stürz <benni@stuerz.xyz>
+On Sat, Mar 26, 2022 at 3:24 PM Yang Yingliang <yangyingliang@huawei.com> wrote:
+>
+> Add the missing destroy_workqueue() before return from
+> anx7625_i2c_probe() in the error handling case.
+>
+> Fixes: adca62ec370c ("drm/bridge: anx7625: Support reading edid through aux channel")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 > ---
->   drivers/net/wireless/realtek/rtw89/coex.c | 40 +++++++++++------------
->   1 file changed, 20 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/realtek/rtw89/coex.c b/drivers/net/wireless/realtek/rtw89/coex.c
-> index 684583955511..3c83a0bfb120 100644
-> --- a/drivers/net/wireless/realtek/rtw89/coex.c
-> +++ b/drivers/net/wireless/realtek/rtw89/coex.c
-> @@ -97,26 +97,26 @@ static const struct rtw89_btc_fbtc_slot s_def[] = {
->   };
->   
->   static const u32 cxtbl[] = {
-> -	0xffffffff, /* 0 */
-> -	0xaaaaaaaa, /* 1 */
-> -	0x55555555, /* 2 */
-> -	0x66555555, /* 3 */
-> -	0x66556655, /* 4 */
-> -	0x5a5a5a5a, /* 5 */
-> -	0x5a5a5aaa, /* 6 */
-> -	0xaa5a5a5a, /* 7 */
-> -	0x6a5a5a5a, /* 8 */
-> -	0x6a5a5aaa, /* 9 */
-> -	0x6a5a6a5a, /* 10 */
-> -	0x6a5a6aaa, /* 11 */
-> -	0x6afa5afa, /* 12 */
-> -	0xaaaa5aaa, /* 13 */
-> -	0xaaffffaa, /* 14 */
-> -	0xaa5555aa, /* 15 */
-> -	0xfafafafa, /* 16 */
-> -	0xffffddff, /* 17 */
-> -	0xdaffdaff, /* 18 */
-> -	0xfafadafa  /* 19 */
-> +	[0]  = 0xffffffff,
-> +	[1]  = 0xaaaaaaaa,
-> +	[2]  = 0x55555555,
-> +	[3]  = 0x66555555,
-> +	[4]  = 0x66556655,
-> +	[5]  = 0x5a5a5a5a,
-> +	[6]  = 0x5a5a5aaa,
-> +	[7]  = 0xaa5a5a5a,
-> +	[8]  = 0x6a5a5a5a,
-> +	[9]  = 0x6a5a5aaa,
-> +	[10] = 0x6a5a6a5a,
-> +	[11] = 0x6a5a6aaa,
-> +	[12] = 0x6afa5afa,
-> +	[13] = 0xaaaa5aaa,
-> +	[14] = 0xaaffffaa,
-> +	[15] = 0xaa5555aa,
-> +	[16] = 0xfafafafa,
-> +	[17] = 0xffffddff,
-> +	[18] = 0xdaffdaff,
-> +	[19] = 0xfafadafa
->   };
->   
->   struct rtw89_btc_btf_tlv {
+Reviewed-by: Hsin-Yi Wang <hsinyi@chromium.org>
 
-
-Is this change really necessary? Yes, the entries must be ordered; however, the 
-comment carries that information at very few extra characters. To me, this patch 
-looks like unneeded source churn. One other concern is that this driver is 
-backported to older kernels and older compilers by several distros. Will this 
-change require adding extra conditional statements to the source used in these 
-applications?
-
-Larry
-
+>  drivers/gpu/drm/bridge/analogix/anx7625.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> index 31ecf5626f1d..1895e3448c02 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> @@ -2654,7 +2654,7 @@ static int anx7625_i2c_probe(struct i2c_client *client,
+>         if (ret) {
+>                 if (ret != -EPROBE_DEFER)
+>                         DRM_DEV_ERROR(dev, "fail to parse DT : %d\n", ret);
+> -               return ret;
+> +               goto free_wq;
+>         }
+>
+>         if (anx7625_register_i2c_dummy_clients(platform, client) != 0) {
+> @@ -2669,7 +2669,7 @@ static int anx7625_i2c_probe(struct i2c_client *client,
+>         pm_suspend_ignore_children(dev, true);
+>         ret = devm_add_action_or_reset(dev, anx7625_runtime_disable, dev);
+>         if (ret)
+> -               return ret;
+> +               goto free_wq;
+>
+>         if (!platform->pdata.low_power_mode) {
+>                 anx7625_disable_pd_protocol(platform);
+> --
+> 2.25.1
+>

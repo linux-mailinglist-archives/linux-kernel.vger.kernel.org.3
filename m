@@ -2,117 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7B34E84AA
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 00:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FA24E84AD
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 00:51:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbiCZXkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 19:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
+        id S230047AbiCZXwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 19:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiCZXkh (ORCPT
+        with ESMTP id S229796AbiCZXwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 19:40:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EF766233;
-        Sat, 26 Mar 2022 16:38:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA8D360C4A;
-        Sat, 26 Mar 2022 23:38:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9BCAC340E8;
-        Sat, 26 Mar 2022 23:38:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648337938;
-        bh=hMPQDBssRxL8VPYoAMsSCFYEvXM/XCQLEGICdhvYns4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=o9erOLoxGpL5CiIx5MnuQavqLzIE/Qfz9DnTx0WqY/i2MzY08u3Wlpuryxbgqpcf/
-         GFTvqYFqgXyczhFw04tgwiPQzWMIYUN8yx77KXOHyfkV2C+gp/c1Yd62Y/FoGwGIaQ
-         E4soRP+10BsnNXAENQUQtl+YrWqiWOgXZDLws8b1jlMyFYr4Jj3CGfn+I9yCMxAlpr
-         8o9G0a7R7ZXC2LCkfx81S2yDiuU15QUm6dtmIyhZUVMnzRCjR4SWkHWreX0nzFj4JT
-         NZcUAv0CSvNhbderZWrnHYLJOOr9C2vKbfRQtQjtOSetqLHubT88FNWFGYEC1N2kPK
-         Nb/Ojo4mDD/MQ==
-Date:   Sun, 27 Mar 2022 08:38:54 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v4 0/3] bootconfig: Support embedding a bootconfig in
- kernel for non initrd boot
-Message-Id: <20220327083854.5f44f9a33a21c53a410ff6db@kernel.org>
-In-Reply-To: <164833781316.2573528.8385063821185577976.stgit@devnote2>
-References: <164833781316.2573528.8385063821185577976.stgit@devnote2>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 26 Mar 2022 19:52:49 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759C5E13;
+        Sat, 26 Mar 2022 16:51:11 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 6371C1C0BB0; Sun, 27 Mar 2022 00:51:09 +0100 (CET)
+Date:   Sun, 27 Mar 2022 00:51:08 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        jacek.anaszewski@gmail.com, linux-leds@vger.kernel.org
+Subject: [GIT PULL] LEDs changes for v5.18-rc1
+Message-ID: <20220326235108.GA4456@duo.ucw.cz>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="6c2NcOVqGQ03X4Wi"
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-I forgot to add LTO people and Masahiro to this mail. Let me update the
-cover mail and resubmit.
+--6c2NcOVqGQ03X4Wi
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 27 Mar 2022 08:36:53 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
 
-> Hi,
-> 
-> Here are the 4th version of the patchset to enable kernel embedded bootconfig
-> for non-initrd kernel boot environment. I've fixed Makefile to determine
-> update by checking the contents of embedding bootconfig file. Thanks
-> Masahiro!
-> 
-> You can embed a bootconfig file into the kernel as a default bootconfig,
-> which will be used if there is no initrd or no bootconfig is attached to initrd. 
-> 
-> This needs 2 options: CONFIG_EMBED_BOOT_CONFIG=y and set the file
-> path to CONFIG_EMBED_BOOT_CONFIG_FILE. Even if you embed the bootconfig file
-> to the kernel, it will not be enabled unless you pass "bootconfig" kernel
-> command line option at boot. Moreover, since this is just a "default"
-> bootconfig, you can override it with a new bootconfig if you attach another
-> bootconfig to the initrd (if possible).
-> CONFIG_EMBED_BOOT_CONFIG_FILE can take both absolute and relative path, but
-> to simplify and make it independent from the build environment, I recommend
-> you to use an absolute path for that.
-> 
-> This is requested by Padmanabha at the below thread;
-> 
->  https://lore.kernel.org/all/20220307184011.GA2570@pswork/T/#u
-> 
-> Thank you,
-> 
-> ---
-> 
-> Masami Hiramatsu (3):
->       bootconfig: Check the checksum before removing the bootconfig from initrd
->       bootconfig: Support embedding a bootconfig file in kernel
->       docs: bootconfig: Add how to embed the bootconfig into kernel
-> 
-> 
->  Documentation/admin-guide/bootconfig.rst |   30 ++++++++++++++++++++++++++---
->  include/linux/bootconfig.h               |   10 ++++++++++
->  init/Kconfig                             |   21 ++++++++++++++++++++
->  init/main.c                              |   31 +++++++++++++++---------------
->  lib/.gitignore                           |    1 +
->  lib/Makefile                             |   10 ++++++++++
->  lib/bootconfig.c                         |   23 ++++++++++++++++++++++
->  7 files changed, 108 insertions(+), 18 deletions(-)
-> 
-> --
-> Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
+  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
 
+are available in the Git repository at:
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+  git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git/ tags/=
+leds-5.18-rc1
+
+for you to fetch changes up to e26557a0aa68acfb705b51947b7c756401a1ab71:
+
+  leds: pca955x: Allow zero LEDs to be specified (2022-03-02 09:51:40 +0100)
+
+----------------------------------------------------------------
+LED updates for 5.18-rc1. Nothing major here, there are two drivers
+that need review and did not make it.
+
+----------------------------------------------------------------
+Andrew Jeffery (2):
+      leds: pca955x: Make the gpiochip always expose all pins
+      leds: pca955x: Allow zero LEDs to be specified
+
+Andr=E9 Apitzsch (2):
+      dt-bindings: vendor-prefixes: Add ocs prefix
+      leds: sgm3140: Add ocs,ocp8110 compatible
+
+Hans de Goede (2):
+      leds: simatic-ipc-leds: Make simatic_ipc_led_mem_res static
+      leds: simatic-ipc-leds: Don't directly deref ioremap_resource() retur=
+ned ptr
+
+Krzysztof Kozlowski (1):
+      dt-bindings: leds: common: fix unit address in max77693 example
+
+Uwe Kleine-K=F6nig (1):
+      leds: lm3692x: Return 0 from remove callback
+
+ Documentation/devicetree/bindings/leds/common.yaml |  9 ++-
+ .../devicetree/bindings/vendor-prefixes.yaml       |  2 +
+ drivers/leds/flash/leds-sgm3140.c                  |  1 +
+ drivers/leds/leds-lm3692x.c                        |  5 +-
+ drivers/leds/leds-pca955x.c                        | 67 +++++++++++-------=
+----
+ drivers/leds/simple/simatic-ipc-leds.c             | 34 ++++++-----
+ 6 files changed, 65 insertions(+), 53 deletions(-)
+
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--6c2NcOVqGQ03X4Wi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYj+m7AAKCRAw5/Bqldv6
+8lehAJ9M/Ba9JIj+fa2Sdovh06xaN60jxwCeP6p5m0OSkx3IAPL4e6CZDXuFAVg=
+=Zb1J
+-----END PGP SIGNATURE-----
+
+--6c2NcOVqGQ03X4Wi--

@@ -2,110 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF42F4E8145
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 15:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5110E4E8147
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 15:01:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233203AbiCZOBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 10:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
+        id S233204AbiCZODV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 10:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233182AbiCZOBi (ORCPT
+        with ESMTP id S232682AbiCZODS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 10:01:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487B7E7287;
-        Sat, 26 Mar 2022 07:00:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2FB1B80092;
-        Sat, 26 Mar 2022 14:00:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CDACC340F0;
-        Sat, 26 Mar 2022 13:59:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648303199;
-        bh=OtwUQSJIfqGM9pSzRByk+oWkJW2rmWs3VVB7YTz1NQY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TUfg2O3KFWxiG7Rmv+kKdymq+2eWH7ZgaIWHVqFV922+rsPsgzBacFGtkZWsY/IfG
-         La4L/S8E7+DIYrRaYq1OR3U9zLGE8iVj/fCxvxI93hNQSpAQZKwPz9H1N5jQ/5oUIa
-         +M/kMGtYuLYDCAOQYMOYazxCppd4GPQ7bhTpxsDvq0idwb1XlLyZ43pLK4qda0eT7H
-         AwAnQKUjh84d6VuQSHfrwje++GB9hGrXZaym2ZziUm/haUQ4ct8IeTfakm0awC0DrC
-         +KVVp6ARgLdtr9ZNmfuPRZ0rHxw84WkrL6/QGRcfGADSBKNtVjEIF4SFRZVNSuFGiH
-         wBixgZzoFUuEA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 4206640407; Sat, 26 Mar 2022 10:59:57 -0300 (-03)
-Date:   Sat, 26 Mar 2022 10:59:57 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Ali Saidi <alisaidi@amazon.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, german.gomez@arm.com,
-        benh@kernel.crashing.org, Nick.Forrington@arm.com,
-        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
-        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
-        kjain@linux.ibm.com, lihuafei1@huawei.com, mark.rutland@arm.com,
-        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, will@kernel.org
-Subject: Re: [PATCH v4 1/4] tools: arm64: Import cputype.h
-Message-ID: <Yj8cXWaQr1rXnvF8@kernel.org>
-References: <20220324183323.31414-1-alisaidi@amazon.com>
- <20220324183323.31414-2-alisaidi@amazon.com>
- <Yj4McMHsxtJ3PfKk@kernel.org>
- <Yj4bKHrmKhujZdpj@kernel.org>
- <20220326054956.GB20556@leoy-ThinkPad-X240s>
+        Sat, 26 Mar 2022 10:03:18 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE94A138590;
+        Sat, 26 Mar 2022 07:01:41 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id u16so14276902wru.4;
+        Sat, 26 Mar 2022 07:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2j8Ri7xLUYDefCVJcUnV8/o8GOr4jF0zQNRPq876plI=;
+        b=VdEocQScuWQuWOJ0qb3s5SxMmmZrNyCd29AyzIx81VJhoYcRfQsyWbvJejCdTeo3c0
+         XNbIVw7pz1qSuiR5CV5Cpit85Knf5A+oAIMCwmaeHR9wlzaO/GRgeR+wvT/bV75uMheb
+         kzaGcDgYA3HcBc1osCc56XR0wDvtMDgjKC4QNOqyanHrGtOKMnLqCm7/vfzEfkPpQI6c
+         +oCkwFycD65HIm5Jg7J70od80QsdT52FojfqHsLQU1baIp/tUuEJKRhCAtFUg8C+crLa
+         QLFY32B6iHU/kMiGoIIuQDWjdwbnbrebLyo0eJNYxiZ7E5GcXNrVCjhjJPwvuQdP2Vzh
+         qr9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2j8Ri7xLUYDefCVJcUnV8/o8GOr4jF0zQNRPq876plI=;
+        b=Q/MwQ1XOGfvoiuooUXeUULt1g8MJtYFDzNlli3tZ3mRzwtgnaIMVexmjPsSyQZi0zn
+         GcpemQzrlC0Fke8AbPDZ2/1K37Lg0ETWaVJuamAO8anBr4QMwk2fVx0GY4/3wS5+LGjy
+         xnpoyjydHJM0iecIiedchQvEE/2/ydVjlIjsrmlqnlic/8MmS+qepq0F22fjye6HBKle
+         l19AHw/mhoTbRd4d1ZTg3O/10EiIdPD7BoOfyg/OOm6yO7WJWK0jinXdfUaceD1SitIB
+         d4mWouTD3FPK2Ao/rUxqMcbRt+62WGyeg2G0rBCSn/J55NU377M9DwtQ1sMSW/8QuPGj
+         7/LQ==
+X-Gm-Message-State: AOAM5320E+VahLXLUf0ylFP6VL0BvbwKVcHAnrNyps+YKu41IPLiXltA
+        eEtRcIVwr5ZRNi8x1IpNfS4=
+X-Google-Smtp-Source: ABdhPJyqNPnJAYvlaoh+jNrXVGmjvn0bsNfbqqPlzEfTsiCZZ/o6AAoJyWqFY9zdhvKTgiRnjHN/9A==
+X-Received: by 2002:adf:816e:0:b0:1e4:ad2b:cb24 with SMTP id 101-20020adf816e000000b001e4ad2bcb24mr13516563wrm.521.1648303300090;
+        Sat, 26 Mar 2022 07:01:40 -0700 (PDT)
+Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
+        by smtp.gmail.com with ESMTPSA id p11-20020a5d638b000000b002048a77636dsm7319713wru.97.2022.03.26.07.01.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Mar 2022 07:01:39 -0700 (PDT)
+Date:   Sat, 26 Mar 2022 14:01:37 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 00/38] 5.10.109-rc1 review
+Message-ID: <Yj8cwfWBAZg5UY0a@debian>
+References: <20220325150419.757836392@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220326054956.GB20556@leoy-ThinkPad-X240s>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220325150419.757836392@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sat, Mar 26, 2022 at 01:49:56PM +0800, Leo Yan escreveu:
-> Hi Arnaldo, Ali,
+Hi Greg,
+
+On Fri, Mar 25, 2022 at 04:04:44PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.109 release.
+> There are 38 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> On Fri, Mar 25, 2022 at 04:42:32PM -0300, Arnaldo Carvalho de Melo wrote:
-> > Em Fri, Mar 25, 2022 at 03:39:44PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > Em Thu, Mar 24, 2022 at 06:33:20PM +0000, Ali Saidi escreveu:
-> > > > Bring-in the kernel's arch/arm64/include/asm/cputype.h into tools/
-> > > > for arm64 to make use of all the core-type definitions in perf.
-> > 
-> > > > Replace sysreg.h with the version already imported into tools/.
-> >  
-> > > You forgot to add it to tools/perf/check-headers.sh so that we get
-> > > notificed when the original file in the kernel sources gets updated, so
-> > > that we can check if this needs any tooling adjustments.
-> >  
-> > > I'll add the entry together with the waiver for this specific
-> > > difference.
-> > 
-> > This:
-> > 
-> > diff --git a/tools/perf/check-headers.sh b/tools/perf/check-headers.sh
-> > index 30ecf3a0f68b6830..6ee44b18c6b57cf1 100755
-> > --- a/tools/perf/check-headers.sh
-> > +++ b/tools/perf/check-headers.sh
-> > @@ -146,6 +146,7 @@ done
-> >  check arch/x86/lib/memcpy_64.S        '-I "^EXPORT_SYMBOL" -I "^#include <asm/export.h>" -I"^SYM_FUNC_START\(_LOCAL\)*(memcpy_\(erms\|orig\))"'
-> >  check arch/x86/lib/memset_64.S        '-I "^EXPORT_SYMBOL" -I "^#include <asm/export.h>" -I"^SYM_FUNC_START\(_LOCAL\)*(memset_\(erms\|orig\))"'
-> >  check arch/x86/include/asm/amd-ibs.h  '-I "^#include [<\"]\(asm/\)*msr-index.h"'
-> > +check arch/arm64/include/asm/cputype.h '-I "^#include [<\"]\(asm/\)*sysreg.h"'
-> >  check include/uapi/asm-generic/mman.h '-I "^#include <\(uapi/\)*asm-generic/mman-common\(-tools\)*.h>"'
-> >  check include/uapi/linux/mman.h       '-I "^#include <\(uapi/\)*asm/mman.h>"'
-> >  check include/linux/build_bug.h       '-I "^#\(ifndef\|endif\)\( \/\/\)* static_assert$"'
-> 
-> LGTM.  I did the testing on both my x86 and Arm64 platforms, thanks for
-> the fixing up.
+> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
+> Anything received after that time might be too late.
 
-Thanks, adding a:
+Build test:
+mips (gcc version 11.2.1 20220314): 63 configs -> no new failure
+arm (gcc version 11.2.1 20220314): 105 configs -> no new failure
+arm64 (gcc version 11.2.1 20220314): 3 configs -> no failure
+x86_64 (gcc version 11.2.1 20220314): 4 configs -> no failure
 
-Tested-by: Leo Yan <leo.yan@linaro.org>
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
 
-- Arnaldo
+[1]. https://openqa.qa.codethink.co.uk/tests/942
+[2]. https://openqa.qa.codethink.co.uk/tests/944
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
+

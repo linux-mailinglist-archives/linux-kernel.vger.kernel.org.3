@@ -2,122 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E844E8364
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 19:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B23144E836A
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 19:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234622AbiCZSlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 14:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
+        id S234621AbiCZSnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 14:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232795AbiCZSk6 (ORCPT
+        with ESMTP id S232199AbiCZSnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 14:40:58 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820172FFD2
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 11:39:21 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id m67so19420268ybm.4
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 11:39:21 -0700 (PDT)
+        Sat, 26 Mar 2022 14:43:13 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE39458387
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 11:41:36 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id bn33so14182342ljb.6
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 11:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=k/ssPz4GjZfeEN38KWETRXLltMA9E5UJ9EeqUr0mW+E=;
-        b=eU4nTQZtKr8tHEmUIXFQeybG037KmX2E/b8xIuZDvlAj2YJrGqdLkEQ2py/rY3TJLN
-         OcAvYWuJX3WhXjaFlWFzJXA59mE/8/x2c1SXRpWBe9RIL1joAUFFC4vFL17R8lpLlqo6
-         MZ37zjeuySDtgQMNnM+kQILWAH2CTGnb+b/vvVCo5z4TsocVZ5cdGCjr+Zunakmdjv8O
-         GYfNZV8wwhbB8s0k7dPAyz0BWAikIHIW5npY3tjbBbzT/8m0Qd3zvXQ9pwReWCa8G3i1
-         u7RmbN3tr4DMcKGNOMkYCAPRMH4v3aIBIoJrnIGod9Ywz11trDYEu/G2Azmw1Jt/Xqcn
-         HmoQ==
+        bh=je98ykY3vsH8qDn25IW7eQYaUsod4iWZw+6FMsszdYQ=;
+        b=cY/i8NkOXIGpbugW/kXT/lHU/6KoHURxtydz8kA95dAKXv2dKSirRf5cna3Zz4aQE+
+         3zUrMCb8X6oIozpmPaWm2GuBQkB5p7v5BNoSLeNAqcrF06WOFYpSLhQLT9RJ7kcNoToA
+         /byaS8f5DiCBA3c9IENt3HgD+FLD9/VL6yCSc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=k/ssPz4GjZfeEN38KWETRXLltMA9E5UJ9EeqUr0mW+E=;
-        b=tuj+qSkEBzbWTKAuEb5B/Gmj5QQ6R8NysekvUcQc0+Rag1MkRLtz8K/6gj4EdLeKUY
-         0b092U6rRRWXhLLT1QWuy7pXgOO6HOmktzuVhmbJvSoLXzf0f/CjrwpkfwD9/UcP7ISw
-         0RfCHbH/HMz+cxQW5izo4Ib8n7fCmGaYd33ux2eWflK6x8S17PD3bcUfxmorRCWTlc1F
-         Y1kFWpjl4+LiKNhq55GuAi4CMYsQ/uGe2W+wEw/dY0zP34Q35ushbxwR/bu63+7PzwQ4
-         6humZMDSRLkwZggzkRefWrNbBDt19SesZawAoaejIEcJ8ezR912jeuhYCWXcBdyEiCl3
-         dw0A==
-X-Gm-Message-State: AOAM533DrUxKoh3+Lsuv5k7oThz7hITGE4EitXK9wp9eSwrVENsbJJTd
-        iMT60D8jNiaPlP/5y9bZ8oJf5SVo7wZIxpzFSH0awA==
-X-Google-Smtp-Source: ABdhPJzwmw6Z8LdcfSmjv9GvfYSLTsZMXaWLSBNT2IbcRER7i/wVtT89y8wvZg2ZFXaL7T0ipXC+3JOrJ0qnI1spITY=
-X-Received: by 2002:a25:f45:0:b0:628:b4c9:7a9f with SMTP id
- 66-20020a250f45000000b00628b4c97a9fmr15340626ybp.55.1648319960447; Sat, 26
- Mar 2022 11:39:20 -0700 (PDT)
+        bh=je98ykY3vsH8qDn25IW7eQYaUsod4iWZw+6FMsszdYQ=;
+        b=Cy1a5qiS6mmKnFX4AAjdEKm/aVsjiLvcqW3Eis8mZq0EmXA7Gi0yP+oealMz0dFA7E
+         pXtxuO0G5VAuCMtxJMOTqByE8iy50npo272OPzSKk7lXydHiK8z0E7oOCHANj7rzn7FV
+         yd95eAgwjNlyKskO5eYo1Omg4FeNOAkN/ZVVivm9FAOoYBQbHBdIxXVgZj6H/SnTl1xa
+         9I+Ukq41pI8nw9BGQAX8HVPyy8jAIDcomhb0JfH6VmFSsfrHXstQaWI+Zi+WYNAtOpeA
+         aSPgIW9bGQRYrCX7Z/xnyUgdaY7O8zXpGAvQc1K1iQCV4+5pnWCkmxITk3uMLWxfDhgL
+         DGeA==
+X-Gm-Message-State: AOAM5318xJK45kn7WHkvctSgoyUJ7fz0NgRfD2QhiUzl9hgFiOcYhCE8
+        3HG1Plki9Ho18Mxv8LtnXSJLi0SbMO91udIczWs=
+X-Google-Smtp-Source: ABdhPJylVVmpaUkleG9tXewEDLKhVLcqR6nSPXJStEVINZt7LFseQiNV/f6NGvvnp/8kJXNaa6itfw==
+X-Received: by 2002:a2e:86ca:0:b0:24a:c44a:aa3b with SMTP id n10-20020a2e86ca000000b0024ac44aaa3bmr3306773ljj.290.1648320094728;
+        Sat, 26 Mar 2022 11:41:34 -0700 (PDT)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
+        by smtp.gmail.com with ESMTPSA id n20-20020a19ef14000000b0044a212f7845sm1134757lfh.118.2022.03.26.11.41.33
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Mar 2022 11:41:34 -0700 (PDT)
+Received: by mail-lf1-f54.google.com with SMTP id 5so18450413lfp.1
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 11:41:33 -0700 (PDT)
+X-Received: by 2002:a19:e048:0:b0:448:2caa:7ed2 with SMTP id
+ g8-20020a19e048000000b004482caa7ed2mr13185867lfj.449.1648320093080; Sat, 26
+ Mar 2022 11:41:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220322004654.618274-1-eric.dumazet@gmail.com>
-In-Reply-To: <20220322004654.618274-1-eric.dumazet@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Sat, 26 Mar 2022 11:39:09 -0700
-Message-ID: <CANn89iLOCN8888SQFh6i1+yBZ=RWwDGE3BbPRbjpdKxApC1MxQ@mail.gmail.com>
-Subject: Re: [PATCH] watch_queue: Free the page array when watch_queue is dismantled
-To:     Eric Dumazet <eric.dumazet@gmail.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        syzbot <syzkaller@googlegroups.com>, Jann Horn <jannh@google.com>
+References: <20220325150419.757836392@linuxfoundation.org> <20220325150420.085364078@linuxfoundation.org>
+ <CAHk-=wiaeZKiEk87Sms1sy53m8tT3UCLOoeUBnX1c_1dZ78WjQ@mail.gmail.com> <Yj7oXgoCdhWAwFQt@kroah.com>
+In-Reply-To: <Yj7oXgoCdhWAwFQt@kroah.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 26 Mar 2022 11:41:17 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgeOrhN_Gznm80==STG1pEbqLMCaZZoeQzZu=NN9GOTgw@mail.gmail.com>
+Message-ID: <CAHk-=wgeOrhN_Gznm80==STG1pEbqLMCaZZoeQzZu=NN9GOTgw@mail.gmail.com>
+Subject: Re: [PATCH 5.10 11/38] swiotlb: rework "fix info leak with DMA_FROM_DEVICE"
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Christoph Hellwig <hch@lst.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping ?
+On Sat, Mar 26, 2022 at 3:18 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:"
+>
+> Yes, I've been watching that thread.  This change is already in 5.15 and
+> 5.16 kernels, and does solve one known security issue, so it's a tough
+> call.
 
-On Mon, Mar 21, 2022 at 5:47 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
->
-> From: Eric Dumazet <edumazet@google.com>
->
-> Commit 7ea1a0124b6d ("watch_queue: Free the alloc bitmap
-> when the watch_queue is torn down") took care of the bitmap,
-> but not the page array.
->
-> BUG: memory leak
-> unreferenced object 0xffff88810d9bc140 (size 32):
->   comm "syz-executor335", pid 3603, jiffies 4294946994 (age 12.840s)
->   hex dump (first 32 bytes):
->     40 a7 40 04 00 ea ff ff 00 00 00 00 00 00 00 00  @.@.............
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<ffffffff81459bff>] kmalloc_array include/linux/slab.h:621 [inline]
->     [<ffffffff81459bff>] kcalloc include/linux/slab.h:652 [inline]
->     [<ffffffff81459bff>] watch_queue_set_size+0x12f/0x2e0 kernel/watch_queue.c:251
->     [<ffffffff8159fcf2>] pipe_ioctl+0x82/0x140 fs/pipe.c:632
->     [<ffffffff815b601c>] vfs_ioctl fs/ioctl.c:51 [inline]
->     [<ffffffff815b601c>] __do_sys_ioctl fs/ioctl.c:874 [inline]
->     [<ffffffff815b601c>] __se_sys_ioctl fs/ioctl.c:860 [inline]
->     [<ffffffff815b601c>] __x64_sys_ioctl+0xfc/0x140 fs/ioctl.c:860
->     [<ffffffff84493a05>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->     [<ffffffff84493a05>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->     [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
->
-> Reported-by: syzbot <syzkaller@googlegroups.com>
-> Fixes: c73be61cede5 ("pipe: Add general notification queue support")
-> Signed-off-by: Eric Dumazet <edumazet@google.com>
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: Jann Horn <jannh@google.com>
-> ---
->  kernel/watch_queue.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
-> index 00703444a21948deaa8b7ac8b57b73528badff0d..58fe68664eb1b0001cb00c8d046e108462df4836 100644
-> --- a/kernel/watch_queue.c
-> +++ b/kernel/watch_queue.c
-> @@ -370,6 +370,7 @@ static void __put_watch_queue(struct kref *kref)
->
->         for (i = 0; i < wqueue->nr_pages; i++)
->                 __free_page(wqueue->notes[i]);
-> +       kfree(wqueue->notes);
->         bitmap_free(wqueue->notes_bitmap);
->
->         wfilter = rcu_access_pointer(wqueue->filter);
-> --
-> 2.35.1.894.gb6a874cedc-goog
->
+If you're following that thread, you'll have seen that I've reverted
+it, and I actually think the security argument was bogus - the whole
+commit was due to a misunderstanding of the actual direction of the
+data transfer.
+
+But hey, maybe I'm wrong. The only truly uncontested fact is that it
+broke the ath9k driver.
+
+           Linus

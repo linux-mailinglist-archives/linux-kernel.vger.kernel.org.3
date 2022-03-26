@@ -2,106 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85B14E809D
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 12:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 322F54E80A2
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 12:46:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232729AbiCZLmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 07:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
+        id S232750AbiCZLsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 07:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232715AbiCZLmP (ORCPT
+        with ESMTP id S232747AbiCZLry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 07:42:15 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB134F476;
-        Sat, 26 Mar 2022 04:40:38 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id b43so8801982ljr.10;
-        Sat, 26 Mar 2022 04:40:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FMCXUD4zN8cbLx2oPee1gYgI6Vkubs2/OUjrvABtL2c=;
-        b=RRQjx24ZJ+sPw0EsS4j2ufpttvcuSB2yfC+8tRvDJTNpiojfnfkLGEgveGVHRIjNTV
-         sa1vjrow+35r1SevZpWaifxAYerZhfwt/vWQfA4H29iGFZqHB8BrZsxIVuJt2sVGe4E3
-         iSFSVbKWcy/xc1z6NvuzyC0trCVzL0YLHez64adCxB57vpi75TlYSu/BvU3ldoYtISJm
-         sgyHxOqnWOD06u9dXrUiqNAHk+R4ZE92URYJGVCQHI+cJjKyOOhzhoRgXFDfo5KOyaXY
-         81q/RGFZYEULQWaJ7vb0AMZ+9LvH9WWjCFoLs6Iv4bBRyyPHXS7FjRaOk7N97n0y5QAr
-         O1Kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FMCXUD4zN8cbLx2oPee1gYgI6Vkubs2/OUjrvABtL2c=;
-        b=2kCuLTv4FQ7Ya0S6lSTsNWOmZ61IW9SVl3EX2vIR1HpX5eBODAIWZY7AXwgtFMnK97
-         fZS+OsfRayO1WgvDB0Rm2FMIyqYSZY82AXCRpLweWKwngWUhidNlk3jGNlUaB5ieNs6C
-         rSCWvFXhAiyjjCDyyHNda4Zitro8jDgg3qaCQkfZ626hyROrXG4AhhXcObBXb6vCNQ6L
-         I5yRQW0ks4qTt/OQR7ygLOxLTvCPyo6uBZP3Lc20ivuuaasj3w2sdaBAPhOiwhkKJkWo
-         uKcneVv4C9lKELlskwM96UPHj2p2oprjn4/lED2MWN/JUnZGU3vIPQ1zAoXSzrZCYVZU
-         lZ2w==
-X-Gm-Message-State: AOAM532AAqTGbAcP+XI2ILARLuAQxauvm3JyJGOsIEwy7ivuVc5rl0oP
-        yzTkCD/QATolGpjZ/9FtlB8=
-X-Google-Smtp-Source: ABdhPJx5E4HdGJ9e+XJC4t2MkkRqddhTZnzGjarstCoz0Pqv4OSoqk8vpIDnH4C2Es/0hM9Ljz/6AQ==
-X-Received: by 2002:a05:651c:124a:b0:249:5eae:745e with SMTP id h10-20020a05651c124a00b002495eae745emr11733019ljh.296.1648294837194;
-        Sat, 26 Mar 2022 04:40:37 -0700 (PDT)
-Received: from localhost.localdomain (95-31-172-65.broadband.corbina.ru. [95.31.172.65])
-        by smtp.gmail.com with ESMTPSA id l4-20020a2e9084000000b00244cb29e3e4sm1015213ljg.133.2022.03.26.04.40.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 04:40:34 -0700 (PDT)
-From:   Fedor Pchelkin <aissur0002@gmail.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     Fedor Pchelkin <aissur0002@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>
-Subject: [PATCH 4/4] file: Fix file descriptor leak in copy_fd_bitmaps()
-Date:   Sat, 26 Mar 2022 14:40:09 +0300
-Message-Id: <20220326114009.1690-1-aissur0002@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 26 Mar 2022 07:47:54 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86B650466;
+        Sat, 26 Mar 2022 04:46:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648295177; x=1679831177;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QZz30kRk2KYFgwCCmkTEJe3s7wNZUQDJ9cvHRPojmY0=;
+  b=PTq2cvEtK0Mpj4er9XfUIHJgFc8QRO7PqCkV4pXb4XnXIsm23lx1nbMP
+   tkZGPUXpaAx36W/rDu9eIY7UeezXEWCpGRLACi17XXThjEM62eOq/T4lk
+   5pdK/130vcBCrqnloIhSIs9jgsSgR3tx40pg1XTxiMS6Fa/8DhlzInkQI
+   FYFAIGaXTTBCB67UMG4qRwG4c39VVMSoej4nfnAgUD/KQUAoRdN86eBS1
+   xW73hmGBfXA/jjQlBVWawvKmZbFxJ1RFgJJ2eX2hBWT669DCrrFMPrtCN
+   JOtYoE6vNhUl2pSCc6jI2q3pQ7vTSyKcm6iB11tO8tqTdwjJpITTAnnRb
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="239376247"
+X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
+   d="scan'208";a="239376247"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 04:46:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,213,1643702400"; 
+   d="scan'208";a="718492219"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 26 Mar 2022 04:46:14 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nY4s1-000NKn-Vl; Sat, 26 Mar 2022 11:46:13 +0000
+Date:   Sat, 26 Mar 2022 19:45:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alex Deucher <alexander.deucher@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        linux-doc@vger.kernel.org
+Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_optc.c:95:
+ warning: This comment starts with '/**', but isn't a kernel-doc comment.
+ Refer Documentation/doc-guide/kernel-doc.rst
+Message-ID: <202203261919.vs4G6G1g-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If count argument in copy_fd_bitmaps() is not a multiple of
-BITS_PER_BYTE, then one byte is lost and is not used in further
-manipulations with cpy value in memcpy() and memset()
-causing a leak. The leak was introduced with close_range() call
-using CLOSE_RANGE_UNSHARE flag.
+Hi Alex,
 
-The patch suggests implementing an indicator (named add_byte)
-of count being multiple of BITS_PER_BYTE and adding it to the
-cpy value.
+First bad commit (maybe != root cause):
 
-Found by Syzkaller (https://github.com/google/syzkaller).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   52d543b5497cf31d6baeb0bcfe5a5474c3238578
+commit: 8fe44c080a53ac0ccbe88053a2e40f9acca33091 drm/amdgpu/display: fold DRM_AMD_DC_DCN3_1 into DRM_AMD_DC_DCN
+date:   9 months ago
+config: powerpc64-randconfig-r015-20220325 (https://download.01.org/0day-ci/archive/20220326/202203261919.vs4G6G1g-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8fe44c080a53ac0ccbe88053a2e40f9acca33091
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8fe44c080a53ac0ccbe88053a2e40f9acca33091
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/gpu/drm/
 
-Signed-off-by: Fedor Pchelkin <aissur0002@gmail.com>
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
----
- fs/file.c | 2 --
- 1 file changed, 2 deletions(-)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/fs/file.c b/fs/file.c
-index 3ef1479df203..3c64a6423604 100644
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -56,10 +56,8 @@ static void copy_fd_bitmaps(struct fdtable *nfdt, struct fdtable *ofdt,
- {
- 	unsigned int cpy, set;
- 	unsigned int add_byte = 0;
--	
- 	if (count % BITS_PER_BYTE != 0)
- 		add_byte = 1;
--	
- 	cpy = count / BITS_PER_BYTE + add_byte;
- 	set = (nfdt->max_fds - count) / BITS_PER_BYTE;
- 	memcpy(nfdt->open_fds, ofdt->open_fds, cpy);
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_optc.c:95: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Enable CRTC
+
+
+vim +95 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_optc.c
+
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19   93  
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19   94  /**
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  @95   * Enable CRTC
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19   96   * Enable CRTC - call ASIC Control Object to enable Timing generator.
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19   97   */
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19   98  static bool optc31_enable_crtc(struct timing_generator *optc)
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19   99  {
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  100  	struct optc *optc1 = DCN10TG_FROM_TG(optc);
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  101  
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  102  	/* opp instance for OTG, 1 to 1 mapping and odm will adjust */
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  103  	REG_UPDATE(OPTC_DATA_SOURCE_SELECT,
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  104  			OPTC_SEG0_SRC_SEL, optc->inst);
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  105  
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  106  	/* VTG enable first is for HW workaround */
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  107  	REG_UPDATE(CONTROL,
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  108  			VTG0_ENABLE, 1);
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  109  
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  110  	REG_SEQ_START();
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  111  
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  112  	/* Enable CRTC */
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  113  	REG_UPDATE_2(OTG_CONTROL,
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  114  			OTG_DISABLE_POINT_CNTL, 2,
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  115  			OTG_MASTER_EN, 1);
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  116  
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  117  	REG_SEQ_SUBMIT();
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  118  	REG_SEQ_WAIT_DONE();
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  119  
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  120  	return true;
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  121  }
+110d3968fe9508 Nicholas Kazlauskas 2021-05-19  122  
+
+:::::: The code at line 95 was first introduced by commit
+:::::: 110d3968fe9508142cb76b530d141209efa169a8 drm/amd/display: Add DCN3.1 OPTC
+
+:::::: TO: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,93 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC9874E80C9
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 13:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0B04E80CB
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 13:25:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232894AbiCZM0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 08:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
+        id S232902AbiCZM1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 08:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbiCZM0N (ORCPT
+        with ESMTP id S230494AbiCZM1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 08:26:13 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44594292BB4;
-        Sat, 26 Mar 2022 05:24:36 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id CB5B4C021; Sat, 26 Mar 2022 13:24:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1648297473; bh=J+rWcnu8yF7moh054Aw+8XHr3g7eD83siDQ/MkyTBjI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fMGFh1uJbcJcldQgmnJxIll8S+FwMV8Yav7DYp0Ttu8UGPN0eWvmzuI3WXZmxJDed
-         KcNdXofmrYQdnymnzjU/Xltw6xG8gZ08wTHYsJ2ko+Kvr9I6nPHIq8WAs+BZFV/fgx
-         ngpduVyNJvXiDcX5Bx1LQaDboa/g6T6Uyv/XxR6Uu5dyi+6uiQEk5nR+0l9KGxB6NL
-         0tlEUOE1841SaECbJ1VnWOItVEiFqcpBpZe1ReTj8SqCocJqd0GnLgkmPviq1maSNx
-         L8Lmds4tH7eovs/GPa//YYaes9YGnhKLgMLXd6wSJWp18ODxDqUusJsmd5eRFTyr0G
-         AnojQo6SajdHg==
+        Sat, 26 Mar 2022 08:27:02 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3099292BB2;
+        Sat, 26 Mar 2022 05:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1648297521;
+        bh=VCWWrzyL8XtS2aaYrOKS+Lz6dsRdhW+SIbacYpRBbAw=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=iWHOlgzNAumeAregQScYvHjQ+6/qUz61+1ceEQpfoXobIBvUIStxR/zHnMlAHkJPn
+         liArEorNtc40IFKTkLqucFlBwEOlBW1lCoXpi0AXhq+k2XzZMu3WrW0wy7W+GNDFO3
+         C6hoTomQ2qfsYHI2j4mY8O1cP4zqYHg8wA1u6wKo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.35.223]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N0oFz-1oJKXk08NZ-00wpB2; Sat, 26
+ Mar 2022 13:25:21 +0100
+Message-ID: <9610390a-c6ce-e231-a8d9-cbf97a4bfecd@gmx.de>
+Date:   Sat, 26 Mar 2022 13:25:20 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5.17 00/39] 5.17.1-rc1 review
+Content-Language: de-DE
+To:     Rudi Heitbaum <rudi@heitbaum.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <67e05375-077f-ebc7-c691-b0a0a31b3479@gmx.de>
+ <20220326032027.GA7@ba72772bdc1f>
+From:   Ronald Warsow <rwarsow@gmx.de>
+In-Reply-To: <20220326032027.GA7@ba72772bdc1f>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Zpf6VghU7a8AeiRB5swC6uAafLBrWyVBgwlWGV3ZNEBGgwaVqIs
+ SEOmSY6Oe1VLr5eV0jLi6MYJJ7dIWxBIP8ZzJK/z5jB8qciPC6enFHS9JWuQdlzZur6UdGu
+ JU7mQMl7rOnOV5mJgDLSIfD3MTcSvb0MViMqosSEf+ZoYoMhiIdNWaouh5R2vkoxZTdng4z
+ QfQdz5RMtqdXuxL1ETLSw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:yPiWFK3IZos=:yYSf/wEObSb+j4jH3RZpvE
+ uE/3pG06YY3CihUfm1szfVQ28QMCuCT9wikBlqqZLrDH9gZHGqMBDXpPE6k7Lf/xfEv18PXv7
+ dwZD30di2gDj/YNayAKS8apVMIhZb+/AWp995sg1G/nzEstMqGJ5Cz41LaTac6fEBXr8ixCoO
+ /jAC4vJ8N2Ybvw+LIO/846RTjPStZR4Ou83RD+dKaRXIBOQeiRMr4VLlwFE7gzv9GWPnteBNi
+ 9B/7YvhWzZGGIDJZEXUlPy2ZKtvcJYfZirW8ZQmXE7DdhGOQf8EJUaPQFrBuwn/r0HJaiaP3d
+ wSv35/Y5YXHeKr11rcK2H1Cn6mgqYrdp23AR2Kmf8lhBO1peoiCq21PfDb5U6pJCUrfmFdHim
+ wZWyp+yKl6h0ZlkrnmEPKTQrZzx8rAPGv7lkSZk3IO8a0rxWiB1xQ5wuWnnKVc5w5wcbDcPAC
+ gkC14emeQD4hRBKZTGIlqY5CgcCTtsS2wZzlc3rR+J5U2yvh4BoapJl/o0PytaOBDxJy2zSEw
+ ZEivusO9ozWla/nUo8tVjroJNKiwHA0HyLFPdfsa/G6m7S5WFKaDFFJos8xbsQdE0HW7f2qaL
+ gQp+BkI6eiLVYQa7Eu28k8RgIX7iO454XnV7fAdz+Qg8oMkYOYMQ1r8kxDEZsg1RPDszU33ch
+ N9tLnFcJ3oF/5B7CKdjMWNSgkRJU/t6YUiZaeeflnpGfqn3YS1ReDF9U69BItyTTgXgg607ad
+ 4wEgnk1NlNssAyLai/AGzzaOeKo6tgYp9GhmnLgK3jDFwrXZJrN5Akkpln3tiQTOiBwR/RQTP
+ EJcv67Oj7MyXi2QYKwhdeHEZAhQu32dIZOLElxFkwIr6a+0QAaXYY7BSxISt2l1LgjvATEiaA
+ 6p/PF1g1Uunz2KjzVkD8oIm5QCLuTviqtG6qu1ecnXzWG4wKv5/TXARto3d4MX/fmLeqgfj49
+ QoUX1Pj7Qc59kDxOeMkNPAgAMeXxYKge6fsLoOxpOVG8v2vGSy2BTtTFv7ZePTivN7N8w+sYN
+ A8hSmU1BZ7cXODcTFUaJQ8EcwvY91rrrD5RGRM+F0wN2TBOEsAPaUQJIRE/3g/sRAElEcfHkw
+ GW5mrXGsj7LEj4=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id C07DCC009;
-        Sat, 26 Mar 2022 13:24:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1648297472; bh=J+rWcnu8yF7moh054Aw+8XHr3g7eD83siDQ/MkyTBjI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bp2S0TjOym2RriaIq4Q1XLf+Az7nE22NgnsSp9Ixsfwed0OtIMB2UrLt2wm+8Cxfd
-         y/2CPT2Ah6NIRetxdVwix0c0l7Ava30y1r9eXbhIztXaFF93xDJqVh8Ay9NuVXtDqC
-         FKZ12TmjWf7EvNH0A3ZPR+tHbwsnrfy05WGCYeWe3Epdokk43fIQC4YjpM2/nOu8hG
-         Z5hboCFi/GSpfu8hJfkgol0EeL4axCfzEvGTfBKTLuj3KBm5rSOd9oOedhr4yko8pV
-         1OyLgdx9e3ErzM+pPBStOFFNor9sU/FMwqKjsHTPbG9Bq1CdVfDf1FWkt0j1u9WvwF
-         thne8LKrDEvxg==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 1cc6f6ba;
-        Sat, 26 Mar 2022 12:24:25 +0000 (UTC)
-Date:   Sat, 26 Mar 2022 21:24:10 +0900
-From:   asmadeus@codewreck.org
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     David Kahurani <k.kahurani@gmail.com>, davem@davemloft.net,
-        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        lucho@ionkov.net, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net,
-        syzbot+5e28cdb7ebd0f2389ca4@syzkaller.appspotmail.com
-Subject: Re: [syzbot] WARNING in p9_client_destroy
-Message-ID: <Yj8F6sQzx6Bvy+aZ@codewreck.org>
-References: <CAAZOf26g-L2nSV-Siw6mwWQv1nv6on8c0fWqB4bKmX73QAFzow@mail.gmail.com>
- <3597833.OkAhqpS0b6@silver>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3597833.OkAhqpS0b6@silver>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christian Schoenebeck wrote on Sat, Mar 26, 2022 at 12:48:26PM +0100:
-> [...]
+
+
+On 26.03.22 04:20, Rudi Heitbaum wrote:
+> On Fri, Mar 25, 2022 at 05:45:45PM +0100, Ronald Warsow wrote:
+>> hallo Greg
+>>
+>> 5.17.1-rc1
+>>
+>> compiles, boots and runs on my x86_64
+>> (Intel i5-11400, Fedora 35)
+>>
+>> btw I get:
+>>
+>> iwlwifi 0000:00:14.3: Direct firmware load for
+>> iwlwifi-QuZ-a0-hr-b0-69.ucode failed with error -2
+>>
+>> (not a regression in the 5.17-series, but compared to 5.16.x !)
 >
-> > Signed-off-by: David Kahurani <k.kahurani@gmail.com>
-> > Reported-by: syzbot+5e28cdb7ebd0f2389ca4@syzkaller.appspotmail.com
+> Hi Ronald,
+>
+> 68 is the current correct firmware for the iwlwifi wireless cards
+> The 69 version (whilst supported by the kernel) is not
+> yet available. See the git below.
+>
 
-Looks good to me - it's pretty much what I'd have done if I hadn't
-forgotten!
-It doesn't strike me as anything critical and I don't have anything else
-for this cycle so I'll just queue it in -next for now, and submit it
-at the start of the 5.19 cycle in ~2months.
 
-> I'm not absolutely sure that this will really fix this issue, but it seems to 
-> be a good idea to add a rcu_barrier() call here nevertheless.
+Thanks for the info.
+my wifi is running without it.
+my intention was just to share what I see here
 
-Yeah, I'm not really sure either but this is the only idea I have given
-the debug code doesn't list anything left in the cache, and David came
-to the same conclusion :/
+Ronald
 
-Can't hurt though, so let's try and see if syzbot complains
-again. Thanks for the review!
-
--- 
-Dominique

@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D87B04E7EAD
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 03:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE5C4E7EB0
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 03:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiCZCy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 22:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
+        id S230440AbiCZCz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 22:55:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiCZCyy (ORCPT
+        with ESMTP id S230429AbiCZCz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 22:54:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860ED2DD70;
-        Fri, 25 Mar 2022 19:53:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648263197; x=1679799197;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=uI+S8wJngH0DegLJABgjbAsMLT1fPpAdxr5wiQNUH04=;
-  b=R3ewHIzcYSX84Bd5JI9CFtn9TCr9GSkuiHCeca4tnXPtQt7bzPXp+Jkd
-   +XgNmK+rmRYRj4AfFJbJrKjlIQhHQddS66r0wrXYdpwCPSK+8pOYTBl7y
-   eniV+z8vfX661yivUD85bZmrsb8A7q3KlvPpBcrR1zLK5/hzc/Ozw0DGn
-   eTIPDFFbL1o09CM5gXDuTVUXStWbXOP8fwQPyxOaRLyoOmLiM4wRx5lUc
-   Res09ob3H81VM8SLUVbSYXQLoydP2ipLPA5TuuTHUkomYOIxrtpdoO3+d
-   qeg94ABnMq6au20yV7Lz0MWR9dmxVcJ6ZP5C0A94wUVcJv9bPf7ph/JrO
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10297"; a="345188336"
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="345188336"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2022 19:53:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,211,1643702400"; 
-   d="scan'208";a="648456233"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 25 Mar 2022 19:53:13 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nXwYD-000MvT-6Q; Sat, 26 Mar 2022 02:53:13 +0000
-Date:   Sat, 26 Mar 2022 10:52:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Subject: Re: [net-next 1/5] net: mdio: fwnode: add fwnode_mdiobus_register()
-Message-ID: <202203261007.nhIuHNPd-lkp@intel.com>
-References: <20220325172234.1259667-2-clement.leger@bootlin.com>
+        Fri, 25 Mar 2022 22:55:27 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E581ED06D
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 19:53:50 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id mp6-20020a17090b190600b001c6841b8a52so13849432pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 19:53:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PSIzA3SpmPoH3dTegWNfD7Vv70zoBNgsaVOFtt43/Bc=;
+        b=nSJzWQN4BaeFQPoqBygBN0ITz429JEufgDJi4BftxutV+8zfgJ5iUqWqjZ2i6nIcNx
+         2EIkKIA5YrtYVGL+YOBrdwVExrNw9uoN6cF9p8YaNqx056uOnuSf/PfZlUIGbOMH9tKC
+         3fwbBC4aWEx+aqf1Pz9u6UusYRKeGNff13BlY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PSIzA3SpmPoH3dTegWNfD7Vv70zoBNgsaVOFtt43/Bc=;
+        b=DViSSHEXbxBbOAUreqXsoAzSRtk/s7KVvMfKMWU0FIXF4qXwCnq3WAi3EvA5mswtCC
+         9MxxKwWsuEEyVAAAXRzh04fcFZHHa16UIDte/Yfnkj+caEABzZxCJtqgwc0cXMgy5EGt
+         +RvspHlo6lyIJxtnfaCADmdSTjeAfuZMxynyl+dhbUBYfEDWhyb8CxuiPG4F7lHsrQOp
+         orh8IYYO5GwkLTJOv6WAisSaeFmr9iyUnWoSOQ6L/Hzcp1wMLxJo6MPOwaptZK6joYEu
+         CK2w8QTF++KA444iJm2rdCVcgZOp0ldvPZA0WVdtNSey9ozosYBbbRuo4uxIF5ReL0ga
+         9DIQ==
+X-Gm-Message-State: AOAM5333hD/GR2oQT7YqKrkbmM245mlg8xAZnQuH6zQIkHrBPWrsHUCc
+        uDKItWol9PVsnmKy/5aM4P2cji2tOy217SuiJV0=
+X-Google-Smtp-Source: ABdhPJzfibpB6rdR0T7HJKExSnBJpuF/dDIcZ9CCmazvIpUr+AOvvbX2lfRPbxAu3iDexWWwFIX1dA==
+X-Received: by 2002:a17:903:2444:b0:154:13b6:8850 with SMTP id l4-20020a170903244400b0015413b68850mr15054628pls.55.1648263230255;
+        Fri, 25 Mar 2022 19:53:50 -0700 (PDT)
+Received: from 86f5abb19214 ([203.221.136.13])
+        by smtp.gmail.com with ESMTPSA id w24-20020a639358000000b00385fcbf8e55sm6751036pgm.28.2022.03.25.19.53.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 19:53:49 -0700 (PDT)
+Date:   Sat, 26 Mar 2022 02:53:38 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.17 00/39] 5.17.1-rc1 review
+Message-ID: <20220326024843.GA7@86f5abb19214>
+References: <20220325150420.245733653@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220325172234.1259667-2-clement.leger@bootlin.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220325150420.245733653@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,63 +71,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Clément,
+On Fri, Mar 25, 2022 at 04:14:15PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.1 release.
+> There are 39 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-Thank you for the patch! Perhaps something to improve:
+Hi Greg,
 
-[auto build test WARNING on net-next/master]
+5.17.1-rc1 tested.
 
-url:    https://github.com/0day-ci/linux/commits/Cl-ment-L-ger/net-mdio-fwnode-add-fwnode_mdiobus_register/20220326-040146
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 89695196f0ba78a17453f9616355f2ca6b293402
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220326/202203261007.nhIuHNPd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/8ed21cbab4f71b382b70d22da18e9331bd9b714f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Cl-ment-L-ger/net-mdio-fwnode-add-fwnode_mdiobus_register/20220326-040146
-        git checkout 8ed21cbab4f71b382b70d22da18e9331bd9b714f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/mdio/
+Run tested on:
+- Allwinner H6 (Tanix TX6)
+- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+In addition - build tested on:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
 
-All warnings (new ones prefixed by >>):
-
->> drivers/net/mdio/fwnode_mdio.c:154:34: warning: unused variable 'whitelist_phys' [-Wunused-const-variable]
-   static const struct of_device_id whitelist_phys[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/whitelist_phys +154 drivers/net/mdio/fwnode_mdio.c
-
-   147	
-   148	/* The following is a list of PHY compatible strings which appear in
-   149	 * some DTBs. The compatible string is never matched against a PHY
-   150	 * driver, so is pointless. We only expect devices which are not PHYs
-   151	 * to have a compatible string, so they can be matched to an MDIO
-   152	 * driver.  Encourage users to upgrade their DT blobs to remove these.
-   153	 */
- > 154	static const struct of_device_id whitelist_phys[] = {
-   155		{ .compatible = "brcm,40nm-ephy" },
-   156		{ .compatible = "broadcom,bcm5241" },
-   157		{ .compatible = "marvell,88E1111", },
-   158		{ .compatible = "marvell,88e1116", },
-   159		{ .compatible = "marvell,88e1118", },
-   160		{ .compatible = "marvell,88e1145", },
-   161		{ .compatible = "marvell,88e1149r", },
-   162		{ .compatible = "marvell,88e1310", },
-   163		{ .compatible = "marvell,88E1510", },
-   164		{ .compatible = "marvell,88E1514", },
-   165		{ .compatible = "moxa,moxart-rtl8201cp", },
-   166		{}
-   167	};
-   168	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi

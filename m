@@ -2,63 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3462C4E7E6A
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 02:21:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 853004E7E6C
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 02:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbiCZBWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 21:22:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
+        id S230071AbiCZBXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 21:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiCZBWb (ORCPT
+        with ESMTP id S229772AbiCZBXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 21:22:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2104D2A5AA6;
-        Fri, 25 Mar 2022 18:20:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C14DAB82AE1;
-        Sat, 26 Mar 2022 01:20:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A733C2BBE4;
-        Sat, 26 Mar 2022 01:20:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648257653;
-        bh=2jM6K8HMj5gWuZKaREeuXsW8X1XXJcDu7VTZ4Gfp0is=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EO9MI3ehZHiOLQMcJlTwchKS/p6Js2NZFbXf9joprxQs2P7hTMp7d8aCULfgYESZi
-         MPKtKXrKqC4eMF09Q5BzgI5G0PuwAbCHZuXf6vukcDkFPi1neEtTRKSIC2ktmPj6lk
-         Hmaa5kdihagorvJ9LOpt/ARO1Mt90Gt4r+3nJZOIy10MTZdw8n8Y266Qylk6TqxNkv
-         C5hY4uFuSNC6dzMFVSNCtU+2TSVekU2WAh7tSraXu/SqKSLaGd9P6K2uUnztveQbtQ
-         rL2bQHFET5z9uY3A7uu3qRtt/phHpvfcqCUcK2TYswijun2rxOK7C13EDPV9rl8Dhs
-         Fax3QgG8o77lg==
-Date:   Sat, 26 Mar 2022 10:20:47 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        kernel-janitors@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 0/4] kprobes: rethook: x86: Replace
- kretprobe trampoline with rethook
-Message-Id: <20220326102047.61c095c112e0add6876446e2@kernel.org>
-In-Reply-To: <Yj3zB2n7Hy0DhkU+@hirez.programming.kicks-ass.net>
-References: <164821817332.2373735.12048266953420821089.stgit@devnote2>
-        <Yj3VAsgGA9zJvxgs@hirez.programming.kicks-ass.net>
-        <Yj3zB2n7Hy0DhkU+@hirez.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Fri, 25 Mar 2022 21:23:42 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8332A5AA7;
+        Fri, 25 Mar 2022 18:22:07 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id t4so4719072pgc.1;
+        Fri, 25 Mar 2022 18:22:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=D7K0kdAFx5XSFJ+m4rzI3hM8NM4+hMJqlBRG593utMQ=;
+        b=VWNrITceuY8rPGZesl1dtoB+Sc7wOGazalX8UymCmNcRDrABBh/Li+VAFma6TvqoM1
+         dOndekWIlNlYAXoVdUOSUZtZbyVV8YcWKdKP4iBdTE9iqLkhswAUYMZbGAD0YBIabi67
+         0d+0P0PVxSOCISkU6TDA1HEk1D2qol4XXd67AYAwujHfk+Nk45WnBMGCRDOh4H4/WGYv
+         6ueOHY9zEFFRxXzPEUvFBxCdScLIedT6ZXOaq+nBAxjbtpsrKx3fAzTnk0YMrMugb+N1
+         xyzrWxLXTUyU+uDFNgj9C1P8/QR1Dls/bl/cT6udO/aEeqPmleTp35HG5xeZqM34VErL
+         FDCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=D7K0kdAFx5XSFJ+m4rzI3hM8NM4+hMJqlBRG593utMQ=;
+        b=We1dwykusUy5cYMhF2OBe95SSxi6uGZd8gZxqeCyfVkyPrGl5nodWQ5l72YGp7DTeK
+         iO9oAErnXhFubV9SreYSgVQ4vVBc9n5I9wvfY+MbAPvgBTw+mOJQ+neh83aRUHF7ytSJ
+         F4/arc0jihktuMSM3bIP5pHMYnwWdLELJEaYZjaE2tmXb0Ca/tNvPTnNOdYQM9KSzemL
+         oX6HM60p+48iQtBwqjmahiQtuGP2w7bE964h0MuX0AImSXX+x83sYOarVo5KtHH4Rpqp
+         48TVk294EKsRVdaYB9ogwCOKbe+RPbK9QEU5tMo+AZsIJ0VBPu1Y74OJ9zhB+jN3/myn
+         96aA==
+X-Gm-Message-State: AOAM533IsqHbAhnqjE6ChG0wPb7Bwot53uRK8eDnSssxq4MbWkuSupBx
+        2Ps2By1gVUtw/HRNtWYxLSRZfOvz7/tpmjJdNK5uXw==
+X-Google-Smtp-Source: ABdhPJxX+9IZeItEcA/px1aSyFLpCMmkvZt1fSYolg8tN/DGuCFl4sYK1KgA3W8j1sQW2xeR8pj/AA==
+X-Received: by 2002:a05:6a00:b51:b0:4fa:ece9:15e4 with SMTP id p17-20020a056a000b5100b004faece915e4mr11284456pfo.27.1648257726809;
+        Fri, 25 Mar 2022 18:22:06 -0700 (PDT)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id y3-20020a17090a8b0300b001c735089cc2sm6926131pjn.54.2022.03.25.18.22.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Mar 2022 18:22:06 -0700 (PDT)
+Message-ID: <623e6abe.1c69fb81.52568.3eb6@mx.google.com>
+Date:   Fri, 25 Mar 2022 18:22:06 -0700 (PDT)
+X-Google-Original-Date: Sat, 26 Mar 2022 01:22:04 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220325150420.245733653@linuxfoundation.org>
+Subject: RE: [PATCH 5.17 00/39] 5.17.1-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,45 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Mar 2022 17:51:19 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
-
-> On Fri, Mar 25, 2022 at 03:43:15PM +0100, Peter Zijlstra wrote:
-> > On Fri, Mar 25, 2022 at 11:22:53PM +0900, Masami Hiramatsu wrote:
-> > 
-> > > Masami Hiramatsu (3):
-> > >       kprobes: Use rethook for kretprobe if possible
-> > >       rethook: kprobes: x86: Replace kretprobe with rethook on x86
-> > >       x86,kprobes: Fix optprobe trampoline to generate complete pt_regs
-> > > 
-> > > Peter Zijlstra (1):
-> > >       Subject: x86,rethook: Fix arch_rethook_trampoline() to generate a complete pt_regs
-> > 
-> > You fat-fingered the subject there ^
-> > 
-> > Other than that:
-> > 
-> > Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > 
-> > Hopefully the ftrace return trampoline can also be switched over..
+On Fri, 25 Mar 2022 16:14:15 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.17.1 release.
+> There are 39 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Urgh, allnoconfig doesn't build because..
+> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
+> Anything received after that time might be too late.
 > 
-> diff --git a/kernel/Makefile b/kernel/Makefile
-> index 56f4ee97f328..471d71935e90 100644
-> --- a/kernel/Makefile
-> +++ b/kernel/Makefile
-> @@ -108,6 +108,7 @@ obj-$(CONFIG_TRACING) += trace/
->  obj-$(CONFIG_TRACE_CLOCK) += trace/
->  obj-$(CONFIG_RING_BUFFER) += trace/
->  obj-$(CONFIG_TRACEPOINTS) += trace/
-> +obj-$(CONFIG_RETHOOK) += trace/
->  obj-$(CONFIG_IRQ_WORK) += irq_work.o
->  obj-$(CONFIG_CPU_PM) += cpu_pm.o
->  obj-$(CONFIG_BPF) += bpf/
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.1-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Oops, thanks for pointing out!
+5.17.1-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>

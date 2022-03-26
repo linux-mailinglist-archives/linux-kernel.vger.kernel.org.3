@@ -2,205 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1218F4E7E50
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 02:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 456E54E7E53
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Mar 2022 02:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbiCZBBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Mar 2022 21:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
+        id S229895AbiCZBE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Mar 2022 21:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbiCZBBw (ORCPT
+        with ESMTP id S229456AbiCZBE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Mar 2022 21:01:52 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660B549907
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 18:00:16 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2e61c5a0eb7so72150777b3.22
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 18:00:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=W/ClygQLeJR/GjVzXq75kHiIvruhnm90EJigIUb5rZw=;
-        b=qvXvN7ja3CcCfay9zb0Q2CDseDpfbRINVIQt1YTD06ESglVUby/9ezmskzn7/w1Koa
-         un04IA9WyKGhKOEc48VCnthy3cleHZGP3rbESDpwCOCC8cMPwrC04Nwg4XT8NqqZ0EIW
-         Z61UGzTYFCU6LrZ+Sqe6Mxyoq5iZhYg8G9xKg8X1GpqgKy73kbsuOoJsFiNHsISuc/1R
-         l6JOVgQ4OfTV2WC2GMTRta4NclDnXa7DOGbcok6OLgUqeJ6+7N9ZncSFkivTW/gIf0k4
-         HKF4UqSzmR88sKi0dZ9pasMRPcAEiNM4shQ9OE32PQcXH6tOS4P2bQoFVGjAf+7m8Eut
-         TyBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=W/ClygQLeJR/GjVzXq75kHiIvruhnm90EJigIUb5rZw=;
-        b=4qkHh1QBa665RnJg+6pRfpA0d5eWb7gf3LRQp5kIaGsGVRhc87njU+1gJvYGZ0zvxW
-         nuDfxjVozJGJ84KhZR9jKd+T76O8ajvIw2uW2MDkw1s4o/v9WRzr9sXaVt0T3/KB0i6x
-         uCkmURPcbTJNaqKhDQ+ShGBXgKwuPZJHYVitJjrP0zyYYtYglcFgFrGWActwr1bs/SCC
-         drGNk3/9ENTH9/LhmVE0Br1IIN/nnyTyqNOoCr5cOJNz/hPHj9MY/TXpks/TNcXakkTJ
-         +OoqHglaf9pEp9Desy4zBb1IPVwul602sXrngGu29Wo4yc56iswKGxgUdcBt1BY0z13Y
-         UwPg==
-X-Gm-Message-State: AOAM530YTTzuJUxMuhIc7om1tNxU0MECLDiSF2Uy0vWTsfdJs5dGgYVT
-        XkHTl/ttOwIbefPMmALgoZEO1Rw/1mU=
-X-Google-Smtp-Source: ABdhPJy2mX78Uhkpp5sqymv1JurScdsIpF4FkonUhkkFsQjtO+6MfpQJTJvSqsJUsyMITIzOvH5PK27R4IE=
-X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:200:cd78:b0cd:6717:696d])
- (user=yuzhao job=sendgmr) by 2002:a25:1f88:0:b0:633:6acc:ebff with SMTP id
- f130-20020a251f88000000b006336accebffmr14039337ybf.377.1648256415541; Fri, 25
- Mar 2022 18:00:15 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 19:00:03 -0600
-Message-Id: <20220326010003.3155137-1-yuzhao@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [GIT PULL] Multi-gen LRU for 5.18-rc1
-From:   Yu Zhao <yuzhao@google.com>
+        Fri, 25 Mar 2022 21:04:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2256211174A
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Mar 2022 18:02:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF9DB60ADC
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 01:02:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D6DC2BBE4;
+        Sat, 26 Mar 2022 01:02:49 +0000 (UTC)
+Date:   Fri, 25 Mar 2022 21:02:47 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <baohua@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Donald Carr <d@chaos-reins.com>,
-        Hillf Danton <hdanton@sina.com>,
-        "=?UTF-8?q?Holger=20Hoffst=C3=A4tte?=" 
-        <holger@applied-asynchrony.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Rik van Riel <riel@surriel.com>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Yu Zhao <yuzhao@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Cc:     LKML <linux-kernel@vger.kernel.org>, Amit Shah <amit@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH] virtio: Workaround fix for hard hang on guest using
+ fifos
+Message-ID: <20220325210247.0d695ab6@gandalf.local.home>
+In-Reply-To: <CAHk-=wjTL=vz2PC7=dFZVrT=9nuBtZ21j_qT8e=yHvVuXvhCdg@mail.gmail.com>
+References: <20220325172036.3f8f619e@gandalf.local.home>
+        <CAHk-=wjTL=vz2PC7=dFZVrT=9nuBtZ21j_qT8e=yHvVuXvhCdg@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, 25 Mar 2022 17:36:27 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-This is more of an option than a request for 5.18. I'm sending it to
-you directly because, in my judgement, it's now as ready as it'll ever
-be.
+> On Fri, Mar 25, 2022 at 2:20 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > With the updates to change the size being passed in the splice from
+> > page_size to pipe_size, this never finished (it would copy around a meg or
+> > so). And stopped. When I killed the agent-fifo task on the guest, the guest
+> > hung hard.  
+> 
+> Without knowing (or really caring) at all how virtqueue works, this
+> sounds very much like the classic pipe deadlock where two processes
+> communicate over a pair of pipes, sending each other commands, and
+> replying to each other with status updates.
 
-Thanks!
+It does look like this. Note, this is not due to my application, since it
+flows in one direction, but I think the way virtio pipes are implemented
+can cause this to occur.
 
-The following changes since commit 46f538bf2404ee9c32648deafb886f49144bfd5e:
+A virtio pipe on the guest looks like a normal bidirectional char device.
+You open it, read it, write to it. No problem. On the host, there are two
+FIFOs that are attached to the guest. One for each direction. That is, the
+host is using two pipes that convert to a character device on the guest.
 
-  Merge tag 'backlight-next-5.18' of git://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight (2022-03-25 14:01:23 -0700)
+> 
+> And you absolutely cannot do that if one side can possibly want to up
+> fill the whole pipe.
+> 
+> Deadlock:
+> 
+>  - process A is trying to send data to process B (on 'pipe_A'), and
+> blocks because the pipe is full
+> 
+>  - process B is reads the data and everything is fine, and A gets to continue
+> 
 
-are available in the Git repository at:
+I think you left out a step here, where A is blocked again.
 
-  https://linux-mm.googlesource.com/mglru/ tags/mglru-for-5.18-rc1
+>  - but then process B sends some stratus update the other way (on
+> 'pipe_B' - you can't use the same pipe for bidirectional, it's why you
+> use a pair of pipes or a socketpair) and waits for the result.
+> 
+>  - now A and B are both waiting for each other - A is waiting for B to
+> empty the big bunch of data it's sending, and B is waiting for the
+> result for the (small) command it sent.
+> 
+> and neither makes any progress.
+> 
+> You can find several mentions of these kinds of problems by just
+> googling for "bidirectional pipe deadlock" or similar.
+> 
+> The solution is invariably to either
+> 
+>  (a) make sure that nobody writes even remotely close to enough data
+> to fill a pipe before reading the other pipe (you can still fill up a
+> pipe, but at least somebody is always going to succeed and make
+> progress and do the read to make progress).
+> 
+>  (b) make sure everybody who writes to a pipe will use nonblocking IO
+> (and is willing to do reads in between to satisfy the other end).
+> 
+> That first case is basically what one of the PIPE_BUF guarantees is
+> all about (the other one is the atomicity it guarantees, ie you can
+> write a "command packet" and be guaranteed that readers will see it
+> without data mixed in from other writes).
+> 
+> I have no idea what your client/agent does and how it interacts with
+> the virtio pipes, but it really _sounds_ like a very similar issue,
+> where it used to work (because PIPE_BUF) and now no longer does
+> (because pipe filled).
 
-for you to fetch changes up to bcf5f2a801b85f09ad691d07460fdf3fbef8404d:
+So the agent writes to the virtio char device on the guest, while the
+client is reading the guest's FIFO on the host.
 
-  mm: multi-gen LRU: design doc (2022-03-25 15:30:50 -0600)
+One directional.
 
-----------------------------------------------------------------
-Multi-gen LRU for 5.18-rc1
 
-This series was retested on top of 5.18-ed4643521e6a. All previous
-comments have been addressed.
+> 
+> And that virtio_console __send_control_msg() pattern very much sounds
+> like a "send data and wait for ACK" behavior of "process B".
 
-Changes since v8 [1]
-  * Removed two user-hostile config options (suggested by Linus
-    Torvalds).
+Something happens where data stops transferring (the virtio system waiting
+for status?) This mostly happens when I run the agent under gdb. Which it
+stops transferring data. Everything is still fine. I hit Ctrl^C twice to
+get back to the gdb command prompt, and then I kill the process with the
+gdb "kill" command. It asks me if I'm sure, I type "y", and then boom! The
+system is hung. The guest locks up.
 
-Changes since v9 [2]
-  * Resolved the conflicts with the latest folio changes.
-  * Switched to spin_trylock() to move onto the next page table rather
-    than spin on the current one when trying to clear the accessed
-    bit on many page tables.
-  * Added introductory paragraphs to the admin guide and the design
-    doc (suggested by Mike Rapoport).
-  * Expanded comments in get_nr_evictable() (suggested by Barry Song
-    and Aneesh Kumar).
-  * Expanded comments in inc_max_seq() (suggested by Barry Song).
+And printk()s show that the exit of the agent is in that loop.
 
-[1] https://lkml.kernel.org/r/20220308234723.3834941-1-yuzhao@google.com
-[2] https://lkml.kernel.org/r/20220309021230.721028-1-yuzhao@google.com
+ watchdog: BUG: soft lockup - CPU#0 stuck for 26s! [agent-test:1165]
+ Modules linked in: ip6table_filter ip6_tables ebtable_nat ebtables bnep bluetooth ecdh_generic ecc cfg80211 rfkill cirrus drm_shmem_helper drm_kms_helper vmw_vsock_virtio_transport vmw_vsock_virtio_transport_common pcspkr joydev serio_raw vsock virtio_console drm virtio_balloon 8139too i2c_piix4 floppy nfsd auth_rpcgss nfs_acl lockd grace sunrpc virtio_net net_failover failover virtio_pci virtio virtio_pci_legacy_dev virtio_pci_modern_dev virtio_ring 8139cp mii ata_generic pata_acpi
+ CPU: 0 PID: 1165 Comm: agent-test Not tainted 5.17.0-test+ #41
+ Hardware name: Bochs Bochs, BIOS Bochs 01/01/2011
+ RIP: 0010:virtqueue_get_buf_ctx_split+0x0/0xd0 [virtio_ring]
+ Code: 75 a6 45 31 e4 39 45 2c 74 e6 0f 0b 83 c6 01 48 83 c2 10 39 c6 75 b4 45 31 e4 39 45 2c 74 d1 0f 0b 66 0f 1f 84 00 00 00 00 00 <0f> 1f 44 00 00 41 54 53 80 7f 3b 00 0f 85 9a 00 00 00 48 8b 47 68
+ RSP: 0018:ffffb85c012e7c68 EFLAGS: 00000246
+ RAX: 0000000000000000 RBX: ffff951705171300 RCX: 0000000000000000
+ RDX: 0000000000000000 RSI: ffffb85c012e7c74 RDI: ffff951705171e40
+ RBP: ffff951705171e40 R08: ffffffffae733288 R09: 0000000000009ffb
+ R10: 00000000000002a1 R11: ffffffffae7032a0 R12: ffff951705171388
+ R13: ffff951705171368 R14: 0000000000000006 R15: 0000000000000001
+ FS:  0000000000000000(0000) GS:ffff95173d400000(0000) knlGS:0000000000000000
+ CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ CR2: 00007f0c8aa2f000 CR3: 000000000e60a000 CR4: 00000000000006f0
+ Call Trace:
+  <TASK>
+  __send_control_msg.part.0+0xdd/0xf0 [virtio_console]
+  port_fops_release+0x10e/0x130 [virtio_console]
+  __fput+0x8c/0x240
+  task_work_run+0x5c/0x90
+  do_exit+0x32a/0xb20
+  do_group_exit+0x2d/0x90
+  get_signal+0x10e/0xa40
+  arch_do_signal_or_restart+0x109/0x740
+  ? kick_process+0x46/0x70
+  ? __send_signal+0x2b2/0x400
+  ? send_signal+0x3f/0x130
+  exit_to_user_mode_prepare+0xf0/0x1c0
+  syscall_exit_to_user_mode+0x17/0x30
+  do_syscall_64+0x48/0x90
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+ RIP: 0033:0x35878f5603
+ Code: Unable to access opcode bytes at RIP 0x35878f55d9.
+ RSP: 002b:00007fffffffe878 EFLAGS: 00000246 ORIG_RAX: 0000000000000113
+ RAX: fffffffffffffe00 RBX: 0000000000000000 RCX: 00000035878f5603
+ RDX: 0000000000000006 RSI: 0000000000000000 RDI: 0000000000000004
+ RBP: 00007fffffffe9c0 R08: 0000000000007fff R09: 0000000000000003
+ R10: 0000000000000000 R11: 0000000000000346 R12: 0000000000400df0
+ R13: 00007fffffffeaa0 R14: 0000000000000000 R15: 0000000000000000
 
-Signed-off-by: Yu Zhao <yuzhao@google.com>
-
-----------------------------------------------------------------
-Yu Zhao (14):
-      mm: x86, arm64: add arch_has_hw_pte_young()
-      mm: x86: add CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG
-      mm/vmscan.c: refactor shrink_node()
-      Revert "include/linux/mm_inline.h: fold __update_lru_size() into its sole caller"
-      mm: multi-gen LRU: groundwork
-      mm: multi-gen LRU: minimal implementation
-      mm: multi-gen LRU: exploit locality in rmap
-      mm: multi-gen LRU: support page table walks
-      mm: multi-gen LRU: optimize multiple memcgs
-      mm: multi-gen LRU: kill switch
-      mm: multi-gen LRU: thrashing prevention
-      mm: multi-gen LRU: debugfs interface
-      mm: multi-gen LRU: admin guide
-      mm: multi-gen LRU: design doc
-
- Documentation/admin-guide/mm/index.rst        |    1 +
- Documentation/admin-guide/mm/multigen_lru.rst |  152 ++
- Documentation/vm/index.rst                    |    1 +
- Documentation/vm/multigen_lru.rst             |  160 ++
- arch/Kconfig                                  |    9 +
- arch/arm64/include/asm/pgtable.h              |   14 +-
- arch/x86/Kconfig                              |    1 +
- arch/x86/include/asm/pgtable.h                |    9 +-
- arch/x86/mm/pgtable.c                         |    5 +-
- fs/exec.c                                     |    2 +
- fs/fuse/dev.c                                 |    3 +-
- include/linux/cgroup.h                        |   15 +-
- include/linux/memcontrol.h                    |   36 +
- include/linux/mm.h                            |    7 +
- include/linux/mm_inline.h                     |  217 +-
- include/linux/mm_types.h                      |   78 +
- include/linux/mmzone.h                        |  211 ++
- include/linux/nodemask.h                      |    1 +
- include/linux/page-flags-layout.h             |   11 +-
- include/linux/page-flags.h                    |    4 +-
- include/linux/pgtable.h                       |   17 +-
- include/linux/sched.h                         |    4 +
- include/linux/swap.h                          |    4 +
- kernel/bounds.c                               |    7 +
- kernel/cgroup/cgroup-internal.h               |    1 -
- kernel/exit.c                                 |    1 +
- kernel/fork.c                                 |    9 +
- kernel/sched/core.c                           |    1 +
- mm/Kconfig                                    |   26 +
- mm/huge_memory.c                              |    3 +-
- mm/internal.h                                 |    1 +
- mm/memcontrol.c                               |   27 +
- mm/memory.c                                   |   39 +-
- mm/mm_init.c                                  |    6 +-
- mm/mmzone.c                                   |    2 +
- mm/rmap.c                                     |    7 +
- mm/swap.c                                     |   55 +-
- mm/vmscan.c                                   | 3102 +++++++++++++++++++++++--
- mm/workingset.c                               |  119 +-
- 39 files changed, 4097 insertions(+), 271 deletions(-)
- create mode 100644 Documentation/admin-guide/mm/multigen_lru.rst
- create mode 100644 Documentation/vm/multigen_lru.rst
+-- Steve

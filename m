@@ -2,141 +2,391 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C31354E8955
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 20:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA374E895C
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 20:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236259AbiC0Sd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 14:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50476 "EHLO
+        id S236292AbiC0Sio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 14:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiC0Sdz (ORCPT
+        with ESMTP id S236282AbiC0Sik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 14:33:55 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993771A811;
-        Sun, 27 Mar 2022 11:32:16 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id 1so9866434qke.1;
-        Sun, 27 Mar 2022 11:32:16 -0700 (PDT)
+        Sun, 27 Mar 2022 14:38:40 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF494091E
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 11:36:59 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id yy13so24506997ejb.2
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 11:36:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=19uBF9iCIoMNrxoWIz9dMSdfhYfSKOAUfWryPoAUr/c=;
-        b=Gje6NJsyJp7AHQqT8ZqvE+6dIuz3pv15I4EH5k6OsoU+u8gfU8rTssKRtwx1aJXBj1
-         0aSvPogUKwd3anE2Qwp0SJQJXD1Q/DrTfufYwhPAU7wNL8+StG7Kr4/ZO46hZV8HmoIi
-         zbhGm1yN/SOLjvVRFhHKef1ugLlgQNTDs7JhrNE8ynd8yH1Xdppwa/jQnpjVkJIALGKW
-         ENpLg3SwSDyMW8otYwnsPwZT7ZlZToUIZfp7MZUHK1vprze3Mk1sY4i1Ll1lwuDSUdCv
-         ZwM8i8rAEMAHbje9tk19AvBCzRjrOCwGu0/YbcNlxUprgloq6dF52KPdxWBbvtCeG3MR
-         i28w==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=vPkWPK9fcrenNX3+70MAXLkgTo7ZH+XGzuJnlJpQ+tY=;
+        b=K0FOnBwPoH0sISCMEALWpe2aHrvlhzM6ps+MqZ7dum3H1lrvM3N8BGs5NpZPrmLgRG
+         +SQhcFojpo6YZNqBPG5ROAgrp4wfk2/vqvAMlog0HEot6OtbZ8kXtgmlaHG+CbnPFaWq
+         dSzz8HbD9VvgHsDxkcbGPnmeXTk1clpoSTAg4qmlPZAF11MNWBd0IPFZX9incy5adj8O
+         ClbE4TQ8wKsPcUhpqJVoUdJsz0Z81hYukaT1GYK7JJWAgoXhn2HxzQJjgydG0nk0+h/K
+         +ebttYTJCTa6636N9oVdASUHb2bztz676S9JmoEL8FwiG/mDT1rZSbjfoAGL8fVwSbdE
+         1EGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=19uBF9iCIoMNrxoWIz9dMSdfhYfSKOAUfWryPoAUr/c=;
-        b=33RO0RSGYM7fDkWpxPc0cIwIsPLdnQFCBnn4s/ByqDbAOsYQZJcsJEo7/dBBRrvvaT
-         pPtp/eOtthFEyK2ZvXAXZrww5ezH7cY62uA86FiA9kBFTMzXvzSMWCWsM2X6fgBDJPxF
-         30A8xpML+xDN81ClMwtEMG4BBNMQM4VA5d5d0mtML8y9un3f0nrRqnNv4VO7KGznrqsR
-         D/qsZcTtM52WN8Ca1DaX3iZuAbE0HJn14WIcxtikURuqIRpU2XpvCxuljJun+sy4KAG0
-         jAt/iZVZMzoNJKZV0ZiAgQauiGIhzahvg9dnGb+U1f1IqNvU7KH+0+reB1jRhBr7ZF8w
-         QocQ==
-X-Gm-Message-State: AOAM530/Fh+mkQqbTzHbM/LQwk2P+lnh5jbuUfB+xsyK/g9/VG5apDgd
-        TgCxsdZD0IqgXhegJ3K2l3U=
-X-Google-Smtp-Source: ABdhPJxCaiO7jDnSjehUfjkz+hqrEdPwhVeKUAkTK7W6xw2jWYd/Z6bqyePBx1P3+qPV7N2hL4lZ1g==
-X-Received: by 2002:a37:9dca:0:b0:67b:8dfb:6835 with SMTP id g193-20020a379dca000000b0067b8dfb6835mr12859531qke.638.1648405935727;
-        Sun, 27 Mar 2022 11:32:15 -0700 (PDT)
-Received: from localhost (pppoe-209-91-167-254.vianet.ca. [209.91.167.254])
-        by smtp.gmail.com with ESMTPSA id q26-20020ae9e41a000000b0067d1a20872fsm6564613qkc.94.2022.03.27.11.32.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Mar 2022 11:32:15 -0700 (PDT)
-Date:   Sun, 27 Mar 2022 14:32:13 -0400
-From:   Trevor Woerner <twoerner@gmail.com>
-To:     Vladimir Zapolskiy <vz@mleia.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>, Arnd Bergmann <arnd@arndb.de>,
-        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
-Message-ID: <20220327183213.GA36326@localhost>
-References: <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
- <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
- <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
- <4f39f086-1932-1729-8761-d5c533356812@mleia.com>
- <dc599cae-7245-73dc-8050-14ec6c1336b8@arm.com>
- <f497fb65-3568-cda2-f086-2275b50daf4b@mleia.com>
- <faea4c0c-e20b-c043-6f74-95af8177e8bd@arm.com>
- <4a7e3d0e-f804-74a5-ef5b-206404eb9b61@mleia.com>
- <CAHUNapQMaBZ2-yJR10Qv+Pix9BA3AGSgjBaMBB9zJTTLLOGSkg@mail.gmail.com>
- <024f0d22-47d8-2d14-bed4-9f538a1537b3@mleia.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=vPkWPK9fcrenNX3+70MAXLkgTo7ZH+XGzuJnlJpQ+tY=;
+        b=XX0RSZCczcKePIVvbejO/hJcof/iDX3Bj5pWgB6nglQkXzgaijML0ZaaHgrmMEj130
+         WOTlRhFplgoyWgDpGCNzZ5VJ1IGVllH9pNR70hju9xIJqNdLt/PTcGlQAuVfbfcQxb1k
+         rhSgokrg3DCVpcCp2J3TN4P+Xy3kL4BqMjcQYH2RGLtZVTgm7LTLfuJYo/VUdLQIkNcK
+         QzxBFEeU1OPOZgRxwnbPkl2B22QdcdQYHdb9wfcssE66Mo1aPXUdQkkrTWw0RHJoEo2J
+         CRDnv0hMSGSwoO+VZMGJBaX+bDa/PwHG9Ez4lwEzm6usAXfxnH8NnQdrDfp4w/MDBGI5
+         /5qQ==
+X-Gm-Message-State: AOAM530tqqEzHTx+jV5DExUILLXhp9/XiYD8H5IXqr6hgthNp/W5vF61
+        dwmBS1qR0ntHW20/XhYcA0W3hCC5f80JLNb/gn8=
+X-Google-Smtp-Source: ABdhPJwLGrFHvKqbadJlybD5vZR20nmJ1xLDZFySDZ5iPxe3wgxVdyGbVwAuQ8+Awfi9M6uo6g59KnVrCUqV8QyLfe0=
+X-Received: by 2002:a17:906:1e94:b0:6cc:4382:f12e with SMTP id
+ e20-20020a1709061e9400b006cc4382f12emr22844093ejj.482.1648406217735; Sun, 27
+ Mar 2022 11:36:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <024f0d22-47d8-2d14-bed4-9f538a1537b3@mleia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Sun, 27 Mar 2022 19:36:20 +0100
+Message-ID: <CAHpNFcMpMEkmWPjSNnoYuAY=9H-1Sqx-WtKqZ-SW=ipeN5BhwQ@mail.gmail.com>
+Subject: (Refinement) Presenting GPRS VT2 from ViaLicensing today world wide
+ RS : for ViaLicencing GPRS is quite a package, New from RS @ Via 2022
+To:     press@vialicensing.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vladimir,
+ICE-SSRTP GEA Replacement 2022 + (c)RS
 
-On Sun 2022-03-27 @ 07:27:00 PM, Vladimir Zapolskiy wrote:
-> Hi Trevor,
-> 
-> On 3/27/22 5:57 AM, Trevor Woerner wrote:
-> > On the lpc32xx both the SPI and SSP peripherals are APB devices (low-speed)
-> > 
-> > lpc32xx-apb-peripherals.png
-> > The APB devices on this SoC are driven by the PERIPH_CLK which can be
-> > derived from either the HCLK or the SYSCLK.
-> 
-> thank you for the data, I'd like to reference to Table 14, which says that
-> both bus clock source and function clock source for SSP0 and SSP1 are a
-> non-selectable HCLK. I'm unsure if for instance PERIPH_CLK can be set as
-> a function clock source for SSPx.
+IiCE-SSR for digital channel infrastructure can help heal GPRS+ 3G+ 4G+ 5G+
 
-Interesting. I see that I had assumed that all APB peripherals would be driven
-by the PERIPH_CLK since the diagram shows that clock as going to all APB
-peripherals.
+Time NTP Protocols : is usable in 2G+ <> 5G+LTE Network SIM
 
-In the SSP chapter, for example, there is a clock prescale register, which
-says:
+ICE-SSRTP Encryption AES,Blake2, Poly ChaCha, SM4, SHA2, SHA3, GEA-1 and GEA-2
+'Ideal for USB Dongle & Radio' in Rust RS ' Ideal for Quality TPM
+Implementation'
 
-	This register controls the factor by which the prescaler divides the AHB clock
-	HCLK to yield the prescaler clock that is, in turn, divided by the SCR factor
-	in SSPnCR0, to determine the bit clock.
+"GEA-1 and GEA-2, which are very similar (GEA-2 is just an extension
+of GEA-1 with a higher amount of processing, and apparently not
+weakened) are bit-oriented stream ciphers."
 
-So that confirms that the clock driving the SSP (an APB peripheral) is the
-AHB's HCLK!
+IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
 
-Section 21.7 of the SPI chapter also clearly shows the SPI clock as being
-derived from the HCLK as well.
+Interleaved signals help Isolate noise from a Signal Send & Receive ...
 
-Thanks for the clarification :-)
+Overlapping inverted waves are a profile for complex audio & FFT is the result.
 
-> > lpc32xx-clock.png
-> > The default on reset is for PERIPH_CLK to be derived from the SYSCLK but
-> > both U-Boot and Linux run in "normal" mode, which is to say that
-> > PERIPH_CLK, HCLK, ARM_CLK, and DDRAM_CLK are derived from the HCLK PLL.>
-> > There is no separate SSP clock, the SSP is driven by one clock: the
-> > PERIPH_CLK (or "apb_pclk").
-> 
-> Right, there is no separate SSP clock in sense of a bus clock, it is
-> correct to get HCLK clock (or equally its child SSP clock) rate as a bus
-> clock rate, and the reason for introduction of SSP0/SSP1 clocks is that
-> these clocks are gated.
-> 
-> If I'm correct above, what does it mean in connection to LPC32xx device
-> tree bindings? The first or single clock source shall remain to be SSPx
-> clock, either the former is "sspclk" or "apb_pclk".
+Interleaved, Inverted & Compressed & a simple encryption?
 
-Doesn't this mean the apb_pclk should not be specified as the SSP/SPI clock?
-If sspclk is a synonym for HCLK, then sspclk and apb_pclk are completely
-different clocks. On my device HCLK is 260MHz and PERIPH_CLK is 13MHz.
+*
+
+Time differentiated : Interleave, Inversion & differentiating Elliptic curve.
+
+We will be able to know and test the Cypher : PRINCIPLE OF INTENT TO TRUST
+
+We know of a cypher but : (Principle RS)
+
+We blend the cypher..
+Interleaved pages of a cypher obfuscate : PAL CScam does this
+
+Timed : Theoretically unique to you in principle for imprecision, But
+we cannot really have imprecise in Crypto!
+
+But we can have a set time & in effect Elliptic curve a transient variable T,
+With this, Interleave the resulting pages (RAM Buffer Concept)
+
+Invert them over Time Var = T
+
+We can do all & principally this is relatively simple.
+
+(c)RS
+
+*
+
+Example of use:
+
+Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade marker
+
+Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
+Interleaved channel BAND.
+
+Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
+Coprocessor digital channel selector &
+
+channel Key selection based on unique..
+
+Crystal time Quartz with Synced Tick (Regulated & modular)
+
+All digital interface and resistor ring channel & sync selector with
+micro band tuning firmware.
+
+(c)Rupert S
+
+*
+
+Good for cables ? and noise ?
+
+Presenting :  IiCE-SSR for digital channel infrastructure & cables
+<Yes Even The Internet &+ Ethernet 5 Band>
+
+So the question of interleaved Bands & or signal inversion is a simple
+question but we have,
+
+SSD & HDD Cables & does signal inversion help us? Do interleaving bands help us?
+
+In Audio inversion would be a strange way to hear! but the inversion
+does help alleviate ...
+
+Transistor emission fatigue...
+
+IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
+
+Interleaved signals help Isolate noise from a Signal Send & Receive ...
+
+Overlapping inverted waves are a profile for complex audio & FFT is the result.
+
+Interleaved, Inverted & Compressed & a simple encryption?
+
+Good for cables ? and noise ?
+
+Presenting : IiCE for digital channel infrastructure & cables <Yes
+Even The Internet &+ Ethernet 5 Band>
+
+(c) Rupert S
+
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
+
+
+Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
+
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+
+https://science.n-helix.com/2022/03/ice-ssrtp.html
+
+https://science.n-helix.com/2021/11/ihmtes.html
+
+https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
+https://science.n-helix.com/2021/11/wave-focus-anc.html
+https://science.n-helix.com/2021/12/3d-audio-plugin.html
+
+Integral to Telecoms Security TRNG
+
+*RAND OP Ubuntu :
+https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
+
+https://pollinate.n-helix.com
+
+*
+
+***** Dukes Of THRUST ******
+
+Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade markerz
+
+Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
+Interleaved channel BAND.
+
+Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
+Coprocessor digital channel selector &
+
+channel Key selection based on unique..
+
+Crystal time Quartz with Synced Tick (Regulated & modular)
+
+All digital interface and resistor ring channel & sync selector with
+micro band tuning firmware.
+
+(c)Rupert S
+
+Dev/Random : Importance
+
+Dev/Random : Importance : Our C/T/RNG Can Help GEA-2 Open Software
+implementation of 3 Bits (T/RNG) Not 1 : We need Chaos : GEA-1 and
+GEA-2 Implementations we will improve with our /Dev/Random
+
+Our C/T/RNG Can Help GEA-2 Open Software implementation of 3 Bits
+(T/RNG) Not 1 : We need Chaos : GEA-1 and GEA-2 Implementations we
+will improve with our /Dev/Random
+
+We can improve GPRS 2G to 5G networks still need to save power, GPRS
+Doubles a phones capacity to run all day,
+
+Code can and will be improved, Proposals include:
+
+Blake2
+ChaCha
+SM4
+SHA2
+SHA3
+
+Elliptic Encipher
+AES
+Poly ChaCha
+
+Firstly we need a good solid & stable /dev/random
+
+So we can examine the issue with a true SEED!
+
+Rupert S https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+TRNG Samples & Method DRAND Proud!
+
+https://drive.google.com/file/d/1b_Sl1oI7qTlc6__ihLt-N601nyLsY7QU/view?usp=drive_web
+https://drive.google.com/file/d/1yi4ERt0xdPc9ooh9vWrPY1LV_eXV-1Wc/view?usp=drive_web
+https://drive.google.com/file/d/11dKUNl0ngouSIJzOD92lO546tfGwC0tu/view?usp=drive_web
+https://drive.google.com/file/d/10a0E4Gh5S-itzBVh0fOaxS7JS9ru-68T/view?usp=drive_web
+
+https://github.com/P1sec/gea-implementation
+
+"GEA-1 and GEA-2, which are very similar (GEA-2 is just an extension
+of GEA-1 with a higher amount of processing, and apparently not
+weakened) are bit-oriented stream ciphers."
+
+"A stream cipher, such as the well-known RC4 or GEA-1, usually works
+through using the Xor operation against a plaintext. The Xor operation
+being symmetrical, this means that encrypting should be considered the
+same operation as decrypting: GEA-1 and GEA-2 are basically
+pseudo-random data generators, taking a seed (the key, IV and
+direction bit of the GPRS data, which are concatenated),
+
+The generated random data (the keystream) is xored with the clear-text
+data (the plaintext) for encrypting. Then, later, the keystream is
+xored with the encrypted data (the ciphertext) for decrypting. That is
+why the functions called in the target library for decrypting and
+encrypting are the same.
+
+GEA-1 and GEA-2 are bit-oriented, unlike RC4 which is byte-oriented,
+because their algorithms generate only one bit of pseudo-random data
+at once (derived from their internal state), while algorithms like RC4
+generate no less than one byte at once (in RC4's case, derived from
+
+permutation done in its internal state). Even though the keystream
+bits are put together by the current encryption / decryption C and
+Rust libraries into bytes in order to generate usable keystream,
+obviously.
+
+Based on this, you can understand that GEA-1 and GEA-2 are LFSR:
+Linear Feedback Shift Register-oriented ciphers, because their
+internal state is stored into fixed-size registers. This includes the
+S and W registers which serve for initialization / key scheduling
+purposes and are respectively 64 and 97-bit wide registers, and the A,
+B, C (and for GEA-2 only D) registers which serve for the purpose of
+keystream generation, which are respectively 31, 32, 33 and 29-bit
+wide registers.
+
+On each iteration of the keystream generation, each register is
+bit-wise rotated by one position, while the bit being rotated from the
+left towards the right side (or conversely depending on in which bit
+order you internally represent your registers) is fed back to the
+algorithm and mutated depending on given conditions. Hence, the
+
+shifted-out bit is derived from other processing, and reinserted,
+while being for this reason possibly flipped depending on conditions
+depending on bits present at the other side of the given register.
+
+This is the explanation for the name of linear feedback shift register
+(shift because of the shift operation required for the rotation, and
+linear feedback because of the constant-time transform operation
+involved).
+
+The rest of the register may also be mutated at each iteration steps,
+as in the case of the GEA-1 and 2, whole fixed Xor sequences (which
+differ for each register) may be applied depending on whether the
+rotated bit is a 0 or a 1.
+
+Note that a step where the register iterates is called clocking (the
+register is clocked), and that the fixed points where the register may
+be Xor'ed when the rotated bit becomes a 1 are called taps. The linear
+function which may transmute the rotated bit at the clocking step
+(taking several bits of the original register as an input) is called
+the F function.
+
+Those kind of bit-oriented LFSR algorithms, such as GEA-1 and 2 (for
+GPRS) and A5/1 and 2 (for GSM), were designed this way for optimal
+hardware implementations in the late 80's and early 90's."
+
+*****
+
+IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
+
+Interleaved signals help Isolate noise from a Signal Send & Receive ...
+
+Overlapping inverted waves are a profile for complex audio & FFT is the result.
+
+Interleaved, Inverted & Compressed & a simple encryption?
+
+Good for cables ? and noise ?
+
+Presenting :  IiCE-SSR for digital channel infrastructure & cables
+<Yes Even The Internet &+ Ethernet 5 Band>
+
+So the question of interleaved Bands & or signal inversion is a simple
+question but we have,
+
+SSD & HDD Cables & does signal inversion help us? Do interleaving bands help us?
+
+In Audio inversion would be a strange way to hear! but the inversion
+does help alleviate ...
+
+Transistor emission fatigue...
+
+IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
+
+Interleaved signals help Isolate noise from a Signal Send & Receive ...
+
+Overlapping inverted waves are a profile for complex audio & FFT is the result.
+
+Interleaved, Inverted & Compressed & a simple encryption?
+
+Good for cables ? and noise ?
+
+Presenting : IiCE for digital channel infrastructure & cables <Yes
+Even The Internet &+ Ethernet 5 Band>
+
+(c) Rupert S
+
+
+***** Dukes Of THRUST ******
+
+Autism, Deafness & the hard of hearing : In need of ANC & Active audio
+clarification or correction 2022-01
+
+Sony & a few others make noise cancelling headphones that are suitable
+for people with Acute disfunction to brain function for ear drums ...
+Attention deficit or Autism,
+The newer Sony headsets are theoretically enablers of a clear
+confusion free world for Autistic people..
+Reaching out to a larger audience of people simply annoyed by a
+confusing world; While they listen to music..
+Can and does protect a small percentage of people who are confused &
+harassed by major discord located in all jurisdictions of life...
+
+Crazy noise levels, Or simply drowned in HISSING Static:
+
+Search for active voice enhanced noise cancellation today.
+
+Rupert S https://science.n-helix.com
+
+
+https://science.n-helix.com/2021/11/wave-focus-anc.html
+
+https://science.n-helix.com/2021/10/noise-violation-technology-bluetooth.html
+
+
+https://www.orosound.com/
+
+https://www.consumerreports.org/noise-canceling-headphone/best-noise-canceling-headphones-of-the-year-a1166868524/

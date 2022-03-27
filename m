@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9994E87AF
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 14:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE484E87B8
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 14:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234637AbiC0Mk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 08:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49910 "EHLO
+        id S234802AbiC0MlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 08:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbiC0Mk4 (ORCPT
+        with ESMTP id S232193AbiC0Mk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 08:40:56 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E841F626;
-        Sun, 27 Mar 2022 05:39:17 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id h18so3602465ila.12;
-        Sun, 27 Mar 2022 05:39:17 -0700 (PDT)
+        Sun, 27 Mar 2022 08:40:58 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13CF1F626;
+        Sun, 27 Mar 2022 05:39:19 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id 8so8168777ilq.4;
+        Sun, 27 Mar 2022 05:39:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mK+dixa0LoEPtfSZUPyenmhOFOLQVwPd2apmwWfFfKk=;
-        b=Cxc7UtWsWbPr0EBSFHG/IsAtFw218VBBnQUsXTeD8TC1O3/IQwAgLSAnhIKh8kiKD+
-         8O87BfuhWAWrv9wbYS905+MbxHmX0MjQJ8S9nHQux66MYNNQFE6LzVDEPjVAlhpHREgx
-         LPzhHdMZwLreadrR/Ou64OmJuu2UgmzWiO2jTRJpgl8PNdvir4kQPmkAtFlkwEA9y1zy
-         Hd1re5B5QP/Fis5oTFZpc4qfX6e5+S0rhed8AX2g0UK+iVa4kIrdsuVrq3Cby+prjNYj
-         L+bKvysgtw9LuL15b5k2mwYu3mRsxjC6aFk+ikTfIO9zZ3pTNA/AgoPEnablN36BWs1Y
-         2RWg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=L4YCgujv27+woyfX0FEzZgY70JuHa3urHBxFeIijA2o=;
+        b=Vl9OvyTBcamMB+DBnmsjvio3b1Q1L0IOI47z9vKDe7Cx2sPI8kdMJeVgCYcLWVvZol
+         uUk7niO3ula5zUxe3u0pyvTwVMmgQoA+LyFoqgBno5ZonHAv6JkrtEkgionyqklvjbKz
+         VsI9EDekcfUmJ/UtaCCshDtBlBxn1o77KTf0pgoegd5tdWxgZ7aHcB8jCGy+g6QOD6MA
+         nb13Q7Tr0vSUWTyw5zydjvLHXKJ0+QAIYHeJwsn5eJJQOA1Rtm/FcY+s+xpqX/s3MK+x
+         ro+68Bc1qdfIpPvsKe4N7lnFxDjiUcb6vLMhafy0cnK2VSX5qpCt0XDWlOQ74+OId5+y
+         JBFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mK+dixa0LoEPtfSZUPyenmhOFOLQVwPd2apmwWfFfKk=;
-        b=SuhoUV69nc0UebXElOnvT2/7UZOtFtEbWa61kvzNeZaX0EJhn5uLjqAH1tRELHb7GD
-         afu/kGp6TZdgHSdGF0/UfElmV54EAQiPkYJR7jra+587irdyhJ/q9wZxNt2lvEh34dRF
-         kaQWEAOjax55u6KSabz5gvpn9y+xq1pIfRIPCWXSrEsvqJXheEbu+wpG6Y8ZEF07okaa
-         3sDv5HQtRmjCLnKBd08MCxe0hMRvXhy51mvnHYUSPjKkbVZfpIB3+q15Db/5qNNmzhpc
-         lVwzoYRTqchOQaYaxrvek1rFS3kUCJgKmlKB4SyU6S3RpgY+ytKqzGiyTmqAeM+C/7qm
-         5Lrg==
-X-Gm-Message-State: AOAM5336Krafg2DJX7oEVaN3DAiduEPqNZO0JlZQfUl5Dgt4ZOrRaoHD
-        FQ4AUCmf3GnjYe+sLZ8JG1x8PyvXSI4=
-X-Google-Smtp-Source: ABdhPJxucE0TY7Eko2gCyimMqt3jAoPXXrivt7GCnIyK8+KMY9Hs0ZZ1RQapuajVqIx3CVVscwBhmA==
-X-Received: by 2002:a05:6e02:12c6:b0:2c8:5969:104a with SMTP id i6-20020a056e0212c600b002c85969104amr3180676ilm.73.1648384756584;
-        Sun, 27 Mar 2022 05:39:16 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=L4YCgujv27+woyfX0FEzZgY70JuHa3urHBxFeIijA2o=;
+        b=06wYeZuXvaIdvZgFYrlbDcmS2KgfwUeoQ00K4hPTthpwCSgQoZTPgMKRzQ5ecLqJqH
+         0bhj/X+yenGEpqXAXuLcvXfl0S9aqcjiAoXUC2j6z7o6kokifwkwFq8eK9KSu5aVhmpK
+         wrpMMhaKD+Ks1qIZg1PW6HHcIdfJSTkELC0N7dNWxt/JOM93BlAagVUXe81mroCJJFAu
+         aIlu5rAVNRdkzwbXbxsT0iMxCGRR86CeolWGSXtLErWBBbCZdH46gcQh5rz2yvY58hsJ
+         nXvOs0eWS2TNWaN/z6zekd9AZbCjBG9BhVeiOp+Lo2tVg2MyjvBJxvOm2t+XU+Wc+p8S
+         w8oQ==
+X-Gm-Message-State: AOAM530GA9eMGhnPGuyw7p0sj/vO9Ynn27xTW+SPuflyq2QjG9OcXmiU
+        yJaROAXdY9zqjPH45b92HwKPimqdfBI=
+X-Google-Smtp-Source: ABdhPJyWZn2Fl0JCU6vjMYac2Vo5YOOmyLLN/6PEU/jRVxmEe89gaAT6y7GwciQB+PUlcdlPa5aNeQ==
+X-Received: by 2002:a05:6e02:19cc:b0:2c2:82ad:7c92 with SMTP id r12-20020a056e0219cc00b002c282ad7c92mr3263154ill.258.1648384758777;
+        Sun, 27 Mar 2022 05:39:18 -0700 (PDT)
 Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:7073:b368:2f66:5e36])
-        by smtp.gmail.com with ESMTPSA id t7-20020a5e9907000000b00649d6bd1ec5sm6134534ioj.31.2022.03.27.05.39.14
+        by smtp.gmail.com with ESMTPSA id t7-20020a5e9907000000b00649d6bd1ec5sm6134534ioj.31.2022.03.27.05.39.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Mar 2022 05:39:15 -0700 (PDT)
+        Sun, 27 Mar 2022 05:39:18 -0700 (PDT)
 From:   Adam Ford <aford173@gmail.com>
 To:     linux-mmc@vger.kernel.org
 Cc:     haibo.chen@nxp.com, aford@beaconembedded.com,
@@ -62,10 +62,12 @@ Cc:     haibo.chen@nxp.com, aford@beaconembedded.com,
         NXP Linux Team <linux-imx@nxp.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/5] dt-bindings: mmc: imx-esdhc: Update compatible fallbacks
-Date:   Sun, 27 Mar 2022 07:38:30 -0500
-Message-Id: <20220327123835.28329-1-aford173@gmail.com>
+Subject: [PATCH 2/5] arm64: dts: imx8mn: Enable HS400-ES
+Date:   Sun, 27 Mar 2022 07:38:31 -0500
+Message-Id: <20220327123835.28329-2-aford173@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220327123835.28329-1-aford173@gmail.com>
+References: <20220327123835.28329-1-aford173@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,58 +80,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SDHC controller in the imx8mn and imx8mp have the same controller
-as the imx8mm which is slightly different than that of the imx7d.
-Using the fallback of the imx8mm enables the controllers to support
-HS400-ES which is not available on the imx7d. After discussion with NXP,
-it turns out that the imx8qm should fall back to the imx8qxp, because
-those have some additional flags not present in the imx8mm.
+The SDHC controller in the imx8mn has the same controller
+as the imx8mm which supports HS400-ES. Change the compatible
+fallback to imx8mm to enable it.
 
-Suggested-by: haibo.chen@nxp.com
 Signed-off-by: Adam Ford <aford173@gmail.com>
 ---
-V2:  Added suggested-by note and imx8qxp updates.
----
- .../devicetree/bindings/mmc/fsl-imx-esdhc.yaml   | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-index 7dbbcae9485c..1427e9b5a6ec 100644
---- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-+++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-@@ -34,23 +34,25 @@ properties:
-           - fsl,imx6ull-usdhc
-           - fsl,imx7d-usdhc
-           - fsl,imx7ulp-usdhc
-+          - fsl,imx8mm-usdhc
-+          - fsl,imx8qxp-usdhc
-           - fsl,imxrt1050-usdhc
-           - nxp,s32g2-usdhc
-       - items:
-           - enum:
--              - fsl,imx8mm-usdhc
--              - fsl,imx8mn-usdhc
--              - fsl,imx8mp-usdhc
-               - fsl,imx8mq-usdhc
--              - fsl,imx8qm-usdhc
--              - fsl,imx8qxp-usdhc
-           - const: fsl,imx7d-usdhc
-       - items:
-           - enum:
--              - fsl,imx93-usdhc
-+              - fsl,imx8mn-usdhc
-+              - fsl,imx8mp-usdhc
-               - fsl,imx8ulp-usdhc
-+              - fsl,imx93-usdhc
-           - const: fsl,imx8mm-usdhc
--
-+      - items:
-+          - enum:
-+              - fsl,imx8qm-usdhc
-+          - const: fsl,imx8qxp-usdhc
-   reg:
-     maxItems: 1
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
+index 99f0f5026674..959285c3fee0 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
+@@ -933,7 +933,7 @@ mu: mailbox@30aa0000 {
+ 			};
  
+ 			usdhc1: mmc@30b40000 {
+-				compatible = "fsl,imx8mn-usdhc", "fsl,imx7d-usdhc";
++				compatible = "fsl,imx8mn-usdhc", "fsl,imx8mm-usdhc";
+ 				reg = <0x30b40000 0x10000>;
+ 				interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&clk IMX8MN_CLK_IPG_ROOT>,
+@@ -947,7 +947,7 @@ usdhc1: mmc@30b40000 {
+ 			};
+ 
+ 			usdhc2: mmc@30b50000 {
+-				compatible = "fsl,imx8mn-usdhc", "fsl,imx7d-usdhc";
++				compatible = "fsl,imx8mn-usdhc", "fsl,imx8mm-usdhc";
+ 				reg = <0x30b50000 0x10000>;
+ 				interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&clk IMX8MN_CLK_IPG_ROOT>,
+@@ -961,7 +961,7 @@ usdhc2: mmc@30b50000 {
+ 			};
+ 
+ 			usdhc3: mmc@30b60000 {
+-				compatible = "fsl,imx8mn-usdhc", "fsl,imx7d-usdhc";
++				compatible = "fsl,imx8mn-usdhc", "fsl,imx8mm-usdhc";
+ 				reg = <0x30b60000 0x10000>;
+ 				interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&clk IMX8MN_CLK_IPG_ROOT>,
 -- 
 2.34.1
 

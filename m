@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE544E89B4
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 21:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 957B34E89BB
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 21:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236507AbiC0T2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 15:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
+        id S236519AbiC0Tcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 15:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiC0T2D (ORCPT
+        with ESMTP id S229987AbiC0Tcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 15:28:03 -0400
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481F74FC54;
-        Sun, 27 Mar 2022 12:26:23 -0700 (PDT)
-Received: by mail-wm1-f45.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso1700417wme.5;
-        Sun, 27 Mar 2022 12:26:23 -0700 (PDT)
+        Sun, 27 Mar 2022 15:32:32 -0400
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC063403F0;
+        Sun, 27 Mar 2022 12:30:52 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id a1so17432960wrh.10;
+        Sun, 27 Mar 2022 12:30:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=3QD6ZpwAjHhu9Cg8+tAjiF0wBOXuxBwFvAYXKqVnCP8=;
-        b=bqBAmROjaj6dp1fKAP+uUDKg9r3C7iKcN/YybJFDqYLvL7uPnWZBJXjp2PnLdoyVyz
-         5+BH6hj3J6mcdT5O7iqnLAW2YThMVSwV2PuFTIjcSM7jDBLdVg6P4os17Q5druAXgRx5
-         N2tcapLIioODdMUnQy2P8RitxwfDSkuVYSoZIgQjQ28XyQnx7elpM5xV9uS452229vk1
-         SibNx431lHCB/cNwkgmkuOqTbfAe/NowWosgF2v82tie3bYGEfM2Yj3ad8f8aQpYYfoN
-         xqAnT0eng/vRMcaqAhUSDoEQoyTMW4KsKG3mMOk5VFJ4ac0hGpAivegn9uAk7IFPVrIX
-         YbvA==
-X-Gm-Message-State: AOAM533coegxavtQRTXmmZcQPTX2jWHR06bJXHEKQWRg5FAp37nRHPju
-        TE11Hh3FDe1f/88s1Wlyv8U=
-X-Google-Smtp-Source: ABdhPJx4oXRvNQH0bPygBY3AD1ZODz5GvySPKM3zK8vf/TlTM3Q4YMHaCKde0o7vkYtw+/VZ2BImXA==
-X-Received: by 2002:a05:600c:1987:b0:38c:beb2:7e2b with SMTP id t7-20020a05600c198700b0038cbeb27e2bmr21009128wmq.1.1648409181776;
-        Sun, 27 Mar 2022 12:26:21 -0700 (PDT)
+        bh=oDwBb4EBdk3r4Q2S2CBoQkv3TN3dzVfRBaGMfKsjK2w=;
+        b=naCXnBJBAx1T+AFt9LK6RejoC58GiXPiGJeV+jk+4tdk/ZdyI9dP2D5pBwHUe/4Iea
+         9TZkTejTwYLIXXcqjztzsYpjDDqGInwmrRFwZ8jrk670s0tHYzCVy1O10Vs+QJqA93d3
+         R8+DukUS+wx3f0vHT6Hz6oCYkghLCm9J3AvNF+ELNTM6P7yNnu96x5PC2THw5QfthWZ0
+         3hG6OyBhJWIt6OPXWq/Tyfs/j7CP6e4TBxECmfmYP+p7ZTceCyYys+lkAiYb8BbM/2/i
+         myhd4Y2L2uSswLiOBNrB9ixKKCpqc1PEOZSOHrKoCatCXf6q1fh0z/dlfSEQeVeLN3so
+         SsQg==
+X-Gm-Message-State: AOAM531rO0rJ9uJ7QQYURJRWkTwLy6dboHF9UC7ZsdMUmJNQrV4IwwXq
+        uvWrey6z3L1KUUaV/wSC30U=
+X-Google-Smtp-Source: ABdhPJzz+5SfFj0YJWjnS9ioUf8a+WgCadG7x+fKNlYI5KOkGRrI2hNy6Z08Vr9mvrAte7oIqCT79A==
+X-Received: by 2002:a5d:688a:0:b0:204:6e3:f937 with SMTP id h10-20020a5d688a000000b0020406e3f937mr18538474wru.90.1648409451435;
+        Sun, 27 Mar 2022 12:30:51 -0700 (PDT)
 Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id i14-20020a0560001ace00b00203da1fa749sm16819662wry.72.2022.03.27.12.26.20
+        by smtp.googlemail.com with ESMTPSA id b3-20020adfd1c3000000b00205820686dasm12119882wrd.5.2022.03.27.12.30.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Mar 2022 12:26:21 -0700 (PDT)
-Message-ID: <aaed94ae-047d-b16c-3d9b-7e431a212b82@kernel.org>
-Date:   Sun, 27 Mar 2022 21:26:20 +0200
+        Sun, 27 Mar 2022 12:30:50 -0700 (PDT)
+Message-ID: <6d69f9cd-d4e3-8327-9c60-3cb0b1d3f70e@kernel.org>
+Date:   Sun, 27 Mar 2022 21:30:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 1/5] dt-bindings: mmc: imx-esdhc: Update compatible
- fallbacks
+Subject: Re: [PATCH v1 03/12] dt-bindings: pinctrl: add i.MXRT1170 pinctrl
+ Documentation
 Content-Language: en-US
-To:     Adam Ford <aford173@gmail.com>, linux-mmc@vger.kernel.org
-Cc:     haibo.chen@nxp.com, aford@beaconembedded.com,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220327123835.28329-1-aford173@gmail.com>
+To:     Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
+Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, aisheng.dong@nxp.com, stefan@agner.ch,
+        linus.walleij@linaro.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        linux@armlinux.org.uk, abel.vesa@nxp.com, dev@lynxeye.de,
+        marcel.ziswiler@toradex.com, tharvey@gateworks.com,
+        leoyang.li@nxp.com, sebastian.reichel@collabora.com,
+        cniedermaier@dh-electronics.com, clin@suse.com,
+        giulio.benetti@benettiengineering.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
+References: <20220326144313.673549-1-Mr.Bossman075@gmail.com>
+ <20220326144313.673549-4-Mr.Bossman075@gmail.com>
+ <2af35b48-c49d-3a76-256b-c31d2650ed39@kernel.org>
+ <8ce4ea34-f389-6eff-2e5b-0f23641df219@gmail.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220327123835.28329-1-aford173@gmail.com>
+In-Reply-To: <8ce4ea34-f389-6eff-2e5b-0f23641df219@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -74,27 +78,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/03/2022 14:38, Adam Ford wrote:
-> The SDHC controller in the imx8mn and imx8mp have the same controller
-> as the imx8mm which is slightly different than that of the imx7d.
-> Using the fallback of the imx8mm enables the controllers to support
-> HS400-ES which is not available on the imx7d. After discussion with NXP,
-> it turns out that the imx8qm should fall back to the imx8qxp, because
-> those have some additional flags not present in the imx8mm.
+On 27/03/2022 21:14, Jesse Taube wrote:
 > 
-> Suggested-by: haibo.chen@nxp.com
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> ---
-> V2:  Added suggested-by note and imx8qxp updates.
-> ---
->  .../devicetree/bindings/mmc/fsl-imx-esdhc.yaml   | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
 > 
+> On 3/27/22 15:08, Krzysztof Kozlowski wrote:
+>> On 26/03/2022 15:43, Jesse Taube wrote:
+>>> Add i.MXRT1170 pinctrl binding Documentation
+>>>
+>>> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>>> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+>>> ---
+>>>   .../bindings/pinctrl/fsl,imxrt1170.yaml       | 77 +++++++++++++++++++
+>>>   1 file changed, 77 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,imxrt1170.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1170.yaml b/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1170.yaml
+>>> new file mode 100644
+>>> index 000000000000..2e880b3e537c
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1170.yaml
+>>> @@ -0,0 +1,77 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/pinctrl/fsl,imxrt1170.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Freescale i.MXRT1170 IOMUX Controller
+>>> +
+>>> +maintainers:
+>>> +  - Giulio Benetti <giulio.benetti@benettiengineering.com>
+>>> +  - Jesse Taube <Mr.Bossman075@gmail.com>
+>>> +
+>>> +description:
+>>> +  Please refer to fsl,imx-pinctrl.txt and pinctrl-bindings.txt in this directory
+>>> +  for common binding part and usage.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: fsl,imxrt1170-iomuxc
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +# Client device subnode's properties
+>>> +patternProperties:
+>>> +  'grp$':
+>>> +    type: object
+>>> +    description:
+>>> +      Pinctrl node's client devices use subnodes for desired pin configuration.
+>>> +      Client device subnodes use below standard properties.
+>>> +
+>>> +    properties:
+>>> +      fsl,pins:
+>>> +        description:
+>>> +          each entry consists of 6 integers and represents the mux and config
+>>> +          setting for one pin. The first 5 integers <mux_reg conf_reg input_reg
+>>> +          mux_val input_val> are specified using a PIN_FUNC_ID macro, which can
+>>> +          be found in <arch/arm/boot/dts/imxrt1170-pinfunc.h>. The last
+>>> +          integer CONFIG is the pad setting value like pull-up on this pin. Please
+>>> +          refer to i.MXRT1170 Reference Manual for detailed CONFIG settings.
+>>> +        $ref: /schemas/types.yaml#/definitions/uint32-matrix
+>>> +        items:
+>>> +          items:
+>>> +            - description: |
+>>> +                "mux_reg" indicates the offset of mux register.
+>>> +            - description: |
+>>> +                "conf_reg" indicates the offset of pad configuration register.
+>>> +            - description: |
+>>> +                "input_reg" indicates the offset of select input register.
+>>> +            - description: |
+>>> +                "mux_val" indicates the mux value to be applied.
+>>> +            - description: |
+>>> +                "input_val" indicates the select input value to be applied.
+>>> +            - description: |
+>>> +                "pad_setting" indicates the pad configuration value to be applied.
+>>> +    required:
+>>> +      - fsl,pins
+>>> +
+>>> +    additionalProperties: false
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>
+>> You miss pinctrl.yaml, why?
+> In the file name? Because I forgot for the fsl,imxrt1050.yaml, I can 
+> change for both files.
+>>
 
-YAML and logic looks good, although I did not check the actual hardware
-properties.
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-
+No, you miss here inclusion of pinctrl.yaml schema.
 
 Best regards,
 Krzysztof

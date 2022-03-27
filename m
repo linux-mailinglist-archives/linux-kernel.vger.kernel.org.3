@@ -2,95 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03534E866A
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 09:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB0E14E866E
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 09:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235572AbiC0HJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 03:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
+        id S235593AbiC0HLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 03:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbiC0HJN (ORCPT
+        with ESMTP id S231994AbiC0HLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 03:09:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1A21A4
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 00:07:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 078F2B80CC7
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 07:07:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4B93C340EC;
-        Sun, 27 Mar 2022 07:07:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648364852;
-        bh=Wy+/kbTqX0Ydc2b+R/ChvMSaHemRdhbRDkg/zZc7cW0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GrN30X4J+g58lJKL5q5KsSFlO4qv2GW8jUEhnyaF01yU7Ugt+cJYQ/WP9lz2cvGYz
-         oyuyy1feA5U4RQHk0l5bMaGWS0db9YxQk0yMk2aaa/7MoYUPb941DRDewpMm0fJBI5
-         +OzXTQLH6NOyViz6PINYC8ECNtJuCRn2M3AxsSo0=
-Date:   Sun, 27 Mar 2022 09:07:28 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yusuf Khan <yusisamerican@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, jasowang@redhat.com,
-        mikelley@microsoft.com, mst@redhat.com, javier@javigon.com,
-        arnd@arndb.de, will@kernel.org, axboe@kernel.dk,
-        Christoph Grenz <christophg+lkml@grenz-bonn.de>
-Subject: Re: [PATCH v9 1/3] drivers: ddcci: upstream DDCCI driver
-Message-ID: <YkANMPtg7pN7sF0L@kroah.com>
-References: <20220327045845.144742-1-yusisamerican@gmail.com>
- <20220327045845.144742-2-yusisamerican@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220327045845.144742-2-yusisamerican@gmail.com>
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 27 Mar 2022 03:11:03 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7AD1D31F;
+        Sun, 27 Mar 2022 00:09:26 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id w7so7229063pfu.11;
+        Sun, 27 Mar 2022 00:09:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=Dswsk0jetBijYktZ7SH96xaSPfRhbnA9l3ZIGPdBlrI=;
+        b=i6+b2XSkalNg6DOhuZPtEKFGG0z1vvDdmoEcVQ4ypDwvzICeXJOv4LFhwpx2x18QS+
+         AhlWIC4s2MpT+zM5Ora+fCociP/CzNaaxGO+mJO+Z7nuQbZL7hQ1oRJlNk+n19Hq4lgb
+         7A4rHk02cWxNisZq8XWes7odzO7hdXfD5DMzQIuPQjiRbP1yr1N0cCB7cM7R8ohpRLPx
+         YINtCTy1tB07UxDqqu34cU/PVkwNZBOMFK0p8ZA/Dr3q9nYRJ8HLG8q214dSGaW1ETG9
+         QrK6+hgJlceQmK7rDuk2ew0kSGyBPUZ1iORntFv13yzMoDOr4mqV6wloQ1dkju8jS0pY
+         qzMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Dswsk0jetBijYktZ7SH96xaSPfRhbnA9l3ZIGPdBlrI=;
+        b=NcSGL6uQpOQSa0RiOjLuqWars9ssyBuYTw7Dya365IVU0YJOZ4t9AH0T5p0kbYSI6x
+         1RHT3eBwdfZ9xFn9sSg0U+jJNX5OPppH6/XJQSMtG7hWaM2XoKv+gPcGhxK7GYpOauG9
+         I3buVK+nZJMDqW2cDq2IyjRx5LdtK2rAct9BJhXlzwi0Wa6zIodJucDsOvUUzmnJ+FJs
+         PMW5KdCFp1CIhV7t/nj/0JowlEW3f8o5gZlaDJRMu+zo8/dNIOe5oBcLo72i91c/ykFQ
+         H64XxmZ8WCVpGHHe0jQnT0ver5Lktdxyb9RYcXSrrPcCd0N91tFKR8WBzNN7ybJ6i788
+         DlIw==
+X-Gm-Message-State: AOAM531sXJcYJtlL5ZlyUXH3QIszTPcgeYrZ0w/OVahIJLoGgv55WaYT
+        dTAgtJKNxWtlMZaAwX4ITpw=
+X-Google-Smtp-Source: ABdhPJymh6IMTtnDyhTTmlhAfbLgWrj5zjZfypZgJnag3MlTplfc8wEo9bq0GVF9wmHFKQk5NpcMMg==
+X-Received: by 2002:a63:de0c:0:b0:378:9365:c3c6 with SMTP id f12-20020a63de0c000000b003789365c3c6mr5894337pgg.301.1648364965504;
+        Sun, 27 Mar 2022 00:09:25 -0700 (PDT)
+Received: from localhost ([115.220.243.108])
+        by smtp.gmail.com with ESMTPSA id k14-20020aa7820e000000b004f7134a70cdsm11349504pfi.61.2022.03.27.00.09.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 27 Mar 2022 00:09:24 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     philipp.reisner@linbit.com
+Cc:     lars.ellenberg@linbit.com, axboe@kernel.dk, agruen@linbit.com,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH] drbd: fix an invalid memory access caused by incorrect use of list iterator
+Date:   Sun, 27 Mar 2022 15:09:18 +0800
+Message-Id: <20220327070918.8465-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 26, 2022 at 09:58:43PM -0700, Yusuf Khan wrote:
-> This patch adds the main DDCCI driver.
-> 
-> Signed-off-by: Yusuf Khan <yusisamerican@gmail.com>
-> Signed-off-by: Christoph Grenz <christophg+lkml@grenz-bonn.de>
-> ---
+The bug is here:
+	idr_remove(&connection->peer_devices, vnr);
 
-Hi,
+If the previous for_each_connection() don't exit early (no goto hit
+inside the loop), the iterator 'connection' after the loop will be a
+bogus pointer to an invalid structure object containing the HEAD
+(&resource->connections). As a result, the use of 'connection' above
+will lead to a invalid memory access (including a possible invalid free
+as idr_remove could call free_layer).
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+The original intention should have been to remove all peer_devices,
+but the following lines have already done the work. So just remove
+this line and the unneeded label, to fix this bug.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Cc: stable@vger.kernel.org
+Fixes: c06ece6ba6f1b ("drbd: Turn connection->volumes into connection->peer_devices")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+---
+ drivers/block/drbd/drbd_main.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what is needed in order to
-  properly describe the change.
+diff --git a/drivers/block/drbd/drbd_main.c b/drivers/block/drbd/drbd_main.c
+index 6f450816c4fa..5d5beeba3ed4 100644
+--- a/drivers/block/drbd/drbd_main.c
++++ b/drivers/block/drbd/drbd_main.c
+@@ -2793,12 +2793,12 @@ enum drbd_ret_code drbd_create_device(struct drbd_config_context *adm_ctx, unsig
+ 
+ 	if (init_submitter(device)) {
+ 		err = ERR_NOMEM;
+-		goto out_idr_remove_vol;
++		goto out_idr_remove_from_resource;
+ 	}
+ 
+ 	err = add_disk(disk);
+ 	if (err)
+-		goto out_idr_remove_vol;
++		goto out_idr_remove_from_resource;
+ 
+ 	/* inherit the connection state */
+ 	device->state.conn = first_connection(resource)->cstate;
+@@ -2812,8 +2812,6 @@ enum drbd_ret_code drbd_create_device(struct drbd_config_context *adm_ctx, unsig
+ 	drbd_debugfs_device_add(device);
+ 	return NO_ERROR;
+ 
+-out_idr_remove_vol:
+-	idr_remove(&connection->peer_devices, vnr);
+ out_idr_remove_from_resource:
+ 	for_each_connection(connection, resource) {
+ 		peer_device = idr_remove(&connection->peer_devices, vnr);
+-- 
+2.17.1
 
-- You did not write a descriptive Subject: for the patch, allowing Greg,
-  and everyone else, to know what this patch is all about.  Please read
-  the section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what a proper Subject: line should
-  look like.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot

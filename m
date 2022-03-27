@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2D14E87B3
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 14:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEBE4E87B5
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 14:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232193AbiC0MlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 08:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
+        id S235128AbiC0MlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 08:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234785AbiC0MlD (ORCPT
+        with ESMTP id S234870AbiC0MlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 08:41:03 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB4F1FA59;
-        Sun, 27 Mar 2022 05:39:23 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id e9so8138893ilu.9;
-        Sun, 27 Mar 2022 05:39:23 -0700 (PDT)
+        Sun, 27 Mar 2022 08:41:05 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1CE1FA43;
+        Sun, 27 Mar 2022 05:39:25 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id d3so8146421ilr.10;
+        Sun, 27 Mar 2022 05:39:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Db2FgafGdIhiWGFMVMPKe9KlxkIGLYfI01dwnul3AK8=;
-        b=UQn1hkvuN4yYBZysacrXMzgOjFCbxMf2DfmKbgjl5Rg8v4ybdjp/JZCc+fvt8GjvyZ
-         2vHpbG98OiAAVlGkI3UVwaPBnos7OCeEkPWT51fZA8yRcBmhjfzFXol3md3KSTU2xEqo
-         Lj/i/uiPIXKsZTDOsZTK+w0XIFJovcf4MoFn7ESzsm0+sA0s+YqHnY7NX0xTIv0tMOvJ
-         TQcJjJFzNrFU0GiNW4T3/wS2YFR5oEajuCQ6B1mzwxKZFYA2go6fnSqZLF+1s8GcpK6p
-         1aCOO/qVyUtEag/KFUF2ufErJTUdg+gYJdN3T6Twmp/z0WAn0QYnvwixPE7ddEiT86aJ
-         +Szw==
+        bh=EOKyTZ0MHbuBrMLYUwj/DaXVPHkzGJ/MdORrc27Sp4c=;
+        b=G5i5dsVJBuclAECK6fgs5/2d9WmYJx2BhGGIPWUdWLsVVXQIUKirMMxg0MhIUNRxxT
+         WpPRZP5HwlQf2XnpiaGMSsetyB+pG78KbdYjUjvRW4GRfIVV1DAvM+wcAGfRoUyfLGIx
+         7nPKbXhOWLk4lmNGrai0T3iDwldkU6T+PetftsM4zkU/kMUbKWb0J9wDUEtXlM4agmf4
+         c5jgLEoJhQ4Z0ZpBNbYuXhzQTBE3joBdupHFUJQDxzCTwnsHJGZYJ9zx5tn2zYgYouP+
+         EjyGBSurMuzkaxAWdfs89H4zVjr7/CJXiqoRcoG6Jyj2MFlvzSB7zXubkxHsvypQm6dr
+         FDOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Db2FgafGdIhiWGFMVMPKe9KlxkIGLYfI01dwnul3AK8=;
-        b=pgTjs/0n1uvl1ur6j0zvwH5C/TO5xRuUzo/eXS5EWR/3a8EOUWyOJyXr+bFn7XBnXF
-         LOLAm3B5EpMxSbe2fjtcGNoKC1s4I3S/RoD8HZF8QN+kfpnP4J3ouOrFnAGPLjwBh3yq
-         DQCnjvweKbFdp/XLVo6D5JIDEcyt/uC/LbZk3ZIlHAIIXGiANGqqu7qqMjuDnccXIQjX
-         yqkbLD58xMhdEWi5iLY/YHdBsdcnrbmVdGIMHrWpWEvSKGW+PkSnQaPP7Ak7yn/aIPb7
-         cs2iAo4tzxNFpJmFFodCm0TNPA5KmRTBLH7ZabNrSr39PirOtypU4FRPGZf/dicN6+ba
-         yq5Q==
-X-Gm-Message-State: AOAM530az7Mpix3pKjxfh8Sp7Mzfbiw8oPDpG+7wXNPKDAQHbwCZC2dT
-        nedeeROLPYPQxlZy3BhsZvd3zoCd7o8=
-X-Google-Smtp-Source: ABdhPJybUAAqFZNNiE14C9c+Svi9NSPW079QGvVzWsq5MFjow7kiB4/68j70romv42SMobrvWhgoqA==
-X-Received: by 2002:a05:6e02:783:b0:2c8:4fe9:5e74 with SMTP id q3-20020a056e02078300b002c84fe95e74mr3511131ils.148.1648384762446;
-        Sun, 27 Mar 2022 05:39:22 -0700 (PDT)
+        bh=EOKyTZ0MHbuBrMLYUwj/DaXVPHkzGJ/MdORrc27Sp4c=;
+        b=mJ2Q2SS347K7Iv1BPL1xdxQ/pJSSEu2flZYPqCKkDsPug/QDrCcJ7HuSlTTphP2K1j
+         swSHSegSyS+7BdyQsgSjmBQt8WKiMMJnYpAHjnf0Qy9HbKtOeQm/+AuBDFLM4EjzVI3y
+         ICkIYACqs1cySRvFMh896Jzvry2gApDO2SyTjDUcp1+9xQtkGS3kuSMduxfMKv2BmGQW
+         yizkwzRwYQhbKvMWmLmjuv6Q6u2tTlcL2iur29IGriVfOjEF7YRJAStNkG0KmOVEV+8S
+         mftkDq/EISDaedcq09TbeThpCZNyfna6mZKTFvKra4nSSSmnyPXA7eGQw9kpczzzGP9J
+         chNw==
+X-Gm-Message-State: AOAM5317l/0vyP1APEVyMUz6E2T0sN1obGm5XU71xAPSudeoJWluiG/m
+        KNxXMevzOHCW2RVwWRgv9u0/1qddEU0=
+X-Google-Smtp-Source: ABdhPJwOgGfZHeF+KeTKAyl5nYTr1kYDkrcxKObLP5Bwz9aT13RyU1bcdXcbD+8aVKW8ijwe+VL2IA==
+X-Received: by 2002:a92:cd85:0:b0:2c7:f152:7161 with SMTP id r5-20020a92cd85000000b002c7f1527161mr3380794ilb.265.1648384764282;
+        Sun, 27 Mar 2022 05:39:24 -0700 (PDT)
 Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:7073:b368:2f66:5e36])
-        by smtp.gmail.com with ESMTPSA id t7-20020a5e9907000000b00649d6bd1ec5sm6134534ioj.31.2022.03.27.05.39.21
+        by smtp.gmail.com with ESMTPSA id t7-20020a5e9907000000b00649d6bd1ec5sm6134534ioj.31.2022.03.27.05.39.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Mar 2022 05:39:21 -0700 (PDT)
+        Sun, 27 Mar 2022 05:39:23 -0700 (PDT)
 From:   Adam Ford <aford173@gmail.com>
 To:     linux-mmc@vger.kernel.org
 Cc:     haibo.chen@nxp.com, aford@beaconembedded.com,
@@ -62,9 +62,9 @@ Cc:     haibo.chen@nxp.com, aford@beaconembedded.com,
         NXP Linux Team <linux-imx@nxp.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 4/5] arm64: dts: imx8qxp: Remove imx7d-usdhc compatible fallback
-Date:   Sun, 27 Mar 2022 07:38:33 -0500
-Message-Id: <20220327123835.28329-4-aford173@gmail.com>
+Subject: [PATCH 5/5] arm64: dts: imx8qm: Remove fsl,imx7d-usdhc compatible fallback
+Date:   Sun, 27 Mar 2022 07:38:34 -0500
+Message-Id: <20220327123835.28329-5-aford173@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220327123835.28329-1-aford173@gmail.com>
 References: <20220327123835.28329-1-aford173@gmail.com>
@@ -80,39 +80,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the compatible flag for fsl,imx8qxp-usdhc directly matches
-in the driver, there is no need to fall back on the imx7d-usdhc.
+The correct fallback for the imx8qm should only be fsl,imx8qxp-usdhc
+because fsl,imx8qxp-usdhc is a superset which contains additional
+flags not present in fsl,imx7d-usdhc.
 
 Signed-off-by: Adam Ford <aford173@gmail.com>
 ---
-V2:  New to series
----
- arch/arm64/boot/dts/freescale/imx8qxp-ss-conn.dtsi | 6 +++---
+ arch/arm64/boot/dts/freescale/imx8qm-ss-conn.dtsi | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8qxp-ss-conn.dtsi b/arch/arm64/boot/dts/freescale/imx8qxp-ss-conn.dtsi
-index 46da21af3702..75fc951bca25 100644
---- a/arch/arm64/boot/dts/freescale/imx8qxp-ss-conn.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8qxp-ss-conn.dtsi
-@@ -5,15 +5,15 @@
-  */
+diff --git a/arch/arm64/boot/dts/freescale/imx8qm-ss-conn.dtsi b/arch/arm64/boot/dts/freescale/imx8qm-ss-conn.dtsi
+index ec1639174e2e..336f0ea7e7b5 100644
+--- a/arch/arm64/boot/dts/freescale/imx8qm-ss-conn.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8qm-ss-conn.dtsi
+@@ -13,13 +13,13 @@ &fec2 {
+ };
  
  &usdhc1 {
--	compatible = "fsl,imx8qxp-usdhc", "fsl,imx7d-usdhc";
-+	compatible = "fsl,imx8qxp-usdhc";
+-	compatible = "fsl,imx8qm-usdhc", "fsl,imx8qxp-usdhc", "fsl,imx7d-usdhc";
++	compatible = "fsl,imx8qm-usdhc", "fsl,imx8qxp-usdhc";
  };
  
  &usdhc2 {
--	compatible = "fsl,imx8qxp-usdhc", "fsl,imx7d-usdhc";
-+	compatible = "fsl,imx8qxp-usdhc";
+-	compatible = "fsl,imx8qm-usdhc", "fsl,imx8qxp-usdhc", "fsl,imx7d-usdhc";
++	compatible = "fsl,imx8qm-usdhc", "fsl,imx8qxp-usdhc";
  };
  
  &usdhc3 {
--	compatible = "fsl,imx8qxp-usdhc", "fsl,imx7d-usdhc";
-+	compatible = "fsl,imx8qxp-usdhc";
+-	compatible = "fsl,imx8qm-usdhc", "fsl,imx8qxp-usdhc", "fsl,imx7d-usdhc";
++	compatible = "fsl,imx8qm-usdhc", "fsl,imx8qxp-usdhc";
  };
- 
- &fec1 {
 -- 
 2.34.1
 

@@ -2,65 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3D84E8509
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 04:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6F34E8536
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 04:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232919AbiC0CnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 22:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
+        id S233527AbiC0C5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 22:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbiC0CnJ (ORCPT
+        with ESMTP id S233184AbiC0C5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 22:43:09 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8CE60ED
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 19:41:30 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id pv16so22346564ejb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 19:41:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=K3hLkpz9UBfsQM5/ihZSTbzc6DyuMMrFt7IBwlsxIaQ=;
-        b=l/9VF2WnGPk2fqAXyOzFFMON51TfN9Ii8cqphdun+m3/apB1ILZLD4YyoVTfA4Qu1y
-         n4IU7t+eAhKTUuLdW0tO82BjHcve71O+ULNWWdyjXrU5rfpJ8vbPzRzXX2GOFuBiAUNk
-         a6nL+9jlbcrAXEOQzzSRCJur2fM9LPVMmySRzstCpXWqPe0LhCsIG+PlYE6mA2bwkAjL
-         lbyWrEOZexk4SCXBHyQvRUUwuMSunSWnT6fbuy9Ac+PomRsq9mIkj1mlhE9m2EGeEkEf
-         /qrKYKhsVhL6FErLQ9YWVytl7FpuwUqLSfCuz+8qZKQBFR+Tg88RKTwvu/p6ZNZflsVK
-         G3hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=K3hLkpz9UBfsQM5/ihZSTbzc6DyuMMrFt7IBwlsxIaQ=;
-        b=pOB3ylvlH7r2lYnYPuWk5RrzYqQeWv8mVZ6FrxAMTxBC3lybXVO0lc9XiaqhnoVQ67
-         M6JmUzXRgHTi7MrUw3Er0r54nzx5hUAoXZz001o9yuSWyChk9TtNkpUZeY6/ucta3NdH
-         5WTfqsBiMcAWlm4X08gUeF0A79mqLCTTqm00WgCRx/3KJejkm+LzOT8VUe23Syl71waC
-         D4QzsNr5O+VNmeQdbFdGyT1/BuoOrpTHRzWuy/PPuKzm5AH58UfqNPc9gfvR1PhLZxo3
-         orUDIk2yrqIbiBnT3XFv542u08WcU1tCwZq8rKHOCE4p4TzzQhjF6XySkuBmpEvO3pW6
-         smMA==
-X-Gm-Message-State: AOAM531qrDyNF36ppK8UixdJKgiZBPoruPo9WqdwYfEdqsh/sVvoXqST
-        6Iy1Z6vMCenM9D3vFvIow2w=
-X-Google-Smtp-Source: ABdhPJx+fb1QIhq3fxPuRrBmS1BZKFF09QsAxuxVkvXEYintX0IP/uzyplJG/MzAnP+6c8677PAsuA==
-X-Received: by 2002:a17:906:36ce:b0:6d6:e540:ed65 with SMTP id b14-20020a17090636ce00b006d6e540ed65mr19880051ejc.330.1648348889343;
-        Sat, 26 Mar 2022 19:41:29 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id sb15-20020a1709076d8f00b006dfe4cda58fsm4128613ejc.95.2022.03.26.19.41.28
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 26 Mar 2022 19:41:29 -0700 (PDT)
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        ying.huang@intel.com, mgorman@techsingularity.net,
-        Wei Yang <richard.weiyang@gmail.com>
-Subject: [PATCH 2/2] mm/vmscan: make sure wakeup_kswapd with managed zone
-Date:   Sun, 27 Mar 2022 02:41:01 +0000
-Message-Id: <20220327024101.10378-2-richard.weiyang@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20220327024101.10378-1-richard.weiyang@gmail.com>
-References: <20220327024101.10378-1-richard.weiyang@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Sat, 26 Mar 2022 22:57:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F373C41981;
+        Sat, 26 Mar 2022 19:55:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E037B80BA9;
+        Sun, 27 Mar 2022 02:55:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 879D2C340E8;
+        Sun, 27 Mar 2022 02:55:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648349731;
+        bh=NPWbAvL7cuLkuOpOb1ozj+CvWozFHnqgxcgdL9eIxEM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KXZ4yBSETfpeuCbiDs/Eg4c8vd6dM7q/8f8f6ICue6C/PlIQQu/CscOlIInFuc76K
+         mtG+Y9PPfoeoCpZkgMo4bzgX1qG1FbttNsaB/J8jVkZA+XIcg+pe/WWLobZ1HoZwk7
+         ryhGkIO3cMFKwP+I0iC4JyL2vSXP0fE31y5uppAge+W29T6y70+wGgyO45aIlVx5GG
+         A/3yQfcK/ro/rmLGtltu9JCNScYKDetw1p0IKLVQ6Ztj/FIN2S9+0M6fxkr0svVFUC
+         2NB7NMs5hsqnb4lHEszaONO+7fvE6zr9gbqe1N/vuLMk+p+WzRpwleAgSRhj1RORfS
+         a+5oNkkoXekvQ==
+Date:   Sun, 27 Mar 2022 11:55:26 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Subject: Re: [PATCH v4 0/3] bootconfig: Support embedding a bootconfig in
+ kernel for non initrd boot
+Message-Id: <20220327115526.cc4b0ff55fc53c97683c3e4d@kernel.org>
+In-Reply-To: <164833878595.2575750.1483106296151574233.stgit@devnote2>
+References: <164833878595.2575750.1483106296151574233.stgit@devnote2>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,49 +64,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-wakeup_kswapd() only wake up kswapd when the zone is managed.
+Hi Padmanabha,
 
-For two callers of wakeup_kswapd(), they are node perspective.
+On Sun, 27 Mar 2022 08:53:06 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> 
+> 
+> KNOWN ISSUE:
+> 
+> According to the report from Padmanabha[3], the embedded bootconfig data may not
+> be updated if you do incremental build the kernel with CONFIG_LTO. This is
+> under investigation.
 
-  * wake_all_kswapds
-  * numamigrate_isolate_page
+I tried to test this version with LTO_CLANG_FULL and LTO_CLANG_THIN with
+switching the embedded bootconfig file by CONFIG_EMBED_BOOT_CONFIG_FILE (on x86).
 
-If we picked up a !managed zone, this is not we expected.
+I found that when I use LTO_CLANG_FULL, the embedded bootconfig was updated
+correctly.
+But with the LTO_CLANG_THIN, the embedded bootconfig was *NOT* updated.
 
-This patch makes sure we pick up a managed zone for wakeup_kswapd().
+I used the latest prebuild llvm 15.0.0 on x86 [4]. Padmanabha, can you confirm
+with this latest LLVM? I guess something wrong with your old LLVM.
 
-Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
----
- mm/migrate.c    | 2 +-
- mm/page_alloc.c | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+[4] https://download.01.org/0day-ci/cross-package/clang-latest/clang-latest/clang.tar.xz
 
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 3d60823afd2d..c4b654c0bdf0 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -2046,7 +2046,7 @@ static int numamigrate_isolate_page(pg_data_t *pgdat, struct page *page)
- 		if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING))
- 			return 0;
- 		for (z = pgdat->nr_zones - 1; z >= 0; z--) {
--			if (populated_zone(pgdat->node_zones + z))
-+			if (managed_zone(pgdat->node_zones + z))
- 				break;
- 		}
- 		wakeup_kswapd(pgdat->node_zones + z, 0, order, ZONE_MOVABLE);
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 4c0c4ef94ba0..6656c2d06e01 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -4674,6 +4674,8 @@ static void wake_all_kswapds(unsigned int order, gfp_t gfp_mask,
- 
- 	for_each_zone_zonelist_nodemask(zone, z, ac->zonelist, highest_zoneidx,
- 					ac->nodemask) {
-+		if (!managed_zone(zone))
-+			continue;
- 		if (last_pgdat != zone->zone_pgdat)
- 			wakeup_kswapd(zone, gfp_mask, order, highest_zoneidx);
- 		last_pgdat = zone->zone_pgdat;
+Here is the test procedure.
+
+1. Prepare 2 different bootconfig files (bconf1, bconf2).
+2. Configure kernel with LTO_CLANG and setting the full path of bconf1 to
+   CONFIG_EMBED_BOOT_CONFIG_FILE.
+3. Build the kernel
+4. Boot the kernel with "bootconfig" in the kernel cmdline.
+5. Check the /proc/bootconfig is same as bconf1.
+6. Reconfigure kernel with the full path of *bconf2* to CONFIG_EMBED_BOOT_CONFIG_FILE.
+7. Rebuild the kernel (no cleanup)
+8. Boot the kernel with "bootconfig" in the kernel cmdline.
+9. Check the /proc/bootconfig is same as bconf2.
+
+So with LTO_CLANG_FULL, at the step 9 /proc/bootconfig shows bconf2, but with
+LTO_CLANG_THIN, it shows bconf1.
+
+In both cases, build log showed that the default.bconf was updated (I confirmed the
+lib/default.bconf is updated)
+
+  UPD     lib/default.bconf
+  CC      lib/bootconfig.o
+  AR      lib/lib.a
+
+
+Here is my guess. I found that when we enable LTO_CLANG, the compiler compiles
+C source file into LLVM IR bitcode.
+
+$ file work/linux/build-x86_64/lib/bootconfig.o 
+work/linux/build-x86_64/lib/bootconfig.o: LLVM IR bitcode
+
+This means at this point the object file doesn't include the lib/default.bconf
+because it will be embedded by assembler. The bitcode seems only have the
+inline asm code (which only has an .incbin directive) as a constatns block[5].
+
+[5]
+  Block ID #11 (CONSTANTS_BLOCK):
+      Num Instances: 32
+         Total Size: 54305b/6788.12B/1697W
+    Percent of file: 19.9792%
+       Average Size: 1697.03/212.13B/53W
+  Tot/Avg SubBlocks: 0/0.000000e+00
+    Tot/Avg Abbrevs: 4/1.250000e-01
+    Tot/Avg Records: 486/1.518750e+01
+    Percent Abbrevs: 80.8642%
+
+        Record Histogram:
+                  Count    # Bits     b/Rec   % Abv  Record Kind
+                    219      4860      22.2  100.00  INTEGER
+                    144      1728      12.0  100.00  SETTYPE
+                     41       656      16.0          NULL
+                     39      2970      76.2          CE_INBOUNDS_GEP
+                     26      3504     134.8  100.00  CSTRING
+                     10     37720    3772.0          INLINEASM
+                      4        96      24.0  100.00  CE_CAST
+                      1        58                    CE_CMP
+                      1        52                    CE_SELECT
+                      1        46                    CE_BINOP
+
+And when the LLVM runs LTO with THIN mode, it might not update (not rebuild to
+machine code) that inline asm code block because that block is not updated.
+I confirmed that the block (bootconfig.o) is not updated after rebuilding
+the kernel as below.
+
+After step 3.
+$ llvm-bcanalyzer work/linux/build-x86_64/lib/bootconfig.o > bconf.dump1
+After step 7.
+$ llvm-bcanalyzer work/linux/build-x86_64/lib/bootconfig.o > bconf.dump2
+$ diff bconf.dump*
+(No difference)
+
+Thank you,
+
+> 
+> [3] https://lore.kernel.org/all/20220321183500.GA4065@pswork/T/#u
+> 
+> Thank you,
+> 
+> ---
+> 
+> Masami Hiramatsu (3):
+>       bootconfig: Check the checksum before removing the bootconfig from initrd
+>       bootconfig: Support embedding a bootconfig file in kernel
+>       docs: bootconfig: Add how to embed the bootconfig into kernel
+> 
+> 
+>  Documentation/admin-guide/bootconfig.rst |   30 ++++++++++++++++++++++++++---
+>  include/linux/bootconfig.h               |   10 ++++++++++
+>  init/Kconfig                             |   21 ++++++++++++++++++++
+>  init/main.c                              |   31 +++++++++++++++---------------
+>  lib/.gitignore                           |    1 +
+>  lib/Makefile                             |   10 ++++++++++
+>  lib/bootconfig.c                         |   23 ++++++++++++++++++++++
+>  7 files changed, 108 insertions(+), 18 deletions(-)
+> 
+> --
+> Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
+
+
 -- 
-2.33.1
-
+Masami Hiramatsu <mhiramat@kernel.org>

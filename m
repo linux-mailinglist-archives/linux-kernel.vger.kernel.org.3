@@ -2,394 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9576B4E84C0
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 01:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 869D84E84C3
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 01:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbiC0ALX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 20:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
+        id S231296AbiC0AP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 20:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbiC0ALV (ORCPT
+        with ESMTP id S231215AbiC0AP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 20:11:21 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DE124BF8
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 17:09:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648339783; x=1679875783;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7i7Cb9JNb8xr9edzi3UdRW67oXUMO3NPdGxGaiibGKw=;
-  b=al2r0mCmaT5KrcWwAjQ1/gvytuUbw/UPdWA6390dyDTorW+/tw7EJb6H
-   OurCQVS5jZME50RYWfxt8hdbtlVIyrVYKl+9nRojp4V/1/aSHKmpRCobl
-   Y0puN4w9MMg+brquwa8q0sEQ66IIvFXFRWo0fCWtKDjD5CB05W7RA4L/9
-   EY7H3YaK75ZcZuAUjBZ38Ax+WPwGoy6AM+frd+BM1Qt7Lf9Rjly/CDQN/
-   rB+xHGV0VgLUTzaOETWhtUuCH78oZ54xdPvT1cwDVW/5HW6NcHzwe4a5K
-   K7pyY7IZg6GFg0cHc+2bsg5bOATAHP2XzLfg9j/lqSsn1Hfj21gGBcxfB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="256385743"
-X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
-   d="scan'208";a="256385743"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 17:09:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
-   d="scan'208";a="584815875"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 26 Mar 2022 17:09:41 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nYGTV-0000Xx-64; Sun, 27 Mar 2022 00:09:41 +0000
-Date:   Sun, 27 Mar 2022 08:08:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [bvanassche:ufs-for-next-2022-03-25 33/33]
- include/linux/of.h:857:28: error: initializer element is not constant
-Message-ID: <202203270815.J07XgGLC-lkp@intel.com>
+        Sat, 26 Mar 2022 20:15:28 -0400
+Received: from qproxy5-pub.mail.unifiedlayer.com (qproxy5-pub.mail.unifiedlayer.com [69.89.21.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF4CDF19
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 17:13:51 -0700 (PDT)
+Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
+        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id B12F880347EC
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 00:13:50 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id B67CA10047820
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 00:13:49 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id YGXVneTnPkku4YGXVnwHIl; Sun, 27 Mar 2022 00:13:49 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=fYlod2cF c=1 sm=1 tr=0 ts=623fac3d
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=o8Y5sQTvuykA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Y3Bp1HCxH6R3EVIpWVmailGsd7SzevAOYU40B0JUvME=; b=MvC0wJ5Tf6Fz/AHAgw1pNhl2gR
+        33M6/tGOe9kJQphvMVyk/6X41MwpWnnT4XNlgyv3mYtFzHkrYYfFZBWD/+EHpOgr7V2sTMBmWqhsQ
+        xBDmwu1+ukwP1uCE3wj1I/xzw;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:34444 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nYGXU-003RBR-GI; Sat, 26 Mar 2022 18:13:48 -0600
+Subject: Re: [PATCH 5.17 00/39] 5.17.1-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220325150420.245733653@linuxfoundation.org>
+In-Reply-To: <20220325150420.245733653@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <2437eb9a-6702-89cd-bed5-cf5bb1ea796b@w6rz.net>
+Date:   Sat, 26 Mar 2022 17:13:46 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nYGXU-003RBR-GI
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:34444
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/bvanassche/linux ufs-for-next-2022-03-25
-head:   ac30f53240eb3296851f8d8d691ec36bfde92307
-commit: ac30f53240eb3296851f8d8d691ec36bfde92307 [33/33] of.h: Improve of_match_node()
-config: xtensa-randconfig-m031-20220327 (https://download.01.org/0day-ci/archive/20220327/202203270815.J07XgGLC-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/bvanassche/linux/commit/ac30f53240eb3296851f8d8d691ec36bfde92307
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche ufs-for-next-2022-03-25
-        git checkout ac30f53240eb3296851f8d8d691ec36bfde92307
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash drivers/char/tpm/ drivers/clk/ drivers/crypto/ drivers/dma/ drivers/gpio/ drivers/hwmon/ drivers/i2c/busses/ drivers/i2c/muxes/ drivers/iio/adc/ drivers/iio/imu/bmi160/ drivers/input/joystick/ drivers/input/misc/ drivers/input/serio/ drivers/input/touchscreen/ drivers/leds/ drivers/media/i2c/ drivers/mfd/ drivers/misc/lis3lv02d/ drivers/mtd/devices/ drivers/power/supply/ drivers/pwm/ drivers/uio/ drivers/video/backlight/ drivers/w1/masters/ sound/soc/codecs/ sound/soc/dwc/ sound/soc/xtensa/
+On 3/25/22 8:14 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.1 release.
+> There are 39 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.1-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-All errors (new ones prefixed by >>):
+Tested-by: Ron Economos <re@w6rz.net>
 
-   In file included from include/linux/clk-provider.h:9,
-                    from drivers/clk/clk-cdce706.c:11:
->> drivers/clk/clk-cdce706.c:693:48: error: 'cdce706_dt_match' undeclared here (not in a function); did you mean 'cdce706_dev_data'?
-     693 |                 .of_match_table = of_match_ptr(cdce706_dt_match),
-         |                                                ^~~~~~~~~~~~~~~~
-   include/linux/of.h:857:30: note: in definition of macro 'of_match_ptr'
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                              ^~~~
-   include/linux/of.h:857:35: warning: left-hand operand of comma expression has no effect [-Wunused-value]
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                                   ^
-   drivers/clk/clk-cdce706.c:693:35: note: in expansion of macro 'of_match_ptr'
-     693 |                 .of_match_table = of_match_ptr(cdce706_dt_match),
-         |                                   ^~~~~~~~~~~~
->> include/linux/of.h:857:28: error: initializer element is not constant
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/clk/clk-cdce706.c:693:35: note: in expansion of macro 'of_match_ptr'
-     693 |                 .of_match_table = of_match_ptr(cdce706_dt_match),
-         |                                   ^~~~~~~~~~~~
-   include/linux/of.h:857:28: note: (near initialization for 'cdce706_i2c_driver.driver.of_match_table')
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/clk/clk-cdce706.c:693:35: note: in expansion of macro 'of_match_ptr'
-     693 |                 .of_match_table = of_match_ptr(cdce706_dt_match),
-         |                                   ^~~~~~~~~~~~
---
-   In file included from include/linux/irqdomain.h:35,
-                    from include/linux/acpi.h:13,
-                    from include/linux/i2c.h:13,
-                    from drivers/crypto/atmel-ecc.c:13:
->> drivers/crypto/atmel-ecc.c:385:48: error: 'atmel_ecc_dt_ids' undeclared here (not in a function); did you mean 'atmel_ecc_id'?
-     385 |                 .of_match_table = of_match_ptr(atmel_ecc_dt_ids),
-         |                                                ^~~~~~~~~~~~~~~~
-   include/linux/of.h:857:30: note: in definition of macro 'of_match_ptr'
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                              ^~~~
-   include/linux/of.h:857:35: warning: left-hand operand of comma expression has no effect [-Wunused-value]
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                                   ^
-   drivers/crypto/atmel-ecc.c:385:35: note: in expansion of macro 'of_match_ptr'
-     385 |                 .of_match_table = of_match_ptr(atmel_ecc_dt_ids),
-         |                                   ^~~~~~~~~~~~
->> include/linux/of.h:857:28: error: initializer element is not constant
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/crypto/atmel-ecc.c:385:35: note: in expansion of macro 'of_match_ptr'
-     385 |                 .of_match_table = of_match_ptr(atmel_ecc_dt_ids),
-         |                                   ^~~~~~~~~~~~
-   include/linux/of.h:857:28: note: (near initialization for 'atmel_ecc_driver.driver.of_match_table')
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/crypto/atmel-ecc.c:385:35: note: in expansion of macro 'of_match_ptr'
-     385 |                 .of_match_table = of_match_ptr(atmel_ecc_dt_ids),
-         |                                   ^~~~~~~~~~~~
---
-   In file included from include/linux/of_dma.h:13,
-                    from drivers/dma/altera-msgdma.c:22:
->> drivers/dma/altera-msgdma.c:954:48: error: 'msgdma_match' undeclared here (not in a function)
-     954 |                 .of_match_table = of_match_ptr(msgdma_match),
-         |                                                ^~~~~~~~~~~~
-   include/linux/of.h:857:30: note: in definition of macro 'of_match_ptr'
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                              ^~~~
-   include/linux/of.h:857:35: warning: left-hand operand of comma expression has no effect [-Wunused-value]
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                                   ^
-   drivers/dma/altera-msgdma.c:954:35: note: in expansion of macro 'of_match_ptr'
-     954 |                 .of_match_table = of_match_ptr(msgdma_match),
-         |                                   ^~~~~~~~~~~~
->> include/linux/of.h:857:28: error: initializer element is not constant
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/dma/altera-msgdma.c:954:35: note: in expansion of macro 'of_match_ptr'
-     954 |                 .of_match_table = of_match_ptr(msgdma_match),
-         |                                   ^~~~~~~~~~~~
-   include/linux/of.h:857:28: note: (near initialization for 'msgdma_driver.driver.of_match_table')
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/dma/altera-msgdma.c:954:35: note: in expansion of macro 'of_match_ptr'
-     954 |                 .of_match_table = of_match_ptr(msgdma_match),
-         |                                   ^~~~~~~~~~~~
---
-   In file included from include/linux/irqdomain.h:35,
-                    from include/linux/gpio/driver.h:9,
-                    from drivers/gpio/gpio-mmio.c:55:
->> drivers/gpio/gpio-mmio.c:810:48: error: 'bgpio_of_match' undeclared here (not in a function)
-     810 |                 .of_match_table = of_match_ptr(bgpio_of_match),
-         |                                                ^~~~~~~~~~~~~~
-   include/linux/of.h:857:30: note: in definition of macro 'of_match_ptr'
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                              ^~~~
-   include/linux/of.h:857:35: warning: left-hand operand of comma expression has no effect [-Wunused-value]
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                                   ^
-   drivers/gpio/gpio-mmio.c:810:35: note: in expansion of macro 'of_match_ptr'
-     810 |                 .of_match_table = of_match_ptr(bgpio_of_match),
-         |                                   ^~~~~~~~~~~~
->> include/linux/of.h:857:28: error: initializer element is not constant
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/gpio/gpio-mmio.c:810:35: note: in expansion of macro 'of_match_ptr'
-     810 |                 .of_match_table = of_match_ptr(bgpio_of_match),
-         |                                   ^~~~~~~~~~~~
-   include/linux/of.h:857:28: note: (near initialization for 'bgpio_driver.driver.of_match_table')
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/gpio/gpio-mmio.c:810:35: note: in expansion of macro 'of_match_ptr'
-     810 |                 .of_match_table = of_match_ptr(bgpio_of_match),
-         |                                   ^~~~~~~~~~~~
---
-   In file included from include/linux/irqdomain.h:35,
-                    from include/linux/acpi.h:13,
-                    from include/linux/i2c.h:13,
-                    from drivers/gpio/gpio-adp5588.c:13:
->> drivers/gpio/gpio-adp5588.c:460:48: error: 'adp5588_gpio_of_id' undeclared here (not in a function); did you mean 'adp5588_gpio_id'?
-     460 |                 .of_match_table = of_match_ptr(adp5588_gpio_of_id),
-         |                                                ^~~~~~~~~~~~~~~~~~
-   include/linux/of.h:857:30: note: in definition of macro 'of_match_ptr'
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                              ^~~~
-   include/linux/of.h:857:35: warning: left-hand operand of comma expression has no effect [-Wunused-value]
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                                   ^
-   drivers/gpio/gpio-adp5588.c:460:35: note: in expansion of macro 'of_match_ptr'
-     460 |                 .of_match_table = of_match_ptr(adp5588_gpio_of_id),
-         |                                   ^~~~~~~~~~~~
->> include/linux/of.h:857:28: error: initializer element is not constant
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/gpio/gpio-adp5588.c:460:35: note: in expansion of macro 'of_match_ptr'
-     460 |                 .of_match_table = of_match_ptr(adp5588_gpio_of_id),
-         |                                   ^~~~~~~~~~~~
-   include/linux/of.h:857:28: note: (near initialization for 'adp5588_gpio_driver.driver.of_match_table')
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/gpio/gpio-adp5588.c:460:35: note: in expansion of macro 'of_match_ptr'
-     460 |                 .of_match_table = of_match_ptr(adp5588_gpio_of_id),
-         |                                   ^~~~~~~~~~~~
---
-   In file included from include/linux/irqdomain.h:35,
-                    from include/linux/gpio/driver.h:9,
-                    from drivers/gpio/gpio-max732x.c:17:
->> drivers/gpio/gpio-max732x.c:740:48: error: 'max732x_of_table' undeclared here (not in a function); did you mean 'max732x_probe'?
-     740 |                 .of_match_table = of_match_ptr(max732x_of_table),
-         |                                                ^~~~~~~~~~~~~~~~
-   include/linux/of.h:857:30: note: in definition of macro 'of_match_ptr'
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                              ^~~~
-   include/linux/of.h:857:35: warning: left-hand operand of comma expression has no effect [-Wunused-value]
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                                   ^
-   drivers/gpio/gpio-max732x.c:740:35: note: in expansion of macro 'of_match_ptr'
-     740 |                 .of_match_table = of_match_ptr(max732x_of_table),
-         |                                   ^~~~~~~~~~~~
->> include/linux/of.h:857:28: error: initializer element is not constant
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/gpio/gpio-max732x.c:740:35: note: in expansion of macro 'of_match_ptr'
-     740 |                 .of_match_table = of_match_ptr(max732x_of_table),
-         |                                   ^~~~~~~~~~~~
-   include/linux/of.h:857:28: note: (near initialization for 'max732x_driver.driver.of_match_table')
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/gpio/gpio-max732x.c:740:35: note: in expansion of macro 'of_match_ptr'
-     740 |                 .of_match_table = of_match_ptr(max732x_of_table),
-         |                                   ^~~~~~~~~~~~
---
-   In file included from include/linux/irqdomain.h:35,
-                    from include/linux/acpi.h:13,
-                    from drivers/char/tpm/tpm_tis_i2c_cr50.c:19:
->> drivers/char/tpm/tpm_tis_i2c_cr50.c:790:48: error: 'of_cr50_i2c_match' undeclared here (not in a function)
-     790 |                 .of_match_table = of_match_ptr(of_cr50_i2c_match),
-         |                                                ^~~~~~~~~~~~~~~~~
-   include/linux/of.h:857:30: note: in definition of macro 'of_match_ptr'
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                              ^~~~
-   include/linux/of.h:857:35: warning: left-hand operand of comma expression has no effect [-Wunused-value]
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                                   ^
-   drivers/char/tpm/tpm_tis_i2c_cr50.c:790:35: note: in expansion of macro 'of_match_ptr'
-     790 |                 .of_match_table = of_match_ptr(of_cr50_i2c_match),
-         |                                   ^~~~~~~~~~~~
->> include/linux/of.h:857:28: error: initializer element is not constant
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/char/tpm/tpm_tis_i2c_cr50.c:790:35: note: in expansion of macro 'of_match_ptr'
-     790 |                 .of_match_table = of_match_ptr(of_cr50_i2c_match),
-         |                                   ^~~~~~~~~~~~
-   include/linux/of.h:857:28: note: (near initialization for 'cr50_i2c_driver.driver.of_match_table')
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/char/tpm/tpm_tis_i2c_cr50.c:790:35: note: in expansion of macro 'of_match_ptr'
-     790 |                 .of_match_table = of_match_ptr(of_cr50_i2c_match),
-         |                                   ^~~~~~~~~~~~
---
-   In file included from include/linux/irqdomain.h:35,
-                    from include/linux/acpi.h:13,
-                    from include/linux/i2c.h:13,
-                    from drivers/char/tpm/tpm_i2c_atmel.c:22:
->> drivers/char/tpm/tpm_i2c_atmel.c:213:48: error: 'i2c_atmel_of_match' undeclared here (not in a function)
-     213 |                 .of_match_table = of_match_ptr(i2c_atmel_of_match),
-         |                                                ^~~~~~~~~~~~~~~~~~
-   include/linux/of.h:857:30: note: in definition of macro 'of_match_ptr'
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                              ^~~~
-   include/linux/of.h:857:35: warning: left-hand operand of comma expression has no effect [-Wunused-value]
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                                   ^
-   drivers/char/tpm/tpm_i2c_atmel.c:213:35: note: in expansion of macro 'of_match_ptr'
-     213 |                 .of_match_table = of_match_ptr(i2c_atmel_of_match),
-         |                                   ^~~~~~~~~~~~
->> include/linux/of.h:857:28: error: initializer element is not constant
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/char/tpm/tpm_i2c_atmel.c:213:35: note: in expansion of macro 'of_match_ptr'
-     213 |                 .of_match_table = of_match_ptr(i2c_atmel_of_match),
-         |                                   ^~~~~~~~~~~~
-   include/linux/of.h:857:28: note: (near initialization for 'i2c_atmel_driver.driver.of_match_table')
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/char/tpm/tpm_i2c_atmel.c:213:35: note: in expansion of macro 'of_match_ptr'
-     213 |                 .of_match_table = of_match_ptr(i2c_atmel_of_match),
-         |                                   ^~~~~~~~~~~~
---
-   In file included from include/linux/irqdomain.h:35,
-                    from include/linux/acpi.h:13,
-                    from include/linux/i2c.h:13,
-                    from drivers/char/tpm/tpm_i2c_infineon.c:18:
->> drivers/char/tpm/tpm_i2c_infineon.c:727:51: error: 'tpm_tis_i2c_of_match' undeclared here (not in a function); did you mean 'tpm_tis_i2c_status'?
-     727 |                    .of_match_table = of_match_ptr(tpm_tis_i2c_of_match),
-         |                                                   ^~~~~~~~~~~~~~~~~~~~
-   include/linux/of.h:857:30: note: in definition of macro 'of_match_ptr'
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                              ^~~~
-   include/linux/of.h:857:35: warning: left-hand operand of comma expression has no effect [-Wunused-value]
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                                   ^
-   drivers/char/tpm/tpm_i2c_infineon.c:727:38: note: in expansion of macro 'of_match_ptr'
-     727 |                    .of_match_table = of_match_ptr(tpm_tis_i2c_of_match),
-         |                                      ^~~~~~~~~~~~
->> include/linux/of.h:857:28: error: initializer element is not constant
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/char/tpm/tpm_i2c_infineon.c:727:38: note: in expansion of macro 'of_match_ptr'
-     727 |                    .of_match_table = of_match_ptr(tpm_tis_i2c_of_match),
-         |                                      ^~~~~~~~~~~~
-   include/linux/of.h:857:28: note: (near initialization for 'tpm_tis_i2c_driver.driver.of_match_table')
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/char/tpm/tpm_i2c_infineon.c:727:38: note: in expansion of macro 'of_match_ptr'
-     727 |                    .of_match_table = of_match_ptr(tpm_tis_i2c_of_match),
-         |                                      ^~~~~~~~~~~~
---
-   In file included from include/linux/irqdomain.h:35,
-                    from include/linux/acpi.h:13,
-                    from include/linux/i2c.h:13,
-                    from drivers/hwmon/ad7414.c:20:
-   include/linux/of.h:857:35: warning: left-hand operand of comma expression has no effect [-Wunused-value]
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                                   ^
-   drivers/hwmon/ad7414.c:222:35: note: in expansion of macro 'of_match_ptr'
-     222 |                 .of_match_table = of_match_ptr(ad7414_of_match),
-         |                                   ^~~~~~~~~~~~
->> include/linux/of.h:857:28: error: initializer element is not constant
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/hwmon/ad7414.c:222:35: note: in expansion of macro 'of_match_ptr'
-     222 |                 .of_match_table = of_match_ptr(ad7414_of_match),
-         |                                   ^~~~~~~~~~~~
-   include/linux/of.h:857:28: note: (near initialization for 'ad7414_driver.driver.of_match_table')
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/hwmon/ad7414.c:222:35: note: in expansion of macro 'of_match_ptr'
-     222 |                 .of_match_table = of_match_ptr(ad7414_of_match),
-         |                                   ^~~~~~~~~~~~
---
-   In file included from include/linux/irqdomain.h:35,
-                    from include/linux/acpi.h:13,
-                    from include/linux/i2c.h:13,
-                    from drivers/hwmon/adc128d818.c:15:
-   include/linux/of.h:857:35: warning: left-hand operand of comma expression has no effect [-Wunused-value]
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                                   ^
-   drivers/hwmon/adc128d818.c:524:35: note: in expansion of macro 'of_match_ptr'
-     524 |                 .of_match_table = of_match_ptr(adc128_of_match),
-         |                                   ^~~~~~~~~~~~
->> include/linux/of.h:857:28: error: initializer element is not constant
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/hwmon/adc128d818.c:524:35: note: in expansion of macro 'of_match_ptr'
-     524 |                 .of_match_table = of_match_ptr(adc128_of_match),
-         |                                   ^~~~~~~~~~~~
-   include/linux/of.h:857:28: note: (near initialization for 'adc128_driver.driver.of_match_table')
-     857 | #define of_match_ptr(_ptr) ((_ptr), NULL)
-         |                            ^
-   drivers/hwmon/adc128d818.c:524:35: note: in expansion of macro 'of_match_ptr'
-     524 |                 .of_match_table = of_match_ptr(adc128_of_match),
-         |                                   ^~~~~~~~~~~~
-..
-
-
-vim +857 include/linux/of.h
-
-   856	
- > 857	#define of_match_ptr(_ptr) ((_ptr), NULL)
-   858	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65AE34E86C4
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 10:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163744E86C7
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 10:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiC0IBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 04:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
+        id S235639AbiC0IB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 04:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiC0IBs (ORCPT
+        with ESMTP id S232312AbiC0IBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 04:01:48 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245B5101;
-        Sun, 27 Mar 2022 01:00:10 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id n7-20020a17090aab8700b001c6aa871860so12626773pjq.2;
-        Sun, 27 Mar 2022 01:00:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=lSV2zkJT4vTOb08gOwZPa0NvOrdi/khmoY6zgOHN1IU=;
-        b=I4nZDPWhZYZeLJb8asDUzGUv2Tkq/AVxOmNPKYmN9FI0pvI/7zGJXrbkl0VUcgRz9S
-         qVNgOlh7kqa6TikZU+hQWrUKMRIypgi56wUPg4Lvasa5kFUh6GMucI67ATIHhsEqtNAk
-         vvltX73/l6VI9k1LRcDz38w5fUsO6jxDH28tmuwgIOWuhFXSeoL6CW9T5d4xOmB0tm5Y
-         jbdDiloJY/Dje0WtN7v8C4W4IJ167RRFu0QBTPFzsCbMcSEKvYuplodWsZe8J0YduxCe
-         NyLfl5Nqrblqjwi1umQaqn4kQBto/Bzx66ch8L/7wm9mUYhTa9FohT1q0yHpHaOBVXRN
-         99kg==
+        Sun, 27 Mar 2022 04:01:51 -0400
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919F11114D;
+        Sun, 27 Mar 2022 01:00:13 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id u3so16179951wrg.3;
+        Sun, 27 Mar 2022 01:00:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=lSV2zkJT4vTOb08gOwZPa0NvOrdi/khmoY6zgOHN1IU=;
-        b=7qMRjYHfPjzwlBZLvH6YYsWzgpK3opqo/P85E5immnSWlf6WW/ogblJO63ywvGIuCb
-         OwTPmlg6qg3E9o12ikrNRBsxMugdVuHADoqqINjmuUfiEurcb5KtNnWMvJia5feY+tMO
-         U26si8UtimIXL3d7hiGLaRZUnv+R4MXtR4orLNMVl3HqIh/dV/sm9DCQKguPXRlEV6Sk
-         R/ph++nPAk0KAOCMVG5yKzbBgPJqWHLgn9LSB0/bWvAGFmw6MQJRq43YgW83Tw0hOur8
-         2c0yHUPiYYu1PyipWyFu4k7W/QfXllAcKpZxPZivc3+u/SlYJQjPavoAYBkF90tbqA6H
-         KE3Q==
-X-Gm-Message-State: AOAM533f3E/tEZoLNk+PpXEL5W9WUKo9lo0yP+wgGMthY5kR8xYPOq9E
-        uE0ypYx4s2sPTHi5vvMRHDA=
-X-Google-Smtp-Source: ABdhPJwgAWZdlT1LPliJa/D7j61uWppjASH38drcCgQlfMobPBwJ0/dg/LsNxh1vNVV4xNg7Lm3zRw==
-X-Received: by 2002:a17:902:bb92:b0:153:4eae:c77e with SMTP id m18-20020a170902bb9200b001534eaec77emr20266086pls.93.1648368009676;
-        Sun, 27 Mar 2022 01:00:09 -0700 (PDT)
-Received: from localhost ([115.220.243.108])
-        by smtp.gmail.com with ESMTPSA id d11-20020aa7868b000000b004f768dfe93asm11934637pfo.176.2022.03.27.01.00.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 27 Mar 2022 01:00:09 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     song@kernel.org, rgoldwyn@suse.com
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
-Subject: [PATCH] md: md1: fix an incorrect NULL check on list iterator
-Date:   Sun, 27 Mar 2022 16:00:02 +0800
-Message-Id: <20220327080002.11923-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8q2PEyctEYcJQQuX1kcjiYZtUrzQ1TsH7qQAnCPe3ho=;
+        b=EXCCdFrwhn0pvwe1hfvAg1MwaewgMCxtmvnEU20IZ05XP8UOgCY9lRdau7zwoyb+1q
+         0+F/c+I18j02P+9C1DCRVFCRqX5sTXOtHeH8IcLdFHc1A4EbysQKPut/p2HPCt4/yZEc
+         YgGaWAhdRhfafEizjo+dgFCYNS5nUoea+hSjTPMuZaRDa+VjxPDXc1NZFtDRjj1bTFtZ
+         FYkDmnjKoRC5WIuB4NtckpVF6Su6evUaLSGsqBqHlCbMElRqGVPKIPwx9erLSl8DE9dX
+         jDlv7fcw9PA2xQFh4uf+Ma4D+D0E1mQ0OaQFwCBFfd7Yd55reBfT1HG+RR4mi5lQolma
+         xfiA==
+X-Gm-Message-State: AOAM530xoHezaXLLqjCgD2opiOqMRbXV1wDJjkLLrmN6kKyIdtHZCJzh
+        OuSyaz2FRhHmzB677myOOUiogwKzBaU=
+X-Google-Smtp-Source: ABdhPJzTB1G5vWt2XzAl1FM9J93U3f4r1YgUAAVvI8L/4ZAAqbVrbM1adGbma+x2m2UlsfAok7H+rg==
+X-Received: by 2002:adf:d1e5:0:b0:205:85f5:656c with SMTP id g5-20020adfd1e5000000b0020585f5656cmr16397217wrd.65.1648368012012;
+        Sun, 27 Mar 2022 01:00:12 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id j8-20020a05600c404800b0038cc9c7670bsm8857789wmm.3.2022.03.27.01.00.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Mar 2022 01:00:11 -0700 (PDT)
+Message-ID: <237a1e6a-7e0f-21b6-f8f4-045142f86712@kernel.org>
+Date:   Sun, 27 Mar 2022 10:00:09 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 1/3] dt-bindings: clock: fix some conversion issues for
+ rockchip,rk3399-cru.yaml
+Content-Language: en-US
+To:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220326102712.20906-1-jbx6244@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220326102712.20906-1-jbx6244@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bug is here:
-	if (!rdev)
+On 26/03/2022 11:27, Johan Jonker wrote:
+> With the conversion of rockchip,rk3399-cru.txt some issues were added,
+> so fix them:
+> 
+> Changed:
+>   Align the table with external clocks.
+>   Remove the original author in 2016 as maintainer.
 
-The list iterator value 'rdev' will *always* be set and non-NULL
-by rdev_for_each(), so it is incorrect to assume that the iterator
-value will be NULL if the list is empty or no element found.
-Otherwise it will bypass the NULL check and lead to invalid memory
-access passing the check.
+This requires explanation.
 
-To fix the bug, use a new variable 'iter' as the list iterator,
-while use the original variable 'pdev' as a dedicated pointer to
-point to the found element.
+>   Change clocks maxItems.
 
-Cc: stable@vger.kernel.org
-Fixes: 2aa82191ac36c ("md-cluster: Perform a lazy update")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
- drivers/md/md.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+This requires explanation. There is no maxItems in clocks.
 
-diff --git a/drivers/md/md.c b/drivers/md/md.c
-index 4d38bd7dadd6..7476fc204172 100644
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -2629,14 +2629,16 @@ static void sync_sbs(struct mddev *mddev, int nospares)
- 
- static bool does_sb_need_changing(struct mddev *mddev)
- {
--	struct md_rdev *rdev;
-+	struct md_rdev *rdev = NULL, *iter;
- 	struct mdp_superblock_1 *sb;
- 	int role;
- 
- 	/* Find a good rdev */
--	rdev_for_each(rdev, mddev)
--		if ((rdev->raid_disk >= 0) && !test_bit(Faulty, &rdev->flags))
-+	rdev_for_each(iter, mddev)
-+		if ((iter->raid_disk >= 0) && !test_bit(Faulty, &iter->flags)) {
-+			rdev = iter;
- 			break;
-+		}
- 
- 	/* No good device found. */
- 	if (!rdev)
--- 
-2.17.1
+>   Add clock-names.
+>   Use clock-controller node name in example.
 
+Why?
+
+>   Remove assigned-xxx.
+>   Remove ">" from description.
+
+All this should be around two or three commits, so you need to split
+changes which are cleanups to changes affecting functionality (adding
+new properties, changing values).
+
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  .../bindings/clock/rockchip,rk3399-cru.yaml   | 32 +++++++------------
+>  1 file changed, 11 insertions(+), 21 deletions(-)
+> 
+
+
+Best regards,
+Krzysztof

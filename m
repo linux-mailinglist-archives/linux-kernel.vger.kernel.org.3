@@ -2,280 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 885D44E85D4
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 07:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1074E85D7
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 07:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234608AbiC0FBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 01:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
+        id S234620AbiC0FIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 01:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234486AbiC0FBj (ORCPT
+        with ESMTP id S234905AbiC0FIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 01:01:39 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC87B05
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:00:01 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id x2so12075239plm.7
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:00:01 -0700 (PDT)
+        Sun, 27 Mar 2022 01:08:13 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062FE15FF0
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:06:35 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id p10so13809654lfa.12
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:06:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3Z+uQoE5tv5cHr6wpjP6l67koucowLD5yeqOkHmKHU0=;
-        b=aUub3SXZDNAe3rt0JmtJcmmicYAwzQWev/wcbkoR7BOJSI9NFdWyt3RH+piK3JezkR
-         b+o6W8iokQcUdl1jFu13xDVRHk1ChyndxQ9ZcW6fx+AmnFIJdkHk0+I+DyhaAP5/oZGf
-         nFzE72ioMYYT0lkNUWCf+GmPAd2LorPBuRhb9vS7e61rpE5y9gPB6GXsCIcpHLp/UU4T
-         QwufuVZrSGo+j00WLAxDfbXR+3rVhh/7LuOhSUBDE3kKtuNCmNZ4uY3+SeJ3+42BflcC
-         dfheay2W4WDz4GWXfCrlRL28OmTMrgZOSe4wrpsqxMfpm6gBYOUsN/UkBOoViYfC5ERz
-         xbFQ==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4DsawngOkTaf1ffe3Djt9i8R04p2xlEj2LaUyWMHpLQ=;
+        b=IL1j88A1zMmNQ619gkjkOLfevd4yJp/uUvy/JL+W394T7Ci9byh8r//w+swnF4uoTk
+         MZxgdJEbG5E8/y/0RfpNKMtcmR1SxV+ftoqfImF3PZxALDLZgAsd0IabrARdiKS285Pw
+         iUyVNk8ywuM4lUwh7TQ+LKc1DK3c/TGkrq11k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3Z+uQoE5tv5cHr6wpjP6l67koucowLD5yeqOkHmKHU0=;
-        b=YC3iqyuC3NBijnTv+ZPKjUV8IJGI76VCbOo0tm8wRcnpBKKRJ2QHFjCGuK5Pah18+w
-         KHBN5z0KeqOrGaSwAgxH2QI/O6f/2/Ttqkbe+L232j/xgyMPnOQv+LykqR7P092dzRQG
-         OrKjQkf0bq84ETrnZ1VCT0hrUHPe6EmiU5rD6B2tCbwBrY8AUuzC4eig+JFKt5RLZDGU
-         L5LDR8/zt4FBR620xHqszaR8xZBPCII76MqcwRuKL77QW0O7BrClHX2GU1AXWMIJCEp1
-         FnlF8xSLpFXBfxBzHRf/9cGn/eTTtaIBiAvrZuF6/AACBPip9YExBquRKEnU+ingXsa9
-         7emw==
-X-Gm-Message-State: AOAM532F9+6fBCvKUIhH6YVY3zaawFLNIwcXduXtJQ0VG5RQkpo0jTeO
-        3tZbbAJjj1UxE0uUmdW5OOgyWUaX4yoL1A==
-X-Google-Smtp-Source: ABdhPJxN3oRsGKDyRGUIiGhE7lrFptr0eaibvGE5GE5UbbAlWQoa50MVLf8wswBGkbyZ+i9dVjSQUg==
-X-Received: by 2002:a17:902:e944:b0:14e:dc4f:f099 with SMTP id b4-20020a170902e94400b0014edc4ff099mr20156069pll.161.1648357201056;
-        Sat, 26 Mar 2022 22:00:01 -0700 (PDT)
-Received: from yusufkhan-MS-7B17.lan ([24.17.200.29])
-        by smtp.gmail.com with ESMTPSA id w8-20020a63a748000000b0038117e18f02sm9336207pgo.29.2022.03.26.22.00.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 22:00:00 -0700 (PDT)
-From:   Yusuf Khan <yusisamerican@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     jasowang@redhat.com, mikelley@microsoft.com, mst@redhat.com,
-        gregkh@linuxfoundation.org, javier@javigon.com, arnd@arndb.de,
-        will@kernel.org, axboe@kernel.dk,
-        Yusuf Khan <yusisamerican@gmail.com>,
-        Christoph Grenz <christophg+lkml@grenz-bonn.de>
-Subject: [PATCH v9 3/3] drivers: ddcci: upstream DDCCI driver
-Date:   Sat, 26 Mar 2022 21:58:45 -0700
-Message-Id: <20220327045845.144742-4-yusisamerican@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220327045845.144742-1-yusisamerican@gmail.com>
-References: <20220327045845.144742-1-yusisamerican@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4DsawngOkTaf1ffe3Djt9i8R04p2xlEj2LaUyWMHpLQ=;
+        b=5IXDFtkFm0jBPy5OZHzPhMtWvH6enWNr//tk4uri663ORIf+f+HdRcxUPJEzWybYuc
+         CmWqimF0izcrxXLbwTKLUkElvmHvv0556YV2bPtpKPsmArJswbyOTYPisliu9BKzjIVk
+         s/T5Bc6ApNmotZUHVh7Hx/iGHtI1ttAVW7AzEUy4zbXOf39ZoBchafDtm/SxxYDZOMj7
+         zmUuhMmjsjlCMMvRcNMuwJcVmfAfJoKLNIRJpuag9hkvOBSi6TOKGYr572xFuK8p+dm6
+         lMSnSk3QyQ4Tvagw/GLB3JwwFcdl8fWraf4zaBysi+lexn+HEGvS1kB35+6f6p/dPMqm
+         uPDg==
+X-Gm-Message-State: AOAM533tszaiX1tXKwHbRfHCDn5tX6AxnrttvMd4MxrQw45BnzDfdnQm
+        40miNkMCuA/6XmBUOHOQN94yJZS9sGql6QcG6Qs=
+X-Google-Smtp-Source: ABdhPJwFBsmz5WpHrPGji1C3p3LUjzLuaqou6ciQ9Gos6vcjGMeOdgo1uHNchyADf2rFIEELWN3DYA==
+X-Received: by 2002:a05:6512:31d0:b0:44a:db2:8f20 with SMTP id j16-20020a05651231d000b0044a0db28f20mr14350131lfe.96.1648357593408;
+        Sat, 26 Mar 2022 22:06:33 -0700 (PDT)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
+        by smtp.gmail.com with ESMTPSA id r11-20020a2e8e2b000000b0024980665874sm1250705ljk.52.2022.03.26.22.06.32
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Mar 2022 22:06:33 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id bu29so19767999lfb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:06:32 -0700 (PDT)
+X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
+ y3-20020ac24203000000b004488053d402mr14244664lfh.687.1648357591941; Sat, 26
+ Mar 2022 22:06:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+References: <1812355.tdWV9SEqCh@natalenko.name> <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
+ <20220324055732.GB12078@lst.de> <4386660.LvFx2qVVIh@natalenko.name>
+ <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com> <878rsza0ih.fsf@toke.dk>
+ <4be26f5d8725cdb016c6fdd9d05cfeb69cdd9e09.camel@freebox.fr>
+ <20220324163132.GB26098@lst.de> <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com>
+ <871qyr9t4e.fsf@toke.dk> <CAHk-=whUQCCaQXJt3KUeQ8mtnLeVXEScNXCp+_DYh2SNY7EcEA@mail.gmail.com>
+ <20220327054848.1a545b12.pasic@linux.ibm.com>
+In-Reply-To: <20220327054848.1a545b12.pasic@linux.ibm.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 26 Mar 2022 22:06:15 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whUJ=tMEgP3KiWwk0pzmHn+1QORUu50syE+zOGk4UnFog@mail.gmail.com>
+Message-ID: <CAHk-=whUJ=tMEgP3KiWwk0pzmHn+1QORUu50syE+zOGk4UnFog@mail.gmail.com>
+Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
+ ath9k-based AP
+To:     Halil Pasic <pasic@linux.ibm.com>
+Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Maxime Bizon <mbizon@freebox.fr>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Olha Cherevyk <olha.cherevyk@gmail.com>,
+        iommu <iommu@lists.linux-foundation.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds Documentation for the DDCCI driver.
+On Sat, Mar 26, 2022 at 8:49 PM Halil Pasic <pasic@linux.ibm.com> wrote:
+>
+> I agree it CPU modified buffers *concurrently* with DMA can never work,
+> and I believe the ownership model was conceived to prevent this
+> situation.
 
-Signed-off-by: Yusuf Khan <yusisamerican@gmail.com>
-Signed-off-by: Christoph Grenz <christophg+lkml@grenz-bonn.de>
----
- Documentation/ABI/testing/sysfs-driver-ddcci |  57 +++++++++
- Documentation/driver-api/ddcci.rst           | 122 +++++++++++++++++++
- 2 files changed, 179 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-driver-ddcci
- create mode 100644 Documentation/driver-api/ddcci.rst
+But that just means that the "ownership" model is garbage, and cannot
+handle this REAL LIFE situation.
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-ddcci b/Documentation/ABI/testing/sysfs-driver-ddcci
-new file mode 100644
-index 000000000000..19f77ccf3ed0
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-driver-ddcci
-@@ -0,0 +1,57 @@
-+What:		/sys/bus/ddcci/ddcci<I²C bus number>i<hex address>
-+Date:		March 2022
-+KernelVersion:	5.18
-+Contact:	Christoph Grenz <christophg+lkml@grenz-bonn.de>
-+Description:	This file is a user interface for an internal
-+		dependent device on the I2C bus, it exports the same
-+		information as the master device(/sys/bus/ddcci/
-+		ddcci<I²C bus number>) that is referenced in this
-+		document.
-+
-+What:		/sys/bus/ddcci/ddcci<I²C bus number>e<hex address>
-+Date:		March 2022
-+KernelVersion:	5.18
-+Contact:	Christoph Grenz <christophg+lkml@grenz-bonn.de>
-+Description:	This file is a user interface for an external
-+		dependent device on the I2C bus, it exports the same
-+		information as the master device(/sys/bus/ddcci/
-+		ddcci<I²C bus number>) that is referenced in this
-+		document.
-+
-+What:		/sys/bus/ddcci/ddcci<I²C bus number>
-+Date:		March 2022
-+KernelVersion:	5.18
-+Contact:	Christoph Grenz <christophg+lkml@grenz-bonn.de>
-+Description:	This file provides the user interface for the
-+		master device on the I2C bus. It exports the following
-+		peices of information:
-+		- idProt
-+		ACCESS.bus protocol supported by the device. Usually
-+		"monitor".
-+
-+		- idType
-+		ACCESS.bus device subtype. Usually "LCD" or "CRT".
-+
-+		- idModel
-+		ACCESS.bus device model identifier. Usually a
-+		shortened form of the device model name.
-+
-+		- idVendor
-+		ACCESS.bus device vendor identifier. Empty if the
-+		Identification command is not supported.
-+
-+		- idModule
-+		ACCESS.bus device module identifier. Empty if the
-+		Identification command is not supported.
-+
-+		- idSerial
-+		32 bit device number. A fixed serial number if it's
-+		positive, a temporary serial number if negative and zero
-+		if the Identification command is not supported.
-+
-+		- modalias
-+		A combined identifier for driver selection. It has the form:
-+		ddcci:<idProt>-<idType>-<idModel>-<idVendor>-<idModule>.
-+		All non-alphanumeric characters (including whitespace)
-+		in the model, vendor or module parts are replaced by
-+		underscores to prevent issues with software like systemd-udevd.
-diff --git a/Documentation/driver-api/ddcci.rst b/Documentation/driver-api/ddcci.rst
-new file mode 100644
-index 000000000000..2b7de1ac2656
---- /dev/null
-+++ b/Documentation/driver-api/ddcci.rst
-@@ -0,0 +1,122 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+==============
-+DDC/CI
-+==============
-+
-+1. Introduction
-+===============
-+DDC/CI is a control protocol for monitor settings supported by most
-+monitors since about 2005. It is based on ACCESS.bus (an early USB predecessor).
-+This could be used to create drivers that communicate with the DDCCI component,
-+see ddcci-backlight for an example.
-+
-+2. sysfs interface
-+==================
-+Each detected DDC/CI device gets a directory in /sys/bus/ddcci/devices.
-+The main device on a bus is named ddcci[I²C bus number].
-+Internal dependent devices are named ddcci[I²C bus number]i[hex address]
-+External dependent devices are named ddcci[I²C bus number]e[hex address]
-+There the following files export information about the device:
-+
-+capabilities
-+The full ACCESS.bus capabilities string. It contains the protocol,
-+type and model of the device, a list of all supported command
-+codes, etc. See the ACCESS.bus spec for more information.
-+
-+- idProt
-+ACCESS.bus protocol supported by the device. Usually "monitor".
-+
-+- idType
-+ACCESS.bus device subtype. Usually "LCD" or "CRT".
-+
-+- idModel
-+ACCESS.bus device model identifier. Usually a shortened form of the
-+device model name.
-+
-+- idVendor
-+ACCESS.bus device vendor identifier. Empty if the Identification command
-+is not supported.
-+
-+- idModule
-+ACCESS.bus device module identifier. Empty if the Identification command
-+is not supported.
-+
-+- idSerial
-+32 bit device number. A fixed serial number if it's positive, a temporary
-+serial number if negative and zero if the
-+Identification command is not supported.
-+
-+- modalias
-+A combined identifier for driver selection. It has the form:
-+ddcci:<idProt>-<idType>-<idModel>-<idVendor>-<idModule>.
-+All non-alphanumeric characters (including whitespace) in the model,
-+vendor or module parts are replaced by underscores to prevent issues
-+with software like systemd-udevd.
-+
-+3. Character device interface
-+=============================
-+For each DDC/CI device a character device in
-+/dev/bus/ddcci/[I²C bus number]/ is created,
-+127 devices are assigned in total.
-+
-+The main device on the bus is named display.
-+
-+Internal dependent devices are named i[hex address]
-+
-+External dependent devices are named e[hex address]
-+
-+These character devices can be used to issue commands to a DDC/CI device
-+more easily than over i2c-dev devices. They should be opened unbuffered.
-+To send a command just write the command byte and the arguments with a
-+single write() operation. The length byte and checksum are automatically
-+calculated.
-+
-+To read a response use read() with a buffer big enough for the expected answer.
-+
-+NOTE: The maximum length of a DDC/CI message is 32 bytes.
-+
-+4. ddcci-backlight (monitor backlight driver)
-+=============================================
-+[This is not specific to the DDC/CI backlight driver, if you already dealt with
-+backlight drivers, skip over this.]
-+
-+For each monitor that supports accessing the Backlight Level White
-+or the Luminance property, a backlight device of type "raw" named like the
-+corresponding ddcci device is created. You can find them in /sys/class/backlight/.
-+For convenience a symlink "ddcci_backlight" on the device associated with the
-+display connector in /sys/class/drm/ to the backlight device is created, as
-+long as the graphics driver allows to make this association.
-+
-+5. Limitations
-+==============
-+
-+-Dependent devices (sub devices using DDC/CI directly wired to the monitor,
-+like  Calibration devices, IR remotes, etc.) aren't automatically detected.
-+You can force detection of external dependent devices by writing
-+"ddcci-dependent [address]" into /sys/bus/i2c/i2c-?/new_device.
-+
-+There is no direct synchronization if you manually change the luminance
-+with the buttons on your monitor, as this can only be realized through polling
-+and some monitors close their OSD every time a DDC/CI command is received.
-+
-+Monitor hotplugging is not detected. You need to detach/reattach the I²C driver
-+or reload the module.
-+
-+6. Debugging
-+============
-+Both drivers use the dynamic debugging feature of the Linux kernel.
-+To get detailed debugging messages, set the dyndbg module parameter.
-+If you want to enable debugging permanently across reboots, create a file
-+/etc/modprobe.d/ddcci.conf containing lines like the following before loading the modules:
-+
-+options ddcci dyndbg
-+options ddcci-backlight dyndbg
-+
-+7. Origin
-+============
-+This driver originally came from Christoph Grenz in DKMS form here:
-+https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux
-+with multiple backups available on the wayback machine. It also
-+inlcudes a example program for the usage of this driver in
-+userland.
--- 
-2.25.1
+Here's the deal: if somebody makes a model that is counter-factual,
+you have exactly two choices:
 
+ - fix the damn model
+
+ - live in a la-la-land that isn't reality
+
+Which choice do you pick?
+
+And I'll be brutally honest: if you pick the la-la-land one, I don't
+think we can really discuss this any more.
+
+> But a CPU can modify the buffer *after* DMA has written to
+> it, while the mapping is still alive.
+
+Yes.
+
+But you are making ALL your arguments based on that "ownership" model
+that we now know is garbage.
+
+If you make your arguments based on garbage, the end result _might_
+work just by happenstance, but the arguments sure aren't very
+convincing, are they?
+
+So let's make it really clear that the arguments must not be based on
+some "ownership" model that you just admitted cannot handle the very
+real case of real and common hardware.
+
+Ok?
+
+>  For example one could do one
+> partial read from the device, *after* the DMA is done,
+> sync_for_cpu(DMA_FROM_DEVICE), examine, then zero out the entire buffer,
+> sync_for_device(DMA_FROM_DEVICE)
+
+So the result you want to get to I can believe in, but your sequence
+of getting there is untenable, since it depends on breaking other
+cases that are more important than your utterly broken hardware that
+you don't even know how much data it filled.
+
+And I fundamentally also happen to think that since the CPU just wrote
+that buffer, and *that* write is what you want to sync with the
+device, then that DMA_FROM_DEVICE was just pure fantasy to begin with.
+
+So that code sequence you quote is wrong. You are literally trying to
+re-introduce the semantics that we already know broke the ath9k
+driver.
+
+Instead, let me give you a couple of alternative scenarios.
+
+Alternative 1:
+
+ - ok, so the CPU wrote zeroes to the area, and we want to tell the
+DMA mapping code that it needs to make that CPU write visible to the
+device.
+
+ - Ahh, you mean "sync_for_device(DMA_TO_DEVICE)"?
+
+ - Yes.
+
+   The "for_device()" tells us that afterwards, the device can access
+the memory (we synced it for the device).
+
+   And the DMA_TO_DEVICE tells us that we're transferring the zeroes
+we wrote on the CPU to the device bounce buffer.
+
+   Now the device got those zeroes, and it can overwrite them
+(partially), and everything is fine
+
+ - And then we need to use "sync_for_cpu(DMA_FROM_DEVICE)" when we
+want to see the result once it's all done?
+
+ - Yes.
+
+ - Splendid. Except I don't like how you mix DMA_TO_DEVICE and
+DMA_FROM_DEVICE and you made the dma_alloc() not use DMA_BIDIRECTIONAL
+
+ - Yeah, that's ugly, but it matches reality, and it would "just work" today.
+
+Alternative 2:
+
+ - Ok, so the CPU doesn't even want to write to the area AT ALL, but
+we know we have a broken device that might not fill all of the bounce
+buffer, and we don't want to see old stale bounce buffer contents that
+could come from some other operation entirely and leak sensitive data
+that wasn't for us.
+
+ - Ahh, so you really want to just clear the bounce buffer before IO?
+
+ - Yes. So let's introduce a "clear_bounce_buffer()" operation before
+starting DMA. Let's call it "sync_for_device(DMA_NONE)" and teach the
+non-bounce-buffer dmas mapping entities to just ignore it, because
+they don't have a bounce buffer that can contain stale data.
+
+ - Sounds good.
+
+Alternative 3:
+
+ - Ok, you have me stumped. I can't come up with something else sane.
+
+Anyway, notice what's common about these alternatives? They are based
+not on some "we have a broken model", but on trying to solve the
+actual real-life problem case.
+
+I'm more than happy to hear other alternatives.
+
+But the alternative I am _not_ willing to entertain is "Yeah, we have
+a model of ownership, and that can't handle ath9k because that one
+wants to do CPU reads while DMA is possibly active, so ath9k is
+broken".
+
+Can we please agree on that?
+
+                          Linus

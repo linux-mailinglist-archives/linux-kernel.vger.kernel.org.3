@@ -2,96 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A140C4E84F4
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 03:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 806144E8508
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 04:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232548AbiC0Bje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 21:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
+        id S232798AbiC0CnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 22:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232454AbiC0Bjd (ORCPT
+        with ESMTP id S232675AbiC0CnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 21:39:33 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9F83A3
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 18:37:53 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-de3f2a19c8so11873026fac.1
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 18:37:53 -0700 (PDT)
+        Sat, 26 Mar 2022 22:43:09 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C83F6
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 19:41:30 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id lr4so13863739ejb.11
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 19:41:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Q69hN/ppK7TtcW1j6kBKZgV9STG2WZFvOUKaGB8HOrY=;
-        b=YC6JUzcv3vsA01QNQrv7g/vh8ab11+mCZMHMY117NR+CrBKfB8Ix+tcr/nbBkCaoll
-         nzuxNoK5joKvFgBWmGNd3isd6EWxZ7wc52g5VC1L4Omrx96Jyc55kzTx+h7PqjufqlP3
-         U62u9HoqY0wJ2yZFKUKVUaEKnoWCQRAiUHF2Y=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=Lp7OyzRBJpk9Yhtc35RHQ3SBsAFn1AOoGl5hsCUQLbs=;
+        b=MAfmrOrSIP7drRaxTKwnegVd2sfztTnVTorPJK7e8aedVf6yMq/vRH817+4junb0ix
+         ww+vG67sokwSMY5RVO6HhUib64/0sQ2XS5JucHsX31m/OR9NLqUTm9p+n6V11nImiTX3
+         Z6HtXyyaaSK/XZDBfV6wnTdmzYzovYALAQZGw3clsmYjWZX168IuxaKjggXyvjp9G2Px
+         cM/1T2ZQiLgW6HDPX95O0zS7ODao/evQK+pSDRxmDrqpOpGkIKEc17SMD8p9XLvUpB88
+         eM8cWlmXHL4+vvCZrLiMp64LTm4si3S0fe3GkN83AQ0V8uFCGK0eAWNcgrM0fMB3WjWU
+         yu2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Q69hN/ppK7TtcW1j6kBKZgV9STG2WZFvOUKaGB8HOrY=;
-        b=hq91AaaWYj3wUx9IEWdQ0e8gH4p52ayT1wHNRNWpZ1C/Pj3gFPnxCLak9OjL6bQrt3
-         O0qDeOjTDtCBk559TYimN8TMyfOSRNbQacESz7XWKOcrKGLNpHZ3RjOEIaNJVL1dkZNI
-         TAKUnWGkKRb37D1kMALyBYIa31bTmn2Yc6NEqdZ58K6qmxG84u8CxqCKsqict/vvBeaT
-         2W+gdc22oJheMAJ7yS9DnyRYbWUrcev+8McAKRt84Q/9tVJ1tidHEg0i7HYswljQSp18
-         QbyPp0jqwX/2zpojdWtzk2XfGW70owNyB3J2ZdfsvQWAJVXz6C2+BB6RQQUkva+P8TbS
-         6+iA==
-X-Gm-Message-State: AOAM530B39kk1SgTD5dWWnU4212szQ0bHcO5x13vGfWEdeJdJ85bmTzb
-        OvHPhEIhEKx45JRWbCko6ArBKQ==
-X-Google-Smtp-Source: ABdhPJzk5EFvf1q1Ne6Ghcsw+ZWUOI88cF3yWOp0YQDmpTJ0M4ZHXm06hNa7o4d5oodGdSi2HbrSXg==
-X-Received: by 2002:a05:6870:e88e:b0:de:4705:7fdf with SMTP id q14-20020a056870e88e00b000de47057fdfmr7486112oan.212.1648345072061;
-        Sat, 26 Mar 2022 18:37:52 -0700 (PDT)
-Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
-        by smtp.gmail.com with ESMTPSA id k124-20020aca3d82000000b002ef4c5bb9dbsm5170097oia.0.2022.03.26.18.37.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 18:37:51 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Sat, 26 Mar 2022 20:37:49 -0500
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.17 00/39] 5.17.1-rc1 review
-Message-ID: <Yj+/7UCtRCV9ojQW@fedora64.linuxtx.org>
-References: <20220325150420.245733653@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220325150420.245733653@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Lp7OyzRBJpk9Yhtc35RHQ3SBsAFn1AOoGl5hsCUQLbs=;
+        b=m3U2z11YYAu2LX0YdZXbeCGZ4wNKYiNiq7ms8SqDm32cJM+T2kBoBcZv6DuaQoct2u
+         4tzaQosihKF1Q5PU+Lv7kLBMdi5srlzzQ4UAxIzf8qQ2LnWX6vHOHde0/8Vspllbe2qB
+         kbKrmMTlEUKJiU1GPuNV+rNlXZLT+a1o6BvJYnXFyZi5Mg6h8Q16ACOnyhVlT6LCIy4e
+         zPPSQYCepa05Yvo2M/dPrPBP3fFB1O22aasRIq2e9E16sACwbpgwzooA2VnKMRDQ9kHW
+         QDsWcL4Wj7KlsSpv5LxpBejfAL4MQKxlvcK3a28c5oxsdVNg7Z1FUj/stDk+0EhM1Qm+
+         vPbA==
+X-Gm-Message-State: AOAM530pUbD7N2K5VtvoPuT/DgWn0V2RfTL8fTtq5Gu2oC5Ff/Vzmv3U
+        sXJuRdc3u3grHLbu8IWJOb9kIrePpPc=
+X-Google-Smtp-Source: ABdhPJwff1yCMKXeTrXkMama+S8HcSKS9lgO5aoriPadtVF0OJUe0QGsnM0vV+XByfwOXQGdiWM8OA==
+X-Received: by 2002:a17:907:eab:b0:6da:8ec5:d386 with SMTP id ho43-20020a1709070eab00b006da8ec5d386mr19851733ejc.668.1648348888564;
+        Sat, 26 Mar 2022 19:41:28 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id sd7-20020a1709076e0700b006e015549bdfsm3982750ejc.53.2022.03.26.19.41.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 26 Mar 2022 19:41:28 -0700 (PDT)
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        ying.huang@intel.com, mgorman@techsingularity.net,
+        Wei Yang <richard.weiyang@gmail.com>
+Subject: [PATCH 1/2] mm/vmscan: reclaim only affects managed_zones
+Date:   Sun, 27 Mar 2022 02:41:00 +0000
+Message-Id: <20220327024101.10378-1-richard.weiyang@gmail.com>
+X-Mailer: git-send-email 2.11.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 04:14:15PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.17.1 release.
-> There are 39 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.1-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+As mentioned in commit 6aa303defb74 ("mm, vmscan: only allocate and
+reclaim from zones with pages managed by the buddy allocator") , reclaim
+only affects managed_zones.
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+Let's adjust the code and comment accordingly.
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+---
+ mm/vmscan.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 7ad54b770bb1..89745cf34386 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -1031,7 +1031,7 @@ static bool skip_throttle_noprogress(pg_data_t *pgdat)
+ 	for (i = 0; i < MAX_NR_ZONES; i++) {
+ 		struct zone *zone = pgdat->node_zones + i;
+ 
+-		if (!populated_zone(zone))
++		if (!managed_zone(zone))
+ 			continue;
+ 
+ 		reclaimable += zone_reclaimable_pages(zone);
+@@ -3912,7 +3912,7 @@ static bool pgdat_balanced(pg_data_t *pgdat, int order, int highest_zoneidx)
+ 	}
+ 
+ 	/*
+-	 * If a node has no populated zone within highest_zoneidx, it does not
++	 * If a node has no managed zone within highest_zoneidx, it does not
+ 	 * need balancing by definition. This can happen if a zone-restricted
+ 	 * allocation tries to wake a remote kswapd.
+ 	 */
+-- 
+2.33.1
+

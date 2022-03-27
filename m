@@ -2,62 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8244E8A4D
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 23:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDEF4E8A50
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 23:50:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236821AbiC0Vtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 17:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
+        id S236827AbiC0VwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 17:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbiC0Vtj (ORCPT
+        with ESMTP id S230226AbiC0VwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 17:49:39 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6A43878A;
-        Sun, 27 Mar 2022 14:48:00 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id r23so14957124edb.0;
-        Sun, 27 Mar 2022 14:48:00 -0700 (PDT)
+        Sun, 27 Mar 2022 17:52:16 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A3C3FDB9;
+        Sun, 27 Mar 2022 14:50:37 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id w25so14904252edi.11;
+        Sun, 27 Mar 2022 14:50:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=10DwZiGdLo3hJFyknuuSJ9NrQcIJAd3mzxuhl7Xh74I=;
-        b=SXfIFxn/OMeLD4DgcunldrrQ4thZDEEsQN7KIK35VxVxm4sPKjA0uKjl7q12AYwimT
-         9ISN8zfP48Q9thC4BH6ePKjVFf3whf5ewXPwLg7UaThQYNqN6MaCW0jo7WLZfWz7Xd3E
-         xZyjAIX2msykGln2x6RgZQzS3GsYZU6Q1B0s8Biby8gzJpRx8V0teaolYc9GEZIobdf6
-         9kngYbQ8ZczCrI3DsODrPoeiBrjybS9+N6m/hhQBm2yrKP38iJF+zE9NVb1DFOgRCWez
-         cJnrq9M/fD1hEl0PrTcaibE3K0wxjScfW/5Ip/JZo0le1gxWhjIJWpEdsQQkJIkRxToO
-         n9BQ==
+        bh=TTcZIvDgvkwENo79A4lHb3jXHV4Zy2dwVb7gB1jhZgM=;
+        b=PwZ04pOlLIm1Unxlgvy6MVL9adW1Z7zyxbaLYtEAkn/rACy38Q/F3IGEVHeHxbv11I
+         bSAXt8swt1eGdn7pOX/LyuFX0YjjfJQKWw7e61wrmvrSlNepKB97f3y2UxmX9LoOoH6R
+         sjXn+MASRXsUpp4XSOgZbak+Zy2hTLyAJNs44Ps7qlDHpb2xik9Nl4M3xtU/HvDcpzOJ
+         eXWOdFGBQPPdN2UZg0eKPOsICXXxZqxToUAbYODdWpRUcuRmSiKQ159hvfsKDjiLGiJ3
+         76b3k1t2igKPztUXP+6K3mldLcomSpuZ4nWIS8Kqp4Wlwxn6NnHmHGnzbq0QkNtNamvJ
+         Y+GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=10DwZiGdLo3hJFyknuuSJ9NrQcIJAd3mzxuhl7Xh74I=;
-        b=EPpk3w8AevjRjUfNuYk+MSWD8VblnqFezsGMav9VF5nuD8EDT3a5vVsRDNiAyTBJLb
-         3nPvT1SWS6Rt+U8PpufHcFGSdnMBrsR4rvg0aZrRtBa/8zQqyYxqHs3xqgqWwe0U+OUi
-         Rr56xviWRhQqgjrM0uLrezU8qcfk5wg9c7R75TbZsHoyssd0jaOOMaVRacRboszFoOk8
-         GhBri9prW+pjeX2i75LeuIv7Ota7hCZaMeWz4FGqhsrDqOAgJ5k7w11cIg4aCMozT+yi
-         jASSjPETLeS4HFmYdHDNNdds0ebDkCIDU3s3wvmVQuDDTHkesUs+bbZE/k6feiS9qDnS
-         77GA==
-X-Gm-Message-State: AOAM5323I3x4hFHwZPqNn5nvN2XHC+aNUtZaBnp6RplLbn8wcqbJR457
-        W6Uq+C2daznVIXgadDa1MkM=
-X-Google-Smtp-Source: ABdhPJy4sUrGVMDcw69uwGlOgKI+xgZMdkTvhFRQOKehyNJdf/1YjMNl0G+viaikQsNSObKW/rfajg==
-X-Received: by 2002:a05:6402:5210:b0:419:d802:626e with SMTP id s16-20020a056402521000b00419d802626emr4631547edd.11.1648417679059;
-        Sun, 27 Mar 2022 14:47:59 -0700 (PDT)
+        bh=TTcZIvDgvkwENo79A4lHb3jXHV4Zy2dwVb7gB1jhZgM=;
+        b=bVO/DErpgKnn/VfEXdv12iD5NhF7wyT52Nlpd5i9dHP94GQ2xPtFv++UxL8CG7567U
+         46EV7E88YK4fNhK7QVjI/E2lQLqxC1bujolHr+RZlR7UXrJ1avRkaMRFv/H9MfFl2hh1
+         u98fJkzP5QAesXv9MaFCNKojKgvb4dNtO04+xZDINxqSF7ctNO4K3WLG1UJqHUDky9GB
+         6Ug/cLBBLu5mvI0XL8xKd+k4cvbw8VVCnQ6Fqv45brHq1Kdss1375UxEnkWQoDIX6IJb
+         E4qpBmLqVNsbhtm/SoSeUTsVnh612tu3NYOQP0tO/WE0TZqG3BqV3CtboKKQ5l3WngrC
+         v++w==
+X-Gm-Message-State: AOAM533dfrFvu7aPxohbS7qWlZVzOidp90FFgv/nU14XtZyS+4ncfZe1
+        cafBW/ea4klL5ab4on7pjEs=
+X-Google-Smtp-Source: ABdhPJzzbzALNEpY7ocNy8qACRP+3a93A8WMHmF6JkOH3WG/eLxTIPaHlI1M2v1LBjxLWK4uHktwRQ==
+X-Received: by 2002:a05:6402:d7:b0:413:673:ba2f with SMTP id i23-20020a05640200d700b004130673ba2fmr12609981edu.29.1648417835982;
+        Sun, 27 Mar 2022 14:50:35 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id q9-20020a17090609a900b006cd30a3c4f0sm5089236eje.147.2022.03.27.14.47.58
+        by smtp.googlemail.com with ESMTPSA id ge13-20020a170907908d00b006e09a005d73sm3530726ejb.31.2022.03.27.14.50.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Mar 2022 14:47:58 -0700 (PDT)
+        Sun, 27 Mar 2022 14:50:35 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH] block: use dedicated list iterator variable
-Date:   Sun, 27 Mar 2022 23:47:04 +0200
-Message-Id: <20220327214704.2188742-1-jakobkoschel@gmail.com>
+Subject: [PATCH] bpf: replace usage of found with dedicated list iterator variable
+Date:   Sun, 27 Mar 2022 23:50:10 +0200
+Message-Id: <20220327215010.2193515-1-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -79,37 +85,100 @@ To *never* use the list iterator variable after the loop it was
 concluded to use a separate iterator variable instead of a
 found boolean [1].
 
+This removes the need to use a found variable (supported & existed)
+and simply checking if the variable was set, can determine if the
+break/goto was hit.
+
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- block/blk-mq.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ kernel/bpf/bpf_iter.c | 30 ++++++++++++++----------------
+ 1 file changed, 14 insertions(+), 16 deletions(-)
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 8e659dc5fcf3..455fdd488f3c 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -4466,12 +4466,14 @@ static bool blk_mq_elv_switch_none(struct list_head *head,
- static void blk_mq_elv_switch_back(struct list_head *head,
- 		struct request_queue *q)
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+index b7aef5b3416d..0b6d5e726ba3 100644
+--- a/kernel/bpf/bpf_iter.c
++++ b/kernel/bpf/bpf_iter.c
+@@ -329,35 +329,34 @@ static void cache_btf_id(struct bpf_iter_target_info *tinfo,
+ bool bpf_iter_prog_supported(struct bpf_prog *prog)
  {
--	struct blk_mq_qe_pair *qe;
-+	struct blk_mq_qe_pair *qe = NULL;
-+	struct blk_mq_qe_pair *iter;
- 	struct elevator_type *t = NULL;
- 
--	list_for_each_entry(qe, head, node)
--		if (qe->q == q) {
--			t = qe->type;
-+	list_for_each_entry(iter, head, node)
-+		if (iter->q == q) {
-+			t = iter->type;
-+			qe = iter;
+ 	const char *attach_fname = prog->aux->attach_func_name;
++	struct bpf_iter_target_info *tinfo = NULL, *iter;
+ 	u32 prog_btf_id = prog->aux->attach_btf_id;
+ 	const char *prefix = BPF_ITER_FUNC_PREFIX;
+-	struct bpf_iter_target_info *tinfo;
+ 	int prefix_len = strlen(prefix);
+-	bool supported = false;
+
+ 	if (strncmp(attach_fname, prefix, prefix_len))
+ 		return false;
+
+ 	mutex_lock(&targets_mutex);
+-	list_for_each_entry(tinfo, &targets, list) {
+-		if (tinfo->btf_id && tinfo->btf_id == prog_btf_id) {
+-			supported = true;
++	list_for_each_entry(iter, &targets, list) {
++		if (iter->btf_id && iter->btf_id == prog_btf_id) {
++			tinfo = iter;
  			break;
  		}
- 
+-		if (!strcmp(attach_fname + prefix_len, tinfo->reg_info->target)) {
+-			cache_btf_id(tinfo, prog);
+-			supported = true;
++		if (!strcmp(attach_fname + prefix_len, iter->reg_info->target)) {
++			cache_btf_id(iter, prog);
++			tinfo = iter;
+ 			break;
+ 		}
+ 	}
+ 	mutex_unlock(&targets_mutex);
+
+-	if (supported) {
++	if (tinfo) {
+ 		prog->aux->ctx_arg_info_size = tinfo->reg_info->ctx_arg_info_size;
+ 		prog->aux->ctx_arg_info = tinfo->reg_info->ctx_arg_info;
+ 	}
+
+-	return supported;
++	return tinfo != NULL;
+ }
+
+ const struct bpf_func_proto *
+@@ -498,12 +497,11 @@ bool bpf_link_is_iter(struct bpf_link *link)
+ int bpf_iter_link_attach(const union bpf_attr *attr, bpfptr_t uattr,
+ 			 struct bpf_prog *prog)
+ {
++	struct bpf_iter_target_info *tinfo = NULL, *iter;
+ 	struct bpf_link_primer link_primer;
+-	struct bpf_iter_target_info *tinfo;
+ 	union bpf_iter_link_info linfo;
+ 	struct bpf_iter_link *link;
+ 	u32 prog_btf_id, linfo_len;
+-	bool existed = false;
+ 	bpfptr_t ulinfo;
+ 	int err;
+
+@@ -529,14 +527,14 @@ int bpf_iter_link_attach(const union bpf_attr *attr, bpfptr_t uattr,
+
+ 	prog_btf_id = prog->aux->attach_btf_id;
+ 	mutex_lock(&targets_mutex);
+-	list_for_each_entry(tinfo, &targets, list) {
+-		if (tinfo->btf_id == prog_btf_id) {
+-			existed = true;
++	list_for_each_entry(iter, &targets, list) {
++		if (iter->btf_id == prog_btf_id) {
++			tinfo = iter;
+ 			break;
+ 		}
+ 	}
+ 	mutex_unlock(&targets_mutex);
+-	if (!existed)
++	if (!tinfo)
+ 		return -ENOENT;
+
+ 	link = kzalloc(sizeof(*link), GFP_USER | __GFP_NOWARN);
 
 base-commit: b47d5a4f6b8d42f8a8fbe891b36215e4fddc53be
--- 
+--
 2.25.1
 

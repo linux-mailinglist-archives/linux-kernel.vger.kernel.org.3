@@ -2,123 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 333E04E885B
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 17:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1144E885C
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 17:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235818AbiC0PPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 11:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
+        id S235823AbiC0PQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 11:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbiC0PPu (ORCPT
+        with ESMTP id S231449AbiC0PQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 11:15:50 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33584EF71
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 08:14:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648394051; x=1679930051;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=miylXDcvB50cC7HJQyQcZZE78lqoMQ3oC3bV0lCkIgc=;
-  b=nn2cyfPrbam7p8lfMliUuXaY91pwmzxKQUWkWJrbNMF9pDOlqSYN+752
-   F9eOOL+hxmk0RScKqRxlnGk0aEbBQKBFqiA5gZ35Azfy6MUFWoi2rzyYV
-   v303szHEs22Y+wyjp4zTLfKQfIkl0wUzO+7VQvyFVKeNTCNs5uZkLHgTG
-   it6oJQ0LY/LAen5AzMGDIDIsWcZ6puMy4V09NgILZFYNSNQ5oCiowrcrp
-   ZYCkv5msgJcHwvkU6Vjz1P/aznLqnv+UnSPA5FDQ/zMGP7lq3vI2l8jHF
-   lGpL9kqNOkyJy4xRH4a1RDFYXN/0GP1dagUTFc29/WTWP8OYJvAMcmbDo
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="345293908"
-X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
-   d="scan'208";a="345293908"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 08:14:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
-   d="scan'208";a="617553158"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 27 Mar 2022 08:14:09 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nYUan-00019Q-86; Sun, 27 Mar 2022 15:14:09 +0000
-Date:   Sun, 27 Mar 2022 23:13:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: mm/kasan/shadow.c:496:15: sparse: sparse: restricted
- kasan_vmalloc_flags_t degrades to integer
-Message-ID: <202203272343.oME5HaYV-lkp@intel.com>
+        Sun, 27 Mar 2022 11:16:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30677506E7
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 08:14:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648394097;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aO0HGjT7ZCP54sd0nyJvdO8KKuk8vcPL3oF3GsN92ZE=;
+        b=SNswb3xSgkvYu6XDGOKqvcJl86wT7RMxeA25H1RTOvl7+JfXvpxEsbdcGsoCrc1a4fs2cn
+        ERrWlosJhTYBgNRPtYo1gOqtcfzg7btnPzz54wSzdqiAdlJHY/WWfbLLr1hvaCQgayLF90
+        D5YUySikyFrL6E3OXI4Z9NW5sW/F20k=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-494-ORdutjHEP4arkCb2xFdKWg-1; Sun, 27 Mar 2022 11:14:53 -0400
+X-MC-Unique: ORdutjHEP4arkCb2xFdKWg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 44DD0185A79C;
+        Sun, 27 Mar 2022 15:14:53 +0000 (UTC)
+Received: from starship (unknown [10.40.194.231])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4D9531402404;
+        Sun, 27 Mar 2022 15:14:50 +0000 (UTC)
+Message-ID: <d71378091e7a410ce56947b72d6e59deccaa65bd.camel@redhat.com>
+Subject: Re: [PATCH v4 3/6] KVM: x86: nSVM: support PAUSE filtering when L0
+ doesn't intercept PAUSE
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Jim Mattson <jmattson@google.com>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>
+Date:   Sun, 27 Mar 2022 18:14:49 +0300
+In-Reply-To: <848bba1a-66f2-a3eb-510e-9322b729c8ec@redhat.com>
+References: <20220322174050.241850-1-mlevitsk@redhat.com>
+         <20220322174050.241850-4-mlevitsk@redhat.com>
+         <848bba1a-66f2-a3eb-510e-9322b729c8ec@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f022814633e1c600507b3a99691b4d624c2813f0
-commit: f6e39794f4b6da7ca9b77f2f9ad11fd6f0ac83e5 kasan, vmalloc: only tag normal vmalloc allocations
-date:   3 days ago
-config: s390-randconfig-s031-20220327 (https://download.01.org/0day-ci/archive/20220327/202203272343.oME5HaYV-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f6e39794f4b6da7ca9b77f2f9ad11fd6f0ac83e5
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f6e39794f4b6da7ca9b77f2f9ad11fd6f0ac83e5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash mm/kasan/
+On Thu, 2022-03-24 at 19:24 +0100, Paolo Bonzini wrote:
+> On 3/22/22 18:40, Maxim Levitsky wrote:
+> > Allow L1 to use PAUSE filtering if L0 doesn't use it.
+> > 
+> > Signed-off-by: Maxim Levitsky<mlevitsk@redhat.com>
+> 
+> Can you enlarge the commit message to explain the logic in 
+> nested_vmcb02_prepare_control?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+No problem, I will do in the next version.
+
+How about this:
+
+KVM: x86: nSVM: support nested PAUSE filtering when possible           
+ 
+Expose the pause filtering and threshold in the guest CPUID 
+and support PAUSE filtering when possible:
+
+- If the L0 doesn't intercept PAUSE
+  (cpu_pm=on, or pause_filter_count kvm_amd's parameter is 0),
+  then allow L1 to have full control over PAUSE filtering.
+ 
+- Otherwise if the L1 doesn't intercept PAUSE, 
+  use KVM's PAUSE thresholds, and update them even 
+  when running nested.
+ 
+- Otherwise ignore both	host and guest PAUSE thresholds,
+  because it is	not really possible to merge them correctly.
+
+  It is	expected that in this case, userspace hypervisor (e.g qemu)
+  will not enable this feature in the guest CPUID, to avoid
+  having the guest to update both thresholds pointlessly.
 
 
-sparse warnings: (new ones prefixed by >>)
->> mm/kasan/shadow.c:496:15: sparse: sparse: restricted kasan_vmalloc_flags_t degrades to integer
+Best regards,
+	Maxim Levitsky
 
-vim +496 mm/kasan/shadow.c
+> 
+> Thanks,
+> 
+> Paolo
+> 
 
-   477	
-   478	void *__kasan_unpoison_vmalloc(const void *start, unsigned long size,
-   479				       kasan_vmalloc_flags_t flags)
-   480	{
-   481		/*
-   482		 * Software KASAN modes unpoison both VM_ALLOC and non-VM_ALLOC
-   483		 * mappings, so the KASAN_VMALLOC_VM_ALLOC flag is ignored.
-   484		 * Software KASAN modes can't optimize zeroing memory by combining it
-   485		 * with setting memory tags, so the KASAN_VMALLOC_INIT flag is ignored.
-   486		 */
-   487	
-   488		if (!is_vmalloc_or_module_addr(start))
-   489			return (void *)start;
-   490	
-   491		/*
-   492		 * Don't tag executable memory with the tag-based mode.
-   493		 * The kernel doesn't tolerate having the PC register tagged.
-   494		 */
-   495		if (IS_ENABLED(CONFIG_KASAN_SW_TAGS) &&
- > 496		    !(flags & KASAN_VMALLOC_PROT_NORMAL))
-   497			return (void *)start;
-   498	
-   499		start = set_tag(start, kasan_random_tag());
-   500		kasan_unpoison(start, size, false);
-   501		return (void *)start;
-   502	}
-   503	
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

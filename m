@@ -2,133 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0651C4E8619
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 07:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73EB54E861D
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 07:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235259AbiC0FpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 01:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42418 "EHLO
+        id S235276AbiC0Fzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 01:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232607AbiC0FpS (ORCPT
+        with ESMTP id S232607AbiC0Fzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 01:45:18 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B78FDB
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:43:40 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2e592e700acso119181557b3.5
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:43:40 -0700 (PDT)
+        Sun, 27 Mar 2022 01:55:41 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1B757173;
+        Sat, 26 Mar 2022 22:54:03 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id v4so11163475pjh.2;
+        Sat, 26 Mar 2022 22:54:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kp+n7MjmnLTJ4vOAA537LLcCjh6KRC0etIIuCa/wcqQ=;
-        b=icDZzCAPN5GzbIs+eeeY5TNGBRG9fV3oU6z+g0Dshz7qXNcvNe25C09q2gQBxiVQKm
-         BPvx9nsC8xFm+raqnG0tK6LL4xi/wSZ69riv36QGC9YvgpI2rEq9CqUsz7JhVmBn2gYR
-         W3zAr1bQe+0ML/qTY18DiE8AK1LRW6NMRf6CXu/8ujOCOAg3851aNlzvCSF+ORKoq8Kh
-         ty696EWA9jVAe8eGmqO5/uMA7L6CsQY/8BYppV4yD3ILqroCSC8AriglDCA2PuQ3Kt2k
-         XCWm6/8wntsx4G9rdOE0LuUcoookkpQKFIlP+JA5xl1vcIsLErdvCsQ4ndWV7dWYwgCx
-         kLzg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=LIDQGlj3VLO68EFfP7fGx3WACork59rTmNVuYIV40DE=;
+        b=q1T9x1irmTEDglNu4jA/LGN/tv+9XWlN8xmGoZRJ94dQYV4PFTPV+3L3D6La0T5TGO
+         U7u5tZsTqJm/JgbrkP+OQlxzLLkeh4oACKfpJ6iH3azw4RA2mxRiB2By0FqZdKeiR8NK
+         d6UJaVdF2yWaggbls8plj0d0/v3rL2+jiOEyoCkppbkHH/q/WxNnxLp7ed1z9AVoQSkq
+         vPw7DDwGHJMnX4Doy3QuQrbWiTeq9wsbyNHKN5wC/oF42wohZagR1O+ZCi+G5rSAfwcB
+         B/66OfrBlgVndH/XA71/creKi9QT6sKKlyswdatTFl96vg8weVg1aBPdaIiYMYbWhbY6
+         CoHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kp+n7MjmnLTJ4vOAA537LLcCjh6KRC0etIIuCa/wcqQ=;
-        b=u+slCl95uEtfkSq9H36PhMjbQ0rQUTRLt62EIaG3rNPrpXsMXpROiH67hYqhnSMtG2
-         ABC+B34VoMJCJbyowU9Yk01R3/qPOvVkQrSreQzQVFEXDQDXNUGYK2zunuiRGlOKVVrc
-         otPR/lEEUeYc4R4pAEMkP55LT5YF23BffhRZpv+OjqdnV/DYYoYxRJEO4epXenrxUna0
-         d8BwnpvCkycE5409pf9QN4ACRBGlNyIvuNxsUbV0E2UW6iT5cc6ePQi93AHu/S+NfyCK
-         hG7QELpdlCBYKoCnLqyBfdTOH91AKRWmi78WQfWor+No5p0FbHk3htf40ME9B5m1+Tfg
-         MoMQ==
-X-Gm-Message-State: AOAM532ZUAJm/5OgaGWTATs4ybaiX3EO0yXp+aPX46DYC1S7Ciysoz6G
-        9FMxd8Coz4GzHonX4T5e6hNh4c69e3+ZdgfQKCjSZw==
-X-Google-Smtp-Source: ABdhPJwIvL78p8zBSpKdXW3OcMDN5VYLW8WBGkkTHwZ1qqfNPoxw6rEtsQ28DJ6Hi85h7xXmRkfj7I3ZUMylE9TN7io=
-X-Received: by 2002:a81:5dd6:0:b0:2d6:3041:12e0 with SMTP id
- r205-20020a815dd6000000b002d6304112e0mr19479093ywb.331.1648359819570; Sat, 26
- Mar 2022 22:43:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220327051853.57647-1-songmuchun@bytedance.com> <20220327051853.57647-2-songmuchun@bytedance.com>
-In-Reply-To: <20220327051853.57647-2-songmuchun@bytedance.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Sun, 27 Mar 2022 13:43:03 +0800
-Message-ID: <CAMZfGtVWa0uOKqSeuau9pCNXSQHPz5=S+yYupCUYRqhqyhod+A@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mm: kfence: fix objcgs vector allocation
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     kasan-dev@googlegroups.com,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=LIDQGlj3VLO68EFfP7fGx3WACork59rTmNVuYIV40DE=;
+        b=qnIEhkRlsHDZjbILPKF59suh2GrsMeGKCHfBrb4eMdXgUTsx0AqIxFhlCS5zselCs9
+         cf+4RbVp6oZMuJzExihF7V2MdBVxhJcRAz+cio5QoEqH0xZyfja+kru7j2pR6juufDyx
+         Vf6uODrdQBWtV8NYHlCALtyIEDsx2Faqn+bsxr6l+8M6Sbq8vkiPNCNJht6d4wG1OvC6
+         TyXuouqx1UyXX1EXJJ3JEmCbGZK0okJIIrjvbsKrw5qIzJgKEieBmWFA4MzNMhxxRGTl
+         spuIfPXb4NjNGM+HPEfwnsac5r+53V9ny9vUxte95mi5FTRO3mmfnH74z6AaZIAvIFFW
+         fn7g==
+X-Gm-Message-State: AOAM530AOhXQUxN+QlKh+//qeQsW2WatObb6rFyZ67LSUQ+koa+WoV40
+        Hk6D6gkg+wF89Tr1zjBf+HU=
+X-Google-Smtp-Source: ABdhPJy4k07mvfzm2EG3bok+szq0r8f379ZtqpNiz3wD1da1BhAx93ZoSKYEp5L3TI3I5jVnEniXNA==
+X-Received: by 2002:a17:90b:1a8b:b0:1c7:386b:4811 with SMTP id ng11-20020a17090b1a8b00b001c7386b4811mr22577530pjb.4.1648360442838;
+        Sat, 26 Mar 2022 22:54:02 -0700 (PDT)
+Received: from localhost.localdomain ([115.220.243.108])
+        by smtp.googlemail.com with ESMTPSA id w61-20020a17090a6bc300b001c7ca8a1467sm8779049pjj.46.2022.03.26.22.53.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Mar 2022 22:54:02 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     yannick.fertre@foss.st.com
+Cc:     raphael.gallais-pou@foss.st.com, philippe.cornu@foss.st.com,
+        airlied@linux.ie, daniel@ffwll.ch, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, marex@denx.de,
+        dri-devel@lists.freedesktop.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH] stm: ltdc: fix two incorrect NULL checks on list iterator
+Date:   Sun, 27 Mar 2022 13:53:55 +0800
+Message-Id: <20220327055355.3808-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 27, 2022 at 1:19 PM Muchun Song <songmuchun@bytedance.com> wrote:
->
-> If the kfence object is allocated to be used for objects vector, then
-> this slot of the pool eventually being occupied permanently since
-> the vector is never freed.  The solutions could be 1) freeing vector
-> when the kfence object is freed or 2) allocating all vectors statically.
-> Since the memory consumption of object vectors is low, it is better to
-> chose 2) to fix the issue and it is also can reduce overhead of vectors
-> allocating in the future.
->
-> Fixes: d3fb45f370d9 ("mm, kfence: insert KFENCE hooks for SLAB")
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+The two bugs are here:
+	if (encoder) {
+	if (bridge && bridge->timings)
 
-Since it cannot be compiled successfully when !CONFIG_MEMCG
-(The following patch should be applied), I'll update this in the next
-version if anyone agrees with this change.
+The list iterator value 'encoder/bridge' will *always* be set and
+non-NULL by drm_for_each_encoder()/list_for_each_entry(), so it is
+incorrect to assume that the iterator value will be NULL if the
+list is empty or no element is found.
 
-Thanks.
+To fix the bug, use a new variable '*_iter' as the list iterator,
+while use the old variable 'encoder/bridge' as a dedicated pointer
+to point to the found element.
 
-diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-index 9976b3f0d097..b5c4b62b5d2c 100644
---- a/mm/kfence/core.c
-+++ b/mm/kfence/core.c
-@@ -583,7 +583,9 @@ static bool __init kfence_init_pool(void)
-                struct kfence_metadata *meta = &kfence_metadata[i];
+Cc: stable@vger.kernel.org
+Fixes: 99e360442f223 ("drm/stm: Fix bus_flags handling")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+---
+ drivers/gpu/drm/stm/ltdc.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-                /* Initialize metadata. */
-+#ifdef CONFIG_MEMCG
-                slab->memcg_data = (unsigned long)&meta->objcg |
-MEMCG_DATA_OBJCGS;
-+#endif
-                INIT_LIST_HEAD(&meta->list);
-                raw_spin_lock_init(&meta->lock);
-                meta->state = KFENCE_OBJECT_UNUSED;
-@@ -940,7 +942,9 @@ void __kfence_free(void *addr)
- {
-        struct kfence_metadata *meta = addr_to_metadata((unsigned long)addr);
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index dbdee954692a..d6124aa873e5 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -528,8 +528,8 @@ static void ltdc_crtc_mode_set_nofb(struct drm_crtc *crtc)
+ 	struct drm_device *ddev = crtc->dev;
+ 	struct drm_connector_list_iter iter;
+ 	struct drm_connector *connector = NULL;
+-	struct drm_encoder *encoder = NULL;
+-	struct drm_bridge *bridge = NULL;
++	struct drm_encoder *encoder = NULL, *en_iter;
++	struct drm_bridge *bridge = NULL, *br_iter;
+ 	struct drm_display_mode *mode = &crtc->state->adjusted_mode;
+ 	u32 hsync, vsync, accum_hbp, accum_vbp, accum_act_w, accum_act_h;
+ 	u32 total_width, total_height;
+@@ -538,15 +538,19 @@ static void ltdc_crtc_mode_set_nofb(struct drm_crtc *crtc)
+ 	int ret;
+ 
+ 	/* get encoder from crtc */
+-	drm_for_each_encoder(encoder, ddev)
+-		if (encoder->crtc == crtc)
++	drm_for_each_encoder(en_iter, ddev)
++		if (en_iter->crtc == crtc) {
++			encoder = en_iter;
+ 			break;
++		}
+ 
+ 	if (encoder) {
+ 		/* get bridge from encoder */
+-		list_for_each_entry(bridge, &encoder->bridge_chain, chain_node)
+-			if (bridge->encoder == encoder)
++		list_for_each_entry(br_iter, &encoder->bridge_chain, chain_node)
++			if (br_iter->encoder == encoder) {
++				bridge = br_iter;
+ 				break;
++			}
+ 
+ 		/* Get the connector from encoder */
+ 		drm_connector_list_iter_begin(ddev, &iter);
+-- 
+2.17.1
 
-+#ifdef CONFIG_MEMCG
-        KFENCE_WARN_ON(meta->objcg);
-+#endif
-        /*
-         * If the objects of the cache are SLAB_TYPESAFE_BY_RCU, defer freeing
-         * the object, as the object page may be recycled for other-typed
-diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
-index 6f0e1aece3f8..9a6c4b1b12a8 100644
---- a/mm/kfence/kfence.h
-+++ b/mm/kfence/kfence.h
-@@ -89,7 +89,9 @@ struct kfence_metadata {
-        struct kfence_track free_track;
-        /* For updating alloc_covered on frees. */
-        u32 alloc_stack_hash;
-+#ifdef CONFIG_MEMCG
-        struct obj_cgroup *objcg;
-+#endif
- };

@@ -2,132 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C164E85EC
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 07:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14EAC4E85EF
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 07:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235013AbiC0FXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 01:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
+        id S235058AbiC0F3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 01:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiC0FXE (ORCPT
+        with ESMTP id S235030AbiC0F3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 01:23:04 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0571D301
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:21:26 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 17so15182254lji.1
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:21:25 -0700 (PDT)
+        Sun, 27 Mar 2022 01:29:32 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA78441FB4
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:27:54 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2d07ae0b1c4so118493477b3.11
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:27:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3AIrmmPfx/ZOrHBctYZwCCwGfAaK/1/IH4psZd3wsUE=;
-        b=djCcgOaCULO1J4pux52MUZuwiPblxKGguZJ9FLwYib2dSNo188P6jyJlcS/Z3+Vjqp
-         NuxHz+nULM3zYzdCDc/LCticaRTrzP6Eu8i5lYrUz9D+Qn4hFWHokDkpiq4ZgcyhM3fv
-         2VMFEP6rvt3FcDITehwTGDWmAXZRTRWN+Beak=
+        bh=YgicqkCAvKN3gU0TpIKb4dIuI5ODIxLQrQ5+n0JgnmE=;
+        b=jlGIuagyuKA21DL3+KdYHrYYfkokePE6pXILsVDiB+4HHTDI1p7HME4hzVEcno/3dS
+         PELGTjLfGCih+cQ86kYVUHStNAWvNF5mYRH4fngt23A5ZvyXar7InfP5+ZAHO/Nq7GF9
+         cHyLrBaA1xgBp5Ae4ok/YUDJp7XQ8ZNiwS0x2VbUEOLPB6bU1lSH/BzjNpwGcN2GXH+p
+         0z5kkfW5v40Vxikp9SyJm8LiL03mUk+EQwljGFAGaTWyk7WpDyVXyXPrhRfkbZQ/7f5z
+         2psHl3yMYvkz0UycClNrJUyPA1WJNBuekLf8cUTKHbvc5NrJUbiPUU1Ia4r9oPlcF+x4
+         XHYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3AIrmmPfx/ZOrHBctYZwCCwGfAaK/1/IH4psZd3wsUE=;
-        b=L4IZraCc8vrbhj4B/NS5EIsWck+T3hzlxJJESh0iB14IBHDeQj1q3BG2bQNW6UAlVl
-         VcE8OPgivLOTNq4HomIY1coh3lFZBnfCLSf4fBtJPeqN6m8mivm2hjtpGYQZhR3GPcjC
-         3KKiJadTPEt+M/oHZV22U3sUhvOMdixwA68pNS6QRc/pcTC5YRbOL7PFzWkRHX4LQyoz
-         3vXuQUkkblQa3N4aNEhJTL3Q5BjQ6Re2BEbaLUrApujZsoTCeuff6YLvEFuV44oc1Bej
-         zw1lG4B0AaVrJgdETKDIBB0JvuSDfa352Tim6i0Pua6/5/v6GmkhV3fnnxj8oa8O85fT
-         j0tg==
-X-Gm-Message-State: AOAM530mDJiznRecXLTXA4U2mmWT4Z4c5fZPgtTnnudg2u5Lse+goPDy
-        jaizvJrAXtUE/R930EG+mu2B8RKJVJBPfb0fYwc=
-X-Google-Smtp-Source: ABdhPJz1K2NFWvBtf2WpYygd6D+vgYCm7naH2VsHOQgZrI//7uo18KeEYRorCiVXZGhzXtPJISh64g==
-X-Received: by 2002:a2e:9010:0:b0:244:c66c:c3e6 with SMTP id h16-20020a2e9010000000b00244c66cc3e6mr14568524ljg.391.1648358484176;
-        Sat, 26 Mar 2022 22:21:24 -0700 (PDT)
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com. [209.85.208.179])
-        by smtp.gmail.com with ESMTPSA id bu9-20020a056512168900b004489c47d241sm1262102lfb.32.2022.03.26.22.21.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Mar 2022 22:21:20 -0700 (PDT)
-Received: by mail-lj1-f179.google.com with SMTP id h11so15167785ljb.2
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:21:20 -0700 (PDT)
-X-Received: by 2002:a2e:6f17:0:b0:248:124:9c08 with SMTP id
- k23-20020a2e6f17000000b0024801249c08mr14918936ljc.506.1648358479393; Sat, 26
- Mar 2022 22:21:19 -0700 (PDT)
+        bh=YgicqkCAvKN3gU0TpIKb4dIuI5ODIxLQrQ5+n0JgnmE=;
+        b=WxepPSU8WiLuf/z94rzoaR1WG9VyxD068swQrYRyesj/0DUe5dAhRbnhBrMfatFKKo
+         dwvrt1IIVUPZbdAQCMStQwsqpRF/mSTebhWQveCEavMYAYE20gwLJxfGC98N83yq7Sp9
+         stwqjJcXH3j56bBO4Ljm6PwL8PRqUn+SpfNmGirditWvDUsjL3+x3qO3MB/UucTm7kIN
+         xed0k87rqYpkeRFIp/G07m7l+iNIPSfSYwXoHBL2vNQ0+QuR4zqBOO/KcWWsN0WgfCiF
+         gdjKbkXWcwCI6wJc23u5YdpfQbJIExgctazlszZ66H3IwTbk7chPlt6dsOh/eQAwyww0
+         BQEA==
+X-Gm-Message-State: AOAM532ty72H0zB/RG1XxGUiNfg0WhlIB9oqtVitp2n9mxX6EvNmQdMx
+        iCiAcw8dMWVkg/qQ3a40NyXVwD2+kHo35JiUIIza2U2HmzhTmA==
+X-Google-Smtp-Source: ABdhPJzzw/OngC7HG5Wt2z+m+5FYq1dMSef73+ak3m/Hhj9AvMAbNI0CwKPblL14NNRYzbZHr/r8zjL9kRIOPHKj/7o=
+X-Received: by 2002:a81:5dd6:0:b0:2d6:3041:12e0 with SMTP id
+ r205-20020a815dd6000000b002d6304112e0mr19445727ywb.331.1648358873967; Sat, 26
+ Mar 2022 22:27:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <1812355.tdWV9SEqCh@natalenko.name> <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
- <20220324055732.GB12078@lst.de> <4386660.LvFx2qVVIh@natalenko.name>
- <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com> <878rsza0ih.fsf@toke.dk>
- <4be26f5d8725cdb016c6fdd9d05cfeb69cdd9e09.camel@freebox.fr>
- <20220324163132.GB26098@lst.de> <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com>
- <871qyr9t4e.fsf@toke.dk> <CAHk-=whUQCCaQXJt3KUeQ8mtnLeVXEScNXCp+_DYh2SNY7EcEA@mail.gmail.com>
- <20220327054848.1a545b12.pasic@linux.ibm.com> <CAHk-=whUJ=tMEgP3KiWwk0pzmHn+1QORUu50syE+zOGk4UnFog@mail.gmail.com>
-In-Reply-To: <CAHk-=whUJ=tMEgP3KiWwk0pzmHn+1QORUu50syE+zOGk4UnFog@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 26 Mar 2022 22:21:03 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgUx5CVF_1aEkhhEiRGXHgKzUdKiyctBKcHAxkxPpbiaw@mail.gmail.com>
-Message-ID: <CAHk-=wgUx5CVF_1aEkhhEiRGXHgKzUdKiyctBKcHAxkxPpbiaw@mail.gmail.com>
-Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
- ath9k-based AP
-To:     Halil Pasic <pasic@linux.ibm.com>
-Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Maxime Bizon <mbizon@freebox.fr>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Olha Cherevyk <olha.cherevyk@gmail.com>,
-        iommu <iommu@lists.linux-foundation.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable <stable@vger.kernel.org>
+References: <000000000000cabcb505dae9e577@google.com> <CAMZfGtUG9GSRSp6fQ6AD6MFemX9ZS=XYWFceMPjVH7LATamUKg@mail.gmail.com>
+ <CAHk-=wii1peDbW+eZipUnLmU_STXx6Vm30PiQnjhfUmgYrSd+Q@mail.gmail.com>
+In-Reply-To: <CAHk-=wii1peDbW+eZipUnLmU_STXx6Vm30PiQnjhfUmgYrSd+Q@mail.gmail.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Sun, 27 Mar 2022 13:27:17 +0800
+Message-ID: <CAMZfGtWzk2+yJd0vHWvokknBhWVfyauRZBvxbkFoDsngOK8MzA@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in list_lru_add
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     syzbot <syzbot+f8c45ccc7d5d45fc5965@syzkaller.appspotmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 26, 2022 at 10:06 PM Linus Torvalds
+On Sat, Mar 26, 2022 at 4:29 AM Linus Torvalds
 <torvalds@linux-foundation.org> wrote:
 >
-> On Sat, Mar 26, 2022 at 8:49 PM Halil Pasic <pasic@linux.ibm.com> wrote:
+> On Fri, Mar 25, 2022 at 2:52 AM Muchun Song <songmuchun@bytedance.com> wrote:
 > >
-> > I agree it CPU modified buffers *concurrently* with DMA can never work,
-> > and I believe the ownership model was conceived to prevent this
-> > situation.
+> > We can see that we put the dentry (ffff88807ebda0f8) into
+> > the list_lru (ffff888011bd47f0). But we do not allocate struct
+> > list_lru_one for the memcg (ffff88801c530000).  Then it panics.
 >
-> But that just means that the "ownership" model is garbage, and cannot
-> handle this REAL LIFE situation.
+> Hmm.
+>
+> Looking at memcg_slab_pre_alloc_hook(), I note that it will return
+> success without doing the LRU checking for several cases.
+>
+> So since you can reproduce the problem, I would suggest you add some
+> debug code to __d_alloc() that prints out something big if it gets a
+> dentry but you can't look up the list_lru_one() for that dentry.
+>
+> Hmm?
+>
+> The only other situation I can think of is if dentry->d_sb were to
+> change during the dentry lifetime, but I don't think that can happen.
+> The only assignment I can find with "git grep" is that
+>
+>         dentry->d_sb = sb;
+>
+> in __d_alloc(), and while it's possible my grep pattern was bogus, it
+> sounds unlikely.
+>
 
-Just to clarify: I obviously agree that the "both sides modify
-concurrently" obviously cannot work with bounce buffers.
+I have found the root cause, it was caused by kfence. Here is
+the fix patch [1].
 
-People still do want to do that, but they'll limit themselves to
-actual cache-coherent DMA when they do so (or do nasty uncached
-accesses but at least no bounce buffering).
+[1] https://lore.kernel.org/all/20220327051853.57647-1-songmuchun@bytedance.com/
 
-But the "bounce ownership back and forth" model comes up empty when
-the CPU wants to read while the DMA is still going on. And that not
-only can work, but *has* worked.
-
-You could have a new "get me a non-ownership copy" operation of
-course, but that hits the problem of "which existing drivers need it?"
-
-We have no idea, outside of ath9k.
-
-This is why I believe we have to keep the existing semantics in a way
-that keep ath9k - and any number of unknown other drivers - happy.
-
-And then for the cases where you want to introduce the zeroing because
-you don't know how much data the DMA returned - those are the ones
-you'll have to mark some way.
-
-                  Linus
+Thanks.

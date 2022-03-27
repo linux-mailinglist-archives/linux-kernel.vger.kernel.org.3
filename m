@@ -2,120 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FEF4E87C8
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 14:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C564E87D4
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 15:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235128AbiC0Mrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 08:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
+        id S235701AbiC0NCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 09:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbiC0Mrv (ORCPT
+        with ESMTP id S229967AbiC0NCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 08:47:51 -0400
-Received: from stuerz.xyz (unknown [45.77.206.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65554433B5;
-        Sun, 27 Mar 2022 05:46:12 -0700 (PDT)
-Received: by stuerz.xyz (Postfix, from userid 114)
-        id 3C409FBBC6; Sun, 27 Mar 2022 12:46:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=stuerz.xyz; s=mail;
-        t=1648385171; bh=G70xCP6D8WSn+bAqlXu192tXuBsjh/gv9sAawqfU9NY=;
-        h=Date:Subject:To:References:Cc:From:In-Reply-To:From;
-        b=XW7jQ0JjvkbBwWYcDnJe2nlVcVuRIXoXRSxf3PNWwPKilsznYeHIMaHkGHbpF6CPi
-         nqty3MnXTqG+wOEmI6ELfBW3t6Ot8AvrXhUDwqW1UwZJf6kiQJniSr9SnP78twlnv0
-         ZUgcLapZcbEI4qbn8OxvPWktNikL6Kc+Etx6Bphh9afk/Hjw9xpphYQkktP6pYTs4U
-         LH6YzQsfUm6Srdnzw7PCZmDV1KvBPkO+9qnzYPwcN+LOHDfP1TScrzVJPWp75MbJFA
-         PLeKhwC+Gp8yjNM/5t52esOjGU9lpx0aWVyem4iFCEGjhJnePoGwI4TGCoWVDXFMVG
-         IaZqNMJ7zdbtQ==
-Received: from [IPV6:2a02:8109:a100:1a48:ff0:ef2f:d4da:17d8] (unknown [IPv6:2a02:8109:a100:1a48:ff0:ef2f:d4da:17d8])
-        by stuerz.xyz (Postfix) with ESMTPSA id 2060CFBBBC;
-        Sun, 27 Mar 2022 12:46:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=stuerz.xyz; s=mail;
-        t=1648385168; bh=G70xCP6D8WSn+bAqlXu192tXuBsjh/gv9sAawqfU9NY=;
-        h=Date:Subject:To:References:Cc:From:In-Reply-To:From;
-        b=vBbH8cJYXUrIhSgvFCWqsIlouOaWa0Ob/IwOKcnk6W9EsrhxCv3d9ruHzL3uCcOyT
-         isUVW1tcpcwMZ4y6KY5ZxcD9C88CnxszLWDsiAskZjdJ53DER27M6zK0oaEhWWieSL
-         Juy7xWTEZPuLwOj9cO6+/7dR2PqcKQxjkt2MABFO0zPwNEsjU2mafYbXnQPlZ2I0cL
-         2ZDQJwWjnuzEx4AHGvLxNgfwyXB0lIDpMXfYtHANjMklviMBw30yLOvmuMA/WBhhwQ
-         lTIOL/KwWHU60GJWJ06zwdDByMnoxCjLnfIwK3SRtaOMOkXk/Hr5rtRBTGuebT4pdB
-         MUwu53koBYhbA==
-Message-ID: <8f9271b6-0381-70a9-f0c2-595b2235866a@stuerz.xyz>
-Date:   Sun, 27 Mar 2022 14:46:00 +0200
+        Sun, 27 Mar 2022 09:02:30 -0400
+X-Greylist: delayed 396 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Mar 2022 06:00:51 PDT
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A699817A9B;
+        Sun, 27 Mar 2022 06:00:51 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 311EA3200973;
+        Sun, 27 Mar 2022 08:54:11 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Sun, 27 Mar 2022 08:54:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; bh=0Poh99Zp5F+kUx
+        onhOeLMx5mbCgIAbikKidBnjSuO14=; b=mk5o9K8+r5CsemyYP5iZZiLO2vXUvh
+        QeHDy8TFePh/0Ltoq3PfFWCPwVD3SoUOhvnPC8P9LY2TMgfQsgxLOeKaAszy1Z4P
+        tcelHY1V4whM/sIr3Ho+u7JSUW1gzBAaTDFp4R2mU2LgLK4MHXwApLvg7PUxW4t/
+        HrKkl/nLygPxK0Sl2pxG0X0TIt2RGtY4RV7bPiupwhphiSNtmwoZRak7JMTAXdxZ
+        uMdx9a8NLNbEnVtCLTf35PyVN4z3pxw6TL/G2ypyoPvljoejPRyuTpALcVYi0QZY
+        0+7NSqfL3798c2PTinQluMpLZ1B7PKjRQyrqcKrU6MqtBmYgAqT+Jwpw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=0Poh99Zp5F+kUxonhOeLMx5mbCgIAbikKidBnjSuO
+        14=; b=jvzYHtT0IcVKhFVmeiTMy0Y3W6KTZpLc6mnTsvnLbUvPQtltH9jBpwJ4Z
+        vmRUvhmTg1SeltMTaGhgUa+SzXeq1sZNQFD9ocYXr251HpVDUBuyU2Fw92qJpvGT
+        Z8qh9V2T/j1DLp3G7h5OkiNc14Xlbj4ysK2maycFnRy9+ZtoqGAFiG+ih9MkXjnU
+        6YCeFlyyZNIzKrphmaEyiQ0/o66L1FCFs/y4cD/L97pFnqfbxh5sQ1WuAy3A2ZMo
+        +kZcjeUgCyk8jUdFXOarPz0fsBTsBUZ/3/bTCu8pQmjW0f2q+MyYy4ZSIToDY2ud
+        z+bSHp1SLaCw0xvV9ZkXmUueKN48A==
+X-ME-Sender: <xms:cF5AYsPWhGaKC4GVosNulieA6UPoZtzHTCsEVuv2VJK3AiYr9bOwDA>
+    <xme:cF5AYi-_PF3ZXtj6wB-YWW7GBJqaK6Bafouidw-ZXK2RyRpzED3Uhv3BETVEQyEJ7
+    jtgPh9hjRHeMWBevxM>
+X-ME-Received: <xmr:cF5AYjT5VT-sVxPpm6mNjZbbQdDkaW4ilFjZUDvqZRGk_ucwcrusBtsBBiBC4Zw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudehhedgheekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeejhfehtdefjeeuudehudevleegudethfduiedugeevudehgefh
+    vefhueeguedtgeenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucevlhhushhtvg
+    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhg
+    sehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:cF5AYks_U06sRHaVf83kuZ-wTsZkiTXz-g50lW9n6cuXnQWJ6lxLqg>
+    <xmx:cF5AYkcZt8Nni4pPNht3eZ0KY43PhOwdF0o-J5pWQMtYksFTjkiQyQ>
+    <xmx:cF5AYo0pBjY1B8QXRq2X19yKopKlTye4qazZ9sNYDlK6T3CZUMV4mw>
+    <xmx:cl5AYoOOM0ZId1xMffmZVveh7L1GYDratW_puMOcJzDdt-4XbFCTzw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 27 Mar 2022 08:54:06 -0400 (EDT)
+Message-ID: <169412ca-9167-b214-d613-4fe0e76ad36a@flygoat.com>
+Date:   Sun, 27 Mar 2022 13:54:04 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: [PATCH 00/22] Replace comments with C99 initializers
-Content-Language: en-US
-To:     =?UTF-8?Q?Benjamin_St=c3=bcrz?= <benni@stuerz.xyz>
-References: <20220326165909.506926-1-benni@stuerz.xyz>
-Cc:     sebastian.hesselbarth@gmail.com, gregory.clement@bootlin.com,
-        linux@armlinux.org.uk, linux@simtec.co.uk, krzk@kernel.org,
-        alim.akhtar@samsung.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        robert.moore@intel.com, rafael.j.wysocki@intel.com,
-        lenb@kernel.org, 3chas3@gmail.com, laforge@gnumonks.org,
-        arnd@arndb.de, gregkh@linuxfoundation.org, mchehab@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
-        linus.walleij@linaro.org, brgl@bgdev.pl,
-        mike.marciniszyn@cornelisnetworks.com,
-        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
-        pali@kernel.org, dmitry.torokhov@gmail.com, isdn@linux-pingi.de,
-        benh@kernel.crashing.org, fbarrat@linux.ibm.com, ajd@linux.ibm.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        nico@fluxnic.net, loic.poulain@linaro.org, kvalo@kernel.org,
-        pkshih@realtek.com, bhelgaas@google.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-input@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-media@vger.kernel.org,
-        wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-pci@vger.kernel.org
-From:   =?UTF-8?Q?Benjamin_St=c3=bcrz?= <benni@stuerz.xyz>
-In-Reply-To: <20220326165909.506926-1-benni@stuerz.xyz>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH v12 3/6] dt-bindings: display: Add Loongson display
+ controller
+Content-Language: en-GB
+To:     Sui Jingfeng <15330273260@189.cn>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220327113846.2498146-1-15330273260@189.cn>
+ <20220327113846.2498146-4-15330273260@189.cn>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20220327113846.2498146-4-15330273260@189.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series replaces comments with C99's designated initializers
-in a few places. It also adds some enum initializers. This is my first
-time contributing to the Linux kernel, therefore I'm probably doing a
-lot of things the wrong way. I'm sorry for that.
 
-I've gotten a few emails so far stating that this patch series is
-unnecessary. Yes, in fact this patch series is not necessary by itself,
-but it could help me understand how the whole process works and maybe I
-could help somewhere, where help is actually needed.
 
-This patch itself is a no-op.
+在 2022/3/27 12:38, Sui Jingfeng 写道:
+> Add DT bindings and simple usages for Loongson display controller
+> found in LS7A1000 bridges chip and LS2k1000 SoC.
+>
+> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+[...]
+> +
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    bus {
+> +
+> +        #address-cells = <3>;
+> +        #size-cells = <2>;
+> +        #interrupt-cells = <2>;
+> +
+> +        display-controller@6,1 {
+> +            compatible = "loongson,ls7a1000-dc";
+> +            reg = <0x3100 0x0 0x0 0x0 0x0>;
+> +            interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            i2c@6 {
+> +                compatible = "loongson,gpio-i2c";
+> +                reg = <0x00001650 0x00000020>;
+Hi Jingfeng,
 
-Signed-off-by: Benjamin Stürz <benni@stuerz.xyz>
----
- .gitignore | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for your patch.
 
-diff --git a/.gitignore b/.gitignore
-index 7afd412dadd2..706f667261eb 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -20,7 +20,7 @@
- *.dtb
- *.dtbo
- *.dtb.S
--*.dwo
-+*.dwo
- *.elf
- *.gcno
- *.gz
--- 
-2.35.1
+Just curious about what is this "reg" for?
+> +                loongson,nr = <6>;
+Why nr start from 6?
+
+The approach you are handling I2C seems to be wired..
+
+Actually you can reference how network subsystem is handling
+MDIO controller built-in into Ethernet controller [1] in this case. It is
+basically the same problem.
+
+[1]: 
+https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+
+Thanks.
+- Jiaxun
+
+> +                loongson,sda = <0>;
+> +                loongson,scl = <1>;
+> +                loongson,udelay = <5>;
+> +                loongson,timeout = <2200>;
+> +            };
+> +
+> +            i2c@7 {
+> +                compatible = "loongson,gpio-i2c";
+> +                reg = <0x00001650 0x00000020>;
+> +                loongson,nr = <7>;
+> +                loongson,sda = <2>;
+> +                loongson,scl = <3>;
+> +                loongson,udelay = <5>;
+> +                loongson,timeout = <2200>;
+> +            };
+> +
+> +            ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                port@0 {
+> +                    reg = <0>;
+> +                    endpoint {
+> +                            remote-endpoint = <&vga_encoder_in>;
+> +                    };
+> +                };
+> +
+> +                port@1 {
+> +                    reg = <1>;
+> +                    endpoint {
+> +                            remote-endpoint = <&dvi_encoder_in>;
+> +                    };
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    bus {
+> +
+> +        #address-cells = <3>;
+> +        #size-cells = <2>;
+> +        #interrupt-cells = <2>;
+> +
+> +        display-controller@6,0 {
+> +            compatible = "loongson,ls2k1000-dc";
+> +            reg = <0x3100 0x0 0x0 0x0 0x0>;
+> +            interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +            ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                port@0 {
+> +                    reg = <0>;
+> +                    endpoint {
+> +                            remote-endpoint = <&panel_in>;
+> +                    };
+> +                };
+> +
+> +                port@1 {
+> +                    reg = <1>;
+> +                    endpoint {
+> +                            remote-endpoint = <&hdmi_encoder_in>;
+> +                    };
+> +                };
+> +            };
+> +        };
+> +    };
+> +...
+

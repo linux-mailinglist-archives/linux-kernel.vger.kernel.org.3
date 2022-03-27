@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8256D4E88D2
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 18:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535194E88D7
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 18:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236003AbiC0QZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 12:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
+        id S236035AbiC0QaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 12:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbiC0QZ2 (ORCPT
+        with ESMTP id S236028AbiC0QaC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 12:25:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3AE4C40C;
-        Sun, 27 Mar 2022 09:23:49 -0700 (PDT)
+        Sun, 27 Mar 2022 12:30:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533F36430;
+        Sun, 27 Mar 2022 09:28:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90A9861090;
-        Sun, 27 Mar 2022 16:23:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1471EC340EC;
-        Sun, 27 Mar 2022 16:23:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05A18B80D87;
+        Sun, 27 Mar 2022 16:28:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12E91C340EC;
+        Sun, 27 Mar 2022 16:28:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648398228;
-        bh=YkDb6E6VtnXov8jHR1w8NK/7WAyUsl5XyV+mYViI/iE=;
+        s=k20201202; t=1648398498;
+        bh=hbtabaqAl60KDXR0ALM8mPHH4bvEdZJyIUMFPMJYXBQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Kf2cFa0wjjny3JaXVOXkLznTZSEzTiJG74AgLuspd+sBI6qwCUs6j+1HJZmiPVKEo
-         AQegVXVtLyP0vibmflnZhuY77ZgkvWLVe4QS1n7k+SdcWYLz4EfhinS4mdJlmLy9+N
-         zAvJCUxVDpG59aISHiO26KDh8flWqCA3ljekS4RFHUCwnCWlx9MrQUyiMKfLc+C7Zj
-         vhlvL3TDjgXdo65htGao+nYkEGyyaue5J75HM/OXp7+t1RBXHmgDSd/HdbKxtu2lUo
-         lVzSIFznum8jc0na+LePshZjhTt72aOS85Yd9JQ9+k5I9GauKgRgJHthh32klFnKtM
-         Y4Kizvk4vbRRg==
-Date:   Sun, 27 Mar 2022 17:31:20 +0100
+        b=B1FdCTAk+Cqbt9oVx3VrAeIQuVnLIaVpKuy8/CQRhHfvTkfbp2XnQt75427fDAj3X
+         JrVeiLzbhkqg9vNqAHF8DeLD/kewKhQqo+viwxOqcwKsbjMmwJ2X81pZwxHm9fygiZ
+         11q3yCxig+TDD9+bbGkFh/oEPZNfcm1mLSgtIpCBilsKJhkC0eoH5oCGlMNv86DknH
+         nNGNUjmaIfJ/dEcONx9X1RXnrySgr1L7SYvUD2vg0cMYDe3Jwe58yv2mVld7n9FOWG
+         te0pjDzukBbXh1tmUjiypB6K+clW6hMivK6yClhc0w2Opny+hiBC8vkRoZ6MOilh8M
+         ZFmKWRogMrSYQ==
+Date:   Sun, 27 Mar 2022 17:35:51 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Jagath Jog J <jagathjog1996@gmail.com>
 Cc:     dan@dlrobertson.com, andy.shevchenko@gmail.com,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] iio: accel: bma400: Fix the scale min and max
- macro values
-Message-ID: <20220327173120.78fd5148@jic23-huawei>
-In-Reply-To: <20220326194146.15549-2-jagathjog1996@gmail.com>
+Subject: Re: [PATCH v2 2/5] iio: accel: bma400: conversion to device-managed
+ function
+Message-ID: <20220327173551.4fdcc706@jic23-huawei>
+In-Reply-To: <20220326194146.15549-3-jagathjog1996@gmail.com>
 References: <20220326194146.15549-1-jagathjog1996@gmail.com>
-        <20220326194146.15549-2-jagathjog1996@gmail.com>
+        <20220326194146.15549-3-jagathjog1996@gmail.com>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -57,57 +57,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Mar 2022 01:11:42 +0530
+On Sun, 27 Mar 2022 01:11:43 +0530
 Jagath Jog J <jagathjog1996@gmail.com> wrote:
 
-> Changing the scale macro values to match the bma400 sensitivity
-> for 1 LSB of all the available ranges.
+> This is a conversion to device-managed by using devm_iio_device_register
+> inside probe function, now disabling the regulator and putting bma400 to
+> power down via a devm_add_action_or_reset() hook.
+
+I would state here that previously the bma400 was not put into power down
+mode in some error paths in probe where it now is, but that should cause no
+harm.
+> 
+> The dev_set_drvdata() call, bma400_remove() function and hooks in the I2C
+> and SPI driver struct is removed as devm_iio_device_register function is
+> used to automatically unregister on driver detach.
 > 
 > Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
-Hi Jagath,
+one other minor thing inline.
+
+Jonathan
 
 > ---
->  drivers/iio/accel/bma400.h | 22 ++++++++++++++++++++--
->  1 file changed, 20 insertions(+), 2 deletions(-)
+>  drivers/iio/accel/bma400.h      |  2 -
+>  drivers/iio/accel/bma400_core.c | 77 ++++++++++++++++-----------------
+>  drivers/iio/accel/bma400_i2c.c  |  8 ----
+>  drivers/iio/accel/bma400_spi.c  |  8 ----
+>  4 files changed, 38 insertions(+), 57 deletions(-)
 > 
 > diff --git a/drivers/iio/accel/bma400.h b/drivers/iio/accel/bma400.h
-> index c4c8d74155c2..190366debdb3 100644
+> index 190366debdb3..c1b3dbfbd98f 100644
 > --- a/drivers/iio/accel/bma400.h
 > +++ b/drivers/iio/accel/bma400.h
-> @@ -83,8 +83,26 @@
->  #define BMA400_ACC_ODR_MIN_WHOLE_HZ 25
->  #define BMA400_ACC_ODR_MIN_HZ       12
+> @@ -112,6 +112,4 @@ extern const struct regmap_config bma400_regmap_config;
 >  
-> -#define BMA400_SCALE_MIN            38357
-> -#define BMA400_SCALE_MAX            306864
-> +/* BMA400_SCALE_MIN macro value represents m/s^2 for 1 LSB before
-Multiline comment syntax in IIO is
-/*
- * BMA400....
-
-> + * converting to micro values for +-2g range.
-> + *
-> + * For +-2g - 1 LSB = 0.976562 milli g = 0.009576 m/s^2
-> + * For +-4g - 1 LSB = 1.953125 milli g = 0.019153 m/s^2
-> + * For +-16g - 1 LSB = 7.8125 milli g = 0.076614 m/s^2
-> + *
-> + * The raw value which is used to select the different ranges is determined
-> + * by the first bit set position from the scale value, so BMA400_SCALE_MIN
-> + * should be odd.
-> + *
-> + * Scale values for +-2g, +-4g, +-8g and +-16g is populated into bma400_scales
-> + * array by left shifting BMA400_SCALE_MIN.
-> + * eg:
-> + * To select +-2g = 9577 << 0 = raw value to write is 0.
-> + * To select +-8g = 9577 << 2 = raw value to write is 2.
-> + * To select +-16g = 9677 << 3 = raw value to write is 3.
-
-9667?
-
-> + */
-> +#define BMA400_SCALE_MIN            9577
-> +#define BMA400_SCALE_MAX            76617
+>  int bma400_probe(struct device *dev, struct regmap *regmap, const char *name);
 >  
->  #define BMA400_NUM_REGULATORS       2
->  #define BMA400_VDD_REGULATOR        0
+> -void bma400_remove(struct device *dev);
+> -
+>  #endif
+> diff --git a/drivers/iio/accel/bma400_core.c b/drivers/iio/accel/bma400_core.c
+> index fd2647b728d3..dc273381a0a2 100644
+> --- a/drivers/iio/accel/bma400_core.c
+> +++ b/drivers/iio/accel/bma400_core.c
+> @@ -560,6 +560,26 @@ static void bma400_init_tables(void)
+>  	}
+>  }
+>  
+> +static void bma400_regulators_disable(void *data_ptr)
+> +{
+> +	struct bma400_data *data = data_ptr;
+> +
+> +	regulator_bulk_disable(ARRAY_SIZE(data->regulators), data->regulators);
+> +}
+> +
+> +static void bma400_power_disable(void *data_ptr)
+> +{
+> +	struct bma400_data *data = data_ptr;
+> +	int ret;
+> +
+> +	mutex_lock(&data->mutex);
+> +	ret = bma400_set_power_mode(data, POWER_MODE_SLEEP);
+> +	if (ret)
+> +		dev_warn(data->dev, "Failed to put device into sleep mode (%pe)\n",
+> +			 ERR_PTR(ret));
+
+Drop the check on ret out of the locked region.  No reason for it to be done
+under the lock so generally nice not to do so.  Also matches the previous
+ordering so there shouldnt' be any questions about it.
+
+> +	mutex_unlock(&data->mutex);
+> +}
+> +
+>  static int bma400_init(struct bma400_data *data)
+>  {
+>  	unsigned int val;
+> @@ -569,13 +589,12 @@ static int bma400_init(struct bma400_data *data)
+>  	ret = regmap_read(data->regmap, BMA400_CHIP_ID_REG, &val);
+>  	if (ret) {
+>  		dev_err(data->dev, "Failed to read chip id register\n");
+> -		goto out;
+> +		return ret;
+>  	}
+>  
+>  	if (val != BMA400_ID_REG_VAL) {
+>  		dev_err(data->dev, "Chip ID mismatch\n");
+> -		ret = -ENODEV;
+> -		goto out;
+> +		return -ENODEV;
+>  	}
+>  
+>  	data->regulators[BMA400_VDD_REGULATOR].supply = "vdd";
+> @@ -589,27 +608,31 @@ static int bma400_init(struct bma400_data *data)
+>  				"Failed to get regulators: %d\n",
+>  				ret);
+>  
+> -		goto out;
+> +		return ret;
+>  	}
+>  	ret = regulator_bulk_enable(ARRAY_SIZE(data->regulators),
+>  				    data->regulators);
+>  	if (ret) {
+>  		dev_err(data->dev, "Failed to enable regulators: %d\n",
+>  			ret);
+> -		goto out;
+> +		return ret;
+>  	}
+>  
+> +	ret = devm_add_action_or_reset(data->dev, bma400_regulators_disable, data);
+> +	if (ret)
+> +		return ret;
+> +
+>  	ret = bma400_get_power_mode(data);
+>  	if (ret) {
+>  		dev_err(data->dev, "Failed to get the initial power-mode\n");
+> -		goto err_reg_disable;
+> +		return ret;
+>  	}
+>  
+>  	if (data->power_mode != POWER_MODE_NORMAL) {
+>  		ret = bma400_set_power_mode(data, POWER_MODE_NORMAL);
+>  		if (ret) {
+>  			dev_err(data->dev, "Failed to wake up the device\n");
+> -			goto err_reg_disable;
+> +			return ret;
+>  		}
+>  		/*
+>  		 * TODO: The datasheet waits 1500us here in the example, but
+> @@ -618,19 +641,23 @@ static int bma400_init(struct bma400_data *data)
+>  		usleep_range(1500, 2000);
+>  	}
+>  
+> +	ret = devm_add_action_or_reset(data->dev, bma400_power_disable, data);
+> +	if (ret)
+> +		return ret;
+> +
+>  	bma400_init_tables();
+>  
+>  	ret = bma400_get_accel_output_data_rate(data);
+>  	if (ret)
+> -		goto err_reg_disable;
+> +		return ret;
+>  
+>  	ret = bma400_get_accel_oversampling_ratio(data);
+>  	if (ret)
+> -		goto err_reg_disable;
+> +		return ret;
+>  
+>  	ret = bma400_get_accel_scale(data);
+>  	if (ret)
+> -		goto err_reg_disable;
+> +		return ret;
+>  
+>  	/*
+>  	 * Once the interrupt engine is supported we might use the
+> @@ -639,12 +666,6 @@ static int bma400_init(struct bma400_data *data)
+>  	 * channel.
+>  	 */
+>  	return regmap_write(data->regmap, BMA400_ACC_CONFIG2_REG, 0x00);
+> -
+> -err_reg_disable:
+> -	regulator_bulk_disable(ARRAY_SIZE(data->regulators),
+> -			       data->regulators);
+> -out:
+> -	return ret;
+>  }
+>  
+>  static int bma400_read_raw(struct iio_dev *indio_dev,
+> @@ -822,32 +843,10 @@ int bma400_probe(struct device *dev, struct regmap *regmap, const char *name)
+>  	indio_dev->num_channels = ARRAY_SIZE(bma400_channels);
+>  	indio_dev->modes = INDIO_DIRECT_MODE;
+>  
+> -	dev_set_drvdata(dev, indio_dev);
+> -
+> -	return iio_device_register(indio_dev);
+> +	return devm_iio_device_register(dev, indio_dev);
+>  }
+>  EXPORT_SYMBOL(bma400_probe);
+>  
+> -void bma400_remove(struct device *dev)
+> -{
+> -	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+> -	struct bma400_data *data = iio_priv(indio_dev);
+> -	int ret;
+> -
+> -	mutex_lock(&data->mutex);
+> -	ret = bma400_set_power_mode(data, POWER_MODE_SLEEP);
+> -	mutex_unlock(&data->mutex);
+> -
+> -	if (ret)
+> -		dev_warn(dev, "Failed to put device into sleep mode (%pe)\n", ERR_PTR(ret));
+> -
+> -	regulator_bulk_disable(ARRAY_SIZE(data->regulators),
+> -			       data->regulators);
+> -
+> -	iio_device_unregister(indio_dev);
+> -}
+> -EXPORT_SYMBOL(bma400_remove);
+> -
 

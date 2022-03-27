@@ -2,131 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7648D4E89E5
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 22:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49CA14E89E9
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 22:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236588AbiC0UCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 16:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
+        id S236602AbiC0UFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 16:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbiC0UCM (ORCPT
+        with ESMTP id S236590AbiC0UFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 16:02:12 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB9F12087;
-        Sun, 27 Mar 2022 13:00:32 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id r13so24704489ejd.5;
-        Sun, 27 Mar 2022 13:00:31 -0700 (PDT)
+        Sun, 27 Mar 2022 16:05:38 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21E21262C
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:03:56 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id b19so17527435wrh.11
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:03:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=78iW5XK4+ASAwJVsAvI1krxN1Cn3kULaSzDMrQW3lbE=;
-        b=W7sg25bHaszzvWVJN0gyX6n6UFKurK5uWS8e6vL3YRtpn8QA30BzDbsf0Fo0KnzuVo
-         f5lgeCM1g7VjeI4+YsTMtUtXLU8OULMmeB5PSBFxtOhNQxOmFPwV58KHSise/8GMyt0R
-         UkRxgQ3CLiyEWm9B5wmzgYC64NBf7VmqUh+uCDsTRhKm1dBL3PhDD7kvx2KxY5v+Ou9s
-         LtCbA+PaAxJA8Aqhhp0q2Rfl3QnpipqfZJ/WNelj96BMMf018qhLZN8AMLxNqJh1Ixg8
-         Af8ZbFHjT7fOZzcs+O1sgyvPQnq9W6Aze+RWRCdQHnD8mS6FSfbjKHib+pU03gWIfqf1
-         ov8Q==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=1d28fyRINWBEv9rFNENNgciYP3HOQGFrcYEryHqhBZQ=;
+        b=ETiMFcHrqDcGBEgPEp4gfZ1ft8E9q6y6ATkGzSVs9s/aB1O+Kvl9zW7Wp2Z1HI3v3R
+         5RjXenHnXi7ULhG35yU/RVt2Zy4ux6NoihY0JjBJnAM+UBINSKubsl1Jr26/v+I7GOjK
+         cTCbd9sBP2U/mvbB+rcJUXPDXItFBclpPdkVuEhFbHxB4rVNX8+vSCkGFhmUjHf1g21N
+         a7aoNTd3PA/TWCRNGxqoKU7hlKgp+gvW/fQ7pXdMLwt0cxc5l/OLqWb4kkX+KW1f+N8t
+         EAxZGziLUfq3WyE13+L45h5OamBGDBcttq6VjvRPxR4h7EbMMuN/9XzlBTrD0egq2HpI
+         aZ1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=78iW5XK4+ASAwJVsAvI1krxN1Cn3kULaSzDMrQW3lbE=;
-        b=ZmonW1tyc16bGmt4eGqB/bGDMcjSVrcxHhhvxkq1J2QuvGtadUCuauS2i64BFdbHdh
-         fald6rcruUT0imX2uwJiXvXlKTP8dYRdWeRpHrHRwoOaLy/vXw0XnQRgl+UuKN4iGhUQ
-         wMoMCVYNZokjU2MmEzQ3EFpHSOu5iLZhuXo1XYVH1W/YWB3EsczCMyrT1G9s4luM2sr3
-         dIWUWOl0PGl/bwp825Gil0EH+SXT6FClgZbCeK9NuChTwFaD1jhHmq8SSwa2UOIUvJs4
-         P6C+9+sp47+LpcVKv6x7AAhKT5PgWIIm0c5PXW199mhsksvS50i6feCxjKDtEbueZlzY
-         /qPw==
-X-Gm-Message-State: AOAM5321I1VjcLNmqJUahq/dlTke0c8clt5HM/mKGd9J3P0KvOqalsQC
-        uvWTE6XKEfErJkyt5UtA372kjwV/uL0gsFfvKVo=
-X-Google-Smtp-Source: ABdhPJwdyxkAQAdfH1wRFs+W0MNyk4bgRb4Rgv1M9DLQvwm3YbnfTG06hhOU+eKDq7Hs4uOIofL7RgDFq+x0npk+U+Y=
-X-Received: by 2002:a17:907:628e:b0:6d9:c6fa:6168 with SMTP id
- nd14-20020a170907628e00b006d9c6fa6168mr23537601ejc.132.1648411230602; Sun, 27
- Mar 2022 13:00:30 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1d28fyRINWBEv9rFNENNgciYP3HOQGFrcYEryHqhBZQ=;
+        b=uYhTsyY21/Rpoy4oXmoYTnUGo8h9a/Phdu2GRp9knW+E3nbogpQyZqHBIT/40nqYsb
+         N53RqPsKilhVIy50XnkTC+0wr3ysJs340DsqsqifWqeLuEI+GmK7NZm/sB7p1eusKBrS
+         WrXKOwQsBCR+XmxLHJpo7a1IqGMF5FC5JXf+vAEf9pasLSJ0R9kTf90fevjjbIIyOsNW
+         7QkkVoHe97Q18jZauPW74gMENNKWDytgEwvnkg32zt2dq6nFvGvKMgrhbgAd9wFUaxMd
+         I+N1Gq/zBm0bpRrPOZxOSnd83h5yBwsUXlc7HAScdFNluGVbSf+j+e6gMNaTU0qJ1zky
+         ZYKA==
+X-Gm-Message-State: AOAM530a4TSraQgzLVrd/KqxGQdnlDwwEqH78K7WdgOqGOebPimRzPo+
+        g+rUgxAkn5YTINTD3SODY9PHTF/66vph8A==
+X-Google-Smtp-Source: ABdhPJzePJDajCPuH03dlfT6LG4aetEiDC1h/QSd89XIhYxAFlPsxZjCF0AKG5u4+34RD+EcMX0Avg==
+X-Received: by 2002:adf:a482:0:b0:1e3:3e5f:496c with SMTP id g2-20020adfa482000000b001e33e5f496cmr18356033wrb.606.1648411435594;
+        Sun, 27 Mar 2022 13:03:55 -0700 (PDT)
+Received: from localhost.localdomain ([88.160.162.107])
+        by smtp.gmail.com with ESMTPSA id f14-20020a05600c154e00b0038d06cc21b2sm1354555wmg.35.2022.03.27.13.03.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Mar 2022 13:03:55 -0700 (PDT)
+From:   Fabien Parent <fparent@baylibre.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>
+Cc:     Fabien Parent <fparent@baylibre.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 1/4] dt-bindings: arm64: dts: mediatek: Add mt8195-demo board
+Date:   Sun, 27 Mar 2022 22:03:09 +0200
+Message-Id: <20220327200312.3090515-2-fparent@baylibre.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220327200312.3090515-1-fparent@baylibre.com>
+References: <20220327200312.3090515-1-fparent@baylibre.com>
 MIME-Version: 1.0
-References: <20220326165909.506926-1-benni@stuerz.xyz> <20220326165909.506926-5-benni@stuerz.xyz>
-In-Reply-To: <20220326165909.506926-5-benni@stuerz.xyz>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 27 Mar 2022 22:59:54 +0300
-Message-ID: <CAHp75VeTXMAueQc_c0Ryj5+a8PrJ7gk-arugiNnxtAm03x7XTg@mail.gmail.com>
-Subject: Re: [PATCH 05/22] acpica: Replace comments with C99 initializers
-To:     =?UTF-8?Q?Benjamin_St=C3=BCrz?= <benni@stuerz.xyz>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        linux@simtec.co.uk, Krzysztof Kozlowski <krzk@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Robert Moore <robert.moore@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Len Brown <lenb@kernel.org>, 3chas3@gmail.com,
-        Harald Welte <laforge@gnumonks.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        mike.marciniszyn@cornelisnetworks.com,
-        dennis.dalessandro@cornelisnetworks.com,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        linux-atm-general@lists.sourceforge.net,
-        netdev <netdev@vger.kernel.org>, linux-edac@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:HFI1 DRIVER" <linux-rdma@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
-        <linuxppc-dev@lists.ozlabs.org>, linux-media@vger.kernel.org,
-        wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 26, 2022 at 7:39 PM Benjamin St=C3=BCrz <benni@stuerz.xyz> wrot=
-e:
->
-> This replaces comments with C99's designated
-> initializers because the kernel supports them now.
+Add bindings for the MediaTek mt8195-demo board.
 
-Does it follow the conventions which are accepted in the ACPI CA project?
+Signed-off-by: Fabien Parent <fparent@baylibre.com>
+---
+v2:
+ * move compatible next to the MT8195-EVB compatible
 
---=20
-With Best Regards,
-Andy Shevchenko
+ Documentation/devicetree/bindings/arm/mediatek.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
+index ab0593c77321..024a45300da5 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
+@@ -133,6 +133,7 @@ properties:
+           - const: mediatek,mt8183
+       - items:
+           - enum:
++              - mediatek,mt8195-demo
+               - mediatek,mt8195-evb
+           - const: mediatek,mt8195
+       - description: Google Burnet (HP Chromebook x360 11MK G3 EE)
+-- 
+2.35.1
+

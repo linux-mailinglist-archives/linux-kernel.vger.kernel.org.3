@@ -2,139 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1BE4E85EE
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 07:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CBB34E85F4
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 07:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235023AbiC0F3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 01:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
+        id S235086AbiC0Fda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 01:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiC0F3F (ORCPT
+        with ESMTP id S233643AbiC0Fd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 01:29:05 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63201EACC;
-        Sat, 26 Mar 2022 22:27:26 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id z128so9746810pgz.2;
-        Sat, 26 Mar 2022 22:27:26 -0700 (PDT)
+        Sun, 27 Mar 2022 01:33:26 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C4EB85C;
+        Sat, 26 Mar 2022 22:31:48 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id f3so8585679pfe.2;
+        Sat, 26 Mar 2022 22:31:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=E8NTt7ig1pU1hSZ1U5qlamHZutvLAHUXQA1+pTFB7LQ=;
-        b=DBzTXJyy/uzYtS/GWMtT4TwhEt19ty3BMTfcsETZ0mJ33m4jWoq/+aw16lttOSVRB+
-         vcxYWGRspvX74scpSZAF5bBCmmFRZGgg4jLEo8ZfwnKEpcs5nA5tgiLCsLWRfNIlq9dC
-         02HLn29GDI/JgALE9F2rZyqDHFoAg31RPwbNDatVwBQt0LKDsTb6mYvmEWXH0R8da5al
-         MvjsXYtzBMJZoNbvIUpDMLZABqnbObaXkyAjlRiIcKm5/sSU6cOIthQ39lUH+strxAbx
-         jhF1HSkdV8d0jW1c6ROXNpfEMkbP3uZh6LwIg0nr+a58fpxg2djYvLS++dHj0WGA9DLN
-         vA4Q==
+        h=from:to:cc:subject:date:message-id;
+        bh=T9ii1s/vDDaD1QA64Ks3s/bvtYbdmXDV59Ucnc6x+8M=;
+        b=KDf55Yv5mpN2AkGspc9VfaKo0K2v900aUEgARfmtbxGdDUL6QXuvltflUnnxq9PkHt
+         YhW79cDOHms4RxghCJ1odTS3nROpbDTpCnIHmpQ0gIsgSaHGWxR/Ajl+aqYrON7uxevK
+         ZGbYyFQdZtH7S4orjIPps5iSgN/1w/8COOndrIemkzpS5iGeY6Fm3KpBjqrdsFfrOFVL
+         iSwc8hN81KgS13LzY0muEQDppdLDaOI63J4hYMNlhm9atCWo8og4mXVlxxKGPjLdU3uY
+         AHyqFXZQ4LoJ/FMpl6b2E4O6S3ZOb0KN+Y0yfnQw2Quy7wUbvzjmRUDB+CJNT8rRFKQ8
+         lbZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=E8NTt7ig1pU1hSZ1U5qlamHZutvLAHUXQA1+pTFB7LQ=;
-        b=1F3TdSE95avh1U2sANQtX999B158q+ALsy5IcScLt38xOJzL/RiAdgE0xejykeDCBq
-         ReSHyqe+Pc89ddtOqhXKK0woCJ/qDIw4gMosk7H9zAS8vpYA80ZLdLB6oiJa/LvAjEgb
-         67QoUUj2UKK5EzPeJgxuo/G4V1JdKBrnH5HM4IWjV8k3MjEnrpife+zLyyJBiZ/4Gv5L
-         bg6PlslD1ACLV+YvUadyK+UzJxQ6P5YPib60oLBmq45f+6a24hhZqwfn4yPurcPPV5Yh
-         Ln0NJgMlBG2XjRxUAL7g4UJfG5R7+mln+GqCN9da4OiJ2ptPSegH6XVwDPDneouiEz/K
-         7/Zw==
-X-Gm-Message-State: AOAM532wcOAvPT+/8qAwTiG0fa5wnQ3N0V1RBb/NH0DXsakSDXLKxBs/
-        YtyTg4dDYucLkGABxiy/Ff0=
-X-Google-Smtp-Source: ABdhPJzbD5EsXIw7aOaiiFtQxTNjlryX9D5y4t13BB7E98bVXDll3Mnci1izQFCEiLImPlb1UzxgXA==
-X-Received: by 2002:a05:6a00:2186:b0:4f7:5544:1cc9 with SMTP id h6-20020a056a00218600b004f755441cc9mr17621539pfi.62.1648358846240;
-        Sat, 26 Mar 2022 22:27:26 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-21.three.co.id. [180.214.233.21])
-        by smtp.gmail.com with ESMTPSA id t18-20020a17090ad51200b001c71bec7b22sm10051853pju.23.2022.03.26.22.27.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Mar 2022 22:27:25 -0700 (PDT)
-Message-ID: <49829de5-efe5-9065-d87a-2494d16b9465@gmail.com>
-Date:   Sun, 27 Mar 2022 12:27:20 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] Documentation: kernel-doc: Promote "Writing
- kernel-doc comments" to page title
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>, linux-kernel@vger.kernel.org
-References: <20220326123337.642536-1-bagasdotme@gmail.com>
- <20220326123337.642536-2-bagasdotme@gmail.com>
- <20220326145332.0698a849@coco.lan>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220326145332.0698a849@coco.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=T9ii1s/vDDaD1QA64Ks3s/bvtYbdmXDV59Ucnc6x+8M=;
+        b=F5/jbsKZ/4/1tqdELFTFzsYjcQwtEXSDCF6aAEIhxOfbVlihlIh9FRr5bY5AaLvTc2
+         4nVeZh0Su6xMX8eiAhqTcp02ilb1sxJkW66Ez9fasVJaa3W0lBsida+GdJ6FgOC0ngd6
+         YVeRCdr7FdDrrdILXgj+OAx2/LnMDfUNHpFMf8EQlV0+KI91jzrUU7K5xhbiWyoEgQTB
+         BL0G/vIGoT2AfphhsLlFTosCGK4Js7MzhMENT4+NN4NalFcFrk3WbcPKxo/kKf90RvPx
+         Df4078bIkpPsFMpKp/ulVDUk56aYoaqQjxlmnBwe88uTmMi9+ZTeEkATydsPZlJtbvTT
+         IhEQ==
+X-Gm-Message-State: AOAM531dCsEDdeNY6/vjZ6atO9qo2JJzbZaOvIROU8cesxhsedY+e0Zb
+        LRFs0Wm3EJEQ8kWT/71Djy4=
+X-Google-Smtp-Source: ABdhPJzkzp7Reb+gYTSiszuRxap2P3TtfajgbjK+Rluk16gl1IRBjl55f5DmGDmjeshiq0mHS3yx2A==
+X-Received: by 2002:a05:6a00:849:b0:4fb:1112:c19f with SMTP id q9-20020a056a00084900b004fb1112c19fmr10667773pfk.74.1648359108089;
+        Sat, 26 Mar 2022 22:31:48 -0700 (PDT)
+Received: from localhost.localdomain ([115.220.243.108])
+        by smtp.googlemail.com with ESMTPSA id f15-20020a056a001acf00b004fb2ad05521sm3894539pfv.215.2022.03.26.22.31.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Mar 2022 22:31:47 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     bskeggs@redhat.com
+Cc:     kherbst@redhat.com, lyude@redhat.com, airlied@linux.ie,
+        daniel@ffwll.ch, linux@roeck-us.net,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH] device: fix missing check on list iterator
+Date:   Sun, 27 Mar 2022 13:31:39 +0800
+Message-Id: <20220327053139.2572-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/03/22 20.56, Mauro Carvalho Chehab wrote:
-> Hmm... I can't really see any differences... What this patch seems to be
-> doing is to just change the markups for each level.
-> 
-> See, on Sphinx, the first markup (whatever it is) is level 1, level 2
-> the second different markup and so on.
-> 
-> So, before this patch, kernel-doc.rst had:
-> 
-> 	level 1: Writing kernel-doc comments
-> 	=====================================
-> 
-> 	level 2: How to format kernel-doc comments
-> 	------------------------------------------
-> 
-> 	level 3: Function parameters
-> 	~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> And after it, it will have:
-> 
-> 	====================================
-> 	level 1: Writing kernel-doc comments
-> 	====================================
-> 
-> 	level 2: How to format kernel-doc comments
-> 	==========================================
-> 
-> 	level 3: Function parameters
-> 	----------------------------
-> 
-> No semantic changes at all.
-> 
-> The only (eventual) value of a change like that would be to make the
-> levels more uniform, but IMO, it is not worth to apply a change like
-> that, as:
-> 
-> 	1. There are a lot other documents that don't use the more commonly
-> 	   used level standard;
-> 
-> 	2. Making all .rst files to use the same definitions is hard;
-> 
-> 	3. Even if we place everything using identical markups for every
-> 	   level, as new stuff gets added, different (still valid)
-> 	   markups could be used on newer documents.
-> 
-> Regards,
-> Mauro
-> 
+The bug is here:
+	lo = pstate->base.domain[domain->name];
 
-Indeed, fixing heading levels when adding title heading is required because
-without it, Sphinx will complain "indentation inconsistency" error.
+The list iterator 'pstate' will point to a bogus position containing
+HEAD if the list is empty or no element is found. This case should
+be checked before any use of the iterator, otherwise it will lead
+to a invalid memory access.
 
-Maybe better splitting indentation level changes into its own patch, right?
+To fix this bug, add an check. Use a new value 'iter' as the list
+iterator, while use the old value 'pstate' as a dedicated variable
+to point to the found element.
 
+Cc: stable@vger.kernel.org
+Fixes: 9838366c1597d ("drm/nouveau/device: initial control object class, with pstate control methods")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+---
+ drivers/gpu/drm/nouveau/nvkm/engine/device/ctrl.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/device/ctrl.c b/drivers/gpu/drm/nouveau/nvkm/engine/device/ctrl.c
+index ce774579c89d..6b768635e8ba 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/engine/device/ctrl.c
++++ b/drivers/gpu/drm/nouveau/nvkm/engine/device/ctrl.c
+@@ -72,7 +72,7 @@ nvkm_control_mthd_pstate_attr(struct nvkm_control *ctrl, void *data, u32 size)
+ 	} *args = data;
+ 	struct nvkm_clk *clk = ctrl->device->clk;
+ 	const struct nvkm_domain *domain;
+-	struct nvkm_pstate *pstate;
++	struct nvkm_pstate *pstate = NULL, *iter;
+ 	struct nvkm_cstate *cstate;
+ 	int i = 0, j = -1;
+ 	u32 lo, hi;
+@@ -103,11 +103,16 @@ nvkm_control_mthd_pstate_attr(struct nvkm_control *ctrl, void *data, u32 size)
+ 		return -EINVAL;
+ 
+ 	if (args->v0.state != NVIF_CONTROL_PSTATE_ATTR_V0_STATE_CURRENT) {
+-		list_for_each_entry(pstate, &clk->states, head) {
+-			if (i++ == args->v0.state)
++		list_for_each_entry(iter, &clk->states, head) {
++			if (i++ == args->v0.state) {
++				pstate = iter;
+ 				break;
++			}
+ 		}
+ 
++		if (!pstate)
++			return -EINVAL;
++
+ 		lo = pstate->base.domain[domain->name];
+ 		hi = lo;
+ 		list_for_each_entry(cstate, &pstate->list, head) {
 -- 
-An old man doll... just what I always wanted! - Clara
+2.17.1
+

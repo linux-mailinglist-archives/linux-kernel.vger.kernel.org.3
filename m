@@ -2,116 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A8E4E8632
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 08:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED454E8633
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 08:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235431AbiC0GKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 02:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
+        id S235440AbiC0GKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 02:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234284AbiC0GKL (ORCPT
+        with ESMTP id S235434AbiC0GKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 02:10:11 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45F9336;
-        Sat, 26 Mar 2022 23:08:32 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id n7-20020a17090aab8700b001c6aa871860so12514272pjq.2;
-        Sat, 26 Mar 2022 23:08:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=WLGme/rACNlsZ/NoBqpCvphC8ae3fvVeZ1qiIRGm49Q=;
-        b=XxWXZt/CIQ5HISAsyoesltjNLHrlcH2NIr1yONMkl0bplVYnpAG5GWej4Clhp3dLO5
-         GvKx1+YJuelabHz0EuPlf/SFVYswpHRzDiUU4hyRv+FoH+Qsoz7K/CmNJ4y2mUyobXMO
-         i+luyiWxak5Ntcr5wR4x0YJ18XnvdMhBbEEvd/gyVEXV5QkbQwmOjOQzGK2PG+SsRlIE
-         92FSexrViYOC1HdAVoLO4Faox6KBxhSafHvgs8xTV+0PgfR9kFl5fkvyjp+NpG0C3Yic
-         6O5DsvsST/pHNi2c8POVbXvpSvYd2wvu4fNOd8jWvhGJ0PH61VEUULiCffcvBKkSJoeE
-         +A0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=WLGme/rACNlsZ/NoBqpCvphC8ae3fvVeZ1qiIRGm49Q=;
-        b=RDF5sdVA+vFvnkUPibEAkPy7V1Hjq02JQjCyClBdxrw2yMjV19Jd7wxNdoklnPBGr4
-         XWbY/Gb7S/uNaKvg1i1eo4CnN76RHOUefAtam6ZYUsbJghV0UjK7nPDB3uuDR4MSDR0D
-         VGrG7TpyWlcNbb02WTQ0Am8Wsg/J4Us6jZTHeTI8Y5xSxNxqf6UnD2BbLECl0Wx8F6rs
-         +ZXnEHPwnrLAVvFPq1kIpWbclVhQNlJ1StwhoVgAWDNqrH09Jewk/WyBCBF56617kWV8
-         RwbT7LnncKvoHOG9RgwyMMfKS+5Ii8Fqk5532rK/vZAAL8+OLomx2g7v7zQXWh1q1Bxk
-         1mvg==
-X-Gm-Message-State: AOAM5313MD8K4skBfjTnDIWLYhNxKHlm6S60VFGYjTSbNYJb5qE0Omab
-        k4DQmO/A4rX0RZ52VC8NFMSzxfr6UjxTxA==
-X-Google-Smtp-Source: ABdhPJzijW7TduNxnjGw5WJJDKE1+upP6F6srZfdjFLh9QanrNnahAQOypcz+SZL3SPFyXcGFOR1GA==
-X-Received: by 2002:a17:90b:4b06:b0:1c9:9751:cf9b with SMTP id lx6-20020a17090b4b0600b001c99751cf9bmr1363741pjb.0.1648361312296;
-        Sat, 26 Mar 2022 23:08:32 -0700 (PDT)
-Received: from localhost.localdomain ([115.220.243.108])
-        by smtp.googlemail.com with ESMTPSA id m18-20020a056a00081200b004faeae3a291sm11239661pfk.26.2022.03.26.23.08.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 23:08:31 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     perex@perex.cz
-Cc:     tiwai@suse.com, krzysztof.h1@wp.pl, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
-Subject: [PATCH] cs423x: cs4236: fix an incorrect NULL check on list iterator
-Date:   Sun, 27 Mar 2022 14:08:22 +0800
-Message-Id: <20220327060822.4735-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 27 Mar 2022 02:10:30 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AE3B7D1
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 23:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:Cc:References:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=r1Z4+9mP70DcRJzsHUVzWOn2gh7baT5li/8hB4Sd/Rw=; b=anv90Aq7MF3P8hebttS9c8+zs4
+        ZTApTE9jcvphENrMooPQqHdh1AXfSt2/PhjSEs4bsMT50611uXn+sS7WDgUbGbdOmCg4WqJR3E9md
+        AN0++YljWIaurRU1CeNm+pN+222Ssk57fWlqK/kJbIPg2UoSwPLKqPb/pwDr/GCSyjbE4VqrUy9ht
+        ZIT2VjRA9bNX9e6v12FetwcskRWG5LGf3wjO7glrWBaV+2OvkHWIs2xK0dj/QGCveJQ0HvJxZUy+v
+        /Li4xVWYk9yMQ9HaRaU+nGFDcFuW3emA5nUDO5ZngElk+SbSVLeUa+tmBX3wX8S0cF8pgWO/2kNoR
+        yglfdpaQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nYM52-00Fpme-Sf; Sun, 27 Mar 2022 06:08:49 +0000
+Message-ID: <53ce9316-1467-78ea-21a9-02a1c2438002@infradead.org>
+Date:   Sat, 26 Mar 2022 23:08:45 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: 5.17.0 fails to suspend
+Content-Language: en-US
+To:     Norbert Preining <norbert@preining.info>,
+        linux-kernel@vger.kernel.org
+References: <YjryLd+TuigtA6co@sakefilet.preining.info>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <YjryLd+TuigtA6co@sakefilet.preining.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bug is here:
-	err = snd_card_cs423x_pnp(dev, card->private_data, pdev, cdev);
+Hi Rafael-
+Does this need to go to linux-usb or linux-pm?
+thanks.
 
-The list iterator value 'cdev' will *always* be set and non-NULL
-by list_for_each_entry(), so it is incorrect to assume that the
-iterator value will be NULL if the list is empty or no element
-is found.
 
-To fix the bug, use a new variable 'iter' as the list iterator,
-while use the original variable 'cdev' as a dedicated pointer
-to point to the found element. And snd_card_cs423x_pnp() itself
-has NULL check for cdev.
+On 3/23/22 03:10, Norbert Preining wrote:
+> Hi all,
+> 
+> (please cc)
+> 
+> upgrading from 5.16.15 or so to 5.17.o my laptop (Fujitsu Lifebook U
+> Series) fails to suspend:
+> 
+> kernel: Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+> kernel: printk: Suspending console(s) (use no_console_suspend to debug)
+> kernel: e1000e: EEE TX LPI TIMER: 00000011
+> kernel: PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x30 returns -16
+> kernel: PM: dpm_run_callback(): pci_pm_suspend+0x0/0x160 returns -16
+> kernel: xhci_hcd 0000:00:14.0: PM: failed to suspend async: error -16
+> kernel: PM: Some devices failed to suspend, or early wake event detected
+> kernel: nvme nvme0: Shutdown timeout set to 8 seconds
+> kernel: nvme nvme0: 8/0/0 default/read/poll queues
+> kernel: OOM killer enabled.
+> 
+> No external usb device connected, internal ones:
+> $ lsusb
+> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+> Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+> Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+> Bus 001 Device 004: ID 04f2:b6e1 Chicony Electronics Co., Ltd FJ Camera
+> Bus 001 Device 003: ID 298d:2033 Next Biometrics NB-2033-U
+> Bus 001 Device 002: ID 058f:9540 Alcor Micro Corp. AU9540 Smartcard Reader
+> Bus 001 Device 005: ID 8087:0026 Intel Corp. AX201 Bluetooth
+> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+> 
+> What further information can I provide (no external usb device
+> 
+> (please cc)
+> 
+> All the best
+> 
+> Norbert
+> 
+> --
+> PREINING Norbert                              https://www.preining.info
+> Fujitsu Research     +    IFMGA Guide     +    TU Wien    +    TeX Live
+> GPG: 0x860CDC13   fp: F7D8 A928 26E3 16A1 9FA0 ACF0 6CAC A448 860C DC13
 
-Cc: stable@vger.kernel.org
-Fixes: c2b73d1458014 ("ALSA: cs4236: cs4232 and cs4236 driver merge to solve PnP BIOS detection")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
- sound/isa/cs423x/cs4236.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/sound/isa/cs423x/cs4236.c b/sound/isa/cs423x/cs4236.c
-index b6bdebd9ef27..10112e1bb25d 100644
---- a/sound/isa/cs423x/cs4236.c
-+++ b/sound/isa/cs423x/cs4236.c
-@@ -494,7 +494,7 @@ static int snd_cs423x_pnpbios_detect(struct pnp_dev *pdev,
- 	static int dev;
- 	int err;
- 	struct snd_card *card;
--	struct pnp_dev *cdev;
-+	struct pnp_dev *cdev, *iter;
- 	char cid[PNP_ID_LEN];
- 
- 	if (pnp_device_is_isapnp(pdev))
-@@ -510,9 +510,11 @@ static int snd_cs423x_pnpbios_detect(struct pnp_dev *pdev,
- 	strcpy(cid, pdev->id[0].id);
- 	cid[5] = '1';
- 	cdev = NULL;
--	list_for_each_entry(cdev, &(pdev->protocol->devices), protocol_list) {
--		if (!strcmp(cdev->id[0].id, cid))
-+	list_for_each_entry(iter, &(pdev->protocol->devices), protocol_list) {
-+		if (!strcmp(iter->id[0].id, cid)) {
-+			cdev = iter;
- 			break;
-+		}
- 	}
- 	err = snd_cs423x_card_new(&pdev->dev, dev, &card);
- 	if (err < 0)
 -- 
-2.17.1
-
+~Randy

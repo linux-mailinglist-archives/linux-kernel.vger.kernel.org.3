@@ -2,207 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59DF4E87F0
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 15:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904394E87EB
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 15:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235611AbiC0Nzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 09:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
+        id S235396AbiC0NtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 09:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232854AbiC0Nzf (ORCPT
+        with ESMTP id S229513AbiC0NtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 09:55:35 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E3D2AE26
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 06:53:55 -0700 (PDT)
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220327135351epoutp01134de3b81ca22fbe055243e814bf7ee6~gQUWttBbt1492014920epoutp01z
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:53:51 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220327135351epoutp01134de3b81ca22fbe055243e814bf7ee6~gQUWttBbt1492014920epoutp01z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1648389231;
-        bh=1nz+6cCIa6mz3t+BgJaQhVhLfhOC3PJmKjtzjfk4/so=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=c3MfDQHruH4VhPi2L9X5wDcGHqUStW9hsbgKHsq099xB1yGMC2RWcARs6FN7IDrJp
-         UACf4Wbh55/EGB+cHAZNh4kfR71S7MvQfVlTvL6Gaerd3K2W8yrNPvC+C2KyIpGbER
-         xNArR4XtrDSIHIahr87Qsn0PJBoVsZarMJaLQctY=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220327135349epcas1p244a7240021cc34203a2298f3dd55bd4e~gQUVfWV221250212502epcas1p2k;
-        Sun, 27 Mar 2022 13:53:49 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.38.247]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4KRHNr32Bfz4x9Pp; Sun, 27 Mar
-        2022 13:53:48 +0000 (GMT)
-X-AuditID: b6c32a38-929ff700000255ac-af-62406c6c99a5
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        21.BF.21932.C6C60426; Sun, 27 Mar 2022 22:53:48 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: [PATCH 0/8] memblock: introduce memsize showing reserved memory
-Reply-To: jaewon31.kim@samsung.com
-Sender: Jaewon Kim <jaewon31.kim@samsung.com>
-From:   Jaewon Kim <jaewon31.kim@samsung.com>
-To:     Mike Rapoport <rppt@kernel.org>,
-        Jaewon Kim <jaewon31.kim@samsung.com>
-CC:     "vbabka@suse.cz" <vbabka@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        YongTaek Lee <ytk.lee@samsung.com>,
-        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <YkAU2JlcX7nlvbwp@kernel.org>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220327135347epcms1p13faf0f2b7d98d3b59b25e903678d9c48@epcms1p1>
-Date:   Sun, 27 Mar 2022 22:53:47 +0900
-X-CMS-MailID: 20220327135347epcms1p13faf0f2b7d98d3b59b25e903678d9c48
+        Sun, 27 Mar 2022 09:49:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D62213E94;
+        Sun, 27 Mar 2022 06:47:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7345B8013C;
+        Sun, 27 Mar 2022 13:47:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9D99C340EC;
+        Sun, 27 Mar 2022 13:47:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648388859;
+        bh=GcofGmQumimhl5OM4grJQX7kjo1GV6TWDaRRje8li8E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DVQEy2ex/vXD/NWI7KoNA5kIgUAVdd5vGyP4CG3hIh7nfMTVyQeQO5Ir+jkYThHL5
+         zRVVCumoQMVF0Tpd15Gfle0lul0LGBIsjhXbGvnwgf5bs5OxhnZQeOki8CGIN8tENg
+         w0D0sobt4gRRJChRVfQeRccEX96obw2BK09zh1p2qPMuIVC+ysi+lK/KRQwPMDsQy2
+         x+8TJRrjDmH6bRtbxsm2X1MIRQh6//az54g1CusTZSE6temv6JQMqXC6u0B+zDhwMo
+         yViHnXdP8SQYrVlp+98noCPB6pP5ZdTMipSYahDM/dB6f/kCL8bgoTe1b5amVSSgPY
+         BhJwuUjk8wmag==
+Date:   Sun, 27 Mar 2022 14:55:11 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Shreeya Patel <shreeya.patel@collabora.com>
+Cc:     lars@metafoo.de, robh+dt@kernel.org, Zhigang.Shi@liteon.com,
+        krisman@collabora.com, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, alvaro.soliverez@collabora.com
+Subject: Re: [PATCH 2/3] dt-bindings: Document ltrf216a light sensor
+ bindings
+Message-ID: <20220327145511.2d36dd10@jic23-huawei>
+In-Reply-To: <20220325103014.6597-3-shreeya.patel@collabora.com>
+References: <20220325103014.6597-1-shreeya.patel@collabora.com>
+        <20220325103014.6597-3-shreeya.patel@collabora.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 101P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprKJsWRmVeSWpSXmKPExsWy7bCmgW5OjkOSQc8/YYs569ewWbw8pGnR
-        vXkmo0Xv+1dMFpd3zWGzuLfmP6vFkfXbmSxmN/YxWjxez+3A6bFz1l12j02rOtk8Nn2axO5x
-        YsZvFo++LasYPc4sOMLu8XmTXAB7VLZNRmpiSmqRQmpecn5KZl66rZJ3cLxzvKmZgaGuoaWF
-        uZJCXmJuqq2Si0+ArltmDtBhSgpliTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSClJwCswK9
-        4sTc4tK8dL281BIrQwMDI1OgwoTsjG8fvrEUnJOv+Pz3AWMD4xGJLkZODgkBE4kj11+xdTFy
-        cQgJ7GCUWP9qF1MXIwcHr4CgxN8dwiA1wgI+Eu+bZrGD2EICShJnf1xhh4jrSjR1r2YBsdkE
-        tCXeL5jECtIqIuAlceetB8hIZoGlTBIbbjQxQ+zilZjR/pQFwpaW2L58KyNIPaeAlkTfbl+I
-        sKjEzdVv2WHs98fmM0LYIhKt985CjRGUePBzN1RcSuJc93GwiyUEIiRe7FGHCOdIvN85hxXC
-        Npd4tqEFbCSvgK/EpEsvwVpZBFQl/s6cwQLR6iLxsz0YJMwsIC+x/e0cZpAws4CmxPpd+hBT
-        FCV2/p7LCPNHw8bf7OhsZgE+iXdfe1hh4jvmPWGCsNUkWp59hYrLSPz994x1AqPSLEQoz0Ky
-        eBbC4gWMzKsYxVILinPTU4sNC0zgEZucn7uJEZw+tSx2MM59+0HvECMTB+MhRgkOZiURXtmz
-        9klCvCmJlVWpRfnxRaU5qcWHGE2BPp7ILCWanA9M4Hkl8YYmlgYmZkYmFsaWxmZK4ry9U08n
-        CgmkJ5akZqemFqQWwfQxcXBKNTAZZ624esSsuD00o2lddF3M2oufrq2ZnC8qtUuo5c7qaUon
-        6rj1WC2iA9pe/p6jbvMwiINP4Zd2zo4HVzObdgU42b5ZmL9qY0d25jKDzfWlwetyTqvNuJqj
-        HPfOs+KvZkuJ+Fxno+b5fN37fJOVlpdPuWjPNbl8r4fjEQaD1BnP1jv67FwhWvD3+aS158S2
-        /+ctXJsyV2XG7SWNs7zP/+//++2S35Kv4lbvjDVqxL9l113K7dmQoGNZrveW40jA8boND39G
-        JEco7DRgiFgxteU452Ml17JrDeHl2x8HrvhX2P9BJ66+8MPi0MVrFtx87fS02vKcw8GtKlnr
-        7b3e+q4JzRBkOB0pta5ryfWFEaeUWIozEg21mIuKEwGh5EDeKAQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220324065919epcas1p4c79da5f6ec4fa0311409ca24a38785d8
-References: <YkAU2JlcX7nlvbwp@kernel.org> <Yj1zVkryTVoAnxsX@kernel.org>
-        <20220324070158.22969-1-jaewon31.kim@samsung.com>
-        <20220325083846epcms1p372559472ceb511cc45d39c110563063a@epcms1p3>
-        <CGME20220324065919epcas1p4c79da5f6ec4fa0311409ca24a38785d8@epcms1p1>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> 
-> 
->--------- Original Message ---------
->Sender : Mike Rapoport <rppt@kernel.org>
->Date : 2022-03-27 16:40 (GMT+9)
->Title : Re: [PATCH 0/8] memblock: introduce memsize showing reserved memory
-> 
->Hi,
-> 
->On Fri, Mar 25, 2022 at 05:38:46PM +0900, Jaewon Kim wrote:
-> 
->> >--------- Original Message ---------
->> >Sender : Mike Rapoport <rppt@kernel.org>
->> >Date : 2022-03-25 16:46 (GMT+9)
->> >Title : Re: [PATCH 0/8] memblock: introduce memsize showing reserved memory
->> > 
->> >Hi,
->> > 
->> >On Thu, Mar 24, 2022 at 04:01:50PM +0900, Jaewon Kim wrote:
->> >> Some of memory regions can be reserved for a specific purpose. They are
->> >> usually defined through reserved-memory in device tree. If only size
->> >> without address is specified in device tree, the address of the region
->> >> will be determined at boot time.
->> >> 
->> >> We may find the address of the memory regions through booting log, but
->> >> it does not show all. And it could be hard to catch the very beginning
->> >> log. The memblock_dump_all shows all memblock status but it does not
->> >> show region name and its information is difficult to summarize.
->> >> 
->> >> This patch introduce a debugfs node, memblock/memsize, to see reserved
->> >> memory easily.
->> >> 
->> >> Here's an example
->> >> 
->> >> $ cat debugfs/memblock/memsize
->> >> 0x0f9000000-0x0fb000000 0x02000000 (   32768 KB )   map reusable linux,cma
->> >> 0x0b1900000-0x0b1b00000 0x00200000 (    2048 KB ) nomap unusable test1
->> >> 0x0b0200000-0x0b0400000 0x00200000 (    2048 KB )   map unusable test2
->> >>  (snipped)
->> >> 
->> >> Reserved    :  746924 KB
->> >>  .kernel    :  137027 KB
->> >>   .text     :   28158 KB
->> >>   .rwdata   :    3238 KB
->> >>   .rodata   :   13468 KB
->> >>   .bss      :   12570 KB
->> >>   .etc      :   79593 KB
->> >>  .unusable  :  609897 KB
->> >> System      : 3447380 KB
->> >>  .common    : 3152468 KB
->> >>  .reusable  :  294912 KB
->> >> Total       : 4194304 KB (  4096.00 MB )
->> > 
->> >Most of this information information is already available at various
->> >places, like the existing memblock debugfs, /proc/iomem and DT sysfs.
->> > 
->> >I don't see why we need yet another debugfs file to expose it.
->> 
->> Hi.
->> Thank you for your reply.
->> 
->> I don't think existing memblock debugfs or /proc/iomem shows information I want.
->> They don't show name and actually allocated address and size. And it does not
->> handle pages freed to buddy allocator after boot.
->> 
->> And which DT sysfs do you mean? If it is /proc/device-tree/reserved-memory, it
->> shows name and size, but it does not show address for only size defined regions.
->> It does not recognize the freed pages, either.
->> 
->> Especially I'd like to create a node showing all reserved memory status, their 
->> total size is same as the physical memory size. This was very useful when I 
->> compare reserved memory and kernel init time memory between different chipsets,
->> or between different sw release versions.
-> 
->I'm still not following. The reserved region sizes are available in the
->existing memblock debugfs.
->Why the names are important? What is the value of having names for *some*
->of the reserved regions?
+On Fri, 25 Mar 2022 16:00:13 +0530
+Shreeya Patel <shreeya.patel@collabora.com> wrote:
 
-Hi
-
-There are many memory regions in memblock debugfs memory/reserved, and some might
-be splited or merged with other region. Among regions in debugfs, we can't find 
-the one we defined in device tree. Especially it is difficult to find the region we
-described size only without start address.
-
-On mobile environment, memory is used by not only CPU but also GPU, Camera, Secure
-world, Audio, ETC. To support them, there are many reserved regions described in
-device tree. So the name is quite important to recognize a region. And with thename
-we can compare reserved memory map with other map.
-
-Additionally as I said, we need one simple knob to look overall reservecd memory
-status.
-
-Thank you
-Jaewon Kim
-
+> Add devicetree bindings for ltrf216a ambient light sensor
 > 
->> Thank you
->> Jaewon Kim
+> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+Hi Shreeya,
+
+As we are making this Zhigang Shi's problem to maintain, I'm 
+looking for an ack.  Bit mean otherwise :)
+
+Except for the deprecated part this could just have gone in
+trivial-bindings.yaml.
+
+I guess you don't need it for your existing board, but best
+practice would probably include ensuring whatever supplies
+the device needs are here so that platforms that don't enable
+them by default can turn them on.
+
+Also, there is an interrupt according to the datasheet linked
+from patch 3 and that should definitely be in the binding
+even if the driver isn't using it.
+
+Jonathan
+
+
+> ---
+>  .../bindings/iio/light/liteon,ltrf216a.yaml   | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
 > 
->-- 
->Sincerely yours,
->Mike.
-> 
+> diff --git a/Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml b/Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
+> new file mode 100644
+> index 000000000000..275d86a0353a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
+> @@ -0,0 +1,42 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/light/liteon,ltrf216a.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: LTRF216A Ambient Light Sensor
+> +
+> +maintainers:
+> +  - Zhigang Shi <Zhigang.Shi@liteon.com>
+> +
+> +description: |
+> +  Ambient sensing with an i2c interface.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - liteon,ltrf216a
+> +      - ltr,ltrf216a
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        light-sensor@53 {
+> +                compatible = "ltr,ltrf216a";
+> +                reg = <0x53>;
+> +        };
+> +    };
+> +...
+

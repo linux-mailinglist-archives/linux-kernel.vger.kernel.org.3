@@ -2,119 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7264E886D
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 17:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1584E8870
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 17:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235853AbiC0P0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 11:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59582 "EHLO
+        id S235858AbiC0P1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 11:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235631AbiC0P0e (ORCPT
+        with ESMTP id S233863AbiC0P1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 11:26:34 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E060C1402F
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 08:24:54 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-160-sYhtiCskO1qRFgnKRoKrFA-1; Sun, 27 Mar 2022 16:24:51 +0100
-X-MC-Unique: sYhtiCskO1qRFgnKRoKrFA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Sun, 27 Mar 2022 16:24:48 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Sun, 27 Mar 2022 16:24:48 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Halil Pasic <pasic@linux.ibm.com>
-CC:     =?utf-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Maxime Bizon <mbizon@freebox.fr>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        "Marek Szyprowski" <m.szyprowski@samsung.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        Olha Cherevyk <olha.cherevyk@gmail.com>,
-        iommu <iommu@lists.linux-foundation.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable <stable@vger.kernel.org>
-Subject: RE: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
- ath9k-based AP
-Thread-Topic: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
- ath9k-based AP
-Thread-Index: AQHYQZpzK/9JYQDqEEKfLChLw6SC36zTVWUA
-Date:   Sun, 27 Mar 2022 15:24:48 +0000
-Message-ID: <0745b44456d44d1e9fc364e5a3780d9a@AcuMS.aculab.com>
-References: <1812355.tdWV9SEqCh@natalenko.name>
- <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
- <20220324055732.GB12078@lst.de> <4386660.LvFx2qVVIh@natalenko.name>
- <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com> <878rsza0ih.fsf@toke.dk>
- <4be26f5d8725cdb016c6fdd9d05cfeb69cdd9e09.camel@freebox.fr>
- <20220324163132.GB26098@lst.de>
- <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com> <871qyr9t4e.fsf@toke.dk>
- <CAHk-=whUQCCaQXJt3KUeQ8mtnLeVXEScNXCp+_DYh2SNY7EcEA@mail.gmail.com>
- <20220327054848.1a545b12.pasic@linux.ibm.com>
- <CAHk-=whUJ=tMEgP3KiWwk0pzmHn+1QORUu50syE+zOGk4UnFog@mail.gmail.com>
- <CAHk-=wgUx5CVF_1aEkhhEiRGXHgKzUdKiyctBKcHAxkxPpbiaw@mail.gmail.com>
-In-Reply-To: <CAHk-=wgUx5CVF_1aEkhhEiRGXHgKzUdKiyctBKcHAxkxPpbiaw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sun, 27 Mar 2022 11:27:20 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-cusazon11020019.outbound.protection.outlook.com [52.101.61.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B67913F89;
+        Sun, 27 Mar 2022 08:25:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KSwx0x/RqFfOQjey9622hSpwym3u82Jrs3dl3ODDOQuzebINcGJCgl29UU+UlAqrpSaVeA5B8Zpsd7YoF5krGln3T9tqSpWdjMnqTkQb3ZmFIvMM6Gt3pf5IHqanYLUwH5tryKhSQOPnLMVNiZESBBMfjalhDaAvS8j7DdyM1cBLJVp5M20v/2y/DOmC9vNSwxn6U3owLiHFJHLoF6W79+36iSOy1cnHD71wSeyYBEIV9xE084Oy2M6jteHWp3V94Hx7diKPio4uZxt2GjmuxM4AlUfZRgfXGvNJ2O65SMGKMG+KbvFyocEmb5VTRRJO/rQGERfImYYs2qii6lqVFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2Xid1u31RIE5t3e5lCPz699WYlpsvDp25R6BYYMjH7s=;
+ b=Uuz1DVAPX5HU2A1izIPR5RaU89I3K5y4tOFSHdxTfdgVLLOstOC8JXjbq05l1CSHvVVgIlnvVtcB909ZsauHBqRA5T9DxAomPNCVjN0OSZJ8JMPdI8w0oX/HNl9b2lxRtcFm/t1VfREqXPApEzcdnLTOziw+CKC64uveoNG/3vnnOl19bnzKeGp+O/e+83s6T6EA4R4di6szOoquFGt4vDoq5ivvanlBoDZokWrTa4pExKcyTJ+C0m4WJXaa8LtYl42wnnc4KVdc6h58rUnKCa/xbnMCkA6su0tu3A0IMfayCtDFm6qvUycJ2LJUz+tfSTjgquc+lgzuH9rHNyNPqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2Xid1u31RIE5t3e5lCPz699WYlpsvDp25R6BYYMjH7s=;
+ b=bEMUYR74n1kPYnhfscgMTKd9khW7RUmfIlVVbX1if3Pb9A5H8WtJlnkcPIMsG8kMfUxX2JPPGI3sNpqV5y7OW3lsSzNh36rhKKOs7Biy4bT3TBT2LN5oQO8X/9E7dAL8bbYt8KBb5W++YHSyS+s+ynhCmFzhXRu3F5GkhLVsqso=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from DM6PR21MB1514.namprd21.prod.outlook.com (2603:10b6:5:22d::11)
+ by SN6PR2101MB1133.namprd21.prod.outlook.com (2603:10b6:805:4::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.15; Sun, 27 Mar
+ 2022 15:25:38 +0000
+Received: from DM6PR21MB1514.namprd21.prod.outlook.com
+ ([fe80::f8aa:99ff:9265:bb6b]) by DM6PR21MB1514.namprd21.prod.outlook.com
+ ([fe80::f8aa:99ff:9265:bb6b%3]) with mapi id 15.20.5123.015; Sun, 27 Mar 2022
+ 15:25:38 +0000
+From:   Michael Kelley <mikelley@microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, vkuznets@redhat.com,
+        decui@microsoft.com
+Cc:     mikelley@microsoft.com
+Subject: [PATCH 1/1] hv: drivers: vmbus: Prevent load re-ordering when reading ring buffer
+Date:   Sun, 27 Mar 2022 08:25:10 -0700
+Message-Id: <1648394710-33480-1-git-send-email-mikelley@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: MW4PR04CA0176.namprd04.prod.outlook.com
+ (2603:10b6:303:85::31) To DM6PR21MB1514.namprd21.prod.outlook.com
+ (2603:10b6:5:22d::11)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f4c1f54c-1698-4b06-0428-08da10060be2
+X-MS-TrafficTypeDiagnostic: SN6PR2101MB1133:EE_
+X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-Microsoft-Antispam-PRVS: <SN6PR2101MB11336736DC864E00B35D22B4D71C9@SN6PR2101MB1133.namprd21.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VG2XeQNhK2WGP04noICO5Z2bcYlRA9n5kLEBwcpApE1zbEugem4j9Sk30ePGPz9Z8YFF7IBfe1epVZ0ltEVHeeDVHD8CPt+T0xzQAS/sEt5bwQCjviuzdstEI/JWwKZgZK6uCNvUVMwFKEJPfxZT0HK0Wryyzb1pNYGV9gQstqta9/QzTwRWBscsugYKMQ79FiGbHvnJaglgwy/Dxw1pRjAgT+ziRawVrt7yvR29uaP4KOhICA7JDa5rOQRXSeaqEOLPhcqfcl5yfQYM3Hqe4Gjzydh1eZs3wLW3cmH1gT4Men5YhYPPm+oiFVAo36EZi3iaIXG5kisqTw5NjfU4e7+NR2h4c6xxFjE2SIx4j67tX4Fz37jzF9699uK7mDKv9pGm/R7SuyuAehybBrIoI1VCOWz/OzOVhNPPXvNK04thtBumyrmbPqk/5de+5+rZ/LVj+kR+GdorJdePrqMLpqcyRPWHKoOwqWnD9x52v9TQ+BZCw2n8QemJbiSUSHqV6Wok0A0hWD0jwCHIGi/bcoWCD5M1mfzgue4y06ZbWUQJGGHWU30Fo+02SHW8JGnoUy12+QoZr4U2a5143XEwnGLT8VnbA0xorq1eWZWWJABIotPEnUYMITVk3zMGIL5mFqsw0UWnrwUxU9i7eV8E0BBHQ0RXwM6+FqbFehCAeH8niSrkvAv+xWBRduyjkUkbGxdEYo+Z6LZV87AK0j4i6E9X6q9KIIrjPv+kU6QVpKNpOPU2xtWFUSBZuaijLtFc
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1514.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(38100700002)(66476007)(186003)(52116002)(38350700002)(6506007)(83380400001)(26005)(66556008)(66946007)(6666004)(6512007)(8676002)(6636002)(2906002)(8936002)(6486002)(508600001)(4326008)(10290500003)(5660300002)(316002)(86362001)(82960400001)(107886003)(82950400001)(36756003)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FIWod7Ast9FWZ7hyaQzpLzzx/XGQmP5cGqweEQWRvv9GkR+h2GG4M5wCZT4b?=
+ =?us-ascii?Q?wtl7QDFknMhKMKN1fld71RpTToUT1d2BEvD3mFPQHGPYT84+5DDJekiss+qP?=
+ =?us-ascii?Q?gi+LB7pa2BekSbiTq3Pxj0FPPX8AIOLdrgTc0Dnp99Ew/K/b8sLN8E4PBP4a?=
+ =?us-ascii?Q?NAiVdP09uoOv/cP2XD5YEFmXQn8zJl8SsDwzt2bAXi+ecvS0Il4cRTd0rP67?=
+ =?us-ascii?Q?F7PhWd5uiJmwmekr/fi6dyAgSgoxVCa1lmsJb1zm4ATrWmgl907LOvIBuxDu?=
+ =?us-ascii?Q?a1MhMVrjjelngQ9bF6EHUO4uBUTIc5yHK17f18QPFjDIaTULuPDKsF76G0vQ?=
+ =?us-ascii?Q?NeAPI3EpKrl2TUQTx0795DjLqH3WXXcAvXyeAvJAwa4ACL+SWu/UBJvsod9E?=
+ =?us-ascii?Q?eTJggpg2YlFfhhTFZtS4gHqfICSYd0UmyqPdMAkj4MI0pVMw0NgSPww6pEUh?=
+ =?us-ascii?Q?TnClpXeQ6nUk+S4WM+xJ/CpU9BVUI7yXkHffH1EWjdN3l3jOEmJ5hiW3xi6A?=
+ =?us-ascii?Q?DKDRC3ffwHj6J/1qZQBBgEwa7T2poNX4d+iHm4AObST8WA/pdLpnAXYUD9+y?=
+ =?us-ascii?Q?6xWzjgoQ83mcmxwYXXs5wotexuEV4OFlrfJzga+fhnl2mA7+V8ZabOgl4/B0?=
+ =?us-ascii?Q?PWYFy1a6MCUbailBgVrdU4pD3enrC9ZyU7drXwYUIw+ZxiLwNmWZsxUUVahM?=
+ =?us-ascii?Q?UqDfGqHVFvTVcCqAlNGFWw5eqy5cVPbDGP/a+nI6Htmn8gdC6vI3CAhZ6mcw?=
+ =?us-ascii?Q?iHuTmkh7aq0RIWXT7HlYtBDcYL4HkL8kiZCBWdjbzu9KC8VSVJjRbkI/S/Ak?=
+ =?us-ascii?Q?qetg7SRulgbB+oyXb9KIEy91u6hnT3o536FWgKCKPgA7J09pu8c8pzX02B1w?=
+ =?us-ascii?Q?GjdIjtqyMhBPWzKnxvV8gbUWcAoqa4KsWQ3grwNVmNMxUXoNBBPK0RX8E/Oe?=
+ =?us-ascii?Q?Nbz4D28pzTRaB1+wq0gzf8LdcbVGP7eAiBUZrpjUq9WDKLvrqisxNYdM4mKC?=
+ =?us-ascii?Q?B/PP7E5RG7Mk2/MKf/cyyWxq1/RK7atnOURgeUzocMNWpERkHJTzlPKEkDKW?=
+ =?us-ascii?Q?xqapMJm88clQqdD7le6GxTXHwGBhAGFhhOn2+RxRzGL8CTVtwJDp2o6goRAq?=
+ =?us-ascii?Q?rVMNIeVxPgi6RCcvHmSOhSMupEyYEnqHBr8U5G27B6KrO2iw24XJsPoB5IMA?=
+ =?us-ascii?Q?lEkKIMzbIT4J0XCjNGQgQz1+VXDgvIQGDvRBQt+zepU9vQRc9SSXtvsCQMaK?=
+ =?us-ascii?Q?q/KHAQyHo6b0EQfJf691vOVBnNdlf9pQ8FtyCbGylYyTvVySPn6no7eWUFIK?=
+ =?us-ascii?Q?qmqUJlND8YVl5OruE6Z+HmZE8pGn3nxBPR71JLY4pHPxjHzA5QXG9ELQ242L?=
+ =?us-ascii?Q?0262JASET3RWpVO3wHVVd3ybNX9gqjw5SZPCAAxQQQa+ffRDdxxiT0UFTx73?=
+ =?us-ascii?Q?1bWOui5iiknMe6ncA2Q0ZpvZf690s+XQOIHc9f0f3tNBfDFSJLf9zW3tqUZc?=
+ =?us-ascii?Q?U+EeWgYmcltPJFnwFDUxa4hhVdIalnFtHsYIcH97FAvFtDS+V3qnAAYg9w1K?=
+ =?us-ascii?Q?N09Vp1hF/VKLBznCxlzyWP0ExkhxwJ4WdtRiT8DaMGzLmtUeE91jIGjijth0?=
+ =?us-ascii?Q?4l4KY2S0jVCJxNpJrO/xL0ei8gq7TJuxUQzRm6oRbz48K7x9kuI0kLzEpsXt?=
+ =?us-ascii?Q?uHZKBty94MF393W1J1pwuaqpxw2Pd827SrxrodREdDITg2BS3NpoTCatZTqY?=
+ =?us-ascii?Q?5Ulg+8asafLrpIOANHb69MgRuO6aRT0=3D?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f4c1f54c-1698-4b06-0428-08da10060be2
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1514.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2022 15:25:38.3905
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6dlZsU6wpxWnUDdJFF5hyKWbiB6q634/jT63AKqv2ccVzZDoVveE2Gwocp2kpYlYcp91qsv7pa4OfIR3T42G+A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR2101MB1133
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjcgTWFyY2ggMjAyMiAwNjoyMQ0KPiANCj4g
-T24gU2F0LCBNYXIgMjYsIDIwMjIgYXQgMTA6MDYgUE0gTGludXMgVG9ydmFsZHMNCj4gPHRvcnZh
-bGRzQGxpbnV4LWZvdW5kYXRpb24ub3JnPiB3cm90ZToNCj4gPg0KPiA+IE9uIFNhdCwgTWFyIDI2
-LCAyMDIyIGF0IDg6NDkgUE0gSGFsaWwgUGFzaWMgPHBhc2ljQGxpbnV4LmlibS5jb20+IHdyb3Rl
-Og0KPiA+ID4NCj4gPiA+IEkgYWdyZWUgaXQgQ1BVIG1vZGlmaWVkIGJ1ZmZlcnMgKmNvbmN1cnJl
-bnRseSogd2l0aCBETUEgY2FuIG5ldmVyIHdvcmssDQo+ID4gPiBhbmQgSSBiZWxpZXZlIHRoZSBv
-d25lcnNoaXAgbW9kZWwgd2FzIGNvbmNlaXZlZCB0byBwcmV2ZW50IHRoaXMNCj4gPiA+IHNpdHVh
-dGlvbi4NCj4gPg0KPiA+IEJ1dCB0aGF0IGp1c3QgbWVhbnMgdGhhdCB0aGUgIm93bmVyc2hpcCIg
-bW9kZWwgaXMgZ2FyYmFnZSwgYW5kIGNhbm5vdA0KPiA+IGhhbmRsZSB0aGlzIFJFQUwgTElGRSBz
-aXR1YXRpb24uDQo+IA0KPiBKdXN0IHRvIGNsYXJpZnk6IEkgb2J2aW91c2x5IGFncmVlIHRoYXQg
-dGhlICJib3RoIHNpZGVzIG1vZGlmeQ0KPiBjb25jdXJyZW50bHkiIG9idmlvdXNseSBjYW5ub3Qg
-d29yayB3aXRoIGJvdW5jZSBidWZmZXJzLg0KDQpBcmVuJ3QgYm91bmNlIGJ1ZmZlcnMganVzdCBh
-IG1vcmUgZXh0cmVtZSBjYXNlIG9uIG5vbi1jb2hlcmVudA0KbWVtb3J5IGFjY2Vzc2VzPw0KVGhl
-eSBqdXN0IG5lZWQgZXhwbGljaXQgbWVtb3J5IGNvcGllcyByYXRoZXIgdGhhbiBqdXN0IGNhY2hl
-DQp3cml0ZWJhY2sgYW5kIGludmFsaWRhdGUgb3BlcmF0aW9ucy4NCg0KU28gJ2JvdGggc2lkZXMg
-bW9kaWZ5IGNvbmN1cnJlbnRseScganVzdCBoYXMgdGhlIHNhbWUgaXNzdWUNCmFzIGl0IGRvZXMg
-d2l0aCBub24tY29oZXJlbnQgbWVtb3J5IGluIHRoYXQgdGhlIGxvY2F0aW9ucw0KbmVlZCB0byBi
-ZSBpbiBzZXBhcmF0ZSAoZG1hKSBjYWNoZSBsaW5lcy4NCkluZGVlZCwgaWYgdGhlIGJvdW5jZSBi
-dWZmZXJzIGFyZSBhY3R1YWxseSBjb2hlcmVudCB0aGVuDQphcmJpdHJhcnkgY29uY3VycmVudCB1
-cGRhdGVzIGFyZSBwb3NzaWJsZS4NCg0KT25lIGlzc3VlIGlzIHRoYXQgdGhlIGRyaXZlciBuZWVk
-cyB0byBpbmRpY2F0ZSB3aGljaCBwYXJ0cw0Kb2YgYW55IGJ1ZmZlciBhcmUgZGlydHkuDQpXaGVy
-ZWFzIHRoZSBhbnkgJ2NhY2hlIHdyaXRlYmFjaycgcmVxdWVzdCB3aWxsIG9ubHkgd3JpdGUNCmRp
-cnR5IGRhdGEuDQoNCkdldCBldmVyeXRoaW5nIHJpZ2h0IGFuZCB5b3UgY2FuIGV2ZW4gc3VwcG9y
-dCBoYXJkd2FyZSB3aGVyZQ0KdGhlICdib3VuY2UgYnVmZmVycycgYXJlIGFjdHVhbGx5IG9uIHRo
-ZSBjYXJkIGFuZCB0aGUgY29waWVzDQphcmUgTU1JTyAob3IgYmV0dGVyLCBlc3BlY2lhbGx5IG9u
-IFBDSWUsIHN5bmNocm9ub3VzIGhvc3QNCmluaXRpYXRlZCBkbWEgdHJhbnNmZXJzKS4NCg0KCURh
-dmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3Vu
-dCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3
-Mzg2IChXYWxlcykNCg==
+When reading a packet from a host-to-guest ring buffer, there is no
+memory barrier between reading the write index (to see if there is
+a packet to read) and reading the contents of the packet. The Hyper-V
+host uses store-release when updating the write index to ensure that
+writes of the packet data are completed first. On the guest side,
+the processor can reorder and read the packet data before the write
+index, and sometimes get stale packet data. Getting such stale packet
+data has been observed in a reproducible case in a VM on ARM64.
+
+Fix this by using virt_load_acquire() to read the write index,
+ensuring that reads of the packet data cannot be reordered
+before it. Preventing such reordering is logically correct, and
+with this change, getting stale data can no longer be reproduced.
+
+Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+---
+ drivers/hv/ring_buffer.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
+index 71efacb..3d215d9 100644
+--- a/drivers/hv/ring_buffer.c
++++ b/drivers/hv/ring_buffer.c
+@@ -439,7 +439,16 @@ int hv_ringbuffer_read(struct vmbus_channel *channel,
+ static u32 hv_pkt_iter_avail(const struct hv_ring_buffer_info *rbi)
+ {
+ 	u32 priv_read_loc = rbi->priv_read_index;
+-	u32 write_loc = READ_ONCE(rbi->ring_buffer->write_index);
++	u32 write_loc;
++
++	/*
++	 * The Hyper-V host writes the packet data, then uses
++	 * store_release() to update the write_index.  Use load_acquire()
++	 * here to prevent loads of the packet data from being re-ordered
++	 * before the read of the write_index and potentially getting
++	 * stale data.
++	 */
++	write_loc = virt_load_acquire(&rbi->ring_buffer->write_index);
+ 
+ 	if (write_loc >= priv_read_loc)
+ 		return write_loc - priv_read_loc;
+-- 
+1.8.3.1
 

@@ -2,86 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773674E875B
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 13:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61814E875D
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 13:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233319AbiC0LTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 07:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
+        id S233345AbiC0LUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 07:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiC0LS6 (ORCPT
+        with ESMTP id S229692AbiC0LUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 07:18:58 -0400
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3410C39825;
-        Sun, 27 Mar 2022 04:17:18 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id h4so16470467wrc.13;
-        Sun, 27 Mar 2022 04:17:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Yo4Qxz57xPmfJcP7ucWBN2Y163R/nwHjuNzzvflm4rU=;
-        b=CW8S7mQujMa7SA7TD5fPDu8Lzlci8oo09qDkAjITX7n7HLSNWXeFjJN9lz1rMS2G4q
-         fDYYD2tKhmoZQj+Z+fQFeKSwIu0BNreeeZH8Ku+w3INlcYhB/IRWxVVRciTkbBohmBXL
-         xMwgRkU5IyvPpupHDxXqEwIg/az7Vs08P3oXCf+hLMenZNreA4+pCfoalSoRK6Ygkkqi
-         zwhrGdefuomPuv49TSaUFEtGXiMJSMDfkj/g20O7utrs5saKQXicgaV2SimlHSxfkNle
-         NSmhdowH6dTdjpgIpWKdtxwRNm1WuHc251hieFyIbzle8eEIPzYrZnIUt5QqfdptxcaH
-         6ikA==
-X-Gm-Message-State: AOAM531ms9pHw7FW8gOm+UyzZAM6wZnQbkMy/E5a9kIf+RsmLxlZp1We
-        GXH+JB19ptNB1M9NZtc2pIUf4JQJ4AM=
-X-Google-Smtp-Source: ABdhPJz8x6R8DUBdB2seJZmTkt1ay+PlI0jnhgdDgynlwHgHCu3xzK8Nsc8tACfQh0xFCNq9DpppTQ==
-X-Received: by 2002:a05:6000:1d82:b0:203:e5cc:c19b with SMTP id bk2-20020a0560001d8200b00203e5ccc19bmr16740081wrb.553.1648379836536;
-        Sun, 27 Mar 2022 04:17:16 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id w7-20020a1cf607000000b00389a5390180sm8925535wmc.25.2022.03.27.04.17.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Mar 2022 04:17:15 -0700 (PDT)
-Message-ID: <015bac04-4378-b4b8-c7d1-b0e2615fbe45@kernel.org>
-Date:   Sun, 27 Mar 2022 13:17:14 +0200
+        Sun, 27 Mar 2022 07:20:00 -0400
+Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3973735A96
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 04:18:22 -0700 (PDT)
+Received: from pop-os.home ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id YQuZno4PVvjW4YQuZnulRo; Sun, 27 Mar 2022 13:18:20 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 27 Mar 2022 13:18:20 +0200
+X-ME-IP: 90.126.236.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Todd Kjos <tkjos@google.com>
+Subject: [PATCH] binderfs: Fix the maximum minor value in binderfs_binder_device_create() and binderfs_binder_ctl_create()
+Date:   Sun, 27 Mar 2022 13:18:17 +0200
+Message-Id: <ba880255b91b4682c21c62ae0bc5673e34a119aa.1648379891.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 3/4] dt-bindings: hwmon: add Microchip LAN966x bindings
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220326192347.2940747-1-michael@walle.cc>
- <20220326192347.2940747-4-michael@walle.cc>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220326192347.2940747-4-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/03/2022 20:23, Michael Walle wrote:
-> Add a binding for the temperature sensor and the fan controller on the
-> Microchip LAN966x family.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  .../bindings/hwmon/microchip,lan966x.yaml     | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml
-> 
+ida_alloc_max(..., max, ...) returns values from 0 to max, inclusive.
 
+So, BINDERFS_MAX_MINOR is a valid value for 'minor'.
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+BINDERFS_MAX_MINOR is '1U << MINORBITS' and we have:
+	#define MKDEV(ma,mi)	(((ma) << MINORBITS) | (mi))
 
+So, When this value is used in MKDEV() and it will overflow.
 
-Best regards,
-Krzysztof
+Fixes: 3ad20fe393b3 ("binder: implement binderfs")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+This patch is completely speculative.
+
+The 'BINDERFS_MAX_MINOR_CAPPED - 1' is here only for symmetry with the
+BINDERFS_MAX_MINOR case. I'm not sure at all that is is needed and, more
+importantly, that it is correct.
+---
+ drivers/android/binderfs.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/android/binderfs.c b/drivers/android/binderfs.c
+index e3605cdd4335..47df1f381150 100644
+--- a/drivers/android/binderfs.c
++++ b/drivers/android/binderfs.c
+@@ -130,8 +130,8 @@ static int binderfs_binder_device_create(struct inode *ref_inode,
+ 	mutex_lock(&binderfs_minors_mutex);
+ 	if (++info->device_count <= info->mount_opts.max)
+ 		minor = ida_alloc_max(&binderfs_minors,
+-				      use_reserve ? BINDERFS_MAX_MINOR :
+-						    BINDERFS_MAX_MINOR_CAPPED,
++				      use_reserve ? BINDERFS_MAX_MINOR - 1:
++						    BINDERFS_MAX_MINOR_CAPPED - 1,
+ 				      GFP_KERNEL);
+ 	else
+ 		minor = -ENOSPC;
+@@ -433,8 +433,8 @@ static int binderfs_binder_ctl_create(struct super_block *sb)
+ 	/* Reserve a new minor number for the new device. */
+ 	mutex_lock(&binderfs_minors_mutex);
+ 	minor = ida_alloc_max(&binderfs_minors,
+-			      use_reserve ? BINDERFS_MAX_MINOR :
+-					    BINDERFS_MAX_MINOR_CAPPED,
++			      use_reserve ? BINDERFS_MAX_MINOR - 1 :
++					    BINDERFS_MAX_MINOR_CAPPED - 1,
+ 			      GFP_KERNEL);
+ 	mutex_unlock(&binderfs_minors_mutex);
+ 	if (minor < 0) {
+-- 
+2.32.0
+

@@ -2,184 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 906014E89EE
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 22:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6560B4E89F1
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 22:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235857AbiC0UGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 16:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
+        id S236622AbiC0UHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 16:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbiC0UGh (ORCPT
+        with ESMTP id S232186AbiC0UG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 16:06:37 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7655A1262C;
-        Sun, 27 Mar 2022 13:04:58 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id pv16so24779678ejb.0;
-        Sun, 27 Mar 2022 13:04:58 -0700 (PDT)
+        Sun, 27 Mar 2022 16:06:58 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1403C4FC42
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:05:19 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id bn33so16644969ljb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:05:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ohtTOFwdPQ4AOw3GQF3QapgXdCDzfitdYHdMexYJt0s=;
-        b=VoQkFMhBgUDHuzvs3mhfiHHPpmStH1xj91457cCibQ50SFqt5Jtw87mJlFR127MmLu
-         Ij7yt2ru7DBLU6qsqTAgVWlVSKinUyUODiYpljqzyGYvxOG+0dSljYo7nIvchmTsTd1E
-         og0z6dFLrLKbpR7w7o0QRcZoxsH+iqyL1UmuWVS2HY85Z7p1pFM/zoGzEMdq6w+KSW4a
-         3XOxzC+0nyP56XAEV5lNXpSu67G0ObDmXI2B664X+94hZ7VuTuVhi+nq0eVP8FhKi+fZ
-         zLZU5/YQuUhG6Jz2ZYegPNVMpBJxukxbtBH6Hw4vd31233q1o4YmkgfkswIXFzSYIE4q
-         cPlg==
+        bh=wob/7GSQVIpO7i1InQcutyEWYgbvdwTICG96D7RFBB8=;
+        b=MBKpZ1UtrtPBVIHqjdSKYB/rkJWZ1f0vdHzhtdISyO5M6IfCasC0hYp5oS9+XwcX2g
+         onX3toZbyl+fJ/Tk2m9EN2QoWGToeUma4YxombZeY5ZkW09xgeyTm/fWrkUSPf9q19W+
+         djbSzf2EiLGwXDF9V4ce2XqsgWTUpumTDa/0Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ohtTOFwdPQ4AOw3GQF3QapgXdCDzfitdYHdMexYJt0s=;
-        b=ty3k+EqpMjkV/49Qu81PFShrMBJZSpqbYPkLEpb9cl80i0gaq4KgYDHktyv9IwEdGZ
-         8+wy28ZGqQFvxgbyUf9jtdho2mmSYxv7XQ3qN2y6cJjmUoXcgwDOtWG3afNsm2X84L69
-         ybmw6Qhiew6wmCr7bCO1UAOpjaSJ2kz/PZ6ioEr68SNE/3WQrS8cINn7KZ2cFNMBlABs
-         DtO5z9bVXRJtqJHAMolgItQuIr2ibR9npGQh1SeKn3Tt/fNyf+9B9tFf4C2eo+KOuPrW
-         LAjSO6HtMwFTbiBZJZ2+EY8ixjUN9zfv5cOV9ajVhPaysGhw0a1Os6fTKMSbr87/8Pba
-         Lk/Q==
-X-Gm-Message-State: AOAM533U9OP94yymxSRpXwBNHzJckKmg/V7Q8scrq/IHmJt14OsZvC18
-        fC2RSWNMCl3uBUGvabVYqWMxV29E988y4rzWVlT0sdIuil4=
-X-Google-Smtp-Source: ABdhPJyBZUDM7B9ex+Xu4sTigiToYzIpFWAhdJcN22kvx75+VjSKmc9f8txVyQ6ygvykMMrjk4anaB6clFk8v8NsdVI=
-X-Received: by 2002:a17:907:9703:b0:6da:6412:508a with SMTP id
- jg3-20020a170907970300b006da6412508amr23819809ejc.77.1648411496962; Sun, 27
- Mar 2022 13:04:56 -0700 (PDT)
+        bh=wob/7GSQVIpO7i1InQcutyEWYgbvdwTICG96D7RFBB8=;
+        b=POmAIKWHlKjiDsMeaFYjnwUNIaYBA3e0Lc1ETHksdku3FTd2A6TVuOqIKpvkrW0xaK
+         LAB5+NXGdiJXbFe85NSfP+vjripq8EiZRHhC03j/Q3J4ispikbM0VWpMFFul4ITBfeou
+         n59RYmSTCtDNbsN7gdbabLf4ar67mghI9M8LCQfwm2xugWbzd5f9J9oP05appkzW/Y+r
+         f3wM4a6wHCGzLiZFad0odyDp5P5l+0M7LuS65YXgMIX5kpCVijlmM0/rVtiEeETxY7+t
+         Nu9EtPseBXqoKOVUgOZoOPEhq85yiP0YwZBC+V56lfT9nfyI2fg9MN3wBAcEblxEbH7o
+         rXQA==
+X-Gm-Message-State: AOAM5300p8yPBKidJ8OQu2jts7WrTabTRpyDIK3LC7R4+9+qhc/lPDc2
+        k96/IaKHsqDDzfg1tp1mCDTfesKZMOKQeceJENs=
+X-Google-Smtp-Source: ABdhPJyCLJRIUVxmPMB4uwikqSt+3jmlKZ1bb4qL5guKuAa0Sj3PCZe5rN1G7rFBM8qM3WvZBlPFyA==
+X-Received: by 2002:a2e:8648:0:b0:24a:cedf:54c3 with SMTP id i8-20020a2e8648000000b0024acedf54c3mr1997985ljj.384.1648411517050;
+        Sun, 27 Mar 2022 13:05:17 -0700 (PDT)
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com. [209.85.208.175])
+        by smtp.gmail.com with ESMTPSA id a20-20020a194f54000000b0044a9afab7e7sm67911lfk.290.2022.03.27.13.05.11
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Mar 2022 13:05:13 -0700 (PDT)
+Received: by mail-lj1-f175.google.com with SMTP id c15so16618109ljr.9
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:05:11 -0700 (PDT)
+X-Received: by 2002:a2e:9b10:0:b0:247:f28c:ffd3 with SMTP id
+ u16-20020a2e9b10000000b00247f28cffd3mr16821393lji.152.1648411509868; Sun, 27
+ Mar 2022 13:05:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <f6372a2f880c6e8597a8f070eb031d4cd451d37e.1648291287.git.mchehab@kernel.org>
-In-Reply-To: <f6372a2f880c6e8597a8f070eb031d4cd451d37e.1648291287.git.mchehab@kernel.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 27 Mar 2022 23:04:21 +0300
-Message-ID: <CAHp75Vc50ko7F0ZT_uWf6+f3atj0mg+RdFP9-sX_PLUtPqk3Eg@mail.gmail.com>
-Subject: Re: [PATCH] lib/bitmap.c make bitmap_print_bitmask_to_buf parseable
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <1812355.tdWV9SEqCh@natalenko.name> <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
+ <20220324055732.GB12078@lst.de> <4386660.LvFx2qVVIh@natalenko.name>
+ <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com> <878rsza0ih.fsf@toke.dk>
+ <4be26f5d8725cdb016c6fdd9d05cfeb69cdd9e09.camel@freebox.fr>
+ <20220324163132.GB26098@lst.de> <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com>
+ <871qyr9t4e.fsf@toke.dk> <CAHk-=whUQCCaQXJt3KUeQ8mtnLeVXEScNXCp+_DYh2SNY7EcEA@mail.gmail.com>
+ <20220327054848.1a545b12.pasic@linux.ibm.com> <CAHk-=whUJ=tMEgP3KiWwk0pzmHn+1QORUu50syE+zOGk4UnFog@mail.gmail.com>
+ <CAHk-=wgUx5CVF_1aEkhhEiRGXHgKzUdKiyctBKcHAxkxPpbiaw@mail.gmail.com>
+ <0745b44456d44d1e9fc364e5a3780d9a@AcuMS.aculab.com> <CAHk-=wgLyqNJx=bb8=o0Nk5U8gMnf0-=qx53ShLEb3V=Yrt8fw@mail.gmail.com>
+In-Reply-To: <CAHk-=wgLyqNJx=bb8=o0Nk5U8gMnf0-=qx53ShLEb3V=Yrt8fw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 27 Mar 2022 13:04:53 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh+TzZhMCiPPnchC4FSeS53-QCN3RYqxLAh4ahKMLoj9A@mail.gmail.com>
+Message-ID: <CAHk-=wh+TzZhMCiPPnchC4FSeS53-QCN3RYqxLAh4ahKMLoj9A@mail.gmail.com>
+Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
+ ath9k-based AP
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Halil Pasic <pasic@linux.ibm.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Maxime Bizon <mbizon@freebox.fr>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Olha Cherevyk <olha.cherevyk@gmail.com>,
+        iommu <iommu@lists.linux-foundation.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 26, 2022 at 8:39 PM Mauro Carvalho Chehab
-<mchehab@kernel.org> wrote:
+On Sun, Mar 27, 2022 at 12:23 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> The documentation of such function is not on a proper ReST format,
-> as reported by Sphinx:
+> So I will propose that we really make it very much about practical
+> concerns, and we document things as
 >
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:532: WARNING: Unexpected indentation.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:526: WARNING: Inline emphasis start-string without end-string.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:532: WARNING: Inline emphasis start-string without end-string.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:532: WARNING: Inline emphasis start-string without end-string.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:533: WARNING: Block quote ends without a blank line; unexpected unindent.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:536: WARNING: Definition list ends without a blank line; unexpected unindent.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:542: WARNING: Unexpected indentation.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:536: WARNING: Inline emphasis start-string without end-string.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:536: WARNING: Inline emphasis start-string without end-string.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:543: WARNING: Block quote ends without a blank line; unexpected unindent.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:552: WARNING: Unexpected indentation.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:545: WARNING: Inline emphasis start-string without end-string.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:545: WARNING: Inline emphasis start-string without end-string.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:552: WARNING: Inline emphasis start-string without end-string.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:552: WARNING: Inline emphasis start-string without end-string.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:554: WARNING: Block quote ends without a blank line; unexpected unindent.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:556: WARNING: Definition list ends without a blank line; unexpected unindent.
->     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:580: WARNING: Unexpected indentation.
+>  (a) the "sync" operation has by definition a "whose _future_ access
+> do we sync for" notion.
 >
-> So, the produced output at:
+>      So "dma_sync_single_for_cpu()" says that the future accesses to
+> this dma area is for the CPU.
 >
->         https://www.kernel.org/doc/html/latest/core-api/kernel-api.html?#c.bitmap_print_bitmask_to_buf
+>      Note how it does *NOT* say that the "CPU owns the are". That's
+> bullsh*t, and we now know it's BS.
 >
-> is broken. Fix it by adding spaces and marking the literal blocks.
+>  (b) but the sync operation also has a "who wrote the data we're syncing"
+>
+>      Note that this is *not* "who accessed or owned it last", because
+> that's nonsensical: if we're syncing for the CPU, then the only reason
+> to do so is because we expect that the last access was by the device,
+> so specifying that separately would just be redundant and stupid.
+>
+>      But specifying who *wrote* to the area is meaningful and matters.
 
-LGTM,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Thanks!
+We could also simply require that the bounce buffer code *remember*
+who wrote to it last.
 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
->  lib/bitmap.c | 33 ++++++++++++++++++++-------------
->  1 file changed, 20 insertions(+), 13 deletions(-)
->
-> diff --git a/lib/bitmap.c b/lib/bitmap.c
-> index 0d5c2ece0bcb..8ebe508580ea 100644
-> --- a/lib/bitmap.c
-> +++ b/lib/bitmap.c
-> @@ -527,33 +527,39 @@ static int bitmap_print_to_buf(bool list, char *buf, const unsigned long *maskp,
->   * cpumap_print_to_pagebuf() or directly by drivers to export hexadecimal
->   * bitmask and decimal list to userspace by sysfs ABI.
->   * Drivers might be using a normal attribute for this kind of ABIs. A
-> - * normal attribute typically has show entry as below:
-> - * static ssize_t example_attribute_show(struct device *dev,
-> + * normal attribute typically has show entry as below::
-> + *
-> + *   static ssize_t example_attribute_show(struct device *dev,
->   *             struct device_attribute *attr, char *buf)
-> - * {
-> + *   {
->   *     ...
->   *     return bitmap_print_to_pagebuf(true, buf, &mask, nr_trig_max);
-> - * }
-> + *   }
-> + *
->   * show entry of attribute has no offset and count parameters and this
->   * means the file is limited to one page only.
->   * bitmap_print_to_pagebuf() API works terribly well for this kind of
-> - * normal attribute with buf parameter and without offset, count:
-> - * bitmap_print_to_pagebuf(bool list, char *buf, const unsigned long *maskp,
-> + * normal attribute with buf parameter and without offset, count::
-> + *
-> + *   bitmap_print_to_pagebuf(bool list, char *buf, const unsigned long *maskp,
->   *                        int nmaskbits)
-> - * {
-> - * }
-> + *   {
-> + *   }
-> + *
->   * The problem is once we have a large bitmap, we have a chance to get a
->   * bitmask or list more than one page. Especially for list, it could be
->   * as complex as 0,3,5,7,9,... We have no simple way to know it exact size.
->   * It turns out bin_attribute is a way to break this limit. bin_attribute
-> - * has show entry as below:
-> - * static ssize_t
-> - * example_bin_attribute_show(struct file *filp, struct kobject *kobj,
-> + * has show entry as below::
-> + *
-> + *   static ssize_t
-> + *   example_bin_attribute_show(struct file *filp, struct kobject *kobj,
->   *             struct bin_attribute *attr, char *buf,
->   *             loff_t offset, size_t count)
-> - * {
-> + *   {
->   *     ...
-> - * }
-> + *   }
-> + *
->   * With the new offset and count parameters, this makes sysfs ABI be able
->   * to support file size more than one page. For example, offset could be
->   * >= 4096.
-> @@ -577,6 +583,7 @@ static int bitmap_print_to_buf(bool list, char *buf, const unsigned long *maskp,
->   * This function is not a replacement for sprintf() or bitmap_print_to_pagebuf().
->   * It is intended to workaround sysfs limitations discussed above and should be
->   * used carefully in general case for the following reasons:
-> + *
->   *  - Time complexity is O(nbits^2/count), comparing to O(nbits) for snprintf().
->   *  - Memory complexity is O(nbits), comparing to O(1) for snprintf().
->   *  - @off and @count are NOT offset and number of bits to print.
-> --
-> 2.35.1
->
+So when the ath9k driver does
 
+ - setup:
 
--- 
-With Best Regards,
-Andy Shevchenko
+                bf->bf_buf_addr = dma_map_single(sc->dev, skb->data,
+                                                 common->rx_bufsize,
+                                                 DMA_FROM_DEVICE);
+
+we clear the bounce buffer and remember that the state of the bounce
+buffer is "device wrote to it" (because DMA_FROM_DEVICE).
+
+Then, we have an interrupt or other event, and ath9k does
+
+ - rc event:
+
+        dma_sync_single_for_cpu(sc->dev, bf->bf_buf_addr,
+                                common->rx_bufsize, DMA_FROM_DEVICE);
+
+        ret = ath9k_hw_process_rxdesc_edma(ah, rs, skb->data);
+        if (ret == -EINPROGRESS) {
+                /*let device gain the buffer again*/
+                dma_sync_single_for_device(sc->dev, bf->bf_buf_addr,
+                                common->rx_bufsize, DMA_FROM_DEVICE);
+                return false;
+        }
+
+and the first dma_sync_single_for_cpu() now sees "Ok, I want the CPU
+buffer, and I remember that the device wrote to it, so I will copy
+from the bounce buffer". It's still DMA_FROM_DEVICE, so that "the
+device wrote to it" doesn't change.
+
+When the CPU then decides "ok, that wasn't it", and does that
+dma_sync_single_for_device(), the bounce buffer code goes "Ok, the
+last operation was that the device wrote to the buffer, so the bounce
+buffer is still valid and I should do nothing".
+
+Voila, no ath9k breakage, and it all still makes perfect sense.
+
+And that sounds like an even more logical model than the one where we
+tell the bounce buffer code what the previous operation was, but it
+involves basically the DMA mapping code remembering what the last
+direction was. That makes perfect sense to me, but it's certainly not
+what the DMA mapping code has traditionally done, which makes me
+nervous that it would just expose a _lot_ of other drivers that do odd
+things.
+
+The "good news" (if there is such a thing) is that usually the
+direction doesn't actually change. So if you use DMA_FROM_DEVICE
+initially, you'll continue to use that. So there is probably basically
+never any difference between "what was the previous operation" and
+"what is the next operation".
+
+So maybe practically speaking, we don't care.
+
+Anyway, I do think we have choices here on how to describe things.
+
+I do think that the "DMA code doesn't have to remember" model has the
+advantage that remembering is always an added complexity, and
+operations that behave differently depending on previous history are
+always a bit harder to think about because of that. Which is why I
+think that model I outlined in the previous email is probably the most
+straightforward one.
+
+                 Linus

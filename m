@@ -2,100 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BEE4E8917
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 19:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 243224E891A
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 19:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236150AbiC0RRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 13:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60276 "EHLO
+        id S236154AbiC0RdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 13:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233819AbiC0RRQ (ORCPT
+        with ESMTP id S233682AbiC0RdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 13:17:16 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E3C10D8;
-        Sun, 27 Mar 2022 10:15:36 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 77D458205CD;
-        Sun, 27 Mar 2022 17:15:35 +0000 (UTC)
-Received: from pdx1-sub0-mail-a238.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id E3DE1820967;
-        Sun, 27 Mar 2022 17:15:34 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1648401335; a=rsa-sha256;
-        cv=none;
-        b=mASLVU82rm04FvTtwR5TrFfus09d7x/uyne0+hA6ZJjosKuWNLRYUbf3MmldFBai+aicli
-        4+iZz6aLQ/N3yOg5HN6oGDmZ2rSRduwxNBxesQlLbf5w+eViBJBcuTo9/gc+XQMSOgZhX0
-        GR9afCKsUDEqRmxOwnNIpp0ILF+/KKIN7A0IriEKtpyU0u4heI1d6MZOGrFEBvZvVXzh2+
-        QsJ+qzI+Ur8lRkrGRimRC+7/CFzaYOBA7BQRamcv9mTHL4mtSGaLlrgdPckCJSPd4mqaag
-        DhViuiSP0nt+2KIu3PpAZ3Km4H4UakutzlH8+JM6Q/OKDCDKV4Ax3ILOko9Mrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1648401335;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=w1fiPFDj2EpQaIQHXWoKn3h6vJnDYTtbXYGB2AtQB/M=;
-        b=putNwyg+Awl4ppVfSdMmbl9jW6lMqWhMDbAbpoLNrdZpZ9DjbaxhK7aQVF73p81muhS55u
-        itbB3/ysDs2pl/4e3b49mOrP3YV/ufQ1hUHZOicbLKt1HZlpNUC6HcryLg9hQRb8MP4ANn
-        5VztJKsKOBUwnmxesQl5VByj/D3v0BIKzNMFHWZUW9WvMUnR1mSGvSPFaep9qEwEJ/4e6L
-        4EKhf+mXOXxGSOuMqGzPBMLlxDDwpzcB5k2gVG89oJYVtHDC9mrjfTkSkMcMq5QbtszkJF
-        bao5lRcsMmdq5hmxtUv8ApPMZjtPnICH/pLlVjzOeWJZWmp827P4N4KrTghr4Q==
-ARC-Authentication-Results: i=1;
-        rspamd-cf7f5c5bf-jv2nd;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from pdx1-sub0-mail-a238.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.125.123.11 (trex/6.5.3);
-        Sun, 27 Mar 2022 17:15:35 +0000
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Wide-Eyed-Reaction: 4ad0f3d36db091d2_1648401335307_1738802150
-X-MC-Loop-Signature: 1648401335307:4236116255
-X-MC-Ingress-Time: 1648401335307
-Received: from offworld (unknown [104.36.25.8])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a238.dreamhost.com (Postfix) with ESMTPSA id 4KRMsf0Bryz1Nr;
-        Sun, 27 Mar 2022 10:15:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1648401334;
-        bh=w1fiPFDj2EpQaIQHXWoKn3h6vJnDYTtbXYGB2AtQB/M=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=JUHQZg3eVPW8q+YSmOiGPFv7tFcXH5OIUnb9WfpNxom52k8suKMAqjHkxMGnwNrrd
-         bkicK+dtXF/BV12JTR0P9gD6dvz96zeIlWjkWF32nMt/pxz3gTWEHGnwyomC3ODAj3
-         dEiYlObkZdB1Fn/7uWiCKyNPf+KbLHn0qZMjDa7IVYbAVCiwAAKiQJA8vBlO8oPKE5
-         zzxu0d9GV1c2VxokOSOI4sg9Qo57m0Yge24QCJVPBXOIe5LGmoywTr+Cdj6GyZFhHD
-         ADdoF0Hu5MSgsSk9FidNMBN8J8HYQY68zcGLwpSY1uKlM/RGtTZyWebYku0gJovW1O
-         zQDX5A7pzt9jw==
-Date:   Sun, 27 Mar 2022 10:15:30 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+19480160ef25c9ffa29d@syzkaller.appspotmail.com,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Sridhar Samudrala <sridhar.samudrala@intel.com>,
-        Alexander Duyck <alexander.h.duyck@intel.com>
-Subject: Re: [PATCH] list: Fix another data-race around ep->rdllist.
-Message-ID: <20220327171530.sbx63nw7h72bjucw@offworld>
-References: <20220326063558.89906-1-kuniyu@amazon.co.jp>
+        Sun, 27 Mar 2022 13:33:21 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C283849C80
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 10:31:41 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id y142so22328119ybe.11
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 10:31:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zr0NjEDn5ahm6BQl9cvFf4dmTZugbKlSBosKFEdMvGE=;
+        b=h+37ODtnkJ7MiURB8YYbqoFGCcPx7Qpg+DWSWAL7f82ah+0CBjQXs8wpusJLry2oe6
+         yWVZm64apx6y+McOu+Y2QhsCOOYd+iP5/4DM/w4bPTagYTgmt2BiSpQOkFt/pyYPamQz
+         1csnIsLYgjd2h9zEc9On5mOzBpY1DuXBRhKaPhyikp/qUrj1yZd0zOfHBbnwZ3Sz+CMO
+         wI0lzkbj4mcZLDTSaAHTIoET5WxkiGl79BjthFc0YS7umTyQR61LOi3jwKX3GRW1ZIUW
+         tQ8AjxiH4zS28VWB5gqNysY7172nuAHgLwoKQd0hozmCWhXMpsPU0K4aemCAS9+TZJQK
+         Xt2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zr0NjEDn5ahm6BQl9cvFf4dmTZugbKlSBosKFEdMvGE=;
+        b=bzPxi3/1py6CNEzrErydR6YCwbUwTJ3/wYKkSrfBIYX5HYyTwkE0Vv27INph0V22L/
+         B6ecx5jOWAxgVWVhHz0PPokv4nTFQHJLOBQokzLkBbOpnfY9bjWvbqxLq10oMr3+dE85
+         ntuPY7rUuvWB1BQk9o8p6E60RxoBvxSB7ffM8ws0XZahwaSUgjlCKb8AfjRGyNjBCPq8
+         jnAX98i4TgL2X6vDopsij4Z/jjZu4956WOkHMbNf2nvGskHkKEdnr5KnAYn1bx/0cxX9
+         Z4LAszWUk3LXGSIxp4ToSVtUR8MvGpCye54r3300b083B0rAFOXHdZgSKKTr4Mdgni6L
+         n7qg==
+X-Gm-Message-State: AOAM530EwZcPLlc+R1gtXJnTKomsMuLQKTVb1NUeuTkt2mCFkJBklGCk
+        w3F/fS2HayM7qaSzL2kyadbHHkbCL+T/SOvrbObxaVvR40I=
+X-Google-Smtp-Source: ABdhPJyGnwKMfYcqaiFZe1zeZU3RqSmU7N6GnYgQV6XjaXq8hsj8Vi7m8Y1L2eKljjv4r5eGm1bTnSJVmmXUyEVfi+g=
+X-Received: by 2002:a05:6902:1149:b0:634:63a3:f6a1 with SMTP id
+ p9-20020a056902114900b0063463a3f6a1mr19743428ybu.425.1648402300751; Sun, 27
+ Mar 2022 10:31:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220326063558.89906-1-kuniyu@amazon.co.jp>
-User-Agent: NeoMutt/20201120
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220327051853.57647-1-songmuchun@bytedance.com> <20220327051853.57647-2-songmuchun@bytedance.com>
+In-Reply-To: <20220327051853.57647-2-songmuchun@bytedance.com>
+From:   Marco Elver <elver@google.com>
+Date:   Sun, 27 Mar 2022 19:31:04 +0200
+Message-ID: <CANpmjNPA71CyZefox1rb_f8HqEM_R70EgZCX8fHeeAnDyujO8w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] mm: kfence: fix objcgs vector allocation
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     torvalds@linux-foundation.org, glider@google.com,
+        dvyukov@google.com, akpm@linux-foundation.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        vbabka@suse.cz, roman.gushchin@linux.dev,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,24 +71,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 26 Mar 2022, Kuniyuki Iwashima wrote:
+On Sun, 27 Mar 2022 at 07:19, Muchun Song <songmuchun@bytedance.com> wrote:
+>
+> If the kfence object is allocated to be used for objects vector, then
+> this slot of the pool eventually being occupied permanently since
+> the vector is never freed.  The solutions could be 1) freeing vector
+> when the kfence object is freed or 2) allocating all vectors statically.
+> Since the memory consumption of object vectors is low, it is better to
+> chose 2) to fix the issue and it is also can reduce overhead of vectors
+> allocating in the future.
+>
+> Fixes: d3fb45f370d9 ("mm, kfence: insert KFENCE hooks for SLAB")
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> ---
+>  mm/kfence/core.c   | 3 +++
+>  mm/kfence/kfence.h | 1 +
+>  2 files changed, 4 insertions(+)
 
->syzbot had reported another race around ep->rdllist.  ep_poll() calls
->list_empty_careful() locklessly to check if the list is empty or not
->by testing rdllist->prev == rdllist->next.
->
->When the list does not have any nodes, the next and prev arguments of
->__list_add() is the same head pointer.  Thus the write to head->prev
->there is racy with lockless list_empty_careful() and needs WRITE_ONCE()
->to avoid store-tearing.
->
->Note that the reader side is already fixed in the patch [0].
->
->[0]: https://lore.kernel.org/mm-commits/20220326031647.DD24EC004DD@smtp.kernel.org/
->
->BUG: KCSAN: data-race in do_epoll_ctl / do_epoll_wait
+Thanks for this -- mostly looks good. Minor comments below + also
+please fix what the test robot reported.
 
-I think this needs to be part of the same list-fix-a-data-race-around-ep-rdllist.patch
+> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+> index 13128fa13062..9976b3f0d097 100644
+> --- a/mm/kfence/core.c
+> +++ b/mm/kfence/core.c
+> @@ -579,9 +579,11 @@ static bool __init kfence_init_pool(void)
+>         }
+>
+>         for (i = 0; i < CONFIG_KFENCE_NUM_OBJECTS; i++) {
+> +               struct slab *slab = virt_to_slab(addr);
+>                 struct kfence_metadata *meta = &kfence_metadata[i];
+>
+>                 /* Initialize metadata. */
+> +               slab->memcg_data = (unsigned long)&meta->objcg | MEMCG_DATA_OBJCGS;
 
-Thanks,
-Davidlohr
+Maybe just move it to kfence_guarded_alloc(), see "/* Set required
+slab fields */", where similar initialization on slab is done.
+
+>                 INIT_LIST_HEAD(&meta->list);
+>                 raw_spin_lock_init(&meta->lock);
+>                 meta->state = KFENCE_OBJECT_UNUSED;
+> @@ -938,6 +940,7 @@ void __kfence_free(void *addr)
+>  {
+>         struct kfence_metadata *meta = addr_to_metadata((unsigned long)addr);
+>
+> +       KFENCE_WARN_ON(meta->objcg);
+
+This holds true for both SLAB and SLUB, right? (I think it does, but
+just double-checking.)
+
+>         /*
+>          * If the objects of the cache are SLAB_TYPESAFE_BY_RCU, defer freeing
+>          * the object, as the object page may be recycled for other-typed
+> diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
+> index 2a2d5de9d379..6f0e1aece3f8 100644
+> --- a/mm/kfence/kfence.h
+> +++ b/mm/kfence/kfence.h
+> @@ -89,6 +89,7 @@ struct kfence_metadata {
+>         struct kfence_track free_track;
+>         /* For updating alloc_covered on frees. */
+>         u32 alloc_stack_hash;
+> +       struct obj_cgroup *objcg;
+>  };
+>
+>  extern struct kfence_metadata kfence_metadata[CONFIG_KFENCE_NUM_OBJECTS];
+> --
+> 2.11.0
+>

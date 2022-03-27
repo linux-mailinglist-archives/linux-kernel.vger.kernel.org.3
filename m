@@ -2,125 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF824E85F7
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 07:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75FF04E85F9
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 07:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235098AbiC0Ffd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 01:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
+        id S235122AbiC0Fhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 01:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233643AbiC0Ff3 (ORCPT
+        with ESMTP id S233643AbiC0Fhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 01:35:29 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54285B869;
-        Sat, 26 Mar 2022 22:33:51 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id y6so9571018plg.2;
-        Sat, 26 Mar 2022 22:33:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=xSaEo9LO7falECQjCcduKi//QmoNEw98a9U9ZQZJgh0=;
-        b=lGH+n2l5hbyQ3oeQV+8To9w7NYMbU1mNpdI5etgt2b/SaqSpTPk8Jcr8H008L2ru5M
-         RDP1RsfEsbdT+3ClnYQ4TtmoUHlrtsenl/HCd040hLBMfOw9rvLCgUZjUG95Wz7097D2
-         oqJrsybkccDLMPIxa4R/MGoMYleRdKkXLvoKAdslDyrLIrNOdjJpvoznMFzi6FMtMKm7
-         klcoxCekVLTOt0sj167R63L7OUzbNaYPYkoczk7MQ2GTwp4NUHWGFlmVBqWxoulTtOLn
-         GxvGK9D8vyvzNm3NKQrpknUprTMCrsJ/a6h98VRfNOLcv06Zy9MBQ9GcQJd4fqZBvfEa
-         NHkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=xSaEo9LO7falECQjCcduKi//QmoNEw98a9U9ZQZJgh0=;
-        b=re3BGj7bqhKbSNZl3Mdr1wBbkXzDHp8H4Y5bRuq1KsgPheaK857s7KTEaQZ3yX4D2S
-         6bOkXZ9cm8dSgEc6Dw0plf/jcHrvGNTNg0OfjfTMYMr/FK6MREhU48HF4X7rDUfrSvsG
-         FAo8ZWnQxpRujbOrU/GX8PEEHqE+HrG4AIJE8cMLa68qsVfA3gCLJ0PzSZ6UE+MY9+SK
-         Pzr7U30/d43NpsaXmO1S7g6umtjSAvrehC8SCbfPBJY6+ZO8/iIK1psFw2ckR+YmsHxm
-         Tngc1BIU0xBl13xoGd0meL5Tv6kmlR+3e0ugn7dUVrAxm8EDAsqWIU8HtlKNs8odBPHx
-         TkmQ==
-X-Gm-Message-State: AOAM532rkvnFGpimQEJ5TJ1IJx3II5b/XwH/gDyQSU4TxGUbd9EGBAZy
-        9qM2Qyb8fjZagOKmOCo3780=
-X-Google-Smtp-Source: ABdhPJzZ18rhjsZXOUmdR1MF8whBPlQuLAFQEDXUlRLG9T0g/Unls8OXFNRgC9YAvDov3k0h3cyoFw==
-X-Received: by 2002:a17:902:b597:b0:151:e24e:a61e with SMTP id a23-20020a170902b59700b00151e24ea61emr19886693pls.66.1648359230883;
-        Sat, 26 Mar 2022 22:33:50 -0700 (PDT)
-Received: from localhost.localdomain ([115.220.243.108])
-        by smtp.googlemail.com with ESMTPSA id d80-20020a621d53000000b004fae1119955sm11654765pfd.213.2022.03.26.22.33.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 22:33:50 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     tomba@kernel.org
-Cc:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
-Subject: [PATCH] omapdrm: fix missing check on list iterator
-Date:   Sun, 27 Mar 2022 13:33:44 +0800
-Message-Id: <20220327053344.2696-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 27 Mar 2022 01:37:32 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E785DAE
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:35:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648359353; x=1679895353;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4TYUpfpG6TbN1datt2KoN1OWaOXfrEoX5o19f6S765o=;
+  b=bZ86DdFDziAUjXmOhdgd64ueamT/eDAWeKkYQgQdwyJOmz8lfy78fQDx
+   QTfIXHhBTTuUro9w6yC/KdEQyK5B+wiQlXhSzYbVuK9ec4tpZqlw5+kTG
+   rS//QYpnofujfUUMPeu5BPvnJegh7yC3U5kkIE97lss8qY+w6FiKWz36e
+   CffSPQg8wzkHFXK//12YtPlmraFf5duKCFe61lr85bLTNcRLhHOhgH8W7
+   ukeWNBMQGZoYa8X2TC4NObf1Fkvx/eEUeSHZFizp6meQY+QXAj3brg+Wx
+   kwk0j1PdCCDGvi/swDgOQuRD6Q+zHr84NbXf4XWvOxB8JnmvHLu+RjWHE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="283709438"
+X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
+   d="scan'208";a="283709438"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 22:35:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
+   d="scan'208";a="602442660"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Mar 2022 22:35:51 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nYLZ8-0000kn-Fc; Sun, 27 Mar 2022 05:35:50 +0000
+Date:   Sun, 27 Mar 2022 13:35:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     wujunwen <wudaemon@163.com>, arnd@arndb.de,
+        gregkh@linuxfoundation.org
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        wujunwen <wudaemon@163.com>
+Subject: Re: [PATCH v1] char: misc:use DEFINE_PROC_SHOW_ATTRIBUTE micro to
+ simplify misc proc_fops
+Message-ID: <202203271316.pktWRsr4-lkp@intel.com>
+References: <20220327035854.219491-1-wudaemon@163.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220327035854.219491-1-wudaemon@163.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bug is here:
-	bus_flags = connector->display_info.bus_flags;
+Hi wujunwen,
 
-The list iterator 'connector-' will point to a bogus position containing
-HEAD if the list is empty or no element is found. This case must
-be checked before any use of the iterator, otherwise it will lead
-to a invalid memory access.
+Thank you for the patch! Yet something to improve:
 
-To fix this bug, add an check. Use a new value 'iter' as the list
-iterator, while use the old value 'connector' as a dedicated variable
-to point to the found element.
+[auto build test ERROR on char-misc/char-misc-testing]
+[also build test ERROR on soc/for-next linux/master linus/master v5.17 next-20220325]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Cc: stable@vger.kernel.org
-Fixes: ("drm/omap: Add support for drm_panel")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
- drivers/gpu/drm/omapdrm/omap_encoder.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/wujunwen/char-misc-use-DEFINE_PROC_SHOW_ATTRIBUTE-micro-to-simplify-misc-proc_fops/20220327-120053
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 37fd83916da2e4cae03d350015c82a67b1b334c4
+config: xtensa-randconfig-m031-20220327 (https://download.01.org/0day-ci/archive/20220327/202203271316.pktWRsr4-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/738cb3f8808411f37ad8cb6c2529c6686a87eddf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review wujunwen/char-misc-use-DEFINE_PROC_SHOW_ATTRIBUTE-micro-to-simplify-misc-proc_fops/20220327-120053
+        git checkout 738cb3f8808411f37ad8cb6c2529c6686a87eddf
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash drivers/char/
 
-diff --git a/drivers/gpu/drm/omapdrm/omap_encoder.c b/drivers/gpu/drm/omapdrm/omap_encoder.c
-index 4dd05bc732da..d648ab4223b1 100644
---- a/drivers/gpu/drm/omapdrm/omap_encoder.c
-+++ b/drivers/gpu/drm/omapdrm/omap_encoder.c
-@@ -76,14 +76,16 @@ static void omap_encoder_mode_set(struct drm_encoder *encoder,
- 	struct omap_encoder *omap_encoder = to_omap_encoder(encoder);
- 	struct omap_dss_device *output = omap_encoder->output;
- 	struct drm_device *dev = encoder->dev;
--	struct drm_connector *connector;
-+	struct drm_connector *connector = NULL, *iter;
- 	struct drm_bridge *bridge;
- 	struct videomode vm = { 0 };
- 	u32 bus_flags;
- 
--	list_for_each_entry(connector, &dev->mode_config.connector_list, head) {
--		if (connector->encoder == encoder)
-+	list_for_each_entry(iter, &dev->mode_config.connector_list, head) {
-+		if (iter->encoder == encoder) {
-+			connector = iter;
- 			break;
-+		}
- 	}
- 
- 	drm_display_mode_to_videomode(adjusted_mode, &vm);
-@@ -106,8 +108,10 @@ static void omap_encoder_mode_set(struct drm_encoder *encoder,
- 		omap_encoder_update_videomode_flags(&vm, bus_flags);
- 	}
- 
--	bus_flags = connector->display_info.bus_flags;
--	omap_encoder_update_videomode_flags(&vm, bus_flags);
-+	if (connector) {
-+		bus_flags = connector->display_info.bus_flags;
-+		omap_encoder_update_videomode_flags(&vm, bus_flags);
-+	}
- 
- 	/* Set timings for all devices in the display pipeline. */
- 	dss_mgr_set_timings(output, &vm);
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/char/misc.c: In function 'misc_init':
+>> drivers/char/misc.c:254:45: error: 'misc_proc_ops' undeclared (first use in this function); did you mean 'misc_fops'?
+     254 |         ret = proc_create("misc", 0, NULL, &misc_proc_ops);
+         |                                             ^~~~~~~~~~~~~
+         |                                             misc_fops
+   drivers/char/misc.c:254:45: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +254 drivers/char/misc.c
+
+   248	
+   249	static int __init misc_init(void)
+   250	{
+   251		int err;
+   252		struct proc_dir_entry *ret;
+   253	
+ > 254		ret = proc_create("misc", 0, NULL, &misc_proc_ops);
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

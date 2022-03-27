@@ -2,78 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C064E8A1D
+	by mail.lfdr.de (Postfix) with ESMTP id 336BF4E8A1E
 	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 22:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236795AbiC0UzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 16:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
+        id S236803AbiC0UzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 16:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236685AbiC0UzG (ORCPT
+        with ESMTP id S236700AbiC0UzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 16:55:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B0119C3D;
-        Sun, 27 Mar 2022 13:53:27 -0700 (PDT)
+        Sun, 27 Mar 2022 16:55:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E011C90B
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:53:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92DBB60C7E;
-        Sun, 27 Mar 2022 20:53:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id ECB4EC340EC;
-        Sun, 27 Mar 2022 20:53:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F07860C7C
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 20:53:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A0967C36AE3;
+        Sun, 27 Mar 2022 20:53:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648414406;
-        bh=87VxAPUC4MEYU50JY20QJEjmRmHn1sfWkM4LnungiO4=;
+        s=k20201202; t=1648414413;
+        bh=vddYN3W7lNHX+l1nwisuW1pMNwWyskE9ZZA0Y6/lo9w=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=kdC8uSLdvd38tZmeFZluZxXrCxcmU+asLsaarQBcqkmNNQ3WbAOf+gyq1IZQHA+b6
-         afkPIU3rov+aPRzISlxURgSVsZvKXiu5XnFcHsZ6SVJvngwrt4QKe5eaAIlSseRPFu
-         oLBsWdlpF0zz4qAUzSbHi6KPyp0AkqMVXPmUUWsuQp5yffU4AomM9+1751UcuiWTAI
-         ykNrn3sD/RBTiZOrQMIW+L7WZVXJd9Cwdvhhs2wx1FKkMwJgP0ruilgsWIlw0Dg25p
-         6XjIk3b48Crx0gvnNiESfLq5C+BvrXkNQs+yCOubLYBvZ+GFjFr28COvjhAkC2KacR
-         9LVql/nYVVjRA==
+        b=KibREAmW5XEc99cBvRhznaWP4bR1GKk/RxbJFqipaBzkYD7zPpfZX3rc8w78YqP9Z
+         0smgmvzvzxskMTzdCAPUa9vsDsnGxkRbtPRKdIrJLRgF7/hKWYvJ91sVXt9ip1XUdL
+         RNCKY2p86SxsQy6oLT61+XexBO5G/EsMfCKXte5N13sGx8MXOYEh9eAoh9kAqTDmHO
+         ykIFmt5y/wCN3Hx4YF7Nq1WW5lWz1a5N6h98O+D8WOijpIeEhtNHW7Bk/CLZHrzL+s
+         Bv5WcA/W5OX8wdBmSLm2eIjJPJCpgCZiHa6TpefkZ2ZcPK72zyxPzrzDVE1u9rVUyM
+         YCfoWQgMD36oA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D7403E6BBCA;
-        Sun, 27 Mar 2022 20:53:25 +0000 (UTC)
-Subject: Re: [GIT PULL] perf tools changes for v5.18: 1st batch
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8E2BFE6D3DD;
+        Sun, 27 Mar 2022 20:53:33 +0000 (UTC)
+Subject: Re: [GIT PULL] memblock: test suite and a small cleanup
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220326155357.231739-1-acme@kernel.org>
-References: <20220326155357.231739-1-acme@kernel.org>
-X-PR-Tracked-List-Id: <linux-perf-users.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220326155357.231739-1-acme@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-for-v5.18-2022-03-26
-X-PR-Tracked-Commit-Id: ab0809af0bee88b689ba289ec8c40aa2be3a17ec
+In-Reply-To: <Yj1tymvsh0tzkXUV@kernel.org>
+References: <Yj1tymvsh0tzkXUV@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Yj1tymvsh0tzkXUV@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock tags/memblock-v5.18-rc1
+X-PR-Tracked-Commit-Id: 58ffc34896db2e5e49e6ae6bf8042f85504d84e8
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 7b58b82b86c8b65a2b57a4c6cb96a460654f9e09
-Message-Id: <164841440587.12998.1081588827837875501.pr-tracker-bot@kernel.org>
-Date:   Sun, 27 Mar 2022 20:53:25 +0000
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+X-PR-Merge-Commit-Id: 02f9a04d76b76b80b05ddc33ceabe806b84fda3c
+Message-Id: <164841441357.12998.8317431222755678901.pr-tracker-bot@kernel.org>
+Date:   Sun, 27 Mar 2022 20:53:33 +0000
+To:     Mike Rapoport <rppt@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Christy Lee <christylee@fb.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        German Gomez <german.gomez@arm.com>,
-        Ian Rogers <irogers@google.com>,
-        James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Mahmoud Mandour <ma.mandourr@gmail.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        tangmeng <tangmeng@uniontech.com>,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        xaizek <xaizek@posteo.net>, Yury Norov <yury.norov@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Karolina Drobnik <karolinadrobnik@gmail.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -84,12 +66,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sat, 26 Mar 2022 12:53:57 -0300:
+The pull request you sent on Fri, 25 Mar 2022 10:22:50 +0300:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-for-v5.18-2022-03-26
+> https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock tags/memblock-v5.18-rc1
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7b58b82b86c8b65a2b57a4c6cb96a460654f9e09
+https://git.kernel.org/torvalds/c/02f9a04d76b76b80b05ddc33ceabe806b84fda3c
 
 Thank you!
 

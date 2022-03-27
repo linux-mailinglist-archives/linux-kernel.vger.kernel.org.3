@@ -2,143 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C064E8A21
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 22:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E6704E8A27
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 23:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234952AbiC0U7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 16:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
+        id S235108AbiC0VFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 17:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbiC0U7q (ORCPT
+        with ESMTP id S229878AbiC0VFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 16:59:46 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E0BB8E
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:58:07 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id bo16-20020a17090b091000b001c6c96491aeso6354567pjb.1
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:58:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=XonkmmLfj4Wct1L8IBmrGiXwJl2mUMAxLc+XoNB7FkQ=;
-        b=PfjgpQre+BTnF+Si7StcBuHOdZRl2W+8L4Em08Ajr2TGis+LMi5SHvZT8+51IVIAn5
-         8H+RCxmedCcQmBgr4Wgj06ZHlll++/ggSwdRdo8sr8afYIE2YEnq7pLUKz5K2Y8hudkn
-         4dXI1W8Y6g6E0hymMOvQ4o8TLzLUhSl3wDolmIGNzAbQxP8prwvnijD9qtuY3yP4SHm7
-         kuHeYOUxlsd7iK7zAEGzyNTv5SOdaYGA0ZCm7G5QUAiRfuUnpYHpbAHmlUK2ls6cZ2Wu
-         7+tCr7BGEp2h1fDS0YY6eZT7HfBl3niHNV5TEo0avD3QrE6RKKc2zxAqBOeYImhEFHvX
-         8zVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=XonkmmLfj4Wct1L8IBmrGiXwJl2mUMAxLc+XoNB7FkQ=;
-        b=v0Ng9wershf9Bu9KWMCj+/zkMNZfs1RrgpFZVpV3ntG8ViekcAGJYJlROMA5FcxyxX
-         r0TwA/ct+836SHr5n9knAQlp+ddCqTmUk9DDSBCnO4OKLRSa/JPlUfIVjm414eLsEgtb
-         ZEFlK00940zpze2o8mDxM3+dIDeLNcrmtEi+aqiPpKwrz8jx4bPTsrZ+WcbBlqx9HOkX
-         utKMFBT9nB06UevkLMPO39GH3u8iz9zCW3unFNn88mkGcGEn99kxP9qi5ceKqWJyRyd4
-         +IbYKfSwSzkm9NemcvqcR8NfPajUmi4wekMgEIAl0Vl9LFKujrt82r0RmjzJ3zioXRmH
-         kIpQ==
-X-Gm-Message-State: AOAM53352T9e8f9Kx3dqX/xJU+Od/I6uMi8ya1NHgzm7CLmgCpyzAIJq
-        dr3/PSiihT/jxkZWzOWasVKh0Z9PT6Ed
-X-Google-Smtp-Source: ABdhPJwNX3stSfD31SPexaUkVp2e8Ou343K+n8O5BPfRQaT8A2UVAx5EaTfXBzrGU/eISjsUQrYLX08rJYy7
-X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
- (user=mizhang job=sendgmr) by 2002:a05:6a00:3316:b0:4fa:80fd:f3f6 with SMTP
- id cq22-20020a056a00331600b004fa80fdf3f6mr20127184pfb.65.1648414686742; Sun,
- 27 Mar 2022 13:58:06 -0700 (PDT)
-Reply-To: Mingwei Zhang <mizhang@google.com>
-Date:   Sun, 27 Mar 2022 20:58:03 +0000
-Message-Id: <20220327205803.739336-1-mizhang@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH] KVM: x86/mmu: add lockdep check before lookup_address_in_mm()
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Sun, 27 Mar 2022 17:05:07 -0400
+Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A94D496BA;
+        Sun, 27 Mar 2022 14:03:27 -0700 (PDT)
+Received: from dread.disaster.area (pa49-186-150-27.pa.vic.optusnet.com.au [49.186.150.27])
+        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id B445B10E6855;
+        Mon, 28 Mar 2022 08:03:20 +1100 (AEDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1nYa2h-00AeCQ-BD; Mon, 28 Mar 2022 08:03:19 +1100
+Date:   Mon, 28 Mar 2022 08:03:19 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Trond Myklebust <trondmy@hammerspace.com>
+Cc:     "miklos@szeredi.hu" <miklos@szeredi.hu>,
+        "raven@themaw.net" <raven@themaw.net>,
+        "kzak@redhat.com" <kzak@redhat.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "mszeredi@redhat.com" <mszeredi@redhat.com>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
+        "amir73il@gmail.com" <amir73il@gmail.com>,
+        "christian@brauner.io" <christian@brauner.io>,
+        "James.Bottomley@hansenpartnership.com" 
+        <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getvalues(2) prototype
+Message-ID: <20220327210319.GM1609613@dread.disaster.area>
+References: <20220322192712.709170-1-mszeredi@redhat.com>
+ <20220323225843.GI1609613@dread.disaster.area>
+ <CAJfpegv6PmZ_RXipBs9UEjv_WfEUtTDE1uNZq+9fBkCzWPvXkw@mail.gmail.com>
+ <20220324203116.GJ1609613@dread.disaster.area>
+ <5d5c170949a5c4e2e4b8ef8949e5cdc5110eeabf.camel@hammerspace.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5d5c170949a5c4e2e4b8ef8949e5cdc5110eeabf.camel@hammerspace.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=deDjYVbe c=1 sm=1 tr=0 ts=6240d11d
+        a=sPqof0Mm7fxWrhYUF33ZaQ==:117 a=sPqof0Mm7fxWrhYUF33ZaQ==:17
+        a=8nJEP1OIZ-IA:10 a=o8Y5sQTvuykA:10 a=7-415B0cAAAA:8
+        a=SMe7BH-ruLLs_FX_YN0A:9 a=wPNLvfGTeEIA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a lockdep check before invoking lookup_address_in_mm().
-lookup_address_in_mm() walks all levels of host page table without
-accquiring any lock. This is usually unsafe unless we are walking the
-kernel addresses (check other usage cases of lookup_address_in_mm and
-lookup_address_in_pgd).
+On Fri, Mar 25, 2022 at 04:42:27PM +0000, Trond Myklebust wrote:
+> On Fri, 2022-03-25 at 07:31 +1100, Dave Chinner wrote:
+> > > and anyway the point of a
+> > > hierarchical namespace is to be able to list nodes on each level. 
+> > > We
+> > > can use getxattr() for this purpose, just like getvalues() does in
+> > > the
+> > > above example.
+> > 
+> > Yup, and like Casey suggests, you could implement a generic
+> > getvalues()-like user library on top of it so users don't even need
+> > to know where and how the values are located or retrieved.
+> > 
+> > The other advantage of an xattr interface is that is also provides a
+> > symmetrical API for -changing- values. No need for some special
+> > configfs or configfd thingy for setting parameters - just change the
+> > value of the parameter or mount option with a simple setxattr call.
+> > That retains the simplicity of proc and sysfs attributes in that you
+> > can change them just by writing a new value to the file....
+> 
+> The downsides are, however, that the current interface provides little
+> in the way of atomicity if you want to read or write to multiple
+> attributes at the same time. Something like a backup program might want
+> to be able to atomically retrieve the ctime when it is backing up the
+> attributes.
 
-Walking host page table (especially guest addresses) usually requires
-holding two types of locks: 1) mmu_lock in mm or the lock that protects
-the reverse maps of host memory in range; 2) lock for the leaf paging
-structures.
+I assumed that batched updates were implied and understood after
+my earlier comments about XFS_IOC_ATTRMULTI_BY_HANDLE as used
+by xfsdump/restore for the past 20+ years.
 
-One exception case is when we take the mmu_lock of the secondary mmu.
-Holding mmu_lock of KVM MMU in either read mode or write mode prevents host
-level entities from modifying the host page table concurrently. This is
-because all of them will have to invoke KVM mmu_notifier first before doing
-the actual work. Since KVM mmu_notifier invalidation operations always take
-the mmu write lock, we are safe if we hold the mmu lock here.
+> Also, when setting attributes, I'd like to avoid multiple syscalls when
+> I'm changing multiple related attributes.
+>
+> IOW: Adding a batching interface that is akin to what Miklos was
+> proposing would be a helpful change if we want to go down this path.
 
-Note: this means that KVM cannot allow concurrent multiple mmu_notifier
-invalidation callbacks by using KVM mmu read lock. Since, otherwise, any
-host level entity can cause race conditions with this one. Walking host
-page table here may get us stale information or may trigger NULL ptr
-dereference that is hard to reproduce.
+Yup, that's exactly what XFS_IOC_ATTRMULTI_BY_HANDLE provides and
+I'm assuming that would also be provided by whatever formalised
+generic syscall API we come up with here...
 
-Having a lockdep check here will prevent or at least warn future
-development that directly walks host page table simply in a KVM ioctl
-function. In addition, it provides a record for any future development on
-KVM mmu_notifier.
+Cheers,
 
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: Ben Gardon <bgardon@google.com>
-Cc: David Matlack <dmatlack@google.com>
-
-Signed-off-by: Mingwei Zhang <mizhang@google.com>
----
- arch/x86/kvm/mmu/mmu.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 1361eb4599b4..066bb5435156 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -2820,6 +2820,24 @@ static int host_pfn_mapping_level(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
- 	 */
- 	hva = __gfn_to_hva_memslot(slot, gfn);
- 
-+	/*
-+	 * lookup_address_in_mm() walks all levels of host page table without
-+	 * accquiring any lock. This is not safe when KVM does not take the
-+	 * mmu_lock. Holding mmu_lock in either read mode or write mode prevents
-+	 * host level entities from modifying the host page table. This is
-+	 * because all of them will have to invoke KVM mmu_notifier first before
-+	 * doing the actual work. Since KVM mmu_notifier invalidation operations
-+	 * always take the mmu write lock, we are safe if we hold the mmu lock
-+	 * here.
-+	 *
-+	 * Note: this means that KVM cannot allow concurrent multiple
-+	 * mmu_notifier invalidation callbacks by using KVM mmu read lock.
-+	 * Otherwise, any host level entity can cause race conditions with this
-+	 * one. Walking host page table here may get us stale information or may
-+	 * trigger NULL ptr dereference that is hard to reproduce.
-+	 */
-+	lockdep_assert_held(&kvm->mmu_lock);
-+
- 	pte = lookup_address_in_mm(kvm->mm, hva, &level);
- 	if (unlikely(!pte))
- 		return PG_LEVEL_4K;
+Dave.
 -- 
-2.35.1.1021.g381101b075-goog
-
+Dave Chinner
+david@fromorbit.com

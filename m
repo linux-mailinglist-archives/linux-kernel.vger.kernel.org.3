@@ -2,74 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 685624E8709
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 10:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 873004E870D
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 10:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbiC0IyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 04:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
+        id S231726AbiC0JAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 05:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbiC0Ix6 (ORCPT
+        with ESMTP id S229698AbiC0JAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 04:53:58 -0400
-Received: from mailgate.ics.forth.gr (mailgate.ics.forth.gr [139.91.1.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43D31D0E8
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 01:52:19 -0700 (PDT)
-Received: from av3.ics.forth.gr (av3in.ics.forth.gr [139.91.1.77])
-        by mailgate.ics.forth.gr (8.15.2/ICS-FORTH/V10-1.8-GATE) with ESMTP id 22R8qHNg047403
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 11:52:17 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; d=ics.forth.gr; s=av; c=relaxed/simple;
-        q=dns/txt; i=@ics.forth.gr; t=1648371132; x=1650963132;
-        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=O7kXkCdvhvkq/xOJDYOOrEuPdlDIk8ke1X+ujPivqOc=;
-        b=ElHHF3EcNDRUAW8hyeIYHGqck2a8/UujzBMHet2ql7Jkpr7oaB7w6OJPGoBg1W11
-        Bq9vVLj4YGbWEwT/utY5bhVE1q8FKEwPtvn0FaO5z4n6UPuZiIpU2wuu6p5jACpP
-        pMKbx0K91DiNP2LLKyBdCdDkLJpr56qm8dN/02fVOQeffXkSWt0CUGD8mzk+KN9x
-        19HYd7WToHqmVXRlmag/YX36IqQ//wYgflQ9gUc2G9roqxZgKu8dqvocBqjqQ3gn
-        LruNfrpxPo26b0VrhVX8YhEqQ/caigpMilCOA20AdiM0YFKtlOxEVPDvLVHgUE2B
-        6crZP2Kf7jCCMVIKWpD+LA==;
-X-AuditID: 8b5b014d-f2ab27000000641e-21-624025bc924b
-Received: from enigma.ics.forth.gr (webmail.ics.forth.gr [139.91.151.35])
-        by av3.ics.forth.gr (Symantec Messaging Gateway) with SMTP id 66.EE.25630.CB520426; Sun, 27 Mar 2022 11:52:12 +0300 (EEST)
-X-ICS-AUTH-INFO: Authenticated user:  at ics.forth.gr
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Sun, 27 Mar 2022 11:52:11 +0300
-From:   Nick Kossifidis <mick@ics.forth.gr>
-To:     Conor.Dooley@microchip.com
-Cc:     mick@ics.forth.gr, palmer@dabbelt.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu
-Subject: Re: [PATCH] RISC-V-fixes: relocate DTB if it's outside memory region
-Organization: FORTH
-In-Reply-To: <ebaa9b4e-9e37-e2f4-2bee-37d324e7302b@microchip.com>
-References: <20220322132839.3653682-1-mick@ics.forth.gr>
- <ebaa9b4e-9e37-e2f4-2bee-37d324e7302b@microchip.com>
-Message-ID: <941622f4f76ecd5bc071e310479b3ad3@mailhost.ics.forth.gr>
-X-Sender: mick@mailhost.ics.forth.gr
-User-Agent: Roundcube Webmail/1.3.16
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNLMWRmVeSWpSXmKPExsXSHT1dWXePqkOSwdmVYhZbf89it5iyaQe7
-        xeVdc9gstn1uYbNofneO3eLl5R5mi7ZZ/A7sHm9evmTxONzxhd3j4aZLTB6bl9R73PmxlNHj
-        UvN1do/Pm+QC2KO4bFJSczLLUov07RK4MhoXCRdM5qhY8GY/SwPjKbYuRk4OCQETiQu7JrB2
-        MXJxCAkcY5Q4s3IFK0TCVGL23k5GEJtXQFDi5MwnLCA2s4CFxNQr+xkhbHmJ5q2zmUFsFgFV
-        iTdNG9hBbDYBTYn5lw6C1YsIyEn8/3WGGWQBs8BqRomJk1rBFggL+EpMWrkDzOYXEJb4dPci
-        mM0p4Chxuq0B6DoOoIvyJSY+jYO4wUXi2rbJUEerSHz4/YAdpEQUyN48V2kCo+AsJJfOQnLp
-        LCSXLmBkXsUokFhmrJeZXKyXll9UkqGXXrSJERz+jL47GG9vfqt3iJGJg/EQowQHs5IIr+xZ
-        +yQh3pTEyqrUovz4otKc1OJDjNIcLErivCzXZJKEBNITS1KzU1MLUotgskwcnFINTBN3/iw5
-        P3PJO7kv0fZr3044xx8/f/ejIrMXxTfFM6N+VjSfjUxbdFb8y+zE7J0f33dyeAQ7H7b4eknm
-        6+Jq03fTBXdI60sseCd34EvRO86jiZerLk99/ic80+zL7B0F3BeWe36q6Fu4Qa1Kq/LLJZ+I
-        i10dvdsjjCfOTPv3wnzrY7Owg9dLN7Dbavdznjj/+PjmedfZNmz1jmRdbnb6vHu4TW/M27PS
-        sX4e11s72mR4F3OtPKGjluI4ax+b1vLIj7FpoiKN/96kMwfm6SzxUH9ZLR6WuWzZ7W8hbRfs
-        rAXyXi6bsvOD/VOhRQLf563cfOgmb4LUga401q83RNLDp917lJeSNbvyxoXCVRffvZdVYinO
-        SDTUYi4qTgQAbcQ2iu4CAAA=
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Sun, 27 Mar 2022 05:00:16 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB763B295;
+        Sun, 27 Mar 2022 01:58:38 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id t2so9994752pfj.10;
+        Sun, 27 Mar 2022 01:58:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=7xvsh8FIV4X8qjBnU3ZR0V0Ttcm32tPDVRGj1HnLnug=;
+        b=hXNdbJix4pJNIu2Zw42LECnSqu0TzyHbbcrJVKJZzn2sHuyavQZAd3cXnA00U+UeGu
+         8cAgWYrQQda4AS1Cgmk/l1RzymnM4xhUv1nBxDK/55+xOYrquUXTY14E8jpgPIJyaY8l
+         eHX8cvOvuRYXHwUTNMEYc8aTv5sPrIprkoKn7z8Nlyd5p5SwATk0GKOX6/ovt/aHDPOj
+         RsH7T/N82Fly7SiP92iAFmcRt4+StxLYkg/DAYtphvqcv27J1/yYfFEUWpo1xn567qvf
+         ER7UZ6PELw/ESZS08qkgsbt+WlKnvpjNS2p8Zh7ZCFI+QpNKotlXVAC1yqMu03FQssui
+         ArWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=7xvsh8FIV4X8qjBnU3ZR0V0Ttcm32tPDVRGj1HnLnug=;
+        b=Rwl+0Ys/M3hfjzH6EOuItrPO03huA2Y+L5JP7x9EFSjmnNkqUdkvoTsh92jz7IyT6r
+         ADUA8UQnTSbqiWw0K1OHWgGWdEhgdwMnI7KOUMHuHcPWYFmvGTRlkWgL7IYO1ZuZcIcB
+         4wHvhbOv9MPeIAtOKrbbpiMvZPyLxPOHOfH0gqh9a95TdLTyaPkCIvsDW/wGW/yhLHnS
+         cHb6S2Qg3OpXWEkJVVa2TtgILtmo06+4ZngifsvRzehVpuNwNuBeknsGVX2SqZVKmRv3
+         Y6GzewajotsDH/mVm71XTK92WO+3ix5JxIJ74xfx0jQSbF8LILwbNKoLm/rpj6rDLsxR
+         5TNA==
+X-Gm-Message-State: AOAM533s3VCz8MHqboRWpLat3KJxaXuBoi+WiD/5Kvg3hiVzjgHImx/D
+        oky5WkWBD440V3Na9xzaI8w=
+X-Google-Smtp-Source: ABdhPJwJbpivqpvlQVVZaanGQJI7qe/8a0VaU1hK1gJAWjlZGbY/NQWcPqZk9scKr+0fN97YM0BV9A==
+X-Received: by 2002:a65:5a0d:0:b0:381:3c1e:9aca with SMTP id y13-20020a655a0d000000b003813c1e9acamr6080914pgs.562.1648371518258;
+        Sun, 27 Mar 2022 01:58:38 -0700 (PDT)
+Received: from localhost ([115.220.243.108])
+        by smtp.gmail.com with ESMTPSA id u41-20020a056a0009a900b004fa831fb240sm12129339pfg.6.2022.03.27.01.58.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 27 Mar 2022 01:58:37 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     mchehab@kernel.org
+Cc:     sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, kitakar@gmail.com,
+        alinesantanacordeiro@gmail.com, laurent.pinchart@ideasonboard.com,
+        tomi.valkeinen@ideasonboard.com, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH] pci: atomisp_cmd: fix three missing checks on list iterator
+Date:   Sun, 27 Mar 2022 16:58:31 +0800
+Message-Id: <20220327085831.14462-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,29 +68,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Στις 2022-03-24 11:37, Conor.Dooley@microchip.com έγραψε:
-> On 22/03/2022 13:28, Nick Kossifidis wrote:
->> In case the DTB provided by the bootloader/BootROM is before the 
->> kernel
->> image or outside /memory, we won't be able to access it through the
->> linear mapping, and get a segfault on setup_arch(). Currently OpenSBI
->> relocates DTB but that's not always the case (e.g. if FW_JUMP_FDT_ADDR
->> is not specified), and it's also not the most portable approach since
->> the default FW_JUMP_FDT_ADDR of the generic platform relocates the DTB
->> at a specific offset that may not be available. To avoid this 
->> situation
->> copy DTB so that it's visible through the linear mapping.
->> 
->> Signed-off-by: Nick Kossifidis <mick@ics.forth.gr>
-> 
-> Albeit in a backport, I tested this on a PolarFire SoC based board.
-> So I guess, Tested-by: Conor Dooley <conor.dooley@microchip.com>
-> 
-> And a lot cleaner than using create_pgd_mapping in setup_vm_final to do 
-> it :)
-> 
-> Thanks,
-> Conor.
-> 
+The three bugs are here:
+	__func__, s3a_buf->s3a_data->exp_id);
+	__func__, md_buf->metadata->exp_id);
+	__func__, dis_buf->dis_data->exp_id);
 
-Thanks !
+The list iterator 's3a_buf/md_buf/dis_buf' will point to a bogus
+position containing HEAD if the list is empty or no element is found.
+This case must be checked before any use of the iterator, otherwise
+it will lead to a invalid memory access.
+
+To fix this bug, add an check. Use a new variable '*_iter' as the
+list iterator, while use the old variable '*_buf' as a dedicated
+pointer to point to the found element.
+
+Cc: stable@vger.kernel.org
+Fixes: ad85094b293e4 ("Revert "media: staging: atomisp: Remove driver"")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+---
+ .../staging/media/atomisp/pci/atomisp_cmd.c   | 57 ++++++++++++-------
+ 1 file changed, 36 insertions(+), 21 deletions(-)
+
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+index 97d5a528969b..0da0b69a4637 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+@@ -901,9 +901,9 @@ void atomisp_buf_done(struct atomisp_sub_device *asd, int error,
+ 	int err;
+ 	unsigned long irqflags;
+ 	struct ia_css_frame *frame = NULL;
+-	struct atomisp_s3a_buf *s3a_buf = NULL, *_s3a_buf_tmp;
+-	struct atomisp_dis_buf *dis_buf = NULL, *_dis_buf_tmp;
+-	struct atomisp_metadata_buf *md_buf = NULL, *_md_buf_tmp;
++	struct atomisp_s3a_buf *s3a_buf = NULL, *_s3a_buf_tmp, *s3a_iter;
++	struct atomisp_dis_buf *dis_buf = NULL, *_dis_buf_tmp, *dis_iter;
++	struct atomisp_metadata_buf *md_buf = NULL, *_md_buf_tmp, *md_iter;
+ 	enum atomisp_metadata_type md_type;
+ 	struct atomisp_device *isp = asd->isp;
+ 	struct v4l2_control ctrl;
+@@ -942,60 +942,75 @@ void atomisp_buf_done(struct atomisp_sub_device *asd, int error,
+ 
+ 	switch (buf_type) {
+ 	case IA_CSS_BUFFER_TYPE_3A_STATISTICS:
+-		list_for_each_entry_safe(s3a_buf, _s3a_buf_tmp,
++		list_for_each_entry_safe(s3a_iter, _s3a_buf_tmp,
+ 					 &asd->s3a_stats_in_css, list) {
+-			if (s3a_buf->s3a_data ==
++			if (s3a_iter->s3a_data ==
+ 			    buffer.css_buffer.data.stats_3a) {
+-				list_del_init(&s3a_buf->list);
+-				list_add_tail(&s3a_buf->list,
++				list_del_init(&s3a_iter->list);
++				list_add_tail(&s3a_iter->list,
+ 					      &asd->s3a_stats_ready);
++				s3a_buf = s3a_iter;
+ 				break;
+ 			}
+ 		}
+ 
+ 		asd->s3a_bufs_in_css[css_pipe_id]--;
+ 		atomisp_3a_stats_ready_event(asd, buffer.css_buffer.exp_id);
+-		dev_dbg(isp->dev, "%s: s3a stat with exp_id %d is ready\n",
+-			__func__, s3a_buf->s3a_data->exp_id);
++		if (s3a_buf)
++			dev_dbg(isp->dev, "%s: s3a stat with exp_id %d is ready\n",
++				__func__, s3a_buf->s3a_data->exp_id);
++		else
++			dev_dbg(isp->dev, "%s: s3a stat is ready with no exp_id found\n",
++				__func__);
+ 		break;
+ 	case IA_CSS_BUFFER_TYPE_METADATA:
+ 		if (error)
+ 			break;
+ 
+ 		md_type = atomisp_get_metadata_type(asd, css_pipe_id);
+-		list_for_each_entry_safe(md_buf, _md_buf_tmp,
++		list_for_each_entry_safe(md_iter, _md_buf_tmp,
+ 					 &asd->metadata_in_css[md_type], list) {
+-			if (md_buf->metadata ==
++			if (md_iter->metadata ==
+ 			    buffer.css_buffer.data.metadata) {
+-				list_del_init(&md_buf->list);
+-				list_add_tail(&md_buf->list,
++				list_del_init(&md_iter->list);
++				list_add_tail(&md_iter->list,
+ 					      &asd->metadata_ready[md_type]);
++				md_buf = md_iter;
+ 				break;
+ 			}
+ 		}
+ 		asd->metadata_bufs_in_css[stream_id][css_pipe_id]--;
+ 		atomisp_metadata_ready_event(asd, md_type);
+-		dev_dbg(isp->dev, "%s: metadata with exp_id %d is ready\n",
+-			__func__, md_buf->metadata->exp_id);
++		if (md_buf)
++			dev_dbg(isp->dev, "%s: metadata with exp_id %d is ready\n",
++				__func__, md_buf->metadata->exp_id);
++		else
++			dev_dbg(isp->dev, "%s: metadata is ready with no exp_id found\n",
++				__func__);
+ 		break;
+ 	case IA_CSS_BUFFER_TYPE_DIS_STATISTICS:
+-		list_for_each_entry_safe(dis_buf, _dis_buf_tmp,
++		list_for_each_entry_safe(dis_iter, _dis_buf_tmp,
+ 					 &asd->dis_stats_in_css, list) {
+-			if (dis_buf->dis_data ==
++			if (dis_iter->dis_data ==
+ 			    buffer.css_buffer.data.stats_dvs) {
+ 				spin_lock_irqsave(&asd->dis_stats_lock,
+ 						  irqflags);
+-				list_del_init(&dis_buf->list);
+-				list_add(&dis_buf->list, &asd->dis_stats);
++				list_del_init(&dis_iter->list);
++				list_add(&dis_iter->list, &asd->dis_stats);
+ 				asd->params.dis_proj_data_valid = true;
+ 				spin_unlock_irqrestore(&asd->dis_stats_lock,
+ 						       irqflags);
++				dis_buf = dis_iter;
+ 				break;
+ 			}
+ 		}
+ 		asd->dis_bufs_in_css--;
+-		dev_dbg(isp->dev, "%s: dis stat with exp_id %d is ready\n",
+-			__func__, dis_buf->dis_data->exp_id);
++		if (dis_buf)
++			dev_dbg(isp->dev, "%s: dis stat with exp_id %d is ready\n",
++				__func__, dis_buf->dis_data->exp_id);
++		else
++			dev_dbg(isp->dev, "%s: dis stat is ready with no exp_id found\n",
++				__func__);
+ 		break;
+ 	case IA_CSS_BUFFER_TYPE_VF_OUTPUT_FRAME:
+ 	case IA_CSS_BUFFER_TYPE_SEC_VF_OUTPUT_FRAME:
+-- 
+2.17.1
+

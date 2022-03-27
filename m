@@ -2,116 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1144E885C
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 17:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C97F4E885E
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 17:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235823AbiC0PQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 11:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
+        id S235831AbiC0PRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 11:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbiC0PQg (ORCPT
+        with ESMTP id S235584AbiC0PRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 11:16:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30677506E7
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 08:14:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648394097;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aO0HGjT7ZCP54sd0nyJvdO8KKuk8vcPL3oF3GsN92ZE=;
-        b=SNswb3xSgkvYu6XDGOKqvcJl86wT7RMxeA25H1RTOvl7+JfXvpxEsbdcGsoCrc1a4fs2cn
-        ERrWlosJhTYBgNRPtYo1gOqtcfzg7btnPzz54wSzdqiAdlJHY/WWfbLLr1hvaCQgayLF90
-        D5YUySikyFrL6E3OXI4Z9NW5sW/F20k=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-494-ORdutjHEP4arkCb2xFdKWg-1; Sun, 27 Mar 2022 11:14:53 -0400
-X-MC-Unique: ORdutjHEP4arkCb2xFdKWg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Sun, 27 Mar 2022 11:17:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653C150B1E
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 08:15:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 44DD0185A79C;
-        Sun, 27 Mar 2022 15:14:53 +0000 (UTC)
-Received: from starship (unknown [10.40.194.231])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4D9531402404;
-        Sun, 27 Mar 2022 15:14:50 +0000 (UTC)
-Message-ID: <d71378091e7a410ce56947b72d6e59deccaa65bd.camel@redhat.com>
-Subject: Re: [PATCH v4 3/6] KVM: x86: nSVM: support PAUSE filtering when L0
- doesn't intercept PAUSE
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Jim Mattson <jmattson@google.com>, x86@kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wanpeng Li <wanpengli@tencent.com>
-Date:   Sun, 27 Mar 2022 18:14:49 +0300
-In-Reply-To: <848bba1a-66f2-a3eb-510e-9322b729c8ec@redhat.com>
-References: <20220322174050.241850-1-mlevitsk@redhat.com>
-         <20220322174050.241850-4-mlevitsk@redhat.com>
-         <848bba1a-66f2-a3eb-510e-9322b729c8ec@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0220561036
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 15:15:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05176C340EC;
+        Sun, 27 Mar 2022 15:15:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648394123;
+        bh=Hl0LXWoiLzrKX6l1Eq/43l5hDVxWTAXk31ja3k+z+ZY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u16gBWssceWp1pZoEzsr2VAt8LlB6WKPEzcsCxfqNMA22jp4UYuDOwdmE4lDRwI3J
+         YkJX5q5CorWKR0QBLmdvSlc9Tnb1sVFHYc/RaOIDabn+kYr2H4dRxy15iJhjjwPY1+
+         9tg4b/Q8/rcnTAI6aV52vWernTiarCalzcdsKWbRDC6xf0Pfxcwu65Jn0/tjZvVJTU
+         /L2I5StgosR+jakn9tbHYgHdj6AQB/kDNYbE/tYiACoFj/6jbmoYJvCA1k379+m1NN
+         Jo4jVyBoOhwrYJFczNtZlB0d19NPVci5h7I1ep2BDh5X658N7ZT9kYLaAwEcENBNc+
+         EA8e2MNk4c9kw==
+Date:   Sun, 27 Mar 2022 18:15:15 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Jaewon Kim <jaewon31.kim@samsung.com>
+Cc:     "vbabka@suse.cz" <vbabka@suse.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        YongTaek Lee <ytk.lee@samsung.com>,
+        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
+Subject: Re: [PATCH 0/8] memblock: introduce memsize showing reserved memory
+Message-ID: <YkB/gzP6tOpDktoZ@kernel.org>
+References: <YkAU2JlcX7nlvbwp@kernel.org>
+ <Yj1zVkryTVoAnxsX@kernel.org>
+ <20220324070158.22969-1-jaewon31.kim@samsung.com>
+ <20220325083846epcms1p372559472ceb511cc45d39c110563063a@epcms1p3>
+ <CGME20220324065919epcas1p4c79da5f6ec4fa0311409ca24a38785d8@epcms1p1>
+ <20220327135347epcms1p13faf0f2b7d98d3b59b25e903678d9c48@epcms1p1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220327135347epcms1p13faf0f2b7d98d3b59b25e903678d9c48@epcms1p1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-03-24 at 19:24 +0100, Paolo Bonzini wrote:
-> On 3/22/22 18:40, Maxim Levitsky wrote:
-> > Allow L1 to use PAUSE filtering if L0 doesn't use it.
+On Sun, Mar 27, 2022 at 10:53:47PM +0900, Jaewon Kim wrote:
 > > 
-> > Signed-off-by: Maxim Levitsky<mlevitsk@redhat.com>
+> >--------- Original Message ---------
+> >Sender : Mike Rapoport <rppt@kernel.org>
+> >Date : 2022-03-27 16:40 (GMT+9)
+> >Title : Re: [PATCH 0/8] memblock: introduce memsize showing reserved memory
+> > 
+> > 
+> >I'm still not following. The reserved region sizes are available in the
+> >existing memblock debugfs.
+> >Why the names are important? What is the value of having names for *some*
+> >of the reserved regions?
 > 
-> Can you enlarge the commit message to explain the logic in 
-> nested_vmcb02_prepare_control?
-
-No problem, I will do in the next version.
-
-How about this:
-
-KVM: x86: nSVM: support nested PAUSE filtering when possible           
- 
-Expose the pause filtering and threshold in the guest CPUID 
-and support PAUSE filtering when possible:
-
-- If the L0 doesn't intercept PAUSE
-  (cpu_pm=on, or pause_filter_count kvm_amd's parameter is 0),
-  then allow L1 to have full control over PAUSE filtering.
- 
-- Otherwise if the L1 doesn't intercept PAUSE, 
-  use KVM's PAUSE thresholds, and update them even 
-  when running nested.
- 
-- Otherwise ignore both	host and guest PAUSE thresholds,
-  because it is	not really possible to merge them correctly.
-
-  It is	expected that in this case, userspace hypervisor (e.g qemu)
-  will not enable this feature in the guest CPUID, to avoid
-  having the guest to update both thresholds pointlessly.
-
-
-Best regards,
-	Maxim Levitsky
-
+> Hi
 > 
-> Thanks,
+> There are many memory regions in memblock debugfs memory/reserved, and some might
+> be splited or merged with other region. Among regions in debugfs, we can't find 
+> the one we defined in device tree. Especially it is difficult to find the region we
+> described size only without start address.
 > 
-> Paolo
-> 
+> On mobile environment, memory is used by not only CPU but also GPU, Camera, Secure
+> world, Audio, ETC. To support them, there are many reserved regions described in
+> device tree. So the name is quite important to recognize a region. And with thename
+> we can compare reserved memory map with other map.
 
+You still didn't describe your use case. What is the problem your patches
+are trying to solve? Why is it important to know what is the use of particular
+reserved region? 
 
+You propose complex mechanism that seems to fit very particular scenario
+and sprinkle some calls to this mechanism at random places because you need
+to "compare reserved memory map with other map".
+
+Does not sound convincing to me, sorry.
+
+> Thank you
+> Jaewon Kim
+
+-- 
+Sincerely yours,
+Mike.

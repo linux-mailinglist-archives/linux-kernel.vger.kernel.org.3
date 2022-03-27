@@ -2,106 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81594E8754
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 13:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 773674E875B
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 13:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233042AbiC0LIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 07:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
+        id S233319AbiC0LTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 07:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiC0LIY (ORCPT
+        with ESMTP id S229861AbiC0LS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 07:08:24 -0400
-Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649D337BC1
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 04:06:44 -0700 (PDT)
-Received: from pop-os.home ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id YQj9no0PLvjW4YQj9nukfS; Sun, 27 Mar 2022 13:06:41 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 27 Mar 2022 13:06:41 +0200
-X-ME-IP: 90.126.236.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Jack Wang <jinpu.wang@ionos.com>, Jens Axboe <axboe@kernel.dk>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Danil Kipnis <danil.kipnis@cloud.ionos.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jack Wang <jinpu.wang@cloud.ionos.com>,
-        linux-block@vger.kernel.org
-Subject: [PATCH] block/rnbd: Fix the maximum clt_device_id value in init_dev()
-Date:   Sun, 27 Mar 2022 13:06:30 +0200
-Message-Id: <42165d3f9dfc7abb54542d34a4e33ea8e83b101c.1648379172.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Sun, 27 Mar 2022 07:18:58 -0400
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3410C39825;
+        Sun, 27 Mar 2022 04:17:18 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id h4so16470467wrc.13;
+        Sun, 27 Mar 2022 04:17:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Yo4Qxz57xPmfJcP7ucWBN2Y163R/nwHjuNzzvflm4rU=;
+        b=CW8S7mQujMa7SA7TD5fPDu8Lzlci8oo09qDkAjITX7n7HLSNWXeFjJN9lz1rMS2G4q
+         fDYYD2tKhmoZQj+Z+fQFeKSwIu0BNreeeZH8Ku+w3INlcYhB/IRWxVVRciTkbBohmBXL
+         xMwgRkU5IyvPpupHDxXqEwIg/az7Vs08P3oXCf+hLMenZNreA4+pCfoalSoRK6Ygkkqi
+         zwhrGdefuomPuv49TSaUFEtGXiMJSMDfkj/g20O7utrs5saKQXicgaV2SimlHSxfkNle
+         NSmhdowH6dTdjpgIpWKdtxwRNm1WuHc251hieFyIbzle8eEIPzYrZnIUt5QqfdptxcaH
+         6ikA==
+X-Gm-Message-State: AOAM531ms9pHw7FW8gOm+UyzZAM6wZnQbkMy/E5a9kIf+RsmLxlZp1We
+        GXH+JB19ptNB1M9NZtc2pIUf4JQJ4AM=
+X-Google-Smtp-Source: ABdhPJz8x6R8DUBdB2seJZmTkt1ay+PlI0jnhgdDgynlwHgHCu3xzK8Nsc8tACfQh0xFCNq9DpppTQ==
+X-Received: by 2002:a05:6000:1d82:b0:203:e5cc:c19b with SMTP id bk2-20020a0560001d8200b00203e5ccc19bmr16740081wrb.553.1648379836536;
+        Sun, 27 Mar 2022 04:17:16 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id w7-20020a1cf607000000b00389a5390180sm8925535wmc.25.2022.03.27.04.17.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Mar 2022 04:17:15 -0700 (PDT)
+Message-ID: <015bac04-4378-b4b8-c7d1-b0e2615fbe45@kernel.org>
+Date:   Sun, 27 Mar 2022 13:17:14 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 3/4] dt-bindings: hwmon: add Microchip LAN966x bindings
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220326192347.2940747-1-michael@walle.cc>
+ <20220326192347.2940747-4-michael@walle.cc>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220326192347.2940747-4-michael@walle.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ida_alloc_range(..., min, max, ...) returns values from min to max,
-inclusive.
+On 26/03/2022 20:23, Michael Walle wrote:
+> Add a binding for the temperature sensor and the fan controller on the
+> Microchip LAN966x family.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  .../bindings/hwmon/microchip,lan966x.yaml     | 53 +++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,lan966x.yaml
+> 
 
-So, '1 << (MINORBITS - RNBD_PART_BITS)' is a valid value for ret, which is
-then saved in 'dev->clt_device_id'.
 
-This value is used in rnbd_client_setup_device() and passed to
-rnbd_clt_setup_gen_disk().
-There we have:
-    dev->gd->first_minor	= idx << RNBD_PART_BITS
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-So a possible value for 'gd->first_minor' is '1 << MINORBITS'
 
-This is an issue because:
-    rnbd_clt_setup_gen_disk()
-    --> add_disk(dev->gd)
-      --> device_add_disk(NULL, disk, NULL)
-
-And there we have:
-   ddev->devt = MKDEV(disk->major, disk->first_minor);
-
-So, should 'gd->first_minor' be '1 << MINORBITS', MKDEV() would overflow.
-
-Fixes: f7a7a5c228d4 ("block/rnbd: client: main functionality")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-#define MKDEV(ma,mi)	(((ma) << MINORBITS) | (mi))
-
-This patch is completely speculative.
-
-I think that:
-	if (disk->first_minor + disk->minors > MINORMASK + 1)
-		return -EINVAL;
-in device_add_disk() handles this corner case.
-Anyway, if I'm correct, handling the error earlier can't hurt (at least I
-guess so :)).
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/block/rnbd/rnbd-clt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/block/rnbd/rnbd-clt.c b/drivers/block/rnbd/rnbd-clt.c
-index b66e8840b94b..db900c3786a3 100644
---- a/drivers/block/rnbd/rnbd-clt.c
-+++ b/drivers/block/rnbd/rnbd-clt.c
-@@ -1454,7 +1454,7 @@ static struct rnbd_clt_dev *init_dev(struct rnbd_clt_session *sess,
- 		goto out_alloc;
- 	}
- 
--	ret = ida_alloc_max(&index_ida, 1 << (MINORBITS - RNBD_PART_BITS),
-+	ret = ida_alloc_max(&index_ida, (1 << (MINORBITS - RNBD_PART_BITS)) - 1,
- 			    GFP_KERNEL);
- 	if (ret < 0) {
- 		pr_err("Failed to initialize device '%s' from session %s, allocating idr failed, err: %d\n",
--- 
-2.32.0
-
+Best regards,
+Krzysztof

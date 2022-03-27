@@ -2,148 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289E64E8A15
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 22:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 266C84E8A1B
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 22:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233675AbiC0UpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 16:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
+        id S234012AbiC0UwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 16:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231506AbiC0UpF (ORCPT
+        with ESMTP id S231506AbiC0UwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 16:45:05 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083E3DF90
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:43:25 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id h196so9995659qke.12
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:43:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lxxWCgHNZWMKU7Ny0DjHsf3s23oLRkOVPRxextG00dE=;
-        b=L1ycbZtxsJPB1/9Xzl57OFyZ9e/gQCmZZqnt/vydyIrcYblpWF2xhXnkjCMSu6UAEY
-         bg6QxzjfKvbLXfY7nhCjm2EyQtrkUw52YXV9DrL7avOZLCN8j5kDZ70/hBdfA3BFCmGA
-         M+j80QhoRvKqBiwvLr8UwBWbNO2feRpAAerOS5pADwR3RTISxENL04qDF1ugcGkPCMgW
-         ATYf2udq5wwiyBJcZjNL5plgNZNuYpUAZApojMYxwBcQcIeinwkFFSegnQQfTKPhirGN
-         Xn069vC2v7/AoPt4lX5LhwAvp5blbRNeY2Lk3dWx8nD9th45DD/kZ0vTKq0jEEZBLk6P
-         8wKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lxxWCgHNZWMKU7Ny0DjHsf3s23oLRkOVPRxextG00dE=;
-        b=NJhu+asYXQpcZuBd42TpLgie26gnGBaPFFGbuRqPhSkW4WulyXk44mUyF+5iRP6XGH
-         eEgOmx8XWw+dCrvdLk/eZI6a+xUYYWUZs/DChJL9dl05PiNV3KTaPP/W5myqoGKAtjEl
-         L2nikjW+NCS/JsM4KReQr1ZX0m1s2RuBt6PNoWrapuU0b1//t2KygBoRwR25dv553R68
-         GJ/FgIaB/WPwKEc2sGI3Gn2GowmyAJ2lhoGXDThvCAhpBZDhs2SiLWlfYu2rK/vhgQMl
-         t+KXiD1semIvRqbFOmWX2uJAdajIZWr9DNZRglAEFCqas0iPY0eEGyVQiubSF0MddgVZ
-         ja1g==
-X-Gm-Message-State: AOAM5324Yr4Is0jaF1zWLaF5NeUpJDe5Cdq2hPy0K1gWc65FgurLgNCX
-        dJCnsknc4QPoHQHnnYlZ3Oac9/+9oF8io/h+FqwZyw==
-X-Google-Smtp-Source: ABdhPJxWhHAdX8JHUz3VoU5Awi9+MR8BZCYkOxNkxXIJm7hc4e69+97wtCO+GmAbQG1JFE3nsaBv7m4kHeaUNjsgF9M=
-X-Received: by 2002:a37:6784:0:b0:67b:32b3:ba71 with SMTP id
- b126-20020a376784000000b0067b32b3ba71mr13989523qkc.595.1648413804527; Sun, 27
- Mar 2022 13:43:24 -0700 (PDT)
+        Sun, 27 Mar 2022 16:52:03 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8458A192AD
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:50:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648414224; x=1679950224;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pDeVuR7jrBBzl1Smfwcy7VsMGMXmN22TJrrLvMT5vJQ=;
+  b=jFS3CDIuUQq4KM2PYl5vEG18eTTefjdbQv+n14I5mJ0pIZLEP7FNDxqX
+   VgRDfsh9RTki0pMLfxltIkqhxQA/FHsdK5uklf3up2g0aZcUT7ZkajC/P
+   D2fF30O94SAqFbmroNp6tBUcneT95Crt6KfuhPiwwfseqrW1CdpH9sm5O
+   X9jrQdOqQAAugzS+6Eh3noD1OKZyiqyxKhZxA5uq4pjiVHJ+tGw4eWKVB
+   bDAMdvoC5WVo8zsT98zN0FGgMvtFhIhh6K2xC87x5tBkhy2+OF7E77V/9
+   QmfaAi0jheaRFWxhUeqYd9It1FgnvIsjrjhKcG4XUzk0dwQWH9U82+0eZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="238808578"
+X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
+   d="scan'208";a="238808578"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 13:50:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
+   d="scan'208";a="651104421"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 27 Mar 2022 13:50:22 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nYZq9-0001Pu-AS; Sun, 27 Mar 2022 20:50:21 +0000
+Date:   Mon, 28 Mar 2022 04:50:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Terry Bowman <terry.bowman@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Robert Richter <rrichter@amd.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [watchdog-next:v5.18-rc1 12/13] drivers/watchdog/sp5100_tco.c:345:6:
+ warning: assignment to 'struct resource *' from 'int' makes pointer from
+ integer without a cast
+Message-ID: <202203280446.sZhhsZYx-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220327203532.407821-1-mizhang@google.com>
-In-Reply-To: <20220327203532.407821-1-mizhang@google.com>
-From:   Mingwei Zhang <mizhang@google.com>
-Date:   Sun, 27 Mar 2022 13:43:13 -0700
-Message-ID: <CAL715W+ftVzqBizAwZNZhmn5F8kRCF==eN+xjc+0KuSEmqm5Mw@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/mmu: add lockdep check before lookup_address_in_mm()
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please ignore this one and will provide an updated patch shortly.
+tree:   git://www.linux-watchdog.org/linux-watchdog-next.git v5.18-rc1
+head:   826270373f17fd8ebd10753ca0a5fd2ceb1dc38e
+commit: 0578fff4aae5bce3f09875f58e68e9ffbab8daf5 [12/13] Watchdog: sp5100_tco: Add initialization using EFCH MMIO
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220328/202203280446.sZhhsZYx-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
+reproduce (this is a W=1 build):
+        git remote add watchdog-next git://www.linux-watchdog.org/linux-watchdog-next.git
+        git fetch --no-tags watchdog-next v5.18-rc1
+        git checkout 0578fff4aae5bce3f09875f58e68e9ffbab8daf5
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/watchdog/
 
-On Sun, Mar 27, 2022 at 1:35 PM Mingwei Zhang <mizhang@google.com> wrote:
->
-> Add a lockdep check before invoking lookup_address_in_mm().
-> lookup_address_in_mm() walks all levels of host page table without
-> accquiring any lock. This is usually unsafe unless we are walking the
-> kernel addresses (check other usage cases of lookup_address_in_mm and
-> lookup_address_in_pgd).
->
-> Walking host page table (especially guest addresses) usually requires
-> holding two types of locks: 1) mmu_lock in mm or the lock that protects
-> the reverse maps of host memory in range; 2) lock for the leaf paging
-> structures.
->
-> One exception case is when we take the mmu_lock of the secondary mmu.
-> Holding mmu_lock of KVM MMU in either read mode or write mode prevents host
-> level entities from modifying the host page table concurrently. This is
-> because all of them will have to invoke KVM mmu_notifier first before doing
-> the actual work. Since KVM mmu_notifier invalidation operations always take
-> the mmu write lock, we are safe if we hold the mmu lock here.
->
-> Note: this means that KVM cannot allow concurrent multiple mmu_notifier
-> invalidation callbacks by using KVM mmu read lock. Since, otherwise, any
-> host level entity can cause race conditions with this one. Walking host
-> page table here may get us stale information or may trigger NULL ptr
-> dereference that is hard to reproduce.
->
-> Having a lockdep check here will prevent or at least warn future
-> development that directly walks host page table simply in a KVM ioctl
-> function. In addition, it provides a record for any future development on
-> KVM mmu_notifier.
->
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Ben Gardon <bgardon@google.com>
-> Cc: David Matlack <dmatlack@google.com>
->
-> Signed-off-by: Mingwei Zhang <mizhang@google.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
->
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 1361eb4599b4..342aa184c0a2 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -2820,6 +2820,24 @@ static int host_pfn_mapping_level(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
->          */
->         hva = __gfn_to_hva_memslot(slot, gfn);
->
-> +       /*
-> +        * lookup_address_in_mm() walks all levels of host page table without
-> +        * accquiring any lock. This is not safe when KVM does not take the
-> +        * mmu_lock. Holding mmu_lock in either read mode or write mode prevents
-> +        * host level entities from modifying the host page table. This is
-> +        * because all of them will have to invoke KVM mmu_notifier first before
-> +        * doing the actual work. Since KVM mmu_notifier invalidation operations
-> +        * always take the mmu write lock, we are safe if we hold the mmu lock
-> +        * here.
-> +        *
-> +        * Note: this means that KVM cannot allow concurrent multiple
-> +        * mmu_notifier invalidation callbacks by using KVM mmu read lock.
-> +        * Otherwise, any host level entity can cause race conditions with this
-> +        * one. Walking host page table here may get us stale information or may
-> +        * trigger NULL ptr dereference that is hard to reproduce.
-> +        */
-> +       lockdep_is_held(kvm->mmu_lock);
-> +
->         pte = lookup_address_in_mm(kvm->mm, hva, &level);
->         if (unlikely(!pte))
->                 return PG_LEVEL_4K;
-> --
-> 2.35.1.1021.g381101b075-goog
->
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/watchdog/sp5100_tco.c: In function 'sp5100_tco_setupdevice_mmio':
+   drivers/watchdog/sp5100_tco.c:345:8: error: implicit declaration of function 'request_mem_region_muxed'; did you mean 'request_mem_region'? [-Werror=implicit-function-declaration]
+     345 |  res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
+         |        ^~~~~~~~~~~~~~~~~~~~~~~~
+         |        request_mem_region
+>> drivers/watchdog/sp5100_tco.c:345:6: warning: assignment to 'struct resource *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     345 |  res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
+         |      ^
+   cc1: some warnings being treated as errors
+
+
+vim +345 drivers/watchdog/sp5100_tco.c
+
+   333	
+   334	static int sp5100_tco_setupdevice_mmio(struct device *dev,
+   335					       struct watchdog_device *wdd)
+   336	{
+   337		struct sp5100_tco *tco = watchdog_get_drvdata(wdd);
+   338		const char *dev_name = SB800_DEVNAME;
+   339		u32 mmio_addr = 0, alt_mmio_addr = 0;
+   340		struct resource *res;
+   341		void __iomem *addr;
+   342		int ret;
+   343		u32 val;
+   344	
+ > 345		res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
+   346					       EFCH_PM_ACPI_MMIO_PM_SIZE,
+   347					       "sp5100_tco");
+   348	
+   349		if (!res) {
+   350			dev_err(dev,
+   351				"Memory region 0x%08x already in use\n",
+   352				EFCH_PM_ACPI_MMIO_PM_ADDR);
+   353			return -EBUSY;
+   354		}
+   355	
+   356		addr = ioremap(EFCH_PM_ACPI_MMIO_PM_ADDR, EFCH_PM_ACPI_MMIO_PM_SIZE);
+   357		if (!addr) {
+   358			dev_err(dev, "Address mapping failed\n");
+   359			ret = -ENOMEM;
+   360			goto out;
+   361		}
+   362	
+   363		/*
+   364		 * EFCH_PM_DECODEEN_WDT_TMREN is dual purpose. This bitfield
+   365		 * enables sp5100_tco register MMIO space decoding. The bitfield
+   366		 * also starts the timer operation. Enable if not already enabled.
+   367		 */
+   368		val = efch_read_pm_reg8(addr, EFCH_PM_DECODEEN);
+   369		if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
+   370			efch_update_pm_reg8(addr, EFCH_PM_DECODEEN, 0xff,
+   371					    EFCH_PM_DECODEEN_WDT_TMREN);
+   372		}
+   373	
+   374		/* Error if the timer could not be enabled */
+   375		val = efch_read_pm_reg8(addr, EFCH_PM_DECODEEN);
+   376		if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
+   377			dev_err(dev, "Failed to enable the timer\n");
+   378			ret = -EFAULT;
+   379			goto out;
+   380		}
+   381	
+   382		mmio_addr = EFCH_PM_WDT_ADDR;
+   383	
+   384		/* Determine alternate MMIO base address */
+   385		val = efch_read_pm_reg8(addr, EFCH_PM_ISACONTROL);
+   386		if (val & EFCH_PM_ISACONTROL_MMIOEN)
+   387			alt_mmio_addr = EFCH_PM_ACPI_MMIO_ADDR +
+   388				EFCH_PM_ACPI_MMIO_WDT_OFFSET;
+   389	
+   390		ret = sp5100_tco_prepare_base(tco, mmio_addr, alt_mmio_addr, dev_name);
+   391		if (!ret) {
+   392			tco_timer_enable_mmio(addr);
+   393			ret = sp5100_tco_timer_init(tco);
+   394		}
+   395	
+   396	out:
+   397		if (addr)
+   398			iounmap(addr);
+   399	
+   400		release_resource(res);
+   401	
+   402		return ret;
+   403	}
+   404	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

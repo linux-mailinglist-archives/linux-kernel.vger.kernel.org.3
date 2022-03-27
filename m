@@ -2,165 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1584E8870
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 17:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E236F4E8872
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 17:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235858AbiC0P1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 11:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
+        id S235863AbiC0Pgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 11:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233863AbiC0P1U (ORCPT
+        with ESMTP id S233863AbiC0Pgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 11:27:20 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-cusazon11020019.outbound.protection.outlook.com [52.101.61.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B67913F89;
-        Sun, 27 Mar 2022 08:25:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KSwx0x/RqFfOQjey9622hSpwym3u82Jrs3dl3ODDOQuzebINcGJCgl29UU+UlAqrpSaVeA5B8Zpsd7YoF5krGln3T9tqSpWdjMnqTkQb3ZmFIvMM6Gt3pf5IHqanYLUwH5tryKhSQOPnLMVNiZESBBMfjalhDaAvS8j7DdyM1cBLJVp5M20v/2y/DOmC9vNSwxn6U3owLiHFJHLoF6W79+36iSOy1cnHD71wSeyYBEIV9xE084Oy2M6jteHWp3V94Hx7diKPio4uZxt2GjmuxM4AlUfZRgfXGvNJ2O65SMGKMG+KbvFyocEmb5VTRRJO/rQGERfImYYs2qii6lqVFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2Xid1u31RIE5t3e5lCPz699WYlpsvDp25R6BYYMjH7s=;
- b=Uuz1DVAPX5HU2A1izIPR5RaU89I3K5y4tOFSHdxTfdgVLLOstOC8JXjbq05l1CSHvVVgIlnvVtcB909ZsauHBqRA5T9DxAomPNCVjN0OSZJ8JMPdI8w0oX/HNl9b2lxRtcFm/t1VfREqXPApEzcdnLTOziw+CKC64uveoNG/3vnnOl19bnzKeGp+O/e+83s6T6EA4R4di6szOoquFGt4vDoq5ivvanlBoDZokWrTa4pExKcyTJ+C0m4WJXaa8LtYl42wnnc4KVdc6h58rUnKCa/xbnMCkA6su0tu3A0IMfayCtDFm6qvUycJ2LJUz+tfSTjgquc+lgzuH9rHNyNPqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2Xid1u31RIE5t3e5lCPz699WYlpsvDp25R6BYYMjH7s=;
- b=bEMUYR74n1kPYnhfscgMTKd9khW7RUmfIlVVbX1if3Pb9A5H8WtJlnkcPIMsG8kMfUxX2JPPGI3sNpqV5y7OW3lsSzNh36rhKKOs7Biy4bT3TBT2LN5oQO8X/9E7dAL8bbYt8KBb5W++YHSyS+s+ynhCmFzhXRu3F5GkhLVsqso=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-Received: from DM6PR21MB1514.namprd21.prod.outlook.com (2603:10b6:5:22d::11)
- by SN6PR2101MB1133.namprd21.prod.outlook.com (2603:10b6:805:4::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.15; Sun, 27 Mar
- 2022 15:25:38 +0000
-Received: from DM6PR21MB1514.namprd21.prod.outlook.com
- ([fe80::f8aa:99ff:9265:bb6b]) by DM6PR21MB1514.namprd21.prod.outlook.com
- ([fe80::f8aa:99ff:9265:bb6b%3]) with mapi id 15.20.5123.015; Sun, 27 Mar 2022
- 15:25:38 +0000
-From:   Michael Kelley <mikelley@microsoft.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, vkuznets@redhat.com,
-        decui@microsoft.com
-Cc:     mikelley@microsoft.com
-Subject: [PATCH 1/1] hv: drivers: vmbus: Prevent load re-ordering when reading ring buffer
-Date:   Sun, 27 Mar 2022 08:25:10 -0700
-Message-Id: <1648394710-33480-1-git-send-email-mikelley@microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR04CA0176.namprd04.prod.outlook.com
- (2603:10b6:303:85::31) To DM6PR21MB1514.namprd21.prod.outlook.com
- (2603:10b6:5:22d::11)
+        Sun, 27 Mar 2022 11:36:51 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA65111145
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 08:35:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648395312; x=1679931312;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9UXTrqjncngzRK7Cvd+C8FvVTvU5sVNw0F50GjPGkw0=;
+  b=hghlTEwHQSpWlB8QYyP1P20x4zGPs+CVSvbLa+Cx9ZDAdeGfssHj0oVQ
+   nb/aWMPDFsrgDjmz6NoKrO6p9YVRCrK4bSztK1+VYdHdU7CodBZQSzhg5
+   3swV1UjWuRz7jTog04HfJq8lcYg5PmA+q2kJCSWu7EAKAouQMWyxQaU1Q
+   ld0oZsKy9UsV4p9jUBY0lz1+vKz2sFDIMucIHROxC4H1BGFOBrTTgS0eU
+   0UszPi8gVctRYtlcjNDXAGJRmuzalrhQGUvxT0cI06HZ90/W+vIzpIJP+
+   r3rAUKb7He4Da9lqQI/yvJe/erDkcFqZAooilu5QAp9iM4oo+f52WzdG9
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="345295050"
+X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
+   d="scan'208";a="345295050"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 08:35:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
+   d="scan'208";a="650799461"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 27 Mar 2022 08:35:10 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nYUv7-0001Ae-SH; Sun, 27 Mar 2022 15:35:09 +0000
+Date:   Sun, 27 Mar 2022 23:34:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: include/linux/fortify-string.h:336:4: warning: call to
+ __read_overflow2_field declared with 'warning' attribute: detected read
+ beyond size of field (2nd parameter); maybe use struct_group()?
+Message-ID: <202203272333.HjJA3Nkg-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f4c1f54c-1698-4b06-0428-08da10060be2
-X-MS-TrafficTypeDiagnostic: SN6PR2101MB1133:EE_
-X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-X-MS-Exchange-AtpMessageProperties: SA|SL
-X-Microsoft-Antispam-PRVS: <SN6PR2101MB11336736DC864E00B35D22B4D71C9@SN6PR2101MB1133.namprd21.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VG2XeQNhK2WGP04noICO5Z2bcYlRA9n5kLEBwcpApE1zbEugem4j9Sk30ePGPz9Z8YFF7IBfe1epVZ0ltEVHeeDVHD8CPt+T0xzQAS/sEt5bwQCjviuzdstEI/JWwKZgZK6uCNvUVMwFKEJPfxZT0HK0Wryyzb1pNYGV9gQstqta9/QzTwRWBscsugYKMQ79FiGbHvnJaglgwy/Dxw1pRjAgT+ziRawVrt7yvR29uaP4KOhICA7JDa5rOQRXSeaqEOLPhcqfcl5yfQYM3Hqe4Gjzydh1eZs3wLW3cmH1gT4Men5YhYPPm+oiFVAo36EZi3iaIXG5kisqTw5NjfU4e7+NR2h4c6xxFjE2SIx4j67tX4Fz37jzF9699uK7mDKv9pGm/R7SuyuAehybBrIoI1VCOWz/OzOVhNPPXvNK04thtBumyrmbPqk/5de+5+rZ/LVj+kR+GdorJdePrqMLpqcyRPWHKoOwqWnD9x52v9TQ+BZCw2n8QemJbiSUSHqV6Wok0A0hWD0jwCHIGi/bcoWCD5M1mfzgue4y06ZbWUQJGGHWU30Fo+02SHW8JGnoUy12+QoZr4U2a5143XEwnGLT8VnbA0xorq1eWZWWJABIotPEnUYMITVk3zMGIL5mFqsw0UWnrwUxU9i7eV8E0BBHQ0RXwM6+FqbFehCAeH8niSrkvAv+xWBRduyjkUkbGxdEYo+Z6LZV87AK0j4i6E9X6q9KIIrjPv+kU6QVpKNpOPU2xtWFUSBZuaijLtFc
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1514.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(38100700002)(66476007)(186003)(52116002)(38350700002)(6506007)(83380400001)(26005)(66556008)(66946007)(6666004)(6512007)(8676002)(6636002)(2906002)(8936002)(6486002)(508600001)(4326008)(10290500003)(5660300002)(316002)(86362001)(82960400001)(107886003)(82950400001)(36756003)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FIWod7Ast9FWZ7hyaQzpLzzx/XGQmP5cGqweEQWRvv9GkR+h2GG4M5wCZT4b?=
- =?us-ascii?Q?wtl7QDFknMhKMKN1fld71RpTToUT1d2BEvD3mFPQHGPYT84+5DDJekiss+qP?=
- =?us-ascii?Q?gi+LB7pa2BekSbiTq3Pxj0FPPX8AIOLdrgTc0Dnp99Ew/K/b8sLN8E4PBP4a?=
- =?us-ascii?Q?NAiVdP09uoOv/cP2XD5YEFmXQn8zJl8SsDwzt2bAXi+ecvS0Il4cRTd0rP67?=
- =?us-ascii?Q?F7PhWd5uiJmwmekr/fi6dyAgSgoxVCa1lmsJb1zm4ATrWmgl907LOvIBuxDu?=
- =?us-ascii?Q?a1MhMVrjjelngQ9bF6EHUO4uBUTIc5yHK17f18QPFjDIaTULuPDKsF76G0vQ?=
- =?us-ascii?Q?NeAPI3EpKrl2TUQTx0795DjLqH3WXXcAvXyeAvJAwa4ACL+SWu/UBJvsod9E?=
- =?us-ascii?Q?eTJggpg2YlFfhhTFZtS4gHqfICSYd0UmyqPdMAkj4MI0pVMw0NgSPww6pEUh?=
- =?us-ascii?Q?TnClpXeQ6nUk+S4WM+xJ/CpU9BVUI7yXkHffH1EWjdN3l3jOEmJ5hiW3xi6A?=
- =?us-ascii?Q?DKDRC3ffwHj6J/1qZQBBgEwa7T2poNX4d+iHm4AObST8WA/pdLpnAXYUD9+y?=
- =?us-ascii?Q?6xWzjgoQ83mcmxwYXXs5wotexuEV4OFlrfJzga+fhnl2mA7+V8ZabOgl4/B0?=
- =?us-ascii?Q?PWYFy1a6MCUbailBgVrdU4pD3enrC9ZyU7drXwYUIw+ZxiLwNmWZsxUUVahM?=
- =?us-ascii?Q?UqDfGqHVFvTVcCqAlNGFWw5eqy5cVPbDGP/a+nI6Htmn8gdC6vI3CAhZ6mcw?=
- =?us-ascii?Q?iHuTmkh7aq0RIWXT7HlYtBDcYL4HkL8kiZCBWdjbzu9KC8VSVJjRbkI/S/Ak?=
- =?us-ascii?Q?qetg7SRulgbB+oyXb9KIEy91u6hnT3o536FWgKCKPgA7J09pu8c8pzX02B1w?=
- =?us-ascii?Q?GjdIjtqyMhBPWzKnxvV8gbUWcAoqa4KsWQ3grwNVmNMxUXoNBBPK0RX8E/Oe?=
- =?us-ascii?Q?Nbz4D28pzTRaB1+wq0gzf8LdcbVGP7eAiBUZrpjUq9WDKLvrqisxNYdM4mKC?=
- =?us-ascii?Q?B/PP7E5RG7Mk2/MKf/cyyWxq1/RK7atnOURgeUzocMNWpERkHJTzlPKEkDKW?=
- =?us-ascii?Q?xqapMJm88clQqdD7le6GxTXHwGBhAGFhhOn2+RxRzGL8CTVtwJDp2o6goRAq?=
- =?us-ascii?Q?rVMNIeVxPgi6RCcvHmSOhSMupEyYEnqHBr8U5G27B6KrO2iw24XJsPoB5IMA?=
- =?us-ascii?Q?lEkKIMzbIT4J0XCjNGQgQz1+VXDgvIQGDvRBQt+zepU9vQRc9SSXtvsCQMaK?=
- =?us-ascii?Q?q/KHAQyHo6b0EQfJf691vOVBnNdlf9pQ8FtyCbGylYyTvVySPn6no7eWUFIK?=
- =?us-ascii?Q?qmqUJlND8YVl5OruE6Z+HmZE8pGn3nxBPR71JLY4pHPxjHzA5QXG9ELQ242L?=
- =?us-ascii?Q?0262JASET3RWpVO3wHVVd3ybNX9gqjw5SZPCAAxQQQa+ffRDdxxiT0UFTx73?=
- =?us-ascii?Q?1bWOui5iiknMe6ncA2Q0ZpvZf690s+XQOIHc9f0f3tNBfDFSJLf9zW3tqUZc?=
- =?us-ascii?Q?U+EeWgYmcltPJFnwFDUxa4hhVdIalnFtHsYIcH97FAvFtDS+V3qnAAYg9w1K?=
- =?us-ascii?Q?N09Vp1hF/VKLBznCxlzyWP0ExkhxwJ4WdtRiT8DaMGzLmtUeE91jIGjijth0?=
- =?us-ascii?Q?4l4KY2S0jVCJxNpJrO/xL0ei8gq7TJuxUQzRm6oRbz48K7x9kuI0kLzEpsXt?=
- =?us-ascii?Q?uHZKBty94MF393W1J1pwuaqpxw2Pd827SrxrodREdDITg2BS3NpoTCatZTqY?=
- =?us-ascii?Q?5Ulg+8asafLrpIOANHb69MgRuO6aRT0=3D?=
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4c1f54c-1698-4b06-0428-08da10060be2
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1514.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2022 15:25:38.3905
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6dlZsU6wpxWnUDdJFF5hyKWbiB6q634/jT63AKqv2ccVzZDoVveE2Gwocp2kpYlYcp91qsv7pa4OfIR3T42G+A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR2101MB1133
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When reading a packet from a host-to-guest ring buffer, there is no
-memory barrier between reading the write index (to see if there is
-a packet to read) and reading the contents of the packet. The Hyper-V
-host uses store-release when updating the write index to ensure that
-writes of the packet data are completed first. On the guest side,
-the processor can reorder and read the packet data before the write
-index, and sometimes get stale packet data. Getting such stale packet
-data has been observed in a reproducible case in a VM on ARM64.
+Hi Kees,
 
-Fix this by using virt_load_acquire() to read the write index,
-ensuring that reads of the packet data cannot be reordered
-before it. Preventing such reordering is logically correct, and
-with this change, getting stale data can no longer be reproduced.
+FYI, the error/warning still remains.
 
-Signed-off-by: Michael Kelley <mikelley@microsoft.com>
----
- drivers/hv/ring_buffer.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f022814633e1c600507b3a99691b4d624c2813f0
+commit: 281d0c962752fb40866dd8d4cade68656f34bd1f fortify: Add Clang support
+date:   6 weeks ago
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220327/202203272333.HjJA3Nkg-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=281d0c962752fb40866dd8d4cade68656f34bd1f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 281d0c962752fb40866dd8d4cade68656f34bd1f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/cifs/
 
-diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
-index 71efacb..3d215d9 100644
---- a/drivers/hv/ring_buffer.c
-+++ b/drivers/hv/ring_buffer.c
-@@ -439,7 +439,16 @@ int hv_ringbuffer_read(struct vmbus_channel *channel,
- static u32 hv_pkt_iter_avail(const struct hv_ring_buffer_info *rbi)
- {
- 	u32 priv_read_loc = rbi->priv_read_index;
--	u32 write_loc = READ_ONCE(rbi->ring_buffer->write_index);
-+	u32 write_loc;
-+
-+	/*
-+	 * The Hyper-V host writes the packet data, then uses
-+	 * store_release() to update the write_index.  Use load_acquire()
-+	 * here to prevent loads of the packet data from being re-ordered
-+	 * before the read of the write_index and potentially getting
-+	 * stale data.
-+	 */
-+	write_loc = virt_load_acquire(&rbi->ring_buffer->write_index);
- 
- 	if (write_loc >= priv_read_loc)
- 		return write_loc - priv_read_loc;
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from fs/cifs/cifssmb.c:17:
+   In file included from include/linux/fs.h:6:
+   In file included from include/linux/wait_bit.h:8:
+   In file included from include/linux/wait.h:9:
+   In file included from include/linux/spinlock.h:55:
+   In file included from include/linux/preempt.h:78:
+   In file included from arch/x86/include/asm/preempt.h:7:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:53:
+   In file included from arch/x86/include/asm/cpufeature.h:5:
+   In file included from arch/x86/include/asm/processor.h:22:
+   In file included from arch/x86/include/asm/msr.h:11:
+   In file included from arch/x86/include/asm/cpumask.h:5:
+   In file included from include/linux/cpumask.h:12:
+   In file included from include/linux/bitmap.h:11:
+   In file included from include/linux/string.h:253:
+>> include/linux/fortify-string.h:336:4: warning: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
+                           __read_overflow2_field(q_size_field, size);
+                           ^
+   1 warning generated.
+
+
+vim +/warning +336 include/linux/fortify-string.h
+
+28e77cc1c06866 Kees Cook      2021-06-16  267  
+28e77cc1c06866 Kees Cook      2021-06-16  268  /*
+28e77cc1c06866 Kees Cook      2021-06-16  269   * __builtin_object_size() must be captured here to avoid evaluating argument
+28e77cc1c06866 Kees Cook      2021-06-16  270   * side-effects further into the macro layers.
+28e77cc1c06866 Kees Cook      2021-06-16  271   */
+28e77cc1c06866 Kees Cook      2021-06-16  272  #define memset(p, c, s) __fortify_memset_chk(p, c, s,			\
+28e77cc1c06866 Kees Cook      2021-06-16  273  		__builtin_object_size(p, 0), __builtin_object_size(p, 1))
+a28a6e860c6cf2 Francis Laniel 2021-02-25  274  
+f68f2ff91512c1 Kees Cook      2021-04-20  275  /*
+f68f2ff91512c1 Kees Cook      2021-04-20  276   * To make sure the compiler can enforce protection against buffer overflows,
+f68f2ff91512c1 Kees Cook      2021-04-20  277   * memcpy(), memmove(), and memset() must not be used beyond individual
+f68f2ff91512c1 Kees Cook      2021-04-20  278   * struct members. If you need to copy across multiple members, please use
+f68f2ff91512c1 Kees Cook      2021-04-20  279   * struct_group() to create a named mirror of an anonymous struct union.
+f68f2ff91512c1 Kees Cook      2021-04-20  280   * (e.g. see struct sk_buff.) Read overflow checking is currently only
+f68f2ff91512c1 Kees Cook      2021-04-20  281   * done when a write overflow is also present, or when building with W=1.
+f68f2ff91512c1 Kees Cook      2021-04-20  282   *
+f68f2ff91512c1 Kees Cook      2021-04-20  283   * Mitigation coverage matrix
+f68f2ff91512c1 Kees Cook      2021-04-20  284   *					Bounds checking at:
+f68f2ff91512c1 Kees Cook      2021-04-20  285   *					+-------+-------+-------+-------+
+f68f2ff91512c1 Kees Cook      2021-04-20  286   *					| Compile time  |   Run time    |
+f68f2ff91512c1 Kees Cook      2021-04-20  287   * memcpy() argument sizes:		| write | read  | write | read  |
+f68f2ff91512c1 Kees Cook      2021-04-20  288   *        dest     source   length      +-------+-------+-------+-------+
+f68f2ff91512c1 Kees Cook      2021-04-20  289   * memcpy(known,   known,   constant)	|   y   |   y   |  n/a  |  n/a  |
+f68f2ff91512c1 Kees Cook      2021-04-20  290   * memcpy(known,   unknown, constant)	|   y   |   n   |  n/a  |   V   |
+f68f2ff91512c1 Kees Cook      2021-04-20  291   * memcpy(known,   known,   dynamic)	|   n   |   n   |   B   |   B   |
+f68f2ff91512c1 Kees Cook      2021-04-20  292   * memcpy(known,   unknown, dynamic)	|   n   |   n   |   B   |   V   |
+f68f2ff91512c1 Kees Cook      2021-04-20  293   * memcpy(unknown, known,   constant)	|   n   |   y   |   V   |  n/a  |
+f68f2ff91512c1 Kees Cook      2021-04-20  294   * memcpy(unknown, unknown, constant)	|   n   |   n   |   V   |   V   |
+f68f2ff91512c1 Kees Cook      2021-04-20  295   * memcpy(unknown, known,   dynamic)	|   n   |   n   |   V   |   B   |
+f68f2ff91512c1 Kees Cook      2021-04-20  296   * memcpy(unknown, unknown, dynamic)	|   n   |   n   |   V   |   V   |
+f68f2ff91512c1 Kees Cook      2021-04-20  297   *					+-------+-------+-------+-------+
+f68f2ff91512c1 Kees Cook      2021-04-20  298   *
+f68f2ff91512c1 Kees Cook      2021-04-20  299   * y = perform deterministic compile-time bounds checking
+f68f2ff91512c1 Kees Cook      2021-04-20  300   * n = cannot perform deterministic compile-time bounds checking
+f68f2ff91512c1 Kees Cook      2021-04-20  301   * n/a = no run-time bounds checking needed since compile-time deterministic
+f68f2ff91512c1 Kees Cook      2021-04-20  302   * B = can perform run-time bounds checking (currently unimplemented)
+f68f2ff91512c1 Kees Cook      2021-04-20  303   * V = vulnerable to run-time overflow (will need refactoring to solve)
+f68f2ff91512c1 Kees Cook      2021-04-20  304   *
+f68f2ff91512c1 Kees Cook      2021-04-20  305   */
+f68f2ff91512c1 Kees Cook      2021-04-20  306  __FORTIFY_INLINE void fortify_memcpy_chk(__kernel_size_t size,
+f68f2ff91512c1 Kees Cook      2021-04-20  307  					 const size_t p_size,
+f68f2ff91512c1 Kees Cook      2021-04-20  308  					 const size_t q_size,
+f68f2ff91512c1 Kees Cook      2021-04-20  309  					 const size_t p_size_field,
+f68f2ff91512c1 Kees Cook      2021-04-20  310  					 const size_t q_size_field,
+f68f2ff91512c1 Kees Cook      2021-04-20  311  					 const char *func)
+a28a6e860c6cf2 Francis Laniel 2021-02-25  312  {
+a28a6e860c6cf2 Francis Laniel 2021-02-25  313  	if (__builtin_constant_p(size)) {
+f68f2ff91512c1 Kees Cook      2021-04-20  314  		/*
+f68f2ff91512c1 Kees Cook      2021-04-20  315  		 * Length argument is a constant expression, so we
+f68f2ff91512c1 Kees Cook      2021-04-20  316  		 * can perform compile-time bounds checking where
+f68f2ff91512c1 Kees Cook      2021-04-20  317  		 * buffer sizes are known.
+f68f2ff91512c1 Kees Cook      2021-04-20  318  		 */
+f68f2ff91512c1 Kees Cook      2021-04-20  319  
+f68f2ff91512c1 Kees Cook      2021-04-20  320  		/* Error when size is larger than enclosing struct. */
+f68f2ff91512c1 Kees Cook      2021-04-20  321  		if (p_size > p_size_field && p_size < size)
+a28a6e860c6cf2 Francis Laniel 2021-02-25  322  			__write_overflow();
+f68f2ff91512c1 Kees Cook      2021-04-20  323  		if (q_size > q_size_field && q_size < size)
+a28a6e860c6cf2 Francis Laniel 2021-02-25  324  			__read_overflow2();
+f68f2ff91512c1 Kees Cook      2021-04-20  325  
+f68f2ff91512c1 Kees Cook      2021-04-20  326  		/* Warn when write size argument larger than dest field. */
+f68f2ff91512c1 Kees Cook      2021-04-20  327  		if (p_size_field < size)
+f68f2ff91512c1 Kees Cook      2021-04-20  328  			__write_overflow_field(p_size_field, size);
+f68f2ff91512c1 Kees Cook      2021-04-20  329  		/*
+f68f2ff91512c1 Kees Cook      2021-04-20  330  		 * Warn for source field over-read when building with W=1
+f68f2ff91512c1 Kees Cook      2021-04-20  331  		 * or when an over-write happened, so both can be fixed at
+f68f2ff91512c1 Kees Cook      2021-04-20  332  		 * the same time.
+f68f2ff91512c1 Kees Cook      2021-04-20  333  		 */
+f68f2ff91512c1 Kees Cook      2021-04-20  334  		if ((IS_ENABLED(KBUILD_EXTRA_WARN1) || p_size_field < size) &&
+f68f2ff91512c1 Kees Cook      2021-04-20  335  		    q_size_field < size)
+f68f2ff91512c1 Kees Cook      2021-04-20 @336  			__read_overflow2_field(q_size_field, size);
+a28a6e860c6cf2 Francis Laniel 2021-02-25  337  	}
+f68f2ff91512c1 Kees Cook      2021-04-20  338  	/*
+f68f2ff91512c1 Kees Cook      2021-04-20  339  	 * At this point, length argument may not be a constant expression,
+f68f2ff91512c1 Kees Cook      2021-04-20  340  	 * so run-time bounds checking can be done where buffer sizes are
+f68f2ff91512c1 Kees Cook      2021-04-20  341  	 * known. (This is not an "else" because the above checks may only
+f68f2ff91512c1 Kees Cook      2021-04-20  342  	 * be compile-time warnings, and we want to still warn for run-time
+f68f2ff91512c1 Kees Cook      2021-04-20  343  	 * overflows.)
+f68f2ff91512c1 Kees Cook      2021-04-20  344  	 */
+f68f2ff91512c1 Kees Cook      2021-04-20  345  
+f68f2ff91512c1 Kees Cook      2021-04-20  346  	/*
+f68f2ff91512c1 Kees Cook      2021-04-20  347  	 * Always stop accesses beyond the struct that contains the
+f68f2ff91512c1 Kees Cook      2021-04-20  348  	 * field, when the buffer's remaining size is known.
+f68f2ff91512c1 Kees Cook      2021-04-20  349  	 * (The -1 test is to optimize away checks where the buffer
+f68f2ff91512c1 Kees Cook      2021-04-20  350  	 * lengths are unknown.)
+f68f2ff91512c1 Kees Cook      2021-04-20  351  	 */
+f68f2ff91512c1 Kees Cook      2021-04-20  352  	if ((p_size != (size_t)(-1) && p_size < size) ||
+f68f2ff91512c1 Kees Cook      2021-04-20  353  	    (q_size != (size_t)(-1) && q_size < size))
+f68f2ff91512c1 Kees Cook      2021-04-20  354  		fortify_panic(func);
+a28a6e860c6cf2 Francis Laniel 2021-02-25  355  }
+a28a6e860c6cf2 Francis Laniel 2021-02-25  356  
+
+:::::: The code at line 336 was first introduced by commit
+:::::: f68f2ff91512c199ec24883001245912afc17873 fortify: Detect struct member overflows in memcpy() at compile-time
+
+:::::: TO: Kees Cook <keescook@chromium.org>
+:::::: CC: Kees Cook <keescook@chromium.org>
+
 -- 
-1.8.3.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

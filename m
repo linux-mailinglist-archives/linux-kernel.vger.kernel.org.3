@@ -2,113 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54FF4E89EC
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 22:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 906014E89EE
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 22:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236553AbiC0UFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 16:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50564 "EHLO
+        id S235857AbiC0UGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 16:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236606AbiC0UFn (ORCPT
+        with ESMTP id S232186AbiC0UGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 16:05:43 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EF21262C
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:04:03 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id d7so17560792wrb.7
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:04:03 -0700 (PDT)
+        Sun, 27 Mar 2022 16:06:37 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7655A1262C;
+        Sun, 27 Mar 2022 13:04:58 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id pv16so24779678ejb.0;
+        Sun, 27 Mar 2022 13:04:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iJbD7GeiV3igl6VNguRP5qJL5l5Nl/axoFONn8QJIfU=;
-        b=fEMDx2bCuxS4Zm8LB3F3FJphxpSoTBI7fBsMmIAkzSS+RhLEApfcfzASulW3rvHIUj
-         Fzc9L04NYrob1El3aZndJkZyXdVJzx7iwUbU0cI2KWZZVnlBM468nPoKdO+Cyr1zb43F
-         QmUtpU4piIotMa3dnw/TmJCwWy5cWRiGC1TmHYqas8lHbRAj6hmaCiHMKVSx6BZdI6YC
-         JHVsuspeV7Re/SeDKLFjkULD6A3TfGopFlIkwDU2yfG7eBDP5sT9fL0Y8nP90rEI2JIJ
-         x6KKz0wcDB+7BahOWyOjLej77CpOgieONpyiP/JpNj12eLkT1q4SA1+zgO37qsxjjtGC
-         JgBQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ohtTOFwdPQ4AOw3GQF3QapgXdCDzfitdYHdMexYJt0s=;
+        b=VoQkFMhBgUDHuzvs3mhfiHHPpmStH1xj91457cCibQ50SFqt5Jtw87mJlFR127MmLu
+         Ij7yt2ru7DBLU6qsqTAgVWlVSKinUyUODiYpljqzyGYvxOG+0dSljYo7nIvchmTsTd1E
+         og0z6dFLrLKbpR7w7o0QRcZoxsH+iqyL1UmuWVS2HY85Z7p1pFM/zoGzEMdq6w+KSW4a
+         3XOxzC+0nyP56XAEV5lNXpSu67G0ObDmXI2B664X+94hZ7VuTuVhi+nq0eVP8FhKi+fZ
+         zLZU5/YQuUhG6Jz2ZYegPNVMpBJxukxbtBH6Hw4vd31233q1o4YmkgfkswIXFzSYIE4q
+         cPlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iJbD7GeiV3igl6VNguRP5qJL5l5Nl/axoFONn8QJIfU=;
-        b=KQRXZrDg0ax/ylOK3OMgPfsy88UcdIAl5PNPHrQVi4olLR0C9ARW5XHbR6A9uku3pQ
-         vqn/Me38fbYXTyJEQedHaKD4Uv4MjH7mj6Ta0w+MD8NqbBGzpErlQQlOQ4mc4NQs8Jey
-         aDT0KKcB3M5hkdVsKRHcAAcwL1mstao/H4+VkQOtMc6wVXqKqgbfoICn5Gx06HZncPFb
-         Wk6prZbjyyuoxHf8omnR/UOYWLHknHSSDTcvJ24y95mH9oJolLfky+FqvjG4us2k/PL0
-         dggRrSpHnm04JKsmD+rZTlMZt4N5BPaDxqJFWPaUMcyl0xDzDg0zV/SDWAcbJ3oqEKQB
-         znvw==
-X-Gm-Message-State: AOAM530PHX8jR/xHxuiEN7pYCrlpZNxuoFqWXP/NzZB0fd40Yeqt7zio
-        GMFfUlarUV1C/goLOgvFHpLT8w==
-X-Google-Smtp-Source: ABdhPJx9fDpUw9UHjouZ5xNgvBdvHwpAvG/dOlQFuld3IFFhBQo3mpP4z82x+04LskxTKLhhh2Z1Hg==
-X-Received: by 2002:a05:6000:1e19:b0:205:94ac:34d3 with SMTP id bj25-20020a0560001e1900b0020594ac34d3mr17030169wrb.200.1648411441890;
-        Sun, 27 Mar 2022 13:04:01 -0700 (PDT)
-Received: from localhost.localdomain ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id f14-20020a05600c154e00b0038d06cc21b2sm1354555wmg.35.2022.03.27.13.04.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Mar 2022 13:04:01 -0700 (PDT)
-From:   Fabien Parent <fparent@baylibre.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Fabien Parent <fparent@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] arm64: defconfig: enable some mt6360 PMIC drivers
-Date:   Sun, 27 Mar 2022 22:03:12 +0200
-Message-Id: <20220327200312.3090515-5-fparent@baylibre.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220327200312.3090515-1-fparent@baylibre.com>
-References: <20220327200312.3090515-1-fparent@baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ohtTOFwdPQ4AOw3GQF3QapgXdCDzfitdYHdMexYJt0s=;
+        b=ty3k+EqpMjkV/49Qu81PFShrMBJZSpqbYPkLEpb9cl80i0gaq4KgYDHktyv9IwEdGZ
+         8+wy28ZGqQFvxgbyUf9jtdho2mmSYxv7XQ3qN2y6cJjmUoXcgwDOtWG3afNsm2X84L69
+         ybmw6Qhiew6wmCr7bCO1UAOpjaSJ2kz/PZ6ioEr68SNE/3WQrS8cINn7KZ2cFNMBlABs
+         DtO5z9bVXRJtqJHAMolgItQuIr2ibR9npGQh1SeKn3Tt/fNyf+9B9tFf4C2eo+KOuPrW
+         LAjSO6HtMwFTbiBZJZ2+EY8ixjUN9zfv5cOV9ajVhPaysGhw0a1Os6fTKMSbr87/8Pba
+         Lk/Q==
+X-Gm-Message-State: AOAM533U9OP94yymxSRpXwBNHzJckKmg/V7Q8scrq/IHmJt14OsZvC18
+        fC2RSWNMCl3uBUGvabVYqWMxV29E988y4rzWVlT0sdIuil4=
+X-Google-Smtp-Source: ABdhPJyBZUDM7B9ex+Xu4sTigiToYzIpFWAhdJcN22kvx75+VjSKmc9f8txVyQ6ygvykMMrjk4anaB6clFk8v8NsdVI=
+X-Received: by 2002:a17:907:9703:b0:6da:6412:508a with SMTP id
+ jg3-20020a170907970300b006da6412508amr23819809ejc.77.1648411496962; Sun, 27
+ Mar 2022 13:04:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <f6372a2f880c6e8597a8f070eb031d4cd451d37e.1648291287.git.mchehab@kernel.org>
+In-Reply-To: <f6372a2f880c6e8597a8f070eb031d4cd451d37e.1648291287.git.mchehab@kernel.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 27 Mar 2022 23:04:21 +0300
+Message-ID: <CAHp75Vc50ko7F0ZT_uWf6+f3atj0mg+RdFP9-sX_PLUtPqk3Eg@mail.gmail.com>
+Subject: Re: [PATCH] lib/bitmap.c make bitmap_print_bitmask_to_buf parseable
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the charger and regulator driver for the
-MT6360 PMIC. These drivers are essential for
-some MediaTek MT8195 based boards to boot properly.
+On Sat, Mar 26, 2022 at 8:39 PM Mauro Carvalho Chehab
+<mchehab@kernel.org> wrote:
+>
+> The documentation of such function is not on a proper ReST format,
+> as reported by Sphinx:
+>
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:532: WARNING: Unexpected indentation.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:526: WARNING: Inline emphasis start-string without end-string.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:532: WARNING: Inline emphasis start-string without end-string.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:532: WARNING: Inline emphasis start-string without end-string.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:533: WARNING: Block quote ends without a blank line; unexpected unindent.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:536: WARNING: Definition list ends without a blank line; unexpected unindent.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:542: WARNING: Unexpected indentation.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:536: WARNING: Inline emphasis start-string without end-string.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:536: WARNING: Inline emphasis start-string without end-string.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:543: WARNING: Block quote ends without a blank line; unexpected unindent.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:552: WARNING: Unexpected indentation.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:545: WARNING: Inline emphasis start-string without end-string.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:545: WARNING: Inline emphasis start-string without end-string.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:552: WARNING: Inline emphasis start-string without end-string.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:552: WARNING: Inline emphasis start-string without end-string.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:554: WARNING: Block quote ends without a blank line; unexpected unindent.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:556: WARNING: Definition list ends without a blank line; unexpected unindent.
+>     Documentation/core-api/kernel-api:81: ./lib/bitmap.c:580: WARNING: Unexpected indentation.
+>
+> So, the produced output at:
+>
+>         https://www.kernel.org/doc/html/latest/core-api/kernel-api.html?#c.bitmap_print_bitmask_to_buf
+>
+> is broken. Fix it by adding spaces and marking the literal blocks.
 
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
----
-v2: no changes
+LGTM,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Thanks!
 
- arch/arm64/configs/defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+>  lib/bitmap.c | 33 ++++++++++++++++++++-------------
+>  1 file changed, 20 insertions(+), 13 deletions(-)
+>
+> diff --git a/lib/bitmap.c b/lib/bitmap.c
+> index 0d5c2ece0bcb..8ebe508580ea 100644
+> --- a/lib/bitmap.c
+> +++ b/lib/bitmap.c
+> @@ -527,33 +527,39 @@ static int bitmap_print_to_buf(bool list, char *buf, const unsigned long *maskp,
+>   * cpumap_print_to_pagebuf() or directly by drivers to export hexadecimal
+>   * bitmask and decimal list to userspace by sysfs ABI.
+>   * Drivers might be using a normal attribute for this kind of ABIs. A
+> - * normal attribute typically has show entry as below:
+> - * static ssize_t example_attribute_show(struct device *dev,
+> + * normal attribute typically has show entry as below::
+> + *
+> + *   static ssize_t example_attribute_show(struct device *dev,
+>   *             struct device_attribute *attr, char *buf)
+> - * {
+> + *   {
+>   *     ...
+>   *     return bitmap_print_to_pagebuf(true, buf, &mask, nr_trig_max);
+> - * }
+> + *   }
+> + *
+>   * show entry of attribute has no offset and count parameters and this
+>   * means the file is limited to one page only.
+>   * bitmap_print_to_pagebuf() API works terribly well for this kind of
+> - * normal attribute with buf parameter and without offset, count:
+> - * bitmap_print_to_pagebuf(bool list, char *buf, const unsigned long *maskp,
+> + * normal attribute with buf parameter and without offset, count::
+> + *
+> + *   bitmap_print_to_pagebuf(bool list, char *buf, const unsigned long *maskp,
+>   *                        int nmaskbits)
+> - * {
+> - * }
+> + *   {
+> + *   }
+> + *
+>   * The problem is once we have a large bitmap, we have a chance to get a
+>   * bitmask or list more than one page. Especially for list, it could be
+>   * as complex as 0,3,5,7,9,... We have no simple way to know it exact size.
+>   * It turns out bin_attribute is a way to break this limit. bin_attribute
+> - * has show entry as below:
+> - * static ssize_t
+> - * example_bin_attribute_show(struct file *filp, struct kobject *kobj,
+> + * has show entry as below::
+> + *
+> + *   static ssize_t
+> + *   example_bin_attribute_show(struct file *filp, struct kobject *kobj,
+>   *             struct bin_attribute *attr, char *buf,
+>   *             loff_t offset, size_t count)
+> - * {
+> + *   {
+>   *     ...
+> - * }
+> + *   }
+> + *
+>   * With the new offset and count parameters, this makes sysfs ABI be able
+>   * to support file size more than one page. For example, offset could be
+>   * >= 4096.
+> @@ -577,6 +583,7 @@ static int bitmap_print_to_buf(bool list, char *buf, const unsigned long *maskp,
+>   * This function is not a replacement for sprintf() or bitmap_print_to_pagebuf().
+>   * It is intended to workaround sysfs limitations discussed above and should be
+>   * used carefully in general case for the following reasons:
+> + *
+>   *  - Time complexity is O(nbits^2/count), comparing to O(nbits) for snprintf().
+>   *  - Memory complexity is O(nbits), comparing to O(1) for snprintf().
+>   *  - @off and @count are NOT offset and number of bits to print.
+> --
+> 2.35.1
+>
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 1e521f17cb39..3848246f6727 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -565,6 +565,7 @@ CONFIG_SYSCON_REBOOT_MODE=y
- CONFIG_BATTERY_SBS=m
- CONFIG_BATTERY_BQ27XXX=y
- CONFIG_BATTERY_MAX17042=m
-+CONFIG_CHARGER_MT6360=m
- CONFIG_CHARGER_BQ25890=m
- CONFIG_CHARGER_BQ25980=m
- CONFIG_SENSORS_ARM_SCMI=y
-@@ -625,6 +626,7 @@ CONFIG_MFD_EXYNOS_LPASS=m
- CONFIG_MFD_HI6421_PMIC=y
- CONFIG_MFD_HI655X_PMIC=y
- CONFIG_MFD_MAX77620=y
-+CONFIG_MFD_MT6360=y
- CONFIG_MFD_MT6397=y
- CONFIG_MFD_SPMI_PMIC=y
- CONFIG_MFD_RK808=y
-@@ -645,6 +647,7 @@ CONFIG_REGULATOR_MAX8973=y
- CONFIG_REGULATOR_MP8859=y
- CONFIG_REGULATOR_MT6358=y
- CONFIG_REGULATOR_MT6359=y
-+CONFIG_REGULATOR_MT6360=y
- CONFIG_REGULATOR_MT6397=y
- CONFIG_REGULATOR_PCA9450=y
- CONFIG_REGULATOR_PF8X00=y
+
 -- 
-2.35.1
-
+With Best Regards,
+Andy Shevchenko

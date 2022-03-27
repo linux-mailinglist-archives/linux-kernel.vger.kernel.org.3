@@ -2,107 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 749C84E8983
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 21:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA074E8984
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 21:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236424AbiC0TIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 15:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
+        id S236429AbiC0TJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 15:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiC0TIM (ORCPT
+        with ESMTP id S230222AbiC0TJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 15:08:12 -0400
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC1010FEB;
-        Sun, 27 Mar 2022 12:06:32 -0700 (PDT)
-Received: by mail-wr1-f49.google.com with SMTP id u3so17408852wrg.3;
-        Sun, 27 Mar 2022 12:06:32 -0700 (PDT)
+        Sun, 27 Mar 2022 15:09:23 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405E41275B
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 12:07:44 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id v12so3807812ljd.3
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 12:07:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=INTrBTrJY7RVmPLb8SbyXB8sqGb+uTMdgIk+2pXg01s=;
+        b=gn35GwaLNeG5jMkGhmp8vlq8JyWjgJRPwiKs/ueFbDUXqk73yjS7lXrKvy2EEOsh7L
+         SqFFGj5pZKW/z8AxSIH5MqgiMv28Fk8ePi/YKCnA0imgkx8gs322sZjNsM/2lQvhZ09H
+         3KJUIPQ41vp7/hqeC49BBei3LxqhzDu/9jdPr8irQllLxPGSXRk9hL+SUXqtUFrD/omK
+         mf61bW29GExKwOqAh1M+Whsj9MV5k69Rh2b5TloF5X/rx+8IcPk9F6hvLQ7E0jzb9CT4
+         jY8y3OMF8Ux+W9+9NGIb3plkwCQdLnL6KbJPY0+fhLcPFe2nUfJ4H6hX8eGiKUKC5zEU
+         /lww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ll1EHkrJQGbMWuBiZ52whwPW7D9ncmXOlUyWZdkQFa8=;
-        b=3gEMKWDiLghLhNx0pN6uEZNNJwmxZk6mKYFkRjgEdzAuVj6b5MN+PrgM+4OxSVKoGm
-         XjHxz461BRPBJaD5R/H3xdWz3Kr6iqDqAgqZVS2yXXNKPUS9CoZmvSRodl4skVlfMOXA
-         1XvVzK226CA9Ae/xLG3/RIULZk93I+Ck39zfqFvobIjZ6NEZbSJa/Sqtsr4xPxK/0Uon
-         ZJE6MgRl/W7rVye1k6nHlX7aIDSJtBLxEGSignj8DIPTKaBUobXHKlHXbFEoUn9q04GA
-         nEaUnXQeBQR1q7lBoZ3P2kfsgZrYvvk+OSs8ELJ9+VGCE1lrEtPfQM6sQ46vEWKTEb3q
-         PV2Q==
-X-Gm-Message-State: AOAM532DKS1FIRjjA0+YDdPIVMQ1uC1BUj6rSycufBjThP/rx/uZLdkR
-        JfcWaF/u6DumLYq/7s7o+EU=
-X-Google-Smtp-Source: ABdhPJz/my4VzDnEV9yFVeCXb5EyongRdUMvxKA1PHdYDpHE1k/AUDAJKQ34W85UwabacM7E3JqqhQ==
-X-Received: by 2002:a5d:6487:0:b0:205:7c2b:b6ba with SMTP id o7-20020a5d6487000000b002057c2bb6bamr17678468wri.283.1648407990933;
-        Sun, 27 Mar 2022 12:06:30 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id p8-20020a5d59a8000000b00204178688d3sm11472248wrr.100.2022.03.27.12.06.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Mar 2022 12:06:30 -0700 (PDT)
-Message-ID: <edc4011d-5bfe-8ec5-e76b-61952cb3b9eb@kernel.org>
-Date:   Sun, 27 Mar 2022 21:06:29 +0200
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=INTrBTrJY7RVmPLb8SbyXB8sqGb+uTMdgIk+2pXg01s=;
+        b=Vmc8m4zTUbLsYiy6yApmukRsp1TwdaKNoq754blSEnugMswn5DE3NPWzXKbPQ3/r2A
+         lS3yaCqNxwVeQEOW1X+Q9vEBA4pZYnoXfmoO7PlmDWiIIoHDki+Gq8e2WBxdOJJgA8OH
+         RTlvYnCVGBokWu7HH+1WC80ZOi6qDzPPQYbCdrjVHlEZYGYYHDl/tUwfyNb7A9FQOdVw
+         lWPhSPNFSlSpeNZY02ZsJKNuaGvv2o4uXthoD/UwmCq2I6V94MWysh6anh4LW/ZSV9Ru
+         RM5wYic/EDKVQgfhQF4pUDJXDk3h5gvyd8rhiuQS04H6mH5PVOunHYEHSkjD+Ni4B2eJ
+         ZWDQ==
+X-Gm-Message-State: AOAM5304l1eXwPEpaZlwOXbR7Q5Qa6+kj1XjrVuosx2lXQ7JrEQK7PMK
+        312kleBw+M5Prlz/ZvJx8w9wm9ktEI6Lcs/YnUVkK5CKaSA=
+X-Google-Smtp-Source: ABdhPJzIfQho+S3dXGiXi5AT1WZXp+xqt2JJ/q0qZJ+JWEs4J85/KIkAATX5dU1NwNdgePifT/JcBWhRy17R7hkaRRI=
+X-Received: by 2002:a2e:b6cf:0:b0:24a:c0e6:1aa1 with SMTP id
+ m15-20020a2eb6cf000000b0024ac0e61aa1mr8853871ljo.422.1648408062512; Sun, 27
+ Mar 2022 12:07:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 02/12] dt-bindings: timer: gpt: Add i.MXRT compatible
- Documentation
-Content-Language: en-US
-To:     Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
-Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, aisheng.dong@nxp.com, stefan@agner.ch,
-        linus.walleij@linaro.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
-        linux@armlinux.org.uk, abel.vesa@nxp.com, dev@lynxeye.de,
-        marcel.ziswiler@toradex.com, tharvey@gateworks.com,
-        leoyang.li@nxp.com, sebastian.reichel@collabora.com,
-        cniedermaier@dh-electronics.com, clin@suse.com,
-        giulio.benetti@benettiengineering.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
-References: <20220326144313.673549-1-Mr.Bossman075@gmail.com>
- <20220326144313.673549-3-Mr.Bossman075@gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220326144313.673549-3-Mr.Bossman075@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Sun, 27 Mar 2022 14:07:31 -0500
+Message-ID: <CABb+yY3JSArf0Tnp3RWN=D9J11KvBpkds6W4tWd8=zq3cj5+5w@mail.gmail.com>
+Subject: [GIT PULL] Mailbox changes for v5.18
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/03/2022 15:43, Jesse Taube wrote:
-> Both the i.MXRT1170 and 1050 have the same GPT timer as "fsl,imx6dl-gpt"
-> Add i.MXRT to the compatible list.
-> 
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> ---
->  Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml b/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
-> index a4f51f46b7a1..716c6afcca1f 100644
-> --- a/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
-> +++ b/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
-> @@ -31,6 +31,8 @@ properties:
->            - enum:
->                - fsl,imx6sl-gpt
->                - fsl,imx6sx-gpt
-> +              - fsl,imxrt1050-gpt
-> +              - fsl,imxrt1170-gpt
->            - const: fsl,imx6dl-gpt
+Hi Linus,
+The following changes since commit ffb217a13a2eaf6d5bd974fc83036a53ca69f1e2:
 
-This looks ok, but your usage looks wrong. Did you test your DTS with
-dtbs_check?
+  Linux 5.17-rc7 (2022-03-06 14:28:31 -0800)
 
-For the bindings only change:
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+are available in the Git repository at:
 
+  git://git.linaro.org/landing-teams/working/fujitsu/integration.git
+tags/mailbox-v5.18
 
-Best regards,
-Krzysztof
+for you to fetch changes up to 1b0d0f7c12d57763fe27200d0569c863f11d2b8a:
+
+  dt-bindings: mailbox: add definition for mt8186 (2022-03-12 19:33:39 -0600)
+
+----------------------------------------------------------------
+- qcom: add support for MSM8976
+- mtk: enable mt8186
+add ADSP controller driver
+- ti: use poll mode during suspend
+- tegra: fix tx channel flush
+- imx: add i.MX8 SECO MU support
+prepare for, and add iMX93 support
+
+----------------------------------------------------------------
+Adam Skladowski (2):
+      dt-bindings: mailbox: Add compatible for the MSM8976
+      mailbox: qcom-apcs-ipc: Add compatible for MSM8976 SoC
+
+Allen-KH Cheng (2):
+      dt-bindings: mailbox: mtk,adsp-mbox: add mtk adsp-mbox document
+      mailbox: mediatek: add support for adsp mailbox controller
+
+Dave Gerlach (2):
+      mailbox: ti-msgmgr: Refactor message read during interrupt handler
+      mailbox: ti-msgmgr: Operate mailbox in polled mode during system suspend
+
+Franck LENORMAND (1):
+      mailbox: imx: add i.MX8 SECO MU support
+
+Pekka Pessi (1):
+      mailbox: tegra-hsp: Flush whole channel
+
+Peng Fan (7):
+      dt-bindings: mailbox: imx-mu: add i.MX8 SECO MU support
+      mailbox: imx: introduce rxdb callback
+      dt-bindings: mailbox: imx-mu: add i.MX93 MU
+      dt-bindings: mailbox: imx-mu: add i.MX93 S4 MU support
+      mailbox: imx: extend irq to an array
+      mailbox: imx: support dual interrupts
+      mailbox: imx: support i.MX93 S401 MU
+
+Ranjani Vaidyanathan (1):
+      mailbox: imx: enlarge timeout while reading/writing messages to SCFW
+
+Rex-BC Chen (1):
+      dt-bindings: mailbox: add definition for mt8186
+
+Robin Gong (2):
+      mailbox: imx: fix wakeup failure from freeze mode
+      mailbox: imx: fix crash in resume on i.mx8ulp
+
+ .../devicetree/bindings/mailbox/fsl,mu.yaml        |  35 ++-
+ .../devicetree/bindings/mailbox/mtk,adsp-mbox.yaml |  50 ++++
+ .../devicetree/bindings/mailbox/mtk-gce.txt        |   8 +-
+ .../bindings/mailbox/qcom,apcs-kpss-global.yaml    |   1 +
+ drivers/mailbox/Kconfig                            |   9 +
+ drivers/mailbox/Makefile                           |   2 +
+ drivers/mailbox/imx-mailbox.c                      | 308 +++++++++++++++++++--
+ drivers/mailbox/mtk-adsp-mailbox.c                 | 176 ++++++++++++
+ drivers/mailbox/qcom-apcs-ipc-mailbox.c            |   1 +
+ drivers/mailbox/tegra-hsp.c                        |   5 +
+ drivers/mailbox/ti-msgmgr.c                        | 181 +++++++++---
+ include/linux/soc/ti/ti-msgmgr.h                   |   8 +-
+ 12 files changed, 715 insertions(+), 69 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mailbox/mtk,adsp-mbox.yaml
+ create mode 100644 drivers/mailbox/mtk-adsp-mailbox.c

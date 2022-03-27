@@ -2,128 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 343494E85E8
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 07:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FBF54E85E6
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 07:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234986AbiC0FVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 01:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60000 "EHLO
+        id S234989AbiC0FWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 01:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233630AbiC0FV0 (ORCPT
+        with ESMTP id S233630AbiC0FWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 01:21:26 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C1B1D0D3
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:19:47 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id c2so9724544pga.10
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:19:47 -0700 (PDT)
+        Sun, 27 Mar 2022 01:22:14 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DDE65FF;
+        Sat, 26 Mar 2022 22:20:36 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id gp15-20020a17090adf0f00b001c7cd11b0b3so6947357pjb.3;
+        Sat, 26 Mar 2022 22:20:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DjAjApw5OmSknfrnxGEwevfGU2mFpTwiMRTXvU9CZ2U=;
-        b=wBkFbXGMET0gE47K/TSFH9UuQfvLUwNBZdLSiqEWnESv1luqGTYjTde2w9BVYFtu0X
-         UCauf6MGpfAFDUFFCZwVl2MlL3Vwe5axNiwZFUCq1DFJ8od7ZT8iuIzBWTmmBqUEPbJa
-         2iGj07rGHmzXcYAyVfO2jcERGzKat2XWz4N+quZ/AI4x5mUWY3LIhpJROZLsLjYHO/aO
-         QCfuIkz6YAllOHDGUBj/u7cXtMtZrPsXwfrD60+vjfbGttYX9LSffkfnrfmwwnIVaASt
-         rQpxqgWlSDEoclf7TLF+0BJB3/G8LIJl6WW+Yyzz4wHi4/nFX6d4sr2RojTfwP5FNVxy
-         OXJg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=/a7VRIQfIk0sc3S+jykLBy1he3snFYah83JVhZ/FtcE=;
+        b=Gu4KKtsGjBhRW6NALsZW7nc+kbdqqMi0pvPUrm0M1PGXR6i7tH9CzlmoBZjvqIvKIB
+         PANnpRV0QzyhRqV6SuqNlLC9we6wmEyOkgcgEsr3ygdMhosxl1ZnkumOC8GuI1PyZdAf
+         hWX7RvBCmGl5CPoQslMoAUKcz3qTS1K11cPL2aOFjqKrXoK8/1DvDV9GuiZu/pzTLvGP
+         0O+/NycEb2xyfFc9XgPFLlw1Swr0VZq+KHUcbsxJ8FsTEfRMgYr7wmfnj19e9hRz4J5T
+         8rDqczBMI96n1yYUrmFxkmRb83MZcnPk4ByGlrnqJJAvx7I/KtRF+/OA0oCH2gZ8zGzF
+         J4UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DjAjApw5OmSknfrnxGEwevfGU2mFpTwiMRTXvU9CZ2U=;
-        b=afHY3cvoFoiZ1i1jJP6BoR6wsNU1MDgBnj9COhA2FHJpumKaFoHaYgIi+X3zLxY5h0
-         vt7fBtiTteWv/y0eFO7RV/pz45fENi/q9cXw6sqWudGj6cnDuyrmtN1U4EsEzsYs78WB
-         C5S3wf4Aqjh/HBJK6CGxWTG65ovuHdITvYAXZoVlBz5jvgmdIqv0o+51dOiQGdhaeTE8
-         F/KxOHK+x6VpypKBaXuAvKnCh9CaIGJaJIMUj2mweC/7mtEG37bjkh6KeRGd035fY56P
-         XapZvIZ7qRsPCE8ixazVP2d4OLI45y+XQTJEktJFJ6tL9eqflgE1F/94kbfhtjHE8sAT
-         GBqg==
-X-Gm-Message-State: AOAM5334XyQUK2kCA7N3FrvBBjnrUUXy8131qlBT+KW72M5fFBq6ghRx
-        ENCDyhyS3UE4/uhJ6TSgb3XsNA==
-X-Google-Smtp-Source: ABdhPJzY53+MiMZ7oUkfYyICVhIUmUhH6YNa1A7t1v9zaZB+lsmZbngkcXass1+xHl+FsgDVtW0DIg==
-X-Received: by 2002:a05:6a00:1a91:b0:4fa:b21d:2ce with SMTP id e17-20020a056a001a9100b004fab21d02cemr17887607pfv.75.1648358387326;
-        Sat, 26 Mar 2022 22:19:47 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id m18-20020a056a00081200b004faeae3a291sm11115940pfk.26.2022.03.26.22.19.41
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=/a7VRIQfIk0sc3S+jykLBy1he3snFYah83JVhZ/FtcE=;
+        b=Wzad3YGmRHFPKaLOXtz8mKapS6o469JvJFVXt8NUHNEiVsnEkXTLV1m4goIsKsJvzR
+         bt+/gbXO7B44pyI9PmHMVOVyShaapc+pjaN+CBFWNRYsTQKaszl11aa+admUhg3KwCJs
+         lhl7Ivmq9+9em+n8VjDVgLbYxTdn1gcX1uF87gYiATHqTmC8gScuIrN75ulQdnyUArX8
+         rE1ZEEh+s/jFV0Q72FBvJ9BvDpSKySk1AmxF39kirCLQ8MUB5JknSHmjB9pwO68F6X3b
+         PUtsTMMncn5Le/9bSi6i6scJGbynSEggwweUJ1BOey9rxLIQGJ5JjsUrJg0DBDN3T50a
+         ZyFQ==
+X-Gm-Message-State: AOAM5320nJ8bvSrJoqlat2vezyDMcbMlsc80Y0wyMTpy4AADfJ2ZIyhN
+        9vcxvr6HOJ79r5tPMemUYb0=
+X-Google-Smtp-Source: ABdhPJwpKtizoLaCssM+03oOecEr9SKKWfBodr8JhWSrgJTi3+rwUGiYHVWv+7cjG+H0YSsjqMU39Q==
+X-Received: by 2002:a17:902:d652:b0:153:ad02:741c with SMTP id y18-20020a170902d65200b00153ad02741cmr20017545plh.135.1648358435718;
+        Sat, 26 Mar 2022 22:20:35 -0700 (PDT)
+Received: from localhost.localdomain ([115.220.243.108])
+        by smtp.googlemail.com with ESMTPSA id ij17-20020a17090af81100b001c67c964d93sm15735507pjb.2.2022.03.26.22.20.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 22:19:47 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     torvalds@linux-foundation.org, glider@google.com, elver@google.com,
-        dvyukov@google.com, akpm@linux-foundation.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        vbabka@suse.cz, roman.gushchin@linux.dev
-Cc:     kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        Sat, 26 Mar 2022 22:20:35 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     patrik.r.jakobsson@gmail.com
+Cc:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH 2/2] mm: kfence: fix objcgs vector allocation
-Date:   Sun, 27 Mar 2022 13:18:53 +0800
-Message-Id: <20220327051853.57647-2-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-In-Reply-To: <20220327051853.57647-1-songmuchun@bytedance.com>
-References: <20220327051853.57647-1-songmuchun@bytedance.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH] gma500: fix an incorrect NULL check on list iterator
+Date:   Sun, 27 Mar 2022 13:20:28 +0800
+Message-Id: <20220327052028.2013-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the kfence object is allocated to be used for objects vector, then
-this slot of the pool eventually being occupied permanently since
-the vector is never freed.  The solutions could be 1) freeing vector
-when the kfence object is freed or 2) allocating all vectors statically.
-Since the memory consumption of object vectors is low, it is better to
-chose 2) to fix the issue and it is also can reduce overhead of vectors
-allocating in the future.
+The bug is here:
+	return crtc;
 
-Fixes: d3fb45f370d9 ("mm, kfence: insert KFENCE hooks for SLAB")
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+The list iterator value 'crtc' will *always* be set and non-NULL by
+list_for_each_entry(), so it is incorrect to assume that the iterator
+value will be NULL if the list is empty or no element is found.
+
+To fix the bug, return 'crtc' when found, otherwise return NULL.
+
+Cc: stable@vger.kernel.org
+fixes: 89c78134cc54d ("gma500: Add Poulsbo support")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 ---
- mm/kfence/core.c   | 3 +++
- mm/kfence/kfence.h | 1 +
- 2 files changed, 4 insertions(+)
+ drivers/gpu/drm/gma500/psb_intel_display.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-index 13128fa13062..9976b3f0d097 100644
---- a/mm/kfence/core.c
-+++ b/mm/kfence/core.c
-@@ -579,9 +579,11 @@ static bool __init kfence_init_pool(void)
- 	}
+diff --git a/drivers/gpu/drm/gma500/psb_intel_display.c b/drivers/gpu/drm/gma500/psb_intel_display.c
+index d5f95212934e..42d1a733e124 100644
+--- a/drivers/gpu/drm/gma500/psb_intel_display.c
++++ b/drivers/gpu/drm/gma500/psb_intel_display.c
+@@ -535,14 +535,15 @@ void psb_intel_crtc_init(struct drm_device *dev, int pipe,
  
- 	for (i = 0; i < CONFIG_KFENCE_NUM_OBJECTS; i++) {
-+		struct slab *slab = virt_to_slab(addr);
- 		struct kfence_metadata *meta = &kfence_metadata[i];
- 
- 		/* Initialize metadata. */
-+		slab->memcg_data = (unsigned long)&meta->objcg | MEMCG_DATA_OBJCGS;
- 		INIT_LIST_HEAD(&meta->list);
- 		raw_spin_lock_init(&meta->lock);
- 		meta->state = KFENCE_OBJECT_UNUSED;
-@@ -938,6 +940,7 @@ void __kfence_free(void *addr)
+ struct drm_crtc *psb_intel_get_crtc_from_pipe(struct drm_device *dev, int pipe)
  {
- 	struct kfence_metadata *meta = addr_to_metadata((unsigned long)addr);
+-	struct drm_crtc *crtc = NULL;
++	struct drm_crtc *crtc;
  
-+	KFENCE_WARN_ON(meta->objcg);
- 	/*
- 	 * If the objects of the cache are SLAB_TYPESAFE_BY_RCU, defer freeing
- 	 * the object, as the object page may be recycled for other-typed
-diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
-index 2a2d5de9d379..6f0e1aece3f8 100644
---- a/mm/kfence/kfence.h
-+++ b/mm/kfence/kfence.h
-@@ -89,6 +89,7 @@ struct kfence_metadata {
- 	struct kfence_track free_track;
- 	/* For updating alloc_covered on frees. */
- 	u32 alloc_stack_hash;
-+	struct obj_cgroup *objcg;
- };
+ 	list_for_each_entry(crtc, &dev->mode_config.crtc_list, head) {
+ 		struct gma_crtc *gma_crtc = to_gma_crtc(crtc);
++
+ 		if (gma_crtc->pipe == pipe)
+-			break;
++			return crtc;
+ 	}
+-	return crtc;
++	return NULL;
+ }
  
- extern struct kfence_metadata kfence_metadata[CONFIG_KFENCE_NUM_OBJECTS];
+ int gma_connector_clones(struct drm_device *dev, int type_mask)
 -- 
-2.11.0
+2.17.1
 

@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1D54E85DB
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 07:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9170E4E85E1
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 07:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234645AbiC0FLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 01:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
+        id S234872AbiC0FSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 01:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234486AbiC0FLc (ORCPT
+        with ESMTP id S234486AbiC0FSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 01:11:32 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32F8326D1
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:09:54 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so12446117pjf.1
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 22:09:54 -0700 (PDT)
+        Sun, 27 Mar 2022 01:18:34 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FCB13FB7;
+        Sat, 26 Mar 2022 22:16:56 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id w8so12084648pll.10;
+        Sat, 26 Mar 2022 22:16:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id;
-        bh=Z5EKWPKNzm8cvte72SjRtTGquUZgoqCpRIcSt/1/Umc=;
-        b=FnYg8OIV24UEG074PlR98g0sAQBcYruqIeBvx2BeyUoc80DP9s3Fh6wm7+IBoxFkrN
-         fs5u0bIRN/SKumQOTvt1Pnoo/ijLoT2zs0elPLbCbNZ+Yx9fn+SZBo9JusCnaKCHIL8d
-         HfNBXzm2aDM+wvR2hCCqYd5mznYqibR3UAcS+/63FWs5er3Y65rMh9q56sEC7CCx6wPp
-         nyak+en+A7F08K3YevlNm11d9Q11D4dE+0uOCM4cVcjdD1Iz2lbJFm66aALvPvBFlljO
-         MZ16hBGVD6nY2XPl4JXIC1/KhAljDDi2FgW0rBWPtKxTNKz5aNdz+fkKqiEQt76fblEZ
-         UgLw==
+        bh=v6BSL8VhVmwIej2fDS4fILub4T69woLAa8tFuzppLBk=;
+        b=p1RRPdi5pT7hK/9+H4XP2JjJHVZf5LxJOg8oRMScYDqznggSSt6DW7OpAdLqP4W8AO
+         QWWXECWxX9RPOiBmnLcGSoeUAuH1F+eyyngCzsyhHkZijHQoVL9KbaZwV9fGF305+GcJ
+         KQ3lX6EwP13jR2+yq49xM5HsChFGhq36v/XvVksErbSWaX6jJWgE1FVl4GfE6ZGDp/ME
+         zuCOEEjiXqpFYeQgPcQWuFdbX097X4/JPAM0o/UjSHybVTDj/5lDfa+2lsiPJUw6JxuM
+         exi7XYluIPx9OcyFwBgAHJMqZ3Sg1+1ssX6ot4argKFyWxlQSjKuvG+YfQKY4uDl0/u6
+         BxRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Z5EKWPKNzm8cvte72SjRtTGquUZgoqCpRIcSt/1/Umc=;
-        b=bX3nbVgnxEyv6qc4pIrzsbAYZDgJ1FnDt5IU6cgkAI0k/tBg1krFIKY1zrqcDBVk9a
-         OvnFKuSiHNIRdXFFJwk+Rj/OZrhzBX6zMXA/u8LwJ94qUBP38Fvcq3kAJY6W6pd59LlJ
-         zMuCYiXT8RFEmyCrY0/+c27SC1eqqHM1P//nTU/rw3n4eE1DfPLrv0UlpyODPELcddrP
-         kY9IyjPK+MA3XgYeyAUuq1kE6kdY3+KXD72+DW0R0uVrFTChCfvNUll5buQPn97hwmLH
-         YIgHadF45Wu/c+nV41FCXkQimV3OgBPGClx4xWqGGE0lO7t7zGh7QAFFdIOIK2XoTO2O
-         BREQ==
-X-Gm-Message-State: AOAM533a/QF65Wbhy9t/WxoRYjWBUVIMQMdojkSBeduhTQsb/JsHHyOu
-        OfpVZQze7EyU+hItW5Yw9RUCQIT4bS7beQ==
-X-Google-Smtp-Source: ABdhPJzZI5uxOvxHFTaIAz9af0GpXXF0sc7MoA1wfxo+9D+L4evJjKE+DpgwZgK80tVBlHrlLpW6Bg==
-X-Received: by 2002:a17:90a:a58e:b0:1bd:4752:90cf with SMTP id b14-20020a17090aa58e00b001bd475290cfmr22038142pjq.54.1648357794360;
-        Sat, 26 Mar 2022 22:09:54 -0700 (PDT)
+        bh=v6BSL8VhVmwIej2fDS4fILub4T69woLAa8tFuzppLBk=;
+        b=cU7Qp9vKXqvMRS73ELCec5O95MjonHDNhMdZGG1UhVf0l10wTWWe4P0Pr4VH9QF6aT
+         XczTUSk1B4vSAvnA4sx6oKhUQX3P59WXyL4jjgpcedqI8navp+7juikgjP5YFm/jD01y
+         q7yHwaWO09RzyDZSz8ej/tY8W9/1SZWjTedM3Az9ZqifgcLzRUP0897Xef3lTtmzl6Dz
+         wAV0/rPyGbZiK1GZeDMhPFAqDqgFZ7tU8axmHG2LTr1vUqEK4lgd9NhaqulrIgxK4QS+
+         cmAvGs0hwGSUytdHYqLiraOfb/aNDR7hABQTomUlHB8f12lx9tRK4byBXkQ9D0g8gTmE
+         MbRA==
+X-Gm-Message-State: AOAM532UQXTs3IBpjI+NwbcNoaBfZIlVLjMdeScS+2EVQNC7KrliRR1A
+        XEUoTE7AyWTWYnHRegrTt28=
+X-Google-Smtp-Source: ABdhPJy4t0oQf/ADzsmcEEOjd/bCRxwrxMcaQ4ZDD2+D52Gbr5tPv/h47XDsREiddKHMcr1Fn6Xu5w==
+X-Received: by 2002:a17:902:b906:b0:14f:76a0:ad48 with SMTP id bf6-20020a170902b90600b0014f76a0ad48mr20445815plb.79.1648358215837;
+        Sat, 26 Mar 2022 22:16:55 -0700 (PDT)
 Received: from localhost.localdomain ([115.220.243.108])
-        by smtp.googlemail.com with ESMTPSA id e19-20020a637453000000b003821bdb8103sm9561015pgn.83.2022.03.26.22.09.50
+        by smtp.googlemail.com with ESMTPSA id d11-20020a056a00198b00b004fa7da68465sm11290361pfl.60.2022.03.26.22.16.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 22:09:53 -0700 (PDT)
+        Sat, 26 Mar 2022 22:16:55 -0700 (PDT)
 From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     airlied@linux.ie
-Cc:     kraxel@redhat.com, gurchetansingh@chromium.org, olvaffe@gmail.com,
-        daniel@ffwll.ch, airlied@redhat.com,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [PATCH] virtio-gpu: fix a missing check to avoid NULL dereference
-Date:   Sun, 27 Mar 2022 13:09:45 +0800
-Message-Id: <20220327050945.1614-1-xiam0nd.tong@gmail.com>
+To:     mpe@ellerman.id.au
+Cc:     benh@kernel.crashing.org, paulus@samba.org,
+        akpm@linux-foundation.org, liam.howlett@oracle.com,
+        david@redhat.com, maz@kernel.org, Felix.Kuehling@amd.com,
+        maciej.szmigiero@oracle.com, apopple@nvidia.com,
+        bharata@linux.ibm.com, linuxram@us.ibm.com,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH] kvm: fix incorrect NULL check on list iterator
+Date:   Sun, 27 Mar 2022 13:16:46 +0800
+Message-Id: <20220327051646.1856-1-xiam0nd.tong@gmail.com>
 X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -68,34 +69,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'cache_ent' could be set NULL inside virtio_gpu_cmd_get_capset()
-and it will lead to a NULL dereference by a lately use of it
-(i.e., ptr = cache_ent->caps_cache). Fix it with a NULL check.
+The bug is here:
+	if (!p)
+                return ret;
 
-Fixes: 62fb7a5e10962 ("virtio-gpu: add 3d/virgl support")
+The list iterator value 'p' will *always* be set and non-NULL by
+list_for_each_entry(), so it is incorrect to assume that the iterator
+value will be NULL if the list is empty or no element is found.
+
+To fix the bug, Use a new value 'iter' as the list iterator, while use
+the old value 'p' as a dedicated variable to point to the found element.
+
+Cc: stable@vger.kernel.org
+Fixes: dfaa973ae9605 ("KVM: PPC: Book3S HV: In H_SVM_INIT_DONE, migrate remaining normal-GFNs to secure-GFNs")
 Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 ---
- drivers/gpu/drm/virtio/virtgpu_ioctl.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/powerpc/kvm/book3s_hv_uvmem.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_ioctl.c b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
-index c708bab555c6..b0f1c4d8fd23 100644
---- a/drivers/gpu/drm/virtio/virtgpu_ioctl.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
-@@ -579,8 +579,10 @@ static int virtio_gpu_get_caps_ioctl(struct drm_device *dev,
- 	spin_unlock(&vgdev->display_info_lock);
+diff --git a/arch/powerpc/kvm/book3s_hv_uvmem.c b/arch/powerpc/kvm/book3s_hv_uvmem.c
+index e414ca44839f..0cb20ee6a632 100644
+--- a/arch/powerpc/kvm/book3s_hv_uvmem.c
++++ b/arch/powerpc/kvm/book3s_hv_uvmem.c
+@@ -360,13 +360,15 @@ static bool kvmppc_gfn_is_uvmem_pfn(unsigned long gfn, struct kvm *kvm,
+ static bool kvmppc_next_nontransitioned_gfn(const struct kvm_memory_slot *memslot,
+ 		struct kvm *kvm, unsigned long *gfn)
+ {
+-	struct kvmppc_uvmem_slot *p;
++	struct kvmppc_uvmem_slot *p = NULL, *iter;
+ 	bool ret = false;
+ 	unsigned long i;
  
- 	/* not in cache - need to talk to hw */
--	virtio_gpu_cmd_get_capset(vgdev, found_valid, args->cap_set_ver,
-+	ret = virtio_gpu_cmd_get_capset(vgdev, found_valid, args->cap_set_ver,
- 				  &cache_ent);
-+	if (ret)
-+		return ret;
- 	virtio_gpu_notify(vgdev);
- 
- copy_exit:
-
-base-commit: f443e374ae131c168a065ea1748feac6b2e76613
+-	list_for_each_entry(p, &kvm->arch.uvmem_pfns, list)
+-		if (*gfn >= p->base_pfn && *gfn < p->base_pfn + p->nr_pfns)
++	list_for_each_entry(iter, &kvm->arch.uvmem_pfns, list)
++		if (*gfn >= iter->base_pfn && *gfn < iter->base_pfn + iter->nr_pfns) {
++			p = iter;
+ 			break;
++		}
+ 	if (!p)
+ 		return ret;
+ 	/*
 -- 
 2.17.1
 

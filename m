@@ -2,81 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1178B4E8708
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 10:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 685624E8709
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 10:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbiC0IwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 04:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57830 "EHLO
+        id S231506AbiC0IyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 04:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbiC0IwF (ORCPT
+        with ESMTP id S230448AbiC0Ix6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 04:52:05 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825FF193E2;
-        Sun, 27 Mar 2022 01:50:26 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id l129so1410125pga.3;
-        Sun, 27 Mar 2022 01:50:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KDCMuuDQX9Mk03+k/luGIpkllIh0BseCRuZMYg4QBhE=;
-        b=bF0Xc3uY4jKCFIsekknhKJ1qWSKcPHC25x76rwoIPMc7W3nOL1Ddii32xAZmxcDn4O
-         /Cu7e2/3CuivFp9QxY54bjAv6jhPhBdZCRzwokmfli0+cYxKLbitO0AgtToobC/CeTRe
-         5AHy18yQLb6w4bOY6VtIKYoIUHcAKd6ZJ808+Z5i3aiB92d707wXLLIiIAFxUcxqG0ID
-         vTRuTwWwqBFBFjNgj4R4OBYwfPMAKjMWkD8Zm5UfKY57wWP23Fi+phIxjP7Dx9xG+P8S
-         ZeQuQNbBWlp57dfsE2ZmTaZWRavkA2jguAoHxJVwLvIPj4Uwy34o4eMv5HAS+UrKHIhV
-         BRWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KDCMuuDQX9Mk03+k/luGIpkllIh0BseCRuZMYg4QBhE=;
-        b=lSasgskiB/l0jG07T/gSEGABFh18OHtFoJcMuULyXIlacBIzHFbPsLmy6I1lObeQSo
-         yGqmMIQ6ack+bT1sWjqcA1xGtEicHTK3k/zoPnKkHgY7QrX5XfZM6oBTs8kojgn7QiOU
-         Re7OA6DwiJiLuhUXRVm8Ynxc8ijO4kFbtt2j+RVuHw44ExEtq0F4ZciyotYEsS5blmX7
-         q0YOHIvY6YBEV6AGxUVHyZTKJk9qWEuBwg/1oSn60AzsgR4CaEzswi689/Nzdhw2Mh52
-         3OFeTyBW4KrV99VLt+SG7kxpKjRzSR3htiWuw2ItLTEvsb+EOyTO7hclFeHTjKn/o14e
-         HFvw==
-X-Gm-Message-State: AOAM530tQXTt3rvPOp1WnGMsi3mj+jLylLnmV5CExxmk75nreIk/vo+t
-        0XpYdbL7NP37feIiX0pM82Q=
-X-Google-Smtp-Source: ABdhPJw56wj2lDzzaannn1dHBGqq+qN3VLtID5GBUIIvrg4PF8C8uihnSgEaAznPLnzrTV7b1ckdhg==
-X-Received: by 2002:a05:6a00:1687:b0:4e1:45d:3ded with SMTP id k7-20020a056a00168700b004e1045d3dedmr17666708pfc.0.1648371025936;
-        Sun, 27 Mar 2022 01:50:25 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id ml16-20020a17090b361000b001c6c9141b0csm10755189pjb.45.2022.03.27.01.50.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Mar 2022 01:50:25 -0700 (PDT)
-Message-ID: <63efab39-68aa-f4c5-1d5d-d708188eb7b0@gmail.com>
-Date:   Sun, 27 Mar 2022 17:50:18 +0900
+        Sun, 27 Mar 2022 04:53:58 -0400
+Received: from mailgate.ics.forth.gr (mailgate.ics.forth.gr [139.91.1.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43D31D0E8
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 01:52:19 -0700 (PDT)
+Received: from av3.ics.forth.gr (av3in.ics.forth.gr [139.91.1.77])
+        by mailgate.ics.forth.gr (8.15.2/ICS-FORTH/V10-1.8-GATE) with ESMTP id 22R8qHNg047403
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 11:52:17 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; d=ics.forth.gr; s=av; c=relaxed/simple;
+        q=dns/txt; i=@ics.forth.gr; t=1648371132; x=1650963132;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=O7kXkCdvhvkq/xOJDYOOrEuPdlDIk8ke1X+ujPivqOc=;
+        b=ElHHF3EcNDRUAW8hyeIYHGqck2a8/UujzBMHet2ql7Jkpr7oaB7w6OJPGoBg1W11
+        Bq9vVLj4YGbWEwT/utY5bhVE1q8FKEwPtvn0FaO5z4n6UPuZiIpU2wuu6p5jACpP
+        pMKbx0K91DiNP2LLKyBdCdDkLJpr56qm8dN/02fVOQeffXkSWt0CUGD8mzk+KN9x
+        19HYd7WToHqmVXRlmag/YX36IqQ//wYgflQ9gUc2G9roqxZgKu8dqvocBqjqQ3gn
+        LruNfrpxPo26b0VrhVX8YhEqQ/caigpMilCOA20AdiM0YFKtlOxEVPDvLVHgUE2B
+        6crZP2Kf7jCCMVIKWpD+LA==;
+X-AuditID: 8b5b014d-f2ab27000000641e-21-624025bc924b
+Received: from enigma.ics.forth.gr (webmail.ics.forth.gr [139.91.151.35])
+        by av3.ics.forth.gr (Symantec Messaging Gateway) with SMTP id 66.EE.25630.CB520426; Sun, 27 Mar 2022 11:52:12 +0300 (EEST)
+X-ICS-AUTH-INFO: Authenticated user:  at ics.forth.gr
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] Documentation: kernel-doc: Promote "Writing
- kernel-doc comments" to page title
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
-References: <20220326123337.642536-1-bagasdotme@gmail.com>
- <20220326123337.642536-2-bagasdotme@gmail.com>
- <20220326145332.0698a849@coco.lan>
- <49829de5-efe5-9065-d87a-2494d16b9465@gmail.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <49829de5-efe5-9065-d87a-2494d16b9465@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Sun, 27 Mar 2022 11:52:11 +0300
+From:   Nick Kossifidis <mick@ics.forth.gr>
+To:     Conor.Dooley@microchip.com
+Cc:     mick@ics.forth.gr, palmer@dabbelt.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu
+Subject: Re: [PATCH] RISC-V-fixes: relocate DTB if it's outside memory region
+Organization: FORTH
+In-Reply-To: <ebaa9b4e-9e37-e2f4-2bee-37d324e7302b@microchip.com>
+References: <20220322132839.3653682-1-mick@ics.forth.gr>
+ <ebaa9b4e-9e37-e2f4-2bee-37d324e7302b@microchip.com>
+Message-ID: <941622f4f76ecd5bc071e310479b3ad3@mailhost.ics.forth.gr>
+X-Sender: mick@mailhost.ics.forth.gr
+User-Agent: Roundcube Webmail/1.3.16
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNLMWRmVeSWpSXmKPExsXSHT1dWXePqkOSwdmVYhZbf89it5iyaQe7
+        xeVdc9gstn1uYbNofneO3eLl5R5mi7ZZ/A7sHm9evmTxONzxhd3j4aZLTB6bl9R73PmxlNHj
+        UvN1do/Pm+QC2KO4bFJSczLLUov07RK4MhoXCRdM5qhY8GY/SwPjKbYuRk4OCQETiQu7JrB2
+        MXJxCAkcY5Q4s3IFK0TCVGL23k5GEJtXQFDi5MwnLCA2s4CFxNQr+xkhbHmJ5q2zmUFsFgFV
+        iTdNG9hBbDYBTYn5lw6C1YsIyEn8/3WGGWQBs8BqRomJk1rBFggL+EpMWrkDzOYXEJb4dPci
+        mM0p4Chxuq0B6DoOoIvyJSY+jYO4wUXi2rbJUEerSHz4/YAdpEQUyN48V2kCo+AsJJfOQnLp
+        LCSXLmBkXsUokFhmrJeZXKyXll9UkqGXXrSJERz+jL47GG9vfqt3iJGJg/EQowQHs5IIr+xZ
+        +yQh3pTEyqrUovz4otKc1OJDjNIcLErivCzXZJKEBNITS1KzU1MLUotgskwcnFINTBN3/iw5
+        P3PJO7kv0fZr3044xx8/f/ejIrMXxTfFM6N+VjSfjUxbdFb8y+zE7J0f33dyeAQ7H7b4eknm
+        6+Jq03fTBXdI60sseCd34EvRO86jiZerLk99/ic80+zL7B0F3BeWe36q6Fu4Qa1Kq/LLJZ+I
+        i10dvdsjjCfOTPv3wnzrY7Owg9dLN7Dbavdznjj/+PjmedfZNmz1jmRdbnb6vHu4TW/M27PS
+        sX4e11s72mR4F3OtPKGjluI4ax+b1vLIj7FpoiKN/96kMwfm6SzxUH9ZLR6WuWzZ7W8hbRfs
+        rAXyXi6bsvOD/VOhRQLf563cfOgmb4LUga401q83RNLDp917lJeSNbvyxoXCVRffvZdVYinO
+        SDTUYi4qTgQAbcQ2iu4CAAA=
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,95 +77,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Bagas,
+Στις 2022-03-24 11:37, Conor.Dooley@microchip.com έγραψε:
+> On 22/03/2022 13:28, Nick Kossifidis wrote:
+>> In case the DTB provided by the bootloader/BootROM is before the 
+>> kernel
+>> image or outside /memory, we won't be able to access it through the
+>> linear mapping, and get a segfault on setup_arch(). Currently OpenSBI
+>> relocates DTB but that's not always the case (e.g. if FW_JUMP_FDT_ADDR
+>> is not specified), and it's also not the most portable approach since
+>> the default FW_JUMP_FDT_ADDR of the generic platform relocates the DTB
+>> at a specific offset that may not be available. To avoid this 
+>> situation
+>> copy DTB so that it's visible through the linear mapping.
+>> 
+>> Signed-off-by: Nick Kossifidis <mick@ics.forth.gr>
+> 
+> Albeit in a backport, I tested this on a PolarFire SoC based board.
+> So I guess, Tested-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+> And a lot cleaner than using create_pgd_mapping in setup_vm_final to do 
+> it :)
+> 
+> Thanks,
+> Conor.
+> 
 
-On Sun, 27 Mar 2022 12:27:20 +0700,
-Bagas Sanjaya wrote:
-> On 26/03/22 20.56, Mauro Carvalho Chehab wrote:
->> Hmm... I can't really see any differences... What this patch seems to =
-be
->> doing is to just change the markups for each level.
->>
->> See, on Sphinx, the first markup (whatever it is) is level 1, level 2
->> the second different markup and so on.
->>
->> So, before this patch, kernel-doc.rst had:
->>
->> =C2=A0=C2=A0=C2=A0=C2=A0level 1: Writing kernel-doc comments
->> =C2=A0=C2=A0=C2=A0=C2=A0=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->>
->> =C2=A0=C2=A0=C2=A0=C2=A0level 2: How to format kernel-doc comments
->> =C2=A0=C2=A0=C2=A0=C2=A0------------------------------------------
->>
->> =C2=A0=C2=A0=C2=A0=C2=A0level 3: Function parameters
->> =C2=A0=C2=A0=C2=A0=C2=A0~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>
->> And after it, it will have:
->>
->> =C2=A0=C2=A0=C2=A0=C2=A0=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->> =C2=A0=C2=A0=C2=A0=C2=A0level 1: Writing kernel-doc comments
->> =C2=A0=C2=A0=C2=A0=C2=A0=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->>
->> =C2=A0=C2=A0=C2=A0=C2=A0level 2: How to format kernel-doc comments
->> =C2=A0=C2=A0=C2=A0=C2=A0=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
->>
->> =C2=A0=C2=A0=C2=A0=C2=A0level 3: Function parameters
->> =C2=A0=C2=A0=C2=A0=C2=A0----------------------------
->>
->> No semantic changes at all.
->>
->> The only (eventual) value of a change like that would be to make the
->> levels more uniform, but IMO, it is not worth to apply a change like
->> that, as:
->>
->> =C2=A0=C2=A0=C2=A0=C2=A01. There are a lot other documents that don't =
-use the more commonly
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 used level standard;
->>
->> =C2=A0=C2=A0=C2=A0=C2=A02. Making all .rst files to use the same defin=
-itions is hard;
->>
->> =C2=A0=C2=A0=C2=A0=C2=A03. Even if we place everything using identical=
- markups for every
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 level, as new stuff gets added, d=
-ifferent (still valid)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 markups could be used on newer do=
-cuments.
->>
->> Regards,
->> Mauro
->>
->=20
-> Indeed, fixing heading levels when adding title heading is required bec=
-ause
-> without it, Sphinx will complain "indentation inconsistency" error.
-
-I think all you'd need to do would be to promote both of two headings
-of
-
-    Title A
-    =3D=3D=3D=3D=3D=3D=3D
-
-to
-
-    =3D=3D=3D=3D=3D=3D=3D
-    Title A
-    =3D=3D=3D=3D=3D=3D=3D
-
-, namely "Writing kernel-doc comments" and "Including kernel-doc
-comments".  They deserve their own chapters in PDF.
-
-As Mauro says, such changes won't have any effect on the resulting
-pretty-printed docs.  So I'm afraid I don't see any point in 1/2.
-
-        Thanks, Akira
-
->=20
-> Maybe better splitting indentation level changes into its own patch, ri=
-ght?
->=20
+Thanks !

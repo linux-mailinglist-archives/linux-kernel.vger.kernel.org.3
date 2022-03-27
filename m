@@ -2,92 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 797184E8640
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 08:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9FE74E8644
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 08:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235519AbiC0GSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 02:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
+        id S235522AbiC0GYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 02:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbiC0GSd (ORCPT
+        with ESMTP id S229485AbiC0GYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 02:18:33 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8BCCC;
-        Sat, 26 Mar 2022 23:16:53 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id x2so12142266plm.7;
-        Sat, 26 Mar 2022 23:16:53 -0700 (PDT)
+        Sun, 27 Mar 2022 02:24:00 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179F211A32;
+        Sat, 26 Mar 2022 23:22:10 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id l4-20020a17090a49c400b001c6840df4a3so12547167pjm.0;
+        Sat, 26 Mar 2022 23:22:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=FFXAZ+ZCLg1E07+7aFn5xO35cDp1vs/vKSMlzwaorB8=;
-        b=Rty7PjuEP4K8mBkWYBe2djpwG0fYPjUVS1Uc1H9kROTxTAzED0s6oPHAhhspyV58H7
-         QiIdK4it5w0iWaA5W0KBKitGH7Sb9pVn4/Xf5q28ewpipyL3ti54EQzltsVKvdu3Hmk1
-         88+w0ChS+j+YQ7bCW6AafREYI6vOru4zx4n57XDFTL8SiKmAWv7O8nHJd9M9qCqm61Ie
-         JEg5Ppcde1b9zDfmCmi82p5HdPoS4RYYPIjRPWB9cq2YK3AkQD5R2p+ZWh5uof141lWj
-         A1hQpFlqV4aJsd0NsdWU7MCYq7s6em+/1pmnjonJlX4Rc7k8TvXWRnF467MzK1zYjJhR
-         zx5A==
+        h=from:to:cc:subject:date:message-id;
+        bh=2+k5zw4UeWTVGq+IrF5mnTMmU6zOsHiGi1YYw7GIJjs=;
+        b=jtiaQYzS6/owMqLM9XhSR0EDPTLY0V6y0R0MvHJfJuX5aySk3D55CIxg3Q1IHC66ds
+         Lwpm0Vr7lM0OEdVSGGOnO2MgJJygBdnHdNrWPlHPFfrkdLaClqu5udmllAOt93HYp3GT
+         Lu4lYrRMUeOUlBQ3bUzXFI/Q/lOzlx1wjCtdBaFlUNmZQGSlcCnyvL+bIsxRn3+qKCzf
+         bxr+oFG9NqJpPuuFHtshlxI8SW1mDc2FiFyTh2lgtV1xfp5LVZRJ9EYXTSuewQwoIZqN
+         tD98iDOsB5lqIR4iOMWXAFuxratBI5y6dtzzlTDjMTq+NLq1KiPDrGAEGvZCgpbYOAsW
+         3Xcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FFXAZ+ZCLg1E07+7aFn5xO35cDp1vs/vKSMlzwaorB8=;
-        b=WSv5EavR2YFHQP1agPQpV1Vao5uHQyX7SichNxyYINypfL8vsqGBGkz2yyHYrczrmV
-         WTZ9NDENi7RmzDmi9OEMFON3FjzHZ0POJ29d4IIOpead9elbNrswvKZOzCPu8tgIc2+Y
-         P7sqwSZh+foR23Qo3jVSHhOLaM7ZOno+kss7tvSj6wiuTcxgUwkOP+ygwQyWYKHoSUD9
-         R6aXcXJzZ8zTl60t2IOSDqZEhL5dNU8Wa3lzzdtQTAqY2ip1QopRqM45JMI6lg7COHwB
-         KZdvj5mZnZoqp4jXUbq9hEmB40YWFG6zba081LXXBxNmEtAKKVMKEMgN4opGoeXtgo4o
-         WDOQ==
-X-Gm-Message-State: AOAM530rO2S5wwyZtCzH3R9Tw+a9owDN/5xK6GzONLWAKmJdCEXQXD4M
-        rPqipPj4eUzlp1GoIP7L1UQ=
-X-Google-Smtp-Source: ABdhPJwK5F1pt++klpew6iP/jI6WmfaSJ7D9iE9lboar4F92qzgiXyRBBeauoMsJ4lVYhUnpZRtivA==
-X-Received: by 2002:a17:902:d2c8:b0:154:2b02:a499 with SMTP id n8-20020a170902d2c800b001542b02a499mr20134427plc.168.1648361813442;
-        Sat, 26 Mar 2022 23:16:53 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-21.three.co.id. [180.214.233.21])
-        by smtp.gmail.com with ESMTPSA id kk11-20020a17090b4a0b00b001c73933d803sm17608212pjb.10.2022.03.26.23.16.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Mar 2022 23:16:52 -0700 (PDT)
-Message-ID: <bd8eb95a-1af7-1925-d3f2-0baa91b55526@gmail.com>
-Date:   Sun, 27 Mar 2022 13:16:38 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] docs: Add a document on how to fix a messy diffstat
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-References: <87wnghd78t.fsf@meer.lwn.net>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <87wnghd78t.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=2+k5zw4UeWTVGq+IrF5mnTMmU6zOsHiGi1YYw7GIJjs=;
+        b=Wal3m0r/LoHIkXh296qtl+n+Om9ggi6kVmF5EDPkiP6R9xGT1TefyyiniQVVTvNxj4
+         Tss798PMcZrjzJF74eOl7DttOPbHOquGNtwRTaXXNd8LkkbA4AsApPHWgyaPf1lylQQ4
+         OYB4nB0bgEaUD2nC9WiKfTUEU0b9+aSOfPtiKnzIqfVFydcO8DEI9C5zBwx5UCNWcaZ+
+         BUN4WwT1v5NZpS63fjjPr23Elqsgij8p3O1fYisF1Bty6Ndl6kvRnIf79Pa2ZFnpZclz
+         NVaNjAulpmFy2h4x5j0XQNucF5ekOKnIHqNF6zhLoRuKHMEzmq4CWEhAAkzWmEya26f4
+         eI0Q==
+X-Gm-Message-State: AOAM531LP4a2t7lTNxN30kUFuSXfWR+YFQQytbhFtBWYgsUWJDVDL35W
+        7v5NuSITBZiAtIToxQAv0Vs=
+X-Google-Smtp-Source: ABdhPJzoTM4gwf2vVMJZXghIBHYF29uo2xq+ONuoPnlNNlrVzY6hswAF87YdMbStydxT6SdQ6fhnGQ==
+X-Received: by 2002:a17:902:6944:b0:153:9866:7fea with SMTP id k4-20020a170902694400b0015398667feamr20505669plt.6.1648362129633;
+        Sat, 26 Mar 2022 23:22:09 -0700 (PDT)
+Received: from localhost.localdomain ([115.220.243.108])
+        by smtp.googlemail.com with ESMTPSA id ij17-20020a17090af81100b001c67c964d93sm15879005pjb.2.2022.03.26.23.22.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Mar 2022 23:22:09 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     srinivas.kandagatla@linaro.org
+Cc:     amahesh@qti.qualcomm.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, jorge.ramirez-ortiz@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH] misc: fastrpc: fix an incorrect NULL check on list iterator
+Date:   Sun, 27 Mar 2022 14:22:02 +0800
+Message-Id: <20220327062202.5720-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/03/22 04.58, Jonathan Corbet wrote:
-> +So what is to be done?  The best response when confronted with this
-> +situation is to indeed to a merge, but to do it privately, as if it were
-> +the source of shame.  Create a new, throwaway branch and do the merge
-> +there::
-> +
-> +  ... vM --- vN-rc1 --- vN-rc2 --- vN-rc3 --- ... --- vN-rc7 --- vN
-> +                |         |                                      |
-> +                |         +-- c1 --- c2 --- ... --- cN           |
-> +                |                   /               |            |
-> +                +-- x1 --- x2 --- x3                +------------+-- TEMP
-> +
+The bug is here:
+	if (!buf) {
 
-A merge from the mainline, right? Or merge from what?
+The list iterator value 'buf' will *always* be set and non-NULL
+by list_for_each_entry(), so it is incorrect to assume that the
+iterator value will be NULL if the list is empty (in this case, the
+check 'if (!buf) {' will always be false and never exit expectly).
 
+To fix the bug, use a new variable 'iter' as the list iterator,
+while use the original variable 'buf' as a dedicated pointer to
+point to the found element.
+
+Cc: stable@vger.kernel.org
+Fixes: 2419e55e532de ("misc: fastrpc: add mmap/unmap support")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+---
+ drivers/misc/fastrpc.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+index aa1682b94a23..45aaf54a7560 100644
+--- a/drivers/misc/fastrpc.c
++++ b/drivers/misc/fastrpc.c
+@@ -1353,17 +1353,18 @@ static int fastrpc_req_munmap_impl(struct fastrpc_user *fl,
+ 				   struct fastrpc_req_munmap *req)
+ {
+ 	struct fastrpc_invoke_args args[1] = { [0] = { 0 } };
+-	struct fastrpc_buf *buf, *b;
++	struct fastrpc_buf *buf = NULL, *iter, *b;
+ 	struct fastrpc_munmap_req_msg req_msg;
+ 	struct device *dev = fl->sctx->dev;
+ 	int err;
+ 	u32 sc;
+ 
+ 	spin_lock(&fl->lock);
+-	list_for_each_entry_safe(buf, b, &fl->mmaps, node) {
+-		if ((buf->raddr == req->vaddrout) && (buf->size == req->size))
++	list_for_each_entry_safe(iter, b, &fl->mmaps, node) {
++		if ((iter->raddr == req->vaddrout) && (iter->size == req->size)) {
++			buf = iter;
+ 			break;
+-		buf = NULL;
++		}
+ 	}
+ 	spin_unlock(&fl->lock);
+ 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.17.1
+

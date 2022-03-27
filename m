@@ -2,189 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6F34E8536
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 04:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6B64E8539
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 05:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233527AbiC0C5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Mar 2022 22:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
+        id S233648AbiC0DPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Mar 2022 23:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233184AbiC0C5L (ORCPT
+        with ESMTP id S231910AbiC0DPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Mar 2022 22:57:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F373C41981;
-        Sat, 26 Mar 2022 19:55:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E037B80BA9;
-        Sun, 27 Mar 2022 02:55:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 879D2C340E8;
-        Sun, 27 Mar 2022 02:55:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648349731;
-        bh=NPWbAvL7cuLkuOpOb1ozj+CvWozFHnqgxcgdL9eIxEM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KXZ4yBSETfpeuCbiDs/Eg4c8vd6dM7q/8f8f6ICue6C/PlIQQu/CscOlIInFuc76K
-         mtG+Y9PPfoeoCpZkgMo4bzgX1qG1FbttNsaB/J8jVkZA+XIcg+pe/WWLobZ1HoZwk7
-         ryhGkIO3cMFKwP+I0iC4JyL2vSXP0fE31y5uppAge+W29T6y70+wGgyO45aIlVx5GG
-         A/3yQfcK/ro/rmLGtltu9JCNScYKDetw1p0IKLVQ6Ztj/FIN2S9+0M6fxkr0svVFUC
-         2NB7NMs5hsqnb4lHEszaONO+7fvE6zr9gbqe1N/vuLMk+p+WzRpwleAgSRhj1RORfS
-         a+5oNkkoXekvQ==
-Date:   Sun, 27 Mar 2022 11:55:26 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Subject: Re: [PATCH v4 0/3] bootconfig: Support embedding a bootconfig in
- kernel for non initrd boot
-Message-Id: <20220327115526.cc4b0ff55fc53c97683c3e4d@kernel.org>
-In-Reply-To: <164833878595.2575750.1483106296151574233.stgit@devnote2>
-References: <164833878595.2575750.1483106296151574233.stgit@devnote2>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Sat, 26 Mar 2022 23:15:30 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AC617AB0;
+        Sat, 26 Mar 2022 20:13:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648350832; x=1679886832;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/A6DpEcffmvgLm6q+sVR/U01n76qk67tk+U7N8uWM2I=;
+  b=kNDb3eb+O9T5C2014Cl+fqTwwlgFyO2RrMtS6E5bjBiEkOe/Kw9wAAcY
+   CtAP4cb20ry+K3W4+jaZoyPyI69wSsjpLFul4BxPxok3c4klDVO0hU/uF
+   NcG9dX1cPwX3p5QbRl9fBmxOv99sE3NgjEztHryNrTxYBwXDYMH9JLimu
+   DPR9HrW10Rp0B9tQwcrEZaw59mA6t4ICW/tVfH4FAZ+DSd/20EJx/TwaF
+   1zQUD3p+Y2rLM5Hzvz6wMBnXOifd6icxyixCWglHV4RT5kj6T3YrLEc9e
+   0oYc1LXd8yvsDQHuDZamizPEAzbdJVWacnMHcq+zUMFO99BV339ps5ERX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="259008006"
+X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
+   d="scan'208";a="259008006"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 20:13:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
+   d="scan'208";a="562289030"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 26 Mar 2022 20:13:48 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nYJLg-0000gH-1W; Sun, 27 Mar 2022 03:13:48 +0000
+Date:   Sun, 27 Mar 2022 11:13:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Michael Walle <michael@walle.cc>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v1 4/4] hwmon: add driver for the Microchip LAN966x SoC
+Message-ID: <202203271141.S44Wx3yF-lkp@intel.com>
+References: <20220326192347.2940747-5-michael@walle.cc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220326192347.2940747-5-michael@walle.cc>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Padmanabha,
+Hi Michael,
 
-On Sun, 27 Mar 2022 08:53:06 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> 
-> 
-> KNOWN ISSUE:
-> 
-> According to the report from Padmanabha[3], the embedded bootconfig data may not
-> be updated if you do incremental build the kernel with CONFIG_LTO. This is
-> under investigation.
+I love your patch! Perhaps something to improve:
 
-I tried to test this version with LTO_CLANG_FULL and LTO_CLANG_THIN with
-switching the embedded bootconfig file by CONFIG_EMBED_BOOT_CONFIG_FILE (on x86).
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on robh/for-next linus/master v5.17 next-20220325]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I found that when I use LTO_CLANG_FULL, the embedded bootconfig was updated
-correctly.
-But with the LTO_CLANG_THIN, the embedded bootconfig was *NOT* updated.
+url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Walle/hwmon-add-lan9668-driver/20220327-032606
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: sparc64-randconfig-s031-20220327 (https://download.01.org/0day-ci/archive/20220327/202203271141.S44Wx3yF-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/cfef456b1f1b1ab545a03f098e209aff8ae507b7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Michael-Walle/hwmon-add-lan9668-driver/20220327-032606
+        git checkout cfef456b1f1b1ab545a03f098e209aff8ae507b7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc64 SHELL=/bin/bash drivers/hwmon/
 
-I used the latest prebuild llvm 15.0.0 on x86 [4]. Padmanabha, can you confirm
-with this latest LLVM? I guess something wrong with your old LLVM.
-
-[4] https://download.01.org/0day-ci/cross-package/clang-latest/clang-latest/clang.tar.xz
-
-Here is the test procedure.
-
-1. Prepare 2 different bootconfig files (bconf1, bconf2).
-2. Configure kernel with LTO_CLANG and setting the full path of bconf1 to
-   CONFIG_EMBED_BOOT_CONFIG_FILE.
-3. Build the kernel
-4. Boot the kernel with "bootconfig" in the kernel cmdline.
-5. Check the /proc/bootconfig is same as bconf1.
-6. Reconfigure kernel with the full path of *bconf2* to CONFIG_EMBED_BOOT_CONFIG_FILE.
-7. Rebuild the kernel (no cleanup)
-8. Boot the kernel with "bootconfig" in the kernel cmdline.
-9. Check the /proc/bootconfig is same as bconf2.
-
-So with LTO_CLANG_FULL, at the step 9 /proc/bootconfig shows bconf2, but with
-LTO_CLANG_THIN, it shows bconf1.
-
-In both cases, build log showed that the default.bconf was updated (I confirmed the
-lib/default.bconf is updated)
-
-  UPD     lib/default.bconf
-  CC      lib/bootconfig.o
-  AR      lib/lib.a
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-Here is my guess. I found that when we enable LTO_CLANG, the compiler compiles
-C source file into LLVM IR bitcode.
+sparse warnings: (new ones prefixed by >>)
+>> drivers/hwmon/lan966x-hwmon.c:302:24: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected struct regmap * @@     got void [noderef] __iomem *[assigned] base @@
+   drivers/hwmon/lan966x-hwmon.c:302:24: sparse:     expected struct regmap *
+   drivers/hwmon/lan966x-hwmon.c:302:24: sparse:     got void [noderef] __iomem *[assigned] base
 
-$ file work/linux/build-x86_64/lib/bootconfig.o 
-work/linux/build-x86_64/lib/bootconfig.o: LLVM IR bitcode
+vim +302 drivers/hwmon/lan966x-hwmon.c
 
-This means at this point the object file doesn't include the lib/default.bconf
-because it will be embedded by assembler. The bitcode seems only have the
-inline asm code (which only has an .incbin directive) as a constatns block[5].
-
-[5]
-  Block ID #11 (CONSTANTS_BLOCK):
-      Num Instances: 32
-         Total Size: 54305b/6788.12B/1697W
-    Percent of file: 19.9792%
-       Average Size: 1697.03/212.13B/53W
-  Tot/Avg SubBlocks: 0/0.000000e+00
-    Tot/Avg Abbrevs: 4/1.250000e-01
-    Tot/Avg Records: 486/1.518750e+01
-    Percent Abbrevs: 80.8642%
-
-        Record Histogram:
-                  Count    # Bits     b/Rec   % Abv  Record Kind
-                    219      4860      22.2  100.00  INTEGER
-                    144      1728      12.0  100.00  SETTYPE
-                     41       656      16.0          NULL
-                     39      2970      76.2          CE_INBOUNDS_GEP
-                     26      3504     134.8  100.00  CSTRING
-                     10     37720    3772.0          INLINEASM
-                      4        96      24.0  100.00  CE_CAST
-                      1        58                    CE_CMP
-                      1        52                    CE_SELECT
-                      1        46                    CE_BINOP
-
-And when the LLVM runs LTO with THIN mode, it might not update (not rebuild to
-machine code) that inline asm code block because that block is not updated.
-I confirmed that the block (bootconfig.o) is not updated after rebuilding
-the kernel as below.
-
-After step 3.
-$ llvm-bcanalyzer work/linux/build-x86_64/lib/bootconfig.o > bconf.dump1
-After step 7.
-$ llvm-bcanalyzer work/linux/build-x86_64/lib/bootconfig.o > bconf.dump2
-$ diff bconf.dump*
-(No difference)
-
-Thank you,
-
-> 
-> [3] https://lore.kernel.org/all/20220321183500.GA4065@pswork/T/#u
-> 
-> Thank you,
-> 
-> ---
-> 
-> Masami Hiramatsu (3):
->       bootconfig: Check the checksum before removing the bootconfig from initrd
->       bootconfig: Support embedding a bootconfig file in kernel
->       docs: bootconfig: Add how to embed the bootconfig into kernel
-> 
-> 
->  Documentation/admin-guide/bootconfig.rst |   30 ++++++++++++++++++++++++++---
->  include/linux/bootconfig.h               |   10 ++++++++++
->  init/Kconfig                             |   21 ++++++++++++++++++++
->  init/main.c                              |   31 +++++++++++++++---------------
->  lib/.gitignore                           |    1 +
->  lib/Makefile                             |   10 ++++++++++
->  lib/bootconfig.c                         |   23 ++++++++++++++++++++++
->  7 files changed, 108 insertions(+), 18 deletions(-)
-> 
-> --
-> Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
-
+   289	
+   290	static struct regmap *lan966x_init_regmap(struct platform_device *pdev,
+   291						  const char *name)
+   292	{
+   293		struct regmap_config regmap_config = {
+   294			.reg_bits = 32,
+   295			.reg_stride = 4,
+   296			.val_bits = 32,
+   297		};
+   298		void __iomem *base;
+   299	
+   300		base = devm_platform_ioremap_resource_byname(pdev, name);
+   301		if (IS_ERR(base))
+ > 302			return base;
+   303	
+   304		regmap_config.name = name;
+   305	
+   306		return devm_regmap_init_mmio(&pdev->dev, base, &regmap_config);
+   307	}
+   308	
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+0-DAY CI Kernel Test Service
+https://01.org/lkp

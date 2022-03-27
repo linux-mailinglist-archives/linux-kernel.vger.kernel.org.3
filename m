@@ -2,79 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12934E8A45
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 23:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADEB4E8A4A
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 23:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236817AbiC0VnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 17:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
+        id S236740AbiC0Vs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 17:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbiC0VnA (ORCPT
+        with ESMTP id S230226AbiC0VsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 17:43:00 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07C633A13;
-        Sun, 27 Mar 2022 14:41:20 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id w7so21710379lfd.6;
-        Sun, 27 Mar 2022 14:41:20 -0700 (PDT)
+        Sun, 27 Mar 2022 17:48:25 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C2338784
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 14:46:46 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id y10so14905487edv.7
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 14:46:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=bmEK1Kxpl0XlATDB3PjeWdnvGtZF39wnbbmUHSnsVOE=;
-        b=IN1nFvSkg/9GK4aUgeTH/8ambguEzr+WPQjfGNpiw5xieoM4jqvMVQNqr8479CQ9e7
-         KW0mc8Q5gORzpfExuKsFMFZExxy1yGvofHsSe/IZIx4MseeiY/2jxNVfOfdbSzji3uP4
-         /ch4aI1TCCgOfqQlinWCYlucf3Ph4T+xsngpMTxZJout2+T3XvQa0JA0GadtwwjHS4yK
-         8HcBeEMd0vSqGzWBCxjkDKUjs/mWS6P3oNtmylOT3FqxN0dHR9EGnhgdY8eXf5Y2sXPs
-         4gr8yacPNdpCfSEoNSnwVDkO/RGrjBj5tq5lXp5T9cYNBkQ4SeDV0u+83yfHC6HPXgwG
-         daAQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=20Qku66Un0STcQwrUDTvMrfzVHtMmdMF1TmmER8SnJY=;
+        b=FoDAg4e/PGIria8vzwCAxOEuxrwDQwIGCluc3GEnGj2GDpvVZ4ev3cIUA2TR95+O0U
+         xj5eN+Xnb/+qfKAxicpgNenLbFQXgXLS52Hk9Xgh+NIJsRWOHi4MROOnNOaUbj3YVqhB
+         3TTELcQiZGEDGETLkESdWH7bRkCXGA3GFxQUkcuaEsZCWilDayZ5TGcM8k2bif8gbEwC
+         YNVwYlehu/iOf341tPXfYRi9JvRxFAFjjFJjaTs+rX0uAi5Js7cNV0KrLr3InlKBMjvV
+         779l5tGkOGuHKgqHVpNfOZY7id6ZXaQnk+JSMB2LCCVEg3lw1HZkcNHkxm3emqW9Fs/v
+         aGbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=bmEK1Kxpl0XlATDB3PjeWdnvGtZF39wnbbmUHSnsVOE=;
-        b=4ONe75jJ/hkJIV/QZxmx00wIpkRicaiCJyanwSiVZs0c9T7vyw2tpNLF1Vg3iLcFKa
-         dDtquFl4DFKWLdtj160mpTAr0YK27i5UFz0ZLweohGtNgxDEtyhg4pt6ntADAyNzgIK1
-         dcOzeVIl3S2rYV5Er+YfXZ6JgPmdQRInjutLyw/FaBd+AfW0V44qnRPPgXttMgIPzIZq
-         RTgMgnY/nqKYDluSZaUQuvPYHH6d9090tFYxoRfG4IcOameWlYUf6rOXgfNvqt7AJ1CY
-         122lCUK/hvPiDbsGuzJZR1kD+CqMdF86NZBp/CRziXEP6asThRvTThgeGF/1rskJLdOY
-         g3Ow==
-X-Gm-Message-State: AOAM530LOf3vtQBc9gnsVZRjhACiJ/Nx7UdlmNcvUO/RXmSNeuBSbM/b
-        IbIMHAGYtG2/ktxrQdbjGBo=
-X-Google-Smtp-Source: ABdhPJxMYioCRkCFW8DvOH7MUhBRFoH/i7M5Rdnufy2CRsL7C0efrbHJcK9G5YzoRGrxZxml540+2g==
-X-Received: by 2002:a05:6512:11eb:b0:448:8cd0:7d7e with SMTP id p11-20020a05651211eb00b004488cd07d7emr16773121lfs.593.1648417278987;
-        Sun, 27 Mar 2022 14:41:18 -0700 (PDT)
-Received: from mobilestation ([95.79.188.22])
-        by smtp.gmail.com with ESMTPSA id t24-20020a2e9d18000000b0024986ae8972sm1518985lji.0.2022.03.27.14.41.18
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=20Qku66Un0STcQwrUDTvMrfzVHtMmdMF1TmmER8SnJY=;
+        b=AviDNN3feQbyrCPDgGrSd4FQlcxg5Pj1yunhtUeJGwaUR1vjmvpQXk1jZiDo4pfZij
+         T5oKC75ZNxPZB6jWoSNrZUcJ2SFnYbvmC4WS94xNbvZb2vPc9qsY/hNwQcHers80CJTZ
+         CCvdbJTjBRe82l4uB/eDgqZl1FeHLXvFass5ewVZHRfCSQC/CcEOCQA+nY8yxSrL4nMH
+         VG0r3imKhRMDHJdug2SN/TFuaRH+vFCVn8VbIHtS2nShIwByWUR8SPF/89w80c0UpNLC
+         dVH59SWpOotUrPnDlh6JrazJVCePw34OuKwbjPyvTOETdXcJKkoeK9gBH+RCmg5+i83O
+         HwNQ==
+X-Gm-Message-State: AOAM532WLzIYtA9A7i+p3toizaTql+R+snWSXOcfgm7eVClm2lS9aYah
+        APtf5cQCJAIKAouhcLwIOfIN+E1x4Omefw==
+X-Google-Smtp-Source: ABdhPJxidSXi4561yYZTlm3oJpeiNN7duuJ5IEqqVWfm9zZ3RDMLaV/Ae6SosezsxMVmNDsL9jXcVg==
+X-Received: by 2002:a50:9d49:0:b0:418:681b:f6d with SMTP id j9-20020a509d49000000b00418681b0f6dmr12358612edk.160.1648417605044;
+        Sun, 27 Mar 2022 14:46:45 -0700 (PDT)
+Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id js24-20020a170906ca9800b006c8aeca8fe8sm4990367ejb.58.2022.03.27.14.46.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Mar 2022 14:41:18 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 00:41:16 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Frank Li <frank.li@nxp.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 00/25] dmaengine: dw-edma: Add RP/EP local DMA
- controllers support
-Message-ID: <20220327214116.b6ku7sc2xvc6swlq@mobilestation>
-References: <PAXPR04MB9186C220089D1480CD5C4826881A9@PAXPR04MB9186.eurprd04.prod.outlook.com>
+        Sun, 27 Mar 2022 14:46:44 -0700 (PDT)
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+To:     Scott Branden <scott.branden@broadcom.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
+Subject: [PATCH] misc: bcm-vk: replace usage of found with dedicated list iterator variable
+Date:   Sun, 27 Mar 2022 23:45:51 +0200
+Message-Id: <20220327214551.2188544-1-jakobkoschel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <PAXPR04MB9186C220089D1480CD5C4826881A9@PAXPR04MB9186.eurprd04.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -85,210 +73,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Frank,
+To move the list iterator variable into the list_for_each_entry_*()
+macro in the future it should be avoided to use the list iterator
+variable after the loop body.
 
-On Fri, Mar 25, 2022 at 02:52:53PM +0000, Frank Li wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Sent: Wednesday, March 23, 2022 8:48 PM
-> > To: Gustavo Pimentel <gustavo.pimentel@synopsys.com>; Vinod Koul
-> > <vkoul@kernel.org>; Jingoo Han <jingoohan1@gmail.com>; Bjorn Helgaas
-> > <bhelgaas@google.com>; Frank Li <frank.li@nxp.com>; Manivannan Sadhasivam
-> > <manivannan.sadhasivam@linaro.org>
-> > Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>; Serge Semin
-> > <fancer.lancer@gmail.com>; Alexey Malahov
-> > <Alexey.Malahov@baikalelectronics.ru>; Pavel Parkhomenko
-> > <Pavel.Parkhomenko@baikalelectronics.ru>; Lorenzo Pieralisi
-> > <lorenzo.pieralisi@arm.com>; Rob Herring <robh@kernel.org>; Krzysztof
-> > Wilczyński <kw@linux.com>; linux-pci@vger.kernel.org;
-> > dmaengine@vger.kernel.org; linux-kernel@vger.kernel.org
-> > Subject: [EXT] [PATCH 00/25] dmaengine: dw-edma: Add RP/EP local DMA
-> > controllers support
-> > 
-> > Caution: EXT Email
-> > 
-> > This is a final patchset in the series created in the framework of
-> > my Baikal-T1 PCIe/eDMA-related work:
-> > 
-> > [1: In-progress] clk: Baikal-T1 DDR/PCIe resets and some xGMAC fixes
-> > Link: --submitted--
-> > [2: In-progress] PCI: dwc: Various fixes and cleanups
-> > Link: --submitted--
-> > [3: In-progress] PCI: dwc: Add dma-ranges/YAML-schema/Baikal-T1 support
-> > Link: --submitted--
-> > [4: In-progress] dmaengine: dw-edma: Add RP/EP local DMA controllers
-> > support
-> > Link: --you are looking at it--
-> > 
-> > Note it is recommended to merge the last patchset after the former ones in
-> > order to prevent merge conflicts. @Bjorn could you merge in this patchset
-> > through your PCIe repo? After getting all the ack'es of course.
-> > 
-> > Please note originally this series was self content, but due to Frank
-> > being a bit faster in his work submission I had to rebase my patchset onto
-> > his one. So now this patchset turns to be dependent on the Frank' work:
-> > Link:
-> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kern
-> > el.org%2Fdmaengine%2F20220310192457.3090-1-
-> > Frank.Li%40nxp.com%2F&amp;data=04%7C01%7CFrank.Li%40nxp.com%7Cfc099c7e402d4
-> > 556176e08da0d386b19%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6378368332
-> > 26917527%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTi
-> > I6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=3wsUdFo2TpBCVe8haYoFMxPyY78D4yABM
-> > B%2Bz0QHkE3Q%3D&amp;reserved=0
-> > So please review and merge his series first before applying this one.
-> > 
-> > @Frank, @Manivannan as we agreed here:
-> > Link:
-> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kern
-> > el.org%2Fdmaengine%2F20220309211204.26050-6-
-> > Frank.Li%40nxp.com%2F&amp;data=04%7C01%7CFrank.Li%40nxp.com%7Cfc099c7e402d4
-> > 556176e08da0d386b19%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6378368332
-> > 26917527%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTi
-> > I6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=UwV79KHJWWhHZ9dYuqrBP8%2B5n6xonLU
-> > bK5wqduuSg%2FM%3D&amp;reserved=0
-> > this series contains two patches with our joint work. Here they are:
-> > [PATCH 1/25] dmaengine: dw-edma: Drop dma_slave_config.direction field
-> > usage
-> > [PATCH 2/25] dmaengine: dw-edma: Fix eDMA Rd/Wr-channels and DMA-direction
-> > semantics
-> > @Frank, could you please pick them up and add them to your series in place
-> > of the patches:
-> > [PATCH v5 6/9] dmaengine: dw-edma: Don't rely on the deprecated "direction"
-> > member
-> > Link:
-> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kern
-> > el.org%2Fdmaengine%2F20220310192457.3090-7-
-> > Frank.Li%40nxp.com%2F&amp;data=04%7C01%7CFrank.Li%40nxp.com%7Cfc099c7e402d4
-> > 556176e08da0d386b19%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6378368332
-> > 26917527%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTi
-> > I6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=G2Q2BTfp4vt0yiyHbPnn9kKBDfOx6QBmE
-> > ypOREcWq4g%3D&amp;reserved=0
-> > [PATCH v5 5/9] dmaengine: dw-edma: Fix programming the source & dest
-> > addresses for ep
-> > Link:
-> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kern
-> > el.org%2Fdmaengine%2F20220310192457.3090-6-
-> > Frank.Li%40nxp.com%2F&amp;data=04%7C01%7CFrank.Li%40nxp.com%7Cfc099c7e402d4
-> > 556176e08da0d386b19%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6378368332
-> > 26917527%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTi
-> > I6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=UppQMqEDobyEN2JU05MS6k%2FuXeS6%2B
-> > skrr%2BeN%2FeQzPk8%3D&amp;reserved=0
-> > respectively?
-> > 
-> > @Frank please don't forget to fix your series so the chip->dw field is
-> > initialized after all the probe() initializations are done. For that sake
-> > you also need to make sure that the dw_edma_irq_request(),
-> > dw_edma_channel_setup() and dw_edma_v0_core_debugfs_on() methods take
-> > dw_edma structure pointer as a parameter.
-> > 
-> > Here is a short summary regarding this patchset. The series starts with
-> > fixes patches. The very first two patches have been modified based on
-> > discussion with @Frank and @Manivannan as I noted in the previous
-> > paragraph. They concern fixing the Read/Write channels xfer semantics.
-> > See the patches description for more details. After that goes the fix of
-> > the dma_direct_map_resource() method, which turned out to be not working
-> > correctly for the case of having devive.dma_range_map being non-empty
-> > (non-empty dma-ranges DT property). Then we discovered that the
-> > dw-edma-pcie.c driver incorrectly initializes the LL/DT base addresses for
-> > the platforms with not matching CPU and PCIe memory spaces. It is fixed by
-> > using the pci_bus_address() method to get a correct base address. After
-> > that you can find a series of interleaved xfers fixes. It turned out the
-> > interleaved transfers implementation didn't work quite correctly from the
-> > very beginning for instance missing src/dst addresses initialization, etc.
-> > In the framework of the next two patches we suggest to add a new
-> > platform-specific callback - pci_addrees() and use to convert the CPU
-> > address to the PCIe space address. It is at least required for the DW eDAM
-> > remote End-point setup on the platforms with not-matching address spaces.
-> > In case of the DW eDMA local RP/EP setup the conversion will be done
-> > automatically by the outbound iATU (if no DMA-bypass flag is specified for
-> > the corresponding iATU window). Then we introduce a set of patches to make
-> > the DebugFS part of the code supporting the multi-eDMA controllers
-> > platforms. It starts with several cleanup patches and is closed joining
-> > the Read/Write channels into a single DMA-device as they originally should
-> > have been. After that you can find the patches with adding the non-atomic
-> > io-64 methods usage, dropping DT-region descriptors allocation, replacing
-> > chip IDs with device name. In addition to that in order to have the eDMA
-> > embedded into the DW PCIe RP/EP supported we need to bypass the
-> > dma-ranges-based memory ranges mapping since in case of the root port DT
-> > node it's applicable for the peripheral PCIe devices only. Finally at the
-> > series closure we introduce a generic DW eDMA controller support being
-> > available in the DW PCIe Host/End-point driver.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> > Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> > Cc: Rob Herring <robh@kernel.org>
-> > Cc: "Krzysztof Wilczyński" <kw@linux.com>
-> > Cc: linux-pci@vger.kernel.org
-> > Cc: dmaengine@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > 
-> > Serge Semin (25):
-> >   dmaengine: dw-edma: Drop dma_slave_config.direction field usage
-> >   dmaengine: dw-edma: Fix eDMA Rd/Wr-channels and DMA-direction
-> >     semantics
-> >   dma-direct: take dma-ranges/offsets into account in resource mapping
-> >   dmaengine: Fix dma_slave_config.dst_addr description
-> >   dmaengine: dw-edma: Convert ll/dt phys-address to PCIe bus/DMA address
-> >   dmaengine: dw-edma: Fix missing src/dst address of the interleaved
-> >     xfers
-> >   dmaengine: dw-edma: Don't permit non-inc interleaved xfers
-> >   dmaengine: dw-edma: Fix invalid interleaved xfers semantics
-> >   dmaengine: dw-edma: Add CPU to PCIe bus address translation
-> >   dmaengine: dw-edma: Add PCIe bus address getter to the remote EP
-> >     glue-driver
-> >   dmaengine: dw-edma: Drop chancnt initialization
-> >   dmaengine: dw-edma: Fix DebugFS reg entry type
-> >   dmaengine: dw-edma: Stop checking debugfs_create_*() return value
-> >   dmaengine: dw-edma: Add dw_edma prefix to the DebugFS nodes descriptor
-> >   dmaengine: dw-edma: Convert DebugFS descs to being kz-allocated
-> >   dmaengine: dw-edma: Simplify the DebugFS context CSRs init procedure
-> >   dmaengine: dw-edma: Move eDMA data pointer to DebugFS node descriptor
-> >   dmaengine: dw-edma: Join Write/Read channels into a single device
-> >   dmaengine: dw-edma: Use DMA-engine device DebugFS subdirectory
-> >   dmaengine: dw-edma: Use non-atomic io-64 methods
-> >   dmaengine: dw-edma: Drop DT-region allocation
-> >   dmaengine: dw-edma: Replace chip ID number with device name
-> >   dmaengine: dw-edma: Bypass dma-ranges mapping for the local setup
-> >   dmaengine: dw-edma: Skip cleanup procedure if no private data found
-> >   PCI: dwc: Add DW eDMA engine support
-> 
+To *never* use the list iterator variable after the loop it was
+concluded to use a separate iterator variable instead of a
+found boolean [1].
 
-> Why I can't see your patch in https://www.spinics.net/lists/linux-pci/
-> But there are Manivannan's reply in https://www.spinics.net/lists/linux-pci/
+This removes the need to use a found variable and simply checking if
+the variable was set, can determine if the break/goto was hit.
 
-That might be connected with the domain. I'll resend the patchsets
-from my personal email after getting all the comments
-addressed/discussed. Regarding the patches you are the most interested
-in I'll speed the discussion up around them and send them out to you
-directly so not to block your series any longer.
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+---
+ drivers/misc/bcm-vk/bcm_vk_msg.c | 29 +++++++++++++----------------
+ 1 file changed, 13 insertions(+), 16 deletions(-)
 
--Sergey
+diff --git a/drivers/misc/bcm-vk/bcm_vk_msg.c b/drivers/misc/bcm-vk/bcm_vk_msg.c
+index 066b9ef7fcd7..3c081504f38c 100644
+--- a/drivers/misc/bcm-vk/bcm_vk_msg.c
++++ b/drivers/misc/bcm-vk/bcm_vk_msg.c
+@@ -757,20 +757,19 @@ static struct bcm_vk_wkent *bcm_vk_dequeue_pending(struct bcm_vk *vk,
+ 						   u16 q_num,
+ 						   u16 msg_id)
+ {
+-	bool found = false;
+-	struct bcm_vk_wkent *entry;
++	struct bcm_vk_wkent *entry = NULL, *iter;
+ 
+ 	spin_lock(&chan->pendq_lock);
+-	list_for_each_entry(entry, &chan->pendq[q_num], node) {
+-		if (get_msg_id(&entry->to_v_msg[0]) == msg_id) {
+-			list_del(&entry->node);
+-			found = true;
++	list_for_each_entry(iter, &chan->pendq[q_num], node) {
++		if (get_msg_id(&iter->to_v_msg[0]) == msg_id) {
++			list_del(&iter->node);
++			entry = iter;
+ 			bcm_vk_msgid_bitmap_clear(vk, msg_id, 1);
+ 			break;
+ 		}
+ 	}
+ 	spin_unlock(&chan->pendq_lock);
+-	return ((found) ? entry : NULL);
++	return entry;
+ }
+ 
+ s32 bcm_to_h_msg_dequeue(struct bcm_vk *vk)
+@@ -1010,16 +1009,14 @@ ssize_t bcm_vk_read(struct file *p_file,
+ 					 miscdev);
+ 	struct device *dev = &vk->pdev->dev;
+ 	struct bcm_vk_msg_chan *chan = &vk->to_h_msg_chan;
+-	struct bcm_vk_wkent *entry = NULL;
++	struct bcm_vk_wkent *entry = NULL, *iter;
+ 	u32 q_num;
+ 	u32 rsp_length;
+-	bool found = false;
+ 
+ 	if (!bcm_vk_drv_access_ok(vk))
+ 		return -EPERM;
+ 
+ 	dev_dbg(dev, "Buf count %zu\n", count);
+-	found = false;
+ 
+ 	/*
+ 	 * search through the pendq on the to_h chan, and return only those
+@@ -1028,13 +1025,13 @@ ssize_t bcm_vk_read(struct file *p_file,
+ 	 */
+ 	spin_lock(&chan->pendq_lock);
+ 	for (q_num = 0; q_num < chan->q_nr; q_num++) {
+-		list_for_each_entry(entry, &chan->pendq[q_num], node) {
+-			if (entry->ctx->idx == ctx->idx) {
++		list_for_each_entry(iter, &chan->pendq[q_num], node) {
++			if (iter->ctx->idx == ctx->idx) {
+ 				if (count >=
+-				    (entry->to_h_blks * VK_MSGQ_BLK_SIZE)) {
+-					list_del(&entry->node);
++				    (iter->to_h_blks * VK_MSGQ_BLK_SIZE)) {
++					list_del(&iter->node);
+ 					atomic_dec(&ctx->pend_cnt);
+-					found = true;
++					entry = iter;
+ 				} else {
+ 					/* buffer not big enough */
+ 					rc = -EMSGSIZE;
+@@ -1046,7 +1043,7 @@ ssize_t bcm_vk_read(struct file *p_file,
+ read_loop_exit:
+ 	spin_unlock(&chan->pendq_lock);
+ 
+-	if (found) {
++	if (entry) {
+ 		/* retrieve the passed down msg_id */
+ 		set_msg_id(&entry->to_h_msg[0], entry->usr_msg_id);
+ 		rsp_length = entry->to_h_blks * VK_MSGQ_BLK_SIZE;
 
-> 
-> Best regards
-> Frank Li
-> 
-> > 
-> >  drivers/dma/dw-edma/dw-edma-core.c            | 249 +++++++------
-> >  drivers/dma/dw-edma/dw-edma-core.h            |  10 +-
-> >  drivers/dma/dw-edma/dw-edma-pcie.c            |  24 +-
-> >  drivers/dma/dw-edma/dw-edma-v0-core.c         |  76 ++--
-> >  drivers/dma/dw-edma/dw-edma-v0-core.h         |   1 -
-> >  drivers/dma/dw-edma/dw-edma-v0-debugfs.c      | 350 ++++++++----------
-> >  drivers/dma/dw-edma/dw-edma-v0-debugfs.h      |   5 -
-> >  .../pci/controller/dwc/pcie-designware-ep.c   |   4 +
-> >  .../pci/controller/dwc/pcie-designware-host.c |  13 +-
-> >  drivers/pci/controller/dwc/pcie-designware.c  | 188 ++++++++++
-> >  drivers/pci/controller/dwc/pcie-designware.h  |  23 +-
-> >  include/linux/dma/edma.h                      |  18 +-
-> >  include/linux/dmaengine.h                     |   2 +-
-> >  kernel/dma/direct.c                           |   2 +-
-> >  14 files changed, 598 insertions(+), 367 deletions(-)
-> > 
-> > --
-> > 2.35.1
-> 
+base-commit: b47d5a4f6b8d42f8a8fbe891b36215e4fddc53be
+-- 
+2.25.1
+

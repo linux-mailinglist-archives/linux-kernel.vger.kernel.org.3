@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA8B4E8935
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 20:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81AB54E8946
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 20:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236259AbiC0SK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 14:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
+        id S236290AbiC0SLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 14:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbiC0SK4 (ORCPT
+        with ESMTP id S236002AbiC0SK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 14:10:56 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07olkn2024.outbound.protection.outlook.com [40.92.15.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3308934656;
-        Sun, 27 Mar 2022 11:09:17 -0700 (PDT)
+        Sun, 27 Mar 2022 14:10:57 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07olkn2054.outbound.protection.outlook.com [40.92.15.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D0B34656;
+        Sun, 27 Mar 2022 11:09:18 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b5wf/+W+9wFIEm4fr5QhC4ywC8Hw4FPJ+VpZxHAZdBwIpDD6KzETt193/OnIHIBk/dzWkrMU4BkhZm4A5byNPToVf53O8mU+fCWkuTQijkS0JT9wjcSNsp4SbPxohATMha3H3F5KZlcCSFjU5zr879XLKbf8kh1mRNq7et5HIlhu3mDihyMeDtzvCiiissziuOZnKSXf+Na93ScUPqjYpwr26x4Innpk9DAru01oaA+Jub/SlUgZtdyUB+nOnxSYeuXuUID7fzKMxLW57rlNQk0cLERTFPp0biJoYdxoVyFUnOKMiHfNPl3JnXSSOBvMFIsL566MiJeH39GTel6IwQ==
+ b=nkkpofr0oY4mwalITBGCLd6X9IQN+QQGHf3YzMO8b39LeFgBsPU5LNdylZ5ThLbvrt0CTXYHNOQr/P3GK1gBjz6BGuo6n0MMxa8mbe/p6MB5VZeD49J98dNo4mOWquK0EuEj+LTABXlSjgPkUkBb61KP54hfP1aDYGmY69hca4cbjxZXfp0iQn6nq2jnWy6IiucGKUnpEOx4oNF2JmCeFVzrphbzBHUGktKI3BeCRoYAAXHi2fJeC58+fdOz5TkPo6LHzRSFRrVu+f+pbv0ReRv6KPYHpXkEUOhItsbUHaYZ0ELvUWxxJr8B+OYBpswD2xBw0FZFJZmfvDMdBU/vwQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GDWbkechiUts43t6wdEreqPDHHI83SXUQOY4PCkZFIY=;
- b=DBWQB86kZHqAvZdvsTn7Htc9llA7HRI4gsMZzMOEe6iYlay4Vr3Pw9VKwk3EJuFlvYdGA8H8Nr0m/++WQCBYxpvNUWVAcZUrxKe1NruOBYV51DaFityXzNUaBHTCQuk5dOh6Nm3wb+iApF938ZHgiAxTnMcrNp9YcDjWH2fgcKlXiemElZ2Mr/slAVq4k2qJ9AqWz4psKITo0kjSPaNmk3u+gUmicqohKObTCe4j2K8oKdQo6gt51wK3bf5blmEUBOLAKA203vNnbEMuctWHmgaeMevgDp3rU1788cE9EUq7X/A3KmK4xV6yQnPq5Kipnbteoo7h3VwIuvRKcb4gmg==
+ bh=KFKoQI8qtTgwudEHVjf9qhOg5oV2gYjmdqDJG42AWBY=;
+ b=koB1Rnqd1anMBUcwuVEQlzNGcHw6YIh+TNOFbB2P77WLeq9wUUeIIwj1u8p3H6MPV+mpwfbFCGHJM145h+5h0Nq6mkszG/wYaeTQX4vZD+VhB0UeGt2AB5hbAArZcFKm/JzKCRNCIc8iwHKwTQGENv5WrASajbgHqTDzxe4EYFUdpR/pTIkpRFoOBr4H87y3gV0UkU6KdnvuQ2gpNGh6YPcN8Pyh4IXWyfWuUZ7fOr3i2TnoyhG9l28OFptk1kyT2C2anEMcxt0/ngg4xixGLETyJ7cEjEWZh13IgLmKE4Pv+CpdWLNXPcDn4tfyfprIg8Qy5kPNn8yOfuGqYs/5Pw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 Received: from CY4PR04MB0567.namprd04.prod.outlook.com (2603:10b6:903:b1::20)
  by BN8PR04MB5778.namprd04.prod.outlook.com (2603:10b6:408:a3::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Sun, 27 Mar
- 2022 18:09:15 +0000
+ 2022 18:09:17 +0000
 Received: from CY4PR04MB0567.namprd04.prod.outlook.com
  ([fe80::451b:e5ed:c1a3:4070]) by CY4PR04MB0567.namprd04.prod.outlook.com
  ([fe80::451b:e5ed:c1a3:4070%5]) with mapi id 15.20.5102.022; Sun, 27 Mar 2022
- 18:09:15 +0000
+ 18:09:17 +0000
 From:   Jonathan Bakker <xc-racer2@live.ca>
 To:     krzk@kernel.org, alim.akhtar@samsung.com
 Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Bakker <xc-racer2@live.ca>
-Subject: [PATCH v2 0/5] ARM: dts: s5pv210: Bugfixes, features, and improvements
-Date:   Sun, 27 Mar 2022 11:08:49 -0700
-Message-ID: <CY4PR04MB056763D8667AD2BC418B7026CB1C9@CY4PR04MB0567.namprd04.prod.outlook.com>
+        Jonathan Bakker <xc-racer2@live.ca>, Stable@vger.kernel.org
+Subject: [PATCH v2 1/5] ARM: dts: s5pv210: Remove spi-cs-high on panel in Aries
+Date:   Sun, 27 Mar 2022 11:08:50 -0700
+Message-ID: <CY4PR04MB05670C771062570E911AF3B4CB1C9@CY4PR04MB0567.namprd04.prod.outlook.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <CY4PR04MB05677B4C4E26A8A179F6ABC0CB179@CY4PR04MB0567.namprd04.prod.outlook.com>
 References: <CY4PR04MB05677B4C4E26A8A179F6ABC0CB179@CY4PR04MB0567.namprd04.prod.outlook.com>
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-TMN:  [Eo975Aw8e/dQAFcwK+fgKEDSUZWwNn7oTePv3IqWxr/i3AO7Fzr78yTJgF6up4UZ]
+X-TMN:  [uUYvmy3QjvIbmARDGHzr5iugghlbHRmzJjCi7GnE28JI5+m8aBTL1r5eg0qWb6TS]
 X-ClientProxiedBy: BYAPR07CA0031.namprd07.prod.outlook.com
  (2603:10b6:a02:bc::44) To CY4PR04MB0567.namprd04.prod.outlook.com
  (2603:10b6:903:b1::20)
-X-Microsoft-Original-Message-ID: <20220327180854.4857-1-xc-racer2@live.ca>
+X-Microsoft-Original-Message-ID: <20220327180854.4857-2-xc-racer2@live.ca>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d1385b75-abfb-4b1a-aba0-08da101ce712
+X-MS-Office365-Filtering-Correlation-Id: 21a008ae-231a-4a23-d8ef-08da101ce7e6
 X-MS-TrafficTypeDiagnostic: BN8PR04MB5778:EE_
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: u70eNHGRgbDLZ3MvjntQipQaRK9c/qr7HJjVmLROhPtImzVwJK6FHddO6shdqTCN+oKHTMvF2HT0VmoZ9O/X0DKJQvSAOb+kqDE3rQ/Y6wnJZ6Ti6Olr5MqKM1W0LugXLhnYVIRiI58Sb2y0yKNGJX9u+IxWqnF+Txqx+Q3Ak1q1z24jcCyjfkOSZNArO9b/cRIGv9BD8cXU+/iBQ5Sd4T4qRsNBm9UZGGWfvCyBZ3CxlMwQThb0MLK3JmdzyVGljeKQWR2Z1/hGuAxAvFxwmR/TJNuako3QWpHmb+IMXhuESsBDeJ3n/cgV7rBCv7ieHdJNbvfn1ft1OePXXXa/00Rf29ktlJ65OvYgBg26wK4HMN23Yg6vHJAbGjYrTUA7qoxOGexoDq7/qnl0uIlqF8ZErJE8IonbVM158aAugaJ73/uMKcnWm9ABmU8u9lMFtvHlu8h+AKwtnzUHUT5h7p0KWmYYcQrk6XUGRnrvtH3DdD1N/Gwbks26wErNoWnD//vNmdiVDdcq1HyZFiMt3U+VlYCSQbz4893PVAWc4Ekd/MccXUSYCLjlbZPCwcEy8yh4fYjyzpV6gDgomKr/Pw==
+X-Microsoft-Antispam-Message-Info: KK0ykxToTmj01VFGW5KzIqdwRroyv4C/6NdEszLhbLjPPBpWB14ALtBHojZ/uXum0rf/3epreAf7/KIndlTIhBh/F2Az1J8YbKEc5h8n9rA+xqB6sYGRBR9BVsIyAwxWEnuQIC8mmOnT6ozyzWnfgNc6OUEVay+PiuMdL4YJKlm2TGgAJpdxdzyTSUJwvtGvxk/vtD+rGgKVRZzJRWmAuda7s5lGQkbr6R7Tx4jZ7Gd0CgpyzLtRH2vW/nd8mcpbzBN726SpSo8SUVmGqs0MkC1KFbBFTZ1hXE8u2I9fGtozNCMtnLgNcf9xqBhH+kINHcrAGiIEkwFa1imz9lyktGhHVITR7GSzf8ueaxeJd/bQg1iOPhgHY0C2i9+qdFXm36a6X7xPwHi7AITlrpQoBjlQbc2IwZTj0USa/43vkFYuRkfiTbpYIH9C5eXPbTxvuwuRfh5i7OaEFqrV1hsNv7/JpjEslayY6nstKqEv6olGjxAam7C6BYYW3jpA/qWv89LFHU1gYHMKLec1vbjjBirqEbdPm2UIyE0bKJdPcewSrEYJ60XsRTPCeNKadTktdU8fo1ZA7PKVUubbbishxA==
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vauFwV9fLxVIc08+8K9ttrmsBQgSxzv64xDjebCx2vl6FoMZuv7YZu3EolbT?=
- =?us-ascii?Q?fatyVHW3My5TzL9qvzz0jyCh1+d7wanZwmZBam8uAEVaH8wvFB/vuZFQDKro?=
- =?us-ascii?Q?VlRSW3poqFvrDk3jKrlouaiZ1dHWINY7IP1p8e03dEf+/OhdzXRjn49faiYn?=
- =?us-ascii?Q?x3zId3jFXB350t+roSwUaDGZbL68YRVTD1OB4B6gDv+jZbv9c1epbx11vGdD?=
- =?us-ascii?Q?C9ITzbM9Icd29nrOR1Nf5UP/dULSGmfAJXDKpMRu2Kj9QcuL98XmV+l5MAiF?=
- =?us-ascii?Q?6oJ7hoVW8HJni14NBnAS9DjTKw0DgzMAIHcOY+IPaPhINOve6NeDtJGhKx/w?=
- =?us-ascii?Q?9bAKaIJfyakQnEtR/nQmCGrk1S68ppYL50yUn3WQ3MbOO3tdx4rTqNDGImD6?=
- =?us-ascii?Q?yopZEqSZlZHan0bhhVW9hA+Fq9yqLe8rD1ANx6TKOlLD7CzdMy81BZMZpaHm?=
- =?us-ascii?Q?rTHyJnO1NGDiTm9MupheOaWhoV1BFvlefPNZzGx9K2KDZ88rOyzwaDAgEUeU?=
- =?us-ascii?Q?DehdzJpuB7PWOK8mDy2+4T9bm+laEQaCWFGoqq85F0hF13ZrAk0ViNlfPNaE?=
- =?us-ascii?Q?n5D8EUK0QmVtwDHAU4m2w3KGikVkxCN7tqat7z2N2k5Zt0VhWq2oPSux6rgP?=
- =?us-ascii?Q?5ecoz62B+3RrebpY/yyD0lfqIjBOOOdPR3nenlpwGfUg8uHdA+jCVlQ3tbe+?=
- =?us-ascii?Q?TV7dSplw8mwGkrqtPv/njOuY2T67qO3nabNHDVIpt5vci3BOFfQPkDsFEe1B?=
- =?us-ascii?Q?nUNahh9/xYjEhJUqtQPAD0GDUD8r06CVeGvpncxnV0h0+O2/JnsWo5zMINgu?=
- =?us-ascii?Q?IGzKQI3Piy2ubD84kuBpVl/cFoTdPapGIj2AKzBMZCDhjSFestWF7X2DvPlq?=
- =?us-ascii?Q?6YHbvMo+S9BpP8BAn7wgupHACGgiDyYEjs0QIYSf3eGDFUDSjatnjdRU9eBX?=
- =?us-ascii?Q?KyeJuaOzsSyPPYs3aSza+aNgLx6gQ2Y9/N4rcObRoijocqTpK+gkiBBwVgRC?=
- =?us-ascii?Q?iZlfsP+vE8I7K3FJh0+/LUqchbGhU01f6jd14apKm9SLupbm5g4A5gtdbSH2?=
- =?us-ascii?Q?svfLy+56ESKA37HBckXxQQqS3vqfjLJTyowZ2fYuQ+PjoxXZf1v3Xv4qT2TN?=
- =?us-ascii?Q?ettmmUKrIkx+wPmsMU2AjP6CYvQ6GmY3vUm5XEuGT0+qfixPBiNCcjETxHW1?=
- =?us-ascii?Q?Vo2Cs/pSeo7r91o7jM9xjmGOcVymXViKLLeUorSId+74MXR7gILeCVqBKMUz?=
- =?us-ascii?Q?wfOBUzxvspKETah11SegmCTzf1bBkQqbO5/AoLiu9aXJPrA3vQqJG3eldnLs?=
- =?us-ascii?Q?kM+ZZmD++LRCGQWc+Ix467S04ZMOQCoFNLHF58BROKkCaPT/1poQE3gwj3mF?=
- =?us-ascii?Q?GYOHvbNTAGrpHhQzFbQhJPUVUEmIoVxPj7rhNU5478fG+NDRI6Lu6DIQ0qZv?=
- =?us-ascii?Q?VadNbMkjbDAFCXgvQj+m2aAprmXBwOOMbWxAkwHLcVEFS0F41k+WyBIwgb8l?=
- =?us-ascii?Q?RJozV/t0W9r+nUU=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8y8nSEKwF3hjnESNh5S2mTCwRYpHDZwSxVIN6hsq4boaCYP0VMq7lHczK696?=
+ =?us-ascii?Q?5X69EgIs+btw7ZW9sImE7hA38k1cBOmORC4ro8iC67usJF1ualoDz18T6N16?=
+ =?us-ascii?Q?/ADJTmLpNtFXfQYEZzyjGz5y0xMV8cPNofnCy6uzkhG081msFNIbqIYszV+V?=
+ =?us-ascii?Q?7pGhmlTbJT/H0+/oxTXXGRAYTGcWEuVPZr8SHiRcE8DZ7s6cI1L965FfJBS6?=
+ =?us-ascii?Q?iKdL9IL8ox0R1oTlus4rus1FFu4HMWAf38xoBy+FLVTyDsw7k5zVOPCcUJrf?=
+ =?us-ascii?Q?+ka3dFDREFW+CaiN4in5S85sM/7S1cWKBdwVCJIfgcb2EBlHccz4INp3Nkao?=
+ =?us-ascii?Q?lx/lFhn33QqdR7kcGYYUAUspp+0Hdc3VZnEW28Ky8PLj042UquCdbfikCJSa?=
+ =?us-ascii?Q?SR0TB0J6kX7MsKlW6yU4aumUxATLx+cCJoH662BWsB1OruiH1FD24/HQjYbb?=
+ =?us-ascii?Q?sTcCTuS01BIVjtCnAaO1Pb/LWRgpc8WB1bUPGOxBEqFBt1gcA/lchhLPjpII?=
+ =?us-ascii?Q?64PPRbfhjYYaffrX5K2jN+Qhcp4jVPlge+l27pfvVmZDC0BNvT09liOPzKQZ?=
+ =?us-ascii?Q?vLyw/YRFs4xSdPOrjclwLbVOxrMdYH5saPBluDpynjw1ObYxJVdwGna6juH/?=
+ =?us-ascii?Q?rmFOrKV77ND4FU3qm1a64MN6AwuqCEkusDybPdvvOZdAlFz3NChQM/Zuc52N?=
+ =?us-ascii?Q?/JPYodFtXH/IvGGV09EnEd7npMxbt4X4xRgFsw3EojQQtHqyJiMrXQ5iwXL7?=
+ =?us-ascii?Q?7v8mhAB8JQj9mNt9/g7fGGJ1ss+ehsKxLuw+2UQ6rRUzcqXWsiz0v81Dxixq?=
+ =?us-ascii?Q?/cm/fk8OdCT4dO8ZTuEXEsntcsFpV+3Sona6WM7kzJ6bNvZ9oe7nERn5wmNS?=
+ =?us-ascii?Q?3x6Auu3YSTOSc0x4HM+SH3oa+GT4gJrdKcv6O1DiINy8J52UjQzVY7I4RaGN?=
+ =?us-ascii?Q?4GjGjHZixXj+tLuC9sI5rNsfAkosyDj2ugpHK6EM+5/l4xQei/u4XzfonqSL?=
+ =?us-ascii?Q?beAE7q2ykcoxAzgxRys5Ll4Xx28KP5oZ87FiBdk0F/6Nvd6AP6b15A/tLkMI?=
+ =?us-ascii?Q?uxL7Cqw9ehChzUwwHqT+0RDq+0YfIpfETtPD+VSC/Os4e+C8eEg9dO1+sVvO?=
+ =?us-ascii?Q?BwrHmhxPYE2V/irKosj4IcxfUDe53YBbePN4hJcExfBSZ9pz3B3mbvlhnZA9?=
+ =?us-ascii?Q?zEb8D2nL0KpRMqdmj8fmQuXY+xui7HcgyH255pE6EnMMoCjmNDOm3MJCfyOv?=
+ =?us-ascii?Q?0IEjtVQFeLc69FXU7wxaMxHh4Lic6cMEuPAVSyk24n2Y9XLoX+wLSrerlixC?=
+ =?us-ascii?Q?KwN6LryNXcJ0MYHxVcGXzshwEcNyghzyIJ5otK80mhW2PPy/xeB9NJzR+uCr?=
+ =?us-ascii?Q?MijNM2hUQXIEQ6UR71KjfGaqTotR88gOxIaoxuhnB7eh7wklr54GLNnkWxY1?=
+ =?us-ascii?Q?5NYyNEaqSWK0ezznHSfxHgZODfT4H/5ptid8ZIwgIElMFXAqamdjYKBvwdo1?=
+ =?us-ascii?Q?B1LgJG7M4sQwPaY=3D?=
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-edb50.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1385b75-abfb-4b1a-aba0-08da101ce712
+X-MS-Exchange-CrossTenant-Network-Message-Id: 21a008ae-231a-4a23-d8ef-08da101ce7e6
 X-MS-Exchange-CrossTenant-AuthSource: CY4PR04MB0567.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2022 18:09:15.3547
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2022 18:09:17.0890
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -106,31 +106,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Various cleanups to fix warnings when running make dtbs_check are included,
-as are bugfixes for the panel CS pin and bluetooth interrupt name on Aries.
+Since commit 766c6b63aa04 ("spi: fix client driver breakages when using
+GPIO descriptors"), the panel has been blank due to an inverted CS GPIO.
+In order to correct this, drop the spi-cs-high from the panel SPI device.
 
-Changes in v2:
-- Re-ordered patches to include bugfixes at start
-- CC Stable where appropriate
-- Drop sound-dai-cells changes
-- Drop charger-manager and related changes
-- Adjust memory reg entries commit to retain one node per device
+Fixes: 766c6b63aa04 ("spi: fix client driver breakages when using GPIO descriptors")
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
+---
+Changes in v2
+- CC Stable
+- Put bugfix at start of series
+---
+ arch/arm/boot/dts/s5pv210-aries.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
-Jonathan Bakker (4):
-  ARM: dts: s5pv210: Remove spi-cs-high on panel in Aries
-  ARM: dts: s5pv210: Correct interrupt name for bluetooth in Aries
-  ARM: dts: s5pv210: Adjust memory reg entries to match spec
-  ARM: dts: s5pv210: Adjust DMA node names to match spec
-
-Krzysztof Kozlowski (1):
-  ARM: dts: s5pv210: align DMA channels with dtschema
-
- arch/arm/boot/dts/s5pv210-aquila.dts |  3 +--
- arch/arm/boot/dts/s5pv210-aries.dtsi | 11 +++++------
- arch/arm/boot/dts/s5pv210-goni.dts   |  6 +++---
- arch/arm/boot/dts/s5pv210.dtsi       | 18 +++++++++---------
- 4 files changed, 18 insertions(+), 20 deletions(-)
-
+diff --git a/arch/arm/boot/dts/s5pv210-aries.dtsi b/arch/arm/boot/dts/s5pv210-aries.dtsi
+index 160f8cd9a68d..740036a61c8e 100644
+--- a/arch/arm/boot/dts/s5pv210-aries.dtsi
++++ b/arch/arm/boot/dts/s5pv210-aries.dtsi
+@@ -564,7 +564,6 @@
+ 			reset-gpios = <&mp05 5 GPIO_ACTIVE_LOW>;
+ 			vdd3-supply = <&ldo7_reg>;
+ 			vci-supply = <&ldo17_reg>;
+-			spi-cs-high;
+ 			spi-max-frequency = <1200000>;
+ 
+ 			pinctrl-names = "default";
 -- 
 2.20.1
 

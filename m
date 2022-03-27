@@ -2,109 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB004E863C
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 08:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F48C4E863F
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 08:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233862AbiC0GRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 02:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
+        id S235499AbiC0GSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 02:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233392AbiC0GRD (ORCPT
+        with ESMTP id S230098AbiC0GSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 02:17:03 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451EC1F9;
-        Sat, 26 Mar 2022 23:15:23 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id f3so8623663pfe.2;
-        Sat, 26 Mar 2022 23:15:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=zQojn1+l5AZVyTtTxvOBeZeYl0iCp/EsKmxH0UlfEcs=;
-        b=Hibwc5S0U7wcL6DejpbxHFA4lwtNZXXluK5w0lQDctDdwmhutQeqQBn0No39o26MwV
-         gJG5BJCw1+UelUqn/tGXf3SFwVIPDpmpiPRSZ+u1sY3f6iqKckD719pRDZc973b4EXde
-         R/a3pJSpYS6ro2qo3aZVIvSxfLYGAYktqScZAeFd0+/KnFt80DQVgCDhTtNBLGxmyS5T
-         wgahD66mgtdWO8inc+hftRU9X4Zks5RVn+SEKX/vKLDEW+TKTNipJOxRacru4iMCdTcJ
-         LKDDpszpxqgA1TWeikNnHOoZGSRFkAxqIpLH9InpiH+8DcW/Xg321+8hqxml1LWEvNuG
-         298Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=zQojn1+l5AZVyTtTxvOBeZeYl0iCp/EsKmxH0UlfEcs=;
-        b=F18BhXXoV1/diYE1968mp/kwhzYQKCIvwfSeMnqG1pTgD277JTbVUGmEogeOljQVup
-         ea4oWVDNG3wkRkwBnwC6N9n7byp02A7sE55gI4g4lRtb+3lQE9D5jWLBTymrdvsmQksn
-         0i/OK08aksti7OAzONjctDdn1DLC8HVzrHjsfUbJrAR3OPJwf1w9O02TzB03wCO0GxPU
-         aJB1TP78VNlBOJQwU9ioGNJXNzxrRzIlF89eh/Ausp4qBJi3vmSzf7lufswrLQP7UEC7
-         BQnWTQ2+m7eaicChRkMJyneGWPYVgBMo/dWF7O37AuU70yLgJ6bse040MW7GqUXSbeXZ
-         E6ng==
-X-Gm-Message-State: AOAM5301OkmcBRUDtiPsNBcW8qw+JkrPPsApm4DbYmg7dqru7mpnJyLe
-        C4A55d8IEXB7FC3JeujS++k=
-X-Google-Smtp-Source: ABdhPJwA+6yTY8xKsO78Xv/GnGsfLJkWH/TmLye/R0ryZxaUbH2KjgQoftfUHWRZJBP0X7DIXlyr1g==
-X-Received: by 2002:a62:5583:0:b0:4fa:c74c:7eaa with SMTP id j125-20020a625583000000b004fac74c7eaamr17732239pfb.23.1648361722864;
-        Sat, 26 Mar 2022 23:15:22 -0700 (PDT)
-Received: from localhost.localdomain ([115.220.243.108])
-        by smtp.googlemail.com with ESMTPSA id u204-20020a6279d5000000b004fa58625a80sm11650684pfc.53.2022.03.26.23.15.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 23:15:22 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     jyri.sarha@iki.fi
-Cc:     tomba@kernel.org, airlied@linux.ie, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
-Subject: [PATCH] tilcdc: tilcdc_external: fix an incorrect NULL check on list iterator
-Date:   Sun, 27 Mar 2022 14:15:16 +0800
-Message-Id: <20220327061516.5076-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 27 Mar 2022 02:18:32 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E76BFC1
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 23:16:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648361815; x=1679897815;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=08G6ifSTauJ8kgC7zzmccUPip4T8HRtfNK+jtuN3/W4=;
+  b=cb1v2YCRxIZtBsV67D7TjAFY3SfWWMQU/yWaFODPjVUAGFVjHhPUwGAv
+   4lHKaHl95atpg2e+shaJIJwoEY2qABj+Dj5wjqtI/GlF5Ojq4x+N35xyK
+   O6fgRSw6bTGDmXhI4LL+9c9P+s6JXKiYWuOcy8t/lthYzdLtx2RmJqTj3
+   oHnC0HPAF0nY7FQo6R7j+nkoKGCb7cgWecRCth+BfYDGOPuGEh1iJDx3e
+   iGiChTqOdBDmkdCv+iX73MM6KoOzzlGeMtgshmnMxBtjJHLQrnmtOKvHK
+   9eHUWtpusBUu2wAuZ+lv0TiSIs64b3aiSG91aWlWVuCrn+AmIP5PsQo97
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="345263997"
+X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
+   d="scan'208";a="345263997"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2022 23:16:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
+   d="scan'208";a="584858534"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 26 Mar 2022 23:16:52 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nYMCq-0000ma-96; Sun, 27 Mar 2022 06:16:52 +0000
+Date:   Sun, 27 Mar 2022 14:16:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     wujunwen <wudaemon@163.com>, arnd@arndb.de,
+        gregkh@linuxfoundation.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, wujunwen <wudaemon@163.com>
+Subject: Re: [PATCH v1] char: misc:use DEFINE_PROC_SHOW_ATTRIBUTE micro to
+ simplify misc proc_fops
+Message-ID: <202203271414.XUS8IhaO-lkp@intel.com>
+References: <20220327035854.219491-1-wudaemon@163.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220327035854.219491-1-wudaemon@163.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bug is here:
-	if (!encoder) {
+Hi wujunwen,
 
-The list iterator value 'encoder' will *always* be set and non-NULL
-by list_for_each_entry(), so it is incorrect to assume that the
-iterator value will be NULL if the list is empty or no element
-is found.
+Thank you for the patch! Yet something to improve:
 
-To fix the bug, use a new variable 'iter' as the list iterator,
-while use the original variable 'encoder' as a dedicated pointer
-to point to the found element.
+[auto build test ERROR on char-misc/char-misc-testing]
+[also build test ERROR on soc/for-next linux/master linus/master v5.17 next-20220325]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Cc: stable@vger.kernel.org
-Fixes: ec9eab097a500 ("drm/tilcdc: Add drm bridge support for attaching drm bridge drivers")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
- drivers/gpu/drm/tilcdc/tilcdc_external.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/wujunwen/char-misc-use-DEFINE_PROC_SHOW_ATTRIBUTE-micro-to-simplify-misc-proc_fops/20220327-120053
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 37fd83916da2e4cae03d350015c82a67b1b334c4
+config: hexagon-randconfig-r045-20220327 (https://download.01.org/0day-ci/archive/20220327/202203271414.XUS8IhaO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/738cb3f8808411f37ad8cb6c2529c6686a87eddf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review wujunwen/char-misc-use-DEFINE_PROC_SHOW_ATTRIBUTE-micro-to-simplify-misc-proc_fops/20220327-120053
+        git checkout 738cb3f8808411f37ad8cb6c2529c6686a87eddf
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/char/
 
-diff --git a/drivers/gpu/drm/tilcdc/tilcdc_external.c b/drivers/gpu/drm/tilcdc/tilcdc_external.c
-index 7594cf6e186e..3b86d002ef62 100644
---- a/drivers/gpu/drm/tilcdc/tilcdc_external.c
-+++ b/drivers/gpu/drm/tilcdc/tilcdc_external.c
-@@ -60,11 +60,13 @@ struct drm_connector *tilcdc_encoder_find_connector(struct drm_device *ddev,
- int tilcdc_add_component_encoder(struct drm_device *ddev)
- {
- 	struct tilcdc_drm_private *priv = ddev->dev_private;
--	struct drm_encoder *encoder;
-+	struct drm_encoder *encoder = NULL, *iter;
- 
--	list_for_each_entry(encoder, &ddev->mode_config.encoder_list, head)
--		if (encoder->possible_crtcs & (1 << priv->crtc->index))
-+	list_for_each_entry(iter, &ddev->mode_config.encoder_list, head)
-+		if (iter->possible_crtcs & (1 << priv->crtc->index)) {
-+			encoder = iter;
- 			break;
-+		}
- 
- 	if (!encoder) {
- 		dev_err(ddev->dev, "%s: No suitable encoder found\n", __func__);
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/char/misc.c:254:38: error: use of undeclared identifier 'misc_proc_ops'; did you mean 'misc_fops'?
+           ret = proc_create("misc", 0, NULL, &misc_proc_ops);
+                                               ^~~~~~~~~~~~~
+                                               misc_fops
+   drivers/char/misc.c:132:37: note: 'misc_fops' declared here
+   static const struct file_operations misc_fops = {
+                                       ^
+   1 error generated.
+
+
+vim +254 drivers/char/misc.c
+
+   248	
+   249	static int __init misc_init(void)
+   250	{
+   251		int err;
+   252		struct proc_dir_entry *ret;
+   253	
+ > 254		ret = proc_create("misc", 0, NULL, &misc_proc_ops);
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

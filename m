@@ -2,148 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B70FD4E887E
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 17:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A094E888A
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 17:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235893AbiC0Prq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 11:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56734 "EHLO
+        id S235916AbiC0P4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 11:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235790AbiC0Pro (ORCPT
+        with ESMTP id S230219AbiC0P4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 11:47:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047F935A82;
-        Sun, 27 Mar 2022 08:46:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 810E861046;
-        Sun, 27 Mar 2022 15:46:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C118CC340EC;
-        Sun, 27 Mar 2022 15:46:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648395964;
-        bh=B3ZPOyUYGQj+6qCSUleqjBCQQNBjm+6YkuHdgpSuAyw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YL+McNUSywygkfaI557mBMAfRb0GJiv3JZRwJRHIGuweV+5a+4Xv2ENzQQjRXdPB4
-         CVSCQTU2esJ/zb8h2OJPHCY5fznjz6FRlpHKxUHVRjCGefXw8XlzBOTvmfAYtuyiHQ
-         iywuzIBa82tJN68p7zn4YWzBkiVvGxMWVQbQU9+V+sRH+1Km0wczyty5P+zSNFG7Wz
-         25piB0hpv07m3uxR8JC8S1k24aeRLCjZ0mv547FcGfIUp28gK5D1Jv+HkRYs1/OHXh
-         ZP0O6B2FO3KRVVVfvmlzMTezLF+EpUCnaPJtefdoW1zuV76ZXKi0qzrOU6TvIKV46J
-         JZnL5Q3Y2jsoA==
-Date:   Sun, 27 Mar 2022 16:53:36 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Tong Zhang <ztong0001@gmail.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sean Nyekjaer <sean@geanix.com>,
-        Alexandru Ardelean <ardeleanalex@gmail.com>,
-        Jonathan Albrieux <jonathan.albrieux@gmail.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] iio:imu:bmi160: disable regulator in error path
-Message-ID: <20220327165336.799db3ac@jic23-huawei>
-In-Reply-To: <20220327154005.806049-1-ztong0001@gmail.com>
-References: <20220318070900.2499370-1-ztong0001@gmail.com>
-        <20220327154005.806049-1-ztong0001@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Sun, 27 Mar 2022 11:56:31 -0400
+Received: from IND01-MA1-obe.outbound.protection.outlook.com (mail-ma1ind01olkn0182.outbound.protection.outlook.com [104.47.100.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BE0120A9;
+        Sun, 27 Mar 2022 08:54:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BVmSPLlj4K8t8xGIofp2WNNzHU4TMaCGDumxmud8Bo077IFKb0fmgWUGyink+rMr1PE9fa5RaSdVyoEf+JPIoIw7zOgb1bf9t8jesox+yTa/6O+ZwrajiNHeLhdWN8i3qmNWQpGKeN83JM+vSPtUOiIitKHD9GVJJmJN5K77YuAi15JCX4ryHPGr0xVacoM3o8g1cruzpx8oxaNnRu3xompkFdAXMxtE5go+MsncuPbcGJC1gGBVsDRJwY95VHtsHnc10tzL+0IcUaUtMWyZagW7dHxbvbBq0IZJ+kznyvdBir34HA3XU/ZPrbSayNmY/08up5ZJUcCaa3cbu8T+CQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=332RzeANlZkgMlVT7KnX9t8T8LJu2FySmHdFdviKUw4=;
+ b=nfJ5Vi2Kmkwcon44cmzmDrnGp6qLoG4phhM64iSIThTWCwmA2rXk5cDZAN4722sc4UEEZgbjDY8zDRxEEeuF84xY9cCcrjkGET3C77rx9ca9AwZvhzRv7vVRmgDU979iTGW2D/ugL29mX+oKNJk3FyV9l73aLH+lqObBVqiRsZq8DdkSY5Jmkg7MHApnpnQxXK0wXqnhnnB7bvweFoSmPERuAmOy/58E6MjswiV+8GEryhytO2sPeGYwfMneRvTA8GqG5TgIYcahPhgilUMdu/1FcL5/vbdowCsVEnba05V9Vr01ud8Kq4xEkkY1mrIiT1VfcFdGCnRCwboPrb8I+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=332RzeANlZkgMlVT7KnX9t8T8LJu2FySmHdFdviKUw4=;
+ b=qxVvlx3L0hnASB8oJ8ARUnQ/tAZ7jjtqQwhsH3H1TJNeY+U7Dab5T/R7EKB3W1HyVzTa2X6Fmgpvoq+g8I9lhvLEADxCaKD/tB0LeB0S2rDcLMxOS3W+y0Zf+kTnMvBC8/t8n3de55MiN+n0ERxsv6vXn5iylKQSQasny9Ljlu9a6EGkZyE117/Zu952PLXyD3FcvKdE7wSbzBLUXULCQEBjs/uoPRObQZeA3x1HWzcPm0e9Icz2jxUiy4iyIjznHOxzLWGTwZERTWXFGED+EkWFbwD6RXw4eD7PyJlpcqJKeXCtvTDhFkMutnLtWqyg9/MpwnUeA/wSyTvW3x5VlA==
+Received: from MA0PR01MB7443.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:5c::7)
+ by MAXPR01MB4166.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:5::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Sun, 27 Mar
+ 2022 15:54:48 +0000
+Received: from MA0PR01MB7443.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::1983:1d86:32f7:4c2]) by MA0PR01MB7443.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::1983:1d86:32f7:4c2%7]) with mapi id 15.20.5102.019; Sun, 27 Mar 2022
+ 15:54:48 +0000
+Message-ID: <MA0PR01MB7443B82F782378825531D702B41C9@MA0PR01MB7443.INDPRD01.PROD.OUTLOOK.COM>
+Subject: [PATCH] Removing the unused TODO
+From:   Dipankar Das <dipsonu10@hotmail.com>
+To:     dave@stgolabs.net, axboe@kernel.dk
+Cc:     linux-efi@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dipsonu10@hotmail.com
+Date:   Sun, 27 Mar 2022 21:24:40 +0530
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TMN:  [DxIGcH3BlopwL89DYLTa5mnZNmdv/uCD]
+X-ClientProxiedBy: BM1PR0101CA0041.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:b00:1a::27) To MA0PR01MB7443.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:5c::7)
+X-Microsoft-Original-Message-ID: <f585897e03b85d4ff13c96223893264c2a3de801.camel@hotmail.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5fba3e7b-da11-44b2-218d-08da100a1d5d
+X-MS-Exchange-SLBlob-MailProps: 79Jo46q8hhAGd6HLJWKohVWz45gMXq9RzesEPAiP3hgmNAbZ46ZztfdXa2kOfTeCx2tsufgphnerouSYEmzCPVglKSvzFrZysjTYNwL1k/KUG/otKMm5DbDxpBZSffaJ8cyO6osh1cb3ww0rdY2ibzDoKElcbNpC8TQgb5RYlOcCRZJETH2cEIvVXrSE6Z17JEdSYlWYxp7jlRLA6X7cejFbFdGJkFoJNXB9smpxSIkyKDJ743U9yydPELdZCg4YKpXkd/Skb7imCkvA5yeyeMtjJvFcwqqy+PJS6a/x223N3ETLDEoWQKoU5vJjKu3GFfux/lRvtd+aYYxZpMZ5E+4/pSqchRWAlZoGx9FObn1CIs6j3I2Z5vmohqNJPLNkMVPyHnRcZqWeuDL2kXWyta6yHcSGrByPD7+i0Z9NhE/pGgOu1fmXi8TYh8Rjnl82wITwMh0Y50g2zVrC1MxdRULcN7PQmvvcKHwmW60dpqcHX5SGFt7x3cvWqrPntUZPrIWhKlXL1W4gPpIebDeVSOCmLIWTEYaLVwvOw931lL4TeYl1R/l+krYDaZQLywAlPD0Zu6edxqT4pyzS5BP8QtQYjhgsC/etfI/aLb8D6ygNjk6PrZdh8bbbF5bHhBBQJ79Y32FmuQuGdUjAu8lAzYSWJr1A0n+d2upqiP83vuw99hiwn+Zb6SiVu+PZ2COo
+X-MS-TrafficTypeDiagnostic: MAXPR01MB4166:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IQXVrXtcrs3TE5/Mj+H7p1SBpz/DEVQoFIUMTJ/yJC+eMLTdeVz+PiutERaLBKB0zejpAjTf3n0gJd9IcOr0bgcatUJycdudwbfKLjJ4Ebldjve3ULfb/Q+xSzwyk4w3CEsnNoXJouni2zDxOwu89JYek2WYxH//lBMUtAygS4AbdoBKKgLTiEA6gJRB8zkmARXfP06k/osyKdWG2jSV7hjnTn8r5RAV/dosl6BtC30hR9RaEkmUMsPL8ivpBUNNxOXpzIp++TUe3zg9yYcvAYHn0dI8e7NMbYh39o6SLFWqQYnSuavnIiCocYDLhjZYyOB78HRAYQT8/w6DPcWhVTpC6KCxx9rGhK+i5fraxNwX0mE4KR4yaZHr+7V7PncYB12gOBknFmB3BtTRxnzmja0zstkYRi+UygRr+PBJ8sfQJlLcXPsuGpcXM1x/On/DYR3jrBjRs8qkDjAh10u2tf8tx6HnJzdXtdGG+R85JpTeq2isJD22SQjkDRc0NDoeIaXPXlqHaHja2whN0mVfRf9IpM1nFd84nvTbgpwC7EeRKIzVT4jPBeW9jFekQ+l/HmuR+flmM+0H5cN8HGJGxg==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q3NtSzVaWjV0azE1L3JUdXN5OFAvZCtTZG5pZFZrVkV3SjZEYWZkS3htV0pQ?=
+ =?utf-8?B?aVl2TDNHVXRpUHdBeVBORVU1RG1ocys5dUp4V3NVV0lIZzRLSU15ZzU5SDN5?=
+ =?utf-8?B?TlhtNys1bjN5K3pydXZyYVM0c0Rvd3pNTC9zMjJiWWNRZDFjbVFuNjA5ZHps?=
+ =?utf-8?B?TjdKTzZuaU1pdjliV1NIa0VoWHBkQjVMcWh1WGY1R2VmaGtNdWlhVEMwL2Jp?=
+ =?utf-8?B?WGF3elE1SjMvaXREYnE1UTlrY0lzdzFxT2lJaENHQ01EYzJiRS84b3VyTFIr?=
+ =?utf-8?B?SjVteVFZYjRBNndETHJDb0pyUGxIRkU3MkNnejNZaW8wQWlZK2RobkpFYk1P?=
+ =?utf-8?B?dU9aRG04eVQ4a3ZFNENtdEtwcmQwUlovNXpuYW5KYTNQTlB6SmluWDRJcVdX?=
+ =?utf-8?B?bGFPeENUbDlWWk5zZlM1SWdzdmx0UTJubm43Q2FYQVArL1dPTTZmbTBrMnRJ?=
+ =?utf-8?B?SjhDNUxTd2RtWVhGY0ZjZDFaL2tGNGVMMnR5allGR2JIclkwM1MyNGhkaHFW?=
+ =?utf-8?B?WWJRV0J2cnpUZnd2ZEtCQVZFTTJpaEYvazhQQ09PNDFBK0RPUVdvbnAzT1Br?=
+ =?utf-8?B?MG1qdTAzMDcremNENTR6RDZOU0VIbkdybERCZy9GanZhMlJXK0ZXZVNtSlpV?=
+ =?utf-8?B?M3M4Y0hYaWd0blAvU1d5aEdIQzYzUzl5aXJ2TzBJOTkyNHZLc29odk4wblda?=
+ =?utf-8?B?K0wydUEzNm01Q21QNmhkMFRTYWNZeVFFQk1OY2RocTJTSXJDVytnN0hXaEpu?=
+ =?utf-8?B?eXZHWDhIYXpCSjlzSnIzMnV6TmZwWHh1aUprUmR0VDVmMUluSzJvNElFWFQw?=
+ =?utf-8?B?NlZzUGdJT0hQeTNsSGk0T1ZIUkFtcmhibVh5SnlFQ0pGRFU4a1BHNXc0Y2U1?=
+ =?utf-8?B?bzRWcHYzWU11NVZJK1lXQlRia3UyeW9KbEdLaEpCcGg3ejhGZytncy9RdGRo?=
+ =?utf-8?B?SnF2ZVJyYk1jalVEYUEreExORHp5aElhMjJybE9iai8wOE8wWlhUeXZQblZR?=
+ =?utf-8?B?NmxmTksyMVNmN2Vxb05pL3VyOHZWdG9WcHo0UkdwWjBOaHdLdjlIS3haTVlv?=
+ =?utf-8?B?UVNTcUo3aHlmSHFjRVBuTlR3V0VJalQxR2hYZFRoMzFldW4yQkp4Q3pEWWJX?=
+ =?utf-8?B?bVF4R2lWaTh2OENuUkdrbmF5MWIrV3E1ZVVSRjFpQ0VYODNsTktRVkl5dGlK?=
+ =?utf-8?B?NUtmVDIzTkhGVzhWYTI3bld5SWxEcWp6OEVuUnhIRzZveFNvNXNLT0R0bXFU?=
+ =?utf-8?B?TVZzOXRYSUx4WkVQK0VUS3BVQmRrZzdueFRlbnBTbVJ5RW1STE1NejJDdWpV?=
+ =?utf-8?B?S1JhREQ4Ty9MdUdlU3RPU3Bhb3VLbXNJNkFVQzRkbHQxRGVXNjN6aG9ORmJG?=
+ =?utf-8?B?UDIwTTF5M3dSMlc4a1V4eU1Hd1FsSDNVZzAzK21FNWtnZVNEV2hETEp3bjJE?=
+ =?utf-8?B?WWg3VnVJOXJQeXpkaThoNDN1dzQ5dnhwUVdmSyt4YVlidjRQZmdWWVRRMkdj?=
+ =?utf-8?B?Z2U2S2dzeU1VSzc5OVpaVGNXZjdOajJsamc3QjdqNTdTVHNaaXFRVVZTbkl1?=
+ =?utf-8?B?VzVlRXpIdUdoYlp4T2tUNXdhSUkzMGh1RSszUFdJa2ZYY0p5SlZPdkFxM01Y?=
+ =?utf-8?B?N3NDVUFSYjhuYjQrMTlTVkV3NHZCOEJ6V1dtOXNRdlV4MVoraEtRb3Z0czhQ?=
+ =?utf-8?B?bUVNRFhGSjZxUkMzVHRvWnNUcXRhb3FWV0N2QXpXcUppSnVlOFJ0dVBxbUZC?=
+ =?utf-8?B?NHlLbE9lZ2dVcXdENncvS0ZibTg3aUtMTFpOUDRGWXFtc3IvWGFycDZjaStt?=
+ =?utf-8?B?bEI1bWJobmRVZ0o5Z0lOQ2p5OGZONk4vZFlsVnJuWkU2VWk0RkFSR2kzUDBK?=
+ =?utf-8?B?OEpwaW1UODl1N25FK2R1dzVKb1UvSjhTWVY2bkV6SVcvcFI3ekxVTlQxQzdN?=
+ =?utf-8?Q?og1usL92vbs=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5fba3e7b-da11-44b2-218d-08da100a1d5d
+X-MS-Exchange-CrossTenant-AuthSource: MA0PR01MB7443.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2022 15:54:48.0020
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MAXPR01MB4166
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Mar 2022 08:40:05 -0700
-Tong Zhang <ztong0001@gmail.com> wrote:
+From 429f8f717c7a2b36ef75b7f747e05971c53ed932 Mon Sep 17 00:00:00 2001
+From: Dipankar Das <dipsonu10@hotmail.com>
+Date: Sun, 27 Mar 2022 20:06:40 +0530
+Subject: [PATCH] Removing the unused TODO
+As the TODO didn't had a message and nothing related to it
 
-> Regulator should be disabled in error path as mentioned in _regulator_put().
-> Also disable accel if gyro cannot be enabled.
-> 
-> [   16.233604] WARNING: CPU: 0 PID: 2177 at drivers/regulator/core.c:2257 _regulator_put
-> [   16.240453] Call Trace:
-> [   16.240572]  <TASK>
-> [   16.240676]  regulator_put+0x26/0x40
-> [   16.240853]  regulator_bulk_free+0x26/0x50
-> [   16.241050]  release_nodes+0x3f/0x70
-> [   16.241225]  devres_release_group+0x147/0x1c0
-> [   16.241441]  ? bmi160_core_probe+0x175/0x3a0 [bmi160_core]
-> 
-> Fixes: 5dea3fb066f0 ("iio: imu: bmi160: added regulator support")
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
-oops. Raced with you ;)
+To: dave@stgolabs.net,
+    axboe@kernel.dk
+Cc: linux-efi@vger.kernel.org,
+    linux-block@vger.kernel.org,
+    linux-kernel@vger.kernel.org
 
-Anyhow, I added the tag, so no problem.
+Signed-off-by: Dipankar Das <dipsonu10@hotmail.com>
+---
+ block/partitions/efi.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Jonathan
+diff --git a/block/partitions/efi.c b/block/partitions/efi.c
+index 5e9be13a56a8..87d4788fe274 100644
+--- a/block/partitions/efi.c
++++ b/block/partitions/efi.c
+@@ -8,8 +8,6 @@
+  * efi.[ch] by Matt Domsch <Matt_Domsch@dell.com>
+  *   Copyright 2000,2001,2002,2004 Dell Inc.
+  *
+- * TODO:
+- *
+  * Changelog:
+  * Mon August 5th, 2013 Davidlohr Bueso <davidlohr@hp.com>
+  * - detect hybrid MBRs, tighter pMBR checking & cleanups.
+-- 
+2.25.1
 
-> ---
-> v2: also disable accel when gyro fail to enable
-> v3: add tag
->  drivers/iio/imu/bmi160/bmi160_core.c | 20 ++++++++++++++------
->  1 file changed, 14 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/iio/imu/bmi160/bmi160_core.c b/drivers/iio/imu/bmi160/bmi160_core.c
-> index 824b5124a5f5..01336105792e 100644
-> --- a/drivers/iio/imu/bmi160/bmi160_core.c
-> +++ b/drivers/iio/imu/bmi160/bmi160_core.c
-> @@ -730,7 +730,7 @@ static int bmi160_chip_init(struct bmi160_data *data, bool use_spi)
->  
->  	ret = regmap_write(data->regmap, BMI160_REG_CMD, BMI160_CMD_SOFTRESET);
->  	if (ret)
-> -		return ret;
-> +		goto disable_regulator;
->  
->  	usleep_range(BMI160_SOFTRESET_USLEEP, BMI160_SOFTRESET_USLEEP + 1);
->  
-> @@ -741,29 +741,37 @@ static int bmi160_chip_init(struct bmi160_data *data, bool use_spi)
->  	if (use_spi) {
->  		ret = regmap_read(data->regmap, BMI160_REG_DUMMY, &val);
->  		if (ret)
-> -			return ret;
-> +			goto disable_regulator;
->  	}
->  
->  	ret = regmap_read(data->regmap, BMI160_REG_CHIP_ID, &val);
->  	if (ret) {
->  		dev_err(dev, "Error reading chip id\n");
-> -		return ret;
-> +		goto disable_regulator;
->  	}
->  	if (val != BMI160_CHIP_ID_VAL) {
->  		dev_err(dev, "Wrong chip id, got %x expected %x\n",
->  			val, BMI160_CHIP_ID_VAL);
-> -		return -ENODEV;
-> +		ret = -ENODEV;
-> +		goto disable_regulator;
->  	}
->  
->  	ret = bmi160_set_mode(data, BMI160_ACCEL, true);
->  	if (ret)
-> -		return ret;
-> +		goto disable_regulator;
->  
->  	ret = bmi160_set_mode(data, BMI160_GYRO, true);
->  	if (ret)
-> -		return ret;
-> +		goto disable_accel;
->  
->  	return 0;
-> +
-> +disable_accel:
-> +	bmi160_set_mode(data, BMI160_ACCEL, false);
-> +
-> +disable_regulator:
-> +	regulator_bulk_disable(ARRAY_SIZE(data->supplies), data->supplies);
-> +	return ret;
->  }
->  
->  static int bmi160_data_rdy_trigger_set_state(struct iio_trigger *trig,
 

@@ -2,106 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5A24E8688
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 09:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6C64E868C
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 09:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235606AbiC0HeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 03:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
+        id S235616AbiC0Hel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 03:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235092AbiC0HeT (ORCPT
+        with ESMTP id S235092AbiC0Hej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 03:34:19 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483C4312
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 00:32:41 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KR6x35gvdz9sSV;
-        Sun, 27 Mar 2022 09:32:39 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id l9UUxVPIjdLE; Sun, 27 Mar 2022 09:32:39 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KR6x34b9Wz9sSS;
-        Sun, 27 Mar 2022 09:32:39 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 830848B768;
-        Sun, 27 Mar 2022 09:32:39 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id ThPcLHWlEFUZ; Sun, 27 Mar 2022 09:32:39 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.204.35])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 3F4358B763;
-        Sun, 27 Mar 2022 09:32:39 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 22R7WSvO2282414
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Sun, 27 Mar 2022 09:32:28 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 22R7WROw2282413;
-        Sun, 27 Mar 2022 09:32:27 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Nicholas Piggin <npiggin@gmail.com>
-Subject: [PATCH] powerpc/64: Fix build failure with allyesconfig in book3s_64_entry.S
-Date:   Sun, 27 Mar 2022 09:32:26 +0200
-Message-Id: <89cf27bf43ee07a0b2879b9e8e2f5cd6386a3645.1648366338.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1648366345; l=1222; s=20211009; h=from:subject:message-id; bh=96+kSaCqQqSaoNnej1U3MksSs1dXsAqDN4zXM01iUoE=; b=XAD5BO+OzdTkf5MAnzN4AkWLh4nvU/V8fJpknb7mgYHef9EEspZjhq7TWZzxjRIGxkpZLRgzoMSX x5lxDSECADEKy/rpKTvPKPUMIK3FPfiudeaOqHmqrMnUqBt0667A
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 27 Mar 2022 03:34:39 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A4F1B7AB;
+        Sun, 27 Mar 2022 00:33:01 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id v4so11257411pjh.2;
+        Sun, 27 Mar 2022 00:33:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=YKubZFE6bM+QSkBsG+9QO1RxuSxqs+5gFlfSVbQQPZM=;
+        b=VZ4ulUcfcPskQTm+VP+1tNFGk9rxfIjmMpkWEYsSvkdG8F0oPCs5b2j+Ayxot6MhTY
+         sIM1zO7pvPXr5csmHmxug3yU8T450E66bZa5PM+UuyTrhahCi0J2x7zs20c5uNpWDEuS
+         2u2N/5dr8tpEwfrho4YZuhqrVZxQnX/9dIdWW9C+rp2SxaWzPFpAyVsTSw4odFx6+yaV
+         FSCc40Sy0WVQl/2T0zNgitx5om5ds0AE41dxr6Ebah7IdMOL5ZnHulfneOygKC9kmivs
+         /r/CwCmM0C2nB5zyeH5ZpDG3Ja1/VcfegeGPnV2xbjA76xO0jczW9+GI0EIQjXLnhVbN
+         PSjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=YKubZFE6bM+QSkBsG+9QO1RxuSxqs+5gFlfSVbQQPZM=;
+        b=PXeNGO7U4/rPEYRaBDkecv+E6pQr1vDLAr1MbgXj6+DDYIBkDMfxqVr+nQRbJLG1dU
+         lChijgyu6or5GFbuF7Hvq0ZZx0zovFg9kcyj1f8FQlFko3xpfAlUMA/WkLyC7HLhBN59
+         AkrCuUfGeIBV0daAjcPJYH2bBqEbrlerWDnXFOdp+Y2WPct4xceGzj3LX5x8ecKLQ/kJ
+         QtgCERnHUAKuBHmswWLEg2ublipwMfTZiGwo5vc49hkN9cUcqVF2zw9gmjqn6j0gBxnr
+         xsI7giA5/iW8SEuBNhdnnvwYHag+Gb1iwzD/CBTlEnBrlCvXGiFYQXz9eFsT3V8DuOqv
+         pi+g==
+X-Gm-Message-State: AOAM531UZ9wpuh3hrQEXkKmedcLEelz3BBgPIjuPw5/acro3KHR6v7Dj
+        LpKuDkMH2pzKDxXfAKAxPi0=
+X-Google-Smtp-Source: ABdhPJzze9ezzNVHssEARN6KgfiGzfb3NOY5VDH6d7E2Cd06YEKl1rpHROxsCkMbscLIKv1rf2DGqQ==
+X-Received: by 2002:a17:90a:4897:b0:1c7:5fce:cbcd with SMTP id b23-20020a17090a489700b001c75fcecbcdmr32747388pjh.45.1648366381225;
+        Sun, 27 Mar 2022 00:33:01 -0700 (PDT)
+Received: from localhost ([115.220.243.108])
+        by smtp.gmail.com with ESMTPSA id h14-20020a63384e000000b00366ba5335e7sm9528888pgn.72.2022.03.27.00.33.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 27 Mar 2022 00:33:00 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     robdclark@gmail.com, sean@poorly.run, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        swboyd@chromium.org, bjorn.andersson@linaro.org,
+        quic_khsieh@quicinc.com, quic_kalyant@quicinc.com,
+        markyacoub@google.com, jsanka@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH] dpu1: dpu_encoder: fix a missing check on list iterator
+Date:   Sun, 27 Mar 2022 15:32:52 +0800
+Message-Id: <20220327073252.10871-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using conditional branches between two files is hasardous,
-they may get linked to far from each other.
+The bug is here:
+	 cstate = to_dpu_crtc_state(drm_crtc->state);
 
-	arch/powerpc/kvm/book3s_64_entry.o:(.text+0x3ec): relocation truncated
-	to fit: R_PPC64_REL14 (stub) against symbol `system_reset_common'
-	defined in .text section in arch/powerpc/kernel/head_64.o
+For the drm_for_each_crtc(), just like list_for_each_entry(),
+the list iterator 'drm_crtc' will point to a bogus position
+containing HEAD if the list is empty or no element is found.
+This case must be checked before any use of the iterator,
+otherwise it will lead to a invalid memory access.
 
-Reorganise the code to use non conditional branches.
+To fix this bug, use a new variable 'iter' as the list iterator,
+while use the origin variable 'drm_crtc' as a dedicated pointer
+to point to the found element.
 
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Fixes: 89d35b239101 ("KVM: PPC: Book3S HV P9: Implement the rest of the P9 path in C")
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: stable@vger.kernel.org
+Fixes: b107603b4ad0f ("drm/msm/dpu: map mixer/ctl hw blocks in encoder modeset")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 ---
- arch/powerpc/kvm/book3s_64_entry.S | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/arch/powerpc/kvm/book3s_64_entry.S b/arch/powerpc/kvm/book3s_64_entry.S
-index 05e003eb5d90..99fa36df36fa 100644
---- a/arch/powerpc/kvm/book3s_64_entry.S
-+++ b/arch/powerpc/kvm/book3s_64_entry.S
-@@ -414,10 +414,11 @@ END_FTR_SECTION_IFSET(CPU_FTR_DAWR1)
- 	 */
- 	ld	r10,HSTATE_SCRATCH0(r13)
- 	cmpwi	r10,BOOK3S_INTERRUPT_MACHINE_CHECK
--	beq	machine_check_common
-+	beq	1f
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+index 1e648db439f9..d3fdb18e96f9 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+@@ -965,7 +965,7 @@ static void dpu_encoder_virt_mode_set(struct drm_encoder *drm_enc,
+ 	struct dpu_kms *dpu_kms;
+ 	struct list_head *connector_list;
+ 	struct drm_connector *conn = NULL, *conn_iter;
+-	struct drm_crtc *drm_crtc;
++	struct drm_crtc *drm_crtc = NULL, *iter;
+ 	struct dpu_crtc_state *cstate;
+ 	struct dpu_global_state *global_state;
+ 	struct dpu_hw_blk *hw_pp[MAX_CHANNELS_PER_ENC];
+@@ -1007,9 +1007,14 @@ static void dpu_encoder_virt_mode_set(struct drm_encoder *drm_enc,
+ 		return;
+ 	}
  
- 	cmpwi	r10,BOOK3S_INTERRUPT_SYSTEM_RESET
--	beq	system_reset_common
-+	bne	.
+-	drm_for_each_crtc(drm_crtc, drm_enc->dev)
+-		if (drm_crtc->state->encoder_mask & drm_encoder_mask(drm_enc))
++	drm_for_each_crtc(iter, drm_enc->dev)
++		if (iter->state->encoder_mask & drm_encoder_mask(drm_enc)) {
++			drm_crtc = iter;
+ 			break;
++		}
++
++	if (!drm_crtc)
++		return;
  
--	b	.
-+	b	system_reset_common
-+1:	b	machine_check_common
- #endif
+ 	/* Query resource that have been reserved in atomic check step. */
+ 	num_pp = dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
 -- 
-2.35.1
+2.17.1
 

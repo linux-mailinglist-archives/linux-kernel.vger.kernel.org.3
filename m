@@ -2,97 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A104E89D1
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 21:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C4A4E89D3
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 21:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236553AbiC0TrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 15:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
+        id S236561AbiC0Tre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 15:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236547AbiC0Tq5 (ORCPT
+        with ESMTP id S236547AbiC0Trd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 15:46:57 -0400
-Received: from mx1.smtp.larsendata.com (mx1.smtp.larsendata.com [91.221.196.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF9F29C96
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 12:45:17 -0700 (PDT)
-Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
-        by mx1.smtp.larsendata.com (Halon) with ESMTPS
-        id 6cdf4254-ae06-11ec-8da1-0050568c148b;
-        Sun, 27 Mar 2022 19:45:16 +0000 (UTC)
-Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sam@ravnborg.org)
-        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 4749C194B36;
-        Sun, 27 Mar 2022 21:45:15 +0200 (CEST)
-Date:   Sun, 27 Mar 2022 21:45:11 +0200
-X-Report-Abuse-To: abuse@mxhotel.dk
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Christophe Branchereau <cbranchereau@gmail.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] drm/panel : innolux-ej030na and abt-y030xx067a :
- add .enable and .disable
-Message-ID: <YkC+x4m0BQFgu/n0@ravnborg.org>
-References: <20220321133651.291592-1-cbranchereau@gmail.com>
- <20220321133651.291592-4-cbranchereau@gmail.com>
- <GJM39R.I3L8ZIKHOJ252@crapouillou.net>
- <CAFsFa85Rcxh7G-X9zygHdAaca2nydUXxGfE2Vgcx_nzqgQZVgw@mail.gmail.com>
- <CAFsFa85P8V-yePR5LTLjn57GCoqJJYn5pX6WNdp+a+G23XEbSg@mail.gmail.com>
+        Sun, 27 Mar 2022 15:47:33 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA283BBF7;
+        Sun, 27 Mar 2022 12:45:54 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id r13so24666721ejd.5;
+        Sun, 27 Mar 2022 12:45:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yu665j/iElCvxD/UYxHqm5c8k6YEsd7NiQqb8GTsgY0=;
+        b=KqNM7ZRqeFz0N3q1HofbMepFBhGhkPZEX2pEiTIGKIqO0orEAOR5VjWQjPhuozAr2N
+         v465OrGrgywHmFmuoT/8ctLa4/JPZ12VnByr93go6JSgXgCyYDjqOKVVuhxLztNm9Vw1
+         iSPRym5vYC5Z3J7zbaFFIHHvKIv4T6d+HCqzApaDEWRIdtPVn9p5yIdDqwTXZl+IpgCm
+         S1Ew02JqqV6psB3hkP0ppIExTe/HElDrMx7YTMCVGSDfyrBy19hcFw+jshXbXKq8GNhe
+         Apbr8O/DohUD8D8VdCzH3aHw65UslstOCinsVZQcu85ZSH6Tx8w9Gl3FoXm4yVpIcUq8
+         FhPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yu665j/iElCvxD/UYxHqm5c8k6YEsd7NiQqb8GTsgY0=;
+        b=L4tD0U4Ej3CPmZHY3ixHUAvvq95POVgZmsG2RzqbTPyHqJIcuGyzg21gshuHJ1AR3l
+         krY6uhYHKf6ALbKsT4euz1yhjVZshmbVSpCejzsgPDxzz7IkWP8tv9RbYndQ5lxj5P5F
+         13k7rpnxOX5HPXW7HWs/abgz2CH+HTiBTJapq37gUOR56Cs+VEJZtR79J4VzAqU8uvhP
+         9cF0O2NQN2i3PQRab1tkToo6Fv3fnO+JbdTC+6/MiC4d+ssALWx4P53C7CIrto9SARyd
+         IkPAFQRKUlZvUfbj5rMma7Lefy27KdhP6djknBSAokryUPJ4lxEk1757UjFea3HF1VQJ
+         lJyQ==
+X-Gm-Message-State: AOAM533Ft7x6z6BgAGZJ+kI+3F10u98+eDHMAYgthghDfkAx41oUN4w4
+        0JYbHsrB34NJ0QgXoRhfBXWwfxmkn/fMXFLVH1LRxpfPYgc=
+X-Google-Smtp-Source: ABdhPJwOVM5eau3At52wi0bjCHtgeIN0Dv5BJDW1M8yNRA3OcpJmT+BXnd9fOJwhCUmQKknTEUBY8VEkbxHSXyFouPg=
+X-Received: by 2002:a17:907:e8d:b0:6e0:19e7:9549 with SMTP id
+ ho13-20020a1709070e8d00b006e019e79549mr23624761ejc.44.1648410352643; Sun, 27
+ Mar 2022 12:45:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFsFa85P8V-yePR5LTLjn57GCoqJJYn5pX6WNdp+a+G23XEbSg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220326194146.15549-1-jagathjog1996@gmail.com> <20220326194146.15549-4-jagathjog1996@gmail.com>
+In-Reply-To: <20220326194146.15549-4-jagathjog1996@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 27 Mar 2022 22:45:16 +0300
+Message-ID: <CAHp75Vdx3ZWFc9Xa7AhLGM=-4AzfamEqTkZxvBeu=Hu4KF7pSg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] iio: accel: bma400: Add triggered buffer support
+To:     Jagath Jog J <jagathjog1996@gmail.com>
+Cc:     Dan Robertson <dan@dlrobertson.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+On Sat, Mar 26, 2022 at 9:41 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:
+>
+> Added trigger buffer support to read continuous acceleration
+> data from device with data ready interrupt which is mapped
+> to INT1 pin.
 
-On Mon, Mar 21, 2022 at 03:42:08PM +0100, Christophe Branchereau wrote:
-> Sorry I meant "sleep out" not "sleep in" obviously
-> 
-> On Mon, Mar 21, 2022 at 3:39 PM Christophe Branchereau
-> <cbranchereau@gmail.com> wrote:
-> >
-> > Following the introduction of bridge_atomic_enable in the ingenic
-> > drm driver, the crtc is enabled between .prepare and .enable, if
-> > it exists. Add it so the backlight is only enabled after the crtc is, to
-> > avoid graphical issues.
-> >
-> > As we're moving the "sleep in" command out of the init sequence
-> > into .enable for the ABT, we need to switch the regmap cache
-> > to REGCACHE_FLAT to be able to use regmap_set_bits, given this
-> > panel registers are write-ony and read as 0.
-> >
-> > On Mon, Mar 21, 2022 at 3:21 PM Paul Cercueil <paul@crapouillou.net> wrote:
-> > >
-> > > Hi Christophe,
-> > >
-> > > Le lun., mars 21 2022 at 14:36:51 +0100, Christophe Branchereau
-> > > <cbranchereau@gmail.com> a écrit :
-> > > > Following the introduction of bridge_atomic_enable in the ingenic
-> > > > drm driver, the crtc is enabled between .prepare and .enable, if
-> > > > it exists.
-> > > >
-> > > > Add it so the backlight is only enabled after the crtc is, to avoid
-> > > > graphical issues.
-> > > >
-> > > > Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
-> > >
-> > > Didn't Sam acked it?
-No, that was the new driver, already replied.
+...
 
-For these changes - with the updated changelog:
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
+> +       struct {
+
+> +               __le16 buff[3];
+
+In my (mostly review) practice it's rare that sensors operate in LE mode.
+Please, double check that.
+
+> +               u8 temperature;
+> +               s64 ts __aligned(8);
+> +       } buffer ____cacheline_aligned;
+
+-- 
+With Best Regards,
+Andy Shevchenko

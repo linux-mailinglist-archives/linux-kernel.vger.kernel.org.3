@@ -2,133 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01B04E8647
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 08:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183734E864A
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 08:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234620AbiC0G0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 02:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
+        id S233810AbiC0Ghs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 02:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiC0G0R (ORCPT
+        with ESMTP id S229485AbiC0Ghp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 02:26:17 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDBA2B6;
-        Sat, 26 Mar 2022 23:24:39 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id gb19so11194529pjb.1;
-        Sat, 26 Mar 2022 23:24:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=dr1pfWEjH/LtXsB7tWBt6bQIyc8GynNaruocx5UK+p4=;
-        b=NrLU0Tud7dKyPrRn8FqNdKPZ7B+J9NM5tUooHHg3BkdUnZcMyXyEWggcERwvymf/D5
-         NHttV+aFJg3cbs6CYTIPfr6oAxg1Uik0CQ5xkH6Pk8XYDOOtm0Sc+VPIDE8v5FIcDER4
-         ujPKjNuz0Im4hQ5LXHN+57P1RWpXRdLtM3HNNeNaIr8RIulQStfCfLil2W2gN7rXDTfL
-         qqFGTlabkl4FVmxP8AM/qfqWNnAshka/ZgPMYw974Yl1LonF47klbzkITdVK6S87SVZh
-         pGxeGJHwamPBf0b9qkfcoMoMnpQTuRIIurLdpeOiEeyDEfQFSElvZxFP9ZNzo2CTM9mw
-         yELw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=dr1pfWEjH/LtXsB7tWBt6bQIyc8GynNaruocx5UK+p4=;
-        b=wRbHMkWSlgb9XGm9OLhLhivtyNvvoS3TnvaGCmNIU9b2OML0VlXYsx4LcOZGzZO6Gx
-         vbjm9SLtLX/b9qxUPMvqbLPs0nQHyf3y/3DpdGMJlDQ7sx5LyB2zhe3HQuhyZcT622V/
-         FlshoQRbYQYnZ4Unfj/zUoqEHftE/xEjpqPQus3qmmcdtj5SWj+9rp5YgClBrRbqRBnL
-         Q4RbE9i0NW76L9CGABU9IPDO4XWSIYtS8yJn2F4eKPFXPJqbCvyFFt/NPc+unYOEJsB+
-         38ccrqGgal9PUEcwXt1PnneTaTQdeNtD1DNSIr8tDO0YtIdc0f9k9LrNfrBEiurq9B8A
-         QsPw==
-X-Gm-Message-State: AOAM533ZlAFZHvP/VYE51Sm7Zbd95Gb+tn6j4RsIBdeb0gfrj6/cBikU
-        Brgr7oN2E+CHICAR+Co/jBw=
-X-Google-Smtp-Source: ABdhPJyGXjU/L3SAlfRX+kjprH5TGZQAun8MSIIIXSf68KUd+2NTcRZWbqiVuhcKNd4iHFEwB3EEyA==
-X-Received: by 2002:a17:90a:ca96:b0:1c6:b478:788e with SMTP id y22-20020a17090aca9600b001c6b478788emr22401255pjt.162.1648362278797;
-        Sat, 26 Mar 2022 23:24:38 -0700 (PDT)
-Received: from localhost.localdomain ([115.220.243.108])
-        by smtp.googlemail.com with ESMTPSA id l5-20020a056a0016c500b004f768db4c94sm12228443pfc.212.2022.03.26.23.24.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 23:24:38 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     balbi@kernel.org
-Cc:     gregkh@linuxfoundation.org, joel@jms.id.au, andrew@aj.id.au,
-        rentao.bupt@gmail.com, caihuoqing@baidu.com,
-        benh@kernel.crashing.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
-Subject: [PATCH] aspeed-vhub: epn: fix an incorrect member check on list iterator
-Date:   Sun, 27 Mar 2022 14:24:31 +0800
-Message-Id: <20220327062431.5847-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 27 Mar 2022 02:37:45 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7373CFC3;
+        Sat, 26 Mar 2022 23:36:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=d3KR8Rc1AINo2B0ZxpxbVflKal9A0i+al9XwlVMQf3o=; b=lK+UVv7psfLbi4Im3IoW2Sol5P
+        NoY7DmHxcEFGg9K3QDtqIMJISBPhy8xMwSDNt4zmqO20Ekt99GgCABz6oTBh3LTKLR5GPv7wHDLau
+        rnDJNeR4woSz98h43jSLziTB7UuWDzEzKzTNXMuitH++eMVyshozrh6T/86O4UKiQCndhFqGdSh2F
+        tUqwxt4UbuGpmpa62OqOuUevh+tutlsi1x20+UHchk1mc6jL9Vre70/JnQJgSQSw74326xoWT2b6w
+        FblmaIYThU2TjnJ3EljSwRP1+Uga97CioOIfY7tGtTnHUal48hI3sLZP/hBgSPavoWP3aONzLyLBQ
+        4qVPykwQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nYMVQ-004zWY-Iv; Sun, 27 Mar 2022 06:36:05 +0000
+Message-ID: <129d2cd4-729a-8b7f-a536-fae6b8758cec@infradead.org>
+Date:   Sat, 26 Mar 2022 23:35:58 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] keys: remove __user annotation from function prototype
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     Jann Horn <jannh@google.com>, David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org
+References: <20220122201516.13547-1-rdunlap@infradead.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220122201516.13547-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bug is here:
-	if (&req->req == u_req) {
+ping.
 
-The list iterator 'req' will point to a bogus position containing
-HEAD if the list is empty or no element is found. This case must
-be checked before any use of the iterator, otherwise it may bypass
-the 'if (&req->req == u_req) {' check in theory, if '*u_req' obj is
-just allocated in the same addr with '&req->req'.
+On 1/22/22 12:15, Randy Dunlap wrote:
+> Remove a missed __user annotation from the prototype for
+> keyring_read(). This cures a sparse warning when it complains about
+> the difference in the prototype and the function definition.
+> 
+> security/keys/keyring.c:481:13: sparse:    long static [signed] [toplevel] keyring_read( ... )
+> security/keys/keyring.c:81:13: sparse:    long static [addressable] [signed] [toplevel] keyring_read( ... )
+> 
+> Fixes: 796e46f9e2cb ("keys: Remove outdated __user annotations").
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Jann Horn <jannh@google.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Cc: keyrings@vger.kernel.org
+> ---
+>  security/keys/keyring.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- linux-next-20220121.orig/security/keys/keyring.c
+> +++ linux-next-20220121/security/keys/keyring.c
+> @@ -79,7 +79,7 @@ static void keyring_revoke(struct key *k
+>  static void keyring_destroy(struct key *keyring);
+>  static void keyring_describe(const struct key *keyring, struct seq_file *m);
+>  static long keyring_read(const struct key *keyring,
+> -			 char __user *buffer, size_t buflen);
+> +			 char *buffer, size_t buflen);
+>  
+>  struct key_type key_type_keyring = {
+>  	.name		= "keyring",
 
-To fix this bug, just mova all thing inside the loop and return 0,
-otherwise return error.
-
-Cc: stable@vger.kernel.org
-Fixes: 7ecca2a4080cb ("usb/gadget: Add driver for Aspeed SoC virtual hub")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
- drivers/usb/gadget/udc/aspeed-vhub/epn.c | 23 ++++++++++-------------
- 1 file changed, 10 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/epn.c b/drivers/usb/gadget/udc/aspeed-vhub/epn.c
-index 917892ca8753..aae4ce3e1029 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/epn.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/epn.c
-@@ -468,27 +468,24 @@ static int ast_vhub_epn_dequeue(struct usb_ep* u_ep, struct usb_request *u_req)
- 	struct ast_vhub *vhub = ep->vhub;
- 	struct ast_vhub_req *req;
- 	unsigned long flags;
--	int rc = -EINVAL;
- 
- 	spin_lock_irqsave(&vhub->lock, flags);
- 
- 	/* Make sure it's actually queued on this endpoint */
- 	list_for_each_entry (req, &ep->queue, queue) {
--		if (&req->req == u_req)
--			break;
--	}
--
--	if (&req->req == u_req) {
--		EPVDBG(ep, "dequeue req @%p active=%d\n",
--		       req, req->active);
--		if (req->active)
--			ast_vhub_stop_active_req(ep, true);
--		ast_vhub_done(ep, req, -ECONNRESET);
--		rc = 0;
-+		if (&req->req == u_req) {
-+			EPVDBG(ep, "dequeue req @%p active=%d\n",
-+				req, req->active);
-+			if (req->active)
-+				ast_vhub_stop_active_req(ep, true);
-+			ast_vhub_done(ep, req, -ECONNRESET);
-+			spin_unlock_irqrestore(&vhub->lock, flags);
-+			return 0;
-+		}
- 	}
- 
- 	spin_unlock_irqrestore(&vhub->lock, flags);
--	return rc;
-+	return -EINVAL;
- }
- 
- void ast_vhub_update_epn_stall(struct ast_vhub_ep *ep)
 -- 
-2.17.1
-
+~Randy

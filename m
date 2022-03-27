@@ -2,65 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C40644E878D
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 14:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A914E8793
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 14:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234141AbiC0MC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 08:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40884 "EHLO
+        id S234256AbiC0MFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 08:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233102AbiC0MC6 (ORCPT
+        with ESMTP id S234211AbiC0MFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 08:02:58 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4BE1ADB4
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 05:01:19 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2e6ceb45174so82730177b3.8
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 05:01:19 -0700 (PDT)
+        Sun, 27 Mar 2022 08:05:16 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E009B7E6
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 05:03:37 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id z8so21556448ybh.7
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 05:03:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+JLBatQiTjNxucxb+AAO5n2LSgO+yRQ0dxeApnUF+sc=;
-        b=BWL6eg5Qoeih5liyNKTxPU8t35qf9FMH6Hq7U68Y61Anl3fyA1H2eJKBbM+xexmlxF
-         +aL7AzpTyJTEDG+vWVy9DTMPpBcG70TJLJhLOpgwLdeDjLwZCl+wjrjvnyE2ZWdXX0Rb
-         upPC0UJywk2d4Zfb1EpDIFdq2unL30jj7pOUPgqNrW0QWcgMOiGgHN375QAi7VRBhXfX
-         2+kpnaDxPiUNhOjlubGPDH2RXCDtMlLFjbB+JfWFgo/q+5wz34B18XlXUDJbWYI3IrZ0
-         Mxc0KY+9A/mCwEc9i2w81HkHj9EHIA79PIgXoKL2bqvYfI1Xae4uLOJD//so9x5OiKqX
-         yGwQ==
+         :cc:content-transfer-encoding;
+        bh=wHl9/T6i852qERrOCzTbVmjCSJRBRFv6zzTTgfN3gGk=;
+        b=DBeKCqnidSXRmjiHTwVXUm4Pw0FrvuU5auJwDHCtbAnP1JZ6qiPpSjZDc1EnievgCm
+         k5no1MQUvAD2Yp3D3H1Tr3wFvuBVtBvY0i0mU5RabNBoi3/pL8f/6Tb9BQLGy0EqxLim
+         On/ghyDbBKDfoI1WVgqODIBn6khsYUoHAWzfmXzjVfIdVAfJdqWQ38L4b3KjNIsnQGf5
+         cgvoKweA70BHCozuaKCRihZLkHnnvPPUZn2vskE4BruKJzGYVu0lZCSi+igjp0nfvdo0
+         ZJyraa0orbFShGttjahETrCdSKgHieYBFQK9fGyQ0z7Gu5mGO845X2d0b8f0k35o7KuE
+         ASiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+JLBatQiTjNxucxb+AAO5n2LSgO+yRQ0dxeApnUF+sc=;
-        b=eNdVzp87mnsABwIdlus+EYwW/4YHQHPEajHOT9xdAq1NjugpLH3Styjaut3AEnkbQa
-         HdomNIk10bO9C24QfKzlt5DHDAyjr5B9LVSopRTWzqZb17Msgl4RfV646zwBVFoEzBa2
-         WjrJIE2U+v0C88LfSwedBejxuHrJpScum2L6uHq5a7QDhNEzDF1vVSabA2SxZRZyAnak
-         Uz1Y5cVnCTThZAbH//8OkAElI3+7720/l4am8HOJsjkN0v3byM7UuI0aFd0vX/5jwemq
-         Xc0Jw6R3Bn1RxVihSdEQ2j57Vn2Pp66lWvus3Ei/nSZ+Mlz8Xvgp6BSb2DoQzxYFsJPq
-         2pIQ==
-X-Gm-Message-State: AOAM531SKo2AGRsll4nxivN0azCqwvFzpK4vSfS24wRm0fFjjQGAQDA+
-        sXq7r6bBNr4pTFHEFMN9Hc4uWzLeXcmkuPTG8qwCaA==
-X-Google-Smtp-Source: ABdhPJwSVZimEgxSRjV+BLp7lkLZBgy1/Qoke1+kB8RxAxMHiVCaNhApabi0eLeIBCfWUsAR91rj1IwV7cn/PgMj9zc=
-X-Received: by 2002:a0d:d68e:0:b0:2e5:9f48:a24a with SMTP id
- y136-20020a0dd68e000000b002e59f48a24amr20897888ywd.151.1648382478791; Sun, 27
- Mar 2022 05:01:18 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=wHl9/T6i852qERrOCzTbVmjCSJRBRFv6zzTTgfN3gGk=;
+        b=AiLuoecyTVRjK2WX9TX2bk34WiEUpsPbRcYjO67YhSngvdHgw5uZoXWtDxt7Hw0R9z
+         rnQpea+TXxzq5MgB+DFL0gKkj+ET4lCFtbAocyv7OywFh3INmbqA5qqhI7lARRMxffMY
+         4nU3HfBJdKnzU4N5+7d+O9rvtY/NPYXCGmjYUcS2OdRkuYalzWdaUl74JseeGKXKNk14
+         05vpUvgpibYuq9B3Gq2WwUaEGZ3E3dqx1WJQ3ig10lOLdNdmvBRA+yiWiWVW+yh8/c+N
+         Mn/6A3MYsqhr6NmRLQZuE1OOsr8S57MQ1uKFek1iuuc65IJ1PTlGKUcIuMJ3hRl/cRKi
+         L7wg==
+X-Gm-Message-State: AOAM53167azrlmF332qDHQ+UBmkkQkavnYxY4pj5yk0YMtORdEI//MVy
+        id64vDdZz6n0ZpR1wwOmyTnX4Aw8diGULm++h9W21Q==
+X-Google-Smtp-Source: ABdhPJyTVK6hiK7PmUY/txocaMlBoVgao0GtcKKhq5CZDdZWRUTeou5UFQRdJHVA+h0E7EBO4BHN73OpU62W6NXo4pA=
+X-Received: by 2002:a25:ab64:0:b0:633:6d02:ebc8 with SMTP id
+ u91-20020a25ab64000000b006336d02ebc8mr18404908ybi.492.1648382616352; Sun, 27
+ Mar 2022 05:03:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <202203222145.UcCrXHfm-lkp@intel.com> <20220322130308.GA21877@65fc916127a5>
-In-Reply-To: <20220322130308.GA21877@65fc916127a5>
+References: <20220326165909.506926-1-benni@stuerz.xyz> <20220326165909.506926-9-benni@stuerz.xyz>
+In-Reply-To: <20220326165909.506926-9-benni@stuerz.xyz>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 27 Mar 2022 14:01:07 +0200
-Message-ID: <CACRpkdbiUDREqOe6C_AAnG7vpeMCgMvaOKknEXT2B0yUWKbyzQ@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: mediatek: common-v1: fix semicolon.cocci warnings
-To:     kernel test robot <lkp@intel.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kbuild-all@lists.01.org,
-        linux-gpio@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
-        Sean Wang <sean.wang@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Sun, 27 Mar 2022 14:03:24 +0200
+Message-ID: <CACRpkdYa6cKC34MzkXKsVSAFEkcGb=R5a0XS68eA3njoTh8Q8A@mail.gmail.com>
+Subject: Re: [PATCH 09/22] gpio-winbond: Use C99 initializers
+To:     =?UTF-8?Q?Benjamin_St=C3=BCrz?= <benni@stuerz.xyz>
+Cc:     andrew@lunn.ch, sebastian.hesselbarth@gmail.com,
+        gregory.clement@bootlin.com, linux@armlinux.org.uk,
+        linux@simtec.co.uk, krzk@kernel.org, alim.akhtar@samsung.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, robert.moore@intel.com,
+        rafael.j.wysocki@intel.com, lenb@kernel.org, 3chas3@gmail.com,
+        laforge@gnumonks.org, arnd@arndb.de, gregkh@linuxfoundation.org,
+        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rric@kernel.org, brgl@bgdev.pl,
+        mike.marciniszyn@cornelisnetworks.com,
+        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
+        pali@kernel.org, dmitry.torokhov@gmail.com, isdn@linux-pingi.de,
+        benh@kernel.crashing.org, fbarrat@linux.ibm.com, ajd@linux.ibm.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        nico@fluxnic.net, loic.poulain@linaro.org, kvalo@kernel.org,
+        pkshih@realtek.com, bhelgaas@google.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-input@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-media@vger.kernel.org,
+        wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-pci@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -71,23 +90,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 2:03 PM kernel test robot <lkp@intel.com> wrote:
+On Sat, Mar 26, 2022 at 6:00 PM Benjamin St=C3=BCrz <benni@stuerz.xyz> wrot=
+e:
 
-> From: kernel test robot <lkp@intel.com>
+> This replaces comments with C99's designated
+> initializers because the kernel supports them now.
 >
-> drivers/pinctrl/mediatek/pinctrl-mtk-common.c:171:2-3: Unneeded semicolon
->
->
->  Remove unneeded semicolon.
->
-> Generated by: scripts/coccinelle/misc/semicolon.cocci
->
-> Fixes: 156f721704b5 ("pinctrl: mediatek: common-v1: Commonize spec_ies_smt_set callback")
-> CC: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Benjamin St=C3=BCrz <benni@stuerz.xyz>
 
-Patch applied.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
 Linus Walleij

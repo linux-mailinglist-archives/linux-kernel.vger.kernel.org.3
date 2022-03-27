@@ -2,112 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737664E86CF
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 10:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E154E86D2
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 10:05:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235633AbiC0IFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 04:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54196 "EHLO
+        id S235649AbiC0IGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 04:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiC0IFd (ORCPT
+        with ESMTP id S229636AbiC0IGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 04:05:33 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B51E2C64E;
-        Sun, 27 Mar 2022 01:03:54 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id jx9so11270148pjb.5;
-        Sun, 27 Mar 2022 01:03:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=5XpCe/dhohQRtgxYw4qrnTYj4xTRi/aun8FZYK8rzRI=;
-        b=Ln3wl1pOFR/gFdMI12yBjzwshEtLTaAljOpd3k6OOAdMrx0wY9qzv5IXx4hZr22oCv
-         WMq5usgkP125k4vId0VqPdYNmxXgIVWWH2/9T+t3dU5+ARm2ZSepljayGjIUMSQudW4Y
-         WGTzmKWOQoRvQTY88VCMY6R6TEx9JlsRTgowEjKz8lAZ2XCzpfy41+uY4kD3Qn++XxvJ
-         Uw2vq+hkL0C2IiPeajev9mhqA2WhRc1qSbN2ZJEfBedsQWHlId/y3hUPyBIeODsgLsqy
-         OaU2Ra/wnUDh84gWhon4s00tnYbj0gJWEKNyI8pfOcmWb6ZNLtZGVtYJ+pa9M8iS5PQ+
-         w+Uw==
+        Sun, 27 Mar 2022 04:06:32 -0400
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC43231DD3;
+        Sun, 27 Mar 2022 01:04:54 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id w25so13695539edi.11;
+        Sun, 27 Mar 2022 01:04:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=5XpCe/dhohQRtgxYw4qrnTYj4xTRi/aun8FZYK8rzRI=;
-        b=1P1PDSf89ni7ZO6gnzFUHKTk4ORYov8W8HrAAZuOueRb2hGxQoRBmANjBch8dRUfYc
-         qXkn6rIVU6uNDpvbq5Qwwtd+QyllRG5EeLKBJdPJOO3RO/hoXKpCBE3CHZ5ELTXVZwPN
-         uB4DlTKbzUJCFEptjAoUKoEBhqGomkkPJnmhke78taucwjEbRmM47R4DBgLVct7Dt9V9
-         7xOxv8XZ6ztAZ608N/HjwKqhh7C+6qJZeeKkc2k0rYO79TN+GzjHIvzAvOzB7ivp2Fmg
-         WXYhpCEyR0ciRrdjhy2nXjSTy3Q6W0ZipQA5MUlCbUClF6BNuUJ9sx3cABkGfs4qwV7d
-         8Cxw==
-X-Gm-Message-State: AOAM533UV1UBk3sCqXGVZu/J1d0+PE2sRQRBhb6uUb8Cp2S6nXmr4dlK
-        S97ecu7kfeUw18oyp/sMsQo=
-X-Google-Smtp-Source: ABdhPJwau6MqIHbu+LZ/UCfLHdpIQifopUQhgTPr01bqpIiL25L4v0r2Bjv7OX5yEq8LLa/I1w/3Yw==
-X-Received: by 2002:a17:90b:38cf:b0:1bf:42ee:6fa with SMTP id nn15-20020a17090b38cf00b001bf42ee06famr34435669pjb.9.1648368234032;
-        Sun, 27 Mar 2022 01:03:54 -0700 (PDT)
-Received: from localhost ([115.220.243.108])
-        by smtp.gmail.com with ESMTPSA id k137-20020a633d8f000000b0039800918b00sm5989617pga.77.2022.03.27.01.03.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 27 Mar 2022 01:03:53 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     sj@kernel.org, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
-Subject: [PATCH] damon: vaddr-test: fix a missing check on list iterator
-Date:   Sun, 27 Mar 2022 16:03:45 +0800
-Message-Id: <20220327080345.12295-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IHOIaMurWc7F9ZSw+uYgY5lnqAhPhqRFB9rnEJSiWNc=;
+        b=XRLf+KToX5ieK1+FLwI+C6RLEWPd566JOa4H5F3zZRhjMONVoBhH/ZTesY0iIL3UFU
+         fsgJRP1XlHVoV6D1T2msy9aa17H+RuqDAhUURErwz2mxTWS3DQZoyHVaFm210J5wQ91y
+         cWXCNQiYgtyaAkPEJHFsiFSwe+wlgu7AJqf4o7B2gbXCIC0PG+f8PX1fdYIne+Jf8rn0
+         bRrZSywDNPkRuP739p+OtIHOur+9TSOXxOtRrdkCQMyRepyNpkFAZAo1XgGa3h3a1Ko7
+         0VgEg/zU4hlJR6BPVMNlLIVRaQjZT2/LoIxQhujDYe/+9ZmoegG25dzgAm1nzhfufQfX
+         Pfww==
+X-Gm-Message-State: AOAM531DlJpP9DFv4q/69r00Ovj6vcvxoaXW/8vEsb3Q/o+wnCFllOB/
+        +CXNzfaOTNWajUpg4rEJf3o=
+X-Google-Smtp-Source: ABdhPJy4EOHN+HJ/Npv5WtakVNt4K3GvTHkNtyBVRFi8JZFEELjsIEw1eNOVaTJKMRJ2z5r3pD5F7g==
+X-Received: by 2002:a05:6402:5304:b0:413:8a0c:c54a with SMTP id eo4-20020a056402530400b004138a0cc54amr9137498edb.172.1648368293151;
+        Sun, 27 Mar 2022 01:04:53 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id y16-20020aa7d510000000b004197c1cec7dsm5403354edq.6.2022.03.27.01.04.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Mar 2022 01:04:52 -0700 (PDT)
+Message-ID: <c7714450-0b68-7041-dd46-072d45efc753@kernel.org>
+Date:   Sun, 27 Mar 2022 10:04:51 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 2/3] arm64: dts: rockchip: rk3399: use generic pmucru
+ nodename
+Content-Language: en-US
+To:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220326102712.20906-1-jbx6244@gmail.com>
+ <20220326102712.20906-2-jbx6244@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220326102712.20906-2-jbx6244@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bug is here:
-	KUNIT_EXPECT_EQ(test, r->ar.start, start + i * expected_width);
-	KUNIT_EXPECT_EQ(test, r->ar.end, end);
+On 26/03/2022 11:27, Johan Jonker wrote:
+> The cru nodenames should be generic,
 
-For the damon_for_each_region(), just like list_for_each_entry(),
-the list iterator 'drm_crtc' will point to a bogus position
-containing HEAD if the list is empty or no element is found.
-This case must be checked before any use of the iterator,
-otherwise it will lead to a invalid memory access.
+"The node names"
 
-To fix this bug, just mov two KUNIT_EXPECT_EQ() into the loop
-when found.
+> so fix this for the pmucru node.
 
-Cc: stable@vger.kernel.org
-Fixes: 044cd9750fe01 ("mm/damon/vaddr-test: split a test function having >1024 bytes frame size")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
- mm/damon/vaddr-test.h | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Wrap description like in our coding style:
+https://elixir.bootlin.com/linux/v5.13/source/Documentation/process/submitting-patches.rst#L588
 
-diff --git a/mm/damon/vaddr-test.h b/mm/damon/vaddr-test.h
-index 6a1b9272ea12..98b7a9f54b35 100644
---- a/mm/damon/vaddr-test.h
-+++ b/mm/damon/vaddr-test.h
-@@ -281,14 +281,16 @@ static void damon_test_split_evenly_succ(struct kunit *test,
- 	KUNIT_EXPECT_EQ(test, damon_nr_regions(t), nr_pieces);
- 
- 	damon_for_each_region(r, t) {
--		if (i == nr_pieces - 1)
-+		if (i == nr_pieces - 1) {
-+			KUNIT_EXPECT_EQ(test,
-+				r->ar.start, start + i * expected_width);
-+			KUNIT_EXPECT_EQ(test, r->ar.end, end);
- 			break;
-+		}
- 		KUNIT_EXPECT_EQ(test,
- 				r->ar.start, start + i++ * expected_width);
- 		KUNIT_EXPECT_EQ(test, r->ar.end, start + i * expected_width);
- 	}
--	KUNIT_EXPECT_EQ(test, r->ar.start, start + i * expected_width);
--	KUNIT_EXPECT_EQ(test, r->ar.end, end);
- 	damon_free_target(t);
- }
- 
--- 
-2.17.1
 
+Best regards,
+Krzysztof

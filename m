@@ -2,75 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165594E892B
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 20:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8823B4E892C
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 20:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236249AbiC0SES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 14:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
+        id S236247AbiC0SF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 14:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236082AbiC0SEP (ORCPT
+        with ESMTP id S233759AbiC0SF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 14:04:15 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB0A344FC
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 11:02:36 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id q5so16399133ljb.11
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 11:02:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OQOFDrIFh2bz70XHqIr89KbFLDHUuV5VP66dlTu2bGw=;
-        b=UaVNLwcZnvNLhG+fejMyq3YjMXYSMxy5CO44s6uUwA0vwEwVOizoIns9xkanN7LLp0
-         W1vSRjwHVhQ+ttok6Z7J+uole/YvctKvrH6MJNpHghzdUIo/cKLR1r4McGrH4Vruxf7W
-         HID+h3OJaj/oQ34G67d/vgqL0v6Fwqnq6rLSY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OQOFDrIFh2bz70XHqIr89KbFLDHUuV5VP66dlTu2bGw=;
-        b=v4zaD8/NwrHeGa4HKic1dmmXJ5n2H/L8eTfBZ8V48FI4Fd0U/4cn30C/2s/L05+sK1
-         41qtZAoDrjREgRu5HAREOXbG5NgvnJwC7Z4lN6E0Ep27fX+p5IFtKIeL1+O5JtxvIBXX
-         FuYxx2gkU6Rmc0KlwUdiK9+nfoHqDLmKYjhUgOMyl+3zQU6bDmpj/WXJyjT2pz+rfpPQ
-         ZIp+eniU6h7Bx3XpPun7eUP9rBdOmoS5ulAfTcpsF5pRNWZBYrzIyVdWKNkW3RR/gXtn
-         TqwBRW9IInRooaz/nDp9GNQz6aaTejzDgq6FyJWj8lpkhNI02e3E2Ok4P1RNRKe+ZwpN
-         B0Kw==
-X-Gm-Message-State: AOAM532FgqHbLSDKxgHJH9WAnuPHEPkvjuVvewBgKCC1NAoSJyD9oJ5v
-        OaLGrdiAZRZ0t7gc9VZu6fZzbYbZcOD9s3vNphk=
-X-Google-Smtp-Source: ABdhPJwioTJCOJsWYRRlCq9uEfb7AzsH86N3OZv4zjae5Zwku3CV0PgAzAYdksPOAzElbMrWr0PnCg==
-X-Received: by 2002:a2e:1544:0:b0:247:dce4:681 with SMTP id 4-20020a2e1544000000b00247dce40681mr16904931ljv.430.1648404154029;
-        Sun, 27 Mar 2022 11:02:34 -0700 (PDT)
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
-        by smtp.gmail.com with ESMTPSA id b14-20020a0565120b8e00b0044a29806f79sm1416776lfv.259.2022.03.27.11.02.29
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Mar 2022 11:02:30 -0700 (PDT)
-Received: by mail-lf1-f45.google.com with SMTP id h7so21220284lfl.2
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 11:02:29 -0700 (PDT)
-X-Received: by 2002:a05:6512:3d8f:b0:44a:2c65:8323 with SMTP id
- k15-20020a0565123d8f00b0044a2c658323mr16370626lfv.52.1648404149184; Sun, 27
- Mar 2022 11:02:29 -0700 (PDT)
+        Sun, 27 Mar 2022 14:05:56 -0400
+Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.47.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF91724F19
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 11:04:17 -0700 (PDT)
+Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
+        by gateway22.websitewelcome.com (Postfix) with ESMTP id 4C2F4120A9
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:04:17 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id YXFRn4CSLb6UBYXFRnCQIS; Sun, 27 Mar 2022 13:04:17 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=y0TymoW1/EHyK8EcWmQLz2OyazkUOJVHtE/BKhoGZqU=; b=jmoaOlvmFTqS0WAkv82OTHV6OZ
+        4V17ERb7dRVBIRX5YVLNuQdICPL6Jbefu6lY9QlFoV/LN0mnb2150lnz9YNTq23XoHWF9KiFL+WPe
+        ANFcn8hV3nzIPrw6haZdXOdHrF51zHQy6bRSaiGm4KQ4Q/F4NFfEoOSH66y+ZygEZJ97mm3tGG6RZ
+        rAchapmHNt+L9Ci3csMU6rVWv58nM2NQp6yhPQf2R3LMWfL8M3L7R8GyDUwKxbHcRGxqeXBQOokjF
+        AvY7R20QsC75/fCIKgIkM6j0Nc845sn+SIJ6TMdhNRGo6lXf0mKWBKZeysT/QIm5TBCL3CMpQJjrZ
+        wM2FYvfA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54516)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nYXFQ-0046TH-TF; Sun, 27 Mar 2022 18:04:16 +0000
+Message-ID: <a1607f0d-9d6c-fb55-d0d2-b57e4fdfda23@roeck-us.net>
+Date:   Sun, 27 Mar 2022 11:04:15 -0700
 MIME-Version: 1.0
-References: <20220325150419.757836392@linuxfoundation.org> <20220325150420.085364078@linuxfoundation.org>
- <CAHk-=wiaeZKiEk87Sms1sy53m8tT3UCLOoeUBnX1c_1dZ78WjQ@mail.gmail.com>
- <Yj7oXgoCdhWAwFQt@kroah.com> <CAHk-=wgeOrhN_Gznm80==STG1pEbqLMCaZZoeQzZu=NN9GOTgw@mail.gmail.com>
- <YkAuqiHAEaDLHDAO@kroah.com>
-In-Reply-To: <YkAuqiHAEaDLHDAO@kroah.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 27 Mar 2022 11:02:12 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgzSHQqz33i0DfmFyEG43eeyDkkUO=a3jY0eH2h_1AwgA@mail.gmail.com>
-Message-ID: <CAHk-=wgzSHQqz33i0DfmFyEG43eeyDkkUO=a3jY0eH2h_1AwgA@mail.gmail.com>
-Subject: Re: [PATCH 5.10 11/38] swiotlb: rework "fix info leak with DMA_FROM_DEVICE"
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Christoph Hellwig <hch@lst.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/4] hwmon: (asus-ec-sensors) implement locking via the
+ ACPI global lock
+Content-Language: en-US
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     darcagn@protonmail.com, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
+ <20220327121404.1702631-3-eugene.shalygin@gmail.com>
+ <CAB95QASpZTz4eMger46WEa9xWJNmARShBUNb7edJA1eij3KBwA@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAB95QASpZTz4eMger46WEa9xWJNmARShBUNb7edJA1eij3KBwA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nYXFQ-0046TH-TF
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54516
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 1
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,42 +85,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 27, 2022 at 2:30 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> But why did you just revert that commit, and not the previous one (i.e.
-> the one that this one "fixes")?  Shouldn't ddbd89deb7d3 ("swiotlb: fix
-> info leak with DMA_FROM_DEVICE") also be dropped?
+On 3/27/22 09:21, Eugene Shalygin wrote:
+> On Sun, 27 Mar 2022 at 14:15, Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
+>> +       /* number of board EC sensors */
+>> +       u8 nr_sensors;
+> 
+> Re-added by mistake, will be fixed in the next patch version.
+> 
+>> +               if (ACPI_FAILURE(status)) {
+>> +                       dev_err(dev,
+>> +                               "Failed to get hardware access guard AML mutex"
+>> +                               "'%s': error %d",
+>> +                               mutex_path, status);
+> 
+> Can't choose between various options to fix this broken string
+> literal. Would be thankful, Günter, for a suggestion.
+> 
 
-The previous one wasn't obviously broken, and while it's a bit ugly,
-it doesn't have the fundamental issues that the "fix" commit had.
+What is the problem other than that the string is split across
+multiple lines ? That can easily be fixed by not splitting it,
+so you'll have to be more specific.
 
-And it does fix the whole "bounce buffer contents are undefined, and
-can get copied back later" at the bounce buffer allocation (well,
-"mapping") stage.
-
-Which could cause wasted CPU cycles and isn't great, but should fix
-the stale content thing for at least the common "map DMA, do DMA,
-unmap" situation.
-
-What commit aa6f8dcbab47 tried to fix was the "do multiple DMA
-sequences using one single mapping" case, but that's also what then
-broke ath9k because it really does want to do exactly that, but it
-very much needs to do it using the same buffer with no "let's reset
-it".
-
-So I think you're fine to drop ddbd89deb7d3 too, but that commit
-doesn't seem *wrong* per se.
-
-I do think we need some model for "clear the bounce buffer of stale
-data", and I do think that commit ddbd89deb7d3 probably isn't the
-final word, but we don't actually _have_ the final word on this all,
-so stable dropping it all is sane.
-
-But as mentioned, commit ddbd89deb7d3 can actually fix some cases.
-
-In particular, I do think it fixes the SG_IO data leak case that
-triggered the whole issue. It was just then the "let's expand on this
-fix" that was a disaster.
-
-                  Linus
+Guenter

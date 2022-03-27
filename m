@@ -2,165 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E17434E8838
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 16:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC47A4E8854
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 17:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235761AbiC0Op4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 10:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
+        id S235783AbiC0PIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 11:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbiC0Opz (ORCPT
+        with ESMTP id S229518AbiC0PIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 10:45:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95AA6558;
-        Sun, 27 Mar 2022 07:44:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 27 Mar 2022 11:08:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A7DA41984
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 08:06:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648393583;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kRrEX4hnlAxo6wDrCfxKsONrmV+bOzrMHx67TeVnS8Q=;
+        b=HeN0CVClQJnZFRNtviKU7amHnlaHwuA2f3xmCdLc0oO63b1gXQpUlaHbg3FMRu2/EV0tS/
+        lgB8cDJkrzxUM/bL2dz208WY5tVTB7aDabixR7lwfOiw+w7HachyvqzPyd1hpxW2CZBR//
+        2ojBip/4A+hw7d47bMkcJZws2Qwg/Zo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-190-rJ7w-bCtNVy_7aZ85C39BA-1; Sun, 27 Mar 2022 11:06:20 -0400
+X-MC-Unique: rJ7w-bCtNVy_7aZ85C39BA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48EDE6102C;
-        Sun, 27 Mar 2022 14:44:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13A5DC340EC;
-        Sun, 27 Mar 2022 14:44:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648392254;
-        bh=KaaMBLWHobctIZkx9Oel+yUjiNjl6Gc2pcQei+x3+ME=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KS/65AzesUTLsBp+XxUP1m9uj9heIV9TAaN7regkUeinj+GIlaecsUQYrLiGP7mBC
-         GM2HzaELMVFqvwCRVopXDnRrgDzXVRoJRwJ7YT9ScorO1Fm0QHtksrYgNUoejadIt2
-         j4+wTOP7WlHwxQeBYMrToomF4rdFX1IrcCyFlx7mlIIUnqnC0uta9LCMHecaWE+0UN
-         joibO2ShmjF9U0STZ36Rn6bQyP9TlFdzi12xmxF3pD3jd7F21PDgM3XHAHx5Kstiq9
-         MAT5v6WDEIfz21zYMnTelf0JnyDJ4YHSc8NeLmr2aIIyzkkK35yI5sev15RoNBe96a
-         52azvuz+4S3aQ==
-Date:   Sun, 27 Mar 2022 15:51:47 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, Gwendal Grignou <gwendal@chromium.org>
-Subject: Re: [PATCH v2] iio:proximity:sx9324: Fix hardware gain read/write
-Message-ID: <20220327155147.52e898b4@jic23-huawei>
-In-Reply-To: <20220324222928.874522-1-swboyd@chromium.org>
-References: <20220324222928.874522-1-swboyd@chromium.org>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7EE5F80281D;
+        Sun, 27 Mar 2022 15:06:17 +0000 (UTC)
+Received: from starship (unknown [10.40.194.231])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9CD081457F13;
+        Sun, 27 Mar 2022 15:06:09 +0000 (UTC)
+Message-ID: <e605082ac8361c1932bfddfe2055660c7cea5f2b.camel@redhat.com>
+Subject: Re: [PATCH 00/21] KVM: x86: Event/exception fixes and cleanups
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
+        Peter Shier <pshier@google.com>
+Date:   Sun, 27 Mar 2022 18:06:07 +0300
+In-Reply-To: <YjzjIhyw6aqsSI7Q@google.com>
+References: <20220311032801.3467418-1-seanjc@google.com>
+         <08548cb00c4b20426e5ee9ae2432744d6fa44fe8.camel@redhat.com>
+         <YjzjIhyw6aqsSI7Q@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Mar 2022 15:29:28 -0700
-Stephen Boyd <swboyd@chromium.org> wrote:
+On Thu, 2022-03-24 at 21:31 +0000, Sean Christopherson wrote:
+> On Sun, Mar 13, 2022, Maxim Levitsky wrote:
+> > On Fri, 2022-03-11 at 03:27 +0000, Sean Christopherson wrote:
+> > > The main goal of this series is to fix KVM's longstanding bug of not
+> > > honoring L1's exception intercepts wants when handling an exception that
+> > > occurs during delivery of a different exception.  E.g. if L0 and L1 are
+> > > using shadow paging, and L2 hits a #PF, and then hits another #PF while
+> > > vectoring the first #PF due to _L1_ not having a shadow page for the IDT,
+> > > KVM needs to check L1's intercepts before morphing the #PF => #PF => #DF
+> > > so that the #PF is routed to L1, not injected into L2 as a #DF.
+> > > 
+> > > nVMX has hacked around the bug for years by overriding the #PF injector
+> > > for shadow paging to go straight to VM-Exit, and nSVM has started doing
+> > > the same.  The hacks mostly work, but they're incomplete, confusing, and
+> > > lead to other hacky code, e.g. bailing from the emulator because #PF
+> > > injection forced a VM-Exit and suddenly KVM is back in L1.
+> > > 
+> > > Everything leading up to that are related fixes and cleanups I encountered
+> > > along the way; some through code inspection, some through tests (I truly
+> > > thought this series was finished 10 commits and 3 days ago...).
+> > > 
+> > > Nothing in here is all that urgent; all bugs tagged for stable have been
+> > > around for multiple releases (years in most cases).
+> > > 
+> > I am just curious. Are you aware that I worked on this few months ago?
+> 
+> Ah, so that's why I had a feeling of deja vu when factoring out kvm_queued_exception.
+> I completely forgot about it :-/  In my defense, that was nearly a year ago[1][2], though
+> I suppose one could argue 11 == "a few" :-)
+> 
+> [1] https://lore.kernel.org/all/20210225154135.405125-1-mlevitsk@redhat.com
+> [2] https://lore.kernel.org/all/20210401143817.1030695-3-mlevitsk@redhat.com
+> 
+> > I am sure that you even reviewed some of my code back then.
+> 
+> Yep, now that I've found the threads I remember discussing the mechanics.
+> 
+> > If so, could you have had at least mentioned this and/or pinged me to continue
+> > working on this instead of re-implementing it?
+> 
+> I'm invoking Hanlon's razor[*]; I certainly didn't intended to stomp over your
+> work, I simply forgot.
 
-> There are four possible gain values according to 'sx9324_gain_vals[]':
-> 
-> 	1, 2, 4, and 8
-> 
-> The values are off by one when writing and reading the register. The
-> bits should be set according to this equation:
-> 
-> 	ilog2(<gain>) + 1
-> 
-> so that a gain of 8 is 0x3 in the register field and a gain of 4 is 0x2
-> in the register field, etc
+Thank you very much for the explanation, and I am glad that it was a honest mistake.
 
-Example seems wrong... 
+Other than that I am actually very happy that you posted this patch series,
+as this gives more chance that this long standing issue will be fixed,
+and if your patches are better/simpler/less invasive to KVM and still address the issue, 
+I fully support using them instead of mine.
+ 
+Totally agree with you about your thoughts about splitting pending/injected exception,
+I also can't say I liked my approach that much, for the same reasons you mentioned.
+ 
+It is also the main reason I put the whole thing on the backlog lately, 
+because I was feeling that I am changing too much of the KVM, 
+for a relatively theoretical issue.
+ 
+ 
+I will review your patches, compare them to mine, and check if you or I missed something.
 
-ilog2(8) + 1 = 3 + 1 = 0x4
-ilog2(4) + 1 = 2 + 1 = 0x3
-ilog2(2) + 1 = 1 + 1 = 0x2
-ilog2(1) + 1 = 0 + 1 = 0x1
-                       0x0 reserved.
+PS:
 
-or have I misunderstood?
+Back then, I also did an extensive review on few cases when qemu injects exceptions itself,
+which it does thankfully rarely. There are several (theoretical) issues there.
+I don't remember those details, I need to refresh my memory.
 
->. Note that a gain of 0 is reserved per the
-> datasheet. The default gain (SX9324_REG_PROX_CTRL0_GAIN_1) is also
-> wrong. It should be 0x1 << 3, i.e. 0x8, not 0x80 which is setting the
-> reserved bit 7.
+AFAIK, qemu injects #MC sometimes when it gets it from the kernel in form of a signal,
+if I recall this correctly, and it also reflects back #DB, when guest debug was enabled
+(and that is the reason for some work I did in this area, like the KVM_GUESTDBG_BLOCKIRQ thing)
+
+Qemu does this without considering nested and/or pending exception/etc.
+It just kind of abuses the KVM_SET_VCPU_EVENTS for that.
+
+Best regards,
+	Maxim Levitsky
+
+
 > 
-> Fix this all up to properly handle the hardware gain and return errors
-> for invalid settings.
+> As for the technical aspects, looking back at your series, I strongly considered
+> taking the same approach of splitting pending vs. injected (again, without any
+> recollection of your work).  I ultimately opted to go with the "immediated morph
+> to pending VM-Exit" approach as it allows KVM to do the right thing in almost every
+> case without requiring new ABI, and even if KVM screws up, e.g. queues multiple
+> pending exceptions.  It also neatly handles one-off things like async #PF in L2.
 > 
-> Fixes: 4c18a890dff8 ("iio:proximity:sx9324: Add SX9324 support")
-> Cc: Gwendal Grignou <gwendal@chromium.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
+> However, I hadn't considered your approach, which addresses the ABI conundrum by
+> processing pending=>injected immediately after handling the VM-Exit.  I can't think
+> of any reason that wouldn't work, but I really don't like splitting the event
+> priority logic, nor do I like having two event injection sites (getting rid of the
+> extra calls to kvm_check_nested_events() is still on my wish list).  If we could go
+> back in time, I would likely vote for properly tracking injected vs. pending, but
+> since we're mostly stuck with KVM's ABI, I prefer the "immediately morph to pending
+> VM-Exit" hack over the "immediately morph to 'injected' exception" hack.
 > 
-> Changes from v1 (https://lore.kernel.org/r/)20220318204808.3404542-1-swboyd@chromium.org:
->  * Reject invalid settings
->  * Fix default value
->  * More commit text details
+> [*] https://en.wikipedia.org/wiki/Hanlon%27s_razor
 > 
->  drivers/iio/proximity/sx9324.c | 26 +++++++++++++++++++++-----
->  1 file changed, 21 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/iio/proximity/sx9324.c b/drivers/iio/proximity/sx9324.c
-> index 0d9bbbb50cb4..6e90917e3e36 100644
-> --- a/drivers/iio/proximity/sx9324.c
-> +++ b/drivers/iio/proximity/sx9324.c
-> @@ -76,7 +76,10 @@
->  
->  #define SX9324_REG_PROX_CTRL0		0x30
->  #define SX9324_REG_PROX_CTRL0_GAIN_MASK	GENMASK(5, 3)
-> -#define SX9324_REG_PROX_CTRL0_GAIN_1		0x80
-> +#define SX9324_REG_PROX_CTRL0_GAIN_SHIFT	3
-> +#define SX9324_REG_PROX_CTRL0_GAIN_RSVD		0x0
-> +#define SX9324_REG_PROX_CTRL0_GAIN_1		0x1
-> +#define SX9324_REG_PROX_CTRL0_GAIN_8		0x4
->  #define SX9324_REG_PROX_CTRL0_RAWFILT_MASK	GENMASK(2, 0)
->  #define SX9324_REG_PROX_CTRL0_RAWFILT_1P50	0x01
->  #define SX9324_REG_PROX_CTRL1		0x31
-> @@ -379,7 +382,14 @@ static int sx9324_read_gain(struct sx_common_data *data,
->  	if (ret)
->  		return ret;
->  
-> -	*val = 1 << FIELD_GET(SX9324_REG_PROX_CTRL0_GAIN_MASK, regval);
-> +	regval = FIELD_GET(SX9324_REG_PROX_CTRL0_GAIN_MASK, regval);
-> +	if (regval)
-> +		regval--;
-> +	else if (regval == SX9324_REG_PROX_CTRL0_GAIN_RSVD ||
-> +		 regval > SX9324_REG_PROX_CTRL0_GAIN_8)
-> +		return -EINVAL;
-> +
-> +	*val = 1 << regval;
->  
->  	return IIO_VAL_INT;
->  }
-> @@ -725,8 +735,12 @@ static int sx9324_write_gain(struct sx_common_data *data,
->  	unsigned int gain, reg;
->  	int ret;
->  
-> -	gain = ilog2(val);
->  	reg = SX9324_REG_PROX_CTRL0 + chan->channel / 2;
-> +
-> +	gain = ilog2(val) + 1;
-> +	if (val <= 0 || gain > SX9324_REG_PROX_CTRL0_GAIN_8)
-> +		return -EINVAL;
-> +
->  	gain = FIELD_PREP(SX9324_REG_PROX_CTRL0_GAIN_MASK, gain);
->  
->  	mutex_lock(&data->mutex);
-> @@ -784,9 +798,11 @@ static const struct sx_common_reg_default sx9324_default_regs[] = {
->  	{ SX9324_REG_AFE_CTRL8, SX9324_REG_AFE_CTRL8_RESFILTN_4KOHM },
->  	{ SX9324_REG_AFE_CTRL9, SX9324_REG_AFE_CTRL9_AGAIN_1 },
->  
-> -	{ SX9324_REG_PROX_CTRL0, SX9324_REG_PROX_CTRL0_GAIN_1 |
-> +	{ SX9324_REG_PROX_CTRL0,
-> +		SX9324_REG_PROX_CTRL0_GAIN_1 << SX9324_REG_PROX_CTRL0_GAIN_SHIFT |
->  		SX9324_REG_PROX_CTRL0_RAWFILT_1P50 },
-> -	{ SX9324_REG_PROX_CTRL1, SX9324_REG_PROX_CTRL0_GAIN_1 |
-> +	{ SX9324_REG_PROX_CTRL1,
-> +		SX9324_REG_PROX_CTRL0_GAIN_1 << SX9324_REG_PROX_CTRL0_GAIN_SHIFT |
->  		SX9324_REG_PROX_CTRL0_RAWFILT_1P50 },
->  	{ SX9324_REG_PROX_CTRL2, SX9324_REG_PROX_CTRL2_AVGNEG_THRESH_16K },
->  	{ SX9324_REG_PROX_CTRL3, SX9324_REG_PROX_CTRL3_AVGDEB_2SAMPLES |
-> 
-> base-commit: a8ee3b32f5da6c77a5ccc0e42c2250d61ba54fe0
+
 

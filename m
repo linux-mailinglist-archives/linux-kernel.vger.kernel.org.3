@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A9E4E8B03
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 01:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5811B4E8B08
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 01:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbiC0XFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 19:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
+        id S235460AbiC0XJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 19:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234952AbiC0XFI (ORCPT
+        with ESMTP id S229989AbiC0XJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 19:05:08 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C18CDF22
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 16:03:28 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id g9so20730946ybf.1
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 16:03:28 -0700 (PDT)
+        Sun, 27 Mar 2022 19:09:18 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1200BDEAF
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 16:07:39 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id y38so20524786ybi.8
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 16:07:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=GNVbXCzpaPBpjVJf9Y3umU3ovBWyOt+mnLOqzP0G5fs=;
-        b=Lq+3Ycqkd2yxo1E7kguh+whRwzFxHhfQdJO5xs4Jv6gEAdYPetGoGDoFNbY9jJdl8M
-         zFhkuCcZl2RLvUqQBhJl2ZaPKmf3clpXMfxz+Qpwaq+JQzDsZ11bb1LDyCXE+Uiu40GQ
-         zMkf1Ir2im5FMrhN6asCZ9NLbmON2QLFm6p+t3yT1QRALHg4I1rpX7YIFp20hGLjbomf
-         ILp1+V282FJJFe15nNGABkbrdrhVmoNE/Tjo1/Md6GTYif2csN80+Uka+fWJsEmmJk3J
-         hyhvZqnZt3XlsNiKBnR86qy96AUs+8B/JLdqJ+Iz/5Ge9pIjK3zZS/3S8tq1kIsQ/iVn
-         mXDQ==
+        bh=Ve5+XZdwip+wfJ4zW83es5FP+je84qvCmA8uoY+nFLs=;
+        b=U7PQrj7BlEBIpfqmMR8TfU+MOKxh3kIGvThZ45dmPpytK+1bkRmD/iuObLyklhxlT2
+         FG5vAILis0+hh0PeEyFI27qkcE33C1ysq5W6UlMUEv8bwsgBADY406aM4jCRhHuzQwvZ
+         rfLG4jC3Xl4ugO3PSn18wKQ2FuvSOTyeZb7h0TiKqf7DYA48Ow08vF0xmTzlnVh4ix/w
+         0+4pm+GDQOg34sGRkCe1C30T9wJzePDXxF00iRWQ/4DLf18QAH57XcB21/uqJyiY/aw/
+         m1vOccxyiGQEGFJEcKITiqBDHq1H/G9cYgC21pks78eGltS3VcrCHDI78JDh7Mk3UZ2J
+         8W9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GNVbXCzpaPBpjVJf9Y3umU3ovBWyOt+mnLOqzP0G5fs=;
-        b=JigiNRdZ760GXaEmMSS3E4UFLB9DO1NjIfIIbOW+124Rtu4Hdb3bHMCPCWUR9CoVkE
-         xdAPzSZWBtLEEO3Ou0PeEF0Xox2NvnAutr13R13JqcOv6pNCCUF1+a4x8TSygD3Y8teE
-         BXi8swJIjHCa1JSxlmepMIeUmUx06GCjT02HPXadw5Np7Xt860c/T00dOQBGTicajuuf
-         qeRt8v2+v2TYvcCB1oGtvqUz2tWi8yEY3dS0RD+rgc/TGKwClyw682KQsdhqDp/HypZW
-         eX3HrFVGAV+L3u4HGOt1fi8FVPPHJyjBugWew8YWaSOw8ffrpHoDke0JkidN5AF8XC3M
-         kQWg==
-X-Gm-Message-State: AOAM531qJ1g2zjlRYNF9qIUGR+rliluF7/GgluBDwQVyoSCx34p+GITs
-        fKiS/1zkfVnyfKnFsoTC6rmt2dWSryJ4sPWVoOvW8Q==
-X-Google-Smtp-Source: ABdhPJxlxr1BwZc54ths6NcHOQaw9kJGsItE/6tcALJDtRye5lejO5OnsKvOleB2/rLXxDXTySYQyid0MK8w9Cdl5FA=
-X-Received: by 2002:a25:3d02:0:b0:63c:a59b:8246 with SMTP id
- k2-20020a253d02000000b0063ca59b8246mr6343771yba.369.1648422207645; Sun, 27
- Mar 2022 16:03:27 -0700 (PDT)
+        bh=Ve5+XZdwip+wfJ4zW83es5FP+je84qvCmA8uoY+nFLs=;
+        b=PowdG1EAo8KhvvfVlMde8FGds/plc/l4MAUv1/kVJ0TN2gPm6XuKcphq/0GNWw/g5D
+         jWC6Fg8ZdjqvqLgb7zPmjpTBAR65uqJ63alRRB/u80H7fhXjgdk1j2PDKDg61QLIyhyx
+         usiLFsbSYd8E5sBF9X+/7TFkMA5viBaVmUlPCUIWoyCoAMVnx9CcWxreEHmtaNTu0ygM
+         Hrm6PgtymIDNj5h/dWB3YdFMcdJut7+A7xWy68GhdE32M5+cEtEPf289j100cmneETcg
+         BnI7hcczpwzW48RmBEvOpcmbv7bMXHliIRDWfQoOo1C+XXkhtbYZab5MVwex89JT4DBT
+         OIWQ==
+X-Gm-Message-State: AOAM533PfmRUpa+ru8BvlIM9g/uCvxZdLGmwS4dFO9FfOzN0yglOnkqy
+        y08cIQAoX+0gy0N6UmfEBapq+nA0PYBJV7gdtkWduL8vz5eU6Q==
+X-Google-Smtp-Source: ABdhPJyYdGF7SbqGEL+ETG0K/sHAhVQ0ncmoxpfN+n6jIOZ/nEU4xm6uwZxHYNtHVmCEdtNxAygQYxsyW2X45AkixBU=
+X-Received: by 2002:a25:d088:0:b0:633:b902:2d29 with SMTP id
+ h130-20020a25d088000000b00633b9022d29mr19969569ybg.626.1648422458225; Sun, 27
+ Mar 2022 16:07:38 -0700 (PDT)
 MIME-Version: 1.0
 References: <1647927649-9907-1-git-send-email-haibo.chen@nxp.com>
-In-Reply-To: <1647927649-9907-1-git-send-email-haibo.chen@nxp.com>
+ <CAHp75VdZ9RVuMrgWXOWqCrmvHBtkz+S=dxXhR44Ri3p6Pj5LMA@mail.gmail.com> <AM0PR04MB4001E8E8DA1DF5355EB96A2B90179@AM0PR04MB4001.eurprd04.prod.outlook.com>
+In-Reply-To: <AM0PR04MB4001E8E8DA1DF5355EB96A2B90179@AM0PR04MB4001.eurprd04.prod.outlook.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 28 Mar 2022 01:03:16 +0200
-Message-ID: <CACRpkdaj4qCFMdYyBbu7Z=Wqdn0+7=Hz3tst_15xYwp9wLgGtw@mail.gmail.com>
+Date:   Mon, 28 Mar 2022 01:07:27 +0200
+Message-ID: <CACRpkda5szS32JkMFaTjw+zm+Oye+8QCv1A0B2UL6keuYPKS4w@mail.gmail.com>
 Subject: Re: [PATCH v2] gpio: Allow setting gpio device id via device tree alias
-To:     haibo.chen@nxp.com, Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Cc:     brgl@bgdev.pl, andy.shevchenko@gmail.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com
+To:     Bough Chen <haibo.chen@nxp.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,31 +70,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 6:52 AM <haibo.chen@nxp.com> wrote:
+On Tue, Mar 22, 2022 at 11:16 AM Bough Chen <haibo.chen@nxp.com> wrote:
 
-> From: Haibo Chen <haibo.chen@nxp.com>
->
-> For some SoCs which contain different cores, like few ARM A cores
-> and few ARM M cores. Some GPIO controllers like GPIO3/GPIO4/GPIO5
-> belong to A core domain, some GPIO controllers like GPIO1/GPIO2
-> belong to M core domain. Linux only cover A cores, without gpio
-> alias, we can get gpiochip0/gpiochip1/gpiochip2 to map the real
-> GPIO3/GPIO4/GPIO5, it's difficult for users to identify this map
-> relation, and hardcode the gpio device index. With gpio alias,
-> we can easily make gpiochip3 map to GPIO3, gpiochip4 map to GPIO4.
-> For GPIO controllers do not claim the alias, it will get one id
-> which larger than all the claimed aliases.
->
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+> For users, usually, they will open /dev/gpiochipx to handle gpio related option.
 
-This is device tree related, adds semantics to aliases and needs
-a prerequisite patch to
-Documentation/devicetree/bindings/gpio/gpio.txt
-at the very least.
+That makes sense, it is intuitive in a way.
 
-Also that patch needs to CC to devicetree@vger.kernel.org
+> By the way, how can user get the labels and device names of GPIO chips?
 
-IIRC this has been suggested in the past.
+The way to get metadata for any /dev/* device such as topology on
+buses is through sysfs.
+
+It is also possible to get labels for all gpiochips by iterating over them.
+
+The most user-friendly thing to do is however to make use of libgpiod
+and associated example tools such as gpiodetect:
+https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/about/
 
 Yours,
 Linus Walleij

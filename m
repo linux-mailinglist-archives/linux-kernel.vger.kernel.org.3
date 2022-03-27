@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088514E8947
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 20:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4374E893F
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 20:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236314AbiC0SLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 14:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
+        id S236334AbiC0SL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 14:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236271AbiC0SLq (ORCPT
+        with ESMTP id S236014AbiC0SLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 14:11:46 -0400
+        Sun, 27 Mar 2022 14:11:49 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D528F3467D
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 11:10:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B8534672
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 11:10:03 -0700 (PDT)
 Received: from dslb-178-004-173-219.178.004.pools.vodafone-ip.de ([178.4.173.219] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1nYXKw-00019B-3X; Sun, 27 Mar 2022 20:09:58 +0200
+        id 1nYXKw-00019B-Sr; Sun, 27 Mar 2022 20:09:58 +0200
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         David Laight <David.Laight@ACULAB.COM>,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH v2 2/9] staging: r8188eu: use ieee80211 helper to read the pwr bit
-Date:   Sun, 27 Mar 2022 20:09:37 +0200
-Message-Id: <20220327180944.712545-3-martin@kaiser.cx>
+Subject: [PATCH v2 3/9] staging: r8188eu: use standard mechanisms for control frames
+Date:   Sun, 27 Mar 2022 20:09:38 +0200
+Message-Id: <20220327180944.712545-4-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220327180944.712545-1-martin@kaiser.cx>
 References: <20220323074859.177425-1-martin@kaiser.cx>
@@ -46,26 +46,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the ieee80211 helper to read the power management bit.
+Use defines and macros from ieee80211.h to check for control frames and
+to define control frame subtypes.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/core/rtw_recv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/r8188eu/core/rtw_recv.c       |  3 ++-
+ drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c |  3 ++-
+ drivers/staging/r8188eu/include/wifi.h        | 21 ++++++-------------
+ 3 files changed, 10 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index fc7f2a559f9b..5af715a08430 100644
+index 5af715a08430..7735fbe6fa72 100644
 --- a/drivers/staging/r8188eu/core/rtw_recv.c
 +++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -1079,7 +1079,7 @@ static int validate_recv_frame(struct adapter *adapter, struct recv_frame *precv
- 	pattrib->frag_num = GetFragNum(ptr);
- 	pattrib->seq_num = GetSequence(ptr);
+@@ -801,9 +801,10 @@ static int validate_recv_ctrl_frame(struct adapter *padapter,
+ 	struct rx_pkt_attrib *pattrib = &precv_frame->attrib;
+ 	struct sta_priv *pstapriv = &padapter->stapriv;
+ 	u8 *pframe = precv_frame->rx_data;
++	__le16 fc = *(__le16 *)pframe;
+ 	/* uint len = precv_frame->len; */
  
--	pattrib->pw_save = GetPwrMgt(ptr);
-+	pattrib->pw_save = ieee80211_has_pm(fc);
- 	pattrib->mfrag = ieee80211_has_morefrags(fc);
- 	pattrib->mdata = ieee80211_has_moredata(fc);
- 	pattrib->privacy = ieee80211_has_protected(fc);
+-	if (GetFrameType(pframe) != WIFI_CTRL_TYPE)
++	if (!ieee80211_is_ctl(fc))
+ 		return _FAIL;
+ 
+ 	/* receive the frames that ra(a1) is my address */
+diff --git a/drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c b/drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c
+index 9bf7a9248026..7e50a42b6f75 100644
+--- a/drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c
++++ b/drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c
+@@ -113,12 +113,13 @@ void update_recvframe_phyinfo_88e(struct recv_frame *precvframe, struct phy_stat
+ 	struct hal_data_8188e *pHalData = &padapter->haldata;
+ 	struct phy_info *pPHYInfo  = &pattrib->phy_info;
+ 	u8 *wlanhdr = precvframe->rx_data;
++	__le16 fc = *(__le16 *)wlanhdr;
+ 	struct odm_per_pkt_info	pkt_info;
+ 	u8 *sa = NULL;
+ 	struct sta_priv *pstapriv;
+ 	struct sta_info *psta;
+ 
+-	pkt_info.bPacketMatchBSSID = ((!IsFrameTypeCtrl(wlanhdr)) &&
++	pkt_info.bPacketMatchBSSID = ((!ieee80211_is_ctl(fc)) &&
+ 		!pattrib->icv_err && !pattrib->crc_err &&
+ 		!memcmp(get_hdr_bssid(wlanhdr),
+ 		 get_bssid(&padapter->mlmepriv), ETH_ALEN));
+diff --git a/drivers/staging/r8188eu/include/wifi.h b/drivers/staging/r8188eu/include/wifi.h
+index 299553351246..47b73fde2006 100644
+--- a/drivers/staging/r8188eu/include/wifi.h
++++ b/drivers/staging/r8188eu/include/wifi.h
+@@ -13,7 +13,6 @@
+ #define WLAN_SSID_MAXLEN	32
+ 
+ enum WIFI_FRAME_TYPE {
+-	WIFI_CTRL_TYPE =	(BIT(2)),
+ 	WIFI_DATA_TYPE =	(BIT(3)),
+ 	WIFI_QOS_DATA_TYPE	= (BIT(7)|BIT(3)),	/*  QoS Data */
+ };
+@@ -34,13 +33,12 @@ enum WIFI_FRAME_SUBTYPE {
+ 	WIFI_ACTION         = (BIT(7) | BIT(6) | BIT(4) | IEEE80211_FTYPE_MGMT),
+ 
+ 	/*  below is for control frame */
+-	WIFI_PSPOLL         = (BIT(7) | BIT(5) | WIFI_CTRL_TYPE),
+-	WIFI_RTS            = (BIT(7) | BIT(5) | BIT(4) | WIFI_CTRL_TYPE),
+-	WIFI_CTS            = (BIT(7) | BIT(6) | WIFI_CTRL_TYPE),
+-	WIFI_ACK            = (BIT(7) | BIT(6) | BIT(4) | WIFI_CTRL_TYPE),
+-	WIFI_CFEND          = (BIT(7) | BIT(6) | BIT(5) | WIFI_CTRL_TYPE),
+-	WIFI_CFEND_CFACK    = (BIT(7) | BIT(6) | BIT(5) | BIT(4) |
+-	WIFI_CTRL_TYPE),
++	WIFI_PSPOLL         = (BIT(7) | BIT(5) | IEEE80211_FTYPE_CTL),
++	WIFI_RTS            = (BIT(7) | BIT(5) | BIT(4) | IEEE80211_FTYPE_CTL),
++	WIFI_CTS            = (BIT(7) | BIT(6) | IEEE80211_FTYPE_CTL),
++	WIFI_ACK            = (BIT(7) | BIT(6) | BIT(4) | IEEE80211_FTYPE_CTL),
++	WIFI_CFEND          = (BIT(7) | BIT(6) | BIT(5) | IEEE80211_FTYPE_CTL),
++	WIFI_CFEND_CFACK    = (BIT(7) | BIT(6) | BIT(5) | BIT(4) | IEEE80211_FTYPE_CTL),
+ 
+ 	/*  below is for data frame */
+ 	WIFI_DATA           = (0 | WIFI_DATA_TYPE),
+@@ -340,13 +338,6 @@ static inline unsigned char *get_hdr_bssid(unsigned char *pframe)
+ 	return sa;
+ }
+ 
+-static inline bool IsFrameTypeCtrl(unsigned char *pframe)
+-{
+-	if (WIFI_CTRL_TYPE == GetFrameType(pframe))
+-		return true;
+-	else
+-		return false;
+-}
+ /*-----------------------------------------------------------------------------
+ 			Below is for the security related definition
+ ------------------------------------------------------------------------------*/
 -- 
 2.30.2
 

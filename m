@@ -2,128 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B874E8973
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 20:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FE94E8975
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 21:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236392AbiC0S7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 14:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
+        id S236381AbiC0TDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 15:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiC0S7s (ORCPT
+        with ESMTP id S229751AbiC0TDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 14:59:48 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E32011C0B;
-        Sun, 27 Mar 2022 11:58:09 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id j15so24505745eje.9;
-        Sun, 27 Mar 2022 11:58:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kB2dOSwca7bk7/EKKWZtu1L76wh+UxbbfaUTKA78p6Y=;
-        b=ksWbGKH7kiaxZP48hFJISoG79zBpeexh8ccaT1c7ynHJiV23AD51JKAQAu+ccvKKXV
-         KkUkGI13NTqGnXvT/l1H6+xFTqRYkwVGpQX15HI2UOsuL23YtgCEoWZPr0endQXHzcaD
-         SFNF3Ijw97JOsKHIo1ACuinv+4YjLzP2FWMRD8dPsuOHrRQ3JNAGJnq7SFJ47Ng9S2Wr
-         OrWlURFr28oQJQOzV0gLYtvwPUqZ3ZPIfIVS0/SczLUu8jDxQgYumg4sX22M9o9cgNmo
-         CP/gJZoUsWqyzCfLol65j2N+4wtBcxs3DWZzUJSYfX0+L20/GLDkVz7BX9RQGQBAhqx0
-         fHFA==
+        Sun, 27 Mar 2022 15:03:01 -0400
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B15DB6D;
+        Sun, 27 Mar 2022 12:01:22 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id j15so24514656eje.9;
+        Sun, 27 Mar 2022 12:01:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kB2dOSwca7bk7/EKKWZtu1L76wh+UxbbfaUTKA78p6Y=;
-        b=zhRx42yc/DCGeRjeEaQUdMgVPoXxDwBv4SUCU/Y585trjEqDdi0A0LYShYCHhGbmXR
-         UOD5wcVKBcsnZgUFvgZ89gtbt0Q1LF0vBKHMhbK+6AkF96CvQJpfeqyK+sBNA8ULnJTV
-         7FvkOJ0kmx+fXXjtPeSshbKghZOTMT/AkQ8JZDVHJnrVI+Sgfbb2i5CueKnlz5Q30RFT
-         ISv3IUEtu78Uy7YLv2ZiaUf/gJ1ICXhFl/3DgfOHR+9MuuoYcPKHpC3OURxbKkBevn9y
-         oSAog0i9BH5jT6zXS1OybITaPVurYe5TpWrY3O5xxFEU5QPNg3pgILcuqSFHJpx5lRSS
-         wPfw==
-X-Gm-Message-State: AOAM533mwKnXsPXJO+liY0/NksPE79SIwayr7GIl2HyFo/JOk4nff30X
-        LfuUXqaqJQ9Y+pZfzSzJd0E=
-X-Google-Smtp-Source: ABdhPJzrVnJ+knNSeLJwI+w7wX7LgEVhuYbYbtJYsxnQ+zV8liChL9ZCGlcMUVPR4T4j6gG0jo3X2A==
-X-Received: by 2002:a17:907:3f9e:b0:6da:842e:873e with SMTP id hr30-20020a1709073f9e00b006da842e873emr23359379ejc.383.1648407487434;
-        Sun, 27 Mar 2022 11:58:07 -0700 (PDT)
-Received: from skbuf ([188.26.57.45])
-        by smtp.gmail.com with ESMTPSA id n9-20020a05640205c900b00418d79d4a61sm6234792edx.97.2022.03.27.11.58.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Mar 2022 11:58:06 -0700 (PDT)
-Date:   Sun, 27 Mar 2022 21:58:05 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] dsa: bcm_sf2_cfp: fix an incorrect NULL check on list
- iterator
-Message-ID: <20220327185805.cibcmk4rejgb7jre@skbuf>
-References: <20220327055547.3938-1-xiam0nd.tong@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oSZ9o3rrdLDk+/nykPJO7ULpAAzpvgfrHQm7KAVfDx4=;
+        b=SoVovB+KUOXNbje/DFq/jLIWd41/VYbAXiOmg38wU8sSSkv8XUtroZ425qk/ktmMf5
+         MFl3NPzz1Xiu/3Gzr032+SkM25h3qqIJD5ER0aqei0kbK52o4o+050g7iARLsljFno4W
+         Ngqz6K1+BHy1m8mMkEfn18S8gzxEfGOGsbDbU9TcuaSeyD09AQ3uqdstvODgS0bIZ/Di
+         R6Ias7YKSnyekE67RtH6wLcpv7rdWbLF8tN40XANS0w0Q5y5W/uymGDwDGBHb48XsXJo
+         clNQBLGfldihFdSwM27yjgPlwbx9VyOv/IqruG2Qx0NF88izi3iBKtoTCv/f2NeG2oaT
+         JiZw==
+X-Gm-Message-State: AOAM5309imTBsQDWxp4Sbif9shvnPIhTXgML0+x76ELXUv1kYgIc/LW3
+        HJq7KAZ87rGWs1QyuoszXYM=
+X-Google-Smtp-Source: ABdhPJyoNDg+QXSiSpdghTFWR535+B0wbdFJaNGQ+L/T+mFoDxLKKgK1Iet6vj2n3XFyVtUeIxlPGQ==
+X-Received: by 2002:a17:906:4795:b0:6e0:78b8:42f6 with SMTP id cw21-20020a170906479500b006e078b842f6mr21528641ejc.88.1648407680670;
+        Sun, 27 Mar 2022 12:01:20 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id n19-20020a170906165300b006a625c583b9sm4911278ejd.155.2022.03.27.12.01.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Mar 2022 12:01:19 -0700 (PDT)
+Message-ID: <59ba4191-2e9f-7fdf-13e3-f1e924d70992@kernel.org>
+Date:   Sun, 27 Mar 2022 21:01:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220327055547.3938-1-xiam0nd.tong@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: regulator: Add binding for Richtek
+ RT5759 DCDC converter
+Content-Language: en-US
+To:     cy_huang <u0084500@gmail.com>, broonie@kernel.org,
+        robh+dt@kernel.org
+Cc:     lgirdwood@gmail.com, cy_huang@richtek.com, gene_chen@richtek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <1648294788-11758-1-git-send-email-u0084500@gmail.com>
+ <1648294788-11758-2-git-send-email-u0084500@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <1648294788-11758-2-git-send-email-u0084500@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 27, 2022 at 01:55:47PM +0800, Xiaomeng Tong wrote:
-> The bug is here:
-> 	return rule;
+On 26/03/2022 12:39, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
 > 
-> The list iterator value 'rule' will *always* be set and non-NULL
-> by list_for_each_entry(), so it is incorrect to assume that the
-> iterator value will be NULL if the list is empty or no element
-> is found.
+> Add bindings for Richtek RT5759 high-performance DCDC converter.
 > 
-> To fix the bug, return 'rule' when found, otherwise return NULL.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: ae7a5aff783c7 ("net: dsa: bcm_sf2: Keep copy of inserted rules")
-> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 > ---
-
-The change looks correct, but from a process standpoint for next time
-(a) you should have copied Florian, the driver's maintainer (which I did now)
-    who appears on the top of the list in the output of ./get_maintainer.pl
-(b) networking bugfixes that apply to the "net" tree shouldn't need
-    stable@vger.kernel.org copied, instead just target the patch against
-    the https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
-    tree and mark the subject prefix as "[PATCH net]".
-
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
-
->  drivers/net/dsa/bcm_sf2_cfp.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  .../regulator/richtek,rt5759-regulator.yaml        | 90 ++++++++++++++++++++++
+>  1 file changed, 90 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt5759-regulator.yaml
 > 
-> diff --git a/drivers/net/dsa/bcm_sf2_cfp.c b/drivers/net/dsa/bcm_sf2_cfp.c
-> index a7e2fcf2df2c..edbe5e7f1cb6 100644
-> --- a/drivers/net/dsa/bcm_sf2_cfp.c
-> +++ b/drivers/net/dsa/bcm_sf2_cfp.c
-> @@ -567,14 +567,14 @@ static void bcm_sf2_cfp_slice_ipv6(struct bcm_sf2_priv *priv,
->  static struct cfp_rule *bcm_sf2_cfp_rule_find(struct bcm_sf2_priv *priv,
->  					      int port, u32 location)
->  {
-> -	struct cfp_rule *rule = NULL;
-> +	struct cfp_rule *rule;
->  
->  	list_for_each_entry(rule, &priv->cfp.rules_list, next) {
->  		if (rule->port == port && rule->fs.location == location)
-> -			break;
-> +			return rule;
->  	}
->  
-> -	return rule;
-> +	return NULL;
->  }
->  
->  static int bcm_sf2_cfp_rule_cmp(struct bcm_sf2_priv *priv, int port,
-> -- 
-> 2.17.1
-> 
+
+
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+
+Best regards,
+Krzysztof

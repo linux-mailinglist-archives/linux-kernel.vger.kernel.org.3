@@ -2,166 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA284E8952
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 20:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31354E8955
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 20:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236113AbiC0SYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 14:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S236259AbiC0Sd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 14:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiC0SYO (ORCPT
+        with ESMTP id S229529AbiC0Sdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 14:24:14 -0400
-Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.50.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0FA403DB
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 11:22:35 -0700 (PDT)
-Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
-        by gateway23.websitewelcome.com (Postfix) with ESMTP id 1B23915304
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:22:35 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id YXX8nepvI9AGSYXX9nTTK5; Sun, 27 Mar 2022 13:22:35 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=nPJz7RqGPn4MdhgfbThGWUpQI0/IZt0t+EKnHnBpjdc=; b=DQxn1+BTcIcM2u+ch1luwegYgV
-        5UJjDL11O+YiXZmV2cIYzXEGoreMrC2fb7WtA5xm4DbKxAqcVkX3/C5bDnqYOW7A99uHe6NAfYjxs
-        uzufoa+3Q7BwqMdP8Cjy+gAmN9bCJAJ9Uk28jf88TjukL6f1WBdev7crL6eLzDr3VK8NROWUZpwix
-        0wp3hnswQJmcrTrOTwJL9XRCqQPL2DA74/oBsgKTm4l5O9uTrJdkz/nchsQV3DSGkqsyDkppnDefS
-        v3UHk7BMO/PsbHdFayjswaJ5Q9EAMts5r9G7ECMPPF/z82wn3LiW9Ld9M8jcrKPtSKOCaDjq7h7z3
-        Zxs4w0AQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54518)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nYXX8-004LOP-Jh; Sun, 27 Mar 2022 18:22:34 +0000
-Message-ID: <4455ca4c-1ebb-41df-5f04-72a48e8ca7dc@roeck-us.net>
-Date:   Sun, 27 Mar 2022 11:22:33 -0700
+        Sun, 27 Mar 2022 14:33:55 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993771A811;
+        Sun, 27 Mar 2022 11:32:16 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id 1so9866434qke.1;
+        Sun, 27 Mar 2022 11:32:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=19uBF9iCIoMNrxoWIz9dMSdfhYfSKOAUfWryPoAUr/c=;
+        b=Gje6NJsyJp7AHQqT8ZqvE+6dIuz3pv15I4EH5k6OsoU+u8gfU8rTssKRtwx1aJXBj1
+         0aSvPogUKwd3anE2Qwp0SJQJXD1Q/DrTfufYwhPAU7wNL8+StG7Kr4/ZO46hZV8HmoIi
+         zbhGm1yN/SOLjvVRFhHKef1ugLlgQNTDs7JhrNE8ynd8yH1Xdppwa/jQnpjVkJIALGKW
+         ENpLg3SwSDyMW8otYwnsPwZT7ZlZToUIZfp7MZUHK1vprze3Mk1sY4i1Ll1lwuDSUdCv
+         ZwM8i8rAEMAHbje9tk19AvBCzRjrOCwGu0/YbcNlxUprgloq6dF52KPdxWBbvtCeG3MR
+         i28w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=19uBF9iCIoMNrxoWIz9dMSdfhYfSKOAUfWryPoAUr/c=;
+        b=33RO0RSGYM7fDkWpxPc0cIwIsPLdnQFCBnn4s/ByqDbAOsYQZJcsJEo7/dBBRrvvaT
+         pPtp/eOtthFEyK2ZvXAXZrww5ezH7cY62uA86FiA9kBFTMzXvzSMWCWsM2X6fgBDJPxF
+         30A8xpML+xDN81ClMwtEMG4BBNMQM4VA5d5d0mtML8y9un3f0nrRqnNv4VO7KGznrqsR
+         D/qsZcTtM52WN8Ca1DaX3iZuAbE0HJn14WIcxtikURuqIRpU2XpvCxuljJun+sy4KAG0
+         jAt/iZVZMzoNJKZV0ZiAgQauiGIhzahvg9dnGb+U1f1IqNvU7KH+0+reB1jRhBr7ZF8w
+         QocQ==
+X-Gm-Message-State: AOAM530/Fh+mkQqbTzHbM/LQwk2P+lnh5jbuUfB+xsyK/g9/VG5apDgd
+        TgCxsdZD0IqgXhegJ3K2l3U=
+X-Google-Smtp-Source: ABdhPJxCaiO7jDnSjehUfjkz+hqrEdPwhVeKUAkTK7W6xw2jWYd/Z6bqyePBx1P3+qPV7N2hL4lZ1g==
+X-Received: by 2002:a37:9dca:0:b0:67b:8dfb:6835 with SMTP id g193-20020a379dca000000b0067b8dfb6835mr12859531qke.638.1648405935727;
+        Sun, 27 Mar 2022 11:32:15 -0700 (PDT)
+Received: from localhost (pppoe-209-91-167-254.vianet.ca. [209.91.167.254])
+        by smtp.gmail.com with ESMTPSA id q26-20020ae9e41a000000b0067d1a20872fsm6564613qkc.94.2022.03.27.11.32.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Mar 2022 11:32:15 -0700 (PDT)
+Date:   Sun, 27 Mar 2022 14:32:13 -0400
+From:   Trevor Woerner <twoerner@gmail.com>
+To:     Vladimir Zapolskiy <vz@mleia.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>, Arnd Bergmann <arnd@arndb.de>,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
+Message-ID: <20220327183213.GA36326@localhost>
+References: <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
+ <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
+ <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
+ <4f39f086-1932-1729-8761-d5c533356812@mleia.com>
+ <dc599cae-7245-73dc-8050-14ec6c1336b8@arm.com>
+ <f497fb65-3568-cda2-f086-2275b50daf4b@mleia.com>
+ <faea4c0c-e20b-c043-6f74-95af8177e8bd@arm.com>
+ <4a7e3d0e-f804-74a5-ef5b-206404eb9b61@mleia.com>
+ <CAHUNapQMaBZ2-yJR10Qv+Pix9BA3AGSgjBaMBB9zJTTLLOGSkg@mail.gmail.com>
+ <024f0d22-47d8-2d14-bed4-9f538a1537b3@mleia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220326192347.2940747-1-michael@walle.cc>
- <20220326192347.2940747-5-michael@walle.cc>
- <2442b460-4c6d-0ac9-af08-ae4c25aed812@roeck-us.net>
- <9aab54bc48284c9e20cd76085cb9d83a@walle.cc>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v1 4/4] hwmon: add driver for the Microchip LAN966x SoC
-In-Reply-To: <9aab54bc48284c9e20cd76085cb9d83a@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nYXX8-004LOP-Jh
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54518
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 6
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <024f0d22-47d8-2d14-bed4-9f538a1537b3@mleia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/27/22 07:18, Michael Walle wrote:
-> Am 2022-03-27 03:34, schrieb Guenter Roeck:
-> 
->>> +    /*
->>> +     * Data is given in pulses per second. According to the hwmon ABI we
->>> +     * have to assume two pulses per revolution.
->>
->> The hwmon ABI doesn't make any such assumptions. It wants to see RPM,
->> that is all. Pulses per revolution is a fan property.
-> 
-> There is fanY_pulses according to Documentation/ABI/testing/sysfs-class-hwmon:
-> 
->    Should only be created if the chip has a register to configure
->    the number of pulses. In the absence of such a register (and
->    thus attribute) the value assumed by all devices is 2 pulses
->    per fan revolution.
-> 
-> The hardware returns just the pulses per second. Doesn't that
-> mean I have to divide that value by two?
-> 
+Hi Vladimir,
 
-The above refers to hardware which reports RPM.
-
-It is up to the driver to calculate and return RPM. How you do it is your
-decision. Drivers should report the most likely correct RPM value to
-userspace, one that rarely needs manual adjustment. Almost all fans
-report two pulses per revolution, so normally that assumption is used
-to convert PPM to RPM. That isn't mandated (or supposed to be mandated)
-by the ABI. I would call it common sense.
-
-I'll be happy to accept a patch clarifying this.
-
->>> +     */
->>> +    *val = FIELD_GET(FAN_CNT_DATA, data) * 60 / 2;
+On Sun 2022-03-27 @ 07:27:00 PM, Vladimir Zapolskiy wrote:
+> Hi Trevor,
 > 
-> .. otherwise this should then be
-> *val = FIELD_GET(FAN_CNT_DATA, data) * 60;
+> On 3/27/22 5:57 AM, Trevor Woerner wrote:
+> > On the lpc32xx both the SPI and SSP peripherals are APB devices (low-speed)
+> > 
+> > lpc32xx-apb-peripherals.png
+> > The APB devices on this SoC are driven by the PERIPH_CLK which can be
+> > derived from either the HCLK or the SYSCLK.
 > 
+> thank you for the data, I'd like to reference to Table 14, which says that
+> both bus clock source and function clock source for SSP0 and SSP1 are a
+> non-selectable HCLK. I'm unsure if for instance PERIPH_CLK can be set as
+> a function clock source for SSPx.
 
-If you really want to do this, make sure it is well documented that users
-will need to adjust the fan speed via sensors3.conf to get the real fan speed.
+Interesting. I see that I had assumed that all APB peripherals would be driven
+by the PERIPH_CLK since the diagram shows that clock as going to all APB
+peripherals.
 
+In the SSP chapter, for example, there is a clock prescale register, which
+says:
+
+	This register controls the factor by which the prescaler divides the AHB clock
+	HCLK to yield the prescaler clock that is, in turn, divided by the SCR factor
+	in SSPnCR0, to determine the bit clock.
+
+So that confirms that the clock driving the SSP (an APB peripheral) is the
+AHB's HCLK!
+
+Section 21.7 of the SPI chapter also clearly shows the SPI clock as being
+derived from the HCLK as well.
+
+Thanks for the clarification :-)
+
+> > lpc32xx-clock.png
+> > The default on reset is for PERIPH_CLK to be derived from the SYSCLK but
+> > both U-Boot and Linux run in "normal" mode, which is to say that
+> > PERIPH_CLK, HCLK, ARM_CLK, and DDRAM_CLK are derived from the HCLK PLL.>
+> > There is no separate SSP clock, the SSP is driven by one clock: the
+> > PERIPH_CLK (or "apb_pclk").
 > 
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static int lan966x_hwmon_read_pwm(struct device *dev, long *val)
->>> +{
->>> +    struct lan966x_hwmon *hwmon = dev_get_drvdata(dev);
->>> +    unsigned int data;
->>> +    int ret;
->>> +
->>> +    ret = regmap_read(hwmon->regmap_fan, FAN_CFG, &data);
->>> +    if (ret < 0)
->>> +        return ret;
->>> +
->>> +    *val = FIELD_GET(FAN_CFG_DUTY_CYCLE, data);
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static int lan966x_hwmon_read_pwm_freq(struct device *dev, long *val)
->>> +{
->>> +    struct lan966x_hwmon *hwmon = dev_get_drvdata(dev);
->>> +    unsigned long rate = clk_get_rate(hwmon->clk);
->>
->> Is that a dynamic frequency ? If not, it would be better to read it once
->> and store it in struct lan966x_hwmon.
+> Right, there is no separate SSP clock in sense of a bus clock, it is
+> correct to get HCLK clock (or equally its child SSP clock) rate as a bus
+> clock rate, and the reason for introduction of SSP0/SSP1 clocks is that
+> these clocks are gated.
 > 
-> yes it is configurable, actually. See lan966x_hwmon_write_pwm_freq().
-> 
+> If I'm correct above, what does it mean in connection to LPC32xx device
+> tree bindings? The first or single clock source shall remain to be SSPx
+> clock, either the former is "sspclk" or "apb_pclk".
 
-That is the pwm frequency, not the clock frequency. I don't see any
-code which updates the clock frequency reported by clk_get_rate(hwmon->clk),
-ie I don't see a call to clk_set_rate().
-
-Thanks,
-Guenter
+Doesn't this mean the apb_pclk should not be specified as the SSP/SPI clock?
+If sspclk is a synonym for HCLK, then sspclk and apb_pclk are completely
+different clocks. On my device HCLK is 260MHz and PERIPH_CLK is 13MHz.

@@ -2,174 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2172C4E89F6
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 22:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC074E89FD
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 22:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbiC0ULH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 16:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36962 "EHLO
+        id S233108AbiC0U2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 16:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232290AbiC0ULD (ORCPT
+        with ESMTP id S230075AbiC0U2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 16:11:03 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A93712A81
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:09:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648411764; x=1679947764;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OFGRpi0f1J1SzA1qN8mE0eSCAl3coFwiCkY3bupdmYw=;
-  b=R3Oxcnx9ts+tgmJuoZn9t36aBCMyYgMafQXAM2/UivEBM3aeY+5N8V13
-   S/lj4wlVorvWA5LHEfjrwLksOttxDvz7EDz6uoYTDzy40fiPLtr8dsOHu
-   AE+Mz9z2B3DYUAFoZavk0Ofd4W9GTJnB30GI1gWmnVhtD+odZ4Su7QbRV
-   v4enH+vnLggHSVUJfS1niVCsj0wljfcbv1pAqUSsoC/dTLrZPIOoTP66r
-   iZbaBTFEbyanJjgo9rTyJRBkzQDNDLjvc+MAj3NrdQWjM+WxD3TdY6AFp
-   KuLcbwYgyrdUAG4qFb1REie8WbX1BGQBjJjQ6A/99B2GzYdwtBzOJkgh+
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="238806988"
-X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
-   d="scan'208";a="238806988"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 13:09:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
-   d="scan'208";a="502295651"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 27 Mar 2022 13:09:21 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nYZCS-0001OO-NZ; Sun, 27 Mar 2022 20:09:20 +0000
-Date:   Mon, 28 Mar 2022 04:09:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Terry Bowman <terry.bowman@amd.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Robert Richter <rrichter@amd.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [watchdog-next:v5.18-rc1 12/13] drivers/watchdog/sp5100_tco.c:345:8:
- error: implicit declaration of function 'request_mem_region_muxed'
-Message-ID: <202203280401.mKXClwW5-lkp@intel.com>
+        Sun, 27 Mar 2022 16:28:31 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0FD33E3C
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:26:52 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id bp39so10799002qtb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:26:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=marek-ca.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j8UVxZLedNpHTbRo7IKHmaBenq+x1GF8T/vpr9/COFw=;
+        b=5Xj7QIclTvrgSeXF+IP/WwaPT8yZo0PxRfFAqiZqBjcDNtnjxD0mek5rMxQ0apA6Ul
+         bafTXYVSqEDNG8kf1iYuAnOUjXb5qi2oCFDcQE/5uYNK3bZkTgoe0DBepeCXES+YaFHy
+         uUSODGqLQGtJQtv5VugwkPgpPVJ7vryhokzOW0Afh5lkxrKh1Fk1xd1uMpw2hyQsccHV
+         eJjs0ODSNWhsUCnemc7fZSNqvkCppoEijTCKRkwvwUGlle+EBscLvzxCwIDwQdd1VU4r
+         LrHixLpHdso5hm3MW7ETrDT5zUdsZDTsY3q8DSKWsqAUZsobp3QQEeZ78PpeI3s2YU5G
+         2c9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j8UVxZLedNpHTbRo7IKHmaBenq+x1GF8T/vpr9/COFw=;
+        b=pB5N9E8xh/DO++F1eYCc+XxLcRaH2kIR7RMr8mLndJHYSHdRl47uTTT9AgRBITWRAB
+         JC2X+AViCg6q/CnaHCwYhemjh6r83vPbw5gHRS2OwesSTFG+O6ygcOy2guQ2Vem199AQ
+         M2m7NaFxImAnPSQtGGHeBn5HmSQa7021sAP8Cx4zAjX1/c/YA7On6NqY3xlTX8+YJJje
+         FcATSWCN/+PRdIEYFHjoGW4I9cc0m2DAxT5byB5PT2WGiS5lLQZTXMQkeEcc4ILisAth
+         bMutO2bkMPyS/2txnkTa1Ja7XfZcBGanI9mG5k2WAv7Me+eNH4mUl0C4VNKOFRuBmXV2
+         BYRQ==
+X-Gm-Message-State: AOAM532ZQAwym4xzXosjn5nTqP5HBD/IW1QEn9D4yDNeOGMnWidfE7w5
+        UZVx8xvyNsXNnbs7GBwt4CQR3A==
+X-Google-Smtp-Source: ABdhPJwjikefcEW6EE3MzZqkcTWwsp93SdKPjKGmaMKv4cGZBM3L1ZE4fkjaC0trhlqVgv+ImjZTsQ==
+X-Received: by 2002:ac8:5e10:0:b0:2e1:cdc7:a73 with SMTP id h16-20020ac85e10000000b002e1cdc70a73mr19139444qtx.72.1648412811092;
+        Sun, 27 Mar 2022 13:26:51 -0700 (PDT)
+Received: from localhost.localdomain (modemcable134.222-177-173.mc.videotron.ca. [173.177.222.134])
+        by smtp.gmail.com with ESMTPSA id g9-20020a05620a108900b0067b13036bd5sm6720386qkk.52.2022.03.27.13.26.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Mar 2022 13:26:50 -0700 (PDT)
+From:   Jonathan Marek <jonathan@marek.ca>
+To:     freedreno@lists.freedesktop.org
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVER FOR MSM ADRENO
+        GPU), Emma Anholt <emma@anholt.net>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
+        linux-kernel@vger.kernel.org (open list),
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>
+Subject: [PATCH 0/4] drm/msm/adreno: add support for a730
+Date:   Sun, 27 Mar 2022 16:25:53 -0400
+Message-Id: <20220327202643.4053-1-jonathan@marek.ca>
+X-Mailer: git-send-email 2.26.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://www.linux-watchdog.org/linux-watchdog-next.git v5.18-rc1
-head:   826270373f17fd8ebd10753ca0a5fd2ceb1dc38e
-commit: 0578fff4aae5bce3f09875f58e68e9ffbab8daf5 [12/13] Watchdog: sp5100_tco: Add initialization using EFCH MMIO
-config: i386-randconfig-a014-20220328 (https://download.01.org/0day-ci/archive/20220328/202203280401.mKXClwW5-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add watchdog-next git://www.linux-watchdog.org/linux-watchdog-next.git
-        git fetch --no-tags watchdog-next v5.18-rc1
-        git checkout 0578fff4aae5bce3f09875f58e68e9ffbab8daf5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/watchdog/
+Based on a6xx_gpu.c, stripped down and updated for a7xx based on the
+downstream driver. Implements the minimum to be able to submit commands to
+the GPU and use it for userspace driver development. Notably this doesn't
+implement support for the GMU (this means that the clock driver needs to
+support the GPU core clock and turning on the GX rail, which is normally
+offloaded to the GMU).
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Register updates: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/15602
 
-All error/warnings (new ones prefixed by >>):
+Jonathan Marek (4):
+  drm/msm/adreno: move a6xx CP_PROTECT macros to common code
+  drm/msm/adreno: use a single register offset for
+    gpu_read64/gpu_write64
+  drm/msm/adreno: update headers
+  drm/msm/adreno: add support for a730
 
->> drivers/watchdog/sp5100_tco.c:345:8: error: implicit declaration of function 'request_mem_region_muxed' [-Werror,-Wimplicit-function-declaration]
-           res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
-                 ^
->> drivers/watchdog/sp5100_tco.c:345:6: warning: incompatible integer to pointer conversion assigning to 'struct resource *' from 'int' [-Wint-conversion]
-           res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
-               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
-
-
-vim +/request_mem_region_muxed +345 drivers/watchdog/sp5100_tco.c
-
-   333	
-   334	static int sp5100_tco_setupdevice_mmio(struct device *dev,
-   335					       struct watchdog_device *wdd)
-   336	{
-   337		struct sp5100_tco *tco = watchdog_get_drvdata(wdd);
-   338		const char *dev_name = SB800_DEVNAME;
-   339		u32 mmio_addr = 0, alt_mmio_addr = 0;
-   340		struct resource *res;
-   341		void __iomem *addr;
-   342		int ret;
-   343		u32 val;
-   344	
- > 345		res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
-   346					       EFCH_PM_ACPI_MMIO_PM_SIZE,
-   347					       "sp5100_tco");
-   348	
-   349		if (!res) {
-   350			dev_err(dev,
-   351				"Memory region 0x%08x already in use\n",
-   352				EFCH_PM_ACPI_MMIO_PM_ADDR);
-   353			return -EBUSY;
-   354		}
-   355	
-   356		addr = ioremap(EFCH_PM_ACPI_MMIO_PM_ADDR, EFCH_PM_ACPI_MMIO_PM_SIZE);
-   357		if (!addr) {
-   358			dev_err(dev, "Address mapping failed\n");
-   359			ret = -ENOMEM;
-   360			goto out;
-   361		}
-   362	
-   363		/*
-   364		 * EFCH_PM_DECODEEN_WDT_TMREN is dual purpose. This bitfield
-   365		 * enables sp5100_tco register MMIO space decoding. The bitfield
-   366		 * also starts the timer operation. Enable if not already enabled.
-   367		 */
-   368		val = efch_read_pm_reg8(addr, EFCH_PM_DECODEEN);
-   369		if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
-   370			efch_update_pm_reg8(addr, EFCH_PM_DECODEEN, 0xff,
-   371					    EFCH_PM_DECODEEN_WDT_TMREN);
-   372		}
-   373	
-   374		/* Error if the timer could not be enabled */
-   375		val = efch_read_pm_reg8(addr, EFCH_PM_DECODEEN);
-   376		if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
-   377			dev_err(dev, "Failed to enable the timer\n");
-   378			ret = -EFAULT;
-   379			goto out;
-   380		}
-   381	
-   382		mmio_addr = EFCH_PM_WDT_ADDR;
-   383	
-   384		/* Determine alternate MMIO base address */
-   385		val = efch_read_pm_reg8(addr, EFCH_PM_ISACONTROL);
-   386		if (val & EFCH_PM_ISACONTROL_MMIOEN)
-   387			alt_mmio_addr = EFCH_PM_ACPI_MMIO_ADDR +
-   388				EFCH_PM_ACPI_MMIO_WDT_OFFSET;
-   389	
-   390		ret = sp5100_tco_prepare_base(tco, mmio_addr, alt_mmio_addr, dev_name);
-   391		if (!ret) {
-   392			tco_timer_enable_mmio(addr);
-   393			ret = sp5100_tco_timer_init(tco);
-   394		}
-   395	
-   396	out:
-   397		if (addr)
-   398			iounmap(addr);
-   399	
-   400		release_resource(res);
-   401	
-   402		return ret;
-   403	}
-   404	
+ drivers/gpu/drm/msm/Makefile                |   1 +
+ drivers/gpu/drm/msm/adreno/a4xx_gpu.c       |   3 +-
+ drivers/gpu/drm/msm/adreno/a5xx_gpu.c       |  27 +-
+ drivers/gpu/drm/msm/adreno/a5xx_preempt.c   |   4 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c       |  25 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.h       |  17 -
+ drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c |   3 +-
+ drivers/gpu/drm/msm/adreno/a7xx.xml.h       | 666 +++++++++++++++++
+ drivers/gpu/drm/msm/adreno/a7xx_gpu.c       | 777 ++++++++++++++++++++
+ drivers/gpu/drm/msm/adreno/a7xx_gpu.h       |  26 +
+ drivers/gpu/drm/msm/adreno/adreno_device.c  |  12 +
+ drivers/gpu/drm/msm/adreno/adreno_gpu.h     |   9 +-
+ drivers/gpu/drm/msm/adreno/adreno_pm4.xml.h |  45 +-
+ drivers/gpu/drm/msm/msm_gpu.h               |  12 +-
+ drivers/gpu/drm/msm/msm_ringbuffer.h        |   1 +
+ 15 files changed, 1550 insertions(+), 78 deletions(-)
+ create mode 100644 drivers/gpu/drm/msm/adreno/a7xx.xml.h
+ create mode 100644 drivers/gpu/drm/msm/adreno/a7xx_gpu.c
+ create mode 100644 drivers/gpu/drm/msm/adreno/a7xx_gpu.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.26.1
+

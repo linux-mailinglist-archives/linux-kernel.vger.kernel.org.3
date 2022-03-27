@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B894E89A7
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 21:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F644E89AB
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 21:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236498AbiC0TXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 15:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
+        id S236507AbiC0TYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 15:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiC0TXQ (ORCPT
+        with ESMTP id S231214AbiC0TYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 15:23:16 -0400
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462A7344FC;
-        Sun, 27 Mar 2022 12:21:37 -0700 (PDT)
-Received: by mail-wm1-f41.google.com with SMTP id i67-20020a1c3b46000000b0038ce25c870dso3693765wma.1;
-        Sun, 27 Mar 2022 12:21:37 -0700 (PDT)
+        Sun, 27 Mar 2022 15:24:48 -0400
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0C862E5;
+        Sun, 27 Mar 2022 12:23:09 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id w4so17381011wrg.12;
+        Sun, 27 Mar 2022 12:23:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=IaJrh1ErRQ9WrEhGm0JWdX4xd9exVXf/cDGcs4E02+o=;
-        b=7GjXva75njwE+kMAu+PKtSHyRNZTsRRnyNTPIKqnCiMKrZ8pQbC4lugQqUxSHdGeVS
-         f94Jwrz9PtyMj67SInCpeHR+egfmh0elSp4AYV+M+l66tVCaIFunKWbmzzeT7PAwglKe
-         7+1lqKVb8gtmCc8YVl19EkR3kpJs4alaDVsOLtInLVk7nHBX/dz0XNop9DHWjx+RcuTY
-         4Ypx7wWXMFdIbsvQUPT38H+spSPkVEZ6ECchYWc9L/5cM6NA5qHtZjwNezejS4CloKyR
-         TlkcH5nwvT5/WBAiyo+dywYte67Dk6K5RSfaypbBHEX8J+HW89ohB1g6BIG1Vx42HTrR
-         owOQ==
-X-Gm-Message-State: AOAM531VMtYkkVBzPqnhFQrAXJUj5MPfjtAJ8mOwGPEck0KcAuT3bEKz
-        pZdPhAlFkO3BUnOc/BKc8tk=
-X-Google-Smtp-Source: ABdhPJyhcijWpjbV0TupkyN0gc2p7xTf0Ai7n+xMGKYV/s5GpiyhjrG8GQQ2f3hFSsyaasj8BeuGPA==
-X-Received: by 2002:a1c:f018:0:b0:37b:c13c:3128 with SMTP id a24-20020a1cf018000000b0037bc13c3128mr30102288wmb.157.1648408895809;
-        Sun, 27 Mar 2022 12:21:35 -0700 (PDT)
+        bh=Zgcx8aJm5CfWxpMNK/GioBCzvGQ41eUiuqee3qCSfhc=;
+        b=M9MWCLh6Wo9rGV3arzmTCJxyy6HDvwMGmNsUo13eH5gizftMNlzKw9TaqDIBpAzHM1
+         /BytlUeTaDMskgzL6h5ytpSi9f/QOUwkUlnzEY6xMVROgRClNu7DhY3/+99eizQP027z
+         eE6uunWLS+b7y50gquXyzkxUztcyhzBDmsUPY+KdIFtP3tbbacoHx8qRw3735cWuAVpq
+         GBKaLsGvV/3JwvpFaeoAqtQV6s/js+JEomPu3I7/G5J2cahRc1+AprdDfO52b/IXqQ6p
+         jM4EGKejmqqbLm5WPwgTBGO5AG1U5CGF7vAxL0AF1RunEiJF/p+Uavoi0moBisct8Nd3
+         xbzw==
+X-Gm-Message-State: AOAM532Zp/u/QbNREPSSTF5whX/4P75x4HxCAonyFKWZt7nGKFp2qLXa
+        gF9K60QSmppNPsQGBB6+eJE=
+X-Google-Smtp-Source: ABdhPJwz74EFMZa+aN8vziOQkfDg08cVKNG3OJ+6CvuTEeqEJYNYitYqQ29X3l9Zsc2s/FNi/3XGtQ==
+X-Received: by 2002:a5d:6da8:0:b0:205:8537:af57 with SMTP id u8-20020a5d6da8000000b002058537af57mr18060098wrs.80.1648408987696;
+        Sun, 27 Mar 2022 12:23:07 -0700 (PDT)
 Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id e8-20020a05600c2dc800b0038d05f2b34dsm1612263wmh.2.2022.03.27.12.21.34
+        by smtp.googlemail.com with ESMTPSA id a6-20020a05600c224600b0038cbfb9cfbcsm11595292wmm.47.2022.03.27.12.23.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Mar 2022 12:21:35 -0700 (PDT)
-Message-ID: <42c32324-ce22-ae37-6118-35590f4e355c@kernel.org>
-Date:   Sun, 27 Mar 2022 21:21:34 +0200
+        Sun, 27 Mar 2022 12:23:06 -0700 (PDT)
+Message-ID: <0ed1a650-d3e3-6ee1-05db-b3760b3cd245@kernel.org>
+Date:   Sun, 27 Mar 2022 21:23:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH] dt-bindings: spi: qcom-qspi: Add minItems to
- interconnect-names
+Subject: Re: [PATCH v1 12/12] ARM: imxrt_defconfig: Add i.MXRT1170
 Content-Language: en-US
-To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mukesh Savaliya <msavaliy@codeaurora.org>,
-        Akash Asthana <akashast@codeaurora.org>
-Cc:     Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220326212134.45759-1-singh.kuldeep87k@gmail.com>
+To:     Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
+Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, aisheng.dong@nxp.com, stefan@agner.ch,
+        linus.walleij@linaro.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        linux@armlinux.org.uk, abel.vesa@nxp.com, dev@lynxeye.de,
+        marcel.ziswiler@toradex.com, tharvey@gateworks.com,
+        leoyang.li@nxp.com, sebastian.reichel@collabora.com,
+        cniedermaier@dh-electronics.com, clin@suse.com,
+        giulio.benetti@benettiengineering.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
+References: <20220326144313.673549-1-Mr.Bossman075@gmail.com>
+ <20220326144313.673549-13-Mr.Bossman075@gmail.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220326212134.45759-1-singh.kuldeep87k@gmail.com>
+In-Reply-To: <20220326144313.673549-13-Mr.Bossman075@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -72,34 +75,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/03/2022 22:21, Kuldeep Singh wrote:
-> Qualcomm QSPI DT spec says interconnects has minimum length 1 and
-> maximum length 2. Same configuration will be applicable for
-> interconnect-names. Schema currently depicts interconnects length
-> correctly but not interconnect-names. It can have a single entry, which
-> is a valid case yet to be incorporated in the current configuration. The
-> schema tries to look for 2 names and fail for DTs with a single entry.
-> Thus, add minItems property to interconnect-names to fix it.
+On 26/03/2022 15:43, Jesse Taube wrote:
+> Add i.MXRT1170 pinctrl, clocks and USB to imxrt_defconfig.
 
-Thanks for the patch.
-
-6 sentences which explaining the same, which could be written in one
-sentence. In the same time you actually do not explain whether having
-one interconnect is correct. You just say what DT spec says about
-interconnects, but maybe that's wrong.
-
-So either keep just one sentence or really explain why one or two are
-allowed (based on datasheet for example).
-
-> 
-> With the change applied, below interconnect-names values are possible:
-> ['qspi-config'], ['qspi-config', 'qspi-memory']
-> 
-> Fixes: 8f9c291558ea ("dt-bindings: spi: Add interconnect binding for QSPI")
-> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-> ---
->  Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml | 1 +
->  1 file changed, 1 insertion(+)
+You add many more i.IMX unrelated functions, like USB gadgets. Please
+explain in commit msg why do you need them.
 
 
 Best regards,

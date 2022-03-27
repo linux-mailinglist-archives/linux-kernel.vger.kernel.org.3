@@ -2,82 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E154E86D2
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 10:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2444E86D6
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 10:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235649AbiC0IGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 04:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
+        id S235654AbiC0IJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 04:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiC0IGc (ORCPT
+        with ESMTP id S229613AbiC0IJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 04:06:32 -0400
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC43231DD3;
-        Sun, 27 Mar 2022 01:04:54 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id w25so13695539edi.11;
-        Sun, 27 Mar 2022 01:04:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IHOIaMurWc7F9ZSw+uYgY5lnqAhPhqRFB9rnEJSiWNc=;
-        b=XRLf+KToX5ieK1+FLwI+C6RLEWPd566JOa4H5F3zZRhjMONVoBhH/ZTesY0iIL3UFU
-         fsgJRP1XlHVoV6D1T2msy9aa17H+RuqDAhUURErwz2mxTWS3DQZoyHVaFm210J5wQ91y
-         cWXCNQiYgtyaAkPEJHFsiFSwe+wlgu7AJqf4o7B2gbXCIC0PG+f8PX1fdYIne+Jf8rn0
-         bRrZSywDNPkRuP739p+OtIHOur+9TSOXxOtRrdkCQMyRepyNpkFAZAo1XgGa3h3a1Ko7
-         0VgEg/zU4hlJR6BPVMNlLIVRaQjZT2/LoIxQhujDYe/+9ZmoegG25dzgAm1nzhfufQfX
-         Pfww==
-X-Gm-Message-State: AOAM531DlJpP9DFv4q/69r00Ovj6vcvxoaXW/8vEsb3Q/o+wnCFllOB/
-        +CXNzfaOTNWajUpg4rEJf3o=
-X-Google-Smtp-Source: ABdhPJy4EOHN+HJ/Npv5WtakVNt4K3GvTHkNtyBVRFi8JZFEELjsIEw1eNOVaTJKMRJ2z5r3pD5F7g==
-X-Received: by 2002:a05:6402:5304:b0:413:8a0c:c54a with SMTP id eo4-20020a056402530400b004138a0cc54amr9137498edb.172.1648368293151;
-        Sun, 27 Mar 2022 01:04:53 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id y16-20020aa7d510000000b004197c1cec7dsm5403354edq.6.2022.03.27.01.04.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Mar 2022 01:04:52 -0700 (PDT)
-Message-ID: <c7714450-0b68-7041-dd46-072d45efc753@kernel.org>
-Date:   Sun, 27 Mar 2022 10:04:51 +0200
+        Sun, 27 Mar 2022 04:09:40 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8868F46177
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 01:08:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648368482; x=1679904482;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0bIVGGz5y2gYDf0tJIHOjgF6exLKgwLl1xxjM775mIw=;
+  b=KJOcJ3Fnehyx+gFzuUc/qCGE2snzha4XAOBt7QSoN1sK9bYzYrbPPfym
+   EuCdOCbLJvvUDv+uITFDehkBRSz0KcmLJCNCRV+m8DEnhWFa5ZrJeVdjc
+   hfoVVAK/1VkFqn7Ab83q5WLLNfQAkYwgGZ62LnlU4ZKoxBp8a32ggEDFI
+   urSpj1tGoiJsKeKfaNs+1taSILuB31GN7+5+qlasHBNDgRTXknBKmLjou
+   d0pNmJf+BgCCycqIRLbvj4cY8ymCp+/9bJIkRCFFDmRWyMeC0ngZ/So9I
+   LeKXdgNPBhibgL2T0hn8LUNX8Ip2c8JY1BivsFfdFQQNCjpY5cnecWDwB
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10298"; a="258801294"
+X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
+   d="scan'208";a="258801294"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 01:08:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,214,1643702400"; 
+   d="scan'208";a="617500213"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 27 Mar 2022 01:07:57 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nYNwK-0000qj-UH; Sun, 27 Mar 2022 08:07:56 +0000
+Date:   Sun, 27 Mar 2022 16:07:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Muchun Song <songmuchun@bytedance.com>,
+        torvalds@linux-foundation.org, glider@google.com, elver@google.com,
+        dvyukov@google.com, akpm@linux-foundation.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        vbabka@suse.cz, roman.gushchin@linux.dev
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH 2/2] mm: kfence: fix objcgs vector allocation
+Message-ID: <202203271634.QymsHESG-lkp@intel.com>
+References: <20220327051853.57647-2-songmuchun@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 2/3] arm64: dts: rockchip: rk3399: use generic pmucru
- nodename
-Content-Language: en-US
-To:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220326102712.20906-1-jbx6244@gmail.com>
- <20220326102712.20906-2-jbx6244@gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220326102712.20906-2-jbx6244@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220327051853.57647-2-songmuchun@bytedance.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/03/2022 11:27, Johan Jonker wrote:
-> The cru nodenames should be generic,
+Hi Muchun,
 
-"The node names"
+Thank you for the patch! Perhaps something to improve:
 
-> so fix this for the pmucru node.
+[auto build test WARNING on hnaz-mm/master]
 
-Wrap description like in our coding style:
-https://elixir.bootlin.com/linux/v5.13/source/Documentation/process/submitting-patches.rst#L588
+url:    https://github.com/intel-lab-lkp/linux/commits/Muchun-Song/mm-kfence-fix-missing-objcg-housekeeping-for-SLAB/20220327-132038
+base:   https://github.com/hnaz/linux-mm master
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220327/202203271634.QymsHESG-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a33cf78311711db98d9f77541d0a4b50bc466875
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Muchun-Song/mm-kfence-fix-missing-objcg-housekeeping-for-SLAB/20220327-132038
+        git checkout a33cf78311711db98d9f77541d0a4b50bc466875
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash mm/kfence/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> mm/kfence/core.c:593:36: warning: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
+                   struct slab *slab = virt_to_slab(addr);
+                                                    ^~~~
+   mm/kfence/../slab.h:173:53: note: passing argument to parameter 'addr' here
+   static inline struct slab *virt_to_slab(const void *addr)
+                                                       ^
+   mm/kfence/core.c:597:9: error: no member named 'memcg_data' in 'struct slab'
+                   slab->memcg_data = (unsigned long)&meta->objcg | MEMCG_DATA_OBJCGS;
+                   ~~~~  ^
+   mm/kfence/core.c:597:52: error: use of undeclared identifier 'MEMCG_DATA_OBJCGS'
+                   slab->memcg_data = (unsigned long)&meta->objcg | MEMCG_DATA_OBJCGS;
+                                                                    ^
+   1 warning and 2 errors generated.
 
 
-Best regards,
-Krzysztof
+vim +593 mm/kfence/core.c
+
+   543	
+   544	/*
+   545	 * Initialization of the KFENCE pool after its allocation.
+   546	 * Returns 0 on success; otherwise returns the address up to
+   547	 * which partial initialization succeeded.
+   548	 */
+   549	static unsigned long kfence_init_pool(void)
+   550	{
+   551		unsigned long addr = (unsigned long)__kfence_pool;
+   552		struct page *pages;
+   553		int i;
+   554	
+   555		if (!arch_kfence_init_pool())
+   556			return addr;
+   557	
+   558		pages = virt_to_page(addr);
+   559	
+   560		/*
+   561		 * Set up object pages: they must have PG_slab set, to avoid freeing
+   562		 * these as real pages.
+   563		 *
+   564		 * We also want to avoid inserting kfence_free() in the kfree()
+   565		 * fast-path in SLUB, and therefore need to ensure kfree() correctly
+   566		 * enters __slab_free() slow-path.
+   567		 */
+   568		for (i = 0; i < KFENCE_POOL_SIZE / PAGE_SIZE; i++) {
+   569			if (!i || (i % 2))
+   570				continue;
+   571	
+   572			/* Verify we do not have a compound head page. */
+   573			if (WARN_ON(compound_head(&pages[i]) != &pages[i]))
+   574				return addr;
+   575	
+   576			__SetPageSlab(&pages[i]);
+   577		}
+   578	
+   579		/*
+   580		 * Protect the first 2 pages. The first page is mostly unnecessary, and
+   581		 * merely serves as an extended guard page. However, adding one
+   582		 * additional page in the beginning gives us an even number of pages,
+   583		 * which simplifies the mapping of address to metadata index.
+   584		 */
+   585		for (i = 0; i < 2; i++) {
+   586			if (unlikely(!kfence_protect(addr)))
+   587				return addr;
+   588	
+   589			addr += PAGE_SIZE;
+   590		}
+   591	
+   592		for (i = 0; i < CONFIG_KFENCE_NUM_OBJECTS; i++) {
+ > 593			struct slab *slab = virt_to_slab(addr);
+   594			struct kfence_metadata *meta = &kfence_metadata[i];
+   595	
+   596			/* Initialize metadata. */
+   597			slab->memcg_data = (unsigned long)&meta->objcg | MEMCG_DATA_OBJCGS;
+   598			INIT_LIST_HEAD(&meta->list);
+   599			raw_spin_lock_init(&meta->lock);
+   600			meta->state = KFENCE_OBJECT_UNUSED;
+   601			meta->addr = addr; /* Initialize for validation in metadata_to_pageaddr(). */
+   602			list_add_tail(&meta->list, &kfence_freelist);
+   603	
+   604			/* Protect the right redzone. */
+   605			if (unlikely(!kfence_protect(addr + PAGE_SIZE)))
+   606				return addr;
+   607	
+   608			addr += 2 * PAGE_SIZE;
+   609		}
+   610	
+   611		/*
+   612		 * The pool is live and will never be deallocated from this point on.
+   613		 * Remove the pool object from the kmemleak object tree, as it would
+   614		 * otherwise overlap with allocations returned by kfence_alloc(), which
+   615		 * are registered with kmemleak through the slab post-alloc hook.
+   616		 */
+   617		kmemleak_free(__kfence_pool);
+   618	
+   619		return 0;
+   620	}
+   621	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

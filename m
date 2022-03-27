@@ -2,164 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E484E87A9
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 14:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9994E87AF
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 14:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235677AbiC0MRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 08:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47726 "EHLO
+        id S234637AbiC0Mk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 08:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235128AbiC0MQw (ORCPT
+        with ESMTP id S232193AbiC0Mk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 08:16:52 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFEF37A0E;
-        Sun, 27 Mar 2022 05:15:13 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id o10so23515215ejd.1;
-        Sun, 27 Mar 2022 05:15:13 -0700 (PDT)
+        Sun, 27 Mar 2022 08:40:56 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E841F626;
+        Sun, 27 Mar 2022 05:39:17 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id h18so3602465ila.12;
+        Sun, 27 Mar 2022 05:39:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=c4ZqenwWmPW0skuS2J9N+QRi5X/+snz4/hXf3e+SE94=;
-        b=CRoLD6UegOKBpo1G6ixwRpuQpIoBjTkP3ogFKlZsDqRVQMTxlE34E7RQ0kvMWgU13z
-         pQvtcdZXQ0IEjXgL5OKTmkfE7hxjE6jN5F02FD31hBt4fkHTYTieKHKXSGJfU52/J0MK
-         47AKpkhQX2ttRwkjNkJm231OQTLkXRJtIzE/UtJpE9RXch7c/kxSplaTJcurGaCO6W3W
-         pzgW8kB/jpSN7fuX0b+pTf5NfDm1DKB8ccj+u4Yq/QWM1XCXPoSsJ45qaDSjmUnCeVqW
-         35AhAu/lS+ggF3vFyjzx7YaEk0aejiJ8FWgM5ZWeZrvanY4dXVbIH0F7bduH3rbMXlLC
-         eJDw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mK+dixa0LoEPtfSZUPyenmhOFOLQVwPd2apmwWfFfKk=;
+        b=Cxc7UtWsWbPr0EBSFHG/IsAtFw218VBBnQUsXTeD8TC1O3/IQwAgLSAnhIKh8kiKD+
+         8O87BfuhWAWrv9wbYS905+MbxHmX0MjQJ8S9nHQux66MYNNQFE6LzVDEPjVAlhpHREgx
+         LPzhHdMZwLreadrR/Ou64OmJuu2UgmzWiO2jTRJpgl8PNdvir4kQPmkAtFlkwEA9y1zy
+         Hd1re5B5QP/Fis5oTFZpc4qfX6e5+S0rhed8AX2g0UK+iVa4kIrdsuVrq3Cby+prjNYj
+         L+bKvysgtw9LuL15b5k2mwYu3mRsxjC6aFk+ikTfIO9zZ3pTNA/AgoPEnablN36BWs1Y
+         2RWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=c4ZqenwWmPW0skuS2J9N+QRi5X/+snz4/hXf3e+SE94=;
-        b=kGCvjLPPRvh4tNp3S+EQRc26C2LF9qvc0er5vBpnndKcV3I6wfRF/0Xr3x8CGGlqQ4
-         S96rdTlsF0xqyKisXuPWPOV9DKu0lPOzAlFY7La34LFOKUK54mgD9rxoOXxKISF3dtxx
-         84LV+PLy+xDVBTxb+6iElO43FDLRc0T5X6xv6XFq2/XWZQn7etULhE/wsD4KyeNtqVuz
-         f8D+pMI6L7iU8/LaE7BqQMiZaOF38SIP3iAVmvY0snXQsW7zOwwL5NoaOW1YHQx+bbLM
-         gTWuulYs60qJIWFQ2atYd3Ahpjszh1Hr4RC+NQrFMBbXd2Ll2t/8ZixkkR7iqHcTih2F
-         RgfQ==
-X-Gm-Message-State: AOAM530W/gEn0UxApd4Mc7N2CjMuJENdTYQA0iFDPB51t2Ll8i6KNAU0
-        V6ZiPFis0RvRuSL78wEWKe0=
-X-Google-Smtp-Source: ABdhPJy6f16s5PmNJUsXBrTRkotz24owRvjZ0kbXNY/+Ut1f2weCS4jcJzq+8YicgcPNV2M6uwJKOg==
-X-Received: by 2002:a17:907:3f9c:b0:6d8:116d:476b with SMTP id hr28-20020a1709073f9c00b006d8116d476bmr21152184ejc.432.1648383312207;
-        Sun, 27 Mar 2022 05:15:12 -0700 (PDT)
-Received: from tiger.museclub.art (p200300cf9f06c2008407e4c213cb9d01.dip0.t-ipconnect.de. [2003:cf:9f06:c200:8407:e4c2:13cb:9d01])
-        by smtp.googlemail.com with ESMTPSA id hg11-20020a1709072ccb00b006cee4fb36c7sm4530127ejc.64.2022.03.27.05.15.10
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mK+dixa0LoEPtfSZUPyenmhOFOLQVwPd2apmwWfFfKk=;
+        b=SuhoUV69nc0UebXElOnvT2/7UZOtFtEbWa61kvzNeZaX0EJhn5uLjqAH1tRELHb7GD
+         afu/kGp6TZdgHSdGF0/UfElmV54EAQiPkYJR7jra+587irdyhJ/q9wZxNt2lvEh34dRF
+         kaQWEAOjax55u6KSabz5gvpn9y+xq1pIfRIPCWXSrEsvqJXheEbu+wpG6Y8ZEF07okaa
+         3sDv5HQtRmjCLnKBd08MCxe0hMRvXhy51mvnHYUSPjKkbVZfpIB3+q15Db/5qNNmzhpc
+         lVwzoYRTqchOQaYaxrvek1rFS3kUCJgKmlKB4SyU6S3RpgY+ytKqzGiyTmqAeM+C/7qm
+         5Lrg==
+X-Gm-Message-State: AOAM5336Krafg2DJX7oEVaN3DAiduEPqNZO0JlZQfUl5Dgt4ZOrRaoHD
+        FQ4AUCmf3GnjYe+sLZ8JG1x8PyvXSI4=
+X-Google-Smtp-Source: ABdhPJxucE0TY7Eko2gCyimMqt3jAoPXXrivt7GCnIyK8+KMY9Hs0ZZ1RQapuajVqIx3CVVscwBhmA==
+X-Received: by 2002:a05:6e02:12c6:b0:2c8:5969:104a with SMTP id i6-20020a056e0212c600b002c85969104amr3180676ilm.73.1648384756584;
+        Sun, 27 Mar 2022 05:39:16 -0700 (PDT)
+Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:7073:b368:2f66:5e36])
+        by smtp.gmail.com with ESMTPSA id t7-20020a5e9907000000b00649d6bd1ec5sm6134534ioj.31.2022.03.27.05.39.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Mar 2022 05:15:11 -0700 (PDT)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
-Cc:     darcagn@protonmail.com, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] hwmon: (asus-ec-sensors) add PRIME X470-PRO board
-Date:   Sun, 27 Mar 2022 14:14:04 +0200
-Message-Id: <20220327121404.1702631-5-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
-References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
+        Sun, 27 Mar 2022 05:39:15 -0700 (PDT)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-mmc@vger.kernel.org
+Cc:     haibo.chen@nxp.com, aford@beaconembedded.com,
+        Adam Ford <aford173@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/5] dt-bindings: mmc: imx-esdhc: Update compatible fallbacks
+Date:   Sun, 27 Mar 2022 07:38:30 -0500
+Message-Id: <20220327123835.28329-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This board is supposed to be handled by the asus-wmi-sensors driver,
-but due to a buggy WMI implementation the driver and the official ASUS
-software make the BIOS hang together with fan controls.
+The SDHC controller in the imx8mn and imx8mp have the same controller
+as the imx8mm which is slightly different than that of the imx7d.
+Using the fallback of the imx8mm enables the controllers to support
+HS400-ES which is not available on the imx7d. After discussion with NXP,
+it turns out that the imx8qm should fall back to the imx8qxp, because
+those have some additional flags not present in the imx8mm.
 
-This driver complements values provided by the SIO chip and does not
-freeze the BIOS, as tested by a user [2].
-
-[1] https://github.com/electrified/asus-wmi-sensors/blob/master/README.md
-[2] https://github.com/zeule/asus-ec-sensors/issues/12
-
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+Suggested-by: haibo.chen@nxp.com
+Signed-off-by: Adam Ford <aford173@gmail.com>
 ---
- drivers/hwmon/asus-ec-sensors.c | 44 +++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+V2:  Added suggested-by note and imx8qxp updates.
+---
+ .../devicetree/bindings/mmc/fsl-imx-esdhc.yaml   | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index b4060ed1f0fa..ce0e1d97b60b 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -136,10 +136,41 @@ enum ec_sensors {
- #define SENSOR_TEMP_WATER_OUT BIT(ec_sensor_temp_water_out)
+diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+index 7dbbcae9485c..1427e9b5a6ec 100644
+--- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
++++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+@@ -34,23 +34,25 @@ properties:
+           - fsl,imx6ull-usdhc
+           - fsl,imx7d-usdhc
+           - fsl,imx7ulp-usdhc
++          - fsl,imx8mm-usdhc
++          - fsl,imx8qxp-usdhc
+           - fsl,imxrt1050-usdhc
+           - nxp,s32g2-usdhc
+       - items:
+           - enum:
+-              - fsl,imx8mm-usdhc
+-              - fsl,imx8mn-usdhc
+-              - fsl,imx8mp-usdhc
+               - fsl,imx8mq-usdhc
+-              - fsl,imx8qm-usdhc
+-              - fsl,imx8qxp-usdhc
+           - const: fsl,imx7d-usdhc
+       - items:
+           - enum:
+-              - fsl,imx93-usdhc
++              - fsl,imx8mn-usdhc
++              - fsl,imx8mp-usdhc
+               - fsl,imx8ulp-usdhc
++              - fsl,imx93-usdhc
+           - const: fsl,imx8mm-usdhc
+-
++      - items:
++          - enum:
++              - fsl,imx8qm-usdhc
++          - const: fsl,imx8qxp-usdhc
+   reg:
+     maxItems: 1
  
- enum board_family {
-+	family_amd_400_series,
- 	family_amd_500_series,
- };
- 
- /* All the known sensors for ASUS EC controllers */
-+static const struct ec_sensor_info sensors_family_amd_400[] = {
-+	[ec_sensor_temp_chipset] =
-+		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
-+	[ec_sensor_temp_cpu] =
-+		EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b),
-+	[ec_sensor_temp_mb] =
-+		EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c),
-+	[ec_sensor_temp_t_sensor] =
-+		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-+	[ec_sensor_temp_vrm] =
-+		EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
-+	[ec_sensor_in_cpu_core] =
-+		EC_SENSOR("CPU Core", hwmon_in, 2, 0x00, 0xa2),
-+	[ec_sensor_fan_cpu_opt] =
-+		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xbc),
-+	[ec_sensor_fan_vrm_hs] =
-+		EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2),
-+	[ec_sensor_fan_chipset] =
-+		/* no chipset fans in this generation */
-+		EC_SENSOR("Chipset", hwmon_fan, 0, 0x00, 0x00),
-+	[ec_sensor_fan_water_flow] =
-+		EC_SENSOR("Water_Flow", hwmon_fan, 2, 0x00, 0xb4),
-+	[ec_sensor_curr_cpu] =
-+		EC_SENSOR("CPU", hwmon_curr, 1, 0x00, 0xf4),
-+	[ec_sensor_temp_water_in] =
-+		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x0d),
-+	[ec_sensor_temp_water_out] =
-+		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x0b),
-+};
-+
- static const struct ec_sensor_info sensors_family_amd_500[] = {
- 	[ec_sensor_temp_chipset] =
- 		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
-@@ -185,6 +216,15 @@ struct ec_board_info {
- };
- 
- static const struct ec_board_info board_info[] __initconst = {
-+	{
-+		.board_names = {"PRIME X470-PRO"},
-+		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-+			SENSOR_FAN_CPU_OPT |
-+			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
-+		.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
-+		.family = family_amd_400_series,
-+	},
- 	{
- 		.board_names = {"PRIME X570-PRO"},
- 		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
-@@ -762,7 +802,11 @@ static int __init asus_ec_probe(struct platform_device *pdev)
- 
- 	dev_set_drvdata(dev, ec_data);
- 	ec_data->board_info = *pboard_info;
-+
- 	switch (ec_data->board_info.family) {
-+	case family_amd_400_series:
-+		ec_data->sensors_info = sensors_family_amd_400;
-+		break;
- 	case family_amd_500_series:
- 		ec_data->sensors_info = sensors_family_amd_500;
- 		break;
 -- 
-2.35.1
+2.34.1
 

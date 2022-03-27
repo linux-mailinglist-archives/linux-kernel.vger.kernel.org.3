@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C587D4E8669
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 09:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E03534E866A
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 09:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235569AbiC0HIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 03:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
+        id S235572AbiC0HJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 03:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235497AbiC0HIf (ORCPT
+        with ESMTP id S229978AbiC0HJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 03:08:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F89A140EE
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 00:06:58 -0700 (PDT)
+        Sun, 27 Mar 2022 03:09:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1A21A4
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 00:07:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD97C60F55
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 07:06:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6962BC340EC;
-        Sun, 27 Mar 2022 07:06:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 078F2B80CC7
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 07:07:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4B93C340EC;
+        Sun, 27 Mar 2022 07:07:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648364817;
-        bh=415DFYkmPefKhDTSw4PaJNUe8VG4ZSmdxIgk8FHrdyA=;
+        s=korg; t=1648364852;
+        bh=Wy+/kbTqX0Ydc2b+R/ChvMSaHemRdhbRDkg/zZc7cW0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wPDNc/bNtNFejTNEBeGSoE9hJdbVHyw2cd16UmRqci/BojcU/dUzsuek64QBHrrO4
-         4/i9zPpH+HDJHqcvDEG8Wykxzx16MN68RkY8+gFSEoPJLpAIF0ZY4d75FZb7kxh369
-         MtWSe7thH5lvuXQzWM3rtkzW0Bvi7U0l5HXbx9YU=
-Date:   Sun, 27 Mar 2022 09:06:52 +0200
+        b=GrN30X4J+g58lJKL5q5KsSFlO4qv2GW8jUEhnyaF01yU7Ugt+cJYQ/WP9lz2cvGYz
+         oyuyy1feA5U4RQHk0l5bMaGWS0db9YxQk0yMk2aaa/7MoYUPb941DRDewpMm0fJBI5
+         +OzXTQLH6NOyViz6PINYC8ECNtJuCRn2M3AxsSo0=
+Date:   Sun, 27 Mar 2022 09:07:28 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Yusuf Khan <yusisamerican@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, jasowang@redhat.com,
         mikelley@microsoft.com, mst@redhat.com, javier@javigon.com,
         arnd@arndb.de, will@kernel.org, axboe@kernel.dk,
-        Christoph Grenz <christophg+lkml@grenz-bonn.de>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v9 0/3] drivers: ddcci: upstream DDCCI driver
-Message-ID: <YkANDAyCMBBBWEs0@kroah.com>
+        Christoph Grenz <christophg+lkml@grenz-bonn.de>
+Subject: Re: [PATCH v9 1/3] drivers: ddcci: upstream DDCCI driver
+Message-ID: <YkANMPtg7pN7sF0L@kroah.com>
 References: <20220327045845.144742-1-yusisamerican@gmail.com>
+ <20220327045845.144742-2-yusisamerican@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220327045845.144742-1-yusisamerican@gmail.com>
+In-Reply-To: <20220327045845.144742-2-yusisamerican@gmail.com>
 X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,54 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 26, 2022 at 09:58:42PM -0700, Yusuf Khan wrote:
-> This patch upstreams(adds) the DDCCI driver by Christoph Grenz into
-> the kernel. The original gitlab page is loacted at https://gitlab
-> .com/ddcci-driver-linux/ddcci-driver-linux/-/tree/master.
-> 
-> DDC/CI is a control protocol for monitor settings supported by most
-> monitors since about 2005. A chardev and sysfs interface is provided.
-> The seccond patch in this series provides a backlight driver using
-> DDC/CI.
+On Sat, Mar 26, 2022 at 09:58:43PM -0700, Yusuf Khan wrote:
+> This patch adds the main DDCCI driver.
 > 
 > Signed-off-by: Yusuf Khan <yusisamerican@gmail.com>
 > Signed-off-by: Christoph Grenz <christophg+lkml@grenz-bonn.de>
 > ---
-> v2: Fix typos.
-> 
-> v3: Add documentation, move files around, replace semaphores with
-> mutexes, and replaced <asm-generic/fcntl.h> with <linux/fcntl.h>.
-> "imirkin"(which due to his involvement in the dri-devel irc channel
-> I cant help but assume to be a DRM developer) said that the DDC/CI
-> bus does not intefere with the buses that DRM is involved with.
-> 
-> v4: Move some documentation, fix grammer mistakes, remove usages of
-> likely(), and clarify some documentation.
-> 
-> v5: Fix grammer mistakes, remove usages of likely(), and clarify
-> some documentation.
-> 
-> v6: Change contact information to reference Christoph Grenz.
-> 
-> v7: Remove all instances of the unlikely() macro.
-> 
-> v8: Modify documentation to provide updated date and kernel
-> documentation, fix SPDX lines, use isalpha instead of redefining
-> logic, change maximum amount of bytes that can be written to be
-> conformant with DDC/CI specification, prevent userspace from holding
-> locks with the open file descriptor, remove ddcci_cdev_seek, dont
-> refine sysfs_emit() logic, use EXPORT_SYMBOL_GPL instead of
-> EXPORT_SYMBOL, remove ddcci_device_remove_void, remove module
-> paramaters and version, and split into 2 patches.
-> 
-> v9: Fix IS_ANY_ID matching for compilers and archs where char is
-> unsigned char and use the cannonical patch format.
-> Reported-by: kernel test robot <lkp@intel.com>
 
-You sent 3 patches with all the same subject line, yet they did
-different things.  That's not ok at all.  Please read the kernel
-documentation for how to write proper subject lines.
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what is needed in order to
+  properly describe the change.
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what a proper Subject: line should
+  look like.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot

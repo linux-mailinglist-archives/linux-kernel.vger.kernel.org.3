@@ -2,234 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06534E8927
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 19:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33CDD4E8923
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 19:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234859AbiC0RtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 13:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
+        id S236163AbiC0Rtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 13:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230274AbiC0Rs6 (ORCPT
+        with ESMTP id S235083AbiC0Rth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 13:48:58 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334C713DDC
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 10:47:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648403239; x=1679939239;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OUpNPueGOH4YaEWggnAceZWPfZs0gAnOejGtcmFM+RA=;
-  b=ETFDJU40mkNV9kMHCPgVr+T7Ud89FNQg+o4u9ti8KitJrLbg22IpHrNW
-   pG/hD72pTZ66Ld3lSLGcf1fQFg+qtsSlNYzONUk+26ocEZ6PO4aJrz/nt
-   ii4Ffs10vx9k8kGuoSz1widdoPw8ILgDszhG0XxKcWt0NRDCip3lIrP4r
-   ipjBach6uJ2s26DFJBtMjYlampjnKcvk2D1WQxh9DOG+857YQchRmLqMf
-   TMBdfFLBjouqj87eOwOQiscvlRaZ+5WP4t+DGg3Mnvi5GN/wqTd+belQF
-   7zD1bP9B6GJDn9l+XToz7yQICmfqmkNxN8uHAK7+axYOi9waynwcdoWdN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="241019823"
-X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
-   d="scan'208";a="241019823"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 10:47:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
-   d="scan'208";a="520740138"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 27 Mar 2022 10:47:16 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nYWyx-0001HW-Tf; Sun, 27 Mar 2022 17:47:15 +0000
-Date:   Mon, 28 Mar 2022 01:47:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/video/fbdev/i740fb.c:743:9: sparse: sparse: incorrect type
- in argument 1 (different address spaces)
-Message-ID: <202203280145.msqrXeT4-lkp@intel.com>
+        Sun, 27 Mar 2022 13:49:37 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C68E13DF1
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 10:47:58 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id p10so15303473lfa.12
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 10:47:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=o1iDTaw6udoeWxS0P3g37FT6qwmikziMFuHY85TzLms=;
+        b=QXev/0HctMbQHJBBNg+vNKoiZgjxrbVRSPl69GoL4dHj0DM3HKnB8D6M9SfRxR7oye
+         ZjtoNDJsE178zhG1uAUpIv6gx7j2hqmmr9e61yPEb/ijmDJDrw7sxwJYVDWTMob0rc0O
+         16xoprFxcmNSQ9AF+YH9lSIXRpizPi37FJt/Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o1iDTaw6udoeWxS0P3g37FT6qwmikziMFuHY85TzLms=;
+        b=MxXmgzf0qrVVepcB7VIgc1BP8a2dK6BFecHJ7dN5aWsxYf7mj90NLqPgjJbRf53R7d
+         b5LKnEGMSbim+iZRA7fAFFAPSnKNguDyAgvVqYKM4y6AHXjn+vAwjxQ0uj6zOdEPJF8T
+         reAdrnj8LlMajV2aM8XqRHl+4dAVCk70il5yP1IrL1PSX4qmhbDBm8gHPrAybv1fFidM
+         WR5ZDEHAfojYR3JwgblErMV47g4+jSiLLxZfX7ZCegA1lBq+WJtx+CIpSOSHykAiSG5D
+         xcy79maRVOAaFLxuO1xMvJuMHx3Uh3myaSSl4IgvGdTvnUBE8Mi1Ti5lU/x2jSyB1r8x
+         +2Fw==
+X-Gm-Message-State: AOAM533PkpafUGVV8+zEa3EtlBABpe2lW6TNJtKce4zuppNqAMRAf+zY
+        2sDM3WO4PTPQC9sdDSG+T5B6/GRalgsh3CpEn68=
+X-Google-Smtp-Source: ABdhPJzGkOC8uJbA+kk3Opg7yZN437E+8XGHnK7aLiazRjMgUlp3l64iLFdAUSXz8+hA3OEvT719mA==
+X-Received: by 2002:a05:6512:34d0:b0:44a:6d14:5019 with SMTP id w16-20020a05651234d000b0044a6d145019mr12636660lfr.632.1648403276151;
+        Sun, 27 Mar 2022 10:47:56 -0700 (PDT)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
+        by smtp.gmail.com with ESMTPSA id a13-20020a195f4d000000b00443a5302315sm1416166lfj.30.2022.03.27.10.47.54
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Mar 2022 10:47:55 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id q14so16352318ljc.12
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 10:47:54 -0700 (PDT)
+X-Received: by 2002:a2e:9b10:0:b0:247:f28c:ffd3 with SMTP id
+ u16-20020a2e9b10000000b00247f28cffd3mr16448428lji.152.1648403274197; Sun, 27
+ Mar 2022 10:47:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220326152646.GT8939@worktop.programming.kicks-ass.net>
+ <CAHk-=whhG15HiqR+WM5M2mMy9F17yVdT8_M0ra0tGJS+5ibrdw@mail.gmail.com> <20220327082217.GU8939@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220327082217.GU8939@worktop.programming.kicks-ass.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 27 Mar 2022 10:47:38 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whzW56xChey=k+9KeK_NFxWLfZrt5UWvVjTxYbHLP1Nwg@mail.gmail.com>
+Message-ID: <CAHk-=whzW56xChey=k+9KeK_NFxWLfZrt5UWvVjTxYbHLP1Nwg@mail.gmail.com>
+Subject: Re: [GIT PULL] x86/core for 5.18
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f022814633e1c600507b3a99691b4d624c2813f0
-commit: 28e77cc1c0686621a4d416f599cee5ab369daa0a fortify: Detect struct member overflows in memset() at compile-time
-date:   6 weeks ago
-config: i386-randconfig-s001 (https://download.01.org/0day-ci/archive/20220328/202203280145.msqrXeT4-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=28e77cc1c0686621a4d416f599cee5ab369daa0a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 28e77cc1c0686621a4d416f599cee5ab369daa0a
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/video/fbdev/
+On Sun, Mar 27, 2022 at 1:22 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> Duh! I pushed the tag to the wrong repo (peterz/queue.git)... I just
+> pushed it out to tip/tip/git as well, so hopefully it should all work
+> now.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks, looks good.
 
+There's a few merges that don't have good explanations ("avoid
+conflicts" really is not an explanation on its own), but those weren't
+actually yours.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/video/fbdev/i740fb.c:743:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got char [noderef] __iomem *screen_base @@
-   drivers/video/fbdev/i740fb.c:743:9: sparse:     expected void const *
-   drivers/video/fbdev/i740fb.c:743:9: sparse:     got char [noderef] __iomem *screen_base
->> drivers/video/fbdev/i740fb.c:743:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got char [noderef] __iomem *screen_base @@
-   drivers/video/fbdev/i740fb.c:743:9: sparse:     expected void const *
-   drivers/video/fbdev/i740fb.c:743:9: sparse:     got char [noderef] __iomem *screen_base
-   drivers/video/fbdev/i740fb.c:743:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got char [noderef] __iomem *screen_base @@
-   drivers/video/fbdev/i740fb.c:743:9: sparse:     expected void *
-   drivers/video/fbdev/i740fb.c:743:9: sparse:     got char [noderef] __iomem *screen_base
+Looking around, the only other thing I notice is that the CC_HAS_IBT
+conditional is horrendously unreadable.
 
-vim +743 drivers/video/fbdev/i740fb.c
+There is no reason to make a Kconfig option use one single expression
+from hell, when the Kconfig language is designed to be able to do so
+much better.
 
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  732  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  733  static int i740fb_set_par(struct fb_info *info)
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  734  {
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  735  	struct i740fb_par *par = info->par;
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  736  	u32 itemp;
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  737  	int i;
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  738  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  739  	i = i740fb_decode_var(&info->var, par, info);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  740  	if (i)
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  741  		return i;
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  742  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10 @743  	memset(info->screen_base, 0, info->screen_size);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  744  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  745  	vga_protect(par);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  746  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  747  	i740outreg(par, XRX, DRAM_EXT_CNTL, DRAM_REFRESH_DISABLE);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  748  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  749  	mdelay(1);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  750  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  751  	i740outreg(par, XRX, VCLK2_VCO_M, par->video_clk2_m);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  752  	i740outreg(par, XRX, VCLK2_VCO_N, par->video_clk2_n);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  753  	i740outreg(par, XRX, VCLK2_VCO_MN_MSBS, par->video_clk2_mn_msbs);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  754  	i740outreg(par, XRX, VCLK2_VCO_DIV_SEL, par->video_clk2_div_sel);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  755  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  756  	i740outreg_mask(par, XRX, PIXPIPE_CONFIG_0,
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  757  			par->pixelpipe_cfg0 & DAC_8_BIT, 0x80);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  758  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  759  	i740inb(par, 0x3DA);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  760  	i740outb(par, 0x3C0, 0x00);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  761  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  762  	/* update misc output register */
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  763  	i740outb(par, VGA_MIS_W, par->misc | 0x01);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  764  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  765  	/* synchronous reset on */
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  766  	i740outreg(par, VGA_SEQ_I, VGA_SEQ_RESET, 0x01);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  767  	/* write sequencer registers */
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  768  	i740outreg(par, VGA_SEQ_I, VGA_SEQ_CLOCK_MODE,
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  769  			par->seq[VGA_SEQ_CLOCK_MODE] | 0x20);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  770  	for (i = 2; i < VGA_SEQ_C; i++)
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  771  		i740outreg(par, VGA_SEQ_I, i, par->seq[i]);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  772  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  773  	/* synchronous reset off */
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  774  	i740outreg(par, VGA_SEQ_I, VGA_SEQ_RESET, 0x03);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  775  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  776  	/* deprotect CRT registers 0-7 */
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  777  	i740outreg(par, VGA_CRT_IC, VGA_CRTC_V_SYNC_END,
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  778  			par->crtc[VGA_CRTC_V_SYNC_END]);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  779  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  780  	/* write CRT registers */
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  781  	for (i = 0; i < VGA_CRT_C; i++)
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  782  		i740outreg(par, VGA_CRT_IC, i, par->crtc[i]);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  783  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  784  	/* write graphics controller registers */
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  785  	for (i = 0; i < VGA_GFX_C; i++)
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  786  		i740outreg(par, VGA_GFX_I, i, par->gdc[i]);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  787  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  788  	/* write attribute controller registers */
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  789  	for (i = 0; i < VGA_ATT_C; i++) {
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  790  		i740inb(par, VGA_IS1_RC);		/* reset flip-flop */
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  791  		i740outb(par, VGA_ATT_IW, i);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  792  		i740outb(par, VGA_ATT_IW, par->atc[i]);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  793  	}
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  794  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  795  	i740inb(par, VGA_IS1_RC);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  796  	i740outb(par, VGA_ATT_IW, 0x20);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  797  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  798  	i740outreg(par, VGA_CRT_IC, EXT_VERT_TOTAL, par->ext_vert_total);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  799  	i740outreg(par, VGA_CRT_IC, EXT_VERT_DISPLAY, par->ext_vert_disp_end);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  800  	i740outreg(par, VGA_CRT_IC, EXT_VERT_SYNC_START,
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  801  			par->ext_vert_sync_start);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  802  	i740outreg(par, VGA_CRT_IC, EXT_VERT_BLANK_START,
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  803  			par->ext_vert_blank_start);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  804  	i740outreg(par, VGA_CRT_IC, EXT_HORIZ_TOTAL, par->ext_horiz_total);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  805  	i740outreg(par, VGA_CRT_IC, EXT_HORIZ_BLANK, par->ext_horiz_blank);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  806  	i740outreg(par, VGA_CRT_IC, EXT_OFFSET, par->ext_offset);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  807  	i740outreg(par, VGA_CRT_IC, EXT_START_ADDR_HI, par->ext_start_addr_hi);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  808  	i740outreg(par, VGA_CRT_IC, EXT_START_ADDR, par->ext_start_addr);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  809  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  810  	i740outreg_mask(par, VGA_CRT_IC, INTERLACE_CNTL,
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  811  			par->interlace_cntl, INTERLACE_ENABLE);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  812  	i740outreg_mask(par, XRX, ADDRESS_MAPPING, par->address_mapping, 0x1F);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  813  	i740outreg_mask(par, XRX, BITBLT_CNTL, par->bitblt_cntl, COLEXP_MODE);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  814  	i740outreg_mask(par, XRX, DISPLAY_CNTL,
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  815  			par->display_cntl, VGA_WRAP_MODE | GUI_MODE);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  816  	i740outreg_mask(par, XRX, PIXPIPE_CONFIG_0, par->pixelpipe_cfg0, 0x9B);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  817  	i740outreg_mask(par, XRX, PIXPIPE_CONFIG_2, par->pixelpipe_cfg2, 0x0C);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  818  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  819  	i740outreg(par, XRX, PLL_CNTL, par->pll_cntl);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  820  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  821  	i740outreg_mask(par, XRX, PIXPIPE_CONFIG_1,
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  822  			par->pixelpipe_cfg1, DISPLAY_COLOR_MODE);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  823  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  824  	itemp = readl(par->regs + FWATER_BLC);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  825  	itemp &= ~(LMI_BURST_LENGTH | LMI_FIFO_WATERMARK);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  826  	itemp |= par->lmi_fifo_watermark;
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  827  	writel(itemp, par->regs + FWATER_BLC);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  828  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  829  	i740outreg(par, XRX, DRAM_EXT_CNTL, DRAM_REFRESH_60HZ);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  830  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  831  	i740outreg_mask(par, MRX, COL_KEY_CNTL_1, 0, BLANK_DISP_OVERLAY);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  832  	i740outreg_mask(par, XRX, IO_CTNL,
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  833  			par->io_cntl, EXTENDED_ATTR_CNTL | EXTENDED_CRTC_CNTL);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  834  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  835  	if (par->pixelpipe_cfg1 != DISPLAY_8BPP_MODE) {
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  836  		i740outb(par, VGA_PEL_MSK, 0xFF);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  837  		i740outb(par, VGA_PEL_IW, 0x00);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  838  		for (i = 0; i < 256; i++) {
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  839  			itemp = (par->pixelpipe_cfg0 & DAC_8_BIT) ? i : i >> 2;
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  840  			i740outb(par, VGA_PEL_D, itemp);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  841  			i740outb(par, VGA_PEL_D, itemp);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  842  			i740outb(par, VGA_PEL_D, itemp);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  843  		}
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  844  	}
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  845  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  846  	/* Wait for screen to stabilize. */
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  847  	mdelay(50);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  848  	vga_unprotect(par);
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  849  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  850  	info->fix.line_length =
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  851  			info->var.xres_virtual * info->var.bits_per_pixel / 8;
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  852  	if (info->var.bits_per_pixel == 8)
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  853  		info->fix.visual = FB_VISUAL_PSEUDOCOLOR;
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  854  	else
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  855  		info->fix.visual = FB_VISUAL_TRUECOLOR;
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  856  
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  857  	return 0;
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  858  }
-5350c65f4f15bb drivers/video/i740fb.c Ondrej Zary 2012-02-10  859  
+That
 
-:::::: The code at line 743 was first introduced by commit
-:::::: 5350c65f4f15bbc111ffa629130d3f32cdd4ccf6 Resurrect Intel740 driver: i740fb
+       def_bool ((CC_IS_GCC && $(cc-option, -fcf-protection=branch
+-mindirect-branch-register)) || \
+                 (CC_IS_CLANG && CLANG_VERSION >= 140000)) && \
+                 $(as-instr,endbr64)
 
-:::::: TO: Ondrej Zary <linux@rainbow-software.org>
-:::::: CC: Florian Tobias Schandinat <FlorianSchandinat@gmx.de>
+really is pretty horrendous. Yeah, we have other examples ot those
+kinds of horrible expressions (*cough*KCSAN*cough*), but wouldn't it
+be much nicer to just write those things legibly.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+And it's nice to see the comments about _why_ some particular compiler
+checks are done, but when it's all part of one very complicated thing
+it's not exactly easy to read or understand.
+
+I've obviously already pulled it (you should have seen the
+pr-tracker-bot reply), but I really think it should have been written
+in a much more straight-forward and obvious manner, something like:
+
+  # work around https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93654
+  config GCC_HAS_IBT
+        def_bool y
+        depends on CC_IS_GCC
+        depends on $(cc-option, -fcf-protection=branch
+-mindirect-branch-register)
+
+  # Clang/LLVM >= 14
+  # https://github.com/llvm/llvm-project/commit/e0b89df2e0f0130881bf6c39bf31d7f6aac00e0f
+  # https://github.com/llvm/llvm-project/commit/dfcf69770bc522b9e411c66454934a37c1f35332
+  config CLANG_HAS_IBT
+        def_bool y
+        depends on CC_IS_CLANG && CLANG_VERSION >= 140000
+
+  # binutils >= 2.29 for 'endbr64' instruction
+  config CC_HAS_IBT
+        def_bool y
+        depends on GCC_HAS_IBT || CLANG_HAS_IBT
+        depends on $(as-instr,endbr64)
+
+instead (ok, using "AS_HAS_IBT" and "LD_HAS_IBT" to clarify all
+_those_ tests too would probably have been even more legible, but I
+got bored).
+
+The above suggested Kconfig snippet is entirely untested, and meant
+purely as a "look, you can split these expressions up to be more
+legible".
+
+The actual *code* seems to be nicely abstracted out, which is why I
+then reacted to that Kconfig mess.
+
+           Linus

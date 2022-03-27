@@ -2,104 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED454E8633
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 08:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA134E8637
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 08:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235440AbiC0GKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 02:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
+        id S235461AbiC0GNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 02:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235434AbiC0GKa (ORCPT
+        with ESMTP id S234606AbiC0GNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 02:10:30 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AE3B7D1
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Mar 2022 23:08:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:Cc:References:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=r1Z4+9mP70DcRJzsHUVzWOn2gh7baT5li/8hB4Sd/Rw=; b=anv90Aq7MF3P8hebttS9c8+zs4
-        ZTApTE9jcvphENrMooPQqHdh1AXfSt2/PhjSEs4bsMT50611uXn+sS7WDgUbGbdOmCg4WqJR3E9md
-        AN0++YljWIaurRU1CeNm+pN+222Ssk57fWlqK/kJbIPg2UoSwPLKqPb/pwDr/GCSyjbE4VqrUy9ht
-        ZIT2VjRA9bNX9e6v12FetwcskRWG5LGf3wjO7glrWBaV+2OvkHWIs2xK0dj/QGCveJQ0HvJxZUy+v
-        /Li4xVWYk9yMQ9HaRaU+nGFDcFuW3emA5nUDO5ZngElk+SbSVLeUa+tmBX3wX8S0cF8pgWO/2kNoR
-        yglfdpaQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nYM52-00Fpme-Sf; Sun, 27 Mar 2022 06:08:49 +0000
-Message-ID: <53ce9316-1467-78ea-21a9-02a1c2438002@infradead.org>
-Date:   Sat, 26 Mar 2022 23:08:45 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: 5.17.0 fails to suspend
-Content-Language: en-US
-To:     Norbert Preining <norbert@preining.info>,
-        linux-kernel@vger.kernel.org
-References: <YjryLd+TuigtA6co@sakefilet.preining.info>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <YjryLd+TuigtA6co@sakefilet.preining.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 27 Mar 2022 02:13:39 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAAFB0F;
+        Sat, 26 Mar 2022 23:12:01 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id c2so9772104pga.10;
+        Sat, 26 Mar 2022 23:12:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=BE+aA36i8c3R5wojjNo4XL/AkAZANQ6GWopioCR7lsc=;
+        b=Nw2r6AW4z/IkzWG3sJ1kq9jiOS0NTZtYmMnksU9Kj20S7JH68xRaP93m21TynLpjml
+         KkXjALXA6lTXTyMtfeOYFAkHwD3zl7ElW4zV+5FurtFTdxqvR/Cr2i8ZjThSpkmYBtCn
+         TkbMS/VpLspECre+tm/1SkjcGqn4naNiNvmC0am9gRpqV/XXgLri9gcP4dwhUGtNz3/l
+         /B3qmFGlug2UMdKZG8BtakV3miPozC4OH/zWhI+m22oOXb3+OkdtmaVfSXbw7TCpI7z2
+         4VDe967Jw5PIvKAxMpNBbPk+fcx96Uwlf40SS6bh1I4M+gypREFTpVEIcFsJ6cGtXBJ0
+         +Vew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=BE+aA36i8c3R5wojjNo4XL/AkAZANQ6GWopioCR7lsc=;
+        b=4DyXsM//p/msW4vBYDrQ9zudTXsWBNl9VEFs4chEBL6Nc5A3pt+3nNAuCO/9Skj8oA
+         qZyKMOcEZX0hF5OAKdFAimXHHMz0CApmzxAsAe2ysGtewGub037SkA8oyfbDaY7X7Ken
+         7RqyaISb0irZUOjorf+FtMRrJoSeI1Bw64oOhIpSpcL3S5tKg8NCrWhYMOlevcDLkNCY
+         PcGmyakA/A3F24eoBBb6SFXXoWVhy68NqXAK3zNgLLlVigohO7K87fftkFWg3WYBl8h8
+         qgOK6bJsaDT4gsN/hI6zl6cx+NaI0pYUgHhJXCtEuHCLF3n/d42peqeOa4tIOFEZsRJG
+         JKYQ==
+X-Gm-Message-State: AOAM530nwe5c7nDe3Ls/tsK9LGwfHn+b3tC9ll3OYS997QHPVp+oNGoD
+        j5C3ksyP+mHsJeGQYmVtM4ThEbFDygw=
+X-Google-Smtp-Source: ABdhPJyIGF8CYoN8BLP/kuL47FMddIbBlo1ZP1EE47uXttVNcUR/kg8Fcm9ClWqDCfbuDe9b4MljEA==
+X-Received: by 2002:a05:6a00:130e:b0:4cc:3c7d:4dec with SMTP id j14-20020a056a00130e00b004cc3c7d4decmr17646042pfu.32.1648361520552;
+        Sat, 26 Mar 2022 23:12:00 -0700 (PDT)
+Received: from localhost.localdomain ([115.220.243.108])
+        by smtp.googlemail.com with ESMTPSA id j13-20020a056a00130d00b004f1025a4361sm11903794pfu.202.2022.03.26.23.11.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Mar 2022 23:12:00 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     ludovic.desroches@microchip.com
+Cc:     tudor.ambarus@microchip.com, vkoul@kernel.org,
+        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH] dma: at_xdmac: fix a missing check on list iterator
+Date:   Sun, 27 Mar 2022 14:11:54 +0800
+Message-Id: <20220327061154.4867-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael-
-Does this need to go to linux-usb or linux-pm?
-thanks.
+The bug is here:
+	__func__, desc, &desc->tx_dma_desc.phys, ret, cookie, residue);
 
+The list iterator 'desc' will point to a bogus position containing
+HEAD if the list is empty or no element is found. To avoid dev_dbg()
+prints a invalid address, use a new variable 'iter' as the list
+iterator, while use the origin variable 'desc' as a dedicated
+pointer to point to the found element.
 
-On 3/23/22 03:10, Norbert Preining wrote:
-> Hi all,
-> 
-> (please cc)
-> 
-> upgrading from 5.16.15 or so to 5.17.o my laptop (Fujitsu Lifebook U
-> Series) fails to suspend:
-> 
-> kernel: Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
-> kernel: printk: Suspending console(s) (use no_console_suspend to debug)
-> kernel: e1000e: EEE TX LPI TIMER: 00000011
-> kernel: PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x30 returns -16
-> kernel: PM: dpm_run_callback(): pci_pm_suspend+0x0/0x160 returns -16
-> kernel: xhci_hcd 0000:00:14.0: PM: failed to suspend async: error -16
-> kernel: PM: Some devices failed to suspend, or early wake event detected
-> kernel: nvme nvme0: Shutdown timeout set to 8 seconds
-> kernel: nvme nvme0: 8/0/0 default/read/poll queues
-> kernel: OOM killer enabled.
-> 
-> No external usb device connected, internal ones:
-> $ lsusb
-> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-> Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-> Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-> Bus 001 Device 004: ID 04f2:b6e1 Chicony Electronics Co., Ltd FJ Camera
-> Bus 001 Device 003: ID 298d:2033 Next Biometrics NB-2033-U
-> Bus 001 Device 002: ID 058f:9540 Alcor Micro Corp. AU9540 Smartcard Reader
-> Bus 001 Device 005: ID 8087:0026 Intel Corp. AX201 Bluetooth
-> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-> 
-> What further information can I provide (no external usb device
-> 
-> (please cc)
-> 
-> All the best
-> 
-> Norbert
-> 
-> --
-> PREINING Norbert                              https://www.preining.info
-> Fujitsu Research     +    IFMGA Guide     +    TU Wien    +    TeX Live
-> GPG: 0x860CDC13   fp: F7D8 A928 26E3 16A1 9FA0 ACF0 6CAC A448 860C DC13
+Cc: stable@vger.kernel.org
+Fixes: 82e2424635f4c ("dmaengine: xdmac: fix print warning on dma_addr_t variable")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+---
+ drivers/dma/at_xdmac.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/dma/at_xdmac.c b/drivers/dma/at_xdmac.c
+index 1476156af74b..def564d1e8fa 100644
+--- a/drivers/dma/at_xdmac.c
++++ b/drivers/dma/at_xdmac.c
+@@ -1453,7 +1453,7 @@ at_xdmac_tx_status(struct dma_chan *chan, dma_cookie_t cookie,
+ {
+ 	struct at_xdmac_chan	*atchan = to_at_xdmac_chan(chan);
+ 	struct at_xdmac		*atxdmac = to_at_xdmac(atchan->chan.device);
+-	struct at_xdmac_desc	*desc, *_desc;
++	struct at_xdmac_desc	*desc, *_desc, *iter;
+ 	struct list_head	*descs_list;
+ 	enum dma_status		ret;
+ 	int			residue, retry;
+@@ -1568,11 +1568,13 @@ at_xdmac_tx_status(struct dma_chan *chan, dma_cookie_t cookie,
+ 	 * microblock.
+ 	 */
+ 	descs_list = &desc->descs_list;
+-	list_for_each_entry_safe(desc, _desc, descs_list, desc_node) {
+-		dwidth = at_xdmac_get_dwidth(desc->lld.mbr_cfg);
+-		residue -= (desc->lld.mbr_ubc & 0xffffff) << dwidth;
+-		if ((desc->lld.mbr_nda & 0xfffffffc) == cur_nda)
++	list_for_each_entry_safe(iter, _desc, descs_list, desc_node) {
++		dwidth = at_xdmac_get_dwidth(iter->lld.mbr_cfg);
++		residue -= (iter->lld.mbr_ubc & 0xffffff) << dwidth;
++		if ((iter->lld.mbr_nda & 0xfffffffc) == cur_nda) {
++			desc = iter;
+ 			break;
++		}
+ 	}
+ 	residue += cur_ubc << dwidth;
+ 
 -- 
-~Randy
+2.17.1
+

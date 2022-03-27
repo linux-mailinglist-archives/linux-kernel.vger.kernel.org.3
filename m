@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57C004E8992
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 21:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB204E8996
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 21:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236461AbiC0TOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 15:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
+        id S236441AbiC0TOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 15:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiC0TN4 (ORCPT
+        with ESMTP id S231214AbiC0TOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 15:13:56 -0400
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F29340C9;
-        Sun, 27 Mar 2022 12:12:17 -0700 (PDT)
-Received: by mail-wm1-f42.google.com with SMTP id r7so7179004wmq.2;
-        Sun, 27 Mar 2022 12:12:17 -0700 (PDT)
+        Sun, 27 Mar 2022 15:14:51 -0400
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6D95F64;
+        Sun, 27 Mar 2022 12:13:11 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id r204-20020a1c44d5000000b0038ccb70e239so2377092wma.3;
+        Sun, 27 Mar 2022 12:13:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=n3bwU1bJAcV9BPDZv4hrQrplN/wyo06SzBsnNMfVQPU=;
-        b=uFq9MJakfOUviQ5j8xW2sseZUm+EzUtRxnaz9uIBs1AoK+zHb8JMDHFhUrT/2jYLPU
-         pRKvT4yyIhWeWcx6S5cv32K4qnTBj4H3U9AFyou97KEImD6rDgP+RdtL6CaLM+hzZYcg
-         rW34+X0hbwAFMN0YZRP8MsqlubQQIaPjKm6RA1toAm8plATIyKsrJZEplxv6FuqYgGCP
-         ggbpuZ/WX3Zq2hLqwaOEH7rzXyacaabC4zJd5mpWk4bHOrpez1MKzN3Dg9acyTjQ1UG8
-         gQpaPwc8Svo+fZ5qeDfzq4YSuSFpmVV7DumI95/76PS2Img49mcHo+Akxm/IXATx8FE/
-         tKKw==
-X-Gm-Message-State: AOAM530FuHPPz2G5AZgT/D5SonRGA7CmdQaKYt88OwBHwKxbcocgSuaO
-        SVkD8doLohLroR+GzNuMKJA=
-X-Google-Smtp-Source: ABdhPJxyiNqZfifLY42W3G4xiGzRnBg+OY+Fe6c4P7ZzawiMiaTLtqZorCZiFKuNaPPkLqbTbOISYw==
-X-Received: by 2002:a7b:c5cd:0:b0:38c:8b1b:d220 with SMTP id n13-20020a7bc5cd000000b0038c8b1bd220mr20639807wmk.118.1648408335713;
-        Sun, 27 Mar 2022 12:12:15 -0700 (PDT)
+        bh=BVCp6R/bmWc9t+8wj8QpgDL3b81JxuDJTlmQAPj0K/4=;
+        b=Bnw3T7PaJaawaBdz5q99m4NovV4hHXyvZq8l5esYkdYYt7wu66CICmy6bcZ6mS1CqI
+         JCUdPnPYfIK9jVDsmRCdjSP/5T8PB7LayTaC8mbv09tUdHkGzp0v0qEGuUrmTAuROpHS
+         oO0A8MunMNVcCfBEPOhsXi8Hv8JCCUK2QkUFTGodyAAkfIz1nUzVOQKAtghB3DlNspF2
+         AWTfiYUvszT1Gg+KqOEu/ZYwW7gs4NoZo8VlMF2I/FATdLd5zdUQKOOL50u7weKgeN9w
+         f4JcCR4z2ojBILIX2puPxS48UCXiqzX3xN9w0Jagjchz+dze2waBoif9D8jU7otxQUoK
+         MmtA==
+X-Gm-Message-State: AOAM530uOR6J6r+4G50vDLiIprDcHPVQ3TS78nTH6FMna0HAjjSvqseI
+        dnq0iuMWZQpm5+0zuhN2xxQ=
+X-Google-Smtp-Source: ABdhPJz1ThdgV5jL/JaZHXiJEoLzVhLa5Jqgvj4nb0etRFVRMMo0BZoSi/gykc/fAulQXVpWCAFEwg==
+X-Received: by 2002:a05:600c:34c2:b0:38c:6cd5:4957 with SMTP id d2-20020a05600c34c200b0038c6cd54957mr20928965wmq.19.1648408389806;
+        Sun, 27 Mar 2022 12:13:09 -0700 (PDT)
 Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id j8-20020a05600c404800b0038cc9c7670bsm9776860wmm.3.2022.03.27.12.12.13
+        by smtp.googlemail.com with ESMTPSA id t6-20020a05600c198600b0038cafe3d47dsm11047544wmq.42.2022.03.27.12.13.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Mar 2022 12:12:14 -0700 (PDT)
-Message-ID: <84c2886e-1a75-1c65-4eb4-737588fcd497@kernel.org>
-Date:   Sun, 27 Mar 2022 21:12:13 +0200
+        Sun, 27 Mar 2022 12:13:09 -0700 (PDT)
+Message-ID: <2e00a51a-c408-d02a-e625-0fdcb6482b0f@kernel.org>
+Date:   Sun, 27 Mar 2022 21:13:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v1 04/12] dt-bindings: clock: imx: Add documentation for
- i.MXRT1170 clock
+Subject: Re: [PATCH v1 07/12] dt-bindings: imx: Add clock binding for
+ i.MXRT1170
 Content-Language: en-US
 To:     Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
 Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
@@ -60,9 +60,9 @@ Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
 References: <20220326144313.673549-1-Mr.Bossman075@gmail.com>
- <20220326144313.673549-5-Mr.Bossman075@gmail.com>
+ <20220326144313.673549-8-Mr.Bossman075@gmail.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220326144313.673549-5-Mr.Bossman075@gmail.com>
+In-Reply-To: <20220326144313.673549-8-Mr.Bossman075@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -77,38 +77,25 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 26/03/2022 15:43, Jesse Taube wrote:
-> Add DT binding documentation for i.MXRT1170 clock driver.
+> Add the clock binding doc for i.MXRT1170.
 > 
 > Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
 > ---
->  .../bindings/clock/imxrt1170-clock.yaml       | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/imxrt1170-clock.yaml
-
-Missing vendor prefix in file name. Add "fsl,"
-
+>  include/dt-bindings/clock/imxrt1170-clock.h | 282 ++++++++++++++++++++
+>  1 file changed, 282 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/imxrt1170-clock.h
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/imxrt1170-clock.yaml b/Documentation/devicetree/bindings/clock/imxrt1170-clock.yaml
+> diff --git a/include/dt-bindings/clock/imxrt1170-clock.h b/include/dt-bindings/clock/imxrt1170-clock.h
 > new file mode 100644
-> index 000000000000..ca0f9ba8b3da
+> index 000000000000..6b94767c3a6e
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/imxrt1170-clock.yaml
-> @@ -0,0 +1,59 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/imxrt1170-clock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Clock bindings for Freescale i.MXRT
+> +++ b/include/dt-bindings/clock/imxrt1170-clock.h
+> @@ -0,0 +1,282 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +/*
 
-Really wrong name. This is name of hardware, not "bindings". It's not
-for every i.MXRT, is it?
-
-Just like you did in patch #3, so this could be:
-Freescale i.MXRT1170 Clock Controller
-
+The same license as bindings, unless you cannot.
 
 
 Best regards,

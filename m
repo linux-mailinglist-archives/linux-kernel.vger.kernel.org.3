@@ -2,48 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2694E8A36
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 23:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83ED84E8A38
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 23:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232351AbiC0V3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 17:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
+        id S235504AbiC0VcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 17:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbiC0V32 (ORCPT
+        with ESMTP id S230226AbiC0Vb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 17:29:28 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6F011A1F;
-        Sun, 27 Mar 2022 14:27:49 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KRTSg3wJZz4xNm;
-        Mon, 28 Mar 2022 08:27:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1648416467;
-        bh=XtxAUwcR8HOR/SFlN77Mm0kN5FlWpJBq49p3PUzU8eo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IDhTWv8HN2uZsmWJWDkRnInUKJm1o9Nk/3k42hiUQwbjR1bXNAbcx7asxqTdM/QwI
-         nrbhdZnt7Yl7/W17qL9LnTZp57OyJPMoO870opZ1dE9jWpFofZPYmCwoAKEe9E2kNW
-         8bgUTfhfcE5HcB2nLkLCu92t88zYNAP/c64nEdjKIaNjajJhUJtAAxYm1i+qXQfVl1
-         h4Ls50M4JEhz/J8nUxvHlFXIftTAMh1MGfs1UY0yqP1nHJxx0B/q6claKTrCCcW/Dm
-         zH+W4XM5dL3cGqBW5mE1qU33RYhwVPNCNgQrVAfoyMIOTW//ZglFb2hmPgFmv8w2in
-         Ph92lEo3YiiYQ==
-Date:   Mon, 28 Mar 2022 08:27:46 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the kspp-gustavo
- tree
-Message-ID: <20220328082746.6a9470f9@canb.auug.org.au>
+        Sun, 27 Mar 2022 17:31:59 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0932FE56;
+        Sun, 27 Mar 2022 14:30:19 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id qa43so24911871ejc.12;
+        Sun, 27 Mar 2022 14:30:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xA5oCyfiJYaNAgB/bEJJxA3FBMRY5wTuBnv+OuT16p0=;
+        b=nr5PYmuLrwHeD+CAZyhPp1njB9vkYw9iEoobgsjwJuQBkEsAMYyCaXy7+pSryMHqGE
+         O40dA/lxPRmnGVyey6vTn2GgAMt9C83v9wv/Y6Arj5sPFLZG6o2Cy1GZoRo5VKlyjLAU
+         jHFPg3Ayqe26hFtuMIirIgizJzlsHDlFVOzVAx8mrc808pif1VD9l1xb1AkfCWv3CObc
+         5jEI3BS7ZebORO+Px+trRXOzuF9nbmVwo7jvMFXVP/94t5iLmE11diHOXc4+GM/ZWZhT
+         JLsWOHve/BdN0K2a5UEEDDh9OKfxORrLkAVpL/vso7JuDozduEbGbj0kijf8Ih6LJrxt
+         2Gbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xA5oCyfiJYaNAgB/bEJJxA3FBMRY5wTuBnv+OuT16p0=;
+        b=Vq02RuajnHeN+gWKhjQ/RkaAGVWw8eyZHnuKXcg66BE1HaulFnhazra/I6f9OoZsU4
+         Jr1Z6qC80POpS6BK1GriISJbLlCKHPWzaezdNbng8LlWdEyVpOpSfxdnf9sdK9uLfOJ+
+         qGHAqPUe4oc6qCpep8XabsMBxb0SDsjEUjzrwyUgeRMz3a27k05h4wrk55o81iPYRZ0g
+         4JQmEXWaR8/44M0c4C3MTtR/St9paEsOQErzWdeVwzihy2rKSEDuiXAouXEZUb8tyziH
+         nUjCCTu0xhRgGBme4ekCWuivmsETsVQaTaZbQ2k2iCu5mUGjLoLrlgOoBA3gUi6Chpwf
+         Xhpg==
+X-Gm-Message-State: AOAM530mvthWor0F84bv+0G9ECNi+lpIrGXVZzefUuqQxZIiDE1qr2WX
+        +Prm/fejyCl/4y5UMdesOBo=
+X-Google-Smtp-Source: ABdhPJx56d7M0sdeJ6YeQ2Nvz0sSKeO6gH6+YQw3oxJeqRPM1YlM/4LGsulwh2vKvwuoldcVpqXfqg==
+X-Received: by 2002:a17:906:2991:b0:6cc:fc18:f10c with SMTP id x17-20020a170906299100b006ccfc18f10cmr23664954eje.744.1648416618303;
+        Sun, 27 Mar 2022 14:30:18 -0700 (PDT)
+Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id g20-20020aa7c594000000b004194b07bbfasm1707968edq.10.2022.03.27.14.30.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Mar 2022 14:30:17 -0700 (PDT)
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Leon Romanovsky <leon@kernel.org>,
+        =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>,
+        Mark Zhang <markzhang@nvidia.com>,
+        Mark Bloch <mbloch@nvidia.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
+        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: [PATCH v2] IB/SA: replace usage of found with dedicated list iterator variable
+Date:   Sun, 27 Mar 2022 23:29:43 +0200
+Message-Id: <20220327212943.2165728-1-jakobkoschel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rTGmvsnqvhcqS4YjeY6N+Xb";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,36 +77,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/rTGmvsnqvhcqS4YjeY6N+Xb
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+To move the list iterator variable into the list_for_each_entry_*()
+macro in the future it should be avoided to use the list iterator
+variable after the loop body.
 
-Hi all,
+To *never* use the list iterator variable after the loop it was
+concluded to use a separate iterator variable instead of a
+found boolean [1].
 
-Commit
+This removes the need to use a found variable and simply checking if
+the variable was set, can determine if the break/goto was hit.
 
-  e432da2a9c19 ("afs: Prefer struct_size over open coded arithmetic")
+v1->v2:
+- set query correctly (Mark Zhang)
 
-is missing a Signed-off-by from its committer.
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+---
+ drivers/infiniband/core/sa_query.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
---=20
-Cheers,
-Stephen Rothwell
+diff --git a/drivers/infiniband/core/sa_query.c b/drivers/infiniband/core/sa_query.c
+index 74ecd7456a11..ed26066b706f 100644
+--- a/drivers/infiniband/core/sa_query.c
++++ b/drivers/infiniband/core/sa_query.c
+@@ -1035,10 +1035,9 @@ int ib_nl_handle_resolve_resp(struct sk_buff *skb,
+ 			      struct netlink_ext_ack *extack)
+ {
+ 	unsigned long flags;
+-	struct ib_sa_query *query;
++	struct ib_sa_query *query = NULL, *iter;
+ 	struct ib_mad_send_buf *send_buf;
+ 	struct ib_mad_send_wc mad_send_wc;
+-	int found = 0;
+ 	int ret;
 
---Sig_/rTGmvsnqvhcqS4YjeY6N+Xb
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+ 	if ((nlh->nlmsg_flags & NLM_F_REQUEST) ||
+@@ -1046,20 +1045,21 @@ int ib_nl_handle_resolve_resp(struct sk_buff *skb,
+ 		return -EPERM;
 
------BEGIN PGP SIGNATURE-----
+ 	spin_lock_irqsave(&ib_nl_request_lock, flags);
+-	list_for_each_entry(query, &ib_nl_request_list, list) {
++	list_for_each_entry(iter, &ib_nl_request_list, list) {
+ 		/*
+ 		 * If the query is cancelled, let the timeout routine
+ 		 * take care of it.
+ 		 */
+-		if (nlh->nlmsg_seq == query->seq) {
+-			found = !ib_sa_query_cancelled(query);
+-			if (found)
+-				list_del(&query->list);
++		if (nlh->nlmsg_seq == iter->seq) {
++			if (!ib_sa_query_cancelled(iter)) {
++				list_del(&iter->list);
++				query = iter;
++			}
+ 			break;
+ 		}
+ 	}
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJA1tIACgkQAVBC80lX
-0GzimQf9EMiu3JBOXgBCCJ+FB4axAQmpFuswlp50ptDvmRI4pXRwIP9OoHXDgLii
-cDSNTrDNo0lLLt7s0kpjcMy2PP+rroELgsmfoO77QQTlfSv4ISwMP0hDxpcB9MBZ
-Ec85tshQ0WYF2IISlWECXAbTja2QyFFL8JwSPKuqQRmCAa5dIs56DM+NCD17TwHU
-aiujN95lqLVVIP66EVWixzCxX1kgLlhrOg9PIHP/AkW98Hl36g3rKjUNEVXB+VXY
-gCrjP8uKmhYaQy6Rlc2ocGHbeko131ArgQ6UXUR4HFFaP+bX0g+wmIx6ViooCphO
-BaxkbIv2flZPucdLkh97Bhqk8zteUg==
-=9Lmw
------END PGP SIGNATURE-----
+-	if (!found) {
++	if (!query) {
+ 		spin_unlock_irqrestore(&ib_nl_request_lock, flags);
+ 		goto resp_out;
+ 	}
 
---Sig_/rTGmvsnqvhcqS4YjeY6N+Xb--
+base-commit: b47d5a4f6b8d42f8a8fbe891b36215e4fddc53be
+--
+2.25.1
+

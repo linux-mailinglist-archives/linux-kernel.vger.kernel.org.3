@@ -2,45 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713AE4E891B
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 19:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4D54E891F
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 19:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236163AbiC0RfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 13:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
+        id S236226AbiC0Rim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 13:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233682AbiC0RfT (ORCPT
+        with ESMTP id S236208AbiC0Rij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 13:35:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9772F4AE2F;
-        Sun, 27 Mar 2022 10:33:40 -0700 (PDT)
+        Sun, 27 Mar 2022 13:38:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BFB50063
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 10:36:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5159FB80D60;
-        Sun, 27 Mar 2022 17:33:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7E1BC340EC;
-        Sun, 27 Mar 2022 17:33:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C7F361115
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 17:36:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B5C7EC340EC;
+        Sun, 27 Mar 2022 17:36:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648402418;
-        bh=tjfrzTXUP10JWkL6oPjMYE35EKBK417x0WxwMGZ4myI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DXqy42CcUS1rjGd1vGkHK4CONo+k2b9lZTJdciTZ4xLOG9nN1PxSzXXPSGQSubAFF
-         Kxl0lc8+TI8nmxSxbMui7RaOLBI5hdHNPS7YItyYQzkrZAK1B1AoDKmmJ4qVv9tRi4
-         KBDaiWkEA+U80GydpKtftOkbkry/aILqcGW/FYyfEtHEjbgbM0kVOdCMy2o8HCSVpo
-         RHLOq3bV8iSItjDeCu7Y5MN4ZAslQF5LfHUo+utRBEDSyTs3GDXyawgCJV8zBOP2VW
-         BLb2TfSDFSl9xaM5tFXaIsf1vOjklYKO1alKqSwi2mYqNRqXdIMEPE0DMk6pKMEF9N
-         wVoKzoY8vAotA==
-From:   kbusch@kernel.org
-To:     linux-block@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     axboe@kernel.dk, linux-kernel@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>
-Subject: [PATCH] block: move lower_48_bits() to block
-Date:   Sun, 27 Mar 2022 11:33:16 -0600
-Message-Id: <20220327173316.315-1-kbusch@kernel.org>
-X-Mailer: git-send-email 2.17.2
+        s=k20201202; t=1648402618;
+        bh=ZzMfnEms0MAUgCxXcIy9cny/Vs8AQSIi2J78Wi3+s/E=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=EJx3QjbAiZObXovYJua3rmJPh1GJGWONzr1KCbkkX+V7LEcUmkUdMDJwSUZPMQY6w
+         77cURv0kIYi6LDw9n4YSbAYmnJUYssDnQRtXGchK1Yl9DDz/fMefwqka4swMhNFdqr
+         wZLCtVO681gr+wWzxPcjTIlVov1Zp4wJz+wKrlFotosJELgOMYKfA5ZhM+x6HjRWSL
+         Pk874wqaKIExGK2sjq8CE77y/DwWZ2A+RDr9kT3RECgTg7Ia3aT2+glHNIFl6YyR5o
+         Kjoa1cCCSNvNKeEsH/mrdWp87bUW7sRDgUWUmf5ACcgPsKuN9RRmEw9vo6GDeJDFz8
+         gczNvRFMmzD0A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A1ECCE6D3DD;
+        Sun, 27 Mar 2022 17:36:58 +0000 (UTC)
+Subject: Re: [GIT PULL] x86/core for 5.18
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220326152646.GT8939@worktop.programming.kicks-ass.net>
+References: <20220326152646.GT8939@worktop.programming.kicks-ass.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220326152646.GT8939@worktop.programming.kicks-ass.net>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86_core_for_5.18_rc1
+X-PR-Tracked-Commit-Id: 3986f65d4f408ce9d0a361e3226a3246a5fb701c
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 7001052160d172f6de06adeffde24dde9935ece8
+Message-Id: <164840261865.18234.11347896670747276781.pr-tracker-bot@kernel.org>
+Date:   Sun, 27 Mar 2022 17:36:58 +0000
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, alexei.starovoitov@gmail.com,
+        christophe.leroy@csgroup.eu
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -51,58 +62,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Keith Busch <kbusch@kernel.org>
+The pull request you sent on Sat, 26 Mar 2022 16:26:46 +0100:
 
-The function is not generally applicable enough to be included in the core
-kernel header. Move it to block since it's the only subsystem using it.
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86_core_for_5.18_rc1
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Keith Busch <kbusch@kernel.org>
----
- include/linux/kernel.h | 9 ---------
- include/linux/t10-pi.h | 9 +++++++++
- 2 files changed, 9 insertions(+), 9 deletions(-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7001052160d172f6de06adeffde24dde9935ece8
 
-diff --git a/include/linux/kernel.h b/include/linux/kernel.h
-index 08ba5995aa8b..a890428bcc1a 100644
---- a/include/linux/kernel.h
-+++ b/include/linux/kernel.h
-@@ -63,15 +63,6 @@
- }					\
- )
- 
--/**
-- * lower_48_bits() - return bits 0-47 of a number
-- * @n: the number we're accessing
-- */
--static inline u64 lower_48_bits(u64 n)
--{
--	return n & ((1ull << 48) - 1);
--}
--
- /**
-  * upper_32_bits - return bits 32-63 of a number
-  * @n: the number we're accessing
-diff --git a/include/linux/t10-pi.h b/include/linux/t10-pi.h
-index a4b1af581f69..248f4ac95642 100644
---- a/include/linux/t10-pi.h
-+++ b/include/linux/t10-pi.h
-@@ -59,6 +59,15 @@ struct crc64_pi_tuple {
- 	__u8   ref_tag[6];
- };
- 
-+/**
-+ * lower_48_bits() - return bits 0-47 of a number
-+ * @n: the number we're accessing
-+ */
-+static inline u64 lower_48_bits(u64 n)
-+{
-+	return n & ((1ull << 48) - 1);
-+}
-+
- static inline u64 ext_pi_ref_tag(struct request *rq)
- {
- 	unsigned int shift = ilog2(queue_logical_block_size(rq->q));
+Thank you!
+
 -- 
-2.17.2
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

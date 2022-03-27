@@ -2,199 +2,382 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31654E888B
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 17:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BE64E8894
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 17:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235921AbiC0P4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 11:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
+        id S235950AbiC0P5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 11:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235915AbiC0P4v (ORCPT
+        with ESMTP id S235932AbiC0P5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 11:56:51 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF56286D7
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 08:55:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648396512; x=1679932512;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=34u6t+Xwa62XzBUwZhcx0t0QMZcrh1CDyQwzr6GSNgo=;
-  b=BQPGGO8ZfvNiGaMEhUybP7FA0aofjrzXeF4TCGD1utbkoTW6C7DMUH/h
-   vzLidkDnS448aRggQ8ruyZGZmgzjGOExOUABiSK25neoUFZP4GtHXaavQ
-   /xVDB9fCBYGQ0KDxtoxY6coPClcK+dFmosljDQ1d5nGzJY/T3o+Otdxfm
-   BtJYhUzXHwIppKXahr58E4AmKYihL45YSojZsGApX9vK0RH+yaJc2KnUq
-   JDpEL4Jwv8V9F28+5dfL/u5KLr8SM8CmMwr5sBelqVTTPhJCp5QxNU0/N
-   oQ8xDVqIOLLYDPN3oZFcAOFGA0lmR7ldfHkuuEIp20R7vKdIZYW4kddy/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="319561270"
-X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
-   d="scan'208";a="319561270"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 08:55:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
-   d="scan'208";a="584939383"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 27 Mar 2022 08:55:11 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nYVEU-0001Bj-DO; Sun, 27 Mar 2022 15:55:10 +0000
-Date:   Sun, 27 Mar 2022 23:54:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/gpu/drm/gma500/framebuffer.c:268:9: sparse: sparse:
- incorrect type in argument 1 (different address spaces)
-Message-ID: <202203272321.USs0Iv84-lkp@intel.com>
+        Sun, 27 Mar 2022 11:57:35 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4650C36B73
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 08:55:53 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a8so23990270ejc.8
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 08:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=vsfG96DftpA+zdHkf533mvx+fsCVdMHbbbON3W2HRdM=;
+        b=HMAbI9tlfFODaYz3IY20RPiVYIUzzXF49wRNPBoaSkqhwx2iS77E9aH0vPkXx6xnBD
+         Y5A8TVa/Nq++saEWr4NXmDUYTEscOzdOU5ww3B8uyenScx/zGrE2Wch7r2Y1c0KGe92A
+         gBOPWNPSqbe4Mi7KEeqyOUlmJEruAqRlW42a5NeJGSuFgI8Xv6zYY+YwOEsrRYQNTWd2
+         0clyY8jWFdf2QtTzLUefig9U/uFuE5557wVh7qbLi5pzAGiGlii9XnFFSwVSMn+S7Iv0
+         STfsUy3DaaFmy5uSgG0YMiS3g7ClOpF3YZMXVOg+Dz9s4t62yDlkNf5SdSFuFN9SUHAh
+         rYVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=vsfG96DftpA+zdHkf533mvx+fsCVdMHbbbON3W2HRdM=;
+        b=02hiDjxHlmAwW0vCaQmrmcoRLnSoqMv31owDIZ6Uv5t81/KHYYUaztWgDCMZeOHuix
+         Nmg0/nby1rVeC7kuERUVhnO8XBqVQPFhmh9je9lsjfhtZ8fUlin9awqOQwKWJ+yU9GsB
+         Y8/6U5Ozndk21C1Ua8LtD1CWZ2G1aV5F2Ri9I188PSOOY8ZNoQoAbJ8LsqaSo7M0pU+q
+         Hu1iVaBiP+poWgVTx5eU06eeo3rPW6t5dekKGg39XHoOPGPhxmLIViv1elhpKqDBlwpz
+         TqPNnvSX2xme2HWQCYy8nxV+eaCB3HhaohRAkyk7ZOdzq87P5gqPb5LLGcuppHkncg0m
+         ja9g==
+X-Gm-Message-State: AOAM532g/8UymKIU/a0WuZEFCLuqrzPuotI3uItMRNJorn9mkVc6YB7F
+        HBZFQWd48Esrx1YfThGyAR7HmOLng5OLMAFDLY0=
+X-Google-Smtp-Source: ABdhPJyLiKz0GwYU5cR/csBxCvmrzbrh2KMyD30Hj2voPwVz7xw7NU21XKDoM8c22plYLoZ95q8P64BpSEuaA+XD01w=
+X-Received: by 2002:a17:907:d13:b0:6e0:b799:8fcc with SMTP id
+ gn19-20020a1709070d1300b006e0b7998fccmr12472723ejc.11.1648396551243; Sun, 27
+ Mar 2022 08:55:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Sun, 27 Mar 2022 16:55:42 +0100
+Message-ID: <CAHpNFcP61zVHxhgLprwgB=0M+QaQhmJhRCw1vfCcJ8TSq2Vkcg@mail.gmail.com>
+Subject: Presenting GPRS VT2 from ViaLicensing today world wide RS : for
+ ViaLicencing GPRS is quite a package, New from RS @ Via 2022
+To:     info@vialicensing.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f022814633e1c600507b3a99691b4d624c2813f0
-commit: 28e77cc1c0686621a4d416f599cee5ab369daa0a fortify: Detect struct member overflows in memset() at compile-time
-date:   6 weeks ago
-config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220327/202203272321.USs0Iv84-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=28e77cc1c0686621a4d416f599cee5ab369daa0a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 28e77cc1c0686621a4d416f599cee5ab369daa0a
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/gma500/
+GPRS New Solutions ViaSystems 2022 : For VIA 2G> 5G Security IS THE
+LAW We Will Progress GPRS Will Survive as a manageable system in
+Africa & south america "We The People Are Hungry" Leaf Random & GPRS
+Security : Operating Systems will manage, But how long will we survive
+with No KLOGS : progress in linux ?
+https://lkml.org/lkml/2022/3/25/991
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Jitter RAND Support Data Set + GPRS Dongle usage Technology : Alarming
+as the GPRS 20% of key '20% of the key discovered Full Potential Hack'
+is With Real /Dev/random #NoHack
+
+Real hardened Rust Implementation & code for use:
+https://github.com/P1sec/gea-implementation
+
+Weekly Seed source : https://pollinate.n-helix.com/
+
+*****
+
+ICE-SSRTP GEA Replacement 2022 + (c)RS
+
+IiCE-SSR for digital channel infrastructure can help heal GPRS+ 3G+ 4G+ 5G+
+
+Time NTP Protocols : is usable in 2G+ <> 5G+LTE Network SIM
+
+ICE-SSRTP Encryption AES,Blake2, Poly ChaCha, SM4, SHA2, SHA3, GEA-1 and GEA-2
+'Ideal for USB Dongle & Radio' in Rust RS ' Ideal for Quality TPM
+Implementation'
+
+"GEA-1 and GEA-2, which are very similar (GEA-2 is just an extension
+of GEA-1 with a higher amount of processing, and apparently not
+weakened) are bit-oriented stream ciphers."
+
+IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
+
+Interleaved signals help Isolate noise from a Signal Send & Receive ...
+
+Overlapping inverted waves are a profile for complex audio & FFT is the result.
+
+Interleaved, Inverted & Compressed & a simple encryption?
+
+Example of use:
+
+Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade marker
+
+Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
+Interleaved channel BAND.
+
+Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
+Coprocessor digital channel selector &
+
+channel Key selection based on unique..
+
+Crystal time Quartz with Synced Tick (Regulated & modular)
+
+All digital interface and resistor ring channel & sync selector with
+micro band tuning firmware.
+
+(c)Rupert S
+
+*
+
+Good for cables ? and noise ?
+
+Presenting :  IiCE-SSR for digital channel infrastructure & cables
+<Yes Even The Internet &+ Ethernet 5 Band>
+
+So the question of interleaved Bands & or signal inversion is a simple
+question but we have,
+
+SSD & HDD Cables & does signal inversion help us? Do interleaving bands help us?
+
+In Audio inversion would be a strange way to hear! but the inversion
+does help alleviate ...
+
+Transistor emission fatigue...
+
+IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
+
+Interleaved signals help Isolate noise from a Signal Send & Receive ...
+
+Overlapping inverted waves are a profile for complex audio & FFT is the result.
+
+Interleaved, Inverted & Compressed & a simple encryption?
+
+Good for cables ? and noise ?
+
+Presenting : IiCE for digital channel infrastructure & cables <Yes
+Even The Internet &+ Ethernet 5 Band>
+
+(c) Rupert S
+
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
 
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/gpu/drm/gma500/framebuffer.c:268:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got unsigned char [noderef] [usertype] __iomem * @@
-   drivers/gpu/drm/gma500/framebuffer.c:268:9: sparse:     expected void const *
-   drivers/gpu/drm/gma500/framebuffer.c:268:9: sparse:     got unsigned char [noderef] [usertype] __iomem *
->> drivers/gpu/drm/gma500/framebuffer.c:268:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got unsigned char [noderef] [usertype] __iomem * @@
-   drivers/gpu/drm/gma500/framebuffer.c:268:9: sparse:     expected void const *
-   drivers/gpu/drm/gma500/framebuffer.c:268:9: sparse:     got unsigned char [noderef] [usertype] __iomem *
->> drivers/gpu/drm/gma500/framebuffer.c:268:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got unsigned char [noderef] [usertype] __iomem * @@
-   drivers/gpu/drm/gma500/framebuffer.c:268:9: sparse:     expected void *
-   drivers/gpu/drm/gma500/framebuffer.c:268:9: sparse:     got unsigned char [noderef] [usertype] __iomem *
+Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
 
-vim +268 drivers/gpu/drm/gma500/framebuffer.c
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
 
-4d8d096e9ae866 Alan Cox           2011-11-03  225  
-4d8d096e9ae866 Alan Cox           2011-11-03  226  /**
-4d8d096e9ae866 Alan Cox           2011-11-03  227   *	psbfb_create		-	create a framebuffer
-358794a29a5fe3 Lee Jones          2021-01-15  228   *	@fb_helper: the framebuffer helper
-4d8d096e9ae866 Alan Cox           2011-11-03  229   *	@sizes: specification of the layout
-4d8d096e9ae866 Alan Cox           2011-11-03  230   *
-4d8d096e9ae866 Alan Cox           2011-11-03  231   *	Create a framebuffer to the specifications provided
-4d8d096e9ae866 Alan Cox           2011-11-03  232   */
-6b7ce2c4161a00 Thomas Zimmermann  2019-11-22  233  static int psbfb_create(struct drm_fb_helper *fb_helper,
-4d8d096e9ae866 Alan Cox           2011-11-03  234  				struct drm_fb_helper_surface_size *sizes)
-4d8d096e9ae866 Alan Cox           2011-11-03  235  {
-6b7ce2c4161a00 Thomas Zimmermann  2019-11-22  236  	struct drm_device *dev = fb_helper->dev;
-f71635e893c383 Thomas Zimmermann  2021-09-20  237  	struct drm_psb_private *dev_priv = to_drm_psb_private(dev);
-a2c68495b57986 Thomas Zimmermann  2020-12-01  238  	struct pci_dev *pdev = to_pci_dev(dev->dev);
-4d8d096e9ae866 Alan Cox           2011-11-03  239  	struct fb_info *info;
-0a8ec2ed0783eb Thomas Zimmermann  2019-11-22  240  	struct drm_framebuffer *fb;
-a9a644ac9e8d6c Dave Airlie        2011-11-28  241  	struct drm_mode_fb_cmd2 mode_cmd;
-4d8d096e9ae866 Alan Cox           2011-11-03  242  	int size;
-4d8d096e9ae866 Alan Cox           2011-11-03  243  	int ret;
-f2d061ed01b3f0 Thomas Zimmermann  2021-10-15  244  	struct psb_gem_object *backing;
-957a2d0e7ea38d Thomas Zimmermann  2021-10-15  245  	struct drm_gem_object *obj;
-a9a644ac9e8d6c Dave Airlie        2011-11-28  246  	u32 bpp, depth;
-4d8d096e9ae866 Alan Cox           2011-11-03  247  
-4d8d096e9ae866 Alan Cox           2011-11-03  248  	mode_cmd.width = sizes->surface_width;
-4d8d096e9ae866 Alan Cox           2011-11-03  249  	mode_cmd.height = sizes->surface_height;
-a9a644ac9e8d6c Dave Airlie        2011-11-28  250  	bpp = sizes->surface_bpp;
-6aa1ead1b85581 Kirill A. Shutemov 2012-03-08  251  	depth = sizes->surface_depth;
-4d8d096e9ae866 Alan Cox           2011-11-03  252  
-4d8d096e9ae866 Alan Cox           2011-11-03  253  	/* No 24bit packed */
-a9a644ac9e8d6c Dave Airlie        2011-11-28  254  	if (bpp == 24)
-a9a644ac9e8d6c Dave Airlie        2011-11-28  255  		bpp = 32;
-4d8d096e9ae866 Alan Cox           2011-11-03  256  
-ebc7d6470ac4b5 Patrik Jakobsson   2020-10-28  257  	mode_cmd.pitches[0] = ALIGN(mode_cmd.width * DIV_ROUND_UP(bpp, 8), 64);
-a6ba582d264f67 Alan Cox           2011-11-29  258  
-a6ba582d264f67 Alan Cox           2011-11-29  259  	size = mode_cmd.pitches[0] * mode_cmd.height;
-a6ba582d264f67 Alan Cox           2011-11-29  260  	size = ALIGN(size, PAGE_SIZE);
-a6ba582d264f67 Alan Cox           2011-11-29  261  
-4d8d096e9ae866 Alan Cox           2011-11-03  262  	/* Allocate the framebuffer in the GTT with stolen page backing */
-957a2d0e7ea38d Thomas Zimmermann  2021-10-15  263  	backing = psb_gem_create(dev, size, "fb", true, PAGE_SIZE);
-957a2d0e7ea38d Thomas Zimmermann  2021-10-15  264  	if (IS_ERR(backing))
-957a2d0e7ea38d Thomas Zimmermann  2021-10-15  265  		return PTR_ERR(backing);
-f2d061ed01b3f0 Thomas Zimmermann  2021-10-15  266  	obj = &backing->base;
-4d8d096e9ae866 Alan Cox           2011-11-03  267  
-bb84977941ad85 Alan Cox           2012-05-03 @268  	memset(dev_priv->vram_addr + backing->offset, 0, size);
-bb84977941ad85 Alan Cox           2012-05-03  269  
-6b7ce2c4161a00 Thomas Zimmermann  2019-11-22  270  	info = drm_fb_helper_alloc_fbi(fb_helper);
-546187c85d4d4e Archit Taneja      2015-07-22  271  	if (IS_ERR(info)) {
-546187c85d4d4e Archit Taneja      2015-07-22  272  		ret = PTR_ERR(info);
-957a2d0e7ea38d Thomas Zimmermann  2021-10-15  273  		goto err_drm_gem_object_put;
-4d8d096e9ae866 Alan Cox           2011-11-03  274  	}
-4d8d096e9ae866 Alan Cox           2011-11-03  275  
-a9a644ac9e8d6c Dave Airlie        2011-11-28  276  	mode_cmd.pixel_format = drm_mode_legacy_fb_format(bpp, depth);
-a9a644ac9e8d6c Dave Airlie        2011-11-28  277  
-957a2d0e7ea38d Thomas Zimmermann  2021-10-15  278  	fb = psb_framebuffer_create(dev, &mode_cmd, obj);
-0a8ec2ed0783eb Thomas Zimmermann  2019-11-22  279  	if (IS_ERR(fb)) {
-0a8ec2ed0783eb Thomas Zimmermann  2019-11-22  280  		ret = PTR_ERR(fb);
-957a2d0e7ea38d Thomas Zimmermann  2021-10-15  281  		goto err_drm_gem_object_put;
-0a8ec2ed0783eb Thomas Zimmermann  2019-11-22  282  	}
-4d8d096e9ae866 Alan Cox           2011-11-03  283  
-6b7ce2c4161a00 Thomas Zimmermann  2019-11-22  284  	fb_helper->fb = fb;
-4d8d096e9ae866 Alan Cox           2011-11-03  285  
-a6ba582d264f67 Alan Cox           2011-11-29  286  	info->fbops = &psbfb_unaccel_ops;
-4d8d096e9ae866 Alan Cox           2011-11-03  287  
-4d8d096e9ae866 Alan Cox           2011-11-03  288  	info->fix.smem_start = dev->mode_config.fb_base;
-4d8d096e9ae866 Alan Cox           2011-11-03  289  	info->fix.smem_len = size;
-ebc7d6470ac4b5 Patrik Jakobsson   2020-10-28  290  	info->fix.ywrapstep = 0;
-a6ba582d264f67 Alan Cox           2011-11-29  291  	info->fix.ypanstep = 0;
-4d8d096e9ae866 Alan Cox           2011-11-03  292  
-4d8d096e9ae866 Alan Cox           2011-11-03  293  	/* Accessed stolen memory directly */
-37214ca00e6474 Kirill A. Shutemov 2012-05-03  294  	info->screen_base = dev_priv->vram_addr + backing->offset;
-4d8d096e9ae866 Alan Cox           2011-11-03  295  	info->screen_size = size;
-4d8d096e9ae866 Alan Cox           2011-11-03  296  
-4d8d096e9ae866 Alan Cox           2011-11-03  297  	if (dev_priv->gtt.stolen_size) {
-4d8d096e9ae866 Alan Cox           2011-11-03  298  		info->apertures->ranges[0].base = dev->mode_config.fb_base;
-4d8d096e9ae866 Alan Cox           2011-11-03  299  		info->apertures->ranges[0].size = dev_priv->gtt.stolen_size;
-4d8d096e9ae866 Alan Cox           2011-11-03  300  	}
-4d8d096e9ae866 Alan Cox           2011-11-03  301  
-6b7ce2c4161a00 Thomas Zimmermann  2019-11-22  302  	drm_fb_helper_fill_info(info, fb_helper, sizes);
-4d8d096e9ae866 Alan Cox           2011-11-03  303  
-a2c68495b57986 Thomas Zimmermann  2020-12-01  304  	info->fix.mmio_start = pci_resource_start(pdev, 0);
-a2c68495b57986 Thomas Zimmermann  2020-12-01  305  	info->fix.mmio_len = pci_resource_len(pdev, 0);
-4d8d096e9ae866 Alan Cox           2011-11-03  306  
-fb2a99e15ff0d3 Sascha Hauer       2012-02-06  307  	/* Use default scratch pixmap (info->pixmap.flags = FB_PIXMAP_SYSTEM) */
-4d8d096e9ae866 Alan Cox           2011-11-03  308  
-e18da8ce7d730b Thomas Zimmermann  2019-11-22  309  	dev_dbg(dev->dev, "allocated %dx%d fb\n", fb->width, fb->height);
-4d8d096e9ae866 Alan Cox           2011-11-03  310  
-4d8d096e9ae866 Alan Cox           2011-11-03  311  	return 0;
-957a2d0e7ea38d Thomas Zimmermann  2021-10-15  312  
-957a2d0e7ea38d Thomas Zimmermann  2021-10-15  313  err_drm_gem_object_put:
-957a2d0e7ea38d Thomas Zimmermann  2021-10-15  314  	drm_gem_object_put(obj);
-4d8d096e9ae866 Alan Cox           2011-11-03  315  	return ret;
-4d8d096e9ae866 Alan Cox           2011-11-03  316  }
-4d8d096e9ae866 Alan Cox           2011-11-03  317  
+https://science.n-helix.com/2022/03/ice-ssrtp.html
 
-:::::: The code at line 268 was first introduced by commit
-:::::: bb84977941ad85a5c0b9ff4fd5331913e31107c4 gma500: wide framebuffer memory
+https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
+https://science.n-helix.com/2021/11/wave-focus-anc.html
+https://science.n-helix.com/2021/12/3d-audio-plugin.html
 
-:::::: TO: Alan Cox <alan@linux.intel.com>
-:::::: CC: Dave Airlie <airlied@redhat.com>
+Integral to Telecoms Security TRNG
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+*RAND OP Ubuntu :
+https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
+
+https://pollinate.n-helix.com
+
+*
+
+***** Dukes Of THRUST ******
+
+Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade markerz
+
+Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
+Interleaved channel BAND.
+
+Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
+Coprocessor digital channel selector &
+
+channel Key selection based on unique..
+
+Crystal time Quartz with Synced Tick (Regulated & modular)
+
+All digital interface and resistor ring channel & sync selector with
+micro band tuning firmware.
+
+(c)Rupert S
+
+Dev/Random : Importance
+
+Dev/Random : Importance : Our C/T/RNG Can Help GEA-2 Open Software
+implementation of 3 Bits (T/RNG) Not 1 : We need Chaos : GEA-1 and
+GEA-2 Implementations we will improve with our /Dev/Random
+
+Our C/T/RNG Can Help GEA-2 Open Software implementation of 3 Bits
+(T/RNG) Not 1 : We need Chaos : GEA-1 and GEA-2 Implementations we
+will improve with our /Dev/Random
+
+We can improve GPRS 2G to 5G networks still need to save power, GPRS
+Doubles a phones capacity to run all day,
+
+Code can and will be improved, Proposals include:
+
+Blake2
+ChaCha
+SM4
+SHA2
+SHA3
+
+Elliptic Encipher
+AES
+Poly ChaCha
+
+Firstly we need a good solid & stable /dev/random
+
+So we can examine the issue with a true SEED!
+
+Rupert S https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+TRNG Samples & Method DRAND Proud!
+
+https://drive.google.com/file/d/1b_Sl1oI7qTlc6__ihLt-N601nyLsY7QU/view?usp=drive_web
+https://drive.google.com/file/d/1yi4ERt0xdPc9ooh9vWrPY1LV_eXV-1Wc/view?usp=drive_web
+https://drive.google.com/file/d/11dKUNl0ngouSIJzOD92lO546tfGwC0tu/view?usp=drive_web
+https://drive.google.com/file/d/10a0E4Gh5S-itzBVh0fOaxS7JS9ru-68T/view?usp=drive_web
+
+https://github.com/P1sec/gea-implementation
+
+"GEA-1 and GEA-2, which are very similar (GEA-2 is just an extension
+of GEA-1 with a higher amount of processing, and apparently not
+weakened) are bit-oriented stream ciphers."
+
+"A stream cipher, such as the well-known RC4 or GEA-1, usually works
+through using the Xor operation against a plaintext. The Xor operation
+being symmetrical, this means that encrypting should be considered the
+same operation as decrypting: GEA-1 and GEA-2 are basically
+pseudo-random data generators, taking a seed (the key, IV and
+direction bit of the GPRS data, which are concatenated),
+
+The generated random data (the keystream) is xored with the clear-text
+data (the plaintext) for encrypting. Then, later, the keystream is
+xored with the encrypted data (the ciphertext) for decrypting. That is
+why the functions called in the target library for decrypting and
+encrypting are the same.
+
+GEA-1 and GEA-2 are bit-oriented, unlike RC4 which is byte-oriented,
+because their algorithms generate only one bit of pseudo-random data
+at once (derived from their internal state), while algorithms like RC4
+generate no less than one byte at once (in RC4's case, derived from
+
+permutation done in its internal state). Even though the keystream
+bits are put together by the current encryption / decryption C and
+Rust libraries into bytes in order to generate usable keystream,
+obviously.
+
+Based on this, you can understand that GEA-1 and GEA-2 are LFSR:
+Linear Feedback Shift Register-oriented ciphers, because their
+internal state is stored into fixed-size registers. This includes the
+S and W registers which serve for initialization / key scheduling
+purposes and are respectively 64 and 97-bit wide registers, and the A,
+B, C (and for GEA-2 only D) registers which serve for the purpose of
+keystream generation, which are respectively 31, 32, 33 and 29-bit
+wide registers.
+
+On each iteration of the keystream generation, each register is
+bit-wise rotated by one position, while the bit being rotated from the
+left towards the right side (or conversely depending on in which bit
+order you internally represent your registers) is fed back to the
+algorithm and mutated depending on given conditions. Hence, the
+
+shifted-out bit is derived from other processing, and reinserted,
+while being for this reason possibly flipped depending on conditions
+depending on bits present at the other side of the given register.
+
+This is the explanation for the name of linear feedback shift register
+(shift because of the shift operation required for the rotation, and
+linear feedback because of the constant-time transform operation
+involved).
+
+The rest of the register may also be mutated at each iteration steps,
+as in the case of the GEA-1 and 2, whole fixed Xor sequences (which
+differ for each register) may be applied depending on whether the
+rotated bit is a 0 or a 1.
+
+Note that a step where the register iterates is called clocking (the
+register is clocked), and that the fixed points where the register may
+be Xor'ed when the rotated bit becomes a 1 are called taps. The linear
+function which may transmute the rotated bit at the clocking step
+(taking several bits of the original register as an input) is called
+the F function.
+
+Those kind of bit-oriented LFSR algorithms, such as GEA-1 and 2 (for
+GPRS) and A5/1 and 2 (for GSM), were designed this way for optimal
+hardware implementations in the late 80's and early 90's."
+
+*****
+
+IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
+
+Interleaved signals help Isolate noise from a Signal Send & Receive ...
+
+Overlapping inverted waves are a profile for complex audio & FFT is the result.
+
+Interleaved, Inverted & Compressed & a simple encryption?
+
+Good for cables ? and noise ?
+
+Presenting :  IiCE-SSR for digital channel infrastructure & cables
+<Yes Even The Internet &+ Ethernet 5 Band>
+
+So the question of interleaved Bands & or signal inversion is a simple
+question but we have,
+
+SSD & HDD Cables & does signal inversion help us? Do interleaving bands help us?
+
+In Audio inversion would be a strange way to hear! but the inversion
+does help alleviate ...
+
+Transistor emission fatigue...
+
+IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
+
+Interleaved signals help Isolate noise from a Signal Send & Receive ...
+
+Overlapping inverted waves are a profile for complex audio & FFT is the result.
+
+Interleaved, Inverted & Compressed & a simple encryption?
+
+Good for cables ? and noise ?
+
+Presenting : IiCE for digital channel infrastructure & cables <Yes
+Even The Internet &+ Ethernet 5 Band>
+
+(c) Rupert S
+
+
+***** Dukes Of THRUST ******
+
+Autism, Deafness & the hard of hearing : In need of ANC & Active audio
+clarification or correction 2022-01
+
+Sony & a few others make noise cancelling headphones that are suitable
+for people with Acute disfunction to brain function for ear drums ...
+Attention deficit or Autism,
+The newer Sony headsets are theoretically enablers of a clear
+confusion free world for Autistic people..
+Reaching out to a larger audience of people simply annoyed by a
+confusing world; While they listen to music..
+Can and does protect a small percentage of people who are confused &
+harassed by major discord located in all jurisdictions of life...
+
+Crazy noise levels, Or simply drowned in HISSING Static:
+
+Search for active voice enhanced noise cancellation today.
+
+Rupert S https://science.n-helix.com
+
+
+https://science.n-helix.com/2021/11/wave-focus-anc.html
+
+https://science.n-helix.com/2021/10/noise-violation-technology-bluetooth.html
+
+
+https://www.orosound.com/
+
+https://www.consumerreports.org/noise-canceling-headphone/best-noise-canceling-headphones-of-the-year-a1166868524/

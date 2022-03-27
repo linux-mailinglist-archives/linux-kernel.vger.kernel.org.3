@@ -2,59 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75DC4E8B00
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 01:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A9E4E8B03
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 01:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234409AbiC0XD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 19:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
+        id S230483AbiC0XFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 19:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiC0XD5 (ORCPT
+        with ESMTP id S234952AbiC0XFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 19:03:57 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3DB93FDAC
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 16:02:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648422137; x=1679958137;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=COX1dVvku+lnTG99Hr51mJqhPKIU6FF2BADU46vdDUo=;
-  b=KGteQLY0WK6JcS0OVGzSi3lBm8VZLd/rcqZmHIsoDhIvHzrTFVf+IaEQ
-   PBpsyGS5RzNMJ47DR+dcsJ8GP3S2OJSZVV8RnJyV5LkEw5b2OR0WgCDzM
-   LVAXaGS0d5IDExtdHFWhZ2sKbr6raZcIimVhpTCrephby2fLiJA96A3lL
-   +yrbiP9j580jLZUtFWmAQJYspfbHTL/+OTewh8No3WAsPs3mYZoif2kPn
-   PKw7mJh6ffBlrWzcK/R9VyBZhAzc7B/IB3mjRtUrQYVvZMbKF2dGvNiDs
-   ogdq3ikxjnVHrx8uCqTPsIaL1w0gHd0GKV1vxfkxWj0jWhEbYaDptRKB2
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="238814253"
-X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
-   d="scan'208";a="238814253"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 16:02:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
-   d="scan'208";a="651239636"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 27 Mar 2022 16:02:16 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nYbtn-0001VQ-8d; Sun, 27 Mar 2022 23:02:15 +0000
-Date:   Mon, 28 Mar 2022 07:01:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Marek Vasut <marex@denx.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>
-Subject: undefined reference to `v4l2_fwnode_endpoint_parse'
-Message-ID: <202203280727.KWAptOyZ-lkp@intel.com>
+        Sun, 27 Mar 2022 19:05:08 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C18CDF22
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 16:03:28 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id g9so20730946ybf.1
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 16:03:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GNVbXCzpaPBpjVJf9Y3umU3ovBWyOt+mnLOqzP0G5fs=;
+        b=Lq+3Ycqkd2yxo1E7kguh+whRwzFxHhfQdJO5xs4Jv6gEAdYPetGoGDoFNbY9jJdl8M
+         zFhkuCcZl2RLvUqQBhJl2ZaPKmf3clpXMfxz+Qpwaq+JQzDsZ11bb1LDyCXE+Uiu40GQ
+         zMkf1Ir2im5FMrhN6asCZ9NLbmON2QLFm6p+t3yT1QRALHg4I1rpX7YIFp20hGLjbomf
+         ILp1+V282FJJFe15nNGABkbrdrhVmoNE/Tjo1/Md6GTYif2csN80+Uka+fWJsEmmJk3J
+         hyhvZqnZt3XlsNiKBnR86qy96AUs+8B/JLdqJ+Iz/5Ge9pIjK3zZS/3S8tq1kIsQ/iVn
+         mXDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GNVbXCzpaPBpjVJf9Y3umU3ovBWyOt+mnLOqzP0G5fs=;
+        b=JigiNRdZ760GXaEmMSS3E4UFLB9DO1NjIfIIbOW+124Rtu4Hdb3bHMCPCWUR9CoVkE
+         xdAPzSZWBtLEEO3Ou0PeEF0Xox2NvnAutr13R13JqcOv6pNCCUF1+a4x8TSygD3Y8teE
+         BXi8swJIjHCa1JSxlmepMIeUmUx06GCjT02HPXadw5Np7Xt860c/T00dOQBGTicajuuf
+         qeRt8v2+v2TYvcCB1oGtvqUz2tWi8yEY3dS0RD+rgc/TGKwClyw682KQsdhqDp/HypZW
+         eX3HrFVGAV+L3u4HGOt1fi8FVPPHJyjBugWew8YWaSOw8ffrpHoDke0JkidN5AF8XC3M
+         kQWg==
+X-Gm-Message-State: AOAM531qJ1g2zjlRYNF9qIUGR+rliluF7/GgluBDwQVyoSCx34p+GITs
+        fKiS/1zkfVnyfKnFsoTC6rmt2dWSryJ4sPWVoOvW8Q==
+X-Google-Smtp-Source: ABdhPJxlxr1BwZc54ths6NcHOQaw9kJGsItE/6tcALJDtRye5lejO5OnsKvOleB2/rLXxDXTySYQyid0MK8w9Cdl5FA=
+X-Received: by 2002:a25:3d02:0:b0:63c:a59b:8246 with SMTP id
+ k2-20020a253d02000000b0063ca59b8246mr6343771yba.369.1648422207645; Sun, 27
+ Mar 2022 16:03:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <1647927649-9907-1-git-send-email-haibo.chen@nxp.com>
+In-Reply-To: <1647927649-9907-1-git-send-email-haibo.chen@nxp.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 28 Mar 2022 01:03:16 +0200
+Message-ID: <CACRpkdaj4qCFMdYyBbu7Z=Wqdn0+7=Hz3tst_15xYwp9wLgGtw@mail.gmail.com>
+Subject: Re: [PATCH v2] gpio: Allow setting gpio device id via device tree alias
+To:     haibo.chen@nxp.com, Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Cc:     brgl@bgdev.pl, andy.shevchenko@gmail.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,31 +69,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   50d602d81f35621042fa0cdae25808662caffda8
-commit: 51ef2be546e2e480e56fdb59fdeb9a4406e8d52e media: i2c: isl7998x: Add driver for Intersil ISL7998x
-date:   3 weeks ago
-config: microblaze-randconfig-r025-20220328 (https://download.01.org/0day-ci/archive/20220328/202203280727.KWAptOyZ-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=51ef2be546e2e480e56fdb59fdeb9a4406e8d52e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 51ef2be546e2e480e56fdb59fdeb9a4406e8d52e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=microblaze SHELL=/bin/bash
+On Tue, Mar 22, 2022 at 6:52 AM <haibo.chen@nxp.com> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> From: Haibo Chen <haibo.chen@nxp.com>
+>
+> For some SoCs which contain different cores, like few ARM A cores
+> and few ARM M cores. Some GPIO controllers like GPIO3/GPIO4/GPIO5
+> belong to A core domain, some GPIO controllers like GPIO1/GPIO2
+> belong to M core domain. Linux only cover A cores, without gpio
+> alias, we can get gpiochip0/gpiochip1/gpiochip2 to map the real
+> GPIO3/GPIO4/GPIO5, it's difficult for users to identify this map
+> relation, and hardcode the gpio device index. With gpio alias,
+> we can easily make gpiochip3 map to GPIO3, gpiochip4 map to GPIO4.
+> For GPIO controllers do not claim the alias, it will get one id
+> which larger than all the claimed aliases.
+>
+> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
 
-All errors (new ones prefixed by >>):
+This is device tree related, adds semantics to aliases and needs
+a prerequisite patch to
+Documentation/devicetree/bindings/gpio/gpio.txt
+at the very least.
 
-   microblaze-linux-ld: drivers/media/i2c/isl7998x.o: in function `isl7998x_probe':
->> (.text+0x8f4): undefined reference to `v4l2_fwnode_endpoint_parse'
+Also that patch needs to CC to devicetree@vger.kernel.org
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+IIRC this has been suggested in the past.
+
+Yours,
+Linus Walleij

@@ -2,124 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBFE4E8A86
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 00:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E8D4E8A90
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 00:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236949AbiC0WeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 18:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
+        id S236954AbiC0Wmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 18:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236943AbiC0WeO (ORCPT
+        with ESMTP id S229847AbiC0Wmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 18:34:14 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3139449C99;
-        Sun, 27 Mar 2022 15:32:34 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KRVvK1418z4xXS;
-        Mon, 28 Mar 2022 09:32:29 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1648420349;
-        bh=eGnzFInsDLriIvOfS1qS5g3gq01yurBK57/e7LTZYXw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bBSPiO2YJ98hxnBqIblzmHY/pptEACqZhmewYK09YfOLH2z871QTJEGkoeuNvPkp/
-         TgjMvgok7fFQ7j96hWfnTha5NxaXs1ZRgRbQz4edWrxFnsmEhixvkz9DRjWa/VFwOV
-         YWIjabSGdVBpf92SCNO03fEbxpg219t+DAAYksk7W2k4+UvAObdW0wAnexlH0uTUeW
-         sAdRfy41wLbUUl0+R82vI/JCzWcs04yiuGC3P7sQJ0N9RRICnlSYUVol9ZPH/LiN8v
-         dR/kIS7YQl8tGjvr+9MCPi2sg0WDov+DJGJysVRpWaY3BJVNNx8tJhEFP1M5hTlx8x
-         2DUlt3D0/Pjlg==
-Date:   Mon, 28 Mar 2022 09:32:28 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Steve French <stfrench@microsoft.com>
-Subject: linux-next: manual merge of the cifs tree with Linus' tree
-Message-ID: <20220328093228.3c2a6019@canb.auug.org.au>
+        Sun, 27 Mar 2022 18:42:38 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7848632EE0
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 15:40:58 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id u16so17911463wru.4
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 15:40:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ttvVODLTTBaqB4olSje/RjnCtKXgr801DvSo2q2eG0E=;
+        b=eB8kNh0eru6ENTfiF7I8ZxfQgc65hjixuwm+WdOYEGiiS0ZIji4HliGcQvmy7m4n8l
+         JSAC/LEPtDftUix2szlYowNNLRzxAEmYcKmE213cQwfTsW1PyKem+SvaoiJB5SzevEHj
+         p490rhnT34xKU67nlAfaoCjFSXDvaPqM5rBft90+Eu+ruMv9Q784a55+HiMwMwbFxNbB
+         lT4loCIWa8dqjvVMXBtUDE5c0sQTygs6cL3VKja9gTSUg6wv1IB8ps16ju7dt/c9lD+T
+         55tgtAsvXxmb/p7j7e87S8PlYmb5jf480aEWzV+FgM+LN5m5x8HFF4xalRltUHETkgRk
+         +ORA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ttvVODLTTBaqB4olSje/RjnCtKXgr801DvSo2q2eG0E=;
+        b=AbSBM8kgikbyVPitUCPDV1kZyG2bJYcnBvjQdg05KJdjpte6ZDZjH5KJwX47I3Ul3i
+         U7I0WlQNpvL1c2tikec+i53BbfAPd1gVjYdydTSz+mihSD8rJOylvMNVzh9eW7HJ0uTM
+         /+ZuxmKBGFVS/zuk7BtFXBYWxVpkJsWHjYAnMgoMKbV8aT4eIfdq5LDFVtniEqTkiIgx
+         RqrR+oIBGMuPd9fm0xnItFg0xBrO08nDEbWROQihiovVrp6fG1wwD1ub6R3uNFHM5haH
+         v4e0+3ASWZzSEtXdr6lq/5G0tUUP4Vw+AUHlJC0rLWrwGG/dZBJo4KNNdkQpLE1l7jGI
+         I9gg==
+X-Gm-Message-State: AOAM5335drPNg8BLXJhUkG7LdsnKMP7qp1N+HUIknit2H2xgr05LlQ7N
+        5m12HLXv6RR/G7SPs7eYAHpJBQ==
+X-Google-Smtp-Source: ABdhPJwJHwvmnudnZ78O/kb8n+VyIyx/4wcIM7aEIY4BUkHtQ+mFdwbAuOdLXigX6S01LsAJxrtNaw==
+X-Received: by 2002:adf:f94d:0:b0:1e5:5ca1:2b80 with SMTP id q13-20020adff94d000000b001e55ca12b80mr19448508wrr.323.1648420856992;
+        Sun, 27 Mar 2022 15:40:56 -0700 (PDT)
+Received: from localhost.localdomain (2a02-8440-6341-357e-3074-96af-9642-0002.rev.sfr.net. [2a02:8440:6341:357e:3074:96af:9642:2])
+        by smtp.gmail.com with ESMTPSA id v5-20020adfe4c5000000b001edc1e5053esm10400867wrm.82.2022.03.27.15.40.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Mar 2022 15:40:56 -0700 (PDT)
+From:   Guillaume Ranquet <granquet@baylibre.com>
+To:     airlied@linux.ie, angelogioacchino.delregno@collabora.com,
+        chunfeng.yun@mediatek.com, chunkuang.hu@kernel.org,
+        ck.hu@mediatek.com, daniel@ffwll.ch, deller@gmx.de,
+        jitao.shi@mediatek.com, kishon@ti.com, krzk+dt@kernel.org,
+        maarten.lankhorst@linux.intel.com, matthias.bgg@gmail.com,
+        mripard@kernel.org, p.zabel@pengutronix.de, robh+dt@kernel.org,
+        tzimmermann@suse.de, vkoul@kernel.org
+Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, markyacoub@google.com
+Subject: [PATCH 00/22] drm/mediatek: Add mt8195 DisplayPort driver
+Date:   Mon, 28 Mar 2022 00:39:05 +0200
+Message-Id: <20220327223927.20848-1-granquet@baylibre.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AtoCfsxgC+r=uegyvJMlbg2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/AtoCfsxgC+r=uegyvJMlbg2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+this series is built around the DisplayPort driver. The dpi/dpintf
+driver and the added helper functions are required for the DisplayPort
+driver to work.
 
-Hi all,
+This v9 is not quite ready yet, as project constraints forces me to
+publish v9 this week, I'm sorry if it's not standard practice.
 
-Today's linux-next merge of the cifs tree got a conflict in:
+Moreover, it is still un-tested on a recent kernel.
+The integration kernel we are using is still based on 5.10... but we
+are actively working on bringing up a mt8195 integration branch on 5.17.
+The patches have been rebased on top of next-20220301 and have been
+tested to build sucessfully (no functional testing).
 
-  fs/ksmbd/smb2pdu.h
+Changes from v8:
+- The DP-Phy now has its own dt-bindings and now shares a regmap using the
+  syscon facility with the DP driver.
+- hot plug detection has been removed from the Embedded Display Port.
+  patch and moved to the patch adding External Display Port support.
+- started working on better error handling for the mtk_dp driver.
+- rebased on linux-next.
+- removal of tvd pll clocks re-introduced by mistake.
+- various coding style fixes.
 
-between commit:
+Things that are in my todolist for v10:
+- fixing the train_handler in the mtk_dp driver, as I haven't been able
+  to reproduce locally (hopefully migrating to running the tests on a
+  more recent kernel will help)
+- explaining the various sleep/delays introduced in the drivers
+- explaining some of the differences between mt8195 and "legacy"
+- retrieve CK/DE support from panel driver instead of hardcoding it into
+  the dpi driver.
+- better error handling/reporting in mtk_dp
+- look into re-implementing mtk_dp_aux_transfer() using drm_dp_dpcd_read and
+  drm_dp_dpcd_write as suggested by Rex.
 
-  5224f7909617 ("treewide: Replace zero-length arrays with flexible-array m=
-embers")
+Older revisions:
+RFC - https://lore.kernel.org/linux-mediatek/20210816192523.1739365-1-msp@baylibre.com/
+v1  - https://lore.kernel.org/linux-mediatek/20210906193529.718845-1-msp@baylibre.com/
+v2  - https://lore.kernel.org/linux-mediatek/20210920084424.231825-1-msp@baylibre.com/
+v3  - https://lore.kernel.org/linux-mediatek/20211001094443.2770169-1-msp@baylibre.com/
+v4  - https://lore.kernel.org/linux-mediatek/20211011094624.3416029-1-msp@baylibre.com/
+v5  - https://lore.kernel.org/all/20211021092707.3562523-1-msp@baylibre.com/
+v6  - https://lore.kernel.org/linux-mediatek/20211110130623.20553-1-granquet@baylibre.com/
+v7  - https://lore.kernel.org/linux-mediatek/20211217150854.2081-1-granquet@baylibre.com/
+v8  - https://lore.kernel.org/linux-mediatek/20220218145437.18563-1-granquet@baylibre.com/
 
-from Linus' tree and commit:
+Functional dependencies are:
+- Add Mediatek Soc DRM (vdosys0) support for mt8195
+  https://lore.kernel.org/all/20211026155911.17651-1-jason-jh.lin@mediatek.com/
+- Add MediaTek SoC DRM (vdosys1) support for mt8195
+  https://lore.kernel.org/all/20211029075203.17093-1-nancy.lin@mediatek.com/
 
-  be1350004392 ("smb3: move defines for query info and query fsinfo to smbf=
-s_common")
+Guillaume Ranquet (15):
+  dt-bindings: mediatek,dp_phy: Add Display Port PHY binding
+  drm/edid: Convert cea_sad helper struct to kernelDoc
+  drm/edid: Add cea_sad helpers for freq/length
+  drm/mediatek: dpi: move dpi limits to SoC config
+  drm/mediatek: dpi: implement a CK/DE pol toggle in SoC config
+  drm/mediatek: dpi: implement a swap_input toggle in SoC config
+  drm/mediatek: dpi: move dimension mask to SoC config
+  drm/mediatek: dpi: move hvsize_mask to SoC config
+  drm/mediatek: dpi: move swap_shift to SoC config
+  drm/mediatek: dpi: move the yuv422_en_bit to SoC config
+  drm/mediatek: dpi: move the csc_enable bit to SoC config
+  drm/mediatek: dpi: Add dpintf support
+  drm/meditek: dpi: Add matrix_sel helper
+  drm/mediatek: Add mt8195 External DisplayPort support
+  drm/mediatek: DP audio support for mt8195
 
-from the cifs tree.
+Jitao Shi (2):
+  drm/mediatek: add hpd debounce
+  drm/mediatek: change the aux retries times when receiving AUX_DEFER
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Markus Schneider-Pargmann (5):
+  dt-bindings: mediatek,dpi: Add DP_INTF compatible
+  dt-bindings: mediatek,dp: Add Display Port binding
+  video/hdmi: Add audio_infoframe packing for DP
+  phy: phy-mtk-dp: Add driver for DP phy
+  drm/mediatek: Add mt8195 Embedded DisplayPort driver
 
---=20
-Cheers,
-Stephen Rothwell
+ .../display/mediatek/mediatek,dp.yaml         |   97 +
+ .../display/mediatek/mediatek,dpi.yaml        |   11 +-
+ .../bindings/phy/mediatek,dp-phy.yaml         |   43 +
+ MAINTAINERS                                   |    1 +
+ drivers/gpu/drm/drm_edid.c                    |   74 +
+ drivers/gpu/drm/mediatek/Kconfig              |    8 +
+ drivers/gpu/drm/mediatek/Makefile             |    2 +
+ drivers/gpu/drm/mediatek/mtk_dp.c             | 3204 +++++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_dp_reg.h         |  568 +++
+ drivers/gpu/drm/mediatek/mtk_dpi.c            |  222 +-
+ drivers/gpu/drm/mediatek/mtk_dpi_regs.h       |   38 +
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c   |    8 +
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |    1 +
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c        |    6 +-
+ drivers/gpu/drm/mediatek/mtk_drm_drv.h        |    1 +
+ drivers/phy/mediatek/Kconfig                  |    8 +
+ drivers/phy/mediatek/Makefile                 |    1 +
+ drivers/phy/mediatek/phy-mtk-dp.c             |  202 ++
+ drivers/video/hdmi.c                          |   82 +-
+ include/drm/dp/drm_dp_helper.h                |    2 +
+ include/drm/drm_edid.h                        |   25 +-
+ include/linux/hdmi.h                          |    7 +-
+ include/linux/soc/mediatek/mtk-mmsys.h        |    3 +-
+ 23 files changed, 4541 insertions(+), 73 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/mediatek,dp-phy.yaml
+ create mode 100644 drivers/gpu/drm/mediatek/mtk_dp.c
+ create mode 100644 drivers/gpu/drm/mediatek/mtk_dp_reg.h
+ create mode 100644 drivers/phy/mediatek/phy-mtk-dp.c
 
-diff --cc fs/ksmbd/smb2pdu.h
-index d49468426576,4db2896b977b..000000000000
---- a/fs/ksmbd/smb2pdu.h
-+++ b/fs/ksmbd/smb2pdu.h
-@@@ -818,13 -402,9 +402,9 @@@ struct smb2_file_stream_info=20
-  	__le32  StreamNameLength;
-  	__le64 StreamSize;
-  	__le64 StreamAllocationSize;
- -	char   StreamName[0];
- +	char   StreamName[];
-  } __packed;
- =20
-- struct smb2_file_eof_info { /* encoding of request for level 10 */
-- 	__le64 EndOfFile; /* new end of file value */
-- } __packed; /* level 20 Set */
--=20
-  struct smb2_file_ntwrk_info {
-  	__le64 CreationTime;
-  	__le64 LastAccessTime;
+-- 
+2.34.1
 
---Sig_/AtoCfsxgC+r=uegyvJMlbg2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJA5fwACgkQAVBC80lX
-0Gzfywf/fVjZrbTPcdvC0okFkip2vEmy1KyZSZx9g638jNIBHmKfXmb8uu8oAICv
-tf4slHDSX5MHLfBsxuaRZHlFcAHulohU7q4Oki1lnI9anKMUiXPClnZ0QKdXU5OM
-zAqHsT1jxq6VoPz6TBIOBeeA48wmgXA7MtdcGE4HbrOM458Dvg6wVJUyWpin/9dU
-psHwGlXdno92BbDKC2ChjzfSbdkL7uWYfaM2cYBMK1iv9ulMdeHpjbDvjHN9Nx4a
-Sr5btmceoJX8P0go2aB7i4qk4bD549yA5JIRTB2iXY/KK+nmk+RQVSiS07kFILbi
-jOyNEqrHSrrInO1a6jF4krdJgK2rqA==
-=nyNJ
------END PGP SIGNATURE-----
-
---Sig_/AtoCfsxgC+r=uegyvJMlbg2--

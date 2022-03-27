@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DADEB4E8A4A
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 23:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8244E8A4D
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 23:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236740AbiC0Vs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 17:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56830 "EHLO
+        id S236821AbiC0Vtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 17:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbiC0VsZ (ORCPT
+        with ESMTP id S230226AbiC0Vtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 17:48:25 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C2338784
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 14:46:46 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id y10so14905487edv.7
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 14:46:46 -0700 (PDT)
+        Sun, 27 Mar 2022 17:49:39 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6A43878A;
+        Sun, 27 Mar 2022 14:48:00 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id r23so14957124edb.0;
+        Sun, 27 Mar 2022 14:48:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=20Qku66Un0STcQwrUDTvMrfzVHtMmdMF1TmmER8SnJY=;
-        b=FoDAg4e/PGIria8vzwCAxOEuxrwDQwIGCluc3GEnGj2GDpvVZ4ev3cIUA2TR95+O0U
-         xj5eN+Xnb/+qfKAxicpgNenLbFQXgXLS52Hk9Xgh+NIJsRWOHi4MROOnNOaUbj3YVqhB
-         3TTELcQiZGEDGETLkESdWH7bRkCXGA3GFxQUkcuaEsZCWilDayZ5TGcM8k2bif8gbEwC
-         YNVwYlehu/iOf341tPXfYRi9JvRxFAFjjFJjaTs+rX0uAi5Js7cNV0KrLr3InlKBMjvV
-         779l5tGkOGuHKgqHVpNfOZY7id6ZXaQnk+JSMB2LCCVEg3lw1HZkcNHkxm3emqW9Fs/v
-         aGbw==
+        bh=10DwZiGdLo3hJFyknuuSJ9NrQcIJAd3mzxuhl7Xh74I=;
+        b=SXfIFxn/OMeLD4DgcunldrrQ4thZDEEsQN7KIK35VxVxm4sPKjA0uKjl7q12AYwimT
+         9ISN8zfP48Q9thC4BH6ePKjVFf3whf5ewXPwLg7UaThQYNqN6MaCW0jo7WLZfWz7Xd3E
+         xZyjAIX2msykGln2x6RgZQzS3GsYZU6Q1B0s8Biby8gzJpRx8V0teaolYc9GEZIobdf6
+         9kngYbQ8ZczCrI3DsODrPoeiBrjybS9+N6m/hhQBm2yrKP38iJF+zE9NVb1DFOgRCWez
+         cJnrq9M/fD1hEl0PrTcaibE3K0wxjScfW/5Ip/JZo0le1gxWhjIJWpEdsQQkJIkRxToO
+         n9BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=20Qku66Un0STcQwrUDTvMrfzVHtMmdMF1TmmER8SnJY=;
-        b=AviDNN3feQbyrCPDgGrSd4FQlcxg5Pj1yunhtUeJGwaUR1vjmvpQXk1jZiDo4pfZij
-         T5oKC75ZNxPZB6jWoSNrZUcJ2SFnYbvmC4WS94xNbvZb2vPc9qsY/hNwQcHers80CJTZ
-         CCvdbJTjBRe82l4uB/eDgqZl1FeHLXvFass5ewVZHRfCSQC/CcEOCQA+nY8yxSrL4nMH
-         VG0r3imKhRMDHJdug2SN/TFuaRH+vFCVn8VbIHtS2nShIwByWUR8SPF/89w80c0UpNLC
-         dVH59SWpOotUrPnDlh6JrazJVCePw34OuKwbjPyvTOETdXcJKkoeK9gBH+RCmg5+i83O
-         HwNQ==
-X-Gm-Message-State: AOAM532WLzIYtA9A7i+p3toizaTql+R+snWSXOcfgm7eVClm2lS9aYah
-        APtf5cQCJAIKAouhcLwIOfIN+E1x4Omefw==
-X-Google-Smtp-Source: ABdhPJxidSXi4561yYZTlm3oJpeiNN7duuJ5IEqqVWfm9zZ3RDMLaV/Ae6SosezsxMVmNDsL9jXcVg==
-X-Received: by 2002:a50:9d49:0:b0:418:681b:f6d with SMTP id j9-20020a509d49000000b00418681b0f6dmr12358612edk.160.1648417605044;
-        Sun, 27 Mar 2022 14:46:45 -0700 (PDT)
+        bh=10DwZiGdLo3hJFyknuuSJ9NrQcIJAd3mzxuhl7Xh74I=;
+        b=EPpk3w8AevjRjUfNuYk+MSWD8VblnqFezsGMav9VF5nuD8EDT3a5vVsRDNiAyTBJLb
+         3nPvT1SWS6Rt+U8PpufHcFGSdnMBrsR4rvg0aZrRtBa/8zQqyYxqHs3xqgqWwe0U+OUi
+         Rr56xviWRhQqgjrM0uLrezU8qcfk5wg9c7R75TbZsHoyssd0jaOOMaVRacRboszFoOk8
+         GhBri9prW+pjeX2i75LeuIv7Ota7hCZaMeWz4FGqhsrDqOAgJ5k7w11cIg4aCMozT+yi
+         jASSjPETLeS4HFmYdHDNNdds0ebDkCIDU3s3wvmVQuDDTHkesUs+bbZE/k6feiS9qDnS
+         77GA==
+X-Gm-Message-State: AOAM5323I3x4hFHwZPqNn5nvN2XHC+aNUtZaBnp6RplLbn8wcqbJR457
+        W6Uq+C2daznVIXgadDa1MkM=
+X-Google-Smtp-Source: ABdhPJy4sUrGVMDcw69uwGlOgKI+xgZMdkTvhFRQOKehyNJdf/1YjMNl0G+viaikQsNSObKW/rfajg==
+X-Received: by 2002:a05:6402:5210:b0:419:d802:626e with SMTP id s16-20020a056402521000b00419d802626emr4631547edd.11.1648417679059;
+        Sun, 27 Mar 2022 14:47:59 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id js24-20020a170906ca9800b006c8aeca8fe8sm4990367ejb.58.2022.03.27.14.46.44
+        by smtp.googlemail.com with ESMTPSA id q9-20020a17090609a900b006cd30a3c4f0sm5089236eje.147.2022.03.27.14.47.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Mar 2022 14:46:44 -0700 (PDT)
+        Sun, 27 Mar 2022 14:47:58 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Scott Branden <scott.branden@broadcom.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH] misc: bcm-vk: replace usage of found with dedicated list iterator variable
-Date:   Sun, 27 Mar 2022 23:45:51 +0200
-Message-Id: <20220327214551.2188544-1-jakobkoschel@gmail.com>
+Subject: [PATCH] block: use dedicated list iterator variable
+Date:   Sun, 27 Mar 2022 23:47:04 +0200
+Message-Id: <20220327214704.2188742-1-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -81,92 +79,35 @@ To *never* use the list iterator variable after the loop it was
 concluded to use a separate iterator variable instead of a
 found boolean [1].
 
-This removes the need to use a found variable and simply checking if
-the variable was set, can determine if the break/goto was hit.
-
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/misc/bcm-vk/bcm_vk_msg.c | 29 +++++++++++++----------------
- 1 file changed, 13 insertions(+), 16 deletions(-)
+ block/blk-mq.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/misc/bcm-vk/bcm_vk_msg.c b/drivers/misc/bcm-vk/bcm_vk_msg.c
-index 066b9ef7fcd7..3c081504f38c 100644
---- a/drivers/misc/bcm-vk/bcm_vk_msg.c
-+++ b/drivers/misc/bcm-vk/bcm_vk_msg.c
-@@ -757,20 +757,19 @@ static struct bcm_vk_wkent *bcm_vk_dequeue_pending(struct bcm_vk *vk,
- 						   u16 q_num,
- 						   u16 msg_id)
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 8e659dc5fcf3..455fdd488f3c 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -4466,12 +4466,14 @@ static bool blk_mq_elv_switch_none(struct list_head *head,
+ static void blk_mq_elv_switch_back(struct list_head *head,
+ 		struct request_queue *q)
  {
--	bool found = false;
--	struct bcm_vk_wkent *entry;
-+	struct bcm_vk_wkent *entry = NULL, *iter;
+-	struct blk_mq_qe_pair *qe;
++	struct blk_mq_qe_pair *qe = NULL;
++	struct blk_mq_qe_pair *iter;
+ 	struct elevator_type *t = NULL;
  
- 	spin_lock(&chan->pendq_lock);
--	list_for_each_entry(entry, &chan->pendq[q_num], node) {
--		if (get_msg_id(&entry->to_v_msg[0]) == msg_id) {
--			list_del(&entry->node);
--			found = true;
-+	list_for_each_entry(iter, &chan->pendq[q_num], node) {
-+		if (get_msg_id(&iter->to_v_msg[0]) == msg_id) {
-+			list_del(&iter->node);
-+			entry = iter;
- 			bcm_vk_msgid_bitmap_clear(vk, msg_id, 1);
+-	list_for_each_entry(qe, head, node)
+-		if (qe->q == q) {
+-			t = qe->type;
++	list_for_each_entry(iter, head, node)
++		if (iter->q == q) {
++			t = iter->type;
++			qe = iter;
  			break;
  		}
- 	}
- 	spin_unlock(&chan->pendq_lock);
--	return ((found) ? entry : NULL);
-+	return entry;
- }
  
- s32 bcm_to_h_msg_dequeue(struct bcm_vk *vk)
-@@ -1010,16 +1009,14 @@ ssize_t bcm_vk_read(struct file *p_file,
- 					 miscdev);
- 	struct device *dev = &vk->pdev->dev;
- 	struct bcm_vk_msg_chan *chan = &vk->to_h_msg_chan;
--	struct bcm_vk_wkent *entry = NULL;
-+	struct bcm_vk_wkent *entry = NULL, *iter;
- 	u32 q_num;
- 	u32 rsp_length;
--	bool found = false;
- 
- 	if (!bcm_vk_drv_access_ok(vk))
- 		return -EPERM;
- 
- 	dev_dbg(dev, "Buf count %zu\n", count);
--	found = false;
- 
- 	/*
- 	 * search through the pendq on the to_h chan, and return only those
-@@ -1028,13 +1025,13 @@ ssize_t bcm_vk_read(struct file *p_file,
- 	 */
- 	spin_lock(&chan->pendq_lock);
- 	for (q_num = 0; q_num < chan->q_nr; q_num++) {
--		list_for_each_entry(entry, &chan->pendq[q_num], node) {
--			if (entry->ctx->idx == ctx->idx) {
-+		list_for_each_entry(iter, &chan->pendq[q_num], node) {
-+			if (iter->ctx->idx == ctx->idx) {
- 				if (count >=
--				    (entry->to_h_blks * VK_MSGQ_BLK_SIZE)) {
--					list_del(&entry->node);
-+				    (iter->to_h_blks * VK_MSGQ_BLK_SIZE)) {
-+					list_del(&iter->node);
- 					atomic_dec(&ctx->pend_cnt);
--					found = true;
-+					entry = iter;
- 				} else {
- 					/* buffer not big enough */
- 					rc = -EMSGSIZE;
-@@ -1046,7 +1043,7 @@ ssize_t bcm_vk_read(struct file *p_file,
- read_loop_exit:
- 	spin_unlock(&chan->pendq_lock);
- 
--	if (found) {
-+	if (entry) {
- 		/* retrieve the passed down msg_id */
- 		set_msg_id(&entry->to_h_msg[0], entry->usr_msg_id);
- 		rsp_length = entry->to_h_blks * VK_MSGQ_BLK_SIZE;
 
 base-commit: b47d5a4f6b8d42f8a8fbe891b36215e4fddc53be
 -- 

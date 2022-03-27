@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7DA94E8941
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 20:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2FDB4E893D
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 20:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236282AbiC0SLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 14:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
+        id S236298AbiC0SLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 14:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbiC0SK7 (ORCPT
+        with ESMTP id S236271AbiC0SLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 14:10:59 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07olkn2053.outbound.protection.outlook.com [40.92.15.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4114E34656;
-        Sun, 27 Mar 2022 11:09:21 -0700 (PDT)
+        Sun, 27 Mar 2022 14:11:01 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07olkn2089.outbound.protection.outlook.com [40.92.15.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9E43466A;
+        Sun, 27 Mar 2022 11:09:22 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m5fT/8CxbQTGc+j6fiW+O5nwRwU12IqWZ01xOXpm/LJYhv4GhRgz9dZzKpLTbVBEBFieLxheOd1r8Znr1mUj8Cb/pg5ewW7FbNhzx/xh7sdqGcuWgkOOMHhpQS+kinOTmLSOA03czXunWs+hdJhJDyZ9h1/9LWJz3/c+LnESaO3Q1zrfB3tI7SulZl26I8GJ/rqEVrjmSL1aU539xATD7cVO7lecPaURFTW1+VEZzQkyzIc2vqD/VlT9+nexC07wcbiq9LpzyCmIaUAynutR1S/nlsfxb5op8IB/OyKRCCCbdcGN/TckafrBp/Zsh44o462Gu61b4CMfpE5FucmPcA==
+ b=VOnTxOPALGuy1x3PYMQFjpQQF/zOqwxORzjlQRgCB2bsztbwHKvnSTBC7MPjHHzRo308LZqiEgkI3QeEDgXhA0J16MVBGt9zcBtGi+Dxew2i3gi6S3aBEewVT5IRn+FTC8w46jyWxytGMi+Tvko86c1lvx+RGmz3LChS7y74S++GbJ2HbAKS4u1zb5o3GjJUZ+mfBKoxdtDeUJupq/2FywFTtNmmniyn51ZcK0rhD9mPKc3vL/842hDfzy4SCdkIHVPe9QqLy10nDIKuRKAeYN0NC+jhbK5M2jD3Mtbrm2S/kWUA11LDTZB/9iHgvZ2fcZ4/c8CV8oachT3TEWchHw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Fv+7ooUARPAzKlw4ps3s4rr4U5e6oufJifd70YDYepc=;
- b=ga9cPIbs2IixhGb+FABK5vHeS8uAd7PNWsR8j1zmb66jZiCwJXyZgwPh5gmRXWS1DhCVQG0Qs2ouAem/Tazk9YfcWkojiRlw+Wsd1MLisG05ycq5y8N6IKl1279FNtb5ZxWs+fkC2I2Qp83+Lx1LpvFqyCEwIVKGQS/FuM0tybtUyzPb2efGY1buXVKcXNaqoM7zg5oVjghaH9zOw9Gbkr1ozSyMaMRVT2zyF3h0gkkaJxcetIZWbVPlL7nqQZ5a5w776IJAtUVk+alIyxVj3EE8k7B7uGqdiThodoYoUviKpBOV5TNc5ZDtxAI6UnoJi2uEhwTEynTWvyaY21fvTw==
+ bh=ETKIoo7zFkHFLl5B0vYAeoCkzZXf6WdlONDAUr9bmrc=;
+ b=FuvtQeZ8mHD8KuovDl+HeYzJBsu4LxwSjkfkTKczcJp6AVmIICTtsQfx0qsrVRVk4VHOL4ccvuLdf/PO8uvCakUqs0q3OTj1V5yzAmjb2MiYGK2tQMWqnMRHEIKJqC86azQ+nBrtMxHx3lwSQIniJjc5OLUFjDAy6nK0mugmJhCNYqUzJLyK03ywak7TRW9S5BzkVXI1m9BDux/iHj4V/ufRUKjWkiaxYSQCOgWFElqHcUcTStsmv6BqTJz7iTYSM/+b+5gfuUKzkvvC0fw5Z7I8OAHhIbnfO6/aph+xXCS9zHJNNEV8kwdiW6EhnrypNBdnBTXvA/SuGxNlRpl59g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 Received: from CY4PR04MB0567.namprd04.prod.outlook.com (2603:10b6:903:b1::20)
  by BN8PR04MB5778.namprd04.prod.outlook.com (2603:10b6:408:a3::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Sun, 27 Mar
- 2022 18:09:19 +0000
+ 2022 18:09:21 +0000
 Received: from CY4PR04MB0567.namprd04.prod.outlook.com
  ([fe80::451b:e5ed:c1a3:4070]) by CY4PR04MB0567.namprd04.prod.outlook.com
  ([fe80::451b:e5ed:c1a3:4070%5]) with mapi id 15.20.5102.022; Sun, 27 Mar 2022
- 18:09:19 +0000
+ 18:09:20 +0000
 From:   Jonathan Bakker <xc-racer2@live.ca>
 To:     krzk@kernel.org, alim.akhtar@samsung.com
 Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jonathan Bakker <xc-racer2@live.ca>
-Subject: [PATCH v2 3/5] ARM: dts: s5pv210: Adjust memory reg entries to match spec
-Date:   Sun, 27 Mar 2022 11:08:52 -0700
-Message-ID: <CY4PR04MB05677849A13F41BF603906DFCB1C9@CY4PR04MB0567.namprd04.prod.outlook.com>
+Subject: [PATCH v2 4/5] ARM: dts: s5pv210: Adjust DMA node names to match spec
+Date:   Sun, 27 Mar 2022 11:08:53 -0700
+Message-ID: <CY4PR04MB0567F52ABAE0A3CCD3C7CE59CB1C9@CY4PR04MB0567.namprd04.prod.outlook.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <CY4PR04MB05677B4C4E26A8A179F6ABC0CB179@CY4PR04MB0567.namprd04.prod.outlook.com>
 References: <CY4PR04MB05677B4C4E26A8A179F6ABC0CB179@CY4PR04MB0567.namprd04.prod.outlook.com>
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-TMN:  [yl+6Tu3fgPOJfUjUIe6Azwd5ekzE23BD9s0vYJLyMC1B2BmnDLuZpDsIwvWsvTrS]
+X-TMN:  [jdeDKrzxsGXR+H7QENliUOuFJrVGDOCWMO2T1zokTTxMdb6xNeLuecgobJGpegI7]
 X-ClientProxiedBy: BYAPR07CA0031.namprd07.prod.outlook.com
  (2603:10b6:a02:bc::44) To CY4PR04MB0567.namprd04.prod.outlook.com
  (2603:10b6:903:b1::20)
-X-Microsoft-Original-Message-ID: <20220327180854.4857-4-xc-racer2@live.ca>
+X-Microsoft-Original-Message-ID: <20220327180854.4857-5-xc-racer2@live.ca>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3033aeb1-db7b-4cbd-babb-08da101ce9b7
+X-MS-Office365-Filtering-Correlation-Id: 5c646bd0-7c5b-4902-ea0d-08da101cea6c
 X-MS-TrafficTypeDiagnostic: BN8PR04MB5778:EE_
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: INmCne61l+YUuktzZvlyFUY88HveecOkJa6Vdvn87j+ml5KCvf+vQadn/SKem+FkgGnUdOAodkh00Qz0uw+FVsFwRJE6nDWOwh6JrTQHiENVvecvCpNaQqIhSED0BrGV9X+VrW7IXwoyYWdiFjj8HsBu9mWSbSGQk1TWqtTm5WX8wkqQfwrublycf9zGzKw9Jp27sgW6MlihZHOigxuqhMNBKV5hu/DnJvaIdetseL7UhfjTlNkZC3ApXZvhFOenQic3DitvDq3ETYSHbCEbaEXAhOOQJ6qXEBMi+Z3iemaEGn1zdlGIjnORucp4+qpdCwdcrESqWNGTjTCyBBS1onn0nogwGSYz5Z4GQHjsiHXHqombALaxWZazwr17+OiPIn9WHIGgsvc4a468xAmV6F9Z83S3Czlc+0pWe2MR6Qz+4i99bzSouI9lYjwDJY9Z2cqYiPtvgmcrtwuT8Xn5gUynfFoJamBlbJ1ccBpHBiyyClU0QjmApB80W0LjhKBVq6MFq4jaKoCOdVZvNp1mfvK/m75lblasxGU9zjyEYfpZ7ohINSk7iEH8T39F9UwgViE/Q7A6nhGJ4ICS7QROLA==
+X-Microsoft-Antispam-Message-Info: tIousbJf1osUiv48W5N1/S05BA6SJVDTC1oC8gJfs0f1AWP48jeADFCzUMcMmo/3C1ZY2icsMv7BWUHp2uqA1x9gywYvSCEbHgJjOefbH6NvM+0RnypjKccB+W/Z00U+Q8QqVFKPLnzZ5iG/g8ocGnOwiOkbxYBPZraNbySUHcxAVsX2msXfryYWTksKgfoFqQtSH6DlVa47bdMFKHGcEybfG55a80ydSfNX4GbYtCk2cbJMjLBiugbuJU1cx5yshHwC8GwQWMK1MUCNuZjPolQglFA1o5CCPczmVz6T3l6zAoI4q59u37oodtrYM4atOMEpmG4iDHpPfnBrAbFzFTvhi3QXqyqOEATAcd5IhxgLPVaARx+KHMvw5zZzI6MHW05D7X6/2Tti2JXQV8Zplkx5eYcBjEXuwbaM4vhGNMyf6/qaeb6ZNgLmvcKUpKGwyeQBPw26PWbSXjbpwleASsWPopmaqUIOo7N8Exw8Os9ZlVkRd8U1RsA/Ofu9kf1oz0a3moUq9eE+qZY25SMPdK8/6QN+4V2Ukqu1TrZdOEEJcVE1psm+mPGq/HMLGRjjOPl4pB293RhMdwNW4hd+0A==
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HTqW9zXvKWGJYo60r7tV8r+VlkLAGdQqBS8Mma7215vMpRutjeBNOAbVqNhR?=
- =?us-ascii?Q?KpBQFn3REM1DNjis/rSHZwIoxFhPuMCZc7dUA5LWBnhD5oUNRhGVa9iaAovs?=
- =?us-ascii?Q?knKhvis2u3EMXOutLl+5qTPZJjX1DZhFdzj9JS0bDWTmnacfoak7thI4/q0P?=
- =?us-ascii?Q?EutJFPtVWGQ/tIV3AIadL3EElGBl/hj487km860Ft/liD7KVfCwXAPOM5/KC?=
- =?us-ascii?Q?IamyfwPU9FhcJzzHK1MLyDWxPPkteI0IbvuJWhBx0MXlzza/EU2dDC0dNDcw?=
- =?us-ascii?Q?V5iZfhtfcPR0VL7gKMOa4eU8Na4hZaMKfSb4y3pfutGq7PYfGqGtYvqxsrc2?=
- =?us-ascii?Q?dlCQLiXBhYRH3qy+LOtsdRc/4aH71wr7RZMX7uoHKjGZ7SFlFbc9UVKuQ1gK?=
- =?us-ascii?Q?ydG3zjLhkPOGBkrFik8tbWCYlI+0sVlViKOB85CfRTF0OFNuuvgnvYPf9A3H?=
- =?us-ascii?Q?TchPLNtMu9wMFiPct8a5mbz7M5b9ovLYZ0OlbBXEbCMJ5TXEoFIvV9bFgDKt?=
- =?us-ascii?Q?NdIAd/i1AGIo2UVIN5FbqzxHZObY1ehSBAg66DtAykOsKbEQPLsIXsvS8eGx?=
- =?us-ascii?Q?hcbIHvWLjTMTI4Nrmozr/7JAppYPYdClug2/ftSMjMVCGNByj5KPLAR4PwHe?=
- =?us-ascii?Q?AvrM1iiXo+2J1d0HUy1ITIycKN4ehJJTB9x8OkTarQS8vlnxiEPYq7VwrOiA?=
- =?us-ascii?Q?7iWakYlFIzUfKESlSjDpa8/Gk3e225rBYp/dlK/BdORU2zBZC4GljQj0GkU9?=
- =?us-ascii?Q?4asIA7EMqtFQbz1b060jTmvtOxQtOunGqRJSAQAymGpaikaSpo51JZJcLCkD?=
- =?us-ascii?Q?8D0d7hfXThGPZRl7ELdPSSQ9/KP2ytIhvFaf/9YjwWmzSSNV3E3cS+xbx5k1?=
- =?us-ascii?Q?6+5QBSucY8J5spxfY7iEokZEMQrNWz54GAsgI9cCg3oIKjHPY3lU56HjIH+F?=
- =?us-ascii?Q?xfxHnebCptZ5S+y8Z6YDE+SUO4xJ9OECcfngNZYgl4V2JVGkbcXpj1hROxC7?=
- =?us-ascii?Q?EGSKD3uJyV0nKHrCJKlyv3t8mD87zcYPvH+POdmb0kxkN7hTM62awh4lTacI?=
- =?us-ascii?Q?ddqFNm+jE2OGUfpHnUkPsRhu1qdVJ681W4Nvmf0pPb8O6NquZl0VkMYR6eiy?=
- =?us-ascii?Q?UDFbsrFfc+c6/aQ9pRuOSnmbiL2sFB8sP+6JoihkRXBrizqsmTZYdfEGeUv+?=
- =?us-ascii?Q?EHLiDDVti3ghDAiXYZile0FlHezHGjxC2ePFvbHEAsbBYNeMTqAQrly/ZgP+?=
- =?us-ascii?Q?2SJ85dOL5vcjbUoqb006fvZQF6z/ZTqnMvZUGJKkcR2X1HvlnrUR9nWH8hD5?=
- =?us-ascii?Q?jfJ5cROf9NkWsb0TUyMpDbiGPirW0pCnTFnT6jXb5bfebyIPHZo5ZdrQ58wS?=
- =?us-ascii?Q?DrHDQWvOKMHShcv3syU+1ykSQbmFbjAQiD4M0CQn+XY4hHxstvPJkNqT4opm?=
- =?us-ascii?Q?GEZZzehgylzH3wTKv3o26NjitPkR2djlHNgXzGTz5d4rvo1XbmzVqIJFsaXa?=
- =?us-ascii?Q?KqsCE9nssXLaWqs=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WIU5mblY9YBywcvR5C240KuTsDtJanQPFgDJflDVwAC2DuHB9xCf6xhlrJhG?=
+ =?us-ascii?Q?MnPmfc1048YO1X5Zngop35R/mpbZ6EYhlRWPEnLGyn+a+CxHWjVecSWl3rE2?=
+ =?us-ascii?Q?vA1YcyF6vDd+bVzK26O/DjWCdR91q3aRw+d94iJeeRsUfAFgXxvSP49g2Ng3?=
+ =?us-ascii?Q?XvGwTl9WLtloClQBEjVc6lcCBQehyWVCG+LYXiXVkOK4ZNWUHmTqEXQiOFRs?=
+ =?us-ascii?Q?SnQFiJ6RlgnSQRJEp/ODISy0YIyg6ssPLWojzBPxR1NylKtwYUjqXGTRitlT?=
+ =?us-ascii?Q?ir6WikuaBbZFOFF5iDxyyY0J2JKqVTeCkip0roVjP82HCMw4XPAnrRIj6ogw?=
+ =?us-ascii?Q?1tKauV6Xn7BENl5gG/NSjD1OHyp7m1wa5aY+K5rFcOZJnhn5XUjTupGa2i6M?=
+ =?us-ascii?Q?Vux1gee6RZscPQmYX2Z+S3sL/vpUfaZrDRwy0igCL//+wCFCKf2H9gttgNQ5?=
+ =?us-ascii?Q?+BQYOK84Auxx9UnEC0u29PPY8cPIx4pBZXe9V075LXSJy1WtSIL3SVwjO/YI?=
+ =?us-ascii?Q?1hH4DRWbLVeMWblYmXgjp5GuGv3Zy0duhK548+ZlJmt9f5imMNbAou80tJH2?=
+ =?us-ascii?Q?BpK6BhDxVLYh7E2jy+oFs8TynwZMp7AfKl4O7C5DOuJqPI9oyHyOs9zfUNB9?=
+ =?us-ascii?Q?PrV3Gu0ZzwPVeJFioXoe2rZdqg58loMT3SzkTciz/H5igyt3HuMgHeHcVvG4?=
+ =?us-ascii?Q?1Iz1xgRl0srRV6SXuH/eTcI/MNlW1nzq6GQ5brMeDbWHeH69YYOOQ9j/HsVy?=
+ =?us-ascii?Q?pcWLceXXl/OYRQUVYNXP2jS3a+FUavznnE5Gw/3rq1/dyrI6hvkUMyuqKZkv?=
+ =?us-ascii?Q?1sYBow2BoIWbfUZHMeUUdpjxHGpPoHhq8Vrf0F0h0twHRZICKjljKIju3b48?=
+ =?us-ascii?Q?Y56gkRpG3LGIeSFaAe+9PGHj2189EYHZZHzRR3vXKiuNXlpStLT+h0mMmq/W?=
+ =?us-ascii?Q?szuWTPEe3aWvAORyeamzglezepDDCRZsnVDXVDHF5eyfh98riroWulAZmWXk?=
+ =?us-ascii?Q?zt5mnlMMZcEWRlL0s0jJCsX5k246zO4W98wUy0dYiXUydHkeWZYmq5zzqWlu?=
+ =?us-ascii?Q?6I/FhOTxXFUfc2Ou9jYuw4yX0ScYvw4+AQl2wAaJBp/90ir7r2JsfqHxRxIb?=
+ =?us-ascii?Q?+CKmATaDTAfW1l0H1gwQKQ22njOaQFwo4/jm3jkDH4Zj4p7rN3Q++Wji98dk?=
+ =?us-ascii?Q?6egyF3IToFSyfatFAqevAjncnBf6GE66eBQ5dMb/aTKG8v3Skkismbaftzaj?=
+ =?us-ascii?Q?WWbVIiLc98lOazdQhFcoeQDaxGSgj7D8ftGzAwEcY5csY1kYCOkFYKRDrd0f?=
+ =?us-ascii?Q?bKVyhQ6JQBc9RRK8NU5U33pcDVujy7eD05gYE+n6SCUpo5rqNQn3SyILEFBy?=
+ =?us-ascii?Q?08zaiFWjww2viVAcILaCvDjUOrbkgFEWo9Na8qCmQZLWPKoi1TbqW606s2Yc?=
+ =?us-ascii?Q?/PlPOHCvPOpq1hQzc+h4rSlFTenj/iDdMlKXuxXKQHttqheOlIBQrEN+9I7b?=
+ =?us-ascii?Q?Fz2DUy1nfdrfc9g=3D?=
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-edb50.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3033aeb1-db7b-4cbd-babb-08da101ce9b7
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c646bd0-7c5b-4902-ea0d-08da101cea6c
 X-MS-Exchange-CrossTenant-AuthSource: CY4PR04MB0567.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2022 18:09:19.6200
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2022 18:09:20.8856
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -106,69 +106,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reg property of memory nodes should have pairs of offset, size;
-not all memory banks lumped in as one.
+DMA node names should be dma-controller according to the DT spec,
+so rename them from pdma/mdma.  Prevents warnings when running
+make dtbs_check
 
 Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
 ---
-Changes in v2
-- Adjusted so that there is still one memory node, but the reg
-  entries are split into multiple pairs rather than having multiple
-  memory nodes
----
- arch/arm/boot/dts/s5pv210-aquila.dts | 3 +--
- arch/arm/boot/dts/s5pv210-aries.dtsi | 6 +++---
- arch/arm/boot/dts/s5pv210-goni.dts   | 6 +++---
- 3 files changed, 7 insertions(+), 8 deletions(-)
+ arch/arm/boot/dts/s5pv210.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/s5pv210-aquila.dts b/arch/arm/boot/dts/s5pv210-aquila.dts
-index 6423348034b6..79014a624e4a 100644
---- a/arch/arm/boot/dts/s5pv210-aquila.dts
-+++ b/arch/arm/boot/dts/s5pv210-aquila.dts
-@@ -29,8 +29,7 @@
+diff --git a/arch/arm/boot/dts/s5pv210.dtsi b/arch/arm/boot/dts/s5pv210.dtsi
+index 353ba7b09a0c..0bccfb9d0c0e 100644
+--- a/arch/arm/boot/dts/s5pv210.dtsi
++++ b/arch/arm/boot/dts/s5pv210.dtsi
+@@ -117,7 +117,7 @@
+ 			};
+ 		};
  
- 	memory@30000000 {
- 		device_type = "memory";
--		reg = <0x30000000 0x05000000
--			0x40000000 0x18000000>;
-+		reg = <0x30000000 0x05000000>, <0x40000000 0x18000000>;
- 	};
+-		pdma0: dma@e0900000 {
++		pdma0: dma-controller@e0900000 {
+ 			compatible = "arm,pl330", "arm,primecell";
+ 			reg = <0xe0900000 0x1000>;
+ 			interrupt-parent = <&vic0>;
+@@ -129,7 +129,7 @@
+ 			#dma-requests = <32>;
+ 		};
  
- 	pmic_ap_clk: clock-0 {
-diff --git a/arch/arm/boot/dts/s5pv210-aries.dtsi b/arch/arm/boot/dts/s5pv210-aries.dtsi
-index cbd378ac4e18..116c507da028 100644
---- a/arch/arm/boot/dts/s5pv210-aries.dtsi
-+++ b/arch/arm/boot/dts/s5pv210-aries.dtsi
-@@ -24,9 +24,9 @@
+-		pdma1: dma@e0a00000 {
++		pdma1: dma-controller@e0a00000 {
+ 			compatible = "arm,pl330", "arm,primecell";
+ 			reg = <0xe0a00000 0x1000>;
+ 			interrupt-parent = <&vic0>;
+@@ -528,7 +528,7 @@
+ 			clock-names = "sclk_fimg2d", "fimg2d";
+ 		};
  
- 	memory@30000000 {
- 		device_type = "memory";
--		reg = <0x30000000 0x05000000
--			0x40000000 0x10000000
--			0x50000000 0x08000000>;
-+		reg = <0x30000000 0x05000000>,
-+			<0x40000000 0x10000000>,
-+			<0x50000000 0x08000000>;
- 	};
- 
- 	reserved-memory {
-diff --git a/arch/arm/boot/dts/s5pv210-goni.dts b/arch/arm/boot/dts/s5pv210-goni.dts
-index c6f39147cb96..d32f42dd1bf5 100644
---- a/arch/arm/boot/dts/s5pv210-goni.dts
-+++ b/arch/arm/boot/dts/s5pv210-goni.dts
-@@ -30,9 +30,9 @@
- 
- 	memory@30000000 {
- 		device_type = "memory";
--		reg = <0x30000000 0x05000000
--			0x40000000 0x10000000
--			0x50000000 0x08000000>;
-+		reg = <0x30000000 0x05000000>,
-+			<0x40000000 0x10000000>,
-+			<0x50000000 0x08000000>;
- 	};
- 
- 	pmic_ap_clk: clock-0 {
+-		mdma1: mdma@fa200000 {
++		mdma1: dma-controller@fa200000 {
+ 			compatible = "arm,pl330", "arm,primecell";
+ 			reg = <0xfa200000 0x1000>;
+ 			interrupt-parent = <&vic0>;
 -- 
 2.20.1
 

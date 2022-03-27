@@ -2,190 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6560B4E89F1
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 22:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84D614E89F4
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 22:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236622AbiC0UHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 16:07:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
+        id S232230AbiC0UKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 16:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbiC0UG6 (ORCPT
+        with ESMTP id S231990AbiC0UKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 16:06:58 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1403C4FC42
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:05:19 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id bn33so16644969ljb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:05:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wob/7GSQVIpO7i1InQcutyEWYgbvdwTICG96D7RFBB8=;
-        b=MBKpZ1UtrtPBVIHqjdSKYB/rkJWZ1f0vdHzhtdISyO5M6IfCasC0hYp5oS9+XwcX2g
-         onX3toZbyl+fJ/Tk2m9EN2QoWGToeUma4YxombZeY5ZkW09xgeyTm/fWrkUSPf9q19W+
-         djbSzf2EiLGwXDF9V4ce2XqsgWTUpumTDa/0Q=
+        Sun, 27 Mar 2022 16:10:00 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059F060E1
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:08:19 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id u10-20020a5ec00a000000b00648e5804d5bso9194579iol.12
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:08:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wob/7GSQVIpO7i1InQcutyEWYgbvdwTICG96D7RFBB8=;
-        b=POmAIKWHlKjiDsMeaFYjnwUNIaYBA3e0Lc1ETHksdku3FTd2A6TVuOqIKpvkrW0xaK
-         LAB5+NXGdiJXbFe85NSfP+vjripq8EiZRHhC03j/Q3J4ispikbM0VWpMFFul4ITBfeou
-         n59RYmSTCtDNbsN7gdbabLf4ar67mghI9M8LCQfwm2xugWbzd5f9J9oP05appkzW/Y+r
-         f3wM4a6wHCGzLiZFad0odyDp5P5l+0M7LuS65YXgMIX5kpCVijlmM0/rVtiEeETxY7+t
-         Nu9EtPseBXqoKOVUgOZoOPEhq85yiP0YwZBC+V56lfT9nfyI2fg9MN3wBAcEblxEbH7o
-         rXQA==
-X-Gm-Message-State: AOAM5300p8yPBKidJ8OQu2jts7WrTabTRpyDIK3LC7R4+9+qhc/lPDc2
-        k96/IaKHsqDDzfg1tp1mCDTfesKZMOKQeceJENs=
-X-Google-Smtp-Source: ABdhPJyCLJRIUVxmPMB4uwikqSt+3jmlKZ1bb4qL5guKuAa0Sj3PCZe5rN1G7rFBM8qM3WvZBlPFyA==
-X-Received: by 2002:a2e:8648:0:b0:24a:cedf:54c3 with SMTP id i8-20020a2e8648000000b0024acedf54c3mr1997985ljj.384.1648411517050;
-        Sun, 27 Mar 2022 13:05:17 -0700 (PDT)
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com. [209.85.208.175])
-        by smtp.gmail.com with ESMTPSA id a20-20020a194f54000000b0044a9afab7e7sm67911lfk.290.2022.03.27.13.05.11
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Mar 2022 13:05:13 -0700 (PDT)
-Received: by mail-lj1-f175.google.com with SMTP id c15so16618109ljr.9
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 13:05:11 -0700 (PDT)
-X-Received: by 2002:a2e:9b10:0:b0:247:f28c:ffd3 with SMTP id
- u16-20020a2e9b10000000b00247f28cffd3mr16821393lji.152.1648411509868; Sun, 27
- Mar 2022 13:05:09 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=CxecizhYVUoFFb2ENXPAj0S4kGMZ/wuMLwi+CMwdSbI=;
+        b=DTeoVkevFenR/6NZnNe0LflssxD81MWg1WsJRt9sWF8lbOfshcRNOJgj7RdHGt7FR7
+         ArIvF0oBSZuhKcblz0giRPTwY8Ec9smYK8S02J+b2pnbOoWtdMucRHQN0EYPD36Xu3z2
+         9MxyuVzPJyYHzjfDtFJtoQEAKpG85ymFTyAEktc8SW8LjoiKQYowbGM28ni8Ynq4kVMW
+         g9p13/5DjmOl2e4bFm/ouU0jsbgcvFGznUpYVcA91bomyvvAGjJGFp9dbCRFt668I+tl
+         HUcnGg7KKsH2sK5u1Vj+kRFNYuVia+acF5fgaF1NARpge35eO9F5mQU0MkjdTw36ckXI
+         506w==
+X-Gm-Message-State: AOAM532kCpJcMf2GM5Gh2ZUb/tq6sE2SLctrNQkJUO25iMqLfhuLxyk1
+        Vl4nDt3RIY5pF2eD7i69MEvvy/n1jjNye61VrdD8LSvcVJXa
+X-Google-Smtp-Source: ABdhPJwD+PBSPS3ktzpIWdE2S7u5EV8pDUealk+u+8fks+kyKgiSpSbPHMvHcaOUdX0zlvZHyHsVpkDM6GX2PiaEtG08HLZC2fng
 MIME-Version: 1.0
-References: <1812355.tdWV9SEqCh@natalenko.name> <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
- <20220324055732.GB12078@lst.de> <4386660.LvFx2qVVIh@natalenko.name>
- <81ffc753-72aa-6327-b87b-3f11915f2549@arm.com> <878rsza0ih.fsf@toke.dk>
- <4be26f5d8725cdb016c6fdd9d05cfeb69cdd9e09.camel@freebox.fr>
- <20220324163132.GB26098@lst.de> <d8a1cbf4-a521-78ec-1560-28d855e0913e@arm.com>
- <871qyr9t4e.fsf@toke.dk> <CAHk-=whUQCCaQXJt3KUeQ8mtnLeVXEScNXCp+_DYh2SNY7EcEA@mail.gmail.com>
- <20220327054848.1a545b12.pasic@linux.ibm.com> <CAHk-=whUJ=tMEgP3KiWwk0pzmHn+1QORUu50syE+zOGk4UnFog@mail.gmail.com>
- <CAHk-=wgUx5CVF_1aEkhhEiRGXHgKzUdKiyctBKcHAxkxPpbiaw@mail.gmail.com>
- <0745b44456d44d1e9fc364e5a3780d9a@AcuMS.aculab.com> <CAHk-=wgLyqNJx=bb8=o0Nk5U8gMnf0-=qx53ShLEb3V=Yrt8fw@mail.gmail.com>
-In-Reply-To: <CAHk-=wgLyqNJx=bb8=o0Nk5U8gMnf0-=qx53ShLEb3V=Yrt8fw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 27 Mar 2022 13:04:53 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh+TzZhMCiPPnchC4FSeS53-QCN3RYqxLAh4ahKMLoj9A@mail.gmail.com>
-Message-ID: <CAHk-=wh+TzZhMCiPPnchC4FSeS53-QCN3RYqxLAh4ahKMLoj9A@mail.gmail.com>
-Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
- ath9k-based AP
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Halil Pasic <pasic@linux.ibm.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Maxime Bizon <mbizon@freebox.fr>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Olha Cherevyk <olha.cherevyk@gmail.com>,
-        iommu <iommu@lists.linux-foundation.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable <stable@vger.kernel.org>
+X-Received: by 2002:a05:6e02:19c6:b0:2c2:5f51:c81 with SMTP id
+ r6-20020a056e0219c600b002c25f510c81mr4134847ill.57.1648411699002; Sun, 27 Mar
+ 2022 13:08:19 -0700 (PDT)
+Date:   Sun, 27 Mar 2022 13:08:18 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c341cc05db38c1b0@google.com>
+Subject: [syzbot] memory leak in blk_mq_init_tags
+From:   syzbot <syzbot+f08c77040fa163a75a46@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 27, 2022 at 12:23 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> So I will propose that we really make it very much about practical
-> concerns, and we document things as
->
->  (a) the "sync" operation has by definition a "whose _future_ access
-> do we sync for" notion.
->
->      So "dma_sync_single_for_cpu()" says that the future accesses to
-> this dma area is for the CPU.
->
->      Note how it does *NOT* say that the "CPU owns the are". That's
-> bullsh*t, and we now know it's BS.
->
->  (b) but the sync operation also has a "who wrote the data we're syncing"
->
->      Note that this is *not* "who accessed or owned it last", because
-> that's nonsensical: if we're syncing for the CPU, then the only reason
-> to do so is because we expect that the last access was by the device,
-> so specifying that separately would just be redundant and stupid.
->
->      But specifying who *wrote* to the area is meaningful and matters.
+Hello,
 
-We could also simply require that the bounce buffer code *remember*
-who wrote to it last.
+syzbot found the following issue on:
 
-So when the ath9k driver does
+HEAD commit:    6b1f86f8e9c7 Merge tag 'folio-5.18b' of git://git.infradea..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13b41dcb700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c6e80763d853259b
+dashboard link: https://syzkaller.appspot.com/bug?extid=f08c77040fa163a75a46
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1564ecb3700000
 
- - setup:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f08c77040fa163a75a46@syzkaller.appspotmail.com
 
-                bf->bf_buf_addr = dma_map_single(sc->dev, skb->data,
-                                                 common->rx_bufsize,
-                                                 DMA_FROM_DEVICE);
+BUG: memory leak
+unreferenced object 0xffff888118503c00 (size 192):
+  comm "kworker/u4:2", pid 52, jiffies 4294961137 (age 11.420s)
+  hex dump (first 32 bytes):
+    02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    02 00 00 00 06 00 00 00 01 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff822c042b>] kmalloc_node include/linux/slab.h:602 [inline]
+    [<ffffffff822c042b>] kzalloc_node include/linux/slab.h:728 [inline]
+    [<ffffffff822c042b>] blk_mq_init_tags+0x4b/0xc0 block/blk-mq-tag.c:578
+    [<ffffffff822b6caa>] blk_mq_alloc_rq_map+0xea/0x1a0 block/blk-mq.c:3169
+    [<ffffffff822bbb86>] blk_mq_alloc_map_and_rqs+0x26/0xb0 block/blk-mq.c:3620
+    [<ffffffff822c3437>] blk_mq_sched_alloc_map_and_rqs block/blk-mq-sched.c:507 [inline]
+    [<ffffffff822c3437>] blk_mq_init_sched+0x127/0x2e0 block/blk-mq-sched.c:587
+    [<ffffffff8229e6f9>] elevator_init_mq+0x1f9/0x240 block/elevator.c:709
+    [<ffffffff822c7085>] device_add_disk+0x25/0x510 block/genhd.c:421
+    [<ffffffff82846437>] sd_probe+0x457/0x670 drivers/scsi/sd.c:3551
+    [<ffffffff8270c477>] call_driver_probe drivers/base/dd.c:517 [inline]
+    [<ffffffff8270c477>] really_probe.part.0+0xe7/0x380 drivers/base/dd.c:596
+    [<ffffffff8270c81c>] really_probe drivers/base/dd.c:558 [inline]
+    [<ffffffff8270c81c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:755
+    [<ffffffff8270c91a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:785
+    [<ffffffff8270d186>] __device_attach_driver+0xf6/0x140 drivers/base/dd.c:902
+    [<ffffffff827093e7>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:427
+    [<ffffffff8270b9ef>] __device_attach_async_helper+0xcf/0x110 drivers/base/dd.c:931
+    [<ffffffff8127cf94>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
+    [<ffffffff8126b3ef>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
+    [<ffffffff8126bd19>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
 
-we clear the bounce buffer and remember that the state of the bounce
-buffer is "device wrote to it" (because DMA_FROM_DEVICE).
+BUG: memory leak
+unreferenced object 0xffff888117fee680 (size 128):
+  comm "kworker/u4:2", pid 52, jiffies 4294961137 (age 11.420s)
+  hex dump (first 32 bytes):
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff8240b6be>] kmalloc_array_node include/linux/slab.h:679 [inline]
+    [<ffffffff8240b6be>] kcalloc_node include/linux/slab.h:684 [inline]
+    [<ffffffff8240b6be>] sbitmap_init_node+0xde/0x2d0 lib/sbitmap.c:113
+    [<ffffffff8240b8ec>] sbitmap_queue_init_node+0x3c/0x1f0 lib/sbitmap.c:428
+    [<ffffffff822c0347>] bt_alloc block/blk-mq-tag.c:543 [inline]
+    [<ffffffff822c0347>] blk_mq_init_bitmaps+0x57/0xf0 block/blk-mq-tag.c:555
+    [<ffffffff822c0468>] blk_mq_init_tags+0x88/0xc0 block/blk-mq-tag.c:586
+    [<ffffffff822b6caa>] blk_mq_alloc_rq_map+0xea/0x1a0 block/blk-mq.c:3169
+    [<ffffffff822bbb86>] blk_mq_alloc_map_and_rqs+0x26/0xb0 block/blk-mq.c:3620
+    [<ffffffff822c3437>] blk_mq_sched_alloc_map_and_rqs block/blk-mq-sched.c:507 [inline]
+    [<ffffffff822c3437>] blk_mq_init_sched+0x127/0x2e0 block/blk-mq-sched.c:587
+    [<ffffffff8229e6f9>] elevator_init_mq+0x1f9/0x240 block/elevator.c:709
+    [<ffffffff822c7085>] device_add_disk+0x25/0x510 block/genhd.c:421
+    [<ffffffff82846437>] sd_probe+0x457/0x670 drivers/scsi/sd.c:3551
+    [<ffffffff8270c477>] call_driver_probe drivers/base/dd.c:517 [inline]
+    [<ffffffff8270c477>] really_probe.part.0+0xe7/0x380 drivers/base/dd.c:596
+    [<ffffffff8270c81c>] really_probe drivers/base/dd.c:558 [inline]
+    [<ffffffff8270c81c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:755
+    [<ffffffff8270c91a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:785
+    [<ffffffff8270d186>] __device_attach_driver+0xf6/0x140 drivers/base/dd.c:902
+    [<ffffffff827093e7>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:427
+    [<ffffffff8270b9ef>] __device_attach_async_helper+0xcf/0x110 drivers/base/dd.c:931
 
-Then, we have an interrupt or other event, and ath9k does
+BUG: memory leak
+unreferenced object 0xffff888116df4c00 (size 512):
+  comm "kworker/u4:2", pid 52, jiffies 4294961137 (age 11.420s)
+  hex dump (first 32 bytes):
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    10 4c df 16 81 88 ff ff 10 4c df 16 81 88 ff ff  .L.......L......
+  backtrace:
+    [<ffffffff8240b9b8>] kmalloc_node include/linux/slab.h:602 [inline]
+    [<ffffffff8240b9b8>] kzalloc_node include/linux/slab.h:728 [inline]
+    [<ffffffff8240b9b8>] sbitmap_queue_init_node+0x108/0x1f0 lib/sbitmap.c:438
+    [<ffffffff822c0377>] bt_alloc block/blk-mq-tag.c:543 [inline]
+    [<ffffffff822c0377>] blk_mq_init_bitmaps+0x87/0xf0 block/blk-mq-tag.c:557
+    [<ffffffff822c0468>] blk_mq_init_tags+0x88/0xc0 block/blk-mq-tag.c:586
+    [<ffffffff822b6caa>] blk_mq_alloc_rq_map+0xea/0x1a0 block/blk-mq.c:3169
+    [<ffffffff822bbb86>] blk_mq_alloc_map_and_rqs+0x26/0xb0 block/blk-mq.c:3620
+    [<ffffffff822c3437>] blk_mq_sched_alloc_map_and_rqs block/blk-mq-sched.c:507 [inline]
+    [<ffffffff822c3437>] blk_mq_init_sched+0x127/0x2e0 block/blk-mq-sched.c:587
+    [<ffffffff8229e6f9>] elevator_init_mq+0x1f9/0x240 block/elevator.c:709
+    [<ffffffff822c7085>] device_add_disk+0x25/0x510 block/genhd.c:421
+    [<ffffffff82846437>] sd_probe+0x457/0x670 drivers/scsi/sd.c:3551
+    [<ffffffff8270c477>] call_driver_probe drivers/base/dd.c:517 [inline]
+    [<ffffffff8270c477>] really_probe.part.0+0xe7/0x380 drivers/base/dd.c:596
+    [<ffffffff8270c81c>] really_probe drivers/base/dd.c:558 [inline]
+    [<ffffffff8270c81c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:755
+    [<ffffffff8270c91a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:785
+    [<ffffffff8270d186>] __device_attach_driver+0xf6/0x140 drivers/base/dd.c:902
+    [<ffffffff827093e7>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:427
+    [<ffffffff8270b9ef>] __device_attach_async_helper+0xcf/0x110 drivers/base/dd.c:931
+    [<ffffffff8127cf94>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
 
- - rc event:
 
-        dma_sync_single_for_cpu(sc->dev, bf->bf_buf_addr,
-                                common->rx_bufsize, DMA_FROM_DEVICE);
 
-        ret = ath9k_hw_process_rxdesc_edma(ah, rs, skb->data);
-        if (ret == -EINPROGRESS) {
-                /*let device gain the buffer again*/
-                dma_sync_single_for_device(sc->dev, bf->bf_buf_addr,
-                                common->rx_bufsize, DMA_FROM_DEVICE);
-                return false;
-        }
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-and the first dma_sync_single_for_cpu() now sees "Ok, I want the CPU
-buffer, and I remember that the device wrote to it, so I will copy
-from the bounce buffer". It's still DMA_FROM_DEVICE, so that "the
-device wrote to it" doesn't change.
-
-When the CPU then decides "ok, that wasn't it", and does that
-dma_sync_single_for_device(), the bounce buffer code goes "Ok, the
-last operation was that the device wrote to the buffer, so the bounce
-buffer is still valid and I should do nothing".
-
-Voila, no ath9k breakage, and it all still makes perfect sense.
-
-And that sounds like an even more logical model than the one where we
-tell the bounce buffer code what the previous operation was, but it
-involves basically the DMA mapping code remembering what the last
-direction was. That makes perfect sense to me, but it's certainly not
-what the DMA mapping code has traditionally done, which makes me
-nervous that it would just expose a _lot_ of other drivers that do odd
-things.
-
-The "good news" (if there is such a thing) is that usually the
-direction doesn't actually change. So if you use DMA_FROM_DEVICE
-initially, you'll continue to use that. So there is probably basically
-never any difference between "what was the previous operation" and
-"what is the next operation".
-
-So maybe practically speaking, we don't care.
-
-Anyway, I do think we have choices here on how to describe things.
-
-I do think that the "DMA code doesn't have to remember" model has the
-advantage that remembering is always an added complexity, and
-operations that behave differently depending on previous history are
-always a bit harder to think about because of that. Which is why I
-think that model I outlined in the previous email is probably the most
-straightforward one.
-
-                 Linus
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

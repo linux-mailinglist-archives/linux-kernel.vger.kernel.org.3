@@ -2,155 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF324E8928
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 19:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165594E892B
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Mar 2022 20:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236247AbiC0SAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 14:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
+        id S236249AbiC0SES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 14:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236208AbiC0R75 (ORCPT
+        with ESMTP id S236082AbiC0SEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 13:59:57 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3AC82DD5
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 10:58:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648403898; x=1679939898;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/NNXenqLNixW/cbZ0QFlQUJZoB/bisBRV3IUzRk89RY=;
-  b=ZBcA2r15ZnXBffqjEFzNO5DFanlKvxDhQHSo6b7htH9Z9TLMI2WIn3r9
-   /H1PUZqwfnQM6n5rzla7KLDLpJta3vgnwdHket/4buow7A8YWM2+dKVpw
-   bm4pU56QY221VcxpnGTtNLeErk7FUjMGBPAZRn2jFg5C4jD+YVUb0XWiO
-   KBjme/u26i3EpHv9nTWKK6SfI+DGkcBfMjsRD4bNt+3dlfr98g+3GcVVS
-   TH7rOA+FQgQ1qWConjHrM9HeiC5MD3gjcHQ8YIf4rVOnvvhO9lXHWmehO
-   5Bzd+ylK9dLSqMHq5SmjC1QU50HHZhqlO83IU2zLaJtmwblEWyhdyGqo+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="322055657"
-X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
-   d="scan'208";a="322055657"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 10:58:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,215,1643702400"; 
-   d="scan'208";a="545684972"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 27 Mar 2022 10:58:17 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nYX9c-0001IN-7x; Sun, 27 Mar 2022 17:58:16 +0000
-Date:   Mon, 28 Mar 2022 01:57:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [asahilinux:pr/22 112/189]
- drivers/cpufreq/apple-soc-cpufreq.c:53:19: error: implicit declaration of
- function 'readq_relaxed'; did you mean 'readw_relaxed'?
-Message-ID: <202203280127.gqfnFfId-lkp@intel.com>
+        Sun, 27 Mar 2022 14:04:15 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB0A344FC
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 11:02:36 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id q5so16399133ljb.11
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 11:02:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OQOFDrIFh2bz70XHqIr89KbFLDHUuV5VP66dlTu2bGw=;
+        b=UaVNLwcZnvNLhG+fejMyq3YjMXYSMxy5CO44s6uUwA0vwEwVOizoIns9xkanN7LLp0
+         W1vSRjwHVhQ+ttok6Z7J+uole/YvctKvrH6MJNpHghzdUIo/cKLR1r4McGrH4Vruxf7W
+         HID+h3OJaj/oQ34G67d/vgqL0v6Fwqnq6rLSY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OQOFDrIFh2bz70XHqIr89KbFLDHUuV5VP66dlTu2bGw=;
+        b=v4zaD8/NwrHeGa4HKic1dmmXJ5n2H/L8eTfBZ8V48FI4Fd0U/4cn30C/2s/L05+sK1
+         41qtZAoDrjREgRu5HAREOXbG5NgvnJwC7Z4lN6E0Ep27fX+p5IFtKIeL1+O5JtxvIBXX
+         FuYxx2gkU6Rmc0KlwUdiK9+nfoHqDLmKYjhUgOMyl+3zQU6bDmpj/WXJyjT2pz+rfpPQ
+         ZIp+eniU6h7Bx3XpPun7eUP9rBdOmoS5ulAfTcpsF5pRNWZBYrzIyVdWKNkW3RR/gXtn
+         TqwBRW9IInRooaz/nDp9GNQz6aaTejzDgq6FyJWj8lpkhNI02e3E2Ok4P1RNRKe+ZwpN
+         B0Kw==
+X-Gm-Message-State: AOAM532FgqHbLSDKxgHJH9WAnuPHEPkvjuVvewBgKCC1NAoSJyD9oJ5v
+        OaLGrdiAZRZ0t7gc9VZu6fZzbYbZcOD9s3vNphk=
+X-Google-Smtp-Source: ABdhPJwioTJCOJsWYRRlCq9uEfb7AzsH86N3OZv4zjae5Zwku3CV0PgAzAYdksPOAzElbMrWr0PnCg==
+X-Received: by 2002:a2e:1544:0:b0:247:dce4:681 with SMTP id 4-20020a2e1544000000b00247dce40681mr16904931ljv.430.1648404154029;
+        Sun, 27 Mar 2022 11:02:34 -0700 (PDT)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
+        by smtp.gmail.com with ESMTPSA id b14-20020a0565120b8e00b0044a29806f79sm1416776lfv.259.2022.03.27.11.02.29
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Mar 2022 11:02:30 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id h7so21220284lfl.2
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 11:02:29 -0700 (PDT)
+X-Received: by 2002:a05:6512:3d8f:b0:44a:2c65:8323 with SMTP id
+ k15-20020a0565123d8f00b0044a2c658323mr16370626lfv.52.1648404149184; Sun, 27
+ Mar 2022 11:02:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220325150419.757836392@linuxfoundation.org> <20220325150420.085364078@linuxfoundation.org>
+ <CAHk-=wiaeZKiEk87Sms1sy53m8tT3UCLOoeUBnX1c_1dZ78WjQ@mail.gmail.com>
+ <Yj7oXgoCdhWAwFQt@kroah.com> <CAHk-=wgeOrhN_Gznm80==STG1pEbqLMCaZZoeQzZu=NN9GOTgw@mail.gmail.com>
+ <YkAuqiHAEaDLHDAO@kroah.com>
+In-Reply-To: <YkAuqiHAEaDLHDAO@kroah.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 27 Mar 2022 11:02:12 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgzSHQqz33i0DfmFyEG43eeyDkkUO=a3jY0eH2h_1AwgA@mail.gmail.com>
+Message-ID: <CAHk-=wgzSHQqz33i0DfmFyEG43eeyDkkUO=a3jY0eH2h_1AwgA@mail.gmail.com>
+Subject: Re: [PATCH 5.10 11/38] swiotlb: rework "fix info leak with DMA_FROM_DEVICE"
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux pr/22
-head:   7ee315306d1a3b0da8cf2a53e7f55889d0e7f034
-commit: 97012c133dff8f4ad7de4c8d34cf327567c8e3d8 [112/189] cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states
-config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20220328/202203280127.gqfnFfId-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/97012c133dff8f4ad7de4c8d34cf327567c8e3d8
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux pr/22
-        git checkout 97012c133dff8f4ad7de4c8d34cf327567c8e3d8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/cpufreq/
+On Sun, Mar 27, 2022 at 2:30 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> But why did you just revert that commit, and not the previous one (i.e.
+> the one that this one "fixes")?  Shouldn't ddbd89deb7d3 ("swiotlb: fix
+> info leak with DMA_FROM_DEVICE") also be dropped?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The previous one wasn't obviously broken, and while it's a bit ugly,
+it doesn't have the fundamental issues that the "fix" commit had.
 
-All errors (new ones prefixed by >>):
+And it does fix the whole "bounce buffer contents are undefined, and
+can get copied back later" at the bounce buffer allocation (well,
+"mapping") stage.
 
-   drivers/cpufreq/apple-soc-cpufreq.c: In function 'apple_soc_cpufreq_get_rate':
->> drivers/cpufreq/apple-soc-cpufreq.c:53:19: error: implicit declaration of function 'readq_relaxed'; did you mean 'readw_relaxed'? [-Werror=implicit-function-declaration]
-      53 |         u64 reg = readq_relaxed(priv->reg_base + APPLE_CLUSTER_PSTATE);
-         |                   ^~~~~~~~~~~~~
-         |                   readw_relaxed
-   In file included from drivers/cpufreq/apple-soc-cpufreq.c:20:
-   drivers/cpufreq/apple-soc-cpufreq.c: In function 'apple_soc_cpufreq_set_target':
->> include/linux/iopoll.h:165:35: error: implicit declaration of function 'readq'; did you mean 'readl'? [-Werror=implicit-function-declaration]
-     165 |         readx_poll_timeout_atomic(readq, addr, val, cond, delay_us, timeout_us)
-         |                                   ^~~~~
-   include/linux/iopoll.h:88:25: note: in definition of macro 'read_poll_timeout_atomic'
-      88 |                 (val) = op(args); \
-         |                         ^~
-   include/linux/iopoll.h:165:9: note: in expansion of macro 'readx_poll_timeout_atomic'
-     165 |         readx_poll_timeout_atomic(readq, addr, val, cond, delay_us, timeout_us)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/cpufreq/apple-soc-cpufreq.c:71:13: note: in expansion of macro 'readq_poll_timeout_atomic'
-      71 |         if (readq_poll_timeout_atomic(priv->reg_base + APPLE_CLUSTER_PSTATE, reg,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/cpufreq/apple-soc-cpufreq.c:82:9: error: implicit declaration of function 'writeq_relaxed'; did you mean 'writel_relaxed'? [-Werror=implicit-function-declaration]
-      82 |         writeq_relaxed(reg, priv->reg_base + APPLE_CLUSTER_PSTATE);
-         |         ^~~~~~~~~~~~~~
-         |         writel_relaxed
-   cc1: some warnings being treated as errors
+Which could cause wasted CPU cycles and isn't great, but should fix
+the stale content thing for at least the common "map DMA, do DMA,
+unmap" situation.
 
+What commit aa6f8dcbab47 tried to fix was the "do multiple DMA
+sequences using one single mapping" case, but that's also what then
+broke ath9k because it really does want to do exactly that, but it
+very much needs to do it using the same buffer with no "let's reset
+it".
 
-vim +53 drivers/cpufreq/apple-soc-cpufreq.c
+So I think you're fine to drop ddbd89deb7d3 too, but that commit
+doesn't seem *wrong* per se.
 
-    48	
-    49	static unsigned int apple_soc_cpufreq_get_rate(unsigned int cpu)
-    50	{
-    51		struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
-    52		struct apple_cpu_priv *priv = policy->driver_data;
-  > 53		u64 reg = readq_relaxed(priv->reg_base + APPLE_CLUSTER_PSTATE);
-    54		unsigned int pstate = FIELD_GET(APPLE_CLUSTER_PSTATE_DESIRED1, reg);
-    55		unsigned int i;
-    56	
-    57		for (i = 0; policy->freq_table[i].frequency != CPUFREQ_TABLE_END; i++)
-    58			if (policy->freq_table[i].driver_data == pstate)
-    59				return policy->freq_table[i].frequency;
-    60	
-    61		dev_err(priv->cpu_dev, "could not find frequency for pstate %d\n", pstate);
-    62		return 0;
-    63	}
-    64	
-    65	static int apple_soc_cpufreq_set_target(struct cpufreq_policy *policy, unsigned int index)
-    66	{
-    67		struct apple_cpu_priv *priv = policy->driver_data;
-    68		unsigned int pstate = policy->freq_table[index].driver_data;
-    69		u64 reg;
-    70	
-    71		if (readq_poll_timeout_atomic(priv->reg_base + APPLE_CLUSTER_PSTATE, reg,
-    72					      !(reg & APPLE_CLUSTER_PSTATE_BUSY), 2,
-    73					      APPLE_CLUSTER_SWITCH_TIMEOUT)) {
-    74			return -EIO;
-    75		}
-    76	
-    77		reg &= ~(APPLE_CLUSTER_PSTATE_DESIRED1 | APPLE_CLUSTER_PSTATE_DESIRED2);
-    78		reg |= FIELD_PREP(APPLE_CLUSTER_PSTATE_DESIRED1, pstate);
-    79		reg |= FIELD_PREP(APPLE_CLUSTER_PSTATE_DESIRED2, pstate);
-    80		reg |= APPLE_CLUSTER_PSTATE_SET;
-    81	
-  > 82		writeq_relaxed(reg, priv->reg_base + APPLE_CLUSTER_PSTATE);
-    83	
-    84		return 0;
-    85	}
-    86	
+I do think we need some model for "clear the bounce buffer of stale
+data", and I do think that commit ddbd89deb7d3 probably isn't the
+final word, but we don't actually _have_ the final word on this all,
+so stable dropping it all is sane.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+But as mentioned, commit ddbd89deb7d3 can actually fix some cases.
+
+In particular, I do think it fixes the SG_IO data leak case that
+triggered the whole issue. It was just then the "let's expand on this
+fix" that was a disaster.
+
+                  Linus

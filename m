@@ -2,137 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065944E9A35
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A20894E9A3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241970AbiC1O6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 10:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
+        id S244140AbiC1O7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 10:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244279AbiC1O6R (ORCPT
+        with ESMTP id S236854AbiC1O7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 10:58:17 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5E25045F
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:56:37 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id z6so17399537iot.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:56:37 -0700 (PDT)
+        Mon, 28 Mar 2022 10:59:43 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4D35046D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:58:02 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id m30so20827061wrb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:58:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=xn5CPRiyBEC8Phc5T9mHlpINr2001VRnlOFT234SvvE=;
-        b=DE21WS3Uri002Pr1QReulf3aDz87uH4itFX6ffaeqajeUuiWnbfdGAuv4BH71NOY7k
-         Qz6wU/bEaQkTJNrnAzEEceBGiG+bJ6uT1crz6OQWk3G5vzz8dmH+h3+Zbi2hObLAyEWo
-         y7iaQO1td8tPeaU+flW9Y1u+/HFn7d8lj/1tE=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7it7nWrxUCI0Qv2Lqtc/Tbf+JLAGcefs/bHK1LyDZJI=;
+        b=fbwnZjOHQnljc13VEvxcbjuH3175Wbr+RmxQnH+Xqemb6P2ueDbwLqe6DJwS14Otvy
+         oMGmV9+E+6KUDg6gn832tUiQ/RokB/TDY16cIN+z+BHnHW7j+g4H/HiW1TF8FryaMFZv
+         RGqUYQhEDSUKe234IYYn827QNv/pPS4+l7LInt9e7o3e/UOXBnYafJgu4EvvXotklboJ
+         B+0IsQsI6AiytNerl/zalOeaXoojP2n/Tku2ruzuRbZO9jbWmhLk2Kog2nJOcnA/0VyX
+         Aq+MIco6r/v5Vn46BWAhY5MZdFMQ0CmdmOcfjiOk6iS1tlnVGsDO8wSEq/P9SqWrcqsE
+         A4Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=xn5CPRiyBEC8Phc5T9mHlpINr2001VRnlOFT234SvvE=;
-        b=lGUq9KwDh49MGuq072nu7BLgzsHFd3RcfkRsKhYbL0boKSu98VW2I/5Emwy/YRwg02
-         N1+LMH8/RIT2XuiXDXUswAksiricLshpr5uOsNWn8yRpaTEMVV1LMzytK2HbpqBhFLPD
-         I34qW08eO59EFqep9dOiYHNkbdzA91eRQHIjXzNVrYc/mII0fRFlTCUz0wxnT4u+eMZi
-         Crf4gxawJLIbv9wyFmTdvLBBT209oujWyH0v5riax4jsUB8Xvs1u4ga707pfmdMGGXeL
-         3XgCyuBAQa5QZA0UVXdWHu4ZvPQqnYtgYFyqp6rmXtFP/zvwW1zpcZQMW0icpv/qglTz
-         t8FA==
-X-Gm-Message-State: AOAM53398v5kLrKylc+rpwQPGw5R6iChirw6M2I5Y820qrUPyjD6ZJJQ
-        OqXpdO6kNugqxUNZS761VQyyXg==
-X-Google-Smtp-Source: ABdhPJwg199yKqqkaDayt2zOIHK98balymLx+ERu/H6cHCxDivkxD8bu0j9ZObYzOA7rAGFhQrJE3w==
-X-Received: by 2002:a6b:5d19:0:b0:645:c7ca:7ca with SMTP id r25-20020a6b5d19000000b00645c7ca07camr6619071iob.104.1648479396566;
-        Mon, 28 Mar 2022 07:56:36 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id z17-20020a92da11000000b002c83987c2ffsm7138242ilm.76.2022.03.28.07.56.35
+        bh=7it7nWrxUCI0Qv2Lqtc/Tbf+JLAGcefs/bHK1LyDZJI=;
+        b=49X0rnMLvKkbxL+UcCCe7V2nhxi/g02Bn3EZaqXf9Nh3B/arqjdwmNpeN+fsNsT6vU
+         LNjpNZ3jbsfyGjtt7Dh9BTX8KXI8nTSjgTpdKj5ZeT1iwCbg2viKSe0Xl4nBw6++j8AL
+         pk3TtYX/kVCejYwPRaM+TnLyC4AqesRq+wIWDqG/SrhcB/GSQAeaJRp9RMV6Lt2S2vQJ
+         E9tm6l+JE7bO6nDpttbENYnizNT6M6rYqwhTeaa87RNHXIPghFMjjQn854Ewepi94h/d
+         eN5tnriTm9KCSbU2+/XI+O2hfzNV9kXzgxmZ5MwQXb1Uy9cSSddPhj/WGhQhfNZ4b0U7
+         xb4w==
+X-Gm-Message-State: AOAM531Jp4P8evh1jWcH4SqcvFGZCUfx8bvJZ5egdbIhdBt53srKOTdL
+        gyeF3A/24p2JORhq8bpe5vqWTA==
+X-Google-Smtp-Source: ABdhPJxDRBZSnakVm9V5mdFns3aK835p2QU77pO1+SVKkhMh+amBCAX1GxI92vtJXr1OkcB2lwjAHQ==
+X-Received: by 2002:adf:ab09:0:b0:203:f9ce:cc1d with SMTP id q9-20020adfab09000000b00203f9cecc1dmr24122187wrc.269.1648479481303;
+        Mon, 28 Mar 2022 07:58:01 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id y6-20020a05600015c600b00203fa70b4ebsm15878962wry.53.2022.03.28.07.58.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Mar 2022 07:56:36 -0700 (PDT)
-Subject: Re: [PATCH 2/3] cpupower: Introduce a new unit test module for AMD
- P-State driver
-To:     "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Cc:     "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220323071502.2674156-1-li.meng@amd.com>
- <20220323071502.2674156-3-li.meng@amd.com>
- <4c13d97e-1471-5642-39dd-d381fa441753@linuxfoundation.org>
- <MN2PR12MB360098136C287C84D99FD9B6F71D9@MN2PR12MB3600.namprd12.prod.outlook.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <6f52c49f-10c8-0097-9d0f-0ee99925ad9a@linuxfoundation.org>
-Date:   Mon, 28 Mar 2022 08:56:35 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 28 Mar 2022 07:58:00 -0700 (PDT)
+Message-ID: <e9f23a89-864f-e7a4-db89-0dc4499a5864@linaro.org>
+Date:   Mon, 28 Mar 2022 16:57:59 +0200
 MIME-Version: 1.0
-In-Reply-To: <MN2PR12MB360098136C287C84D99FD9B6F71D9@MN2PR12MB3600.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/4] dt-bindings: arm64: dts: mediatek: Add mt8195-demo
+ board
 Content-Language: en-US
+To:     Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220327200312.3090515-1-fparent@baylibre.com>
+ <20220327200312.3090515-2-fparent@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220327200312.3090515-2-fparent@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/22 7:57 AM, Meng, Li (Jassmine) wrote:
-> [AMD Official Use Only]
+On 27/03/2022 22:03, Fabien Parent wrote:
+> Add bindings for the MediaTek mt8195-demo board.
 > 
-> Hi Shuah:
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> ---
+> v2:
+>  * move compatible next to the MT8195-EVB compatible
 > 
-> Thank you very much for your valuable suggestions.
-> We will adapt it to test our AMD P-State driver. But we haven't decided which one to adapt, kunit or kselftest.
-> 
-> Requirements for our unit test module:
->   - It can access kernel internal structures and functions which aren't exposed to user space.
->   - It is implemented through the script trigger CPU benchmark app in conjunction with the kernel module.
-> 
-> Therefore, next, we will study which method can meet the above requirements.
-> Can you give us some suggestions?
-> 
+>  Documentation/devicetree/bindings/arm/mediatek.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-No top posting please. If you need to access kernel internal structures
-and functions KUNit is a better choice for you as long as all of the
-testing can be done in the kernel driver.
 
-If kernel internal structures and functions need to be tested from user-space,
-then a kernel driver test module and a user-space kselftest shell or C program
-is the approach to take.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> -----Original Message-----
-> From: Shuah Khan <skhan@linuxfoundation.org>
-> Sent: Wednesday, March 23, 2022 10:15 PM
-> To: Meng, Li (Jassmine) <Li.Meng@amd.com>; Rafael J . Wysocki <rafael.j.wysocki@intel.com>; Huang, Ray <Ray.Huang@amd.com>; linux-pm@vger.kernel.org
-> Cc: Fontenot, Nathan <Nathan.Fontenot@amd.com>; Sharma, Deepak <Deepak.Sharma@amd.com>; Deucher, Alexander <Alexander.Deucher@amd.com>; Limonciello, Mario <Mario.Limonciello@amd.com>; Su, Jinzhou (Joe) <Jinzhou.Su@amd.com>; Yuan, Perry <Perry.Yuan@amd.com>; Du, Xiaojian <Xiaojian.Du@amd.com>; Viresh Kumar <viresh.kumar@linaro.org>; Borislav Petkov <bp@alien8.de>; linux-kernel@vger.kernel.org; Shuah Khan <skhan@linuxfoundation.org>
-> Subject: Re: [PATCH 2/3] cpupower: Introduce a new unit test module for AMD P-State driver
-> 
-> [CAUTION: External Email]
-> 
-> On 3/23/22 1:15 AM, Meng Li wrote:
->> amd-pstate-ut is a kernel module for testing the functions of AMD P-State driver.
->>
->> It can verify the required conditions and basic functions of AMD
->> P-State driver before integration test.
->>
-> 
-> Can you elaborate on the need for a kernel module? It would be helpful to know tne value the mdoule adds and why it is necessary. Include details on why it can't be done as part of the user-space program.
-> 
-> I am not saying it isn't necssary, I would like to know the reasons before I review the patch.
-> 
-> Also if this is a driver test, why not use other test frameworks such as kunit or kselftest. cpupower is user-space utility and driver debug code would not belong in here.
-> 
 
-thanks,
--- Shuah
+Best regards,
+Krzysztof

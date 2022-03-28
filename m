@@ -2,110 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C27A94E9CEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD1B4E9CF7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:03:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243378AbiC1Q7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 12:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
+        id S243935AbiC1REb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 13:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234838AbiC1Q7P (ORCPT
+        with ESMTP id S234838AbiC1REa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 12:59:15 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E340C4CD4B;
-        Mon, 28 Mar 2022 09:57:34 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a8so29908300ejc.8;
-        Mon, 28 Mar 2022 09:57:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wBY8GOjTBGWVEL0GTMWI6P1arfhZD9nF3EMgpiHJ8pg=;
-        b=TrhfV81sE8oJYSmCYeOpiNX4rwzFlNa0YYzLP08JEAl6V9ZLFZAITEpA+veBQrtYXd
-         nTIjE75VTCdIqCw6ACstHID8jmEUgPezsa2Ye+Q8W1m3xfHTfeACSgW68kRyL0MmayFL
-         y6fCbN7XOb4+BqlfFW+POMeDwCKcSLdInFNbxW1/RObEC7S48YVIEaaj7mIRVg9cBG15
-         2beqkvhDpR66XCMne9A7AkOOyftPDo8lqXCdH3KL4usS/GBmP0v4FgXC0I0ohOZ3So6t
-         JRh1x+o00LD4zh72QK1QlcGKLfNkewdqNuktuGZnEQEyx0ijfjAX/mqSuMPxI5K9/NIS
-         EQlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wBY8GOjTBGWVEL0GTMWI6P1arfhZD9nF3EMgpiHJ8pg=;
-        b=b/HWAANSSAgj7N2sbARHIp85cju/6wieArTUtr9yRGrt9z9kXzj6UpHVpMAnhGilMC
-         USkt6cHlb2vm8qJakP0bEV1YdB7djmEvfMipWYYqk1txS2txLIWe9Dq7JEsycTgTTkXr
-         uMFNThoE7jBMeflNREz2ueNZKp8Zp1IiMiqZHBRk2e8MmuYCguLYyloQRrsqgl/JVobM
-         XNH8Y8vsQYW3AWvDhz/tVfqEN29AHYDJzsWC3sPC5MhCy5eIzLTyPsq6DzfVSWPBenpK
-         6WPvxCwSvN1OjC65evSGXX5HI3Mcw+e29gZs8tGrZ+p68f8m1jXXjym+uKeA7XXG3GBu
-         XRRQ==
-X-Gm-Message-State: AOAM531OKdieaSY5IKM5b8byoB4DjSecZCZcsXKRjHOWZqe4t/l+Y3Rz
-        cos9igW8S7oWOiRCuVOUTqo=
-X-Google-Smtp-Source: ABdhPJwbZdbg18gH4uRako7Q+MjVs4nlqqVBcAfzLaiEeJvaLPgfUTObm+Sv22eUIX11zO3Tys/+HQ==
-X-Received: by 2002:a17:907:2a53:b0:6ce:e4fe:3f92 with SMTP id fe19-20020a1709072a5300b006cee4fe3f92mr28685432ejc.389.1648486649986;
-        Mon, 28 Mar 2022 09:57:29 -0700 (PDT)
-Received: from jernej-laptop.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id p12-20020a17090635cc00b006e055c9c91esm6038305ejb.101.2022.03.28.09.57.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 09:57:29 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Wan Jiabing <wanjiabing@vivo.com>
-Cc:     kael_w@yeah.net, Wan Jiabing <wanjiabing@vivo.com>
-Subject: Re: [PATCH] clk: sunxi-ng: fix not NULL terminated coccicheck error
-Date:   Mon, 28 Mar 2022 18:57:28 +0200
-Message-ID: <2621623.mvXUDI8C0e@jernej-laptop>
-In-Reply-To: <20220328073931.36544-1-wanjiabing@vivo.com>
-References: <20220328073931.36544-1-wanjiabing@vivo.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Mar 2022 13:04:30 -0400
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42D9F62BC8;
+        Mon, 28 Mar 2022 10:02:49 -0700 (PDT)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22SGwOb6019521;
+        Mon, 28 Mar 2022 11:58:24 -0500
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 22SGwL89019520;
+        Mon, 28 Mar 2022 11:58:21 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Mon, 28 Mar 2022 11:58:21 -0500
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Nathan Chancellor <nathan@kernel.org>, x86-ml <x86@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-toolchains@vger.kernel.org
+Subject: Re: clang memcpy calls
+Message-ID: <20220328165821.GL614@gate.crashing.org>
+References: <YjxTt3pFIcV3lt8I@zn.tnic> <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com> <Yj2yYFloadFobRPx@lakrids> <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net> <20220325151238.GB614@gate.crashing.org> <YkGFdtn0yDIPqXRl@FVFF77S0Q05N> <20220328142220.GI614@gate.crashing.org> <YkHNArCbWUEojGjL@lakrids> <20220328155957.GK614@gate.crashing.org> <YkHfZbCE0ycVWyxz@hirez.programming.kicks-ass.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkHfZbCE0ycVWyxz@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne ponedeljek, 28. marec 2022 ob 09:39:31 CEST je Wan Jiabing napisal(a):
-> Fix the following coccicheck error:
-> ./drivers/clk/sunxi-ng/ccu-sun6i-rtc.c:348:1-2: sun6i_rtc_ccu_match is
-> not NULL terminated at line 348
+On Mon, Mar 28, 2022 at 06:16:37PM +0200, Peter Zijlstra wrote:
+> On Mon, Mar 28, 2022 at 10:59:57AM -0500, Segher Boessenkool wrote:
+
+[ Context added back: ]
+> > > My argument is: if the compiler is permitted to implictly and
+> > > arbitrarily add calls to instrumented functions within a function marked
+> > > with `no_sanitize_address`, the `no_sanitize_address` attribute is
+> > > effectively useless, and therefore *something* needs to change.
+
+ > I do not see how that follows.  Maybe that is obvious from how you look
+> > at your use case, but it is not from the viewpoint of people who just
+> > want to do sanitation. 
 > 
-> Fixes: d91612d7f01a ("clk: sunxi-ng: Add support for the sun6i RTC clocks")
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
-
-> ---
->  drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 1 +
->  1 file changed, 1 insertion(+)
+> It's a substitution issue:
 > 
-> diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-> b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c index 8a10bade7e0d..ffb72d9a9c36
-> 100644
-> --- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-> +++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-> @@ -346,6 +346,7 @@ static const struct of_device_id sun6i_rtc_ccu_match[] =
-> { .compatible	= "allwinner,sun50i-r329-rtc",
->  		.data		= &sun50i_r329_rtc_ccu_data,
->  	},
-> +	{},
->  };
+> either:
 > 
->  int sun6i_rtc_ccu_probe(struct device *dev, void __iomem *reg)
+>   memcpy() equals: "asan instrumentation" + "memcpy implementation"
+> 
+> or:
+> 
+>   memcpy() equals: "memcpy implementation"
+> 
+> It can not be both, since they're not equivalent.
+
+Equivalent in what sense?  ASAN (like any other sanitizer) does not
+change the semantics of valid programs *at all*.  And invalid programs
+do not have semantics, of course.
+
+> So if the compiler does the substitution, it needs some sense of
+> equivalence. All we're asking is that it be consistent (my preference is
+> for the latter).
+
+If you want to never do sanitation, there is -fno-sanitize=all.  But
+that obviously is not what you want either.
+
+> > So what is the goal here?  Why do you need to
+> > prevent sanitation on anything called from this function, at all cost?
+> 
+> Kernel entry code might not have reached a point where instrumentation
+> assumptions are valid yet. Consider calling into C before the kernel
+> page-tables are swapped in. KASAN instrumentation would insta-explode
+> simply because the environment it expects (the shadow data etc..) isn't
+> there.
+
+Ah.  Something like the proposed global boolean flag would work fine for
+that, afaics?  Have all the asan implementation functions just return
+until the "I am ready now" flag is set.  This is trivial overhead,
+compared to having asan at all!
 
 
-
-
+Segher

@@ -2,114 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5D74E97ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E5F4E97F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243104AbiC1NXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 09:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
+        id S243156AbiC1NXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 09:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243100AbiC1NW7 (ORCPT
+        with ESMTP id S243136AbiC1NXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 09:22:59 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CC05D5EE
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:21:18 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id t13so11001939pgn.8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:21:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5c3917MAZUYc8aYNOkJjQUYFUTHwIYAfPcFsBEaVqNw=;
-        b=r39mJhBONAyJ7iXYcHhktyYbkv/FPoZd74/kg4pgnTyGP1heoE7mTSS62HxWYxqLm4
-         PuXMXRdxhhUPQgQDEKXSTDKbCERIm4ZxXgMFSGHxPwq7rEmRd9kjNCbu4ZDixvhilV6w
-         v7W70+Mv6ParbmAjsbbGsb/VYLI5oIHC3oCg2tQ6awPFhRo5EDLR5YqsOm9KVXQzwjBa
-         eoC/H/OtOefp9xkaXUJ81Hjr+2imn9dVDM5MEf0XlnRX/GUs6ZJOroYAWgl09x6vwwmY
-         rSRL7wd4/o3bYrmaSkTnqSR6MV/SQGq88Hrx+DT1s/9/8Ge1VJ8k8golO2cYUQMzpRGC
-         NVvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5c3917MAZUYc8aYNOkJjQUYFUTHwIYAfPcFsBEaVqNw=;
-        b=s9GDGJlAQnHhZktigFtTfRRDlP55wpisI1uQdHTucJQDBFEDRMEKjOtnjXTxevlEHO
-         boO+oy9nQ7h9HiBSnXD/GwWWhXDfrAJzKuUpmyFsf/bpg4g+wegG9hWxzwgfrql/WWTv
-         mLoRktgbOYcMHNR4h8UZEesHFCYhZnPvYTGwgs6U+6spkiwySVGV1pNRemNZrxdXlmNn
-         fJ3D9cuzjNHWCF3Xvh8EtzLv2n+ajxnMO889EGC3LxFoU1XqFd6pEAiE7wFem2wuljYS
-         HnvlpJkbFThL8blZaEbjvMw8lJ93eG2hxqBV6aJVvEIDI3zpPNn22ofBhure0RcSLIAI
-         CrDg==
-X-Gm-Message-State: AOAM533MH8mBpOEgiR1oTMT1icoifPSxERZFs/ZrpZLBM64qc4ri4Suc
-        L6F+wgItG776HZ67V07MReisibRqB1cjFfVm6P3LQg==
-X-Google-Smtp-Source: ABdhPJyfHIEgcq0z1XfEkx7RvUBOUzGmsXb6PCpzATZyq9pUeZ2izW3H71PqV4LgpviFa/P7cR8EnzqtvU9/vZhAiCg=
-X-Received: by 2002:a05:6a00:1741:b0:4fa:f5bc:30bd with SMTP id
- j1-20020a056a00174100b004faf5bc30bdmr20188685pfc.0.1648473678172; Mon, 28 Mar
- 2022 06:21:18 -0700 (PDT)
+        Mon, 28 Mar 2022 09:23:22 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2265E159;
+        Mon, 28 Mar 2022 06:21:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1648473670;
+        bh=Nm/Ru4v6GD/9m6h8Ema9mdsaUHXiVXieqg+H9J3bSYw=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=dCRQEFglsITzGpimBzcg+u4n6Kl0FzRG46PfUKNDL3Zc6F4MnJpb1xKHoaS2pPHf7
+         Pje8OF4P7mEbD47lM71pF7jGJfY9ca178uwYfm18LEHprmOLdnwz49EnmIvOp5nfwD
+         IXCKRSqyaVAzKIxi+6TF8gqSqeuG7cFz7zOx9I8k=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([37.201.215.112]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mdvqg-1o9Wy01IDW-00b62U; Mon, 28
+ Mar 2022 15:21:10 +0200
+Date:   Mon, 28 Mar 2022 15:21:08 +0200
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-omap@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org,
+        chrome-platform@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
+        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
+        linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org,
+        linux-unisoc@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-realtek-soc@lists.infradead.org
+Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
+Message-ID: <YkG2RPrtPaBNXb7a@latitude>
+References: <20220328000915.15041-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-References: <20220322080213.1487134-1-xji@analogixsemi.com>
- <CAJMQK-j+PhB6dZBuKG3NtW94oT0bVkp9G1bXhmyZLgYOmTCgog@mail.gmail.com>
- <20220322085208.GA1487511@anxtwsw-Precision-3640-Tower> <CAGXv+5Gddu8VU7xjX-r2=u85i7Ut=_6JpQV6py52OyzEkpezTg@mail.gmail.com>
- <20220322101342.GA1493353@anxtwsw-Precision-3640-Tower> <CAG3jFytYcLP_1JJzoTU8YcwXp8==EpPdad5z02ROu8HtuaqfzQ@mail.gmail.com>
- <20220325062912.GA1527766@anxtwsw-Precision-3640-Tower>
-In-Reply-To: <20220325062912.GA1527766@anxtwsw-Precision-3640-Tower>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 28 Mar 2022 15:21:06 +0200
-Message-ID: <CAG3jFysrg6opHQpqdy9aDSQWFkwyGfZYG9PStTaApkS=euk1Ag@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/bridge: anx7625: Set downstream sink into normal status
-To:     Xin Ji <xji@analogixsemi.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        dri-devel@lists.freedesktop.org, Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>, qwen@analogixsemi.com,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-kernel@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        treapking@chromium.org, pihsun@chromium.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>, tzungbi@google.com,
-        bliang@analogixsemi.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="x1hzLjR6QNWBL5ri"
+Content-Disposition: inline
+In-Reply-To: <20220328000915.15041-1-ansuelsmth@gmail.com>
+X-Provags-ID: V03:K1:Bioqa+FsRJNTbH3AmylnUOJ5uauHNDFVr5040I9oO0lC3hC8za8
+ 8toO+l0g55xievdKeTJ469gRnIKOkbsFSsOO+tgGq7irO2EOMhJkwHWcURdNp65efMi2oLY
+ L5fGfWljKrJsoHoMaPXHH/ObRkqn8C/sxbzJkrFQPrLB6jphQpHadN6OgYOe3EsTr5qfgRR
+ 0QxmE3cnPXA2J3+3R2qHQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qSCWiWhp0AA=:JPnFg4Ox1UVYYY/8fhKJVM
+ l+WvPeePMt4LgNO1jOCklUiJsMJp2fVhkF6zvHWpwPAD9p3mgVERt6B29InFZ4jYgFdBA1cTm
+ qSqT6SMcjXT0xhEAtfS8lEHCAbdD+JaGn0C9Vl8obNjSlkwx/RiBlQwb138BWaVTReKkIROJp
+ NmbTpMS9m/HMPbF3tfbiDPS0I/f9zoLSS7lRHcDmG6NU4aEbhAtjG4N8fPjMYmN41KZP9j5Li
+ 0HqNylcSxz+EM6+yyI1O5ffSi+2g4Qeiedae73p8MkQGX0AkPpv20/NDmW8nPMRoCUgSLThAY
+ TLdgd+0xyYxRjrrnEqh1rv8JAQ9VNn+jVKn4b8KoLIFFAHxWRR+1lI0NYVeb+3XeLxOfeBg14
+ gAyZihbMNiS3tr6yDnFt9RsPUjd86HIxJXiBnn8ff/PMNRF4yRbIEmRqoLDMLj7ZQdDyig2TR
+ D3faEKe4uBc/xXFoVzCqIxa/RYEGjM6cmx3QBW4SvS6R6OYs/pkBLkkboqv+dthGVLTpWGQm8
+ t3hHhgBoZzDa/tDukFKzCnMCBX0fvBwPKnGwK3pn+w09ll4szL8l+1POb0DSdWP85MUvSXqIY
+ CEbfamt1sbJpKJhT+xpLHVfcFXCnO/8M/zW+3B5KclMF/aUNQZPItw/KgeBEk22LsgMwBSohD
+ 7pg464l4jsM0XKrhGm0BltSjqvBNzDwBfrU/lM0dbnClpcDfyAZ7djoox39wGvonabWYMqx+I
+ hwAruor/3uM4fCfq9TGuMjXxss+XipMSC9sQVHcKr1rbhp4CWR2WKgcjRuaERyOUV4HoWg3xd
+ 0PT7V6QsSDQzDft0mgayfapeqTiIoERDMphL2Pub/kxAqGkOXvDyIKmOcblFa4eMvZOA2t7pz
+ /UcIVrhr4hcrN0H5A6QqC21PvordOTxUA1TsbJdoWbUXY1KBORh2xhnjzO/9Mur33ngpFnmmy
+ OxPhT26iaoSQ9AfHKYJ8LEsqXBGgF4OewVdWCJWgvOJGhPYVHPQHbP+teS5P8ozVm6x0al4qs
+ 4PygQzjcdy6BF9MKsChug4Iv0jEJ+gKPzHip49KhW1vvSuTzRqJ/qoNcv/VD/9TonnJNkdSTa
+ LKKxAFfWQ792s0=
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,
+        T_SCC_BODY_TEXT_LINE,WEIRD_QUOTING autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Mar 2022 at 07:29, Xin Ji <xji@analogixsemi.com> wrote:
->
-> On Thu, Mar 24, 2022 at 01:07:56PM +0100, Robert Foss wrote:
-> > > > > > The driver uses DRM_DEV_* for logs. Can we use this?
-> > > > > Hi Hsin-Yi, as comment in drm/drm_print.h:
-> > > > > "NOTE: this is deprecated in favor of drm_dbg". DRM bridge driver not
-> > > > > use DRM_DEV_* any more. I'll send a patch to replace all of DRM_DEV_*
-> > > > > later.
-> > > >
-> > > > drm_dbg is better than dev_dbg though. With the former, you still get the
-> > > > option to control it with the drm.debug module parameter, unlike the latter
-> > > > which normally gets compiled out.
-> > > >
-> > > > Please use drm_dbg*.
-> > > >
-> > > > ChenYu
-> > >
-> > > Hi ChenYu, the parameter of drm_dbg is "drm", if use drm_dbg, it will
-> > > change more code, I'll consider to upstream new patch to replace all of
-> > > them later.
-> > >
-> >
-> > Alright, since the driver already uses these logging functions, let's
-> > apply this patch and fix the logging function this driver uses in a
-> > separate series.
-> >
-> > Xin: Can you submit a patch/series that converts this driver to use
-> > drm_dbg* functions instead?
-> Hi Robert Foss, OK, I'll submit patch after this patch get merged.
-> Thanks,
 
-Applied to drm-misc-next.
+--x1hzLjR6QNWBL5ri
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Rob.
+On Mon, Mar 28, 2022 at 02:09:14AM +0200, Ansuel Smith wrote:
+> Hi,
+> as the title say, the intention of this ""series"" is to finally categorize
+> the ARM dts directory in subdirectory for each oem.
+[...]
+> [1] https://gist.github.com/Ansuel/47c49925ee7ef4b1dd035afc74679ab5
+> [2] https://gist.github.com/Ansuel/19f61f1e583c49407ce35c10e770fbe0
+
+Nice idea, thank you!
+
+A few notes on categorization below.
+
+
+>  create mode 100644 arch/arm/boot/dts/broadcom/Makefile
+>  rename arch/arm/boot/dts/{ => broadcom}/bcm-cygnus-clock.dtsi (100%)
+
+Or maybe bcm instead of broadcom. Not sure which is preferred by
+Broadcom people.
+
+>  create mode 100644 arch/arm/boot/dts/dove/Makefile
+>  rename arch/arm/boot/dts/{ => dove}/dove-cm-a510.dtsi (100%)
+
+Arguably part of Marvell.
+
+>  create mode 100644 arch/arm/boot/dts/edac/Makefile
+>  rename arch/arm/boot/dts/{ => edac}/ecx-2000.dts (100%)
+>  rename arch/arm/boot/dts/{ => edac}/ecx-common.dtsi (100%)
+>  rename arch/arm/boot/dts/{ => edac}/highbank.dts (100%)
+
+Why edac?
+The most obvious name I can see here is calxeda.
+
+>  create mode 100644 arch/arm/boot/dts/freescale/Makefile
+
+Freescale has been part of NXP for a while, so it might make sense to
+merge the freescale and nxp directories. I can't speak for
+NXP-the-company, so that's just my view as a bystander.
+
+>  create mode 100644 arch/arm/boot/dts/kirkwood/Makefile
+
+The Kirkwood family should probably be sorted into Marvell.
+
+>  create mode 100644 arch/arm/boot/dts/layerscape/Makefile
+>  rename arch/arm/boot/dts/{ => layerscape}/ls1021a-moxa-uc-8410a.dts (100%)
+>  rename arch/arm/boot/dts/{ => layerscape}/ls1021a-qds.dts (100%)
+>  rename arch/arm/boot/dts/{ => layerscape}/ls1021a-tsn.dts (100%)
+>  rename arch/arm/boot/dts/{ => layerscape}/ls1021a-twr.dts (100%)
+>  rename arch/arm/boot/dts/{ => layerscape}/ls1021a.dtsi (100%)
+
+The Layerscape family is part of Freescale/NXP.
+
+>  create mode 120000 arch/arm/boot/dts/nxp/armv7-m.dtsi
+
+armv7-m.dtsi is a bit confusing, because it contains a few devices at
+fixed addresses, so it looks vendor-specific at a first glance into the
+file. However, if it is actually as vendor-neutral as the name implies,
+I think it should live dts/ directly, rather than in vendor
+subdirectories.
+
+>  rename arch/arm/boot/dts/{ => nxp}/lpc18xx.dtsi (100%)
+
+Here we have the NXP LPCxxxx family, which is AFAIK unrelated to the
+i.MX family (and thus the bulk of the Freescale legacy).
+
+>  create mode 100644 arch/arm/boot/dts/vybrid/Makefile
+
+Vybrid is another chip family of NXP, with a good deal of Freescale
+legacy in it as evidenced by the "fsl," prefix in the devicetrees.
+
+
+
+Thanks,
+Jonathan
+
+--x1hzLjR6QNWBL5ri
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmJBthoACgkQCDBEmo7z
+X9sFJw/8DJFQM9nd8arLY6Z//ocARyXbmt5SCXJ4Fe+N9mDLSgBhMW92vbZe9AJj
+LXhypAAS4wZv1lpuor2GHufy5pFc0jL+UXBajKabI27cZX6x1KJR5tWglAAzfepf
+zI8iaRfdQ1vm+70MGQDgXYMsUAyk+1RXuLYWZYXp3XX0E/0SsyXkc92jdqyurZmI
+8PwvWo5cRY+2m35pvPUff8I4RNfrVvCcMUlzD34bnbi6Kt8Iedvn8QCzLglZyKgs
++0JL9pSrbyRvGqbYuaKqryL7bs/msL7CLAqUTzunTi1TFbGV8/dRzlxL9fFYmyFp
+NJ9zszuKs8wfW03g+piIjWwN0ZItFXNQvvdBs0y6bfZZLwu6V9QF1MAN+7cnlCRK
+94EH4UNH/FGOZkTnrW1IfNRG9hBMgddEWKQQmniGKmdZGefAIfvENQWq/ErV5vb5
+vVUwMxG6HqbFZH0C5bFzeyUwd8UjjnCSGJ/Fe3Xdmgqpvk6pdgDESW+/7MEnXYks
+9zs9a/M9a7iGH+Dagu5EkP8L2r2R1wTEBjSXrs0ZjfceZbVvYwygfoKPUzW59eRE
+szecWAs/qLdxDrLfIVN1Kpr8KmLNSyyYT3kFDAkuupyHj4Qb9Am40KgzcTgYgv0g
+ex5m9SbThoor9QWhVT1IDQHbzT0ZKHkaqf0dCJyIPVUekDYbFvA=
+=A4ZY
+-----END PGP SIGNATURE-----
+
+--x1hzLjR6QNWBL5ri--

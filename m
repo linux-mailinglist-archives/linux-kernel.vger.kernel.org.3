@@ -2,179 +2,414 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25094EA22E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 23:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48874EA233
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 23:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbiC1VC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 17:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
+        id S230022AbiC1VEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 17:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiC1VC0 (ORCPT
+        with ESMTP id S230324AbiC1VD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 17:02:26 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D246FF75
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 14:00:40 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id y10so10595614pfa.7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 14:00:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=f/GvndT+5e72qW8tftZIUvnHz4PSf2jIRJgogiD5zrI=;
-        b=RCyi+zUD+fHdNxXdEz82Oe0p5sAr1mlG0X7xn+4MNPQ4B5E4u1HSBg6Qc1kwd9rYdR
-         ds/IDpBTa5rsEUU22cjOYUNwtOB8kDU39mk557YR3m5nLVtyBh0khXZo01N+q7hLD0ob
-         AxR0KEKE8IBX9Zaqkt6H+5Qepul4EO8wiwzJLZq8QHynTwqFhvHrh5su9nLyJvHBgGUi
-         xuKbF9Smrg2ECDOwuxSaO4PxxbbuNRX54Jq3b2Lsywv9os4IvDIteTaWT8OEH7FVxdGq
-         ViYntLkAJbK5YlO1nKdz6LAdh17GyluLkeAUhi2IIEG7Q9Zt7GYZGhLMcytWwUnmwz9p
-         jK4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f/GvndT+5e72qW8tftZIUvnHz4PSf2jIRJgogiD5zrI=;
-        b=Mz4NAniJ+J3IT0I6OnhWmA35fRJ+fErqwjD5HJ6iga3LEajablth1BgNq8qqZkDBwM
-         l3NxMiszyUPUN/iaJzRTMoJEjRnwlo+LFdt4tynXpGdiYx/NbhYPaE1NtLojMlkNeTVq
-         29pN4UfQPYLowd//BtmkC/Kvybor7PnnbzVrm+KaIi1BHpZJ1zCAnEhZu/Ui0JGma8ZC
-         GmuLJQL0Yz5/KNB0XJnJs9Rebzs8bSGzF+l9ShjH+SCtLf0qRWZDnaAyVmH9vw9wJ0r7
-         OpCvWuxAcLQJSMAyizTglIY85Vu5NXuCV6GzCxFylWaeBmNRUnnKajjWsRMN67L2t3PC
-         ynYA==
-X-Gm-Message-State: AOAM532p6h8E2JyCzY/0DI3orWVgOT2mLIeTpJ6wofWN1v4Avn3CQwwk
-        Zm3THgyNOw5N5+J9tULJKK0+mw==
-X-Google-Smtp-Source: ABdhPJxjtirRjZvZZguFjo78NbXyGY7NQBBzphFPUklHd9ZkaFYulPitcqn8m4RWZDIjPMlN1BjiyA==
-X-Received: by 2002:a63:58d:0:b0:382:16e6:9fb6 with SMTP id 135-20020a63058d000000b0038216e69fb6mr11689292pgf.16.1648501239349;
-        Mon, 28 Mar 2022 14:00:39 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id x38-20020a056a0018a600b004fafd05ac3fsm14473848pfh.37.2022.03.28.14.00.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 14:00:38 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 21:00:35 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Nikunj A Dadhania <nikunj@amd.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Peter Gonda <pgonda@google.com>,
-        Bharata B Rao <bharata@amd.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Mingwei Zhang <mizhang@google.com>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v1 0/9] KVM: SVM: Defer page pinning for SEV guests
-Message-ID: <YkIh8zM7XfhsFN8L@google.com>
-References: <20220308043857.13652-1-nikunj@amd.com>
+        Mon, 28 Mar 2022 17:03:58 -0400
+Received: from relay.hostedemail.com (relay.hostedemail.com [64.99.140.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F23E72E3E
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 14:02:13 -0700 (PDT)
+Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay11.hostedemail.com (Postfix) with ESMTP id 6F7A4814A2;
+        Mon, 28 Mar 2022 21:02:12 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf07.hostedemail.com (Postfix) with ESMTPA id 26F8820027;
+        Mon, 28 Mar 2022 21:02:11 +0000 (UTC)
+Message-ID: <71707d32195faff3cc8a1fdeb38cb28b9f9636d3.camel@perches.com>
+Subject: Re: [PATCH 00/26] dvb-usb: use designated initializers
+From:   Joe Perches <joe@perches.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Benjamin =?ISO-8859-1?Q?St=FCrz?= <benni@stuerz.xyz>
+Cc:     Michael Krufky <mkrufky@linuxtv.org>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Date:   Mon, 28 Mar 2022 14:02:09 -0700
+In-Reply-To: <cover.1648499509.git.mchehab@kernel.org>
+References: <cover.1648499509.git.mchehab@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220308043857.13652-1-nikunj@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 26F8820027
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
+        autolearn_force=no version=3.4.6
+X-Stat-Signature: gerhh5gwmejinit5ma3kq1qbbknxi6rr
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/tAo+biUMTQ3zIHiIdzAdF8XeIG8/uAnw=
+X-HE-Tag: 1648501331-662927
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022, Nikunj A Dadhania wrote:
-> This is a follow-up to the RFC implementation [1] that incorporates
-> review feedback and bug fixes. See the "RFC v1" section below for a 
-> list of changes.
+(adding Benjamin Stürz and link to series)
 
-Heh, for future reference, the initial posting of a series/patch/RFC is implicitly
-v1, i.e. this should be RFC v2.
+https://lore.kernel.org/all/cover.1648499509.git.mchehab@kernel.org/
 
-> SEV guest requires the guest's pages to be pinned in host physical
-> memory as migration of encrypted pages is not supported. The memory
-> encryption scheme uses the physical address of the memory being
-> encrypted. If guest pages are moved by the host, content decrypted in
-> the guest would be incorrect thereby corrupting guest's memory.
+On Mon, 2022-03-28 at 22:41 +0200, Mauro Carvalho Chehab wrote:
+> There are two DVB USB cores on media. The new one (dvb-usb-v2)
+> solves several problems with the previous one, but, unfortunately,
+> there are several drivers that weren't migrated yet.
 > 
-> For SEV/SEV-ES guests, the hypervisor doesn't know which pages are
-> encrypted and when the guest is done using those pages. Hypervisor
-> should treat all the guest pages as encrypted until they are 
-> deallocated or the guest is destroyed.
+> One of the problems with dvb-usb is that, besides the common
+> DVB USB table, it also uses a per-device table which require
+> links to the USB ID table.
 > 
-> While provision a pfn, make KVM aware that guest pages need to be 
-> pinned for long-term and use appropriate pin_user_pages API for these
-> special encrypted memory regions. KVM takes the first reference and
-> holds it until a mapping is done. Take an extra reference before KVM
-> releases the pfn. 
+> This is done, on most drivers, using a magic number, which is easy
+> to get outdated.
 > 
-> Actual pinning management is handled by vendor code via new
-> kvm_x86_ops hooks. MMU calls in to vendor code to pin the page on
-> demand. Metadata of the pinning is stored in architecture specific
-> memslot area. During the memslot freeing path and deallocation path
-> guest pages are unpinned.
+> Rewrite the drivers in order to use an enum and use designated
+> initializers where needed.
 > 
-> Guest boot time comparison:
-> +---------------+----------------+-------------------+
-> | Guest Memory  |   baseline     |  Demand Pinning + |
-> | Size (GB)     | v5.17-rc6(secs)| v5.17-rc6(secs)   |
-> +---------------+----------------+-------------------+
-> |      4        |     6.16       |      5.71         |
-> +---------------+----------------+-------------------+
-> |     16        |     7.38       |      5.91         |
-> +---------------+----------------+-------------------+
-> |     64        |    12.17       |      6.16         |
-> +---------------+----------------+-------------------+
-> |    128        |    18.20       |      6.50         |
-> +---------------+----------------+-------------------+
-> |    192        |    24.56       |      6.80         |
-> +---------------+----------------+-------------------+
+> This patch series was inspired on this patch:
+>   https://patchwork.kernel.org/project/linux-media/patch/20220326165909.506926-16-benni@stuerz.xyz/
+> 
+> While it would be nice to also change the tables to be const, this
+> is currently not possible, as a couple drivers that depend on the
+> dvb-usb struct depend on it to not be const.
+> 
+> Writing a patch series like that and making it properly referencing
+> the right entries is not fun. That's most drivers were never fixed.
+> So, I ended using a script to change it, adding several checks on
+> it, in order to avoid the risk of problems.
 
-Let me preface this by saying I generally like the idea and especially the
-performance, but...
+fancy script, nice...
 
-I think we should abandon this approach in favor of committing all our resources
-to fd-based private memory[*], which (if done right) will provide on-demand pinning
-for "free".  I would much rather get that support merged sooner than later, and use
-it as a carrot for legacy SEV to get users to move over to its new APIs, with a long
-term goal of deprecating and disallowing SEV/SEV-ES guests without fd-based private
-memory.  That would require guest kernel support to communicate private vs. shared,
-but SEV guests already "need" to do that to play nice with live migration, so it's
-not a big ask, just another carrot to entice guests/customers to update their kernel
-(and possibly users to update their guest firmware).
+> 
+> Even so, I needed to manually adjust some patches.
+> 
+> This is the used script:
+> 
+> <script>
+> #!/usr/bin/perl
+> use strict;
+> use warnings;
+> use Text::Tabs;
+> use File::Find;
+> 
+> my $usb_id_pre = "";
+> my $usb_id_end = "";
+> 
+> my %vid;
+> my %pid;
+> 
+> my %pid_count;
+> 
+> my $state = "pre";
+> 
+> sub out_ids()
+> {
+> 	open OUT, "> include/media/dvb-usb-ids.h" or die;
+> 	print OUT $usb_id_pre;
+> 	foreach my $k(sort keys %vid) {
+> 		my $ln = sprintf "#define USB_VID_%-31s %s\n", $k, $vid{$k};
+> 		$ln = unexpand($ln);
+> 		print OUT $ln;
+> 	}
+> 
+> 	print OUT "\n/* Product IDs */\n\n";
+> 	foreach my $k(sort keys %pid) {
+> 		my $ln = sprintf "#define USB_PID_%-39s %s\n", $k, $pid{$k};
+> 		$ln = unexpand($ln);
+> 		print OUT $ln;
+> 	}
+> 	print OUT $usb_id_end;
+> 	close OUT;
+> }
+> 
+> my @enum;
+> 
+> sub validate_model($$)
+> {
+> 	my $my_vid = $1;
+> 	my $my_pid = $2;
+> 
+> 	if (!$vid{$my_vid}) {
+> 		print "$.# ERROR! VID: $my_vid\n";
+> 		return "";
+> 	}
+> 
+> 	if (!$pid{$my_pid}) {
+> 		print "$.# ERROR! PID: $my_pid\n";
+> 		return "";
+> 	}
+> 
+> 	my $tmp_vid = $my_vid;
+> 	$tmp_vid =~ s/_ELECTRONIC$//;
+> 	$tmp_vid =~ s/_MICRO$//;
+> 	$tmp_vid =~ s/_1$//;
+> 	$tmp_vid =~ s/_2$//;
+> 	$tmp_vid =~ s/_UNK$//;
+> 	$tmp_vid =~ s/GTEK/GENIATECH/;
+> 
+> 	# Change model name to be different
+> 	my $model = $tmp_vid . "_" . $my_pid;
+> 
+> 	return $my_pid if ($my_pid =~ /$tmp_vid[_]/ && !grep(/^$my_pid$/, @enum));
+> 
+> 	print "NEW model: $model\n";
+> 
+> 	# Add the new PID to include/media/dvb-usb-ids.h
+> 	$pid{$model} = $pid{$my_pid};
+> 
+> 	$pid_count{$my_pid}--;
+> 
+> 	# Drop unused PIDs
+> 	if (!$pid_count{$my_pid}) {
+> 		delete ($pid{$my_pid});
+> 		print "Drop: $my_pid\n";
+> 	}
+> 
+> 	return $model if (!grep(/^$model$/, @enum));
+> 
+> 	print "$.# ERROR! Model $model aready exists\n";
+> 	return "";
+> }
+> 
+> sub count_pid()
+> {
+> 	my $file = $File::Find::name;
+> 
+> 	return if (!($file =~ /[.][ch]/));
+> 
+> 	open IN, $file or die "Can't open $file";
+> 	while (<IN>) {
+> 		if (/USB_PID_([\w\_]+)/) {
+> 			$pid_count{$1}++;
+> 			next;
+> 		}
+> 	}
+> 	close IN;
+> }
+> 
+> open IN, "include/media/dvb-usb-ids.h" or die;
+> while (<IN>) {
+> 	if (/#define\s+USB_VID_(\S+)\s+(\S+)/) {
+> 		$state = "vid";
+> 		$vid{$1} = $2;
+> #print "VID: $1 -> $2\n";
+> 		next;
+> 	}
+> 	if (/#define\s+USB_PID_(\S+)\s+(\S+)/) {
+> 		$state = "pid";
+> 		$pid{$1} = $2;
+> #print "PID: $1 -> $2\n";
+> 		next;
+> 	}
+> 
+> 	if ($state eq "pre") {
+> 		$usb_id_pre .= $_;
+> 	} elsif ($state eq "pid") {
+> 		$usb_id_end .= $_;
+> 	}
+> }
+> close IN;
+> 
+> find({wanted => \&count_pid, no_chdir => 1}, "drivers/media/usb/");
+> 
+> 
+> while (scalar @ARGV) {
+> 	@enum = ();
+> 	my @dev_id;
+> 
+> 
+> 	my $usb_dev_id_table;
+> 	my $out = "";
+> 	my $should_write = 1;
+> 
+> 	my $file = $ARGV[0];
+> 
+> 	print "Processing $file...\n";
+> 
+> 	open IN, $file or die "Can't open $1";
+> 
+> 	my $entry = "";
+> 
+> 	my $pos = 0;
+> 
+> 	while (<IN>) {
+> 		if (m/struct\s.*usb_device_id\s+([\w\_]+).*{/) {
+> 			$usb_dev_id_table = $1;
+> 		}
+> 		if (!$usb_dev_id_table) {
+> 			$out .= $_;
+> 			next;
+> 		}
+> 
+> 		if (m,\/\*\s*(\d+)\s*\*\/,) {
+> 			if ($1 != $pos) {
+> 				printf "$.# ERROR! Count is wrong! Want %d, got %d\n", $pos, $1;
+> 				$should_write = 0;
+> 				last;
+> 			}
+> 		}
+> 
+> 		$pos++ if (m/USB_DEVICE/);
+> 
+> 		last if (m/^}\s*;/);
+> 
+> 		$entry .= $_;
+> 		next if (!(m/}\s*,/));
+> 
+> 		if ($entry =~ m/USB_DEVICE\(USB_VID_([\w\_]+)\s*,\s*USB_PID_([\w\_]+)/) {
+> 			my $my_vid = $1;
+> 			my $my_pid = $2;
+> 
+> 			my $model = validate_model($my_vid, $my_pid);
+> 			if ($model eq "") {
+> 				$should_write = 0;
+> 				last;
+> 			}
+> 
+> 			push @enum, $model;
+> 			push @dev_id, "DVB_USB_DEV($my_vid, $model)";
+> 			print "DVB_USB_DEV($my_vid, $model)\n";
+> 		}
+> 		if ($entry =~ m/USB_DEVICE_VER\(USB_VID_([\w\_]+)\s*,\s*USB_PID_([\w\_]+)\s*,\s*(\w+)\s*,\s*(\w+)/) {
+> 			my $my_vid = $1;
+> 			my $my_pid = $2;
+> 			my $lo = $3;
+> 			my $hi = $4;
+> 
+> 			my $model = validate_model($my_vid, $my_pid);
+> 			if ($model eq "") {
+> 				$should_write = 0;
+> 				last;
+> 			}
+> 
+> 			push @enum, $model;
+> 			push @dev_id, "DVB_USB_DEV_VER($my_vid, $model, $lo, $hi)";
+> 			print "DVB_USB_DEV_VER($my_vid, $model, $lo, $hi)\n";
+> 		}
+> 		$entry = "";
+> 	}
+> 
+> 	if ($should_write && scalar(@enum) != $pos) {
+> 		printf "ERROR! Count is wrong! Want %d, got %d\n", $pos, scalar(@enum);
+> 		$should_write = 0;
+> 	}
+> 
+> 	if ($usb_dev_id_table && $should_write) {
+> 		$out .= "enum {\n";
+> 		for my $e (@enum) {
+> 			$out .= "\t$e,\n";
+> 		}
+> 		$out .= "};\n\n";
+> 
+> 		$out .= "static struct usb_device_id $usb_dev_id_table\[\] = {\n";
+> 		for my $e (@dev_id) {
+> 			$out .= "\t$e,\n";
+> 		}
+> 		$out .= "\t{ }\n";
+> 		$out .= "};\n\n";
+> 
+> 		my $start = 1;
+> 
+> 		while (<IN>) {
+> 			next if ($start && m/^$/);
+> 			$start = 0;
+> 			while (m/$usb_dev_id_table\[(\d+)\]/g) {
+> 				my $i = $1;
+> 
+> 				if ($1 > scalar @enum) {
+> 					print "ERROR! $usb_dev_id_table element $1 doesn't exist!\n";
+> 					$should_write = 0;
+> 					last;
+> 				}
+> 
+> 				my $idx = $enum[$1];
+> 
+> 				if (!(s,($usb_dev_id_table)\[$i\],$1\[$idx],g)) {
+> 					print "ERROR! can't replace $1!\n";
+> 					$should_write = 0;
+> 					last;
+> 				}
+> 			}
+> 			$out .= $_;
+> 		}
+> 		close IN;
+> 	} else {
+> 		while (<IN>) {
+> 			$out .= $_;
+> 		}
+> 		print "\tunchanged\n";
+> 		$should_write = 0;
+> 	}
+> 
+> 	if ($should_write || $file eq "include/media/dvb-usb-ids.h") {
+> 		open OUT, ">$file" or die "Can't write on file $file";
+> 		print OUT $out;
+> 		close OUT;
+> 		printf "\twrote\n";
+> 
+> 		out_ids();
+> 	}
+> 
+> 	shift @ARGV;
+> }
+> </script>
+> 
+> 
+> Mauro Carvalho Chehab (26):
+>   media: dvb-usb-ids.h: sort entries
+>   media: dvb-usb: move USB IDs to dvb-usb-ids.h
+>   media: dvb-usb: vp702x: reference to usb ID table
+>   media: dvb-usb: Add helper macros for using USB VID/PID
+>   media: dvb-usb: a800: use an enum for the device number
+>   media: af9005: use the newer dvb-usb macros for USB device
+>   media: dvb-usb: az6027: use an enum for the device number
+>   media: cinergyT2-core: use the newer dvb-usb macros for USB device
+>   media: cxusb: use the newer dvb-usb macros for USB device
+>   media: digitv: use the newer dvb-usb macros for USB device
+>   media: dvb-usb: dtt200u: use an enum for the device number
+>   media: dtv5100: use the newer dvb-usb macros for USB device
+>   media: dw2102: use the newer dvb-usb macros for USB device
+>   media: dvb-usb: gp8psk: use an enum for the device number
+>   media: dvb-usb: m920x: use an enum for the device number
+>   media: dvb-usb: nova-t-usb2: use an enum for the device number
+>   media: dvb-usb: opera1: use an enum for the device number
+>   media: dvb-usb: pctv452e: use an enum for the device number
+>   media: technisat-usb2: use the newer dvb-usb macros for USB device
+>   media: dvb-usb: ttusb2: use an enum for the device number
+>   media: dvb-usb: umt-010: use an enum for the device number
+>   media: dvb-usb: vp702x: use an enum for the device number
+>   media: dvb-usb: vp7045: use an enum for the device number
+>   media: dvb-usb: dibusb-mb: use an enum for the device number
+>   media: dvb-usb: dibusb-mc: use an enum for the device number
+>   media: dvb-usb: dib0700_devices: use an enum for the device number
+> 
+>  drivers/media/usb/dvb-usb/a800.c            |  18 +-
+>  drivers/media/usb/dvb-usb/af9005.c          |  19 +-
+>  drivers/media/usb/dvb-usb/az6027.c          |  45 +-
+>  drivers/media/usb/dvb-usb/cinergyT2-core.c  |  10 +-
+>  drivers/media/usb/dvb-usb/cxusb.c           |  88 +--
+>  drivers/media/usb/dvb-usb/dib0700_devices.c | 428 +++++++------
+>  drivers/media/usb/dvb-usb/dibusb-mb.c       | 165 ++---
+>  drivers/media/usb/dvb-usb/dibusb-mc.c       |  88 +--
+>  drivers/media/usb/dvb-usb/digitv.c          |  13 +-
+>  drivers/media/usb/dvb-usb/dtt200u.c         |  56 +-
+>  drivers/media/usb/dvb-usb/dtv5100.c         |  11 +-
+>  drivers/media/usb/dvb-usb/dw2102.c          |  84 ++-
+>  drivers/media/usb/dvb-usb/gp8psk.c          |  36 +-
+>  drivers/media/usb/dvb-usb/m920x.c           |  51 +-
+>  drivers/media/usb/dvb-usb/nova-t-usb2.c     |  18 +-
+>  drivers/media/usb/dvb-usb/opera1.c          |  15 +-
+>  drivers/media/usb/dvb-usb/pctv452e.c        |  22 +-
+>  drivers/media/usb/dvb-usb/technisat-usb2.c  |  11 +-
+>  drivers/media/usb/dvb-usb/ttusb2.c          |  36 +-
+>  drivers/media/usb/dvb-usb/umt-010.c         |  18 +-
+>  drivers/media/usb/dvb-usb/vp702x.c          |  23 +-
+>  drivers/media/usb/dvb-usb/vp7045.c          |  28 +-
+>  include/media/dvb-usb-ids.h                 | 632 +++++++++++---------
+>  23 files changed, 1071 insertions(+), 844 deletions(-)
+> 
 
-This series isn't awful by any means, but it requires poking into core flows and
-further complicates paths that are already anything but simple.  And things like
-conditionally grabbing vCPU0 to pin pages in its MMU make me flinch.  And I think
-the situation would only get worse by the time all the bugs and corner cases are
-ironed out.  E.g. this code is wrong:
 
-  void kvm_release_pfn_clean(kvm_pfn_t pfn)
-  {
-	if (!is_error_noslot_pfn(pfn) && !kvm_is_reserved_pfn(pfn)) {
-		struct page *page = pfn_to_page(pfn);
-
-		if (page_maybe_dma_pinned(page))
-			unpin_user_page(page);
-		else
-			put_page(page);
-	}
-  }
-  EXPORT_SYMBOL_GPL(kvm_release_pfn_clean);
-
-Because (a) page_maybe_dma_pinned() is susceptible to false positives (clearly
-documented), and (b) even if it didn't get false positives, there's no guarantee
-that _KVM_ owns a pin of the page.
-
-It's not an impossible problem to solve, but I suspect any solution will require
-either touching a lot of code or will be fragile and difficult to maintain, e.g.
-by auditing all users to understand which need to pin and which don't.  Even if
-we _always_ pin memory for SEV guests, we'd still need to plumb the "is SEV guest"
-info around.
-
-And FWIW, my years-old idea of using a software-available SPTE bit to track pinned
-pages is plagued by the same underlying issue: KVM's current management (or lack
-thereof) of SEV guest memory just isn't viable long term.  In all honesty, it
-probably should never have been merged.  We can't change the past, but we can, 
-and IMO should, avoid piling on more code to an approach that is fundamentally flawed.
-	
-[*] https://lore.kernel.org/all/20220310140911.50924-1-chao.p.peng@linux.intel.com

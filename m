@@ -2,146 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2AA4EA2B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 00:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D094EA2FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 00:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbiC1WRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 18:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
+        id S229892AbiC1Wau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 18:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiC1WQi (ORCPT
+        with ESMTP id S229818AbiC1Was (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 18:16:38 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4787C143
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 15:12:55 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id j83so17189592oih.6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 15:12:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version;
-        bh=hYgV/cj7s/KJHrRdB4rcVThWkKuipKsBWWVTwy7GkeY=;
-        b=ThkJbWLv9rIxaiiAXpFpGA+YNbqtfsNkqlw3AzbmFPP3LcN4iJXeUF9gPpwXpDO01P
-         FVR0aoODFvCx6scl2+ryNEa8dSFVhyJttsE953LXv+e0Qj9KAmHc1nSGGOEGy6mOGO18
-         lQ2xXlaJ8YZDQfaNnAUL7djpj3Yg6aBk8y0mQDaoWcJiPsXqtjnEPx3EIpC0VT+Qod1y
-         C61Xf8MN6RuLa9xpy410KXx0z1ik+WoyOGzFyTt2A06XAjp8S+I+/0KyRcj/urg3nsc+
-         PgWU31Bw4LtPiBL6RU44AiRmtVwF82RQHhT7ygzH+3PWe3c2YDFEc4/qjCsmH/v1uB3E
-         RyKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version;
-        bh=hYgV/cj7s/KJHrRdB4rcVThWkKuipKsBWWVTwy7GkeY=;
-        b=BLoyeUVWQuEnEvB+4dA6YJI0pcnV/WQLbG1CkKM9uCLRG++UtQxCppVETfSlL3ox7L
-         jnVdQi05QAcyMQHNMhw4/Oh3ZpRhFw7qh0WFBiXH5R3xxGWGRsFgpuNK8MD3NYVc1xHF
-         EnGugN3im6L70WI9NVwJ9j99LqcB3OCifIE7aMcrmstsW7i/FUmIPk7oRV+ZqF0XGYHQ
-         VKdVNd29BdFNG42gl3uOcHUBtF/qr2HrTIAeAabLXEnfE0R5iKJK096o5Xz3ytlBqhHH
-         HjfKbs8nKFxmoveqjGG8vDg1s/rTjcqWScG1pggdDY0Wb9UHXuv574gKRNQliE3316+r
-         DvYg==
-X-Gm-Message-State: AOAM533LrOqrtBvnOtdCHXmvknNfPg7p9XVcZWaRNcNgElFjnOIT0hCf
-        y3YlUqbWgItQHoPVMlj5WR4LhT3ZWAr3vA==
-X-Google-Smtp-Source: ABdhPJzIBjwmQbEY1T2jGgJO1yNijei4zyMA//zsn44ah4IfxKMgs56Z1dXVOvquog8xahe2gztSsw==
-X-Received: by 2002:a05:6870:1714:b0:dd:a30e:d23e with SMTP id h20-20020a056870171400b000dda30ed23emr577361oae.85.1648503853461;
-        Mon, 28 Mar 2022 14:44:13 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id r7-20020a056830418700b005cda6037350sm7614141otu.79.2022.03.28.14.44.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 14:44:13 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 14:44:11 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Galbraith <efault@gmx.de>, Vlastimil Babka <vbabka@suse.cz>,
-        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH] mm/munlock: add lru_add_drain() to fix memcg_stat_test
-Message-ID: <47f6d39c-a075-50cb-1cfb-26dd957a48af@google.com>
+        Mon, 28 Mar 2022 18:30:48 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD0B4BBBF
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 15:29:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648506546; x=1680042546;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=gg5QwhP4YCgK1cnFnIvMFqJVjZwNm4QeiHPCuwP2Rc8=;
+  b=jOm/zI2HtDDL4tnyh0xVuvqV0TBFcEi7v4ih4sbE5pOpKnfn7UY/SWJH
+   zLSxjhcokryqigwxkiuNOBajHpYdE7LM7EGmsWVS5pPPOZmj+iRVe+AGH
+   ehkJ/YXs7hchqfebIxM2XObUNRKm9KejYs40Ho2nwoemIkqEf+tKDzyaZ
+   e6gT0sHVF/6sv+hcf8yB5tyrEDV0vi0cUg8D52OOTHyCCu5AElGnS6iuS
+   9orLVxe89oP8swrFcB1b/Q4/BCxy8Xe7FgOV8leJJ9woIRK/2Nkas3BmW
+   ftoIgD0QU1M3GXLcFhXDy4iLD/xQtxhTGa2DEZSp9gHko266sVyOHCrdR
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="258823339"
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="258823339"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 14:41:01 -0700
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="617924058"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 14:41:00 -0700
+Date:   Mon, 28 Mar 2022 14:44:23 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v2 5/8] iommu: Add PASID support for DMA mapping API
+ users
+Message-ID: <20220328144423.39ba9b9b@jacob-builder>
+In-Reply-To: <12390112-c497-1f02-5ddc-ad8ee3645347@linux.intel.com>
+References: <20220315050713.2000518-1-jacob.jun.pan@linux.intel.com>
+        <20220315050713.2000518-6-jacob.jun.pan@linux.intel.com>
+        <12390112-c497-1f02-5ddc-ad8ee3645347@linux.intel.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mike reports that LTP memcg_stat_test usually leads to...
-memcg_stat_test 3 TINFO: Test unevictable with MAP_LOCKED
-memcg_stat_test 3 TINFO: Running memcg_process --mmap-lock1 -s 135168
-memcg_stat_test 3 TINFO: Warming up pid: 3460
-memcg_stat_test 3 TINFO: Process is still here after warm up: 3460
-memcg_stat_test 3 TFAIL: unevictable is 122880, 135168 expected
-...but may lead to...
-memcg_stat_test 4 TINFO: Test unevictable with mlock
-memcg_stat_test 4 TINFO: Running memcg_process --mmap-lock2 -s 135168
-memcg_stat_test 4 TINFO: Warming up pid: 4271
-memcg_stat_test 4 TINFO: Process is still here after warm up: 4271
-memcg_stat_test 4 TFAIL: unevictable is 122880, 135168 expected
-...or both.  A wee bit flaky.
+Hi BaoLu,
 
-follow_page_pte() used to have an lru_add_drain() per each page mlocked,
-and the test came to rely on accurate stats.  The pagevec to be drained
-is different now, but still covered by lru_add_drain(); and, never mind
-the test, I believe it's in everyone's interest that a bulk faulting
-interface like populate_vma_page_range() or faultin_vma_page_range()
-should drain its local pagevecs at the end, to save others sometimes
-needing the much more expensive lru_add_drain_all().  This does not
-absolutely guarantee exact stats - the mlocking task can be migrated
-between CPUs as it proceeds - but it's good enough and the tests pass.
+On Fri, 18 Mar 2022 20:43:54 +0800, Lu Baolu <baolu.lu@linux.intel.com>
+wrote:
 
-Reported-by: Mike Galbraith <efault@gmx.de>
-Fixes: b67bf49ce7aa ("mm/munlock: delete FOLL_MLOCK and FOLL_POPULATE")
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
-One can argue about the Fixes tag - I'd have chosen the pagevec commit,
-but this is the one Mike identified, and the one which touches mm/gup.c,
-so I'm happy to go with this - and doesn't matter so long as 5.18 gets it.
+> On 2022/3/15 13:07, Jacob Pan wrote:
+> > DMA mapping API is the de facto standard for in-kernel DMA. It operates
+> > on a per device/RID basis which is not PASID-aware.
+> > 
+> > Some modern devices such as Intel Data Streaming Accelerator, PASID is
+> > required for certain work submissions. To allow such devices use DMA
+> > mapping API, we need the following functionalities:
+> > 1. Provide device a way to retrieve a PASID for work submission within
+> > the kernel
+> > 2. Enable the kernel PASID on the IOMMU for the device
+> > 3. Attach the kernel PASID to the device's default DMA domain, let it
+> > be IOVA or physical address in case of pass-through.
+> > 
+> > This patch introduces a driver facing API that enables DMA API
+> > PASID usage. Once enabled, device drivers can continue to use DMA APIs
+> > as is. There is no difference in dma_handle between without PASID and
+> > with PASID.
+> > 
+> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > ---
+> >   drivers/iommu/dma-iommu.c | 65 +++++++++++++++++++++++++++++++++++++++
+> >   include/linux/dma-iommu.h |  7 +++++
+> >   include/linux/iommu.h     |  9 ++++++
+> >   3 files changed, 81 insertions(+)
+> > 
+> > diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+> > index b22034975301..d0ff1a34b1b6 100644
+> > --- a/drivers/iommu/dma-iommu.c
+> > +++ b/drivers/iommu/dma-iommu.c
+> > @@ -39,6 +39,8 @@ enum iommu_dma_cookie_type {
+> >   	IOMMU_DMA_MSI_COOKIE,
+> >   };
+> >   
+> > +static DECLARE_IOASID_SET(iommu_dma_pasid);
+> > +
+> >   struct iommu_dma_cookie {
+> >   	enum iommu_dma_cookie_type	type;
+> >   	union {
+> > @@ -370,6 +372,69 @@ void iommu_put_dma_cookie(struct iommu_domain
+> > *domain) domain->iova_cookie = NULL;
+> >   }
+> >   
+> > +/**
+> > + * iommu_enable_pasid_dma --Enable in-kernel DMA request with PASID
+> > + * @dev:	Device to be enabled
+> > + *
+> > + * DMA request with PASID will be mapped the same way as the legacy
+> > DMA.
+> > + * If the device is in pass-through, PASID will also pass-through. If
+> > the
+> > + * device is in IOVA map, the supervisor PASID will point to the same
+> > IOVA
+> > + * page table.
+> > + *
+> > + * @return the kernel PASID to be used for DMA or INVALID_IOASID on
+> > failure  
+> 
+> The comment on the return value should be rephrased according to the
+> real code.
+> 
+yes, will do.
 
- mm/gup.c |   10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+> > + */
+> > +int iommu_enable_pasid_dma(struct device *dev, ioasid_t *pasid)
+> > +{
+> > +	struct iommu_domain *dom;
+> > +	ioasid_t id, max;
+> > +	int ret;
+> > +
+> > +	dom = iommu_get_domain_for_dev(dev);
+> > +	if (!dom || !dom->ops || !dom->ops->attach_dev_pasid)
+> > +		return -ENODEV;
+> > +	max = iommu_get_dev_pasid_max(dev);
+> > +	if (!max)
+> > +		return -EINVAL;
+> > +
+> > +	id = ioasid_alloc(&iommu_dma_pasid, 1, max, dev);
+> > +	if (id == INVALID_IOASID)
+> > +		return -ENOMEM;
+> > +
+> > +	ret = dom->ops->attach_dev_pasid(dom, dev, id);
+> > +	if (ret) {
+> > +		ioasid_put(id);
+> > +		return ret;
+> > +	}
+> > +	*pasid = id;
+> > +
+> > +	return ret;
+> > +}
+> > +EXPORT_SYMBOL(iommu_enable_pasid_dma);
+> > +
+> > +/**
+> > + * iommu_disable_pasid_dma --Disable in-kernel DMA request with PASID
+> > + * @dev:	Device's PASID DMA to be disabled
+> > + *
+> > + * It is the device driver's responsibility to ensure no more incoming
+> > DMA
+> > + * requests with the kernel PASID before calling this function. IOMMU
+> > driver
+> > + * ensures PASID cache, IOTLBs related to the kernel PASID are cleared
+> > and
+> > + * drained.
+> > + *
+> > + * @return 0 on success or error code on failure  
+> 
+> Ditto.
+> 
+same
 
---- 5.18-pre/mm/gup.c
-+++ linux/mm/gup.c
-@@ -1404,6 +1404,7 @@ long populate_vma_page_range(struct vm_a
- 	struct mm_struct *mm = vma->vm_mm;
- 	unsigned long nr_pages = (end - start) / PAGE_SIZE;
- 	int gup_flags;
-+	long ret;
- 
- 	VM_BUG_ON(!PAGE_ALIGNED(start));
- 	VM_BUG_ON(!PAGE_ALIGNED(end));
-@@ -1438,8 +1439,10 @@ long populate_vma_page_range(struct vm_a
- 	 * We made sure addr is within a VMA, so the following will
- 	 * not result in a stack expansion that recurses back here.
- 	 */
--	return __get_user_pages(mm, start, nr_pages, gup_flags,
-+	ret = __get_user_pages(mm, start, nr_pages, gup_flags,
- 				NULL, NULL, locked);
-+	lru_add_drain();
-+	return ret;
- }
- 
- /*
-@@ -1471,6 +1474,7 @@ long faultin_vma_page_range(struct vm_ar
- 	struct mm_struct *mm = vma->vm_mm;
- 	unsigned long nr_pages = (end - start) / PAGE_SIZE;
- 	int gup_flags;
-+	long ret;
- 
- 	VM_BUG_ON(!PAGE_ALIGNED(start));
- 	VM_BUG_ON(!PAGE_ALIGNED(end));
-@@ -1498,8 +1502,10 @@ long faultin_vma_page_range(struct vm_ar
- 	if (check_vma_flags(vma, gup_flags))
- 		return -EINVAL;
- 
--	return __get_user_pages(mm, start, nr_pages, gup_flags,
-+	ret = __get_user_pages(mm, start, nr_pages, gup_flags,
- 				NULL, NULL, locked);
-+	lru_add_drain();
-+	return ret;
- }
- 
- /*
+> > + */
+> > +void iommu_disable_pasid_dma(struct device *dev, ioasid_t pasid)
+> > +{
+> > +	struct iommu_domain *dom;
+> > +
+> > +	/* TODO: check the given PASID is within the ioasid_set */
+> > +	dom = iommu_get_domain_for_dev(dev);
+> > +	if (!dom->ops->detach_dev_pasid)
+> > +		return;
+> > +	dom->ops->detach_dev_pasid(dom, dev, pasid);
+> > +	ioasid_put(pasid);
+> > +}
+> > +EXPORT_SYMBOL(iommu_disable_pasid_dma);
+> > +
+> >   /**
+> >    * iommu_dma_get_resv_regions - Reserved region driver helper
+> >    * @dev: Device from iommu_get_resv_regions()
+> > diff --git a/include/linux/dma-iommu.h b/include/linux/dma-iommu.h
+> > index 24607dc3c2ac..e6cb9b52a420 100644
+> > --- a/include/linux/dma-iommu.h
+> > +++ b/include/linux/dma-iommu.h
+> > @@ -18,6 +18,13 @@ int iommu_get_dma_cookie(struct iommu_domain
+> > *domain); int iommu_get_msi_cookie(struct iommu_domain *domain,
+> > dma_addr_t base); void iommu_put_dma_cookie(struct iommu_domain
+> > *domain); 
+> > +/*
+> > + * For devices that can do DMA request with PASID, setup a system
+> > PASID.
+> > + * Address modes (IOVA, PA) are selected by the platform code.
+> > + */  
+> 
+> No need for a comment here. Or move it to the function if need.
+> 
+right, this comment is obsolete. will remove.
+
+> > +int iommu_enable_pasid_dma(struct device *dev, ioasid_t *pasid);
+> > +void iommu_disable_pasid_dma(struct device *dev, ioasid_t pasid);
+> > +
+> >   /* Setup call for arch DMA mapping code */
+> >   void iommu_setup_dma_ops(struct device *dev, u64 dma_base, u64
+> > dma_limit); int iommu_dma_init_fq(struct iommu_domain *domain);
+> > diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> > index fde5b933dbe3..fb011722e4f8 100644
+> > --- a/include/linux/iommu.h
+> > +++ b/include/linux/iommu.h
+> > @@ -395,6 +395,15 @@ static inline void iommu_set_dev_pasid_max(struct
+> > device *dev, 
+> >   	param->pasid_max = max;
+> >   }
+> > +static inline ioasid_t iommu_get_dev_pasid_max(struct device *dev)
+> > +{
+> > +	struct dev_iommu *param = dev->iommu;
+> > +
+> > +	if (WARN_ON(!param))
+> > +		return 0;
+> > +
+> > +	return param->pasid_max;
+> > +}
+> >   
+> >   int iommu_device_register(struct iommu_device *iommu,
+> >   			  const struct iommu_ops *ops,  
+> 
+> Best regards,
+> baolu
+
+
+Thanks,
+
+Jacob

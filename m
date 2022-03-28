@@ -2,71 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781A34EA3B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 01:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 687264EA3B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 01:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbiC1XcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 19:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
+        id S230447AbiC1XcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 19:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbiC1XcD (ORCPT
+        with ESMTP id S230357AbiC1Xb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 19:32:03 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9762942ECC;
-        Mon, 28 Mar 2022 16:30:20 -0700 (PDT)
-Received: from localhost.localdomain (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2102820DEDDE;
-        Mon, 28 Mar 2022 16:30:20 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2102820DEDDE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1648510220;
-        bh=VCBmKOU3bhYrRKyxH/RJtKwil2TxccJ2CJcGM4eyu/Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=noDMiblwX6L3HSRCCnVnic33xfGbHmfkE9BfxIdWCOwQZIAEzf9V8AlRBxGPWkf1f
-         RRJleWDD5u/STBlTvRlNOnZQSj0dLyiBOV00pF+DZNA4LRInwY2qIlNjfbgghSrw1g
-         z71ppjoAxGGZF9nJLDxtSf4Tx/uLk31XJYjFnNCI=
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     mathieu.desnoyers@efficios.com
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org, rostedt@goodmis.org,
-        beaub@linux.microsoft.com
-Subject: Re: Comments on new user events ABI
-Date:   Mon, 28 Mar 2022 16:30:10 -0700
-Message-Id: <20220328233010.2636-1-beaub@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <1283359416.196715.1648499713041.JavaMail.zimbra@efficios.com>
-References: <1283359416.196715.1648499713041.JavaMail.zimbra@efficios.com>
+        Mon, 28 Mar 2022 19:31:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC41B3C711;
+        Mon, 28 Mar 2022 16:30:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 811E1B8115C;
+        Mon, 28 Mar 2022 23:30:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 20297C34110;
+        Mon, 28 Mar 2022 23:30:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648510212;
+        bh=jfLEW8Shh94IpRP5NsFyGBrC0Ur4xy9XSQg9OBesm5w=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=GMaMR//pqJ0XsxFuwy3IazWa8tfk0X3VL3piygIXOEBJaD+kPwqrTOsnTTG7Nc5So
+         Tt99HAd2NrMP3E4tvK2Jul+H1Qggk6YejjZSlmfvhA/7+D0TCPbQZvkiLcwTlwLONK
+         9THnnc2dwk1IxdhXDWHmXRAdrRoiAYvY4woQeTlsM9i0h97QLzf1So7y8hZGmWsICd
+         rEMNQfuowVaORQ4v6AY3HHBDUWpv8lG5HooV57RFK2z9KqCS7/CdnjyHgIEbP7Zfo4
+         DxsO6qrt6ZjsZc0SK1H5ag8uJxrK0qmjEiJJzQ0DzETgNuQDRO9m2Y8K/9NAeQSOle
+         GMAIDQRFQvDfQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0213BE7BB0B;
+        Mon, 28 Mar 2022 23:30:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] net: dsa: bcm_sf2_cfp: fix an incorrect NULL check on list
+ iterator
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164851021200.6043.5974433550480970783.git-patchwork-notify@kernel.org>
+Date:   Mon, 28 Mar 2022 23:30:12 +0000
+References: <20220328032431.22538-1-xiam0nd.tong@gmail.com>
+In-Reply-To: <20220328032431.22538-1-xiam0nd.tong@gmail.com>
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Cc:     f.fainelli@gmail.com, andrew@lunn.ch, vivien.didelot@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> ----- On Mar 28, 2022, at 4:24 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon, 28 Mar 2022 11:24:31 +0800 you wrote:
+> The bug is here:
+> 	return rule;
 > 
-> > Hi Beau, Hi Steven,
-> > 
-> > I've done a review of the trace events ABI, and I have a few comments.
-> > Sorry for being late to the party, but I only noticed this new ABI recently.
-> > Hopefully we can improve this ABI before the 5.18 release.
-> > 
+> The list iterator value 'rule' will *always* be set and non-NULL
+> by list_for_each_entry(), so it is incorrect to assume that the
+> iterator value will be NULL if the list is empty or no element
+> is found.
 > 
-> Also a bit of testing shows that dyn_event_add() is called without holding the event_mutex.
-> Has this been tested with lockdep ?
+> [...]
 
-Sorry, looks like I've been running with LOCKDEP_SUPPORT without it on :(
-I now have both CONFIG_LOCKDEP and CONFIG_LOCK_DEBUGGING_SUPPORT.
+Here is the summary with links:
+  - net: dsa: bcm_sf2_cfp: fix an incorrect NULL check on list iterator
+    https://git.kernel.org/netdev/net/c/6da69b1da130
 
-You are right about this, thanks! I've sent a patch.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Link: https://lore.kernel.org/all/20220328223225.1992-1-beaub@linux.microsoft.com/
 
-Thanks,
--Beau

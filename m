@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B594E8CDE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 06:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CFF4E8CE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 06:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237920AbiC1ECS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 00:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35620 "EHLO
+        id S237956AbiC1ECg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 00:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237930AbiC1ECH (ORCPT
+        with ESMTP id S237970AbiC1ECI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 00:02:07 -0400
+        Mon, 28 Mar 2022 00:02:08 -0400
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11316457BF
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 21:00:09 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2e6402f436cso109452437b3.3
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 21:00:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA37546641
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 21:00:17 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2e5bcae3665so108169427b3.16
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 21:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=5yVgehYPp/D4TvQwla1lP4QXTd3no9VslKN9O7AQtMc=;
-        b=PhhJHuDY8p3QcagPQvPZS3gUNE+WTXGwsjHGcy5vYWAnTDsBi689RrlHpX0zFrkeeB
-         cgq7zsJvQ4TmXMK1FTpCqUW7u3lra5MV6nGauGeFVJDPCVrWmnkHjOmwhDdU+M7H3MZe
-         9q35JQxGebLqH5/ONPtCo4HXNZx4OcvVXTYpNkTBV6/yAbNgaRVy5ssOv6jFVcFkP4kh
-         c6sqXcTOyO3FaJ9kpa11O5JJElojJYBxTFCpnde1aJSzeINLr01Z2GHiUlyp+D3vIicZ
-         9yFl6rYahM5JoO00jsPYyoSQwu+mCGj11q2ksSeUHehSTH8F0UI4LYMgOKHBkHzbM5kw
-         cvlQ==
+         :cc;
+        bh=5YF472UBEt2/+0TMmuAJ6M5CUqS69OAWnmeSQdznm4c=;
+        b=Otbv6BZ5qGCcevBDAZX6xN8e9nfLahzy72aZz2C8ZnF7O0aumEiNkqQhZur1HY8/Cs
+         iuIInxQV8DulTLV4peuIv24Kjo659uXmfHBO0sgraK+JrrU+As1YNNyP5VsmX8xvpfHj
+         +DBCyPIEf7Myz5u2eebcccJK1GhatoYgWRAn9u6/hx3eLzgc6yDZpT0DbGZeqrIsxVy0
+         MWOGzNy1ZJc3Y1AzaPB/KCHt1qRh6XZ3/aS55BAmF+xfDQhiQ6MSAI6I/s870uy88oLD
+         B8qFjM3s8ixGcMg26tII9h+aMEs3oAt5IN56f2ExKguMu+wacxiRqK48y/Tgb9VayNGA
+         E72w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=5yVgehYPp/D4TvQwla1lP4QXTd3no9VslKN9O7AQtMc=;
-        b=iF8MWLqIh6xzgo0soQ160eNnLUm1DT25Wi2zxHvSo0hJyGlIdiu3CbT3N9Bz82CLbi
-         ixLQxJHc4ucQyHhMD1mBOrre0yOVc87bp0Q5Ssb2FOto3EiLXDC6DRYrZ19WkYSct+AR
-         ejOZto+9O56lmgtOMOoBCLsqZSu6kYZeyDA7OnFUm7cEPvn3az0K2LsRbW9D/Jj1OnrH
-         6F/5rV1ebVOl5HkL/BkZdYX2+IIzZYMz4Q/qL7NHVBNzCHiLa9i/87QV7xD7E70ia4CL
-         MbB1F4PRFPYnQmCmFLp06pB/bUA0NwvVeJsAq7oEsC5A408JNEVoMEOY7rdyyL42M9mz
-         DWYw==
-X-Gm-Message-State: AOAM532So+rm/ZihDAtaqdRFq2YWpeTSVuMgX8wNTfWVx+e7+cEit7pZ
-        JQaZOIExPZcJ/LO9Tgye7Di3isCiCHYEApg=
-X-Google-Smtp-Source: ABdhPJys0sTPrji6EjHujuYz082iO9ggsvoNSm4OdxVncyEN7gJkiqTrwHhvJvo9vVVIk7aJX3q2Povqc86sLs4=
+         :references:subject:from:to:cc;
+        bh=5YF472UBEt2/+0TMmuAJ6M5CUqS69OAWnmeSQdznm4c=;
+        b=yHq9DY+fi3ZS+6RHy82omiik6knn4fOP81bLBQ6HDS57Si0+Sxcpbpkc2q9dM0WoqG
+         v7lKBJpDQyIctA7ZuHpDZ3D33ehQJQixFIWJ5gxbOC6Tw+UkOGP3bO8A7h7Q5QlHvBcD
+         VJwOPulf/dQBVkSkfxL5f/5JhzzHpvlqyAYDIYlMAWHG89fqSV1r8TlCynijk3QfIAW6
+         ZzPDsI9XB7righsVVx4mVXB+uYSnLNBD3YAZLCQfibsGbPcz6TlZMJDtlDIrw2V1e7Mx
+         ifvDvXHxEOyWStN7yaKCwnwnaRzeB/4jQz5xXWiak5AziLLztjtydAa+jTyEK9P7PQq5
+         Bg3g==
+X-Gm-Message-State: AOAM5311Jl50epRSZzlNCdEKNP1g2ACcnZxSVpuFdRgrNg3Ks18dOMUl
+        gVnF5CKoQA/8MR8k+b59qyuwBWaFjhdzFgo=
+X-Google-Smtp-Source: ABdhPJwZN53y2iru9thBQM3748jxF+GUaJNvT80PrAObXElBNXlNdj3eJA3jMrzwFwkCwnM8D+0mObmQfCh9oiQ=
 X-Received: from tj2.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:187])
- (user=tjmercier job=sendgmr) by 2002:a25:bdd3:0:b0:635:eaaf:53 with SMTP id
- g19-20020a25bdd3000000b00635eaaf0053mr20426308ybk.74.1648440008833; Sun, 27
- Mar 2022 21:00:08 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 03:59:43 +0000
+ (user=tjmercier job=sendgmr) by 2002:a81:f0c:0:b0:2d6:83ab:7605 with SMTP id
+ 12-20020a810f0c000000b002d683ab7605mr23417374ywp.150.1648440016871; Sun, 27
+ Mar 2022 21:00:16 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 03:59:46 +0000
 In-Reply-To: <20220328035951.1817417-1-tjmercier@google.com>
-Message-Id: <20220328035951.1817417-5-tjmercier@google.com>
+Message-Id: <20220328035951.1817417-8-tjmercier@google.com>
 Mime-Version: 1.0
 References: <20220328035951.1817417-1-tjmercier@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [RFC v4 4/8] dmabuf: heaps: export system_heap buffers with GPU
- cgroup charging
+Subject: [RFC v4 7/8] binder: use __kernel_pid_t and __kernel_uid_t for userspace
 From:   "T.J. Mercier" <tjmercier@google.com>
 To:     tjmercier@google.com, David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
@@ -85,7 +84,6 @@ Cc:     kaleshsingh@google.com, Kenny.Ho@amd.com, mkoutny@suse.com,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
         cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
@@ -96,143 +94,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hridya Valsaraju <hridya@google.com>
+The kernel interface should use types that the kernel defines instead of
+pid_t and uid_t, whose definiton is owned by libc. This fixes the header
+so that it can be included without first including sys/types.h.
 
-All DMA heaps now register a new GPU cgroup device upon creation, and the
-system_heap now exports buffers associated with its GPU cgroup device for
-tracking purposes.
-
-Signed-off-by: Hridya Valsaraju <hridya@google.com>
 Signed-off-by: T.J. Mercier <tjmercier@google.com>
-
 ---
-v3 changes
-Use more common dual author commit message format per John Stultz.
+ include/uapi/linux/android/binder.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-v2 changes
-Move dma-buf cgroup charge transfer from a dma_buf_op defined by every
-heap to a single dma-buf function for all heaps per Daniel Vetter and
-Christian K=C3=B6nig.
----
- drivers/dma-buf/dma-heap.c          | 27 +++++++++++++++++++++++++++
- drivers/dma-buf/heaps/system_heap.c |  3 +++
- include/linux/dma-heap.h            | 11 +++++++++++
- 3 files changed, 41 insertions(+)
-
-diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
-index 8f5848aa144f..885072427775 100644
---- a/drivers/dma-buf/dma-heap.c
-+++ b/drivers/dma-buf/dma-heap.c
-@@ -7,6 +7,7 @@
-  */
-=20
- #include <linux/cdev.h>
-+#include <linux/cgroup_gpu.h>
- #include <linux/debugfs.h>
- #include <linux/device.h>
- #include <linux/dma-buf.h>
-@@ -31,6 +32,7 @@
-  * @heap_devt		heap device node
-  * @list		list head connecting to list of heaps
-  * @heap_cdev		heap char device
-+ * @gpucg_dev		gpu cgroup device for memory accounting
-  *
-  * Represents a heap of memory from which buffers can be made.
-  */
-@@ -41,6 +43,9 @@ struct dma_heap {
- 	dev_t heap_devt;
- 	struct list_head list;
- 	struct cdev heap_cdev;
-+#ifdef CONFIG_CGROUP_GPU
-+	struct gpucg_device gpucg_dev;
-+#endif
- };
-=20
- static LIST_HEAD(heap_list);
-@@ -216,6 +221,26 @@ const char *dma_heap_get_name(struct dma_heap *heap)
- 	return heap->name;
- }
-=20
-+#ifdef CONFIG_CGROUP_GPU
-+/**
-+ * dma_heap_get_gpucg_dev() - get struct gpucg_device for the heap.
-+ * @heap: DMA-Heap to get the gpucg_device struct for.
-+ *
-+ * Returns:
-+ * The gpucg_device struct for the heap. NULL if the GPU cgroup controller=
- is
-+ * not enabled.
-+ */
-+struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap)
-+{
-+	return &heap->gpucg_dev;
-+}
-+#else /* CONFIG_CGROUP_GPU */
-+struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap)
-+{
-+	return NULL;
-+}
-+#endif /* CONFIG_CGROUP_GPU */
-+
- struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
- {
- 	struct dma_heap *heap, *h, *err_ret;
-@@ -288,6 +313,8 @@ struct dma_heap *dma_heap_add(const struct dma_heap_exp=
-ort_info *exp_info)
- 	list_add(&heap->list, &heap_list);
- 	mutex_unlock(&heap_list_lock);
-=20
-+	gpucg_register_device(dma_heap_get_gpucg_dev(heap), exp_info->name);
-+
- 	return heap;
-=20
- err2:
-diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/sy=
-stem_heap.c
-index ab7fd896d2c4..752a05c3cfe2 100644
---- a/drivers/dma-buf/heaps/system_heap.c
-+++ b/drivers/dma-buf/heaps/system_heap.c
-@@ -395,6 +395,9 @@ static struct dma_buf *system_heap_allocate(struct dma_=
-heap *heap,
- 	exp_info.ops =3D &system_heap_buf_ops;
- 	exp_info.size =3D buffer->len;
- 	exp_info.flags =3D fd_flags;
-+#ifdef CONFIG_CGROUP_GPU
-+	exp_info.gpucg_dev =3D dma_heap_get_gpucg_dev(heap);
-+#endif
- 	exp_info.priv =3D buffer;
- 	dmabuf =3D dma_buf_export(&exp_info);
- 	if (IS_ERR(dmabuf)) {
-diff --git a/include/linux/dma-heap.h b/include/linux/dma-heap.h
-index 0c05561cad6e..e447a61d054e 100644
---- a/include/linux/dma-heap.h
-+++ b/include/linux/dma-heap.h
-@@ -10,6 +10,7 @@
- #define _DMA_HEAPS_H
-=20
- #include <linux/cdev.h>
-+#include <linux/cgroup_gpu.h>
- #include <linux/types.h>
-=20
- struct dma_heap;
-@@ -59,6 +60,16 @@ void *dma_heap_get_drvdata(struct dma_heap *heap);
-  */
- const char *dma_heap_get_name(struct dma_heap *heap);
-=20
-+/**
-+ * dma_heap_get_gpucg_dev() - get a pointer to the struct gpucg_device for=
- the
-+ * heap.
-+ * @heap: DMA-Heap to retrieve gpucg_device for.
-+ *
-+ * Returns:
-+ * The gpucg_device struct for the heap.
-+ */
-+struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap);
-+
- /**
-  * dma_heap_add - adds a heap to dmabuf heaps
-  * @exp_info:		information needed to register this heap
---=20
+diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
+index 169fd5069a1a..aa28454dbca3 100644
+--- a/include/uapi/linux/android/binder.h
++++ b/include/uapi/linux/android/binder.h
+@@ -289,8 +289,8 @@ struct binder_transaction_data {
+ 
+ 	/* General information about the transaction. */
+ 	__u32	        flags;
+-	pid_t		sender_pid;
+-	uid_t		sender_euid;
++	__kernel_pid_t	sender_pid;
++	__kernel_uid_t	sender_euid;
+ 	binder_size_t	data_size;	/* number of bytes of data */
+ 	binder_size_t	offsets_size;	/* number of bytes of offsets */
+ 
+-- 
 2.35.1.1021.g381101b075-goog
 

@@ -2,169 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07CC24E964F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2404E9642
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242359AbiC1MNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 08:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
+        id S242306AbiC1MMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 08:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242376AbiC1MNx (ORCPT
+        with ESMTP id S234315AbiC1MMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 08:13:53 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2092.outbound.protection.outlook.com [40.107.237.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A0446668
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:12:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A4VCxqMggcvkW3C9dj8t2SGQNpmtVahoBgixwWQhixMaVRKyJPyDdbaRioI6oh+FgPNj+B9dmXuVnl0J16/q+Qqtm45DudqGgKb7qJFVE83l8pIKSORqdg0XaMKZeQpFybPQOaXBzhPhmjZeO2ZaxPA0XRPqRXc9sst1RHTVgA25Xi3NB1TnmZYJOJ0aLS8k5szZCEG3P5+h/WTLxCMEfT1jVzKI2A+mQ2jV3glNa7JvPK4130zpNaxx4AFpkKK1EkG5MiKVF0+E/Bcup4W04w6X7lIQ8ZX8sNZrAw13jQ/SFr6ps4gzU7BsftFD3NTNXaRXKgKvwXtfa2eh2hEl9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o6wmurCUafD3OSxUP7M0ca2dU0L6ywOZT4i4P6S+8E4=;
- b=GtoWppOSi5ETfjOaO1SZB/LmQEthRHHz6DSqYKX2pE1mBaoOo+kKiCLJ4H3O0noj2w+ZPOB56W7AAxcz4vOJW7e52F825+N8Ot5pzM3igjZUtTD4bBJS29DAbS/wrcHg9Od9ZblVpoWSB++WK9m0LP8gjCUNBKW8KbxXtQm4hjVo4gNHqxrijx3YxrK3YKQoDk1frJC3aphufkAI8pfttSEkKv6zuqEnmiVPaaW6Qhv1S35gKXYQ8HELiy5lcJXn/MBhJBV57JIqtBBiNu9R6HATeHZoPjHbwBnmatVmclaPy8FFftMpJV3um/3X4geLSiGndgKWLJd2fHyrGNy95A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
- header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
+        Mon, 28 Mar 2022 08:12:23 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4E94616F;
+        Mon, 28 Mar 2022 05:10:42 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id b13so10564674pfv.0;
+        Mon, 28 Mar 2022 05:10:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o6wmurCUafD3OSxUP7M0ca2dU0L6ywOZT4i4P6S+8E4=;
- b=aqVUaTosKUm4ci7LAs22aBKBrsdcLzuCQV45xGzZLL2ue6JXU7Hugl95hEmZF2IjktO7zyv7uXC6ajdsd+Pz0Ax2MocbtidzcwwEPZwOOZLntwJV/UHGT9G45VMhRP2xz0kNr6RyDD1e+LxaG1gfwq8VK4yKD6oLrcbLhyWSYM4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=analogixsemi.com;
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
- by DM6PR04MB4170.namprd04.prod.outlook.com (2603:10b6:5:9c::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Mon, 28 Mar
- 2022 12:12:10 +0000
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::a865:6d10:c4a9:1142]) by BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::a865:6d10:c4a9:1142%9]) with mapi id 15.20.5102.023; Mon, 28 Mar 2022
- 12:12:10 +0000
-From:   Xin Ji <xji@analogixsemi.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Xin Ji <xji@analogixsemi.com>
-Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] drm/bridge: anx7625: Use DPI bus type
-Date:   Mon, 28 Mar 2022 20:09:55 +0800
-Message-Id: <20220328120956.1848795-4-xji@analogixsemi.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220328120956.1848795-1-xji@analogixsemi.com>
-References: <20220328120956.1848795-1-xji@analogixsemi.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0174.apcprd02.prod.outlook.com
- (2603:1096:201:1f::34) To BY5PR04MB6739.namprd04.prod.outlook.com
- (2603:10b6:a03:229::8)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fcb2e2b0-d9f7-4a4b-7e0b-08da10b42f9d
-X-MS-TrafficTypeDiagnostic: DM6PR04MB4170:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR04MB417004CC17A0E1BC82BD481DC71D9@DM6PR04MB4170.namprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 940M2wU5dUCoJXLTLCx90tQ8tL2fSmkRi3Nhe00gMA/NYuPXSAh2FMUmfn73Xenh5yE2RkBD/qMN5ZmzK4UGQxUG0Ezvxxvs/6Z/wMHxoI31MAMbjSYqcQVG5rMS2XlVSDqaVtj40WeTuU5bCFqL/yXXXaxuDpDSQP7Y9x5tly6P9TNp5RQWfVEcmkJ6oyj43IazJST1fp6vV/FZQf1MI9asktDnb7hlwqEPhNm3Bo5+355RXMjPh1ncpUXcToM/9GFd8Ij0wct8BVV8szIg7ufewdncbpMZkNfswYuD7c2pGwM12DdfHznSxc/ggn10e0JmGeP6qeMo5+O+nkqwVTSHiOOVtVg8vY83xvH1rHz+i0p7ulajPebt4Dub1KuWvEMAkT3GNvjycZnWNbNOr2+73eh4WrFaujzmLl8LeMO2F+YJpvqemX/WE5tWnGVd4w9czpKbNz/hO6GLiJRai7T549Z2o6/4COMrUxfGm++b9L1FyL2uOq+hUoT7f6ImLgVrogOkAdzw3PojpldM1xByY2NwMXnCwobJXxSK+klEW2kEEyib3XWv3uhscLxrCGG7VxmAtaxCml5o3JBvvN6I1B8IUKom5EUevPVqI3UWMuMBFe2jDEle55WYav4bXYFkOy/Xehs5UC1n+fJA/SWU8TqcYUm62LTtg+1B+VJ6S2GVT8ZxK0FS7jyinITfuqSRgnndvH/GIWYi6n3skA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8936002)(8676002)(7416002)(2906002)(110136005)(5660300002)(38100700002)(316002)(38350700002)(66476007)(4326008)(7049001)(86362001)(52116002)(55236004)(66946007)(186003)(6512007)(1076003)(26005)(66556008)(2616005)(6486002)(6506007)(83380400001)(36756003)(508600001)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?w4pD3yyqZxYORSxta9mHXSFU5ir8G608XYh4NpaYkDTtSgvZ/3IsWzhxMwnJ?=
- =?us-ascii?Q?WRE7ulPmGrrzQQlohQqz3nq+AWMND/9O08NoBxVyLF/PQtA4ykvU9DE/hLq/?=
- =?us-ascii?Q?qcyy5XSYkXIaxX3U/ptJ0OZ3YBHOFGkMYW9LJKtOul9X1le8SeIVQbkZrZ77?=
- =?us-ascii?Q?AXwH1zcB5nmvJyVbKjJbDh/2ZTHeV55zyfL0TwxWtTDIo3vftQyaZmtbMmXk?=
- =?us-ascii?Q?AvTQCmAcoPE7OiPDaHkeUDbFxPeewCRTuDzZZj+K0HxQvAF9R0IEdKQ/Bm0u?=
- =?us-ascii?Q?2rHLmVFpvCc9GyUORj4GFdUC3LM8+TlAL6msEl7zrKvsu37HKa2mo4U0tdRV?=
- =?us-ascii?Q?VgEg95sRER9eDQSQrz/9vBIA+NV81QUiacxVFdFv2mpPFncrbu9jZ9zoeY+g?=
- =?us-ascii?Q?AWwiUG98FifzEIumBVEUtCo6bbc8DZZnaG/ehGEh/96cN8vEF3TZ4/FTk8bz?=
- =?us-ascii?Q?3+6O4h+u+Pq6M1bsIohsDD8k5aDn1Iovzc+Ol26h8aAhRKni/0rDtUIYB4/A?=
- =?us-ascii?Q?0FSK9j2hE278bbf1pr5IopIt3sI+14nGEcPLgTeVjju7oI4iV6kpXZ6jPN4B?=
- =?us-ascii?Q?3OMNRUqWJ18cimgCCQDtPtJdLJdOrjFiCtuj8rV0V8H4w0AF3vC08AO4XFN3?=
- =?us-ascii?Q?IBjWsa9eCveBS/J56talwPBq5wkKHPB6ZsWTe2wU48Zn8Ybt3QCRkiFQjN07?=
- =?us-ascii?Q?scI4srZ/o40fhtb0qep8uQZJlJKQN5P4+nEI5RinjImjPBekM+/5FTZYed5W?=
- =?us-ascii?Q?Va4EHjSKl3hsPgcS3uEx95jmGJ9OIHEisBLyxLMFer1H5tyolEpmxyD2pNIT?=
- =?us-ascii?Q?mXeSkm+CcWlpgZcvSbw/nUnadaidIDp5x4GP51m5to2dK1eCGvdid9aQ2duu?=
- =?us-ascii?Q?XhTXwU0ZPDHUwRD3GWsXCJ0JK0BHQcvcvivy7fc6ZGy28lJS+adgwLV/2M0H?=
- =?us-ascii?Q?UqX2BHBq1K1QzRMGWz9ChERxn1Osfr+S5PsSDXMqq9pKQFxVE/VmpS0ZLCkz?=
- =?us-ascii?Q?LQrFMaqCqv1TZzAUp3FR78FaaW1YAGd/x75WYbJyNGTLVPBhFI8y3n74vhq6?=
- =?us-ascii?Q?zRdyi58d8AXaFFjgN+fhc1iF/OSm0uDwJC+xY1IYIkEUk7NxPNvw1gpkQxTG?=
- =?us-ascii?Q?kzO1HKtWM5G1ucKnIsJSRZ2VutZDJg2i2Kju+vVx2ZrOS/vcqRZLS2rzyoWT?=
- =?us-ascii?Q?OvasohqQEPYzTeivK9WGFMtiAI00/VOc9oEW6zqdZgxnGtu1JP6tryopse/r?=
- =?us-ascii?Q?ytnl48Fgw+H1IroHg3z1sFdkFWT3Jj1LN0jI3Rw5uuQnUfYXEYZnCKZ61Kaf?=
- =?us-ascii?Q?HToe9OlZovWSHIIK51PrmvWbL1MIUWNuRXrqcRBAutfVGCEL+u/xi5gigH7g?=
- =?us-ascii?Q?K0/Ud6caxIN1phSl/jUOzay8cL7AJED6qokJ+BjBIab9pjJzb/P1WgRz+G/X?=
- =?us-ascii?Q?w+xw2J6zeKM2zJ8IXuvooCKPfQ2on86vLje1oOxuoh2cm3apDWYSS7PqPBY9?=
- =?us-ascii?Q?5xi7TvJ2NS977Cf0FkHvTMaNiDMx+2+KSqULV2qzHEGO3+KXUBpzoY/klkLn?=
- =?us-ascii?Q?QgPYVI/RvUaPXBlFFg4gi9LUhZzFane6jG102mRBDRE2Px9vSvG0rrffuXb4?=
- =?us-ascii?Q?wPDwbiOR3YgHOMWS4yw5vUSGV3Uyot7kqfni3fFOQNlp/kCaVe2lKR8d9OOz?=
- =?us-ascii?Q?TEQ4p/UwI5gheB7HGebEXi2TUl0FWhLynxglTtWuUzN0jtUWhmcV8EPLkjM8?=
- =?us-ascii?Q?Z1Yo927VYg=3D=3D?=
-X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fcb2e2b0-d9f7-4a4b-7e0b-08da10b42f9d
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2022 12:12:10.6605
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9p/4jPjzf8oHJjBbpF4z8b/5ana3iqV2hLEYsRMBLt/+Alf59ZBKS7PleGdmOY/2ffQ4X7EnEU1B2FW7FdK/Qg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB4170
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=2metHrwiTDvTKdu2SsVynM27Kre3NRcfjJWJDziOK2s=;
+        b=bzLn/vTVd5csLlxLA8U14K6h6AVYNc/RaTCL2SCqxZTGmJhDLexAqiu40rUPlPJZ1+
+         EHWKGGcoIbJahNJfKHYl2GmXvEEh/DG4QQU3qzKFMvpmk8SpWzz8+7o4Bngn6iyBi8Ve
+         danmjzuRezT1r5HfS/9olEugghGy+AeI8c0u0S27K2MSwonGfyIbrT3MokDmYeUpBQvg
+         yukIigRDeqY43PseXtn6zKUJicPkatL5bHwzS/DgzBkOIDTgPBkTZKrljs2upSPCgC7Z
+         +3d8QpUx0l5hx3m7IVcCXLP6I9jH1aHPEQc7l2F00tRVfLFApTyLBA2RQP3GMUfsZVWT
+         BczA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=2metHrwiTDvTKdu2SsVynM27Kre3NRcfjJWJDziOK2s=;
+        b=a4McFD4uiEotbtyuCI+B7NmMjK6KX4Lzn66HRye00zZdDPkF95a0AU2KIJYsojxgCZ
+         PH+sH+NIGIN4i+BZJeFycKIyjJPVFrmHNmL/oSwG+FFN6rM7ni8vZsmnWBUgTbNwDDGS
+         nhOos70RazISFoE7V3Aja7m+rqtB0r/Sgv2rL25p1ELRcShaC8sqnIXmRXuR9wPgovXV
+         9TqpQj3rhGZ1KrKw72+sojyZX9DF85RwtPOtbVEsjsDKjKWsctl0UHoUQYMPSyKNXy5H
+         Rg2drkoS0toBDE4c1V0BCIHFghfjm4QN2/AnfMgiEzNMyl7gsV/bsr0HsLHEsMBPhGTs
+         wswg==
+X-Gm-Message-State: AOAM530VHGQBFYkuF55pTBNw29jxpoaRbYyYuv73mPI20q/gxj756Tc4
+        cpV8Wwt5Ib/nGJ1soL41SnA3VKEC1vC4AA==
+X-Google-Smtp-Source: ABdhPJyNkvB3SXX6Y53tt18jSoLf0RY9GAqt/vx5zeQ2C0Q++J31WoyKZlVWfJrEAe8oSoT2nr33MQ==
+X-Received: by 2002:a63:770c:0:b0:386:361f:ecce with SMTP id s12-20020a63770c000000b00386361feccemr10162135pgc.202.1648469442425;
+        Mon, 28 Mar 2022 05:10:42 -0700 (PDT)
+Received: from ubuntu.huawei.com ([119.3.119.18])
+        by smtp.googlemail.com with ESMTPSA id p10-20020a056a0026ca00b004fb44e0cb17sm5528250pfw.116.2022.03.28.05.10.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 05:10:41 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com
+Cc:     borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        jcmvbkbc@gmail.com, elder@linaro.org, dsterba@suse.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH v3] char: tty3270: fix a missing check on list iterator
+Date:   Mon, 28 Mar 2022 20:10:30 +0800
+Message-Id: <20220328121030.32047-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As V4L2_FWNODE_BUS_TYPE_PARALLEL not properly descript for DPI
-interface, this patch use new defined V4L2_FWNODE_BUS_TYPE_DPI for it.
+The bug is here:
+	if (s->len != flen) {
 
-Fixes: fd0310b6fe7d ("drm/bridge: anx7625: add MIPI DPI input feature")
-Signed-off-by: Xin Ji <xji@analogixsemi.com>
+The list iterator 's' will point to a bogus position containing
+HEAD if the list is empty or no element is found. This case must
+be checked before any use of the iterator, otherwise it may bypass
+the 'if (s->len != flen) {' in theory if s->len's value is flen,
+or/and lead to an invalid memory access lately.
+
+To fix this bug, use a new variable 'iter' as the list iterator,
+while using the origin variable 's' as a dedicated pointer to
+point to the found element. And if the list is empty or no element
+is found, WARN_ON and return.
+
+Cc: stable@vger.kernel.org
+Fixes: ^1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 ---
- drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+changes since v2:
+ - WARN_ON and return (Sven Schnelle)
 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-index 9a2a19ad4202..c528fa2c9533 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-@@ -1615,14 +1615,14 @@ static int anx7625_parse_dt(struct device *dev,
+changes since v1:
+ - reallocate s when s == NULL (Sven Schnelle)
+
+v1:https://lore.kernel.org/lkml/20220327064931.7775-1-xiam0nd.tong@gmail.com/
+v2:https://lore.kernel.org/lkml/20220328070543.24671-1-xiam0nd.tong@gmail.com/
+
+---
+ drivers/s390/char/tty3270.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/s390/char/tty3270.c b/drivers/s390/char/tty3270.c
+index 5c83f71c1d0e..9d0952178322 100644
+--- a/drivers/s390/char/tty3270.c
++++ b/drivers/s390/char/tty3270.c
+@@ -1109,9 +1109,9 @@ static void tty3270_put_character(struct tty3270 *tp, char ch)
+ static void
+ tty3270_convert_line(struct tty3270 *tp, int line_nr)
+ {
++	struct string *s = NULL, *n, *iter;
+ 	struct tty3270_line *line;
+ 	struct tty3270_cell *cell;
+-	struct string *s, *n;
+ 	unsigned char highlight;
+ 	unsigned char f_color;
+ 	char *cp;
+@@ -1142,9 +1142,14 @@ tty3270_convert_line(struct tty3270 *tp, int line_nr)
  
- 	anx7625_get_swing_setting(dev, pdata);
- 
--	pdata->is_dpi = 1; /* default dpi mode */
-+	pdata->is_dpi = 0; /* default dsi mode */
- 	pdata->mipi_host_node = of_graph_get_remote_node(np, 0, 0);
- 	if (!pdata->mipi_host_node) {
- 		DRM_DEV_ERROR(dev, "fail to get internal panel.\n");
- 		return -ENODEV;
- 	}
- 
--	bus_type = V4L2_FWNODE_BUS_TYPE_PARALLEL;
-+	bus_type = 0;
- 	mipi_lanes = MAX_LANES_SUPPORT;
- 	ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
- 	if (ep0) {
-@@ -1632,8 +1632,8 @@ static int anx7625_parse_dt(struct device *dev,
- 		mipi_lanes = of_property_count_u32_elems(ep0, "data-lanes");
- 	}
- 
--	if (bus_type == V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus type is Parallel(DSI) */
--		pdata->is_dpi = 0;
-+	if (bus_type == V4L2_FWNODE_BUS_TYPE_DPI) /* bus type is DPI */
-+		pdata->is_dpi = 1;
- 
- 	pdata->mipi_lanes = mipi_lanes;
- 	if (pdata->mipi_lanes > MAX_LANES_SUPPORT || pdata->mipi_lanes <= 0)
+ 	/* Find the line in the list. */
+ 	i = tp->view.rows - 2 - line_nr;
+-	list_for_each_entry_reverse(s, &tp->lines, list)
+-		if (--i <= 0)
++	list_for_each_entry_reverse(iter, &tp->lines, list)
++		if (--i <= 0) {
++			s = iter;
+ 			break;
++		 }
++
++	if(WARN_ON(!s))
++		return;
+ 	/*
+ 	 * Check if the line needs to get reallocated.
+ 	 */
 -- 
-2.25.1
+2.17.1
 

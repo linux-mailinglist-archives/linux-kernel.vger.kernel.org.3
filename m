@@ -2,117 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11BD64E9323
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 13:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1752C4E9470
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 13:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240577AbiC1LUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 07:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
+        id S241210AbiC1L32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 07:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240569AbiC1LUG (ORCPT
+        with ESMTP id S241083AbiC1LXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 07:20:06 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8D0D6D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 04:18:25 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id m3so24065057lfj.11
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 04:18:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=subject:from:to:date:message-id:in-reply-to:references:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=Mr3I0zTOmgfpQLSBDag6X3RkoBkoQu16gRVM9S+AEJk=;
-        b=jbV6LejVShCi1T0VntAgmPDw0vvedWvv41xd7eUPffr8XAgeNM0WFffn+YkFYGyBnT
-         IjZQOH8dAm+wYbyX7H2e3MtEPMbSQEr/B1L3kFtt0k2QXD0NpTBSg4PkNm0lSj8vdTtv
-         43bgjUPTnFjYYPW9wpNJSkHhkoJeZ3hkNuInHXjULLXvBLe8uaSIHiA86Vmhhk38qZ9J
-         j9qMbQULcVlnFdfIR9l5soJEeaI9BIX9G8CHHJPqkViyE7LIRxMaErBnaXOAsrbYd+dz
-         pULh2gHBCEz8TktcZbKH4MPF4n/Vd56PMOvizrs+cImHZCMHYkFob1/GGiy1A+g6ALi/
-         HA6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=Mr3I0zTOmgfpQLSBDag6X3RkoBkoQu16gRVM9S+AEJk=;
-        b=WTFXOBtlYwBkH+FCLTyRlbmJ7oVwCcOgrD3HDHjFyv6bnKF620aHz7KRChD2IeQ/BQ
-         MO0CsYcSp/EiA9wbPxAY30ZntuhBVd1wFqn36TrErHAQY0nKYulNaqiYkrbqDR+XtOfj
-         rfVBwkxLlBr09hZ+wEGT7hrWdtPCvOBm3kBGSeyo4SZpaofTSobS2ALm+GxetdG/p1fd
-         cYGDNgc1fUiAazFjbNtImjfxlNj1uyJgBV//9/Uwr/YZOwWtQCoZKDCgRe6ep5nHvWKu
-         wpqRF7YgIbqeiO+SB/SQy//wFbOUrtDGGMqjys1M9aQBSaGFiwlAnWWTFNktR7AZE2S0
-         mGfg==
-X-Gm-Message-State: AOAM532pdUdI9euze3H2Nasln5EFBv5+JxzDc2wEtTXWYoS1tMSsm7XR
-        fBQ2QZFRG8sA+waiEyTvCIHcyw==
-X-Google-Smtp-Source: ABdhPJyEoLfTVx81uIbeqr52bd0IdNg687n+trzkDyCfYVD8GcWwCIe94C+hoM3YaYIuscSMh9fFmA==
-X-Received: by 2002:a19:654c:0:b0:448:2649:1169 with SMTP id c12-20020a19654c000000b0044826491169mr19369641lfj.555.1648466303868;
-        Mon, 28 Mar 2022 04:18:23 -0700 (PDT)
-Received: from [127.0.1.1] ([2.92.192.17])
-        by smtp.gmail.com with ESMTPSA id j15-20020a056512108f00b0044a3cc8769dsm1603648lfg.123.2022.03.28.04.18.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 04:18:23 -0700 (PDT)
-Subject: [PATCH 1/4] dm: Export dm_complete_request()
-From:   Kirill Tkhai <kirill.tkhai@openvz.org>
-To:     agk@redhat.com, snitzer@redhat.com, dm-devel@redhat.com,
-        song@kernel.org, linux-kernel@vger.kernel.org,
-        khorenko@virtuozzo.com, kirill.tkhai@openvz.org
-Date:   Mon, 28 Mar 2022 14:18:22 +0300
-Message-ID: <164846630280.251310.15762330533681496392.stgit@pro>
-In-Reply-To: <164846619932.251310.3668540533992131988.stgit@pro>
-References: <164846619932.251310.3668540533992131988.stgit@pro>
-User-Agent: StGit/1.5
+        Mon, 28 Mar 2022 07:23:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E858E55BED;
+        Mon, 28 Mar 2022 04:20:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38AFC611B5;
+        Mon, 28 Mar 2022 11:20:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40058C340F3;
+        Mon, 28 Mar 2022 11:20:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648466404;
+        bh=PPyB38zuBoAibvBuvbbADfl/549D/slCttl/tVe3DZc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GQiwkRlxk0RUzHTbr+UTcprC5QGTmI9+269Ms1CxYWzy1Gofz+b3ZaL0DkCD2OHdg
+         mGwtw1Rop+QV++zyU7wQXOcntHQy8r552HUyOyMB7ZPJ08eu+MSPAmAhS1Bj5HlQDv
+         l+6kBPkfOsrzxzlP7b8unRLdaQRLDeoW3wdoT3uQZjWeNXSQyAGUBo2WUEA5pZBu1E
+         /ZDY6nx2bQ9z7al+6RLdgiQksMvAQ6XDTXcDKVeMiawetMF6JLUoRHXqdqBTzb086J
+         sd5LV37TKiAtQE4ePdmsMgYvSpnus/MdSSXMe7VBAl+ozV/HfB/08HGnDtVK997Ozq
+         a5LH0TnUaMF+g==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     John David Anglin <dave.anglin@bell.net>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>,
+        James.Bottomley@HansenPartnership.com, svens@stackframe.org,
+        rmk+kernel@armlinux.org.uk, akpm@linux-foundation.org,
+        ebiederm@xmission.com, wangkefeng.wang@huawei.com,
+        zhengqi.arch@bytedance.com, linux-parisc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 39/43] parisc: Fix handling off probe non-access faults
+Date:   Mon, 28 Mar 2022 07:18:23 -0400
+Message-Id: <20220328111828.1554086-39-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220328111828.1554086-1-sashal@kernel.org>
+References: <20220328111828.1554086-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This function is required for dm-qcow2 driver going in next patches.
-The driver transforms block requests into file operations on underlining
-file in QCOW2 format (like loop but over QCOW2 instead of RAW file).
-We need to have a possibility to complete a request after corresponding
-file operations are finished.
+From: John David Anglin <dave.anglin@bell.net>
 
-Signed-off-by: Kirill Tkhai <kirill.tkhai@openvz.org>
+[ Upstream commit e00b0a2ab8ec019c344e53bfc76e31c18bb587b7 ]
+
+Currently, the parisc kernel does not fully support non-access TLB
+fault handling for probe instructions. In the fast path, we set the
+target register to zero if it is not a shadowed register. The slow
+path is not implemented, so we call do_page_fault. The architecture
+indicates that non-access faults should not cause a page fault from
+disk.
+
+This change adds to code to provide non-access fault support for
+probe instructions. It also modifies the handling of faults on
+userspace so that if the address lies in a valid VMA and the access
+type matches that for the VMA, the probe target register is set to
+one. Otherwise, the target register is set to zero.
+
+This was done to make probe instructions more useful for userspace.
+Probe instructions are not very useful if they set the target register
+to zero whenever a page is not present in memory. Nominally, the
+purpose of the probe instruction is determine whether read or write
+access to a given address is allowed.
+
+This fixes a problem in function pointer comparison noticed in the
+glibc testsuite (stdio-common/tst-vfprintf-user-type). The same
+problem is likely in glibc (_dl_lookup_address).
+
+V2 adds flush and lpa instruction support to handle_nadtlb_fault.
+
+Signed-off-by: John David Anglin <dave.anglin@bell.net>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/dm-rq.c |    3 ++-
- drivers/md/dm-rq.h |    2 ++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ arch/parisc/include/asm/traps.h |  1 +
+ arch/parisc/kernel/traps.c      |  2 +
+ arch/parisc/mm/fault.c          | 89 +++++++++++++++++++++++++++++++++
+ 3 files changed, 92 insertions(+)
 
-diff --git a/drivers/md/dm-rq.c b/drivers/md/dm-rq.c
-index 579ab6183d4d..1b9a633efe37 100644
---- a/drivers/md/dm-rq.c
-+++ b/drivers/md/dm-rq.c
-@@ -275,7 +275,7 @@ static void dm_softirq_done(struct request *rq)
-  * Complete the clone and the original request with the error status
-  * through softirq context.
-  */
--static void dm_complete_request(struct request *rq, blk_status_t error)
-+void dm_complete_request(struct request *rq, blk_status_t error)
- {
- 	struct dm_rq_target_io *tio = tio_from_request(rq);
- 
-@@ -283,6 +283,7 @@ static void dm_complete_request(struct request *rq, blk_status_t error)
- 	if (likely(!blk_should_fake_timeout(rq->q)))
- 		blk_mq_complete_request(rq);
- }
-+EXPORT_SYMBOL(dm_complete_request);
- 
- /*
-  * Complete the not-mapped clone and the original request with the error status
-diff --git a/drivers/md/dm-rq.h b/drivers/md/dm-rq.h
-index 1eea0da641db..56156738d1b4 100644
---- a/drivers/md/dm-rq.h
-+++ b/drivers/md/dm-rq.h
-@@ -44,4 +44,6 @@ ssize_t dm_attr_rq_based_seq_io_merge_deadline_show(struct mapped_device *md, ch
- ssize_t dm_attr_rq_based_seq_io_merge_deadline_store(struct mapped_device *md,
- 						     const char *buf, size_t count);
- 
-+void dm_complete_request(struct request *rq, blk_status_t error);
-+
+diff --git a/arch/parisc/include/asm/traps.h b/arch/parisc/include/asm/traps.h
+index 34619f010c63..0ccdb738a9a3 100644
+--- a/arch/parisc/include/asm/traps.h
++++ b/arch/parisc/include/asm/traps.h
+@@ -18,6 +18,7 @@ unsigned long parisc_acctyp(unsigned long code, unsigned int inst);
+ const char *trap_name(unsigned long code);
+ void do_page_fault(struct pt_regs *regs, unsigned long code,
+ 		unsigned long address);
++int handle_nadtlb_fault(struct pt_regs *regs);
  #endif
-
+ 
+ #endif
+diff --git a/arch/parisc/kernel/traps.c b/arch/parisc/kernel/traps.c
+index b6fdebddc8e9..39576a9245c7 100644
+--- a/arch/parisc/kernel/traps.c
++++ b/arch/parisc/kernel/traps.c
+@@ -662,6 +662,8 @@ void notrace handle_interruption(int code, struct pt_regs *regs)
+ 			 by hand. Technically we need to emulate:
+ 			 fdc,fdce,pdc,"fic,4f",prober,probeir,probew, probeiw
+ 		*/
++		if (code == 17 && handle_nadtlb_fault(regs))
++			return;
+ 		fault_address = regs->ior;
+ 		fault_space = regs->isr;
+ 		break;
+diff --git a/arch/parisc/mm/fault.c b/arch/parisc/mm/fault.c
+index e9eabf8f14d7..f114e102aaf2 100644
+--- a/arch/parisc/mm/fault.c
++++ b/arch/parisc/mm/fault.c
+@@ -425,3 +425,92 @@ void do_page_fault(struct pt_regs *regs, unsigned long code,
+ 	}
+ 	pagefault_out_of_memory();
+ }
++
++/* Handle non-access data TLB miss faults.
++ *
++ * For probe instructions, accesses to userspace are considered allowed
++ * if they lie in a valid VMA and the access type matches. We are not
++ * allowed to handle MM faults here so there may be situations where an
++ * actual access would fail even though a probe was successful.
++ */
++int
++handle_nadtlb_fault(struct pt_regs *regs)
++{
++	unsigned long insn = regs->iir;
++	int breg, treg, xreg, val = 0;
++	struct vm_area_struct *vma, *prev_vma;
++	struct task_struct *tsk;
++	struct mm_struct *mm;
++	unsigned long address;
++	unsigned long acc_type;
++
++	switch (insn & 0x380) {
++	case 0x280:
++		/* FDC instruction */
++		fallthrough;
++	case 0x380:
++		/* PDC and FIC instructions */
++		if (printk_ratelimit()) {
++			pr_warn("BUG: nullifying cache flush/purge instruction\n");
++			show_regs(regs);
++		}
++		if (insn & 0x20) {
++			/* Base modification */
++			breg = (insn >> 21) & 0x1f;
++			xreg = (insn >> 16) & 0x1f;
++			if (breg && xreg)
++				regs->gr[breg] += regs->gr[xreg];
++		}
++		regs->gr[0] |= PSW_N;
++		return 1;
++
++	case 0x180:
++		/* PROBE instruction */
++		treg = insn & 0x1f;
++		if (regs->isr) {
++			tsk = current;
++			mm = tsk->mm;
++			if (mm) {
++				/* Search for VMA */
++				address = regs->ior;
++				mmap_read_lock(mm);
++				vma = find_vma_prev(mm, address, &prev_vma);
++				mmap_read_unlock(mm);
++
++				/*
++				 * Check if access to the VMA is okay.
++				 * We don't allow for stack expansion.
++				 */
++				acc_type = (insn & 0x40) ? VM_WRITE : VM_READ;
++				if (vma
++				    && address >= vma->vm_start
++				    && (vma->vm_flags & acc_type) == acc_type)
++					val = 1;
++			}
++		}
++		if (treg)
++			regs->gr[treg] = val;
++		regs->gr[0] |= PSW_N;
++		return 1;
++
++	case 0x300:
++		/* LPA instruction */
++		if (insn & 0x20) {
++			/* Base modification */
++			breg = (insn >> 21) & 0x1f;
++			xreg = (insn >> 16) & 0x1f;
++			if (breg && xreg)
++				regs->gr[breg] += regs->gr[xreg];
++		}
++		treg = insn & 0x1f;
++		if (treg)
++			regs->gr[treg] = 0;
++		regs->gr[0] |= PSW_N;
++		return 1;
++
++	default:
++		break;
++	}
++
++	return 0;
++}
+-- 
+2.34.1
 

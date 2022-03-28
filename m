@@ -2,139 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DA64E9C5E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185A64E9C60
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242450AbiC1QhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 12:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48768 "EHLO
+        id S242102AbiC1Qhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 12:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233943AbiC1QhG (ORCPT
+        with ESMTP id S233943AbiC1Qhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 12:37:06 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051E54EA09
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:35:26 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id b130so11225268pga.13
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:35:26 -0700 (PDT)
+        Mon, 28 Mar 2022 12:37:31 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D03F62BCA
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:35:49 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id o10so29892960ejd.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:35:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Vk77d+0Kc7DWFXj6xs6aYSWNHloUJ9SME5XaB8pmN0g=;
-        b=MVsgivSN2ISec4Pob7oOW99fNO7H6pTfq5sq9jLNLxDpR4WuNXdeLGhtd3Fu42tHOj
-         AoT27tQmiZZk+wrjDnd4Ftv3vVo/yto0m8UxjaB/WAW57mOgGRkhQgQIkQQARBat7M1Y
-         dnuVfy8aw9hbGZIiGaVCF067aPwVgPx1Wo2Yhg8gyFAux2AmuIAUX+H6Spo1Puh1TM+a
-         wYzFQat3v6GvOtZLtwqU6ZFd2zjufMnuvOcSATf2dHFGhn5RWn/olLpdBEKHr8LaL+hD
-         WdHvffmw3QxrplHlgPd2IqPP2/5Ewu7blWfrPw2/qcJR+roIH1/tVajAEnAXLlTcLIcC
-         RQxQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OwMy4MS8C7C8gzFiov5E/LSR2ViwcR0jmdDA7SujYjA=;
+        b=V9W9p+XtclEqC4lFHujJCkNAwvr5bva2d1hg/1VTScBm5oBPLzPiK3VsCCyvx08zUx
+         NZ6jBVYBltF7IMRPsw06HicPiu2bZrTMncHWALY6o+w7I3rVU1UDuq6j9z3tgoTQZ60M
+         2ta1I+R+U2ZmLZwFMPfujJkiSx77UtxZW+8TitpxnVeOHJf7kBh7+BIp12hz4QwQxzUD
+         6YwNNBg5ZnRoUBTkiaxe2Jr/h2JrIv7i/BjwDguSo7NFqDxXgSM4jEZLdYWemQHKhFTf
+         AC29a+2Z3imHt0PX97Ad7cGrg/OZUkTIdol67k36TgWkXGfDS0Gy6akREHGAi1UAnUZ7
+         K4JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Vk77d+0Kc7DWFXj6xs6aYSWNHloUJ9SME5XaB8pmN0g=;
-        b=QHeYtjLurrxeGDTUpQ/3jEuEVdYQ03cFcqoDfLK1E2ans1/MmjlC70/mkAm++q8So2
-         z7QzX2+8Q+tOBZeNEv7tie29vD/FgarZdZiUCKva3+EVH3pX0js5BSSJRv1OwAry7BIO
-         5CAleHf/EzW6kHXKw0hXA77TNUK654SgP+ywy8opAa8LHl2Qxgge0yShim664ypamJ6p
-         YddoYpKLEM11yma/m81JFaNjXv/T6aoD0Ciq1uFMAnVZZEqYqTO2mGlCH4LG20uFitFJ
-         qDBtJyVCL2O7/sjavz9i2jJD74hVrwTgWPtZLRJ056Pb8zDh6YSvj9hZhkDRZr9pMkYt
-         lMzA==
-X-Gm-Message-State: AOAM532WK9SkIppm6VkZdMhfdg7Jya8d8hvfQYc+eGj/P2oihbPhSsEB
-        1AwCaVb4n9iR8LT2oFWz1QGqIw==
-X-Google-Smtp-Source: ABdhPJxknusVhxPrxeY+oa20v4VonS+Ltx8QGrc1Yyi+Gao+OuPqoiqyoIfm7iXs2RJIyiQLbKWpHw==
-X-Received: by 2002:a62:cd83:0:b0:4fa:7410:6d86 with SMTP id o125-20020a62cd83000000b004fa74106d86mr24579791pfg.52.1648485325297;
-        Mon, 28 Mar 2022 09:35:25 -0700 (PDT)
-Received: from ?IPV6:2409:8a28:e6c:aaa0:b49b:a46e:8f1f:6bcd? ([2409:8a28:e6c:aaa0:b49b:a46e:8f1f:6bcd])
-        by smtp.gmail.com with ESMTPSA id x25-20020a056a000bd900b004faae43da95sm15923707pfu.138.2022.03.28.09.35.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Mar 2022 09:35:24 -0700 (PDT)
-Message-ID: <933ecd2d-fe2f-3b52-f2f0-c5b1a132dd81@bytedance.com>
-Date:   Tue, 29 Mar 2022 00:35:11 +0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OwMy4MS8C7C8gzFiov5E/LSR2ViwcR0jmdDA7SujYjA=;
+        b=PF5zo2wTyya18mBZIAljJGqowpmBdaOJudCnmB9zDxKKNS1JM5gSUeHcX8OhnsJ87W
+         ZsxMAlT6/+VMcBXR5dG5RHpNU1b/kgx86arSPGRWNvkMcoH+yaGsthhfIbCpAMDVMdEp
+         0VSBJF+ZYylygZAXbG6GVQKHT+Sk+KgkxiiA+17iFmQ0yvTVzex+BMTKl9VdH9Sae9sS
+         3ZVDk0zNjCBS+0BKogJC7BQtfc3koGPld9MvOfMO0WbU1LIBvw1DNSonFwJYRbFvLmiV
+         FlRgcPUOjdJUL4c/uiNF5poWru7uYoLxOyMJx0wTpSYsQDymC7x9BEWTIlfgmRZVfZtg
+         txoA==
+X-Gm-Message-State: AOAM532t3iu457iCyHrskwBuKjRR+JtrA9UFATLK74ETuSl57bU+JuoZ
+        gkHTgqwKfw3WyCwaZAg8z4IMIW7+KPrut0y3qfcG7A==
+X-Google-Smtp-Source: ABdhPJzEQcYDp2/qHU9fvLW0LgXzV02XSswT1eH2SnbmaDayw4XPT0FotUGC3PnjMKmAHq3k3RMUGAyOA9Is8fS79Ts=
+X-Received: by 2002:a17:907:1622:b0:6df:d1a2:d4a3 with SMTP id
+ hb34-20020a170907162200b006dfd1a2d4a3mr27667302ejc.542.1648485347621; Mon, 28
+ Mar 2022 09:35:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [External] Re: [PATCH] sched/fair: fix broken bandwidth control
- with nohz_full
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
-        Frederic Weisbecker <fweisbec@gmail.com>
-References: <20220328110751.39987-1-zhouchengming@bytedance.com>
- <20220328132047.GD8939@worktop.programming.kicks-ass.net>
- <c0465b27-328a-1288-fb50-d4c6321c8b4d@bytedance.com>
- <YkHRmv/OcABIB0wP@hirez.programming.kicks-ass.net>
- <6fc49cff-f8a1-8b09-5a25-a64e5d07d258@bytedance.com>
- <YkHal1m3pnxGoQ1Y@hirez.programming.kicks-ass.net>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <YkHal1m3pnxGoQ1Y@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220326003356.487828-1-dlatypov@google.com> <CABVgOSmbQxZmmNtUQLsvMSPkr2FpXB_kdJUUbC=nLrt6xN7e2A@mail.gmail.com>
+In-Reply-To: <CABVgOSmbQxZmmNtUQLsvMSPkr2FpXB_kdJUUbC=nLrt6xN7e2A@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 28 Mar 2022 11:35:36 -0500
+Message-ID: <CAGS_qxq_vFtGS4BGieZz8L3QH7rZ7ZN25pGYmjWWoXbTGOKC9A@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: kunit: update kconfig options needed for
+ UML coverage
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>, maxime@cerno.tech
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/28 23:56, Peter Zijlstra wrote:
-> On Mon, Mar 28, 2022 at 11:40:25PM +0800, Chengming Zhou wrote:
-> 
->>> NOHZ_FULL is for use-cases that 'never' intend to go into the kernel,
->>> your use-case actively relies on going into the kernel. Hence the
->>> confusion.
->>
->> In fact, I put a testcase at the end of git message, in which only run
->> a userspace loop workload:
->>
->> cd /sys/fs/cgroup
->> echo "+cpu" > cgroup.subtree_control
->>
->> mkdir test
->> echo "105000 100000" > test/cpu.max
->>
->> echo $$ > test/cgroup.procs
->> taskset -c 1 bash -c "while true; do let i++; done"  --> will be throttled
-> 
-> Ofcourse.. I'm arguing that bandiwdth control and NOHZ_FULL are somewhat
-> mutually exclusive, use-case wise. So I really don't get why you'd want
-> them both.
+On Fri, Mar 25, 2022 at 9:56 PM David Gow <davidgow@google.com> wrote:
+>
 
-This problem is found by our VM team, they use bandwidth for overcommit,
-share CPUs between two VMs.
+<snip>
 
-> 
-> NOHZ_FULL says, "I 'never' intend to go to the kernel"
+> >         # Append coverage options to the current config
+> > -       $ echo -e "CONFIG_DEBUG_KERNEL=y\nCONFIG_DEBUG_INFO=y\nCONFIG_GCOV=y" >> .kunit/.kunitconfig
+> > +       $ echo -e "CONFIG_DEBUG_KERNEL=y\nCONFIG_DEBUG_INFO=y\nCONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y\nCONFIG_GCOV=y" >> .kunit/.kunitconfig
+> >         $ ./tools/testing/kunit/kunit.py run
+>
+> Would we want to instead use a chain of --kconfig_add arguments? (I
+> think there are advantages either way...)
 
-Like VCPU seldom kvm_exit to the kernel, stop tick is helpful for performance,
-since kvm_exit is more expensive.
+I've been considering this ever since the --kconfig_add patch was accepted.
+It's more compatible w/ commands using --kunitconfig, but it also
+looks very verbose.
+E.g. it looks like
 
-> 
-> bandwidth control says: "I expect to be sharing the system and must be
-> interrupted to not consume too much time", which very much implies: "I
-> will go into the kernel".
+$ tools/testing/kunit/kunit.py run --make_options=CC=/usr/bin/gcc-6
+--kconfig_add=CONFIG_DEBUG_INFO=y
+--kconfig_add=CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+--kconfig_add=CONFIG_GCOV=y
 
-Yes, agree. If the tasks in the task_group used up quota, they have to
-go into the kernel to resched out.
+Neither looks very appealing to me, so I've just kept it as-is for now.
 
-> 
-> The trade-off we make to make NOHZ_FULL work, makes system enter/exit
-> *far* more expensive. There's also people asking to outright kill a task
-> that causes entry under NOHZ_FULL.
-
-It's correct that the task under NOHZ_FULL shouldn't often enter/exit.
-
-> 
-> So yes, you can configure it, but why does it make sense?
-
-I don't know if other people have the same use-case, or is there other
-better way to do VMs overcommit and bandwidth...
-
-Thanks.
-
+Maybe there's something we can do to make this easier (e.g. allowing
+--kunitconfig to be repeated and mergable)?

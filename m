@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E80604E98AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63EE14E98B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243484AbiC1Nv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 09:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33092 "EHLO
+        id S236703AbiC1Nwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 09:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243479AbiC1Nv5 (ORCPT
+        with ESMTP id S243493AbiC1Nwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 09:51:57 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E749851E40
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:50:15 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so10648147pjk.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:50:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fYLS3FUqU6ElSyyxJvju10Ed/M1yqpvYoJBkWCWwU+Y=;
-        b=ZWFK5+xwGXw7oPM/iGfRRRCNaF2jI3AzpFlQtaV6DU+HkIy6Jf9sFeftvS/3gSabeG
-         Z90f9L8K4jXmhZ3sNoNXya0wqmFmH6o8HAvRLix+pjySIYr5Lp/OBY7NxjjsiTFzCFe1
-         E3yuaSqnw0y2xw9oY5KM9qIPAPn3rCVsiTQWfSwN4nO/fzeISvih74bWczQckDwm7fjU
-         ZMOrrBMt+v5LAGstZm+z/6ldoo61Vdi7znyMfei7tdxFViLYpJgDFRSiG7IrTU4r9bEH
-         kyuNkqh9B/f3JeE6kS761ACcZqiQFYvwW+qk6ObiG9fTQg5wgAv+kTzSx4y3VQ1RcJEY
-         m6QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fYLS3FUqU6ElSyyxJvju10Ed/M1yqpvYoJBkWCWwU+Y=;
-        b=fKMsOaeQWfXJp6TetIjgDQRaNdsovK0suUX64BrL3kBkRmgb1synSNVmZmIrH1ruXb
-         DfXmOxKNf6E4TcV7WkvfBWHFjawSYGjuWpd2HGeRbVE4wfBw9jc9cNJqSQL+1ObNI1Xu
-         +65QYIjRZXUugv6paIwbQW2h4hQMcfxPZZ7HyDs/db5tf/11qgTGtXVky6+f9GZa4wHM
-         ilb95I1A3EJlEGHe/iSj+927G7nGmYegeSyI6TD39/NJSgpkykfGT2B4h4HMx2Up0hvj
-         8G6+zxG1liASzWFJmIQKjfsDjSZJzVJFuadBItKB4okN2o9AaiYTk0Ng3qTgcUhk1JcS
-         lNYA==
-X-Gm-Message-State: AOAM5336meA0MOI9zahKsa96yk5lh51G62hkQZ1k/rav+EuCWtwsXDLV
-        kcLH1SKOmfOQ2Z/H5VbjM2i7Bg==
-X-Google-Smtp-Source: ABdhPJyWR7UUgXnqyeNQTWo5J4/+xW5sMz6Rk/7vNAQSxhZG8Uz1PRs+zmE6Y7ocgIGh8R9G+b1FEQ==
-X-Received: by 2002:a17:90a:5291:b0:1bb:ef4d:947d with SMTP id w17-20020a17090a529100b001bbef4d947dmr41339439pjh.243.1648475415426;
-        Mon, 28 Mar 2022 06:50:15 -0700 (PDT)
-Received: from ?IPV6:2409:8a28:e6c:aaa0:b49b:a46e:8f1f:6bcd? ([2409:8a28:e6c:aaa0:b49b:a46e:8f1f:6bcd])
-        by smtp.gmail.com with ESMTPSA id l2-20020a056a0016c200b004f7e3181a41sm17091631pfc.98.2022.03.28.06.50.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Mar 2022 06:50:15 -0700 (PDT)
-Message-ID: <c0465b27-328a-1288-fb50-d4c6321c8b4d@bytedance.com>
-Date:   Mon, 28 Mar 2022 21:50:05 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [External] Re: [PATCH] sched/fair: fix broken bandwidth control
- with nohz_full
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com
-References: <20220328110751.39987-1-zhouchengming@bytedance.com>
- <20220328132047.GD8939@worktop.programming.kicks-ass.net>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <20220328132047.GD8939@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        Mon, 28 Mar 2022 09:52:47 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC975BD1A;
+        Mon, 28 Mar 2022 06:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1648475436;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=4ezCWy705CocHbi8RdHxAqN8vv3gv5SFt/Dzp2Yq4pw=;
+    b=h67cVVRQQY22Ho6Oj4lqPV6bbZckg/sqlHJTvISuhhitSpD81WickIMTAt5h0AFRCu
+    Qg+4KMYijDSN2sgiXaUl4mkWwL9szWD4xXIJNJkYGv3z88l0PTuJb0dZ/VHDeEbmgBID
+    CBrquT4GkxLKaOV2BIp8osnHX+l3cX0/OHzhwCQzswvxR4LPQN6v+l5jOK8elenecZim
+    yxdVkybdH/gWZLIWfRewxjT6C6qAdZGJSpqqZf7tPJGeXqzB/cGuyUHgPrRZx7Uc2aQt
+    y0IhuWC0oSbH7Z+AuXQhtPgu/MgbvE1jvg6fxo79GX5ZqOVxt5WvtyeuH2CF7eSsjLBB
+    +nnw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw43u32M="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.42.1 DYNA|AUTH)
+    with ESMTPSA id u3e945y2SDoZ3IR
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Mon, 28 Mar 2022 15:50:35 +0200 (CEST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <YkG2RPrtPaBNXb7a@latitude>
+Date:   Mon, 28 Mar 2022 15:50:34 +0200
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-actions@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org,
+        chrome-platform@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
+        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
+        linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org,
+        linux-unisoc@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-realtek-soc@lists.infradead.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D9AFAC3C-46CA-4C40-8559-FD6934411CAB@goldelico.com>
+References: <20220328000915.15041-1-ansuelsmth@gmail.com>
+ <YkG2RPrtPaBNXb7a@latitude>
+To:     =?utf-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Ansuel Smith <ansuelsmth@gmail.com>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,44 +80,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/28 21:20, Peter Zijlstra wrote:
-> On Mon, Mar 28, 2022 at 07:07:51PM +0800, Chengming Zhou wrote:
->> With nohz_full enabled on cpu, the scheduler_tick() will be stopped
->> when only one CFS task left on rq.
->>
->> scheduler_tick()
->>   task_tick_fair()
->>     entity_tick()
->>       update_curr()
->>         account_cfs_rq_runtime(cfs_rq, delta_exec) --> stopped
->>
->> So that running task can't account its runtime periodically, but
->> the cfs_bandwidth hrtimer still __refill_cfs_bandwidth_runtime()
->> periodically. Later in one period, the task would account very
->> big delta_exec, which cause the cfs_rq to be throttled for a
->> long time.
->>
->> There are two solutions for the problem, the first is that we
->> can check in sched_can_stop_tick() if current task's cfs_rq
->> have runtime_enabled, in which case we don't stop tick. But
->> it will make nohz_full almost useless in cloud environment
->> that every container has the cpu bandwidth control setting.
-> 
-> How is NOHZ_FULL useful in that environment to begin with? If you set
-> bandwidth crap, the expectation is that there is overcommit, which more
-> or less assumes lots of scheduling, presumably VMs or somesuch crud.
-> 
-> So how does NOHZ_FULL make sense?
 
-Yes, we have scheduled some VMs in cgroups on the host, which
-enabled NOHZ_FULL to reduce the interference of tick to vcpu task
-if it's the only task running on cpu.
 
-This problem will however throttle it wrongly, even if it hasn't
-used up its quota.
+> Am 28.03.2022 um 15:21 schrieb Jonathan Neusch=C3=A4fer =
+<j.neuschaefer@gmx.net>:
+>=20
+> Or maybe bcm instead of broadcom. Not sure which is preferred by
+> Broadcom people.
 
-Do you suggest that we shouldn't stop tick when the current task's
-cfs_rq has runtime_enabled ?
+Maybe it should always follow the list of vendor prefixes as we are =
+talking about DTS?
 
-Thanks.
+just my 2cts,
+Nikolaus
 

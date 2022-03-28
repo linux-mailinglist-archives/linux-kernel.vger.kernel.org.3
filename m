@@ -2,128 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F844EA197
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71334EA194
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:34:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344267AbiC1Ug1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 16:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
+        id S1344689AbiC1UgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 16:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346274AbiC1UeQ (ORCPT
+        with ESMTP id S1346503AbiC1UfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 16:34:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE6232EF8;
-        Mon, 28 Mar 2022 13:32:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A86D6149E;
-        Mon, 28 Mar 2022 20:32:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60CA1C340ED;
-        Mon, 28 Mar 2022 20:32:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648499554;
-        bh=8+UTYWbVLgOBzCkQVECx2w9eUsJDkRhc8E5Y1Jz2ip0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sPy/YTXkdJdSZVHLGbJfXwU8C0JLpFaTNvtev8+HV1HOtIxVNXr8isggfrPXodslo
-         d5/r7Zn4lLeWOpZWcd6/rk9M00q9O4CdS79sdqlXOUUii20ZrQfqN71rPcBUHIPlXt
-         /rEBLI07rQO8OI0qPBNmerM0KlAC0VQ41Z3LCJPahzAQtSjhlJAHJWqJ3PmGy4EGLn
-         zoqohpSev54HbH7NZ3SaAfInKtZs3xSf7/XehKqj/XFM4yzbMcF4aWogKMRHdcrsdC
-         6Lwvr77bWO60aTj9DzWNDIyoBLUkno0z6EB7mdF7+Lxdk/b0X7KepLA0XELxwUDTAR
-         twPi+mbwai4Mw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 3A55E40407; Mon, 28 Mar 2022 17:32:31 -0300 (-03)
-Date:   Mon, 28 Mar 2022 17:32:31 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 4/5] perf stat: Avoid segv if core.user_cpus isn't set.
-Message-ID: <YkIbXzCYEutqxQRE@kernel.org>
-References: <20220328062414.1893550-1-irogers@google.com>
- <20220328062414.1893550-5-irogers@google.com>
+        Mon, 28 Mar 2022 16:35:06 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B701530F6C;
+        Mon, 28 Mar 2022 13:33:22 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id r13so31066767ejd.5;
+        Mon, 28 Mar 2022 13:33:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=99of423IY7CVPR8iPnU+TMAUNxIGG8oT/8tTMtEORJo=;
+        b=G5DBj1J4jLpDgQj7PFiqg755gBkN6ZebE1uZCqAfXyefK1DTfuLKXUbpVv8eChBm/6
+         j+9ZOtiTtsRKec9UTyuPH78a1LDBDHVlI5Ri9ulgfW79sWSTowUIBbsR7m+YxeS/qAZc
+         EZoCnTMA1kTWwkrSCR0wbrdM4YuF8YtBvkCrNlEe5ZRu6DA79QoHwWu9JNHl5uoG7kYD
+         yH64hFSIyfYEsjTixT3DTerwLTh+A2iKo2Z9YwWibTVtOS6SIx0JN0L7q7gwXVr5V0sB
+         4WpFTx9p3YRgp7BxWgSTUjdPLkv2bkRyCuiltwEKDdk1S8kGyfaxGQTvRq5GRp/5SCtA
+         78qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=99of423IY7CVPR8iPnU+TMAUNxIGG8oT/8tTMtEORJo=;
+        b=mFbN1mxA00vR4Czgk3myFKPdkEiwch69MwpSN/2ow2TJr1plvrTn51PmrAv3dxiQF8
+         AKv66No+szw4N986PKx3w/Z6qiESW7eOwto2X972TB4vm3p3Ck555EdLeNcpuRnzdhiQ
+         qFg9tfhkojFgt6pPI2TbKKLf+itOoBYYRC3UP7GyWF4H28ofq8zmydEW5X8pndYL3mv+
+         FBiOehogQuf+bD8LRjuTrWhWqXVd5IhKua1BiZ77aWzvT4Rkh3yOmnIprC9kgZYZR+Db
+         +eDvF47ZPjOAuc9IYB0pBJK9Zb1KN19rW6PGbM2cE9QOm7dQ88mfChr2xis2c38wNQIR
+         yazQ==
+X-Gm-Message-State: AOAM5325w91H3oYz5pMH2uirncvXlhDh7qvpe1Z7HMFTw2cJoJXr+1bo
+        FbGIbTDkQxi76ScBS5uk/mypaqZdUP1GscZsBYA=
+X-Google-Smtp-Source: ABdhPJzCRrL+Gc1pbqF+lApMPgSvyVYO246Ig45MwOtUmzuhGX2T1TmaYbvQh8EJzEZ6yHHl8+D9+W35G0lcF5JQgc0=
+X-Received: by 2002:a17:907:e8d:b0:6e0:19e7:9549 with SMTP id
+ ho13-20020a1709070e8d00b006e019e79549mr30071158ejc.44.1648499601151; Mon, 28
+ Mar 2022 13:33:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328062414.1893550-5-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YkHOpCT2Gad1YaxN@hp-amd-paul>
+In-Reply-To: <YkHOpCT2Gad1YaxN@hp-amd-paul>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 28 Mar 2022 23:32:44 +0300
+Message-ID: <CAHp75Vf7R2=m7apZfXkY9-nETNiG7n6oXpivBg-56Wguzx2+8A@mail.gmail.com>
+Subject: Re: [PATCH] IIO: accel: fixed coding style issues
+To:     Paul Lemmermann <thepaulodoom@thepaulodoom.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sun, Mar 27, 2022 at 11:24:13PM -0700, Ian Rogers escreveu:
-> Passing null to perf_cpu_map__max doesn't make sense as there is no
-> valid max. Avoid this problem by null checking in
-> perf_stat_init_aggr_mode.
+On Mon, Mar 28, 2022 at 7:45 PM Paul Lemmermann
+<thepaulodoom@thepaulodoom.com> wrote:
+>
+> Fixed case statement issues and spacing issues.
 
-Applying this one after changing user_cpus back to cpus as this is a fix
-independent of this patchset.
+...
 
-In the future, please try to have such patches at the beginning of the
-series, so that  they can get cherry-picked more easily.
+>                         switch (val[j]) {
+> -                       case -1: str = "-1"; break;
+> -                       case 0:  str = "0";  break;
+> -                       case 1:  str = "1";  break;
+> -                       default: goto unknown_format;
+> +                       case -1:
+> +                               str = "-1";
+> +                               break;
+> +                       case 0:
+> +                               str = "0";
+> +                               break;
+> +                       case 1:
+> +                               str = "1";
+> +                               break;
+> +                       default:
+> +                               goto unknown_format;
+>                         }
 
-- Arnaldo
- 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/builtin-stat.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index 5bee529f7656..ecd5cf4fd872 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -1472,7 +1472,10 @@ static int perf_stat_init_aggr_mode(void)
->  	 * taking the highest cpu number to be the size of
->  	 * the aggregation translate cpumap.
->  	 */
-> -	nr = perf_cpu_map__max(evsel_list->core.user_cpus).cpu;
-> +	if (evsel_list->core.user_cpus)
-> +		nr = perf_cpu_map__max(evsel_list->core.user_cpus).cpu;
-> +	else
-> +		nr = 0;
->  	stat_config.cpus_aggr_map = cpu_aggr_map__empty_new(nr + 1);
->  	return stat_config.cpus_aggr_map ? 0 : -ENOMEM;
->  }
-> -- 
-> 2.35.1.1021.g381101b075-goog
+What you cited from documentation mostly affects the new code, but
+this code is already in the kernel and modifying it, esp. taking into
+account 3x LOCs count, looks like an unneeded churn, even if
+documentation thinks otherwise.
+
+What I could acknowledge from your proposal is the default case.
+Otherwise just leave it to the point if we touch this code for
+something else in the future.
+
+...
+
+>  static const struct of_device_id kxsd9_of_match[] = {
+> -        { .compatible = "kionix,kxsd9" },
+> -        { },
+> +       { .compatible = "kionix,kxsd9" },
+
+> +       { },
+
+I dunno why you touched this line (likely TABs vs. spaces), but please
+remove the comma as well here.
+
+>  };
 
 -- 
-
-- Arnaldo
+With Best Regards,
+Andy Shevchenko

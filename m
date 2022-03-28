@@ -2,103 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B78A4E9A51
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 927524E9A5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244179AbiC1PG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 11:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
+        id S244224AbiC1PIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 11:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240427AbiC1PGz (ORCPT
+        with ESMTP id S244186AbiC1PHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 11:06:55 -0400
-Received: from mail.thepaulodoom.com (www.thepaulodoom.com [45.77.108.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EFBF42493
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:05:13 -0700 (PDT)
-Received: from hp-amd-paul (c-98-240-189-147.hsd1.mn.comcast.net [98.240.189.147])
-        by vultr.guest (OpenSMTPD) with ESMTPSA id 4453a9ce (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 28 Mar 2022 15:05:11 +0000 (UTC)
-Date:   Mon, 28 Mar 2022 10:05:08 -0500
-From:   Paul Lemmermann <thepaulodoom@thepaulodoom.com>
-To:     jic23@kernel.org
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] IIO: accel: fixed coding style issues
-Message-ID: <YkHOpCT2Gad1YaxN@hp-amd-paul>
+        Mon, 28 Mar 2022 11:07:50 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DEE42493
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:06:09 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id y38so23883453ybi.8
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:06:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M/wRiyThS5X8/D2KX8GPji/87UrigbGUnnN2Y5aIQZk=;
+        b=yV5Sdnq4Kjd2UWp/LZ5lwEEIERJNIr6KcM46CNCVWFvx5wlzaJKddNK3VRi9pv7R2o
+         hWLbRfqsYLG0O6BNwadNXFRL0YPv+6GRHkR0IzKLPhfmrUR2KryNXljHadxnyCDBIKfG
+         KF3hEMCHNIbTbUadbfHl44Bxavmpj4Yv1hA3CuM83B2CxsfvMWvxfFESE+lhkcc2sl81
+         sVn2fmUkIK1jSq6CSafEfGsW+woSpsvXDMkS8B+IG38HEM9XFKMRr8RrXUF/P0GXJxbn
+         0RCKTCb0nMdQINyuCCC1bFgIRbmReMA7sVoFZOdeeWwD8F4hNP9k17WhtrZi3ge5CPd4
+         ikkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M/wRiyThS5X8/D2KX8GPji/87UrigbGUnnN2Y5aIQZk=;
+        b=MYwP5AijEsRoRwCmdm1TYMylaaxHRvnq5r85IarYrTJm80B/87L63ZXhX/P0Qgt9CZ
+         4BH/Tw+v5UFd6GT8hYD7zLyW9kT8ZN9mwVixDoMl0kTLsMW0BXWlJizSPtjSJXfdQi+Q
+         8qLXstlf7nfbuKQtNjJRi2H+R9IJ/dNXpxqNP7kmI61jh9TuF4SS8GyuwVpoNa91IKQl
+         ZwfxiCVF5ewa29hZcG5IKR/WTSuqK+GkgT1VEPySXJweN8xvF4lJxmd7/lt/p1A7mNPm
+         s2CEpCDD3Asp7S4IyjoFklR316tCMkLfWci04/8ZCJ1EHX+ikx8qK6D8+o0O8KZQsPog
+         Zz1w==
+X-Gm-Message-State: AOAM533hxhZUsIKevm2ea2jI2YwAq2hIcx7R/GHycamDJAp/2xmv3wDB
+        9EsW9p71X+AZ1p/OVLSvDh9JNFdWf9m5Hmypq9c1Vw==
+X-Google-Smtp-Source: ABdhPJyBvWP4T/nWYSh2/FjJMHmzkTwu66lNSkHUz/fBNP/OZSAqAsPGed14FjOgCZ7TguMcw0Nj5dmdm+VJ9v0F0CI=
+X-Received: by 2002:a25:ab64:0:b0:633:6d02:ebc8 with SMTP id
+ u91-20020a25ab64000000b006336d02ebc8mr23196123ybi.492.1648479968482; Mon, 28
+ Mar 2022 08:06:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220321042142.69239-1-frank@zago.net> <20220321042142.69239-3-frank@zago.net>
+In-Reply-To: <20220321042142.69239-3-frank@zago.net>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 28 Mar 2022 17:05:57 +0200
+Message-ID: <CACRpkdaOHHkJnvB=RQ8dLXGxT_h5mGgy5Np87QVMcPzegNi2oQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] gpio: ch341: add MFD cell driver for the CH341
+To:     frank zago <frank@zago.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
+        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed case statement issues and spacing issues.
+Hi Frank,
 
-Signed-off-by: Paul Lemmermann <thepaulodoom@thepaulodoom.com>
----
- drivers/iio/accel/bmc150-accel-core.c | 15 +++++++++++----
- drivers/iio/accel/dmard09.c           |  2 +-
- drivers/iio/accel/kxsd9-spi.c         |  4 ++--
- 3 files changed, 14 insertions(+), 7 deletions(-)
+thanks for your patch!
 
-diff --git a/drivers/iio/accel/bmc150-accel-core.c b/drivers/iio/accel/bmc150-accel-core.c
-index d11f66801..f7dd7ec2c 100644
---- a/drivers/iio/accel/bmc150-accel-core.c
-+++ b/drivers/iio/accel/bmc150-accel-core.c
-@@ -432,10 +432,17 @@ static bool bmc150_apply_bosc0200_acpi_orientation(struct device *dev,
- 
- 		for (j = 0; j < 3; j++) {
- 			switch (val[j]) {
--			case -1: str = "-1"; break;
--			case 0:  str = "0";  break;
--			case 1:  str = "1";  break;
--			default: goto unknown_format;
-+			case -1:
-+				str = "-1";
-+				break;
-+			case 0:
-+				str = "0";
-+				break;
-+			case 1:
-+				str = "1";
-+				break;
-+			default:
-+				goto unknown_format;
- 			}
- 			orientation->rotation[i * 3 + j] = str;
- 		}
-diff --git a/drivers/iio/accel/dmard09.c b/drivers/iio/accel/dmard09.c
-index e6e28c964..87bc38d4d 100644
---- a/drivers/iio/accel/dmard09.c
-+++ b/drivers/iio/accel/dmard09.c
-@@ -24,7 +24,7 @@
- #define DMARD09_AXIS_Y 1
- #define DMARD09_AXIS_Z 2
- #define DMARD09_AXIS_X_OFFSET ((DMARD09_AXIS_X + 1) * 2)
--#define DMARD09_AXIS_Y_OFFSET ((DMARD09_AXIS_Y + 1 )* 2)
-+#define DMARD09_AXIS_Y_OFFSET ((DMARD09_AXIS_Y + 1) * 2)
- #define DMARD09_AXIS_Z_OFFSET ((DMARD09_AXIS_Z + 1) * 2)
- 
- struct dmard09_data {
-diff --git a/drivers/iio/accel/kxsd9-spi.c b/drivers/iio/accel/kxsd9-spi.c
-index 57c451cfb..989f53fb0 100644
---- a/drivers/iio/accel/kxsd9-spi.c
-+++ b/drivers/iio/accel/kxsd9-spi.c
-@@ -44,8 +44,8 @@ static const struct spi_device_id kxsd9_spi_id[] = {
- MODULE_DEVICE_TABLE(spi, kxsd9_spi_id);
- 
- static const struct of_device_id kxsd9_of_match[] = {
--        { .compatible = "kionix,kxsd9" },
--        { },
-+	{ .compatible = "kionix,kxsd9" },
-+	{ },
- };
- MODULE_DEVICE_TABLE(of, kxsd9_of_match);
- 
--- 
-2.35.1
+I see you already got a bunch of homework from Andy, I will do a more
+thorough review on the next iteration, just a few things:
 
+On Mon, Mar 21, 2022 at 5:21 AM frank zago <frank@zago.net> wrote:
+
+> The GPIO interface offers 16 GPIOs. 6 are read/write, and 10 are
+> read-only.
+>
+> Signed-off-by: frank zago <frank@zago.net>
+(...)
+> +config GPIO_CH341
+> +       tristate "CH341 USB adapter in GPIO/I2C/SPI mode"
+> +       depends on MFD_CH341
+
+I would add
+default MFD_CD341
+
+This way it gets selected automatically if the MFD module gets
+selected. (I suspect you should do the same with the I2C module).
+
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/gpio.h>
+
+Use <linux/gpio/driver.h>
+
+Yours,
+Linus Walleij

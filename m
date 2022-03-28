@@ -2,171 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8BE4EA25F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 23:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72DCC4EA263
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 23:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiC1VWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 17:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
+        id S229747AbiC1VWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 17:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiC1VWM (ORCPT
+        with ESMTP id S229379AbiC1VWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 17:22:12 -0400
+        Mon, 28 Mar 2022 17:22:31 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFCB7E29C0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 14:20:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00CCFE72A7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 14:20:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648502424;
+        s=mimecast20190719; t=1648502444;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mUd5WAhqRr0QpqIojRY9Mvzy4YJpSqTmXJ8hZzENJfc=;
-        b=cieWqpjPy1mQ5zQtyagbdEbLj8Njo3+VdHCUu8kkulaJOy5DeXd9hkF2I7fSbVx1DKB+EB
-        MJoDZE8JWMVTEFlIqfyy4PkxoTCUnRdNvTi+o0+Re0zcMDEsQJnTSyRM6P/t5HUWxxXpHp
-        vE1zhvYDU6uNxd/UW1UHRnzzCv2SIQw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Ovb2abZLdPXIpDXoFNTL/ZfMzAu8x+Cb7oB/ww9JfYA=;
+        b=XWvlDsxq2zQIz2e26TNkOgTYSmEsWEdDuc8edZe3kxXhHjS+c5+mXmu3HB/cwC+wt0HrOr
+        6HqaMAIOEz3+BFxZmrBop0/3rU3ntPWWZiYimp3b5YCotW82qUKFW0INNKAtTn1tEKxZd/
+        5h98GGSaLMOKQwcCl4FXjFj0rRIc6Qg=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-288-rvnrj3h4OWa_ug285Jo_ZA-1; Mon, 28 Mar 2022 17:20:20 -0400
-X-MC-Unique: rvnrj3h4OWa_ug285Jo_ZA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7C8E93803902;
-        Mon, 28 Mar 2022 21:20:20 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1786B40D1B9B;
-        Mon, 28 Mar 2022 21:20:17 +0000 (UTC)
-Message-ID: <9e184cff-263a-d83a-0fc9-0ac7d453aa2a@redhat.com>
-Date:   Mon, 28 Mar 2022 17:20:16 -0400
+ us-mta-108-UZm2-OL6Maep0Ey4spWX0g-1; Mon, 28 Mar 2022 17:20:43 -0400
+X-MC-Unique: UZm2-OL6Maep0Ey4spWX0g-1
+Received: by mail-qk1-f199.google.com with SMTP id bj2-20020a05620a190200b005084968bb24so9234226qkb.23
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 14:20:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=Ovb2abZLdPXIpDXoFNTL/ZfMzAu8x+Cb7oB/ww9JfYA=;
+        b=3CgLKTjVk4XWnqB+fvAzwgg37T3wpM+VgV8gAq/ywonKLbPLDVKuo8xSYSMotDItKp
+         x7zSV6N8jBjPlNFGKxhyxjpXAY6OD5AudLSQqmdZ6GPdvoOojDrOB5EItE46/DihQAY3
+         t2/tASTeU4IDYfNccir8d87wCiLYegSAwLL/AZDd4KnGcrvBo7o9L379eXK7hzCx644p
+         Q+lXccDTobD6+OW/iUb6rjvjweIwIdN4qANL6ZLx4A1vWiWXZyyezfSSiQGYTB5jdyEt
+         ONS4OWGuXXAqb3XuLb7smEeATC9ctA++jWxq9O031Iq+igrCCUmCgdnmCSHJ7DseIY9g
+         LG6g==
+X-Gm-Message-State: AOAM530Hu7lpN6vN7E4ypwPNFJ2KxvkyVkazED4u+kga5j4D3Lr57JxM
+        ZoPNmUneRno8MHyh0igOADDVtjQDqmR17ghktfK3oqbx/ypx+XB0/NCUePJtGNzQJumH7nwH1xH
+        isMmo9p2p/HV+aBPpwwOC3pbN
+X-Received: by 2002:ac8:7d84:0:b0:2e2:1ef6:94bb with SMTP id c4-20020ac87d84000000b002e21ef694bbmr24837159qtd.348.1648502442442;
+        Mon, 28 Mar 2022 14:20:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxr/xaDRnoX5KQggdrvWhRc+vYS5yUpsvIM+b2oehs7B0Lt4/tR1Ebdv6ok0NtajQHNvYUffQ==
+X-Received: by 2002:ac8:7d84:0:b0:2e2:1ef6:94bb with SMTP id c4-20020ac87d84000000b002e21ef694bbmr24837135qtd.348.1648502442222;
+        Mon, 28 Mar 2022 14:20:42 -0700 (PDT)
+Received: from [192.168.8.138] (pool-71-126-244-162.bstnma.fios.verizon.net. [71.126.244.162])
+        by smtp.gmail.com with ESMTPSA id w17-20020ac857d1000000b002e19feda592sm13392465qta.85.2022.03.28.14.20.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 14:20:41 -0700 (PDT)
+Message-ID: <30057caf791dd789fe715715d1c1973994a91953.camel@redhat.com>
+Subject: Re: [PATCH] dispnv50: atom: fix an incorrect NULL check on list
+ iterator
+From:   Lyude Paul <lyude@redhat.com>
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>, bskeggs@redhat.com,
+        kherbst@redhat.com, airlied@linux.ie, daniel@ffwll.ch
+Cc:     yangyingliang@huawei.com, contact@emersion.fr, airlied@gmail.com,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Date:   Mon, 28 Mar 2022 17:20:40 -0400
+In-Reply-To: <20220327073925.11121-1-xiam0nd.tong@gmail.com>
+References: <20220327073925.11121-1-xiam0nd.tong@gmail.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.DarkModeFix.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH-mm v3] mm/list_lru: Optimize
- memcg_reparent_list_lru_node()
-Content-Language: en-US
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220309144000.1470138-1-longman@redhat.com>
- <CAMZfGtWS581YW4Y8oNU=E_zPnpK=mMdYVSG1F3U3fJNAzBzc+g@mail.gmail.com>
- <2263666d-5eef-b1fe-d5e3-b166a3185263@redhat.com>
- <CAMZfGtVG2YcmxY0fECkAYNb=sKXJQhWJqgtMTEpQwxXEXmSOLw@mail.gmail.com>
- <e93696b7-b678-6f41-9c1e-46aad447ce8d@redhat.com>
- <YkIIjGk5t4XorQXe@carbon.dhcp.thefacebook.com>
- <5aa687c4-2888-7977-8c1a-d51384e685aa@redhat.com>
- <YkIkvoCgWr8aZeRx@carbon.dhcp.thefacebook.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YkIkvoCgWr8aZeRx@carbon.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/22 17:12, Roman Gushchin wrote:
-> On Mon, Mar 28, 2022 at 04:46:39PM -0400, Waiman Long wrote:
->> On 3/28/22 15:12, Roman Gushchin wrote:
->>> On Sun, Mar 27, 2022 at 08:57:15PM -0400, Waiman Long wrote:
->>>> On 3/22/22 22:12, Muchun Song wrote:
->>>>> On Wed, Mar 23, 2022 at 9:55 AM Waiman Long <longman@redhat.com> wrote:
->>>>>> On 3/22/22 21:06, Muchun Song wrote:
->>>>>>> On Wed, Mar 9, 2022 at 10:40 PM Waiman Long <longman@redhat.com> wrote:
->>>>>>>> Since commit 2c80cd57c743 ("mm/list_lru.c: fix list_lru_count_node()
->>>>>>>> to be race free"), we are tracking the total number of lru
->>>>>>>> entries in a list_lru_node in its nr_items field.  In the case of
->>>>>>>> memcg_reparent_list_lru_node(), there is nothing to be done if nr_items
->>>>>>>> is 0.  We don't even need to take the nlru->lock as no new lru entry
->>>>>>>> could be added by a racing list_lru_add() to the draining src_idx memcg
->>>>>>>> at this point.
->>>>>>> Hi Waiman,
->>>>>>>
->>>>>>> Sorry for the late reply.  Quick question: what if there is an inflight
->>>>>>> list_lru_add()?  How about the following race?
->>>>>>>
->>>>>>> CPU0:                               CPU1:
->>>>>>> list_lru_add()
->>>>>>>         spin_lock(&nlru->lock)
->>>>>>>         l = list_lru_from_kmem(memcg)
->>>>>>>                                         memcg_reparent_objcgs(memcg)
->>>>>>>                                         memcg_reparent_list_lrus(memcg)
->>>>>>>                                             memcg_reparent_list_lru()
->>>>>>>                                                 memcg_reparent_list_lru_node()
->>>>>>>                                                     if (!READ_ONCE(nlru->nr_items))
->>>>>>>                                                         // Miss reparenting
->>>>>>>                                                         return
->>>>>>>         // Assume 0->1
->>>>>>>         l->nr_items++
->>>>>>>         // Assume 0->1
->>>>>>>         nlru->nr_items++
->>>>>>>
->>>>>>> IIUC, we use nlru->lock to serialise this scenario.
->>>>>> I guess this race is theoretically possible but very unlikely since it
->>>>>> means a very long pause between list_lru_from_kmem() and the increment
->>>>>> of nr_items.
->>>>> It is more possible in a VM.
->>>>>
->>>>>> How about the following changes to make sure that this race can't happen?
->>>>>>
->>>>>> diff --git a/mm/list_lru.c b/mm/list_lru.c
->>>>>> index c669d87001a6..c31a0a8ad4e7 100644
->>>>>> --- a/mm/list_lru.c
->>>>>> +++ b/mm/list_lru.c
->>>>>> @@ -395,9 +395,10 @@ static void memcg_reparent_list_lru_node(struct
->>>>>> list_lru *lru, int nid,
->>>>>>             struct list_lru_one *src, *dst;
->>>>>>
->>>>>>             /*
->>>>>> -        * If there is no lru entry in this nlru, we can skip it
->>>>>> immediately.
->>>>>> +        * If there is no lru entry in this nlru and the nlru->lock is free,
->>>>>> +        * we can skip it immediately.
->>>>>>              */
->>>>>> -       if (!READ_ONCE(nlru->nr_items))
->>>>>> +       if (!READ_ONCE(nlru->nr_items) && !spin_is_locked(&nlru->lock))
->>>>> I think we also should insert a smp_rmb() between those two loads.
->>>> Thinking about this some more, I believe that adding spin_is_locked() check
->>>> will be enough for x86. However, that will likely not be enough for arches
->>>> with a more relaxed memory semantics. So the safest way to avoid this
->>>> possible race is to move the check to within the lock critical section,
->>>> though that comes with a slightly higher overhead for the 0 nr_items case. I
->>>> will send out a patch to correct that. Thanks for bring this possible race
->>>> to my attention.
->>> Yes, I think it's not enough:
->>> CPU0                                       CPU1
->>> READ_ONCE(&nlru->nr_items) -> 0
->>>                                              spin_lock(&nlru->lock);
->>>                                              nlru->nr_items++;
->>>                                              spin_unlock(&nlru->lock);
->>> && !spin_is_locked(&nlru->lock) -> 0
->> I have actually thought of that. I am even thinking about reading nr_items
->> again after spin_is_locked(). Still for arches with relaxed memory
->> semantics, when will a memory write by one cpu be propagated to another cpu
->> can be highly variable. It is very hard to prove that it is completely safe.
->>
->> x86 has a more strict memory semantics and it is the only architecture that
->> I have enough confidence that doing the check without taking a lock can be
->> safe. Perhaps we could use this optimization just for x86 and do it inside
->> locks for the rests.
-> Hm, is this such a big problem in the real life? Can you describe the setup?
-> I'm somewhat resistant to an idea of having arch-specific optimizations here
-> without a HUGE reason.
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
-I am just throwing this idea out for discussion. It does not mean that I 
-want to do an arch specific patch unless there is performance data to 
-indicate a substantial gain in performance in some use cases.
+Will push this to the appropriate repository shortly.
 
+On Sun, 2022-03-27 at 15:39 +0800, Xiaomeng Tong wrote:
+> The bug is here:
+>         return encoder;
+> 
+> The list iterator value 'encoder' will *always* be set and non-NULL
+> by drm_for_each_encoder_mask(), so it is incorrect to assume that the
+> iterator value will be NULL if the list is empty or no element found.
+> Otherwise it will bypass some NULL checks and lead to invalid memory
+> access passing the check.
+> 
+> To fix this bug, just return 'encoder' when found, otherwise return
+> NULL.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 12885ecbfe62d ("drm/nouveau/kms/nvd9-: Add CRC support")
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> ---
+>  drivers/gpu/drm/nouveau/dispnv50/atom.h |  6 +++---
+>  drivers/gpu/drm/nouveau/dispnv50/crc.c  | 27 ++++++++++++++++++++-----
+>  2 files changed, 25 insertions(+), 8 deletions(-)
+> (also 
+> diff --git a/drivers/gpu/drm/nouveau/dispnv50/atom.h
+> b/drivers/gpu/drm/nouveau/dispnv50/atom.h
+> index 3d82b3c67dec..93f8f4f64578 100644
+> --- a/drivers/gpu/drm/nouveau/dispnv50/atom.h
+> +++ b/drivers/gpu/drm/nouveau/dispnv50/atom.h
+> @@ -160,14 +160,14 @@ nv50_head_atom_get(struct drm_atomic_state *state,
+> struct drm_crtc *crtc)
+>  static inline struct drm_encoder *
+>  nv50_head_atom_get_encoder(struct nv50_head_atom *atom)
+>  {
+> -       struct drm_encoder *encoder = NULL;
+> +       struct drm_encoder *encoder;
+>  
+>         /* We only ever have a single encoder */
+>         drm_for_each_encoder_mask(encoder, atom->state.crtc->dev,
+>                                   atom->state.encoder_mask)
+> -               break;
+> +               return encoder;
+>  
+> -       return encoder;
+> +       return NULL;
+>  }
+>  
+>  #define nv50_wndw_atom(p) container_of((p), struct nv50_wndw_atom, state)
+> diff --git a/drivers/gpu/drm/nouveau/dispnv50/crc.c
+> b/drivers/gpu/drm/nouveau/dispnv50/crc.c
+> index 29428e770f14..b834e8a9ae77 100644
+> --- a/drivers/gpu/drm/nouveau/dispnv50/crc.c
+> +++ b/drivers/gpu/drm/nouveau/dispnv50/crc.c
+> @@ -390,9 +390,18 @@ void nv50_crc_atomic_check_outp(struct nv50_atom *atom)
+>                 struct nv50_head_atom *armh =
+> nv50_head_atom(old_crtc_state);
+>                 struct nv50_head_atom *asyh =
+> nv50_head_atom(new_crtc_state);
+>                 struct nv50_outp_atom *outp_atom;
+> -               struct nouveau_encoder *outp =
+> -                       nv50_real_outp(nv50_head_atom_get_encoder(armh));
+> -               struct drm_encoder *encoder = &outp->base.base;
+> +               struct nouveau_encoder *outp;
+> +               struct drm_encoder *encoder, *enc;
+> +
+> +               enc = nv50_head_atom_get_encoder(armh);
+> +               if (!enc)
+> +                       continue;
+> +
+> +               outp = nv50_real_outp(enc);
+> +               if (!outp)
+> +                       continue;
+> +
+> +               encoder = &outp->base.base;
+>  
+>                 if (!asyh->clr.crc)
+>                         continue;
+> @@ -443,8 +452,16 @@ void nv50_crc_atomic_set(struct nv50_head *head,
+>         struct drm_device *dev = crtc->dev;
+>         struct nv50_crc *crc = &head->crc;
+>         const struct nv50_crc_func *func = nv50_disp(dev)->core->func->crc;
+> -       struct nouveau_encoder *outp =
+> -               nv50_real_outp(nv50_head_atom_get_encoder(asyh));
+> +       struct nouveau_encoder *outp;
+> +       struct drm_encoder *encoder;
+> +
+> +       encoder = nv50_head_atom_get_encoder(asyh);
+> +       if (!encoder)
+> +               return;
+> +
+> +       outp = nv50_real_outp(encoder);
+> +       if (!outp)
+> +               return;
+>  
+>         func->set_src(head, outp->or, nv50_crc_source_type(outp, asyh-
+> >crc.src),
+>                       &crc->ctx[crc->ctx_idx]);
+
+-- 
 Cheers,
-Longman
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 

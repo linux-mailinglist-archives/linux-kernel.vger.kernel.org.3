@@ -2,94 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A25E4E9869
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433404E97EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243307AbiC1Nke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 09:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
+        id S243073AbiC1NWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 09:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237976AbiC1Nka (ORCPT
+        with ESMTP id S243115AbiC1NWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 09:40:30 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6B1E13F1C;
-        Mon, 28 Mar 2022 06:38:49 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22SDJU00005431;
-        Mon, 28 Mar 2022 08:19:30 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 22SDJSov005423;
-        Mon, 28 Mar 2022 08:19:28 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Mon, 28 Mar 2022 08:19:28 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Benjamin =?iso-8859-1?Q?St=FCrz?= <benni@stuerz.xyz>,
-        Andrew Lunn <andrew@lunn.ch>,
-        linux-atm-general@lists.sourceforge.net,
-        linux-ia64@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Harald Welte <laforge@gnumonks.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, wcn36xx@lists.infradead.org,
-        Pkshih <pkshih@realtek.com>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-edac@vger.kernel.org,
-        dennis.dalessandro@cornelisnetworks.com,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Ingo Molnar <mingo@redhat.com>,
-        Chas Williams <3chas3@gmail.com>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        Len Brown <lenb@kernel.org>,
-        mike.marciniszyn@cornelisnetworks.com,
-        Robert Richter <rric@kernel.org>,
-        Andrew Donnellan <ajd@linux.ibm.com>, kvalo@kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        loic.poulain@linaro.org, Borislav Petkov <bp@alien8.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        James Morse <james.morse@arm.com>,
-        Networking <netdev@vger.kernel.org>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH 01/22] orion5x: Replace comments with C99 initializers
-Message-ID: <20220328131928.GH614@gate.crashing.org>
-References: <20220326165909.506926-1-benni@stuerz.xyz> <CAK8P3a1e57mNUQgronhwrsXsuQW9sZYxCktKij7NwsieBWiGmw@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+        Mon, 28 Mar 2022 09:22:49 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0693446161
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:21:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=KX7uokQYmda6l1eRTSgrF7cPdNJEr6jjgFQwQLQA8+k=; b=Ojax3+y7b3yYboJJyvu4xZArgG
+        fEx52upEWDPG3d0hlLLCgAHN/gl14zizL1xxx/CWGspd5FNzbYTxJt9jBewTF+osqJ+fePiUFphNM
+        wyXm6GnCbeWSuBPRlTVFwGYaHX4TEH/Bq7eu3RtMtPb1XnI9tem4kW7nnrjTU7EE3v2GOBLEEV7TN
+        LQdDN8SAWqp4HIETgAZVEZiBBYkUKTIKjLAWQuhLYqiZrG6rb5C41hTH4JmiVqBkix+UXTj7k+rRh
+        vTRZdE6j6Fe0Y0BU6IZy2VwGbl///SVprBiTizl2EAlZrZB7VSZwgM1gK0aW8qwGHvahQQKD7i2Wt
+        gEslHT7w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nYpIg-00Gwyz-Fe; Mon, 28 Mar 2022 13:20:50 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DA4499861EA; Mon, 28 Mar 2022 15:20:47 +0200 (CEST)
+Date:   Mon, 28 Mar 2022 15:20:47 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com
+Subject: Re: [PATCH] sched/fair: fix broken bandwidth control with nohz_full
+Message-ID: <20220328132047.GD8939@worktop.programming.kicks-ass.net>
+References: <20220328110751.39987-1-zhouchengming@bytedance.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK8P3a1e57mNUQgronhwrsXsuQW9sZYxCktKij7NwsieBWiGmw@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220328110751.39987-1-zhouchengming@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,25 +55,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 26, 2022 at 08:23:31PM +0100, Arnd Bergmann wrote:
-> On Sat, Mar 26, 2022 at 5:58 PM Benjamin Stürz <benni@stuerz.xyz> wrote:
-> >
-> > This replaces comments with C99's designated
-> > initializers because the kernel supports them now.
+On Mon, Mar 28, 2022 at 07:07:51PM +0800, Chengming Zhou wrote:
+> With nohz_full enabled on cpu, the scheduler_tick() will be stopped
+> when only one CFS task left on rq.
 > 
-> The change looks fine, but the comment looks misplaced, as enum initializers
-> are not c99 feature.
+> scheduler_tick()
+>   task_tick_fair()
+>     entity_tick()
+>       update_curr()
+>         account_cfs_rq_runtime(cfs_rq, delta_exec) --> stopped
+> 
+> So that running task can't account its runtime periodically, but
+> the cfs_bandwidth hrtimer still __refill_cfs_bandwidth_runtime()
+> periodically. Later in one period, the task would account very
+> big delta_exec, which cause the cfs_rq to be throttled for a
+> long time.
+> 
+> There are two solutions for the problem, the first is that we
+> can check in sched_can_stop_tick() if current task's cfs_rq
+> have runtime_enabled, in which case we don't stop tick. But
+> it will make nohz_full almost useless in cloud environment
+> that every container has the cpu bandwidth control setting.
 
-Yes, it is from C89/C90.
+How is NOHZ_FULL useful in that environment to begin with? If you set
+bandwidth crap, the expectation is that there is overcommit, which more
+or less assumes lots of scheduling, presumably VMs or somesuch crud.
 
-> Also, the named array and struct intializers have been
-> supported by gnu89 for a long time and widely used in the kernel, so it's
-> not a recent change even for the others.
-
-GCC supports this since 1998.  There was a syntax different from C99
-designated initializers (".ans = 42") before (namely, "ans: 42").
-
-1998 is long enough ago for all intents and purposes now of course ;-)
-
-
-Segher
+So how does NOHZ_FULL make sense?

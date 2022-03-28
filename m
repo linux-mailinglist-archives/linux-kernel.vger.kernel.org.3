@@ -2,77 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB5E4E9BA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1610C4E9B9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240512AbiC1Ptt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 11:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
+        id S239054AbiC1PwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 11:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240161AbiC1Prr (ORCPT
+        with ESMTP id S234752AbiC1PwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 11:47:47 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA17562107
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:45:50 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id k125so11728973qkf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:45:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:reply-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gpKxm33hG9nlHcEeqdiWQbm6h6iJLFhuhpxRsRgto7o=;
-        b=oCkITZZSAoa7y+hGguyS6MYAAj6clot3WbUGb1bkh0zxW36mOa42SJn/W7VWs+qBzF
-         NZWwsjDdWthp62hG/h8MmtbSEcLYbfRknvuL0KVqLDbvlGDgV25H2MZ+luWOI8W0GBmC
-         7ilc8G3nDSUAJHjXaKUYJFNRJgvKsHYwEn3QjLfJgkhIJXPI4seFdwdHykmR1Vky+60W
-         9974Z8xqR812yGnZ9M1hbeoqigYJTlvOhVCaXmPVQE3n3BWNI/8PELi/qEz0IpjGoUKw
-         UgNBqux8eyhkUgs1IZajaw2zxupS3J8FZhQ2h9iFQBaEvV3+7G38+ty5kNoEF4CzMOEi
-         mPHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :reply-to:references:mime-version:content-disposition:in-reply-to;
-        bh=gpKxm33hG9nlHcEeqdiWQbm6h6iJLFhuhpxRsRgto7o=;
-        b=qRaMJqh/oRe7npH901MErn1dMTufPPnPX/GTsaI3w6/U2rPxritpnxSX3HzmZxC423
-         HOIu7CP+zXTkKIYzZmQGzDEiUdBN6PGzArVPPJSBzivJ7Ewx5wpTZzbKDjTwi6c7DXRl
-         V3QswC4lKoxJArpA517nqTzG+4UJikIvMXIea9Dtxj9qP7FytoyByTjXN91DMoTOjoMR
-         qN5sVlDji5CHTyh3h9gOeylIHSbj7VXgVFmFab/UgB3Hm78GtF5rM3es0QTRmKu9kqwV
-         2unLKhwLEXO4w3cqbfNfFF2p9G34N3IFIutE5lTxVkrPlcEQwyNwR6Fyf4fYCk7XcPJI
-         KAqw==
-X-Gm-Message-State: AOAM530+4dBLFbIHz/13/odkO8Tay/7mjkJTo2W6ix5umMCxCon1OTh3
-        9ECYM+RngBy4LXfcQA+e3A==
-X-Google-Smtp-Source: ABdhPJy+d0vkilsCh1sUV4QY8DsbGQhl3yNH29Gx6ttYWR/k7mndA1lBvqqUvDWmjH1iCrQlT31YAw==
-X-Received: by 2002:a37:a693:0:b0:67e:c38b:c938 with SMTP id p141-20020a37a693000000b0067ec38bc938mr16124821qke.206.1648482349800;
-        Mon, 28 Mar 2022 08:45:49 -0700 (PDT)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id u20-20020a05620a455400b0067ec0628661sm9141522qkp.110.2022.03.28.08.45.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 08:45:49 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:80fb:65f7:c1f1:9f2])
-        by serve.minyard.net (Postfix) with ESMTPSA id C43301800BB;
-        Mon, 28 Mar 2022 15:45:46 +0000 (UTC)
-Date:   Mon, 28 Mar 2022 10:45:45 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     chenchacha <chen.chenchacha@qq.com>
-Cc:     Chen Guanqiao <chen.chenchacha@foxmail.com>,
-        openipmi-developer@lists.sourceforge.net,
+        Mon, 28 Mar 2022 11:52:09 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E428D6;
+        Mon, 28 Mar 2022 08:50:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648482628; x=1680018628;
+  h=from:to:cc:subject:date:message-id;
+  bh=tlMl6mWTjEgCjjBZ7AIYF8HCdwTMIlqr2UAHIAdUy+E=;
+  b=jmX/BqMqumzzial2Cc1UZTbssWr0sgw9KkoxerHY1Dm2VV/f//5RBZkF
+   PZhMEELE2Z1MVquAP6wJLHgvOXlVZHy+HxXySjJCVcK1eHd3Vt1kGKiUW
+   1jl/hV5vDTF9RQ0fp3eHF3HUA4WrXqx6L5rdJtr8RkCsqoy2Uom1uGm1M
+   VcBNMs+8urQKOGGgdwFZHgo3Z4KAB0jrjor+mHKGPNix5VqUCfP0ZRcBD
+   XYB0ds//Yq6P0BkYR2807fOqwTrZrAzo6OTe85di+Ohtx5xwhFD47YUMF
+   dYHuduf8lVG+3zZYgq0rnTFl2kynj3npH7rmVkaJmaL6VlVJXWSbhokDZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="257863535"
+X-IronPort-AV: E=Sophos;i="5.90,217,1643702400"; 
+   d="scan'208";a="257863535"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 08:50:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,217,1643702400"; 
+   d="scan'208";a="617824927"
+Received: from otc-lr-04.jf.intel.com ([10.54.39.41])
+  by fmsmga004.fm.intel.com with ESMTP; 28 Mar 2022 08:50:19 -0700
+From:   kan.liang@linux.intel.com
+To:     peterz@infradead.org, mingo@redhat.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] ipmi: msghandler: check the users and msgs causing
- the system to block
-Message-ID: <20220328154545.GP3457@minyard.net>
-Reply-To: minyard@acm.org
-References: <tencent_BD6D4CB98B6D7FAA04F63D28F6457F10F40A@qq.com>
- <20220328013842.GN3457@minyard.net>
- <tencent_071EACFAEE3F0CFA14A674C4603E39026F09@qq.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_071EACFAEE3F0CFA14A674C4603E39026F09@qq.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Cc:     eranian@google.com, Kan Liang <kan.liang@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] perf/x86/intel: Don't extend the pseudo-encoding to GP counters
+Date:   Mon, 28 Mar 2022 08:49:02 -0700
+Message-Id: <1648482543-14923-1-git-send-email-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,58 +56,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 11:27:06PM +0800, chenchacha wrote:
-> 
-> > Anyway, a better solution for the kernel side of things, I think, would
-> > be to add limits on the number of users and the number of messages per
-> > user.  That's more inline with what other kernel things do.  I know of
-> > nothing else in the kernel that does what you are proposing.
-> 
-> The precondition for add limits, is that people known that ipmi has too many
-> users and messages cause problems, this patch is to let administrator known
-> that.
-> 
-> In addition, different machines have different limit, My server my block
-> 700,000 messages and it's fine, and my NAS pc went to OOM when it probably
-> blocked for 10,000 messages. So, to limit the number of users and messages,
-> can wait until we have accumulated some online experience?
+From: Kan Liang <kan.liang@linux.intel.com>
 
-I don't mean a limit on the total number of messages, but a limit on the
-total number of oustanding messages, and a limit on the total number of
-users.  No user should have more than a handful of oustanding message,
-and limiting the number of users to 20 or 30 should be more than enough
-for any system.
+The INST_RETIRED.PREC_DIST event (0x0100) doesn't count on SPR.
+perf stat -e cpu/event=0xc0,umask=0x0/,cpu/event=0x0,umask=0x1/ -C0
 
-Having those limits in place would probably help you trace down your
-problem, as you would hit the limits and it should report it at the
-source of the problem.
+ Performance counter stats for 'CPU(s) 0':
 
--corey
+           607,246      cpu/event=0xc0,umask=0x0/
+                 0      cpu/event=0x0,umask=0x1/
 
-> 
-> > 
-> > Does that make sense?
-> > 
-> > -corey
-> > 
-> 
-> thanks
-> --
-> 
-> Chen Guanqiao
-> > > 
-> > > This patch provides a method to view the current number of users and messages in
-> > > ipmi, and introduce a simple interface to clear the message queue.
-> > > 
-> > > Chen Guanqiao (3):
-> > >    ipmi: Get the number of user through sysfs
-> > >    ipmi: Get the number of message through sysfs
-> > >    ipmi: add a interface to clean message queue in sysfs
-> > > 
-> > >   drivers/char/ipmi/ipmi_msghandler.c | 159 ++++++++++++++++++++++++++++
-> > >   1 file changed, 159 insertions(+)
-> > > 
-> > > -- 
-> > > 2.25.1
-> > > 
-> 
+The encoding for INST_RETIRED.PREC_DIST is pseudo-encoding, which
+doesn't work on the generic counters. However, current perf extends its
+mask to the generic counters.
+
+The pseudo event-code for a fixed counter must be 0x00. Check and avoid
+extending the mask for the fixed counter event which using the
+pseudo-encoding, e.g., ref-cycles and PREC_DIST event.
+
+With the patch,
+perf stat -e cpu/event=0xc0,umask=0x0/,cpu/event=0x0,umask=0x1/ -C0
+
+ Performance counter stats for 'CPU(s) 0':
+
+           583,184      cpu/event=0xc0,umask=0x0/
+           583,048      cpu/event=0x0,umask=0x1/
+
+Fixes: 2de71ee153ef ("perf/x86/intel: Fix ICL/SPR INST_RETIRED.PREC_DIST encodings")
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Cc: stable@vger.kernel.org
+---
+ arch/x86/events/intel/core.c      | 6 +++++-
+ arch/x86/include/asm/perf_event.h | 5 +++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index db32ef6..1d2e49d 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -5668,7 +5668,11 @@ static void intel_pmu_check_event_constraints(struct event_constraint *event_con
+ 			/* Disabled fixed counters which are not in CPUID */
+ 			c->idxmsk64 &= intel_ctrl;
+ 
+-			if (c->idxmsk64 != INTEL_PMC_MSK_FIXED_REF_CYCLES)
++			/*
++			 * Don't extend the pseudo-encoding to the
++			 * generic counters
++			 */
++			if (!use_fixed_pseudo_encoding(c->code))
+ 				c->idxmsk64 |= (1ULL << num_counters) - 1;
+ 		}
+ 		c->idxmsk64 &=
+diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+index 48e6ef56..cd85f03 100644
+--- a/arch/x86/include/asm/perf_event.h
++++ b/arch/x86/include/asm/perf_event.h
+@@ -242,6 +242,11 @@ struct x86_pmu_capability {
+ #define INTEL_PMC_IDX_FIXED_SLOTS	(INTEL_PMC_IDX_FIXED + 3)
+ #define INTEL_PMC_MSK_FIXED_SLOTS	(1ULL << INTEL_PMC_IDX_FIXED_SLOTS)
+ 
++static inline bool use_fixed_pseudo_encoding(u64 code)
++{
++	return !(code & 0xff);
++}
++
+ /*
+  * We model BTS tracing as another fixed-mode PMC.
+  *
+-- 
+2.7.4
+

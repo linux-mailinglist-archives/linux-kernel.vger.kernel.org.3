@@ -2,178 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9984E9BE2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F7A4E9BCC
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241060AbiC1QGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 12:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
+        id S240747AbiC1QD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 12:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237767AbiC1QGI (ORCPT
+        with ESMTP id S238088AbiC1QDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 12:06:08 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6FF2822290;
-        Mon, 28 Mar 2022 09:04:25 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22SFxw1v015812;
-        Mon, 28 Mar 2022 10:59:58 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 22SFxwpE015811;
-        Mon, 28 Mar 2022 10:59:58 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Mon, 28 Mar 2022 10:59:57 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Nathan Chancellor <nathan@kernel.org>, x86-ml <x86@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-toolchains@vger.kernel.org
-Subject: Re: clang memcpy calls
-Message-ID: <20220328155957.GK614@gate.crashing.org>
-References: <YjxTt3pFIcV3lt8I@zn.tnic> <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com> <Yj2yYFloadFobRPx@lakrids> <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net> <20220325151238.GB614@gate.crashing.org> <YkGFdtn0yDIPqXRl@FVFF77S0Q05N> <20220328142220.GI614@gate.crashing.org> <YkHNArCbWUEojGjL@lakrids>
-Mime-Version: 1.0
+        Mon, 28 Mar 2022 12:03:24 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F186226ADF
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:01:43 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id b130so11159229pga.13
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:01:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8Gd1mrZiQOq3smqLlHqwKW871rQ12hCh1YJ0GNZOHYE=;
+        b=TrjSxQqoq2V/zaVRUVmSd509ZbzvmP9G/rPfqEw958xRKal/oCddaFt9mZTwpiStt6
+         T7i7jI0YEJ+bPWHPrOL6wm2UbnQsGp/BhD272MaNjuRcndS5qKCbDC9pKTu3Lhvkdjcy
+         nVhO+/vDMFl+S+YlrJm74pvhlS92O00zdMHRg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8Gd1mrZiQOq3smqLlHqwKW871rQ12hCh1YJ0GNZOHYE=;
+        b=8CUhhivQgr+uUScMLUqYIkqEBMPomikk+qHgxPETLD4KMGMvn2x5RfxONQp3+L1fgE
+         V59shLl5TptBTEkKgyNMcSrVNJN5e2f6JVsmEnRq00JT2k3VG1zNbFWe+nW++BShMFxR
+         COc/99TNmFVJuylHJtcDWrtAd1kPwZamjg5usAiDYszwyWQc25IuS+0rIP1N4TZfGm9z
+         H5HC6l3eLo3e06TOdIF5OKzZJfvbtBv9+iBfCqLq9L3IZwGk7nuAn93Vk+gSuw8O/Ccj
+         6nJR/2Hu5Fdt2rtnCD/O+zMHdgPWkuuFjJtVv6+vBxecP2snyZT0iukT86ncGZTYChBA
+         xaGA==
+X-Gm-Message-State: AOAM5326/s6hX9IthjONZwBC6pDOcqdo5/8FjbPKyUloD35vS0gXanAr
+        AWlqbtzmWqPmxhH3PGSpxfw2Z2F8A4fsLw==
+X-Google-Smtp-Source: ABdhPJx/aE4mOpcNZ94+9DP9mvByqTVOtA3KKp0T0hyrjY1SWuvPY/xWOjcqMY/IdfDGO621C3bIVw==
+X-Received: by 2002:a05:6a00:2402:b0:4e1:46ca:68bd with SMTP id z2-20020a056a00240200b004e146ca68bdmr23889175pfh.70.1648483303527;
+        Mon, 28 Mar 2022 09:01:43 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 124-20020a621682000000b004f6a2e59a4dsm16262776pfw.121.2022.03.28.09.01.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 09:01:43 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 09:01:42 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        George Burgess IV <gbiv@google.com>,
+        linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [GIT PULL] FORTIFY_SOURCE updates for v5.18-rc1
+Message-ID: <202203280854.C36F2EC@keescook>
+References: <202203251443.9BBADFD98@keescook>
+ <CAHk-=wjeGc-BjkDWTYkXzyQu-vf9EEujuT-6=U7Od0DvCUfb8w@mail.gmail.com>
+ <CAHk-=wid1da7CONOA4ia++vKe5pCFda6gwdafjFP4HXJQcjcsA@mail.gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YkHNArCbWUEojGjL@lakrids>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAHk-=wid1da7CONOA4ia++vKe5pCFda6gwdafjFP4HXJQcjcsA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 03:58:10PM +0100, Mark Rutland wrote:
-> On Mon, Mar 28, 2022 at 09:22:20AM -0500, Segher Boessenkool wrote:
-> > The attribute is about how the *current* function is instrumented, not
-> > about anything called by this function.  This is clearly documented:
-> > 'no_sanitize_address'
-> > 'no_address_safety_analysis'
-> >      The 'no_sanitize_address' attribute on functions is used to inform
-> >      the compiler that it should not instrument memory accesses in the
-> >      function when compiling with the '-fsanitize=address' option.  The
-> >      'no_address_safety_analysis' is a deprecated alias of the
-> >      'no_sanitize_address' attribute, new code should use
-> >      'no_sanitize_address'.
-> 
-> I understand this, and I have read the documentation.
-> 
-> I'm not claiming any *individual* semantic is wrong, just that in
-> combination this doesn't provide what people *need* (even if it strictly
-> matches what is documented).
-> 
-> My argument is: if the compiler is permitted to implictly and
-> arbitrarily add calls to instrumented functions within a function marked
-> with `no_sanitize_address`, the `no_sanitize_address` attribute is
-> effectively useless, and therefore *something* needs to change.
+On Sat, Mar 26, 2022 at 12:40:18PM -0700, Linus Torvalds wrote:
+> On Sat, Mar 26, 2022 at 12:29 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > Because if all the compiler issues and warnings have been sorted out,
+> > it sounds to me like the compile-time side could/should be done
+> > unconditionally if there are no runtime downsides.
 
-I do not see how that follows.  Maybe that is obvious from how you look
-at your use case, but it is not from the viewpoint of people who just
-want to do sanitation.  So what is the goal here?  Why do you need to
-prevent sanitation on anything called from this function, at all cost?
+Yeah, I'd like to do this. The way the header files are currently split
+up makes this slightly weird, and there have been issues with some
+arch/compiler combinations, so it's not quite as cut-and-dried as I'd
+like. I'll investigate what it could look like.
 
-> > > I appreciate where you're coming from here, but I think you're approaching the
-> > > problem sideways.
-> > 
-> > I am stating facts, I am not trying to solve your problem there.  It
-> > seemed to me (and still does) that you didn't grasp all facts here.
-> 
-> Sorry, but I think you're reading my replies uncharitably if you think
-> that.
+> .. or do the existing compiler warnings for the builtins already cover
+> all cases, and the only reason the fortify-source code has
+> compile-time warnings is that the option takes over the builtins?
 
-Not at all.  I just don't see what your problem is, and what you try to
-achieve.  I do know what you say you want, but that is clearly
-impossible to do: the compiler cannot put restrictions on what some
-external function will or won't do!
+This mostly depends on the compiler version, and they often overlap, but
+the new FORTIFY logic tends to be more strict (where possible) and is more
+consistent; I view the two diagnostic capabilities as complementary.
 
-> > > We need to define *what the semantics are* so that we can actually solve the
-> > > problem, e.g. is a memcpy implementation expected to be instrumented or not?
-> > 
-> > That is up to the memcpy implementation itself, of course.
-> 
-> Sorry, but that doesn't make sense to me. When the compiler instruments
-> a function with AddressSanitizer, it must have *some* assumption about
-> whether memcpy() itself will be instrumented, such that it won't miss
-> some necessary instrumentation (and ideally, for performance reasons
-> doesn't have redundant instrumentation).
-
-Yes.  It sets things up with an external memcpy that is sanitized.  But
-that happens at the linking stage: it is fine in general for user space,
-but for kasan you need to do something similar manually.
-
-> If the story is "memcpy may or may not be instrumented", then the only
-> way to guarantee necessary instrumentation is for the compiler to
-> *always* place it in the caller (unless forbidden by
-> `no_sanitize_address`). If that were the case, the kernel can make
-> things work by simply not instrumenting memcpy and friends.
-
-It is *impossible* (in general) to put this in the caller, and it is not
-how this stuff is designed either (of course).
-
-> IIUC today those assumptions are not documented. Is the behaviour
-> consistent?
-
-The documentation I quoted above is simple and clear enough I hope.
-
-Consistent?  Consistent with what?
-
-> > > > GCC *requires* memcpy to be the standard memcpy always (i.e. to have the
-> > > > standard-specified semantics).  This means that it will have the same
-> > > > semantics as __builtin_memcpy always, and either or not be a call to an
-> > > > external function.  It can also create calls to it out of thin air.
-> > > 
-> > > I understand all of that.
-> > 
-> > And still you want us to do something that is impossible under those
-> > existing constraints :-(
-> 
-> If that's truly impossible, that's very unfortunate.
-> 
-> FWIW, I can believe this would require tremendous effort to change, even
-> if it's not truly impossible.
-
-No.  Truly and trivially impossible.  You must want something else than
-what you say, but I cannot figure out what.
-
-To implement what you ask for we will have to build every function
-twice, once with and once without instrumentation, and emit both
-somewhere, somehow.  This requires either some ABI extensions, or file
-format extensions ("fat objects"), or at the minimum some copperation
-between the app (the kernel here), the compiler, and the linker (and
-more tools in general, but, kernel :-) )
-
-> If that is the case, it means that kernel side we have to never
-> instrument our implementation of memcpy and friends for correctness
-> reasons, which has the unfortunate property of losing coverage in the
-> cases we *would* like to use an instrumented memcpy.
-
-What correctness reasons are that?
-
-> > If you want the external memcpy called by modules A, B, C to not be
-> > instrumented, you have to link A, B, and C against an uninstrumented
-> > memcpy.  This is something the kernel will have to do, the compiler has
-> > no say in how the kernel is linked together.
-> 
-> Unfortunately that options doesn't really fix the `no_sanitize_address`
-> semantic, and forces us to move *all* uninstrumentable code out into
-> separate compilation units, etc.
-
-Yes.  Which follows directly from you not wanting to call anything
-instrumented from anything marked with such an attribute: you have to
-divide the world into two parts, if you want the world to be divided
-into two parts.
-
-> This isn't *impossible*, but is *very* painful.
-
-Yes.  It is doable if there is just a handful of things that you do not
-want instrumented.  Like low-level interrupt handlers.  Luckily those
-things are generally written in assembler language for other reasons.
-
-
-Segher
+-- 
+Kees Cook

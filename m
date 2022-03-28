@@ -2,300 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CB34EA196
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1ECD4EA19A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344702AbiC1Ugg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 16:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52242 "EHLO
+        id S1343613AbiC1UhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 16:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344566AbiC1UgO (ORCPT
+        with ESMTP id S1345187AbiC1UhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 16:36:14 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B9B51E6D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 13:34:26 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id c11so13060886pgu.11
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 13:34:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Z8M2eaDrvySsRMoJDq3gdwHu0GI4WHy75G6qEWnfrak=;
-        b=UDUMifkjplq8rJ6a+odmLYcEQAXp6T6HvU89gOcSXenZ++rWsksgkLUZHakIakEqoM
-         092VAJn5hHH1DhG0qyrYvjjdzUBUTzHhobRgl4mFji/FjDh8x4ji3NraIQTC3GliwDWV
-         Xz3nb7KzKPHat9T11HkkwoXt7zfpxcv+nKihAI4qEYPEXpAKFTNHpb+z4qaARrxt8mNy
-         CjGeqFlOnjfbLFi5dMUza92eKf5khfq56qwIkGTtR8EEgTZedFRT/D/1Z5cL+i4JFiag
-         4pISPz3r8REj3A3chZuksVXQ6ivqXOxmhTgSlwb46eNpPu8JcJLx+83en6zYNBX5jV78
-         ZCig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Z8M2eaDrvySsRMoJDq3gdwHu0GI4WHy75G6qEWnfrak=;
-        b=AvhuhLjE4zC79j5Tm1rGgTpWA5sUqnw6BGNvlFkibiMFi1JNK0/oB4fbaUVaJ3kUIo
-         8aCFeilT2njNiXGMdQXHhk2uHch0E+BeWdCgnCifGfBiNcTejpLTJ8DNoYdbfTazc6cv
-         WNCcI6AB/o0AzhEYVojp4uRQpskEW1JYBFFXuQkpViwhVbA312j5jdov4bEoCSsPoczu
-         ZbgkGSVFX4ACT6n/2lCD3wSN+FivoWWPBj1GSeVkLPgW0Ofi0D7dZmXg9p2/ayNSePwV
-         QlSSTRwyatba7d5pmC0tcgDkG/qU3WBG33EaznOoQM5SJuQSfd0XZLDH3VEnQe8Jnzru
-         o5Uw==
-X-Gm-Message-State: AOAM530HLK68Pdg/4/V/hP8MIjTwxpLa43HLK+sVM2DatvvPLtCanw+h
-        VlbPDQQC9DJQTu4T4+Y9HjXrnw==
-X-Google-Smtp-Source: ABdhPJyAHodgi4WXMqBDST8LyTg3i4XZ/SS4vBU9UigkT8BaXibKIqaOWnSK6pOBC4R3tdkj8P6aHA==
-X-Received: by 2002:aa7:8556:0:b0:4fa:6d38:95e3 with SMTP id y22-20020aa78556000000b004fa6d3895e3mr24967832pfn.54.1648499665428;
-        Mon, 28 Mar 2022 13:34:25 -0700 (PDT)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id j9-20020a056a00130900b004f73df40914sm16770458pfu.82.2022.03.28.13.34.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 13:34:24 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 20:34:21 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v2 11/11] KVM: x86/MMU: Require reboot permission to
- disable NX hugepages
-Message-ID: <YkIbzWcC36w9vqng@google.com>
-References: <20220321234844.1543161-1-bgardon@google.com>
- <20220321234844.1543161-12-bgardon@google.com>
+        Mon, 28 Mar 2022 16:37:11 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586F368FB4;
+        Mon, 28 Mar 2022 13:35:14 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id AFB663FBF24;
+        Mon, 28 Mar 2022 16:35:13 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id eGl2JjcfyixH; Mon, 28 Mar 2022 16:35:13 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 3D39A3FBF23;
+        Mon, 28 Mar 2022 16:35:13 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 3D39A3FBF23
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1648499713;
+        bh=tNcH335YJ/4x8yVi8nSDMIeS4E89Ow3BdGUYIADF9gI=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=oE92hvqbxg9Ro3dlq/CWgRV8YpFDucYZj2ABJ+hhQudLX9eNslVwB6xxCFKfHU0I+
+         fbrYGadCY9zJZDRZlePVW2zcV/9miO7E0VIYbrNuGUdd1h/6nWL0HkgW7np+90kKiR
+         mDZMj/gDz8VGoMvHPotk6XZSXILGQ+5FqjJoanjcgo84Jym9lHV1Z8Os6O5WMXdk+F
+         GmpFmRLX2u+T+jZmYcH9DhhdShuC9K2FE9dQVj1CWowINZWRhtw9A6zI4nBZuWPweq
+         K6HdkqUpxMCRa7I4IXeKaGds6T/qKSTTe1+uPE2LSFtIN7BUwMDw+RDnWmHcCQUwMG
+         dbhvny9nKC0rw==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id hz3AuyqO_hcb; Mon, 28 Mar 2022 16:35:13 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 3205F3FC089;
+        Mon, 28 Mar 2022 16:35:13 -0400 (EDT)
+Date:   Mon, 28 Mar 2022 16:35:13 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Beau Belgrave <beaub@microsoft.com>, rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Message-ID: <1283359416.196715.1648499713041.JavaMail.zimbra@efficios.com>
+In-Reply-To: <2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com>
+References: <2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com>
+Subject: Re: Comments on new user events ABI
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220321234844.1543161-12-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF98 (Linux)/8.8.15_GA_4232)
+Thread-Topic: Comments on new user events ABI
+Thread-Index: B0M+BmOcIucczO4F1K4t0lJIcDaNNfBSo6mg
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 04:48:44PM -0700, Ben Gardon wrote:
-> Ensure that the userspace actor attempting to disable NX hugepages has
-> permission to reboot the system. Since disabling NX hugepages would
-> allow a guest to crash the system, it is similar to reboot permissions.
+----- On Mar 28, 2022, at 4:24 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+
+> Hi Beau, Hi Steven,
 > 
-> This approach is the simplest permission gating, but passing a file
-> descriptor opened for write for the module parameter would also work
-> well and be more precise.
-> The latter approach was suggested by Sean Christopherson.
+> I've done a review of the trace events ABI, and I have a few comments.
+> Sorry for being late to the party, but I only noticed this new ABI recently.
+> Hopefully we can improve this ABI before the 5.18 release.
 > 
-> Suggested-by: Jim Mattson <jmattson@google.com>
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> ---
->  arch/x86/kvm/x86.c                            | 18 ++++++-
->  .../selftests/kvm/include/kvm_util_base.h     |  2 +
->  tools/testing/selftests/kvm/lib/kvm_util.c    |  7 +++
->  .../selftests/kvm/x86_64/nx_huge_pages_test.c | 49 ++++++++++++++-----
->  .../kvm/x86_64/nx_huge_pages_test.sh          |  2 +-
->  5 files changed, 65 insertions(+), 13 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 74351cbb9b5b..995f30667619 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -4256,7 +4256,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  	case KVM_CAP_SYS_ATTRIBUTES:
->  	case KVM_CAP_VAPIC:
->  	case KVM_CAP_ENABLE_CAP:
-> -	case KVM_CAP_VM_DISABLE_NX_HUGE_PAGES:
->  		r = 1;
->  		break;
->  	case KVM_CAP_EXIT_HYPERCALL:
-> @@ -4359,6 +4358,14 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  	case KVM_CAP_DISABLE_QUIRKS2:
->  		r = KVM_X86_VALID_QUIRKS;
->  		break;
-> +	case KVM_CAP_VM_DISABLE_NX_HUGE_PAGES:
-> +		/*
-> +		 * Since the risk of disabling NX hugepages is a guest crashing
-> +		 * the system, ensure the userspace process has permission to
-> +		 * reboot the system.
-> +		 */
-> +		r = capable(CAP_SYS_BOOT);
 
-Duplicating this check and comment isn't ideal. I think it would be fine
-to unconditionally return true here (KVM, after all, does support the
-capability) and only check for CAP_SYS_BOOT when userspace attempts to
-enable the capability.
+Also a bit of testing shows that dyn_event_add() is called without holding the event_mutex.
+Has this been tested with lockdep ?
 
-> +		break;
->  	default:
->  		break;
->  	}
-> @@ -6050,6 +6057,15 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
->  		mutex_unlock(&kvm->lock);
->  		break;
->  	case KVM_CAP_VM_DISABLE_NX_HUGE_PAGES:
-> +		/*
-> +		 * Since the risk of disabling NX hugepages is a guest crashing
-> +		 * the system, ensure the userspace process has permission to
-> +		 * reboot the system.
-> +		 */
-> +		if (!capable(CAP_SYS_BOOT)) {
-> +			r = -EPERM;
-> +			break;
-> +		}
->  		kvm->arch.disable_nx_huge_pages = true;
->  		kvm_update_nx_huge_pages(kvm);
->  		r = 0;
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index 72163ba2f878..4db8251c3ce5 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+[  144.192299] ------------[ cut here ]------------
+[  144.194026] WARNING: CPU: 10 PID: 2689 at kernel/trace/trace_dynevent.h:82 user_event_parse_cmd+0x972/0xa00
+[  144.196850] Modules linked in:
+[  144.197836] CPU: 10 PID: 2689 Comm: example Not tainted 5.17.0+ #269
+[  144.199805] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Bochs 01/01/2011
+[  144.202303] RIP: 0010:user_event_parse_cmd+0x972/0xa00
+[  144.203899] Code: 48 00 00 00 00 e9 cf f8 ff ff 41 bf f4 ff ff ff e9 3a f7 ff ff be ff ff ff ff 48 c7 c7 08 bb f7 8a e8 b2 05 de 00 85 c0 75 02 <0f> 0b 48 83 bb 30 01 00 00 00 0f 84 54 fa ff ff e9 25 fa ff ff 48
+[  144.209398] RSP: 0018:ffffb6264b87be10 EFLAGS: 00010246
+[  144.211098] RAX: 0000000000000000 RBX: ffff9c3045cb7c00 RCX: 0000000000000001
+[  144.213314] RDX: 0000000000000000 RSI: ffffffff8aa2d11e RDI: ffffffff8aac2f16
+[  144.215577] RBP: ffff9c3045cb7d20 R08: 0000000000000001 R09: 0000000000000001
+[  144.217723] R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000011
+[  144.221511] R13: ffffb6264b87bea8 R14: 000000000000000c R15: 0000000000000000
+[  144.223760] FS:  00007ff6d10e54c0(0000) GS:ffff9c3627a80000(0000) knlGS:0000000000000000
+[  144.226364] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  144.228203] CR2: 00007ff6d0b16a80 CR3: 00000006530ae004 CR4: 00000000001706e0
+[  144.230349] Call Trace:
+[  144.231307]  <TASK>
+[  144.232140]  ? _copy_from_user+0x68/0xa0
+[  144.233534]  user_events_ioctl+0xfe/0x4d0
+[  144.234980]  __x64_sys_ioctl+0x8e/0xd0
+[  144.236268]  ? lockdep_hardirqs_on+0x7d/0x100
+[  144.237771]  do_syscall_64+0x3a/0x80
+[  144.239036]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  144.240696] RIP: 0033:0x7ff6d0b16217
+[  144.241938] Code: b3 66 90 48 8b 05 71 4c 2d 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 41 4c 2d 00 f7 d8 64 89 01 48
+[  144.247797] RSP: 002b:00007ffce19eb3b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+[  144.252578] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ff6d0b16217
+[  144.254897] RDX: 00007ffce19eb3e0 RSI: 00000000c0082a00 RDI: 0000000000000003
+[  144.257162] RBP: 00007ffce19eb400 R08: 0000000000000003 R09: 0000000000000000
+[  144.259487] R10: 0000000000000000 R11: 0000000000000246 R12: 000056095fe00820
+[  144.261817] R13: 00007ffce19eb550 R14: 0000000000000000 R15: 0000000000000000
+[  144.264135]  </TASK>
+[  144.264980] irq event stamp: 4515
+[  144.266162] hardirqs last  enabled at (4523): [<ffffffff8916ab2e>] __up_console_sem+0x5e/0x70
+[  144.268987] hardirqs last disabled at (4532): [<ffffffff8916ab13>] __up_console_sem+0x43/0x70
+[  144.271739] softirqs last  enabled at (4390): [<ffffffff8a400361>] __do_softirq+0x361/0x4a8
+[  144.274480] softirqs last disabled at (4385): [<ffffffff890e7554>] irq_exit_rcu+0x104/0x120
+[  144.277220] ---[ end trace 0000000000000000 ]---
 
-Can you split out the selftests changes to a separate commit? I have a
-feeling you meant to :).
 
-> @@ -411,4 +411,6 @@ uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name);
->  
->  uint32_t guest_get_vcpuid(void);
->  
-> +void vm_disable_nx_huge_pages(struct kvm_vm *vm);
-> +
->  #endif /* SELFTEST_KVM_UTIL_BASE_H */
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 9d72d1bb34fa..46a7fa08d3e0 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -2765,3 +2765,10 @@ uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name)
->  	return value;
->  }
->  
-> +void vm_disable_nx_huge_pages(struct kvm_vm *vm)
-> +{
-> +	struct kvm_enable_cap cap = { 0 };
-> +
-> +	cap.cap = KVM_CAP_VM_DISABLE_NX_HUGE_PAGES;
-> +	vm_enable_cap(vm, &cap);
-> +}
-> diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
-> index 2bcbe4efdc6a..5ce98f759bc8 100644
-> --- a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
-
-Will you add a test to exercise the CAP_SYS_BOOT check? At minimum the
-selftest should check if it has CAP_SYS_BOOT and act accordingly (e.g.
-exiting with KSFT_SKIP).
-
-> @@ -57,13 +57,40 @@ static void check_split_count(struct kvm_vm *vm, int expected_splits)
->  		    expected_splits, actual_splits);
->  }
->  
-> +static void help(void)
-> +{
-> +	puts("");
-> +	printf("usage: nx_huge_pages_test.sh [-x]\n");
-> +	puts("");
-> +	printf(" -x: Allow executable huge pages on the VM.\n");
-> +	puts("");
-> +	exit(0);
-> +}
-> +
->  int main(int argc, char **argv)
->  {
->  	struct kvm_vm *vm;
->  	struct timespec ts;
-> +	bool disable_nx = false;
-> +	int opt;
-> +
-> +	while ((opt = getopt(argc, argv, "x")) != -1) {
-> +		switch (opt) {
-> +		case 'x':
-> +			disable_nx = true;
-> +			break;
-> +		case 'h':
-> +		default:
-> +			help();
-> +			break;
-> +		}
-> +	}
->  
->  	vm = vm_create(VM_MODE_DEFAULT, DEFAULT_GUEST_PHY_PAGES, O_RDWR);
->  
-> +	if (disable_nx)
-> +		vm_disable_nx_huge_pages(vm);
-> +
->  	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS_HUGETLB,
->  				    HPAGE_PADDR_START, HPAGE_SLOT,
->  				    HPAGE_SLOT_NPAGES, 0);
-> @@ -83,21 +110,21 @@ int main(int argc, char **argv)
->  	 * at 2M.
->  	 */
->  	run_guest_code(vm, guest_code0);
-> -	check_2m_page_count(vm, 2);
-> -	check_split_count(vm, 2);
-> +	check_2m_page_count(vm, disable_nx ? 4 : 2);
-> +	check_split_count(vm, disable_nx ? 0 : 2);
->  
->  	/*
->  	 * guest_code1 is in the same huge page as data1, so it will cause
->  	 * that huge page to be remapped at 4k.
->  	 */
->  	run_guest_code(vm, guest_code1);
-> -	check_2m_page_count(vm, 1);
-> -	check_split_count(vm, 3);
-> +	check_2m_page_count(vm, disable_nx ? 4 : 1);
-> +	check_split_count(vm, disable_nx ? 0 : 3);
->  
->  	/* Run guest_code0 again to check that is has no effect. */
->  	run_guest_code(vm, guest_code0);
-> -	check_2m_page_count(vm, 1);
-> -	check_split_count(vm, 3);
-> +	check_2m_page_count(vm, disable_nx ? 4 : 1);
-> +	check_split_count(vm, disable_nx ? 0 : 3);
->  
->  	/*
->  	 * Give recovery thread time to run. The wrapper script sets
-> @@ -110,7 +137,7 @@ int main(int argc, char **argv)
->  	/*
->  	 * Now that the reclaimer has run, all the split pages should be gone.
->  	 */
-> -	check_2m_page_count(vm, 1);
-> +	check_2m_page_count(vm, disable_nx ? 4 : 1);
->  	check_split_count(vm, 0);
->  
->  	/*
-> @@ -118,13 +145,13 @@ int main(int argc, char **argv)
->  	 * again to check that pages are mapped at 2M again.
->  	 */
->  	run_guest_code(vm, guest_code0);
-> -	check_2m_page_count(vm, 2);
-> -	check_split_count(vm, 2);
-> +	check_2m_page_count(vm, disable_nx ? 4 : 2);
-> +	check_split_count(vm, disable_nx ? 0 : 2);
->  
->  	/* Pages are once again split from running guest_code1. */
->  	run_guest_code(vm, guest_code1);
-> -	check_2m_page_count(vm, 1);
-> -	check_split_count(vm, 3);
-> +	check_2m_page_count(vm, disable_nx ? 4 : 1);
-> +	check_split_count(vm, disable_nx ? 0 : 3);
->  
->  	kvm_vm_free(vm);
->  
-> diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
-> index 19fc95723fcb..29f999f48848 100755
-> --- a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
-> +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
-> @@ -14,7 +14,7 @@ echo 1 > /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio
->  echo 100 > /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms
->  echo 200 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
->  
-> -./nx_huge_pages_test
-> +./nx_huge_pages_test "${@}"
->  RET=$?
->  
->  echo $NX_HUGE_PAGES > /sys/module/kvm/parameters/nx_huge_pages
-> -- 
-> 2.35.1.894.gb6a874cedc-goog
-> 
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

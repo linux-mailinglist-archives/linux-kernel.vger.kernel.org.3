@@ -2,388 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD284E9878
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C2D4E987D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243342AbiC1NnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 09:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
+        id S243351AbiC1NoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 09:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243350AbiC1Nmv (ORCPT
+        with ESMTP id S242534AbiC1Nn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 09:42:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7190E31532;
-        Mon, 28 Mar 2022 06:41:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F414661163;
-        Mon, 28 Mar 2022 13:41:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09EDCC004DD;
-        Mon, 28 Mar 2022 13:41:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648474868;
-        bh=NvCpAH/O59jFUVMaTlMuGW4GmmwpcLL8K/WTXn+P1Dg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=V0ZKKcyW/f9rReZbAjgvDnr9a+dAOyWBWKZ7RTU9vfebfvLjd4l2qqjYA5rHhFuHr
-         WDE0g1ais0C2S7SZHt8chzwEU+2A36PtSRWsNcj4ZHikMHXyrJ387+rzlCaFWvac5E
-         kjuRgPoXn3MR07Bc3AUEM/ovyLJ/4pjBhIBVY5Gw=
-Date:   Mon, 28 Mar 2022 15:41:06 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [GIT PULL] TTY/Serial driver changes for 5.18-rc1
-Message-ID: <YkG68oNE448ucfPD@kroah.com>
+        Mon, 28 Mar 2022 09:43:59 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2089.outbound.protection.outlook.com [40.107.92.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F4431532;
+        Mon, 28 Mar 2022 06:42:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G4Xj+gH77sZpP3rD//WqX/YbeerQNgQQ/gbhE9bA8gFAYEgtgbhb6eZwmQ7lI7WONaJjSR/akm8OAyjAM7LmmTLvp+xX9DtQ6UszKcOMJgq7x8AKlSXhya4mTRzx4ezvu6bPEQCiHfb0EXDJDfJS2kqXldM9FN4Xb5XzkfkFBbgmzKdBHBiCSjkyszEm9SuZsFHP6fAslYsUDZnbhWVtTQ+dKQUZE5QY7h/+f3bmQmtHvdWpZDWuTKBqjDeJLiZhSFQI++SBRvsadsJqZAwCJTsEIwStMhw/ao/KD8Qfxnj4oxcGgwQpqf6gZyDW9VmuZV/UvN5OnXs2M2dXzAg0Bw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gZXLVIVbqF4RbQOI4q+BsXI7fhdCVIQq1TyR3gB0j8Y=;
+ b=dfxmrp4ZRIFp+WsDdBMQo6yGN06gQP3918Br0wgoyeFxaEls0Ht1tWsG2Dyp43mcHgFuDho4qd1VscCTq0K7oiomqMJhrgeaQkiDH1blL/H6Qv/lG84FsKFTFo/m9ID35GircfaOC+p1a6QTPA3iSb9QfdJNRwBi7bykqTKqrU4tR4KMbb7oEiCN2X+cxWx7Wure6Rc/BdD1bjx5Yu7X2wnIgf9xlc8l0K/hpO7gEIBOob0WCoxK0WpYEsKVyyR23ufynD2wd/RA3z3XBRkhoAz4KJiAiT8RjrBvLQbmRC+cBmM8neVliWlFpxdICF89L83oog/7T2THi6c/LZORpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gZXLVIVbqF4RbQOI4q+BsXI7fhdCVIQq1TyR3gB0j8Y=;
+ b=2/UOhbkUZwajChTvp9srFakG//ZmnQY+XMlyy2z+tfWSR7V6ojP72/i8XQaR8nKD3i2aGl5YesCw9qXPiThEvkgRU7GQUemd1QVJs3xzdBSoa/r+WeU+5q8iI8DuG3sXW2lqBGyipctji1iBba3z4Vy1dMmuWC2dIX2lhEcRt0w=
+Received: from DM5PR12CA0024.namprd12.prod.outlook.com (2603:10b6:4:1::34) by
+ DS7PR12MB6007.namprd12.prod.outlook.com (2603:10b6:8:7e::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5102.17; Mon, 28 Mar 2022 13:42:12 +0000
+Received: from DM6NAM11FT028.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:4:1:cafe::b9) by DM5PR12CA0024.outlook.office365.com
+ (2603:10b6:4:1::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17 via Frontend
+ Transport; Mon, 28 Mar 2022 13:42:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT028.mail.protection.outlook.com (10.13.173.140) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5102.17 via Frontend Transport; Mon, 28 Mar 2022 13:42:11 +0000
+Received: from ethanolx1ade-milan-genesis.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 28 Mar 2022 08:42:10 -0500
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+To:     <bp@alien8.de>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <yazen.ghannam@amd.com>, <linux-kernel@vger.kernel.org>,
+        <linux-edac@vger.kernel.org>, <bilbao@vt.edu>,
+        Carlos Bilbao <carlos.bilbao@amd.com>
+Subject: [PATCH 0/2] x86/mce: Grade new machine errors for AMD MCEs and include messages for panic cases
+Date:   Mon, 28 Mar 2022 08:41:30 -0500
+Message-ID: <20220328134131.736572-1-carlos.bilbao@amd.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 560adef2-ce4e-49a0-f03c-08da10c0c2b3
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6007:EE_
+X-Microsoft-Antispam-PRVS: <DS7PR12MB6007373A2F57FE61BFC003F1F81D9@DS7PR12MB6007.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: A7ABP0wFddJrCRQy4igQaUPFiDCEnVn6aDAAZPWgg67a+3SNF7GG4A1K0810n+VIW4wwSMQ79GUchOxPKKsB5NXgKiFBO+kpyeXsrY6VrD3LXECxC/Tkpf1kFewZ8JIma7T0vFsZjdmbvBXL97KPYdkNcJm+l31c4XzdRRlOGUlKXygLNDj2EuUgC7JQfFtCn26MbnejDaHqRRuqD06uAneVLMLH5BT+h6lAt1ymnYxP1FPMib9NpIe0uF0IKh/uiZ5Jp3LRjRObPuo0xRf2OTVaUj7xtUsu5Jugh5I5IMIRYUBoDzBfmmvYTQOoD8T/NDTB3UDb0JMYZDKYUVWRi+CFreEGnlFmHfzlApeflG1vFHGEJDn5/xR1/7TvsIqT3NlI0AWmrdOUY2xtPia2iILhCOO7Alm8ckx5B4kDmANxhYBj5uIPqSJbUAxTR7KoSmrQ/KP+7Izzs8NIb0YulZswE7Dc7BPozNgxvhtmGryssoq09CNaEiw6TdIoREKazyqU1Gb0zgu0DgyfkVHSDLlTAObzgAkTAsymH7ZflRu3ufxiPV8H4H2sq4xlEn9YfONHnQd9OuQ0w3ONETcYwhxykwtE0CJqoXRYEDD6Hrv6FVeSmU+i8k9lKEfLHjJu9EOcMc3Am7TqCo4I8AZfd5GGBbO6fnMHea+YGjxufEUMzprlIawi7mrXLTfL/UwUlMlMHLenXgnnjsAiAgCccg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(8936002)(36860700001)(86362001)(82310400004)(2616005)(6666004)(4744005)(40460700003)(15650500001)(44832011)(356005)(2906002)(508600001)(5660300002)(81166007)(83380400001)(6916009)(47076005)(7696005)(26005)(1076003)(186003)(16526019)(336012)(426003)(70586007)(4326008)(36756003)(8676002)(54906003)(316002)(70206006)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2022 13:42:11.1590
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 560adef2-ce4e-49a0-f03c-08da10c0c2b3
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT028.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6007
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3:
+This patchset includes grading of new types of machine errors on AMD's MCE
+grading logic mce_severity_amd(), which helps the MCE handler determine
+what actions to take. If the error is graded as a PANIC, the EDAC driver
+will not decode; so we also include new error messages to describe the MCE
+and help debugging critical errors.
 
-  Linux 5.17-rc6 (2022-02-27 14:36:33 -0800)
+Carlos Bilbao (2):
+  x86/mce: Extend AMD severity grading function with new types of errors
+  x86/mce: Add messages to describe panic machine errors on AMD's MCEs grading
+ 
+ arch/x86/include/asm/mce.h         |   6 +
+ arch/x86/kernel/cpu/mce/severity.c | 203 ++++++++++++++++++++++++-----
+ 2 files changed, 174 insertions(+), 35 deletions(-)
 
-are available in the Git repository at:
+-- 
+2.27.0
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.18-rc1
-
-for you to fetch changes up to b31c41339f4f8a833cb9dc509f87aab6a159ffe4:
-
-  vt_ioctl: fix potential spectre v1 in VT_DISALLOCATE (2022-03-18 14:35:01 +0100)
-
-----------------------------------------------------------------
-TTY/Serial driver changes for 5.18-rc1
-
-Here are the big set of tty and serial driver changes for 5.18-rc1.
-
-Nothing major, some more good cleanups from Jiri and 2 new serial
-drivers.  Highlights include:
-	- termbits cleanups
-	- export symbol cleanups and other core cleanups from Jiri Slaby
-	- new sunplus and mvebu uart drivers (amazing that people are
-	  still creating new uarts...)
-	- samsung serial driver cleanups
-	- ldisc 29 is now "reserved" for experimental/development line
-	  disciplines
-	- lots of other tiny fixes and cleanups to serial drivers and
-	  bindings
-
-All of these have been in linux-next for a while with no reported
-issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Abel Vesa (3):
-      dt-bindings: serial: fsl-lpuart: Add i.MX8DXL compatible
-      dt-bindings: serial: fsl-lpuart: Drop i.MX8QXP backwards compatibility
-      dt-bindings: serial: fsl-lpuart: Remove i.MX8QM from enum
-
-Adrien Thierry (1):
-      serial: 8250_bcm2835aux: Add ACPI support
-
-Alexander Vorwerk (1):
-      tty: serial: jsm: fix two assignments in if conditions
-
-Allen-KH Cheng (1):
-      dt-bindings: serial: Add compatible for Mediatek MT8186
-
-Andy Shevchenko (9):
-      serial: 8250_exar: derive nr_ports from PCI ID for Acces I/O cards
-      amiserial: Drop duplicate NULL check in shutdown()
-      serial: core: Fix the definition name in the comment of UPF_* flags
-      tty: Drop duplicate NULL check in TTY port functions
-      serial: core: Drop duplicate NULL check in uart_*shutdown()
-      serial: 8250_mid: Get rid of custom MID_DEVICE() macro
-      serial: 8250_mid: Remove unneeded test for ->setup() presence
-      serial: 8250_mid: Balance reference count for PCI DMA device
-      serial: 8250_lpss: Balance reference count for PCI DMA device
-
-Biju Das (3):
-      dt-bindings: serial: renesas,scif: Remove redundant renesas,scif-r9a07g054
-      dt-bindings: serial: renesas,scif: Document RZ/G2UL SoC
-      dt-bindings: serial: renesas,sci: Document RZ/G2UL SoC
-
-Colin Ian King (2):
-      serial: 8250_mtk: make two read-only arrays static const
-      tty: serial: jsm: remove redundant assignments to variable linestatus
-
-Erwan Le Ray (2):
-      serial: mctrl_gpio: add a new API to enable / disable wake_irq
-      serial: stm32: enable / disable wake irqs for mcrtl_gpio wakeup sources
-
-Geert Uytterhoeven (2):
-      serial: sh-sci: Simplify multiplication/shift logic
-      serial: SERIAL_SUNPLUS should depend on ARCH_SUNPLUS
-
-Greg Kroah-Hartman (4):
-      Merge tag 'v5.17-rc2' into tty-next
-      Merge 5.17-rc4 into tty-next
-      Merge 5.17-rc6 into tty-next
-      Revert "tty: serial: meson: *"
-
-Hammer Hsieh (3):
-      dt-bindings: serial: Add bindings doc for Sunplus SoC UART Driver
-      serial: sunplus-uart: Add Sunplus SoC UART Driver
-      serial: sunplus-uart: Fix compile error while CONFIG_SERIAL_SUNPLUS_CONSOLE=n
-
-Harald Seiler (1):
-      tty: serial: imx: Add fast path when rs485 delays are 0
-
-Hui Wang (1):
-      serial: sc16is7xx: Clear RS485 bits in the shutdown
-
-Ilpo Järvinen (3):
-      ia64: termbits.h is identical to asm-generic one
-      xtensa: termbits.h is identical to asm-generic one
-      serial: 8250: fix XOFF/XON sending when DMA is used
-
-Jiri Slaby (22):
-      serial: core: clean up EXPORT_SYMBOLs
-      serial: atmel_serial: include circ_buf.h
-      tty: add kfifo to tty_port
-      tty: tty_port_open, document shutdown vs failed activate
-      mxser: fix xmit_buf leak in activate when LSR == 0xff
-      mxser: use tty_port xmit_buf helpers
-      mxser: switch from xmit_buf to kfifo
-      serial: fsl_linflexuart: deduplicate character sending
-      serial: fsl_linflexuart: don't call uart_write_wakeup() twice
-      serial: mcf: use helpers in mcf_tx_chars()
-      tty: serial: mpc52xx_uart: make rx/tx hooks return unsigned
-      tty: serial: serial_txx9: remove info print from init
-      tty: serial: lpc32xx_hs: use serial_lpc32xx_stop_tx() helper
-      tty: serial: amba-pl010: use more uart_port pointers
-      tty: serial: define UART_LCR_WLEN() macro
-      tty: serial: make use of UART_LCR_WLEN() + tty_get_char_size()
-      USB: serial: make use of UART_LCR_WLEN() + tty_get_char_size()
-      sdio_uart: make use of UART_LCR_WLEN() + tty_get_char_size()
-      mxser: make use of UART_LCR_WLEN() + tty_get_char_size()
-      serial: make uart_console_write->putchar()'s character an unsigned char
-      tty: serial: serial_txx9: remove struct uart_txx9_port
-      serial: samsung_tty: do not unlock port->lock for uart_write_wakeup()
-
-Krzysztof Kozlowski (10):
-      dt-bindings: serial: samsung_uart: Document Exynos5433 compatible
-      serial: 8250_tegra: mark acpi_device_id as unused with !ACPI
-      tty: serial: samsung: embed s3c24xx_uart_info in parent structure
-      tty: serial: samsung: embed s3c2410_uartcfg in parent structure
-      tty: serial: samsung: reduce number of casts
-      tty: serial: samsung: constify s3c24xx_serial_drv_data
-      tty: serial: samsung: constify UART name
-      tty: serial: samsung: constify s3c24xx_serial_drv_data members
-      tty: serial: samsung: constify variables and pointers
-      tty: serial: samsung: simplify getting OF match data
-
-Lech Perczak (3):
-      sc16is7xx: Preserve EFR bits on update
-      sc16is7xx: Update status lines in single call
-      sc16is7xx: Separate GPIOs from modem control lines
-
-Maciej W. Rozycki (1):
-      serial: 8250: Correct Kconfig help text for blacklisted PCI devices
-
-Max Staudt (1):
-      tty: Reserve ldisc 29 for development purposes
-
-Michael Walle (1):
-      tty: serial: atmel: add earlycon support
-
-Pali Rohár (7):
-      MAINTAINERS: Add Pali Rohár as mvebu-uart.c maintainer
-      math64: New DIV_U64_ROUND_CLOSEST helper
-      dt-bindings: mvebu-uart: document DT bindings for marvell,armada-3700-uart-clock
-      serial: mvebu-uart: implement UART clock driver for configuring UART base clock
-      dt-bindings: mvebu-uart: update information about UART clock
-      serial: mvebu-uart: implement support for baudrates higher than 230400 Bd
-      arm64: dts: marvell: armada-37xx: add device node for UART clock and use it
-
-Rafael J. Wysocki (1):
-      tty: Replace acpi_bus_get_device()
-
-Rafał Miłecki (1):
-      tty: serial: bcm63xx: use more precise Kconfig symbol
-
-Randy Dunlap (2):
-      tty: hvc: fix return value of __setup handler
-      kgdboc: fix return value of __setup handler
-
-Sherry Sun (1):
-      tty: serial: fsl_lpuart: count tty buffer overruns
-
-Steffen Trumtrar (1):
-      serial: 8250: Return early in .start_tx() if there are no chars to send
-
-Tomasz Moń (4):
-      serial: imx: reduce RX interrupt frequency
-      sc16is7xx: Properly resume TX after stop
-      sc16is7xx: Handle modem status lines
-      sc16is7xx: Set AUTOCTS and AUTORTS bits
-
-Uwe Kleine-König (1):
-      serial: 8250: Fix race condition in RTS-after-send handling
-
-Vincent Whitchurch (2):
-      dt-bindings: serial: samsung: Add ARTPEC-8 UART
-      tty: serial: samsung: Add ARTPEC-8 support
-
-Wei Yongjun (1):
-      serial: mvebu-uart: fix return value check in mvebu_uart_clock_probe()
-
-Woody Lin (1):
-      serial: samsung: Add samsung_early_read to support early kgdboc
-
-Xiaomeng Tong (1):
-      vt_ioctl: fix potential spectre v1 in VT_DISALLOCATE
-
-Xu Wang (1):
-      tty: serial: max3100: Remove redundant 'flush_workqueue()' calls
-
-Yang Guang (1):
-      serial: 8250_aspeed_vuart: replace snprintf with sysfs_emit
-
-Yu Tu (7):
-      tty: serial: meson: Move request the register region to probe
-      tty: serial: meson: Use devm_ioremap_resource to get register mapped memory
-      tty: serial: meson: Describes the calculation of the UART baud rate clock using a clock frame
-      tty: serial: meson: Make some bit of the REG5 register writable
-      tty: serial: meson: The system stuck when you run the stty command on the console to change the baud rate
-      tty: serial: meson: Added S4 SOC compatibility
-      tty: serial: meson: Fix the compile link error reported by kernel test robot
-
-Zev Weiss (1):
-      serial: 8250_aspeed_vuart: add PORT_ASPEED_VUART port type
-
- .../clock/marvell,armada-3700-uart-clock.yaml      |  59 ++
- .../devicetree/bindings/serial/fsl-lpuart.yaml     |  10 +-
- .../devicetree/bindings/serial/mtk-uart.txt        |   1 +
- .../devicetree/bindings/serial/mvebu-uart.txt      |   9 +-
- .../devicetree/bindings/serial/renesas,sci.yaml    |   2 +
- .../devicetree/bindings/serial/renesas,scif.yaml   |   5 +-
- .../devicetree/bindings/serial/samsung_uart.yaml   |   4 +
- .../bindings/serial/sunplus,sp7021-uart.yaml       |  56 ++
- MAINTAINERS                                        |  13 +
- arch/arm64/boot/dts/marvell/armada-37xx.dtsi       |  14 +-
- arch/ia64/include/uapi/asm/termbits.h              | 209 ------
- arch/xtensa/include/uapi/asm/termbits.h            | 221 ------
- drivers/mmc/core/sdio_uart.c                       |  17 +-
- drivers/tty/amiserial.c                            |   6 +-
- drivers/tty/goldfish.c                             |   2 +-
- drivers/tty/hvc/hvc_dcc.c                          |   2 +-
- drivers/tty/hvc/hvc_iucv.c                         |   4 +-
- drivers/tty/mxser.c                                | 125 ++--
- drivers/tty/serdev/core.c                          |   7 +-
- drivers/tty/serial/21285.c                         |   2 +-
- drivers/tty/serial/8250/8250_aspeed_vuart.c        |   8 +-
- drivers/tty/serial/8250/8250_bcm2835aux.c          |  52 +-
- drivers/tty/serial/8250/8250_dma.c                 |  11 +-
- drivers/tty/serial/8250/8250_early.c               |   2 +-
- drivers/tty/serial/8250/8250_exar.c                |  37 +-
- drivers/tty/serial/8250/8250_ingenic.c             |   2 +-
- drivers/tty/serial/8250/8250_lpss.c                |  28 +-
- drivers/tty/serial/8250/8250_mid.c                 |  43 +-
- drivers/tty/serial/8250/8250_mtk.c                 |   4 +-
- drivers/tty/serial/8250/8250_omap.c                |  16 +-
- drivers/tty/serial/8250/8250_port.c                |  45 +-
- drivers/tty/serial/8250/8250_tegra.c               |   2 +-
- drivers/tty/serial/8250/Kconfig                    |  16 +-
- drivers/tty/serial/Kconfig                         |  32 +-
- drivers/tty/serial/Makefile                        |   1 +
- drivers/tty/serial/altera_jtaguart.c               |   4 +-
- drivers/tty/serial/altera_uart.c                   |   2 +-
- drivers/tty/serial/amba-pl010.c                    | 176 +++--
- drivers/tty/serial/amba-pl011.c                    |   6 +-
- drivers/tty/serial/apbuart.c                       |   2 +-
- drivers/tty/serial/ar933x_uart.c                   |   2 +-
- drivers/tty/serial/arc_uart.c                      |   2 +-
- drivers/tty/serial/atmel_serial.c                  |  27 +-
- drivers/tty/serial/bcm63xx_uart.c                  |   2 +-
- drivers/tty/serial/clps711x.c                      |   2 +-
- drivers/tty/serial/digicolor-usart.c               |   2 +-
- drivers/tty/serial/dz.c                            |   2 +-
- drivers/tty/serial/earlycon-arm-semihost.c         |   2 +-
- drivers/tty/serial/earlycon-riscv-sbi.c            |   2 +-
- drivers/tty/serial/fsl_linflexuart.c               |  50 +-
- drivers/tty/serial/fsl_lpuart.c                    |  24 +-
- drivers/tty/serial/imx.c                           |  22 +-
- drivers/tty/serial/imx_earlycon.c                  |   2 +-
- drivers/tty/serial/ip22zilog.c                     |   2 +-
- drivers/tty/serial/jsm/jsm_cls.c                   |  20 +-
- drivers/tty/serial/jsm/jsm_neo.c                   |  19 +-
- drivers/tty/serial/jsm/jsm_tty.c                   |   3 +-
- drivers/tty/serial/kgdboc.c                        |   6 +-
- drivers/tty/serial/lantiq.c                        |   2 +-
- drivers/tty/serial/liteuart.c                      |   2 +-
- drivers/tty/serial/lpc32xx_hs.c                    |  12 +-
- drivers/tty/serial/max3100.c                       |   1 -
- drivers/tty/serial/mcf.c                           |   7 +-
- drivers/tty/serial/meson_uart.c                    |   2 +-
- drivers/tty/serial/milbeaut_usio.c                 |   2 +-
- drivers/tty/serial/mpc52xx_uart.c                  |  22 +-
- drivers/tty/serial/mps2-uart.c                     |   4 +-
- drivers/tty/serial/mvebu-uart.c                    | 600 +++++++++++++++-
- drivers/tty/serial/mxs-auart.c                     |   2 +-
- drivers/tty/serial/omap-serial.c                   |  20 +-
- drivers/tty/serial/owl-uart.c                      |   2 +-
- drivers/tty/serial/pch_uart.c                      |   2 +-
- drivers/tty/serial/pic32_uart.c                    |   2 +-
- drivers/tty/serial/pmac_zilog.c                    |   2 +-
- drivers/tty/serial/pxa.c                           |  18 +-
- drivers/tty/serial/qcom_geni_serial.c              |   2 +-
- drivers/tty/serial/rda-uart.c                      |   2 +-
- drivers/tty/serial/sa1100.c                        |   2 +-
- drivers/tty/serial/samsung_tty.c                   | 296 ++++----
- drivers/tty/serial/sb1250-duart.c                  |   2 +-
- drivers/tty/serial/sc16is7xx.c                     | 263 ++++++-
- drivers/tty/serial/sccnxp.c                        |   2 +-
- drivers/tty/serial/serial-tegra.c                  |  22 +-
- drivers/tty/serial/serial_core.c                   |  40 +-
- drivers/tty/serial/serial_mctrl_gpio.c             |  38 +
- drivers/tty/serial/serial_mctrl_gpio.h             |  18 +
- drivers/tty/serial/serial_txx9.c                   | 369 +++++-----
- drivers/tty/serial/sh-sci.c                        |   4 +-
- drivers/tty/serial/sifive.c                        |   4 +-
- drivers/tty/serial/sprd_serial.c                   |   4 +-
- drivers/tty/serial/st-asc.c                        |   2 +-
- drivers/tty/serial/stm32-usart.c                   |   5 +-
- drivers/tty/serial/sunplus-uart.c                  | 775 +++++++++++++++++++++
- drivers/tty/serial/sunsab.c                        |   2 +-
- drivers/tty/serial/sunsu.c                         |   2 +-
- drivers/tty/serial/sunzilog.c                      |   4 +-
- drivers/tty/serial/uartlite.c                      |   4 +-
- drivers/tty/serial/vr41xx_siu.c                    |  17 +-
- drivers/tty/serial/vt8500_serial.c                 |   2 +-
- drivers/tty/serial/xilinx_uartps.c                 |   2 +-
- drivers/tty/serial/zs.c                            |   2 +-
- drivers/tty/tty_port.c                             |  18 +-
- drivers/tty/vt/vt_ioctl.c                          |  10 +-
- drivers/usb/serial/ark3116.c                       |  17 +-
- drivers/usb/serial/f81232.c                        |  16 +-
- drivers/usb/serial/f81534.c                        |  16 +-
- drivers/usb/serial/mos7720.c                       |  20 +-
- drivers/usb/serial/quatech2.c                      |  16 +-
- drivers/usb/serial/ssu100.c                        |  16 +-
- include/linux/math64.h                             |  13 +
- include/linux/serial.h                             |   2 +
- include/linux/serial_core.h                        |   6 +-
- include/linux/tty_port.h                           |   3 +
- include/uapi/linux/serial_core.h                   |   6 +
- include/uapi/linux/tty.h                           |   6 +-
- 115 files changed, 2727 insertions(+), 1473 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/marvell,armada-3700-uart-clock.yaml
- create mode 100644 Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
- delete mode 100644 arch/ia64/include/uapi/asm/termbits.h
- delete mode 100644 arch/xtensa/include/uapi/asm/termbits.h
- create mode 100644 drivers/tty/serial/sunplus-uart.c

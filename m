@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1264E8FFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 10:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE174E9003
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 10:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239277AbiC1IWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 04:22:24 -0400
+        id S239264AbiC1IWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 04:22:35 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239261AbiC1IWT (ORCPT
+        with ESMTP id S239292AbiC1IWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 04:22:19 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6059853A41;
-        Mon, 28 Mar 2022 01:20:33 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id F14481F430ED
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648455632;
-        bh=HTtoc9TVDdHP3psxCeqfPiDHAPdGIinJmaM31VEeTWA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LK9UqtwE81DgNYCKdeZZSDBq8fnjasY1InKFW0p49+nBg8VyvJfeLlFKWGwRdgqPo
-         gyTdxQ35jwwf7Ryf6Rr0ypstopk2UMgRSm2gmEoAnFA+f0WngNhF7a476V+LAjiD62
-         zxvdd2bmsi8g9kzd5JMwGAnRCWuLfwdA2GtTm29zEEwoQTjeXwzx9A8h7jWYIFz8Pj
-         SvkLU3Z1og09N2W48A8GopEhM2Rnn114Sb7SL/BV5C8ePDGNuX0n0GLwPBnCpsErsn
-         Nu9rXZmI02pbclGO4yfen05p65bbMarAM1Suxf00H0K/0u01Iv3g5irKmIkK2C8rwV
-         2Fh1x5iNAJ3dg==
-Message-ID: <4697e3af-86f7-83e0-1737-3f5000fc8d30@collabora.com>
-Date:   Mon, 28 Mar 2022 10:20:27 +0200
+        Mon, 28 Mar 2022 04:22:24 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD6153A5D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 01:20:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648455643; x=1679991643;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=X/ujBVMAf8bxk2V6GI32GPU9XNz0mDme+92j35t6tB4=;
+  b=DpQTLhXdPbp7ICihLu3eCOqtAfgOMk4QmiT7BuNP2dWRQhWok0S0zxSV
+   yhzPZumIdfH4HazYktm8W9t+dpng5k+AYifl3xtW79F1zXpn2Tb4M4yXy
+   aStrgXFxxiG2PgyHgRdylVTsie0WuGzaf8oxcIAF9xhOBJtV0pQ4UbV1C
+   3vb11kfjq684WgGG0Z3fzfDIEUeqIB4uhTwHu7Cq5wzPfLplyS5brk6re
+   SSEhXIH5o6sMMXgLwfLka8cZSXLtp1RFMaWO02jG29WTws30p+MxzvMpn
+   qQD6KLWYYR+clJwPD/YushhXTe62x+/oQLs4m0sOpaSYGdGzvM+GAjf6j
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="259129827"
+X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
+   d="scan'208";a="259129827"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 01:20:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
+   d="scan'208";a="563435784"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 28 Mar 2022 01:20:41 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nYkcC-0001sL-HP; Mon, 28 Mar 2022 08:20:40 +0000
+Date:   Mon, 28 Mar 2022 16:20:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: drivers/spi/spi-amd.c:296:21: warning: cast to smaller integer type
+ 'enum amd_spi_versions' from 'const void *'
+Message-ID: <202203281638.pWQ7vWbp-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v9 17/22] phy: phy-mtk-dp: Add driver for DP phy
-Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>, airlied@linux.ie,
-        chunfeng.yun@mediatek.com, chunkuang.hu@kernel.org,
-        ck.hu@mediatek.com, daniel@ffwll.ch, deller@gmx.de,
-        jitao.shi@mediatek.com, kishon@ti.com, krzk+dt@kernel.org,
-        maarten.lankhorst@linux.intel.com, matthias.bgg@gmail.com,
-        mripard@kernel.org, p.zabel@pengutronix.de, robh+dt@kernel.org,
-        tzimmermann@suse.de, vkoul@kernel.org
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, markyacoub@google.com,
-        Markus Schneider-Pargmann <msp@baylibre.com>
-References: <20220327223927.20848-1-granquet@baylibre.com>
- <20220327223927.20848-18-granquet@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220327223927.20848-18-granquet@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,99 +64,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/03/22 00:39, Guillaume Ranquet ha scritto:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This is a new driver that supports the integrated DisplayPort phy for
-> mediatek SoCs, especially the mt8195. The phy is integrated into the
-> DisplayPort controller and will be created by the mtk-dp driver. This
-> driver expects a struct regmap to be able to work on the same registers
-> as the DisplayPort controller. It sets the device data to be the struct
-> phy so that the DisplayPort controller can easily work with it.
-> 
-> The driver does not have any devicetree bindings because the datasheet
-> does not list the controller and the phy as distinct units.
-> 
-> The interaction with the controller can be covered by the configure
-> callback of the phy framework and its displayport parameters.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> ---
->   MAINTAINERS                       |   1 +
->   drivers/phy/mediatek/Kconfig      |   8 ++
->   drivers/phy/mediatek/Makefile     |   1 +
->   drivers/phy/mediatek/phy-mtk-dp.c | 201 ++++++++++++++++++++++++++++++
->   4 files changed, 211 insertions(+)
->   create mode 100644 drivers/phy/mediatek/phy-mtk-dp.c
-> 
+Hi André,
 
-..snip..
+FYI, the error/warning still remains.
 
-> diff --git a/drivers/phy/mediatek/phy-mtk-dp.c b/drivers/phy/mediatek/phy-mtk-dp.c
-> new file mode 100644
-> index 000000000000..e5c5494f3636
-> --- /dev/null
-> +++ b/drivers/phy/mediatek/phy-mtk-dp.c
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ae085d7f9365de7da27ab5c0d16b12d51ea7fca9
+commit: 209043554915d7c51ac112a668ad1a255e1bea61 spi: amd: Add support for version AMDI0062
+date:   6 weeks ago
+config: x86_64-randconfig-a011-20220328 (https://download.01.org/0day-ci/archive/20220328/202203281638.pWQ7vWbp-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=209043554915d7c51ac112a668ad1a255e1bea61
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 209043554915d7c51ac112a668ad1a255e1bea61
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/spi/
 
-..snip..
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +
-> +static int mtk_dp_phy_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct mtk_dp_phy *dp_phy;
-> +	struct phy *phy;
-> +	struct regmap *regs;
-> +
-> +	regs = syscon_regmap_lookup_by_phandle(dev->of_node, "mediatek,dp-syscon");
-> +
+All warnings (new ones prefixed by >>):
 
-Please drop this blank line
+>> drivers/spi/spi-amd.c:296:21: warning: cast to smaller integer type 'enum amd_spi_versions' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+           amd_spi->version = (enum amd_spi_versions) device_get_match_data(dev);
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
-> +	if (IS_ERR(regs))
-> +		return PTR_ERR(regs);
-> +
-> +	dp_phy = devm_kzalloc(dev, sizeof(*dp_phy), GFP_KERNEL);
-> +	if (!dp_phy)
-> +		return -ENOMEM;
-> +
-> +	dp_phy->regs = regs;
-> +
-> +	phy = devm_phy_create(dev, NULL, &mtk_dp_phy_dev_ops);
-> +
 
-Same here
+vim +296 drivers/spi/spi-amd.c
 
-> +	if (IS_ERR(phy))
-> +		return dev_err_probe(dev, PTR_ERR(phy), "Failed to create DP PHY: %ld\n", PTR_ERR(phy));
-> +
+   272	
+   273	static int amd_spi_probe(struct platform_device *pdev)
+   274	{
+   275		struct device *dev = &pdev->dev;
+   276		struct spi_master *master;
+   277		struct amd_spi *amd_spi;
+   278		int err = 0;
+   279	
+   280		/* Allocate storage for spi_master and driver private data */
+   281		master = spi_alloc_master(dev, sizeof(struct amd_spi));
+   282		if (!master) {
+   283			dev_err(dev, "Error allocating SPI master\n");
+   284			return -ENOMEM;
+   285		}
+   286	
+   287		amd_spi = spi_master_get_devdata(master);
+   288		amd_spi->io_remap_addr = devm_platform_ioremap_resource(pdev, 0);
+   289		if (IS_ERR(amd_spi->io_remap_addr)) {
+   290			err = PTR_ERR(amd_spi->io_remap_addr);
+   291			dev_err(dev, "error %d ioremap of SPI registers failed\n", err);
+   292			goto err_free_master;
+   293		}
+   294		dev_dbg(dev, "io_remap_address: %p\n", amd_spi->io_remap_addr);
+   295	
+ > 296		amd_spi->version = (enum amd_spi_versions) device_get_match_data(dev);
+   297	
+   298		/* Initialize the spi_master fields */
+   299		master->bus_num = 0;
+   300		master->num_chipselect = 4;
+   301		master->mode_bits = 0;
+   302		master->flags = SPI_MASTER_HALF_DUPLEX;
+   303		master->setup = amd_spi_master_setup;
+   304		master->transfer_one_message = amd_spi_master_transfer;
+   305	
+   306		/* Register the controller with SPI framework */
+   307		err = devm_spi_register_master(dev, master);
+   308		if (err) {
+   309			dev_err(dev, "error %d registering SPI controller\n", err);
+   310			goto err_free_master;
+   311		}
+   312	
+   313		return 0;
+   314	
+   315	err_free_master:
+   316		spi_master_put(master);
+   317	
+   318		return err;
+   319	}
+   320	
 
-Using dev_err_probe automates printing the error, so the correct usage is:
-
-return dev_err_probe(dev, PTR_ERR(phy), "Failed to create DP PHY\n");
-
-> +	phy_set_drvdata(phy, dp_phy);
-> +
-> +	return 0;
-> +}
-> +
-> +struct platform_driver mtk_dp_phy_driver = {
-> +	.probe = mtk_dp_phy_probe,
-> +	.driver = {
-> +		.name = "mediatek-dp-phy",
-> +	},
-> +};
-> +module_platform_driver(mtk_dp_phy_driver);
-
-Also, in your dt-binding, you mention a compatible for this driver, but I don't see
-any, here. This means that you do know what to do, so please do it.
-
-Regards,
-Angelo
-
-> +
-> +MODULE_AUTHOR("Markus Schneider-Pargmann <msp@baylibre.com>");
-> +MODULE_DESCRIPTION("MediaTek DP PHY Driver");
-> +MODULE_LICENSE("GPL");
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,170 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9164E8CAD
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 05:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E92F24E8CB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 05:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237866AbiC1DrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 23:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
+        id S237875AbiC1D4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 23:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbiC1DrS (ORCPT
+        with ESMTP id S229754AbiC1D4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 23:47:18 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8BCFD26;
-        Sun, 27 Mar 2022 20:45:38 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KRdlz1654zBrny;
-        Mon, 28 Mar 2022 11:41:35 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 28 Mar 2022 11:45:35 +0800
-Message-ID: <0e803aad-5ae6-349b-b17e-89a832306925@huawei.com>
-Date:   Mon, 28 Mar 2022 11:45:24 +0800
+        Sun, 27 Mar 2022 23:56:46 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EF5220D8;
+        Sun, 27 Mar 2022 20:55:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648439706; x=1679975706;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=1IrgS1Xz4xDu9eaps5L0yXyUmT/Eaqj8UxN5lOp2JiA=;
+  b=U3vuF2kBsyAx6Hih/UaZgUNuhyrEC9meVxDcrlvok1lFX2OgKjjDKhzA
+   /UaD6np6Gd+oIuh2mOjV7ABjfGXUNeEpW/ETIG0G5GErqG2v3r82Zec8j
+   +iZLemustXErmG/vxVdCGTMqzFuuzARIxm8vSaiDfrPmAeiuuEKMZ0S7h
+   0JB5F8PK3Mw1+YwyYWAPSzbBU4wUhRLiRfu9PEPdW8Tf4LKR+Zlqc1We3
+   smrhGY54PTs0fqoT0VA2MGGkSsQIVULILP9iwEsYeUuPNpzn3VPoDYhDh
+   M3xBennDfLhL6bmuKHDr327exzECY1BuXNdrmQ0iiMNOYOdiGlXTO1KI8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="239502536"
+X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
+   d="scan'208";a="239502536"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 20:55:05 -0700
+X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
+   d="scan'208";a="638819456"
+Received: from stung2-mobl.gar.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.255.94.73])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 20:55:03 -0700
+Message-ID: <51982ec477e43c686c5c64731715fee528750d85.camel@intel.com>
+Subject: Re: [PATCH v2 01/21] x86/virt/tdx: Detect SEAM
+From:   Kai Huang <kai.huang@intel.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Cc:     "Hansen, Dave" <dave.hansen@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>
+Date:   Mon, 28 Mar 2022 16:55:01 +1300
+In-Reply-To: <BN9PR11MB527657C2AA8B9ACD94C9D5468C189@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <cover.1647167475.git.kai.huang@intel.com>
+         <a258224c26b6a08400d9a8678f5d88f749afe51e.1647167475.git.kai.huang@intel.com>
+         <BN9PR11MB527657C2AA8B9ACD94C9D5468C189@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v7 1/5] fs-verity: define a function to return the
- integrity protected file digest
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, <linux-integrity@vger.kernel.org>
-CC:     Eric Biggers <ebiggers@kernel.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        <linux-fscrypt@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Eric Biggers <ebiggers@google.com>
-References: <20220325223824.310119-1-zohar@linux.ibm.com>
- <20220325223824.310119-2-zohar@linux.ibm.com>
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <20220325223824.310119-2-zohar@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/26 6:38, Mimi Zohar wrote:
-> Define a function named fsverity_get_digest() to return the verity file
-> digest and the associated hash algorithm (enum hash_algo).
+On Wed, 2022-03-23 at 16:21 +1300, Tian, Kevin wrote:
+> > From: Kai Huang <kai.huang@intel.com>
+> > Sent: Sunday, March 13, 2022 6:50 PM
+> > 
+> > @@ -715,6 +716,8 @@ static void init_intel(struct cpuinfo_x86 *c)
+> >       if (cpu_has(c, X86_FEATURE_TME))
+> >               detect_tme(c);
+> > 
+> > +     tdx_detect_cpu(c);
+> > +
 > 
-> This assumes that before calling fsverity_get_digest() the file must have
-> been opened, which is even true for the IMA measure/appraise on file
-> open policy rule use case (func=FILE_CHECK).  do_open() calls vfs_open()
-> immediately prior to ima_file_check().
+> TDX is not reported as a x86 feature. and the majority of detection
+> and initialization have been conducted on demand in this series
+> (as explained in patch04). Why is SEAM (and latter keyid) so different
+> to be detected at early boot phase?
 > 
-> Acked-by: Eric Biggers <ebiggers@google.com>
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
->   fs/verity/Kconfig            |  1 +
->   fs/verity/fsverity_private.h |  7 ------
->   fs/verity/measure.c          | 43 ++++++++++++++++++++++++++++++++++++
->   include/linux/fsverity.h     | 18 +++++++++++++++
->   4 files changed, 62 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/verity/Kconfig b/fs/verity/Kconfig
-> index 24d1b54de807..54598cd80145 100644
-> --- a/fs/verity/Kconfig
-> +++ b/fs/verity/Kconfig
-> @@ -3,6 +3,7 @@
->   config FS_VERITY
->   	bool "FS Verity (read-only file-based authenticity protection)"
->   	select CRYPTO
-> +	select CRYPTO_HASH_INFO
->   	# SHA-256 is implied as it's intended to be the default hash algorithm.
->   	# To avoid bloat, other wanted algorithms must be selected explicitly.
->   	# Note that CRYPTO_SHA256 denotes the generic C implementation, but
-> diff --git a/fs/verity/fsverity_private.h b/fs/verity/fsverity_private.h
-> index a7920434bae5..c6fb62e0ef1a 100644
-> --- a/fs/verity/fsverity_private.h
-> +++ b/fs/verity/fsverity_private.h
-> @@ -14,7 +14,6 @@
->   
->   #define pr_fmt(fmt) "fs-verity: " fmt
->   
-> -#include <crypto/sha2.h>
->   #include <linux/fsverity.h>
->   #include <linux/mempool.h>
->   
-> @@ -26,12 +25,6 @@ struct ahash_request;
->    */
->   #define FS_VERITY_MAX_LEVELS		8
->   
-> -/*
-> - * Largest digest size among all hash algorithms supported by fs-verity.
-> - * Currently assumed to be <= size of fsverity_descriptor::root_hash.
-> - */
-> -#define FS_VERITY_MAX_DIGEST_SIZE	SHA512_DIGEST_SIZE
-> -
->   /* A hash algorithm supported by fs-verity */
->   struct fsverity_hash_alg {
->   	struct crypto_ahash *tfm; /* hash tfm, allocated on demand */
-> diff --git a/fs/verity/measure.c b/fs/verity/measure.c
-> index f0d7b30c62db..e99c00350c28 100644
-> --- a/fs/verity/measure.c
-> +++ b/fs/verity/measure.c
-> @@ -57,3 +57,46 @@ int fsverity_ioctl_measure(struct file *filp, void __user *_uarg)
->   	return 0;
->   }
->   EXPORT_SYMBOL_GPL(fsverity_ioctl_measure);
-> +
-> +/**
-> + * fsverity_get_digest() - get a verity file's digest
-> + * @inode: inode to get digest of
-> + * @digest: (out) pointer to the digest
-> + * @alg: (out) pointer to the hash algorithm enumeration
-> + *
-> + * Return the file hash algorithm and digest of an fsverity protected file.
-> + * Assumption: before calling fsverity_get_digest(), the file must have been
-> + * opened.
-> + *
-> + * Return: 0 on success, -errno on failure
-> + */
-> +int fsverity_get_digest(struct inode *inode,
-> +			u8 digest[FS_VERITY_MAX_DIGEST_SIZE],
-> +			enum hash_algo *alg)
-> +{
-> +	const struct fsverity_info *vi;
-> +	const struct fsverity_hash_alg *hash_alg;
-> +	int i;
-> +
-> +	vi = fsverity_get_info(inode);
-> +	if (!vi)
-> +		return -ENODATA; /* not a verity file */
-> +
-> +	hash_alg = vi->tree_params.hash_alg;
-> +	memset(digest, 0, FS_VERITY_MAX_DIGEST_SIZE);
+> Thanks
+> Kevin
 
-Hi Mimi,
+Hi Kevin,
 
-I would suggest moving this memset downward right before the memcpy.
+Sorry for late reply.  I was out last week.
 
-> +
-> +	/* convert the verity hash algorithm name to a hash_algo_name enum */
-> +	i = match_string(hash_algo_name, HASH_ALGO__LAST, hash_alg->name);
-> +	if (i < 0)
-> +		return -EINVAL;
-> +	*alg = i;
-> +
-> +	if (WARN_ON_ONCE(hash_alg->digest_size != hash_digest_size[*alg]))
-> +		return -EINVAL;
-> +	memcpy(digest, vi->file_digest, hash_alg->digest_size);
-> +
-> +	pr_debug("file digest %s:%*phN\n", hash_algo_name[*alg],
-> +		 hash_digest_size[*alg], digest);
-> +
-> +	return 0;
-> +}
+SEAMRR and TDX KeyIDs are configured by BIOS and they are static during
+machine's runtime.  On the other hand, TDX module can be updated and
+reinitialized at runtime (not supported in this series but will be supported in
+the future).  Theoretically, even P-SEAMLDR can be updated at runtime (although
+I think unlikely to be supported in Linux).  Therefore I think detecting SEAMRR
+and TDX KeyIDs at boot fits better.
+
+It is also more flexible from some other perspectives I think: 1) There was a
+request to add X86_FEATURE_SEAM bit and expose it to /proc/cpuinfo. I didn't add
+it because I didn't think the use case was solid.  But in case someone has some
+use case in the future we can add it, and detecting SEAMRR during boot fits this
+more. 2) There was a request to expose TDX KeyID info via sysfs so userspace can
+know how many TDs can be created.  It's not done in this series but it will be
+done at some time in the future. Detecting KeyIDs at boot allows this info being
+able to be exposed via sysfs at early stage, providing more flexibility to
+userspace. 
+
+At last, currently in this series the patch to handle kexec checks whether
+SEAMRR and TDX KeyIDs are enabled and then flush cache (of course this is open
+to discussion).  Detecting them at boot fits better I think.
+
 -- 
-Best
-GUO Zihua
+Thanks,
+-Kai
+
+

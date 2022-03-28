@@ -2,66 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BF64E9292
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 134E54E9297
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240285AbiC1KjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 06:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S240297AbiC1Kj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 06:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235067AbiC1KjC (ORCPT
+        with ESMTP id S235067AbiC1KjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 06:39:02 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F4036170
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 03:37:21 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KRpzc0w98z4xLS;
-        Mon, 28 Mar 2022 21:37:16 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1648463837;
-        bh=j+k2BDfbdQx4zYpgl58V8K4qKN8q+JC6OELJvVduZdk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=BN2Ccu9ny+Pu9NAS6ObsluDgsrxVhj9MCOS7BRzf1KuSQETEzKLrUgB7uPhYE5rYB
-         ZQeod4N4q5q+hqeJOjp+U16rLaOSyPrA7W4eCZUnTgYZPmnscAY6XddB274kKpHED8
-         0i/sLbGDzq6GFxaGDHKDLCV/PeG76NwNxkqR2U7899Q/uYditTkyUQsPSadeW/FEjT
-         VSZ+wGt7nqjYKmbwayd/kSptFNiwgkI8TzmUm9YxcM7xcnQteSjZLpnLk5PkACCyWk
-         satOHFvYM3ZjfdHJJYWAvsXL1C/5aSIlt5Lyzi3ZemU+uIAvUi8ILTWBwAFvGX4slj
-         e5J0r/3bpn/TQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        songyuanzheng@huawei.com
-Subject: Re: [PATCH v4 1/2] Revert "powerpc: Set max_mapnr correctly"
-In-Reply-To: <b2ff771c-01ef-3f14-f22d-9248735fdc77@huawei.com>
-References: <20220216121109.157605-1-wangkefeng.wang@huawei.com>
- <b2ff771c-01ef-3f14-f22d-9248735fdc77@huawei.com>
-Date:   Mon, 28 Mar 2022 21:37:15 +1100
-Message-ID: <87sfr2fjms.fsf@mpe.ellerman.id.au>
+        Mon, 28 Mar 2022 06:39:24 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5661C527F7;
+        Mon, 28 Mar 2022 03:37:40 -0700 (PDT)
+X-UUID: 6025ff49f2764af48de003697981ec35-20220328
+X-UUID: 6025ff49f2764af48de003697981ec35-20220328
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <hui.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1299995605; Mon, 28 Mar 2022 18:37:34 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 28 Mar 2022 18:37:32 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 28 Mar 2022 18:37:31 +0800
+From:   Hui-Liu Liu <hui.liu@mediatek.com>
+To:     <lee.jones@linaro.org>, <robh+dt@kernel.org>,
+        <matthias.bgg@gmail.com>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <eddie.huang@mediatek.com>,
+        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <fshao@chromium.org>
+CC:     <srv_heupstream@mediatek.com>, <hui.liu@mediatek.com>,
+        <zhiyong.tao@mediatek.com>, <hsin-hsiung.wang@mediatek.com>,
+        <sean.wang@mediatek.com>, <macpaul.lin@mediatek.com>,
+        <yuchen.huang@mediatek.com>, <wen.su@mediatek.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v3 0/1] Add mt6359 node for MediaTek PMIC MT6359
+Date:   Mon, 28 Mar 2022 18:37:28 +0800
+Message-ID: <20220328103729.25102-1-hui.liu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kefeng Wang <wangkefeng.wang@huawei.com> writes:
-> Hi maintainers=EF=BC=8C
->
-> I saw the patches has been reviewed[1], could they be merged?
+This pathset add PMIC MT6359 related nodes.
 
-Maybe I'm just misreading the change log, but it seems wrong that we
-need to add extra checks. pfn_valid() shouldn't return true for vmalloc
-addresses in the first place, shouldn't we fix that instead? Who knows
-what else that might be broken because of that.
+The series[1] send by Hsin-Hsiung will continue to upstream in this pathset afterwards.
+[1] https://patchwork.kernel.org/project/linux-mediatek/patch/1622011927-359-9-git-send-email-hsin-hsiung.wang@mediatek.com/
 
-cheers
+Changes in patch v3:
+1)Add commit message.
+
+Changes in patch v2:
+1)Only add mt6359.dtsi, mt8192-evb.dts no need update.
+
+Changes in patch v1:
+1)Add "SPDX-License-Identifier: (GPL-2.0 OR MIT)" in mt6359.dtsi.
+
+Hui Liu (1):
+  arm64: dts: mt6359: add PMIC MT6359 nodes
+
+ arch/arm64/boot/dts/mediatek/mt6359.dtsi | 298 +++++++++++++++++++++++
+ 1 file changed, 298 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt6359.dtsi
+
+--
+2.18.0
+
+

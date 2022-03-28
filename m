@@ -2,147 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E694E8C51
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 04:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 225F94E8C54
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 04:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237688AbiC1CvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 22:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
+        id S237696AbiC1Cvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 22:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237686AbiC1CvG (ORCPT
+        with ESMTP id S233861AbiC1Cv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 22:51:06 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B4443AF7;
-        Sun, 27 Mar 2022 19:49:26 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id D6E141F42E8E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648435765;
-        bh=WBy+NdgrMIzJ3AKUedzuJEhPjlvydZ03Twj00zAxYz4=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=U3HkSb6POVvUJbAp6jHygGoEOaVyoi8l0Klzz5SmXmhTVofrR1p1nTiR+uWW5jdqX
-         UN1KUGIcImPUaXDtH2vuW52wos7Og6P7mKML3/LZ/qCU5TTOOQut7je/MyJ2uIFUHD
-         /7yLlGkpB3nOgw96VAIRUmok/5+jzodHVky0vKDI4X0e12zlBvIahqpgAFKL33ibpN
-         v5jXh3msmHzjAqTIa4+7gRLRjNRmG7YGV6QwmiJrSE+jZN+/PRYrw09zdD+7V5ZF6h
-         WPCikNH/4djTYKBlbTAlaoH2olFO8fW/T99NL973+iDEDG6OwVickaV+KHI715hBMA
-         EcWrj3LAdcEQg==
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Shreeya Patel <shreeya.patel@collabora.com>, lars@metafoo.de,
-        robh+dt@kernel.org, Zhigang.Shi@liteon.com,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        alvaro.soliverez@collabora.com
-Subject: Re: [PATCH 2/3] dt-bindings: Document ltrf216a light sensor bindings
-Organization: Collabora
-References: <20220325103014.6597-1-shreeya.patel@collabora.com>
-        <20220325103014.6597-3-shreeya.patel@collabora.com>
-        <20220327145511.2d36dd10@jic23-huawei>
-Date:   Sun, 27 Mar 2022 22:49:20 -0400
-In-Reply-To: <20220327145511.2d36dd10@jic23-huawei> (Jonathan Cameron's
-        message of "Sun, 27 Mar 2022 14:55:11 +0100")
-Message-ID: <87czi6ssen.fsf@collabora.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Sun, 27 Mar 2022 22:51:27 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA00545519;
+        Sun, 27 Mar 2022 19:49:46 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0V8KSgjt_1648435779;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V8KSgjt_1648435779)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 28 Mar 2022 10:49:42 +0800
+Date:   Mon, 28 Mar 2022 10:49:39 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        gregkh@linuxfoundation.org, fannaihao@baidu.com,
+        tao.peng@linux.alibaba.com, willy@infradead.org,
+        linux-kernel@vger.kernel.org, tianzichen@kuaishou.com,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        linux-fsdevel@vger.kernel.org, luodaowen.backend@bytedance.com,
+        eguan@linux.alibaba.com, gerry@linux.alibaba.com,
+        torvalds@linux-foundation.org
+Subject: Re: [Linux-cachefs] [PATCH v6 14/22] erofs: add
+ erofs_fscache_read_folios() helper
+Message-ID: <YkEiQywvozBKTExr@B-P7TQMD6M-0146.local>
+Mail-Followup-To: Jeffle Xu <jefflexu@linux.alibaba.com>,
+        dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        gregkh@linuxfoundation.org, fannaihao@baidu.com,
+        tao.peng@linux.alibaba.com, willy@infradead.org,
+        linux-kernel@vger.kernel.org, tianzichen@kuaishou.com,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        linux-fsdevel@vger.kernel.org, luodaowen.backend@bytedance.com,
+        eguan@linux.alibaba.com, gerry@linux.alibaba.com,
+        torvalds@linux-foundation.org
+References: <20220325122223.102958-1-jefflexu@linux.alibaba.com>
+ <20220325122223.102958-15-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220325122223.102958-15-jefflexu@linux.alibaba.com>
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jonathan Cameron <jic23@kernel.org> writes:
+On Fri, Mar 25, 2022 at 08:22:15PM +0800, Jeffle Xu wrote:
+> Add erofs_fscache_read_folios() helper reading from fscache. It supports
+> on-demand read semantics. That is, it will make the backend prepare for
+> the data when cache miss. Once data ready, it will reinitiate a read
+> from the cache.
+> 
+> This helper can then be used to implement .readpage()/.readahead() of
+> on-demand read semantics.
+> 
+> Besides also add erofs_fscache_read_folio() wrapper helper.
+> 
+> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+> ---
+>  fs/erofs/fscache.c | 39 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+> 
+> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
+> index 30383d9adb62..6a55f7b5f883 100644
+> --- a/fs/erofs/fscache.c
+> +++ b/fs/erofs/fscache.c
+> @@ -7,6 +7,45 @@
+>  
+>  static struct fscache_volume *volume;
+>  
+> +/*
+> + * erofs_fscache_read_folios - Read data from fscache.
+> + *
+> + * Fill the read data into page cache described by @start/len, which shall be
+> + * both aligned with PAGE_SIZE. @pstart describes the corresponding physical
+> + * start address in the cache file.
+> + */
+> +static int erofs_fscache_read_folios(struct fscache_cookie *cookie,
+> +				     struct address_space *mapping,
+> +				     loff_t start, size_t len,
+> +				     loff_t pstart)
+> +{
+> +	struct netfs_cache_resources cres;
+> +	struct iov_iter iter;
+> +	int ret;
+> +
+> +	memset(&cres, 0, sizeof(cres));
+> +
+> +	ret = fscache_begin_read_operation(&cres, cookie);
+> +	if (ret)
+> +		return ret;
+> +
+> +	iov_iter_xarray(&iter, READ, &mapping->i_pages, start, len);
+> +
+> +	ret = fscache_read(&cres, pstart, &iter,
+> +			   NETFS_READ_HOLE_ONDEMAND, NULL, NULL);
+> +
+> +	fscache_end_operation(&cres);
+> +	return ret;
+> +}
+> +
+> +static inline int erofs_fscache_read_folio(struct fscache_cookie *cookie,
+> +					   struct folio *folio, loff_t pstart)
 
-> On Fri, 25 Mar 2022 16:00:13 +0530
-> Shreeya Patel <shreeya.patel@collabora.com> wrote:
->
->> Add devicetree bindings for ltrf216a ambient light sensor
->> 
->> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
-> Hi Shreeya,
->
-> As we are making this Zhigang Shi's problem to maintain, I'm 
-> looking for an ack.  Bit mean otherwise :)
+I've seen two users of this helper,
 
-Alternatively, Shreeya could take over the maintainership of this
-schema, since she wrote it. :)
+ 1) erofs_fscache_readpage_noinline
+ 2) erofs_fscache_readpage_blob
 
->
-> Except for the deprecated part this could just have gone in
-> trivial-bindings.yaml.
->
-> I guess you don't need it for your existing board, but best
-> practice would probably include ensuring whatever supplies
-> the device needs are here so that platforms that don't enable
-> them by default can turn them on.
->
-> Also, there is an interrupt according to the datasheet linked
-> from patch 3 and that should definitely be in the binding
-> even if the driver isn't using it.
->
-> Jonathan
->
->
->> ---
->>  .../bindings/iio/light/liteon,ltrf216a.yaml   | 42 +++++++++++++++++++
->>  1 file changed, 42 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
->> 
->> diff --git a/Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml b/Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
->> new file mode 100644
->> index 000000000000..275d86a0353a
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
->> @@ -0,0 +1,42 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/iio/light/liteon,ltrf216a.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: LTRF216A Ambient Light Sensor
->> +
->> +maintainers:
->> +  - Zhigang Shi <Zhigang.Shi@liteon.com>
->> +
->> +description: |
->> +  Ambient sensing with an i2c interface.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - liteon,ltrf216a
->> +      - ltr,ltrf216a
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    i2c {
->> +
->> +        #address-cells = <1>;
->> +        #size-cells = <0>;
->> +
->> +        light-sensor@53 {
->> +                compatible = "ltr,ltrf216a";
->> +                reg = <0x53>;
->> +        };
->> +    };
->> +...
->
+Actually, we could fold such logic in these users since this additional
+helper doesn't enhance the readability but increase the overhead when
+reading the code.
 
--- 
-Gabriel Krisman Bertazi
+It'd be better to get rid of it instead.
+
+Thanks,
+Gao Xiang
+
+> +{
+> +	return erofs_fscache_read_folios(cookie, folio_file_mapping(folio),
+> +					 folio_pos(folio), folio_size(folio),
+> +					 pstart);
+> +}
+> +
+>  static const struct address_space_operations erofs_fscache_blob_aops = {
+>  };
+>  
+> -- 
+> 2.27.0
+> 
+> --
+> Linux-cachefs mailing list
+> Linux-cachefs@redhat.com
+> https://listman.redhat.com/mailman/listinfo/linux-cachefs

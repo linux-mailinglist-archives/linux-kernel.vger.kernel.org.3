@@ -2,119 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB414E8BB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 03:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B8D4E8BB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 03:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237346AbiC1Bp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 21:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50820 "EHLO
+        id S236175AbiC1BqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 21:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234947AbiC1BpY (ORCPT
+        with ESMTP id S234947AbiC1BqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 21:45:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16F249FAF;
-        Sun, 27 Mar 2022 18:43:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1B9DB80DD4;
-        Mon, 28 Mar 2022 01:43:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EBD8C340EC;
-        Mon, 28 Mar 2022 01:43:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648431821;
-        bh=7A18LrQnBuUKW4eG9uehKdgAef2TXiymAn97vaYYyic=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=RwJQFZtGH6IYV4yBdK9/XqHpSEzYp/le7BtiOpKc3vPrkUK9HeDttmo/4Y9JcEMQ5
-         dxloLypelrGeHnpzkemfRKTsMcOdAS0RiJgtw4bvbhe3qDyhJA2Tm6pefQbQqppl9O
-         Rg9gIconWvKH6OiCu1gzhBIixsAZXoJGZ/D+XJeQCWUV3xtxLKpLVpoGf90BGTdNdd
-         IoPeU9PZ73IsZdje8BnM4rv7KpVITNwgT9DMiAdis0H6ikx9pC5hiVV6mXks4sOTlh
-         43/yux82YofBDp0QlhvTeLwf7RRj26TgSlTFlBtJqhkbGAO8hzZHkgeHwLg63vCg4u
-         1h5BjRnhpHIUQ==
-Received: by mail-wr1-f42.google.com with SMTP id t11so18295668wrm.5;
-        Sun, 27 Mar 2022 18:43:41 -0700 (PDT)
-X-Gm-Message-State: AOAM53076yDSP6AEl6thQgaNWfpMCFVwEPg0xg7N+GDxQDpRM7fQyVTp
-        AziQMW7DhbQ8PgcEDZBnA6ikdycF2VhIsn4r4gc=
-X-Google-Smtp-Source: ABdhPJzJ3iRXdPbm8ua2lUtmz8nVVspNyR/f6MlQnEAoZIcRdAn/8tWte7Uydt/xG90+zGG/kqSEbolCVbzBTgRBSs4=
-X-Received: by 2002:adf:908e:0:b0:1e7:bea7:3486 with SMTP id
- i14-20020adf908e000000b001e7bea73486mr19631349wri.401.1648431819935; Sun, 27
- Mar 2022 18:43:39 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6000:2c1:0:0:0:0 with HTTP; Sun, 27 Mar 2022 18:43:39
- -0700 (PDT)
-In-Reply-To: <HK2PR04MB3891BE0766FAF0AEC39FE2DC811A9@HK2PR04MB3891.apcprd04.prod.outlook.com>
-References: <HK2PR04MB3891BE0766FAF0AEC39FE2DC811A9@HK2PR04MB3891.apcprd04.prod.outlook.com>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Mon, 28 Mar 2022 10:43:39 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd8Q7-1O9PQ693stmLjoG99KME__FSm0gPtvndi4xxoVcA@mail.gmail.com>
-Message-ID: <CAKYAXd8Q7-1O9PQ693stmLjoG99KME__FSm0gPtvndi4xxoVcA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] exfat: fix referencing wrong parent directory
- information after renaming
-To:     "Yuezhang.Mo@sony.com" <Yuezhang.Mo@sony.com>
-Cc:     "sj1557.seo@samsung.com" <sj1557.seo@samsung.com>,
+        Sun, 27 Mar 2022 21:46:16 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D82E4F9F2
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 18:44:36 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220328014434epoutp02e0bc1eaa7d8dfd233521c208e5c872f9~gaA5X6S3g1245012450epoutp02T
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 01:44:34 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220328014434epoutp02e0bc1eaa7d8dfd233521c208e5c872f9~gaA5X6S3g1245012450epoutp02T
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1648431874;
+        bh=1DVfOb/VDpCbE+hBNZbGBz9ZRSgFDj3w/wRTXPKyIrE=;
+        h=Subject:Reply-To:From:To:CC:Date:References:From;
+        b=oSJDYevXDme5VetXSy1E5h+RydZZtrUlEBjP+p8f3kNsiSIlTP5fO3pr6BZWygEIr
+         vRdDMrqm3YiUvZDgtoNBBjFqG1e+qPuwxoypSHULffsV3bcfAuK+macdM2RA7VfDcK
+         EGEYLERH44PsoFtqXPJQuFyAbu8fhXoi9MMvkQ60=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20220328014433epcas2p3af42d44409d77a51e2e9056bd3d67002~gaA4tGebn1109011090epcas2p3u;
+        Mon, 28 Mar 2022 01:44:33 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.101]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4KRb8v2mxJz4x9Q3; Mon, 28 Mar
+        2022 01:44:31 +0000 (GMT)
+X-AuditID: b6c32a47-81bff700000063c4-b7-624112fe2eaf
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        DA.AE.25540.EF211426; Mon, 28 Mar 2022 10:44:30 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH 0/5] Add support for Axis, ARTPEC-8 PCIe driver
+Reply-To: wangseok.lee@samsung.com
+Sender: =?UTF-8?B?7J207JmV7ISd?= <wangseok.lee@samsung.com>
+From:   =?UTF-8?B?7J207JmV7ISd?= <wangseok.lee@samsung.com>
+To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "Andy.Wu@sony.com" <Andy.Wu@sony.com>,
-        "Wataru.Aoyama@sony.com" <Wataru.Aoyama@sony.com>,
-        "Kohada.Tetsuhiro@dc.MitsubishiElectric.co.jp" 
-        <Kohada.Tetsuhiro@dc.mitsubishielectric.co.jp>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        "lars.persson@axis.com" <lars.persson@axis.com>
+CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "kernel@axis.com" <kernel@axis.com>,
+        =?UTF-8?B?7KCE66y46riw?= <moonki.jun@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1@epcms2p7>
+Date:   Mon, 28 Mar 2022 10:44:30 +0900
+X-CMS-MailID: 20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPJsWRmVeSWpSXmKPExsWy7bCmhe4/Icckgy9/rSyWNGVYzD9yjtXi
+        +aFZzBafWlQtLjztYbN4Oesem0VDz29WiyNvPjJb7D++ksni8q45bBZn5x1ns5iw6huLxZvf
+        L9gtzi3OtGjde4TdYuedE8wOAh5r5q1h9Li+LsBjwaZSj02rOtk8nlyZzuSxeUm9R9+WVYwe
+        x29sZ/L4vEkugDMq2yYjNTEltUghNS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnF
+        J0DXLTMH6AMlhbLEnFKgUEBicbGSvp1NUX5pSapCRn5xia1SakFKToF5gV5xYm5xaV66Xl5q
+        iZWhgYGRKVBhQnZGywSDgg7BisVPT7E1MP7i6WLk5JAQMJHo+viWrYuRi0NIYAejRPun5yxd
+        jBwcvAKCEn93CIPUCAvYS5zfe50FxBYSUJLYsWYeM0TcWuLTlMtgcTYBS4mLrQ8ZQeaICJxl
+        krh5dzsriMMscJtZYv7z9ywQ23glZrQ/hbKlJbYv38oIYWtI/FjWywxhi0rcXP2WHcZ+f2w+
+        VI2IROu9s1A1ghIPfu6GiktJLHhyiBXCrpbY//c3E4TdwCjRfz8V5BkJAX2JHdeNQcK8Ar4S
+        h1b1sYHYLAKqEj/7GqHKXSR+XpoENoZZQF5i+9s5zCCtzAKaEut36UNMUZY4cosFooJPouPw
+        X3aYp3bMewI1RU1i3sqdzBDlMhJbX/pDhD0kJt1sZYKEYKBE15dG5gmMCrMQ4TwLydpZCGsX
+        MDKvYhRLLSjOTU8tNiowhsdscn7uJkZwStZy38E44+0HvUOMTByMhxglOJiVRHhlz9onCfGm
+        JFZWpRblxxeV5qQWH2I0BXp4IrOUaHI+MCvklcQbmlgamJiZGZobmRqYK4nzeqVsSBQSSE8s
+        Sc1OTS1ILYLpY+LglGpgSovotoyZtIb3h5uQi/rs/LVzZi9+o3Qmdt33ei53u2sRgZuqjkaF
+        W+Ucjfdk/ML+6cwbacvn/351Mb+YHBZu3Tk95FeDcp2PVEH1n1T/OezvT5uILDL3ei82K1Xg
+        kvmpqNMKNzpmzcmLOrXaq8kypuBOnd6JhYubGLzEOCcUC+1pK3i8O+al4PZ3az2PyU6zD83O
+        CJmpK9k6TaD6Q9C8risXNc8cSa7+PlPsdLRFvt4FwdrdPorxF0OWiZ0OMqhxXtuZ1iKsuGDH
+        fzU3hvcVJ5fwrQgP17li6HbjhvKstKdHufTl3rbUi4RmS03Wr1USUH9+v/OfcJnzx5WT9K4/
+        Xvvd+69oaITY4f/3WFKVWIozEg21mIuKEwEKd9x0UgQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1
+References: <CGME20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1@epcms2p7>
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022-03-25 18:42 GMT+09:00, Yuezhang.Mo@sony.com <Yuezhang.Mo@sony.com>:
-Hi Yuezhang,
+This series patches include newly PCIe support for Axis ARTPEC-8 SoC.
+ARTPEC-8 is the SoC platform of Axis Communications.
+PCIe controller driver and phy driver have been newly added.
+There is also a new MAINTAINER in the addition of phy driver.
+PCIe controller is designed based on Design-Ware PCIe controller IP
+and PCIe phy is desinged based on SAMSUNG PHY IP.
+It also includes modifications to the Design-Ware controller driver to 
+run the 64bit-based ARTPEC-8 PCIe controller driver.
+It consists of 6 patches in total.
 
-> During renaming, the parent directory information maybe
-> updated. But the file/directory still references to the
-> old parent directory information.
->
-> This bug will cause 2 problems.
->
-> (1) The renamed file can not be written.
->
->     [10768.175172] exFAT-fs (sda1): error, failed to bmap (inode : 7afd50e4
-> iblock : 0, err : -5)
->     [10768.184285] exFAT-fs (sda1): Filesystem has been set read-only
->     ash: write error: Input/output error
-Could you please elaborate how to reproduce it ?
+This series has been tested on AXIS SW bring-up board 
+with ARTPEC-8 chipset.
 
-Thanks.
->
-> (2) Some dentries of the renamed file/directory are not set
->     to deleted after removing the file/directory.
->
-> fixes: 5f2aa075070c ("exfat: add inode operations")
->
-> Signed-off-by: Yuezhang Mo <Yuezhang.Mo@sony.com>
-> Reviewed-by: Andy Wu <Andy.Wu@sony.com>
-> Reviewed-by: Aoyama Wataru <wataru.aoyama@sony.com>
-> Reviewed-by: Daniel Palmer <daniel.palmer@sony.com>
-> ---
->  fs/exfat/namei.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/fs/exfat/namei.c b/fs/exfat/namei.c
-> index a02a04a993bf..e7adb6bfd9d5 100644
-> --- a/fs/exfat/namei.c
-> +++ b/fs/exfat/namei.c
-> @@ -1080,6 +1080,7 @@ static int exfat_rename_file(struct inode *inode,
-> struct exfat_chain *p_dir,
->
->  		exfat_remove_entries(inode, p_dir, oldentry, 0,
->  			num_old_entries);
-> +		ei->dir = *p_dir;
->  		ei->entry = newentry;
->  	} else {
->  		if (exfat_get_entry_type(epold) == TYPE_FILE) {
-> --
-> 2.25.1
->
+wangseok.lee (5):
+  dt-bindings: pci: Add ARTPEC-8 PCIe controller
+  dt-bindings: phy: Add ARTPEC-8 PCIe phy
+  PCI: axis: Add ARTPEC-8 PCIe controller driver
+  phy: Add ARTPEC-8 PCIe PHY driver
+  MAINTAINERS: Add maintainer for Axis ARTPEC-8 PCIe PHY driver
+
+ .../bindings/pci/axis,artpec8-pcie-ep.yaml         | 110 +++
+ .../devicetree/bindings/pci/axis,artpec8-pcie.yaml | 117 +++
+ .../bindings/phy/axis,artpec8-pcie-phy.yaml        |  67 ++
+ MAINTAINERS                                        |   2 +
+ drivers/pci/controller/dwc/Kconfig                 |  31 +
+ drivers/pci/controller/dwc/Makefile                |   1 +
+ drivers/pci/controller/dwc/pcie-artpec8.c          | 912 +++++++++++++++++++++
+ drivers/phy/Kconfig                                |   1 +
+ drivers/phy/Makefile                               |   1 +
+ drivers/phy/artpec/Kconfig                         |   9 +
+ drivers/phy/artpec/Makefile                        |   2 +
+ drivers/phy/artpec/phy-artpec8-pcie.c              | 879 ++++++++++++++++++++
+ 12 files changed, 2132 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
+ create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml
+ create mode 100644 drivers/pci/controller/dwc/pcie-artpec8.c
+ create mode 100644 drivers/phy/artpec/Kconfig
+ create mode 100644 drivers/phy/artpec/Makefile
+ create mode 100644 drivers/phy/artpec/phy-artpec8-pcie.c
+
+-- 
+2.9.5

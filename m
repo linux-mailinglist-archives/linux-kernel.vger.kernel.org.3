@@ -2,108 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CAC94EA1FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D143A4EA1FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345718AbiC1Uus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 16:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
+        id S234110AbiC1Uun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 16:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346399AbiC1Usg (ORCPT
+        with ESMTP id S1346422AbiC1Usl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 16:48:36 -0400
-Received: from stuerz.xyz (unknown [45.77.206.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A1CDEBD;
-        Mon, 28 Mar 2022 13:46:49 -0700 (PDT)
-Received: by stuerz.xyz (Postfix, from userid 114)
-        id B7348FB5E4; Mon, 28 Mar 2022 20:46:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=stuerz.xyz; s=mail;
-        t=1648500408; bh=5t9XKqDfb1pVMMfFmkQUBKRx7TGbB+L68FzAskNSgbw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=aaNkupoizOKf82Kgx7o2zWfINV0bXNmZpP4vp5oog25xHEj7aTg/LOOm/GZGcOOnv
-         mXauQplxQvI4GGuM0Kow5URxqRzNhKxqhBD1DR6zrzjJw2/0rvzQG0fky9lFX9Nsse
-         PQHtpLrDQKlQeRS0JM6MVbbqXo0ZroCWqDNjuBN+m0+ZqpXKKzmykRwY5jif/Gxrr6
-         GuXeQjN6+Bg+JBjeYVGDFSg0jUkg41y80qtPTdahPrc7+xmVV+a4ja2ZwI29nT4qt1
-         TEWT+QHJhwQqTb757+8V9zmdfVz69xxTY9AbAEvKUOH8F+uU1rV9m/RizC+W6iF74+
-         GVF/Yb0G+8dlg==
-Received: from benni-fedora.. (unknown [IPv6:2a02:8109:a100:1a48:ff0:ef2f:d4da:17d8])
-        by stuerz.xyz (Postfix) with ESMTPSA id 6082DFB404;
-        Mon, 28 Mar 2022 20:46:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=stuerz.xyz; s=mail;
-        t=1648500406; bh=5t9XKqDfb1pVMMfFmkQUBKRx7TGbB+L68FzAskNSgbw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GkG5TgSFSGAQh7MfaSjiP7EiXN1Tl7OzcnYkBoU3sMnkLvQ70mSl5DahbFhYoo4T0
-         VPAKLjEbapZ69QpIQb4tnCCcWTqKRda2bCq8L5hp211uYXIqeHcoM2MvNCp/DpQpNg
-         WXnU8qhv10gstCGoE5y6qWDHPUc8OEzGzl9Qxxc16DZaHo6+fFDOo7lu9gHPkM+Pwv
-         bEzyc9xgZw6rpLUwxvdhTRpjYrD5MVB9gtwVyPdijBEWWm0NMpKBMrPMGkBXA+rvdJ
-         8jQzPAFxB6/6OWtg7KHl6ihzZa7o5DUQB9TUUYZFO/NdsSbKoSokwegd3NrarkgrhA
-         vh3BUIT28kP3g==
-From:   =?UTF-8?q?Benjamin=20St=C3=BCrz?= <benni@stuerz.xyz>
-To:     linux@simtec.co.uk
-Cc:     krzk@kernel.org, alim.akhtar@samsung.com, linux@armlinux.org.uk,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Benjamin=20St=C3=BCrz?= <benni@stuerz.xyz>
-Subject: [PATCH v2] s3c: Improve readability of bast_pc104_irqmask[]
-Date:   Mon, 28 Mar 2022 22:46:38 +0200
-Message-Id: <20220328204638.273157-1-benni@stuerz.xyz>
-X-Mailer: git-send-email 2.35.1
+        Mon, 28 Mar 2022 16:48:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E5A63DEC4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 13:46:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648500418;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+j0F+pjj0JcJKM7ihopqWQCEovqqfXkw1HkKI4nUXYk=;
+        b=MxPRXWRsUUcTaXUedFSs1kUsuudMnmLBL7y3heflcAEFS51ikasAGy4XZRDuQymUXMHjob
+        VvbyIf3OdXuEytrXYA4Ua47RNwVZPhnSWPj9NEQiUuA+Lk4595mGnwp/sMGbBusZNd9hRg
+        FYJkx4ohiFQpa9Lf0e2qsnRTfH7f+x0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-428-pv8RJBa8Pjq0LT3-dVzq8Q-1; Mon, 28 Mar 2022 16:46:56 -0400
+X-MC-Unique: pv8RJBa8Pjq0LT3-dVzq8Q-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A896A899ED0;
+        Mon, 28 Mar 2022 20:46:55 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7DC7D2166B3F;
+        Mon, 28 Mar 2022 20:46:44 +0000 (UTC)
+Message-ID: <5aa687c4-2888-7977-8c1a-d51384e685aa@redhat.com>
+Date:   Mon, 28 Mar 2022 16:46:39 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,RDNS_DYNAMIC,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH-mm v3] mm/list_lru: Optimize
+ memcg_reparent_list_lru_node()
+Content-Language: en-US
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220309144000.1470138-1-longman@redhat.com>
+ <CAMZfGtWS581YW4Y8oNU=E_zPnpK=mMdYVSG1F3U3fJNAzBzc+g@mail.gmail.com>
+ <2263666d-5eef-b1fe-d5e3-b166a3185263@redhat.com>
+ <CAMZfGtVG2YcmxY0fECkAYNb=sKXJQhWJqgtMTEpQwxXEXmSOLw@mail.gmail.com>
+ <e93696b7-b678-6f41-9c1e-46aad447ce8d@redhat.com>
+ <YkIIjGk5t4XorQXe@carbon.dhcp.thefacebook.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YkIIjGk5t4XorQXe@carbon.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace comments in bast_pc104_irqmask[] with C99's designated
-initializers because it makes the code cleaner and easier to read.
+On 3/28/22 15:12, Roman Gushchin wrote:
+> On Sun, Mar 27, 2022 at 08:57:15PM -0400, Waiman Long wrote:
+>> On 3/22/22 22:12, Muchun Song wrote:
+>>> On Wed, Mar 23, 2022 at 9:55 AM Waiman Long <longman@redhat.com> wrote:
+>>>> On 3/22/22 21:06, Muchun Song wrote:
+>>>>> On Wed, Mar 9, 2022 at 10:40 PM Waiman Long <longman@redhat.com> wrote:
+>>>>>> Since commit 2c80cd57c743 ("mm/list_lru.c: fix list_lru_count_node()
+>>>>>> to be race free"), we are tracking the total number of lru
+>>>>>> entries in a list_lru_node in its nr_items field.  In the case of
+>>>>>> memcg_reparent_list_lru_node(), there is nothing to be done if nr_items
+>>>>>> is 0.  We don't even need to take the nlru->lock as no new lru entry
+>>>>>> could be added by a racing list_lru_add() to the draining src_idx memcg
+>>>>>> at this point.
+>>>>> Hi Waiman,
+>>>>>
+>>>>> Sorry for the late reply.  Quick question: what if there is an inflight
+>>>>> list_lru_add()?  How about the following race?
+>>>>>
+>>>>> CPU0:                               CPU1:
+>>>>> list_lru_add()
+>>>>>        spin_lock(&nlru->lock)
+>>>>>        l = list_lru_from_kmem(memcg)
+>>>>>                                        memcg_reparent_objcgs(memcg)
+>>>>>                                        memcg_reparent_list_lrus(memcg)
+>>>>>                                            memcg_reparent_list_lru()
+>>>>>                                                memcg_reparent_list_lru_node()
+>>>>>                                                    if (!READ_ONCE(nlru->nr_items))
+>>>>>                                                        // Miss reparenting
+>>>>>                                                        return
+>>>>>        // Assume 0->1
+>>>>>        l->nr_items++
+>>>>>        // Assume 0->1
+>>>>>        nlru->nr_items++
+>>>>>
+>>>>> IIUC, we use nlru->lock to serialise this scenario.
+>>>> I guess this race is theoretically possible but very unlikely since it
+>>>> means a very long pause between list_lru_from_kmem() and the increment
+>>>> of nr_items.
+>>> It is more possible in a VM.
+>>>
+>>>> How about the following changes to make sure that this race can't happen?
+>>>>
+>>>> diff --git a/mm/list_lru.c b/mm/list_lru.c
+>>>> index c669d87001a6..c31a0a8ad4e7 100644
+>>>> --- a/mm/list_lru.c
+>>>> +++ b/mm/list_lru.c
+>>>> @@ -395,9 +395,10 @@ static void memcg_reparent_list_lru_node(struct
+>>>> list_lru *lru, int nid,
+>>>>            struct list_lru_one *src, *dst;
+>>>>
+>>>>            /*
+>>>> -        * If there is no lru entry in this nlru, we can skip it
+>>>> immediately.
+>>>> +        * If there is no lru entry in this nlru and the nlru->lock is free,
+>>>> +        * we can skip it immediately.
+>>>>             */
+>>>> -       if (!READ_ONCE(nlru->nr_items))
+>>>> +       if (!READ_ONCE(nlru->nr_items) && !spin_is_locked(&nlru->lock))
+>>> I think we also should insert a smp_rmb() between those two loads.
+>> Thinking about this some more, I believe that adding spin_is_locked() check
+>> will be enough for x86. However, that will likely not be enough for arches
+>> with a more relaxed memory semantics. So the safest way to avoid this
+>> possible race is to move the check to within the lock critical section,
+>> though that comes with a slightly higher overhead for the 0 nr_items case. I
+>> will send out a patch to correct that. Thanks for bring this possible race
+>> to my attention.
+> Yes, I think it's not enough:
+> CPU0                                       CPU1
+> READ_ONCE(&nlru->nr_items) -> 0
+>                                             spin_lock(&nlru->lock);
+>                                             nlru->nr_items++;
+>                                             spin_unlock(&nlru->lock);
+> && !spin_is_locked(&nlru->lock) -> 0
+I have actually thought of that. I am even thinking about reading 
+nr_items again after spin_is_locked(). Still for arches with relaxed 
+memory semantics, when will a memory write by one cpu be propagated to 
+another cpu can be highly variable. It is very hard to prove that it is 
+completely safe.
 
-Signed-off-by: Benjamin Stürz <benni@stuerz.xyz>
----
- arch/arm/mach-s3c/bast-irq.c | 22 +++++-----------------
- 1 file changed, 5 insertions(+), 17 deletions(-)
+x86 has a more strict memory semantics and it is the only architecture 
+that I have enough confidence that doing the check without taking a lock 
+can be safe. Perhaps we could use this optimization just for x86 and do 
+it inside locks for the rests.
 
-diff --git a/arch/arm/mach-s3c/bast-irq.c b/arch/arm/mach-s3c/bast-irq.c
-index d299f124e6dc..618b51db3eef 100644
---- a/arch/arm/mach-s3c/bast-irq.c
-+++ b/arch/arm/mach-s3c/bast-irq.c
-@@ -28,23 +28,11 @@
- /* table of ISA irq nos to the relevant mask... zero means
-  * the irq is not implemented
- */
--static const unsigned char bast_pc104_irqmasks[] = {
--	0,   /* 0 */
--	0,   /* 1 */
--	0,   /* 2 */
--	1,   /* 3 */
--	0,   /* 4 */
--	2,   /* 5 */
--	0,   /* 6 */
--	4,   /* 7 */
--	0,   /* 8 */
--	0,   /* 9 */
--	8,   /* 10 */
--	0,   /* 11 */
--	0,   /* 12 */
--	0,   /* 13 */
--	0,   /* 14 */
--	0,   /* 15 */
-+static const unsigned char bast_pc104_irqmasks[16] = {
-+	[3]  = 1,
-+	[5]  = 2,
-+	[7]  = 4,
-+	[10] = 8,
- };
- 
- static const unsigned char bast_pc104_irqs[] = { 3, 5, 7, 10 };
--- 
-2.35.1
+> Getting back to the original patch, I wonder if instead we can batch reparenting
+> of lrus so we don't have to grab and release nlru->lock for each reparenting lru.
+
+nlru is actually a sub-structure within a lru. So if there are m lrus 
+and n nodes, we will have m*n nlrus. I don't believe there is anymore 
+batching that can be done.
+
+Cheers,
+Longman
 

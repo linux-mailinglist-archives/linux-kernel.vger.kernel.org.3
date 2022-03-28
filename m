@@ -2,108 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6284A4E9984
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A254E9987
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243830AbiC1ObW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 10:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
+        id S243834AbiC1Obn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 10:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243820AbiC1ObU (ORCPT
+        with ESMTP id S243854AbiC1Obj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 10:31:20 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284C83D1F2;
-        Mon, 28 Mar 2022 07:29:38 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 3FCB9C000B;
-        Mon, 28 Mar 2022 14:29:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1648477777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p3NiSvA7v2bm7VGGIXeyl2Gyk0azu36w+C8pKD/U2OE=;
-        b=T5nzcd6xh9Mdsyz9hOoK2u4VdMYUBeiCeXm0+J75YdZV1k0PkUOgXkT8giUfobn5vCLEAS
-        OyqmlsHRZMFlHtkefQuOX9iGkoHKupBCR2yfwUcPh6AOs2BGRMpb8jPNt2PFkjsYp1kjC7
-        SOIsq4QkJcWyh1FNHbi5qiY2b4XJj5WhaNo6ExgbxxPZB97mGyyU5+77dXWWoYfJ0YrxSw
-        JyhqPLRr0rbwv+pznjpVHbLqCSVZCkJshijEutC/0ksr0aCkXlOan7YUqmbcrE2fr84egg
-        gkfbHGHdL1DmLcqmDCYUchm9KeRtg+x+Vdw16bzFqw4kpYE5MYbuork8dQgXRg==
-Date:   Mon, 28 Mar 2022 16:28:12 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 3/9] device property: add index argument to
- property_read_string_array() callback
-Message-ID: <20220328162812.16deac92@fixe.home>
-In-Reply-To: <Yj3SFYdUQ4r7GXqs@smile.fi.intel.com>
-References: <20220325113148.588163-1-clement.leger@bootlin.com>
-        <20220325113148.588163-4-clement.leger@bootlin.com>
-        <Yj3SFYdUQ4r7GXqs@smile.fi.intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Mon, 28 Mar 2022 10:31:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F08F3EF13;
+        Mon, 28 Mar 2022 07:29:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B9BE6122F;
+        Mon, 28 Mar 2022 14:29:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD272C004DD;
+        Mon, 28 Mar 2022 14:29:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648477794;
+        bh=byiE8FZ883BrjGw8gfIztJdTINfyzJFcS+KRzQJss3M=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rrgEezYG/4cPc4oou3FM0jWLFHkwN45btCIqU4Bx0pGbjxjngdZuXXlLPbcdE8Rq7
+         FmBtEZfNY+CLpzWy99qk17y3bvylWiF3OCR/eO6ZZAT0yj1J26QSr3vowekLj91s+X
+         QzZV2tq5M6WB3LxDG+Yk+Ywoxv3W25S+eOoKtAxqTKZXjp2KU+LD6uptY17KiWnK9I
+         U2zM0IMs3ODG9gesiN/d3xglAwNrfMo0UI4/Ordt6O8SH4T2/mcmAybZa4wVhW6++e
+         H+6eMQFTG+wkv6EV4zd2Uu1X7gi0EJmrl4txArc+Bbt2oFdBYsOErx5Syw25UQuutr
+         /5fBWENqK7hkA==
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Subject: [PATCH v5 0/3] bootconfig: Support embedding a bootconfig in kernel for non initrd boot
+Date:   Mon, 28 Mar 2022 23:29:49 +0900
+Message-Id: <164847778869.3060675.8115416881394543419.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Fri, 25 Mar 2022 16:30:45 +0200,
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> a =C3=A9crit :
+Hi,
 
-> >  	pointer =3D property_entry_find(props, propname, length);
-> >  	if (IS_ERR(pointer))
-> >  		return PTR_ERR(pointer); =20
->=20
-> > +	if (index >=3D array_len)
-> > +		return -ENODATA; =20
->=20
-> I was about to ask if we can check this before the
-> property_entry_find() call, but realized that in such case it will
-> shadow possible errors due to wrong or absent property.
+Here are the 5th version of the patchset to enable kernel embedded bootconfig
+for non-initrd kernel boot environment. This version fixes to sort .gitignore
+and fixes lib/Makefile to cleanup default.bconf correctly and to allow user
+to specify a relative path to CONFIG_EMBED_BOOT_CONFIG_FILE. (Thanks Masahiro!)
+Also this update the document patch about the relative path.
+Here is the previous thread [1].
 
-I think you are actually right, the check can be done after
-property_entry_count_elems_of_size() since it already checks for the
-property to be present. I'll move that check.
+[1] https://lore.kernel.org/all/164833878595.2575750.1483106296151574233.stgit@devnote2/T/#u
 
->=20
-> ...
->=20
-> > -		of_property_read_string_array(node, propname, val,
-> > nval) :
-> > +		of_property_read_string_array_index(node,
-> > propname, val, nval,
-> > +						    index) : =20
->=20
-> Dunno about the style there, but I think it can be one line.
+You can embed a bootconfig file into the kernel as a default bootconfig,
+which will be used if there is no initrd or no bootconfig is attached to initrd. 
 
-Seems like the complete file is strictly applying the 80 columns rules
-so I thought it was better to keep it like this. However, I think the
-ternary oeprator is not really readable with such split.
+This needs 2 options: CONFIG_EMBED_BOOT_CONFIG=y and set the file
+path to CONFIG_EMBED_BOOT_CONFIG_FILE. Even if you embed the bootconfig file
+to the kernel, it will not be enabled unless you pass "bootconfig" kernel
+command line option at boot. Moreover, since this is just a "default"
+bootconfig, you can override it with a new bootconfig if you attach another
+bootconfig to the initrd (if possible).
+CONFIG_EMBED_BOOT_CONFIG_FILE can take both absolute and relative path, but
+to simplify and make it independent from the build environment, I recommend
+you to use an absolute path for that.
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+This is requested by Padmanabha at the below thread[2];
+
+[2] https://lore.kernel.org/all/20220307184011.GA2570@pswork/T/#u
+
+
+KNOWN ISSUE:
+
+According to the report from Padmanabha[3] and my analysis [4], the embedded
+bootconfig data may not be updated if you do incremental build the kernel
+with CONFIG_LTO_CLANG_THIN.
+
+[3] https://lore.kernel.org/all/20220321183500.GA4065@pswork/T/#u
+[4] https://lore.kernel.org/all/20220327115526.cc4b0ff55fc53c97683c3e4d@kernel.org/
+
+This seems like clang's LTO Thin mode issue. It may not detect the inline
+asm depends on external files.
+
+I think the possible workaround is to split the inline asm which includes
+'.incbin' directive into an asm file. But this should be done in another
+seires because there are other features which uses '.incbin'. (e.g.
+/proc/config.gz)
+
+Thank you,
+
+---
+
+Masami Hiramatsu (3):
+      bootconfig: Check the checksum before removing the bootconfig from initrd
+      bootconfig: Support embedding a bootconfig file in kernel
+      docs: bootconfig: Add how to embed the bootconfig into kernel
+
+
+ Documentation/admin-guide/bootconfig.rst |   31 +++++++++++++++++++++++++++---
+ include/linux/bootconfig.h               |   10 ++++++++++
+ init/Kconfig                             |   21 ++++++++++++++++++++
+ init/main.c                              |   31 +++++++++++++++---------------
+ lib/.gitignore                           |    1 +
+ lib/Makefile                             |    9 +++++++++
+ lib/bootconfig.c                         |   23 ++++++++++++++++++++++
+ 7 files changed, 108 insertions(+), 18 deletions(-)
+
+--
+Masami Hiramatsu (Linaro) <mhiramat@kernel.org>

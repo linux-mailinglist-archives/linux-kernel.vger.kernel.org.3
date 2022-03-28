@@ -2,147 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3F04E9FA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 21:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 487304E9FB3
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 21:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243161AbiC1TTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 15:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
+        id S245563AbiC1TV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 15:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234167AbiC1TTi (ORCPT
+        with ESMTP id S244720AbiC1TVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 15:19:38 -0400
-Received: from mail.thepaulodoom.com (www.thepaulodoom.com [45.77.108.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A88766C9A;
-        Mon, 28 Mar 2022 12:17:55 -0700 (PDT)
-Received: from hp-amd-paul (c-98-240-189-147.hsd1.mn.comcast.net [98.240.189.147])
-        by vultr.guest (OpenSMTPD) with ESMTPSA id 19d4373f (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 28 Mar 2022 19:17:53 +0000 (UTC)
-Date:   Mon, 28 Mar 2022 14:17:51 -0500
-From:   Paul Lemmermann <thepaulodoom@thepaulodoom.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] IIO: accel: fixed coding style issues
-Message-ID: <YkIJ3/nkVNMy/qv8@hp-amd-paul>
-References: <YkHOpCT2Gad1YaxN@hp-amd-paul>
- <20220328180623.1380d23e@jic23-huawei>
+        Mon, 28 Mar 2022 15:21:55 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9595DE4E;
+        Mon, 28 Mar 2022 12:20:14 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id b13so11762221pfv.0;
+        Mon, 28 Mar 2022 12:20:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GJEJWucPHfNfh0owOSh1kHfEuPNtGB0oLcBX/58o8qM=;
+        b=JP/IsseErt3A3GaLZ07OVojIgAwMlkKQXJbU0k6teFguY4PSuv5O56wntHbS7cQX8M
+         ygcQ6cP8WIS0Oe2g9kgoYbVhd8a6t3rkAW349ZzBJVb/5xDkScINNk6VtNUf4fFLXf7l
+         MOKxSppY//7Wm1FNURCk/MdfjSzRBSxBZkg7bZT8DxtUeOp1w8uP/24JIM16Bn1fw7bh
+         8sLIsZi+o3DMg0VPJZwvau0LqCUve5dgtRttgqoVqmmpzUdQv0+o+C9eszP9egtXRt9X
+         UH6I5aTsqmQ4QwCY0uw/FSHFWrv2FpMv6+o+sUda7CtYZp7bITnlqF1nE+ypDgwRqjof
+         nexQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GJEJWucPHfNfh0owOSh1kHfEuPNtGB0oLcBX/58o8qM=;
+        b=mj+VxfjPN6MKQgobI8EM6U1wj+BhrVTvRxnWrkwE0nt8w4OwaHM4z9I6IitusGDmMg
+         W3GzgfRwIY7gbn+LofPfKzObY6/BdR7EsldqP5exGwqRbJqdVPTWeb6rrPTpuSuwXPKM
+         iDYtHEJ+9QoP6i7S67WXE728IMyhROzjakclx8sqoxh23dA74qAVB9HmawAsKSO4JVk2
+         KEb6XijqAXRUykw8YZHDTATnyoHqJPVQlfz/YHGpX+7S4FxY5H6jLchAunJxfzYxi57H
+         dPqDfheWB4aHu+aDNkQjn7x/KYvz5gG4kzL5oXYq1QcO4q5eyXq9lnZ5PXQtiDTFj9Nw
+         KC/Q==
+X-Gm-Message-State: AOAM533WPk0Lhlyt5KaEm9GsI/DeMUXO4HVsaoEh2JlvKHL6Z8WM8ikS
+        wyLG6/jOEXrHFCBlF8ytZljMrPAzk/U=
+X-Google-Smtp-Source: ABdhPJwR9Pf/sSAf0tS1ztVneZEH22dR8Gn749LLOhJ7HmycSZ5LiQpEf7U7uAqx2SXRA97/1JMA+Q==
+X-Received: by 2002:a65:56cb:0:b0:378:82ed:d74 with SMTP id w11-20020a6556cb000000b0037882ed0d74mr11408905pgs.491.1648495213750;
+        Mon, 28 Mar 2022 12:20:13 -0700 (PDT)
+Received: from localhost.localdomain ([122.161.51.18])
+        by smtp.gmail.com with ESMTPSA id nn7-20020a17090b38c700b001c9ba103530sm265339pjb.48.2022.03.28.12.20.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 12:20:13 -0700 (PDT)
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Mukesh Savaliya <msavaliy@codeaurora.org>,
+        Akash Asthana <akashast@codeaurora.org>
+Cc:     Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: spi: qcom-qspi: Add minItems to interconnect-names
+Date:   Tue, 29 Mar 2022 00:50:06 +0530
+Message-Id: <20220328192006.18523-1-singh.kuldeep87k@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328180623.1380d23e@jic23-huawei>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 06:06:23PM +0100, Jonathan Cameron wrote:
-> On Mon, 28 Mar 2022 10:05:08 -0500
-> Paul Lemmermann <thepaulodoom@thepaulodoom.com> wrote:
-> 
-> > Fixed case statement issues and spacing issues.
-> > 
-> > Signed-off-by: Paul Lemmermann <thepaulodoom@thepaulodoom.com>
-> Hi Paul,
-> 
-> Thanks for the patch.
-> 
-> These are drivers written / maintained by different authors, so one
-> patch per driver preferred.  Particularly handy as people might not
-> agree with all of them so separate patches would allow me to pick
-> and choose which ones to pick up.
-> 
-> Comments inline.
-> 
-> Please state how you identified the changes btw.  Script?
+Add minItems constraint to interconnect-names as well. The schema
+currently tries to match 2 names and fail for DTs with single entry.
 
-I used the checkpatch.pl script to identify these changes.
+With the change applied, below interconnect-names values are possible:
+['qspi-config'], ['qspi-config', 'qspi-memory']
 
-> 
-> Jonathan
-> 
-> > ---
-> >  drivers/iio/accel/bmc150-accel-core.c | 15 +++++++++++----
-> >  drivers/iio/accel/dmard09.c           |  2 +-
-> >  drivers/iio/accel/kxsd9-spi.c         |  4 ++--
-> >  3 files changed, 14 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/iio/accel/bmc150-accel-core.c b/drivers/iio/accel/bmc150-accel-core.c
-> > index d11f66801..f7dd7ec2c 100644
-> > --- a/drivers/iio/accel/bmc150-accel-core.c
-> > +++ b/drivers/iio/accel/bmc150-accel-core.c
-> > @@ -432,10 +432,17 @@ static bool bmc150_apply_bosc0200_acpi_orientation(struct device *dev,
-> >  
-> >  		for (j = 0; j < 3; j++) {
-> >  			switch (val[j]) {
-> > -			case -1: str = "-1"; break;
-> > -			case 0:  str = "0";  break;
-> > -			case 1:  str = "1";  break;
-> > -			default: goto unknown_format;
-> > +			case -1:
-> > +				str = "-1";
-> > +				break;
-> > +			case 0:
-> > +				str = "0";
-> > +				break;
-> > +			case 1:
-> > +				str = "1";
-> > +				break;
-> > +			default:
-> > +				goto unknown_format;
-> 
-> I'm not seeing any clear advantage to this change.
->
-The reason for this change is that most, if not all, case statements in
-the kernel are multiple lines. Also, in the kernel docs (https://docs.kernel.org/process/coding-style.html)
-it says, to not put multiple statements on one line.
+Fixes: 8f9c291558ea ("dt-bindings: spi: Add interconnect binding for QSPI")
+Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+---
+v2:
+- Reword commit description
 
-Thanks,
-Paul
-> 
-> >  			}
-> >  			orientation->rotation[i * 3 + j] = str;
-> >  		}
-> > diff --git a/drivers/iio/accel/dmard09.c b/drivers/iio/accel/dmard09.c
-> > index e6e28c964..87bc38d4d 100644
-> > --- a/drivers/iio/accel/dmard09.c
-> > +++ b/drivers/iio/accel/dmard09.c
-> > @@ -24,7 +24,7 @@
-> >  #define DMARD09_AXIS_Y 1
-> >  #define DMARD09_AXIS_Z 2
-> >  #define DMARD09_AXIS_X_OFFSET ((DMARD09_AXIS_X + 1) * 2)
-> > -#define DMARD09_AXIS_Y_OFFSET ((DMARD09_AXIS_Y + 1 )* 2)
-> > +#define DMARD09_AXIS_Y_OFFSET ((DMARD09_AXIS_Y + 1) * 2)
-> 
-> This is one is good.
-> 
-> >  #define DMARD09_AXIS_Z_OFFSET ((DMARD09_AXIS_Z + 1) * 2)
-> >  
-> >  struct dmard09_data {
-> > diff --git a/drivers/iio/accel/kxsd9-spi.c b/drivers/iio/accel/kxsd9-spi.c
-> > index 57c451cfb..989f53fb0 100644
-> > --- a/drivers/iio/accel/kxsd9-spi.c
-> > +++ b/drivers/iio/accel/kxsd9-spi.c
-> > @@ -44,8 +44,8 @@ static const struct spi_device_id kxsd9_spi_id[] = {
-> >  MODULE_DEVICE_TABLE(spi, kxsd9_spi_id);
-> >  
-> >  static const struct of_device_id kxsd9_of_match[] = {
-> > -        { .compatible = "kionix,kxsd9" },
-> > -        { },
-> > +	{ .compatible = "kionix,kxsd9" },
-> 
-> Also good to clean up.
-> 
-> Thanks,
-> 
-> Jonathan
-> 
-> 
-> > +	{ },
-> >  };
-> >  MODULE_DEVICE_TABLE(of, kxsd9_of_match);
-> >  
-> 
+ Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
+index 055524fe8327..116f3746c1e6 100644
+--- a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
++++ b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
+@@ -49,6 +49,7 @@ properties:
+     maxItems: 2
+ 
+   interconnect-names:
++    minItems: 1
+     items:
+       - const: qspi-config
+       - const: qspi-memory
+-- 
+2.25.1
+

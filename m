@@ -2,62 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3724EA3AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 01:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 703254EA3CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 01:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbiC1Xg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 19:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
+        id S230511AbiC1XmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 19:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230396AbiC1Xgy (ORCPT
+        with ESMTP id S230472AbiC1XmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 19:36:54 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265DFBAB98;
-        Mon, 28 Mar 2022 16:35:12 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id 12so17361844oix.12;
-        Mon, 28 Mar 2022 16:35:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SroNa1s30omGiI5Y9VrYvsu2x7qDgV7jwDVANE4sovM=;
-        b=HJhcNH8lh11A/fImjjR+QEZhgYPiWZgR15xG1Imups9ob4ZaPshTS3QZnZgde2/j48
-         lv0HHEPHymmLZ5OMwinp9K+nA7g3fO6WS7MkcfcDPRDPeDQFeWLLdJQupqEemBT1f5bN
-         rr2XjD+VY9MQcRE4iSBRtkMhSSszjImK8m1aWarmo37LnaD+0BtNNOphT94wUbmKfVOR
-         rVv7baG/3p6DrJ5ZT4HUd7c99ykSxtRQJEHw8sNwKwVnvAyWrOyOB2xwvlDBfnbxECTC
-         lxsAq10YQfpSQj4PNLyvfPm3VWYdyCYZ+QjxvdIab4PyYXO7C3e4h5M5uulTueYL/v8t
-         xw8A==
-X-Gm-Message-State: AOAM531nEzDD+PjaiPl9dPKI5Gnc5tpvKBOF2C4d6b7W6VX0nfpCPKEu
-        aKl5ytTVYqUpCjqFz6WgQ5UQfqBDrg==
-X-Google-Smtp-Source: ABdhPJwkSu1O1DKPbpe99hnvB1lz+rBg9kLNZGBXNnWcQE2xKETugXJz1gq3e0uO5Ff/4VU0Ceh4iA==
-X-Received: by 2002:a54:4714:0:b0:2ec:f566:8da5 with SMTP id k20-20020a544714000000b002ecf5668da5mr801500oik.97.1648510511483;
-        Mon, 28 Mar 2022 16:35:11 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r19-20020acaa813000000b002ed02ca6a3fsm8015753oie.1.2022.03.28.16.35.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 16:35:11 -0700 (PDT)
-Received: (nullmailer pid 3257819 invoked by uid 1000);
-        Mon, 28 Mar 2022 23:35:10 -0000
-Date:   Mon, 28 Mar 2022 18:35:10 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     broonie@kernel.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com, robh+dt@kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 4/5] ASoC: dt-bindings: cs35l45: Cirrus Logic CS35L45
- Smart Amp
-Message-ID: <YkJGLo/dAAO3QMq5@robh.at.kernel.org>
-References: <20220318162943.1578102-1-rf@opensource.cirrus.com>
- <20220318162943.1578102-5-rf@opensource.cirrus.com>
+        Mon, 28 Mar 2022 19:42:22 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A3A63A9;
+        Mon, 28 Mar 2022 16:40:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648510841; x=1680046841;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0mmJ/whBeCllU3xdwmN5YeVPUumAS7XqYgOhdOdB3g8=;
+  b=jjl01dh8ga3r27G7Um1eUGGr8KRhZuwKdHNJA8XrfOrx2q34bLFFB0bh
+   +Kfef9U0isZrgaDez4SqQq5CPpJE/FjslqG4P36My16BNB/SmDIGgTiyA
+   9xLcMEjMU2Oek2fKiqq72QOjVvwO6urQc+nUW49dk1sXEUcuDQT912YSF
+   4OrFfkw4JiZqQK7oaTi4ePqGKqStWiQmS/f2+onwghqGDgwmbghnljUef
+   +geCGv+W1Th5azb3OQRKVxs9zZe6MkIegtR4IbeQictN6ql3Vk1YI3D4I
+   lQ7H6OKgsTWZ7gARnHwKhrIOTrE8MBnJy33SvOM/UINRuGlSlVnjYxwoL
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="239057013"
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="239057013"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 16:40:40 -0700
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="521215541"
+Received: from nhawacha-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.27.18])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 16:40:37 -0700
+Message-ID: <9d8d20f62f82e052893fa32368d6a228a2140728.camel@intel.com>
+Subject: Re: [PATCH v2 09/21] x86/virt/tdx: Get information about TDX module
+ and convertible memory
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, pbonzini@redhat.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, peterz@infradead.org,
+        tony.luck@intel.com, ak@linux.intel.com, dan.j.williams@intel.com,
+        isaku.yamahata@intel.com
+Date:   Tue, 29 Mar 2022 12:40:35 +1300
+In-Reply-To: <60bf1aa7-b004-0ea7-7efc-37b4a1ea2461@intel.com>
+References: <cover.1647167475.git.kai.huang@intel.com>
+         <98c1010509aa412e7f05b12187cacf40451d5246.1647167475.git.kai.huang@intel.com>
+         <20220324174301.GA1212881@ls.amr.corp.intel.com>
+         <f211441a6d23321e22517684159e2c28c8492b86.camel@intel.com>
+         <20220328202225.GA1525925@ls.amr.corp.intel.com>
+         <60bf1aa7-b004-0ea7-7efc-37b4a1ea2461@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220318162943.1578102-5-rf@opensource.cirrus.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,18 +71,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Mar 2022 16:29:42 +0000, Richard Fitzgerald wrote:
-> This adds the schema binding for the Cirrus Logic CS35L45 Smart Amp
-> and associated header file.
+On Mon, 2022-03-28 at 13:30 -0700, Dave Hansen wrote:
+> On 3/28/22 13:22, Isaku Yamahata wrote:
+> > > > > +	/*
+> > > > > +	 * Also a sane BIOS should never generate invalid CMR(s) between
+> > > > > +	 * two valid CMRs.  Sanity check this and simply return error in
+> > > > > +	 * this case.
+> > > > > +	 */
+> > > > > +	for (j = i; j < cmr_num; j++)
+> > > > > +		if (cmr_valid(&cmr_array[j])) {
+> > > > > +			pr_err("Firmware bug: invalid CMR(s) among valid CMRs.\n");
+> > > > > +			return -EFAULT;
+> > > > > +		}
+> > > > This check doesn't make sense because above i-for loop has break.
+> > > The break in above i-for loop will hit at the first invalid CMR entry.  Yes "j =
+> > > i" will make double check on this invalid CMR entry, but it should have no
+> > > problem.  Or we can change to "j = i + 1" to skip the first invalid CMR entry.
+> > > 
+> > > Does this make sense?
+> > It makes sense. Somehow I missed j = i. I scratch my review.
 > 
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-> ---
->  .../bindings/sound/cirrus,cs35l45.yaml        | 75 +++++++++++++++++++
->  MAINTAINERS                                   |  2 +
->  include/dt-bindings/sound/cs35l45.h           | 20 +++++
->  3 files changed, 97 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/cirrus,cs35l45.yaml
->  create mode 100644 include/dt-bindings/sound/cs35l45.h
-> 
+> You can also take it as something you might want to refactor, add
+> comments, or work on better variable names.  If it confused one person,
+> it will confuse more in the future.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Hi Dave,
+
+OK I'll think over whether I can improve.  Thanks for advice.
+
+Btw if you have time, could you help to review this series? Or could you take a
+look at whether the overall design is OK, for instance, the design limitations
+described in the cover letter?
+
+-- 
+Thanks,
+-Kai
+
+

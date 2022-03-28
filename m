@@ -2,101 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185A64E9C60
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2EEB4E9C65
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242102AbiC1Qhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 12:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
+        id S239787AbiC1Qjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 12:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233943AbiC1Qhb (ORCPT
+        with ESMTP id S242532AbiC1Qjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 12:37:31 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D03F62BCA
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:35:49 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id o10so29892960ejd.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:35:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OwMy4MS8C7C8gzFiov5E/LSR2ViwcR0jmdDA7SujYjA=;
-        b=V9W9p+XtclEqC4lFHujJCkNAwvr5bva2d1hg/1VTScBm5oBPLzPiK3VsCCyvx08zUx
-         NZ6jBVYBltF7IMRPsw06HicPiu2bZrTMncHWALY6o+w7I3rVU1UDuq6j9z3tgoTQZ60M
-         2ta1I+R+U2ZmLZwFMPfujJkiSx77UtxZW+8TitpxnVeOHJf7kBh7+BIp12hz4QwQxzUD
-         6YwNNBg5ZnRoUBTkiaxe2Jr/h2JrIv7i/BjwDguSo7NFqDxXgSM4jEZLdYWemQHKhFTf
-         AC29a+2Z3imHt0PX97Ad7cGrg/OZUkTIdol67k36TgWkXGfDS0Gy6akREHGAi1UAnUZ7
-         K4JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OwMy4MS8C7C8gzFiov5E/LSR2ViwcR0jmdDA7SujYjA=;
-        b=PF5zo2wTyya18mBZIAljJGqowpmBdaOJudCnmB9zDxKKNS1JM5gSUeHcX8OhnsJ87W
-         ZsxMAlT6/+VMcBXR5dG5RHpNU1b/kgx86arSPGRWNvkMcoH+yaGsthhfIbCpAMDVMdEp
-         0VSBJF+ZYylygZAXbG6GVQKHT+Sk+KgkxiiA+17iFmQ0yvTVzex+BMTKl9VdH9Sae9sS
-         3ZVDk0zNjCBS+0BKogJC7BQtfc3koGPld9MvOfMO0WbU1LIBvw1DNSonFwJYRbFvLmiV
-         FlRgcPUOjdJUL4c/uiNF5poWru7uYoLxOyMJx0wTpSYsQDymC7x9BEWTIlfgmRZVfZtg
-         txoA==
-X-Gm-Message-State: AOAM532t3iu457iCyHrskwBuKjRR+JtrA9UFATLK74ETuSl57bU+JuoZ
-        gkHTgqwKfw3WyCwaZAg8z4IMIW7+KPrut0y3qfcG7A==
-X-Google-Smtp-Source: ABdhPJzEQcYDp2/qHU9fvLW0LgXzV02XSswT1eH2SnbmaDayw4XPT0FotUGC3PnjMKmAHq3k3RMUGAyOA9Is8fS79Ts=
-X-Received: by 2002:a17:907:1622:b0:6df:d1a2:d4a3 with SMTP id
- hb34-20020a170907162200b006dfd1a2d4a3mr27667302ejc.542.1648485347621; Mon, 28
- Mar 2022 09:35:47 -0700 (PDT)
+        Mon, 28 Mar 2022 12:39:41 -0400
+Received: from gateway30.websitewelcome.com (gateway30.websitewelcome.com [192.185.196.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7116606E3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:37:59 -0700 (PDT)
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway30.websitewelcome.com (Postfix) with ESMTP id 5662A1C1EF
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:37:59 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id YsNTntiIRRnrrYsNTn6kl4; Mon, 28 Mar 2022 11:37:59 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=hiAxs7IHF0rwd27wBXL1/c9LFYx80jZfA+vxRKssdAY=; b=4hM99fFLGFCXB5cJDY8lo4Y7ea
+        GLASzNOoPWsqoULbaTlRGwjF/QOLLXlc8yi+MGAwcm/I8HKXRe/BSYh9ey0j0XfdgxiWyxUqScm9P
+        NLU3vUDD8AeKyBm/Pnw2nCiaob8IL7rHA9LLPel/dE/dimFV29Xlngfi1EFf4tXp40gWBYPFxVc57
+        Jcird/H9E1noQxQ7lwoZmneXID0oSrCWLMfz5mojNKE1MWOO+KsWprsdYPaFACatosIn5XRwmriny
+        7z5Dkqt+Sgv7rgS0MR2r0hmuKSR9e0E5UXYPmQrJqyvhgYl8uWcEDIQr3PxBB1r0v8sw4p+CLG5oX
+        xNBQC7jg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54532)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nYsNS-001jY7-Ud; Mon, 28 Mar 2022 16:37:59 +0000
+Message-ID: <0b818aa2-e776-3554-8d7b-79fd856e2e1f@roeck-us.net>
+Date:   Mon, 28 Mar 2022 09:37:57 -0700
 MIME-Version: 1.0
-References: <20220326003356.487828-1-dlatypov@google.com> <CABVgOSmbQxZmmNtUQLsvMSPkr2FpXB_kdJUUbC=nLrt6xN7e2A@mail.gmail.com>
-In-Reply-To: <CABVgOSmbQxZmmNtUQLsvMSPkr2FpXB_kdJUUbC=nLrt6xN7e2A@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 28 Mar 2022 11:35:36 -0500
-Message-ID: <CAGS_qxq_vFtGS4BGieZz8L3QH7rZ7ZN25pGYmjWWoXbTGOKC9A@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: kunit: update kconfig options needed for
- UML coverage
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>, maxime@cerno.tech
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220326192347.2940747-1-michael@walle.cc>
+ <20220326192347.2940747-5-michael@walle.cc>
+ <2442b460-4c6d-0ac9-af08-ae4c25aed812@roeck-us.net>
+ <9aab54bc48284c9e20cd76085cb9d83a@walle.cc>
+ <4455ca4c-1ebb-41df-5f04-72a48e8ca7dc@roeck-us.net>
+ <4e5c78ce651c258a4be33c01ec07a0c3@walle.cc>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v1 4/4] hwmon: add driver for the Microchip LAN966x SoC
+In-Reply-To: <4e5c78ce651c258a4be33c01ec07a0c3@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nYsNS-001jY7-Ud
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54532
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 27
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 9:56 PM David Gow <davidgow@google.com> wrote:
->
+On 3/28/22 04:28, Michael Walle wrote:
+> Am 2022-03-27 20:22, schrieb Guenter Roeck:
+>> On 3/27/22 07:18, Michael Walle wrote:
+>>> Am 2022-03-27 03:34, schrieb Guenter Roeck:
+>>>
+>>>>> +    /*
+>>>>> +     * Data is given in pulses per second. According to the hwmon ABI we
+>>>>> +     * have to assume two pulses per revolution.
+>>>>
+>>>> The hwmon ABI doesn't make any such assumptions. It wants to see RPM,
+>>>> that is all. Pulses per revolution is a fan property.
+>>>
+>>> There is fanY_pulses according to Documentation/ABI/testing/sysfs-class-hwmon:
+>>>
+>>>    Should only be created if the chip has a register to configure
+>>>    the number of pulses. In the absence of such a register (and
+>>>    thus attribute) the value assumed by all devices is 2 pulses
+>>>    per fan revolution.
+>>>
+>>> The hardware returns just the pulses per second. Doesn't that
+>>> mean I have to divide that value by two?
+>>>
+>>
+>> The above refers to hardware which reports RPM.
+>>
+>> It is up to the driver to calculate and return RPM. How you do it is your
+>> decision. Drivers should report the most likely correct RPM value to
+>> userspace, one that rarely needs manual adjustment. Almost all fans
+>> report two pulses per revolution, so normally that assumption is used
+>> to convert PPM to RPM. That isn't mandated (or supposed to be mandated)
+>> by the ABI. I would call it common sense.
+>>
+>> I'll be happy to accept a patch clarifying this.
+> 
+> Where would that go? into the sysfs abi description of the
+> fanY_input?
+> 
 
-<snip>
+For example.
 
-> >         # Append coverage options to the current config
-> > -       $ echo -e "CONFIG_DEBUG_KERNEL=y\nCONFIG_DEBUG_INFO=y\nCONFIG_GCOV=y" >> .kunit/.kunitconfig
-> > +       $ echo -e "CONFIG_DEBUG_KERNEL=y\nCONFIG_DEBUG_INFO=y\nCONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y\nCONFIG_GCOV=y" >> .kunit/.kunitconfig
-> >         $ ./tools/testing/kunit/kunit.py run
->
-> Would we want to instead use a chain of --kconfig_add arguments? (I
-> think there are advantages either way...)
-
-I've been considering this ever since the --kconfig_add patch was accepted.
-It's more compatible w/ commands using --kunitconfig, but it also
-looks very verbose.
-E.g. it looks like
-
-$ tools/testing/kunit/kunit.py run --make_options=CC=/usr/bin/gcc-6
---kconfig_add=CONFIG_DEBUG_INFO=y
---kconfig_add=CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
---kconfig_add=CONFIG_GCOV=y
-
-Neither looks very appealing to me, so I've just kept it as-is for now.
-
-Maybe there's something we can do to make this easier (e.g. allowing
---kunitconfig to be repeated and mergable)?
+Thanks,
+Guenter

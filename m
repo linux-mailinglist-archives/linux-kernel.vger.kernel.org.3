@@ -2,107 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A47A4E8D57
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 06:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE6A4E8D5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 06:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238052AbiC1EbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 00:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S238058AbiC1EiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 00:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233207AbiC1EbS (ORCPT
+        with ESMTP id S233207AbiC1EiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 00:31:18 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1465E220CA;
-        Sun, 27 Mar 2022 21:29:39 -0700 (PDT)
-Received: from [192.168.12.80] (unknown [182.2.37.32])
-        by gnuweeb.org (Postfix) with ESMTPSA id 2B6987E2FD;
-        Mon, 28 Mar 2022 04:29:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1648441777;
-        bh=I508hysutfNMCifaxyR6DAcvMvWBy7ffokyw5LkHEbQ=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=i4aBD/vBkS9hGSbyZbsAPighyljpA9grWq/RBP7Lxn+TFzfa7DIfYil3id70aQHxH
-         BMadMCOP3PaPdU0y4uC901hWgcGkUpdbj3RKc1hSM1raWw31LzonaUPuH+z466Yl32
-         MiKsE02G0omxnCEoLnIqDociQ34rswVdjrjfqHFlVTMp3bkBBJ1qwZL3vM5XJ2d3ki
-         pJNxkJBDVEZawQirC840yc+blRrvhihRq/pnMR4RWHKDwh1r3dsmOp9Yzii+u8wb0H
-         tE0zf8ancL4iwGjsfuZaM1mdvPLiuf3aKaQQ7K7GMoXFIg5k1L1T5YduV4p+3PuQGX
-         2amwBaeWKF4Wg==
-Message-ID: <6f020f3a-da63-09a5-95f4-167429ff3727@gnuweeb.org>
-Date:   Mon, 28 Mar 2022 11:29:26 +0700
+        Mon, 28 Mar 2022 00:38:19 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFCB4F9E1
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 21:36:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648442198; x=1679978198;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FIz0Q1EvMYJmF9dpmCafzvMzCnhuyHbQDx/8zSoT89s=;
+  b=LoaNVghW2Yn0hsJY88+nQhDYpP/mB/eGmHeb7RDxilGKNzyekcXug9GL
+   hIHJxO9hOt9eS9CCKywrv3nk/Lvwn2cBVxLAnIOBV6zfE0VkgCoOo5j5o
+   i+PmCyn1LOkrXCgKULDHfpERyC2dg+6lH4V0L4X5QJVv4W1FE6YmfzVNJ
+   K8CfQ8342+vv6bflxpEgPaMzCIMHM2dYiFQp5+W6gBQDaMKy7BPLlXYfn
+   1uNCGvjCKlFjMEnHmOEdgZmxSxynHtIGL+obNpr5RWX7vFyPPJ5HkZgvA
+   4tFzqaTGgNhZe4UUbprKiyVs1cskrwYSRV5SjF9kKWv0QCnmhJq1XnnPo
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="257738545"
+X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
+   d="scan'208";a="257738545"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 21:36:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
+   d="scan'208";a="502374947"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 27 Mar 2022 21:36:36 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nYh7L-0001is-Ur; Mon, 28 Mar 2022 04:36:35 +0000
+Date:   Mon, 28 Mar 2022 12:36:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: arch/arm/boot/compressed/atags_to_fdt.c:129:5: warning: stack frame
+ size (1344) exceeds limit (1280) in 'atags_to_fdt'
+Message-ID: <202203281213.XUi8zP3z-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, gwml@vger.gnuweeb.org, x86@kernel.org,
-        David Laight <David.Laight@aculab.com>,
-        Jiri Hladky <hladky.jiri@googlemail.com>
-References: <20220310015306.445359-1-ammarfaizi2@gnuweeb.org>
- <20220310015306.445359-2-ammarfaizi2@gnuweeb.org> <YkDZY8n1k5SJw9st@zn.tnic>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: Re: [PATCH v5 1/2] x86/delay: Fix the wrong asm constraint in
- `delay_loop()`
-In-Reply-To: <YkDZY8n1k5SJw9st@zn.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/22 4:38 AM, Borislav Petkov wrote:
-> On Thu, Mar 10, 2022 at 08:53:05AM +0700, Ammar Faizi wrote:
->> The asm constraint does not reflect that the asm statement can modify
->> the value of @loops. But the asm statement in delay_loop() does modify
->> the @loops.
->>
->> Specifiying the wrong constraint may lead to undefined behavior, it may
->> clobber random stuff (e.g. local variable, important temporary value in
->> regs, etc.).
-> 
-> This is especially dangerous when the compiler decides to inline the
-> function and since it doesn't know that the value gets modified, it
-> might decide to use it from a register directly without reloading it.
-> 
-> Add that to the commit message pls.
+Hi Ard,
 
-Will add that in the v6.
+FYI, the error/warning still remains.
 
->> Cc: stable@vger.kernel.org # v2.6.27+
-> 
-> I don't see the need for the stable Cc. Or do you have a case where
-> a corruption really does happen?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ae085d7f9365de7da27ab5c0d16b12d51ea7fca9
+commit: 672513bf583157cc088a32e75bd850dd9f81564c ARM: decompressor: disable stack protector
+date:   4 months ago
+config: arm-buildonly-randconfig-r003-20220327 (https://download.01.org/0day-ci/archive/20220328/202203281213.XUi8zP3z-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=672513bf583157cc088a32e75bd850dd9f81564c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 672513bf583157cc088a32e75bd850dd9f81564c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-I don't find any visible issue on this. But that's undefined behavior,
-different compiler may yield different result (e.g. there is no guarantee
-newer compilers will produce the appropriate result due to UB). So it's not
-something we should rely on.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-============
-Side note for inline:
-Even if it is not inlined, it's still dangerous, because if the compiler is
-able to see that the function to be called doesn't clobber some call-clobbered
-regs, the compiler can assume the call-clobbered regs are not clobbered and it
-reuses the value without reloading.
+All warnings (new ones prefixed by >>):
 
-See the example from Alviro here:
+   arch/arm/boot/compressed/atags_to_fdt.c:129:5: warning: no previous prototype for function 'atags_to_fdt' [-Wmissing-prototypes]
+   int atags_to_fdt(void *atag_list, void *fdt, int total_space)
+       ^
+   arch/arm/boot/compressed/atags_to_fdt.c:129:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int atags_to_fdt(void *atag_list, void *fdt, int total_space)
+   ^
+   static 
+>> arch/arm/boot/compressed/atags_to_fdt.c:129:5: warning: stack frame size (1344) exceeds limit (1280) in 'atags_to_fdt' [-Wframe-larger-than]
+   int atags_to_fdt(void *atag_list, void *fdt, int total_space)
+       ^
+   2 warnings generated.
 
-   https://lore.kernel.org/lkml/CAOG64qPgTv5tQNknuG9d-=oL2EPQQ1ys7xu2FoBpNLyzv1qYzA@mail.gmail.com/
+
+vim +/atags_to_fdt +129 arch/arm/boot/compressed/atags_to_fdt.c
+
+31d0b9f9982f8e Ben Dooks          2018-10-12  120  
+b90b9a38251e9c Nicolas Pitre      2011-09-13  121  /*
+b90b9a38251e9c Nicolas Pitre      2011-09-13  122   * Convert and fold provided ATAGs into the provided FDT.
+b90b9a38251e9c Nicolas Pitre      2011-09-13  123   *
+4716e2e34a22a8 Geert Uytterhoeven 2021-05-19  124   * Return values:
+b90b9a38251e9c Nicolas Pitre      2011-09-13  125   *    = 0 -> pretend success
+b90b9a38251e9c Nicolas Pitre      2011-09-13  126   *    = 1 -> bad ATAG (may retry with another possible ATAG pointer)
+b90b9a38251e9c Nicolas Pitre      2011-09-13  127   *    < 0 -> error from libfdt
+b90b9a38251e9c Nicolas Pitre      2011-09-13  128   */
+b90b9a38251e9c Nicolas Pitre      2011-09-13 @129  int atags_to_fdt(void *atag_list, void *fdt, int total_space)
+
+:::::: The code at line 129 was first introduced by commit
+:::::: b90b9a38251e9c89c34179eccde57411ceb5f1aa ARM: zImage: allow supplementing appended DTB with traditional ATAG data
+
+:::::: TO: Nicolas Pitre <nicolas.pitre@linaro.org>
+:::::: CC: Nicolas Pitre <nico@fluxnic.net>
 
 -- 
-Ammar Faizi
+0-DAY CI Kernel Test Service
+https://01.org/lkp

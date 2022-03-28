@@ -2,135 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5D04E9188
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436524E918C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239886AbiC1Jjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 05:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44300 "EHLO
+        id S239894AbiC1Jk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 05:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239872AbiC1Jjo (ORCPT
+        with ESMTP id S233254AbiC1Jk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 05:39:44 -0400
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FB8541B1;
-        Mon, 28 Mar 2022 02:38:03 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id yy13so27413881ejb.2;
-        Mon, 28 Mar 2022 02:38:03 -0700 (PDT)
+        Mon, 28 Mar 2022 05:40:26 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E726913D47;
+        Mon, 28 Mar 2022 02:38:46 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id f10so3968798plr.6;
+        Mon, 28 Mar 2022 02:38:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=kSPMoIuWL9FXjN+mAnYdY25Lo8PRjU76MHfmUpfVXVs=;
+        b=IMdm7fMd88UVnKMkI1wdPkZmSds+d4Fbesv2Y+svsa/iljkTo4Hi0a6KHzYFxgZMTm
+         kib/TKA8jXbtcC/D57pLvWgWyibonGcfANHOR0JLTgFReatfDNer6C3iRIZ9E+w6IwRQ
+         O9O6vC7ZF1mIvkzeEmWPlmBhuDG4T0BH0siMhij+0nBrM3SIvGNE5J6zikfaWdzdEpln
+         PXneyfQIcBLijbiiNCbrkpuRhmZdLlb+/j1BdnJypfSSwXyjUaCcINgZVb/OgKue87/q
+         BPipgM0fjt1GYeuqlrBZ97UG8gxRuf9IC3nEUgIAwiPF5v3W0DVuyqduoxzMEEnKtpZV
+         6bxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DrPaEMfDat9GUeQRRHhxK3bi9z/y1g5nfYZpdXBeJh0=;
-        b=Q3OiKon3Vg93LsG1eTgqGoot1xXNCnEGl3I9Huxn6T9UdbK40VKGH8Dy+yV2FRe62p
-         qD6xx7HhVkxyx4oRUJre9KCoC2srEWfkZ6DZLfCMfl5DCpXBejJ5uF6/22L6p/tJ2wOn
-         morxrPBls7C545b92zEsutJ9TJXdRQ2h3+ub/1uXTyEXSh90iBlvawTm7gxY+kPAMQmr
-         Eq9LX6MVCssWoH23aR+MTZf9aoV0VdvgPRQTWNQXOWTvGPOe50McBLpSUDq06vxbKUJT
-         cHgsg7MsH1lwcHat7JBrjUD+9kqduJpIPElhfShKWT7XqtAcRqJy5gLi7bsvZY7Dj+v7
-         j7IA==
-X-Gm-Message-State: AOAM531GSr15buJCCmJOZfM/xwejTQVy1AMH074WxORaYt0BqOR0fyK+
-        BBviwZmrNXO6gtpyebhvcW8=
-X-Google-Smtp-Source: ABdhPJwLsldpE5WWlbufSSBwZw6+SgXRr/UdYD3h5M6meozH4epky2mYxDMbkRWCkKh6Y8bzyTb+Yw==
-X-Received: by 2002:a17:906:a046:b0:6b9:20c:47c1 with SMTP id bg6-20020a170906a04600b006b9020c47c1mr26357100ejb.615.1648460282232;
-        Mon, 28 Mar 2022 02:38:02 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id k12-20020aa7c38c000000b0041939d9ccd0sm6775331edq.81.2022.03.28.02.38.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Mar 2022 02:38:01 -0700 (PDT)
-Message-ID: <564c7092-d6a3-7766-d83f-9762075d055f@kernel.org>
-Date:   Mon, 28 Mar 2022 11:38:00 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 0/5] Add support for Axis, ARTPEC-8 PCIe driver
-Content-Language: en-US
-To:     wangseok.lee@samsung.com,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>
-Cc:     "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "kernel@axis.com" <kernel@axis.com>,
-        =?UTF-8?B?7KCE66y46riw?= <moonki.jun@samsung.com>
-References: <0716d9e4-24e1-d16c-162c-00a8664296e1@kernel.org>
- <20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1@epcms2p7>
- <CGME20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1@epcms2p8>
- <20220328090200epcms2p8637d2a2e09a3a627be776586b80c8adf@epcms2p8>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220328090200epcms2p8637d2a2e09a3a627be776586b80c8adf@epcms2p8>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=kSPMoIuWL9FXjN+mAnYdY25Lo8PRjU76MHfmUpfVXVs=;
+        b=KWFji7RYNTzoEUEpxrockicQkc8368IOgL557K+oUkbNYfZP6SEHTBeRBXQM3nAgtl
+         F1PxX1Qyw+wz6YOJCT7eQ+kYgI6YAFntJ/tlN6TW05EyHHB0PbIk/79ZRvUSMWbJkn5R
+         +3fAWB8LZ70MFYpH0HrvqRB1HY9OwI+eqjeuTl3xBkrNmFguJ5VlsZesWSNrnrA2X4cx
+         +FlxlR0WHJbZ1id5O6Pzc6ki2/b+3EybonnwCm7OaX/dxEqkK85/ZlVh5T6CnQeAVaHK
+         6ST2LOYqVa5M3BcqGQg2jJ3P7nM6mrnbaFU2lsJRn8hh1XuhSto2X1DeXyrB98dS6OVr
+         DdoA==
+X-Gm-Message-State: AOAM531fe3Chiq+oAPSAyfqFVLMCpJFnbonxWxEhwtTcvef59XaxI0Ty
+        AKMbq8flAwMSd9W2+Ibb+eQ=
+X-Google-Smtp-Source: ABdhPJwd3Kvd5Gx8C8CWNFbj86fF16CZZwvwxBWlW9+TXd4T/qw23dd8dU5QaNPdwStSu2Yidnsacg==
+X-Received: by 2002:a17:902:f54f:b0:154:5686:7616 with SMTP id h15-20020a170902f54f00b0015456867616mr24668500plf.125.1648460326246;
+        Mon, 28 Mar 2022 02:38:46 -0700 (PDT)
+Received: from ubuntu.huawei.com ([119.3.119.18])
+        by smtp.googlemail.com with ESMTPSA id y12-20020a17090a784c00b001c6bdafc995sm17230900pjl.3.2022.03.28.02.38.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 02:38:45 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     svens@linux.ibm.com
+Cc:     agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        dsterba@suse.com, elder@linaro.org, gor@linux.ibm.com,
+        gregkh@linuxfoundation.org, hca@linux.ibm.com, jcmvbkbc@gmail.com,
+        jirislaby@kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, stable@vger.kernel.org,
+        xiam0nd.tong@gmail.com
+Subject: Re: [PATCH v2] char: tty3270: fix a missing check on list iterator
+Date:   Mon, 28 Mar 2022 17:38:31 +0800
+Message-Id: <20220328093831.28087-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <yt9dczi6cvln.fsf@linux.ibm.com>
+References: <yt9dczi6cvln.fsf@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2022 11:02, 이왕석 wrote:
->> --------- Original Message ---------
->> Sender : Krzysztof Kozlowski <krzk@kernel.org>
->> Date : 2022-03-28 16:12 (GMT+9)
->> Title : Re: [PATCH 0/5] Add support for Axis, ARTPEC-8 PCIe driver
->>
->> On 28/03/2022 03:44, 이왕석 wrote:
->>>  This series patches include newly PCIe support for Axis ARTPEC-8 SoC.
->>>  ARTPEC-8 is the SoC platform of Axis Communications.
->>>  PCIe controller driver and phy driver have been newly added.
->>>  There is also a new MAINTAINER in the addition of phy driver.
->>>  PCIe controller is designed based on Design-Ware PCIe controller IP
->>>  and PCIe phy is desinged based on SAMSUNG PHY IP.
->>>  It also includes modifications to the Design-Ware controller driver to 
->>>  run the 64bit-based ARTPEC-8 PCIe controller driver.
->>>  It consists of 6 patches in total.
->>>  
->>>  This series has been tested on AXIS SW bring-up board 
->>>  with ARTPEC-8 chipset.
->>
->> You lost mail threading. This makes reading this difficult for us. Plus
->> you sent something non-applicable (patch #2), so please resend.
->>
->> Knowing recent Samsung reluctance to extend existing drivers and always
->> duplicate, please provide description/analysis why this driver cannot be
->> combined with existing driver. The answer like: we need several syscon
->> because we do not implement other frameworks (like interconnect) are not
->> valid.
->>
->> Best regards,
->> Krzysztof
+> I should have written that in my first reply, but s == NULL means
+> the given line number couldn't be found in the list of lines. This is
+> a serious error and should be warned about. So maybe something like:
 > 
-> Hello, Krzysztof
-> Thanks for your review.
+> if (WARN_ON(!s))
+> 	return;
 > 
-> patch#2 was sent to the wrong format so sent again.
-> Sorry for causing confusion.
+> But allocating a new empty line in that case is certainly wrong.
 
-The first sending was HTML. Second was broken text, so still not working.
+Thank you, i have resend a v3 patch as you suggested.
 
-Please resend everything with proper threading.
-
-
-> This patch is specialized in Artpec-8, 
-> the SoC Platform of Axis Communication, and is newly applied.
-> Since the target SoC platform is different from the driver previously 
-> used by Samsung, it is difficult to merge with the existing driver.
-
-Recently I always saw such answers and sometimes it was true, sometimes
-not. What is exactly different?
-
-Best regards,
-Krzysztof
+--
+Xiaomeng Tong

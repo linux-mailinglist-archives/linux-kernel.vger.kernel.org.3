@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8734E96CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F3F4E96D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240930AbiC1MiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 08:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52444 "EHLO
+        id S242579AbiC1Mjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 08:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242549AbiC1MiH (ORCPT
+        with ESMTP id S239356AbiC1Mji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 08:38:07 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5AC4EA03
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:36:26 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id p8so12501771pfh.8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:36:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=ISEfxaNYWNVisu+9QZGXAX2bZb+iFFTUSbrI/VjohWU=;
-        b=gJwGbRu12ZLWAHRt2TcJNBqbpeS1g9EVoDCJGFZu6aWM9hxxnJ3u2yH9ffkfiE80D6
-         Wvdh7bEy5amQQUVmacUifyiotmmqcaG138rWwjzcma2qyL6EMl1jXEBTTq7TLeaHITWT
-         lW6z1N/G0S6X/UVu0dQ8h0UVe09Oq1LFIJFAKNrhBqHeIYl5jfgCbsl7FkxNqS87bAQg
-         DoE9Ch9sC7Gf1MrdCldAFQf/RBWCiCXcegeF5DI9E2uJK2onBPBCRfpkExg2gpvz0p1/
-         ns8tBJNZA9OwskIywb4UsA6lCkcXuPtHegfpv6ZYSRS9SohPThSn2/7Ny+n0zbXjd5hz
-         4T1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=ISEfxaNYWNVisu+9QZGXAX2bZb+iFFTUSbrI/VjohWU=;
-        b=VQ4B+dXYRaPIrWgiiQtrXehyjPgCOFODvl9bOYVLwxANW3b6Lko+u3E0U2LQGvpzau
-         IiIWMxNnYyw7mv82aXiBa9szCCgt80UEInWVlmplG7d/O3ObI6BSe3lYdZ8f1td9ezjJ
-         kbNM5Ih0Y7AEYKyqt7+PDxtNuyMAWteiIzp9sp+7QnoqnSNY/sy+6PHwWlf6HvIBCbMq
-         pC8wKKwFIgDuIVfWIzN0mOJa92Cfc8EaaUDgSYCQvOL6bOPukA2O//M1fAWKnd1bADfK
-         9HQkmgecCOC/IqGzzViTEt3Fu0y8pQlGqJ3xWupF0KlOB40l02oHcIhLVdt4pWHmNYZ+
-         VJpw==
-X-Gm-Message-State: AOAM530t/RgWR2/FeSUKSpwqbwDrCd4BdkuoILRM/hvUsZNFYR89NlVp
-        21eyqHuAeuY5TDUdIEszLv4DrW3Kvk5jPsAM
-X-Google-Smtp-Source: ABdhPJxIPGIfNkoPiozRWEbOm1oSo8MflGjlwyo4NUYbR28pSYjyc8iTfJAojR4+S8z7amlPWyGtSA==
-X-Received: by 2002:a63:2b4f:0:b0:398:49ba:a268 with SMTP id r76-20020a632b4f000000b0039849baa268mr4240877pgr.546.1648470985967;
-        Mon, 28 Mar 2022 05:36:25 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id nl17-20020a17090b385100b001c70883f6ccsm23577653pjb.36.2022.03.28.05.36.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 05:36:25 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Hannes Reinecke <hare@suse.de>, Jan Kara <jack@suse.cz>
-Cc:     linux-block@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <cc17199798312406b90834e433d2cefe8266823d.1648306232.git.christophe.jaillet@wanadoo.fr>
-References: <cc17199798312406b90834e433d2cefe8266823d.1648306232.git.christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] block: Fix the maximum minor value is blk_alloc_ext_minor()
-Message-Id: <164847098496.6880.2578259301021456744.b4-ty@kernel.dk>
-Date:   Mon, 28 Mar 2022 06:36:24 -0600
+        Mon, 28 Mar 2022 08:39:38 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902924ECFF;
+        Mon, 28 Mar 2022 05:37:57 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22S8Jr1s017538;
+        Mon, 28 Mar 2022 14:37:44 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=PRSUOkbjhbLZbdipmTB0fmY4CfFxVYPER1xJPcVCusk=;
+ b=GND7worVS6mA7ZXXW7V81FZ/BD6+o/Yo1ksdttq6DgyRCkO4AxsgshfrPJ8hqliCtafS
+ MMr0eK4bT/qd5/Z3bnELbfPK5hs5LNt9pBgJouBKWLxcwQZFlRRz/C2bj5Ahq7Zjehbr
+ /QIRaEmTtHc9AZdQHbnFF40wIvz7MHuAYNxAAiuChN7mFZ402kf6YTNe7r4BoH+MaQRI
+ o7BeNbCs5PGvzl/Ckairnt/Iqse9KcZdwEgr9cpzkOjHGT/22tEKzXIImOz8Ql6OZePi
+ xjbuH/nBXkYT/a78Q9BfJaCw4eXTFAeoQXUU7o2O+vw+c16n1i704lkw4t6DVDW9Fytv og== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f1s4p1r08-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Mar 2022 14:37:44 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 86AE710002A;
+        Mon, 28 Mar 2022 14:37:38 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7629C22D163;
+        Mon, 28 Mar 2022 14:37:38 +0200 (CEST)
+Received: from [10.201.21.216] (10.75.127.47) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 28 Mar
+ 2022 14:37:37 +0200
+Message-ID: <be2042d2-e315-223d-5454-ebfb934f9d2d@foss.st.com>
+Date:   Mon, 28 Mar 2022 14:37:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] stm: ltdc: fix two incorrect NULL checks on list iterator
+Content-Language: en-US
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        <yannick.fertre@foss.st.com>
+CC:     <philippe.cornu@foss.st.com>, <airlied@linux.ie>,
+        <daniel@ffwll.ch>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@foss.st.com>, <marex@denx.de>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+References: <20220327055355.3808-1-xiam0nd.tong@gmail.com>
+From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+In-Reply-To: <20220327055355.3808-1-xiam0nd.tong@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-28_04,2022-03-28_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,25 +77,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 26 Mar 2022 15:50:46 +0100, Christophe JAILLET wrote:
-> ida_alloc_range(..., min, max, ...) returns values from min to max,
-> inclusive.
-> 
-> So, NR_EXT_DEVT is a valid idx returned by blk_alloc_ext_minor().
-> 
-> This is an issue because in device_add_disk(), this value is used in:
->    ddev->devt = MKDEV(disk->major, disk->first_minor);
-> and NR_EXT_DEVT is '(1 << MINORBITS)'.
-> 
-> [...]
+Hello Xiaomeng
 
-Applied, thanks!
+On 3/27/22 07:53, Xiaomeng Tong wrote:
+> The two bugs are here:
+> 	if (encoder) {
+> 	if (bridge && bridge->timings)
+>
+> The list iterator value 'encoder/bridge' will *always* be set and
+> non-NULL by drm_for_each_encoder()/list_for_each_entry(), so it is
+> incorrect to assume that the iterator value will be NULL if the
+> list is empty or no element is found.
+>
+> To fix the bug, use a new variable '*_iter' as the list iterator,
+> while use the old variable 'encoder/bridge' as a dedicated pointer
+> to point to the found element.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 99e360442f223 ("drm/stm: Fix bus_flags handling")
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> ---
+>  drivers/gpu/drm/stm/ltdc.c | 16 ++++++++++------
+>  1 file changed, 10 insertions(+), 6 deletions(-)
 
-[1/1] block: Fix the maximum minor value is blk_alloc_ext_minor()
-      commit: d1868328dec5ae2cf210111025fcbc71f78dd5ca
 
-Best regards,
--- 
-Jens Axboe
+Thanks for your fix
 
+Acked-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+
+
+Raphaël Gallais-Pou
 

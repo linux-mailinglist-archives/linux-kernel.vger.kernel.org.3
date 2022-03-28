@@ -2,162 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D28D4EA0E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 619D94EA0DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 21:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344039AbiC1UBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 16:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
+        id S1343962AbiC1UBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 16:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343970AbiC1UBe (ORCPT
+        with ESMTP id S239880AbiC1UBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 16:01:34 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CE439166;
-        Mon, 28 Mar 2022 12:59:52 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id D9B6F1F4384C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648497591;
-        bh=juEkTDE+SY0qwuOHnUrLzTo/uQ/rPpurP5PmYNSVfck=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iDK0M7FyPd5O9ZPH6cann5jLnLLjQxkwxZS6CxveFOrYR2TgBiSEl3kWREbifBLE5
-         HZRuUeEO9kEeU/TrdUJ9PrBWxVgDCny/0Y81gl86ehzEsOcPhiqoSaXJripdv6E71x
-         0/25h8I8CAdgcpPLWjeE19aES5+LvahKaZ5cD1qVXJg+Zx8TeFAdwyMEPjV/k3svr+
-         lcehnmWXJt8Ck9Bmp0H1zf/LUbVDh/KbR2MIF9h2fOQBKaxcPWGqsLYOMxy1jFN4mH
-         7U+Vs2qTQY+N/5Stg8DeyjEX6RuMi0RR/lqfzNFIq5yT+qFvI0KHGVelygcwbOopyu
-         SSNsN4gBJVs5Q==
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@collabora.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH v1 01/24] media: h264: Increase reference lists size to 32
-Date:   Mon, 28 Mar 2022 15:59:13 -0400
-Message-Id: <20220328195936.82552-2-nicolas.dufresne@collabora.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
-References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
+        Mon, 28 Mar 2022 16:01:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 273E634B81
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 12:59:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648497566;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rNlkcdDOnbEEqyaA/TedcvXNhWifU9B0NNWARWuI3n8=;
+        b=Q4W5mxp8IzvQnXAFA4pXr4iq6DFjrZ3uAYshzd2RmqwmQCfufN9DG/sm0/uQbJh0ck7W8z
+        YvmcNHOW6IY+7u8JXVg7aKdOc7xJ4qOsOimQp7dSRHgrafHDWVgaNJc1R9k9wjW4JJ0EhK
+        kp2Nl2JvQRYFtW8W03tBLCLhIfmOyCA=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-550-pZ5kztpxP6qC0KWnfws5FA-1; Mon, 28 Mar 2022 15:59:24 -0400
+X-MC-Unique: pZ5kztpxP6qC0KWnfws5FA-1
+Received: by mail-qt1-f197.google.com with SMTP id cb11-20020a05622a1f8b00b002e06f729debso13089703qtb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 12:59:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rNlkcdDOnbEEqyaA/TedcvXNhWifU9B0NNWARWuI3n8=;
+        b=j5UydY96GoEO6z8+cWZXbLZ+UGk0itLYS3Y8G3PUfZGDtVs/BN+9Bavweyxi04LOj9
+         tH+3tZ+ZsK6jv0c4t3jnf37KcWWNNxK41P4YMsQ7/PVPHMw6Ijxzt27UJhnXomCSAJ1Z
+         EbgIi6IwAWGrqMoA1rktDo/KQuNEERrkKM36hdL5na2HVsIAOOaF/DyyeT4goU1KF0bO
+         ysFDOkArAwaDw5pOlpsSxQLKjYIn16bJlYOwGOcONWP6Z5wOyEW9clZl1t6KKHpXdimT
+         UhZhaSCnZb9SN52D5CorEawREYmSdVzPrCVULRPK9OQXOnL2mGKGR3DqoExjRelV8f6A
+         r7qQ==
+X-Gm-Message-State: AOAM532fFDJBGFNsqEnJj0y9ivr/F2UfU79BnLrM8KsQPhJQxPQMpzv2
+        +tssZYUkW9e3u1pZ4/smncf4Qk3etRqCJ6AeIkqvGl3vxu2PAFDfq2OyTpQkaYUyN9puFnckvci
+        FyGlP7dWR0FQ8uvVDUw8HtgsN
+X-Received: by 2002:ac8:5cc1:0:b0:2e1:bd05:1371 with SMTP id s1-20020ac85cc1000000b002e1bd051371mr23484915qta.573.1648497564278;
+        Mon, 28 Mar 2022 12:59:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx9L8BI7elUtjtShDyTNCfyVyjEHPEC/OaWfgPxbM34Cf9QU+7w8TC2BCSK0jUFIPEMZj6Lpw==
+X-Received: by 2002:ac8:5cc1:0:b0:2e1:bd05:1371 with SMTP id s1-20020ac85cc1000000b002e1bd051371mr23484900qta.573.1648497564027;
+        Mon, 28 Mar 2022 12:59:24 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::35])
+        by smtp.gmail.com with ESMTPSA id z15-20020a05622a060f00b002e2070bf899sm12526007qta.90.2022.03.28.12.59.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 12:59:23 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 12:59:20 -0700
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+Subject: Re: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
+Message-ID: <20220328195920.dqlfra3lcardko6r@treble>
+References: <20220318105140.43914-1-sv@linux.ibm.com>
+ <20220318105140.43914-4-sv@linux.ibm.com>
+ <YjR6kHq4c/rjCTpr@hirez.programming.kicks-ass.net>
+ <0b55f122-4760-c1ba-840a-0911cefec2ad@csgroup.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0b55f122-4760-c1ba-840a-0911cefec2ad@csgroup.eu>
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is to accommodate support for field decoding, which splits the top
-and the bottom reference into the reference list.
+On Sun, Mar 27, 2022 at 09:09:20AM +0000, Christophe Leroy wrote:
+> Second point is the endianess and 32/64 selection, especially when 
+> crossbuilding. There is already some stuff regarding endianess based on 
+> bswap_if_needed() but that's based on constant selection at build time 
+> and I couldn't find an easy way to set it conditionaly based on the 
+> target being built.
+>
+> Regarding 32/64 selection, there is almost nothing, it's based on using 
+> type 'long' which means that at the time being the target and the build 
+> platform must both be 32 bits or 64 bits.
+> 
+> For both cases (endianess and 32/64) I think the solution should 
+> probably be to start with the fileformat of the object file being 
+> reworked by objtool.
 
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
----
- drivers/media/v4l2-core/v4l2-h264.c        | 6 +++---
- drivers/staging/media/hantro/hantro_hw.h   | 6 +++---
- drivers/staging/media/rkvdec/rkvdec-h264.c | 6 +++---
- include/media/v4l2-h264.h                  | 8 ++++----
- 4 files changed, 13 insertions(+), 13 deletions(-)
+Do we really need to detect the endianness/bitness at runtime?  Objtool
+is built with the kernel, why not just build-in the same target
+assumptions as the kernel itself?
 
-diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
-index 0618c6f52214..8d750ee69e74 100644
---- a/drivers/media/v4l2-core/v4l2-h264.c
-+++ b/drivers/media/v4l2-core/v4l2-h264.c
-@@ -210,7 +210,7 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
-  * v4l2_h264_build_p_ref_list() - Build the P reference list
-  *
-  * @builder: reference list builder context
-- * @reflist: 16 sized array used to store the P reference list. Each entry
-+ * @reflist: 32 sized array used to store the P reference list. Each entry
-  *	     is a v4l2_h264_reference structure
-  *
-  * This functions builds the P reference lists. This procedure is describe in
-@@ -233,9 +233,9 @@ EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
-  * v4l2_h264_build_b_ref_lists() - Build the B0/B1 reference lists
-  *
-  * @builder: reference list builder context
-- * @b0_reflist: 16 sized array used to store the B0 reference list. Each entry
-+ * @b0_reflist: 32 sized array used to store the B0 reference list. Each entry
-  *		is a v4l2_h264_reference structure
-- * @b1_reflist: 16 sized array used to store the B1 reference list. Each entry
-+ * @b1_reflist: 32 sized array used to store the B1 reference list. Each entry
-  *		is a v4l2_h264_reference structure
-  *
-  * This functions builds the B0/B1 reference lists. This procedure is described
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 2bc6b8f088f5..292aaaabaf24 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -69,9 +69,9 @@ struct hantro_h264_dec_ctrls {
-  * @b1:		B1 reflist
-  */
- struct hantro_h264_dec_reflists {
--	struct v4l2_h264_reference p[HANTRO_H264_DPB_SIZE];
--	struct v4l2_h264_reference b0[HANTRO_H264_DPB_SIZE];
--	struct v4l2_h264_reference b1[HANTRO_H264_DPB_SIZE];
-+	struct v4l2_h264_reference p[V4L2_H264_REF_LIST_LEN];
-+	struct v4l2_h264_reference b0[V4L2_H264_REF_LIST_LEN];
-+	struct v4l2_h264_reference b1[V4L2_H264_REF_LIST_LEN];
- };
- 
- /**
-diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-index 3c7f3d87fab4..dff89732ddd0 100644
---- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -100,9 +100,9 @@ struct rkvdec_h264_priv_tbl {
- #define RKVDEC_H264_DPB_SIZE 16
- 
- struct rkvdec_h264_reflists {
--	struct v4l2_h264_reference p[RKVDEC_H264_DPB_SIZE];
--	struct v4l2_h264_reference b0[RKVDEC_H264_DPB_SIZE];
--	struct v4l2_h264_reference b1[RKVDEC_H264_DPB_SIZE];
-+	struct v4l2_h264_reference p[V4L2_H264_REF_LIST_LEN];
-+	struct v4l2_h264_reference b0[V4L2_H264_REF_LIST_LEN];
-+	struct v4l2_h264_reference b1[V4L2_H264_REF_LIST_LEN];
- 	u8 num_valid;
- };
- 
-diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
-index ef9a894e3c32..e282fb16ac58 100644
---- a/include/media/v4l2-h264.h
-+++ b/include/media/v4l2-h264.h
-@@ -37,7 +37,7 @@ struct v4l2_h264_reflist_builder {
- 		u16 longterm : 1;
- 	} refs[V4L2_H264_NUM_DPB_ENTRIES];
- 	s32 cur_pic_order_count;
--	struct v4l2_h264_reference unordered_reflist[V4L2_H264_NUM_DPB_ENTRIES];
-+	struct v4l2_h264_reference unordered_reflist[V4L2_H264_REF_LIST_LEN];
- 	u8 num_valid;
- };
- 
-@@ -51,9 +51,9 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
-  * v4l2_h264_build_b_ref_lists() - Build the B0/B1 reference lists
-  *
-  * @builder: reference list builder context
-- * @b0_reflist: 16 sized array used to store the B0 reference list. Each entry
-+ * @b0_reflist: 32 sized array used to store the B0 reference list. Each entry
-  *		is a v4l2_h264_reference structure
-- * @b1_reflist: 16 sized array used to store the B1 reference list. Each entry
-+ * @b1_reflist: 32 sized array used to store the B1 reference list. Each entry
-  *		is a v4l2_h264_reference structure
-  *
-  * This functions builds the B0/B1 reference lists. This procedure is described
-@@ -70,7 +70,7 @@ v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
-  * v4l2_h264_build_p_ref_list() - Build the P reference list
-  *
-  * @builder: reference list builder context
-- * @reflist: 16 sized array used to store the P reference list. Each entry
-+ * @reflist: 32 sized array used to store the P reference list. Each entry
-  *	     is a v4l2_h264_reference structure
-  *
-  * This functions builds the P reference lists. This procedure is describe in
+> What are current works in progress on objtool ? Should I wait Josh's 
+> changes before starting looking at all this ? Should I wait for anything 
+> else ?
+
+I'm not making any major changes to the code, just shuffling things
+around to make the interface more modular.  I hope to have something
+soon (this week).  Peter recently added a big feature (Intel IBT) which
+is already in -next.
+
+Contributions are welcome, with the understanding that you'll help
+maintain it ;-)
+
+Some years ago Kamalesh Babulal had a prototype of objtool for ppc64le
+which did the full stack validation.  I'm not sure what ever became of
+that.
+
+FWIW, there have been some objtool patches for arm64 stack validation,
+but the arm64 maintainers have been hesitant to get on board with
+objtool, as it brings a certain maintenance burden.  Especially for the
+full stack validation and ORC unwinder.  But if you only want inline
+static calls and/or mcount then it'd probably be much easier to
+maintain.
+
 -- 
-2.34.1
+Josh
 

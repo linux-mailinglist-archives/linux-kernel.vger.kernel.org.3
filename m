@@ -2,127 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 431854EA3EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 02:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5519A4EA3EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 02:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbiC1XzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 19:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
+        id S231215AbiC1X55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 19:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiC1XzG (ORCPT
+        with ESMTP id S231213AbiC1X5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 19:55:06 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AC5134
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 16:53:22 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:48432)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nYzAm-00FuPV-4Y; Mon, 28 Mar 2022 17:53:20 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:41522 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nYzAk-000IZk-5q; Mon, 28 Mar 2022 17:53:19 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     <akpm@linux-foundation.org>, <hughd@google.com>,
-        <legion@kernel.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, Miaohe Lin <linmiaohe@huawei.com>
-References: <20220322080918.59861-1-linmiaohe@huawei.com>
-Date:   Mon, 28 Mar 2022 18:52:43 -0500
-In-Reply-To: <20220322080918.59861-1-linmiaohe@huawei.com> (Miaohe Lin's
-        message of "Tue, 22 Mar 2022 16:09:18 +0800")
-Message-ID: <87ilrxprck.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 28 Mar 2022 19:57:54 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF15548E46
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 16:56:11 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so1043115pjf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 16:56:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=R5oHCy312DV02dgL2mbxc6XsFyRp35/nzV9uAHuDVL8=;
+        b=VdeMGDhBvYtE+tVfMkspuND3/7DIoOMPUCVTDtTlEioK4Zp5hqbOfTFDiZt5K44ayS
+         fnvlBEdPsoSL7x/DbpE7cgK+SfpEKdBSB73Z0G459wlOPyvqyXpjszHn5jZxV954Y1m+
+         kGEdjSVuItAQwgX97aOEemfU1wnkxTdxglSoMzxoatlN8MoeBrVjAW62nJb0oTxRhDev
+         ZbdqY4WeMFHrp8BIIgBZ/dpZ8uGNofipq0r54d/7/2DNqRhUnOG6G0byQfKsrs8taS9d
+         UJB9bfRxpxBlPxluUE6silYECHfQnTGdtWDbmLuSXWXNy9ykNzkceeJBNRFaESkJx2jL
+         vn/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=R5oHCy312DV02dgL2mbxc6XsFyRp35/nzV9uAHuDVL8=;
+        b=hko7ytpVhJrdKaGZxZIqJsH8lavNHvjkCOxPM0/Wqc4KeA+6merixoIhdqKTTsMZfP
+         mxpJOnEHX8SRTQ272q3w/ldMJN6ffryX1oH8Uu9k7vw9svOH4KOwoRr+1WctnDnT9XUA
+         NaajRoe2S5nHPgrsvV2703s1Z7DhdyPmGEVPMOXBybOo/W3Cn+Oi/z50qCKaa7F4K8gt
+         GO77PSyzFh9gJWAHl+Mv8HayclfnOKTMxzYOsT2WsSY6XmGOo+BRfwIxyr+q7jZoKkje
+         PRpga+NzeLDtUc+lVuBuSMbU3XWChglI18qzYG8K0Il+AFrZI37P/AVaZL3lHyExQLy/
+         VlRg==
+X-Gm-Message-State: AOAM531VoFASr8OpsBOeXtdZd5bPdjgBtIvMoj6VZa4OBj0rVY83NrYZ
+        6id212vyiGqugIDsuI/ea9MdIQKVHZx1cQ==
+X-Google-Smtp-Source: ABdhPJwWwKwcbx4mWnZcS0vNwCcr+CGjSoNFeM3hP68m739AGvq4ty6tV34XjWMljTYtL4iWZ09X6A==
+X-Received: by 2002:a17:90a:889:b0:1c9:8baa:3eeb with SMTP id v9-20020a17090a088900b001c98baa3eebmr1612687pjc.44.1648511771099;
+        Mon, 28 Mar 2022 16:56:11 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id p128-20020a625b86000000b004fa666a1327sm16920043pfb.102.2022.03.28.16.56.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 16:56:10 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 23:56:06 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: Re: [PATCH v5 08/13] KVM: Use memfile_pfn_ops to obtain pfn for
+ private pages
+Message-ID: <YkJLFu98hZOvTSrL@google.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-9-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nYzAk-000IZk-5q;;;mid=<87ilrxprck.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18Nb6UePjBpVKyMHCsWjDtNwSqTFKHXX5Q=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310140911.50924-9-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Linus Torvalds <torvalds@linux-foundation.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1416 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 15 (1.1%), b_tie_ro: 13 (0.9%), parse: 1.10
-        (0.1%), extract_message_metadata: 18 (1.3%), get_uri_detail_list: 2.9
-        (0.2%), tests_pri_-1000: 15 (1.0%), tests_pri_-950: 1.36 (0.1%),
-        tests_pri_-900: 1.21 (0.1%), tests_pri_-90: 96 (6.8%), check_bayes: 93
-        (6.5%), b_tokenize: 6 (0.4%), b_tok_get_all: 9 (0.7%), b_comp_prob:
-        2.6 (0.2%), b_tok_touch_all: 69 (4.9%), b_finish: 1.39 (0.1%),
-        tests_pri_0: 1254 (88.6%), check_dkim_signature: 0.47 (0.0%),
-        check_dkim_adsp: 3.7 (0.3%), poll_dns_idle: 1.82 (0.1%), tests_pri_10:
-        2.5 (0.2%), tests_pri_500: 8 (0.6%), rewrite_mail: 0.00 (0.0%)
-Subject: [GIT PULL] ucounts: Fix shm ucounts for v5.18
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 10, 2022, Chao Peng wrote:
+> @@ -2217,4 +2220,34 @@ static inline void kvm_handle_signal_exit(struct kvm_vcpu *vcpu)
+>  /* Max number of entries allowed for each kvm dirty ring */
+>  #define  KVM_DIRTY_RING_MAX_ENTRIES  65536
+>  
+> +#ifdef CONFIG_MEMFILE_NOTIFIER
+> +static inline long kvm_memfile_get_pfn(struct kvm_memory_slot *slot, gfn_t gfn,
+> +				       int *order)
+> +{
+> +	pgoff_t index = gfn - slot->base_gfn +
+> +			(slot->private_offset >> PAGE_SHIFT);
 
-Linus,
+This is broken for 32-bit kernels, where gfn_t is a 64-bit value but pgoff_t is a
+32-bit value.  There's no reason to support this for 32-bit kernels, so...
 
-Please pull the ucount-rlimit-for-v5.18 tag from the git tree:
+The easiest fix, and likely most maintainable for other code too, would be to
+add a dedicated CONFIG for private memory, and then have KVM check that for all
+the memfile stuff.  x86 can then select it only for 64-bit kernels, and in turn
+select MEMFILE_NOTIFIER iff private memory is supported.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ucount-rlimit-for-v5.18
+diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+index ca7b2a6a452a..ee9c8c155300 100644
+--- a/arch/x86/kvm/Kconfig
++++ b/arch/x86/kvm/Kconfig
+@@ -48,7 +48,9 @@ config KVM
+        select SRCU
+        select INTERVAL_TREE
+        select HAVE_KVM_PM_NOTIFIER if PM
+-       select MEMFILE_NOTIFIER
++       select HAVE_KVM_PRIVATE_MEM if X86_64
++       select MEMFILE_NOTIFIER if HAVE_KVM_PRIVATE_MEM
++
+        help
+          Support hosting fully virtualized guest machines using hardware
+          virtualization extensions.  You will need a fairly recent
 
-  HEAD: e97824ff663ce3509fe040431c713182c2f058b1 mm/mlock: fix two bugs in user_shm_lock()
+And in addition to replacing checks on CONFIG_MEMFILE_NOTIFIER, the probing of
+whether or not KVM_MEM_PRIVATE is allowed can be:
 
-From: Miaohe Lin <linmiaohe@huawei.com>
-Date: Tue, 22 Mar 2022 16:09:18 +0800
-Subject: [PATCH] mm/mlock: fix two bugs in user_shm_lock()
+@@ -1499,23 +1499,19 @@ static void kvm_replace_memslot(struct kvm *kvm,
+        }
+ }
 
-user_shm_lock forgets to set allowed to 0 when get_ucounts fails. So the
-later user_shm_unlock might do the extra dec_rlimit_ucounts. Also in the
-RLIM_INFINITY case, user_shm_lock will success regardless of the value of
-memlock where memblock == LONG_MAX && !capable(CAP_IPC_LOCK) should fail.
-Fix all of these by changing the code to leave lock_limit at ULONG_MAX aka
-RLIM_INFINITY, leave "allowed" initialized to 0 and remove the special case
-of RLIM_INFINITY as nothing can be greater than ULONG_MAX.
+-bool __weak kvm_arch_private_memory_supported(struct kvm *kvm)
+-{
+-       return false;
+-}
+-
+ static int check_memory_region_flags(struct kvm *kvm,
+                                const struct kvm_userspace_memory_region *mem)
+ {
+        u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
 
-Credit goes to Eric W. Biederman for proposing simplifying the code and
-thus catching the later bug.
+-       if (kvm_arch_private_memory_supported(kvm))
+-               valid_flags |= KVM_MEM_PRIVATE;
+-
+ #ifdef __KVM_HAVE_READONLY_MEM
+        valid_flags |= KVM_MEM_READONLY;
+ #endif
 
-Fixes: d7c9e99aee48 ("Reimplement RLIMIT_MEMLOCK on top of ucounts")
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-Cc: stable@vger.kernel.org
-v1: https://lkml.kernel.org/r/20220310132417.41189-1-linmiaohe@huawei.com
-v2: https://lkml.kernel.org/r/20220314064039.62972-1-linmiaohe@huawei.com
-Link: https://lkml.kernel.org/r/20220322080918.59861-1-linmiaohe@huawei.com
-Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
----
- mm/mlock.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
++#ifdef CONFIG_KVM_HAVE_PRIVATE_MEM
++       valid_flags |= KVM_MEM_PRIVATE;
++#endif
++
+        if (mem->flags & ~valid_flags)
+                return -EINVAL;
 
-diff --git a/mm/mlock.c b/mm/mlock.c
-index 25934e7db3e1..37f969ec68fa 100644
---- a/mm/mlock.c
-+++ b/mm/mlock.c
-@@ -827,13 +827,12 @@ int user_shm_lock(size_t size, struct ucounts *ucounts)
- 
- 	locked = (size + PAGE_SIZE - 1) >> PAGE_SHIFT;
- 	lock_limit = rlimit(RLIMIT_MEMLOCK);
--	if (lock_limit == RLIM_INFINITY)
--		allowed = 1;
--	lock_limit >>= PAGE_SHIFT;
-+	if (lock_limit != RLIM_INFINITY)
-+		lock_limit >>= PAGE_SHIFT;
- 	spin_lock(&shmlock_user_lock);
- 	memlock = inc_rlimit_ucounts(ucounts, UCOUNT_RLIMIT_MEMLOCK, locked);
- 
--	if (!allowed && (memlock == LONG_MAX || memlock > lock_limit) && !capable(CAP_IPC_LOCK)) {
-+	if ((memlock == LONG_MAX || memlock > lock_limit) && !capable(CAP_IPC_LOCK)) {
- 		dec_rlimit_ucounts(ucounts, UCOUNT_RLIMIT_MEMLOCK, locked);
- 		goto out;
- 	}
--- 
-2.29.2
+> +
+> +	return slot->pfn_ops->get_lock_pfn(file_inode(slot->private_file),
+> +					   index, order);
 
+In a similar vein, get_locK_pfn() shouldn't return a "long".  KVM likely won't use
+these APIs on 32-bit kernels, but that may not hold true for other subsystems, and
+this code is confusing and technically wrong.  The pfns for struct page squeeze
+into an unsigned long because PAE support is capped at 64gb, but casting to a
+signed long could result in a pfn with bit 31 set being misinterpreted as an error.
+
+Even returning an "unsigned long" for the pfn is wrong.  It "works" for the shmem
+code because shmem deals only with struct page, but it's technically wrong, especially
+since one of the selling points of this approach is that it can work without struct
+page.
+
+OUT params suck, but I don't see a better option than having the return value be
+0/-errno, with "pfn_t *pfn" for the resolved pfn.
+
+> +}
+> +
+> +static inline void kvm_memfile_put_pfn(struct kvm_memory_slot *slot,
+> +				       kvm_pfn_t pfn)
+> +{
+> +	slot->pfn_ops->put_unlock_pfn(pfn);
+> +}
+> +
+> +#else
+> +static inline long kvm_memfile_get_pfn(struct kvm_memory_slot *slot, gfn_t gfn,
+> +				       int *order)
+> +{
+
+This should be a WARN_ON() as its usage should be guarded by a KVM_PRIVATE_MEM
+check, and private memslots should be disallowed in this case.
+
+Alternatively, it might be a good idea to #ifdef these out entirely and not provide
+stubs.  That'd likely require a stub or two in arch code, but overall it might be
+less painful in the long run, e.g. would force us to more carefully consider the
+touch points for private memory.  Definitely not a requirement, just an idea.

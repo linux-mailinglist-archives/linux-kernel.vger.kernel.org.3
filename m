@@ -2,84 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8744E9815
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9AD4E981E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243193AbiC1N2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 09:28:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
+        id S243203AbiC1N3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 09:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236591AbiC1N2s (ORCPT
+        with ESMTP id S243186AbiC1N25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 09:28:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 108594CD72
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:27:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648474027;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aY3sYkjLuM3RlptN8oBvpx75lErsnsQyc7EGZhr+deA=;
-        b=Ejr1U0ONFqxLqr26VlaRoBAvxdvnbPVaWPffLZIJ45RvQOiUxAa96iR5NI5maPZiaYF0FZ
-        k0MWQTCpG95vLLQ60K3j8IjmqNlawlnuek6Ry1hjHkICCt4XslX9yprH/ZRQU9IxQwyxle
-        KmozbGBZrqtvTRVGdoE7W03Xnur+/hM=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-202-aW-x8SgaMnGoATNPLmmOcg-1; Mon, 28 Mar 2022 09:27:05 -0400
-X-MC-Unique: aW-x8SgaMnGoATNPLmmOcg-1
-Received: by mail-qt1-f197.google.com with SMTP id f22-20020ac840d6000000b002dd4d87de21so12127775qtm.23
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:27:05 -0700 (PDT)
+        Mon, 28 Mar 2022 09:28:57 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8163E5E762;
+        Mon, 28 Mar 2022 06:27:16 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id w25so16894899edi.11;
+        Mon, 28 Mar 2022 06:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=PJXGZlpigjTh6H9JMMa18nQ2vBOjy1Eubx2lpLSUCN4=;
+        b=P+Xah39W4u3PaDSAqPLufO5/H/K2gU2w/d2wFaGX2dVMn3ptW0NhEHGwzIdwRpRl/0
+         z1FSOdPVtx96dA5F7FeFqr/xM+E7aaBMX+Jrr4ATSqkcDJ6ByLiqoci0ikB8zblEPzRr
+         AgfVgEhpKJPDuyJpnsbMs0owuaCWieQCxknWTP5AisVim3x2oWgpvZspTe1rCjJ71yEY
+         k1XEvY3EOHeoQH9GnIpyLgDu0KacloeGCU6qlaS6y84XNz0XNDoFZ24ZhfgNJ0IJhypy
+         Itw+T2ZDe09wzSYH9OizIncV+P60OAXYspmhj2dwWHF5nT/b4EcIUOf1ZGBuS6ErOxv8
+         XOvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=aY3sYkjLuM3RlptN8oBvpx75lErsnsQyc7EGZhr+deA=;
-        b=dV5TULxY+2tfvKCI8SR9l1vjjzkCwKmfxYlvLwdj2lW4Q+QZSUimlobeDdRB2tGqEr
-         9xl3IdRGjf52uzRxr5bNBYSZi2kjuB0vpGarnFS8oquPDFxVNvowzCY4iba9kx5/BUWK
-         6NjfKQAgm5gkBUXYZUf7S7jjKwKEMg4zk/u/YEfmhWyNiEV/O2HAHvDyXWI6ESB6gZ87
-         vq+XHJfpp55YRqeFUE1vfDTG6HQVB7m3d9M/bsRwkdHLGl7xYpPi+Q/G/WTH+O50Mm41
-         /gAo3+wjBT4iG/v+kAnuCR2mqERlbAkkqA96ily4Njo9fFs9ZltF9UuLWOZzKtbD0lXP
-         1ryA==
-X-Gm-Message-State: AOAM531FqveZou8CP3Gm/d33oG0jYCNABe0a4PscPA3RfO9Uh2SoM4Os
-        ClGeJCRiEDrj5gd0QgKfQVTknQF+ma4DO8sEPhwVcZd08rtKtB9XzMah26jFvGMHY5hQouHKSuu
-        63y/YaiB9zhu6O11x/ihhxMpn
-X-Received: by 2002:ac8:7c4d:0:b0:2e1:fef5:e41f with SMTP id o13-20020ac87c4d000000b002e1fef5e41fmr21459110qtv.577.1648474024457;
-        Mon, 28 Mar 2022 06:27:04 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzdRi3nr6+vA/ALSykiqh7W/MIIzT9PdQHtKR62/0GYejwiyda6Z0HY6KyKlRs4hkHNeUHzoA==
-X-Received: by 2002:ac8:7c4d:0:b0:2e1:fef5:e41f with SMTP id o13-20020ac87c4d000000b002e1fef5e41fmr21459088qtv.577.1648474024223;
-        Mon, 28 Mar 2022 06:27:04 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id n8-20020ac85a08000000b002e06aa02021sm13072251qta.49.2022.03.28.06.27.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Mar 2022 06:27:03 -0700 (PDT)
-Subject: Re: [RESEND PATCH v1 1/8] firmware_loader: Clear data and size in
- fw_free_paged_buf
-To:     Russ Weight <russell.h.weight@intel.com>, mcgrof@kernel.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     lgoncalv@redhat.com, yilun.xu@intel.com, hao.wu@intel.com,
-        matthew.gerlach@intel.com, basheer.ahmed.muddebihal@intel.com,
-        tianfei.zhang@intel.com
-References: <20220323233331.155121-1-russell.h.weight@intel.com>
- <20220323233331.155121-2-russell.h.weight@intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <5ec3e671-53aa-b8cc-1360-c454f3db277d@redhat.com>
-Date:   Mon, 28 Mar 2022 06:27:01 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=PJXGZlpigjTh6H9JMMa18nQ2vBOjy1Eubx2lpLSUCN4=;
+        b=kwByqwyHsmgVDDXPEUBpuYWgXhcrIPFMA7ryqfL9ZyX5jmNIK9p/pLd10BBxV0sH/y
+         5+cayCHfcZd4B2GbB8lJamLC7vtXyKdVIUdEOTkEw/6JC/RdgiBL7UfG6Wstp4mhwvFc
+         s0cDiwH7/8dbURRbArn4WRHIb2+M6L6o4i8DI5Qo8H2g2CBpNW3OiK+1aSgpdI16dbUS
+         clgbY1izjuJ72lqaHVsWcwlZJDYDUEtryKZgYcspg1TfpwJSX7XAQy+w54jz4B7zc2wA
+         6MS+dkAQP60/sequTrK+5NC9AfCLx14j4Dv27JQAPybz5uRZEraq4P2x2m4vP7+2sZ16
+         AXfg==
+X-Gm-Message-State: AOAM531Pif7ptqV/rXgVy1sqKMokLrTxCaZqnrxa2V0Ap2A+H7zpdAhB
+        oI+38FkUwNXRJh0cQklj3ss=
+X-Google-Smtp-Source: ABdhPJzfZMouNxSUPChSrobO0DmZY1dpjyjoJXynXzykI+ox1dAeHmzyb365QAjutoruA3M7o01bCQ==
+X-Received: by 2002:a05:6402:27d0:b0:419:5184:58ae with SMTP id c16-20020a05640227d000b00419518458aemr16315076ede.314.1648474034597;
+        Mon, 28 Mar 2022 06:27:14 -0700 (PDT)
+Received: from Ansuel-xps.localdomain (93-42-69-170.ip85.fastwebnet.it. [93.42.69.170])
+        by smtp.gmail.com with ESMTPSA id y16-20020aa7d510000000b004197c1cec7dsm6986648edq.6.2022.03.28.06.27.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 06:27:14 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 15:27:13 +0200
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-omap@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org,
+        chrome-platform@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
+        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
+        linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org,
+        linux-unisoc@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-realtek-soc@lists.infradead.org
+Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
+Message-ID: <YkG3sQ3MDhVoW8l4@Ansuel-xps.localdomain>
+References: <20220328000915.15041-1-ansuelsmth@gmail.com>
+ <YkG2RPrtPaBNXb7a@latitude>
 MIME-Version: 1.0
-In-Reply-To: <20220323233331.155121-2-russell.h.weight@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YkG2RPrtPaBNXb7a@latitude>
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,
+        T_SCC_BODY_TEXT_LINE,WEIRD_QUOTING autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,38 +89,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 28, 2022 at 03:21:08PM +0200, Jonathan Neuschäfer wrote:
+> On Mon, Mar 28, 2022 at 02:09:14AM +0200, Ansuel Smith wrote:
+> > Hi,
+> > as the title say, the intention of this ""series"" is to finally categorize
+> > the ARM dts directory in subdirectory for each oem.
+> [...]
+> > [1] https://gist.github.com/Ansuel/47c49925ee7ef4b1dd035afc74679ab5
+> > [2] https://gist.github.com/Ansuel/19f61f1e583c49407ce35c10e770fbe0
+> 
+> Nice idea, thank you!
+> 
+> A few notes on categorization below.
+> 
+> 
+> >  create mode 100644 arch/arm/boot/dts/broadcom/Makefile
+> >  rename arch/arm/boot/dts/{ => broadcom}/bcm-cygnus-clock.dtsi (100%)
+> 
+> Or maybe bcm instead of broadcom. Not sure which is preferred by
+> Broadcom people.
+> 
 
-On 3/23/22 4:33 PM, Russ Weight wrote:
-> The fw_free_paged_buf() function resets the paged buffer information in
-> the fw_priv data structure. Additionally, clear the data and size members
-> of fw_priv in order to facilitate the reuse of fw_priv. This is being
-> done in preparation for enabling userspace to initiate multiple firmware
-> uploads using this sysfs interface.
+In arm64 they used broadcom so i assume the full name looks correct.
+
+> >  create mode 100644 arch/arm/boot/dts/dove/Makefile
+> >  rename arch/arm/boot/dts/{ => dove}/dove-cm-a510.dtsi (100%)
+> 
+> Arguably part of Marvell.
+> 
+> >  create mode 100644 arch/arm/boot/dts/edac/Makefile
+> >  rename arch/arm/boot/dts/{ => edac}/ecx-2000.dts (100%)
+> >  rename arch/arm/boot/dts/{ => edac}/ecx-common.dtsi (100%)
+> >  rename arch/arm/boot/dts/{ => edac}/highbank.dts (100%)
+> 
+> Why edac?
+> The most obvious name I can see here is calxeda.
+> 
+> >  create mode 100644 arch/arm/boot/dts/freescale/Makefile
+> 
+> Freescale has been part of NXP for a while, so it might make sense to
+> merge the freescale and nxp directories. I can't speak for
+> NXP-the-company, so that's just my view as a bystander.
+> 
+> >  create mode 100644 arch/arm/boot/dts/kirkwood/Makefile
+> 
+> The Kirkwood family should probably be sorted into Marvell.
+> 
+> >  create mode 100644 arch/arm/boot/dts/layerscape/Makefile
+> >  rename arch/arm/boot/dts/{ => layerscape}/ls1021a-moxa-uc-8410a.dts (100%)
+> >  rename arch/arm/boot/dts/{ => layerscape}/ls1021a-qds.dts (100%)
+> >  rename arch/arm/boot/dts/{ => layerscape}/ls1021a-tsn.dts (100%)
+> >  rename arch/arm/boot/dts/{ => layerscape}/ls1021a-twr.dts (100%)
+> >  rename arch/arm/boot/dts/{ => layerscape}/ls1021a.dtsi (100%)
+> 
+> The Layerscape family is part of Freescale/NXP.
+> 
+> >  create mode 120000 arch/arm/boot/dts/nxp/armv7-m.dtsi
+> 
+> armv7-m.dtsi is a bit confusing, because it contains a few devices at
+> fixed addresses, so it looks vendor-specific at a first glance into the
+> file. However, if it is actually as vendor-neutral as the name implies,
+> I think it should live dts/ directly, rather than in vendor
+> subdirectories.
 >
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> ---
-> v1:
->    - No change from RFC patch
-> ---
->   drivers/base/firmware_loader/main.c | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
-> index 94d1789a233e..2cc11d93753a 100644
-> --- a/drivers/base/firmware_loader/main.c
-> +++ b/drivers/base/firmware_loader/main.c
-> @@ -253,6 +253,8 @@ void fw_free_paged_buf(struct fw_priv *fw_priv)
 
-Why isn't a vfree needed or realloc done?
+Considering it's really just 3 binding IMHO it should be just dropped
+and merged in other dtsi... But lets not extend this too much.
+This is really just a simplic link and armv7-m.dtsi is placed in dts/
+I create links in each oem that includes it to skip any changes to the
+dts.
 
-Tom
+> >  rename arch/arm/boot/dts/{ => nxp}/lpc18xx.dtsi (100%)
+> 
+> Here we have the NXP LPCxxxx family, which is AFAIK unrelated to the
+> i.MX family (and thus the bulk of the Freescale legacy).
+> 
+> >  create mode 100644 arch/arm/boot/dts/vybrid/Makefile
+> 
+> Vybrid is another chip family of NXP, with a good deal of Freescale
+> legacy in it as evidenced by the "fsl," prefix in the devicetrees.
+> 
+> 
+> 
+> Thanks,
+> Jonathan
 
->   	fw_priv->pages = NULL;
->   	fw_priv->page_array_size = 0;
->   	fw_priv->nr_pages = 0;
-> +	fw_priv->data = NULL;
-> +	fw_priv->size = 0;
->   }
->   
->   int fw_grow_paged_buf(struct fw_priv *fw_priv, int pages_needed)
+Thx for the hint hope to get more comments about the dubious
+categorization about nxp and freescale.
 
+-- 
+	Ansuel

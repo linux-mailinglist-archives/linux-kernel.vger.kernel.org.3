@@ -2,88 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DD04E9934
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E21814E9936
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243742AbiC1OTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 10:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
+        id S243745AbiC1OUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 10:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbiC1OTl (ORCPT
+        with ESMTP id S234059AbiC1OUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 10:19:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6AC127B2E;
-        Mon, 28 Mar 2022 07:18:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 795EBB81120;
-        Mon, 28 Mar 2022 14:17:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D761C004DD;
-        Mon, 28 Mar 2022 14:17:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648477078;
-        bh=eaTXhf1qYpLaigtqnuzsS+jfI6S6R315R8J6y/idT9c=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=BMCIv86PYe9CKLSsXmv8emZs3/B+yfgoPHGYH5/GHBSHI5lPglIrQgmijWB4OwH+G
-         LYbghOBTe1O8BATYD89pzfQupCg+uNDVwGWuJnwkUzpDMp95ntNTr1V+u1mFyxdwql
-         Wo1JHynwfwvXV5u57uqzfciaOpplbrnIYoolu//CF/D3N8BLnNvL/gnpCyggIReF4O
-         p39ijz3fm+HlI+4BGcOL54Rib9SGiJ7T8hzNZZncaNd9cQMwKWg+wAJ9vk+zXh76lW
-         RRHhllS5bZDXIv2wqtAXT53Sbe/vw4OwqiYFOIWVN8QGOTfrOEx0wxwqp3q0Xcgt3U
-         rroUlAZd2Y4kg==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-Cc:     trix@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ath9k: initialize arrays at compile time
-References: <20220328130727.3090827-1-trix@redhat.com>
-        <877d8eyz61.fsf@kernel.org> <87lewu5fw7.fsf@toke.dk>
-Date:   Mon, 28 Mar 2022 17:17:53 +0300
-In-Reply-To: <87lewu5fw7.fsf@toke.dk> ("Toke \=\?utf-8\?Q\?H\=C3\=B8iland-J\?\=
- \=\?utf-8\?Q\?\=C3\=B8rgensen\=22's\?\= message of
-        "Mon, 28 Mar 2022 16:08:08 +0200")
-Message-ID: <87pmm6xisu.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Mon, 28 Mar 2022 10:20:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 871185DA67
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:19:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648477142;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MdCC2vq9cPXJuSNaiMrLPgmXV59Q9f2WNHJtMSehXOA=;
+        b=jE8Ab9w/nr0M+wzoBLuSpdsEP4i0h1UeLrWOPfHR0HMdYzavHhEsCdciVbGPx5GN9gUNeT
+        ZwqkYBbTsycIgSFe6I0IoghkwltwgI/4vK/eRkl7NxTyTPQSi+mLCjr8iEyXjJ2CVeIqUz
+        Tnp4g7NI/kZ/sz/dt3Hm3OFESfPPL6g=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-134-STCIvrdoOxW5eo8Q9DZp2Q-1; Mon, 28 Mar 2022 10:19:01 -0400
+X-MC-Unique: STCIvrdoOxW5eo8Q9DZp2Q-1
+Received: by mail-wr1-f70.google.com with SMTP id h33-20020adf9024000000b00203fcba8aadso4338852wrh.15
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:19:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=MdCC2vq9cPXJuSNaiMrLPgmXV59Q9f2WNHJtMSehXOA=;
+        b=7kINMV0pcAoVTDqHArCz1XN5oCc4Li7hmA0PSV43OtfW7SN4NrrGqb1BpgeBoak0SU
+         ZlW2tocYfXOxciOJ5VGl1i+sQ2pWLjdHT54hFqnla+DCoEDoUePudED5Yn8M/909SP9Q
+         JgvBV7ZozcqJPhcU4vIUsHW+El6B3YLOVZKciWIEuo++KstpAkBd/OTZCOcgxU+HBGE4
+         sHNL/rAaVe0TC9S88b5f2KviA0ZyywRasdrg1rNiQg44U8zpXNI0SvYvNXIEeqnxrvSS
+         Wbzt4WuHrMSv2FsIa8QKxTLXLb/CvLCo9KqOpX0LwI6wZIob/BaBXc6oZWDo7O0IflHM
+         7muA==
+X-Gm-Message-State: AOAM5333CKZDjTilMskYy4HaqJvxQsufbOIsevoM5JVqnWEt8UgSRycg
+        +cQwwQk7/mGzyDzPQmHQrhEfo2n86mWV0jyNl7zxvnVX/JsiHNscXrTitfdSkG5wEGoUJb1e+zg
+        bwkp/ajpqWVhUympWSfdTDArk
+X-Received: by 2002:a05:6000:15c7:b0:205:87a2:87bc with SMTP id y7-20020a05600015c700b0020587a287bcmr23267027wry.260.1648477139905;
+        Mon, 28 Mar 2022 07:18:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx8w6depzhTIUSmpGGv6Ed4U55mm4nqtTubVGFzw0jHjIXP1/XJspcPZTrwm3K2T94Ka0w6kQ==
+X-Received: by 2002:a05:6000:15c7:b0:205:87a2:87bc with SMTP id y7-20020a05600015c700b0020587a287bcmr23267009wry.260.1648477139677;
+        Mon, 28 Mar 2022 07:18:59 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:2200:50d1:ff5c:5927:203a? (p200300cbc704220050d1ff5c5927203a.dip0.t-ipconnect.de. [2003:cb:c704:2200:50d1:ff5c:5927:203a])
+        by smtp.gmail.com with ESMTPSA id u11-20020a056000038b00b00203e5c9aa09sm18374118wrf.27.2022.03.28.07.18.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 07:18:58 -0700 (PDT)
+Message-ID: <02f50037-46ce-ec08-63cb-e855694e69a5@redhat.com>
+Date:   Mon, 28 Mar 2022 16:18:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [RFC] locking/rwsem: dont wake up wwaiter in case of lock holder
+Content-Language: en-US
+To:     Hillf Danton <hdanton@sina.com>, Waiman Long <longman@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220326134059.4082-1-hdanton@sina.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220326134059.4082-1-hdanton@sina.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk> writes:
+On 26.03.22 14:40, Hillf Danton wrote:
+> In the slowpath of down for write, we bail out in case of signal received and
+> try to wake up any pending waiter but it makes no sense to wake up a write
+> waiter given any lock holder, either write or read.
 
-> Kalle Valo <kvalo@kernel.org> writes:
->
->> Hi,
->>
->> The content type on this email was weird:
->>
->> Content-Type: application/octet-stream; x-default=3Dtrue
->
-> Hmm, I get:
->
-> Content-Type: text/plain; charset=3D"US-ASCII"; x-default=3Dtrue
+But is handling this better really worth additional code and runtime
+checks? IOW, does this happen often enough that we actually care about
+optimizing this? I have no idea :)
 
-Heh, strange.
+> 
+> The RFC is do nothing for wwaiter if any lock holder present - they will fill
+> their duty at lock release time.
+> 
+> Only for thoughts now.
+> 
+> Hillf
+> 
+> --- x/kernel/locking/rwsem.c
+> +++ y/kernel/locking/rwsem.c
+> @@ -418,6 +418,8 @@ static void rwsem_mark_wake(struct rw_se
+>  	waiter = rwsem_first_waiter(sem);
+>  
+>  	if (waiter->type == RWSEM_WAITING_FOR_WRITE) {
+> +		if (RWSEM_LOCK_MASK & atomic_long_read(&sem->count))
+> +			return;
+>  		if (wake_type == RWSEM_WAKE_ANY) {
+>  			/*
+>  			 * Mark writer at the front of the queue for wakeup.
+> --
+> 
 
-> Patchwork seems to have parsed the content just fine, but it shows *no*
-> content-type, so maybe the issue is that the header is missing but
-> different systems repair that differently?
 
-Yeah, I'm using Gnus which is pretty exotic :) It might be choosing
-octet-stream for me.
+-- 
+Thanks,
 
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
+David / dhildenb
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes

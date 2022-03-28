@@ -2,101 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24E04E9960
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7293B4E9969
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243790AbiC1O0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 10:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
+        id S243332AbiC1O1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 10:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243782AbiC1O0a (ORCPT
+        with ESMTP id S230240AbiC1O1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 10:26:30 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0521EEDA;
-        Mon, 28 Mar 2022 07:24:49 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id t5so12784309pfg.4;
-        Mon, 28 Mar 2022 07:24:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=8cccm2I+4KQDgNNYHUDY+ywBQCQ8yCeJGNdK8lQVpuc=;
-        b=IYjEsW9/LupErXbLGzSBAZGPm9cCPnTKQASA/r1SBiEmUA2dpVFLdeb2ZVCXU44JL6
-         hHLbYKI8oltUMlu8JBtd5XdaOkpZLw8t0R0Qk3BOYb/57dhke2Zt8wOysMbre1rTno73
-         j685lnflFzMCJBuK5UOPaBwHUIH0X+jovn3Ui3ow2QunV10XwCrekr1QUQZ1TiSZQgDu
-         wJLk0ue9OLiv+vTTgkK7Zrzk+UAPK6IZKFZiK4Ct1eCvYmFyZU0lHdTzq8qfitd3o1c6
-         dCdnDHDxsWAlntgHnilGr5DWLF+np4WSww4TTMbnLwfn9G3yOB/M1RhzDW61qCU51JHH
-         7j8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=8cccm2I+4KQDgNNYHUDY+ywBQCQ8yCeJGNdK8lQVpuc=;
-        b=qBow+QEsFFsLeLO6VKOgAb0FfAItHZHsf0kr2kT/yotuxPP8qJCiv6F6/eBGD6571y
-         p8y6PgjoaVUglkrLH/jgpZ4snB29D4xphrja+Sty1la55VcN4tq5yIsLi4PPQjV1Zkm2
-         JEPg4vP1hljX1iuF8G3Pvrmgo9imD/n41stArNtOaKRIocIe62I1xSnMx3c0NcD06Idp
-         RL3tq+f6VVtF8QjAeEqTjvEmDKuXy1DiAqe4yZOQq1oOrWZDvy7ddFxUiNKYBNkjrb2m
-         0dw0JBvWLlEhPC54/Ac+HffddyoMZt2PfLwRKeKD39BIh4uJ/qm7maEPNgp+ldf5X2sn
-         Yqmw==
-X-Gm-Message-State: AOAM531BCAz2uvHeDaZIKx7pXD+cMPorGDUssP/wgHAKrrMc+moOuPgH
-        Ydy/HHje1vMvCSqwopRIwuy9CGgxPnQ=
-X-Google-Smtp-Source: ABdhPJwA5iDbCHTLuYfWrqG6KuF3HtRxj7SDoNnVwtk1l8KQzi1iaq7qdTa9xXCJo2ckFBal+JZfYQ==
-X-Received: by 2002:a05:6a00:2485:b0:4f6:b5c5:ee8e with SMTP id c5-20020a056a00248500b004f6b5c5ee8emr23446306pfv.21.1648477489258;
-        Mon, 28 Mar 2022 07:24:49 -0700 (PDT)
-Received: from mail.broadcom.net ([192.19.11.250])
-        by smtp.gmail.com with ESMTPSA id oo17-20020a17090b1c9100b001bf0ccc59c2sm21664206pjb.16.2022.03.28.07.24.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 07:24:48 -0700 (PDT)
-From:   Kamal Dasu <kdasu.kdev@gmail.com>
-To:     Kamal Dasu <kdasu.kdev@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Mark Brown <broonie@kernel.org>,
-        Boris Brezillon <bbrezillon@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: bcm-qspi: fix MSPI only access with bcm_qspi_exec_mem_op()
-Date:   Mon, 28 Mar 2022 10:24:42 -0400
-Message-Id: <20220328142442.7553-1-kdasu.kdev@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Mar 2022 10:27:15 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6451EECF
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:25:34 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:36834)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nYqJG-003OQK-D2; Mon, 28 Mar 2022 08:25:30 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:41434 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nYqJE-002YCW-Uq; Mon, 28 Mar 2022 08:25:30 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+References: <Ygq5aBB/qMQw6aP5@linutronix.de>
+Date:   Mon, 28 Mar 2022 09:25:06 -0500
+In-Reply-To: <Ygq5aBB/qMQw6aP5@linutronix.de> (Sebastian Andrzej Siewior's
+        message of "Mon, 14 Feb 2022 21:19:52 +0100")
+Message-ID: <8735j2xigt.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-XM-SPF: eid=1nYqJE-002YCW-Uq;;;mid=<8735j2xigt.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+DSbZxTMSwJ8KUAlJYxFOHmS2cVk8VvCo=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 876 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 11 (1.2%), b_tie_ro: 9 (1.1%), parse: 1.17 (0.1%),
+         extract_message_metadata: 18 (2.1%), get_uri_detail_list: 3.8 (0.4%),
+        tests_pri_-1000: 9 (1.0%), tests_pri_-950: 1.30 (0.1%),
+        tests_pri_-900: 1.10 (0.1%), tests_pri_-90: 153 (17.5%), check_bayes:
+        139 (15.9%), b_tokenize: 15 (1.7%), b_tok_get_all: 13 (1.5%),
+        b_comp_prob: 3.6 (0.4%), b_tok_touch_all: 102 (11.7%), b_finish: 1.04
+        (0.1%), tests_pri_0: 659 (75.2%), check_dkim_signature: 0.97 (0.1%),
+        check_dkim_adsp: 8 (0.9%), poll_dns_idle: 2.3 (0.3%), tests_pri_10:
+        2.7 (0.3%), tests_pri_500: 16 (1.8%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] signal/x86: Delay calling signals in atomic
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes case where MSPI controller is used to access spi-nor
-flash and BSPI block is not present.
+Sebastian Andrzej Siewior <bigeasy@linutronix.de> writes:
 
-Fixes: 5f195ee7d830 ("spi: bcm-qspi: Implement the spi_mem interface")
-Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
----
- drivers/spi/spi-bcm-qspi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> From: Oleg Nesterov <oleg@redhat.com>
+> Date: Tue, 14 Jul 2015 14:26:34 +0200
+>
+> On x86_64 we must disable preemption before we enable interrupts
+> for stack faults, int3 and debugging, because the current task is using
+> a per CPU debug stack defined by the IST. If we schedule out, another task
+> can come in and use the same stack and cause the stack to be corrupted
+> and crash the kernel on return.
+>
+> When CONFIG_PREEMPT_RT is enabled, spinlock_t locks become sleeping, and
+> one of these is the spin lock used in signal handling.
+>
+> Some of the debug code (int3) causes do_trap() to send a signal.
+> This function calls a spinlock_t lock that has been converted to a
+> sleeping lock. If this happens, the above issues with the corrupted
+> stack is possible.
+>
+> Instead of calling the signal right away, for PREEMPT_RT and x86,
+> the signal information is stored on the stacks task_struct and
+> TIF_NOTIFY_RESUME is set. Then on exit of the trap, the signal resume
+> code will send the signal when preemption is enabled.
 
-diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
-index 86c76211b3d3..cad2d55dcd3d 100644
---- a/drivers/spi/spi-bcm-qspi.c
-+++ b/drivers/spi/spi-bcm-qspi.c
-@@ -1205,7 +1205,7 @@ static int bcm_qspi_exec_mem_op(struct spi_mem *mem,
- 	addr = op->addr.val;
- 	len = op->data.nbytes;
- 
--	if (bcm_qspi_bspi_ver_three(qspi) == true) {
-+	if (has_bspi(qspi) && bcm_qspi_bspi_ver_three(qspi) == true) {
- 		/*
- 		 * The address coming into this function is a raw flash offset.
- 		 * But for BSPI <= V3, we need to convert it to a remapped BSPI
-@@ -1224,7 +1224,7 @@ static int bcm_qspi_exec_mem_op(struct spi_mem *mem,
- 	    len < 4)
- 		mspi_read = true;
- 
--	if (mspi_read)
-+	if (!has_bspi(qspi) || mspi_read)
- 		return bcm_qspi_mspi_exec_mem_op(spi, op);
- 
- 	ret = bcm_qspi_bspi_set_mode(qspi, op, 0);
--- 
-2.17.1
+Folks I really would have appreciated being copied on a signal handling
+patch like this.
 
+It is too late to nack, but I think this buggy patch deserved one.  Can
+we please fix PREEMPT_RT instead?
+
+As far as I can tell this violates all of rules from
+implementing/maintaining the RT kernel.  Instead of coming up with new
+abstractions that makes sense and can use by everyone this introduces
+a hack only for PREEMPT_RT and a pretty horrible one at that.
+
+This talks about int3, but the code looks for in_atomic().  Which means
+that essentially every call of force_sig will take this path as they
+almost all come from exception handlers.  It is the nature of signals
+that report on faults.  An exception is raised and the kernel reports it
+to userspace with a fault signal (aka force_sig_xxx).
+
+Further this code is buggy.  TIF_NOTIFY_RESUME is not the correct
+flag to set to enter into exit_to_usermode_loop.  TIF_NOTIFY_RESUME is
+about that happens after signal handling.  This very much needs to be
+TIF_SIGPENDING with recalc_sigpending and friends updated to know about
+"task->force_info".
+
+Does someone own this problem?  Can that person please fix this
+properly?
+
+I really don't think it is going to be maintainable for PREEMPT_RT to
+maintain a separate signal delivery path for faults from the rest of
+linux.
+
+
+Eric
+
+> [ rostedt: Switched from #ifdef CONFIG_PREEMPT_RT to
+>   ARCH_RT_DELAYS_SIGNAL_SEND and added comments to the code. ]
+> [bigeasy: Add on 32bit as per Yang Shi, minor rewording. ]
+>
+> Signed-off-by: Oleg Nesterov <oleg@redhat.com>
+> Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> ---
+>  arch/x86/include/asm/signal.h | 13 +++++++++++++
+>  include/linux/sched.h         |  3 +++
+>  kernel/entry/common.c         |  9 +++++++++
+>  kernel/signal.c               | 28 ++++++++++++++++++++++++++++
+>  4 files changed, 53 insertions(+)
+>
+> diff --git a/arch/x86/include/asm/signal.h b/arch/x86/include/asm/signal.h
+> index 2dfb5fea13aff..fc03f4f7ed84c 100644
+> --- a/arch/x86/include/asm/signal.h
+> +++ b/arch/x86/include/asm/signal.h
+> @@ -28,6 +28,19 @@ typedef struct {
+>  #define SA_IA32_ABI	0x02000000u
+>  #define SA_X32_ABI	0x01000000u
+>  
+> +/*
+> + * Because some traps use the IST stack, we must keep preemption
+> + * disabled while calling do_trap(), but do_trap() may call
+> + * force_sig_info() which will grab the signal spin_locks for the
+> + * task, which in PREEMPT_RT are mutexes.  By defining
+> + * ARCH_RT_DELAYS_SIGNAL_SEND the force_sig_info() will set
+> + * TIF_NOTIFY_RESUME and set up the signal to be sent on exit of the
+> + * trap.
+> + */
+> +#if defined(CONFIG_PREEMPT_RT)
+> +#define ARCH_RT_DELAYS_SIGNAL_SEND
+> +#endif
+> +
+>  #ifndef CONFIG_COMPAT
+>  #define compat_sigset_t compat_sigset_t
+>  typedef sigset_t compat_sigset_t;
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 75ba8aa60248b..0514237cee3fc 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -1087,6 +1087,9 @@ struct task_struct {
+>  	/* Restored if set_restore_sigmask() was used: */
+>  	sigset_t			saved_sigmask;
+>  	struct sigpending		pending;
+> +#ifdef CONFIG_PREEMPT_RT
+> +	struct				kernel_siginfo forced_info;
+> +#endif
+>  	unsigned long			sas_ss_sp;
+>  	size_t				sas_ss_size;
+>  	unsigned int			sas_ss_flags;
+> diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+> index bad713684c2e3..216dbf46e05f5 100644
+> --- a/kernel/entry/common.c
+> +++ b/kernel/entry/common.c
+> @@ -162,6 +162,15 @@ static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
+>  		if (ti_work & _TIF_NEED_RESCHED)
+>  			schedule();
+>  
+> +#ifdef ARCH_RT_DELAYS_SIGNAL_SEND
+> +		if (unlikely(current->forced_info.si_signo)) {
+> +			struct task_struct *t = current;
+> +
+> +			force_sig_info(&t->forced_info);
+> +			t->forced_info.si_signo = 0;
+> +		}
+> +#endif
+> +
+>  		if (ti_work & _TIF_UPROBE)
+>  			uprobe_notify_resume(regs);
+>  
+> diff --git a/kernel/signal.c b/kernel/signal.c
+> index 9b04631acde8f..cb2b28c17c0a5 100644
+> --- a/kernel/signal.c
+> +++ b/kernel/signal.c
+> @@ -1327,6 +1327,34 @@ force_sig_info_to_task(struct kernel_siginfo *info, struct task_struct *t,
+>  	struct k_sigaction *action;
+>  	int sig = info->si_signo;
+>  
+> +	/*
+> +	 * On some archs, PREEMPT_RT has to delay sending a signal from a trap
+> +	 * since it can not enable preemption, and the signal code's spin_locks
+> +	 * turn into mutexes. Instead, it must set TIF_NOTIFY_RESUME which will
+> +	 * send the signal on exit of the trap.
+> +	 */
+> +#ifdef ARCH_RT_DELAYS_SIGNAL_SEND
+> +	if (in_atomic()) {
+> +		struct task_struct *t = current;
+> +
+> +		if (WARN_ON_ONCE(t->forced_info.si_signo))
+> +			return 0;
+> +
+> +		if (is_si_special(info)) {
+> +			WARN_ON_ONCE(info != SEND_SIG_PRIV);
+> +			t->forced_info.si_signo = info->si_signo;
+> +			t->forced_info.si_errno = 0;
+> +			t->forced_info.si_code = SI_KERNEL;
+> +			t->forced_info.si_pid = 0;
+> +			t->forced_info.si_uid = 0;
+> +		} else {
+> +			t->forced_info = *info;
+> +		}
+> +
+> +		set_tsk_thread_flag(t, TIF_NOTIFY_RESUME);
+> +		return 0;
+> +	}
+> +#endif
+>  	spin_lock_irqsave(&t->sighand->siglock, flags);
+>  	action = &t->sighand->action[sig-1];
+>  	ignored = action->sa.sa_handler == SIG_IGN;

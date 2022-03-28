@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FF74E8C94
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 05:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BD14E8C97
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 05:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237798AbiC1D0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 23:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
+        id S237804AbiC1D2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 23:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232900AbiC1D0W (ORCPT
+        with ESMTP id S230218AbiC1D2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 23:26:22 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850D54757F;
-        Sun, 27 Mar 2022 20:24:42 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id k14so11240784pga.0;
-        Sun, 27 Mar 2022 20:24:42 -0700 (PDT)
+        Sun, 27 Mar 2022 23:28:35 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7C74757F;
+        Sun, 27 Mar 2022 20:26:56 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id 85so10443454qkm.9;
+        Sun, 27 Mar 2022 20:26:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=StWsfRvIf8NP0BN7pKBIBz96vmouHPlYLHze1UYeSYc=;
-        b=CC7aF5L1RaStECNMFPD/eWFADbvMNwuUsWDyscAx6IFh2rlYRzcs8ssb9V8oPEfkpz
-         AbTc3eS851kHxcR2sN8SfQ1xhIRhrPs34DDip2JZNmjRZqOJOuJiMRDkzAOGCrZDdAp2
-         xOyMhT/7By00c/ZWVePvdQ6EmvE4WYw2ZK/hPiyxXEwawozk+SI1t+7ZlibwRooOe+GV
-         N3l4xIVeEPwrb89nho+EMeD2cH4gU421/l3ImDa03nZPLLZdrsmyHpzQohBaLSrOu7cd
-         k/mEr1yFABxbiH18zk9yZfNjBrMs27gz79doBw1B8U2OeuOXFXypsMTypRmcGUZzwkkr
-         QgRw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ombNCD2E1kEOXTkZKzTdQw3vNkWsQV7mKFpn1lZyTEI=;
+        b=SA+QodpcnT05y1Q3fra3dhwNhB5oa8XXxXp177wHxv62DDPf0lxVNfC3nqX0y10d4P
+         ScPYBqJBgRhxEv4kt94nQ2yCx9UOq3zmEp9vSN+lzrsD2Gba8fEJrIUZk9sX3OrFAy6r
+         F5a9hsDS4xxdDIyWp3edvlmnSzLg14fI4fovUHRo9oBNtc56VUzZuGlLezuINbaYE+rb
+         CYPPJ3AQos+lJMtwCQEnIKAQ3y7WovNkOidmZb0z8xs0xcBNYITH+L8s9/eVDFAKO4I0
+         CzKFNeHNFf6gGH4htfL8HqAx3xE7wEpxwtf8T96qO3W/EI0vrc5VRBlt+Q0DoY943cBM
+         Pd+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=StWsfRvIf8NP0BN7pKBIBz96vmouHPlYLHze1UYeSYc=;
-        b=vtlyG260/IvA9I8+F5303GUwVIZdXNJwEcvPyBqLkTJu1kG38wvsjOZbeswMEaL3xF
-         QnOX5gfSanObXaDxRwo1+AYu0MWvPoDFhqnPKgpeYc7iREzy/8TPhZVZDPUATsMxccKJ
-         pRxgDeNTWD/GXxClmEpUiFHNOkRhWFZIV81/pdncqiJt85Dh/urcOcNMfNyfLXT9GHi+
-         /SvZR4tgnw87zOk+i0igjw2SBMp9iZGisRclvm9eUzGfMxlODlnSO0lbDvAUyQXaH//n
-         zQCWuTxGxkSJ/ZSxLroSm6sdwVRMn2B0MSsHgeUifh4jYNdH29h9sPQQWq0ousBYNt4m
-         50IA==
-X-Gm-Message-State: AOAM530rdmMhBSAHkSZvIsrfwlKIy2o3oXZkNgxPGMeo7W2BtAFb/gQD
-        Vkl26rBIHqNQmCelB0BjvUA=
-X-Google-Smtp-Source: ABdhPJwld6WMH1Hvr/UgfeTGgR05knyPDtXUgWcA2pvpoKH1lzmByFdZDqXnQv+wruFxRBkbNgAHyA==
-X-Received: by 2002:a65:4cc9:0:b0:381:4472:bbb4 with SMTP id n9-20020a654cc9000000b003814472bbb4mr8670465pgt.10.1648437881937;
-        Sun, 27 Mar 2022 20:24:41 -0700 (PDT)
-Received: from ubuntu.huawei.com ([119.3.119.18])
-        by smtp.googlemail.com with ESMTPSA id r4-20020a638f44000000b0038105776895sm11225763pgn.76.2022.03.27.20.24.37
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ombNCD2E1kEOXTkZKzTdQw3vNkWsQV7mKFpn1lZyTEI=;
+        b=TN5fmP5Pthr1CPGB1vApnAcwIBhic3cLj5IO8COlTRomFNq/z7IHyQ9Mhp2wx27Fap
+         HfxrtrkMSSWosGKS8ONpKfYOrockGYAqZx82M3z9e9g1+ukK1V8hBnJP8EeCBFVJTKWo
+         hfRN0jGK1VcKAb28/cHCKju79gCoTAvmxTBca2hEe37JYJlcqj+wS9l4FD1SW6nSwh7n
+         SUbCCtvQ3v2u8ZXloAgtcNqkmoeWxkAUifkMmksV5FMItbxpF8icvh/kNjh7spXL20vk
+         m+wb99bS8yCMOfzQPhBbq0/tW/X8uXTfF8W3GXk9eryVl04fHOrfq7CeTM1EW8ixjkG8
+         7jhg==
+X-Gm-Message-State: AOAM532+UBSRiOlCcyjcnIHeXnoWjWCyj4s9jYV9MGSXKTEP9DJYVHBE
+        pfep734rzFbHzb8vGnzL4RY=
+X-Google-Smtp-Source: ABdhPJy/L7PFrjNbdwwgtuKWMOX1nrqMWZtt0khYNk3KIrOLULqso6Jmx6gi3k1y1UqBfjdWvTv2Vw==
+X-Received: by 2002:a05:620a:2904:b0:67d:db5a:b27f with SMTP id m4-20020a05620a290400b0067ddb5ab27fmr13451964qkp.529.1648438014399;
+        Sun, 27 Mar 2022 20:26:54 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id s15-20020a05620a29cf00b00680ca4b3755sm2533193qkp.119.2022.03.27.20.26.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Mar 2022 20:24:41 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     f.fainelli@gmail.com
-Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [PATCH] net: dsa: bcm_sf2_cfp: fix an incorrect NULL check on list iterator
-Date:   Mon, 28 Mar 2022 11:24:31 +0800
-Message-Id: <20220328032431.22538-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Sun, 27 Mar 2022 20:26:53 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     djwong@kernel.org
+Cc:     linux-xfs@vger.kernel.org, dchinner@redhat.com,
+        chandan.babu@oracle.com, bfoster@redhat.com,
+        allison.henderson@oracle.com, lv.ruyi@zte.com.cn,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] fs: xfs: add NULL pointer check
+Date:   Mon, 28 Mar 2022 03:26:42 +0000
+Message-Id: <20220328032642.2371596-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -66,46 +71,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bug is here:
-	return rule;
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-The list iterator value 'rule' will *always* be set and non-NULL
-by list_for_each_entry(), so it is incorrect to assume that the
-iterator value will be NULL if the list is empty or no element
-is found.
+kmem_zalloc() is a memory allocation function which can return NULL when
+some internal memory errors happen. It is safer to check NULL pointer.
 
-To fix the bug, return 'rule' when found, otherwise return NULL.
-
-Fixes: ae7a5aff783c7 ("net: dsa: bcm_sf2: Keep copy of inserted rules")
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
 ---
- drivers/net/dsa/bcm_sf2_cfp.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/xfs/libxfs/xfs_attr_leaf.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/net/dsa/bcm_sf2_cfp.c b/drivers/net/dsa/bcm_sf2_cfp.c
-index a7e2fcf2df2c..edbe5e7f1cb6 100644
---- a/drivers/net/dsa/bcm_sf2_cfp.c
-+++ b/drivers/net/dsa/bcm_sf2_cfp.c
-@@ -567,14 +567,14 @@ static void bcm_sf2_cfp_slice_ipv6(struct bcm_sf2_priv *priv,
- static struct cfp_rule *bcm_sf2_cfp_rule_find(struct bcm_sf2_priv *priv,
- 					      int port, u32 location)
- {
--	struct cfp_rule *rule = NULL;
-+	struct cfp_rule *rule;
+diff --git a/fs/xfs/libxfs/xfs_attr_leaf.c b/fs/xfs/libxfs/xfs_attr_leaf.c
+index 014daa8c542d..e6694f49f563 100644
+--- a/fs/xfs/libxfs/xfs_attr_leaf.c
++++ b/fs/xfs/libxfs/xfs_attr_leaf.c
+@@ -1571,6 +1571,8 @@ xfs_attr3_leaf_compact(
+ 	trace_xfs_attr_leaf_compact(args);
  
- 	list_for_each_entry(rule, &priv->cfp.rules_list, next) {
- 		if (rule->port == port && rule->fs.location == location)
--			break;
-+			return rule;
- 	}
+ 	tmpbuffer = kmem_alloc(args->geo->blksize, 0);
++	if (!tmpbuffer)
++		return;
+ 	memcpy(tmpbuffer, bp->b_addr, args->geo->blksize);
+ 	memset(bp->b_addr, 0, args->geo->blksize);
+ 	leaf_src = (xfs_attr_leafblock_t *)tmpbuffer;
+@@ -2290,6 +2292,8 @@ xfs_attr3_leaf_unbalance(
+ 		struct xfs_attr3_icleaf_hdr tmphdr;
  
--	return rule;
-+	return NULL;
- }
+ 		tmp_leaf = kmem_zalloc(state->args->geo->blksize, 0);
++		if (!tmp_leaf)
++			return;
  
- static int bcm_sf2_cfp_rule_cmp(struct bcm_sf2_priv *priv, int port,
+ 		/*
+ 		 * Copy the header into the temp leaf so that all the stuff
 -- 
-2.17.1
+2.25.1
 

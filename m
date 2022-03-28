@@ -2,52 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4804E927A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1724E927D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240233AbiC1K2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 06:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
+        id S240242AbiC1K23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 06:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240235AbiC1K1u (ORCPT
+        with ESMTP id S240232AbiC1K20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 06:27:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E6C36E02;
-        Mon, 28 Mar 2022 03:26:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F3DE60FCC;
-        Mon, 28 Mar 2022 10:26:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B81A5C004DD;
-        Mon, 28 Mar 2022 10:26:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648463168;
-        bh=ClrbOWRSNMLl96m+NhBGm3Qrgj7yVuAq3b+4WcQ0rAM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Jb8eKOJTOMzxbajxJGkA9vxuWFcssjok0OoiizOjXmuFfGDzcYGBmPKnzFcMUWeJG
-         YB7gQT8IR29Ze0+2NdPi4vN2mEDvLJD90RzrTM3JWWCpvf598luRcWob/I/SnLLRxd
-         xV/SiWwv4kDhkYP0sQ2vLrxfR9CSCo+DuUiQg9JR3MkYpbkVnQS0vbSlcneZhnY8f6
-         0cFvYTTM8QtK0GZQRZ3JxZh1c56T3T9ed44RUPmAMxus5RJNA7PoAX0ieqCvLytqdp
-         sGLPZUfJJxrRnIdKJdJu8mI4u7i3SBLjH52W2sl30XcRdbFkvDCGD6H05rGeA23A9a
-         y0WxUfg7zoNRg==
-Date:   Mon, 28 Mar 2022 12:26:04 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] docs: kfigure.py: Don't warn of missing PDF converter
- in 'make htmldocs'
-Message-ID: <20220328122604.67d0eb5e@coco.lan>
-In-Reply-To: <c80e1481-10d4-7151-fe59-e846259eb0d4@gmail.com>
-References: <c80e1481-10d4-7151-fe59-e846259eb0d4@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Mon, 28 Mar 2022 06:28:26 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DF23B2AE;
+        Mon, 28 Mar 2022 03:26:46 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22SAEEil018693;
+        Mon, 28 Mar 2022 10:26:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=pp1; bh=NTudMMXM/2VbRKK7tifX00G280bSD7nwhFpzsJUlv9k=;
+ b=qqzl3Excr55CsWnAkZfjVa1W4ETPjU9OGcO0aRFeY7LmyVEpoJXtWS+5aFcN+93vJ076
+ HYJzoE/vs8exnkYiR53kOj6PUj6mpsbGuJtKMmGfLg3x5IxlmZb92gmq4faIizEr/4D5
+ TA1U3rHvPHbRQnGq/Dc76vjx3z2ZmadlLNlVYCKJxrwVv42/w7eSRgt+fRnykxso2hvg
+ 05SVZT4Ea4lwkCAcodQt7j587LHKmoUS9YLmIPBbCHub5c/0UUJ/D+pUJMQuOZ0Cy3So
+ Wd1TUKqKSGyDBrJg/hHzluz2SucX7M+yXUFrSpMg1yMzrg6mA1It3+EwAnwsrxiWKG5j oA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f3b3c06sa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Mar 2022 10:26:40 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22SAQdMr031194;
+        Mon, 28 Mar 2022 10:26:39 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f3b3c06s1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Mar 2022 10:26:39 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22SANj3Q031436;
+        Mon, 28 Mar 2022 10:26:38 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3f1t3hu60f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Mar 2022 10:26:38 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22SAQejN41288064
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Mar 2022 10:26:40 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 06DCF52054;
+        Mon, 28 Mar 2022 10:26:35 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id A64FF52051;
+        Mon, 28 Mar 2022 10:26:34 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Xiaomeng Tong <xiam0nd.tong@gmail.com>, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, gregkh@linuxfoundation.org,
+        jcmvbkbc@gmail.com, elder@linaro.org, dsterba@suse.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v3] char: tty3270: fix a missing check on list iterator
+References: <20220328093505.27902-1-xiam0nd.tong@gmail.com>
+        <47a6e396-3d51-79f5-a544-8942470fa2fd@kernel.org>
+Date:   Mon, 28 Mar 2022 12:26:34 +0200
+In-Reply-To: <47a6e396-3d51-79f5-a544-8942470fa2fd@kernel.org> (Jiri Slaby's
+        message of "Mon, 28 Mar 2022 12:09:59 +0200")
+Message-ID: <yt9d8rsucqzp.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: nMTN3N-IOmQFTN2SxoerQHKuNvTLHmyk
+X-Proofpoint-GUID: UccP9BdvNjv2GJAXYw09B8Bjg9uBy4xq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-28_03,2022-03-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ priorityscore=1501 bulkscore=0 spamscore=0 mlxlogscore=737 malwarescore=0
+ clxscore=1015 impostorscore=0 suspectscore=0 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203280059
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,62 +93,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sat, 26 Mar 2022 16:48:39 +0900
-Akira Yokosawa <akiyks@gmail.com> escreveu:
+Jiri Slaby <jirislaby@kernel.org> writes:
 
-> SVG -> PDF conversion is not required in "make htmldocs".
-> It is pointless to always warn of a missing converter.
-> Demote the log message in setupTools() to verbose.
-> 
-> For "make pdfdocs" (or "make latexdocs"), promote the dynamic
-> message of "include SVG raw" to a warn.
-> Expand the message and recommend installing Inkscape or
-> ImageMagick.
-> 
-> Fixes: 8ccd05697a9d ("docs: sphinx/kfigure.py: Use inkscape(1) for SVG -> PDF conversion")
-> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: linux-doc@vger.kernel.org
+>> Cc: stable@vger.kernel.org
+>> Fixes: ^1da177e4c3f4 ("Linux-2.6.12-rc2")
+>
+> That's barely the commit introducing the behavior.
+>
 
-Makes sense to me.
-
-Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-
-> ---
->  Documentation/sphinx/kfigure.py | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/sphinx/kfigure.py b/Documentation/sphinx/kfigure.py
-> index 24d2b2addcce..cefdbb7e7523 100644
-> --- a/Documentation/sphinx/kfigure.py
-> +++ b/Documentation/sphinx/kfigure.py
-> @@ -212,7 +212,7 @@ def setupTools(app):
->          if convert_cmd:
->              kernellog.verbose(app, "use convert(1) from: " + convert_cmd)
->          else:
-> -            kernellog.warn(app,
-> +            kernellog.verbose(app,
->                  "Neither inkscape(1) nor convert(1) found.\n"
->                  "For SVG to PDF conversion, "
->                  "install either Inkscape (https://inkscape.org/) (preferred) or\n"
-> @@ -296,8 +296,10 @@ def convert_image(img_node, translator, src_fname=None):
->  
->          if translator.builder.format == 'latex':
->              if not inkscape_cmd and convert_cmd is None:
-> -                kernellog.verbose(app,
-> -                                  "no SVG to PDF conversion available / include SVG raw.")
-> +                kernellog.warn(app,
-> +                                  "no SVG to PDF conversion available / include SVG raw."
-> +                                  "\nIncluding large raw SVGs can cause xelatex error."
-> +                                  "\nInstall Inkscape (preferred) or ImageMagick.")
->                  img_node.replace_self(file2literal(src_fname))
->              else:
->                  dst_fname = path.join(translator.builder.outdir, fname + '.pdf')
-> 
-> base-commit: 8d6451b9a51b555be2c9a6c326a980b2de00741a
-
-
-
-Thanks,
-Mauro
+Well, that code was introduced way before linux switch to git - not sure
+whether it makes sense to provide a Fixes: header in that case.

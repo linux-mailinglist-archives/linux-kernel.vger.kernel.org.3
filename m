@@ -2,137 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C204E922F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD144E9237
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240121AbiC1KAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 06:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
+        id S239738AbiC1KDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 06:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240113AbiC1KAw (ORCPT
+        with ESMTP id S234956AbiC1KDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 06:00:52 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6118142490;
-        Mon, 28 Mar 2022 02:59:12 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1E2C5210EA;
-        Mon, 28 Mar 2022 09:59:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1648461551; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iiTWiXg3repmNdg1Lg6AudefAR3R2YTlD7u2pBnhmOA=;
-        b=w3cAsglSQAeuB3h4e410ghJ6wveRSYL5MoAGtutSdr5DyPqRIma30N9GW3aRZviT5xIJsv
-        qOAznb33JI4wPbrwf6cxuZTwQpzte4dLJ76iCfhkaSJR1+NjACvVuXiUDYsKagOCmuR4Cl
-        gZAco2jNRzlPTd3Qw6+Qf55HdIIf8x4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1648461551;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iiTWiXg3repmNdg1Lg6AudefAR3R2YTlD7u2pBnhmOA=;
-        b=7adj626p536xHfFhrfQaKE1zb3vuXgCKxRB71Gjs+N+KVl840ivPB6N+1XgnyWzDFgdt4i
-        TdAi7TPxP2R33iCw==
-Received: from quack3.suse.cz (unknown [10.163.43.118])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 0FA13A3B82;
-        Mon, 28 Mar 2022 09:59:11 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id BB4BDA0610; Mon, 28 Mar 2022 11:59:10 +0200 (CEST)
-Date:   Mon, 28 Mar 2022 11:59:10 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jiri Slaby <jslaby@suse.cz>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Jan Kara <jack@suse.cz>
-Subject: Re: [PATCH] block: restore the old set_task_ioprio() behaviour wrt
- PF_EXITING
-Message-ID: <20220328095910.fyifhw6ry4ggcdbc@quack3.lan>
-References: <20220328085928.7899-1-jslaby@suse.cz>
+        Mon, 28 Mar 2022 06:03:22 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885022E6AB;
+        Mon, 28 Mar 2022 03:01:42 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id B52E25805CA;
+        Mon, 28 Mar 2022 06:01:41 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 28 Mar 2022 06:01:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; bh=nZAXAsNq5mkXS/
+        Tat8STmC+wZsmvosjFIg/ceUBcJqc=; b=WYHjRNRomMF4TRAvFWRRVqXrs5m6Is
+        mzslJIjAuA8z2BTRksJvkmhag7H7RJpQdCLslYRoLuQ3maMsoSSJrV2HLSBIlCAW
+        jshD03+X0ACSPvpUtojcAj+8b3rToajbLbVfKU9Dd0jZKaM1zqEw+HywJguNbVzq
+        Fd1rpTL4fUSAKVInVU5CX3BaXdoDubbb3sGXJormk7AtGiLaHFWnmyFpja0fnas1
+        pk3LoeelFvtqP92oi0kdsk0/5JmdFYf5Jv7YVuzvQk3HQRPS7LVVKty8P//84eED
+        3tatol9M0OKwS05BZvzRz4hI6RXNFxjyKQ7sGiss/T1eTPTURUr+WlpQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=nZAXAsNq5mkXS/Tat8STmC+wZsmvosjFIg/ceUBcJ
+        qc=; b=UjhMydFA6oMwcIZFOQPzjVulFHkMOgEUJaeP+wz0Pq6+oeglmuim0P+Tt
+        XkPazk54RreexS1kx0IHlc6rmIUK0xX3TLG7wjOvI5doTbsYFsVK6UhP6rnCNOiF
+        UCTf/j8HjfInkN6IN92M/bAP0y9TIzEJQZ22YSc/+MhKY+k+oQznGuD2iqxfaDmP
+        mHGoX6xXUsCUGyXAP7iG+K32zaRqI5mXWEPwqizSPo8QWwHTMiOyT37hr1bNW01Y
+        53EjPglKHD6bwxBZRRGVGZySpBs56L98VdLsQnNr7d+2GKvTpkHvlESz1DazPEQb
+        dfrh+M1jUlRq4+hVY/PIn2yfGpCyA==
+X-ME-Sender: <xms:g4dBYi9Q3MODDCCyQzWXzfi5RDhva3kCO9wgx5w6sBqLC-27pn7aUA>
+    <xme:g4dBYit6Ikr7mGLDM7SlMgFnz6T49JZJ5-1XkNM5QfJsTEWFiTzexk0zA-yO9ed51
+    td0m82As79rOYAwjoc>
+X-ME-Received: <xmr:g4dBYoD-dGvs6WDAN7tv3Gu0iGwbY7LIECBcYhKx7SNrg7E7gXtQfPsw0Tvf9to>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudehjedgvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeehieduvdevhfekjeeftddtkeeitefhudekvdeiueeulefgleei
+    jeeghedvkeduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:g4dBYqfIWsD5D2Wh72VfeXSqKe2lVb3uOsF44hao6cTNLKd4qBqzqw>
+    <xmx:g4dBYnM9JX_O0Pa032o-K-2QiSk_qLC_7bxPyyd8FugMf0lCbIOq6w>
+    <xmx:g4dBYkkY-3gsXftuPzFj8rsOr6spkXkvXCfCjpY-1XkPFkeJ_A31Uw>
+    <xmx:hYdBYqcgPS7UFBK5xT6JyQAN_RZh0tyqlwjglG3RuTKYVSKNgR-nMw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 28 Mar 2022 06:01:36 -0400 (EDT)
+Message-ID: <44408f8f-20ac-a558-ece9-d14c7b99ca50@flygoat.com>
+Date:   Mon, 28 Mar 2022 11:01:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328085928.7899-1-jslaby@suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v13 5/6] drm/loongson: add drm driver for loongson display
+ controller
+Content-Language: en-GB
+To:     Sui Jingfeng <15330273260@189.cn>,
+        kernel test robot <lkp@intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <error27@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220328022835.2508587-5-15330273260@189.cn>
+ <202203281653.wiRaycuD-lkp@intel.com>
+ <efc756c5-9ea3-66df-4885-82f57ff31b1f@189.cn>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <efc756c5-9ea3-66df-4885-82f57ff31b1f@189.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 28-03-22 10:59:28, Jiri Slaby wrote:
-> PF_EXITING tasks were silently ignored before the below commits.
-> Continue doing so. Otherwise python-psutil tests fail:
->   ERROR: psutil.tests.test_process.TestProcess.test_zombie_process
->   ----------------------------------------------------------------------
->   Traceback (most recent call last):
->     File "/home/abuild/rpmbuild/BUILD/psutil-5.9.0/build/lib.linux-x86_64-3.9/psutil/_pslinux.py", line 1661, in wrapper
->       return fun(self, *args, **kwargs)
->     File "/home/abuild/rpmbuild/BUILD/psutil-5.9.0/build/lib.linux-x86_64-3.9/psutil/_pslinux.py", line 2133, in ionice_set
->       return cext.proc_ioprio_set(self.pid, ioclass, value)
->   ProcessLookupError: [Errno 3] No such process
-> 
->   During handling of the above exception, another exception occurred:
-> 
->   Traceback (most recent call last):
->     File "/home/abuild/rpmbuild/BUILD/psutil-5.9.0/psutil/tests/test_process.py", line 1313, in test_zombie_process
->       succeed_or_zombie_p_exc(fun)
->     File "/home/abuild/rpmbuild/BUILD/psutil-5.9.0/psutil/tests/test_process.py", line 1288, in succeed_or_zombie_p_exc
->       return fun()
->     File "/home/abuild/rpmbuild/BUILD/psutil-5.9.0/build/lib.linux-x86_64-3.9/psutil/__init__.py", line 792, in ionice
->       return self._proc.ionice_set(ioclass, value)
->     File "/home/abuild/rpmbuild/BUILD/psutil-5.9.0/build/lib.linux-x86_64-3.9/psutil/_pslinux.py", line 1665, in wrapper
->       raise NoSuchProcess(self.pid, self._name)
->   psutil.NoSuchProcess: process no longer exists (pid=2057)
-> 
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Jan Kara <jack@suse.cz>
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Fixes: 5fc11eebb4 (block: open code create_task_io_context in set_task_ioprio)
-> Fixes: a957b61254 (block: fix error in handling dead task for ioprio setting)
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 
-OK, as much as I find it disputable what ioprio_set() should be doing for
-PF_EXITTING task, I guess there's no harm in maintaining the old behavior and
-just ignoring the call. So feel free to add:
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+在 2022/3/28 10:01, Sui Jingfeng 写道:
+>
+> On 2022/3/28 16:51, kernel test robot wrote:
+>> Hi Sui,
+[...]
+>>
+>
+> Hi,  my driver will not used on microblaze arch,
+>
+> what does this warnings means, do i need to fix this?
 
-									Honza
+Hi Jingfeng,
 
-> ---
->  block/blk-ioc.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/block/blk-ioc.c b/block/blk-ioc.c
-> index 11f49f78db32..df9cfe4ca532 100644
-> --- a/block/blk-ioc.c
-> +++ b/block/blk-ioc.c
-> @@ -280,7 +280,6 @@ int set_task_ioprio(struct task_struct *task, int ioprio)
->  
->  		task_lock(task);
->  		if (task->flags & PF_EXITING) {
-> -			err = -ESRCH;
->  			kmem_cache_free(iocontext_cachep, ioc);
->  			goto out;
->  		}
-> @@ -292,7 +291,7 @@ int set_task_ioprio(struct task_struct *task, int ioprio)
->  	task->io_context->ioprio = ioprio;
->  out:
->  	task_unlock(task);
-> -	return err;
-> +	return 0;
->  }
->  EXPORT_SYMBOL_GPL(set_task_ioprio);
->  
-> -- 
-> 2.35.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+The problem it discovered is general for all archs.
+
+Type of reg_base (MMIO pointer) should be "void __iomem *" instead of 
+"void *"
+everywhere, including parameter list.
+
+__iomem is the attribute for MMIO.
+
+Thanks.
+- Jiaxun
+

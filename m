@@ -2,76 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1FE24E9EC4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E934E9ED7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245134AbiC1SS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 14:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
+        id S245162AbiC1ST2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 14:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbiC1SS0 (ORCPT
+        with ESMTP id S240970AbiC1ST1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 14:18:26 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A6A38D9A;
-        Mon, 28 Mar 2022 11:16:45 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id w8so15361284pll.10;
-        Mon, 28 Mar 2022 11:16:45 -0700 (PDT)
+        Mon, 28 Mar 2022 14:19:27 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1B345AD2;
+        Mon, 28 Mar 2022 11:17:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hmQ8Pxzi+Z9l8ejBIWAmIqyy4Jpg692Mg7RREXlY2/Q=;
-        b=dGhJRXlBShwg8AriQxi7fKU2M/J713BdphGZclZ0PJ7lZso9/8FinVzDhD/2f88oZj
-         lbiwQiWzjjC94beyGKvUl3OJT4njdmwWj8JGcxL/8BCBTtueq1WUGspGKUP5nJsn7KrM
-         yoc4qM9O0pcV+qhmWDkEpINspKieu994ykC6KiJttD146G4iSGuluqHql6PIO7U9SfhB
-         GKKAYKImLaaddTWhIOwubiiMFq2tKM45hr5GS+CMbf9BoeMSnGKnIiPGMuh+834kHK5g
-         ZBwBamOzMULQPlfd480rP8JnGbip+Z0/otTzlzae4VPtLreXqXv+HFGboddZZv6BVvlW
-         8Mdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hmQ8Pxzi+Z9l8ejBIWAmIqyy4Jpg692Mg7RREXlY2/Q=;
-        b=GXbhHjUD6TL+kI0iuo1bukuy4mCj3c6YBrjFppPT8eazWnbfJ9TDHvJAGHLw71i3xB
-         Kx+tEdC2VaNlEoDP4MsF+FRqvWbIUvtQQA8JvRmYm87/oOdwf9iKekfyThesyuakgLJ8
-         q2b1i8SbsTtDmnMZpHEpEa2ulOPAAkBmq6uhOWWyDry7Y99K8uioWhKo5bBgkxJvXZa/
-         0cQwlq28DA8xYxsT0uGyVG0EOSYaOdoXUFo24CTeUwQy4wy1E1KWK49gqypTNWVW8Mj6
-         UNun1trbYlelBY5mWLDEBDgP/hBcjM35L/Jm/E1CKPKdsryteFlYsHU5jDot8LNJHx6q
-         mDtA==
-X-Gm-Message-State: AOAM533jmLFj6fEM4q3L585qCMlmEdPgH4hXMTa3ZoRHB+kVJw4YDlw+
-        //G8smNBtpWxSz83NCbT/eE=
-X-Google-Smtp-Source: ABdhPJxWp8Kjua4kmFMI6A6/fbdM9xNqeDSXQ1aUQW9gEwyiCKAt5OoXzGTXkfYMujWRpH8mSxuVIw==
-X-Received: by 2002:a17:90b:4d87:b0:1c9:7f58:e5ca with SMTP id oj7-20020a17090b4d8700b001c97f58e5camr424499pjb.154.1648491404814;
-        Mon, 28 Mar 2022 11:16:44 -0700 (PDT)
-Received: from 9a2d8922b8f1 ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id e19-20020a637453000000b003821bdb8103sm14081451pgn.83.2022.03.28.11.16.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 11:16:44 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 23:46:38 +0530
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mukesh Savaliya <msavaliy@codeaurora.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648491466; x=1680027466;
+  h=from:to:cc:subject:date:message-id;
+  bh=Bb91pJm1kGSwurPQgwz7cFnRs4FbBTLF/d/dsS4oK5g=;
+  b=xxdK53JTLcGSJVgsy+jzDWbvhtdfK51/gq1Ql40DqqAGj8rXbnNwDGl4
+   WUeLzttKo5dJaVWzfGSijomh5DHC3wanRQ3wu88XwUtrOhFplr/E8PVnv
+   M7SZDD2EFOhwnHpAl9hy3uG6qrtTFa/KBZbY6qmN0qSrOXWJKQPrtFGn5
+   Q=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 28 Mar 2022 11:17:45 -0700
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 28 Mar 2022 11:17:44 -0700
+X-QCInternal: smtphost
+Received: from hu-vnivarth-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.111.166])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 28 Mar 2022 23:47:30 +0530
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id 9F8BA419F; Mon, 28 Mar 2022 23:47:29 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: spi: qcom-qspi: Add minItems to
- interconnect-names
-Message-ID: <20220328181638.GA16448@9a2d8922b8f1>
-References: <20220326212134.45759-1-singh.kuldeep87k@gmail.com>
- <42c32324-ce22-ae37-6118-35590f4e355c@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <42c32324-ce22-ae37-6118-35590f4e355c@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: [PATCH] drivers/tty/serial/qcom-geni-serial: Do stop_rx in suspend path for console if console_suspend is disabled
+Date:   Mon, 28 Mar 2022 23:47:24 +0530
+Message-Id: <1648491444-17137-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,35 +55,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 27, 2022 at 09:21:34PM +0200, Krzysztof Kozlowski wrote:
-> On 26/03/2022 22:21, Kuldeep Singh wrote:
-> > Qualcomm QSPI DT spec says interconnects has minimum length 1 and
-> > maximum length 2. Same configuration will be applicable for
-> > interconnect-names. Schema currently depicts interconnects length
-> > correctly but not interconnect-names. It can have a single entry, which
-> > is a valid case yet to be incorporated in the current configuration. The
-> > schema tries to look for 2 names and fail for DTs with a single entry.
-> > Thus, add minItems property to interconnect-names to fix it.
-> 
-> Thanks for the patch.
-> 
-> 6 sentences which explaining the same, which could be written in one
-> sentence. In the same time you actually do not explain whether having
-> one interconnect is correct. You just say what DT spec says about
-> interconnects, but maybe that's wrong.
+[Why]
+For the case of console_suspend disabled, if back to back suspend/resume
+test is executed, at the end of test, sometimes console would appear to
+be frozen not responding to input. This would happen because, for
+console_suspend disabled, suspend/resume routines only turn resources
+off/on but don't do a port close/open.
+As a result, during resume, some rx transactions come in before system is
+ready, malfunction of rx happens in turn resulting in console appearing
+to be stuck.
 
-Though commit desscription is subject to personal perspective, but I
-also see some duplication here and will submit v2 with a shorter
-description.
+[How]
+Do a stop_rx in suspend sequence to prevent this. start_rx is already
+present in resume sequence as part of call to set_termios which does a
+stop_rx/start_rx.
+Additionally other changes have been made at same place
+a) replace the hardcoded flags with macros
+b) perform voting before calling resume_port in resume sequence
+c) consequently, swap the order in suspend sequence
 
-> 
-> So either keep just one sentence or really explain why one or two are
-> allowed (based on datasheet for example).
+Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+---
+ drivers/tty/serial/qcom_geni_serial.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-Please see commit 8f9c291558ea, interconnect properties were added by
-one of maintainers of qcom-qspi. And it's been sometime this change is
-in-tree with no regressions introduced. So, I don't think we should
-double check this change. My change simply define minItem constraint to
-interconnect-names which is already existing on interconnects.
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index aedc388..37d064f 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -19,6 +19,7 @@
+ #include <linux/slab.h>
+ #include <linux/tty.h>
+ #include <linux/tty_flip.h>
++#include <dt-bindings/interconnect/qcom,icc.h>
+ 
+ /* UART specific GENI registers */
+ #define SE_UART_LOOPBACK_CFG		0x22c
+@@ -1477,34 +1478,38 @@ static int qcom_geni_serial_remove(struct platform_device *pdev)
+ 
+ static int __maybe_unused qcom_geni_serial_sys_suspend(struct device *dev)
+ {
++	int ret;
+ 	struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
+ 	struct uart_port *uport = &port->uport;
+ 	struct qcom_geni_private_data *private_data = uport->private_data;
+ 
++	/* do a stop_rx here, start_rx is handled in uart_resume_port by call to setermios */
++	if (!console_suspend_enabled && uart_console(uport))
++		uport->ops->stop_rx(uport);
++
+ 	/*
+ 	 * This is done so we can hit the lowest possible state in suspend
+ 	 * even with no_console_suspend
+ 	 */
++	ret = uart_suspend_port(private_data->drv, uport);
+ 	if (uart_console(uport)) {
+-		geni_icc_set_tag(&port->se, 0x3);
++		geni_icc_set_tag(&port->se, QCOM_ICC_TAG_ACTIVE_ONLY);
+ 		geni_icc_set_bw(&port->se);
+ 	}
+-	return uart_suspend_port(private_data->drv, uport);
++	return ret;
+ }
+ 
+ static int __maybe_unused qcom_geni_serial_sys_resume(struct device *dev)
+ {
+-	int ret;
+ 	struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
+ 	struct uart_port *uport = &port->uport;
+ 	struct qcom_geni_private_data *private_data = uport->private_data;
+ 
+-	ret = uart_resume_port(private_data->drv, uport);
+ 	if (uart_console(uport)) {
+-		geni_icc_set_tag(&port->se, 0x7);
++		geni_icc_set_tag(&port->se, QCOM_ICC_TAG_ALWAYS);
+ 		geni_icc_set_bw(&port->se);
+ 	}
+-	return ret;
++	return uart_resume_port(private_data->drv, uport);
+ }
+ 
+ static const struct dev_pm_ops qcom_geni_serial_pm_ops = {
+-- 
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
 
--Kuldeep

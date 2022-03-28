@@ -2,106 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C8C4E8CBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 05:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4F14E8CDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 06:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232992AbiC1EBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 00:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
+        id S233704AbiC1EBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 00:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiC1EBP (ORCPT
+        with ESMTP id S233758AbiC1EBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 00:01:15 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022D5433A3;
-        Sun, 27 Mar 2022 20:59:34 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id DAC9B1F42E3D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648439973;
-        bh=p5kFKkno7W8Otr+MEWs2MZhZGWjZxlAPNrorp3vcRNg=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=My6E3QlN7FcjxmfTvX/c1wcXd90XrxliEgJQI9mTs+dDK4g532bhf6jeJU4cHhpeS
-         bDhiVMHbh6agyEwnuI4LY6+5D3nmDjZAtAq4n8K6+nW5xk8kjN84QwhyWW2tHqYLrg
-         D3uUGaJKkaWSqWcsxWx6o5F/RLQPjsHxLA/aC3D1EkJnUkhnjB0l6Ua+yzCqW58mhq
-         TxfuHpglNpHqReT9r8Z4AJ+38k4i43K6eJ51tVoUzQue6IDPk5/g/foRRJtP0KqlbB
-         UyOv/2pFB6XA/O20XhG5+54r6iJ7FJoyeauSdzO/JrzS3v88vWjnj2WxGC9uAhwj35
-         OYq/mbx5Dos/w==
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
-        Zhigang.Shi@liteon.com, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, alvaro.soliverez@collabora.com
-Subject: Re: [PATCH 3/3] iio: light: Add support for ltrf216a sensor
-Organization: Collabora
-References: <20220325103014.6597-1-shreeya.patel@collabora.com>
-        <20220325103014.6597-4-shreeya.patel@collabora.com>
-Date:   Sun, 27 Mar 2022 23:59:28 -0400
-In-Reply-To: <20220325103014.6597-4-shreeya.patel@collabora.com> (Shreeya
-        Patel's message of "Fri, 25 Mar 2022 16:00:14 +0530")
-Message-ID: <878rsusp5r.fsf@collabora.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 28 Mar 2022 00:01:38 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB0E4506B
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 20:59:57 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id e4-20020a056902034400b00633691534d5so9968533ybs.7
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 20:59:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=ZanSM+z+bqiT+dazTvxIhzoTPKfBDbdIJDmpkh0ngiA=;
+        b=dEZSetUwhJ77JER9uOFHsQsp76JzF2DjT1q6+REMveb9Wt4BrGDGIQgD1zzZM9bma+
+         yhEZCho/DguXCN/LWIpS6/sXTLVs/7I8V57LnPEuNyRfMseJ+ScdFrLfEpJoGDWtMIFM
+         t64Dd1vWRIhCANW1YNotTj71VdF86eU/Z1yZ/2P1/oZx3uAbxFDxrqLAVLQm8PT6wR0S
+         qEnNzRfOZYWdnMNSE8GFnj9hFuliT0+m6mkGHNaGsEGbIMS5RBIfRao1fm6MCxklAbdl
+         N8IuezzihPA3MdxNEuigRrXDRU77mTQDN2Wi23Fw13t4QVAYQLDOIAduNv28SyaFtkAo
+         +W/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=ZanSM+z+bqiT+dazTvxIhzoTPKfBDbdIJDmpkh0ngiA=;
+        b=r4+JEZdWbbMKMY+xeZ+r+A4kdsfvrKT2ryEhFRfNNTQvCtujgWKDctB/kq6297gnp8
+         nqeU+YLcYzblufZGyV01+t7zA7bx8PI2yu7+cH+lVAchilbKW+Ku44MW1cCrlFv6KfIY
+         o8IFFR2t60JVsZexOuZbtDLued83bCMQLr+oXrkRM+VZZPnOv7gvGuTFslsNDA/lCnYu
+         Q1UaUjByJ+FrDCsfuoojQJk/ZtgV9NKE+lt8OJfMQjjEQqnxWO6VKuE/XlV9dDgM6Url
+         7IpcpEFaURdrofI/BFitqQK7EyIuv7LxLVrpRst8ZzfKfkDkDp2QkRx3PCYLltaPrmyI
+         ZDgQ==
+X-Gm-Message-State: AOAM532feiv3uIK+JTmiBKeoAGuTi0q7UPCyP1OVV6pe0eY/kAxdLNH3
+        C0CXFnFdJQMUFME5mrAf+f8VwvgNtYSwyP4=
+X-Google-Smtp-Source: ABdhPJxDNziGYjzb/ZRm1pevbyvVdw8eQjc7VwyCozk0n3Hczh8k36e8/hVih9NxH0h+d3gtUEehLBH2IOPtLgg=
+X-Received: from tj2.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:187])
+ (user=tjmercier job=sendgmr) by 2002:a25:25c3:0:b0:633:8079:1768 with SMTP id
+ l186-20020a2525c3000000b0063380791768mr21066931ybl.488.1648439997054; Sun, 27
+ Mar 2022 20:59:57 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 03:59:39 +0000
+Message-Id: <20220328035951.1817417-1-tjmercier@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
+Subject: [RFC v4 0/8] Proposal for a GPU cgroup controller
+From:   "T.J. Mercier" <tjmercier@google.com>
+To:     tjmercier@google.com, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     kaleshsingh@google.com, Kenny.Ho@amd.com, mkoutny@suse.com,
+        skhan@linuxfoundation.org, dri-devel@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shreeya Patel <shreeya.patel@collabora.com> writes:
+This patch series revisits the proposal for a GPU cgroup controller to
+track and limit memory allocations by various device/allocator
+subsystems. The patch series also contains a simple prototype to
+illustrate how Android intends to implement DMA-BUF allocator
+attribution using the GPU cgroup controller. The prototype does not
+include resource limit enforcements.
 
-> From: Zhigang Shi <Zhigang.Shi@liteon.com>
->
-> Add initial support for ltrf216a ambient light sensor.
->
-> Datasheet :-
-> https://gitlab.steamos.cloud/shreeya/iio/-/blob/main/LTR-F216A-QT.pdf
-> +	struct ltrf216a_data *data = iio_priv(indio_dev);
-> +
-> +	ret = i2c_smbus_write_byte_data(data->client, LTRF216A_MAIN_CTRL, 0);
-> +	if (ret < 0)
-> +		dev_err(&data->client->dev, "Error writing LTRF216A_MAIN_CTRL\n");
-> +
-> +	return ret;
-> +}
-> +
-> +static int ltrf216a_set_it_time(struct ltrf216a_data *data, int itime)
+Changelog:
+v4:
+Skip test if not run as root per Shuah Khan
 
-ltrf216a_set_int_time instad of it_time?  although, ltr501 also uses
-"it" instead of "int" on the function name..
+Add better test logging for abnormal child termination per Shuah Khan
 
-> +
-> +static int ltrf216a_get_lux(struct ltrf216a_data *data)
-> +{
-> +	int greendata, cleardata, lux;
-> +
-> +	greendata = ltrf216a_read_data(data, LTRF216A_ALS_DATA_0);
-> +	cleardata = ltrf216a_read_data(data, LTRF216A_CLEAR_DATA_0);
-> +
-> +	if (greendata < 0 || cleardata < 0)
-> +		lux = 0;
-> +	else
-> +		lux = greendata * 8 * WIN_FAC / data->als_gain_fac / data->int_time_fac / 10;
+Adjust ordering of charge/uncharge during transfer to avoid potentially
+hitting cgroup limit per Michal Koutn=C3=BD
 
-This could be rewritten to avoid most of the divisions.
+Adjust gpucg_try_charge critical section for charge transfer functionality
 
-But it also doesn't fit the calculation shown in page 20 on the
-datasheet.
+Fix uninitialized return code error for dmabuf_try_charge error case
 
-I suspect that 8 was calculated from a specific Window Factor (~1.77),
-which is specific to one device, but I'm not sure.  The datasheet
-formula is:
+v3:
+Remove Upstreaming Plan from gpu-cgroup.rst per John Stultz
 
-lux = (ALS_DATA_X * 0.45 * window_factor) / (gain * int_time)
+Use more common dual author commit message format per John Stultz
 
-Shouldn't WIN_FAC be a configurable parameter, instead of constant?
+Remove android from binder changes title per Todd Kjos
 
--- 
-Gabriel Krisman Bertazi
+Add a kselftest for this new behavior per Greg Kroah-Hartman
+
+Include details on behavior for all combinations of kernel/userspace
+versions in changelog (thanks Suren Baghdasaryan) per Greg Kroah-Hartman.
+
+Fix pid and uid types in binder UAPI header
+
+v2:
+See the previous revision of this change submitted by Hridya Valsaraju
+at: https://lore.kernel.org/all/20220115010622.3185921-1-hridya@google.com/
+
+Move dma-buf cgroup charge transfer from a dma_buf_op defined by every
+heap to a single dma-buf function for all heaps per Daniel Vetter and
+Christian K=C3=B6nig. Pointers to struct gpucg and struct gpucg_device
+tracking the current associations were added to the dma_buf struct to
+achieve this.
+
+Fix incorrect Kconfig help section indentation per Randy Dunlap.
+
+History of the GPU cgroup controller
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+The GPU/DRM cgroup controller came into being when a consensus[1]
+was reached that the resources it tracked were unsuitable to be integrated
+into memcg. Originally, the proposed controller was specific to the DRM
+subsystem and was intended to track GEM buffers and GPU-specific
+resources[2]. In order to help establish a unified memory accounting model
+for all GPU and all related subsystems, Daniel Vetter put forth a
+suggestion to move it out of the DRM subsystem so that it can be used by
+other DMA-BUF exporters as well[3]. This RFC proposes an interface that
+does the same.
+
+[1]: https://patchwork.kernel.org/project/dri-devel/cover/20190501140438.95=
+06-1-brian.welty@intel.com/#22624705
+[2]: https://lore.kernel.org/amd-gfx/20210126214626.16260-1-brian.welty@int=
+el.com/
+[3]: https://lore.kernel.org/amd-gfx/YCVOl8%2F87bqRSQei@phenom.ffwll.local/
+
+Hridya Valsaraju (5):
+  gpu: rfc: Proposal for a GPU cgroup controller
+  cgroup: gpu: Add a cgroup controller for allocator attribution of GPU
+    memory
+  dmabuf: heaps: export system_heap buffers with GPU cgroup charging
+  dmabuf: Add gpu cgroup charge transfer function
+  binder: Add a buffer flag to relinquish ownership of fds
+
+T.J. Mercier (3):
+  dmabuf: Use the GPU cgroup charge/uncharge APIs
+  binder: use __kernel_pid_t and __kernel_uid_t for userspace
+  selftests: Add binder cgroup gpu memory transfer test
+
+ Documentation/gpu/rfc/gpu-cgroup.rst          | 183 +++++++
+ Documentation/gpu/rfc/index.rst               |   4 +
+ drivers/android/binder.c                      |  26 +
+ drivers/dma-buf/dma-buf.c                     | 107 ++++
+ drivers/dma-buf/dma-heap.c                    |  27 +
+ drivers/dma-buf/heaps/system_heap.c           |   3 +
+ include/linux/cgroup_gpu.h                    | 139 +++++
+ include/linux/cgroup_subsys.h                 |   4 +
+ include/linux/dma-buf.h                       |  22 +-
+ include/linux/dma-heap.h                      |  11 +
+ include/uapi/linux/android/binder.h           |   5 +-
+ init/Kconfig                                  |   7 +
+ kernel/cgroup/Makefile                        |   1 +
+ kernel/cgroup/gpu.c                           | 362 +++++++++++++
+ .../selftests/drivers/android/binder/Makefile |   8 +
+ .../drivers/android/binder/binder_util.c      | 254 +++++++++
+ .../drivers/android/binder/binder_util.h      |  32 ++
+ .../selftests/drivers/android/binder/config   |   4 +
+ .../binder/test_dmabuf_cgroup_transfer.c      | 484 ++++++++++++++++++
+ 19 files changed, 1679 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/gpu/rfc/gpu-cgroup.rst
+ create mode 100644 include/linux/cgroup_gpu.h
+ create mode 100644 kernel/cgroup/gpu.c
+ create mode 100644 tools/testing/selftests/drivers/android/binder/Makefile
+ create mode 100644 tools/testing/selftests/drivers/android/binder/binder_u=
+til.c
+ create mode 100644 tools/testing/selftests/drivers/android/binder/binder_u=
+til.h
+ create mode 100644 tools/testing/selftests/drivers/android/binder/config
+ create mode 100644 tools/testing/selftests/drivers/android/binder/test_dma=
+buf_cgroup_transfer.c
+
+--=20
+2.35.1.1021.g381101b075-goog
+

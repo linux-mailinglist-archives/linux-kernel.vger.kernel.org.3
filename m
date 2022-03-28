@@ -2,147 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EACB54EA1FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CAC94EA1FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345724AbiC1Uuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 16:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
+        id S1345718AbiC1Uus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 16:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346396AbiC1Usg (ORCPT
+        with ESMTP id S1346399AbiC1Usg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Mar 2022 16:48:36 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6EF4D621
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 13:46:42 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id o67so17072412vsc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 13:46:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XsQUCW+gJbF0u5yR61fkU3TsOCnzNiiW+Vxpx9INrJc=;
-        b=MNDWq16FFczuLNyJYyOX7vHHTdWA2Wu9kBX8qv46n3K741rT37IeIbD5nIaONQCbZw
-         ykDGIGbG84boAlB7ETuwBxvrdxO+W+mgFtJ62oabT7/6qxVREQR3w7OLi7valopAvXDs
-         AV7VBcy2wlN3N6BksJRwTutIU587j9Y07p2fp50UjdbZoG4WdtCzvC30Y8HTOdESgA+w
-         0VVUlhmtXEPzAgba0s1aNVkRTMFb72tQDKquGKo/uMscY8thjFyOoFsVZ/92RXSwejP0
-         1RumF0DEYGBBRUsTdmmR9HLRx5PFijQywtx0AE7xJFZqYlsuJfLcyUGEm8N36jj/I/uo
-         1OyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XsQUCW+gJbF0u5yR61fkU3TsOCnzNiiW+Vxpx9INrJc=;
-        b=b6QJyZ335RkJtjhubY7t44jF6CTto+sKCTTPESkWOkPfsqFjO4cfpQDfDUa/4GKGEk
-         Lx/kg7M8CEq/kGmqYKmj0+qtJ+Gw3IUczOfoD635Of8g3EKdgKnz7tpInd5m6xKThX0o
-         YW8np/7M61qjoC42/N39nNJGvUgwgSAlRsuTO3v1GSyLKqL3UubCXwBYr1FrQjU1DcsK
-         Y4gGrjymIIovXxHBtoyV+wqQlDEZNIDRsvi1do8n8Cpzv8UzKFTODXw8W9oTUzSgdoBS
-         2AMlEXgmdCP7dVmD8EJD1+EMvYasn9ftEQwB3Ai1PRYcEvix+gVmH2xklA0d/ml0BSog
-         cY3g==
-X-Gm-Message-State: AOAM530UopKmJHVeBJz6kXibT3fg8hIUYZENAlBr+IIhTeqNuMn7loLS
-        +KW6USPpy0LgNw+XwjvAhlAuDqMdzui9+RXc00B9+w==
-X-Google-Smtp-Source: ABdhPJzzdXoVPaMj6oTX3qrkIGyEHAVu69MNP7vNBnLGNfBJAsNqF3ReaFVP6i9HdVRszInntBnpHH+cIw0gdA37t+k=
-X-Received: by 2002:a05:6102:c8b:b0:325:983f:9862 with SMTP id
- f11-20020a0561020c8b00b00325983f9862mr5858756vst.74.1648500401268; Mon, 28
- Mar 2022 13:46:41 -0700 (PDT)
+Received: from stuerz.xyz (unknown [45.77.206.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A1CDEBD;
+        Mon, 28 Mar 2022 13:46:49 -0700 (PDT)
+Received: by stuerz.xyz (Postfix, from userid 114)
+        id B7348FB5E4; Mon, 28 Mar 2022 20:46:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=stuerz.xyz; s=mail;
+        t=1648500408; bh=5t9XKqDfb1pVMMfFmkQUBKRx7TGbB+L68FzAskNSgbw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aaNkupoizOKf82Kgx7o2zWfINV0bXNmZpP4vp5oog25xHEj7aTg/LOOm/GZGcOOnv
+         mXauQplxQvI4GGuM0Kow5URxqRzNhKxqhBD1DR6zrzjJw2/0rvzQG0fky9lFX9Nsse
+         PQHtpLrDQKlQeRS0JM6MVbbqXo0ZroCWqDNjuBN+m0+ZqpXKKzmykRwY5jif/Gxrr6
+         GuXeQjN6+Bg+JBjeYVGDFSg0jUkg41y80qtPTdahPrc7+xmVV+a4ja2ZwI29nT4qt1
+         TEWT+QHJhwQqTb757+8V9zmdfVz69xxTY9AbAEvKUOH8F+uU1rV9m/RizC+W6iF74+
+         GVF/Yb0G+8dlg==
+Received: from benni-fedora.. (unknown [IPv6:2a02:8109:a100:1a48:ff0:ef2f:d4da:17d8])
+        by stuerz.xyz (Postfix) with ESMTPSA id 6082DFB404;
+        Mon, 28 Mar 2022 20:46:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=stuerz.xyz; s=mail;
+        t=1648500406; bh=5t9XKqDfb1pVMMfFmkQUBKRx7TGbB+L68FzAskNSgbw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GkG5TgSFSGAQh7MfaSjiP7EiXN1Tl7OzcnYkBoU3sMnkLvQ70mSl5DahbFhYoo4T0
+         VPAKLjEbapZ69QpIQb4tnCCcWTqKRda2bCq8L5hp211uYXIqeHcoM2MvNCp/DpQpNg
+         WXnU8qhv10gstCGoE5y6qWDHPUc8OEzGzl9Qxxc16DZaHo6+fFDOo7lu9gHPkM+Pwv
+         bEzyc9xgZw6rpLUwxvdhTRpjYrD5MVB9gtwVyPdijBEWWm0NMpKBMrPMGkBXA+rvdJ
+         8jQzPAFxB6/6OWtg7KHl6ihzZa7o5DUQB9TUUYZFO/NdsSbKoSokwegd3NrarkgrhA
+         vh3BUIT28kP3g==
+From:   =?UTF-8?q?Benjamin=20St=C3=BCrz?= <benni@stuerz.xyz>
+To:     linux@simtec.co.uk
+Cc:     krzk@kernel.org, alim.akhtar@samsung.com, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Benjamin=20St=C3=BCrz?= <benni@stuerz.xyz>
+Subject: [PATCH v2] s3c: Improve readability of bast_pc104_irqmask[]
+Date:   Mon, 28 Mar 2022 22:46:38 +0200
+Message-Id: <20220328204638.273157-1-benni@stuerz.xyz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220328062414.1893550-1-irogers@google.com> <20220328062414.1893550-5-irogers@google.com>
- <YkIbXzCYEutqxQRE@kernel.org>
-In-Reply-To: <YkIbXzCYEutqxQRE@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 28 Mar 2022 13:46:29 -0700
-Message-ID: <CAP-5=fXUPTPgKE1TAtBxx4hBNYQJwDbHf+ZNq7AKkaYabYC+KA@mail.gmail.com>
-Subject: Re: [PATCH 4/5] perf stat: Avoid segv if core.user_cpus isn't set.
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,RDNS_DYNAMIC,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 1:32 PM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Sun, Mar 27, 2022 at 11:24:13PM -0700, Ian Rogers escreveu:
-> > Passing null to perf_cpu_map__max doesn't make sense as there is no
-> > valid max. Avoid this problem by null checking in
-> > perf_stat_init_aggr_mode.
->
-> Applying this one after changing user_cpus back to cpus as this is a fix
-> independent of this patchset.
->
-> In the future, please try to have such patches at the beginning of the
-> series, so that  they can get cherry-picked more easily.
+Replace comments in bast_pc104_irqmask[] with C99's designated
+initializers because it makes the code cleaner and easier to read.
 
-Ack. The problem is best exhibited when the intersect happens, without
-it getting a reproducer wasn't something I was able to do.
+Signed-off-by: Benjamin Stürz <benni@stuerz.xyz>
+---
+ arch/arm/mach-s3c/bast-irq.c | 22 +++++-----------------
+ 1 file changed, 5 insertions(+), 17 deletions(-)
 
-Thanks,
-Ian
+diff --git a/arch/arm/mach-s3c/bast-irq.c b/arch/arm/mach-s3c/bast-irq.c
+index d299f124e6dc..618b51db3eef 100644
+--- a/arch/arm/mach-s3c/bast-irq.c
++++ b/arch/arm/mach-s3c/bast-irq.c
+@@ -28,23 +28,11 @@
+ /* table of ISA irq nos to the relevant mask... zero means
+  * the irq is not implemented
+ */
+-static const unsigned char bast_pc104_irqmasks[] = {
+-	0,   /* 0 */
+-	0,   /* 1 */
+-	0,   /* 2 */
+-	1,   /* 3 */
+-	0,   /* 4 */
+-	2,   /* 5 */
+-	0,   /* 6 */
+-	4,   /* 7 */
+-	0,   /* 8 */
+-	0,   /* 9 */
+-	8,   /* 10 */
+-	0,   /* 11 */
+-	0,   /* 12 */
+-	0,   /* 13 */
+-	0,   /* 14 */
+-	0,   /* 15 */
++static const unsigned char bast_pc104_irqmasks[16] = {
++	[3]  = 1,
++	[5]  = 2,
++	[7]  = 4,
++	[10] = 8,
+ };
+ 
+ static const unsigned char bast_pc104_irqs[] = { 3, 5, 7, 10 };
+-- 
+2.35.1
 
-> - Arnaldo
->
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/builtin-stat.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> > index 5bee529f7656..ecd5cf4fd872 100644
-> > --- a/tools/perf/builtin-stat.c
-> > +++ b/tools/perf/builtin-stat.c
-> > @@ -1472,7 +1472,10 @@ static int perf_stat_init_aggr_mode(void)
-> >        * taking the highest cpu number to be the size of
-> >        * the aggregation translate cpumap.
-> >        */
-> > -     nr = perf_cpu_map__max(evsel_list->core.user_cpus).cpu;
-> > +     if (evsel_list->core.user_cpus)
-> > +             nr = perf_cpu_map__max(evsel_list->core.user_cpus).cpu;
-> > +     else
-> > +             nr = 0;
-> >       stat_config.cpus_aggr_map = cpu_aggr_map__empty_new(nr + 1);
-> >       return stat_config.cpus_aggr_map ? 0 : -ENOMEM;
-> >  }
-> > --
-> > 2.35.1.1021.g381101b075-goog
->
-> --
->
-> - Arnaldo

@@ -2,130 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E342B4E8C4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 04:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A7C64E8C4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 04:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237676AbiC1Cur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 22:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
+        id S237680AbiC1CvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 22:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235045AbiC1Cuo (ORCPT
+        with ESMTP id S237678AbiC1Cu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 22:50:44 -0400
-Received: from mail.meizu.com (unknown [14.29.68.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF8B4199A;
-        Sun, 27 Mar 2022 19:49:02 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
- (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Mon, 28 Mar
- 2022 10:49:00 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Mon, 28 Mar
- 2022 10:49:00 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     <chuck.lever@oracle.com>
-CC:     <linux-nfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>
-Subject: [PATCH] SUNRPC: Return true/false (not 1/0) from bool functions
-Date:   Mon, 28 Mar 2022 10:48:59 +0800
-Message-ID: <1648435739-3034-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Sun, 27 Mar 2022 22:50:58 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AD742EFB
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 19:49:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648435759; x=1679971759;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=9rqPqfcIa1ccW3H6rOJaZsgeTrXk813nKYlbyrcSd64=;
+  b=d0Su/EWdsBrfk6mYQFxuouRgXE2oeqiMQ78xUekp41KRQ0K8ljl7oUUz
+   ibw2qAiFUkcuP9wriGi+fOt6Gsyoih99lqTOfUq2WWEj6QbvlgmsPVkSL
+   7NOwCix3iw6YmJM7mWIBSNSUT26ovFk7nQXBNnjVZ9DRkTzQtRhOPex7D
+   j2NSp6oPttZbJ/S5nOUX09/uJMBI040cyUIWqS6sazphbHXdOmof3ba0a
+   U+pWfouyQSiGVAMlt3seP251p/xNKKXCJ2s9ESlvam7MwVFweyQt+hOLy
+   gfbwL7OKG6wiwqgDigDrcAzmfon6LaeJt+KRlcWfN8VcI8/72n8/U6jEj
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="345334471"
+X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
+   d="scan'208";a="345334471"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 19:49:19 -0700
+X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
+   d="scan'208";a="520833975"
+Received: from crjohnso-mobl.amr.corp.intel.com (HELO [10.209.122.14]) ([10.209.122.14])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 19:49:19 -0700
+Message-ID: <347c75b8-3a48-0758-892a-0d0ac139f740@intel.com>
+Date:   Sun, 27 Mar 2022 19:49:19 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-125.meizu.com (172.16.1.125) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Haowen Bai <baihaowen@meizu.com>, dave.hansen@linux.intel.com,
+        luto@kernel.org, peterz@infradead.org
+Cc:     linux-kernel@vger.kernel.org
+References: <1648433573-25735-1-git-send-email-baihaowen@meizu.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH] x86/mm: Directly return instead of using local ret
+ variable
+In-Reply-To: <1648433573-25735-1-git-send-email-baihaowen@meizu.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return boolean values ("true" or "false") instead of 1 or 0 from bool
-functions.  This fixes the following warnings from coccicheck:
+On 3/27/22 19:12, Haowen Bai wrote:
+> 
+> diff --git a/arch/x86/mm/pf_in.c b/arch/x86/mm/pf_in.c
+> index 3f83e31..4eff3ee 100644
+> --- a/arch/x86/mm/pf_in.c
+> +++ b/arch/x86/mm/pf_in.c
+> @@ -130,7 +130,6 @@ enum reason_type get_ins_type(unsigned long ins_addr)
+>  	unsigned char *p;
+>  	struct prefix_bits prf;
+>  	int i;
+> -	enum reason_type rv = OTHERS;
+>  
+>  	p = (unsigned char *)ins_addr;
+>  	p += skip_prefix(p, &prf);
+> @@ -141,7 +140,7 @@ enum reason_type get_ins_type(unsigned long ins_addr)
+>  	CHECK_OP_TYPE(opcode, imm_wop, IMM_WRITE);
+>  
+>  exit:
+> -	return rv;
+> +	return OTHERS;
+>  }
+>  #undef CHECK_OP_TYPE
+>  
 
-./fs/nfsd/nfs2acl.c:289:9-10: WARNING: return of 0/1 in function
-'nfsaclsvc_encode_accessres' with return type bool
-./fs/nfsd/nfs2acl.c:252:9-10: WARNING: return of 0/1 in function
-'nfsaclsvc_encode_getaclres' with return type bool
+Does this even compile?  Take a look at this macro:
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- fs/nfsd/nfs2acl.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+> #define CHECK_OP_TYPE(opcode, array, type) \
+>         for (i = 0; i < ARRAY_SIZE(array); i++) { \
+>                 if (array[i] == opcode) { \
+>                         rv = type; \
+>                         goto exit; \
+>                 } \
 
-diff --git a/fs/nfsd/nfs2acl.c b/fs/nfsd/nfs2acl.c
-index 367551b..b576080 100644
---- a/fs/nfsd/nfs2acl.c
-+++ b/fs/nfsd/nfs2acl.c
-@@ -249,34 +249,34 @@ nfsaclsvc_encode_getaclres(struct svc_rqst *rqstp, struct xdr_stream *xdr)
- 	int w;
- 
- 	if (!svcxdr_encode_stat(xdr, resp->status))
--		return 0;
-+		return false;
- 
- 	if (dentry == NULL || d_really_is_negative(dentry))
--		return 1;
-+		return true;
- 	inode = d_inode(dentry);
- 
- 	if (!svcxdr_encode_fattr(rqstp, xdr, &resp->fh, &resp->stat))
--		return 0;
-+		return false;
- 	if (xdr_stream_encode_u32(xdr, resp->mask) < 0)
--		return 0;
-+		return false;
- 
- 	rqstp->rq_res.page_len = w = nfsacl_size(
- 		(resp->mask & NFS_ACL)   ? resp->acl_access  : NULL,
- 		(resp->mask & NFS_DFACL) ? resp->acl_default : NULL);
- 	while (w > 0) {
- 		if (!*(rqstp->rq_next_page++))
--			return 1;
-+			return true;
- 		w -= PAGE_SIZE;
- 	}
- 
- 	if (!nfs_stream_encode_acl(xdr, inode, resp->acl_access,
- 				   resp->mask & NFS_ACL, 0))
--		return 0;
-+		return false;
- 	if (!nfs_stream_encode_acl(xdr, inode, resp->acl_default,
- 				   resp->mask & NFS_DFACL, NFS_ACL_DEFAULT))
--		return 0;
-+		return false;
- 
--	return 1;
-+	return true;
- }
- 
- /* ACCESS */
-@@ -286,17 +286,17 @@ nfsaclsvc_encode_accessres(struct svc_rqst *rqstp, struct xdr_stream *xdr)
- 	struct nfsd3_accessres *resp = rqstp->rq_resp;
- 
- 	if (!svcxdr_encode_stat(xdr, resp->status))
--		return 0;
-+		return false;
- 	switch (resp->status) {
- 	case nfs_ok:
- 		if (!svcxdr_encode_fattr(rqstp, xdr, &resp->fh, &resp->stat))
--			return 0;
-+			return false;
- 		if (xdr_stream_encode_u32(xdr, resp->access) < 0)
--			return 0;
-+			return false;
- 		break;
- 	}
- 
--	return 1;
-+	return true;
- }
- 
- /*
--- 
-2.7.4
+It uses 'rv'.
 

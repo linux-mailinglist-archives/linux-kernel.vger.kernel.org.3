@@ -2,116 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101DC4E8B75
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 03:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC9D4E8B76
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 03:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbiC1BKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 21:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42136 "EHLO
+        id S233120AbiC1BLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 21:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiC1BKS (ORCPT
+        with ESMTP id S229812AbiC1BLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 21:10:18 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E408E4EF47
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 18:08:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648429718; x=1679965718;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=c8/MgHXx3maUUUtV6Fsyj+VWOWpDvpWGJo7i6X8QRnk=;
-  b=e0jo8SA9kgk3tjwDt0OWv2pDEmK4rmsYvLpCROa47Lv7Dmt7Wo0yi67D
-   OBkjc14pL0JH+qFER6ntCBw0T0cCmbv4fd2IbzwqWMasUByIyoX7FnyH/
-   FeL9Iun0GFBgKBEFXiEUCLjSi2giDQMPudCsoJxTGSSwL5RBEdpl/Mf2I
-   T8Ux4t/IOjLHjwwOtxo41xEurBS87ghx1N0FCs47gQoYe1Gls3wC04VB+
-   tFbDv7mkgxhMuRfivDUXqq6aUVw9FoHPpr7KcPgyb5MnLPVWOMBKMmq2Q
-   wzuaiH+alntnRzygbsOjFxkE0+LfPYLQzUB/d308h9DlhwPyp/Cmgg+++
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="283773627"
-X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
-   d="scan'208";a="283773627"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 18:08:38 -0700
-X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
-   d="scan'208";a="545755351"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 18:08:36 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Wei Yang <richard.weiyang@gmail.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mgorman@techsingularity.net
-Subject: Re: [PATCH 2/2] mm/vmscan: make sure wakeup_kswapd with managed zone
-References: <20220327024101.10378-1-richard.weiyang@gmail.com>
-        <20220327024101.10378-2-richard.weiyang@gmail.com>
-Date:   Mon, 28 Mar 2022 09:08:34 +0800
-In-Reply-To: <20220327024101.10378-2-richard.weiyang@gmail.com> (Wei Yang's
-        message of "Sun, 27 Mar 2022 02:41:01 +0000")
-Message-ID: <8735j2opd9.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sun, 27 Mar 2022 21:11:35 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0514EF5B
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 18:09:54 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id d65so6809716qke.5
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 18:09:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=HLwATRdL3qnh4+RFHCS+QeiuVSG5OuceytzfKR6YaL4=;
+        b=RyRHoJSJGVsHOt6dPdLU6Oe6diDyZqCMpl1cLmvuqaqWPicsOsn0c1UQtkvcn+G17t
+         +Izwt8diODSqtmMia14yFOTeqUpnceRD6N3YriqppilI0Lr7fbq2f2z2hhd9nwxD8py2
+         5tYXSJgzwm+IrpRflu5PLkeXFCofX9BPeUshTVovG2uOnylsiD0oksa7wC2ghl+mfX42
+         MJExzYKlGj8p4xKQ0aVOqVqMpSXeIBoW0GiYcVXVgwbBJCOzYv7zhFbjv/tjkNIlwXnf
+         tOs6Pozvzenk4uK8ZkxcPfqPdM2tRyAo7OdgnY0LXg1b0ebht2cR2uIw3smUchbx0Ssw
+         lGAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=HLwATRdL3qnh4+RFHCS+QeiuVSG5OuceytzfKR6YaL4=;
+        b=Q+ZhfaW7USKJg/sXDI6T6tUKQ9p5vctp+WJO4FOgWpzbAxhZZ+oItbxtU0Ud8c2PQ7
+         J56s0jiVVdgaeVQNXsRolS/jr1zCUUpPbjy1zMjy7Njir2dNY6mhKUk+tXejGNZIjXjv
+         v3s3DmnK/rv7slS7MggseLkmRYoEgvHnFXLF/yvXf4qcmEmT1zwxlOC1m1qpOJ6fJlJQ
+         Zcj5MNIAjw5BdpTHbSjq0owDxffHHNiA8UOZt3JJzZYhIl1JMzevVo5+F9Kda9DbNQaH
+         WuyOQ6Pr7PHAvrX8rJ7FZ+NNIe6z5YyEZ2HTn86pDXtXRP9StBTuKqOhpy7mc54qlN6H
+         bZAQ==
+X-Gm-Message-State: AOAM530hbE2v+/I2YpcPuvzd96LOvUZ29EQ1dXLU4C7BpZA3Xu/5GVFg
+        SLdwER6E0TbliTDkDFMaQ1lSbT4xo4k=
+X-Google-Smtp-Source: ABdhPJzQSDsaCAQzmrfmVaVU2TdkyDM0WkQvF88/7o7wMdLNqH8knAJrZg1mgWJFyhKid21NK3VW3A==
+X-Received: by 2002:a37:9d7:0:b0:67e:85d2:2417 with SMTP id 206-20020a3709d7000000b0067e85d22417mr14223843qkj.753.1648429793920;
+        Sun, 27 Mar 2022 18:09:53 -0700 (PDT)
+Received: from localhost ([98.242.64.6])
+        by smtp.gmail.com with ESMTPSA id az17-20020a05620a171100b00680af0db559sm5629479qkb.127.2022.03.27.18.09.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Mar 2022 18:09:53 -0700 (PDT)
+Date:   Sun, 27 Mar 2022 18:09:51 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Laight <David.Laight@aculab.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org
+Subject: Pull request for bitmap branch
+Message-ID: <YkEK37hEhUcl5NUU@yury-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Wei,
+Hi Stephen,
 
-Wei Yang <richard.weiyang@gmail.com> writes:
+Can you please pull this branch for linux-next?
+https://github.com/norov/linux/tree/bitmap
 
-> wakeup_kswapd() only wake up kswapd when the zone is managed.
->
-> For two callers of wakeup_kswapd(), they are node perspective.
->
->   * wake_all_kswapds
->   * numamigrate_isolate_page
->
-> If we picked up a !managed zone, this is not we expected.
->
-> This patch makes sure we pick up a managed zone for wakeup_kswapd().
->
-> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-> ---
->  mm/migrate.c    | 2 +-
->  mm/page_alloc.c | 2 ++
->  2 files changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 3d60823afd2d..c4b654c0bdf0 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -2046,7 +2046,7 @@ static int numamigrate_isolate_page(pg_data_t *pgdat, struct page *page)
->  		if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING))
->  			return 0;
->  		for (z = pgdat->nr_zones - 1; z >= 0; z--) {
-> -			if (populated_zone(pgdat->node_zones + z))
-> +			if (managed_zone(pgdat->node_zones + z))
-
-This looks good to me!  Thanks!  It seems that we can replace
-populated_zone() in migrate_balanced_pgdat() too.  Right?
-
->  				break;
->  		}
->  		wakeup_kswapd(pgdat->node_zones + z, 0, order, ZONE_MOVABLE);
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 4c0c4ef94ba0..6656c2d06e01 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -4674,6 +4674,8 @@ static void wake_all_kswapds(unsigned int order, gfp_t gfp_mask,
->  
->  	for_each_zone_zonelist_nodemask(zone, z, ac->zonelist, highest_zoneidx,
->  					ac->nodemask) {
-> +		if (!managed_zone(zone))
-> +			continue;
->  		if (last_pgdat != zone->zone_pgdat)
->  			wakeup_kswapd(zone, gfp_mask, order, highest_zoneidx);
->  		last_pgdat = zone->zone_pgdat;
-
-Best Regards,
-Huang, Ying
+Thanks,
+Yury

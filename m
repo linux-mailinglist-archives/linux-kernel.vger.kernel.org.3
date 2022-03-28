@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E187B4E9DBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227F14E9DC2
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244676AbiC1Rnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 13:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34166 "EHLO
+        id S242950AbiC1RrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 13:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244663AbiC1Rnd (ORCPT
+        with ESMTP id S234310AbiC1RrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 13:43:33 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B972465152
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:41:52 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id y10-20020a5b0d0a000000b00633b9765410so11381162ybp.18
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:41:52 -0700 (PDT)
+        Mon, 28 Mar 2022 13:47:17 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CA11DA50
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:45:36 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id g9-20020a17090ace8900b001c7cce3c0aeso6836pju.2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:45:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=aVA4LBHoLKMhMeszpuqgZVuKkHU9fUPyLNppRxS+x30=;
-        b=b8YOQWtHZFjqrGpVz0IfM2MOlUS28rXfzIOO4U0z8LH66Q4385DU1RQX9YwULYvE6K
-         0D9F85V9xAkc4+ZqL7fi8NvouSXz/3jlk6WawL9tTugRib2gpu5JOO1xmtTSwioct0FJ
-         qPJYJIitF4x1jyyKzYDcu0SCR6KYF6hum5wMaLQrciia6QJn1uOtFI/eIQ0/IeO8MjS1
-         I38sV1PURryNLMXfXxkY6a/c38NkHdSpYENv/K7Mky3E52xrLTvnKhjOzA2SAFiY9rfh
-         loaQhllfxcn5oRwl55dY95LKWOcQqyU9V8dupc8tZQBaix1ONPZaxAR6kJ+sM7v1yGud
-         Liwg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DFRGfZNHGMMZKzJXUtu7ywwZlF3JepUWQrm/J5WbDog=;
+        b=Yy3kEtjMZs/I13OAjIHNMfVQqyx8j2y9dZpaYo4UdgPeSC0LY3fzpXqyQ1VsawjRh3
+         HwC+BnDEukxYsn8YMnQzppXPNqj+Nj9Q4853j941qJtuaAulWV7jo1a4mKB+fQSnR+vm
+         drF6ZUCZ9nd5FoWi9r1laR/5SAp/fBFtmBRaqXNbVvKTCooqfShSqN/IjsckscJjHFq/
+         Le80edO/zX0cwYTdpWnyk5dZKV4G1rpdY1nbimdPoz7iLCKv87dfnAfhMQ55CAdB1ffW
+         kPdFJPrVld3qFIzI72m2dFfazJVSIhgPntvLB2to/twgjxjs3ydu3VxBuEdT02TAnsKo
+         7Tew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=aVA4LBHoLKMhMeszpuqgZVuKkHU9fUPyLNppRxS+x30=;
-        b=E4k9dWvAuQlUC0rI6GGgqjDgRiNbOoY7Qstxq9I8DPpnuyglYobyO+JDeJluTSzhGd
-         9cf9izodx2IlidlipCWvM1S9Ub16zahw+igmnzCPiJACCDMbKp/U3RxBb2lF9V9uI/Nk
-         0/DkglOEUXp33pYxQ395ERauVLLLSl5DngFRv3hv6L7xUqSCBbQuktYB3EvpFFep+lyX
-         okKoLicZDOuiwJ+PVmId6LQHhFRwtm8K+xc61KhM1/0celJ8qkqQwaKztH0HtZ89kXdq
-         WktNynEoKcZPvk/p8+yO06qvGeOmkchWScB/ygEjgysISKttAzDXQLSpE6/jw2i97D+H
-         CFSg==
-X-Gm-Message-State: AOAM5306TGhkXge6Nf6yQOiKtvc4BH2dYon83s3bwfM5g4LEd2wZiqIc
-        gDVVVKvpdUlWbWSeFPRA1twiRXpCyU/ZNw==
-X-Google-Smtp-Source: ABdhPJwT4e9NZT6ZiqObMlzk2YveWab3+TEkjoa2PYCl3ut5T+4O5QYfGL5wjUYwOtZSqylIRTzMQDjvKoQxvA==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:73c:9f0b:d20c:cf44])
- (user=dlatypov job=sendgmr) by 2002:a81:106:0:b0:2d0:e682:8a7a with SMTP id
- 6-20020a810106000000b002d0e6828a7amr27046249ywb.257.1648489312013; Mon, 28
- Mar 2022 10:41:52 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 10:41:43 -0700
-In-Reply-To: <20220328174143.857262-1-dlatypov@google.com>
-Message-Id: <20220328174143.857262-2-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20220328174143.857262-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v3 2/2] kunit: split resource API impl from test.c into new resource.c
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DFRGfZNHGMMZKzJXUtu7ywwZlF3JepUWQrm/J5WbDog=;
+        b=iiiwNWkvHMw3UixtmvgsCEGQJVV1G1OhPbDi5OOJ+e9a6XZo45MCfOVf2mCjKM5MDv
+         R6XyNQM/jWrIEyCjmnnW+Tx3Q/1b/59+wy4jUMlEPpQDCl2mc3k6+KfKk9VMrWgZUGcN
+         +BViRjLvzKTtqYJWbJmvTYfGgCVIQnadg8Cg0reYjKzMFgsGXie0QAwLsGrFUoR31yZf
+         AEIw/xC9jVFXTllCTMpft++gOAs6TUbfGCsQQ65XG8kid6Lg9TIaxlt7/ScIaj/DhFiR
+         4iy/8cepvL84vU+plczgn+yy9meHpRqChu21magXKcPMUez6gHCBi58IbiUBoPB+sb5L
+         z12w==
+X-Gm-Message-State: AOAM530zJa9/AZWsELt+zSiTz0FC/Gy93THcr6+0FkboRqhvM9DbDaWM
+        O1N9etDFNnFm+cM4JBw+bdx2iQ==
+X-Google-Smtp-Source: ABdhPJwEx7IuTcEsLqYET6UU/G+s23PPdN9RvYtLCUVjSTVaQ++fYWkpyiwXGZwx1OCTpvKAaHQ6/Q==
+X-Received: by 2002:a17:902:cec8:b0:154:6dd6:255d with SMTP id d8-20020a170902cec800b001546dd6255dmr27367332plg.62.1648489535569;
+        Mon, 28 Mar 2022 10:45:35 -0700 (PDT)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id e6-20020a63aa06000000b00380c8bed5a6sm14379851pgf.46.2022.03.28.10.45.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 10:45:34 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 17:45:31 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v2 9/9] KVM: x86/mmu: Promote pages in-place when
+ disabling dirty logging
+Message-ID: <YkH0O2Qh7lRizGtC@google.com>
+References: <20220321224358.1305530-1-bgardon@google.com>
+ <20220321224358.1305530-10-bgardon@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321224358.1305530-10-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,307 +79,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We've split out the declarations from include/kunit/test.h into
-resource.h.
-This patch splits out the definitions as well for consistency.
+On Mon, Mar 21, 2022 at 03:43:58PM -0700, Ben Gardon wrote:
+> When disabling dirty logging, the TDP MMU currently zaps each leaf entry
+> mapping memory in the relevant memslot. This is very slow. Doing the zaps
+> under the mmu read lock requires a TLB flush for every zap and the
+> zapping causes a storm of ETP/NPT violations.
+> 
+> Instead of zapping, replace the split large pages with large page
+> mappings directly. While this sort of operation has historically only
+> been done in the vCPU page fault handler context, refactorings earlier
+> in this series and the relative simplicity of the TDP MMU make it
+> possible here as well.
+> 
+> Running the dirty_log_perf_test on an Intel Skylake with 96 vCPUs and 1G
+> of memory per vCPU, this reduces the time required to disable dirty
+> logging from over 45 seconds to just over 1 second. It also avoids
+> provoking page faults, improving vCPU performance while disabling
+> dirty logging.
+> 
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c          |  4 +-
+>  arch/x86/kvm/mmu/mmu_internal.h |  6 +++
+>  arch/x86/kvm/mmu/tdp_mmu.c      | 73 ++++++++++++++++++++++++++++++++-
+>  3 files changed, 79 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 6f98111f8f8b..a99c23ef90b6 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -100,7 +100,7 @@ module_param_named(flush_on_reuse, force_flush_and_sync_on_reuse, bool, 0644);
+>   */
+>  bool tdp_enabled = false;
+>  
+> -static int max_huge_page_level __read_mostly;
+> +int max_huge_page_level;
+>  static int tdp_root_level __read_mostly;
+>  static int max_tdp_level __read_mostly;
+>  
+> @@ -4486,7 +4486,7 @@ static inline bool boot_cpu_is_amd(void)
+>   * the direct page table on host, use as much mmu features as
+>   * possible, however, kvm currently does not do execution-protection.
+>   */
+> -static void
+> +void
+>  build_tdp_shadow_zero_bits_mask(struct rsvd_bits_validate *shadow_zero_check,
+>  				int shadow_root_level)
+>  {
+> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> index 1bff453f7cbe..6c08a5731fcb 100644
+> --- a/arch/x86/kvm/mmu/mmu_internal.h
+> +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> @@ -171,4 +171,10 @@ void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
+>  void account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
+>  void unaccount_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
+>  
+> +void
+> +build_tdp_shadow_zero_bits_mask(struct rsvd_bits_validate *shadow_zero_check,
+> +				int shadow_root_level);
+> +
+> +extern int max_huge_page_level __read_mostly;
+> +
+>  #endif /* __KVM_X86_MMU_INTERNAL_H */
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index af60922906ef..eb8929e394ec 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -1709,6 +1709,66 @@ void kvm_tdp_mmu_clear_dirty_pt_masked(struct kvm *kvm,
+>  		clear_dirty_pt_masked(kvm, root, gfn, mask, wrprot);
+>  }
+>  
+> +static bool try_promote_lpage(struct kvm *kvm,
+> +			      const struct kvm_memory_slot *slot,
+> +			      struct tdp_iter *iter)
 
-A side effect of this is git blame won't properly track history by
-default, users need to run
-$ git blame -L ,1 -C13 lib/kunit/resource.c
+Use "huge_page" instead of "lpage" to be consistent with eager page
+splitting and the rest of the Linux kernel. Some of the old KVM methods
+still use "lpage" and "large page", but we're slowly moving away from
+that.
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
----
-v1 -> v2: add this patch
-v2 -> v3: drop trailing \n at end of resource.c
----
- lib/kunit/Makefile   |   1 +
- lib/kunit/resource.c | 125 +++++++++++++++++++++++++++++++++++++++++++
- lib/kunit/test.c     | 116 +--------------------------------------
- 3 files changed, 127 insertions(+), 115 deletions(-)
- create mode 100644 lib/kunit/resource.c
+> +{
+> +	struct kvm_mmu_page *sp = sptep_to_sp(iter->sptep);
+> +	struct rsvd_bits_validate shadow_zero_check;
+> +	bool map_writable;
+> +	kvm_pfn_t pfn;
+> +	u64 new_spte;
+> +	u64 mt_mask;
+> +
+> +	/*
+> +	 * If addresses are being invalidated, don't do in-place promotion to
+> +	 * avoid accidentally mapping an invalidated address.
+> +	 */
+> +	if (unlikely(kvm->mmu_notifier_count))
+> +		return false;
 
-diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index c49f4ffb6273..29aff6562b42 100644
---- a/lib/kunit/Makefile
-+++ b/lib/kunit/Makefile
-@@ -1,6 +1,7 @@
- obj-$(CONFIG_KUNIT) +=			kunit.o
- 
- kunit-objs +=				test.o \
-+					resource.o \
- 					string-stream.o \
- 					assert.o \
- 					try-catch.o \
-diff --git a/lib/kunit/resource.c b/lib/kunit/resource.c
-new file mode 100644
-index 000000000000..8f8057aad78f
---- /dev/null
-+++ b/lib/kunit/resource.c
-@@ -0,0 +1,125 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit resource API for test managed resources (allocations, etc.).
-+ *
-+ * Copyright (C) 2022, Google LLC.
-+ * Author: Daniel Latypov <dlatypov@google.com>
-+ */
-+
-+#include <kunit/resource.h>
-+#include <kunit/test.h>
-+#include <linux/kref.h>
-+
-+/*
-+ * Used for static resources and when a kunit_resource * has been created by
-+ * kunit_alloc_resource().  When an init function is supplied, @data is passed
-+ * into the init function; otherwise, we simply set the resource data field to
-+ * the data value passed in.
-+ */
-+int kunit_add_resource(struct kunit *test,
-+		       kunit_resource_init_t init,
-+		       kunit_resource_free_t free,
-+		       struct kunit_resource *res,
-+		       void *data)
-+{
-+	int ret = 0;
-+	unsigned long flags;
-+
-+	res->free = free;
-+	kref_init(&res->refcount);
-+
-+	if (init) {
-+		ret = init(res, data);
-+		if (ret)
-+			return ret;
-+	} else {
-+		res->data = data;
-+	}
-+
-+	spin_lock_irqsave(&test->lock, flags);
-+	list_add_tail(&res->node, &test->resources);
-+	/* refcount for list is established by kref_init() */
-+	spin_unlock_irqrestore(&test->lock, flags);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(kunit_add_resource);
-+
-+int kunit_add_named_resource(struct kunit *test,
-+			     kunit_resource_init_t init,
-+			     kunit_resource_free_t free,
-+			     struct kunit_resource *res,
-+			     const char *name,
-+			     void *data)
-+{
-+	struct kunit_resource *existing;
-+
-+	if (!name)
-+		return -EINVAL;
-+
-+	existing = kunit_find_named_resource(test, name);
-+	if (existing) {
-+		kunit_put_resource(existing);
-+		return -EEXIST;
-+	}
-+
-+	res->name = name;
-+
-+	return kunit_add_resource(test, init, free, res, data);
-+}
-+EXPORT_SYMBOL_GPL(kunit_add_named_resource);
-+
-+struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
-+						    kunit_resource_init_t init,
-+						    kunit_resource_free_t free,
-+						    gfp_t internal_gfp,
-+						    void *data)
-+{
-+	struct kunit_resource *res;
-+	int ret;
-+
-+	res = kzalloc(sizeof(*res), internal_gfp);
-+	if (!res)
-+		return NULL;
-+
-+	ret = kunit_add_resource(test, init, free, res, data);
-+	if (!ret) {
-+		/*
-+		 * bump refcount for get; kunit_resource_put() should be called
-+		 * when done.
-+		 */
-+		kunit_get_resource(res);
-+		return res;
-+	}
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
-+
-+void kunit_remove_resource(struct kunit *test, struct kunit_resource *res)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&test->lock, flags);
-+	list_del(&res->node);
-+	spin_unlock_irqrestore(&test->lock, flags);
-+	kunit_put_resource(res);
-+}
-+EXPORT_SYMBOL_GPL(kunit_remove_resource);
-+
-+int kunit_destroy_resource(struct kunit *test, kunit_resource_match_t match,
-+			   void *match_data)
-+{
-+	struct kunit_resource *res = kunit_find_resource(test, match,
-+							 match_data);
-+
-+	if (!res)
-+		return -ENOENT;
-+
-+	kunit_remove_resource(test, res);
-+
-+	/* We have a reference also via _find(); drop it. */
-+	kunit_put_resource(res);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(kunit_destroy_resource);
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 3bca3bf5c15b..0f66c13d126e 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -6,10 +6,10 @@
-  * Author: Brendan Higgins <brendanhiggins@google.com>
-  */
- 
-+#include <kunit/resource.h>
- #include <kunit/test.h>
- #include <kunit/test-bug.h>
- #include <linux/kernel.h>
--#include <linux/kref.h>
- #include <linux/moduleparam.h>
- #include <linux/sched/debug.h>
- #include <linux/sched.h>
-@@ -592,120 +592,6 @@ void __kunit_test_suites_exit(struct kunit_suite **suites)
- }
- EXPORT_SYMBOL_GPL(__kunit_test_suites_exit);
- 
--/*
-- * Used for static resources and when a kunit_resource * has been created by
-- * kunit_alloc_resource().  When an init function is supplied, @data is passed
-- * into the init function; otherwise, we simply set the resource data field to
-- * the data value passed in.
-- */
--int kunit_add_resource(struct kunit *test,
--		       kunit_resource_init_t init,
--		       kunit_resource_free_t free,
--		       struct kunit_resource *res,
--		       void *data)
--{
--	int ret = 0;
--	unsigned long flags;
--
--	res->free = free;
--	kref_init(&res->refcount);
--
--	if (init) {
--		ret = init(res, data);
--		if (ret)
--			return ret;
--	} else {
--		res->data = data;
--	}
--
--	spin_lock_irqsave(&test->lock, flags);
--	list_add_tail(&res->node, &test->resources);
--	/* refcount for list is established by kref_init() */
--	spin_unlock_irqrestore(&test->lock, flags);
--
--	return ret;
--}
--EXPORT_SYMBOL_GPL(kunit_add_resource);
--
--int kunit_add_named_resource(struct kunit *test,
--			     kunit_resource_init_t init,
--			     kunit_resource_free_t free,
--			     struct kunit_resource *res,
--			     const char *name,
--			     void *data)
--{
--	struct kunit_resource *existing;
--
--	if (!name)
--		return -EINVAL;
--
--	existing = kunit_find_named_resource(test, name);
--	if (existing) {
--		kunit_put_resource(existing);
--		return -EEXIST;
--	}
--
--	res->name = name;
--
--	return kunit_add_resource(test, init, free, res, data);
--}
--EXPORT_SYMBOL_GPL(kunit_add_named_resource);
--
--struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
--						    kunit_resource_init_t init,
--						    kunit_resource_free_t free,
--						    gfp_t internal_gfp,
--						    void *data)
--{
--	struct kunit_resource *res;
--	int ret;
--
--	res = kzalloc(sizeof(*res), internal_gfp);
--	if (!res)
--		return NULL;
--
--	ret = kunit_add_resource(test, init, free, res, data);
--	if (!ret) {
--		/*
--		 * bump refcount for get; kunit_resource_put() should be called
--		 * when done.
--		 */
--		kunit_get_resource(res);
--		return res;
--	}
--	return NULL;
--}
--EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
--
--void kunit_remove_resource(struct kunit *test, struct kunit_resource *res)
--{
--	unsigned long flags;
--
--	spin_lock_irqsave(&test->lock, flags);
--	list_del(&res->node);
--	spin_unlock_irqrestore(&test->lock, flags);
--	kunit_put_resource(res);
--}
--EXPORT_SYMBOL_GPL(kunit_remove_resource);
--
--int kunit_destroy_resource(struct kunit *test, kunit_resource_match_t match,
--			   void *match_data)
--{
--	struct kunit_resource *res = kunit_find_resource(test, match,
--							 match_data);
--
--	if (!res)
--		return -ENOENT;
--
--	kunit_remove_resource(test, res);
--
--	/* We have a reference also via _find(); drop it. */
--	kunit_put_resource(res);
--
--	return 0;
--}
--EXPORT_SYMBOL_GPL(kunit_destroy_resource);
--
- struct kunit_kmalloc_array_params {
- 	size_t n;
- 	size_t size;
--- 
-2.35.1.1021.g381101b075-goog
+Why is this necessary? Seeing this makes me wonder if we need a similar
+check for eager page splitting.
 
+> +
+> +	if (iter->level > max_huge_page_level || iter->gfn < slot->base_gfn ||
+> +	    iter->gfn >= slot->base_gfn + slot->npages)
+> +		return false;
+> +
+> +	pfn = __gfn_to_pfn_memslot(slot, iter->gfn, true, NULL, true,
+> +				   &map_writable, NULL);
+> +	if (is_error_noslot_pfn(pfn))
+> +		return false;
+> +
+> +	/*
+> +	 * Can't reconstitute an lpage if the consituent pages can't be
+> +	 * mapped higher.
+> +	 */
+> +	if (iter->level > kvm_mmu_max_mapping_level(kvm, slot, iter->gfn,
+> +						    pfn, PG_LEVEL_NUM))
+> +		return false;
+> +
+> +	build_tdp_shadow_zero_bits_mask(&shadow_zero_check, iter->root_level);
+> +
+> +	/*
+> +	 * In some cases, a vCPU pointer is required to get the MT mask,
+> +	 * however in most cases it can be generated without one. If a
+> +	 * vCPU pointer is needed kvm_x86_try_get_mt_mask will fail.
+> +	 * In that case, bail on in-place promotion.
+> +	 */
+> +	if (unlikely(!static_call(kvm_x86_try_get_mt_mask)(kvm, iter->gfn,
+> +							   kvm_is_mmio_pfn(pfn),
+> +							   &mt_mask)))
+> +		return false;
+> +
+> +	__make_spte(kvm, sp, slot, ACC_ALL, iter->gfn, pfn, 0, false, true,
+> +		  map_writable, mt_mask, &shadow_zero_check, &new_spte);
+> +
+> +	if (tdp_mmu_set_spte_atomic(kvm, iter, new_spte))
+> +		return true;
+> +
+> +	/* Re-read the SPTE as it must have been changed by another thread. */
+> +	iter->old_spte = READ_ONCE(*rcu_dereference(iter->sptep));
+
+Huge page promotion could be retried in this case.
+
+> +
+> +	return false;
+> +}
+> +
+>  /*
+>   * Clear leaf entries which could be replaced by large mappings, for
+>   * GFNs within the slot.
+> @@ -1729,8 +1789,17 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
+>  		if (tdp_mmu_iter_cond_resched(kvm, &iter, false, true))
+>  			continue;
+>  
+> -		if (!is_shadow_present_pte(iter.old_spte) ||
+> -		    !is_last_spte(iter.old_spte, iter.level))
+> +		if (iter.level > max_huge_page_level ||
+> +		    iter.gfn < slot->base_gfn ||
+> +		    iter.gfn >= slot->base_gfn + slot->npages)
+
+I feel like I've been seeing this "does slot contain gfn" calculation a
+lot in recent commits. It's probably time to create a helper function.
+No need to do this clean up as part of your series though, unless you
+want to :).
+
+> +			continue;
+> +
+> +		if (!is_shadow_present_pte(iter.old_spte))
+> +			continue;
+> +
+> +		/* Try to promote the constitutent pages to an lpage. */
+> +		if (!is_last_spte(iter.old_spte, iter.level) &&
+> +		    try_promote_lpage(kvm, slot, &iter))
+>  			continue;
+
+If iter.old_spte is not a leaf, the only loop would always continue to
+the next SPTE. Now we try to promote it and if that fails we run through
+the rest of the loop. This seems broken. For example, in the next line
+we end up grabbing the pfn of the non-leaf SPTE (which would be the PFN
+of the TDP MMU page table?) and treat that as the PFN backing this GFN,
+which is wrong.
+
+In the worst case we end up zapping an SPTE that we didn't need to, but
+we should still fix up this code.
+
+>  
+>  		pfn = spte_to_pfn(iter.old_spte);
+> -- 
+> 2.35.1.894.gb6a874cedc-goog
+> 

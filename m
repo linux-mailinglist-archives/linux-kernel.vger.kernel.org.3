@@ -2,159 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE324E931A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 13:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6444E931E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 13:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240543AbiC1LRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 07:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
+        id S240556AbiC1LST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 07:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233384AbiC1LRi (ORCPT
+        with ESMTP id S240661AbiC1LSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 07:17:38 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3B95523F
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 04:15:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648466157; x=1680002157;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wrodZFeDW4Z/d0hS+ESXF40ZqVjPhza5GfVoBuF40QU=;
-  b=iLJmZf/CUrYM9OUexBA7xjubYkItB0yFhkTrdD49SpND9dY46k6kr9yA
-   lYxZ38AXh9UZMIiLzeHzH5wOArfIE0BPoQP0iOk05ng0nO2BqvtB49wqz
-   no1rkFzfxIEmcaqYDGkRBUy8t7MUNnjFOVijdz54axgOkMcFyJB/saG0n
-   Jo/im5l1IBl3FyHg/1wueDZF83WT9q/K4FMoxtgr2Bssq7CXjYnKwnQNy
-   HuZ+8uvT+wTPbUAFD91gHds8LzFbEyd1AO22TV0O4OmZ8Dxw6oJ6fLSI6
-   B8jwXWWSQMMNVKoFSQpTGzsDUz8XcwvaLAWclQVGlg8R6BmQtFKD3LSH1
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="319674412"
-X-IronPort-AV: E=Sophos;i="5.90,217,1643702400"; 
-   d="scan'208";a="319674412"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 04:15:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,217,1643702400"; 
-   d="scan'208";a="520968292"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 28 Mar 2022 04:15:55 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nYnLm-0001zV-NG; Mon, 28 Mar 2022 11:15:54 +0000
-Date:   Mon, 28 Mar 2022 19:14:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: kernel/trace/trace_events_user.c:593:31: sparse: sparse: incorrect
- type in assignment (different address spaces)
-Message-ID: <202203281937.Po855SGa-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 28 Mar 2022 07:18:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D382255492;
+        Mon, 28 Mar 2022 04:16:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1384D61147;
+        Mon, 28 Mar 2022 11:16:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B358AC340EC;
+        Mon, 28 Mar 2022 11:16:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648466189;
+        bh=SEGKAv2y0LvSw8+qA9ED5lVRRO6x9HRUKOz3nmtGoC8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tUTV/QOq7dDA4kcmIkSHlLL/Hr9M04Fs6Vl5W5VQmjdsYu270n5hz/mijUUoBCylW
+         RyysfIlXK7NXFCbLPvxou3Rv/NxGZhCanIVqXYkk1C+xyRGK4VwJGH3PrXY9tHNPTc
+         reOczTlpUZSom/wyacm3f2vHkjY1t++RgYCFKu2IzJxjEJKhWV4F5wvgZbbcTbc1hC
+         044fBGw9JLpSB6LhU+ye76Spr+A37VSsQvcxKkyB0fWpE80MQlGOOhjZsskkHYZhbY
+         5wmKVwR3jKiwjfmAxTg8LdL7sdqj9YsjPQuWPTyl8OF4jgTO11Qvf4gThlBKtpRqyS
+         kIq7WJRMN83ZQ==
+Date:   Mon, 28 Mar 2022 20:16:22 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Subject: Re: [PATCH v4 2/3] bootconfig: Support embedding a bootconfig file
+ in kernel
+Message-Id: <20220328201622.c0b06c599b2f3dfc971f48eb@kernel.org>
+In-Reply-To: <CAK7LNATv8aHMPazZ1TrLjT4T6SfFSpFJcQNJOVFdc4_noO61Kw@mail.gmail.com>
+References: <164833878595.2575750.1483106296151574233.stgit@devnote2>
+        <164833880897.2575750.113875316750095499.stgit@devnote2>
+        <CAK7LNATv8aHMPazZ1TrLjT4T6SfFSpFJcQNJOVFdc4_noO61Kw@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ae085d7f9365de7da27ab5c0d16b12d51ea7fca9
-commit: 0279400ad38d858ed68f5d787385f6122d4170b2 user_events: Optimize writing events by only copying data once
-date:   6 weeks ago
-config: i386-randconfig-s001-20220328 (https://download.01.org/0day-ci/archive/20220328/202203281937.Po855SGa-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0279400ad38d858ed68f5d787385f6122d4170b2
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 0279400ad38d858ed68f5d787385f6122d4170b2
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/acpi/apei/ drivers/gpu/drm/ kernel/trace/
+On Mon, 28 Mar 2022 15:27:43 +0900
+Masahiro Yamada <masahiroy@kernel.org> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> On Sun, Mar 27, 2022 at 8:53 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > This allows kernel developer to embed a default bootconfig file in
+> > the kernel instead of embedding it in the initrd. This will be good
+> > for who are using the kernel without initrd, or who needs a default
+> > bootconfigs.
+> > This needs to set two kconfigs: CONFIG_EMBED_BOOT_CONFIG=y and set
+> > the file path to CONFIG_EMBED_BOOT_CONFIG_FILE.
+> >
+> > Note that you still need 'bootconfig' command line option to load the
+> > embedded bootconfig. Also if you boot using an initrd with a different
+> > bootconfig, the kernel will use the bootconfig in the initrd, instead
+> > of the default bootconfig.
+> >
+> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > ---
+> >  Changes in v3:
+> >   - Avoid updating the default.bconf if the file is not changed.
+> > ---
+> >  include/linux/bootconfig.h |   10 ++++++++++
+> >  init/Kconfig               |   21 +++++++++++++++++++++
+> >  init/main.c                |   13 ++++++++-----
+> >  lib/.gitignore             |    1 +
+> >  lib/Makefile               |   10 ++++++++++
+> >  lib/bootconfig.c           |   23 +++++++++++++++++++++++
+> >  6 files changed, 73 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
+> > index a4665c7ab07c..5dbda5e3e9bb 100644
+> > --- a/include/linux/bootconfig.h
+> > +++ b/include/linux/bootconfig.h
+> > @@ -289,4 +289,14 @@ int __init xbc_get_info(int *node_size, size_t *data_size);
+> >  /* XBC cleanup data structures */
+> >  void __init xbc_exit(void);
+> >
+> > +/* XBC embedded bootconfig data in kernel */
+> > +#ifdef CONFIG_EMBED_BOOT_CONFIG
+> > +char * __init xbc_get_embedded_bootconfig(size_t *size);
+> > +#else
+> > +static inline char *xbc_get_embedded_bootconfig(size_t *size)
+> > +{
+> > +       return NULL;
+> > +}
+> > +#endif
+> > +
+> >  #endif
+> > diff --git a/init/Kconfig b/init/Kconfig
+> > index beb5b866c318..bff308a782f8 100644
+> > --- a/init/Kconfig
+> > +++ b/init/Kconfig
+> > @@ -1357,6 +1357,27 @@ config BOOT_CONFIG
+> >
+> >           If unsure, say Y.
+> >
+> > +config EMBED_BOOT_CONFIG
+> > +       bool "Embed bootconfig file in the kernel"
+> > +       depends on BOOT_CONFIG
+> > +       default n
+> > +       help
+> > +         Embed a bootconfig file given by EMBED_BOOT_CONFIG_FILE in the
+> > +         kernel. Usually, the bootconfig file is loaded with the initrd
+> > +         image. But if the system doesn't support initrd, this option will
+> > +         help you by embedding a bootconfig file while building the kernel.
+> > +
+> > +         If unsure, say N.
+> > +
+> > +config EMBED_BOOT_CONFIG_FILE
+> > +       string "Embedded bootconfig file path"
+> > +       default ""
+> > +       depends on EMBED_BOOT_CONFIG
+> > +       help
+> > +         Specify a bootconfig file which will be embedded to the kernel.
+> > +         This bootconfig will be used if there is no initrd or no other
+> > +         bootconfig in the initrd.
+> > +
+> >  choice
+> >         prompt "Compiler optimization level"
+> >         default CC_OPTIMIZE_FOR_PERFORMANCE
+> > diff --git a/init/main.c b/init/main.c
+> > index 4f3ba3b84e34..180511324c95 100644
+> > --- a/init/main.c
+> > +++ b/init/main.c
+> > @@ -265,7 +265,7 @@ static int __init loglevel(char *str)
+> >  early_param("loglevel", loglevel);
+> >
+> >  #ifdef CONFIG_BLK_DEV_INITRD
+> > -static void * __init get_boot_config_from_initrd(u32 *_size)
+> > +static void * __init get_boot_config_from_initrd(size_t *_size)
+> >  {
+> >         u32 size, csum;
+> >         char *data;
+> > @@ -411,12 +411,15 @@ static void __init setup_boot_config(void)
+> >         static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
+> >         const char *msg;
+> >         int pos;
+> > -       u32 size;
+> > +       size_t size;
+> >         char *data, *err;
+> >         int ret;
+> >
+> >         /* Cut out the bootconfig data even if we have no bootconfig option */
+> >         data = get_boot_config_from_initrd(&size);
+> > +       /* If there is no bootconfig in initrd, try embedded one. */
+> > +       if (!data)
+> > +               data = xbc_get_embedded_bootconfig(&size);
+> >
+> >         strlcpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+> >         err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
+> > @@ -435,8 +438,8 @@ static void __init setup_boot_config(void)
+> >         }
+> >
+> >         if (size >= XBC_DATA_MAX) {
+> > -               pr_err("bootconfig size %d greater than max size %d\n",
+> > -                       size, XBC_DATA_MAX);
+> > +               pr_err("bootconfig size %ld greater than max size %d\n",
+> > +                       (long)size, XBC_DATA_MAX);
+> >                 return;
+> >         }
+> >
+> > @@ -449,7 +452,7 @@ static void __init setup_boot_config(void)
+> >                                 msg, pos);
+> >         } else {
+> >                 xbc_get_info(&ret, NULL);
+> > -               pr_info("Load bootconfig: %d bytes %d nodes\n", size, ret);
+> > +               pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
+> >                 /* keys starting with "kernel." are passed via cmdline */
+> >                 extra_command_line = xbc_make_cmdline("kernel");
+> >                 /* Also, "init." keys are init arguments */
+> > diff --git a/lib/.gitignore b/lib/.gitignore
+> > index e5e217b8307b..30a2a5db7033 100644
+> > --- a/lib/.gitignore
+> > +++ b/lib/.gitignore
+> > @@ -6,3 +6,4 @@
+> >  /oid_registry_data.c
+> >  /test_fortify.log
+> >  /test_fortify/*.log
+> > +/default.bconf
+> 
+> 
+> I think lib/.gitignore is alphabetically sorted.
+> 
+> Please insert the new one
+> to the proper line.
 
+Ah, OK. Let me fix that.
 
-sparse warnings: (new ones prefixed by >>)
-   kernel/trace/trace_events_user.c:409:38: sparse: sparse: Using plain integer as NULL pointer
-   kernel/trace/trace_events_user.c:430:40: sparse: sparse: Using plain integer as NULL pointer
->> kernel/trace/trace_events_user.c:593:31: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *[assigned] udata @@     got void [noderef] __user * @@
-   kernel/trace/trace_events_user.c:593:31: sparse:     expected void *[assigned] udata
-   kernel/trace/trace_events_user.c:593:31: sparse:     got void [noderef] __user *
-   kernel/trace/trace_events_user.c:1064:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/trace/trace_events_user.c:1064:16: sparse:    void [noderef] __rcu *
-   kernel/trace/trace_events_user.c:1064:16: sparse:    void *
-   kernel/trace/trace_events_user.c:1122:13: sparse: sparse: cast removes address space '__user' of expression
-   kernel/trace/trace_events_user.c:1122:13: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __user *buf @@     got char * @@
-   kernel/trace/trace_events_user.c:1122:13: sparse:     expected void [noderef] __user *buf
-   kernel/trace/trace_events_user.c:1122:13: sparse:     got char *
-   kernel/trace/trace_events_user.c:1138:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/trace/trace_events_user.c:1138:16: sparse:    void [noderef] __rcu *
-   kernel/trace/trace_events_user.c:1138:16: sparse:    void *
-   kernel/trace/trace_events_user.c:1165:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/trace/trace_events_user.c:1165:9: sparse:    void [noderef] __rcu *
-   kernel/trace/trace_events_user.c:1165:9: sparse:    void *
+> > diff --git a/lib/Makefile b/lib/Makefile
+> > index 353bc09ce38d..dd9f3ebb62ca 100644
+> > --- a/lib/Makefile
+> > +++ b/lib/Makefile
+> > @@ -276,6 +276,16 @@ $(foreach file, $(libfdt_files), \
+> >         $(eval CFLAGS_$(file) = -I $(srctree)/scripts/dtc/libfdt))
+> >  lib-$(CONFIG_LIBFDT) += $(libfdt_files)
+> >
+> > +ifeq ($(CONFIG_EMBED_BOOT_CONFIG),y)
+> > +$(obj)/bootconfig.o: $(obj)/default.bconf
+> > +
+> > +targets += default.bconf
+> 
+> 
+> I did not test this patch, but presumably
+> "make clean" will miss to clean up default.bconf
+> 
+> The 'targets' must exist outside the ifeq-block.
+> Move the 'endif' up.
+> 
+> 
+> ifeq ($(CONFIG_EMBED_BOOT_CONFIG),y)
+> $(obj)/bootconfig.o: $(obj)/default.bconf
+> endif
+> 
+> targets += default.bconf
+> 
+> ...
 
-vim +593 kernel/trace/trace_events_user.c
+You're right! I didn't know this behavior. Thanks for the notice.
+I misunderstood that the files in targets always be built...
 
-   571	
-   572	#ifdef CONFIG_PERF_EVENTS
-   573	static void user_event_bpf(struct user_event *user, struct iov_iter *i)
-   574	{
-   575		struct user_bpf_context context;
-   576		struct user_bpf_iter bpf_i;
-   577		char fast_data[MAX_STACK_BPF_DATA];
-   578		void *temp = NULL;
-   579	
-   580		if ((user->flags & FLAG_BPF_ITER) && iter_is_iovec(i)) {
-   581			/* Raw iterator */
-   582			context.data_type = USER_BPF_DATA_ITER;
-   583			context.data_len = i->count;
-   584			context.iter = &bpf_i;
-   585	
-   586			bpf_i.iov_offset = i->iov_offset;
-   587			bpf_i.iov = i->iov;
-   588			bpf_i.nr_segs = i->nr_segs;
-   589		} else if (i->nr_segs == 1 && iter_is_iovec(i)) {
-   590			/* Single buffer from user */
-   591			context.data_type = USER_BPF_DATA_USER;
-   592			context.data_len = i->count;
- > 593			context.udata = i->iov->iov_base + i->iov_offset;
-   594		} else {
-   595			/* Multi buffer from user */
-   596			struct iov_iter copy = *i;
-   597			size_t copy_size = min_t(size_t, i->count, MAX_BPF_COPY_SIZE);
-   598	
-   599			context.data_type = USER_BPF_DATA_KERNEL;
-   600			context.kdata = fast_data;
-   601	
-   602			if (unlikely(copy_size > sizeof(fast_data))) {
-   603				temp = kmalloc(copy_size, GFP_NOWAIT);
-   604	
-   605				if (temp)
-   606					context.kdata = temp;
-   607				else
-   608					copy_size = sizeof(fast_data);
-   609			}
-   610	
-   611			context.data_len = copy_nofault(context.kdata,
-   612							copy_size, &copy);
-   613		}
-   614	
-   615		trace_call_bpf(&user->call, &context);
-   616	
-   617		kfree(temp);
-   618	}
-   619	
+After moving the 'targets' out of ifeq-block, I confirmed that the
+default.bconf was not generated when CONFIG_EMBED_BOOT_CONFIG is not
+set, and it is cleaned up when CONFIG_EMBED_BOOT_CONFIG=y.
+Thanks!
+
+> 
+> > +filechk_defbconf = cat /dev/null $(CONFIG_EMBED_BOOT_CONFIG_FILE)
+> > +$(obj)/default.bconf: FORCE
+> > +       $(call filechk,defbconf)
+> 
+> 
+> This will work, but users will be confused when they
+> try to build out-of-tree with the O= option.
+> 
+> If CONFIG_EMBED_BOOT_CONFIG_FILE is a relative path,
+> it is actually relative to the object tree, not the source tree.
+
+Yes, that's right. I would like to fix this issue.
+
+> I am not sure if that is the expected behavior, but it is not documented
+> anywhere.
+> 
+> 
+> If you want to search both in the objtree and srctree,
+> you can write like follows:   [UNTESTED]
+> 
+> 
+> filechk_defbconf = cat $(or $(real-prereqs), /dev/null)
+> $(obj)/default.bconf: $(CONFIG_EMBED_BOOT_CONFIG_FILE) FORCE
+>         $(call filechk,defbconf)
+
+Great! let me check it works.
+
+Thank you,
+
+> 
+> 
+> 
+> 
+> > +
+> > +endif
+> > +
+> >  lib-$(CONFIG_BOOT_CONFIG) += bootconfig.o
+> >
+> >  obj-$(CONFIG_RBTREE_TEST) += rbtree_test.o
+> > diff --git a/lib/bootconfig.c b/lib/bootconfig.c
+> > index 74f3201ab8e5..3a3bf3a208e3 100644
+> > --- a/lib/bootconfig.c
+> > +++ b/lib/bootconfig.c
+> > @@ -12,6 +12,29 @@
+> >  #include <linux/kernel.h>
+> >  #include <linux/memblock.h>
+> >  #include <linux/string.h>
+> > +
+> > +#ifdef CONFIG_EMBED_BOOT_CONFIG
+> > +asm (
+> > +"      .pushsection .init.data, \"aw\"                 \n"
+> > +"      .global embedded_bootconfig_data                \n"
+> > +"embedded_bootconfig_data:                             \n"
+> > +"      .incbin \"lib/default.bconf\"                   \n"
+> > +"      .global embedded_bootconfig_data_end            \n"
+> > +"embedded_bootconfig_data_end:                         \n"
+> > +"      .popsection                                     \n"
+> > +);
+> > +
+> > +extern __visible char embedded_bootconfig_data[];
+> > +extern __visible char embedded_bootconfig_data_end[];
+> > +
+> > +char * __init xbc_get_embedded_bootconfig(size_t *size)
+> > +{
+> > +       *size = embedded_bootconfig_data_end - embedded_bootconfig_data;
+> > +       return (*size) ? embedded_bootconfig_data : NULL;
+> > +}
+> > +
+> > +#endif
+> > +
+> >  #else /* !__KERNEL__ */
+> >  /*
+> >   * NOTE: This is only for tools/bootconfig, because tools/bootconfig will
+> >
+> 
+> 
+> -- 
+> Best Regards
+> Masahiro Yamada
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Masami Hiramatsu <mhiramat@kernel.org>

@@ -2,99 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7C64E8C4E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 04:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E694E8C51
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 04:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237680AbiC1CvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 22:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
+        id S237688AbiC1CvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 22:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237678AbiC1Cu6 (ORCPT
+        with ESMTP id S237686AbiC1CvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 22:50:58 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AD742EFB
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 19:49:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648435759; x=1679971759;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=9rqPqfcIa1ccW3H6rOJaZsgeTrXk813nKYlbyrcSd64=;
-  b=d0Su/EWdsBrfk6mYQFxuouRgXE2oeqiMQ78xUekp41KRQ0K8ljl7oUUz
-   ibw2qAiFUkcuP9wriGi+fOt6Gsyoih99lqTOfUq2WWEj6QbvlgmsPVkSL
-   7NOwCix3iw6YmJM7mWIBSNSUT26ovFk7nQXBNnjVZ9DRkTzQtRhOPex7D
-   j2NSp6oPttZbJ/S5nOUX09/uJMBI040cyUIWqS6sazphbHXdOmof3ba0a
-   U+pWfouyQSiGVAMlt3seP251p/xNKKXCJ2s9ESlvam7MwVFweyQt+hOLy
-   gfbwL7OKG6wiwqgDigDrcAzmfon6LaeJt+KRlcWfN8VcI8/72n8/U6jEj
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="345334471"
-X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
-   d="scan'208";a="345334471"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 19:49:19 -0700
-X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
-   d="scan'208";a="520833975"
-Received: from crjohnso-mobl.amr.corp.intel.com (HELO [10.209.122.14]) ([10.209.122.14])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 19:49:19 -0700
-Message-ID: <347c75b8-3a48-0758-892a-0d0ac139f740@intel.com>
-Date:   Sun, 27 Mar 2022 19:49:19 -0700
+        Sun, 27 Mar 2022 22:51:06 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B4443AF7;
+        Sun, 27 Mar 2022 19:49:26 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: krisman)
+        with ESMTPSA id D6E141F42E8E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648435765;
+        bh=WBy+NdgrMIzJ3AKUedzuJEhPjlvydZ03Twj00zAxYz4=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=U3HkSb6POVvUJbAp6jHygGoEOaVyoi8l0Klzz5SmXmhTVofrR1p1nTiR+uWW5jdqX
+         UN1KUGIcImPUaXDtH2vuW52wos7Og6P7mKML3/LZ/qCU5TTOOQut7je/MyJ2uIFUHD
+         /7yLlGkpB3nOgw96VAIRUmok/5+jzodHVky0vKDI4X0e12zlBvIahqpgAFKL33ibpN
+         v5jXh3msmHzjAqTIa4+7gRLRjNRmG7YGV6QwmiJrSE+jZN+/PRYrw09zdD+7V5ZF6h
+         WPCikNH/4djTYKBlbTAlaoH2olFO8fW/T99NL973+iDEDG6OwVickaV+KHI715hBMA
+         EcWrj3LAdcEQg==
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Shreeya Patel <shreeya.patel@collabora.com>, lars@metafoo.de,
+        robh+dt@kernel.org, Zhigang.Shi@liteon.com,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        alvaro.soliverez@collabora.com
+Subject: Re: [PATCH 2/3] dt-bindings: Document ltrf216a light sensor bindings
+Organization: Collabora
+References: <20220325103014.6597-1-shreeya.patel@collabora.com>
+        <20220325103014.6597-3-shreeya.patel@collabora.com>
+        <20220327145511.2d36dd10@jic23-huawei>
+Date:   Sun, 27 Mar 2022 22:49:20 -0400
+In-Reply-To: <20220327145511.2d36dd10@jic23-huawei> (Jonathan Cameron's
+        message of "Sun, 27 Mar 2022 14:55:11 +0100")
+Message-ID: <87czi6ssen.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Haowen Bai <baihaowen@meizu.com>, dave.hansen@linux.intel.com,
-        luto@kernel.org, peterz@infradead.org
-Cc:     linux-kernel@vger.kernel.org
-References: <1648433573-25735-1-git-send-email-baihaowen@meizu.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH] x86/mm: Directly return instead of using local ret
- variable
-In-Reply-To: <1648433573-25735-1-git-send-email-baihaowen@meizu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/27/22 19:12, Haowen Bai wrote:
-> 
-> diff --git a/arch/x86/mm/pf_in.c b/arch/x86/mm/pf_in.c
-> index 3f83e31..4eff3ee 100644
-> --- a/arch/x86/mm/pf_in.c
-> +++ b/arch/x86/mm/pf_in.c
-> @@ -130,7 +130,6 @@ enum reason_type get_ins_type(unsigned long ins_addr)
->  	unsigned char *p;
->  	struct prefix_bits prf;
->  	int i;
-> -	enum reason_type rv = OTHERS;
->  
->  	p = (unsigned char *)ins_addr;
->  	p += skip_prefix(p, &prf);
-> @@ -141,7 +140,7 @@ enum reason_type get_ins_type(unsigned long ins_addr)
->  	CHECK_OP_TYPE(opcode, imm_wop, IMM_WRITE);
->  
->  exit:
-> -	return rv;
-> +	return OTHERS;
->  }
->  #undef CHECK_OP_TYPE
->  
+Jonathan Cameron <jic23@kernel.org> writes:
 
-Does this even compile?  Take a look at this macro:
+> On Fri, 25 Mar 2022 16:00:13 +0530
+> Shreeya Patel <shreeya.patel@collabora.com> wrote:
+>
+>> Add devicetree bindings for ltrf216a ambient light sensor
+>> 
+>> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+> Hi Shreeya,
+>
+> As we are making this Zhigang Shi's problem to maintain, I'm 
+> looking for an ack.  Bit mean otherwise :)
 
-> #define CHECK_OP_TYPE(opcode, array, type) \
->         for (i = 0; i < ARRAY_SIZE(array); i++) { \
->                 if (array[i] == opcode) { \
->                         rv = type; \
->                         goto exit; \
->                 } \
+Alternatively, Shreeya could take over the maintainership of this
+schema, since she wrote it. :)
 
-It uses 'rv'.
+>
+> Except for the deprecated part this could just have gone in
+> trivial-bindings.yaml.
+>
+> I guess you don't need it for your existing board, but best
+> practice would probably include ensuring whatever supplies
+> the device needs are here so that platforms that don't enable
+> them by default can turn them on.
+>
+> Also, there is an interrupt according to the datasheet linked
+> from patch 3 and that should definitely be in the binding
+> even if the driver isn't using it.
+>
+> Jonathan
+>
+>
+>> ---
+>>  .../bindings/iio/light/liteon,ltrf216a.yaml   | 42 +++++++++++++++++++
+>>  1 file changed, 42 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml b/Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
+>> new file mode 100644
+>> index 000000000000..275d86a0353a
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
+>> @@ -0,0 +1,42 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/iio/light/liteon,ltrf216a.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: LTRF216A Ambient Light Sensor
+>> +
+>> +maintainers:
+>> +  - Zhigang Shi <Zhigang.Shi@liteon.com>
+>> +
+>> +description: |
+>> +  Ambient sensing with an i2c interface.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - liteon,ltrf216a
+>> +      - ltr,ltrf216a
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    i2c {
+>> +
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +
+>> +        light-sensor@53 {
+>> +                compatible = "ltr,ltrf216a";
+>> +                reg = <0x53>;
+>> +        };
+>> +    };
+>> +...
+>
 
+-- 
+Gabriel Krisman Bertazi

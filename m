@@ -2,153 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F51B4E9ACE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F094E9AD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233926AbiC1PSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 11:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
+        id S232846AbiC1PT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 11:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiC1PSe (ORCPT
+        with ESMTP id S229812AbiC1PTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 11:18:34 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A900560078
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:16:53 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id k14so12525640pga.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:16:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=V2BkG1eTX10cucUGmcHAn94FhLtFZhm8llsNlwvtRuc=;
-        b=sALbJwx8VGCOa6mzxzDleDWU1dPFqfgqIX1UyiHh3zAj5ZCTtCKO3xjq94w2VrpetQ
-         y0OlGDN2AP01yDewUz/x8/cbYm9hbsQQ7RsIAkSDsaia0hIWnniT0PPDDAg9NMxLqT7f
-         CUh5MKcp8D4mUEodbmDVwDeIhz1E/LoLuUEAg/360b4C0vFGeHSOm9fHdeUV1wr2NJyf
-         D4l1oUU7gaTWjmf8iToex55XptSW+KJX3nCVq3VNVumPDFyAXJrvmiPnfTWg6AKp5THL
-         hN3Tbi1K4CiHHiW9fzyPr6xYQmlwrDUIYWzTSDQIl2m4MSCeIu7Wjc4IHwm43yWIdm+N
-         MUEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=V2BkG1eTX10cucUGmcHAn94FhLtFZhm8llsNlwvtRuc=;
-        b=tc6ehxmA+oovqdFj1KBIEkqfeqrwy7E3V0KH98q6Ohg19RX9Q7vkJquHNoNQddK9Uh
-         KoCeko8bboe4l6qvi4bKA0GMr3wrqouM7vujf1sZi/0gSPEv/UIt4xEktOmHT6I+2QEd
-         +4p07uwr+oUXHfO4NHBtP88Db59OSNZgMpc2S89YEPtdLPykm26WdF4b375NTPpQlQNs
-         apfjmvtKdctOLbbERjrjOLCUGUcY0yO+60daF4HPp3Y1oZz8x8U2iE+tnpWGFDPbPqd5
-         kPOnDhwx7o/gCM0TtT3PHsAclcyldS9cT5tg+peQRuI/BjO8NvFDqHI/8nxPZ0Ux5F7V
-         AaPw==
-X-Gm-Message-State: AOAM532SdDU4K7EOj+DEVA7UB2rUpQjX3lJH3luQqmOkGsTJLZ1jcLzz
-        GSA4TBwFBbaM41URenFOAHQ7xQ==
-X-Google-Smtp-Source: ABdhPJymvUPIEff3uEiOhFC8PqKbbFXCngUaPAQ96GGUp2FYuqQpLllY+Mk5xWbNxDWjkvXLJTlEUw==
-X-Received: by 2002:a05:6a00:b51:b0:4fa:ece9:15e4 with SMTP id p17-20020a056a000b5100b004faece915e4mr22481702pfo.27.1648480612981;
-        Mon, 28 Mar 2022 08:16:52 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p10-20020a056a0026ca00b004fb44e0cb17sm6083630pfw.116.2022.03.28.08.16.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 08:16:52 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 15:16:49 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH] KVM: x86/mmu: add lockdep check before
- lookup_address_in_mm()
-Message-ID: <YkHRYY6x1Ewez/g4@google.com>
-References: <20220327205803.739336-1-mizhang@google.com>
+        Mon, 28 Mar 2022 11:19:50 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678CBBE
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:18:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=KEVI2o2rD3UrOqh8lKO7UOSKAG4YSuE1N9F0wquI240=; b=mz45GIU7h6D1zDQqv44USen4y7
+        1qk54CAqNW4WZR5nvOAZ8KkEZakRLvdGNFZbIrOL7BbpZ8T9XtEb+GU09DoZ6BruPGL2Cs8I+VjY1
+        G5AG8/ZP+4CP8np0srofJFvphmHhkwgfQcn4sC6Nms/GAo1nyXEnGH4gTaHDCbsv7/wPoXtsA99m9
+        EGSaC76FPR7vHNgxDooM6qSMCl8qoPsgaIJP990Sos7zTMcUn7410oQ847bzhbH0pajF9inD46ZDm
+        qY8rBUX5DgrGtyQXjegO7h4GQ4WPWCGQXWgCLT5XRAFqeNcu54GXjX01dqw97DOCgKH4gsH9tZu77
+        fab2JmdQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nYr7t-005TZZ-UY; Mon, 28 Mar 2022 15:17:50 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 29A19300237;
+        Mon, 28 Mar 2022 17:17:47 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 01BEE323C8DAB; Mon, 28 Mar 2022 17:17:46 +0200 (CEST)
+Date:   Mon, 28 Mar 2022 17:17:46 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
+        Frederic Weisbecker <fweisbec@gmail.com>
+Subject: Re: [External] Re: [PATCH] sched/fair: fix broken bandwidth control
+ with nohz_full
+Message-ID: <YkHRmv/OcABIB0wP@hirez.programming.kicks-ass.net>
+References: <20220328110751.39987-1-zhouchengming@bytedance.com>
+ <20220328132047.GD8939@worktop.programming.kicks-ass.net>
+ <c0465b27-328a-1288-fb50-d4c6321c8b4d@bytedance.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220327205803.739336-1-mizhang@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c0465b27-328a-1288-fb50-d4c6321c8b4d@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 27, 2022, Mingwei Zhang wrote:
-> Add a lockdep check before invoking lookup_address_in_mm().
-> lookup_address_in_mm() walks all levels of host page table without
-> accquiring any lock. This is usually unsafe unless we are walking the
-> kernel addresses (check other usage cases of lookup_address_in_mm and
-> lookup_address_in_pgd).
+On Mon, Mar 28, 2022 at 09:50:05PM +0800, Chengming Zhou wrote:
+> On 2022/3/28 21:20, Peter Zijlstra wrote:
+> > On Mon, Mar 28, 2022 at 07:07:51PM +0800, Chengming Zhou wrote:
+> >> With nohz_full enabled on cpu, the scheduler_tick() will be stopped
+> >> when only one CFS task left on rq.
+> >>
+> >> scheduler_tick()
+> >>   task_tick_fair()
+> >>     entity_tick()
+> >>       update_curr()
+> >>         account_cfs_rq_runtime(cfs_rq, delta_exec) --> stopped
+> >>
+> >> So that running task can't account its runtime periodically, but
+> >> the cfs_bandwidth hrtimer still __refill_cfs_bandwidth_runtime()
+> >> periodically. Later in one period, the task would account very
+> >> big delta_exec, which cause the cfs_rq to be throttled for a
+> >> long time.
+> >>
+> >> There are two solutions for the problem, the first is that we
+> >> can check in sched_can_stop_tick() if current task's cfs_rq
+> >> have runtime_enabled, in which case we don't stop tick. But
+> >> it will make nohz_full almost useless in cloud environment
+> >> that every container has the cpu bandwidth control setting.
+> > 
+> > How is NOHZ_FULL useful in that environment to begin with? If you set
+> > bandwidth crap, the expectation is that there is overcommit, which more
+> > or less assumes lots of scheduling, presumably VMs or somesuch crud.
+> > 
+> > So how does NOHZ_FULL make sense?
 > 
-> Walking host page table (especially guest addresses) usually requires
-> holding two types of locks: 1) mmu_lock in mm or the lock that protects
-> the reverse maps of host memory in range; 2) lock for the leaf paging
-> structures.
+> Yes, we have scheduled some VMs in cgroups on the host, which
+> enabled NOHZ_FULL to reduce the interference of tick to vcpu task
+> if it's the only task running on cpu.
 > 
-> One exception case is when we take the mmu_lock of the secondary mmu.
-> Holding mmu_lock of KVM MMU in either read mode or write mode prevents host
-> level entities from modifying the host page table concurrently. This is
-> because all of them will have to invoke KVM mmu_notifier first before doing
-> the actual work. Since KVM mmu_notifier invalidation operations always take
-> the mmu write lock, we are safe if we hold the mmu lock here.
+> This problem will however throttle it wrongly, even if it hasn't
+> used up its quota.
 > 
-> Note: this means that KVM cannot allow concurrent multiple mmu_notifier
-> invalidation callbacks by using KVM mmu read lock. Since, otherwise, any
-> host level entity can cause race conditions with this one. Walking host
-> page table here may get us stale information or may trigger NULL ptr
-> dereference that is hard to reproduce.
-> 
-> Having a lockdep check here will prevent or at least warn future
-> development that directly walks host page table simply in a KVM ioctl
-> function. In addition, it provides a record for any future development on
-> KVM mmu_notifier.
-> 
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Ben Gardon <bgardon@google.com>
-> Cc: David Matlack <dmatlack@google.com>
-> 
-> Signed-off-by: Mingwei Zhang <mizhang@google.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 1361eb4599b4..066bb5435156 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -2820,6 +2820,24 @@ static int host_pfn_mapping_level(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
->  	 */
->  	hva = __gfn_to_hva_memslot(slot, gfn);
->  
-> +	/*
-> +	 * lookup_address_in_mm() walks all levels of host page table without
-> +	 * accquiring any lock. This is not safe when KVM does not take the
-> +	 * mmu_lock. Holding mmu_lock in either read mode or write mode prevents
-> +	 * host level entities from modifying the host page table. This is
-> +	 * because all of them will have to invoke KVM mmu_notifier first before
-> +	 * doing the actual work. Since KVM mmu_notifier invalidation operations
-> +	 * always take the mmu write lock, we are safe if we hold the mmu lock
-> +	 * here.
-> +	 *
-> +	 * Note: this means that KVM cannot allow concurrent multiple
-> +	 * mmu_notifier invalidation callbacks by using KVM mmu read lock.
-> +	 * Otherwise, any host level entity can cause race conditions with this
-> +	 * one. Walking host page table here may get us stale information or may
-> +	 * trigger NULL ptr dereference that is hard to reproduce.
-> +	 */
-> +	lockdep_assert_held(&kvm->mmu_lock);
+> Do you suggest that we shouldn't stop tick when the current task's
+> cfs_rq has runtime_enabled ?
 
-Holding mmu_lock isn't strictly required.  It would also be safe to use this helper
-if mmu_notifier_retry_hva() were checked after grabbing the mapping level, before
-consuming it.  E.g. we could theoretically move this to kvm_faultin_pfn().
+I'm not suggesting anything just yet as I'm not sure I understand things
+well enough. I'm just wondering if NOHZ_FULL makes sense for you since
+NOHZ_FULL makes system entry/exit so much more expensive.
 
-And simply holding the lock isn't sufficient, i.e. the lockdep gives a false sense
-of security.  E.g. calling this while holding mmu_lock but without first checking
-mmu_notifier_count would let it run concurrently with host PTE modifications.
-
-I'm definitely in favor of adding a comment to document the mmu_notifier
-interactions, but I don't like adding a lockdep.
+NOHZ_FULL is for use-cases that 'never' intend to go into the kernel,
+your use-case actively relies on going into the kernel. Hence the
+confusion.

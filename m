@@ -2,61 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E660D4EA374
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 01:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C264EA387
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 01:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbiC1XJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 19:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
+        id S230381AbiC1XKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 19:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiC1XJQ (ORCPT
+        with ESMTP id S230283AbiC1XKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 19:09:16 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D80F60C2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 16:07:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648508854; x=1680044854;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tvAFI6iISHckMFlraLRgHpijQiwX/o6AHylRpEbVP+8=;
-  b=NW8ckGgxUN9UzSWdNYWV4ucfkcu5IL/bw4SBOduAPf7k+xY4Fvx3RYso
-   rAArniZHYcoqs5YmtjbxLJbk7eeqvUhuqYjU42mdU7vD6U8GTtldgeAIK
-   9SJzHtllxBR9LmsyJL9MqbHTsWFDgThH0HHDUfTuMPCLioc7If6nH3j10
-   OFwn772aptOPQdnIv2b1/w0pIgEk2ps3Jryro/ciTSptNSDYJzWST5qrJ
-   lYwJwK3+FifPTOIcpDDKDGOi8GMkBrnXq6LW+rKSd1A/NCQ6zyAxCUtDh
-   XlkoWVFXmbFBrGI1dL/Ca3Yk/mgewPl/mG7sV1HDRAIh/hllyzcupkE6E
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="241273993"
-X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="241273993"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 16:07:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="546147297"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 28 Mar 2022 16:07:32 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nYySR-0002P2-Us; Mon, 28 Mar 2022 23:07:31 +0000
-Date:   Tue, 29 Mar 2022 07:06:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:axboe/linux-block/sock-nolock 6/6]
- fs/io_uring.c:8999:9: error: implicit declaration of function
- 'io_sock_nolock_clear'
-Message-ID: <202203290706.2CmUdsqb-lkp@intel.com>
+        Mon, 28 Mar 2022 19:10:03 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B471DFE5;
+        Mon, 28 Mar 2022 16:08:21 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1648508897;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GW5piibXVKo9A/BIxG2OaJSsIL3nRb2gFVpSMD8Zngg=;
+        b=RataHu52uLY+1j4O0rcSXT0F7L8lkLcVrcT9weAkzaKSC0NHIk3kvnB0qFAmfvDIlsEd0G
+        UPZTvh7TgcalSd1NjpUx2DmQFqGZapNjbfS1SP9dFm7PLlrXhDbbKJaQePnxynRB6i580m
+        j6ExbwCCgxEpnvnJtrTQioJk/TtTamCz93AG21LXrtGWDNLj5x3PzKowf6NJKDBdv2In6T
+        SFHIAuVbgNhvLIZf52lVvPW/bj3bqilEfjSg6IVt2pNR0ffuYP/vkLbkT8Stt8Ous3Qlax
+        Bc9PCNEBPEy1tyHAqwSE/gSh3gZUmCRoc/yd8/iF4MdHN+pFm90GiY7eASJ96Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1648508897;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GW5piibXVKo9A/BIxG2OaJSsIL3nRb2gFVpSMD8Zngg=;
+        b=aOELans+tovI5r1VYnU410Rrhjf4G2toTen/ParOs+ebyjfwwNbUXzKvkk4zFq8Hn7i6vn
+        uY0etoAkLcKmnUCg==
+To:     Benjamin =?utf-8?Q?St=C3=BCrz?= <benni@stuerz.xyz>, andrew@lunn.ch
+Cc:     sebastian.hesselbarth@gmail.com, gregory.clement@bootlin.com,
+        linux@armlinux.org.uk, linux@simtec.co.uk, krzk@kernel.org,
+        alim.akhtar@samsung.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, robert.moore@intel.com,
+        rafael.j.wysocki@intel.com, lenb@kernel.org, 3chas3@gmail.com,
+        laforge@gnumonks.org, arnd@arndb.de, gregkh@linuxfoundation.org,
+        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rric@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl,
+        mike.marciniszyn@cornelisnetworks.com,
+        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
+        pali@kernel.org, dmitry.torokhov@gmail.com, isdn@linux-pingi.de,
+        benh@kernel.crashing.org, fbarrat@linux.ibm.com, ajd@linux.ibm.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        nico@fluxnic.net, loic.poulain@linaro.org, kvalo@kernel.org,
+        pkshih@realtek.com, bhelgaas@google.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-input@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-media@vger.kernel.org,
+        wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-pci@vger.kernel.org,
+        Benjamin =?utf-8?Q?St=C3=BCrz?= <benni@stuerz.xyz>
+Subject: Re: [PATCH 04/22] x86: Replace comments with C99 initializers
+In-Reply-To: <20220326165909.506926-4-benni@stuerz.xyz>
+References: <20220326165909.506926-1-benni@stuerz.xyz>
+ <20220326165909.506926-4-benni@stuerz.xyz>
+Date:   Tue, 29 Mar 2022 01:08:16 +0200
+Message-ID: <87lewtfzfj.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,107 +82,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/sock-nolock
-head:   90b2144118aabeddabb82f22e07b87da068c54cd
-commit: 90b2144118aabeddabb82f22e07b87da068c54cd [6/6] io_uring: mark accept direct socket as no-lock
-config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20220329/202203290706.2CmUdsqb-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/90b2144118aabeddabb82f22e07b87da068c54cd
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block axboe/linux-block/sock-nolock
-        git checkout 90b2144118aabeddabb82f22e07b87da068c54cd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
+Benjamin,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Sat, Mar 26 2022 at 17:58, Benjamin St=C3=BCrz wrote:
 
-All errors (new ones prefixed by >>):
+> This replaces comments with C99's designated
+> initializers because the kernel supports them now.
 
-   fs/io_uring.c: In function '__io_submit_flush_completions':
-   fs/io_uring.c:2705:40: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
-    2705 |         struct io_wq_work_node *node, *prev;
-         |                                        ^~~~
-   fs/io_uring.c: In function 'io_rsrc_file_put':
->> fs/io_uring.c:8999:9: error: implicit declaration of function 'io_sock_nolock_clear' [-Werror=implicit-function-declaration]
-    8999 |         io_sock_nolock_clear(file);
-         |         ^~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+the kernel has used designated array initializers for a very long time
+simply because the kernel did not use pure C89 but C89 with GNU
+extensions, i.e. -std=3Dgnu89, which include designated array
+initializers. GCC supports this since 1998 with =3Dgnu89, so 'now' is
+more than slightly off.
 
+Explicit value assignment to enum constants are a different story. They
+are neither designated initializers nor new in C99. The following
+paragraph from the standard has not been changed since C89:
 
-vim +/io_sock_nolock_clear +8999 fs/io_uring.c
+   "The identifiers in an enumerator list are declared as constants that
+    have type int and may appear wherever such are permitted. An
+    enumerator with =3D defines its enumeration constant as the value of
+    the constant expression. If the first enumerator has no =3D, the value
+    of its enumeration constant is 0. Each subsequent enumerator with no
+    =3D defines its enumeration constant as the value of the constant
+    expression obtained by adding 1 to the value of the previous
+    enumeration constant. (The use of enumerators with =3D may produce
+    enumeration constants with values that duplicate other values in the
+    same enumeration.)"
 
-  8938	
-  8939	static void io_rsrc_file_put(struct io_ring_ctx *ctx, struct io_rsrc_put *prsrc)
-  8940	{
-  8941		struct file *file = prsrc->file;
-  8942	#if defined(CONFIG_UNIX)
-  8943		struct sock *sock = ctx->ring_sock->sk;
-  8944		struct sk_buff_head list, *head = &sock->sk_receive_queue;
-  8945		struct sk_buff *skb;
-  8946		int i;
-  8947	
-  8948		__skb_queue_head_init(&list);
-  8949	
-  8950		/*
-  8951		 * Find the skb that holds this file in its SCM_RIGHTS. When found,
-  8952		 * remove this entry and rearrange the file array.
-  8953		 */
-  8954		skb = skb_dequeue(head);
-  8955		while (skb) {
-  8956			struct scm_fp_list *fp;
-  8957	
-  8958			fp = UNIXCB(skb).fp;
-  8959			for (i = 0; i < fp->count; i++) {
-  8960				int left;
-  8961	
-  8962				if (fp->fp[i] != file)
-  8963					continue;
-  8964	
-  8965				unix_notinflight(fp->user, fp->fp[i]);
-  8966				left = fp->count - 1 - i;
-  8967				if (left) {
-  8968					memmove(&fp->fp[i], &fp->fp[i + 1],
-  8969							left * sizeof(struct file *));
-  8970				}
-  8971				fp->count--;
-  8972				if (!fp->count) {
-  8973					kfree_skb(skb);
-  8974					skb = NULL;
-  8975				} else {
-  8976					__skb_queue_tail(&list, skb);
-  8977				}
-  8978				io_sock_nolock_clear(file);
-  8979				fput(file);
-  8980				file = NULL;
-  8981				break;
-  8982			}
-  8983	
-  8984			if (!file)
-  8985				break;
-  8986	
-  8987			__skb_queue_tail(&list, skb);
-  8988	
-  8989			skb = skb_dequeue(head);
-  8990		}
-  8991	
-  8992		if (skb_peek(&list)) {
-  8993			spin_lock_irq(&head->lock);
-  8994			while ((skb = __skb_dequeue(&list)) != NULL)
-  8995				__skb_queue_tail(head, skb);
-  8996			spin_unlock_irq(&head->lock);
-  8997		}
-  8998	#else
-> 8999		io_sock_nolock_clear(file);
-  9000		fput(file);
-  9001	#endif
-  9002	}
-  9003	
+Please make sure that your changelogs are factual. Making uninformed
+claims is not helping your cause.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+The most important part is the WHY:
+
+    Why is the current code suboptimal?
+
+    Why is the proposed change making it better, more correct, less
+    error prone?
+
+If you can't come up with proper technical answers for these questions
+then why should it be changed?
+
+>  enum regnames {
+> -	GDB_AX,			/* 0 */
+> +	GDB_AX =3D 0,
+
+Linear enums without value assignment like here are not a problem at
+all. Simply because they are well defined and well understood. See the
+above quote of the standard.
+
+Whether the explicit assignment is an improvement over the trailing
+comment or not is a matter of taste and preference. There is absolutely
+_zero_ technical advantage in using explicit value assignments in _this_
+case and neither in many other cases of your series.
+
+Also completely removing the comments here loses information:
+
+> -	GDB_PC,			/* 8 also known as eip */
+> -	GDB_PS,			/* 9 also known as eflags */
+
+Can you map _PC to EIP and _PS to EFLAGS? I can't without digging
+deep...
+
+>  static const char *const mtrr_strings[MTRR_NUM_TYPES] =3D
+>  {
+> -	"uncachable",		/* 0 */
+> -	"write-combining",	/* 1 */
+> -	"?",			/* 2 */
+> -	"?",			/* 3 */
+> -	"write-through",	/* 4 */
+> -	"write-protect",	/* 5 */
+> -	"write-back",		/* 6 */
+> +	[0] =3D "uncachable",
+> +	[1] =3D "write-combining",
+> +	[2] =3D "?",
+> +	[3] =3D "?",
+> +	[4] =3D "write-through",
+> +	[5] =3D "write-protect",
+> +	[6] =3D "write-back",
+
+Again, while not supported in C89, the kernel uses designators in array
+initializers for a very long time...
+
+Linear array initializers like the mtrr strings are not a real problem
+simply because there is no correlation and the code using the array
+still has to make sure that the index into the array is what it expects
+to be the content. Changing it from C89 automatic to explicit C99
+designators does not help there at all.
+
+It becomes a different story if you combine [enum] constants and arrays
+and use the constants in code because then the change to the constants
+will immediately be reflected in the array initializer. I.e. for this
+case:
+
+enum foo {
+     BAR,
+     BAZ,
+     RAB,
+     ZAR,
+};
+
+char foobar[] =3D {
+     "bar",
+     "baz",
+     "rab",
+     "zar",
+};
+
+it makes a difference if someone does:
+
+  enum foo {
+     BAR,
+     BAZ,
++    MOO,
+     RAB,
+     ZAR,
+  };
+
+because then the related array initializer is obviously out of
+order. With:
+
+char *foobar[] =3D {
+     [BAR] =3D "bar",
+     [BAZ] =3D "baz",
+     [RAB] =3D "rab",
+     [ZAR] =3D "zar",
+};
+
+the existing values are still in the same place, just the newly added
+value is a NULL pointer. It also does not matter when the fixup for the
+missing array entry becomes:
+
+  char *foobar[] =3D {
+     [BAR] =3D "bar",
+     [BAZ] =3D "baz",
+     [RAB] =3D "rab",
+     [ZAR] =3D "zar",
++    [MOO] =3D "moo",=20=20=20=20=20
+  };
+
+because the compiled result is still in enum order. While doing
+
+  char foobar[] =3D {
+     "bar",
+     "baz",
+     "rab",
+     "zar",
++    "moo",
+  };
+
+would be blantantly wrong. See?
+
+But that does not apply to any of your proposed changes.
+
+So you really need to look at things and not just throw a mechanical
+change scheme at it, which results even in failures like reported by
+the 0-day robot against patch 10/22.
+
+That said, I'm not completely opposed to those changes, but you really
+have to come up with good reasons why they make sense aside of
+cosmetical reasons.
+
+Btw, the really important change regarding initializers between C89 and
+C99 was the ability to initialize struct members explicitly.
+
+In C89 the only way to initialize a struct was
+
+   =3D { a, b, c, d }
+
+which was way more error prone than the enum/array initializers. The
+dangerous part or C89 struct initializers are changes to the struct
+unless the change of the struct is actually triggering a type
+mismatch.
+
+But even that needs some serious inspection whether there is confusion
+potential or not. The harmless example is a file local:
+
+struct foo {
+       unsigned int      id;
+       unsigned int      flags;
+};
+
+and the C89 style initializer:
+
+static struct foo[] {
+       { ID_A, 0x01 },
+       { ID_B, 0x02 },
+       { ID_C, 0x01 },
+};
+
+which has a very low confusion potential simply because it's scope is
+file local and well defined and unlikely to change.
+
+A globally used structure is a different problem especially when it
+becomes necessary to insert a new struct member in the middle instead of
+appending it, changing the order, removing a member... That ends up in a
+hard to diagnose disaster with C89 style unnamed initializers pretty
+fast.
+
+Ideally C89 style unnamed struct initializers should not be used at all,
+but again it's a matter of common sense and justification whether it's
+worth to change it just because.
+
+Thanks,
+
+        tglx

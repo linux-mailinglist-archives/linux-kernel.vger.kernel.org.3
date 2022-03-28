@@ -2,119 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378534E9D8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CEAB4E9DA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244511AbiC1Rbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 13:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
+        id S244605AbiC1RhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 13:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232336AbiC1Rbq (ORCPT
+        with ESMTP id S232336AbiC1RhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 13:31:46 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676B8633A2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:30:05 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id mp11-20020a17090b190b00b001c79aa8fac4so264765pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2rbg0zjEEZcrrrki0TLW7AmDf91MrcPr+Sit2fUDac0=;
-        b=T50k+e8A1/6vv1rfaDGOCv8B5qU1VUl408G2Ln8z6Jp25Qjr8AdOCZrDGIrNWXxnGm
-         c4NJx+VC/TJj02rrHHOIJdBBhvpand0nvwJrHjfwKAcIyWJmWDDZxuk10DEJXrJd7JOM
-         eo38/C9E92JT2x3fyk0853ktk/jORrKo2Rh6U7FHXT/LXAd2bOAqXQ6bmgOowANp3cOC
-         nGbuBfY2YGJrn4c0ZEXM7UCHbeNgF9faf5TscSYF2y7v/0E1nX2chDkmXCCJE6CWTF5T
-         K6PIArSmkRwohFu4bcuSmwg0XSm7Hsz5z7jE7GKebgV7Cv+37AZXC3YqvCmXZADTbm3n
-         REWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=2rbg0zjEEZcrrrki0TLW7AmDf91MrcPr+Sit2fUDac0=;
-        b=x06alG4o1ZjSjz5KQQrOSbS+5w9yLaipBeUMTH6jCj6t+7yIMuy03Isaic4S0k1iAy
-         9hp1DJXCdrCV2xPt2IyEj8G+5iMy4VEVxKeSQt3JjLbr/QHdKbm8uUIKWO+v288nmmu2
-         Vwq10a8oNEQ8QptPvxtxon9b0vJ7ORZhq9+7VZXemYwGB8QID0KARg+I6Y+NTTfbtLc7
-         0FPrthnUKH/FxwD0FnWN9HBqnpepVgra9olsmDAhRolGAA6/vJAoAXoF2M996f8zuU+8
-         dfR9qkpQK2xjy9KurDziTyhO7TjedTyoTvSm19pzGiux5eCx0KRPr4Eq59wUlr3cqQTO
-         yMFw==
-X-Gm-Message-State: AOAM530Aa+NuZ4jVaqWqhAE1POeXBdneSE/2fjGh5Sjx/Qx9I+pDzwnu
-        uYDCosJQ7GTM//WNm82jCW0=
-X-Google-Smtp-Source: ABdhPJx4XIuVX7JbWq9Yd7WuK4wvV525Y3fxmMqq9rs5w970A+gth+x7NsJzcOwJ6+d3mdDOY8VPQQ==
-X-Received: by 2002:a17:90a:c28c:b0:1c9:9eef:6e2b with SMTP id f12-20020a17090ac28c00b001c99eef6e2bmr232555pjt.188.1648488604648;
-        Mon, 28 Mar 2022 10:30:04 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:3b11])
-        by smtp.gmail.com with ESMTPSA id nn7-20020a17090b38c700b001c9ba103530sm100826pjb.48.2022.03.28.10.30.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 10:30:03 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 28 Mar 2022 07:30:02 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Imran Khan <imran.f.khan@oracle.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH v7 7/8] kernfs: Replace per-fs rwsem with hashed
- rwsems.
-Message-ID: <YkHwmhOaSHuXPemP@slm.duckdns.org>
-References: <20220317072612.163143-1-imran.f.khan@oracle.com>
- <20220317072612.163143-8-imran.f.khan@oracle.com>
- <YjPNOQJf/Wxa4YeV@zeniv-ca.linux.org.uk>
- <536f2392-45d2-2f43-5e9d-01ef50e33126@oracle.com>
- <YjgpaeFfFandY999@zeniv-ca.linux.org.uk>
- <Yjir/d5S3J1PTiux@slm.duckdns.org>
- <Yji8KT2K7ZKOQ+6S@zeniv-ca.linux.org.uk>
- <YjjP5ldCCGYqD+UV@slm.duckdns.org>
- <Yjk3Nqft/U6vDvd1@zeniv-ca.linux.org.uk>
- <a692a5af-158e-ad0c-63a1-6525ee6d3898@oracle.com>
+        Mon, 28 Mar 2022 13:37:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6298713EBA;
+        Mon, 28 Mar 2022 10:35:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0A2C60F43;
+        Mon, 28 Mar 2022 17:35:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 192F3C340F0;
+        Mon, 28 Mar 2022 17:35:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648488918;
+        bh=8DK84zvqPVQ5dqS+l/hxkkjiMncObsS+szQGh2/hPXg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=c2bDiePA9kHGkpvEstcte3dmY6J/ZwxEwE+Akse5+A/eLvrlrOHTah0fbvzTpRuh4
+         Pokc1eA4hRapiiyGDVv7277DFDB+HQ8hZe6l+gOshZAHIksKcpxXEB1ikexTibdkJP
+         f60RlTKUb7L0Djzxhr943hpHmv1HuG3Jr+P43jTJ30TkGk+Q+TQ6+iK6umVxiVqewQ
+         JQWzn1Ibvr7nDQw3iR4n33tSn5lWpGTtBkX6wHt+6NyvhH4ms3egZ3yvz9dVYJs5se
+         vZ26BRS4YGRcpdNJ1eiJa1uwFOWgXH/OU8iHr15SF/oruYYJiqRreOQD7ZMvr+Cy5i
+         2TOB7CldP3qPw==
+Message-ID: <6e1686d0-50f4-8681-1f15-2e4df957ebc8@kernel.org>
+Date:   Mon, 28 Mar 2022 19:35:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a692a5af-158e-ad0c-63a1-6525ee6d3898@oracle.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 3/5] arm64: dts: imx8mp: Enable HS400-ES
+Content-Language: en-US
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Adam Ford <aford173@gmail.com>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>
+References: <20220327123835.28329-1-aford173@gmail.com>
+ <20220327123835.28329-3-aford173@gmail.com>
+ <c964bf2c-f7bf-451c-1691-02903f20c634@pengutronix.de>
+ <CAHCN7xL05pBK0uK7zuE7Uq4P9Rzo6bHbJdbOt5XnQRB7Sh3msw@mail.gmail.com>
+ <74e74ea8-1554-bf08-b0ea-36e77259cb18@pengutronix.de>
+ <5c24c12b-3a12-1e18-9f03-2c54cad30bf9@kernel.org>
+ <CAHCN7xJ28t3igV8uHWfLxJx6wWkwzojg-d0QTTZM9jdfGCbTzw@mail.gmail.com>
+ <5282b39b-85d5-81d6-10d5-a45c66d4d4e9@kernel.org>
+ <010b3600-81dd-f5e3-2d57-8cab8efd58f0@pengutronix.de>
+ <37da40fe-6e85-af40-756b-d022fe2559aa@kernel.org>
+ <e2a3e6c0-d98c-7417-31bd-5f674c9c32b4@pengutronix.de>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <e2a3e6c0-d98c-7417-31bd-5f674c9c32b4@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 11:15:30AM +1100, Imran Khan wrote:
-> Hello Al,
+On 28/03/2022 15:42, Ahmad Fatoum wrote:
+> On 28.03.22 15:14, Krzysztof Kozlowski wrote:
+>> On 28/03/2022 15:07, Ahmad Fatoum wrote:
+>>> On 28.03.22 14:56, Krzysztof Kozlowski wrote:
+>>>> You could also add two cases:
+>>>> 1. three compatibles, deprecated: True,
+>>>> 2. two compatibles, without imx7d.
+>>>>
+>>>> Existing DTS stays with three compatibles for two years and later gets
+>>>> converted to two compatibles. New DTS should use two compatibles.
+>>>>
+>>>> It's quite a lot of churn, but would make in the long term bindings
+>>>> correct and also not break other users/projects.
+>>>
+>>> I don't see why we need to deprecate the old binding. New SoCs
+>>> can be imx8mm-usdhc compatible from the beginning and need not
+>>> care about the old binding. Existing SoCs can just remain imx7d-usdhc
+>>> compatible as they are now.
+>>>
+>>> I don't see what the deprecation accomplishes.
+>>
+>> It avoids to have too many entries of imx8mm (imx8mm alone,
+>> imx8mm+imx7d, imx8xx+imx8mm+imx7d).
 > 
-> On 22/3/22 1:40 pm, Al Viro wrote:
-> [...]
-> > 
-> > Sorry, misread that thing - the reason it copies the damn thing at all is
-> > the use of strsep().  Yecch...  Rule of the thumb regarding strsep() use,
-> > be it in kernel or in the userland: don't.  It's almost never the right
-> > primitive to use.
-> > 
-> > Lookups should use qstr; it has both the length and place for hash.
-> > Switch kernfs_find_ns() to that (and lift the calculation of length
-> > into the callers that do not have it - note that kernfs_iop_lookup()
-> > does) and you don't need the strsep() shite (or copying) anymore.
-> > 
-> 
-> Regarding using qstr in kernfs_find_ns, do you mean that I should remove
-> ->name and ->hash with a ->qstr in kernfs_node and further modify
-> kernfs_name_compare to make use of qstr.name and qstr.hash.
-> 
-> Also the suggestion about removing buffer copying from kernfs_walk_ns is
-> not clear to me because kernfs_walk_ns invokes kernfs_find_ns with
-> individual path components so we need some mechanism to separate path
-> components.
-> 
-> Sorry if I have missed or misunderstood something in your suggestion.
+> I see. I assume use of deprecated binding will be reported on a dtbs_check?
 
-qstr encodes the lenght of the string and doesn't need the terminating '\0',
-so we can just walk qstr over the passed in path instead of copying and
-overwriting '\0'. This is rather separate and we can revisit this later tho.
+Unfortunately no, at least not yet. :-(
 
-Thanks.
+> If so, the expectation is that downstream projects run dtbs_check on their
+> imported Linux DT repository, see the deprecation warning and extend
+> their drivers to comply with it.
+> 
+> Some time later upstream will remove the deprecated binding and adjust
+> the device trees. This works for me.
+>
 
--- 
-tejun
+Yes. Plus this gives the notice to downstream projects, to comply with
+the change of DTS.
+
+Best regards,
+Krzysztof

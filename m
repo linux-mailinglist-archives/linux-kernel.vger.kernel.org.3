@@ -2,141 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF3A4E8B5C
+	by mail.lfdr.de (Postfix) with ESMTP id 323FA4E8B5B
 	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 02:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237171AbiC1A7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 20:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
+        id S237178AbiC1A7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 20:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233105AbiC1A7B (ORCPT
+        with ESMTP id S233105AbiC1A7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 20:59:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A82201E3DB
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 17:57:21 -0700 (PDT)
+        Sun, 27 Mar 2022 20:59:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6554611145
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 17:58:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648429040;
+        s=mimecast20190719; t=1648429088;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hCoHUvo0otD1KBtAxsU+h6m7YgOeGv2vtjDIUeHjlH0=;
-        b=LFxjf/hVw2Ij3jM0ox7HIFI8z5eSvSh0ritmTINu+/ayEckrjSnmdZtM4vNOT0oy5dxhMq
-        dh2//3agnANL0Lr2OWkFCUbWQxOPGeg7ZBGbwVyyaBptdxHX9PQuLtoqJPxzdFiaUzHEtd
-        D3g2N3jz4ytVMI0xDzjD+ydoeyipA+A=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=t5CzkAYzJdztQErtcdV4oqw1LA76ghZxAVdYYw2i554=;
+        b=JriYPP5TvN0dGsvMjgJcnEqYrDUKQ5eGdC7VT+CFFfL8WkEKusuclYEQFgzz23OErrl8I9
+        6ZhBWtYCnCa2m3P5Hqm2leiM1KXzikAKAGsdb7c9mITockB7txr3YE0kVdknfkCAsA4Y+i
+        xD2KRF3nqRdS5j/a0Vl2gTyfE5SSX+A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-427-l-72ovXrOy6M1r66HAMhYw-1; Sun, 27 Mar 2022 20:57:17 -0400
-X-MC-Unique: l-72ovXrOy6M1r66HAMhYw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+ us-mta-248-DPcAUgVXMG2mt9O-XIn8aw-1; Sun, 27 Mar 2022 20:57:57 -0400
+X-MC-Unique: DPcAUgVXMG2mt9O-XIn8aw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 833413811A24;
-        Mon, 28 Mar 2022 00:57:16 +0000 (UTC)
-Received: from [10.22.16.95] (unknown [10.22.16.95])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 442F0401E01;
-        Mon, 28 Mar 2022 00:57:16 +0000 (UTC)
-Message-ID: <e93696b7-b678-6f41-9c1e-46aad447ce8d@redhat.com>
-Date:   Sun, 27 Mar 2022 20:57:15 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH-mm v3] mm/list_lru: Optimize
- memcg_reparent_list_lru_node()
-Content-Language: en-US
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-References: <20220309144000.1470138-1-longman@redhat.com>
- <CAMZfGtWS581YW4Y8oNU=E_zPnpK=mMdYVSG1F3U3fJNAzBzc+g@mail.gmail.com>
- <2263666d-5eef-b1fe-d5e3-b166a3185263@redhat.com>
- <CAMZfGtVG2YcmxY0fECkAYNb=sKXJQhWJqgtMTEpQwxXEXmSOLw@mail.gmail.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E5B959219AB;
+        Mon, 28 Mar 2022 00:57:55 +0000 (UTC)
+Received: from llong.com (unknown [10.22.16.95])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7443740CF8EA;
+        Mon, 28 Mar 2022 00:57:54 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <CAMZfGtVG2YcmxY0fECkAYNb=sKXJQhWJqgtMTEpQwxXEXmSOLw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH] mm/list_lru: Fix possible race in memcg_reparent_list_lru_node()
+Date:   Sun, 27 Mar 2022 20:57:36 -0400
+Message-Id: <20220328005736.2513727-1-longman@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/22 22:12, Muchun Song wrote:
-> On Wed, Mar 23, 2022 at 9:55 AM Waiman Long <longman@redhat.com> wrote:
->> On 3/22/22 21:06, Muchun Song wrote:
->>> On Wed, Mar 9, 2022 at 10:40 PM Waiman Long <longman@redhat.com> wrote:
->>>> Since commit 2c80cd57c743 ("mm/list_lru.c: fix list_lru_count_node()
->>>> to be race free"), we are tracking the total number of lru
->>>> entries in a list_lru_node in its nr_items field.  In the case of
->>>> memcg_reparent_list_lru_node(), there is nothing to be done if nr_items
->>>> is 0.  We don't even need to take the nlru->lock as no new lru entry
->>>> could be added by a racing list_lru_add() to the draining src_idx memcg
->>>> at this point.
->>> Hi Waiman,
->>>
->>> Sorry for the late reply.  Quick question: what if there is an inflight
->>> list_lru_add()?  How about the following race?
->>>
->>> CPU0:                               CPU1:
->>> list_lru_add()
->>>       spin_lock(&nlru->lock)
->>>       l = list_lru_from_kmem(memcg)
->>>                                       memcg_reparent_objcgs(memcg)
->>>                                       memcg_reparent_list_lrus(memcg)
->>>                                           memcg_reparent_list_lru()
->>>                                               memcg_reparent_list_lru_node()
->>>                                                   if (!READ_ONCE(nlru->nr_items))
->>>                                                       // Miss reparenting
->>>                                                       return
->>>       // Assume 0->1
->>>       l->nr_items++
->>>       // Assume 0->1
->>>       nlru->nr_items++
->>>
->>> IIUC, we use nlru->lock to serialise this scenario.
->> I guess this race is theoretically possible but very unlikely since it
->> means a very long pause between list_lru_from_kmem() and the increment
->> of nr_items.
-> It is more possible in a VM.
->
->> How about the following changes to make sure that this race can't happen?
->>
->> diff --git a/mm/list_lru.c b/mm/list_lru.c
->> index c669d87001a6..c31a0a8ad4e7 100644
->> --- a/mm/list_lru.c
->> +++ b/mm/list_lru.c
->> @@ -395,9 +395,10 @@ static void memcg_reparent_list_lru_node(struct
->> list_lru *lru, int nid,
->>           struct list_lru_one *src, *dst;
->>
->>           /*
->> -        * If there is no lru entry in this nlru, we can skip it
->> immediately.
->> +        * If there is no lru entry in this nlru and the nlru->lock is free,
->> +        * we can skip it immediately.
->>            */
->> -       if (!READ_ONCE(nlru->nr_items))
->> +       if (!READ_ONCE(nlru->nr_items) && !spin_is_locked(&nlru->lock))
-> I think we also should insert a smp_rmb() between those two loads.
+Muchun Song found out there could be a race between list_lru_add()
+and memcg_reparent_list_lru_node() causing the later function to miss
+reparenting of a lru entry as shown below:
 
-Thinking about this some more, I believe that adding spin_is_locked() 
-check will be enough for x86. However, that will likely not be enough 
-for arches with a more relaxed memory semantics. So the safest way to 
-avoid this possible race is to move the check to within the lock 
-critical section, though that comes with a slightly higher overhead for 
-the 0 nr_items case. I will send out a patch to correct that. Thanks for 
-bring this possible race to my attention.
+CPU0:                               CPU1:
+list_lru_add()
+     spin_lock(&nlru->lock)
+     l = list_lru_from_kmem(memcg)
+                                     memcg_reparent_objcgs(memcg)
+                                     memcg_reparent_list_lrus(memcg)
+                                         memcg_reparent_list_lru()
+                                             memcg_reparent_list_lru_node()
+                                                 if (!READ_ONCE(nlru->nr_items))
+                                                     // Miss reparenting
+                                                     return
+     // Assume 0->1
+     l->nr_items++
+     // Assume 0->1
+     nlru->nr_items++
 
-Cheers,
-Longman
+Though it is not likely that a list_lru_node that has 0 item suddenly
+has a newly added lru entry at the end of its life. The race is still
+theoretically possible.
+
+Adding a spin_is_locked() check will likely be enough for x86, but it
+is less certain for other arches with a more relaxed memory semantics
+like arcm64 and ppc. To avoid race, this patch moves the nr_items check
+to within the lock critical section.
+
+Fixes: 405cc51fc104 ("mm/list_lru: optimize memcg_reparent_list_lru_node()")
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ mm/list_lru.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/mm/list_lru.c b/mm/list_lru.c
+index c669d87001a6..8aec8ebd5995 100644
+--- a/mm/list_lru.c
++++ b/mm/list_lru.c
+@@ -394,18 +394,18 @@ static void memcg_reparent_list_lru_node(struct list_lru *lru, int nid,
+ 	int dst_idx = dst_memcg->kmemcg_id;
+ 	struct list_lru_one *src, *dst;
+ 
+-	/*
+-	 * If there is no lru entry in this nlru, we can skip it immediately.
+-	 */
+-	if (!READ_ONCE(nlru->nr_items))
+-		return;
+-
+ 	/*
+ 	 * Since list_lru_{add,del} may be called under an IRQ-safe lock,
+ 	 * we have to use IRQ-safe primitives here to avoid deadlock.
+ 	 */
+ 	spin_lock_irq(&nlru->lock);
+ 
++	/*
++	 * If there is no lru entry in this nlru, we can skip it immediately.
++	 */
++	if (!nlru->nr_items)
++		goto out;
++
+ 	src = list_lru_from_memcg_idx(lru, nid, src_idx);
+ 	if (!src)
+ 		goto out;
+-- 
+2.27.0
 

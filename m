@@ -2,475 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A8B14E9052
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 10:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CABE24E9054
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 10:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239448AbiC1Ikb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 04:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
+        id S239455AbiC1ImH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 04:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235537AbiC1Ik3 (ORCPT
+        with ESMTP id S235537AbiC1ImE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 04:40:29 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED9D3EB8D;
-        Mon, 28 Mar 2022 01:38:45 -0700 (PDT)
-X-UUID: f6d95041844f401787d82b5900d3f101-20220328
-X-UUID: f6d95041844f401787d82b5900d3f101-20220328
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 483530449; Mon, 28 Mar 2022 16:38:37 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 28 Mar 2022 16:38:35 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 28 Mar 2022 16:38:35 +0800
-Message-ID: <032e690ba56f646a12d68c5fcb8de35f74ce9b25.camel@mediatek.com>
-Subject: Re: [PATCH v9 15/22] drm/mediatek: dpi: Add dpintf support
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Guillaume Ranquet <granquet@baylibre.com>, <airlied@linux.ie>,
-        <angelogioacchino.delregno@collabora.com>,
-        <chunfeng.yun@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <ck.hu@mediatek.com>, <daniel@ffwll.ch>, <deller@gmx.de>,
-        <jitao.shi@mediatek.com>, <kishon@ti.com>, <krzk+dt@kernel.org>,
-        <maarten.lankhorst@linux.intel.com>, <matthias.bgg@gmail.com>,
-        <mripard@kernel.org>, <p.zabel@pengutronix.de>,
-        <robh+dt@kernel.org>, <tzimmermann@suse.de>, <vkoul@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <markyacoub@google.com>,
-        "Markus Schneider-Pargmann" <msp@baylibre.com>
-Date:   Mon, 28 Mar 2022 16:38:35 +0800
-In-Reply-To: <20220327223927.20848-16-granquet@baylibre.com>
-References: <20220327223927.20848-1-granquet@baylibre.com>
-         <20220327223927.20848-16-granquet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 28 Mar 2022 04:42:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A878153A6B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 01:40:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648456822;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=l1A+KmteLAN0ERVYaTCTWXzUwXF6QOlGwibaPQ1ipLw=;
+        b=GrBiCMK75e9qiipoPGmM3Va0nBtWpWgQQGaBzWGUX1JAQ+TU/HtQlhkHey+kgXjqTBb7po
+        eTugcLQBphbhahSw1LWzhhYUP06ZNq1COECTKD9w85TZLML0rgNqXkoe8CLTeNwWPXdZN+
+        eb5XdpOcWnMZXWt5CVRtAS8ViSS03cU=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-264-bnGcVF7XPYKVTiKUKOnnBw-1; Mon, 28 Mar 2022 04:40:20 -0400
+X-MC-Unique: bnGcVF7XPYKVTiKUKOnnBw-1
+Received: by mail-wm1-f71.google.com with SMTP id o19-20020a05600c379300b0038c7117460dso5406304wmr.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 01:40:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=l1A+KmteLAN0ERVYaTCTWXzUwXF6QOlGwibaPQ1ipLw=;
+        b=emNbzI49koANMklXwmMNH36dxDEIgpB3vD8ILgdeNSqp+HMMl1twXoTYjquL02G5Pq
+         O+n3/ZXLRdI52fku8Y+FeKcEW+DJ0z1Ev7gTuCZt2gmnTfiW6M9cur39YEWPckAi8X/b
+         L/wqb73oTSOkOtEeXAsvNpcSEDtmot1Gnl2WkQ9JSS9pTWRC9XTeEe+P7DFh8ZSKnz8L
+         n7fptlvR3pnkPuNkfofXGpIaQfFQYZFUFEstr88WRcweuuT/OE0r4jZApKh21x7qCcqK
+         qbNj2CMhody0TePBK75bsTi4ViD6yPKBbA9pS0ihOPVeCbQ1Xn06YuzMc239SZJEYt3f
+         d8HA==
+X-Gm-Message-State: AOAM531Vou4JNGy4oO0f8tNmeCP2ReMuFxAGDxk0cJ+4hrnFVMo+ETyV
+        vy4qK+qQTbaqnlt+FgVpqqbBrgVVwmfN2qvkuL1tzyE786lqzaBQ+oj+UK0+0EBy4SIgSy3ZkG3
+        0vkBwH3nkJMCfpMNmWDZxe1sQ
+X-Received: by 2002:a05:600c:4401:b0:38c:8df8:9797 with SMTP id u1-20020a05600c440100b0038c8df89797mr34087032wmn.13.1648456819466;
+        Mon, 28 Mar 2022 01:40:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwxiPZFJa7ApsBFKEdeOO+6tYtLq6fYC75457JZka/ZZAfB4UgDoEMn7gfDVjHqpWtvnfNXUg==
+X-Received: by 2002:a05:600c:4401:b0:38c:8df8:9797 with SMTP id u1-20020a05600c440100b0038c8df89797mr34087008wmn.13.1648456819196;
+        Mon, 28 Mar 2022 01:40:19 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id g16-20020a05600c4ed000b0038ceb0b21b4sm9028325wmq.24.2022.03.28.01.40.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 01:40:18 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Zap only TDP MMU leafs in zap range and
+ mmu_notifier unmap
+In-Reply-To: <20220325230348.2587437-1-seanjc@google.com>
+References: <20220325230348.2587437-1-seanjc@google.com>
+Date:   Mon, 28 Mar 2022 10:40:17 +0200
+Message-ID: <87lewuo4ge.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Guillaume,
+Sean Christopherson <seanjc@google.com> writes:
 
-Thanks for your patch, but I have some questions for this patch:
+> Re-introduce zapping only leaf SPTEs in kvm_zap_gfn_range() and
+> kvm_tdp_mmu_unmap_gfn_range(), this time without losing a pending TLB
+> flush when processing multiple roots (including nested TDP shadow roots).
+> Dropping the TLB flush resulted in random crashes when running Hyper-V
+> Server 2019 in a guest with KSM enabled in the host (or any source of
+> mmu_notifier invalidations, KSM is just the easiest to force).
+>
+> This effectively revert commits 873dd122172f8cce329113cfb0dfe3d2344d80c0
+> and fcb93eb6d09dd302cbef22bd95a5858af75e4156, and thus restores commit
+> cf3e26427c08ad9015956293ab389004ac6a338e, plus this delta on top:
+>
+> bool kvm_tdp_mmu_zap_leafs(struct kvm *kvm, int as_id, gfn_t start, gfn_t end,
+>         struct kvm_mmu_page *root;
+>
+>         for_each_tdp_mmu_root_yield_safe(kvm, root, as_id)
+> -               flush = tdp_mmu_zap_leafs(kvm, root, start, end, can_yield, false);
+> +               flush = tdp_mmu_zap_leafs(kvm, root, start, end, can_yield, flush);
+>
+>         return flush;
+>  }
+>
 
-On Mon, 2022-03-28 at 00:39 +0200, Guillaume Ranquet wrote:
-> dpintf is the displayport interface hardware unit. This unit is
-> similar
-> to dpi and can reuse most of the code.
-> 
-> This patch adds support for mt8195-dpintf to this dpi driver. Main
-> differences are:
->  - Some features/functional components are not available for dpintf
->    which are now excluded from code execution once is_dpintf is set
->  - dpintf can and needs to choose between different clockdividers
-> based
->    on the clockspeed. This is done by choosing a different clock
-> parent.
->  - There are two additional clocks that need to be managed. These are
->    only set for dpintf and will be set to NULL if not supplied. The
->    clk_* calls handle these as normal clocks then.
->  - Some register contents differ slightly between the two components.
-> To
->    work around this I added register bits/masks with a DPINTF_ prefix
->    and use them where different.
-> 
-> Based on a separate driver for dpintf created by
-> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
+I confirm this fixes the issue I was seeing, thanks!
+
+Tested-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+
+> Cc: Ben Gardon <bgardon@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  drivers/gpu/drm/mediatek/mtk_dpi.c          | 78 ++++++++++++++++++-
-> --
->  drivers/gpu/drm/mediatek/mtk_dpi_regs.h     | 38 ++++++++++
->  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |  8 +++
->  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |  1 +
->  drivers/gpu/drm/mediatek/mtk_drm_drv.c      |  5 +-
->  include/linux/soc/mediatek/mtk-mmsys.h      |  2 +
->  6 files changed, 120 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> index eb969c5c5c2e..8198d3cf23ac 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -126,6 +126,7 @@ struct mtk_dpi_conf {
->  	const u32 *output_fmts;
->  	u32 num_output_fmts;
->  	bool is_ck_de_pol;
-> +	bool is_dpintf;
->  	bool swap_input_support;
->  	/* Mask used for HWIDTH, HPORCH, VSYNC_WIDTH and VSYNC_PORCH
-> (no shift) */
->  	u32 dimension_mask;
-> @@ -498,11 +499,11 @@ static int mtk_dpi_set_display_mode(struct
-> mtk_dpi *dpi,
+>  arch/x86/kvm/mmu/mmu.c     |  4 +--
+>  arch/x86/kvm/mmu/tdp_mmu.c | 57 +++++++++++---------------------------
+>  arch/x86/kvm/mmu/tdp_mmu.h |  8 +-----
+>  3 files changed, 19 insertions(+), 50 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 1361eb4599b4..a7cb877f3784 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -5842,8 +5842,8 @@ void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
 >  
->  	vm.pixelclock = pll_rate / factor;
->  	if ((dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_LE) ||
-> -	    (dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_BE))
-> +		 (dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_BE)) {
->  		clk_set_rate(dpi->pixel_clk, vm.pixelclock * 2);
-> -	else
-> +	} else {
->  		clk_set_rate(dpi->pixel_clk, vm.pixelclock);
-> -
-> +	}
+>  	if (is_tdp_mmu_enabled(kvm)) {
+>  		for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++)
+> -			flush = kvm_tdp_mmu_zap_gfn_range(kvm, i, gfn_start,
+> -							  gfn_end, flush);
+> +			flush = kvm_tdp_mmu_zap_leafs(kvm, i, gfn_start,
+> +						      gfn_end, true, flush);
+>  	}
 >  
->  	vm.pixelclock = clk_get_rate(dpi->pixel_clk);
->  
-> @@ -515,9 +516,15 @@ static int mtk_dpi_set_display_mode(struct
-> mtk_dpi *dpi,
->  			    MTK_DPI_POLARITY_FALLING :
-> MTK_DPI_POLARITY_RISING;
->  	dpi_pol.vsync_pol = vm.flags & DISPLAY_FLAGS_VSYNC_HIGH ?
->  			    MTK_DPI_POLARITY_FALLING :
-> MTK_DPI_POLARITY_RISING;
-> -	hsync.sync_width = vm.hsync_len;
-> -	hsync.back_porch = vm.hback_porch;
-> -	hsync.front_porch = vm.hfront_porch;
-> +	if (dpi->conf->is_dpintf) {
-> +		hsync.sync_width = vm.hsync_len / 4;
-> +		hsync.back_porch = vm.hback_porch / 4;
-> +		hsync.front_porch = vm.hfront_porch / 4;
-> +	} else {
-> +		hsync.sync_width = vm.hsync_len;
-> +		hsync.back_porch = vm.hback_porch;
-> +		hsync.front_porch = vm.hfront_porch;
-> +	}
->  	hsync.shift_half_line = false;
->  	vsync_lodd.sync_width = vm.vsync_len;
->  	vsync_lodd.back_porch = vm.vback_porch;
-> @@ -559,13 +566,20 @@ static int mtk_dpi_set_display_mode(struct
-> mtk_dpi *dpi,
->  	mtk_dpi_config_channel_limit(dpi);
->  	mtk_dpi_config_bit_num(dpi, dpi->bit_num);
->  	mtk_dpi_config_channel_swap(dpi, dpi->channel_swap);
-> -	mtk_dpi_config_yc_map(dpi, dpi->yc_map);
->  	mtk_dpi_config_color_format(dpi, dpi->color_format);
-> -	mtk_dpi_config_2n_h_fre(dpi);
-> -	mtk_dpi_dual_edge(dpi);
-> -	mtk_dpi_config_disable_edge(dpi);
-> +	if (dpi->conf->is_dpintf) {
-> +		mtk_dpi_mask(dpi, DPI_CON, DPINTF_INPUT_2P_EN,
-> +			     DPINTF_INPUT_2P_EN);
-> +	} else {
-> +		mtk_dpi_config_yc_map(dpi, dpi->yc_map);
-> +		mtk_dpi_config_2n_h_fre(dpi);
-> +		mtk_dpi_dual_edge(dpi);
-> +		mtk_dpi_config_disable_edge(dpi);
-> +	}
->  	mtk_dpi_sw_reset(dpi, false);
->  
-> +	mtk_dpi_enable(dpi);
-
-Why do we need to add mtk_dpi_enable() here?
-Will this change the power on sequence?
-
-BRs,
-Rex
-> +
->  	return 0;
+>  	if (flush)
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index b3b6426725d4..c4333efb9e9c 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -906,10 +906,8 @@ bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
 >  }
 >  
-> @@ -642,7 +656,10 @@ static int mtk_dpi_bridge_atomic_check(struct
-> drm_bridge *bridge,
->  	dpi->bit_num = MTK_DPI_OUT_BIT_NUM_8BITS;
->  	dpi->channel_swap = MTK_DPI_OUT_CHANNEL_SWAP_RGB;
->  	dpi->yc_map = MTK_DPI_OUT_YC_MAP_RGB;
-> -	dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
-> +	if (out_bus_format == MEDIA_BUS_FMT_YUYV8_1X16)
-> +		dpi->color_format =
-> MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL;
-> +	else
-> +		dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
->  
->  	return 0;
->  }
-> @@ -801,6 +818,16 @@ static unsigned int mt8183_calculate_factor(int
-> clock)
->  		return 2;
->  }
->  
-> +static unsigned int mt8195_dpintf_calculate_factor(int clock)
-> +{
-> +	if (clock < 70000)
-> +		return 4;
-> +	else if (clock < 200000)
-> +		return 2;
-> +	else
-> +		return 1;
-> +}
-> +
->  static const u32 mt8173_output_fmts[] = {
->  	MEDIA_BUS_FMT_RGB888_1X24,
->  };
-> @@ -810,6 +837,12 @@ static const u32 mt8183_output_fmts[] = {
->  	MEDIA_BUS_FMT_RGB888_2X12_BE,
->  };
->  
-> +static const u32 mt8195_output_fmts[] = {
-> +	MEDIA_BUS_FMT_RGB888_1X24,
-> +	MEDIA_BUS_FMT_YUV8_1X24,
-> +	MEDIA_BUS_FMT_YUYV8_1X16,
-> +};
-> +
->  static const struct mtk_dpi_yc_limit mtk_dpi_limit = {
->  	.c_bottom = 0x0010,
->  	.c_top = 0x0FE0,
-> @@ -817,6 +850,13 @@ static const struct mtk_dpi_yc_limit
-> mtk_dpi_limit = {
->  	.y_top = 0x0FE0,
->  };
->  
-> +static const struct mtk_dpi_yc_limit mtk_dpintf_limit = {
-> +	.c_bottom = 0x0000,
-> +	.c_top = 0xFFF,
-> +	.y_bottom = 0x0000,
-> +	.y_top = 0xFFF,
-> +};
-> +
->  static const struct mtk_dpi_conf mt8173_conf = {
->  	.cal_factor = mt8173_calculate_factor,
->  	.reg_h_fre_con = 0xe0,
-> @@ -882,6 +922,19 @@ static const struct mtk_dpi_conf mt8192_conf = {
->  	.limit = &mtk_dpi_limit,
->  };
->  
-> +static const struct mtk_dpi_conf mt8195_dpintf_conf = {
-> +	.cal_factor = mt8195_dpintf_calculate_factor,
-> +	.output_fmts = mt8195_output_fmts,
-> +	.num_output_fmts = ARRAY_SIZE(mt8195_output_fmts),
-> +	.is_dpintf = true,
-> +	.dimension_mask = DPINTF_HPW_MASK,
-> +	.hvsize_mask = DPINTF_HSIZE_MASK,
-> +	.channel_swap_shift = DPINTF_CH_SWAP,
-> +	.yuv422_en_bit = DPINTF_YUV422_EN,
-> +	.csc_enable_bit = DPINTF_CSC_ENABLE,
-> +	.limit = &mtk_dpintf_limit,
-> +};
-> +
->  static int mtk_dpi_probe(struct platform_device *pdev)
+>  /*
+> - * Tears down the mappings for the range of gfns, [start, end), and frees the
+> - * non-root pages mapping GFNs strictly within that range. Returns true if
+> - * SPTEs have been cleared and a TLB flush is needed before releasing the
+> - * MMU lock.
+> + * Zap leafs SPTEs for the range of gfns, [start, end). Returns true if SPTEs
+> + * have been cleared and a TLB flush is needed before releasing the MMU lock.
+>   *
+>   * If can_yield is true, will release the MMU lock and reschedule if the
+>   * scheduler needs the CPU or there is contention on the MMU lock. If this
+> @@ -917,44 +915,25 @@ bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
+>   * the caller must ensure it does not supply too large a GFN range, or the
+>   * operation can cause a soft lockup.
+>   */
+> -static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+> -			  gfn_t start, gfn_t end, bool can_yield, bool flush)
+> +static bool tdp_mmu_zap_leafs(struct kvm *kvm, struct kvm_mmu_page *root,
+> +			      gfn_t start, gfn_t end, bool can_yield, bool flush)
 >  {
->  	struct device *dev = &pdev->dev;
-> @@ -1004,6 +1057,9 @@ static const struct of_device_id
-> mtk_dpi_of_ids[] = {
->  	{ .compatible = "mediatek,mt8192-dpi",
->  	  .data = &mt8192_conf,
->  	},
-> +	{ .compatible = "mediatek,mt8195-dpintf",
-> +	  .data = &mt8195_dpintf_conf,
-> +	},
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(of, mtk_dpi_of_ids);
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> index 3a02fabe1662..91b32dfffced 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> @@ -40,10 +40,15 @@
->  #define FAKE_DE_LEVEN			BIT(21)
->  #define FAKE_DE_RODD			BIT(22)
->  #define FAKE_DE_REVEN			BIT(23)
-> +#define DPINTF_YUV422_EN		BIT(24)
-> +#define DPINTF_CSC_ENABLE		BIT(26)
-> +#define DPINTF_INPUT_2P_EN		BIT(29)
+> -	bool zap_all = (start == 0 && end >= tdp_mmu_max_gfn_host());
+>  	struct tdp_iter iter;
 >  
->  #define DPI_OUTPUT_SETTING	0x14
->  #define CH_SWAP				0
-> +#define DPINTF_CH_SWAP			BIT(1)
->  #define CH_SWAP_MASK			(0x7 << 0)
-> +#define DPINTF_CH_SWAP_MASK		(0x7 << 1)
->  #define SWAP_RGB			0x00
->  #define SWAP_GBR			0x01
->  #define SWAP_BRG			0x02
-> @@ -80,8 +85,10 @@
->  #define DPI_SIZE		0x18
->  #define HSIZE				0
->  #define HSIZE_MASK			(0x1FFF << 0)
-> +#define DPINTF_HSIZE_MASK		(0xFFFF << 0)
->  #define VSIZE				16
->  #define VSIZE_MASK			(0x1FFF << 16)
-> +#define DPINTF_VSIZE_MASK		(0xFFFF << 16)
+> -	/*
+> -	 * No need to try to step down in the iterator when zapping all SPTEs,
+> -	 * zapping the top-level non-leaf SPTEs will recurse on their children.
+> -	 * Do not do it above the 1GB level, to avoid making tdp_mmu_set_spte's
+> -	 * recursion too expensive and allow yielding.
+> -	 */
+> -	int min_level = zap_all ? PG_LEVEL_1G : PG_LEVEL_4K;
+> -
+>  	end = min(end, tdp_mmu_max_gfn_host());
 >  
->  #define DPI_DDR_SETTING		0x1C
->  #define DDR_EN				BIT(0)
-> @@ -93,24 +100,30 @@
->  #define DPI_TGEN_HWIDTH		0x20
->  #define HPW				0
->  #define HPW_MASK			(0xFFF << 0)
-> +#define DPINTF_HPW_MASK			(0xFFFF << 0)
+>  	lockdep_assert_held_write(&kvm->mmu_lock);
 >  
->  #define DPI_TGEN_HPORCH		0x24
->  #define HBP				0
->  #define HBP_MASK			(0xFFF << 0)
-> +#define DPINTF_HBP_MASK			(0xFFFF << 0)
->  #define HFP				16
->  #define HFP_MASK			(0xFFF << 16)
-> +#define DPINTF_HFP_MASK			(0xFFFF << 16)
+>  	rcu_read_lock();
 >  
->  #define DPI_TGEN_VWIDTH		0x28
->  #define DPI_TGEN_VPORCH		0x2C
+> -	for_each_tdp_pte_min_level(iter, root, min_level, start, end) {
+> +	for_each_tdp_pte_min_level(iter, root, PG_LEVEL_4K, start, end) {
+>  		if (can_yield &&
+>  		    tdp_mmu_iter_cond_resched(kvm, &iter, flush, false)) {
+>  			flush = false;
+>  			continue;
+>  		}
 >  
->  #define VSYNC_WIDTH_SHIFT		0
->  #define VSYNC_WIDTH_MASK		(0xFFF << 0)
-> +#define DPINTF_VSYNC_WIDTH_MASK		(0xFFFF << 0)
->  #define VSYNC_HALF_LINE_SHIFT		16
->  #define VSYNC_HALF_LINE_MASK		BIT(16)
->  #define VSYNC_BACK_PORCH_SHIFT		0
->  #define VSYNC_BACK_PORCH_MASK		(0xFFF << 0)
-> +#define DPINTF_VSYNC_BACK_PORCH_MASK	(0xFFFF << 0)
->  #define VSYNC_FRONT_PORCH_SHIFT		16
->  #define VSYNC_FRONT_PORCH_MASK		(0xFFF << 16)
-> +#define DPINTF_VSYNC_FRONT_PORCH_MASK	(0xFFFF << 16)
+> -		if (!is_shadow_present_pte(iter.old_spte))
+> -			continue;
+> -
+> -		/*
+> -		 * If this is a non-last-level SPTE that covers a larger range
+> -		 * than should be zapped, continue, and zap the mappings at a
+> -		 * lower level, except when zapping all SPTEs.
+> -		 */
+> -		if (!zap_all &&
+> -		    (iter.gfn < start ||
+> -		     iter.gfn + KVM_PAGES_PER_HPAGE(iter.level) > end) &&
+> +		if (!is_shadow_present_pte(iter.old_spte) ||
+>  		    !is_last_spte(iter.old_spte, iter.level))
+>  			continue;
 >  
->  #define DPI_BG_HCNTL		0x30
->  #define BG_RIGHT			(0x1FFF << 0)
-> @@ -217,4 +230,29 @@
+> @@ -962,17 +941,13 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+>  		flush = true;
+>  	}
 >  
->  #define EDGE_SEL_EN			BIT(5)
->  #define H_FRE_2N			BIT(25)
+> +	rcu_read_unlock();
 > +
-> +#define DPI_MATRIX_SET	0xB4
-> +#define INT_MATRIX_SEL			BIT(0)
-> +#define INT_MATRIX_SEL_MASK		(0x1F << 0)
-> +#define RGB_TO_JPEG			0x00
-> +#define RGB_TO_FULL709			0x01
-> +#define RGB_TO_BT601			0x02
-> +#define RGB_TO_BT709			0x03
-> +#define JPEG_TO_RGB			0x04
-> +#define FULL709_TO_RGB			0x05
-> +#define BT601_TO_RGB			0x06
-> +#define BT709_TO_RGB			0x07
-> +#define JPEG_TO_BT601			0x08
-> +#define JPEG_TO_BT709			0x09
-> +#define BT601_TO_JPEG			0xA
-> +#define BT709_TO_JPEG			0xB
-> +#define BT709_TO_BT601			0xC
-> +#define BT601_TO_BT709			0xD
-> +#define JPEG_TO_CERGB			0x14
-> +#define FULL709_TO_CERGB		0x15
-> +#define BT601_TO_CERGB			0x16
-> +#define BT709_TO_CERGB			0x17
-> +#define RGB_TO_CERGB			0x1C
-> +#define MATRIX_BIT			BIT(8)
-> +#define EXT_MATRIX_EN			BIT(12)
->  #endif /* __MTK_DPI_REGS_H */
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
-> b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
-> index 2e99aee13dfe..558fc2733358 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
-> @@ -351,6 +351,11 @@ static const char * const
-> mtk_ddp_comp_stem[MTK_DDP_COMP_TYPE_MAX] = {
->  	[MTK_DISP_WDMA] = "wdma",
->  	[MTK_DPI] = "dpi",
->  	[MTK_DSI] = "dsi",
-> +	[MTK_DP_INTF] = "dp-intf",
-> +	[MTK_DISP_PWM] = "pwm",
-> +	[MTK_DISP_MUTEX] = "mutex",
-> +	[MTK_DISP_OD] = "od",
-> +	[MTK_DISP_BLS] = "bls",
->  };
+>  	/*
+> -	 * Need to flush before releasing RCU.  TODO: do it only if intermediate
+> -	 * page tables were zapped; there is no need to flush under RCU protection
+> -	 * if no 'struct kvm_mmu_page' is freed.
+> +	 * Because this flow zaps _only_ leaf SPTEs, the caller doesn't need
+> +	 * to provide RCU protection as no 'struct kvm_mmu_page' will be freed.
+>  	 */
+> -	if (flush)
+> -		kvm_flush_remote_tlbs_with_address(kvm, start, end - start);
+> -
+> -	rcu_read_unlock();
+> -
+> -	return false;
+> +	return flush;
+>  }
 >  
->  struct mtk_ddp_comp_match {
-> @@ -369,6 +374,8 @@ static const struct mtk_ddp_comp_match
-> mtk_ddp_matches[DDP_COMPONENT_ID_MAX] = {
->  	[DDP_COMPONENT_DITHER]		= { MTK_DISP_DITHER,	0,
-> &ddp_dither },
->  	[DDP_COMPONENT_DPI0]		= { MTK_DPI,		0,
-> &ddp_dpi },
->  	[DDP_COMPONENT_DPI1]		= { MTK_DPI,		1,
-> &ddp_dpi },
-> +	[DDP_COMPONENT_DP_INTF0]	= { MTK_DP_INTF,	0, &ddp_dpi
-> },
-> +	[DDP_COMPONENT_DP_INTF1]	= { MTK_DP_INTF,	1, &ddp_dpi
-> },
->  	[DDP_COMPONENT_DSI0]		= { MTK_DSI,		0,
-> &ddp_dsi },
->  	[DDP_COMPONENT_DSI1]		= { MTK_DSI,		1,
-> &ddp_dsi },
->  	[DDP_COMPONENT_DSI2]		= { MTK_DSI,		2,
-> &ddp_dsi },
-> @@ -481,6 +488,7 @@ int mtk_ddp_comp_init(struct device_node *node,
-> struct mtk_ddp_comp *comp,
->  	    type == MTK_DISP_PWM ||
->  	    type == MTK_DISP_RDMA ||
->  	    type == MTK_DPI ||
-> +	    type == MTK_DP_INTF ||
->  	    type == MTK_DSI)
->  		return 0;
+>  /*
+> @@ -981,13 +956,13 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+>   * SPTEs have been cleared and a TLB flush is needed before releasing the
+>   * MMU lock.
+>   */
+> -bool __kvm_tdp_mmu_zap_gfn_range(struct kvm *kvm, int as_id, gfn_t start,
+> -				 gfn_t end, bool can_yield, bool flush)
+> +bool kvm_tdp_mmu_zap_leafs(struct kvm *kvm, int as_id, gfn_t start, gfn_t end,
+> +			   bool can_yield, bool flush)
+>  {
+>  	struct kvm_mmu_page *root;
 >  
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
-> b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
-> index ad267bb8fc9b..43ad74be509e 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
-> @@ -34,6 +34,7 @@ enum mtk_ddp_comp_type {
->  	MTK_DISP_UFOE,
->  	MTK_DISP_WDMA,
->  	MTK_DPI,
-> +	MTK_DP_INTF,
->  	MTK_DSI,
->  	MTK_DDP_COMP_TYPE_MAX,
->  };
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> index 247c6ff277ef..c8a233f609f0 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> @@ -509,6 +509,8 @@ static const struct of_device_id
-> mtk_ddp_comp_dt_ids[] = {
->  	  .data = (void *)MTK_DPI },
->  	{ .compatible = "mediatek,mt8183-dpi",
->  	  .data = (void *)MTK_DPI },
-> +	{ .compatible = "mediatek,mt8195-dpintf",
-> +	  .data = (void *)MTK_DP_INTF },
->  	{ .compatible = "mediatek,mt2701-dsi",
->  	  .data = (void *)MTK_DSI },
->  	{ .compatible = "mediatek,mt8173-dsi",
-> @@ -609,7 +611,8 @@ static int mtk_drm_probe(struct platform_device
-> *pdev)
->  		    comp_type == MTK_DISP_OVL_2L ||
->  		    comp_type == MTK_DISP_RDMA ||
->  		    comp_type == MTK_DPI ||
-> -		    comp_type == MTK_DSI) {
-> +		    comp_type == MTK_DPI ||
-> +		    comp_type == MTK_DP_INTF) {
->  			dev_info(dev, "Adding component match for
-> %pOF\n",
->  				 node);
->  			drm_of_component_match_add(dev, &match,
-> component_compare_of,
-> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h
-> b/include/linux/soc/mediatek/mtk-mmsys.h
-> index 4bba275e235a..56ed2fa5f59e 100644
-> --- a/include/linux/soc/mediatek/mtk-mmsys.h
-> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
-> @@ -19,6 +19,8 @@ enum mtk_ddp_comp_id {
->  	DDP_COMPONENT_DITHER,
->  	DDP_COMPONENT_DPI0,
->  	DDP_COMPONENT_DPI1,
-> +	DDP_COMPONENT_DP_INTF0,
-> +	DDP_COMPONENT_DP_INTF1,
->  	DDP_COMPONENT_DSI0,
->  	DDP_COMPONENT_DSI1,
->  	DDP_COMPONENT_DSI2,
+>  	for_each_tdp_mmu_root_yield_safe(kvm, root, as_id)
+> -		flush = zap_gfn_range(kvm, root, start, end, can_yield, flush);
+> +		flush = tdp_mmu_zap_leafs(kvm, root, start, end, can_yield, flush);
+>  
+>  	return flush;
+>  }
+> @@ -1235,8 +1210,8 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+>  bool kvm_tdp_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range,
+>  				 bool flush)
+>  {
+> -	return __kvm_tdp_mmu_zap_gfn_range(kvm, range->slot->as_id, range->start,
+> -					   range->end, range->may_block, flush);
+> +	return kvm_tdp_mmu_zap_leafs(kvm, range->slot->as_id, range->start,
+> +				     range->end, range->may_block, flush);
+>  }
+>  
+>  typedef bool (*tdp_handler_t)(struct kvm *kvm, struct tdp_iter *iter,
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.h b/arch/x86/kvm/mmu/tdp_mmu.h
+> index 5e5ef2576c81..54bc8118c40a 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.h
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.h
+> @@ -15,14 +15,8 @@ __must_check static inline bool kvm_tdp_mmu_get_root(struct kvm_mmu_page *root)
+>  void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
+>  			  bool shared);
+>  
+> -bool __kvm_tdp_mmu_zap_gfn_range(struct kvm *kvm, int as_id, gfn_t start,
+> +bool kvm_tdp_mmu_zap_leafs(struct kvm *kvm, int as_id, gfn_t start,
+>  				 gfn_t end, bool can_yield, bool flush);
+> -static inline bool kvm_tdp_mmu_zap_gfn_range(struct kvm *kvm, int as_id,
+> -					     gfn_t start, gfn_t end, bool flush)
+> -{
+> -	return __kvm_tdp_mmu_zap_gfn_range(kvm, as_id, start, end, true, flush);
+> -}
+> -
+>  bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp);
+>  void kvm_tdp_mmu_zap_all(struct kvm *kvm);
+>  void kvm_tdp_mmu_invalidate_all_roots(struct kvm *kvm);
+>
+> base-commit: 19164ad08bf668bca4f4bfbaacaa0a47c1b737a6
+
+-- 
+Vitaly
 

@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072324EA0E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237EA4EA0FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344154AbiC1UBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 16:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
+        id S1344211AbiC1UBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 16:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344003AbiC1UBf (ORCPT
+        with ESMTP id S1344057AbiC1UBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 16:01:35 -0400
+        Mon, 28 Mar 2022 16:01:37 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24163969A;
-        Mon, 28 Mar 2022 12:59:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31543969A;
+        Mon, 28 Mar 2022 12:59:55 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id D7E931F43853
+        with ESMTPSA id 3554D1F43859
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648497593;
-        bh=koeYZVYa1e9V9VAWFVOsniYBHyi6nWtDcIkC0przTEE=;
+        s=mail; t=1648497594;
+        bh=WOqr7O+kEBWDQ82IgnDtk4f1Hxn2t1rG144dWJ0+7Co=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n4LqLgpBupA7Vw6AD5z/wVRO3g7+he2wEA288iD6Ho4mfTQVWnM+FTZpAmFZPZDaH
-         oj4IlQXm7SvqKU/H10sqMz9poEwuzZUeiG8gEE5WzvHIvwCs7WZRCcgSfye+qzqCfR
-         EoHcip48VZ/+lhfc0OdQ+tsFwhTfX/RxMezGwkbxBdD6s2MPplK0ASSQ54/PjzgfCw
-         avIr1tSLDsp4s9vUcNp4o92zyvncm2ExFJAxNiqgzqwdLtEvnEJO9t1et5oL61egqu
-         r9mDlWWDSqwT3dXjH0VK0+X7DkXmvrAh6x4UzBbdnW5aC27R57F6deeFO515CWc3xf
-         Kh5Hc7D/2cwPQ==
+        b=Cz72vvSxzdruPPJ8pEtYfNdPVPTUte/ufE9GzUc+AXcriDMH0TI+o/84Ii9w3hPOl
+         gt5u+JSyJsd5Z6aG/Eg0JdSsgz8FdcmFD2WaRi8S8omaLlUeSOMddEbng9F8UMZO5P
+         kvgM4lkscZatvCDNoFSCPe51n0uAYafRMkkmdLjhhjcXD109gBa3DfnjCo+TYmW1/D
+         lqPeoP70MbWqAkwNBLA5819DUrfC+rNWuF0K0rMkmArcnc/Syt+XsZ+m0Ek/Fd4DSg
+         utYttlwNVvg+CK7t4PS2goLlFmz/+980G61TyAO9xPQZi/Ovsdrq/NyQotDj9zbxpT
+         xkAHFQdYQokOg==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     kernel@collabora.com, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 03/24] media: h264: Avoid wrapping long_term_frame_idx
-Date:   Mon, 28 Mar 2022 15:59:15 -0400
-Message-Id: <20220328195936.82552-4-nicolas.dufresne@collabora.com>
+Subject: [PATCH v1 04/24] media: h264: Store current picture fields
+Date:   Mon, 28 Mar 2022 15:59:16 -0400
+Message-Id: <20220328195936.82552-5-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
 References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
@@ -50,31 +50,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For long term reference, frame_num is set to long_term_frame_idx which
-does not require wrapping. This if fixed by observation, no directly
-related issue have been found yet.
+This information, also called picture structure will be needed to construct
+reference list when decoding field.
 
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 ---
- drivers/media/v4l2-core/v4l2-h264.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/v4l2-core/v4l2-h264.c | 10 +++++++---
+ include/media/v4l2-h264.h           |  4 ++++
+ 2 files changed, 11 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
-index 8d750ee69e74..aebed1cbe05a 100644
+index aebed1cbe05a..4c6bfb057bda 100644
 --- a/drivers/media/v4l2-core/v4l2-h264.c
 +++ b/drivers/media/v4l2-core/v4l2-h264.c
-@@ -57,8 +57,10 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
- 		 * '8.2.4.1 Decoding process for picture numbers' of the spec.
- 		 * TODO: This logic will have to be adjusted when we start
- 		 * supporting interlaced content.
-+		 * For long term reference, frame_num is set to
-+		 * long_term_frame_idx which requires no wrapping.
- 		 */
--		if (dpb[i].frame_num > cur_frame_num)
-+		if (!b->refs[i].longterm && dpb[i].frame_num > cur_frame_num)
- 			b->refs[i].frame_num = (int)dpb[i].frame_num -
- 					       max_frame_num;
- 		else
+@@ -34,13 +34,17 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
+ 	cur_frame_num = dec_params->frame_num;
+ 
+ 	memset(b, 0, sizeof(*b));
+-	if (!(dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC))
++	if (!(dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC)) {
+ 		b->cur_pic_order_count = min(dec_params->bottom_field_order_cnt,
+ 					     dec_params->top_field_order_cnt);
+-	else if (dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_BOTTOM_FIELD)
++		b->cur_pic_fields = V4L2_H264_FRAME_REF;
++	} else if (dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_BOTTOM_FIELD) {
+ 		b->cur_pic_order_count = dec_params->bottom_field_order_cnt;
+-	else
++		b->cur_pic_fields = V4L2_H264_BOTTOM_FIELD_REF;
++	} else {
+ 		b->cur_pic_order_count = dec_params->top_field_order_cnt;
++		b->cur_pic_fields = V4L2_H264_TOP_FIELD_REF;
++	}
+ 
+ 	for (i = 0; i < V4L2_H264_NUM_DPB_ENTRIES; i++) {
+ 		u32 pic_order_count;
+diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
+index e282fb16ac58..e165a54c68fa 100644
+--- a/include/media/v4l2-h264.h
++++ b/include/media/v4l2-h264.h
+@@ -21,6 +21,7 @@
+  * @refs.longterm: set to true for a long term reference
+  * @refs: array of references
+  * @cur_pic_order_count: picture order count of the frame being decoded
++ * @cur_pic_fields: fields present in the frame being decoded
+  * @unordered_reflist: unordered list of references. Will be used to generate
+  *		       ordered P/B0/B1 lists
+  * @num_valid: number of valid references in the refs array
+@@ -36,7 +37,10 @@ struct v4l2_h264_reflist_builder {
+ 		u32 pic_num;
+ 		u16 longterm : 1;
+ 	} refs[V4L2_H264_NUM_DPB_ENTRIES];
++
+ 	s32 cur_pic_order_count;
++	u8 cur_pic_fields;
++
+ 	struct v4l2_h264_reference unordered_reflist[V4L2_H264_REF_LIST_LEN];
+ 	u8 num_valid;
+ };
 -- 
 2.34.1
 

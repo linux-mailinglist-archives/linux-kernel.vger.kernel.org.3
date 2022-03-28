@@ -2,98 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1B64E9C50
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C517E4E9C4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242257AbiC1Qed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 12:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
+        id S241388AbiC1QfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 12:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242235AbiC1Qea (ORCPT
+        with ESMTP id S238904AbiC1QfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 12:34:30 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB0D62A17
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:32:49 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 18:32:46 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648485168;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=s8R1rFpKPGiX8tjGMLwDE5ZH7Zajq5rA2088Om6hAHo=;
-        b=eXTKy1Uso/VUNvAsvpJ137VDRkdojOQXWHib8tpLLwnH/2Z+7n5+FDi3Ta2Tvtk2ZyQDT2
-        3DEogWfW4rVM4xIuKGBPO+jCd5HxcFD4VKTcSVRpVaLcvKhOyCwnK+0cdUEgSfhmPFZd1c
-        KL3e8SxzHWt2anLOYVZz+BTtS4ue/GZ1KyPdpPM2nLR0QtqOdXrIH1S7GLMOgsfEHpiOnm
-        3Kn6Ru3SUVkB8GYsgexhaxMoL5x1ou/n0hxt6I+PKIji3p0qZsRJiyT9EMmNcSkBUW+N49
-        z3H6/WydomIyrcmxDf1q7QvqKD9cOacSIvDUuqLOQxqT29ZwIacCvWCVKmrz2w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648485168;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=s8R1rFpKPGiX8tjGMLwDE5ZH7Zajq5rA2088Om6hAHo=;
-        b=Ly+2vTanCidedkBsGTsZ8Po7DAmp4mhC1h9ppOeYA6tzf4slNkMND8z1bABgnhlI+zeqsU
-        OPgk7cRmP4RyWcBQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCH] signal/x86: Delay calling signals in atomic
-Message-ID: <YkHjLkDsA4oYj9rU@linutronix.de>
-References: <Ygq5aBB/qMQw6aP5@linutronix.de>
- <8735j2xigt.fsf@email.froward.int.ebiederm.org>
- <87h77iw34u.fsf@email.froward.int.ebiederm.org>
+        Mon, 28 Mar 2022 12:35:00 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695BA7648;
+        Mon, 28 Mar 2022 09:33:18 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id e189so16151635oia.8;
+        Mon, 28 Mar 2022 09:33:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bIvjLAN1WghVKdHbiAwbpiS4KUlO9J5lK2uou4RVILk=;
+        b=4BuMH9UC17PguaV7KVJJqo4LZHm4VxTwZQ3azrARHcBzitgGWODEb3IuIXHryl09Q1
+         PHaRtwISpRuw28cShPTwqWLLFh7u7Kf6lp2nRJXrKXQ9SrzTt2xkRC+LC8RWE8/3Q78k
+         yYSACNPIxAk3HmJwe6x295vWxb02lfeMTeshxV2f1pQWc+zy3AdgzfFKKPb3nB+C54Wl
+         1OVH3WCZxz2Wv3rntn6tQvi5d9beZDsDnPQ64uXi1D0e45vNcfYi3Sty1Imrp4cBRshp
+         hpde1HBbm95O1T56LfCUAWRpyYjJgvNlOAZm7M0o4E5JfQeXpVLrRIYZ9i1diSYMl0VU
+         39nQ==
+X-Gm-Message-State: AOAM533GjdNXKY4KDptnJoLLywK33KVjrlY8NuTPLNeK75esrMK0Eeu7
+        ejVBq6tWoln0o2EjEQtjDg==
+X-Google-Smtp-Source: ABdhPJwNVh5RZ1sp9MXlR5GlreRlGRTmHJKVh03oTfj9pol2juq4vLORJb84KwOjAAWD3ibi6+xCCg==
+X-Received: by 2002:a05:6808:1059:b0:2ed:b699:7f2e with SMTP id c25-20020a056808105900b002edb6997f2emr909oih.240.1648485197630;
+        Mon, 28 Mar 2022 09:33:17 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t15-20020a056808158f00b002e331356c87sm7218218oiw.39.2022.03.28.09.33.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 09:33:16 -0700 (PDT)
+Received: (nullmailer pid 2515489 invoked by uid 1000);
+        Mon, 28 Mar 2022 16:33:15 -0000
+Date:   Mon, 28 Mar 2022 11:33:15 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Guillaume Ranquet <granquet@baylibre.com>
+Cc:     airlied@linux.ie, angelogioacchino.delregno@collabora.com,
+        chunfeng.yun@mediatek.com, chunkuang.hu@kernel.org,
+        ck.hu@mediatek.com, daniel@ffwll.ch, deller@gmx.de,
+        jitao.shi@mediatek.com, kishon@ti.com, krzk+dt@kernel.org,
+        maarten.lankhorst@linux.intel.com, matthias.bgg@gmail.com,
+        mripard@kernel.org, p.zabel@pengutronix.de, tzimmermann@suse.de,
+        vkoul@kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, markyacoub@google.com,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: Re: [PATCH v9 02/22] dt-bindings: mediatek,dp: Add Display Port
+ binding
+Message-ID: <YkHjS9ToXqyliItf@robh.at.kernel.org>
+References: <20220327223927.20848-1-granquet@baylibre.com>
+ <20220327223927.20848-3-granquet@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87h77iw34u.fsf@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220327223927.20848-3-granquet@baylibre.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-28 09:41:37 [-0500], Eric W. Biederman wrote:
-> I want to say the patch below looks like it was a perfectly fine debug
-> patch to see if what someone thinks is the issue is the issue.  It is
-> not a good final solution for the reasons I have already mentioned.
+On Mon, Mar 28, 2022 at 12:39:07AM +0200, Guillaume Ranquet wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
 > 
-> May I ask where the rest of the conversation was?  I can only find the
-> single posting of this patch on linux-kernel without any conversation,
-> and the description indicates this change has seen several rounds of
-> development.
+> This controller is present on several mediatek hardware. Currently
+> mt8195 and mt8395 have this controller without a functional difference,
+> so only one compatible field is added.
+> 
+> The controller can have two forms, as a normal display port and as an
+> embedded display port.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
+>  .../display/mediatek/mediatek,dp.yaml         | 100 ++++++++++++++++++
+>  1 file changed, 100 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+> new file mode 100644
+> index 000000000000..802cc406c72b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+> @@ -0,0 +1,100 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/mediatek/mediatek,dp.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek Display Port Controller
+> +
+> +maintainers:
+> +  - CK Hu <ck.hu@mediatek.com>
+> +  - Jitao shi <jitao.shi@mediatek.com>
+> +
+> +description: |
+> +  Device tree bindings for the Mediatek (embedded) Display Port controller
+> +  present on some Mediatek SoCs.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: mediatek,mt8195-dp-tx
+> +      - const: syscon
 
-There was not feedback based on what has been posted to lkml.
-This, was ended as this patch, was originally posted by Steven as
-	https://lore.kernel.org/linux-rt-users/20120124191454.345715521@goodmis.org/
+Add something to the above description to convince me this is a syscon. 
 
-a few iterations later we got to v4 in
-	https://lore.kernel.org/linux-rt-users/20120203183041.427463295@goodmis.org/
+If you need a regmap, the driver can create one. 'syscon' is really only 
+needed if there's not a specific driver.
 
-which got review from Oleg and then become Oleg's in v5
-	https://lore.kernel.org/linux-rt-users/20120208005850.233662427@goodmis.org/
-
-and was part of the RT queue since v3.0.20-rt36.
-
-> Eric
-
-Sebastian
+Rob

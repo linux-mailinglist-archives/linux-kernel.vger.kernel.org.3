@@ -2,75 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8808F4E9278
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4804E927A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240224AbiC1K1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 06:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
+        id S240233AbiC1K2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 06:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234664AbiC1K1c (ORCPT
+        with ESMTP id S240235AbiC1K1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 06:27:32 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A940F369D9;
-        Mon, 28 Mar 2022 03:25:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Lf3j/iRG/esIjnJN7hgl0CTJgV2rHtUJ5goRSH2ROBM=; b=AG7brs63P76eLr0qRcQFEuUfjA
-        pl6byXYPpSfILFFBPlkavssv233PFl/ZsZYr20eM+lLGhrMJcm2U+7gA83FEdvdKEDjJkUFo8QLNJ
-        TMwheso7I7nOp0NuEVI903hjeirUjAC8MwGIO1e6YxhmpydAQVxBDSSApS2cGc+XCS1TPXwRaZ2Hy
-        xepAGGRqg/MqqCfTL4MbuLpmRFnFw99IAOaewkzh4G4gjSnyMknHQ0F9vocWaH2jie0g9oHulGCo8
-        eRGn5udwwaQBmi2xDbMzHZcVNgVxqlwFy6zny02qiBO471Gl7GBolBEzT1BXC8BLsHXrL6+d1iBx3
-        u8M3/xvw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nYmZ4-00GouA-VZ; Mon, 28 Mar 2022 10:25:35 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7FAAC9861F5; Mon, 28 Mar 2022 12:25:34 +0200 (CEST)
-Date:   Mon, 28 Mar 2022 12:25:34 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf/x86: Unify format of events sysfs show
-Message-ID: <20220328102534.GX8939@worktop.programming.kicks-ass.net>
-References: <20220324031957.135595-1-yangjihong1@huawei.com>
- <20220324101107.GC8939@worktop.programming.kicks-ass.net>
- <a4a0758f-b183-8244-d59c-10d31d8e0a3a@huawei.com>
+        Mon, 28 Mar 2022 06:27:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E6C36E02;
+        Mon, 28 Mar 2022 03:26:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F3DE60FCC;
+        Mon, 28 Mar 2022 10:26:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B81A5C004DD;
+        Mon, 28 Mar 2022 10:26:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648463168;
+        bh=ClrbOWRSNMLl96m+NhBGm3Qrgj7yVuAq3b+4WcQ0rAM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Jb8eKOJTOMzxbajxJGkA9vxuWFcssjok0OoiizOjXmuFfGDzcYGBmPKnzFcMUWeJG
+         YB7gQT8IR29Ze0+2NdPi4vN2mEDvLJD90RzrTM3JWWCpvf598luRcWob/I/SnLLRxd
+         xV/SiWwv4kDhkYP0sQ2vLrxfR9CSCo+DuUiQg9JR3MkYpbkVnQS0vbSlcneZhnY8f6
+         0cFvYTTM8QtK0GZQRZ3JxZh1c56T3T9ed44RUPmAMxus5RJNA7PoAX0ieqCvLytqdp
+         sGLPZUfJJxrRnIdKJdJu8mI4u7i3SBLjH52W2sl30XcRdbFkvDCGD6H05rGeA23A9a
+         y0WxUfg7zoNRg==
+Date:   Mon, 28 Mar 2022 12:26:04 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] docs: kfigure.py: Don't warn of missing PDF converter
+ in 'make htmldocs'
+Message-ID: <20220328122604.67d0eb5e@coco.lan>
+In-Reply-To: <c80e1481-10d4-7151-fe59-e846259eb0d4@gmail.com>
+References: <c80e1481-10d4-7151-fe59-e846259eb0d4@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a4a0758f-b183-8244-d59c-10d31d8e0a3a@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 09:38:47AM +0800, Yang Jihong wrote:
-> Hi Peter,
-> 
-> On 2022/3/24 18:11, Peter Zijlstra wrote:
-> > On Thu, Mar 24, 2022 at 11:19:57AM +0800, Yang Jihong wrote:
-> > > Sysfs show formats of files in /sys/devices/cpu/events/ are not unified,
-> > > some end with "\n", and some do not. Modify sysfs show format of events
-> > > defined by EVENT_ATTR_STR to end with "\n".
-> > 
-> > Did you test all the userspace that consumes these fields to make sure
-> > none of them break? I suppose it's mostly perf tool, but I'm fairly sure
-> > there's others out there as well.
-> > 
-> Yes, I tested "perf record" and "perf stat" commands on my machine against
-> the modified events, and the results are as follows:
+Em Sat, 26 Mar 2022 16:48:39 +0900
+Akira Yokosawa <akiyks@gmail.com> escreveu:
 
-Fair enough, I'll queue it for after -rc1.
+> SVG -> PDF conversion is not required in "make htmldocs".
+> It is pointless to always warn of a missing converter.
+> Demote the log message in setupTools() to verbose.
+> 
+> For "make pdfdocs" (or "make latexdocs"), promote the dynamic
+> message of "include SVG raw" to a warn.
+> Expand the message and recommend installing Inkscape or
+> ImageMagick.
+> 
+> Fixes: 8ccd05697a9d ("docs: sphinx/kfigure.py: Use inkscape(1) for SVG -> PDF conversion")
+> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: linux-doc@vger.kernel.org
+
+Makes sense to me.
+
+Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+
+> ---
+>  Documentation/sphinx/kfigure.py | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/sphinx/kfigure.py b/Documentation/sphinx/kfigure.py
+> index 24d2b2addcce..cefdbb7e7523 100644
+> --- a/Documentation/sphinx/kfigure.py
+> +++ b/Documentation/sphinx/kfigure.py
+> @@ -212,7 +212,7 @@ def setupTools(app):
+>          if convert_cmd:
+>              kernellog.verbose(app, "use convert(1) from: " + convert_cmd)
+>          else:
+> -            kernellog.warn(app,
+> +            kernellog.verbose(app,
+>                  "Neither inkscape(1) nor convert(1) found.\n"
+>                  "For SVG to PDF conversion, "
+>                  "install either Inkscape (https://inkscape.org/) (preferred) or\n"
+> @@ -296,8 +296,10 @@ def convert_image(img_node, translator, src_fname=None):
+>  
+>          if translator.builder.format == 'latex':
+>              if not inkscape_cmd and convert_cmd is None:
+> -                kernellog.verbose(app,
+> -                                  "no SVG to PDF conversion available / include SVG raw.")
+> +                kernellog.warn(app,
+> +                                  "no SVG to PDF conversion available / include SVG raw."
+> +                                  "\nIncluding large raw SVGs can cause xelatex error."
+> +                                  "\nInstall Inkscape (preferred) or ImageMagick.")
+>                  img_node.replace_self(file2literal(src_fname))
+>              else:
+>                  dst_fname = path.join(translator.builder.outdir, fname + '.pdf')
+> 
+> base-commit: 8d6451b9a51b555be2c9a6c326a980b2de00741a
+
+
+
+Thanks,
+Mauro

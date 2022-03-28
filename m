@@ -2,60 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E654E8BA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 03:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BB94E8BC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 03:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237287AbiC1Bfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 21:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
+        id S237392AbiC1BzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 21:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiC1Bfm (ORCPT
+        with ESMTP id S234637AbiC1By6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 21:35:42 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B8D220D8
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 18:34:02 -0700 (PDT)
-Received: from kwepemi100013.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KRZwT5XMcz1GCx0;
-        Mon, 28 Mar 2022 09:33:45 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi100013.china.huawei.com (7.221.188.136) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 28 Mar 2022 09:33:59 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 28 Mar 2022 09:33:58 +0800
-From:   Tong Tiangen <tongtiangen@huawei.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>,
-        Tong Tiangen <tongtiangen@huawei.com>
-Subject: [PATCH -next v3 1/4] mm: page_table_check: move pxx_user_accessible_page into x86
-Date:   Mon, 28 Mar 2022 01:52:39 +0000
-Message-ID: <20220328015242.1136836-2-tongtiangen@huawei.com>
-X-Mailer: git-send-email 2.18.0.huawei.25
-In-Reply-To: <20220328015242.1136836-1-tongtiangen@huawei.com>
-References: <20220328015242.1136836-1-tongtiangen@huawei.com>
+        Sun, 27 Mar 2022 21:54:58 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E664FC52
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 18:53:18 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2e6650cde1bso132932437b3.12
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 18:53:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ld6gg90UxBewd5EuGKuXKzT3kPcWyc890roNOgvWpfk=;
+        b=5h4Rr7Cxj8cXXW8wb+j0jqJ/+Tk37Wv78eprkSxBXIZ5n57eqyJPv6fvnWo0y+kDq9
+         yFFV1uIFMQmTsZczXyoU3t/U0n2UDVBaAtW5ZBltiQ+KDK1mp6RiTy1BSCN9Hlwke1MG
+         Xed05ry/fZyrvE6Wpzkn7WqLi9SZAB7jOdx/cWbSP84BP2+UWis0XNYchFwFGLTRJgZZ
+         QwXNexHoVXd+3DjEio4oPOVYbLFAfOlOjfqHc+BpE2H4lzKPJKINjHhZhe/4s+vLPeRP
+         pYfwlVKvDmow3zL0HveL743Xxm4bhwPuFlk9fWPq+61gdMGzbmA1JGQNnD2+ofRU67ZR
+         gKBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ld6gg90UxBewd5EuGKuXKzT3kPcWyc890roNOgvWpfk=;
+        b=U1mQUPwSOvlleZIhF97uweoW/Cb3+xRSsO9pxm9SsS4ewkGTf+Defp++CCpVXnOkoB
+         NInp2D8RW5P6E3CN3Mz66GttqXDALhbY6wuw3zZPBTnpDo6jeoFceyP+AmI4XGXJC2EH
+         tO/srvPF9UVBdvGdqAA3Q2T7iUNA/VSmkvsF0zVy245ZJBWlCJF9sTJLu+RCrQ7IUlOm
+         43MztfpnH72lh+WwSRcifMvzzTfy7moUJhDZMg/+wPEJZeupIyGepV4pNaW3HdKikwaw
+         GTDqm+gC866JJM4Lp/mfdyCrRAnhtSM6ltLcP6A3pZ/+4F1clyV85Si4JSHk3ALJlmN6
+         C10Q==
+X-Gm-Message-State: AOAM53215usaC/2TI2qgJlGiMAVMtZv3rGvfc6YhkA6Mj53OTUdjt/Mz
+        K8mfAlRlRZ+0x6wqLoAkAG1/zUujYzM4N8ee5W77iA==
+X-Google-Smtp-Source: ABdhPJxYugzqwYygfRvHynhLC1/y3UEtpQG+g+Vx00P+G+LPRSrHTxtSoTXnS8V1aBHStCTQzJ52zfmvBCz0y9N1JKA=
+X-Received: by 2002:a81:897:0:b0:2e5:f3b2:f6de with SMTP id
+ 145-20020a810897000000b002e5f3b2f6demr23165273ywi.141.1648432398131; Sun, 27
+ Mar 2022 18:53:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+References: <20220327051853.57647-1-songmuchun@bytedance.com>
+ <20220327051853.57647-2-songmuchun@bytedance.com> <CANpmjNPA71CyZefox1rb_f8HqEM_R70EgZCX8fHeeAnDyujO8w@mail.gmail.com>
+In-Reply-To: <CANpmjNPA71CyZefox1rb_f8HqEM_R70EgZCX8fHeeAnDyujO8w@mail.gmail.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Mon, 28 Mar 2022 09:52:40 +0800
+Message-ID: <CAMZfGtXt9xWnVv8hav+zWHYRmOqBGu3WPaasYwGxCb1-MDDwgQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] mm: kfence: fix objcgs vector allocation
+To:     Marco Elver <elver@google.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,93 +77,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kefeng Wang <wangkefeng.wang@huawei.com>
+On Mon, Mar 28, 2022 at 1:31 AM Marco Elver <elver@google.com> wrote:
+>
+> On Sun, 27 Mar 2022 at 07:19, Muchun Song <songmuchun@bytedance.com> wrote:
+> >
+> > If the kfence object is allocated to be used for objects vector, then
+> > this slot of the pool eventually being occupied permanently since
+> > the vector is never freed.  The solutions could be 1) freeing vector
+> > when the kfence object is freed or 2) allocating all vectors statically.
+> > Since the memory consumption of object vectors is low, it is better to
+> > chose 2) to fix the issue and it is also can reduce overhead of vectors
+> > allocating in the future.
+> >
+> > Fixes: d3fb45f370d9 ("mm, kfence: insert KFENCE hooks for SLAB")
+> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> > ---
+> >  mm/kfence/core.c   | 3 +++
+> >  mm/kfence/kfence.h | 1 +
+> >  2 files changed, 4 insertions(+)
+>
+> Thanks for this -- mostly looks good. Minor comments below + also
+> please fix what the test robot reported.
 
-The pxx_user_accessible_page() check the PTE bit, it's
-architecture-specific code, move them into x86's pgtable.h,
-also add default PMD/PUD_PAGE_SIZE definition, it's prepare
-for support page table check feature on new architecture.
+Will do.
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
----
- arch/x86/include/asm/pgtable.h | 19 +++++++++++++++++++
- mm/page_table_check.c          | 25 ++++++++-----------------
- 2 files changed, 27 insertions(+), 17 deletions(-)
+>
+> > diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+> > index 13128fa13062..9976b3f0d097 100644
+> > --- a/mm/kfence/core.c
+> > +++ b/mm/kfence/core.c
+> > @@ -579,9 +579,11 @@ static bool __init kfence_init_pool(void)
+> >         }
+> >
+> >         for (i = 0; i < CONFIG_KFENCE_NUM_OBJECTS; i++) {
+> > +               struct slab *slab = virt_to_slab(addr);
+> >                 struct kfence_metadata *meta = &kfence_metadata[i];
+> >
+> >                 /* Initialize metadata. */
+> > +               slab->memcg_data = (unsigned long)&meta->objcg | MEMCG_DATA_OBJCGS;
+>
+> Maybe just move it to kfence_guarded_alloc(), see "/* Set required
+> slab fields */", where similar initialization on slab is done.
 
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 62ab07e24aef..8cd6514e3052 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -1430,6 +1430,25 @@ static inline bool arch_faults_on_old_pte(void)
- 	return false;
- }
- 
-+#ifdef CONFIG_PAGE_TABLE_CHECK
-+static inline bool pte_user_accessible_page(pte_t pte)
-+{
-+	return (pte_val(pte) & _PAGE_PRESENT) && (pte_val(pte) & _PAGE_USER);
-+}
-+
-+static inline bool pmd_user_accessible_page(pmd_t pmd)
-+{
-+	return pmd_leaf(pmd) && (pmd_val(pmd) & _PAGE_PRESENT) &&
-+		(pmd_val(pmd) & _PAGE_USER);
-+}
-+
-+static inline bool pud_user_accessible_page(pud_t pud)
-+{
-+	return pud_leaf(pud) && (pud_val(pud) & _PAGE_PRESENT) &&
-+		(pud_val(pud) & _PAGE_USER);
-+}
-+#endif
-+
- #endif	/* __ASSEMBLY__ */
- 
- #endif /* _ASM_X86_PGTABLE_H */
-diff --git a/mm/page_table_check.c b/mm/page_table_check.c
-index 2458281bff89..145f059d1c4d 100644
---- a/mm/page_table_check.c
-+++ b/mm/page_table_check.c
-@@ -10,6 +10,14 @@
- #undef pr_fmt
- #define pr_fmt(fmt)	"page_table_check: " fmt
- 
-+#ifndef PMD_PAGE_SIZE
-+#define PMD_PAGE_SIZE	PMD_SIZE
-+#endif
-+
-+#ifndef PUD_PAGE_SIZE
-+#define PUD_PAGE_SIZE	PUD_SIZE
-+#endif
-+
- struct page_table_check {
- 	atomic_t anon_map_count;
- 	atomic_t file_map_count;
-@@ -52,23 +60,6 @@ static struct page_table_check *get_page_table_check(struct page_ext *page_ext)
- 	return (void *)(page_ext) + page_table_check_ops.offset;
- }
- 
--static inline bool pte_user_accessible_page(pte_t pte)
--{
--	return (pte_val(pte) & _PAGE_PRESENT) && (pte_val(pte) & _PAGE_USER);
--}
--
--static inline bool pmd_user_accessible_page(pmd_t pmd)
--{
--	return pmd_leaf(pmd) && (pmd_val(pmd) & _PAGE_PRESENT) &&
--		(pmd_val(pmd) & _PAGE_USER);
--}
--
--static inline bool pud_user_accessible_page(pud_t pud)
--{
--	return pud_leaf(pud) && (pud_val(pud) & _PAGE_PRESENT) &&
--		(pud_val(pud) & _PAGE_USER);
--}
--
- /*
-  * An enty is removed from the page table, decrement the counters for that page
-  * verify that it is of correct type and counters do not become negative.
--- 
-2.18.0.huawei.25
+But slab->memcg_data is special since it is only needed to be
+initialized once.  I think it is better move it to the place where
+__SetPageSlab(&pages[i]) is.  What do you think?
 
+>
+> >                 INIT_LIST_HEAD(&meta->list);
+> >                 raw_spin_lock_init(&meta->lock);
+> >                 meta->state = KFENCE_OBJECT_UNUSED;
+> > @@ -938,6 +940,7 @@ void __kfence_free(void *addr)
+> >  {
+> >         struct kfence_metadata *meta = addr_to_metadata((unsigned long)addr);
+> >
+> > +       KFENCE_WARN_ON(meta->objcg);
+>
+> This holds true for both SLAB and SLUB, right? (I think it does, but
+> just double-checking.)
+
+Right.
+
+Thanks.

@@ -2,135 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 228CC4E9B22
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB0074E9B2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237767AbiC1PcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 11:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
+        id S238121AbiC1PdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 11:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232846AbiC1PcO (ORCPT
+        with ESMTP id S238012AbiC1PdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 11:32:14 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20F45D18B;
-        Mon, 28 Mar 2022 08:30:31 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id p15so29459602ejc.7;
-        Mon, 28 Mar 2022 08:30:31 -0700 (PDT)
+        Mon, 28 Mar 2022 11:33:07 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245D25DA25
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:31:26 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a8so29405097ejc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:31:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=p3XuvSz9El6nko432TGNXkjhObeuwCH/Ie6ye/gIxy8=;
-        b=IIz4FdV0mOAafEMr4USQHNy+IBB8W1SLxNvpY/qmwe2L60jIkh+BtkZhRLusE+9byJ
-         VVOGC3zinYbOUHGmsCd3rVC2X3mzOikYzWwgTARQiJoLNejLG6UtsmsOLYNWwa5xebSl
-         LNl2I+j4OF8XLi8+9lnxeCIEzt7rAW/BtqIbKaPUf0iApZt76Mbpehd2wRQJCk5yR+QI
-         8NZpda1g8E03N2qz7Oh7iXrTozXwVZMMJ3MgtA6bpR25EguMNLOn8u0iMynemdSUOket
-         6XSWVQ87FGvnAm7+rdyebHF81x9Q1Xf03LzPHMmJiMMQqQsFNEYlNbGAWHzzK9cZeSNW
-         3Lvw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XVOdqtYpNwqLWJc4Ni5fAaD2U0widdST+YuPSsDvcoE=;
+        b=IQMm759QFEPImiACJ3TGGCTHB3IELcopOlUDoSvauStFHz4MaTX2LwwOGHGdfLjajk
+         Edf7FKVRQ61ssawAJddyaJFEqxk+UT3wvr6Axw6pa76AAmhHuQBAXIEXTS/zgLdQfdZA
+         sPQzEUAhFKo6F9P+xO/KZgjFT4Qa9QxhHM5V2nY481/FFMxLnlLHdZmNLc4btyeRDqah
+         rq5JpRo2enI69rZUHjo1Z75ro8x5lYiv7pqTxRSXdAs4JtERgOL+us4LYsLrd/Hmc/Sk
+         ++6dM0HAX9NVBWovfjsOnvqxf3KNaHP6tXFtCmBLn6lOkTCYLWpRMDijqHfO9/tDX+vL
+         y69g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=p3XuvSz9El6nko432TGNXkjhObeuwCH/Ie6ye/gIxy8=;
-        b=JAqN2ruLwtMeJyavhf1AGyRb1bh/zGZjY5VuWv70KNDlM1BOFPC7ghhF8uWGru8qJt
-         jSV3VZuQ1E0p73NQpC1ex5lngI4kSkhEoiYIVQ+CTEks733QydptkXmU2cogVANTUT5k
-         JzTgg2OF8GC6ZjiVsXx8PxmJHZg6K3k2bcYhN/v57VB37qt8NPWEZExKDWDjrgx3uY2/
-         yrV+HoqmHO/OKGrfcXcpj3tox9IfcgmRbR+BSlIP0pUVQgU9/4HixcFlf8kDfgDhZ8jo
-         986paEn2zsvYQ6DGn1WXuKGFtXQ+pWJAD5JbOUudDoBQLhN/YUnoQeinEeohpxdfWnJA
-         9Utg==
-X-Gm-Message-State: AOAM5315gscQJaAeg2qeA4U0bm90VK9wPCWSWFnEryVoYUZX0ZtVnGMG
-        tE9luG+F+WpReVM5YZJJmKE=
-X-Google-Smtp-Source: ABdhPJzTNnMXRuknjU+f0aWqPcOk/WgtWC3qwlzaCIcEolJcpttqYGy3tEe+3vYytAaiM+K47vsWvQ==
-X-Received: by 2002:a17:907:d02:b0:6e0:4f1d:7ab1 with SMTP id gn2-20020a1709070d0200b006e04f1d7ab1mr27848220ejc.716.1648481430084;
-        Mon, 28 Mar 2022 08:30:30 -0700 (PDT)
-Received: from [192.168.1.10] ([46.249.74.23])
-        by smtp.googlemail.com with ESMTPSA id bx5-20020a0564020b4500b00418fca53406sm7022210edb.27.2022.03.28.08.30.28
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 28 Mar 2022 08:30:29 -0700 (PDT)
-Subject: Re: [PATCH 0/3] drm: omapdrm: Fix excessive GEM buffers DMM/CMA usage
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, merlijn@wizzup.org, tony@atomide.com,
-        airlied@linux.ie, daniel@ffwll.ch
-References: <1642587791-13222-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <e126b6a7-5c34-66d5-d371-b2bae3b94924@ideasonboard.com>
-From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Message-ID: <653c8cf1-8644-f5cb-810e-81539a99d776@gmail.com>
-Date:   Mon, 28 Mar 2022 18:30:19 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Firefox/60.0 Thunderbird/60.6.1
+        bh=XVOdqtYpNwqLWJc4Ni5fAaD2U0widdST+YuPSsDvcoE=;
+        b=YedWVa/nT7Gt3aM7px33miez5gHCnDKkjfbemLsKUr7sehpePYKlGAMw7jzYxuVYLw
+         IWnjdeBxjr9fWb39/cSySuQj0Glxfx/985mPtVLSVIJrCchKn7z8KtBbo2xcQa63F7ug
+         vsW2YBms/cy+xL9re0hD/Ax43a5o903eRX2+dqPoAFX9dsYK7ktGt/ZACRM43Ms76xqk
+         /ceD8uKVPZmCv4Sn7lCEHFAYEUi3VexzpSr2p5nlEVJPQDSeaK1znjEeGevoTM9g3Ifr
+         Jhrt1GYyHGuKSAgiOjh80YUo/6vP1vecDsqXgueD16JkYasHu3LGS0oH5qm03iHB5vyq
+         6pfg==
+X-Gm-Message-State: AOAM532p2lN+as1cpw8FqpgNTgilZ6jSMwoStW45a2ETzC9j3/Aqkvlp
+        lxjpY3YkH+E6o3zcuXk4CozPMQ==
+X-Google-Smtp-Source: ABdhPJwnNW5LR0Gjv8RcjkHQy3MYxUIcpD+Okgnjnsl2Orn1ckdKLdXfSAas4GHG2hGm1N3O1blXfA==
+X-Received: by 2002:a17:907:6e17:b0:6da:83a3:c27a with SMTP id sd23-20020a1709076e1700b006da83a3c27amr28069230ejc.415.1648481484632;
+        Mon, 28 Mar 2022 08:31:24 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id b8-20020a170906728800b006e0351df2dcsm6085838ejl.70.2022.03.28.08.31.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 08:31:24 -0700 (PDT)
+Message-ID: <9277ab24-cbd0-f972-5a08-2faad2662f32@linaro.org>
+Date:   Mon, 28 Mar 2022 17:31:23 +0200
 MIME-Version: 1.0
-In-Reply-To: <e126b6a7-5c34-66d5-d371-b2bae3b94924@ideasonboard.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 6/6] arm64: dts: qcom: sm8250: remove address cells from
+ dsi nodes
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220328143035.519909-1-vkoul@kernel.org>
+ <20220328143035.519909-7-vkoul@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220328143035.519909-7-vkoul@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 28.03.22 г. 12:46 ч., Tomi Valkeinen wrote:
-> Hi,
+On 28/03/2022 16:30, Vinod Koul wrote:
+> The child of dsi nodes do not have unit address, this causes warnings:
 > 
-> On 19/01/2022 12:23, Ivaylo Dimitrov wrote:
->> This patch series fixes excessive DMM or CMA usage of GEM buffers 
->> leading to
->> various runtime allocation failures. The series enables daily usage of 
->> devices
->> without exausting limited resources like CMA or DMM space if GPU 
->> rendering is
->> needed.
->>
->> The first patch doesn't bring any functional changes, it just moves some
->> TILER/DMM related code to a separate function, to simplify the review 
->> of the
->> next two patches.
->>
->> The second patch allows off-CPU rendering to non-scanout buffers. 
->> Without that
->> patch, it is basically impossible to use the driver allocated GEM 
->> buffers on
->> OMAP3 for anything else but a basic CPU rendered examples as if we 
->> want GPU
->> rendering, we must allocate buffers as scanout buffers, which are CMA 
->> allocated.
->> CMA soon gets fragmented and we start seeing allocation failures. Such 
->> failres
->> in Xorg cannot be handeled gracefully, so the system is basically 
->> unusable.
->>
->> Third patch fixes similar issue on OMAP4/5, where DMM/TILER spaces get
->> fragmented with time, leading to allocation failures.
->>
->> Series were tested on Motolola Droid4 and Nokia N900, with OMAP DDX and
->> PVR EXA from https://github.com/maemo-leste/xf86-video-omap
->>
->> Ivaylo Dimitrov (3):
->>    drm: omapdrm: simplify omap_gem_pin
->>    drm: omapdrm: Support exporting of non-contiguous GEM BOs
->>    drm: omapdrm: Do no allocate non-scanout GEMs through DMM/TILER
->>
->>   drivers/gpu/drm/omapdrm/omap_gem.c        | 198 
->> +++++++++++++++++-------------
->>   drivers/gpu/drm/omapdrm/omap_gem.h        |   3 +-
->>   drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c |   5 +-
->>   3 files changed, 116 insertions(+), 90 deletions(-)
->>
+> arch/arm64/boot/dts/qcom/sm8250.dtsi:3249.22-3301.6:
+> 	Warning (avoid_unnecessary_addr_size): /soc@0/mdss@ae00000/dsi@ae94000:
+> 	unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
 > 
-> I have pushed this to drm-misc-next.
+> arch/arm64/boot/dts/qcom/sm8250.dtsi:3322.22-3374.6:
+> 	Warning (avoid_unnecessary_addr_size): /soc@0/mdss@ae00000/dsi@ae96000:
+> 	unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
 > 
+> So remove #address-cells/#size-cells for dsi nodes.
 
-Great, next is VRFB and TE support for Droid4 panel, as soon as I find 
-some spare time :)
+Looks good.
 
-Ivo
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+
+Best regards,
+Krzysztof

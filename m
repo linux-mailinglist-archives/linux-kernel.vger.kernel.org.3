@@ -2,117 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969964E90C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFBF84E90C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239647AbiC1JJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 05:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41678 "EHLO
+        id S239653AbiC1JJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 05:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbiC1JJN (ORCPT
+        with ESMTP id S238346AbiC1JJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 05:09:13 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD31FD0D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:07:32 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KRmzm2swPz4x7X;
-        Mon, 28 Mar 2022 20:07:16 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1648458447;
-        bh=v1UBLdFGsXMcX/h6bZC2s3eWJwQLx420VUoxxYmsYak=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Jau2K2Wnvnvu6yY6wbeCl0JkYlOu6kb0Mff5EhPVKTjOwNgYWWBmrKmDRumZUWWww
-         6+cy1pvfShtmes6SwjGIJqEPr5CyjfYKjakgQMzhHObVgEf6uGSQgPM6GTqLAgo+IK
-         mYmnvh5FEfjRqvHcRCkR3gAsdaiYtiaU5Ip1cSK8kJYMqc4LliYmj6EA+YW4SZ8VVH
-         B2RhMISgR3A0V7mnWCinfXnfNxwwwkIHNc8NRSJGM1R1N08PKsJxzir1A1+C2y2GaS
-         PvHyn8zwtwD7RY6I3bPVw3i1CLyj9lCTlFtbEGd6W84pNxjVyi9lZXEuhP3Ku9RPTl
-         jJGXGfEuS6pZA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Julia Lawall <Julia.Lawall@inria.fr>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
-        bigunclemax@gmail.com, cgel.zte@gmail.com, chenjingwen6@huawei.com,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Corentin Labbe <clabbe@baylibre.com>, danielhb413@gmail.com,
-        Helge Deller <deller@gmx.de>, farosas@linux.ibm.com,
-        ganeshgr@linux.ibm.com, Geoff Levand <geoff@infradead.org>,
-        guozhengkui@vivo.com, haren@linux.ibm.com, hbathini@linux.ibm.com,
-        hbh25y@gmail.com, Jakob Koschel <jakobkoschel@gmail.com>,
-        jniethe5@gmail.com, Joe Lawrence <joe.lawrence@redhat.com>,
-        Kees Cook <keescook@chromium.org>, kernel.noureddine@gmail.com,
-        kjain@linux.ibm.com, ldufour@linux.ibm.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        maddy@linux.ibm.com, mamatha4@linux.vnet.ibm.com,
-        Miroslav Benes <mbenes@suse.cz>, mikey@neuling.org,
-        Michal Suchanek <msuchanek@suse.de>, nathanl@linux.ibm.com,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>, oss@buserror.net,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Petr Mladek <pmladek@suse.com>, psampat@linux.ibm.com,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ritesh Harjani <riteshh@linux.ibm.com>, rmclure@linux.ibm.com,
-        sachinp@linux.ibm.com, sourabhjain@linux.ibm.com,
-        tobias@waldekranz.com, Thierry Reding <treding@nvidia.com>,
-        Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>, wangborong@cdjrlc.com,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-5.18-1 tag
-In-Reply-To: <CAHk-=whk4jihDM+zkhZPYRyNO0-YA1_-K9_NyC3EDsX+gkxC-w@mail.gmail.com>
-References: <87zglefhxd.fsf@mpe.ellerman.id.au>
- <CAHk-=whk4jihDM+zkhZPYRyNO0-YA1_-K9_NyC3EDsX+gkxC-w@mail.gmail.com>
-Date:   Mon, 28 Mar 2022 20:07:13 +1100
-Message-ID: <87wngefnsu.fsf@mpe.ellerman.id.au>
+        Mon, 28 Mar 2022 05:09:28 -0400
+Received: from mail.meizu.com (edge01.meizu.com [14.29.68.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103A613CC7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:07:47 -0700 (PDT)
+Received: from IT-EXMB-1-123.meizu.com (172.16.1.123) by mz-mail04.meizu.com
+ (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Mon, 28 Mar
+ 2022 17:07:45 +0800
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by
+ IT-EXMB-1-123.meizu.com (172.16.1.123) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 28 Mar 2022 17:07:44 +0800
+Received: from IT-EXMB-1-125.meizu.com ([fe80::7481:7d92:3801:4575]) by
+ IT-EXMB-1-125.meizu.com ([fe80::7481:7d92:3801:4575%3]) with mapi id
+ 15.01.2308.014; Mon, 28 Mar 2022 17:07:44 +0800
+From:   =?gb2312?B?sNe6xs7E?= <baihaowen@meizu.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "Larry.Finger@lwfinger.net" <Larry.Finger@lwfinger.net>,
+        "phil@philpotter.co.uk" <phil@philpotter.co.uk>,
+        "straube.linux@gmail.com" <straube.linux@gmail.com>,
+        "martin@kaiser.cx" <martin@kaiser.cx>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: =?gb2312?B?tPC4tDogW1BBVENIIFYyXSBzdGFnaW5nOiByODE4OGV1OiBEaXJlY3RseSBy?=
+ =?gb2312?B?ZXR1cm4gX1NVQ0NFU1MgaW5zdGVhZCBvZiB1c2luZyBsb2NhbCByZXQgdmFy?=
+ =?gb2312?Q?iable?=
+Thread-Topic: [PATCH V2] staging: r8188eu: Directly return _SUCCESS instead of
+ using local ret variable
+Thread-Index: AQHYQn/ynpKI+ybssEqkIpZT65/a3qzT9eCAgACLIh4=
+Date:   Mon, 28 Mar 2022 09:07:44 +0000
+Message-ID: <be09d628f09041ac8f2c7bf2e9d5a13d@meizu.com>
+References: <1648457028-4226-1-git-send-email-baihaowen@meizu.com>,<YkF2MRdxlUWow0UC@kroah.com>
+In-Reply-To: <YkF2MRdxlUWow0UC@kroah.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.137.70]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> writes:
-> On Fri, Mar 25, 2022 at 3:25 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
->>
->> Livepatch support for 32-bit is probably the standout new feature, otherwise mostly just
->> lots of bits and pieces all over the board.
->
-> Heh. I would have expected 32-bit ppc to be entirely legacy by now, so
-> it's a bit surprising to see that being a standout feature.
-
-We still get the odd bug report from people running mainline, or recent
-stable kernels, on 32-bit.
-
-And obviously Christophe has been doing lots of work on the Linux side,
-so in that sense 32-bit is alive and well.
-
-Having said that I don't think we'll see any new 32-bit CPU designs, so
-the clock is slowly ticking.
-
-> That said:
->
->> There's a series of commits cleaning up function descriptor handling,
->
-> For some reason I also thought that powerpc had actually moved away
-> from function descriptors, so I'm clearly not keeping up with the
-> times.
-
-No you're right, we have moved away from them, but not entirely.
-
-Functions descriptors are still used for 64-bit big endian, but they're
-not used for 64-bit little endian, or 32-bit.
-
-cheers
+SGksIEdyZWcgS0gNCg0KWWVzLCBJIHRoaW5rIHN5bmMgcnRsODcyM2JzIGFuZCByODE4OGV1IHdp
+bGwgYmUgYmV0dGVyIGFzIHRoZXkgaGF2ZSBzYW1lIHByb2JsZW0uDQoNCmNvbW1pdCAwNjc3NTZh
+Y2RhYzhlMGRkOTFlZGY0ODAwZTg0NGZjYjZlMGNjNzJhDQpBdXRob3I6IEhhcmlwcmFzYWQgS2Vs
+YW0gPGhhcmlwcmFzYWQua2VsYW1AZ21haWwuY29tPg0KRGF0ZTogICBNb24gSnVsIDE1IDIzOjE2
+OjE4IDIwMTkgKzA1MzANCg0KICAgIHN0YWdpbmc6IHJ0bDg3MjNiczogY29yZTogQ2hhbmdlIHJl
+dHVybiB0eXBlIG9mIGluaXRfbWxtZV9leHRfcHJpdg0KDQogICAgQXMgaW5pdF9tbG1lX2V4dF9w
+cml2IGZ1bmN0aW9uIGFsd2F5cyByZXR1cm5zIFNVQ0NFU1MgLCBXZSBjYW4gY2hhbmdlDQogICAg
+cmV0dXJuIHR5cGUgZnJvbSBpbnQgdG8gdm9pZC4NCg0KICAgIEZpeGVzIGJlbG93IGlzc3VlIGlk
+ZW50aWZpZWQgYnkgY29jY2ljaGVjaw0KICAgIGRyaXZlcnMvc3RhZ2luZy9ydGw4NzIzYnMvY29y
+ZS9ydHdfbWxtZV9leHQuYzo0NjQ6NS04OiBVbm5lZWRlZA0KICAgIHZhcmlhYmxlOiAicmVzIi4g
+UmV0dXJuICJfU1VDQ0VTUyIgb24gbGluZSA0OTINCg0KX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXw0Kt6K8/sjLOiBHcmVnIEtIIDxncmVna2hAbGludXhmb3VuZGF0aW9u
+Lm9yZz4NCreiy83KsbzkOiAyMDIyxOoz1MIyOMjVIDE2OjQ3OjQ1DQrK1bz+yMs6ILDXusbOxA0K
+s63LzTogTGFycnkuRmluZ2VyQGx3ZmluZ2VyLm5ldDsgcGhpbEBwaGlscG90dGVyLmNvLnVrOyBz
+dHJhdWJlLmxpbnV4QGdtYWlsLmNvbTsgbWFydGluQGthaXNlci5jeDsgbGludXgtc3RhZ2luZ0Bs
+aXN0cy5saW51eC5kZXY7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCtb3zOI6IFJlOiBb
+UEFUQ0ggVjJdIHN0YWdpbmc6IHI4MTg4ZXU6IERpcmVjdGx5IHJldHVybiBfU1VDQ0VTUyBpbnN0
+ZWFkIG9mIHVzaW5nIGxvY2FsIHJldCB2YXJpYWJsZQ0KDQpPbiBNb24sIE1hciAyOCwgMjAyMiBh
+dCAwNDo0Mzo0OFBNICswODAwLCBIYW93ZW4gQmFpIHdyb3RlOg0KPiBmaXhlcyBjb2NjaW5lbGxl
+IHdhcm5pbmc6DQo+IC4vZHJpdmVycy9zdGFnaW5nL3I4MTg4ZXUvY29yZS9ydHdfbWxtZV9leHQu
+YzozNTc6NS04OiBVbm5lZWRlZCB2YXJpYWJsZTogInJlcyIuDQo+ICBSZXR1cm4gIl9TVUNDRVNT
+IiBvbiBsaW5lIDM4MA0KPg0KPiBTaWduZWQtb2ZmLWJ5OiBIYW93ZW4gQmFpIDxiYWloYW93ZW5A
+bWVpenUuY29tPg0KPiAtLS0NCj4gVjEtPlYyOiBzcGxpdCBpbnRvIHR3byBwYXRjaGVzLg0KPg0K
+PiAgZHJpdmVycy9zdGFnaW5nL3I4MTg4ZXUvY29yZS9ydHdfbWxtZV9leHQuYyB8IDMgKy0tDQo+
+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDIgZGVsZXRpb25zKC0pDQo+DQo+IGRp
+ZmYgLS1naXQgYS9kcml2ZXJzL3N0YWdpbmcvcjgxODhldS9jb3JlL3J0d19tbG1lX2V4dC5jIGIv
+ZHJpdmVycy9zdGFnaW5nL3I4MTg4ZXUvY29yZS9ydHdfbWxtZV9leHQuYw0KPiBpbmRleCA5MzFl
+NmYyLi40YjdiMGVlIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3N0YWdpbmcvcjgxODhldS9jb3Jl
+L3J0d19tbG1lX2V4dC5jDQo+ICsrKyBiL2RyaXZlcnMvc3RhZ2luZy9yODE4OGV1L2NvcmUvcnR3
+X21sbWVfZXh0LmMNCj4gQEAgLTM1NCw3ICszNTQsNiBAQCBzdGF0aWMgdTggaW5pdF9jaGFubmVs
+X3NldChzdHJ1Y3QgYWRhcHRlciAqcGFkYXB0ZXIsIHU4IENoYW5uZWxQbGFuLCBzdHJ1Y3QgcnRf
+Yw0KPg0KPiAgaW50ICBpbml0X21sbWVfZXh0X3ByaXYoc3RydWN0IGFkYXB0ZXIgKnBhZGFwdGVy
+KQ0KPiAgew0KPiAtICAgICBpbnQgICAgIHJlcyA9IF9TVUNDRVNTOw0KPiAgICAgICBzdHJ1Y3Qg
+cmVnaXN0cnlfcHJpdiAqcHJlZ2lzdHJ5cHJpdiA9ICZwYWRhcHRlci0+cmVnaXN0cnlwcml2Ow0K
+PiAgICAgICBzdHJ1Y3QgbWxtZV9leHRfcHJpdiAqcG1sbWVleHQgPSAmcGFkYXB0ZXItPm1sbWVl
+eHRwcml2Ow0KPiAgICAgICBzdHJ1Y3QgbWxtZV9wcml2ICpwbWxtZXByaXYgPSAmcGFkYXB0ZXIt
+Pm1sbWVwcml2Ow0KPiBAQCAtMzc3LDcgKzM3Niw3IEBAIGludCAgICAgICBpbml0X21sbWVfZXh0
+X3ByaXYoc3RydWN0IGFkYXB0ZXIgKnBhZGFwdGVyKQ0KPg0KPiAgICAgICBwbWxtZWV4dC0+YWN0
+aXZlX2tlZXBfYWxpdmVfY2hlY2sgPSB0cnVlOw0KPg0KPiAtICAgICByZXR1cm4gcmVzOw0KPiAr
+ICAgICByZXR1cm4gX1NVQ0NFU1M7DQoNCklmIGEgZnVuY3Rpb24gY2FuIG9ubHkgZXZlciBzdWNj
+ZWVkLCB3aHkgcmV0dXJuIGFueXRoaW5nPyAgUGxlYXNlIG1ha2UNCnRoaXMgYSBmdW5jdGlvbiBy
+ZXR1cm4gdm9pZC4NCg0KdGhhbmtzLA0KDQpncmVnIGstaA0K

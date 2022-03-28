@@ -2,96 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E181D4E8FB3
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 10:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F50A4E8FB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 10:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238255AbiC1IGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 04:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
+        id S239126AbiC1IHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 04:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239098AbiC1IGK (ORCPT
+        with ESMTP id S236211AbiC1IHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 04:06:10 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC3652E6F;
-        Mon, 28 Mar 2022 01:04:30 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 6A11F1F42F03
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648454668;
-        bh=OgeZn3h62XRwSUZAUHSs6JjYPCvTevBe27bS/7gUpUU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RYSAAir6nrRU1Bv61iSlbrH6+U+cZjsjYqInwDj/OIUQpvqrymdIIn/bg8TvOTvun
-         U7K6MQUOZmaOMEzQ2bOcq3rv7glozuTwUnHAADB55ZmlByZyawn3Oh8hklLJuEM/Fx
-         F8jZNLKTAGZtBTykPIf/+nsEWBtpa7Tsp9kI05bCOHix34dlzPJzC/JZhl9dDjju0s
-         XHADgeqcLyRs9PlPLGlclF5ilyASiSDqC/pggNZRefQahGSBi2D0E7klkS4cHtNhZm
-         /t6CjUsFLlXSRFX2MhoHYXteDVyOGWJfhOKBmdRv9UNBkfBBGkiALXB/7UjOL0QFye
-         BoNjq6IFiSFcg==
-Message-ID: <0c523ad5-6a71-5c71-17b8-1f15c1860d89@collabora.com>
-Date:   Mon, 28 Mar 2022 10:04:24 +0200
+        Mon, 28 Mar 2022 04:07:06 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BC752E58;
+        Mon, 28 Mar 2022 01:05:26 -0700 (PDT)
+Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A840D1EC03AD;
+        Mon, 28 Mar 2022 10:05:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1648454720;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=TgYlt5nc7wuciyx7G8H9YwvEKtCL+n4QE5+p7msxcds=;
+        b=V9IqrlxxviCrGiqelyL2A4fuZ02xoQlvZmW05/np63cGMoImBaU6+12OzilUmj4ggY+GFn
+        JqZ46zIiR4h3DyaxRKVol9wqXLnKyG4q07tz+4NovtOaz7R5QZtUzn4OF/M2iBtGsq3rlU
+        6Ypa1ZH/furZtBZNMAb0GDqQb2+xj48=
+Date:   Mon, 28 Mar 2022 10:05:22 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, gwml@vger.gnuweeb.org, x86@kernel.org
+Subject: Re: [PATCH v5 2/2] x86/MCE/AMD: Fix memory leak when
+ `threshold_create_bank()` fails
+Message-ID: <YkFsQhpGGXIFTMyp@zn.tnic>
+References: <20220310015306.445359-1-ammarfaizi2@gnuweeb.org>
+ <20220310015306.445359-3-ammarfaizi2@gnuweeb.org>
+ <YkDqo2eEbABbtSGY@zn.tnic>
+ <82609267-8fc6-5b3d-c931-c0d93ab14788@gnuweeb.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v9 04/22] drm/edid: Convert cea_sad helper struct to
- kernelDoc
-Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>, airlied@linux.ie,
-        chunfeng.yun@mediatek.com, chunkuang.hu@kernel.org,
-        ck.hu@mediatek.com, daniel@ffwll.ch, deller@gmx.de,
-        jitao.shi@mediatek.com, kishon@ti.com, krzk+dt@kernel.org,
-        maarten.lankhorst@linux.intel.com, matthias.bgg@gmail.com,
-        mripard@kernel.org, p.zabel@pengutronix.de, robh+dt@kernel.org,
-        tzimmermann@suse.de, vkoul@kernel.org
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, markyacoub@google.com
-References: <20220327223927.20848-1-granquet@baylibre.com>
- <20220327223927.20848-5-granquet@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220327223927.20848-5-granquet@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <82609267-8fc6-5b3d-c931-c0d93ab14788@gnuweeb.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/03/22 00:39, Guillaume Ranquet ha scritto:
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> ---
->   include/drm/drm_edid.h | 11 ++++++++---
->   1 file changed, 8 insertions(+), 3 deletions(-)
+On Mon, Mar 28, 2022 at 11:12:53AM +0700, Ammar Faizi wrote:
+> Although, I am not sure if that 100% guarantees mce_threshold_remove_device()
+> will not mess up with the interrupt (e.g. freeing the data while the interrupt
+> reading it), unless we're using RCU stuff.
 > 
-> diff --git a/include/drm/drm_edid.h b/include/drm/drm_edid.h
-> index 144c495b99c4..5d4d840b9904 100644
-> --- a/include/drm/drm_edid.h
-> +++ b/include/drm/drm_edid.h
-> @@ -359,12 +359,17 @@ struct edid {
->   
->   #define EDID_PRODUCT_ID(e) ((e)->prod_code[0] | ((e)->prod_code[1] << 8))
->   
-> -/* Short Audio Descriptor */
+> What do you think?
 
-Hello Guillaume,
+I would've said it doesn't matter but that thresholding device creation
+is part of hotplug and it can happen multiple times even *after* the
+interrupt vector has been set during setup so a potential teardown and
+concurrent thresholding interrupt firing might really hit in a not fully
+initialized/cleaned up state so yeah, let's do Yazen's thing.
 
-> +/* struct cea_sad - Short Audio Descriptor.
-> +	@format: See HDMI_AUDIO_CODING_TYPE_*.
-> +	@channels: max number of channels - 1.
-> +	@freq: See CEA_SAD_FREQ_*.
-> +	@byte2: meaning depends on format.
-> +*/
+The alternative would be the temporarily re-assign mce_threshold_vector
+to default_threshold_interrupt while setup is being done but that's not
+really necessary atm.
 
-I appreciate the effort, but this is not valid kerneldoc.
+But call that helper function __threshold_remove_device().
 
-Please refer to https://docs.kernel.org/doc-guide/kernel-doc.html
+Thx.
 
-Regards,
-Angelo
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

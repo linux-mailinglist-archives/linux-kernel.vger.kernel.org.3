@@ -2,69 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFBE4E91B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B219A4E91BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239923AbiC1JuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 05:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43970 "EHLO
+        id S239931AbiC1JuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 05:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239920AbiC1JuD (ORCPT
+        with ESMTP id S239926AbiC1JuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 05:50:03 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A970A1F634
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:48:22 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id y7-20020a92d207000000b002c7f55e413bso7460749ily.5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:48:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=sVvRetvU66viZg03zt42J481swUWQOVgkFgrLPfYY/8=;
-        b=WubhmctCDjgAktRHergqhedIEZnqKdGlIMkAcH6fLa1LcNWnmqLbX5q9C8OXT+DIDS
-         my2e2bOZkpc+rIJXqIK4Hhzt8LPFMEJXqP3eb988RO7jONQpwYHo6g7LfW8YTMXab6z7
-         m4Q6e8S423fcqktd66z7KGf3BFY5JPRox/Sm+YXcg2nBzPcJgGSuUu6H4mLng52wqwYP
-         RLgYFo0pMn3tbIyUvqGlX4zlkT4nfKNvTxuYCwrSA7ANZYLxknVbFdlWAU2iUtV1J3Yq
-         ymSKB+bIHQTB6b+YvwIGZBrzQStbBWiDWR8QeGvO0nkTfrZMA5R3TvJz1JPtJZv/+tku
-         Rtqw==
-X-Gm-Message-State: AOAM5320lkNiH+hiz6ZWdSAqEQZlOTT6nAjN+0tj9bmelvlqCmugZC3U
-        UQv2MATkIxj6J0wyUPnly987G9AChGQ8mYbyj6hqT5mE8dsg
-X-Google-Smtp-Source: ABdhPJyzeX1qMoACO2pA8AueYO+lQlS5AXFOjsBz6huoRNJY9WSpaqdZ/pIq6qMIvI2Gw8vV55QNG/qPhoKV9A85R2g/iU+ap6CW
+        Mon, 28 Mar 2022 05:50:15 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047BA31216;
+        Mon, 28 Mar 2022 02:48:33 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0V8QUoPW_1648460907;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V8QUoPW_1648460907)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 28 Mar 2022 17:48:29 +0800
+Date:   Mon, 28 Mar 2022 17:48:26 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        fannaihao@baidu.com
+Subject: Re: [PATCH v6 19/22] erofs: register cookie context for data blobs
+Message-ID: <YkGEasaBSCwfGdj3@B-P7TQMD6M-0146.local>
+Mail-Followup-To: Jeffle Xu <jefflexu@linux.alibaba.com>,
+        dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        fannaihao@baidu.com
+References: <20220325122223.102958-1-jefflexu@linux.alibaba.com>
+ <20220325122223.102958-20-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1561:b0:2c8:3d92:ed52 with SMTP id
- k1-20020a056e02156100b002c83d92ed52mr5163039ilu.132.1648460902011; Mon, 28
- Mar 2022 02:48:22 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 02:48:22 -0700
-In-Reply-To: <000000000000b960c00594598949@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007d99f705db443685@google.com>
-Subject: Re: KASAN: use-after-free Read in tc_chain_fill_node
-From:   syzbot <syzbot+5f229e48cccc804062c0@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, gregkh@linuxfoundation.org, jiri@mellanox.com,
-        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        stable-commits@vger.kernel.org, stable@vger.kernel.org,
-        syzkaller-lts-bugs@googlegroups.com, vladbu@mellanox.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220325122223.102958-20-jefflexu@linux.alibaba.com>
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-net: core: netlink: add helper refcount dec and lock function
-net: sched: add helper function to take reference to Qdisc
-net: sched: extend Qdisc with rcu
-net: sched: rename qdisc_destroy() to qdisc_put()
-net: sched: use Qdisc rcu API instead of relying on rtnl lock
-But I can't find it in any tested tree for more than 90 days.
-Is it a correct commit? Please update it by replying:
-#syz fix: exact-commit-title
-Until then the bug is still considered open and
-new crashes with the same signature are ignored.
+On Fri, Mar 25, 2022 at 08:22:20PM +0800, Jeffle Xu wrote:
+> Similar to the multi device mode, erofs could be mounted from multiple
+> blob files (one bootstrap blob file and optional multiple data blob
+> files). In this case, each device slot contains the path of
+> corresponding data blob file.
+> 
+> Registers corresponding cookie context for each data blob file.
+> 
+> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+> ---
+>  fs/erofs/internal.h |  1 +
+>  fs/erofs/super.c    | 30 ++++++++++++++++++++++--------
+>  2 files changed, 23 insertions(+), 8 deletions(-)
+> 
+> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+> index 6537ededed51..94a118caf580 100644
+> --- a/fs/erofs/internal.h
+> +++ b/fs/erofs/internal.h
+> @@ -52,6 +52,7 @@ struct erofs_device_info {
+>  	struct block_device *bdev;
+>  	struct dax_device *dax_dev;
+
+Place
+	struct erofs_fscache *fscache;
+
+>  	u64 dax_part_off;
+> +	struct erofs_fscache *blob;
+
+Instead here since `blob' is also nydus-specific.
+
+Need to update the subject and commit message too.
+
+>  
+>  	u32 blocks;
+>  	u32 mapped_blkaddr;
+> diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+> index de5aeda4aea0..9a6f35e0c22b 100644
+> --- a/fs/erofs/super.c
+> +++ b/fs/erofs/super.c
+> @@ -259,15 +259,28 @@ static int erofs_init_devices(struct super_block *sb,
+>  		}
+>  		dis = ptr + erofs_blkoff(pos);
+>  
+> -		bdev = blkdev_get_by_path(dif->path,
+> -					  FMODE_READ | FMODE_EXCL,
+> -					  sb->s_type);
+> -		if (IS_ERR(bdev)) {
+> -			err = PTR_ERR(bdev);
+> -			break;
+> +		if (IS_ENABLED(CONFIG_EROFS_FS_ONDEMAND) &&
+> +		    erofs_is_nodev_mode(sb)) {
+> +			struct erofs_fscache *blob;
+
+Same here.
+
+Thanks,
+Gao Xiang

@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD524E9BB7
+	by mail.lfdr.de (Postfix) with ESMTP id 30F9D4E9BB6
 	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238285AbiC1P6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 11:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
+        id S240503AbiC1P6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 11:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240765AbiC1P6I (ORCPT
+        with ESMTP id S241576AbiC1P63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 11:58:08 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7821B522C4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:56:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aKsjxMkQENAOBUkPYTl6YfQjAOa0EjF3Forn4KcmeIs=; b=o2E2mD5H64SFW9YBYGELehzcyb
-        fTnokIKJraQFZ21HK66pMe6+4uwIZP8RV6u0C92e2agwqgLXBtEZxUqQf7GrBIpk8KpNUswKENh+H
-        PhC1cgATQSkz66qkqbs2QkAyd9agkMxkLoloP6E+GRfdyCSarlVJe+8iY57BHpcYNp66Uk2/9Dqv/
-        BSnSgnxTZ9wVSqbvZjIh6oa+7VxMUCgHKNVVoDRmBLKkjwo976GFEgnh/P18ya9bxMxTCSeq9rxd+
-        enyd2FicPRbful63X0182I8mmBTXXzcVr18Wsp75aBG3XcwG92ogE67bwqkGZPYewOhLqcLReb9AJ
-        WI+0Oa3g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nYriz-005Tzh-9z; Mon, 28 Mar 2022 15:56:09 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Mon, 28 Mar 2022 11:58:29 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06CE4D252
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:56:48 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3C954300454;
-        Mon, 28 Mar 2022 17:56:07 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1F42B206D95DB; Mon, 28 Mar 2022 17:56:07 +0200 (CEST)
-Date:   Mon, 28 Mar 2022 17:56:07 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
-        Frederic Weisbecker <fweisbec@gmail.com>
-Subject: Re: [External] Re: [PATCH] sched/fair: fix broken bandwidth control
- with nohz_full
-Message-ID: <YkHal1m3pnxGoQ1Y@hirez.programming.kicks-ass.net>
-References: <20220328110751.39987-1-zhouchengming@bytedance.com>
- <20220328132047.GD8939@worktop.programming.kicks-ass.net>
- <c0465b27-328a-1288-fb50-d4c6321c8b4d@bytedance.com>
- <YkHRmv/OcABIB0wP@hirez.programming.kicks-ass.net>
- <6fc49cff-f8a1-8b09-5a25-a64e5d07d258@bytedance.com>
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5A8CE210E5;
+        Mon, 28 Mar 2022 15:56:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648483007; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jvUhOBKNVj4c+/wwCBVDfk5zh3g+G6cbljMgkZr/JXg=;
+        b=Gk6funvwVOS9F2pjFvepF0BbtBDD9+CYVmazkONire6H4chuYzN5rTrFakHHW3B4LJJMqS
+        pjhBcEDNowkSlM5gyj/qgS981XeEb2oXwlKlYvsX7mcMpmY7jER3H0Ei3FYIdcAJxbNHpJ
+        gMqOOyLrl2Hn3QOJr3b78M3+KIaQb1g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648483007;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jvUhOBKNVj4c+/wwCBVDfk5zh3g+G6cbljMgkZr/JXg=;
+        b=E8bT0r4i1ritJh3olW3zuQ80uaZrVLeU9beMfVv82fzvlXqO+n0YuYf675nxhQaH673frk
+        8FOmixGHxOKhosCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4E65A13B08;
+        Mon, 28 Mar 2022 15:56:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 9zUWE7/aQWI7WQAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 28 Mar 2022 15:56:47 +0000
+Date:   Mon, 28 Mar 2022 17:56:45 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] RAS updates for 5.18
+Message-ID: <YkHaveCqTPTmgGoO@zn.tnic>
+References: <YjtZAvQnshp1pZIh@zn.tnic>
+ <CAHk-=wgXbSa8yq8Dht8at+gxb_idnJ7X5qWZQWRBN4_CUPr=eQ@mail.gmail.com>
+ <Yj4orVIbqcyTQcY7@zn.tnic>
+ <87pmm69myo.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <6fc49cff-f8a1-8b09-5a25-a64e5d07d258@bytedance.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87pmm69myo.fsf@meer.lwn.net>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,36 +75,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 11:40:25PM +0800, Chengming Zhou wrote:
-
-> > NOHZ_FULL is for use-cases that 'never' intend to go into the kernel,
-> > your use-case actively relies on going into the kernel. Hence the
-> > confusion.
+On Mon, Mar 28, 2022 at 08:21:51AM -0600, Jonathan Corbet wrote:
+> Maybe something that looks like:
 > 
-> In fact, I put a testcase at the end of git message, in which only run
-> a userspace loop workload:
+>   https://lore.kernel.org/lkml/87wnghd78t.fsf@meer.lwn.net/
 > 
-> cd /sys/fs/cgroup
-> echo "+cpu" > cgroup.subtree_control
-> 
-> mkdir test
-> echo "105000 100000" > test/cpu.max
-> 
-> echo $$ > test/cgroup.procs
-> taskset -c 1 bash -c "while true; do let i++; done"  --> will be throttled
+> :)
 
-Ofcourse.. I'm arguing that bandiwdth control and NOHZ_FULL are somewhat
-mutually exclusive, use-case wise. So I really don't get why you'd want
-them both.
+I was just about to scratch something together but it is a good thing
+I got distracted by other stuff so that you'll document it a lot more
+eloquently than me! :-)
 
-NOHZ_FULL says, "I 'never' intend to go to the kernel"
+A typo:
 
-bandwidth control says: "I expect to be sharing the system and must be
-interrupted to not consume too much time", which very much implies: "I
-will go into the kernel".
+"So what is to be done? The best response when confronted with this
+situation is to indeed to a merge,"
 
-The trade-off we make to make NOHZ_FULL work, makes system enter/exit
-*far* more expensive. There's also people asking to outright kill a task
-that causes entry under NOHZ_FULL.
+should be
 
-So yes, you can configure it, but why does it make sense?
+"... to indeed *do* a merge, ..."
+
+Other than that, very much
+
+Acked-by: Borislav Petkov <bp@suse.de>
+
+Thanks for doing that!
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

@@ -2,126 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F6E4E9C03
+	by mail.lfdr.de (Postfix) with ESMTP id 45F704E9C02
 	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239098AbiC1QO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 12:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
+        id S241554AbiC1QOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 12:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241597AbiC1QOX (ORCPT
+        with ESMTP id S240216AbiC1QOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 12:14:23 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0252562A21
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:12:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648483962; x=1680019962;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1K00Uy2bjZkVdoEOhcJO6s0f7diS2FE9HUV9VPPi8yw=;
-  b=TZl93Yn4/jB/6jAmw+awVAIe3zA9FqmIHYS8WzRgwpdkdSk1vtKH5tuN
-   tPQS7ya64oScLop8FicBnVgfeBj7lkvW2y0TOW8/7sBuZeD1eDfcmCqiO
-   8ISRij/bFIZNUq5kHoJ6iCBtQkxbbsR6jyofZVhVvXH+n2YOtqg4h1Q/H
-   C5CrShAi6LiDp2gZG3FaRVqxvr4DcAGjk1FtK3Y6MZzkBk2t+A+hgKdTm
-   aFmaFHXMMPUoVHArym+BFmIx/oUGUfleiW6GhNVkMuRXTkyepgZCONPgB
-   /RRJWrkGB6zdNmNWz7BiOOWG7d+sIfow5ozSNNdjyR8ANcooCijJaF9KT
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="241195781"
-X-IronPort-AV: E=Sophos;i="5.90,217,1643702400"; 
-   d="scan'208";a="241195781"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 09:11:58 -0700
-X-IronPort-AV: E=Sophos;i="5.90,217,1643702400"; 
-   d="scan'208";a="521075979"
-Received: from allenzho-mobl.amr.corp.intel.com (HELO localhost) ([10.212.109.43])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 09:11:57 -0700
-Date:   Mon, 28 Mar 2022 09:11:56 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Philip <benjamin.philip495@gmail.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Charlie Sands <sandsch@northvilleschools.net>,
-        Mitali Borkar <mitaliborkar810@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        iweiny@gmail.com, ira.weiny@intel.com
-Subject: Re: [PATCH] staging: rts5208: Convert kmap() to kmap_local_page()
-Message-ID: <YkHeTCGdnGPjW0/9@iweiny-desk3>
-References: <20220328112440.17756-1-fmdefrancesco@gmail.com>
- <YkHXQRmExRFioEBN@iweiny-desk3>
+        Mon, 28 Mar 2022 12:14:11 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8856210E
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:12:29 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id t4so9541616pgc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:12:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=OYF/jvStaXgJs+lPLO95DLgpFNQWTZE9eUToA1rRs6g=;
+        b=e+BGZaz9UF7wurI72M/5D45ULqW3ey6hXKY/Ts68ZgJK+22nFqMUvhRnEdRnUBpuvl
+         qPQCU0In4ULU6FrtL4iIXhYl3zMBK19R+WUV7DTPh5cvUw6eRFk7AhjuMWBOTqlyWtQC
+         nJKNVvqCmiJ+2LNK54Aq7rTRVFsfPFfRB/v6VG5I9BgHJXzNoHViwd1UmQgMDaSWQXpp
+         2CS5wZFjeU2yLm1azU7lY7IbkgKzdX1RwEucQh4Bj2ntyML4fmuRyUdWr6bNzZXduSsv
+         B679isvImDqKin6vhmJQq3ouLNW2MPfA9u+B75y+vagvE5heMpuBBBY2due9oOaT3xWM
+         w8Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OYF/jvStaXgJs+lPLO95DLgpFNQWTZE9eUToA1rRs6g=;
+        b=AgEcsABhTGNJ1Y8KPLhBDZmW8r0M2YVmKpJ5SoXOlg0S3hqh58QyH9dOOkMCWmOTAk
+         DHJA5yBW2tscdJXZVgSet0cRJRE2yd0KIlmxKtphuiZHsarPyjn7rZ43yhw++lnUQhRI
+         rYy94Y6M91ORwDlRIA8tdDAefkSw02OTZ4vqzEFJ5PRq1tzFAGaHEScsGHrTdFSlGqOR
+         dw6TbgNEd4rZGlQURGkL3s/7IyTja5KtTph7xUP+IeDiWqYJCxcMHeLGNZp5KVzvSC5a
+         PXV6GrtGX5j2e3x+I+1MFYUGSjR+2HcWOEX2jnzL/JTG4lKUoFBCBCiyfoFY/VnT2zM4
+         a3vQ==
+X-Gm-Message-State: AOAM5338WGtx0geCkcmdjDMKw3FBe1vzu8bHLfvazBUbUEWVZibM+F6F
+        zmy8ji7/Umqh8XF0NOtoqmd3AQ==
+X-Google-Smtp-Source: ABdhPJwufdTEwBp0S3JduRuquBjA87WlSM0qhzSDEaHQGglV4NKMddG55IsfZm3xx1Hl90qslp+rzw==
+X-Received: by 2002:a63:3fcc:0:b0:398:ae5:6905 with SMTP id m195-20020a633fcc000000b003980ae56905mr10471109pga.463.1648483949404;
+        Mon, 28 Mar 2022 09:12:29 -0700 (PDT)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id z12-20020aa7888c000000b004f3fc6d95casm16878011pfe.20.2022.03.28.09.12.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 09:12:28 -0700 (PDT)
+Message-ID: <21f3fd84-2de9-646c-4d0c-94007a996c70@linaro.org>
+Date:   Mon, 28 Mar 2022 09:12:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkHXQRmExRFioEBN@iweiny-desk3>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] ext4: check if offset+length is valid in fallocate
+Content-Language: en-US
+To:     linux-ext4@vger.kernel.org
+Cc:     Andreas Dilger <adilger.kernel@dilger.ca>,
+        Ritesh Harjani <riteshh@linux.ibm.com>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com,
+        tytso@mit.edu
+References: <20220315215439.269122-1-tadeusz.struk@linaro.org>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+In-Reply-To: <20220315215439.269122-1-tadeusz.struk@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 08:41:53AM -0700, Ira Weiny wrote:
-> On Mon, Mar 28, 2022 at 01:24:40PM +0200, Fabio M. De Francesco wrote:
-> > The use of kmap() is being deprecated and kmap_local_page() is faster.
-> > Use kmap_local_page() in place of kmap().
-> 
-> Thanks for the patch!  I have just a couple of comments.
-> 
-> kmap_local_page() is not necessarily faster than kmap() but it is more correct
-> in this case.  You should mention why.
-> 
-> Also to help with kmap_local_page() there are a number of helpers implemented
-> in highmem.h for things like memcpy, memmove, etc.
-> 
-> Check out memcpy_page() for this use case.
-> 
-> Thank you!
-> Ira
-> 
+On 3/15/22 14:54, Tadeusz Struk wrote:
+> Syzbot found an issue [1] in ext4_fallocate().
+> The C reproducer [2] calls fallocate(), passing size 0xffeffeff000ul,
+> and offset 0x1000000ul, which, when added together exceed the disk size,
+> and trigger a BUG in ext4_ind_remove_space() [3].
+> According to the comment doc in ext4_ind_remove_space() the 'end' block
+> parameter needs to be one block after the last block to remove.
+> In the case when the BUG is triggered it points to the last block on
+> a 4GB virtual disk image. This is calculated in
+> ext4_ind_remove_space() in [4].
+> This patch adds a check that ensure the length + offest to be
+> within the valid range and returns -ENOSPC error code in case
+> it is invalid.
 
-Also I believe this is work toward the Outreachy program.  If so be sure to
-follow the guidelines on this page:
+Hi,
+Any feedback on this?
 
-https://kernelnewbies.org/Outreachyfirstpatch
-
-In particular, it does not look like you cc'ed the Outreachy list.
-
-Thanks!
-Ira
-
-> > 
-> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> > ---
-> >  drivers/staging/rts5208/rtsx_transport.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/staging/rts5208/rtsx_transport.c b/drivers/staging/rts5208/rtsx_transport.c
-> > index 805dc18fac0a..de690d7ee5e3 100644
-> > --- a/drivers/staging/rts5208/rtsx_transport.c
-> > +++ b/drivers/staging/rts5208/rtsx_transport.c
-> > @@ -92,13 +92,13 @@ unsigned int rtsx_stor_access_xfer_buf(unsigned char *buffer,
-> >  			while (sglen > 0) {
-> >  				unsigned int plen = min(sglen, (unsigned int)
-> >  						PAGE_SIZE - poff);
-> > -				unsigned char *ptr = kmap(page);
-> > +				unsigned char *ptr = kmap_local_page(page);
-> >  
-> >  				if (dir == TO_XFER_BUF)
-> >  					memcpy(ptr + poff, buffer + cnt, plen);
-> >  				else
-> >  					memcpy(buffer + cnt, ptr + poff, plen);
-> > -				kunmap(page);
-> > +				kunmap_local(ptr);
-> >  
-> >  				/* Start at the beginning of the next page */
-> >  				poff = 0;
-> > -- 
-> > 2.34.1
-> > 
+-- 
+Thanks,
+Tadeusz

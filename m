@@ -2,61 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B403F4E95AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 13:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3194E95BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 13:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241576AbiC1Lvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 07:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
+        id S238143AbiC1Lww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 07:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243298AbiC1Lom (ORCPT
+        with ESMTP id S243565AbiC1LpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 07:44:42 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AA0574AA;
-        Mon, 28 Mar 2022 04:40:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=uSPQzhJnBZpuInXUZRxeTEHXo//rS4RqH+94/ELlhDM=; b=Y319biAt5K6nejbSVQElCizcwH
-        KshO/fhWzu1hp+KwOwUryrxbQeDmHHG3cgOxCgoW7piq2YJneFquQHl2Ypc/fz8B2txGisxU35L2R
-        N+iwuANB4NrRgWyUv6i38FoskJay75oaezYExrIXi0UX84c0fbRbQuG77f++ywMi423bOYWytesMe
-        NF8/Yem5KYG3fpVA9WSly7w6tnLfdCmR+0P9a/P0TmqVb3D/pukv4HvUBP4c5QCf/50ts4JAY5Z/U
-        +BunOWmHS1ASn87GsmDEGL2Y5TnieEE6dGFQbHJi9xxwfX/Sf9Ek/OaluB4mUZhT+B5MgM6Aszsgr
-        g4H6fshw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nYnit-005Qev-7a; Mon, 28 Mar 2022 11:39:47 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 509969861E7; Mon, 28 Mar 2022 13:39:46 +0200 (CEST)
-Date:   Mon, 28 Mar 2022 13:39:46 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Radoslaw Burny <rburny@google.com>, linux-arch@vger.kernel.org,
-        bpf@vger.kernel.org, Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: Re: [PATCH 2/2] locking: Apply contention tracepoints in the slow
- path
-Message-ID: <20220328113946.GA8939@worktop.programming.kicks-ass.net>
-References: <20220322185709.141236-1-namhyung@kernel.org>
- <20220322185709.141236-3-namhyung@kernel.org>
+        Mon, 28 Mar 2022 07:45:03 -0400
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6126558821;
+        Mon, 28 Mar 2022 04:40:48 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id y10so16531502edv.7;
+        Mon, 28 Mar 2022 04:40:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eDubNeR8lpKK3svP84YhB5WCBn4ignuIyXSpyYoO2K4=;
+        b=byZLHwsuKWsAWI5hf82R49vORLptruO5rxh9QO92bvEvdWcaIdwakSxbMbdK5rLRh3
+         lm8XFSI7w+DV0EiAc+hzV7nK8gfvPwuDR8qPscGT36u6rVmKF3+npyb3Mx2KjhoaHTeX
+         iqKlXHjEad2kDsTH7TP2NhwbMgFP3kTcwh6wqu0sqOrStF94TqJi0dXPyKYVG0CDNjQJ
+         csEwunw9ZzcH7FEU9Qx0m1cE3OCUGLUVUpnpgli45GM6uXj5Zp7mY708RrNKs4PPyJvH
+         j4eaPJVlblOLsGDez14QCRfI5FQWy5Ua6B7BQ9pkASCA5gXPxxxqlAVW0+uLm+a77id8
+         618w==
+X-Gm-Message-State: AOAM5306odNl9yTT4ocHOocqj3Rb+Q4YYrONita8sSgFvmon5LUlvhQ5
+        MXWKudoOmerYh2H37t+4H4E=
+X-Google-Smtp-Source: ABdhPJz4zSei/ored2fJWGSc6ht4oW/5m5HsFDCl4Z5ds/QUVoxsSJ2wzA/cQ6qtCavbiz4YtEhqwg==
+X-Received: by 2002:aa7:cb93:0:b0:415:d57a:4603 with SMTP id r19-20020aa7cb93000000b00415d57a4603mr15378617edt.62.1648467614194;
+        Mon, 28 Mar 2022 04:40:14 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id hs12-20020a1709073e8c00b006dfdfdac005sm5836373ejc.174.2022.03.28.04.40.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 04:40:13 -0700 (PDT)
+Message-ID: <fd3478ba-ebb9-c1bf-1823-dc03de80b76e@kernel.org>
+Date:   Mon, 28 Mar 2022 13:40:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220322185709.141236-3-namhyung@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 0/5] Add support for Axis, ARTPEC-8 PCIe driver
+Content-Language: en-US
+To:     wangseok.lee@samsung.com,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        "lars.persson@axis.com" <lars.persson@axis.com>
+Cc:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "kernel@axis.com" <kernel@axis.com>,
+        =?UTF-8?B?7KCE66y46riw?= <moonki.jun@samsung.com>
+References: <564c7092-d6a3-7766-d83f-9762075d055f@kernel.org>
+ <0716d9e4-24e1-d16c-162c-00a8664296e1@kernel.org>
+ <20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1@epcms2p7>
+ <20220328090200epcms2p8637d2a2e09a3a627be776586b80c8adf@epcms2p8>
+ <CGME20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1@epcms2p4>
+ <20220328112918epcms2p44bfdd6ef74c14f04bae6a475054860b6@epcms2p4>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220328112918epcms2p44bfdd6ef74c14f04bae6a475054860b6@epcms2p4>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,102 +83,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 11:57:09AM -0700, Namhyung Kim wrote:
-> diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
-> index ee2fd7614a93..c88deda77cf2 100644
-> --- a/kernel/locking/mutex.c
-> +++ b/kernel/locking/mutex.c
-> @@ -644,6 +644,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
->  	}
+On 28/03/2022 13:29, 이왕석 wrote:
+>> --------- Original Message ---------
+>> Sender : Krzysztof Kozlowski <krzk@kernel.org>
+>> Date : 2022-03-28 18:38 (GMT+9)
+>> Title : Re: [PATCH 0/5] Add support for Axis, ARTPEC-8 PCIe driver
+>>
+>> On 28/03/2022 11:02, 이왕석 wrote:
+>>>>  --------- Original Message ---------
+>>>>  Sender : Krzysztof Kozlowski <krzk@kernel.org>
+>>>>  Date : 2022-03-28 16:12 (GMT+9)
+>>>>  Title : Re: [PATCH 0/5] Add support for Axis, ARTPEC-8 PCIe driver
+>>>>
+>>>>  On 28/03/2022 03:44, 이왕석 wrote:
+>>>>>   This series patches include newly PCIe support for Axis ARTPEC-8 SoC.
+>>>>>   ARTPEC-8 is the SoC platform of Axis Communications.
+>>>>>   PCIe controller driver and phy driver have been newly added.
+>>>>>   There is also a new MAINTAINER in the addition of phy driver.
+>>>>>   PCIe controller is designed based on Design-Ware PCIe controller IP
+>>>>>   and PCIe phy is desinged based on SAMSUNG PHY IP.
+>>>>>   It also includes modifications to the Design-Ware controller driver to 
+>>>>>   run the 64bit-based ARTPEC-8 PCIe controller driver.
+>>>>>   It consists of 6 patches in total.
+>>>>>   
+>>>>>   This series has been tested on AXIS SW bring-up board 
+>>>>>   with ARTPEC-8 chipset.
+>>>>
+>>>>  You lost mail threading. This makes reading this difficult for us. Plus
+>>>>  you sent something non-applicable (patch #2), so please resend.
+>>>>
+>>>>  Knowing recent Samsung reluctance to extend existing drivers and always
+>>>>  duplicate, please provide description/analysis why this driver cannot be
+>>>>  combined with existing driver. The answer like: we need several syscon
+>>>>  because we do not implement other frameworks (like interconnect) are not
+>>>>  valid.
+>>>>
+>>>>  Best regards,
+>>>>  Krzysztof
+>>>  
+>>>  Hello, Krzysztof
+>>>  Thanks for your review.
+>>>  
+>>>  patch#2 was sent to the wrong format so sent again.
+>>>  Sorry for causing confusion.
+>>  
+>> The first sending was HTML. Second was broken text, so still not working.
+>>
+>> Please resend everything with proper threading.
+> 
+> Hello, Krzysztof
+> 
+> I sent patch#2 three times.
+> due to the influence of the email system,
+> there was something wrong with the first and second mails.
+> Sorry for causing confusion.
+> Did you receive the third patch i sent you?
+
+Maybe, I don't know. It's not threaded so it's difficult to find it
+among other 100 emails...
+
 >  
->  	set_current_state(state);
-> +	trace_contention_begin(lock, 0);
->  	for (;;) {
->  		bool first;
->  
-> @@ -710,6 +711,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
->  skip_wait:
->  	/* got the lock - cleanup and rejoice! */
->  	lock_acquired(&lock->dep_map, ip);
-> +	trace_contention_end(lock, 0);
->  
->  	if (ww_ctx)
->  		ww_mutex_lock_acquired(ww, ww_ctx);
+>>>  This patch is specialized in Artpec-8, 
+>>>  the SoC Platform of Axis Communication, and is newly applied.
+>>>  Since the target SoC platform is different from the driver previously 
+>>>  used by Samsung, it is difficult to merge with the existing driver.
+>>
+>> Recently I always saw such answers and sometimes it was true, sometimes
+>> not. What is exactly different?
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> The main reason this patch should be added is that
+> this patch is not the driver applied to exynos platform.
 
-(note: it's possible to get to this trace_contention_end() without ever
-having passed a _begin -- fixed in the below)
+Still this does not explain why you need separate driver.
 
-> @@ -721,6 +723,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
->  err:
->  	__set_current_state(TASK_RUNNING);
->  	__mutex_remove_waiter(lock, &waiter);
-> +	trace_contention_end(lock, ret);
->  err_early_kill:
->  	raw_spin_unlock(&lock->wait_lock);
->  	debug_mutex_free_waiter(&waiter);
+> Because the SoC platform is different, 
+> the IP configuration of PCIe is also different.
 
+What is exactly different? Usually drivers can support IP blocks with
+some differences...
 
-So there was one thing here, that might or might not be important, but
-is somewhat inconsistent with the whole thing. That is, do you want to
-include optimistic spinning in the contention time or not?
+> We will organize a driver for Artpec-8 platform and 
+> if there is no special reason, maintain this 
+> without adding it from the next series.
 
-Because currently you do it sometimes.
-
-Also, if you were to add LCB_F_MUTEX then you could have something like:
+I don't understand this.
 
 
---- a/kernel/locking/mutex.c
-+++ b/kernel/locking/mutex.c
-@@ -602,12 +602,14 @@ __mutex_lock_common(struct mutex *lock,
- 	preempt_disable();
- 	mutex_acquire_nest(&lock->dep_map, subclass, 0, nest_lock, ip);
- 
-+	trace_contention_begin(lock, LCB_F_MUTEX | LCB_F_SPIN);
- 	if (__mutex_trylock(lock) ||
- 	    mutex_optimistic_spin(lock, ww_ctx, NULL)) {
- 		/* got the lock, yay! */
- 		lock_acquired(&lock->dep_map, ip);
- 		if (ww_ctx)
- 			ww_mutex_set_context_fastpath(ww, ww_ctx);
-+		trace_contention_end(lock, 0);
- 		preempt_enable();
- 		return 0;
- 	}
-@@ -644,7 +646,7 @@ __mutex_lock_common(struct mutex *lock,
- 	}
- 
- 	set_current_state(state);
--	trace_contention_begin(lock, 0);
-+	trace_contention_begin(lock, LCB_F_MUTEX);
- 	for (;;) {
- 		bool first;
- 
-@@ -684,10 +686,16 @@ __mutex_lock_common(struct mutex *lock,
- 		 * state back to RUNNING and fall through the next schedule(),
- 		 * or we must see its unlock and acquire.
- 		 */
--		if (__mutex_trylock_or_handoff(lock, first) ||
--		    (first && mutex_optimistic_spin(lock, ww_ctx, &waiter)))
-+		if (__mutex_trylock_or_handoff(lock, first))
- 			break;
- 
-+		if (first) {
-+			trace_contention_begin(lock, LCB_F_MUTEX | LCB_F_SPIN);
-+			if (mutex_optimistic_spin(lock, ww_ctx, &waiter))
-+				break;
-+			trace_contention_begin(lock, LCB_F_MUTEX);
-+		}
-+
- 		raw_spin_lock(&lock->wait_lock);
- 	}
- 	raw_spin_lock(&lock->wait_lock);
-@@ -723,8 +731,8 @@ __mutex_lock_common(struct mutex *lock,
- err:
- 	__set_current_state(TASK_RUNNING);
- 	__mutex_remove_waiter(lock, &waiter);
--	trace_contention_end(lock, ret);
- err_early_kill:
-+	trace_contention_end(lock, ret);
- 	raw_spin_unlock(&lock->wait_lock);
- 	debug_mutex_free_waiter(&waiter);
- 	mutex_release(&lock->dep_map, ip);
+Best regards,
+Krzysztof

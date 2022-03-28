@@ -2,152 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA36F4E8D88
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 07:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650E64E8D8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 07:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238148AbiC1FmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 01:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49390 "EHLO
+        id S238163AbiC1FtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 01:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbiC1FmG (ORCPT
+        with ESMTP id S231955AbiC1FtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 01:42:06 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D9C2E09F;
-        Sun, 27 Mar 2022 22:40:25 -0700 (PDT)
-X-UUID: 8c4a81a21ad64d209aa46e820eadc924-20220328
-X-UUID: 8c4a81a21ad64d209aa46e820eadc924-20220328
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1464454364; Mon, 28 Mar 2022 13:39:57 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 28 Mar 2022 13:39:55 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 28 Mar 2022 13:39:55 +0800
-Message-ID: <b9ed8c1511ea26c070dd3fb61f4370e5f858058c.camel@mediatek.com>
-Subject: Re: [PATCH v16 4/8] soc: mediatek: add mtk-mmsys support for mt8195
- vdosys0
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Jason-JH Lin <jason-jh.lin@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <hsinyi@chromium.org>, <fshao@chromium.org>,
-        <moudy.ho@mediatek.com>, <roy-cw.yeh@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>, <nancy.lin@mediatek.com>,
-        <singo.chang@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 28 Mar 2022 13:39:55 +0800
-In-Reply-To: <a068f2c9b2111f3a7a20da19073ef5fdb7f4a91f.camel@mediatek.com>
-References: <20220307032859.3275-1-jason-jh.lin@mediatek.com>
-         <20220307032859.3275-5-jason-jh.lin@mediatek.com>
-         <a068f2c9b2111f3a7a20da19073ef5fdb7f4a91f.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 28 Mar 2022 01:49:10 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D655006F
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 22:47:31 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id 10so11469674qtz.11
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 22:47:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=awOwP9Jzhs17cGP+PeKK0ZA8BbP44Lx7OHHlXGKgDaU=;
+        b=DgCfRAFSzBCotgie8rQynAHBECTXSw4S5PIyd1BjLnlwnhke2lkWc9Aknd2N3N86Xw
+         JDOo8vCGcIR/bacIgSzVCw/HQFZRFhLkJvv9ieq3JKuZ4BC6j3t8Phhr6GvEMjhQ8JPE
+         D3aDaWXyIX167DYlplUZoXinYr2Ik1WLXbFXQyoYvyRu3cEnBkHqOXE1y8st7NoVaXZN
+         MiJQrcSY8Gdzd+udet3xP7zRx1YPvyuID0UhGG0ihEGecpUoBpofF1Af0XePkboQVBwC
+         wpTTL0PvCy/Zi6cgQc8+jR7w/hUpM4Vw2MWwiN8KcX0VuEORUW+e93tHdQ+Z2M1BSKw6
+         o/fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=awOwP9Jzhs17cGP+PeKK0ZA8BbP44Lx7OHHlXGKgDaU=;
+        b=Vj14V3bB61fxccvtxNaL/1bzGBSp4z90vXHOo1LwaHTg5zbGFatvHYtGe+FdgTq/Bx
+         Ezm25s+o9IVDFiQyL5dN9cc50SpXLedfMo1JPM9BgxYHtnAk28wjaNBjdkIYmBAyCYHc
+         fGu9Ovze74fdSIa+dJdxZMX5CyyqAkIAw+SPHuBHKFGWsnyPbO3DGUDA8y+Elp+mLwKv
+         WfzBSXCOpP4XUJRo1j49Qm0BB/aKDiSxorv5UJlnrX63NkLKoCxcf3zxZmfI/sE4RHsv
+         XthClULEdzVHoyWunZ06sjBxCnhDvaCeCKsYw3OGBK5ZeQXiikgh0XBkaBGkP/n6nr8s
+         h7Qg==
+X-Gm-Message-State: AOAM531ijsu/6hsZQHJgoYTkozhfii3MYPGy/kEeBzzBoQmOkVC7myVy
+        5KNNK8yMguEiYZuV/1B/JOU=
+X-Google-Smtp-Source: ABdhPJw+0suad34DqjR5blS7erhntKhDrIn2UHXMnAju4AEchO/G9ZXmrj07UlDlhEetDgQqiiuAHA==
+X-Received: by 2002:a05:622a:c4:b0:2e1:cb5b:9b5c with SMTP id p4-20020a05622a00c400b002e1cb5b9b5cmr20271910qtw.69.1648446450453;
+        Sun, 27 Mar 2022 22:47:30 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 186-20020a370cc3000000b0067d36e3481dsm7237261qkm.17.2022.03.27.22.47.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Mar 2022 22:47:29 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: yang.yang29@zte.com.cn
+To:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        paul@paul-moore.com, eparis@redhat.com, linux-audit@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH v2] audit: do a quick exit when syscall number is invalid
+Date:   Mon, 28 Mar 2022 05:46:42 +0000
+Message-Id: <20220328054641.2372974-1-yang.yang29@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jason:
+From: Yang Yang <yang.yang29@zte.com.cn>
 
-On Mon, 2022-03-28 at 13:03 +0800, Jason-JH Lin wrote:
-> Hi CK,
-> 
-> Thanks for the reviews.
-> 
-> On Mon, 2022-03-07 at 11:28 +0800, jason-jh.lin wrote:
-> > Add mt8195 vdosys0 clock driver name and routing table to
-> > the driver data of mtk-mmsys.
-> > 
-> > Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
-> > Acked-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > ---
-> > Impelmentation patch of vdosys1 can be refered to [1]
-> > 
-> > [1] soc: mediatek: add mtk-mmsys support for mt8195 vdosys1
-> > ---
-> >  drivers/soc/mediatek/mt8195-mmsys.h    | 130
-> > +++++++++++++++++++++++++
-> >  drivers/soc/mediatek/mtk-mmsys.c       |  11 +++
-> >  include/linux/soc/mediatek/mtk-mmsys.h |   9 ++
-> >  3 files changed, 150 insertions(+)
-> >  create mode 100644 drivers/soc/mediatek/mt8195-mmsys.h
-> > 
-> > diff --git a/drivers/soc/mediatek/mt8195-mmsys.h
-> > b/drivers/soc/mediatek/mt8195-mmsys.h
-> > new file mode 100644
-> > index 000000000000..24a3afe23bc8
-> > --- /dev/null
-> > +++ b/drivers/soc/mediatek/mt8195-mmsys.h
-> > @@ -0,0 +1,130 @@
-> > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > +
-> > +#ifndef __SOC_MEDIATEK_MT8195_MMSYS_H
-> > +#define __SOC_MEDIATEK_MT8195_MMSYS_H
-> > +
-> > +#define MT8195_VDO0_OVL_MOUT_EN					
-> > 0xf14
-> > +#define MT8195_MOUT_DISP_OVL0_TO_DISP_RDMA0			
-> > BIT(0)
-> > +#define MT8195_MOUT_DISP_OVL0_TO_DISP_WDMA0			
-> > BIT(1)
-> >  
-> > Useless, so remove.
-> > 
-> > +#define MT8195_MOUT_DISP_OVL0_TO_DISP_OVL1			BIT(2)
-> > Ditto.Useless, so remove.
-> > Regards,
-> > CK
-> 
-> Although these definitions are not used, they represent the
-> functionality provided by this register.
-> 
-> I think we can show that we have these capabilities by defining them.
-> 
-> Can we keep these definitions?
+Userspace may use syscall with invalid syscall number by calling
+syscall(syscall_num,..). For example we found openSSH may use
+syscall with syscall number is -1 in some case. When that happens
+we better do a quick handle no need to gohead.
 
-It's better that we know how to use it. Even though the symbol name
-show some information, but I would like to add it to
-mmsys_mt8195_routing_table[].
+Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+---
+v2:
+- fix compile error of arch/alpha, I have no alpha compile environment, so this fix
+- is done by code review.
+---
+ arch/alpha/include/uapi/asm/unistd.h | 1 +
+ kernel/auditsc.c                     | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-Regards,
-CK
-
-> 
-> Regards,
-> Jason-JH.Lin
-> 
-> > +#define MT8195_MOUT_DISP_OVL1_TO_DISP_RDMA1			
-> > BIT(4)
-> > +#define MT8195_MOUT_DISP_OVL1_TO_DISP_WDMA1			
-> > BIT(5)
-> > +#define MT8195_MOUT_DISP_OVL1_TO_DISP_OVL0			BIT(6)
-> 
-> 
-> [snip]
-> 
+diff --git a/arch/alpha/include/uapi/asm/unistd.h b/arch/alpha/include/uapi/asm/unistd.h
+index 71fd5db06866..8115062216e4 100644
+--- a/arch/alpha/include/uapi/asm/unistd.h
++++ b/arch/alpha/include/uapi/asm/unistd.h
+@@ -13,5 +13,6 @@
+ #define __NR_getgid	__NR_getxgid
+ 
+ #include <asm/unistd_32.h>
++#include <asm-generic/unistd.h>
+ 
+ #endif /* _UAPI_ALPHA_UNISTD_H */
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index ea2ee1181921..ea4915999e01 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2077,7 +2077,8 @@ void __audit_syscall_exit(int success, long return_code)
+ 	struct audit_context *context = audit_context();
+ 
+ 	if (!context || context->dummy ||
+-	    context->context != AUDIT_CTX_SYSCALL)
++	    context->context != AUDIT_CTX_SYSCALL ||
++	    unlikely(context->major < 0 || context->major >= NR_syscalls))
+ 		goto out;
+ 
+ 	/* this may generate CONFIG_CHANGE records */
+-- 
+2.25.1
 

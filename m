@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423954EA0CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 21:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 748114EA0B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 21:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241021AbiC1Twe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 15:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
+        id S1344031AbiC1Tv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 15:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344151AbiC1TsP (ORCPT
+        with ESMTP id S1344215AbiC1TsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 15:48:15 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F7367D18
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 12:44:00 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id w28-20020a05660205dc00b00645d3cdb0f7so11031132iox.10
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 12:43:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to:cc;
-        bh=m2uN4NlVyz2bf6er2V8/N42952/hiadRCIADaej82As=;
-        b=bQLkcH8LA1ghEfJYIfLWRok58zbFSnoTUlJ3L99eIZ133ick/YmsMUMrkFGgYKEYGz
-         qB0+MCFnEBI1029pwypuuQtrMVq7ryaRfJsEG5zBiKKEILJgm78Qsej/5GMDIyo2C7Gj
-         ZWLiFD/loJFMQwMliwHpvsSM8XpJT3S3EvPWzLU5UghAmUnq718LaKjHWWbbpuI1vqVg
-         F1dxtkMIvWfr/kDwwpKeCvweryT6dda0uqm2ORHGn+h8MoYq/R7E1y+EarPhW+Ou9UsK
-         whTdb2b1ZkOlrl8pkkByLzMjLJgXO7ME/o1AY43/ccvbuUIgONpFSbJIa1YDMngvCiTq
-         apIA==
-X-Gm-Message-State: AOAM5321j2IAfb7icPqukE/gHQQVKuQIa9s0FtPr3dHhihkdWmtdB8HX
-        8q+3Nj2b6KilcgStNqW5kTA9MpvIkdV64NPK7PKF27v6X/wS
-X-Google-Smtp-Source: ABdhPJzWRUbxX3GwZManMLzH51Tc/vIus9FE7DMLvKBgTqTXqjMkQGlprdOtDmqTtjBJCmtze//ETM5zqaK+QVVMkeROVGYMgC7Y
+        Mon, 28 Mar 2022 15:48:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D574F6A074;
+        Mon, 28 Mar 2022 12:44:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5303CB81202;
+        Mon, 28 Mar 2022 19:43:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38CD8C3410F;
+        Mon, 28 Mar 2022 19:43:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648496627;
+        bh=ingGZxMaEc9r5alfLYbLed9tPRonczPlahQ4UPFgo+s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Uj2udP9xv6uTDYJPEi68+kRBALKcKW+hWXGTEw2tdvp3YOBBrlk4qXtGaatsKVFjE
+         vcPm68q+rrPDN7vgMmoQRMJeXknUCUam56FYJk/mFu7Mjfg9nSBTigjbRcp4NZTTV3
+         yXVZoF5OSfdeq2K3C03B/YQ/tUiQvvg/lNQOtsHkI7ud/6VmBjf4wNx/ELAk5P8UmL
+         PXZFSiSWyDIpAI97j4n/IxwulDnGcIdTZYftt1TyNFYwjGinpvJ7kfkXY2h7xaLunK
+         +gfVLCdvPc/hh7YD3gNRP7JwDQqvVkbKAgdiKZjfVmRSnkoB+t3P6csIEEIoRAsFxh
+         I11AmU0xlUycQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzbot+3c765c5248797356edaa@syzkaller.appspotmail.com,
+        Anton Altaparmakov <anton@tuxera.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-ntfs-dev@lists.sourceforge.net
+Subject: [PATCH AUTOSEL 4.14 2/2] ntfs: add sanity check on allocation size
+Date:   Mon, 28 Mar 2022 15:43:43 -0400
+Message-Id: <20220328194343.1586624-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220328194343.1586624-1-sashal@kernel.org>
+References: <20220328194343.1586624-1-sashal@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1d15:b0:2c8:5edc:4362 with SMTP id
- i21-20020a056e021d1500b002c85edc4362mr6494255ila.308.1648496622459; Mon, 28
- Mar 2022 12:43:42 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 12:43:42 -0700
-In-Reply-To: <20220328194338.1586587-1-sashal@kernel.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000098643805db4c8734@google.com>
-Subject: Re: [PATCH AUTOSEL 4.19 1/2] ext4: don't BUG if someone dirty pages
- without asking ext4 first
-From:   syzbot 
-        <syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     adilger.kernel@dilger.ca, lee.jones@linaro.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sashal@kernel.org, stable@vger.kernel.org, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,88 +61,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Theodore Ts'o <tytso@mit.edu>
->
-> [ Upstream commit cc5095747edfb054ca2068d01af20be3fcc3634f ]
->
-> [un]pin_user_pages_remote is dirtying pages without properly warning
-> the file system in advance.  A related race was noted by Jan Kara in
-> 2018[1]; however, more recently instead of it being a very hard-to-hit
-> race, it could be reliably triggered by process_vm_writev(2) which was
-> discovered by Syzbot[2].
->
-> This is technically a bug in mm/gup.c, but arguably ext4 is fragile in
-> that if some other kernel subsystem dirty pages without properly
-> notifying the file system using page_mkwrite(), ext4 will BUG, while
-> other file systems will not BUG (although data will still be lost).
->
-> So instead of crashing with a BUG, issue a warning (since there may be
-> potential data loss) and just mark the page as clean to avoid
-> unprivileged denial of service attacks until the problem can be
-> properly fixed.  More discussion and background can be found in the
-> thread starting at [2].
->
-> [1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
-> [2] https://lore.kernel.org/r/Yg0m6IjcNmfaSokM@google.com
->
-> Reported-by: syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com
-> Reported-by: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-> Link: https://lore.kernel.org/r/YiDS9wVfq4mM2jGK@mit.edu
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  fs/ext4/inode.c | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
->
-> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-> index 7959aae4857e..96cf0f57ca95 100644
-> --- a/fs/ext4/inode.c
-> +++ b/fs/ext4/inode.c
-> @@ -2148,6 +2148,15 @@ static int ext4_writepage(struct page *page,
->  	else
->  		len = PAGE_SIZE;
->  
-> +	/* Should never happen but for bugs in other kernel subsystems */
-> +	if (!page_has_buffers(page)) {
-> +		ext4_warning_inode(inode,
-> +		   "page %lu does not have buffers attached", page->index);
-> +		ClearPageDirty(page);
-> +		unlock_page(page);
-> +		return 0;
-> +	}
-> +
->  	page_bufs = page_buffers(page);
->  	/*
->  	 * We cannot do block allocation or other extent handling in this
-> @@ -2697,6 +2706,22 @@ static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
->  			wait_on_page_writeback(page);
->  			BUG_ON(PageWriteback(page));
->  
-> +			/*
-> +			 * Should never happen but for buggy code in
-> +			 * other subsystems that call
-> +			 * set_page_dirty() without properly warning
-> +			 * the file system first.  See [1] for more
-> +			 * information.
-> +			 *
-> +			 * [1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
-> +			 */
-> +			if (!page_has_buffers(page)) {
-> +				ext4_warning_inode(mpd->inode, "page %lu does not have buffers attached", page->index);
-> +				ClearPageDirty(page);
-> +				unlock_page(page);
-> +				continue;
-> +			}
-> +
->  			if (mpd->map.m_len == 0)
->  				mpd->first_page = page->index;
->  			mpd->next_page = page->index + 1;
-> -- 
-> 2.34.1
->
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-I see the command but can't find the corresponding bug.
-The email is sent to  syzbot+HASH@syzkaller.appspotmail.com address
-but the HASH does not correspond to any known bug.
-Please double check the address.
+[ Upstream commit 714fbf2647b1a33d914edd695d4da92029c7e7c0 ]
+
+ntfs_read_inode_mount invokes ntfs_malloc_nofs with zero allocation
+size.  It triggers one BUG in the __ntfs_malloc function.
+
+Fix this by adding sanity check on ni->attr_list_size.
+
+Link: https://lkml.kernel.org/r/20220120094914.47736-1-dzm91@hust.edu.cn
+Reported-by: syzbot+3c765c5248797356edaa@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Acked-by: Anton Altaparmakov <anton@tuxera.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/ntfs/inode.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/fs/ntfs/inode.c b/fs/ntfs/inode.c
+index 8cd134750ebb..4150b3633f77 100644
+--- a/fs/ntfs/inode.c
++++ b/fs/ntfs/inode.c
+@@ -1915,6 +1915,10 @@ int ntfs_read_inode_mount(struct inode *vi)
+ 		}
+ 		/* Now allocate memory for the attribute list. */
+ 		ni->attr_list_size = (u32)ntfs_attr_size(a);
++		if (!ni->attr_list_size) {
++			ntfs_error(sb, "Attr_list_size is zero");
++			goto put_err_out;
++		}
+ 		ni->attr_list = ntfs_malloc_nofs(ni->attr_list_size);
+ 		if (!ni->attr_list) {
+ 			ntfs_error(sb, "Not enough memory to allocate buffer "
+-- 
+2.34.1
 

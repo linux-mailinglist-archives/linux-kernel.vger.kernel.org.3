@@ -2,142 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F5F4E9205
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB0A4E920A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240056AbiC1Jys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 05:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
+        id S240059AbiC1Jzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 05:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239800AbiC1Jyr (ORCPT
+        with ESMTP id S237730AbiC1Jzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 05:54:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 168CC54BD7;
-        Mon, 28 Mar 2022 02:53:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1405D6E;
-        Mon, 28 Mar 2022 02:53:03 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.8.66])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0BE283F66F;
-        Mon, 28 Mar 2022 02:53:01 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 10:52:54 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Nathan Chancellor <nathan@kernel.org>, x86-ml <x86@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-toolchains@vger.kernel.org
-Subject: Re: clang memcpy calls
-Message-ID: <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
-References: <YjxTt3pFIcV3lt8I@zn.tnic>
- <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
- <Yj2yYFloadFobRPx@lakrids>
- <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net>
- <20220325151238.GB614@gate.crashing.org>
+        Mon, 28 Mar 2022 05:55:43 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2098.outbound.protection.outlook.com [40.107.215.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4691E4C400
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:54:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GO1okmpPlxWrtLaLWGa5f6A2SXPHmkgnUJOTLljkeIx0dW6md0O+pzcCFfQfVxFF28CrN2MU0hLMbSM7TdLgMqFlL6nZm/ldzVAlDaKzXgs95NEn75LEYCWxeZQ4SZ7/F9Dmm5478W4bYtHKZ90Z7IyxIhdea6GeiHqGXveDGUzKUIuqJyCzOJzUJeXPo/bM/+dzq6hd4bkRsvklDp/zNupUljnmiiqIMdU2Eps01L96Jev1rQWeDpZk9hC+BRfHpWDFLBzQF8UGxvP0ZBJiJcgEaN5LCoElYL9t6fnHuQRmuRSA9Vy1kid5ytKJMgFBXpWgVy2NohbEM/oMbGaQNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=I5L/PhTCV5AlqOJZUqTvaUu4KafswmX1JJEwcwsrwXw=;
+ b=Aq1sEpbFUYpO+1J/rPMf/vA+PVV8P6I0h7A98mvfg3RzYKMQ2eIIFeJHyPWqd8x48ap8NZVUyOkcPPYrmaMQAJ7geDnPNX9noSlgxjSxaCP5gYGZFJXFUQroAXo0kQjpMkyQx3gqz4gt7LRpv1vfjCVTijLZ4UcbQVhZ5wA++PZpVCrZQdMeK82faRJwyLqmarxJvWK2r8sN08Z25Nf93b54TOF9UNOTKP+81SOipu2p+RBovM5Egsyhf7hZBFK1SKGHb0fFvYorTb8jT7ynk6bBzcUBqYfOUhqrN7n6n/pbzG5OYmp5z6oJhtv7425UA+X0fZafAvJ3BpvRnkjZOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I5L/PhTCV5AlqOJZUqTvaUu4KafswmX1JJEwcwsrwXw=;
+ b=BWAqPEyEkRmVaDAUNkxgWLbHW2Wxm0xQ2KqbIZlyloDya++xkvwfjmySDKXcIkXEcQqP+37kL6ZfpUF8C1J+/GdTnJjvWrxdXE4hyTKxEmNwrC8VxQqRUriyXDscjYE4WUdIEh/MntO0kFEY2ol5fcgDGyhgoxz9vNmRYiXf/ZI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3080.apcprd06.prod.outlook.com (2603:1096:4:6d::16) by
+ SG2PR06MB5216.apcprd06.prod.outlook.com (2603:1096:4:1d6::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5102.19; Mon, 28 Mar 2022 09:53:58 +0000
+Received: from SG2PR06MB3080.apcprd06.prod.outlook.com
+ ([fe80::34de:38d6:2701:5f94]) by SG2PR06MB3080.apcprd06.prod.outlook.com
+ ([fe80::34de:38d6:2701:5f94%3]) with mapi id 15.20.5102.022; Mon, 28 Mar 2022
+ 09:53:58 +0000
+From:   Qing Wang <wangqing@vivo.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc:     Wang Qing <wangqing@vivo.com>
+Subject: [PATCH] sched: topology: add input parameter for sched_domain_flags_f()
+Date:   Mon, 28 Mar 2022 02:53:37 -0700
+Message-Id: <1648461219-4333-1-git-send-email-wangqing@vivo.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: HK0PR03CA0099.apcprd03.prod.outlook.com
+ (2603:1096:203:b0::15) To SG2PR06MB3080.apcprd06.prod.outlook.com
+ (2603:1096:4:6d::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220325151238.GB614@gate.crashing.org>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d227cddb-b9e6-4665-1504-08da10a0e108
+X-MS-TrafficTypeDiagnostic: SG2PR06MB5216:EE_
+X-Microsoft-Antispam-PRVS: <SG2PR06MB5216179D33C82E4242510DADBD1D9@SG2PR06MB5216.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DBQoxJy7JpUMg3KNN7FLHDjwjYBcqbzKRYmg1+ssg4h1xgGFvP421ViYfIPC5MUOzDMKW6bP736BoK8VdZE7DJv06in9PHazrHsy3DHhEaOFJew8/MfNspNOPmwcDRAHx3nY9rQBLaMvWslrRJO0GCVHD23ZlpgQ9NNnkWdOhoUIkmB5qgMdAaJInlZ/FXuJLnQRoajdi6pHc+UIGqozxLy6KM4DCgrcxDLT0AJX84FokuT5MOmxCMVkuIRQ+DqTNeu5q+s73CPxS4YXDs4C0L17k1GKUxUXK440jo2H8xJrUlJylCZBay9zmHLieEtCnEuxRTb9dbZWvFIfdwgj2w2sOgZKaCczhhlyqq0kQgZYEi66Pw7BrSVei+6Ws0kqsenUbuxsjXWgX3HRb16DumKzCAD5GgnpVcdGFxp5lmYwKZ2fWgfoT9NdlQ2BNvIfgEmOg8Yhlvkp4AR3vOEA6aGDjc06S5y85Bp2hjMgISLxd5LU+nrDrpZC/vUCxdj0keZyl2aOlqbLrlkIflNuy5Z8hzira+K30XSU8hwijsmdHtJZc7kC9g9N8O0LqGru/MO3cDhQkmfpVTwkkOVDd8CnCUEdL7/awJBRllKxc6TVJu3GGvbDIT5FhJl3Acm6WJyELyKJCygw6r/GgTlWxWNYZ2qJSI+lzFIZhQf6Mc0kCt6dRD0nZ2i3TtJzFm2GELs6437/yh7PwhkMs8gXrQ6+Ogc2ec7mMXbkj36SmQw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3080.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52116002)(36756003)(26005)(86362001)(6506007)(66946007)(107886003)(186003)(2616005)(6666004)(7416002)(8936002)(6512007)(5660300002)(83380400001)(2906002)(508600001)(66556008)(921005)(66476007)(38100700002)(110136005)(316002)(38350700002)(4326008)(6486002)(8676002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GQtyp6rCzufG0vHFA4O/aqByqqOBLl5Cho7tZasYqVE1QULpWQgQMsnMYw3u?=
+ =?us-ascii?Q?t7Es+lUlBYlcNJ4ZFUcBl3daROI4hTpGTwHIlLsw5XD+ikCtX3DNUEsy++vE?=
+ =?us-ascii?Q?v5GzqhcU8LXssNpwgCoJ2WeLWy4EQiPk2Y15KqilGRuptHoTFVQpXp6pEqMA?=
+ =?us-ascii?Q?9/U03DOECsYyR0Q7mGRtqTKLH7Ib4XJwUCbA61LyZjTrayFfHdzGASJxdx6R?=
+ =?us-ascii?Q?RKcXHSFN3I/JJIfxAc2sCg8NuF522Q84LcKycgVSeKfgonxVdadRaLqivz2h?=
+ =?us-ascii?Q?E/XQfvxfyimdFrgl45gpRO7pxiRscu7xys2iLKqIbrp3Vs35fRz37evXIo4f?=
+ =?us-ascii?Q?KGJpqBMaOQLWas0NZVzjev45yzWdAWZfBZkhj2JqGgPRde5aDhAG+gSnxfMj?=
+ =?us-ascii?Q?HFcp8PseCI7OzF+oFFpAAdyOXN4HT3JJKKmiqwLCLzVBuO3DBJtG3fmnmOdi?=
+ =?us-ascii?Q?6IZ5vkjnuClPf4nzZxCrnPZFTCYAOIZrt7cjz/oLGLDtnZPj46AsnkS0mFT9?=
+ =?us-ascii?Q?06v5fVu4mcI8l2H8vEjS4k6x1yK29lFo+Bw77g6ueDdTtD9JmRzgqZR9H0LF?=
+ =?us-ascii?Q?5bMAY5FD1NRxIibmVl4nZfkbEMZPASQtRZyjG5PJ/MSoZTcySOKLgE6op8Ej?=
+ =?us-ascii?Q?6HODmv725LM4eVfWtO+6Etiw22QMkk0D45uAkTldd9vUlfoM0N29pxLNbBrC?=
+ =?us-ascii?Q?6psn4F5l9MwqIl+lskFTAp+K/bp7o+uubmmopwK7i0aoOkfEnn6xYtoX5q7V?=
+ =?us-ascii?Q?u6CMPb2EVm43VPPzkKtiGaOcGkbws07Gq2FYM+4ANn9P0+Cw6mBT2xxOUGx6?=
+ =?us-ascii?Q?+/jU5353jbqmTOL6LaKguFE45VMZJQcSmw6epV4FZzkX9qoKIpRhIf7Qs0/g?=
+ =?us-ascii?Q?Ge0/PdQdpU7NlWA+zPN3KRFKyrWd57DJ682sbifZRIaDMwys7sq55v1GtnKJ?=
+ =?us-ascii?Q?1pgrk/16xUTxw2nF+FrsD7H5YhwaR7Ar7WG/puLN3ugZiWo8zpKx7UvU3fof?=
+ =?us-ascii?Q?EQSae4Vc8/XRSXVWsUL6p8AzFmC0WyJfse5mMxRykyxdUmeOz9vhBDPjkm70?=
+ =?us-ascii?Q?+9qSelSqHPLSi8Je1ZvttUNW9RgpROJKLHCpUsXLtGjoiKY+I9lb8uGSHEDZ?=
+ =?us-ascii?Q?a7LkCr4FJaRwOMeKcvVeTZxBsg8UbKUKsuc5gA3RaNP8VbBYbkL766AMd3/D?=
+ =?us-ascii?Q?z3g+WXGcuVsUAwBDrYpI/qGoGV22y5JMHfx4gWaSCZMeClbjKYprlYPEBm8L?=
+ =?us-ascii?Q?ex+ipxA3EhLK5Or3m2ouJPDwc624OtVFBWh/7Tm69VX+rIYXdPaIX5aBEa6P?=
+ =?us-ascii?Q?LXZQl+1GA0MYt/WCQUeCEVFN/3uEvq1CmTSTJ4sayNjEHyJJAO4khNhgxJ0a?=
+ =?us-ascii?Q?NfGJTZTWqL7gdzMXJAuRrp3oWiR1SZumEc/5hTvarwE7NOHt8sQGr/cqwmHe?=
+ =?us-ascii?Q?sNirgG+BEi1hNR0eO60m3Pm1+j3HZ8JWv3+Nnsh/YID6dzXX4wFEViAHtwfM?=
+ =?us-ascii?Q?YTtB7Zd/jIHPUOW0gC3czbqUrZAG7LTriQEKMbwBQ56KKp54Sff4c3Dyz073?=
+ =?us-ascii?Q?WgccOwLWWigkXmaSbcnMk/TT4jHpLt5S6dpXE0qKktA4FilKUAbby21SmlfZ?=
+ =?us-ascii?Q?9mD3XucEccvYN7cW/Y9Jjol/fAjau1mo2GczVPfxvvDssxWPsm38159HnH8r?=
+ =?us-ascii?Q?gd9taYR7G0xeA8V56WnafYtbUH6a4lOFAlmtduMgcrBDZuVcy34AMYjmfvnZ?=
+ =?us-ascii?Q?sG1veyToxA=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d227cddb-b9e6-4665-1504-08da10a0e108
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3080.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2022 09:53:58.5373
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UG1sucXhFrkZOTiNz6BaCWt2Bq72+N42+MdhLEKrJ1nGW0E5LySTrR5G0lzajPrnTyyWaPtWQcfGULo+9dKY4w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB5216
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 10:12:38AM -0500, Segher Boessenkool wrote:
-> Hi!
-> 
-> On Fri, Mar 25, 2022 at 03:13:36PM +0100, Peter Zijlstra wrote:
-> > 
-> > +linux-toolchains
-> > 
-> > On Fri, Mar 25, 2022 at 12:15:28PM +0000, Mark Rutland wrote:
+From: Wang Qing <wangqing@vivo.com>
 
-> > > a) The compiler expects the out-of-line implementations of functions
-> > >    ARE NOT instrumented by address-sanitizer.
-> > > 
-> > >    If this is the case, then it's legitimate for the compiler to call
-> > >    these functions anywhere, and we should NOT instrument the kernel
-> > >    implementations of these. If the compiler wants those instrumented it
-> > >    needs to add the instrumentation in the caller.
-> 
-> The compiler isn't assuming anything about asan.  The compiler generates
-> its code without any consideration of what asan will or will not do.
-> The burden of making things work is on asan.
+sched_domain_flags_f() are statically set now, but actually, we can get a
+lot of necessary information based on the cpu_map. e.g. we can know whether
+its cache is shared.
 
-I think we're talking past each other here, so let me be more precise. :)
+Allows custom extension without affecting current.
 
-The key thing is that when the user passes `-fsantize=address`, instrumentation
-is added by (a part of) the compiler. That instrumentation is added under some
-assumptions as to how the compiler as a whole will behave.
+Signed-off-by: Wang Qing <wangqing@vivo.com>
+---
+ arch/powerpc/kernel/smp.c      |  4 ++--
+ arch/x86/kernel/smpboot.c      |  8 ++++----
+ include/linux/sched/topology.h | 10 +++++-----
+ kernel/sched/topology.c        |  2 +-
+ 4 files changed, 12 insertions(+), 12 deletions(-)
 
-With that in mind, the question is how is __attribute__((no_sanitize_address))
-intended to work when considering all the usual expectations around how the
-compiler can play with memcpy and similar?
+diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
+index de0f6f0..e503d23
+--- a/arch/powerpc/kernel/smp.c
++++ b/arch/powerpc/kernel/smp.c
+@@ -1000,7 +1000,7 @@ static bool shared_caches;
+ 
+ #ifdef CONFIG_SCHED_SMT
+ /* cpumask of CPUs with asymmetric SMT dependency */
+-static int powerpc_smt_flags(void)
++static int powerpc_smt_flags(const struct cpumask *cpu_map)
+ {
+ 	int flags = SD_SHARE_CPUCAPACITY | SD_SHARE_PKG_RESOURCES;
+ 
+@@ -1018,7 +1018,7 @@ static int powerpc_smt_flags(void)
+  * since the migrated task remains cache hot. We want to take advantage of this
+  * at the scheduler level so an extra topology level is required.
+  */
+-static int powerpc_shared_cache_flags(void)
++static int powerpc_shared_cache_flags(const struct cpumask *cpu_map)
+ {
+ 	return SD_SHARE_PKG_RESOURCES;
+ }
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index 2ef1477..c005a8e
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -535,25 +535,25 @@ static bool match_llc(struct cpuinfo_x86 *c, struct cpuinfo_x86 *o)
+ 
+ 
+ #if defined(CONFIG_SCHED_SMT) || defined(CONFIG_SCHED_CLUSTER) || defined(CONFIG_SCHED_MC)
+-static inline int x86_sched_itmt_flags(void)
++static inline int x86_sched_itmt_flags(const struct cpumask *cpu_map)
+ {
+ 	return sysctl_sched_itmt_enabled ? SD_ASYM_PACKING : 0;
+ }
+ 
+ #ifdef CONFIG_SCHED_MC
+-static int x86_core_flags(void)
++static int x86_core_flags(const struct cpumask *cpu_map)
+ {
+ 	return cpu_core_flags() | x86_sched_itmt_flags();
+ }
+ #endif
+ #ifdef CONFIG_SCHED_SMT
+-static int x86_smt_flags(void)
++static int x86_smt_flags(const struct cpumask *cpu_map)
+ {
+ 	return cpu_smt_flags() | x86_sched_itmt_flags();
+ }
+ #endif
+ #ifdef CONFIG_SCHED_CLUSTER
+-static int x86_cluster_flags(void)
++static int x86_cluster_flags(const struct cpumask *cpu_map)
+ {
+ 	return cpu_cluster_flags() | x86_sched_itmt_flags();
+ }
+diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
+index 56cffe4..6aa985a
+--- a/include/linux/sched/topology.h
++++ b/include/linux/sched/topology.h
+@@ -36,28 +36,28 @@ extern const struct sd_flag_debug sd_flag_debug[];
+ #endif
+ 
+ #ifdef CONFIG_SCHED_SMT
+-static inline int cpu_smt_flags(void)
++static inline int cpu_smt_flags(const struct cpumask *cpu_map)
+ {
+ 	return SD_SHARE_CPUCAPACITY | SD_SHARE_PKG_RESOURCES;
+ }
+ #endif
+ 
+ #ifdef CONFIG_SCHED_CLUSTER
+-static inline int cpu_cluster_flags(void)
++static inline int cpu_cluster_flags(const struct cpumask *cpu_map)
+ {
+ 	return SD_SHARE_PKG_RESOURCES;
+ }
+ #endif
+ 
+ #ifdef CONFIG_SCHED_MC
+-static inline int cpu_core_flags(void)
++static inline int cpu_core_flags(const struct cpumask *cpu_map)
+ {
+ 	return SD_SHARE_PKG_RESOURCES;
+ }
+ #endif
+ 
+ #ifdef CONFIG_NUMA
+-static inline int cpu_numa_flags(void)
++static inline int cpu_numa_flags(const struct cpumask *cpu_map)
+ {
+ 	return SD_NUMA;
+ }
+@@ -180,7 +180,7 @@ void free_sched_domains(cpumask_var_t doms[], unsigned int ndoms);
+ bool cpus_share_cache(int this_cpu, int that_cpu);
+ 
+ typedef const struct cpumask *(*sched_domain_mask_f)(int cpu);
+-typedef int (*sched_domain_flags_f)(void);
++typedef int (*sched_domain_flags_f)(const struct cpumask *cpu_map);
+ 
+ #define SDTL_OVERLAP	0x01
+ 
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index 05b6c2a..34dfec4
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -1556,7 +1556,7 @@ sd_init(struct sched_domain_topology_level *tl,
+ 	sd_weight = cpumask_weight(tl->mask(cpu));
+ 
+ 	if (tl->sd_flags)
+-		sd_flags = (*tl->sd_flags)();
++		sd_flags = (*tl->sd_flags)(tl->mask(cpu));
+ 	if (WARN_ONCE(sd_flags & ~TOPOLOGY_SD_FLAGS,
+ 			"wrong sd_flags in topology description\n"))
+ 		sd_flags &= TOPOLOGY_SD_FLAGS;
+-- 
+2.7.4
 
-I think the answer to that is "this hasn't been thought about in great detail",
-which leads to the question of "how could/should this be made to work?", which
-is what I'm on about below.
-
-> It is legitimate to call (or not call!) memcpy anywhere.  memcpy always
-> is __builtin_memcpy, which either or not does a function call.
-> 
-> > >    AFAICT The two options for the compiler here are:
-> > > 
-> > >    1) Always inline an uninstrumented form of the function in this case
-> > > 
-> > >    2) Have distinct instrumented/uninstrumented out-of-line
-> > >       implementations, and call the uninstrumented form in this case.
-> 
-> The compiler should not do anything differently here if it uses asan.
-> The address sanitizer and the memcpy function implementation perhaps
-> have to cooperate somehow, or asan needs more smarts.  This needs to
-> happen no matter what, to support other things calling memcpy, say,
-> assembler code.
-
-I appreciate where you're coming from here, but I think you're approaching the
-problem sideways.
-
-> > > So from those examples it seems GCC falls into bucket (a), and assumes the
-> > > blessed functions ARE NOT instrumented.
-> 
-> No, it doesn't show GCC assumes anything.  No testing of this kind can
-> show anything alike.
-
-I appreciate that; hence "it seems".
-
-What I'm getting at is that the *instrumentation* is added under some
-assumptions (those of whoever wrote the instrumentation code), and those
-assumptions might not match the behaviour of the compiler, or the behaviour we
-expect for __attribute__((no_sanitize_address)).
-
-We need to define *what the semantics are* so that we can actually solve the
-problem, e.g. is a memcpy implementation expected to be instrumented or not?
-
-> > > I think something has to change on the compiler side here (e.g. as per
-> > > options above), and we should align GCC and clang on the same
-> > > approach...
-> 
-> GCC *requires* memcpy to be the standard memcpy always (i.e. to have the
-> standard-specified semantics).  This means that it will have the same
-> semantics as __builtin_memcpy always, and either or not be a call to an
-> external function.  It can also create calls to it out of thin air.
-
-I understand all of that.
-
-Given the standard doesn't say *anything* about instrumentation, what does GCC
-*require* instrumentation-wise of the memcpy implementation? What happens *in
-practice* today?
-
-For example, is the userspace implementation of memcpy() instrumented for
-AddressSanitizer, or not?
-
-Thanks,
-Mark.

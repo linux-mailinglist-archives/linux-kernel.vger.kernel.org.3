@@ -2,38 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81A54EA0E3
+	by mail.lfdr.de (Postfix) with ESMTP id 6D28D4EA0E2
 	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343988AbiC1UBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 16:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
+        id S1344039AbiC1UBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 16:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239880AbiC1UBd (ORCPT
+        with ESMTP id S1343970AbiC1UBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 16:01:33 -0400
+        Mon, 28 Mar 2022 16:01:34 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CF0387B8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 12:59:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CE439166;
+        Mon, 28 Mar 2022 12:59:52 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id 84BA11F40A43
+        with ESMTPSA id D9B6F1F4384C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648497589;
-        bh=xco3lbW21cyWapa9jNZ90fWA8TJrSosaNbyiTjreIEw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=E2SGCOlU6Vu2TQrbpD/JmCrK9QfnzGFxJpTx5LS65mKe2tTkuwNlhOp2gpHjQoEFQ
-         wu4XgyDXk2lX9f6V9ySek8zxFVZHmDF+WI8nl+m2ea7TIYhvszUt9+1MrUb9rWP7T/
-         ZT8rId2aW/3jwPJh/0R0O1guCCqFJZDGv3GRTMTd5YB0MJVj+EPSLy6xrgWBNgkv8G
-         etvHpbmLmdH50zzZSz8ghBdYSZmRNI9NggeQJ2mrw3FciBEgmJ1USz3AlnFplQDEEY
-         zSsAicMP8JIWRKZnXfqwC2+h1uijDHQLUo6MmL9anXk6bIb3tbOlfmSyxzjogMKaJv
-         liS+tyce4NW+w==
+        s=mail; t=1648497591;
+        bh=juEkTDE+SY0qwuOHnUrLzTo/uQ/rPpurP5PmYNSVfck=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=iDK0M7FyPd5O9ZPH6cann5jLnLLjQxkwxZS6CxveFOrYR2TgBiSEl3kWREbifBLE5
+         HZRuUeEO9kEeU/TrdUJ9PrBWxVgDCny/0Y81gl86ehzEsOcPhiqoSaXJripdv6E71x
+         0/25h8I8CAdgcpPLWjeE19aES5+LvahKaZ5cD1qVXJg+Zx8TeFAdwyMEPjV/k3svr+
+         lcehnmWXJt8Ck9Bmp0H1zf/LUbVDh/KbR2MIF9h2fOQBKaxcPWGqsLYOMxy1jFN4mH
+         7U+Vs2qTQY+N/5Stg8DeyjEX6RuMi0RR/lqfzNFIq5yT+qFvI0KHGVelygcwbOopyu
+         SSNsN4gBJVs5Q==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 00/24] H.264 Field Decoding Support for Frame-based Decoders
-Date:   Mon, 28 Mar 2022 15:59:12 -0400
-Message-Id: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel@collabora.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH v1 01/24] media: h264: Increase reference lists size to 32
+Date:   Mon, 28 Mar 2022 15:59:13 -0400
+Message-Id: <20220328195936.82552-2-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
+References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -42,117 +50,114 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Until now, only Cedrus (a slice base decoder) supported interlaced decoding.
-In order to support field decoding in our frame-based decoder, the v4l2-h264
-library needed adaptation to produce the appropriate reference lists.
+This is to accommodate support for field decoding, which splits the top
+and the bottom reference into the reference list.
 
-This patch extends the v4l2-h264 library to produce the larger references list
-needed to represent fields separately. Hantro, MTK-VCODEC and RKVDEC drivers
-have been adapted to accommodate the larger lists. Though, only Hantro and
-RKVDEC actually have HW support for field decoding. So only these two
-have been updated to make use of the larger lists. All this work has been
-done using the H.264 specification, LibreELEC downstream kernel patches,
-Rockchip MPP reference software and Hantro reference software.
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+---
+ drivers/media/v4l2-core/v4l2-h264.c        | 6 +++---
+ drivers/staging/media/hantro/hantro_hw.h   | 6 +++---
+ drivers/staging/media/rkvdec/rkvdec-h264.c | 6 +++---
+ include/media/v4l2-h264.h                  | 8 ++++----
+ 4 files changed, 13 insertions(+), 13 deletions(-)
 
-All this work have been tested using GStreamer mainline implementation but also
-with FFMPEG LibreELEC fork using the testing tool fluster running through the
-ITU-T H.264 (2016-02) AVCv2 set of bitstream. Before this patch, the scores
-were:
-
-Hantro:
-  FFMPEG:
-  GSteamer:
-RKVDEC:
-  FFMPEG:
-  GSteamer:
-
-And after these changes:
-
-Hantro:
-  FFMPEG:   118/135
-  GSteamer: 129/135
-RKVDEC:
-  FFMPEG:   118/135
-  GSteamer: 129/135
-
-Note that a bug in FFMPEG / LibreELEC fork was noticed and fixed with the
-following change:
-
-diff --git a/libavcodec/v4l2_request_h264.c b/libavcodec/v4l2_request_h264.c
-index 88da8f0a2d..394bae0550 100644
---- a/libavcodec/v4l2_request_h264.c
-+++ b/libavcodec/v4l2_request_h264.c
-@@ -66,7 +66,7 @@ static void fill_dpb_entry(struct v4l2_h264_dpb_entry *entry, const H264Picture
- {
-     entry->reference_ts = ff_v4l2_request_get_capture_timestamp(pic->f);
-     entry->pic_num = pic->pic_id;
--    entry->frame_num = pic->frame_num;
-+    entry->frame_num = pic->long_ref ? pic->pic_id : pic->frame_num;
-     entry->fields = pic->reference & V4L2_H264_FRAME_REF;
-     entry->flags = V4L2_H264_DPB_ENTRY_FLAG_VALID;
-     if (entry->fields)
-
-Some useful links:
-
-Detailed Hantro Results:     https://gitlab.freedesktop.org/-/snippets/5189
-Detailed RKVDEC Results:     https://gitlab.freedesktop.org/-/snippets/5253
-ITU-T H.264 (2016-02) AVCv2: https://www.itu.int/net/itu-t/sigdb/spevideo/VideoForm-s.aspx?val=102002641
-Fluster:                     https://github.com/fluendo/fluster
-GStreamer:                   https://gitlab.freedesktop.org/gstreamer/gstreamer/
-FFMPEG Fork:                 https://github.com/jernejsk/FFmpeg/tree/v4l2-request-hwaccel-4.4
-Rockchip MPP:                https://github.com/rockchip-linux/mpp
-
-Alex Bee (1):
-  media: rkvdec-h264: Don't hardcode SPS/PPS parameters
-
-Jonas Karlman (5):
-  media: rkvdec: h264: Fix reference frame_num wrap for second field
-  media: rkvdec: Ensure decoded resolution fit coded resolution
-  media: rkvdec: h264: Validate and use pic width and height in mbs
-  media: rkvdec: h264: Fix bit depth wrap in pps packet
-  media: hantro: h264: Make dpb entry management more robust
-
-Nicolas Dufresne (17):
-  media: h264: Increase reference lists size to 32
-  media: doc: Document dual use of H.264 pic_num/frame_num
-  media: h264: Avoid wrapping long_term_frame_idx
-  media: h264: Store current picture fields
-  media: h264: Store all fields into the unordered list
-  media: v4l2: Trace calculated p/b0/b1 initial reflist
-  media: h264: Sort p/b reflist using frame_num
-  media: v4l2: Reorder field reflist
-  media: v4l2-mem2mem: Fix typo in trace message
-  media: v4l2-mem2mem: Trace on implicit un-hold
-  media: rkvdec: Stop overclocking the decoder
-  media: rkvdec: h264: Fix dpb_valid implementation
-  media: rkvdec: Enable capture buffer holding for H264
-  media: rkvdec-h264: Add field decoding support
-  media: hantro: Enable HOLD_CAPTURE_BUF for H.264
-  media: hantro: Stop using H.264 parameter pic_num
-  media: hantro: Add H.264 field decoding support
-
-Sebastian Fricke (1):
-  media: videobuf2-v4l2: Warn on holding buffers without support
-
- .../media/v4l/ext-ctrls-codec-stateless.rst   |  10 +-
- .../media/common/videobuf2/videobuf2-v4l2.c   |   7 +-
- drivers/media/v4l2-core/v4l2-h264.c           | 238 +++++++++++++++---
- drivers/media/v4l2-core/v4l2-mem2mem.c        |   3 +-
- drivers/staging/media/hantro/hantro_h264.c    | 119 +++++++--
- drivers/staging/media/hantro/hantro_hw.h      |   7 +-
- drivers/staging/media/hantro/hantro_v4l2.c    |  25 ++
- drivers/staging/media/rkvdec/rkvdec-h264.c    | 104 ++++----
- drivers/staging/media/rkvdec/rkvdec.c         |  22 +-
- drivers/staging/media/rkvdec/rkvdec.h         |   1 +
- include/media/v4l2-h264.h                     |  20 +-
- 11 files changed, 431 insertions(+), 125 deletions(-)
-
-base-commit: 51d86122ff02ac2ceef5c0a1cf28f0b5ed580ddd
+diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
+index 0618c6f52214..8d750ee69e74 100644
+--- a/drivers/media/v4l2-core/v4l2-h264.c
++++ b/drivers/media/v4l2-core/v4l2-h264.c
+@@ -210,7 +210,7 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
+  * v4l2_h264_build_p_ref_list() - Build the P reference list
+  *
+  * @builder: reference list builder context
+- * @reflist: 16 sized array used to store the P reference list. Each entry
++ * @reflist: 32 sized array used to store the P reference list. Each entry
+  *	     is a v4l2_h264_reference structure
+  *
+  * This functions builds the P reference lists. This procedure is describe in
+@@ -233,9 +233,9 @@ EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
+  * v4l2_h264_build_b_ref_lists() - Build the B0/B1 reference lists
+  *
+  * @builder: reference list builder context
+- * @b0_reflist: 16 sized array used to store the B0 reference list. Each entry
++ * @b0_reflist: 32 sized array used to store the B0 reference list. Each entry
+  *		is a v4l2_h264_reference structure
+- * @b1_reflist: 16 sized array used to store the B1 reference list. Each entry
++ * @b1_reflist: 32 sized array used to store the B1 reference list. Each entry
+  *		is a v4l2_h264_reference structure
+  *
+  * This functions builds the B0/B1 reference lists. This procedure is described
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index 2bc6b8f088f5..292aaaabaf24 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -69,9 +69,9 @@ struct hantro_h264_dec_ctrls {
+  * @b1:		B1 reflist
+  */
+ struct hantro_h264_dec_reflists {
+-	struct v4l2_h264_reference p[HANTRO_H264_DPB_SIZE];
+-	struct v4l2_h264_reference b0[HANTRO_H264_DPB_SIZE];
+-	struct v4l2_h264_reference b1[HANTRO_H264_DPB_SIZE];
++	struct v4l2_h264_reference p[V4L2_H264_REF_LIST_LEN];
++	struct v4l2_h264_reference b0[V4L2_H264_REF_LIST_LEN];
++	struct v4l2_h264_reference b1[V4L2_H264_REF_LIST_LEN];
+ };
+ 
+ /**
+diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
+index 3c7f3d87fab4..dff89732ddd0 100644
+--- a/drivers/staging/media/rkvdec/rkvdec-h264.c
++++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+@@ -100,9 +100,9 @@ struct rkvdec_h264_priv_tbl {
+ #define RKVDEC_H264_DPB_SIZE 16
+ 
+ struct rkvdec_h264_reflists {
+-	struct v4l2_h264_reference p[RKVDEC_H264_DPB_SIZE];
+-	struct v4l2_h264_reference b0[RKVDEC_H264_DPB_SIZE];
+-	struct v4l2_h264_reference b1[RKVDEC_H264_DPB_SIZE];
++	struct v4l2_h264_reference p[V4L2_H264_REF_LIST_LEN];
++	struct v4l2_h264_reference b0[V4L2_H264_REF_LIST_LEN];
++	struct v4l2_h264_reference b1[V4L2_H264_REF_LIST_LEN];
+ 	u8 num_valid;
+ };
+ 
+diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
+index ef9a894e3c32..e282fb16ac58 100644
+--- a/include/media/v4l2-h264.h
++++ b/include/media/v4l2-h264.h
+@@ -37,7 +37,7 @@ struct v4l2_h264_reflist_builder {
+ 		u16 longterm : 1;
+ 	} refs[V4L2_H264_NUM_DPB_ENTRIES];
+ 	s32 cur_pic_order_count;
+-	struct v4l2_h264_reference unordered_reflist[V4L2_H264_NUM_DPB_ENTRIES];
++	struct v4l2_h264_reference unordered_reflist[V4L2_H264_REF_LIST_LEN];
+ 	u8 num_valid;
+ };
+ 
+@@ -51,9 +51,9 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
+  * v4l2_h264_build_b_ref_lists() - Build the B0/B1 reference lists
+  *
+  * @builder: reference list builder context
+- * @b0_reflist: 16 sized array used to store the B0 reference list. Each entry
++ * @b0_reflist: 32 sized array used to store the B0 reference list. Each entry
+  *		is a v4l2_h264_reference structure
+- * @b1_reflist: 16 sized array used to store the B1 reference list. Each entry
++ * @b1_reflist: 32 sized array used to store the B1 reference list. Each entry
+  *		is a v4l2_h264_reference structure
+  *
+  * This functions builds the B0/B1 reference lists. This procedure is described
+@@ -70,7 +70,7 @@ v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
+  * v4l2_h264_build_p_ref_list() - Build the P reference list
+  *
+  * @builder: reference list builder context
+- * @reflist: 16 sized array used to store the P reference list. Each entry
++ * @reflist: 32 sized array used to store the P reference list. Each entry
+  *	     is a v4l2_h264_reference structure
+  *
+  * This functions builds the P reference lists. This procedure is describe in
 -- 
 2.34.1
 

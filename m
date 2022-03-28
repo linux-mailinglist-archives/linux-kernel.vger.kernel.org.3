@@ -2,117 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4222C4EA269
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 23:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A665A4EA276
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 23:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbiC1V2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 17:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59476 "EHLO
+        id S229950AbiC1VaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 17:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiC1V23 (ORCPT
+        with ESMTP id S229495AbiC1VaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 17:28:29 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4B913DB7B
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 14:26:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D54D6CE13BA
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 21:26:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDD87C340F0;
-        Mon, 28 Mar 2022 21:26:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1648502790;
-        bh=wxoq9ME/nIVvmUovBMwsQE6E8oPpAYoAac/ZEw8Fya0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=yf2w62tXhWPSCdrwhr8ccax+GVrf2ywD2KQk2KtH9HUhQmdXMDPoZJ5V4UvoTySq2
-         udT2dg8Ev7lBimxMk1Yq0bG3gGeCJIEKACvs4H2DV+ytQ3vhyr2qVP3V3iBJMJqaSl
-         UGQFD1P1IKswDwMgGsYlOLpcmpYHzqAkQk+kHK+Y=
-Date:   Mon, 28 Mar 2022 14:26:29 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     <mhocko@suse.com>, <kosaki.motohiro@jp.fujitsu.com>,
-        <mgorman@suse.de>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] mm/mempolicy: fix mpol_new leak in
- shared_policy_replace
-Message-Id: <20220328142629.6ab7c5312d9ec154ccc502b2@linux-foundation.org>
-In-Reply-To: <c8625168-4a40-1f6c-47b1-2c9194d3d4b3@huawei.com>
-References: <20220322104345.36379-1-linmiaohe@huawei.com>
-        <20220325172907.57dd381b746563be5dc77097@linux-foundation.org>
-        <c8625168-4a40-1f6c-47b1-2c9194d3d4b3@huawei.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 28 Mar 2022 17:30:11 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F2017E21
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 14:28:23 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id c15-20020a17090a8d0f00b001c9c81d9648so734055pjo.2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 14:28:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WVVxBxlyVCxS7vEDq6k+BkZvn5usLnrTMDhIOyfoQRA=;
+        b=F3l3l0SrNcazav4z9RryKfjHbpu2VZCStqEvabNnrpQsKduUOQ3GJ4YLD/Bnt3UC53
+         9gigw6DRFNxzp6Tn0uRX1OSxCzSfPN1szWmGrwz4vNHvV9VLYO4WmYDXdPaWdH8TblyA
+         El5pN/YNKIMy+iw6lu+xed7E4QwRzAZ0FR3pSWjUWLUUPJwMVJMtE8E6wGN4E5LNs8u0
+         yM55QJ2oVDQAWknXjyDPGA1Gh8t7X0l+yW2q0hEFkIUxZQxSu7VSEXhtFwFrkoLq0Y0h
+         pW8wbdUJiuzKmB2oEiRn9NUOZIq9e6JfKX2gwfUvAStK/w8sCzYOPevQeMdOmxmqtm3Z
+         UnEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WVVxBxlyVCxS7vEDq6k+BkZvn5usLnrTMDhIOyfoQRA=;
+        b=KKviW9Q6kQ4FPVBRLh50SZltmtZedow8zZgcSS+sNJLfbz1wIhW5RUngc8RUQShSkO
+         wz97cuTwtTWDBsMPWpL34O2Q8O7N7LcVFRpUs7989IAApUEzFXG3NIRkfPnlMBQ6x34X
+         fyCQzfI/WaGc4O3eHVqjtoWw6USer8Ub2lrPkhHk7Tm7JukC2Ff45toTSo6erxrDV92C
+         sEYfT/ts1JzBHFq/cEBLaqefnQD80RGM42C3C34+P/mheFRfh9+VhSMJJtsaozLs5duX
+         jrwr7a9xvgThh7+wBICHaQZRkY0B5YvmDXAKNFNVtuUhm4bbyEbLmw1K45Z2SIuTlw41
+         wX4g==
+X-Gm-Message-State: AOAM530TwAYdgnm/yfyottyJOod7Xs3XrCKrz61S2XkyrCtri4wcfDam
+        GitfmTaYoysSwjRCSrSiuHOVFg==
+X-Google-Smtp-Source: ABdhPJwWeZMb9Wt1LCrjPclYKOZxIau/iyRcg9FuFBqfs0Ro5aFT1BqcZ/SiNPFqKlNMwaMh8+jAOw==
+X-Received: by 2002:a17:903:2288:b0:153:bfbe:7354 with SMTP id b8-20020a170903228800b00153bfbe7354mr27601061plh.112.1648502856956;
+        Mon, 28 Mar 2022 14:27:36 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 22-20020a17090a019600b001c6457e1760sm410018pjc.21.2022.03.28.14.27.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 14:27:36 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 21:27:32 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: Re: [PATCH v5 05/13] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <YkIoRDNbwJH/IDeC@google.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-6-chao.p.peng@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310140911.50924-6-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 26 Mar 2022 14:46:28 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+On Thu, Mar 10, 2022, Chao Peng wrote:
+> Extend the memslot definition to provide fd-based private memory support
+> by adding two new fields (private_fd/private_offset). The memslot then
+> can maintain memory for both shared pages and private pages in a single
+> memslot. Shared pages are provided by existing userspace_addr(hva) field
+> and private pages are provided through the new private_fd/private_offset
+> fields.
+> 
+> Since there is no 'hva' concept anymore for private memory so we cannot
+> rely on get_user_pages() to get a pfn, instead we use the newly added
+> memfile_notifier to complete the same job.
+> 
+> This new extension is indicated by a new flag KVM_MEM_PRIVATE.
+> 
+> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
 
-> On 2022/3/26 8:29, Andrew Morton wrote:
-> > On Tue, 22 Mar 2022 18:43:45 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
-> > 
-> >> If mpol_new is allocated but not used in restart loop, mpol_new will be
-> >> freed via mpol_put before returning to the caller.  But refcnt is not
-> >> initialized yet, so mpol_put could not do the right things and might leak
-> >> the unused mpol_new. This would happen if mempolicy was updated on the
-> >> shared shmem file while the sp->lock has been dropped during the memory
-> >> allocation.
-> >>
-> >> This issue could be triggered easily with the below code snippet if there
-> >> are many processes doing the below work at the same time:
-> >>
-> >>   shmid = shmget((key_t)5566, 1024 * PAGE_SIZE, 0666|IPC_CREAT);
-> >>   shm = shmat(shmid, 0, 0);
-> >>   loop many times {
-> >>     mbind(shm, 1024 * PAGE_SIZE, MPOL_LOCAL, mask, maxnode, 0);
-> >>     mbind(shm + 128 * PAGE_SIZE, 128 * PAGE_SIZE, MPOL_DEFAULT, mask,
-> >>           maxnode, 0);
-> >>   }
-> >>
-> >> ...
-> >>
-> >> --- a/mm/mempolicy.c
-> >> +++ b/mm/mempolicy.c
-> >> @@ -2733,6 +2733,7 @@ static int shared_policy_replace(struct shared_policy *sp, unsigned long start,
-> >>  	mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
-> >>  	if (!mpol_new)
-> >>  		goto err_out;
-> >> +	refcount_set(&mpol_new->refcnt, 1);
-> >>  	goto restart;
-> >>  }
-> > 
-> > Two other sites in this file do
-> > 
-> > 	atomic_set(&policy->refcnt, 1);
-> > 
-> > 
-> > Could we please instead have a little helper function which does the
-> > kmem_cache_alloc()+refcount_set()?> .
-> 
-> There are usecases like below:
-> 
-> 	struct mempolicy *new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
-> 	*new = *old;
-> 	^^^^^^^^^^^^
-> 	refcount_set(&new->refcnt, 1);
-> 
-> If we use helper function to do kmem_cache_alloc()+refcount_set() above, separate
-> refcount_set(&new->refcnt, 1) is still needed as old is copied to new and overwrites
-> the refcnt field. So that little helper function might not work. Or am I miss something?
-> 
+Needs a Co-developed-by: for Yu, or a From: if Yu is the sole author.
 
-Hm, spose so.  I guess the helper doesn't add much in that case.
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> ---
+>  Documentation/virt/kvm/api.rst | 37 +++++++++++++++++++++++++++-------
+>  include/linux/kvm_host.h       |  7 +++++++
+>  include/uapi/linux/kvm.h       |  8 ++++++++
+>  3 files changed, 45 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 3acbf4d263a5..f76ac598606c 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -1307,7 +1307,7 @@ yet and must be cleared on entry.
+>  :Capability: KVM_CAP_USER_MEMORY
+>  :Architectures: all
+>  :Type: vm ioctl
+> -:Parameters: struct kvm_userspace_memory_region (in)
+> +:Parameters: struct kvm_userspace_memory_region(_ext) (in)
+>  :Returns: 0 on success, -1 on error
+>  
+>  ::
+> @@ -1320,9 +1320,17 @@ yet and must be cleared on entry.
+>  	__u64 userspace_addr; /* start of the userspace allocated memory */
+>    };
+>  
+> +  struct kvm_userspace_memory_region_ext {
+> +	struct kvm_userspace_memory_region region;
+> +	__u64 private_offset;
+> +	__u32 private_fd;
+> +	__u32 padding[5];
 
-Can we please redo this on mainline?  I'm not happy with the bloat
-which refcnt_t adds and I think I'll drop
-mm-mempolicy-convert-from-atomic_t-to-refcount_t-on-mempolicy-refcnt.patch.
+Uber nit, I'd prefer we pad u32 for private_fd separate from padding the size of
+the structure for future expansion.
+
+Regarding future expansion, any reason not to go crazy and pad like 128+ bytes?
+It'd be rather embarassing if the next memslot extension needs 3 u64s and we end
+up with region_ext2 :-)
+
+> +};
+> +
+>    /* for kvm_memory_region::flags */
+>    #define KVM_MEM_LOG_DIRTY_PAGES	(1UL << 0)
+>    #define KVM_MEM_READONLY	(1UL << 1)
+> +  #define KVM_MEM_PRIVATE		(1UL << 2)
+>  
+>  This ioctl allows the user to create, modify or delete a guest physical
+>  memory slot.  Bits 0-15 of "slot" specify the slot id and this value
+
+...
+
+> +static inline bool kvm_slot_is_private(const struct kvm_memory_slot *slot)
+
+I 100% think we should usurp the name "private" for these memslots, but as prep
+work this series should first rename KVM_PRIVATE_MEM_SLOTS to avoid confusion.
+Maybe KVM_INTERNAL_MEM_SLOTS?

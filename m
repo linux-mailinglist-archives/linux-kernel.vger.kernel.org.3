@@ -2,104 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0515C4E9721
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7EF4E9724
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239612AbiC1M5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 08:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46422 "EHLO
+        id S242660AbiC1M5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 08:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234432AbiC1M46 (ORCPT
+        with ESMTP id S240038AbiC1M51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 08:56:58 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25419E0BD
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:55:18 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id i65so11233168qkd.7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:55:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=marek-ca.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k+wjaE9zp8UiiJ3ll5xchHseTtAzJ2kCou17dDYzPoA=;
-        b=tcx16Kj+7Cqux9mvpPivKKmgL8LuL0VEeyv7xtoKn155d3O5pQ1xM9KdQFbPq67vAu
-         ncPSybCNjkrekLm+BxOjgqjGogipQmtloV8c1paAp+7GYhYuV6wCmsGykAk0FTp6Il/w
-         SveZKg7ZHVBl72dE00xbC1PExj+UjXh2sEWE/3MXLhw/aMamfw35KhT50syApyCDML5H
-         d2KWjYD0l7FoZFzuPTMtRxzKpj3dQESwtb/YnSuKykGxKYinz3NENxy+Xt7Er2ZZfRq1
-         aWmBYOcwAkasBZD3JTKhMM9WLTWQDzMc+Sv2cWoc0BLJqX+/sYa7eWtfaYESenkXCpJ5
-         gnwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k+wjaE9zp8UiiJ3ll5xchHseTtAzJ2kCou17dDYzPoA=;
-        b=I85DYt6MGbhQF1kZMUPcyFzyHStbYZ6I+JiJpqJqnlzNjXpgCI3kxA82ftM9LCtCt9
-         RLceZGNMTkBAb7UAcFDfjgLLOMt2wUMtrxuje6SRIGRFp3JEC/aCZ1/xnh/O1F80dNIw
-         BzMl0Fk/pLa/QzSXSaHL6L57FadYEi++Z5/Vc4733NJgbpqSaI7C9FwMJWJ99iWLptQa
-         R9wSF3uq2hjhM7er+yY380JL/hH/Pp/PbJEImWZHP/QeWbrQ26Qys38UusgPdOxwPaQO
-         SqH6H2X3guekrxhBDMtm7HbNh7z7skIqCze8hmd6JK09H6Bx9MZUbisSX0kvGqBOX5Z/
-         1DiA==
-X-Gm-Message-State: AOAM5301dZJ+1bguBi3exwKJjKgXvaXjhUo0ypH/zHvNmsKseQ1+Catu
-        xCRFYrouLS8XYPlxNJiEZNYFfQ==
-X-Google-Smtp-Source: ABdhPJxc8NsbZVET0kGypEAfG6BJjXHoFiXSRAGghnfGjwEdoHpPzeLu52swAHTy2TVKfJyxc8qtoQ==
-X-Received: by 2002:a37:a084:0:b0:67d:405b:60d0 with SMTP id j126-20020a37a084000000b0067d405b60d0mr15545606qke.83.1648472117315;
-        Mon, 28 Mar 2022 05:55:17 -0700 (PDT)
-Received: from localhost.localdomain (modemcable134.222-177-173.mc.videotron.ca. [173.177.222.134])
-        by smtp.gmail.com with ESMTPSA id c10-20020ac87dca000000b002e1db1b7b10sm12441798qte.25.2022.03.28.05.55.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 05:55:16 -0700 (PDT)
-From:   Jonathan Marek <jonathan@marek.ca>
-To:     freedreno@lists.freedesktop.org
-Cc:     dpiliaiev@igalia.com, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVER FOR MSM ADRENO
-        GPU), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/msm: use orig_nents to iterate over scatterlist with per-process tables
-Date:   Mon, 28 Mar 2022 08:55:05 -0400
-Message-Id: <20220328125505.31605-1-jonathan@marek.ca>
-X-Mailer: git-send-email 2.26.1
+        Mon, 28 Mar 2022 08:57:27 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDCBB35DD5;
+        Mon, 28 Mar 2022 05:55:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F150D6E;
+        Mon, 28 Mar 2022 05:55:45 -0700 (PDT)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1E1623F718;
+        Mon, 28 Mar 2022 05:55:44 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 13:55:38 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Jakub Jelinek <jakub@redhat.com>
+Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Nathan Chancellor <nathan@kernel.org>, x86-ml <x86@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-toolchains@vger.kernel.org
+Subject: Re: clang memcpy calls
+Message-ID: <YkGwSsXLBjReBhMf@lakrids>
+References: <YjxTt3pFIcV3lt8I@zn.tnic>
+ <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
+ <Yj2yYFloadFobRPx@lakrids>
+ <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net>
+ <20220325151238.GB614@gate.crashing.org>
+ <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
+ <YkGL929QoFiTfMK7@tucnak>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkGL929QoFiTfMK7@tucnak>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This matches the implementation of iommu_map_sgtable() used for the
-non-per-process page tables path.
+On Mon, Mar 28, 2022 at 12:20:39PM +0200, Jakub Jelinek wrote:
+> On Mon, Mar 28, 2022 at 10:52:54AM +0100, Mark Rutland wrote:
+> > I think we're talking past each other here, so let me be more precise. :)
+> > 
+> > The key thing is that when the user passes `-fsantize=address`, instrumentation
+> > is added by (a part of) the compiler. That instrumentation is added under some
+> > assumptions as to how the compiler as a whole will behave.
+> > 
+> > With that in mind, the question is how is __attribute__((no_sanitize_address))
+> > intended to work when considering all the usual expectations around how the
+> > compiler can play with memcpy and similar?
+> 
+> no_sanitize_address or lack thereof is whether the current function
+> shouldn't be or should be ASan instrumented, not on whether other functions
+> it calls are instrumented or not.
 
-This works around the dma_map_sgtable() call (used to invalidate cache)
-overwriting sgt->nents with 1 (which is probably a separate issue).
+I understand this. :)
 
-Fixes: b145c6e65eb0 ("drm/msm: Add support to create a local pagetable")
-Signed-off-by: Jonathan Marek <jonathan@marek.ca>
----
- drivers/gpu/drm/msm/msm_iommu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> memcpy/memmove/memset are just a tiny bit special case because the
+> compiler can add them on their own even if they aren't present in the
+> source (there are a few others the compiler can pattern match too) and
+> various builtins can be on the other side expanded inline instead of
+> called, so one then gets the sanitization status of the function in
+> which it is used rather than whether the out of line implementation of
+> the function is sanitized.
 
-diff --git a/drivers/gpu/drm/msm/msm_iommu.c b/drivers/gpu/drm/msm/msm_iommu.c
-index bcaddbba564df..22935ef26a3a1 100644
---- a/drivers/gpu/drm/msm/msm_iommu.c
-+++ b/drivers/gpu/drm/msm/msm_iommu.c
-@@ -58,7 +58,7 @@ static int msm_iommu_pagetable_map(struct msm_mmu *mmu, u64 iova,
- 	u64 addr = iova;
- 	unsigned int i;
- 
--	for_each_sg(sgt->sgl, sg, sgt->nents, i) {
-+	for_each_sg(sgt->sgl, sg, sgt->orig_nents, i) {
- 		size_t size = sg->length;
- 		phys_addr_t phys = sg_phys(sg);
- 
--- 
-2.26.1
+Yep, and this is the point I'm getting at. If the compiler *implicitly*
+generates a call to one of these from a function which was marked with
+__attribute__((no_sanitize_address)), then either:
 
+1) This renders __attribute__((no_sanitize_address)) useless, since
+   instrumentation is being added in a way the code author cannot
+   reliably prevent. If so, I'd argue that this is a compiler bug, and
+   that the transformation of inserting the call is unsound.
+
+2) There's an expectation that those out-of-line implementations are
+   *NOT* instrumented, and this is fine so long as those are not
+   instrumented.
+
+I appreciate that this isn't necessarily something which was considered
+when the feature was originally designed, and maybe this is fine for
+userspace, but for kernel usage we need to be able to reliably prevent
+instrumentation.
+
+> If coexistence of instrumented and non-instrumented memcpy etc. was the goal
+> (it clearly wasn't), then the sanitizer libraries wouldn't be overriding
+> memcpy calls, but instead the compiler would redirect calls to memcpy in
+> instrumented functions to say __asan_memcpy which then would be
+> instrumented.
+
+FWIW, I think that approach would be fine for kernel usage.
+
+> > Given the standard doesn't say *anything* about instrumentation, what does GCC
+> > *require* instrumentation-wise of the memcpy implementation? What happens *in
+> > practice* today?
+> > 
+> > For example, is the userspace implementation of memcpy() instrumented for
+> > AddressSanitizer, or not?
+> 
+> It is, for all functions, whether compiled with -fsanitize=address or not,
+> if user app is linked with -fsanitize=address, libasan is linked in and
+> overrides the libc memcpy with its instrumented version.
+
+Thanks for confirming! Just to check, how does libasan prevent recursing
+within itself on implicitly generated calls to memcpy and friends? Is
+anything special done to build the libasan code, is that all asm, or
+something else?
+
+> Note that the default shadow memory value is 0 which means accessible,
+> so even when memcpy is instrumented, when called from non-instrumented code
+> often it will not do anything beyond normal behavior
+
+That might be true in userspace, but is not the case within the kernel
+as the shadow might not be mapped (and is one reason we need to inhibit
+instrumentation in the first place).
+
+For example, consider the code which *creates* the page tables for the
+shadow memory. Until that's run, accessing the shadow will result in a
+(fatal) fault, and while the compilation unit with that code is compiled
+*without* `-fsantize=address`, it may call into the common
+implementation of memcpy() and friends shared by all kernel code.
+
+Thanks,
+Mark.
+
+> , as non-instrumented
+> functions don't poison the paddings in between variable (there even doesn't
+> have to be any) etc.  But e.g. malloc/operator new etc. is also overridden,
+> so buffer overflows/underflows on memory allocated that way from
+> uninstrumented code using memcpy etc. will be diagnosed.
+> 
+> 	Jakub
+> 

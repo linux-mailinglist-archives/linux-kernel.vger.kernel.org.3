@@ -2,108 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E40E34E9A1F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E36694E9A25
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244074AbiC1OxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 10:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
+        id S244087AbiC1OyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 10:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244110AbiC1OxH (ORCPT
+        with ESMTP id S240562AbiC1OyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 10:53:07 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F84E4BB97
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:51:26 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id l129so3916103pga.3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:51:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=obleDDk1Z4CONGxAkHZNS2tjDM/nuYlv6cPwOVJDufY=;
-        b=h8Ok29DH4z6N0TfkIQj67vjU5KD03U8eMxwkX7kHs1WHIbA4lLyhTbcKvx33kZrWV5
-         4tWfsq4cMxVflItMlDGuqv7OJV1eH4KdzObOzdOtizGAIkxs5mrn85cRduSTqrnG00PQ
-         lL3IUJdXqE+IrbTYrjk1tVVXals52dlLJhfHN08n6eJ+rnGqFHEtsew3k8F56JnePW/4
-         Zw7A6sVXJ+Aq9Tjx6/ONd0HiSUFF1MWVPcy4GVHXqAPwBhLU2ccTWenC/NJysEW/Rd95
-         T3atXP4WAJ0g/Hnd6AHuxCGN4fX4Zp/B2DOVWsUW09lZPzOuSOBmfGQUZqJmRMe9+EP3
-         BWiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=obleDDk1Z4CONGxAkHZNS2tjDM/nuYlv6cPwOVJDufY=;
-        b=0REcFbyK+0NyiaOwbM62KJZbcaza6WQRXtcRpZ/vmUJUojLrm+yJT4u7evmZzWbf3v
-         CFGkCUyZNTBg0kHTPMwf0dHJl0MVkzZWbZFcKHTg6egvu0Bf8rH9sSTot4DmcHINng+a
-         wLk7hhwFy19xfuRcNsA0LGEd/AzM8YjLdMvkxIvN0RBo4dWaBjxBLDTw+QAZgzfjEkEW
-         nir7UDnXCuB1lumQVLTwEuNnXTPnTr/1+J8uWFdFZO8/U7TcDK0eQ37SN34elj6ZjntO
-         Z8zw5qtL/LPCa7W3imxQ/9S8OjqEuqEqpTD2Uo9ltJ+3qmnf1yv5CiGXcjhGNR48Ia5i
-         kO/w==
-X-Gm-Message-State: AOAM530hadDVKhqmar70h1nhPqywQt+0pXwB8KYFIUZARMVe1g9m55OL
-        73bGl+l9wd5aceItGlxm2m0PKA==
-X-Google-Smtp-Source: ABdhPJx6O3QG54jbtM3+68GYNfgyadHMEYPzXTEypnpZ1C+mZMHehDR1WLLZmYv16OhknEgRZIk0wg==
-X-Received: by 2002:a63:68c6:0:b0:380:3fbc:dfb6 with SMTP id d189-20020a6368c6000000b003803fbcdfb6mr10592508pgc.326.1648479085523;
-        Mon, 28 Mar 2022 07:51:25 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id h12-20020a056a00230c00b004faf2563bcasm15408065pfh.114.2022.03.28.07.51.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 07:51:24 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 14:51:21 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] KVM: x86: optimize PKU branching in
- kvm_load_{guest|host}_xsave_state
-Message-ID: <YkHLaS2IPZDCToXk@google.com>
-References: <20220324004439.6709-1-jon@nutanix.com>
- <Yj5bCw0q5n4ZgSuU@google.com>
- <387E8E8B-81B9-40FF-8D52-76821599B7E4@nutanix.com>
- <e8488e5c-7372-fc6e-daee-56633028854a@redhat.com>
- <1E31F2B6-96BF-42E0-AD41-3C512D98D74B@nutanix.com>
+        Mon, 28 Mar 2022 10:54:04 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C330E5DE56
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:52:23 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id CF2831F40887
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648479142;
+        bh=XMWA9qgWgkC/u71lI6wm/PuAiM5oal1tM//wU28I3+Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KpxYfx5mPacmgWtvt0niX7ZGuHbYIYeRj0xTOMgZP7XUOchwKhPwRxny07to7LuBj
+         OJ9HizD4Ma3B8gwDFN+9W6uFPYL7qjVnfWl+BvvWvZ71uxSlsB1qTCFTtP7oNLmHt0
+         VO60a4vdL+8Tzth/2i8qMPikMX4EvoI1wuoIsKaU+uGJ5GZ6SpZp01QjQAg07TETb5
+         +2xfAt/nS2ciDJbTItTh6LFd1P+xmEahKdg5pFrj6iwE8nodPW0W/QA8WEJroO8oHn
+         NyOHs7sVRdDzrysFgIdJhWpuwT5RolACCr4aozGJN2gMfrtIntI3EHQ8WngSSSThs3
+         aVDTi9XfD5/GA==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     chunkuang.hu@kernel.org
+Cc:     p.zabel@pengutronix.de, chunfeng.yun@mediatek.com, kishon@ti.com,
+        vkoul@kernel.org, matthias.bgg@gmail.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2] phy: mediatek: phy-mtk-mipi-dsi: Simplify with dev_err_probe()
+Date:   Mon, 28 Mar 2022 16:52:17 +0200
+Message-Id: <20220328145217.228457-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1E31F2B6-96BF-42E0-AD41-3C512D98D74B@nutanix.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022, Jon Kohler wrote:
-> 
-> 
-> > On Mar 27, 2022, at 6:43 AM, Paolo Bonzini <pbonzini@redhat.com> wrote:
-> > 
-> > On 3/26/22 02:37, Jon Kohler wrote:
-> >>>>    Flip the ordering of the || condition so that XFEATURE_MASK_PKRU is
-> >>>>    checked first, which when instrumented in our environment appeared
-> >>>>    to be always true and less overall work than kvm_read_cr4_bits.
-> >>> 
-> >>> If it's always true, then it should be checked last, not first.  And if
-> >> Sean thanks for the review. This would be a left handed || short circuit, so
-> >> wouldn’t we want always true to be first?
-> > 
-> > Yes.
-> 
-> Ack, thanks.
+Use the dev_err_probe() helper to simplify error handling during probe.
 
-Yeah, I lost track of whether it was a || or &&.
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+
+v2: Sorry, v1 was only partial as I have accidentally sent the
+    wrong patch file. Fixed for v2.
+
+ drivers/phy/mediatek/phy-mtk-mipi-dsi.c | 29 +++++++++----------------
+ 1 file changed, 10 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/phy/mediatek/phy-mtk-mipi-dsi.c b/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
+index 67b005d5b9e3..28506932bd91 100644
+--- a/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
++++ b/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
+@@ -154,11 +154,9 @@ static int mtk_mipi_tx_probe(struct platform_device *pdev)
+ 		return PTR_ERR(mipi_tx->regs);
+ 
+ 	ref_clk = devm_clk_get(dev, NULL);
+-	if (IS_ERR(ref_clk)) {
+-		ret = PTR_ERR(ref_clk);
+-		dev_err(dev, "Failed to get reference clock: %d\n", ret);
+-		return ret;
+-	}
++	if (IS_ERR(ref_clk))
++		return dev_err_probe(dev, PTR_ERR(ref_clk),
++				     "Failed to get reference clock\n");
+ 
+ 	ret = of_property_read_u32(dev->of_node, "drive-strength-microamp",
+ 				   &mipi_tx->mipitx_drive);
+@@ -178,27 +176,20 @@ static int mtk_mipi_tx_probe(struct platform_device *pdev)
+ 
+ 	ret = of_property_read_string(dev->of_node, "clock-output-names",
+ 				      &clk_init.name);
+-	if (ret < 0) {
+-		dev_err(dev, "Failed to read clock-output-names: %d\n", ret);
+-		return ret;
+-	}
++	if (ret < 0)
++		return dev_err_probe(dev, ret, "Failed to read clock-output-names\n");
+ 
+ 	clk_init.ops = mipi_tx->driver_data->mipi_tx_clk_ops;
+ 
+ 	mipi_tx->pll_hw.init = &clk_init;
+ 	mipi_tx->pll = devm_clk_register(dev, &mipi_tx->pll_hw);
+-	if (IS_ERR(mipi_tx->pll)) {
+-		ret = PTR_ERR(mipi_tx->pll);
+-		dev_err(dev, "Failed to register PLL: %d\n", ret);
+-		return ret;
+-	}
++	if (IS_ERR(mipi_tx->pll))
++		return dev_err_probe(dev, PTR_ERR(mipi_tx->pll), "Failed to register PLL\n");
+ 
+ 	phy = devm_phy_create(dev, NULL, &mtk_mipi_tx_ops);
+-	if (IS_ERR(phy)) {
+-		ret = PTR_ERR(phy);
+-		dev_err(dev, "Failed to create MIPI D-PHY: %d\n", ret);
+-		return ret;
+-	}
++	if (IS_ERR(phy))
++		return dev_err_probe(dev, PTR_ERR(phy), "Failed to create MIPI D-PHY\n");
++
+ 	phy_set_drvdata(phy, mipi_tx);
+ 
+ 	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+-- 
+2.35.1
+

@@ -2,118 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E42A4E9D4B
+	by mail.lfdr.de (Postfix) with ESMTP id CA0DA4E9D4C
 	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244298AbiC1RS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 13:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
+        id S244548AbiC1RTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 13:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236199AbiC1RS5 (ORCPT
+        with ESMTP id S244547AbiC1RTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 13:18:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0187164BE0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:17:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 891FCB8117D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 17:17:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3505C340F0;
-        Mon, 28 Mar 2022 17:17:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648487833;
-        bh=tsHOIB8dmpEnEigOmeEzDX7+3UaF+f5tQDsXH8gievU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=R+dhNRJ3fJh94YsiEAPa1fz1v7bIvyALQBN7pfBRthhbjgJBB/MVXl5gZBOQsiMlV
-         VwO+I5g9NbgOzKZh0i+HOw+qKjeDKND6BAodGwsbLoQEqH98Syj8UynG/+rr6US8Uu
-         j4FSxhaE/h0BO8fghQhNfSv+5SKpiq9r3JuHUTvcu+oF+f1kztqR4CznJQWopZFJ7L
-         O3auhUsc+FUZoUaKW+2xQSjLd4e1yRCzmxz5S+odM3LswUuClzU2xXNxcTmUTuNKh/
-         C4v+QgKdbNiA73tkI5Sqk9Z6vuknKXg36V2QT79anPX7LTPEgSBeB780JEjCX6kCDg
-         dRqiMKebjRkcQ==
-Date:   Mon, 28 Mar 2022 10:17:11 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Eric Dumazet <edumazet@google.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Brian Vazquez <brianvv@google.com>,
-        linux-riscv@lists.infradead.org
-Subject: Re: net/core/dev.c:10290:18: sparse: sparse: cast removes address
- space '__percpu' of expression
-Message-ID: <20220328101711.111e1dd5@kernel.org>
-In-Reply-To: <202203281436.hsNgYWWu-lkp@intel.com>
-References: <202203281436.hsNgYWWu-lkp@intel.com>
+        Mon, 28 Mar 2022 13:19:43 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8D263BC4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:17:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=ilMcPBjUCXJWeW2dVgPW5uEUuNJPkXASfjLKkiNNkIs=; b=T+m65BH3m8iNnGqfbRdiWmAMiA
+        trFg2yKWGqWUm5wBcKzDvtyri4OXqPn53c9WSF/uTjShv6yV+tIVD/IXPNgqMaUoURo5vHhn4Yjq4
+        VEksJMCVhNm5Etic2RzIDePf8s4cjoTReycG1WycSJfKINPR4mT1oINBgGKXQ4sgtWvX1p70ORkzE
+        ZVf6vuMenbeaplCsUScybdMuwHL06NMP+alz/e3R9RkJrPNoDsN7hoecRXJPRLjv2FdwpFHZ9iHwO
+        OZ4fBd90lGZzmGvnreKv6kmD1hEmRGvjBWO3AqlehAKFfk6ENC7uZ9AOXXxaSrNG02qtg+eDzxWgn
+        5lK0Yesg==;
+Received: from [165.90.126.25] (helo=mail.igalia.com)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1nYt04-0006lu-Qv; Mon, 28 Mar 2022 19:17:52 +0200
+Date:   Mon, 28 Mar 2022 16:17:38 -0100
+From:   Melissa Wen <mwen@igalia.com>
+To:     Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
+Cc:     amd-gfx@lists.freedesktop.org, harry.wentland@amd.com,
+        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
+        alexander.deucher@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jasdeep Dhillon <jdhillon@amd.com>
+Subject: Re: [PATCH 1/2] drm/amd/display: detach fpu operations from
+ dcn10_validate_bandwidth in calcs
+Message-ID: <20220328171738.iu5peqfcled2psv3@mail.igalia.com>
+References: <20220326202448.2046077-1-mwen@igalia.com>
+ <20220326202448.2046077-2-mwen@igalia.com>
+ <1586f68e-c635-482f-9399-2b027b766543@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nck3fakny2nfpihg"
+Content-Disposition: inline
+In-Reply-To: <1586f68e-c635-482f-9399-2b027b766543@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CC: riscv, is there something special about cmpxchg() on that arch?
-We don't see it on x86, and I don't see anything special in the code
-for riscv, at least on 5.17.
 
-On Mon, 28 Mar 2022 14:28:34 +0800 kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   ae085d7f9365de7da27ab5c0d16b12d51ea7fca9
-> commit: 625788b5844511cf4c30cffa7fa0bc3a69cebc82 net: add per-cpu storage and net->core_stats
-> date:   2 weeks ago
-> config: riscv-randconfig-s032-20220328 (https://download.01.org/0day-ci/archive/20220328/202203281436.hsNgYWWu-lkp@intel.com/config)
-> compiler: riscv64-linux-gcc (GCC) 11.2.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # apt-get install sparse
->         # sparse version: v0.6.4-dirty
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=625788b5844511cf4c30cffa7fa0bc3a69cebc82
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 625788b5844511cf4c30cffa7fa0bc3a69cebc82
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash net/core/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> 
-> sparse warnings: (new ones prefixed by >>)
->    net/core/dev.c:3254:23: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected restricted __wsum [usertype] csum @@     got unsigned int @@
->    net/core/dev.c:3254:23: sparse:     expected restricted __wsum [usertype] csum
->    net/core/dev.c:3254:23: sparse:     got unsigned int
->    net/core/dev.c:3254:23: sparse: sparse: cast from restricted __wsum
-> >> net/core/dev.c:10290:18: sparse: sparse: cast removes address space '__percpu' of expression  
->    net/core/dev.c:3759:17: sparse: sparse: context imbalance in '__dev_queue_xmit' - different lock contexts for basic block
->    net/core/dev.c:4961:17: sparse: sparse: context imbalance in 'net_tx_action' - different lock contexts for basic block
-> 
-> vim +/__percpu +10290 net/core/dev.c
-> 
->  10282	
->  10283	struct net_device_core_stats *netdev_core_stats_alloc(struct net_device *dev)
->  10284	{
->  10285		struct net_device_core_stats __percpu *p;
->  10286	
->  10287		p = alloc_percpu_gfp(struct net_device_core_stats,
->  10288				     GFP_ATOMIC | __GFP_NOWARN);
->  10289	
->  10290		if (p && cmpxchg(&dev->core_stats, NULL, p))
->  10291			free_percpu(p);
->  10292	
->  10293		/* This READ_ONCE() pairs with the cmpxchg() above */
->  10294		p = READ_ONCE(dev->core_stats);
->  10295		if (!p)
->  10296			return NULL;
->  10297	
->  10298		return this_cpu_ptr(p);
->  10299	}
->  10300	EXPORT_SYMBOL(netdev_core_stats_alloc);
->  10301	
-> 
+--nck3fakny2nfpihg
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On 03/28, Christian K=F6nig wrote:
+> Am 26.03.22 um 21:24 schrieb Melissa Wen:
+> > dcn10_validate_bandwidth is only used on dcn10 files, but is declared in
+> > dcn_calcs files. Rename dcn10_* to dcn_* in calcs, remove DC_FP_* wrapp=
+er
+> > inside DML folder and create an specific dcn10_validate_bandwidth in
+> > dcn10_resources that calls dcn_validate_bandwidth and properly wraps th=
+at
+> > FPU function with DC_FP_* macro.
+> >=20
+> > Signed-off-by: Melissa Wen <mwen@igalia.com>
+> > ---
+> >   .../gpu/drm/amd/display/dc/dcn10/dcn10_resource.c  | 14 ++++++++++++++
+> >   .../gpu/drm/amd/display/dc/dml/calcs/dcn_calcs.c   |  5 +----
+> >   drivers/gpu/drm/amd/display/dc/inc/dcn_calcs.h     |  2 +-
+> >   3 files changed, 16 insertions(+), 5 deletions(-)
+> >=20
+> > diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c b/dr=
+ivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c
+> > index 4048908dd265..1587a060b55a 100644
+> > --- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c
+> > +++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c
+> > @@ -1141,6 +1141,20 @@ static void dcn10_destroy_resource_pool(struct r=
+esource_pool **pool)
+> >   	*pool =3D NULL;
+> >   }
+> > +static bool dcn10_validate_bandwidth(
+> > +		struct dc *dc,
+> > +		struct dc_state *context,
+> > +		bool fast_validate)
+> > +{
+> > +	bool voltage_supported;
+> > +
+> > +	DC_FP_START();
+> > +	voltage_supported =3D dcn_validate_bandwidth(dc, context, fast_valida=
+te);
+> > +	DC_FP_END();
+> > +
+> > +	return voltage_supported;
+> > +}
+> > +
+> >   static enum dc_status dcn10_validate_plane(const struct dc_plane_stat=
+e *plane_state, struct dc_caps *caps)
+> >   {
+> >   	if (plane_state->format >=3D SURFACE_PIXEL_FORMAT_VIDEO_BEGIN
+> > diff --git a/drivers/gpu/drm/amd/display/dc/dml/calcs/dcn_calcs.c b/dri=
+vers/gpu/drm/amd/display/dc/dml/calcs/dcn_calcs.c
+> > index e447c74be713..c25023f7d604 100644
+> > --- a/drivers/gpu/drm/amd/display/dc/dml/calcs/dcn_calcs.c
+> > +++ b/drivers/gpu/drm/amd/display/dc/dml/calcs/dcn_calcs.c
+> > @@ -764,7 +764,7 @@ static unsigned int get_highest_allowed_voltage_lev=
+el(uint32_t chip_family,
+> >   	return 4;
+> >   }
+> > -bool dcn10_validate_bandwidth(
+> > +bool dcn_validate_bandwidth(
+> >   		struct dc *dc,
+> >   		struct dc_state *context,
+> >   		bool fast_validate)
+> > @@ -790,7 +790,6 @@ bool dcn10_validate_bandwidth(
+> >   		dcn_bw_sync_calcs_and_dml(dc);
+> >   	memset(v, 0, sizeof(*v));
+> > -	DC_FP_START();
+> >   	v->sr_exit_time =3D dc->dcn_soc->sr_exit_time;
+> >   	v->sr_enter_plus_exit_time =3D dc->dcn_soc->sr_enter_plus_exit_time;
+> > @@ -1323,8 +1322,6 @@ bool dcn10_validate_bandwidth(
+> >   	bw_limit =3D dc->dcn_soc->percent_disp_bw_limit * v->fabric_and_dram=
+_bandwidth_vmax0p9;
+> >   	bw_limit_pass =3D (v->total_data_read_bandwidth / 1000.0) < bw_limit;
+> > -	DC_FP_END();
+> > -
+> >   	PERFORMANCE_TRACE_END();
+> >   	BW_VAL_TRACE_FINISH();
+> > diff --git a/drivers/gpu/drm/amd/display/dc/inc/dcn_calcs.h b/drivers/g=
+pu/drm/amd/display/dc/inc/dcn_calcs.h
+> > index 337c0161e72d..806f3041db14 100644
+> > --- a/drivers/gpu/drm/amd/display/dc/inc/dcn_calcs.h
+> > +++ b/drivers/gpu/drm/amd/display/dc/inc/dcn_calcs.h
+> > @@ -619,7 +619,7 @@ struct dcn_ip_params {
+> >   };
+> >   extern const struct dcn_ip_params dcn10_ip_defaults;
+> > -bool dcn10_validate_bandwidth(
+> > +bool dcn_validate_bandwidth(
+> >   		struct dc *dc,
+> >   		struct dc_state *context,
+> >   		bool fast_validate);
+>=20
+> Just for the record: That's not really usual kernel coding style, but tha=
+t's
+> not topic of this patch set.
+Yeah. I didn't change the code style to ease any version conflict managemen=
+t.
+>=20
+> The series is Acked-by: Christian K=F6nig <christian.koenig@amd.com>
+
+Thanks!
+>=20
+> And it would be really nice if we could make the DC_FP_* macros somehow f=
+ail
+> in the dml folder.
+
+And if we include a kind of dc_assert_fp_disabled() in the dc_fpu_begin()
+(DC_FP_START) - more or less the reverse of dc_assert_fp_enabled(). Does
+it meet the `make the DC_FP_* macros somehow fail in the dml folder` ?
+It is not restricted to the dml folder, but I think it would work
+similarly... Does it make sense?
+
+Melissa
+
+>=20
+> Thanks,
+> Christian.
+>=20
+>=20
+
+--nck3fakny2nfpihg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmJB7a4ACgkQwqF3j0dL
+ehwrzA//QJ6AXYIDEi3GqSLj5lCIMmah8UIxpKgnr8qwFlwj7C/PjnJyOTGe0snd
+dTwfd7G0rsmfcYkS/YtqKT+/9Vbfv596xSNOBVAZoQxJ2+ffNdG854aKEM1Mx512
+OL3X5/3oOb0uc6Z3xjOa2vYRc0RssXdUwvU6DaKFsAx2tYLN5M62E/k6WP83B1wR
+hphGK3wj81ihN6hmyucmhvQI88eHCyayrTWKyUlDCjMUJFr+7A5F0jbbg73fahVQ
+o73TCuuThqRT+Irp42o3/HmPsvyjaPhH1wnkfjsZeXBiw0FB8GkZmAYGPx4A5rXK
+8b3OlT9jIQ99cLojzWh5voRWKZsQ9Tu0/HFIqayseg70d4I24zt8Sn9XtZTOVCvl
+aFPQc3RUhKPjgbgb/1BUX9NPd+uB6Db8UdpcTM5vA+tf2rzpFFgIqbLfmM82fhkp
+wjUDaI8iN0NVIkMy/BZ/t6DQ6BfYJCly3d68BDfpcNnlWl8EAqjW5X3LcEwaqtZ0
+F96jQ6MbqhX9I6Xvn0rMVQQuyWGW6/cJzgCqq0UsKXg7SKJmqP4dtK6mrgP5RvVk
+gTU9FjmowMVGuFiGN/i1QPHN8eCc0FVmFjs4/uEWWWkCFbjxJLu1VJmiMBLhUpun
+XfyfThUfwoj//5unmAqYryRL4V3KRdluzAti6iDjLAzi5q+I8+M=
+=jExT
+-----END PGP SIGNATURE-----
+
+--nck3fakny2nfpihg--

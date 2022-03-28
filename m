@@ -2,67 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A8F84E8EE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 09:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C645B4E8EE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 09:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238793AbiC1HXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 03:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
+        id S236714AbiC1HZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 03:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231468AbiC1HXa (ORCPT
+        with ESMTP id S231468AbiC1HZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 03:23:30 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CBF1706A;
-        Mon, 28 Mar 2022 00:21:50 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id g22so4698112edz.2;
-        Mon, 28 Mar 2022 00:21:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=v9u93oacVo0WHHkBTfuXklapfqlel1OBBUvggiuQ4ZE=;
-        b=TGOTnXKUAHCIU+stD2wybSqfdtfoxvgH3A2+xJNSodC0jc+8BvRxwtj5M9TwCuSfFD
-         h7Gxsh+qK4FuccKgFkv7RWxygNtbFB3uc+JtkkbbfkEDkBHbLQYcJ1cmVQYpf0ukDtM9
-         ykbYu8ztxRjnG+3kus2DH+R/trvdJvbkrxwjTmHiZZP0PEL7Ps17OCIojazwAZ/I2muQ
-         XYLmXu2Vvetq3BTgc7Tu+zCJXqFwbfZHD0hqzrCIdQOwc6tb9M5YFVVZTpgRr/xykg+X
-         zVslnUaM6ujpCVDEor4QgazueP+anJGjRvo3rcAIQn/PuvMnGUNlj7jaVldAhCn+f+oQ
-         P9UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=v9u93oacVo0WHHkBTfuXklapfqlel1OBBUvggiuQ4ZE=;
-        b=rYb41kVWvJs9NkSbkFVisnu7yxHfvWOhNyXcpa5/5MjVUXGdzl7uQ5MknynSgZM+z9
-         JDwq+yeL2WbCfBi3xOGGlXbXlwzsL92McERu1hbomDs7nilbuYvFqF3kkm9f5aUF8ILC
-         IkL9VQ3xoHNFMwaj7DEjfFo701HWVUNgwbFmQfnlhKp3sBr2LYaXDOw52HL/EHjKliz2
-         rjupnYvesqE4NjOcjML8i/D/sj5NdnNJBGYhvMXHN7UyPSy0WQt1qNv+xtSjHgt7z1NC
-         svbxkz2dCpHvTrPOC/eJLehNmQksm/qzW/H8V4OMYHlqbjBvuIQLfqHf8vlvPrKMTnKQ
-         rmsQ==
-X-Gm-Message-State: AOAM533Fz8QfyQBb2UI+Ebe61Y/64sxVN6CEW17WpCtXGY9fWrfZJXje
-        4FGGj/En0osvNUl3s2WQzD8=
-X-Google-Smtp-Source: ABdhPJwp0NDJizEMGzCurWCE3EkvJVdpD/qGorSycoQ524nmUamymlU4x2gOmtdnw2N6IIC4XLpTSQ==
-X-Received: by 2002:a05:6402:84b:b0:419:105:f516 with SMTP id b11-20020a056402084b00b004190105f516mr14735753edz.3.1648452108484;
-        Mon, 28 Mar 2022 00:21:48 -0700 (PDT)
-Received: from leap.localnet (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
-        by smtp.gmail.com with ESMTPSA id gn33-20020a1709070d2100b006dfcce8be86sm5595208ejc.225.2022.03.28.00.21.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 00:21:46 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Cc:     syzbot <syzbot+f08c77040fa163a75a46@syzkaller.appspotmail.com>
-Subject: Re: [syzbot] memory leak in blk_mq_init_tags
-Date:   Mon, 28 Mar 2022 09:21:38 +0200
-Message-ID: <12985729.uLZWGnKmhe@leap>
-In-Reply-To: <000000000000c341cc05db38c1b0@google.com>
-References: <000000000000c341cc05db38c1b0@google.com>
+        Mon, 28 Mar 2022 03:25:33 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622BA205D8
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 00:23:53 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KRkh80r80z1GD2V;
+        Mon, 28 Mar 2022 15:23:36 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 28 Mar 2022 15:23:50 +0800
+Subject: Re: [PATCH 2/2] mm/vmscan: make sure wakeup_kswapd with managed zone
+To:     "Huang, Ying" <ying.huang@intel.com>,
+        Wei Yang <richard.weiyang@gmail.com>
+CC:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <mgorman@techsingularity.net>
+References: <20220327024101.10378-1-richard.weiyang@gmail.com>
+ <20220327024101.10378-2-richard.weiyang@gmail.com>
+ <8735j2opd9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <8ff6f619-e04a-d785-fa9a-6822c04d4ee1@huawei.com>
+Date:   Mon, 28 Mar 2022 15:23:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="nextPart2823658.e9J7NaK4W3"
-Content-Transfer-Encoding: 7Bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <8735j2opd9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,163 +54,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
+On 2022/3/28 9:08, Huang, Ying wrote:
+> Hi, Wei,
+> 
+> Wei Yang <richard.weiyang@gmail.com> writes:
+> 
+>> wakeup_kswapd() only wake up kswapd when the zone is managed.
+>>
+>> For two callers of wakeup_kswapd(), they are node perspective.
+>>
+>>   * wake_all_kswapds
+>>   * numamigrate_isolate_page
+>>
+>> If we picked up a !managed zone, this is not we expected.
+>>
+>> This patch makes sure we pick up a managed zone for wakeup_kswapd().
+>>
+>> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+>> ---
+>>  mm/migrate.c    | 2 +-
+>>  mm/page_alloc.c | 2 ++
+>>  2 files changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/mm/migrate.c b/mm/migrate.c
+>> index 3d60823afd2d..c4b654c0bdf0 100644
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -2046,7 +2046,7 @@ static int numamigrate_isolate_page(pg_data_t *pgdat, struct page *page)
+>>  		if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING))
+>>  			return 0;
+>>  		for (z = pgdat->nr_zones - 1; z >= 0; z--) {
+>> -			if (populated_zone(pgdat->node_zones + z))
+>> +			if (managed_zone(pgdat->node_zones + z))
+> 
+> This looks good to me!  Thanks!  It seems that we can replace
+> populated_zone() in migrate_balanced_pgdat() too.  Right?
 
---nextPart2823658.e9J7NaK4W3
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
+This patch looks good to me too. Thanks!
 
-On domenica 27 marzo 2022 22:08:18 CEST syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    6b1f86f8e9c7 Merge tag 'folio-5.18b' of git://git.infradea..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=13b41dcb700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c6e80763d853259b
-> dashboard link: https://syzkaller.appspot.com/bug?extid=f08c77040fa163a75a46
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1564ecb3700000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+f08c77040fa163a75a46@syzkaller.appspotmail.com
-> 
-> BUG: memory leak
-> unreferenced object 0xffff888118503c00 (size 192):
->   comm "kworker/u4:2", pid 52, jiffies 4294961137 (age 11.420s)
->   hex dump (first 32 bytes):
->     02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     02 00 00 00 06 00 00 00 01 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<ffffffff822c042b>] kmalloc_node include/linux/slab.h:602 [inline]
->     [<ffffffff822c042b>] kzalloc_node include/linux/slab.h:728 [inline]
->     [<ffffffff822c042b>] blk_mq_init_tags+0x4b/0xc0 block/blk-mq-tag.c:578
->     [<ffffffff822b6caa>] blk_mq_alloc_rq_map+0xea/0x1a0 block/blk-mq.c:3169
->     [<ffffffff822bbb86>] blk_mq_alloc_map_and_rqs+0x26/0xb0 block/blk-mq.c:3620
->     [<ffffffff822c3437>] blk_mq_sched_alloc_map_and_rqs block/blk-mq-sched.c:507 [inline]
->     [<ffffffff822c3437>] blk_mq_init_sched+0x127/0x2e0 block/blk-mq-sched.c:587
->     [<ffffffff8229e6f9>] elevator_init_mq+0x1f9/0x240 block/elevator.c:709
->     [<ffffffff822c7085>] device_add_disk+0x25/0x510 block/genhd.c:421
->     [<ffffffff82846437>] sd_probe+0x457/0x670 drivers/scsi/sd.c:3551
->     [<ffffffff8270c477>] call_driver_probe drivers/base/dd.c:517 [inline]
->     [<ffffffff8270c477>] really_probe.part.0+0xe7/0x380 drivers/base/dd.c:596
->     [<ffffffff8270c81c>] really_probe drivers/base/dd.c:558 [inline]
->     [<ffffffff8270c81c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:755
->     [<ffffffff8270c91a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:785
->     [<ffffffff8270d186>] __device_attach_driver+0xf6/0x140 drivers/base/dd.c:902
->     [<ffffffff827093e7>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:427
->     [<ffffffff8270b9ef>] __device_attach_async_helper+0xcf/0x110 drivers/base/dd.c:931
->     [<ffffffff8127cf94>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
->     [<ffffffff8126b3ef>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
->     [<ffffffff8126bd19>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-> 
-> BUG: memory leak
-> unreferenced object 0xffff888117fee680 (size 128):
->   comm "kworker/u4:2", pid 52, jiffies 4294961137 (age 11.420s)
->   hex dump (first 32 bytes):
->     01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<ffffffff8240b6be>] kmalloc_array_node include/linux/slab.h:679 [inline]
->     [<ffffffff8240b6be>] kcalloc_node include/linux/slab.h:684 [inline]
->     [<ffffffff8240b6be>] sbitmap_init_node+0xde/0x2d0 lib/sbitmap.c:113
->     [<ffffffff8240b8ec>] sbitmap_queue_init_node+0x3c/0x1f0 lib/sbitmap.c:428
->     [<ffffffff822c0347>] bt_alloc block/blk-mq-tag.c:543 [inline]
->     [<ffffffff822c0347>] blk_mq_init_bitmaps+0x57/0xf0 block/blk-mq-tag.c:555
->     [<ffffffff822c0468>] blk_mq_init_tags+0x88/0xc0 block/blk-mq-tag.c:586
->     [<ffffffff822b6caa>] blk_mq_alloc_rq_map+0xea/0x1a0 block/blk-mq.c:3169
->     [<ffffffff822bbb86>] blk_mq_alloc_map_and_rqs+0x26/0xb0 block/blk-mq.c:3620
->     [<ffffffff822c3437>] blk_mq_sched_alloc_map_and_rqs block/blk-mq-sched.c:507 [inline]
->     [<ffffffff822c3437>] blk_mq_init_sched+0x127/0x2e0 block/blk-mq-sched.c:587
->     [<ffffffff8229e6f9>] elevator_init_mq+0x1f9/0x240 block/elevator.c:709
->     [<ffffffff822c7085>] device_add_disk+0x25/0x510 block/genhd.c:421
->     [<ffffffff82846437>] sd_probe+0x457/0x670 drivers/scsi/sd.c:3551
->     [<ffffffff8270c477>] call_driver_probe drivers/base/dd.c:517 [inline]
->     [<ffffffff8270c477>] really_probe.part.0+0xe7/0x380 drivers/base/dd.c:596
->     [<ffffffff8270c81c>] really_probe drivers/base/dd.c:558 [inline]
->     [<ffffffff8270c81c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:755
->     [<ffffffff8270c91a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:785
->     [<ffffffff8270d186>] __device_attach_driver+0xf6/0x140 drivers/base/dd.c:902
->     [<ffffffff827093e7>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:427
->     [<ffffffff8270b9ef>] __device_attach_async_helper+0xcf/0x110 drivers/base/dd.c:931
-> 
-> BUG: memory leak
-> unreferenced object 0xffff888116df4c00 (size 512):
->   comm "kworker/u4:2", pid 52, jiffies 4294961137 (age 11.420s)
->   hex dump (first 32 bytes):
->     01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     10 4c df 16 81 88 ff ff 10 4c df 16 81 88 ff ff  .L.......L......
->   backtrace:
->     [<ffffffff8240b9b8>] kmalloc_node include/linux/slab.h:602 [inline]
->     [<ffffffff8240b9b8>] kzalloc_node include/linux/slab.h:728 [inline]
->     [<ffffffff8240b9b8>] sbitmap_queue_init_node+0x108/0x1f0 lib/sbitmap.c:438
->     [<ffffffff822c0377>] bt_alloc block/blk-mq-tag.c:543 [inline]
->     [<ffffffff822c0377>] blk_mq_init_bitmaps+0x87/0xf0 block/blk-mq-tag.c:557
->     [<ffffffff822c0468>] blk_mq_init_tags+0x88/0xc0 block/blk-mq-tag.c:586
->     [<ffffffff822b6caa>] blk_mq_alloc_rq_map+0xea/0x1a0 block/blk-mq.c:3169
->     [<ffffffff822bbb86>] blk_mq_alloc_map_and_rqs+0x26/0xb0 block/blk-mq.c:3620
->     [<ffffffff822c3437>] blk_mq_sched_alloc_map_and_rqs block/blk-mq-sched.c:507 [inline]
->     [<ffffffff822c3437>] blk_mq_init_sched+0x127/0x2e0 block/blk-mq-sched.c:587
->     [<ffffffff8229e6f9>] elevator_init_mq+0x1f9/0x240 block/elevator.c:709
->     [<ffffffff822c7085>] device_add_disk+0x25/0x510 block/genhd.c:421
->     [<ffffffff82846437>] sd_probe+0x457/0x670 drivers/scsi/sd.c:3551
->     [<ffffffff8270c477>] call_driver_probe drivers/base/dd.c:517 [inline]
->     [<ffffffff8270c477>] really_probe.part.0+0xe7/0x380 drivers/base/dd.c:596
->     [<ffffffff8270c81c>] really_probe drivers/base/dd.c:558 [inline]
->     [<ffffffff8270c81c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:755
->     [<ffffffff8270c91a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:785
->     [<ffffffff8270d186>] __device_attach_driver+0xf6/0x140 drivers/base/dd.c:902
->     [<ffffffff827093e7>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:427
->     [<ffffffff8270b9ef>] __device_attach_async_helper+0xcf/0x110 drivers/base/dd.c:931
->     [<ffffffff8127cf94>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-> 
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
-> 
-> -- 
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000c341cc05db38c1b0%40google.com.
-> 
-I think that, if device_add_disk() fails, the code should jump to the 
-"out_free_index" label. 
+BTW: This makes me remember the bewilderment when I read the relevant code.
+It's very kind of you if you could tell me the difference between
+managed_zone and populated_zone. IIUC, when the caller relies on the
+activity from buddy system, managed_zone should always be used. I think
+there're many places like compaction need to use managed_zone but
+populated_zone is used now. They might need to change to use managed_zone
+too. Or am I miss something?
 
-Let's try if my argument is correct...
+Many Thanks. :)
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-
-Fabio
-
---nextPart2823658.e9J7NaK4W3
-Content-Disposition: attachment; filename="diff"
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/x-patch; charset="UTF-8"; name="diff"
-
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index a390679cf458..cd310eb406bb 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -3434,7 +3434,7 @@ static int sd_probe(struct device *dev)
- 	error = device_add(&sdkp->disk_dev);
- 	if (error) {
- 		put_device(&sdkp->disk_dev);
--		goto out;
-+		goto out_free_index;
- 	}
- 
- 	dev_set_drvdata(dev, sdkp);
-
---nextPart2823658.e9J7NaK4W3--
-
-
+> 
+>>  				break;
+>>  		}
+>>  		wakeup_kswapd(pgdat->node_zones + z, 0, order, ZONE_MOVABLE);
+>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>> index 4c0c4ef94ba0..6656c2d06e01 100644
+>> --- a/mm/page_alloc.c
+>> +++ b/mm/page_alloc.c
+>> @@ -4674,6 +4674,8 @@ static void wake_all_kswapds(unsigned int order, gfp_t gfp_mask,
+>>  
+>>  	for_each_zone_zonelist_nodemask(zone, z, ac->zonelist, highest_zoneidx,
+>>  					ac->nodemask) {
+>> +		if (!managed_zone(zone))
+>> +			continue;
+>>  		if (last_pgdat != zone->zone_pgdat)
+>>  			wakeup_kswapd(zone, gfp_mask, order, highest_zoneidx);
+>>  		last_pgdat = zone->zone_pgdat;
+> 
+> Best Regards,
+> Huang, Ying
+> 
+> .
+> 
 

@@ -2,112 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8422D4E98C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 749C44E98C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242277AbiC1N4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 09:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45068 "EHLO
+        id S243521AbiC1N5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 09:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233194AbiC1N4h (ORCPT
+        with ESMTP id S234398AbiC1N5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 09:56:37 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5263D3ED34;
-        Mon, 28 Mar 2022 06:54:56 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 856811F42AAD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648475695;
-        bh=93dA8FqYNp/Lt0Zjhk8lbR0S/JZ+vwD2obtfNGwvT9k=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=KQMS29eMxg8jrJxNMnr1l3jR2gpWeys+qwiBVvwG9sKokh3/MdoMaow+vqOBWlLNl
-         B8gaYSG5RrP3uRI6NW/7fOSDseJNzgYymCvrythI8PxI6Sh91JEnzBOhWDLtzgSUZc
-         9SJyLPFYulCwU+4cxVWr/j1zo+pWB61LilNV31K2ydtfj7rUZD/lc8mjWFYrbhDTl/
-         rqWkXmci9gLpTG9e5ZcUUD4EI7jCMoz58/U1Moho+yuqdrecQDZSfeLrRI67cGW99c
-         S2SawVjwMzea5rQeLqt8PQdO4jkfqy/zo3koFbfRyO9hDVbzTovLwfUEOMIYsSsF6Z
-         EiDKJPsG0ibbA==
-Message-ID: <a2421f17-fa0f-bc8c-f55d-9526ed844998@collabora.com>
-Date:   Mon, 28 Mar 2022 15:54:51 +0200
+        Mon, 28 Mar 2022 09:57:08 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322A64EA38
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:55:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gaThz6ESM1nDJuMoy7Het8pna8psJjs6H6kDuboA//s=; b=McueSvhmwWHn7UYU9iLjWmtLZZ
+        3AOotlv0qDVEP9R8l4oM0drN0Mx5SdDaYRwMV5vPamLIcGB1kI4pp+7aBYc+8DtyPAFZXU8h1AtuM
+        eltsWd+XfN2WlLKIFtgW45vScrzOuEYXL9xoMSAIthleSt8+cAK60WW+3HaQs7yDNusub8n3iZDZZ
+        QBHpaSheVqL63+bUdOi07QJ1HzVhShM8f9pVyatILw/MOHSGBGM5ZUUgPRBHkGqYdzLLYPX6DzSTs
+        NWxhskiCCLvtKxqd9PwOdHGdV6NTvp9VrZc5xcwZi9QbnGxGJqteRuV+zPlB/VekgY2jl4wmSyqiZ
+        S7Xvsimg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nYpq0-00GyPo-B3; Mon, 28 Mar 2022 13:55:16 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C05CA9861EA; Mon, 28 Mar 2022 15:55:14 +0200 (CEST)
+Date:   Mon, 28 Mar 2022 15:55:14 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Dennis Zhou <dennis@kernel.org>,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>
+Subject: Re: [PATCH 0/3] Remove volatile from arch_raw_cpu_ptr() and revert
+ the hacks.
+Message-ID: <20220328135514.GE8939@worktop.programming.kicks-ass.net>
+References: <CAHk-=wh81PAKxapicYOby3WWOFJV2htR5KWCRdKNgw68mOc0Zg@mail.gmail.com>
+ <20220324173927.2230447-1-bigeasy@linutronix.de>
+ <CAHk-=wgcM9vUjGTdoCbX4DuBM+53FFmHFqYZdF8mNzATwj8z0A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] PCI: mediatek: Update entries to distinguish MediaTek
- PCIe controller
-Content-Language: en-US
-To:     Jianjun Wang <jianjun.wang@mediatek.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Ryder Lee <ryder.lee@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220326032708.3626-1-jianjun.wang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220326032708.3626-1-jianjun.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgcM9vUjGTdoCbX4DuBM+53FFmHFqYZdF8mNzATwj8z0A@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 26/03/22 04:27, Jianjun Wang ha scritto:
-> Add model numbers in Kconfig and update driver name in
-> pcie-mediatek-gen3.c to distinguish the MediaTek PCIe controllers.
-> 
-> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> ---
->   drivers/pci/controller/Kconfig              | 11 +++++++----
->   drivers/pci/controller/pcie-mediatek-gen3.c | 12 ++++++------
->   2 files changed, 13 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-> index 601f2531ee91..dd7a2caf8da9 100644
-> --- a/drivers/pci/controller/Kconfig
-> +++ b/drivers/pci/controller/Kconfig
-> @@ -237,8 +237,11 @@ config PCIE_MEDIATEK
->   	depends on OF
->   	depends on PCI_MSI_IRQ_DOMAIN
->   	help
-> -	  Say Y here if you want to enable PCIe controller support on
-> -	  MediaTek SoCs.
-> +	  Adds support for PCIe MAC controller for MediaTek SoCs.
-> +
-> +	  The following SoCs are supported for this PCIe controller:
-> +	  MT2701 and MT7623 with no MSI supported.
-> +	  MT2712, MT7622 and MT7629 support up to 32 MSI interrupt numbers.
->   
->   config PCIE_MEDIATEK_GEN3
->   	tristate "MediaTek Gen3 PCIe controller"
-> @@ -250,8 +253,8 @@ config PCIE_MEDIATEK_GEN3
->   	  and support up to 256 MSI interrupt numbers for
->   	  multi-function devices.
->   
-> -	  Say Y here if you want to enable Gen3 PCIe controller support on
-> -	  MediaTek SoCs.
-> +	  The following SoCs are supported for this PCIe controller:
-> +	  MT8192 and MT8195.
+On Thu, Mar 24, 2022 at 11:28:16AM -0700, Linus Torvalds wrote:
 
-I agree with the pcie-mediatek-gen3 naming change, it's good to differentiate,
-but I don't think that updating the Kconfig description is a good idea.
+> So Ack on your series, but that additional comment might be worth it,
+> since I didn't even think of it until you mentioned it. Clearly much
+> too subtle.
 
-Everyone can get the list of supported SoCs by reading the dt-bindings for these
-drivers, so it's unnecessary to make a list of SoCs in Kconfig... this is also
-to avoid updating these entries everytime support for a new chip is added to the
-gen3 (or the other) driver.
-
-If nobody opposes to my proposal - please drop that description change.
-
-Regards,
-Angelo
+Sebastian, were you going to resend these patches with that comment on,
+or should I go collect them as is for post -rc1?

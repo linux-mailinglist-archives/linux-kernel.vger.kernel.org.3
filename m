@@ -2,101 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 188614E9A69
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD664E9AA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244261AbiC1PKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 11:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
+        id S243782AbiC1PNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 11:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244253AbiC1PKe (ORCPT
+        with ESMTP id S244580AbiC1PNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 11:10:34 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F8D286C4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:08:52 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id h23so20839685wrb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:08:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HNhb7r/LKhCf7ktLcFjFiDUTXjUe/4x79E9mxzYgx1o=;
-        b=nU9yW6rS1+26VMUlhMihK742eYLWAVyY979qq0i723Yt0460w264cwqXztxkZOkG+h
-         is9yHp/h1rhhIWWeSonnZ3mHkbnocnMtWU7OgxJMgi7WsOZ7mk9QjfqiqaTeb8FYfRoD
-         wt+mn5mi1uACHCSlrwZ8QdiftYf4xz5sTLmpid/vi/r7tg98sQCAztFNBLm3W5pBCgsW
-         35EtfR9NF3I/0jRVZnnjZKAIy9CNCnV90QGW1dGx5Qivq5acPVG1m3u1aSRWp8Cyox2z
-         1GVrUfHL74T0GCFMDnKZ74ioszI7iJzafgluJlCXcAlgV/Cu9LoBMGOD6xKDbuOjdAbi
-         7T9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HNhb7r/LKhCf7ktLcFjFiDUTXjUe/4x79E9mxzYgx1o=;
-        b=Bt56tMPeKKFRFe6fsj85OS6dJI4SV1o0JkiQaCKeuNxQjPr9Q6y046xbM6Z46f2bZF
-         Mlsnn7U9tNDLuijNoA/upuZ9w+wRvTK2IHHvADYN9BxlpzS2Wwd1a7w3eB7x9UCQCnxn
-         aa1EIg+3WluXGrlC0pK1qUEe1bEf2zSF+lxtCJzCCOiAJ2DWgHYB9QkWF6q3AZ5g2E06
-         yDRUkeHv7nnPKeIKg9z7F0bb6SC04ENV3RrBNCzR/ubMMO4XD3bEuAqmnF6/QcrTAjiF
-         X01v1pCezbXTX6+EF9P4UAZcLtBia8GZ0EjVbyt9fEOFAgwtobeArjm6Pwi0fwsHBAy2
-         sQhQ==
-X-Gm-Message-State: AOAM530q0YIXdi2cGUS2UCB/22QILHPhJMjiEZ0nbLE4X6wH9xxwfaOD
-        aOz0BmIa//qZlAQthWxKd0my1Q==
-X-Google-Smtp-Source: ABdhPJzOOgAJZIkk8oY7G+cG8+D3hzrGwhDFaIVXQH1eROLtVBHDaxuSvZlweoB8VjB++jcWWG18rw==
-X-Received: by 2002:adf:e342:0:b0:1f0:648f:c32b with SMTP id n2-20020adfe342000000b001f0648fc32bmr23857646wrj.204.1648480131068;
-        Mon, 28 Mar 2022 08:08:51 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id 2-20020a1c1902000000b00380d3873d6asm12256243wmz.43.2022.03.28.08.08.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Mar 2022 08:08:50 -0700 (PDT)
-Message-ID: <ae06ecc3-da1e-ddf2-3d20-c9f1cbed5550@linaro.org>
-Date:   Mon, 28 Mar 2022 17:08:49 +0200
+        Mon, 28 Mar 2022 11:13:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E69331C91F
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:11:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648480314;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c4bc9leYRRtOW/54gUC7hrLdsVm71KWKCliWns2HM+g=;
+        b=D6jjAB0tfKaQ36HVeylCcQQfQ9yoEWZtw8iLVL06p1LMyqKoSvWhfqk8g3S0CWGg5HfxRP
+        sIXt1KZLT3JjViwgRONqx3VILjZ6YhWpuiKDfzuay+iynTu4XlRi6yiQoA3IOGgOCQrQAC
+        G1do+or/JHbNULICJxvWoeetlOrrGu4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-426-dryIcnp_MXmfefw8afjRwA-1; Mon, 28 Mar 2022 11:11:52 -0400
+X-MC-Unique: dryIcnp_MXmfefw8afjRwA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 97C2A3817483;
+        Mon, 28 Mar 2022 15:11:36 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 51DA14010A02;
+        Mon, 28 Mar 2022 15:11:32 +0000 (UTC)
+Message-ID: <c4642442-aff8-c287-015f-90f41f09c323@redhat.com>
+Date:   Mon, 28 Mar 2022 11:11:31 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 3/6] arm64: dts: qcom: sm8250: move qup-opp-table out of
- soc node
+Subject: Re: [RFC] locking/rwsem: dont wake up wwaiter in case of lock holder
 Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220328143035.519909-1-vkoul@kernel.org>
- <20220328143035.519909-4-vkoul@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220328143035.519909-4-vkoul@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To:     David Hildenbrand <david@redhat.com>,
+        Hillf Danton <hdanton@sina.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220326134059.4082-1-hdanton@sina.com>
+ <02f50037-46ce-ec08-63cb-e855694e69a5@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <02f50037-46ce-ec08-63cb-e855694e69a5@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2022 16:30, Vinod Koul wrote:
-> The soc node expects all the nodes to have unit addresses. The
-> qup-opp-table does not have that which causes warnings:
-> 
-> arch/arm64/boot/dts/qcom/sm8250.dtsi:916.32-933.5:
-> 	Warning (simple_bus_reg): /soc@0/qup-opp-table:
-> 	missing or empty reg/ranges property
-> 
-> Move the qup-opp-table out of soc node to fix these warnings
-> 
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm8250.dtsi | 38 ++++++++++++++--------------
->  1 file changed, 19 insertions(+), 19 deletions(-)
-> 
+On 3/28/22 10:18, David Hildenbrand wrote:
+> On 26.03.22 14:40, Hillf Danton wrote:
+>> In the slowpath of down for write, we bail out in case of signal received and
+>> try to wake up any pending waiter but it makes no sense to wake up a write
+>> waiter given any lock holder, either write or read.
+> But is handling this better really worth additional code and runtime
+> checks? IOW, does this happen often enough that we actually care about
+> optimizing this? I have no idea :)
+>
+>> The RFC is do nothing for wwaiter if any lock holder present - they will fill
+>> their duty at lock release time.
+>>
+>> Only for thoughts now.
+>>
+>> Hillf
+>>
+>> --- x/kernel/locking/rwsem.c
+>> +++ y/kernel/locking/rwsem.c
+>> @@ -418,6 +418,8 @@ static void rwsem_mark_wake(struct rw_se
+>>   	waiter = rwsem_first_waiter(sem);
+>>   
+>>   	if (waiter->type == RWSEM_WAITING_FOR_WRITE) {
+>> +		if (RWSEM_LOCK_MASK & atomic_long_read(&sem->count))
+>> +			return;
+>>   		if (wake_type == RWSEM_WAKE_ANY) {
+>>   			/*
+>>   			 * Mark writer at the front of the queue for wakeup.
+>> --
 
+That check isn't good enough. First of all, any reader count in 
+sem->count can be transient due to the fact that we do an unconditional 
+atomic_long_add() on down_read(). The reader may then remove its reader 
+count in the slow path. This patch may cause missed wakeup which is a 
+much bigger problem than spending a bit of cpu time to check for lock 
+availability and sleep again.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The write lock bit, however, is real. We do support the first writer in 
+the wait queue to spin on the lock when the handoff bit is set. So 
+waking up a writer when the rwsem is currently write-locked can still be 
+useful.
 
+BTW, I didn't see this RFC patch in LKML. Is it only posted on linux-mm 
+originally?
 
-Best regards,
-Krzysztof
+Cheers,
+Longman
+

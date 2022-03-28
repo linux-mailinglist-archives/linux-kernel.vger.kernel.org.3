@@ -2,141 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A65A4E982D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7CF4E9830
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243233AbiC1Nal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 09:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60724 "EHLO
+        id S243245AbiC1Nat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 09:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243213AbiC1Naf (ORCPT
+        with ESMTP id S243240AbiC1Nap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 09:30:35 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11D3260B
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:28:54 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id gb19so14065696pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:28:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OWWkThZzG6fg+LvXYQeO6VrIXNOo2Za760j3Jl9Casc=;
-        b=YJ+SNrGdPbhG4Hdu+QgUc3szEdJT3mDr8DxEK55+jCssVQl5LAtgnqYl7dDc1hxx72
-         E01D4AiZLzZjp8GCBW3fvMPVo0flIAsxQ/LH8AjMkw9afKRmTc5WhcMNdkNW7c5/sd8w
-         BOWWAMUa0AFgyRoyUFLqveHBP0coEgUWNmOBkn5B2gmGQRrEu2Us0wH4BKWuv8nVrq6S
-         5mX+2jjqLhUod3xvd9gE2n8ysUQNlUL7CHZTWe+hEyYCscxyojVix5wFhpp9MLV/4WfH
-         2TebjWFsXuUYPDzXlT0BKuPF9e/dGp729BwpG1QBuVcNW6IfOd2EjChUbsyi+gvMsXv9
-         dwWA==
+        Mon, 28 Mar 2022 09:30:45 -0400
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62FB5E167;
+        Mon, 28 Mar 2022 06:29:02 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id r64so8393568wmr.4;
+        Mon, 28 Mar 2022 06:29:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=OWWkThZzG6fg+LvXYQeO6VrIXNOo2Za760j3Jl9Casc=;
-        b=ylncudV9PDPaqX/k/mRdrAY3kkgcGphzsYn2ppkp54gLrAzlZthdI7wOVU+c81chR9
-         d1TzBLT1eGnrjlUU2IE8riDmVRskKDrW/jmxmwQ+Yp06F90Vm32t8T9+FulEjrF4AeEd
-         p7ZOQTpfjBr6xxHhiy3hfOocE3/ZNWjLrFIDcjUw6lO/uLpRLLO3THAN6tctOSPicP0y
-         JK8D4M+GHupdUoCmu0wkI0p2XEBpPcabUecQx3cb3yNRB3vjCBNvtXrhXRfnuBKnFuwv
-         fFHy7Vv0lz9BTbW6db1cDYy6ATeJdsVKyxiuP3S0QixHyzmXLwNvju8Pph6PFGWctyf2
-         c9bg==
-X-Gm-Message-State: AOAM533qRmf92pJKB+qMPDEg/+g+/qrjXe/66SLwN07yDwD4KQHNlWEf
-        lo8Asg79N0DA0ObAacfQ2DDzlA==
-X-Google-Smtp-Source: ABdhPJzAlGHI/Kia99wHVmm5tvWLa5lQ97WbqD5zyvwlynxzhx1bxi7GFshiphoDnCUj+TsAFpBliA==
-X-Received: by 2002:a17:902:d48e:b0:154:b6a:9ff with SMTP id c14-20020a170902d48e00b001540b6a09ffmr26164352plg.2.1648474134256;
-        Mon, 28 Mar 2022 06:28:54 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056a00080700b004fb28fafc4csm9980936pfk.97.2022.03.28.06.28.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 06:28:54 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     glider@google.com, elver@google.com, dvyukov@google.com,
-        akpm@linux-foundation.org
-Cc:     kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH v2] mm: kfence: fix objcgs vector allocation
-Date:   Mon, 28 Mar 2022 21:28:43 +0800
-Message-Id: <20220328132843.16624-1-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        bh=uLvcnNGD7orwMt3H7FvAzNbV1+jVVtO3wV/gzqZo0EQ=;
+        b=dyHP+PwLbxiYYVnxiHYNbDIWC8X79p6vkPrgpbflAwQVgIC7U881QRdLBrPekkO3EA
+         ZXqpZbE21r2rGaPJ/zebhvw33HIGV3jlrEbYsa5kiqxNCw6RIEdTkhZvfQnKuXbtbN+M
+         PX1Ti6VrlyzlTjkE9ogkDvEPCKqYMYibCGy9ZHl5iX2azy/ANM66lKsX7SskS5PKunlj
+         hECzY88l71xgbu5mos2IKUb6nYZUbzTNK4BO6Vt3rg8yhj7M0mOP8M5JkVLoqbHG4kNZ
+         S3D0TlXj9hB68YTNiBy2PcuLD8bCj6NZ5pEzvYe8QZ1vltf1U982g7wmypYbC2g7jTSd
+         q9ig==
+X-Gm-Message-State: AOAM5330+op9inXcO9vC9VJbeEpzrO9AxUOQCnp0WdL1WpimQCqDc8Z2
+        aiC/80VhwArod9aDniS80gc=
+X-Google-Smtp-Source: ABdhPJzvXxx8G3oSboQduPDY5peChv4cOygHj3HSI2yRRkfQTz9OKVkIUO7HO/NYVQC/sQZwMl+zbQ==
+X-Received: by 2002:a05:600c:2e02:b0:38c:8390:d8ca with SMTP id o2-20020a05600c2e0200b0038c8390d8camr26669786wmf.15.1648474141242;
+        Mon, 28 Mar 2022 06:29:01 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id l9-20020a5d6d89000000b00203d62072c4sm13608526wrs.43.2022.03.28.06.28.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 06:29:00 -0700 (PDT)
+Message-ID: <a06f24af-ea9a-c787-ed09-438c019c63ca@kernel.org>
+Date:   Mon, 28 Mar 2022 15:28:59 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH v2 3/6] ASoC: dt-bindings: Extend clock bindings of
+ rt5659
+Content-Language: en-US
+To:     Sameer Pujar <spujar@nvidia.com>, broonie@kernel.org,
+        lgirdwood@gmail.com, robh+dt@kernel.org, krzk+dt@kernel.org,
+        perex@perex.cz, tiwai@suse.com, peter.ujfalusi@linux.intel.com,
+        pierre-louis.bossart@linux.intel.com
+Cc:     oder_chiou@realtek.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <1648448050-15237-1-git-send-email-spujar@nvidia.com>
+ <1648448050-15237-4-git-send-email-spujar@nvidia.com>
+ <da414b44-1bec-5918-84f5-9dfff2009f41@kernel.org>
+ <53d77f33-27e8-3446-d758-3e545eea2db4@nvidia.com>
+ <5e4e11b5-02b8-e03e-2924-c9f2882921be@kernel.org>
+ <fbd9cbfe-d653-d6d2-e55c-fb80527bea13@nvidia.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <fbd9cbfe-d653-d6d2-e55c-fb80527bea13@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the kfence object is allocated to be used for objects vector, then
-this slot of the pool eventually being occupied permanently since
-the vector is never freed.  The solutions could be 1) freeing vector
-when the kfence object is freed or 2) allocating all vectors statically.
-Since the memory consumption of object vectors is low, it is better to
-chose 2) to fix the issue and it is also can reduce overhead of vectors
-allocating in the future.
+On 28/03/2022 15:19, Sameer Pujar wrote:
+> 
+> On 28-03-2022 13:37, Krzysztof Kozlowski wrote:
+>> On 28/03/2022 09:58, Sameer Pujar wrote:
+>>> On 28-03-2022 12:36, Krzysztof Kozlowski wrote:
+>>>> External email: Use caution opening links or attachments
+>>>>
+>>>>
+>>>> On 28/03/2022 08:14, Sameer Pujar wrote:
+>>>>> The rt5658 or rt5659 CODEC system clock (SYSCLK) can be derived from
+>>>>> various clock sources. For example it can be derived either from master
+>>>>> clock (MCLK) or by internal PLL. The internal PLL again can take input
+>>>>> clock references from bit clocks (BCLKs) and MCLK. To enable a flexible
+>>>>> clocking configuration the DT binding is extended here.
+>>>>>
+>>>>> It makes use of standard clock bindings and sets up the clock relation
+>>>>> via DT.
+>>>>>
+>>>>> Signed-off-by: Sameer Pujar <spujar@nvidia.com>
+>>>>> Cc: Oder Chiou <oder_chiou@realtek.com>
+>>>>> ---
+>>>>>    .../devicetree/bindings/sound/realtek,rt5659.yaml  | 53 ++++++++++++++++++++--
+>>>>>    1 file changed, 49 insertions(+), 4 deletions(-)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/sound/realtek,rt5659.yaml b/Documentation/devicetree/bindings/sound/realtek,rt5659.yaml
+>>>>> index b0485b8..0c2f3cb 100644
+>>>>> --- a/Documentation/devicetree/bindings/sound/realtek,rt5659.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/sound/realtek,rt5659.yaml
+>>>>> @@ -29,12 +29,28 @@ properties:
+>>>>>        maxItems: 1
+>>>>>
+>>>>>      clocks:
+>>>>> -    items:
+>>>>> -      - description: Master clock (MCLK) to the CODEC
+>>>>> +    description: |
+>>>>> +      CODEC can receive multiple clock inputs like Master
+>>>>> +      clock (MCLK), I2S bit clocks (BCLK1, BCLK2, BCLK3,
+>>>>> +      BCLK4). The CODEC SYSCLK can be generated from MCLK
+>>>>> +      or internal PLL. In turn PLL can reference from MCLK
+>>>>> +      and BCLKs.
+>>>>>
+>>>>>      clock-names:
+>>>>> -    items:
+>>>>> -      - const: mclk
+>>>>> +    description: |
+>>>>> +      The clock names can be combination of following:
+>>>>> +        "mclk"        : Master clock
+>>>>> +        "pll_ref"     : Reference to CODEC PLL clock
+>>>>> +        "sysclk"      : CODEC SYSCLK
+>>>>> +        "^bclk[1-4]$" : Bit clocks to CODEC
+>>>> No, that does not look correct. You allow anything as clock input (even
+>>>> 20 clocks, different names, any order). That's not how DT schema should
+>>>> work and that's not how hardware looks like.
+>>>> Usually the clock inputs are always there which also you mentioned in
+>>>> description - "multiple clock inputs". All these clocks should be
+>>>> expected, unless really the wires (physical wires) can be left disconnected.
+>>> The CODEC can receive multiple clocks but all the input clocks need not
+>>> be present or connected always. If a specific configuration is needed
+>>> and platform supports such an input, then all these inputs can be added.
+>>> I don't know how to define this detail in the schema. If I make all of
+>>> them expected, then binding check throws errors. If I were to list all
+>>> the possible combinations, the list is going to be big (not sure if this
+>>> would be OK?).
+>> Thanks for explanation. Please differentiate between these two:
+>> 1. clock inputs connected, but unused (not needed for driver or for
+>> particular use case),
+>> 2. clock inputs really not connected.
+>>
+>> For the 1. above, such clock inputs should still be listed in the
+>> bindings and DTS. For the 2. above, such clocks should actually not be
+>> there.
+> 
+> Thank you for the suggestion.
+> 
+>> How to achieve this depends on number of your combinations. IOW,
+>> how many clocks are physically optional.
+> 
+>  From CODEC point of view all these clock inputs are possible and a 
+> platform may choose to connect a subset of it depending on the 
+> application. The binding is expected to support all such cases. To 
+> support all possibilities, the total combinations can be very big (100+).
+> 
+>> For some small number of
+>> variations this can be:
+>> oneOf:
+>>   - const: mclk
+>>   - items:
+>>     - const: mclk
+>>     - enum:
+>>         - bclk1
+>>         - bclk2
+>>         - bclk3
+>>         - bclk4
+>>   - items:
+>>     - const: mclk
+>>     - const: pll_ref
+>>     - enum:
+>>         - bclk1
+>>         - bclk2
+>>         - bclk3
+>>         - bclk4
+>>
+>> For a total flexibility that any clock input can be disconnected, this
+>> should be a list of enums I guess (with minItems). However please find
+>> the clocks always connected and include them if possible in a fixed way
+>> (like this oneOf above).
+> 
+> May be I can list the most commonly required combinations like below and 
+> extend it whenever there is a need for specific combination?
 
-Fixes: d3fb45f370d9 ("mm, kfence: insert KFENCE hooks for SLAB")
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
----
-v2:
- - Fix compiler error reported by kernel test robot <lkp@intel.com>.
+Yes, this would work. Relaxing such constraints is possible.
 
- mm/kfence/core.c   | 11 ++++++++++-
- mm/kfence/kfence.h |  3 +++
- 2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-index 13128fa13062..d4c7978cd75e 100644
---- a/mm/kfence/core.c
-+++ b/mm/kfence/core.c
-@@ -555,6 +555,8 @@ static bool __init kfence_init_pool(void)
- 	 * enters __slab_free() slow-path.
- 	 */
- 	for (i = 0; i < KFENCE_POOL_SIZE / PAGE_SIZE; i++) {
-+		struct slab *slab = page_slab(&pages[i]);
-+
- 		if (!i || (i % 2))
- 			continue;
- 
-@@ -562,7 +564,11 @@ static bool __init kfence_init_pool(void)
- 		if (WARN_ON(compound_head(&pages[i]) != &pages[i]))
- 			goto err;
- 
--		__SetPageSlab(&pages[i]);
-+		__folio_set_slab(slab_folio(slab));
-+#ifdef CONFIG_MEMCG
-+		slab->memcg_data = (unsigned long)&kfence_metadata[i / 2 - 1].objcg |
-+				   MEMCG_DATA_OBJCGS;
-+#endif
- 	}
- 
- 	/*
-@@ -938,6 +944,9 @@ void __kfence_free(void *addr)
- {
- 	struct kfence_metadata *meta = addr_to_metadata((unsigned long)addr);
- 
-+#ifdef CONFIG_MEMCG
-+	KFENCE_WARN_ON(meta->objcg);
-+#endif
- 	/*
- 	 * If the objects of the cache are SLAB_TYPESAFE_BY_RCU, defer freeing
- 	 * the object, as the object page may be recycled for other-typed
-diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
-index 2a2d5de9d379..9a6c4b1b12a8 100644
---- a/mm/kfence/kfence.h
-+++ b/mm/kfence/kfence.h
-@@ -89,6 +89,9 @@ struct kfence_metadata {
- 	struct kfence_track free_track;
- 	/* For updating alloc_covered on frees. */
- 	u32 alloc_stack_hash;
-+#ifdef CONFIG_MEMCG
-+	struct obj_cgroup *objcg;
-+#endif
- };
- 
- extern struct kfence_metadata kfence_metadata[CONFIG_KFENCE_NUM_OBJECTS];
--- 
-2.11.0
-
+Best regards,
+Krzysztof

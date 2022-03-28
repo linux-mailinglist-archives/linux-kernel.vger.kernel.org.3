@@ -2,88 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742D24EA2BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 00:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 392BD4EA2CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 00:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiC1WP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 18:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37882 "EHLO
+        id S229463AbiC1WJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 18:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiC1WP0 (ORCPT
+        with ESMTP id S229500AbiC1WHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 18:15:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC23E28AB0C;
-        Mon, 28 Mar 2022 15:07:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D6D06153C;
-        Mon, 28 Mar 2022 21:41:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2256EC340ED;
-        Mon, 28 Mar 2022 21:41:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648503699;
-        bh=9eqkVxFD2Kacygi3vpts5s7jHVaoYVLrpTEOsLr633g=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=iwtsvsquYmktNJv8VP8HpQuVK5fGfsDyhzEUyqXltnwCxdS6QM0kQiBdTRAm8tOJC
-         C4k5B5iKOj3EoQB0TR2BPr6bdUkZl3RVdD8ihegsc2rJWvSf6ucKDwmv2bW2gUyjq4
-         hmz+ZPOU3HEZw0t1gK+b/ThDLnxqPfMFT6u4629/CHQ4ulGr2jBo0TUTmd1Jbe1hTZ
-         Y6ZIu/dQA7rtRt1BHoTo5+D/CkWYdcIPczyshJtLIN7NgatzcdsoSsH4MHPf+WK2xe
-         FyTNJHbP+JNNc2oHQtdIsYMxPbonBF8Nv0RRh7RpIr39TuCc/qqnvoJs6RkXVaNNMj
-         HCfX3KZCIOsyw==
-Message-ID: <9b799a29ec8bc87386bc370a03a11b33ac948209.camel@kernel.org>
-Subject: Re: [PATCH v2] ceph: remove unused CEPH_MDS_LEASE_RELEASE related
- code
-From:   Jeff Layton <jlayton@kernel.org>
-To:     xiubli@redhat.com
-Cc:     idryomov@gmail.com, vshankar@redhat.com,
-        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 28 Mar 2022 17:41:37 -0400
-In-Reply-To: <20220328131026.923174-1-xiubli@redhat.com>
-References: <20220328131026.923174-1-xiubli@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Mon, 28 Mar 2022 18:07:51 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B122A13CED5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 15:01:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648504875; x=1680040875;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=MoJJ7PpyY30zJiWm4s27HVjf2QmYd2IbqH48aFV+r4o=;
+  b=ezbr+1WecsUVnzOlGib5YzuCjxLK7by4BGLw3kkIw38OmXDUdTUcfB9+
+   K41itfz+pkuEn9UaFs6tjR2uz7rcLF1HeSqek3TZWbiwsGGWy6PwTU10s
+   wxATxupkB4UsTzWMlsNfaiWvjQ6NKW/ZeyvLsFKRtPWnxPyXP8uxma1oK
+   WWzamK0lKBt/zEcyjO1zKvFfd8fMSTt1mz8pP7muPRG6LrL7diRGO+VwM
+   ECuElNRCPmeQDAePmaLDyRLKak2zELujnAfmig48y+q8cwX8O6Kt7ktQL
+   qAEVKzHGkCRcQQMg5QI9/YWK5DH5imNY5UuSrOTpRajozHvQ+LrtlHFJK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="257936479"
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="257936479"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 14:38:33 -0700
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="564026275"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 14:38:33 -0700
+Date:   Mon, 28 Mar 2022 14:41:56 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v2 3/8] iommu/vt-d: Implement device_pasid domain attach
+ ops
+Message-ID: <20220328144156.66ba6f39@jacob-builder>
+In-Reply-To: <BN9PR11MB5276FF347A54098F469936978C139@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20220315050713.2000518-1-jacob.jun.pan@linux.intel.com>
+        <20220315050713.2000518-4-jacob.jun.pan@linux.intel.com>
+        <20220315143322.GW11336@nvidia.com>
+        <BN9PR11MB5276E98AE37EA912B01EB0B68C119@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <20220316140140.76bb24c6@jacob-builder>
+        <BN9PR11MB5276FF347A54098F469936978C139@BN9PR11MB5276.namprd11.prod.outlook.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-03-28 at 21:10 +0800, xiubli@redhat.com wrote:
-> From: Xiubo Li <xiubli@redhat.com>
-> 
-> ceph_mdsc_lease_release was removed by commit 8aa152c77890 (ceph:
-> remove ceph_mdsc_lease_release). ceph_mdsc_lease_send_msg will never
-> call this function with CEPH_MDS_LEASE_RELEASE.
-> 
-> Signed-off-by: Xiubo Li <xiubli@redhat.com>
-> ---
->  fs/ceph/mds_client.c | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
-> index 459c6f23915f..a89ee866ebbb 100644
-> --- a/fs/ceph/mds_client.c
-> +++ b/fs/ceph/mds_client.c
-> @@ -4424,12 +4424,6 @@ void ceph_mdsc_lease_send_msg(struct ceph_mds_session *session,
->  	memcpy((void *)(lease + 1) + 4,
->  	       dentry->d_name.name, dentry->d_name.len);
->  	spin_unlock(&dentry->d_lock);
-> -	/*
-> -	 * if this is a preemptive lease RELEASE, no need to
-> -	 * flush request stream, since the actual request will
-> -	 * soon follow.
-> -	 */
-> -	msg->more_to_follow = (action == CEPH_MDS_LEASE_RELEASE);
->  
->  	ceph_con_send(&session->s_con, msg);
->  }
+Hi Kevin,
 
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+On Fri, 18 Mar 2022 05:33:38 +0000, "Tian, Kevin" <kevin.tian@intel.com>
+wrote:
+
+> > From: Jacob Pan
+> > Sent: Thursday, March 17, 2022 5:02 AM
+> > 
+> > Hi Kevin,
+> > 
+> > On Wed, 16 Mar 2022 07:41:34 +0000, "Tian, Kevin" <kevin.tian@intel.com>
+> > wrote:
+> >   
+> > > > From: Jason Gunthorpe <jgg@nvidia.com>
+> > > > Sent: Tuesday, March 15, 2022 10:33 PM
+> > > >
+> > > > On Mon, Mar 14, 2022 at 10:07:07PM -0700, Jacob Pan wrote:  
+> > > > > +	/*
+> > > > > +	 * Each domain could have multiple devices attached with
+> > > > > shared or  
+> > > > per  
+> > > > > +	 * device PASIDs. At the domain level, we keep track of
+> > > > > unique PASIDs  
+> > > > and  
+> > > > > +	 * device user count.
+> > > > > +	 * E.g. If a domain has two devices attached, device A
+> > > > > has PASID 0, 1;
+> > > > > +	 * device B has PASID 0, 2. Then the domain would have
+> > > > > PASID 0, 1, 2.
+> > > > > +	 */  
+> > > >
+> > > > A 2d array of xarray's seems like a poor data structure for this
+> > > > task.  
+> > >  
+> > Perhaps i mis-presented here, I am not using 2D array. It is an 1D
+> > xarray for domain PASIDs only. Then I use the existing device list in
+> > each domain, adding another xa to track per-device-domain PASIDs.  
+> > > besides that it also doesn't work when we support per-device PASID
+> > > allocation in the future. In that case merging device PASIDs together
+> > > is conceptually wrong.
+> > >  
+> > Sorry, could you elaborate? If we do per-dev PASID allocation, we could
+> > use the ioasid_set for each pdev, right?  
+> 
+> My point is simply about the comment above which says the domain
+> will have PASID 0, 1, 2 when there is [devA, PASID0] and [devB, PASID0].
+> You can maintain a single  PASID list only when it's globally allocated
+> cross devices. otherwise this has to be a tuple including device and
+> PASID.
+> 
+Got you, you are right we don't want to limit to globally allocated scheme.
+
+Thanks,
+
+Jacob

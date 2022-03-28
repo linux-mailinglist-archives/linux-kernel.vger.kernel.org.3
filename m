@@ -2,154 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBAE74E90AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0569A4E90B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239620AbiC1JDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 05:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
+        id S236633AbiC1JFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 05:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbiC1JDt (ORCPT
+        with ESMTP id S234191AbiC1JFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 05:03:49 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7521453E06
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:02:08 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220328090205epoutp04ac5bd97532e5caa55418adba16a8d08e~gf_6Cgcgr1246312463epoutp04i
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:02:05 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220328090205epoutp04ac5bd97532e5caa55418adba16a8d08e~gf_6Cgcgr1246312463epoutp04i
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1648458126;
-        bh=eF3iknj3DFZy4JaEdicp6aGFJOG1Z9lY5FCFTX5urrE=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=B9OytBArcn6xcmhvJc/CvP/GJ5t4XRHf5+aXhrHxzRcnO/UjP1ce3pLuUQLAetGWE
-         ZcfgxVCvCgB4JPdbPJ6P44fS6QswJ2a/t0GxZA8qDtQMQXJUl5/I9ajrNWmorf7j93
-         q8lyI63NfqIlN12Ls+32mVvJj70ZA+wUcL+g50Rk=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20220328090205epcas2p46d90d925fa6c81d906e1c5c372b2a6d5~gf_5WBIOh2027020270epcas2p4s;
-        Mon, 28 Mar 2022 09:02:05 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.91]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4KRmsj6GtHz4x9QT; Mon, 28 Mar
-        2022 09:02:01 +0000 (GMT)
-X-AuditID: b6c32a47-831ff700000063c4-a2-62417988c360
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8F.7A.25540.88971426; Mon, 28 Mar 2022 18:02:00 +0900 (KST)
-Mime-Version: 1.0
-Subject: Re: [PATCH 0/5] Add support for Axis, ARTPEC-8 PCIe driver
-Reply-To: wangseok.lee@samsung.com
-Sender: =?UTF-8?B?7J207JmV7ISd?= <wangseok.lee@samsung.com>
-From:   =?UTF-8?B?7J207JmV7ISd?= <wangseok.lee@samsung.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>
-CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "kernel@axis.com" <kernel@axis.com>,
-        =?UTF-8?B?7KCE66y46riw?= <moonki.jun@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <0716d9e4-24e1-d16c-162c-00a8664296e1@kernel.org>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220328090200epcms2p8637d2a2e09a3a627be776586b80c8adf@epcms2p8>
-Date:   Mon, 28 Mar 2022 18:02:00 +0900
-X-CMS-MailID: 20220328090200epcms2p8637d2a2e09a3a627be776586b80c8adf
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrFJsWRmVeSWpSXmKPExsWy7bCmmW5HpWOSwcKnBhZLmjIsXh7StJh/
-        5ByrxfNDs5gtPrWoWlx42sNm8XLWPTaL8+c3sFs09PxmtTjy5iOzxf7jK5ksLu+aw2Zxdt5x
-        NosJq76xWLz5/YLd4tziTIvWvUfYLXbeOcHsIOSxZt4aRo/r6wI8Fmwq9di0qpPN48mV6Uwe
-        m5fUe/RtWcXocfzGdiaPz5vkAjijsm0yUhNTUosUUvOS81My89JtlbyD453jTc0MDHUNLS3M
-        lRTyEnNTbZVcfAJ03TJzgF5RUihLzCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BSYF+gV
-        J+YWl+al6+WlllgZGhgYmQIVJmRn/PnwnKlgnkTFvf1zWBoYj4h3MXJySAiYSFz4sImxi5GL
-        Q0hgB6PE90X7gBwODl4BQYm/O4RBaoQFnCX+3W5lBrGFBJQkdqyZxwwRt5b4NOUyC4jNJmAp
-        cbH1IdgcEYFvTBKzf7xiA3GYBW4zS8x//p4FYhuvxIz2p1C2tMT25VsZQWxOATuJD997WCHi
-        GhI/lvUyQ9iiEjdXv2WHsd8fm88IYYtItN47C1UjKPHg526ouJTEgieHoOZUS+z/+5sJwm5g
-        lOi/nwrymISAvsSO68YgYV4BX4me6fvASlgEVIF+74Na5SJxauI0MJtZQFti2cLXzCCtzAKa
-        Eut36UNMUZY4cgvuqYaNv9nR2cwCfBIdh//CxXfMewJ1jJrEvJU7mScwKs9CBPQsJLtmIexa
-        wMi8ilEstaA4Nz212KjAGB63yfm5mxjBiVrLfQfjjLcf9A4xMnEwHmKU4GBWEuGVPWufJMSb
-        klhZlVqUH19UmpNafIjRFOjLicxSosn5wFyRVxJvaGJpYGJmZmhuZGpgriTO65WyIVFIID2x
-        JDU7NbUgtQimj4mDU6qBKSbZyKc810Pt4bHASe8fnha75MIhtXTRnF07/91eIeTwX1trE8uM
-        A28DYtUTHrlGae9WrzW1qP7Tl1DJLLBw4YNUPi2rOu6lvatXf2jYfMs6s19kt+YjiyVTqzt1
-        /xkcDno0Yd3ej884IpczfEzPesud2e4b5uZ0+bXXm/1TfWXnmx9srLu+cY0Dm+meq/OOWDa6
-        iZQHS8uXP9a3O/JrT8vCsm9/vhbwr5/i2bn0/qm1R5tXT+86/+L2U/aZkv3u/yQOl+un7Wds
-        miM/+b7VuflFV622/Ap927zIX0hH8+XMbWrT/+ssP5fxyaupfdOTeybld259nP0nK7/ZTI79
-        f2NlZNoy+R9mLwqXeXob3FViKc5INNRiLipOBACCdAQSXQQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1
-References: <0716d9e4-24e1-d16c-162c-00a8664296e1@kernel.org>
-        <20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1@epcms2p7>
-        <CGME20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1@epcms2p8>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 28 Mar 2022 05:05:01 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C3552E16
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:03:20 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id q137-20020a6b8e8f000000b006495204b061so9961528iod.14
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:03:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=1BEYGgw9VLCjR2OvZTUoVmRSlR553OWUYaMPhi+y6Hc=;
+        b=NkOd19q/ze8jBNMnpx4YNPjDlWRqPFqVQ8DM2YNCo+BNZbk5TixIlICqLidatDSBvW
+         rYOeVddMS1lXSPA/A7zUxg4ZVhElHQZ0EO70EnqrynU0f5XKdRz7A1Ht5lZxxrZkBGIG
+         MCpG7C8OV/xzqAqRgqhSNJBQeenLJjhkO4CRCFJBWVGOBmwk4ErBqf2FvveK9EWa8yG/
+         klg5gVd52tnoGQj5D0v6PYkYtY4wqV9SJj0PvKNGBybG0Hx+avzHM8XBq+XZbWOTpK/p
+         r/bemCUpE24FZraPOiJ3WjXbKFHzHNfV1n6+iGpafx2d8YcGSVXBjeK+94EK6k3S/wGO
+         EzbQ==
+X-Gm-Message-State: AOAM532QcFxpETyysZOrlv1bt/WgS/RjODCq4u0sPhGyK5CbutimLb2B
+        Yek2NHhgYvrgO46/F2zrfxeZc/VA6S695/Q50Td7amPpfAg/
+X-Google-Smtp-Source: ABdhPJybG4JW2cX3BKjRHqvJcBND+2gWOtlcswy0BQI67/ZhFh4GTrfGHpwJw3X9zPUyPUUZEyS0yte8YTbeuDgoK4bmx/Tu2R7i
+MIME-Version: 1.0
+X-Received: by 2002:a05:6638:260c:b0:323:6cae:8654 with SMTP id
+ m12-20020a056638260c00b003236cae8654mr1522894jat.220.1648458200247; Mon, 28
+ Mar 2022 02:03:20 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 02:03:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000073f09205db439577@google.com>
+Subject: [syzbot] kernel BUG in __pagevec_lru_add
+From:   syzbot <syzbot+e2771c7f4aa80a94a9d4@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> --------- Original Message ---------
-> Sender : Krzysztof Kozlowski=C2=A0<krzk=40kernel.org>=0D=0A>=20Date=20:=
-=202022-03-28=2016:12=20(GMT+9)=0D=0A>=20Title=20:=20Re:=20=5BPATCH=200/5=
-=5D=20Add=20support=20for=20Axis,=20ARTPEC-8=20PCIe=20driver=0D=0A>=20=0D=
-=0A>=20On=C2=A028/03/2022=C2=A003:44,=C2=A0=EC=9D=B4=EC=99=95=EC=84=9D=C2=
-=A0wrote:=0D=0A>=20>=C2=A0This=C2=A0series=C2=A0patches=C2=A0include=C2=A0n=
-ewly=C2=A0PCIe=C2=A0support=C2=A0for=C2=A0Axis=C2=A0ARTPEC-8=C2=A0SoC.=0D=
-=0A>=20>=C2=A0ARTPEC-8=C2=A0is=C2=A0the=C2=A0SoC=C2=A0platform=C2=A0of=C2=
-=A0Axis=C2=A0Communications.=0D=0A>=20>=C2=A0PCIe=C2=A0controller=C2=A0driv=
-er=C2=A0and=C2=A0phy=C2=A0driver=C2=A0have=C2=A0been=C2=A0newly=C2=A0added.=
-=0D=0A>=20>=C2=A0There=C2=A0is=C2=A0also=C2=A0a=C2=A0new=C2=A0MAINTAINER=C2=
-=A0in=C2=A0the=C2=A0addition=C2=A0of=C2=A0phy=C2=A0driver.=0D=0A>=20>=C2=A0=
-PCIe=C2=A0controller=C2=A0is=C2=A0designed=C2=A0based=C2=A0on=C2=A0Design-W=
-are=C2=A0PCIe=C2=A0controller=C2=A0IP=0D=0A>=20>=C2=A0and=C2=A0PCIe=C2=A0ph=
-y=C2=A0is=C2=A0desinged=C2=A0based=C2=A0on=C2=A0SAMSUNG=C2=A0PHY=C2=A0IP.=
-=0D=0A>=20>=C2=A0It=C2=A0also=C2=A0includes=C2=A0modifications=C2=A0to=C2=
-=A0the=C2=A0Design-Ware=C2=A0controller=C2=A0driver=C2=A0to=C2=A0=0D=0A>=20=
->=C2=A0run=C2=A0the=C2=A064bit-based=C2=A0ARTPEC-8=C2=A0PCIe=C2=A0controlle=
-r=C2=A0driver.=0D=0A>=20>=C2=A0It=C2=A0consists=C2=A0of=C2=A06=C2=A0patches=
-=C2=A0in=C2=A0total.=0D=0A>=20>=C2=A0=0D=0A>=20>=C2=A0This=C2=A0series=C2=
-=A0has=C2=A0been=C2=A0tested=C2=A0on=C2=A0AXIS=C2=A0SW=C2=A0bring-up=C2=A0b=
-oard=C2=A0=0D=0A>=20>=C2=A0with=C2=A0ARTPEC-8=C2=A0chipset.=0D=0A>=20=0D=0A=
->=20You=C2=A0lost=C2=A0mail=C2=A0threading.=C2=A0This=C2=A0makes=C2=A0readi=
-ng=C2=A0this=C2=A0difficult=C2=A0for=C2=A0us.=C2=A0Plus=0D=0A>=20you=C2=A0s=
-ent=C2=A0something=C2=A0non-applicable=C2=A0(patch=C2=A0=232),=C2=A0so=C2=
-=A0please=C2=A0resend.=0D=0A>=20=0D=0A>=20Knowing=C2=A0recent=C2=A0Samsung=
-=C2=A0reluctance=C2=A0to=C2=A0extend=C2=A0existing=C2=A0drivers=C2=A0and=C2=
-=A0always=0D=0A>=20duplicate,=C2=A0please=C2=A0provide=C2=A0description/ana=
-lysis=C2=A0why=C2=A0this=C2=A0driver=C2=A0cannot=C2=A0be=0D=0A>=20combined=
-=C2=A0with=C2=A0existing=C2=A0driver.=C2=A0The=C2=A0answer=C2=A0like:=C2=A0=
-we=C2=A0need=C2=A0several=C2=A0syscon=0D=0A>=20because=C2=A0we=C2=A0do=C2=
-=A0not=C2=A0implement=C2=A0other=C2=A0frameworks=C2=A0(like=C2=A0interconne=
-ct)=C2=A0are=C2=A0not=0D=0A>=20valid.=0D=0A>=20=0D=0A>=20Best=C2=A0regards,=
-=0D=0A>=20Krzysztof=0D=0A=0D=0AHello,=20Krzysztof=0D=0AThanks=20for=20your=
-=20review.=0D=0A=0D=0Apatch=232=20was=20sent=20to=20the=20wrong=20format=20=
-so=20sent=20again.=0D=0ASorry=20for=20causing=20confusion.=0D=0A=0D=0AThis=
-=20patch=20is=20specialized=20in=20Artpec-8,=20=0D=0Athe=20SoC=20Platform=
-=20of=20Axis=20Communication,=20and=20is=20newly=20applied.=0D=0ASince=20th=
-e=20target=20SoC=20platform=20is=20different=20from=20the=20driver=20previo=
-usly=20=0D=0Aused=20by=20Samsung,=20it=20is=20difficult=20to=20merge=20with=
-=20the=20existing=20driver.=0D=0A=0D=0AThanks.
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    1bc191051dca Merge tag 'trace-v5.18' of git://git.kernel.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11b9b613700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a9ef58c085ccd118
+dashboard link: https://syzkaller.appspot.com/bug?extid=e2771c7f4aa80a94a9d4
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e2771c7f4aa80a94a9d4@syzkaller.appspotmail.com
+
+ __release_gpc arch/x86/kvm/../../../virt/kvm/pfncache.c:121 [inline]
+ __release_gpc arch/x86/kvm/../../../virt/kvm/pfncache.c:107 [inline]
+ kvm_gfn_to_pfn_cache_unmap+0x2df/0x3a0 arch/x86/kvm/../../../virt/kvm/pfncache.c:296
+ kvm_gfn_to_pfn_cache_destroy arch/x86/kvm/../../../virt/kvm/pfncache.c:333 [inline]
+ kvm_gfn_to_pfn_cache_destroy+0x199/0x260 arch/x86/kvm/../../../virt/kvm/pfncache.c:326
+ kvm_xen_destroy_vm+0x18/0x90 arch/x86/kvm/xen.c:811
+ kvm_arch_destroy_vm+0x360/0x470 arch/x86/kvm/x86.c:11774
+ kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1217 [inline]
+ kvm_put_kvm+0x4fa/0xb60 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1250
+ kvm_vm_release+0x3f/0x50 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1273
+ __fput+0x286/0x9f0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:32 [inline]
+ do_exit+0xaff/0x2a30 kernel/exit.c:806
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:936
+ get_signal+0x4b0/0x28c0 kernel/signal.c:2903
+------------[ cut here ]------------
+kernel BUG at mm/swap.c:1012!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 7754 Comm: syz-executor.1 Tainted: G        W         5.17.0-syzkaller-02237-g1bc191051dca #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:__pagevec_lru_add_fn mm/swap.c:1012 [inline]
+RIP: 0010:__pagevec_lru_add+0xead/0x11e0 mm/swap.c:1062
+Code: 48 c7 c6 00 0d b6 89 48 89 ef e8 de f1 09 00 0f 0b 45 31 e4 eb b3 e8 62 3e d4 ff 48 c7 c6 80 12 b6 89 48 89 ef e8 c3 f1 09 00 <0f> 0b e8 4c 3e d4 ff 48 89 ef e8 94 71 fe ff be 08 00 00 00 49 89
+RSP: 0000:ffffc90008587bc8 EFLAGS: 00010046
+RAX: 0000000000040000 RBX: dffffc0000000000 RCX: ffffc9000c3e9000
+RDX: 0000000000040000 RSI: ffffffff81a4822d RDI: 0000000000000003
+RBP: ffffea0001162680 R08: 0000000000000018 R09: 00000000ffffffff
+R10: ffffffff89186e92 R11: 00000000ffffffff R12: 0000000000000010
+R13: 0000000000000000 R14: ffff88805ad67000 R15: ffff888021768000
+FS:  00007f5c0fffe700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f5c0fffd0e8 CR3: 0000000057caa000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 00000000e08e0077 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ folio_add_lru+0x467/0x6a0 mm/swap.c:469
+ lru_cache_add_inactive_or_unevictable+0x192/0x520 mm/swap.c:490
+ do_anonymous_page mm/memory.c:3811 [inline]
+ handle_pte_fault mm/memory.c:4566 [inline]
+ __handle_mm_fault+0x3190/0x4150 mm/memory.c:4704
+ handle_mm_fault+0x1c8/0x790 mm/memory.c:4802
+ do_user_addr_fault+0x489/0x11c0 arch/x86/mm/fault.c:1397
+ handle_page_fault arch/x86/mm/fault.c:1484 [inline]
+ exc_page_fault+0x9e/0x180 arch/x86/mm/fault.c:1540
+ asm_exc_page_fault+0x1e/0x30 arch/x86/include/asm/idtentry.h:568
+RIP: 0033:0x7f5c1162f1dc
+Code: c0 e8 28 66 ff ff b8 ff ff ff ff e9 33 ff ff ff 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 41 54 31 c0 55 48 81 ec 68 10 00 00 <48> 89 7c 24 08 48 8d 3d 38 48 0a 00 48 89 34 24 48 8b 14 24 48 8b
+RSP: 002b:00007f5c0fffd0e0 EFLAGS: 00010202
+RAX: 0000000000000000 RBX: 00007f5c1179c030 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffffffffffff RDI: 0000000020000080
+RBP: 00007f5c116e308d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000020000080 R11: 0000000000000000 R12: 0000000000000000
+R13: 00007f5c11ccfb1f R14: 00007f5c0fffe300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__pagevec_lru_add_fn mm/swap.c:1012 [inline]
+RIP: 0010:__pagevec_lru_add+0xead/0x11e0 mm/swap.c:1062
+Code: 48 c7 c6 00 0d b6 89 48 89 ef e8 de f1 09 00 0f 0b 45 31 e4 eb b3 e8 62 3e d4 ff 48 c7 c6 80 12 b6 89 48 89 ef e8 c3 f1 09 00 <0f> 0b e8 4c 3e d4 ff 48 89 ef e8 94 71 fe ff be 08 00 00 00 49 89
+RSP: 0000:ffffc90008587bc8 EFLAGS: 00010046
+RAX: 0000000000040000 RBX: dffffc0000000000 RCX: ffffc9000c3e9000
+RDX: 0000000000040000 RSI: ffffffff81a4822d RDI: 0000000000000003
+RBP: ffffea0001162680 R08: 0000000000000018 R09: 00000000ffffffff
+R10: ffffffff89186e92 R11: 00000000ffffffff R12: 0000000000000010
+R13: 0000000000000000 R14: ffff88805ad67000 R15: ffff888021768000
+FS:  00007f5c0fffe700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f5c0fffd0e8 CR3: 0000000057caa000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 00000000e08e0077 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

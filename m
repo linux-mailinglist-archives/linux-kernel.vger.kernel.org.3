@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4912A4EA07D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 21:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A6D4EA04E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 21:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343637AbiC1TqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 15:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
+        id S244746AbiC1Tru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 15:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343713AbiC1Too (ORCPT
+        with ESMTP id S1343722AbiC1Tqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 15:44:44 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD9866C9A
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 12:42:40 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id g11-20020a056602072b00b00645cc0735d7so11042300iox.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 12:42:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to:cc;
-        bh=IH/0Be4mYvFxzGsDxJItB2Q/4tGPp/20wo5bgbYbxXU=;
-        b=rui2ySMZ8Hn7Zr6qEMAu1zwysg8I7UZmIii/m323X+petSIZUNz9Q9pirZPBzKtcGa
-         PK/IyxMiQNeoPZm8Szw0QOM1byYIe8/LyrURhWfCw1eYpV5CSGOAM6imi5eR2MI7Mx5Z
-         fnxPNzTpkzo3DRnO7gBkbqPtRRC89GpnoeVwtPrBtytn6/g86TE+KeYWh24Zfaqp39bN
-         fXmJ1gZGbvjOBaPpxwK/+n/ypERQ/RUY59JRbE1J2uiJP5qzVsKODfHLZ5fdol503ZwM
-         yR72RGNyrAtLccTFj1WR9M1bVwdIGyaHXFvp0bwzB9cvVbNxPGA6X6JogXVRV8tydrzP
-         o1uA==
-X-Gm-Message-State: AOAM531bcr4tgdsHG3ENgUKXV3aXYKaTmywIcZUDfNWld0Lh9z5En3TH
-        LBMrxmT3YbGMHdgMfa2krZ8kk2QEOsjfLgxn1oTNqGvHcG97
-X-Google-Smtp-Source: ABdhPJyk+05FvCtiduQ1ZZxIGJZy7XoI5uXzVOMzWtWn4sR4RVl6GeFcoQ7Gh/r9wsiMa0W9Ww3NjnoDROtkEqxLUBkNPjmESpOX
+        Mon, 28 Mar 2022 15:46:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4042968FB3;
+        Mon, 28 Mar 2022 12:43:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9078B81204;
+        Mon, 28 Mar 2022 19:43:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B91A6C340F0;
+        Mon, 28 Mar 2022 19:43:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648496582;
+        bh=yg6WkGRZiXN6RT05fbnMqWKZL4qp2s5qQM6TuONT29E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Q91P3olZvaYqSiCyW3K5MecrNtUbk2fv9OMeeM3Qzjbh2gX/UjeVyMW9lyKXAjMb+
+         /nfU3nggig1npQ5TTF1CIT9WN8Zp/g4pkMMk9jQ/e5thX8IDyyko7KsbJJ9oZshZ49
+         fKopqM6QI4XAMnrVU+zdLwgySv6GWs+j4Bk9rBDZLoS28gc70nFLha/IJ8/xNsdLIQ
+         1Mk0Q5LsXqXh9UIgc00UX4vLzvnfPh3zqmasu5yILx8SAqE9b09LGNR89oqVYjf2Dk
+         OT7RadB8T5OFSdwnc9rCdIJfJqut7U9ND7w7qpNEMvqFQQ67yOdnD9JejWFPUvrmel
+         D2h+pIYEG8Xrw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Mark Rutland <mark.rutland@arm.com>, Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 01/16] atomics: Fix atomic64_{read_acquire,set_release} fallbacks
+Date:   Mon, 28 Mar 2022 15:42:44 -0400
+Message-Id: <20220328194300.1586178-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:ceb2:0:b0:314:f9b9:d420 with SMTP id
- z18-20020a02ceb2000000b00314f9b9d420mr13564302jaq.177.1648496559723; Mon, 28
- Mar 2022 12:42:39 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 12:42:39 -0700
-In-Reply-To: <20220328194226.1585920-7-sashal@kernel.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000db1a1c05db4c8319@google.com>
-Subject: Re: [PATCH AUTOSEL 5.16 07/20] ext4: don't BUG if someone dirty pages
- without asking ext4 first
-From:   syzbot 
-        <syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     adilger.kernel@dilger.ca, lee.jones@linaro.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sashal@kernel.org, stable@vger.kernel.org, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,88 +57,219 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Theodore Ts'o <tytso@mit.edu>
->
-> [ Upstream commit cc5095747edfb054ca2068d01af20be3fcc3634f ]
->
-> [un]pin_user_pages_remote is dirtying pages without properly warning
-> the file system in advance.  A related race was noted by Jan Kara in
-> 2018[1]; however, more recently instead of it being a very hard-to-hit
-> race, it could be reliably triggered by process_vm_writev(2) which was
-> discovered by Syzbot[2].
->
-> This is technically a bug in mm/gup.c, but arguably ext4 is fragile in
-> that if some other kernel subsystem dirty pages without properly
-> notifying the file system using page_mkwrite(), ext4 will BUG, while
-> other file systems will not BUG (although data will still be lost).
->
-> So instead of crashing with a BUG, issue a warning (since there may be
-> potential data loss) and just mark the page as clean to avoid
-> unprivileged denial of service attacks until the problem can be
-> properly fixed.  More discussion and background can be found in the
-> thread starting at [2].
->
-> [1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
-> [2] https://lore.kernel.org/r/Yg0m6IjcNmfaSokM@google.com
->
-> Reported-by: syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com
-> Reported-by: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-> Link: https://lore.kernel.org/r/YiDS9wVfq4mM2jGK@mit.edu
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  fs/ext4/inode.c | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
->
-> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-> index 2f5686dfa30d..a61d1e4e1026 100644
-> --- a/fs/ext4/inode.c
-> +++ b/fs/ext4/inode.c
-> @@ -1992,6 +1992,15 @@ static int ext4_writepage(struct page *page,
->  	else
->  		len = PAGE_SIZE;
->  
-> +	/* Should never happen but for bugs in other kernel subsystems */
-> +	if (!page_has_buffers(page)) {
-> +		ext4_warning_inode(inode,
-> +		   "page %lu does not have buffers attached", page->index);
-> +		ClearPageDirty(page);
-> +		unlock_page(page);
-> +		return 0;
-> +	}
-> +
->  	page_bufs = page_buffers(page);
->  	/*
->  	 * We cannot do block allocation or other extent handling in this
-> @@ -2595,6 +2604,22 @@ static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
->  			wait_on_page_writeback(page);
->  			BUG_ON(PageWriteback(page));
->  
-> +			/*
-> +			 * Should never happen but for buggy code in
-> +			 * other subsystems that call
-> +			 * set_page_dirty() without properly warning
-> +			 * the file system first.  See [1] for more
-> +			 * information.
-> +			 *
-> +			 * [1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
-> +			 */
-> +			if (!page_has_buffers(page)) {
-> +				ext4_warning_inode(mpd->inode, "page %lu does not have buffers attached", page->index);
-> +				ClearPageDirty(page);
-> +				unlock_page(page);
-> +				continue;
-> +			}
-> +
->  			if (mpd->map.m_len == 0)
->  				mpd->first_page = page->index;
->  			mpd->next_page = page->index + 1;
-> -- 
-> 2.34.1
->
+From: Mark Rutland <mark.rutland@arm.com>
 
-I see the command but can't find the corresponding bug.
-The email is sent to  syzbot+HASH@syzkaller.appspotmail.com address
-but the HASH does not correspond to any known bug.
-Please double check the address.
+[ Upstream commit dc1b4df09acdca7a89806b28f235cd6d8dcd3d24 ]
+
+Arnd reports that on 32-bit architectures, the fallbacks for
+atomic64_read_acquire() and atomic64_set_release() are broken as they
+use smp_load_acquire() and smp_store_release() respectively, which do
+not work on types larger than the native word size.
+
+Since those contain compiletime_assert_atomic_type(), any attempt to use
+those fallbacks will result in a build-time error. e.g. with the
+following added to arch/arm/kernel/setup.c:
+
+| void test_atomic64(atomic64_t *v)
+| {
+|        atomic64_set_release(v, 5);
+|        atomic64_read_acquire(v);
+| }
+
+The compiler will complain as follows:
+
+| In file included from <command-line>:
+| In function 'arch_atomic64_set_release',
+|     inlined from 'test_atomic64' at ./include/linux/atomic/atomic-instrumented.h:669:2:
+| ././include/linux/compiler_types.h:346:38: error: call to '__compiletime_assert_9' declared with attribute error: Need native word sized stores/loads for atomicity.
+|   346 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+|       |                                      ^
+| ././include/linux/compiler_types.h:327:4: note: in definition of macro '__compiletime_assert'
+|   327 |    prefix ## suffix();    \
+|       |    ^~~~~~
+| ././include/linux/compiler_types.h:346:2: note: in expansion of macro '_compiletime_assert'
+|   346 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+|       |  ^~~~~~~~~~~~~~~~~~~
+| ././include/linux/compiler_types.h:349:2: note: in expansion of macro 'compiletime_assert'
+|   349 |  compiletime_assert(__native_word(t),    \
+|       |  ^~~~~~~~~~~~~~~~~~
+| ./include/asm-generic/barrier.h:133:2: note: in expansion of macro 'compiletime_assert_atomic_type'
+|   133 |  compiletime_assert_atomic_type(*p);    \
+|       |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+| ./include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+|   164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+|       |                                                       ^~~~~~~~~~~~~~~~~~~
+| ./include/linux/atomic/atomic-arch-fallback.h:1270:2: note: in expansion of macro 'smp_store_release'
+|  1270 |  smp_store_release(&(v)->counter, i);
+|       |  ^~~~~~~~~~~~~~~~~
+| make[2]: *** [scripts/Makefile.build:288: arch/arm/kernel/setup.o] Error 1
+| make[1]: *** [scripts/Makefile.build:550: arch/arm/kernel] Error 2
+| make: *** [Makefile:1831: arch/arm] Error 2
+
+Fix this by only using smp_load_acquire() and smp_store_release() for
+native atomic types, and otherwise falling back to the regular barriers
+necessary for acquire/release semantics, as we do in the more generic
+acquire and release fallbacks.
+
+Since the fallback templates are used to generate the atomic64_*() and
+atomic_*() operations, the __native_word() check is added to both. For
+the atomic_*() operations, which are always 32-bit, the __native_word()
+check is redundant but not harmful, as it is always true.
+
+For the example above this works as expected on 32-bit, e.g. for arm
+multi_v7_defconfig:
+
+| <test_atomic64>:
+|         push    {r4, r5}
+|         dmb     ish
+|         pldw    [r0]
+|         mov     r2, #5
+|         mov     r3, #0
+|         ldrexd  r4, [r0]
+|         strexd  r4, r2, [r0]
+|         teq     r4, #0
+|         bne     484 <test_atomic64+0x14>
+|         ldrexd  r2, [r0]
+|         dmb     ish
+|         pop     {r4, r5}
+|         bx      lr
+
+... and also on 64-bit, e.g. for arm64 defconfig:
+
+| <test_atomic64>:
+|         bti     c
+|         paciasp
+|         mov     x1, #0x5
+|         stlr    x1, [x0]
+|         ldar    x0, [x0]
+|         autiasp
+|         ret
+
+Reported-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+Link: https://lore.kernel.org/r/20220207101943.439825-1-mark.rutland@arm.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/linux/atomic/atomic-arch-fallback.h | 38 ++++++++++++++++++---
+ scripts/atomic/fallbacks/read_acquire       | 11 +++++-
+ scripts/atomic/fallbacks/set_release        |  7 +++-
+ 3 files changed, 49 insertions(+), 7 deletions(-)
+
+diff --git a/include/linux/atomic/atomic-arch-fallback.h b/include/linux/atomic/atomic-arch-fallback.h
+index a3dba31df01e..6db58d180866 100644
+--- a/include/linux/atomic/atomic-arch-fallback.h
++++ b/include/linux/atomic/atomic-arch-fallback.h
+@@ -151,7 +151,16 @@
+ static __always_inline int
+ arch_atomic_read_acquire(const atomic_t *v)
+ {
+-	return smp_load_acquire(&(v)->counter);
++	int ret;
++
++	if (__native_word(atomic_t)) {
++		ret = smp_load_acquire(&(v)->counter);
++	} else {
++		ret = arch_atomic_read(v);
++		__atomic_acquire_fence();
++	}
++
++	return ret;
+ }
+ #define arch_atomic_read_acquire arch_atomic_read_acquire
+ #endif
+@@ -160,7 +169,12 @@ arch_atomic_read_acquire(const atomic_t *v)
+ static __always_inline void
+ arch_atomic_set_release(atomic_t *v, int i)
+ {
+-	smp_store_release(&(v)->counter, i);
++	if (__native_word(atomic_t)) {
++		smp_store_release(&(v)->counter, i);
++	} else {
++		__atomic_release_fence();
++		arch_atomic_set(v, i);
++	}
+ }
+ #define arch_atomic_set_release arch_atomic_set_release
+ #endif
+@@ -1258,7 +1272,16 @@ arch_atomic_dec_if_positive(atomic_t *v)
+ static __always_inline s64
+ arch_atomic64_read_acquire(const atomic64_t *v)
+ {
+-	return smp_load_acquire(&(v)->counter);
++	s64 ret;
++
++	if (__native_word(atomic64_t)) {
++		ret = smp_load_acquire(&(v)->counter);
++	} else {
++		ret = arch_atomic64_read(v);
++		__atomic_acquire_fence();
++	}
++
++	return ret;
+ }
+ #define arch_atomic64_read_acquire arch_atomic64_read_acquire
+ #endif
+@@ -1267,7 +1290,12 @@ arch_atomic64_read_acquire(const atomic64_t *v)
+ static __always_inline void
+ arch_atomic64_set_release(atomic64_t *v, s64 i)
+ {
+-	smp_store_release(&(v)->counter, i);
++	if (__native_word(atomic64_t)) {
++		smp_store_release(&(v)->counter, i);
++	} else {
++		__atomic_release_fence();
++		arch_atomic64_set(v, i);
++	}
+ }
+ #define arch_atomic64_set_release arch_atomic64_set_release
+ #endif
+@@ -2358,4 +2386,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
+ #endif
+ 
+ #endif /* _LINUX_ATOMIC_FALLBACK_H */
+-// cca554917d7ea73d5e3e7397dd70c484cad9b2c4
++// 8e2cc06bc0d2c0967d2f8424762bd48555ee40ae
+diff --git a/scripts/atomic/fallbacks/read_acquire b/scripts/atomic/fallbacks/read_acquire
+index 803ba7561076..a0ea1d26e6b2 100755
+--- a/scripts/atomic/fallbacks/read_acquire
++++ b/scripts/atomic/fallbacks/read_acquire
+@@ -2,6 +2,15 @@ cat <<EOF
+ static __always_inline ${ret}
+ arch_${atomic}_read_acquire(const ${atomic}_t *v)
+ {
+-	return smp_load_acquire(&(v)->counter);
++	${int} ret;
++
++	if (__native_word(${atomic}_t)) {
++		ret = smp_load_acquire(&(v)->counter);
++	} else {
++		ret = arch_${atomic}_read(v);
++		__atomic_acquire_fence();
++	}
++
++	return ret;
+ }
+ EOF
+diff --git a/scripts/atomic/fallbacks/set_release b/scripts/atomic/fallbacks/set_release
+index 86ede759f24e..05cdb7f42477 100755
+--- a/scripts/atomic/fallbacks/set_release
++++ b/scripts/atomic/fallbacks/set_release
+@@ -2,6 +2,11 @@ cat <<EOF
+ static __always_inline void
+ arch_${atomic}_set_release(${atomic}_t *v, ${int} i)
+ {
+-	smp_store_release(&(v)->counter, i);
++	if (__native_word(${atomic}_t)) {
++		smp_store_release(&(v)->counter, i);
++	} else {
++		__atomic_release_fence();
++		arch_${atomic}_set(v, i);
++	}
+ }
+ EOF
+-- 
+2.34.1
 

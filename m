@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4544E9E6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5512F4E9E7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbiC1R5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 13:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
+        id S241741AbiC1R6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 13:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245074AbiC1R4v (ORCPT
+        with ESMTP id S245011AbiC1R4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 13:56:51 -0400
+        Mon, 28 Mar 2022 13:56:54 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA96621E1F;
-        Mon, 28 Mar 2022 10:55:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0441224594;
+        Mon, 28 Mar 2022 10:55:07 -0700 (PDT)
 Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KS0dr4kkWz67Q5R;
-        Tue, 29 Mar 2022 01:52:32 +0800 (CST)
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KS0dt6lWgz67sj9;
+        Tue, 29 Mar 2022 01:52:34 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 28 Mar 2022 19:55:01 +0200
+ 15.1.2375.24; Mon, 28 Mar 2022 19:55:04 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <corbet@lwn.net>, <viro@zeniv.linux.org.uk>, <ast@kernel.org>,
         <daniel@iogearbox.net>, <andrii@kernel.org>, <kpsingh@kernel.org>,
@@ -36,9 +36,9 @@ CC:     <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
         <linux-security-module@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH 16/18] bpf-preload: Do kernel mount to ensure that pinned objects don't disappear
-Date:   Mon, 28 Mar 2022 19:50:31 +0200
-Message-ID: <20220328175033.2437312-17-roberto.sassu@huawei.com>
+Subject: [PATCH 18/18] bpf-preload/selftests: Preload a test eBPF program and check pinned objects
+Date:   Mon, 28 Mar 2022 19:50:33 +0200
+Message-ID: <20220328175033.2437312-19-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220328175033.2437312-1-roberto.sassu@huawei.com>
 References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
@@ -58,101 +58,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One of the differences between traditional LSMs in the security subsystem
-and LSMs implemented as eBPF programs is that for the latter category it
-cannot be guaranteed that they cannot be stopped.
+Introduce the 'preload_methods' test, which loads the new kernel module
+bpf_testmod_preload.ko (with the light skeleton from
+gen_preload_methods.c), mounts a new instance of the bpf filesystem, and
+checks if the pinned objects exist.
 
-If a pinned program is unpinned, its execution will be stopped and will not
-enforce anymore its policy. For traditional LSMs this problem does not
-arise as, once they are invoked by the kernel, only the LSMs themselves
-decide whether or not they could be stopped.
-
-Solve this problem by mounting the bpf filesystem from the kernel, so that
-an object cannot be unpinned (a kernel mount is not accessible to user
-space). This will ensure that the LSM will run until the very end of the
-kernel lifecycle.
-
-Delay the kernel mount until the security subsystem (e.g. IMA) is fully
-initialized (e.g. keys loaded), so that the security subsystem can evaluate
-kernel modules loaded by populate_bpffs().
+The test requires to include 'gen_preload_methods_lskel' among the list of
+eBPF programs to preload.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- fs/namespace.c      | 1 +
- include/linux/bpf.h | 5 +++++
- init/main.c         | 2 ++
- kernel/bpf/inode.c  | 9 +++++++++
- 4 files changed, 17 insertions(+)
+ tools/testing/selftests/bpf/Makefile          | 17 ++++-
+ .../bpf/bpf_testmod_preload/.gitignore        |  7 ++
+ .../bpf/bpf_testmod_preload/Makefile          | 20 ++++++
+ .../bpf/prog_tests/test_preload_methods.c     | 69 +++++++++++++++++++
+ 4 files changed, 110 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/bpf_testmod_preload/.gitignore
+ create mode 100644 tools/testing/selftests/bpf/bpf_testmod_preload/Makefile
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_preload_methods.c
 
-diff --git a/fs/namespace.c b/fs/namespace.c
-index 6e9844b8c6fb..3b69f96dc641 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -31,6 +31,7 @@
- #include <uapi/linux/mount.h>
- #include <linux/fs_context.h>
- #include <linux/shmem_fs.h>
-+#include <linux/bpf.h>
- #include <linux/mnt_idmapping.h>
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index de81779e90e3..ca419b0a083c 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -82,7 +82,7 @@ TEST_PROGS_EXTENDED := with_addr.sh \
+ TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
+ 	flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
+ 	test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko \
+-	xdpxceiver xdp_redirect_multi
++	xdpxceiver xdp_redirect_multi bpf_testmod_preload.ko
  
- #include "pnode.h"
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index bdb5298735ce..5f624310fda2 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1103,6 +1103,8 @@ static inline void bpf_module_put(const void *data, struct module *owner)
- 		module_put(owner);
- }
+ TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read
  
-+void __init mount_bpffs(void);
+@@ -110,6 +110,7 @@ override define CLEAN
+ 	$(Q)$(RM) -r $(TEST_GEN_FILES)
+ 	$(Q)$(RM) -r $(EXTRA_CLEAN)
+ 	$(Q)$(MAKE) -C bpf_testmod clean
++	$(Q)$(MAKE) -C bpf_testmod_preload clean
+ 	$(Q)$(MAKE) docs-clean
+ endef
+ 
+@@ -502,7 +503,7 @@ TRUNNER_EXTRA_SOURCES := test_progs.c cgroup_helpers.c trace_helpers.c	\
+ 			 btf_helpers.c flow_dissector_load.h		\
+ 			 cap_helpers.c
+ TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko	\
+-		       ima_setup.sh					\
++		       ima_setup.sh $(OUTPUT)/bpf_testmod_preload.ko	\
+ 		       $(wildcard progs/btf_dump_test_case_*.c)
+ TRUNNER_BPF_BUILD_RULE := CLANG_BPF_BUILD_RULE
+ TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS) -DENABLE_ATOMICS_TESTS
+@@ -575,9 +576,19 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
+ 	$(call msg,BINARY,,$@)
+ 	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
+ 
++bpf_testmod_preload/bpf_testmod_preload.c: $(OUTPUT)/gen_preload_methods.preload.lskel.h $(BPFTOOL) $(TRUNNER_BPF_LSKELSP)
++	$(call msg,GEN-MOD,,$@)
++	$(BPFTOOL) gen module $< > $@
 +
- #ifdef CONFIG_NET
- /* Define it here to avoid the use of forward declaration */
- struct bpf_dummy_ops_state {
-@@ -1141,6 +1143,9 @@ static inline int bpf_struct_ops_map_sys_lookup_elem(struct bpf_map *map,
- {
- 	return -EINVAL;
- }
-+static inline void __init mount_bpffs(void)
++$(OUTPUT)/bpf_testmod_preload.ko: bpf_testmod_preload/bpf_testmod_preload.c
++	$(call msg,MOD,,$@)
++	$(Q)$(RM) bpf_testmod_preload/bpf_testmod_preload.ko # force re-compilation
++	$(Q)$(MAKE) $(submake_extras) -C bpf_testmod_preload
++	$(Q)cp bpf_testmod_preload/bpf_testmod_preload.ko $@
++
+ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)	\
+ 	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
+ 	feature bpftool							\
+-	$(addprefix $(OUTPUT)/,*.o *.skel.h *.lskel.h *.subskel.h no_alu32 bpf_gcc bpf_testmod.ko)
++	$(addprefix $(OUTPUT)/,*.o *.skel.h *.lskel.h *.subskel.h no_alu32 bpf_gcc bpf_testmod.ko bpf_testmod_preload.ko)
+ 
+ .PHONY: docs docs-clean
+diff --git a/tools/testing/selftests/bpf/bpf_testmod_preload/.gitignore b/tools/testing/selftests/bpf/bpf_testmod_preload/.gitignore
+new file mode 100644
+index 000000000000..989530ffc79f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/bpf_testmod_preload/.gitignore
+@@ -0,0 +1,7 @@
++*.mod
++*.mod.c
++*.o
++.ko
++/Module.symvers
++/modules.order
++bpf_testmod_preload.c
+diff --git a/tools/testing/selftests/bpf/bpf_testmod_preload/Makefile b/tools/testing/selftests/bpf/bpf_testmod_preload/Makefile
+new file mode 100644
+index 000000000000..d17ac6670974
+--- /dev/null
++++ b/tools/testing/selftests/bpf/bpf_testmod_preload/Makefile
+@@ -0,0 +1,20 @@
++BPF_TESTMOD_PRELOAD_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
++KDIR ?= $(abspath $(BPF_TESTMOD_PRELOAD_DIR)/../../../../..)
++
++ifeq ($(V),1)
++Q =
++else
++Q = @
++endif
++
++MODULES = bpf_testmod_preload.ko
++
++obj-m += bpf_testmod_preload.o
++CFLAGS_bpf_testmod_preload.o = -I$(BPF_TESTMOD_PRELOAD_DIR)/../tools/include
++
++all:
++	+$(Q)make -C $(KDIR) M=$(BPF_TESTMOD_PRELOAD_DIR) modules
++
++clean:
++	+$(Q)make -C $(KDIR) M=$(BPF_TESTMOD_PRELOAD_DIR) clean
++
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_preload_methods.c b/tools/testing/selftests/bpf/prog_tests/test_preload_methods.c
+new file mode 100644
+index 000000000000..bad3b187794b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/test_preload_methods.c
+@@ -0,0 +1,69 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
++ */
++
++#include <errno.h>
++#include <limits.h>
++#include <test_progs.h>
++#include <sys/mount.h>
++#include <sys/stat.h>
++
++#define MOUNT_FLAGS (MS_NOSUID | MS_NODEV | MS_NOEXEC | MS_RELATIME)
++
++static int duration;
++
++void test_test_preload_methods(void)
 +{
-+}
- #endif
- 
- struct bpf_array {
-diff --git a/init/main.c b/init/main.c
-index 0c064c2c79fd..30dcd0dd9faa 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -99,6 +99,7 @@
- #include <linux/kcsan.h>
- #include <linux/init_syscalls.h>
- #include <linux/stackdepot.h>
-+#include <linux/bpf.h>
- #include <net/net_namespace.h>
- 
- #include <asm/io.h>
-@@ -1638,4 +1639,5 @@ static noinline void __init kernel_init_freeable(void)
- 	 */
- 
- 	integrity_load_keys();
-+	mount_bpffs();
- }
-diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-index c1941c65ce95..e8361d7679d0 100644
---- a/kernel/bpf/inode.c
-+++ b/kernel/bpf/inode.c
-@@ -1020,3 +1020,12 @@ static int __init bpf_init(void)
- 	return ret;
- }
- fs_initcall(bpf_init);
++	char bpf_mntpoint[] = "/tmp/bpf_mntpointXXXXXX", *dir;
++	char path[PATH_MAX];
++	struct stat st;
++	int err;
 +
-+static struct vfsmount *bpffs_mount __read_mostly;
++	system("rmmod bpf_testmod_preload 2> /dev/null");
 +
-+void __init mount_bpffs(void)
-+{
-+	bpffs_mount = kern_mount(&bpf_fs_type);
-+	if (IS_ERR(bpffs_mount))
-+		pr_err("bpffs: could not mount!\n");
++	err = system("insmod bpf_testmod_preload.ko");
++	if (CHECK(err, "insmod",
++		  "cannot load bpf_testmod_preload.ko, err=%d\n", err))
++		return;
++
++	dir = mkdtemp(bpf_mntpoint);
++	if (CHECK(!dir, "mkstemp", "cannot create temp file, err=%d\n",
++		  -errno))
++		goto out_rmmod;
++
++	err = mount(bpf_mntpoint, bpf_mntpoint, "bpf", MOUNT_FLAGS, NULL);
++	if (CHECK(err, "mount",
++		  "cannot mount bpf filesystem to %s, err=%d\n", bpf_mntpoint,
++		  err))
++		goto out_unlink;
++
++	snprintf(path, sizeof(path), "%s/gen_preload_methods_lskel",
++		 bpf_mntpoint);
++
++	err = stat(path, &st);
++	if (CHECK(err, "stat", "cannot find %s\n", path))
++		goto out_unmount;
++
++	snprintf(path, sizeof(path),
++		 "%s/gen_preload_methods_lskel/dump_bpf_map", bpf_mntpoint);
++
++	err = stat(path, &st);
++	if (CHECK(err, "stat", "cannot find %s\n", path))
++		goto out_unmount;
++
++	snprintf(path, sizeof(path), "%s/gen_preload_methods_lskel/ringbuf",
++		 bpf_mntpoint);
++
++	err = stat(path, &st);
++	if (CHECK(err, "stat", "cannot find %s\n", path))
++		goto out_unmount;
++
++out_unmount:
++	umount(bpf_mntpoint);
++out_unlink:
++	rmdir(bpf_mntpoint);
++out_rmmod:
++	system("rmmod bpf_testmod_preload");
 +}
 -- 
 2.32.0

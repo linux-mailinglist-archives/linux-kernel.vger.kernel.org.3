@@ -2,70 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A574E9F18
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6E04E9F1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245268AbiC1Skq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 14:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
+        id S245278AbiC1Sln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 14:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243749AbiC1Skn (ORCPT
+        with ESMTP id S243749AbiC1Sll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 14:40:43 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB6C62C84;
-        Mon, 28 Mar 2022 11:39:02 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id m22so15043025pja.0;
-        Mon, 28 Mar 2022 11:39:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ccQY+nh2LrlRuF220Zy4PJ1Pgg4dKfaXAR1grqXSOgk=;
-        b=KrSlN2+RE1rrrywqYvhNoB0Ox2+Q+ZtEDV7fgm4o0+G7nELzn+1kPbrsiNyNe915Wl
-         jTsKtjJlCCnArfLpVe1jlBiwZ0M6hAc5PEO1VoKGDELCkQSoqK5svZIJR2jSg9r0gBnH
-         zYNc/M3yVZTMQKulOoYAWdzqq+7FGxREnSV/6rPNELRs8lwanDwi+Uhn1KZoGrHAKyuB
-         GUhoWClwBxPOFj0A5ERiE6m5fx/dTNqSYQeCMMNwn0l45HFeXnw/e/NHANkqEOi8JgtU
-         kTQiJutQgTJBw5sXRhDCwPyz6Dy6zmgJHmuKZc7AfzBJKD0skMzl4Iw7b6ePV4276hbi
-         QxZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ccQY+nh2LrlRuF220Zy4PJ1Pgg4dKfaXAR1grqXSOgk=;
-        b=dhnkh2KoHvfTws24AI31JqJbF/VE5VYSZQHnwkKTwLxUsD3HLsHTSn+jZKXwdBFu3H
-         VSXdA7luNXNfbsWAXi8wlmPwY6hqOnxUR3/8eTvHJ5UrdKAmS5tSzld7wAShD7J8AoYl
-         p5gxrrMpMnHFUf81+gTmNYokztYBiPPU+DAls8iAQOoeDFuiBa8433xMMFjs5VFBhnwT
-         JKN7yP85sZ55WE7dOcKrgiLXGe5cqCVgdOR/HAL0CYp3Nvw6tyha0ONPGu5IO2qW1z45
-         BUGMyhL+Nh1hMGIpuOb6Y4v/98q5XvUCQNRYENyiYKJLePTsrAo26TyD6Oq/sbZvHc2i
-         qTFQ==
-X-Gm-Message-State: AOAM533Yztm4ApPetyYLCUaYwzvrF73yAUioRLynmOZ1eraxQHjE5rbe
-        vwmQ2w7x2h3XBbji/M6f8IY=
-X-Google-Smtp-Source: ABdhPJxRb20GkX9Lx2PRH//RxpoYIkA7P8jyuzbCPZ/guhKbbjPg1mU14UaIJVXvi6sUABIsWb2yaw==
-X-Received: by 2002:a17:90b:4c12:b0:1c6:f450:729d with SMTP id na18-20020a17090b4c1200b001c6f450729dmr523934pjb.190.1648492741860;
-        Mon, 28 Mar 2022 11:39:01 -0700 (PDT)
-Received: from jagath-PC ([115.99.143.239])
-        by smtp.gmail.com with ESMTPSA id m12-20020a17090a2c0c00b001bc4cf0107esm195989pjd.53.2022.03.28.11.39.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 28 Mar 2022 11:39:01 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 00:08:57 +0530
-From:   Jagath Jog J <jagathjog1996@gmail.com>
+        Mon, 28 Mar 2022 14:41:41 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5D914026;
+        Mon, 28 Mar 2022 11:39:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1648492796; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QmieihZbGB29NOEkXombMlBt3Ij7l+yxxQPdnPvDlbM=;
+        b=oBUY8yaDcgU5YYatcQr7/GNeFWvb5DzhkdvXEQunAKpWhRoGQxcwo5cuBZKwXRj32FyE0g
+        aqkOUpQRJiVkD5tz92uU0wyEMy0yjca22p+Vb1Kfoy1iLLosOikPwArTdhlSoKBjLxbbH8
+        jQ/rWoaM4qDFtKJWq6t51AwDAxoThy0=
+Date:   Mon, 28 Mar 2022 19:39:45 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 02/12] iio: buffer-dma: Enable buffer write support
 To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     dan@dlrobertson.com, andy.shevchenko@gmail.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] iio: accel: bma400: Add triggered buffer support
-Message-ID: <20220328183852.GA4465@jagath-PC>
-References: <20220326194146.15549-1-jagathjog1996@gmail.com>
- <20220326194146.15549-4-jagathjog1996@gmail.com>
- <20220327174545.41a15150@jic23-huawei>
+Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Christian =?iso-8859-1?b?S/ZuaWc=?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org
+Message-Id: <96XG9R.3NOIIEN7IS001@crapouillou.net>
+In-Reply-To: <20220328182409.1e959386@jic23-huawei>
+References: <20220207125933.81634-1-paul@crapouillou.net>
+        <20220207125933.81634-3-paul@crapouillou.net>
+        <20220328182409.1e959386@jic23-huawei>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220327174545.41a15150@jic23-huawei>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,152 +57,268 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Jonathan,
 
-On Sun, Mar 27, 2022 at 05:45:45PM +0100, Jonathan Cameron wrote:
-> On Sun, 27 Mar 2022 01:11:44 +0530
-> Jagath Jog J <jagathjog1996@gmail.com> wrote:
-> 
-> > Added trigger buffer support to read continuous acceleration
-> > data from device with data ready interrupt which is mapped
-> > to INT1 pin.
-> > 
-> > Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
-> Hi Jagath,
-> 
-> Just a few small things noticed on this read through.
-> 
-> Thanks,
-> 
-> Jonathan
-> 
-> > ---
-> >  drivers/iio/accel/Kconfig       |   2 +
-> >  drivers/iio/accel/bma400.h      |  10 +-
-> >  drivers/iio/accel/bma400_core.c | 162 ++++++++++++++++++++++++++++++--
-> >  drivers/iio/accel/bma400_i2c.c  |   2 +-
-> >  drivers/iio/accel/bma400_spi.c  |   2 +-
-> >  5 files changed, 168 insertions(+), 10 deletions(-)
-> > 
-> 
-> > diff --git a/drivers/iio/accel/bma400_core.c b/drivers/iio/accel/bma400_core.c
-> > index dc273381a0a2..fa3f4b5f229f 100644
-> > --- a/drivers/iio/accel/bma400_core.c
-> > +++ b/drivers/iio/accel/bma400_core.c
-> > @@ -11,16 +11,22 @@
-> >   *  - Create channel for sensor time
-> >   */
-> >  
-> > +#include <linux/bitfield.h>
-> >  #include <linux/bitops.h>
-> >  #include <linux/device.h>
-> > -#include <linux/iio/iio.h>
-> > -#include <linux/iio/sysfs.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/module.h>
-> >  #include <linux/mutex.h>
-> >  #include <linux/regmap.h>
-> >  #include <linux/regulator/consumer.h>
-> >  
-> > +#include <linux/iio/iio.h>
-> > +#include <linux/iio/sysfs.h>
-> 
-> Is iio/sysfs.h actually used?  It rarely is these days as it contains
-> the infrastructure for custom attributes and we try not to use any
-> of those anymore.
-> 
-> > +#include <linux/iio/buffer.h>
-> > +#include <linux/iio/trigger.h>
-> > +#include <linux/iio/trigger_consumer.h>
-> > +#include <linux/iio/triggered_buffer.h>
-> > +
-> This reorganization of headers is good but shouldn't be in this patch.
-> Add an earlier patch in the series to move the existing pair down here
-> before this patch then adds the new ones.
+Le lun., mars 28 2022 at 18:24:09 +0100, Jonathan Cameron=20
+<jic23@kernel.org> a =E9crit :
+> On Mon,  7 Feb 2022 12:59:23 +0000
+> Paul Cercueil <paul@crapouillou.net> wrote:
+>=20
+>>  Adding write support to the buffer-dma code is easy - the write()
+>>  function basically needs to do the exact same thing as the read()
+>>  function: dequeue a block, read or write the data, enqueue the block
+>>  when entirely processed.
+>>=20
+>>  Therefore, the iio_buffer_dma_read() and the new=20
+>> iio_buffer_dma_write()
+>>  now both call a function iio_buffer_dma_io(), which will perform=20
+>> this
+>>  task.
+>>=20
+>>  The .space_available() callback can return the exact same value as=20
+>> the
+>>  .data_available() callback for input buffers, since in both cases we
+>>  count the exact same thing (the number of bytes in each available
+>>  block).
+>>=20
+>>  Note that we preemptively reset block->bytes_used to the buffer's=20
+>> size
+>>  in iio_dma_buffer_request_update(), as in the future the
+>>  iio_dma_buffer_enqueue() function won't reset it.
+>>=20
+>>  v2: - Fix block->state not being reset in
+>>        iio_dma_buffer_request_update() for output buffers.
+>>      - Only update block->bytes_used once and add a comment about=20
+>> why we
+>>        update it.
+>>      - Add a comment about why we're setting a different state for=20
+>> output
+>>        buffers in iio_dma_buffer_request_update()
+>>      - Remove useless cast to bool (!!) in iio_dma_buffer_io()
+>>=20
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  Reviewed-by: Alexandru Ardelean <ardeleanalex@gmail.com>
+> One comment inline.
+>=20
+> I'd be tempted to queue this up with that fixed, but do we have
+> any users?  Even though it's trivial I'm not that keen on code
+> upstream well in advance of it being used.
 
-Sure I will do the reorganization of headers in the seperate patch.
+There's a userspace user in libiio. On the kernel side we do have=20
+drivers that use it in ADI's downstream kernel, that we plan to=20
+upstream in the long term (but it can take some time, as we need to=20
+upstream other things first, like JESD204B support).
 
-> 
-> 
-> ...
-> 
-> >  
-> >  static int bma400_get_temp_reg(struct bma400_data *data, int *val, int *val2)
-> > @@ -659,6 +687,10 @@ static int bma400_init(struct bma400_data *data)
-> >  	if (ret)
-> >  		return ret;
-> >  
-> > +	/* Configure INT1 pin to open drain */
-> > +	ret = regmap_write(data->regmap, BMA400_INT_IO_CTRL_REG, 0x06);
-> > +	if (ret)
-> > +		return ret;
-> >  	/*
-> >  	 * Once the interrupt engine is supported we might use the
-> >  	 * data_src_reg, but for now ensure this is set to the
-> > @@ -807,6 +839,33 @@ static int bma400_write_raw_get_fmt(struct iio_dev *indio_dev,
-> >  	}
-> >  }
-> >  
-> > +static int bma400_data_rdy_trigger_set_state(struct iio_trigger *trig,
-> > +					     bool state)
-> > +{
-> > +	struct iio_dev *indio_dev = iio_trigger_get_drvdata(trig);
-> > +	struct bma400_data *data = iio_priv(indio_dev);
-> > +	int ret;
-> > +
-> > +	ret = regmap_update_bits(data->regmap, BMA400_INT_CONFIG0_REG,
-> > +				 BMA400_INT_DRDY_MSK,
-> > +				 FIELD_PREP(BMA400_INT_DRDY_MSK, state));
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = regmap_update_bits(data->regmap, BMA400_INT1_MAP_REG,
-> > +				 BMA400_INT_DRDY_MSK,
-> > +				 FIELD_PREP(BMA400_INT_DRDY_MSK, state));
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	return 0;
-> 
-> 	return regmap_update_bits()...
-> 
-> > +}
-> 
-> ...
-> 
-> 
-> > +static irqreturn_t bma400_interrupt(int irq, void *private)
-> > +{
-> > +	struct iio_dev *indio_dev = private;
-> > +	struct bma400_data *data = iio_priv(indio_dev);
-> > +	irqreturn_t ret = IRQ_NONE;
-> > +	__le16 status;
-> > +
-> > +	mutex_lock(&data->mutex);
-> > +	ret = regmap_bulk_read(data->regmap, BMA400_INT_STAT0_REG, &status,
-> > +			       sizeof(status));
-> > +	mutex_unlock(&data->mutex);
-> > +	if (ret)
-> > +		return IRQ_NONE;
-> > +
-> > +	if (FIELD_GET(BMA400_INT_DRDY_MSK, le16_to_cpu(status))) {
-> > +		iio_trigger_poll_chained(data->trig);
-> > +		ret = IRQ_HANDLED;
-> Preference for this style
-> 		return IRQ_HANDLED;
-> > +	}
-> > +
-> return IRQ_NONE;
-> and don't initialize above.
+>=20
+>>  ---
+>>   drivers/iio/buffer/industrialio-buffer-dma.c | 88=20
+>> ++++++++++++++++----
+>>   include/linux/iio/buffer-dma.h               |  7 ++
+>>   2 files changed, 79 insertions(+), 16 deletions(-)
+>>=20
+>>  diff --git a/drivers/iio/buffer/industrialio-buffer-dma.c=20
+>> b/drivers/iio/buffer/industrialio-buffer-dma.c
+>>  index 1fc91467d1aa..a9f1b673374f 100644
+>>  --- a/drivers/iio/buffer/industrialio-buffer-dma.c
+>>  +++ b/drivers/iio/buffer/industrialio-buffer-dma.c
+>>  @@ -195,6 +195,18 @@ static void _iio_dma_buffer_block_done(struct=20
+>> iio_dma_buffer_block *block)
+>>   		block->state =3D IIO_BLOCK_STATE_DONE;
+>>   }
+>>=20
+>>  +static void iio_dma_buffer_queue_wake(struct iio_dma_buffer_queue=20
+>> *queue)
+>>  +{
+>>  +	__poll_t flags;
+>>  +
+>>  +	if (queue->buffer.direction =3D=3D IIO_BUFFER_DIRECTION_IN)
+>>  +		flags =3D EPOLLIN | EPOLLRDNORM;
+>>  +	else
+>>  +		flags =3D EPOLLOUT | EPOLLWRNORM;
+>>  +
+>>  +	wake_up_interruptible_poll(&queue->buffer.pollq, flags);
+>>  +}
+>>  +
+>>   /**
+>>    * iio_dma_buffer_block_done() - Indicate that a block has been=20
+>> completed
+>>    * @block: The completed block
+>>  @@ -212,7 +224,7 @@ void iio_dma_buffer_block_done(struct=20
+>> iio_dma_buffer_block *block)
+>>   	spin_unlock_irqrestore(&queue->list_lock, flags);
+>>=20
+>>   	iio_buffer_block_put_atomic(block);
+>>  -	wake_up_interruptible_poll(&queue->buffer.pollq, EPOLLIN |=20
+>> EPOLLRDNORM);
+>>  +	iio_dma_buffer_queue_wake(queue);
+>>   }
+>>   EXPORT_SYMBOL_GPL(iio_dma_buffer_block_done);
+>>=20
+>>  @@ -241,7 +253,7 @@ void iio_dma_buffer_block_list_abort(struct=20
+>> iio_dma_buffer_queue *queue,
+>>   	}
+>>   	spin_unlock_irqrestore(&queue->list_lock, flags);
+>>=20
+>>  -	wake_up_interruptible_poll(&queue->buffer.pollq, EPOLLIN |=20
+>> EPOLLRDNORM);
+>>  +	iio_dma_buffer_queue_wake(queue);
+>>   }
+>>   EXPORT_SYMBOL_GPL(iio_dma_buffer_block_list_abort);
+>>=20
+>>  @@ -335,8 +347,24 @@ int iio_dma_buffer_request_update(struct=20
+>> iio_buffer *buffer)
+>>   			queue->fileio.blocks[i] =3D block;
+>>   		}
+>>=20
+>>  -		block->state =3D IIO_BLOCK_STATE_QUEUED;
+>>  -		list_add_tail(&block->head, &queue->incoming);
+>>  +		/*
+>>  +		 * block->bytes_used may have been modified previously, e.g. by
+>>  +		 * iio_dma_buffer_block_list_abort(). Reset it here to the
+>>  +		 * block's so that iio_dma_buffer_io() will work.
+>>  +		 */
+>>  +		block->bytes_used =3D block->size;
+>>  +
+>>  +		/*
+>>  +		 * If it's an input buffer, mark the block as queued, and
+>>  +		 * iio_dma_buffer_enable() will submit it. Otherwise mark it as
+>>  +		 * done, which means it's ready to be dequeued.
+>>  +		 */
+>>  +		if (queue->buffer.direction =3D=3D IIO_BUFFER_DIRECTION_IN) {
+>>  +			block->state =3D IIO_BLOCK_STATE_QUEUED;
+>>  +			list_add_tail(&block->head, &queue->incoming);
+>>  +		} else {
+>>  +			block->state =3D IIO_BLOCK_STATE_DONE;
+>>  +		}
+>>   	}
+>>=20
+>>   out_unlock:
+>>  @@ -465,20 +493,12 @@ static struct iio_dma_buffer_block=20
+>> *iio_dma_buffer_dequeue(
+>>   	return block;
+>>   }
+>>=20
+>>  -/**
+>>  - * iio_dma_buffer_read() - DMA buffer read callback
+>>  - * @buffer: Buffer to read form
+>>  - * @n: Number of bytes to read
+>>  - * @user_buffer: Userspace buffer to copy the data to
+>>  - *
+>>  - * Should be used as the read callback for iio_buffer_access_ops
+>>  - * struct for DMA buffers.
+>>  - */
+>>  -int iio_dma_buffer_read(struct iio_buffer *buffer, size_t n,
+>>  -	char __user *user_buffer)
+>>  +static int iio_dma_buffer_io(struct iio_buffer *buffer,
+>>  +			     size_t n, char __user *user_buffer, bool is_write)
+>>   {
+>>   	struct iio_dma_buffer_queue *queue =3D iio_buffer_to_queue(buffer);
+>>   	struct iio_dma_buffer_block *block;
+>>  +	void *addr;
+>>   	int ret;
+>>=20
+>>   	if (n < buffer->bytes_per_datum)
+>>  @@ -501,8 +521,13 @@ int iio_dma_buffer_read(struct iio_buffer=20
+>> *buffer, size_t n,
+>>   	n =3D rounddown(n, buffer->bytes_per_datum);
+>>   	if (n > block->bytes_used - queue->fileio.pos)
+>>   		n =3D block->bytes_used - queue->fileio.pos;
+>>  +	addr =3D block->vaddr + queue->fileio.pos;
+>>=20
+>>  -	if (copy_to_user(user_buffer, block->vaddr + queue->fileio.pos,=20
+>> n)) {
+>>  +	if (is_write)
+>>  +		ret =3D copy_from_user(addr, user_buffer, n);
+>>  +	else
+>>  +		ret =3D copy_to_user(user_buffer, addr, n);
+>>  +	if (ret) {
+>>   		ret =3D -EFAULT;
+>>   		goto out_unlock;
+>>   	}
+>>  @@ -521,8 +546,39 @@ int iio_dma_buffer_read(struct iio_buffer=20
+>> *buffer, size_t n,
+>>=20
+>>   	return ret;
+>>   }
+>>  +
+>>  +/**
+>>  + * iio_dma_buffer_read() - DMA buffer read callback
+>>  + * @buffer: Buffer to read form
+>>  + * @n: Number of bytes to read
+>>  + * @user_buffer: Userspace buffer to copy the data to
+>>  + *
+>>  + * Should be used as the read callback for iio_buffer_access_ops
+>>  + * struct for DMA buffers.
+>>  + */
+>>  +int iio_dma_buffer_read(struct iio_buffer *buffer, size_t n,
+>>  +	char __user *user_buffer)
+>>  +{
+>>  +	return iio_dma_buffer_io(buffer, n, user_buffer, false);
+>>  +}
+>>   EXPORT_SYMBOL_GPL(iio_dma_buffer_read);
+>>=20
+>>  +/**
+>>  + * iio_dma_buffer_write() - DMA buffer write callback
+>>  + * @buffer: Buffer to read form
+>>  + * @n: Number of bytes to read
+>>  + * @user_buffer: Userspace buffer to copy the data from
+>>  + *
+>>  + * Should be used as the write callback for iio_buffer_access_ops
+>>  + * struct for DMA buffers.
+>>  + */
+>>  +int iio_dma_buffer_write(struct iio_buffer *buffer, size_t n,
+>>  +			 const char __user *user_buffer)
+>>  +{
+>>  +	return iio_dma_buffer_io(buffer, n, (__force char *)user_buffer,=20
+>> true);
+>=20
+> Casting away the const is a little nasty.   Perhaps it's worth adding=20
+> a
+> parameter to iio_dma_buffer_io so you can have different parameters
+> for the read and write cases and hence keep the const in place?
+> return iio_dma_buffer_io(buffer, n, NULL, user_buffer, true);
+> and
+> return iio_dma_buffer_io(buffer,n, user_buffer, NULL, false);
 
-Sure I will make these changes and I will try to handle the events before
-the data ready since step interrupt will occur less frequently compared to
-data ready interrupts.
+I can do that.
 
-> 
-> > +	return ret;
-> > +}
-> > +
-> 
-> 
+Cheers,
+-Paul
 
-Thank you,
-Jagath
+>>  +}
+>>  +EXPORT_SYMBOL_GPL(iio_dma_buffer_write);
+>>  +
+>>   /**
+>>    * iio_dma_buffer_data_available() - DMA buffer data_available=20
+>> callback
+>>    * @buf: Buffer to check for data availability
+>>  diff --git a/include/linux/iio/buffer-dma.h=20
+>> b/include/linux/iio/buffer-dma.h
+>>  index 18d3702fa95d..490b93f76fa8 100644
+>>  --- a/include/linux/iio/buffer-dma.h
+>>  +++ b/include/linux/iio/buffer-dma.h
+>>  @@ -132,6 +132,8 @@ int iio_dma_buffer_disable(struct iio_buffer=20
+>> *buffer,
+>>   	struct iio_dev *indio_dev);
+>>   int iio_dma_buffer_read(struct iio_buffer *buffer, size_t n,
+>>   	char __user *user_buffer);
+>>  +int iio_dma_buffer_write(struct iio_buffer *buffer, size_t n,
+>>  +			 const char __user *user_buffer);
+>>   size_t iio_dma_buffer_data_available(struct iio_buffer *buffer);
+>>   int iio_dma_buffer_set_bytes_per_datum(struct iio_buffer *buffer,=20
+>> size_t bpd);
+>>   int iio_dma_buffer_set_length(struct iio_buffer *buffer, unsigned=20
+>> int length);
+>>  @@ -142,4 +144,9 @@ int iio_dma_buffer_init(struct=20
+>> iio_dma_buffer_queue *queue,
+>>   void iio_dma_buffer_exit(struct iio_dma_buffer_queue *queue);
+>>   void iio_dma_buffer_release(struct iio_dma_buffer_queue *queue);
+>>=20
+>>  +static inline size_t iio_dma_buffer_space_available(struct=20
+>> iio_buffer *buffer)
+>>  +{
+>>  +	return iio_dma_buffer_data_available(buffer);
+>>  +}
+>>  +
+>>   #endif
+>=20
+
+

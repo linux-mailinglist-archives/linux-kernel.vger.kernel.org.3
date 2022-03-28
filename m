@@ -2,494 +2,566 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1084E90DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA424E90E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239719AbiC1JQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 05:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        id S235184AbiC1JQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 05:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbiC1JQM (ORCPT
+        with ESMTP id S239729AbiC1JQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 05:16:12 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218E340917;
-        Mon, 28 Mar 2022 02:14:31 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id DBFB11F4328A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648458869;
-        bh=ahA27kmJ3/0WZXPVbldbye3TiUylyzwKPGXwMcmHFAs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TJds3WmRY9+pdPdsC0AVCpwkff0g0H79YNhu0JFtNAT7Hm9UF3J9ggsRPAJkhKNv5
-         wwfa8cHgZr0NJzPxa8xGL88LU/QcH6NmXRnVME5f3kpZpyNnWt2PsZyf/5Iu0KOAbg
-         DrvCuQ0lrmc0/2lrTE19P+fj2+0drCTKZGPtoPSzclHSxQmN0ydMPMTmaQVzF9cAKo
-         q+TVIXm3OS9MflF2v9RPBl3WoXrCra2epc3cq8CclJl1l6mPfj0rMEYEMzULnD2EjU
-         b6/nYsWO/hr5zb1hGBwUCbxPW7mM3NzrdgkN/bXoebbNw2xdNgdiJNQ+70wc0pBSNj
-         4LgxFsNzrAcdA==
-Message-ID: <9a31c1ce-829b-acc7-6fc1-2a9df45e5c38@collabora.com>
-Date:   Mon, 28 Mar 2022 11:14:23 +0200
+        Mon, 28 Mar 2022 05:16:26 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F226A53E06
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:14:44 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22S8AHp9030601;
+        Mon, 28 Mar 2022 04:14:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=9MeTAIQrZLpAgh/ZQgdtdWZY70IfagMUFdBkUapJ9us=;
+ b=N9cKguDMexYHdUW36Jy06Q8o/S4FWpvuGDg+yfqSYyWoZwtQz0lMcWZFlS/bFa+1SiLq
+ MDrys3gDhKTsE3QJJMqVJKWvWRgfh+qfH8ZIs1l6HzfoXcIgBDkq+JocsuAjMGipxEB0
+ AdNF/QpYDCVM0KRXTxpnagEpNEQeD9mgvChCocjJFUGYUNF4M8v26qsaPcjFg0Bxsqyz
+ VxNwMCFkUCOwJcZvlPFN00Mrrj3USInaYbFgz++xsxahKEn+n24bhS8ALlAxf4Z+FXow
+ kpYpmwP6ROXRWdg3pAvgcFXqBfON99lp11JZ+Yq9SYJpZrv792bx60I4to3hOgKjykja 5A== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3f2081af9m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 28 Mar 2022 04:14:33 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 28 Mar
+ 2022 10:14:31 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
+ Transport; Mon, 28 Mar 2022 10:14:31 +0100
+Received: from [198.61.64.146] (EDINB751011.ad.cirrus.com [198.61.64.146])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 20CCBB16;
+        Mon, 28 Mar 2022 09:14:31 +0000 (UTC)
+Message-ID: <b6e2eb33-7f3c-2b04-210f-81a9996cba79@opensource.cirrus.com>
+Date:   Mon, 28 Mar 2022 10:14:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v9 18/22] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
+Subject: Re: [PATCH] ASoC: cs*: use simple i2c probe function
 Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>, airlied@linux.ie,
-        chunfeng.yun@mediatek.com, chunkuang.hu@kernel.org,
-        ck.hu@mediatek.com, daniel@ffwll.ch, deller@gmx.de,
-        jitao.shi@mediatek.com, kishon@ti.com, krzk+dt@kernel.org,
-        maarten.lankhorst@linux.intel.com, matthias.bgg@gmail.com,
-        mripard@kernel.org, p.zabel@pengutronix.de, robh+dt@kernel.org,
-        tzimmermann@suse.de, vkoul@kernel.org
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, markyacoub@google.com,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        kernel test robot <lkp@intel.com>
-References: <20220327223927.20848-1-granquet@baylibre.com>
- <20220327223927.20848-19-granquet@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220327223927.20848-19-granquet@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Stephen Kitt <steve@sk2.org>,
+        James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     <patches@opensource.cirrus.com>, Wolfram Sang <wsa@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220325170734.1216018-1-steve@sk2.org>
+From:   Lucas tanure <tanureal@opensource.cirrus.com>
+In-Reply-To: <20220325170734.1216018-1-steve@sk2.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-ORIG-GUID: uHcsKInvU0GnvffWbM42gAb_xWaoXNtf
+X-Proofpoint-GUID: uHcsKInvU0GnvffWbM42gAb_xWaoXNtf
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/03/22 00:39, Guillaume Ranquet ha scritto:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On 3/25/22 17:07, Stephen Kitt wrote:
+> The i2c probe functions here don't use the id information provided in
+> their second argument, so the single-parameter i2c probe function
+> ("probe_new") can be used instead.
 > 
-> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> This avoids scanning the identifier tables during probes.
 > 
-> It supports the mt8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver shares its iomap range with the mtk-dp-phy driver using
-> the regmap/syscon facility.
-> 
-> This driver is based on an initial version by
-> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-
-Hello Guillaume,
-as you know, there's some more work to do on this driver.
-
-I will also mention here, not on the code, that at this point, your
-mtk_dp_aux_transfer() function has something VERY similar to function
-drm_dp_dpcd_access(), so I really believe that you can instead use
-functions drm_dp_dpcd_read() and drm_dp_dpcd_write(), avoiding code
-duplication around.
-
-Please check drivers/gpu/drm/dp/drm_dp.c.
-
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
+Reviewed-by: Lucas Tanure <tanureal@opensource.cirrus.com>
 > ---
->   drivers/gpu/drm/mediatek/Kconfig       |    8 +
->   drivers/gpu/drm/mediatek/Makefile      |    2 +
->   drivers/gpu/drm/mediatek/mtk_dp.c      | 2221 ++++++++++++++++++++++++
->   drivers/gpu/drm/mediatek/mtk_dp_reg.h  |  568 ++++++
->   drivers/gpu/drm/mediatek/mtk_drm_drv.c |    1 +
->   drivers/gpu/drm/mediatek/mtk_drm_drv.h |    1 +
->   6 files changed, 2801 insertions(+)
->   create mode 100644 drivers/gpu/drm/mediatek/mtk_dp.c
->   create mode 100644 drivers/gpu/drm/mediatek/mtk_dp_reg.h
+>   sound/soc/codecs/cs35l32.c     | 5 ++---
+>   sound/soc/codecs/cs35l33.c     | 5 ++---
+>   sound/soc/codecs/cs35l34.c     | 5 ++---
+>   sound/soc/codecs/cs35l35.c     | 5 ++---
+>   sound/soc/codecs/cs35l36.c     | 5 ++---
+>   sound/soc/codecs/cs35l41-i2c.c | 5 ++---
+>   sound/soc/codecs/cs4234.c      | 4 ++--
+>   sound/soc/codecs/cs4265.c      | 5 ++---
+>   sound/soc/codecs/cs4270.c      | 5 ++---
+>   sound/soc/codecs/cs4271-i2c.c  | 5 ++---
+>   sound/soc/codecs/cs42l42.c     | 5 ++---
+>   sound/soc/codecs/cs42l51-i2c.c | 5 ++---
+>   sound/soc/codecs/cs42l52.c     | 5 ++---
+>   sound/soc/codecs/cs42l56.c     | 5 ++---
+>   sound/soc/codecs/cs42l73.c     | 5 ++---
+>   sound/soc/codecs/cs42xx8-i2c.c | 5 ++---
+>   sound/soc/codecs/cs43130.c     | 5 ++---
+>   sound/soc/codecs/cs4341.c      | 5 ++---
+>   sound/soc/codecs/cs4349.c      | 5 ++---
+>   sound/soc/codecs/cs53l30.c     | 5 ++---
+>   20 files changed, 40 insertions(+), 59 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/mediatek/Kconfig b/drivers/gpu/drm/mediatek/Kconfig
-> index 2976d21e9a34..03ffa9b896c3 100644
-> --- a/drivers/gpu/drm/mediatek/Kconfig
-> +++ b/drivers/gpu/drm/mediatek/Kconfig
-> @@ -28,3 +28,11 @@ config DRM_MEDIATEK_HDMI
->   	select PHY_MTK_HDMI
->   	help
->   	  DRM/KMS HDMI driver for Mediatek SoCs
-> +
-> +config MTK_DPTX_SUPPORT
-
-Actually, I think that the best would be DRM_MEDIATEK_DP_TX or DRM_MEDIATEK_DP...
-...also, ordering is important, please!
-
-> +	tristate "DRM DPTX Support for Mediatek SoCs"
-> +	depends on DRM_MEDIATEK
-> +	select PHY_MTK_DP
-> +	select DRM_DP_HELPER
-> +	help
-> +	  DRM/KMS Display Port driver for Mediatek SoCs.
-> diff --git a/drivers/gpu/drm/mediatek/Makefile b/drivers/gpu/drm/mediatek/Makefile
-> index 29098d7c8307..d86a6406055e 100644
-> --- a/drivers/gpu/drm/mediatek/Makefile
-> +++ b/drivers/gpu/drm/mediatek/Makefile
-> @@ -21,3 +21,5 @@ mediatek-drm-hdmi-objs := mtk_cec.o \
->   			  mtk_hdmi_ddc.o
+> diff --git a/sound/soc/codecs/cs35l32.c b/sound/soc/codecs/cs35l32.c
+> index 933e3d627e5f..badfc55bc5fa 100644
+> --- a/sound/soc/codecs/cs35l32.c
+> +++ b/sound/soc/codecs/cs35l32.c
+> @@ -346,8 +346,7 @@ static int cs35l32_handle_of_data(struct i2c_client *i2c_client,
+>   	return 0;
+>   }
 >   
->   obj-$(CONFIG_DRM_MEDIATEK_HDMI) += mediatek-drm-hdmi.o
-> +
-> +obj-$(CONFIG_MTK_DPTX_SUPPORT) += mtk_dp.o
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
-> new file mode 100644
-> index 000000000000..7cd8459cf719
-> --- /dev/null
-> +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-> @@ -0,0 +1,2221 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2019 MediaTek Inc.
-> + * Copyright (c) 2021 BayLibre
-> + */
-> +
-> +#include <drm/drm_atomic_helper.h>
-> +#include <drm/drm_bridge.h>
-> +#include <drm/drm_crtc.h>
-> +#include <drm/dp/drm_dp_helper.h>
-> +#include <drm/drm_edid.h>
-> +#include <drm/drm_of.h>
-> +#include <drm/drm_panel.h>
-> +#include <drm/drm_print.h>
-> +#include <drm/drm_probe_helper.h>
-> +#include <linux/arm-smccc.h>
-> +#include <linux/clk.h>
-> +#include <linux/delay.h>
-> +#include <linux/errno.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/nvmem-consumer.h>
-> +#include <linux/of.h>
-> +#include <linux/of_irq.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/phy/phy.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/regmap.h>
-> +#include <sound/hdmi-codec.h>
-> +#include <video/videomode.h>
-> +
-> +#include "mtk_dp_reg.h"
-> +
-> +#define MTK_DP_AUX_WAIT_REPLY_COUNT 20
-> +#define MTK_DP_CHECK_SINK_CAP_TIMEOUT_COUNT 3
-> +
-> +//TODO: platform/device data or dts?
-
-Assuming that your TODO is about the maximum number of lanes,
-{ .compatible = "mediatek,mt8195-edp-tx", .data = &some_const_structure },
-
-> +#define MTK_DP_MAX_LANES 4
-> +#define MTK_DP_MAX_LINK_RATE MTK_DP_LINKRATE_HBR3
-
-..snip..
-
-> +
-> +static int mtk_dp_bulk_16bit_write(struct mtk_dp *mtk_dp, u32 offset, u8 *buf,
-> +				   size_t length)
-> +{
-> +	int i;
-> +	int ret = 0;
-> +	int num_regs = (length + 1) / 2;
-> +
-> +	/* 2 bytes per register */
-> +	for (i = 0; i < num_regs; i++) {
-> +		u32 val = buf[i * 2] |
-> +			  (i * 2 + 1 < length ? buf[i * 2 + 1] << 8 : 0);
-> +
-> +		ret = mtk_dp_write(mtk_dp, offset + i * 4, val);
-> +		if (ret)
-> +			goto out;
-
-if (ret)
-     return ret;
-
-> +	}
-> +
-> +out:
-
-Remove this label.
-
-> +	return ret;
-> +}
-> +
-> +static unsigned long mtk_dp_sip_atf_call(unsigned int cmd, unsigned int para)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_smc(MTK_DP_SIP_CONTROL_AARCH32, cmd, para, 0, 0, 0, 0, 0,
-> +		      &res);
-> +
-> +	pr_debug("[DPTX]%s cmd 0x%x, p1 0x%x, ret 0x%lx-0x%lx", __func__, cmd,
-> +		 para, res.a0, res.a1);
-> +	return res.a1;
-> +}
-> +
-> +static int mtk_dp_msa_bypass_disable(struct mtk_dp *mtk_dp)
-> +{
-> +	const u16 bits_to_set =
-> +		BIT(HTOTAL_SEL_DP_ENC0_P0_SHIFT) |
-> +		BIT(VTOTAL_SEL_DP_ENC0_P0_SHIFT) |
-> +		BIT(HSTART_SEL_DP_ENC0_P0_SHIFT) |
-> +		BIT(VSTART_SEL_DP_ENC0_P0_SHIFT) |
-> +		BIT(HWIDTH_SEL_DP_ENC0_P0_SHIFT) |
-> +		BIT(VHEIGHT_SEL_DP_ENC0_P0_SHIFT) |
-> +		BIT(HSP_SEL_DP_ENC0_P0_SHIFT) | BIT(HSW_SEL_DP_ENC0_P0_SHIFT) |
-> +		BIT(VSP_SEL_DP_ENC0_P0_SHIFT) | BIT(VSW_SEL_DP_ENC0_P0_SHIFT);
-> +	return mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_3030, bits_to_set,
-> +			   bits_to_set);
-> +}
-> +
-> +#define MTK_UPD_BITS_OR_OUT(mtk_dp, offset, val, mask, ret, label) \
-> +	do {\
-> +		ret = mtk_dp_update_bits(mtk_dp, offset, val, mask); \
-> +		if (ret) \
-> +			goto label; \
-> +	} while (0)
-
-I'm sorry, no offense - but this macro is a bit ugly...
-
-I think I understand why you have introduced it, but in my opinion this decreases
-human readability a lot, I was even about to point out multiple functions that
-you had unused labels before checking this macro, as that was totally unexpected...
-
-In my opinion, this should be open-coded everywhere... yes it makes the file a
-bit fatter in terms of amount of text, but eh... it's life :)))
-
-
-> +
-
-....snip....
-
-> +
-> +static int mtk_dp_set_color_format(struct mtk_dp *mtk_dp,
-> +				   enum mtk_dp_color_format color_format)
-> +{
-> +	u32 val;
-> +	int ret;
-> +
-> +	mtk_dp->info.format = color_format;
-> +
-> +	/* Update MISC0 */
-> +	ret = mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_3034,
-> +				 color_format << DP_TEST_COLOR_FORMAT_SHIFT,
-> +			   DP_TEST_COLOR_FORMAT_MASK);
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	switch (color_format) {
-> +	case MTK_DP_COLOR_FORMAT_YUV_422:
-> +		val = PIXEL_ENCODE_FORMAT_DP_ENC0_P0_YCBCR422;
-> +		break;
-> +	case MTK_DP_COLOR_FORMAT_YUV_420:
-> +		val = PIXEL_ENCODE_FORMAT_DP_ENC0_P0_YCBCR420;
-> +		break;
-> +	case MTK_DP_COLOR_FORMAT_YONLY:
-> +	case MTK_DP_COLOR_FORMAT_RAW:
-> +	case MTK_DP_COLOR_FORMAT_RESERVED:
-> +	case MTK_DP_COLOR_FORMAT_UNKNOWN:
-> +		drm_warn(mtk_dp->drm_dev, "Unsupported color format: %d\n",
-> +			 color_format);
-> +		fallthrough;
-
-Uhm, are you sure that you should fallthrough?
-If we get a color format that we don't understand, the best thing that would
-happen is that we'd get scrambled colors... which is something unwanted.
-
-The best idea is to return -EINVAL here, hence refuse to go on with an invalid
-color format.
-
-> +	case MTK_DP_COLOR_FORMAT_RGB_444:
-> +	case MTK_DP_COLOR_FORMAT_YUV_444:
-> +		val = PIXEL_ENCODE_FORMAT_DP_ENC0_P0_RGB;
-> +		break;
-> +	}
-> +
-> +	return mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_303C, val,
-> +			   PIXEL_ENCODE_FORMAT_DP_ENC0_P0_MASK);
-> +}
-> +
-
-...snip...
-
-> +
-> +static void mtk_dp_initialize_hpd_detect_settings(struct mtk_dp *mtk_dp)
-> +{
-> +	// Debounce threshold
-
-I think I already told you to fix comments style.
-
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_TRANS_P0_3410,
-> +			   8 << HPD_DEB_THD_DP_TRANS_P0_SHIFT,
-> +			   HPD_DEB_THD_DP_TRANS_P0_MASK);
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_TRANS_P0_3410,
-> +			   (HPD_INT_THD_DP_TRANS_P0_LOWER_500US |
-> +			    HPD_INT_THD_DP_TRANS_P0_UPPER_1100US)
-> +				   << HPD_INT_THD_DP_TRANS_P0_SHIFT,
-> +			   HPD_INT_THD_DP_TRANS_P0_MASK);
-> +
-> +	// Connect threshold 1.5ms + 5 x 0.1ms = 2ms
-> +	// Disconnect threshold 1.5ms + 5 x 0.1ms = 2ms
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_TRANS_P0_3410,
-> +			   (5 << HPD_DISC_THD_DP_TRANS_P0_SHIFT) |
-> +				   (5 << HPD_CONN_THD_DP_TRANS_P0_SHIFT),
-> +			   HPD_DISC_THD_DP_TRANS_P0_MASK |
-> +				   HPD_CONN_THD_DP_TRANS_P0_MASK);
-> +	mtk_dp_update_bits(mtk_dp, MTK_DP_TRANS_P0_3430,
-> +			   HPD_INT_THD_ECO_DP_TRANS_P0_HIGH_BOUND_EXT,
-> +			   HPD_INT_THD_ECO_DP_TRANS_P0_MASK);
-> +}
-> +
-
-..snip..
-
-> +
-> +static int mtk_dp_power_disable(struct mtk_dp *mtk_dp)
-> +{
-> +	int ret;
-> +
-> +	ret = mtk_dp_write(mtk_dp, MTK_DP_TOP_PWR_STATE, 0);
-> +
-> +	if (ret)
-> +		goto out;
-> +
-> +	usleep_range(10, 200);
-> +	ret = mtk_dp_write(mtk_dp, MTK_DP_0034,
-> +			   DA_CKM_CKTX0_EN_FORCE_EN | DA_CKM_BIAS_LPF_EN_FORCE_VAL |
-> +		     DA_CKM_BIAS_EN_FORCE_VAL |
-> +		     DA_XTP_GLB_LDO_EN_FORCE_VAL |
-> +		     DA_XTP_GLB_AVD10_ON_FORCE_VAL);
-> +
-> +	if (ret)
-> +		goto out;
-> +
-> +	/* Disable RX */
-> +	ret = mtk_dp_write(mtk_dp, MTK_DP_1040, 0);
-> +
-> +	if (ret)
-> +		goto out;
-> +
-> +	ret = mtk_dp_write(mtk_dp, MTK_DP_TOP_MEM_PD,
-> +			   0x550 | BIT(FUSE_SEL_SHIFT) | BIT(MEM_ISO_EN_SHIFT));
-> +
-> +out:
-
-You are using a goto instead of a return, but you're not reverting any change,
-so this goto usage is not justified - hence, wrong.
-
-Please simply return ret when anything fails, and return 0 at the end of this
-function.
-
-	.......
-	(blahblah function code)
-
-	ret = something()
-	if (ret)
-		return ret;
-
-	return 0;
-}
-
-> +	return ret;
-> +}
-> +
-
-...snip...
-
-> +
-> +static int mtk_dp_dt_parse(struct mtk_dp *mtk_dp,
-> +			   struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	int ret = 0;
-> +	void __iomem *base;
-> +
-> +	base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(base))
-> +		return PTR_ERR(base);
-> +
-> +	mtk_dp->regs = syscon_node_to_regmap(dev->of_node);
-> +	if (IS_ERR(mtk_dp->regs))
-> +		return PTR_ERR(mtk_dp->regs);
-> +
-> +	//TODO: optional clock?
-
-Well, if it's optional, you should use devm_clk_get_optional(), meaning
-that......
-
-> +	mtk_dp->dp_tx_clk = devm_clk_get(dev, "faxi");
-> +	if (IS_ERR(mtk_dp->dp_tx_clk)) {
-> +		ret = PTR_ERR(mtk_dp->dp_tx_clk);
-> +		dev_info(dev, "Failed to get dptx clock: %d\n", ret);
-> +		mtk_dp->dp_tx_clk = NULL;
-
-...I shouldn't see this snippet of code, as it should be a bit different... :)
-
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-
-..snip..
-
-> +static void mtk_dp_bridge_atomic_disable(struct drm_bridge *bridge,
-> +					 struct drm_bridge_state *old_state)
-> +{
-> +	struct mtk_dp *mtk_dp = mtk_dp_from_bridge(bridge);
-> +
-> +	mtk_dp_video_mute(mtk_dp, true);
-> +	mtk_dp->state = MTK_DP_STATE_IDLE;
-> +	mtk_dp->train_state = MTK_DP_TRAIN_STATE_STARTUP;
-> +
-> +	mtk_dp->enabled = false;
-
-> +	msleep(100);
-
-100 milliseconds is an eternity, why are we sleeping for *so long* here?
-
-Please, either add a comment that fully explains the resons for that, or
-remove the sleep entirely: to my eyes, it doesn't look like this sleep is
-really needed for anything important because here you are disabling the
-bridge and *powering off* the IP entirely.
-
-> +	mtk_dp_poweroff(mtk_dp);
-> +}
-> +
-
-..snip..
-
-> +
-> +static enum drm_mode_status
-> +mtk_dp_bridge_mode_valid(struct drm_bridge *bridge,
-> +			 const struct drm_display_info *info,
-> +			 const struct drm_display_mode *mode)
-> +{
-> +	struct mtk_dp *mtk_dp = mtk_dp_from_bridge(bridge);
-> +	u32 rx_linkrate = (u32)mtk_dp->train_info.link_rate * 27000;
-> +	u32 bpp = info->color_formats & DRM_COLOR_FORMAT_YCBCR422 ? 16 : 24;
-> +
-> +	if (rx_linkrate * mtk_dp->train_info.lane_count < mode->clock * bpp / 8)
-> +		return MODE_CLOCK_HIGH;
-> +
-> +	if (mode->clock > 600000)
-> +		return MODE_CLOCK_HIGH;
-> +
-> +	//TODO: explain magic number: 62?
-
-Please fix this TODO for v10.
-
-> +	if ((mode->clock * 1000) / (mode->htotal * mode->vtotal) > 62)
-> +		return MODE_CLOCK_HIGH;
-> +
-> +	return MODE_OK;
-> +}
-> +
-
+> -static int cs35l32_i2c_probe(struct i2c_client *i2c_client,
+> -				       const struct i2c_device_id *id)
+> +static int cs35l32_i2c_probe(struct i2c_client *i2c_client)
+>   {
+>   	struct cs35l32_private *cs35l32;
+>   	struct cs35l32_platform_data *pdata =
+> @@ -576,7 +575,7 @@ static struct i2c_driver cs35l32_i2c_driver = {
+>   		   .of_match_table = cs35l32_of_match,
+>   		   },
+>   	.id_table = cs35l32_id,
+> -	.probe = cs35l32_i2c_probe,
+> +	.probe_new = cs35l32_i2c_probe,
+>   	.remove = cs35l32_i2c_remove,
+>   };
+>   
+> diff --git a/sound/soc/codecs/cs35l33.c b/sound/soc/codecs/cs35l33.c
+> index 2a6f5e46d031..47dc0f6d90a2 100644
+> --- a/sound/soc/codecs/cs35l33.c
+> +++ b/sound/soc/codecs/cs35l33.c
+> @@ -1116,8 +1116,7 @@ static int cs35l33_of_get_pdata(struct device *dev,
+>   	return 0;
+>   }
+>   
+> -static int cs35l33_i2c_probe(struct i2c_client *i2c_client,
+> -				       const struct i2c_device_id *id)
+> +static int cs35l33_i2c_probe(struct i2c_client *i2c_client)
+>   {
+>   	struct cs35l33_private *cs35l33;
+>   	struct cs35l33_pdata *pdata = dev_get_platdata(&i2c_client->dev);
+> @@ -1286,7 +1285,7 @@ static struct i2c_driver cs35l33_i2c_driver = {
+>   
+>   		},
+>   	.id_table = cs35l33_id,
+> -	.probe = cs35l33_i2c_probe,
+> +	.probe_new = cs35l33_i2c_probe,
+>   	.remove = cs35l33_i2c_remove,
+>   
+>   };
+> diff --git a/sound/soc/codecs/cs35l34.c b/sound/soc/codecs/cs35l34.c
+> index ed678241c22b..50d509a06071 100644
+> --- a/sound/soc/codecs/cs35l34.c
+> +++ b/sound/soc/codecs/cs35l34.c
+> @@ -994,8 +994,7 @@ static const char * const cs35l34_core_supplies[] = {
+>   	"VP",
+>   };
+>   
+> -static int cs35l34_i2c_probe(struct i2c_client *i2c_client,
+> -			      const struct i2c_device_id *id)
+> +static int cs35l34_i2c_probe(struct i2c_client *i2c_client)
+>   {
+>   	struct cs35l34_private *cs35l34;
+>   	struct cs35l34_platform_data *pdata =
+> @@ -1217,7 +1216,7 @@ static struct i2c_driver cs35l34_i2c_driver = {
+>   
+>   		},
+>   	.id_table = cs35l34_id,
+> -	.probe = cs35l34_i2c_probe,
+> +	.probe_new = cs35l34_i2c_probe,
+>   	.remove = cs35l34_i2c_remove,
+>   
+>   };
+> diff --git a/sound/soc/codecs/cs35l35.c b/sound/soc/codecs/cs35l35.c
+> index 961a3e07e70f..6b70afb70a67 100644
+> --- a/sound/soc/codecs/cs35l35.c
+> +++ b/sound/soc/codecs/cs35l35.c
+> @@ -1466,8 +1466,7 @@ static const struct reg_sequence cs35l35_errata_patch[] = {
+>   	{ 0x7F, 0x00 },
+>   };
+>   
+> -static int cs35l35_i2c_probe(struct i2c_client *i2c_client,
+> -			      const struct i2c_device_id *id)
+> +static int cs35l35_i2c_probe(struct i2c_client *i2c_client)
+>   {
+>   	struct cs35l35_private *cs35l35;
+>   	struct device *dev = &i2c_client->dev;
+> @@ -1658,7 +1657,7 @@ static struct i2c_driver cs35l35_i2c_driver = {
+>   		.of_match_table = cs35l35_of_match,
+>   	},
+>   	.id_table = cs35l35_id,
+> -	.probe = cs35l35_i2c_probe,
+> +	.probe_new = cs35l35_i2c_probe,
+>   	.remove = cs35l35_i2c_remove,
+>   };
+>   
+> diff --git a/sound/soc/codecs/cs35l36.c b/sound/soc/codecs/cs35l36.c
+> index d83c1b318c1c..cc5e80222916 100644
+> --- a/sound/soc/codecs/cs35l36.c
+> +++ b/sound/soc/codecs/cs35l36.c
+> @@ -1700,8 +1700,7 @@ static const struct reg_sequence cs35l36_revb0_errata_patch[] = {
+>   	{ CS35L36_TESTKEY_CTRL, CS35L36_TEST_LOCK2 },
+>   };
+>   
+> -static int cs35l36_i2c_probe(struct i2c_client *i2c_client,
+> -			      const struct i2c_device_id *id)
+> +static int cs35l36_i2c_probe(struct i2c_client *i2c_client)
+>   {
+>   	struct cs35l36_private *cs35l36;
+>   	struct device *dev = &i2c_client->dev;
+> @@ -1947,7 +1946,7 @@ static struct i2c_driver cs35l36_i2c_driver = {
+>   		.of_match_table = cs35l36_of_match,
+>   	},
+>   	.id_table = cs35l36_id,
+> -	.probe = cs35l36_i2c_probe,
+> +	.probe_new = cs35l36_i2c_probe,
+>   	.remove = cs35l36_i2c_remove,
+>   };
+>   module_i2c_driver(cs35l36_i2c_driver);
+> diff --git a/sound/soc/codecs/cs35l41-i2c.c b/sound/soc/codecs/cs35l41-i2c.c
+> index faad5c638cb8..86d866aeb680 100644
+> --- a/sound/soc/codecs/cs35l41-i2c.c
+> +++ b/sound/soc/codecs/cs35l41-i2c.c
+> @@ -29,8 +29,7 @@ static const struct i2c_device_id cs35l41_id_i2c[] = {
+>   
+>   MODULE_DEVICE_TABLE(i2c, cs35l41_id_i2c);
+>   
+> -static int cs35l41_i2c_probe(struct i2c_client *client,
+> -			     const struct i2c_device_id *id)
+> +static int cs35l41_i2c_probe(struct i2c_client *client)
+>   {
+>   	struct cs35l41_private *cs35l41;
+>   	struct device *dev = &client->dev;
+> @@ -91,7 +90,7 @@ static struct i2c_driver cs35l41_i2c_driver = {
+>   		.acpi_match_table = ACPI_PTR(cs35l41_acpi_match),
+>   	},
+>   	.id_table	= cs35l41_id_i2c,
+> -	.probe		= cs35l41_i2c_probe,
+> +	.probe_new	= cs35l41_i2c_probe,
+>   	.remove		= cs35l41_i2c_remove,
+>   };
+>   
+> diff --git a/sound/soc/codecs/cs4234.c b/sound/soc/codecs/cs4234.c
+> index 20126cc675b1..b44939166e5d 100644
+> --- a/sound/soc/codecs/cs4234.c
+> +++ b/sound/soc/codecs/cs4234.c
+> @@ -731,7 +731,7 @@ static int cs4234_powerup(struct cs4234 *cs4234)
+>   	return 0;
+>   }
+>   
+> -static int cs4234_i2c_probe(struct i2c_client *i2c_client, const struct i2c_device_id *id)
+> +static int cs4234_i2c_probe(struct i2c_client *i2c_client)
+>   {
+>   	struct cs4234 *cs4234;
+>   	struct device *dev = &i2c_client->dev;
+> @@ -908,7 +908,7 @@ static struct i2c_driver cs4234_i2c_driver = {
+>   		.pm = &cs4234_pm,
+>   		.of_match_table = cs4234_of_match,
+>   	},
+> -	.probe =	cs4234_i2c_probe,
+> +	.probe_new =	cs4234_i2c_probe,
+>   	.remove =	cs4234_i2c_remove,
+>   };
+>   module_i2c_driver(cs4234_i2c_driver);
+> diff --git a/sound/soc/codecs/cs4265.c b/sound/soc/codecs/cs4265.c
+> index 4415fb364d4d..86bfa8d5ec78 100644
+> --- a/sound/soc/codecs/cs4265.c
+> +++ b/sound/soc/codecs/cs4265.c
+> @@ -568,8 +568,7 @@ static const struct regmap_config cs4265_regmap = {
+>   	.cache_type = REGCACHE_RBTREE,
+>   };
+>   
+> -static int cs4265_i2c_probe(struct i2c_client *i2c_client,
+> -			     const struct i2c_device_id *id)
+> +static int cs4265_i2c_probe(struct i2c_client *i2c_client)
+>   {
+>   	struct cs4265_private *cs4265;
+>   	int ret;
+> @@ -653,7 +652,7 @@ static struct i2c_driver cs4265_i2c_driver = {
+>   		.of_match_table = cs4265_of_match,
+>   	},
+>   	.id_table = cs4265_id,
+> -	.probe =    cs4265_i2c_probe,
+> +	.probe_new = cs4265_i2c_probe,
+>   	.remove =   cs4265_i2c_remove,
+>   };
+>   
+> diff --git a/sound/soc/codecs/cs4270.c b/sound/soc/codecs/cs4270.c
+> index 2d239e983a83..07cac01f87bd 100644
+> --- a/sound/soc/codecs/cs4270.c
+> +++ b/sound/soc/codecs/cs4270.c
+> @@ -677,8 +677,7 @@ static int cs4270_i2c_remove(struct i2c_client *i2c_client)
+>    * This function is called whenever the I2C subsystem finds a device that
+>    * matches the device ID given via a prior call to i2c_add_driver().
+>    */
+> -static int cs4270_i2c_probe(struct i2c_client *i2c_client,
+> -	const struct i2c_device_id *id)
+> +static int cs4270_i2c_probe(struct i2c_client *i2c_client)
+>   {
+>   	struct cs4270_private *cs4270;
+>   	unsigned int val;
+> @@ -765,7 +764,7 @@ static struct i2c_driver cs4270_i2c_driver = {
+>   		.of_match_table = cs4270_of_match,
+>   	},
+>   	.id_table = cs4270_id,
+> -	.probe = cs4270_i2c_probe,
+> +	.probe_new = cs4270_i2c_probe,
+>   	.remove = cs4270_i2c_remove,
+>   };
+>   
+> diff --git a/sound/soc/codecs/cs4271-i2c.c b/sound/soc/codecs/cs4271-i2c.c
+> index 0a174236f573..0e8a7cf0da50 100644
+> --- a/sound/soc/codecs/cs4271-i2c.c
+> +++ b/sound/soc/codecs/cs4271-i2c.c
+> @@ -11,8 +11,7 @@
+>   #include <sound/soc.h>
+>   #include "cs4271.h"
+>   
+> -static int cs4271_i2c_probe(struct i2c_client *client,
+> -			     const struct i2c_device_id *id)
+> +static int cs4271_i2c_probe(struct i2c_client *client)
+>   {
+>   	struct regmap_config config;
+>   
+> @@ -35,7 +34,7 @@ static struct i2c_driver cs4271_i2c_driver = {
+>   		.name = "cs4271",
+>   		.of_match_table = of_match_ptr(cs4271_dt_ids),
+>   	},
+> -	.probe = cs4271_i2c_probe,
+> +	.probe_new = cs4271_i2c_probe,
+>   	.id_table = cs4271_i2c_id,
+>   };
+>   module_i2c_driver(cs4271_i2c_driver);
+> diff --git a/sound/soc/codecs/cs42l42.c b/sound/soc/codecs/cs42l42.c
+> index 43d98bdb5b5b..8019921f9cca 100644
+> --- a/sound/soc/codecs/cs42l42.c
+> +++ b/sound/soc/codecs/cs42l42.c
+> @@ -2040,8 +2040,7 @@ static int cs42l42_handle_device_data(struct device *dev,
+>   	return 0;
+>   }
+>   
+> -static int cs42l42_i2c_probe(struct i2c_client *i2c_client,
+> -				       const struct i2c_device_id *id)
+> +static int cs42l42_i2c_probe(struct i2c_client *i2c_client)
+>   {
+>   	struct cs42l42_private *cs42l42;
+>   	int ret, i, devid;
+> @@ -2240,7 +2239,7 @@ static struct i2c_driver cs42l42_i2c_driver = {
+>   		.acpi_match_table = ACPI_PTR(cs42l42_acpi_match),
+>   		},
+>   	.id_table = cs42l42_id,
+> -	.probe = cs42l42_i2c_probe,
+> +	.probe_new = cs42l42_i2c_probe,
+>   	.remove = cs42l42_i2c_remove,
+>   };
+>   
+> diff --git a/sound/soc/codecs/cs42l51-i2c.c b/sound/soc/codecs/cs42l51-i2c.c
+> index 70260e0a8f09..2dec18ae2918 100644
+> --- a/sound/soc/codecs/cs42l51-i2c.c
+> +++ b/sound/soc/codecs/cs42l51-i2c.c
+> @@ -19,8 +19,7 @@ static struct i2c_device_id cs42l51_i2c_id[] = {
+>   };
+>   MODULE_DEVICE_TABLE(i2c, cs42l51_i2c_id);
+>   
+> -static int cs42l51_i2c_probe(struct i2c_client *i2c,
+> -			     const struct i2c_device_id *id)
+> +static int cs42l51_i2c_probe(struct i2c_client *i2c)
+>   {
+>   	struct regmap_config config;
+>   
+> @@ -44,7 +43,7 @@ static struct i2c_driver cs42l51_i2c_driver = {
+>   		.of_match_table = cs42l51_of_match,
+>   		.pm = &cs42l51_pm_ops,
+>   	},
+> -	.probe = cs42l51_i2c_probe,
+> +	.probe_new = cs42l51_i2c_probe,
+>   	.remove = cs42l51_i2c_remove,
+>   	.id_table = cs42l51_i2c_id,
+>   };
+> diff --git a/sound/soc/codecs/cs42l52.c b/sound/soc/codecs/cs42l52.c
+> index 80161151b3f2..9b182b585be4 100644
+> --- a/sound/soc/codecs/cs42l52.c
+> +++ b/sound/soc/codecs/cs42l52.c
+> @@ -1086,8 +1086,7 @@ static const struct regmap_config cs42l52_regmap = {
+>   	.cache_type = REGCACHE_RBTREE,
+>   };
+>   
+> -static int cs42l52_i2c_probe(struct i2c_client *i2c_client,
+> -			     const struct i2c_device_id *id)
+> +static int cs42l52_i2c_probe(struct i2c_client *i2c_client)
+>   {
+>   	struct cs42l52_private *cs42l52;
+>   	struct cs42l52_platform_data *pdata = dev_get_platdata(&i2c_client->dev);
+> @@ -1226,7 +1225,7 @@ static struct i2c_driver cs42l52_i2c_driver = {
+>   		.of_match_table = cs42l52_of_match,
+>   	},
+>   	.id_table = cs42l52_id,
+> -	.probe =    cs42l52_i2c_probe,
+> +	.probe_new = cs42l52_i2c_probe,
+>   };
+>   
+>   module_i2c_driver(cs42l52_i2c_driver);
+> diff --git a/sound/soc/codecs/cs42l56.c b/sound/soc/codecs/cs42l56.c
+> index 3cf8a0b4478c..2c4e09b43199 100644
+> --- a/sound/soc/codecs/cs42l56.c
+> +++ b/sound/soc/codecs/cs42l56.c
+> @@ -1167,8 +1167,7 @@ static int cs42l56_handle_of_data(struct i2c_client *i2c_client,
+>   	return 0;
+>   }
+>   
+> -static int cs42l56_i2c_probe(struct i2c_client *i2c_client,
+> -			     const struct i2c_device_id *id)
+> +static int cs42l56_i2c_probe(struct i2c_client *i2c_client)
+>   {
+>   	struct cs42l56_private *cs42l56;
+>   	struct cs42l56_platform_data *pdata =
+> @@ -1350,7 +1349,7 @@ static struct i2c_driver cs42l56_i2c_driver = {
+>   		.of_match_table = cs42l56_of_match,
+>   	},
+>   	.id_table = cs42l56_id,
+> -	.probe =    cs42l56_i2c_probe,
+> +	.probe_new = cs42l56_i2c_probe,
+>   	.remove =   cs42l56_i2c_remove,
+>   };
+>   
+> diff --git a/sound/soc/codecs/cs42l73.c b/sound/soc/codecs/cs42l73.c
+> index 018463f34e12..5a9166289f36 100644
+> --- a/sound/soc/codecs/cs42l73.c
+> +++ b/sound/soc/codecs/cs42l73.c
+> @@ -1274,8 +1274,7 @@ static const struct regmap_config cs42l73_regmap = {
+>   	.use_single_write = true,
+>   };
+>   
+> -static int cs42l73_i2c_probe(struct i2c_client *i2c_client,
+> -			     const struct i2c_device_id *id)
+> +static int cs42l73_i2c_probe(struct i2c_client *i2c_client)
+>   {
+>   	struct cs42l73_private *cs42l73;
+>   	struct cs42l73_platform_data *pdata = dev_get_platdata(&i2c_client->dev);
+> @@ -1386,7 +1385,7 @@ static struct i2c_driver cs42l73_i2c_driver = {
+>   		   .of_match_table = cs42l73_of_match,
+>   		   },
+>   	.id_table = cs42l73_id,
+> -	.probe = cs42l73_i2c_probe,
+> +	.probe_new = cs42l73_i2c_probe,
+>   
+>   };
+>   
+> diff --git a/sound/soc/codecs/cs42xx8-i2c.c b/sound/soc/codecs/cs42xx8-i2c.c
+> index 0214e3ab9da0..cb06a06d48b0 100644
+> --- a/sound/soc/codecs/cs42xx8-i2c.c
+> +++ b/sound/soc/codecs/cs42xx8-i2c.c
+> @@ -17,8 +17,7 @@
+>   
+>   #include "cs42xx8.h"
+>   
+> -static int cs42xx8_i2c_probe(struct i2c_client *i2c,
+> -			     const struct i2c_device_id *id)
+> +static int cs42xx8_i2c_probe(struct i2c_client *i2c)
+>   {
+>   	int ret = cs42xx8_probe(&i2c->dev,
+>   			devm_regmap_init_i2c(i2c, &cs42xx8_regmap_config));
+> @@ -51,7 +50,7 @@ static struct i2c_driver cs42xx8_i2c_driver = {
+>   		.pm = &cs42xx8_pm,
+>   		.of_match_table = cs42xx8_of_match,
+>   	},
+> -	.probe = cs42xx8_i2c_probe,
+> +	.probe_new = cs42xx8_i2c_probe,
+>   	.remove = cs42xx8_i2c_remove,
+>   	.id_table = cs42xx8_i2c_id,
+>   };
+> diff --git a/sound/soc/codecs/cs43130.c b/sound/soc/codecs/cs43130.c
+> index 44b20c1ef851..e38552a961ef 100644
+> --- a/sound/soc/codecs/cs43130.c
+> +++ b/sound/soc/codecs/cs43130.c
+> @@ -2418,8 +2418,7 @@ static int cs43130_handle_device_data(struct i2c_client *i2c_client,
+>   	return 0;
+>   }
+>   
+> -static int cs43130_i2c_probe(struct i2c_client *client,
+> -			     const struct i2c_device_id *id)
+> +static int cs43130_i2c_probe(struct i2c_client *client)
+>   {
+>   	struct cs43130_private *cs43130;
+>   	int ret;
+> @@ -2702,7 +2701,7 @@ static struct i2c_driver cs43130_i2c_driver = {
+>   		.pm             = &cs43130_runtime_pm,
+>   	},
+>   	.id_table	= cs43130_i2c_id,
+> -	.probe		= cs43130_i2c_probe,
+> +	.probe_new	= cs43130_i2c_probe,
+>   	.remove		= cs43130_i2c_remove,
+>   };
+>   
+> diff --git a/sound/soc/codecs/cs4341.c b/sound/soc/codecs/cs4341.c
+> index 29d05e32d341..8ac043f1aae0 100644
+> --- a/sound/soc/codecs/cs4341.c
+> +++ b/sound/soc/codecs/cs4341.c
+> @@ -225,8 +225,7 @@ static int cs4341_probe(struct device *dev)
+>   }
+>   
+>   #if IS_ENABLED(CONFIG_I2C)
+> -static int cs4341_i2c_probe(struct i2c_client *i2c,
+> -			    const struct i2c_device_id *id)
+> +static int cs4341_i2c_probe(struct i2c_client *i2c)
+>   {
+>   	struct cs4341_priv *cs4341;
+>   
+> @@ -260,7 +259,7 @@ static struct i2c_driver cs4341_i2c_driver = {
+>   		.name = "cs4341-i2c",
+>   		.of_match_table = of_match_ptr(cs4341_dt_ids),
+>   	},
+> -	.probe = cs4341_i2c_probe,
+> +	.probe_new = cs4341_i2c_probe,
+>   	.id_table = cs4341_i2c_id,
+>   };
+>   #endif
+> diff --git a/sound/soc/codecs/cs4349.c b/sound/soc/codecs/cs4349.c
+> index 786c69a8ec4a..4ec4bed9ee08 100644
+> --- a/sound/soc/codecs/cs4349.c
+> +++ b/sound/soc/codecs/cs4349.c
+> @@ -278,8 +278,7 @@ static const struct regmap_config cs4349_regmap = {
+>   	.cache_type		= REGCACHE_RBTREE,
+>   };
+>   
+> -static int cs4349_i2c_probe(struct i2c_client *client,
+> -				      const struct i2c_device_id *id)
+> +static int cs4349_i2c_probe(struct i2c_client *client)
+>   {
+>   	struct cs4349_private *cs4349;
+>   	int ret;
+> @@ -382,7 +381,7 @@ static struct i2c_driver cs4349_i2c_driver = {
+>   		.pm = &cs4349_runtime_pm,
+>   	},
+>   	.id_table	= cs4349_i2c_id,
+> -	.probe		= cs4349_i2c_probe,
+> +	.probe_new	= cs4349_i2c_probe,
+>   	.remove		= cs4349_i2c_remove,
+>   };
+>   
+> diff --git a/sound/soc/codecs/cs53l30.c b/sound/soc/codecs/cs53l30.c
+> index f2087bd38dbc..703545273900 100644
+> --- a/sound/soc/codecs/cs53l30.c
+> +++ b/sound/soc/codecs/cs53l30.c
+> @@ -918,8 +918,7 @@ static struct regmap_config cs53l30_regmap = {
+>   	.use_single_write = true,
+>   };
+>   
+> -static int cs53l30_i2c_probe(struct i2c_client *client,
+> -			     const struct i2c_device_id *id)
+> +static int cs53l30_i2c_probe(struct i2c_client *client)
+>   {
+>   	const struct device_node *np = client->dev.of_node;
+>   	struct device *dev = &client->dev;
+> @@ -1125,7 +1124,7 @@ static struct i2c_driver cs53l30_i2c_driver = {
+>   		.pm = &cs53l30_runtime_pm,
+>   	},
+>   	.id_table = cs53l30_id,
+> -	.probe = cs53l30_i2c_probe,
+> +	.probe_new = cs53l30_i2c_probe,
+>   	.remove = cs53l30_i2c_remove,
+>   };
+>   
 

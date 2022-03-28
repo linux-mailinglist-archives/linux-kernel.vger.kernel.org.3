@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 191A24E9782
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0304E97A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242855AbiC1NJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 09:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55866 "EHLO
+        id S242045AbiC1NK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 09:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242942AbiC1NJg (ORCPT
+        with ESMTP id S242984AbiC1NKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 09:09:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2B625DA78
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:07:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648472859;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PtHN8VWVvChKHe7fcrbgQxII1uEL3nooKYmXW4yHoDA=;
-        b=inivgjKJu9pDFHeYAE7MeXgxIAOm8mr9iznI9jsEXGgG1FBMtIICgLh17JJR7W7hI3UeeC
-        gggVylot+81MpUoSpN5UB3lZUDDHLXtwZIKw6beFEgrWf+xPgzeANZCSqv4Y9mZaH+9cNK
-        ve5cHVp9jZGIVbKjQvEn/0ADrKBbhFY=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-557-MpWw0_CpPfCOOoE-w9nQ-w-1; Mon, 28 Mar 2022 09:07:37 -0400
-X-MC-Unique: MpWw0_CpPfCOOoE-w9nQ-w-1
-Received: by mail-qv1-f70.google.com with SMTP id k20-20020ad44714000000b00440fd2c4a0aso11242615qvz.20
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:07:37 -0700 (PDT)
+        Mon, 28 Mar 2022 09:10:40 -0400
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D092706;
+        Mon, 28 Mar 2022 06:08:45 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id z92so16817527ede.13;
+        Mon, 28 Mar 2022 06:08:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=PtHN8VWVvChKHe7fcrbgQxII1uEL3nooKYmXW4yHoDA=;
-        b=0Ga/gYCWtE8LCG2fcxKXC6wvAD03f0C83h6zs/gv1K+SfMy83h8CwQxUlLP2XDBPgm
-         XtFIDaO/XTWgtmzOgWDFCEqZ6kqlUROm59FXiIvTLqqRzAG5hMybqQkK3Fuofq6tLqP8
-         5PbrfusJq1A2c/UsbBa5K+m4gkKblHhVuRUazHi4n3zJhQZFiJvdZu/wLwhLAbQPrn1W
-         SVWCRpA08CiATQy3cy2HVHoItIigY+RINvFKuLQkP7X0VALINZ/c9HLIyBeWBTz+Jur/
-         3rzjUS4tBVwgaeRB0nB8liyrSlV8yEUcI5nRhTtjedhbMyp7BDyFw6fFYmhXXUwsJbYh
-         8+7g==
-X-Gm-Message-State: AOAM530Snr0ZZEmppPJk9ozi1rxMNoDnOSxmwPv9PkZ+PAMCPOymdMyx
-        +Was0gM1AwItZrnmc8mLTAYYFUJgOGos2iUT3r5Cz3y6e8i+lvOWBRz/tzSqGns1uBHsrHOjRpG
-        UTXp6etmcgW5w/BFL2TYK57qp
-X-Received: by 2002:a05:620a:44d6:b0:67b:2dd8:3064 with SMTP id y22-20020a05620a44d600b0067b2dd83064mr15958167qkp.219.1648472856944;
-        Mon, 28 Mar 2022 06:07:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzXF6xziFnZvT7B9Thf2sImzwCkc8tQCsS4WrJzX9a9Q+rXQD1iC0oh26pKBl4kArr2VB9/qQ==
-X-Received: by 2002:a05:620a:44d6:b0:67b:2dd8:3064 with SMTP id y22-20020a05620a44d600b0067b2dd83064mr15958127qkp.219.1648472856653;
-        Mon, 28 Mar 2022 06:07:36 -0700 (PDT)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id n8-20020ac85a08000000b002e06aa02021sm13035414qta.49.2022.03.28.06.07.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 06:07:35 -0700 (PDT)
-From:   trix@redhat.com
-To:     toke@toke.dk, kvalo@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH v2] ath9k: initialize arrays at compile time
-Date:   Mon, 28 Mar 2022 06:07:27 -0700
-Message-Id: <20220328130727.3090827-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        bh=zKU7dcPQqrzvad7hCDksyWL9/bxBhGy75hbbfKW8UQY=;
+        b=QkoBo2QHxG2156gS/i+Z0h8Nvs4+eChijQon2rZRJzniPGV3fBlKlUM1l9GW0tcGXj
+         7Hhk0Tba/Mqg++cglzSETeDioA57AdJYB3AIMyjPCUNa6gM47viVw5WVtmjcXR/DRcMO
+         2kv5KlahTXTLWNXAov+vqPXbdzKqY9ceP3mNBdQ9VLOUBLP8fuecY8g0HRcxmBQ9Q0lY
+         1Achb/UMDvaSxeZ2WEVWdvJV11/6zJS+0TT9IOo32svDZVlhdVqmkriePcFNP6sMd+/D
+         aK9kXEhE1zf3eTIOrb/MlloN72fO+tqTcrXd+JXkBjmCT5EUTeIVrcmf7ZW53Z5HovMa
+         B0og==
+X-Gm-Message-State: AOAM532XJsvHTUoZPV9zvSNintDrGFd3r8oLdUkjQ2o3T+v540OD2vGY
+        dvp1KKpD6SZnSKxIrMJXohY=
+X-Google-Smtp-Source: ABdhPJxlgo+UgbH0M14lZEhBkIm04LSbc7VOhK2JBw82e42uIBhhCIiSHUQDD3W4GCC7jAEztHrQBg==
+X-Received: by 2002:a05:6402:1c1e:b0:416:5b93:eacf with SMTP id ck30-20020a0564021c1e00b004165b93eacfmr16467238edb.302.1648472924228;
+        Mon, 28 Mar 2022 06:08:44 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id d4-20020a056402000400b00412d60fee38sm7004246edu.11.2022.03.28.06.08.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 06:08:43 -0700 (PDT)
+Message-ID: <da2351be-1fca-4269-cb7b-9dcd6a01b2dc@kernel.org>
+Date:   Mon, 28 Mar 2022 15:08:42 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 4/5] phy: Add ARTPEC-8 PCIe PHY driver
+Content-Language: en-US
+To:     wangseok.lee@samsung.com,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        "lars.persson@axis.com" <lars.persson@axis.com>
+Cc:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "kernel@axis.com" <kernel@axis.com>,
+        =?UTF-8?B?7KCE66y46riw?= <moonki.jun@samsung.com>
+References: <CGME20220328021832epcms2p6b6294b824c64404c437d0fd7f09369a4@epcms2p6>
+ <20220328021832epcms2p6b6294b824c64404c437d0fd7f09369a4@epcms2p6>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220328021832epcms2p6b6294b824c64404c437d0fd7f09369a4@epcms2p6>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,207 +79,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+On 28/03/2022 04:18, 이왕석 wrote:
+> Add support Axis, ARTPEC-8 SoC.
+> ARTPEC-8 is the SoC platform of Axis Communications.
+> This is based on arm64 and support GEN4 & 2lane.
+> This driver provides PHY interface for ARTPEC-8 SoC PCIe controller,
+> based on Samsung PCIe PHY IP.
+> 
 
-Early clearing of arrays with
-memset(array, 0, size);
-is equivilent to initializing the array in its decl with
-array[size] = {};
+You already sent it on 28th of January and did not respond to my comments.
 
-Convert the memsets to initializations.
+Please do not resend same/similar code, but instead respond to comments
+received earlier.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
-v2: cleanup commit log
-    change { 0 } to {}
-    
- drivers/net/wireless/ath/ath9k/ar9003_calib.c  |  6 ++----
- drivers/net/wireless/ath/ath9k/ar9003_eeprom.c |  4 +---
- drivers/net/wireless/ath/ath9k/ar9003_paprd.c  | 14 ++++++--------
- drivers/net/wireless/ath/ath9k/eeprom.c        |  3 +--
- drivers/net/wireless/ath/ath9k/eeprom_4k.c     |  4 +---
- drivers/net/wireless/ath/ath9k/eeprom_9287.c   |  4 +---
- drivers/net/wireless/ath/ath9k/eeprom_def.c    |  4 +---
- drivers/net/wireless/ath/ath9k/wow.c           |  7 ++-----
- 8 files changed, 15 insertions(+), 31 deletions(-)
-
-diff --git a/drivers/net/wireless/ath/ath9k/ar9003_calib.c b/drivers/net/wireless/ath/ath9k/ar9003_calib.c
-index dc24da1ff00b1..142b11085bbc6 100644
---- a/drivers/net/wireless/ath/ath9k/ar9003_calib.c
-+++ b/drivers/net/wireless/ath/ath9k/ar9003_calib.c
-@@ -891,10 +891,9 @@ static void ar9003_hw_tx_iq_cal_outlier_detection(struct ath_hw *ah,
- {
- 	int i, im, nmeasurement;
- 	int magnitude, phase;
--	u32 tx_corr_coeff[MAX_MEASUREMENT][AR9300_MAX_CHAINS];
-+	u32 tx_corr_coeff[MAX_MEASUREMENT][AR9300_MAX_CHAINS] = {};
- 	struct ath9k_hw_cal_data *caldata = ah->caldata;
- 
--	memset(tx_corr_coeff, 0, sizeof(tx_corr_coeff));
- 	for (i = 0; i < MAX_MEASUREMENT / 2; i++) {
- 		tx_corr_coeff[i * 2][0] = tx_corr_coeff[(i * 2) + 1][0] =
- 					AR_PHY_TX_IQCAL_CORR_COEFF_B0(i);
-@@ -1155,10 +1154,9 @@ static void ar9003_hw_tx_iq_cal_post_proc(struct ath_hw *ah,
- static void ar9003_hw_tx_iq_cal_reload(struct ath_hw *ah)
- {
- 	struct ath9k_hw_cal_data *caldata = ah->caldata;
--	u32 tx_corr_coeff[MAX_MEASUREMENT][AR9300_MAX_CHAINS];
-+	u32 tx_corr_coeff[MAX_MEASUREMENT][AR9300_MAX_CHAINS] = {};
- 	int i, im;
- 
--	memset(tx_corr_coeff, 0, sizeof(tx_corr_coeff));
- 	for (i = 0; i < MAX_MEASUREMENT / 2; i++) {
- 		tx_corr_coeff[i * 2][0] = tx_corr_coeff[(i * 2) + 1][0] =
- 					AR_PHY_TX_IQCAL_CORR_COEFF_B0(i);
-diff --git a/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c b/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
-index b0a4ca3559fd8..25dd9d92f656f 100644
---- a/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
-+++ b/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
-@@ -5451,14 +5451,12 @@ static void ath9k_hw_ar9300_set_txpower(struct ath_hw *ah,
- 	struct ath_common *common = ath9k_hw_common(ah);
- 	struct ar9300_eeprom *eep = &ah->eeprom.ar9300_eep;
- 	struct ar9300_modal_eep_header *modal_hdr;
--	u8 targetPowerValT2[ar9300RateSize];
-+	u8 targetPowerValT2[ar9300RateSize] = {};
- 	u8 target_power_val_t2_eep[ar9300RateSize];
- 	u8 targetPowerValT2_tpc[ar9300RateSize];
- 	unsigned int i = 0, paprd_scale_factor = 0;
- 	u8 pwr_idx, min_pwridx = 0;
- 
--	memset(targetPowerValT2, 0 , sizeof(targetPowerValT2));
--
- 	/*
- 	 * Get target powers from EEPROM - our baseline for TX Power
- 	 */
-diff --git a/drivers/net/wireless/ath/ath9k/ar9003_paprd.c b/drivers/net/wireless/ath/ath9k/ar9003_paprd.c
-index 34e1009402846..ab3987777dd08 100644
---- a/drivers/net/wireless/ath/ath9k/ar9003_paprd.c
-+++ b/drivers/net/wireless/ath/ath9k/ar9003_paprd.c
-@@ -419,13 +419,16 @@ static inline int find_proper_scale(int expn, int N)
- static bool create_pa_curve(u32 *data_L, u32 *data_U, u32 *pa_table, u16 *gain)
- {
- 	unsigned int thresh_accum_cnt;
--	int x_est[NUM_BIN + 1], Y[NUM_BIN + 1], theta[NUM_BIN + 1];
-+	int x_est[NUM_BIN + 1] = {};
-+	int Y[NUM_BIN + 1] = {};
-+	int theta[NUM_BIN + 1] = {};
- 	int PA_in[NUM_BIN + 1];
- 	int B1_tmp[NUM_BIN + 1], B2_tmp[NUM_BIN + 1];
- 	unsigned int B1_abs_max, B2_abs_max;
- 	int max_index, scale_factor;
--	int y_est[NUM_BIN + 1];
--	int x_est_fxp1_nonlin, x_tilde[NUM_BIN + 1];
-+	int y_est[NUM_BIN + 1] = {};
-+	int x_est_fxp1_nonlin;
-+	int x_tilde[NUM_BIN + 1] = {};
- 	unsigned int x_tilde_abs;
- 	int G_fxp, Y_intercept, order_x_by_y, M, I, L, sum_y_sqr, sum_y_quad;
- 	int Q_x, Q_B1, Q_B2, beta_raw, alpha_raw, scale_B;
-@@ -439,11 +442,6 @@ static bool create_pa_curve(u32 *data_L, u32 *data_U, u32 *pa_table, u16 *gain)
- 	thresh_accum_cnt = 16;
- 	scale_factor = 5;
- 	max_index = 0;
--	memset(theta, 0, sizeof(theta));
--	memset(x_est, 0, sizeof(x_est));
--	memset(Y, 0, sizeof(Y));
--	memset(y_est, 0, sizeof(y_est));
--	memset(x_tilde, 0, sizeof(x_tilde));
- 
- 	for (i = 0; i < NUM_BIN; i++) {
- 		s32 accum_cnt, accum_tx, accum_rx, accum_ang;
-diff --git a/drivers/net/wireless/ath/ath9k/eeprom.c b/drivers/net/wireless/ath/ath9k/eeprom.c
-index efb7889142d47..03675f6e0409e 100644
---- a/drivers/net/wireless/ath/ath9k/eeprom.c
-+++ b/drivers/net/wireless/ath/ath9k/eeprom.c
-@@ -480,7 +480,7 @@ void ath9k_hw_get_gain_boundaries_pdadcs(struct ath_hw *ah,
- 		[AR5416_MAX_PWR_RANGE_IN_HALF_DB];
- 
- 	u8 *pVpdL, *pVpdR, *pPwrL, *pPwrR;
--	u8 minPwrT4[AR5416_NUM_PD_GAINS];
-+	u8 minPwrT4[AR5416_NUM_PD_GAINS] = {};
- 	u8 maxPwrT4[AR5416_NUM_PD_GAINS];
- 	int16_t vpdStep;
- 	int16_t tmpVal;
-@@ -500,7 +500,6 @@ void ath9k_hw_get_gain_boundaries_pdadcs(struct ath_hw *ah,
- 	else
- 		intercepts = AR5416_PD_GAIN_ICEPTS;
- 
--	memset(&minPwrT4, 0, AR5416_NUM_PD_GAINS);
- 	ath9k_hw_get_channel_centers(ah, chan, &centers);
- 
- 	for (numPiers = 0; numPiers < availPiers; numPiers++) {
-diff --git a/drivers/net/wireless/ath/ath9k/eeprom_4k.c b/drivers/net/wireless/ath/ath9k/eeprom_4k.c
-index e8c2cc03be0cb..b74a60fd6cf17 100644
---- a/drivers/net/wireless/ath/ath9k/eeprom_4k.c
-+++ b/drivers/net/wireless/ath/ath9k/eeprom_4k.c
-@@ -583,12 +583,10 @@ static void ath9k_hw_4k_set_txpower(struct ath_hw *ah,
- 	struct ath_regulatory *regulatory = ath9k_hw_regulatory(ah);
- 	struct ar5416_eeprom_4k *pEepData = &ah->eeprom.map4k;
- 	struct modal_eep_4k_header *pModal = &pEepData->modalHeader;
--	int16_t ratesArray[Ar5416RateSize];
-+	int16_t ratesArray[Ar5416RateSize] = {};
- 	u8 ht40PowerIncForPdadc = 2;
- 	int i;
- 
--	memset(ratesArray, 0, sizeof(ratesArray));
--
- 	if (ath9k_hw_4k_get_eeprom_rev(ah) >= AR5416_EEP_MINOR_VER_2)
- 		ht40PowerIncForPdadc = pModal->ht40PowerIncForPdadc;
- 
-diff --git a/drivers/net/wireless/ath/ath9k/eeprom_9287.c b/drivers/net/wireless/ath/ath9k/eeprom_9287.c
-index 3caa149b10131..f70e3ef9b10b3 100644
---- a/drivers/net/wireless/ath/ath9k/eeprom_9287.c
-+++ b/drivers/net/wireless/ath/ath9k/eeprom_9287.c
-@@ -711,12 +711,10 @@ static void ath9k_hw_ar9287_set_txpower(struct ath_hw *ah,
- 	struct ath_regulatory *regulatory = ath9k_hw_regulatory(ah);
- 	struct ar9287_eeprom *pEepData = &ah->eeprom.map9287;
- 	struct modal_eep_ar9287_header *pModal = &pEepData->modalHeader;
--	int16_t ratesArray[Ar5416RateSize];
-+	int16_t ratesArray[Ar5416RateSize] = {};
- 	u8 ht40PowerIncForPdadc = 2;
- 	int i;
- 
--	memset(ratesArray, 0, sizeof(ratesArray));
--
- 	if (ath9k_hw_ar9287_get_eeprom_rev(ah) >= AR9287_EEP_MINOR_VER_2)
- 		ht40PowerIncForPdadc = pModal->ht40PowerIncForPdadc;
- 
-diff --git a/drivers/net/wireless/ath/ath9k/eeprom_def.c b/drivers/net/wireless/ath/ath9k/eeprom_def.c
-index 9729a69d3e2e3..4d24c877cbfc2 100644
---- a/drivers/net/wireless/ath/ath9k/eeprom_def.c
-+++ b/drivers/net/wireless/ath/ath9k/eeprom_def.c
-@@ -1150,12 +1150,10 @@ static void ath9k_hw_def_set_txpower(struct ath_hw *ah,
- 	struct ar5416_eeprom_def *pEepData = &ah->eeprom.def;
- 	struct modal_eep_header *pModal =
- 		&(pEepData->modalHeader[IS_CHAN_2GHZ(chan)]);
--	int16_t ratesArray[Ar5416RateSize];
-+	int16_t ratesArray[Ar5416RateSize] = {};
- 	u8 ht40PowerIncForPdadc = 2;
- 	int i, cck_ofdm_delta = 0;
- 
--	memset(ratesArray, 0, sizeof(ratesArray));
--
- 	if (ath9k_hw_def_get_eeprom_rev(ah) >= AR5416_EEP_MINOR_VER_2)
- 		ht40PowerIncForPdadc = pModal->ht40PowerIncForPdadc;
- 
-diff --git a/drivers/net/wireless/ath/ath9k/wow.c b/drivers/net/wireless/ath/ath9k/wow.c
-index 8d0b1730a9d5b..0232fba96d74c 100644
---- a/drivers/net/wireless/ath/ath9k/wow.c
-+++ b/drivers/net/wireless/ath/ath9k/wow.c
-@@ -53,11 +53,8 @@ static int ath9k_wow_add_disassoc_deauth_pattern(struct ath_softc *sc)
- 	struct ath_common *common = ath9k_hw_common(ah);
- 	int pattern_count = 0;
- 	int ret, i, byte_cnt = 0;
--	u8 dis_deauth_pattern[MAX_PATTERN_SIZE];
--	u8 dis_deauth_mask[MAX_PATTERN_SIZE];
--
--	memset(dis_deauth_pattern, 0, MAX_PATTERN_SIZE);
--	memset(dis_deauth_mask, 0, MAX_PATTERN_SIZE);
-+	u8 dis_deauth_pattern[MAX_PATTERN_SIZE] = {};
-+	u8 dis_deauth_mask[MAX_PATTERN_SIZE] = {};
- 
- 	/*
- 	 * Create Dissassociate / Deauthenticate packet filter
--- 
-2.26.3
-
+Best regards,
+Krzysztof

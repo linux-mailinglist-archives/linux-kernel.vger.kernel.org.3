@@ -2,133 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887344EA301
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 00:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9408C4EA2E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 00:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiC1WSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 18:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
+        id S229724AbiC1WT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 18:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiC1WSO (ORCPT
+        with ESMTP id S229821AbiC1WTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 18:18:14 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2073.outbound.protection.outlook.com [40.107.236.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB3BE7A;
-        Mon, 28 Mar 2022 15:15:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wu29d05gOWSiQhlUKFGv8g87xAAILjkSL1uMkHsA30OT0XszfPNd2fZsQPA7i3JNhVhJHqCsA/pC4ldoK6Zxqb4fBDA/Q3kI7kxw2EMoiz7wDvxI0Zqb7gFLUHhejKanPytgUXYhDLuKDoHBoQ68LnNuYck3HvtudwNV08hk0OOQris6eu3IIWV5E9uSGi5cGpUxkVBAHmo6C0HkbjHT12e/J3OhT2tHWr12lQeiTfMxQC/g0bULV2Hg1IFURZocsNBR1FlEj+mnvzvr3AaoPWnCaK5Vhr3R7m55kqz5BQNYwMU6egdnutW1LHcH8fI5QIpJZOuFZgYVAGNydCFPYg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EHcsop71DwBcVMnd0WQLLptotjlrSH7fp9iMLs5HjBw=;
- b=l4wYKB8osP3GH8GqayWsOVIRjQdR1ZyL/Trysh9Jj7hx+1GKcFaTaFLmXA6pOJeU7mzniV3O0zmJ+z/k6S9eXc9+9cg2Ci05mC8SK96PsV4EJcgN8QJpQJ1u1AjPe7O0ida5Ddty5KPCdbnQ1TeRwCbuDyjHpCIM0JCUJ0XHwToBKy3gXgVHnt2gIOe8LuYJytefiMHvWwfQNHJZAfL0+0QXZpjk/KgZuETTkFf1iexcFgAyK2RqaNuy+lbLUpswvkC8UillIOWUl44kc/wuDLQwUbxT95uW9ujuF4z+mT/EzmCSzk9R0XaElgup4xAZnXWBfnl/qWZCJI1ss/CPTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EHcsop71DwBcVMnd0WQLLptotjlrSH7fp9iMLs5HjBw=;
- b=YT1v6eEv+q/oM2sShYTJOHtjldRaLNqa7m9OhrmVVyvbdkRbM4dW9bZCOxPAxX4m7dYzl+et3twjOt9N4+kduu7KBhgkCVyXPhl3TeteXUHvc6AvcGKrVJ+3R3ZadTz7SFXcjrSq/efUGGnUPBTopruqi+ffYIjftuUx30ZxnLU=
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
- by DM6PR12MB2715.namprd12.prod.outlook.com (2603:10b6:5:4a::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.19; Mon, 28 Mar
- 2022 22:14:59 +0000
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::70d6:f6dd:3e14:3c2d]) by BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::70d6:f6dd:3e14:3c2d%5]) with mapi id 15.20.5102.023; Mon, 28 Mar 2022
- 22:14:59 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     "Huang, Ray" <Ray.Huang@amd.com>
-CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 0/3] Improve usability for amd-pstate
-Thread-Topic: [PATCH 0/3] Improve usability for amd-pstate
-Thread-Index: AQHYQAsN0/gEe0j8DEeyCqZmzLGXZKzTI0WAgAI+z4A=
-Date:   Mon, 28 Mar 2022 22:14:59 +0000
-Message-ID: <BL1PR12MB5157E8B3EF9E0F87629198F8E21D9@BL1PR12MB5157.namprd12.prod.outlook.com>
-References: <20220325054228.5247-1-mario.limonciello@amd.com>
- <YkBQ548oCbCqd6lE@amd.com>
-In-Reply-To: <YkBQ548oCbCqd6lE@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-03-28T22:14:41Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=237b5a9b-f614-4839-8a58-036eff14015d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-03-28T22:14:58Z
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: d31fd233-8418-4fd1-9cc5-bcaf386cc5ef
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 860cc6d8-fab4-4733-7e50-08da11086616
-x-ms-traffictypediagnostic: DM6PR12MB2715:EE_
-x-microsoft-antispam-prvs: <DM6PR12MB27151783D3D7F7956F35C350E21D9@DM6PR12MB2715.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: s+DHx/ejPZelSYZLVXDW+KpToMRzXbKrhFPwFuOf0vSlYvtNAW/67QuhXNcoOk1THIIAex4jFGlh5iOZOF+h9NSYRmV9Mqy8uwk6n7xQRuZGzA5nbwJqDdhz+nf8Lqwr0QNRj2Dbtj5ZjftSay5sq3TOnNGlhL64Hv0z28lVZLpo1/YOEsHiSMl1kQc9/t46x23P2gteXTHX3/vDufGWdvQqGRGfWf/pgF6mmh0WBtUsB3Qh32lobLrfEafe46mcoe7LDxXK0KjUQYtDwsWfLNEE9Lp94bUZbnhGTKVnLIp/1+6i8sc8efNN237khqo3wvTupjfKKlaLyCb/rWkUZOVBnwWAJ+XU7dRu77ZfPhpeeFyBa2+lHZfqRSjEb1VIJIZmLoBR2mpZYioFWH5BMYcvUQwHmzvZEyk+hO3YLydawrwnoj1trlcB+/g0YbinrRfLDvFZxcuZGK9stZEzoG1v+sIITz49rlTuLc2AoU9KqQwcyU8fs0Ko9PpBmcUhxm+7bzclT2zP+iPSXFRRnJE+PYlQWcz/OwACvnnS/mRTDJkyhDGBE73w7/w+HBdoXGIZ8SrokP3j8OgaAVXQFiD28D6RwryxhGwyqSDeK1lVnDieb4deH+KwTb/WGg1yHae4VVxodciwQU6mjJz4s4EHnVcU6wIeqBo7yfbeloICZ32rQix/xg0Jl/s73UVCvA72NIPGOBfAleMVCLbc7A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(55016003)(38100700002)(71200400001)(66446008)(5660300002)(76116006)(8676002)(66556008)(4326008)(64756008)(66476007)(6862004)(52536014)(66946007)(2906002)(8936002)(33656002)(508600001)(26005)(86362001)(9686003)(53546011)(7696005)(6636002)(316002)(83380400001)(6506007)(186003)(54906003)(38070700005)(122000001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7ewxRgu2Zk8dUclXRgOgZ/5iX/G6I+2WeplP59lHjqbulsJXgLEjqKboNcwv?=
- =?us-ascii?Q?lE/jmYtgnlk1w8TV62VS8XSKCXIlgTOmdRzmpsacXGKEDzZHvQqRXs19iF8/?=
- =?us-ascii?Q?KRhN4mIbsZD9y9kR82ATTCJRBa7fMQf9PZJpjt5iUmScT0Ujge8IyD/NnmOa?=
- =?us-ascii?Q?UsoHImzlcWzCJ2WKA+mjXXswhidpZRVCeAWN+xugaousBFMVkvM1gZAUS674?=
- =?us-ascii?Q?IfphayTsZ6GUCKJHnO28SDiPHZ438ZDD6Q0NAE8OUgpeYWOyEoXzW1oPb8ed?=
- =?us-ascii?Q?hrL2jRzte/eakQVP89eP7V9FPBMdCW2G+kilHueH1tLKcIt/pMtz7I7RlF4M?=
- =?us-ascii?Q?FdqFb4zndRoBpM41VbMLoNceny0vuHiWY3tsu5+P1sdSNhkUKdZw76F87tbo?=
- =?us-ascii?Q?rHDuL2AysfO9N5kVAZKOglhRT3gKzm6BVpU6T57Y30y6N2z3CWLz2w13H4sN?=
- =?us-ascii?Q?70WrK4SQLLQjGU2wDYnE7yOPhCMHcTyEzEYUMsJp10eKlz1huiAQk80rVGXh?=
- =?us-ascii?Q?5UhFXbxa+76gtfHlLFJI2mdLmNkF9H4u4lTZ7XOXvhkufWUr5HehT9WER8xf?=
- =?us-ascii?Q?Ot6e93+KE1EAE94bPGetXHq8rOVCoOn+y5RHJHuaXSTRq37ZEycMCn1IQwY+?=
- =?us-ascii?Q?flGXdjdagNgOkh23PjWEMkbNDhtMCi3Isi7rDHqgmmrH067F+ywREThI3ABX?=
- =?us-ascii?Q?SXHD6hNB4btd5r9pkubyDdctvPxMDerWcLclLys0LoKziJ+SiixGf+JqxyjS?=
- =?us-ascii?Q?eDyw8vidy0cbJVxf7iK3l5eYKKfzUvcK6i5vIOmUOmb2SbLsnDr7SYlnkxEf?=
- =?us-ascii?Q?cmGZ5kWb0mbio002+rFQUfBmcNfkI+Kymn0siEEINNS7r920kWnzWwLdSacR?=
- =?us-ascii?Q?CjhXFKurOkyP4A+cQFnp2MkY2dCWsiksjS+/0uExrfFfBANO7mPiH+u0HxT+?=
- =?us-ascii?Q?DwpY8wAuDPpH41nm0tmidCpS/gIhS31kmsmOoaJKhibZHRNNwTEIwHYpu47Q?=
- =?us-ascii?Q?pfBvNrgTuWkJ9CLNr/jKl5eU2k8kl1hgWkMFIuwV0pYmygT+wXEYM1kCR6m9?=
- =?us-ascii?Q?zdT5O5kN+Oqftef9eJP3zuuiD87/XzTmAFyhiuU/1ZylPgDa1QwfbQ5e3pZN?=
- =?us-ascii?Q?4Tk2ahxQ0kp+dwqR5qIKiAgEyZZmh1OK1uAZAC8d2/o7z295tOCOu9nQxAme?=
- =?us-ascii?Q?g0TA0Xg8cvdvUDX9N1smxzIVMt5i/vjtP368IzgKGucDCEW1cgtKdKhEDvpJ?=
- =?us-ascii?Q?5pKMshbkvJqYL6PWyTNfNkq5I8xYADaRY9rfb61ZKLq6H7qEvsHsiqyEaYFT?=
- =?us-ascii?Q?NvFu0yL990Q/q4TikldsNVIJyj1JMtbllmWLbFvLW3LEedSL+vjJV45yYyJ8?=
- =?us-ascii?Q?OaOKffBPUMCVCD2e0tbgTCr7dsWd7X1u/QLuAbr9O2uG943q8fVUUC/X3GZO?=
- =?us-ascii?Q?tB46RYAS0nDMKSyUecO515QxZcsTXiqqE3TkEZqPjqhxSQFApQCtEawuFtKT?=
- =?us-ascii?Q?1MKE3Ri3ePmiFwx1AghfuuMV/IzAaTWx723YQdFL8kXHqhmXPaeDMsg354Rp?=
- =?us-ascii?Q?tpaprLEdqLY/CPOXlxuOtSn46GTh9BeYBZqKsrK0pOQtOCCW3TH2BsHzuytY?=
- =?us-ascii?Q?wlNGzubxCQ8DKn1ObSSXf+VkjFujl3lZ1dCDgKrPVvID0Ax05rgn+RUZlIWf?=
- =?us-ascii?Q?b8kSofyavcWG8TGSyzJuPGbbPnXdGWlxLvMCV7HYgwIJIBoVWgV8XNkXVQkE?=
- =?us-ascii?Q?yTi5h4Th0A=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 28 Mar 2022 18:19:50 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2842843EF2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 15:17:40 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2e5827a76f4so164750027b3.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 15:17:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HlzHnAB+DkmHC29zDgjcUDTmmN26ykYVSroGA/4Zdtw=;
+        b=byEqOtoQCkaUX7NCZl/dyQLS8bl7uXnfWbp3NnlOTpwEbQSF2NneIOCbmVjrOYZ8lH
+         yUeHyqvS4GE5CgutHCCmNZEKkjGu+uNiNibetefHkv+kN6GCT8/QXwawstXjdsPzLMNZ
+         oaaCz3s6ZR1zFJfBtlhv4UsgA2FCpslTEd6dI42/v48Ymsj2lfcdZcwI7WXSriOiuC2S
+         J+qbvKl2fLVNGj5nqODiZ7gxfiGf2QwRm7I5JEaHuIOQ1gxRJ2iratpEYAFGSeLeqk66
+         rhoXJgPGFjzOevlyTJKjt9/B5oI9LnfAVHGaMD5dOpCUrbQZTuCyMiy7EO98zbfc35mA
+         0/JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HlzHnAB+DkmHC29zDgjcUDTmmN26ykYVSroGA/4Zdtw=;
+        b=pEOqohZfYPT/0K0AxpdAm4aLreCGP1aqJa/oJ21k6L/M93TZBGTzaYaYN5R5xduaNH
+         Lba9RxV9KIxI7U6dGaZ+eqGlp5A2TIK0qeBT2u0onvRoGjpOpQx9V4Y9Wq/jqCMOhUV6
+         4YxD/l/LDPcFzPYJnBn9TZwAA7GiuqmodWS9VZD1+ytvqsBZJ+BFmh9L6oro0tJaxzfj
+         wyYc2+2RYdoAp00ZsmBM/rZSK+Q3VX3r2WJ67lmG9G86K3TSUtpiTqEDBzDPaZbRr28u
+         aETY50ep3eNP6/rYjeF41DjBTYucXRtjWrKeE7836SrqAJQJf8tB380ngh68bxA+Ugi4
+         h18g==
+X-Gm-Message-State: AOAM530a3g+zfRUBRscgCJilF6zN0lE5agpxfOu5NxK3viPB7snrEyOQ
+        NIFyP70YTO554LMUlEQKSJfiZu1F58avCF1fyhumtw==
+X-Google-Smtp-Source: ABdhPJzaA21lYo0IR0rgyTPFFwxXQ5ehzsABJkFVJt46iQRr9T7gnDQyB44x84FPmWaSA/qiKkY5GmYHJxKSZa0WL74=
+X-Received: by 2002:a81:15ce:0:b0:2e5:e189:7366 with SMTP id
+ 197-20020a8115ce000000b002e5e1897366mr28498284ywv.188.1648505858953; Mon, 28
+ Mar 2022 15:17:38 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 860cc6d8-fab4-4733-7e50-08da11086616
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Mar 2022 22:14:59.5569
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: upcnbmR4L4kEWaiBYn6O8zwoABVgy4BrcufMW/d0bKvhHSFkNcRHIYcXX7FOxFvNdVarYT+Q0X9Rir3CSswPBw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2715
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220321234844.1543161-1-bgardon@google.com> <20220321234844.1543161-7-bgardon@google.com>
+ <YkIFCHFBOy+VIllw@google.com>
+In-Reply-To: <YkIFCHFBOy+VIllw@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Mon, 28 Mar 2022 15:17:27 -0700
+Message-ID: <CANgfPd9NG5cKWrq=tFmnsE1MnPaek+w6wLtdpKqVSg3W1QNMnQ@mail.gmail.com>
+Subject: Re: [PATCH v2 06/11] KVM: selftests: Add NX huge pages test
+To:     David Matlack <dmatlack@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -136,74 +74,287 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Public]
+On Mon, Mar 28, 2022 at 11:57 AM David Matlack <dmatlack@google.com> wrote:
+>
+> On Mon, Mar 21, 2022 at 04:48:39PM -0700, Ben Gardon wrote:
+> > There's currently no test coverage of NX hugepages in KVM selftests, so
+> > add a basic test to ensure that the feature works as intended.
+> >
+> > Reviewed-by: David Dunn <daviddunn@google.com>
+> >
+> > Signed-off-by: Ben Gardon <bgardon@google.com>
+> > ---
+> >  tools/testing/selftests/kvm/Makefile          |   3 +-
+> >  .../kvm/lib/x86_64/nx_huge_pages_guest.S      |  45 ++++++
+> >  .../selftests/kvm/x86_64/nx_huge_pages_test.c | 133 ++++++++++++++++++
+> >  .../kvm/x86_64/nx_huge_pages_test.sh          |  25 ++++
+> >  4 files changed, 205 insertions(+), 1 deletion(-)
+> >  create mode 100644 tools/testing/selftests/kvm/lib/x86_64/nx_huge_pages_guest.S
+> >  create mode 100644 tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> >  create mode 100755 tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+> >
+> > diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> > index 04099f453b59..6ee30c0df323 100644
+> > --- a/tools/testing/selftests/kvm/Makefile
+> > +++ b/tools/testing/selftests/kvm/Makefile
+> > @@ -38,7 +38,7 @@ ifeq ($(ARCH),riscv)
+> >  endif
+> >
+> >  LIBKVM = lib/assert.c lib/elf.c lib/io.c lib/kvm_util.c lib/rbtree.c lib/sparsebit.c lib/test_util.c lib/guest_modes.c lib/perf_test_util.c
+> > -LIBKVM_x86_64 = lib/x86_64/apic.c lib/x86_64/processor.c lib/x86_64/vmx.c lib/x86_64/svm.c lib/x86_64/ucall.c lib/x86_64/handlers.S
+> > +LIBKVM_x86_64 = lib/x86_64/apic.c lib/x86_64/processor.c lib/x86_64/vmx.c lib/x86_64/svm.c lib/x86_64/ucall.c lib/x86_64/handlers.S lib/x86_64/nx_huge_pages_guest.S
+> >  LIBKVM_aarch64 = lib/aarch64/processor.c lib/aarch64/ucall.c lib/aarch64/handlers.S lib/aarch64/spinlock.c lib/aarch64/gic.c lib/aarch64/gic_v3.c lib/aarch64/vgic.c
+> >  LIBKVM_s390x = lib/s390x/processor.c lib/s390x/ucall.c lib/s390x/diag318_test_handler.c
+> >  LIBKVM_riscv = lib/riscv/processor.c lib/riscv/ucall.c
+> > @@ -56,6 +56,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/kvm_clock_test
+> >  TEST_GEN_PROGS_x86_64 += x86_64/kvm_pv_test
+> >  TEST_GEN_PROGS_x86_64 += x86_64/mmio_warning_test
+> >  TEST_GEN_PROGS_x86_64 += x86_64/mmu_role_test
+> > +TEST_GEN_PROGS_x86_64 += x86_64/nx_huge_pages_test
+>
+> This will make the selftest infrastructure treat nx_huge_pages_test as
+> the selftest that gets run by default (e.g. if someone runs `make
+> kselftest`). But you actually want nx_huge_pages_test.sh to be the
+> selftest that gets run (nx_huge_pages_test is really just a helper
+> binary). Is that correct?
+>
+> Take a look at [1] for how to set this up. Specifically I think you want
+> to move nx_huge_pages_test to TEST_GEN_PROGS_EXTENDED and add
+> nx_huge_pages_test.sh to TEST_PROGS.
+>
+> I'd love to have the infrastructure in place for doing this because I've
+> been wanting to add some shell script wrappers for dirty_log_perf_test
+> to set up HugeTLBFS and invoke it with various different arguments.
+>
+> [1] https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html#contributing-new-tests-details
 
+Oh awesome, thank you for the tip! I'll try that.
 
-
-> -----Original Message-----
-> From: Huang, Ray <Ray.Huang@amd.com>
-> Sent: Sunday, March 27, 2022 06:56
-> To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> Cc: Rafael J . Wysocki <rafael@kernel.org>; Viresh Kumar
-> <viresh.kumar@linaro.org>; open list:AMD PSTATE DRIVER <linux-
-> pm@vger.kernel.org>; open list <linux-kernel@vger.kernel.org>
-> Subject: Re: [PATCH 0/3] Improve usability for amd-pstate
->=20
-> On Fri, Mar 25, 2022 at 01:42:25PM +0800, Limonciello, Mario wrote:
-> > There has recently been some news coverage about `amd-pstate` being in
-> > 5.17, but this news also mentioned that it's a bit difficult to use.
-> >
-> > You need to either block init calls, or compile the module into the ker=
-nel
-> > to force it to take precedence over acpi-cpufreq.
-> >
-> > This series aims to improve the usability of amd-pstate so that distros
-> > can compile as a module, but users can still use it (relatively) easily=
-.
-> >
-> > A new module parameter is included that will force amd-pstate to take
-> > precedence and a module table to let it load automatically on such syst=
-ems.
-> >
-> > With the patches in this series a user can make a file
-> > /etc/modprobe.d/amd-pstate.conf:
-> >
-> > options amd-pstate replace=3D1
->=20
-> Actually, because the amd-pstate is fairly new for current distos, we can
-> modify /etc/modules-load.d/modules.conf to add one line "amd_pstate" to
-> inform the system this module should be loaded at boot time.
-
-Actually I don't believe that would work in the case that acpi-cpufreq is b=
-uilt-in
-or gets loaded first.
-
->=20
-> But your method also looks fine for me as well, the amd-pstate can force =
-to
-> replace the acpi-cpufreq. I am not sure whether anyone objects to this wa=
-y.
-
-Thanks for your suggestions in the series, I'll adopt them for v2.
-
->=20
-> Thanks,
-> Ray
->=20
-> >
-> > Then upon the next reboot amd-pstate should load automatically even if
-> > acpi-cpufreq was included on the system.
-> > Mario Limonciello (3):
-> >   cpufreq: Allow passing NULL as the argument for unregistering a drive=
-r
-> >   cpufreq: amd-pstate: Allow replacing existing cpufreq drivers when
-> >     loaded
-> >   cpufreq: amd-pstate: Add a module device table
-> >
-> >  drivers/cpufreq/amd-pstate.c | 19 ++++++++++++++++---
-> >  drivers/cpufreq/cpufreq.c    |  4 ++--
-> >  2 files changed, 18 insertions(+), 5 deletions(-)
-> >
+>
+> >  TEST_GEN_PROGS_x86_64 += x86_64/platform_info_test
+> >  TEST_GEN_PROGS_x86_64 += x86_64/pmu_event_filter_test
+> >  TEST_GEN_PROGS_x86_64 += x86_64/set_boot_cpu_id
+> > diff --git a/tools/testing/selftests/kvm/lib/x86_64/nx_huge_pages_guest.S b/tools/testing/selftests/kvm/lib/x86_64/nx_huge_pages_guest.S
+> > new file mode 100644
+> > index 000000000000..09c66b9562a3
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kvm/lib/x86_64/nx_huge_pages_guest.S
+> > @@ -0,0 +1,45 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + * tools/testing/selftests/kvm/nx_huge_page_guest.S
+> > + *
+> > + * Copyright (C) 2022, Google LLC.
+> > + */
+> > +
+> > +.include "kvm_util.h"
+> > +
+> > +#define HPAGE_SIZE   (2*1024*1024)
+> > +#define PORT_SUCCESS 0x70
+> > +
+> > +.global guest_code0
+> > +.global guest_code1
+> > +
+> > +.align HPAGE_SIZE
+> > +exit_vm:
+> > +     mov    $0x1,%edi
+> > +     mov    $0x2,%esi
+> > +     mov    a_string,%edx
+> > +     mov    $0x1,%ecx
+> > +     xor    %eax,%eax
+> > +     jmp    ucall
+> > +
+> > +
+> > +guest_code0:
+> > +     mov data1, %eax
+> > +     mov data2, %eax
+> > +     jmp exit_vm
+> > +
+> > +.align HPAGE_SIZE
+> > +guest_code1:
+> > +     mov data1, %eax
+> > +     mov data2, %eax
+> > +     jmp exit_vm
+> > +data1:
+> > +.quad        0
+> > +
+> > +.align HPAGE_SIZE
+> > +data2:
+> > +.quad        0
+> > +a_string:
+> > +.string "why does the ucall function take a string argument?"
+> > +
+> > +
+> > diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> > new file mode 100644
+> > index 000000000000..2bcbe4efdc6a
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> > @@ -0,0 +1,133 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * tools/testing/selftests/kvm/nx_huge_page_test.c
+> > + *
+> > + * Usage: to be run via nx_huge_page_test.sh, which does the necessary
+> > + * environment setup and teardown
+> > + *
+> > + * Copyright (C) 2022, Google LLC.
+> > + */
+> > +
+> > +#define _GNU_SOURCE
+> > +
+> > +#include <fcntl.h>
+> > +#include <stdint.h>
+> > +#include <time.h>
+> > +
+> > +#include <test_util.h>
+> > +#include "kvm_util.h"
+> > +
+> > +#define HPAGE_SLOT           10
+> > +#define HPAGE_PADDR_START       (10*1024*1024)
+> > +#define HPAGE_SLOT_NPAGES    (100*1024*1024/4096)
+> > +
+> > +/* Defined in nx_huge_page_guest.S */
+> > +void guest_code0(void);
+> > +void guest_code1(void);
+> > +
+> > +static void run_guest_code(struct kvm_vm *vm, void (*guest_code)(void))
+> > +{
+> > +     struct kvm_regs regs;
+> > +
+> > +     vcpu_regs_get(vm, 0, &regs);
+> > +     regs.rip = (uint64_t)guest_code;
+> > +     vcpu_regs_set(vm, 0, &regs);
+> > +     vcpu_run(vm, 0);
+> > +}
+> > +
+> > +static void check_2m_page_count(struct kvm_vm *vm, int expected_pages_2m)
+> > +{
+> > +     int actual_pages_2m;
+> > +
+> > +     actual_pages_2m = vm_get_single_stat(vm, "pages_2m");
+> > +
+> > +     TEST_ASSERT(actual_pages_2m == expected_pages_2m,
+> > +                 "Unexpected 2m page count. Expected %d, got %d",
+> > +                 expected_pages_2m, actual_pages_2m);
+> > +}
+> > +
+> > +static void check_split_count(struct kvm_vm *vm, int expected_splits)
+> > +{
+> > +     int actual_splits;
+> > +
+> > +     actual_splits = vm_get_single_stat(vm, "nx_lpage_splits");
+> > +
+> > +     TEST_ASSERT(actual_splits == expected_splits,
+> > +                 "Unexpected nx lpage split count. Expected %d, got %d",
+> > +                 expected_splits, actual_splits);
+> > +}
+> > +
+> > +int main(int argc, char **argv)
+> > +{
+> > +     struct kvm_vm *vm;
+> > +     struct timespec ts;
+> > +
+> > +     vm = vm_create(VM_MODE_DEFAULT, DEFAULT_GUEST_PHY_PAGES, O_RDWR);
+> > +
+> > +     vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS_HUGETLB,
+> > +                                 HPAGE_PADDR_START, HPAGE_SLOT,
+> > +                                 HPAGE_SLOT_NPAGES, 0);
+> > +
+> > +     kvm_vm_elf_load_memslot(vm, program_invocation_name, HPAGE_SLOT);
+> > +
+> > +     vm_vcpu_add_default(vm, 0, guest_code0);
+> > +
+> > +     check_2m_page_count(vm, 0);
+> > +     check_split_count(vm, 0);
+> > +
+> > +     /*
+> > +      * Running guest_code0 will access data1 and data2.
+> > +      * This should result in part of the huge page containing guest_code0,
+> > +      * and part of the hugepage containing the ucall function being mapped
+> > +      * at 4K. The huge pages containing data1 and data2 will be mapped
+> > +      * at 2M.
+> > +      */
+> > +     run_guest_code(vm, guest_code0);
+> > +     check_2m_page_count(vm, 2);
+> > +     check_split_count(vm, 2);
+> > +
+> > +     /*
+> > +      * guest_code1 is in the same huge page as data1, so it will cause
+> > +      * that huge page to be remapped at 4k.
+> > +      */
+> > +     run_guest_code(vm, guest_code1);
+> > +     check_2m_page_count(vm, 1);
+> > +     check_split_count(vm, 3);
+> > +
+> > +     /* Run guest_code0 again to check that is has no effect. */
+> > +     run_guest_code(vm, guest_code0);
+> > +     check_2m_page_count(vm, 1);
+> > +     check_split_count(vm, 3);
+> > +
+> > +     /*
+> > +      * Give recovery thread time to run. The wrapper script sets
+> > +      * recovery_period_ms to 100, so wait 1.5x that.
+> > +      */
+> > +     ts.tv_sec = 0;
+> > +     ts.tv_nsec = 150000000;
+> > +     nanosleep(&ts, NULL);
+> > +
+> > +     /*
+> > +      * Now that the reclaimer has run, all the split pages should be gone.
+> > +      */
+> > +     check_2m_page_count(vm, 1);
+> > +     check_split_count(vm, 0);
+> > +
+> > +     /*
+> > +      * The split 2M pages should have been reclaimed, so run guest_code0
+> > +      * again to check that pages are mapped at 2M again.
+> > +      */
+> > +     run_guest_code(vm, guest_code0);
+> > +     check_2m_page_count(vm, 2);
+> > +     check_split_count(vm, 2);
+> > +
+> > +     /* Pages are once again split from running guest_code1. */
+> > +     run_guest_code(vm, guest_code1);
+> > +     check_2m_page_count(vm, 1);
+> > +     check_split_count(vm, 3);
+> > +
+> > +     kvm_vm_free(vm);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+> > new file mode 100755
+> > index 000000000000..19fc95723fcb
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+> > @@ -0,0 +1,25 @@
+> > +#!/bin/bash
+> > +# SPDX-License-Identifier: GPL-2.0-only */
+> > +
+> > +# tools/testing/selftests/kvm/nx_huge_page_test.sh
+> > +# Copyright (C) 2022, Google LLC.
+> > +
+> > +NX_HUGE_PAGES=$(cat /sys/module/kvm/parameters/nx_huge_pages)
+> > +NX_HUGE_PAGES_RECOVERY_RATIO=$(cat /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio)
+> > +NX_HUGE_PAGES_RECOVERY_PERIOD=$(cat /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms)
+> > +HUGE_PAGES=$(cat /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages)
+> > +
+> > +echo 1 > /sys/module/kvm/parameters/nx_huge_pages
+> > +echo 1 > /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio
+> > +echo 100 > /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms
+> > +echo 200 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+> > +
+> > +./nx_huge_pages_test
+> > +RET=$?
+> > +
+> > +echo $NX_HUGE_PAGES > /sys/module/kvm/parameters/nx_huge_pages
+> > +echo $NX_HUGE_PAGES_RECOVERY_RATIO > /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio
+> > +echo $NX_HUGE_PAGES_RECOVERY_PERIOD > /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms
+> > +echo $HUGE_PAGES > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+> > +
+> > +exit $RET
 > > --
-> > 2.34.1
+> > 2.35.1.894.gb6a874cedc-goog
 > >

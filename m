@@ -2,262 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE3C4E9EEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4986C4E9EF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244418AbiC1S1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 14:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
+        id S245220AbiC1SaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 14:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240336AbiC1S1I (ORCPT
+        with ESMTP id S242272AbiC1SaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 14:27:08 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F8D4ECF6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:25:26 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id d19-20020a0566022bf300b00645eba5c992so10933339ioy.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:25:26 -0700 (PDT)
+        Mon, 28 Mar 2022 14:30:20 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDE813E20
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:28:37 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id dr20so30441999ejc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:28:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=8WaH8oTp9zQ4RiMod88tKNM8FNGzolc7NDGliqXEyFM=;
+        b=RA1LFZlyqYnQKlZhfG5eW4EytFq6FXGfsjb2/DOkWkAoisIvQquLsZTwb8nBtNlht8
+         ZHqiJ/MOFhcB+HyYDg4DOrCFHvXKNreT5wQEPJ7PzPnMoI2QrObdeAd08uOLLZhCsV8Y
+         oo/fwNelFB8E06amjBdYhwsR2VhATbyd3kx12XlxxP1sGczHl+YWk9N47mzb48HohD17
+         d9HYqBqtvUEw1TYZH7O9tEkaSoRyqnabxydRHWLDA8W6lAvtHgHxiIUB7dc49IG+TBgi
+         G8ykTzQvXQ9aD4+tQHre6cRAhm0yoObw1rfkn0AAPUuFF1ZU/BUjCdEdRxBpKxz80uJg
+         RymA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=RBDHVALQi6in3MzmSvksdqiyNF+gV4JupE/OPsrZyog=;
-        b=BU0JIyMFHtncHsK1Be3EwXQjZ7E8Ioyc6y0PHdAgYB8RaN19R66ruLY2zlVNasPSA9
-         Y4z8FLC9grTHI7JvavoJPn++W2stCH9Mz4Fad5NAHqyZgmodGvyM3GMNJ7xv8W1HUEd2
-         E7DGqj2HX+GLaBK92YwgK1q4Mph5ggYBhPYUJ7t8yveLop7i1rsCCSqcwC49UIoAeFOk
-         BQgvODGBloFENNXhBorn5JOQ6h1q2RUGP6CslNYqA0agqWY7LjaLCfiwGNKafverZBIX
-         Bhjz6wXxTC3FzGnER+ZEfjVedWQvibP3Nqo8Xpise8RUyqyi8q3RuO69HcaVTjWNpt0N
-         Pk1g==
-X-Gm-Message-State: AOAM5302AX9vhLXwQhApfxh+oenMLxFx2NnwrxPVeieboaIev+bIYtR3
-        HbXH7wyqMJbJoyQm968aQY/xjrXKLPQrUHxV9h7Q1iSJoiet
-X-Google-Smtp-Source: ABdhPJzab1QKPQlFRWArIzNIbpMntnS0NX/WKJ497m2G15az2oVdICT7J0yPXysaW+n9iW88CC3NNPoZl6AWsrT/5eol+ZNCU12C
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=8WaH8oTp9zQ4RiMod88tKNM8FNGzolc7NDGliqXEyFM=;
+        b=MgNrm1we3zW8jHnqv1KssFEi33/HF1GlhdIdHUFQapFKfFNcLHvOzyUhiEPOf0FHup
+         SWyCVQ5oMSy5RciTtDsWsrvmQPzum7iGI3QFECUZGZZ70GqgLRHrPAQ7Yl4voFUk5aVH
+         5kUmLMAKSTmipqAnClSCNeFr43bZz+2ZGu1Gtn5Mdfwa+BksNcDcqRujOywLiABGRjGJ
+         MZzMQc83WZf53H1ZqtBsrDM3BE+4sZfk/nDx7azrvJWrm0CXrC0anqWsgkQoPzQopCqH
+         iew0qhM2nuNEgByT5kFLeHxAVoVXa1kVjKI8Avv7Z3bpK+rYFrTOFY+TaYnsR8gyY7zR
+         Zssg==
+X-Gm-Message-State: AOAM533Upv2lgmiOzwu9WdMUfc2zJhJw+1gJAOsRN5Sebtmu1tm/la5c
+        +xiZcFpgWOVelEoq5eYGqx5LbaS3vyoC2SP1LayXhg==
+X-Google-Smtp-Source: ABdhPJz3R1rYGKfMgCT8Xw+uvi6MQu9Vw8tO6cBRgeUu+llCkBBC4HKzRw85BEQANrPE+Bd5D9ZFeLO+o1zCssURxAk=
+X-Received: by 2002:a17:906:9754:b0:6da:7d72:1353 with SMTP id
+ o20-20020a170906975400b006da7d721353mr29368499ejy.273.1648492115577; Mon, 28
+ Mar 2022 11:28:35 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a5e:dc05:0:b0:645:d2cc:3e92 with SMTP id
- b5-20020a5edc05000000b00645d2cc3e92mr7186171iok.72.1648491926259; Mon, 28 Mar
- 2022 11:25:26 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 11:25:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ae0adf05db4b6f66@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in j1939_xtp_rx_dat_one (3)
-From:   syzbot <syzbot+a9dce1ff45c3bbeceb3a@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kernel@pengutronix.de, kuba@kernel.org,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
-        pabeni@redhat.com, robin@protonic.nl, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
+References: <20220328035951.1817417-1-tjmercier@google.com>
+ <20220328035951.1817417-5-tjmercier@google.com> <YkHH/0Use7F30UUE@phenom.ffwll.local>
+In-Reply-To: <YkHH/0Use7F30UUE@phenom.ffwll.local>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Mon, 28 Mar 2022 11:28:24 -0700
+Message-ID: <CABdmKX01p6g_iHsB6dd4Wwh=8iLdYiUqdY6_yyA5ax2YNHt6tQ@mail.gmail.com>
+Subject: Re: [RFC v4 4/8] dmabuf: heaps: export system_heap buffers with GPU
+ cgroup charging
+To:     "T.J. Mercier" <tjmercier@google.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Daniel Vetter <daniel@ffwll.ch>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Mar 28, 2022 at 7:36 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+>
+> On Mon, Mar 28, 2022 at 03:59:43AM +0000, T.J. Mercier wrote:
+> > From: Hridya Valsaraju <hridya@google.com>
+> >
+> > All DMA heaps now register a new GPU cgroup device upon creation, and t=
+he
+> > system_heap now exports buffers associated with its GPU cgroup device f=
+or
+> > tracking purposes.
+> >
+> > Signed-off-by: Hridya Valsaraju <hridya@google.com>
+> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> >
+> > ---
+> > v3 changes
+> > Use more common dual author commit message format per John Stultz.
+> >
+> > v2 changes
+> > Move dma-buf cgroup charge transfer from a dma_buf_op defined by every
+> > heap to a single dma-buf function for all heaps per Daniel Vetter and
+> > Christian K=C3=B6nig.
+>
+> Apologies for being out of the loop quite a bit. I scrolled through this
+> all and I think it looks good to get going.
+>
+> The only thing I have is whether we should move the cgroup controllers ou=
+t
+> of dma-buf heaps, since that's rather android centric. E.g.
+> - a system gpucg_device which is used by all the various single page
+>   allocators (dma-buf heap but also shmem helpers and really anything
+>   else)
+> - same for cma, again both for dma-buf heaps and also for the gem cma
+>   helpers in drm
 
-syzbot found the following issue on:
+Thanks Daniel, in general that makes sense to me as an approach to
+making this more universal. However for the Android case I'm not sure
+if the part about a single system gpucg_device would be sufficient,
+because there are at least 12 different graphics related heaps that
+could potentially be accounted/limited differently. [1]  So that
+raises the question of how fine grained we want this to be... I tend
+towards separating them all, but I haven't formed a strong opinion
+about this at the moment. It sounds like you are in favor of a
+smaller, more rigidly defined set of them? Either way, we need to add
+code for accounting at points where we know memory is specifically for
+graphics use and not something else right? (I.E. Whether it is a
+dma-buf heap or somewhere like drm_gem_object_init.) So IIUC the only
+question is what to use for the gpucg_device(s) at these locations.
 
-HEAD commit:    ae085d7f9365 mm: kfence: fix missing objcg housekeeping fo..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17656105700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6bae4cd50262530e
-dashboard link: https://syzkaller.appspot.com/bug?extid=a9dce1ff45c3bbeceb3a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12529653700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14b64ea5700000
+[1] https://cs.android.com/android/platform/superproject/+/master:hardware/=
+google/graphics/common/libion/ion.cpp;l=3D39-50
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a9dce1ff45c3bbeceb3a@syzkaller.appspotmail.com
+>
+> Otherwise this will only work on non-upstream android where gpu drivers
+> allocate everything from dma-buf heap. If you use something like the x86
+> android project with mesa drivers, then driver-internal buffers will be
+> allocated through gem and not through dma-buf heaps. Or at least I think
+> that's how it works.
+>
+> But also meh, we can fix this fairly easily later on by adding these
+> standard gpucg_dev somwehere with a bit of kerneldoc.
 
-vcan0: j1939_xtp_rx_dat_one: 0xffff88801fe31400: last 00
-vcan0: j1939_xtp_rx_dat_one: 0xffff88801fe31800: last 00
-vcan0: j1939_xtp_rx_dat_one: 0xffff88801fe31800: Data of RX-looped back packet (00 ff ff ff ff ff ff) doesn't match TX data (00 00 00 00 00 00 00)!
-==================================================================
-BUG: KASAN: use-after-free in j1939_xtp_rx_dat_one+0xe15/0xee0 net/can/j1939/transport.c:1877
-Read of size 1 at addr ffff88802304ab8e by task ksoftirqd/1/21
+This is what I was thinking would happen next, but IDK if anyone sees
+a more central place to do this type of use-specific accounting.
 
-CPU: 1 PID: 21 Comm: ksoftirqd/1 Tainted: G        W         5.17.0-syzkaller-11407-gae085d7f9365 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- j1939_xtp_rx_dat_one+0xe15/0xee0 net/can/j1939/transport.c:1877
- j1939_xtp_rx_dat net/can/j1939/transport.c:1929 [inline]
- j1939_tp_recv+0x6de/0xcb0 net/can/j1939/transport.c:2123
- j1939_can_recv+0x6ff/0x9a0 net/can/j1939/main.c:108
- deliver net/can/af_can.c:574 [inline]
- can_rcv_filter+0x5d4/0x8d0 net/can/af_can.c:608
- can_receive+0x31d/0x580 net/can/af_can.c:665
- can_rcv+0x120/0x1c0 net/can/af_can.c:696
- __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5405
- __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5519
- process_backlog+0x3a0/0x7c0 net/core/dev.c:5847
- __napi_poll+0xb3/0x6e0 net/core/dev.c:6413
- napi_poll net/core/dev.c:6480 [inline]
- net_rx_action+0x8ec/0xc60 net/core/dev.c:6567
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
- run_ksoftirqd kernel/softirq.c:921 [inline]
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
- </TASK>
+>
+> Anyway has my all my ack, but don't count this as my in-depth review :-)
+> -Daniel
 
-Allocated by task 3606:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- __kasan_slab_alloc+0x90/0xc0 mm/kasan/common.c:469
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:749 [inline]
- slab_alloc_node mm/slub.c:3217 [inline]
- kmem_cache_alloc_node+0x255/0x3f0 mm/slub.c:3267
- __alloc_skb+0x215/0x340 net/core/skbuff.c:414
- alloc_skb include/linux/skbuff.h:1300 [inline]
- alloc_skb_with_frags+0x93/0x730 net/core/skbuff.c:5988
- sock_alloc_send_pskb+0x793/0x920 net/core/sock.c:2600
- j1939_sk_alloc_skb net/can/j1939/socket.c:861 [inline]
- j1939_sk_send_loop net/can/j1939/socket.c:1118 [inline]
- j1939_sk_sendmsg+0x6eb/0x13f0 net/can/j1939/socket.c:1253
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:725
- sock_no_sendpage+0xf6/0x140 net/core/sock.c:3106
- kernel_sendpage.part.0+0x1ff/0x7b0 net/socket.c:3492
- kernel_sendpage net/socket.c:3489 [inline]
- sock_sendpage+0xdf/0x140 net/socket.c:1007
- pipe_to_sendpage+0x2ad/0x380 fs/splice.c:364
- splice_from_pipe_feed fs/splice.c:418 [inline]
- __splice_from_pipe+0x43e/0x8a0 fs/splice.c:562
- splice_from_pipe fs/splice.c:597 [inline]
- generic_splice_sendpage+0xd4/0x140 fs/splice.c:746
- do_splice_from fs/splice.c:767 [inline]
- direct_splice_actor+0x110/0x180 fs/splice.c:936
- splice_direct_to_actor+0x34b/0x8c0 fs/splice.c:891
- do_splice_direct+0x1a7/0x270 fs/splice.c:979
- do_sendfile+0xae0/0x1240 fs/read_write.c:1246
- __do_sys_sendfile64 fs/read_write.c:1311 [inline]
- __se_sys_sendfile64 fs/read_write.c:1297 [inline]
- __x64_sys_sendfile64+0x1cc/0x210 fs/read_write.c:1297
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Freed by task 15:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0x166/0x1a0 mm/kasan/common.c:328
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1728 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1754
- slab_free mm/slub.c:3510 [inline]
- kmem_cache_free+0xdd/0x5a0 mm/slub.c:3527
- kfree_skbmem+0xef/0x1b0 net/core/skbuff.c:700
- kfree_skb_reason+0x85/0x110 include/linux/refcount.h:279
- kfree_skb include/linux/skbuff.h:1250 [inline]
- j1939_session_skb_drop_old net/can/j1939/transport.c:340 [inline]
- j1939_xtp_rx_cts_one net/can/j1939/transport.c:1434 [inline]
- j1939_xtp_rx_cts+0xbdb/0x1170 net/can/j1939/transport.c:1473
- j1939_tp_cmd_recv net/can/j1939/transport.c:2061 [inline]
- j1939_tp_recv+0x83c/0xcb0 net/can/j1939/transport.c:2133
- j1939_can_recv+0x6ff/0x9a0 net/can/j1939/main.c:108
- deliver net/can/af_can.c:574 [inline]
- can_rcv_filter+0x5d4/0x8d0 net/can/af_can.c:608
- can_receive+0x31d/0x580 net/can/af_can.c:665
- can_rcv+0x120/0x1c0 net/can/af_can.c:696
- __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5405
- __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5519
- process_backlog+0x3a0/0x7c0 net/core/dev.c:5847
- __napi_poll+0xb3/0x6e0 net/core/dev.c:6413
- napi_poll net/core/dev.c:6480 [inline]
- net_rx_action+0x8ec/0xc60 net/core/dev.c:6567
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
-
-The buggy address belongs to the object at ffff88802304ab40
- which belongs to the cache skbuff_head_cache of size 232
-The buggy address is located 78 bytes inside of
- 232-byte region [ffff88802304ab40, ffff88802304ac28)
-
-The buggy address belongs to the physical page:
-page:ffffea00008c1280 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x2304a
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 0000000000000000 dead000000000122 ffff888140b8d500
-raw: 0000000000000000 00000000000c000c 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12a20(GFP_ATOMIC|__GFP_NOWARN|__GFP_NORETRY), pid 3590, tgid 3590 (kworker/1:3), ts 33637485571, free_ts 33296379898
- prep_new_page mm/page_alloc.c:2438 [inline]
- get_page_from_freelist+0xba2/0x3df0 mm/page_alloc.c:4179
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5405
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2262
- alloc_slab_page mm/slub.c:1799 [inline]
- allocate_slab+0x26c/0x3c0 mm/slub.c:1944
- new_slab mm/slub.c:2004 [inline]
- ___slab_alloc+0x8df/0xf20 mm/slub.c:3005
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3092
- slab_alloc_node mm/slub.c:3183 [inline]
- kmem_cache_alloc_node+0x122/0x3f0 mm/slub.c:3267
- __alloc_skb+0x215/0x340 net/core/skbuff.c:414
- alloc_skb include/linux/skbuff.h:1300 [inline]
- ndisc_alloc_skb+0x134/0x320 net/ipv6/ndisc.c:420
- ndisc_send_rs+0x37f/0x6f0 net/ipv6/ndisc.c:701
- addrconf_dad_completed+0x37a/0xd30 net/ipv6/addrconf.c:4231
- addrconf_dad_work+0x79f/0x1340 net/ipv6/addrconf.c:4141
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1353 [inline]
- free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1403
- free_unref_page_prepare mm/page_alloc.c:3325 [inline]
- free_unref_page+0x19/0x690 mm/page_alloc.c:3420
- qlink_free mm/kasan/quarantine.c:157 [inline]
- qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:176
- kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:283
- __kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:446
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:749 [inline]
- slab_alloc_node mm/slub.c:3217 [inline]
- kmem_cache_alloc_node+0x255/0x3f0 mm/slub.c:3267
- __alloc_skb+0x215/0x340 net/core/skbuff.c:414
- alloc_skb include/linux/skbuff.h:1300 [inline]
- alloc_skb_with_frags+0x93/0x730 net/core/skbuff.c:5988
- sock_alloc_send_pskb+0x793/0x920 net/core/sock.c:2600
- mld_newpack.isra.0+0x1be/0x750 net/ipv6/mcast.c:1746
- add_grhead+0x283/0x360 net/ipv6/mcast.c:1849
- add_grec+0x106a/0x1530 net/ipv6/mcast.c:1987
- mld_send_initial_cr.part.0+0xf6/0x230 net/ipv6/mcast.c:2234
- mld_send_initial_cr net/ipv6/mcast.c:1232 [inline]
- ipv6_mc_dad_complete+0x1d0/0x690 net/ipv6/mcast.c:2245
- addrconf_dad_completed+0x9e8/0xd30 net/ipv6/addrconf.c:4211
- addrconf_dad_work+0x79f/0x1340 net/ipv6/addrconf.c:4141
-
-Memory state around the buggy address:
- ffff88802304aa80: 00 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc
- ffff88802304ab00: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
->ffff88802304ab80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                      ^
- ffff88802304ac00: fb fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc
- ffff88802304ac80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Thanks again for taking a look!
+>
+> > ---
+> >  drivers/dma-buf/dma-heap.c          | 27 +++++++++++++++++++++++++++
+> >  drivers/dma-buf/heaps/system_heap.c |  3 +++
+> >  include/linux/dma-heap.h            | 11 +++++++++++
+> >  3 files changed, 41 insertions(+)
+> >
+> > diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+> > index 8f5848aa144f..885072427775 100644
+> > --- a/drivers/dma-buf/dma-heap.c
+> > +++ b/drivers/dma-buf/dma-heap.c
+> > @@ -7,6 +7,7 @@
+> >   */
+> >
+> >  #include <linux/cdev.h>
+> > +#include <linux/cgroup_gpu.h>
+> >  #include <linux/debugfs.h>
+> >  #include <linux/device.h>
+> >  #include <linux/dma-buf.h>
+> > @@ -31,6 +32,7 @@
+> >   * @heap_devt                heap device node
+> >   * @list             list head connecting to list of heaps
+> >   * @heap_cdev                heap char device
+> > + * @gpucg_dev                gpu cgroup device for memory accounting
+> >   *
+> >   * Represents a heap of memory from which buffers can be made.
+> >   */
+> > @@ -41,6 +43,9 @@ struct dma_heap {
+> >       dev_t heap_devt;
+> >       struct list_head list;
+> >       struct cdev heap_cdev;
+> > +#ifdef CONFIG_CGROUP_GPU
+> > +     struct gpucg_device gpucg_dev;
+> > +#endif
+> >  };
+> >
+> >  static LIST_HEAD(heap_list);
+> > @@ -216,6 +221,26 @@ const char *dma_heap_get_name(struct dma_heap *hea=
+p)
+> >       return heap->name;
+> >  }
+> >
+> > +#ifdef CONFIG_CGROUP_GPU
+> > +/**
+> > + * dma_heap_get_gpucg_dev() - get struct gpucg_device for the heap.
+> > + * @heap: DMA-Heap to get the gpucg_device struct for.
+> > + *
+> > + * Returns:
+> > + * The gpucg_device struct for the heap. NULL if the GPU cgroup contro=
+ller is
+> > + * not enabled.
+> > + */
+> > +struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap)
+> > +{
+> > +     return &heap->gpucg_dev;
+> > +}
+> > +#else /* CONFIG_CGROUP_GPU */
+> > +struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap)
+> > +{
+> > +     return NULL;
+> > +}
+> > +#endif /* CONFIG_CGROUP_GPU */
+> > +
+> >  struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_i=
+nfo)
+> >  {
+> >       struct dma_heap *heap, *h, *err_ret;
+> > @@ -288,6 +313,8 @@ struct dma_heap *dma_heap_add(const struct dma_heap=
+_export_info *exp_info)
+> >       list_add(&heap->list, &heap_list);
+> >       mutex_unlock(&heap_list_lock);
+> >
+> > +     gpucg_register_device(dma_heap_get_gpucg_dev(heap), exp_info->nam=
+e);
+> > +
+> >       return heap;
+> >
+> >  err2:
+> > diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heap=
+s/system_heap.c
+> > index ab7fd896d2c4..752a05c3cfe2 100644
+> > --- a/drivers/dma-buf/heaps/system_heap.c
+> > +++ b/drivers/dma-buf/heaps/system_heap.c
+> > @@ -395,6 +395,9 @@ static struct dma_buf *system_heap_allocate(struct =
+dma_heap *heap,
+> >       exp_info.ops =3D &system_heap_buf_ops;
+> >       exp_info.size =3D buffer->len;
+> >       exp_info.flags =3D fd_flags;
+> > +#ifdef CONFIG_CGROUP_GPU
+> > +     exp_info.gpucg_dev =3D dma_heap_get_gpucg_dev(heap);
+> > +#endif
+> >       exp_info.priv =3D buffer;
+> >       dmabuf =3D dma_buf_export(&exp_info);
+> >       if (IS_ERR(dmabuf)) {
+> > diff --git a/include/linux/dma-heap.h b/include/linux/dma-heap.h
+> > index 0c05561cad6e..e447a61d054e 100644
+> > --- a/include/linux/dma-heap.h
+> > +++ b/include/linux/dma-heap.h
+> > @@ -10,6 +10,7 @@
+> >  #define _DMA_HEAPS_H
+> >
+> >  #include <linux/cdev.h>
+> > +#include <linux/cgroup_gpu.h>
+> >  #include <linux/types.h>
+> >
+> >  struct dma_heap;
+> > @@ -59,6 +60,16 @@ void *dma_heap_get_drvdata(struct dma_heap *heap);
+> >   */
+> >  const char *dma_heap_get_name(struct dma_heap *heap);
+> >
+> > +/**
+> > + * dma_heap_get_gpucg_dev() - get a pointer to the struct gpucg_device=
+ for the
+> > + * heap.
+> > + * @heap: DMA-Heap to retrieve gpucg_device for.
+> > + *
+> > + * Returns:
+> > + * The gpucg_device struct for the heap.
+> > + */
+> > +struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap);
+> > +
+> >  /**
+> >   * dma_heap_add - adds a heap to dmabuf heaps
+> >   * @exp_info:                information needed to register this heap
+> > --
+> > 2.35.1.1021.g381101b075-goog
+> >
+>
+> --
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch

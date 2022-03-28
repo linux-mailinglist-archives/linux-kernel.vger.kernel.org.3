@@ -2,119 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3CE4E8C59
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 04:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48B24E8C5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 04:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237700AbiC1CxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 22:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
+        id S237707AbiC1Czy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 22:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233861AbiC1CxT (ORCPT
+        with ESMTP id S233861AbiC1Czx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 22:53:19 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655794F9D6;
-        Sun, 27 Mar 2022 19:51:39 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id b15so11353385pfm.5;
-        Sun, 27 Mar 2022 19:51:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gQ261RI2Cp+P10H+WpY/iFBXQys4qPm/vC9yh0f0/5w=;
-        b=kcvKa9HRrD9xApF1/0hhsKpwtnt0zgbak1C3/01igYYflJOJnOOzm2pI0W3OoRarhG
-         XU0JK+zVR+6TKTaMKOpKsA0Hq2Zr1s4cliaxJqjI1t/xutg2jPEx+wGgL0pLu9pd+nJg
-         rKwnXwPZxjVHTuMxlUxXuUbE1SnyKCyGlTciPp8N2p+ZS/GjvPK7rWfAmlu+kKK+w07G
-         TbyCgCQm5PxPbapiWpk2Cgeb1o9awwcqMfmnNvh+fNK6WcfVSd/vrqtOiQj06JdtuKz/
-         3QVAIPnRF/fPJlCIE7NZ101bVZLG8eQ1CVyakM6iiWU4saBGVpvIUiNII9hfLegBro7w
-         uztQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gQ261RI2Cp+P10H+WpY/iFBXQys4qPm/vC9yh0f0/5w=;
-        b=157zkW+wGpX+WJRhKf+MrIph0fKdC4/lNdm/IG6bHGtI5NHRyPgObcNjelbMG0+qBz
-         HQiyO9M5frTG9fPeN4gkyA2Y+QhEiK+9JNjUYRwSs/AVr+DhTIlleHZI3lKRnmkPxyIG
-         ZfkE27g2tbniXRiVQakT4pld7r+XFtX1aUBZcd06au4x/cVlvIBpnZZdmvSi3kDpybcZ
-         RrS6VM2jtH7kQvv8iIeIOvQg+QOe3R4Y3u4lkuSzEe/LnlsmjSv+8F5XlA/os0M9/+lC
-         sIWH0koFacuX9lUR58bHitApJQv311AIea8ekEvDCHGPt4nFkKtj4IhIHCGAzkS3ITGJ
-         Nx8g==
-X-Gm-Message-State: AOAM533VlLmW4TtgF+djgpPmAgT1Hk8gq3NCO8S4yi13gxEy6DNZY0J9
-        kWE/ChSzRvIJ0iud6cIbNfsub8PxTgs=
-X-Google-Smtp-Source: ABdhPJzTAHtbZaHGDduzYup9evEOUCvQrN7AGdlDz+V6pTx6P1juspcdwgIDy/rKHzJiX8rPrqPp7w==
-X-Received: by 2002:a65:6941:0:b0:381:fea7:f3d8 with SMTP id w1-20020a656941000000b00381fea7f3d8mr8802699pgq.235.1648435898753;
-        Sun, 27 Mar 2022 19:51:38 -0700 (PDT)
-Received: from ?IPV6:2600:8802:b00:4a48:b1c4:d244:b609:ac10? ([2600:8802:b00:4a48:b1c4:d244:b609:ac10])
-        by smtp.gmail.com with ESMTPSA id d16-20020a056a00245000b004f7728a4346sm14125681pfj.79.2022.03.27.19.51.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Mar 2022 19:51:38 -0700 (PDT)
-Message-ID: <0dd59973-a4da-51db-5234-d4cc48ec13ee@gmail.com>
-Date:   Sun, 27 Mar 2022 19:51:39 -0700
+        Sun, 27 Mar 2022 22:55:53 -0400
+Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11C34C780;
+        Sun, 27 Mar 2022 19:54:12 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
+ (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Mon, 28 Mar
+ 2022 10:54:12 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Mon, 28 Mar
+ 2022 10:54:10 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     <philipp.reisner@linbit.com>, <lars.ellenberg@linbit.com>,
+        <axboe@kernel.dk>
+CC:     <drbd-dev@lists.linbit.com>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Haowen Bai <baihaowen@meizu.com>
+Subject: [PATCH] drbd: Return true/false (not 1/0) from bool functions
+Date:   Mon, 28 Mar 2022 10:54:09 +0800
+Message-ID: <1648436049-4335-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] dsa: bcm_sf2_cfp: fix an incorrect NULL check on list
- iterator
-Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20220327055547.3938-1-xiam0nd.tong@gmail.com>
- <20220327185805.cibcmk4rejgb7jre@skbuf>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220327185805.cibcmk4rejgb7jre@skbuf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-125.meizu.com (172.16.1.125) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Return boolean values ("true" or "false") instead of 1 or 0 from bool
+functions.  This fixes the following warnings from coccicheck:
 
+./drivers/block/drbd/drbd_req.c:912:9-10: WARNING: return of 0/1 in
+function 'remote_due_to_read_balancing' with return type bool
 
-On 3/27/2022 11:58 AM, Vladimir Oltean wrote:
-> On Sun, Mar 27, 2022 at 01:55:47PM +0800, Xiaomeng Tong wrote:
->> The bug is here:
->> 	return rule;
->>
->> The list iterator value 'rule' will *always* be set and non-NULL
->> by list_for_each_entry(), so it is incorrect to assume that the
->> iterator value will be NULL if the list is empty or no element
->> is found.
->>
->> To fix the bug, return 'rule' when found, otherwise return NULL.
->>
->> Cc: stable@vger.kernel.org
->> Fixes: ae7a5aff783c7 ("net: dsa: bcm_sf2: Keep copy of inserted rules")
->> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
->> ---
-> 
-> The change looks correct, but from a process standpoint for next time
-> (a) you should have copied Florian, the driver's maintainer (which I did now)
->      who appears on the top of the list in the output of ./get_maintainer.pl
-> (b) networking bugfixes that apply to the "net" tree shouldn't need
->      stable@vger.kernel.org copied, instead just target the patch against
->      the https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
->      tree and mark the subject prefix as "[PATCH net]".
-> 
-> Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ drivers/block/drbd/drbd_req.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If you could please resubmit with the subject being:
-
-net: dsa: bcm_sf2_cfp: fix an incorrect NULL check on list iterator
-
-and add Vladimir's and my tag below:
-
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-
-That would be great! Thanks
+diff --git a/drivers/block/drbd/drbd_req.c b/drivers/block/drbd/drbd_req.c
+index c043945..171905a 100644
+--- a/drivers/block/drbd/drbd_req.c
++++ b/drivers/block/drbd/drbd_req.c
+@@ -909,7 +909,7 @@ static bool remote_due_to_read_balancing(struct drbd_device *device, sector_t se
+ 
+ 	switch (rbm) {
+ 	case RB_CONGESTED_REMOTE:
+-		return 0;
++		return false;
+ 	case RB_LEAST_PENDING:
+ 		return atomic_read(&device->local_cnt) >
+ 			atomic_read(&device->ap_pending_cnt) + atomic_read(&device->rs_pending_cnt);
 -- 
-Florian
+2.7.4
+

@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A084E96FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C8A4E9709
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242628AbiC1Mvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 08:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
+        id S242654AbiC1MxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 08:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234249AbiC1Mvc (ORCPT
+        with ESMTP id S242638AbiC1Mwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 08:51:32 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5380B33A07
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:49:52 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id j2so25861613ybu.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:49:52 -0700 (PDT)
+        Mon, 28 Mar 2022 08:52:51 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12B34D634
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:51:10 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id i1so9921218ila.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:51:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KUChceqjpLh79J1JQFAPdmmRt16+9BpF6Er6lqRNHnM=;
-        b=maVnbV2w40X+zie6c69eqLTkE3mwOUCUKhLqXBM5TBtY9izg4Mq9EndXyXXEQDihlh
-         ZkHfQxiXaMnhMMdwDip1XvXuXZ7ScmQWwvW/WZQeLwjDehz04SIA0Ts+EVjB4nTnD9zY
-         7qeGSbRUBvHUdRHrzr8HhPZS/KY/7z1Z4aJuEZk+h1bMGQI2ZfeNP62Tnf+mP1RdkNZI
-         VYV4ZO4V7TaAtGhl6djHJPtYZdb1sPVykMZJnfQdgxzWJOnKYF2FqcxBzsvKOcBy6XT4
-         YATWrrE48W/6FFVW6LvoILUNa6ehaETUCpNtc9VYgS0vVTZ8K6cpbZ/zWsU59pvw5j67
-         zS8w==
+         :cc:content-transfer-encoding;
+        bh=NmQMOl74rWGRWzafuyJ5jjCyGGjWrcet8PudU8eNoTM=;
+        b=fmnUk8fzFuPNcQLP4BGXA1S9aa97ooEg6VvUkroT0u2nlfdICTx4oy6TaPbWXhvP2p
+         ycG9uUulYtBRRjLm9QXjKOnv6AXp/13Jj48+DV1eeBRQcSNHZBR8E/63/XFTjZ4F2U1Z
+         /yWrDsUP0Axr8AP3acYeBwfDZz53FpCWg20obz6FBTMIy6DyWhoK3XEuP3vzdYNdNFi8
+         +0A4Z/J7Mlr9Z394QGOI1u0UNFDGE7BJASd2oJy7o5ajLXTTwx3PsG+wubUAG6Tzsn1M
+         e99RFMzotoXtGAcBMws38D0LjwZFIdFfjgVk2ZTTXM/RkrDzZs84Ula9HelT/mD+AsNs
+         pjYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KUChceqjpLh79J1JQFAPdmmRt16+9BpF6Er6lqRNHnM=;
-        b=l0JvC2zitdSUqBqko00ENXsNKu1RZxKyrCgF60VvbLt28Z0PuSYiz2sBJmJqtcjrRk
-         0CBy+OND/8gwJHBO7gAPATWImlEsejbqP4Y6t+FlTNFzMyoVG1flWIP7OBWiqIrbGWcI
-         TtcsaNWbY6/w81zfrn5Q6QxkD68VgCDKjACjkeq4zBlQK0+HNZBdcZSozcNAT9kHb2kN
-         cwKBnvwbZCr44eyJsSbTNDLsH3w47IPKIGmsNJC50Vn7Uxt2MRBdQQj1qlkHiTsbN79U
-         X1Jo9MSIMhScsL6RsSjkTfrBsUfmDEh3bhKw9l4v5mljRdV4tmcVtbBOUmPmYGtiniTv
-         Z5xQ==
-X-Gm-Message-State: AOAM531ntKRP+w9wD6djGaSKaqNqEndy9if/Z34ez/HB/twlgls7MGkk
-        ZMdzidTCrkY+Olib5O04BZG7paVzQ7NnAG6QzbK96g==
-X-Google-Smtp-Source: ABdhPJz/nC8Q3dmMv0pTY0Bqml7jS4vWoZHU6q7UKQKSEbGR6IHs4zmkgJSlmMqGUOmtHm2Y9W1Xg3JOt85G5SRnmEo=
-X-Received: by 2002:a05:6902:24f:b0:62d:69d:c9fc with SMTP id
- k15-20020a056902024f00b0062d069dc9fcmr21590325ybs.87.1648471791406; Mon, 28
- Mar 2022 05:49:51 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=NmQMOl74rWGRWzafuyJ5jjCyGGjWrcet8PudU8eNoTM=;
+        b=joBcVIR8/zO1LvbNI9MRhfkfqmZrdLrGGj7vRztaQlZWpJQPEI36TS0ux9QiaBPUAG
+         QqfpID1B3YxXNf0mOyMp+8dxF8IsCCB+OaWNArVuMFcuv9njh/fzGdqmado/VzHXoAaf
+         erCfB0ru+K4mdpQYv6cOb2jnbngczY0fd0tBedF7oYIFyvs7aRVinLKNWHe/md6d4EvH
+         Mh3fTH2bKRiLQeg2HzeWnHCERPyoLX2x1wFiW59ybOl+HDdPMXlnGL70a0OVdjaiVscK
+         zkEdo0+7+QNoADFvcKCRHg0rEAlBecKv1JpD6rHQCU6JPeACsEt9qPE22pp/KERI+voz
+         UBlw==
+X-Gm-Message-State: AOAM5318oaSDR106mHmqg7cmMDxnzEa8UhXgnuwuM3WTw2A3o1tcB4QD
+        py7rs76qrtr93smYgw+aM8Tg/EDx1iw3EiuzhwM=
+X-Google-Smtp-Source: ABdhPJxh9OmbBwag5bvEGizKUKZLQbnirkyw/QJTsPJZeG6mVqa3cTPMDPAy/NRf7yrVNUIQBEFYGZcMWITxadtTRCQ=
+X-Received: by 2002:a92:cdad:0:b0:2c6:7b76:a086 with SMTP id
+ g13-20020a92cdad000000b002c67b76a086mr6014966ild.5.1648471870337; Mon, 28 Mar
+ 2022 05:51:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1648049113.git.andreyknvl@google.com> <7027b9b6b0cae2921ff65739582ae499bf61470c.1648049113.git.andreyknvl@google.com>
-In-Reply-To: <7027b9b6b0cae2921ff65739582ae499bf61470c.1648049113.git.andreyknvl@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 28 Mar 2022 14:49:15 +0200
-Message-ID: <CANpmjNPJkFOMn1pL-=gx+x_YHgg72QH5iqe561+Geiy3JoOg1w@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] kasan: use stack_trace_save_shadow
-To:     andrey.konovalov@linux.dev
-Cc:     Alexander Potapenko <glider@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, Mark Rutland <mark.rutland@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
+References: <20220328021139.8700-1-steve.lee.analog@gmail.com> <PH0PR03MB678617C7A854827D0EC99010991D9@PH0PR03MB6786.namprd03.prod.outlook.com>
+In-Reply-To: <PH0PR03MB678617C7A854827D0EC99010991D9@PH0PR03MB6786.namprd03.prod.outlook.com>
+From:   Lee Steve <steve.lee.analog@gmail.com>
+Date:   Mon, 28 Mar 2022 21:50:59 +0900
+Message-ID: <CA+Fz0PZQUcjLL2fmOLcyYxhqfyoY0jVKtz1GgRTur9XJDs_wag@mail.gmail.com>
+Subject: Re: [V3 1/2] ASoC: max98390: Add reset gpio control
+To:     "Sa, Nuno" <Nuno.Sa@analog.com>
+Cc:     "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "ryans.lee@maximintegrated.com" <ryans.lee@maximintegrated.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "krzk@kernel.org" <krzk@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,50 +73,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Mar 2022 at 16:33, <andrey.konovalov@linux.dev> wrote:
+On Mon, Mar 28, 2022 at 4:42 PM Sa, Nuno <Nuno.Sa@analog.com> wrote:
 >
-> From: Andrey Konovalov <andreyknvl@google.com>
+> > From: Steve Lee <steve.lee.analog@gmail.com>
+> > Sent: Monday, March 28, 2022 4:12 AM
+> > To: lgirdwood@gmail.com; broonie@kernel.org; perex@perex.cz;
+> > tiwai@suse.com; ryans.lee@maximintegrated.com; linux-
+> > kernel@vger.kernel.org; alsa-devel@alsa-project.org
+> > Cc: krzk@kernel.org; Sa, Nuno <Nuno.Sa@analog.com>; Steve Lee
+> > <steve.lee.analog@gmail.com>
+> > Subject: [V3 1/2] ASoC: max98390: Add reset gpio control
+> >
+> > [External]
+> >
+> >  Add reset gpio control to support RESET PIN connected to gpio.
+> >
+> > Signed-off-by: Steve Lee <steve.lee.analog@gmail.com>
+> > ---
+> >  sound/soc/codecs/max98390.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/sound/soc/codecs/max98390.c
+> > b/sound/soc/codecs/max98390.c
+> > index 40fd6f363f35..05df9b85d9b0 100644
+> > --- a/sound/soc/codecs/max98390.c
+> > +++ b/sound/soc/codecs/max98390.c
+> > @@ -1022,6 +1022,7 @@ static int max98390_i2c_probe(struct
+> > i2c_client *i2c,
+> >
+> >       struct max98390_priv *max98390 =3D NULL;
+> >       struct i2c_adapter *adapter =3D i2c->adapter;
+> > +     struct gpio_desc *reset_gpio;
+> >
+> >       ret =3D i2c_check_functionality(adapter,
+> >               I2C_FUNC_SMBUS_BYTE
+> > @@ -1073,6 +1074,17 @@ static int max98390_i2c_probe(struct
+> > i2c_client *i2c,
+> >               return ret;
+> >       }
+> >
+> > +     reset_gpio =3D devm_gpiod_get_optional(&i2c->dev,
+> > +                                          "reset", GPIOD_OUT_LOW);
+> > +
+> > +     /* Power on device */
+> > +     if (reset_gpio) {
+> > +             usleep_range(1000, 2000);
+> > +             /* bring out of reset */
+> > +             gpiod_set_value_cansleep(reset_gpio, 1);
 >
-> Now that stack_trace_save_shadow() is implemented by arm64, use it
-> whenever CONFIG_HAVE_SHADOW_STACKTRACE is enabled. This improves the
-> boot time of a defconfig build by ~30% for all KASAN modes.
+> Note this will set the gpio in the asserted state. Being it active low, t=
+his will
+> do the opposite thing that you are trying to accomplish...
 >
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> ---
->  mm/kasan/common.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-> index d9079ec11f31..8d9d35c6562b 100644
-> --- a/mm/kasan/common.c
-> +++ b/mm/kasan/common.c
-> @@ -33,10 +33,13 @@
->  depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc)
->  {
->         unsigned long entries[KASAN_STACK_DEPTH];
-> -       unsigned int nr_entries;
-> +       unsigned int size;
+> - Nuno S=C3=A1
 
-Why did this variable name change?
-
-> -       nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
-> -       return __stack_depot_save(entries, nr_entries, flags, can_alloc);
-> +       if (IS_ENABLED(CONFIG_HAVE_SHADOW_STACKTRACE))
-
-Would it be more reliable to check the return-code? I.e. do:
-
-  int size;
-
-  size = stack_trace_save_shadow(...)
-  if (size < 0)
-    size = stack_trace_save(...);
-
-> +               size = stack_trace_save_shadow(entries, ARRAY_SIZE(entries), 0);
-> +       else
-> +               size = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
-> +       return __stack_depot_save(entries, size, flags, can_alloc);
->  }
->
->  void kasan_set_track(struct kasan_track *track, gfp_t flags)
-> --
-> 2.25.1
+I agree with your comment. I will update next version patch if there
+is other concern.

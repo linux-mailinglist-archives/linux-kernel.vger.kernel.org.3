@@ -2,85 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D414E9CC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F41784E9C42
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243514AbiC1Qwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 12:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
+        id S239098AbiC1Q3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 12:29:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242931AbiC1Qwe (ORCPT
+        with ESMTP id S238148AbiC1Q3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 12:52:34 -0400
-Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.146.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4930A48304
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:50:53 -0700 (PDT)
-Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
-        by gateway33.websitewelcome.com (Postfix) with ESMTP id D4CCEDE05
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:27:53 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id YsDhnm9DzXvvJYsDhnzV9w; Mon, 28 Mar 2022 11:27:53 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=wDN9VpzJLwYt/LpVw9pBXbbKy8BbkXAy+je0SIOYHx0=; b=Cax9ptlpBRhAzMgWEOh0rBPvcS
-        K5tzDhyEcBrW4gRtr/2NbnIpSjaxRXAXaJpnKLOJpGMkTHEk6+1BjdSxohgyBmUgI4sauOtjOH/cN
-        IsP8hmZwDXU8GuX8310rr3YFKG5wldlPEPdzlf9FUN8Ky8ZhBHUaUtIZrrdropCUUyFWHWb0CFxoZ
-        ozzBDb0AQX4y2cF/z7uehKc4E9X6xl9KfnZUoN3uHki3ngK+QKfFofeiGdnWSfXHrgy4WrR4jWRUv
-        3umBGMIYhqQcaIYpmcDfT9EbIJpSMR/noScFhWGvVy0EeW200Stlt6bqyoeSnWumwQpwWly6Dl2dq
-        wEsSeJaw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54526)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nYsDh-001dPE-4p; Mon, 28 Mar 2022 16:27:53 +0000
-Message-ID: <ab64105b-c48d-cdf2-598a-3e0a2e261b27@roeck-us.net>
-Date:   Mon, 28 Mar 2022 09:27:50 -0700
+        Mon, 28 Mar 2022 12:29:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A74E606E6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:27:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 98D62D6E;
+        Mon, 28 Mar 2022 09:27:55 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.73.152])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D6763F73B;
+        Mon, 28 Mar 2022 09:27:52 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 17:27:51 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        chris.hyser@oracle.com, pkondeti@codeaurora.org,
+        Valentin.Schneider@arm.com, patrick.bellasi@matbug.net,
+        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
+        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com
+Subject: Re: [PATCH 0/6] Add latency_nice priority
+Message-ID: <20220328162751.gvfqnrxjdo2defji@wubuntu>
+References: <20220311161406.23497-1-vincent.guittot@linaro.org>
+ <20220322163911.3jge4unswuap3pjh@wubuntu>
+ <CAKfTPtBYuEt=JuLLKFVJfzq_rNRoKPYfAnq7a2Jw=fBKMj6a3g@mail.gmail.com>
+ <20220324172528.lrjiehsqrwvnwg2x@wubuntu>
+ <CAKfTPtDpskXzJ4ZXt9=+NAbypZyfFMHE0w+N23CtArsA35s=UA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 0/2] hwmon: introduce hwmon_sanitize()
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>, Michael Walle <michael@walle.cc>
-Cc:     Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-References: <20220328115226.3042322-1-michael@walle.cc>
- <YkGwjjUz+421O2E1@lunn.ch>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <YkGwjjUz+421O2E1@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nYsDh-001dPE-4p
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54526
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 2
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtDpskXzJ4ZXt9=+NAbypZyfFMHE0w+N23CtArsA35s=UA@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,24 +51,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/22 05:56, Andrew Lunn wrote:
->> I'm not sure how to handle this correctly, as this touches both the
->> network tree and the hwmon tree. Also, the GPY PHY temperature senors
->> driver would use it.
+On 03/25/22 14:27, Vincent Guittot wrote:
+> removed Dhaval's email which returns error
 > 
-> There are a few options:
+> On Thu, 24 Mar 2022 at 18:25, Qais Yousef <qais.yousef@arm.com> wrote:
+> >
+> > On 03/23/22 16:32, Vincent Guittot wrote:
+> > > On Tue, 22 Mar 2022 at 17:39, Qais Yousef <qais.yousef@arm.com> wrote:
+> > > >
+> > > > Hi Vincent
+> > > >
+> > > > Thanks for reviving this patchset!
+> > > >
+> > > > On 03/11/22 17:14, Vincent Guittot wrote:
+> > > > > This patchset restarts the work about adding a latency nice priority to
+> > > > > describe the latency tolerance of cfs tasks.
+> > > > >
+> > > > > The patches [1-4] have been done by Parth:
+> > > > > https://lore.kernel.org/lkml/20200228090755.22829-1-parth@linux.ibm.com/
+> > > > >
+> > > > > I have just rebased and moved the set of latency priority outside the
+> > > > > priority update. I have removed the reviewed tag because the patches
+> > > > > are 2 years old.
+> > > >
+> > > > AFAIR the blocking issue we had then is on agreement on the interface. Has this
+> > > > been resolved now? I didn't see any further discussion since then.
+> > >
+> > > I think that there was an agreement about using a latency nice
+> > > priority in the range [-20:19] with -20 meaning sensitive to latency
+> > > whereas 19 means that task doesn't care about scheduling latency.  The
+> > > open point was about how to use this input in the scheduler with some
+> > > behavior being opposed.
+> >
+> > What I remember is that the problem was to consolidate on use cases then
+> > discuss interfaces.
+> >
+> > See https://lwn.net/Articles/820659/
+> >
+> >         "  Youssef said that the interface to all of this is the sticking
+> >         point.  Thomas Gleixner agreed, saying that the -20..19 range "requires
+> >         a crystal ball" to use properly. Zijlstra repeated his call to
+> >         enumerate the use cases before getting into the interface details.
+> >         Giani repeated that the interface does not look correct now, and agreed
+> >         that a more comprehensive look at the use cases was needed. Things were
+> >         being done backwards currently, he said.  "
+> >
 > 
-> 1) Get the hwmon_sanitize_name() merged into hwmon, ask for a stable
-> branch, and get it merged into netdev net-next.
-> 
-> 2) Have the hwmon maintainers ACK the change and agree that it can be
-> merged via netdev.
-> 
-> Probably the second option is easiest, and since it is not touching
-> the core of hwmon, it is unlikely to cause merge conflicts.
-> 
+> At LPC, everybody seemed aligned with latency_nice so I assumed that
+> there was an agreement on this interface.
+> Latency_nice fits well with my proposal because it's all about
+> relative comparison between the running task to the others. The
+> current nice priority is used to set how much cpu bandwidth a task
+> will have compared to others and the latency_nice is used in a similar
+> way to know which one should run compared to the others.
 
-No, it isn't the easiest solution because it also modifies a hwmon
-driver to use it.
+I think the users were happy, but not the maintainers :-)
 
-Guenter
+I am still happy with it, but I just want to make sure that our use case is
+something we still care about having in upstream and we'd still like to use
+this interface to achieve that. I don't want it to be blocked based on
+interface not suitable. So this should be taken into consideration that this is
+not a replacement to at least our previous use case.
+
+The concept of latency_nice conversion to weight is something new and I don't
+think any of the other users requires it. So we need to keep the user visible
+interface detached from weight which is internal implementation detail for your
+use case.
+
+> 
+> > >
+> > > >
+> > > > >
+> > > > > The patches [5-6] use latency nice priority to decide if a cfs task can
+> > > > > preempt the current running task. Patch 5 gives some tests results with
+> > > > > cyclictests and hackbench to highlight the benefit of latency nice
+> > > > > priority for short interactive task or long intensive tasks.
+> > > >
+> > > > This is a new use case AFAICT. For Android, we want to do something in EAS path
+> > >
+> > > I don't think it's new, it's about being able to run some tasks in
+> >
+> > I meant new use case to latency-nice interface. I don't think we had this in
+> > any of our discussions before? I don't mind it, but it'd be good to clarify if
+> > it has any relation about the other use cases and what should happen to the
+> > other use cases.
+> 
+> Several discussions happened about changing the preemption policy of
+> CFS. I have Mel's example in mind with hackbench where we want to
+> reduce the preemption capabilities for the threads and on the other
+> side the multimedia tasks which complain about having to wait before
+> being scheduled. All this is about preempting or not the others. And
+> all this has been kept outside topology consideration but only for the
+> local run queue
+
+Cool. I can see its usefulness. Though I still have to convince myself that you
+can affect preemption without impacting bandwidth and is not a subtler way to
+modify nice.
+
+
+Thanks
+
+--
+Qais Yousef

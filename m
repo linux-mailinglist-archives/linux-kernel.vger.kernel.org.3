@@ -2,113 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1AC4E9DAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4C64E9DAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244622AbiC1RlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 13:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
+        id S244630AbiC1Rlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 13:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237132AbiC1RlJ (ORCPT
+        with ESMTP id S244624AbiC1Rlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 13:41:09 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2259136313;
-        Mon, 28 Mar 2022 10:39:28 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id bx5so14862802pjb.3;
-        Mon, 28 Mar 2022 10:39:28 -0700 (PDT)
+        Mon, 28 Mar 2022 13:41:52 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A413C71B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:40:11 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id i4so2607938wrb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:40:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kqHiuoHywsuyhvMhsQ3JRIWwYjdiUZitcBz1mGi8Kbs=;
-        b=kvllLJWJ27fAkznbiPNkwEzkxSSAy4K+jjy7J6fYw9SdyjSqOaXYsDmnpgzSHe75Fy
-         KaLSSDiVyOzwiAs92TDRouJc8uq8mXRUHQXoRxzU2I4pemrWpdm0nykMPWlDd0G7tdUd
-         zAP3mfd7O9PQhTOqWKIsaSscZrDCS88j3Y6Vc/ovPWV5yzH3gNt5TFe0HmwkfOqElui/
-         H5wiavr+CPjN3MFGC/c6Q4nmtfpstxVFEAOuNdJpPG72+u6A7tlG9v94CBjrTOpt8sEP
-         e/z7ksLqqvJs4N27aXSp9bn3OrlSTznpAKC0jVoBgKwzPlQsHqkGkBXZUlqCEm6kDjtP
-         ib4Q==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u7Pw0UDHvWPbyY/38qBqqCe3PVzLbMMxLL5t1gm37DE=;
+        b=Svvqjb2SkS/48q6xbiX2X1wN7mDw3pfoVg/uY/pHR9KLPPwar6u6c+81vO+UOejvKF
+         hpg5vPM09bdyxttV9wHFyd/TPD1bp4zjl6Y2rIjrJI8ugdvcmbyNDeKXP3mbDhUqW4tV
+         jRzfIy1Tuu8erYzn5+TuzV7AfZl4vCUW+L2gO7UvFOyP7T04KWgnungqiVW5sFMrI/2u
+         pPsFqx5SvlO9jrklFVUXFbw84Ncv97fsugiS35TbIYpu4xaTbeu+cELv+UHbSUpRZI34
+         gqowc5bDLNi+zb9ZI8vzkDcZIwZDz6WJSNuFpZwncNjNiZainL83C/VRs0+OelDiphyz
+         hNLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=kqHiuoHywsuyhvMhsQ3JRIWwYjdiUZitcBz1mGi8Kbs=;
-        b=2bpXDwkCfRkDv/AkvssqLSfYyDaZON8qPX6j2iugPWREtU0330pfhsIDP5f/fYIC3f
-         807G2WFSRmyThwoQcIzYEWaItTtdQdi/0cOkc4gZyiJgQR3ZOIbBvQ5tTfuaADNXO7nw
-         s1zdcyIiwYLm63Xd2vZtnwM6vGgg61lDIW/V67OKcgDheO9q1gnr/5ei9AGKHGECCZTX
-         d8IEW9M7RvKOpP2ZSiSA3nug/gkjkODCbs3Sc/aGod0IxnipLW9F5RYdcoYxzo1DEMQm
-         fKrEjz+nQtaGs9+1N/IRyOOQtH8G0LMynZmW/h2h7mzRQJQsfs6bntaCbrggP31DFHQm
-         EcVw==
-X-Gm-Message-State: AOAM532n3pBYBdvAN7Ew5VVorqx3goQNWZc404bD2CiWl0Jh4UCmFVS5
-        +oPVFKpyMXk13GZ1TP83Q8g=
-X-Google-Smtp-Source: ABdhPJz5bfufFF/WNY87Wreel+U6APHskPQBN1aTt0JKA3aqZh0ZOH7w62yT+XAy5Zj+z+kMU6/jbw==
-X-Received: by 2002:a17:90b:4a4a:b0:1c7:82e9:1014 with SMTP id lb10-20020a17090b4a4a00b001c782e91014mr309126pjb.0.1648489167501;
-        Mon, 28 Mar 2022 10:39:27 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:3b11])
-        by smtp.gmail.com with ESMTPSA id o5-20020a17090a3d4500b001c97528521asm134001pjf.6.2022.03.28.10.39.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 10:39:27 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 28 Mar 2022 07:39:25 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Peter Hurley <peter@hurleysoftware.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Esben Haabendal <esben@geanix.com>,
-        Steven Walter <stevenrwalter@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        =?iso-8859-1?Q?Andr=E9?= Pribil <a.pribil@beck-ipc.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-rt-users@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] RT scheduling policies for workqueues
-Message-ID: <YkHyzcfiyjLfIVOo@slm.duckdns.org>
-References: <20220323145600.2156689-1-linux@rasmusvillemoes.dk>
- <YkGIhYKJG+w4L7ge@linutronix.de>
- <20220328100927.5ax34nea7sp7jdsy@pengutronix.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u7Pw0UDHvWPbyY/38qBqqCe3PVzLbMMxLL5t1gm37DE=;
+        b=uI7Q5JmsiDltnP2cr4LlpilXyiQs+hHAZKONSirTLoA2XXMK/5MfHD3uSpkkXH2jV4
+         8ueX0tRUSQdmP8e98Ss++c95BjbjxF5AN4dZFkl5llL3KejJh+QntKR41xHIRU5wsQuc
+         TAULgusOqITKykZj4OjNJ+jseZnfbVE80xN94Yln6jfOVueUNzt1ySxd/qMVcxBOfGfU
+         itUiD4S4o1XHIWoKLEnCl8xpr3nBxLCqHoPuxX9XbGAanZlgQPph5wa/nQgzLhU5MXJz
+         dO7UGp+e90h69jikVraDUtdnBd7lsh5sTvxISFqSzuvInN0s+CxgQXVp2kUOmsfFCcrV
+         OUwg==
+X-Gm-Message-State: AOAM531wiSl0gwZONF1GJwctpTjeiL52KyDK/rr7q7HFGgAAiayQgKN8
+        GskPDiuvYnvAIAD35v6nRNDMhrBrUfIrU8KA2j5nUBZEcEScZ9mU
+X-Google-Smtp-Source: ABdhPJxSFYIGnJM4s7WQywzag2MO7U13kk65HieKtWAFHkndyBTCdzYExv1HceSUKep1wMeeCBcmHbWvq0ZzzdDz70s=
+X-Received: by 2002:a05:6000:188f:b0:205:4d98:607a with SMTP id
+ a15-20020a056000188f00b002054d98607amr24978901wri.505.1648489209640; Mon, 28
+ Mar 2022 10:40:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328100927.5ax34nea7sp7jdsy@pengutronix.de>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220324234123.1608337-1-haoluo@google.com> <9cdf860d-8370-95b5-1688-af03265cc874@fb.com>
+In-Reply-To: <9cdf860d-8370-95b5-1688-af03265cc874@fb.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Mon, 28 Mar 2022 10:39:58 -0700
+Message-ID: <CA+khW7g3hy61qnvtqUizaW+qB6wk=Y9cjivhORshOk=ZzTXJ-A@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next 0/2] Mmapable task local storage.
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Yonghong,
 
-On Mon, Mar 28, 2022 at 12:09:27PM +0200, Marc Kleine-Budde wrote:
-> > Having a kthread per "low-latency" tty instance is something I would
-> > prefer. The kwork corner is an anonymous worker instance and probably
-> > does more harm than good. Especially if it is a knob for everyone which
-> > is used for the wrong reasons and manages to be harmful in the end.
-> > With a special kthread for a particular tty, the thread can be assigned
-> > with the desired priority within the system and ttyS1 can be
-> > distinguished from ttyS0 (and so on). This turned out to be useful in a
-> > few setups over the years.
-> 
-> +1
-> 
-> The networking subsystem has gone the same/similar way with NAPI. NAPI
-> handling can be switched from the softirq to kernel thread on a per
-> interface basis.
+On Fri, Mar 25, 2022 at 12:16 PM Yonghong Song <yhs@fb.com> wrote:
+>
+> On 3/24/22 4:41 PM, Hao Luo wrote:
+> > Some map types support mmap operation, which allows userspace to
+> > communicate with BPF programs directly. Currently only arraymap
+> > and ringbuf have mmap implemented.
+> >
+> > However, in some use cases, when multiple program instances can
+> > run concurrently, global mmapable memory can cause race. In that
+> > case, userspace needs to provide necessary synchronizations to
+> > coordinate the usage of mapped global data. This can be a source
+> > of bottleneck.
+>
+> I can see your use case here. Each calling process can get the
+> corresponding bpf program task local storage data through
+> mmap interface. As you mentioned, there is a tradeoff
+> between more memory vs. non-global synchronization.
+>
+> I am thinking that another bpf_iter approach can retrieve
+> the similar result. We could implement a bpf_iter
+> for task local storage map, optionally it can provide
+> a tid to retrieve the data for that particular tid.
+> This way, user space needs an explicit syscall, but
+> does not need to allocate more memory than necessary.
+>
+> WDYT?
+>
 
-I wonder whether it'd be useful to provide a set of wrappers which can make
-switching between workqueue and kworker easy. Semantics-wise, they're
-already mostly aligned and it shouldn't be too difficult to e.g. make an
-unbounded workqueue be backed by a dedicated kthread_worker instead of
-shared pool depending on a flag, or even allow switching dynamically.
+Thanks for the suggestion. I have two thoughts about bpf_iter + tid and mmap:
 
-Thanks.
+- mmap prevents the calling task from reading other task's value.
+Using bpf_iter, one can pass other task's tid to get their values. I
+assume there are two potential ways of passing tid to bpf_iter: one is
+to use global data in bpf prog, the other is adding tid parameterized
+iter_link. For the first, it's not easy for unpriv tasks to use. For
+the second, we need to create one iter_link object for each interested
+tid. It may not be easy to use either.
 
--- 
-tejun
+- Regarding adding an explicit syscall. I thought about adding
+write/read syscalls for task local storage maps, just like reading
+values from iter_link. Writing or reading task local storage map
+updates/reads the current task's value. I think this could achieve the
+same effect as mmap.
+
+Hao
+
+> >
+> > It would be great to have a mmapable local storage in that case.
+> > This patch adds that.
+> >
+> > Mmap isn't BPF syscall, so unpriv users can also use it to
+> > interact with maps.
+> >
+> > Currently the only way of allocating mmapable map area is using
+> > vmalloc() and it's only used at map allocation time. Vmalloc()
+> > may sleep, therefore it's not suitable for maps that may allocate
+> > memory in an atomic context such as local storage. Local storage
+> > uses kmalloc() with GFP_ATOMIC, which doesn't sleep. This patch
+> > uses kmalloc() with GFP_ATOMIC as well for mmapable map area.
+> >
+> > Allocating mmapable memory has requirment on page alignment. So we
+> > have to deliberately allocate more memory than necessary to obtain
+> > an address that has sdata->data aligned at page boundary. The
+> > calculations for mmapable allocation size, and the actual
+> > allocation/deallocation are packaged in three functions:
+> >
+> >   - bpf_map_mmapable_alloc_size()
+> >   - bpf_map_mmapable_kzalloc()
+> >   - bpf_map_mmapable_kfree()
+> >
+> > BPF local storage uses them to provide generic mmap API:
+> >
+> >   - bpf_local_storage_mmap()
+> >
+> > And task local storage adds the mmap callback:
+> >
+> >   - task_storage_map_mmap()
+> >
+> > When application calls mmap on a task local storage, it gets its
+> > own local storage.
+> >
+> > Overall, mmapable local storage trades off memory with flexibility
+> > and efficiency. It brings memory fragmentation but can make programs
+> > stateless. Therefore useful in some cases.
+> >
+> > Hao Luo (2):
+> >    bpf: Mmapable local storage.
+> >    selftests/bpf: Test mmapable task local storage.
+> >
+> >   include/linux/bpf.h                           |  4 +
+> >   include/linux/bpf_local_storage.h             |  5 +-
+> >   kernel/bpf/bpf_local_storage.c                | 73 +++++++++++++++++--
+> >   kernel/bpf/bpf_task_storage.c                 | 40 ++++++++++
+> >   kernel/bpf/syscall.c                          | 67 +++++++++++++++++
+> >   .../bpf/prog_tests/task_local_storage.c       | 38 ++++++++++
+> >   .../bpf/progs/task_local_storage_mmapable.c   | 38 ++++++++++
+> >   7 files changed, 257 insertions(+), 8 deletions(-)
+> >   create mode 100644 tools/testing/selftests/bpf/progs/task_local_storage_mmapable.c
+> >

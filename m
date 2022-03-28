@@ -2,130 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C8A4E9709
+	by mail.lfdr.de (Postfix) with ESMTP id 58A274E9708
 	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242654AbiC1MxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 08:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
+        id S242652AbiC1MxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 08:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242638AbiC1Mwv (ORCPT
+        with ESMTP id S242643AbiC1Mww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 08:52:51 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12B34D634
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:51:10 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id i1so9921218ila.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:51:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=NmQMOl74rWGRWzafuyJ5jjCyGGjWrcet8PudU8eNoTM=;
-        b=fmnUk8fzFuPNcQLP4BGXA1S9aa97ooEg6VvUkroT0u2nlfdICTx4oy6TaPbWXhvP2p
-         ycG9uUulYtBRRjLm9QXjKOnv6AXp/13Jj48+DV1eeBRQcSNHZBR8E/63/XFTjZ4F2U1Z
-         /yWrDsUP0Axr8AP3acYeBwfDZz53FpCWg20obz6FBTMIy6DyWhoK3XEuP3vzdYNdNFi8
-         +0A4Z/J7Mlr9Z394QGOI1u0UNFDGE7BJASd2oJy7o5ajLXTTwx3PsG+wubUAG6Tzsn1M
-         e99RFMzotoXtGAcBMws38D0LjwZFIdFfjgVk2ZTTXM/RkrDzZs84Ula9HelT/mD+AsNs
-         pjYQ==
+        Mon, 28 Mar 2022 08:52:52 -0400
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD7A6424;
+        Mon, 28 Mar 2022 05:51:10 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-de3eda6b5dso15113393fac.0;
+        Mon, 28 Mar 2022 05:51:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NmQMOl74rWGRWzafuyJ5jjCyGGjWrcet8PudU8eNoTM=;
-        b=joBcVIR8/zO1LvbNI9MRhfkfqmZrdLrGGj7vRztaQlZWpJQPEI36TS0ux9QiaBPUAG
-         QqfpID1B3YxXNf0mOyMp+8dxF8IsCCB+OaWNArVuMFcuv9njh/fzGdqmado/VzHXoAaf
-         erCfB0ru+K4mdpQYv6cOb2jnbngczY0fd0tBedF7oYIFyvs7aRVinLKNWHe/md6d4EvH
-         Mh3fTH2bKRiLQeg2HzeWnHCERPyoLX2x1wFiW59ybOl+HDdPMXlnGL70a0OVdjaiVscK
-         zkEdo0+7+QNoADFvcKCRHg0rEAlBecKv1JpD6rHQCU6JPeACsEt9qPE22pp/KERI+voz
-         UBlw==
-X-Gm-Message-State: AOAM5318oaSDR106mHmqg7cmMDxnzEa8UhXgnuwuM3WTw2A3o1tcB4QD
-        py7rs76qrtr93smYgw+aM8Tg/EDx1iw3EiuzhwM=
-X-Google-Smtp-Source: ABdhPJxh9OmbBwag5bvEGizKUKZLQbnirkyw/QJTsPJZeG6mVqa3cTPMDPAy/NRf7yrVNUIQBEFYGZcMWITxadtTRCQ=
-X-Received: by 2002:a92:cdad:0:b0:2c6:7b76:a086 with SMTP id
- g13-20020a92cdad000000b002c67b76a086mr6014966ild.5.1648471870337; Mon, 28 Mar
- 2022 05:51:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220328021139.8700-1-steve.lee.analog@gmail.com> <PH0PR03MB678617C7A854827D0EC99010991D9@PH0PR03MB6786.namprd03.prod.outlook.com>
-In-Reply-To: <PH0PR03MB678617C7A854827D0EC99010991D9@PH0PR03MB6786.namprd03.prod.outlook.com>
-From:   Lee Steve <steve.lee.analog@gmail.com>
-Date:   Mon, 28 Mar 2022 21:50:59 +0900
-Message-ID: <CA+Fz0PZQUcjLL2fmOLcyYxhqfyoY0jVKtz1GgRTur9XJDs_wag@mail.gmail.com>
-Subject: Re: [V3 1/2] ASoC: max98390: Add reset gpio control
-To:     "Sa, Nuno" <Nuno.Sa@analog.com>
-Cc:     "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "ryans.lee@maximintegrated.com" <ryans.lee@maximintegrated.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "krzk@kernel.org" <krzk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=cQGZg2ywem6zxyCvwABFfPlNmUhfTOw/8YRFpemaFf4=;
+        b=lxYI6PE/y1AyVi/kPrz3uzfMQr9NaeAJKx8sGYkkgayhNhRdX+0v8MSLkl0ltW8lPc
+         +bQaTpJ9DHNQyC4ADdh5zwr4gAP4aTUFj6xsZ2JYYDOeobyBPIKgd9ci+lZ08p2jFaMv
+         801DaSCgvRAMAndOHxMccqrF18/Txhat1aQdT3HFXkJh19UHjybZWD6n8ega68PUY3Fo
+         pZELp6whHbujMgMelI8H9FtkqWGMxsWL1vHbvfiJ4YPOB1RRr8A3bU0TPUWc5HSaniAR
+         Ay3ZvsiiNOn3Uv6RyWymXtu2xVYsPSkL1t6kahtYQhtQD5QdxlssOaFRMeF7Wx4koVlE
+         0LNw==
+X-Gm-Message-State: AOAM530/wo7YVM7ixMwqwClLMz94E/DAq0sQuC9xy79gOFymU07BV7gS
+        STn7jcA96DPvD+7wBftaxA==
+X-Google-Smtp-Source: ABdhPJxhc/XOS06cKfWmV8nxW6YHrYLXoTD/KyWUtNUbx5hNVIsj9+PLIdx7x7AayOuJl1MVzaw89Q==
+X-Received: by 2002:a05:6870:a1a0:b0:dd:e471:8baf with SMTP id a32-20020a056870a1a000b000dde4718bafmr14907619oaf.40.1648471869579;
+        Mon, 28 Mar 2022 05:51:09 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id n62-20020acaef41000000b002ef646e6690sm7309500oih.53.2022.03.28.05.51.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 05:51:08 -0700 (PDT)
+Received: (nullmailer pid 2153574 invoked by uid 1000);
+        Mon, 28 Mar 2022 12:51:05 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+In-Reply-To: <1648433498-23450-1-git-send-email-hayashi.kunihiko@socionext.com>
+References: <1648433498-23450-1-git-send-email-hayashi.kunihiko@socionext.com>
+Subject: Re: [PATCH] dt-bindings: PCI: uniphier: Convert uniphier-pcie.txt to json-schema
+Date:   Mon, 28 Mar 2022 07:51:05 -0500
+Message-Id: <1648471865.799906.2153573.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 4:42 PM Sa, Nuno <Nuno.Sa@analog.com> wrote:
->
-> > From: Steve Lee <steve.lee.analog@gmail.com>
-> > Sent: Monday, March 28, 2022 4:12 AM
-> > To: lgirdwood@gmail.com; broonie@kernel.org; perex@perex.cz;
-> > tiwai@suse.com; ryans.lee@maximintegrated.com; linux-
-> > kernel@vger.kernel.org; alsa-devel@alsa-project.org
-> > Cc: krzk@kernel.org; Sa, Nuno <Nuno.Sa@analog.com>; Steve Lee
-> > <steve.lee.analog@gmail.com>
-> > Subject: [V3 1/2] ASoC: max98390: Add reset gpio control
-> >
-> > [External]
-> >
-> >  Add reset gpio control to support RESET PIN connected to gpio.
-> >
-> > Signed-off-by: Steve Lee <steve.lee.analog@gmail.com>
-> > ---
-> >  sound/soc/codecs/max98390.c | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> >
-> > diff --git a/sound/soc/codecs/max98390.c
-> > b/sound/soc/codecs/max98390.c
-> > index 40fd6f363f35..05df9b85d9b0 100644
-> > --- a/sound/soc/codecs/max98390.c
-> > +++ b/sound/soc/codecs/max98390.c
-> > @@ -1022,6 +1022,7 @@ static int max98390_i2c_probe(struct
-> > i2c_client *i2c,
-> >
-> >       struct max98390_priv *max98390 =3D NULL;
-> >       struct i2c_adapter *adapter =3D i2c->adapter;
-> > +     struct gpio_desc *reset_gpio;
-> >
-> >       ret =3D i2c_check_functionality(adapter,
-> >               I2C_FUNC_SMBUS_BYTE
-> > @@ -1073,6 +1074,17 @@ static int max98390_i2c_probe(struct
-> > i2c_client *i2c,
-> >               return ret;
-> >       }
-> >
-> > +     reset_gpio =3D devm_gpiod_get_optional(&i2c->dev,
-> > +                                          "reset", GPIOD_OUT_LOW);
-> > +
-> > +     /* Power on device */
-> > +     if (reset_gpio) {
-> > +             usleep_range(1000, 2000);
-> > +             /* bring out of reset */
-> > +             gpiod_set_value_cansleep(reset_gpio, 1);
->
-> Note this will set the gpio in the asserted state. Being it active low, t=
-his will
-> do the opposite thing that you are trying to accomplish...
->
-> - Nuno S=C3=A1
+On Mon, 28 Mar 2022 11:11:38 +0900, Kunihiko Hayashi wrote:
+> Convert the file into a JSON description at the yaml format.
+> 
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> ---
+>  .../bindings/pci/socionext,uniphier-pcie.yaml | 100 ++++++++++++++++++
+>  .../devicetree/bindings/pci/uniphier-pcie.txt |  82 --------------
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 101 insertions(+), 83 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/pci/socionext,uniphier-pcie.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/pci/uniphier-pcie.txt
+> 
 
-I agree with your comment. I will update next version patch if there
-is other concern.
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
+
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
+
+Full log is available here: https://patchwork.ozlabs.org/patch/1609988
+
+
+pcie@66000000: compatible: ['socionext,uniphier-pcie', 'snps,dw-pcie'] is too long
+	arch/arm64/boot/dts/socionext/uniphier-ld20-akebi96.dt.yaml
+	arch/arm64/boot/dts/socionext/uniphier-ld20-global.dt.yaml
+	arch/arm64/boot/dts/socionext/uniphier-ld20-ref.dt.yaml
+	arch/arm64/boot/dts/socionext/uniphier-pxs3-ref.dt.yaml
+

@@ -2,83 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720624E9D08
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 940744E9CF5
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243935AbiC1RIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 13:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53004 "EHLO
+        id S243902AbiC1RBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 13:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233834AbiC1RIW (ORCPT
+        with ESMTP id S234838AbiC1RBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 13:08:22 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E439562BCC
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:06:40 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id e16so25847687lfc.13
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:06:40 -0700 (PDT)
+        Mon, 28 Mar 2022 13:01:46 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D6460DA8;
+        Mon, 28 Mar 2022 10:00:04 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id j18so21282689wrd.6;
+        Mon, 28 Mar 2022 10:00:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jOAa7WpMNgbqgji3fRQGom5Ba+QYEkdDzROArpIBjvc=;
-        b=ENw5v98dathuIv0v3Q532b+NqOLHiJ3fyUjwxxYyseIx+Nx5kyLtsaLjIcefkdeNL9
-         IS6mlD38Idl9cNFzUflS7/2bSe2H7jFluyt13j3tgOhoffcXGXLpz23Ge1bsEIbDnUbs
-         uddK+qnZk5D44idwiIMTVrkTNlCVx83nc1JIxtSICXQJtfnKuLN4r5aFF3zd4PP2jBR+
-         W5DUogc99JJoE1vCVXg6EKYnkXel5NSQI4bV+tkaNEPPGtApavU02ID1WMvX5Qufg8y0
-         PzzkYtZ72vpzJUSjqofTtQk6sJM5nkuZBHNUjZ26vrcxREbqZBunnlsTnWE/4lXHcsYR
-         zFXg==
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZEVHtJO6G677L0G9fCsEHBPzXupfvRbVBLDDcKGMsYU=;
+        b=GgFcrGvHeEH9/JlDBJIxdBIaTQg6F3si2q5JnsELpGexfHNINgrEkleEGhZEppLibP
+         BhiiFQMGXwqq50116/Bkk6wogeLJprQ+5bKwzXN+kMaU0pIxxzAAeTfaSVj+EzjxARRe
+         hTZw6+nbuV56dKTaTp0Xqrs5tkC9fEPLbWVzpk9AnrvYhcHTm8e/sCtFI7zmov2sabX9
+         ONkVSc+3F+g2yiueHefAvigIqxij9CEOWQW1aR/CHIiA6ThvCKgZoQpTjGWT39Br2UPV
+         bAMyeKsdacEE4OMzznwTEGpf5Tmu4LaVw2jJGEYt4g19MVPeiUSaDKSsK++gHzHxsCaF
+         8Y5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jOAa7WpMNgbqgji3fRQGom5Ba+QYEkdDzROArpIBjvc=;
-        b=ZhoWEQEpu6Tc071Vhz7+kksuHGaCUxdyIiJBwP0Jg+9KXw0k/z3KUE+lJAmwAIXWJO
-         8t4wPDadzoo6Mu/LhsGHIfxhmKKktzYRyWgy3R5nTO8VpRupZXJlWjrzhyrb8Xq0H9QF
-         +P6SybiYB2xpcqwHcdrADdQLe7eu+lrx+iS9IBuwPgNx3h/DrHx+pGKE8AjK7h1wCIA+
-         NqCptXiIkNT00FrJKLDjtXVBbPckyb5/y1U1uDUnBe61pLg2mXFhRY85okTW4Iw41alA
-         H1FQ30+5xNSk8+oE8vPh1+agLfb2Lyk54uolQDgc9YbRcUiED7j32kYG9rPzkYsTZlh1
-         CfVg==
-X-Gm-Message-State: AOAM532DOLyUhOOH2RTKe79sTZw40nwuVHnuYjt6iMBolMyQKTDFRLDr
-        9uC6TCM6t/CiG5lX2VaRgMjt4vFZN0Fa+cVa1c4V0dmQscdrhA==
-X-Google-Smtp-Source: ABdhPJxr5kjWcCV8tG3lkJMUxSBK+Y8LJ8mhkQigVG3HvLYkVCUYHLrC4mkFAkK1Pl+r45CjbUgT+lgIchcrUtFocJo=
-X-Received: by 2002:a17:907:d06:b0:6e0:e2f5:4f55 with SMTP id
- gn6-20020a1709070d0600b006e0e2f54f55mr13018196ejc.618.1648486724923; Mon, 28
- Mar 2022 09:58:44 -0700 (PDT)
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZEVHtJO6G677L0G9fCsEHBPzXupfvRbVBLDDcKGMsYU=;
+        b=7YXqBeEzFpSstGusFqp57NzZJyd+Qxx0GjMa8CShWBYItLcfIQuJcBS50MaUjLNDGY
+         zzXjAD1xOO2x60eXHEFj6RZYWsssqONx5ftwrMUnoYAqpJU6ts+9t0Cm/46HTodvmKPy
+         CB1QCRO08o1atJaJl1J8ZvR1OWlbFB+m0yTjGGkiWWSQ43x/UY7fecvSpNQS+AVivQEn
+         4yx89lnIsO/VNPe6EY7/lYh66+t89lMxpzFaQgRvVWbYZOVp51kWi56hTsACENc26Sot
+         buiEUqt9wCW45/J21b1O/BMX/9hosS4QLbEPiHnjakccG6B0YSB0fCPEh7nBfiL2QdDm
+         1AOg==
+X-Gm-Message-State: AOAM5314t4FN5Jqa9KExZIRN7144+BF7T9qlx7Aedk+AlDgaib3Qacci
+        2ENrYlDrwuldNzDc9mYVQIo=
+X-Google-Smtp-Source: ABdhPJxzjh9QUSY5wPmlsFXZZNn50r8F3dt/NEaF/KDOVSxLctYdcEXRjycF7pXgfgOk2gK6TCDYyQ==
+X-Received: by 2002:adf:e2cc:0:b0:203:e8ba:c709 with SMTP id d12-20020adfe2cc000000b00203e8bac709mr24899786wrj.713.1648486803349;
+        Mon, 28 Mar 2022 10:00:03 -0700 (PDT)
+Received: from trex (95.red-81-38-138.dynamicip.rima-tde.net. [81.38.138.95])
+        by smtp.gmail.com with ESMTPSA id r12-20020a5d6c6c000000b00203ec2b1255sm16241799wrz.60.2022.03.28.10.00.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 10:00:02 -0700 (PDT)
+From:   "Jorge Ramirez-Ortiz, Gmail" <jorge.ramirez.ortiz@gmail.com>
+X-Google-Original-From: "Jorge Ramirez-Ortiz, Gmail" <JorgeRamirez-Ortiz>
+Date:   Mon, 28 Mar 2022 19:00:01 +0200
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Cc:     srinivas.kandagatla@linaro.org, amahesh@qti.qualcomm.com,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        jorge.ramirez-ortiz@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] misc: fastrpc: fix an incorrect NULL check on list
+ iterator
+Message-ID: <20220328170001.GA3040725@trex>
+References: <20220327062202.5720-1-xiam0nd.tong@gmail.com>
 MIME-Version: 1.0
-References: <20220326002013.483394-1-dlatypov@google.com> <20220326002013.483394-2-dlatypov@google.com>
-In-Reply-To: <20220326002013.483394-2-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 28 Mar 2022 12:58:33 -0400
-Message-ID: <CAFd5g47yH1bOCHS4JDSw0=bzpqj6bECy564=gUKTBzwjXjk-Wg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] kunit: split resource API impl from test.c into
- new resource.c
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220327062202.5720-1-xiam0nd.tong@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 8:20 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> We've split out the declarations from include/kunit/test.h into
-> resource.h.
-> This patch splits out the definitions as well for consistency.
->
-> A side effect of this is git blame won't properly track history by
-> default, users need to run
-> $ git blame -L ,1 -C13 lib/kunit/resource.c
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+On 27/03/22, Xiaomeng Tong wrote:
+> The bug is here:
+> 	if (!buf) {
+> 
+> The list iterator value 'buf' will *always* be set and non-NULL
+> by list_for_each_entry(), so it is incorrect to assume that the
+> iterator value will be NULL if the list is empty (in this case, the
+> check 'if (!buf) {' will always be false and never exit expectly).
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+yes.
+
+> 
+> To fix the bug, use a new variable 'iter' as the list iterator,
+> while use the original variable 'buf' as a dedicated pointer to
+> point to the found element.
+
+LGTM
+
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 2419e55e532de ("misc: fastrpc: add mmap/unmap support")
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> ---
+>  drivers/misc/fastrpc.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+> index aa1682b94a23..45aaf54a7560 100644
+> --- a/drivers/misc/fastrpc.c
+> +++ b/drivers/misc/fastrpc.c
+> @@ -1353,17 +1353,18 @@ static int fastrpc_req_munmap_impl(struct fastrpc_user *fl,
+>  				   struct fastrpc_req_munmap *req)
+>  {
+>  	struct fastrpc_invoke_args args[1] = { [0] = { 0 } };
+> -	struct fastrpc_buf *buf, *b;
+> +	struct fastrpc_buf *buf = NULL, *iter, *b;
+>  	struct fastrpc_munmap_req_msg req_msg;
+>  	struct device *dev = fl->sctx->dev;
+>  	int err;
+>  	u32 sc;
+>  
+>  	spin_lock(&fl->lock);
+> -	list_for_each_entry_safe(buf, b, &fl->mmaps, node) {
+> -		if ((buf->raddr == req->vaddrout) && (buf->size == req->size))
+> +	list_for_each_entry_safe(iter, b, &fl->mmaps, node) {
+> +		if ((iter->raddr == req->vaddrout) && (iter->size == req->size)) {
+> +			buf = iter;
+>  			break;
+> -		buf = NULL;
+> +		}
+>  	}
+>  	spin_unlock(&fl->lock);
+>  
+> -- 
+> 2.17.1
+> 
+

@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094C44E99A8
+	by mail.lfdr.de (Postfix) with ESMTP id 54F424E99A9
 	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243930AbiC1OdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 10:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36916 "EHLO
+        id S243935AbiC1OdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 10:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243918AbiC1Ocn (ORCPT
+        with ESMTP id S243962AbiC1Ocw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 10:32:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6580444777;
-        Mon, 28 Mar 2022 07:31:00 -0700 (PDT)
+        Mon, 28 Mar 2022 10:32:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617264507E;
+        Mon, 28 Mar 2022 07:31:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D77B61243;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B78AB81128;
+        Mon, 28 Mar 2022 14:31:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE9DC34100;
         Mon, 28 Mar 2022 14:31:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E7B0C34111;
-        Mon, 28 Mar 2022 14:30:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648477859;
-        bh=OuRo2q+coWtb/ALyqpyfzlvv3DncSmX5J0Wv6DnCo6M=;
+        s=k20201202; t=1648477862;
+        bh=//n+xEkhJPFZ3pDSmeYVZ+8oCvxqPp7Y/VAsuX6T7Uw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fdAnRGpsJ6xFyxaB/YI7OPLUwBkCWAtSSiNXB+HrQ+WkY68iJ3m/95U/3czpJKRc8
-         ZWm+wLa9q55CE55KiLrHfabf0UflBdQ36post17Rz0rZKGWYqwgnvnWzOXCEN0F/c1
-         exWVaYdel9ANnvERwEysnRHSCDaCUm3YUc6qpUk+qyp7kZY59BBvDGIQKgA22wlora
-         jMxovM4jmcnhHxKSAuuZPka94WYAOk22TUBK74oLBI6YDLNtq8GvG56Rexoq29FSJI
-         68QWLr8Kyo7OZXCKDPiQ4CDIOl99RtYTY9wTiAPyLzVZSWBEFyvaFQiG2bBegbcyUP
-         aRW9qDeuM3vVw==
+        b=H1QnMx4ho6mODSnFYKL4rdh0Z9lLg2WPpQ+dXzqM+VPJss6yBBqxHwAGf0GQK74d4
+         gKj+uUO01acCOVk2+STqTKHbDY7bzzSwQuHiA93NwVuBDphlJCGXT/2nF+3umimHUU
+         yMoVm8pyW621YGWBUo/1yPm14Zu+hJmii3UktotUfXUdbR+JMDnIjDTyfXf32ZYRSe
+         tSm1VStef2FEWeYu6hkvlHhhel6g06em0+n2oOkjyAsu1oLoTdaH67wPpfSP2G4T3q
+         fXPRpqlexzQhQDtZQgA1uezkya8F4g7p8MX4vtuXFf0sbDeECBj3NG7IudSKhcBi5T
+         lR7PCJ+o5UNlw==
 From:   Vinod Koul <vkoul@kernel.org>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
@@ -39,9 +39,9 @@ Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
         Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/6] arm64: dts: qcom: sm8250: move wcd938x node out of soc node
-Date:   Mon, 28 Mar 2022 20:00:34 +0530
-Message-Id: <20220328143035.519909-6-vkoul@kernel.org>
+Subject: [PATCH 6/6] arm64: dts: qcom: sm8250: remove address cells from dsi nodes
+Date:   Mon, 28 Mar 2022 20:00:35 +0530
+Message-Id: <20220328143035.519909-7-vkoul@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220328143035.519909-1-vkoul@kernel.org>
 References: <20220328143035.519909-1-vkoul@kernel.org>
@@ -57,77 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The soc node expects all the nodes to have unit addresses. The wcd codec
-node does not have that which causes warnings:
+The child of dsi nodes do not have unit address, this causes warnings:
 
-arch/arm64/boot/dts/qcom/sm8250-mtp.dts:631.17-648.4:
-Warning (simple_bus_reg): /soc@0/codec: missing or empty reg/ranges property
+arch/arm64/boot/dts/qcom/sm8250.dtsi:3249.22-3301.6:
+	Warning (avoid_unnecessary_addr_size): /soc@0/mdss@ae00000/dsi@ae94000:
+	unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
 
-Move wcd node out of soc to fix this
+arch/arm64/boot/dts/qcom/sm8250.dtsi:3322.22-3374.6:
+	Warning (avoid_unnecessary_addr_size): /soc@0/mdss@ae00000/dsi@ae96000:
+	unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
+
+So remove #address-cells/#size-cells for dsi nodes.
 
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/sm8250-mtp.dts | 40 ++++++++++++-------------
- 1 file changed, 19 insertions(+), 21 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-index fb99cc2827c7..3876a94b49a9 100644
---- a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-@@ -156,6 +156,25 @@ vreg_s6c_0p88: smpc6-regulator {
- 		regulator-always-on;
- 		vin-supply = <&vph_pwr>;
- 	};
-+
-+	wcd938x: codec {
-+		compatible = "qcom,wcd9380-codec";
-+		#sound-dai-cells = <1>;
-+		reset-gpios = <&tlmm 32 0>;
-+		vdd-buck-supply = <&vreg_s4a_1p8>;
-+		vdd-rxtx-supply = <&vreg_s4a_1p8>;
-+		vdd-io-supply = <&vreg_s4a_1p8>;
-+		vdd-mic-bias-supply = <&vreg_bob>;
-+		qcom,micbias1-microvolt = <1800000>;
-+		qcom,micbias2-microvolt = <1800000>;
-+		qcom,micbias3-microvolt = <1800000>;
-+		qcom,micbias4-microvolt = <1800000>;
-+		qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 500000 500000 500000 500000 500000>;
-+		qcom,mbhc-headset-vthreshold-microvolt = <1700000>;
-+		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
-+		qcom,rx-device = <&wcd_rx>;
-+		qcom,tx-device = <&wcd_tx>;
-+	};
- };
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index fb94b342f2d1..a76089ebf9ca 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -3275,9 +3275,6 @@ dsi0: dsi@ae94000 {
  
- &adsp {
-@@ -627,27 +646,6 @@ &slpi {
- 	firmware-name = "qcom/sm8250/slpi.mbn";
- };
+ 				status = "disabled";
  
--&soc {
--	wcd938x: codec {
--		compatible = "qcom,wcd9380-codec";
--		#sound-dai-cells = <1>;
--		reset-gpios = <&tlmm 32 0>;
--		vdd-buck-supply = <&vreg_s4a_1p8>;
--		vdd-rxtx-supply = <&vreg_s4a_1p8>;
--		vdd-io-supply = <&vreg_s4a_1p8>;
--		vdd-mic-bias-supply = <&vreg_bob>;
--		qcom,micbias1-microvolt = <1800000>;
--		qcom,micbias2-microvolt = <1800000>;
--		qcom,micbias3-microvolt = <1800000>;
--		qcom,micbias4-microvolt = <1800000>;
--		qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 500000 500000 500000 500000 500000>;
--		qcom,mbhc-headset-vthreshold-microvolt = <1700000>;
--		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
--		qcom,rx-device = <&wcd_rx>;
--		qcom,tx-device = <&wcd_tx>;
--	};
--};
+-				#address-cells = <1>;
+-				#size-cells = <0>;
 -
- &sound {
- 	compatible = "qcom,sm8250-sndcard";
- 	model = "SM8250-MTP-WCD9380-WSA8810-VA-DMIC";
+ 				ports {
+ 					#address-cells = <1>;
+ 					#size-cells = <0>;
+@@ -3348,9 +3345,6 @@ dsi1: dsi@ae96000 {
+ 
+ 				status = "disabled";
+ 
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-
+ 				ports {
+ 					#address-cells = <1>;
+ 					#size-cells = <0>;
 -- 
 2.34.1
 

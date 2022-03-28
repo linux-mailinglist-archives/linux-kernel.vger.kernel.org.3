@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7914E9D10
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D61CD4E9D15
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244344AbiC1RK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 13:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
+        id S244197AbiC1RMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 13:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233834AbiC1RK4 (ORCPT
+        with ESMTP id S236364AbiC1RMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 13:10:56 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F731FCD9;
-        Mon, 28 Mar 2022 10:09:14 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id p15so30032805ejc.7;
-        Mon, 28 Mar 2022 10:09:14 -0700 (PDT)
+        Mon, 28 Mar 2022 13:12:01 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BEE47ADF;
+        Mon, 28 Mar 2022 10:10:19 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a8so29980740ejc.8;
+        Mon, 28 Mar 2022 10:10:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oz/GhbrsSoiiuJbFSvXUMfpNUWNZ2X3Kmt6C0b9MtEY=;
-        b=XLFg6dCmzHI6UVEuH8BLYtKKM4uvH1ZozdUxJhyd9zDVCSiCtUzw6R4eiOcIvKdtp+
-         OKddStrGMKY8ErWM/NqQq/kTWdaunQJTqePkGKtU1344Wj+/F/i30ItvbA4IFnBLSQwF
-         V54eQVV+UGCyhBuPy2yjZg2dmrMr+eoLRbjvlMQ1nkV1S+tR/6RAYXCgx+dCLXCwTgOu
-         w6GK9j/qC32+SQY+8OroKJsE2UtR34akAYW9D+sOA0gZhXFh1I3RJnD6fFQuFmo/0BU/
-         PRSsL+VvNUjbki90jg38CzUeCr2IKa7ibdhMwchZvJ3LJYdvrreSSh3J/0os/8ijeegd
-         s8YQ==
+        bh=Ofjd2BLbf/d57rh07u4nbPhNk5X3kqpA9oKVtxjKxc4=;
+        b=RdJbBdxYbiTOUg5lxR0R+3/uOKZOUPBBpsyEkMPR8HHH3Wj7UmqQ0sxQA+kkEx92pP
+         oce38WRh3IhgxR9b2W6uMT1D9+r/0P1SpUwYPi2tFx6GrEQmLX1anrY3S/AYbj7Tggei
+         urziVxnW+ZtH9/qhxaj1Xfafl9l2o7GoXkfPeIu/Xrxf/85l/uuFuYCTIk25IxrCOnSl
+         73TkmiNmg2xjWech/yEn3BCp7ycy20cfnr3ShHoF3LTMke99AY6KPD7ZeD84aEj8RaRE
+         XlDOqkH9+eq5M3h4qYxL3A8KBiJfQ8dLHcCju/ft3Ymfl0LgwqHkDqEOpV+2ZzuUzFS3
+         xZvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oz/GhbrsSoiiuJbFSvXUMfpNUWNZ2X3Kmt6C0b9MtEY=;
-        b=7ae/eTvSNuu4AkaQhjqhBqSL+aSkDL8qfqHqmcCVfV0CSQvc9WPaUo7PLX6lmxYo7v
-         Pqr9egLr2rmlSUqkphc83LYWnq6j+qBfe74jexfXV6iumy9rWQwOcyJ0fWwuhDG2CVUJ
-         AdcbKWRh4WBZX2PRupilIxAPqe1xBT3XOQAD+KkHtHWSBckKLQwGkxsy27x9rcUxFoUE
-         Q97LDjruvO8tVcZp806dx0qz84GbFd/EzgFpo2ce+7jK/G1s0e+VlDyUfgVEyVJLfF9E
-         u0iqyjypen2iJF9TxK36pYYevaTgiI6TO8n6koRxwmlPCpBaJH0+GGWDYfxe4Sj7qLad
-         Ubpg==
-X-Gm-Message-State: AOAM5320MaRDafYIVmIdkeoGqrkUAEZDOwTZLqlBrtOEQ45G0/dAFuy5
-        a7cCItsNIdraX0rFuteT+xGZUvXUARA=
-X-Google-Smtp-Source: ABdhPJxn3BJyJKNC9/61CZcKeOhAnR0kP6RUMvDsLZPNcLzptiHSJT5FmZKkFiS6yu0S2vwJNZhpcA==
-X-Received: by 2002:a17:907:7ba3:b0:6df:b07c:ee35 with SMTP id ne35-20020a1709077ba300b006dfb07cee35mr28691222ejc.588.1648487353124;
-        Mon, 28 Mar 2022 10:09:13 -0700 (PDT)
+        bh=Ofjd2BLbf/d57rh07u4nbPhNk5X3kqpA9oKVtxjKxc4=;
+        b=5XtOtslrWyPCmnO/56yaLtlEO5nE3OFj6FjG+/h9RwCCxqo79VN52Mv2vK9IHdgifs
+         8I1YSLKLo6EjgV6nZa72XwM8ZlhPkdQrKDpdbKk0FK/wSdxi2odlHHKSrYm8igM+VdBg
+         l0L9yI+hadDTQ2G1v272Q/7sTBVeY/eet98YeX9A7vhUT4WhI/d7RlwdL0lzG2R0pEd5
+         AuBd58OJMBRnMAzzqbjvDmlc84mZz2Ryd6uAA6PsHmccfpRzAQanKG2pd6cnimc+6VzL
+         0pR7a62DlD1oljSPOQcLNOGbhPLXXmvfiaYkB/JvhZkhqMMpBN6EUMYN1+Pbsi02/WAT
+         Tzxg==
+X-Gm-Message-State: AOAM5333XHO5oNfl3hkthq1bW5T2aBwPhSUtxTbZN7xNYwInsHvE9MS2
+        gRDNfyvihzvBievxyOCO9G7xIFAsWpQ=
+X-Google-Smtp-Source: ABdhPJyqg4BdnBj4b8BiPKRMBVJOYfgoYQTkh+JHfQmfe8ltITzE2pv4VlnjsBwMAjCa2rMFVr44bw==
+X-Received: by 2002:a17:907:728b:b0:6df:8f3b:28ae with SMTP id dt11-20020a170907728b00b006df8f3b28aemr28825891ejc.336.1648487417609;
+        Mon, 28 Mar 2022 10:10:17 -0700 (PDT)
 Received: from jernej-laptop.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id o17-20020a056402439100b0041938757232sm7321011edc.17.2022.03.28.10.09.11
+        by smtp.gmail.com with ESMTPSA id j9-20020a170906534900b006df9b29eaf1sm6174022ejo.8.2022.03.28.10.10.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 10:09:12 -0700 (PDT)
+        Mon, 28 Mar 2022 10:10:16 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
 To:     linux-media@vger.kernel.org,
         Sebastian Fricke <sebastian.fricke@collabora.com>
 Cc:     acourbot@chromium.org, tfiga@chromium.org,
         hverkuil-cisco@xs4all.nl,
         Sebastian Fricke <sebastian.fricke@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Maxime Ripard <mripard@kernel.org>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Chen-Yu Tsai <wens@csie.org>,
+        open list <linux-kernel@vger.kernel.org>,
         "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
         "moderated list:ARM/Allwinner sunXi SoC support" 
         <linux-arm-kernel@lists.infradead.org>,
         "open list:ARM/Allwinner sunXi SoC support" 
-        <linux-sunxi@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v3 2/2] staging: media: cedrus: Rename H265 to HEVC
-Date:   Mon, 28 Mar 2022 19:09:11 +0200
-Message-ID: <4697363.GXAFRqVoOG@jernej-laptop>
-In-Reply-To: <20220327084308.9053-3-sebastian.fricke@collabora.com>
-References: <20220327084308.9053-1-sebastian.fricke@collabora.com> <20220327084308.9053-3-sebastian.fricke@collabora.com>
+        <linux-sunxi@lists.linux.dev>
+Subject: Re: [RFC PATCH v3 1/2] media: docs-rst: Append HEVC specific term
+Date:   Mon, 28 Mar 2022 19:10:15 +0200
+Message-ID: <2095465.irdbgypaU6@jernej-laptop>
+In-Reply-To: <20220327084308.9053-2-sebastian.fricke@collabora.com>
+References: <20220327084308.9053-1-sebastian.fricke@collabora.com> <20220327084308.9053-2-sebastian.fricke@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -83,45 +83,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian!
+Dne nedelja, 27. marec 2022 ob 10:43:08 CEST je Sebastian Fricke napisal(a):
+> Describe the coding tree unit as replacement for the macroblock in the
+> HEVC codec. Highlight a key difference of the HEVC codec to predecessors
+> like AVC(H.264) to give a better overview of the differences between the
+> coding standards.
+>=20
 
-Dne nedelja, 27. marec 2022 ob 10:43:10 CEST je Sebastian Fricke napisal(a):
-> Rename all instances where the identifier H265 is used with HEVC.
-> The codec has multiple identifiers H.265 (ITU-T), MPEG-H Part 2 (ISO),
-> but the actual name of the codec is HEVC (High Efficiency Video Coding).
-> Also nearly all other related drivers use the term HEVC instead of H265.
-> 
-> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+Looks good to me.
 
-This patch is not constructive. I admit, it's unfortunate it's not using same 
-name as other drivers, but anyone dealing with HEVC will know H265 is synonym 
-for it. This patch doesn't improve anything and actually makes any fix harder 
-to backport, if something cames up. According to diffstat, this rewrites more 
-than 50% of cedrus_h265.c, including renaming the file. Additionally, it's easy 
-to miss something to rename and we could play this game in the future too, for 
-no real benefit.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-So NAK.
-
-Best regard,
+Best regards,
 Jernej
 
-P.S. Please wait at least few days before resending patches, even if you find 
-something. After all, RFC patches are meant to get some response, it's not 
-expected they will be perfect.
-
+> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 > ---
->  drivers/staging/media/sunxi/cedrus/Makefile   |   2 +-
->  drivers/staging/media/sunxi/cedrus/cedrus.c   |  30 +-
->  drivers/staging/media/sunxi/cedrus/cedrus.h   |  14 +-
->  .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
->  .../cedrus/{cedrus_h265.c => cedrus_hevc.c}   | 438 +++++++++---------
->  .../staging/media/sunxi/cedrus/cedrus_hw.c    |   4 +-
->  .../staging/media/sunxi/cedrus/cedrus_regs.h  | 394 ++++++++--------
->  .../staging/media/sunxi/cedrus/cedrus_video.c |   4 +-
->  8 files changed, 448 insertions(+), 448 deletions(-)
->  rename drivers/staging/media/sunxi/cedrus/{cedrus_h265.c => cedrus_hevc.c}
-> (53%)
+>  Documentation/userspace-api/media/v4l/dev-decoder.rst | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/userspace-api/media/v4l/dev-decoder.rst
+> b/Documentation/userspace-api/media/v4l/dev-decoder.rst index
+> 3cf2b496f2d0..eb5b1b1e3a51 100644
+> --- a/Documentation/userspace-api/media/v4l/dev-decoder.rst
+> +++ b/Documentation/userspace-api/media/v4l/dev-decoder.rst
+> @@ -72,6 +72,11 @@ coded resolution
+>  coded width
+>     width for given coded resolution.
+>=20
+> +coding tree unit
+> +   processing unit of the HEVC codec (=E2=89=98 macroblock units in H.26=
+4, VP8,
+> VP9); +   can use block structures of up to 64=C3=9764 pixels;
+> +   Good at sub-partitioning the picture into variable sized structures.
+> +
+>  decode order
+>     the order in which frames are decoded; may differ from display order =
+if
+> the coded format includes a feature of frame reordering; for decoders, @@
+> -104,7 +109,8 @@ keyframe
+>  macroblock
+>     a processing unit in image and video compression formats based on lin=
+ear
+> block transforms (e.g. H.264, VP8, VP9); codec-specific, but for most of =
+=2D=20
+>  popular codecs the size is 16x16 samples (pixels).
+> +   popular codecs the size is 16x16 samples (pixels). The HEVC codec use=
+s a
+> +   slightly more flexible processing unit called coding tree unit (CTU).
+>=20
+>  OUTPUT
+>     the source buffer queue; for decoders, the queue of buffers containing
+
 
 
 

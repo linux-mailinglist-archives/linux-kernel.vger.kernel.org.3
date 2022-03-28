@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566274EA1EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 901354EA1E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346073AbiC1UsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 16:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
+        id S1345797AbiC1Uru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 16:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345705AbiC1Un3 (ORCPT
+        with ESMTP id S1345660AbiC1Un0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 16:43:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61B666AF7;
-        Mon, 28 Mar 2022 13:41:47 -0700 (PDT)
+        Mon, 28 Mar 2022 16:43:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1776266AD2;
+        Mon, 28 Mar 2022 13:41:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E3C0B8121D;
-        Mon, 28 Mar 2022 20:41:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24BF7C341C7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5E3B614CA;
+        Mon, 28 Mar 2022 20:41:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19E69C341C6;
         Mon, 28 Mar 2022 20:41:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1648500103;
-        bh=WFRIVoaSVGogfWxn6F5H5FzA85zVU7xFddFjRUvhWLs=;
+        bh=2lLZy+8+HfLpQ9ZSrqPaFYZy8P0gQVUkzGts/rb6k78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nIlAMyM1Zp/U5kaXCpx3RdqljcXRWkCMztLvL3070xMq5VTZ9waWhLiESauRCLIxC
-         xAOo10egzA/pnJ/2MyN/MUZH/ZBw7DppOJCIloX0/TSgaOlbjndjbucUuX34avl/xN
-         0MEB012p4Un13TaV116xeX8ZVDwEro8XrjD96TJvcW5weDPmq1hqTcsl5h2MKe8yYm
-         3TcTbXMUbhkDlyUlIp/xJHYSZd5BXz8l/KbeFM4NYlfLsypjZF0aknmkAgeKg2SEIr
-         mr1yS12woguh09Dt+K8J4b+JRrR+ZBeUI/xY1owejbP5njI9nzkHRl81ZafW23Kz03
-         GxCMnvxCNxd6Q==
+        b=XaU8cfgp2Dr2seVzNVGCrurhgSZaMGQajaHuwN+mQfYCZo9PS5959RuAnO62t4biR
+         /oJxyYxQ9gfPk4tc+sp2zugG+tDdavM8yjE6p9vcj7Uj5kZnpGmKSZBu8TRxqx5boS
+         xDpRfQ2/MIKw5r0ooYZQPLyXl53n4hKTi7Yn2K+FFfw5gcoDiNT4dHk3UP+aZ2B62k
+         9fcTlU8xP/dkdA7nzuwlwYRnasHhgzuCU3I0av4VOgBOj6AQVrDDi2z1YJ+ovoPql1
+         nugLFCP9gQnjAxKC/MhU4ZTSlKKOnGs5v05r+OQqRhFtJnTikhJxdqxrFWAUtGqJWs
+         D8XZ0HMLPyVYA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nYwBI-000lcq-LC; Mon, 28 Mar 2022 22:41:40 +0200
+        id 1nYwBI-000lcu-NJ; Mon, 28 Mar 2022 22:41:40 +0200
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Sean Young <sean@mess.org>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 16/26] media: dvb-usb: nova-t-usb2: use an enum for the device number
-Date:   Mon, 28 Mar 2022 22:41:28 +0200
-Message-Id: <58f1a356b7b75bbefef3aa07cd99896c446df32f.1648499509.git.mchehab@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 17/26] media: dvb-usb: opera1: use an enum for the device number
+Date:   Mon, 28 Mar 2022 22:41:29 +0200
+Message-Id: <08861d80b6706ac1ed04a68959ebb78f27cb028d.1648499509.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1648499509.git.mchehab@kernel.org>
 References: <cover.1648499509.git.mchehab@kernel.org>
@@ -71,69 +69,64 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/26] at: https://lore.kernel.org/all/cover.1648499509.git.mchehab@kernel.org/
 
- drivers/media/usb/dvb-usb/nova-t-usb2.c | 18 ++++++++++++------
- include/media/dvb-usb-ids.h             |  4 ++--
- 2 files changed, 14 insertions(+), 8 deletions(-)
+ drivers/media/usb/dvb-usb/opera1.c | 15 ++++++++++-----
+ include/media/dvb-usb-ids.h        |  2 +-
+ 2 files changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb/nova-t-usb2.c b/drivers/media/usb/dvb-usb/nova-t-usb2.c
-index 9c0eb0d40822..4782d0780913 100644
---- a/drivers/media/usb/dvb-usb/nova-t-usb2.c
-+++ b/drivers/media/usb/dvb-usb/nova-t-usb2.c
-@@ -160,11 +160,17 @@ static int nova_t_probe(struct usb_interface *intf,
+diff --git a/drivers/media/usb/dvb-usb/opera1.c b/drivers/media/usb/dvb-usb/opera1.c
+index e8d784b9d119..0da86f58aff6 100644
+--- a/drivers/media/usb/dvb-usb/opera1.c
++++ b/drivers/media/usb/dvb-usb/opera1.c
+@@ -425,10 +425,15 @@ static int opera1_rc_query(struct dvb_usb_device *dev, u32 * event, int *state)
+ 	return 0;
  }
  
- /* do not change the order of the ID table */
--static struct usb_device_id nova_t_table [] = {
--/* 00 */	{ USB_DEVICE(USB_VID_HAUPPAUGE,     USB_PID_WINTV_NOVA_T_USB2_COLD) },
--/* 01 */	{ USB_DEVICE(USB_VID_HAUPPAUGE,     USB_PID_WINTV_NOVA_T_USB2_WARM) },
--			{ }		/* Terminating entry */
 +enum {
-+	HAUPPAUGE_WINTV_NOVA_T_USB2_COLD,
-+	HAUPPAUGE_WINTV_NOVA_T_USB2_WARM,
- };
-+
-+static struct usb_device_id nova_t_table[] = {
-+	DVB_USB_DEV(HAUPPAUGE, HAUPPAUGE_WINTV_NOVA_T_USB2_COLD),
-+	DVB_USB_DEV(HAUPPAUGE, HAUPPAUGE_WINTV_NOVA_T_USB2_WARM),
-+	{ }
++	CYPRESS_OPERA1_COLD,
++	OPERA1_WARM,
 +};
 +
- MODULE_DEVICE_TABLE(usb, nova_t_table);
+ static struct usb_device_id opera1_table[] = {
+-	{USB_DEVICE(USB_VID_CYPRESS, USB_PID_OPERA1_COLD)},
+-	{USB_DEVICE(USB_VID_OPERA1, USB_PID_OPERA1_WARM)},
+-	{}
++	DVB_USB_DEV(CYPRESS, CYPRESS_OPERA1_COLD),
++	DVB_USB_DEV(OPERA1, OPERA1_WARM),
++	{ }
+ };
  
- static struct dvb_usb_device_properties nova_t_properties = {
-@@ -221,8 +227,8 @@ static struct dvb_usb_device_properties nova_t_properties = {
+ MODULE_DEVICE_TABLE(usb, opera1_table);
+@@ -540,8 +545,8 @@ static struct dvb_usb_device_properties opera1_properties = {
  	.num_device_descs = 1,
  	.devices = {
- 		{   "Hauppauge WinTV-NOVA-T usb2",
--			{ &nova_t_table[0], NULL },
--			{ &nova_t_table[1], NULL },
-+			{ &nova_t_table[HAUPPAUGE_WINTV_NOVA_T_USB2_COLD], NULL },
-+			{ &nova_t_table[HAUPPAUGE_WINTV_NOVA_T_USB2_WARM], NULL },
+ 		{"Opera1 DVB-S USB2.0",
+-			{&opera1_table[0], NULL},
+-			{&opera1_table[1], NULL},
++			{&opera1_table[CYPRESS_OPERA1_COLD], NULL},
++			{&opera1_table[OPERA1_WARM], NULL},
  		},
- 		{ NULL },
  	}
+ };
 diff --git a/include/media/dvb-usb-ids.h b/include/media/dvb-usb-ids.h
-index 10d73c108149..cc1df632d08b 100644
+index cc1df632d08b..6aa15988b577 100644
 --- a/include/media/dvb-usb-ids.h
 +++ b/include/media/dvb-usb-ids.h
-@@ -267,6 +267,8 @@
- #define USB_PID_HAUPPAUGE_NOVA_T_STICK_3		0x7070
- #define USB_PID_HAUPPAUGE_TIGER_ATSC			0xb200
- #define USB_PID_HAUPPAUGE_TIGER_ATSC_B210		0xb210
-+#define USB_PID_HAUPPAUGE_WINTV_NOVA_T_USB2_COLD	0x9300
-+#define USB_PID_HAUPPAUGE_WINTV_NOVA_T_USB2_WARM	0x9301
- #define USB_PID_INTEL_CE9500				0x9500
- #define USB_PID_ITETECH_IT9135				0x9135
- #define USB_PID_ITETECH_IT9135_9005			0x9005
-@@ -447,8 +449,6 @@
- #define USB_PID_WINFAST_DTV_DONGLE_STK7700P		0x6f00
- #define USB_PID_WINFAST_DTV_DONGLE_STK7700P_2		0x6f01
- #define USB_PID_WINFAST_DTV_DONGLE_WARM 		0x6026
--#define USB_PID_WINTV_NOVA_T_USB2_COLD			0x9300
--#define USB_PID_WINTV_NOVA_T_USB2_WARM			0x9301
- #define USB_PID_WINTV_SOLOHD				0x0264
- #define USB_PID_WINTV_SOLOHD_2				0x8268
- #define USB_PID_XBOX_ONE_TUNER				0x02d5
+@@ -168,6 +168,7 @@
+ #define USB_PID_CYPRESS_DW2102				0x2102
+ #define USB_PID_CYPRESS_DW2104				0x2104
+ #define USB_PID_CYPRESS_DW3101				0x3101
++#define USB_PID_CYPRESS_OPERA1_COLD			0x2830
+ #define USB_PID_DELOCK_USB2_DVBT			0xb803
+ #define USB_PID_DIBCOM_ANCHOR_2135_COLD 		0x2131
+ #define USB_PID_DIBCOM_HOOK_DEFAULT			0x0064
+@@ -307,7 +308,6 @@
+ #define USB_PID_NOXON_DAB_STICK 			0x00b3
+ #define USB_PID_NOXON_DAB_STICK_REV2			0x00e0
+ #define USB_PID_NOXON_DAB_STICK_REV3			0x00b4
+-#define USB_PID_OPERA1_COLD				0x2830
+ #define USB_PID_OPERA1_WARM				0x3829
+ #define USB_PID_PCTV_2002E				0x025c
+ #define USB_PID_PCTV_2002E_SE				0x025d
 -- 
 2.35.1
 

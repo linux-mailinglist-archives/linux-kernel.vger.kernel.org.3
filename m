@@ -2,178 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DAFF4E9302
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 13:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB814E9305
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 13:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240483AbiC1LLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 07:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
+        id S240488AbiC1LL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 07:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235578AbiC1LLT (ORCPT
+        with ESMTP id S229999AbiC1LLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 07:11:19 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A713E43EC3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 04:09:37 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nYnFX-0000jR-1o; Mon, 28 Mar 2022 13:09:27 +0200
-Message-ID: <74e74ea8-1554-bf08-b0ea-36e77259cb18@pengutronix.de>
-Date:   Mon, 28 Mar 2022 13:09:25 +0200
+        Mon, 28 Mar 2022 07:11:54 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2133.outbound.protection.outlook.com [40.107.223.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CDB26AE7;
+        Mon, 28 Mar 2022 04:10:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a3g6dAOEB/t2ME19LTMLsbz1/f3M+YgH4cD6N+Q0ine1ce2io88Oho9PiyfXfCWNnE/T82aq88yxefTCcCCy7nJ/6JMnz7Y9MDpkheDrVb0X3V7QZex9FBNHGtRD155YmtpNkcfIXlkoVBIvWXZiV58E6/dzXJBnv6SzJwm9GMVhXdLPfINq94WHtP2YLK3oFB698LG4tWSUtFwSxLuh3+t7QaB6HwxzbblkvMbrzQVb9yBV+g70a///TGVtxCcPwJIfb5Phs2vL37eiT3higVLkglNvxQ5mcvybql/+Io6UTvDfBafB1113+MBVw3CGtL1W9bMMKyUHDSTiZ/y7og==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6sbpNeXmNpSr5vPMTrAC3T7SpZF1OiyvCZUrjDUgRFw=;
+ b=LMeOOFSwwAXIJllQmUzP0orFbqHTGYo5l00XYt4KAvaGANwSk6yzXhbPDBTZKg8jUK+BaCe9cFMjFbNtZ8Ww7Y0QN9IoU/+SYgGg4UCTWVS7I3J9CaT+wqP1hBgLz9Z4u/95hUzMSukeHAXEFfyGScq6as+bB6J7soG/ZQTHg2ie5XMs3QXr1q0V0tZlIBsFlxcBL6arVZp8PLGZlbXD8JwMaIzUPi1FbcZSq0Y4PtOB4UbkY9yZncV7gVsr43W8tblihvSaOl32IKSrQr4LudIndk06e1drA2rF3Cr5m9qOi/h8sT3/QTac44iQAEQ07Uccjc+xwZ3z3ZJauryYqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6sbpNeXmNpSr5vPMTrAC3T7SpZF1OiyvCZUrjDUgRFw=;
+ b=qSDSocQ9lfTuaiBJSLHBsoaPBW7NaLQSGEE2hLwWqWd+M+1PLFRKWrTG1hmsHx0gp8jQE+giS5cJRU5Ym65baQ+kkuXVsCuBCQZswvzqfBddMv3pfbyZuahPJSlW1bhV8/3KKOJK20NbSL2ndS5s7B1IOpShsIrhbHAEH8oJ178=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by DM6PR04MB5371.namprd04.prod.outlook.com (2603:10b6:5:103::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Mon, 28 Mar
+ 2022 11:10:12 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::a865:6d10:c4a9:1142]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::a865:6d10:c4a9:1142%9]) with mapi id 15.20.5102.023; Mon, 28 Mar 2022
+ 11:10:11 +0000
+Date:   Mon, 28 Mar 2022 19:10:04 +0800
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>, a.hajda@samsung.com,
+        narmstrong@baylibre.com, dan.carpenter@oracle.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+        sam@ravnborg.org, pihsun@chromium.org, tzungbi@google.com,
+        maxime@cerno.tech, drinkcat@google.com, hsinyi@chromium.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        bliang@analogixsemi.com, qwen@analogixsemi.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>
+Subject: Re: [PATCH v12 3/4] drm/bridge: anx7625: add MIPI DPI input feature
+Message-ID: <20220328111004.GA1536268@anxtwsw-Precision-3640-Tower>
+References: <20211105031904.2641088-1-xji@analogixsemi.com>
+ <20211105031904.2641088-3-xji@analogixsemi.com>
+ <YiTruiCIkyxs3jTC@pendragon.ideasonboard.com>
+ <YiWiYpEfTOOqgyAN@google.com>
+ <CAG3jFys-BYsBp07AAFQ2O_TFsXOwhcVDnsOh8WVNNSag3HZw+Q@mail.gmail.com>
+ <CAG3jFyu47cv8oSecONM95KVoP=NOvgwafAp4TQ33CZ0Y4zWmnQ@mail.gmail.com>
+ <20220321115226.GA1484106@anxtwsw-Precision-3640-Tower>
+ <CAG3jFysvDa2FS3NS6f2sXAid_TmrXyb9vCADN87v=mJ-txGp0A@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG3jFysvDa2FS3NS6f2sXAid_TmrXyb9vCADN87v=mJ-txGp0A@mail.gmail.com>
+X-ClientProxiedBy: HK2PR06CA0014.apcprd06.prod.outlook.com
+ (2603:1096:202:2e::26) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 3/5] arm64: dts: imx8mp: Enable HS400-ES
-Content-Language: en-US
-To:     Adam Ford <aford173@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     linux-mmc <linux-mmc@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>
-References: <20220327123835.28329-1-aford173@gmail.com>
- <20220327123835.28329-3-aford173@gmail.com>
- <c964bf2c-f7bf-451c-1691-02903f20c634@pengutronix.de>
- <CAHCN7xL05pBK0uK7zuE7Uq4P9Rzo6bHbJdbOt5XnQRB7Sh3msw@mail.gmail.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <CAHCN7xL05pBK0uK7zuE7Uq4P9Rzo6bHbJdbOt5XnQRB7Sh3msw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2660b9fa-ed0c-471d-9f1f-08da10ab86c2
+X-MS-TrafficTypeDiagnostic: DM6PR04MB5371:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR04MB5371B14AE61B7BCBBFFDB93FC71D9@DM6PR04MB5371.namprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CzM/HsqOMbhRIXjgDt58pdavNSogl1KZcTkRThleGuFg5+ddC4oLTgNaX+jIRm3D4GsKq0FCIpXLytZTpXLvwIuoA2ObV4+2vRlBCwCnFaYlFDYjaAkXN+XRdd+K3Fib9pKL+iW0GWfkPxEnKZ2PmZsi67EmtnSN48Z/0v13Jj1M4omj5B5z3jELb/L50fO0YgG+d+oAosBzDTVGoL/psX3mEphNWYqAJ8aNsBscw353U695wsASONak2CkSQ0P8XLcpcnnokdo8Q+DzDOXotG2HpE7N256NBqGCnGYoRwjeiudBynj7ix08YUciHHc8obi7ziDpkjnTSGomDmxJaTHIohDcOtv5Bo4SBQ6S4AJw/WO2oZmfZT/hfuxV8NVdEpLnxgdgeyKsXd9hzwBdzzBMiMnu5VuGyFLPctsJEdX85N/xy3xrBZQj7fxMGHsNPB43pDm62nPamIaNMUgmIQBOhjAnZBDPm9moqmGCcCrJQ1W2lubuaEVvluC3TcxVlPL2v6zhsCNxqaBUOT4Q3THLUzF6VSoMgm7AoLBIKfeU/LaYtCo46LjoFhDUeaTowogHU/Uadr7C9WawSD1LprTUhfrTtgZ7fxulYJOEfZ1WWEr9FLsTl5noxCiQ70PYftYzLK4iL+m1VrCqOZ/G+Tl55y5Zjj3kTvAg3DEltKc00c4Ziim1uyVwPhuGxosGmOzC+2BVFl654cY8l8A5F0HJRDWz8PCMr/+b+BLqCLVMpTQZ3xb0x5yVURyFc/R7s4B9aDtXM8/+gM0pjwXKm7ulGPG/EGuAduYZQj0F59c=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(6512007)(6506007)(508600001)(6666004)(7416002)(66476007)(66556008)(4326008)(52116002)(8936002)(55236004)(66946007)(5660300002)(9686003)(316002)(86362001)(45080400002)(966005)(6486002)(8676002)(33716001)(6916009)(54906003)(33656002)(83380400001)(38350700002)(38100700002)(2906002)(26005)(1076003)(186003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d7dG3m2kltuI4hyam+uIKuF7Bgc5rIA1YWWkWVEQfZ27XwjtdL9asShH56wA?=
+ =?us-ascii?Q?pG0f2eFtt3oPxqKTeLi7PErxKuP18RJiZ43F3rjsggdHlYf9m5HevSFlgnof?=
+ =?us-ascii?Q?ftniNFOQWoohTeuYiVBHb0RYQZMtZr6ZxGBw8ChsRPU/7I3GzuMXzmskFQIJ?=
+ =?us-ascii?Q?oMfmDGdZaVl+fFrPC/3ThqZoxRmyPgtAy1kRHFy4mD96l5qMadLr0RlejBbo?=
+ =?us-ascii?Q?25CbNgQcbmLSjvYGRziEGx90XxabdDOZyR8FLhDBGiyRj1isVpaahX51ih6w?=
+ =?us-ascii?Q?QZb6fBAhlC2D+KOkytpiVK3CB1ZFEzOAO/JVhjLJgurJxkPoOdj3y2OqDRSZ?=
+ =?us-ascii?Q?kVQgufNbPHqvyB2MWwOCgxOvNtIv6gl3wQC1l0PcOo4EXyM8CvV7aD8Dlf/m?=
+ =?us-ascii?Q?cXPT+N2SUWLTp6PRJqJfvH2v66XPb4le/TcpPdy4VdjXdyEr24QaJzCxhrrD?=
+ =?us-ascii?Q?A6/QLzGjZttsYvmw/tLorxlwOX3DnDtOlvE0vKP/IKbj0wSzQ8awl6ujKUit?=
+ =?us-ascii?Q?TBKefhNb0wzXjOiItWuUYot2CpKBxr5P7Y53kjP+SOu4D3FV/+ImdXx6Nlhw?=
+ =?us-ascii?Q?yf7JbRUp8orfDFnxkLrp+9rHmPHjuOxC8whN1Fklye5ITGbnbYhu+jZlrXfO?=
+ =?us-ascii?Q?C/Eb5yK/DBQLCjBopyDjtelwj2XVDH4cu/CuA+yblr4d01sJBBPsLKl9Vfbo?=
+ =?us-ascii?Q?KvZzTCH0nBhzi8b8QFKjCF65dNsjf1SCooBwexqI5va4gRi8PCIXQeFNGyaz?=
+ =?us-ascii?Q?RCFeGAFFXoopzTKHBXVKj2XL2cUpkha3R3cojcRCAnan4/9lNshlPZNrsnkO?=
+ =?us-ascii?Q?KyL6FDF7/tWfp432HCrBGxb3nYYYZscee86u/yRgqq5VIS823hgJeJYdi5BM?=
+ =?us-ascii?Q?h9E+dXTrX0cIpphHNo5ayOLp7RA4k8dD2cpa/nJn0jeQSiPlM8I5JXCOab5v?=
+ =?us-ascii?Q?/bd2aBCPgObJRGjvDv1D/99nfJfybehKJ686SU5OWIasf52sQnDmCmnPo/yc?=
+ =?us-ascii?Q?WdFjXXpJTxVnTZX8L4USMvDaxp+Gg5BaiCJFd4JfZAmf2CySqSNZQepEcvhH?=
+ =?us-ascii?Q?WJKTNQPx8s+KOlNquiIcyucxAwo1cr2PJyllkQON3Nt9JAX4YqqwU3R6DA6r?=
+ =?us-ascii?Q?gTHbXFJmgLK4oV9hzwIyj7T9sh8fFgjwqhIkYf/9BuWhMAhHHDXSQEzrA76A?=
+ =?us-ascii?Q?kbaWDkenXGJqg29qRve4gJPE0DdvCqtxb/PQGUI9W2pWXWXH4vbAVTjA7bxt?=
+ =?us-ascii?Q?yUYh/3sj916vfLn8jk2G/CfxdLG9uA6SZCVjxUZ/P6GFvVaN/bZy1TRjZ3FW?=
+ =?us-ascii?Q?HAfPnb6Lu6IirjYCoG7+HU4ntuxjyCEsZ6ZvDdLzwna+6TvSJvEzC7BM6rp0?=
+ =?us-ascii?Q?kkfkB2ob82N9ZSVLHaIs7C3Pfz58LpkqE4/lhr48S/e+R3ySS9DUrJMuAOrY?=
+ =?us-ascii?Q?By2WJUHN8F3rOCFm6JAImgsZTA6rlyDN9C95FRi2J4HN6qWiRgc4sdAq6fAT?=
+ =?us-ascii?Q?AhSKsQp+TW7ApveX7I2fOoj1Oy53lfihQbXZI96GJlj/QN5INgXRcRHQLK5O?=
+ =?us-ascii?Q?m1xmVv8prRxB6VkpKkBsKUrdLvBYeB77RPVTgAMTneWiUO9/j/mDrcleOrY5?=
+ =?us-ascii?Q?7N/aSGzG3HG3w+0Qp+o948PSHXZU0e8VQRbGt7h+t83NRAX//2KDVNWz0Bov?=
+ =?us-ascii?Q?nbklUurKGnAEs1YBUjntIHFXohca4GIDy5CNifRPCVG5fnKemWpoFWQN24j1?=
+ =?us-ascii?Q?AWP/R3rhbA=3D=3D?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2660b9fa-ed0c-471d-9f1f-08da10ab86c2
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2022 11:10:11.5512
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Eqb9rfruL653M0A0ErAF1UNsYfnsvOgUIOVkhogghfYhCIuOoWMAhjpg7OLRxyzmVtij/NefBrwPngE9DIDe9A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB5371
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Adam,
-
-On 28.03.22 12:47, Adam Ford wrote:
-> On Mon, Mar 28, 2022 at 2:20 AM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
->>
->> Hello Adam,
->>
->> On 27.03.22 14:38, Adam Ford wrote:
->>> The SDHC controller in the imx8mp has the same controller
->>> as the imx8mm which supports HS400-ES. Change the compatible
->>> fallback to imx8mm to enable it.
->>
->> I believe that's a shortcoming of the Linux driver, which should explicitly list
->> fsl,imx8mp-usdhc in its compatibles and enable HS400-ES for it.
->>
->> I find dropping compatibles problematic, because like Linux matching
->> fsl,imx8mm-usdhc, but not fsl,imx8mp-usdhc, other software may match
->> fsl,imx7d-usdhc, but not fsl,imx8[mp]-usdhc.
->>
->> I'd prefer that either the kernel driver gains extra compatibles or that
->> the DTS lists extra compatibles and we refrain from dropping existing
->> (correct) ones.
->>
+On Mon, Mar 28, 2022 at 11:54:12AM +0200, Robert Foss wrote:
+> > > > > > > -   DRM_DEV_DEBUG_DRIVER(dev, "found dsi host node.\n");
+> > > > > > > +   bus_type = V4L2_FWNODE_BUS_TYPE_PARALLEL;
+> > > > > > > +   mipi_lanes = MAX_LANES_SUPPORT;
+> > > > > > > +   ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
+> > > > > > > +   if (ep0) {
+> > > > > > > +           if (of_property_read_u32(ep0, "bus-type", &bus_type))
+> > > > > > > +                   bus_type = 0;
+> > > > > > > +
+> > > > > > > +           mipi_lanes = of_property_count_u32_elems(ep0, "data-lanes");
+> > > > > > > +   }
+> > > > > > > +
+> > > > > > > +   if (bus_type == V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus type is Parallel(DSI) */
+> > > > > >
+> > > > > > This is not correct *at all*. V4L2_FWNODE_BUS_TYPE_PARALLEL has nothing
+> > > > > > to do with DSI. DSI stands for Digital *Serial* Interface. If anything,
+> > > > > > the V4L2_FWNODE_BUS_TYPE_PARALLEL type would map better to DPI, even if
+> > > > > > it's not an exact match.
+> > > > > >
+> > > > > > This patch has landed in v5.17-rc1, along with the corresponding
+> > > > > > bindings. As DT bindings are an ABI, we should really fix this before
+> > > > > > v5.17 is released. There is no DSI bus types defined in DT, and adding
+> > > > > > one as a fix so late in the v5.17-rc cycle seems a bit of a stretch to
+> > > > > > me (unless Rob disagrees).
+> > > > > >
+> > > > > > It would seem best to revert this series and the corresponding bindings,
+> > > > > > and retry in v5.18.
+> > > > >
+> > > > > There is a DT patch using this property that is already queued up for 5.17
+> > > > > in the soc tree:
+> > > > >
+> > > > > https://nam10.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F20220214200507.2500693-1-nfraprado%40collabora.com%2F&amp;data=04%7C01%7Cxji%40analogixsemi.com%7C450c5609d8c24e9a34fa08da10a0f126%7Cb099b0b4f26c4cf59a0fd5be9acab205%7C0%7C0%7C637840580680816692%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=bARYbwXq6IJGxn3UBp%2F75lZhoTpzmZkTQsN0yvs7Cgg%3D&amp;reserved=0
+> > > > >
+> > > > > merged here:
+> > > > >
+> > > > > https://nam10.safelinks.protection.outlook.com/?url=http%3A%2F%2Fgit.kernel.org%2Fsoc%2Fsoc%2Fc%2F32568ae37596b529628ac09b875f4874e614f63f&amp;data=04%7C01%7Cxji%40analogixsemi.com%7C450c5609d8c24e9a34fa08da10a0f126%7Cb099b0b4f26c4cf59a0fd5be9acab205%7C0%7C0%7C637840580680816692%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=lt3Tp8DveE1RJ%2F1MqDzYdKtHDxIyqhBbur%2Fm4N432AI%3D&amp;reserved=0
+> > > > >
+> > > > > We will need to revert that one as well.
+> > > >
+> > > > I just submitted a series reverting the dt-binding change + the
+> > > > related commit to "mt8183: jacuzzi".
+> > > > Can I get a quick r-b/a-b in order to get this into v5.17.
+> > > >
+> > > > https://nam10.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F20220307154558.2505734-3-robert.foss%40linaro.org%2F&amp;data=04%7C01%7Cxji%40analogixsemi.com%7C450c5609d8c24e9a34fa08da10a0f126%7Cb099b0b4f26c4cf59a0fd5be9acab205%7C0%7C0%7C637840580680816692%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=dgA%2BrQ3KBMPLoR5bwL5Wt2Vs6EuNy%2Fh9yfOftxeUXjM%3D&amp;reserved=0
+> > > >
+> > >
+> > > v2 of revert submitted.
+> > >
+> > > https://nam10.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F20220308094911.2680291-1-robert.foss%40linaro.org%2F&amp;data=04%7C01%7Cxji%40analogixsemi.com%7C450c5609d8c24e9a34fa08da10a0f126%7Cb099b0b4f26c4cf59a0fd5be9acab205%7C0%7C0%7C637840580680816692%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=vIcCvXrwZs8XhXuoQ8On7vB9%2Bwrsov1DD5UBX%2B1G93Q%3D&amp;reserved=0
+> > >
+> > > Xin: Will you spin a series that adds DPI support and re-enables DPI
+> > > for anx7625? Additionally, "mt8183: jacuzzi" will have to have DPI
+> > > re-enabled.
+> > Hi Robert Foss, I'm little confused, do I need resend this serial or
+> > send a patch based on currently define(V4L2_FWNODE_BUS_TYPE_PARALLEL)?
+> >
+> > And use V4L2_FWNODE_BUS_TYPE_PARALLEL for DPI, other value for DSI
+> > setup?
 > 
-> I would argue that imx7d is not correct since the IP blocks between
-> imx7d and imx8mm have different flags/quirks.  One of which includes
-> HS400-ES, but there are other differences as well.
-
-The DTS currently says that an fsl,imx7d-usdhc is a subset of an
-fsl,imx8mm-usdhc. So a driver could treat both HW the exact same
-by focusing on the i.MX7D parts. Linux apparently did exactly
-that so far. Is this not accurate?
-
-
->> What do you think?
+> V4L2_FWNODE_BUS_TYPE_PARALLEL is not meant to be used for DPI, but
+> rather is used to represtent CPI. So another enum (something along the
+> lines of V4L2_FWNODE_BUS_TYPE_DPI) needs to be defined, and then this
+> series needs to use this new enum.
 > 
-> From my understanding of the fallback compatibility strings is to
-> avoid having to add more and more compatible strings to the drivers
-> when they do not serve a functional purpose. Based On a conversation
-> with Krzysztof [1], he suggested we update the YAML file based on the
-> fallback, but he wanted NXP to give their feedback as to what the
-> right fallback strings should be.  Haibo from NXP sent me a hierarchy
-> [1] which is what I used to update the YAML file.  Based on the YAML
-> file, the fallback in each DTSI file was updated to ensure the use of
-> the proper IP block.
-
-Myself I am in favor of moving to three compatibles instead of dropping one.
-For some theoretical fsl,imx8mf-usdhc that's supposed to be exactly the same
-as a fsl,imx8mm-usdhc, I don't mind omitting the fsl,imx7d-usdhc compatible,
-but for existing device trees, this may introduce needless potential breakage
-for other software that also uses Linux device trees.
-
-Cheers,
-Ahmad
-
+> I'd like to see the following:
+>  - Introduction of V4L2_FWNODE_BUS_TYPE_DPI
+>  - Reworking this series to use V4L2_FWNODE_BUS_TYPE_DPI
+>  - Reworking "mt8183: jacuzzi" to use V4L2_FWNODE_BUS_TYPE_DPI
 > 
-> adam
+> Does that make sense?
+Hi Rob, OK, I'll prepare the patch for review.
+Thanks,
+Xin
 > 
-> [1] - https://lore.kernel.org/linux-arm-kernel/CAHCN7xLWoUGi-jfxR2a0gvEFkPT3USUEb+8U3CCqCb5wWEJ8xw@mail.gmail.com/T/
 > 
->>
->> Cheers,
->> Ahmad
->>
->>> Signed-off-by: Adam Ford <aford173@gmail.com>
->>> ---
->>>  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 6 +++---
->>>  1 file changed, 3 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
->>> index 794d75173cf5..d5ee1520f1fe 100644
->>> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
->>> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
->>> @@ -769,7 +769,7 @@ i2c6: i2c@30ae0000 {
->>>                       };
->>>
->>>                       usdhc1: mmc@30b40000 {
->>> -                             compatible = "fsl,imx8mp-usdhc", "fsl,imx7d-usdhc";
->>> +                             compatible = "fsl,imx8mp-usdhc", "fsl,imx8mm-usdhc";
->>>                               reg = <0x30b40000 0x10000>;
->>>                               interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
->>>                               clocks = <&clk IMX8MP_CLK_DUMMY>,
->>> @@ -783,7 +783,7 @@ usdhc1: mmc@30b40000 {
->>>                       };
->>>
->>>                       usdhc2: mmc@30b50000 {
->>> -                             compatible = "fsl,imx8mp-usdhc", "fsl,imx7d-usdhc";
->>> +                             compatible = "fsl,imx8mp-usdhc", "fsl,imx8mm-usdhc";
->>>                               reg = <0x30b50000 0x10000>;
->>>                               interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
->>>                               clocks = <&clk IMX8MP_CLK_DUMMY>,
->>> @@ -797,7 +797,7 @@ usdhc2: mmc@30b50000 {
->>>                       };
->>>
->>>                       usdhc3: mmc@30b60000 {
->>> -                             compatible = "fsl,imx8mp-usdhc", "fsl,imx7d-usdhc";
->>> +                             compatible = "fsl,imx8mp-usdhc", "fsl,imx8mm-usdhc";
->>>                               reg = <0x30b60000 0x10000>;
->>>                               interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
->>>                               clocks = <&clk IMX8MP_CLK_DUMMY>,
->>
->>
->> --
->> Pengutronix e.K.                           |                             |
->> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
->> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
->> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-> 
-
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> Rob.

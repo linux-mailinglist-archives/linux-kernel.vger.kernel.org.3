@@ -2,160 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C355D4E9A18
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F06B4E9A21
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244065AbiC1Ovu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 10:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S244082AbiC1OxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 10:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237283AbiC1Ovs (ORCPT
+        with ESMTP id S244091AbiC1OxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 10:51:48 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FEB3F8A7;
-        Mon, 28 Mar 2022 07:50:06 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 157AE1F404A0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648479005;
-        bh=rh1r1C45HfSaIbukyLwkQj2wc8+C93F7ZOfSvSOU2o4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Gm788Xsmn/QVrAO0hM+4de4tvTGjuuQWcofmlA/NObYcXRpCLczAB9EceIFF+RA+f
-         6YROwpBLFZrNKk2LvanhAbBgBOR4rFQ/fctRk4p2FQ4ZpVUj5ufjJJVhn6mIwDi456
-         F0oRcUMx8s2PESeOjf06VwhO2LHllFHJpJj/B/CqrFEko2GOKnz/UmXpXCUZSAMbIU
-         7B7bB1v2H4/Rdq3FBOn8QQkyneNIh60bQYvExblMH840ebePsWjvmgEwHVRAGhVepu
-         MLemwNev0VUqSuhOdykoq0wC0TU1muVwYWFICjzAcITBsShepSyR8TBnmO4d2P8hEG
-         /LqBP7Tixh4dA==
-Message-ID: <0b042c71-4d07-76a6-53bb-94bbd4bad6c0@collabora.com>
-Date:   Mon, 28 Mar 2022 16:50:02 +0200
+        Mon, 28 Mar 2022 10:53:02 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5DD3F8A7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:51:21 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2e5e31c34bfso151531767b3.10
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:51:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Dh492AvAmd1IfP231Dj/fJ74UloGtVlkt9YVNW5vE7I=;
+        b=rTK8HzanSVvHJeaRUqDoYN+cyp2drqzhCBdkBIia2K9UHYErmLeBK1OF/IhtkMKjMd
+         4+DvzSiFP3vAayYc5opVfj41MCgxmEQBqkQQRWWbIG0LAIcbrOs8KZdtMVelLS2er9dZ
+         jaxB9J/SWWUrxSXh1SWupnN36l+s9gh7UnQCAiKuuQusGpvuHHsROcp8xmilrEEIYbK3
+         Aetv6B61+/xAPj5dfK/gSAJJKbvDVjsZZI7/EcFX/nzsileuM+QGjh/tkT4SafDIs5qm
+         Drssu3limcmRrZ657CulEGvWJwC4sWBiDlSFDu3Z3q0wpQoorJ/UqttXZSqCWrnkNHX5
+         zOFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Dh492AvAmd1IfP231Dj/fJ74UloGtVlkt9YVNW5vE7I=;
+        b=uqIzuOi5WILsc8mK3ZBu6BFLfGl/06LFWDudRp0iLLktNKnElmb6oPpenj8o0oqWt3
+         i/sajb9lC/S5dbEJ5onAECMutYi+AQdSdZLaHxIWksoNWFC5PdunZUVioO4x/eisFHed
+         s73WLAcDFFhsGiHa3jlaIhxyOAW/k80I6upSzK7VM89uH426icrz4YLPVJiHQvr4AZDN
+         3YOTi3/ijKNLue8k3sbVAs6XE23mrNaNrHQohcALHWGpOgLHx/aMcAu4QCgsTNRlenca
+         CS7+D3OZ+qYz5x7mt/KjpA6xdlMDxhj5yXLU+M23mG6bR7RW5uOCpAwP4ZBoOha4ldg4
+         DKJA==
+X-Gm-Message-State: AOAM533b7EpKeXZHiUZy+rT8E+7SyKao4a3BZmf8j1A8tLHmJC8d4u0g
+        LzKoXS4e/iwChzQFT/5Na4jIWC+AAUAgVfRsSjAaJQ==
+X-Google-Smtp-Source: ABdhPJwmyDAZlA/7hxHve0d0gyq6aqe1zkCsFLU02yLIaouW62yvoiJYimjxjmhfS2vJzYOHdSk9d4pF7QNrsYPzPxA=
+X-Received: by 2002:a81:1c4f:0:b0:2e5:9db3:7a8e with SMTP id
+ c76-20020a811c4f000000b002e59db37a8emr24636467ywc.319.1648479081138; Mon, 28
+ Mar 2022 07:51:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/4] arm64: dts: mediatek: Add device-tree for MT8195
- Demo board
-Content-Language: en-US
-To:     Fabien Parent <fparent@baylibre.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220327200312.3090515-1-fparent@baylibre.com>
- <20220327200312.3090515-3-fparent@baylibre.com>
- <94d231cf-ce4c-22f5-b9af-41ae68f1e659@collabora.com>
- <20220328144107.ed4xwzuiezzixqrx@radium>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220328144107.ed4xwzuiezzixqrx@radium>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220328112707.22217-1-linmiaohe@huawei.com>
+In-Reply-To: <20220328112707.22217-1-linmiaohe@huawei.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Mon, 28 Mar 2022 22:50:45 +0800
+Message-ID: <CAMZfGtXccwgR6TxNJc6aYV+WGJvAWWAz=RXEHNWDwjKfV49JuA@mail.gmail.com>
+Subject: Re: [PATCH] mm: shmem: make shmem_init return void
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/03/22 16:41, Fabien Parent ha scritto:
-> On Mon, Mar 28, 2022 at 03:47:09PM +0200, AngeloGioacchino Del Regno wrote:
->> Il 27/03/22 22:03, Fabien Parent ha scritto:
->>> Add basic device-tree for the MT8195 Demo board. The
->>> Demo board is made by MediaTek and has a MT8195 SoC,
->>> associated with the MT6359 and MT6360 PMICs, and
->>> the MT7921 connectivity chip.
->>>
->>> The IOs available on that board are:
->>> * 1 USB Type-C connector with DP aux mode support
->>> * 1 USB Type-A connector
->>> * 1 full size HDMI RX and 1 full size HDMI TX connector
->>> * 1 uSD slot
->>> * 40 pins header
->>> * SPI interface header
->>> * 1 M.2 slot
->>> * 1 audio jack
->>> * 1 micro-USB port for serial debug
->>> * 2 connectors for DSI displays
->>> * 3 connectors for CSI cameras
->>> * 1 connector for a eDP panel
->>> * 1 MMC storage
->>>
->>> This commit adds basic support in order to be able to boot.
->>>
->>> Signed-off-by: Fabien Parent <fparent@baylibre.com>
->>> ---
->>> v2:
->>>    * remove empty i2c nodes
->>>    * remove empty spi node
->>>    * remove unused pcie pinctrls
->>>    * fixup node nodes to not contains underscore
->>>    * rename mt6360 pmic node
->>>    * move mmc1 node right after mmc0 node
->>>    * use generic node name for gpio-keys
->>>    * uniformize pinctrl node names
->>>
->>>    arch/arm64/boot/dts/mediatek/Makefile        |   1 +
->>>    arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 447 +++++++++++++++++++
->>>    2 files changed, 448 insertions(+)
->>>    create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-demo.dts
->>>
->>
->> ..snip..
->>
->>> diff --git a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
->>> new file mode 100644
->>> index 000000000000..d94b4e01159a
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
->>> @@ -0,0 +1,447 @@
->>
->> ..snip..
->>
->>> +
->>> +	gpio-keys {
->>> +		compatible = "gpio-keys";
->>> +		input-name = "gpio-keys";
->>> +		pinctrl-names = "default";
->>> +		pinctrl-0 = <&gpio_keys_pins>;
->>> +
->>> +		key-0 {
->>
->> key-volup is more descriptive, can you please change that?
-> 
-> Which review should I follow, yours or the one from Krzysztof? Because both reviews are contradictory
-> 
+On Mon, Mar 28, 2022 at 7:44 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>
+> The return value of shmem_init is never used. So we can make it
+> return void now.
+>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  include/linux/shmem_fs.h | 2 +-
+>  mm/shmem.c               | 9 ++++-----
+>  2 files changed, 5 insertions(+), 6 deletions(-)
+>
+> diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
+> index ab51d3cd39bd..3e915cc550bc 100644
+> --- a/include/linux/shmem_fs.h
+> +++ b/include/linux/shmem_fs.h
+> @@ -56,7 +56,7 @@ static inline struct shmem_inode_info *SHMEM_I(struct inode *inode)
+>   * Functions in mm/shmem.c called directly from elsewhere:
+>   */
+>  extern const struct fs_parameter_spec shmem_fs_parameters[];
+> -extern int shmem_init(void);
+> +extern void shmem_init(void);
+>  extern int shmem_init_fs_context(struct fs_context *fc);
+>  extern struct file *shmem_file_setup(const char *name,
+>                                         loff_t size, unsigned long flags);
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index 529c9ad3e926..26e09a022087 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -3879,7 +3879,7 @@ static struct file_system_type shmem_fs_type = {
+>         .fs_flags       = FS_USERNS_MOUNT,
+>  };
+>
+> -int __init shmem_init(void)
+> +void __init shmem_init(void)
+>  {
+>         int error;
+>
+> @@ -3904,14 +3904,13 @@ int __init shmem_init(void)
+>         else
+>                 shmem_huge = SHMEM_HUGE_NEVER; /* just in case it was patched */
+>  #endif
+> -       return 0;
+> +       return;
+>
+>  out1:
+>         unregister_filesystem(&shmem_fs_type);
+>  out2:
+>         shmem_destroy_inodecache();
+>         shm_mnt = ERR_PTR(error);
+> -       return error;
+>  }
+>
+>  #if defined(CONFIG_TRANSPARENT_HUGEPAGE) && defined(CONFIG_SYSFS)
+> @@ -3989,14 +3988,14 @@ static struct file_system_type shmem_fs_type = {
+>         .fs_flags       = FS_USERNS_MOUNT,
+>  };
+>
+> -int __init shmem_init(void)
+> +void __init shmem_init(void)
+>  {
+>         BUG_ON(register_filesystem(&shmem_fs_type) != 0);
+>
+>         shm_mnt = kern_mount(&shmem_fs_type);
+>         BUG_ON(IS_ERR(shm_mnt));
+>
+> -       return 0;
+> +       return;
 
-There are a lot of "vol-down", "vol-up" (etc) instances, lots of which are on
-Qualcomm device-trees... so I guess this is just about personal preference...
-
-Honestly, before sending my review I forgot to check Krzysztof's one (sorry!!),
-but I think that this kind of node names is highly subjective... at least, I am
-not aware of any rule about having to use "generic" names.
-
-Check Documentation/devicetree/bindings/input/gpio-keys.yaml - in the example,
-you can find "specific" node names, like:
-
-         up {
-
-             label = "GPIO Key UP";
-
-In any case, as I said, it's my personal preference to have it named as something
-like "key-volup" or "vol-up" or .. a name that is describing the key, but, as a
-personal preference, it is nothing mandatory, not even from my side.
-
-If anyone else has reasons to disagree, shrug, it's fine :))
-
->>
->>> +			gpios = <&pio 106 GPIO_ACTIVE_LOW>;
->>> +			label = "volume_up";
->>> +			linux,code = <KEY_VOLUMEUP>;
->>> +			wakeup-source;
->>> +			debounce-interval = <15>;
->>> +		};
->>> +	};
->>> +};
+Weird. Using return at the end of a void function.

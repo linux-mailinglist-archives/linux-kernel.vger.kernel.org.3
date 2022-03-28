@@ -2,56 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C44E4E9560
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 13:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0EA74E957A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 13:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233207AbiC1Llf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 07:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
+        id S242791AbiC1Lnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 07:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241415AbiC1Laa (ORCPT
+        with ESMTP id S242069AbiC1LeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 07:30:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4195641D;
-        Mon, 28 Mar 2022 04:24:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C09BB81055;
-        Mon, 28 Mar 2022 11:24:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05094C36AE9;
-        Mon, 28 Mar 2022 11:24:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648466655;
-        bh=v2XPnttxf4shVO7YYrOoto3gK09GCYMeYaw4sP+HWFY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BIOXUaCjXgK6Gjo3ivz16aKp4qmEE8aNr6PGrV5qHK3wdW/kBjZ0mQh8qLt3WhKEq
-         IcnAicfW3k4SKP3/eAWxYnx1dOMLQblQXRpkOlGcPps8hwsWT5bwB4WxlZmY9f+7Ok
-         lVoV79c3e2Ay9RNPS8lAEu9fnun6I6pbggcxDkgoqwUN1DR8KGVd+1vHo4T7wH8L4r
-         42omsZ+7MKMPHkwIAXsKR//dKu3WpO7ixmzv+IXkUgI1ePm0yMPnYddYFFNPMuwASh
-         YmlRp/tz0dBJctqP73fd9umgE7wIYvPvL2t20n/ZrQE8hMJwNM1kb0G9+/kjdWI27z
-         XgN2cpI5YpX1g==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
-        pavel@ucw.cz, len.brown@intel.com, gregkh@linuxfoundation.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 15/16] PM: core: keep irq flags in device_pm_check_callbacks()
-Date:   Mon, 28 Mar 2022 07:23:44 -0400
-Message-Id: <20220328112345.1556601-15-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220328112345.1556601-1-sashal@kernel.org>
-References: <20220328112345.1556601-1-sashal@kernel.org>
+        Mon, 28 Mar 2022 07:34:03 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014295A084
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 04:25:19 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22S8q9MM019240;
+        Mon, 28 Mar 2022 11:23:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : mime-version : content-type
+ : in-reply-to; s=pp1; bh=I5dFES/eWSZnGXe3JZkKj+4IbIArY7yWHLMSomc3d7o=;
+ b=PUmcGQJwKQShK8CRbBzYWwflCbDoVrM2QaXvzw8w0Y8ICs/dujRYPwe7ExHvKPVIEmIF
+ IIdSmV/zaYXYbQ4oNMcPSzCcM+kd+ckFX4yr9xyORwxaxfwdPCz9xf1p+hEnpi7hFFyC
+ Qmf4U3J+Q0r5Z/pX+2thgNUxvjDGJZqkMXDVE+8i/zCCXvWYKvcuYdRcKLRo4QdvnKea
+ fxkYVtvDYc5OKrBpFcehBOmHUTim4COI840xTA7RMFdVUnAVzic7+SuwMEYkTqNGCIev
+ zw5uYUCvXmeMkPNbjzgN5lLI37rQJ+tPaGjBoe0wMcZq8NzKuUqRO4IwbFehoLqGpz7r Tg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f37j9wjj3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Mar 2022 11:23:54 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22SAmLng032631;
+        Mon, 28 Mar 2022 11:23:53 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f37j9wjhh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Mar 2022 11:23:53 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22SB7fYG005171;
+        Mon, 28 Mar 2022 11:23:50 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3f1tf8u7y5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Mar 2022 11:23:50 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22SBNmYA32964980
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Mar 2022 11:23:48 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4C4474C040;
+        Mon, 28 Mar 2022 11:23:48 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7AB054C046;
+        Mon, 28 Mar 2022 11:23:45 +0000 (GMT)
+Received: from linux.vnet.ibm.com (unknown [9.40.195.195])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Mon, 28 Mar 2022 11:23:45 +0000 (GMT)
+Date:   Mon, 28 Mar 2022 16:53:44 +0530
+From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+To:     Qing Wang <wangqing@vivo.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched: topology: add input parameter for
+ sched_domain_flags_f()
+Message-ID: <20220328112344.GA557306@linux.vnet.ibm.com>
+Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+References: <1648461219-4333-1-git-send-email-wangqing@vivo.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <1648461219-4333-1-git-send-email-wangqing@vivo.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: AwB0kzleKPyBqCHr9vUXxqYLBXV0KV3X
+X-Proofpoint-GUID: hinLlWNsO13sFPgm-QS03HRYBoYTbVnp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-28_04,2022-03-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 adultscore=0
+ suspectscore=0 mlxlogscore=999 priorityscore=1501 impostorscore=0
+ phishscore=0 mlxscore=0 malwarescore=0 spamscore=0 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203280063
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,105 +104,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+* Qing Wang <wangqing@vivo.com> [2022-03-28 02:53:37]:
 
-[ Upstream commit 524bb1da785a7ae43dd413cd392b5071c6c367f8 ]
+> From: Wang Qing <wangqing@vivo.com>
+> 
+> sched_domain_flags_f() are statically set now, but actually, we can get a
+> lot of necessary information based on the cpu_map. e.g. we can know whether
+> its cache is shared.
+> 
+> Allows custom extension without affecting current.
+> 
 
-The function device_pm_check_callbacks() can be called under the spin
-lock (in the reported case it happens from genpd_add_device() ->
-dev_pm_domain_set(), when the genpd uses spinlocks rather than mutexes.
+can you elaborate on how passing a cpumask pointer will help us to know if
+cache is shared or not? With this patch, we are just passing the cpumask,
+but dont seem to be using it in any of the cases. 
 
-However this function uncoditionally uses spin_lock_irq() /
-spin_unlock_irq(), thus not preserving the CPU flags. Use the
-irqsave/irqrestore instead.
+or did I miss anything?
 
-The backtrace for the reference:
-[    2.752010] ------------[ cut here ]------------
-[    2.756769] raw_local_irq_restore() called with IRQs enabled
-[    2.762596] WARNING: CPU: 4 PID: 1 at kernel/locking/irqflag-debug.c:10 warn_bogus_irq_restore+0x34/0x50
-[    2.772338] Modules linked in:
-[    2.775487] CPU: 4 PID: 1 Comm: swapper/0 Tainted: G S                5.17.0-rc6-00384-ge330d0d82eff-dirty #684
-[    2.781384] Freeing initrd memory: 46024K
-[    2.785839] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    2.785841] pc : warn_bogus_irq_restore+0x34/0x50
-[    2.785844] lr : warn_bogus_irq_restore+0x34/0x50
-[    2.785846] sp : ffff80000805b7d0
-[    2.785847] x29: ffff80000805b7d0 x28: 0000000000000000 x27: 0000000000000002
-[    2.785850] x26: ffffd40e80930b18 x25: ffff7ee2329192b8 x24: ffff7edfc9f60800
-[    2.785853] x23: ffffd40e80930b18 x22: ffffd40e80930d30 x21: ffff7edfc0dffa00
-[    2.785856] x20: ffff7edfc09e3768 x19: 0000000000000000 x18: ffffffffffffffff
-[    2.845775] x17: 6572206f74206465 x16: 6c696166203a3030 x15: ffff80008805b4f7
-[    2.853108] x14: 0000000000000000 x13: ffffd40e809550b0 x12: 00000000000003d8
-[    2.860441] x11: 0000000000000148 x10: ffffd40e809550b0 x9 : ffffd40e809550b0
-[    2.867774] x8 : 00000000ffffefff x7 : ffffd40e809ad0b0 x6 : ffffd40e809ad0b0
-[    2.875107] x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
-[    2.882440] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff7edfc03a8000
-[    2.889774] Call trace:
-[    2.892290]  warn_bogus_irq_restore+0x34/0x50
-[    2.896770]  _raw_spin_unlock_irqrestore+0x94/0xa0
-[    2.901690]  genpd_unlock_spin+0x20/0x30
-[    2.905724]  genpd_add_device+0x100/0x2d0
-[    2.909850]  __genpd_dev_pm_attach+0xa8/0x23c
-[    2.914329]  genpd_dev_pm_attach_by_id+0xc4/0x190
-[    2.919167]  genpd_dev_pm_attach_by_name+0x3c/0xd0
-[    2.924086]  dev_pm_domain_attach_by_name+0x24/0x30
-[    2.929102]  psci_dt_attach_cpu+0x24/0x90
-[    2.933230]  psci_cpuidle_probe+0x2d4/0x46c
-[    2.937534]  platform_probe+0x68/0xe0
-[    2.941304]  really_probe.part.0+0x9c/0x2fc
-[    2.945605]  __driver_probe_device+0x98/0x144
-[    2.950085]  driver_probe_device+0x44/0x15c
-[    2.954385]  __device_attach_driver+0xb8/0x120
-[    2.958950]  bus_for_each_drv+0x78/0xd0
-[    2.962896]  __device_attach+0xd8/0x180
-[    2.966843]  device_initial_probe+0x14/0x20
-[    2.971144]  bus_probe_device+0x9c/0xa4
-[    2.975092]  device_add+0x380/0x88c
-[    2.978679]  platform_device_add+0x114/0x234
-[    2.983067]  platform_device_register_full+0x100/0x190
-[    2.988344]  psci_idle_init+0x6c/0xb0
-[    2.992113]  do_one_initcall+0x74/0x3a0
-[    2.996060]  kernel_init_freeable+0x2fc/0x384
-[    3.000543]  kernel_init+0x28/0x130
-[    3.004132]  ret_from_fork+0x10/0x20
-[    3.007817] irq event stamp: 319826
-[    3.011404] hardirqs last  enabled at (319825): [<ffffd40e7eda0268>] __up_console_sem+0x78/0x84
-[    3.020332] hardirqs last disabled at (319826): [<ffffd40e7fd6d9d8>] el1_dbg+0x24/0x8c
-[    3.028458] softirqs last  enabled at (318312): [<ffffd40e7ec90410>] _stext+0x410/0x588
-[    3.036678] softirqs last disabled at (318299): [<ffffd40e7ed1bf68>] __irq_exit_rcu+0x158/0x174
-[    3.045607] ---[ end trace 0000000000000000 ]---
-
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/base/power/main.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index 23af54512053..ae382c4018fd 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -2121,7 +2121,9 @@ static bool pm_ops_is_empty(const struct dev_pm_ops *ops)
- 
- void device_pm_check_callbacks(struct device *dev)
- {
--	spin_lock_irq(&dev->power.lock);
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&dev->power.lock, flags);
- 	dev->power.no_pm_callbacks =
- 		(!dev->bus || (pm_ops_is_empty(dev->bus->pm) &&
- 		 !dev->bus->suspend && !dev->bus->resume)) &&
-@@ -2130,7 +2132,7 @@ void device_pm_check_callbacks(struct device *dev)
- 		(!dev->pm_domain || pm_ops_is_empty(&dev->pm_domain->ops)) &&
- 		(!dev->driver || (pm_ops_is_empty(dev->driver->pm) &&
- 		 !dev->driver->suspend && !dev->driver->resume));
--	spin_unlock_irq(&dev->power.lock);
-+	spin_unlock_irqrestore(&dev->power.lock, flags);
- }
- 
- bool dev_pm_smart_suspend_and_suspended(struct device *dev)
--- 
-2.34.1
-
+> Signed-off-by: Wang Qing <wangqing@vivo.com>
+> ---
+>  arch/powerpc/kernel/smp.c      |  4 ++--
+>  arch/x86/kernel/smpboot.c      |  8 ++++----
+>  include/linux/sched/topology.h | 10 +++++-----
+>  kernel/sched/topology.c        |  2 +-
+>  4 files changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
+> index de0f6f0..e503d23
+> --- a/arch/powerpc/kernel/smp.c
+> +++ b/arch/powerpc/kernel/smp.c
+> @@ -1000,7 +1000,7 @@ static bool shared_caches;
+>  
+>  #ifdef CONFIG_SCHED_SMT
+>  /* cpumask of CPUs with asymmetric SMT dependency */
+> -static int powerpc_smt_flags(void)
+> +static int powerpc_smt_flags(const struct cpumask *cpu_map)
+>  {
+>  	int flags = SD_SHARE_CPUCAPACITY | SD_SHARE_PKG_RESOURCES;
+>  
+> @@ -1018,7 +1018,7 @@ static int powerpc_smt_flags(void)
+>   * since the migrated task remains cache hot. We want to take advantage of this
+>   * at the scheduler level so an extra topology level is required.
+>   */
+> -static int powerpc_shared_cache_flags(void)
+> +static int powerpc_shared_cache_flags(const struct cpumask *cpu_map)
+>  {
+>  	return SD_SHARE_PKG_RESOURCES;
+>  }
+> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+> index 2ef1477..c005a8e
+> --- a/arch/x86/kernel/smpboot.c
+> +++ b/arch/x86/kernel/smpboot.c
+> @@ -535,25 +535,25 @@ static bool match_llc(struct cpuinfo_x86 *c, struct cpuinfo_x86 *o)
+>  
+>  
+>  #if defined(CONFIG_SCHED_SMT) || defined(CONFIG_SCHED_CLUSTER) || defined(CONFIG_SCHED_MC)
+> -static inline int x86_sched_itmt_flags(void)
+> +static inline int x86_sched_itmt_flags(const struct cpumask *cpu_map)
+>  {
+>  	return sysctl_sched_itmt_enabled ? SD_ASYM_PACKING : 0;
+>  }
+>  
+>  #ifdef CONFIG_SCHED_MC
+> -static int x86_core_flags(void)
+> +static int x86_core_flags(const struct cpumask *cpu_map)
+>  {
+>  	return cpu_core_flags() | x86_sched_itmt_flags();
+>  }
+>  #endif
+>  #ifdef CONFIG_SCHED_SMT
+> -static int x86_smt_flags(void)
+> +static int x86_smt_flags(const struct cpumask *cpu_map)
+>  {
+>  	return cpu_smt_flags() | x86_sched_itmt_flags();
+>  }
+>  #endif
+>  #ifdef CONFIG_SCHED_CLUSTER
+> -static int x86_cluster_flags(void)
+> +static int x86_cluster_flags(const struct cpumask *cpu_map)
+>  {
+>  	return cpu_cluster_flags() | x86_sched_itmt_flags();
+>  }
+> diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
+> index 56cffe4..6aa985a
+> --- a/include/linux/sched/topology.h
+> +++ b/include/linux/sched/topology.h
+> @@ -36,28 +36,28 @@ extern const struct sd_flag_debug sd_flag_debug[];
+>  #endif
+>  
+>  #ifdef CONFIG_SCHED_SMT
+> -static inline int cpu_smt_flags(void)
+> +static inline int cpu_smt_flags(const struct cpumask *cpu_map)
+>  {
+>  	return SD_SHARE_CPUCAPACITY | SD_SHARE_PKG_RESOURCES;
+>  }
+>  #endif
+>  
+>  #ifdef CONFIG_SCHED_CLUSTER
+> -static inline int cpu_cluster_flags(void)
+> +static inline int cpu_cluster_flags(const struct cpumask *cpu_map)
+>  {
+>  	return SD_SHARE_PKG_RESOURCES;
+>  }
+>  #endif
+>  
+>  #ifdef CONFIG_SCHED_MC
+> -static inline int cpu_core_flags(void)
+> +static inline int cpu_core_flags(const struct cpumask *cpu_map)
+>  {
+>  	return SD_SHARE_PKG_RESOURCES;
+>  }
+>  #endif
+>  
+>  #ifdef CONFIG_NUMA
+> -static inline int cpu_numa_flags(void)
+> +static inline int cpu_numa_flags(const struct cpumask *cpu_map)
+>  {
+>  	return SD_NUMA;
+>  }
+> @@ -180,7 +180,7 @@ void free_sched_domains(cpumask_var_t doms[], unsigned int ndoms);
+>  bool cpus_share_cache(int this_cpu, int that_cpu);
+>  
+>  typedef const struct cpumask *(*sched_domain_mask_f)(int cpu);
+> -typedef int (*sched_domain_flags_f)(void);
+> +typedef int (*sched_domain_flags_f)(const struct cpumask *cpu_map);
+>  
+>  #define SDTL_OVERLAP	0x01
+>  
+> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+> index 05b6c2a..34dfec4
+> --- a/kernel/sched/topology.c
+> +++ b/kernel/sched/topology.c
+> @@ -1556,7 +1556,7 @@ sd_init(struct sched_domain_topology_level *tl,
+>  	sd_weight = cpumask_weight(tl->mask(cpu));
+>  
+>  	if (tl->sd_flags)
+> -		sd_flags = (*tl->sd_flags)();
+> +		sd_flags = (*tl->sd_flags)(tl->mask(cpu));
+>  	if (WARN_ONCE(sd_flags & ~TOPOLOGY_SD_FLAGS,
+>  			"wrong sd_flags in topology description\n"))
+>  		sd_flags &= TOPOLOGY_SD_FLAGS;
+> -- 
+> 2.7.4
+> 
+> 

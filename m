@@ -2,588 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7664E8D6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 06:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFBF4E8D6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 07:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238088AbiC1E6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 00:58:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34666 "EHLO
+        id S238093AbiC1FBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 01:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234431AbiC1E6j (ORCPT
+        with ESMTP id S234431AbiC1FBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 00:58:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E029FD17
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 21:56:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648443416;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2gkNQpu4kANGFFL3VkEjiCuQFdxFNSWesUdsMKBws3Q=;
-        b=c0ejT8/5yJNtNY8QLDuKiQkGTn5xp0pubPylpyyVn7FuymOOubWTGfA6ry71k6nzYoynzp
-        mfENF0H5/VWswEq9v76+jlbWKLw7140z8STmHuwiO5IJs0BqpERVGwDWu6DtuKUVCyV71l
-        73VS85x8qy2fcgaC/O0zbblxQpM/SA4=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-583-Th-gYyUMMae0Cns7yLBAbw-1; Mon, 28 Mar 2022 00:56:55 -0400
-X-MC-Unique: Th-gYyUMMae0Cns7yLBAbw-1
-Received: by mail-lj1-f200.google.com with SMTP id o25-20020a2e7319000000b0024aa653c564so2589617ljc.23
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 21:56:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2gkNQpu4kANGFFL3VkEjiCuQFdxFNSWesUdsMKBws3Q=;
-        b=UawUbsqvFy92fxTdOyDAg5x3eIZPwh9oCe1oQ1bIDuHPsSOiOh8lAcvQiFV3Ay9G0q
-         109u18cjl+IJ/ZMxibGtfTFqU1O6fap5jvOXNvk8nahJ7nBdSOvgID05ewhRX/9cEW6e
-         1pKTNGBoe94+E+kMuQm5/EpNZzWc0ASxDHvybFiIHf896CZORULU1zqhl7VbWwdwqh34
-         MrdzGo5+NQBdl17u3mKBhHXRWcw96ugaBb9Krkj3i0qoOjnYvbTGFEbL2KHzjvECfYom
-         PtsNjESsVaZPj9vHC5gJJD5tFSfA3dIFriWpbgPU/XNSr50a7HtBtsEgBzirGQ+UHcpt
-         54iw==
-X-Gm-Message-State: AOAM531+vusloc05AarfyRS8CwPdl84CyZYuxhmBdqtuos0aq6sXeKbz
-        gFpDSZZYlARXYX+t4WZb9WwJi510uipICASTzs43O7M8LdWYyOO88J4BR5zLnu8MdarLF+jYdvr
-        SGBVnzjc2S/gqUZyYv8cdGDWoPL+XBCQLYn5O8hDM
-X-Received: by 2002:a05:6512:1395:b0:446:d382:79a5 with SMTP id p21-20020a056512139500b00446d38279a5mr17926718lfa.210.1648443412757;
-        Sun, 27 Mar 2022 21:56:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxt/bzJ9zwsNh8eSBVNz+omWW+KwYlD+ICzTaTEWGL/Qf6hUvuQA+7bxaQNlLmtrAeX/T1GVfdn1/f74Wo+kio=
-X-Received: by 2002:a05:6512:1395:b0:446:d382:79a5 with SMTP id
- p21-20020a056512139500b00446d38279a5mr17926694lfa.210.1648443412391; Sun, 27
- Mar 2022 21:56:52 -0700 (PDT)
+        Mon, 28 Mar 2022 01:01:39 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179A617A94
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 21:59:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648443598; x=1679979598;
+  h=message-id:date:subject:references:to:cc:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ItKVeN4kQ5zqSlKbMRK95RjmRwNynHEFDdYPfqUO3vo=;
+  b=OYVknlkgdyEYcmGXAmmoSzznGRN4qMBoiY6IRMBxTM7ISw/cA74kE2mu
+   uisWl6HvWbx2FnQsmiXIdx9KKOqZR/G1I9clZ3akHuXQ/qEzIot98/eD/
+   QzX/ib4hxhTNgKCBh3Nv3yW6SWhM9oGfyf6FxMuMFnUGwY02VcoN9fa0d
+   BGe7BArR1kW3yE0Mj11tIsfZK6zXz1NhYlpU9zmXZ6T/jTHP/CQ8pcAcM
+   XmQyUADsyBjnkzs15sxG6c25sJrCA+w4cDt8nWxvQYzIhn42m0iYvVniv
+   TH5GR+1WW0jFOTghNFlRV4QexpBtMC/7C3WX4rF46tBSLV3sJbp3k4ebH
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="345347459"
+X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
+   d="scan'208";a="345347459"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2022 21:59:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
+   d="scan'208";a="563246755"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga008.jf.intel.com with ESMTP; 27 Mar 2022 21:59:56 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Sun, 27 Mar 2022 21:59:56 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Sun, 27 Mar 2022 21:59:56 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.21; Sun, 27 Mar 2022 21:59:56 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PM9DH0uz/7VI2a4Yh16YeZTqe19y6qMT2y/Lfh9xznMPXs1cBtLBvvlMUIW8jowmRIOdrypW0OVSg0lJnpqokB6FgU0OLA6iz4I5CMhtKqSITApYEi3FklwMqPBo1c5qqkcauI234X467rf6z/K7NeFaEEh6CGWC7E5iSG9CRSSwPS63m+0pguLjtAoU24Hf1EDNzddPjELGuscHL5QEPOM39DajKzjMAPhRM7jx/rfF8sWnqvU6mkP5U/PVk2JaIDR9HjRCgGV/ByhtQ50SAnwIoLO8KWl5mlrEiPthOEkfSFL0gOTRUP/7NEXtrNjdDxpX7K4squuUVIuB81q4Pg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0Jlp/FIEhU1OsAgzC/VX8Rk299SL5B4cLhRrn2X0si0=;
+ b=iWirDrn1GUAMD5zw2+6GZKqRagjO4HcDrfIwRXS51Be8rpb+zkgeDsHDr78c/Bxgj0SJsjim6xiUQ5ZKqp5QkEdxx0AM/DP5EUJeqdH3qPWChCIhJw7kSLuP5DrKtV0V47tYwicqa25m4EjOEfOwF0c+QWnj2BvhE4KYfVgCz7V5inNr5j5oJ/UQY1G4his3bTZuSWfr/NwlqkdAN8Hauvc/A51XNg4uC0YtojqukA8wK8HURVFXT0YwsCEhzQnqG/hcDeQTj1aHv2f+sQJvDdpJCZBoK7TZ01Kc0WREcYS7nuUZh/279jVCTNyMDY0W8oD5fuR2fA0UpNIq7eW1YQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ0PR11MB5598.namprd11.prod.outlook.com (2603:10b6:a03:304::12)
+ by BN7PR11MB2595.namprd11.prod.outlook.com (2603:10b6:406:b1::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.22; Mon, 28 Mar
+ 2022 04:59:53 +0000
+Received: from SJ0PR11MB5598.namprd11.prod.outlook.com
+ ([fe80::90bc:9408:541e:5b94]) by SJ0PR11MB5598.namprd11.prod.outlook.com
+ ([fe80::90bc:9408:541e:5b94%7]) with mapi id 15.20.5102.022; Mon, 28 Mar 2022
+ 04:59:53 +0000
+Message-ID: <0daa1ccb-3ca1-480b-9965-62f62342f901@intel.com>
+Date:   Mon, 28 Mar 2022 12:59:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: [drm-misc:for-linux-next 2/3]
+ drivers/dma-buf/st-dma-fence-unwrap.c:148:4: warning: Value stored to 'err'
+ is never read [clang-analyzer-deadcode.DeadStores]
+References: <202203270435.TtRcG3Pv-lkp@intel.com>
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+CC:     <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+From:   kernel test robot <yujie.liu@intel.com>
+In-Reply-To: <202203270435.TtRcG3Pv-lkp@intel.com>
+X-Forwarded-Message-Id: <202203270435.TtRcG3Pv-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: HK2PR02CA0127.apcprd02.prod.outlook.com
+ (2603:1096:202:16::11) To SJ0PR11MB5598.namprd11.prod.outlook.com
+ (2603:10b6:a03:304::12)
 MIME-Version: 1.0
-References: <Yj1hkpyUqJE9sQ2p@redhat.com> <CACGkMEunsuWhn+aB2dM7noU257M9JV6jDjkQXLyOA+GjEoz_iw@mail.gmail.com>
- <20220325050947-mutt-send-email-mst@kernel.org> <CACGkMEvioAVMmB+ab2xXB2YPECtwi1J55u8mRRk9-JAjFSZ8vg@mail.gmail.com>
- <20220325060659-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220325060659-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 28 Mar 2022 12:56:41 +0800
-Message-ID: <CACGkMEu4mRfNbJXJtAFzhyd55fD7phUDKnVtYW0aqRnQmT_bYw@mail.gmail.com>
-Subject: Re:
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Keir Fraser <keirf@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: dcd74644-d03d-4e09-dfd8-08da1077cbe8
+X-MS-TrafficTypeDiagnostic: BN7PR11MB2595:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <BN7PR11MB259566AF16F60AE92F064598FB1D9@BN7PR11MB2595.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UZX44HU3xA3T/gboTfzX2JhsE/hS4coJNIte7hyzu1CHYgsdExW3Eqt4gAHCFdi475CmId9kV9lLbjY5BWPRyAkjMAkACMKpPa37XrRf2C7fB4YEnf14BYlLmS6Nx+pZE0aGzktzUFAoGsLT0XVUpTluUcU0HtRfJtnNgzAa9MUX/342+oIwJ1bXz7G/LvkWprWwc2uIYORA8okwjf76a3OYpWzlHoeF7iabjBr2u7PW9Fy6fcajkwkeTxgUe3AHdbGqIAaIvDbEH1S1xW4kzteaOPl6lZgutTPLjNqPzO49dEJU22hdT3l5GIjCreXiKfWe2ANfH+dGFS6r/n6FsKUUukUTNKKSlSlMv/mhidBf1yqU8qj9sd6aBlBrJNmRuEPv/2J1Z+jPeBiEzKC96oOmHmidreFNGd4V0b0XAaqEpo61oloRUOqFzrlW6jGiQTSxtJRssi9JT+1eDgr1ibaTdB+3M6XUPQ4qmZ7cJK1gNLX+0RfHzA9A0f0USaNdPOo52JEqQgQ9lDqLQO4bPdrUSpxTYNgNukWk3cNcM+18wKvBbQ2/sYRNCssd9EUKAoL/Y4ojqA85YVXPp+XH77pXb8nsXjS3RS5/6r7k8D/XFAxy3/29vTB7JURC+Uv26Oq/tuohg3bUgb19EoPqQJH29JBlYa0h//C/lWVWpX+hjIjkJUA4peQc8wZiai5Ma7SMvcXu+zku6LcEx3SKXKZoaa42S+YyJuqqyiQE/G8QYGZg6cJ46wJzfm1Q5s1q4xLZYOAnKnRkWUtmFaoCdtQi+ZGlUOhcd3+OBuOSEHDW5Zmlo9ydbqMBkhhgqUViGs0DGTRqleWAnBw1BVEZmqkRNgMuGonmveNw645n+kU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5598.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(31686004)(83380400001)(6486002)(54906003)(186003)(6916009)(2616005)(966005)(5660300002)(31696002)(316002)(36756003)(26005)(66574015)(6512007)(38100700002)(66476007)(8676002)(508600001)(66556008)(82960400001)(6506007)(8936002)(2906002)(66946007)(4326008)(6666004)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZElrUDNNWTZ5VXdXbkg1c083b24xQ2EySk80aHhCek5HRHVERVpXTzRsQkkz?=
+ =?utf-8?B?V0YvRVJwMnQ5RGU2dnhjcU1xVkpldFRKK29Ham43Z3V3N2NKbW1kZXVKZTFH?=
+ =?utf-8?B?Z2QyL3BraE1sc3BTZkJLUEE2Z1FOdG56YUhtdmhzVUhERDdsT0VOZ2lMb1kw?=
+ =?utf-8?B?ZGorRU5oTHlkL0x1dFRhbkxKcUw1enZsaS92c0t3bXlmNkREZk45am1xYkZE?=
+ =?utf-8?B?am1KUlVjTlU1UWxiaVJQQTBUQXBsQWFlZU1LWHZWM1FwQitxTVpGZFFzTzFr?=
+ =?utf-8?B?c2hmNUt4UUErN3Q2SG9jeE9LQzM5OUNBaDNWR0ZkaXRUQ0NsOExMVlV3WW5G?=
+ =?utf-8?B?VEVZQTloazRsWFZRYmk5TS95RGVSL1V3Wk1OQ1JFekM1MUxYRU9jaUtGelpi?=
+ =?utf-8?B?WmpiMWtrMDhwTjRpR3UvWmhGSWxIY053aGxRemZBV2dSeGkwTEd6QjZzWlVa?=
+ =?utf-8?B?aklONUpPVlpHcVZiSStuWGJZY2VScDdQekdvT2x6N3MwOXFMUnE0b3MyRlRx?=
+ =?utf-8?B?d0s2cUlXcEM5OWFzQWc2aGFncGsvUlM1Tm1ERzhaZjRET1JZbDFIT1Uybjc1?=
+ =?utf-8?B?SEdkSzF5Ri9IMklNbnRacm5UZUVxZVdLQ2RIUjFxT1hRdlZMMTl3MW5SK2c1?=
+ =?utf-8?B?ci9qeUEydWxpSUtDanAyZytQQ3haRERLZ3J2RklVTkNEYVdMbnFuRVNab3RY?=
+ =?utf-8?B?VXdEcWw2VUdXRVcvcWxyNWVQdXgxc0lVMjZDa2xZUER0WkFmdHp2RUhWSFR2?=
+ =?utf-8?B?VTFNcU5HVGNEbkg5RWx1NUZNV3dYVVhnckpueG9Vek51ditRbGRWckpUclNj?=
+ =?utf-8?B?enM1b3ZwTXhRZnlENHI1NCtCU2tjYkJvWWIzTlBGczAzNjBhWFk5QWZxWUFh?=
+ =?utf-8?B?Qis5dFhHS1ZVQ0hkMURWZng1MFFVK3k2cHJhTWd2aEp0eHZPK0ZTZ2NVRzZI?=
+ =?utf-8?B?RnU4RXJINEtMQXZKWmtnZXEwZmdsdmV3eHVzOFNZVXNTYmJyUVU3cWtUWnY5?=
+ =?utf-8?B?c0ZYbkRUV1IzQ2t2SlJ5Z3cvN05GRElkd3RqOFFSWUdVNkJjMGtsaC9uanFt?=
+ =?utf-8?B?Rk4xNWNnOC9NaWRNZUpnVHB1bTAxaElYam5QRjAzcEZXVWw5UEJLSUlHbU0r?=
+ =?utf-8?B?cjY0SlF0MjlWcDFKM0l0K1dsYkJnZ3lNWS9Td0FtY09xcDRhczFLMzFoMHN2?=
+ =?utf-8?B?ME5oRk1YOW1mVFVSVVFzdXZzTFhEaU5OTjg4bTV1L09tTmdnd2t0d3ZEVkk1?=
+ =?utf-8?B?eUNiYlBnNEVaWUlxaytYcWdXcnlYSHlqYzVCY0QyME5HWTFJNjlha0w0YXJm?=
+ =?utf-8?B?NjRQOVV6MHRlQ1I1UUZiNVhoSyt5TzRPd0dZYUdPVUtCVUx0azcwNk93U2R1?=
+ =?utf-8?B?S0dqL3A2dG1pZGdJUm9lMzJDdm8rY0pDeGVoazk0NUdYeEJ5aVo5TnBuOEM2?=
+ =?utf-8?B?c2xyTTFPNmRxblNRNXVPLzBtZktMaXRqdkJkZi90YXVWQ2t6Rkg5STlwSkJ2?=
+ =?utf-8?B?K0I5UVBVeHZrUGJKMmtUc0tUKzAxbm1xazU5YnNoT1RTRTJIRDlzT25mUXZz?=
+ =?utf-8?B?QTZqTHpwZ3habFFSNWZEV3VOTnlJeGRxLzlJaVNmRlpIeGxxVEdJOGUxMmk5?=
+ =?utf-8?B?bkxDazh4VkVRNC9selNUdytVa05vWm14bTlSOE5YWmNMYVA5SmgvZXRQWEps?=
+ =?utf-8?B?eHplUnNNTktqRTVwZGdzbDB5SnZ5Zy95RWlETnBHTzR2bFVZQ3JKUEIzQ3JV?=
+ =?utf-8?B?V1dCMmdtNkdEQ3ZvOGd2akYyYlVLNFRoVlRUMTZ2T2N5STAvT3NGR1Vtb3hm?=
+ =?utf-8?B?R0xmbytlRDQreVVtRmhwVzhDTXBNb3VvWnVTN3dCQm9GSHY1OFU2RnV6VXYy?=
+ =?utf-8?B?Z2ozbnlrWTlmWWcvTER4ZUd5UEZVMnA4WFJKUlk3SWxpbU9Va1lQV0tDbUJv?=
+ =?utf-8?B?a2drb0M5WlpWY1pNS2l3ZG5lSHhpQVlUNDFVbmx2NTcrWUp0UHFTQTROMXBG?=
+ =?utf-8?B?VUhTYlhJRCsxUEQ3YkxkNkE0WnZoQmdKTXdoS1B2Ukt0VCtJZEFFVGRXcU5s?=
+ =?utf-8?B?QWZ2SHo4NHlLTVFDWllkWjlqRlhhdzR6RUpjamhNZ2pEMWZoZzE2R3FEUkQv?=
+ =?utf-8?B?SFlGQTQxMzBkNXF4SjY5bHRpdExEdmFDOExhaDBNaE1wVU9hUUI1ajB0VHMw?=
+ =?utf-8?B?T0FvcDMzT2EvakNJVnFZckx5NTdJVEFQb0wvekdna0tya1dpSm5SK1FCdVNu?=
+ =?utf-8?B?UlhvR3dxaXZkSWVKNkREalkybnJoSWpVK1JCeHB1bW5zVUhNb2pxendxd0p0?=
+ =?utf-8?B?RGE3ZkFzYkRmdTJUaGhNZUIxVGg2U1pBZVEwSkh5T1ZYLzBlRmFEdz09?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: dcd74644-d03d-4e09-dfd8-08da1077cbe8
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5598.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2022 04:59:53.7191
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Qglcf+BM5nMQ/dDCoq2Rwp3mk6WQmnstlrlEyyR53o9TzHJpoYay3f5AkyB6iihklmQJL6ZV/vkTUy4kDUiK2g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR11MB2595
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 6:10 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Fri, Mar 25, 2022 at 05:20:19PM +0800, Jason Wang wrote:
-> > On Fri, Mar 25, 2022 at 5:10 PM Michael S. Tsirkin <mst@redhat.com> wro=
-te:
-> > >
-> > > On Fri, Mar 25, 2022 at 03:52:00PM +0800, Jason Wang wrote:
-> > > > On Fri, Mar 25, 2022 at 2:31 PM Michael S. Tsirkin <mst@redhat.com>=
- wrote:
-> > > > >
-> > > > > Bcc:
-> > > > > Subject: Re: [PATCH 3/3] virtio: harden vring IRQ
-> > > > > Message-ID: <20220325021422-mutt-send-email-mst@kernel.org>
-> > > > > Reply-To:
-> > > > > In-Reply-To: <f7046303-7d7d-e39f-3c71-3688126cc812@redhat.com>
-> > > > >
-> > > > > On Fri, Mar 25, 2022 at 11:04:08AM +0800, Jason Wang wrote:
-> > > > > >
-> > > > > > =E5=9C=A8 2022/3/24 =E4=B8=8B=E5=8D=887:03, Michael S. Tsirkin =
-=E5=86=99=E9=81=93:
-> > > > > > > On Thu, Mar 24, 2022 at 04:40:04PM +0800, Jason Wang wrote:
-> > > > > > > > This is a rework on the previous IRQ hardening that is done=
- for
-> > > > > > > > virtio-pci where several drawbacks were found and were reve=
-rted:
-> > > > > > > >
-> > > > > > > > 1) try to use IRQF_NO_AUTOEN which is not friendly to affin=
-ity managed IRQ
-> > > > > > > >     that is used by some device such as virtio-blk
-> > > > > > > > 2) done only for PCI transport
-> > > > > > > >
-> > > > > > > > In this patch, we tries to borrow the idea from the INTX IR=
-Q hardening
-> > > > > > > > in the reverted commit 080cd7c3ac87 ("virtio-pci: harden IN=
-TX interrupts")
-> > > > > > > > by introducing a global irq_soft_enabled variable for each
-> > > > > > > > virtio_device. Then we can to toggle it during
-> > > > > > > > virtio_reset_device()/virtio_device_ready(). A synchornize_=
-rcu() is
-> > > > > > > > used in virtio_reset_device() to synchronize with the IRQ h=
-andlers. In
-> > > > > > > > the future, we may provide config_ops for the transport tha=
-t doesn't
-> > > > > > > > use IRQ. With this, vring_interrupt() can return check and =
-early if
-> > > > > > > > irq_soft_enabled is false. This lead to smp_load_acquire() =
-to be used
-> > > > > > > > but the cost should be acceptable.
-> > > > > > > Maybe it should be but is it? Can't we use synchronize_irq in=
-stead?
-> > > > > >
-> > > > > >
-> > > > > > Even if we allow the transport driver to synchornize through
-> > > > > > synchronize_irq() we still need a check in the vring_interrupt(=
-).
-> > > > > >
-> > > > > > We do something like the following previously:
-> > > > > >
-> > > > > >         if (!READ_ONCE(vp_dev->intx_soft_enabled))
-> > > > > >                 return IRQ_NONE;
-> > > > > >
-> > > > > > But it looks like a bug since speculative read can be done befo=
-re the check
-> > > > > > where the interrupt handler can't see the uncommitted setup whi=
-ch is done by
-> > > > > > the driver.
-> > > > >
-> > > > > I don't think so - if you sync after setting the value then
-> > > > > you are guaranteed that any handler running afterwards
-> > > > > will see the new value.
-> > > >
-> > > > The problem is not disabled but the enable.
-> > >
-> > > So a misbehaving device can lose interrupts? That's not a problem at =
-all
-> > > imo.
-> >
-> > It's the interrupt raised before setting irq_soft_enabled to true:
-> >
-> > CPU 0 probe) driver specific setup (not commited)
-> > CPU 1 IRQ handler) read the uninitialized variable
-> > CPU 0 probe) set irq_soft_enabled to true
-> > CPU 1 IRQ handler) read irq_soft_enable as true
-> > CPU 1 IRQ handler) use the uninitialized variable
-> >
-> > Thanks
->
-> Yea, it hurts if you do it.  So do not do it then ;).
->
-> irq_soft_enabled (I think driver_ok or status is a better name)
+tree:   git://anongit.freedesktop.org/drm/drm-misc for-linux-next
+head:   519f490db07e1a539490612f376487f61e48e39c
+commit: 64a8f92fd783e750cdb81af75942dcd53bbf61bd [2/3] dma-buf: add dma_fence_unwrap v2
+config: riscv-randconfig-c006-20220324 (https://download.01.org/0day-ci/archive/20220327/202203270435.TtRcG3Pv-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+         chmod +x ~/bin/make.cross
+         # install riscv cross compiling tool for clang build
+         # apt-get install binutils-riscv64-linux-gnu
+         git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
+         git fetch --no-tags drm-misc for-linux-next
+         git checkout 64a8f92fd783e750cdb81af75942dcd53bbf61bd
+         # save the config file to linux build tree
+         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=riscv clang-analyzer
 
-I can change it to driver_ok.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <yujie.liu@intel.com>
 
-> should be initialized to false *before* irq is requested.
->
-> And requesting irq commits all memory otherwise all drivers would be
-> broken,
 
-So I think we might talk different issues:
+clang-analyzer warnings: (new ones prefixed by >>)
 
-1) Whether request_irq() commits the previous setups, I think the
-answer is yes, since the spin_unlock of desc->lock (release) can
-guarantee this though there seems no documentation around
-request_irq() to say this.
+ >> drivers/dma-buf/st-dma-fence-unwrap.c:148:4: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
+                            err = -EINVAL;
+                            ^     ~~~~~~~
 
-And I can see at least drivers/video/fbdev/omap2/omapfb/dss/dispc.c is
-using smp_wmb() before the request_irq().
+vim +/err +148 drivers/dma-buf/st-dma-fence-unwrap.c
 
-And even if write is ordered we still need read to be ordered to be
-paired with that.
+64a8f92fd783e75 Christian König 2022-03-11  120
+64a8f92fd783e75 Christian König 2022-03-11  121  static int unwrap_array(void *arg)
+64a8f92fd783e75 Christian König 2022-03-11  122  {
+64a8f92fd783e75 Christian König 2022-03-11  123  	struct dma_fence *fence, *f1, *f2, *array;
+64a8f92fd783e75 Christian König 2022-03-11  124  	struct dma_fence_unwrap iter;
+64a8f92fd783e75 Christian König 2022-03-11  125  	int err = 0;
+64a8f92fd783e75 Christian König 2022-03-11  126
+64a8f92fd783e75 Christian König 2022-03-11  127  	f1 = mock_fence();
+64a8f92fd783e75 Christian König 2022-03-11  128  	if (!f1)
+64a8f92fd783e75 Christian König 2022-03-11  129  		return -ENOMEM;
+64a8f92fd783e75 Christian König 2022-03-11  130
+64a8f92fd783e75 Christian König 2022-03-11  131  	f2 = mock_fence();
+64a8f92fd783e75 Christian König 2022-03-11  132  	if (!f2) {
+64a8f92fd783e75 Christian König 2022-03-11  133  		dma_fence_put(f1);
+64a8f92fd783e75 Christian König 2022-03-11  134  		return -ENOMEM;
+64a8f92fd783e75 Christian König 2022-03-11  135  	}
+64a8f92fd783e75 Christian König 2022-03-11  136
+64a8f92fd783e75 Christian König 2022-03-11  137  	array = mock_array(2, f1, f2);
+64a8f92fd783e75 Christian König 2022-03-11  138  	if (!array)
+64a8f92fd783e75 Christian König 2022-03-11  139  		return -ENOMEM;
+64a8f92fd783e75 Christian König 2022-03-11  140
+64a8f92fd783e75 Christian König 2022-03-11  141  	dma_fence_unwrap_for_each(fence, &iter, array) {
+64a8f92fd783e75 Christian König 2022-03-11  142  		if (fence == f1) {
+64a8f92fd783e75 Christian König 2022-03-11  143  			f1 = NULL;
+64a8f92fd783e75 Christian König 2022-03-11  144  		} else if (fence == f2) {
+64a8f92fd783e75 Christian König 2022-03-11  145  			f2 = NULL;
+64a8f92fd783e75 Christian König 2022-03-11  146  		} else {
+64a8f92fd783e75 Christian König 2022-03-11  147  			pr_err("Unexpected fence!\n");
+64a8f92fd783e75 Christian König 2022-03-11 @148  			err = -EINVAL;
+64a8f92fd783e75 Christian König 2022-03-11  149  		}
+64a8f92fd783e75 Christian König 2022-03-11  150  	}
+64a8f92fd783e75 Christian König 2022-03-11  151
+64a8f92fd783e75 Christian König 2022-03-11  152  	if (f1 || f2) {
+64a8f92fd783e75 Christian König 2022-03-11  153  		pr_err("Not all fences seen!\n");
+64a8f92fd783e75 Christian König 2022-03-11 @154  		err = -EINVAL;
+64a8f92fd783e75 Christian König 2022-03-11  155  	}
+64a8f92fd783e75 Christian König 2022-03-11  156
+64a8f92fd783e75 Christian König 2022-03-11  157  	dma_fence_signal(f1);
+64a8f92fd783e75 Christian König 2022-03-11  158  	dma_fence_signal(f2);
+64a8f92fd783e75 Christian König 2022-03-11  159  	dma_fence_put(array);
+64a8f92fd783e75 Christian König 2022-03-11  160  	return 0;
+64a8f92fd783e75 Christian König 2022-03-11  161  }
+64a8f92fd783e75 Christian König 2022-03-11  162
 
-> if it doesn't it just needs to be fixed, not worked around in
-> virtio.
-
-2) virtio drivers might do a lot of setups between request_irq() and
-virtio_device_ready():
-
-request_irq()
-driver specific setups
-virtio_device_ready()
-
-CPU 0 probe) request_irq()
-CPU 1 IRQ handler) read the uninitialized variable
-CPU 0 probe) driver specific setups
-CPU 0 probe) smp_store_release(intr_soft_enabled, true), commit the setups
-CPU 1 IRQ handler) read irq_soft_enable as true
-CPU 1 IRQ handler) use the uninitialized variable
-
-Thanks
-
->
->
-> > >
-> > > > We use smp_store_relase()
-> > > > to make sure the driver commits the setup before enabling the irq. =
-It
-> > > > means the read needs to be ordered as well in vring_interrupt().
-> > > >
-> > > > >
-> > > > > Although I couldn't find anything about this in memory-barriers.t=
-xt
-> > > > > which surprises me.
-> > > > >
-> > > > > CC Paul to help make sure I'm right.
-> > > > >
-> > > > >
-> > > > > >
-> > > > > > >
-> > > > > > > > To avoid breaking legacy device which can send IRQ before D=
-RIVER_OK, a
-> > > > > > > > module parameter is introduced to enable the hardening so f=
-unction
-> > > > > > > > hardening is disabled by default.
-> > > > > > > Which devices are these? How come they send an interrupt befo=
-re there
-> > > > > > > are any buffers in any queues?
-> > > > > >
-> > > > > >
-> > > > > > I copied this from the commit log for 22b7050a024d7
-> > > > > >
-> > > > > > "
-> > > > > >
-> > > > > >     This change will also benefit old hypervisors (before 2009)
-> > > > > >     that send interrupts without checking DRIVER_OK: previously=
-,
-> > > > > >     the callback could race with driver-specific initialization=
-.
-> > > > > > "
-> > > > > >
-> > > > > > If this is only for config interrupt, I can remove the above lo=
-g.
-> > > > >
-> > > > >
-> > > > > This is only for config interrupt.
-> > > >
-> > > > Ok.
-> > > >
-> > > > >
-> > > > > >
-> > > > > > >
-> > > > > > > > Note that the hardening is only done for vring interrupt si=
-nce the
-> > > > > > > > config interrupt hardening is already done in commit 22b705=
-0a024d7
-> > > > > > > > ("virtio: defer config changed notifications"). But the met=
-hod that is
-> > > > > > > > used by config interrupt can't be reused by the vring inter=
-rupt
-> > > > > > > > handler because it uses spinlock to do the synchronization =
-which is
-> > > > > > > > expensive.
-> > > > > > > >
-> > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > > >
-> > > > > > > > ---
-> > > > > > > >   drivers/virtio/virtio.c       | 19 +++++++++++++++++++
-> > > > > > > >   drivers/virtio/virtio_ring.c  |  9 ++++++++-
-> > > > > > > >   include/linux/virtio.h        |  4 ++++
-> > > > > > > >   include/linux/virtio_config.h | 25 ++++++++++++++++++++++=
-+++
-> > > > > > > >   4 files changed, 56 insertions(+), 1 deletion(-)
-> > > > > > > >
-> > > > > > > > diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virti=
-o.c
-> > > > > > > > index 8dde44ea044a..85e331efa9cc 100644
-> > > > > > > > --- a/drivers/virtio/virtio.c
-> > > > > > > > +++ b/drivers/virtio/virtio.c
-> > > > > > > > @@ -7,6 +7,12 @@
-> > > > > > > >   #include <linux/of.h>
-> > > > > > > >   #include <uapi/linux/virtio_ids.h>
-> > > > > > > > +static bool irq_hardening =3D false;
-> > > > > > > > +
-> > > > > > > > +module_param(irq_hardening, bool, 0444);
-> > > > > > > > +MODULE_PARM_DESC(irq_hardening,
-> > > > > > > > +          "Disalbe IRQ software processing when it is not =
-expected");
-> > > > > > > > +
-> > > > > > > >   /* Unique numbering for virtio devices. */
-> > > > > > > >   static DEFINE_IDA(virtio_index_ida);
-> > > > > > > > @@ -220,6 +226,15 @@ static int virtio_features_ok(struct v=
-irtio_device *dev)
-> > > > > > > >    * */
-> > > > > > > >   void virtio_reset_device(struct virtio_device *dev)
-> > > > > > > >   {
-> > > > > > > > + /*
-> > > > > > > > +  * The below synchronize_rcu() guarantees that any
-> > > > > > > > +  * interrupt for this line arriving after
-> > > > > > > > +  * synchronize_rcu() has completed is guaranteed to see
-> > > > > > > > +  * irq_soft_enabled =3D=3D false.
-> > > > > > > News to me I did not know synchronize_rcu has anything to do
-> > > > > > > with interrupts. Did not you intend to use synchronize_irq?
-> > > > > > > I am not even 100% sure synchronize_rcu is by design a memory=
- barrier
-> > > > > > > though it's most likely is ...
-> > > > > >
-> > > > > >
-> > > > > > According to the comment above tree RCU version of synchronize_=
-rcu():
-> > > > > >
-> > > > > > """
-> > > > > >
-> > > > > >  * RCU read-side critical sections are delimited by rcu_read_lo=
-ck()
-> > > > > >  * and rcu_read_unlock(), and may be nested.  In addition, but =
-only in
-> > > > > >  * v5.0 and later, regions of code across which interrupts, pre=
-emption,
-> > > > > >  * or softirqs have been disabled also serve as RCU read-side c=
-ritical
-> > > > > >  * sections.  This includes hardware interrupt handlers, softir=
-q handlers,
-> > > > > >  * and NMI handlers.
-> > > > > > """
-> > > > > >
-> > > > > > So interrupt handlers are treated as read-side critical section=
-s.
-> > > > > >
-> > > > > > And it has the comment for explain the barrier:
-> > > > > >
-> > > > > > """
-> > > > > >
-> > > > > >  * Note that this guarantee implies further memory-ordering gua=
-rantees.
-> > > > > >  * On systems with more than one CPU, when synchronize_rcu() re=
-turns,
-> > > > > >  * each CPU is guaranteed to have executed a full memory barrie=
-r since
-> > > > > >  * the end of its last RCU read-side critical section whose beg=
-inning
-> > > > > >  * preceded the call to synchronize_rcu().  In addition, each C=
-PU having
-> > > > > > """
-> > > > > >
-> > > > > > So on SMP it provides a full barrier. And for UP/tiny RCU we do=
-n't need the
-> > > > > > barrier, if the interrupt come after WRITE_ONCE() it will see t=
-he
-> > > > > > irq_soft_enabled as false.
-> > > > > >
-> > > > >
-> > > > > You are right. So then
-> > > > > 1. I do not think we need load_acquire - why is it needed? Just
-> > > > >    READ_ONCE should do.
-> > > >
-> > > > See above.
-> > > >
-> > > > > 2. isn't synchronize_irq also doing the same thing?
-> > > >
-> > > >
-> > > > Yes, but it requires a config ops since the IRQ knowledge is transp=
-ort specific.
-> > > >
-> > > > >
-> > > > >
-> > > > > > >
-> > > > > > > > +  */
-> > > > > > > > + WRITE_ONCE(dev->irq_soft_enabled, false);
-> > > > > > > > + synchronize_rcu();
-> > > > > > > > +
-> > > > > > > >           dev->config->reset(dev);
-> > > > > > > >   }
-> > > > > > > >   EXPORT_SYMBOL_GPL(virtio_reset_device);
-> > > > > > > Please add comment explaining where it will be enabled.
-> > > > > > > Also, we *really* don't need to synch if it was already disab=
-led,
-> > > > > > > let's not add useless overhead to the boot sequence.
-> > > > > >
-> > > > > >
-> > > > > > Ok.
-> > > > > >
-> > > > > >
-> > > > > > >
-> > > > > > >
-> > > > > > > > @@ -427,6 +442,10 @@ int register_virtio_device(struct virt=
-io_device *dev)
-> > > > > > > >           spin_lock_init(&dev->config_lock);
-> > > > > > > >           dev->config_enabled =3D false;
-> > > > > > > >           dev->config_change_pending =3D false;
-> > > > > > > > + dev->irq_soft_check =3D irq_hardening;
-> > > > > > > > +
-> > > > > > > > + if (dev->irq_soft_check)
-> > > > > > > > +         dev_info(&dev->dev, "IRQ hardening is enabled\n")=
-;
-> > > > > > > >           /* We always start by resetting the device, in ca=
-se a previous
-> > > > > > > >            * driver messed it up.  This also tests that cod=
-e path a little. */
-> > > > > > > one of the points of hardening is it's also helpful for buggy
-> > > > > > > devices. this flag defeats the purpose.
-> > > > > >
-> > > > > >
-> > > > > > Do you mean:
-> > > > > >
-> > > > > > 1) we need something like config_enable? This seems not easy to=
- be
-> > > > > > implemented without obvious overhead, mainly the synchronize wi=
-th the
-> > > > > > interrupt handlers
-> > > > >
-> > > > > But synchronize is only on tear-down path. That is not critical f=
-or any
-> > > > > users at the moment, even less than probe.
-> > > >
-> > > > I meant if we have vq->irq_pending, we need to call vring_interrupt=
-()
-> > > > in the virtio_device_ready() and synchronize the IRQ handlers with
-> > > > spinlock or others.
-> > > >
-> > > > >
-> > > > > > 2) enable this by default, so I don't object, but this may have=
- some risk
-> > > > > > for old hypervisors
-> > > > >
-> > > > >
-> > > > > The risk if there's a driver adding buffers without setting DRIVE=
-R_OK.
-> > > >
-> > > > Probably not, we have devices that accept random inputs from outsid=
-e,
-> > > > net, console, input etc. I've done a round of audits of the Qemu
-> > > > codes. They look all fine since day0.
-> > > >
-> > > > > So with this approach, how about we rename the flag "driver_ok"?
-> > > > > And then add_buf can actually test it and BUG_ON if not there  (a=
-t least
-> > > > > in the debug build).
-> > > >
-> > > > This looks like a hardening of the driver in the core instead of th=
-e
-> > > > device. I think it can be done but in a separate series.
-> > > >
-> > > > >
-> > > > > And going down from there, how about we cache status in the
-> > > > > device? Then we don't need to keep re-reading it every time,
-> > > > > speeding boot up a tiny bit.
-> > > >
-> > > > I don't fully understand here, actually spec requires status to be
-> > > > read back for validation in many cases.
-> > > >
-> > > > Thanks
-> > > >
-> > > > >
-> > > > > >
-> > > > > > >
-> > > > > > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/=
-virtio_ring.c
-> > > > > > > > index 962f1477b1fa..0170f8c784d8 100644
-> > > > > > > > --- a/drivers/virtio/virtio_ring.c
-> > > > > > > > +++ b/drivers/virtio/virtio_ring.c
-> > > > > > > > @@ -2144,10 +2144,17 @@ static inline bool more_used(const =
-struct vring_virtqueue *vq)
-> > > > > > > >           return vq->packed_ring ? more_used_packed(vq) : m=
-ore_used_split(vq);
-> > > > > > > >   }
-> > > > > > > > -irqreturn_t vring_interrupt(int irq, void *_vq)
-> > > > > > > > +irqreturn_t vring_interrupt(int irq, void *v)
-> > > > > > > >   {
-> > > > > > > > + struct virtqueue *_vq =3D v;
-> > > > > > > > + struct virtio_device *vdev =3D _vq->vdev;
-> > > > > > > >           struct vring_virtqueue *vq =3D to_vvq(_vq);
-> > > > > > > > + if (!virtio_irq_soft_enabled(vdev)) {
-> > > > > > > > +         dev_warn_once(&vdev->dev, "virtio vring IRQ raise=
-d before DRIVER_OK");
-> > > > > > > > +         return IRQ_NONE;
-> > > > > > > > + }
-> > > > > > > > +
-> > > > > > > >           if (!more_used(vq)) {
-> > > > > > > >                   pr_debug("virtqueue interrupt with no wor=
-k for %p\n", vq);
-> > > > > > > >                   return IRQ_NONE;
-> > > > > > > > diff --git a/include/linux/virtio.h b/include/linux/virtio.=
-h
-> > > > > > > > index 5464f398912a..957d6ad604ac 100644
-> > > > > > > > --- a/include/linux/virtio.h
-> > > > > > > > +++ b/include/linux/virtio.h
-> > > > > > > > @@ -95,6 +95,8 @@ dma_addr_t virtqueue_get_used_addr(struct=
- virtqueue *vq);
-> > > > > > > >    * @failed: saved value for VIRTIO_CONFIG_S_FAILED bit (f=
-or restore)
-> > > > > > > >    * @config_enabled: configuration change reporting enable=
-d
-> > > > > > > >    * @config_change_pending: configuration change reported =
-while disabled
-> > > > > > > > + * @irq_soft_check: whether or not to check @irq_soft_enab=
-led
-> > > > > > > > + * @irq_soft_enabled: callbacks enabled
-> > > > > > > >    * @config_lock: protects configuration change reporting
-> > > > > > > >    * @dev: underlying device.
-> > > > > > > >    * @id: the device type identification (used to match it =
-with a driver).
-> > > > > > > > @@ -109,6 +111,8 @@ struct virtio_device {
-> > > > > > > >           bool failed;
-> > > > > > > >           bool config_enabled;
-> > > > > > > >           bool config_change_pending;
-> > > > > > > > + bool irq_soft_check;
-> > > > > > > > + bool irq_soft_enabled;
-> > > > > > > >           spinlock_t config_lock;
-> > > > > > > >           spinlock_t vqs_list_lock; /* Protects VQs list ac=
-cess */
-> > > > > > > >           struct device dev;
-> > > > > > > > diff --git a/include/linux/virtio_config.h b/include/linux/=
-virtio_config.h
-> > > > > > > > index dafdc7f48c01..9c1b61f2e525 100644
-> > > > > > > > --- a/include/linux/virtio_config.h
-> > > > > > > > +++ b/include/linux/virtio_config.h
-> > > > > > > > @@ -174,6 +174,24 @@ static inline bool virtio_has_feature(=
-const struct virtio_device *vdev,
-> > > > > > > >           return __virtio_test_bit(vdev, fbit);
-> > > > > > > >   }
-> > > > > > > > +/*
-> > > > > > > > + * virtio_irq_soft_enabled: whether we can execute callbac=
-ks
-> > > > > > > > + * @vdev: the device
-> > > > > > > > + */
-> > > > > > > > +static inline bool virtio_irq_soft_enabled(const struct vi=
-rtio_device *vdev)
-> > > > > > > > +{
-> > > > > > > > + if (!vdev->irq_soft_check)
-> > > > > > > > +         return true;
-> > > > > > > > +
-> > > > > > > > + /*
-> > > > > > > > +  * Read irq_soft_enabled before reading other device spec=
-ific
-> > > > > > > > +  * data. Paried with smp_store_relase() in
-> > > > > > > paired
-> > > > > >
-> > > > > >
-> > > > > > Will fix.
-> > > > > >
-> > > > > > Thanks
-> > > > > >
-> > > > > >
-> > > > > > >
-> > > > > > > > +  * virtio_device_ready() and WRITE_ONCE()/synchronize_rcu=
-() in
-> > > > > > > > +  * virtio_reset_device().
-> > > > > > > > +  */
-> > > > > > > > + return smp_load_acquire(&vdev->irq_soft_enabled);
-> > > > > > > > +}
-> > > > > > > > +
-> > > > > > > >   /**
-> > > > > > > >    * virtio_has_dma_quirk - determine whether this device h=
-as the DMA quirk
-> > > > > > > >    * @vdev: the device
-> > > > > > > > @@ -236,6 +254,13 @@ void virtio_device_ready(struct virtio=
-_device *dev)
-> > > > > > > >           if (dev->config->enable_cbs)
-> > > > > > > >                     dev->config->enable_cbs(dev);
-> > > > > > > > + /*
-> > > > > > > > +  * Commit the driver setup before enabling the virtqueue
-> > > > > > > > +  * callbacks. Paried with smp_load_acuqire() in
-> > > > > > > > +  * virtio_irq_soft_enabled()
-> > > > > > > > +  */
-> > > > > > > > + smp_store_release(&dev->irq_soft_enabled, true);
-> > > > > > > > +
-> > > > > > > >           BUG_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
-> > > > > > > >           dev->config->set_status(dev, status | VIRTIO_CONF=
-IG_S_DRIVER_OK);
-> > > > > > > >   }
-> > > > > > > > --
-> > > > > > > > 2.25.1
-> > > > >
-> > >
->
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,154 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F444E8F02
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 09:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FECD4E8F09
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 09:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238822AbiC1HdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 03:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
+        id S238828AbiC1Hfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 03:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234268AbiC1HdQ (ORCPT
+        with ESMTP id S238827AbiC1Hfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 03:33:16 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F7751E4B;
-        Mon, 28 Mar 2022 00:31:33 -0700 (PDT)
-X-UUID: 10bfd5f56ccd47739d9962a536d27e70-20220328
-X-UUID: 10bfd5f56ccd47739d9962a536d27e70-20220328
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 860874880; Mon, 28 Mar 2022 15:31:29 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 28 Mar 2022 15:31:28 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 28 Mar 2022 15:31:28 +0800
-Message-ID: <8c7d47869dc8a9e8580740fe25bb2fd289253a4d.camel@mediatek.com>
-Subject: Re: [PATCH v9 08/22] drm/mediatek: dpi: implement a CK/DE pol
- toggle in SoC config
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Guillaume Ranquet <granquet@baylibre.com>, <airlied@linux.ie>,
-        <angelogioacchino.delregno@collabora.com>,
-        <chunfeng.yun@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <ck.hu@mediatek.com>, <daniel@ffwll.ch>, <deller@gmx.de>,
-        <jitao.shi@mediatek.com>, <kishon@ti.com>, <krzk+dt@kernel.org>,
-        <maarten.lankhorst@linux.intel.com>, <matthias.bgg@gmail.com>,
-        <mripard@kernel.org>, <p.zabel@pengutronix.de>,
-        <robh+dt@kernel.org>, <tzimmermann@suse.de>, <vkoul@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <markyacoub@google.com>
-Date:   Mon, 28 Mar 2022 15:31:28 +0800
-In-Reply-To: <20220327223927.20848-9-granquet@baylibre.com>
-References: <20220327223927.20848-1-granquet@baylibre.com>
-         <20220327223927.20848-9-granquet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 28 Mar 2022 03:35:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D507D4AE0E
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 00:33:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648452834;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z9XZp52oACkgIKoqkexoluVDy/BwEPxs39tIximHMiw=;
+        b=iOZmXL+8a7mu3WfPxQQKIlE1spUMk3Jwb4f8vldhY7DE8MVIv4BvUT3+8bGVzmPb1LmgcV
+        D4U6grrpznpCsHGuym6B9J+P3Wn6bE7FWnuuD3iGDALxbbJqRyVi056EogNtVJFFbiICfg
+        I+ehuOHoo1sfXk3pySjcBSIJG+0fSNM=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-480-e7oxxaaeOxOtvkq3AcKShQ-1; Mon, 28 Mar 2022 03:33:53 -0400
+X-MC-Unique: e7oxxaaeOxOtvkq3AcKShQ-1
+Received: by mail-wm1-f69.google.com with SMTP id v2-20020a05600c214200b0038c7c02deceso5326495wml.8
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 00:33:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=z9XZp52oACkgIKoqkexoluVDy/BwEPxs39tIximHMiw=;
+        b=sH+XphVdiNLDo1mFcibDCnLQEo14jhDG9m6v0SlsWwKvo9wvRsdwguuMZJ6ndZ9yj7
+         Fiqm6a+sZTsbbcMtxbrb+Z/WNKMGJ1zWhwhsrONamQWg7YM9YKLY7MQGggfAmLRhoJPh
+         CGSCFSzBBTlsswpKUfuqiD2VB7qoV8+jmkMGwbVpq6OXkDRlYJ2vYUK25N3XgS4yEgvg
+         EMaKWtyTxARnY2yv3EWWF8D095NF93tAKV205gfNywD3JhiDnhcpGj5D5Nl6EGIUYF/C
+         xDukLwsuIvSxtwESlFF1zbnYjUE7GpY0qvpwfg/q+ZEHUHi59sCSim0+y/INM0mH4rWd
+         e84g==
+X-Gm-Message-State: AOAM532RCVMXAWsEAxCTHql8pVf32O1eVrLUpQHSADT28sDwXTgdReu+
+        nuAAJ3kKh9zVyFJpTVw87P1RBJHCM15Ab4DmBIqsIfD61amw5IfhEB/HnkDOWKmcQjtrHxkAp0T
+        zVNQVaDMNdtHGm7bNHWhqO58X
+X-Received: by 2002:a5d:6750:0:b0:203:efaf:9fc1 with SMTP id l16-20020a5d6750000000b00203efaf9fc1mr21339404wrw.252.1648452831777;
+        Mon, 28 Mar 2022 00:33:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy8CVQchI+J8cFZu7EhBEKy/ErIlY77zkJwrFB6+EFgoMzhF+/lltIFD1/JP1p10sMWtyn2jw==
+X-Received: by 2002:a5d:6750:0:b0:203:efaf:9fc1 with SMTP id l16-20020a5d6750000000b00203efaf9fc1mr21339374wrw.252.1648452831464;
+        Mon, 28 Mar 2022 00:33:51 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:2200:50d1:ff5c:5927:203a? (p200300cbc704220050d1ff5c5927203a.dip0.t-ipconnect.de. [2003:cb:c704:2200:50d1:ff5c:5927:203a])
+        by smtp.gmail.com with ESMTPSA id n65-20020a1c2744000000b003862bfb509bsm15389618wmn.46.2022.03.28.00.33.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 00:33:51 -0700 (PDT)
+Message-ID: <31c9ea16-2271-c616-3e32-ea0dc725a4c4@redhat.com>
+Date:   Mon, 28 Mar 2022 09:33:50 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH 1/2] mm/vmscan: reclaim only affects managed_zones
+Content-Language: en-US
+To:     Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        ying.huang@intel.com, mgorman@techsingularity.net
+References: <20220327024101.10378-1-richard.weiyang@gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220327024101.10378-1-richard.weiyang@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-03-28 at 00:39 +0200, Guillaume Ranquet wrote:
-> Adds a bit of flexibility to support SoCs without CK/DE pol support
+On 27.03.22 04:41, Wei Yang wrote:
+> As mentioned in commit 6aa303defb74 ("mm, vmscan: only allocate and
+> reclaim from zones with pages managed by the buddy allocator") , reclaim
+> only affects managed_zones.
 > 
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
+> Let's adjust the code and comment accordingly.
+> 
+> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
 > ---
->  drivers/gpu/drm/mediatek/mtk_dpi.c | 22 +++++++++++++++++-----
->  1 file changed, 17 insertions(+), 5 deletions(-)
+>  mm/vmscan.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> index 4746eb342567..545a1337cc89 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -125,6 +125,7 @@ struct mtk_dpi_conf {
->  	bool edge_sel_en;
->  	const u32 *output_fmts;
->  	u32 num_output_fmts;
-> +	bool is_ck_de_pol;
->  	const struct mtk_dpi_yc_limit *limit;
->  };
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 7ad54b770bb1..89745cf34386 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -1031,7 +1031,7 @@ static bool skip_throttle_noprogress(pg_data_t *pgdat)
+>  	for (i = 0; i < MAX_NR_ZONES; i++) {
+>  		struct zone *zone = pgdat->node_zones + i;
 >  
-> @@ -211,13 +212,20 @@ static void mtk_dpi_config_pol(struct mtk_dpi
-> *dpi,
->  			       struct mtk_dpi_polarities *dpi_pol)
->  {
->  	unsigned int pol;
-> +	unsigned int mask;
+> -		if (!populated_zone(zone))
+> +		if (!managed_zone(zone))
+>  			continue;
 >  
-> -	pol = (dpi_pol->ck_pol == MTK_DPI_POLARITY_RISING ? 0 : CK_POL)
-> |
-> -	      (dpi_pol->de_pol == MTK_DPI_POLARITY_RISING ? 0 : DE_POL)
-> |
-> -	      (dpi_pol->hsync_pol == MTK_DPI_POLARITY_RISING ? 0 :
-> HSYNC_POL) |
-> +	mask = HSYNC_POL | VSYNC_POL;
-> +	pol = (dpi_pol->hsync_pol == MTK_DPI_POLARITY_RISING ? 0 :
-> HSYNC_POL) |
->  	      (dpi_pol->vsync_pol == MTK_DPI_POLARITY_RISING ? 0 :
-> VSYNC_POL);
-> -	mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, pol,
-> -		     CK_POL | DE_POL | HSYNC_POL | VSYNC_POL);
-> +	if (dpi->conf->is_ck_de_pol) {
-> +		mask |= CK_POL | DE_POL;
-> +		pol |= (dpi_pol->ck_pol == MTK_DPI_POLARITY_RISING ?
-> +			0 : CK_POL) |
-> +		       (dpi_pol->de_pol == MTK_DPI_POLARITY_RISING ?
-> +			0 : DE_POL);
-> +	}
-> +
-> +	mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, pol, mask);
->  }
+>  		reclaimable += zone_reclaimable_pages(zone);
+> @@ -3912,7 +3912,7 @@ static bool pgdat_balanced(pg_data_t *pgdat, int order, int highest_zoneidx)
+>  	}
 >  
->  static void mtk_dpi_config_3d(struct mtk_dpi *dpi, bool en_3d)
-> @@ -799,6 +807,7 @@ static const struct mtk_dpi_conf mt8173_conf = {
->  	.max_clock_khz = 300000,
->  	.output_fmts = mt8173_output_fmts,
->  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
-> +	.is_ck_de_pol = true,
->  	.limit = &mtk_dpi_limit,
->  };
->  
-> @@ -809,6 +818,7 @@ static const struct mtk_dpi_conf mt2701_conf = {
->  	.max_clock_khz = 150000,
->  	.output_fmts = mt8173_output_fmts,
->  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
-> +	.is_ck_de_pol = true,
->  	.limit = &mtk_dpi_limit,
->  };
->  
-> @@ -818,6 +828,7 @@ static const struct mtk_dpi_conf mt8183_conf = {
->  	.max_clock_khz = 100000,
->  	.output_fmts = mt8183_output_fmts,
->  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
-> +	.is_ck_de_pol = true,
->  	.limit = &mtk_dpi_limit,
->  };
->  
-> @@ -827,6 +838,7 @@ static const struct mtk_dpi_conf mt8192_conf = {
->  	.max_clock_khz = 150000,
->  	.output_fmts = mt8173_output_fmts,
->  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
-> +	.is_ck_de_pol = true,
->  	.limit = &mtk_dpi_limit,
->  };
->  
+>  	/*
+> -	 * If a node has no populated zone within highest_zoneidx, it does not
+> +	 * If a node has no managed zone within highest_zoneidx, it does not
+>  	 * need balancing by definition. This can happen if a zone-restricted
+>  	 * allocation tries to wake a remote kswapd.
+>  	 */
 
-Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+Reviewed-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
 

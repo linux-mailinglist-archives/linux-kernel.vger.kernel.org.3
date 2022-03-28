@@ -2,232 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 527A64E90B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBAE74E90AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239628AbiC1JEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 05:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
+        id S239620AbiC1JDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 05:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238671AbiC1JEK (ORCPT
+        with ESMTP id S232087AbiC1JDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 05:04:10 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18A9653E0C;
-        Mon, 28 Mar 2022 02:02:26 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:54834.655473141
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id D96DF1002BE;
-        Mon, 28 Mar 2022 17:01:59 +0800 (CST)
-Received: from  ([172.27.8.53])
-        by gateway-151646-dep-b7fbf7d79-vjdjk with ESMTP id 3f3720f820be42faa0e22b914cbd3427 for lkp@intel.com;
-        Mon, 28 Mar 2022 17:02:25 CST
-X-Transaction-ID: 3f3720f820be42faa0e22b914cbd3427
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 172.27.8.53
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <efc756c5-9ea3-66df-4885-82f57ff31b1f@189.cn>
-Date:   Mon, 28 Mar 2022 17:01:52 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v13 5/6] drm/loongson: add drm driver for loongson display
- controller
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <error27@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220328022835.2508587-5-15330273260@189.cn>
- <202203281653.wiRaycuD-lkp@intel.com>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <202203281653.wiRaycuD-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Mon, 28 Mar 2022 05:03:49 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7521453E06
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:02:08 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220328090205epoutp04ac5bd97532e5caa55418adba16a8d08e~gf_6Cgcgr1246312463epoutp04i
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:02:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220328090205epoutp04ac5bd97532e5caa55418adba16a8d08e~gf_6Cgcgr1246312463epoutp04i
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1648458126;
+        bh=eF3iknj3DFZy4JaEdicp6aGFJOG1Z9lY5FCFTX5urrE=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=B9OytBArcn6xcmhvJc/CvP/GJ5t4XRHf5+aXhrHxzRcnO/UjP1ce3pLuUQLAetGWE
+         ZcfgxVCvCgB4JPdbPJ6P44fS6QswJ2a/t0GxZA8qDtQMQXJUl5/I9ajrNWmorf7j93
+         q8lyI63NfqIlN12Ls+32mVvJj70ZA+wUcL+g50Rk=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20220328090205epcas2p46d90d925fa6c81d906e1c5c372b2a6d5~gf_5WBIOh2027020270epcas2p4s;
+        Mon, 28 Mar 2022 09:02:05 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.91]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4KRmsj6GtHz4x9QT; Mon, 28 Mar
+        2022 09:02:01 +0000 (GMT)
+X-AuditID: b6c32a47-831ff700000063c4-a2-62417988c360
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8F.7A.25540.88971426; Mon, 28 Mar 2022 18:02:00 +0900 (KST)
+Mime-Version: 1.0
+Subject: Re: [PATCH 0/5] Add support for Axis, ARTPEC-8 PCIe driver
+Reply-To: wangseok.lee@samsung.com
+Sender: =?UTF-8?B?7J207JmV7ISd?= <wangseok.lee@samsung.com>
+From:   =?UTF-8?B?7J207JmV7ISd?= <wangseok.lee@samsung.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        "lars.persson@axis.com" <lars.persson@axis.com>
+CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "kernel@axis.com" <kernel@axis.com>,
+        =?UTF-8?B?7KCE66y46riw?= <moonki.jun@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <0716d9e4-24e1-d16c-162c-00a8664296e1@kernel.org>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220328090200epcms2p8637d2a2e09a3a627be776586b80c8adf@epcms2p8>
+Date:   Mon, 28 Mar 2022 18:02:00 +0900
+X-CMS-MailID: 20220328090200epcms2p8637d2a2e09a3a627be776586b80c8adf
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrFJsWRmVeSWpSXmKPExsWy7bCmmW5HpWOSwcKnBhZLmjIsXh7StJh/
+        5ByrxfNDs5gtPrWoWlx42sNm8XLWPTaL8+c3sFs09PxmtTjy5iOzxf7jK5ksLu+aw2Zxdt5x
+        NosJq76xWLz5/YLd4tziTIvWvUfYLXbeOcHsIOSxZt4aRo/r6wI8Fmwq9di0qpPN48mV6Uwe
+        m5fUe/RtWcXocfzGdiaPz5vkAjijsm0yUhNTUosUUvOS81My89JtlbyD453jTc0MDHUNLS3M
+        lRTyEnNTbZVcfAJ03TJzgF5RUihLzCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BSYF+gV
+        J+YWl+al6+WlllgZGhgYmQIVJmRn/PnwnKlgnkTFvf1zWBoYj4h3MXJySAiYSFz4sImxi5GL
+        Q0hgB6PE90X7gBwODl4BQYm/O4RBaoQFnCX+3W5lBrGFBJQkdqyZxwwRt5b4NOUyC4jNJmAp
+        cbH1IdgcEYFvTBKzf7xiA3GYBW4zS8x//p4FYhuvxIz2p1C2tMT25VsZQWxOATuJD997WCHi
+        GhI/lvUyQ9iiEjdXv2WHsd8fm88IYYtItN47C1UjKPHg526ouJTEgieHoOZUS+z/+5sJwm5g
+        lOi/nwrymISAvsSO68YgYV4BX4me6fvASlgEVIF+74Na5SJxauI0MJtZQFti2cLXzCCtzAKa
+        Eut36UNMUZY4cgvuqYaNv9nR2cwCfBIdh//CxXfMewJ1jJrEvJU7mScwKs9CBPQsJLtmIexa
+        wMi8ilEstaA4Nz212KjAGB63yfm5mxjBiVrLfQfjjLcf9A4xMnEwHmKU4GBWEuGVPWufJMSb
+        klhZlVqUH19UmpNafIjRFOjLicxSosn5wFyRVxJvaGJpYGJmZmhuZGpgriTO65WyIVFIID2x
+        JDU7NbUgtQimj4mDU6qBKSbZyKc810Pt4bHASe8fnha75MIhtXTRnF07/91eIeTwX1trE8uM
+        A28DYtUTHrlGae9WrzW1qP7Tl1DJLLBw4YNUPi2rOu6lvatXf2jYfMs6s19kt+YjiyVTqzt1
+        /xkcDno0Yd3ej884IpczfEzPesud2e4b5uZ0+bXXm/1TfWXnmx9srLu+cY0Dm+meq/OOWDa6
+        iZQHS8uXP9a3O/JrT8vCsm9/vhbwr5/i2bn0/qm1R5tXT+86/+L2U/aZkv3u/yQOl+un7Wds
+        miM/+b7VuflFV622/Ap927zIX0hH8+XMbWrT/+ssP5fxyaupfdOTeybld259nP0nK7/ZTI79
+        f2NlZNoy+R9mLwqXeXob3FViKc5INNRiLipOBACCdAQSXQQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1
+References: <0716d9e4-24e1-d16c-162c-00a8664296e1@kernel.org>
+        <20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1@epcms2p7>
+        <CGME20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1@epcms2p8>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2022/3/28 16:51, kernel test robot wrote:
-> Hi Sui,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on drm/drm-next]
-> [also build test WARNING on robh/for-next linus/master v5.17 next-20220328]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/MIPS-Loongson64-dts-update-the-display-controller-device-node/20220328-103101
-> base:   git://anongit.freedesktop.org/drm/drm drm-next
-> config: microblaze-randconfig-s032-20220328 (https://download.01.org/0day-ci/archive/20220328/202203281653.wiRaycuD-lkp@intel.com/config)
-> compiler: microblaze-linux-gcc (GCC) 11.2.0
-> reproduce:
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # apt-get install sparse
->          # sparse version: v0.6.4-dirty
->          # https://github.com/intel-lab-lkp/linux/commit/836c0ab646f65b0a8c6574b5d2495c8617e96545
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Sui-Jingfeng/MIPS-Loongson64-dts-update-the-display-controller-device-node/20220328-103101
->          git checkout 836c0ab646f65b0a8c6574b5d2495c8617e96545
->          # save the config file to linux build tree
->          mkdir build_dir
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/gpu/drm/loongson/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
->
-> sparse warnings: (new ones prefixed by >>)
->>> drivers/gpu/drm/loongson/lsdc_i2c.c:179:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem *dir_reg @@     got void * @@
->     drivers/gpu/drm/loongson/lsdc_i2c.c:179:23: sparse:     expected void [noderef] __iomem *dir_reg
->     drivers/gpu/drm/loongson/lsdc_i2c.c:179:23: sparse:     got void *
->>> drivers/gpu/drm/loongson/lsdc_i2c.c:180:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem *dat_reg @@     got void * @@
->     drivers/gpu/drm/loongson/lsdc_i2c.c:180:23: sparse:     expected void [noderef] __iomem *dat_reg
->     drivers/gpu/drm/loongson/lsdc_i2c.c:180:23: sparse:     got void *
->     drivers/gpu/drm/loongson/lsdc_i2c.c:252:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem *dir_reg @@     got void * @@
->     drivers/gpu/drm/loongson/lsdc_i2c.c:252:23: sparse:     expected void [noderef] __iomem *dir_reg
->     drivers/gpu/drm/loongson/lsdc_i2c.c:252:23: sparse:     got void *
->     drivers/gpu/drm/loongson/lsdc_i2c.c:253:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem *dat_reg @@     got void * @@
->     drivers/gpu/drm/loongson/lsdc_i2c.c:253:23: sparse:     expected void [noderef] __iomem *dat_reg
->     drivers/gpu/drm/loongson/lsdc_i2c.c:253:23: sparse:     got void *
-> --
->>> drivers/gpu/drm/loongson/lsdc_pci_drv.c:185:61: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void *reg_base @@     got void [noderef] __iomem *reg_base @@
->     drivers/gpu/drm/loongson/lsdc_pci_drv.c:185:61: sparse:     expected void *reg_base
->     drivers/gpu/drm/loongson/lsdc_pci_drv.c:185:61: sparse:     got void [noderef] __iomem *reg_base
-> --
->>> drivers/gpu/drm/loongson/lsdc_output.c:232:63: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void *reg_base @@     got void [noderef] __iomem *reg_base @@
->     drivers/gpu/drm/loongson/lsdc_output.c:232:63: sparse:     expected void *reg_base
->     drivers/gpu/drm/loongson/lsdc_output.c:232:63: sparse:     got void [noderef] __iomem *reg_base
->
-> vim +179 drivers/gpu/drm/loongson/lsdc_i2c.c
->
->     129	
->     130	struct lsdc_i2c *lsdc_of_create_i2c_adapter(struct device *parent,
->     131						    void *reg_base,
->     132						    struct device_node *i2c_np)
->     133	{
->     134		unsigned int udelay = 5;
->     135		unsigned int timeout = 2200;
->     136		int nr = -1;
->     137		struct i2c_adapter *adapter;
->     138		struct lsdc_i2c *li2c;
->     139		u32 sda, scl;
->     140		int ret;
->     141	
->     142		li2c = kzalloc(sizeof(*li2c), GFP_KERNEL);
->     143		if (!li2c)
->     144			return ERR_PTR(-ENOMEM);
->     145	
->     146		spin_lock_init(&li2c->reglock);
->     147	
->     148		ret = of_property_read_u32(i2c_np, "loongson,sda", &sda);
->     149		if (ret) {
->     150			dev_err(parent, "No sda pin number provided\n");
->     151			return ERR_PTR(ret);
->     152		}
->     153	
->     154		ret = of_property_read_u32(i2c_np, "loongson,scl", &scl);
->     155		if (ret) {
->     156			dev_err(parent, "No scl pin number provided\n");
->     157			return ERR_PTR(ret);
->     158		}
->     159	
->     160		ret = of_property_read_u32(i2c_np, "loongson,nr", &nr);
->     161		if (ret) {
->     162			int id;
->     163	
->     164			if (ret == -EINVAL)
->     165				dev_dbg(parent, "no nr provided\n");
->     166	
->     167			id = of_alias_get_id(i2c_np, "i2c");
->     168			if (id >= 0)
->     169				nr = id;
->     170		}
->     171	
->     172		li2c->sda = 1 << sda;
->     173		li2c->scl = 1 << scl;
->     174	
->     175		/* Optional properties which made the driver more flexible */
->     176		of_property_read_u32(i2c_np, "loongson,udelay", &udelay);
->     177		of_property_read_u32(i2c_np, "loongson,timeout", &timeout);
->     178	
->   > 179		li2c->dir_reg = reg_base + LS7A_DC_GPIO_DIR_REG;
->   > 180		li2c->dat_reg = reg_base + LS7A_DC_GPIO_DAT_REG;
->     181	
->     182		li2c->bit.setsda = ls7a_i2c_set_sda;
->     183		li2c->bit.setscl = ls7a_i2c_set_scl;
->     184		li2c->bit.getsda = ls7a_i2c_get_sda;
->     185		li2c->bit.getscl = ls7a_i2c_get_scl;
->     186		li2c->bit.udelay = udelay;
->     187		li2c->bit.timeout = usecs_to_jiffies(timeout);
->     188		li2c->bit.data = li2c;
->     189	
->     190		adapter = &li2c->adapter;
->     191		adapter->algo_data = &li2c->bit;
->     192		adapter->owner = THIS_MODULE;
->     193		adapter->class = I2C_CLASS_DDC;
->     194		adapter->dev.parent = parent;
->     195		adapter->nr = nr;
->     196		adapter->dev.of_node = i2c_np;
->     197	
->     198		snprintf(adapter->name, sizeof(adapter->name), "gpio-i2c-%d", nr);
->     199	
->     200		i2c_set_adapdata(adapter, li2c);
->     201	
->     202		ret = i2c_bit_add_numbered_bus(adapter);
->     203		if (ret) {
->     204			if (i2c_np)
->     205				of_node_put(i2c_np);
->     206	
->     207			kfree(li2c);
->     208			return ERR_PTR(ret);
->     209		}
->     210	
->     211		dev_info(parent, "sda=%u, scl=%u, nr=%d, udelay=%u, timeout=%u\n",
->     212			 li2c->sda, li2c->scl, nr, udelay, timeout);
->     213	
->     214		ret = devm_add_action_or_reset(parent, lsdc_of_release_i2c_adapter, li2c);
->     215		if (ret)
->     216			return NULL;
->     217	
->     218		return li2c;
->     219	}
->     220	
-
-Hi,  my driver will not used on microblaze arch,
-
-what does this warnings means, do i need to fix this?
-
+> --------- Original Message ---------
+> Sender : Krzysztof Kozlowski=C2=A0<krzk=40kernel.org>=0D=0A>=20Date=20:=
+=202022-03-28=2016:12=20(GMT+9)=0D=0A>=20Title=20:=20Re:=20=5BPATCH=200/5=
+=5D=20Add=20support=20for=20Axis,=20ARTPEC-8=20PCIe=20driver=0D=0A>=20=0D=
+=0A>=20On=C2=A028/03/2022=C2=A003:44,=C2=A0=EC=9D=B4=EC=99=95=EC=84=9D=C2=
+=A0wrote:=0D=0A>=20>=C2=A0This=C2=A0series=C2=A0patches=C2=A0include=C2=A0n=
+ewly=C2=A0PCIe=C2=A0support=C2=A0for=C2=A0Axis=C2=A0ARTPEC-8=C2=A0SoC.=0D=
+=0A>=20>=C2=A0ARTPEC-8=C2=A0is=C2=A0the=C2=A0SoC=C2=A0platform=C2=A0of=C2=
+=A0Axis=C2=A0Communications.=0D=0A>=20>=C2=A0PCIe=C2=A0controller=C2=A0driv=
+er=C2=A0and=C2=A0phy=C2=A0driver=C2=A0have=C2=A0been=C2=A0newly=C2=A0added.=
+=0D=0A>=20>=C2=A0There=C2=A0is=C2=A0also=C2=A0a=C2=A0new=C2=A0MAINTAINER=C2=
+=A0in=C2=A0the=C2=A0addition=C2=A0of=C2=A0phy=C2=A0driver.=0D=0A>=20>=C2=A0=
+PCIe=C2=A0controller=C2=A0is=C2=A0designed=C2=A0based=C2=A0on=C2=A0Design-W=
+are=C2=A0PCIe=C2=A0controller=C2=A0IP=0D=0A>=20>=C2=A0and=C2=A0PCIe=C2=A0ph=
+y=C2=A0is=C2=A0desinged=C2=A0based=C2=A0on=C2=A0SAMSUNG=C2=A0PHY=C2=A0IP.=
+=0D=0A>=20>=C2=A0It=C2=A0also=C2=A0includes=C2=A0modifications=C2=A0to=C2=
+=A0the=C2=A0Design-Ware=C2=A0controller=C2=A0driver=C2=A0to=C2=A0=0D=0A>=20=
+>=C2=A0run=C2=A0the=C2=A064bit-based=C2=A0ARTPEC-8=C2=A0PCIe=C2=A0controlle=
+r=C2=A0driver.=0D=0A>=20>=C2=A0It=C2=A0consists=C2=A0of=C2=A06=C2=A0patches=
+=C2=A0in=C2=A0total.=0D=0A>=20>=C2=A0=0D=0A>=20>=C2=A0This=C2=A0series=C2=
+=A0has=C2=A0been=C2=A0tested=C2=A0on=C2=A0AXIS=C2=A0SW=C2=A0bring-up=C2=A0b=
+oard=C2=A0=0D=0A>=20>=C2=A0with=C2=A0ARTPEC-8=C2=A0chipset.=0D=0A>=20=0D=0A=
+>=20You=C2=A0lost=C2=A0mail=C2=A0threading.=C2=A0This=C2=A0makes=C2=A0readi=
+ng=C2=A0this=C2=A0difficult=C2=A0for=C2=A0us.=C2=A0Plus=0D=0A>=20you=C2=A0s=
+ent=C2=A0something=C2=A0non-applicable=C2=A0(patch=C2=A0=232),=C2=A0so=C2=
+=A0please=C2=A0resend.=0D=0A>=20=0D=0A>=20Knowing=C2=A0recent=C2=A0Samsung=
+=C2=A0reluctance=C2=A0to=C2=A0extend=C2=A0existing=C2=A0drivers=C2=A0and=C2=
+=A0always=0D=0A>=20duplicate,=C2=A0please=C2=A0provide=C2=A0description/ana=
+lysis=C2=A0why=C2=A0this=C2=A0driver=C2=A0cannot=C2=A0be=0D=0A>=20combined=
+=C2=A0with=C2=A0existing=C2=A0driver.=C2=A0The=C2=A0answer=C2=A0like:=C2=A0=
+we=C2=A0need=C2=A0several=C2=A0syscon=0D=0A>=20because=C2=A0we=C2=A0do=C2=
+=A0not=C2=A0implement=C2=A0other=C2=A0frameworks=C2=A0(like=C2=A0interconne=
+ct)=C2=A0are=C2=A0not=0D=0A>=20valid.=0D=0A>=20=0D=0A>=20Best=C2=A0regards,=
+=0D=0A>=20Krzysztof=0D=0A=0D=0AHello,=20Krzysztof=0D=0AThanks=20for=20your=
+=20review.=0D=0A=0D=0Apatch=232=20was=20sent=20to=20the=20wrong=20format=20=
+so=20sent=20again.=0D=0ASorry=20for=20causing=20confusion.=0D=0A=0D=0AThis=
+=20patch=20is=20specialized=20in=20Artpec-8,=20=0D=0Athe=20SoC=20Platform=
+=20of=20Axis=20Communication,=20and=20is=20newly=20applied.=0D=0ASince=20th=
+e=20target=20SoC=20platform=20is=20different=20from=20the=20driver=20previo=
+usly=20=0D=0Aused=20by=20Samsung,=20it=20is=20difficult=20to=20merge=20with=
+=20the=20existing=20driver.=0D=0A=0D=0AThanks.

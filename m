@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BAE14EA1AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C654EA1D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344916AbiC1Up4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 16:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43226 "EHLO
+        id S1345624AbiC1Ur0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 16:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345680AbiC1Un1 (ORCPT
+        with ESMTP id S1345678AbiC1Un1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Mar 2022 16:43:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E76C67D3C;
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6629F66AD2;
         Mon, 28 Mar 2022 13:41:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DE0F614E2;
-        Mon, 28 Mar 2022 20:41:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC2B5C341D8;
-        Mon, 28 Mar 2022 20:41:43 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BD2D1CE170B;
+        Mon, 28 Mar 2022 20:41:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC9B4C34117;
+        Mon, 28 Mar 2022 20:41:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648500103;
-        bh=Mq/3q2HPn+lLhZOCSw6V5fK6FkDgJ6aTbZK5JZLvons=;
+        s=k20201202; t=1648500102;
+        bh=9HZjksUabmOm37G5sc/HJE9SBSEyfBlYvIZOWWpC4hE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QlkVJ9TTb7ibxxkWfR5u0Bk1y3V8E1KXwHnFn+OyB4DHxn7J12kUwAMaLTFyBwsUM
-         evLjrFaet6OSW4fq1wtwdALOTeYhN9rhzagGar/6SRCNxNNew0AIzdmB0pj1+2XWDR
-         ZeYGmZHpeUSQDB+0Pf4FQHUbGgJqkIw3OrAn1Ez/6mfA8dL/w7x1e5KdHXPQwSeb9u
-         AhYrRljb6nP04TJsP0/UsHPC2qSfJDXf+D9TVzFESVaFYk/WAl1hiyq3Jerzq8kWmG
-         415fp4kFBceJVi+lyFvvoQnbrJ61X6ITnwzMeC5KW9IAb+ljqkxYacegpfg44M7z2G
-         GAcp4ednTd4EA==
+        b=ABswXVV5gQuCk9AD/wtL8bO+BypW0m8y+ANAQ5rnByh5DMEvWtpqrsgbAg0JsEJ9c
+         VT9ZhC4q8iRP+vYd/N/27I+V+4EniwELQuULlz4lgsnjuy5r171ufFlmoYBAXqFM/E
+         jGX9CNMzMX2t5ZaN4NWUJpLoSSP8V+i8PHqAY/8M2WfwjP5OQAKe6SZl5vXqK83/CJ
+         WjJSYbnnBNWrf9t2Fj0Xe4IgSrFQVuC/POsAdh3Ck3bQAk6NcGLdfkeeEGbONH+u3p
+         75S6fEbN/Cf+qBa4eGs7S32hQ8tLXoiL6fjlsG+ZeuucRpLhQZrDx0wQiW25CvdXAl
+         XOcDh/+HdwqSA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nYwBI-000lc8-37; Mon, 28 Mar 2022 22:41:40 +0200
+        id 1nYwBI-000lcC-55; Mon, 28 Mar 2022 22:41:40 +0200
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 05/26] media: dvb-usb: a800: use an enum for the device number
-Date:   Mon, 28 Mar 2022 22:41:17 +0200
-Message-Id: <dc8f9ec6cc8f2e16967a61752a292c46622c01dc.1648499509.git.mchehab@kernel.org>
+Subject: [PATCH 06/26] media: af9005: use the newer dvb-usb macros for USB device
+Date:   Mon, 28 Mar 2022 22:41:18 +0200
+Message-Id: <9b1749763465815af92f0a4d8f210fe170c549d5.1648499509.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1648499509.git.mchehab@kernel.org>
 References: <cover.1648499509.git.mchehab@kernel.org>
@@ -57,11 +57,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device number is currently a value that needs to be the same
-on two separate tables, but the code doesn't actually enforce it,
-leading to errors as boards get added or removed.
-
-Fix it by using an enum.
+In order to make the drivers under dvb-usb more homogeneous,
+use the new macro.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -69,46 +66,53 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/26] at: https://lore.kernel.org/all/cover.1648499509.git.mchehab@kernel.org/
 
- drivers/media/usb/dvb-usb/a800.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ drivers/media/usb/dvb-usb/af9005.c | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb/a800.c b/drivers/media/usb/dvb-usb/a800.c
-index 36b5b6227412..5f294784923c 100644
---- a/drivers/media/usb/dvb-usb/a800.c
-+++ b/drivers/media/usb/dvb-usb/a800.c
-@@ -72,11 +72,17 @@ static int a800_probe(struct usb_interface *intf,
+diff --git a/drivers/media/usb/dvb-usb/af9005.c b/drivers/media/usb/dvb-usb/af9005.c
+index b6a2436d16e9..0827bf3d4e8c 100644
+--- a/drivers/media/usb/dvb-usb/af9005.c
++++ b/drivers/media/usb/dvb-usb/af9005.c
+@@ -994,19 +994,16 @@ static int af9005_usb_probe(struct usb_interface *intf,
+ 				  THIS_MODULE, NULL, adapter_nr);
  }
  
- /* do not change the order of the ID table */
--static struct usb_device_id a800_table [] = {
--/* 00 */	{ USB_DEVICE(USB_VID_AVERMEDIA,     USB_PID_AVERMEDIA_DVBT_USB2_COLD) },
--/* 01 */	{ USB_DEVICE(USB_VID_AVERMEDIA,     USB_PID_AVERMEDIA_DVBT_USB2_WARM) },
--			{ }		/* Terminating entry */
+-enum af9005_usb_table_entry {
 +enum {
-+	AVERMEDIA_DVBT_USB2_COLD,
-+	AVERMEDIA_DVBT_USB2_WARM,
+ 	AFATECH_AF9005,
+-	TERRATEC_AF9005,
+-	ANSONIC_AF9005,
++	TERRATEC_CINERGY_T_USB_XE,
++	ANSONIC_DVBT_USB,
  };
-+
-+static struct usb_device_id a800_table[] = {
-+	DVB_USB_DEV(AVERMEDIA, AVERMEDIA_DVBT_USB2_COLD),
-+	DVB_USB_DEV(AVERMEDIA, AVERMEDIA_DVBT_USB2_WARM),
-+	{ }
-+};
-+
- MODULE_DEVICE_TABLE (usb, a800_table);
  
- static struct dvb_usb_device_properties a800_properties = {
-@@ -132,8 +138,8 @@ static struct dvb_usb_device_properties a800_properties = {
- 	.num_device_descs = 1,
- 	.devices = {
- 		{   "AVerMedia AverTV DVB-T USB 2.0 (A800)",
--			{ &a800_table[0], NULL },
--			{ &a800_table[1], NULL },
-+			{ &a800_table[AVERMEDIA_DVBT_USB2_COLD], NULL },
-+			{ &a800_table[AVERMEDIA_DVBT_USB2_WARM], NULL },
- 		},
- 	}
+ static struct usb_device_id af9005_usb_table[] = {
+-	[AFATECH_AF9005] = {USB_DEVICE(USB_VID_AFATECH,
+-				USB_PID_AFATECH_AF9005)},
+-	[TERRATEC_AF9005] = {USB_DEVICE(USB_VID_TERRATEC,
+-				USB_PID_TERRATEC_CINERGY_T_USB_XE)},
+-	[ANSONIC_AF9005] = {USB_DEVICE(USB_VID_ANSONIC,
+-				USB_PID_ANSONIC_DVBT_USB)},
++	DVB_USB_DEV(AFATECH, AFATECH_AF9005),
++	DVB_USB_DEV(TERRATEC, TERRATEC_CINERGY_T_USB_XE),
++	DVB_USB_DEV(ANSONIC, ANSONIC_DVBT_USB),
+ 	{ }
  };
+ 
+@@ -1071,11 +1068,11 @@ static struct dvb_usb_device_properties af9005_properties = {
+ 		     .warm_ids = {NULL},
+ 		     },
+ 		    {.name = "TerraTec Cinergy T USB XE",
+-		     .cold_ids = {&af9005_usb_table[TERRATEC_AF9005], NULL},
++		     .cold_ids = {&af9005_usb_table[TERRATEC_CINERGY_T_USB_XE], NULL},
+ 		     .warm_ids = {NULL},
+ 		     },
+ 		    {.name = "Ansonic DVB-T USB1.1 stick",
+-		     .cold_ids = {&af9005_usb_table[ANSONIC_AF9005], NULL},
++		     .cold_ids = {&af9005_usb_table[ANSONIC_DVBT_USB], NULL},
+ 		     .warm_ids = {NULL},
+ 		     },
+ 		    {NULL},
 -- 
 2.35.1
 

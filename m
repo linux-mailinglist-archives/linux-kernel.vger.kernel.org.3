@@ -2,260 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB0A4E920A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3684E920D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240059AbiC1Jzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 05:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
+        id S240072AbiC1J4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 05:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237730AbiC1Jzn (ORCPT
+        with ESMTP id S237730AbiC1J4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 05:55:43 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2098.outbound.protection.outlook.com [40.107.215.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4691E4C400
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:54:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GO1okmpPlxWrtLaLWGa5f6A2SXPHmkgnUJOTLljkeIx0dW6md0O+pzcCFfQfVxFF28CrN2MU0hLMbSM7TdLgMqFlL6nZm/ldzVAlDaKzXgs95NEn75LEYCWxeZQ4SZ7/F9Dmm5478W4bYtHKZ90Z7IyxIhdea6GeiHqGXveDGUzKUIuqJyCzOJzUJeXPo/bM/+dzq6hd4bkRsvklDp/zNupUljnmiiqIMdU2Eps01L96Jev1rQWeDpZk9hC+BRfHpWDFLBzQF8UGxvP0ZBJiJcgEaN5LCoElYL9t6fnHuQRmuRSA9Vy1kid5ytKJMgFBXpWgVy2NohbEM/oMbGaQNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I5L/PhTCV5AlqOJZUqTvaUu4KafswmX1JJEwcwsrwXw=;
- b=Aq1sEpbFUYpO+1J/rPMf/vA+PVV8P6I0h7A98mvfg3RzYKMQ2eIIFeJHyPWqd8x48ap8NZVUyOkcPPYrmaMQAJ7geDnPNX9noSlgxjSxaCP5gYGZFJXFUQroAXo0kQjpMkyQx3gqz4gt7LRpv1vfjCVTijLZ4UcbQVhZ5wA++PZpVCrZQdMeK82faRJwyLqmarxJvWK2r8sN08Z25Nf93b54TOF9UNOTKP+81SOipu2p+RBovM5Egsyhf7hZBFK1SKGHb0fFvYorTb8jT7ynk6bBzcUBqYfOUhqrN7n6n/pbzG5OYmp5z6oJhtv7425UA+X0fZafAvJ3BpvRnkjZOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I5L/PhTCV5AlqOJZUqTvaUu4KafswmX1JJEwcwsrwXw=;
- b=BWAqPEyEkRmVaDAUNkxgWLbHW2Wxm0xQ2KqbIZlyloDya++xkvwfjmySDKXcIkXEcQqP+37kL6ZfpUF8C1J+/GdTnJjvWrxdXE4hyTKxEmNwrC8VxQqRUriyXDscjYE4WUdIEh/MntO0kFEY2ol5fcgDGyhgoxz9vNmRYiXf/ZI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3080.apcprd06.prod.outlook.com (2603:1096:4:6d::16) by
- SG2PR06MB5216.apcprd06.prod.outlook.com (2603:1096:4:1d6::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5102.19; Mon, 28 Mar 2022 09:53:58 +0000
-Received: from SG2PR06MB3080.apcprd06.prod.outlook.com
- ([fe80::34de:38d6:2701:5f94]) by SG2PR06MB3080.apcprd06.prod.outlook.com
- ([fe80::34de:38d6:2701:5f94%3]) with mapi id 15.20.5102.022; Mon, 28 Mar 2022
- 09:53:58 +0000
-From:   Qing Wang <wangqing@vivo.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH] sched: topology: add input parameter for sched_domain_flags_f()
-Date:   Mon, 28 Mar 2022 02:53:37 -0700
-Message-Id: <1648461219-4333-1-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: HK0PR03CA0099.apcprd03.prod.outlook.com
- (2603:1096:203:b0::15) To SG2PR06MB3080.apcprd06.prod.outlook.com
- (2603:1096:4:6d::16)
+        Mon, 28 Mar 2022 05:56:04 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39B84D9F7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:54:24 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id f10so3998703plr.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:54:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=vFzI/UO9S/7amXxoLgmYKGJ5Mev3LOFubNmP39fe8tI=;
+        b=TMsLXfqkJdT1zPna/+HAShg++nN7DF7jJsTb4VSpRixOLRQlZax4SyZ7cooc+dbQYe
+         orGkB0WXzAlWV7F4OPxRZXYgHqfUTKcknBVkKAAuf2d9C/jlrBTdts44nY1DbCvGQeEw
+         RC5EpqZrVDJZhtoIObQClGHZCBXF+6id6SNJXNrMSrm/DyX+x18EJsWZGJy5TFH+UfTf
+         iChpKdFEi5ou2S9mJcO6vPOVA5oanURTWuqUonvz4cD5eN1M6E2VeQfGPXVSk3rw0rvB
+         5xoWqBTBxtsRUtq8/mpn7vfw7cDLnABFHLo0Zx+yepOjfPFi1C0RWkAkZHuOwmTRcVU8
+         eRzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vFzI/UO9S/7amXxoLgmYKGJ5Mev3LOFubNmP39fe8tI=;
+        b=I4lUmYW72jot//vrO4VGCqNa1TQOghU2ozAVH836uIgKWZwj5P5DcCXRaq1BJCOiK+
+         yDRaDshVBYU7caONd5uyYIsh/C9ePgJ0JQ1c9JRTjdXe8YRHpfpdf4YSTzl+t3zx2pqA
+         2mTSK/zNfHPdf2J0IR9R0NfYXDpwB/pxVzrBFCewBdWkBCoI0maHrr1fKIPEUypOJRTD
+         jZ7XWIuI+LQMKhCa+GHHBx06NC4ZjJfcQMYZR013wkJEdZn5rPV6NnKUgev6G7BklKJd
+         TSrtYE1QwKu0heAxmiTOQWA6GZ8pfoengMVr8tKbuV4Kd93p4OB5BGjLBjcT0cCQ/XrX
+         cI7A==
+X-Gm-Message-State: AOAM530qs1O8xenV0M1bdCJ7mtp8/Ub65+eb6W2qaBRIkyD6fkb5wvtx
+        xuYLPiXBo1JAH7evvGi+L2Of2/AtcaKmgMHUkVqdeQ==
+X-Google-Smtp-Source: ABdhPJzbwvWS4Ya4eSWLbt3jj91/xcjC8ySl3W6dm7vJZUIPTR+YYZCh59b57AISL/1wZWV+X0VTOrH7gRzWttv8tKI=
+X-Received: by 2002:a17:902:9301:b0:153:2252:44ea with SMTP id
+ bc1-20020a170902930100b00153225244eamr25086369plb.65.1648461263991; Mon, 28
+ Mar 2022 02:54:23 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d227cddb-b9e6-4665-1504-08da10a0e108
-X-MS-TrafficTypeDiagnostic: SG2PR06MB5216:EE_
-X-Microsoft-Antispam-PRVS: <SG2PR06MB5216179D33C82E4242510DADBD1D9@SG2PR06MB5216.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DBQoxJy7JpUMg3KNN7FLHDjwjYBcqbzKRYmg1+ssg4h1xgGFvP421ViYfIPC5MUOzDMKW6bP736BoK8VdZE7DJv06in9PHazrHsy3DHhEaOFJew8/MfNspNOPmwcDRAHx3nY9rQBLaMvWslrRJO0GCVHD23ZlpgQ9NNnkWdOhoUIkmB5qgMdAaJInlZ/FXuJLnQRoajdi6pHc+UIGqozxLy6KM4DCgrcxDLT0AJX84FokuT5MOmxCMVkuIRQ+DqTNeu5q+s73CPxS4YXDs4C0L17k1GKUxUXK440jo2H8xJrUlJylCZBay9zmHLieEtCnEuxRTb9dbZWvFIfdwgj2w2sOgZKaCczhhlyqq0kQgZYEi66Pw7BrSVei+6Ws0kqsenUbuxsjXWgX3HRb16DumKzCAD5GgnpVcdGFxp5lmYwKZ2fWgfoT9NdlQ2BNvIfgEmOg8Yhlvkp4AR3vOEA6aGDjc06S5y85Bp2hjMgISLxd5LU+nrDrpZC/vUCxdj0keZyl2aOlqbLrlkIflNuy5Z8hzira+K30XSU8hwijsmdHtJZc7kC9g9N8O0LqGru/MO3cDhQkmfpVTwkkOVDd8CnCUEdL7/awJBRllKxc6TVJu3GGvbDIT5FhJl3Acm6WJyELyKJCygw6r/GgTlWxWNYZ2qJSI+lzFIZhQf6Mc0kCt6dRD0nZ2i3TtJzFm2GELs6437/yh7PwhkMs8gXrQ6+Ogc2ec7mMXbkj36SmQw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3080.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52116002)(36756003)(26005)(86362001)(6506007)(66946007)(107886003)(186003)(2616005)(6666004)(7416002)(8936002)(6512007)(5660300002)(83380400001)(2906002)(508600001)(66556008)(921005)(66476007)(38100700002)(110136005)(316002)(38350700002)(4326008)(6486002)(8676002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GQtyp6rCzufG0vHFA4O/aqByqqOBLl5Cho7tZasYqVE1QULpWQgQMsnMYw3u?=
- =?us-ascii?Q?t7Es+lUlBYlcNJ4ZFUcBl3daROI4hTpGTwHIlLsw5XD+ikCtX3DNUEsy++vE?=
- =?us-ascii?Q?v5GzqhcU8LXssNpwgCoJ2WeLWy4EQiPk2Y15KqilGRuptHoTFVQpXp6pEqMA?=
- =?us-ascii?Q?9/U03DOECsYyR0Q7mGRtqTKLH7Ib4XJwUCbA61LyZjTrayFfHdzGASJxdx6R?=
- =?us-ascii?Q?RKcXHSFN3I/JJIfxAc2sCg8NuF522Q84LcKycgVSeKfgonxVdadRaLqivz2h?=
- =?us-ascii?Q?E/XQfvxfyimdFrgl45gpRO7pxiRscu7xys2iLKqIbrp3Vs35fRz37evXIo4f?=
- =?us-ascii?Q?KGJpqBMaOQLWas0NZVzjev45yzWdAWZfBZkhj2JqGgPRde5aDhAG+gSnxfMj?=
- =?us-ascii?Q?HFcp8PseCI7OzF+oFFpAAdyOXN4HT3JJKKmiqwLCLzVBuO3DBJtG3fmnmOdi?=
- =?us-ascii?Q?6IZ5vkjnuClPf4nzZxCrnPZFTCYAOIZrt7cjz/oLGLDtnZPj46AsnkS0mFT9?=
- =?us-ascii?Q?06v5fVu4mcI8l2H8vEjS4k6x1yK29lFo+Bw77g6ueDdTtD9JmRzgqZR9H0LF?=
- =?us-ascii?Q?5bMAY5FD1NRxIibmVl4nZfkbEMZPASQtRZyjG5PJ/MSoZTcySOKLgE6op8Ej?=
- =?us-ascii?Q?6HODmv725LM4eVfWtO+6Etiw22QMkk0D45uAkTldd9vUlfoM0N29pxLNbBrC?=
- =?us-ascii?Q?6psn4F5l9MwqIl+lskFTAp+K/bp7o+uubmmopwK7i0aoOkfEnn6xYtoX5q7V?=
- =?us-ascii?Q?u6CMPb2EVm43VPPzkKtiGaOcGkbws07Gq2FYM+4ANn9P0+Cw6mBT2xxOUGx6?=
- =?us-ascii?Q?+/jU5353jbqmTOL6LaKguFE45VMZJQcSmw6epV4FZzkX9qoKIpRhIf7Qs0/g?=
- =?us-ascii?Q?Ge0/PdQdpU7NlWA+zPN3KRFKyrWd57DJ682sbifZRIaDMwys7sq55v1GtnKJ?=
- =?us-ascii?Q?1pgrk/16xUTxw2nF+FrsD7H5YhwaR7Ar7WG/puLN3ugZiWo8zpKx7UvU3fof?=
- =?us-ascii?Q?EQSae4Vc8/XRSXVWsUL6p8AzFmC0WyJfse5mMxRykyxdUmeOz9vhBDPjkm70?=
- =?us-ascii?Q?+9qSelSqHPLSi8Je1ZvttUNW9RgpROJKLHCpUsXLtGjoiKY+I9lb8uGSHEDZ?=
- =?us-ascii?Q?a7LkCr4FJaRwOMeKcvVeTZxBsg8UbKUKsuc5gA3RaNP8VbBYbkL766AMd3/D?=
- =?us-ascii?Q?z3g+WXGcuVsUAwBDrYpI/qGoGV22y5JMHfx4gWaSCZMeClbjKYprlYPEBm8L?=
- =?us-ascii?Q?ex+ipxA3EhLK5Or3m2ouJPDwc624OtVFBWh/7Tm69VX+rIYXdPaIX5aBEa6P?=
- =?us-ascii?Q?LXZQl+1GA0MYt/WCQUeCEVFN/3uEvq1CmTSTJ4sayNjEHyJJAO4khNhgxJ0a?=
- =?us-ascii?Q?NfGJTZTWqL7gdzMXJAuRrp3oWiR1SZumEc/5hTvarwE7NOHt8sQGr/cqwmHe?=
- =?us-ascii?Q?sNirgG+BEi1hNR0eO60m3Pm1+j3HZ8JWv3+Nnsh/YID6dzXX4wFEViAHtwfM?=
- =?us-ascii?Q?YTtB7Zd/jIHPUOW0gC3czbqUrZAG7LTriQEKMbwBQ56KKp54Sff4c3Dyz073?=
- =?us-ascii?Q?WgccOwLWWigkXmaSbcnMk/TT4jHpLt5S6dpXE0qKktA4FilKUAbby21SmlfZ?=
- =?us-ascii?Q?9mD3XucEccvYN7cW/Y9Jjol/fAjau1mo2GczVPfxvvDssxWPsm38159HnH8r?=
- =?us-ascii?Q?gd9taYR7G0xeA8V56WnafYtbUH6a4lOFAlmtduMgcrBDZuVcy34AMYjmfvnZ?=
- =?us-ascii?Q?sG1veyToxA=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d227cddb-b9e6-4665-1504-08da10a0e108
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3080.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2022 09:53:58.5373
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UG1sucXhFrkZOTiNz6BaCWt2Bq72+N42+MdhLEKrJ1nGW0E5LySTrR5G0lzajPrnTyyWaPtWQcfGULo+9dKY4w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB5216
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20211105031904.2641088-1-xji@analogixsemi.com>
+ <20211105031904.2641088-3-xji@analogixsemi.com> <YiTruiCIkyxs3jTC@pendragon.ideasonboard.com>
+ <YiWiYpEfTOOqgyAN@google.com> <CAG3jFys-BYsBp07AAFQ2O_TFsXOwhcVDnsOh8WVNNSag3HZw+Q@mail.gmail.com>
+ <CAG3jFyu47cv8oSecONM95KVoP=NOvgwafAp4TQ33CZ0Y4zWmnQ@mail.gmail.com> <20220321115226.GA1484106@anxtwsw-Precision-3640-Tower>
+In-Reply-To: <20220321115226.GA1484106@anxtwsw-Precision-3640-Tower>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 28 Mar 2022 11:54:12 +0200
+Message-ID: <CAG3jFysvDa2FS3NS6f2sXAid_TmrXyb9vCADN87v=mJ-txGp0A@mail.gmail.com>
+Subject: Re: [PATCH v12 3/4] drm/bridge: anx7625: add MIPI DPI input feature
+To:     Xin Ji <xji@analogixsemi.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, a.hajda@samsung.com,
+        narmstrong@baylibre.com, dan.carpenter@oracle.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+        sam@ravnborg.org, pihsun@chromium.org, tzungbi@google.com,
+        maxime@cerno.tech, drinkcat@google.com, hsinyi@chromium.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        bliang@analogixsemi.com, qwen@analogixsemi.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Qing <wangqing@vivo.com>
+> > > > > > -   DRM_DEV_DEBUG_DRIVER(dev, "found dsi host node.\n");
+> > > > > > +   bus_type =3D V4L2_FWNODE_BUS_TYPE_PARALLEL;
+> > > > > > +   mipi_lanes =3D MAX_LANES_SUPPORT;
+> > > > > > +   ep0 =3D of_graph_get_endpoint_by_regs(np, 0, 0);
+> > > > > > +   if (ep0) {
+> > > > > > +           if (of_property_read_u32(ep0, "bus-type", &bus_type=
+))
+> > > > > > +                   bus_type =3D 0;
+> > > > > > +
+> > > > > > +           mipi_lanes =3D of_property_count_u32_elems(ep0, "da=
+ta-lanes");
+> > > > > > +   }
+> > > > > > +
+> > > > > > +   if (bus_type =3D=3D V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus t=
+ype is Parallel(DSI) */
+> > > > >
+> > > > > This is not correct *at all*. V4L2_FWNODE_BUS_TYPE_PARALLEL has n=
+othing
+> > > > > to do with DSI. DSI stands for Digital *Serial* Interface. If any=
+thing,
+> > > > > the V4L2_FWNODE_BUS_TYPE_PARALLEL type would map better to DPI, e=
+ven if
+> > > > > it's not an exact match.
+> > > > >
+> > > > > This patch has landed in v5.17-rc1, along with the corresponding
+> > > > > bindings. As DT bindings are an ABI, we should really fix this be=
+fore
+> > > > > v5.17 is released. There is no DSI bus types defined in DT, and a=
+dding
+> > > > > one as a fix so late in the v5.17-rc cycle seems a bit of a stret=
+ch to
+> > > > > me (unless Rob disagrees).
+> > > > >
+> > > > > It would seem best to revert this series and the corresponding bi=
+ndings,
+> > > > > and retry in v5.18.
+> > > >
+> > > > There is a DT patch using this property that is already queued up f=
+or 5.17
+> > > > in the soc tree:
+> > > >
+> > > > https://nam10.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2=
+Flore.kernel.org%2Fall%2F20220214200507.2500693-1-nfraprado%40collabora.com=
+%2F&amp;data=3D04%7C01%7Cxji%40analogixsemi.com%7C69542695a9cd42cff5a508da0=
+0ea7baa%7Cb099b0b4f26c4cf59a0fd5be9acab205%7C0%7C0%7C637823304343387964%7CU=
+nknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLC=
+JXVCI6Mn0%3D%7C3000&amp;sdata=3DKbitBhnvGWfpHu6PNLUmrgdqcoZbXaA3hGwq9iAjQfI=
+%3D&amp;reserved=3D0
+> > > >
+> > > > merged here:
+> > > >
+> > > > https://nam10.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2F=
+git.kernel.org%2Fsoc%2Fsoc%2Fc%2F32568ae37596b529628ac09b875f4874e614f63f&a=
+mp;data=3D04%7C01%7Cxji%40analogixsemi.com%7C69542695a9cd42cff5a508da00ea7b=
+aa%7Cb099b0b4f26c4cf59a0fd5be9acab205%7C0%7C0%7C637823304343387964%7CUnknow=
+n%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI=
+6Mn0%3D%7C3000&amp;sdata=3DYJAs0IPxR0hrHpGR7K00itcTIF9cnz4L4ta%2B9ACQdSk%3D=
+&amp;reserved=3D0
+> > > >
+> > > > We will need to revert that one as well.
+> > >
+> > > I just submitted a series reverting the dt-binding change + the
+> > > related commit to "mt8183: jacuzzi".
+> > > Can I get a quick r-b/a-b in order to get this into v5.17.
+> > >
+> > > https://nam10.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fl=
+ore.kernel.org%2Fall%2F20220307154558.2505734-3-robert.foss%40linaro.org%2F=
+&amp;data=3D04%7C01%7Cxji%40analogixsemi.com%7C69542695a9cd42cff5a508da00ea=
+7baa%7Cb099b0b4f26c4cf59a0fd5be9acab205%7C0%7C0%7C637823304343387964%7CUnkn=
+own%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXV=
+CI6Mn0%3D%7C3000&amp;sdata=3DS5ScH2jid3ZRobvO%2Fl2nVgdOvFHNj1nWafTQYG3L9d0%=
+3D&amp;reserved=3D0
+> > >
+> >
+> > v2 of revert submitted.
+> >
+> > https://nam10.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flor=
+e.kernel.org%2Fall%2F20220308094911.2680291-1-robert.foss%40linaro.org%2F&a=
+mp;data=3D04%7C01%7Cxji%40analogixsemi.com%7C69542695a9cd42cff5a508da00ea7b=
+aa%7Cb099b0b4f26c4cf59a0fd5be9acab205%7C0%7C0%7C637823304343387964%7CUnknow=
+n%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI=
+6Mn0%3D%7C3000&amp;sdata=3DD6ulS16g4v4x0u23OtYRrSeitTqllWwDzPiT%2BxMcQQg%3D=
+&amp;reserved=3D0
+> >
+> > Xin: Will you spin a series that adds DPI support and re-enables DPI
+> > for anx7625? Additionally, "mt8183: jacuzzi" will have to have DPI
+> > re-enabled.
+> Hi Robert Foss, I'm little confused, do I need resend this serial or
+> send a patch based on currently define(V4L2_FWNODE_BUS_TYPE_PARALLEL)?
+>
+> And use V4L2_FWNODE_BUS_TYPE_PARALLEL for DPI, other value for DSI
+> setup?
 
-sched_domain_flags_f() are statically set now, but actually, we can get a
-lot of necessary information based on the cpu_map. e.g. we can know whether
-its cache is shared.
+V4L2_FWNODE_BUS_TYPE_PARALLEL is not meant to be used for DPI, but
+rather is used to represtent CPI. So another enum (something along the
+lines of V4L2_FWNODE_BUS_TYPE_DPI) needs to be defined, and then this
+series needs to use this new enum.
 
-Allows custom extension without affecting current.
+I'd like to see the following:
+ - Introduction of V4L2_FWNODE_BUS_TYPE_DPI
+ - Reworking this series to use V4L2_FWNODE_BUS_TYPE_DPI
+ - Reworking "mt8183: jacuzzi" to use V4L2_FWNODE_BUS_TYPE_DPI
 
-Signed-off-by: Wang Qing <wangqing@vivo.com>
----
- arch/powerpc/kernel/smp.c      |  4 ++--
- arch/x86/kernel/smpboot.c      |  8 ++++----
- include/linux/sched/topology.h | 10 +++++-----
- kernel/sched/topology.c        |  2 +-
- 4 files changed, 12 insertions(+), 12 deletions(-)
+Does that make sense?
 
-diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
-index de0f6f0..e503d23
---- a/arch/powerpc/kernel/smp.c
-+++ b/arch/powerpc/kernel/smp.c
-@@ -1000,7 +1000,7 @@ static bool shared_caches;
- 
- #ifdef CONFIG_SCHED_SMT
- /* cpumask of CPUs with asymmetric SMT dependency */
--static int powerpc_smt_flags(void)
-+static int powerpc_smt_flags(const struct cpumask *cpu_map)
- {
- 	int flags = SD_SHARE_CPUCAPACITY | SD_SHARE_PKG_RESOURCES;
- 
-@@ -1018,7 +1018,7 @@ static int powerpc_smt_flags(void)
-  * since the migrated task remains cache hot. We want to take advantage of this
-  * at the scheduler level so an extra topology level is required.
-  */
--static int powerpc_shared_cache_flags(void)
-+static int powerpc_shared_cache_flags(const struct cpumask *cpu_map)
- {
- 	return SD_SHARE_PKG_RESOURCES;
- }
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 2ef1477..c005a8e
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -535,25 +535,25 @@ static bool match_llc(struct cpuinfo_x86 *c, struct cpuinfo_x86 *o)
- 
- 
- #if defined(CONFIG_SCHED_SMT) || defined(CONFIG_SCHED_CLUSTER) || defined(CONFIG_SCHED_MC)
--static inline int x86_sched_itmt_flags(void)
-+static inline int x86_sched_itmt_flags(const struct cpumask *cpu_map)
- {
- 	return sysctl_sched_itmt_enabled ? SD_ASYM_PACKING : 0;
- }
- 
- #ifdef CONFIG_SCHED_MC
--static int x86_core_flags(void)
-+static int x86_core_flags(const struct cpumask *cpu_map)
- {
- 	return cpu_core_flags() | x86_sched_itmt_flags();
- }
- #endif
- #ifdef CONFIG_SCHED_SMT
--static int x86_smt_flags(void)
-+static int x86_smt_flags(const struct cpumask *cpu_map)
- {
- 	return cpu_smt_flags() | x86_sched_itmt_flags();
- }
- #endif
- #ifdef CONFIG_SCHED_CLUSTER
--static int x86_cluster_flags(void)
-+static int x86_cluster_flags(const struct cpumask *cpu_map)
- {
- 	return cpu_cluster_flags() | x86_sched_itmt_flags();
- }
-diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-index 56cffe4..6aa985a
---- a/include/linux/sched/topology.h
-+++ b/include/linux/sched/topology.h
-@@ -36,28 +36,28 @@ extern const struct sd_flag_debug sd_flag_debug[];
- #endif
- 
- #ifdef CONFIG_SCHED_SMT
--static inline int cpu_smt_flags(void)
-+static inline int cpu_smt_flags(const struct cpumask *cpu_map)
- {
- 	return SD_SHARE_CPUCAPACITY | SD_SHARE_PKG_RESOURCES;
- }
- #endif
- 
- #ifdef CONFIG_SCHED_CLUSTER
--static inline int cpu_cluster_flags(void)
-+static inline int cpu_cluster_flags(const struct cpumask *cpu_map)
- {
- 	return SD_SHARE_PKG_RESOURCES;
- }
- #endif
- 
- #ifdef CONFIG_SCHED_MC
--static inline int cpu_core_flags(void)
-+static inline int cpu_core_flags(const struct cpumask *cpu_map)
- {
- 	return SD_SHARE_PKG_RESOURCES;
- }
- #endif
- 
- #ifdef CONFIG_NUMA
--static inline int cpu_numa_flags(void)
-+static inline int cpu_numa_flags(const struct cpumask *cpu_map)
- {
- 	return SD_NUMA;
- }
-@@ -180,7 +180,7 @@ void free_sched_domains(cpumask_var_t doms[], unsigned int ndoms);
- bool cpus_share_cache(int this_cpu, int that_cpu);
- 
- typedef const struct cpumask *(*sched_domain_mask_f)(int cpu);
--typedef int (*sched_domain_flags_f)(void);
-+typedef int (*sched_domain_flags_f)(const struct cpumask *cpu_map);
- 
- #define SDTL_OVERLAP	0x01
- 
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 05b6c2a..34dfec4
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1556,7 +1556,7 @@ sd_init(struct sched_domain_topology_level *tl,
- 	sd_weight = cpumask_weight(tl->mask(cpu));
- 
- 	if (tl->sd_flags)
--		sd_flags = (*tl->sd_flags)();
-+		sd_flags = (*tl->sd_flags)(tl->mask(cpu));
- 	if (WARN_ONCE(sd_flags & ~TOPOLOGY_SD_FLAGS,
- 			"wrong sd_flags in topology description\n"))
- 		sd_flags &= TOPOLOGY_SD_FLAGS;
--- 
-2.7.4
 
+Rob.

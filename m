@@ -2,50 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 590294E9BD1
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E854E9BE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240812AbiC1QEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 12:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
+        id S241067AbiC1QG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 12:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240807AbiC1QEt (ORCPT
+        with ESMTP id S237237AbiC1QGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 12:04:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EF85DE50
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:03:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D934BB810D5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 16:03:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F74BC004DD;
-        Mon, 28 Mar 2022 16:03:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648483385;
-        bh=P0P3Lnt4gmVt++k6Xk8i+eUeKJePtopQkH5guyzaals=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oEzW3aC2jtw45GDsyEznM0jFg8h+Yzbq/A+p0lUe6s0UE/V+mpj8F1WgbxJpOC1T/
-         yPgto4nsBiPimjOwwvze5QLkxulYoqi3uh7+YyIGHf/Em/ACHGvYfjrhw5FM3z9pNt
-         CdbLyYP3WOvSLPfWzJF++nW79ZiQClnPj1D3yFuNE3QLDx29iUO6EdDNGkLfxDWWQ8
-         TPJl/vI91vEINeKuW7cDofEkBBUhxPqyvQomUur8LciuSTtpnGPhcygAf1cYNpZTuh
-         qRrAel1D7zGYsEMNIZZoKiAZjnkr4YEfXbxmXpJDLTlZ6OXDt74jeS8Kspx82WcLn4
-         g+ERzIdLrxWew==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
-        Wenqing Liu <wenqingliu0120@gmail.com>,
-        Chao Yu <chao.yu@oppo.com>
-Subject: [PATCH] f2fs: fix to do sanity check on inline_dots inode
-Date:   Tue, 29 Mar 2022 00:02:53 +0800
-Message-Id: <20220328160253.3102-1-chao@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Mon, 28 Mar 2022 12:06:54 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6667D4DF58
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:05:13 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a8so29607254ejc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:05:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bEu+oart4Gwr+EP+AbNQngr10mG4qqGsRv4fsyOxjhI=;
+        b=avRVoC3lzpjUvhF/Wiu3VOeNZwcC6vRTuDJRyxS38ChAcvk/ia4iNFqJe2FYH2ySDV
+         ko3IDhpFgBqMDdZSwvQSNsAIcXllUrKZLWqLNJwiXrc2alJT4AihdevfOShh5cy3m7qY
+         eyxdBMW720R+R09G5Xr0/flys3hXmlAoSIH88=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bEu+oart4Gwr+EP+AbNQngr10mG4qqGsRv4fsyOxjhI=;
+        b=W095WC+BOs/rugzCemaRME3kPJUssk4h24a4s83tgA+HErkEJ2L6991WjJViOAKSoa
+         STSwVlf2YdE2kvEMk1BANUrz18w5emdIGiQIGl927cx4npL6fmwp0TMX84GIVGetUq1I
+         /wyYzqY/hXbrcTN2cuUiUsEgCQxceJ+3EFtTJGAf/O/t1ifLhnnecvHVJdFOStH0jWaJ
+         zdvRuXFVDNWnDtho184TXx75W9JuNZntbtD0LTEWQRDJH22O4XzdQBibXRnY0XHLIDk9
+         qU23jH47hQh5GyC+fA8zpEkGd+oLOU0bNjTniB4ia0jGyqC8cRU7UxgeIjq+QK8qgTTX
+         XLAQ==
+X-Gm-Message-State: AOAM530zqo3VuXs9yhO95F55s32vXDo46RsIEW1EttefAM8/CLV+wrUp
+        4h9nROHzO+vClUjLQN0N/bncNA1g4+Kg7g==
+X-Google-Smtp-Source: ABdhPJwMggKMILOeBfthtrP1d1s8h3UsNzmUSmgRqGzeetQ5veSJXfM+tXpc6sXa0XV9dHN+8DwxPw==
+X-Received: by 2002:a17:907:d89:b0:6df:e54d:2462 with SMTP id go9-20020a1709070d8900b006dfe54d2462mr28932846ejc.97.1648483511599;
+        Mon, 28 Mar 2022 09:05:11 -0700 (PDT)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
+        by smtp.gmail.com with ESMTPSA id i11-20020a05640242cb00b0041922d3ce3bsm7385700edc.26.2022.03.28.09.05.10
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 09:05:10 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id r7so19970748wrc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:05:10 -0700 (PDT)
+X-Received: by 2002:a5d:4491:0:b0:203:f63a:e89b with SMTP id
+ j17-20020a5d4491000000b00203f63ae89bmr24455813wrq.342.1648483509935; Mon, 28
+ Mar 2022 09:05:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220325234344.199841-1-swboyd@chromium.org> <20220325234344.199841-2-swboyd@chromium.org>
+In-Reply-To: <20220325234344.199841-2-swboyd@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 28 Mar 2022 09:04:57 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VEZ6pTuqsjWaNAeMc8_szDDZSXdmU9K3FdQpdyU0VKLw@mail.gmail.com>
+Message-ID: <CAD=FV=VEZ6pTuqsjWaNAeMc8_szDDZSXdmU9K3FdQpdyU0VKLw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: sc7180-trogdor: Simplify trackpad enabling
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Joseph Barrera <joebar@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,65 +76,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As Wenqing reported in bugzilla:
+Hi,
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215765
+On Fri, Mar 25, 2022 at 4:43 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Trogdor boards with a detachable keyboard don't have a trackpad over
+> i2c. Instead the trackpad is on the detachable keyboard base. Let's move
+> the enabling of the trackpad i2c bus out of the base sc7180-trogdor.dtsi
+> file so that each trogdor board that is detachable, of which there are
+> many, doesn't have to disable the trackpad bus.
+>
+> Cc: Joseph Barrera <joebar@google.com>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi   | 4 ----
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi | 4 ----
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi    | 4 ++++
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi          | 1 -
+>  4 files changed, 4 insertions(+), 9 deletions(-)
 
-It will cause a kernel panic with steps:
-- mkdir mnt
-- mount tmp40.img mnt
-- ls mnt
-
-folio_mark_dirty+0x33/0x50
-f2fs_add_regular_entry+0x541/0xad0 [f2fs]
-f2fs_add_dentry+0x6c/0xb0 [f2fs]
-f2fs_do_add_link+0x182/0x230 [f2fs]
-__recover_dot_dentries+0x2d6/0x470 [f2fs]
-f2fs_lookup+0x5af/0x6a0 [f2fs]
-__lookup_slow+0xac/0x200
-lookup_slow+0x45/0x70
-walk_component+0x16c/0x250
-path_lookupat+0x8b/0x1f0
-filename_lookup+0xef/0x250
-user_path_at_empty+0x46/0x70
-vfs_statx+0x98/0x190
-__do_sys_newlstat+0x41/0x90
-__x64_sys_newlstat+0x1a/0x30
-do_syscall_64+0x37/0xb0
-entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The root cause is for special file: e.g. character, block, fifo or
-socket file, f2fs doesn't assign address space operations pointer array
-for mapping->a_ops field, so, in a fuzzed image, if inline_dots flag was
-tagged in special file, during lookup(), when f2fs runs into
-__recover_dot_dentries(), it will cause NULL pointer access once
-f2fs_add_regular_entry() calls a_ops->set_dirty_page().
-
-Fixes: 510022a85839 ("f2fs: add F2FS_INLINE_DOTS to recover missing dot dentries")
-Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
----
- fs/f2fs/namei.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
-index 906e9e301ac8..e3f23ae9bb19 100644
---- a/fs/f2fs/namei.c
-+++ b/fs/f2fs/namei.c
-@@ -461,6 +461,13 @@ static int __recover_dot_dentries(struct inode *dir, nid_t pino)
- 		return 0;
- 	}
- 
-+	if (!S_ISDIR(dir->i_mode)) {
-+		f2fs_err(sbi, "inconsistent inode status, skip recovering inline_dots inode (ino:%lu, i_mode:%u, pino:%u)",
-+			  dir->i_ino, dir->i_mode, pino);
-+		set_sbi_flag(sbi, SBI_NEED_FSCK);
-+		return -ENOTDIR;
-+	}
-+
- 	err = f2fs_dquot_initialize(dir);
- 	if (err)
- 		return err;
--- 
-2.32.0
-
+What about pompom?
+What about trogdor-r1?

@@ -2,302 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4986C4E9EF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD1A4E9EFB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245220AbiC1SaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 14:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
+        id S245236AbiC1ScE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 14:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242272AbiC1SaU (ORCPT
+        with ESMTP id S244803AbiC1ScB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 14:30:20 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDE813E20
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:28:37 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id dr20so30441999ejc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:28:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8WaH8oTp9zQ4RiMod88tKNM8FNGzolc7NDGliqXEyFM=;
-        b=RA1LFZlyqYnQKlZhfG5eW4EytFq6FXGfsjb2/DOkWkAoisIvQquLsZTwb8nBtNlht8
-         ZHqiJ/MOFhcB+HyYDg4DOrCFHvXKNreT5wQEPJ7PzPnMoI2QrObdeAd08uOLLZhCsV8Y
-         oo/fwNelFB8E06amjBdYhwsR2VhATbyd3kx12XlxxP1sGczHl+YWk9N47mzb48HohD17
-         d9HYqBqtvUEw1TYZH7O9tEkaSoRyqnabxydRHWLDA8W6lAvtHgHxiIUB7dc49IG+TBgi
-         G8ykTzQvXQ9aD4+tQHre6cRAhm0yoObw1rfkn0AAPUuFF1ZU/BUjCdEdRxBpKxz80uJg
-         RymA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8WaH8oTp9zQ4RiMod88tKNM8FNGzolc7NDGliqXEyFM=;
-        b=MgNrm1we3zW8jHnqv1KssFEi33/HF1GlhdIdHUFQapFKfFNcLHvOzyUhiEPOf0FHup
-         SWyCVQ5oMSy5RciTtDsWsrvmQPzum7iGI3QFECUZGZZ70GqgLRHrPAQ7Yl4voFUk5aVH
-         5kUmLMAKSTmipqAnClSCNeFr43bZz+2ZGu1Gtn5Mdfwa+BksNcDcqRujOywLiABGRjGJ
-         MZzMQc83WZf53H1ZqtBsrDM3BE+4sZfk/nDx7azrvJWrm0CXrC0anqWsgkQoPzQopCqH
-         iew0qhM2nuNEgByT5kFLeHxAVoVXa1kVjKI8Avv7Z3bpK+rYFrTOFY+TaYnsR8gyY7zR
-         Zssg==
-X-Gm-Message-State: AOAM533Upv2lgmiOzwu9WdMUfc2zJhJw+1gJAOsRN5Sebtmu1tm/la5c
-        +xiZcFpgWOVelEoq5eYGqx5LbaS3vyoC2SP1LayXhg==
-X-Google-Smtp-Source: ABdhPJz3R1rYGKfMgCT8Xw+uvi6MQu9Vw8tO6cBRgeUu+llCkBBC4HKzRw85BEQANrPE+Bd5D9ZFeLO+o1zCssURxAk=
-X-Received: by 2002:a17:906:9754:b0:6da:7d72:1353 with SMTP id
- o20-20020a170906975400b006da7d721353mr29368499ejy.273.1648492115577; Mon, 28
- Mar 2022 11:28:35 -0700 (PDT)
+        Mon, 28 Mar 2022 14:32:01 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B9C54FAA;
+        Mon, 28 Mar 2022 11:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648492220; x=1680028220;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=r3i5UaWM0bgiovmA6dltplhk6QvrIpD/lMvovcgfU9k=;
+  b=PwfRatwoPEIERsCvQqLrzmIvGF2b4z3jrMKXrKRQ+LWimXkqqRHqg7VN
+   QMUZQrYp2Y5AvIn45ke/y5BU0Uhf5RmixT9c3kmSAMjECt5l3Oo16gq9h
+   n8nWYLGotCDq/LiNlcco7QZYPufM7nHv5219WPDyAPrIReBrcv2+4IgJv
+   P5Z/2v35es9NLsNFKujB1uTSjmMrjjEwwuPIT4MhGYqGGnd2XAblWfHXs
+   k/huBVkVb31mXRkWb7tfnEUm/6TgKkjnCE7ZR5eKIi4wL9eMdQ3DJ9OOf
+   E2MPipHEZKIlDMqCt5RH08xqWGg2H4jtCyvsgf6xWt/SmqBroSaYS3kAX
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="239009503"
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="239009503"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 11:30:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="694456299"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga001.fm.intel.com with ESMTP; 28 Mar 2022 11:30:19 -0700
+Received: from [10.209.5.67] (kliang2-MOBL.ccr.corp.intel.com [10.209.5.67])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 0221158095F;
+        Mon, 28 Mar 2022 11:30:18 -0700 (PDT)
+Message-ID: <6d922fe2-cf8a-87fa-600d-a55c8d23da26@linux.intel.com>
+Date:   Mon, 28 Mar 2022 14:30:17 -0400
 MIME-Version: 1.0
-References: <20220328035951.1817417-1-tjmercier@google.com>
- <20220328035951.1817417-5-tjmercier@google.com> <YkHH/0Use7F30UUE@phenom.ffwll.local>
-In-Reply-To: <YkHH/0Use7F30UUE@phenom.ffwll.local>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Mon, 28 Mar 2022 11:28:24 -0700
-Message-ID: <CABdmKX01p6g_iHsB6dd4Wwh=8iLdYiUqdY6_yyA5ax2YNHt6tQ@mail.gmail.com>
-Subject: Re: [RFC v4 4/8] dmabuf: heaps: export system_heap buffers with GPU
- cgroup charging
-To:     "T.J. Mercier" <tjmercier@google.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Daniel Vetter <daniel@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] perf/x86/intel: Don't extend the pseudo-encoding to GP
+ counters
+Content-Language: en-US
+To:     Stephane Eranian <eranian@google.com>
+Cc:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <1648482543-14923-1-git-send-email-kan.liang@linux.intel.com>
+ <CABPqkBQS_VW4isEXBXzukWyUGqZSnR1G8c0p+MvK-MCVTjV2Ww@mail.gmail.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <CABPqkBQS_VW4isEXBXzukWyUGqZSnR1G8c0p+MvK-MCVTjV2Ww@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 7:36 AM Daniel Vetter <daniel@ffwll.ch> wrote:
->
-> On Mon, Mar 28, 2022 at 03:59:43AM +0000, T.J. Mercier wrote:
-> > From: Hridya Valsaraju <hridya@google.com>
-> >
-> > All DMA heaps now register a new GPU cgroup device upon creation, and t=
-he
-> > system_heap now exports buffers associated with its GPU cgroup device f=
-or
-> > tracking purposes.
-> >
-> > Signed-off-by: Hridya Valsaraju <hridya@google.com>
-> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> >
-> > ---
-> > v3 changes
-> > Use more common dual author commit message format per John Stultz.
-> >
-> > v2 changes
-> > Move dma-buf cgroup charge transfer from a dma_buf_op defined by every
-> > heap to a single dma-buf function for all heaps per Daniel Vetter and
-> > Christian K=C3=B6nig.
->
-> Apologies for being out of the loop quite a bit. I scrolled through this
-> all and I think it looks good to get going.
->
-> The only thing I have is whether we should move the cgroup controllers ou=
-t
-> of dma-buf heaps, since that's rather android centric. E.g.
-> - a system gpucg_device which is used by all the various single page
->   allocators (dma-buf heap but also shmem helpers and really anything
->   else)
-> - same for cma, again both for dma-buf heaps and also for the gem cma
->   helpers in drm
 
-Thanks Daniel, in general that makes sense to me as an approach to
-making this more universal. However for the Android case I'm not sure
-if the part about a single system gpucg_device would be sufficient,
-because there are at least 12 different graphics related heaps that
-could potentially be accounted/limited differently. [1]  So that
-raises the question of how fine grained we want this to be... I tend
-towards separating them all, but I haven't formed a strong opinion
-about this at the moment. It sounds like you are in favor of a
-smaller, more rigidly defined set of them? Either way, we need to add
-code for accounting at points where we know memory is specifically for
-graphics use and not something else right? (I.E. Whether it is a
-dma-buf heap or somewhere like drm_gem_object_init.) So IIUC the only
-question is what to use for the gpucg_device(s) at these locations.
 
-[1] https://cs.android.com/android/platform/superproject/+/master:hardware/=
-google/graphics/common/libion/ion.cpp;l=3D39-50
+On 3/28/2022 1:11 PM, Stephane Eranian wrote:
+> On Mon, Mar 28, 2022 at 8:50 AM <kan.liang@linux.intel.com> wrote:
+>>
+>> From: Kan Liang <kan.liang@linux.intel.com>
+>>
+>> The INST_RETIRED.PREC_DIST event (0x0100) doesn't count on SPR.
+>> perf stat -e cpu/event=0xc0,umask=0x0/,cpu/event=0x0,umask=0x1/ -C0
+>>
+>>   Performance counter stats for 'CPU(s) 0':
+>>
+>>             607,246      cpu/event=0xc0,umask=0x0/
+>>                   0      cpu/event=0x0,umask=0x1/
+>>
+>> The encoding for INST_RETIRED.PREC_DIST is pseudo-encoding, which
+>> doesn't work on the generic counters. However, current perf extends its
+>> mask to the generic counters.
+>>
+>> The pseudo event-code for a fixed counter must be 0x00. Check and avoid
+>> extending the mask for the fixed counter event which using the
+>> pseudo-encoding, e.g., ref-cycles and PREC_DIST event.
+>>
+>> With the patch,
+>> perf stat -e cpu/event=0xc0,umask=0x0/,cpu/event=0x0,umask=0x1/ -C0
+>>
+>>   Performance counter stats for 'CPU(s) 0':
+>>
+>>             583,184      cpu/event=0xc0,umask=0x0/
+>>             583,048      cpu/event=0x0,umask=0x1/
+>>
+>> Fixes: 2de71ee153ef ("perf/x86/intel: Fix ICL/SPR INST_RETIRED.PREC_DIST encodings")
+>> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+>> Cc: stable@vger.kernel.org
+>> ---
+>>   arch/x86/events/intel/core.c      | 6 +++++-
+>>   arch/x86/include/asm/perf_event.h | 5 +++++
+>>   2 files changed, 10 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+>> index db32ef6..1d2e49d 100644
+>> --- a/arch/x86/events/intel/core.c
+>> +++ b/arch/x86/events/intel/core.c
+>> @@ -5668,7 +5668,11 @@ static void intel_pmu_check_event_constraints(struct event_constraint *event_con
+>>                          /* Disabled fixed counters which are not in CPUID */
+>>                          c->idxmsk64 &= intel_ctrl;
+>>
+>> -                       if (c->idxmsk64 != INTEL_PMC_MSK_FIXED_REF_CYCLES)
+>> +                       /*
+>> +                        * Don't extend the pseudo-encoding to the
+>> +                        * generic counters
+>> +                        */
+>> +                       if (!use_fixed_pseudo_encoding(c->code))
+>>                                  c->idxmsk64 |= (1ULL << num_counters) - 1;
+>>                  }
+>>                  c->idxmsk64 &=
+>> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+>> index 48e6ef56..cd85f03 100644
+>> --- a/arch/x86/include/asm/perf_event.h
+>> +++ b/arch/x86/include/asm/perf_event.h
+>> @@ -242,6 +242,11 @@ struct x86_pmu_capability {
+>>   #define INTEL_PMC_IDX_FIXED_SLOTS      (INTEL_PMC_IDX_FIXED + 3)
+>>   #define INTEL_PMC_MSK_FIXED_SLOTS      (1ULL << INTEL_PMC_IDX_FIXED_SLOTS)
+>>
+>> +static inline bool use_fixed_pseudo_encoding(u64 code)
+>> +{
+>> +       return !(code & 0xff);
+>> +}
+>> +
+> I ack the problem.
+> 
+> That does not take into account the old encoding for PREC_DIST 0x01c0
+> which is also forced to
+> fixed counter0 on ICL and should not be extended.
 
->
-> Otherwise this will only work on non-upstream android where gpu drivers
-> allocate everything from dma-buf heap. If you use something like the x86
-> android project with mesa drivers, then driver-internal buffers will be
-> allocated through gem and not through dma-buf heaps. Or at least I think
-> that's how it works.
->
-> But also meh, we can fix this fairly easily later on by adding these
-> standard gpucg_dev somwehere with a bit of kerneldoc.
+The old encoding is not documented in the ICL event list now. The only 
+PREC_DIST event for ICL is using the pseudo encoding.
 
-This is what I was thinking would happen next, but IDK if anyone sees
-a more central place to do this type of use-specific accounting.
+   {
+     "EventCode": "0x00",
+     "UMask": "0x01",
+     "EventName": "INST_RETIRED.PREC_DIST",
+     "BriefDescription": "Precise instruction retired event with a 
+reduced effect of PEBS shadow in IP distribution",
+     "PublicDescription": "A version of INST_RETIRED that allows for a 
+more unbiased distribution of samples across instructions retired. It 
+utilizes the Precise Distribution of Instructions Retired (PDIR) feature 
+to mitigate some bias in how retired instructions get sampled. Use on 
+Fixed Counter 0.",
+     "Counter": "Fixed counter 0",
 
->
-> Anyway has my all my ack, but don't count this as my in-depth review :-)
-> -Daniel
+Ideally, I think we should remove the old encoding 0x01c0 from the 
+constraints table rather than force it to fixed counter 0 only.
+If so, that should be a separate patch.
 
-Thanks again for taking a look!
->
-> > ---
-> >  drivers/dma-buf/dma-heap.c          | 27 +++++++++++++++++++++++++++
-> >  drivers/dma-buf/heaps/system_heap.c |  3 +++
-> >  include/linux/dma-heap.h            | 11 +++++++++++
-> >  3 files changed, 41 insertions(+)
-> >
-> > diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
-> > index 8f5848aa144f..885072427775 100644
-> > --- a/drivers/dma-buf/dma-heap.c
-> > +++ b/drivers/dma-buf/dma-heap.c
-> > @@ -7,6 +7,7 @@
-> >   */
-> >
-> >  #include <linux/cdev.h>
-> > +#include <linux/cgroup_gpu.h>
-> >  #include <linux/debugfs.h>
-> >  #include <linux/device.h>
-> >  #include <linux/dma-buf.h>
-> > @@ -31,6 +32,7 @@
-> >   * @heap_devt                heap device node
-> >   * @list             list head connecting to list of heaps
-> >   * @heap_cdev                heap char device
-> > + * @gpucg_dev                gpu cgroup device for memory accounting
-> >   *
-> >   * Represents a heap of memory from which buffers can be made.
-> >   */
-> > @@ -41,6 +43,9 @@ struct dma_heap {
-> >       dev_t heap_devt;
-> >       struct list_head list;
-> >       struct cdev heap_cdev;
-> > +#ifdef CONFIG_CGROUP_GPU
-> > +     struct gpucg_device gpucg_dev;
-> > +#endif
-> >  };
-> >
-> >  static LIST_HEAD(heap_list);
-> > @@ -216,6 +221,26 @@ const char *dma_heap_get_name(struct dma_heap *hea=
-p)
-> >       return heap->name;
-> >  }
-> >
-> > +#ifdef CONFIG_CGROUP_GPU
-> > +/**
-> > + * dma_heap_get_gpucg_dev() - get struct gpucg_device for the heap.
-> > + * @heap: DMA-Heap to get the gpucg_device struct for.
-> > + *
-> > + * Returns:
-> > + * The gpucg_device struct for the heap. NULL if the GPU cgroup contro=
-ller is
-> > + * not enabled.
-> > + */
-> > +struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap)
-> > +{
-> > +     return &heap->gpucg_dev;
-> > +}
-> > +#else /* CONFIG_CGROUP_GPU */
-> > +struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap)
-> > +{
-> > +     return NULL;
-> > +}
-> > +#endif /* CONFIG_CGROUP_GPU */
-> > +
-> >  struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_i=
-nfo)
-> >  {
-> >       struct dma_heap *heap, *h, *err_ret;
-> > @@ -288,6 +313,8 @@ struct dma_heap *dma_heap_add(const struct dma_heap=
-_export_info *exp_info)
-> >       list_add(&heap->list, &heap_list);
-> >       mutex_unlock(&heap_list_lock);
-> >
-> > +     gpucg_register_device(dma_heap_get_gpucg_dev(heap), exp_info->nam=
-e);
-> > +
-> >       return heap;
-> >
-> >  err2:
-> > diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heap=
-s/system_heap.c
-> > index ab7fd896d2c4..752a05c3cfe2 100644
-> > --- a/drivers/dma-buf/heaps/system_heap.c
-> > +++ b/drivers/dma-buf/heaps/system_heap.c
-> > @@ -395,6 +395,9 @@ static struct dma_buf *system_heap_allocate(struct =
-dma_heap *heap,
-> >       exp_info.ops =3D &system_heap_buf_ops;
-> >       exp_info.size =3D buffer->len;
-> >       exp_info.flags =3D fd_flags;
-> > +#ifdef CONFIG_CGROUP_GPU
-> > +     exp_info.gpucg_dev =3D dma_heap_get_gpucg_dev(heap);
-> > +#endif
-> >       exp_info.priv =3D buffer;
-> >       dmabuf =3D dma_buf_export(&exp_info);
-> >       if (IS_ERR(dmabuf)) {
-> > diff --git a/include/linux/dma-heap.h b/include/linux/dma-heap.h
-> > index 0c05561cad6e..e447a61d054e 100644
-> > --- a/include/linux/dma-heap.h
-> > +++ b/include/linux/dma-heap.h
-> > @@ -10,6 +10,7 @@
-> >  #define _DMA_HEAPS_H
-> >
-> >  #include <linux/cdev.h>
-> > +#include <linux/cgroup_gpu.h>
-> >  #include <linux/types.h>
-> >
-> >  struct dma_heap;
-> > @@ -59,6 +60,16 @@ void *dma_heap_get_drvdata(struct dma_heap *heap);
-> >   */
-> >  const char *dma_heap_get_name(struct dma_heap *heap);
-> >
-> > +/**
-> > + * dma_heap_get_gpucg_dev() - get a pointer to the struct gpucg_device=
- for the
-> > + * heap.
-> > + * @heap: DMA-Heap to retrieve gpucg_device for.
-> > + *
-> > + * Returns:
-> > + * The gpucg_device struct for the heap.
-> > + */
-> > +struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap);
-> > +
-> >  /**
-> >   * dma_heap_add - adds a heap to dmabuf heaps
-> >   * @exp_info:                information needed to register this heap
-> > --
-> > 2.35.1.1021.g381101b075-goog
-> >
->
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
+> 
+> That also limits the options for the SLOTS events which can be
+> measured by a GP. Yet to work
+> with PERF_METRICS, it has to be programmed into fixed counter 3.
+
+For the SLOTS event which can only work with PERF_METRICS, the current 
+perf already limit it as below.
+FIXED_EVENT_CONSTRAINT(0x0400, 3),	/* SLOTS */
+No behavior is changed with this patch.
+
+For the GP version of SLOTS, it's 0x01a4. According to the event list, 
+it can be scheduled on all GP counters. So it's not added into the 
+constraints table.
+
+     "EventCode": "0xa4",
+     "UMask": "0x01",
+     "EventName": "TOPDOWN.SLOTS_P",
+     "BriefDescription": "TMA slots available for an unhalted logical 
+processor. General counter - architectural event",
+     "PublicDescription": "Counts the number of available slots for an 
+unhalted logical processor. The event increments by machine-width of the 
+narrowest pipeline as employed by the Top-down Microarchitecture 
+Analysis method. The count is distributed among unhalted logical 
+processors (hyper-threads) who share the same physical core.",
+     "Counter": "0,1,2,3,4,5,6,7",
+     "PEBScounters": "0,1,2,3,4,5,6,7",
+
+Even we finally decide to extend the 0x01a4 to the fixed counter 3 and 
+add an entry FIXED_EVENT_CONSTRAINT(0x01a4, 3) in the constraints table. 
+This patch doesn't limit it.
+
+Thanks,
+Kan
+
+> 
+>>   /*
+>>    * We model BTS tracing as another fixed-mode PMC.
+>>    *
+>> --
+>> 2.7.4
+>>

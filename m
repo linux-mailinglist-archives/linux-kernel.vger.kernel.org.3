@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 324914E8EAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 09:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 888DB4E8EB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 09:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238726AbiC1HIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 03:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
+        id S238731AbiC1HJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 03:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235517AbiC1HI3 (ORCPT
+        with ESMTP id S229457AbiC1HJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 03:08:29 -0400
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05B052B0B;
-        Mon, 28 Mar 2022 00:06:49 -0700 (PDT)
-Received: by mail-ed1-f43.google.com with SMTP id z92so15724837ede.13;
-        Mon, 28 Mar 2022 00:06:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bWHNH/EfXpoNd6GDO+NCVI8AReob2nLGcB93Fy6VsBU=;
-        b=HGgVkuhVWivmPBLSISJL3YLvYy9oKFi1Bx+GvT4GFLzfY7Cnb44h0f+9tBjqbgXYNV
-         K8q7T0kQn8PyMPvghT09LoIst+2VIVN1aGVyiMPXCsRmWocfINCLFlCnbiwG0NgNyacx
-         vgInjHe+eOu3ueuvZz0nJ+X1j6AsrkvJfH6hXZEj/piJVaxiD4pv293TKwI7eoxJVExw
-         OM1G6CWoDw02MMr2mCxkuIJaQMtgoM7CSDbtXayysOYJLFFwSWdPPgZvWmu/mHeGiluT
-         bdkG1Z4UGd+FYbenkLbj3ocsAGbgQR+UWzc208B/MG5BBJ4JSsRstzodKVggz3ovDX96
-         BEQA==
-X-Gm-Message-State: AOAM531lToNovJSKf2nokdxWvEhS5xaLMQmLa09uvASzA4SkPp2qIbUn
-        YyFf9zRIEQg5rGJd6JZScno=
-X-Google-Smtp-Source: ABdhPJyIknQbldb2sxGzz5k0GbACmYk7LHZl4P9ANNwRnBbA6fgve5eGIekXkq4wWYc5UHkwHDUhEQ==
-X-Received: by 2002:a05:6402:3496:b0:419:82d5:f1d9 with SMTP id v22-20020a056402349600b0041982d5f1d9mr14537977edc.36.1648451208200;
-        Mon, 28 Mar 2022 00:06:48 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id k12-20020aa7c38c000000b0041939d9ccd0sm6618012edq.81.2022.03.28.00.06.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Mar 2022 00:06:47 -0700 (PDT)
-Message-ID: <da414b44-1bec-5918-84f5-9dfff2009f41@kernel.org>
-Date:   Mon, 28 Mar 2022 09:06:46 +0200
+        Mon, 28 Mar 2022 03:09:08 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FE952B0C;
+        Mon, 28 Mar 2022 00:07:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648451248; x=1679987248;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iKKjbMlhQ9O01nA5FHTsRYbYntbRkkX3eUwWUELIyZk=;
+  b=h6QVNuRuGd311JegZxqMGR2AHWMGXVfjaxpKWyI34JcqPolVHH2LpUE2
+   enZxYiloBRnldrN9OVZwW0wyHGL4/KzUyjtsY7qi0heSx+6pU9MnhtVAC
+   OuHyuJD8rn+2OwMnscKTWYQFEjIh0uXYMcwRuZb8H9E/7wVX3n/Tkqly1
+   c=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Mar 2022 00:07:28 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 00:07:27 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 28 Mar 2022 00:07:27 -0700
+Received: from mpubbise-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 28 Mar 2022 00:07:23 -0700
+From:   Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <swboyd@chromium.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_sibis@quicinc.com>,
+        <kuabhs@chromium.org>, <quic_pillair@quicinc.com>,
+        Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
+Subject: [PATCH v10] arm64: dts: qcom: sc7280: Add WPSS remoteproc node
+Date:   Mon, 28 Mar 2022 12:37:01 +0530
+Message-ID: <20220328070701.28551-1-quic_mpubbise@quicinc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v2 3/6] ASoC: dt-bindings: Extend clock bindings of
- rt5659
-Content-Language: en-US
-To:     Sameer Pujar <spujar@nvidia.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        perex@perex.cz, tiwai@suse.com, peter.ujfalusi@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com
-Cc:     oder_chiou@realtek.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <1648448050-15237-1-git-send-email-spujar@nvidia.com>
- <1648448050-15237-4-git-send-email-spujar@nvidia.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <1648448050-15237-4-git-send-email-spujar@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,56 +65,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2022 08:14, Sameer Pujar wrote:
-> The rt5658 or rt5659 CODEC system clock (SYSCLK) can be derived from
-> various clock sources. For example it can be derived either from master
-> clock (MCLK) or by internal PLL. The internal PLL again can take input
-> clock references from bit clocks (BCLKs) and MCLK. To enable a flexible
-> clocking configuration the DT binding is extended here.
-> 
-> It makes use of standard clock bindings and sets up the clock relation
-> via DT.
-> 
-> Signed-off-by: Sameer Pujar <spujar@nvidia.com>
-> Cc: Oder Chiou <oder_chiou@realtek.com>
-> ---
->  .../devicetree/bindings/sound/realtek,rt5659.yaml  | 53 ++++++++++++++++++++--
->  1 file changed, 49 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/realtek,rt5659.yaml b/Documentation/devicetree/bindings/sound/realtek,rt5659.yaml
-> index b0485b8..0c2f3cb 100644
-> --- a/Documentation/devicetree/bindings/sound/realtek,rt5659.yaml
-> +++ b/Documentation/devicetree/bindings/sound/realtek,rt5659.yaml
-> @@ -29,12 +29,28 @@ properties:
->      maxItems: 1
->  
->    clocks:
-> -    items:
-> -      - description: Master clock (MCLK) to the CODEC
-> +    description: |
-> +      CODEC can receive multiple clock inputs like Master
-> +      clock (MCLK), I2S bit clocks (BCLK1, BCLK2, BCLK3,
-> +      BCLK4). The CODEC SYSCLK can be generated from MCLK
-> +      or internal PLL. In turn PLL can reference from MCLK
-> +      and BCLKs.
->  
->    clock-names:
-> -    items:
-> -      - const: mclk
-> +    description: |
-> +      The clock names can be combination of following:
-> +        "mclk"        : Master clock
-> +        "pll_ref"     : Reference to CODEC PLL clock
-> +        "sysclk"      : CODEC SYSCLK
-> +        "^bclk[1-4]$" : Bit clocks to CODEC
+From: Rakesh Pillai <quic_pillair@quicinc.com>
 
-No, that does not look correct. You allow anything as clock input (even
-20 clocks, different names, any order). That's not how DT schema should
-work and that's not how hardware looks like.
+Add the WPSS remoteproc node in dts for
+PIL loading.
 
-Usually the clock inputs are always there which also you mentioned in
-description - "multiple clock inputs". All these clocks should be
-expected, unless really the wires (physical wires) can be left disconnected.
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Signed-off-by: Rakesh Pillai <quic_pillair@quicinc.com>
+Signed-off-by: Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
+---
+Changes from v9:
+- Rebased on ToT
 
-Best regards,
-Krzysztof
+Changes from v8:
+- Enable remoteproc_wpss from sc7280-idp.dtsi as the change is common for IDP and IDP2
+
+Changes from v7:
+- Remove wpss_mem from reserved memory. Its part of board dtsi.
+
+Changes from v6:
+- Swap the oder of two properties in wpss_mem reserved memory
+
+Changes from v5:
+- Update the clock names
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi |  4 ++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi     | 51 ++++++++++++++++++++++++
+ 2 files changed, 55 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+index ecbf2b89d896..069ffbc37bc4 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+@@ -547,3 +547,7 @@ sw_ctrl: sw-ctrl {
+ 	};
+ };
+ 
++&remoteproc_wpss {
++	status = "okay";
++};
++
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index f0b64be63c21..b757e8ad1199 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -2842,6 +2842,57 @@ qspi: spi@88dc000 {
+ 			status = "disabled";
+ 		};
+ 
++		remoteproc_wpss: remoteproc@8a00000 {
++			compatible = "qcom,sc7280-wpss-pil";
++			reg = <0 0x08a00000 0 0x10000>;
++
++			interrupts-extended = <&intc GIC_SPI 587 IRQ_TYPE_EDGE_RISING>,
++					      <&wpss_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
++					      <&wpss_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
++					      <&wpss_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
++					      <&wpss_smp2p_in 3 IRQ_TYPE_EDGE_RISING>,
++					      <&wpss_smp2p_in 7 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "wdog", "fatal", "ready", "handover",
++					  "stop-ack", "shutdown-ack";
++
++			clocks = <&gcc GCC_WPSS_AHB_BDG_MST_CLK>,
++				 <&gcc GCC_WPSS_AHB_CLK>,
++				 <&gcc GCC_WPSS_RSCP_CLK>,
++				 <&rpmhcc RPMH_CXO_CLK>;
++			clock-names = "ahb_bdg", "ahb",
++				      "rscp", "xo";
++
++			power-domains = <&rpmhpd SC7280_CX>,
++					<&rpmhpd SC7280_MX>;
++			power-domain-names = "cx", "mx";
++
++			memory-region = <&wpss_mem>;
++
++			qcom,qmp = <&aoss_qmp>;
++
++			qcom,smem-states = <&wpss_smp2p_out 0>;
++			qcom,smem-state-names = "stop";
++
++			resets = <&aoss_reset AOSS_CC_WCSS_RESTART>,
++				 <&pdc_reset PDC_WPSS_SYNC_RESET>;
++			reset-names = "restart", "pdc_sync";
++
++			qcom,halt-regs = <&tcsr_mutex 0x37000>;
++
++			status = "disabled";
++
++			glink-edge {
++				interrupts-extended = <&ipcc IPCC_CLIENT_WPSS
++							     IPCC_MPROC_SIGNAL_GLINK_QMP
++							     IRQ_TYPE_EDGE_RISING>;
++				mboxes = <&ipcc IPCC_CLIENT_WPSS
++						IPCC_MPROC_SIGNAL_GLINK_QMP>;
++
++				label = "wpss";
++				qcom,remote-pid = <13>;
++			};
++		};
++
+ 		dc_noc: interconnect@90e0000 {
+ 			reg = <0 0x090e0000 0 0x5080>;
+ 			compatible = "qcom,sc7280-dc-noc";
+-- 
+2.35.1
+

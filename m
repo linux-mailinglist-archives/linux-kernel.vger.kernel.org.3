@@ -2,92 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD424EA22A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 23:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B25094EA22E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 23:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232602AbiC1VBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 17:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
+        id S230487AbiC1VC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 17:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiC1VBj (ORCPT
+        with ESMTP id S229926AbiC1VC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 17:01:39 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650426EB13
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 13:59:56 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id r23so18428635edb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 13:59:56 -0700 (PDT)
+        Mon, 28 Mar 2022 17:02:26 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D246FF75
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 14:00:40 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id y10so10595614pfa.7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 14:00:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=v/zSPqmwF724vuIgv1AiC9fqBd4XFYW22ARZzgRtCYM=;
-        b=N5tMMfS8Hfv3JbwfarORQ4RfR5BUoj/Y+Fkrzm3vA1qhiDTAl5B/TeKmEX3yZMIJhG
-         u37j3CWzKQbtgrx/3s/nn757RUoUX7YmLhHMxp1ACXrI7doAQVeVylamgFwKHSwrDUNb
-         FUp7trRflJN1tdcUzSkOZCw9fHT1KXstAUSzc=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=f/GvndT+5e72qW8tftZIUvnHz4PSf2jIRJgogiD5zrI=;
+        b=RCyi+zUD+fHdNxXdEz82Oe0p5sAr1mlG0X7xn+4MNPQ4B5E4u1HSBg6Qc1kwd9rYdR
+         ds/IDpBTa5rsEUU22cjOYUNwtOB8kDU39mk557YR3m5nLVtyBh0khXZo01N+q7hLD0ob
+         AxR0KEKE8IBX9Zaqkt6H+5Qepul4EO8wiwzJLZq8QHynTwqFhvHrh5su9nLyJvHBgGUi
+         xuKbF9Smrg2ECDOwuxSaO4PxxbbuNRX54Jq3b2Lsywv9os4IvDIteTaWT8OEH7FVxdGq
+         ViYntLkAJbK5YlO1nKdz6LAdh17GyluLkeAUhi2IIEG7Q9Zt7GYZGhLMcytWwUnmwz9p
+         jK4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=v/zSPqmwF724vuIgv1AiC9fqBd4XFYW22ARZzgRtCYM=;
-        b=l8K/R5nu+iLYtoyfpufXV1so++OI4W3rAYHrOTvF7OoAnf27nVFQEWdr+5OTZ+Hkoi
-         FAfdevxa53B3tmcoWt6qIQpIPc5b5SL5q0X3STekDc4hmVJFTC6QayH0fEgROBAL10dv
-         is4MGHB6QEFu4j+aWLcyNH111CO1fGl9+hIHJh1AaXJEJ59q/Swhkbuj2SGp8eLJv2wG
-         3JW4KGPHelVeIYU6xcgasv3vX3jjb5S43Un0Gu2Mhg2TOXNud8N2wVvYD67QEmZ+pvIz
-         7RtHgW5rbZ7sG3oZ4GYE4hxVPrXUWEDCnBsKkJIOt5bP5FIZVanyzdc2D11HzcLVMgyn
-         SjCA==
-X-Gm-Message-State: AOAM532C6XzTZ/GiT5vhMH5H0PZ1586Q0jIlP63Bd3EXvavzfBdNG/7s
-        KJIMrAhMk1HPT0wXDK2snwZJoQ==
-X-Google-Smtp-Source: ABdhPJy1yI3tZA984XTLw01+7WsuvDx3NaF6PZwGFB4hCezzJQ8PiFZlJFX1oIAwNoVmJCohQPzW/A==
-X-Received: by 2002:a50:9986:0:b0:413:bbdd:d5a1 with SMTP id m6-20020a509986000000b00413bbddd5a1mr18792517edb.26.1648501194995;
-        Mon, 28 Mar 2022 13:59:54 -0700 (PDT)
-Received: from alco.lan (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id hq39-20020a1709073f2700b006dfc58efab9sm6462259ejc.73.2022.03.28.13.59.54
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f/GvndT+5e72qW8tftZIUvnHz4PSf2jIRJgogiD5zrI=;
+        b=Mz4NAniJ+J3IT0I6OnhWmA35fRJ+fErqwjD5HJ6iga3LEajablth1BgNq8qqZkDBwM
+         l3NxMiszyUPUN/iaJzRTMoJEjRnwlo+LFdt4tynXpGdiYx/NbhYPaE1NtLojMlkNeTVq
+         29pN4UfQPYLowd//BtmkC/Kvybor7PnnbzVrm+KaIi1BHpZJ1zCAnEhZu/Ui0JGma8ZC
+         GmuLJQL0Yz5/KNB0XJnJs9Rebzs8bSGzF+l9ShjH+SCtLf0qRWZDnaAyVmH9vw9wJ0r7
+         OpCvWuxAcLQJSMAyizTglIY85Vu5NXuCV6GzCxFylWaeBmNRUnnKajjWsRMN67L2t3PC
+         ynYA==
+X-Gm-Message-State: AOAM532p6h8E2JyCzY/0DI3orWVgOT2mLIeTpJ6wofWN1v4Avn3CQwwk
+        Zm3THgyNOw5N5+J9tULJKK0+mw==
+X-Google-Smtp-Source: ABdhPJxjtirRjZvZZguFjo78NbXyGY7NQBBzphFPUklHd9ZkaFYulPitcqn8m4RWZDIjPMlN1BjiyA==
+X-Received: by 2002:a63:58d:0:b0:382:16e6:9fb6 with SMTP id 135-20020a63058d000000b0038216e69fb6mr11689292pgf.16.1648501239349;
+        Mon, 28 Mar 2022 14:00:39 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id x38-20020a056a0018a600b004fafd05ac3fsm14473848pfh.37.2022.03.28.14.00.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 13:59:54 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        syzbot <syzkaller@googlegroups.com>
-Subject: [PATCH] media: uvc: Handle cameras with invalid descriptors
-Date:   Mon, 28 Mar 2022 22:59:52 +0200
-Message-Id: <20220328205952.584407-1-ribalda@chromium.org>
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
+        Mon, 28 Mar 2022 14:00:38 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 21:00:35 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Nikunj A Dadhania <nikunj@amd.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Peter Gonda <pgonda@google.com>,
+        Bharata B Rao <bharata@amd.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Mingwei Zhang <mizhang@google.com>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v1 0/9] KVM: SVM: Defer page pinning for SEV guests
+Message-ID: <YkIh8zM7XfhsFN8L@google.com>
+References: <20220308043857.13652-1-nikunj@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220308043857.13652-1-nikunj@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the source entity does not contain any pads, do not create a link.
+On Tue, Mar 08, 2022, Nikunj A Dadhania wrote:
+> This is a follow-up to the RFC implementation [1] that incorporates
+> review feedback and bug fixes. See the "RFC v1" section below for a 
+> list of changes.
 
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- drivers/media/usb/uvc/uvc_entity.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Heh, for future reference, the initial posting of a series/patch/RFC is implicitly
+v1, i.e. this should be RFC v2.
 
-diff --git a/drivers/media/usb/uvc/uvc_entity.c b/drivers/media/usb/uvc/uvc_entity.c
-index 7c4d2f93d351..1f730cb72e58 100644
---- a/drivers/media/usb/uvc/uvc_entity.c
-+++ b/drivers/media/usb/uvc/uvc_entity.c
-@@ -43,7 +43,7 @@ static int uvc_mc_create_links(struct uvc_video_chain *chain,
- 		source = (UVC_ENTITY_TYPE(remote) == UVC_TT_STREAMING)
- 		       ? (remote->vdev ? &remote->vdev->entity : NULL)
- 		       : &remote->subdev.entity;
--		if (source == NULL)
-+		if (source == NULL || source->num_pads == 0)
- 			continue;
- 
- 		remote_pad = remote->num_pads - 1;
--- 
-2.35.1.1021.g381101b075-goog
+> SEV guest requires the guest's pages to be pinned in host physical
+> memory as migration of encrypted pages is not supported. The memory
+> encryption scheme uses the physical address of the memory being
+> encrypted. If guest pages are moved by the host, content decrypted in
+> the guest would be incorrect thereby corrupting guest's memory.
+> 
+> For SEV/SEV-ES guests, the hypervisor doesn't know which pages are
+> encrypted and when the guest is done using those pages. Hypervisor
+> should treat all the guest pages as encrypted until they are 
+> deallocated or the guest is destroyed.
+> 
+> While provision a pfn, make KVM aware that guest pages need to be 
+> pinned for long-term and use appropriate pin_user_pages API for these
+> special encrypted memory regions. KVM takes the first reference and
+> holds it until a mapping is done. Take an extra reference before KVM
+> releases the pfn. 
+> 
+> Actual pinning management is handled by vendor code via new
+> kvm_x86_ops hooks. MMU calls in to vendor code to pin the page on
+> demand. Metadata of the pinning is stored in architecture specific
+> memslot area. During the memslot freeing path and deallocation path
+> guest pages are unpinned.
+> 
+> Guest boot time comparison:
+> +---------------+----------------+-------------------+
+> | Guest Memory  |   baseline     |  Demand Pinning + |
+> | Size (GB)     | v5.17-rc6(secs)| v5.17-rc6(secs)   |
+> +---------------+----------------+-------------------+
+> |      4        |     6.16       |      5.71         |
+> +---------------+----------------+-------------------+
+> |     16        |     7.38       |      5.91         |
+> +---------------+----------------+-------------------+
+> |     64        |    12.17       |      6.16         |
+> +---------------+----------------+-------------------+
+> |    128        |    18.20       |      6.50         |
+> +---------------+----------------+-------------------+
+> |    192        |    24.56       |      6.80         |
+> +---------------+----------------+-------------------+
 
+Let me preface this by saying I generally like the idea and especially the
+performance, but...
+
+I think we should abandon this approach in favor of committing all our resources
+to fd-based private memory[*], which (if done right) will provide on-demand pinning
+for "free".  I would much rather get that support merged sooner than later, and use
+it as a carrot for legacy SEV to get users to move over to its new APIs, with a long
+term goal of deprecating and disallowing SEV/SEV-ES guests without fd-based private
+memory.  That would require guest kernel support to communicate private vs. shared,
+but SEV guests already "need" to do that to play nice with live migration, so it's
+not a big ask, just another carrot to entice guests/customers to update their kernel
+(and possibly users to update their guest firmware).
+
+This series isn't awful by any means, but it requires poking into core flows and
+further complicates paths that are already anything but simple.  And things like
+conditionally grabbing vCPU0 to pin pages in its MMU make me flinch.  And I think
+the situation would only get worse by the time all the bugs and corner cases are
+ironed out.  E.g. this code is wrong:
+
+  void kvm_release_pfn_clean(kvm_pfn_t pfn)
+  {
+	if (!is_error_noslot_pfn(pfn) && !kvm_is_reserved_pfn(pfn)) {
+		struct page *page = pfn_to_page(pfn);
+
+		if (page_maybe_dma_pinned(page))
+			unpin_user_page(page);
+		else
+			put_page(page);
+	}
+  }
+  EXPORT_SYMBOL_GPL(kvm_release_pfn_clean);
+
+Because (a) page_maybe_dma_pinned() is susceptible to false positives (clearly
+documented), and (b) even if it didn't get false positives, there's no guarantee
+that _KVM_ owns a pin of the page.
+
+It's not an impossible problem to solve, but I suspect any solution will require
+either touching a lot of code or will be fragile and difficult to maintain, e.g.
+by auditing all users to understand which need to pin and which don't.  Even if
+we _always_ pin memory for SEV guests, we'd still need to plumb the "is SEV guest"
+info around.
+
+And FWIW, my years-old idea of using a software-available SPTE bit to track pinned
+pages is plagued by the same underlying issue: KVM's current management (or lack
+thereof) of SEV guest memory just isn't viable long term.  In all honesty, it
+probably should never have been merged.  We can't change the past, but we can, 
+and IMO should, avoid piling on more code to an approach that is fundamentally flawed.
+	
+[*] https://lore.kernel.org/all/20220310140911.50924-1-chao.p.peng@linux.intel.com

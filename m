@@ -2,49 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7ECA4E8C0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 04:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2DAC4E8C11
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 04:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237544AbiC1C0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 22:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
+        id S237551AbiC1C1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 22:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231679AbiC1CZ6 (ORCPT
+        with ESMTP id S231679AbiC1C1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 22:25:58 -0400
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD5FDFD6;
-        Sun, 27 Mar 2022 19:24:19 -0700 (PDT)
-Received: from imladris.surriel.com ([96.67.55.152])
-        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <riel@shelob.surriel.com>)
-        id 1nYf3B-00083X-7B; Sun, 27 Mar 2022 22:24:09 -0400
-Message-ID: <1d4dc5f732e8da263c2a2e783e4550419cfb0c7b.camel@surriel.com>
-Subject: Re: [PATCH] mm,hwpoison: unmap poisoned page before invalidation
-From:   Rik van Riel <riel@surriel.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     linux-mm@kvack.org, kernel-team@fb.com,
-        Oscar Salvador <osalvador@suse.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org, linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Sun, 27 Mar 2022 22:24:08 -0400
-In-Reply-To: <e3e3ae0f-50f6-6b13-c520-26aac353e0cb@huawei.com>
-References: <20220325161428.5068d97e@imladris.surriel.com>
-         <e6aa40b9-1cd8-b13f-555b-5f8ad863f196@huawei.com>
-         <5b734809fef4d76944490d5ac3ea816f0756b90a.camel@surriel.com>
-         <e3e3ae0f-50f6-6b13-c520-26aac353e0cb@huawei.com>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-gw9OjvNiSuMBA33y3aoL"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Sun, 27 Mar 2022 22:27:07 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E9BC252A8;
+        Sun, 27 Mar 2022 19:25:26 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:54610.494973045
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id D383310013F;
+        Mon, 28 Mar 2022 10:25:13 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id eae105db69d34658b5ac131636339b9f for robh@kernel.org;
+        Mon, 28 Mar 2022 10:25:25 CST
+X-Transaction-ID: eae105db69d34658b5ac131636339b9f
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <244eb5ad-9b73-42cf-b797-74b9f79e15be@189.cn>
+Date:   Mon, 28 Mar 2022 10:24:55 +0800
 MIME-Version: 1.0
-Sender: riel@shelob.surriel.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v12 3/6] dt-bindings: display: Add Loongson display
+ controller
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Roland Scheidegger <sroland@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org, Qing Zhang <zhangqing@loongson.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        David Airlie <airlied@linux.ie>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Zack Rusin <zackr@vmware.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
+References: <20220327113846.2498146-1-15330273260@189.cn>
+ <20220327113846.2498146-4-15330273260@189.cn>
+ <1648389731.700898.4042146.nullmailer@robh.at.kernel.org>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <1648389731.700898.4042146.nullmailer@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -52,49 +78,44 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---=-gw9OjvNiSuMBA33y3aoL
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+On 2022/3/27 22:02, Rob Herring wrote:
+> On Sun, 27 Mar 2022 19:38:43 +0800, Sui Jingfeng wrote:
+>> Add DT bindings and simple usages for Loongson display controller
+>> found in LS7A1000 bridges chip and LS2k1000 SoC.
+>>
+>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+>> ---
+>>   .../loongson/loongson,display-controller.yaml | 322 ++++++++++++++++++
+>>   1 file changed, 322 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+>>
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>
+> yamllint warnings/errors:
+>
+> dtschema/dtc warnings/errors:
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.example.dt.yaml: display-controller@6,1: 'ports' is a required property
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+>
+> doc reference errors (make refcheckdocs):
+>
+> See https://patchwork.ozlabs.org/patch/1609879
+>
+> This check can fail if there are any dependencies. The base for a patch
+> series is generally the most recent rc1.
+>
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+>
+> pip3 install dtschema --upgrade
+>
+> Please check and re-submit.
+>
+It is my fault, remove the ports from the required will fix this,
 
-T24gTW9uLCAyMDIyLTAzLTI4IGF0IDEwOjE0ICswODAwLCBNaWFvaGUgTGluIHdyb3RlOgo+IE9u
-IDIwMjIvMy8yNyA0OjE0LCBSaWsgdmFuIFJpZWwgd3JvdGU6Cj4gCj4gCj4gPiAKPiA+ID4gPiDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAvKiBSZXRyeSBp
-ZiBhIGNsZWFuIHBhZ2Ugd2FzIHJlbW92ZWQKPiA+ID4gPiBmcm9tCj4gPiA+ID4gdGhlIGNhY2hl
-LiAqLwo+ID4gPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgaWYgKGludmFsaWRhdGVfaW5vZGVfcGFnZSh2bWYtPnBhZ2UpKQo+ID4gPiA+IC3CoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBv
-aXNvbnJldCA9IDA7Cj4gPiA+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqB1bmxvY2tfcGFnZSh2bWYtPnBhZ2UpOwo+ID4gPiA+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKGludmFsaWRhdGVfaW5vZGVfcGFn
-ZShwYWdlKSkKPiA+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwb2lzb25yZXQgPSBWTV9GQVVMVF9OT1BBR0U7Cj4gPiA+
-ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB1bmxvY2tf
-cGFnZShwYWdlKTsKPiA+IAo+IAo+IFN1cmUsIGJ1dCB3aGVuIEkgdGhpbmsgbW9yZSBhYm91dCB0
-aGlzLCBpdCBzZWVtcyB0aGlzIGZpeCBpc24ndAo+IGlkZWFsOgo+IElmIFZNX0ZBVUxUX05PUEFH
-RSBpcyByZXR1cm5lZCB3aXRoIHBhZ2UgdGFibGUgdW5zZXQsIHRoZSBwcm9jZXNzCj4gd2lsbAo+
-IHJlLXRyaWdnZXIgcGFnZSBmYXVsdCBhZ2FpbiBhbmQgYWdhaW4gdW50aWwgaW52YWxpZGF0ZV9p
-bm9kZV9wYWdlCj4gc3VjY2VlZHMKPiB0byBldmljdCB0aGUgaW5vZGUgcGFnZS4gVGhpcyBtaWdo
-dCBoYW5nIHRoZSBwcm9jZXNzIGEgcmVhbGx5IGxvbmcKPiB0aW1lLgo+IE9yIGFtIEkgbWlzcyBz
-b21ldGhpbmc/Cj4gCklmIGludmFsaWRhdGVfaW5vZGVfcGFnZSBmYWlscywgd2Ugd2lsbCByZXR1
-cm4KVk1fRkFVTFRfSFdQT0lTT04sIGFuZCBraWxsIHRoZSB0YXNrLCBpbnN0ZWFkCm9mIGxvb3Bp
-bmcgaW5kZWZpbml0ZWx5LgoKLS0gCkFsbCBSaWdodHMgUmV2ZXJzZWQuCg==
+I run make dt_binding_check before made it optional.
 
+  I will resend the patch.
 
---=-gw9OjvNiSuMBA33y3aoL
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmJBHEgACgkQznnekoTE
-3oNcpAf7B7Uo3qImByKvNkKrLOo3TC12TjfsY/K4fZu0nUa0pGp3hxl2o+QFQuv7
-jLirEcL92c7wOCcIZquB4pwGJa9+wTtvjqiB0VK5Gf7kertT7LE5DxXC/aWjt0ze
-FIitaRbmRroEctSivbapWHYQxHomxQg9z4qNr9WJAgy+ySZokM/F+cG/Q3SWZKN3
-dUUA7jOa8LvtGgf33Y29l+eAdUn1CsFyinASlwyTnVhp6R6Wx+yoqGU5e69sAAdn
-HmpXv6GTdPeeWjd7VJ1lpn0PzIuOitD6c+Hz7ce/q1F+meHq+7waJmacw/jNLHY6
-SCamQtrspIDd+BmzoqpY+RaUsEA/9w==
-=sROm
------END PGP SIGNATURE-----
-
---=-gw9OjvNiSuMBA33y3aoL--

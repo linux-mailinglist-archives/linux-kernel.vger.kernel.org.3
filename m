@@ -2,112 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F40014E9F8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 21:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B97A64E9F90
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 21:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245492AbiC1TNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 15:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
+        id S245529AbiC1TOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 15:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245494AbiC1TNm (ORCPT
+        with ESMTP id S245522AbiC1TOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 15:13:42 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3ADB66C8F
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 12:12:00 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id bq8so16733700ejb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 12:12:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jG3Rt4P3Raf9WSo1WvvLrHkpUajHf7ot05DbpWV2Eb0=;
-        b=PZXl6pFWIqhq+IGkvc2dvo1z28ViM0/IcQ4ra0LmbQRG+i3q7bJIKzhEv80XtXXLUZ
-         waKmqllEWW4P/SrOXG8yhqE5IICerx62efk1JSCHfpiKs9M0/QM9dNIClCclyNZJanlN
-         TZxflkCPUVClCsVlNjmTsqPXnB2f4kUt2KCVXGToBybPB04HISvbSsq+UPvv+XpZkzbO
-         whfwwhTEOqTOQebiJmWZWGOeOHWu734U2dHqQHsqubey4vfizUddn+ynpeCpeEn24N5b
-         B27SV1lynfnOmxFHMiqlmSB0bG9iX3Xx3lZ0RiEhINPXLJ8cfTZsoWfnosBwhV0fNVit
-         VWQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jG3Rt4P3Raf9WSo1WvvLrHkpUajHf7ot05DbpWV2Eb0=;
-        b=h8aGEAVkohWpOVJdGxghtop+/n1yj5jSnzwFvYUKKI3dT7TUpiCbAWrECmzmED3AUN
-         X5+8B7JgEZz0V3feINSKdUaoJZOgbNykwXwXlWRkfLX9iW3AUGrb3DXUVjaso+LomLUw
-         Dm9+mzYM/WJuD+oYDP3gSQ0Uiv0vnYLKi2EHXyUS9obda4BKQzN/4qylX1LM4QYqXJR5
-         RNDlyG7gcsVGJw3cw4HX5MHUrCQhDh/EPBVpX3JTaKL120UbZ9tRFV4EJjbH3UCINDNp
-         2r0D3cZvE86PojbceKE+Nu0vNOJC/tdFXZYVr+WH+gQSUSt4BCkOhh7PJG8TX2B7Rh7V
-         tjdQ==
-X-Gm-Message-State: AOAM530SSBD5gxhoCzRi0NAGjRB6GnI90KJqtdVneOZAkZW6G/Dej/Lu
-        Dzdv/jwyWdqgiPrTUWnvJ8FCvg1XuDlaAxO0
-X-Google-Smtp-Source: ABdhPJwFwLiR9+MtMZeMy5VDtsZaqzeSjHEJIe4h1TwW5hRcMHYc4oopQ5oF00JoT/EEnuMkQdrKVg==
-X-Received: by 2002:a17:907:60d6:b0:6df:a099:e26e with SMTP id hv22-20020a17090760d600b006dfa099e26emr29699586ejc.34.1648494718902;
-        Mon, 28 Mar 2022 12:11:58 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id gn3-20020a1709070d0300b006e1036666bfsm2166989ejc.223.2022.03.28.12.11.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 12:11:58 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Keerthy <j-keerthy@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH] dt-bindings: gpio: davinci: list contents of GPIO hogs
-Date:   Mon, 28 Mar 2022 21:11:53 +0200
-Message-Id: <20220328191153.171241-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Mon, 28 Mar 2022 15:14:01 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227CB66CA0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 12:12:19 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 12:12:12 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1648494737;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8pHkCo/gdRv4VedvapgXEYnE/62prPMyEb6hZYV3es8=;
+        b=t9tc2STGox8vO6ih3HLbuu+28UG4g40sJCUn6N4HOSguqH4MwV/DLaXfxB80qMUo2nYNJT
+        DyOpCDb6F4+8uAH0sU7MVsH+uBtYNh0C8yaocdC2D2CFOB2IMGrEaV4vOFuOoBJ9nYH5oz
+        ijbV7LGHWOVXRK3qPgnpikPHX1x0HKI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH-mm v3] mm/list_lru: Optimize
+ memcg_reparent_list_lru_node()
+Message-ID: <YkIIjGk5t4XorQXe@carbon.dhcp.thefacebook.com>
+References: <20220309144000.1470138-1-longman@redhat.com>
+ <CAMZfGtWS581YW4Y8oNU=E_zPnpK=mMdYVSG1F3U3fJNAzBzc+g@mail.gmail.com>
+ <2263666d-5eef-b1fe-d5e3-b166a3185263@redhat.com>
+ <CAMZfGtVG2YcmxY0fECkAYNb=sKXJQhWJqgtMTEpQwxXEXmSOLw@mail.gmail.com>
+ <e93696b7-b678-6f41-9c1e-46aad447ce8d@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e93696b7-b678-6f41-9c1e-46aad447ce8d@redhat.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hogs children should list allowed properties, otherwise any property
-would be accepted.  Simplify also GPIO hog node name pattern.
+On Sun, Mar 27, 2022 at 08:57:15PM -0400, Waiman Long wrote:
+> On 3/22/22 22:12, Muchun Song wrote:
+> > On Wed, Mar 23, 2022 at 9:55 AM Waiman Long <longman@redhat.com> wrote:
+> > > On 3/22/22 21:06, Muchun Song wrote:
+> > > > On Wed, Mar 9, 2022 at 10:40 PM Waiman Long <longman@redhat.com> wrote:
+> > > > > Since commit 2c80cd57c743 ("mm/list_lru.c: fix list_lru_count_node()
+> > > > > to be race free"), we are tracking the total number of lru
+> > > > > entries in a list_lru_node in its nr_items field.  In the case of
+> > > > > memcg_reparent_list_lru_node(), there is nothing to be done if nr_items
+> > > > > is 0.  We don't even need to take the nlru->lock as no new lru entry
+> > > > > could be added by a racing list_lru_add() to the draining src_idx memcg
+> > > > > at this point.
+> > > > Hi Waiman,
+> > > > 
+> > > > Sorry for the late reply.  Quick question: what if there is an inflight
+> > > > list_lru_add()?  How about the following race?
+> > > > 
+> > > > CPU0:                               CPU1:
+> > > > list_lru_add()
+> > > >       spin_lock(&nlru->lock)
+> > > >       l = list_lru_from_kmem(memcg)
+> > > >                                       memcg_reparent_objcgs(memcg)
+> > > >                                       memcg_reparent_list_lrus(memcg)
+> > > >                                           memcg_reparent_list_lru()
+> > > >                                               memcg_reparent_list_lru_node()
+> > > >                                                   if (!READ_ONCE(nlru->nr_items))
+> > > >                                                       // Miss reparenting
+> > > >                                                       return
+> > > >       // Assume 0->1
+> > > >       l->nr_items++
+> > > >       // Assume 0->1
+> > > >       nlru->nr_items++
+> > > > 
+> > > > IIUC, we use nlru->lock to serialise this scenario.
+> > > I guess this race is theoretically possible but very unlikely since it
+> > > means a very long pause between list_lru_from_kmem() and the increment
+> > > of nr_items.
+> > It is more possible in a VM.
+> > 
+> > > How about the following changes to make sure that this race can't happen?
+> > > 
+> > > diff --git a/mm/list_lru.c b/mm/list_lru.c
+> > > index c669d87001a6..c31a0a8ad4e7 100644
+> > > --- a/mm/list_lru.c
+> > > +++ b/mm/list_lru.c
+> > > @@ -395,9 +395,10 @@ static void memcg_reparent_list_lru_node(struct
+> > > list_lru *lru, int nid,
+> > >           struct list_lru_one *src, *dst;
+> > > 
+> > >           /*
+> > > -        * If there is no lru entry in this nlru, we can skip it
+> > > immediately.
+> > > +        * If there is no lru entry in this nlru and the nlru->lock is free,
+> > > +        * we can skip it immediately.
+> > >            */
+> > > -       if (!READ_ONCE(nlru->nr_items))
+> > > +       if (!READ_ONCE(nlru->nr_items) && !spin_is_locked(&nlru->lock))
+> > I think we also should insert a smp_rmb() between those two loads.
+> 
+> Thinking about this some more, I believe that adding spin_is_locked() check
+> will be enough for x86. However, that will likely not be enough for arches
+> with a more relaxed memory semantics. So the safest way to avoid this
+> possible race is to move the check to within the lock critical section,
+> though that comes with a slightly higher overhead for the 0 nr_items case. I
+> will send out a patch to correct that. Thanks for bring this possible race
+> to my attention.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/gpio/gpio-davinci.yaml        | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Yes, I think it's not enough:
+CPU0                                       CPU1
+READ_ONCE(&nlru->nr_items) -> 0
+                                           spin_lock(&nlru->lock);
+                                           nlru->nr_items++;
+                                           spin_unlock(&nlru->lock);
+&& !spin_is_locked(&nlru->lock) -> 0
 
-diff --git a/Documentation/devicetree/bindings/gpio/gpio-davinci.yaml b/Documentation/devicetree/bindings/gpio/gpio-davinci.yaml
-index f32e09ef937c..e5b91c65dcb0 100644
---- a/Documentation/devicetree/bindings/gpio/gpio-davinci.yaml
-+++ b/Documentation/devicetree/bindings/gpio/gpio-davinci.yaml
-@@ -76,12 +76,21 @@ properties:
-     const: 2
- 
- patternProperties:
--  "^(.+-hog(-[0-9]+)?)$":
-+  "^.+-hog(-[0-9]+)?$":
-     type: object
-+    properties:
-+      gpio-hog: true
-+      gpios: true
-+      input: true
-+      output-high: true
-+      output-low: true
-+      line-name: true
- 
-     required:
-       - gpio-hog
- 
-+    additionalProperties: false
-+
- required:
-   - compatible
-   - reg
--- 
-2.32.0
 
+Getting back to the original patch, I wonder if instead we can batch reparenting
+of lrus so we don't have to grab and release nlru->lock for each reparenting lru.
+
+
+Thanks!

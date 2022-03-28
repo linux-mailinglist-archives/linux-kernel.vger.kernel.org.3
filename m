@@ -2,100 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08AA24E970C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7474E970E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242694AbiC1Mxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 08:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
+        id S242700AbiC1Mxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 08:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242688AbiC1Mxd (ORCPT
+        with ESMTP id S242702AbiC1Mxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 08:53:33 -0400
-Received: from mail.thepaulodoom.com (www.thepaulodoom.com [45.77.108.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFB3C5D19F;
-        Mon, 28 Mar 2022 05:51:43 -0700 (PDT)
-Received: from hp-amd-paul (c-98-240-189-147.hsd1.mn.comcast.net [98.240.189.147])
-        by vultr.guest (OpenSMTPD) with ESMTPSA id 6629f991 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 28 Mar 2022 12:51:41 +0000 (UTC)
-Date:   Mon, 28 Mar 2022 07:51:37 -0500
-From:   Paul Lemmermann <thepaulodoom@thepaulodoom.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] crypto: aes_generic: fixed styling warnings
-Message-ID: <20220328125137.bsbvroyxcjw6rl5m@hp-amd-paul>
-References: <20220326172051.14722-1-thepaulodoom@thepaulodoom.com>
- <CAMj1kXEQtTAMPLTtgc=9sDYvgxs+oihfnY7Q6bggC0p5u-V1Hw@mail.gmail.com>
- <20220327224009.2jotnczk67j4cfh2@hp-amd-paul>
- <CAMj1kXHCR1nD24WDnYpD4Nu23x9+hw+=7EXOpq7y7m9LDk2J0w@mail.gmail.com>
+        Mon, 28 Mar 2022 08:53:47 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37235C669
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:51:50 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id b16so16898090ioz.3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:51:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Hl62ZZF9xXxGgi6ZZphdBA1i//kHz1iBa2y3695NrsA=;
+        b=icASZrSdFNGQbdG/IOShlTLaQfwjDp+8NApwJepYPtkO2VaC8ATzL5GB0O7w1lwJnC
+         gQK/lMYDEIt2Uhb+6lmuiTqoPwhBpKt6V+zk0WyvV6JqFZkkq3lcEDuX1leU7siSlnLA
+         3KBEzm2uuxPJiizEuJX544AU8uZXfi3+gLQM5j+1wjsTAPiJqc+7miG69zs/cEcN4eli
+         yRLAsRf6Kty/Wh5lXqdQATNNQY3BpTJAuEsokXdbyXJTTJ7Fm3sXLqJ4POh4aMKQASxa
+         EuinR2GO4dDxqRAJ7/fQj1zOgInecsrGs+2pRx0vv1bAz4R/BzKdXcYv89C6F+C9sHxN
+         h2Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Hl62ZZF9xXxGgi6ZZphdBA1i//kHz1iBa2y3695NrsA=;
+        b=vz7uVinsaOsK9LO2yaNjGil6vcqqiP8KaVBhze7O1/U2/iPfzbrJEifuf2/F7pclfq
+         wXSz7CFPYq7lO2yTwhYLPLCSfDRC3TmWn8ZmluIhZHUDYgC/oa3a8BdaxfAzl3XbJp1Q
+         FX9qd9zzV12W4R1UvDwR7Rf1rqTPDrc1KaScZzd3khRSHNqW3S1i5eQjYj4VeHeGQNxq
+         ROhKO+ChrNM/e3+AiaTLupbOWI+JElLUwD7OQR+SMnQuLswVxjeoHY6spDxia35HK9D1
+         heDG5xNbL0Z8BSykXWFJX40QSvJ1fqj9eQO+GCXrsUWwHaDliTG6fs4C5eUQbYFL6Uv9
+         c1fg==
+X-Gm-Message-State: AOAM532be+jWk+UWbNK5M/ITLjF/ENF+AGELn6WbrH11B/WgHT2hCw0V
+        rBVBKV6BNo47ZAVatcMIzfuPYb73IcnoHyJwMsJ93io1+tASaA==
+X-Google-Smtp-Source: ABdhPJwjOhlugyhQlt5yYxr+1HihIKi/r9Q2nmaXntqRiDx9IpPxhh1ziluusQ/rSAQ46Z5+SMaNsJ5FYPJaYLRk8b4=
+X-Received: by 2002:a05:6602:1683:b0:649:f7d3:f0cf with SMTP id
+ s3-20020a056602168300b00649f7d3f0cfmr6162906iow.197.1648471910425; Mon, 28
+ Mar 2022 05:51:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXHCR1nD24WDnYpD4Nu23x9+hw+=7EXOpq7y7m9LDk2J0w@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220328021139.8700-1-steve.lee.analog@gmail.com> <PH0PR03MB6786EB43BFAD3B711096F69B991D9@PH0PR03MB6786.namprd03.prod.outlook.com>
+In-Reply-To: <PH0PR03MB6786EB43BFAD3B711096F69B991D9@PH0PR03MB6786.namprd03.prod.outlook.com>
+From:   Lee Steve <steve.lee.analog@gmail.com>
+Date:   Mon, 28 Mar 2022 21:51:39 +0900
+Message-ID: <CA+Fz0PaxSFhZG9dOYOWd4MOtHLxwyC3fXmCDZtOTwg4+aQ+jOA@mail.gmail.com>
+Subject: Re: [V3 1/2] ASoC: max98390: Add reset gpio control
+To:     "Sa, Nuno" <Nuno.Sa@analog.com>
+Cc:     "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "ryans.lee@maximintegrated.com" <ryans.lee@maximintegrated.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "krzk@kernel.org" <krzk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 09:39:14AM +0200, Ard Biesheuvel wrote:
-> (please keep the cc's)
-> 
-> On Mon, 28 Mar 2022 at 00:46, Paul Lemmermann
-> <thepaulodoom@thepaulodoom.com> wrote:
+On Mon, Mar 28, 2022 at 5:46 PM Sa, Nuno <Nuno.Sa@analog.com> wrote:
+>
+>
+>
+> > -----Original Message-----
+> > From: Steve Lee <steve.lee.analog@gmail.com>
+> > Sent: Monday, March 28, 2022 4:12 AM
+> > To: lgirdwood@gmail.com; broonie@kernel.org; perex@perex.cz;
+> > tiwai@suse.com; ryans.lee@maximintegrated.com; linux-
+> > kernel@vger.kernel.org; alsa-devel@alsa-project.org
+> > Cc: krzk@kernel.org; Sa, Nuno <Nuno.Sa@analog.com>; Steve Lee
+> > <steve.lee.analog@gmail.com>
+> > Subject: [V3 1/2] ASoC: max98390: Add reset gpio control
 > >
-> > On Sun, Mar 27, 2022 at 01:41:19PM +0200, Ard Biesheuvel wrote:
-> > > On Sat, 26 Mar 2022 at 18:48, Paul Lemmermann
-> > > <thepaulodoom@thepaulodoom.com> wrote:
-> > > >
-> > > > Fixed all styling warnings from the checkpatch.pl script.
-> > > >
-> > > > Signed-off-by: Paul Lemmermann <thepaulodoom@thepaulodoom.com>
-> > >
-> > > Did you test this code after 'fixing' it?
-> > >
-> > No, I did not. Now that I scrutinized it a bit more, I realized the
-> > kernel coding conventions. Sorry about that, this is my first patch.
-> 
-> In that case, welcome!
-> 
-> This is not about coding conventions. This is about correctness.
-> 
-> For instance,
-> 
-> > > >
-> > > > -#define f_nround(bo, bi, k)    do {\
-> > > > +#define f_nround(bo, bi, k)    while (0) {\
-> > > >         f_rn(bo, bi, 0, k);     \
-> > > >         f_rn(bo, bi, 1, k);     \
-> > > >         f_rn(bo, bi, 2, k);     \
-> > > >         f_rn(bo, bi, 3, k);     \
-> > > >         k += 4;                 \
-> > > > -} while (0)
-> > > > +}
-> > > >
-> 
-> Why are you making this change, and why do you think it produces the
-> same result?
-> 
-> > Can you remove everything in the patch past the section with line
-> > 1144, or do I have to resubit the patch?
+> > [External]
 > >
-> 
-> checkpatch.pl is a useful tool for finding style issues, but please
-> use it with care. And changing decades old code just to fix issues
-> reported by checkpatch.pl is really just pointless churn.
-> 
-> So let's just drop this patch altogether, shall we? If you're
-> interested in helping out, please have a look at the staging/ tree -
-> there is a lot of code there that needs cleaning up.
-> 
-Yes, we can drop the patch. Thank you so much for your help and support.
-Looking forward to contributing more to the Linux kernel.
+> >  Add reset gpio control to support RESET PIN connected to gpio.
+> >
+> > Signed-off-by: Steve Lee <steve.lee.analog@gmail.com>
+> > ---
+> >  sound/soc/codecs/max98390.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/sound/soc/codecs/max98390.c
+> > b/sound/soc/codecs/max98390.c
+> > index 40fd6f363f35..05df9b85d9b0 100644
+> > --- a/sound/soc/codecs/max98390.c
+> > +++ b/sound/soc/codecs/max98390.c
+> > @@ -1022,6 +1022,7 @@ static int max98390_i2c_probe(struct
+> > i2c_client *i2c,
+> >
+> >       struct max98390_priv *max98390 =3D NULL;
+> >       struct i2c_adapter *adapter =3D i2c->adapter;
+> > +     struct gpio_desc *reset_gpio;
+> >
+> >       ret =3D i2c_check_functionality(adapter,
+> >               I2C_FUNC_SMBUS_BYTE
+> > @@ -1073,6 +1074,17 @@ static int max98390_i2c_probe(struct
+> > i2c_client *i2c,
+> >               return ret;
+> >       }
+> >
+> > +     reset_gpio =3D devm_gpiod_get_optional(&i2c->dev,
+> > +                                          "reset", GPIOD_OUT_LOW);
+>
+> Forgot to mention,
+>
+> As you stated in the bindings the gpio is active low, this should also be
+> GPIOD_OUT_HIGH, if we want to have the device in reset after this call.
+>
+> - Nuno S=C3=A1
+>
 
-Thanks,
-Paul
+This also agree with your comment. I will update next version patch if
+there is other concern.

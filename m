@@ -2,121 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3DF4E9280
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A99CD4E9283
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240252AbiC1K3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 06:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
+        id S240258AbiC1KaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 06:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239032AbiC1K3W (ORCPT
+        with ESMTP id S234993AbiC1KaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 06:29:22 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38443B3C5;
-        Mon, 28 Mar 2022 03:27:42 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id t13so10668540pgn.8;
-        Mon, 28 Mar 2022 03:27:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=uHDDa0XZK41WRe8STib1Z4AK0mYc33NWhGIfT2U3Az0=;
-        b=hZ7VAWi7YWynf1sfmUIZPLIY35mO8PQixPrJhlhXbcCym6ePpBdpBe0WyjE57VpMk4
-         exvAEndq6f2flrQmPLUKEgJuVHgGsIvkFzC1P2p+/Yzv77gg4RJPBKou5pNx9dCTs0U5
-         RpvV1XSJx2yHveWGUWtiJoBnab3uD8ZS8DL0fSsjzqNuWV/dRfdBFIR2r22fJqf6oL+/
-         Wv7kAPAby7XODegszVbk8F/KDbrJRLVq1187fuIG9rjsqEXQ5E2e5JnnfyRSD2jrQtuO
-         XmeW6whNMgPGaZ3g01QtSmieRKzb2uzwEpduaKXMrdEVuVDSTXtFBPnB8c1wYL0FnBtG
-         U9oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=uHDDa0XZK41WRe8STib1Z4AK0mYc33NWhGIfT2U3Az0=;
-        b=PqIfDUWEetX1TzECcVrsNIiJCTLu0KaXAH/0BYM57wprBjJMuySNgiLXg3wvBdVVNM
-         keFlK6dSPMu9u9ALDIwm4cnKPFQQrQddxURDQZ641pgdNjnwshDMHam8p3LhmLdphXd3
-         CfYDaCOC5/u/3fnMQKm9LL5tuy3sECZVE4DzWgTj61xGuUKSXOsFqZtStPzA7MPvzJLZ
-         kwsGVUyBoHoEhKd23kD8qDo6lyfIIZcslH/1mLL0k7hNUdamfM9nhl3pXjIjIHG0s69X
-         +1VX50mNeBQLZI9D/9t+IZ3mmsyjOWYSlIJKgZRAIEUrL00YKU2ZPEvDV/N/3z/pPWLH
-         jIuw==
-X-Gm-Message-State: AOAM5300w/uqnZJTSkF/VrBUZqPfUPA+eVm+eLA8bVziTx0ca5QrF8GP
-        aEjymRF64TUpmolc5iBHArs=
-X-Google-Smtp-Source: ABdhPJzxcabcTL3XHVJ1uRQp4H+1DZMMpQvdaJio4nqezpvP6SzBPuRKnoYFqp04b41ZR7L5TFMoCQ==
-X-Received: by 2002:a05:6a00:24cc:b0:4fa:a9c5:4b04 with SMTP id d12-20020a056a0024cc00b004faa9c54b04mr22889106pfv.63.1648463262207;
-        Mon, 28 Mar 2022 03:27:42 -0700 (PDT)
-Received: from ubuntu.huawei.com ([119.3.119.18])
-        by smtp.googlemail.com with ESMTPSA id q6-20020a056a00150600b004fb2d266f97sm8258542pfu.115.2022.03.28.03.27.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 03:27:41 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     jirislaby@kernel.org
-Cc:     agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        dsterba@suse.com, elder@linaro.org, gor@linux.ibm.com,
-        gregkh@linuxfoundation.org, hca@linux.ibm.com, jcmvbkbc@gmail.com,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        stable@vger.kernel.org, svens@linux.ibm.com, xiam0nd.tong@gmail.com
-Subject: Re: [PATCH v3] char: tty3270: fix a missing check on list iterator
-Date:   Mon, 28 Mar 2022 18:27:32 +0800
-Message-Id: <20220328102732.28910-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <47a6e396-3d51-79f5-a544-8942470fa2fd@kernel.org>
-References: <47a6e396-3d51-79f5-a544-8942470fa2fd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Mar 2022 06:30:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C22522D8;
+        Mon, 28 Mar 2022 03:28:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B035FB80FC0;
+        Mon, 28 Mar 2022 10:28:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1411C340F0;
+        Mon, 28 Mar 2022 10:28:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648463303;
+        bh=mbW5lOE0DiwZdxys0cKvpTjDkJc1/stJnOezmtZoeSY=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=JXWSYY8sovEf/LSZ79BbS/TkTb4uxARjJVpjLYdk3R+LH36tDuhsMWWJlNKZ5pQpg
+         WXsWCYqqtps+5zv61bLMSzPNdvxdlH+OvsuB5EYL4ErDQYWShFsFSYYXTq8F6Wt4+2
+         nbfq1vN8eCO2JwT2/VYWmLKfzidzIfx1LdS2eqS3wCBuB/muzU1SZc1Owo1uwp44oa
+         s4QhlKD0s0uUrvQNJLATtyep1XI1qWTrLPBlq6xZzKZj8FT5aTOpl2MRmXnZkH7kgr
+         tKyMU3jOgI7xUrF7OIzrR+Nm6nZ3swnMPkj6+0DMNcvtiWfvnDIIHHwaHH46O3E7Pl
+         KBiGqwecokyyA==
+Message-ID: <cd928bbbba3260dfe6ce4a964185a377b4a767cd.camel@kernel.org>
+Subject: Re: [PATCH] ceph: remove unused CEPH_MDS_LEASE_RELEASE related code
+From:   Jeff Layton <jlayton@kernel.org>
+To:     xiubli@redhat.com
+Cc:     idryomov@gmail.com, vshankar@redhat.com,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 28 Mar 2022 06:28:21 -0400
+In-Reply-To: <20220328022535.847164-1-xiubli@redhat.com>
+References: <20220328022535.847164-1-xiubli@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Mar 2022 12:09:59 +0200, Jiri Slaby wrote:
-> On 28. 03. 22, 11:35, Xiaomeng Tong wrote:
-> > The bug is here:
-> > 	if (s->len != flen) {
-> > 
-> > The list iterator 's' will point to a bogus position containing
-> > HEAD if the list is empty or no element is found.
+On Mon, 2022-03-28 at 10:25 +0800, xiubli@redhat.com wrote:
+> From: Xiubo Li <xiubli@redhat.com>
 > 
-> Could you also explain how that can happen?
+> The ceph_mdsc_lease_release() has been removed by commit(8aa152c77890)
+> and the CEPH_MDS_LEASE_RELEASE will never be used.
 > 
 
-When list_for_each_entry_* do not early exits (if the list is empty
-or no break/goto/return hit inside the loop), it will set pos ('s' here)
-with a bogus pointer that point to a invalid struct computed based
-on &HEAD using container_of.
+Like it says in Documentation/process/5.Posting.rst:
 
-#define list_for_each_entry(pos, head, member)                          \
-        for (pos = list_first_entry(head, typeof(*pos), member);        \
-             !list_entry_is_head(pos, head, member);                    \
-             pos = list_next_entry(pos, member))
+"...and please provide both the commit ID and the title when citing
+commits"
 
+You might want to reword this with something like:
 
-> > This case must
-> > be checked before any use of the iterator, otherwise it may bpass
-> > the 'if (s->len != flen) {' in theory iif s->len's value is flen,
+"ceph_mdsc_lease_release was removed by commit 8aa152c77890 (ceph:
+remove ceph_mdsc_lease_release). ceph_mdsc_lease_send_msg will never
+call this function with CEPH_MDS_LEASE_RELEASE."
+
+> Signed-off-by: Xiubo Li <xiubli@redhat.com>
+> ---
+>  fs/ceph/mds_client.c | 6 ------
+>  1 file changed, 6 deletions(-)
 > 
-> bpass + iif -- others already commented on that and you ignored them.
-> 
+> diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
+> index 459c6f23915f..a89ee866ebbb 100644
+> --- a/fs/ceph/mds_client.c
+> +++ b/fs/ceph/mds_client.c
+> @@ -4424,12 +4424,6 @@ void ceph_mdsc_lease_send_msg(struct ceph_mds_session *session,
+>  	memcpy((void *)(lease + 1) + 4,
+>  	       dentry->d_name.name, dentry->d_name.len);
+>  	spin_unlock(&dentry->d_lock);
+> -	/*
+> -	 * if this is a preemptive lease RELEASE, no need to
+> -	 * flush request stream, since the actual request will
+> -	 * soon follow.
+> -	 */
+> -	msg->more_to_follow = (action == CEPH_MDS_LEASE_RELEASE);
+>  
+>  	ceph_con_send(&session->s_con, msg);
+>  }
 
-Thank you, i will correct it.
+It might be possible to trim this function back further. There's only
+one caller and it always calls this with the same "action" value. Still,
+this looks fine...
 
-> > or/and lead to an invalid memory access.
-> > 
-> > To fix this bug, use a new variable 'iter' as the list iterator,
-> > while using the origin variable 's' as a dedicated pointer to
-> > point to the found element. And if the list is empty or no element
-> > is found, WARN_ON and return.
-> > 
-> > Cc: stable@vger.kernel.org
-> > Fixes: ^1da177e4c3f4 ("Linux-2.6.12-rc2")
-> 
-> That's barely the commit introducing the behavior.
-> 
-
-So just remove the Fixes tag? or something else? I find this commitID with
-git blame.
-
---
-Xiaomeng Tong
-
+Reviewed-by: Jeff Layton <jlayton@kernel.org>

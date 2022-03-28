@@ -2,176 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E134EA147
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1262A4EA149
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344407AbiC1UTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 16:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
+        id S1344420AbiC1UUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 16:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238949AbiC1UTg (ORCPT
+        with ESMTP id S1344410AbiC1UUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 16:19:36 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB48866601
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 13:17:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648498674; x=1680034674;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=13AnzCLQQNpFk6sF3TPzOBQwQLrZXNVCBQWgv9FSbnQ=;
-  b=UvzGooJq8oTB4ydHN2CTcpCKlACu80FeUdNsPkhNQ6PXl88w5BLbCd1B
-   mYY8pFcZAcCKvtYDL/fEP01odIBmQXwLkh386txvfKhRDHMPqbIanMLe+
-   Hil4wF2lKVeKYXPrit3AWXD5ChTDXZdc24bnWnNwpzTQ+ItLQrYOEWesR
-   /J5KTKUNkClpJP6tLYtBPWhZR2qnzEIM5v2FrI/tAZqxozXnLeDXGNQ2b
-   WA9pC2e5ceCSSQGP1P7LSJTDM7e8pyyzC1j50tiLDlzkUKcDp7cvQGUbK
-   MNRBs0ssk3xLpJSWgl8wXnpvs83cLZMlEF4ytMvyjtn/OvyG3/gNZsi8d
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="319795127"
-X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="319795127"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 13:17:54 -0700
-X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="518390589"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.60])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 13:17:54 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Zhiquan Li <zhiquan1.li@intel.com>,
-        Youquan Song <youquan.song@intel.com>,
-        Tony Luck <tony.luck@intel.com>
-Subject: [PATCH] x86/uaccess: restore get_user exception type to EX_TYPE_UACCESS
-Date:   Mon, 28 Mar 2022 13:17:48 -0700
-Message-Id: <20220328201748.1864491-1-tony.luck@intel.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 28 Mar 2022 16:20:20 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2DA22527
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 13:18:37 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id g9-20020a17090ace8900b001c7cce3c0aeso314550pju.2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 13:18:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zEO73/klvJY0XxHebACPXmzj87UKrtx/E5ofQ5laclI=;
+        b=BJAjHvV8b5+6vXki2ZavfOGiTz+fQzVf6GH0KLCn8oWPZj8Xv17daoOP3mLHYUmOAY
+         4Zz+BBZfO+4GcsfIxt5gROivUg8hjIkEXrqgS+GnVHY42ulcI+eXZErbEYH+SB7dChAF
+         Bs1CfsRO/+OfdOtJFrHzrNrJVoQVJGEoZ8T8rVehX6v+qKFxu+J1Y9jDBuVWo6UKjZ3G
+         jKqAPXuiUG2B/NLjsNyaOHZ+7/lvm5cmT/ovWVirGSctJYD29ODlWxx+LweM3V/zZ5nN
+         i3S4hf2LII6zqXZZPvF1WrNNDsD7iftRN9mM9MGHrkbjl06JygwBAuJAaJmiA5ZR/dwB
+         Ek6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zEO73/klvJY0XxHebACPXmzj87UKrtx/E5ofQ5laclI=;
+        b=ipfECn1+Fzi8j6sXxNigkj5Xlryx4Gnl2DZW2xWMuDZnLUgZ5e/Pmnm/gAvjEE5Th6
+         A2by5ivnQb8M1pAS5iAptzDRwuxg759aXQONinFQZMQ6ggOGRd+aOrXpI1h4krnlPqaP
+         juDcTbVZ/Z68uPcmx++Vnhr+baN8n4wGCPudxo5aJAJqLoOpFb1A+FmJuxDSucRiA4qU
+         Dc/zSGZW8pZGCWt6NWofkLj3K/DMnsvZ2E332shWAH4G56EPIjkYxJgn7kqE8HQw7EC2
+         ZIzsb60e/SOv9kS2GpIQzNiVTy1TYd62nkaoKKr98XV0SkfYWrvV4OHvIE2QlaY0msLm
+         Atfg==
+X-Gm-Message-State: AOAM531tALumQzUzN8W/25i9YKVqVGPtUJXloVlSCvc/JPfysc/jbI3T
+        bND/YHLUQeDhtNflUESv/r9a7Q==
+X-Google-Smtp-Source: ABdhPJx1XdHg366ztNik62gGZ7COHZ7IZzQ7cjiOLii9D6aAlRskMzBPqX02oU/FSQnuaFD1HroyKA==
+X-Received: by 2002:a17:902:d2c6:b0:156:2b2c:ab54 with SMTP id n6-20020a170902d2c600b001562b2cab54mr621389plc.52.1648498716333;
+        Mon, 28 Mar 2022 13:18:36 -0700 (PDT)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id 13-20020aa7920d000000b004fa94f26b48sm16471350pfo.118.2022.03.28.13.18.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 13:18:35 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 20:18:31 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v2 07/11] KVM: x86/MMU: Factor out updating NX hugepages
+ state for a VM
+Message-ID: <YkIYF6HzLy+l6tu8@google.com>
+References: <20220321234844.1543161-1-bgardon@google.com>
+ <20220321234844.1543161-8-bgardon@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321234844.1543161-8-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhiquan Li <zhiquan1.li@intel.com>
+On Mon, Mar 21, 2022 at 04:48:40PM -0700, Ben Gardon wrote:
+> Factor out the code to update the NX hugepages state for an individual
+> VM. This will be expanded in future commits to allow per-VM control of
+> Nx hugepages.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 18 +++++++++++-------
+>  1 file changed, 11 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 3b8da8b0745e..1b59b56642f1 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -6195,6 +6195,15 @@ static void __set_nx_huge_pages(bool val)
+>  	nx_huge_pages = itlb_multihit_kvm_mitigation = val;
+>  }
+>  
+> +static int kvm_update_nx_huge_pages(struct kvm *kvm)
+> +{
+> +	mutex_lock(&kvm->slots_lock);
+> +	kvm_mmu_zap_all_fast(kvm);
+> +	mutex_unlock(&kvm->slots_lock);
+> +
+> +	wake_up_process(kvm->arch.nx_lpage_recovery_thread);
+> +}
+> +
+>  static int set_nx_huge_pages(const char *val, const struct kernel_param *kp)
+>  {
+>  	bool old_val = nx_huge_pages;
+> @@ -6217,13 +6226,8 @@ static int set_nx_huge_pages(const char *val, const struct kernel_param *kp)
+>  
+>  		mutex_lock(&kvm_lock);
+>  
 
-5.17.0 kernel will crash when we inject MCE by run "einj_mem_uc copyin"
-in ras-tools with CONFIG_CC_HAS_ASM_GOTO_OUTPUT != y kernel config.
-mce: [Hardware Error]: Machine check events logged
-mce: [Hardware Error]: CPU 120: Machine Check Exception: f Bank 1: bd80000000100134
-mce: [Hardware Error]: RIP 10: {fault_in_readable+0x9f/0xd0}
-mce: [Hardware Error]: TSC 63d3fa6181b69 ADDR f921f31400 MISC 86 PPIN 11a090eb80bf0c9c
-mce: [Hardware Error]: PROCESSOR 0:606a6 TIME 1647365323 SOCKET 1 APIC 8d microcode d0002e0
-mce: [Hardware Error]: Run the above through 'mcelog --ascii'
-mce: [Hardware Error]: Machine check: Data load in unrecoverable area of kernel
-Kernel panic - not syncing: Fatal local machine check
+nit: This blank line is asymmetrical with mutex_unlock().
 
-In commit 99641e094d6c ("x86/uaccess: Remove .fixup usage"), the
-exception type of get_user was changed from EX_TYPE_UACCESS to
-EX_TYPE_EFAULT_REG. In case of MCE/SRAR when kernel copy data from user,
-the MCE handler identities the exception type with EX_TYPE_UACCESS to
-MCE_IN_KERNEL_RECOV. While the new type EX_TYPE_EFAULT_REG will lose
-lose the opportunity to rescue the system.
+> -		list_for_each_entry(kvm, &vm_list, vm_list) {
+> -			mutex_lock(&kvm->slots_lock);
+> -			kvm_mmu_zap_all_fast(kvm);
+> -			mutex_unlock(&kvm->slots_lock);
+> -
+> -			wake_up_process(kvm->arch.nx_lpage_recovery_thread);
+> -		}
+> +		list_for_each_entry(kvm, &vm_list, vm_list)
+> +			kvm_set_nx_huge_pages(kvm);
 
-To fix it we have to restore get_user exception type to EX_TYPE_UACCESS,
-but we do not want to miss the operation that make reg = -EFAULT in
-function ex_handler_imm_reg(), so we so add a new flag EX_FLAG_SET_REG
-to identify this case, it will not break anything.
+This should be kvm_update_nx_huge_pages() right?
 
-Fixes: 99641e094d6c ("x86/uaccess: Remove .fixup usage")
-Cc: <stable@vger.kernel.org> # v5.17+
-Signed-off-by: Zhiquan Li <zhiquan1.li@intel.com>
-Co-developed-by: Youquan Song <youquan.song@intel.com>
-Signed-off-by: Youquan Song <youquan.song@intel.com>
-Tested-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
-
-This patch works ... but to test it I had to fake out init/Kconfig so
-that it wouldn't set CONFIG_CC_HAS_ASM_GOTO_OUTPUT=y. So it seems that
-this is only needed when building with some old compiler version.
-
-With Linus' announcement about C99/C11 as new basis, is this fix
-needed? I.e. is it still valid to build the upstream kernel with a
-compiler that doesn't grok CONFIG_CC_HAS_ASM_GOTO_OUTPUT?
-
- arch/x86/include/asm/extable_fixup_types.h |  1 +
- arch/x86/include/asm/uaccess.h             | 15 +++++++++------
- arch/x86/mm/extable.c                      |  8 ++++++++
- 3 files changed, 18 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/include/asm/extable_fixup_types.h b/arch/x86/include/asm/extable_fixup_types.h
-index 503622627400..329eeebba2f6 100644
---- a/arch/x86/include/asm/extable_fixup_types.h
-+++ b/arch/x86/include/asm/extable_fixup_types.h
-@@ -30,6 +30,7 @@
- #define EX_FLAG_CLEAR_AX		EX_DATA_FLAG(1)
- #define EX_FLAG_CLEAR_DX		EX_DATA_FLAG(2)
- #define EX_FLAG_CLEAR_AX_DX		EX_DATA_FLAG(3)
-+#define EX_FLAG_SET_REG		EX_DATA_FLAG(4)
- 
- /* types */
- #define	EX_TYPE_NONE			 0
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index f78e2b3501a1..277f7c87ad81 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -325,11 +325,13 @@ do {									\
- 		     "1:	movl %[lowbits],%%eax\n"		\
- 		     "2:	movl %[highbits],%%edx\n"		\
- 		     "3:\n"						\
--		     _ASM_EXTABLE_TYPE_REG(1b, 3b, EX_TYPE_EFAULT_REG |	\
--					   EX_FLAG_CLEAR_AX_DX,		\
-+		     _ASM_EXTABLE_TYPE_REG(1b, 3b, EX_TYPE_UACCESS |	\
-+					   EX_DATA_IMM(-EFAULT) | \
-+					   EX_FLAG_CLEAR_AX_DX | EX_FLAG_SET_REG,	\
- 					   %[errout])			\
--		     _ASM_EXTABLE_TYPE_REG(2b, 3b, EX_TYPE_EFAULT_REG |	\
--					   EX_FLAG_CLEAR_AX_DX,		\
-+		     _ASM_EXTABLE_TYPE_REG(2b, 3b, EX_TYPE_UACCESS |	\
-+					   EX_DATA_IMM(-EFAULT) | \
-+					   EX_FLAG_CLEAR_AX_DX | EX_FLAG_SET_REG,	\
- 					   %[errout])			\
- 		     : [errout] "=r" (retval),				\
- 		       [output] "=&A"(x)				\
-@@ -372,8 +374,9 @@ do {									\
- 	asm volatile("\n"						\
- 		     "1:	mov"itype" %[umem],%[output]\n"		\
- 		     "2:\n"						\
--		     _ASM_EXTABLE_TYPE_REG(1b, 2b, EX_TYPE_EFAULT_REG | \
--					   EX_FLAG_CLEAR_AX,		\
-+		     _ASM_EXTABLE_TYPE_REG(1b, 2b, EX_TYPE_UACCESS |	\
-+					   EX_DATA_IMM(-EFAULT) | \
-+					   EX_FLAG_CLEAR_AX | EX_FLAG_SET_REG,		\
- 					   %[errout])			\
- 		     : [errout] "=r" (err),				\
- 		       [output] "=a" (x)				\
-diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
-index dba2197c05c3..aac599781879 100644
---- a/arch/x86/mm/extable.c
-+++ b/arch/x86/mm/extable.c
-@@ -183,6 +183,14 @@ int fixup_exception(struct pt_regs *regs, int trapnr, unsigned long error_code,
- 	case EX_TYPE_FAULT_MCE_SAFE:
- 		return ex_handler_fault(e, regs, trapnr);
- 	case EX_TYPE_UACCESS:
-+		/*
-+		 * In the user access case, we might need err reg = -EFAULT, like:
-+		 * _ASM_EXTABLE_TYPE_REG(from, to, EX_TYPE_UACCESS | \
-+		 *                            EX_DATA_IMM(-EFAULT) | \
-+		 *                            EX_FLAG_SET_REG, reg)
-+		 */
-+		if (e->data & EX_FLAG_SET_REG)
-+			*pt_regs_nr(regs, reg) = (long)imm;
- 		return ex_handler_uaccess(e, regs, trapnr);
- 	case EX_TYPE_COPY:
- 		return ex_handler_copy(e, regs, trapnr);
--- 
-2.35.1
-
+>  		mutex_unlock(&kvm_lock);
+>  	}
+>  
+> -- 
+> 2.35.1.894.gb6a874cedc-goog
+> 

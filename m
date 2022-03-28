@@ -2,134 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B4C4E90A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC914E90AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239607AbiC1JCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 05:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
+        id S239609AbiC1JDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 05:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236136AbiC1JCF (ORCPT
+        with ESMTP id S232972AbiC1JDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 05:02:05 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B594EA25;
-        Mon, 28 Mar 2022 02:00:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D4FC11F383;
-        Mon, 28 Mar 2022 09:00:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648458023; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=47pPpyGxuilOfnCBTjS7w3pI+iy5tOMsC7jtD+lLV90=;
-        b=j3VTfzogM268touRV4Bk9j9IbSXqySsLpCu637yg4u3UHRXVzXFp8C/LXvTjFqfA8qklUa
-        cyq5m7d4v1yvK5/VdXSfWna2NUq4G77k2eBKf0a+B6FYETVNzAF+/jqF/6fYCsPn79YgVE
-        KOsHUtcraiBIIUMXN8S1L38FyH4tmfE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648458023;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=47pPpyGxuilOfnCBTjS7w3pI+iy5tOMsC7jtD+lLV90=;
-        b=oEGcYiXSrqVndh2Efqz55c0Kt3SLjTd6PHyfyfszeiv/H8CoqFAdsasE+gUaAdn5lUREac
-        yNRHDdLHHRK/YTCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 29F3913B08;
-        Mon, 28 Mar 2022 09:00:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /W/zBid5QWKzHAAAMHmgww
-        (envelope-from <osalvador@suse.de>); Mon, 28 Mar 2022 09:00:23 +0000
-Date:   Mon, 28 Mar 2022 11:00:21 +0200
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Rik van Riel <riel@surriel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        kernel-team@fb.com, Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] mm,hwpoison: unmap poisoned page before invalidation
-Message-ID: <YkF5Jd6fauTRvVVg@localhost.localdomain>
-References: <20220325161428.5068d97e@imladris.surriel.com>
+        Mon, 28 Mar 2022 05:03:24 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FA34EA25
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:01:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648458104; x=1679994104;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uN72xQG8JfwUCWArdqbx6gNtUH+ZpeBJT5IP9+NE9+E=;
+  b=h8dRE2SOhcZBvsylClwxDqSmxRrQ+AZn2/Zy6Mp4dt5uZ2s/CsrClceQ
+   YdceCT0PTV63yAj7GFyQnzh92LmY/CGpfLp4N8zBDyBDtof3wKmQJaNoA
+   1H0Bn5G1XSiarf27BSmXbiVUXYOWyB//7xrwMCNc2O2wlCcgj+EDp0atn
+   5p5NNTmq+04zxYOUUqYLIdvlsehg6rDcmwzIIE4gntM3Od0a4ga3mC2pu
+   T8eDSFgR5lGPc1/HfYNRnd4Y6YoH7l74PI6jexaIEMM8oNQQyqnN2Js31
+   J2uTNGDHxo7o9Yw2weoRlqlrHmB4p7oCDUHEPnXm5YKkmzSaVYqyy7gLy
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="256526906"
+X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
+   d="scan'208";a="256526906"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 02:01:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,216,1643702400"; 
+   d="scan'208";a="520935840"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 28 Mar 2022 02:01:42 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nYlFt-0001u6-Ff; Mon, 28 Mar 2022 09:01:41 +0000
+Date:   Mon, 28 Mar 2022 17:01:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning:
+ no previous prototype for '__ashldi3'
+Message-ID: <202203281615.7DKtA9hq-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220325161428.5068d97e@imladris.surriel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 04:14:28PM -0400, Rik van Riel wrote:
-> In some cases it appears the invalidation of a hwpoisoned page
-> fails because the page is still mapped in another process. This
-> can cause a program to be continuously restarted and die when
-> it page faults on the page that was not invalidated. Avoid that
-> problem by unmapping the hwpoisoned page when we find it.
-> 
-> Another issue is that sometimes we end up oopsing in finish_fault,
-> if the code tries to do something with the now-NULL vmf->page.
-> I did not hit this error when submitting the previous patch because
-> there are several opportunities for alloc_set_pte to bail out before
-> accessing vmf->page, and that apparently happened on those systems,
-> and most of the time on other systems, too.
-> 
-> However, across several million systems that error does occur a
-> handful of times a day. It can be avoided by returning VM_FAULT_NOPAGE
-> which will cause do_read_fault to return before calling finish_fault.
-> 
-> Fixes: e53ac7374e64 ("mm: invalidate hwpoison page cache page in fault path")
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Miaohe Lin <linmiaohe@huawei.com>
-> Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: stable@vger.kernel.org
-> ---
->  mm/memory.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index be44d0b36b18..76e3af9639d9 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3918,14 +3918,18 @@ static vm_fault_t __do_fault(struct vm_fault *vmf)
->  		return ret;
->  
->  	if (unlikely(PageHWPoison(vmf->page))) {
-> +		struct page *page = vmf->page;
->  		vm_fault_t poisonret = VM_FAULT_HWPOISON;
->  		if (ret & VM_FAULT_LOCKED) {
-> +			if (page_mapped(page))
-> +				unmap_mapping_pages(page_mapping(page),
-> +						    page->index, 1, false);
->  			/* Retry if a clean page was removed from the cache. */
-> -			if (invalidate_inode_page(vmf->page))
-> -				poisonret = 0;
-> -			unlock_page(vmf->page);
-> +			if (invalidate_inode_page(page))
-> +				poisonret = VM_FAULT_NOPAGE;
+Hi Masahiro,
 
-What is the effect of returning VM_FAULT_NOPAGE?
-I take that we are cool because the pte has been installed and points to
-a new page? (I could not find where that is being done).
+FYI, the error/warning still remains.
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ae085d7f9365de7da27ab5c0d16b12d51ea7fca9
+commit: f78b25ee922ef6faf59a258af1b9388ca894cfd9 mips: decompressor: do not copy source files while building
+date:   5 months ago
+config: mips-loongson1b_defconfig (https://download.01.org/0day-ci/archive/20220328/202203281615.7DKtA9hq-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f78b25ee922ef6faf59a258af1b9388ca894cfd9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f78b25ee922ef6faf59a258af1b9388ca894cfd9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/mips/boot/compressed/ashldi3.c:2:
+>> arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning: no previous prototype for '__ashldi3' [-Wmissing-prototypes]
+       9 | long long notrace __ashldi3(long long u, word_type b)
+         |                   ^~~~~~~~~
+
+
+vim +/__ashldi3 +9 arch/mips/boot/compressed/../../../../lib/ashldi3.c
+
+b35cd9884fa5d8 Palmer Dabbelt 2017-05-23  8  
+b35cd9884fa5d8 Palmer Dabbelt 2017-05-23 @9  long long notrace __ashldi3(long long u, word_type b)
+
+:::::: The code at line 9 was first introduced by commit
+:::::: b35cd9884fa5d81c9d5e7f57c9d03264ae2bd835 lib: Add shared copies of some GCC library routines
+
+:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
+:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
 
 -- 
-Oscar Salvador
-SUSE Labs
+0-DAY CI Kernel Test Service
+https://01.org/lkp

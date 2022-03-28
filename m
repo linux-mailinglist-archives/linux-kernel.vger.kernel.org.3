@@ -2,94 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F86B4E96CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E10EE4E96CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242556AbiC1MiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 08:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
+        id S242574AbiC1Min (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 08:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240930AbiC1MiF (ORCPT
+        with ESMTP id S239356AbiC1Mik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 08:38:05 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD45DEE7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:36:23 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id u22so12494893pfg.6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:36:23 -0700 (PDT)
+        Mon, 28 Mar 2022 08:38:40 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69254ECC9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:36:59 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2e612af95e3so146670877b3.9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:36:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=s0MYHADlhkLmgL7QL3wLWNFZxF39wct7bEmjjdPPikg=;
-        b=vwhmFpraliyqWJSMmnH7DqX9kzpnwRglbGpcow2Z6N0VlX0C05na9yy3Tn5BZcbmQi
-         jZQxyUXXeD5bXMcwO10yxyojC0xk+hpMbERx7o7HF9m9cLGsk1x+BTaryp/zJnaudLYL
-         8pmtJAIa7I9FHBGI6/YsbQUM0ftJmJNvAE1v6V9gaMgEVuVVMlFgdxnRQWIpdJBdb8Qk
-         P71NwacXU98ms1gMdzlFqnrPtydU7m9zsYTYTXNKs52rGcWc90OHNnuDioz4nV1He4wK
-         cKRdFdNR9CwAYOSY6Jm15FNAUI+v6bapUwl88hQtcTxyO7V7KBJzk7bqPhTfDeF26HMI
-         9Iiw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uMEZK2jSyKIkvvjIbH4GT3Fdajafv9KYrdFViGd4yCs=;
+        b=E9+QQkZMHaB3kC1jUcU1jKceyPqYXHgBAwrVH0Qoo7sy3RqybcW+gUMd6ILGzB7f+l
+         ws3VHba8umN32ny6nvOGE7S0/BDPYbL3CibIFNlYrI+ImbMRn5uBNTtYcvWjpMn70BeQ
+         YSZHLatfVPFPqrYmESblO10IJea6qXAQwCHfSeIe/Um9EbObWu/lemX2KJ23uLSz97eH
+         g6on/oQ6sD9DD5h9J/mHKHD3CEJ6mjGQwCKzXS6Oo18j1nmsU3d9qcw+HawWBiquerkd
+         1uGdCrnf3Y0q0XTNc1w9PPJSTSY6BhV6JhFKAinQ4KUVPbxqYrV3ctxarnAfrHwnZlJo
+         D6Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=s0MYHADlhkLmgL7QL3wLWNFZxF39wct7bEmjjdPPikg=;
-        b=GdyHh/5a0bW51wCM5EXii2rJthadUoktUaZF8YTCZgFTomz3648I3+PgToPMmzBF35
-         AbbKrbi6eqfMGKB2P+xj2d+5xnA7mwl9wB1PTsuKO+FmMvmEwnbBuqP/b9QtLvjsjSP6
-         fKTzEhzrZAn1nrOwTAh6euAWz7Nbn6kakXkOxCi3+r6VAMifVbnmRdrx47mpfBu+eUpj
-         6S9SxlePPUOeqfJPyoKbWPewlKNRGK0IBcQVjrrefWRqEnVu11NPYEyGQd55KCDnerk5
-         TT2CBrfy+v9dbcyJ2W27a9SZrFRmL1WKncJabRj7pUUknGx1QeLfmsR/wNp/FeiION/W
-         3jZg==
-X-Gm-Message-State: AOAM531aFVRHXLoLSm55rKGn8b0hWYlAmaRUmfA4W72rlJY/2Jkr8O/d
-        bfn1Yx6epb3kNn6JcXSqM5Ta7w==
-X-Google-Smtp-Source: ABdhPJzWhjK5YmHFJh+gdwf2xhaMXvtBHzGIOhwb6sN3mioE4XQobBxt9s/O31BZh77mukjrOCqKdQ==
-X-Received: by 2002:a63:1918:0:b0:382:1cfa:eefa with SMTP id z24-20020a631918000000b003821cfaeefamr9999216pgl.510.1648470983267;
-        Mon, 28 Mar 2022 05:36:23 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id y16-20020a17090a6c9000b001c993d935e7sm4914071pjj.56.2022.03.28.05.36.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 05:36:22 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Jiri Slaby <jslaby@suse.cz>
-Cc:     Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org,
-        Jan Kara <jack@suse.cz>, linux-kernel@vger.kernel.org
-In-Reply-To: <20220328085928.7899-1-jslaby@suse.cz>
-References: <20220328085928.7899-1-jslaby@suse.cz>
-Subject: Re: [PATCH] block: restore the old set_task_ioprio() behaviour wrt PF_EXITING
-Message-Id: <164847098196.6805.10674643795747634430.b4-ty@kernel.dk>
-Date:   Mon, 28 Mar 2022 06:36:21 -0600
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uMEZK2jSyKIkvvjIbH4GT3Fdajafv9KYrdFViGd4yCs=;
+        b=HCmt2dCST3p3r3bPbV0ZLth+J6TKrqy3c0O08LJeHd0CI1Ke5wbQzk8DBPWVmRhOnH
+         RF/4TbluuQ9kAknZbfiIqIn/+LifmhZhhcCpoYUy+nbaXwWfp0S4+RSyXIGHC9TaZ5Xl
+         hj68bb6W50E2rHxVMTznYxbLhgki5qPpVnRV9DMTSAKux9lJwSyIxu8gnhpefqvOSJAM
+         2AjhyN6oageWG09u3KvBqQJz0V8bww9+g9i0NsCK9Luxtrap1ZnKTOt7eVsyTIxd/Yls
+         HKPGsjksu6Pl03n+BvF/mdotX8hehgM5CklHCKD5JzZ37bIDl9NWnmYtizCWsdeoLMZW
+         FJGA==
+X-Gm-Message-State: AOAM531lWyvj1dzs0eI18gSmhxlPstyKdHCEX6ZYdF/UhZMMfZxndH2g
+        FKg/f6OUEZf248Bful6AukJNenxQUKO4s08Xvoljx67OXg4=
+X-Google-Smtp-Source: ABdhPJzKaHl48iYBzuviShvc/fSc+yX8bEigh83P/lNX0DQQM0lmzYQvFiEjENIrpwu0FVlWRhmYK7v0KTcRTDtdgBE=
+X-Received: by 2002:a81:59c4:0:b0:2e5:c7c3:5d29 with SMTP id
+ n187-20020a8159c4000000b002e5c7c35d29mr25403537ywb.512.1648471018879; Mon, 28
+ Mar 2022 05:36:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1648049113.git.andreyknvl@google.com>
+In-Reply-To: <cover.1648049113.git.andreyknvl@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 28 Mar 2022 14:36:22 +0200
+Message-ID: <CANpmjNP_bWMzSkW=Q8Lc7yRWw8as_FoBpD-zwcweAiSBVn-Fsw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] kasan, arm64, scs, stacktrace: collect stack
+ traces from Shadow Call Stack
+To:     andrey.konovalov@linux.dev
+Cc:     Alexander Potapenko <glider@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, Mark Rutland <mark.rutland@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Florian Mayer <fmayer@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Mar 2022 10:59:28 +0200, Jiri Slaby wrote:
-> PF_EXITING tasks were silently ignored before the below commits.
-> Continue doing so. Otherwise python-psutil tests fail:
->   ERROR: psutil.tests.test_process.TestProcess.test_zombie_process
->   ----------------------------------------------------------------------
->   Traceback (most recent call last):
->     File "/home/abuild/rpmbuild/BUILD/psutil-5.9.0/build/lib.linux-x86_64-3.9/psutil/_pslinux.py", line 1661, in wrapper
->       return fun(self, *args, **kwargs)
->     File "/home/abuild/rpmbuild/BUILD/psutil-5.9.0/build/lib.linux-x86_64-3.9/psutil/_pslinux.py", line 2133, in ionice_set
->       return cext.proc_ioprio_set(self.pid, ioclass, value)
->   ProcessLookupError: [Errno 3] No such process
-> 
-> [...]
+On Wed, 23 Mar 2022 at 16:33, <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> kasan, arm64, scs, stacktrace: collect stack traces from Shadow Call Stack
+>
+> Currently, KASAN always uses the normal stack trace collection routines,
+> which rely on the unwinder, when saving alloc and free stack traces.
+>
+> Instead of invoking the unwinder, collect the stack trace by copying
+> frames from the Shadow Call Stack whenever it is enabled. This reduces
+> boot time by 30% for all KASAN modes when Shadow Call Stack is enabled.
+>
+> Stack staces are collected from the Shadow Call Stack via a new
+> stack_trace_save_shadow() interface.
+>
+> Note that the frame of the interrupted function is not included into
+> the stack trace, as it is not yet saved on the SCS when an interrupt
+> happens.
+>
+> ---
+>
+> To deal with this last thing, we could save the interrupted frame address
+> in another per-CPU variable. I'll look into implementing this for v3.
+>
+> I decided to postpone the changes to stack depot that avoid copying
+> frames twice until a planned upcoming update for stack depot.
 
-Applied, thanks!
+That's fair.
 
-[1/1] block: restore the old set_task_ioprio() behaviour wrt PF_EXITING
-      commit: 15583a563cd5a7358e975599b7de7caacd9e9ce9
+> Changes v1->v2:
+> - Provide a kernel-wide stack_trace_save_shadow() interface for collecting
+>   stack traces from shadow stack.
+> - Use ptrauth_strip_insn_pac() and READ_ONCE_NOCHECK, see the comments.
+> - Get SCS pointer from x18, as per-task value is meant to save the SCS
+>   value on CPU switches.
+> - Collect stack frames from SDEI and IRQ contexts.
 
-Best regards,
--- 
-Jens Axboe
-
-
+Do any of these new changes introduce new (noticeable) overhead (in
+particular patch 2)?

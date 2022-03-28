@@ -2,107 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634854E8BF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 04:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2884E8BF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 04:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237488AbiC1CNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 22:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
+        id S237481AbiC1CNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 22:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232626AbiC1CNo (ORCPT
+        with ESMTP id S232626AbiC1CN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 22:13:44 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905904ECD6
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 19:12:05 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id jx9so12653076pjb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 19:12:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=rUHIWinBLG6g3Xi9+MUcsHpYsUZn1UkahgGOhqUSwAo=;
-        b=ByyC85NIdi1Ve9pqan/WfzM2XYMfuKn3CCtZANGGya2Ss2oL4SZYsyVnf0OEXVxqM+
-         NlWfBOfMsvpFMBHl8ERRxXmXQtuzccHXUlYyM9m/uRKOMCz6QzS5xAaSboA5lDQTSx2s
-         yt2c+lBVhmyV/cfJpPpmzbZ+WnXCRFdcJbXGrmGyKdiEyIlle0UKaNumtHMKD09ZyvRo
-         ER4DmEYTfjFQdFg2653XMB3h3c9hvLkq1PQhnPmvKj9+lAr9lO/Ptwejnqm9oYLDjgvI
-         H34KW+QREWOLw0hNIHLsV5CUhGPPFHIdlB8xooOeY1/e4UyH39Zh23M1Hn6d9sJWL8np
-         7Xmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=rUHIWinBLG6g3Xi9+MUcsHpYsUZn1UkahgGOhqUSwAo=;
-        b=a+IxkWe2PP7a9qbV9LIX+S31+oDk30pxTbp5zPYZMR81lxgf7Kq17wMU8+dYhczp/c
-         mQSQKqkYEN8/PPzEyYxEx72uwkn6O22dFSaAvuKHNZgW6UoMZXM6HVjUxcnrQ200KnUD
-         tmriM9tMVuIbpygJTIdRN9QXCjsYIEYq3gZwf/TTo8eYkrhVApPEydPPPanO4UgLZI/k
-         BP2cyvJs4SbPDwPgBn1a3Jzghw95A+PgnxFAwtl74s1TfDChNi7i0E5o3k4JG9vJ3PE9
-         wKSSt46rnSXGYjr5ZB3CrN9gMf5iIDAv44TtxFCBIUgqMR2XlMBd9HNpPrnF3LEA/BWe
-         aKRQ==
-X-Gm-Message-State: AOAM532PDp5SDEAKrA/dhtb/c1ezcXppe64r47yPTLCeKZxIso9wmDiy
-        KqwOD8OW+QxQx+A3IyedsXI=
-X-Google-Smtp-Source: ABdhPJw/rhtmPMAo55tnqm5NaD1eJHN71Eb8+RgZ283zFRwrUZKw9etqglyxTYSO75pWg2fPCGMGdg==
-X-Received: by 2002:a17:902:9a8d:b0:155:ff17:c9fc with SMTP id w13-20020a1709029a8d00b00155ff17c9fcmr7396091plp.28.1648433525098;
-        Sun, 27 Mar 2022 19:12:05 -0700 (PDT)
-Received: from localhost.localdomain ([211.212.143.131])
-        by smtp.gmail.com with ESMTPSA id c63-20020a624e42000000b004fa9ee41b7bsm13322058pfb.217.2022.03.27.19.12.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Mar 2022 19:12:04 -0700 (PDT)
-From:   Steve Lee <steve.lee.analog@gmail.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, ryans.lee@maximintegrated.com,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Cc:     krzk@kernel.org, nuno.sa@analog.com,
-        Steve Lee <steve.lee.analog@gmail.com>
-Subject: [V3 1/2] ASoC: max98390: Add reset gpio control
+        Sun, 27 Mar 2022 22:13:29 -0400
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAEFF4ECD2;
+        Sun, 27 Mar 2022 19:11:48 -0700 (PDT)
+Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
+  by mx.socionext.com with ESMTP; 28 Mar 2022 11:11:48 +0900
+Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
+        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 3BA382058443;
+        Mon, 28 Mar 2022 11:11:48 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 28 Mar 2022 11:11:48 +0900
+Received: from plum.e01.socionext.com (unknown [10.212.243.119])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id EFA0AB62B7;
+        Mon, 28 Mar 2022 11:11:47 +0900 (JST)
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Subject: [PATCH] dt-bindings: PCI: uniphier: Convert uniphier-pcie.txt to json-schema
 Date:   Mon, 28 Mar 2022 11:11:38 +0900
-Message-Id: <20220328021139.8700-1-steve.lee.analog@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <1648433498-23450-1-git-send-email-hayashi.kunihiko@socionext.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Add reset gpio control to support RESET PIN connected to gpio.
+Convert the file into a JSON description at the yaml format.
 
-Signed-off-by: Steve Lee <steve.lee.analog@gmail.com>
+Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 ---
- sound/soc/codecs/max98390.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ .../bindings/pci/socionext,uniphier-pcie.yaml | 100 ++++++++++++++++++
+ .../devicetree/bindings/pci/uniphier-pcie.txt |  82 --------------
+ MAINTAINERS                                   |   2 +-
+ 3 files changed, 101 insertions(+), 83 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pci/socionext,uniphier-pcie.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pci/uniphier-pcie.txt
 
-diff --git a/sound/soc/codecs/max98390.c b/sound/soc/codecs/max98390.c
-index 40fd6f363f35..05df9b85d9b0 100644
---- a/sound/soc/codecs/max98390.c
-+++ b/sound/soc/codecs/max98390.c
-@@ -1022,6 +1022,7 @@ static int max98390_i2c_probe(struct i2c_client *i2c,
- 
- 	struct max98390_priv *max98390 = NULL;
- 	struct i2c_adapter *adapter = i2c->adapter;
-+	struct gpio_desc *reset_gpio;
- 
- 	ret = i2c_check_functionality(adapter,
- 		I2C_FUNC_SMBUS_BYTE
-@@ -1073,6 +1074,17 @@ static int max98390_i2c_probe(struct i2c_client *i2c,
- 		return ret;
- 	}
- 
-+	reset_gpio = devm_gpiod_get_optional(&i2c->dev,
-+					     "reset", GPIOD_OUT_LOW);
+diff --git a/Documentation/devicetree/bindings/pci/socionext,uniphier-pcie.yaml b/Documentation/devicetree/bindings/pci/socionext,uniphier-pcie.yaml
+new file mode 100644
+index 000000000000..57176f62f955
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pci/socionext,uniphier-pcie.yaml
+@@ -0,0 +1,100 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pci/socionext,uniphier-pcie.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	/* Power on device */
-+	if (reset_gpio) {
-+		usleep_range(1000, 2000);
-+		/* bring out of reset */
-+		gpiod_set_value_cansleep(reset_gpio, 1);
-+		usleep_range(1000, 2000);
-+	}
++title: Socionext UniPhier PCIe host controller
 +
- 	/* Check Revision ID */
- 	ret = regmap_read(max98390->regmap,
- 		MAX98390_R24FF_REV_ID, &reg);
++description: |
++  UniPhier PCIe host controller is based on the Synopsys DesignWare
++  PCI core. It shares common features with the PCIe DesignWare core and
++  inherits common properties defined in
++  Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml.
++
++maintainers:
++  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
++
++allOf:
++  - $ref: /schemas/pci/snps,dw-pcie.yaml#
++
++properties:
++  compatible:
++    enum:
++      - socionext,uniphier-pcie
++
++  reg:
++    minItems: 3
++    maxItems: 4
++
++  reg-names:
++    oneOf:
++      - items:
++          - const: dbi
++          - const: link
++          - const: config
++      - items:
++          - const: dbi
++          - const: link
++          - const: config
++          - const: atu
++
++  clocks:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  num-viewport: true
++
++  num-lanes: true
++
++  phys:
++    maxItems: 1
++
++  phy-names:
++    const: pcie-phy
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++  - resets
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    pcie: pcie@66000000 {
++        compatible = "socionext,uniphier-pcie";
++        reg-names = "dbi", "link", "config";
++        reg = <0x66000000 0x1000>, <0x66010000 0x10000>, <0x2fff0000 0x10000>;
++        #address-cells = <3>;
++        #size-cells = <2>;
++        clocks = <&sys_clk 24>;
++        resets = <&sys_rst 24>;
++        num-lanes = <1>;
++        num-viewport = <1>;
++        bus-range = <0x0 0xff>;
++        device_type = "pci";
++        ranges = <0x81000000 0 0x00000000  0x2ffe0000  0 0x00010000>,
++                 <0x82000000 0 0x00000000  0x20000000  0 0x0ffe0000>;
++        phy-names = "pcie-phy";
++        phys = <&pcie_phy>;
++        #interrupt-cells = <1>;
++        interrupt-names = "dma", "msi";
++        interrupts = <0 224 4>, <0 225 4>;
++        interrupt-map-mask = <0 0 0  7>;
++        interrupt-map = <0 0 0  1  &pcie_intc 0>,
++                        <0 0 0  2  &pcie_intc 1>,
++                        <0 0 0  3  &pcie_intc 2>,
++                        <0 0 0  4  &pcie_intc 3>;
++
++        pcie_intc: legacy-interrupt-controller {
++            interrupt-controller;
++            #interrupt-cells = <1>;
++            interrupt-parent = <&gic>;
++            interrupts = <0 226 4>;
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/pci/uniphier-pcie.txt b/Documentation/devicetree/bindings/pci/uniphier-pcie.txt
+deleted file mode 100644
+index 359585db049f..000000000000
+--- a/Documentation/devicetree/bindings/pci/uniphier-pcie.txt
++++ /dev/null
+@@ -1,82 +0,0 @@
+-Socionext UniPhier PCIe host controller bindings
+-
+-This describes the devicetree bindings for PCIe host controller implemented
+-on Socionext UniPhier SoCs.
+-
+-UniPhier PCIe host controller is based on the Synopsys DesignWare PCI core.
+-It shares common functions with the PCIe DesignWare core driver and inherits
+-common properties defined in
+-Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml.
+-
+-Required properties:
+-- compatible: Should be "socionext,uniphier-pcie".
+-- reg: Specifies offset and length of the register set for the device.
+-	According to the reg-names, appropriate register sets are required.
+-- reg-names: Must include the following entries:
+-    "dbi"    - controller configuration registers
+-    "link"   - SoC-specific glue layer registers
+-    "config" - PCIe configuration space
+-    "atu"    - iATU registers for DWC version 4.80 or later
+-- clocks: A phandle to the clock gate for PCIe glue layer including
+-	the host controller.
+-- resets: A phandle to the reset line for PCIe glue layer including
+-	the host controller.
+-- interrupts: A list of interrupt specifiers. According to the
+-	interrupt-names, appropriate interrupts are required.
+-- interrupt-names: Must include the following entries:
+-    "dma" - DMA interrupt
+-    "msi" - MSI interrupt
+-
+-Optional properties:
+-- phys: A phandle to generic PCIe PHY. According to the phy-names, appropriate
+-	phys are required.
+-- phy-names: Must be "pcie-phy".
+-
+-Required sub-node:
+-- legacy-interrupt-controller: Specifies interrupt controller for legacy PCI
+-	interrupts.
+-
+-Required properties for legacy-interrupt-controller:
+-- interrupt-controller: identifies the node as an interrupt controller.
+-- #interrupt-cells: specifies the number of cells needed to encode an
+-	interrupt source. The value must be 1.
+-- interrupt-parent: Phandle to the parent interrupt controller.
+-- interrupts: An interrupt specifier for legacy interrupt.
+-
+-Example:
+-
+-	pcie: pcie@66000000 {
+-		compatible = "socionext,uniphier-pcie", "snps,dw-pcie";
+-		status = "disabled";
+-		reg-names = "dbi", "link", "config";
+-		reg = <0x66000000 0x1000>, <0x66010000 0x10000>,
+-		      <0x2fff0000 0x10000>;
+-		#address-cells = <3>;
+-		#size-cells = <2>;
+-		clocks = <&sys_clk 24>;
+-		resets = <&sys_rst 24>;
+-		num-lanes = <1>;
+-		num-viewport = <1>;
+-		bus-range = <0x0 0xff>;
+-		device_type = "pci";
+-		ranges =
+-		/* downstream I/O */
+-			<0x81000000 0 0x00000000  0x2ffe0000  0 0x00010000
+-		/* non-prefetchable memory */
+-			 0x82000000 0 0x00000000  0x20000000  0 0x0ffe0000>;
+-		#interrupt-cells = <1>;
+-		interrupt-names = "dma", "msi";
+-		interrupts = <0 224 4>, <0 225 4>;
+-		interrupt-map-mask = <0 0 0  7>;
+-		interrupt-map = <0 0 0  1  &pcie_intc 0>,	/* INTA */
+-				<0 0 0  2  &pcie_intc 1>,	/* INTB */
+-				<0 0 0  3  &pcie_intc 2>,	/* INTC */
+-				<0 0 0  4  &pcie_intc 3>;	/* INTD */
+-
+-		pcie_intc: legacy-interrupt-controller {
+-			interrupt-controller;
+-			#interrupt-cells = <1>;
+-			interrupt-parent = <&gic>;
+-			interrupts = <0 226 4>;
+-		};
+-	};
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 4cc47b2dbdc9..c1d377be991c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15337,7 +15337,7 @@ PCIE DRIVER FOR SOCIONEXT UNIPHIER
+ M:	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+ L:	linux-pci@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/pci/uniphier-pcie*
++F:	Documentation/devicetree/bindings/pci/socionext,uniphier-pcie*
+ F:	drivers/pci/controller/dwc/pcie-uniphier*
+ 
+ PCIE DRIVER FOR ST SPEAR13XX
 -- 
-2.17.1
+2.25.1
 

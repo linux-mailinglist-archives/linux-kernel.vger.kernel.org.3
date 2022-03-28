@@ -2,202 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5519A4EA3EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 02:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A765D4EA3F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 02:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbiC1X55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 19:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
+        id S231130AbiC1X6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 19:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbiC1X5y (ORCPT
+        with ESMTP id S229752AbiC1X6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 19:57:54 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF15548E46
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 16:56:11 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so1043115pjf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 16:56:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=R5oHCy312DV02dgL2mbxc6XsFyRp35/nzV9uAHuDVL8=;
-        b=VdeMGDhBvYtE+tVfMkspuND3/7DIoOMPUCVTDtTlEioK4Zp5hqbOfTFDiZt5K44ayS
-         fnvlBEdPsoSL7x/DbpE7cgK+SfpEKdBSB73Z0G459wlOPyvqyXpjszHn5jZxV954Y1m+
-         kGEdjSVuItAQwgX97aOEemfU1wnkxTdxglSoMzxoatlN8MoeBrVjAW62nJb0oTxRhDev
-         ZbdqY4WeMFHrp8BIIgBZ/dpZ8uGNofipq0r54d/7/2DNqRhUnOG6G0byQfKsrs8taS9d
-         UJB9bfRxpxBlPxluUE6silYECHfQnTGdtWDbmLuSXWXNy9ykNzkceeJBNRFaESkJx2jL
-         vn/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=R5oHCy312DV02dgL2mbxc6XsFyRp35/nzV9uAHuDVL8=;
-        b=hko7ytpVhJrdKaGZxZIqJsH8lavNHvjkCOxPM0/Wqc4KeA+6merixoIhdqKTTsMZfP
-         mxpJOnEHX8SRTQ272q3w/ldMJN6ffryX1oH8Uu9k7vw9svOH4KOwoRr+1WctnDnT9XUA
-         NaajRoe2S5nHPgrsvV2703s1Z7DhdyPmGEVPMOXBybOo/W3Cn+Oi/z50qCKaa7F4K8gt
-         GO77PSyzFh9gJWAHl+Mv8HayclfnOKTMxzYOsT2WsSY6XmGOo+BRfwIxyr+q7jZoKkje
-         PRpga+NzeLDtUc+lVuBuSMbU3XWChglI18qzYG8K0Il+AFrZI37P/AVaZL3lHyExQLy/
-         VlRg==
-X-Gm-Message-State: AOAM531VoFASr8OpsBOeXtdZd5bPdjgBtIvMoj6VZa4OBj0rVY83NrYZ
-        6id212vyiGqugIDsuI/ea9MdIQKVHZx1cQ==
-X-Google-Smtp-Source: ABdhPJwWwKwcbx4mWnZcS0vNwCcr+CGjSoNFeM3hP68m739AGvq4ty6tV34XjWMljTYtL4iWZ09X6A==
-X-Received: by 2002:a17:90a:889:b0:1c9:8baa:3eeb with SMTP id v9-20020a17090a088900b001c98baa3eebmr1612687pjc.44.1648511771099;
-        Mon, 28 Mar 2022 16:56:11 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p128-20020a625b86000000b004fa666a1327sm16920043pfb.102.2022.03.28.16.56.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 16:56:10 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 23:56:06 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com
-Subject: Re: [PATCH v5 08/13] KVM: Use memfile_pfn_ops to obtain pfn for
- private pages
-Message-ID: <YkJLFu98hZOvTSrL@google.com>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
- <20220310140911.50924-9-chao.p.peng@linux.intel.com>
+        Mon, 28 Mar 2022 19:58:38 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CF3137F5E;
+        Mon, 28 Mar 2022 16:56:56 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:58544)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nYzEF-00FvWG-5d; Mon, 28 Mar 2022 17:56:55 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:41530 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nYzED-005Hs8-2U; Mon, 28 Mar 2022 17:56:54 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Alexey Gladkov <legion@kernel.org>, Kyle Huey <me@kylehuey.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@ZenIV.linux.org.uk>, <linux-api@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, <linux-kernel@vger.kernel.org>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+        <87bl1kunjj.fsf@email.froward.int.ebiederm.org>
+        <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
+        <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
+        <87tubyx0rg.fsf_-_@email.froward.int.ebiederm.org>
+Date:   Mon, 28 Mar 2022 18:56:46 -0500
+In-Reply-To: <87tubyx0rg.fsf_-_@email.froward.int.ebiederm.org> (Eric
+        W. Biederman's message of "Tue, 15 Mar 2022 18:18:59 -0500")
+Message-ID: <87a6d9pr5t.fsf_-_@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310140911.50924-9-chao.p.peng@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nYzED-005Hs8-2U;;;mid=<87a6d9pr5t.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+Tf8du8XGTtxjfBiYpwsvd8V8xcfv+BF8=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Virus: No
+X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Linus Torvalds <torvalds@linux-foundation.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1483 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 3.6 (0.2%), b_tie_ro: 2.4 (0.2%), parse: 0.71
+        (0.0%), extract_message_metadata: 9 (0.6%), get_uri_detail_list: 2.2
+        (0.1%), tests_pri_-1000: 9 (0.6%), tests_pri_-950: 0.92 (0.1%),
+        tests_pri_-900: 0.77 (0.1%), tests_pri_-90: 66 (4.5%), check_bayes: 65
+        (4.4%), b_tokenize: 10 (0.7%), b_tok_get_all: 10 (0.7%), b_comp_prob:
+        1.81 (0.1%), b_tok_touch_all: 41 (2.8%), b_finish: 0.67 (0.0%),
+        tests_pri_0: 1383 (93.2%), check_dkim_signature: 0.39 (0.0%),
+        check_dkim_adsp: 1.46 (0.1%), poll_dns_idle: 0.33 (0.0%),
+        tests_pri_10: 1.77 (0.1%), tests_pri_500: 6 (0.4%), rewrite_mail: 0.00
+        (0.0%)
+Subject: [GIT PULL] ptrace: Cleanups for v5.18
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022, Chao Peng wrote:
-> @@ -2217,4 +2220,34 @@ static inline void kvm_handle_signal_exit(struct kvm_vcpu *vcpu)
->  /* Max number of entries allowed for each kvm dirty ring */
->  #define  KVM_DIRTY_RING_MAX_ENTRIES  65536
->  
-> +#ifdef CONFIG_MEMFILE_NOTIFIER
-> +static inline long kvm_memfile_get_pfn(struct kvm_memory_slot *slot, gfn_t gfn,
-> +				       int *order)
-> +{
-> +	pgoff_t index = gfn - slot->base_gfn +
-> +			(slot->private_offset >> PAGE_SHIFT);
 
-This is broken for 32-bit kernels, where gfn_t is a 64-bit value but pgoff_t is a
-32-bit value.  There's no reason to support this for 32-bit kernels, so...
+Linus,
 
-The easiest fix, and likely most maintainable for other code too, would be to
-add a dedicated CONFIG for private memory, and then have KVM check that for all
-the memfile stuff.  x86 can then select it only for 64-bit kernels, and in turn
-select MEMFILE_NOTIFIER iff private memory is supported.
+Please pull the ptrace-cleanups-for-v5.18 tag from the git tree:
 
-diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
-index ca7b2a6a452a..ee9c8c155300 100644
---- a/arch/x86/kvm/Kconfig
-+++ b/arch/x86/kvm/Kconfig
-@@ -48,7 +48,9 @@ config KVM
-        select SRCU
-        select INTERVAL_TREE
-        select HAVE_KVM_PM_NOTIFIER if PM
--       select MEMFILE_NOTIFIER
-+       select HAVE_KVM_PRIVATE_MEM if X86_64
-+       select MEMFILE_NOTIFIER if HAVE_KVM_PRIVATE_MEM
-+
-        help
-          Support hosting fully virtualized guest machines using hardware
-          virtualization extensions.  You will need a fairly recent
+  git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ptrace-cleanups-for-v5.18
 
-And in addition to replacing checks on CONFIG_MEMFILE_NOTIFIER, the probing of
-whether or not KVM_MEM_PRIVATE is allowed can be:
+  HEAD: dcbc65aac28360df5f5a3b613043ccc0e81da3cf ptrace: Remove duplicated include in ptrace.c
 
-@@ -1499,23 +1499,19 @@ static void kvm_replace_memslot(struct kvm *kvm,
-        }
- }
+This set of changes removes tracehook.h, moves modification of all of
+the ptrace fields inside of siglock to remove races, adds a missing
+permission check to ptrace.c
 
--bool __weak kvm_arch_private_memory_supported(struct kvm *kvm)
--{
--       return false;
--}
--
- static int check_memory_region_flags(struct kvm *kvm,
-                                const struct kvm_userspace_memory_region *mem)
- {
-        u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
+The removal of tracehook.h is quite significant as it has been a major
+source of confusion in recent years.  Much of that confusion was
+around task_work and TIF_NOTIFY_SIGNAL (which I have now decoupled
+making the semantics clearer).
 
--       if (kvm_arch_private_memory_supported(kvm))
--               valid_flags |= KVM_MEM_PRIVATE;
--
- #ifdef __KVM_HAVE_READONLY_MEM
-        valid_flags |= KVM_MEM_READONLY;
- #endif
+For people who don't know tracehook.h is a vestiage of an attempt to
+implement uprobes like functionality that was never fully merged, and
+was later superseeded by uprobes when uprobes was merged.  For many
+years now we have been removing what tracehook functionaly a little
+bit at a time.  To the point where now anything left in tracehook.h is
+some weird strange thing that is difficult to understand.
 
-+#ifdef CONFIG_KVM_HAVE_PRIVATE_MEM
-+       valid_flags |= KVM_MEM_PRIVATE;
-+#endif
-+
-        if (mem->flags & ~valid_flags)
-                return -EINVAL;
+Eric W. Biederman (15):
+      ptrace: Move ptrace_report_syscall into ptrace.h
+      ptrace/arm: Rename tracehook_report_syscall report_syscall
+      ptrace: Create ptrace_report_syscall_{entry,exit} in ptrace.h
+      ptrace: Remove arch_syscall_{enter,exit}_tracehook
+      ptrace: Remove tracehook_signal_handler
+      task_work: Remove unnecessary include from posix_timers.h
+      task_work: Introduce task_work_pending
+      task_work: Call tracehook_notify_signal from get_signal on all architectures
+      task_work: Decouple TIF_NOTIFY_SIGNAL and task_work
+      signal: Move set_notify_signal and clear_notify_signal into sched/signal.h
+      resume_user_mode: Remove #ifdef TIF_NOTIFY_RESUME in set_notify_resume
+      resume_user_mode: Move to resume_user_mode.h
+      tracehook: Remove tracehook.h
+      ptrace: Move setting/clearing ptrace_message into ptrace_stop
+      ptrace: Return the signal to continue with from ptrace_stop
 
-> +
-> +	return slot->pfn_ops->get_lock_pfn(file_inode(slot->private_file),
-> +					   index, order);
+Jann Horn (1):
+      ptrace: Check PTRACE_O_SUSPEND_SECCOMP permission on PTRACE_SEIZE
 
-In a similar vein, get_locK_pfn() shouldn't return a "long".  KVM likely won't use
-these APIs on 32-bit kernels, but that may not hold true for other subsystems, and
-this code is confusing and technically wrong.  The pfns for struct page squeeze
-into an unsigned long because PAE support is capped at 64gb, but casting to a
-signed long could result in a pfn with bit 31 set being misinterpreted as an error.
+Yang Li (1):
+      ptrace: Remove duplicated include in ptrace.c
 
-Even returning an "unsigned long" for the pfn is wrong.  It "works" for the shmem
-code because shmem deals only with struct page, but it's technically wrong, especially
-since one of the selling points of this approach is that it can work without struct
-page.
 
-OUT params suck, but I don't see a better option than having the return value be
-0/-errno, with "pfn_t *pfn" for the resolved pfn.
+ MAINTAINERS                          |   1 -
+ arch/Kconfig                         |   5 +-
+ arch/alpha/kernel/ptrace.c           |   5 +-
+ arch/alpha/kernel/signal.c           |   4 +-
+ arch/arc/kernel/ptrace.c             |   5 +-
+ arch/arc/kernel/signal.c             |   4 +-
+ arch/arm/kernel/ptrace.c             |  12 +-
+ arch/arm/kernel/signal.c             |   4 +-
+ arch/arm64/kernel/ptrace.c           |  14 +--
+ arch/arm64/kernel/signal.c           |   4 +-
+ arch/csky/kernel/ptrace.c            |   5 +-
+ arch/csky/kernel/signal.c            |   4 +-
+ arch/h8300/kernel/ptrace.c           |   5 +-
+ arch/h8300/kernel/signal.c           |   4 +-
+ arch/hexagon/kernel/process.c        |   4 +-
+ arch/hexagon/kernel/signal.c         |   1 -
+ arch/hexagon/kernel/traps.c          |   6 +-
+ arch/ia64/kernel/process.c           |   4 +-
+ arch/ia64/kernel/ptrace.c            |   6 +-
+ arch/ia64/kernel/signal.c            |   1 -
+ arch/m68k/kernel/ptrace.c            |   5 +-
+ arch/m68k/kernel/signal.c            |   4 +-
+ arch/microblaze/kernel/ptrace.c      |   5 +-
+ arch/microblaze/kernel/signal.c      |   4 +-
+ arch/mips/kernel/ptrace.c            |   5 +-
+ arch/mips/kernel/signal.c            |   4 +-
+ arch/nds32/include/asm/syscall.h     |   2 +-
+ arch/nds32/kernel/ptrace.c           |   5 +-
+ arch/nds32/kernel/signal.c           |   4 +-
+ arch/nios2/kernel/ptrace.c           |   5 +-
+ arch/nios2/kernel/signal.c           |   4 +-
+ arch/openrisc/kernel/ptrace.c        |   5 +-
+ arch/openrisc/kernel/signal.c        |   4 +-
+ arch/parisc/kernel/ptrace.c          |   7 +-
+ arch/parisc/kernel/signal.c          |   4 +-
+ arch/powerpc/kernel/ptrace/ptrace.c  |   8 +-
+ arch/powerpc/kernel/signal.c         |   4 +-
+ arch/riscv/kernel/ptrace.c           |   5 +-
+ arch/riscv/kernel/signal.c           |   4 +-
+ arch/s390/include/asm/entry-common.h |   1 -
+ arch/s390/kernel/ptrace.c            |   1 -
+ arch/s390/kernel/signal.c            |   5 +-
+ arch/sh/kernel/ptrace_32.c           |   5 +-
+ arch/sh/kernel/signal_32.c           |   4 +-
+ arch/sparc/kernel/ptrace_32.c        |   5 +-
+ arch/sparc/kernel/ptrace_64.c        |   5 +-
+ arch/sparc/kernel/signal32.c         |   1 -
+ arch/sparc/kernel/signal_32.c        |   4 +-
+ arch/sparc/kernel/signal_64.c        |   4 +-
+ arch/um/kernel/process.c             |   4 +-
+ arch/um/kernel/ptrace.c              |   5 +-
+ arch/x86/kernel/ptrace.c             |   1 -
+ arch/x86/kernel/signal.c             |   5 +-
+ arch/x86/mm/tlb.c                    |   1 +
+ arch/xtensa/kernel/ptrace.c          |   5 +-
+ arch/xtensa/kernel/signal.c          |   4 +-
+ block/blk-cgroup.c                   |   2 +-
+ fs/coredump.c                        |   1 -
+ fs/exec.c                            |   1 -
+ fs/io-wq.c                           |   6 +-
+ fs/io_uring.c                        |  11 +-
+ fs/proc/array.c                      |   1 -
+ fs/proc/base.c                       |   1 -
+ include/asm-generic/syscall.h        |   2 +-
+ include/linux/entry-common.h         |  47 +-------
+ include/linux/entry-kvm.h            |   2 +-
+ include/linux/posix-timers.h         |   1 -
+ include/linux/ptrace.h               |  81 ++++++++++++-
+ include/linux/resume_user_mode.h     |  64 ++++++++++
+ include/linux/sched/signal.h         |  17 +++
+ include/linux/task_work.h            |   5 +
+ include/linux/tracehook.h            | 226 -----------------------------------
+ include/uapi/linux/ptrace.h          |   2 +-
+ kernel/entry/common.c                |  19 +--
+ kernel/entry/kvm.c                   |   9 +-
+ kernel/exit.c                        |   3 +-
+ kernel/livepatch/transition.c        |   1 -
+ kernel/ptrace.c                      |  47 +++++---
+ kernel/seccomp.c                     |   1 -
+ kernel/signal.c                      |  62 +++++-----
+ kernel/task_work.c                   |   4 +-
+ kernel/time/posix-cpu-timers.c       |   1 +
+ mm/memcontrol.c                      |   2 +-
+ security/apparmor/domain.c           |   1 -
+ security/selinux/hooks.c             |   1 -
+ 85 files changed, 372 insertions(+), 495 deletions(-)
 
-> +}
-> +
-> +static inline void kvm_memfile_put_pfn(struct kvm_memory_slot *slot,
-> +				       kvm_pfn_t pfn)
-> +{
-> +	slot->pfn_ops->put_unlock_pfn(pfn);
-> +}
-> +
-> +#else
-> +static inline long kvm_memfile_get_pfn(struct kvm_memory_slot *slot, gfn_t gfn,
-> +				       int *order)
-> +{
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
-This should be a WARN_ON() as its usage should be guarded by a KVM_PRIVATE_MEM
-check, and private memslots should be disallowed in this case.
-
-Alternatively, it might be a good idea to #ifdef these out entirely and not provide
-stubs.  That'd likely require a stub or two in arch code, but overall it might be
-less painful in the long run, e.g. would force us to more carefully consider the
-touch points for private memory.  Definitely not a requirement, just an idea.

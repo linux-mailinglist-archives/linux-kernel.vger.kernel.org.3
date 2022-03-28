@@ -2,241 +2,372 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F4C4EA16E
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A7A4EA171
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344496AbiC1UZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 16:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42096 "EHLO
+        id S1344787AbiC1U0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 16:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344479AbiC1UZH (ORCPT
+        with ESMTP id S1344766AbiC1U0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 16:25:07 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCD01EAC6;
-        Mon, 28 Mar 2022 13:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648499006; x=1680035006;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ThsbKBussKR1IsuNjDkjqgFuF+bfP+1/CVYIaF3rgJA=;
-  b=d//6fwVsRSfRosBTGisaEQTDRBS9FO/Xk4i5EDohOrJARZj+1HZ6UWhH
-   z26Z7gsMMnb/NsVczgSU9qvBJGmIlj3lyXTBRInnrmIF/FPbUfS7Rz1bO
-   sIbU6vn6Hx7Nk4i/XZEvs8oMVPROOww+1XuLQ16NmGPivbdReXUXkz9mO
-   s=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 28 Mar 2022 13:23:24 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 13:23:08 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 28 Mar 2022 13:23:08 -0700
-Received: from [10.110.35.108] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 28 Mar
- 2022 13:23:07 -0700
-Message-ID: <ff1ecd47-d42a-fa91-5c5c-e23ac183f525@quicinc.com>
-Date:   Mon, 28 Mar 2022 13:23:06 -0700
+        Mon, 28 Mar 2022 16:26:32 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8ADD4C7BF;
+        Mon, 28 Mar 2022 13:24:50 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id BF6EA3FBAEC;
+        Mon, 28 Mar 2022 16:24:49 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id bVmQYq65rfRG; Mon, 28 Mar 2022 16:24:49 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id F41653FBB70;
+        Mon, 28 Mar 2022 16:24:48 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com F41653FBB70
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1648499089;
+        bh=qFoG3MHJSaqcwKtqXG7+32spYi5VLkmmpF/B27Ny7ik=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=Ld/x4Nb90cdD+0zLqLErS9XIWl82prheiLvk9w2bWJ6u6rpSEY5ViMRwPsOUtaK3t
+         CX8Mvf6ZouBoJldnYOTUdjMvIcf/RqhGLWPkHcc2NClXzNfOTO7aqDqKx5P+rNmA+k
+         vjp1Qfm5rmK1bW48lgWMTmhdP7Ez4pGVaIpTACJNNPKgxyq/59LLdwSZLvqfITKCG5
+         ZL5cXeb+oaQ1EoIsxSJ8dH+HvinmoY8+SGLKKUZShcanoK1nNVwLyRpsrLnV8M+CeG
+         vSz2FkfMna0kpoDxBZBN2RT1DjMWv2vc7YsofHJXYOT0a3IEQxBvUfk2hOQng1/eaq
+         voFow7P4L9vWQ==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id I28OI4v_5YmZ; Mon, 28 Mar 2022 16:24:48 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id DBEA13FBEA7;
+        Mon, 28 Mar 2022 16:24:48 -0400 (EDT)
+Date:   Mon, 28 Mar 2022 16:24:48 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Beau Belgrave <beaub@microsoft.com>, rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Message-ID: <2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com>
+Subject: Comments on new user events ABI
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 19/22 v2] wcn36xx: Improve readability of
- wcn36xx_caps_name
-Content-Language: en-US
-To:     =?UTF-8?Q?Benjamin_St=c3=bcrz?= <benni@stuerz.xyz>
-CC:     <loic.poulain@linaro.org>, Kalle Valo <kvalo@kernel.org>,
-        <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <wcn36xx@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220326165909.506926-1-benni@stuerz.xyz>
- <20220326165909.506926-19-benni@stuerz.xyz>
- <f0ebc901-051a-c7fe-ca5a-bc798e7c31e7@quicinc.com>
- <720e4d68-683a-f729-f452-4a9e52a3c6fa@stuerz.xyz>
-From:   Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <720e4d68-683a-f729-f452-4a9e52a3c6fa@stuerz.xyz>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF98 (Linux)/8.8.15_GA_4232)
+Thread-Index: B0M+BmOcIucczO4F1K4t0lJIcDaNNQ==
+Thread-Topic: Comments on new user events ABI
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(apologies for top-posting)
-When you submit new patches you should not do so as a reply, but instead 
-as a new thread with a new version number.
+Hi Beau, Hi Steven,
 
-And since multiple folks have suggested that you submit on a 
-per-subsystem basis I suggest that you re-send this as a singleton just 
-to wcn36xx@lists.infradead.org and linux-wireless@vger.kernel.org along 
-with the associated maintainers.
+I've done a review of the trace events ABI, and I have a few comments.
+Sorry for being late to the party, but I only noticed this new ABI recently.
+Hopefully we can improve this ABI before the 5.18 release.
 
-So I believe [PATCH v3] wcn36xx:... would be the correct subject, but 
-I'm sure Kalle will let us know otherwise
+A bit of context: as you know, I maintain LTTng-UST, a user-space Linux
+tracer. It does not implement much in the kernel because its goal is to
+be purely user-space, mainly for performance reasons. However, when there
+are relevant kernel facilities it can use, or if I need to extend the
+kernel to expose a generally useful ABI to user-space, I do it. For
+instance, I've contributed the rseq() system call for the sake of speeding
+up the LTTng-UST ring buffer and sched_getcpu(). The work I am currently
+doing on virtual-cpu-ids is also with a primary goal of improving the
+LTTng-UST ring buffers (and all memory allocators as a side-effect) ;) .
+Hopefully we can work together and make sure the new ABIs are useful to
+everyone.
 
-On 3/28/2022 11:38 AM, Benjamin Stürz wrote:
-> Make the array more readable and easier to maintain.
-> 
 
-Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+* user_events_status memory mapping
 
-> Signed-off-by: Benjamin Stürz <benni@stuerz.xyz>
-> ---
->   drivers/net/wireless/ath/wcn36xx/main.c | 126 ++++++++++++------------
->   1 file changed, 65 insertions(+), 61 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/ath/wcn36xx/main.c
-> b/drivers/net/wireless/ath/wcn36xx/main.c
-> index 95ea7d040d8c..ac9465dfae64 100644
-> --- a/drivers/net/wireless/ath/wcn36xx/main.c
-> +++ b/drivers/net/wireless/ath/wcn36xx/main.c
-> @@ -192,70 +192,74 @@ static inline u8 get_sta_index(struct
-> ieee80211_vif *vif,
->   	       sta_priv->sta_index;
->   }
-> 
+As I understand it, one part of the user events ABI is a memory mapping
+which contains "flags" which indicates whether a given event is enabled.
+It is indexed by byte, and each byte has this bitwise meaning:
 
-to be safe you may want an #undef here
+/* Bits 0-6 are for known probe types, Bit 7 is for unknown probes */
+#define EVENT_BIT_FTRACE 0
+#define EVENT_BIT_PERF 1
+#define EVENT_BIT_OTHER 7
 
-> +#define DEFINE(s) [s] = #s
-> +
->   static const char * const wcn36xx_caps_names[] = {
-> -	"MCC",				/* 0 */
-> -	"P2P",				/* 1 */
-> -	"DOT11AC",			/* 2 */
-> -	"SLM_SESSIONIZATION",		/* 3 */
-> -	"DOT11AC_OPMODE",		/* 4 */
-> -	"SAP32STA",			/* 5 */
-> -	"TDLS",				/* 6 */
-> -	"P2P_GO_NOA_DECOUPLE_INIT_SCAN",/* 7 */
-> -	"WLANACTIVE_OFFLOAD",		/* 8 */
-> -	"BEACON_OFFLOAD",		/* 9 */
-> -	"SCAN_OFFLOAD",			/* 10 */
-> -	"ROAM_OFFLOAD",			/* 11 */
-> -	"BCN_MISS_OFFLOAD",		/* 12 */
-> -	"STA_POWERSAVE",		/* 13 */
-> -	"STA_ADVANCED_PWRSAVE",		/* 14 */
-> -	"AP_UAPSD",			/* 15 */
-> -	"AP_DFS",			/* 16 */
-> -	"BLOCKACK",			/* 17 */
-> -	"PHY_ERR",			/* 18 */
-> -	"BCN_FILTER",			/* 19 */
-> -	"RTT",				/* 20 */
-> -	"RATECTRL",			/* 21 */
-> -	"WOW",				/* 22 */
-> -	"WLAN_ROAM_SCAN_OFFLOAD",	/* 23 */
-> -	"SPECULATIVE_PS_POLL",		/* 24 */
-> -	"SCAN_SCH",			/* 25 */
-> -	"IBSS_HEARTBEAT_OFFLOAD",	/* 26 */
-> -	"WLAN_SCAN_OFFLOAD",		/* 27 */
-> -	"WLAN_PERIODIC_TX_PTRN",	/* 28 */
-> -	"ADVANCE_TDLS",			/* 29 */
-> -	"BATCH_SCAN",			/* 30 */
-> -	"FW_IN_TX_PATH",		/* 31 */
-> -	"EXTENDED_NSOFFLOAD_SLOT",	/* 32 */
-> -	"CH_SWITCH_V1",			/* 33 */
-> -	"HT40_OBSS_SCAN",		/* 34 */
-> -	"UPDATE_CHANNEL_LIST",		/* 35 */
-> -	"WLAN_MCADDR_FLT",		/* 36 */
-> -	"WLAN_CH144",			/* 37 */
-> -	"NAN",				/* 38 */
-> -	"TDLS_SCAN_COEXISTENCE",	/* 39 */
-> -	"LINK_LAYER_STATS_MEAS",	/* 40 */
-> -	"MU_MIMO",			/* 41 */
-> -	"EXTENDED_SCAN",		/* 42 */
-> -	"DYNAMIC_WMM_PS",		/* 43 */
-> -	"MAC_SPOOFED_SCAN",		/* 44 */
-> -	"BMU_ERROR_GENERIC_RECOVERY",	/* 45 */
-> -	"DISA",				/* 46 */
-> -	"FW_STATS",			/* 47 */
-> -	"WPS_PRBRSP_TMPL",		/* 48 */
-> -	"BCN_IE_FLT_DELTA",		/* 49 */
-> -	"TDLS_OFF_CHANNEL",		/* 51 */
-> -	"RTT3",				/* 52 */
-> -	"MGMT_FRAME_LOGGING",		/* 53 */
-> -	"ENHANCED_TXBD_COMPLETION",	/* 54 */
-> -	"LOGGING_ENHANCEMENT",		/* 55 */
-> -	"EXT_SCAN_ENHANCED",		/* 56 */
-> -	"MEMORY_DUMP_SUPPORTED",	/* 57 */
-> -	"PER_PKT_STATS_SUPPORTED",	/* 58 */
-> -	"EXT_LL_STAT",			/* 60 */
-> -	"WIFI_CONFIG",			/* 61 */
-> -	"ANTENNA_DIVERSITY_SELECTION",	/* 62 */
-> +	DEFINE(MCC),
-> +	DEFINE(P2P),
-> +	DEFINE(DOT11AC),
-> +	DEFINE(SLM_SESSIONIZATION),
-> +	DEFINE(DOT11AC_OPMODE),
-> +	DEFINE(SAP32STA),
-> +	DEFINE(TDLS),
-> +	DEFINE(P2P_GO_NOA_DECOUPLE_INIT_SCAN),
-> +	DEFINE(WLANACTIVE_OFFLOAD),
-> +	DEFINE(BEACON_OFFLOAD),
-> +	DEFINE(SCAN_OFFLOAD),
-> +	DEFINE(ROAM_OFFLOAD),
-> +	DEFINE(BCN_MISS_OFFLOAD),
-> +	DEFINE(STA_POWERSAVE),
-> +	DEFINE(STA_ADVANCED_PWRSAVE),
-> +	DEFINE(AP_UAPSD),
-> +	DEFINE(AP_DFS),
-> +	DEFINE(BLOCKACK),
-> +	DEFINE(PHY_ERR),
-> +	DEFINE(BCN_FILTER),
-> +	DEFINE(RTT),
-> +	DEFINE(RATECTRL),
-> +	DEFINE(WOW),
-> +	DEFINE(WLAN_ROAM_SCAN_OFFLOAD),
-> +	DEFINE(SPECULATIVE_PS_POLL),
-> +	DEFINE(SCAN_SCH),
-> +	DEFINE(IBSS_HEARTBEAT_OFFLOAD),
-> +	DEFINE(WLAN_SCAN_OFFLOAD),
-> +	DEFINE(WLAN_PERIODIC_TX_PTRN),
-> +	DEFINE(ADVANCE_TDLS),
-> +	DEFINE(BATCH_SCAN),
-> +	DEFINE(FW_IN_TX_PATH),
-> +	DEFINE(EXTENDED_NSOFFLOAD_SLOT),
-> +	DEFINE(CH_SWITCH_V1),
-> +	DEFINE(HT40_OBSS_SCAN),
-> +	DEFINE(UPDATE_CHANNEL_LIST),
-> +	DEFINE(WLAN_MCADDR_FLT),
-> +	DEFINE(WLAN_CH144),
-> +	DEFINE(NAN),
-> +	DEFINE(TDLS_SCAN_COEXISTENCE),
-> +	DEFINE(LINK_LAYER_STATS_MEAS),
-> +	DEFINE(MU_MIMO),
-> +	DEFINE(EXTENDED_SCAN),
-> +	DEFINE(DYNAMIC_WMM_PS),
-> +	DEFINE(MAC_SPOOFED_SCAN),
-> +	DEFINE(BMU_ERROR_GENERIC_RECOVERY),
-> +	DEFINE(DISA),
-> +	DEFINE(FW_STATS),
-> +	DEFINE(WPS_PRBRSP_TMPL),
-> +	DEFINE(BCN_IE_FLT_DELTA),
-> +	DEFINE(TDLS_OFF_CHANNEL),
-> +	DEFINE(RTT3),
-> +	DEFINE(MGMT_FRAME_LOGGING),
-> +	DEFINE(ENHANCED_TXBD_COMPLETION),
-> +	DEFINE(LOGGING_ENHANCEMENT),
-> +	DEFINE(EXT_SCAN_ENHANCED),
-> +	DEFINE(MEMORY_DUMP_SUPPORTED),
-> +	DEFINE(PER_PKT_STATS_SUPPORTED),
-> +	DEFINE(EXT_LL_STAT),
-> +	DEFINE(WIFI_CONFIG),
-> +	DEFINE(ANTENNA_DIVERSITY_SELECTION),
->   };
-> 
-> +#undef DEFINE
-> +
->   static const char *wcn36xx_get_cap_name(enum place_holder_in_cap_bitmap x)
->   {
->   	if (x >= ARRAY_SIZE(wcn36xx_caps_names))
+There are a few things I find odd here. First, to improve use of CPU cache,
+I would have expected this memory mapping to expose enable flags as a
+bitmap rather than an array of bytes, indexed bit-wise rather than byte-wise.
+I also don't get what user-space is expected to do differently if FTRACE vs
+PERF is enabled, considering that it gates a writev() to a file descriptor
+associated with /sys/kernel/debug/tracing/user_events_data.
+
+I would have rather thought that tracers implemented in user-space could register
+themselves, and then there could be one /sys/kernel/debug/tracing/user_events_status
+per tracer. Considering that all kernel tracers use the same ABI to write an event,
+and then dispatch this event internally within the kernel to each registered
+tracer, I would expect to have a single memory mapping for all those (e.g. a
+/sys/kernel/debug/tracing/user_events_status/kernel_tracers file).
+
+Then eventually if we have other user-space tracers such as lttng-ust with its
+their own user-space code performing tracing in a shared memory ring buffer, it
+would make sense to allow it to register its own
+/sys/kernel/debug/tracing/user_events_status/lttng_ust file, with its own indexes.
+
+If this facility is ever used by lttng-ust to enable user-space tracing, I would not
+want to take the overhead of calling writev for the sake of kernel tracers if
+those are disabled.
+
+So perhaps in the short-term there is no need to implement the user-space tracer
+registration ABI, but I would have expected a simple bitmap for
+/sys/kernel/debug/tracing/user_events_data/kernel_tracers rather than the
+bytewise index, because as far as the kernel tracers are concerned, providing
+the bit to tell userspace instrumentation exactly which tracers are internally
+enabled within the kernel does not appear to be of any use other than increasing
+the footprint on the actively used cpu cache lines.
+
+
+* user_events_data page faults
+
+If my understanding is correct, when the user-space program's memory containing
+the payload passed to writev() to a user_events_data file descriptor is kicked
+out from the page cache between fault_in_iov_iter_readable and its use by the
+tracers due to high memory pressure, the writev() will fail with -EFAULT and
+the data will be discarded unless user-space somehow handles this error (which
+is not handled in the samples/user_events/sample.c example program). It is good
+that the memory is faulted in immediately before calling the tracers, but
+considering that it is not mlock'd, should we make more effort to ensure the
+tracers are able to handle page faults ?
+
+Integration of the work done by Michael Jeanson and myself on faultable tracepoint
+would allow the tracepoint probes to take page faults. Then, further modifications
+in the kernel tracers would be needed to handle those page faults.
+
+
+* user_reg name_args and write_index vs purely user-space tracers
+
+That part of the user event registration (event layout and ID allocation) appears
+to be intrinsically tied to the kernel tracers and the expected event layout. This
+seems fine as long as the only users we consider are the kernel tracers, but it
+appears to be less relevant for purely user-space tracers. Actually, tying the
+mmap'd event enable mechanism with the event ID and description makes me wonder
+whether it might be better to have LTTng-UST implement its own shared-memory based
+"fast-event-enabling" mechanism rather than use this user-event ABI. The other
+advantage of doing all of this in user-space would be to allow many instances
+of this bitmap to exist on a given system, e.g. one per container in a multi-container
+system, rather than requiring this to be a global kernel-wide singleton, and to use
+it from a non-privileged user.
+
+
+Some comments about the implementation:
+
+kernel/trace/trace_events_user.c:
+static ssize_t user_events_write(struct file *file, const char __user *ubuf,
+                                 size_t count, loff_t *ppos)
+{
+        struct iovec iov;
+        struct iov_iter i;
+
+        if (unlikely(*ppos != 0))
+                return -EFAULT;
+
+        if (unlikely(import_single_range(READ, (char *)ubuf, count, &iov, &i)))
+                return -EFAULT;
+                                         ^ shouldn't this be "WRITE" ? This takes data from
+                                           user-space and copies it into the kernel, similarly
+                                           to fs/read_write.c:new_sync_write().
+
+        return user_events_write_core(file, &i);
+}
+
+include/uapi/linux/user_events.h:
+
+struct user_reg {
+
+        /* Input: Size of the user_reg structure being used */
+        __u32 size;
+
+        /* Input: Pointer to string with event name, description and flags */
+        __u64 name_args;
+
+        /* Output: Byte index of the event within the status page */
+        __u32 status_index;
+
+        /* Output: Index of the event to use when writing data */
+        __u32 write_index;
+};
+
+As this structure is expected to grow, and the user-space sample program uses "sizeof()"
+to figure out its size (which includes padding), I would be more comfortable if this was
+a packed structure rather than non-packed, because as fields are added, it's tricky to
+figure out from the kernel perspective whether the size received are fields that user-space
+is aware of, or if this is just padding.
+
+include/uapi/linux/user_events.h:
+
+struct user_bpf_iter {
+
+        /* Offset of the data within the first iovec */
+        __u32 iov_offset;
+
+        /* Number of iovec structures */
+        __u32 nr_segs;
+
+        /* Pointer to iovec structures */
+        const struct iovec *iov;
+
+                           ^ a pointer in a uapi header is usually a no-go. This should be a u64.
+};
+
+include/uapi/linux/user_events.h:
+
+struct user_bpf_context {
+
+        /* Data type being passed (see union below) */
+        __u32 data_type;
+
+        /* Length of the data */
+        __u32 data_len;
+
+        /* Pointer to data, varies by data type */
+        union {
+                /* Kernel data (data_type == USER_BPF_DATA_KERNEL) */
+                void *kdata;
+
+                /* User data (data_type == USER_BPF_DATA_USER) */
+                void *udata;
+
+                /* Direct iovec (data_type == USER_BPF_DATA_ITER) */
+                struct user_bpf_iter *iter;
+
+                               ^ likewise for the 3 pointers above. Should be u64 in uapi headers.
+        };
+};
+
+kernel/trace/trace_events_user.c:
+
+static long user_reg_get(struct user_reg __user *ureg, struct user_reg *kreg)
+{
+        u32 size;
+        long ret;
+
+        ret = get_user(size, &ureg->size);
+
+        if (ret)
+                return ret;
+
+
+        if (size > PAGE_SIZE)
+                return -E2BIG;
+
+        ^ here I would be tempted to validate that the structure size at least provides room
+          for the "v0" ABI, e.g.:
+
+             if (size < offsetofend(struct user_reg, write_index))
+                  return -EINVAL;
+
+        return copy_struct_from_user(kreg, sizeof(*kreg), ureg, size);
+
+              ^ I find it odd that the kernel copy of struct user_reg may contain a
+                size field which contents differs from the size fetched by get_user().
+                This can happen if a buggy or plainly hostile user-space attempts to
+                confuse the kernel about the size of this structure. Fortunately, the
+                size field does not seem to be used afterwards, but I would think it
+                safer to copy back the "size" fetched by get_user into the reg->size
+                after copy_struct_from_user in case future changes in the code end up
+                relying on a consistent size field.
+}
+
+kernel/trace/trace_events_user.c:
+
+static struct user_event *find_user_event(char *name, u32 *outkey)
+{
+        struct user_event *user;
+        u32 key = user_event_key(name);
+
+        *outkey = key;
+
+        hash_for_each_possible(register_table, user, node, key)
+                if (!strcmp(EVENT_NAME(user), name)) {
+                        atomic_inc(&user->refcnt);
+
+                        ^ what happens if an ill-intended user-space populates enough references
+                          to overflow refcnt (atomic_t). I suspect it can make the kernel free
+                          memory that is still in use, and trigger a use-after-free scenario.
+                          Usually reference counters should use include/linux/refcount.h which
+                          handles reference counter saturation. user_event_parse() has also a use
+                          of atomic_inc() on that same refcnt which userspace can overflow.
+
+                        return user;
+                }
+
+        return NULL;
+}
+
+kernel/trace/trace_events_user.c:
+
+static int user_events_release(struct inode *node, struct file *file)
+{
+[...]
+        /*
+         * Ensure refs cannot change under any situation by taking the
+         * register mutex during the final freeing of the references.
+         */
+        mutex_lock(&reg_mutex);
+[...]
+        mutex_unlock(&reg_mutex);
+
+        kfree(refs);
+
+        ^ AFAIU, the user_events_write() does not rely on reg_mutex to ensure mutual exclusion.
+          Doing so would be prohibitive performance-wise. But I suspect that freeing "refs" here
+          without waiting for a RCU grace period can be an issue if user_events_write_core is using
+          refs concurrently with file descriptor close.
+
+kernel/trace/trace_events_user.c:
+
+static bool user_field_match(struct ftrace_event_field *field, int argc,
+                             const char **argv, int *iout)
+[...]
+
+        for (; i < argc; ++i) {
+[...]
+                pos += snprintf(arg_name + pos, len - pos, argv[i]);
+
+        ^ what happens if strlen(argv[i]) > (len - pos) ? Based on lib/vsprintf.c:
+
+ * The return value is the number of characters which would be
+ * generated for the given input, excluding the trailing null,
+ * as per ISO C99.  If the return is greater than or equal to
+ * @size, the resulting string is truncated.
+
+        So the "pos" returned by the first call to sprintf would be greater than MAX_FIELD_ARG_NAME.
+        Then the second call to snprintf passes a @size argument of "len - pos" using the pos value
+        which is larger than len... which is a negative integer passed as argument to a size_t (unsigned).
+        So it expects a very long string. And the @buf argument is out-of-bound (field_name + pos).
+        Is this pattern for using snprintf() used elsewhere ? From a quick grep, I find this pattern in
+        a few places where AFAIU the input is not user-controlled (as it seems to be the case here), but
+        still it might be worth looking into:
+
+             kernel/cgroup/cgroup.c:show_delegatable_files()
+             kernel/time/clocksource.c:available_clocksource_show()
+
+Also, passing a copy of a userspace string (argv[i]) as format string argument to
+snprintf can be misused to leak kernel data to user-space.
+
+The same function also appear to have similar issues with its use of the field->name userspace input
+string.
+
+Unfortunately this is all the time I have for review right now, but it is at least a good starting
+point for discussion.
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

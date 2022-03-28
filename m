@@ -2,136 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD144E9237
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D04D4E923C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239738AbiC1KDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 06:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
+        id S240128AbiC1KEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 06:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234956AbiC1KDW (ORCPT
+        with ESMTP id S234956AbiC1KEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 06:03:22 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885022E6AB;
-        Mon, 28 Mar 2022 03:01:42 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id B52E25805CA;
-        Mon, 28 Mar 2022 06:01:41 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 28 Mar 2022 06:01:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=nZAXAsNq5mkXS/
-        Tat8STmC+wZsmvosjFIg/ceUBcJqc=; b=WYHjRNRomMF4TRAvFWRRVqXrs5m6Is
-        mzslJIjAuA8z2BTRksJvkmhag7H7RJpQdCLslYRoLuQ3maMsoSSJrV2HLSBIlCAW
-        jshD03+X0ACSPvpUtojcAj+8b3rToajbLbVfKU9Dd0jZKaM1zqEw+HywJguNbVzq
-        Fd1rpTL4fUSAKVInVU5CX3BaXdoDubbb3sGXJormk7AtGiLaHFWnmyFpja0fnas1
-        pk3LoeelFvtqP92oi0kdsk0/5JmdFYf5Jv7YVuzvQk3HQRPS7LVVKty8P//84eED
-        3tatol9M0OKwS05BZvzRz4hI6RXNFxjyKQ7sGiss/T1eTPTURUr+WlpQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=nZAXAsNq5mkXS/Tat8STmC+wZsmvosjFIg/ceUBcJ
-        qc=; b=UjhMydFA6oMwcIZFOQPzjVulFHkMOgEUJaeP+wz0Pq6+oeglmuim0P+Tt
-        XkPazk54RreexS1kx0IHlc6rmIUK0xX3TLG7wjOvI5doTbsYFsVK6UhP6rnCNOiF
-        UCTf/j8HjfInkN6IN92M/bAP0y9TIzEJQZ22YSc/+MhKY+k+oQznGuD2iqxfaDmP
-        mHGoX6xXUsCUGyXAP7iG+K32zaRqI5mXWEPwqizSPo8QWwHTMiOyT37hr1bNW01Y
-        53EjPglKHD6bwxBZRRGVGZySpBs56L98VdLsQnNr7d+2GKvTpkHvlESz1DazPEQb
-        dfrh+M1jUlRq4+hVY/PIn2yfGpCyA==
-X-ME-Sender: <xms:g4dBYi9Q3MODDCCyQzWXzfi5RDhva3kCO9wgx5w6sBqLC-27pn7aUA>
-    <xme:g4dBYit6Ikr7mGLDM7SlMgFnz6T49JZJ5-1XkNM5QfJsTEWFiTzexk0zA-yO9ed51
-    td0m82As79rOYAwjoc>
-X-ME-Received: <xmr:g4dBYoD-dGvs6WDAN7tv3Gu0iGwbY7LIECBcYhKx7SNrg7E7gXtQfPsw0Tvf9to>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudehjedgvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
-    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeehieduvdevhfekjeeftddtkeeitefhudekvdeiueeulefgleei
-    jeeghedvkeduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:g4dBYqfIWsD5D2Wh72VfeXSqKe2lVb3uOsF44hao6cTNLKd4qBqzqw>
-    <xmx:g4dBYnM9JX_O0Pa032o-K-2QiSk_qLC_7bxPyyd8FugMf0lCbIOq6w>
-    <xmx:g4dBYkkY-3gsXftuPzFj8rsOr6spkXkvXCfCjpY-1XkPFkeJ_A31Uw>
-    <xmx:hYdBYqcgPS7UFBK5xT6JyQAN_RZh0tyqlwjglG3RuTKYVSKNgR-nMw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 28 Mar 2022 06:01:36 -0400 (EDT)
-Message-ID: <44408f8f-20ac-a558-ece9-d14c7b99ca50@flygoat.com>
-Date:   Mon, 28 Mar 2022 11:01:36 +0100
+        Mon, 28 Mar 2022 06:04:08 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E13B3617E;
+        Mon, 28 Mar 2022 03:02:28 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22S8IlB0012577;
+        Mon, 28 Mar 2022 10:02:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=q7DKSfasEVPvSYM40bnl4m17qtlsj/d7/x0iS7yhgVM=;
+ b=WIRcp7WXvk7bj1xbyns44rngDNo34KJU0iSr2UMN59exIAeTnXMn6ebSf8KrSRpGYfLr
+ A/+hLZc5rldisNsjUHlQ6YIqMSnSHwFhprv1GOaPQ+FDyW91X8Wm+Qv6zAFK2GVtQzYx
+ K8UHDWlEUGZ1bne/OQlcZ+VidKPWknEfpfqYbHoc6Nl2+DYxlPbh5dZgDbL0+eFK9Cgj
+ WOx95jLC26m3sjteurUhoFMtW2/26OrunyYoifnC6jme5vHWQmYbpPkGWdZZUJwZq1HJ
+ +ahSLEn3cERaiwacNPumedfWxdgG+2cA/o/64/dMhWaj6VTxpaobws/m99Ulq6xpa/Y4 kg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f39d91vmb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Mar 2022 10:02:20 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22S8Iuxa012800;
+        Mon, 28 Mar 2022 10:02:20 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f39d91vkr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Mar 2022 10:02:20 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22S9xU56021154;
+        Mon, 28 Mar 2022 10:02:18 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3f1tf9bnsd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Mar 2022 10:02:17 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22SA2Fdx11338116
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Mar 2022 10:02:15 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7EE2AA4040;
+        Mon, 28 Mar 2022 10:02:15 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1C04CA4051;
+        Mon, 28 Mar 2022 10:02:15 +0000 (GMT)
+Received: from [9.171.53.124] (unknown [9.171.53.124])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 28 Mar 2022 10:02:15 +0000 (GMT)
+Message-ID: <81aba614-6f6a-1601-6ed9-a2939696a460@linux.ibm.com>
+Date:   Mon, 28 Mar 2022 12:02:14 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v13 5/6] drm/loongson: add drm driver for loongson display
- controller
-Content-Language: en-GB
-To:     Sui Jingfeng <15330273260@189.cn>,
-        kernel test robot <lkp@intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <error27@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+Subject: Re: [PATCH net] net/smc: Send out the remaining data in sndbuf before
+ close
+Content-Language: en-US
+To:     Wen Gu <guwen@linux.alibaba.com>, davem@davemloft.net,
+        kuba@kernel.org, dust.li@linux.alibaba.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220328022835.2508587-5-15330273260@189.cn>
- <202203281653.wiRaycuD-lkp@intel.com>
- <efc756c5-9ea3-66df-4885-82f57ff31b1f@189.cn>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <efc756c5-9ea3-66df-4885-82f57ff31b1f@189.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1648447836-111521-1-git-send-email-guwen@linux.alibaba.com>
+From:   Karsten Graul <kgraul@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <1648447836-111521-1-git-send-email-guwen@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: LohlJVzBZu0MSkw_ddSDna2PqUUqfvoq
+X-Proofpoint-GUID: GB44lFKqKkIBYsWh3ok9JzJk8Xfa8JED
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-28_03,2022-03-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ spamscore=0 clxscore=1011 mlxscore=0 lowpriorityscore=0 malwarescore=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 adultscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203280059
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 28/03/2022 08:10, Wen Gu wrote:
+> The current autocork algorithms will delay the data transmission
+> in BH context to smc_release_cb() when sock_lock is hold by user.
+> 
+> So there is a possibility that when connection is being actively
+> closed (sock_lock is hold by user now), some corked data still
+> remains in sndbuf, waiting to be sent by smc_release_cb(). This
+> will cause:
+> 
+> - smc_close_stream_wait(), which is called under the sock_lock,
+>   has a high probability of timeout because data transmission is
+>   delayed until sock_lock is released.
+> 
+> - Unexpected data sends may happen after connction closed and use
+>   the rtoken which has been deleted by remote peer through
+>   LLC_DELETE_RKEY messages.
+> 
+> So this patch will try to send out the remaining corked data in
+> sndbuf before active close process, to ensure data integrity and
+> avoid unexpected data transmission after close.
+> 
+> Reported-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
+> Fixes: 6b88af839d20 ("net/smc: don't send in the BH context if sock_owned_by_user")
+> Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+> ---
 
+Thank you,
 
-在 2022/3/28 10:01, Sui Jingfeng 写道:
->
-> On 2022/3/28 16:51, kernel test robot wrote:
->> Hi Sui,
-[...]
->>
->
-> Hi,  my driver will not used on microblaze arch,
->
-> what does this warnings means, do i need to fix this?
-
-Hi Jingfeng,
-
-The problem it discovered is general for all archs.
-
-Type of reg_base (MMIO pointer) should be "void __iomem *" instead of 
-"void *"
-everywhere, including parameter list.
-
-__iomem is the attribute for MMIO.
-
-Thanks.
-- Jiaxun
-
+Acked-by: Karsten Graul <kgraul@linux.ibm.com>

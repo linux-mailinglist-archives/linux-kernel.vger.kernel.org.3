@@ -2,70 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1DE64E9200
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F5F4E9205
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240061AbiC1Jyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 05:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
+        id S240056AbiC1Jys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 05:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240047AbiC1Jy2 (ORCPT
+        with ESMTP id S239800AbiC1Jyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 05:54:28 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4145154BF6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:52:47 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so14939278pjf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:52:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oFYJu8bdS9lTnagtGk2u5UISyqGssJEWeZR75J4CCQ4=;
-        b=GntnHgow6kb2bhuinGrTFT6S/X9qym/s0sFSEUkJXDmNQl82e2NCI1Dma+l72P+0wm
-         9XMVcbHiRuxmvVtSPBZ7tQKj3M9CwbQN8u0YrhUHuwLJA0xwxOAP/iwP5HG2ieL5yBOB
-         riyl5rYiqhApthbGtlZAOlL61VBJIcvqO1QaO37Z7lv9H4vxQ+xubqdQx26xXUVGFD8d
-         gxMFYcwX+olVPgEM1Ntshiy1FnwUIwyiKDhK2pqaCM1mSHd6b1m0g9+oLCrcBHPeLggT
-         +UMQ6lX6a6VxpFVHvdyINtwXFxyfB2gkIAq5wYTXNjWGzZ4XNOPo3g7YIa1sPy5P0hSU
-         vILg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oFYJu8bdS9lTnagtGk2u5UISyqGssJEWeZR75J4CCQ4=;
-        b=hG164/NraizmBhrS9TrX9KOsU96Bvj3y9NvWwyzbAKRQsJ6UTQTJfJoQ5QoCS/9+w0
-         ABGt5jycjWf6vb4LVCt+0YF1S8cfqBuFP/0kZ5UK8iuV0nxVzgZMlNet6yGNfkY9kaQg
-         IBu2ML4bbYvk0bS4jZh2ac5rlD2MfhjGliIWUgL+bKIuUYYragMlijicibLH+KVwWkKF
-         5zqkh7QbMSOuvWIXChnYo5ofHXdVkXOFy1UX4P11TJ4IaPO9zUdqIKi0an6qLQhWCsWO
-         xA7ot8owQ/CNOH/1hNOe+6wPt5TqXBahHvWDrR+6y3JhCCe6/3CcgmDHfFAO90g7vngj
-         a1Mw==
-X-Gm-Message-State: AOAM531XgKNOWaTIG+ExskkKtu1UQ4DgPqL+f6p2OK6EJ5O4d+a7HdCe
-        +0r7F82prLtW16yUzW04LOqCPg==
-X-Google-Smtp-Source: ABdhPJwLen54FYCTR5UKlde92eYTDiJhw3WeUWHMHtaUWkB4DnSeea8SCaamC7zkpBJAESiySUP9EA==
-X-Received: by 2002:a17:90b:1c01:b0:1c6:dc49:d146 with SMTP id oc1-20020a17090b1c0100b001c6dc49d146mr39288419pjb.29.1648461166701;
-        Mon, 28 Mar 2022 02:52:46 -0700 (PDT)
-Received: from hsinchu16.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id g4-20020a633744000000b00381efba48b0sm12255117pgn.44.2022.03.28.02.52.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 02:52:46 -0700 (PDT)
-From:   Zong Li <zong.li@sifive.com>
-To:     robh+dt@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
-        conor.dooley@microchip.com, geert@linux-m68k.org,
-        bin.meng@windriver.com, green.wan@sifive.com, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     Zong Li <zong.li@sifive.com>, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH v8 4/4] dmaengine: sf-pdma: Get number of channel by device tree
-Date:   Mon, 28 Mar 2022 17:52:25 +0800
-Message-Id: <f08a95b6582a51712c5b2c3cb859136d07bfa8b9.1648461096.git.zong.li@sifive.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1648461096.git.zong.li@sifive.com>
-References: <cover.1648461096.git.zong.li@sifive.com>
+        Mon, 28 Mar 2022 05:54:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 168CC54BD7;
+        Mon, 28 Mar 2022 02:53:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1405D6E;
+        Mon, 28 Mar 2022 02:53:03 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.8.66])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0BE283F66F;
+        Mon, 28 Mar 2022 02:53:01 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 10:52:54 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Nathan Chancellor <nathan@kernel.org>, x86-ml <x86@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-toolchains@vger.kernel.org
+Subject: Re: clang memcpy calls
+Message-ID: <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
+References: <YjxTt3pFIcV3lt8I@zn.tnic>
+ <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
+ <Yj2yYFloadFobRPx@lakrids>
+ <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net>
+ <20220325151238.GB614@gate.crashing.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220325151238.GB614@gate.crashing.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,105 +51,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It currently assumes that there are always four channels, it would
-cause the error if there is actually less than four channels. Change
-that by getting number of channel from device tree.
+On Fri, Mar 25, 2022 at 10:12:38AM -0500, Segher Boessenkool wrote:
+> Hi!
+> 
+> On Fri, Mar 25, 2022 at 03:13:36PM +0100, Peter Zijlstra wrote:
+> > 
+> > +linux-toolchains
+> > 
+> > On Fri, Mar 25, 2022 at 12:15:28PM +0000, Mark Rutland wrote:
 
-For backwards-compatibility, it uses the default value (i.e. 4) when
-there is no 'dma-channels' information in dts.
+> > > a) The compiler expects the out-of-line implementations of functions
+> > >    ARE NOT instrumented by address-sanitizer.
+> > > 
+> > >    If this is the case, then it's legitimate for the compiler to call
+> > >    these functions anywhere, and we should NOT instrument the kernel
+> > >    implementations of these. If the compiler wants those instrumented it
+> > >    needs to add the instrumentation in the caller.
+> 
+> The compiler isn't assuming anything about asan.  The compiler generates
+> its code without any consideration of what asan will or will not do.
+> The burden of making things work is on asan.
 
-Signed-off-by: Zong Li <zong.li@sifive.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
----
- drivers/dma/sf-pdma/sf-pdma.c | 24 ++++++++++++++++--------
- drivers/dma/sf-pdma/sf-pdma.h |  8 ++------
- 2 files changed, 18 insertions(+), 14 deletions(-)
+I think we're talking past each other here, so let me be more precise. :)
 
-diff --git a/drivers/dma/sf-pdma/sf-pdma.c b/drivers/dma/sf-pdma/sf-pdma.c
-index f12606aeff87..db5a4ef76077 100644
---- a/drivers/dma/sf-pdma/sf-pdma.c
-+++ b/drivers/dma/sf-pdma/sf-pdma.c
-@@ -482,23 +482,30 @@ static void sf_pdma_setup_chans(struct sf_pdma *pdma)
- static int sf_pdma_probe(struct platform_device *pdev)
- {
- 	struct sf_pdma *pdma;
--	struct sf_pdma_chan *chan;
- 	struct resource *res;
--	int len, chans;
--	int ret;
-+	int ret, n_chans;
- 	const enum dma_slave_buswidth widths =
- 		DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
- 		DMA_SLAVE_BUSWIDTH_4_BYTES | DMA_SLAVE_BUSWIDTH_8_BYTES |
- 		DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
- 		DMA_SLAVE_BUSWIDTH_64_BYTES;
- 
--	chans = PDMA_NR_CH;
--	len = sizeof(*pdma) + sizeof(*chan) * chans;
--	pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
-+	ret = of_property_read_u32(pdev->dev.of_node, "dma-channels", &n_chans);
-+	if (ret) {
-+		/* backwards-compatibility for no dma-channels property */
-+		dev_dbg(&pdev->dev, "set number of channels to default value: 4\n");
-+		n_chans = PDMA_MAX_NR_CH;
-+	} else if (n_chans > PDMA_MAX_NR_CH) {
-+		dev_err(&pdev->dev, "the number of channels exceeds the maximum\n");
-+		return -EINVAL;
-+	}
-+
-+	pdma = devm_kzalloc(&pdev->dev, struct_size(pdma, chans, n_chans),
-+			    GFP_KERNEL);
- 	if (!pdma)
- 		return -ENOMEM;
- 
--	pdma->n_chans = chans;
-+	pdma->n_chans = n_chans;
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	pdma->membase = devm_ioremap_resource(&pdev->dev, res);
-@@ -556,7 +563,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
- 	struct sf_pdma_chan *ch;
- 	int i;
- 
--	for (i = 0; i < PDMA_NR_CH; i++) {
-+	for (i = 0; i < pdma->n_chans; i++) {
- 		ch = &pdma->chans[i];
- 
- 		devm_free_irq(&pdev->dev, ch->txirq, ch);
-@@ -574,6 +581,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
- 
- static const struct of_device_id sf_pdma_dt_ids[] = {
- 	{ .compatible = "sifive,fu540-c000-pdma" },
-+	{ .compatible = "sifive,pdma0" },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, sf_pdma_dt_ids);
-diff --git a/drivers/dma/sf-pdma/sf-pdma.h b/drivers/dma/sf-pdma/sf-pdma.h
-index 0c20167b097d..dcb3687bd5da 100644
---- a/drivers/dma/sf-pdma/sf-pdma.h
-+++ b/drivers/dma/sf-pdma/sf-pdma.h
-@@ -22,11 +22,7 @@
- #include "../dmaengine.h"
- #include "../virt-dma.h"
- 
--#define PDMA_NR_CH					4
--
--#if (PDMA_NR_CH != 4)
--#error "Please define PDMA_NR_CH to 4"
--#endif
-+#define PDMA_MAX_NR_CH					4
- 
- #define PDMA_BASE_ADDR					0x3000000
- #define PDMA_CHAN_OFFSET				0x1000
-@@ -118,7 +114,7 @@ struct sf_pdma {
- 	void __iomem            *membase;
- 	void __iomem            *mappedbase;
- 	u32			n_chans;
--	struct sf_pdma_chan	chans[PDMA_NR_CH];
-+	struct sf_pdma_chan	chans[];
- };
- 
- #endif /* _SF_PDMA_H */
--- 
-2.35.1
+The key thing is that when the user passes `-fsantize=address`, instrumentation
+is added by (a part of) the compiler. That instrumentation is added under some
+assumptions as to how the compiler as a whole will behave.
 
+With that in mind, the question is how is __attribute__((no_sanitize_address))
+intended to work when considering all the usual expectations around how the
+compiler can play with memcpy and similar?
+
+I think the answer to that is "this hasn't been thought about in great detail",
+which leads to the question of "how could/should this be made to work?", which
+is what I'm on about below.
+
+> It is legitimate to call (or not call!) memcpy anywhere.  memcpy always
+> is __builtin_memcpy, which either or not does a function call.
+> 
+> > >    AFAICT The two options for the compiler here are:
+> > > 
+> > >    1) Always inline an uninstrumented form of the function in this case
+> > > 
+> > >    2) Have distinct instrumented/uninstrumented out-of-line
+> > >       implementations, and call the uninstrumented form in this case.
+> 
+> The compiler should not do anything differently here if it uses asan.
+> The address sanitizer and the memcpy function implementation perhaps
+> have to cooperate somehow, or asan needs more smarts.  This needs to
+> happen no matter what, to support other things calling memcpy, say,
+> assembler code.
+
+I appreciate where you're coming from here, but I think you're approaching the
+problem sideways.
+
+> > > So from those examples it seems GCC falls into bucket (a), and assumes the
+> > > blessed functions ARE NOT instrumented.
+> 
+> No, it doesn't show GCC assumes anything.  No testing of this kind can
+> show anything alike.
+
+I appreciate that; hence "it seems".
+
+What I'm getting at is that the *instrumentation* is added under some
+assumptions (those of whoever wrote the instrumentation code), and those
+assumptions might not match the behaviour of the compiler, or the behaviour we
+expect for __attribute__((no_sanitize_address)).
+
+We need to define *what the semantics are* so that we can actually solve the
+problem, e.g. is a memcpy implementation expected to be instrumented or not?
+
+> > > I think something has to change on the compiler side here (e.g. as per
+> > > options above), and we should align GCC and clang on the same
+> > > approach...
+> 
+> GCC *requires* memcpy to be the standard memcpy always (i.e. to have the
+> standard-specified semantics).  This means that it will have the same
+> semantics as __builtin_memcpy always, and either or not be a call to an
+> external function.  It can also create calls to it out of thin air.
+
+I understand all of that.
+
+Given the standard doesn't say *anything* about instrumentation, what does GCC
+*require* instrumentation-wise of the memcpy implementation? What happens *in
+practice* today?
+
+For example, is the userspace implementation of memcpy() instrumented for
+AddressSanitizer, or not?
+
+Thanks,
+Mark.

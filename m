@@ -2,160 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 916114E9EAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D30C4E9EB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:08:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244973AbiC1SGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 14:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47034 "EHLO
+        id S245071AbiC1SJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 14:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237822AbiC1SGa (ORCPT
+        with ESMTP id S245010AbiC1SJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 14:06:30 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93E74BFFE
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:04:48 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id z16so13427066pfh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:04:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ym/L1wBpDfLtNFYglb5eik8J+ZADs+Mxo8dMLHDIgV0=;
-        b=JWB0uri4NhVLpGuhzaP6omiJxFh+N6igYL2QbafBZatuK8GtgilikAUUQfcEkJl9wQ
-         2skQvDSUo+QMjRe4Vq0ipUufHfPSE2C2fzWmL/E7sMtpWPWJFR1FLOsBmdCm9HOHzXEt
-         yayMV6b+Awot34BckY+CuNWx864MNrfv4zC++1Mfxle2jUQHy4bUJTm97tdfZUR4A7dp
-         9QdBiZK0g7wZ32cr9l81iMisnMhxmxy006GUhGTI9rOJQ1/HcMxwFZZn6DDGsY9E85hG
-         P1FidWr4vXP/LzVnH7wc2TVdmAqGZvpuUuRA89S2j34ES3txBLDpPUa5NJrNlP5VLJfn
-         X5rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ym/L1wBpDfLtNFYglb5eik8J+ZADs+Mxo8dMLHDIgV0=;
-        b=WCKMNQBy+isq+xVEey9OjkWtkzS4X8pW8uBgx2qqrpGvlqLIt0/10MKfC2exARtFgU
-         PDkMulBOC5u+vom0BgDBcjcTbmRwhqQnkNWyS0XJ1pcBXCpJm907IYIKvvRhPeWs2Vxj
-         Y/3FbiRn8dOmfYj6Cvwj3AfVNaEByz6YJkOcACcQ7qoASbLC/SRojOvsM9dehTMDygCG
-         GlNLT9jOPgbGaefDw+quZp14pmgXr0cK3stp45u/Do7yDPXzdF8vE6nJVHl/fpnUcFNO
-         k2os7CfMqxd/i826z9P1c4dyCX/MohnTuWvO/0TnwRKaIJg539a9yXyHIiDzjDGInek0
-         rmeg==
-X-Gm-Message-State: AOAM531QcZPx+UOPF+Quk4mVAUE/ctcaM/HI593LnrTiP3zEbji9DWQ8
-        3PHIIfRcpPVs8PLWoKaL62wQYw==
-X-Google-Smtp-Source: ABdhPJz6cmAET3X2l8oi9XiqgexGDczM4h6l+4EdHGvw31KNYFpDUf/5HHI7EuZ0lQttFGrQKlsXbg==
-X-Received: by 2002:a05:6a00:1496:b0:4fb:34a7:dcce with SMTP id v22-20020a056a00149600b004fb34a7dccemr11419180pfu.70.1648490687914;
-        Mon, 28 Mar 2022 11:04:47 -0700 (PDT)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id 21-20020a630115000000b00382a0895661sm13558768pgb.11.2022.03.28.11.04.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 11:04:46 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 18:04:43 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v2 6/9] KVM: x86/mmu: Factor out part of vmx_get_mt_mask
- which does not depend on vcpu
-Message-ID: <YkH4u7O8uSNKl+eE@google.com>
-References: <20220321224358.1305530-1-bgardon@google.com>
- <20220321224358.1305530-7-bgardon@google.com>
+        Mon, 28 Mar 2022 14:09:34 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99005DE42
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:07:52 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nYtmI-0007iB-Qd; Mon, 28 Mar 2022 20:07:42 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-3f39-5bba-2215-6d78.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:3f39:5bba:2215:6d78])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 0478655CFA;
+        Mon, 28 Mar 2022 18:07:39 +0000 (UTC)
+Date:   Mon, 28 Mar 2022 20:07:39 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Peter Hurley <peter@hurleysoftware.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Esben Haabendal <esben@geanix.com>,
+        Steven Walter <stevenrwalter@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        =?utf-8?B?QW5kcsOp?= Pribil <a.pribil@beck-ipc.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-rt-users@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] RT scheduling policies for workqueues
+Message-ID: <20220328180739.o2nka5u72jj66ipg@pengutronix.de>
+References: <20220323145600.2156689-1-linux@rasmusvillemoes.dk>
+ <YkGIhYKJG+w4L7ge@linutronix.de>
+ <20220328100927.5ax34nea7sp7jdsy@pengutronix.de>
+ <YkHyzcfiyjLfIVOo@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jaohf7esmtmkbeyj"
 Content-Disposition: inline
-In-Reply-To: <20220321224358.1305530-7-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <YkHyzcfiyjLfIVOo@slm.duckdns.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 03:43:55PM -0700, Ben Gardon wrote:
-> Factor out the parts of vmx_get_mt_mask which do not depend on the vCPU
-> argument. This also requires adding some error reporting to the helper
-> function to say whether it was possible to generate the MT mask without
-> a vCPU argument. This refactoring will allow the MT mask to be computed
-> when noncoherent DMA is not enabled on a VM.
 
-We could probably make vmx_get_mt_mask() entirely independent of
-the kvm_vcpu, but it would take more work.
+--jaohf7esmtmkbeyj
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-For MTRRs, the guest must update them on all CPUs at once (SDM 11.11.8)
-so we could just cache vCPU 0's MTRRs at the VM level and use that here.
-(From my experience, Intel CPUs implement MTRRs at the core level.
-Properly emulating that would require a different EPT table for every
-virtual core.)
+On 28.03.2022 07:39:25, Tejun Heo wrote:
+> Hello,
+>=20
+> On Mon, Mar 28, 2022 at 12:09:27PM +0200, Marc Kleine-Budde wrote:
+> > > Having a kthread per "low-latency" tty instance is something I would
+> > > prefer. The kwork corner is an anonymous worker instance and probably
+> > > does more harm than good. Especially if it is a knob for everyone whi=
+ch
+> > > is used for the wrong reasons and manages to be harmful in the end.
+> > > With a special kthread for a particular tty, the thread can be assign=
+ed
+> > > with the desired priority within the system and ttyS1 can be
+> > > distinguished from ttyS0 (and so on). This turned out to be useful in=
+ a
+> > > few setups over the years.
+> >=20
+> > +1
+> >=20
+> > The networking subsystem has gone the same/similar way with NAPI. NAPI
+> > handling can be switched from the softirq to kernel thread on a per
+> > interface basis.
+>=20
+> I wonder whether it'd be useful to provide a set of wrappers which can ma=
+ke
+> switching between workqueue and kworker easy. Semantics-wise, they're
+> already mostly aligned and it shouldn't be too difficult to e.g. make an
+> unbounded workqueue be backed by a dedicated kthread_worker instead of
+> shared pool depending on a flag, or even allow switching dynamically.
 
-For CR0.CD, I'm not exactly sure what the semantics are for MP systems
-but I can't imagine it's valid for software to configure CR0.CD
-differently on different cores. I would have to scoure the SDM closely
-to confirm, but we could probably do something like cache
-max(CR0.CD for all vCPUs) at the VM level and use that to indicate if
-caching is disabled.
+For NAPI a sysfs entry was added to switch to threaded mode:
 
-> 
-> No functional change intended.
-> 
-> 
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 24 +++++++++++++++++++-----
->  1 file changed, 19 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index e8963f5af618..69c654567475 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -7149,9 +7149,26 @@ static int __init vmx_check_processor_compat(void)
->  	return 0;
->  }
->  
-> +static bool vmx_try_get_mt_mask(struct kvm *kvm, gfn_t gfn,
-> +				bool is_mmio, u64 *mask)
-> +{
-> +	if (is_mmio) {
-> +		*mask =  MTRR_TYPE_UNCACHABLE << VMX_EPT_MT_EPTE_SHIFT;
-> +		return true;
-> +	}
-> +
-> +	if (!kvm_arch_has_noncoherent_dma(kvm)) {
-> +		*mask = (MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT) | VMX_EPT_IPAT_BIT;
-> +		return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
->  static u64 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
->  {
->  	u8 cache;
-> +	u64 mask;
->  
->  	/* We wanted to honor guest CD/MTRR/PAT, but doing so could result in
->  	 * memory aliases with conflicting memory types and sometimes MCEs.
-> @@ -7171,11 +7188,8 @@ static u64 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
->  	 * EPT memory type is used to emulate guest CD/MTRR.
->  	 */
->  
-> -	if (is_mmio)
-> -		return MTRR_TYPE_UNCACHABLE << VMX_EPT_MT_EPTE_SHIFT;
-> -
-> -	if (!kvm_arch_has_noncoherent_dma(vcpu->kvm))
-> -		return (MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT) | VMX_EPT_IPAT_BIT;
-> +	if (vmx_try_get_mt_mask(vcpu->kvm, gfn, is_mmio, &mask))
-> +		return mask;
->  
->  	if (kvm_read_cr0(vcpu) & X86_CR0_CD) {
->  		if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED))
-> -- 
-> 2.35.1.894.gb6a874cedc-goog
-> 
+| 5fdd2f0e5c64 net: add sysfs attribute to control napi threaded mode
+| 29863d41bb6e net: implement threaded-able napi poll loop support
+| 898f8015ffe7 net: extract napi poll functionality to __napi_poll()
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--jaohf7esmtmkbeyj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJB+WgACgkQrX5LkNig
+013Z1ggAtDuYsJ8eovJaR23f5iytmtRRTA6QccpR0Mkf20o+g47two6oUywEU5dq
+mC3OVmG8STeZflRuUelhII1ghKhmUUXGAN5z/lYuTypmKeGJoZeebPuwYPjUbGo2
+gHxxsKFpBhanPh4uFgFzq1AYPmdMYIdL1Io/fbjym0BL41fyKmJJsTFJ9P9iAQmn
+AXFr/VwU/Q0NbQD/SUKkzs0CvOoE5Zh1UvE2EIQCtFP8xUqiCAGx6ko0yEPrC5bS
+NOsJKRrO6rSHY3wIFW0r77w2mxQIkzn3W8EWVL7037RMiYt4EQjgbLs2+cPh7DfS
++XEHOZs0yK2jpFKOpITZDOWfkPW+0g==
+=s07w
+-----END PGP SIGNATURE-----
+
+--jaohf7esmtmkbeyj--

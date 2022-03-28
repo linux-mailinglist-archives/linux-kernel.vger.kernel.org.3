@@ -2,181 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184AA4E9DD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B89E4E9DD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244706AbiC1Ruy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 13:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
+        id S244712AbiC1RvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 13:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238979AbiC1Rux (ORCPT
+        with ESMTP id S244710AbiC1RvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 13:50:53 -0400
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D0B3C4B7;
-        Mon, 28 Mar 2022 10:49:12 -0700 (PDT)
-Received: by mail-lj1-f176.google.com with SMTP id a30so12799584ljq.13;
-        Mon, 28 Mar 2022 10:49:11 -0700 (PDT)
+        Mon, 28 Mar 2022 13:51:04 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2B33C734
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:49:22 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id q19so12796213pgm.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:49:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8MCsBPpBoD29U6k6rEfjlGbRxzmLC6LeIyUcAUTlgXI=;
+        b=GYFbw0+n24Bpt7HqJE3VsUtffGSMgXlkr2m2PF6agvHemn+Yf7nBK2ngclbCjC6RIn
+         xWLF0e/+K/FOvEgdjbyPGwiIUN1ahOp4sRP+9wKOZPsMnOBQ6r9wpHoQkOl8crRDm7Fx
+         0e4n94YUD0ldCVvnFkL25f+dh+c899tzIb84f+zaTjjzzG9LaIBTDnlO8PXYKlwE9bIR
+         0AzWflkXpeFebJSKk9WTUQk7Z7I41l2JP4RP7IPbN2eCECAJeFCDxx54QkerMw3L2wPy
+         hj340HBeyYfUEo2JML5CE/kAk611f54zY5gla0JHZom6ezh8ekWvuGNHjNcGYSl7Rjon
+         ELUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EyQ8IXVuGy+MjhTeeviL9/NWr5Oku+oE3kNpUwAlM28=;
-        b=mzUsrqs1v9Oox0FLiZXA0oFdHuqoEo4Bzxx8RTE8IW2/gN/kMRw5hJyIY1cmLV6Vch
-         b6Nuh4yNiUtWICDHF+U+Xi7w19MAMZYQopDF/k/64vSbPj2J08FkzE1YDipEaOJdrHwp
-         i+7eYODLfGrZRKcuVHHvxaO+HAVbX1MsVmpewDujMWBFaIHgdYaKrEJZC4ZFAr7k8t9X
-         hFVDpYaLKnGJsiG8kU0DmOQoHIU5kS2DLvZY89xpazFhW6uNRSc9fd28pfIeFJrlerbB
-         U/r3suyr+U/rD0SEZ0uJV4lF0txJxYuDjEbQGfgMglFrMVwOqvk0Wlkxo9mj4Z9ctItd
-         gKJQ==
-X-Gm-Message-State: AOAM531oqij7enAauyfowhgvcSv9RMgJUMYpCgsdQYG0i3mSfBFW9g8W
-        MaPas58lBD2uy/kRC2pGlmPcRXaile2sd4wAM40=
-X-Google-Smtp-Source: ABdhPJylsb5/U29MfMdIeOIKZdvUSIE4MIawm5G11yaSRrZfEr1IXA3xAF9bfyuvUtx6BVZVZ6Fg7r4xnLNf7VJDTG4=
-X-Received: by 2002:a05:651c:248:b0:245:5b3d:9abb with SMTP id
- x8-20020a05651c024800b002455b3d9abbmr21451205ljn.366.1648489750323; Mon, 28
- Mar 2022 10:49:10 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8MCsBPpBoD29U6k6rEfjlGbRxzmLC6LeIyUcAUTlgXI=;
+        b=aHGdcFfzLM0AieuwPsK1og52ooyYp3rvDJ/GUtK8fhOIbfSuUDl5hfrCHaL0SJ/L2D
+         mZCeBMm3ZjfqTyhMusmNtE8yIT8EoH9LCXe0w3ubgQyZ7sTQntf87nVioW6nQN4148AJ
+         cPKoEYfoSlW6QFUdP2yhCoPdjnw4wIdlniR1MtXAj2XXgRZW3gpdF3Q/jX14BeFg+abx
+         DLHB7zI57CnNolVCD/yWhLyFX502fYL5Pu5P7JC7FPNPaisP5RaUilnYruJkcUhJr89Q
+         OGiqDG/N2EezPwopoE9RUHxAdqMZ7P2+pn3vubDY8IHevHcS9CtL/62gG64XrchA7L8l
+         c1Ew==
+X-Gm-Message-State: AOAM53392h3HIVINqQw7iEPjmBtN8UlokjluCPPLK4t+HWOMiEX4E5cf
+        S0N29vbFDcFFO1/xmfMwqkxJ4Q==
+X-Google-Smtp-Source: ABdhPJwtGB4B8y4JOhtFb1FTlgGTfD2O1LXa8pI7m/kxpB2c71DY2lXS9H87UnKEZhCzdQ+637Dq4g==
+X-Received: by 2002:a05:6a00:8d4:b0:4f6:6da0:f380 with SMTP id s20-20020a056a0008d400b004f66da0f380mr24569850pfu.34.1648489762027;
+        Mon, 28 Mar 2022 10:49:22 -0700 (PDT)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id g3-20020a17090a708300b001c7e8ae7637sm135006pjk.8.2022.03.28.10.49.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 10:49:20 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 17:49:17 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v2 0/9] KVM: x86/MMU: Optimize disabling dirty logging
+Message-ID: <YkH1HbuUcY4JH5tT@google.com>
+References: <20220321224358.1305530-1-bgardon@google.com>
 MIME-Version: 1.0
-References: <20220322185709.141236-1-namhyung@kernel.org> <20220322185709.141236-3-namhyung@kernel.org>
- <20220328113946.GA8939@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220328113946.GA8939@worktop.programming.kicks-ass.net>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 28 Mar 2022 10:48:59 -0700
-Message-ID: <CAM9d7ciQQEypvv2a2zQLHNc7p3NNxF59kASxHoFMCqiQicKwBA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] locking: Apply contention tracepoints in the slow path
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Radoslaw Burny <rburny@google.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321224358.1305530-1-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 4:39 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Tue, Mar 22, 2022 at 11:57:09AM -0700, Namhyung Kim wrote:
-> > diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
-> > index ee2fd7614a93..c88deda77cf2 100644
-> > --- a/kernel/locking/mutex.c
-> > +++ b/kernel/locking/mutex.c
-> > @@ -644,6 +644,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
-> >       }
-> >
-> >       set_current_state(state);
-> > +     trace_contention_begin(lock, 0);
-> >       for (;;) {
-> >               bool first;
-> >
-> > @@ -710,6 +711,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
-> >  skip_wait:
-> >       /* got the lock - cleanup and rejoice! */
-> >       lock_acquired(&lock->dep_map, ip);
-> > +     trace_contention_end(lock, 0);
-> >
-> >       if (ww_ctx)
-> >               ww_mutex_lock_acquired(ww, ww_ctx);
->
-> (note: it's possible to get to this trace_contention_end() without ever
-> having passed a _begin -- fixed in the below)
->
-> > @@ -721,6 +723,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
-> >  err:
-> >       __set_current_state(TASK_RUNNING);
-> >       __mutex_remove_waiter(lock, &waiter);
-> > +     trace_contention_end(lock, ret);
-> >  err_early_kill:
-> >       raw_spin_unlock(&lock->wait_lock);
-> >       debug_mutex_free_waiter(&waiter);
->
->
-> So there was one thing here, that might or might not be important, but
-> is somewhat inconsistent with the whole thing. That is, do you want to
-> include optimistic spinning in the contention time or not?
+On Mon, Mar 21, 2022 at 03:43:49PM -0700, Ben Gardon wrote:
+> Currently disabling dirty logging with the TDP MMU is extremely slow.
+> On a 96 vCPU / 96G VM it takes ~256 seconds to disable dirty logging
+> with the TDP MMU, as opposed to ~4 seconds with the legacy MMU. This
+> series optimizes TLB flushes and introduces in-place large page
+> promotion, to bring the disable dirty log time down to ~3 seconds.
+> 
+> Testing:
+> Ran KVM selftests and kvm-unit-tests on an Intel Haswell. This
+> series introduced no new failures.
+> 
+> Performance:
+> 
+> Without this series, TDP MMU:
+> > ./dirty_log_perf_test -v 96 -s anonymous_hugetlb_1gb
+> Test iterations: 2
+> Testing guest mode: PA-bits:ANY, VA-bits:48,  4K pages
+> guest physical test memory offset: 0x3fe7c0000000
+> Populate memory time: 4.972184425s
+> Enabling dirty logging time: 0.001943807s
+> 
+> Iteration 1 dirty memory time: 0.061862112s
+> Iteration 1 get dirty log time: 0.001416413s
+> Iteration 1 clear dirty log time: 1.417428057s
+> Iteration 2 dirty memory time: 0.664103656s
+> Iteration 2 get dirty log time: 0.000676724s
+> Iteration 2 clear dirty log time: 1.149387201s
+> Disabling dirty logging time: 256.682188868s
+> Get dirty log over 2 iterations took 0.002093137s. (Avg 0.001046568s/iteration)
+> Clear dirty log over 2 iterations took 2.566815258s. (Avg 1.283407629s/iteration)
+> 
+> Without this series, Legacy MMU:
+> > ./dirty_log_perf_test -v 96 -s anonymous_hugetlb_1gb
+> Test iterations: 2
+> Testing guest mode: PA-bits:ANY, VA-bits:48,  4K pages
+> guest physical test memory offset: 0x3fe7c0000000
+> Populate memory time: 4.892940915s
+> Enabling dirty logging time: 0.001864603s
+> 
+> Iteration 1 dirty memory time: 0.060490391s
+> Iteration 1 get dirty log time: 0.001416277s
+> Iteration 1 clear dirty log time: 0.323548614s
+> Iteration 2 dirty memory time: 29.217064826s
+> Iteration 2 get dirty log time: 0.000696202s
+> Iteration 2 clear dirty log time: 0.907089084s
+> Disabling dirty logging time: 4.246216551s
+> Get dirty log over 2 iterations took 0.002112479s. (Avg 0.001056239s/iteration)
+> Clear dirty log over 2 iterations took 1.230637698s. (Avg 0.615318849s/iteration)
+> 
+> With this series, TDP MMU:
+> (Updated since RFC. Pulling out patches 1-4 could have a performance impact.)
+> > ./dirty_log_perf_test -v 96 -s anonymous_hugetlb_1gb
+> Test iterations: 2
+> Testing guest mode: PA-bits:ANY, VA-bits:48,  4K pages
+> guest physical test memory offset: 0x3fe7c0000000
+> Populate memory time: 4.878083336s
+> Enabling dirty logging time: 0.001874340s
+> 
+> Iteration 1 dirty memory time: 0.054867383s
+> Iteration 1 get dirty log time: 0.001368377s
+> Iteration 1 clear dirty log time: 1.406960856s
+> Iteration 2 dirty memory time: 0.679301083s
+> Iteration 2 get dirty log time: 0.000662905s
+> Iteration 2 clear dirty log time: 1.138263359s
+> Disabling dirty logging time: 3.169381810s
+> Get dirty log over 2 iterations took 0.002031282s. (Avg 0.001015641s/iteration)
+> Clear dirty log over 2 iterations took 2.545224215s. (Avg 1.272612107s/iteration)
+> 
+> Patch breakdown:
+> Patches 1-4 remove the need for a vCPU pointer to make_spte
+> Patches 5-8 are small refactors in preparation for in-place lpage promotion
+> Patch 9 implements in-place largepage promotion when disabling dirty logging
+> 
+> Changelog:
+> RFC -> v1:
+> 	Dropped the first 4 patches from the series. Patch 1 was sent
+> 	separately, patches 2-4 will be taken over by Sean Christopherson.
+> 	Incorporated David Matlack's Reviewed-by.
+> v1 -> v2:
+> 	Several patches were queued and dropped from this revision.
+> 	Incorporated feedback from Peter Xu on the last patch in the series.
+> 	Refreshed performance data
+> 		Between versions 1 and 2 of this series, disable time without
+> 		the TDP MMU went from 45s to 256, a major regression. I was
+> 		testing on a skylake before and haswell this time, but that
+> 		does not explain the huge performance loss.
+> 
+> Ben Gardon (9):
+>   KVM: x86/mmu: Move implementation of make_spte to a helper
+>   KVM: x86/mmu: Factor mt_mask out of __make_spte
+>   KVM: x86/mmu: Factor shadow_zero_check out of __make_spte
+>   KVM: x86/mmu: Replace vcpu argument with kvm pointer in make_spte
+>   KVM: x86/mmu: Factor out the meat of reset_tdp_shadow_zero_bits_mask
+>   KVM: x86/mmu: Factor out part of vmx_get_mt_mask which does not depend
+>     on vcpu
+>   KVM: x86/mmu: Add try_get_mt_mask to x86_ops
+>   KVM: x86/mmu: Make kvm_is_mmio_pfn usable outside of spte.c
+>   KVM: x86/mmu: Promote pages in-place when disabling dirty logging
 
-Yes, this was in a grey area and would create begin -> begin -> end
-path for mutexes.  But I think tools can handle it with the flags.
+Use () after function names to make it clear you are referring to a
+function and not something else. e.g.
 
->
-> Because currently you do it sometimes.
->
-> Also, if you were to add LCB_F_MUTEX then you could have something like:
+  KVM: x86/mmu: Move implementation of make_spte to a helper
 
-Yep, I'm ok with having the mutex flag.  Do you want me to send
-v5 with this change or would you like to do it by yourself?
+becomes
 
-Thanks,
-Namhyung
+  KVM: x86/mmu: Move implementation of make_spte() to a helper
 
+This applies throughout the series, in commit messages and comments.
 
->
->
-> --- a/kernel/locking/mutex.c
-> +++ b/kernel/locking/mutex.c
-> @@ -602,12 +602,14 @@ __mutex_lock_common(struct mutex *lock,
->         preempt_disable();
->         mutex_acquire_nest(&lock->dep_map, subclass, 0, nest_lock, ip);
->
-> +       trace_contention_begin(lock, LCB_F_MUTEX | LCB_F_SPIN);
->         if (__mutex_trylock(lock) ||
->             mutex_optimistic_spin(lock, ww_ctx, NULL)) {
->                 /* got the lock, yay! */
->                 lock_acquired(&lock->dep_map, ip);
->                 if (ww_ctx)
->                         ww_mutex_set_context_fastpath(ww, ww_ctx);
-> +               trace_contention_end(lock, 0);
->                 preempt_enable();
->                 return 0;
->         }
-> @@ -644,7 +646,7 @@ __mutex_lock_common(struct mutex *lock,
->         }
->
->         set_current_state(state);
-> -       trace_contention_begin(lock, 0);
-> +       trace_contention_begin(lock, LCB_F_MUTEX);
->         for (;;) {
->                 bool first;
->
-> @@ -684,10 +686,16 @@ __mutex_lock_common(struct mutex *lock,
->                  * state back to RUNNING and fall through the next schedule(),
->                  * or we must see its unlock and acquire.
->                  */
-> -               if (__mutex_trylock_or_handoff(lock, first) ||
-> -                   (first && mutex_optimistic_spin(lock, ww_ctx, &waiter)))
-> +               if (__mutex_trylock_or_handoff(lock, first))
->                         break;
->
-> +               if (first) {
-> +                       trace_contention_begin(lock, LCB_F_MUTEX | LCB_F_SPIN);
-> +                       if (mutex_optimistic_spin(lock, ww_ctx, &waiter))
-> +                               break;
-> +                       trace_contention_begin(lock, LCB_F_MUTEX);
-> +               }
-> +
->                 raw_spin_lock(&lock->wait_lock);
->         }
->         raw_spin_lock(&lock->wait_lock);
-> @@ -723,8 +731,8 @@ __mutex_lock_common(struct mutex *lock,
->  err:
->         __set_current_state(TASK_RUNNING);
->         __mutex_remove_waiter(lock, &waiter);
-> -       trace_contention_end(lock, ret);
->  err_early_kill:
-> +       trace_contention_end(lock, ret);
->         raw_spin_unlock(&lock->wait_lock);
->         debug_mutex_free_waiter(&waiter);
->         mutex_release(&lock->dep_map, ip);
+> 
+>  arch/x86/include/asm/kvm-x86-ops.h |  1 +
+>  arch/x86/include/asm/kvm_host.h    |  2 +
+>  arch/x86/kvm/mmu/mmu.c             | 21 +++++----
+>  arch/x86/kvm/mmu/mmu_internal.h    |  6 +++
+>  arch/x86/kvm/mmu/spte.c            | 39 +++++++++++-----
+>  arch/x86/kvm/mmu/spte.h            |  6 +++
+>  arch/x86/kvm/mmu/tdp_mmu.c         | 73 +++++++++++++++++++++++++++++-
+>  arch/x86/kvm/svm/svm.c             |  9 ++++
+>  arch/x86/kvm/vmx/vmx.c             | 25 ++++++++--
+>  9 files changed, 155 insertions(+), 27 deletions(-)
+> 
+> -- 
+> 2.35.1.894.gb6a874cedc-goog
+> 

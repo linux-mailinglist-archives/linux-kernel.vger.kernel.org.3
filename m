@@ -2,147 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF454E93A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 13:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BD64E9323
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 13:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240942AbiC1LYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 07:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
+        id S240577AbiC1LUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 07:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240999AbiC1LXD (ORCPT
+        with ESMTP id S240569AbiC1LUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 07:23:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB2A56219;
-        Mon, 28 Mar 2022 04:19:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BE3BB81058;
-        Mon, 28 Mar 2022 11:19:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA3FCC34100;
-        Mon, 28 Mar 2022 11:19:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648466395;
-        bh=TzN9S2c1jJpI9v8G0EpdcxObJsrqJKiqIfBV48VR++4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QWb47MVqqOrbWmsOejZHe0cYnXjrcqD9BzoK6BGnNnNvNElEJ8XL7jru7VMNja99p
-         360R92JMZvozOrWuqkWvcGsCiNglIDfgrM3pMBLg2cd74Ln7enLHPlRKcHVzyqt4tr
-         BHLGM9/D8Cps/2iw8XENtCK1fB0+ctWoytISrjop3grfBRSnnx4lQYT2EnRJNt/Goj
-         XOye7MoARZAQSpu4NKR62RtsoqKzi5aAFmeoJQwl6ul0hQeHP8VvBW/eW96aqokpbk
-         cgqAkHssLJiUxcQKcapHJg9w2WH32ikqBuQipRx+KEoWpvXfXlp0yFhpoC16+Q+fuj
-         Z5VKD32jMdjHg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     John David Anglin <dave.anglin@bell.net>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>,
-        James.Bottomley@HansenPartnership.com, svens@stackframe.org,
-        ira.weiny@intel.com, akpm@linux-foundation.org,
-        linux-parisc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 38/43] parisc: Fix non-access data TLB cache flush faults
-Date:   Mon, 28 Mar 2022 07:18:22 -0400
-Message-Id: <20220328111828.1554086-38-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220328111828.1554086-1-sashal@kernel.org>
-References: <20220328111828.1554086-1-sashal@kernel.org>
+        Mon, 28 Mar 2022 07:20:06 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8D0D6D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 04:18:25 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id m3so24065057lfj.11
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 04:18:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=subject:from:to:date:message-id:in-reply-to:references:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=Mr3I0zTOmgfpQLSBDag6X3RkoBkoQu16gRVM9S+AEJk=;
+        b=jbV6LejVShCi1T0VntAgmPDw0vvedWvv41xd7eUPffr8XAgeNM0WFffn+YkFYGyBnT
+         IjZQOH8dAm+wYbyX7H2e3MtEPMbSQEr/B1L3kFtt0k2QXD0NpTBSg4PkNm0lSj8vdTtv
+         43bgjUPTnFjYYPW9wpNJSkHhkoJeZ3hkNuInHXjULLXvBLe8uaSIHiA86Vmhhk38qZ9J
+         j9qMbQULcVlnFdfIR9l5soJEeaI9BIX9G8CHHJPqkViyE7LIRxMaErBnaXOAsrbYd+dz
+         pULh2gHBCEz8TktcZbKH4MPF4n/Vd56PMOvizrs+cImHZCMHYkFob1/GGiy1A+g6ALi/
+         HA6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:from:to:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=Mr3I0zTOmgfpQLSBDag6X3RkoBkoQu16gRVM9S+AEJk=;
+        b=WTFXOBtlYwBkH+FCLTyRlbmJ7oVwCcOgrD3HDHjFyv6bnKF620aHz7KRChD2IeQ/BQ
+         MO0CsYcSp/EiA9wbPxAY30ZntuhBVd1wFqn36TrErHAQY0nKYulNaqiYkrbqDR+XtOfj
+         rfVBwkxLlBr09hZ+wEGT7hrWdtPCvOBm3kBGSeyo4SZpaofTSobS2ALm+GxetdG/p1fd
+         cYGDNgc1fUiAazFjbNtImjfxlNj1uyJgBV//9/Uwr/YZOwWtQCoZKDCgRe6ep5nHvWKu
+         wpqRF7YgIbqeiO+SB/SQy//wFbOUrtDGGMqjys1M9aQBSaGFiwlAnWWTFNktR7AZE2S0
+         mGfg==
+X-Gm-Message-State: AOAM532pdUdI9euze3H2Nasln5EFBv5+JxzDc2wEtTXWYoS1tMSsm7XR
+        fBQ2QZFRG8sA+waiEyTvCIHcyw==
+X-Google-Smtp-Source: ABdhPJyEoLfTVx81uIbeqr52bd0IdNg687n+trzkDyCfYVD8GcWwCIe94C+hoM3YaYIuscSMh9fFmA==
+X-Received: by 2002:a19:654c:0:b0:448:2649:1169 with SMTP id c12-20020a19654c000000b0044826491169mr19369641lfj.555.1648466303868;
+        Mon, 28 Mar 2022 04:18:23 -0700 (PDT)
+Received: from [127.0.1.1] ([2.92.192.17])
+        by smtp.gmail.com with ESMTPSA id j15-20020a056512108f00b0044a3cc8769dsm1603648lfg.123.2022.03.28.04.18.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 04:18:23 -0700 (PDT)
+Subject: [PATCH 1/4] dm: Export dm_complete_request()
+From:   Kirill Tkhai <kirill.tkhai@openvz.org>
+To:     agk@redhat.com, snitzer@redhat.com, dm-devel@redhat.com,
+        song@kernel.org, linux-kernel@vger.kernel.org,
+        khorenko@virtuozzo.com, kirill.tkhai@openvz.org
+Date:   Mon, 28 Mar 2022 14:18:22 +0300
+Message-ID: <164846630280.251310.15762330533681496392.stgit@pro>
+In-Reply-To: <164846619932.251310.3668540533992131988.stgit@pro>
+References: <164846619932.251310.3668540533992131988.stgit@pro>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John David Anglin <dave.anglin@bell.net>
+This function is required for dm-qcow2 driver going in next patches.
+The driver transforms block requests into file operations on underlining
+file in QCOW2 format (like loop but over QCOW2 instead of RAW file).
+We need to have a possibility to complete a request after corresponding
+file operations are finished.
 
-[ Upstream commit f839e5f1cef36ce268950c387129b1bfefdaebc9 ]
-
-When a page is not present, we get non-access data TLB faults from
-the fdc and fic instructions in flush_user_dcache_range_asm and
-flush_user_icache_range_asm. When these occur, the cache line is
-not invalidated and potentially we get memory corruption. The
-problem was hidden by the nullification of the flush instructions.
-
-These faults also affect performance. With pa8800/pa8900 processors,
-there will be 32 faults per 4 KB page since the cache line is 128
-bytes.  There will be more faults with earlier processors.
-
-The problem is fixed by using flush_cache_pages(). It does the flush
-using a tmp alias mapping.
-
-The flush_cache_pages() call in flush_cache_range() flushed too
-large a range.
-
-V2: Remove unnecessary preempt_disable() and preempt_enable() calls.
-
-Signed-off-by: John David Anglin <dave.anglin@bell.net>
-Signed-off-by: Helge Deller <deller@gmx.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Kirill Tkhai <kirill.tkhai@openvz.org>
 ---
- arch/parisc/kernel/cache.c | 28 +---------------------------
- 1 file changed, 1 insertion(+), 27 deletions(-)
+ drivers/md/dm-rq.c |    3 ++-
+ drivers/md/dm-rq.h |    2 ++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/parisc/kernel/cache.c b/arch/parisc/kernel/cache.c
-index 94150b91c96f..bce71cefe572 100644
---- a/arch/parisc/kernel/cache.c
-+++ b/arch/parisc/kernel/cache.c
-@@ -558,15 +558,6 @@ static void flush_cache_pages(struct vm_area_struct *vma, struct mm_struct *mm,
- 	}
- }
- 
--static void flush_user_cache_tlb(struct vm_area_struct *vma,
--				 unsigned long start, unsigned long end)
--{
--	flush_user_dcache_range_asm(start, end);
--	if (vma->vm_flags & VM_EXEC)
--		flush_user_icache_range_asm(start, end);
--	flush_tlb_range(vma, start, end);
--}
--
- void flush_cache_mm(struct mm_struct *mm)
+diff --git a/drivers/md/dm-rq.c b/drivers/md/dm-rq.c
+index 579ab6183d4d..1b9a633efe37 100644
+--- a/drivers/md/dm-rq.c
++++ b/drivers/md/dm-rq.c
+@@ -275,7 +275,7 @@ static void dm_softirq_done(struct request *rq)
+  * Complete the clone and the original request with the error status
+  * through softirq context.
+  */
+-static void dm_complete_request(struct request *rq, blk_status_t error)
++void dm_complete_request(struct request *rq, blk_status_t error)
  {
- 	struct vm_area_struct *vma;
-@@ -581,17 +572,8 @@ void flush_cache_mm(struct mm_struct *mm)
- 		return;
- 	}
+ 	struct dm_rq_target_io *tio = tio_from_request(rq);
  
--	preempt_disable();
--	if (mm->context == mfsp(3)) {
--		for (vma = mm->mmap; vma; vma = vma->vm_next)
--			flush_user_cache_tlb(vma, vma->vm_start, vma->vm_end);
--		preempt_enable();
--		return;
--	}
--
- 	for (vma = mm->mmap; vma; vma = vma->vm_next)
- 		flush_cache_pages(vma, mm, vma->vm_start, vma->vm_end);
--	preempt_enable();
+@@ -283,6 +283,7 @@ static void dm_complete_request(struct request *rq, blk_status_t error)
+ 	if (likely(!blk_should_fake_timeout(rq->q)))
+ 		blk_mq_complete_request(rq);
  }
++EXPORT_SYMBOL(dm_complete_request);
  
- void flush_cache_range(struct vm_area_struct *vma,
-@@ -605,15 +587,7 @@ void flush_cache_range(struct vm_area_struct *vma,
- 		return;
- 	}
+ /*
+  * Complete the not-mapped clone and the original request with the error status
+diff --git a/drivers/md/dm-rq.h b/drivers/md/dm-rq.h
+index 1eea0da641db..56156738d1b4 100644
+--- a/drivers/md/dm-rq.h
++++ b/drivers/md/dm-rq.h
+@@ -44,4 +44,6 @@ ssize_t dm_attr_rq_based_seq_io_merge_deadline_show(struct mapped_device *md, ch
+ ssize_t dm_attr_rq_based_seq_io_merge_deadline_store(struct mapped_device *md,
+ 						     const char *buf, size_t count);
  
--	preempt_disable();
--	if (vma->vm_mm->context == mfsp(3)) {
--		flush_user_cache_tlb(vma, start, end);
--		preempt_enable();
--		return;
--	}
--
--	flush_cache_pages(vma, vma->vm_mm, vma->vm_start, vma->vm_end);
--	preempt_enable();
-+	flush_cache_pages(vma, vma->vm_mm, start, end);
- }
- 
- void
--- 
-2.34.1
++void dm_complete_request(struct request *rq, blk_status_t error);
++
+ #endif
+
 

@@ -2,97 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2AB4E9F48
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 936584E9F4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245375AbiC1S7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 14:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44174 "EHLO
+        id S245390AbiC1TAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 15:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245371AbiC1S7v (ORCPT
+        with ESMTP id S245402AbiC1TAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 14:59:51 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3835F66
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:58:09 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id v35so27677059ybi.10
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:58:09 -0700 (PDT)
+        Mon, 28 Mar 2022 15:00:04 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0FAFD16
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:58:19 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id g20so18037296edw.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:58:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8612p/69znHIDRySiH+8dA+VUWRJM0II/moWC9PgDh0=;
-        b=R0RSG/eD45vxAB8C5huZwsNn3GSeO3CeFOpFkhEwACU4cYjU/qDHeJ9dRU/s8iPWkR
-         MkZHry9neauW9HYX8gXxgzjaqkX2mpcav9D0nXygYspjw6/qDToneyjZcOTBPNrq53yY
-         nkBuN1SaZSzlXWjtN+gOY40RVYATiLKCRctlk5ci0unOxkcEx6JuTvZCItXjBp8QYbB3
-         cXCQ0phWilxKLZc1KrUHJB7xFLYl9pFmrgGZwLiW3wfmofX2/LAFA74UEDDkPcl4f/BO
-         MBQq7nWEcsK7zH3LuUO/lIgSlBmR5GgZAgOjW8+GlMDjlS4XRGDFjKBSgPib3uyzEw80
-         dCcA==
+        bh=Y7h2AchlhCAthHYHcLIlHiiUCH1u4tsKGd2lWHTZUlY=;
+        b=mzL7CPaM/qH7HTC6bp0faYg2StoSqQkehQG7tEQFBD6MCSe3XcD+kHNFEbCTamS1Pw
+         qumiplt3iKPQUj0cqZQ1kw3OIBmh4MtZBIQSgNDRgAclRYsb1/f0hyX6ry0Z4598KQwu
+         oKmvQUQq5Y6EgdRP/JknK0Xx+pa9BsiZkYMScUwrUdgADuZbpfdM2YWBWBEJjv2cmp/Q
+         YLIIaK9aKIX3ZAtI/NHqT8c0bXXpSU231LBgnUIOiPaogDDWWNt221MuVZWz/ufUeRN0
+         bwwAh9f7pWf/yo3yreuykfHUearzuagnk5PqlE74yVTBBbCA8MmNNNEF7nvrlIy9byBd
+         Hx0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8612p/69znHIDRySiH+8dA+VUWRJM0II/moWC9PgDh0=;
-        b=K5NZ9081QDlBse/lLT8xuGN+95Zg7/dpdE5ciBJKenVtT/d5g2lFiL9wDHrlYvHVjr
-         ARqFZecBZH+ZwYQTfvhkqH/60TXeEwlUQB2pqkjyM8byDIUHNp2f4cNzc+zZSMiJIwF8
-         R+4JegXEoNxQFGyc8ZenuylNcKzSoyun3jpck0belJRvgGS2xF5CzrZHz9b9XM7l5guY
-         1pvrGSW9t0R586h7x3SP4lOl4pDozmkqge8wu6omPeNjj2rrtYtkayklJX4e9wiF9M5y
-         yLtDH9y5nPgb84+mWySL+vN+Z7WWeCpd+96RddoNbmSIkBJhv8GZm9Nfz+B03oL4tEsw
-         fjWw==
-X-Gm-Message-State: AOAM531948slqgocnnOd8a56B3Y6m54c89Uqd2xmP/GJ7r9d9VjBwH0L
-        P9io3uu9IDlMjH6Jd7oK/BTkiuQ1lGqyPwpszcV1JQ==
-X-Google-Smtp-Source: ABdhPJwt+RoOnL37cR1r2A91NZ3Rlf28H9zAzoMDrsg1szQFpW4MvObpLTmFzcIGyJ6XEm4sTQgFMRKRui/r76+UYwE=
-X-Received: by 2002:a05:6902:241:b0:633:d3e1:ff5e with SMTP id
- k1-20020a056902024100b00633d3e1ff5emr24158708ybs.625.1648493888782; Mon, 28
- Mar 2022 11:58:08 -0700 (PDT)
+        bh=Y7h2AchlhCAthHYHcLIlHiiUCH1u4tsKGd2lWHTZUlY=;
+        b=xji2yZx9BX7jNIz+/97gqiVfdAYct9d3CtaPdGrEuMiZqs/zbsWeIsS7xaEn2nGGcV
+         uvxYKwTQMFqgS6g4hMWdXWvbfGBVCzbA/88yJ7cV4m5n7EduU0V1GScZFIJs/CRdz/3B
+         4i0yS4JvAAibLAv1O/n3b7xQ7vmWZFO4i4YLNWdKffHqBPtXM4gIcchFl0ho/n2ZfjdA
+         bjOHFWguYtUxigP58kH+37lew6RhUCDM5vYFmbT4uQX9ePa7qO2U4Z8FdUDutbrJYgin
+         qfH/zg0HmXGkwzcEAfobu7ZL0sjMcaQ8arvdhl+/RMxHotJM2V4kkKUnANTE183rMYu7
+         SO8Q==
+X-Gm-Message-State: AOAM532zovxRmazBMsHsVlcL/OCGH5H1MEgUvs8BAjD0v6ZzA8YnHJ/y
+        Sw2w97/eBHij5yJmBQTmyWX40SDTZZgr/7pd/dWVoA==
+X-Google-Smtp-Source: ABdhPJyhJkHcV4gC2iZ87HQT2UlMmP4fn/UBsOPEcsgyAISFagHCmwwoTGCGuHLFwOJv6MS2vb9mQGfOkes3PzUe8Yk=
+X-Received: by 2002:a05:6402:4302:b0:419:4be8:6493 with SMTP id
+ m2-20020a056402430200b004194be86493mr18086577edc.294.1648493897275; Mon, 28
+ Mar 2022 11:58:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220328132843.16624-1-songmuchun@bytedance.com>
- <CANpmjNO=vMYhL_Uf3ewXvfWoan3q+cYjWV0jEze7toKSh2HRjg@mail.gmail.com>
- <CAMZfGtWfudKnm71uNQtS-=+3_m25nsfPDo8-vZYzrktQbxHUMA@mail.gmail.com> <CAMZfGtVkp+xCM3kgLHRNRFUs_fus0f3Ry_jFv8QaSWLfnkXREg@mail.gmail.com>
-In-Reply-To: <CAMZfGtVkp+xCM3kgLHRNRFUs_fus0f3Ry_jFv8QaSWLfnkXREg@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 28 Mar 2022 20:57:32 +0200
-Message-ID: <CANpmjNMszqqOF6TA1RmE93=xRU9pA5oc4RBoAtS+sBWwvS5y4w@mail.gmail.com>
-Subject: Re: [PATCH v2] mm: kfence: fix objcgs vector allocation
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>
+References: <20220326003356.487828-1-dlatypov@google.com> <CABVgOSmbQxZmmNtUQLsvMSPkr2FpXB_kdJUUbC=nLrt6xN7e2A@mail.gmail.com>
+ <CAGS_qxq_vFtGS4BGieZz8L3QH7rZ7ZN25pGYmjWWoXbTGOKC9A@mail.gmail.com> <CAFd5g45f3X3xF2vz2BkTHRqOC4uW6GZxtUUMaP5mwwbK8uNVtA@mail.gmail.com>
+In-Reply-To: <CAFd5g45f3X3xF2vz2BkTHRqOC4uW6GZxtUUMaP5mwwbK8uNVtA@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 28 Mar 2022 13:58:06 -0500
+Message-ID: <CAGS_qxp604tXbqzSg0nmz=Ws9ZzX47u-XCftNxfcamyM=GrQYw@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: kunit: update kconfig options needed for
+ UML coverage
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     David Gow <davidgow@google.com>, Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>, maxime@cerno.tech
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Mar 2022 at 17:54, Muchun Song <songmuchun@bytedance.com> wrote:
-[...]
-> > >
-> > > Btw, how did you test this?
-> > >
+On Mon, Mar 28, 2022 at 11:54 AM 'Brendan Higgins' via KUnit
+Development <kunit-dev@googlegroups.com> wrote:
 >
-> I have tested it with syzkaller with the following configs.
-> And I didn't find any issues.
+> On Mon, Mar 28, 2022 at 12:35 PM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > On Fri, Mar 25, 2022 at 9:56 PM David Gow <davidgow@google.com> wrote:
+> > >
+> >
+> > <snip>
+> >
+> > > >         # Append coverage options to the current config
+> > > > -       $ echo -e "CONFIG_DEBUG_KERNEL=y\nCONFIG_DEBUG_INFO=y\nCONFIG_GCOV=y" >> .kunit/.kunitconfig
+> > > > +       $ echo -e "CONFIG_DEBUG_KERNEL=y\nCONFIG_DEBUG_INFO=y\nCONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y\nCONFIG_GCOV=y" >> .kunit/.kunitconfig
+> > > >         $ ./tools/testing/kunit/kunit.py run
+> > >
+> > > Would we want to instead use a chain of --kconfig_add arguments? (I
+> > > think there are advantages either way...)
+> >
+> > I've been considering this ever since the --kconfig_add patch was accepted.
+> > It's more compatible w/ commands using --kunitconfig, but it also
+> > looks very verbose.
+> > E.g. it looks like
+> >
+> > $ tools/testing/kunit/kunit.py run --make_options=CC=/usr/bin/gcc-6
+> > --kconfig_add=CONFIG_DEBUG_INFO=y
+> > --kconfig_add=CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+> > --kconfig_add=CONFIG_GCOV=y
 >
-> CONFIG_KFENCE=y
-> CONFIG_KFENCE_SAMPLE_INTERVAL=10
-> CONFIG_KFENCE_NUM_OBJECTS=2550
-> CONFIG_KFENCE_DEFERRABLE=n
-> CONFIG_KFENCE_STATIC_KEYS=y
-> CONFIG_KFENCE_STRESS_TEST_FAULTS=0
+> I don't think it's *that* much more verbose, but I see your point. I
+> personally prefer this, but not enough to argue about it.
 
-Hmm, I would have expected that you have some definitive test case
-that shows the issue, and with the patch the issue is gone. Were there
-issues triggered by syzkaller w/o this patch?
+I personally prefer it too, but I'm biased as the person who added
+--kconfig_add.
+They're both ugly enough I'd figured I'd save the bikeshedding for
+another patch.
 
-Thanks,
--- Marco
+>
+> > Neither looks very appealing to me, so I've just kept it as-is for now.
+> >
+> > Maybe there's something we can do to make this easier (e.g. allowing
+> > --kunitconfig to be repeated and mergable)?
+>
+> I would like --kunitconfig to be repeadable and mergable.
+
+Ack.
+There's some things to consider first.
+
+1. This will conflict w/
+https://patchwork.kernel.org/project/linux-kselftest/patch/20220226212325.2984807-1-dlatypov@google.com/,
+so I'm going to wait until that gets merged first.
+
+2. some kconfigs can be incompatible (e.g. these options only work on
+UML, can't combine w/ a non-UML compatible file)
+How do we make this less of a footgun?
+We'd talked about how it'd be nice if kconfig/"make olddefconfig"
+could print out *why* options get dropped (either they're not visible,
+have unmet deps, etc.). If we had that, I'd feel more comfortable w/
+repeatable kunitconfig.
+
+3. People have the ability to do this already if they're really sure it's safe
+$ cat <files...> | ./tools/testing/kunit/kunit.py run --kunitconfig=/dev/stdin
+
+4. are we committed to supporting a "uml_coverage.kunitconfig" file?
+As shown by the existence of this patch, we've let it get broken for a
+bit, at least against linux-next (afaik, it was working on
+torvalds/master up until the 5.18 window opened and we had some
+patches reworking CONFIG_DEBUG_INFO).
+
+These instructions exist so others don't have to try and re-figure out
+the steps/workarounds.
+But they're not more formally "part of KUnit" since no one has had the
+expertise to maintain it (and fix issues like the reliance on gcc-6),
+etc.
+
+Creating a kunitconfig file for this will further imply ownership.

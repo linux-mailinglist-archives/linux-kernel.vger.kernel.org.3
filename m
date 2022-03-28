@@ -2,162 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F05BD4E8BB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 03:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB414E8BB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 03:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237339AbiC1BpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 21:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
+        id S237346AbiC1Bp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 21:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiC1BpH (ORCPT
+        with ESMTP id S234947AbiC1BpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 21:45:07 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2498149699;
-        Sun, 27 Mar 2022 18:43:27 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id c23so13562155plo.0;
-        Sun, 27 Mar 2022 18:43:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=9RNR9zr52nHugIxJEYN2sk3uYFpuqaSTDOBoX9HzNO4=;
-        b=PFpO6o3zLKChAGfFLiBR0mChWVvul+X+MXHqw+lrP3hBGqUdcMiapDtQTy3RLzbIPb
-         wxv+pTm73Q/VAUQmFJC44bRpW35cZigyODEmB1j6Dj/CvkDEyFwdq/Yz5EncRrySVy89
-         oGHQz5y/bN7eUcxmMDvGy6HfQxiasQB0UecRQQMqTbnQvZ1Bsq07cKresna+l+ECaCnj
-         AygqzIZ5G2wxm4T+AGvFh8vAt3lJ3oWhDmt8fixqV2PJBVegjlQB9AlJ5QIyrLtEJsPP
-         Zfx7570QAkY2k2A1E9wl+L5BnhxKL2rPis+hDcZcPlPPnGO5rOh4BwZClUQjr5lazuix
-         U1QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=9RNR9zr52nHugIxJEYN2sk3uYFpuqaSTDOBoX9HzNO4=;
-        b=fB/L/Z91/E1Vf22Hxd1/CTY9/9h2Ar5D/z6KIgz9IWgYqF4cVBOowVBIMKJOp+V/cC
-         sBd/eEmyWoCf5WEzt3A63UYA0/kTGiDyrHlh9/uu9dD1p1NTAt+W7cbJdwdxQ3vlgXLX
-         RqEL+DWustCvzQdaRX8rk0zK5/7XZ9qLXGu2FbPhHCgqlsc62A9kYJw6aLzon0P3Nbh+
-         a/N5bfTYHE79tSR3i58dBE5wDHVtPoOhEBLHNjOd39jRz4LSrEHC6XqyAeQRg/hyuNIA
-         5R7udmdg//C0nbvCHM6PyKfAy9kTI9Chl79019c8iPXraKs+eQsTBJnl46Iq3KwMOnNt
-         /t9Q==
-X-Gm-Message-State: AOAM530l57eQmuwC7AlIWrUr5p/CQEGxJ3c8fKrrBslB61nlwsVhhbB7
-        AgeRk7mZ2y1qUbDQmHXn92Y=
-X-Google-Smtp-Source: ABdhPJywb7Gs9aQi718r3lu2LJAk8/u2Ygdz3SwAdrfgFRrvnbkPk1sXVYBq8NHxMKoTeRWSrFVldg==
-X-Received: by 2002:a17:902:b10c:b0:154:a3b5:b33a with SMTP id q12-20020a170902b10c00b00154a3b5b33amr23409743plr.3.1648431806312;
-        Sun, 27 Mar 2022 18:43:26 -0700 (PDT)
-Received: from ubuntu.huawei.com ([119.3.119.18])
-        by smtp.googlemail.com with ESMTPSA id v24-20020a634818000000b0036407db4728sm10939289pga.26.2022.03.27.18.43.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Mar 2022 18:43:25 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     trondmy@hammerspace.com
-Cc:     anna@kernel.org, bhalevy@panasas.com, bharrosh@panasas.com,
-        linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        stable@vger.kernel.org, xiam0nd.tong@gmail.com
-Subject: Re: [PATCH] nfs: callback_proc: fix an incorrect NULL check on list iterator
-Date:   Mon, 28 Mar 2022 09:43:14 +0800
-Message-Id: <20220328014314.18987-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <436766b6fb5f3ec513629d4fa0888b77c65cfa16.camel@hammerspace.com>
-References: <436766b6fb5f3ec513629d4fa0888b77c65cfa16.camel@hammerspace.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 27 Mar 2022 21:45:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16F249FAF;
+        Sun, 27 Mar 2022 18:43:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1B9DB80DD4;
+        Mon, 28 Mar 2022 01:43:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EBD8C340EC;
+        Mon, 28 Mar 2022 01:43:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648431821;
+        bh=7A18LrQnBuUKW4eG9uehKdgAef2TXiymAn97vaYYyic=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=RwJQFZtGH6IYV4yBdK9/XqHpSEzYp/le7BtiOpKc3vPrkUK9HeDttmo/4Y9JcEMQ5
+         dxloLypelrGeHnpzkemfRKTsMcOdAS0RiJgtw4bvbhe3qDyhJA2Tm6pefQbQqppl9O
+         Rg9gIconWvKH6OiCu1gzhBIixsAZXoJGZ/D+XJeQCWUV3xtxLKpLVpoGf90BGTdNdd
+         IoPeU9PZ73IsZdje8BnM4rv7KpVITNwgT9DMiAdis0H6ikx9pC5hiVV6mXks4sOTlh
+         43/yux82YofBDp0QlhvTeLwf7RRj26TgSlTFlBtJqhkbGAO8hzZHkgeHwLg63vCg4u
+         1h5BjRnhpHIUQ==
+Received: by mail-wr1-f42.google.com with SMTP id t11so18295668wrm.5;
+        Sun, 27 Mar 2022 18:43:41 -0700 (PDT)
+X-Gm-Message-State: AOAM53076yDSP6AEl6thQgaNWfpMCFVwEPg0xg7N+GDxQDpRM7fQyVTp
+        AziQMW7DhbQ8PgcEDZBnA6ikdycF2VhIsn4r4gc=
+X-Google-Smtp-Source: ABdhPJzJ3iRXdPbm8ua2lUtmz8nVVspNyR/f6MlQnEAoZIcRdAn/8tWte7Uydt/xG90+zGG/kqSEbolCVbzBTgRBSs4=
+X-Received: by 2002:adf:908e:0:b0:1e7:bea7:3486 with SMTP id
+ i14-20020adf908e000000b001e7bea73486mr19631349wri.401.1648431819935; Sun, 27
+ Mar 2022 18:43:39 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:6000:2c1:0:0:0:0 with HTTP; Sun, 27 Mar 2022 18:43:39
+ -0700 (PDT)
+In-Reply-To: <HK2PR04MB3891BE0766FAF0AEC39FE2DC811A9@HK2PR04MB3891.apcprd04.prod.outlook.com>
+References: <HK2PR04MB3891BE0766FAF0AEC39FE2DC811A9@HK2PR04MB3891.apcprd04.prod.outlook.com>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Mon, 28 Mar 2022 10:43:39 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd8Q7-1O9PQ693stmLjoG99KME__FSm0gPtvndi4xxoVcA@mail.gmail.com>
+Message-ID: <CAKYAXd8Q7-1O9PQ693stmLjoG99KME__FSm0gPtvndi4xxoVcA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] exfat: fix referencing wrong parent directory
+ information after renaming
+To:     "Yuezhang.Mo@sony.com" <Yuezhang.Mo@sony.com>
+Cc:     "sj1557.seo@samsung.com" <sj1557.seo@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "Andy.Wu@sony.com" <Andy.Wu@sony.com>,
+        "Wataru.Aoyama@sony.com" <Wataru.Aoyama@sony.com>,
+        "Kohada.Tetsuhiro@dc.MitsubishiElectric.co.jp" 
+        <Kohada.Tetsuhiro@dc.mitsubishielectric.co.jp>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Mar 2022 15:20:42 +0000, Trond Myklebust wrote:
-> On Sun, 2022-03-27 at 16:02 +0800, Xiaomeng Tong wrote:
-> > The bug is here:
-> >         if (!server ||
-> >         server->pnfs_curr_ld->id != dev->cbd_layout_type) {
-> > 
-> > The list iterator value 'server' will *always* be set and non-NULL
-> > by list_for_each_entry_rcu, so it is incorrect to assume that the
-> > iterator value will be NULL if the list is empty or no element is
-> > found (In fact, it will be a bogus pointer to an invalid struct
-> > object containing the HEAD, which is used for above check at next
-> > outer loop). Otherwise it may bypass the check in theory (iif
-> > server->pnfs_curr_ld->id == dev->cbd_layout_type, 'server' now is
-> > a bogus pointer) and lead to invalid memory access passing the check.
-> > 
-> > To fix the bug, use a new variable 'iter' as the list iterator,
-> > while use the original variable 'server' as a dedicated pointer to
-> > point to the found element.
-> > 
-> > Cc: stable@vger.kernel.org
-> > Fixes: 1be5683b03a76 ("pnfs: CB_NOTIFY_DEVICEID")
-> > Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-> > ---
-> >  fs/nfs/callback_proc.c | 9 +++++----
-> >  1 file changed, 5 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/fs/nfs/callback_proc.c b/fs/nfs/callback_proc.c
-> > index c343666d9a42..84779785dc8d 100644
-> > --- a/fs/nfs/callback_proc.c
-> > +++ b/fs/nfs/callback_proc.c
-> > @@ -361,7 +361,7 @@ __be32 nfs4_callback_devicenotify(void *argp,
-> > void *resp,
-> >         uint32_t i;
-> >         __be32 res = 0;
-> >         struct nfs_client *clp = cps->clp;
-> > -       struct nfs_server *server = NULL;
-> > +       struct nfs_server *server = NULL, *iter;
-> >  
-> >         if (!clp) {
-> >                 res = cpu_to_be32(NFS4ERR_OP_NOT_IN_SESSION);
-> > @@ -374,10 +374,11 @@ __be32 nfs4_callback_devicenotify(void *argp,
-> > void *resp,
-> >                 if (!server ||
-> >                     server->pnfs_curr_ld->id != dev->cbd_layout_type)
-> > {
-> >                         rcu_read_lock();
-> > -                       list_for_each_entry_rcu(server, &clp-
-> > >cl_superblocks, client_link)
-> > -                               if (server->pnfs_curr_ld &&
-> > -                                   server->pnfs_curr_ld->id == dev-
-> > >cbd_layout_type) {
-> > +                       list_for_each_entry_rcu(iter, &clp-
-> > >cl_superblocks, client_link)
-> > +                               if (iter->pnfs_curr_ld &&
-> > +                                   iter->pnfs_curr_ld->id == dev-
-> > >cbd_layout_type) {
-> >                                         rcu_read_unlock();
-> > +                                       server = iter;
-> 
-> Hmm... We're not holding any locks on the super block for 'iter' here,
-> so nothing is preventing it from going away while we're.
-> 
+2022-03-25 18:42 GMT+09:00, Yuezhang.Mo@sony.com <Yuezhang.Mo@sony.com>:
+Hi Yuezhang,
 
-ok, i am not a 'rcu lock' expert, i will make it hold the rcu_read_lock()
-if necessary.
-
-> Given that we really only want a pointer to the struct
-> pnfs_layoutdriver_type anyway, why not just convert the code to save a
-> pointer to that (and do it while holding the rcu_read_lock())?
-> 
-
-Maybe it's not that simple. If you only save a pointer to that and still
-use 'server' as the list iterator of list_for_each_entry_rcu, there could
-be problem.
-
-I.e., if no element found in list_for_each_entry_rcu in the first outer
-'for' loop, and now 'server' is a bogus pointer to an invalid struct, and
-continue to go into the second outer 'for' loop, and the check below will
-lead to invalid memory access (server->pnfs_curr_ld->id), even can potentialy
-be bypassed with crafted data to make the condition false and mistakely run
-nfs4_delete_deviceid(server->pnfs_curr_ld, clp, &dev->cbd_dev_id); with bogus
-'server'.
-
-if (!server ||
-    server->pnfs_curr_ld->id != dev->cbd_layout_type) {
-
-> The struct pnfs_layoutdriver is always expected to be a statically
-> allocated structure, so it won't go away as long as the pNFS driver
-> module remains loaded.
+> During renaming, the parent directory information maybe
+> updated. But the file/directory still references to the
+> old parent directory information.
 >
+> This bug will cause 2 problems.
+>
+> (1) The renamed file can not be written.
+>
+>     [10768.175172] exFAT-fs (sda1): error, failed to bmap (inode : 7afd50e4
+> iblock : 0, err : -5)
+>     [10768.184285] exFAT-fs (sda1): Filesystem has been set read-only
+>     ash: write error: Input/output error
+Could you please elaborate how to reproduce it ?
 
---
-Xiaomeng Tong 
+Thanks.
+>
+> (2) Some dentries of the renamed file/directory are not set
+>     to deleted after removing the file/directory.
+>
+> fixes: 5f2aa075070c ("exfat: add inode operations")
+>
+> Signed-off-by: Yuezhang Mo <Yuezhang.Mo@sony.com>
+> Reviewed-by: Andy Wu <Andy.Wu@sony.com>
+> Reviewed-by: Aoyama Wataru <wataru.aoyama@sony.com>
+> Reviewed-by: Daniel Palmer <daniel.palmer@sony.com>
+> ---
+>  fs/exfat/namei.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/fs/exfat/namei.c b/fs/exfat/namei.c
+> index a02a04a993bf..e7adb6bfd9d5 100644
+> --- a/fs/exfat/namei.c
+> +++ b/fs/exfat/namei.c
+> @@ -1080,6 +1080,7 @@ static int exfat_rename_file(struct inode *inode,
+> struct exfat_chain *p_dir,
+>
+>  		exfat_remove_entries(inode, p_dir, oldentry, 0,
+>  			num_old_entries);
+> +		ei->dir = *p_dir;
+>  		ei->entry = newentry;
+>  	} else {
+>  		if (exfat_get_entry_type(epold) == TYPE_FILE) {
+> --
+> 2.25.1
+>

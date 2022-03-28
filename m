@@ -2,127 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF01E4E9DBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC97C4E9DB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244679AbiC1RoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 13:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
+        id S244648AbiC1RnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 13:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241277AbiC1RoS (ORCPT
+        with ESMTP id S244441AbiC1RnR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 13:44:18 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB4764BE4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:42:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1648489345;
-        bh=hALfZm+7u5wG4Gk0GOZM9IFFoUVeMWeOU+c2qaXA7Y8=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=Jea1mmCDSGEchxzPkPfKmYxi4He1t1l1eGYpSzfwXtRNzVJ3vM4/qrPqgd9o12gKQ
-         sn0wsGypoRxWswjdQvkE4ZTU+SSh+H5jUz6Gi2SLP0c1OczQzYblf3iRGdTjYPnfbm
-         UPBp2jVMFCZ9vL0SZqjvxVX5M2mmZCaKzXtrv758=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.168.86]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N1fis-1o1G4v1dge-0121v9; Mon, 28
- Mar 2022 19:42:25 +0200
-Message-ID: <f9407abf-23cf-d539-b7de-2f1e3c589559@gmx.de>
-Date:   Mon, 28 Mar 2022 19:40:47 +0200
+        Mon, 28 Mar 2022 13:43:17 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE8036B62
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:41:35 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id bp39so13026187qtb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:41:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OE+8cdgGfoCGXGwp8r/5HOUNTsvZQT1x4g0OFfZy04I=;
+        b=VpuXPRNVm7f1LqJrjVj7chLW0tPoQ3BE1b1rqOCodPiOJkbCRaxy3RaqkZ3zgcws1Z
+         BmY7ItjiL2MzN3PNeAVPB1vGcUUdvw4SSDVbsHNp2sWBUJ3YOArvlSgd5sFosUnNhRDp
+         9S0fobS/YsOxR55WP+tFLPD7FLla6aVPjYa+cBXmoJ4Pc1N9D9BWP0mQDiKICcx2FWp4
+         HgEz9JMtHIXUPFvUrKeDItYmkoOuG0dwZoIyGT/GR5JQGYeEuebbO0GYSlcS6zHv69x2
+         vqR/jEWpLjrjNl8YCBT64S+sk3pyg6/YfqZwYnm57mtx8p5kSu4BNADmKoOKfVcg6W6R
+         SBJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OE+8cdgGfoCGXGwp8r/5HOUNTsvZQT1x4g0OFfZy04I=;
+        b=0b5RokpXJ3x9Xp3jmeYPMsZ2+k4s0pSDkqJsckc4GiBU9xGBlwWMneYXaV7lSeQm8d
+         P11uCE++UAUsRkfjRL1vKf4aFXj8hV+pw8lpK3dcxcRG+UxIO470lSexLP9TCWNrb1OD
+         NqToBQWkwlYNNuRWSG0kXfGzchP7ynpwnim/sBnfiUvOrvk7NKOghQW+SJY3Hw6uSX7g
+         823/CS3ZgxKQFYGtxaZuVSGWIEhMHB6gk7XYDefX1MOLgHwuWhyTCWELzWd+c9RR9ZP1
+         Jk++hU6/JsTWA4ai9QAzsI8XxibyY3gPTD2jwyGcv6ZLj6UXIN+sV8GDcwwWuML581yF
+         iJjw==
+X-Gm-Message-State: AOAM532zPJYKvE0jWjKxRrSKe6JxC4mUJWNi1Lw3ArJGVBkTtDUU/q+z
+        WSEJ5MFHx6rbi7WLqNXzN/ziS5SQVUCuFP588/nboA==
+X-Google-Smtp-Source: ABdhPJzG6IU5B+2M3qXnnxgjxuQwtFazpbuUwBiH9W1XKT5vWh+FJkrC4Mnus1LpesRkUaMWoMwBYnzujoxfG1MZOn4=
+X-Received: by 2002:ac8:7d0e:0:b0:2e0:6675:adf6 with SMTP id
+ g14-20020ac87d0e000000b002e06675adf6mr23080372qtb.227.1648489294729; Mon, 28
+ Mar 2022 10:41:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [deller-parisc:for-next 11/14] kernel/irq/cpuhotplug.c:155:6:
- warning: no previous prototype for 'irq_migrate_all_off_this_cpu'
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-References: <202203290038.b6TKcGbv-lkp@intel.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <202203290038.b6TKcGbv-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:kpde6xC0xalvtU//EPFQaY+sNDf/p0igb5twFId+G/15m2L1WpG
- DWynANkLt02QQxszWhaayZyTW+A++W5RaUEpNjjNdveLbHq6MxR1vs15EM5nqOhdUSjERFa
- jY3RzajwFPpY8xSwgNt2t+U9yFtQXjHoTdkMIZxVFY7+v/HtRGTxR9SjNTlxDmg0OSRYIai
- Ukqwbdbjgn21XqsLggImw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Rbabh3kivLs=:rUj67NzeSMarr7mtZLKopG
- xiZJxB9l/iFf/2BZCr3cVVzk9OblebcQhMYUZ+V4gQNaF/sACkPFYDNQfjldy9ifYhCFVadw2
- Ihta9kttw20UX0VDijenkEOC5IJSS9QNP6ebq8o/2exY91TMw4prb9/LNnbjf6Cbe7Tf6h/qh
- NNtXZu9shLrQkhi/pedGnUre+/xvjqRIzBQrnAnk4rcnB87gEnbjB/uMwmJF0bT97S79pbyO6
- PfALepk46HVqeYyrISlNKK5A54sJkgV8jADk+sIuylJRWWNG8dvDIBw4JIc5lYaQd1Q2RBB70
- St4aBULfbLs/z87678jdIZRV3QqY4/quteQE+MvBUNW/j5PuwGn+i+uY8QPlJt3oM7NdMcEPs
- 6A9EuPHeT9vc+8oQMDxKH3DnMqGNAt04sbz8XRg8KWuOoCFKeJol+8m/zAGu/95yCtU5QfLvH
- R9JpsK+k0Lyl+4s8LX9ToQQFH2pPPLqT+aDX4tBSjYwizLnymFMOHItyiI4aig6Vv1cKgZxvh
- mUaaKk4o9eDk4sIH6E421HjIdEYEnbxrm/K6Pwz20R0+56rF00V/3fzbkS+SdAUDmBV/nc/e5
- csvWY+Y0mo/2k9NbZABR3YVPuLfZKOkZxvVNMqP6dULvrvedXxbl4MCyt+iMEK6/ojCGFc0Vp
- H+rqLmd3yu38uxD5bUsRg+pjy8sscoJKvtl6Ftu8a91V9uidKM5sZhcXo62TNNMhJ4gmxrMUX
- WID2wG+4zCmfqMqjtkP+8hPrcuzSISbkI0uyB5PIkKWQbMhbElagr669I0VVoKZucMIMKLECu
- IwnhAQv4fTk5q1MCkrCJJVo7J0ZWYxsY7Cw+vXUO5QhlScO6VtHZqy+DCtx/h0t/aeyH04vvE
- fLWYQ7AtSsDaUWZR9I+jCblykaSkkW1GY4g3f7kWIFkx7tew7Ot8dk3tfmxAx1hNlrkvPiUbW
- xXzPZxPpZyHHwm1lXvbS/3wrc30WQebeE16aBQ0GbiB6P0G+dZUeqJelPuncBDRJaueSq/5ue
- YbKU1/k9XThfNnRootYWJlHCH2pzaF8MWvbW7aN1ZmUp9f98dUAivxLJdP8G6/kXwq8M64jsm
- fUlt+HBD1WEH7A=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220327205803.739336-1-mizhang@google.com> <YkHRYY6x1Ewez/g4@google.com>
+In-Reply-To: <YkHRYY6x1Ewez/g4@google.com>
+From:   Mingwei Zhang <mizhang@google.com>
+Date:   Mon, 28 Mar 2022 10:41:23 -0700
+Message-ID: <CAL715WL7ejOBjzXy9vbS_M2LmvXcC-CxmNr+oQtCZW0kciozHA@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/mmu: add lockdep check before lookup_address_in_mm()
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/22 18:50, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-li=
-nux.git for-next
-> head:   d2d1f1e2e989e1f0369d6c991fec7cd3843979a3
-> commit: 1d02434051997d499ed9b4fe29fb2992f93f5345 [11/14] parisc: Impleme=
-nt __cpu_die() and __cpu_disable() for CPU hotplugging
-> config: parisc-randconfig-r004-20220327 (https://download.01.org/0day-ci=
-/archive/20220329/202203290038.b6TKcGbv-lkp@intel.com/config)
-> compiler: hppa64-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sb=
-in/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-=
-linux.git/commit/?id=3D1d02434051997d499ed9b4fe29fb2992f93f5345
->         git remote add deller-parisc https://git.kernel.org/pub/scm/linu=
-x/kernel/git/deller/parisc-linux.git
->         git fetch --no-tags deller-parisc for-next
->         git checkout 1d02434051997d499ed9b4fe29fb2992f93f5345
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-11.2.0 make.cr=
-oss O=3Dbuild_dir ARCH=3Dparisc64 SHELL=3D/bin/bash kernel/irq/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All error/warnings (new ones prefixed by >>):
->
->>> kernel/irq/cpuhotplug.c:155:6: warning: no previous prototype for 'irq=
-_migrate_all_off_this_cpu' [-Wmissing-prototypes]
->      155 | void irq_migrate_all_off_this_cpu(void)
->          |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    In file included from include/uapi/linux/posix_types.h:5,
->                     from include/uapi/linux/types.h:14,
->                     from include/linux/types.h:6,
->                     from include/linux/limits.h:6,
->                     from include/linux/kernel.h:16,
->                     from include/linux/interrupt.h:6,
->                     from kernel/irq/cpuhotplug.c:12:
->>> include/linux/stddef.h:8:16: error: expected identifier or '(' before =
-'void'
->        8 | #define NULL ((void *)0)
->          |                ^~~~
->    include/linux/irq.h:620:41: note: in expansion of macro 'NULL'
->      620 | # define irq_affinity_online_cpu        NULL
->          |                                         ^~~~
->    kernel/irq/cpuhotplug.c:218:5: note: in expansion of macro 'irq_affin=
-ity_online_cpu'
->      218 | int irq_affinity_online_cpu(unsigned int cpu)
+Hi Sean,
 
-fixed.
-Thanks!
-Helge
+
+On Mon, Mar 28, 2022 at 8:16 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Sun, Mar 27, 2022, Mingwei Zhang wrote:
+> > Add a lockdep check before invoking lookup_address_in_mm().
+> > lookup_address_in_mm() walks all levels of host page table without
+> > accquiring any lock. This is usually unsafe unless we are walking the
+> > kernel addresses (check other usage cases of lookup_address_in_mm and
+> > lookup_address_in_pgd).
+> >
+> > Walking host page table (especially guest addresses) usually requires
+> > holding two types of locks: 1) mmu_lock in mm or the lock that protects
+> > the reverse maps of host memory in range; 2) lock for the leaf paging
+> > structures.
+> >
+> > One exception case is when we take the mmu_lock of the secondary mmu.
+> > Holding mmu_lock of KVM MMU in either read mode or write mode prevents host
+> > level entities from modifying the host page table concurrently. This is
+> > because all of them will have to invoke KVM mmu_notifier first before doing
+> > the actual work. Since KVM mmu_notifier invalidation operations always take
+> > the mmu write lock, we are safe if we hold the mmu lock here.
+> >
+> > Note: this means that KVM cannot allow concurrent multiple mmu_notifier
+> > invalidation callbacks by using KVM mmu read lock. Since, otherwise, any
+> > host level entity can cause race conditions with this one. Walking host
+> > page table here may get us stale information or may trigger NULL ptr
+> > dereference that is hard to reproduce.
+> >
+> > Having a lockdep check here will prevent or at least warn future
+> > development that directly walks host page table simply in a KVM ioctl
+> > function. In addition, it provides a record for any future development on
+> > KVM mmu_notifier.
+> >
+> > Cc: Sean Christopherson <seanjc@google.com>
+> > Cc: Ben Gardon <bgardon@google.com>
+> > Cc: David Matlack <dmatlack@google.com>
+> >
+> > Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> > ---
+> >  arch/x86/kvm/mmu/mmu.c | 18 ++++++++++++++++++
+> >  1 file changed, 18 insertions(+)
+> >
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 1361eb4599b4..066bb5435156 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -2820,6 +2820,24 @@ static int host_pfn_mapping_level(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
+> >        */
+> >       hva = __gfn_to_hva_memslot(slot, gfn);
+> >
+> > +     /*
+> > +      * lookup_address_in_mm() walks all levels of host page table without
+> > +      * accquiring any lock. This is not safe when KVM does not take the
+> > +      * mmu_lock. Holding mmu_lock in either read mode or write mode prevents
+> > +      * host level entities from modifying the host page table. This is
+> > +      * because all of them will have to invoke KVM mmu_notifier first before
+> > +      * doing the actual work. Since KVM mmu_notifier invalidation operations
+> > +      * always take the mmu write lock, we are safe if we hold the mmu lock
+> > +      * here.
+> > +      *
+> > +      * Note: this means that KVM cannot allow concurrent multiple
+> > +      * mmu_notifier invalidation callbacks by using KVM mmu read lock.
+> > +      * Otherwise, any host level entity can cause race conditions with this
+> > +      * one. Walking host page table here may get us stale information or may
+> > +      * trigger NULL ptr dereference that is hard to reproduce.
+> > +      */
+> > +     lockdep_assert_held(&kvm->mmu_lock);
+>
+> Holding mmu_lock isn't strictly required.  It would also be safe to use this helper
+> if mmu_notifier_retry_hva() were checked after grabbing the mapping level, before
+> consuming it.  E.g. we could theoretically move this to kvm_faultin_pfn().
+>
+> And simply holding the lock isn't sufficient, i.e. the lockdep gives a false sense
+> of security.  E.g. calling this while holding mmu_lock but without first checking
+> mmu_notifier_count would let it run concurrently with host PTE modifications.
+
+Right, even holding the kvm->mmu_lock is not safe, since we may have
+several concurrent invalidations ongoing and they are done zapping
+entries in EPT (so that they could just release the kvm->mmu_lock) and
+start working on the host page table. If we want to make it safe, we
+also have to check mmu_notifier_count (and potentially mmu_seq as
+well).
+
+With that, I start to feel this is a bug. The issue is just so rare
+that it has never triggered a problem.
+
+lookup_address_in_mm() walks the host page table as if it is a
+sequence of _static_ memory chunks. This is clearly dangerous. If we
+look at hva_to_pfn(), which is the right way to walk host page table:
+
+hva_to_pfn() =>
+  hva_to_pfn_fast() =>
+    get_user_page_fast_only() =>
+      internal_get_user_pages_fast() =>
+        lockless_pages_from_mm() =>
+          local_irq_save(flags); /* Disable interrupts here. */
+          gup_pgd_range(start, end, gup_flags, pages, &nr_pinned);
+  ... ...
+  hva_to_pfn_slow() =>
+    get_user_pages_unlocked() =>
+      mmap_read_lock(mm); /* taking the mm lock here. */
+
+The above code has two branches to walk the host page table: 1) the
+fast one and 2) slow one; The slower one takes the mm lock, while the
+faster one simply disables the interrupts.
+
+I think we might have to mimic the same thing in
+lockless_pages_from_mm(), i.e. wrapping
+local_irq_{save,restore}(flags) around the lookup_address_in_mm().
+
+Alternatively, we have to specify that the function
+lookup_address_in_mm() as well as its callers:
+host_pfn_mapping_level() and kvm_mmu_max_mapping_level() CANNOT be
+called in generic places in KVM, but only in the fault path and AFTER
+the check of "is_page_fault_stale()".
+
+But right now,  kvm_mmu_max_mapping_level() are used in other places
+as well: kvm_mmu_zap_collapsible_spte(), which does not satisfy the
+strict requirement of walking the host page table.
+
+>
+> I'm definitely in favor of adding a comment to document the mmu_notifier
+> interactions, but I don't like adding a lockdep.

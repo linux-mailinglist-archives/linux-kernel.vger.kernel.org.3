@@ -2,149 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 936584E9F4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C334E9F4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245390AbiC1TAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 15:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
+        id S245399AbiC1TAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 15:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245402AbiC1TAE (ORCPT
+        with ESMTP id S245386AbiC1TAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 15:00:04 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0FAFD16
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:58:19 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id g20so18037296edw.6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:58:19 -0700 (PDT)
+        Mon, 28 Mar 2022 15:00:06 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C896DF39
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:58:23 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id h4so21682258wrc.13
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:58:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y7h2AchlhCAthHYHcLIlHiiUCH1u4tsKGd2lWHTZUlY=;
-        b=mzL7CPaM/qH7HTC6bp0faYg2StoSqQkehQG7tEQFBD6MCSe3XcD+kHNFEbCTamS1Pw
-         qumiplt3iKPQUj0cqZQ1kw3OIBmh4MtZBIQSgNDRgAclRYsb1/f0hyX6ry0Z4598KQwu
-         oKmvQUQq5Y6EgdRP/JknK0Xx+pa9BsiZkYMScUwrUdgADuZbpfdM2YWBWBEJjv2cmp/Q
-         YLIIaK9aKIX3ZAtI/NHqT8c0bXXpSU231LBgnUIOiPaogDDWWNt221MuVZWz/ufUeRN0
-         bwwAh9f7pWf/yo3yreuykfHUearzuagnk5PqlE74yVTBBbCA8MmNNNEF7nvrlIy9byBd
-         Hx0Q==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=E/lv74yXlf5dC/6MenQmc2ZtVjQIh9equ8kVJX63xWc=;
+        b=OrbhPIDn83kWAtJ2oKWtBlRPdoYiHN8t/eY8BJB3jH/rszwQdeGByqRBVTNOFh7DGF
+         uPuQdVtk8BprelsP/U01tDroOw5hDaDmq5TieJlEY96VNfg3EEGecwwoBEcbJ64//oGE
+         LEPFC8R1wxmBG875/AHuw6ChS+xb7pGaUna2JSRYSLB54r9w+YdjPCbqdR8lrlKeLu0+
+         goT3cScyNUIrKsPMKWp3tVD925tJvUTuliFjNMgvPtLWLWDqaUitc5AyX8mdXRtYLbLt
+         802O0+xZ0zoZY1SZ5+V+ubAuGQp/AJ74kAdvFlZJ/A4SWlBh8wm5NV2GRjDLMNMaoEin
+         V5Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y7h2AchlhCAthHYHcLIlHiiUCH1u4tsKGd2lWHTZUlY=;
-        b=xji2yZx9BX7jNIz+/97gqiVfdAYct9d3CtaPdGrEuMiZqs/zbsWeIsS7xaEn2nGGcV
-         uvxYKwTQMFqgS6g4hMWdXWvbfGBVCzbA/88yJ7cV4m5n7EduU0V1GScZFIJs/CRdz/3B
-         4i0yS4JvAAibLAv1O/n3b7xQ7vmWZFO4i4YLNWdKffHqBPtXM4gIcchFl0ho/n2ZfjdA
-         bjOHFWguYtUxigP58kH+37lew6RhUCDM5vYFmbT4uQX9ePa7qO2U4Z8FdUDutbrJYgin
-         qfH/zg0HmXGkwzcEAfobu7ZL0sjMcaQ8arvdhl+/RMxHotJM2V4kkKUnANTE183rMYu7
-         SO8Q==
-X-Gm-Message-State: AOAM532zovxRmazBMsHsVlcL/OCGH5H1MEgUvs8BAjD0v6ZzA8YnHJ/y
-        Sw2w97/eBHij5yJmBQTmyWX40SDTZZgr/7pd/dWVoA==
-X-Google-Smtp-Source: ABdhPJyhJkHcV4gC2iZ87HQT2UlMmP4fn/UBsOPEcsgyAISFagHCmwwoTGCGuHLFwOJv6MS2vb9mQGfOkes3PzUe8Yk=
-X-Received: by 2002:a05:6402:4302:b0:419:4be8:6493 with SMTP id
- m2-20020a056402430200b004194be86493mr18086577edc.294.1648493897275; Mon, 28
- Mar 2022 11:58:17 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=E/lv74yXlf5dC/6MenQmc2ZtVjQIh9equ8kVJX63xWc=;
+        b=i6SAsgPWHFS61wVn9ZnTwjUTGPEV1CN7EdIv9Sc93n/nugMuvc4dbMvL+lNixZELMk
+         cZLT2e1BBfDKrVpO1wN08o1DZWldd8wFtm6Ri7aDrcwIVNWyqssZ+P3wu0vAkVby7I6q
+         uoZphOpA7nLKZu0ZfCuLB0Lb7F8dXa3h5fVMKzExS610rWLZlq//Lm1fPYVZP69EDPxS
+         XL6pzOOXUhTjJJvbA6GWtmTkkXVsXVBeG8B3OIR3GSOzEHA74B9c2T7B1qi9nKrtg1DF
+         LTTc4TPi7qmte7koxxCcqBZs7LSS52PTS1lQzQy26tZpmO11FPG0Oof25K9iIikwMkwH
+         tDDQ==
+X-Gm-Message-State: AOAM532WjzbusUMz2ImhMtSG/1TT06Aw7jKzlsqhecQ7ljjqOVV06Gqn
+        70KNbSdqQanqMh9HDXHyWzFwqg==
+X-Google-Smtp-Source: ABdhPJx9v0AU8NnuBgNH2WbRla9KrXbvI6qxt4kIbC2y4evVDkLfSE1Wz2vp2Q/2cceLaGPYRL1XZg==
+X-Received: by 2002:a05:6000:508:b0:1e4:a027:d147 with SMTP id a8-20020a056000050800b001e4a027d147mr25574286wrf.315.1648493902229;
+        Mon, 28 Mar 2022 11:58:22 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id o6-20020a05600002c600b002057f1738fcsm14033191wry.110.2022.03.28.11.58.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 11:58:21 -0700 (PDT)
+Message-ID: <2e0be70f-f800-e3f8-363e-6598468fa091@linaro.org>
+Date:   Mon, 28 Mar 2022 20:58:21 +0200
 MIME-Version: 1.0
-References: <20220326003356.487828-1-dlatypov@google.com> <CABVgOSmbQxZmmNtUQLsvMSPkr2FpXB_kdJUUbC=nLrt6xN7e2A@mail.gmail.com>
- <CAGS_qxq_vFtGS4BGieZz8L3QH7rZ7ZN25pGYmjWWoXbTGOKC9A@mail.gmail.com> <CAFd5g45f3X3xF2vz2BkTHRqOC4uW6GZxtUUMaP5mwwbK8uNVtA@mail.gmail.com>
-In-Reply-To: <CAFd5g45f3X3xF2vz2BkTHRqOC4uW6GZxtUUMaP5mwwbK8uNVtA@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 28 Mar 2022 13:58:06 -0500
-Message-ID: <CAGS_qxp604tXbqzSg0nmz=Ws9ZzX47u-XCftNxfcamyM=GrQYw@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: kunit: update kconfig options needed for
- UML coverage
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     David Gow <davidgow@google.com>, Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>, maxime@cerno.tech
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 3/3] dt-bindings: phy: uniphier-ahci: Fix missing
+ reset-names
+Content-Language: en-US
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <1648433152-23126-1-git-send-email-hayashi.kunihiko@socionext.com>
+ <1648433152-23126-4-git-send-email-hayashi.kunihiko@socionext.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1648433152-23126-4-git-send-email-hayashi.kunihiko@socionext.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 11:54 AM 'Brendan Higgins' via KUnit
-Development <kunit-dev@googlegroups.com> wrote:
->
-> On Mon, Mar 28, 2022 at 12:35 PM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > On Fri, Mar 25, 2022 at 9:56 PM David Gow <davidgow@google.com> wrote:
-> > >
-> >
-> > <snip>
-> >
-> > > >         # Append coverage options to the current config
-> > > > -       $ echo -e "CONFIG_DEBUG_KERNEL=y\nCONFIG_DEBUG_INFO=y\nCONFIG_GCOV=y" >> .kunit/.kunitconfig
-> > > > +       $ echo -e "CONFIG_DEBUG_KERNEL=y\nCONFIG_DEBUG_INFO=y\nCONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y\nCONFIG_GCOV=y" >> .kunit/.kunitconfig
-> > > >         $ ./tools/testing/kunit/kunit.py run
-> > >
-> > > Would we want to instead use a chain of --kconfig_add arguments? (I
-> > > think there are advantages either way...)
-> >
-> > I've been considering this ever since the --kconfig_add patch was accepted.
-> > It's more compatible w/ commands using --kunitconfig, but it also
-> > looks very verbose.
-> > E.g. it looks like
-> >
-> > $ tools/testing/kunit/kunit.py run --make_options=CC=/usr/bin/gcc-6
-> > --kconfig_add=CONFIG_DEBUG_INFO=y
-> > --kconfig_add=CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-> > --kconfig_add=CONFIG_GCOV=y
->
-> I don't think it's *that* much more verbose, but I see your point. I
-> personally prefer this, but not enough to argue about it.
+On 28/03/2022 04:05, Kunihiko Hayashi wrote:
+> Add missing "phy" reset-names to fix the following warning:
+> 
+>   uniphier-pro4-ace.dtb: ahci-phy@10: resets: [[26, 28], [26, 12], [26, 30], [36, 0], [36, 1], [36, 2]] is too long
+>       From schema: Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+>   uniphier-pro4-ace.dtb: ahci-phy@10: reset-names: 'oneOf' conditional failed, one must be fixed:
+>       ['link', 'gio', 'phy', 'pm', 'tx', 'rx'] is too long
+>       From schema: Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
 
-I personally prefer it too, but I'm biased as the person who added
---kconfig_add.
-They're both ugly enough I'd figured I'd save the bikeshedding for
-another patch.
+There is no ahci-phy in current sources...
 
->
-> > Neither looks very appealing to me, so I've just kept it as-is for now.
-> >
-> > Maybe there's something we can do to make this easier (e.g. allowing
-> > --kunitconfig to be repeated and mergable)?
->
-> I would like --kunitconfig to be repeadable and mergable.
+> 
+> Fixes: 34f92b67621f ("dt-bindings: phy: uniphier-ahci: Add bindings for Pro4 SoC")
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> ---
+>  .../devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml   | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml b/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+> index 3b400a85b44a..14f7579e7daa 100644
+> --- a/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+> @@ -43,13 +43,14 @@ properties:
+>  
+>    resets:
+>      minItems: 2
+> -    maxItems: 5
+> +    maxItems: 6
+>  
+>    reset-names:
+>      oneOf:
 
-Ack.
-There's some things to consider first.
+As a separate commit, this oneOf should be converted into allOf:if:then:
+cases which will enforce the resets per compatible.
 
-1. This will conflict w/
-https://patchwork.kernel.org/project/linux-kselftest/patch/20220226212325.2984807-1-dlatypov@google.com/,
-so I'm going to wait until that gets merged first.
+Can you do that as well?
 
-2. some kconfigs can be incompatible (e.g. these options only work on
-UML, can't combine w/ a non-UML compatible file)
-How do we make this less of a footgun?
-We'd talked about how it'd be nice if kconfig/"make olddefconfig"
-could print out *why* options get dropped (either they're not visible,
-have unmet deps, etc.). If we had that, I'd feel more comfortable w/
-repeatable kunitconfig.
+>        - items:          # for Pro4
+>            - const: link
+>            - const: gio
+> +          - const: phy
+>            - const: pm
+>            - const: tx
+>            - const: rx
 
-3. People have the ability to do this already if they're really sure it's safe
-$ cat <files...> | ./tools/testing/kunit/kunit.py run --kunitconfig=/dev/stdin
-
-4. are we committed to supporting a "uml_coverage.kunitconfig" file?
-As shown by the existence of this patch, we've let it get broken for a
-bit, at least against linux-next (afaik, it was working on
-torvalds/master up until the 5.18 window opened and we had some
-patches reworking CONFIG_DEBUG_INFO).
-
-These instructions exist so others don't have to try and re-figure out
-the steps/workarounds.
-But they're not more formally "part of KUnit" since no one has had the
-expertise to maintain it (and fix issues like the reliance on gcc-6),
-etc.
-
-Creating a kunitconfig file for this will further imply ownership.
+Best regards,
+Krzysztof

@@ -2,73 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48B24E8C5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 04:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A224E8C5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 04:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237707AbiC1Czy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 22:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
+        id S237712AbiC1C7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 22:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233861AbiC1Czx (ORCPT
+        with ESMTP id S231923AbiC1C7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 22:55:53 -0400
-Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11C34C780;
-        Sun, 27 Mar 2022 19:54:12 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
- (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Mon, 28 Mar
- 2022 10:54:12 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Mon, 28 Mar
- 2022 10:54:10 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     <philipp.reisner@linbit.com>, <lars.ellenberg@linbit.com>,
-        <axboe@kernel.dk>
-CC:     <drbd-dev@lists.linbit.com>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Haowen Bai <baihaowen@meizu.com>
-Subject: [PATCH] drbd: Return true/false (not 1/0) from bool functions
-Date:   Mon, 28 Mar 2022 10:54:09 +0800
-Message-ID: <1648436049-4335-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Sun, 27 Mar 2022 22:59:00 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09774B1F6;
+        Sun, 27 Mar 2022 19:57:20 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1648436235;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vhpVEffh7PsiV5KTLrc2gQ5RNNJSm3uaVzdGf/WPCPY=;
+        b=XH2tGYkkqFH4Yww3ZFRv806shwyK3IlfyFQ6NqCFsFH2arW3wc8RVAw8RQN/y3yo6nzjXs
+        C4hL7UtJ5K8ilIuZJHFkdrTYSSTKRovdVpSZUXfwmoYNED8DggvKiV52zrHPaOwtm6oQSh
+        N92iL8ZSnkADXx3hqTB/RBHKDAPu9II=
+From:   Guoqing Jiang <guoqing.jiang@linux.dev>
+Subject: Re: [PATCH] md: md2: fix an incorrect NULL check on list iterator
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>, song@kernel.org,
+        rgoldwyn@suse.com
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20220327080111.12028-1-xiam0nd.tong@gmail.com>
+Message-ID: <bdc2ed02-6f13-c8a5-7e61-190a5dd9b6bc@linux.dev>
+Date:   Mon, 28 Mar 2022 10:57:11 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-125.meizu.com (172.16.1.125) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220327080111.12028-1-xiam0nd.tong@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return boolean values ("true" or "false") instead of 1 or 0 from bool
-functions.  This fixes the following warnings from coccicheck:
+Hi Xiaomeng,
 
-./drivers/block/drbd/drbd_req.c:912:9-10: WARNING: return of 0/1 in
-function 'remote_due_to_read_balancing' with return type bool
+I'd suggest to rephrase the subject to "md: fix an incorrect NULL check 
+in md_reload_sb".
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- drivers/block/drbd/drbd_req.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 3/27/22 4:01 PM, Xiaomeng Tong wrote:
+> The bug is here:
+> 	if (!rdev || rdev->desc_nr != nr) {
+>
+> The list iterator value 'rdev' will *always* be set and non-NULL
+> by rdev_for_each_rcu(), so it is incorrect to assume that the
+> iterator value will be NULL if the list is empty or no element
+> found (In fact, it will be a bogus pointer to an invalid struct
+> object containing the HEAD). Otherwise it will bypass the check
+> and lead to invalid memory access passing the check.
+>
+> To fix the bug, use a new variable 'iter' as the list iterator,
+> while use the original variable 'pdev' as a dedicated pointer to
+> point to the found element.
+>
+> Cc:stable@vger.kernel.org
+> Fixes: 70bcecdb1534 ("amd-cluster: Improve md_reload_sb to be less error prone")
 
-diff --git a/drivers/block/drbd/drbd_req.c b/drivers/block/drbd/drbd_req.c
-index c043945..171905a 100644
---- a/drivers/block/drbd/drbd_req.c
-+++ b/drivers/block/drbd/drbd_req.c
-@@ -909,7 +909,7 @@ static bool remote_due_to_read_balancing(struct drbd_device *device, sector_t se
- 
- 	switch (rbm) {
- 	case RB_CONGESTED_REMOTE:
--		return 0;
-+		return false;
- 	case RB_LEAST_PENDING:
- 		return atomic_read(&device->local_cnt) >
- 			atomic_read(&device->ap_pending_cnt) + atomic_read(&device->rs_pending_cnt);
--- 
-2.7.4
+amd-cluster? 😉
 
+> Signed-off-by: Xiaomeng Tong<xiam0nd.tong@gmail.com>
+> ---
+>   drivers/md/md.c | 10 ++++++----
+>   1 file changed, 6 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/md/md.c b/drivers/md/md.c
+> index 7476fc204172..f156678c08bc 100644
+> --- a/drivers/md/md.c
+> +++ b/drivers/md/md.c
+> @@ -9794,16 +9794,18 @@ static int read_rdev(struct mddev *mddev, struct md_rdev *rdev)
+>   
+>   void md_reload_sb(struct mddev *mddev, int nr)
+>   {
+> -	struct md_rdev *rdev;
+> +	struct md_rdev *rdev = NULL, *iter;
+>   	int err;
+>   
+>   	/* Find the rdev */
+> -	rdev_for_each_rcu(rdev, mddev) {
+> -		if (rdev->desc_nr == nr)
+> +	rdev_for_each_rcu(iter, mddev) {
+> +		if (iter->desc_nr == nr) {
+> +			rdev = iter;
+>   			break;
+> +		}
+>   	}
+>   
+> -	if (!rdev || rdev->desc_nr != nr) {
+> +	if (!rdev) {
+>   		pr_warn("%s: %d Could not find rdev with nr %d\n", __func__, __LINE__, nr);
+>   		return;
+>   	}
+
+I guess we only need to check desc_nr since rdev should always be valid 
+, and IMO the fix tag
+is not necessary.
+
+@@ -9800,7 +9800,7 @@ void md_reload_sb(struct mddev *mddev, int nr)
+                         break;
+         }
+
+-       if (!rdev || rdev->desc_nr != nr) {
++       if (rdev->desc_nr != nr) {
+
+Thanks,
+Guoqing

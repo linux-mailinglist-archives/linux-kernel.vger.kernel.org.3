@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D79B04E9975
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24E04E9960
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243808AbiC1O2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 10:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53076 "EHLO
+        id S243790AbiC1O0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 10:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243801AbiC1O2i (ORCPT
+        with ESMTP id S243782AbiC1O0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 10:28:38 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3744B46B1A;
-        Mon, 28 Mar 2022 07:26:58 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22SEMLX6009684;
-        Mon, 28 Mar 2022 09:22:21 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 22SEMKu7009683;
-        Mon, 28 Mar 2022 09:22:20 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Mon, 28 Mar 2022 09:22:20 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Nathan Chancellor <nathan@kernel.org>, x86-ml <x86@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-toolchains@vger.kernel.org
-Subject: Re: clang memcpy calls
-Message-ID: <20220328142220.GI614@gate.crashing.org>
-References: <YjxTt3pFIcV3lt8I@zn.tnic> <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com> <Yj2yYFloadFobRPx@lakrids> <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net> <20220325151238.GB614@gate.crashing.org> <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 28 Mar 2022 10:26:30 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0521EEDA;
+        Mon, 28 Mar 2022 07:24:49 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id t5so12784309pfg.4;
+        Mon, 28 Mar 2022 07:24:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=8cccm2I+4KQDgNNYHUDY+ywBQCQ8yCeJGNdK8lQVpuc=;
+        b=IYjEsW9/LupErXbLGzSBAZGPm9cCPnTKQASA/r1SBiEmUA2dpVFLdeb2ZVCXU44JL6
+         hHLbYKI8oltUMlu8JBtd5XdaOkpZLw8t0R0Qk3BOYb/57dhke2Zt8wOysMbre1rTno73
+         j685lnflFzMCJBuK5UOPaBwHUIH0X+jovn3Ui3ow2QunV10XwCrekr1QUQZ1TiSZQgDu
+         wJLk0ue9OLiv+vTTgkK7Zrzk+UAPK6IZKFZiK4Ct1eCvYmFyZU0lHdTzq8qfitd3o1c6
+         dCdnDHDxsWAlntgHnilGr5DWLF+np4WSww4TTMbnLwfn9G3yOB/M1RhzDW61qCU51JHH
+         7j8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=8cccm2I+4KQDgNNYHUDY+ywBQCQ8yCeJGNdK8lQVpuc=;
+        b=qBow+QEsFFsLeLO6VKOgAb0FfAItHZHsf0kr2kT/yotuxPP8qJCiv6F6/eBGD6571y
+         p8y6PgjoaVUglkrLH/jgpZ4snB29D4xphrja+Sty1la55VcN4tq5yIsLi4PPQjV1Zkm2
+         JEPg4vP1hljX1iuF8G3Pvrmgo9imD/n41stArNtOaKRIocIe62I1xSnMx3c0NcD06Idp
+         RL3tq+f6VVtF8QjAeEqTjvEmDKuXy1DiAqe4yZOQq1oOrWZDvy7ddFxUiNKYBNkjrb2m
+         0dw0JBvWLlEhPC54/Ac+HffddyoMZt2PfLwRKeKD39BIh4uJ/qm7maEPNgp+ldf5X2sn
+         Yqmw==
+X-Gm-Message-State: AOAM531BCAz2uvHeDaZIKx7pXD+cMPorGDUssP/wgHAKrrMc+moOuPgH
+        Ydy/HHje1vMvCSqwopRIwuy9CGgxPnQ=
+X-Google-Smtp-Source: ABdhPJwA5iDbCHTLuYfWrqG6KuF3HtRxj7SDoNnVwtk1l8KQzi1iaq7qdTa9xXCJo2ckFBal+JZfYQ==
+X-Received: by 2002:a05:6a00:2485:b0:4f6:b5c5:ee8e with SMTP id c5-20020a056a00248500b004f6b5c5ee8emr23446306pfv.21.1648477489258;
+        Mon, 28 Mar 2022 07:24:49 -0700 (PDT)
+Received: from mail.broadcom.net ([192.19.11.250])
+        by smtp.gmail.com with ESMTPSA id oo17-20020a17090b1c9100b001bf0ccc59c2sm21664206pjb.16.2022.03.28.07.24.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 07:24:48 -0700 (PDT)
+From:   Kamal Dasu <kdasu.kdev@gmail.com>
+To:     Kamal Dasu <kdasu.kdev@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Mark Brown <broonie@kernel.org>,
+        Boris Brezillon <bbrezillon@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: bcm-qspi: fix MSPI only access with bcm_qspi_exec_mem_op()
+Date:   Mon, 28 Mar 2022 10:24:42 -0400
+Message-Id: <20220328142442.7553-1-kdasu.kdev@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+This fixes case where MSPI controller is used to access spi-nor
+flash and BSPI block is not present.
 
-On Mon, Mar 28, 2022 at 10:52:54AM +0100, Mark Rutland wrote:
-> On Fri, Mar 25, 2022 at 10:12:38AM -0500, Segher Boessenkool wrote:
-> > The compiler isn't assuming anything about asan.  The compiler generates
-> > its code without any consideration of what asan will or will not do.
-> > The burden of making things work is on asan.
-> 
-> I think we're talking past each other here, so let me be more precise. :)
-> 
-> The key thing is that when the user passes `-fsantize=address`, instrumentation
-> is added by (a part of) the compiler. That instrumentation is added under some
-> assumptions as to how the compiler as a whole will behave.
-> 
-> With that in mind, the question is how is __attribute__((no_sanitize_address))
-> intended to work when considering all the usual expectations around how the
-> compiler can play with memcpy and similar?
+Fixes: 5f195ee7d830 ("spi: bcm-qspi: Implement the spi_mem interface")
+Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
+---
+ drivers/spi/spi-bcm-qspi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The attribute is about how the *current* function is instrumented, not
-about anything called by this function.  This is clearly documented:
-'no_sanitize_address'
-'no_address_safety_analysis'
-     The 'no_sanitize_address' attribute on functions is used to inform
-     the compiler that it should not instrument memory accesses in the
-     function when compiling with the '-fsanitize=address' option.  The
-     'no_address_safety_analysis' is a deprecated alias of the
-     'no_sanitize_address' attribute, new code should use
-     'no_sanitize_address'.
+diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
+index 86c76211b3d3..cad2d55dcd3d 100644
+--- a/drivers/spi/spi-bcm-qspi.c
++++ b/drivers/spi/spi-bcm-qspi.c
+@@ -1205,7 +1205,7 @@ static int bcm_qspi_exec_mem_op(struct spi_mem *mem,
+ 	addr = op->addr.val;
+ 	len = op->data.nbytes;
+ 
+-	if (bcm_qspi_bspi_ver_three(qspi) == true) {
++	if (has_bspi(qspi) && bcm_qspi_bspi_ver_three(qspi) == true) {
+ 		/*
+ 		 * The address coming into this function is a raw flash offset.
+ 		 * But for BSPI <= V3, we need to convert it to a remapped BSPI
+@@ -1224,7 +1224,7 @@ static int bcm_qspi_exec_mem_op(struct spi_mem *mem,
+ 	    len < 4)
+ 		mspi_read = true;
+ 
+-	if (mspi_read)
++	if (!has_bspi(qspi) || mspi_read)
+ 		return bcm_qspi_mspi_exec_mem_op(spi, op);
+ 
+ 	ret = bcm_qspi_bspi_set_mode(qspi, op, 0);
+-- 
+2.17.1
 
-> > The compiler should not do anything differently here if it uses asan.
-> > The address sanitizer and the memcpy function implementation perhaps
-> > have to cooperate somehow, or asan needs more smarts.  This needs to
-> > happen no matter what, to support other things calling memcpy, say,
-> > assembler code.
-> 
-> I appreciate where you're coming from here, but I think you're approaching the
-> problem sideways.
-
-I am stating facts, I am not trying to solve your problem there.  It
-seemed to me (and still does) that you didn't grasp all facts here.
-
-> We need to define *what the semantics are* so that we can actually solve the
-> problem, e.g. is a memcpy implementation expected to be instrumented or not?
-
-That is up to the memcpy implementation itself, of course.
-
-> > GCC *requires* memcpy to be the standard memcpy always (i.e. to have the
-> > standard-specified semantics).  This means that it will have the same
-> > semantics as __builtin_memcpy always, and either or not be a call to an
-> > external function.  It can also create calls to it out of thin air.
-> 
-> I understand all of that.
-
-And still you want us to do something that is impossible under those
-existing constraints :-(
-
-If you want the external memcpy called by modules A, B, C to not be
-instrumented, you have to link A, B, and C against an uninstrumented
-memcpy.  This is something the kernel will have to do, the compiler has
-no say in how the kernel is linked together.
-
-
-Segher

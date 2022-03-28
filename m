@@ -2,90 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C484E906A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 10:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6ED4E906E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 10:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239515AbiC1Is4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 04:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46932 "EHLO
+        id S239527AbiC1Itc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 04:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239252AbiC1Isy (ORCPT
+        with ESMTP id S231683AbiC1Ita (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 04:48:54 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0E953B49;
-        Mon, 28 Mar 2022 01:47:14 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22S8glYX028088;
-        Mon, 28 Mar 2022 08:47:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=1WMyPKuakxygvqFu/TfVrdxFzRNPw04S3K2mLjSwAqY=;
- b=FN7bpoXxpVEVExT0HMCkWVt8XoswSGn9tyQxXOkeU5gPiHYEKl9kLc5AJZlkfeWajv12
- bH94KMmt1vbRRzqmqeClXARWN3WcIHPZOmZ7J5YkXfopmsJjLOyxfMOwQY3WVakYeVZY
- hK36OSMwADqa9WUNZEkQfwxO9yR4xj44VOn9KiVQCgUfwxp6xWlvZU/syz6E1IyuMYqH
- StClJ5XePgkgf14KnFytvSJ74UQnQguQYmnsTm8xqZRc0TJFzccyWABn4YmL8vRv0AI3
- m9PCSX1+5SQ4GpjfEoNb7ycbtIi9MjWIN9u8STbLl7O/lCPRRwGPg4WU4U0rXTj6O8g/ bg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f2cm9wm3x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Mar 2022 08:47:07 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22S8ivXi004243;
-        Mon, 28 Mar 2022 08:47:07 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f2cm9wm39-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Mar 2022 08:47:07 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22S8hX8o030906;
-        Mon, 28 Mar 2022 08:47:05 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03fra.de.ibm.com with ESMTP id 3f1tf8tyhx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Mar 2022 08:47:05 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22S8l1V136700430
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Mar 2022 08:47:01 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 97A1AAE04D;
-        Mon, 28 Mar 2022 08:47:01 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3BA99AE045;
-        Mon, 28 Mar 2022 08:47:01 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 28 Mar 2022 08:47:01 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Cc:     hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, jcmvbkbc@gmail.com, elder@linaro.org,
-        dsterba@suse.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] char: tty3270: fix a missing check on list iterator
-References: <20220328070543.24671-1-xiam0nd.tong@gmail.com>
-Date:   Mon, 28 Mar 2022 10:47:00 +0200
-In-Reply-To: <20220328070543.24671-1-xiam0nd.tong@gmail.com> (Xiaomeng Tong's
-        message of "Mon, 28 Mar 2022 15:05:43 +0800")
-Message-ID: <yt9dczi6cvln.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Mon, 28 Mar 2022 04:49:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104BA53B56
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 01:47:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4EF6B80FBC
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:47:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14C96C340ED;
+        Mon, 28 Mar 2022 08:47:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648457267;
+        bh=aCy1183IFeSJEQ/PvYRHTMEfAcgEEitlYrwCkkKgiSg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MX3gCVLJyItskiLMyOpDpXgDdaC2i9inH9p+RNcDTUqYTphF66BnOK1B/otYzGxUK
+         2TraMoHCww74EnS9ZquMBxPHBsFGqCZIPgfSVK3kKVklcTZkLw+ATny7mKTujwe+nX
+         6qSaISaGLQyfGIE+sdXdVYkRjXMMKF2Y+tOWhmbE=
+Date:   Mon, 28 Mar 2022 10:47:45 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        straube.linux@gmail.com, martin@kaiser.cx,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] staging: r8188eu: Directly return _SUCCESS instead of
+ using local ret variable
+Message-ID: <YkF2MRdxlUWow0UC@kroah.com>
+References: <1648457028-4226-1-git-send-email-baihaowen@meizu.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: jTc4xcaF8gubDZs8biPwYCuljP5tqMgp
-X-Proofpoint-GUID: O8qap2T0lA6sLN_d5XP_L1UktDNCgWnz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-28_02,2022-03-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 clxscore=1015 malwarescore=0 bulkscore=0 adultscore=0
- impostorscore=0 mlxscore=0 mlxlogscore=907 suspectscore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203280049
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1648457028-4226-1-git-send-email-baihaowen@meizu.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -94,56 +53,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xiaomeng Tong <xiam0nd.tong@gmail.com> writes:
-
-> --- a/drivers/s390/char/tty3270.c
-> +++ b/drivers/s390/char/tty3270.c
-> @@ -1111,7 +1111,7 @@ tty3270_convert_line(struct tty3270 *tp, int line_nr)
->  {
->  	struct tty3270_line *line;
->  	struct tty3270_cell *cell;
-> -	struct string *s, *n;
-> +	struct string *s = NULL, *n, *iter;
-
-Please keep reverse XMAS-tree layout.
-
->  	unsigned char highlight;
->  	unsigned char f_color;
->  	char *cp;
-> @@ -1142,13 +1142,20 @@ tty3270_convert_line(struct tty3270 *tp, int line_nr)
+On Mon, Mar 28, 2022 at 04:43:48PM +0800, Haowen Bai wrote:
+> fixes coccinelle warning:
+> ./drivers/staging/r8188eu/core/rtw_mlme_ext.c:357:5-8: Unneeded variable: "res".
+>  Return "_SUCCESS" on line 380
+> 
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
+> V1->V2: split into two patches.
+> 
+>  drivers/staging/r8188eu/core/rtw_mlme_ext.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> index 931e6f2..4b7b0ee 100644
+> --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> @@ -354,7 +354,6 @@ static u8 init_channel_set(struct adapter *padapter, u8 ChannelPlan, struct rt_c
 >  
->  	/* Find the line in the list. */
->  	i = tp->view.rows - 2 - line_nr;
-> -	list_for_each_entry_reverse(s, &tp->lines, list)
-> -		if (--i <= 0)
-> +	list_for_each_entry_reverse(iter, &tp->lines, list)
-> +		if (--i <= 0) {
-> +			s = iter;
->  			break;
-> +		}
->  	/*
->  	 * Check if the line needs to get reallocated.
->  	 */
-> -	if (s->len != flen) {
-> +	if (!s) {
-> +		/* Reallocate string. */
-> +		n = tty3270_alloc_string(tp, flen);
-> +		list_add(&n->list, &tp->lines);
-> +		s = n;
-> +	} else if (s->len != flen) {
->  		/* Reallocate string. */
->  		n = tty3270_alloc_string(tp, flen);
->  		list_add(&n->list, &s->list);
+>  int	init_mlme_ext_priv(struct adapter *padapter)
+>  {
+> -	int	res = _SUCCESS;
+>  	struct registry_priv *pregistrypriv = &padapter->registrypriv;
+>  	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
+>  	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
+> @@ -377,7 +376,7 @@ int	init_mlme_ext_priv(struct adapter *padapter)
+>  
+>  	pmlmeext->active_keep_alive_check = true;
+>  
+> -	return res;
+> +	return _SUCCESS;
 
-I should have written that in my first reply, but s == NULL means
-the given line number couldn't be found in the list of lines. This is
-a serious error and should be warned about. So maybe something like:
+If a function can only ever succeed, why return anything?  Please make
+this a function return void.
 
-if (WARN_ON(!s))
-	return;
+thanks,
 
-But allocating a new empty line in that case is certainly wrong.
-
-Thanks
-Sven
-
+greg k-h

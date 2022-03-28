@@ -2,63 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E124EA3CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 01:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70FE44EA3E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 01:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbiC1XpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 19:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
+        id S231192AbiC1Xqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 19:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbiC1XpP (ORCPT
+        with ESMTP id S231130AbiC1Xqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 19:45:15 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467D5126FBA
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 16:43:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648511014; x=1680047014;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O4avTRIrnHAvVCB23P7MPIKTwh4gepgKr4ohUVOGRVw=;
-  b=OjI2zoKLpkAjbL5V/FZAwxV4GUPJK5J72iL3Wkp/UpXBCLmQPlRS+0fB
-   vcKkPmTStl3GGjLqDAqbIgsBbIPoh8qmGENUUtqRzFBJowpcP3+5xpTWs
-   71cgAQ/ueT8TEkZLKIp1UdlyRkYAx/ifR4Rtm0T5LwY7sJFCK3Ef2v7Fj
-   xkZ/ZffpkEW1gAB9p3hWM0f2H02gjEZaD2FXHy70cNOMh+DjUEaVuHTS0
-   Hh+XhEeg/CYywnbTyBRVV2GTcPMOIaRU8+t+xAqBqpXNnvJhusT+3zcRw
-   jCLL/vEtaWBMGHgkvILSrydPOBg267aVzBvSld7dUSHUc6uLKd6IEGG5o
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="246613521"
-X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="246613521"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 16:43:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="652455642"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 28 Mar 2022 16:43:30 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nYz1G-0002Q8-6C; Mon, 28 Mar 2022 23:43:30 +0000
-Date:   Tue, 29 Mar 2022 07:42:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kirill Tkhai <kirill.tkhai@openvz.org>, agk@redhat.com,
-        snitzer@redhat.com, dm-devel@redhat.com, song@kernel.org,
-        linux-kernel@vger.kernel.org, khorenko@virtuozzo.com
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH 3/4] dm-qcow2: Introduce driver to create block devices
- over QCOW2 files
-Message-ID: <202203290708.kbbyhG39-lkp@intel.com>
-References: <164846631540.251310.2398727490395218229.stgit@pro>
+        Mon, 28 Mar 2022 19:46:34 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A68613DFB
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 16:44:52 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 16:44:45 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1648511090;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a/CwHgY1OQH27D1lFMO1ZeHx5K6kGyMSqY6y7nOOFAE=;
+        b=OtAGsM4wI8P38y+LX/EzDOHIeRGVdxEnG4+bxRWWO9b6gmBsR8lvwLOWDDzNYtF8zdvKTy
+        u3Yx4YFiKFwjVddd+CeFXt1b2xVWAh8aY4VWve4ba2U32S82IerLXbUZbdBcq/eTK1kS5k
+        sB61GcIJD7nmGIBQjT4nc1UCF/wrt00=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH-mm v3] mm/list_lru: Optimize
+ memcg_reparent_list_lru_node()
+Message-ID: <YkJIbfqt6x6xTpd7@carbon.dhcp.thefacebook.com>
+References: <20220309144000.1470138-1-longman@redhat.com>
+ <CAMZfGtWS581YW4Y8oNU=E_zPnpK=mMdYVSG1F3U3fJNAzBzc+g@mail.gmail.com>
+ <2263666d-5eef-b1fe-d5e3-b166a3185263@redhat.com>
+ <CAMZfGtVG2YcmxY0fECkAYNb=sKXJQhWJqgtMTEpQwxXEXmSOLw@mail.gmail.com>
+ <e93696b7-b678-6f41-9c1e-46aad447ce8d@redhat.com>
+ <YkIIjGk5t4XorQXe@carbon.dhcp.thefacebook.com>
+ <5aa687c4-2888-7977-8c1a-d51384e685aa@redhat.com>
+ <YkIkvoCgWr8aZeRx@carbon.dhcp.thefacebook.com>
+ <9e184cff-263a-d83a-0fc9-0ac7d453aa2a@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <164846631540.251310.2398727490395218229.stgit@pro>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <9e184cff-263a-d83a-0fc9-0ac7d453aa2a@redhat.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,54 +59,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kirill,
+On Mon, Mar 28, 2022 at 05:20:16PM -0400, Waiman Long wrote:
+> On 3/28/22 17:12, Roman Gushchin wrote:
+> > On Mon, Mar 28, 2022 at 04:46:39PM -0400, Waiman Long wrote:
+> > > On 3/28/22 15:12, Roman Gushchin wrote:
+> > > > On Sun, Mar 27, 2022 at 08:57:15PM -0400, Waiman Long wrote:
+> > > > > On 3/22/22 22:12, Muchun Song wrote:
+> > > > > > On Wed, Mar 23, 2022 at 9:55 AM Waiman Long <longman@redhat.com> wrote:
+> > > > > > > On 3/22/22 21:06, Muchun Song wrote:
+> > > > > > > > On Wed, Mar 9, 2022 at 10:40 PM Waiman Long <longman@redhat.com> wrote:
+> > > > > > > > > Since commit 2c80cd57c743 ("mm/list_lru.c: fix list_lru_count_node()
+> > > > > > > > > to be race free"), we are tracking the total number of lru
+> > > > > > > > > entries in a list_lru_node in its nr_items field.  In the case of
+> > > > > > > > > memcg_reparent_list_lru_node(), there is nothing to be done if nr_items
+> > > > > > > > > is 0.  We don't even need to take the nlru->lock as no new lru entry
+> > > > > > > > > could be added by a racing list_lru_add() to the draining src_idx memcg
+> > > > > > > > > at this point.
+> > > > > > > > Hi Waiman,
+> > > > > > > > 
+> > > > > > > > Sorry for the late reply.  Quick question: what if there is an inflight
+> > > > > > > > list_lru_add()?  How about the following race?
+> > > > > > > > 
+> > > > > > > > CPU0:                               CPU1:
+> > > > > > > > list_lru_add()
+> > > > > > > >         spin_lock(&nlru->lock)
+> > > > > > > >         l = list_lru_from_kmem(memcg)
+> > > > > > > >                                         memcg_reparent_objcgs(memcg)
+> > > > > > > >                                         memcg_reparent_list_lrus(memcg)
+> > > > > > > >                                             memcg_reparent_list_lru()
+> > > > > > > >                                                 memcg_reparent_list_lru_node()
+> > > > > > > >                                                     if (!READ_ONCE(nlru->nr_items))
+> > > > > > > >                                                         // Miss reparenting
+> > > > > > > >                                                         return
+> > > > > > > >         // Assume 0->1
+> > > > > > > >         l->nr_items++
+> > > > > > > >         // Assume 0->1
+> > > > > > > >         nlru->nr_items++
+> > > > > > > > 
+> > > > > > > > IIUC, we use nlru->lock to serialise this scenario.
+> > > > > > > I guess this race is theoretically possible but very unlikely since it
+> > > > > > > means a very long pause between list_lru_from_kmem() and the increment
+> > > > > > > of nr_items.
+> > > > > > It is more possible in a VM.
+> > > > > > 
+> > > > > > > How about the following changes to make sure that this race can't happen?
+> > > > > > > 
+> > > > > > > diff --git a/mm/list_lru.c b/mm/list_lru.c
+> > > > > > > index c669d87001a6..c31a0a8ad4e7 100644
+> > > > > > > --- a/mm/list_lru.c
+> > > > > > > +++ b/mm/list_lru.c
+> > > > > > > @@ -395,9 +395,10 @@ static void memcg_reparent_list_lru_node(struct
+> > > > > > > list_lru *lru, int nid,
+> > > > > > >             struct list_lru_one *src, *dst;
+> > > > > > > 
+> > > > > > >             /*
+> > > > > > > -        * If there is no lru entry in this nlru, we can skip it
+> > > > > > > immediately.
+> > > > > > > +        * If there is no lru entry in this nlru and the nlru->lock is free,
+> > > > > > > +        * we can skip it immediately.
+> > > > > > >              */
+> > > > > > > -       if (!READ_ONCE(nlru->nr_items))
+> > > > > > > +       if (!READ_ONCE(nlru->nr_items) && !spin_is_locked(&nlru->lock))
+> > > > > > I think we also should insert a smp_rmb() between those two loads.
+> > > > > Thinking about this some more, I believe that adding spin_is_locked() check
+> > > > > will be enough for x86. However, that will likely not be enough for arches
+> > > > > with a more relaxed memory semantics. So the safest way to avoid this
+> > > > > possible race is to move the check to within the lock critical section,
+> > > > > though that comes with a slightly higher overhead for the 0 nr_items case. I
+> > > > > will send out a patch to correct that. Thanks for bring this possible race
+> > > > > to my attention.
+> > > > Yes, I think it's not enough:
+> > > > CPU0                                       CPU1
+> > > > READ_ONCE(&nlru->nr_items) -> 0
+> > > >                                              spin_lock(&nlru->lock);
+> > > >                                              nlru->nr_items++;
+> > > >                                              spin_unlock(&nlru->lock);
+> > > > && !spin_is_locked(&nlru->lock) -> 0
+> > > I have actually thought of that. I am even thinking about reading nr_items
+> > > again after spin_is_locked(). Still for arches with relaxed memory
+> > > semantics, when will a memory write by one cpu be propagated to another cpu
+> > > can be highly variable. It is very hard to prove that it is completely safe.
+> > > 
+> > > x86 has a more strict memory semantics and it is the only architecture that
+> > > I have enough confidence that doing the check without taking a lock can be
+> > > safe. Perhaps we could use this optimization just for x86 and do it inside
+> > > locks for the rests.
+> > Hm, is this such a big problem in the real life? Can you describe the setup?
+> > I'm somewhat resistant to an idea of having arch-specific optimizations here
+> > without a HUGE reason.
+> 
+> I am just throwing this idea out for discussion. It does not mean that I
+> want to do an arch specific patch unless there is performance data to
+> indicate a substantial gain in performance in some use cases.
 
-Thank you for the patch! Yet something to improve:
+Got it!
+I mean it's not obvious from the original commit message if it's just a nice
+optimization or there was a real life problem. In the first case the best thing
+is probably to leave everything as it is now, in the latter we need to do
+something. I'm trying to understand which case it is.
 
-[auto build test ERROR on device-mapper-dm/for-next]
-[also build test ERROR on song-md/md-next linus/master v5.17 next-20220328]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kirill-Tkhai/dm-Introduce-dm-qcow2-driver-to-attach-QCOW2-files-as-block-device/20220328-192031
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220329/202203290708.kbbyhG39-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c41a15c11909af3588885a88f6622c36dcc9ca35
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kirill-Tkhai/dm-Introduce-dm-qcow2-driver-to-attach-QCOW2-files-as-block-device/20220328-192031
-        git checkout c41a15c11909af3588885a88f6622c36dcc9ca35
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   m68k-linux-ld: drivers/md/dm-qcow2-target.o: in function `calc_cached_parameters':
-   dm-qcow2-target.c:(.text+0x10ee): undefined reference to `__divdi3'
-   m68k-linux-ld: drivers/md/dm-qcow2-map.o: in function `qio_subclu_indexes':
-   dm-qcow2-map.c:(.text+0x15e): undefined reference to `__udivdi3'
-   m68k-linux-ld: drivers/md/dm-qcow2-map.o: in function `calc_refcounters_map':
-   dm-qcow2-map.c:(.text+0x2be): undefined reference to `__divdi3'
->> m68k-linux-ld: dm-qcow2-map.c:(.text+0x2e8): undefined reference to `__moddi3'
-   m68k-linux-ld: drivers/md/dm-qcow2-map.o: in function `process_embedded_qios':
-   dm-qcow2-map.c:(.text+0x38fa): undefined reference to `__divdi3'
-   m68k-linux-ld: drivers/md/dm-qcow2-map.o: in function `parse_metadata':
-   dm-qcow2-map.c:(.text+0x4d7a): undefined reference to `__divdi3'
->> m68k-linux-ld: dm-qcow2-map.c:(.text+0x4d98): undefined reference to `__divdi3'
-   m68k-linux-ld: dm-qcow2-map.c:(.text+0x4e00): undefined reference to `__moddi3'
-   m68k-linux-ld: dm-qcow2-map.c:(.text+0x4e26): undefined reference to `__divdi3'
-   m68k-linux-ld: drivers/md/dm-qcow2-map.o: in function `relocate_refcount_table':
-   dm-qcow2-map.c:(.text+0x52ce): undefined reference to `__udivdi3'
-   `.exit.text' referenced in section `.data' of sound/soc/codecs/tlv320adc3xxx.o: defined in discarded section `.exit.text' of sound/soc/codecs/tlv320adc3xxx.o
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks!

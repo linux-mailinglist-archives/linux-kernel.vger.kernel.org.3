@@ -2,49 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E84744E99AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 195884E99CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240590AbiC1Of1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 10:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
+        id S243902AbiC1OhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 10:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231985AbiC1OfZ (ORCPT
+        with ESMTP id S236346AbiC1OhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 10:35:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92118473B5;
-        Mon, 28 Mar 2022 07:33:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE70AD6E;
-        Mon, 28 Mar 2022 07:33:42 -0700 (PDT)
-Received: from [10.1.196.218] (eglon.cambridge.arm.com [10.1.196.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E621D3F73B;
-        Mon, 28 Mar 2022 07:33:40 -0700 (PDT)
-Subject: Re: [PATCH 4.9 00/14] 4.9.309-rc1 review
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220325150415.694544076@linuxfoundation.org>
- <15268a27-5386-45d8-5c55-1095251331f7@gmail.com>
- <bc8caeac-ea75-f91a-5bb0-9195eb263914@gmail.com>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <1e508bfb-d275-9a3f-16bd-915d464f006b@arm.com>
-Date:   Mon, 28 Mar 2022 15:33:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
-MIME-Version: 1.0
-In-Reply-To: <bc8caeac-ea75-f91a-5bb0-9195eb263914@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 28 Mar 2022 10:37:21 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6044CD67;
+        Mon, 28 Mar 2022 07:35:40 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id k124-20020a1ca182000000b0038c9cf6e2a6so8708780wme.0;
+        Mon, 28 Mar 2022 07:35:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=328x0xP62Tm4C/j9QOIhfOPeltnC1X+TTrn/OvLPN1E=;
+        b=JESc/sCCocgPCuvsg016sk3FLd0aPbxUs2B3M5qmjNX53/rTJygDQRUxFtGjNzA+Ih
+         FFvcTzCG6FhKJj1uNJOneHbSAvgy3HQgfGPtaPFK9hTzqElfj0Dq0KSOrmyNeU+33aIS
+         ibE6khgJuo7D5n1xK+/3HrflU049OrYuOHxyZdWTmt9PMHG4S9gTGIsv2zh7pXfUySrv
+         sKnld/Rva8r2NI5KrQOTs8Kj/t9I5/7guiG/R7tp9mSTp6N+VH/i9eUQC9/gEjn5Ykdh
+         rS8eD7ZaI/BshPmak18wZLkVZ+zcKN9OmEJXrGs+dhOgIhLaYMrLbgfE01YoqO2K4mEa
+         0HyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=328x0xP62Tm4C/j9QOIhfOPeltnC1X+TTrn/OvLPN1E=;
+        b=WqbbUGNajDoUHzRVgKCl50PFrEnOOCgs7wwKzEV2uz98Yj7QE7Zwdw8RQJQ2EpJqeV
+         jLNK/Y+xuNwWADXrmCKOCL7+Ib7aviRtzmv9aH9JiFMmEwLTTGJbjqqdOcnS9XPJCLY9
+         FPr+/URAHN4bTQ3vgQG/ZUdBB+8pDY1WcuMfTVo42PVh2U2LzzhF4u/WEUKNyJq+qxLR
+         DSsqQSF7GwLTTx7xtTDpfO3h579CVQ+aVHJdcJhO7koDNEVRbIM8QnQqExBsQsOhdG7r
+         gsjL9N3uLmgNm0EMNj1bPevohSKQoRh9Empz4zxvywvOUaow5FkOSFuKzxt/yRCQRte7
+         avgg==
+X-Gm-Message-State: AOAM533mCisk96RGdpKZgwe/c7EcOK1B0mD5O7XZA5/Ev40s/NtSW9Os
+        uIaih+eO1UYY+2MX6GaSSm21vN3JbS0I8A==
+X-Google-Smtp-Source: ABdhPJzMUJWsEZAlM1V/ydplBTxkvZDhiLPBjSw8ljpLv5176bAmYtFOOZJKT32vucPANPe55H/8rQ==
+X-Received: by 2002:a05:600c:1c82:b0:38c:a750:56e7 with SMTP id k2-20020a05600c1c8200b0038ca75056e7mr26805950wms.188.1648478138821;
+        Mon, 28 Mar 2022 07:35:38 -0700 (PDT)
+Received: from Dev-shlomop.pliops.ent (bzq-219-32-62.isdn.bezeqint.net. [62.219.32.62])
+        by smtp.googlemail.com with ESMTPSA id c12-20020a05600c0a4c00b00381141f4967sm14269090wmq.35.2022.03.28.07.35.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 07:35:37 -0700 (PDT)
+From:   Shlomo Pongratz <shlomopongratz@gmail.com>
+X-Google-Original-From: Shlomo Pongratz <shlomop@pliops.com>
+To:     jgg@nvidia.com, linux-pci@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, andrew.maier@eideticom.com,
+        logang@deltatee.com, bhelgaas@google.com
+Subject: Re: [PATCH V2 1/1] Intel Sky Lake-E host root ports check.
+Date:   Mon, 28 Mar 2022 17:35:36 +0300
+Message-Id: <20220328143536.20761-1-shlomop@pliops.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220328113728.GA1693573@nvidia.com>
+References: <20220328113728.GA1693573@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,46 +68,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
+Hi Jason,
 
-On 26/03/2022 00:00, Florian Fainelli wrote:
-> On 3/25/22 14:31, Florian Fainelli wrote:
->> On 3/25/22 08:04, Greg Kroah-Hartman wrote:
->>> This is the start of the stable review cycle for the 4.9.309 release.
->>> There are 14 patches in this series, all will be posted as a response
->>> to this one.  If anyone has any issues with these being applied, please
->>> let me know.
->>>
->>> Responses should be made by Sun, 27 Mar 2022 15:04:08 +0000.
->>> Anything received after that time might be too late.
->>>
->>> The whole patch series can be found in one patch at:
->>>     https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.309-rc1.gz
->>> or in the git tree and branch at:
->>>     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
->>> and the diffstat can be found below.
->>>
->>> thanks,
->>>
->>> greg k-h
->>
->> On ARCH_BRCMSTB, using 32-bit and 64-bit ARM kernels:
->>
->> Tested-by: Florian Fainelli <f.fainelli@gmail.com>
->>
->> PS: is there any reason why the Spectre BHB patches from here are not part of
->> linux-stable/linux-4.9.y?
-> 
-> Meant to provide this link, from here:
-> 
-> https://gitlab.arm.com/linux-arm/linux-jm/-/tree/bhb/v3/v4.9.302
+Thank you for your comments I'll fix the spelling mistakes.
 
-These were from before the disclosure date. Since then the 'backport everything' approach
-was investigated more, but we decided not to go that way.
-These trees need the bugs we subsequently discovered fixing, retesting and reposting. I
-was on holiday last week. I plan to get to it this week.
+You suggested to remove the port field and to ignore the slot number for root ports,
+and I understand the reasoning, but, from safety reasons, if we know that device 2030
+will always be found on slot 0 and 2032 for example will always be found on slot 2
+wouldn't it be prudent to compare the device number vs the port number,
+unless you believe that the BIOS/ACPI issue will be fixed.
 
-
-Thanks,
-
-James
+Shlomo.

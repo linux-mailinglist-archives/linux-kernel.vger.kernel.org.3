@@ -2,64 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928B14E9274
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8808F4E9278
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240210AbiC1K0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 06:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53578 "EHLO
+        id S240224AbiC1K1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 06:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234831AbiC1K0S (ORCPT
+        with ESMTP id S234664AbiC1K1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 06:26:18 -0400
+        Mon, 28 Mar 2022 06:27:32 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407F833E85;
-        Mon, 28 Mar 2022 03:24:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A940F369D9;
+        Mon, 28 Mar 2022 03:25:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=cowTe1SqlS2BOdGmzt26WP+/bS7/jiiuXA3bfaFKWco=; b=ike4utfUXfV67i9TA6zdOS8mNs
-        frOWZK9ja5kR0DpwP2JZsKKcNlTXAUWQgTNZ1PxZmZfw0P/YO4O/xLGx4RTU8nsHY++w4ymxFWYD3
-        GjLUJ0y8HErEb9MprHuxSla+Xq+Eb/H7h6PQlsvB1uCdbY73ven3GlV0Voax5vXsvDW0ruCm8WeG0
-        N2LAVDx0zAeehFxBZZ9fniVMQhP1aAkQEjDvKV3usfXWZvIb5zDb8u4euUSKx9RKjnVrbvsyuyfh4
-        6u67ITXkcXlrq/vYwqH/VfRTyejXlP9ltIRIapq5WAxHu76zGm8dr4gqalhJy5Fh9LrVF4zSpbBJh
-        c7ulFH3w==;
+        bh=Lf3j/iRG/esIjnJN7hgl0CTJgV2rHtUJ5goRSH2ROBM=; b=AG7brs63P76eLr0qRcQFEuUfjA
+        pl6byXYPpSfILFFBPlkavssv233PFl/ZsZYr20eM+lLGhrMJcm2U+7gA83FEdvdKEDjJkUFo8QLNJ
+        TMwheso7I7nOp0NuEVI903hjeirUjAC8MwGIO1e6YxhmpydAQVxBDSSApS2cGc+XCS1TPXwRaZ2Hy
+        xepAGGRqg/MqqCfTL4MbuLpmRFnFw99IAOaewkzh4G4gjSnyMknHQ0F9vocWaH2jie0g9oHulGCo8
+        eRGn5udwwaQBmi2xDbMzHZcVNgVxqlwFy6zny02qiBO471Gl7GBolBEzT1BXC8BLsHXrL6+d1iBx3
+        u8M3/xvw==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nYmXI-00GoqY-SQ; Mon, 28 Mar 2022 10:23:45 +0000
+        id 1nYmZ4-00GouA-VZ; Mon, 28 Mar 2022 10:25:35 +0000
 Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3D6BC9861F5; Mon, 28 Mar 2022 12:23:42 +0200 (CEST)
-Date:   Mon, 28 Mar 2022 12:23:42 +0200
+        id 7FAAC9861F5; Mon, 28 Mar 2022 12:25:34 +0200 (CEST)
+Date:   Mon, 28 Mar 2022 12:25:34 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, x86@kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH] livepatch: Remove klp_arch_set_pc() and asm/livepatch.h
-Message-ID: <20220328102342.GW8939@worktop.programming.kicks-ass.net>
-References: <e029c7cfde436f6bbf99148ab14dc2da99add503.1648447981.git.christophe.leroy@csgroup.eu>
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf/x86: Unify format of events sysfs show
+Message-ID: <20220328102534.GX8939@worktop.programming.kicks-ass.net>
+References: <20220324031957.135595-1-yangjihong1@huawei.com>
+ <20220324101107.GC8939@worktop.programming.kicks-ass.net>
+ <a4a0758f-b183-8244-d59c-10d31d8e0a3a@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e029c7cfde436f6bbf99148ab14dc2da99add503.1648447981.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <a4a0758f-b183-8244-d59c-10d31d8e0a3a@huawei.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -70,37 +57,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 08:26:48AM +0200, Christophe Leroy wrote:
-> All three versions of klp_arch_set_pc() do exactly the same: they
-> call ftrace_instruction_pointer_set().
+On Fri, Mar 25, 2022 at 09:38:47AM +0800, Yang Jihong wrote:
+> Hi Peter,
 > 
-> Call ftrace_instruction_pointer_set() directly and remove
-> klp_arch_set_pc().
-> 
-> As klp_arch_set_pc() was the only thing remaining in asm/livepatch.h
-> on x86 and s390, remove asm/livepatch.h
-> 
-> livepatch.h remains on powerpc but its content is exclusively used
-> by powerpc specific code.
+> On 2022/3/24 18:11, Peter Zijlstra wrote:
+> > On Thu, Mar 24, 2022 at 11:19:57AM +0800, Yang Jihong wrote:
+> > > Sysfs show formats of files in /sys/devices/cpu/events/ are not unified,
+> > > some end with "\n", and some do not. Modify sysfs show format of events
+> > > defined by EVENT_ATTR_STR to end with "\n".
+> > 
+> > Did you test all the userspace that consumes these fields to make sure
+> > none of them break? I suppose it's mostly perf tool, but I'm fairly sure
+> > there's others out there as well.
+> > 
+> Yes, I tested "perf record" and "perf stat" commands on my machine against
+> the modified events, and the results are as follows:
 
-The only remaining thing seems to be a klp_init_thread_info() for ppc64,
-but yeah..
-
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-
-> diff --git a/kernel/livepatch/patch.c b/kernel/livepatch/patch.c
-> index c172bf92b576..4c4f5a776d80 100644
-> --- a/kernel/livepatch/patch.c
-> +++ b/kernel/livepatch/patch.c
-> @@ -118,7 +118,7 @@ static void notrace klp_ftrace_handler(unsigned long ip,
->  	if (func->nop)
->  		goto unlock;
->  
-> -	klp_arch_set_pc(fregs, (unsigned long)func->new_func);
-> +	ftrace_instruction_pointer_set(fregs, (unsigned long)func->new_func);
->  
->  unlock:
->  	ftrace_test_recursion_unlock(bit);
-
-So ptrace has instruction_pointer_set(), I'm not sure why we have yet
-another variant in the ftrace_ namespace. Perhaps also delete that?
+Fair enough, I'll queue it for after -rc1.

@@ -2,540 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 258494E8E99
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 09:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D80624E8E96
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 09:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238696AbiC1HFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 03:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
+        id S238680AbiC1HFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 03:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238672AbiC1HFM (ORCPT
+        with ESMTP id S238666AbiC1HFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 03:05:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EE810FDF;
-        Mon, 28 Mar 2022 00:03:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61B4CB80EAE;
-        Mon, 28 Mar 2022 07:03:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A676CC004DD;
-        Mon, 28 Mar 2022 07:03:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648451009;
-        bh=eYXp4CZzOLnB7UbYr+YBJiZncjYTIW0c7gw28Eg4vSU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b0UudTB9YH0PNKPD82KUIQOpRK1+hggnEw+r5dYN5Qe5uy9NsbTN2HCylBtm71/q7
-         NLAWsdiqSdBa9XXCx1YsjZJymqYQPDCHZJMIY+wYfzvYSkaAK7+j7oVcrmrVKbbtXL
-         kWOezTm0JwfO8nGZSAgg1B0JDTTXv8qdO1nsg9z4=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org
-Cc:     lwn@lwn.net, jslaby@suse.cz,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: Linux 4.9.309
-Date:   Mon, 28 Mar 2022 09:03:20 +0200
-Message-Id: <16484509993174@kroah.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <16484509993211@kroah.com>
-References: <16484509993211@kroah.com>
+        Mon, 28 Mar 2022 03:05:08 -0400
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B388E2AF5;
+        Mon, 28 Mar 2022 00:03:26 -0700 (PDT)
+Received: by mail-wr1-f51.google.com with SMTP id u16so18943883wru.4;
+        Mon, 28 Mar 2022 00:03:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pkiElRGcYMgqGO+15AWzkYL63nI4vFLbBIBuyFUuyGM=;
+        b=AVvIeps8xZRD98ICS5dQ7gA256C+XkC06zWEgJqsY41wW6INddOJpq3kVWjWw56csG
+         cbQaELz4Vhvoys7lnP2NjJjZS/8zAabldA/MdO/FV3ufpDDuLG+EqP6GgGpneRtJb3WW
+         xazyNf6xSebAiH0NXI0tiLxmiWDT3a7mutOVwtS8zuKwrdCFcTOAA0T3rJhIkyX0+wLs
+         S30USnF1CQXVz8Q5rISgV0fCmrcrmszIvAyfVYkuTA0P+EEqZ8MTIbYYeWUMDV1s2g4R
+         VkAkEtMjpOuOsPrCnUc/5phm6XQwb1VDuMiQ4zkTwUQukdHuN2fvAJspA4FCJs9zLwF+
+         ufAw==
+X-Gm-Message-State: AOAM531V23x/qSIfyNBW07djIvnHGagV+sSrw5z+GwQwNLe8YIdnNGRY
+        iQgIyEO2QptipIdWuCcHSAw=
+X-Google-Smtp-Source: ABdhPJwy/cOClG5uWIA9JX2AxfXLLjzon9aoQtRw5DDcKvCEtvAdLnaCcFAucyDOibo1MjviWfbGPg==
+X-Received: by 2002:a5d:64e7:0:b0:205:8b74:8db7 with SMTP id g7-20020a5d64e7000000b002058b748db7mr21770989wri.34.1648451005144;
+        Mon, 28 Mar 2022 00:03:25 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id w5-20020a5d5445000000b00203f8c96bcesm11097375wrv.49.2022.03.28.00.03.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 00:03:24 -0700 (PDT)
+Message-ID: <95cb1ea9-a737-7d01-f81f-f94ea92c7a4d@kernel.org>
+Date:   Mon, 28 Mar 2022 09:03:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH v2 2/6] ASoC: dt-bindings: Add audio-graph-port
+ bindings to rt5659
+Content-Language: en-US
+To:     Sameer Pujar <spujar@nvidia.com>, broonie@kernel.org,
+        lgirdwood@gmail.com, robh+dt@kernel.org, krzk+dt@kernel.org,
+        perex@perex.cz, tiwai@suse.com, peter.ujfalusi@linux.intel.com,
+        pierre-louis.bossart@linux.intel.com
+Cc:     oder_chiou@realtek.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <1648448050-15237-1-git-send-email-spujar@nvidia.com>
+ <1648448050-15237-3-git-send-email-spujar@nvidia.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <1648448050-15237-3-git-send-email-spujar@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-diff --git a/Makefile b/Makefile
-index ecf06e17c3c8..c1d4ddadbcb5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1,6 +1,6 @@
- VERSION = 4
- PATCHLEVEL = 9
--SUBLEVEL = 308
-+SUBLEVEL = 309
- EXTRAVERSION =
- NAME = Roaring Lionus
- 
-diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-index c3fba8b52753..28e241e63567 100644
---- a/arch/x86/kernel/acpi/boot.c
-+++ b/arch/x86/kernel/acpi/boot.c
-@@ -1324,6 +1324,17 @@ static int __init disable_acpi_pci(const struct dmi_system_id *d)
- 	return 0;
- }
- 
-+static int __init disable_acpi_xsdt(const struct dmi_system_id *d)
-+{
-+	if (!acpi_force) {
-+		pr_notice("%s detected: force use of acpi=rsdt\n", d->ident);
-+		acpi_gbl_do_not_use_xsdt = TRUE;
-+	} else {
-+		pr_notice("Warning: DMI blacklist says broken, but acpi XSDT forced\n");
-+	}
-+	return 0;
-+}
-+
- static int __init dmi_disable_acpi(const struct dmi_system_id *d)
- {
- 	if (!acpi_force) {
-@@ -1444,6 +1455,19 @@ static struct dmi_system_id __initdata acpi_dmi_table[] = {
- 		     DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 360"),
- 		     },
- 	 },
-+	/*
-+	 * Boxes that need ACPI XSDT use disabled due to corrupted tables
-+	 */
-+	{
-+	 .callback = disable_acpi_xsdt,
-+	 .ident = "Advantech DAC-BJ01",
-+	 .matches = {
-+		     DMI_MATCH(DMI_SYS_VENDOR, "NEC"),
-+		     DMI_MATCH(DMI_PRODUCT_NAME, "Bearlake CRB Board"),
-+		     DMI_MATCH(DMI_BIOS_VERSION, "V1.12"),
-+		     DMI_MATCH(DMI_BIOS_DATE, "02/01/2011"),
-+		     },
-+	 },
- 	{}
- };
- 
-diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
-index 69c6f02f16b5..ee300bbe8831 100644
---- a/drivers/acpi/battery.c
-+++ b/drivers/acpi/battery.c
-@@ -88,6 +88,10 @@ enum acpi_battery_files {
- 
- static const struct acpi_device_id battery_device_ids[] = {
- 	{"PNP0C0A", 0},
-+
-+	/* Microsoft Surface Go 3 */
-+	{"MSHW0146", 0},
-+
- 	{"", 0},
- };
- 
-@@ -1153,6 +1157,14 @@ static const struct dmi_system_id bat_dmi_table[] __initconst = {
- 			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire V5-573G"),
- 		},
- 	},
-+	{
-+		/* Microsoft Surface Go 3 */
-+		.callback = battery_notification_delay_quirk,
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Surface Go 3"),
-+		},
-+	},
- 	{},
- };
- 
-diff --git a/drivers/acpi/video_detect.c b/drivers/acpi/video_detect.c
-index ec2f77a47150..2837b2f98213 100644
---- a/drivers/acpi/video_detect.c
-+++ b/drivers/acpi/video_detect.c
-@@ -135,6 +135,81 @@ static const struct dmi_system_id video_detect_dmi_table[] = {
- 		DMI_MATCH(DMI_PRODUCT_NAME, "UL30A"),
- 		},
- 	},
-+	/*
-+	 * Clevo NL5xRU and NL5xNU/TUXEDO Aura 15 Gen1 and Gen2 have both a
-+	 * working native and video interface. However the default detection
-+	 * mechanism first registers the video interface before unregistering
-+	 * it again and switching to the native interface during boot. This
-+	 * results in a dangling SBIOS request for backlight change for some
-+	 * reason, causing the backlight to switch to ~2% once per boot on the
-+	 * first power cord connect or disconnect event. Setting the native
-+	 * interface explicitly circumvents this buggy behaviour, by avoiding
-+	 * the unregistering process.
-+	 */
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "AURA1501"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xRU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "EDUBOOK1502"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xNU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xNU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "Clevo NL5xNU",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
-+		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
-+		},
-+	},
- 
- 	/*
- 	 * These models have a working acpi_video backlight control, and using
-diff --git a/drivers/crypto/qat/qat_common/qat_crypto.c b/drivers/crypto/qat/qat_common/qat_crypto.c
-index 3852d31ce0a4..37a9f969c59c 100644
---- a/drivers/crypto/qat/qat_common/qat_crypto.c
-+++ b/drivers/crypto/qat/qat_common/qat_crypto.c
-@@ -170,6 +170,14 @@ int qat_crypto_dev_config(struct adf_accel_dev *accel_dev)
- 		goto err;
- 	if (adf_cfg_section_add(accel_dev, "Accelerator0"))
- 		goto err;
-+
-+	/* Temporarily set the number of crypto instances to zero to avoid
-+	 * registering the crypto algorithms.
-+	 * This will be removed when the algorithms will support the
-+	 * CRYPTO_TFM_REQ_MAY_BACKLOG flag
-+	 */
-+	instances = 0;
-+
- 	for (i = 0; i < instances; i++) {
- 		val = i;
- 		snprintf(key, sizeof(key), ADF_CY "%d" ADF_RING_BANK_NUM, i);
-diff --git a/drivers/nfc/st21nfca/se.c b/drivers/nfc/st21nfca/se.c
-index eac608a457f0..475f8a67856d 100644
---- a/drivers/nfc/st21nfca/se.c
-+++ b/drivers/nfc/st21nfca/se.c
-@@ -330,6 +330,11 @@ int st21nfca_connectivity_event_received(struct nfc_hci_dev *hdev, u8 host,
- 			return -ENOMEM;
- 
- 		transaction->aid_len = skb->data[1];
-+
-+		/* Checking if the length of the AID is valid */
-+		if (transaction->aid_len > sizeof(transaction->aid))
-+			return -EINVAL;
-+
- 		memcpy(transaction->aid, &skb->data[2],
- 		       transaction->aid_len);
- 
-@@ -339,6 +344,11 @@ int st21nfca_connectivity_event_received(struct nfc_hci_dev *hdev, u8 host,
- 			return -EPROTO;
- 
- 		transaction->params_len = skb->data[transaction->aid_len + 3];
-+
-+		/* Total size is allocated (skb->len - 2) minus fixed array members */
-+		if (transaction->params_len > ((skb->len - 2) - sizeof(struct nfc_evt_transaction)))
-+			return -EINVAL;
-+
- 		memcpy(transaction->params, skb->data +
- 		       transaction->aid_len + 4, transaction->params_len);
- 
-diff --git a/drivers/staging/fbtft/fb_st7789v.c b/drivers/staging/fbtft/fb_st7789v.c
-index 085e9872c46d..93bfde68f545 100644
---- a/drivers/staging/fbtft/fb_st7789v.c
-+++ b/drivers/staging/fbtft/fb_st7789v.c
-@@ -85,6 +85,8 @@ enum st7789v_command {
-  */
- static int init_display(struct fbtft_par *par)
- {
-+	par->fbtftops.reset(par);
-+
- 	/* turn off sleep mode */
- 	write_reg(par, MIPI_DCS_EXIT_SLEEP_MODE);
- 	mdelay(120);
-diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-index 55be18cae35b..775901abe678 100644
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -1329,8 +1329,8 @@ static int __ip6_append_data(struct sock *sk,
- 		      sizeof(struct frag_hdr) : 0) +
- 		     rt->rt6i_nfheader_len;
- 
--	if (mtu < fragheaderlen ||
--	    ((mtu - fragheaderlen) & ~7) + fragheaderlen < sizeof(struct frag_hdr))
-+	if (mtu <= fragheaderlen ||
-+	    ((mtu - fragheaderlen) & ~7) + fragheaderlen <= sizeof(struct frag_hdr))
- 		goto emsgsize;
- 
- 	maxfraglen = ((mtu - fragheaderlen) & ~7) + fragheaderlen -
-diff --git a/net/llc/af_llc.c b/net/llc/af_llc.c
-index a8866455e8b2..b6dbec793ebb 100644
---- a/net/llc/af_llc.c
-+++ b/net/llc/af_llc.c
-@@ -274,6 +274,7 @@ static int llc_ui_autobind(struct socket *sock, struct sockaddr_llc *addr)
- {
- 	struct sock *sk = sock->sk;
- 	struct llc_sock *llc = llc_sk(sk);
-+	struct net_device *dev = NULL;
- 	struct llc_sap *sap;
- 	int rc = -EINVAL;
- 
-@@ -285,14 +286,14 @@ static int llc_ui_autobind(struct socket *sock, struct sockaddr_llc *addr)
- 		goto out;
- 	rc = -ENODEV;
- 	if (sk->sk_bound_dev_if) {
--		llc->dev = dev_get_by_index(&init_net, sk->sk_bound_dev_if);
--		if (llc->dev && addr->sllc_arphrd != llc->dev->type) {
--			dev_put(llc->dev);
--			llc->dev = NULL;
-+		dev = dev_get_by_index(&init_net, sk->sk_bound_dev_if);
-+		if (dev && addr->sllc_arphrd != dev->type) {
-+			dev_put(dev);
-+			dev = NULL;
- 		}
- 	} else
--		llc->dev = dev_getfirstbyhwtype(&init_net, addr->sllc_arphrd);
--	if (!llc->dev)
-+		dev = dev_getfirstbyhwtype(&init_net, addr->sllc_arphrd);
-+	if (!dev)
- 		goto out;
- 	rc = -EUSERS;
- 	llc->laddr.lsap = llc_ui_autoport();
-@@ -302,6 +303,11 @@ static int llc_ui_autobind(struct socket *sock, struct sockaddr_llc *addr)
- 	sap = llc_sap_open(llc->laddr.lsap, NULL);
- 	if (!sap)
- 		goto out;
-+
-+	/* Note: We do not expect errors from this point. */
-+	llc->dev = dev;
-+	dev = NULL;
-+
- 	memcpy(llc->laddr.mac, llc->dev->dev_addr, IFHWADDRLEN);
- 	memcpy(&llc->addr, addr, sizeof(llc->addr));
- 	/* assign new connection to its SAP */
-@@ -309,6 +315,7 @@ static int llc_ui_autobind(struct socket *sock, struct sockaddr_llc *addr)
- 	sock_reset_flag(sk, SOCK_ZAPPED);
- 	rc = 0;
- out:
-+	dev_put(dev);
- 	return rc;
- }
- 
-@@ -331,6 +338,7 @@ static int llc_ui_bind(struct socket *sock, struct sockaddr *uaddr, int addrlen)
- 	struct sockaddr_llc *addr = (struct sockaddr_llc *)uaddr;
- 	struct sock *sk = sock->sk;
- 	struct llc_sock *llc = llc_sk(sk);
-+	struct net_device *dev = NULL;
- 	struct llc_sap *sap;
- 	int rc = -EINVAL;
- 
-@@ -347,25 +355,26 @@ static int llc_ui_bind(struct socket *sock, struct sockaddr *uaddr, int addrlen)
- 	rc = -ENODEV;
- 	rcu_read_lock();
- 	if (sk->sk_bound_dev_if) {
--		llc->dev = dev_get_by_index_rcu(&init_net, sk->sk_bound_dev_if);
--		if (llc->dev) {
-+		dev = dev_get_by_index_rcu(&init_net, sk->sk_bound_dev_if);
-+		if (dev) {
- 			if (is_zero_ether_addr(addr->sllc_mac))
--				memcpy(addr->sllc_mac, llc->dev->dev_addr,
-+				memcpy(addr->sllc_mac, dev->dev_addr,
- 				       IFHWADDRLEN);
--			if (addr->sllc_arphrd != llc->dev->type ||
-+			if (addr->sllc_arphrd != dev->type ||
- 			    !ether_addr_equal(addr->sllc_mac,
--					      llc->dev->dev_addr)) {
-+					      dev->dev_addr)) {
- 				rc = -EINVAL;
--				llc->dev = NULL;
-+				dev = NULL;
- 			}
- 		}
--	} else
--		llc->dev = dev_getbyhwaddr_rcu(&init_net, addr->sllc_arphrd,
-+	} else {
-+		dev = dev_getbyhwaddr_rcu(&init_net, addr->sllc_arphrd,
- 					   addr->sllc_mac);
--	if (llc->dev)
--		dev_hold(llc->dev);
-+	}
-+	if (dev)
-+		dev_hold(dev);
- 	rcu_read_unlock();
--	if (!llc->dev)
-+	if (!dev)
- 		goto out;
- 	if (!addr->sllc_sap) {
- 		rc = -EUSERS;
-@@ -398,6 +407,11 @@ static int llc_ui_bind(struct socket *sock, struct sockaddr *uaddr, int addrlen)
- 			goto out_put;
- 		}
- 	}
-+
-+	/* Note: We do not expect errors from this point. */
-+	llc->dev = dev;
-+	dev = NULL;
-+
- 	llc->laddr.lsap = addr->sllc_sap;
- 	memcpy(llc->laddr.mac, addr->sllc_mac, IFHWADDRLEN);
- 	memcpy(&llc->addr, addr, sizeof(llc->addr));
-@@ -408,6 +422,7 @@ static int llc_ui_bind(struct socket *sock, struct sockaddr *uaddr, int addrlen)
- out_put:
- 	llc_sap_put(sap);
- out:
-+	dev_put(dev);
- 	release_sock(sk);
- 	return rc;
- }
-diff --git a/net/mac80211/cfg.c b/net/mac80211/cfg.c
-index f37fbc71fc1d..091ac3a7b186 100644
---- a/net/mac80211/cfg.c
-+++ b/net/mac80211/cfg.c
-@@ -1776,13 +1776,11 @@ static int copy_mesh_setup(struct ieee80211_if_mesh *ifmsh,
- 		const struct mesh_setup *setup)
- {
- 	u8 *new_ie;
--	const u8 *old_ie;
- 	struct ieee80211_sub_if_data *sdata = container_of(ifmsh,
- 					struct ieee80211_sub_if_data, u.mesh);
- 
- 	/* allocate information elements */
- 	new_ie = NULL;
--	old_ie = ifmsh->ie;
- 
- 	if (setup->ie_len) {
- 		new_ie = kmemdup(setup->ie, setup->ie_len,
-@@ -1792,7 +1790,6 @@ static int copy_mesh_setup(struct ieee80211_if_mesh *ifmsh,
- 	}
- 	ifmsh->ie_len = setup->ie_len;
- 	ifmsh->ie = new_ie;
--	kfree(old_ie);
- 
- 	/* now copy the rest of the setup parameters */
- 	ifmsh->mesh_id_len = setup->mesh_id_len;
-diff --git a/net/netfilter/nf_tables_core.c b/net/netfilter/nf_tables_core.c
-index 9d593ecd8e87..fb14082151ce 100644
---- a/net/netfilter/nf_tables_core.c
-+++ b/net/netfilter/nf_tables_core.c
-@@ -127,7 +127,7 @@ nft_do_chain(struct nft_pktinfo *pkt, void *priv)
- 	const struct net *net = pkt->net;
- 	const struct nft_rule *rule;
- 	const struct nft_expr *expr, *last;
--	struct nft_regs regs;
-+	struct nft_regs regs = {};
- 	unsigned int stackptr = 0;
- 	struct nft_jumpstack jumpstack[NFT_JUMP_STACK_SIZE];
- 	struct nft_stats *stats;
-diff --git a/sound/core/pcm_native.c b/sound/core/pcm_native.c
-index 5c07c5be3142..a70026f42a31 100644
---- a/sound/core/pcm_native.c
-+++ b/sound/core/pcm_native.c
-@@ -1489,21 +1489,25 @@ static int snd_pcm_do_reset(struct snd_pcm_substream *substream, int state)
- 	int err = substream->ops->ioctl(substream, SNDRV_PCM_IOCTL1_RESET, NULL);
- 	if (err < 0)
- 		return err;
-+	snd_pcm_stream_lock_irq(substream);
- 	runtime->hw_ptr_base = 0;
- 	runtime->hw_ptr_interrupt = runtime->status->hw_ptr -
- 		runtime->status->hw_ptr % runtime->period_size;
- 	runtime->silence_start = runtime->status->hw_ptr;
- 	runtime->silence_filled = 0;
-+	snd_pcm_stream_unlock_irq(substream);
- 	return 0;
- }
- 
- static void snd_pcm_post_reset(struct snd_pcm_substream *substream, int state)
- {
- 	struct snd_pcm_runtime *runtime = substream->runtime;
-+	snd_pcm_stream_lock_irq(substream);
- 	runtime->control->appl_ptr = runtime->status->hw_ptr;
- 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK &&
- 	    runtime->silence_size > 0)
- 		snd_pcm_playback_silence(substream, ULONG_MAX);
-+	snd_pcm_stream_unlock_irq(substream);
- }
- 
- static const struct action_ops snd_pcm_action_reset = {
-diff --git a/sound/pci/ac97/ac97_codec.c b/sound/pci/ac97/ac97_codec.c
-index c4840fda44b4..a7f1e4ef3f88 100644
---- a/sound/pci/ac97/ac97_codec.c
-+++ b/sound/pci/ac97/ac97_codec.c
-@@ -958,8 +958,8 @@ static int snd_ac97_ad18xx_pcm_get_volume(struct snd_kcontrol *kcontrol, struct
- 	int codec = kcontrol->private_value & 3;
- 	
- 	mutex_lock(&ac97->page_mutex);
--	ucontrol->value.integer.value[0] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 0) & 31);
--	ucontrol->value.integer.value[1] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 8) & 31);
-+	ucontrol->value.integer.value[0] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 8) & 31);
-+	ucontrol->value.integer.value[1] = 31 - ((ac97->spec.ad18xx.pcmreg[codec] >> 0) & 31);
- 	mutex_unlock(&ac97->page_mutex);
- 	return 0;
- }
-diff --git a/sound/pci/cmipci.c b/sound/pci/cmipci.c
-index 73f593526b2d..0024145a7b5b 100644
---- a/sound/pci/cmipci.c
-+++ b/sound/pci/cmipci.c
-@@ -315,7 +315,6 @@ MODULE_PARM_DESC(joystick_port, "Joystick port address.");
- #define CM_MICGAINZ		0x01	/* mic boost */
- #define CM_MICGAINZ_SHIFT	0
- 
--#define CM_REG_MIXER3		0x24
- #define CM_REG_AUX_VOL		0x26
- #define CM_VAUXL_MASK		0xf0
- #define CM_VAUXR_MASK		0x0f
-@@ -3323,7 +3322,7 @@ static void snd_cmipci_remove(struct pci_dev *pci)
-  */
- static unsigned char saved_regs[] = {
- 	CM_REG_FUNCTRL1, CM_REG_CHFORMAT, CM_REG_LEGACY_CTRL, CM_REG_MISC_CTRL,
--	CM_REG_MIXER0, CM_REG_MIXER1, CM_REG_MIXER2, CM_REG_MIXER3, CM_REG_PLL,
-+	CM_REG_MIXER0, CM_REG_MIXER1, CM_REG_MIXER2, CM_REG_AUX_VOL, CM_REG_PLL,
- 	CM_REG_CH0_FRAME1, CM_REG_CH0_FRAME2,
- 	CM_REG_CH1_FRAME1, CM_REG_CH1_FRAME2, CM_REG_EXT_MISC,
- 	CM_REG_INT_STATUS, CM_REG_INT_HLDCLR, CM_REG_FUNCTRL0,
-diff --git a/sound/usb/mixer_quirks.c b/sound/usb/mixer_quirks.c
-index 1f2c69e599d9..c94068874ea8 100644
---- a/sound/usb/mixer_quirks.c
-+++ b/sound/usb/mixer_quirks.c
-@@ -1879,9 +1879,10 @@ void snd_usb_mixer_fu_apply_quirk(struct usb_mixer_interface *mixer,
- 		if (unitid == 7 && cval->control == UAC_FU_VOLUME)
- 			snd_dragonfly_quirk_db_scale(mixer, cval, kctl);
- 		break;
--	/* lowest playback value is muted on C-Media devices */
--	case USB_ID(0x0d8c, 0x000c):
--	case USB_ID(0x0d8c, 0x0014):
-+	/* lowest playback value is muted on some devices */
-+	case USB_ID(0x0d8c, 0x000c): /* C-Media */
-+	case USB_ID(0x0d8c, 0x0014): /* C-Media */
-+	case USB_ID(0x19f7, 0x0003): /* RODE NT-USB */
- 		if (strstr(kctl->id.name, "Playback"))
- 			cval->min_mute = 1;
- 		break;
+On 28/03/2022 08:14, Sameer Pujar wrote:
+> To use rt5658 or rt5659 audio CODEC with generic audio-graph-card machine
+> driver, the CODEC requires "port" bindings. Thus add "audio-graph-port"
+> reference to the rt5659 binding.
+> 
+> Signed-off-by: Sameer Pujar <spujar@nvidia.com>
+> Cc: Oder Chiou <oder_chiou@realtek.com>
+> ---
+>  Documentation/devicetree/bindings/sound/realtek,rt5659.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+
+This should be squashed with your previous patch, otherwise that one is
+not a complete conversion.
+
+Best regards,
+Krzysztof

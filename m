@@ -2,112 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A694E92C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 193734E92C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240375AbiC1KwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 06:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
+        id S240365AbiC1Kvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 06:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240367AbiC1KwG (ORCPT
+        with ESMTP id S235000AbiC1Kvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 06:52:06 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CB14198A;
-        Mon, 28 Mar 2022 03:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648464625; x=1680000625;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=NMKlDRrWVU3oduK1nKD+bbA3te2Pbh9SaIncM+0rnMk=;
-  b=nA7TPX/fgWLjfmgN4fW0uXEL3ZaUO4T0mB+7Ffa/eK2PNBdSwZNeCOmm
-   +6/Ywgv8QwmJzgA54GEIeS2tDb23LI27huhG1/xxeKrhMzFo0G2YqXQzL
-   Wa1HincZmoGitMLB+DCrUKVVJUNuHhQbzPBmTebrzkNKOzgntzfFhZjS1
-   w59Vy6Gj5Y13g1i8VOMefvudUkvcHlPeyJ8YM4yGbMfsgYVKZ0ugE9nAQ
-   nvPCL82DLHSzhW2UVCeYt3RJt2UW0WOUCNzZrXuyiEm9zM/sY7swyQTgC
-   FT31xGyZQs33tEZKcWhLGlfUSxgVNgEmKOS4RgzYp2UNeynQykLxmwQtH
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10299"; a="238901754"
-X-IronPort-AV: E=Sophos;i="5.90,217,1643702400"; 
-   d="scan'208";a="238901754"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 03:50:24 -0700
-X-IronPort-AV: E=Sophos;i="5.90,217,1643702400"; 
-   d="scan'208";a="520962489"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 03:50:23 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nYmwX-0083s4-9E;
-        Mon, 28 Mar 2022 13:49:49 +0300
-Date:   Mon, 28 Mar 2022 13:49:48 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v7 1/1] gpio: add sloppy logic analyzer using polling
-Message-ID: <YkGSzCykWvPXX89O@smile.fi.intel.com>
-References: <20220317085019.3987-1-wsa+renesas@sang-engineering.com>
- <20220317085019.3987-2-wsa+renesas@sang-engineering.com>
- <YjiC6Lg5k5gK/BfP@smile.fi.intel.com>
- <YkGB3AgME/OZAdoG@ninjato>
+        Mon, 28 Mar 2022 06:51:39 -0400
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FAF3DDDB
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 03:49:58 -0700 (PDT)
+Received: by mail-ua1-x933.google.com with SMTP id i26so6100188uap.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 03:49:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=se0Iqy7PBjDTiqb7BMo9NRQR8iF51TKjLrU4uubKJq0=;
+        b=PH3OOm1DLSmLEfVyBClCqbOetntcGPjesRnBObLtYc2liu5QTHsYUbGY64fmSUyZRW
+         8vHxDg4xs/uwucr5nlAT4iklWl0dxzAcFBpj4RRikACPjpJes62IdVXAYgthtTQYoC0l
+         KzYVb+Ql55shVr0dLhDU/Qzd3hnyxsbGvjbt8XtYPY6orDxpQ6/i27dzrsqzPci5nm59
+         lhgtYm7KO3vKZPyjqposaVT5eilBINo2kcsIjjfxUYZmGiluSpfylVmHs0SWGsGfO5CJ
+         oo5HIRQ+PhPIxy67mDQKmr392jLlszW1J20Wx+OjbwYiguprO3r6xdO4Phbn4UX+CIul
+         X9hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=se0Iqy7PBjDTiqb7BMo9NRQR8iF51TKjLrU4uubKJq0=;
+        b=GnHPjmDEznt31jyenRxwf0wqF2/iyMC6NyHUuWG3NJtJQR6Fg8egnts4V0Z9/BHcoq
+         A87UXiAi25mEuBNhslDNmjmAp/0dod0aN0vH/T0zh5KSa3a4Gq5CiRqASe5ptL/1lBsR
+         DKZwYALkRrPE9hqUfkrPhLnUvEOG3hhb3YfQa9CVawkOvz1RTxMf5U1LhsEznRGHs/9G
+         7n3c58FlvxMp+2fCd3HQcwa37o5kRFuvgf7ClVskPQqTMxtS7pD+vPx8gQfZph+w4msF
+         Batf6lfBn6FPo8DaWvrxyxLPvuCz8ExjbFbti99+TjU3bFDXKDTYXPsuBbhgU7C8m7/q
+         UOhw==
+X-Gm-Message-State: AOAM532a36lWxV+2KQOvDVX+rPkc3KvKFzM9uAID0Z4XMCXcNbqlfWlU
+        A+q5MVRLLFHq3osVQPxnwE0+jP5/oMdpN+9Cyqk=
+X-Google-Smtp-Source: ABdhPJzI21a8jKIHHpd37K+/6mSZm2hV4ZFHS1USjoEMENn9F6JZVirJb1YL9OI44fnkC1KeQ/PIWgaAZYAmGeIOu1c=
+X-Received: by 2002:ab0:71cf:0:b0:352:34d3:ffcd with SMTP id
+ n15-20020ab071cf000000b0035234d3ffcdmr9294496uao.92.1648464597365; Mon, 28
+ Mar 2022 03:49:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkGB3AgME/OZAdoG@ninjato>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a59:c783:0:b0:29d:c6c8:bcd0 with HTTP; Mon, 28 Mar 2022
+ 03:49:57 -0700 (PDT)
+From:   Heggins Kate <hegginskate7@gmail.com>
+Date:   Mon, 28 Mar 2022 10:49:57 +0000
+Message-ID: <CAEAJ=VwV24WPLJVjMw4pZknGVQgj38Wc-4G6UySoFMA0Cf2=5g@mail.gmail.com>
+Subject: Danke
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 11:37:32AM +0200, Wolfram Sang wrote:
-
-> > > +	mutex_lock(&priv->lock);
-> > > +
-> > > +	vfree(priv->blob.data);
-> > 
-> > 	priv->blob.data = NULL;
-> > 	priv->blob.size = 0;
-> > 
-> > > +	p = vzalloc(val);
-> > > +	if (!p) {
-> > > +		val = 0;
-> > > +		ret = -ENOMEM;
-> > > +	}
-> > 
-> > 	p = vzalloc(val);
-> > 	if (!p)
-> > 		return -ENOMEM;
-> > 
-> > > +	priv->blob.data = p;
-> > > +	priv->blob.size = val;
-> 
-> I don't like assigning 'priv' memebers twice, so I'd like to keep it as
-> is.
-
-But this will give better understanding of the steps the code performs, no?
-(Because this function basically contains two steps at once. I assume it's
- done this way due to absence of vrealloc(), right?)
-
-But we have kvrealloc(). Can it be used here?
-
-...
-
-> > Can it be wrapped by DEFINE_SHOW_ATTRIBUTE()?
-> 
-> I don't see a way. Do you?
-
-Me neither. I mixed this up with (not upstreamed yet) DEFINE_STORE_ATTRIBUTE.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Hallo, wie geht es dir, ich brauche dringend deine Antwort
+Ich muss dir etwas erkl=C3=A4ren
+Danke
+Katie

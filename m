@@ -2,83 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E5F4E97F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C13F4E97EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243156AbiC1NXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 09:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
+        id S243128AbiC1NXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 09:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243136AbiC1NXW (ORCPT
+        with ESMTP id S243115AbiC1NXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 09:23:22 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2265E159;
-        Mon, 28 Mar 2022 06:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1648473670;
-        bh=Nm/Ru4v6GD/9m6h8Ema9mdsaUHXiVXieqg+H9J3bSYw=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=dCRQEFglsITzGpimBzcg+u4n6Kl0FzRG46PfUKNDL3Zc6F4MnJpb1xKHoaS2pPHf7
-         Pje8OF4P7mEbD47lM71pF7jGJfY9ca178uwYfm18LEHprmOLdnwz49EnmIvOp5nfwD
-         IXCKRSqyaVAzKIxi+6TF8gqSqeuG7cFz7zOx9I8k=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([37.201.215.112]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mdvqg-1o9Wy01IDW-00b62U; Mon, 28
- Mar 2022 15:21:10 +0200
-Date:   Mon, 28 Mar 2022 15:21:08 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-omap@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
-        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org,
-        linux-unisoc@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-realtek-soc@lists.infradead.org
-Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
-Message-ID: <YkG2RPrtPaBNXb7a@latitude>
-References: <20220328000915.15041-1-ansuelsmth@gmail.com>
+        Mon, 28 Mar 2022 09:23:03 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C855DE5F
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:21:22 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nYpJA-0008Oi-58; Mon, 28 Mar 2022 15:21:20 +0200
+Message-ID: <cb5b81bd-9882-e5dc-cd22-54bdbaaefbbc@leemhuis.info>
+Date:   Mon, 28 Mar 2022 15:21:16 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="x1hzLjR6QNWBL5ri"
-Content-Disposition: inline
-In-Reply-To: <20220328000915.15041-1-ansuelsmth@gmail.com>
-X-Provags-ID: V03:K1:Bioqa+FsRJNTbH3AmylnUOJ5uauHNDFVr5040I9oO0lC3hC8za8
- 8toO+l0g55xievdKeTJ469gRnIKOkbsFSsOO+tgGq7irO2EOMhJkwHWcURdNp65efMi2oLY
- L5fGfWljKrJsoHoMaPXHH/ObRkqn8C/sxbzJkrFQPrLB6jphQpHadN6OgYOe3EsTr5qfgRR
- 0QxmE3cnPXA2J3+3R2qHQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qSCWiWhp0AA=:JPnFg4Ox1UVYYY/8fhKJVM
- l+WvPeePMt4LgNO1jOCklUiJsMJp2fVhkF6zvHWpwPAD9p3mgVERt6B29InFZ4jYgFdBA1cTm
- qSqT6SMcjXT0xhEAtfS8lEHCAbdD+JaGn0C9Vl8obNjSlkwx/RiBlQwb138BWaVTReKkIROJp
- NmbTpMS9m/HMPbF3tfbiDPS0I/f9zoLSS7lRHcDmG6NU4aEbhAtjG4N8fPjMYmN41KZP9j5Li
- 0HqNylcSxz+EM6+yyI1O5ffSi+2g4Qeiedae73p8MkQGX0AkPpv20/NDmW8nPMRoCUgSLThAY
- TLdgd+0xyYxRjrrnEqh1rv8JAQ9VNn+jVKn4b8KoLIFFAHxWRR+1lI0NYVeb+3XeLxOfeBg14
- gAyZihbMNiS3tr6yDnFt9RsPUjd86HIxJXiBnn8ff/PMNRF4yRbIEmRqoLDMLj7ZQdDyig2TR
- D3faEKe4uBc/xXFoVzCqIxa/RYEGjM6cmx3QBW4SvS6R6OYs/pkBLkkboqv+dthGVLTpWGQm8
- t3hHhgBoZzDa/tDukFKzCnMCBX0fvBwPKnGwK3pn+w09ll4szL8l+1POb0DSdWP85MUvSXqIY
- CEbfamt1sbJpKJhT+xpLHVfcFXCnO/8M/zW+3B5KclMF/aUNQZPItw/KgeBEk22LsgMwBSohD
- 7pg464l4jsM0XKrhGm0BltSjqvBNzDwBfrU/lM0dbnClpcDfyAZ7djoox39wGvonabWYMqx+I
- hwAruor/3uM4fCfq9TGuMjXxss+XipMSC9sQVHcKr1rbhp4CWR2WKgcjRuaERyOUV4HoWg3xd
- 0PT7V6QsSDQzDft0mgayfapeqTiIoERDMphL2Pub/kxAqGkOXvDyIKmOcblFa4eMvZOA2t7pz
- /UcIVrhr4hcrN0H5A6QqC21PvordOTxUA1TsbJdoWbUXY1KBORh2xhnjzO/9Mur33ngpFnmmy
- OxPhT26iaoSQ9AfHKYJ8LEsqXBGgF4OewVdWCJWgvOJGhPYVHPQHbP+teS5P8ozVm6x0al4qs
- 4PygQzjcdy6BF9MKsChug4Iv0jEJ+gKPzHip49KhW1vvSuTzRqJ/qoNcv/VD/9TonnJNkdSTa
- LKKxAFfWQ792s0=
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,
-        T_SCC_BODY_TEXT_LINE,WEIRD_QUOTING autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     "H.J. Lu" <hjl.tools@gmail.com>
+Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Victor Stinner <vstinner@redhat.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Bug 215720 - brk() regression on AArch64 on static-pie binary --
+ issue with ASLR and a guard page?
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1648473682;77d6f0c8;
+X-HE-SMSGID: 1nYpJA-0008Oi-58
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,103 +44,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, this is your Linux kernel regression tracker.
 
---x1hzLjR6QNWBL5ri
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I noticed a regression report in bugzilla.kernel.org that afaics nobody
+acted upon since it was reported about a week ago, that's why I decided
+to forward it to the lists and the author of the culprit. To quote from
+https://bugzilla.kernel.org/show_bug.cgi?id=215720:
 
-On Mon, Mar 28, 2022 at 02:09:14AM +0200, Ansuel Smith wrote:
-> Hi,
-> as the title say, the intention of this ""series"" is to finally categorize
-> the ARM dts directory in subdirectory for each oem.
-[...]
-> [1] https://gist.github.com/Ansuel/47c49925ee7ef4b1dd035afc74679ab5
-> [2] https://gist.github.com/Ansuel/19f61f1e583c49407ce35c10e770fbe0
+>  Victor Stinner 2022-03-22 02:24:57 UTC
+> 
+> Created attachment 300597 [details]
+> empty.c reproducer
+> 
+> I found a brk() syscall regression of Linux kernel 5.17 on AArch64.
+> 
+> A git bisect found the change "fs/binfmt_elf: use PT_LOAD p_align values for static PIE": commit 9630f0d60fec5fbcaa4435a66f75df1dc9704b66, changed related to the bz#215275.
+> 
+> Program to reproduce the bug, empty.c (attached to the issue):
+> ---
+> _Thread_local int var1 = 0;
+> int main() {
+>     volatile int x = 1;
+>     var1 = x;
+>     return 0;
+> }
+> ---
+> 
+> Build the program as a static PIE program:
+> 
+>     gcc -std=c11 -static-pie -g empty.c -o empty -O2
+> 
+> The program fails randomly, it takes 100 to 6000 runs to reproduce the crash.
+> 
+> Short shell loop to reproduce the crash:
+> ---
+> $ i=0; while true; do ./empty; rc=$?; i=$(($i + 1)); echo "$i:
+> $(date): $rc"; if [ $rc -ne 0 ]; then break; fi; done
+> (...)
+> 159: Tue Mar 22 01:54:22 CET 2022: 0
+> 160: Tue Mar 22 01:54:22 CET 2022: 0
+> Segmentation fault (core dumped)
+> 161: Tue Mar 22 01:54:22 CET 2022: 139
+> ---
+> 
+> Disabling ASLR (write 0 to /proc/sys/kernel/randomize_va_space) works
+> around the bug.
+> 
+> Rather than using "empty.c" program, the "ldconfig -V > /dev/null" command can be used: standard static-pie program.
+> 
+> strace when the program works:
+> ---
+> brk(NULL)                               = 0xaaaac3961000
+> brk(0xaaaac3961b78)                     = 0xaaaac3961b78
+> ---
+> 
+> strace when the bug occurs:
+> ---
+> brk(NULL)                               = 0xaaaabf3c3000
+> brk(0xaaaabf3c3b78)                     = 0xaaaabf3c3000
+> ---
+> 
+> The following test of the brk() syscall fails when the bug occurs:
+> ---
+> 	/* Check against existing mmap mappings. */
+> 	next = find_vma(mm, oldbrk);
+> 	if (next && newbrk + PAGE_SIZE > vm_start_gap(next))
+> 		goto out;
+> ---
+> 
+> Note: When the bug occurs, the program crash with SIGSEGV: the glibc __libc_setup_tls() function calls sbrk(2936) to allocate TLS variables, but it doesn't handle the memory allocation failure.
+> 
+> Note: At the beginning, I discovered this kernel regression while checking for Python
+> buildbot failures on our Fedora Rawhide AArch64 machine.
+> 
+> * Fedora downstream issue: https://bugzilla.redhat.com/show_bug.cgi?id=2066147
+> * Python issue: https://bugs.python.org/issue47078
+> 
+> [reply] [−] Comment 1 Victor Stinner 2022-03-22 02:41:00 UTC
+> 
+> See also the binutils issue: "p_align in ELF program headers should not exceed section alignment"
+> https://sourceware.org/bugzilla/show_bug.cgi?id=28689
+> 
+> See also this old (kernel 4.18) fixed x86-64 kernel bug: "kernel: brk can grow the heap into the area reserved for the stack"
+> https://bugzilla.redhat.com/show_bug.cgi?id=1749633
 
-Nice idea, thank you!
 
-A few notes on categorization below.
+Could somebody take a look into this? Or was this discussed somewhere
+else already? Or even fixed?
 
+Anyway, to get this tracked:
 
->  create mode 100644 arch/arm/boot/dts/broadcom/Makefile
->  rename arch/arm/boot/dts/{ => broadcom}/bcm-cygnus-clock.dtsi (100%)
+#regzbot introduced: 9630f0d60fec5fbcaa4435a66f75df1dc9704b66
+#regzbot from: Victor Stinner <vstinner@redhat.com>
+#regzbot title: brk() regression on AArch64 on static-pie binary
+#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215720
 
-Or maybe bcm instead of broadcom. Not sure which is preferred by
-Broadcom people.
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
->  create mode 100644 arch/arm/boot/dts/dove/Makefile
->  rename arch/arm/boot/dts/{ => dove}/dove-cm-a510.dtsi (100%)
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
 
-Arguably part of Marvell.
+-- 
+Additional information about regzbot:
 
->  create mode 100644 arch/arm/boot/dts/edac/Makefile
->  rename arch/arm/boot/dts/{ => edac}/ecx-2000.dts (100%)
->  rename arch/arm/boot/dts/{ => edac}/ecx-common.dtsi (100%)
->  rename arch/arm/boot/dts/{ => edac}/highbank.dts (100%)
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and the references documentation:
 
-Why edac?
-The most obvious name I can see here is calxeda.
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
 
->  create mode 100644 arch/arm/boot/dts/freescale/Makefile
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
 
-Freescale has been part of NXP for a while, so it might make sense to
-merge the freescale and nxp directories. I can't speak for
-NXP-the-company, so that's just my view as a bystander.
+Hint for reporters: when reporting a regression it's in your interest to
+CC the regression list and tell regzbot about the issue, as that ensures
+the regression makes it onto the radar of the Linux kernel's regression
+tracker -- that's in your interest, as it ensures your report won't fall
+through the cracks unnoticed.
 
->  create mode 100644 arch/arm/boot/dts/kirkwood/Makefile
-
-The Kirkwood family should probably be sorted into Marvell.
-
->  create mode 100644 arch/arm/boot/dts/layerscape/Makefile
->  rename arch/arm/boot/dts/{ => layerscape}/ls1021a-moxa-uc-8410a.dts (100%)
->  rename arch/arm/boot/dts/{ => layerscape}/ls1021a-qds.dts (100%)
->  rename arch/arm/boot/dts/{ => layerscape}/ls1021a-tsn.dts (100%)
->  rename arch/arm/boot/dts/{ => layerscape}/ls1021a-twr.dts (100%)
->  rename arch/arm/boot/dts/{ => layerscape}/ls1021a.dtsi (100%)
-
-The Layerscape family is part of Freescale/NXP.
-
->  create mode 120000 arch/arm/boot/dts/nxp/armv7-m.dtsi
-
-armv7-m.dtsi is a bit confusing, because it contains a few devices at
-fixed addresses, so it looks vendor-specific at a first glance into the
-file. However, if it is actually as vendor-neutral as the name implies,
-I think it should live dts/ directly, rather than in vendor
-subdirectories.
-
->  rename arch/arm/boot/dts/{ => nxp}/lpc18xx.dtsi (100%)
-
-Here we have the NXP LPCxxxx family, which is AFAIK unrelated to the
-i.MX family (and thus the bulk of the Freescale legacy).
-
->  create mode 100644 arch/arm/boot/dts/vybrid/Makefile
-
-Vybrid is another chip family of NXP, with a good deal of Freescale
-legacy in it as evidenced by the "fsl," prefix in the devicetrees.
-
-
-
-Thanks,
-Jonathan
-
---x1hzLjR6QNWBL5ri
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmJBthoACgkQCDBEmo7z
-X9sFJw/8DJFQM9nd8arLY6Z//ocARyXbmt5SCXJ4Fe+N9mDLSgBhMW92vbZe9AJj
-LXhypAAS4wZv1lpuor2GHufy5pFc0jL+UXBajKabI27cZX6x1KJR5tWglAAzfepf
-zI8iaRfdQ1vm+70MGQDgXYMsUAyk+1RXuLYWZYXp3XX0E/0SsyXkc92jdqyurZmI
-8PwvWo5cRY+2m35pvPUff8I4RNfrVvCcMUlzD34bnbi6Kt8Iedvn8QCzLglZyKgs
-+0JL9pSrbyRvGqbYuaKqryL7bs/msL7CLAqUTzunTi1TFbGV8/dRzlxL9fFYmyFp
-NJ9zszuKs8wfW03g+piIjWwN0ZItFXNQvvdBs0y6bfZZLwu6V9QF1MAN+7cnlCRK
-94EH4UNH/FGOZkTnrW1IfNRG9hBMgddEWKQQmniGKmdZGefAIfvENQWq/ErV5vb5
-vVUwMxG6HqbFZH0C5bFzeyUwd8UjjnCSGJ/Fe3Xdmgqpvk6pdgDESW+/7MEnXYks
-9zs9a/M9a7iGH+Dagu5EkP8L2r2R1wTEBjSXrs0ZjfceZbVvYwygfoKPUzW59eRE
-szecWAs/qLdxDrLfIVN1Kpr8KmLNSyyYT3kFDAkuupyHj4Qb9Am40KgzcTgYgv0g
-ex5m9SbThoor9QWhVT1IDQHbzT0ZKHkaqf0dCJyIPVUekDYbFvA=
-=A4ZY
------END PGP SIGNATURE-----
-
---x1hzLjR6QNWBL5ri--
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include 'Link:' tag in the patch descriptions pointing to all reports
+about the issue. This has been expected from developers even before
+regzbot showed up for reasons explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'.

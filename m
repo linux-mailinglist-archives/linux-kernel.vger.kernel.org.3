@@ -2,149 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DFD4E9185
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5D04E9188
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239878AbiC1JjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 05:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
+        id S239886AbiC1Jjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 05:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239872AbiC1JjS (ORCPT
+        with ESMTP id S239872AbiC1Jjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 05:39:18 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6876541B1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:37:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=LE7raKislCZZkXpLroZs2BIDbLhu
-        zFOoOiX4Xsm/vFc=; b=Oa/AVQQZxo59EXMkSKt745EdgGRQcy55ANXgYVA+K+7+
-        gvKw+Yxir2ugT1vMk6zhw1DAy2MB8AvT7r7dg1hkMKtbCYHg49N97mzJ0v9YieQY
-        +WDtacUu9gnA8SuNNa1fVgaiZ8LnHTgY4nhcLEJeRJYrMV5Lw4YhJ8OIFSEVoNI=
-Received: (qmail 1305304 invoked from network); 28 Mar 2022 11:37:33 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Mar 2022 11:37:33 +0200
-X-UD-Smtp-Session: l3s3148p1@pfDOD0TbpNUgAQnoAEkIAFmtuepKDVA5
-Date:   Mon, 28 Mar 2022 11:37:32 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v7 1/1] gpio: add sloppy logic analyzer using polling
-Message-ID: <YkGB3AgME/OZAdoG@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-References: <20220317085019.3987-1-wsa+renesas@sang-engineering.com>
- <20220317085019.3987-2-wsa+renesas@sang-engineering.com>
- <YjiC6Lg5k5gK/BfP@smile.fi.intel.com>
+        Mon, 28 Mar 2022 05:39:44 -0400
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FB8541B1;
+        Mon, 28 Mar 2022 02:38:03 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id yy13so27413881ejb.2;
+        Mon, 28 Mar 2022 02:38:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DrPaEMfDat9GUeQRRHhxK3bi9z/y1g5nfYZpdXBeJh0=;
+        b=Q3OiKon3Vg93LsG1eTgqGoot1xXNCnEGl3I9Huxn6T9UdbK40VKGH8Dy+yV2FRe62p
+         qD6xx7HhVkxyx4oRUJre9KCoC2srEWfkZ6DZLfCMfl5DCpXBejJ5uF6/22L6p/tJ2wOn
+         morxrPBls7C545b92zEsutJ9TJXdRQ2h3+ub/1uXTyEXSh90iBlvawTm7gxY+kPAMQmr
+         Eq9LX6MVCssWoH23aR+MTZf9aoV0VdvgPRQTWNQXOWTvGPOe50McBLpSUDq06vxbKUJT
+         cHgsg7MsH1lwcHat7JBrjUD+9kqduJpIPElhfShKWT7XqtAcRqJy5gLi7bsvZY7Dj+v7
+         j7IA==
+X-Gm-Message-State: AOAM531GSr15buJCCmJOZfM/xwejTQVy1AMH074WxORaYt0BqOR0fyK+
+        BBviwZmrNXO6gtpyebhvcW8=
+X-Google-Smtp-Source: ABdhPJwLsldpE5WWlbufSSBwZw6+SgXRr/UdYD3h5M6meozH4epky2mYxDMbkRWCkKh6Y8bzyTb+Yw==
+X-Received: by 2002:a17:906:a046:b0:6b9:20c:47c1 with SMTP id bg6-20020a170906a04600b006b9020c47c1mr26357100ejb.615.1648460282232;
+        Mon, 28 Mar 2022 02:38:02 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id k12-20020aa7c38c000000b0041939d9ccd0sm6775331edq.81.2022.03.28.02.38.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 02:38:01 -0700 (PDT)
+Message-ID: <564c7092-d6a3-7766-d83f-9762075d055f@kernel.org>
+Date:   Mon, 28 Mar 2022 11:38:00 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="inDyF/t2z9scnhMV"
-Content-Disposition: inline
-In-Reply-To: <YjiC6Lg5k5gK/BfP@smile.fi.intel.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 0/5] Add support for Axis, ARTPEC-8 PCIe driver
+Content-Language: en-US
+To:     wangseok.lee@samsung.com,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        "lars.persson@axis.com" <lars.persson@axis.com>
+Cc:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "kernel@axis.com" <kernel@axis.com>,
+        =?UTF-8?B?7KCE66y46riw?= <moonki.jun@samsung.com>
+References: <0716d9e4-24e1-d16c-162c-00a8664296e1@kernel.org>
+ <20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1@epcms2p7>
+ <CGME20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1@epcms2p8>
+ <20220328090200epcms2p8637d2a2e09a3a627be776586b80c8adf@epcms2p8>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220328090200epcms2p8637d2a2e09a3a627be776586b80c8adf@epcms2p8>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 28/03/2022 11:02, 이왕석 wrote:
+>> --------- Original Message ---------
+>> Sender : Krzysztof Kozlowski <krzk@kernel.org>
+>> Date : 2022-03-28 16:12 (GMT+9)
+>> Title : Re: [PATCH 0/5] Add support for Axis, ARTPEC-8 PCIe driver
+>>
+>> On 28/03/2022 03:44, 이왕석 wrote:
+>>>  This series patches include newly PCIe support for Axis ARTPEC-8 SoC.
+>>>  ARTPEC-8 is the SoC platform of Axis Communications.
+>>>  PCIe controller driver and phy driver have been newly added.
+>>>  There is also a new MAINTAINER in the addition of phy driver.
+>>>  PCIe controller is designed based on Design-Ware PCIe controller IP
+>>>  and PCIe phy is desinged based on SAMSUNG PHY IP.
+>>>  It also includes modifications to the Design-Ware controller driver to 
+>>>  run the 64bit-based ARTPEC-8 PCIe controller driver.
+>>>  It consists of 6 patches in total.
+>>>  
+>>>  This series has been tested on AXIS SW bring-up board 
+>>>  with ARTPEC-8 chipset.
+>>
+>> You lost mail threading. This makes reading this difficult for us. Plus
+>> you sent something non-applicable (patch #2), so please resend.
+>>
+>> Knowing recent Samsung reluctance to extend existing drivers and always
+>> duplicate, please provide description/analysis why this driver cannot be
+>> combined with existing driver. The answer like: we need several syscon
+>> because we do not implement other frameworks (like interconnect) are not
+>> valid.
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> Hello, Krzysztof
+> Thanks for your review.
+> 
+> patch#2 was sent to the wrong format so sent again.
+> Sorry for causing confusion.
 
---inDyF/t2z9scnhMV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The first sending was HTML. Second was broken text, so still not working.
 
-Hi Andy,
-
-> > +	for (i =3D 0; i < priv->trig_len; i+=3D 2) {
->=20
-> Missed space.
-
-Yes.
-
-> > +static int fops_buf_size_set(void *data, u64 val)
-> > +{
-> > +	struct gpio_la_poll_priv *priv =3D data;
->=20
-> > +	int ret =3D 0;
->=20
-> Instead of this assignment and other related things, can we do the follow=
-ing?
->=20
-> > +	void *p;
-> > +
-> > +	if (!val)
-> > +		return -EINVAL;
-> > +
-> > +	mutex_lock(&priv->lock);
-> > +
-> > +	vfree(priv->blob.data);
->=20
-> 	priv->blob.data =3D NULL;
-> 	priv->blob.size =3D 0;
->=20
-> > +	p =3D vzalloc(val);
-> > +	if (!p) {
-> > +		val =3D 0;
-> > +		ret =3D -ENOMEM;
-> > +	}
->=20
-> 	p =3D vzalloc(val);
-> 	if (!p)
-> 		return -ENOMEM;
->=20
-> > +	priv->blob.data =3D p;
-> > +	priv->blob.size =3D val;
-
-I don't like assigning 'priv' memebers twice, so I'd like to keep it as
-is.
-
-> > +static const struct file_operations fops_trigger =3D {
-> > +	.owner =3D THIS_MODULE,
-> > +	.open =3D trigger_open,
-> > +	.write =3D trigger_write,
-> > +	.llseek =3D no_llseek,
-> > +	.release =3D single_release,
-> > +};
->=20
-> Can it be wrapped by DEFINE_SHOW_ATTRIBUTE()?
-
-I don't see a way. Do you?
-
-> > +	dev_info(dev, "initialized");
->=20
-> Not sure how this one would be helpful.
-
-Then please check my comments on your previous reviews.
-
-All the best,
-
-   Wolfram
+Please resend everything with proper threading.
 
 
---inDyF/t2z9scnhMV
-Content-Type: application/pgp-signature; name="signature.asc"
+> This patch is specialized in Artpec-8, 
+> the SoC Platform of Axis Communication, and is newly applied.
+> Since the target SoC platform is different from the driver previously 
+> used by Samsung, it is difficult to merge with the existing driver.
 
------BEGIN PGP SIGNATURE-----
+Recently I always saw such answers and sometimes it was true, sometimes
+not. What is exactly different?
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJBgdwACgkQFA3kzBSg
-KbYyZBAAnxhHF2fEwbRxNWZSbs6cieerGxqMW3ujNQ61Y0c4z3zjENN2DGF7nz8C
-iyHg20CYpZE+j/aPRV0v9CK4PjWSn6Au4UM+0SNKUtLwQRl+pQ/iJFQHc4opHlOD
-Ri4Balpx5AwcpiSxiTPY2RlpNipoWseC4npofbNLrLOVQrVkuO21Fc0oHlgy1yXp
-m34X0XRm2g37kyOgRsl2PxW5qVRNeuns4m8aXX3CFT/QApxH4GDXFOZ+MGJhCN5B
-WxdvxdPDgITRjgUR1xUtKp1adZaD+nM2sPrqdZt9cQZi5GMPUJLInnx6KQbqMQZ/
-wwPJu8YWiPhyK3M6wvSxFIBFwdrkWD5Igl4VpV3MnECzoFLQ4WZYsJeyMezvA9dp
-4zZwbvuJqs7GImS9gr9PTuMU9niKPqKOIiN+GsawvQdceu/++cLue/Z8yDn6wvYa
-WNuI2A3JQQib3ZlksuQ45boGaPrzpV2Oh9nwLhKuP+IOGPPU2e4rsC55WE0y5Eg5
-ngP5hp7L+1/FPAn4XrSnTtxs9gh0hsvYAa4FM5ErrDhuiph3Kbzu2d5Jwjv1PTdS
-nVPnboyMhb3HPd5sD2Sz5n6bFERktycMTcTuKD/+C/1gbbLw1iYP6GX7c8uJMAWM
-4bllfRcoHft54irxD8KSuDJAOnIbeaJji+h8Knmtf5V2Ctrwc+c=
-=wf1u
------END PGP SIGNATURE-----
-
---inDyF/t2z9scnhMV--
+Best regards,
+Krzysztof

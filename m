@@ -2,151 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8F54EA335
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 00:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9A14EA2BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 00:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiC1WpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 18:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50770 "EHLO
+        id S229615AbiC1WN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 18:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiC1WpF (ORCPT
+        with ESMTP id S229455AbiC1WNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 18:45:05 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4403AF1CC;
-        Mon, 28 Mar 2022 15:43:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648507403; x=1680043403;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=43i2ldLha0/YWAMiMHUcHxUpHyrhfZrIuZwK4n9t+sA=;
-  b=bnVtTPJRthHdAgnuUeKx53O1kiSdgzWTnONWmeAL0rJSSqldxSD/LdEK
-   J1N9nj3FcMuoj8GSr1nSHPCpCxBcp0vHOPE3WvWbe+eLp6+++kpbeGoEU
-   oLhMXyq0Hvc4Q/bV4ajewWSDjLzoVE2pNwiaFkmJOZpDVMyu4xWIKMnFv
-   Zwsy597Xwpixkk0acVyPeGJXhvtDvxJOxeKUZgg3ltFclbyTuQhYzJGwJ
-   4GoohaD4cqK3dntc3yiH7YyJzWojl4uz5233y73mX66C3khNLcYc7YRpF
-   Gaalv0s1yh8HYMarFdj35Invya26MxBgGdmh/Arvbe+bqCvObJOfkufjC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="345543595"
-X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="345543595"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 14:35:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="502664503"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 28 Mar 2022 14:35:51 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nYx1j-0002Kv-4R; Mon, 28 Mar 2022 21:35:51 +0000
-Date:   Tue, 29 Mar 2022 05:34:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/12] PCI: dwc: Add unroll iATU space support to the
- regions disable method
-Message-ID: <202203290527.iS9iplnr-lkp@intel.com>
-References: <20220324012524.16784-4-Sergey.Semin@baikalelectronics.ru>
+        Mon, 28 Mar 2022 18:13:25 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3332B35843;
+        Mon, 28 Mar 2022 15:02:01 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id z7so18864960iom.1;
+        Mon, 28 Mar 2022 15:02:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Zku73QpalQjK7mBNfRnqmkOyZliZDHv6CNwYX93bSZc=;
+        b=W+nx2Rs6t4ExOmIqnQeOQD4iJiAsZfVSjiPnDOEoC/PKN0duaeeK+1RfeOBQOF0bYR
+         zIVxDalhLdptimGuGHIEcTFR8MpB8preZuosCSp+LNTX5eHhwGbdhODb9JTnZcLPuT1I
+         QLOMdrrNMAqatCzNY/tm4cqE5mqSjVp0Q/Tu8PY7CF8uCnSmvjGF1mYwh7HEitLEIxWD
+         sI6mZA/N2BW2IsplbUB42Bz0gdBt4R2fZZP1qMmENIuO5OiIC+b0U4MAt6670q1CDugT
+         6PPJTaNT+2GePra2dTPgvFff94DWcxW3cdhHlYkEX8UXDhvu6QOPGNs/qFv8HpxukLcj
+         /I4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Zku73QpalQjK7mBNfRnqmkOyZliZDHv6CNwYX93bSZc=;
+        b=pdqIzV06jo8SuEFXfdXAT24GbBjOdrLTiH9csBtepeqvT1dJFRX/20EhU+1IKOX8AI
+         w3Y1RbVevhUugNZnjbiytYwsbXj31mGKAVIE8EHewFtuAE7xoBFBl2lnmRX3sswsjbM0
+         5FNRlQgQdA/IA3Iu0jkTYwRatCbdVvrPakVJBW9yIk428y6K7VIGckMKxH1Be2bPECyN
+         /F3ZPg1NhW3bqa0Q0SJ+3ct6VRMkBXKdKgaDJiwKisJdm+dsEmD9LWD4xx35y9AZ+uJp
+         HDArddwVU7y8aZ3ymkYnYATSE2DHdpcFQq9kcmp46EngiMjefqTXQWm9/KOsdWKqwYxJ
+         R7ZQ==
+X-Gm-Message-State: AOAM531DMSrArzbqz4JDBhWCNJIm30453f2DY9Tsq73GWJtIpRx/hhxY
+        x61zTWerfb738B/jmIKuDYZNP5iQ6akyk5SH3KXWiT2m
+X-Google-Smtp-Source: ABdhPJyta6fjjW/oHgljQRh12/jOLrq4xulwQgvJrCe6paXK4K0lFuDYs3HHKwvHP2IIgblrMB9kJD1xtRWcuN06kfM=
+X-Received: by 2002:a05:6e02:1562:b0:2c9:cb97:9a4 with SMTP id
+ k2-20020a056e02156200b002c9cb9709a4mr1324007ilu.71.1648503345774; Mon, 28 Mar
+ 2022 14:35:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324012524.16784-4-Sergey.Semin@baikalelectronics.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
+ <20220318161528.1531164-7-benjamin.tissoires@redhat.com> <CAADnVQLvhWxEtHETg0tasJ7Fp5JHNRYWdjhnxi1y1gBpXS=bvQ@mail.gmail.com>
+ <CAO-hwJJXR3jtAvLF1phUa5pKZzVkDxAAHO5+7R50hL-fVhDYyA@mail.gmail.com>
+ <CAEf4BzYVu9JVJvKZK3S9HGwpyPiWrwKPGsTz3wXC_+vmRYGdNw@mail.gmail.com> <CAO-hwJKPxKCzxCKGpH85j5VG3bQk+7axDYpxYoy-12yL7AQj2w@mail.gmail.com>
+In-Reply-To: <CAO-hwJKPxKCzxCKGpH85j5VG3bQk+7axDYpxYoy-12yL7AQj2w@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 28 Mar 2022 14:35:34 -0700
+Message-ID: <CAEf4BzZA7Wmg=N42ib_r9Jm8THXuGGR3CPgTqMyw9n2=gd_+Kg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 06/17] HID: allow to change the report
+ descriptor from an eBPF program
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Serge,
+On Sun, Mar 27, 2022 at 11:57 PM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> On Fri, Mar 25, 2022 at 6:00 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Wed, Mar 23, 2022 at 9:08 AM Benjamin Tissoires
+> > <benjamin.tissoires@redhat.com> wrote:
+> > >
+> > > Hi Alexei,
+> > >
+> > > On Tue, Mar 22, 2022 at 11:51 PM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > On Fri, Mar 18, 2022 at 9:16 AM Benjamin Tissoires
+> > > > <benjamin.tissoires@redhat.com> wrote:
+> > > > >
+> > > > > +u8 *hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size)
+> > > > > +{
+> > > > > +       int ret;
+> > > > > +       struct hid_bpf_ctx_kern ctx = {
+> > > > > +               .type = HID_BPF_RDESC_FIXUP,
+> > > > > +               .hdev = hdev,
+> > > > > +               .size = *size,
+> > > > > +       };
+> > > > > +
+> > > > > +       if (bpf_hid_link_empty(&hdev->bpf, BPF_HID_ATTACH_RDESC_FIXUP))
+> > > > > +               goto ignore_bpf;
+> > > > > +
+> > > > > +       ctx.data = kmemdup(rdesc, HID_MAX_DESCRIPTOR_SIZE, GFP_KERNEL);
+> > > > > +       if (!ctx.data)
+> > > > > +               goto ignore_bpf;
+> > > > > +
+> > > > > +       ctx.allocated_size = HID_MAX_DESCRIPTOR_SIZE;
+> > > > > +
+> > > > > +       ret = hid_bpf_run_progs(hdev, &ctx);
+> > > > > +       if (ret)
+> > > > > +               goto ignore_bpf;
+> > > > > +
+> > > > > +       if (ctx.size > ctx.allocated_size)
+> > > > > +               goto ignore_bpf;
+> > > > > +
+> > > > > +       *size = ctx.size;
+> > > > > +
+> > > > > +       if (*size) {
+> > > > > +               rdesc = krealloc(ctx.data, *size, GFP_KERNEL);
+> > > > > +       } else {
+> > > > > +               rdesc = NULL;
+> > > > > +               kfree(ctx.data);
+> > > > > +       }
+> > > > > +
+> > > > > +       return rdesc;
+> > > > > +
+> > > > > + ignore_bpf:
+> > > > > +       kfree(ctx.data);
+> > > > > +       return kmemdup(rdesc, *size, GFP_KERNEL);
+> > > > > +}
+> > > > > +
+> > > > >  int __init hid_bpf_module_init(void)
+> > > > >  {
+> > > > >         struct bpf_hid_hooks hooks = {
+> > > > >                 .hdev_from_fd = hid_bpf_fd_to_hdev,
+> > > > >                 .pre_link_attach = hid_bpf_pre_link_attach,
+> > > > > +               .post_link_attach = hid_bpf_post_link_attach,
+> > > > >                 .array_detach = hid_bpf_array_detach,
+> > > > >         };
+> > > > >
+> > > > > diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+> > > > > index 937fab7eb9c6..3182c39db006 100644
+> > > > > --- a/drivers/hid/hid-core.c
+> > > > > +++ b/drivers/hid/hid-core.c
+> > > > > @@ -1213,7 +1213,8 @@ int hid_open_report(struct hid_device *device)
+> > > > >                 return -ENODEV;
+> > > > >         size = device->dev_rsize;
+> > > > >
+> > > > > -       buf = kmemdup(start, size, GFP_KERNEL);
+> > > > > +       /* hid_bpf_report_fixup() ensures we work on a copy of rdesc */
+> > > > > +       buf = hid_bpf_report_fixup(device, start, &size);
+> > > >
+> > > > Looking at this patch and the majority of other patches...
+> > > > the code is doing a lot of work to connect HID side with bpf.
+> > > > At the same time the evolution of the patch series suggests
+> > > > that these hook points are not quite stable. More hooks and
+> > > > helpers are being added.
+> > > > It tells us that it's way too early to introduce a stable
+> > > > interface between HID and bpf.
+> > >
+> > > I understand that you might be under the impression that the interface
+> > > is changing a lot, but this is mostly due to my poor knowledge of all
+> > > the arcanes of eBPF.
+> > > The overall way HID-BPF works is to work on a single array, and we
+> > > should pretty much be sorted out. There are a couple of helpers to be
+> > > able to communicate with the device, but the API has been stable in
+> > > the kernel for those for quite some time now.
+> > >
+> > > The variations in the hooks is mostly because I don't know what is the
+> > > best representation we can use in eBPF for those, and the review
+> > > process is changing that.
+> >
+> > I think such a big feature as this one, especially that most BPF folks
+> > are (probably) not familiar with the HID subsystem in the kernel,
+> > would benefit from a bit of live discussion during BPF office hours.
+> > Do you think you can give a short overview of what you are trying to
+> > achieve with some background context on HID specifics at one of the
+> > next BPF office hours? We have a meeting scheduled every week on
+> > Thursday, 9am Pacific time. But people need to put their topic onto
+> > the agenda, otherwise the meeting is cancelled. See [0] for
+> > spreadsheet and links to Zoom meeting, agenda, etc.
+>
+> This sounds like a good idea. I just added my topic on the agenda and
+> will prepare some slides.
+>
 
-I love your patch! Perhaps something to improve:
+Great! Unfortunately I personally have a conflict this week and won't
+be able to attend, so I'll have to catch up somehow through word of
+mouth :( Next week's BPF office hours would be best, but I don't want
+to delay discussions just because of me.
 
-[auto build test WARNING on helgaas-pci/next]
-[also build test WARNING on v5.17 next-20220328]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Serge-Semin/PCI-dwc-Various-fixes-and-cleanups/20220328-231112
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: x86_64-randconfig-a013-20220328 (https://download.01.org/0day-ci/archive/20220329/202203290527.iS9iplnr-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/fb5c4386b8af12124d1e7b48bd7f538c12d85100
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Serge-Semin/PCI-dwc-Various-fixes-and-cleanups/20220328-231112
-        git checkout fb5c4386b8af12124d1e7b48bd7f538c12d85100
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/pci/controller/dwc/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/pci/controller/dwc/pcie-designware.c:508:14: warning: result of comparison of constant 2147483648 with expression of type 'int' is always false [-Wtautological-constant-out-of-range-compare]
-                   if (region == PCIE_ATU_REGION_INBOUND) {
-                       ~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +/int +508 drivers/pci/controller/dwc/pcie-designware.c
-
-   490	
-   491	void dw_pcie_disable_atu(struct dw_pcie *pci, int index,
-   492				 enum dw_pcie_region_type type)
-   493	{
-   494		int region;
-   495	
-   496		switch (type) {
-   497		case DW_PCIE_REGION_INBOUND:
-   498			region = PCIE_ATU_REGION_INBOUND;
-   499			break;
-   500		case DW_PCIE_REGION_OUTBOUND:
-   501			region = PCIE_ATU_REGION_OUTBOUND;
-   502			break;
-   503		default:
-   504			return;
-   505		}
-   506	
-   507		if (pci->iatu_unroll_enabled) {
- > 508			if (region == PCIE_ATU_REGION_INBOUND) {
-   509				dw_pcie_writel_ib_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
-   510							 ~(u32)PCIE_ATU_ENABLE);
-   511			} else {
-   512				dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
-   513							 ~(u32)PCIE_ATU_ENABLE);
-   514			}
-   515		} else {
-   516			dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, region | index);
-   517			dw_pcie_writel_dbi(pci, PCIE_ATU_CR2, ~(u32)PCIE_ATU_ENABLE);
-   518		}
-   519	}
-   520	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Cheers,
+> Benjamin
+>
+> >
+> >   [0] https://docs.google.com/spreadsheets/d/1LfrDXZ9-fdhvPEp_LHkxAMYyxxpwBXjywWa0AejEveU
+> >
+> > [...]
+> >
+>

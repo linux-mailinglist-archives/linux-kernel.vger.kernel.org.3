@@ -2,106 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E804E9BB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD524E9BB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240438AbiC1P4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 11:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
+        id S238285AbiC1P6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 11:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240317AbiC1P43 (ORCPT
+        with ESMTP id S240765AbiC1P6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 11:56:29 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB1E4CD68
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:54:49 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id x20so26657872ybi.5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:54:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=31O2LB6AcOml2RvdEO4cG6BOTLKDOLVfeCmGtEajMX8=;
-        b=S98nLmUUrDhBhHegmQ5svh/O0gzKAdC3PNpDyhpSw32nh071Ot7mN3sU4DnO2NbkGT
-         jCUnY1si56ypC/v3LdAd5DDzfonYfJNRsJJ7ewOzYNOMA95Nkx994w+O4JPfBIgD0A4i
-         Xia5QSO1bXP1+O1OMGgPD8DY/8GLSmc1axTuYAh/qFy1eQ29TKEM2UT6xZPQU/0NaZrz
-         rdT3B+SCmeBv1bzWbyyfPS629Vm+Q0cklx2lR9kpsMEgZh65GUpqEV0ih08QEaqnSPln
-         tG8ZsPJ5RC4DjeEmnRPgSjWsg5a1eQwc7g1Q16uhkzMmepJxMgpg9drYPFqvUEB1GUiw
-         MViw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=31O2LB6AcOml2RvdEO4cG6BOTLKDOLVfeCmGtEajMX8=;
-        b=sdhRbLxdYBXBTQJ9a7FRUkZV25pfwj8uo5QvCGTO3DmiXpG1JdoQHAkoE1cifDYXLt
-         nLchO40GprHDfOWc1Yk7pDpr0fJxppaLjkaBeysKQVarkhz1zRmjZCfra6Ab1kCpdiwZ
-         akbo+0L+OJgw5YWRSsSE/1qe0DUl4AMx1W68qIOJJc6Vpm0q+nPRVXCxkVp0OEt4Ckkx
-         q/Kfyjib+Grms4pvGTtudD9lI0/TzyOdsBMTXyvknVW92zBW3cymHzG5C5FR+YPZIffe
-         SMWKIyeZb6YGXDNh9dEjU5VvPrS9NE6LbncjP6xy98+nqgXw9MzW1pf67WW9lYyxCP3h
-         DQ5g==
-X-Gm-Message-State: AOAM5336OKMO7BFiuhnBdnJ5sUsgmP/GpdCVoVqcVhg6UqgHCPsFOkYv
-        XByNKTHjkOMBitI+QCRrZJo1NVtIMcfIgCcGA+hGtA==
-X-Google-Smtp-Source: ABdhPJzXbFEqKHmcIxRIlfeH0PTYtoH4ZUZ9rq3o2b2Qr7LYC3v04DKb1Lgb4m2+iRheFiZfoS8MtkQkEqQ61wPtDVo=
-X-Received: by 2002:a05:6902:70c:b0:634:73ef:e663 with SMTP id
- k12-20020a056902070c00b0063473efe663mr24680640ybt.246.1648482888370; Mon, 28
- Mar 2022 08:54:48 -0700 (PDT)
+        Mon, 28 Mar 2022 11:58:08 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7821B522C4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:56:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aKsjxMkQENAOBUkPYTl6YfQjAOa0EjF3Forn4KcmeIs=; b=o2E2mD5H64SFW9YBYGELehzcyb
+        fTnokIKJraQFZ21HK66pMe6+4uwIZP8RV6u0C92e2agwqgLXBtEZxUqQf7GrBIpk8KpNUswKENh+H
+        PhC1cgATQSkz66qkqbs2QkAyd9agkMxkLoloP6E+GRfdyCSarlVJe+8iY57BHpcYNp66Uk2/9Dqv/
+        BSnSgnxTZ9wVSqbvZjIh6oa+7VxMUCgHKNVVoDRmBLKkjwo976GFEgnh/P18ya9bxMxTCSeq9rxd+
+        enyd2FicPRbful63X0182I8mmBTXXzcVr18Wsp75aBG3XcwG92ogE67bwqkGZPYewOhLqcLReb9AJ
+        WI+0Oa3g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nYriz-005Tzh-9z; Mon, 28 Mar 2022 15:56:09 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3C954300454;
+        Mon, 28 Mar 2022 17:56:07 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1F42B206D95DB; Mon, 28 Mar 2022 17:56:07 +0200 (CEST)
+Date:   Mon, 28 Mar 2022 17:56:07 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
+        Frederic Weisbecker <fweisbec@gmail.com>
+Subject: Re: [External] Re: [PATCH] sched/fair: fix broken bandwidth control
+ with nohz_full
+Message-ID: <YkHal1m3pnxGoQ1Y@hirez.programming.kicks-ass.net>
+References: <20220328110751.39987-1-zhouchengming@bytedance.com>
+ <20220328132047.GD8939@worktop.programming.kicks-ass.net>
+ <c0465b27-328a-1288-fb50-d4c6321c8b4d@bytedance.com>
+ <YkHRmv/OcABIB0wP@hirez.programming.kicks-ass.net>
+ <6fc49cff-f8a1-8b09-5a25-a64e5d07d258@bytedance.com>
 MIME-Version: 1.0
-References: <20220328132843.16624-1-songmuchun@bytedance.com>
- <CANpmjNO=vMYhL_Uf3ewXvfWoan3q+cYjWV0jEze7toKSh2HRjg@mail.gmail.com> <CAMZfGtWfudKnm71uNQtS-=+3_m25nsfPDo8-vZYzrktQbxHUMA@mail.gmail.com>
-In-Reply-To: <CAMZfGtWfudKnm71uNQtS-=+3_m25nsfPDo8-vZYzrktQbxHUMA@mail.gmail.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Mon, 28 Mar 2022 23:54:12 +0800
-Message-ID: <CAMZfGtVkp+xCM3kgLHRNRFUs_fus0f3Ry_jFv8QaSWLfnkXREg@mail.gmail.com>
-Subject: Re: [PATCH v2] mm: kfence: fix objcgs vector allocation
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6fc49cff-f8a1-8b09-5a25-a64e5d07d258@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 11:51 PM Muchun Song <songmuchun@bytedance.com> wrote:
->
-> On Mon, Mar 28, 2022 at 11:43 PM Marco Elver <elver@google.com> wrote:
-> >
-> > On Mon, 28 Mar 2022 at 15:28, Muchun Song <songmuchun@bytedance.com> wrote:
-> > >
-> > > If the kfence object is allocated to be used for objects vector, then
-> > > this slot of the pool eventually being occupied permanently since
-> > > the vector is never freed.  The solutions could be 1) freeing vector
-> > > when the kfence object is freed or 2) allocating all vectors statically.
-> > > Since the memory consumption of object vectors is low, it is better to
-> > > chose 2) to fix the issue and it is also can reduce overhead of vectors
-> > > allocating in the future.
-> > >
-> > > Fixes: d3fb45f370d9 ("mm, kfence: insert KFENCE hooks for SLAB")
-> > > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> >
-> > Reviewed-by: Marco Elver <elver@google.com>
->
-> Thanks.
->
-> >
-> > Btw, how did you test this?
-> >
+On Mon, Mar 28, 2022 at 11:40:25PM +0800, Chengming Zhou wrote:
 
-I have tested it with syzkaller with the following configs.
-And I didn't find any issues.
+> > NOHZ_FULL is for use-cases that 'never' intend to go into the kernel,
+> > your use-case actively relies on going into the kernel. Hence the
+> > confusion.
+> 
+> In fact, I put a testcase at the end of git message, in which only run
+> a userspace loop workload:
+> 
+> cd /sys/fs/cgroup
+> echo "+cpu" > cgroup.subtree_control
+> 
+> mkdir test
+> echo "105000 100000" > test/cpu.max
+> 
+> echo $$ > test/cgroup.procs
+> taskset -c 1 bash -c "while true; do let i++; done"  --> will be throttled
 
-CONFIG_KFENCE=y
-CONFIG_KFENCE_SAMPLE_INTERVAL=10
-CONFIG_KFENCE_NUM_OBJECTS=2550
-CONFIG_KFENCE_DEFERRABLE=n
-CONFIG_KFENCE_STATIC_KEYS=y
-CONFIG_KFENCE_STRESS_TEST_FAULTS=0
+Ofcourse.. I'm arguing that bandiwdth control and NOHZ_FULL are somewhat
+mutually exclusive, use-case wise. So I really don't get why you'd want
+them both.
+
+NOHZ_FULL says, "I 'never' intend to go to the kernel"
+
+bandwidth control says: "I expect to be sharing the system and must be
+interrupted to not consume too much time", which very much implies: "I
+will go into the kernel".
+
+The trade-off we make to make NOHZ_FULL work, makes system enter/exit
+*far* more expensive. There's also people asking to outright kill a task
+that causes entry under NOHZ_FULL.
+
+So yes, you can configure it, but why does it make sense?

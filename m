@@ -2,84 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2414E8F26
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 09:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DFBF4E8F2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 09:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238840AbiC1HkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 03:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50770 "EHLO
+        id S238876AbiC1Hkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 03:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiC1HkT (ORCPT
+        with ESMTP id S238875AbiC1Hki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 03:40:19 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29879434AA;
-        Mon, 28 Mar 2022 00:38:38 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id i4so205404wrb.5;
-        Mon, 28 Mar 2022 00:38:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=ZGgY4ugwWH/2hsjBN3Oyi9qQcKXFArqdIzAWmPvr9nI=;
-        b=GCOuo35vnRS7u5Ydo1MREMDiIjABMrAhyb/kARxBn3RT5X+NvQ34pvRoTsgxJxcTDC
-         pN2ve8Xa+yXdNt22LGrUxARo/2cRBIxcJyJEdIsgEYrclDTm6eLSoY+mFkIvHzOsDQn2
-         H9fu4dTDTnRGce3wQcX9LnFRk7vaZoAQQ4CjoJI6wWqhxepDCto93XzPvZ6u4Oj0aKOT
-         Yd1tmxrnC52QeGCFnZWmAfPfx7UpxCGbBrtGe7FhtlsPkax4RAubPCtYnIvnjvY7QLwI
-         W0IbN8Ig3qECdSCT2BWWJ7bHCL4tjhU8ghLwQUK98ZXyS2gFHc6THKwaEEL6h0hB3LMW
-         diwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=ZGgY4ugwWH/2hsjBN3Oyi9qQcKXFArqdIzAWmPvr9nI=;
-        b=3+S8D96Q8exorLFjbu9dl1LFUlEvOTMyDFAu6A+OWxnKaMXzJ89UQ0KDLyNauRAu+B
-         dwWkGPzrNeugDqFYNd99EEysi/qQS5cwFI2cyxPdM17L/Asg5Q7OeowsHdCFoKrsWSGT
-         lgzTR8NC+7/poizJtRsOhBZBLVEqWomQiAhYckRfiZCk/x/xeJyCa8mWlh+8Yz6Xz7sS
-         oPhRDphaNztLz/esrMoPL4eO6d4nsX5VP6S4CEQCWYTJxWYQ2JDIZWW2TG1qLSsp2B9+
-         dmwuUh8s0ggbxdOmDNvkvzDNXYWQJlSoFrkntSefVMsUeo6qNgcdKJZSubTA41EVZ/yC
-         zcTA==
-X-Gm-Message-State: AOAM532ied5IYzIy6qpir2/tNnb36HvuGabz0TdNmUFf4VuQwdxbOOh+
-        3KbahQj/tEjec6py5hYfJGqq6NDU/R0=
-X-Google-Smtp-Source: ABdhPJzGvphoXH2utUv2XMoaCJgzDmSCXjq8T3Jq51P+jmVpWm4mJE3i0TNctPzeecybvsH/sbKbJw==
-X-Received: by 2002:a5d:5849:0:b0:205:85cb:baaf with SMTP id i9-20020a5d5849000000b0020585cbbaafmr21879767wrf.442.1648453116632;
-        Mon, 28 Mar 2022 00:38:36 -0700 (PDT)
-Received: from wse-c0127 (2-104-116-184-cable.dk.customer.tdc.net. [2.104.116.184])
-        by smtp.gmail.com with ESMTPSA id p8-20020a5d59a8000000b00204178688d3sm12622464wrr.100.2022.03.28.00.38.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 00:38:35 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 2/4] net: switchdev: add support for
- offloading of fdb locked flag
-In-Reply-To: <20220325203057.vrw5nbwqctluc6u3@skbuf>
-References: <20220323144304.4uqst3hapvzg3ej6@skbuf>
- <86lewzej4n.fsf@gmail.com> <20220324110959.t4hqale35qbrakdu@skbuf>
- <86v8w3vbk4.fsf@gmail.com> <20220324142749.la5til4ys6zva4uf@skbuf>
- <86czia1ned.fsf@gmail.com> <20220325132102.bss26plrk4sifby2@skbuf>
- <86fsn6uoqz.fsf@gmail.com> <20220325140003.a4w4hysqbzmrcxbq@skbuf>
- <86tubmt408.fsf@gmail.com> <20220325203057.vrw5nbwqctluc6u3@skbuf>
-Date:   Mon, 28 Mar 2022 09:38:33 +0200
-Message-ID: <86ee2m8r2e.fsf@gmail.com>
+        Mon, 28 Mar 2022 03:40:38 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7112552E21;
+        Mon, 28 Mar 2022 00:38:56 -0700 (PDT)
+Received: from [192.168.0.3] (ip5f5aef5a.dynamic.kabel-deutschland.de [95.90.239.90])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id BB57661EA1927;
+        Mon, 28 Mar 2022 09:38:54 +0200 (CEST)
+Message-ID: <2e91b545-bde3-3626-e889-be268d01971c@molgen.mpg.de>
+Date:   Mon, 28 Mar 2022 09:38:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] drm/amdgpu: resolve s3 hang for r7340
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+To:     Zhenneng Li <lizhenneng@kylinos.cn>
+Cc:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>,
+        Guchun Chen <guchun.chen@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Lijo Lazar <lijo.lazar@amd.com>, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Wang <kevin1.wang@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Evan Quan <evan.quan@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media@vger.kernel.org
+References: <20220328040536.4121797-1-lizhenneng@kylinos.cn>
+ <cd36a994-0c13-201c-522d-5f8af53e1e87@molgen.mpg.de>
+In-Reply-To: <cd36a994-0c13-201c-522d-5f8af53e1e87@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,71 +59,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On fre, mar 25, 2022 at 22:30, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Fri, Mar 25, 2022 at 05:01:59PM +0100, Hans Schultz wrote:
->> > An attacker sweeping through the 2^47 source MAC address range is a
->> > problem regardless of the implementations proposed so far, no?
->> 
->> The idea is to have a count on the number of locked entries in both the
->> ATU and the FDB, so that a limit on entries can be enforced.
->
-> I can agree with that.
->
-> Note that as far as I understand regular 802.1X, these locked FDB
-> entries are just bloatware if you don't need MAC authentication bypass,
-> because the source port is already locked, so it drops all traffic from
-> an unknown MAC SA except for the link-local packets necessary to run
-> EAPOL, which are trapped to the CPU.
+[Cc: -Jack Zhang (invalid address)
 
-802.1X and MAC Auth can be completely seperated by hostapd listning
-directly on the locked port interface before entering the bridge.
-
->
-> So maybe user space should opt into the MAC authentication bypass
-> process, really, since that requires secure CPU-assisted learning, and
-> regular 802.1X doesn't. It's a real additional burden that shouldn't be
-> ignored or enabled by default.
->
->> > If unlimited growth of the mv88e6xxx locked ATU entry cache is a
->> > concern (which it is), we could limit its size, and when we purge a
->> > cached entry in software is also when we could emit a
->> > SWITCHDEV_FDB_DEL_TO_BRIDGE for it, right?
->> 
->> I think the best would be dynamic entries in both the ATU and the FDB
->> for locked entries.
->
-> Making locked (DPV=0) ATU entries be dynamic (age out) makes sense.
-> Since you set the IgnoreWrongData for source ports, you suppress ATU
-> interrupts for this MAC SA, which in turn means that a station which is
-> unauthorized on port A can never redeem itself when it migrates to port B,
-> for which it does have an authorization, since software never receives
-> any notice that it has moved to a new port.
->
-> But making the locked bridge FDB entry be dynamic, why does it matter?
-> I'm not seeing this through. To denote that it can migrate, or to denote
-> that it can age out? These locked FDB entries are 'extern_learn', so
-> they aren't aged out by the bridge anyway, they are aged out by whomever
-> added them => in our case the SWITCHDEV_FDB_DEL_TO_BRIDGE that I mentioned.
->
-I think the FDB and the ATU should be as much in sync as possible, and
-the FDB definitely should not keep stale entries that only get removed
-by link down. The SWITCHDEV_FDB_DEL_TO_BRIDGE route would requre an
-interrupt when a entry ages out in the ATU, but we know that that cannot
-happen with DPV=0. Thus the need to add dynamic entries with
-SWITCHDEV_FDB_ADD_TO_BRIDGE. 
-
->> How the two are kept in sync is another question, but if there is a
->> switchcore, it will be the 'master', so I don't think the bridge
->> module will need to tell the switchcore to remove entries in that
->> case. Or?
->
-> The bridge will certainly not *need* to tell the switch to delete a
-> locked FDB entry, but it certainly *can* (and this is in fact part of
-> the authorization process, replace an ATU entry with DPV=0 with an ATU
-> entry with DPV=BIT(port)).
-
-Yes you are right, but I was implicitly only regarding internal
-mechanisms in the 'bridge + switchcore', and not userspace netlink
-commands.
->
-> I feel as if I'm missing the essence of your reply.
+Am 28.03.22 um 09:36 schrieb Paul Menzel:
+> Dear Zhenneng,
+> 
+> 
+> Thank you for your patch.
+> 
+> Am 28.03.22 um 06:05 schrieb Zhenneng Li:
+>> This is a workaround for s3 hang for r7340(amdgpu).
+> 
+> Is it hanging when resuming from S3? Maybe also use the line below for 
+> the commit message summary:
+> 
+> drm/amdgpu: Add 1 ms delay to init handler to fix s3 resume hang
+> 
+> Also, please add a space before the ( in “r7340(amdgpu)”.
+> 
+>> When we test s3 with r7340 on arm64 platform, graphics card will hang up,
+>> the error message are as follows:
+>> Mar  4 01:14:11 greatwall-GW-XXXXXX-XXX kernel: [    1.599374][ 7] [  T291] amdgpu 0000:02:00.0: fb0: amdgpudrmfb frame buffer device
+>> Mar  4 01:14:11 greatwall-GW-XXXXXX-XXX kernel: [    1.612869][ 7] [  T291] [drm:amdgpu_device_ip_late_init [amdgpu]] *ERROR* late_init of IP block <si_dpm> failed -22
+>> Mar  4 01:14:11 greatwall-GW-XXXXXX-XXX kernel: [    1.623392][ 7] [  T291] amdgpu 0000:02:00.0: amdgpu_device_ip_late_init failed
+>> Mar  4 01:14:11 greatwall-GW-XXXXXX-XXX kernel: [    1.630696][ 7] [  T291] amdgpu 0000:02:00.0: Fatal error during GPU init
+>> Mar  4 01:14:11 greatwall-GW-XXXXXX-XXX kernel: [    1.637477][ 7] [  T291] [drm] amdgpu: finishing device.
+> 
+> The prefix in the beginning is not really needed. Only the stuff after 
+> `kernel: `.
+> 
+> Maybe also add the output of `lspci -nn -s …` for that r7340 device.
+> 
+>> Change-Id: I5048b3894c0ca9faf2f4847ddab61f9eb17b4823
+> 
+> Without the Gerrit instance this belongs to, the Change-Id is of no use 
+> in the public.
+> 
+>> Signed-off-by: Zhenneng Li <lizhenneng@kylinos.cn>
+>> ---
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c 
+>> b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+>> index 3987ecb24ef4..1eced991b5b2 100644
+>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+>> @@ -2903,6 +2903,8 @@ static void 
+>> amdgpu_device_delayed_init_work_handler(struct work_struct *work)
+>>           container_of(work, struct amdgpu_device, delayed_init_work.work);
+>>       int r;
+>> +    mdelay(1);
+>> +
+> 
+> Wow, I wonder how long it took you to find that workaround.
+> 
+>>       r = amdgpu_ib_ring_tests(adev);
+>>       if (r)
+>>           DRM_ERROR("ib ring test failed (%d).\n", r);
+> 
+> 
+> Kind regards,
+> 
+> Paul

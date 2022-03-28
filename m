@@ -2,111 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 485EF4E9740
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81BBD4E9745
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242764AbiC1NE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 09:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
+        id S242787AbiC1NFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 09:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbiC1NEy (ORCPT
+        with ESMTP id S242785AbiC1NFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 09:04:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7ED6663C3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:03:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648472592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/u9IbKTaxd7JfWbYIumOYCvcuDGJC1EVRBB8DOZNjec=;
-        b=I6ZCdoptpziw1f0gCzeQDSYZIovAZwyHcttnR2NoMfT/XBmlBoNFdNncWuhMmH+KSGuJT3
-        9M9XrTjn7glNizAQULtLxCU5Jj6kQt1Xl2LV4QD95pjMzj4LNMygQQa8gA8YhlDKo2Q2l3
-        loSnyOL5aaFzMCZBHn9/0NaSZ46l+/c=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-554-yLNN0cBuOlaIWs9-hYRWyw-1; Mon, 28 Mar 2022 09:03:06 -0400
-X-MC-Unique: yLNN0cBuOlaIWs9-hYRWyw-1
-Received: by mail-qk1-f198.google.com with SMTP id d12-20020a379b0c000000b0067d8cda1aaaso8336267qke.8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:03:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/u9IbKTaxd7JfWbYIumOYCvcuDGJC1EVRBB8DOZNjec=;
-        b=1DNl2puxtSEkQYyppvsvTGoUCfN1txCJWa0NaglalDC+Ufdz6+DSiguPX9zEpDTIuH
-         oBaPlAlPEs1yq68oop9cHiZ5aTIJJvgRtKEPO+XvY0bNHKougtdwifZoIN+8Aijgg3hl
-         2gCDizU3ghQ5E8QQC049uiEuv14m4zEvjVtcCbur8CY7i9VyWxPMjVtjDlFWJlLeeHtt
-         G/ctQGE1g13Lm6texoWsAdsFfoV9RwyA8XIy4nDqmdYWEzTGpO0fN6xHc337ViZj3TtK
-         N9Pn5W9IZWGtCnEUGtU+uhEAUzd3TuFiCMxQPRXAoDuec/p2qen4uO8meQRwqGlqzzHu
-         GCcA==
-X-Gm-Message-State: AOAM533BuocirXKe1rCuYWX/s/DYKXzMDFmXiTxxnbIfOjn5mRPgwHcZ
-        JudwtsT9V8P63EpaP3GHl9zFyyCxZHjVM9myZbeub8PEb7MonopNH478U7vT7DsrgBIlV24ea3n
-        cdpeh9jWuSg2rugqRA9MQIwNA
-X-Received: by 2002:a05:6214:c4a:b0:441:2c0e:1cb4 with SMTP id r10-20020a0562140c4a00b004412c0e1cb4mr20296004qvj.98.1648472585601;
-        Mon, 28 Mar 2022 06:03:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwwc0BWvMkauz8RL1WHra/Cyzf5posV9J1/75Ci8EjT4n+fT/8/G2vr6453bVFQNKYlS5HK8A==
-X-Received: by 2002:a05:6214:c4a:b0:441:2c0e:1cb4 with SMTP id r10-20020a0562140c4a00b004412c0e1cb4mr20295947qvj.98.1648472585197;
-        Mon, 28 Mar 2022 06:03:05 -0700 (PDT)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id m16-20020a05620a24d000b0067ecf605ef5sm8576234qkn.105.2022.03.28.06.03.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 06:03:04 -0700 (PDT)
-From:   trix@redhat.com
-To:     sfrench@samba.org, nathan@kernel.org, ndesaulniers@google.com
-Cc:     linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] cifs: fix enum usage
-Date:   Mon, 28 Mar 2022 06:03:00 -0700
-Message-Id: <20220328130300.3090213-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Mon, 28 Mar 2022 09:05:08 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE4C165AC;
+        Mon, 28 Mar 2022 06:03:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=6dOO5q99O9jnBJeksf56yOOYMeJk6f9opXAJEEHgAkk=; b=fk
+        O5qE6jq0KMZUWBxWrFlP3+LybsWVkaSjOyy4NsNUe37oHGAKRpfRNmOchCleFNyn2YRPU8JqB6oEm
+        6ArvdHRSNXNpSntEiKN1bFVCQEYoRRnjsFz/IbhBblK+t2HKv/ujm9Y11vPVmAEUWanDT0jgxmKG7
+        myYTmsxvJBZVLRw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nYp1g-00D1CB-FB; Mon, 28 Mar 2022 15:03:16 +0200
+Date:   Mon, 28 Mar 2022 15:03:16 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [net-next 1/5] net: mdio: fwnode: add fwnode_mdiobus_register()
+Message-ID: <YkGyFJuUDS6x4wrC@lunn.ch>
+References: <20220325172234.1259667-1-clement.leger@bootlin.com>
+ <20220325172234.1259667-2-clement.leger@bootlin.com>
+ <Yj4MIIu7Qtvv25Fs@lunn.ch>
+ <20220328082642.471281e7@fixe.home>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220328082642.471281e7@fixe.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+On Mon, Mar 28, 2022 at 08:26:42AM +0200, Clément Léger wrote:
+> Le Fri, 25 Mar 2022 19:38:24 +0100,
+> Andrew Lunn <andrew@lunn.ch> a écrit :
+> 
+> > On Fri, Mar 25, 2022 at 06:22:30PM +0100, Clément Léger wrote:
+> > > In order to support software node description transparently, add fwnode
+> > > support with fwnode_mdiobus_register(). This function behaves exactly
+> > > like of_mdiobus_register() function but using the fwnode node agnostic
+> > > API. This support might also be used to merge ACPI mdiobus support
+> > > which is quite similar to the fwnode one.
+> > > 
+> > > Some part such as the whitelist matching are kept exclusively for OF
+> > > nodes since it uses an of_device_id struct and seems tightly coupled
+> > > with OF. Other parts are generic and will allow to move the existing
+> > > OF support on top of this fwnode version.  
+> > 
+> > Does fwnode have any documentation? How does a developer know what
+> > properties can be passed? Should you be adding a
+> > 
+> > Documentation/fwnode/bindings/net/mdio.yaml ?
+> > 
+> > 	Andrew
+> 
+> Hi Andrew,
+> 
+> Actually, fwnode is an abstraction for various firmware nodes such as
+> ACPI, device-tree and software nodes. It allows to access properties,
+> child and other attributes transparently from these various nodes but
+> does not actually defines how they should describe the hardware. If
+> there is specific hanling to be done, node type can be checked using
+> is_acpi_node(), is_of_node() and so on.
+> 
+> I think it is still needed to document the bindings for each node type.
 
-Clang build fails with
-cifsfs.c:709:18: error: implicit conversion from enumeration
-  type 'enum statusEnum' to different enumeration
-  type 'enum tid_status_enum'
-  tcon->status = CifsExiting;
-               ~ ^~~~~~~~~~~
+But you seem to be implementing a subset of what each node type
+supports. So maybe it would be good to document which parts of the OF
+binding can be used, which parts of the ACPI binding can be used, etc.
 
-The type of the element status changed, so enum needed to change.
-Replace CifsExiting with TID_EXITING.
-
-Fixes: 7e5c8c02911b ("smb3: cleanup and clarify status of tree connections")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- fs/cifs/cifsfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-index 0789bf1496c74..a47fa44b6d52b 100644
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -706,7 +706,7 @@ static void cifs_umount_begin(struct super_block *sb)
- 		spin_unlock(&cifs_tcp_ses_lock);
- 		return;
- 	} else if (tcon->tc_count == 1)
--		tcon->status = CifsExiting;
-+		tcon->status = TID_EXITING;
- 	spin_unlock(&cifs_tcp_ses_lock);
- 
- 	/* cancel_brl_requests(tcon); */ /* BB mark all brl mids as exiting */
--- 
-2.26.3
-
+	Andrew

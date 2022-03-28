@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 397954E9201
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DE64E9200
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240044AbiC1Jy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 05:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58948 "EHLO
+        id S240061AbiC1Jyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 05:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240049AbiC1JyZ (ORCPT
+        with ESMTP id S240047AbiC1Jy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 05:54:25 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9AB54BD8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:52:43 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id i11so3047299plg.12
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:52:43 -0700 (PDT)
+        Mon, 28 Mar 2022 05:54:28 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4145154BF6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:52:47 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so14939278pjf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:52:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sifive.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wa/jhOBDbzXypLwdqQHP2csPLeVnygjpsw6wefsCgcI=;
-        b=Q3fVODma/iyy4N0/11SdBthh/s+q8+fOIxK61L2ALfHDGiUqEW8sE9ALtc52F85OhS
-         EkXBFEVuHIE2gB44Iz1tiQrWKcRhG0a6s9aVJoZ9xbfv6CH6SO1u/V6y7NOA/nFFP7kL
-         MWw5PXy8/qGv4cSwVRq55OiYaJbUpraPvbXSyzOXE4kADO2Kf1JZfbhCU6qxO9jTsXgm
-         1d1XLpCVpErOnecqUNkOmh81lGmRWpaT5KIpA6GNl3UK1gjtK/QJAwR2ccvyRpMAEkVx
-         wVs6gKqRgH98VoJLDPbk3D93Dyu6tsiqmt3fVcs9X1kuynctSonwhdo7RXFhfzWcAu5x
-         k75Q==
+        bh=oFYJu8bdS9lTnagtGk2u5UISyqGssJEWeZR75J4CCQ4=;
+        b=GntnHgow6kb2bhuinGrTFT6S/X9qym/s0sFSEUkJXDmNQl82e2NCI1Dma+l72P+0wm
+         9XMVcbHiRuxmvVtSPBZ7tQKj3M9CwbQN8u0YrhUHuwLJA0xwxOAP/iwP5HG2ieL5yBOB
+         riyl5rYiqhApthbGtlZAOlL61VBJIcvqO1QaO37Z7lv9H4vxQ+xubqdQx26xXUVGFD8d
+         gxMFYcwX+olVPgEM1Ntshiy1FnwUIwyiKDhK2pqaCM1mSHd6b1m0g9+oLCrcBHPeLggT
+         +UMQ6lX6a6VxpFVHvdyINtwXFxyfB2gkIAq5wYTXNjWGzZ4XNOPo3g7YIa1sPy5P0hSU
+         vILg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wa/jhOBDbzXypLwdqQHP2csPLeVnygjpsw6wefsCgcI=;
-        b=cnhoY/uqRto3vYi13Wy3vbn/OnBD0itpRE8EO4ut8OfuaC8hfvv0hamRIBB+UtyzgJ
-         ehYKHk5HOvhDnjUelfhR53VwoVOVlRkGn+0DqmV9JLwgbaR9+1mPhucVeJlAa8uFiXYN
-         qguhbuU3j6bLvll1fvybyEJKYLYfzQgpVD9qzu/B6AzZ1u/05nha4cowjwo/3xE18zH4
-         NJDv+9TPPlqsZEBGbhJ2s5K7lVbkXfoMQlVk/gWOD9cR9ppTEgARLQK0e2rvhBfkpuKt
-         7LSJWqiMZvkwMyVh7fptBwZWAaqJCbNeRSY7ymjaIBpjZsc53hzpKD1JEBofLhu9IYgp
-         nTFg==
-X-Gm-Message-State: AOAM533UtA2xNUytRewIJVI8BmHDWFjy0lgz403DMTcD0TgqXIRo0SEm
-        IdrChZEnleN9RvqhZn+R3r6JvA==
-X-Google-Smtp-Source: ABdhPJxHONZ3f2Yc2WSNu+jkr5b+vJB/GJkHJsbhf2730GFrUfxaNbwYpNK9G38hBoG4pMTeWyCn0w==
-X-Received: by 2002:a17:90a:470a:b0:1c9:a9b4:f88c with SMTP id h10-20020a17090a470a00b001c9a9b4f88cmr5064699pjg.185.1648461163359;
-        Mon, 28 Mar 2022 02:52:43 -0700 (PDT)
+        bh=oFYJu8bdS9lTnagtGk2u5UISyqGssJEWeZR75J4CCQ4=;
+        b=hG164/NraizmBhrS9TrX9KOsU96Bvj3y9NvWwyzbAKRQsJ6UTQTJfJoQ5QoCS/9+w0
+         ABGt5jycjWf6vb4LVCt+0YF1S8cfqBuFP/0kZ5UK8iuV0nxVzgZMlNet6yGNfkY9kaQg
+         IBu2ML4bbYvk0bS4jZh2ac5rlD2MfhjGliIWUgL+bKIuUYYragMlijicibLH+KVwWkKF
+         5zqkh7QbMSOuvWIXChnYo5ofHXdVkXOFy1UX4P11TJ4IaPO9zUdqIKi0an6qLQhWCsWO
+         xA7ot8owQ/CNOH/1hNOe+6wPt5TqXBahHvWDrR+6y3JhCCe6/3CcgmDHfFAO90g7vngj
+         a1Mw==
+X-Gm-Message-State: AOAM531XgKNOWaTIG+ExskkKtu1UQ4DgPqL+f6p2OK6EJ5O4d+a7HdCe
+        +0r7F82prLtW16yUzW04LOqCPg==
+X-Google-Smtp-Source: ABdhPJwLen54FYCTR5UKlde92eYTDiJhw3WeUWHMHtaUWkB4DnSeea8SCaamC7zkpBJAESiySUP9EA==
+X-Received: by 2002:a17:90b:1c01:b0:1c6:dc49:d146 with SMTP id oc1-20020a17090b1c0100b001c6dc49d146mr39288419pjb.29.1648461166701;
+        Mon, 28 Mar 2022 02:52:46 -0700 (PDT)
 Received: from hsinchu16.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id g4-20020a633744000000b00381efba48b0sm12255117pgn.44.2022.03.28.02.52.40
+        by smtp.gmail.com with ESMTPSA id g4-20020a633744000000b00381efba48b0sm12255117pgn.44.2022.03.28.02.52.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 02:52:42 -0700 (PDT)
+        Mon, 28 Mar 2022 02:52:46 -0700 (PDT)
 From:   Zong Li <zong.li@sifive.com>
 To:     robh+dt@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
         aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
@@ -55,10 +55,10 @@ To:     robh+dt@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
         bin.meng@windriver.com, green.wan@sifive.com, vkoul@kernel.org,
         dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     Zong Li <zong.li@sifive.com>
-Subject: [PATCH v8 3/4] riscv: dts: rename the node name of dma
-Date:   Mon, 28 Mar 2022 17:52:24 +0800
-Message-Id: <edd72c0cca1ebceddc032ff6ec2284e3f48c5ad3.1648461096.git.zong.li@sifive.com>
+Cc:     Zong Li <zong.li@sifive.com>, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH v8 4/4] dmaengine: sf-pdma: Get number of channel by device tree
+Date:   Mon, 28 Mar 2022 17:52:25 +0800
+Message-Id: <f08a95b6582a51712c5b2c3cb859136d07bfa8b9.1648461096.git.zong.li@sifive.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1648461096.git.zong.li@sifive.com>
 References: <cover.1648461096.git.zong.li@sifive.com>
@@ -66,7 +66,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,27 +74,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename the node name by the generic DMA naming
+It currently assumes that there are always four channels, it would
+cause the error if there is actually less than four channels. Change
+that by getting number of channel from device tree.
+
+For backwards-compatibility, it uses the default value (i.e. 4) when
+there is no 'dma-channels' information in dts.
 
 Signed-off-by: Zong Li <zong.li@sifive.com>
-CC: Vinod Koul <vkoul@kernel.org>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
- arch/riscv/boot/dts/sifive/fu540-c000.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/dma/sf-pdma/sf-pdma.c | 24 ++++++++++++++++--------
+ drivers/dma/sf-pdma/sf-pdma.h |  8 ++------
+ 2 files changed, 18 insertions(+), 14 deletions(-)
 
-diff --git a/arch/riscv/boot/dts/sifive/fu540-c000.dtsi b/arch/riscv/boot/dts/sifive/fu540-c000.dtsi
-index 6a3011180846..6eebe34c2851 100644
---- a/arch/riscv/boot/dts/sifive/fu540-c000.dtsi
-+++ b/arch/riscv/boot/dts/sifive/fu540-c000.dtsi
-@@ -167,7 +167,7 @@ uart0: serial@10010000 {
- 			clocks = <&prci PRCI_CLK_TLCLK>;
- 			status = "disabled";
- 		};
--		dma: dma@3000000 {
-+		dma: dma-controller@3000000 {
- 			compatible = "sifive,fu540-c000-pdma", "sifive,pdma0";
- 			reg = <0x0 0x3000000 0x0 0x8000>;
- 			interrupt-parent = <&plic0>;
+diff --git a/drivers/dma/sf-pdma/sf-pdma.c b/drivers/dma/sf-pdma/sf-pdma.c
+index f12606aeff87..db5a4ef76077 100644
+--- a/drivers/dma/sf-pdma/sf-pdma.c
++++ b/drivers/dma/sf-pdma/sf-pdma.c
+@@ -482,23 +482,30 @@ static void sf_pdma_setup_chans(struct sf_pdma *pdma)
+ static int sf_pdma_probe(struct platform_device *pdev)
+ {
+ 	struct sf_pdma *pdma;
+-	struct sf_pdma_chan *chan;
+ 	struct resource *res;
+-	int len, chans;
+-	int ret;
++	int ret, n_chans;
+ 	const enum dma_slave_buswidth widths =
+ 		DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
+ 		DMA_SLAVE_BUSWIDTH_4_BYTES | DMA_SLAVE_BUSWIDTH_8_BYTES |
+ 		DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
+ 		DMA_SLAVE_BUSWIDTH_64_BYTES;
+ 
+-	chans = PDMA_NR_CH;
+-	len = sizeof(*pdma) + sizeof(*chan) * chans;
+-	pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
++	ret = of_property_read_u32(pdev->dev.of_node, "dma-channels", &n_chans);
++	if (ret) {
++		/* backwards-compatibility for no dma-channels property */
++		dev_dbg(&pdev->dev, "set number of channels to default value: 4\n");
++		n_chans = PDMA_MAX_NR_CH;
++	} else if (n_chans > PDMA_MAX_NR_CH) {
++		dev_err(&pdev->dev, "the number of channels exceeds the maximum\n");
++		return -EINVAL;
++	}
++
++	pdma = devm_kzalloc(&pdev->dev, struct_size(pdma, chans, n_chans),
++			    GFP_KERNEL);
+ 	if (!pdma)
+ 		return -ENOMEM;
+ 
+-	pdma->n_chans = chans;
++	pdma->n_chans = n_chans;
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	pdma->membase = devm_ioremap_resource(&pdev->dev, res);
+@@ -556,7 +563,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
+ 	struct sf_pdma_chan *ch;
+ 	int i;
+ 
+-	for (i = 0; i < PDMA_NR_CH; i++) {
++	for (i = 0; i < pdma->n_chans; i++) {
+ 		ch = &pdma->chans[i];
+ 
+ 		devm_free_irq(&pdev->dev, ch->txirq, ch);
+@@ -574,6 +581,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
+ 
+ static const struct of_device_id sf_pdma_dt_ids[] = {
+ 	{ .compatible = "sifive,fu540-c000-pdma" },
++	{ .compatible = "sifive,pdma0" },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, sf_pdma_dt_ids);
+diff --git a/drivers/dma/sf-pdma/sf-pdma.h b/drivers/dma/sf-pdma/sf-pdma.h
+index 0c20167b097d..dcb3687bd5da 100644
+--- a/drivers/dma/sf-pdma/sf-pdma.h
++++ b/drivers/dma/sf-pdma/sf-pdma.h
+@@ -22,11 +22,7 @@
+ #include "../dmaengine.h"
+ #include "../virt-dma.h"
+ 
+-#define PDMA_NR_CH					4
+-
+-#if (PDMA_NR_CH != 4)
+-#error "Please define PDMA_NR_CH to 4"
+-#endif
++#define PDMA_MAX_NR_CH					4
+ 
+ #define PDMA_BASE_ADDR					0x3000000
+ #define PDMA_CHAN_OFFSET				0x1000
+@@ -118,7 +114,7 @@ struct sf_pdma {
+ 	void __iomem            *membase;
+ 	void __iomem            *mappedbase;
+ 	u32			n_chans;
+-	struct sf_pdma_chan	chans[PDMA_NR_CH];
++	struct sf_pdma_chan	chans[];
+ };
+ 
+ #endif /* _SF_PDMA_H */
 -- 
 2.35.1
 

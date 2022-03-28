@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F06B4E9A21
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2804E9A23
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244082AbiC1OxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 10:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
+        id S237321AbiC1OxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 10:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244091AbiC1OxC (ORCPT
+        with ESMTP id S244083AbiC1OxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 10:53:02 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5DD3F8A7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:51:21 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2e5e31c34bfso151531767b3.10
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:51:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Dh492AvAmd1IfP231Dj/fJ74UloGtVlkt9YVNW5vE7I=;
-        b=rTK8HzanSVvHJeaRUqDoYN+cyp2drqzhCBdkBIia2K9UHYErmLeBK1OF/IhtkMKjMd
-         4+DvzSiFP3vAayYc5opVfj41MCgxmEQBqkQQRWWbIG0LAIcbrOs8KZdtMVelLS2er9dZ
-         jaxB9J/SWWUrxSXh1SWupnN36l+s9gh7UnQCAiKuuQusGpvuHHsROcp8xmilrEEIYbK3
-         Aetv6B61+/xAPj5dfK/gSAJJKbvDVjsZZI7/EcFX/nzsileuM+QGjh/tkT4SafDIs5qm
-         Drssu3limcmRrZ657CulEGvWJwC4sWBiDlSFDu3Z3q0wpQoorJ/UqttXZSqCWrnkNHX5
-         zOFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Dh492AvAmd1IfP231Dj/fJ74UloGtVlkt9YVNW5vE7I=;
-        b=uqIzuOi5WILsc8mK3ZBu6BFLfGl/06LFWDudRp0iLLktNKnElmb6oPpenj8o0oqWt3
-         i/sajb9lC/S5dbEJ5onAECMutYi+AQdSdZLaHxIWksoNWFC5PdunZUVioO4x/eisFHed
-         s73WLAcDFFhsGiHa3jlaIhxyOAW/k80I6upSzK7VM89uH426icrz4YLPVJiHQvr4AZDN
-         3YOTi3/ijKNLue8k3sbVAs6XE23mrNaNrHQohcALHWGpOgLHx/aMcAu4QCgsTNRlenca
-         CS7+D3OZ+qYz5x7mt/KjpA6xdlMDxhj5yXLU+M23mG6bR7RW5uOCpAwP4ZBoOha4ldg4
-         DKJA==
-X-Gm-Message-State: AOAM533b7EpKeXZHiUZy+rT8E+7SyKao4a3BZmf8j1A8tLHmJC8d4u0g
-        LzKoXS4e/iwChzQFT/5Na4jIWC+AAUAgVfRsSjAaJQ==
-X-Google-Smtp-Source: ABdhPJwmyDAZlA/7hxHve0d0gyq6aqe1zkCsFLU02yLIaouW62yvoiJYimjxjmhfS2vJzYOHdSk9d4pF7QNrsYPzPxA=
-X-Received: by 2002:a81:1c4f:0:b0:2e5:9db3:7a8e with SMTP id
- c76-20020a811c4f000000b002e59db37a8emr24636467ywc.319.1648479081138; Mon, 28
- Mar 2022 07:51:21 -0700 (PDT)
+        Mon, 28 Mar 2022 10:53:21 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0455DE56;
+        Mon, 28 Mar 2022 07:51:39 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22SDaGbc023704;
+        Mon, 28 Mar 2022 16:51:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=0spQ+va0mupBxaDFYwsZDcGVtjhUmIgaGDAqHeg+qeI=;
+ b=rqTgfTo3U5WC7XloVhuPl6Z355ocyoda1qjCaIgQ0dmXUNrz3Yz5ewYvAYh9GM0vVo1h
+ yba4vH8fZ813j6OXkeMVdoIiUVdQILrO6c/z4iZR5SQtOdS6qUdyFce3VSOrqlmP/XHT
+ KbWGXKA0sEUFy9l+UZwjPg8WsZGMsrn2WNhW6EvDAPQaNCH9RMW3rvmUNxuaZXNIQN7z
+ +S0aeLrNWlKxepwUO5KgvAbG+HgXedB/CcmRd1VRoB2z8LgkjAIUKcBit43/6p3myyYX
+ w8cxBb+LXJOctJCJ3XDOf9G1vlp/3m7QigNgsKBeq8PQhAoh+TQ71qB0LDhi1T1gYHlz /A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f1u2422rs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Mar 2022 16:51:24 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 526FF100034;
+        Mon, 28 Mar 2022 16:51:24 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 484B9233C81;
+        Mon, 28 Mar 2022 16:51:24 +0200 (CEST)
+Received: from localhost (10.75.127.48) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 28 Mar 2022 16:51:23
+ +0200
+From:   Yann Gautier <yann.gautier@foss.st.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     Christophe Kerello <christophe.kerello@foss.st.com>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-mmc@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Yann Gautier <yann.gautier@foss.st.com>
+Subject: [PATCH v2] mmc: mmci: stm32: use a buffer for unaligned DMA requests
+Date:   Mon, 28 Mar 2022 16:51:14 +0200
+Message-ID: <20220328145114.334577-1-yann.gautier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220328112707.22217-1-linmiaohe@huawei.com>
-In-Reply-To: <20220328112707.22217-1-linmiaohe@huawei.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Mon, 28 Mar 2022 22:50:45 +0800
-Message-ID: <CAMZfGtXccwgR6TxNJc6aYV+WGJvAWWAz=RXEHNWDwjKfV49JuA@mail.gmail.com>
-Subject: Re: [PATCH] mm: shmem: make shmem_init return void
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-28_06,2022-03-28_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,72 +75,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 7:44 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
->
-> The return value of shmem_init is never used. So we can make it
-> return void now.
->
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  include/linux/shmem_fs.h | 2 +-
->  mm/shmem.c               | 9 ++++-----
->  2 files changed, 5 insertions(+), 6 deletions(-)
->
-> diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
-> index ab51d3cd39bd..3e915cc550bc 100644
-> --- a/include/linux/shmem_fs.h
-> +++ b/include/linux/shmem_fs.h
-> @@ -56,7 +56,7 @@ static inline struct shmem_inode_info *SHMEM_I(struct inode *inode)
->   * Functions in mm/shmem.c called directly from elsewhere:
->   */
->  extern const struct fs_parameter_spec shmem_fs_parameters[];
-> -extern int shmem_init(void);
-> +extern void shmem_init(void);
->  extern int shmem_init_fs_context(struct fs_context *fc);
->  extern struct file *shmem_file_setup(const char *name,
->                                         loff_t size, unsigned long flags);
-> diff --git a/mm/shmem.c b/mm/shmem.c
-> index 529c9ad3e926..26e09a022087 100644
-> --- a/mm/shmem.c
-> +++ b/mm/shmem.c
-> @@ -3879,7 +3879,7 @@ static struct file_system_type shmem_fs_type = {
->         .fs_flags       = FS_USERNS_MOUNT,
->  };
->
-> -int __init shmem_init(void)
-> +void __init shmem_init(void)
->  {
->         int error;
->
-> @@ -3904,14 +3904,13 @@ int __init shmem_init(void)
->         else
->                 shmem_huge = SHMEM_HUGE_NEVER; /* just in case it was patched */
->  #endif
-> -       return 0;
-> +       return;
->
->  out1:
->         unregister_filesystem(&shmem_fs_type);
->  out2:
->         shmem_destroy_inodecache();
->         shm_mnt = ERR_PTR(error);
-> -       return error;
->  }
->
->  #if defined(CONFIG_TRANSPARENT_HUGEPAGE) && defined(CONFIG_SYSFS)
-> @@ -3989,14 +3988,14 @@ static struct file_system_type shmem_fs_type = {
->         .fs_flags       = FS_USERNS_MOUNT,
->  };
->
-> -int __init shmem_init(void)
-> +void __init shmem_init(void)
->  {
->         BUG_ON(register_filesystem(&shmem_fs_type) != 0);
->
->         shm_mnt = kern_mount(&shmem_fs_type);
->         BUG_ON(IS_ERR(shm_mnt));
->
-> -       return 0;
-> +       return;
+In SDIO mode, the sg list for requests can be unaligned with what the
+STM32 SDMMC internal DMA can support. In that case, instead of failing,
+use a temporary bounce buffer to copy from/to the sg list.
+This buffer is limited to 1MB. But for that we need to also limit
+max_req_size to 1MB. It has not shown any throughput penalties for
+SD-cards or eMMC.
 
-Weird. Using return at the end of a void function.
+Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
+---
+Changes since v1:
+- allocate bounce buffer in sdmmc_idma_validate_data()
+- realign on top of mmc/devel branch
+  (25e14a52d35928a1831ca98889a8a25ac3017990)
+
+ drivers/mmc/host/mmci_stm32_sdmmc.c | 88 +++++++++++++++++++++++------
+ 1 file changed, 71 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/mmc/host/mmci_stm32_sdmmc.c b/drivers/mmc/host/mmci_stm32_sdmmc.c
+index 4566d7fc9055..60bca78a72b1 100644
+--- a/drivers/mmc/host/mmci_stm32_sdmmc.c
++++ b/drivers/mmc/host/mmci_stm32_sdmmc.c
+@@ -43,6 +43,9 @@ struct sdmmc_lli_desc {
+ struct sdmmc_idma {
+ 	dma_addr_t sg_dma;
+ 	void *sg_cpu;
++	dma_addr_t bounce_dma_addr;
++	void *bounce_buf;
++	bool use_bounce_buffer;
+ };
+ 
+ struct sdmmc_dlyb {
+@@ -54,6 +57,8 @@ struct sdmmc_dlyb {
+ static int sdmmc_idma_validate_data(struct mmci_host *host,
+ 				    struct mmc_data *data)
+ {
++	struct sdmmc_idma *idma = host->dma_priv;
++	struct device *dev = mmc_dev(host->mmc);
+ 	struct scatterlist *sg;
+ 	int i;
+ 
+@@ -61,41 +66,69 @@ static int sdmmc_idma_validate_data(struct mmci_host *host,
+ 	 * idma has constraints on idmabase & idmasize for each element
+ 	 * excepted the last element which has no constraint on idmasize
+ 	 */
++	idma->use_bounce_buffer = false;
+ 	for_each_sg(data->sg, sg, data->sg_len - 1, i) {
+ 		if (!IS_ALIGNED(sg->offset, sizeof(u32)) ||
+ 		    !IS_ALIGNED(sg->length, SDMMC_IDMA_BURST)) {
+-			dev_err(mmc_dev(host->mmc),
++			dev_dbg(mmc_dev(host->mmc),
+ 				"unaligned scatterlist: ofst:%x length:%d\n",
+ 				data->sg->offset, data->sg->length);
+-			return -EINVAL;
++			goto use_bounce_buffer;
+ 		}
+ 	}
+ 
+ 	if (!IS_ALIGNED(sg->offset, sizeof(u32))) {
+-		dev_err(mmc_dev(host->mmc),
++		dev_dbg(mmc_dev(host->mmc),
+ 			"unaligned last scatterlist: ofst:%x length:%d\n",
+ 			data->sg->offset, data->sg->length);
+-		return -EINVAL;
++		goto use_bounce_buffer;
+ 	}
+ 
++	return 0;
++
++use_bounce_buffer:
++	if (!idma->bounce_buf) {
++		idma->bounce_buf = dmam_alloc_coherent(dev,
++						       host->mmc->max_req_size,
++						       &idma->bounce_dma_addr,
++						       GFP_KERNEL);
++		if (!idma->bounce_buf) {
++			dev_err(dev, "Unable to map allocate DMA bounce buffer.\n");
++			return -ENOMEM;
++		}
++	}
++
++	idma->use_bounce_buffer = true;
++
+ 	return 0;
+ }
+ 
+ static int _sdmmc_idma_prep_data(struct mmci_host *host,
+ 				 struct mmc_data *data)
+ {
+-	int n_elem;
++	struct sdmmc_idma *idma = host->dma_priv;
+ 
+-	n_elem = dma_map_sg(mmc_dev(host->mmc),
+-			    data->sg,
+-			    data->sg_len,
+-			    mmc_get_dma_dir(data));
++	if (idma->use_bounce_buffer) {
++		if (data->flags & MMC_DATA_WRITE) {
++			unsigned int xfer_bytes = data->blksz * data->blocks;
+ 
+-	if (!n_elem) {
+-		dev_err(mmc_dev(host->mmc), "dma_map_sg failed\n");
+-		return -EINVAL;
+-	}
++			sg_copy_to_buffer(data->sg, data->sg_len,
++					  idma->bounce_buf, xfer_bytes);
++			dma_wmb();
++		}
++	} else {
++		int n_elem;
++
++		n_elem = dma_map_sg(mmc_dev(host->mmc),
++				    data->sg,
++				    data->sg_len,
++				    mmc_get_dma_dir(data));
+ 
++		if (!n_elem) {
++			dev_err(mmc_dev(host->mmc), "dma_map_sg failed\n");
++			return -EINVAL;
++		}
++	}
+ 	return 0;
+ }
+ 
+@@ -112,8 +145,19 @@ static int sdmmc_idma_prep_data(struct mmci_host *host,
+ static void sdmmc_idma_unprep_data(struct mmci_host *host,
+ 				   struct mmc_data *data, int err)
+ {
+-	dma_unmap_sg(mmc_dev(host->mmc), data->sg, data->sg_len,
+-		     mmc_get_dma_dir(data));
++	struct sdmmc_idma *idma = host->dma_priv;
++
++	if (idma->use_bounce_buffer) {
++		if (data->flags & MMC_DATA_READ) {
++			unsigned int xfer_bytes = data->blksz * data->blocks;
++
++			sg_copy_from_buffer(data->sg, data->sg_len,
++					    idma->bounce_buf, xfer_bytes);
++		}
++	} else {
++		dma_unmap_sg(mmc_dev(host->mmc), data->sg, data->sg_len,
++			     mmc_get_dma_dir(data));
++	}
+ }
+ 
+ static int sdmmc_idma_setup(struct mmci_host *host)
+@@ -137,6 +181,8 @@ static int sdmmc_idma_setup(struct mmci_host *host)
+ 		host->mmc->max_segs = SDMMC_LLI_BUF_LEN /
+ 			sizeof(struct sdmmc_lli_desc);
+ 		host->mmc->max_seg_size = host->variant->stm32_idmabsize_mask;
++
++		host->mmc->max_req_size = SZ_1M;
+ 	} else {
+ 		host->mmc->max_segs = 1;
+ 		host->mmc->max_seg_size = host->mmc->max_req_size;
+@@ -154,8 +200,16 @@ static int sdmmc_idma_start(struct mmci_host *host, unsigned int *datactrl)
+ 	struct scatterlist *sg;
+ 	int i;
+ 
+-	if (!host->variant->dma_lli || data->sg_len == 1) {
+-		writel_relaxed(sg_dma_address(data->sg),
++	if (!host->variant->dma_lli || data->sg_len == 1 ||
++	    idma->use_bounce_buffer) {
++		u32 dma_addr;
++
++		if (idma->use_bounce_buffer)
++			dma_addr = idma->bounce_dma_addr;
++		else
++			dma_addr = sg_dma_address(data->sg);
++
++		writel_relaxed(dma_addr,
+ 			       host->base + MMCI_STM32_IDMABASE0R);
+ 		writel_relaxed(MMCI_STM32_IDMAEN,
+ 			       host->base + MMCI_STM32_IDMACTRLR);
+-- 
+2.25.1
+

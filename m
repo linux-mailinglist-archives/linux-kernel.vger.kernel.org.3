@@ -2,103 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0897B4E9FC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 21:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF024E9FCD
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 21:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239671AbiC1T21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 15:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
+        id S245702AbiC1TeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 15:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245699AbiC1T1u (ORCPT
+        with ESMTP id S233677AbiC1TeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 15:27:50 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734785E767
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 12:26:09 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 12:26:02 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1648495567;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HI+dsvmjaN/rkGaZbNLF+cKlPT7DGdpfJYFLeEXc0Ts=;
-        b=jpOSnpVGPf5/gLaSmGsNc0vn5N+hBHUR9ky2eGwEPwKeNEvqUDPzzpVpElXTK/7f/6q5Le
-        tMd6dnJTD9Q1coxYQspQN9x0xJsA/tLuqTgnm4C8ado5C/3SWuMh6pO0nLk9xPmTr7SYeL
-        5NECd/RNfvdD7AVIFQwhXx4BEP33vzU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     glider@google.com, elver@google.com, dvyukov@google.com,
-        akpm@linux-foundation.org, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com
-Subject: Re: [PATCH v2] mm: kfence: fix objcgs vector allocation
-Message-ID: <YkILyqc1WIfQLCTI@carbon.dhcp.thefacebook.com>
-References: <20220328132843.16624-1-songmuchun@bytedance.com>
+        Mon, 28 Mar 2022 15:34:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050CC5DE4E;
+        Mon, 28 Mar 2022 12:32:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9265B61291;
+        Mon, 28 Mar 2022 19:32:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3CFBC340F3;
+        Mon, 28 Mar 2022 19:32:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648495940;
+        bh=hsj7vpD6VzgwgqTGJwuQLzl4hvMkV3jhPtqSZ0sfeDk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SNrCTUVspAbKGzkl/lkX7LEl6vPIPwqohKfQS9j4wkOpVeD4AC+KSvULMyl9G55Jg
+         cvfYgsKOx6Hu8vQjstDuuVmtLUToCxVMBhEA7FrUd5cZIm75Qm+TeRN9RS4aPKnQ8s
+         4VdTQMh25Fzqi23HYRD5azwSQUL4od4FBcYQ/fGPYvBUJXJjbspEqr29SZYyM1f0wB
+         ZVDQ0hnYEbkmvCEmJc0CRniluyzKwTE0RE7mMXVz3f34vh8LVY8Ic7yvjqtJelPsvg
+         1p3dQa/I00QKG5gziprxkUBf0YEhl/dnQRJSI8QDwxDggof97taB5T49zkVWsy22d/
+         cmkv6heGq2EfQ==
+Received: by mail-ej1-f48.google.com with SMTP id o10so30824503ejd.1;
+        Mon, 28 Mar 2022 12:32:20 -0700 (PDT)
+X-Gm-Message-State: AOAM532Vt9SL/rAbaUw2fVxZBHBUACmcNubMghaB6Dncb4XhBzOJ9gN7
+        kaQv/Kdvr6DHo0Xl2T35jEwBempx0RUVYS0vOA==
+X-Google-Smtp-Source: ABdhPJzS6HE1I5dwIXHt3Z8+oNfExeRu/Ld613R99JBEBBtqUIPwWmfatFTRXQVhLFWR4Q056OlfLe821+lCv3qLtzU=
+X-Received: by 2002:a17:906:58ce:b0:6da:b548:1bbb with SMTP id
+ e14-20020a17090658ce00b006dab5481bbbmr29647735ejs.14.1648495939083; Mon, 28
+ Mar 2022 12:32:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328132843.16624-1-songmuchun@bytedance.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220324001628.13028-1-Sergey.Semin@baikalelectronics.ru> <20220324001628.13028-3-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20220324001628.13028-3-Sergey.Semin@baikalelectronics.ru>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 28 Mar 2022 14:32:06 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKnnVKmCA6he_A-OAgu1xD1bjHBy4_eXf64q2LJ9+L3_g@mail.gmail.com>
+Message-ID: <CAL_JsqKnnVKmCA6he_A-OAgu1xD1bjHBy4_eXf64q2LJ9+L3_g@mail.gmail.com>
+Subject: Re: [PATCH 02/21] dt-bindings: ata: Convert AHCI-bindings to DT schema
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 09:28:43PM +0800, Muchun Song wrote:
-> If the kfence object is allocated to be used for objects vector, then
-> this slot of the pool eventually being occupied permanently since
-> the vector is never freed.  The solutions could be 1) freeing vector
-> when the kfence object is freed or 2) allocating all vectors statically.
-> Since the memory consumption of object vectors is low, it is better to
-> chose 2) to fix the issue and it is also can reduce overhead of vectors
-> allocating in the future.
-> 
-> Fixes: d3fb45f370d9 ("mm, kfence: insert KFENCE hooks for SLAB")
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+On Wed, Mar 23, 2022 at 7:16 PM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
+>
+> Currently the DT bindings of Generic AHCI Controllers are described by
+> means of the legacy text file. Since such format is deprecated in favor of
+> the DT schema. Let's convert the Generic AHCI Controllers bindings file
+> then to the corresponding yaml files. There will be two of them: a DT
+> schema with a set of properties applied to all AHCI-compatible devices,
+> and a DT schema validating an AHCI-controller on a generic platform. So if
+> a controller conforms to the Serial ATA AHCI interface specification with
+> just peculiar platform environment settings like clock sources, PHYs,
+> power regulators or resets, then the generic AHCI bindings should work for
+> it. Otherwise a dedicated DT-schema needs to be created.
+>
+> So a common AHCI SATA controller DT-node is supposed to be equipped with
+> at least compatible, reg and interrupts properties. It can optionally
+> contain clocks, resets, {ahci,target,phy}-supply and phys phandles. In
+> addition the property "ports-implemented" can be specified in order to
+> define the number of implemented SATA ports. An AHCI SATA controller
+> DT-node can also have a set of sub-nodes representing its ports, for each
+> of which an individual power source and PHY phandle can be specified.
+>
+> Note we have omitted the next compatible strings
+> "marvell,armada-380-ahci", "marvell,armada-3700-ahci", "snps,dwc-ahci",
+> "snps,spear-ahci" since the corresponding controllers are handled by the
+> dedicated drivers now, thus are supposed to have their own DT-schema
+> defined. dma-coherent has also been discarded since it's a generic
+> property and is evaluated by the dt-schema parser.
+>
+> Also note that if there is the "reg-names" property specified for a AHCI
+> DT-node then it is supposed to at least have the "ahci" sub-string as an
+> indicator of the AHCI-compatible registers space.
+>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > ---
-> v2:
->  - Fix compiler error reported by kernel test robot <lkp@intel.com>.
+>  .../devicetree/bindings/ata/ahci-common.yaml  | 110 ++++++++++++++++++
+>  .../devicetree/bindings/ata/ahci-platform.txt |  79 -------------
+>  .../devicetree/bindings/ata/generic-ahci.yaml |  89 ++++++++++++++
+>  3 files changed, 199 insertions(+), 79 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/ata/ahci-common.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/ata/ahci-platform.txt
+>  create mode 100644 Documentation/devicetree/bindings/ata/generic-ahci.yaml
 
-Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
+This has already been converted and is in Linus' tree now for v5.18.
 
-LGTM, thanks!
-
-
-> 
->  mm/kfence/core.c   | 11 ++++++++++-
->  mm/kfence/kfence.h |  3 +++
->  2 files changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-> index 13128fa13062..d4c7978cd75e 100644
-> --- a/mm/kfence/core.c
-> +++ b/mm/kfence/core.c
-> @@ -555,6 +555,8 @@ static bool __init kfence_init_pool(void)
->  	 * enters __slab_free() slow-path.
->  	 */
->  	for (i = 0; i < KFENCE_POOL_SIZE / PAGE_SIZE; i++) {
-> +		struct slab *slab = page_slab(&pages[i]);
-> +
->  		if (!i || (i % 2))
->  			continue;
->  
-> @@ -562,7 +564,11 @@ static bool __init kfence_init_pool(void)
->  		if (WARN_ON(compound_head(&pages[i]) != &pages[i]))
->  			goto err;
->  
-> -		__SetPageSlab(&pages[i]);
-> +		__folio_set_slab(slab_folio(slab));
-> +#ifdef CONFIG_MEMCG
-> +		slab->memcg_data = (unsigned long)&kfence_metadata[i / 2 - 1].objcg |
-> +				   MEMCG_DATA_OBJCGS;
-> +#endif
-
-We can probably put CONFIG_MEMCG_KMEM here, but it doesn't matter that much.
-In the long run we should get rid of CONFIG_MEMCG_KMEM anyway.
+Rob

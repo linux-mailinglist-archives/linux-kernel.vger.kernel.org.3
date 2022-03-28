@@ -2,73 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC924E9A28
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065944E9A35
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244100AbiC1Oyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 10:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
+        id S241970AbiC1O6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 10:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240562AbiC1Oym (ORCPT
+        with ESMTP id S244279AbiC1O6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 10:54:42 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689115DE50
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:53:01 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id p4-20020a17090ad30400b001c7ca87c05bso10176266pju.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:53:01 -0700 (PDT)
+        Mon, 28 Mar 2022 10:58:17 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5E25045F
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:56:37 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id z6so17399537iot.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:56:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=szL7lceaP/NxR0+lC2cN5AaRzpZIx1sqZ2iEfehaPgU=;
-        b=dWoW0WSt+vofTr+ILF/HwHxImbE9tGNhavUUeWUHY4WvJIuRkKIJBouTRGpch6aByh
-         BOCESJWtyC9Iu76Ajmq58cWmG3JORjH1N3DUNyraC9UHpqtMgq5J0B7YvvIwCiB4qSuq
-         43EA1b7BzZ2gstsbw3w8peW/pUMClebmhupAU6Is6uLzwHPCvvmMNApimCrwyzdm/Ogc
-         mRYGeomM5FLr79ZfvojBlNJCv+Y03N/h38wNank/TQ/Bgl3Zpp+EdIMaiOjSkX9MRwim
-         EKf9jK+/Xhy0XPU89tIm71stvekDcCJDBojjObxOlzFtX+2WvswVa86Asj04kDqvnjXi
-         Yq6w==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xn5CPRiyBEC8Phc5T9mHlpINr2001VRnlOFT234SvvE=;
+        b=DE21WS3Uri002Pr1QReulf3aDz87uH4itFX6ffaeqajeUuiWnbfdGAuv4BH71NOY7k
+         Qz6wU/bEaQkTJNrnAzEEceBGiG+bJ6uT1crz6OQWk3G5vzz8dmH+h3+Zbi2hObLAyEWo
+         y7iaQO1td8tPeaU+flW9Y1u+/HFn7d8lj/1tE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=szL7lceaP/NxR0+lC2cN5AaRzpZIx1sqZ2iEfehaPgU=;
-        b=QHZypsh/Z1/d+H8dHG6eHDQSPSTiNWlHg1FeJHcSrwqXQPilkUMUO4zw8GtgPPqCh4
-         SZROZfJpDNVzZCYDzm6oEPVZSleLOOhWuJ4onXe7wA949ma8hMT5kHiUd6/hqKbrsXuf
-         GpobjCobsCGAK2L7ZsIFiSxDLxR6lTclcIEjCv09pgEirTL3rv9Ylfi+krxGBJnncDCt
-         sa6s39IzbMRMUS5RtapQiLd6vbx6IBY3BY8I4tK4qkCrDXeNG0Udx+D22IOHdQx2kqhf
-         jX7QXLKY3TEGlb0sQEDsm5LWFkr+FoLaoHC0EC/EKxx80lfUvd9iB9uUt+/pkm7RbdtF
-         qqNw==
-X-Gm-Message-State: AOAM532M1kfWyGuhmgXU3Ev4IAUnKSH5QImsTk6POMA2LbJuPa+uEOeU
-        9jA+IeapyLFGybJkxvoTyJIm7A==
-X-Google-Smtp-Source: ABdhPJyIClNMv5o0NWmY1p1hSJAbH+a7bM/zRuKCdQmA7b/Y9V8XkwNQyyrDzOcaszKj/ka4JXU7Gg==
-X-Received: by 2002:a17:90b:f82:b0:1c6:58b9:bd36 with SMTP id ft2-20020a17090b0f8200b001c658b9bd36mr41688643pjb.141.1648479180804;
-        Mon, 28 Mar 2022 07:53:00 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id a16-20020a637050000000b00385f92b13d1sm13066121pgn.43.2022.03.28.07.52.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 07:53:00 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 14:52:56 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Zap only TDP MMU leafs in zap range and
- mmu_notifier unmap
-Message-ID: <YkHLyP1LvH0MYN25@google.com>
-References: <20220325230348.2587437-1-seanjc@google.com>
- <87lewuo4ge.fsf@redhat.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xn5CPRiyBEC8Phc5T9mHlpINr2001VRnlOFT234SvvE=;
+        b=lGUq9KwDh49MGuq072nu7BLgzsHFd3RcfkRsKhYbL0boKSu98VW2I/5Emwy/YRwg02
+         N1+LMH8/RIT2XuiXDXUswAksiricLshpr5uOsNWn8yRpaTEMVV1LMzytK2HbpqBhFLPD
+         I34qW08eO59EFqep9dOiYHNkbdzA91eRQHIjXzNVrYc/mII0fRFlTCUz0wxnT4u+eMZi
+         Crf4gxawJLIbv9wyFmTdvLBBT209oujWyH0v5riax4jsUB8Xvs1u4ga707pfmdMGGXeL
+         3XgCyuBAQa5QZA0UVXdWHu4ZvPQqnYtgYFyqp6rmXtFP/zvwW1zpcZQMW0icpv/qglTz
+         t8FA==
+X-Gm-Message-State: AOAM53398v5kLrKylc+rpwQPGw5R6iChirw6M2I5Y820qrUPyjD6ZJJQ
+        OqXpdO6kNugqxUNZS761VQyyXg==
+X-Google-Smtp-Source: ABdhPJwg199yKqqkaDayt2zOIHK98balymLx+ERu/H6cHCxDivkxD8bu0j9ZObYzOA7rAGFhQrJE3w==
+X-Received: by 2002:a6b:5d19:0:b0:645:c7ca:7ca with SMTP id r25-20020a6b5d19000000b00645c7ca07camr6619071iob.104.1648479396566;
+        Mon, 28 Mar 2022 07:56:36 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id z17-20020a92da11000000b002c83987c2ffsm7138242ilm.76.2022.03.28.07.56.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 07:56:36 -0700 (PDT)
+Subject: Re: [PATCH 2/3] cpupower: Introduce a new unit test module for AMD
+ P-State driver
+To:     "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Cc:     "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220323071502.2674156-1-li.meng@amd.com>
+ <20220323071502.2674156-3-li.meng@amd.com>
+ <4c13d97e-1471-5642-39dd-d381fa441753@linuxfoundation.org>
+ <MN2PR12MB360098136C287C84D99FD9B6F71D9@MN2PR12MB3600.namprd12.prod.outlook.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <6f52c49f-10c8-0097-9d0f-0ee99925ad9a@linuxfoundation.org>
+Date:   Mon, 28 Mar 2022 08:56:35 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87lewuo4ge.fsf@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <MN2PR12MB360098136C287C84D99FD9B6F71D9@MN2PR12MB3600.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,33 +87,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022, Vitaly Kuznetsov wrote:
-> Sean Christopherson <seanjc@google.com> writes:
+On 3/28/22 7:57 AM, Meng, Li (Jassmine) wrote:
+> [AMD Official Use Only]
 > 
-> > Re-introduce zapping only leaf SPTEs in kvm_zap_gfn_range() and
-> > kvm_tdp_mmu_unmap_gfn_range(), this time without losing a pending TLB
-> > flush when processing multiple roots (including nested TDP shadow roots).
-> > Dropping the TLB flush resulted in random crashes when running Hyper-V
-> > Server 2019 in a guest with KSM enabled in the host (or any source of
-> > mmu_notifier invalidations, KSM is just the easiest to force).
-> >
-> > This effectively revert commits 873dd122172f8cce329113cfb0dfe3d2344d80c0
-> > and fcb93eb6d09dd302cbef22bd95a5858af75e4156, and thus restores commit
-> > cf3e26427c08ad9015956293ab389004ac6a338e, plus this delta on top:
-> >
-> > bool kvm_tdp_mmu_zap_leafs(struct kvm *kvm, int as_id, gfn_t start, gfn_t end,
-> >         struct kvm_mmu_page *root;
-> >
-> >         for_each_tdp_mmu_root_yield_safe(kvm, root, as_id)
-> > -               flush = tdp_mmu_zap_leafs(kvm, root, start, end, can_yield, false);
-> > +               flush = tdp_mmu_zap_leafs(kvm, root, start, end, can_yield, flush);
-> >
-> >         return flush;
-> >  }
-> >
+> Hi Shuah:
 > 
-> I confirm this fixes the issue I was seeing, thanks!
+> Thank you very much for your valuable suggestions.
+> We will adapt it to test our AMD P-State driver. But we haven't decided which one to adapt, kunit or kselftest.
 > 
-> Tested-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Requirements for our unit test module:
+>   - It can access kernel internal structures and functions which aren't exposed to user space.
+>   - It is implemented through the script trigger CPU benchmark app in conjunction with the kernel module.
+> 
+> Therefore, next, we will study which method can meet the above requirements.
+> Can you give us some suggestions?
+> 
 
-Phew!  I think I would have cried were that not the case :-)  Thanks for testing!
+No top posting please. If you need to access kernel internal structures
+and functions KUNit is a better choice for you as long as all of the
+testing can be done in the kernel driver.
+
+If kernel internal structures and functions need to be tested from user-space,
+then a kernel driver test module and a user-space kselftest shell or C program
+is the approach to take.
+
+> -----Original Message-----
+> From: Shuah Khan <skhan@linuxfoundation.org>
+> Sent: Wednesday, March 23, 2022 10:15 PM
+> To: Meng, Li (Jassmine) <Li.Meng@amd.com>; Rafael J . Wysocki <rafael.j.wysocki@intel.com>; Huang, Ray <Ray.Huang@amd.com>; linux-pm@vger.kernel.org
+> Cc: Fontenot, Nathan <Nathan.Fontenot@amd.com>; Sharma, Deepak <Deepak.Sharma@amd.com>; Deucher, Alexander <Alexander.Deucher@amd.com>; Limonciello, Mario <Mario.Limonciello@amd.com>; Su, Jinzhou (Joe) <Jinzhou.Su@amd.com>; Yuan, Perry <Perry.Yuan@amd.com>; Du, Xiaojian <Xiaojian.Du@amd.com>; Viresh Kumar <viresh.kumar@linaro.org>; Borislav Petkov <bp@alien8.de>; linux-kernel@vger.kernel.org; Shuah Khan <skhan@linuxfoundation.org>
+> Subject: Re: [PATCH 2/3] cpupower: Introduce a new unit test module for AMD P-State driver
+> 
+> [CAUTION: External Email]
+> 
+> On 3/23/22 1:15 AM, Meng Li wrote:
+>> amd-pstate-ut is a kernel module for testing the functions of AMD P-State driver.
+>>
+>> It can verify the required conditions and basic functions of AMD
+>> P-State driver before integration test.
+>>
+> 
+> Can you elaborate on the need for a kernel module? It would be helpful to know tne value the mdoule adds and why it is necessary. Include details on why it can't be done as part of the user-space program.
+> 
+> I am not saying it isn't necssary, I would like to know the reasons before I review the patch.
+> 
+> Also if this is a driver test, why not use other test frameworks such as kunit or kselftest. cpupower is user-space utility and driver debug code would not belong in here.
+> 
+
+thanks,
+-- Shuah

@@ -2,317 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3424E9BB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E484E9BC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240573AbiC1P7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 11:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
+        id S240623AbiC1QCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 12:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbiC1P7c (ORCPT
+        with ESMTP id S235079AbiC1QC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 11:59:32 -0400
-Received: from srv6.fidu.org (srv6.fidu.org [IPv6:2a01:4f8:231:de0::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8744F5E163;
-        Mon, 28 Mar 2022 08:57:48 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by srv6.fidu.org (Postfix) with ESMTP id 7EBBAC80082;
-        Mon, 28 Mar 2022 17:57:46 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
-Received: from srv6.fidu.org ([127.0.0.1])
-        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id NG8Sca-FmaOl; Mon, 28 Mar 2022 17:57:46 +0200 (CEST)
-Received: from [192.168.178.30] (host-212-18-30-247.customer.m-online.net [212.18.30.247])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        Mon, 28 Mar 2022 12:02:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B24861A2C
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:00:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648483246;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oxOO4gJbn0ydaUcqbE+9zc/rIqqndD63o24mIhA8iJM=;
+        b=NJHEz2Ks11IJZQnbceggTwR2UCMqJWvUG2weR/50dPeU/O0qV5++MC/Rkqf3CBzMRJt6kv
+        U/OPJ7kYxJQK9E21k4fA+u4kHOELjpSqSKIwRvFaPU+Zsfm7XKaKN9M/f6i9wUNL2WwuV9
+        cEYWcPEu5BVV7jF7mmDgpjtbxBozyA4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-341-7W1Y8D9BPTyYlCdSe46Ysg-1; Mon, 28 Mar 2022 12:00:43 -0400
+X-MC-Unique: 7W1Y8D9BPTyYlCdSe46Ysg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by srv6.fidu.org (Postfix) with ESMTPSA id CF2BFC80080;
-        Mon, 28 Mar 2022 17:57:45 +0200 (CEST)
-Message-ID: <298eb9f7-50d4-121c-1674-1ad8730ae995@tuxedocomputers.com>
-Date:   Mon, 28 Mar 2022 17:57:45 +0200
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2068A18A6581;
+        Mon, 28 Mar 2022 16:00:40 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8A61AC080A5;
+        Mon, 28 Mar 2022 16:00:26 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     Anna Schumaker <anna.schumaker@netapp.com>,
+        David Wysochanski <dwysocha@redhat.com>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Steve French <sfrench@samba.org>, ceph-devel@vger.kernel.org,
+        dhowells@redhat.com, linux-afs@lists.infradead.org,
+        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] netfs: Prep for write helpers
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 2/4] input/i8042: Merge quirk tables
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>, dmitry.torokhov@gmail.com,
-        tiwai@suse.de, mpdesouza@suse.com, arnd@arndb.de, samuel@cavoj.net,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220322162125.59838-1-wse@tuxedocomputers.com>
- <20220322162125.59838-3-wse@tuxedocomputers.com>
- <c8b3158a-d48d-9abd-d651-5a982609166e@redhat.com>
-From:   Werner Sembach <wse@tuxedocomputers.com>
-In-Reply-To: <c8b3158a-d48d-9abd-d651-5a982609166e@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2181379.1648196143.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+From:   David Howells <dhowells@redhat.com>
+Date:   Mon, 28 Mar 2022 17:00:25 +0100
+Message-ID: <2639515.1648483225@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_QP_LONG_LINE,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
-Am 28.03.22 um 14:02 schrieb Hans de Goede:
-> Hi,
->
-> On 3/22/22 17:21, Werner Sembach wrote:
->> Merge i8042 quirk tables to reduce code duplication for devices that need
->> more than one quirk. Before every quirk had its own table with devices
->> needing that quirk. If a new quirk needed to be added a new table had to
->> be created. When a device needed multiple quirks, it appeared in multiple
->> tables. Now only one table called i8042_dmi_quirk_table exists. In it every
->> device has one entry and required quirks are coded in the .driver_data
->> field of the struct dmi_system_id used by this table. Multiple quirks for
->> one device can be applied by bitwise-and of the new SERIO_QUIRK_* defines.
-> that should be bitwise-or, at least when setting the quirks, testing
-> them happens by bitwise-and. But to me applying here describes the setting
-> of the quirks in the table, so bitwise-or.
-Yes, ofc, I somehow blanked out when writing that sentence.
->
->> Also align quirkable options with command line parameters and make vendor
->> wide quirks per device overwriteable on a per device basis. The first match
->> is honored while following matches are ignored. So when a vendor wide quirk
->> is defined in the table, a device can inserted before and therefore
->> ignoring the vendor wide define.
->>
->> Some duplication on the ASUS devices is required to mirror the exact
->> behaviour of the previous code. All "ASUSTeK COMPUTER INC" devices of
->> chassis type 10 and 31 got the "reset never" quirk. In other tables some
->> ASUS devices got other quirks. With everything being one table now, vendor
->> wide quirks are still possible, but when a device is included explicitly,
->> it will ignore all vendor wide quirks and needs to explicitly include them
->> again. Not knowing which "ASUSTeK COMPUTER INC" devices are of chassis type
->> 10 or 31, there now exists three entries for each of them: One matching
->> chassis type 10, one matching, chassis type 31, and one matching the rest.
->> The quirks are set accordingly to mirror the previous behaviour.
-> Ah, I see. There is a database of DMI dumps from people who have run
-> the hwprobe util on their Linux machine here:
->
-> https://github.com/linuxhw/DMI/
->
-> Looking at the DMI table after your patch the following 4 Asus models
-> now have 3 entries per model because of this: X750LN, X450LCP,
-> ZenBook UX425UA, ZenBook UX325UA_UM325UA:
->
-> X750LN: https://github.com/linuxhw/DMI/blob/master/Notebook/ASUSTek%20Computer/X750/X750LN/1E1B975B9B01
-> Chassis Type: "Desktop", so "3" iow not 10 or 31 so we want just
-> SERIO_QUIRK_NOLOOP for this one. Also note that the no chassis-type-match
-> entry for this is wrong, you kept SERIO_QUIRK_RESET_NEVER there instead
-> of SERIO_QUIRK_NOLOOP.
->
-> X450LCP: https://github.com/linuxhw/DMI/blob/master/Notebook/ASUSTek%20Computer/X450/X450LCP/24D04D5FCB2F
-> Chassis Type: "Notebook", so "10", so want to have:
-> (SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_NEVER) for this one.
->
-> UX425UA: https://github.com/linuxhw/DMI/blob/master/Notebook/ASUSTek%20Computer/ZenBook/ZenBook%20UX425UA_UM425UA/C70168C3DFC7
-> Note the "Product Name" is not an exact match here, but with a DMI_MATCH of the beginnings
-> of the strings match that counts as a match, so this is actually a match.
-> Chassis Type: "Notebook", so "10", so want to have:
-> (SERIO_QUIRK_PROBE_DEFER | SERIO_QUIRK_RESET_NEVER) for this one.
->
-> UX325UA: https://github.com/linuxhw/DMI/blob/master/Notebook/ASUSTek%20Computer/ZenBook/ZenBook%20UX325UA_UM325UA/C52AA8CE00C7
-> Chassis Type: "Notebook", so "10", so want to have:
-> (SERIO_QUIRK_PROBE_DEFER | SERIO_QUIRK_RESET_NEVER) for this one.
->
-> So with this figured out, there no longer is a need for the 3 entries
-> per model thing and you can also drop this paragraph from
-> the commit msg.
-Thanks for this reference. Directly bookmarking it for the future.
->
->> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
->> Cc: stable@vger.kernel.org
->> ---
->>  drivers/input/serio/i8042-x86ia64io.h | 1149 ++++++++++++++-----------
->>  1 file changed, 656 insertions(+), 493 deletions(-)
->>
->> diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
->> index 91c6f24b4837..dbfbd6a2763a 100644
->> --- a/drivers/input/serio/i8042-x86ia64io.h
->> +++ b/drivers/input/serio/i8042-x86ia64io.h
->> @@ -67,951 +67,1091 @@ static inline void i8042_write_command(int val)
->>  
->>  #include <linux/dmi.h>
->>  
->> -static const struct dmi_system_id __initconst i8042_dmi_noloop_table[] = {
->> +#define SERIO_QUIRK_NOKBD		BIT(0)
->> +#define SERIO_QUIRK_NOAUX		BIT(1)
->> +#define SERIO_QUIRK_NOMUX		BIT(2)
->> +#define SERIO_QUIRK_FORCEMUX		BIT(3)
->> +#define SERIO_QUIRK_UNLOCK		BIT(4)
->> +#define SERIO_QUIRK_PROBE_DEFER		BIT(5)
->> +#define SERIO_QUIRK_RESET_ALWAYS	BIT(6)
->> +#define SERIO_QUIRK_RESET_NEVER		BIT(7)
->> +#define SERIO_QUIRK_DIECT		BIT(8)
->> +#define SERIO_QUIRK_DUMBKBD		BIT(9)
->> +#define SERIO_QUIRK_NOLOOP		BIT(10)
->> +#define SERIO_QUIRK_NOTIMEOUT		BIT(11)
->> +#define SERIO_QUIRK_KBDRESET		BIT(12)
->> +#define SERIO_QUIRK_DRITEK		BIT(13)
->> +#define SERIO_QUIRK_NOPNP		BIT(14)
->> +
->> +/* Quirk table for different mainboards. Options similar or identical to i8042
->> + * module parameters.
->> + * ORDERING IS IMPORTANT! The first match will be apllied and the rest ignored.
->> + * This allows entries to overwrite vendor wide quirks on a per device basis.
->> + * Where this is irrelevant, entries are sorted case sensitive by DMI_SYS_VENDOR
->> + * and/or DMI_BOARD_VENDOR to make it easier to avoid dublicate entries.
->> + */
->> +static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
->>  	{
-> <snip>
->
->> @@ -1167,11 +1307,6 @@ static int __init i8042_pnp_init(void)
->>  	bool pnp_data_busted = false;
->>  	int err;
->>  
->> -#ifdef CONFIG_X86
->> -	if (dmi_check_system(i8042_dmi_nopnp_table))
->> -		i8042_nopnp = true;
->> -#endif
->> -
->>  	if (i8042_nopnp) {
->>  		pr_info("PNP detection disabled\n");
->>  		return 0;
->> @@ -1275,6 +1410,62 @@ static inline int i8042_pnp_init(void) { return 0; }
->>  static inline void i8042_pnp_exit(void) { }
->>  #endif /* CONFIG_PNP */
->>  
->> +
->> +#ifdef CONFIG_X86
->> +static void __init i8042_check_quirks(void)
->> +{
->> +	const struct dmi_system_id *device_quirk_info;
->> +	uintptr_t quirks;
->> +
->> +	device_quirk_info = dmi_first_match(i8042_dmi_quirk_table);
->> +	if (!device_quirk_info)
->> +		return;
->> +
->> +	quirks = (uintptr_t)device_quirk_info->driver_data;
->> +
->> +	device_quirk_info = dmi_first_match(i8042_dmi_quirk_table);
-> This line is duplicated from above and can be dropped.
-Copy paste error, thanks for spotting it
->
->> +	if (device_quirk_info) {
-> You already do:
->
-> 	if (!device_quirk_info)
-> 		return;
->
-> Above so this if can be dropped and the code block below can
-> be un-indented 1 step.
-Also copy paste related without rethinking according to the new position in code.
->
->> +		if (quirks & SERIO_QUIRK_NOKBD)
->> +			i8042_nokbd = true;
->> +		if (quirks & SERIO_QUIRK_NOAUX)
->> +			i8042_noaux = true;
->> +		if (quirks & SERIO_QUIRK_NOMUX)
->> +			i8042_nomux = true;
->> +		if (quirks & SERIO_QUIRK_FORCEMUX)
->> +			i8042_nomux = false;
->> +		if (quirks & SERIO_QUIRK_UNLOCK)
->> +			i8042_unlock = true;
->> +		if (quirks & SERIO_QUIRK_PROBE_DEFER)
->> +			i8042_probe_defer = true;
->> +		/* Honor module parameter when value is not default */
->> +		if (i8042_reset == I8042_RESET_DEFAULT) {
->> +			if (quirks & SERIO_QUIRK_RESET_ALWAYS)
->> +				i8042_reset = I8042_RESET_ALWAYS;
->> +			if (quirks & SERIO_QUIRK_RESET_NEVER)
->> +				i8042_reset = I8042_RESET_NEVER;
->> +		}
->> +		if (quirks & SERIO_QUIRK_DIECT)
->> +			i8042_direct = true;
->> +		if (quirks & SERIO_QUIRK_DUMBKBD)
->> +			i8042_dumbkbd = true;
->> +		if (quirks & SERIO_QUIRK_NOLOOP)
->> +			i8042_noloop = true;
->> +		if (quirks & SERIO_QUIRK_NOTIMEOUT)
->> +			i8042_notimeout = true;
->> +		if (quirks & SERIO_QUIRK_KBDRESET)
->> +			i8042_kbdreset = true;
->> +		if (quirks & SERIO_QUIRK_DRITEK)
->> +			i8042_dritek = true;
->> +#ifdef CONFIG_PNP
->> +		if (quirks & SERIO_QUIRK_NOPNP)
->> +			i8042_nopnp = true;
->> +#endif
->> +	}
->> +}
->> +#else
->> +static inline void i8042_check_quirks(void) {}
->> +#endif
->> +
->>  static int __init i8042_platform_init(void)
->>  {
->>  	int retval;
->> @@ -1297,45 +1488,17 @@ static int __init i8042_platform_init(void)
->>  	i8042_kbd_irq = I8042_MAP_IRQ(1);
->>  	i8042_aux_irq = I8042_MAP_IRQ(12);
->>  
->> -	retval = i8042_pnp_init();
->> -	if (retval)
->> -		return retval;
->> -
->>  #if defined(__ia64__)
->> -        i8042_reset = I8042_RESET_ALWAYS;
->> +	i8042_reset = I8042_RESET_ALWAYS;
->>  #endif
->>  
->> -#ifdef CONFIG_X86
->> -	/* Honor module parameter when value is not default */
->> -	if (i8042_reset == I8042_RESET_DEFAULT) {
->> -		if (dmi_check_system(i8042_dmi_reset_table))
->> -			i8042_reset = I8042_RESET_ALWAYS;
->> -
->> -		if (dmi_check_system(i8042_dmi_noselftest_table))
->> -			i8042_reset = I8042_RESET_NEVER;
->> -	}
->> -
->> -	if (dmi_check_system(i8042_dmi_noloop_table))
->> -		i8042_noloop = true;
->> -
->> -	if (dmi_check_system(i8042_dmi_nomux_table))
->> -		i8042_nomux = true;
->> +	i8042_check_quirks();
->>  
->> -	if (dmi_check_system(i8042_dmi_forcemux_table))
->> -		i8042_nomux = false;
->> -
->> -	if (dmi_check_system(i8042_dmi_notimeout_table))
->> -		i8042_notimeout = true;
->> -
->> -	if (dmi_check_system(i8042_dmi_dritek_table))
->> -		i8042_dritek = true;
->> -
->> -	if (dmi_check_system(i8042_dmi_kbdreset_table))
->> -		i8042_kbdreset = true;
->> -
->> -	if (dmi_check_system(i8042_dmi_probe_defer_table))
->> -		i8042_probe_defer = true;
->> +	retval = i8042_pnp_init();
->> +	if (retval)
->> +		return retval;
->>  
->> +#ifdef CONFIG_X86
->>  	/*
->>  	 * A20 was already enabled during early kernel init. But some buggy
->>  	 * BIOSes (in MSI Laptops) require A20 to be enabled using 8042 to
->
-> Other then the above remarks this looks good to me.
->
-> Regards,
->
-> Hans
->
-Thanks for your feedback, i will code up revision 5
+Here's my next batch of netfs changes, if you could pull them?  Note that
+this has dependencies on ceph changes in Ilya's pull request and there are
+some minor conflicts with Willy's folio patches that you've already pulled
+for which Stephen Rothwell has posted adjustments for linux-next[9][10].
 
-Kind Regards,
+Having had a go at implementing write helpers and content encryption
+support in netfslib, it seems that the netfs_read_{,sub}request structs and
+the equivalent write request structs were almost the same and so should be
+merged, thereby requiring only one set of alloc/get/put functions and a
+common set of tracepoints.
 
-Werner Sembach
+Merging the structs also has the advantage that if a bounce buffer is added
+to the request struct, a read operation can be performed to fill the bounce
+buffer, the contents of the buffer can be modified and then a write
+operation can be performed on it to send the data wherever it needs to go
+using the same request structure all the way through.  The I/O handlers
+would then transparently perform any required crypto.  This should make it
+easier to perform RMW cycles if needed.
+
+The potentially common functions and structs, however, by their names all
+proclaim themselves to be associated with the read side of things.  The
+bulk of these changes alter this in the following ways:
+
+ (1) Rename struct netfs_read_{,sub}request to netfs_io_{,sub}request.
+
+ (2) Rename some enums, members and flags to make them more appropriate.
+
+ (3) Adjust some comments to match.
+
+ (4) Drop "read"/"rreq" from the names of common functions.  For instance,
+     netfs_get_read_request() becomes netfs_get_request().
+
+ (5) The ->init_rreq() and ->issue_op() methods become ->init_request() and
+     ->issue_read().  I've kept the latter as a read-specific function and
+     in another branch added an ->issue_write() method.
+
+The driver source is then reorganised into a number of files:
+
+	fs/netfs/buffered_read.c	Create read reqs to the pagecache
+	fs/netfs/io.c			Dispatchers for read and write reqs
+	fs/netfs/main.c			Some general miscellaneous bits
+	fs/netfs/objects.c		Alloc, get and put functions
+	fs/netfs/stats.c		Optional procfs statistics.
+
+and future development can be fitted into this scheme, e.g.:
+
+	fs/netfs/buffered_write.c	Modify the pagecache
+	fs/netfs/buffered_flush.c	Writeback from the pagecache
+	fs/netfs/direct_read.c		DIO read support
+	fs/netfs/direct_write.c		DIO write support
+	fs/netfs/unbuffered_write.c	Write modifications directly back
+
+Beyond the above changes, there are also some changes that affect how
+things work:
+
+ (1) Make fscache_end_operation() generally available.
+
+ (2) In the netfs tracing header, generate enums from the symbol -> string
+     mapping tables rather than manually coding them.
+
+ (3) Add a struct for filesystems that uses netfslib to put into their
+     inode wrapper structs to hold extra state that netfslib is interested
+     in, such as the fscache cookie.  This allows netfslib functions to be
+     set in filesystem operation tables and jumped to directly without
+     having to have a filesystem wrapper.
+
+ (4) Add a member to the struct added in (3) to track the remote inode
+     length as that may differ if local modifications are buffered.  We may
+     need to supply an appropriate EOF pointer when storing data (in AFS
+     for example).
+
+ (5) Pass extra information to netfs_alloc_request() so that the
+     ->init_request() hook can access it and retain information to indicate
+     the origin of the operation.
+
+ (6) Make the ->init_request() hook return an error, thereby allowing a
+     filesystem that isn't allowed to cache an inode (ceph or cifs, for
+     example) to skip readahead.
+
+ (7) Switch to using refcount_t for subrequests and add tracepoints to log
+     refcount changes for the request and subrequest structs.
+
+ (8) Add a function to consolidate dispatching a read request.  Similar
+     code is used in three places and another couple are likely to be added
+     in the future.
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+Tested-by: Jeff Layton <jlayton@kernel.org>
+Tested-by: Dominique Martinet <asmadeus@codewreck.org> # 9p
+Tested-by: Marc Dionne <marc.dionne@auristor.com> # afs
+
+---
+
+Changes
+=======
+ver #4)
+ - Move the check for NETFS_READAHEAD up in ceph_init_request()[7].
+ - Fix netfs_is_cache_enabled() to check cookie->cache_priv to see if a
+   cache is present[8].
+ - Fix netfs_skip_folio_read() to zero out all of the page, not just some
+   of it[8].
+
+ver #3)
+ - Rebased one patch back on the ceph tree as the top patch got removed[4].
+ - Split out the bit to move ceph cap-getting on readahead out from the
+   patch adding an inode context[5].
+ - Made ceph_init_request() store the caps got in rreq->netfs_priv for
+   later freeing.
+ - Comment the need to keep the netfs inode context contiguous with the VFS
+   inode struct[6].
+ - Altered the traces to use 'R=' consistently to denote a request debug ID.
+ 
+ver #2)
+ - Changed kdoc references to renamed files[1].
+ - Switched the begin-read-function patch and the prepare-to-split patch as
+   fewer functions then need unstatic'ing.
+ - Fixed an uninitialised var in netfs_begin_read()[2][3].
+ - Fixed a refleak caused by an unremoved line when netfs_begin_read() was
+   introduced.
+ - Used "#if IS_ENABLED()" in netfs_i_cookie(), not "#ifdef".
+ - Implemented missing bit of ceph readahead through netfs_readahead().
+ - Rearranged the patch order to make the ceph readahead possible.
+
+Link: https://lore.kernel.org/r/20220303202811.6a1d53a1@canb.auug.org.au/ [1]
+Link: https://lore.kernel.org/r/20220303163826.1120936-1-nathan@kernel.org/ [2]
+Link: https://lore.kernel.org/r/20220303235647.1297171-1-colin.i.king@gmail.com/ [3]
+Link: https://lore.kernel.org/r/527234d849b0de18b326d6db0d59070b70d19b7e.camel@kernel.org/ [4]
+Link: https://lore.kernel.org/r/8af0d47f17d89c06bbf602496dd845f2b0bf25b3.camel@kernel.org/ [5]
+Link: https://lore.kernel.org/r/beaf4f6a6c2575ed489adb14b257253c868f9a5c.camel@kernel.org/ [6]
+Link: https://lore.kernel.org/r/dd054c962818716e718bd9b446ee5322ca097675.camel@redhat.com/ [7]
+Link: https://lore.kernel.org/r/3536452.1647421585@warthog.procyon.org.uk/ [8]
+Link: https://lore.kernel.org/r/20220324105317.67a81b0e@canb.auug.org.au/ [9]
+Link: https://lore.kernel.org/r/20220324105426.5250396a@canb.auug.org.au/ [10]
+Link: https://lore.kernel.org/r/164622970143.3564931.3656393397237724303.stgit@warthog.procyon.org.uk/ # v1
+Link: https://lore.kernel.org/r/164678185692.1200972.597611902374126174.stgit@warthog.procyon.org.uk/ # v2
+Link: https://lore.kernel.org/r/164692883658.2099075.5745824552116419504.stgit@warthog.procyon.org.uk/ # v3
+
+---
+The following changes since commit ad5255c1ea9c64b350efe732c90e63063b2bbbe0:
+
+  ceph: misc fix for code style and logs (2022-03-01 18:26:37 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/netfs-prep-20220318
+
+for you to fetch changes up to ab487a4cdfca3d1ef12795a49eafe1144967e617:
+
+  afs: Maintain netfs_i_context::remote_i_size (2022-03-18 09:29:05 +0000)
+
+----------------------------------------------------------------
+Netfs prep for write helpers
+
+----------------------------------------------------------------
+David Howells (19):
+      netfs: Generate enums from trace symbol mapping lists
+      netfs: Rename netfs_read_*request to netfs_io_*request
+      netfs: Finish off rename of netfs_read_request to netfs_io_request
+      netfs: Split netfs_io_* object handling out
+      netfs: Adjust the netfs_rreq tracepoint slightly
+      netfs: Trace refcounting on the netfs_io_request struct
+      netfs: Trace refcounting on the netfs_io_subrequest struct
+      netfs: Adjust the netfs_failure tracepoint to indicate non-subreq lines
+      netfs: Refactor arguments for netfs_alloc_read_request
+      netfs: Change ->init_request() to return an error code
+      ceph: Make ceph_init_request() check caps on readahead
+      netfs: Add a netfs inode context
+      netfs: Add a function to consolidate beginning a read
+      netfs: Prepare to split read_helper.c
+      netfs: Rename read_helper.c to io.c
+      netfs: Split fs/netfs/read_helper.c
+      netfs: Split some core bits out into their own file
+      netfs: Keep track of the actual remote file size
+      afs: Maintain netfs_i_context::remote_i_size
+
+Jeffle Xu (1):
+      fscache: export fscache_end_operation()
+
+ Documentation/filesystems/netfs_library.rst |  140 ++--
+ fs/9p/cache.c                               |   10 +-
+ fs/9p/v9fs.c                                |    4 +-
+ fs/9p/v9fs.h                                |   13 +-
+ fs/9p/vfs_addr.c                            |   62 +-
+ fs/9p/vfs_inode.c                           |   13 +-
+ fs/afs/dynroot.c                            |    1 +
+ fs/afs/file.c                               |   41 +-
+ fs/afs/inode.c                              |   32 +-
+ fs/afs/internal.h                           |   23 +-
+ fs/afs/super.c                              |    4 +-
+ fs/afs/write.c                              |   10 +-
+ fs/cachefiles/io.c                          |   10 +-
+ fs/ceph/addr.c                              |  116 ++-
+ fs/ceph/cache.c                             |   28 +-
+ fs/ceph/cache.h                             |   15 +-
+ fs/ceph/inode.c                             |    6 +-
+ fs/ceph/super.h                             |   17 +-
+ fs/cifs/cifsglob.h                          |   10 +-
+ fs/cifs/fscache.c                           |   19 +-
+ fs/cifs/fscache.h                           |    2 +-
+ fs/fscache/internal.h                       |   11 -
+ fs/netfs/Makefile                           |    8 +-
+ fs/netfs/buffered_read.c                    |  428 ++++++++++
+ fs/netfs/internal.h                         |   50 +-
+ fs/netfs/io.c                               |  657 +++++++++++++++
+ fs/netfs/main.c                             |   20 +
+ fs/netfs/objects.c                          |  160 ++++
+ fs/netfs/read_helper.c                      | 1205 ---------------------------
+ fs/netfs/stats.c                            |    1 -
+ fs/nfs/fscache.c                            |    8 -
+ include/linux/fscache.h                     |   14 +
+ include/linux/netfs.h                       |  162 +++-
+ include/trace/events/cachefiles.h           |    6 +-
+ include/trace/events/netfs.h                |  190 +++--
+ 35 files changed, 1868 insertions(+), 1628 deletions(-)
+ create mode 100644 fs/netfs/buffered_read.c
+ create mode 100644 fs/netfs/io.c
+ create mode 100644 fs/netfs/main.c
+ create mode 100644 fs/netfs/objects.c
+ delete mode 100644 fs/netfs/read_helper.c
 

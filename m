@@ -2,88 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7214EA05F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 21:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BEDD4EA0A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 21:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344155AbiC1Tvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 15:51:44 -0400
+        id S1344082AbiC1TvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 15:51:12 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344149AbiC1TsP (ORCPT
+        with ESMTP id S1344055AbiC1TsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 15:48:15 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC2B6A04E
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 12:44:03 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id b43so16136757ljr.10
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 12:44:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yY5uf81qt+1I3vTlghdpq4T8dk4DpEDuV1Evhs9S7xk=;
-        b=akIoitYH+autCWTeAaNEldmByYC482HSaca0P9IxLJj7fsaVSfNd42H+iwcxh4GRWL
-         aypsLEJK3ATuIaNodb8n3qOF77dMiQykxpohirj3o8IItWcLV8RMBRa48/Hr6cAlS70z
-         hLIa9bUOCy/VZS0n8MBlAqf1WrfAC7HgAd44A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yY5uf81qt+1I3vTlghdpq4T8dk4DpEDuV1Evhs9S7xk=;
-        b=a7WMqg+E5KL9vmCedAybXfex5P7neNQSlCRs9qotx7yA8wTn/vujbNaUVywW8rrsqD
-         MM4C25K3YnkZfcytQiN1sW5kGC8q4TSzVJYm01n4KZ04mOo9uLwMj99k+wSQ0V8BheRe
-         queI5NxMts8Yo0uE/0XFw8cI5sDVafoINjCFjrJJH4TSkijw3U4XRnRmcPK6Ka7CwB9d
-         wx3nCVjw/s6wJJlZPuE/mTEZOZ+1ljwucAves9OLyNthqTvlsim9Afke9+XtaNT9cdSF
-         Ce2fidB5qslP3Wf/kmpFixzrQ0BUYKBmUqG6bqh6iM2vPbV9BSoD/me58AIqGn2nre5c
-         nxPg==
-X-Gm-Message-State: AOAM532ML5POOOiM4rKnphIgz0f6C9Uc6v3E24cCNNWx+bOQ931dDqaJ
-        otBBOgOVabIn0s9Z9oc9DHhgwzOfdtp/YTYr5cM=
-X-Google-Smtp-Source: ABdhPJwt+zDgU9qgFlb5woH5sVBdWNq/SD/iLhcJ+OPBVpMDM7CWMA4f0F+ef3gxNUhZl46ZL2Wzcw==
-X-Received: by 2002:a2e:808d:0:b0:23e:f35:506b with SMTP id i13-20020a2e808d000000b0023e0f35506bmr22000998ljg.285.1648496636653;
-        Mon, 28 Mar 2022 12:43:56 -0700 (PDT)
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
-        by smtp.gmail.com with ESMTPSA id k12-20020a0565123d8c00b0044a3528a3cdsm1720151lfv.208.2022.03.28.12.43.56
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Mar 2022 12:43:56 -0700 (PDT)
-Received: by mail-lj1-f181.google.com with SMTP id v12so7944496ljd.3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 12:43:56 -0700 (PDT)
-X-Received: by 2002:a05:651c:1213:b0:247:e2d9:cdda with SMTP id
- i19-20020a05651c121300b00247e2d9cddamr22434723lja.443.1648496635677; Mon, 28
- Mar 2022 12:43:55 -0700 (PDT)
+        Mon, 28 Mar 2022 15:48:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6360D69CE6;
+        Mon, 28 Mar 2022 12:43:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05140B81211;
+        Mon, 28 Mar 2022 19:43:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6408C34100;
+        Mon, 28 Mar 2022 19:43:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648496625;
+        bh=C/SMjWA3l3pSGH38ujMHoa1gDAUQvkcblMCdK+pMmd0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=exY/KHuh6gR863ajU+vOs9INqTyuo3sXf/kCnBpk6My1Yje2RbycCSPNbEvEZ2DCB
+         yHgjZoEwRHVD4Rhp5XftGwuCiPRoMDE0kJ8H9MglhQNlScZAHqqSxlchzLD2YzpwWk
+         b9hgijfx4xmOEx/XiNnZtweyEA3TxxFbYBq0RA7om2HUjLw7Cl6+A2GRn4B4hwpo6M
+         bzZs7RhJFkfZEIA/SSh8DyNsZvquIyUy1SwkQ4RMGi3B3upNKpEZCefP2z/juNAwE9
+         jmrMgahSV+tssCX6DbIJzM2Yo6JwlQ0QxfS1meo+MPD0k8eVaO1TqWx9fVZyKqWl/J
+         I+GTGKSctgtqQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com,
+        Lee Jones <lee.jones@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 1/2] ext4: don't BUG if someone dirty pages without asking ext4 first
+Date:   Mon, 28 Mar 2022 15:43:42 -0400
+Message-Id: <20220328194343.1586624-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <YkG6qJsnjjzF0iFD@kroah.com>
-In-Reply-To: <YkG6qJsnjjzF0iFD@kroah.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 28 Mar 2022 12:43:39 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgqY_5oWAFvp=zO_HqbdYsQLK+5O3DFgEpRM3MLjNZ9eQ@mail.gmail.com>
-Message-ID: <CAHk-=wgqY_5oWAFvp=zO_HqbdYsQLK+5O3DFgEpRM3MLjNZ9eQ@mail.gmail.com>
-Subject: Re: [GIT PULL] Driver core changes for 5.18-rc1
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Saravana Kannan <saravanak@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 6:39 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> There will be a merge conflict in drivers/power/supply/ab8500_chargalg.c
-> with your tree, the merge conflict should be easy (take all the
-> changes).
+From: Theodore Ts'o <tytso@mit.edu>
 
-And by "take all the changes", I'm sure you mean "take none of them,
-since the code was removed upstream in the meantime".
+[ Upstream commit cc5095747edfb054ca2068d01af20be3fcc3634f ]
 
-Easy typo to make.
+[un]pin_user_pages_remote is dirtying pages without properly warning
+the file system in advance.  A related race was noted by Jan Kara in
+2018[1]; however, more recently instead of it being a very hard-to-hit
+race, it could be reliably triggered by process_vm_writev(2) which was
+discovered by Syzbot[2].
 
-              Linus
+This is technically a bug in mm/gup.c, but arguably ext4 is fragile in
+that if some other kernel subsystem dirty pages without properly
+notifying the file system using page_mkwrite(), ext4 will BUG, while
+other file systems will not BUG (although data will still be lost).
+
+So instead of crashing with a BUG, issue a warning (since there may be
+potential data loss) and just mark the page as clean to avoid
+unprivileged denial of service attacks until the problem can be
+properly fixed.  More discussion and background can be found in the
+thread starting at [2].
+
+[1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
+[2] https://lore.kernel.org/r/Yg0m6IjcNmfaSokM@google.com
+
+Reported-by: syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com
+Reported-by: Lee Jones <lee.jones@linaro.org>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Link: https://lore.kernel.org/r/YiDS9wVfq4mM2jGK@mit.edu
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/ext4/inode.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+index 9c07c8674b21..4d3eefff3c84 100644
+--- a/fs/ext4/inode.c
++++ b/fs/ext4/inode.c
+@@ -2147,6 +2147,15 @@ static int ext4_writepage(struct page *page,
+ 	else
+ 		len = PAGE_SIZE;
+ 
++	/* Should never happen but for bugs in other kernel subsystems */
++	if (!page_has_buffers(page)) {
++		ext4_warning_inode(inode,
++		   "page %lu does not have buffers attached", page->index);
++		ClearPageDirty(page);
++		unlock_page(page);
++		return 0;
++	}
++
+ 	page_bufs = page_buffers(page);
+ 	/*
+ 	 * We cannot do block allocation or other extent handling in this
+@@ -2706,6 +2715,22 @@ static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
+ 			wait_on_page_writeback(page);
+ 			BUG_ON(PageWriteback(page));
+ 
++			/*
++			 * Should never happen but for buggy code in
++			 * other subsystems that call
++			 * set_page_dirty() without properly warning
++			 * the file system first.  See [1] for more
++			 * information.
++			 *
++			 * [1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
++			 */
++			if (!page_has_buffers(page)) {
++				ext4_warning_inode(mpd->inode, "page %lu does not have buffers attached", page->index);
++				ClearPageDirty(page);
++				unlock_page(page);
++				continue;
++			}
++
+ 			if (mpd->map.m_len == 0)
+ 				mpd->first_page = page->index;
+ 			mpd->next_page = page->index + 1;
+-- 
+2.34.1
+

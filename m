@@ -2,115 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBD664E9AA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D424E9AA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 17:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243782AbiC1PNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 11:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
+        id S244364AbiC1PN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 11:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244580AbiC1PNg (ORCPT
+        with ESMTP id S244578AbiC1PNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 11:13:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E69331C91F
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 08:11:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648480314;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c4bc9leYRRtOW/54gUC7hrLdsVm71KWKCliWns2HM+g=;
-        b=D6jjAB0tfKaQ36HVeylCcQQfQ9yoEWZtw8iLVL06p1LMyqKoSvWhfqk8g3S0CWGg5HfxRP
-        sIXt1KZLT3JjViwgRONqx3VILjZ6YhWpuiKDfzuay+iynTu4XlRi6yiQoA3IOGgOCQrQAC
-        G1do+or/JHbNULICJxvWoeetlOrrGu4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-426-dryIcnp_MXmfefw8afjRwA-1; Mon, 28 Mar 2022 11:11:52 -0400
-X-MC-Unique: dryIcnp_MXmfefw8afjRwA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 97C2A3817483;
-        Mon, 28 Mar 2022 15:11:36 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 51DA14010A02;
-        Mon, 28 Mar 2022 15:11:32 +0000 (UTC)
-Message-ID: <c4642442-aff8-c287-015f-90f41f09c323@redhat.com>
-Date:   Mon, 28 Mar 2022 11:11:31 -0400
+        Mon, 28 Mar 2022 11:13:35 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD8653A46;
+        Mon, 28 Mar 2022 08:11:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648480315; x=1680016315;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0Xfm6ZmBe6qP65GEW9BCvq91UKkCOHo/5Qe8dITTyQs=;
+  b=ngmVcqbMtM6+a3J4CdzaKjJNJ4fKpaNjWjhiVZ35CS3FHmymgU+VZ9yn
+   uNCzucvlXTThxXNdz7o5pxiuD2rBR7giboer4umtaeCgNkbY60UTj3LIp
+   pPUpMF9RC0HNOuPaogt6qkf2NXtZCBqm8ySKU1SOw0Nf4nwEm654V3pYm
+   52jgB45ue2EzCE+keShQMABSEvqpg+A68tQBCV2TS+XYGQtgg2PXZHKoE
+   OEXFxCReu9JVmyUgKrCp/4xtQAXbEi2utNhyWFn+Gh9roqeStPX+SnsuY
+   /UAeZ7Tjs4vWcK7fmLij2cZgUeFIjfuyNNjvhd9649tn/muGSUujD8CoP
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="258991028"
+X-IronPort-AV: E=Sophos;i="5.90,217,1643702400"; 
+   d="scan'208";a="258991028"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 08:11:54 -0700
+X-IronPort-AV: E=Sophos;i="5.90,217,1643702400"; 
+   d="scan'208";a="719145825"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.249.166]) ([10.99.249.166])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 08:11:50 -0700
+Message-ID: <6ae534e4-25f8-5825-a2ec-cb1c512dac57@linux.intel.com>
+Date:   Mon, 28 Mar 2022 17:11:48 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC] locking/rwsem: dont wake up wwaiter in case of lock holder
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v2 4/6] ASoC: soc-pcm: tweak DPCM BE hw_param() call
+ order
 Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Hillf Danton <hdanton@sina.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220326134059.4082-1-hdanton@sina.com>
- <02f50037-46ce-ec08-63cb-e855694e69a5@redhat.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <02f50037-46ce-ec08-63cb-e855694e69a5@redhat.com>
+To:     Sameer Pujar <spujar@nvidia.com>, broonie@kernel.org,
+        lgirdwood@gmail.com, robh+dt@kernel.org, krzk+dt@kernel.org,
+        perex@perex.cz, tiwai@suse.com, peter.ujfalusi@linux.intel.com,
+        pierre-louis.bossart@linux.intel.com
+Cc:     oder_chiou@realtek.com, devicetree@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        jonathanh@nvidia.com, thierry.reding@gmail.com,
+        linux-tegra@vger.kernel.org
+References: <1648448050-15237-1-git-send-email-spujar@nvidia.com>
+ <1648448050-15237-5-git-send-email-spujar@nvidia.com>
+From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <1648448050-15237-5-git-send-email-spujar@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/22 10:18, David Hildenbrand wrote:
-> On 26.03.22 14:40, Hillf Danton wrote:
->> In the slowpath of down for write, we bail out in case of signal received and
->> try to wake up any pending waiter but it makes no sense to wake up a write
->> waiter given any lock holder, either write or read.
-> But is handling this better really worth additional code and runtime
-> checks? IOW, does this happen often enough that we actually care about
-> optimizing this? I have no idea :)
->
->> The RFC is do nothing for wwaiter if any lock holder present - they will fill
->> their duty at lock release time.
->>
->> Only for thoughts now.
->>
->> Hillf
->>
->> --- x/kernel/locking/rwsem.c
->> +++ y/kernel/locking/rwsem.c
->> @@ -418,6 +418,8 @@ static void rwsem_mark_wake(struct rw_se
->>   	waiter = rwsem_first_waiter(sem);
->>   
->>   	if (waiter->type == RWSEM_WAITING_FOR_WRITE) {
->> +		if (RWSEM_LOCK_MASK & atomic_long_read(&sem->count))
->> +			return;
->>   		if (wake_type == RWSEM_WAKE_ANY) {
->>   			/*
->>   			 * Mark writer at the front of the queue for wakeup.
->> --
+On 3/28/2022 8:14 AM, Sameer Pujar wrote:
+> For DPCM links, the order of hw_param() call depends on the sequence of
+> BE connection to FE. It is possible that one BE link can provide clock
+> to another BE link. In such cases consumer BE DAI, to get the rate set
+> by provider BE DAI, can use the standard clock functions only if provider
+> has already set the appropriate rate during its hw_param() stage.
 
-That check isn't good enough. First of all, any reader count in 
-sem->count can be transient due to the fact that we do an unconditional 
-atomic_long_add() on down_read(). The reader may then remove its reader 
-count in the slow path. This patch may cause missed wakeup which is a 
-much bigger problem than spending a bit of cpu time to check for lock 
-availability and sleep again.
+Above sentence seems to suggest that consumer can set clock only after 
+provider has started, but code in this patch seems to do it the other 
+way around?
 
-The write lock bit, however, is real. We do support the first writer in 
-the wait queue to spin on the lock when the handoff bit is set. So 
-waking up a writer when the rwsem is currently write-locked can still be 
-useful.
+> 
+> Presently the order is fixed and does not depend on the provider and
+> consumer relationships. So the clock rates need to be known ahead of
+> hw_param() stage.
+> 
+> This patch tweaks the hw_param() order by connecting the provider BEs
+> late to a FE. With this hw_param() calls for provider BEs happen first
+> and then followed by consumer BEs. The consumers can use the standard
+> clk_get_rate() function to get the rate of the clock they depend on.
+> 
 
-BTW, I didn't see this RFC patch in LKML. Is it only posted on linux-mm 
-originally?
+I'm bit confused by " With this hw_param() calls for provider BEs happen 
+first and then followed by consumer BEs. "
 
-Cheers,
-Longman
+Aren't consumers started first and provider second? Code and previous 
+sentence "connecting the provider BEs late to a FE" confuse me.
+
+Overall I don't exactly understand correct order of events after reading 
+commit message and patch...
+
+> Signed-off-by: Sameer Pujar <spujar@nvidia.com>
+> ---
+>   TODO:
+>    * The FE link is not considered in this. For Tegra it is fine to
+>      call hw_params() for FE at the end. But systems, which want to apply
+>      this tweak for FE as well, have to extend this tweak to FE.
+>    * Also only DPCM is considered here. If normal links require such
+>      tweak, it needs to be extended.
+> 
+>   sound/soc/soc-pcm.c | 60 ++++++++++++++++++++++++++++++++++++++++++++++++++++-
+>   1 file changed, 59 insertions(+), 1 deletion(-)
+> 
+> diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
+> index 9a95468..5829514 100644
+> --- a/sound/soc/soc-pcm.c
+> +++ b/sound/soc/soc-pcm.c
+> @@ -1442,6 +1442,29 @@ static int dpcm_prune_paths(struct snd_soc_pcm_runtime *fe, int stream,
+>   	return prune;
+>   }
+>   
+> +static bool defer_dpcm_be_connect(struct snd_soc_pcm_runtime *rtd)
+> +{
+> +	struct snd_soc_dai *dai;
+> +	int i;
+> +
+> +	if (!(rtd->dai_link->dai_fmt & SND_SOC_DAIFMT_FORMAT_MASK))
+> +		return false;
+> +
+> +	if ((rtd->dai_link->dai_fmt & SND_SOC_DAIFMT_CLOCK_PROVIDER_MASK) ==
+> +	    SND_SOC_DAIFMT_CBC_CFC) {
+> +
+> +		for_each_rtd_cpu_dais(rtd, i, dai) {
+> +
+> +			if (!snd_soc_dai_is_dummy(dai))
+> +				return true;
+> +		}
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +#define MAX_CLK_PROVIDER_BE 10
+
+Not sure about this define, it adds unnecessary limitation on max clock 
+number, can't you just run same loop twice while checking 
+defer_dpcm_be_connect() first time and !defer_dpcm_be_connect() second 
+time? defer_dpcm_be_connect() function name may need a bit of adjustment 
+(rtd_is_clock_consumer() maybe?), but it gets rid of the limit.
+
+or do something like following instead of copy pasting loop twice:
+
+rename original dpcm_add_paths() to _dpcm_add_paths() and add additional 
+argument and check somewhere inline:
+static int dpcm_add_paths(struct snd_soc_pcm_runtime *fe, int stream,
+	struct snd_soc_dapm_widget_list **list_, bool clock_consumer)
+{
+	...
+
+  // with renamed defer_dpcm_be_connect
+	if (clock_consumer ^ !rtd_is_clock_consumer())
+		continue;
+
+	...
+}
+
+static int dpcm_add_paths(struct snd_soc_pcm_runtime *fe, int stream,
+    	struct snd_soc_dapm_widget_list **list_)
+{
+	int ret;
+
+	/* start clock consumer BEs */
+	ret = _dpcm_add_paths(*fe, stream, **list_, true);
+	if (ret)
+		return ret;
+
+	/* start clock provider BEs */
+	ret = _dpcm_add_paths(*fe, stream, **list_, false);
+
+	return ret;
+}
+
+> +
+>   static int dpcm_add_paths(struct snd_soc_pcm_runtime *fe, int stream,
+>   	struct snd_soc_dapm_widget_list **list_)
+>   {
+> @@ -1449,7 +1472,8 @@ static int dpcm_add_paths(struct snd_soc_pcm_runtime *fe, int stream,
+>   	struct snd_soc_dapm_widget_list *list = *list_;
+>   	struct snd_soc_pcm_runtime *be;
+>   	struct snd_soc_dapm_widget *widget;
+> -	int i, new = 0, err;
+> +	struct snd_soc_pcm_runtime *prov[MAX_CLK_PROVIDER_BE];
+> +	int i, new = 0, err, count = 0;
+>   
+>   	/* Create any new FE <--> BE connections */
+>   	for_each_dapm_widgets(list, i, widget) {
+> @@ -1489,6 +1513,40 @@ static int dpcm_add_paths(struct snd_soc_pcm_runtime *fe, int stream,
+>   		    (be->dpcm[stream].state != SND_SOC_DPCM_STATE_CLOSE))
+>   			continue;
+>   
+> +		/* Connect clock provider BEs at the end */
+> +		if (defer_dpcm_be_connect(be)) {
+> +			if (count >= MAX_CLK_PROVIDER_BE) {
+> +				dev_err(fe->dev, "ASoC: too many clock provider BEs\n");
+> +				return -EINVAL;
+> +			}
+> +
+> +			prov[count++] = be;
+> +			continue;
+> +		}
+> +
+> +		/* newly connected FE and BE */
+> +		err = dpcm_be_connect(fe, be, stream);
+> +		if (err < 0) {
+> +			dev_err(fe->dev, "ASoC: can't connect %s\n",
+> +				widget->name);
+> +			break;
+> +		} else if (err == 0) /* already connected */
+> +			continue;
+> +
+> +		/* new */
+> +		dpcm_set_be_update_state(be, stream, SND_SOC_DPCM_UPDATE_BE);
+> +		new++;
+> +	}
+> +
+> +	/*
+> +	 * Now connect clock provider BEs. A late connection means,
+> +	 * these BE links appear first in the list maintained by FE
+> +	 * and hw_param() call for these happen first.
+
+Let's stick to ALSA terminology, hw_params() please, same in commit message.
+
+> +	 */
+> +	for (i = 0; i < count; i++) {
+> +
+> +		be = prov[i];
+> +
+>   		/* newly connected FE and BE */
+>   		err = dpcm_be_connect(fe, be, stream);
+>   		if (err < 0) {
 

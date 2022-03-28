@@ -2,191 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C95514EA383
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 01:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4FA4EA36D
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 01:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbiC1XFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 19:05:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
+        id S230273AbiC1XFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 19:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiC1XFg (ORCPT
+        with ESMTP id S230204AbiC1XFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 19:05:36 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9BABC88
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 16:03:54 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id z15-20020a25bb0f000000b00613388c7d99so11979588ybg.8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 16:03:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=/earJ4sVck+JVD0RmuQXUvZhSB6QjqhmiJ8MWnO1LKI=;
-        b=IrQiLG0hxRXg32iOno2nUn/o2FgJuQrQ26s+9yJ0K6hg3SKY9v+eWzTgWWieBi817o
-         rh07NJ1BwQoOMW0XNqOICC5xRNxA/dezaHXddv4aAQU7St/PBcxzJqypHs1yGGZ7C5ah
-         LtCWlaOAFcwNoLOaQgKZ0zRnHxosa2YBvL/r/gVuGgs6ungEezlIu88mSwBB66cU0DOR
-         sjG+7cIvwAZd2MGkuIcpcoJbeinxd1JD3rODf+rrjgJbX2W/DkFHG1cGdwXtfAUvh5HS
-         bKL3cxSXgc2y6KgF0oAunBi0+hgT3Qokd3JpjjVBanEzXjKp0QH0e6yh0y+L4ZE09hUc
-         2nbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=/earJ4sVck+JVD0RmuQXUvZhSB6QjqhmiJ8MWnO1LKI=;
-        b=rQfaTZ2pa6tFGDlb4bPEtdlmk+pYUVbhAanZj6MB4h7hRFHLL7LDr1Xq5kDxrDWhU1
-         BqbfpppgNLZnguLrWJPqtvuwRRwb5vLv3pxRaELK6LeY6B9Q3hAZ5syVFjrQjV30rrwp
-         WUg0k7HdoV5mlRpCy1Xr2McB8N7WonsW2xELbWV1DU7f0+0jdmShvdEg9mXd1G4l9uPh
-         SPlPYP2AqnTKmMKfsXZX2QvAKVXgoVYFn1bR+EO/56OfhCQZqHzl4AXMx7ig3KYhmD0e
-         PtPrlZJdwFrG3S0MZdw90ItAFnWGP8DflRCVeL4vXrpbtDLAqgbkN3220Z6dXiK5bUaj
-         pGyg==
-X-Gm-Message-State: AOAM5306Od/e55AGieaLQd1s9xYiYB3SxbiDxUxsCPehZAN3AtcMPOYZ
-        vTdGfEai70rPJ+1BecCHgSUvOdMvZglrJEI=
-X-Google-Smtp-Source: ABdhPJz9kvuezk0rt56VKV0O2Pjvi8NOVadDXMqpdChGREa/T3/Qrbx4+KDzWi06IHkqCc2yN1SP4FzXrlIro2M=
-X-Received: from pceballos.nyc.corp.google.com ([2620:0:1003:510:a131:a916:1e0a:ee6a])
- (user=pceballos job=sendgmr) by 2002:a05:6902:102f:b0:638:f9fd:1742 with SMTP
- id x15-20020a056902102f00b00638f9fd1742mr22207235ybt.401.1648508633838; Mon,
- 28 Mar 2022 16:03:53 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 19:03:51 -0400
-Message-Id: <20220328185704.1.I7a855580ce9f43fc2f598bdccf088c978d4af822@changeid>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH] HID: Add driver for Google Hangouts Meet Speakermic
-From:   Pablo Ceballos <pceballos@google.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Pablo Ceballos <pceballos@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Mar 2022 19:05:49 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E733928E20;
+        Mon, 28 Mar 2022 16:04:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=U9j9t01F+ucI6Et2jJhTVqbcgEOCuGM/GuyWi4T98rM=; b=CNtXdsuMNOMSUAjqig33jMXU09
+        QAGFaqPIE6KsDSJDokCRuC0x7PB7MIIJ5INQAR7du+Be1jhsc8kDcqNxWvI+J9GqxvvpuYdWdfzop
+        tYX20LihE1CVIIvXmTFuaZUZ4xiJ/Eq1DIq5LgJ1wTLxTjceHWety3Pv5Zm7AsI08ti4EVEAnouGi
+        icxhai1XUr8Im2sexpiP0XIvN7laIfau3HV3UMudIhUrR9FX+LzOWWTGDd7+g37S93Y83hYfwutEl
+        QJxLRPVKsMM9V5RFSsPIPsjaRaWnVEyzZ67iURDlbvXsI8t1D06Cs6BJOmCDJXRhIkPGsJ+zyjk6+
+        00ZcN5cg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nYyP3-00HLby-SO; Mon, 28 Mar 2022 23:04:01 +0000
+Date:   Tue, 29 Mar 2022 00:04:01 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the akpm-current tree
+Message-ID: <YkI+4SzcoaqZIQIG@casper.infradead.org>
+References: <20220209170245.08968c92@canb.auug.org.au>
+ <d2701072-99e6-762b-bc80-64bda193c792@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d2701072-99e6-762b-bc80-64bda193c792@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver works around a problem with the HID usage sent by this
-device for the mute button. It prevents key events from being generated
-for that HID usage since they would be incorrect.
+On Wed, Feb 09, 2022 at 08:03:26AM -0800, Hugh Dickins wrote:
+> On Wed, 9 Feb 2022, Stephen Rothwell wrote:
+> > include/linux/mm_types.h:272: warning: Function parameter or member '__filler' not described in 'folio'
+> > include/linux/mm_types.h:272: warning: Function parameter or member 'mlock_count' not described in 'folio'
+> 
+> Thank you for including the patches and reporting this, Stephen.
+> Is this a warning you can live with for a week or two?
+> 
+> I've never tried generating htmldocs (I'm tempted just to replace a few
+> "/**"s by "/*"s!), and I'm fairly sure Matthew will have strong feelings
+> about how this new union (or not) will be better foliated - me messing
+> around with doc output here is unlikely to be helpful at this moment.
 
-Signed-off-by: Pablo Ceballos <pceballos@google.com>
----
+I have a substantial question, and then some formatting / appearance
+questions.
 
- drivers/hid/Kconfig            | 12 ++++++++
- drivers/hid/Makefile           |  1 +
- drivers/hid/hid-google-atrus.c | 55 ++++++++++++++++++++++++++++++++++
- drivers/hid/hid-ids.h          |  1 +
- 4 files changed, 69 insertions(+)
- create mode 100644 drivers/hid/hid-google-atrus.c
+The first is, what does mlock_count represent for a multi-page folio
+that is partially mlocked?  If you allocate an order-9 page then mmap()
+13 pages of it and mlockall(), does mlock_count increase by 1, 13 or 512?
 
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index f5544157576c..dc6ae9970054 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -403,6 +403,18 @@ config HOLTEK_FF
- 	  Say Y here if you have a Holtek On Line Grip based game controller
- 	  and want to have force feedback support for it.
- 
-+config HID_GOOGLE_ATRUS
-+	tristate "Google Hangouts Meet Speakermic"
-+	depends on USB_HID
-+	---help---
-+	This selects a driver for the Google Hangouts Meet Speakermic.
-+
-+	This driver works around a problem with the HID usage sent by this
-+	device for the mute button. It prevents key events from being generated
-+	for that HID usage since they would be incorrect.
-+
-+	Say Y here if you have a Google Hangouts Meet Speakermic.
-+
- config HID_GOOGLE_HAMMER
- 	tristate "Google Hammer Keyboard"
- 	depends on USB_HID && LEDS_CLASS && CROS_EC
-diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index 6d3e630e81af..2ee446b5b953 100644
---- a/drivers/hid/Makefile
-+++ b/drivers/hid/Makefile
-@@ -50,6 +50,7 @@ obj-$(CONFIG_HID_FT260)		+= hid-ft260.o
- obj-$(CONFIG_HID_GEMBIRD)	+= hid-gembird.o
- obj-$(CONFIG_HID_GFRM)		+= hid-gfrm.o
- obj-$(CONFIG_HID_GLORIOUS)  += hid-glorious.o
-+obj-$(CONFIG_HID_GOOGLE_ATRUS)  += hid-google-atrus.o
- obj-$(CONFIG_HID_GOOGLE_HAMMER)	+= hid-google-hammer.o
- obj-$(CONFIG_HID_VIVALDI)	+= hid-vivaldi.o
- obj-$(CONFIG_HID_GT683R)	+= hid-gt683r.o
-diff --git a/drivers/hid/hid-google-atrus.c b/drivers/hid/hid-google-atrus.c
-new file mode 100644
-index 000000000000..e136c70e9425
---- /dev/null
-+++ b/drivers/hid/hid-google-atrus.c
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ *  HID driver for Google Hangouts Meet Speakermic
-+ *
-+ *  Copyright 2022 Google LLC.
-+ */
-+
-+#include <linux/hid.h>
-+#include <linux/module.h>
-+
-+#include "hid-ids.h"
-+
-+/*
-+ * This driver handles the telephony phone mute HID usage by ignoring it. This
-+ * avoids the default handling by the hid-input driver which is to map this to
-+ * a KEY_MICMUTE event. The issue is that this device implements the phone mute
-+ * HID usage as a toggle switch, where 1 indicates muted, and 0 indicates
-+ * unmuted. However, for an EV_KEY event 1 indicates the key has been pressed
-+ * and 0 indicates it has been released.
-+ */
-+
-+static int atrus_event(struct hid_device *hid, struct hid_field *field,
-+		       struct hid_usage *usage, __s32 value)
-+{
-+	/*
-+	 * Return 1 to indicate no further processing should be done for this
-+	 * usage.
-+	 */
-+	return 1;
-+}
-+
-+static const struct hid_device_id atrus_devices[] = {
-+	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
-+		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_ATRUS) },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(hid, atrus_devices);
-+
-+static const struct hid_usage_id atrus_usages[] = {
-+	/* Handle only the Telephony Phone Mute usage. */
-+	{ HID_UP_TELEPHONY | 0x2f, EV_KEY, HID_ANY_ID },
-+	{ HID_TERMINATOR, HID_TERMINATOR, HID_TERMINATOR }
-+};
-+
-+static struct hid_driver atrus_driver = {
-+	.name = "atrus",
-+	.id_table = atrus_devices,
-+	.usage_table = atrus_usages,
-+	.event = atrus_event,
-+};
-+module_hid_driver(atrus_driver);
-+
-+MODULE_AUTHOR("Pablo Ceballos <pcebalos@google.com>");
-+MODULE_DESCRIPTION("Google Hangouts Meet Speakermic USB HID Driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 85975031389b..9f6fc5cfbeb9 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -506,6 +506,7 @@
- #define USB_DEVICE_ID_GOOGLE_MOONBALL	0x5044
- #define USB_DEVICE_ID_GOOGLE_DON	0x5050
- #define USB_DEVICE_ID_GOOGLE_EEL	0x5057
-+#define USB_DEVICE_ID_GOOGLE_ATRUS	0x8001
- 
- #define USB_VENDOR_ID_GOTOP		0x08f2
- #define USB_DEVICE_ID_SUPER_Q2		0x007f
--- 
-2.35.1.1021.g381101b075-goog
+Then we have a tradeoff between prettiness of the source code and
+prettiness of the htmldocs.  At one maximum, we can make it look like
+this in the htmldocs:
 
+struct folio {
+  unsigned long flags;
+  struct list_head lru;
+  unsigned int mlock_count;
+  struct address_space *mapping;
+  pgoff_t index;
+  void *private;
+  atomic_t _mapcount;
+  atomic_t _refcount;
+#ifdef CONFIG_MEMCG;
+  unsigned long memcg_data;
+#endif;
+};
+
+but at the cost of making the source code look like this:
+
+struct folio {
+        /* private: don't document the anon union */
+        union {
+                struct {
+        /* public: */
+                        unsigned long flags;
+        /* private: */
+                        union {
+        /* public: */
+                                struct list_head lru;
+        /* private: */
+                                struct {
+                                        void *__filler;
+        /* public: */
+                                        unsigned int mlock_count;
+        /* private: */
+                                };
+                        };
+        /* public: */
+                        struct address_space *mapping;
+
+At the other extreme, the htmldocs can look more complicated:
+
+struct folio {
+  unsigned long flags;
+  union {
+    struct list_head lru;
+    struct {
+      unsigned int mlock_count;
+    };
+  };
+  struct address_space *mapping;
+  pgoff_t index;
+  void *private;
+  atomic_t _mapcount;
+  atomic_t _refcount;
+#ifdef CONFIG_MEMCG;
+  unsigned long memcg_data;
+#endif;
+};
+
+with the source code changes being merely:
+
+@@ -227,6 +227,7 @@ struct page {
+  * struct folio - Represents a contiguous set of bytes.
+  * @flags: Identical to the page flags.
+  * @lru: Least Recently Used list; tracks how recently this folio was used.
++ * @mlock_count: Number of times any page in this folio is mlocked.
+  * @mapping: The file this page belongs to, or refers to the anon_vma for
+  *    anonymous memory.
+  * @index: Offset within the file, in units of pages.  For anonymous memory,
+@@ -256,7 +257,9 @@ struct folio {
+                        union {
+                                struct list_head lru;
+                                struct {
++       /* private: */
+                                        void *__filler;
++       /* public: */
+                                        unsigned int mlock_count;
+                                };
+                        };
+
+Various steps in between are possible, such as removing the anonymous
+struct from the documentation, but leaving the union.  We could also
+choose to document __filler, but that seems like a poor choice to me.
+
+Anyway, that's all arguable and not really too important.  My mild
+preference is for the private/public markers around __filler alone,
+but I'll happily abide by the preferences of others.
+
+The important part is what mlock_count really means.  We can be
+reasonably verbose here (two or three lines of text, I'd suggest).

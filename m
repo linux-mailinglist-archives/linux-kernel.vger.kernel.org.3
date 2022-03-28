@@ -2,293 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 702C44E9C27
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9924E9C2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241995AbiC1QY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 12:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37300 "EHLO
+        id S242034AbiC1QZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 12:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238203AbiC1QYZ (ORCPT
+        with ESMTP id S238203AbiC1QZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 12:24:25 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C022FFEA;
-        Mon, 28 Mar 2022 09:22:44 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id w17-20020a056830111100b005b22c584b93so11009532otq.11;
-        Mon, 28 Mar 2022 09:22:44 -0700 (PDT)
+        Mon, 28 Mar 2022 12:25:18 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F841AF13
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:23:37 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id d7so21157497wrb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:23:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=s54w4Y7MqVNpezxtg1f3Hira4YOla2hVpKZX90Ur3Cg=;
+        b=e+PvBP5dLdbFmqn1YvouPmJU1DqB8m1VFGbRlAbMiHtQAl8RR7fWEQCMj28uAXRaq1
+         6weOeNHkksrtIbCEYRssRfn5uInUToA10inttd0OC5P6xBdeKDErv1Ihrvitb4UrVgpZ
+         L3Y2rPPDchmfPJfLUlnT/ZdwUUsl27TzRXRm3OuZkCVla1DGZCgkO5MTREltfdQ/ruuG
+         SITgmg5AFw4ooSD9+fjRcaldgJS8P5YRSPXlY8VxtVzAnKpJxk6gtD4TaAQA7Jv2aCA/
+         uuObYk5IOq39wqgeJW8fQbYM6ruws9spjAEWN169mOoBlS1LRBTIOzkjswxuuXHMrw+y
+         6Ixw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=J1jMR9dXB4EBClhx/VkwbBtXY45OnmdTpgwd1QsgBQ0=;
-        b=MhE+obHAa1C9fRo/5Blx9G6NbyqbnNQUzkUnOEuBMPi9fODml7nwUVMmZvjD8UpCO/
-         18KVdmtxCZcpNqwfpHZa2GHAnH9R8e0srvxbDzg1z4iLWHp5SlOrD40oCaFh71Y61quu
-         Dw+O7FXP7rM17uopU6UWBvJFsQUAGHLySh8z+M+EgR5thQs1RmwitNwn/Px6ZJ9GZOkH
-         PrPxfC0KHTfXXXZQedxuDTxbld2M4/mYFnpkLwDMTNJnxtnYnduAhrmthUmczR4Xj28o
-         ABm7uDcntb0PeDLp2GEAXT+QWcDbTbiS9xoSVHNrpd+LltcgnbCFo9mF6Aba8WOTs7aa
-         dk7A==
-X-Gm-Message-State: AOAM531NKXQMArL80WAFpRVChgbrs3lLgvsLGer3h2g+yFvnryWoVC6g
-        ZvVMiR0SSed5STLsQodDtA==
-X-Google-Smtp-Source: ABdhPJxrUjcZd0pzxFr4q2rWryMDDV/OHhC+GnOG4OjChVysYlaPrNdSQQtr2s79Mp1NPLmf4hpKdg==
-X-Received: by 2002:a05:6830:1f5b:b0:5a2:2ec7:4ea4 with SMTP id u27-20020a0568301f5b00b005a22ec74ea4mr10412065oth.206.1648484563468;
-        Mon, 28 Mar 2022 09:22:43 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e4-20020a056808148400b002d9be41b179sm7702224oiw.50.2022.03.28.09.22.41
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=s54w4Y7MqVNpezxtg1f3Hira4YOla2hVpKZX90Ur3Cg=;
+        b=3GXzLcSQlk0HPgnQJodkOAKmKFlUZ92rarVdzd8rZHdPr8NBeF7DlGsuIft8Z7J45D
+         U5GM7Vs9WhLCMuABA+mrljn5se9I9eHj+qAhaxHtumYn/uYW0pitPdi1YiQ1m7TZfnbS
+         9yfkI4BHnGZXxOkT3uN+BW9LuOomQ1qMjLdjU5fGV0AsY/oxASt6/K7lwFljGNQEV07C
+         sn32MT2kn2iPrPuY4u0a0C0RGih35B/3OwTozFYVq2Y57EdxrcEjnC3eChgBkuf/SFKw
+         CB0uVdvcwBUUEofEc9c1G4VftO0XkFd7d6yQ0a0M4pNxUmMV71I57pfDcIUjdwvI/q0Q
+         hOvA==
+X-Gm-Message-State: AOAM532kyK3RVl6RRP+OM2P2aG86ku3ct+b87EPxyGNl0JKoIG1N/rFg
+        SZQgN1jST+zCPs/aCtUgFb3bCA==
+X-Google-Smtp-Source: ABdhPJxSxzSv849VpLB71DL2nSrK2inpIshaSlkpesI6OrOp+8qiA+tmxOBnqzAc642E+3Es/k9ajQ==
+X-Received: by 2002:a5d:6812:0:b0:203:f854:c380 with SMTP id w18-20020a5d6812000000b00203f854c380mr24405341wru.235.1648484615676;
+        Mon, 28 Mar 2022 09:23:35 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id d5-20020adfef85000000b00205b3945fdasm6455090wro.92.2022.03.28.09.23.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 09:22:42 -0700 (PDT)
-Received: (nullmailer pid 2497885 invoked by uid 1000);
-        Mon, 28 Mar 2022 16:22:41 -0000
-Date:   Mon, 28 Mar 2022 11:22:41 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: PCI: uniphier: Convert uniphier-pcie.txt to
- json-schema
-Message-ID: <YkHg0UeS9kPOW6Kf@robh.at.kernel.org>
-References: <1648433498-23450-1-git-send-email-hayashi.kunihiko@socionext.com>
+        Mon, 28 Mar 2022 09:23:35 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 17:23:33 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jason Wessel <jason.wessel@windriver.com>,
+        linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>
+Subject: [GIT PULL] kgdb changes for v5.18
+Message-ID: <20220328162333.4jwaiwuv5knxh67l@maple.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1648433498-23450-1-git-send-email-hayashi.kunihiko@socionext.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 11:11:38AM +0900, Kunihiko Hayashi wrote:
-> Convert the file into a JSON description at the yaml format.
-> 
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> ---
->  .../bindings/pci/socionext,uniphier-pcie.yaml | 100 ++++++++++++++++++
->  .../devicetree/bindings/pci/uniphier-pcie.txt |  82 --------------
->  MAINTAINERS                                   |   2 +-
->  3 files changed, 101 insertions(+), 83 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pci/socionext,uniphier-pcie.yaml
->  delete mode 100644 Documentation/devicetree/bindings/pci/uniphier-pcie.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/socionext,uniphier-pcie.yaml b/Documentation/devicetree/bindings/pci/socionext,uniphier-pcie.yaml
-> new file mode 100644
-> index 000000000000..57176f62f955
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pci/socionext,uniphier-pcie.yaml
-> @@ -0,0 +1,100 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pci/socionext,uniphier-pcie.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Socionext UniPhier PCIe host controller
-> +
-> +description: |
-> +  UniPhier PCIe host controller is based on the Synopsys DesignWare
-> +  PCI core. It shares common features with the PCIe DesignWare core and
-> +  inherits common properties defined in
-> +  Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml.
-> +
-> +maintainers:
-> +  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> +
-> +allOf:
-> +  - $ref: /schemas/pci/snps,dw-pcie.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - socionext,uniphier-pcie
-> +
-> +  reg:
-> +    minItems: 3
-> +    maxItems: 4
-> +
-> +  reg-names:
-> +    oneOf:
-> +      - items:
-> +          - const: dbi
-> +          - const: link
-> +          - const: config
-> +      - items:
-> +          - const: dbi
-> +          - const: link
-> +          - const: config
-> +          - const: atu
+The following changes since commit 09688c0166e76ce2fb85e86b9d99be8b0084cdf9:
 
-You can have just the 2nd list plus 'minItems: 3' to do the same thing.
+  Linux 5.17-rc8 (2022-03-13 13:23:37 -0700)
 
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  num-viewport: true
-> +
-> +  num-lanes: true
-> +
-> +  phys:
-> +    maxItems: 1
-> +
-> +  phy-names:
-> +    const: pcie-phy
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - clocks
-> +  - resets
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    pcie: pcie@66000000 {
-> +        compatible = "socionext,uniphier-pcie";
-> +        reg-names = "dbi", "link", "config";
-> +        reg = <0x66000000 0x1000>, <0x66010000 0x10000>, <0x2fff0000 0x10000>;
-> +        #address-cells = <3>;
-> +        #size-cells = <2>;
-> +        clocks = <&sys_clk 24>;
-> +        resets = <&sys_rst 24>;
-> +        num-lanes = <1>;
-> +        num-viewport = <1>;
-> +        bus-range = <0x0 0xff>;
-> +        device_type = "pci";
-> +        ranges = <0x81000000 0 0x00000000  0x2ffe0000  0 0x00010000>,
-> +                 <0x82000000 0 0x00000000  0x20000000  0 0x0ffe0000>;
-> +        phy-names = "pcie-phy";
-> +        phys = <&pcie_phy>;
-> +        #interrupt-cells = <1>;
-> +        interrupt-names = "dma", "msi";
-> +        interrupts = <0 224 4>, <0 225 4>;
-> +        interrupt-map-mask = <0 0 0  7>;
-> +        interrupt-map = <0 0 0  1  &pcie_intc 0>,
-> +                        <0 0 0  2  &pcie_intc 1>,
-> +                        <0 0 0  3  &pcie_intc 2>,
-> +                        <0 0 0  4  &pcie_intc 3>;
-> +
-> +        pcie_intc: legacy-interrupt-controller {
-> +            interrupt-controller;
-> +            #interrupt-cells = <1>;
-> +            interrupt-parent = <&gic>;
-> +            interrupts = <0 226 4>;
-> +        };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/pci/uniphier-pcie.txt b/Documentation/devicetree/bindings/pci/uniphier-pcie.txt
-> deleted file mode 100644
-> index 359585db049f..000000000000
-> --- a/Documentation/devicetree/bindings/pci/uniphier-pcie.txt
-> +++ /dev/null
-> @@ -1,82 +0,0 @@
-> -Socionext UniPhier PCIe host controller bindings
-> -
-> -This describes the devicetree bindings for PCIe host controller implemented
-> -on Socionext UniPhier SoCs.
-> -
-> -UniPhier PCIe host controller is based on the Synopsys DesignWare PCI core.
-> -It shares common functions with the PCIe DesignWare core driver and inherits
-> -common properties defined in
-> -Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml.
-> -
-> -Required properties:
-> -- compatible: Should be "socionext,uniphier-pcie".
-> -- reg: Specifies offset and length of the register set for the device.
-> -	According to the reg-names, appropriate register sets are required.
-> -- reg-names: Must include the following entries:
-> -    "dbi"    - controller configuration registers
-> -    "link"   - SoC-specific glue layer registers
-> -    "config" - PCIe configuration space
-> -    "atu"    - iATU registers for DWC version 4.80 or later
-> -- clocks: A phandle to the clock gate for PCIe glue layer including
-> -	the host controller.
-> -- resets: A phandle to the reset line for PCIe glue layer including
-> -	the host controller.
-> -- interrupts: A list of interrupt specifiers. According to the
-> -	interrupt-names, appropriate interrupts are required.
-> -- interrupt-names: Must include the following entries:
-> -    "dma" - DMA interrupt
-> -    "msi" - MSI interrupt
-> -
-> -Optional properties:
-> -- phys: A phandle to generic PCIe PHY. According to the phy-names, appropriate
-> -	phys are required.
-> -- phy-names: Must be "pcie-phy".
-> -
-> -Required sub-node:
-> -- legacy-interrupt-controller: Specifies interrupt controller for legacy PCI
-> -	interrupts.
-> -
-> -Required properties for legacy-interrupt-controller:
-> -- interrupt-controller: identifies the node as an interrupt controller.
-> -- #interrupt-cells: specifies the number of cells needed to encode an
-> -	interrupt source. The value must be 1.
-> -- interrupt-parent: Phandle to the parent interrupt controller.
-> -- interrupts: An interrupt specifier for legacy interrupt.
-> -
-> -Example:
-> -
-> -	pcie: pcie@66000000 {
-> -		compatible = "socionext,uniphier-pcie", "snps,dw-pcie";
-> -		status = "disabled";
-> -		reg-names = "dbi", "link", "config";
-> -		reg = <0x66000000 0x1000>, <0x66010000 0x10000>,
-> -		      <0x2fff0000 0x10000>;
-> -		#address-cells = <3>;
-> -		#size-cells = <2>;
-> -		clocks = <&sys_clk 24>;
-> -		resets = <&sys_rst 24>;
-> -		num-lanes = <1>;
-> -		num-viewport = <1>;
-> -		bus-range = <0x0 0xff>;
-> -		device_type = "pci";
-> -		ranges =
-> -		/* downstream I/O */
-> -			<0x81000000 0 0x00000000  0x2ffe0000  0 0x00010000
-> -		/* non-prefetchable memory */
-> -			 0x82000000 0 0x00000000  0x20000000  0 0x0ffe0000>;
-> -		#interrupt-cells = <1>;
-> -		interrupt-names = "dma", "msi";
-> -		interrupts = <0 224 4>, <0 225 4>;
-> -		interrupt-map-mask = <0 0 0  7>;
-> -		interrupt-map = <0 0 0  1  &pcie_intc 0>,	/* INTA */
-> -				<0 0 0  2  &pcie_intc 1>,	/* INTB */
-> -				<0 0 0  3  &pcie_intc 2>,	/* INTC */
-> -				<0 0 0  4  &pcie_intc 3>;	/* INTD */
-> -
-> -		pcie_intc: legacy-interrupt-controller {
-> -			interrupt-controller;
-> -			#interrupt-cells = <1>;
-> -			interrupt-parent = <&gic>;
-> -			interrupts = <0 226 4>;
-> -		};
-> -	};
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 4cc47b2dbdc9..c1d377be991c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15337,7 +15337,7 @@ PCIE DRIVER FOR SOCIONEXT UNIPHIER
->  M:	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
->  L:	linux-pci@vger.kernel.org
->  S:	Maintained
-> -F:	Documentation/devicetree/bindings/pci/uniphier-pcie*
-> +F:	Documentation/devicetree/bindings/pci/socionext,uniphier-pcie*
->  F:	drivers/pci/controller/dwc/pcie-uniphier*
->  
->  PCIE DRIVER FOR ST SPEAR13XX
-> -- 
-> 2.25.1
-> 
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/danielt/linux.git/ tags/kgdb-5.18-rc1
+
+for you to fetch changes up to c1cb81429df462eca1b6ba615cddd21dd3103c46:
+
+  kdb: Fix the putarea helper function (2022-03-24 16:39:47 +0000)
+
+----------------------------------------------------------------
+kgdb patches for 5.18
+
+Only a single patch this cycle. Fix an obvious mistake with the
+kdb memory accessors. It was a stupid mistake (to/from backwards)
+but it has been there for a long time since many architectures
+tolerated it with surprisingly good grace.
+
+Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
+
+----------------------------------------------------------------
+Daniel Thompson (1):
+      kdb: Fix the putarea helper function
+
+ kernel/debug/kdb/kdb_support.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)

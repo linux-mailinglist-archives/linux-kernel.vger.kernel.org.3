@@ -2,222 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C48A04E9F11
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57AAC4E9F13
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245253AbiC1Sj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 14:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46988 "EHLO
+        id S245260AbiC1SkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 14:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbiC1Sjx (ORCPT
+        with ESMTP id S243749AbiC1SkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 14:39:53 -0400
-Received: from stuerz.xyz (unknown [45.77.206.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0570D5F8FB;
-        Mon, 28 Mar 2022 11:38:11 -0700 (PDT)
-Received: by stuerz.xyz (Postfix, from userid 114)
-        id 33365FA6F0; Mon, 28 Mar 2022 18:38:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=stuerz.xyz; s=mail;
-        t=1648492691; bh=wwyFAGjab7V2LQild07Z240y1k1oKEObyaUPxtHr4f0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BLZ+IFI6j65Hxl/nFEkNJXEJyiKbqSx+PIovKcDIHUQdTHe5zxT9aicxTzDbKaBe9
-         pzVPxeAu7hqhioUXLeNrlvty9mp8YOGumluuL63heXTcgzCQnMuJf0CxDzdbFWzacg
-         9RrSdMmE+l2af5elmKHOk/0uaHrk9/8y3O26i31uyui8ZDTrfhNUlaex2r7Ba71E1r
-         a+5wA4RKl5Zv4mizBK9sAcmvw+jKzBPUpvNjhL/iTexYG0pvLYxo0bq2qrRHDAhetn
-         LpPX4cyh5eA/FUypXfJ75lu5lDGwEvAzHuzkaCdogE4YCBlojlD8q4iaQ32LJ4uFb6
-         1R6O7csoWgEWw==
-Received: from [IPV6:2a02:8109:a100:1a48:ff0:ef2f:d4da:17d8] (unknown [IPv6:2a02:8109:a100:1a48:ff0:ef2f:d4da:17d8])
-        by stuerz.xyz (Postfix) with ESMTPSA id D1E7EFA6EA;
-        Mon, 28 Mar 2022 18:38:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=stuerz.xyz; s=mail;
-        t=1648492688; bh=wwyFAGjab7V2LQild07Z240y1k1oKEObyaUPxtHr4f0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=SmZPBMhrdBcGK92NeSH42sm1RLJX5ldpFnmcdL3l4EFzegYctiJSfjwq0Ga+JEOxE
-         aweskTwhLT+HTUhxx5s8zwmn/Z9vDI6YU7CIWs/a738k2ewJbQOm5bkTWg1+JPu4JG
-         1Fn44PTyS4XKk8wujWmfdFsLLnkDhEhCJMNzlDmDityRkco04mkiW0xkkqg7KsVLv3
-         JIBqM2yZ9/YZ2MYsxZDlLozZg+lehtSLXDDA/ER2NrK/C5ifrdEA7jQDIrEW19YUb6
-         gUHp+AUhN+WKZzcVynCB8I01H28l9gkISd7vAF92O/v+I2TJuLyyGDN1kRR1RrryK6
-         YrpnSIsd/pINw==
-Message-ID: <720e4d68-683a-f729-f452-4a9e52a3c6fa@stuerz.xyz>
-Date:   Mon, 28 Mar 2022 20:38:06 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 19/22 v2] wcn36xx: Improve readability of
- wcn36xx_caps_name
+        Mon, 28 Mar 2022 14:40:18 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E171B14014;
+        Mon, 28 Mar 2022 11:38:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648492716; x=1680028716;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=EFMfa0Xw4+0BNLi3LuU65MJtdwGEqio81+B/7wNCbRE=;
+  b=aXmkKxOD+a2/1+mtNkYQIq5BGc8sHvSRatiHvJG4KBb38GmFUbKj19Rh
+   UEemfQ4Gwv0yL3/QtwhNJNGHpBDp0hoH7vpzZWvYz60J7oz/DKhOycfIL
+   ifQNM5HCs2sWHXe3tdc92IdBw1wWwvE+kQBpkIggXDLj+2Z5VJoJfh8WM
+   nTkAFlySM1Es3gjal2EPDqTxIjDC9Q50lsOM97hjWPs2RbJ8JKZLxlocC
+   2eDYLGwxRd/jY74kFjEuseVCe+ERQXBBXPq8iJXkxitThS7Vg4k+Hr51z
+   g0M+ejf96W2LfiGlxf6Oph4rNUr2gOy+dPvSkcAgGOHtyCHscVW92UESL
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="319777783"
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="319777783"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 11:38:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="502617516"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by orsmga003.jf.intel.com with ESMTP; 28 Mar 2022 11:38:36 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Mon, 28 Mar 2022 11:38:36 -0700
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Mon, 28 Mar 2022 11:38:35 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Mon, 28 Mar 2022 11:38:35 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.177)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.21; Mon, 28 Mar 2022 11:38:35 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NKgfCcJoXpMobRMJ5DrSRJqxDqvMWlqp616q+q1ZnmwVFli+KRcggkzx9gmm5tEr58BRxhe8gLS7oRGN2ID92L06zKjDPpeTku8Eq0o2MeCZczpUuSjiacOOZcHTHdGKxMRKUgjUazgOSUbNXUBhYHR6zPpi7z81wFdo01ObRuSlou2tSUP85UBsdr6xTFi6qpyQGNriz/ed8PweY+6+lwMpnAIBLM0lNUzZc96N3YoNkrzY8azggX1iNlauKcnaxyt8q0dKvHSlQW4iVmPthvYksHGr8bqUDL0vHHqCencvJ08JoE7U3QL7TnLc7vRfiYWTTXfiC3DyVG1XawBR+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wbNSaiUVVjn/Ob+BoFwG8jWP8wz+sGrgsmGRdSs+SQw=;
+ b=mZZZEhUnK8Y/NrjE/SfSrhsnlovritXEv9/kKGDyo6+nX9FzPWgWnsPt07jAtBsA919X5arL9aR9WoXwg9nHuDACIvFdkg1JTGPwhX+zIeFEhqfrJ0RVYDDSpcJZESQprYoelmL13vpzwYmfCnBtQ8UgcfkFCOR0seHrg0kDYG5KzwQIMbMADjptaeG7pUuXDuc3a3Bxfu6CTpT8r+mm/6A53X6rIhIjBASQua45H/ngOh1GF4Icq6Pay6VaLvPWmuvfbzhKDHFo5Vj+6KiMyqXIt3FgH8mZd92yXW88zj6HA1GKvpExn0rRtH137pC2hYPZo/QtvYOHOKNKlfjnrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
+ by DM5PR11MB1675.namprd11.prod.outlook.com (2603:10b6:4:d::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5102.16; Mon, 28 Mar 2022 18:38:34 +0000
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::ec9a:f02a:6fc1:c6c]) by BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::ec9a:f02a:6fc1:c6c%8]) with mapi id 15.20.5102.023; Mon, 28 Mar 2022
+ 18:38:34 +0000
+Message-ID: <939859da-762c-7d48-0111-fbbb4f2e16e5@intel.com>
+Date:   Mon, 28 Mar 2022 11:38:30 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v5 1/2] selftests/resctrl: Extend CPU vendor detection
 Content-Language: en-US
-To:     Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc:     loic.poulain@linaro.org, Kalle Valo <kvalo@kernel.org>,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220326165909.506926-1-benni@stuerz.xyz>
- <20220326165909.506926-19-benni@stuerz.xyz>
- <f0ebc901-051a-c7fe-ca5a-bc798e7c31e7@quicinc.com>
-From:   =?UTF-8?Q?Benjamin_St=c3=bcrz?= <benni@stuerz.xyz>
-In-Reply-To: <f0ebc901-051a-c7fe-ca5a-bc798e7c31e7@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        NICE_REPLY_A,PDS_OTHER_BAD_TLD,RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+References: <20220323080928.1586408-1-tan.shaopeng@jp.fujitsu.com>
+ <20220323080928.1586408-2-tan.shaopeng@jp.fujitsu.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <20220323080928.1586408-2-tan.shaopeng@jp.fujitsu.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR03CA0148.namprd03.prod.outlook.com
+ (2603:10b6:303:8c::33) To BN0PR11MB5744.namprd11.prod.outlook.com
+ (2603:10b6:408:166::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3a9459e4-9f18-4be2-74a0-08da10ea29e8
+X-MS-TrafficTypeDiagnostic: DM5PR11MB1675:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <DM5PR11MB16754403E318BE656F1310EFF81D9@DM5PR11MB1675.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2Gh+3CVJIao6PJ/s9Kk8bjvyOmB+Dlp/4MQkj8nPkKvxFp7U2BkQj4SOmZgq8LY8uVLQjDKbPy+piKswqYEqMlszYMWftS2o0hyshWqoEmlmwUv8Ff5dNaIzrE6vE1pzfR3fPLUgvLr2gocabCcLpyPKn1S3KEjGc0G89kU/pi7RQJEEYmxZd5U+CcF1KUha+0jmsLXc92n285/B/ECYzr7jm6mkaInxWLjCqBZB8FRZCl0ol8yjG+Idv0IGJLU2mEUCEhwXzLvrVssQ3B7GqYdKqIhhpY/vTvZe1ksaW17mMSUQPV+DnlFJOYaWlEbn6tMOv/pp7metccfLeErS22w6SXw8ylGnDcOK4DP/tOb52sCDL0dE9y8PT8oWPgG4c8cZTKLe9YAP+zlDwkG6HfynHiAR64r0MMFqMSvX+qJsKTyIyrOESpBuXC6snp2JrqupFXMaipYblfqZl+6PVVeGFY1wg6w2WO8GwytoWeVkJewGK/e9xgyOlKJuWu7V8M/CMpiE7s4nRnENm3my6boiJ87T8oZ9dMgbnz+xB5jpPpuBt4TS7esyO6YgIgvh3qjJRgYUJ61HxGsHAiwPZQbG6Bpfu912xKqsuBZhe110AzfvQZeWq4kIp0iXG2tg71p+Vmfnyv74DSqWjz00k5HIjFlXJLwr8HVEojwcXGiXJtjFx8fv5V2E8NRg27WXEV3YHoGIa+F4hveu2WQM5k5Wa89zS4vLpH7WJfuOmXo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6512007)(6506007)(508600001)(31696002)(44832011)(6666004)(4326008)(53546011)(66476007)(8936002)(66946007)(5660300002)(66556008)(316002)(86362001)(36756003)(6486002)(8676002)(4744005)(31686004)(83380400001)(82960400001)(38100700002)(2906002)(186003)(2616005)(26005)(110136005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bEU4d2lLQ1hvM2h0UStVUDlaUjhWVlo1YWNURmtFMEo2NWY3MU9TTktPMExi?=
+ =?utf-8?B?MmVua2lqZ1diVU1MSDBVVWNzZVhyVVJsazNaNlY3ZTBNOHVDNVZLNGpQYUlX?=
+ =?utf-8?B?NGFYLzFydS9qNy9wbFV5VzZGSzJNZmdObEgyc0t0R3dlb2hLa05BUFJ0d3ZZ?=
+ =?utf-8?B?ZXpiTDd2UFBXckZHRUY4OFFud0JBcXF6a1FXK01kT1FHSnlWbzFnanllU1lL?=
+ =?utf-8?B?UW1aOHhlL2tLV0NrL1prWjRxdDVXdUt1OXpJQ3BabXFnQkU0M1ZWbDhkK1c0?=
+ =?utf-8?B?Vm0wdllMZzVOZzVIdFBlTzBHc0hvVlB3dlE0cW5GNC9JR3RudklpaGg0YWh2?=
+ =?utf-8?B?amQvOWFKaGphbUpnSDdjeURFYThocWN6U0tLaTRpa2VtTU5rSmlRUit1dUZR?=
+ =?utf-8?B?cVRlQk1UMFpEOEJsRkg1dTRzWFVIbzI2NU5MUTVkejBqbDN3Q0p2SllMZWdm?=
+ =?utf-8?B?UXNsR3NxMUs2dFQzdmw1dEJHM2wwNk1Ha1hpT1FGcUJ4T2lxNzNERkxUQzhv?=
+ =?utf-8?B?MEloS3pSbC8wU1NETmlQNnJOeXJmNEJHdXlTcWM4NjJqbEJtN09TQU9xSWxS?=
+ =?utf-8?B?WnMrTUNOVkpEeXpOaXdFbkxLclkxeUpJRTRQVEZrVUxBbWE5QUVQYm4vSGxS?=
+ =?utf-8?B?YnVhcTBpZk12OVZLVEE0Sk0xS0dZV25qYUdaQlhoWFc0NUIzK0dZazdLODhu?=
+ =?utf-8?B?NVdzMHFyNjNkaUluK1E0aW85YWIzQ1F2V2diZW1waTNyVFBGaSt0NDc2YTRm?=
+ =?utf-8?B?dXNVUFZCZGNVTjRpOFd1NGx6VThQemhwdm93bkJQeUpmOXNheWpucUdQREF1?=
+ =?utf-8?B?c0RNSkZRUTVsdU1qSVpkMVNkTkV3cFcwbnFGbHhZVUM5clZqMGFReGxRbFUr?=
+ =?utf-8?B?NEh2WDNvZGg5emsrMlBRQTR6UzlEdWxGRVlLQzZDcy96K3V1Nkx1bFdkT3pP?=
+ =?utf-8?B?c2ZHYSs4RWloOFRnUGhoUmlSN294Q2JIWFlyZHEzRUI1ZXExbnk4b1RoTjlD?=
+ =?utf-8?B?NmdmOXpqTXpkWGRNWDNZTkZJNTFzOExuMllxbnloZ3kxT1FnK1RkUHd1bnll?=
+ =?utf-8?B?a01SZ1JnUkJwY3VyRTZiODM3ejBBYVpMZGJhWVBOeTFqNFVKUTFkekU2aFdl?=
+ =?utf-8?B?WGZScWpZc2ZWNXRKQmZuLzlKUHFqd1FnMGZ1RFRHbDJLSTBJaFRvMC9sMjF5?=
+ =?utf-8?B?YTZwWlZuWktSL3Rld0xpRk5zdHlTZktVRWlDSXZzYVlNakZwbDk2N3lXbXUx?=
+ =?utf-8?B?N1V0Uy95SHRYaFIrVmNhRWZ2TUdBdDV0dXRxaWlHaWl3R3hyTlBKZ3VlRzFk?=
+ =?utf-8?B?R3RvaDhhbmZJMUp1aHFnaTRidGZmdUNMOXFXVWVsdGF2UktvYUFzeXpxcm14?=
+ =?utf-8?B?VjRPaGEyQ09UWDFtUGViYnpobm1MT2ljY0ZMNlJJZEdQaFd0bFk2bHhqUlRj?=
+ =?utf-8?B?djd5dXlSK2Zjck1udXNRSy9VNG9vaVB6R2FFeUM4RlFoczZwNmRab1c4eSt4?=
+ =?utf-8?B?WWJzajk1TnJVWkNOUEMrYjVIVjR0ZFI0dW54OUR2QmN4aWNKZEhnMzBXNUh4?=
+ =?utf-8?B?MG52Rzk3UWxZMlk4c0FWcHh3OWpWNTd1ZlpLeHVScjJQSlRNeUFPNWpEK0V2?=
+ =?utf-8?B?K2lsYi9pano3T3BobmNxUnRiT1A4c2szeDhpeHRCMmVWSldQY25KN3MwTjFB?=
+ =?utf-8?B?b2lWUHl6T21xZGxwcmgxbjJKQzFDSWJiazlLMjhhVm9TbkRNdFpsRENvaHNx?=
+ =?utf-8?B?N0Ewa0Vzek1IdlY5THkvMHV6TDg0d0hGWTBuVEtnQlpVN3NQbTUxYkp5bkZE?=
+ =?utf-8?B?WlpjMmEweHBxU1FFS2QxSWlxZDhTblVScktIT2kyOE1PZ0lIVTBpVzcyMXg4?=
+ =?utf-8?B?anFHWFgxeW04b3ZnRHJVZVRZUFZBaExxcHZSeE1pRmgyZUFsdk8vMGlXcFBm?=
+ =?utf-8?B?QnRoUzhSdDN6RlBmenFrTTkwM09jVDFCZnNXMzR5UkZldXdFM3A2TzI3L3Nv?=
+ =?utf-8?B?Z09Ka01iMFlBYjhWczBYUzN5R0VOSVJLTm1uK3F5eW94V3JjRUgzeStIUEQ1?=
+ =?utf-8?B?TGkrTUZJM0dNdEtCQjh5RHRDTXJXSkh2M3FON3FMSlgyQkVwQlg3emh0azYz?=
+ =?utf-8?B?KzhENCtWcllwWHExa3duY2Jab20vYk5YL0RVTGFwWjM4R1ZxZTB1anZKMkwz?=
+ =?utf-8?B?Ulp3UDUrdEx6c1BtRUhlVlBQUEQ4ZjFRWURId2tHQW9rTFMzYmR4TnVNbXo2?=
+ =?utf-8?B?dFlZRFhFZU9hRUFHYVJ2MUV2Tk8vZGZCQk9uRyswRWZCbFdlYjlOR1ZMYUdV?=
+ =?utf-8?B?YzJ2YmxRZm4rK3dWdDI2V2MxVUpGbHM1WjJoYStWVDBYSEFuTWNkcllJR3dF?=
+ =?utf-8?Q?yR4fgtODCDynRYCI=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a9459e4-9f18-4be2-74a0-08da10ea29e8
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2022 18:38:34.0181
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OS4WNg4dsy0DiBeO0J5x6+uJZ35FI8tXLEiEhsE9Ecup7XQA8ztpbgTQcmZHxsgQatW/nsHwRguqOoK2ozy2kPCyGChuZsLKOh5bUKwbTAE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1675
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make the array more readable and easier to maintain.
 
-Signed-off-by: Benjamin Stürz <benni@stuerz.xyz>
----
- drivers/net/wireless/ath/wcn36xx/main.c | 126 ++++++++++++------------
- 1 file changed, 65 insertions(+), 61 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/wcn36xx/main.c
-b/drivers/net/wireless/ath/wcn36xx/main.c
-index 95ea7d040d8c..ac9465dfae64 100644
---- a/drivers/net/wireless/ath/wcn36xx/main.c
-+++ b/drivers/net/wireless/ath/wcn36xx/main.c
-@@ -192,70 +192,74 @@ static inline u8 get_sta_index(struct
-ieee80211_vif *vif,
- 	       sta_priv->sta_index;
- }
+On 3/23/2022 1:09 AM, Shaopeng Tan wrote:
+> Currently, the resctrl_tests only has a function to detect AMD vendor.
+> Since when the Intel Sub-NUMA Clustering feature is enabled,
+> Intel CMT and MBM counters may not be accurate,
+> the resctrl_tests also need a function to detect Intel vendor.
+> And in the future, resctrl_tests will need a function to detect different
+> vendors, such as Arm.
+> 
+> Extend the function to detect Intel vendor as well. Also,
+> this function can be easily extended to detect other vendors.
+> 
+> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+> ---
 
-+#define DEFINE(s) [s] = #s
-+
- static const char * const wcn36xx_caps_names[] = {
--	"MCC",				/* 0 */
--	"P2P",				/* 1 */
--	"DOT11AC",			/* 2 */
--	"SLM_SESSIONIZATION",		/* 3 */
--	"DOT11AC_OPMODE",		/* 4 */
--	"SAP32STA",			/* 5 */
--	"TDLS",				/* 6 */
--	"P2P_GO_NOA_DECOUPLE_INIT_SCAN",/* 7 */
--	"WLANACTIVE_OFFLOAD",		/* 8 */
--	"BEACON_OFFLOAD",		/* 9 */
--	"SCAN_OFFLOAD",			/* 10 */
--	"ROAM_OFFLOAD",			/* 11 */
--	"BCN_MISS_OFFLOAD",		/* 12 */
--	"STA_POWERSAVE",		/* 13 */
--	"STA_ADVANCED_PWRSAVE",		/* 14 */
--	"AP_UAPSD",			/* 15 */
--	"AP_DFS",			/* 16 */
--	"BLOCKACK",			/* 17 */
--	"PHY_ERR",			/* 18 */
--	"BCN_FILTER",			/* 19 */
--	"RTT",				/* 20 */
--	"RATECTRL",			/* 21 */
--	"WOW",				/* 22 */
--	"WLAN_ROAM_SCAN_OFFLOAD",	/* 23 */
--	"SPECULATIVE_PS_POLL",		/* 24 */
--	"SCAN_SCH",			/* 25 */
--	"IBSS_HEARTBEAT_OFFLOAD",	/* 26 */
--	"WLAN_SCAN_OFFLOAD",		/* 27 */
--	"WLAN_PERIODIC_TX_PTRN",	/* 28 */
--	"ADVANCE_TDLS",			/* 29 */
--	"BATCH_SCAN",			/* 30 */
--	"FW_IN_TX_PATH",		/* 31 */
--	"EXTENDED_NSOFFLOAD_SLOT",	/* 32 */
--	"CH_SWITCH_V1",			/* 33 */
--	"HT40_OBSS_SCAN",		/* 34 */
--	"UPDATE_CHANNEL_LIST",		/* 35 */
--	"WLAN_MCADDR_FLT",		/* 36 */
--	"WLAN_CH144",			/* 37 */
--	"NAN",				/* 38 */
--	"TDLS_SCAN_COEXISTENCE",	/* 39 */
--	"LINK_LAYER_STATS_MEAS",	/* 40 */
--	"MU_MIMO",			/* 41 */
--	"EXTENDED_SCAN",		/* 42 */
--	"DYNAMIC_WMM_PS",		/* 43 */
--	"MAC_SPOOFED_SCAN",		/* 44 */
--	"BMU_ERROR_GENERIC_RECOVERY",	/* 45 */
--	"DISA",				/* 46 */
--	"FW_STATS",			/* 47 */
--	"WPS_PRBRSP_TMPL",		/* 48 */
--	"BCN_IE_FLT_DELTA",		/* 49 */
--	"TDLS_OFF_CHANNEL",		/* 51 */
--	"RTT3",				/* 52 */
--	"MGMT_FRAME_LOGGING",		/* 53 */
--	"ENHANCED_TXBD_COMPLETION",	/* 54 */
--	"LOGGING_ENHANCEMENT",		/* 55 */
--	"EXT_SCAN_ENHANCED",		/* 56 */
--	"MEMORY_DUMP_SUPPORTED",	/* 57 */
--	"PER_PKT_STATS_SUPPORTED",	/* 58 */
--	"EXT_LL_STAT",			/* 60 */
--	"WIFI_CONFIG",			/* 61 */
--	"ANTENNA_DIVERSITY_SELECTION",	/* 62 */
-+	DEFINE(MCC),
-+	DEFINE(P2P),
-+	DEFINE(DOT11AC),
-+	DEFINE(SLM_SESSIONIZATION),
-+	DEFINE(DOT11AC_OPMODE),
-+	DEFINE(SAP32STA),
-+	DEFINE(TDLS),
-+	DEFINE(P2P_GO_NOA_DECOUPLE_INIT_SCAN),
-+	DEFINE(WLANACTIVE_OFFLOAD),
-+	DEFINE(BEACON_OFFLOAD),
-+	DEFINE(SCAN_OFFLOAD),
-+	DEFINE(ROAM_OFFLOAD),
-+	DEFINE(BCN_MISS_OFFLOAD),
-+	DEFINE(STA_POWERSAVE),
-+	DEFINE(STA_ADVANCED_PWRSAVE),
-+	DEFINE(AP_UAPSD),
-+	DEFINE(AP_DFS),
-+	DEFINE(BLOCKACK),
-+	DEFINE(PHY_ERR),
-+	DEFINE(BCN_FILTER),
-+	DEFINE(RTT),
-+	DEFINE(RATECTRL),
-+	DEFINE(WOW),
-+	DEFINE(WLAN_ROAM_SCAN_OFFLOAD),
-+	DEFINE(SPECULATIVE_PS_POLL),
-+	DEFINE(SCAN_SCH),
-+	DEFINE(IBSS_HEARTBEAT_OFFLOAD),
-+	DEFINE(WLAN_SCAN_OFFLOAD),
-+	DEFINE(WLAN_PERIODIC_TX_PTRN),
-+	DEFINE(ADVANCE_TDLS),
-+	DEFINE(BATCH_SCAN),
-+	DEFINE(FW_IN_TX_PATH),
-+	DEFINE(EXTENDED_NSOFFLOAD_SLOT),
-+	DEFINE(CH_SWITCH_V1),
-+	DEFINE(HT40_OBSS_SCAN),
-+	DEFINE(UPDATE_CHANNEL_LIST),
-+	DEFINE(WLAN_MCADDR_FLT),
-+	DEFINE(WLAN_CH144),
-+	DEFINE(NAN),
-+	DEFINE(TDLS_SCAN_COEXISTENCE),
-+	DEFINE(LINK_LAYER_STATS_MEAS),
-+	DEFINE(MU_MIMO),
-+	DEFINE(EXTENDED_SCAN),
-+	DEFINE(DYNAMIC_WMM_PS),
-+	DEFINE(MAC_SPOOFED_SCAN),
-+	DEFINE(BMU_ERROR_GENERIC_RECOVERY),
-+	DEFINE(DISA),
-+	DEFINE(FW_STATS),
-+	DEFINE(WPS_PRBRSP_TMPL),
-+	DEFINE(BCN_IE_FLT_DELTA),
-+	DEFINE(TDLS_OFF_CHANNEL),
-+	DEFINE(RTT3),
-+	DEFINE(MGMT_FRAME_LOGGING),
-+	DEFINE(ENHANCED_TXBD_COMPLETION),
-+	DEFINE(LOGGING_ENHANCEMENT),
-+	DEFINE(EXT_SCAN_ENHANCED),
-+	DEFINE(MEMORY_DUMP_SUPPORTED),
-+	DEFINE(PER_PKT_STATS_SUPPORTED),
-+	DEFINE(EXT_LL_STAT),
-+	DEFINE(WIFI_CONFIG),
-+	DEFINE(ANTENNA_DIVERSITY_SELECTION),
- };
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 
-+#undef DEFINE
-+
- static const char *wcn36xx_get_cap_name(enum place_holder_in_cap_bitmap x)
- {
- 	if (x >= ARRAY_SIZE(wcn36xx_caps_names))
--- 
-2.35.1
+Thank you
+
+Reinette
+
+

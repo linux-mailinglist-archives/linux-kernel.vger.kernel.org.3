@@ -2,168 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1D24E979A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CF7C4E97A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242943AbiC1NLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 09:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
+        id S242544AbiC1NMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 09:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242974AbiC1NLI (ORCPT
+        with ESMTP id S237730AbiC1NMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 09:11:08 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2114.outbound.protection.outlook.com [40.107.215.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1F71C131;
-        Mon, 28 Mar 2022 06:09:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j4M7c0njimMdgVC3AWTRLMksBxK5+bgTmaKc3z7VD6TeUvF280YtAzPiLMWsDYu9huVAk5lFs0+5cxZRf0/RLw2v+N4AH5pWn/01FafQ/ac0nPEKjQe2CKTYW5pG3UKjzcEUAI75lDwOV+j21402jz5x1y5WeDOl2OJ0egTSTLx/N1z7Z1yUtQ3PN9rWOj04WrvMUEzQ3Njpw6p3tIoEnBxP43E9KKHYYYOOzqq8qNnSpyYycT+b7SwAeirRkmUhlN/FX2i1jSi3FJPFoDfSopfHnuhjmWxo2SBHozbTSwHi/iMgX3Zd9aiUZ97QzCJyDen9HiPVBY+0jRQObxQkRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QVtRoPMwC5AQo48sZqltarz7jYrODdvcw0q1AntM8iU=;
- b=KP1gOVU7zuRFfJI59tkoXGlI/LHuVgob43ytCuXcv4V5xWqGWMCKRUUOoYEKzaqaw9vMIuhvhje4thjKpCUwfxaGKSeZp1w6EpmF7J4srQN2ZdKiXl2+3hNZ+oN/w/1Wqj2uJdmqYPVi23n348ZAPHcsBq1Xa6ONshnVotpfva1I1Z+U+fa2Nhzs3MeV573rZ+JAbXNRnuvnAgrcE4etwnLoGilQj/uqJTY0Is0XVYErxA5lImcWcXJkYhmL0dw1GKnqx4Wdro+lSzqKBACQ4gzhT1SE5jVpv4o27Gu6VrVyt3+TbFSJxgXkfNjocKDyaZ5uHZcFwHfsIKsOn4MxJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QVtRoPMwC5AQo48sZqltarz7jYrODdvcw0q1AntM8iU=;
- b=XWUXPtGW/mA5cvWMTi/zxh7XPOh5ghUmLdowYVajX80UENmyyR3cOS7WrZXYpk04Ls76tV9iPuEEDu2WWRFzcK7QUBrzh1hGpoWWHGenN6DldkeSSKSOA5oH6PqUloLjG4/bTpyCOL3ztDIhJTwRy5jcZj/PwDvcvxVOE/fpFeM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
- by SG2PR06MB2553.apcprd06.prod.outlook.com (2603:1096:4:65::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.19; Mon, 28 Mar
- 2022 13:09:19 +0000
-Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
- ([fe80::5aa:dfff:8ca7:ae33]) by HK2PR06MB3492.apcprd06.prod.outlook.com
- ([fe80::5aa:dfff:8ca7:ae33%6]) with mapi id 15.20.5102.022; Mon, 28 Mar 2022
- 13:09:18 +0000
-From:   Guo Zhengkui <guozhengkui@vivo.com>
-To:     Mustafa Ismail <mustafa.ismail@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        linux-rdma@vger.kernel.org (open list:INTEL ETHERNET PROTOCOL DRIVER
-        FOR RDMA), linux-kernel@vger.kernel.org (open list)
-Cc:     zhengkui_guo@outlook.com, Guo Zhengkui <guozhengkui@vivo.com>
-Subject: [PATCH linux-next] RDMA: simplify if-if to if-else
-Date:   Mon, 28 Mar 2022 21:08:59 +0800
-Message-Id: <20220328130900.8539-1-guozhengkui@vivo.com>
-X-Mailer: git-send-email 2.20.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0200.apcprd02.prod.outlook.com
- (2603:1096:201:20::12) To HK2PR06MB3492.apcprd06.prod.outlook.com
- (2603:1096:202:2f::10)
+        Mon, 28 Mar 2022 09:12:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9225F1088
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:10:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648473036;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oPUIgDa6HUJFIkt4naHdYuQa7qYarBWstooAkOY/xAM=;
+        b=QJJi6vDCZDZTPaYBBRkK2slHKNGphLQHTLgh4AGdBv+4ZPUJz1IDuec2HhdkiD9bah9MCD
+        Z5QnmzhjVeU/R/DZpyTBkQwbIimGq0dPw4gMAohcvjpRbSOyZ9QCySFjRdtNtsxbAHi5eX
+        rqp/ecjYa3tP9a4KEvKpKoC7V0pfhiQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-251-Z2czk1bjP4-S1atZAJ09mQ-1; Mon, 28 Mar 2022 09:10:33 -0400
+X-MC-Unique: Z2czk1bjP4-S1atZAJ09mQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7838180159B;
+        Mon, 28 Mar 2022 13:10:32 +0000 (UTC)
+Received: from lxbceph1.gsslab.pek2.redhat.com (unknown [10.72.47.117])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DB2F3C15D59;
+        Mon, 28 Mar 2022 13:10:29 +0000 (UTC)
+From:   xiubli@redhat.com
+To:     jlayton@kernel.org
+Cc:     idryomov@gmail.com, vshankar@redhat.com,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiubo Li <xiubli@redhat.com>
+Subject: [PATCH v2] ceph: remove unused CEPH_MDS_LEASE_RELEASE related code
+Date:   Mon, 28 Mar 2022 21:10:26 +0800
+Message-Id: <20220328131026.923174-1-xiubli@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ca5a1fb2-50f7-4330-b65a-08da10bc2aec
-X-MS-TrafficTypeDiagnostic: SG2PR06MB2553:EE_
-X-Microsoft-Antispam-PRVS: <SG2PR06MB25536D7F0CCB3C2C58392F05C71D9@SG2PR06MB2553.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OmSO17Gordg4U4+2H137Jukli4VGyH2ZlkfksmVff+1eEbo+Ox8hGsnX374e9H57Rv4jJhCtzwAnynmvb8qXdUzCkFN3svWSIUhe443b+Hy+0MWKC0YNHDqXgxQFApU2CVgif9Et7HVoj7PjVZ1lM0NWcDVArl2nzin3/xP26o7E85UH1A3ypcgM74lr0PsqY5CicwlDSNhHQ33+DVJTMlxuydjIFpiim5bAhTs8lnttz303+zgUj5wVk23LNYUeUSpwccZZyV1eK9Pjj2SHV9dfkj3DB079kSAykVNZ6Ofipm2M7QaqeiZJI9+bBAsLMDbL6WvBOEzo+yPSX7SZ+Bc5Pv0fqSrcvHJ5RufOH3D51Nhch+URsMKNciiJjUvIPYJoKoKkuBfzsqjHLKdWcmk0oDtT4AKeRXDvnjHwQkG5KPd1jJVOS0ZLiE9nFTij8bHEAIwHck2iZGvnHWVj8wIq+Ab7Y/mWiI3sSTRe27AkHSdoHrtFZ8EKsvzsD8MbedYRCMV+nK7/VR0MWLAEe2rcZrg21fMpkilT9RQ7b82lQPlaJaWbN7vy8d3/f4u67vyvs47fmg/46VR+FnCysU32iOxjNhWHS9wSLzKugZWggORpCpOfn/bh37JGlI88PygIxWEVaIr6lorj/HrMPPjHQrzQ6tQyPTBHEeKWNKXn0U779mKFdrm05NMcMIcAdsTWryJp8dEmVLz9Z4hStg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(107886003)(86362001)(2616005)(26005)(110136005)(2906002)(38100700002)(508600001)(66476007)(186003)(52116002)(83380400001)(36756003)(316002)(5660300002)(1076003)(6512007)(8936002)(6506007)(6666004)(66556008)(8676002)(4326008)(38350700002)(6486002)(66946007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ghF53bkHfPQTvI99TDOypxY8pxC1ULd8LqvLUa0qm9BX8FfQggLhURuxpO8M?=
- =?us-ascii?Q?Q1XicnA7y46+UkYFUse+0banUkSW2nE6o3c6JsLDlw3setmFYiFFeMo0Eft5?=
- =?us-ascii?Q?jNIMuW0j7tvkfYE133R5Fut/kopxzYnFXRKIsFlnVWg4WNmtR1A+h/LUilpX?=
- =?us-ascii?Q?JWGEI4wZZ0Yqvk+gUmp/6OeX+dHDhT9DNxCUhZhRqNNT3aafqdYlhdOqmTUe?=
- =?us-ascii?Q?35AgaOdUj7FM5k/Gq1Tkkqq3Y44sj5oE5xRJxGiB7ok6Y/Ox6PVxoWYxiU9M?=
- =?us-ascii?Q?p4/JJgSLv7r8CZyZtZFFIa3fwq1QDp1u8D+7mheXGQjcjEivhf5g/c3HyJIs?=
- =?us-ascii?Q?DdDtzNf1xuiRk4euUIFXS8SS0uuAVFj9n+tRHujZ6fK2TeFpWHpLbgmdSqMh?=
- =?us-ascii?Q?I6b0vKEpT/ddp8/RnjqcF60AqGEt/JQWlxGsLWkOFUr/omRFT/0tek77DcIF?=
- =?us-ascii?Q?NVJrwkZYROo9lX3HwKzvN9ckNssYMQv0zuhg/wdPPEX2wRmK8R+9yI/8Nwq9?=
- =?us-ascii?Q?7XHe4OIdQzYD9nsUIrj5NB7+HG60oAbCJqcXAccmddwJPfmUZWKa65Z14sgt?=
- =?us-ascii?Q?yv+6Ao39UU3YxBcJNUzkQ1EJjgdpPiaqLhvcfI+A2ioCHHD6AaJisiG9o0hv?=
- =?us-ascii?Q?MJg6AiVNwcKJMOBA/XQov2Whzotb5T0K6lN0bWrhGtJoBNGm7OHfFvCL5EJN?=
- =?us-ascii?Q?4jEYcnZ/I2Lt+ngIBfQSnNtPtfDtr7059Q/G2ixSp+msR2710wkuFrEDfMdo?=
- =?us-ascii?Q?pYzYtx9OQNVD+aIMlWTix5PWGoZj/KGutaMCaDM4eo5QYTPNpk6FbUXjZP/v?=
- =?us-ascii?Q?teGCSAbB6svwEquFUCIGZG0yCBPID4UanIHxO07DzR7veMaeD5xmlduGnEyW?=
- =?us-ascii?Q?ShfHxzkZGcB+n+vShS8ucJuX0ea8vCUE+K4ORvZ/CnMflMyrA2J/WXebTnhF?=
- =?us-ascii?Q?yIaZd66LqiJvklo4nSkadfnBEg4kCz2qA7DmbYcYcaiIpjVQh+KHNz5Fo4A/?=
- =?us-ascii?Q?IPR7wWkRjLkkozmk6C7+bgi3UmOTSUvxiUUCbUofVg98QuxHuXBUc2XUMzNm?=
- =?us-ascii?Q?f1TSgC28x3H5t2l8KHlwwTYQedAD/ReiqFTtNX31Z9H3t/1YH8HpBpe9sB0H?=
- =?us-ascii?Q?9dY0ji+ZDHqdNBw24HqgocV8hGWA6gWHY6GLdofvdpLDJdpbhgyEhjBsYbkg?=
- =?us-ascii?Q?tgodd9tL7iPUas0quHwnMCDb4J3LeEG0L63vxI6HUGT0Gfp5Ya/ja8Nu489e?=
- =?us-ascii?Q?biD5S7IVO+hFsI4GyY/3sBLabE9p7/xR9m0IikTx2DdnB6ODTNW9P1shwG4e?=
- =?us-ascii?Q?jtl7gxHcJozpICi8rXhswotUxLe6YHTjhg1+zkFOG1taLt1AsKUQ4e+XsXq/?=
- =?us-ascii?Q?hZMnmAQuffhwM2KmRh47qpZtInbWL1RHS6N5M3pHTT1r8Ip60Zx620okLYIp?=
- =?us-ascii?Q?F1SkVJXD2VKJwB/koa/rwQkWYwWZj2I/u/NeELzB9DozVJTRBZsc9wEXF4R1?=
- =?us-ascii?Q?k8ASuB6xpjBpgJeGNRGUoirLjLJuQ7hO0Iw9my6ydWmOtsHqjtB98drL1NFb?=
- =?us-ascii?Q?c4OPiyX/awDfSM9ImXc2xadhukHVuGJormD0O55Tl+fwTKSH1UGZjOqMf0lR?=
- =?us-ascii?Q?FUBjlkq9ygVEgvHsDdOkJBtIZJo09GcM8zFHsZiAH2rd+s42NH4kZX37ul9P?=
- =?us-ascii?Q?8gsBMTKWwGA/v0Q8z99PMMZoFzbTpzSwmNmFoj0tFEC6fx3zItNwg1ZMvgJr?=
- =?us-ascii?Q?eOK+jKKmfA=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca5a1fb2-50f7-4330-b65a-08da10bc2aec
-X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2022 13:09:18.8117
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IbwNeYVY0SYBLcOJbymaYyzNW0TSTJ+1+3X2IPSVsrTQnqcnboT8nNjYYWJry1M3eR0b3CF8YhNQJ511Mlc1pg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB2553
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-`if (!ret)` can be replaced with `else` for simplification.
+From: Xiubo Li <xiubli@redhat.com>
 
-Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+ceph_mdsc_lease_release was removed by commit 8aa152c77890 (ceph:
+remove ceph_mdsc_lease_release). ceph_mdsc_lease_send_msg will never
+call this function with CEPH_MDS_LEASE_RELEASE.
+
+Signed-off-by: Xiubo Li <xiubli@redhat.com>
 ---
- drivers/infiniband/hw/irdma/puda.c | 4 ++--
- drivers/infiniband/hw/mlx4/mcg.c   | 3 +--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ fs/ceph/mds_client.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/infiniband/hw/irdma/puda.c b/drivers/infiniband/hw/irdma/puda.c
-index 397f3d070f90..ee91424eb94a 100644
---- a/drivers/infiniband/hw/irdma/puda.c
-+++ b/drivers/infiniband/hw/irdma/puda.c
-@@ -842,7 +842,7 @@ static void irdma_puda_free_qp(struct irdma_puda_rsrc *rsrc)
- 		ibdev_dbg(to_ibdev(dev),
- 			  "PUDA: error puda qp destroy wqe, status = %d\n",
- 			  ret);
--	if (!ret) {
-+	else {
- 		ret = irdma_sc_poll_for_cqp_op_done(dev->cqp, IRDMA_CQP_OP_DESTROY_QP,
- 						    &compl_info);
- 		if (ret)
-@@ -871,7 +871,7 @@ static void irdma_puda_free_cq(struct irdma_puda_rsrc *rsrc)
- 	ret = irdma_sc_cq_destroy(&rsrc->cq, 0, true);
- 	if (ret)
- 		ibdev_dbg(to_ibdev(dev), "PUDA: error ieq cq destroy\n");
--	if (!ret) {
-+	else {
- 		ret = irdma_sc_poll_for_cqp_op_done(dev->cqp, IRDMA_CQP_OP_DESTROY_CQ,
- 						    &compl_info);
- 		if (ret)
-diff --git a/drivers/infiniband/hw/mlx4/mcg.c b/drivers/infiniband/hw/mlx4/mcg.c
-index 33f525b744f2..a8c8d432d0dc 100644
---- a/drivers/infiniband/hw/mlx4/mcg.c
-+++ b/drivers/infiniband/hw/mlx4/mcg.c
-@@ -304,9 +304,8 @@ static int send_leave_to_wire(struct mcast_group *group, u8 join_state)
- 	ret = send_mad_to_wire(group->demux, (struct ib_mad *)&mad);
- 	if (ret)
- 		group->state = MCAST_IDLE;
--
- 	/* set timeout handler */
--	if (!ret) {
-+	else {
- 		/* calls mlx4_ib_mcg_timeout_handler */
- 		queue_delayed_work(group->demux->mcg_wq, &group->timeout_work,
- 				msecs_to_jiffies(MAD_TIMEOUT_MS));
+diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
+index 459c6f23915f..a89ee866ebbb 100644
+--- a/fs/ceph/mds_client.c
++++ b/fs/ceph/mds_client.c
+@@ -4424,12 +4424,6 @@ void ceph_mdsc_lease_send_msg(struct ceph_mds_session *session,
+ 	memcpy((void *)(lease + 1) + 4,
+ 	       dentry->d_name.name, dentry->d_name.len);
+ 	spin_unlock(&dentry->d_lock);
+-	/*
+-	 * if this is a preemptive lease RELEASE, no need to
+-	 * flush request stream, since the actual request will
+-	 * soon follow.
+-	 */
+-	msg->more_to_follow = (action == CEPH_MDS_LEASE_RELEASE);
+ 
+ 	ceph_con_send(&session->s_con, msg);
+ }
 -- 
-2.20.1
+2.27.0
 

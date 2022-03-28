@@ -2,102 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A99CD4E9283
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 044EC4E928D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240258AbiC1KaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 06:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
+        id S240271AbiC1KgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 06:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234993AbiC1KaG (ORCPT
+        with ESMTP id S233245AbiC1KgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 06:30:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C22522D8;
-        Mon, 28 Mar 2022 03:28:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 28 Mar 2022 06:36:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E03F113F1B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 03:34:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648463664;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qL7jAD+hqMfuv8LtWCyhM0pklB+Nyp6EIiCs/KXhXss=;
+        b=WodJUHYoi10fY3Zs3ST2JiLHn/txi0Le8MvW9KzryB2/mhsdFryLZY5ZyLieVM6V+jqiON
+        I5IDsmlhNdBZY37rbHerJRdtcYvpgUvL9CdjtKNWKn4ZOUKnuScDPeYTZ5l5dZ03GC7TOz
+        CSIKgDLEb2ILS926XUrioRyhuPGJDKI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-74-0jxMKX5bM6aHmqY2qorA_A-1; Mon, 28 Mar 2022 06:34:22 -0400
+X-MC-Unique: 0jxMKX5bM6aHmqY2qorA_A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B035FB80FC0;
-        Mon, 28 Mar 2022 10:28:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1411C340F0;
-        Mon, 28 Mar 2022 10:28:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648463303;
-        bh=mbW5lOE0DiwZdxys0cKvpTjDkJc1/stJnOezmtZoeSY=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=JXWSYY8sovEf/LSZ79BbS/TkTb4uxARjJVpjLYdk3R+LH36tDuhsMWWJlNKZ5pQpg
-         WXsWCYqqtps+5zv61bLMSzPNdvxdlH+OvsuB5EYL4ErDQYWShFsFSYYXTq8F6Wt4+2
-         nbfq1vN8eCO2JwT2/VYWmLKfzidzIfx1LdS2eqS3wCBuB/muzU1SZc1Owo1uwp44oa
-         s4QhlKD0s0uUrvQNJLATtyep1XI1qWTrLPBlq6xZzKZj8FT5aTOpl2MRmXnZkH7kgr
-         tKyMU3jOgI7xUrF7OIzrR+Nm6nZ3swnMPkj6+0DMNcvtiWfvnDIIHHwaHH46O3E7Pl
-         KBiGqwecokyyA==
-Message-ID: <cd928bbbba3260dfe6ce4a964185a377b4a767cd.camel@kernel.org>
-Subject: Re: [PATCH] ceph: remove unused CEPH_MDS_LEASE_RELEASE related code
-From:   Jeff Layton <jlayton@kernel.org>
-To:     xiubli@redhat.com
-Cc:     idryomov@gmail.com, vshankar@redhat.com,
-        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 28 Mar 2022 06:28:21 -0400
-In-Reply-To: <20220328022535.847164-1-xiubli@redhat.com>
-References: <20220328022535.847164-1-xiubli@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3EB793800E80;
+        Mon, 28 Mar 2022 10:34:22 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A26CC15D40;
+        Mon, 28 Mar 2022 10:34:21 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20220322004654.618274-1-eric.dumazet@gmail.com>
+References: <20220322004654.618274-1-eric.dumazet@gmail.com>
+To:     Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     dhowells@redhat.com, linux-kernel <linux-kernel@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>, Jann Horn <jannh@google.com>
+Subject: Re: [PATCH] watch_queue: Free the page array when watch_queue is dismantled
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2572769.1648463660.1@warthog.procyon.org.uk>
+Date:   Mon, 28 Mar 2022 11:34:20 +0100
+Message-ID: <2572770.1648463660@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-03-28 at 10:25 +0800, xiubli@redhat.com wrote:
-> From: Xiubo Li <xiubli@redhat.com>
-> 
-> The ceph_mdsc_lease_release() has been removed by commit(8aa152c77890)
-> and the CEPH_MDS_LEASE_RELEASE will never be used.
-> 
+Eric Dumazet <eric.dumazet@gmail.com> wrote:
 
-Like it says in Documentation/process/5.Posting.rst:
+> Reported-by: syzbot <syzkaller@googlegroups.com>
 
-"...and please provide both the commit ID and the title when citing
-commits"
+Should this be the following?
 
-You might want to reword this with something like:
+	Reported-by: syzbot+25ea042ae28f3888727a@syzkaller.appspotmail.com
 
-"ceph_mdsc_lease_release was removed by commit 8aa152c77890 (ceph:
-remove ceph_mdsc_lease_release). ceph_mdsc_lease_send_msg will never
-call this function with CEPH_MDS_LEASE_RELEASE."
+David
 
-> Signed-off-by: Xiubo Li <xiubli@redhat.com>
-> ---
->  fs/ceph/mds_client.c | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
-> index 459c6f23915f..a89ee866ebbb 100644
-> --- a/fs/ceph/mds_client.c
-> +++ b/fs/ceph/mds_client.c
-> @@ -4424,12 +4424,6 @@ void ceph_mdsc_lease_send_msg(struct ceph_mds_session *session,
->  	memcpy((void *)(lease + 1) + 4,
->  	       dentry->d_name.name, dentry->d_name.len);
->  	spin_unlock(&dentry->d_lock);
-> -	/*
-> -	 * if this is a preemptive lease RELEASE, no need to
-> -	 * flush request stream, since the actual request will
-> -	 * soon follow.
-> -	 */
-> -	msg->more_to_follow = (action == CEPH_MDS_LEASE_RELEASE);
->  
->  	ceph_con_send(&session->s_con, msg);
->  }
-
-It might be possible to trim this function back further. There's only
-one caller and it always calls this with the same "action" value. Still,
-this looks fine...
-
-Reviewed-by: Jeff Layton <jlayton@kernel.org>

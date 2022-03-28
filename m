@@ -2,107 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F4F4E9CFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5C34E9D03
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244197AbiC1RGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 13:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45874 "EHLO
+        id S244233AbiC1RG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 13:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244152AbiC1RGK (ORCPT
+        with ESMTP id S239218AbiC1RGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 13:06:10 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FEF4DF7A
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:04:29 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id p15so30006228ejc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:04:29 -0700 (PDT)
+        Mon, 28 Mar 2022 13:06:55 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635874B41B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:05:13 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id p15so30010412ejc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:05:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6yQeqxmAC2aKz5WWofRTiroUa0cIPCXtz1ZK19EhWKo=;
-        b=daxWCLSzVHGVhchsUZ6+YMjYVs1b6Fsm+tcDdFellj+t2WgqgjOdKLAWci/CZA5kTt
-         YpUbcI/aiNTyqKr5AatPYmITMGtorqn7ES0eJ6ftJukevTX7gjRktmyM2KYU+jPIuMOo
-         lRr1gySh1tvjJkDAfaSn+RFfZxDEI0XgwVFKQ3Jd0UwbgXJ421CA6h4nu98pFsDLh3iS
-         Uplm1/6F6IsS2NZY2tmoLWY6NxpGAtzxX7vCCefkJ0eCtUEmzhGnTDDG9HvdC85/RgeI
-         UmWlJrwlG+6aq9Gb59jmhagnkKLRvqeRsGPRkeNA/rmK3hTybLGNWQPHfY5ejaZOnwWR
-         nyqA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=njbwY8ik3fUgv8jSTsQUgVzLcyId30Q3o3B5sKqRTl0=;
+        b=AA+hqSjvQkRoJ8cZUyqGfd/7yTL9Ik2iGE1JOIkTTZYzr3XuCg/zVabwzZW507ba8T
+         S/eph8qRKtHs/I1PLGIZJpvcqbGpniKRZmSnwuaYJkRJfWjN86SjnJQ9zkPo750ROQts
+         4uGZzGt6K3N2PzFrCKrDekKLegSEuYxLyrzp166xLQAmLWXvmEC701TcqiJHwNi5IFau
+         FPmaKWBW1ZtvWtNVaUmAn/xSQ7sNHEV5MSnF9IFMRFMX+tqc8ig4hkvtKTYqSujUZCHW
+         n8A95uLPO33HJA8DK7syVmcBkyNOutnDh0L3/g7aeb1WBPuvNbEzVbAlG4wKCOtPOGkt
+         OY0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6yQeqxmAC2aKz5WWofRTiroUa0cIPCXtz1ZK19EhWKo=;
-        b=ds7ymn5JBLwTzXXEqfEzaqyxU5bwf8TR1StfICGvv+Q/VlMmnV+3ZFu5pWdSLLHCwV
-         GQkmqOpM0IHQyv8dHLZ5sD0C9pEo7E/j7XhOmMAmAh4xT1jMIkmNLJF5M5nW2tPIDr6U
-         z1zmUTYFZ8wURLth8ZUKe5CV2IyugZTMHceXyhF65QNS7Aiyul+d1oQ+jynmyjy7HnJb
-         eQdyyhLi/w8LJNpWz8SnuOV4S47teTeDgPae7ZzQf1s+oHwi0YpKWQFuUlLElsGkLhvs
-         2HXFDCbN561k8bPOetawI2OKsWEdVD4NAdP6+mSgkDLKFdqSHmzBKdxStZpdRFUd49Jy
-         N/fA==
-X-Gm-Message-State: AOAM531uai21l8f9aJf9Mt+yfHiKDMs3abYYiZZYCRVXdwWRp3flu58R
-        Ht5XwaR8uIzMb/u5x766zLdD7g==
-X-Google-Smtp-Source: ABdhPJxOIHwbCP7io7cxTbL5Y9HAi1K2LbIG9adPMWYOr5vMxk3eG/GDERE2ELL/JaPwcEKHwv7GGQ==
-X-Received: by 2002:a17:907:7704:b0:6cf:48ac:b4a8 with SMTP id kw4-20020a170907770400b006cf48acb4a8mr29021497ejc.305.1648487067801;
-        Mon, 28 Mar 2022 10:04:27 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id 20-20020a17090601d400b006caff964e30sm6108433ejj.19.2022.03.28.10.04.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Mar 2022 10:04:27 -0700 (PDT)
-Message-ID: <41fe6179-5628-6393-01c1-918baccec176@linaro.org>
-Date:   Mon, 28 Mar 2022 19:04:26 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=njbwY8ik3fUgv8jSTsQUgVzLcyId30Q3o3B5sKqRTl0=;
+        b=rwxwMfYvlhUD5B2+Pm+EbwE6sCgBl1QwPn+htL+WPrKecpx5XYMTOFnJWswptMtDXw
+         oWEBdiMJF6uYHmQFqen4hepXuteEW+Iw31WbdYLplQ2Twt8rGVY144BhahW48WJr9rKR
+         /1TZuw3l+A1a18qr/rTM9BlltkwTBP0buatK3gcskS7QNzI5HTwnFuqv3sJ+ILhw0JY6
+         IGMUZkZeKd+RgFWATUzG0IK+OaA6JbyeFmODaudQxwd+u57mch8+PLkHXSBVImRWrVlu
+         +Cyl1JbGBzJUFfcJEplOJFtJ5BCU1bgcwfxew2pPCoyOzoP1EEFoaIM8Td32ii4LogR0
+         8tKg==
+X-Gm-Message-State: AOAM531jTt4j/8eHS+goihBdWvKnln8VpNjJnlnHcJ/x6t9i01XXkbzh
+        q58dHjf2Wq7+9EtAU+BLakO6FxgJuC8c5NYkWeZ2sA==
+X-Google-Smtp-Source: ABdhPJy7W6iCOh9206/nHb96S3y7AeNe4K9GNZLAbvmPTxAthIwH3e0WVwMB5MxSxntYqxTMRHH/yYMSRFlIlG5jrKU=
+X-Received: by 2002:a17:907:eab:b0:6da:8ec5:d386 with SMTP id
+ ho43-20020a1709070eab00b006da8ec5d386mr28578130ejc.668.1648487111704; Mon, 28
+ Mar 2022 10:05:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] dt-bindings: display: msm: dsi: remove address/size cells
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Krishna Manikandan <mkrishn@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-References: <20220328152923.90623-1-krzysztof.kozlowski@linaro.org>
- <CAA8EJprWoxWwk5EWEfWdLquPR+2=u6V0-v1-+wHMHOk8HiEyNw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAA8EJprWoxWwk5EWEfWdLquPR+2=u6V0-v1-+wHMHOk8HiEyNw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220310210210.2124637-1-brendanhiggins@google.com>
+ <Yirz/hbo4K9zN9Ht@google.com> <CAFmMkTFa9xVt314WEGd0nNx+ovc=aGB_yN1LorP7WrBga9quxw@mail.gmail.com>
+ <CAGS_qxqHhGEYS_4C-gTmPt_d3Fm==VOTEzQGggWh6MWppTHtZQ@mail.gmail.com>
+ <CAFmMkTEoYXAFuz152SobMqnL3TM3GhQNDtR+_+RrzU=sx-bbRg@mail.gmail.com> <CAGS_qxqBuk1knE3424gV73wVgv5kJS5EGmd--bD2FAfuid5XGg@mail.gmail.com>
+In-Reply-To: <CAGS_qxqBuk1knE3424gV73wVgv5kJS5EGmd--bD2FAfuid5XGg@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 28 Mar 2022 13:04:59 -0400
+Message-ID: <CAFd5g45bd3qG99D8KG=qHS0hQGoD=umTDuUnzoQ7t2BUOR=Evw@mail.gmail.com>
+Subject: Re: [RFC v1] kunit: add support for kunit_suites that reference init code
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Daniel Gutson <daniel.gutson@eclypsium.com>,
+        David Gow <davidgow@google.com>, shuah@kernel.org,
+        Martin Fernandez <martin.fernandez@eclypsium.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Richard Hughes <hughsient@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2022 18:43, Dmitry Baryshkov wrote:
-> On Mon, 28 Mar 2022 at 18:30, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> The DSI node is not a bus and the children do not have unit addresses.
->>
->> Reported-by: Vinod Koul <vkoul@kernel.org>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> NAK.
-> DSI panels are children of the DSI device tree node with the reg = <0>; address.
-> This is the convention used by other platforms too (see e.g.
-> arch/arm64/boot/dts/freescale/imx8mq-evk.dts).
-> 
-> With the DSI split link it is possible to attach two panels to a
-> single DSI host, so addresses are necessary.
+On Fri, Mar 25, 2022 at 11:59 AM Daniel Latypov <dlatypov@google.com> wrote=
+:
+>
+> On Fri, Mar 25, 2022 at 8:26 AM Daniel Gutson
+> <daniel.gutson@eclypsium.com> wrote:
+> >
+> > On Fri, Mar 11, 2022 at 2:56 PM Daniel Latypov <dlatypov@google.com> wr=
+ote:
+> > >
+> > > On Fri, Mar 11, 2022 at 4:14 AM Daniel Gutson
+> > > <daniel.gutson@eclypsium.com> wrote:
+> > > >
+> > > >
+> > > >
+> > > > El vie., 11 mar. 2022 4:02 a. m., David Gow <davidgow@google.com> e=
+scribi=C3=B3:
+> > > >>
+> > > >> On Thu, Mar 10, 2022 at 01:02:10PM -0800, Brendan Higgins wrote:
+> > > >> > Add support for a new kind of kunit_suite registration macro cal=
+led
+> > > >> > kunit_test_init_suite(); this new registration macro allows the
+> > > >> > registration of kunit_suites that reference functions marked __i=
+nit and
+> > > >> > data marked __initdata.
+> > > >> >
+> > > >> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > > >> > ---
+> > > >> >
+> > > >> > This patch is in response to a KUnit user issue[1] in which the =
+user was
+> > > >> > attempting to test some init functions; although this is a funct=
+ional
+> > > >> > solution as long as KUnit tests only run during the init phase, =
+we will
+> > > >> > need to do more work if we ever allow tests to run after the ini=
+t phase
+> > > >> > is over; it is for this reason that this patch adds a new regist=
+ration
+> > > >> > macro rather than simply modifying the existing macros.
+> > > >> >
+> > > >> > [1] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCw=
+VABgAJ
+> > > >> >
+> > > >> > ---
+> > > >>
+> > > >> I'm a little concerned that this is just removing the warnings, bu=
+t do
+> > > >> agree that this is safe enough for the moment. At least the inform=
+ation
+> > > >> about which tests need __init is preserved by the use of a differe=
+nt
+> > > >> macro.
+> > > >>
+> > > >> I guess one day we'll need a second list of 'init' tests or someth=
+ing...
+> > > >
+> > > >
+> > > > Hi, could you please detail about this? Why a second list?
+> > > >
+> > >
+> > > I assume this is referring to a future where we want to run tests
+> > > _after_ the init phase.
+> > > In that case, we'd need to be able to separately register tests that
+> > > run during and those that run after.
+> > > (Or we could have one list and just tag each suite as init/post-init.
+> > > If we ever had >2 "phases" where we run tests, this might be the more
+> > > scalable option)
+> > >
+> > > Is it likely we'd have tests run after?
+> > > Not in the near future, I don't think. But it could be asked for.
+> > >
+> > > For context, here's where built-in KUnit tests currently run:
+> > > https://elixir.bootlin.com/linux/v5.17-rc7/source/init/main.c#L1615
+> > > That'd probably become kunit_run_init_tests() and then we'd have
+> > > another kunit_run_post_init_tests() called later, or something.
+> >
+> > Hi folks, any update on this? I'm adding Richard Hughes since we
+> > need this for fwupd/LVFS, so he can provide more context.
+>
+> v1 of the patch was posted here:
+> https://lore.kernel.org/linux-kselftest/20220311072859.2174624-1-brendanh=
+iggins@google.com/
+>
+> It has the requisite Reviewed-by's and no one has complained about it.
+> So we're now waiting for that to get picked up into Shuah's tree and
+> into Linus' for 5.18 (possibly) or 5.19.
 
-Yes, I noticed it slightly after I sent the patch. :(
-
-
-Best regards,
-Krzysztof
+It'll probably be 5.19, but it should be applied to Shuah's kunit-next
+branch end of this week begining of next and then you can use that as
+a base if you wish.

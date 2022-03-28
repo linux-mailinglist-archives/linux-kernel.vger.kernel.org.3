@@ -2,86 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D50C24E96DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F86B4E96CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239356AbiC1MmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 08:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
+        id S242556AbiC1MiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 08:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240672AbiC1MmY (ORCPT
+        with ESMTP id S240930AbiC1MiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 08:42:24 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D045B3F9;
-        Mon, 28 Mar 2022 05:40:38 -0700 (PDT)
-X-UUID: 7c04888e22d946a2ab98aa302e160b34-20220328
-X-UUID: 7c04888e22d946a2ab98aa302e160b34-20220328
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <xiaobing.shi@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 589206584; Mon, 28 Mar 2022 20:40:31 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 28 Mar 2022 20:40:30 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 28 Mar
- 2022 20:40:30 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 28 Mar 2022 20:40:29 +0800
-From:   Xiaobing shi <xiaobing.shi@mediatek.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Xiaobing shi <xiaobing.shi@mediatek.com>
-Subject: [PATCH] remoteproc: avoid array index out of bounds in debugfs file
-Date:   Mon, 28 Mar 2022 20:34:13 +0800
-Message-ID: <20220328123413.18169-1-xiaobing.shi@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Mon, 28 Mar 2022 08:38:05 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD45DEE7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:36:23 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id u22so12494893pfg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:36:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=s0MYHADlhkLmgL7QL3wLWNFZxF39wct7bEmjjdPPikg=;
+        b=vwhmFpraliyqWJSMmnH7DqX9kzpnwRglbGpcow2Z6N0VlX0C05na9yy3Tn5BZcbmQi
+         jZQxyUXXeD5bXMcwO10yxyojC0xk+hpMbERx7o7HF9m9cLGsk1x+BTaryp/zJnaudLYL
+         8pmtJAIa7I9FHBGI6/YsbQUM0ftJmJNvAE1v6V9gaMgEVuVVMlFgdxnRQWIpdJBdb8Qk
+         P71NwacXU98ms1gMdzlFqnrPtydU7m9zsYTYTXNKs52rGcWc90OHNnuDioz4nV1He4wK
+         cKRdFdNR9CwAYOSY6Jm15FNAUI+v6bapUwl88hQtcTxyO7V7KBJzk7bqPhTfDeF26HMI
+         9Iiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=s0MYHADlhkLmgL7QL3wLWNFZxF39wct7bEmjjdPPikg=;
+        b=GdyHh/5a0bW51wCM5EXii2rJthadUoktUaZF8YTCZgFTomz3648I3+PgToPMmzBF35
+         AbbKrbi6eqfMGKB2P+xj2d+5xnA7mwl9wB1PTsuKO+FmMvmEwnbBuqP/b9QtLvjsjSP6
+         fKTzEhzrZAn1nrOwTAh6euAWz7Nbn6kakXkOxCi3+r6VAMifVbnmRdrx47mpfBu+eUpj
+         6S9SxlePPUOeqfJPyoKbWPewlKNRGK0IBcQVjrrefWRqEnVu11NPYEyGQd55KCDnerk5
+         TT2CBrfy+v9dbcyJ2W27a9SZrFRmL1WKncJabRj7pUUknGx1QeLfmsR/wNp/FeiION/W
+         3jZg==
+X-Gm-Message-State: AOAM531aFVRHXLoLSm55rKGn8b0hWYlAmaRUmfA4W72rlJY/2Jkr8O/d
+        bfn1Yx6epb3kNn6JcXSqM5Ta7w==
+X-Google-Smtp-Source: ABdhPJzWhjK5YmHFJh+gdwf2xhaMXvtBHzGIOhwb6sN3mioE4XQobBxt9s/O31BZh77mukjrOCqKdQ==
+X-Received: by 2002:a63:1918:0:b0:382:1cfa:eefa with SMTP id z24-20020a631918000000b003821cfaeefamr9999216pgl.510.1648470983267;
+        Mon, 28 Mar 2022 05:36:23 -0700 (PDT)
+Received: from [127.0.1.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id y16-20020a17090a6c9000b001c993d935e7sm4914071pjj.56.2022.03.28.05.36.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 05:36:22 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org,
+        Jan Kara <jack@suse.cz>, linux-kernel@vger.kernel.org
+In-Reply-To: <20220328085928.7899-1-jslaby@suse.cz>
+References: <20220328085928.7899-1-jslaby@suse.cz>
+Subject: Re: [PATCH] block: restore the old set_task_ioprio() behaviour wrt PF_EXITING
+Message-Id: <164847098196.6805.10674643795747634430.b4-ty@kernel.dk>
+Date:   Mon, 28 Mar 2022 06:36:21 -0600
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a negative offset of an on-stack array that causes an out of
-bounds issue when someone called with a zero 'count' argument to
-syswrite().
+On Mon, 28 Mar 2022 10:59:28 +0200, Jiri Slaby wrote:
+> PF_EXITING tasks were silently ignored before the below commits.
+> Continue doing so. Otherwise python-psutil tests fail:
+>   ERROR: psutil.tests.test_process.TestProcess.test_zombie_process
+>   ----------------------------------------------------------------------
+>   Traceback (most recent call last):
+>     File "/home/abuild/rpmbuild/BUILD/psutil-5.9.0/build/lib.linux-x86_64-3.9/psutil/_pslinux.py", line 1661, in wrapper
+>       return fun(self, *args, **kwargs)
+>     File "/home/abuild/rpmbuild/BUILD/psutil-5.9.0/build/lib.linux-x86_64-3.9/psutil/_pslinux.py", line 2133, in ionice_set
+>       return cext.proc_ioprio_set(self.pid, ioclass, value)
+>   ProcessLookupError: [Errno 3] No such process
+> 
+> [...]
 
-	buf[count - 1]
+Applied, thanks!
 
-We should add an extra check in rproc_coredump_write() to prevent the
-access.
+[1/1] block: restore the old set_task_ioprio() behaviour wrt PF_EXITING
+      commit: 15583a563cd5a7358e975599b7de7caacd9e9ce9
 
-Signed-off-by: Xiaobing shi <xiaobing.shi@mediatek.com>
----
- drivers/remoteproc/remoteproc_debugfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
-index b5a1e3b697d9..581930483ef8 100644
---- a/drivers/remoteproc/remoteproc_debugfs.c
-+++ b/drivers/remoteproc/remoteproc_debugfs.c
-@@ -76,7 +76,7 @@ static ssize_t rproc_coredump_write(struct file *filp,
- 	int ret, err = 0;
- 	char buf[20];
- 
--	if (count > sizeof(buf))
-+	if (count < 1 || count > sizeof(buf))
- 		return -EINVAL;
- 
- 	ret = copy_from_user(buf, user_buf, count);
+Best regards,
 -- 
-2.18.0
+Jens Axboe
+
 

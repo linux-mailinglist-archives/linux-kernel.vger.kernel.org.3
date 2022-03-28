@@ -2,94 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D04D4E923C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9504E9240
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 12:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240128AbiC1KEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 06:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
+        id S240138AbiC1KEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 06:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234956AbiC1KEI (ORCPT
+        with ESMTP id S234956AbiC1KEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 06:04:08 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E13B3617E;
-        Mon, 28 Mar 2022 03:02:28 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22S8IlB0012577;
-        Mon, 28 Mar 2022 10:02:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=q7DKSfasEVPvSYM40bnl4m17qtlsj/d7/x0iS7yhgVM=;
- b=WIRcp7WXvk7bj1xbyns44rngDNo34KJU0iSr2UMN59exIAeTnXMn6ebSf8KrSRpGYfLr
- A/+hLZc5rldisNsjUHlQ6YIqMSnSHwFhprv1GOaPQ+FDyW91X8Wm+Qv6zAFK2GVtQzYx
- K8UHDWlEUGZ1bne/OQlcZ+VidKPWknEfpfqYbHoc6Nl2+DYxlPbh5dZgDbL0+eFK9Cgj
- WOx95jLC26m3sjteurUhoFMtW2/26OrunyYoifnC6jme5vHWQmYbpPkGWdZZUJwZq1HJ
- +ahSLEn3cERaiwacNPumedfWxdgG+2cA/o/64/dMhWaj6VTxpaobws/m99Ulq6xpa/Y4 kg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f39d91vmb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Mar 2022 10:02:20 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22S8Iuxa012800;
-        Mon, 28 Mar 2022 10:02:20 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f39d91vkr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Mar 2022 10:02:20 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22S9xU56021154;
-        Mon, 28 Mar 2022 10:02:18 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3f1tf9bnsd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Mar 2022 10:02:17 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22SA2Fdx11338116
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Mar 2022 10:02:15 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7EE2AA4040;
-        Mon, 28 Mar 2022 10:02:15 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1C04CA4051;
-        Mon, 28 Mar 2022 10:02:15 +0000 (GMT)
-Received: from [9.171.53.124] (unknown [9.171.53.124])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 28 Mar 2022 10:02:15 +0000 (GMT)
-Message-ID: <81aba614-6f6a-1601-6ed9-a2939696a460@linux.ibm.com>
-Date:   Mon, 28 Mar 2022 12:02:14 +0200
+        Mon, 28 Mar 2022 06:04:34 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8140A4756F;
+        Mon, 28 Mar 2022 03:02:53 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id r7so18468724wrc.0;
+        Mon, 28 Mar 2022 03:02:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=pVcjyNnw96+/Pnz/m9L0BVy8dzZvlWkuq3846EQcRJo=;
+        b=Vb4iCc17rm58PZf/3//q7qwqY+h55SrGHC561xQ+W/LJ2UplzSTxRQeYDM08oYRQlg
+         HUw+Vr6BEJna17KRP2YGX6c9zrT8ctcI4Sh009mXvZcn+on/xBj+nlfaWN8n83vYtJQB
+         TeEpkKnLPygs0//6G8t/qiAyhRrn83NHwwqFz3lyJK+G9/D7DhlwRM/SdfYllECv5X+K
+         AM+39A/IELaYutZU2hJHcWosTrHdDtv9h+fcU4xQws94rJTVBoMjFJf7rfu+RbJK8d92
+         SK20GVtQY4VLpOw8T3xaLgss1PaMXWtA5acK1sn2WdrZgiqMz78oxVD1Ux2uJZgpjN1a
+         Dxxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pVcjyNnw96+/Pnz/m9L0BVy8dzZvlWkuq3846EQcRJo=;
+        b=JBCvQyqy73N87LII8gBOcD90oFsdBIUv7BNNrpOHrztk/Dh8OYAsKmSA7nj/V34oJQ
+         xgcabjHYe1ZOkgD7COzt/k3ExNMvLKTusK+OvTW0956sYNaSVzo6iqnoWEFEq81gtaev
+         jBpalXN+nc428qfuK0BUZrbF3RkKF+SSy2/t2EZrHCDRCqWATN6xtdR5qlakt9ZgQBr2
+         DnzL5S78GulUkAHlNg9PUKu9WF6X0Tkq/+Dzm2Y9Nn1kmljshtzp8m4HI4fjrSuiUzL1
+         MgT7KudyHw+dkr1gjTlm3DMWJk0PAC1v4gnsBhNRUeirySxyiVSDKPnksDFw6ORvz6ay
+         eo0Q==
+X-Gm-Message-State: AOAM532sgulxBhztz+R3prWaPFvNpuLbCAoNJhp9GYGKY47s8fzAUuyB
+        nMZ4NPqxc0r3d/wVAy9wQVU=
+X-Google-Smtp-Source: ABdhPJx0R1aJ/IUAA8oIxthfFv+d88EfbA6UFEt0LgGhZLavUeAx4mAX116lurpztLgq4xRU973RGA==
+X-Received: by 2002:a05:6000:1a8d:b0:204:8cdb:279b with SMTP id f13-20020a0560001a8d00b002048cdb279bmr22267585wry.296.1648461771840;
+        Mon, 28 Mar 2022 03:02:51 -0700 (PDT)
+Received: from [192.168.0.32] ([137.101.87.65])
+        by smtp.gmail.com with ESMTPSA id k11-20020a5d6d4b000000b0020599079f68sm10812937wri.106.2022.03.28.03.02.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 03:02:51 -0700 (PDT)
+Message-ID: <cf7ffb39-9f23-37d0-2b29-751bd2fb92ff@gmail.com>
+Date:   Mon, 28 Mar 2022 12:02:49 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH net] net/smc: Send out the remaining data in sndbuf before
- close
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] arm64: dts: mt6359: add PMIC MT6359 nodes
 Content-Language: en-US
-To:     Wen Gu <guwen@linux.alibaba.com>, davem@davemloft.net,
-        kuba@kernel.org, dust.li@linux.alibaba.com
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1648447836-111521-1-git-send-email-guwen@linux.alibaba.com>
-From:   Karsten Graul <kgraul@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <1648447836-111521-1-git-send-email-guwen@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Hui-Liu Liu <hui.liu@mediatek.com>, lee.jones@linaro.org,
+        robh+dt@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        eddie.huang@mediatek.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, fshao@chromium.org
+Cc:     srv_heupstream@mediatek.com, zhiyong.tao@mediatek.com,
+        hsin-hsiung.wang@mediatek.com, sean.wang@mediatek.com,
+        macpaul.lin@mediatek.com, yuchen.huang@mediatek.com,
+        wen.su@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220324081412.12045-1-hui.liu@mediatek.com>
+ <20220324081412.12045-2-hui.liu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220324081412.12045-2-hui.liu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: LohlJVzBZu0MSkw_ddSDna2PqUUqfvoq
-X-Proofpoint-GUID: GB44lFKqKkIBYsWh3ok9JzJk8Xfa8JED
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-28_03,2022-03-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- spamscore=0 clxscore=1011 mlxscore=0 lowpriorityscore=0 malwarescore=0
- impostorscore=0 suspectscore=0 priorityscore=1501 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203280059
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,32 +82,347 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2022 08:10, Wen Gu wrote:
-> The current autocork algorithms will delay the data transmission
-> in BH context to smc_release_cb() when sock_lock is hold by user.
+
+
+On 24/03/2022 09:14, Hui-Liu Liu wrote:
+> From: Hui Liu <hui.liu@mediatek.com>
 > 
-> So there is a possibility that when connection is being actively
-> closed (sock_lock is hold by user now), some corked data still
-> remains in sndbuf, waiting to be sent by smc_release_cb(). This
-> will cause:
+> Add MT6359 node.
+
+Please update commmit message describing e.g. what the node provides. For which 
+SoCs it is for etc.
+
+Please also add the mediatek mailinglist, it should show up when using 
+get_maintainers.pl, did you used that?
+
+Regards,
+Matthias
+
 > 
-> - smc_close_stream_wait(), which is called under the sock_lock,
->   has a high probability of timeout because data transmission is
->   delayed until sock_lock is released.
-> 
-> - Unexpected data sends may happen after connction closed and use
->   the rtoken which has been deleted by remote peer through
->   LLC_DELETE_RKEY messages.
-> 
-> So this patch will try to send out the remaining corked data in
-> sndbuf before active close process, to ensure data integrity and
-> avoid unexpected data transmission after close.
-> 
-> Reported-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
-> Fixes: 6b88af839d20 ("net/smc: don't send in the BH context if sock_owned_by_user")
-> Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+> Signed-off-by: Hui Liu <hui.liu@mediatek.com>
 > ---
-
-Thank you,
-
-Acked-by: Karsten Graul <kgraul@linux.ibm.com>
+>   arch/arm64/boot/dts/mediatek/mt6359.dtsi | 298 +++++++++++++++++++++++
+>   1 file changed, 298 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/mediatek/mt6359.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt6359.dtsi b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
+> new file mode 100644
+> index 000000000000..df3e822232d3
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
+> @@ -0,0 +1,298 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * Copyright (C) 2022 MediaTek Inc.
+> + */
+> +
+> +&pwrap {
+> +	pmic: pmic {
+> +		compatible = "mediatek,mt6359";
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +
+> +		mt6359codec: mt6359codec {
+> +		};
+> +
+> +		regulators {
+> +			mt6359_vs1_buck_reg: buck_vs1 {
+> +				regulator-name = "vs1";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <2200000>;
+> +				regulator-enable-ramp-delay = <0>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vgpu11_buck_reg: buck_vgpu11 {
+> +				regulator-name = "vgpu11";
+> +				regulator-min-microvolt = <400000>;
+> +				regulator-max-microvolt = <1193750>;
+> +				regulator-ramp-delay = <5000>;
+> +				regulator-enable-ramp-delay = <200>;
+> +				regulator-allowed-modes = <0 1 2>;
+> +			};
+> +			mt6359_vmodem_buck_reg: buck_vmodem {
+> +				regulator-name = "vmodem";
+> +				regulator-min-microvolt = <400000>;
+> +				regulator-max-microvolt = <1100000>;
+> +				regulator-ramp-delay = <10760>;
+> +				regulator-enable-ramp-delay = <200>;
+> +			};
+> +			mt6359_vpu_buck_reg: buck_vpu {
+> +				regulator-name = "vpu";
+> +				regulator-min-microvolt = <400000>;
+> +				regulator-max-microvolt = <1193750>;
+> +				regulator-ramp-delay = <5000>;
+> +				regulator-enable-ramp-delay = <200>;
+> +				regulator-allowed-modes = <0 1 2>;
+> +			};
+> +			mt6359_vcore_buck_reg: buck_vcore {
+> +				regulator-name = "vcore";
+> +				regulator-min-microvolt = <400000>;
+> +				regulator-max-microvolt = <1300000>;
+> +				regulator-ramp-delay = <5000>;
+> +				regulator-enable-ramp-delay = <200>;
+> +				regulator-allowed-modes = <0 1 2>;
+> +			};
+> +			mt6359_vs2_buck_reg: buck_vs2 {
+> +				regulator-name = "vs2";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <1600000>;
+> +				regulator-enable-ramp-delay = <0>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vpa_buck_reg: buck_vpa {
+> +				regulator-name = "vpa";
+> +				regulator-min-microvolt = <500000>;
+> +				regulator-max-microvolt = <3650000>;
+> +				regulator-enable-ramp-delay = <300>;
+> +			};
+> +			mt6359_vproc2_buck_reg: buck_vproc2 {
+> +				regulator-name = "vproc2";
+> +				regulator-min-microvolt = <400000>;
+> +				regulator-max-microvolt = <1193750>;
+> +				regulator-ramp-delay = <7500>;
+> +				regulator-enable-ramp-delay = <200>;
+> +				regulator-allowed-modes = <0 1 2>;
+> +			};
+> +			mt6359_vproc1_buck_reg: buck_vproc1 {
+> +				regulator-name = "vproc1";
+> +				regulator-min-microvolt = <400000>;
+> +				regulator-max-microvolt = <1193750>;
+> +				regulator-ramp-delay = <7500>;
+> +				regulator-enable-ramp-delay = <200>;
+> +				regulator-allowed-modes = <0 1 2>;
+> +			};
+> +			mt6359_vcore_sshub_buck_reg: buck_vcore_sshub {
+> +				regulator-name = "vcore_sshub";
+> +				regulator-min-microvolt = <400000>;
+> +				regulator-max-microvolt = <1193750>;
+> +			};
+> +			mt6359_vgpu11_sshub_buck_reg: buck_vgpu11_sshub {
+> +				regulator-name = "vgpu11_sshub";
+> +				regulator-min-microvolt = <400000>;
+> +				regulator-max-microvolt = <1193750>;
+> +			};
+> +			mt6359_vaud18_ldo_reg: ldo_vaud18 {
+> +				regulator-name = "vaud18";
+> +				regulator-min-microvolt = <1800000>;
+> +				regulator-max-microvolt = <1800000>;
+> +				regulator-enable-ramp-delay = <240>;
+> +			};
+> +			mt6359_vsim1_ldo_reg: ldo_vsim1 {
+> +				regulator-name = "vsim1";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <3100000>;
+> +			};
+> +			mt6359_vibr_ldo_reg: ldo_vibr {
+> +				regulator-name = "vibr";
+> +				regulator-min-microvolt = <1200000>;
+> +				regulator-max-microvolt = <3300000>;
+> +			};
+> +			mt6359_vrf12_ldo_reg: ldo_vrf12 {
+> +				regulator-name = "vrf12";
+> +				regulator-min-microvolt = <1100000>;
+> +				regulator-max-microvolt = <1300000>;
+> +			};
+> +			mt6359_vusb_ldo_reg: ldo_vusb {
+> +				regulator-name = "vusb";
+> +				regulator-min-microvolt = <3000000>;
+> +				regulator-max-microvolt = <3000000>;
+> +				regulator-enable-ramp-delay = <960>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vsram_proc2_ldo_reg: ldo_vsram_proc2 {
+> +				regulator-name = "vsram_proc2";
+> +				regulator-min-microvolt = <500000>;
+> +				regulator-max-microvolt = <1293750>;
+> +				regulator-ramp-delay = <7500>;
+> +				regulator-enable-ramp-delay = <240>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vio18_ldo_reg: ldo_vio18 {
+> +				regulator-name = "vio18";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <1900000>;
+> +				regulator-enable-ramp-delay = <960>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vcamio_ldo_reg: ldo_vcamio {
+> +				regulator-name = "vcamio";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <1900000>;
+> +			};
+> +			mt6359_vcn18_ldo_reg: ldo_vcn18 {
+> +				regulator-name = "vcn18";
+> +				regulator-min-microvolt = <1800000>;
+> +				regulator-max-microvolt = <1800000>;
+> +				regulator-enable-ramp-delay = <240>;
+> +			};
+> +			mt6359_vfe28_ldo_reg: ldo_vfe28 {
+> +				regulator-name = "vfe28";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <2800000>;
+> +				regulator-enable-ramp-delay = <120>;
+> +			};
+> +			mt6359_vcn13_ldo_reg: ldo_vcn13 {
+> +				regulator-name = "vcn13";
+> +				regulator-min-microvolt = <900000>;
+> +				regulator-max-microvolt = <1300000>;
+> +			};
+> +			mt6359_vcn33_1_bt_ldo_reg: ldo_vcn33_1_bt {
+> +				regulator-name = "vcn33_1_bt";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <3500000>;
+> +			};
+> +			mt6359_vcn33_1_wifi_ldo_reg: ldo_vcn33_1_wifi {
+> +				regulator-name = "vcn33_1_wifi";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <3500000>;
+> +			};
+> +			mt6359_vaux18_ldo_reg: ldo_vaux18 {
+> +				regulator-name = "vaux18";
+> +				regulator-min-microvolt = <1800000>;
+> +				regulator-max-microvolt = <1800000>;
+> +				regulator-enable-ramp-delay = <240>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vsram_others_ldo_reg: ldo_vsram_others {
+> +				regulator-name = "vsram_others";
+> +				regulator-min-microvolt = <500000>;
+> +				regulator-max-microvolt = <1293750>;
+> +				regulator-ramp-delay = <5000>;
+> +				regulator-enable-ramp-delay = <240>;
+> +			};
+> +			mt6359_vefuse_ldo_reg: ldo_vefuse {
+> +				regulator-name = "vefuse";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <2000000>;
+> +			};
+> +			mt6359_vxo22_ldo_reg: ldo_vxo22 {
+> +				regulator-name = "vxo22";
+> +				regulator-min-microvolt = <1800000>;
+> +				regulator-max-microvolt = <2200000>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vrfck_ldo_reg: ldo_vrfck {
+> +				regulator-name = "vrfck";
+> +				regulator-min-microvolt = <1500000>;
+> +				regulator-max-microvolt = <1700000>;
+> +			};
+> +			mt6359_vrfck_1_ldo_reg: ldo_vrfck_1 {
+> +				regulator-name = "vrfck";
+> +				regulator-min-microvolt = <1240000>;
+> +				regulator-max-microvolt = <1600000>;
+> +			};
+> +			mt6359_vbif28_ldo_reg: ldo_vbif28 {
+> +				regulator-name = "vbif28";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <2800000>;
+> +				regulator-enable-ramp-delay = <240>;
+> +			};
+> +			mt6359_vio28_ldo_reg: ldo_vio28 {
+> +				regulator-name = "vio28";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vemc_ldo_reg: ldo_vemc {
+> +				regulator-name = "vemc";
+> +				regulator-min-microvolt = <2900000>;
+> +				regulator-max-microvolt = <3300000>;
+> +			};
+> +			mt6359_vemc_1_ldo_reg: ldo_vemc_1 {
+> +				regulator-name = "vemc";
+> +				regulator-min-microvolt = <2500000>;
+> +				regulator-max-microvolt = <3300000>;
+> +			};
+> +			mt6359_vcn33_2_bt_ldo_reg: ldo_vcn33_2_bt {
+> +				regulator-name = "vcn33_2_bt";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <3500000>;
+> +			};
+> +			mt6359_vcn33_2_wifi_ldo_reg: ldo_vcn33_2_wifi {
+> +				regulator-name = "vcn33_2_wifi";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <3500000>;
+> +			};
+> +			mt6359_va12_ldo_reg: ldo_va12 {
+> +				regulator-name = "va12";
+> +				regulator-min-microvolt = <1200000>;
+> +				regulator-max-microvolt = <1300000>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_va09_ldo_reg: ldo_va09 {
+> +				regulator-name = "va09";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <1200000>;
+> +			};
+> +			mt6359_vrf18_ldo_reg: ldo_vrf18 {
+> +				regulator-name = "vrf18";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <1810000>;
+> +			};
+> +			mt6359_vsram_md_ldo_reg: ldo_vsram_md {
+> +				regulator-name = "vsram_md";
+> +				regulator-min-microvolt = <500000>;
+> +				regulator-max-microvolt = <1293750>;
+> +				regulator-ramp-delay = <10760>;
+> +				regulator-enable-ramp-delay = <240>;
+> +			};
+> +			mt6359_vufs_ldo_reg: ldo_vufs {
+> +				regulator-name = "vufs";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <1900000>;
+> +			};
+> +			mt6359_vm18_ldo_reg: ldo_vm18 {
+> +				regulator-name = "vm18";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <1900000>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vbbck_ldo_reg: ldo_vbbck {
+> +				regulator-name = "vbbck";
+> +				regulator-min-microvolt = <1100000>;
+> +				regulator-max-microvolt = <1200000>;
+> +			};
+> +			mt6359_vsram_proc1_ldo_reg: ldo_vsram_proc1 {
+> +				regulator-name = "vsram_proc1";
+> +				regulator-min-microvolt = <500000>;
+> +				regulator-max-microvolt = <1293750>;
+> +				regulator-ramp-delay = <7500>;
+> +				regulator-enable-ramp-delay = <240>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vsim2_ldo_reg: ldo_vsim2 {
+> +				regulator-name = "vsim2";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <3100000>;
+> +			};
+> +			mt6359_vsram_others_sshub_ldo: ldo_vsram_others_sshub {
+> +				regulator-name = "vsram_others_sshub";
+> +				regulator-min-microvolt = <500000>;
+> +				regulator-max-microvolt = <1293750>;
+> +			};
+> +		};
+> +
+> +		mt6359rtc: mt6359rtc {
+> +			compatible = "mediatek,mt6358-rtc";
+> +		};
+> +	};
+> +};
+> -- 
+> 2.25.1
+> 
+> ************* MEDIATEK Confidentiality Notice
+>   ********************
+> The information contained in this e-mail message (including any
+> attachments) may be confidential, proprietary, privileged, or otherwise
+> exempt from disclosure under applicable laws. It is intended to be
+> conveyed only to the designated recipient(s). Any use, dissemination,
+> distribution, printing, retaining or copying of this e-mail (including its
+> attachments) by unintended recipient(s) is strictly prohibited and may
+> be unlawful. If you are not an intended recipient of this e-mail, or believe
+>   
+> that you have received this e-mail in error, please notify the sender
+> immediately (by replying to this e-mail), delete any and all copies of
+> this e-mail (including any attachments) from your system, and do not
+> disclose the content of this e-mail to any other person. Thank you!

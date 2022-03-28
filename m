@@ -2,82 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D498B4E91F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4754E91F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 11:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238886AbiC1JyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 05:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
+        id S240020AbiC1JyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 05:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbiC1JyC (ORCPT
+        with ESMTP id S240013AbiC1JyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 05:54:02 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07BB44F477
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:52:23 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22S8AwhJ030875;
-        Mon, 28 Mar 2022 04:52:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=OPCCfEOxSxc4F6/2g2ra5BL+qnE51JBOttEN9Gmrr08=;
- b=Gze6ubOBlOUPUwqoAaAkiINiEniBN1GwXwfojOXqdH6gV+RBw6llMYRYFf074xCipnaY
- dOTf/85uWryVD+yC2FZXv6bOZC3xIovl+w2MgbvRdNlrhMzc/DutJCuT61vvbLYCcwYm
- VNRo8TPtgGLGAC5CkkdxmN7N/kjSfeSAHVkBca23FJDmHQ+GlJN56SpYtpQLI8P03hHE
- Wt74uo0xxJJmeAKLmosDVu+5RRlFr2ZxjYz42PO8qIrOlTy8u01+MQYjqgcjt31K2vfA
- 9g25EBOeX8wje0mZutzXjDhwbdqBOfTGHS3duHWHi9JPNxZJ/Naf9s19AiJIlYgDY5bE mA== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3f2081age3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 28 Mar 2022 04:52:12 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 28 Mar
- 2022 10:52:10 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
- Transport; Mon, 28 Mar 2022 10:52:10 +0100
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8505E46A;
-        Mon, 28 Mar 2022 09:52:10 +0000 (UTC)
-Date:   Mon, 28 Mar 2022 09:52:10 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Stephen Kitt <steve@sk2.org>
-CC:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        <patches@opensource.cirrus.com>, Wolfram Sang <wsa@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ASoC: wm*: use i2c_match_id and simple i2c probe
-Message-ID: <20220328095210.GC38351@ediswmail.ad.cirrus.com>
-References: <20220325162515.1204107-1-steve@sk2.org>
+        Mon, 28 Mar 2022 05:54:14 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95643546A9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:52:33 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id c11so11823175pgu.11
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 02:52:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sGo4IXWrYvYFKPb6MuOn5Y1sxNV0CkrGIqSlou+M1J4=;
+        b=OZBLlblazJg+EmvIrbImIhFMYRc17sRbB35Fpi9pwGw3zCANNiPPqEXPD9uVvr/YKJ
+         CDNYqmhV02YMDkcjTqm5oo3fbexRXcHsrZyvLWFNmYwKrA+FWP67bM9qhOQjSTx0YvFf
+         F0StCKSgSek98iYfrywdlDTmKSDQOt75rkK0cGzUAq+8LI65wQ+t10SW9Lpty0hOU6WW
+         0DKPzpm+cEphwYjWDfxYKCPcl17jtcAT6clLXTgD4RyDdfs7N249dCkRpgrvbXtK0+mN
+         qcN5+sTK2Q6x7ikn79RlM1X7pw6+Gz7w1KiRglEYr2QgpWWpqrdyP524z1fMTHjwozsS
+         L0xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sGo4IXWrYvYFKPb6MuOn5Y1sxNV0CkrGIqSlou+M1J4=;
+        b=J7i4x+D8khmDiTIWRlO0OUXzvKSGdpv1WCXssOJW3QS6wb/myeIX4a7mR08wQe8sO1
+         zQeJ0ypjiGKp69JSYrVnwgAsp5tGLxQJ6qFyXGuQG13JUKJjBWGrHp56ePT3rOXefmcE
+         nLAsKbMW7s+EyDfq98mKJJP1xwQXWavlu3d2zUHX/oz+0COH/cJb33fl+bHIPfYaTOsG
+         MyAcCrHQIspWgIPgd/abY94s977F+6vmXwzb3FUAS+rrmn7J9WLsGrn8uCJ54nOFpHMg
+         qKd8WaCI8baef25laqYoYEaB9RtBjdDHaJuK5CkiqQw1UwqZKkHb7N8LlVnniDoLBbi0
+         6MCQ==
+X-Gm-Message-State: AOAM531QEJ8yFvaMiSR+AyQD6xuJxh57zVhh2eHd+4AYejig/5wBu4cK
+        4rgArCkGVI1ZEjxMl2SBlC/ZdQ==
+X-Google-Smtp-Source: ABdhPJyEdL4vRhiN0Rzcr0Q3f75Ps/anTwmCSmRk/YAdIpVodv6Qix9JzmuNaAukmjuhbbiN2TfclQ==
+X-Received: by 2002:a63:5ce:0:b0:382:1f05:c8b1 with SMTP id 197-20020a6305ce000000b003821f05c8b1mr9604717pgf.19.1648461152933;
+        Mon, 28 Mar 2022 02:52:32 -0700 (PDT)
+Received: from hsinchu16.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
+        by smtp.gmail.com with ESMTPSA id g4-20020a633744000000b00381efba48b0sm12255117pgn.44.2022.03.28.02.52.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 02:52:32 -0700 (PDT)
+From:   Zong Li <zong.li@sifive.com>
+To:     robh+dt@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
+        conor.dooley@microchip.com, geert@linux-m68k.org,
+        bin.meng@windriver.com, green.wan@sifive.com, vkoul@kernel.org,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc:     Zong Li <zong.li@sifive.com>
+Subject: [PATCH v8 0/4] Determine the number of DMA channels by 'dma-channels' property
+Date:   Mon, 28 Mar 2022 17:52:21 +0800
+Message-Id: <cover.1648461096.git.zong.li@sifive.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220325162515.1204107-1-steve@sk2.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: DEmKjIcPs1Wzj91A8oheLVMgf5aAknVv
-X-Proofpoint-GUID: DEmKjIcPs1Wzj91A8oheLVMgf5aAknVv
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 05:25:15PM +0100, Stephen Kitt wrote:
-> As part of the ongoing i2c transition to the simple probe
-> ("probe_new"), this patch uses i2c_match_id to retrieve the
-> driver_data for the probed device. The id parameter is thus no longer
-> necessary and the simple probe can be used instead.
-> 
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
-> ---
+The PDMA driver currently assumes there are four channels by default, it
+might cause the error if there is actually less than four channels.
+Change that by getting number of channel dynamically from device tree.
+For backwards-compatible, it uses the default value (i.e. 4) when there
+is no 'dma-channels' information in dts.
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+This patch set contains the dts and dt-bindings change.
 
-Thanks,
-Charles
+Changed in v8:
+ - Rebase on master
+ - Remove modification of microchip-mpfs.dtsi
+ - Rename DMA node name of fu540-c000.dtsi
+
+Changed in v7:
+ - Rebase on tag v5.17-rc7
+ - Modify the subject of patch
+
+Changed in v6:
+ - Rebase on tag v5.17-rc6
+ - Change sf_pdma.chans[] to a flexible array member.
+
+Changed in v5:
+ - Rebase on tag v5.17-rc3
+ - Fix typo in dt-bindings and commit message
+ - Add PDMA versioning scheme for compatible
+
+Changed in v4:
+ - Remove cflags of debug use reported-by: kernel test robot <lkp@intel.com>
+
+Changed in v3:
+ - Fix allocating wrong size
+ - Return error if 'dma-channels' is larger than maximum
+
+Changed in v2:
+ - Rebase on tag v5.16
+ - Use 4 as default value of dma-channels
+
+Zong Li (4):
+  dt-bindings: dma-engine: sifive,fu540: Add dma-channels property and
+    modify compatible
+  riscv: dts: Add dma-channels property and modify compatible
+  riscv: dts: rename the node name of dma
+  dmaengine: sf-pdma: Get number of channel by device tree
+
+ .../bindings/dma/sifive,fu540-c000-pdma.yaml  | 19 +++++++++++++--
+ arch/riscv/boot/dts/sifive/fu540-c000.dtsi    |  5 ++--
+ drivers/dma/sf-pdma/sf-pdma.c                 | 24 ++++++++++++-------
+ drivers/dma/sf-pdma/sf-pdma.h                 |  8 ++-----
+ 4 files changed, 38 insertions(+), 18 deletions(-)
+
+-- 
+2.35.1
+

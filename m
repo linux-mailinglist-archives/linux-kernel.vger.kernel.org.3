@@ -2,127 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1ECD4EA19A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53AA44EA19F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343613AbiC1UhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 16:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
+        id S1345142AbiC1UjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 16:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345187AbiC1UhL (ORCPT
+        with ESMTP id S1344688AbiC1Ui6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 16:37:11 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586F368FB4;
-        Mon, 28 Mar 2022 13:35:14 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id AFB663FBF24;
-        Mon, 28 Mar 2022 16:35:13 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id eGl2JjcfyixH; Mon, 28 Mar 2022 16:35:13 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 3D39A3FBF23;
-        Mon, 28 Mar 2022 16:35:13 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 3D39A3FBF23
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1648499713;
-        bh=tNcH335YJ/4x8yVi8nSDMIeS4E89Ow3BdGUYIADF9gI=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=oE92hvqbxg9Ro3dlq/CWgRV8YpFDucYZj2ABJ+hhQudLX9eNslVwB6xxCFKfHU0I+
-         fbrYGadCY9zJZDRZlePVW2zcV/9miO7E0VIYbrNuGUdd1h/6nWL0HkgW7np+90kKiR
-         mDZMj/gDz8VGoMvHPotk6XZSXILGQ+5FqjJoanjcgo84Jym9lHV1Z8Os6O5WMXdk+F
-         GmpFmRLX2u+T+jZmYcH9DhhdShuC9K2FE9dQVj1CWowINZWRhtw9A6zI4nBZuWPweq
-         K6HdkqUpxMCRa7I4IXeKaGds6T/qKSTTe1+uPE2LSFtIN7BUwMDw+RDnWmHcCQUwMG
-         dbhvny9nKC0rw==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id hz3AuyqO_hcb; Mon, 28 Mar 2022 16:35:13 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 3205F3FC089;
-        Mon, 28 Mar 2022 16:35:13 -0400 (EDT)
-Date:   Mon, 28 Mar 2022 16:35:13 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Beau Belgrave <beaub@microsoft.com>, rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Message-ID: <1283359416.196715.1648499713041.JavaMail.zimbra@efficios.com>
-In-Reply-To: <2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com>
-References: <2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com>
-Subject: Re: Comments on new user events ABI
+        Mon, 28 Mar 2022 16:38:58 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEA449241;
+        Mon, 28 Mar 2022 13:37:16 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso590833pjh.3;
+        Mon, 28 Mar 2022 13:37:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=k1sAzWPEhJpG5DdAbfTOhs7ujkwRBjEkka+5p8v/Jc8=;
+        b=M78+4fhZXB18iHIh1n+x4EJG+IAdhjoF7HijGVTF1ukn3EOi/yj83n2h1NWqL8urqz
+         hXG+Mhkyl8q+MZsJcj4YN3O5hqyY8VYl0CBJ19I+WVtC7+U7SSKWdAsqMJnMaJCUC4gr
+         9m2ORQxN/UweBQMmG4deC3UYy+QGSPHpf6KEHnXK6Rg1uUSlJ4eWyHw+9/13fHPYj8+n
+         KuDhU4i2GNycL+SkKoHzvkgT4Ggd9IILwhig/hYDvsFYSsYNywqZIFppy2G8Lf7l3G0r
+         yHZvWQvP0W73PdvZfxCN7OvegVCwGtld1kdPM5AduokYksFgoxGsAnuVecMH7DK2CHAm
+         w9ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=k1sAzWPEhJpG5DdAbfTOhs7ujkwRBjEkka+5p8v/Jc8=;
+        b=dZ5PSNdBPKuQD2zdeKSQE8iqenIlIdXHWIfkY+SWZoqeHvbyIya8+nc4Y/3mR4YWe5
+         Cua8ppXBDdL2qAd47Q58kmM9rBgc6oEbCpc2y6TyYmlfHZeQfXba7pOToJilRjoCPEH3
+         vJ2FPtF44cPGZxcVNRfYmhbj/nTFnqZQ6MTYCi0KTjImC7JkEysKPOW1Gm6btcly4mCT
+         ddC8l+kYXzBMh17NVej1SwEes7XcRZEhk+IGBaBmHyDO6IZERQHdiLOz3tR9wMMfwVAW
+         CwvobVsi/m+nw5vIpUeqajFXTQ9yL7LkImJus080yMgcCf8ZotrgInFzcO3A7JkSAXzP
+         Yxqw==
+X-Gm-Message-State: AOAM530RVjNpQrUkDsmdEW4qXf8WJfhgTanQjO56bnjKCHI43RaxJKvP
+        kzS3m82yeAyzLGHEdThjO5s=
+X-Google-Smtp-Source: ABdhPJwxFfbJ4v3cPPUQB2PgDobQREi0NAVBWSeX1qfisVw1NAy2wIadm6Kio/gXfD4sQJ6g+Z7CDg==
+X-Received: by 2002:a17:902:e5c3:b0:154:7d95:ba7e with SMTP id u3-20020a170902e5c300b001547d95ba7emr27540996plf.140.1648499835817;
+        Mon, 28 Mar 2022 13:37:15 -0700 (PDT)
+Received: from jagath-PC ([115.99.143.239])
+        by smtp.gmail.com with ESMTPSA id 204-20020a6302d5000000b00385f29b02b2sm14134673pgc.50.2022.03.28.13.37.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 28 Mar 2022 13:37:15 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 02:07:11 +0530
+From:   Jagath Jog J <jagathjog1996@gmail.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     dan@dlrobertson.com, andy.shevchenko@gmail.com,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] iio: accel: bma400: Add step change event
+Message-ID: <20220328203710.GA8027@jagath-PC>
+References: <20220326194146.15549-1-jagathjog1996@gmail.com>
+ <20220326194146.15549-6-jagathjog1996@gmail.com>
+ <20220327175036.4b026481@jic23-huawei>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF98 (Linux)/8.8.15_GA_4232)
-Thread-Topic: Comments on new user events ABI
-Thread-Index: B0M+BmOcIucczO4F1K4t0lJIcDaNNfBSo6mg
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20220327175036.4b026481@jic23-huawei>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Mar 28, 2022, at 4:24 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+Hi Jonathan,
 
-> Hi Beau, Hi Steven,
+On Sun, Mar 27, 2022 at 05:50:36PM +0100, Jonathan Cameron wrote:
+> On Sun, 27 Mar 2022 01:11:46 +0530
+> Jagath Jog J <jagathjog1996@gmail.com> wrote:
 > 
-> I've done a review of the trace events ABI, and I have a few comments.
-> Sorry for being late to the party, but I only noticed this new ABI recently.
-> Hopefully we can improve this ABI before the 5.18 release.
+> > Added support for event when there is a detection of step change.
+> > INT1 pin is used to interrupt and event is pushed to userspace.
+> > 
+> > Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
 > 
+> These last two patches look fine to me.  Simply having the
+> event enable the channel makes things simpler.
 
-Also a bit of testing shows that dyn_event_add() is called without holding the event_mutex.
-Has this been tested with lockdep ?
+Means do I need to drop the step _INFO_ENABLE and handle the
+enabling and disabling of step channel through the event enable and
+disable?
 
-[  144.192299] ------------[ cut here ]------------
-[  144.194026] WARNING: CPU: 10 PID: 2689 at kernel/trace/trace_dynevent.h:82 user_event_parse_cmd+0x972/0xa00
-[  144.196850] Modules linked in:
-[  144.197836] CPU: 10 PID: 2689 Comm: example Not tainted 5.17.0+ #269
-[  144.199805] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Bochs 01/01/2011
-[  144.202303] RIP: 0010:user_event_parse_cmd+0x972/0xa00
-[  144.203899] Code: 48 00 00 00 00 e9 cf f8 ff ff 41 bf f4 ff ff ff e9 3a f7 ff ff be ff ff ff ff 48 c7 c7 08 bb f7 8a e8 b2 05 de 00 85 c0 75 02 <0f> 0b 48 83 bb 30 01 00 00 00 0f 84 54 fa ff ff e9 25 fa ff ff 48
-[  144.209398] RSP: 0018:ffffb6264b87be10 EFLAGS: 00010246
-[  144.211098] RAX: 0000000000000000 RBX: ffff9c3045cb7c00 RCX: 0000000000000001
-[  144.213314] RDX: 0000000000000000 RSI: ffffffff8aa2d11e RDI: ffffffff8aac2f16
-[  144.215577] RBP: ffff9c3045cb7d20 R08: 0000000000000001 R09: 0000000000000001
-[  144.217723] R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000011
-[  144.221511] R13: ffffb6264b87bea8 R14: 000000000000000c R15: 0000000000000000
-[  144.223760] FS:  00007ff6d10e54c0(0000) GS:ffff9c3627a80000(0000) knlGS:0000000000000000
-[  144.226364] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  144.228203] CR2: 00007ff6d0b16a80 CR3: 00000006530ae004 CR4: 00000000001706e0
-[  144.230349] Call Trace:
-[  144.231307]  <TASK>
-[  144.232140]  ? _copy_from_user+0x68/0xa0
-[  144.233534]  user_events_ioctl+0xfe/0x4d0
-[  144.234980]  __x64_sys_ioctl+0x8e/0xd0
-[  144.236268]  ? lockdep_hardirqs_on+0x7d/0x100
-[  144.237771]  do_syscall_64+0x3a/0x80
-[  144.239036]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  144.240696] RIP: 0033:0x7ff6d0b16217
-[  144.241938] Code: b3 66 90 48 8b 05 71 4c 2d 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 41 4c 2d 00 f7 d8 64 89 01 48
-[  144.247797] RSP: 002b:00007ffce19eb3b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-[  144.252578] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ff6d0b16217
-[  144.254897] RDX: 00007ffce19eb3e0 RSI: 00000000c0082a00 RDI: 0000000000000003
-[  144.257162] RBP: 00007ffce19eb400 R08: 0000000000000003 R09: 0000000000000000
-[  144.259487] R10: 0000000000000000 R11: 0000000000000246 R12: 000056095fe00820
-[  144.261817] R13: 00007ffce19eb550 R14: 0000000000000000 R15: 0000000000000000
-[  144.264135]  </TASK>
-[  144.264980] irq event stamp: 4515
-[  144.266162] hardirqs last  enabled at (4523): [<ffffffff8916ab2e>] __up_console_sem+0x5e/0x70
-[  144.268987] hardirqs last disabled at (4532): [<ffffffff8916ab13>] __up_console_sem+0x43/0x70
-[  144.271739] softirqs last  enabled at (4390): [<ffffffff8a400361>] __do_softirq+0x361/0x4a8
-[  144.274480] softirqs last disabled at (4385): [<ffffffff890e7554>] irq_exit_rcu+0x104/0x120
-[  144.277220] ---[ end trace 0000000000000000 ]---
+> I briefly wondered if we need to care about sequences like
+> 
+> 1) Enable event
+> 2) Enable channel (already enabled, but perhaps this indicates separate intent)
+> 3) Disable event.
+> 4) Is the channel still enabled?
+> 
+> or the simpler case of whether we should disable the channel if the event is
+> disabled and it wasn't otherwise turned on.
+> 
+> However, I can't see a sensible way to do so. Hence I think what you have
+> gone with is the best we can do.
+> 
+> Thanks,
+> 
+> Jonathan
 
+Thanks for reviewing the patch series. I will also address all the comments
+from Andy in the next patch v3.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Thank you
+Jagath
+> 
+> > ---
+> >  drivers/iio/accel/bma400.h      |  2 +
+> >  drivers/iio/accel/bma400_core.c | 73 +++++++++++++++++++++++++++++++++
+> >  2 files changed, 75 insertions(+)
+> > 
+> > diff --git a/drivers/iio/accel/bma400.h b/drivers/iio/accel/bma400.h
+> > index c9b856b37021..c4ec0cf6dc00 100644
+> > --- a/drivers/iio/accel/bma400.h
+> > +++ b/drivers/iio/accel/bma400.h
+> > @@ -39,6 +39,7 @@
+> >  #define BMA400_INT_STAT0_REG        0x0e
+> >  #define BMA400_INT_STAT1_REG        0x0f
+> >  #define BMA400_INT_STAT2_REG        0x10
+> > +#define BMA400_INT12_MAP_REG	    0x23
+> >  
+> >  /* Temperature register */
+> >  #define BMA400_TEMP_DATA_REG        0x11
+> > @@ -54,6 +55,7 @@
+> >  #define BMA400_STEP_CNT3_REG        0x17
+> >  #define BMA400_STEP_STAT_REG        0x18
+> >  #define BMA400_STEP_INT_MSK	    BIT(0)
+> > +#define BMA400_STEP_STAT_MASK	    GENMASK(9, 8)
+> >  
+> >  /*
+> >   * Read-write configuration registers
+> > diff --git a/drivers/iio/accel/bma400_core.c b/drivers/iio/accel/bma400_core.c
+> > index ec2f9c380bda..aaa104a2698b 100644
+> > --- a/drivers/iio/accel/bma400_core.c
+> > +++ b/drivers/iio/accel/bma400_core.c
+> > @@ -24,6 +24,7 @@
+> >  #include <linux/iio/iio.h>
+> >  #include <linux/iio/sysfs.h>
+> >  #include <linux/iio/buffer.h>
+> > +#include <linux/iio/events.h>
+> >  #include <linux/iio/trigger.h>
+> >  #include <linux/iio/trigger_consumer.h>
+> >  #include <linux/iio/triggered_buffer.h>
+> > @@ -70,6 +71,7 @@ struct bma400_data {
+> >  	int scale;
+> >  	struct iio_trigger *trig;
+> >  	int steps_enabled;
+> > +	bool step_event_en;
+> >  	/* Correct time stamp alignment */
+> >  	struct {
+> >  		__le16 buff[3];
+> > @@ -167,6 +169,12 @@ static const struct iio_chan_spec_ext_info bma400_ext_info[] = {
+> >  	{ }
+> >  };
+> >  
+> > +static const struct iio_event_spec bma400_step_detect_event = {
+> > +	.type = IIO_EV_TYPE_CHANGE,
+> > +	.dir = IIO_EV_DIR_NONE,
+> > +	.mask_separate = BIT(IIO_EV_INFO_ENABLE),
+> > +};
+> > +
+> >  #define BMA400_ACC_CHANNEL(_index, _axis) { \
+> >  	.type = IIO_ACCEL, \
+> >  	.modified = 1, \
+> > @@ -209,6 +217,8 @@ static const struct iio_chan_spec bma400_channels[] = {
+> >  		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED) |
+> >  				      BIT(IIO_CHAN_INFO_ENABLE),
+> >  		.scan_index = -1, /* No buffer support */
+> > +		.event_spec = &bma400_step_detect_event,
+> > +		.num_event_specs = 1,
+> >  	},
+> >  	IIO_CHAN_SOFT_TIMESTAMP(4),
+> >  };
+> > @@ -878,6 +888,58 @@ static int bma400_write_raw_get_fmt(struct iio_dev *indio_dev,
+> >  	}
+> >  }
+> >  
+> > +static int bma400_read_event_config(struct iio_dev *indio_dev,
+> > +				    const struct iio_chan_spec *chan,
+> > +				    enum iio_event_type type,
+> > +				    enum iio_event_direction dir)
+> > +{
+> > +	struct bma400_data *data = iio_priv(indio_dev);
+> > +
+> > +	switch (type) {
+> > +	case IIO_EV_TYPE_CHANGE:
+> > +		return data->step_event_en;
+> > +	default:
+> > +		return -EINVAL;
+> > +	}
+> > +}
+> > +
+> > +static int bma400_write_event_config(struct iio_dev *indio_dev,
+> > +				     const struct iio_chan_spec *chan,
+> > +				     enum iio_event_type type,
+> > +				     enum iio_event_direction dir, int state)
+> > +{
+> > +	int ret;
+> > +	struct bma400_data *data = iio_priv(indio_dev);
+> > +
+> > +	switch (type) {
+> > +	case IIO_EV_TYPE_CHANGE:
+> > +		mutex_lock(&data->mutex);
+> > +		if (!data->steps_enabled) {
+> > +			ret = regmap_update_bits(data->regmap,
+> > +						 BMA400_INT_CONFIG1_REG,
+> > +						 BMA400_STEP_INT_MSK,
+> > +						 FIELD_PREP(BMA400_STEP_INT_MSK,
+> > +							    1));
+> > +			if (ret)
+> > +				return ret;
+> > +			data->steps_enabled = 1;
+> > +		}
+> > +
+> > +		ret = regmap_update_bits(data->regmap,
+> > +					 BMA400_INT12_MAP_REG,
+> > +					 BMA400_STEP_INT_MSK,
+> > +					 FIELD_PREP(BMA400_STEP_INT_MSK,
+> > +						    state));
+> > +		mutex_unlock(&data->mutex);
+> > +		if (ret)
+> > +			return ret;
+> > +		data->step_event_en = state;
+> > +		return 0;
+> > +	default:
+> > +		return -EINVAL;
+> > +	}
+> > +}
+> > +
+> >  static int bma400_data_rdy_trigger_set_state(struct iio_trigger *trig,
+> >  					     bool state)
+> >  {
+> > @@ -910,6 +972,8 @@ static const struct iio_info bma400_info = {
+> >  	.read_avail        = bma400_read_avail,
+> >  	.write_raw         = bma400_write_raw,
+> >  	.write_raw_get_fmt = bma400_write_raw_get_fmt,
+> > +	.read_event_config = bma400_read_event_config,
+> > +	.write_event_config = bma400_write_event_config,
+> >  };
+> >  
+> >  static const struct iio_trigger_ops bma400_trigger_ops = {
+> > @@ -965,6 +1029,15 @@ static irqreturn_t bma400_interrupt(int irq, void *private)
+> >  		ret = IRQ_HANDLED;
+> >  	}
+> >  
+> > +	if (FIELD_GET(BMA400_STEP_STAT_MASK, le16_to_cpu(status))) {
+> > +		iio_push_event(indio_dev,
+> > +			       IIO_EVENT_CODE(IIO_STEPS, 0, IIO_NO_MOD,
+> > +					      IIO_EV_DIR_NONE,
+> > +					      IIO_EV_TYPE_CHANGE, 0, 0, 0),
+> > +			       iio_get_time_ns(indio_dev));
+> > +		ret = IRQ_HANDLED;
+> > +	}
+> > +
+> >  	return ret;
+> >  }
+> >  
+> 

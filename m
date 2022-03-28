@@ -2,193 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C85B4E97AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7EA4E97AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242945AbiC1NNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 09:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42736 "EHLO
+        id S242972AbiC1NOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 09:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237949AbiC1NNh (ORCPT
+        with ESMTP id S236694AbiC1NOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 09:13:37 -0400
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8569E14008;
-        Mon, 28 Mar 2022 06:11:55 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id b15so16863595edn.4;
-        Mon, 28 Mar 2022 06:11:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wduPLn72HNFMFI5wRZhSSzG+yA4cTZ99h7NbdswNd2A=;
-        b=6MV6cuMsa9poZ98dOyiKq5HT6BXhCGhKGTRRRGRTtI31nu7Dl15ukcpJIV9Jk26Pdi
-         7lTTbAMeyNBisjOGWrNUcF2mxz9WDx1S0Is0qzCBTbZ/ubXHejKgogB06e+DRBbZingu
-         Q+51Lg+4TKx53wC3OJffwn16JfxrDEFk7KoHwmBD4ibqvC9pLpfrQeX86+hhwmMJgzef
-         /joqHqB+DRmxS5Zaf3wduE3vMzYLbVD2V4K18z50p9xgkZIHxwZ/xzFUC1pwiaFMIIRw
-         KO0djld+R0giRE1zcEfU8mWBT0YhCUV2pDqJe7sO1Q2S86MBrKUmicFmA58ZKUaLjOYx
-         VUKg==
-X-Gm-Message-State: AOAM532vFmrOLBklDOTCOrrM+qWBgS/PFE7F6r54+rq+ZBTupQ2tMjFk
-        B6hWvm0N2QePlDpqFMQMi2E=
-X-Google-Smtp-Source: ABdhPJxCudiVYrrAevwOd7qI2w6vJI/0O3iILZWbDoT5Qs6a4rL/zpZHpfRLRhnS4khWT/uf9WxELg==
-X-Received: by 2002:a05:6402:168a:b0:3fb:600e:4cc3 with SMTP id a10-20020a056402168a00b003fb600e4cc3mr16186266edv.32.1648473114034;
-        Mon, 28 Mar 2022 06:11:54 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.googlemail.com with ESMTPSA id m21-20020a17090677d500b006df766974basm6046482ejn.3.2022.03.28.06.11.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Mar 2022 06:11:53 -0700 (PDT)
-Message-ID: <8a55260d-7354-028b-8439-475a9fbfe092@kernel.org>
-Date:   Mon, 28 Mar 2022 15:11:52 +0200
+        Mon, 28 Mar 2022 09:14:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1DB4DB7F9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648473147;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:in-reply-to:in-reply-to:  references:references;
+        bh=P4ec5zFj3ALGsTbbZVKM3kY6LLLTSnINme02bmLCl/c=;
+        b=YS5EFkaQ60CTwQRyCOj6xmADd8N7TYmXXJO5NfZ5DTtc3DkMIzjNFgq9FPfNBh8OC1Y/JW
+        cLjRK//RDilymHRktO5fAOMP+Hm5Lvapht3r0iOxZ9LT9ClDlAsji1pHOcyaC1TAc/HDDT
+        3j3azH00IHXNobKIqXFRrJN64wHO9l0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-671-eZAiO-zZMzWLX6p6FCHO4g-1; Mon, 28 Mar 2022 09:12:24 -0400
+X-MC-Unique: eZAiO-zZMzWLX6p6FCHO4g-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3A60B85A5BE;
+        Mon, 28 Mar 2022 13:12:23 +0000 (UTC)
+Received: from tucnak.zalov.cz (unknown [10.39.192.15])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8A664432470;
+        Mon, 28 Mar 2022 13:12:22 +0000 (UTC)
+Received: from tucnak.zalov.cz (localhost [127.0.0.1])
+        by tucnak.zalov.cz (8.16.1/8.16.1) with ESMTPS id 22SDCIUs3605583
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 28 Mar 2022 15:12:18 +0200
+Received: (from jakub@localhost)
+        by tucnak.zalov.cz (8.16.1/8.16.1/Submit) id 22SDCF9K3605582;
+        Mon, 28 Mar 2022 15:12:15 +0200
+Date:   Mon, 28 Mar 2022 15:12:14 +0200
+From:   Jakub Jelinek <jakub@redhat.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Nathan Chancellor <nathan@kernel.org>, x86-ml <x86@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-toolchains@vger.kernel.org
+Subject: Re: clang memcpy calls
+Message-ID: <YkG0LqWoBRqQ9Jxu@tucnak>
+Reply-To: Jakub Jelinek <jakub@redhat.com>
+References: <YjxTt3pFIcV3lt8I@zn.tnic>
+ <CAKwvOdkw0Bbm+=ZyViXQhBE1L6uSbvkstHJuHpQ21tzJRftgAw@mail.gmail.com>
+ <Yj2yYFloadFobRPx@lakrids>
+ <Yj3OEI+WHV/A5uf8@hirez.programming.kicks-ass.net>
+ <20220325151238.GB614@gate.crashing.org>
+ <YkGFdtn0yDIPqXRl@FVFF77S0Q05N>
+ <YkGL929QoFiTfMK7@tucnak>
+ <YkGwSsXLBjReBhMf@lakrids>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/2] memory: omap-gpmc: Allow building as a module
-Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     miquel.raynal@bootlin.com, tony@atomide.com, vigneshr@ti.com,
-        kishon@ti.com, nm@ti.com, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220328111319.1236-1-rogerq@kernel.org>
- <20220328111319.1236-3-rogerq@kernel.org>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220328111319.1236-3-rogerq@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkGwSsXLBjReBhMf@lakrids>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/2022 13:13, Roger Quadros wrote:
-> Allow OMAP_GPMC to be built as a module.
+On Mon, Mar 28, 2022 at 01:55:38PM +0100, Mark Rutland wrote:
+> > If coexistence of instrumented and non-instrumented memcpy etc. was the goal
+> > (it clearly wasn't), then the sanitizer libraries wouldn't be overriding
+> > memcpy calls, but instead the compiler would redirect calls to memcpy in
+> > instrumented functions to say __asan_memcpy which then would be
+> > instrumented.
 > 
-> Remove redundant of_match_node() call before
-> of_platform_default_populate() as the latter takes
-> care of matching with of_default_bus_match_table.
-
-Split this part to separate commit, please. It does not look related to
-making it a module.
-
+> FWIW, I think that approach would be fine for kernel usage.
 > 
-> Move compatible match table to the end where it is usually expected.
+> > > Given the standard doesn't say *anything* about instrumentation, what does GCC
+> > > *require* instrumentation-wise of the memcpy implementation? What happens *in
+> > > practice* today?
+> > > 
+> > > For example, is the userspace implementation of memcpy() instrumented for
+> > > AddressSanitizer, or not?
+> > 
+> > It is, for all functions, whether compiled with -fsanitize=address or not,
+> > if user app is linked with -fsanitize=address, libasan is linked in and
+> > overrides the libc memcpy with its instrumented version.
 > 
-> Signed-off-by: Roger Quadros <rogerq@kernel.org>
-> ---
->  drivers/memory/Kconfig     |  2 +-
->  drivers/memory/omap-gpmc.c | 44 +++++++++++++++++++++-----------------
->  2 files changed, 25 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/memory/Kconfig b/drivers/memory/Kconfig
-> index da2af9c38fe3..4debd4b2c8da 100644
-> --- a/drivers/memory/Kconfig
-> +++ b/drivers/memory/Kconfig
-> @@ -103,7 +103,7 @@ config TI_EMIF
->  	  temperature changes
->  
->  config OMAP_GPMC
-> -	bool "Texas Instruments OMAP SoC GPMC driver"
-> +	tristate "Texas Instruments OMAP SoC GPMC driver"
->  	depends on OF_ADDRESS || COMPILE_TEST
->  	select GPIOLIB
->  	help
-> diff --git a/drivers/memory/omap-gpmc.c b/drivers/memory/omap-gpmc.c
-> index ed11887c1b7c..6fdb76cc3bc9 100644
-> --- a/drivers/memory/omap-gpmc.c
-> +++ b/drivers/memory/omap-gpmc.c
-> @@ -12,6 +12,7 @@
->  #include <linux/cpu_pm.h>
->  #include <linux/irq.h>
->  #include <linux/kernel.h>
-> +#include <linux/module.h>
->  #include <linux/init.h>
->  #include <linux/err.h>
->  #include <linux/clk.h>
-> @@ -1889,16 +1890,6 @@ int gpmc_cs_program_settings(int cs, struct gpmc_settings *p)
->  }
->  
->  #ifdef CONFIG_OF
-> -static const struct of_device_id gpmc_dt_ids[] = {
-> -	{ .compatible = "ti,omap2420-gpmc" },
-> -	{ .compatible = "ti,omap2430-gpmc" },
-> -	{ .compatible = "ti,omap3430-gpmc" },	/* omap3430 & omap3630 */
-> -	{ .compatible = "ti,omap4430-gpmc" },	/* omap4430 & omap4460 & omap543x */
-> -	{ .compatible = "ti,am3352-gpmc" },	/* am335x devices */
-> -	{ .compatible = "ti,am64-gpmc" },
-> -	{ }
-> -};
-> -
->  static void gpmc_cs_set_name(int cs, const char *name)
->  {
->  	struct gpmc_cs_data *gpmc = &gpmc_cs[cs];
-> @@ -2257,11 +2248,9 @@ static int gpmc_probe_generic_child(struct platform_device *pdev,
->  	if (!of_platform_device_create(child, NULL, &pdev->dev))
->  		goto err_child_fail;
->  
-> -	/* is child a common bus? */
-> -	if (of_match_node(of_default_bus_match_table, child))
-> -		/* create children and other common bus children */
-> -		if (of_platform_default_populate(child, NULL, &pdev->dev))
-> -			goto err_child_fail;
-> +	/* create children and other common bus children */
-> +	if (of_platform_default_populate(child, NULL, &pdev->dev))
-> +		goto err_child_fail;
->  
->  	return 0;
->  
-> @@ -2278,6 +2267,8 @@ static int gpmc_probe_generic_child(struct platform_device *pdev,
->  	return ret;
->  }
->  
-> +static const struct of_device_id gpmc_dt_ids[];
-> +
->  static int gpmc_probe_dt(struct platform_device *pdev)
->  {
->  	int ret;
-> @@ -2644,6 +2635,19 @@ static int gpmc_resume(struct device *dev)
->  
->  static SIMPLE_DEV_PM_OPS(gpmc_pm_ops, gpmc_suspend, gpmc_resume);
->  
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id gpmc_dt_ids[] = {
-> +	{ .compatible = "ti,omap2420-gpmc" },
-> +	{ .compatible = "ti,omap2430-gpmc" },
-> +	{ .compatible = "ti,omap3430-gpmc" },	/* omap3430 & omap3630 */
-> +	{ .compatible = "ti,omap4430-gpmc" },	/* omap4430 & omap4460 & omap543x */
-> +	{ .compatible = "ti,am3352-gpmc" },	/* am335x devices */
-> +	{ .compatible = "ti,am64-gpmc" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, gpmc_dt_ids);
-> +#endif
-> +
->  static struct platform_driver gpmc_driver = {
->  	.probe		= gpmc_probe,
->  	.remove		= gpmc_remove,
-> @@ -2654,8 +2658,8 @@ static struct platform_driver gpmc_driver = {
->  	},
->  };
->  
-> -static __init int gpmc_init(void)
-> -{
-> -	return platform_driver_register(&gpmc_driver);
-> -}
-> -postcore_initcall(gpmc_init);
-> +module_platform_driver(gpmc_driver);
-> +
-> +MODULE_DESCRIPTION("Texas Instruments GPMC driver");
-> +MODULE_ALIAS("platform:" DEVICE_NAME);
+> Thanks for confirming! Just to check, how does libasan prevent recursing
+> within itself on implicitly generated calls to memcpy and friends? Is
+> anything special done to build the libasan code, is that all asm, or
+> something else?
 
-Why do you need this alias?
+Generally, most of the libasan wrappers look like
+  do something
+  call the original libc function (address from dlsym/dlvsym)
+  do something
+and the "do something" code isn't that complicated.  The compiler doesn't
+add calls to memcpy/memset etc. just to screw up users, they are added
+for a reason, such as copying or clearing very large aggregates (including
+for passing them by value), without -Os it will rarely use calls for smaller
+sizes and will instead expand them inline.
+For malloc and the like wrappers I think it uses some TLS
+recursion counters so that say malloc called from dlsym doesn't cause
+problems.
 
-> +MODULE_LICENSE("GPL v2");
+Now, one way for the kernel to make kasan work (more) reliably even with
+existing compilers without special tweaks for this might be if those
+calls to no_sanitize_address code aren't mixed with sanitized code all the
+time might be set some per-thread flag when starting a "no sanitized" code
+execution and clear it at the end of the region (or vice versa) and test
+those flags in the kernel's memcpy/memset etc. implementation to decide if
+they should be sanitized or not.
+As KASAN is (hopefully) just a kernel debugging aid and not something meant
+for production (in the userspace at least GCC strongly recommends against
+using the sanitizers in production), perhaps allocating one per-thread bool
+or int and changing it in a few spots and testing in the library functions
+might be acceptable.
 
+	Jakub
 
-Best regards,
-Krzysztof

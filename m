@@ -2,124 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36694E9A25
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC924E9A28
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244087AbiC1OyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 10:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
+        id S244100AbiC1Oyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 10:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240562AbiC1OyE (ORCPT
+        with ESMTP id S240562AbiC1Oym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 10:54:04 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C330E5DE56
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:52:23 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id CF2831F40887
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648479142;
-        bh=XMWA9qgWgkC/u71lI6wm/PuAiM5oal1tM//wU28I3+Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KpxYfx5mPacmgWtvt0niX7ZGuHbYIYeRj0xTOMgZP7XUOchwKhPwRxny07to7LuBj
-         OJ9HizD4Ma3B8gwDFN+9W6uFPYL7qjVnfWl+BvvWvZ71uxSlsB1qTCFTtP7oNLmHt0
-         VO60a4vdL+8Tzth/2i8qMPikMX4EvoI1wuoIsKaU+uGJ5GZ6SpZp01QjQAg07TETb5
-         +2xfAt/nS2ciDJbTItTh6LFd1P+xmEahKdg5pFrj6iwE8nodPW0W/QA8WEJroO8oHn
-         NyOHs7sVRdDzrysFgIdJhWpuwT5RolACCr4aozGJN2gMfrtIntI3EHQ8WngSSSThs3
-         aVDTi9XfD5/GA==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     chunkuang.hu@kernel.org
-Cc:     p.zabel@pengutronix.de, chunfeng.yun@mediatek.com, kishon@ti.com,
-        vkoul@kernel.org, matthias.bgg@gmail.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2] phy: mediatek: phy-mtk-mipi-dsi: Simplify with dev_err_probe()
-Date:   Mon, 28 Mar 2022 16:52:17 +0200
-Message-Id: <20220328145217.228457-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 28 Mar 2022 10:54:42 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689115DE50
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:53:01 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id p4-20020a17090ad30400b001c7ca87c05bso10176266pju.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 07:53:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=szL7lceaP/NxR0+lC2cN5AaRzpZIx1sqZ2iEfehaPgU=;
+        b=dWoW0WSt+vofTr+ILF/HwHxImbE9tGNhavUUeWUHY4WvJIuRkKIJBouTRGpch6aByh
+         BOCESJWtyC9Iu76Ajmq58cWmG3JORjH1N3DUNyraC9UHpqtMgq5J0B7YvvIwCiB4qSuq
+         43EA1b7BzZ2gstsbw3w8peW/pUMClebmhupAU6Is6uLzwHPCvvmMNApimCrwyzdm/Ogc
+         mRYGeomM5FLr79ZfvojBlNJCv+Y03N/h38wNank/TQ/Bgl3Zpp+EdIMaiOjSkX9MRwim
+         EKf9jK+/Xhy0XPU89tIm71stvekDcCJDBojjObxOlzFtX+2WvswVa86Asj04kDqvnjXi
+         Yq6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=szL7lceaP/NxR0+lC2cN5AaRzpZIx1sqZ2iEfehaPgU=;
+        b=QHZypsh/Z1/d+H8dHG6eHDQSPSTiNWlHg1FeJHcSrwqXQPilkUMUO4zw8GtgPPqCh4
+         SZROZfJpDNVzZCYDzm6oEPVZSleLOOhWuJ4onXe7wA949ma8hMT5kHiUd6/hqKbrsXuf
+         GpobjCobsCGAK2L7ZsIFiSxDLxR6lTclcIEjCv09pgEirTL3rv9Ylfi+krxGBJnncDCt
+         sa6s39IzbMRMUS5RtapQiLd6vbx6IBY3BY8I4tK4qkCrDXeNG0Udx+D22IOHdQx2kqhf
+         jX7QXLKY3TEGlb0sQEDsm5LWFkr+FoLaoHC0EC/EKxx80lfUvd9iB9uUt+/pkm7RbdtF
+         qqNw==
+X-Gm-Message-State: AOAM532M1kfWyGuhmgXU3Ev4IAUnKSH5QImsTk6POMA2LbJuPa+uEOeU
+        9jA+IeapyLFGybJkxvoTyJIm7A==
+X-Google-Smtp-Source: ABdhPJyIClNMv5o0NWmY1p1hSJAbH+a7bM/zRuKCdQmA7b/Y9V8XkwNQyyrDzOcaszKj/ka4JXU7Gg==
+X-Received: by 2002:a17:90b:f82:b0:1c6:58b9:bd36 with SMTP id ft2-20020a17090b0f8200b001c658b9bd36mr41688643pjb.141.1648479180804;
+        Mon, 28 Mar 2022 07:53:00 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id a16-20020a637050000000b00385f92b13d1sm13066121pgn.43.2022.03.28.07.52.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 07:53:00 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 14:52:56 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Zap only TDP MMU leafs in zap range and
+ mmu_notifier unmap
+Message-ID: <YkHLyP1LvH0MYN25@google.com>
+References: <20220325230348.2587437-1-seanjc@google.com>
+ <87lewuo4ge.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87lewuo4ge.fsf@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the dev_err_probe() helper to simplify error handling during probe.
+On Mon, Mar 28, 2022, Vitaly Kuznetsov wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> 
+> > Re-introduce zapping only leaf SPTEs in kvm_zap_gfn_range() and
+> > kvm_tdp_mmu_unmap_gfn_range(), this time without losing a pending TLB
+> > flush when processing multiple roots (including nested TDP shadow roots).
+> > Dropping the TLB flush resulted in random crashes when running Hyper-V
+> > Server 2019 in a guest with KSM enabled in the host (or any source of
+> > mmu_notifier invalidations, KSM is just the easiest to force).
+> >
+> > This effectively revert commits 873dd122172f8cce329113cfb0dfe3d2344d80c0
+> > and fcb93eb6d09dd302cbef22bd95a5858af75e4156, and thus restores commit
+> > cf3e26427c08ad9015956293ab389004ac6a338e, plus this delta on top:
+> >
+> > bool kvm_tdp_mmu_zap_leafs(struct kvm *kvm, int as_id, gfn_t start, gfn_t end,
+> >         struct kvm_mmu_page *root;
+> >
+> >         for_each_tdp_mmu_root_yield_safe(kvm, root, as_id)
+> > -               flush = tdp_mmu_zap_leafs(kvm, root, start, end, can_yield, false);
+> > +               flush = tdp_mmu_zap_leafs(kvm, root, start, end, can_yield, flush);
+> >
+> >         return flush;
+> >  }
+> >
+> 
+> I confirm this fixes the issue I was seeing, thanks!
+> 
+> Tested-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
-
-v2: Sorry, v1 was only partial as I have accidentally sent the
-    wrong patch file. Fixed for v2.
-
- drivers/phy/mediatek/phy-mtk-mipi-dsi.c | 29 +++++++++----------------
- 1 file changed, 10 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/phy/mediatek/phy-mtk-mipi-dsi.c b/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
-index 67b005d5b9e3..28506932bd91 100644
---- a/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
-+++ b/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
-@@ -154,11 +154,9 @@ static int mtk_mipi_tx_probe(struct platform_device *pdev)
- 		return PTR_ERR(mipi_tx->regs);
- 
- 	ref_clk = devm_clk_get(dev, NULL);
--	if (IS_ERR(ref_clk)) {
--		ret = PTR_ERR(ref_clk);
--		dev_err(dev, "Failed to get reference clock: %d\n", ret);
--		return ret;
--	}
-+	if (IS_ERR(ref_clk))
-+		return dev_err_probe(dev, PTR_ERR(ref_clk),
-+				     "Failed to get reference clock\n");
- 
- 	ret = of_property_read_u32(dev->of_node, "drive-strength-microamp",
- 				   &mipi_tx->mipitx_drive);
-@@ -178,27 +176,20 @@ static int mtk_mipi_tx_probe(struct platform_device *pdev)
- 
- 	ret = of_property_read_string(dev->of_node, "clock-output-names",
- 				      &clk_init.name);
--	if (ret < 0) {
--		dev_err(dev, "Failed to read clock-output-names: %d\n", ret);
--		return ret;
--	}
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "Failed to read clock-output-names\n");
- 
- 	clk_init.ops = mipi_tx->driver_data->mipi_tx_clk_ops;
- 
- 	mipi_tx->pll_hw.init = &clk_init;
- 	mipi_tx->pll = devm_clk_register(dev, &mipi_tx->pll_hw);
--	if (IS_ERR(mipi_tx->pll)) {
--		ret = PTR_ERR(mipi_tx->pll);
--		dev_err(dev, "Failed to register PLL: %d\n", ret);
--		return ret;
--	}
-+	if (IS_ERR(mipi_tx->pll))
-+		return dev_err_probe(dev, PTR_ERR(mipi_tx->pll), "Failed to register PLL\n");
- 
- 	phy = devm_phy_create(dev, NULL, &mtk_mipi_tx_ops);
--	if (IS_ERR(phy)) {
--		ret = PTR_ERR(phy);
--		dev_err(dev, "Failed to create MIPI D-PHY: %d\n", ret);
--		return ret;
--	}
-+	if (IS_ERR(phy))
-+		return dev_err_probe(dev, PTR_ERR(phy), "Failed to create MIPI D-PHY\n");
-+
- 	phy_set_drvdata(phy, mipi_tx);
- 
- 	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
--- 
-2.35.1
-
+Phew!  I think I would have cried were that not the case :-)  Thanks for testing!

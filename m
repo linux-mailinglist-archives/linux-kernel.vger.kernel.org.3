@@ -2,323 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6E04E9F1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 909834E9F1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 20:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245278AbiC1Sln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 14:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
+        id S245286AbiC1Snq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 14:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243749AbiC1Sll (ORCPT
+        with ESMTP id S234951AbiC1Snp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 14:41:41 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5D914026;
-        Mon, 28 Mar 2022 11:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1648492796; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QmieihZbGB29NOEkXombMlBt3Ij7l+yxxQPdnPvDlbM=;
-        b=oBUY8yaDcgU5YYatcQr7/GNeFWvb5DzhkdvXEQunAKpWhRoGQxcwo5cuBZKwXRj32FyE0g
-        aqkOUpQRJiVkD5tz92uU0wyEMy0yjca22p+Vb1Kfoy1iLLosOikPwArTdhlSoKBjLxbbH8
-        jQ/rWoaM4qDFtKJWq6t51AwDAxoThy0=
-Date:   Mon, 28 Mar 2022 19:39:45 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 02/12] iio: buffer-dma: Enable buffer write support
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Christian =?iso-8859-1?b?S/ZuaWc=?= <christian.koenig@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexandru Ardelean <ardeleanalex@gmail.com>,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org
-Message-Id: <96XG9R.3NOIIEN7IS001@crapouillou.net>
-In-Reply-To: <20220328182409.1e959386@jic23-huawei>
-References: <20220207125933.81634-1-paul@crapouillou.net>
-        <20220207125933.81634-3-paul@crapouillou.net>
-        <20220328182409.1e959386@jic23-huawei>
+        Mon, 28 Mar 2022 14:43:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F3963BDD;
+        Mon, 28 Mar 2022 11:42:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E37786121D;
+        Mon, 28 Mar 2022 18:42:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40793C004DD;
+        Mon, 28 Mar 2022 18:41:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648492923;
+        bh=dZqPQ2evpGDvdU03aILrgKFbB/jCtqkJy9n0EhmsaPE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sBQIKt34fkvZofByJo6dJc4pu/Ex63J5X107Tjkda3aJ7DhpBIJrBZWYnXUj/9oke
+         iP1ZMqF1fV1ET1S0T6ou/47yj8OgsrbUiiGq+1V8W7+ZGiIPRkZsHel2wWvukr+fAU
+         oxNd1i0c9vHEPe+rpHFcZKOPTDImrOOCgcw8G6C3okTqFlqtojqX7r7DZijjzf4udK
+         GPdoCoH60mo6AbV2DjKkJdbli5RaQknMIOBGTyj4SZBaBDC6VAXH/Udpc9x1AJiYNp
+         yE52st+gUXGeU52b8HYy4bnNN771x4JQ+1kM190TgQPpP8kCQGnwyAd0jmXoHsUlWS
+         DoGBOQQ4uHtSA==
+Message-ID: <047cec5c-b9e4-5480-be96-01bae8610078@kernel.org>
+Date:   Mon, 28 Mar 2022 20:41:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/5] dt-bindings: pci: Add ARTPEC-8 PCIe controller
+Content-Language: en-US
+To:     wangseok.lee@samsung.com,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        "lars.persson@axis.com" <lars.persson@axis.com>
+Cc:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "kernel@axis.com" <kernel@axis.com>,
+        =?UTF-8?B?7KCE66y46riw?= <moonki.jun@samsung.com>
+References: <CGME20220328014857epcms2p7d8cfd98d60f059916ef35ccc385bc004@epcms2p7>
+ <20220328014857epcms2p7d8cfd98d60f059916ef35ccc385bc004@epcms2p7>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220328014857epcms2p7d8cfd98d60f059916ef35ccc385bc004@epcms2p7>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+On 28/03/2022 03:48, 이왕석 wrote:
+> Add description to support Axis, ARTPEC-8 SoC.
+> ARTPEC-8 is the SoC platform of Axis Communications
+> and PCIe controller is designed based on Design-Ware PCIe controller.
+> 
+> Signed-off-by: Wangseok Lee <wangseok.lee@samsung.com>
+> ---
+>  .../bindings/pci/axis,artpec8-pcie-ep.yaml         | 110 +++++++++++++++++++
+>  .../devicetree/bindings/pci/axis,artpec8-pcie.yaml | 117 +++++++++++++++++++++
+>  2 files changed, 227 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
+>  create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
+> new file mode 100644
+> index 0000000..dc66965
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
+> @@ -0,0 +1,110 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pci/axis,artpec8-pcie-ep.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ARTPEC-8 SoC PCIe Controller Device Tree Bindings
+> +
+> +maintainers:
+> +  - Jesper Nilsson <jesper.nilsson@axis.com>
+> +
+> +description: |+
+> +  This PCIe end-point controller is based on the Synopsys DesignWare PCIe IP
+> +  and thus inherits all the common properties defined in snps,dw-pcie-ep.yaml.
+> +
+> +allOf:
+> +  - $ref: /schemas/pci/snps,dw-pcie-ep.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: axis,artpec8-pcie-ep
+> +
+> +  reg:
+> +    items:
+> +      - description: Data Bus Interface (DBI) registers.
+> +      - description: Data Bus Interface (DBI2) registers.
+> +      - description: PCIe address space region.
+> +
+> +  reg-names:
+> +    items:
+> +      - const: dbi
+> +      - const: dbi2
+> +      - const: addr_space
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: PIPE clock, used by the controller to clock the PIPE
+> +      - description: PCIe dbi clock, ungated version
+> +      - description: PCIe master clock, ungated version
+> +      - description: PCIe slave clock, ungated version
+> +
+> +  clock-names:
+> +    items:
+> +      - const: pipe_clk
+> +      - const: dbi_clk
+> +      - const: mstr_clk
+> +      - const: slv_clk
+> +
+> +  phys:
+> +    maxItems: 1
+> +
+> +  num-lanes:
+> +    const: 2
+> +
+> +required:
 
-Le lun., mars 28 2022 at 18:24:09 +0100, Jonathan Cameron=20
-<jic23@kernel.org> a =E9crit :
-> On Mon,  7 Feb 2022 12:59:23 +0000
-> Paul Cercueil <paul@crapouillou.net> wrote:
->=20
->>  Adding write support to the buffer-dma code is easy - the write()
->>  function basically needs to do the exact same thing as the read()
->>  function: dequeue a block, read or write the data, enqueue the block
->>  when entirely processed.
->>=20
->>  Therefore, the iio_buffer_dma_read() and the new=20
->> iio_buffer_dma_write()
->>  now both call a function iio_buffer_dma_io(), which will perform=20
->> this
->>  task.
->>=20
->>  The .space_available() callback can return the exact same value as=20
->> the
->>  .data_available() callback for input buffers, since in both cases we
->>  count the exact same thing (the number of bytes in each available
->>  block).
->>=20
->>  Note that we preemptively reset block->bytes_used to the buffer's=20
->> size
->>  in iio_dma_buffer_request_update(), as in the future the
->>  iio_dma_buffer_enqueue() function won't reset it.
->>=20
->>  v2: - Fix block->state not being reset in
->>        iio_dma_buffer_request_update() for output buffers.
->>      - Only update block->bytes_used once and add a comment about=20
->> why we
->>        update it.
->>      - Add a comment about why we're setting a different state for=20
->> output
->>        buffers in iio_dma_buffer_request_update()
->>      - Remove useless cast to bool (!!) in iio_dma_buffer_io()
->>=20
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  Reviewed-by: Alexandru Ardelean <ardeleanalex@gmail.com>
-> One comment inline.
->=20
-> I'd be tempted to queue this up with that fixed, but do we have
-> any users?  Even though it's trivial I'm not that keen on code
-> upstream well in advance of it being used.
+compatible
 
-There's a userspace user in libiio. On the kernel side we do have=20
-drivers that use it in ADI's downstream kernel, that we plan to=20
-upstream in the long term (but it can take some time, as we need to=20
-upstream other things first, like JESD204B support).
+> +  - clocks
+> +  - clock-names
+> +  - reg
+> +  - reg-names
+> +  - num-lanes
+> +  - bus-range
+> +  - interrupts
+> +  - interrupt-names
+> +  - samsung,fsys-sysreg
+> +  - samsung,syscon-phandle
+> +  - samsung,syscon-bus-s-fsys
+> +  - samsung,syscon-bus-p-fsys
 
->=20
->>  ---
->>   drivers/iio/buffer/industrialio-buffer-dma.c | 88=20
->> ++++++++++++++++----
->>   include/linux/iio/buffer-dma.h               |  7 ++
->>   2 files changed, 79 insertions(+), 16 deletions(-)
->>=20
->>  diff --git a/drivers/iio/buffer/industrialio-buffer-dma.c=20
->> b/drivers/iio/buffer/industrialio-buffer-dma.c
->>  index 1fc91467d1aa..a9f1b673374f 100644
->>  --- a/drivers/iio/buffer/industrialio-buffer-dma.c
->>  +++ b/drivers/iio/buffer/industrialio-buffer-dma.c
->>  @@ -195,6 +195,18 @@ static void _iio_dma_buffer_block_done(struct=20
->> iio_dma_buffer_block *block)
->>   		block->state =3D IIO_BLOCK_STATE_DONE;
->>   }
->>=20
->>  +static void iio_dma_buffer_queue_wake(struct iio_dma_buffer_queue=20
->> *queue)
->>  +{
->>  +	__poll_t flags;
->>  +
->>  +	if (queue->buffer.direction =3D=3D IIO_BUFFER_DIRECTION_IN)
->>  +		flags =3D EPOLLIN | EPOLLRDNORM;
->>  +	else
->>  +		flags =3D EPOLLOUT | EPOLLWRNORM;
->>  +
->>  +	wake_up_interruptible_poll(&queue->buffer.pollq, flags);
->>  +}
->>  +
->>   /**
->>    * iio_dma_buffer_block_done() - Indicate that a block has been=20
->> completed
->>    * @block: The completed block
->>  @@ -212,7 +224,7 @@ void iio_dma_buffer_block_done(struct=20
->> iio_dma_buffer_block *block)
->>   	spin_unlock_irqrestore(&queue->list_lock, flags);
->>=20
->>   	iio_buffer_block_put_atomic(block);
->>  -	wake_up_interruptible_poll(&queue->buffer.pollq, EPOLLIN |=20
->> EPOLLRDNORM);
->>  +	iio_dma_buffer_queue_wake(queue);
->>   }
->>   EXPORT_SYMBOL_GPL(iio_dma_buffer_block_done);
->>=20
->>  @@ -241,7 +253,7 @@ void iio_dma_buffer_block_list_abort(struct=20
->> iio_dma_buffer_queue *queue,
->>   	}
->>   	spin_unlock_irqrestore(&queue->list_lock, flags);
->>=20
->>  -	wake_up_interruptible_poll(&queue->buffer.pollq, EPOLLIN |=20
->> EPOLLRDNORM);
->>  +	iio_dma_buffer_queue_wake(queue);
->>   }
->>   EXPORT_SYMBOL_GPL(iio_dma_buffer_block_list_abort);
->>=20
->>  @@ -335,8 +347,24 @@ int iio_dma_buffer_request_update(struct=20
->> iio_buffer *buffer)
->>   			queue->fileio.blocks[i] =3D block;
->>   		}
->>=20
->>  -		block->state =3D IIO_BLOCK_STATE_QUEUED;
->>  -		list_add_tail(&block->head, &queue->incoming);
->>  +		/*
->>  +		 * block->bytes_used may have been modified previously, e.g. by
->>  +		 * iio_dma_buffer_block_list_abort(). Reset it here to the
->>  +		 * block's so that iio_dma_buffer_io() will work.
->>  +		 */
->>  +		block->bytes_used =3D block->size;
->>  +
->>  +		/*
->>  +		 * If it's an input buffer, mark the block as queued, and
->>  +		 * iio_dma_buffer_enable() will submit it. Otherwise mark it as
->>  +		 * done, which means it's ready to be dequeued.
->>  +		 */
->>  +		if (queue->buffer.direction =3D=3D IIO_BUFFER_DIRECTION_IN) {
->>  +			block->state =3D IIO_BLOCK_STATE_QUEUED;
->>  +			list_add_tail(&block->head, &queue->incoming);
->>  +		} else {
->>  +			block->state =3D IIO_BLOCK_STATE_DONE;
->>  +		}
->>   	}
->>=20
->>   out_unlock:
->>  @@ -465,20 +493,12 @@ static struct iio_dma_buffer_block=20
->> *iio_dma_buffer_dequeue(
->>   	return block;
->>   }
->>=20
->>  -/**
->>  - * iio_dma_buffer_read() - DMA buffer read callback
->>  - * @buffer: Buffer to read form
->>  - * @n: Number of bytes to read
->>  - * @user_buffer: Userspace buffer to copy the data to
->>  - *
->>  - * Should be used as the read callback for iio_buffer_access_ops
->>  - * struct for DMA buffers.
->>  - */
->>  -int iio_dma_buffer_read(struct iio_buffer *buffer, size_t n,
->>  -	char __user *user_buffer)
->>  +static int iio_dma_buffer_io(struct iio_buffer *buffer,
->>  +			     size_t n, char __user *user_buffer, bool is_write)
->>   {
->>   	struct iio_dma_buffer_queue *queue =3D iio_buffer_to_queue(buffer);
->>   	struct iio_dma_buffer_block *block;
->>  +	void *addr;
->>   	int ret;
->>=20
->>   	if (n < buffer->bytes_per_datum)
->>  @@ -501,8 +521,13 @@ int iio_dma_buffer_read(struct iio_buffer=20
->> *buffer, size_t n,
->>   	n =3D rounddown(n, buffer->bytes_per_datum);
->>   	if (n > block->bytes_used - queue->fileio.pos)
->>   		n =3D block->bytes_used - queue->fileio.pos;
->>  +	addr =3D block->vaddr + queue->fileio.pos;
->>=20
->>  -	if (copy_to_user(user_buffer, block->vaddr + queue->fileio.pos,=20
->> n)) {
->>  +	if (is_write)
->>  +		ret =3D copy_from_user(addr, user_buffer, n);
->>  +	else
->>  +		ret =3D copy_to_user(user_buffer, addr, n);
->>  +	if (ret) {
->>   		ret =3D -EFAULT;
->>   		goto out_unlock;
->>   	}
->>  @@ -521,8 +546,39 @@ int iio_dma_buffer_read(struct iio_buffer=20
->> *buffer, size_t n,
->>=20
->>   	return ret;
->>   }
->>  +
->>  +/**
->>  + * iio_dma_buffer_read() - DMA buffer read callback
->>  + * @buffer: Buffer to read form
->>  + * @n: Number of bytes to read
->>  + * @user_buffer: Userspace buffer to copy the data to
->>  + *
->>  + * Should be used as the read callback for iio_buffer_access_ops
->>  + * struct for DMA buffers.
->>  + */
->>  +int iio_dma_buffer_read(struct iio_buffer *buffer, size_t n,
->>  +	char __user *user_buffer)
->>  +{
->>  +	return iio_dma_buffer_io(buffer, n, user_buffer, false);
->>  +}
->>   EXPORT_SYMBOL_GPL(iio_dma_buffer_read);
->>=20
->>  +/**
->>  + * iio_dma_buffer_write() - DMA buffer write callback
->>  + * @buffer: Buffer to read form
->>  + * @n: Number of bytes to read
->>  + * @user_buffer: Userspace buffer to copy the data from
->>  + *
->>  + * Should be used as the write callback for iio_buffer_access_ops
->>  + * struct for DMA buffers.
->>  + */
->>  +int iio_dma_buffer_write(struct iio_buffer *buffer, size_t n,
->>  +			 const char __user *user_buffer)
->>  +{
->>  +	return iio_dma_buffer_io(buffer, n, (__force char *)user_buffer,=20
->> true);
->=20
-> Casting away the const is a little nasty.   Perhaps it's worth adding=20
-> a
-> parameter to iio_dma_buffer_io so you can have different parameters
-> for the read and write cases and hence keep the const in place?
-> return iio_dma_buffer_io(buffer, n, NULL, user_buffer, true);
-> and
-> return iio_dma_buffer_io(buffer,n, user_buffer, NULL, false);
+Why are they here but not in properties? Other properties are also
+present here but not in properties.
 
-I can do that.
+> +  - phys
+> +  - phy-names
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    artec8 {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +        pcie_ep: pcie-ep@17200000 {
+> +            compatible = "axis,artpec8-pcie-ep";
+> +            clocks = <&clock_cmu_fsys 39>,
+> +                        <&clock_cmu_fsys 38>,
+> +                        <&clock_cmu_fsys 37>,
+> +                        <&clock_cmu_fsys 36>;
 
-Cheers,
--Paul
+Align the indentation of continued lines/entries.
 
->>  +}
->>  +EXPORT_SYMBOL_GPL(iio_dma_buffer_write);
->>  +
->>   /**
->>    * iio_dma_buffer_data_available() - DMA buffer data_available=20
->> callback
->>    * @buf: Buffer to check for data availability
->>  diff --git a/include/linux/iio/buffer-dma.h=20
->> b/include/linux/iio/buffer-dma.h
->>  index 18d3702fa95d..490b93f76fa8 100644
->>  --- a/include/linux/iio/buffer-dma.h
->>  +++ b/include/linux/iio/buffer-dma.h
->>  @@ -132,6 +132,8 @@ int iio_dma_buffer_disable(struct iio_buffer=20
->> *buffer,
->>   	struct iio_dev *indio_dev);
->>   int iio_dma_buffer_read(struct iio_buffer *buffer, size_t n,
->>   	char __user *user_buffer);
->>  +int iio_dma_buffer_write(struct iio_buffer *buffer, size_t n,
->>  +			 const char __user *user_buffer);
->>   size_t iio_dma_buffer_data_available(struct iio_buffer *buffer);
->>   int iio_dma_buffer_set_bytes_per_datum(struct iio_buffer *buffer,=20
->> size_t bpd);
->>   int iio_dma_buffer_set_length(struct iio_buffer *buffer, unsigned=20
->> int length);
->>  @@ -142,4 +144,9 @@ int iio_dma_buffer_init(struct=20
->> iio_dma_buffer_queue *queue,
->>   void iio_dma_buffer_exit(struct iio_dma_buffer_queue *queue);
->>   void iio_dma_buffer_release(struct iio_dma_buffer_queue *queue);
->>=20
->>  +static inline size_t iio_dma_buffer_space_available(struct=20
->> iio_buffer *buffer)
->>  +{
->>  +	return iio_dma_buffer_data_available(buffer);
->>  +}
->>  +
->>   #endif
->=20
+> +            clock-names = "pipe_clk", "dbi_clk", "mstr_clk", "slv_clk";
+> +            reg = <0x0 0x17200000 0x0 0x1000>,
 
+Put reg after compatible.
 
+> +                    <0x0 0x17201000 0x0 0x1000>,
+> +                    <0x2 0x00000000 0x6 0x00000000>;
+> +            reg-names = "dbi", "dbi2", "addr_space";
+> +            num-lanes = <2>;
+> +            bus-range = <0x00 0xff>;
+> +            interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
+> +            interrupt-names = "intr";
+> +            #interrupt-cells = <1>;
+> +            num-ib-windows = <16>;
+> +            num-ob-windows = <16>;
+
+Did you test the bindings with `make dt_binding_check`?
+
+All comments apply also to your second file.
+
+Best regards,
+Krzysztof

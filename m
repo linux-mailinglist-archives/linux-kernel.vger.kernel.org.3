@@ -2,68 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EFCC4E9894
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B50B4E98A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242025AbiC1Nsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 09:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52198 "EHLO
+        id S243446AbiC1Nsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 09:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239330AbiC1Nsk (ORCPT
+        with ESMTP id S243435AbiC1Nsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 09:48:40 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739954D612
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:46:59 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id t5so12686681pfg.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:46:59 -0700 (PDT)
+        Mon, 28 Mar 2022 09:48:52 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31BF65EBDC
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:47:10 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id r204-20020a1c44d5000000b0038ccb70e239so3616307wma.3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:47:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/dMQIrPyzM/kkOwYGPw1QWEOSnMNV3c4vCc0NxfpSIk=;
-        b=DWrWXxOejXxfg5Pki9mNTi/NGQ8EbtGx5AYhdRWOJBZbAPTnMNcfRtzK32Qut8Kd5L
-         mx5u9zz3R2++k4KKy7Fzpg4GGlZzaEue0/X0uwcm/YSMRp4GsVoK/bt4K/jcHREUmDls
-         NFaoTfi2HwZ0wA3yOs4Vm78bXHc181c0ty+ikrOzsaiL0gQdnV51wL+th/FF7KNj26g+
-         vYab+NWs8QZPLnL4CPUN/Tu9ev/Kl31fVbJvvENg0bz13bP0zxlk6lAWeJIVtmBN2pTX
-         HfdzbMwccIUl/FtRUSsUdFNp32QHJD2rWpenE6iMQSQhP0Xt2eu0FXNi4z3Js+8HKLaX
-         VmcA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=lqWUovhT3deFfz1zrmG2BdScTmfXFTXlEBWbC7kOkUc=;
+        b=Casp3ieHRH0PsmFMjKH7TFdpT/TNQBYWEewfJb+0xu+uR1ofg9WJFp8XZHfsoJ6hWp
+         C3nRcv1dmEeOPPKeVzOxrD+erWCy3JA6tU8mIHsAGm/8BjsYzwvx7P5mI7L1KmNHeogG
+         38uNEFuvu5fJtLpThq9lRBZu4UJTQpGAB9zPox6v7iYfXD/Z14PGXT9t5owO2tQYWh0P
+         3dUo+G/1/czVs79WbHUKkU/6h2niPOopvKPMU5QpP07x/qfD1LrC5Cesac25l5SMzvon
+         esMFddga3HKSH7nNwn2IpXtOjAEGaytpRSosc2jrznnt1TPvUIg3fMjEdTz9d4Vfr7yu
+         igag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/dMQIrPyzM/kkOwYGPw1QWEOSnMNV3c4vCc0NxfpSIk=;
-        b=hYNY1GEObjQkWLfI6yCPc1L7bISgmwNlEfZzI1JrngsU9KMqBYMAJaRun2UcViX65j
-         wnNBLF7cRkGLX5BtCUmweNhL1W/NG5RdcIdFhbFao8DVsJmCfphZEjq0tntPJOG+MzLN
-         KagAO3O/sqeNyz62I58F6aLKo70Y9EKRuhpm+k/P5f/Ac1VzBDghQHsqae8K4Abiq5J4
-         OMGLizfYTh+dQw4/QWNRj6S+eQePLbTjb+zKFbo1RZlZ/eRpRqVudCzhmpJx/I5E6gg/
-         GpebSG3qf/+xXMUpvybPhgJQ4EJypcBN1epgBtZBfvSWtDl1eE01PIp2ok2BmPzqfe6E
-         fwFg==
-X-Gm-Message-State: AOAM53377/XMa345kX7Dgpieous+SyexDTuoFKuPSyRL9PR0F4QWP0Uw
-        XnQ9Dx4oJelGbmXHixmOFNzI6w==
-X-Google-Smtp-Source: ABdhPJwVxR9SBT+q+4aBSBWOiOCN9ExcuqATipmXaCY2i5Dn0rpwFMQ+fs8OLE0oODM4si8JB+9/Ow==
-X-Received: by 2002:a63:1459:0:b0:381:7672:e79f with SMTP id 25-20020a631459000000b003817672e79fmr10443003pgu.214.1648475218843;
-        Mon, 28 Mar 2022 06:46:58 -0700 (PDT)
-Received: from localhost.localdomain ([124.123.177.148])
-        by smtp.gmail.com with ESMTPSA id g6-20020a056a000b8600b004faa49add69sm16433899pfj.107.2022.03.28.06.46.55
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=lqWUovhT3deFfz1zrmG2BdScTmfXFTXlEBWbC7kOkUc=;
+        b=CWOBzth0Sj+HifngSY/hmqJ6imbxSRfNb9Uw7Yt6htig85aMwXyK8YAJy52wnzGTrv
+         Zuvj3NsMJNDj0TuVJ7hfmbt9jojWmr69Axs0o76+kkjhjhrS7bYKRkeLwoT2iwqvYLgy
+         oOTUMna5kVflrqeUq/WcuEyyEv6wTc8lXvh7MQD1emUorONbF1Qg+B3Y5QUVbJ6G8MUb
+         bXwkxTBKKCUUQtbDSDGJZvXY6/11ACDSuibnRWpkydcbv377UQ9q707gp6QntSpfxCrE
+         QWpktgPZHiwW36OQpqGQfMIY5F5mQCtbiXcFlppELS7ZW13pDJ/wz24hePbqRjXxwP/X
+         ZSZw==
+X-Gm-Message-State: AOAM533Sfz16Kjcu9W4k5wM0Gs4qN+Ng0NL+hwcrxLa/zurwwVFpAA8c
+        3s7IPV/mHy+XZ5QP86/MeZqusA==
+X-Google-Smtp-Source: ABdhPJwB0pYnLloiCs6wa/2INWNx44L+qT5u6Nb9H+6gXgQ9TsmBu3vjwmvbBF2kaoxeBO0KJ0MWbQ==
+X-Received: by 2002:a05:600c:4401:b0:38c:8df8:9797 with SMTP id u1-20020a05600c440100b0038c8df89797mr35783652wmn.13.1648475228582;
+        Mon, 28 Mar 2022 06:47:08 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id t4-20020a05600001c400b00203fb5dcf29sm12145898wrx.40.2022.03.28.06.47.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 06:46:57 -0700 (PDT)
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-To:     davem@davemloft.net
-Cc:     pabeni@redhat.com, kuba@kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: [PATCH] selftests: net: Add tls config dependency for tls selftests
-Date:   Mon, 28 Mar 2022 19:16:50 +0530
-Message-Id: <20220328134650.72265-1-naresh.kamboju@linaro.org>
-X-Mailer: git-send-email 2.30.2
+        Mon, 28 Mar 2022 06:47:08 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 14:47:05 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Benjamin =?utf-8?B?U3TDvHJ6?= <benni@stuerz.xyz>
+Cc:     sebastian.hesselbarth@gmail.com, gregory.clement@bootlin.com,
+        linux@armlinux.org.uk, linux@simtec.co.uk, krzk@kernel.org,
+        alim.akhtar@samsung.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        robert.moore@intel.com, rafael.j.wysocki@intel.com,
+        lenb@kernel.org, 3chas3@gmail.com, laforge@gnumonks.org,
+        arnd@arndb.de, gregkh@linuxfoundation.org, mchehab@kernel.org,
+        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
+        linus.walleij@linaro.org, brgl@bgdev.pl,
+        mike.marciniszyn@cornelisnetworks.com,
+        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
+        pali@kernel.org, dmitry.torokhov@gmail.com, isdn@linux-pingi.de,
+        benh@kernel.crashing.org, fbarrat@linux.ibm.com, ajd@linux.ibm.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        nico@fluxnic.net, loic.poulain@linaro.org, kvalo@kernel.org,
+        pkshih@realtek.com, bhelgaas@google.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-input@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-media@vger.kernel.org,
+        wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH 00/22] Replace comments with C99 initializers
+Message-ID: <20220328134705.lnxwwznhw622r2pr@maple.lan>
+References: <20220326165909.506926-1-benni@stuerz.xyz>
+ <8f9271b6-0381-70a9-f0c2-595b2235866a@stuerz.xyz>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <8f9271b6-0381-70a9-f0c2-595b2235866a@stuerz.xyz>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,27 +96,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-selftest net tls test cases need TLS=m without this the test hangs.
-Enabling config TLS solves this problem and runs to complete.
-  - CONFIG_TLS=m
+On Sun, Mar 27, 2022 at 02:46:00PM +0200, Benjamin Stürz wrote:
+> This patch series replaces comments with C99's designated initializers
+> in a few places. It also adds some enum initializers. This is my first
+> time contributing to the Linux kernel, therefore I'm probably doing a
+> lot of things the wrong way. I'm sorry for that.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Signed-off-by: Naresh Kamboju <naresh.kamboju@linaro.org>
----
- tools/testing/selftests/net/config | 1 +
- 1 file changed, 1 insertion(+)
+Welcome!
 
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index ead7963b9bf0..cecb921a0dbf 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -43,5 +43,6 @@ CONFIG_NET_ACT_TUNNEL_KEY=m
- CONFIG_NET_ACT_MIRRED=m
- CONFIG_BAREUDP=m
- CONFIG_IPV6_IOAM6_LWTUNNEL=y
-+CONFIG_TLS=m
- CONFIG_CRYPTO_SM4=y
- CONFIG_AMT=m
--- 
-2.30.2
 
+> I've gotten a few emails so far stating that this patch series is
+> unnecessary. Yes, in fact this patch series is not necessary by itself,
+> but it could help me understand how the whole process works and maybe I
+> could help somewhere, where help is actually needed.
+
+Have you been told the series is unnecessary or too big?
+
+Although all patches represent a variant of the same mechanical
+transformation but they are mostly unrelated to each other and, if
+accepted, they will be applied by many different people.
+
+Taken as a whole presenting this to maintainers as a 22 patch set is too
+big. I'd recommend starting with a smaller patch or patch series where
+all the patches get picked up by the same maintainer.
+
+
+> This patch itself is a no-op.
+
+PATCH 0/XX is for the covering letter. You should generate a template for
+it using the --cover-letter option of git format-patch. That way patch 0
+will contain the diffstat for the whole series (which is often useful
+to help understand what the series is for) and there is no need to
+make no-op changes.
+
+
+Daniel.
+
+> 
+> Signed-off-by: Benjamin Stürz <benni@stuerz.xyz>
+> ---
+>  .gitignore | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/.gitignore b/.gitignore
+> index 7afd412dadd2..706f667261eb 100644
+> --- a/.gitignore
+> +++ b/.gitignore
+> @@ -20,7 +20,7 @@
+>  *.dtb
+>  *.dtbo
+>  *.dtb.S
+> -*.dwo
+> +*.dwo
+>  *.elf
+>  *.gcno
+>  *.gz
+> -- 
+> 2.35.1

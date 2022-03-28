@@ -2,69 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D39D4E9DC6
+	by mail.lfdr.de (Postfix) with ESMTP id DAB474E9DC8
 	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244683AbiC1RsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 13:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
+        id S244695AbiC1RsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 13:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244732AbiC1RsI (ORCPT
+        with ESMTP id S242737AbiC1RsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 13:48:08 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC672458A
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:46:27 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id d65so8544696qke.5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:46:27 -0700 (PDT)
+        Mon, 28 Mar 2022 13:48:12 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995672458A
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:46:30 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id p15so30236019ejc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:46:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OTiPPMnOln50TZ8P+7s3GLF/+hjvE6KvjSzwQxSGV3c=;
-        b=Fm0ykbJRyPVO/B3M1TtAUj97/2QpePdENLBvycMQl72Et5cFTTucKx3PxPU6vHbyaY
-         2LOpjhVpM6xaSGIEYzZvrkFLwr0Z0NC0lcL7Kzzby+8EdCi1ztrnxpmgI6JDM+kitiKC
-         4JsDfvrMM8cjNdu7pHpgwZwbW2GdCfoVOTBLGG00zBSchkCznKKlNQ0eV3bNZk4hnLNH
-         NmfmYzK32P+srh3+Z/OMLGYTsmjFD0QMI2ZnXcAZuwRdI9KRXJOZ0iR3Cts8fxgcwrK4
-         Nc0mv/b71Azz0yAA6vcTgzNRtHW63qnAwxup4p6/Yg4dlMORS++VXU7xSpjCTJ20Pjtq
-         NNlA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SymjDndU9Uze0JvEagAd5eX9OKJosBWeGBfW/S+DSuM=;
+        b=Z3mezvkFtrKwM2FAqMnLvQwkbmLD4frPCJzQsImS/mGIGSl/huwuVaTfUxpa5SoMnu
+         EgCwTzcnuJ1osunTWbmUpQ666EVCzst6+34T3mn3yW0o91GH14iWo0OHUehJHPpxfXXR
+         NgE60K0ZworKv25xuZaTmq2I9WajV23kzWvKNlRZtEGl0Ny/aWFzF7zfqcApdfyjK23D
+         GGf/VvtCdsrZgNCDlG+SGyeYD9Dkl5LjawFxS2seGHqSoMI5bcrTl3VxbtVKKhM9NHF/
+         g1MqNbqDDm/XNwhc+hD8rFhUFGiXM2qziiOsv7EpQXtcr7kWBK+l0GPdluH2SvqTkLlp
+         pf9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OTiPPMnOln50TZ8P+7s3GLF/+hjvE6KvjSzwQxSGV3c=;
-        b=OrMBjtv2trk2Kms67zd0ZxeATAeFyeFGtfa1tN4iFvDCegiGIg6P0sG7ZvIWOxP14p
-         cDw0sQSJa+aD84U2StJF4BrhM4QqBRsV6dwojrcmqv7SCF2RUGSKKx21fIUmG2x1uaGm
-         SYlTXQKX2Eh+d6ulEmpeKix/ZDZIpE8f3OmrVkHCdLdJIJojnr2KEJqHEj/O5viY7ijn
-         DTdYAMEr8+i03Dhmu2yJt1JnmdqGEgonqoLjbPWmlr1DanyadldVs1080lvOl7VtDlZS
-         MCqiyWHAEF+tUPk+JRTzbZjzHcr4qd+OZuuagBTlknwDkyaFypX7F802pPHoN0JAwapw
-         6dKA==
-X-Gm-Message-State: AOAM530gDFCX3TuuU6Hi+F4EZpL0pQBJDbGYCoDldeoBnWrgMLkx3pd7
-        adBolFOTS2jPWchQPwyZc5//l2PAO6d1mCT/RqW20Q==
-X-Google-Smtp-Source: ABdhPJzecbcZJmF/Fy7uF0Uu2GrbQXl/xaZaaQcxtzwDnpxDhCnIw5On4j0ksbMhk7IPAvvWDJ9cEz7ao83mUSO+GpY=
-X-Received: by 2002:a05:620a:4110:b0:680:d70a:376d with SMTP id
- j16-20020a05620a411000b00680d70a376dmr3982436qko.446.1648489586646; Mon, 28
- Mar 2022 10:46:26 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SymjDndU9Uze0JvEagAd5eX9OKJosBWeGBfW/S+DSuM=;
+        b=vN5/NJdbn7bS2zrzoH0t9MWGy8rjks4zegwuTYXM4KKaHSfgWK9tjqdrVjdI2yC7rc
+         oBD1PRESm/vOvPj5znQN1w+by4Gf0L/9jpMUw8oZGwNaTkmMWGE8RTWTaHBZ8sjVKufT
+         thKxBxJWowZWA1DgMkBMPaMOOYbBk49ypZbMtVlbkA2iX1KcwEglf8h2es9Pd73R4z8M
+         Yxs95AcDSz7pdsoklLHU7Rl7XeE6c/HGaDhw6iHo1VBAoNyQTB0ZRBHj7g0gstWjBhI8
+         wIzsdWOsQx4xYblUBHNpCcIN9QuH0vriCWZjQqAgot/Uikhe5fQhMJ/qTQBztV0b4x30
+         6KTg==
+X-Gm-Message-State: AOAM531xOzXgdhgFhMPBi7O+NlSVZS/kNtMFtPMpeTN66WXxkbPONrIF
+        NEw/e+jwtioIUl5er5hYiCs=
+X-Google-Smtp-Source: ABdhPJxaGdkB/uFHJglSvsw95vcYxutlSaP+i+Kh24dzvA/n1NXG5rLzCDrO1Hs+2ipo/scsx2YleQ==
+X-Received: by 2002:a17:907:6da6:b0:6e0:bb24:f731 with SMTP id sb38-20020a1709076da600b006e0bb24f731mr18461252ejc.25.1648489589063;
+        Mon, 28 Mar 2022 10:46:29 -0700 (PDT)
+Received: from ?IPV6:2a02:908:1252:fb60:4276:c469:b15d:9dea? ([2a02:908:1252:fb60:4276:c469:b15d:9dea])
+        by smtp.gmail.com with ESMTPSA id z11-20020a50e68b000000b00412ec8b2180sm7324782edm.90.2022.03.28.10.46.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 10:46:28 -0700 (PDT)
+Message-ID: <426855bc-9480-ad47-c362-f2a73c0c8ce9@gmail.com>
+Date:   Mon, 28 Mar 2022 19:46:26 +0200
 MIME-Version: 1.0
-References: <20220324234123.1608337-1-haoluo@google.com> <9cdf860d-8370-95b5-1688-af03265cc874@fb.com>
- <CA+khW7g3hy61qnvtqUizaW+qB6wk=Y9cjivhORshOk=ZzTXJ-A@mail.gmail.com>
-In-Reply-To: <CA+khW7g3hy61qnvtqUizaW+qB6wk=Y9cjivhORshOk=ZzTXJ-A@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Mon, 28 Mar 2022 10:46:15 -0700
-Message-ID: <CA+khW7iq+UKsfQxdT3QpSqPUFN8gQWWDLoQ9zxB=uWTs63AZEA@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next 0/2] Mmapable task local storage.
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] drm/amd/display: detach fpu operations from
+ dcn10_validate_bandwidth in calcs
+Content-Language: en-US
+To:     Melissa Wen <mwen@igalia.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     sunpeng.li@amd.com, Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Xinhui.Pan@amd.com, Rodrigo.Siqueira@amd.com,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        airlied@linux.ie, Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
+        dri-devel@lists.freedesktop.org, daniel@ffwll.ch,
+        Jasdeep Dhillon <jdhillon@amd.com>, alexander.deucher@amd.com,
+        harry.wentland@amd.com
+References: <20220326202448.2046077-1-mwen@igalia.com>
+ <20220326202448.2046077-2-mwen@igalia.com>
+ <1586f68e-c635-482f-9399-2b027b766543@amd.com>
+ <20220328171738.iu5peqfcled2psv3@mail.igalia.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <20220328171738.iu5peqfcled2psv3@mail.igalia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,116 +84,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 10:39 AM Hao Luo <haoluo@google.com> wrote:
->
-> Hi Yonghong,
->
-> On Fri, Mar 25, 2022 at 12:16 PM Yonghong Song <yhs@fb.com> wrote:
-> >
-> > On 3/24/22 4:41 PM, Hao Luo wrote:
-> > > Some map types support mmap operation, which allows userspace to
-> > > communicate with BPF programs directly. Currently only arraymap
-> > > and ringbuf have mmap implemented.
-> > >
-> > > However, in some use cases, when multiple program instances can
-> > > run concurrently, global mmapable memory can cause race. In that
-> > > case, userspace needs to provide necessary synchronizations to
-> > > coordinate the usage of mapped global data. This can be a source
-> > > of bottleneck.
-> >
-> > I can see your use case here. Each calling process can get the
-> > corresponding bpf program task local storage data through
-> > mmap interface. As you mentioned, there is a tradeoff
-> > between more memory vs. non-global synchronization.
-> >
-> > I am thinking that another bpf_iter approach can retrieve
-> > the similar result. We could implement a bpf_iter
-> > for task local storage map, optionally it can provide
-> > a tid to retrieve the data for that particular tid.
-> > This way, user space needs an explicit syscall, but
-> > does not need to allocate more memory than necessary.
-> >
-> > WDYT?
-> >
->
-> Thanks for the suggestion. I have two thoughts about bpf_iter + tid and mmap:
->
-> - mmap prevents the calling task from reading other task's value.
-> Using bpf_iter, one can pass other task's tid to get their values. I
-> assume there are two potential ways of passing tid to bpf_iter: one is
-> to use global data in bpf prog, the other is adding tid parameterized
-> iter_link. For the first, it's not easy for unpriv tasks to use. For
-> the second, we need to create one iter_link object for each interested
-> tid. It may not be easy to use either.
->
-> - Regarding adding an explicit syscall. I thought about adding
-> write/read syscalls for task local storage maps, just like reading
-> values from iter_link. Writing or reading task local storage map
-> updates/reads the current task's value. I think this could achieve the
-> same effect as mmap.
->
+Am 28.03.22 um 19:17 schrieb Melissa Wen:
+> On 03/28, Christian König wrote:
+>> Am 26.03.22 um 21:24 schrieb Melissa Wen:
+>>> dcn10_validate_bandwidth is only used on dcn10 files, but is declared in
+>>> dcn_calcs files. Rename dcn10_* to dcn_* in calcs, remove DC_FP_* wrapper
+>>> inside DML folder and create an specific dcn10_validate_bandwidth in
+>>> dcn10_resources that calls dcn_validate_bandwidth and properly wraps that
+>>> FPU function with DC_FP_* macro.
+>>>
+>>> Signed-off-by: Melissa Wen <mwen@igalia.com>
+>>> ---
+>>>    .../gpu/drm/amd/display/dc/dcn10/dcn10_resource.c  | 14 ++++++++++++++
+>>>    .../gpu/drm/amd/display/dc/dml/calcs/dcn_calcs.c   |  5 +----
+>>>    drivers/gpu/drm/amd/display/dc/inc/dcn_calcs.h     |  2 +-
+>>>    3 files changed, 16 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c
+>>> index 4048908dd265..1587a060b55a 100644
+>>> --- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c
+>>> +++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c
+>>> @@ -1141,6 +1141,20 @@ static void dcn10_destroy_resource_pool(struct resource_pool **pool)
+>>>    	*pool = NULL;
+>>>    }
+>>> +static bool dcn10_validate_bandwidth(
+>>> +		struct dc *dc,
+>>> +		struct dc_state *context,
+>>> +		bool fast_validate)
+>>> +{
+>>> +	bool voltage_supported;
+>>> +
+>>> +	DC_FP_START();
+>>> +	voltage_supported = dcn_validate_bandwidth(dc, context, fast_validate);
+>>> +	DC_FP_END();
+>>> +
+>>> +	return voltage_supported;
+>>> +}
+>>> +
+>>>    static enum dc_status dcn10_validate_plane(const struct dc_plane_state *plane_state, struct dc_caps *caps)
+>>>    {
+>>>    	if (plane_state->format >= SURFACE_PIXEL_FORMAT_VIDEO_BEGIN
+>>> diff --git a/drivers/gpu/drm/amd/display/dc/dml/calcs/dcn_calcs.c b/drivers/gpu/drm/amd/display/dc/dml/calcs/dcn_calcs.c
+>>> index e447c74be713..c25023f7d604 100644
+>>> --- a/drivers/gpu/drm/amd/display/dc/dml/calcs/dcn_calcs.c
+>>> +++ b/drivers/gpu/drm/amd/display/dc/dml/calcs/dcn_calcs.c
+>>> @@ -764,7 +764,7 @@ static unsigned int get_highest_allowed_voltage_level(uint32_t chip_family,
+>>>    	return 4;
+>>>    }
+>>> -bool dcn10_validate_bandwidth(
+>>> +bool dcn_validate_bandwidth(
+>>>    		struct dc *dc,
+>>>    		struct dc_state *context,
+>>>    		bool fast_validate)
+>>> @@ -790,7 +790,6 @@ bool dcn10_validate_bandwidth(
+>>>    		dcn_bw_sync_calcs_and_dml(dc);
+>>>    	memset(v, 0, sizeof(*v));
+>>> -	DC_FP_START();
+>>>    	v->sr_exit_time = dc->dcn_soc->sr_exit_time;
+>>>    	v->sr_enter_plus_exit_time = dc->dcn_soc->sr_enter_plus_exit_time;
+>>> @@ -1323,8 +1322,6 @@ bool dcn10_validate_bandwidth(
+>>>    	bw_limit = dc->dcn_soc->percent_disp_bw_limit * v->fabric_and_dram_bandwidth_vmax0p9;
+>>>    	bw_limit_pass = (v->total_data_read_bandwidth / 1000.0) < bw_limit;
+>>> -	DC_FP_END();
+>>> -
+>>>    	PERFORMANCE_TRACE_END();
+>>>    	BW_VAL_TRACE_FINISH();
+>>> diff --git a/drivers/gpu/drm/amd/display/dc/inc/dcn_calcs.h b/drivers/gpu/drm/amd/display/dc/inc/dcn_calcs.h
+>>> index 337c0161e72d..806f3041db14 100644
+>>> --- a/drivers/gpu/drm/amd/display/dc/inc/dcn_calcs.h
+>>> +++ b/drivers/gpu/drm/amd/display/dc/inc/dcn_calcs.h
+>>> @@ -619,7 +619,7 @@ struct dcn_ip_params {
+>>>    };
+>>>    extern const struct dcn_ip_params dcn10_ip_defaults;
+>>> -bool dcn10_validate_bandwidth(
+>>> +bool dcn_validate_bandwidth(
+>>>    		struct dc *dc,
+>>>    		struct dc_state *context,
+>>>    		bool fast_validate);
+>> Just for the record: That's not really usual kernel coding style, but that's
+>> not topic of this patch set.
+> Yeah. I didn't change the code style to ease any version conflict management.
+>> The series is Acked-by: Christian König <christian.koenig@amd.com>
+> Thanks!
+>> And it would be really nice if we could make the DC_FP_* macros somehow fail
+>> in the dml folder.
+> And if we include a kind of dc_assert_fp_disabled() in the dc_fpu_begin()
+> (DC_FP_START) - more or less the reverse of dc_assert_fp_enabled(). Does
+> it meet the `make the DC_FP_* macros somehow fail in the dml folder` ?
+> It is not restricted to the dml folder, but I think it would work
+> similarly... Does it make sense?
 
-Actually, my use case of using mmap on task local storage is to allow
-userspace to pass FDs into bpf prog. Some of the helpers I want to add
-need to take an FD as parameter and the bpf progs can run
-concurrently, thus using global data is racy. Mmapable task local
-storage is the best solution I can find for this purpose.
+No, IIRC our display team even mentioned to me that those macros could 
+potentially be used recursively.
 
-Song also mentioned to me offline, that mmapable task local storage
-may be useful for his use case.
+What I mean here is that we somehow raise a compiler warning if somebody 
+tries to use those defines inside the folder.
 
-I am actually open to other proposals.
+Maybe check of gcc supports hardware floating point or something like this.
 
-> > >
-> > > It would be great to have a mmapable local storage in that case.
-> > > This patch adds that.
-> > >
-> > > Mmap isn't BPF syscall, so unpriv users can also use it to
-> > > interact with maps.
-> > >
-> > > Currently the only way of allocating mmapable map area is using
-> > > vmalloc() and it's only used at map allocation time. Vmalloc()
-> > > may sleep, therefore it's not suitable for maps that may allocate
-> > > memory in an atomic context such as local storage. Local storage
-> > > uses kmalloc() with GFP_ATOMIC, which doesn't sleep. This patch
-> > > uses kmalloc() with GFP_ATOMIC as well for mmapable map area.
-> > >
-> > > Allocating mmapable memory has requirment on page alignment. So we
-> > > have to deliberately allocate more memory than necessary to obtain
-> > > an address that has sdata->data aligned at page boundary. The
-> > > calculations for mmapable allocation size, and the actual
-> > > allocation/deallocation are packaged in three functions:
-> > >
-> > >   - bpf_map_mmapable_alloc_size()
-> > >   - bpf_map_mmapable_kzalloc()
-> > >   - bpf_map_mmapable_kfree()
-> > >
-> > > BPF local storage uses them to provide generic mmap API:
-> > >
-> > >   - bpf_local_storage_mmap()
-> > >
-> > > And task local storage adds the mmap callback:
-> > >
-> > >   - task_storage_map_mmap()
-> > >
-> > > When application calls mmap on a task local storage, it gets its
-> > > own local storage.
-> > >
-> > > Overall, mmapable local storage trades off memory with flexibility
-> > > and efficiency. It brings memory fragmentation but can make programs
-> > > stateless. Therefore useful in some cases.
-> > >
-> > > Hao Luo (2):
-> > >    bpf: Mmapable local storage.
-> > >    selftests/bpf: Test mmapable task local storage.
-> > >
-> > >   include/linux/bpf.h                           |  4 +
-> > >   include/linux/bpf_local_storage.h             |  5 +-
-> > >   kernel/bpf/bpf_local_storage.c                | 73 +++++++++++++++++--
-> > >   kernel/bpf/bpf_task_storage.c                 | 40 ++++++++++
-> > >   kernel/bpf/syscall.c                          | 67 +++++++++++++++++
-> > >   .../bpf/prog_tests/task_local_storage.c       | 38 ++++++++++
-> > >   .../bpf/progs/task_local_storage_mmapable.c   | 38 ++++++++++
-> > >   7 files changed, 257 insertions(+), 8 deletions(-)
-> > >   create mode 100644 tools/testing/selftests/bpf/progs/task_local_storage_mmapable.c
-> > >
+Christian.
+
+>
+> Melissa
+>
+>> Thanks,
+>> Christian.
+>>
+>>
+

@@ -2,196 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBE34E98A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE4A4E98A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 15:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243414AbiC1NtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 09:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S243450AbiC1NtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 09:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243452AbiC1Ns4 (ORCPT
+        with ESMTP id S240913AbiC1NtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 09:48:56 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D105E77A;
-        Mon, 28 Mar 2022 06:47:14 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id A277A1F42914
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648475233;
-        bh=xm/p5RUG4xpEDHVeoyt/7MmfTaEkbWMuA9kH+M+Y73E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LVSwo0YoQOQ0czBBLU/3eTNmt7ceqqhFo/I8a8yOQDffYMSIG/ztREzP7rplHVTA+
-         Xr9rdwb4WjYwkYG2xyaFTZ5LKO8GbclE5SiHinvAf2jQvYpg7DvIlIH+nZU5kmRYLV
-         GPZGZ0M5mGOszMTIJ+bcGnRw5EMhIWIblyQsX3dPKWf5j/GXWBbityZjT6ZtGdPCL6
-         FmJtZZ9dHLFgRY3Gwt6xWZOSIMggdAltUosjvkI2rOIlPE8LR74G9gRta06/Lz4N7H
-         aCAdT51vB1LJ6VSsJG9OrlFIDmEVQgw4L4D+cj9308vzr6CTEahtUWlR/X73Bc+Oir
-         Yd4a7vNe5h+3Q==
-Message-ID: <94d231cf-ce4c-22f5-b9af-41ae68f1e659@collabora.com>
-Date:   Mon, 28 Mar 2022 15:47:09 +0200
+        Mon, 28 Mar 2022 09:49:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3200F4DF71
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:47:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648475255;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=upPLPBWyZnJnaDaesOEGnaSGwMR9qWYqjr9tyy5b2iI=;
+        b=dF8hibUWH31L0ZKQ8RuNwVfsqCqar+01XNsOi5aNURtWis5gmOrw/tFzPQSHPGf+NC2nIB
+        eNcNKBVXrT5pDnh6ZW8RdiGuURUCN1hPN3wu6xD8B0Ubd3WMbG49k8VYvxHFzapBWjBjko
+        ZCNtQTGb4bAlKkPVb0LKV5a3wj1CoM8=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-110-_O4b0fGBPNqOG5xfV2e8ww-1; Mon, 28 Mar 2022 09:47:34 -0400
+X-MC-Unique: _O4b0fGBPNqOG5xfV2e8ww-1
+Received: by mail-wr1-f70.google.com with SMTP id 71-20020adf82cd000000b00203dc43d216so4333802wrc.22
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 06:47:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=upPLPBWyZnJnaDaesOEGnaSGwMR9qWYqjr9tyy5b2iI=;
+        b=p3zotGtviuj4E/PXRGtl/GX7DtcDDOQW6J519lWVC7CSe06FbXSGhhg5Wro2FvmtLO
+         TcYJczf7fWW9nhRGadVbo3onoiq2cQ8117MkDrYCVSxcnbHFjsEWPgGX/v9j/FICp/2a
+         lwSYvGyEfZNOmftA3oG1Z8YlG9SikVeaZrcBPuklkkAT9LFmKNLC/a3ZccJbkXF2CTDo
+         QS5W906I2ksbqVPiWQTd8uX3KP4+Qa94IujL2lxwfguzdgM1PVOYEcEObEf5N13DjwhE
+         ESzDaiEwTuPH0UXkZITbu8XqkqjbK+e+6zFSi8c3VHUeRE6J9Z37g6mI5nltoRpwyKVj
+         a/Bw==
+X-Gm-Message-State: AOAM533HlCAfMZ6L5WuVjDgojtBEE2V2nG7IyXRjQH2FTLQwnE6H+JMj
+        olMqO9MNUvLR2LcbbJXwo73niFM7Y/ubb/ooVxsNM5Y+pt7vNO8apPraHQWVVQ7QvCvkGdUnoHp
+        3ZAgBui+lHpO7206yYPpcGRnb
+X-Received: by 2002:a05:600c:4f46:b0:38c:d4cd:ee31 with SMTP id m6-20020a05600c4f4600b0038cd4cdee31mr23930294wmq.16.1648475252655;
+        Mon, 28 Mar 2022 06:47:32 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwxoK+tzHkV68lkc8leXnZUz8lWiwrIHpb4NjUHncSUU386GL1+Cxe87sNc+LG0TStZQtOM9Q==
+X-Received: by 2002:a05:600c:4f46:b0:38c:d4cd:ee31 with SMTP id m6-20020a05600c4f4600b0038cd4cdee31mr23930259wmq.16.1648475252354;
+        Mon, 28 Mar 2022 06:47:32 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:2200:50d1:ff5c:5927:203a? (p200300cbc704220050d1ff5c5927203a.dip0.t-ipconnect.de. [2003:cb:c704:2200:50d1:ff5c:5927:203a])
+        by smtp.gmail.com with ESMTPSA id c4-20020a056000184400b0020584c40778sm13128032wri.103.2022.03.28.06.47.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 06:47:31 -0700 (PDT)
+Message-ID: <e1d399da-bebd-062d-aaff-ace3fd542c3f@redhat.com>
+Date:   Mon, 28 Mar 2022 15:47:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/4] arm64: dts: mediatek: Add device-tree for MT8195
- Demo board
+ Thunderbird/91.6.2
+Subject: Re: [page-reclaim] Re: [GIT PULL] Multi-gen LRU for 5.18-rc1
 Content-Language: en-US
-To:     Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220327200312.3090515-1-fparent@baylibre.com>
- <20220327200312.3090515-3-fparent@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220327200312.3090515-3-fparent@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <baohua@kernel.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Donald Carr <d@chaos-reins.com>,
+        Hillf Danton <hdanton@sina.com>,
+        =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Rik van Riel <riel@surriel.com>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        the arch/x86 maintainers <x86@kernel.org>
+References: <20220326010003.3155137-1-yuzhao@google.com>
+ <CAHk-=wjp=jEhjvD9GPnHfuV5Kc1=rUnf84b_qscLJ8fkY74u3Q@mail.gmail.com>
+ <CAOUHufbqum18T4kZ=d_hMehz=N=3iSuNfGrLof5tB8kjGkk8yw@mail.gmail.com>
+ <20220326134928.ad739eeecd5d0855dbdc6257@linux-foundation.org>
+ <400edaab-7c6c-f4d1-9a94-e8d0803857fa@redhat.com>
+ <YkG7mD8kT0uAk3Iy@casper.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <YkG7mD8kT0uAk3Iy@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 27/03/22 22:03, Fabien Parent ha scritto:
-> Add basic device-tree for the MT8195 Demo board. The
-> Demo board is made by MediaTek and has a MT8195 SoC,
-> associated with the MT6359 and MT6360 PMICs, and
-> the MT7921 connectivity chip.
+On 28.03.22 15:43, Matthew Wilcox wrote:
+> On Mon, Mar 28, 2022 at 02:29:20PM +0200, David Hildenbrand wrote:
+>> I'd appreciate if we could merge most MM-related stuff through the -MM
+>> tree; it exists for a reason IMHO. Andrew, you usually have a very good
+>> feeling when something's ready to be merged upstream (sufficient review
+>> from relevant folks, sufficient exposure via -mm and -next, ...).
 > 
-> The IOs available on that board are:
-> * 1 USB Type-C connector with DP aux mode support
-> * 1 USB Type-A connector
-> * 1 full size HDMI RX and 1 full size HDMI TX connector
-> * 1 uSD slot
-> * 40 pins header
-> * SPI interface header
-> * 1 M.2 slot
-> * 1 audio jack
-> * 1 micro-USB port for serial debug
-> * 2 connectors for DSI displays
-> * 3 connectors for CSI cameras
-> * 1 connector for a eDP panel
-> * 1 MMC storage
+> The problem is that the MM tree is completely unusable when patches going
+> in through other trees need to be based on it.  The MM workflow clearly
+> works well for Andrew, but it doesn't work well for us as a community.
 > 
-> This commit adds basic support in order to be able to boot.
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> ---
-> v2:
->   * remove empty i2c nodes
->   * remove empty spi node
->   * remove unused pcie pinctrls
->   * fixup node nodes to not contains underscore
->   * rename mt6360 pmic node
->   * move mmc1 node right after mmc0 node
->   * use generic node name for gpio-keys
->   * uniformize pinctrl node names
-> 
->   arch/arm64/boot/dts/mediatek/Makefile        |   1 +
->   arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 447 +++++++++++++++++++
->   2 files changed, 448 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-> 
+> Fortunately folios is past that point now, but I fear that maple tree
+> will get to that point if it doesn't go in through Andrew's tree this
+> cycle, as it may have other users.
 
-..snip..
+Yes, there are most certainly special cases, like folios and eventually
+like the maple tree rework. But I consider these exceptions to the
+general rule. And the exceptions should follow the same ACKing/review
+process as other -MM stuff, as Linus nicely identified here.
 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-> new file mode 100644
-> index 000000000000..d94b4e01159a
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-> @@ -0,0 +1,447 @@
+-- 
+Thanks,
 
-..snip..
-
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +		input-name = "gpio-keys";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&gpio_keys_pins>;
-> +
-> +		key-0 {
-
-key-volup is more descriptive, can you please change that?
-
-> +			gpios = <&pio 106 GPIO_ACTIVE_LOW>;
-> +			label = "volume_up";
-> +			linux,code = <KEY_VOLUMEUP>;
-> +			wakeup-source;
-> +			debounce-interval = <15>;
-> +		};
-> +	};
-> +};
-> +
-
-..snip..
-
-> +
-> +&pmic {
-> +	interrupt-parent = <&pio>;
-> +	interrupts = <222 IRQ_TYPE_LEVEL_HIGH>;
-
-I would instead use interrupts-extended here:
-
-	interrupts-extended = <&pio 222 IRQ_TYPE_LEVEL_HIGH>;
-
-> +};
-> +
-> +&i2c6 {
-> +	clock-frequency = <400000>;
-> +	pinctrl-0 = <&i2c6_pins>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +
-> +	mt6360: pmic@34 {
-> +		compatible = "mediatek,mt6360";
-> +		reg = <0x34>;
-> +		interrupt-controller;
-> +		interrupt-parent = <&pio>;
-> +		interrupts = <101 IRQ_TYPE_EDGE_FALLING>;
-
-Same here
-
-> +		interrupt-names = "IRQB";
-> +
-
-...snip...
-
-> +
-> +&pio {
-> +	mmc0_default_pins: mmc0-default-pins {
-> +		pins-cmd-dat {
-> +			pinmux = <PINMUX_GPIO126__FUNC_MSDC0_DAT0>,
-> +				 <PINMUX_GPIO125__FUNC_MSDC0_DAT1>,
-> +				 <PINMUX_GPIO124__FUNC_MSDC0_DAT2>,
-> +				 <PINMUX_GPIO123__FUNC_MSDC0_DAT3>,
-> +				 <PINMUX_GPIO119__FUNC_MSDC0_DAT4>,
-> +				 <PINMUX_GPIO118__FUNC_MSDC0_DAT5>,
-> +				 <PINMUX_GPIO117__FUNC_MSDC0_DAT6>,
-> +				 <PINMUX_GPIO116__FUNC_MSDC0_DAT7>,
-> +				 <PINMUX_GPIO121__FUNC_MSDC0_CMD>;
-> +			input-enable;
-> +			drive-strength = <MTK_DRIVE_6mA>;
-> +			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
-> +		};
-> +
-> +		pin-clk {
-
-This is supposed to be "pins-clk", not "pin-clk"... same for all the other
-instances of the "pin-".
-
-Before pushing patches upstream, please run dtbs_check, as these are all
-mistakes that will be pointed out by that.
-
-Regards,
-Angelo
+David / dhildenb
 

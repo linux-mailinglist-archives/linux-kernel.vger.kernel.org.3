@@ -2,78 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6CB4EA33E
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 00:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E56784EA2FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 00:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiC1WpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 18:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
+        id S229955AbiC1WdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 18:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiC1Wox (ORCPT
+        with ESMTP id S229821AbiC1WdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 18:44:53 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C050A8EE3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 15:43:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648507391; x=1680043391;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dGBkA2wzKCxxRszSguxFPvOan/QZFJYt4C3EW6Xk4W0=;
-  b=R4ZILREbKJEX4UM+ZUZx23mAjQ7WFW5NZpeDRtDvdmGshYmeLfeXMZ62
-   fF/rgCJ71ZTjR7NM4j9U9E9QZVRojvJSYB8JLo+5HtY7jauF72KoT0p9z
-   K19aZ/HN8JKOTiU2gntStkpc7v4VLTE8BnxH1SkELlQvZxYCX1vNthZ0M
-   PnXsJxJYMttB9/32nODTRJgTYzKugsSUyMz/cqUYajv3+Rs/u1N4sGHXx
-   JmAoARI+InCDFjyXRTQKhsGJnd/DxOChnYEx5wzHLKmFEl0n39VdvrG8V
-   JthmnHvC0Gb+WJCzS+2B+NbB1jciu9IbjUI+zDz+lEtxzKb+EJaPcmHw0
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="322301424"
-X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="322301424"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 15:30:09 -0700
-X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="546137025"
-Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 15:30:09 -0700
-Date:   Mon, 28 Mar 2022 15:30:04 -0700
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Paolo Bonzini <bonzini@gnu.org>,
-        Tony Luck <tony.luck@intel.com>
-Subject: Re: [patch 0/7] x86/fpu: Cure supervisor mode (ENQCMD) fallout
-Message-ID: <YkI27CuLsDFcPWpS@otcwcpicx3.sc.intel.com>
-References: <20220324134548.432837672@linutronix.de>
+        Mon, 28 Mar 2022 18:33:03 -0400
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D8247049;
+        Mon, 28 Mar 2022 15:31:21 -0700 (PDT)
+Received: by mail-ua1-f52.google.com with SMTP id m42so6942911uae.0;
+        Mon, 28 Mar 2022 15:31:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=CmZ698zi6YOmaGXJq+4D519v38GWNIw39PDssju4nkQ=;
+        b=1roScc6jAZ+y9U38kH2Vqxgbdd6LUeSQlwalwv0l2uhDUBkTa6e4B3XtPkh2nvpCtV
+         y9wxyYeb/rUm83+00UElyerh2AMSdUy7e+9VmoqHQQYKCmm97kVXGB6v6arvXmnjdjJD
+         ecG4/eW19kJEWgbRsOt/I1zEpsJbX2XVjr/b+p/6BmyzKx/pQ+3iM3i9AW6AagggUdG/
+         mYOuBkGMtGvGS3zOIis/vfp7w67L5Y19v19MucNcoE7OoUjDNA7Wtw47kiGgHq3XXXG/
+         fUpvH9skUPVqQZqLP1Rd/Jb6Ao5wYqQmIQ1ZKssQyStAqfjFAG7tQhPdBNqaMFDDPxbr
+         1Taw==
+X-Gm-Message-State: AOAM532wPPiRTEu+ON6lbZR5Hrg4QZWqLnKV+x2V+YnbQnsASQ/PwnJO
+        kAD6Na4WsO+hXL01r+y/SpoinMgbhWyOMg==
+X-Google-Smtp-Source: ABdhPJzWE5xRPjrLSBB9GUTXgKNAIRwOyZjbdunHFJRs04gSwP/p9orLNULbwcDVvPX7z49qml2/Lg==
+X-Received: by 2002:ab0:7411:0:b0:359:6321:5805 with SMTP id r17-20020ab07411000000b0035963215805mr14124678uap.6.1648506680691;
+        Mon, 28 Mar 2022 15:31:20 -0700 (PDT)
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com. [209.85.221.180])
+        by smtp.gmail.com with ESMTPSA id s68-20020a1fdb47000000b0033f4b515116sm1766124vkg.55.2022.03.28.15.31.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 15:31:20 -0700 (PDT)
+Received: by mail-vk1-f180.google.com with SMTP id w189so8804597vke.10;
+        Mon, 28 Mar 2022 15:31:20 -0700 (PDT)
+X-Received: by 2002:a05:6122:1310:b0:343:2ca9:2e11 with SMTP id
+ e16-20020a056122131000b003432ca92e11mr6469975vkp.5.1648506679815; Mon, 28 Mar
+ 2022 15:31:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324134548.432837672@linutronix.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220326102229.421718-1-tanure@linux.com> <7hee2lu82n.fsf@baylibre.com>
+In-Reply-To: <7hee2lu82n.fsf@baylibre.com>
+Reply-To: tanure@linux.com
+From:   Lucas Tanure <tanure@linux.com>
+Date:   Mon, 28 Mar 2022 18:31:24 -0400
+X-Gmail-Original-Message-ID: <CAJX_Q+1tz7BYL+CvXnc=zAamPiZDEFAASv9a7YoWGmzqYL+cUg@mail.gmail.com>
+Message-ID: <CAJX_Q+1tz7BYL+CvXnc=zAamPiZDEFAASv9a7YoWGmzqYL+cUg@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Ensure Low period of SCL is correct
+To:     Kevin Hilman <khilman@baylibre.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thomas,
+On Mon, 28 Mar 2022, 21:37 Kevin Hilman, <khilman@baylibre.com> wrote:
+>
+> Hi Lucas,
+>
+> Lucas Tanure <tanure@linux.com> writes:
+>
+> > The default duty cycle of 33% is less than the required
+> > by the I2C specs for the LOW period of the SCL clock.
+> >
+> > So, for 100Khz or less, use 50%H/50%L duty cycle, and
+> > for the clock above 100Khz, use 40%H/60%L duty cycle.
+> > That ensures the low period of SCL is always more than
+> > the minimum required by the specs at any given frequency.
+>
+> Thanks for the fixes!
+>
+> This is going to affect all SoCs, so ould you please summarize how your
+> changes were tested, and on which SoCs & boards?
+>
+> Thanks,
+>
+> Kevin
 
-On Thu, Mar 24, 2022 at 02:47:07PM +0100, Thomas Gleixner wrote:
-> It builds, boots on host and guest, but is not yet extensively tested.
-> Testing with a AMX + PASID enabled machine has not been done at all as I
-> don't have easy access to such a beast.
+Hi,
 
-I run many copies of dsa_test [1] (i.e. multi-threading and multi-tasking)
-to stressfully exercise FPU PASID state context switch on native.
-No issue is found so far.
+I only tested against the vim3 board, measured the bus with a Saleae
+logic pro 16.
+The measurements were with 100k, 400k, and a few in-between frequencies.
 
-1. https://github.com/intel/idxd-config
+Is that enough?
 
-Thanks.
-
--Fenghua
+Thanks
+Lucas

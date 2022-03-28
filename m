@@ -2,99 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E7E4E9579
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 13:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6454E9584
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 13:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243078AbiC1LoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 07:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
+        id S243141AbiC1Loa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 07:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241889AbiC1Ldz (ORCPT
+        with ESMTP id S241877AbiC1Ldz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 28 Mar 2022 07:33:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8AC5938E;
-        Mon, 28 Mar 2022 04:24:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06E6CB81058;
-        Mon, 28 Mar 2022 11:24:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AFA5C340EC;
-        Mon, 28 Mar 2022 11:24:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648466695;
-        bh=87Dy8mAAeekj4Khq5ieyQ/YtECtV+i9VCgc9SA9o5EY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tWdhy8R3CoQRLuwo0qM4npUxSGczoEnNHQYf+t2Qa0rctdDhIo5oD/NAcM6uiVG0G
-         geAPdutdYyC7VoLq2yy/cAIGvBkZUiMv9jl6zmPX7I3twE7Z4GcegwuZ0MQhil6drp
-         q1SsboJAKLUaPJkTWbqeE3CnK1vcMAI6a5geY/DLljtX4CnWmbalLaqvavq0sMkBO1
-         0T0x0BKKvXmlRUTTLvxm3oU3SQa88rt4Rh1hpx6aaKvzSTnhplULbg2diIMtI6uUjf
-         VMHLgpAHd7lrs1qyEyhCGL1bv3GbtmDJkROqOIc8g5wNRg+XyA4aSB1EGmiYDgu8GW
-         k0RfbVaLSyG4g==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, ldewangan@nvidia.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 8/8] spi: tegra20: Use of_device_get_match_data()
-Date:   Mon, 28 Mar 2022 07:24:39 -0400
-Message-Id: <20220328112440.1557113-8-sashal@kernel.org>
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8927158E74
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 04:24:57 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id j15so27915242eje.9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 04:24:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LSGVVstA8xSFKqm3J0T/OWA7Sm6ZWqDMvi1oUYKoUQg=;
+        b=DPV4As0LqO6PxUoMkKt+gD4Sp4g81m4Uyo0RMYEz2E3P7pfyvtdXjGrBNZDHBP/UB1
+         gCFttcV0hthj4q1bL5TNl0zgC1lGn7IRag4nBKsJ8EP2YePrQZ13CN6W5Sfvfp8QF2Sp
+         wELX/+cizZqQx47zB7fGuZ9lFxr9AwmUsxdmwe8MW4eic5SAUeR1O8wHo+TyZ21CIyay
+         q7N3FAUsLSw2T7TAwO/n3REWByJ0KsJHuB6v+wB5DLXByNeI7ARpMC1EcyMes+d0d++3
+         Az1f4uQBXYfarp3CB4XKNCRn8iHQgyIum6DxyH2giFC9U76PXYn+pGn9yYRL50TSN3s1
+         2OrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LSGVVstA8xSFKqm3J0T/OWA7Sm6ZWqDMvi1oUYKoUQg=;
+        b=SHp2GaygXk4bIUpB48g+Yk5GxOSKMtTKNsM3WlY7GszUT7QvnhvrzXwQtR/GGjzYqj
+         T1dN19Oov0og+ZPXVlEqUN49l45+zLR6BmuC5LdEyoniSMvVihf4D6QePjA5wJ6n9Chh
+         FTs4lArh+ZcQteZY660O9KfEmIvQ9eyNN+UOZF8UHYV2c0emyWhzWgGbV5cMN5UBD9sw
+         Wn1lBSC6V10nY0bovRXS46DmMkJTZuEdk8XZGSAcPemRiDA1ncI4lOcbsbLQq3FiC8xT
+         9XsibvH1mcZc0oL8ZTfwARvJxnOzvIp8JbX7nwkgzbb4czK8jNqGopACaXv5AMiTSTko
+         uhig==
+X-Gm-Message-State: AOAM532y33XvMlD7ClJ4GQdiEfjW5hxXz2my9jcuf+OjWF4gxuJHuWqH
+        FhXGKfkCqmebIwHS6JuqEwg=
+X-Google-Smtp-Source: ABdhPJxl6boSwWBk+hJgPWLFTN1iKFHKVHLRcqYs36e+eXokFUamDhBLmr6Eju0TLSaJYffp3TOQTA==
+X-Received: by 2002:a17:907:1623:b0:6df:c9da:a6a8 with SMTP id hb35-20020a170907162300b006dfc9daa6a8mr26762275ejc.303.1648466693755;
+        Mon, 28 Mar 2022 04:24:53 -0700 (PDT)
+Received: from localhost.localdomain (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
+        by smtp.gmail.com with ESMTPSA id u10-20020a170906b10a00b006e1004406easm1839730ejy.93.2022.03.28.04.24.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 04:24:52 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benjamin Philip <benjamin.philip495@gmail.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Charlie Sands <sandsch@northvilleschools.net>,
+        Mitali Borkar <mitaliborkar810@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        ira.weiny@intel.com
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH] staging: rts5208: Convert kmap() to kmap_local_page()
+Date:   Mon, 28 Mar 2022 13:24:40 +0200
+Message-Id: <20220328112440.17756-1-fmdefrancesco@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220328112440.1557113-1-sashal@kernel.org>
-References: <20220328112440.1557113-1-sashal@kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+The use of kmap() is being deprecated and kmap_local_page() is faster.
+Use kmap_local_page() in place of kmap().
 
-[ Upstream commit c9839acfcbe20ce43d363c2a9d0772472d9921c0 ]
-
-Use of_device_get_match_data() to simplify the code.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Link: https://lore.kernel.org/r/20220315023138.2118293-1-chi.minghao@zte.com.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 ---
- drivers/spi/spi-tegra20-slink.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/staging/rts5208/rtsx_transport.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
-index 1548f7b738c1..b520525df246 100644
---- a/drivers/spi/spi-tegra20-slink.c
-+++ b/drivers/spi/spi-tegra20-slink.c
-@@ -1016,14 +1016,8 @@ static int tegra_slink_probe(struct platform_device *pdev)
- 	struct resource		*r;
- 	int ret, spi_irq;
- 	const struct tegra_slink_chip_data *cdata = NULL;
--	const struct of_device_id *match;
+diff --git a/drivers/staging/rts5208/rtsx_transport.c b/drivers/staging/rts5208/rtsx_transport.c
+index 805dc18fac0a..de690d7ee5e3 100644
+--- a/drivers/staging/rts5208/rtsx_transport.c
++++ b/drivers/staging/rts5208/rtsx_transport.c
+@@ -92,13 +92,13 @@ unsigned int rtsx_stor_access_xfer_buf(unsigned char *buffer,
+ 			while (sglen > 0) {
+ 				unsigned int plen = min(sglen, (unsigned int)
+ 						PAGE_SIZE - poff);
+-				unsigned char *ptr = kmap(page);
++				unsigned char *ptr = kmap_local_page(page);
  
--	match = of_match_device(tegra_slink_of_match, &pdev->dev);
--	if (!match) {
--		dev_err(&pdev->dev, "Error: No device match found\n");
--		return -ENODEV;
--	}
--	cdata = match->data;
-+	cdata = of_device_get_match_data(&pdev->dev);
+ 				if (dir == TO_XFER_BUF)
+ 					memcpy(ptr + poff, buffer + cnt, plen);
+ 				else
+ 					memcpy(buffer + cnt, ptr + poff, plen);
+-				kunmap(page);
++				kunmap_local(ptr);
  
- 	master = spi_alloc_master(&pdev->dev, sizeof(*tspi));
- 	if (!master) {
+ 				/* Start at the beginning of the next page */
+ 				poff = 0;
 -- 
 2.34.1
 

@@ -2,127 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B734E8C84
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 05:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 132574E8C90
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 05:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237781AbiC1DTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 23:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
+        id S237795AbiC1DYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 23:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbiC1DTW (ORCPT
+        with ESMTP id S237784AbiC1DYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 23:19:22 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92352CCAE
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 20:17:42 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id s72so11198852pgc.5
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 20:17:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=iRywC2fXGTLu3XcU+kOv95CJI0/k5YKaCHVvR7OvlV0=;
-        b=Nfd9upElHAEIafOt6kM6Nan2028B+2XJaXGyzMy2vndOjHxTyrwfDWAzbrS2gqhlfC
-         5FdbSHzvm62LfGlh6yNDR1CAHwZRuTeHqoKsr/3vY2jQctjGySYCpv4NaGmIPuAJ6iHl
-         X1ZXEhwIOP73ziWzVm3aZhZiFYAhNKz4Du/yyP8333MOVQraMF+m9JPzhG+8n26SvzNT
-         SeQJJowvS7p8zgy0UprHttmaQg9nB+vMvJyrRtxJIgIYUeDyFku8iDgsO6ucq+cKkkwi
-         7qmYpCvhL2BiCF4uerLvA3b4SnF/bhFnCIX5dvb5eXElUc59kC3LXCbt9Y8PTj+iMlVT
-         5bnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=iRywC2fXGTLu3XcU+kOv95CJI0/k5YKaCHVvR7OvlV0=;
-        b=keGlrf6QogpbA9rHTpwc+t6TKLGZVCKzJ4cCfM6YUaL+H42zvuwWDlAS3T0DQHUF0o
-         xZb8r/+z6F+EmRwbHD1vXaSLesMn4Ewq1PaTjaLIUt0VlHRjuPyqSvAM5wXtIFO0eRAB
-         OICiV1YtEBswG++C9O4diDcWtEXOxjNb+z8fAuATrwUsJSF2G2qjGnoAwQVKDrv7Q8fW
-         /6W2pzbtvaNb59NrpwVGLs9abkykp3qoEv542YoDgb/veGWeso5c5+fBzP0oVdVHSWbJ
-         QcMvwGz7RfhpK7kS3xKyguFaCyIWkoM7yEwkd+LgSEMr27FnmoyrOi7SgjuT0/CSbKe4
-         /tBg==
-X-Gm-Message-State: AOAM530GlnsdXDyZeTHqRSYM9RM+fnx0MwBIz3nGVk+bu9ApZ5eIt8z4
-        Q/bYppd+igwV56fptYAsD2riVQ==
-X-Google-Smtp-Source: ABdhPJwNlEup1sWc1qRG3ghM8ZUBSwqj/5AovEGBEAHE4mZq8u1uojTon7EChtSm992YTThF/H9YqQ==
-X-Received: by 2002:a63:1620:0:b0:375:948e:65bf with SMTP id w32-20020a631620000000b00375948e65bfmr8880013pgl.49.1648437462221;
-        Sun, 27 Mar 2022 20:17:42 -0700 (PDT)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id h12-20020a056a00230c00b004faf2563bcasm12787512pfh.114.2022.03.27.20.17.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Mar 2022 20:17:41 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 08:47:39 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        rafael.j.wysocki@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] opp: fix a missing check on list iterator
-Message-ID: <20220328031739.72togwws2u2rlluo@vireshk-i7>
-References: <20220327053943.3071-1-xiam0nd.tong@gmail.com>
+        Sun, 27 Mar 2022 23:24:07 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08A349F8C
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Mar 2022 20:22:16 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KRdKc2dtWz4xNm;
+        Mon, 28 Mar 2022 14:22:12 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1648437735;
+        bh=IrJfbdSVDOXMHIujPJfxgUdZ7dHjOjq/qnrc+iRN4/Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BX+jjNrhYT7Z9e7SEGqyOvP8Dtt30pxebj5K6KV60R+9U64x/9nUDne/H8LmX5ggT
+         coyfUTFgP1hGO4xI74xgZtKVU1p5MqP8xWO34ynMmjKB2womXFp3bBjvPxkLpBtrQ3
+         +gTQIq4i3zneOY/8fdfwauV1DI3d5CzzqWfNbzvuHUL9CCmaJfA2wEC8acylKuSwt0
+         A7x37nwbkXShqrt2AiZAe8uVFQWRH409+dXUWdEFIqNzunSuX9agc35a8IXr5j3l7I
+         wRTcHd2D2dvm5fPgmoeKRezxy3FR8Zd3q9Dgo6gV6+hV64yt777OTEjcbN22jni/Yu
+         gekoO3NSO0PFA==
+Date:   Mon, 28 Mar 2022 14:22:11 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Alexey Klimov <aklimov@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Laight <David.Laight@aculab.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org
+Subject: Re: Pull request for bitmap branch
+Message-ID: <20220328142152.6df1b0c9@elm.ozlabs.ibm.com>
+In-Reply-To: <YkEhQiJkFmCLeYy6@yury-laptop>
+References: <YkEK37hEhUcl5NUU@yury-laptop>
+        <20220328131756.5aa6b7aa@canb.auug.org.au>
+        <YkEhQiJkFmCLeYy6@yury-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220327053943.3071-1-xiam0nd.tong@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/61Hjm_LScE7t9JHzI7oPi8R";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27-03-22, 13:39, Xiaomeng Tong wrote:
-> The bug is here:
->     dev = new_dev->dev;
-> 
-> The list iterator 'new_dev' will point to a bogus position containing
-> HEAD if the list is empty or no element is found. This case must
-> be checked before any use of the iterator, otherwise it will lead
-> to a invalid memory access.
-> 
-> To fix this bug, add an check. Use a new variable 'iter' as the
-> list iterator, while use the old variable 'new_dev' as a dedicated
-> pointer to point to the found element.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: deaa51465105a ("PM / OPP: Add debugfs support")
-> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-> ---
->  drivers/opp/debugfs.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-> index 596c185b5dda..a4476985e4ce 100644
-> --- a/drivers/opp/debugfs.c
-> +++ b/drivers/opp/debugfs.c
-> @@ -187,14 +187,19 @@ void opp_debug_register(struct opp_device *opp_dev, struct opp_table *opp_table)
->  static void opp_migrate_dentry(struct opp_device *opp_dev,
->  			       struct opp_table *opp_table)
->  {
-> -	struct opp_device *new_dev;
-> +	struct opp_device *new_dev = NULL, *iter;
->  	const struct device *dev;
->  	struct dentry *dentry;
->  
->  	/* Look for next opp-dev */
-> -	list_for_each_entry(new_dev, &opp_table->dev_list, node)
-> -		if (new_dev != opp_dev)
-> +	list_for_each_entry(iter, &opp_table->dev_list, node)
-> +		if (iter != opp_dev) {
-> +			new_dev = iter;
->  			break;
-> +		}
-> +
-> +	if (!new_dev)
-> +		return;
+--Sig_/61Hjm_LScE7t9JHzI7oPi8R
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I think you missed this check in the parent function ?
+Hi Yury,
 
-		if (!list_is_singular(&opp_table->dev_list)) {
+On Sun, 27 Mar 2022 19:45:22 -0700 Yury Norov <yury.norov@gmail.com> wrote:
+>
+> On Mon, Mar 28, 2022 at 01:17:56PM +1100, Stephen Rothwell wrote:
+> > Hi Yury,
+> >=20
+> > On Sun, 27 Mar 2022 18:09:51 -0700 Yury Norov <yury.norov@gmail.com> wr=
+ote: =20
+> > >
+> > > Can you please pull this branch for linux-next?
+> > > https://github.com/norov/linux/tree/bitmap =20
+> >=20
+> > Normally, I don't add new branches to linux-next during the merge
+> > window.  An exception is for branches that only contain changes meant
+> > to be merged by Linus during the current merge window.  Even then, this
+> > is very late to the table :-( =20
+>=20
+> OK. I'll send a reminder when the window will be closed.
 
+Thanks, that would be good.
 
-i.e. this bug can never happen.
+> Rebasing this series from 5.17 to origin/master causes a couple merge
+> conflicts, so I decided to simplify your work.
+>=20
+> Are you OK if I rebase it on 5.18-rc1 when it will be created and send
+> new request?
 
--- 
-viresh
+Sure, but please redo your testing after rebasing.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/61Hjm_LScE7t9JHzI7oPi8R
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJBKeMACgkQAVBC80lX
+0GzZSwf/USYjYGv1XY1urEgfolIvpfrYEVvqGaIVp8AvL9YvppigqZrDGyiNt6p3
+bmOJsk2JHYMCtQEU1kVvm8R6Ko6FxU0WFBj12ET7TeiWCaalJm4HUgYvLDRD+10r
+iWQc/1Yvp6HcM+4MS/8dd6A4NMt4t8NSMVFgT8MsqtE9LnqexCThF8GDZvN02UEl
+qzghWF2RtNnkjW3XjCiP5kGqjVec2LsWU/4cP3ulB7h/GCIc46GwRYBAcs27gXuf
+1Kg9PpasNinjaToO0xnOn4cb0L0OiDGU/1XJwfPtiKFzjLN+Lt79O4rB3O/9sYr+
+7TvB6y9omR9K+crDLKs/Dg9P++xZLQ==
+=ph5e
+-----END PGP SIGNATURE-----
+
+--Sig_/61Hjm_LScE7t9JHzI7oPi8R--

@@ -2,159 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556E44E9D8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 378534E9D8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 19:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244589AbiC1Rae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 13:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
+        id S244511AbiC1Rbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 13:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244470AbiC1Rab (ORCPT
+        with ESMTP id S232336AbiC1Rbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 13:30:31 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2063.outbound.protection.outlook.com [40.107.102.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3C022B15;
-        Mon, 28 Mar 2022 10:28:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bu+VMvWUpGBPkkteruSikd8bizGxzvDeXGlkRfUx0kBCVIALAvstTmOb4H5tP7ynIdIDTq74NWVO7VlURLS5+t2DjxKEcvgY5vIsJ8kEFys5dmsg39XP3byuSVGXvtjpjGdEQu6/23KOY1FPnQ+d+wvNHpcfXP+5lGyzezkJueKujGSpL56Hhm271/tNHMvJMLRJutqsg3/WDUT5bUyzurxD+YC6+W4K1uwzvxjPTM2huJ9H//wOA7jYa7lNwnMF+NT1PF1l5HKkjOoeIQewN9loYyHCLzdeLY2HQoD8l1RyIIgFdKF2tnat8IAcoVTxr17pP+2OPPhUp+h0xiwB7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OD6dFuRviy6j/GEsp0EBlmm/FpNfFwy25uFYexSkFKw=;
- b=Kwqh1BRYkb0hQjfekQ4Cv1E/wVh0zd406RWWkcLdoqN2kYmOLpASLwkywHQ0beTnd5tzWtapCnPcXUi7wnvp2EYCHN5KK3lQpw3/7aqZCY18wkHH1uRXIopCLEkgr2sU9uzs5e3OcZ2ytUXw06EHGCyH29ZSRiLyxxZo6q8WDFJAXVJf3q3EDIyRZgSf+mteStt3dISx1uCPlNjzIl0mP+mSTIuJkMynUmnmkyQx5JG4723P8MoP4niEI1rIjUuOalwfvuiTKLS6tVav8WRMwgPL1whMF/Cri9VosOkmh4lES7GYEJ+lmnaijQLQgbtxsgieHBdc+Kdr8i1i/dfXBw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OD6dFuRviy6j/GEsp0EBlmm/FpNfFwy25uFYexSkFKw=;
- b=ukWbaQwXuGrUVM3wBbzyl83JG2H1foxvH/zNAJZxeLXBl6vu/mkC2GkVV0OZQmjC9Iy/yeIMXgdjvEaE98aJSgaUMjEIWpYFWGmDzNBnJLoQBszaoMZEF0e8qTT4jTfaZVVAtxh4JIzb1uV3cyDHBuu8SySznpgiH37w71viUjA=
-Received: from BN9P221CA0028.NAMP221.PROD.OUTLOOK.COM (2603:10b6:408:10a::10)
- by DM5PR12MB1884.namprd12.prod.outlook.com (2603:10b6:3:10d::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.19; Mon, 28 Mar
- 2022 17:28:48 +0000
-Received: from BN8NAM11FT037.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10a:cafe::10) by BN9P221CA0028.outlook.office365.com
- (2603:10b6:408:10a::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.18 via Frontend
- Transport; Mon, 28 Mar 2022 17:28:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT037.mail.protection.outlook.com (10.13.177.182) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5102.17 via Frontend Transport; Mon, 28 Mar 2022 17:28:47 +0000
-Received: from tr4.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 28 Mar
- 2022 12:28:46 -0500
-From:   Alex Deucher <alexander.deucher@amd.com>
-To:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <corbet@lwn.net>, <hpa@zytor.com>, <x86@kernel.org>,
-        <dave.hansen@linux.intel.com>, <bp@alien8.de>, <mingo@redhat.com>,
-        <tglx@linutronix.de>, <joro@8bytes.org>,
-        <suravee.suthikulpanit@amd.com>, <will@kernel.org>,
-        <iommu@lists.linux-foundation.org>, <robin.murphy@arm.com>,
-        <vasant.hegde@amd.com>
-CC:     Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH V3 2/2] Documentation: x86: Clarify Intel IOMMU documentation
-Date:   Mon, 28 Mar 2022 13:28:29 -0400
-Message-ID: <20220328172829.718235-3-alexander.deucher@amd.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220328172829.718235-1-alexander.deucher@amd.com>
-References: <20220328172829.718235-1-alexander.deucher@amd.com>
+        Mon, 28 Mar 2022 13:31:46 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676B8633A2
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:30:05 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id mp11-20020a17090b190b00b001c79aa8fac4so264765pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 10:30:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2rbg0zjEEZcrrrki0TLW7AmDf91MrcPr+Sit2fUDac0=;
+        b=T50k+e8A1/6vv1rfaDGOCv8B5qU1VUl408G2Ln8z6Jp25Qjr8AdOCZrDGIrNWXxnGm
+         c4NJx+VC/TJj02rrHHOIJdBBhvpand0nvwJrHjfwKAcIyWJmWDDZxuk10DEJXrJd7JOM
+         eo38/C9E92JT2x3fyk0853ktk/jORrKo2Rh6U7FHXT/LXAd2bOAqXQ6bmgOowANp3cOC
+         nGbuBfY2YGJrn4c0ZEXM7UCHbeNgF9faf5TscSYF2y7v/0E1nX2chDkmXCCJE6CWTF5T
+         K6PIArSmkRwohFu4bcuSmwg0XSm7Hsz5z7jE7GKebgV7Cv+37AZXC3YqvCmXZADTbm3n
+         REWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=2rbg0zjEEZcrrrki0TLW7AmDf91MrcPr+Sit2fUDac0=;
+        b=x06alG4o1ZjSjz5KQQrOSbS+5w9yLaipBeUMTH6jCj6t+7yIMuy03Isaic4S0k1iAy
+         9hp1DJXCdrCV2xPt2IyEj8G+5iMy4VEVxKeSQt3JjLbr/QHdKbm8uUIKWO+v288nmmu2
+         Vwq10a8oNEQ8QptPvxtxon9b0vJ7ORZhq9+7VZXemYwGB8QID0KARg+I6Y+NTTfbtLc7
+         0FPrthnUKH/FxwD0FnWN9HBqnpepVgra9olsmDAhRolGAA6/vJAoAXoF2M996f8zuU+8
+         dfR9qkpQK2xjy9KurDziTyhO7TjedTyoTvSm19pzGiux5eCx0KRPr4Eq59wUlr3cqQTO
+         yMFw==
+X-Gm-Message-State: AOAM530Aa+NuZ4jVaqWqhAE1POeXBdneSE/2fjGh5Sjx/Qx9I+pDzwnu
+        uYDCosJQ7GTM//WNm82jCW0=
+X-Google-Smtp-Source: ABdhPJx4XIuVX7JbWq9Yd7WuK4wvV525Y3fxmMqq9rs5w970A+gth+x7NsJzcOwJ6+d3mdDOY8VPQQ==
+X-Received: by 2002:a17:90a:c28c:b0:1c9:9eef:6e2b with SMTP id f12-20020a17090ac28c00b001c99eef6e2bmr232555pjt.188.1648488604648;
+        Mon, 28 Mar 2022 10:30:04 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:3b11])
+        by smtp.gmail.com with ESMTPSA id nn7-20020a17090b38c700b001c9ba103530sm100826pjb.48.2022.03.28.10.30.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 10:30:03 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 28 Mar 2022 07:30:02 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH v7 7/8] kernfs: Replace per-fs rwsem with hashed
+ rwsems.
+Message-ID: <YkHwmhOaSHuXPemP@slm.duckdns.org>
+References: <20220317072612.163143-1-imran.f.khan@oracle.com>
+ <20220317072612.163143-8-imran.f.khan@oracle.com>
+ <YjPNOQJf/Wxa4YeV@zeniv-ca.linux.org.uk>
+ <536f2392-45d2-2f43-5e9d-01ef50e33126@oracle.com>
+ <YjgpaeFfFandY999@zeniv-ca.linux.org.uk>
+ <Yjir/d5S3J1PTiux@slm.duckdns.org>
+ <Yji8KT2K7ZKOQ+6S@zeniv-ca.linux.org.uk>
+ <YjjP5ldCCGYqD+UV@slm.duckdns.org>
+ <Yjk3Nqft/U6vDvd1@zeniv-ca.linux.org.uk>
+ <a692a5af-158e-ad0c-63a1-6525ee6d3898@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d8f3e3d0-47c8-44d0-39fd-08da10e06afe
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1884:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB18846AE2C5550E6D789E3EA9F71D9@DM5PR12MB1884.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JPN9ZD83f3wW33/3GLaCRDE7qmuAowo9SXKt59YdJCYlDAkhBsLSXcqCs5I+ocq8XVtcBneE/sdnIqvptzmyLmCIQdMXycsx4hl+NHt5VZU23zE2Yt7Jode1Bnl0TzauZlKwp4BsJzrpEFZ/DIvVye/qgJkLRXsBbv0dhB2FwYQ/B2bI5+smi3icqOtDt2cUdwft44e70UsXMeruwNilwIA7RINRnkbFejs0ylud3N+k/mo5DzNtdGZ4u7+OyMZhjTwv3LrbCrbvL+Jvs49Wdx5/E3KCravDBclA2MZjFfdtvSmNQSneMhE3pJH17euQPOsBObe+NOu9+LBqd738Nf51H3+bZpaiHWddIQx6Rih/qdlKPUyfhfQd7ljetncXn1s2TG5EowyKxCi9H5hsIJKAdlzPzgml/I2sHan6qnsbtT/5mXAdztn2/fNupcfv3E9GB1VBXvaVq8O5kmlDavdqMmHjFpnonhcbbpWu13E8eS5YfILkXTSkpBlW2/24lRQFAp+6b492cJtl7qGV/kKq4Z5Bf3/jMY9D+iIxLfht2BgJccIkk1XDuoiTrA1IQz8T3FsbS5jB0hbjtvY/cFANcBTziTdrC9ujDrNgrXgEpzCR4nbB5NallokmGcxlNKJON3l/58nbRbtHttXFf5UnGQWUgtadvbd/f9KbFFMqfd6ui601ISEjcN059SMK/r8OCmbp91mwmYPMzmnWMdEH2UTR0Y3/UosgxkGrCmk=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(8936002)(47076005)(356005)(921005)(86362001)(70206006)(70586007)(4326008)(2906002)(7696005)(36860700001)(81166007)(36756003)(2616005)(8676002)(83380400001)(16526019)(1076003)(6666004)(5660300002)(316002)(40460700003)(82310400004)(186003)(26005)(508600001)(6636002)(426003)(7416002)(336012)(110136005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2022 17:28:47.9173
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d8f3e3d0-47c8-44d0-39fd-08da10e06afe
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT037.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1884
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a692a5af-158e-ad0c-63a1-6525ee6d3898@oracle.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Based on feedback from Robin on the initial AMD IOMMU
-documentation, fix up the Intel documentation to
-clarify IOMMU vs device and modern DMA API.
+On Mon, Mar 28, 2022 at 11:15:30AM +1100, Imran Khan wrote:
+> Hello Al,
+> 
+> On 22/3/22 1:40 pm, Al Viro wrote:
+> [...]
+> > 
+> > Sorry, misread that thing - the reason it copies the damn thing at all is
+> > the use of strsep().  Yecch...  Rule of the thumb regarding strsep() use,
+> > be it in kernel or in the userland: don't.  It's almost never the right
+> > primitive to use.
+> > 
+> > Lookups should use qstr; it has both the length and place for hash.
+> > Switch kernfs_find_ns() to that (and lift the calculation of length
+> > into the callers that do not have it - note that kernfs_iop_lookup()
+> > does) and you don't need the strsep() shite (or copying) anymore.
+> > 
+> 
+> Regarding using qstr in kernfs_find_ns, do you mean that I should remove
+> ->name and ->hash with a ->qstr in kernfs_node and further modify
+> kernfs_name_compare to make use of qstr.name and qstr.hash.
+> 
+> Also the suggestion about removing buffer copying from kernfs_walk_ns is
+> not clear to me because kernfs_walk_ns invokes kernfs_find_ns with
+> individual path components so we need some mechanism to separate path
+> components.
+> 
+> Sorry if I have missed or misunderstood something in your suggestion.
 
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
----
+qstr encodes the lenght of the string and doesn't need the terminating '\0',
+so we can just walk qstr over the passed in path instead of copying and
+overwriting '\0'. This is rather separate and we can revisit this later tho.
 
-V2: Fix spelling error in commit message
-    Rework ACPI section as suggested by Dave Hansen
+Thanks.
 
- Documentation/x86/intel-iommu.rst | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/x86/intel-iommu.rst b/Documentation/x86/intel-iommu.rst
-index 4d3391c7bd3f..17d8497e506b 100644
---- a/Documentation/x86/intel-iommu.rst
-+++ b/Documentation/x86/intel-iommu.rst
-@@ -19,9 +19,8 @@ Some Keywords
- Basic stuff
- -----------
- 
--ACPI enumerates and lists the different DMA engines in the platform, and
--device scope relationships between PCI devices and which DMA engine  controls
--them.
-+ACPI enumerates both the IOMMUs in the platform and which IOMMU
-+controls a specific PCI device.
- 
- What is RMRR?
- -------------
-@@ -36,9 +35,9 @@ unity mappings for these regions for these devices to access these regions.
- How is IOVA generated?
- ----------------------
- 
--Well behaved drivers call pci_map_*() calls before sending command to device
-+Well behaved drivers call dma_map_*() calls before sending command to device
- that needs to perform DMA. Once DMA is completed and mapping is no longer
--required, device performs a pci_unmap_*() calls to unmap the region.
-+required, device performs a dma_unmap_*() calls to unmap the region.
- 
- The Intel IOMMU driver allocates a virtual address per domain. Each PCIE
- device has its own domain (hence protection). Devices under p2p bridges
-@@ -68,7 +67,7 @@ address from PCI MMIO ranges so they are not allocated for IOVA addresses.
- 
- Fault reporting
- ---------------
--When errors are reported, the DMA engine signals via an interrupt. The fault
-+When errors are reported, the IOMMU signals via an interrupt. The fault
- reason and device that caused it with fault reason is printed on console.
- 
- See below for sample.
 -- 
-2.35.1
-
+tejun

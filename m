@@ -2,76 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450534EA1F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0284EA1E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345678AbiC1Urq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 16:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
+        id S1346374AbiC1Usf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 16:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346366AbiC1Uov (ORCPT
+        with ESMTP id S1346495AbiC1UpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 16:44:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5746F32EF8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 13:43:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648500187;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PJEPbSEt0O6lWWC+/4/A5CGukD+9ye2bG6M4HjxFpHI=;
-        b=VokgyMEoNeXACqeY7cBSnVAuQEbnXhkyfjX85Hykn8cb+g4KzL3K+A+4Gc1msISb8RHk6A
-        cD/xnmgquUZl317dSEfL5RVfFhFyPDzSu89eGzozPeA+BAkBk4D16ZJFc8bQpxJWuAxql1
-        fUGLGkzKkeut3ztZBisdFUbrDOc0mRU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-515-M3iupVMDMGSjIcyAi0lF1A-1; Mon, 28 Mar 2022 16:43:05 -0400
-X-MC-Unique: M3iupVMDMGSjIcyAi0lF1A-1
-Received: by mail-wm1-f71.google.com with SMTP id n19-20020a7bcbd3000000b0038c94b86258so211691wmi.2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 13:43:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PJEPbSEt0O6lWWC+/4/A5CGukD+9ye2bG6M4HjxFpHI=;
-        b=fJ6Wv5o4lUWypINWVMmc4nR5giUgwrzK5XmwKslPcvL9thyVDqvRKmgsf9fCkLLgJh
-         LTeYg+Afwqaalm0+P2uL0m8QyX8/1WkOEaKjt6Tr4LIOEh1hI1i889rViNkkAJLPYBse
-         4gphMDTRArXKi51vPr1cqAKlBC7btnXYcRfuVN3B0Y7bRYPRCdgfGxvCMwpkYhoBV7cG
-         +OEBkpN1V4ldcUlB3opuE2fn2KWxatkLxYDb0o2osl7azauQFSBVz/5y833ey3SOLqoC
-         Xg71fN7dCYAah/zqYaZlLFwtWb0G+pjgw6xel3o1+UBpv7Hi82g32o3Y/7uEgisN+Kw1
-         N7Ug==
-X-Gm-Message-State: AOAM530noa53Y9alhHwoJN9HwIwUWQciEWhWRYLIkOnTvGTFSlhCIAXt
-        N/Grp+2WJnFDirLHMZgeCwR4FXKXZycY0ovA40iz0Zuoj2JA5gFv3gdwIPs1KpnXCzmayf4GRmn
-        rcYlzyhRD5epoYbUUoweybi82
-X-Received: by 2002:a7b:c341:0:b0:37b:ed90:7dad with SMTP id l1-20020a7bc341000000b0037bed907dadmr1467638wmj.138.1648500184579;
-        Mon, 28 Mar 2022 13:43:04 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwqJ51NlOZBInKiTlBe3giVlBSqn5C3pjZeP3UUXO1W7rcm9wq0r9ipgX192N0DSiX3l8eE+Q==
-X-Received: by 2002:a7b:c341:0:b0:37b:ed90:7dad with SMTP id l1-20020a7bc341000000b0037bed907dadmr1467606wmj.138.1648500184334;
-        Mon, 28 Mar 2022 13:43:04 -0700 (PDT)
-Received: from redhat.com ([2.52.9.207])
-        by smtp.gmail.com with ESMTPSA id l20-20020a05600c1d1400b0038cba2f88c0sm616358wms.26.2022.03.28.13.43.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 13:43:03 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 16:42:59 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Minghao Xue <quic_mingxue@quicinc.com>
-Cc:     jasowang@redhat.com, robh+dt@kernel.org, jean-philippe@linaro.org,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_ztu@quicinc.com
-Subject: Re: [PATCH v2 1/2] dt-bindings: virtio: mmio: add optional
- wakeup-source property
-Message-ID: <20220328164228-mutt-send-email-mst@kernel.org>
-References: <20220325015945.GA17578@mingxue-gv.qualcomm.com>
+        Mon, 28 Mar 2022 16:45:16 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A5EA18F;
+        Mon, 28 Mar 2022 13:43:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=PVRdwLRjbdaCvrvFVMElpF1SE8OywHiiQwb+mQwE81s=; b=qWapL4vKx4xwxmY09OrhllQm6L
+        BU1dDFYxJsD5tKND/6b+wQ3Aym8PGQ5Bam6kelQ7+mzYRc3h4I696m1e2DXKbUt5hDDrRTHVH39++
+        y5VXmy60nj4chA4+9DQtcph/1RD8vEXdSAjOfeBciXG+CW7MGeyBeXJlUq7BZljC3EZk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nYwCs-00D4Cm-4L; Mon, 28 Mar 2022 22:43:18 +0200
+Date:   Mon, 28 Mar 2022 22:43:18 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Horatiu Vultur <horatiu.vultur@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, UNGLinuxDriver@microchip.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net: lan966x: fix kernel oops on ioctl when I/F is
+ down
+Message-ID: <YkId5ssdyHH8JZ64@lunn.ch>
+References: <1ee5aec079e3eefff8475017ff1044bf@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220325015945.GA17578@mingxue-gv.qualcomm.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <1ee5aec079e3eefff8475017ff1044bf@walle.cc>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,37 +51,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 09:59:45AM +0800, Minghao Xue wrote:
-> Some systems want to set the interrupt of virtio_mmio device
-> as a wakeup source. On such systems, we'll use the existence
-> of the "wakeup-source" property as a signal of requirement.
+> > So rather than testing of running, it would be better to test if the
+> > phydev is NULL or not.
 > 
-> Signed-off-by: Minghao Xue <quic_mingxue@quicinc.com>
-
-I don't have enough of a clue about dt to review this.
-Pls get some acks from people with DT expertise.
-
-> ---
-> v1 -> v2: rename property from "virtio,wakeup" to "wakeup-source"
+> What about the following:
 > 
->  Documentation/devicetree/bindings/virtio/mmio.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+> static int lan966x_port_ioctl(struct net_device *dev, struct ifreq *ifr,
+> 			     int cmd)
+> {
+> 	struct lan966x_port *port = netdev_priv(dev);
 > 
-> diff --git a/Documentation/devicetree/bindings/virtio/mmio.yaml b/Documentation/devicetree/bindings/virtio/mmio.yaml
-> index 4b7a027..160b21b 100644
-> --- a/Documentation/devicetree/bindings/virtio/mmio.yaml
-> +++ b/Documentation/devicetree/bindings/virtio/mmio.yaml
-> @@ -31,6 +31,10 @@ properties:
->      description: Required for devices making accesses thru an IOMMU.
->      maxItems: 1
->  
-> +  wakeup-source:
-> +    type: boolean
-> +    description: Required for setting irq of a virtio_mmio device as wakeup source.
-> +
->  required:
->    - compatible
->    - reg
-> -- 
-> 2.7.4
+> 	if (!phy_has_hwtstamp(dev->phydev) && port->lan966x->ptp) {
+> 		switch (cmd) {
+> 		case SIOCSHWTSTAMP:
+> 			return lan966x_ptp_hwtstamp_set(port, ifr);
+> 		case SIOCGHWTSTAMP:
+> 			return lan966x_ptp_hwtstamp_get(port, ifr);
+> 		}
+> 	}
+> 
+> 	if (!dev->phydev)
+> 		return -ENODEV;
+> 
+> 	return phy_mii_ioctl(dev->phydev, ifr, cmd);
 
+Yes, that is good.
+
+     Andrew

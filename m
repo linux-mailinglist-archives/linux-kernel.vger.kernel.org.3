@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EDB64EA181
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C904EA17B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 22:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345852AbiC1Uau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 16:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
+        id S1345817AbiC1Uai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 16:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345789AbiC1UaZ (ORCPT
+        with ESMTP id S1345822AbiC1Ua1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 16:30:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D9CDFD5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 13:28:44 -0700 (PDT)
+        Mon, 28 Mar 2022 16:30:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC733DF20
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 13:28:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72648613F5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 20:28:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DBB93C34100;
-        Mon, 28 Mar 2022 20:28:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B9D2B8120F
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 20:28:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0EF94C340F0;
+        Mon, 28 Mar 2022 20:28:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648499323;
-        bh=hDzmwoBWJcvalozbJMYdgMflfBRp1M4sn/NRKZZi5R0=;
+        s=k20201202; t=1648499324;
+        bh=QLi7AzU+b/7PjKH7gsTRezczmXRNXx1OFehK9D/8XdY=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=VES4+2A2G+gsCyvIn36bCmoqlN4ihnanxhue2saW+9OotPbifL8FRweh0rlHvGC5Z
-         9ocI7m/JzKv9qsORr3IKMQWpbAm76hDyt4t5f5ik/0RQmGBSYEB0j3mYeF2x4jYins
-         iQT5iADU1Qu0mNOVD0UhIJcQSIQdoKz3nX/bcuFwHHnb4m4aOKKOgWnmsoiWbIVzdD
-         OYCyIdmbqtcj1p1lNcdledAZoI23S+133UY5rokIJ5ymF1qHh0uO2Y9T7RVrFyUec0
-         nXwLJ5aOc1TqAcnxXj1rbNz/v4T3hkFmzDOFJrf+hM9wVBO5/+RxtT7lLANWJhbqp0
-         I+sRZ/dGTJxGg==
+        b=i1AGItzJaB7wOwgjZB3C7vVVPmwPfrkwl3pkUZ/tBr3UZQj8SQZzrJ2DVP5cumzjy
+         KB8YchKRrCuJxIiEU8tS3j8EHsXMpfdvta58ntAFrFUxdohx20apc5yW32bxuYK9fE
+         If0//oKQv/FhcU0vh/tSUD3Ycoz3X2ckpN4F2tuIWZcQETMI+S4YazrFVFrO/YkqOD
+         dt4FhK/cUB6F+KqxDUXJ39bitpgk6FMikcA+tx2bUsL2pyWD91bD3pjxpVllR9KVGC
+         B+o2M4kP94C7VquVCse9qpUuFeDIKsdzDEkr7W30ZZ0dvulFAQSdh2kekSyqZIj7NF
+         jc7pZqe5w+eyQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C98D5E7BB0B;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F1A21EAC081;
         Mon, 28 Mar 2022 20:28:43 +0000 (UTC)
-Subject: Re: [GIT PULL] Driver core changes for 5.18-rc1
+Subject: Re: [GIT PULL] Staging driver changes for 5.18-rc1
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YkG6qJsnjjzF0iFD@kroah.com>
-References: <YkG6qJsnjjzF0iFD@kroah.com>
+In-Reply-To: <YkG60GW9QJ8OCWjd@kroah.com>
+References: <YkG60GW9QJ8OCWjd@kroah.com>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YkG6qJsnjjzF0iFD@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git tags/driver-core-5.18-rc1
-X-PR-Tracked-Commit-Id: 88d99e870143199ba5bf42701dca06ce1d1388f0
+X-PR-Tracked-Message-Id: <YkG60GW9QJ8OCWjd@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git tags/staging-5.18-rc1
+X-PR-Tracked-Commit-Id: 41197a5f11a4b2d11ac19bc62552022153032811
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 266d17a8c0d857a579813ad185cd1640b0d6ccac
-Message-Id: <164849932382.7875.3535925229119898659.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: dfdc1de64248b5e1024d8188aeaf0e59ec6cecd5
+Message-Id: <164849932398.7875.1978345527314763094.pr-tracker-bot@kernel.org>
 Date:   Mon, 28 Mar 2022 20:28:43 +0000
 To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Saravana Kannan <saravanak@google.com>
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,12 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 28 Mar 2022 15:39:52 +0200:
+The pull request you sent on Mon, 28 Mar 2022 15:40:32 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git tags/driver-core-5.18-rc1
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git tags/staging-5.18-rc1
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/266d17a8c0d857a579813ad185cd1640b0d6ccac
+https://git.kernel.org/torvalds/c/dfdc1de64248b5e1024d8188aeaf0e59ec6cecd5
 
 Thank you!
 

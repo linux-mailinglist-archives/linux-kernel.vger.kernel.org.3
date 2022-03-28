@@ -2,89 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 801584E967D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4FD4E967E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 14:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242419AbiC1M1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 08:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
+        id S242427AbiC1M1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 08:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236086AbiC1M1S (ORCPT
+        with ESMTP id S236086AbiC1M1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 08:27:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 878654CD7F
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:25:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648470336;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GvJCNB2Cnl/nlDULpdtsfyTRfdka37fX/FHgNiQs3CE=;
-        b=UWVFKoElXqvWCLqfPsIxURQmLn2qvubUV/RVRGM7DORv0FOGigXsUcqqK9AqWHveY5Kjfk
-        eXV1iu8We8fr2MwjDA7KoDoNzdBFcUctxNB7+WpIbP/oeTnew9secspMqkSFMUI26D6rVi
-        pNxm83e5nbDqyavahy2BqpO5SAWogIc=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-497-M0rGSScjMdS8UyDrAMOTEw-1; Mon, 28 Mar 2022 08:25:35 -0400
-X-MC-Unique: M0rGSScjMdS8UyDrAMOTEw-1
-Received: by mail-qk1-f200.google.com with SMTP id v16-20020a376110000000b0067b2749e0fbso8315817qkb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:25:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=GvJCNB2Cnl/nlDULpdtsfyTRfdka37fX/FHgNiQs3CE=;
-        b=md7rW4QaL6tWEdWRROi50SuOvdgKHAaCxkJyoUVbPY916XwVIB/NPzqY2aEj6gLkpG
-         u9WxuUULNgZNuPdds1w48azdF8KZYaJlY5UdyCGj0anDYEVREl8/NWuW/bNB51CJ+Fb7
-         Q0OCJ188mGNJQdw9OOOVRdKoL0bmTvl9Fpcs9P+bhcFy/kXx5LeC93omSnLoYDfy8Da9
-         C9JL3ajqjHX7mCqvA3hQc9iLWuS/jLzL19o6Z+Bj0GObhOxXKa1cx6C551CTReIE0AUU
-         ulEUA6Y9EioW4tk2GtYQtP/km0R/lFwo5vehGRd7/otlbG0MpenVFb9FESlLmaVnNYx3
-         HpCg==
-X-Gm-Message-State: AOAM530DKvtZ0AxyTlVtwDNaUSmyFEi8hA94bbcn7Lm8WYC8CBfG9azB
-        M88SmnYAzlBQLkVC/kfWhM6SihbRjFKj2v1fhWk5uMIU55BVQKuPk8ZeKjSzCnRR3CW8SB/f2zG
-        VjtzUn85A3BlpKEAg8Vym0pvj
-X-Received: by 2002:a05:622a:107:b0:2e1:d655:cc4c with SMTP id u7-20020a05622a010700b002e1d655cc4cmr21566403qtw.669.1648470334645;
-        Mon, 28 Mar 2022 05:25:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyAQwqAdu+kg9mfWp0pBO/UFlRsaaQCJ2OhGI1xR4a2IZwQG3pphqjbnU8jqdybbi/S9OtTEw==
-X-Received: by 2002:a05:622a:107:b0:2e1:d655:cc4c with SMTP id u7-20020a05622a010700b002e1d655cc4cmr21566381qtw.669.1648470334415;
-        Mon, 28 Mar 2022 05:25:34 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id y17-20020a05622a121100b002e0702457b2sm12282866qtx.20.2022.03.28.05.25.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Mar 2022 05:25:34 -0700 (PDT)
-Subject: Re: [PATCH v1 1/2] hwmon: introduce hwmon_sanitize_name()
-To:     Michael Walle <michael@walle.cc>, Xu Yilun <yilun.xu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20220328115226.3042322-1-michael@walle.cc>
- <20220328115226.3042322-2-michael@walle.cc>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <a1f71681-0eb0-c67f-53e0-dfce9d2fdea9@redhat.com>
-Date:   Mon, 28 Mar 2022 05:25:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Mon, 28 Mar 2022 08:27:40 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1EB766A
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 05:25:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=lrVzwikDhjBGNRcFFbTyAqjkMTBLzQaJc2hHSS4wEmg=; b=U0YKf/ro6hqqx+3l1XJttwBDKF
+        vDjhJY0n6WPbgPtJ2ll6rW9EDBb+yeccBWQHCrDhNQ+Y9UJYYush8ulru/PCk7WvEw/EG3sW8bAy0
+        9tydBfVnc2Bpr07gk5Q274j/FBrwmc7wDIBX6KrC4MCW4W1mHw8XivgcAA8l9tBq0U3UTdBcJCKvc
+        u7Zlwm0FvMYk4K5vW0oMQ9O80CVtt2uAQc198QUVuU+QyAeX11FoBVg2z1smHSKGbuQjTMRC/T0+x
+        9JyHZFfQYdPY8IOPwgtrxslAmvSxLfurPf+geAgzW167ILRFvlI7OsSSIFE6M9uKWsQMzdx1NqnyN
+        tEZnkMiw==;
+Received: from [165.90.126.25] (helo=mail.igalia.com)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1nYoRU-0005HJ-4I; Mon, 28 Mar 2022 14:25:52 +0200
+Date:   Mon, 28 Mar 2022 11:25:36 -0100
+From:   Melissa Wen <mwen@igalia.com>
+To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     Emma Anholt <emma@anholt.net>, David Airlie <airlied@linux.ie>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        dan.carpenter@oracle.com
+Subject: Re: [PATCH] drm/v3d: Use kvcalloc
+Message-ID: <20220328122536.cobmqclwtl2ca6k4@mail.igalia.com>
+References: <20220312152656.51625-1-harshit.m.mogalapalli@oracle.com>
 MIME-Version: 1.0
-In-Reply-To: <20220328115226.3042322-2-michael@walle.cc>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qeqcrncyu2fdobow"
+Content-Disposition: inline
+In-Reply-To: <20220312152656.51625-1-harshit.m.mogalapalli@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -92,70 +55,74 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 3/28/22 4:52 AM, Michael Walle wrote:
-> More and more drivers will check for bad characters in the hwmon name
-> and all are using the same code snippet. Consolidate that code by adding
-> a new hwmon_sanitize_name() function.
->
-> Signed-off-by: Michael Walle <michael@walle.cc>
+--qeqcrncyu2fdobow
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 03/12, Harshit Mogalapalli wrote:
+> kvcalloc is same as kvmalloc_array + __GFP_ZERO.
+>=20
+> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 > ---
->   drivers/hwmon/intel-m10-bmc-hwmon.c |  5 +----
->   include/linux/hwmon.h               | 16 ++++++++++++++++
->   2 files changed, 17 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
-> index 7a08e4c44a4b..e6e55fc30153 100644
-> --- a/drivers/hwmon/intel-m10-bmc-hwmon.c
-> +++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
-> @@ -515,7 +515,6 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
->   	struct intel_m10bmc *m10bmc = dev_get_drvdata(pdev->dev.parent);
->   	struct device *hwmon_dev, *dev = &pdev->dev;
->   	struct m10bmc_hwmon *hw;
-> -	int i;
->   
->   	hw = devm_kzalloc(dev, sizeof(*hw), GFP_KERNEL);
->   	if (!hw)
-> @@ -532,9 +531,7 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
->   	if (!hw->hw_name)
->   		return -ENOMEM;
->   
-> -	for (i = 0; hw->hw_name[i]; i++)
-> -		if (hwmon_is_bad_char(hw->hw_name[i]))
-> -			hw->hw_name[i] = '_';
-> +	hwmon_sanitize_name(hw->hw_name);
->   
->   	hwmon_dev = devm_hwmon_device_register_with_info(dev, hw->hw_name,
->   							 hw, &hw->chip, NULL);
-> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-> index eba380b76d15..210b8c0b2827 100644
-> --- a/include/linux/hwmon.h
-> +++ b/include/linux/hwmon.h
-> @@ -484,4 +484,20 @@ static inline bool hwmon_is_bad_char(const char ch)
->   	}
->   }
+>  drivers/gpu/drm/v3d/v3d_gem.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/v3d/v3d_gem.c b/drivers/gpu/drm/v3d/v3d_gem.c
+> index c7ed2e1cbab6..f7d37228461e 100644
+> --- a/drivers/gpu/drm/v3d/v3d_gem.c
+> +++ b/drivers/gpu/drm/v3d/v3d_gem.c
+> @@ -308,9 +308,8 @@ v3d_lookup_bos(struct drm_device *dev,
+>  		return -EINVAL;
+>  	}
+> =20
+> -	job->bo =3D kvmalloc_array(job->bo_count,
+> -				 sizeof(struct drm_gem_cma_object *),
+> -				 GFP_KERNEL | __GFP_ZERO);
+> +	job->bo =3D kvcalloc(job->bo_count, sizeof(struct drm_gem_cma_object *),
+> +			   GFP_KERNEL);
 
-hwmon_is_bad_char is now only used by hwmon_sanitize_name.
+Hi Harshit,
 
-as patch 3, consolidate into only hwmon_sanitize_name.
+This change seems valid to me, but I believe, in this point, v3d should
+move to use the DRM function `drm_gem_objects_lookup()`, and then your
+change goes there, since drm_get_objects_lookup() has the same issue
+you're pointing. What do you think?
 
-Tom
+I already sent a patchset to replace steps in v3d_lookup_bos() by
+drm_gem_objects_lookup(), as I mentioned. The patchset is here:
+https://patchwork.freedesktop.org/series/101610/
+Willing to review it? ^
 
->   
-> +/**
-> + * hwmon_sanitize_name - Replaces invalid characters in a hwmon name
-> + * @name: NUL-terminated name
-> + *
-> + * Invalid characters in the name will be overwritten in-place by an
-> + * underscore.
-> + */
-> +static inline void hwmon_sanitize_name(char *name)
-> +{
-> +	while (*name) {
-> +		if (hwmon_is_bad_char(*name))
-> +			*name = '_';
-> +		name++;
-> +	};
-> +}
-> +
->   #endif
+Thanks,
 
+Melissa
+
+>  	if (!job->bo) {
+>  		DRM_DEBUG("Failed to allocate validated BO pointers\n");
+>  		return -ENOMEM;
+> --=20
+> 2.31.1
+>=20
+
+--qeqcrncyu2fdobow
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmJBqTsACgkQwqF3j0dL
+ehxezg//bh3x6Kkk5aU9Y0GowW2fk6Lfo/opQx/a9VPa/sCZ9ft0ctam7yGZUz4G
+6YvPDT9kPaZJ/4B2+U1MCECuEEciDoelttwXGls3AdRpk7UIZcWsnsHQZeo5tdPe
+gNDZHg7h+TiMNxmdPHItJRuNn4XSe36yTjNfHRUTyx67UhHvmcX8sO12DjQ1u+IL
+kKpODRaacDQvLc+hiizZl2Y8e7AP8/rDKH2Ydc8XrknlTt4q+IZLRSwljlhk1QhX
+Nfwvv4qTD2kMAQPPcRi64sqzEddFk+YJousPmxdIk2fQ0D8+ljEmf/jvxPnUikgj
+34moPZD5r0XJtij/uwTnEwljzAqCOv0XZrorQvVw6WHoi+XvEt7gfvYl7aOPAHZ/
+Q23CsRsXGE6yLttjbM45p87PZAtV48cSUGssufkzMJBqlj5aQKsyrBHDxIZF9cYH
+sRluiDWo18J7TwqKMo9v3sjkYncQgmt4sUrmL2CTkILdim52LnkHflI+balnVg4S
+OQKfafzJ/C9I/nhM/4hcnMeAcw0O+oTxuFKbA80hDUviUXie++SmZ++T1nN8KnAk
+2AedlB8lfMD/PK3mV0HtKvgSPyoQ2pyV9EYZNSzndJefNvRtt+jD2jxOFI1C4+dg
+mJDxWaTRl23qEr8hA0vM1FD8iogjM/HD5cN2eJbdSwbnO7C1gm4=
+=LPIG
+-----END PGP SIGNATURE-----
+
+--qeqcrncyu2fdobow--

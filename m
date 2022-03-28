@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2AE44E9A00
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F15924E99F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 16:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244029AbiC1OpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 10:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
+        id S243997AbiC1Oow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 10:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244011AbiC1Oo5 (ORCPT
+        with ESMTP id S235440AbiC1Oot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 10:44:57 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15EA21AF3F;
-        Mon, 28 Mar 2022 07:43:15 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 88236240002;
-        Mon, 28 Mar 2022 14:43:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1648478593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4RNpBLa/scaiQLYLfS5SMt5LVBIxZWpIM554lUw5974=;
-        b=CA11zv8FiUuwD84/NN2IMFZym0Ik56paljMqTIVIc+ANlaDuGW6Lfmf4eu0uYeJt+u2AjY
-        HKz24Gguzs2NK9OZxaS4vKa9K3ZchbrGbJktyObEqkU/FbtMVYxAd9EWZ3fPezlPlJ6AO/
-        Wym0k1wsasdocRBGCY2oiZx4F8uXnDzlnsGU43oWz2FtLP47LFES4puwqsK6pVodpL91I0
-        cWoMg8GgcE8E9B0GWFBovChLEv8c1lFUyYPdIgfERXFc8H1cC9TLpLPZAtx6anke5Bsn+k
-        dWUO63qh1W6S4Dtm9HyPu/EfRB5hXUT58ObnK1PRXTQxu78GPcKrsYIff3zdyQ==
-Date:   Mon, 28 Mar 2022 16:41:48 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [net-next 1/5] net: mdio: fwnode: add fwnode_mdiobus_register()
-Message-ID: <20220328164148.061c3a63@fixe.home>
-In-Reply-To: <YkHCUbWxaqDJeQoK@lunn.ch>
-References: <20220325172234.1259667-1-clement.leger@bootlin.com>
-        <20220325172234.1259667-2-clement.leger@bootlin.com>
-        <Yj4MIIu7Qtvv25Fs@lunn.ch>
-        <20220328082642.471281e7@fixe.home>
-        <YkGyFJuUDS6x4wrC@lunn.ch>
-        <20220328152700.74be6037@fixe.home>
-        <YkHCUbWxaqDJeQoK@lunn.ch>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Mon, 28 Mar 2022 10:44:49 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5011E25DB;
+        Mon, 28 Mar 2022 07:43:08 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id h4so9428398edr.3;
+        Mon, 28 Mar 2022 07:43:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EPi1GcB8yM8cAT7S1c5FqNzXBFyXnmjwGCRKYtVbIgU=;
+        b=jBRgWqZtMl62v6uxmvgMEgXQ4ksA7zVl2ES3A6kUcaZsWofPtgQANFKoPT/MrS9AM1
+         GETRSbQrjIvEXA+ff/Z4GQF2kB9pFwWFuhhmUto5pX0Gbz+c3//n6mPsxDuCVgBjC8RZ
+         tojfIl2/m8it5it/iMvlEdCK6ESLjR/535EOQqjMIFr+UVahlP69gmNstume9L5gndiW
+         8meRAsGkPbLhH54HY9kNbq0ap6RFP7FkF2Iwf1dHw5KXpGLb7DELGXKFsEwTT2yhvXgQ
+         9HkyfXCNrZwqqI20S66XZeA76rpokcCgdlLubyRXSfgVA0+1TW3WGIzqRl0MCwNk/ObS
+         rd7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EPi1GcB8yM8cAT7S1c5FqNzXBFyXnmjwGCRKYtVbIgU=;
+        b=ZEexo8HUEbUBbQsTMxENpSFeRQnZmQF3yixpQ4wjwMeI5/zSMoAgLY93p+eWNsn/1B
+         XtZ4VdSa6k16swRY+u4depOkaG2w7kNRRWaToXbFVHXmLwQtBb61HqYH6E325E6aVPfJ
+         nhn35HMfoDf/oBO0qHVIgaGdfGTF2zRlmcynvy8SZCdgSAIV0BKsj1LoE/ifbBQUQN+f
+         1kqn567CHczHkaMs1SooH1tYP39CNmahrYgXdLs49/WLHH5ioKRSdKQ8PHn1yygbed6M
+         nDnzcNXyiQM6dkvTFELU3Y6Fw7ak2VR6zBzj2CkWJZ1yRBErrSQdRh0U7N89sa81Bq2h
+         8QnA==
+X-Gm-Message-State: AOAM533dNHyawFG6L4PblC8yGg1q5zibvdFSx8fG5gUXK9pdwbOxLJkq
+        Qn824M/GsOINvLvSeGHEmpI=
+X-Google-Smtp-Source: ABdhPJzO42mbNXXKGAICSLGJyjwnTYM/5BJCuYvLvg5nnTt809l3gVR4O2xXPw/CY0rLQqxYdovBAA==
+X-Received: by 2002:aa7:d751:0:b0:419:2558:a78b with SMTP id a17-20020aa7d751000000b004192558a78bmr16689820eds.6.1648478586661;
+        Mon, 28 Mar 2022 07:43:06 -0700 (PDT)
+Received: from anparri.mshome.net (host-82-59-4-232.retail.telecomitalia.it. [82.59.4.232])
+        by smtp.gmail.com with ESMTPSA id g2-20020aa7c842000000b0041314b98872sm7008983edt.22.2022.03.28.07.43.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 07:43:06 -0700 (PDT)
+From:   "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+To:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Wei Hu <weh@microsoft.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+Subject: [RFC PATCH 0/4] PCI: hv: Miscellaneous changes
+Date:   Mon, 28 Mar 2022 16:42:40 +0200
+Message-Id: <20220328144244.100228-1-parri.andrea@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Mon, 28 Mar 2022 16:12:33 +0200,
-Andrew Lunn <andrew@lunn.ch> a =C3=A9crit :
-
-> > With this series, fwnode_mdiobus_register() supports exactly the same
-> > subset that is supported by of_mdiobus_register(). =20
->=20
-> I need to see the side-by-side conversion. But it looked to me you did
-> not support everything in DT.
-
-I splat the conversion as you requested and it make it clear that it's
-a 1:1 conversion. But indeed, it will be better by looking at patches.
-
->=20
-> And another question is, should it support everything in DT. The DT
-> binding has things which are deprecated. We have to support them in
-> DT, they are ABI. But anything new should not be using them.
-
-Ok, so maybe, the fwnode support should stop supporting these
-deprecated features. From what I can see, there is at least the
-following two things:
-
-- Whitelist id table (seems to check legacy compatible strings)
-- Scanning of child nodes that don't have a reg property. reg is
-  specified as required in the bindings so it's probably not a good
-  thing to keep that.
-
-So maybe these features can be removed from the fwnode support.
+A re-work of [1] to use vmbus_requestor.
 
 Thanks,
+  Andrea
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+[1] https://lkml.kernel.org/r/20220318174848.290621-1-parri.andrea@gmail.com
+
+Andrea Parri (Microsoft) (4):
+  Drivers: hv: vmbus: Remove special code for unsolicited messages
+  PCI: hv: Use vmbus_requestor to generate transaction IDs for VMbus
+    hardening
+  Drivers: hv: vmbus: Introduce vmbus_sendpacket_getid()
+  PCI: hv: Fix synchronization between channel callback and
+    hv_compose_msi_msg()
+
+ drivers/hv/channel.c                |  51 ++++++++-----
+ drivers/hv/hyperv_vmbus.h           |   2 +-
+ drivers/hv/ring_buffer.c            |   4 +-
+ drivers/pci/controller/pci-hyperv.c | 109 +++++++++++++++++++++++++---
+ include/linux/hyperv.h              |   7 ++
+ 5 files changed, 141 insertions(+), 32 deletions(-)
+
+-- 
+2.25.1
+

@@ -2,143 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C494E8BBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 03:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D904E8BBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 03:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237355AbiC1BsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Mar 2022 21:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
+        id S237362AbiC1Bsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Mar 2022 21:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237386AbiC1Br6 (ORCPT
+        with ESMTP id S236140AbiC1Bse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Mar 2022 21:47:58 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE62C4FC4D;
-        Sun, 27 Mar 2022 18:46:14 -0700 (PDT)
-X-UUID: cc02df59dc6545e4b2e68572709dce71-20220328
-X-UUID: cc02df59dc6545e4b2e68572709dce71-20220328
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1747605447; Mon, 28 Mar 2022 09:46:08 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 28 Mar 2022 09:46:06 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 28 Mar
- 2022 09:46:06 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 28 Mar 2022 09:46:06 +0800
-Message-ID: <d5f8ec6f4b35f7db71b0261c9ddbbae9ccce90d4.camel@mediatek.com>
-Subject: Re: [PATCH v9 21/22] drm/mediatek: change the aux retries times
- when receiving AUX_DEFER
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Guillaume Ranquet <granquet@baylibre.com>, <airlied@linux.ie>,
-        <angelogioacchino.delregno@collabora.com>,
-        <chunfeng.yun@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <ck.hu@mediatek.com>, <daniel@ffwll.ch>, <deller@gmx.de>,
-        <jitao.shi@mediatek.com>, <kishon@ti.com>, <krzk+dt@kernel.org>,
-        <maarten.lankhorst@linux.intel.com>, <matthias.bgg@gmail.com>,
-        <mripard@kernel.org>, <p.zabel@pengutronix.de>,
-        <robh+dt@kernel.org>, <tzimmermann@suse.de>, <vkoul@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <markyacoub@google.com>
-Date:   Mon, 28 Mar 2022 09:46:06 +0800
-In-Reply-To: <20220327223927.20848-22-granquet@baylibre.com>
-References: <20220327223927.20848-1-granquet@baylibre.com>
-         <20220327223927.20848-22-granquet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sun, 27 Mar 2022 21:48:34 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BA94FC58;
+        Sun, 27 Mar 2022 18:46:54 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id s11so11209766qtc.3;
+        Sun, 27 Mar 2022 18:46:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=67cH1QE0vg460QdF1Ds8AdGczJLr6DnLmE8iSZO1ujs=;
+        b=A7JB/XVw0UT9w6IIs5Klt+1p9jXGtFS1xRgGNL6wbtYUARLZlCQf0eELviKwGuHhKv
+         q3aHhwP5cSSnV8VCN5Bl0SREhwWQ3/1/wBd++peoQ8YDbpjQfDBEI4nzCKLUJLgeLqzk
+         udImF94NYtKW/fvMjphaCD3ox7NogSxAILHwY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=67cH1QE0vg460QdF1Ds8AdGczJLr6DnLmE8iSZO1ujs=;
+        b=cC2yRP8QOR1aACv6B2MZpsmmXspVRdwVK9CuF9Cbh6bVo1jUOArOGrDONVBv8nQdSR
+         rzYvlX/DVSxmwJjDeJgMmmp+5M+bzRpJpW8/zMLdBgorRr2qg+Kpi9XTNVkbxAbVxyN3
+         zj8YpNig4ueUSlpgW3w7k6okqaMk+VVg1oe1gLVAXlxCGgxK5YD8CP5xzSW+QQU0ZPmy
+         ZApV3uDJG9lEXuv3jXgG5qjnPYrqyTlY1OIoQRr0ueMJlu5m/X8VLK0KgcUKco3q39XK
+         jFHjfNCtGFs9JDSyFjSYI8iDpD6vGLN9wX+ugsSXkIRJV1Gzf2dEM7iGsYAkZByrVMV9
+         6RHg==
+X-Gm-Message-State: AOAM5339kI/XHtxYdtDmJudn/4iV4S8Vg+SM9cMx18fttsQfQJlDbwUE
+        80lf5KCKD28eXOu+PVYrLdmgA2bgpZaWtpSpRbo=
+X-Google-Smtp-Source: ABdhPJzZF+DOZf/7yL6b/t0SWJb98IxMQ99154wPILXLwblfo1Q1aUYOE48CprYh/mEGyOgc/+1UzwiH6klt3fR/XOM=
+X-Received: by 2002:a05:622a:60c:b0:2e2:7b3:3231 with SMTP id
+ z12-20020a05622a060c00b002e207b33231mr19860099qta.678.1648432013473; Sun, 27
+ Mar 2022 18:46:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220328012205.91454-1-andrew@aj.id.au>
+In-Reply-To: <20220328012205.91454-1-andrew@aj.id.au>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Mon, 28 Mar 2022 01:46:41 +0000
+Message-ID: <CACPK8Xc0-VicXV6fG7qMFWsQnf22fccTECZDKf51Aonds8rbVQ@mail.gmail.com>
+Subject: Re: [PATCH] leds: pca955x: Remove unused pca95xx_num_led_regs()
+To:     Andrew Jeffery <andrew@aj.id.au>
+Cc:     linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        jacek.anaszewski@gmail.com,
+        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-03-28 at 00:39 +0200, Guillaume Ranquet wrote:
-> From: Jitao Shi <jitao.shi@mediatek.com>
-> 
-> DP 1.4a Section 2.8.7.1.5.6.1:
-> A DP Source device shall retry at least seven times upon receiving
-> AUX_DEFER before giving up the AUX transaction.
-> 
-> Aux should retry to send msg whether how many bytes.
-> 
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+On Mon, 28 Mar 2022 at 01:22, Andrew Jeffery <andrew@aj.id.au> wrote:
+>
+> Commit 561099a1a2e9 ("leds: pca955x: add GPIO support") removed the
+> remaining use of pca95xx_num_led_regs(). Recently the kernel test robot
+> started complaining about the unused symbol after some patches to the
+> driver were merged[1]. Drop the unused function.
+>
+> [1] https://lore.kernel.org/all/202203260634.OFB2IPFf-lkp@intel.com/
+>
+> Fixes: 561099a1a2e9 ("leds: pca955x: add GPIO support")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
+
+Reviewed-by: Joel Stanley <joel@jms.id.au>
+
 > ---
->  drivers/gpu/drm/mediatek/mtk_dp.c | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c
-> b/drivers/gpu/drm/mediatek/mtk_dp.c
-> index e099491cc6a4..7a197c4a7143 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dp.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-> @@ -2016,7 +2016,7 @@ static ssize_t mtk_dp_aux_transfer(struct
-> drm_dp_aux *mtk_aux,
->  	bool is_read;
->  	u8 request;
->  	size_t accessed_bytes = 0;
-> -	int retry = 3, ret = 0;
-> +	int retry, ret = 0;
->  
->  	mtk_dp = container_of(mtk_aux, struct mtk_dp, aux);
->  
-> @@ -2050,14 +2050,21 @@ static ssize_t mtk_dp_aux_transfer(struct
-> drm_dp_aux *mtk_aux,
->  	}
->  
->  	if (msg->size == 0) {
-> -		ret = mtk_dp_aux_do_transfer(mtk_dp, is_read, request,
-> -					     msg->address +
-> accessed_bytes,
-> -					     msg->buffer +
-> accessed_bytes, 0);
-> +		retry = 32;
-> +		while (retry--) {
-> +			ret = mtk_dp_aux_do_transfer(mtk_dp, is_read,
-> request,
-> +						     msg->address +
-> accessed_bytes,
-> +						     msg->buffer +
-> accessed_bytes, 0);
-> +			if (ret == 0)
-> +				break;
-> +			usleep_range(500, 600);
-> +		}
->  	} else {
->  		while (accessed_bytes < msg->size) {
->  			size_t to_access =
->  				min_t(size_t, DP_AUX_MAX_PAYLOAD_BYTES,
->  				      msg->size - accessed_bytes);
-> +			retry = 32;
->  			while (retry--) {
->  				ret = mtk_dp_aux_do_transfer(mtk_dp,
->  							     is_read,
-> request,
-> @@ -2066,7 +2073,7 @@ static ssize_t mtk_dp_aux_transfer(struct
-> drm_dp_aux *mtk_aux,
->  							     to_access)
-> ;
->  				if (ret == 0)
->  					break;
-> -				usleep_range(50, 100);
-> +				usleep_range(500, 600);
->  			}
->  			if (!retry || ret) {
->  				drm_info(mtk_dp->drm_dev,
-
-Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-
+>  drivers/leds/leds-pca955x.c | 6 ------
+>  1 file changed, 6 deletions(-)
+>
+> diff --git a/drivers/leds/leds-pca955x.c b/drivers/leds/leds-pca955x.c
+> index 81aaf21212d7..33ec4543fb4f 100644
+> --- a/drivers/leds/leds-pca955x.c
+> +++ b/drivers/leds/leds-pca955x.c
+> @@ -145,12 +145,6 @@ static inline int pca95xx_num_input_regs(int bits)
+>         return (bits + 7) / 8;
+>  }
+>
+> -/* 4 bits per LED selector register */
+> -static inline int pca95xx_num_led_regs(int bits)
+> -{
+> -       return (bits + 3)  / 4;
+> -}
+> -
+>  /*
+>   * Return an LED selector register value based on an existing one, with
+>   * the appropriate 2-bit state value set for the given LED number (0-3).
+> --
+> 2.32.0
+>

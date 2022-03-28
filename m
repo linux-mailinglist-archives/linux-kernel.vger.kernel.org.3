@@ -2,98 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F704E9C02
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CA64E9C07
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241554AbiC1QOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 12:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
+        id S241576AbiC1QRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 12:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240216AbiC1QOL (ORCPT
+        with ESMTP id S239988AbiC1QRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 12:14:11 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8856210E
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:12:29 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id t4so9541616pgc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:12:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OYF/jvStaXgJs+lPLO95DLgpFNQWTZE9eUToA1rRs6g=;
-        b=e+BGZaz9UF7wurI72M/5D45ULqW3ey6hXKY/Ts68ZgJK+22nFqMUvhRnEdRnUBpuvl
-         qPQCU0In4ULU6FrtL4iIXhYl3zMBK19R+WUV7DTPh5cvUw6eRFk7AhjuMWBOTqlyWtQC
-         nJKNVvqCmiJ+2LNK54Aq7rTRVFsfPFfRB/v6VG5I9BgHJXzNoHViwd1UmQgMDaSWQXpp
-         2CS5wZFjeU2yLm1azU7lY7IbkgKzdX1RwEucQh4Bj2ntyML4fmuRyUdWr6bNzZXduSsv
-         B679isvImDqKin6vhmJQq3ouLNW2MPfA9u+B75y+vagvE5heMpuBBBY2due9oOaT3xWM
-         w8Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OYF/jvStaXgJs+lPLO95DLgpFNQWTZE9eUToA1rRs6g=;
-        b=AgEcsABhTGNJ1Y8KPLhBDZmW8r0M2YVmKpJ5SoXOlg0S3hqh58QyH9dOOkMCWmOTAk
-         DHJA5yBW2tscdJXZVgSet0cRJRE2yd0KIlmxKtphuiZHsarPyjn7rZ43yhw++lnUQhRI
-         rYy94Y6M91ORwDlRIA8tdDAefkSw02OTZ4vqzEFJ5PRq1tzFAGaHEScsGHrTdFSlGqOR
-         dw6TbgNEd4rZGlQURGkL3s/7IyTja5KtTph7xUP+IeDiWqYJCxcMHeLGNZp5KVzvSC5a
-         PXV6GrtGX5j2e3x+I+1MFYUGSjR+2HcWOEX2jnzL/JTG4lKUoFBCBCiyfoFY/VnT2zM4
-         a3vQ==
-X-Gm-Message-State: AOAM5338WGtx0geCkcmdjDMKw3FBe1vzu8bHLfvazBUbUEWVZibM+F6F
-        zmy8ji7/Umqh8XF0NOtoqmd3AQ==
-X-Google-Smtp-Source: ABdhPJwufdTEwBp0S3JduRuquBjA87WlSM0qhzSDEaHQGglV4NKMddG55IsfZm3xx1Hl90qslp+rzw==
-X-Received: by 2002:a63:3fcc:0:b0:398:ae5:6905 with SMTP id m195-20020a633fcc000000b003980ae56905mr10471109pga.463.1648483949404;
-        Mon, 28 Mar 2022 09:12:29 -0700 (PDT)
-Received: from [192.168.254.17] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id z12-20020aa7888c000000b004f3fc6d95casm16878011pfe.20.2022.03.28.09.12.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Mar 2022 09:12:28 -0700 (PDT)
-Message-ID: <21f3fd84-2de9-646c-4d0c-94007a996c70@linaro.org>
-Date:   Mon, 28 Mar 2022 09:12:27 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] ext4: check if offset+length is valid in fallocate
-Content-Language: en-US
-To:     linux-ext4@vger.kernel.org
-Cc:     Andreas Dilger <adilger.kernel@dilger.ca>,
-        Ritesh Harjani <riteshh@linux.ibm.com>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com,
-        tytso@mit.edu
-References: <20220315215439.269122-1-tadeusz.struk@linaro.org>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-In-Reply-To: <20220315215439.269122-1-tadeusz.struk@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 28 Mar 2022 12:17:35 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D68625EBF
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:15:54 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 43FA4210EE;
+        Mon, 28 Mar 2022 16:15:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648484153; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q4Xt99w9xbYhH0KUJ1KGjk1nQO3I91qbWeC7RgiTOTM=;
+        b=aui3z9lUJWoZzWioOA8gh+7KdVc2GhaSTiJZeV/8K/6sR11p+AbaHSYw/F37iTj2PmKMpH
+        OfD7F/F/FV9ox1gfV6AO3I8z5Hq5M8/PCmY4mj251JXBns0TSvyfwdf9atJudq0BD7aWJf
+        XTPbQY3ekdaRKj1DhcgYMM3z5mp9ylM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648484153;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q4Xt99w9xbYhH0KUJ1KGjk1nQO3I91qbWeC7RgiTOTM=;
+        b=bskkfPk2ufk9FbJgwzGfb4xiY/0rkelwLXX7jkO+0rUVN/6D+4WWR0agYzQzWZhNquLwaz
+        7YscciewtgELbSCA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 2DF91A3B82;
+        Mon, 28 Mar 2022 16:15:53 +0000 (UTC)
+Date:   Mon, 28 Mar 2022 18:15:53 +0200
+Message-ID: <s5hilryjbnq.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mohan Kumar D <mkumard@nvidia.com>
+Cc:     tiwai@suse.com, kai.vehmanen@linux.intel.com, perex@perex.cz,
+        ville.syrjala@linux.intel.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com
+Subject: Re: [PATCH] ALSA: hda: Avoid unsol event during RPM suspending
+In-Reply-To: <7cbfca20-bd1a-9ca0-f0e2-2ecf5fa74f45@nvidia.com>
+References: <20220328091411.31488-1-mkumard@nvidia.com>
+        <s5hczi6l8fz.wl-tiwai@suse.de>
+        <7f7934e6-137c-4d8d-049b-0ed5e57cf00b@nvidia.com>
+        <s5ha6dal4ys.wl-tiwai@suse.de>
+        <7cbfca20-bd1a-9ca0-f0e2-2ecf5fa74f45@nvidia.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/22 14:54, Tadeusz Struk wrote:
-> Syzbot found an issue [1] in ext4_fallocate().
-> The C reproducer [2] calls fallocate(), passing size 0xffeffeff000ul,
-> and offset 0x1000000ul, which, when added together exceed the disk size,
-> and trigger a BUG in ext4_ind_remove_space() [3].
-> According to the comment doc in ext4_ind_remove_space() the 'end' block
-> parameter needs to be one block after the last block to remove.
-> In the case when the BUG is triggered it points to the last block on
-> a 4GB virtual disk image. This is calculated in
-> ext4_ind_remove_space() in [4].
-> This patch adds a check that ensure the length + offest to be
-> within the valid range and returns -ENOSPC error code in case
-> it is invalid.
+On Mon, 28 Mar 2022 15:51:17 +0200,
+Mohan Kumar D wrote:
+> 
+> 
+> On 3/28/2022 4:27 PM, Takashi Iwai wrote:
+> > External email: Use caution opening links or attachments
+> >
+> >
+> > On Mon, 28 Mar 2022 12:19:03 +0200,
+> > Mohan Kumar D wrote:
+> >>
+> >> On 3/28/2022 3:12 PM, Takashi Iwai wrote:
+> >>> External email: Use caution opening links or attachments
+> >>>
+> >>>
+> >>> On Mon, 28 Mar 2022 11:14:11 +0200,
+> >>> Mohan Kumar wrote:
+> >>>> There is a corner case with unsol event handling during codec runtime
+> >>>> suspending state. When the codec runtime suspend call initiated, the
+> >>>> codec->in_pm atomic variable would be 0, currently the codec runtime
+> >>>> suspend function calls snd_hdac_enter_pm() which will just increments
+> >>>> the codec->in_pm atomic variable. Consider unsol event happened just
+> >>>> after this step and before snd_hdac_leave_pm() in the codec runtime
+> >>>> suspend function. The snd_hdac_power_up_pm() in the unsol event
+> >>>> flow in hdmi_present_sense_via_verbs() function would just increment
+> >>>> the codec->in_pm atomic variable without calling pm_runtime_get_sync
+> >>>> function.
+> >>>>
+> >>>> As codec runtime suspend flow is already in progress and in parallel
+> >>>> unsol event is also accessing the codec verbs, as soon as codec
+> >>>> suspend flow completes and clocks are  switched off before completing
+> >>>> the unsol event handling as both functions doesn't wait for each other.
+> >>>> This will result in below errors
+> >>>>
+> >>>> [  589.428020] tegra-hda 3510000.hda: azx_get_response timeout, switching
+> >>>> to polling mode: last cmd=0x505f2f57
+> >>>> [  589.428344] tegra-hda 3510000.hda: spurious response 0x80000074:0x5,
+> >>>> last cmd=0x505f2f57
+> >>>> [  589.428547] tegra-hda 3510000.hda: spurious response 0x80000065:0x5,
+> >>>> last cmd=0x505f2f57
+> >>>>
+> >>>> To avoid this, the unsol event flow should not perform any codec verb
+> >>>> related operations during RPM_SUSPENDING state.
+> >>>>
+> >>>> Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
+> >>> Thanks, that's a hairy problem...
+> >>>
+> >>> The logic sounds good, but can we check the PM state before calling
+> >>> snd_hda_power_up_pm()?
+> >> If am not wrong, PM apis exposed either provide RPM_ACTIVE or
+> >> RPM_SUSPENDED status. Don't see anything which provides info on
+> >> RPM_SUSPENDING. We might need to exactly know this state to fix this
+> >> issue.
+> > Well, maybe my question wasn't clear.  What I meant was that your
+> > change below
+> >
+> >>        ret = snd_hda_power_up_pm(codec);
+> >> -     if (ret < 0 && pm_runtime_suspended(hda_codec_dev(codec)))
+> >> +     if ((ret < 0 && pm_runtime_suspended(dev)) ||
+> >> +             (dev->power.runtime_status == RPM_SUSPENDING))
+> >>                goto out;
+> > can be rather like:
+> >
+> >> +     if (dev->power.runtime_status == RPM_SUSPENDING)
+> >> +             return;
+> >>        ret = snd_hda_power_up_pm(codec);
+> >>        if (ret < 0 && pm_runtime_suspended(hda_codec_dev(codec)))
+> > so that it skips unneeded power up/down calls.
+> >
+> > Basically the state is set at drivers/base/power/runtime.c
+> > rpm_suspend() just before calling the device's runtime_suspend
+> > callback.  So the state is supposed to be same before and after
+> > snd_hda_power_up_pm() in that case.
+> Thanks!, Make sense, will push the updated patch after testing with
+> latest suggestion.
 
-Hi,
-Any feedback on this?
+Thanks.  Also don't forget to cover a case the test bot complained:
+the reference to power.runtime_status needs #ifdef CONFIG_PM.
 
--- 
-Thanks,
-Tadeusz
+
+Takashi

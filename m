@@ -2,102 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565644EA23A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 23:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9015E4EA23F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 23:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiC1VIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 17:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
+        id S229891AbiC1VKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 17:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiC1VIl (ORCPT
+        with ESMTP id S229662AbiC1VKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 17:08:41 -0400
-Received: from mail.thepaulodoom.com (www.thepaulodoom.com [45.77.108.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04B72E0CB;
-        Mon, 28 Mar 2022 14:06:58 -0700 (PDT)
-Received: from hp-amd-paul (c-98-240-189-147.hsd1.mn.comcast.net [98.240.189.147])
-        by vultr.guest (OpenSMTPD) with ESMTPSA id ffe6c82d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 28 Mar 2022 21:06:57 +0000 (UTC)
-Date:   Mon, 28 Mar 2022 16:06:53 -0500
-From:   Paul Lemmermann <thepaulodoom@thepaulodoom.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] IIO: accel: fixed coding style issues
-Message-ID: <YkIjbdICfxBZx3qf@hp-amd-paul>
-References: <YkHOpCT2Gad1YaxN@hp-amd-paul>
- <CAHp75Vf7R2=m7apZfXkY9-nETNiG7n6oXpivBg-56Wguzx2+8A@mail.gmail.com>
+        Mon, 28 Mar 2022 17:10:16 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AEF20F7C
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 14:08:33 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id r13so31221369ejd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 14:08:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Gy52q0hk0EOe2yARL7BLFUrhC07yc/LGzLY5hvJWd9Q=;
+        b=PspVM/NGsYmmepvwb7RIAfO4OVL1acnHrWJHnRYbUv5gXs6ulNmvXMW2TyCbx5Q7Yk
+         RcTiAFURzmyQiGtT6oGZjLVWGifIlTDuAhMA1jenOe/Ptz3rorytIwMJ6Y9H0kribuVR
+         NjaBTSekKRGEvfLcvBKtlgYJu4sjoYMv/TRgRND2J+PaeJymdZeJEpUm2ndWoLA12z6a
+         0+BxKzfI8SwJ521yviTn1P6Xfn9uwZ9Dc2knM62zK++NGw1xu9YpOev6kwIoarH0ywVl
+         C5/NNpMFgBtOIpU4gEwMOduyuUFvYSMvVNeWJBoPg0SXvoZ4uLz5BOXexjGT8HlcE05X
+         kcZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Gy52q0hk0EOe2yARL7BLFUrhC07yc/LGzLY5hvJWd9Q=;
+        b=cs86zCo9syL4aO5m2lBRunTSG9mxqUZdihqM0u45GBFyqzQfiEt6uwyETfnjHJg8TJ
+         IfAm8YBNn+8E/UOYtfjXjzuim0MHaZooV1yqPNZH1puqCX98fjLX50Zc6C0442Nayfwn
+         UOUh8Oe+DAUgpDdtGOicKell1QOvNqRcdFXR9uYA6IHazYQOqrC54rgcHWutD5hgPHMq
+         x9E6dVl6UwfkajWAjZvsiVGKkaWc7P3DaMUzztlSjHDS9m9vxHGHzCOtDi3wIepr6Z1z
+         /pdofLKbo4rRXss6U9DWxnPefQE1p5Q9njbWEugz0OSq8ubjMMdC+s9sv3zKa9Dg15YQ
+         g56Q==
+X-Gm-Message-State: AOAM531KmeApUq1AA38NFNQL0mD5IioQ1ofWtkHvPLb4YSxGZZo4CVVE
+        B+XBmzMqgvjMMbU3p+baa57DrBsgUwPjXDii2Do=
+X-Google-Smtp-Source: ABdhPJzF/ITADHePLd7Kqd1BNDEpYjsT1pDu1lP5yP42YMsGsMH5XWm/84sNviYmE9deBAzqOUwNaIpmQ1r5e4feVGc=
+X-Received: by 2002:a17:907:3e92:b0:6df:cb08:14f5 with SMTP id
+ hs18-20020a1709073e9200b006dfcb0814f5mr31124556ejc.308.1648501711578; Mon, 28
+ Mar 2022 14:08:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vf7R2=m7apZfXkY9-nETNiG7n6oXpivBg-56Wguzx2+8A@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220327050945.1614-1-xiam0nd.tong@gmail.com>
+In-Reply-To: <20220327050945.1614-1-xiam0nd.tong@gmail.com>
+From:   Chia-I Wu <olvaffe@gmail.com>
+Date:   Mon, 28 Mar 2022 14:08:20 -0700
+Message-ID: <CAPaKu7Q54aumxEjih3v=xiW3NG7ct1O5UBzyqMQ0bug4svy-5g@mail.gmail.com>
+Subject: Re: [PATCH] virtio-gpu: fix a missing check to avoid NULL dereference
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:VIRTIO CORE, NET AND BLOCK DRIVERS" 
+        <virtualization@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 11:32:44PM +0300, Andy Shevchenko wrote:
-> On Mon, Mar 28, 2022 at 7:45 PM Paul Lemmermann
-> <thepaulodoom@thepaulodoom.com> wrote:
-> >
-> > Fixed case statement issues and spacing issues.
-> 
-> ...
-> 
-> >                         switch (val[j]) {
-> > -                       case -1: str = "-1"; break;
-> > -                       case 0:  str = "0";  break;
-> > -                       case 1:  str = "1";  break;
-> > -                       default: goto unknown_format;
-> > +                       case -1:
-> > +                               str = "-1";
-> > +                               break;
-> > +                       case 0:
-> > +                               str = "0";
-> > +                               break;
-> > +                       case 1:
-> > +                               str = "1";
-> > +                               break;
-> > +                       default:
-> > +                               goto unknown_format;
-> >                         }
-> 
-> What you cited from documentation mostly affects the new code, but
-> this code is already in the kernel and modifying it, esp. taking into
-> account 3x LOCs count, looks like an unneeded churn, even if
-> documentation thinks otherwise.
-> 
-> What I could acknowledge from your proposal is the default case.
-> Otherwise just leave it to the point if we touch this code for
-> something else in the future.
-> 
-> ...
-> 
-> >  static const struct of_device_id kxsd9_of_match[] = {
-> > -        { .compatible = "kionix,kxsd9" },
-> > -        { },
-> > +       { .compatible = "kionix,kxsd9" },
-> 
-> > +       { },
-> 
-> I dunno why you touched this line (likely TABs vs. spaces), but please
-> remove the comma as well here.
-
-Yes, that is exactly why this patch exists.
-
-Thank you, I will take these thoughts into account and submit a new
-patch.
-
-Thanks!
-Paul
-> 
-> >  };
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+On Sat, Mar 26, 2022 at 10:09 PM Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
+>
+> 'cache_ent' could be set NULL inside virtio_gpu_cmd_get_capset()
+> and it will lead to a NULL dereference by a lately use of it
+> (i.e., ptr = cache_ent->caps_cache). Fix it with a NULL check.
+>
+> Fixes: 62fb7a5e10962 ("virtio-gpu: add 3d/virgl support")
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Reviewed-by: Chia-I Wu <olvaffe@gmail.com>
+> ---
+>  drivers/gpu/drm/virtio/virtgpu_ioctl.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/virtio/virtgpu_ioctl.c b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+> index c708bab555c6..b0f1c4d8fd23 100644
+> --- a/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+> +++ b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+> @@ -579,8 +579,10 @@ static int virtio_gpu_get_caps_ioctl(struct drm_device *dev,
+>         spin_unlock(&vgdev->display_info_lock);
+>
+>         /* not in cache - need to talk to hw */
+> -       virtio_gpu_cmd_get_capset(vgdev, found_valid, args->cap_set_ver,
+> +       ret = virtio_gpu_cmd_get_capset(vgdev, found_valid, args->cap_set_ver,
+>                                   &cache_ent);
+> +       if (ret)
+> +               return ret;
+>         virtio_gpu_notify(vgdev);
+>
+>  copy_exit:
+>
+> base-commit: f443e374ae131c168a065ea1748feac6b2e76613
+> --
+> 2.17.1
+>

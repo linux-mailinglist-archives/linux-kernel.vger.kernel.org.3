@@ -2,85 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119F04E9C36
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D414E9CC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Mar 2022 18:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237488AbiC1Q3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 12:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
+        id S243514AbiC1Qwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 12:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234778AbiC1Q3P (ORCPT
+        with ESMTP id S242931AbiC1Qwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 12:29:15 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117195F260
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:27:34 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id g20so17569623edw.6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:27:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XEFWEPpsTEXkLdyr1Ezg2gVzCPhUwdW/+QiCX/qKU9c=;
-        b=riSaaaSmFdboFZxl9sKIysyEp4a0WnJRns30buM8Q75sbJq8FqwsF9ceVR9o84+p8Y
-         YiJ9S2SvldTY4O+dOn6tGIZdXJpd0gLhydf9VSYfJ3ewBp7t+W7aQialZtss9h6DU2dq
-         WNuBmEuYuwTlJHTyC3cN9iCnND+vGHdAN9IAo/+2zwTQJdukZGJ5uxvASvO0A1Gr+f4O
-         EhwBBSvVIGLFGE9pL4ulxksfM6fEXGMift1+HGvv0n960qow3X5jdGcfC6t1M+DBbLB5
-         sYptd4mxJiSAy5rzM1Z4Rac4hccehG5c5Qit+fIWbhts1E4VCMlEy0fyH/AAFmhhZXai
-         ne9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XEFWEPpsTEXkLdyr1Ezg2gVzCPhUwdW/+QiCX/qKU9c=;
-        b=fvmDQ3VTAPUdPbYMCeSpxy17UZG3keYntdBUljaSdEwsuzTJl4fE+uEzxj+IyjAuZm
-         nfhbMuLqQ/N3oZ3hS8AZBHYfDq1/HQskjXuDs2UqEAR6AXMUGtXxyMuBZYB/CKCc7Y4E
-         v9t2MPvjDuOpd6Y7advRwCG/0LlAX/rtOhSJXe8WBhvefC+q4LPRpq+pAJY7rvCY0Wyx
-         m6osInNgcfSp6FQdRKF6mIt0Nc+tIA3dMmlOeDN5pNocJuK1ri3eVOFRGy0j5dlsGQWB
-         H2WQ+P45BwXe3dXOn/DJPFpguib8+MrSybDBzsdknG4yDQSFrLd1IEcv8mI+jLKazc/a
-         4sFA==
-X-Gm-Message-State: AOAM53057RJI0das8JICbHiDT4Q7A4p9LIhfl1TXwNhgesCJEz+SS5Mo
-        q/uwKa6JjghhCICIXpRwq43Q6WsfIhC5GTuOF/DV9M1w5G1U/Q==
-X-Google-Smtp-Source: ABdhPJxJaAYUy3dl/HuZh0tMXNHIVdjIu/Vmo2Lr0lwMqJgEr+0K1JO5Mk2kiy+JmRfLtwMldWDClK8WeTepoFdlkvQ=
-X-Received: by 2002:aa7:da90:0:b0:418:d7d3:3ceb with SMTP id
- q16-20020aa7da90000000b00418d7d33cebmr17045906eds.129.1648484852398; Mon, 28
- Mar 2022 09:27:32 -0700 (PDT)
+        Mon, 28 Mar 2022 12:52:34 -0400
+Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.146.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4930A48304
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 09:50:53 -0700 (PDT)
+Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
+        by gateway33.websitewelcome.com (Postfix) with ESMTP id D4CCEDE05
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 11:27:53 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id YsDhnm9DzXvvJYsDhnzV9w; Mon, 28 Mar 2022 11:27:53 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=wDN9VpzJLwYt/LpVw9pBXbbKy8BbkXAy+je0SIOYHx0=; b=Cax9ptlpBRhAzMgWEOh0rBPvcS
+        K5tzDhyEcBrW4gRtr/2NbnIpSjaxRXAXaJpnKLOJpGMkTHEk6+1BjdSxohgyBmUgI4sauOtjOH/cN
+        IsP8hmZwDXU8GuX8310rr3YFKG5wldlPEPdzlf9FUN8Ky8ZhBHUaUtIZrrdropCUUyFWHWb0CFxoZ
+        ozzBDb0AQX4y2cF/z7uehKc4E9X6xl9KfnZUoN3uHki3ngK+QKfFofeiGdnWSfXHrgy4WrR4jWRUv
+        3umBGMIYhqQcaIYpmcDfT9EbIJpSMR/noScFhWGvVy0EeW200Stlt6bqyoeSnWumwQpwWly6Dl2dq
+        wEsSeJaw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54526)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nYsDh-001dPE-4p; Mon, 28 Mar 2022 16:27:53 +0000
+Message-ID: <ab64105b-c48d-cdf2-598a-3e0a2e261b27@roeck-us.net>
+Date:   Mon, 28 Mar 2022 09:27:50 -0700
 MIME-Version: 1.0
-References: <20220326003356.487828-1-dlatypov@google.com>
-In-Reply-To: <20220326003356.487828-1-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 28 Mar 2022 12:27:21 -0400
-Message-ID: <CAFd5g46J2iNYE3T7JFkckh5nnQ9W_75o9ukMSSD=+v+cVGrLFA@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: kunit: update kconfig options needed for
- UML coverage
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        maxime@cerno.tech
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 0/2] hwmon: introduce hwmon_sanitize()
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>, Michael Walle <michael@walle.cc>
+Cc:     Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+References: <20220328115226.3042322-1-michael@walle.cc>
+ <YkGwjjUz+421O2E1@lunn.ch>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <YkGwjjUz+421O2E1@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nYsDh-001dPE-4p
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54526
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 2
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 8:34 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> Recent changes have made it so the current set is not sufficient.
-> Namely, CONFIG_DEBUG_INFO is not being set even when explicitly asked.
->
-> Specifying a version of the debug info fixes this.
-> Pick CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT as an option that's
-> hopefully less fragile (esp. given we're tied to GCC 6 and lower).
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+On 3/28/22 05:56, Andrew Lunn wrote:
+>> I'm not sure how to handle this correctly, as this touches both the
+>> network tree and the hwmon tree. Also, the GPY PHY temperature senors
+>> driver would use it.
+> 
+> There are a few options:
+> 
+> 1) Get the hwmon_sanitize_name() merged into hwmon, ask for a stable
+> branch, and get it merged into netdev net-next.
+> 
+> 2) Have the hwmon maintainers ACK the change and agree that it can be
+> merged via netdev.
+> 
+> Probably the second option is easiest, and since it is not touching
+> the core of hwmon, it is unlikely to cause merge conflicts.
+> 
 
-I agree with David's comment. Otherwise,
+No, it isn't the easiest solution because it also modifies a hwmon
+driver to use it.
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Guenter

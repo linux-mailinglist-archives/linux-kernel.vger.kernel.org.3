@@ -2,142 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE184EACA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 13:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BAF84EACAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 13:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235593AbiC2LwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 07:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
+        id S236112AbiC2LwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 07:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231262AbiC2Lv6 (ORCPT
+        with ESMTP id S236089AbiC2LwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 07:51:58 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85430DD979;
-        Tue, 29 Mar 2022 04:50:14 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id c15-20020a17090a8d0f00b001c9c81d9648so2555475pjo.2;
-        Tue, 29 Mar 2022 04:50:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GDmR2wftvG4msxBNDtyhyNG/hSX+JfcBfKqZXC22S84=;
-        b=lCEkb98plRxIzGgu8NPe39Af6CupawyEOqiHL0x0iXTQKydLayauFdzgC7AwCBDGpi
-         XkMDMYOiX6a8LxGzUuIEs3iMH6aIkdvI0SngWsJETv/WPkL9tqMOWrJ+cOYrEUURn37s
-         l8zYwLCP8Wxc7yKYNtRHngoyLH1pAjJkyjQZ5oNCmcJsBhLolgAuJUufMVq+uysWjnRg
-         tP2ysLiZCDfRtLqIX19l3wh5iZL73uCVjr8IFEv1kWvASBRupJcdm9OWNmTk1uj8nV0N
-         z7YWAkDh0Pn/XzNYGSEft3LFbxyOt68BGeDRGwM+m8idBrVEqutLLFrqAVpnwtS67c6E
-         kUvQ==
+        Tue, 29 Mar 2022 07:52:16 -0400
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0BBDE0B1;
+        Tue, 29 Mar 2022 04:50:32 -0700 (PDT)
+Received: by mail-oo1-f54.google.com with SMTP id i8-20020a4a6f48000000b00324ada4b9d9so3045750oof.11;
+        Tue, 29 Mar 2022 04:50:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GDmR2wftvG4msxBNDtyhyNG/hSX+JfcBfKqZXC22S84=;
-        b=DpqgmIhXXlAGQE2gViH8EY579/9CxoLXfhUAMwFZPsHGwvhO+GJXTUoWQdYT8V4hQP
-         +V6JZHSoKHbdDGuPK2lp4LuFTFVzedd2a/Cw+z1BHIpFWO6pAGSg77+jeyvL8JQ6Sav/
-         ueH8Sr9kegNA24bnvpTjhupGz3LHWeBQ12Z4iMkrRcEkQ3dS8hWOZsflp+84WIUo81gz
-         5XsZw0K38HyaYAXWA+fGuxeLpbzfvyuKntE96gdVk5ogYWbF95DDciVNb2OFg/fYzBr/
-         YbypLHrX1bfjBKljPyFcW3Z9aK+NAr5nVIlCzlzsSdB8CZ5m850QMkLOZcfL6U6kwU3Z
-         IN9g==
-X-Gm-Message-State: AOAM531G9h6Zs7XYOOefXr2CerNlpC4cxGuoONlCvPTEuh+F/Dd5DnFl
-        AmnF7oqyzlxdgSWq6i2BXCk=
-X-Google-Smtp-Source: ABdhPJx5ptLka+N/vMi5mG5BEvE1mm3YiKy+HflePq4/ubOUE9Iw3Yveh1gxXR8yIJs4+3B8Icxh4w==
-X-Received: by 2002:a17:902:9007:b0:14f:3680:66d1 with SMTP id a7-20020a170902900700b0014f368066d1mr29238402plp.91.1648554613937;
-        Tue, 29 Mar 2022 04:50:13 -0700 (PDT)
-Received: from localhost ([122.179.46.149])
-        by smtp.gmail.com with ESMTPSA id g5-20020a056a001a0500b004def10341e5sm19466568pfv.22.2022.03.29.04.50.13
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=yuvwzw+NPlzU064huZNX24SkiRaX81wKTyH2T/53Ev8=;
+        b=QICnIc4BanTYZgboW6PxHIVFNkb6JaDo5dpX6P2c9h1iQ9mc5rGhPj+iBD2YuK/Toi
+         ubiAJ/ofHEMZKcsMeKO0tELihFNqTkZ2MdE2Ljlp9k51LH420pxShF4FGDAur3xLWwYm
+         Pd5RlhxoAJLRHzhT1IPzUeLp7q2gxMjlJzvTqOyar2dyCB6J2SUUXKQCLqjQU6ycRoeW
+         +vSb17XaKN+QF5Y28yzjNuT09sXs9eew9LmCgioJ9uyRkLUJddXv+pFCpBvYzuaeoM0P
+         HAOKIX/L9Ydr4GzHkYupVzQtxHUWs+zb4V1pG2UwsgiKGmiPM8WSrqthRqEBeT+DwcgA
+         0BHw==
+X-Gm-Message-State: AOAM532P1QEiNMEv/+q4AX77EEWyS9BIvG1MQsMHtr+8B/rJlmPxldUK
+        XZ7Bps+R1PHXdn1uTDjfSw==
+X-Google-Smtp-Source: ABdhPJwmR/a0AlYIct99XZbVh2WM6/sYPiNZPnX2sfuAxKga/UBtw/wMHWh9AAsLInOrS4ej0s0RZQ==
+X-Received: by 2002:a4a:d254:0:b0:324:b1bf:da28 with SMTP id e20-20020a4ad254000000b00324b1bfda28mr834035oos.49.1648554631484;
+        Tue, 29 Mar 2022 04:50:31 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id d3-20020a9d2903000000b005cda765f578sm8641220otb.0.2022.03.29.04.50.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 04:50:13 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 17:20:11 +0530
-From:   Ritesh Harjani <ritesh.list@gmail.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzbot <syzbot+4cb1e27475bf90a9b926@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, cmaiolino@redhat.com,
-        lczerner@redhat.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sjc@chobot.com,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu, wanjiabing@vivo.com
-Subject: Re: [syzbot] KASAN: use-after-free Read in ext4_xattr_set_entry (4)
-Message-ID: <20220329115011.5fyhukqlfvvzojbg@riteshh-domain>
-References: <00000000000079c56a05ba1c18c3@google.com>
- <000000000000b8cdba05dae41558@google.com>
- <CACT4Y+bWiUfw4YEx7x9rCb80SwbQPfFfSWP6-7cYxOSs5vw39A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACT4Y+bWiUfw4YEx7x9rCb80SwbQPfFfSWP6-7cYxOSs5vw39A@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 29 Mar 2022 04:50:30 -0700 (PDT)
+Received: (nullmailer pid 350363 invoked by uid 1000);
+        Tue, 29 Mar 2022 11:50:29 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     andrew@lunn.ch, ulf.hansson@linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        sebastian.hesselbarth@gmail.com, gregory.clement@bootlin.com,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        krzk+dt@kernel.org, huziji@marvell.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+In-Reply-To: <20220329000231.3544810-3-chris.packham@alliedtelesis.co.nz>
+References: <20220329000231.3544810-1-chris.packham@alliedtelesis.co.nz> <20220329000231.3544810-3-chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH v4 2/2] dt-bindings: mmc: xenon: Convert to JSON schema
+Date:   Tue, 29 Mar 2022 06:50:29 -0500
+Message-Id: <1648554629.870840.350362.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/25 07:18AM, Dmitry Vyukov wrote:
-> On Wed, 23 Mar 2022 at 16:07, syzbot
-> <syzbot+4cb1e27475bf90a9b926@syzkaller.appspotmail.com> wrote:
-> >
-> > syzbot suspects this issue was fixed by commit:
-> >
-> > commit 6e47a3cc68fc525428297a00524833361ebbb0e9
-> > Author: Lukas Czerner <lczerner@redhat.com>
-> > Date:   Wed Oct 27 14:18:52 2021 +0000
-> >
-> >     ext4: get rid of super block and sbi from handle_mount_ops()
-> >
-> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=100bc10b700000
-> > start commit:   f8ad8187c3b5 fs/pipe: allow sendfile() to pipe again
-> > git tree:       upstream
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=96b123631a6700e9
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=4cb1e27475bf90a9b926
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11131f94d00000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c3761b500000
-> >
-> > If the result looks correct, please mark the issue as fixed by replying with:
-> >
-> > #syz fix: ext4: get rid of super block and sbi from handle_mount_ops()
-> >
-> > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
->
-> Looks reasonable:
->
-> #syz fix: ext4: get rid of super block and sbi from handle_mount_ops()
+On Tue, 29 Mar 2022 13:02:31 +1300, Chris Packham wrote:
+> Convert the marvell,xenon-sdhci binding to JSON schema. Currently the
+> in-tree dts files don't validate because they use sdhci@ instead of mmc@
+> as required by the generic mmc-controller schema.
+> 
+> The compatible "marvell,sdhci-xenon" was not documented in the old
+> binding but it accompanies the of "marvell,armada-3700-sdhci" in the
+> armada-37xx SoC dtsi so this combination is added to the new binding
+> document.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+> 
+> Notes:
+>     Changes in v4:
+>     - Add review from Krzysztof
+>     - Squash in addition of marvell,sdhci-xenon with an explanation in the
+>       commit message
+>     Changes in v3:
+>     - Don't accept ap807 without ap806
+>     - Add ref: string for pad-type
+>     Changes in v2:
+>     - Update MAINTAINERS entry
+>     - Incorporate feedback from Krzysztof
+> 
+>  .../bindings/mmc/marvell,xenon-sdhci.txt      | 173 -----------
+>  .../bindings/mmc/marvell,xenon-sdhci.yaml     | 275 ++++++++++++++++++
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 276 insertions(+), 174 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt
+>  create mode 100644 Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+> 
 
-Sorry, I might have missed some discussion maybe.
-But why do we think that this patch could fix the reported bug?
-Because I see this patch from Lukas is a part of "ext4: new mount API
-conversion" patch series. This I guess has nothing to do with the reported call
-stack, no?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Or am I missing anything?
+yamllint warnings/errors:
 
-BUG: KASAN: use-after-free in ext4_xattr_set_entry+0x3151/0x3780 fs/ext4/xattr.c:1586
-Read of size 4 at addr ffff888030c00004 by task syz-executor392/11280
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.example.dt.yaml: mmc@aa0000: compatible: 'oneOf' conditional failed, one must be fixed:
+	['marvell,armada-3700-sdhci'] is too short
+	'marvell,armada-3700-sdhci' is not one of ['marvell,armada-cp110-sdhci', 'marvell,armada-ap806-sdhci']
+	'marvell,armada-ap807-sdhci' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.example.dt.yaml: mmc@ab0000: compatible: 'oneOf' conditional failed, one must be fixed:
+	['marvell,armada-3700-sdhci'] is too short
+	'marvell,armada-3700-sdhci' is not one of ['marvell,armada-cp110-sdhci', 'marvell,armada-ap806-sdhci']
+	'marvell,armada-ap807-sdhci' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
 
-CPU: 0 PID: 11280 Comm: syz-executor392 Not tainted 5.11.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:79 [inline]
- dump_stack+0x107/0x163 lib/dump_stack.c:120
- print_address_description.constprop.0.cold+0x5b/0x2f8 mm/kasan/report.c:230
- __kasan_report mm/kasan/report.c:396 [inline]
- kasan_report.cold+0x79/0xd5 mm/kasan/report.c:413
- ext4_xattr_set_entry+0x3151/0x3780 fs/ext4/xattr.c:1586
- ext4_xattr_ibody_set+0x78/0x2b0 fs/ext4/xattr.c:2224
- ext4_xattr_set_handle+0x8f4/0x13e0 fs/ext4/xattr.c:2380
- ext4_xattr_set+0x13a/0x340 fs/ext4/xattr.c:2493
- __vfs_setxattr+0x10e/0x170 fs/xattr.c:177
- __vfs_setxattr_noperm+0x11a/0x4c0 fs/xattr.c:208
- __vfs_setxattr_locked+0x1bf/0x250 fs/xattr.c:266
- vfs_setxattr+0x135/0x320 fs/xattr.c:291
- setxattr+0x1ff/0x290 fs/xattr.c:553
- path_setxattr+0x170/0x190 fs/xattr.c:572
- __do_sys_setxattr fs/xattr.c:587 [inline]
- __se_sys_setxattr fs/xattr.c:583 [inline]
- __x64_sys_setxattr+0xc0/0x160 fs/xattr.c:583
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+doc reference errors (make refcheckdocs):
 
+See https://patchwork.ozlabs.org/patch/1610447
 
--ritesh
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2694EB4AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1BE4EB4A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbiC2UX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 16:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
+        id S231603AbiC2UYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 16:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbiC2UXh (ORCPT
+        with ESMTP id S231405AbiC2UXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 16:23:37 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C4623B3FD
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 13:21:53 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id pv16so37466768ejb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 13:21:53 -0700 (PDT)
+        Tue, 29 Mar 2022 16:23:38 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CEF12221F
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 13:21:54 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id qa43so37387800ejc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 13:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=tFUJkKDNSDlaGRatgnjRTwnUsmUOuBgdOwxC6d/heDg=;
-        b=ILwQiPuexznMlZzfZ499KkWWp3FTCt9En4hJq0G3JPeDcSovZzeVa6o+fkNo+6f6eZ
-         rV5Kgk0uzq9H3a73qfvSqXAnlsaIrJOOxunyhgNqePq+uAXu2tdVqhw5WsB3fdrlGzSL
-         6x6ISn0SUSjLio6JxqKCJqaie+dLsFgZ82vh+3AhpVJAdItkvtxjNcyBeOdhottgAJ6j
-         2h50T+3vFPu1eIpMf4qLsqvq9KNgkSdtrxGpt00xjBjq7s0hdYaNGpVAVO7jxswUIZqg
-         JAR9CTlO8XNn8cKXXW+4Epsly+Z26Y7+lwqLwoJJIMUsG1ITV6pSrtjvZyuoEi2cMbwX
-         0/jw==
+        bh=Rm745D6xhclneBAjGr3VVkPQWEDVAMfJN6aO5oy/Yx4=;
+        b=XWrTwpWwc6tx4JOrixKR++eET5FoOLIPUNU98mZounH+JyVXW/JA2DxPuCWY6QAjIy
+         FoR1QyN8RiiMyWOvyAcD3ZI42e0tBW7EMVaOucIYOWPIotA4X6+pprt0WifmXxSmME4n
+         O+XD2urLrbzI6/dzLc2oJ0zz4rgY4dLMPY45iE5BI2mPQVSt3C87UU8/wP0xDdSRWr/J
+         9q/pHuhooyy63dz6MK9TvR5tdoZ/zICKUyhTIGAhIhFRLEl8Fog95CXJfmcZnE51vYoX
+         QMnClf0/rGMyq+D3OeAHBC0KBUixpeH4XsxlHL4X+P4JjoG9Bj0QH4Clecfy43PpKTMW
+         jLXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tFUJkKDNSDlaGRatgnjRTwnUsmUOuBgdOwxC6d/heDg=;
-        b=s4rHvar9PsgoWaxNG3aNw8r37fsqyhhGfGU+lO4PnT3tcWkW2clF5McU9CK5T/ETl2
-         s0NCJlKakzKyk+bdR8UijD23y3fiSzkH5Cvz6V1p2i6sC0awcq0DYN1jdVCOGLdMd99g
-         OypOP3n36ogBRFzOwJMKT3fHO9MKNsXgQAQ6qYcnWB8EBUfKP1nvSFf0FQiQ9BLpy2Cu
-         ZR6DZJWRl308hph5kl1M/RekvIu0mFnkK2DDmZEwfQBpIX3zNq7W12UZYVOUD1K3uYk4
-         zmtPTYzkBbcaZL0Ct5VF/oM0w2x2BR+zXjuvEtvNar94gpy5B9to8tICuklXHIql80MV
-         0XQA==
-X-Gm-Message-State: AOAM5326S6pZPL7EflvenY/Dvwn8yy0UQ9r/prcv9VwmkVKHYVCr+GJy
-        itUVfb/7AfhxdVaApFL0Hpw8RUIId0o=
-X-Google-Smtp-Source: ABdhPJyoyU0t0fHUeTsbyn9P2w0/m69f5NzLf++en/S7/O08ht/Bf0ZI72Hz+EUn+qNGq1qQqicIQw==
-X-Received: by 2002:a17:907:9801:b0:6db:ab31:96f4 with SMTP id ji1-20020a170907980100b006dbab3196f4mr36730399ejc.571.1648585312165;
+        bh=Rm745D6xhclneBAjGr3VVkPQWEDVAMfJN6aO5oy/Yx4=;
+        b=jn7AxeV5H2DUfuIIK4vRHZgatse4d6TzWsLGckNF0D/CuEKPfgnh7YycGBlTohBVts
+         lSetZcQefdno/W/xeqxbPoHTWrPVwdY03NJeb5xaPREwh1Xtkzah9AQi0D0DqywR4Cza
+         BlJoDkyrO7ZzWGbU4/a7S1faSXgweC3xjXiqkxSoX+nX8X6ghKa8Jx8NQeD+gurZH1ZR
+         Q7tT7WAkqh015U/ET4tvtNICkBQGGUy3EAyfs8nARFBhyAEmdC8Ob2zFg3D6xlG87a5G
+         ToswklY0dnA1DUyMWJ7oRPkGZhwb5LCULo6MWEh2RFp+TVhws2KXblO5hVX1HVALA3d+
+         4Rmw==
+X-Gm-Message-State: AOAM531NlQRIVmv35CwuP7Hae+mU7omAbypQEp8oqaQ7zmZl1EEQWhSx
+        k5mhh7vH6KVw0NKqZcLjj/8Ny5ebnYM=
+X-Google-Smtp-Source: ABdhPJxSWEuMjJjWnQiMZVz+zwSjoXL8OwJOedad+fGqqzzmL0mySxT/9s/fOSJUHghYbZv0iDlabg==
+X-Received: by 2002:a17:906:3adb:b0:6b7:876c:d11b with SMTP id z27-20020a1709063adb00b006b7876cd11bmr36234623ejd.250.1648585312922;
         Tue, 29 Mar 2022 13:21:52 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
-        by smtp.gmail.com with ESMTPSA id ss12-20020a170907038c00b006e0ec9e806dsm3938111ejb.136.2022.03.29.13.21.51
+        by smtp.gmail.com with ESMTPSA id ss12-20020a170907038c00b006e0ec9e806dsm3938111ejb.136.2022.03.29.13.21.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 13:21:51 -0700 (PDT)
+        Tue, 29 Mar 2022 13:21:52 -0700 (PDT)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH v2 4/8] staging: r8188eu: remove HW_VAR_ACM_CTRL from SetHwReg8188EU()
-Date:   Tue, 29 Mar 2022 22:21:37 +0200
-Message-Id: <20220329202141.7028-5-straube.linux@gmail.com>
+Subject: [PATCH v2 5/8] staging: r8188eu: remove HW_VAR_RXDMA_AGG_PG_TH from SetHwReg8188EU()
+Date:   Tue, 29 Mar 2022 22:21:38 +0200
+Message-Id: <20220329202141.7028-6-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220329202141.7028-1-straube.linux@gmail.com>
 References: <20220329202141.7028-1-straube.linux@gmail.com>
@@ -71,115 +71,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SetHwReg8188EU() is called with HW_VAR_ACM_CTRL only from a function
-in rtw_wlan_util.c. Move the functionality into a static function in
-rtw_wlan_util.c and remove the HW_VAR_ACM_CTRL case from
-SetHwReg8188EU(). This is part of the ongoing effort to get rid of the
-unwanted hal layer.
+The HW_VAR_RXDMA_AGG_PG_TH case in SetHwReg8188EU() just sets a
+variable conditionally and then calls rtw_write8(). Set the variable
+in the caller and call rtw_write8() directly. Move the functionality
+into a new static function to make the code cleaner. Remove the
+HW_VAR_RXDMA_AGG_PG_TH case from SetHwReg8188EU(). This is part of the
+ongoing effort to get rid of the unwanted hal layer.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
-v2: Moved the code into a function.
+v2: Moved the code into a function and included patch 6/9 of v1.
 
- drivers/staging/r8188eu/core/rtw_wlan_util.c | 27 +++++++++++++++++++-
- drivers/staging/r8188eu/hal/usb_halinit.c    | 26 -------------------
- drivers/staging/r8188eu/include/hal_intf.h   |  1 -
- 3 files changed, 26 insertions(+), 28 deletions(-)
+ drivers/staging/r8188eu/core/rtw_mlme.c    | 34 +++++++++++++---------
+ drivers/staging/r8188eu/hal/usb_halinit.c  |  8 -----
+ drivers/staging/r8188eu/include/hal_intf.h |  1 -
+ 3 files changed, 21 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_wlan_util.c b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-index e44f4752f222..f005bd3c9ff2 100644
---- a/drivers/staging/r8188eu/core/rtw_wlan_util.c
-+++ b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-@@ -503,6 +503,31 @@ int WMM_param_handler(struct adapter *padapter, struct ndis_802_11_var_ie *pIE)
- 	return true;
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+index f1e1627641cb..086d64542082 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+@@ -1787,10 +1787,29 @@ void rtw_update_registrypriv_dev_network(struct adapter *adapter)
+ 
  }
  
-+static void set_acm_ctrl(struct adapter *adapter, u8 acm_mask)
++static void rtw_set_threshold(struct adapter *adapter)
 +{
-+	u8 acmctrl = rtw_read8(adapter, REG_ACMHWCTRL);
++	u8 threshold;
++	struct mlme_priv *mlmepriv = &adapter->mlmepriv;
++	struct ht_priv *htpriv = &mlmepriv->htpriv;
 +
-+	if (acm_mask > 1)
-+		acmctrl = acmctrl | 0x1;
++	/*  TH = 1 => means that invalidate usb rx aggregation */
++	/*  TH = 0 => means that validate usb rx aggregation, use init value. */
++	if (htpriv->ht_option) {
++		if (adapter->registrypriv.wifi_spec == 1)
++			threshold = 1;
++		else
++			threshold = USB_RXAGG_PAGE_COUNT;
 +
-+	if (acm_mask & BIT(3))
-+		acmctrl |= ACMHW_VOQEN;
-+	else
-+		acmctrl &= (~ACMHW_VOQEN);
-+
-+	if (acm_mask & BIT(2))
-+		acmctrl |= ACMHW_VIQEN;
-+	else
-+		acmctrl &= (~ACMHW_VIQEN);
-+
-+	if (acm_mask & BIT(1))
-+		acmctrl |= ACMHW_BEQEN;
-+	else
-+		acmctrl &= (~ACMHW_BEQEN);
-+
-+	rtw_write8(adapter, REG_ACMHWCTRL, acmctrl);
++		rtw_write8(adapter, REG_RXDMA_AGG_PG_TH, threshold);
++	} else {
++		rtw_write8(adapter, REG_RXDMA_AGG_PG_TH, 1);
++	}
 +}
 +
- void WMMOnAssocRsp(struct adapter *padapter)
+ /* the function is at passive_level */
+ void rtw_joinbss_reset(struct adapter *padapter)
  {
- 	u8	ACI, ACM, AIFS, ECWMin, ECWMax, aSifsTime;
-@@ -564,7 +589,7 @@ void WMMOnAssocRsp(struct adapter *padapter)
- 	}
+-	u8	threshold;
+ 	struct mlme_priv	*pmlmepriv = &padapter->mlmepriv;
+ 	struct ht_priv		*phtpriv = &pmlmepriv->htpriv;
  
- 	if (padapter->registrypriv.acm_method == 1)
--		SetHwReg8188EU(padapter, HW_VAR_ACM_CTRL, (u8 *)(&acm_mask));
-+		set_acm_ctrl(padapter, acm_mask);
- 	else
- 		padapter->mlmepriv.acm_mask = acm_mask;
+@@ -1801,18 +1820,7 @@ void rtw_joinbss_reset(struct adapter *padapter)
  
+ 	phtpriv->ampdu_enable = false;/* reset to disabled */
+ 
+-	/*  TH = 1 => means that invalidate usb rx aggregation */
+-	/*  TH = 0 => means that validate usb rx aggregation, use init value. */
+-	if (phtpriv->ht_option) {
+-		if (padapter->registrypriv.wifi_spec == 1)
+-			threshold = 1;
+-		else
+-			threshold = 0;
+-		SetHwReg8188EU(padapter, HW_VAR_RXDMA_AGG_PG_TH, (u8 *)(&threshold));
+-	} else {
+-		threshold = 1;
+-		SetHwReg8188EU(padapter, HW_VAR_RXDMA_AGG_PG_TH, (u8 *)(&threshold));
+-	}
++	rtw_set_threshold(padapter);
+ }
+ 
+ /* the function is >= passive_level */
 diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index 8dc90f9636b5..1bf867123c48 100644
+index 1bf867123c48..1b08346f2afd 100644
 --- a/drivers/staging/r8188eu/hal/usb_halinit.c
 +++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -1139,32 +1139,6 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
- 		haldata->AcParam_BE = ((u32 *)(val))[0];
- 		rtw_write32(Adapter, REG_EDCA_BE_PARAM, ((u32 *)(val))[0]);
+@@ -1193,14 +1193,6 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
+ 			}
+ 		}
  		break;
--	case HW_VAR_ACM_CTRL:
+-	case HW_VAR_RXDMA_AGG_PG_TH:
 -		{
--			u8 acm_ctrl = *((u8 *)val);
--			u8 AcmCtrl = rtw_read8(Adapter, REG_ACMHWCTRL);
--
--			if (acm_ctrl > 1)
--				AcmCtrl = AcmCtrl | 0x1;
--
--			if (acm_ctrl & BIT(3))
--				AcmCtrl |= ACMHW_VOQEN;
--			else
--				AcmCtrl &= (~ACMHW_VOQEN);
--
--			if (acm_ctrl & BIT(2))
--				AcmCtrl |= ACMHW_VIQEN;
--			else
--				AcmCtrl &= (~ACMHW_VIQEN);
--
--			if (acm_ctrl & BIT(1))
--				AcmCtrl |= ACMHW_BEQEN;
--			else
--				AcmCtrl &= (~ACMHW_BEQEN);
--
--			rtw_write8(Adapter, REG_ACMHWCTRL, AcmCtrl);
+-			u8 threshold = *((u8 *)val);
+-			if (threshold == 0)
+-				threshold = USB_RXAGG_PAGE_COUNT;
+-			rtw_write8(Adapter, REG_RXDMA_AGG_PG_TH, threshold);
 -		}
 -		break;
- 	case HW_VAR_AMPDU_MIN_SPACE:
+ 	case HW_VAR_H2C_FW_PWRMODE:
  		{
- 			u8 MinSpacingToSet;
+ 			u8 psmode = (*(u8 *)val);
 diff --git a/drivers/staging/r8188eu/include/hal_intf.h b/drivers/staging/r8188eu/include/hal_intf.h
-index d481cc759e27..5b4de29a2e10 100644
+index 5b4de29a2e10..8708675c3478 100644
 --- a/drivers/staging/r8188eu/include/hal_intf.h
 +++ b/drivers/staging/r8188eu/include/hal_intf.h
-@@ -23,7 +23,6 @@ enum hw_variables {
- 	HW_VAR_DM_FUNC_RESET,
- 	HW_VAR_DM_FUNC_CLR,
+@@ -25,7 +25,6 @@ enum hw_variables {
  	HW_VAR_AC_PARAM_BE,
--	HW_VAR_ACM_CTRL,
  	HW_VAR_AMPDU_MIN_SPACE,
  	HW_VAR_AMPDU_FACTOR,
- 	HW_VAR_RXDMA_AGG_PG_TH,
+-	HW_VAR_RXDMA_AGG_PG_TH,
+ 	HW_VAR_H2C_FW_PWRMODE,
+ 	HW_VAR_H2C_FW_JOINBSSRPT,
+ 	HW_VAR_FWLPS_RF_ON,
 -- 
 2.35.1
 

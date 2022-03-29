@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84FC14EAB22
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E384EAB25
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235098AbiC2KUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 06:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34368 "EHLO
+        id S235119AbiC2KUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 06:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235093AbiC2KTy (ORCPT
+        with ESMTP id S235105AbiC2KT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 06:19:54 -0400
+        Tue, 29 Mar 2022 06:19:56 -0400
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795722405BD
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 03:18:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494482414D2
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 03:18:09 -0700 (PDT)
 Received: from integral2.. (unknown [182.2.70.161])
-        by gnuweeb.org (Postfix) with ESMTPSA id 151CE7E734;
-        Tue, 29 Mar 2022 10:18:01 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id EE7447E726;
+        Tue, 29 Mar 2022 10:18:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1648549085;
-        bh=DJZFv4JotEMo5L83nTqipusJFM8ZYgW9v7ot8diz0vk=;
+        s=default; t=1648549088;
+        bh=IyJY9APPUs2Jm0t28TfIT9sgV0eTR+GH3x1eZDSz5/I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VQtJiwB00c4DkarcuHtgJpo5lMxauXI6ZY2BAAz027atQbihyJahtmO5ASq05SpoE
-         ER3x8AqZZW9Y9A3fvGB15CFuVCrQV4XyqQnmfHXEJ1FURvektiK4j2H45gOiTdEBYG
-         IimqHvHsTCdJqTS+3pShi5ZkhSbvAXYehNuUwpjVu0FLR7MxmD5DSd8O3Z/3u+VsEB
-         A9/hbEPCnBmGEWuWkStjGKZ4GmjbArtmA/2E4Fux7IB+7JP9kR/txZuXAktrIcbSlu
-         B36r1OxolWe0Sb7enkTZcTd44Ys++bsNJC/MVcDpSZnhaHFHOseDbsbNhWaqE4FzNM
-         RT15qfrBhKR1Q==
+        b=ARsHG3hF9MVFev9wunSZZCkONyT2C3efkgmQmEfQ17AauzFAyNh5n6IGVNXurrPuL
+         raOclWhgZam5LbHBvWzkIhC7PiQihr5Gfk/cS8/kye//ks3z7KLCcw75x9oTwRgKYx
+         OVbzvFKJLNLeujgAkd7UInBvvf9mNxM/S2fI0Wx5JNrvz8i6TQZnSD5baSqai+Zsqq
+         PgvX0OMI4RQzumlV+A3McOE3YuPD+IkOVwetPEA+0QcJZyYeRWoa6AXS13185vu77a
+         pSsxcI5kTT91EjcGEwOVxqiO+0Ebgvg4EveGwERp0v5KzS65VEgEqm4LnirTrw8XSu
+         4n76w7yxbG68Q==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Willy Tarreau <w@1wt.eu>
 Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
@@ -36,9 +36,9 @@ Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: [PATCH v2 5/9] tools/nolibc/sys: Implement `mmap()` and `munmap()`
-Date:   Tue, 29 Mar 2022 17:17:33 +0700
-Message-Id: <20220329101737.58985-6-ammarfaizi2@gnuweeb.org>
+Subject: [PATCH v2 6/9] tools/nolibc/types: Implement `offsetof()` and `container_of()` macro
+Date:   Tue, 29 Mar 2022 17:17:34 +0700
+Message-Id: <20220329101737.58985-7-ammarfaizi2@gnuweeb.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220329101737.58985-1-ammarfaizi2@gnuweeb.org>
 References: <20220329101737.58985-1-ammarfaizi2@gnuweeb.org>
@@ -53,118 +53,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement mmap() and munmap(). Currently, they are only available for
-architecures that have my_syscall6 macro. For architectures that don't
-have, this function will return -1 with errno set to ENOSYS (Function
-not implemented).
-
-This has been tested on x86 and i386.
-
-Notes for i386:
- 1) The common mmap() syscall implementation uses __NR_mmap2 instead
-    of __NR_mmap.
-
- 2) The offset must be shifted-right by 12-bit.
+Implement `offsetof()` and `container_of()` macro. The first use case
+of these macros is for `malloc()`, `realloc()` and `free()`.
 
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ===
 @@ Changelog:
 
-   Link v1: https://lore.gnuweeb.org/gwml/20220324073039.140946-8-ammarfaizi2@gnuweeb.org
+   Link v1: https://lore.gnuweeb.org/gwml/20220324073039.140946-9-ammarfaizi2@gnuweeb.org
    v1 -> v2:
     * No changes *
 
-   Link RFC v2: https://lore.kernel.org/lkml/20220322102115.186179-5-ammarfaizi2@gnuweeb.org
+   Link RFC v2: https://lore.kernel.org/lkml/20220322102115.186179-6-ammarfaizi2@gnuweeb.org
    RFC v2 -> v1:
     * No changes *
 
-   Link RFC v1: https://lore.kernel.org/lkml/20220320093750.159991-5-ammarfaizi2@gnuweeb.org
-   RFC v1 -> RFC v2:
-    * No changes *
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- tools/include/nolibc/sys.h | 62 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 62 insertions(+)
+ tools/include/nolibc/types.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 4d4308d5d111..08491070387b 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -14,6 +14,7 @@
- #include <asm/unistd.h>
- #include <asm/signal.h>  // for SIGCHLD
- #include <asm/ioctls.h>
-+#include <asm/mman.h>
- #include <linux/fs.h>
- #include <linux/loop.h>
- #include <linux/time.h>
-@@ -675,6 +676,67 @@ int mknod(const char *path, mode_t mode, dev_t dev)
- 	return ret;
- }
+diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
+index 357e60ad38a8..959997034e55 100644
+--- a/tools/include/nolibc/types.h
++++ b/tools/include/nolibc/types.h
+@@ -191,4 +191,15 @@ struct stat {
+ #define major(dev) ((unsigned int)(((dev) >> 8) & 0xfff))
+ #define minor(dev) ((unsigned int)(((dev) & 0xff))
  
-+#ifndef MAP_SHARED
-+#define MAP_SHARED		0x01	/* Share changes */
-+#define MAP_PRIVATE		0x02	/* Changes are private */
-+#define MAP_SHARED_VALIDATE	0x03	/* share + validate extension flags */
++#ifndef offsetof
++#define offsetof(TYPE, FIELD) ((size_t) &((TYPE *)0)->FIELD)
 +#endif
 +
-+#ifndef MAP_FAILED
-+#define MAP_FAILED ((void *)-1)
++#ifndef container_of
++#define container_of(PTR, TYPE, FIELD) ({			\
++	__typeof__(((TYPE *)0)->FIELD) *__FIELD_PTR = (PTR);	\
++	(TYPE *)((char *) __FIELD_PTR - offsetof(TYPE, FIELD));	\
++})
 +#endif
 +
-+static __attribute__((unused))
-+void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
-+	       off_t offset)
-+{
-+#ifndef my_syscall6
-+	/* Function not implemented. */
-+	return -ENOSYS;
-+#else
-+
-+	int n;
-+
-+#if defined(__i386__)
-+	n = __NR_mmap2;
-+	offset >>= 12;
-+#else
-+	n = __NR_mmap;
-+#endif
-+
-+	return (void *)my_syscall6(n, addr, length, prot, flags, fd, offset);
-+#endif
-+}
-+
-+static __attribute__((unused))
-+void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
-+{
-+	void *ret = sys_mmap(addr, length, prot, flags, fd, offset);
-+
-+	if ((unsigned long)ret >= -4095UL) {
-+		SET_ERRNO(-(long)ret);
-+		ret = MAP_FAILED;
-+	}
-+	return ret;
-+}
-+
-+static __attribute__((unused))
-+int sys_munmap(void *addr, size_t length)
-+{
-+	return my_syscall2(__NR_munmap, addr, length);
-+}
-+
-+static __attribute__((unused))
-+int munmap(void *addr, size_t length)
-+{
-+	int ret = sys_munmap(addr, length);
-+
-+	if (ret < 0) {
-+		SET_ERRNO(-ret);
-+		ret = -1;
-+	}
-+	return ret;
-+}
- 
- /*
-  * int mount(const char *source, const char *target,
+ #endif /* _NOLIBC_TYPES_H */
 -- 
 Ammar Faizi
 

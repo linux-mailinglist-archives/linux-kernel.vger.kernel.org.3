@@ -2,87 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE274EADA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2804EADDA
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234892AbiC2Mu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 08:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
+        id S236998AbiC2Mxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 08:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234837AbiC2Mti (ORCPT
+        with ESMTP id S237156AbiC2Mw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 08:49:38 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4B41B2;
-        Tue, 29 Mar 2022 05:47:54 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id BCB281F43E07
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648558073;
-        bh=tJzMYOhX+6l/q9zZjN+QPrd8ljoj0rb7a1tgDfRrPbE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=O8GNe3VfKg3pYdZ1I8sCYquUFd3JTXG47fVyk4/DELPOhaEyYXPaqqCMaQRum5ABL
-         nLTj/0NFPa6rsIOqyIbVU0WBvKCO/ed/kSqGLCT5Dw33SMxA+BReycYTJqX4wEY7t/
-         EZwqjhi2wfNLtxbPYZCew6QiDqDOIsfO/5vhk9ZQ6lGYiTKZ4pVNKuj9Y2ciqIJhuz
-         t4FXcLiZ1QQmo9J0TC/B9hsLFIszOpTvq9ezpMZNaHUnoqeMiZCYw5EXZrF/IcchM9
-         NCVD/dDFRANMa3ojLk4nDut1LDYowr0eIuTU+zLw3hNpbqvQCUChfDSTbU+7cWteW1
-         7gmzR+I7KPV6w==
-Message-ID: <97f2b11d-15c7-d28e-f7b5-e65f2f333580@collabora.com>
-Date:   Tue, 29 Mar 2022 14:47:50 +0200
+        Tue, 29 Mar 2022 08:52:59 -0400
+Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [IPv6:2001:1600:4:17::42ae])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654549FF6
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:51:00 -0700 (PDT)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KSTvQ1PW2zMq12m;
+        Tue, 29 Mar 2022 14:50:58 +0200 (CEST)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KSTvN48RFzlhRV5;
+        Tue, 29 Mar 2022 14:50:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1648558258;
+        bh=30DsOpvra0kSW59WSQV7y+gbtpJ+JQgeFCNzw4XWLXI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Z5sh+qFGfjJpuUF5qsB5XzdkskXrGFLBI3Q6fzWTYyXKD+nhwaqOvB5HiegtH2D8w
+         RDfu3m4SO160S/f0OOmoS0kbP7OyZw1GI2Yln5ATMN6k/srgFbRZS28BKKaAoVH+/Z
+         qIUNkVv8mSRMXPNMny64kCBix40BpgleK56Jib+M=
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jann Horn <jannh@google.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [PATCH v2 00/12] Landlock: file linking and renaming support
+Date:   Tue, 29 Mar 2022 14:51:05 +0200
+Message-Id: <20220329125117.1393824-1-mic@digikod.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v12 1/3] dt-bindings: mmc: mtk-sd: fix yamllint error
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Wenbin Mei <wenbin.mei@mediatek.com>
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        ryder.lee@kernel.org, wenst@chromium.org, chunfeng.yun@mediatek.com
-References: <20220329114540.17140-1-tinghan.shen@mediatek.com>
- <20220329114540.17140-2-tinghan.shen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220329114540.17140-2-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 29/03/22 13:45, Tinghan Shen ha scritto:
-> Documentation/devicetree/bindings/mmc/mtk-sd.yaml
->    54:81     error    line too long (95 > 80 characters)  (line-length)
-> 
+Hi,
 
-I can't reproduce this error that you're getting... this commit is not
-necessary, as the .yamllint file in the kernel allows a maximum line-length
-of 110 characters.
+This second patch series includes a path_rename hook update:
+https://lore.kernel.org/r/20220222175332.384545-1-mic@digikod.net
+This enables to return consistent errors (EXDEV or EACCES) in case of
+file renaming with RENAME_EXCHANGE.  This led to a some refactoring of
+check_access_path_dual(), no_more_access() and
+current_check_refer_path() to make them more generic and properly handle
+access requests indifferently for a source or a destination path.  I
+also added 5 new test suites to cover new edge cases.
 
-rules:
-   line-length:
-     # 80 chars should be enough, but don't fail if a line is longer
-     max: 110
+Problem
+=======
 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/.yamllint?h=next-20220329
+One of the most annoying limitations of Landlock is that sandboxed
+processes can only link and rename files to the same directory (i.e.
+file reparenting is always denied).  Indeed, because of the unprivileged
+nature of Landlock, file hierarchy are identified thanks to ephemeral
+inode tagging, which may cause arbitrary renaming and linking to change
+the security policy in an unexpected way.
 
-Please drop this commit.
+Solution
+========
 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> ---
->   Documentation/devicetree/bindings/mmc/mtk-sd.yaml | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+This patch series brings a new access right, LANDLOCK_ACCESS_FS_REFER,
+which enables to allow safe file linking and renaming.  In a nutshell,
+Landlock checks that the inherited access rights of a moved or renamed
+file cannot increase but only reduce.  Eleven new test suits cover file
+renaming and linking, which brings coverage for security/landlock/ from
+93.5% of lines to 94.6%.
+
+The documentation and the tutorial is extended with this new access
+right, along with more explanations about backward and forward
+compatibility, good practices, and a bit about the current access
+rights rational.
+
+While developing this new feature, I also found an issue with the
+current implementation of Landlock.  In some (rare) cases, sandboxed
+processes may be more restricted than intended.  Indeed, because of the
+current way to check file hierarchy access rights, composition of rules
+may be incomplete when requesting multiple accesses at the same time.
+This is fixed with a dedicated patch involving some refactoring.  A new
+test suite checks relevant new edge cases.
+
+As a side effect, and to limit the increased use of the stack, I reduced
+the number of Landlock nested domains from 64 to 16.  I think this
+should be more than enough for legitimate use cases, but feel free to
+challenge this decision with real and legitimate use cases.
+
+This patch series was developed with some complementary new tests sent
+in a standalone patch series:
+https://lore.kernel.org/r/20220221155311.166278-1-mic@digikod.net
+
+Additionally, a new dedicated syzkaller test has been developed to cover
+new paths.
+
+Previous version:
+https://lore.kernel.org/r/20220221212522.320243-1-mic@digikod.net
+
+Regards,
+
+Mickaël Salaün (12):
+  landlock: Define access_mask_t to enforce a consistent access mask
+    size
+  landlock: Reduce the maximum number of layers to 16
+  landlock: Create find_rule() from unmask_layers()
+  landlock: Fix same-layer rule unions
+  landlock: Move filesystem helpers and add a new one
+  LSM: Remove double path_rename hook calls for RENAME_EXCHANGE
+  landlock: Add support for file reparenting with
+    LANDLOCK_ACCESS_FS_REFER
+  selftest/landlock: Add 11 new test suites dedicated to file
+    reparenting
+  samples/landlock: Add support for file reparenting
+  landlock: Document LANDLOCK_ACCESS_FS_REFER and ABI versioning
+  landlock: Document good practices about filesystem policies
+  landlock: Add design choices documentation for filesystem access
+    rights
+
+ Documentation/security/landlock.rst          |   17 +-
+ Documentation/userspace-api/landlock.rst     |  149 ++-
+ include/linux/lsm_hook_defs.h                |    2 +-
+ include/linux/lsm_hooks.h                    |    1 +
+ include/uapi/linux/landlock.h                |   27 +-
+ samples/landlock/sandboxer.c                 |   37 +-
+ security/apparmor/lsm.c                      |   30 +-
+ security/landlock/fs.c                       |  776 ++++++++++---
+ security/landlock/fs.h                       |    2 +-
+ security/landlock/limits.h                   |    6 +-
+ security/landlock/ruleset.c                  |    6 +-
+ security/landlock/ruleset.h                  |   23 +-
+ security/landlock/syscalls.c                 |    2 +-
+ security/security.c                          |    9 +-
+ security/tomoyo/tomoyo.c                     |   11 +-
+ tools/testing/selftests/landlock/base_test.c |    2 +-
+ tools/testing/selftests/landlock/fs_test.c   | 1038 ++++++++++++++++--
+ 17 files changed, 1857 insertions(+), 281 deletions(-)
+
+
+base-commit: 59db887d13b3a4df2713c2a866fa2767e0dea569
+-- 
+2.35.1
+

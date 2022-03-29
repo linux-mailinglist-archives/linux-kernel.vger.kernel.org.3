@@ -2,115 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736834EB18A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18EEE4EB17B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239436AbiC2QNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 12:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
+        id S231856AbiC2QMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 12:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239392AbiC2QN3 (ORCPT
+        with ESMTP id S239310AbiC2QMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 12:13:29 -0400
-X-Greylist: delayed 170632 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 29 Mar 2022 09:11:44 PDT
-Received: from out162-62-58-216.mail.qq.com (out162-62-58-216.mail.qq.com [162.62.58.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB0217ADAF
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:11:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1648570300;
-        bh=mE9DRDsHIsIHAbKbJFK2/CHjDpNdpunTcLE/Dg65eAI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=cXbmmcQ+c0qnHhF9v3lPJMwDk4yRXsmQFyINzr+IX+FE42HTskribPzu9HEnTkpCT
-         mguTGGgqMjFNy/HWXUJl2CqFBiLO+47QUIBEQL+xG38/juqfLkCtmGjNNvxp/QRz8S
-         jrQDROcDeTPdUE7435JkHas2Ir1qSADEvYWpM+q0=
-Received: from [192.168.31.6] ([120.245.132.52])
-        by newxmesmtplogicsvrszc11.qq.com (NewEsmtp) with SMTP
-        id 28897A01; Wed, 30 Mar 2022 00:10:08 +0800
-X-QQ-mid: xmsmtpt1648570208tm8np4p8u
-Message-ID: <tencent_39A03E44FA72A77EC50A3F8F02C71F0EFA09@qq.com>
-X-QQ-XMAILINFO: OYji31yNgomxdzawO0x/piNS6YFdtMMQ9FSm2rMyK0ZKdKsF7BqYhCbcqbwoqe
-         zIDca7AZHfKpDI2L+27tL+KnvLyR9x6RzBCEIZ9B4BkS4ik46njjwKNB77HhZuCnWbCkUAC3kfuU
-         5zRur5hZB4BU8eSlXIT8XrWbuaDw1HXA1prNkvtjhVT8I0MRkRKzlePtdeMb61HC5mLlUWhzzp2+
-         EZkazy60AjWGEKJ6K3bmuiAOs1AA0XaMs2g7YgdimbIuvuKvybhQn6qXSpUQ+RleaQJFoqft692N
-         h6mAAVIpGEAWyAej6EJKSqzt+MrWubXLWaS9F5j4S82FSY89gxKFGZLYstjUHz1zI6hglcNRE73p
-         22aT0X9P1QSwB4y90BxwIjWZU8Eq8otD7wr0cHJfGJU0PGOZbwT1S8PYhhnOEvVB2Z2VnQ7DH0bk
-         7ClNIi+Tcxk2nR/LJ0LZLRRQKWFjSSvcV441pEkF/nLnetAXA2f8Ex9ESiQHnZjhZMaHzWNEQbMB
-         dCO8+6/Pw4u0X9FRqtX+2ol8DHvX/jReSSGr7dBAtICO5hna3OmGuflNrdsAuGxNMubnkhSJ0Rww
-         Jai9IVA8zbE/iBNJV1vOxcVXjN7mXr8kvaMCP9ZuFHGRyvetQXqbMimDKIhZ9O6kfMgURpoRlc5X
-         H+kfaggx7eOUabExe3RmT0R3reL1c3UyZ3DjeHihkTwMX9OlfKqr91nFgU4A3X3GUge10khC+jco
-         wxZPSH8Xs1JqeJV01u4HSWKcyONaFG7XsEc93HDPOn7qTBvsvufxpDRhhMOZ/ryQ/Cvh9BYsm8yI
-         2pGoCzQDrI8/dBhoA5H6tqlEQ4IwsMm2zwpWM829u2kc5RaB8/AwpMB9I73dP3Gs+psCKeCE7sB5
-         yYzEw4mTBCK4JAlwLVrQs=
-X-OQ-MSGID: <0c20c29b-acc5-3bfa-4947-b7629c2a56ea@foxmail.com>
-Date:   Wed, 30 Mar 2022 00:10:08 +0800
+        Tue, 29 Mar 2022 12:12:30 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF59C1753BE
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:10:45 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id r7so10630678wmq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:10:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=5KGmATQjbYA+t55uqFGpr9FQL9ODvt7ipMp6+gLdwR0=;
+        b=cTl9Z/Z2B7Zis3KdOrxkgb6rLWuK8OXOTKEVukyoy14MzjaVUOgidYcqGlBeXN3/E6
+         gRQ1zHZJ+Go7tFeKRHrn3WvCudR1HQ3QEd2kps/5pOj73DFAHqIWyO8Tztdl0H4PFp/h
+         wZwgN2nuKIaLkKml6sTalVL+qv9GazbFXvZKc8dQFD0GOXaVPohy1y1s5S2dnxRqyYAv
+         xlpP5zY23rwrpFRIxtHcwT6QWTtn+okFiIYcLEbRYDygJbvmWP3hNF273+ClZgqVP4Q2
+         y0H5zcSSJJNLIV8WAK2NVV0FI7zc+o158PrNWzOQQo6gCD0tTb5djvNiTfADBT/nWwsh
+         uBOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=5KGmATQjbYA+t55uqFGpr9FQL9ODvt7ipMp6+gLdwR0=;
+        b=ZpCyZy+SEWUdZF2FDllFzptmF/uD+sHW5Z9+pE5H7hwmUZkfW+oqa+hCAt7vc6Sm/f
+         LmL7+Tt3rZJXgs/smZaQDBrl/b11u8f0DJvw7kdeK9d5M1DnrnyWqw4pKcC79H889zuq
+         OWH/ysQJynvDalgLE3sOM6UTSnGyG++E+4xw2ONDCsyRAY4n/pJNIQnzxqEIombTVa02
+         xaKpbLP8l5PzBWJHE0xaZ5ml+/7DYMCVezzBP8/RPjJ8FafDLLD7P16RdYnbZLwEZKxQ
+         wV2w9/WvBUM0618A0iSVjNApmAXk8tjB89zzF0KTqjS+WGMZHqh9Y5O25Swq3ijCKLVd
+         JfHw==
+X-Gm-Message-State: AOAM533PTlZ1I6zwNSrUPyPKqvINxUZ7GxP5DBHaeRg129enYJcl66ao
+        JEjMdGyNgU7wVIuQkUifxeSfig==
+X-Google-Smtp-Source: ABdhPJyMMortSDOevzw0MwKMNsxauJgQiSDN5PF4JM0VcTIixYewWhKKjOdSbKNzXDYclvxOx1qwOw==
+X-Received: by 2002:a05:600c:20a:b0:38c:95bf:3289 with SMTP id 10-20020a05600c020a00b0038c95bf3289mr514205wmi.134.1648570244412;
+        Tue, 29 Mar 2022 09:10:44 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:a663:978b:3ffb:7dc3? ([2001:861:44c0:66c0:a663:978b:3ffb:7dc3])
+        by smtp.gmail.com with ESMTPSA id i15-20020adffdcf000000b00203efad1d89sm21772577wrs.9.2022.03.29.09.10.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 09:10:43 -0700 (PDT)
+Message-ID: <35708f5e-efe5-5948-181f-8adf7d466647@baylibre.com>
+Date:   Tue, 29 Mar 2022 18:10:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 0/3] ipmi: msghandler: check the users and msgs causing
- the system to block
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 10/13] pinctrl: meson: Enable COMPILE_TEST
 Content-Language: en-US
-To:     minyard@acm.org
-Cc:     openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <tencent_BD6D4CB98B6D7FAA04F63D28F6457F10F40A@qq.com>
- <20220328013842.GN3457@minyard.net>
- <tencent_071EACFAEE3F0CFA14A674C4603E39026F09@qq.com>
- <20220328154545.GP3457@minyard.net>
-From:   chenchacha <chen.chenchacha@foxmail.com>
-In-Reply-To: <20220328154545.GP3457@minyard.net>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Qianggui Song <qianggui.song@amlogic.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+References: <20220329152926.50958-1-andriy.shevchenko@linux.intel.com>
+ <20220329152926.50958-11-andriy.shevchenko@linux.intel.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <20220329152926.50958-11-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/3/28 23:45, Corey Minyard wrote:
-> On Mon, Mar 28, 2022 at 11:27:06PM +0800, chenchacha wrote:
->>
->>> Anyway, a better solution for the kernel side of things, I think, would
->>> be to add limits on the number of users and the number of messages per
->>> user.  That's more inline with what other kernel things do.  I know of
->>> nothing else in the kernel that does what you are proposing.
->>
->> The precondition for add limits, is that people known that ipmi has too many
->> users and messages cause problems, this patch is to let administrator known
->> that.
->>
->> In addition, different machines have different limit, My server my block
->> 700,000 messages and it's fine, and my NAS pc went to OOM when it probably
->> blocked for 10,000 messages. So, to limit the number of users and messages,
->> can wait until we have accumulated some online experience?
+On 29/03/2022 17:29, Andy Shevchenko wrote:
+> Enable COMPILE_TEST for a better test coverage.
 > 
-> I don't mean a limit on the total number of messages, but a limit on the
-> total number of oustanding messages, and a limit on the total number of
-> users.  No user should have more than a handful of oustanding message,
-> and limiting the number of users to 20 or 30 should be more than enough
-> for any system.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>   drivers/pinctrl/meson/Kconfig | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Having those limits in place would probably help you trace down your
-> problem, as you would hit the limits and it should report it at the
-> source of the problem.
-> 
-> -corey
+> diff --git a/drivers/pinctrl/meson/Kconfig b/drivers/pinctrl/meson/Kconfig
+> index d1955c65b4b6..64fb9e074ac6 100644
+> --- a/drivers/pinctrl/meson/Kconfig
+> +++ b/drivers/pinctrl/meson/Kconfig
+> @@ -1,7 +1,7 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+>   menuconfig PINCTRL_MESON
+>   	tristate "Amlogic SoC pinctrl drivers"
+> -	depends on ARCH_MESON
+> +	depends on ARCH_MESON || COMPILE_TEST
+>   	depends on OF
+>   	default y
+>   	select PINMUX
 
-Hi Corey:
-
-According to your suggestion, I have don some tests. After adding 
-limits, event if the bmc hardware fails, the ipmi will not occupy a 
-large memory in system.
-
-The modifications are in the next version of the patch.
-
-Thanks
---
-Chen Guanqiao
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>

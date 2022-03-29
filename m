@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BAA4EB1A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D96D34EB19F
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239461AbiC2QOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 12:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37422 "EHLO
+        id S239474AbiC2QOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 12:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234424AbiC2QOe (ORCPT
+        with ESMTP id S239449AbiC2QOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 12:14:34 -0400
-Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FB31890C4
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:12:50 -0700 (PDT)
+        Tue, 29 Mar 2022 12:14:36 -0400
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B99D18A3CA
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:12:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1648570367;
-        bh=N4oazMyRxgfyyzwKDfheJCYvuPkBFIKFycEMpS8jt70=;
+        s=s201512; t=1648570368;
+        bh=UD9AGV7S0dnlaF0ygMA6XYvPffRpI5mf5hdlfJggF9s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Z276OQmcJfsDrBZpaajFlxeRIYd5ohH52vBEl8FGMgToIW45euBB8/CLhYqAT0OEm
-         CD7ran4IJcGyid/0CMw9LFTSrkipP/yRyPlNuiUfdbUFeriFefY5jopgMTRelyu+0J
-         lDSyMHwJB/C7Bk9Ma2FM+FG9yBPD08Xu9ftUVcHs=
+        b=V0f6u1UTi+VOLeODAX760H3KcGqDQTCRJsTzScaV98hqTVdUGXNOFiY/58f9Hr/CX
+         5PjIT+tmMlVmHo3b3RdsfvXShc9D/Nw45j2qksYuwXZtcNdQIhtvD3UDAn+cz0nQ6P
+         yzQLKif6OGPE3CUlEe0e3ZLKcOB6SpMG0J34ctsA=
 Received: from localhost.localdomain ([120.245.132.52])
         by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
         id 32C96631; Wed, 30 Mar 2022 00:12:44 +0800
-X-QQ-mid: xmsmtpt1648570366truq3wpuv
-Message-ID: <tencent_D9F2E3B84F62AA514CF2332F90E521A9CF05@qq.com>
-X-QQ-XMAILINFO: NgiXOM0lDIKdlfD9qqmp/lF6r0XM2twCukjeb5ROVHoDHFtlu3Kb4ggKK8CBIQ
-         5HjRKXhBED6dZCBmcENUiNu/kRziAGLaMS2qCfrbrS87AhTSjQoRKho8Xv/5aOjynnyZ9o44RCUW
-         tW7SYHD/coCYm1p6Wgm490Qgw70iy4PDUHsEe2ayJcdi0TZGQh0FJQjekmBx3E7UOMYdOQExkDLK
-         schjDCJIZoLHNzNr4XpekNkbxUjceYTXgkusTWK/IUmfsEsfEw9f5nZjm1bC0R/TvgvFxmKLRje6
-         n4DmEg18b+3a78IFh0bQ2M6ENeaMEe+unonvCKjXRfDFGK4JaQUGumoNulN0YxVOeCGVnir6d4rA
-         RejKUmeVz+4fUMidtxN+V5QAd1nYdsgFAcvZftCYOa4RwzoV5eBpvBtUxjJuEcqmceVskF/d8llO
-         wpTTHYzhC/5Lq2TaucUuT9y9HZGms3L8+Yqw8V6cz8wmij3uRt0W7AXS1Qu99I8rRix13hru/TEk
-         ARzXMCDm7iUFHfXlznXdccy6jVU+OjMoernyLDrKS5B48U3ui/aqf/Z3cDP/wxwUwcEJqNQstsWH
-         0SVHDkPgmf8vcglF2WV7sWdNENRF8jDDCao2UeC5Yg2um3aY8sw2k37h7e162obIkyyIthmNPiv1
-         Ri/FWnZKSpwySckvlNvDyXeusVnpUVSyMNkJnl9IiG/Ydkt3NcpfCGRxC+UJkHpxJufIHufWNZCf
-         ndBKB8xwA6umhdD1l4+9z/XmcV7VRPojgGovPYJgCAHvSdpge+pZj3jbFrNSR4Ea5uY1XXLmNu3A
-         +YeWLfoljPBAwcxDzJYE/BLBeoHNITCSr4xLrM5Xhfu7RkWa2fMBUe94W/DbjfaCmjsB+gfhkur2
-         CMAXgU//UB94v87ILgY40lT51v7hC776DuUpGpHLiriq1cUf4+xn3IKo6b72S1+xOu0bxrYgfzHy
-         RzWvWDCDUc85H31HU+sA==
+X-QQ-mid: xmsmtpt1648570367tm9uph8v1
+Message-ID: <tencent_ADBE84293031AFCF8E409D87E2BE9B0FF507@qq.com>
+X-QQ-XMAILINFO: Mv3le6n+CjtdA9uBreSmaTkKIwE+yRqjVvY7VQCyFQThKBA86m0zs41YIiLQKv
+         w+FEv3g5oNGMJV8kPhmNpb4sRpPq2wttYCuI5YqL/Lp2BqtmwfhwZfEjBzNqm+6QmJVm9hzo808Q
+         jz2GALOxR4HjarEpma/gN0GeGNYh25TCv+EbASISleoHb79d63XRCYLsSe74WRTKQFpy9ZzGXzbi
+         JJBDjFTSranocEHnBCLep5RACPhlrMn1NdjoCyYakjQXofwuuM7dhig6nsiTsrHEM1l6g2dDLCLB
+         SKhXNxvGe4YRoA2EPvg+vwkscDFHyJtj89sUyVc7XhXvdYH4eKwh95Umjs1XxLTuryGrKvtk2FyY
+         i+ECGdIZ64pZThoUPFDUfod55rOip5f18NkUM5zExNHe4jEVYCdLleBckuvph8h+71zS/nJLa1Fb
+         3f7nEBaoBfSBeW8t7foZMLiIWysBZriWAwMbVbTRUToe/RcMvL1EzHVrFryX/cOWdUYBeWQf+n2M
+         wfM3Ru0tJawg2rxZJvnDeOXAVe+ILmFQ+f+FZQbJT6XAcOJomua2RLpD5cIfuyDbxEe7cbp8gabj
+         H3TmrOhhH+RAhEn3jYDbvxxnwaPrD1CJ6tngYBqA/7fdL6DW3CudkyJ1FW91Zs+pMceWqHVndTyF
+         yHHpoQxpbYvrNCqRv2L+m3U5WL4nYI4nXgyp0DzaOUCoXwrUuTEUQgnkqopu9XnOTWH/Ybwa/Nzn
+         T31+Kk7DTs6Zyei9c2uYlPb4wwdLD8n0a9oTGrlNO2Fp3oCWvGuJnd6a7aHkuL3sYFQ4N0Y0UgNF
+         tT7oX1yvV653q6+nD/7LjcYdVYyX8s8GbBONJuyY7PN4TWPwyLH5hBab/Q99uzilF9r50ie+cvtr
+         FBJnKrIt/khfAqzecTklcJJqNteB5UGGvC8vohpR9LF2WRAdCJL0Ny+fyVITBqFauGzXYaXHbA
 From:   Chen Guanqiao <chen.chenchacha@foxmail.com>
 To:     minyard@acm.org, openipmi-developer@lists.sourceforge.net,
         linux-kernel@vger.kernel.org
 Cc:     Chen Guanqiao <chen.chenchacha@foxmail.com>
-Subject: [PATCH v2 1/4] ipmi: msghandler: Add a limit for the number of users
-Date:   Wed, 30 Mar 2022 00:12:39 +0800
-X-OQ-MSGID: <20220329161242.76457-2-chen.chenchacha@foxmail.com>
+Subject: [PATCH v2 2/4] ipmi: msghandler: Add a limit for the number of messages
+Date:   Wed, 30 Mar 2022 00:12:40 +0800
+X-OQ-MSGID: <20220329161242.76457-3-chen.chenchacha@foxmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220329161242.76457-1-chen.chenchacha@foxmail.com>
 References: <20220329161242.76457-1-chen.chenchacha@foxmail.com>
@@ -64,74 +63,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The administrator sets the limit for the number of users by modifying
-/sys/module/ipmi_msghandler/parameters/default_max_users.
+The administrator sets the limit for the number of messages by modifying
+/sys/module/ipmi_msghandler/parameters/default_max_msgs.
+
+Before create a message, count the number of outstanding messages, if
+the number reaches the limit, it will return a busy.
 
 Signed-off-by: Chen Guanqiao <chen.chenchacha@foxmail.com>
 ---
- drivers/char/ipmi/ipmi_msghandler.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/char/ipmi/ipmi_msghandler.c | 37 +++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
 diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
-index c59265146e9c..7886c8337368 100644
+index 7886c8337368..80ab88702c5f 100644
 --- a/drivers/char/ipmi/ipmi_msghandler.c
 +++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -145,6 +145,12 @@ module_param(default_max_retries, uint, 0644);
- MODULE_PARM_DESC(default_max_retries,
- 		 "The time (milliseconds) between retry sends in maintenance mode");
+@@ -151,6 +151,12 @@ module_param(default_max_users, uint, 0644);
+ MODULE_PARM_DESC(default_max_users,
+ 		 "The maximum number of users per interface");
 
-+/* The default maximum number of users per intf */
-+static unsigned int default_max_users = 50;
-+module_param(default_max_users, uint, 0644);
-+MODULE_PARM_DESC(default_max_users,
-+		 "The maximum number of users per interface");
++/* The default maximum number of outstanding messages per intf */
++static unsigned int default_max_messages = 100;
++module_param(default_max_messages, uint, 0644);
++MODULE_PARM_DESC(default_max_messages,
++		 "The maximum number of outstanding messages per interface");
 +
  /* Call every ~1000 ms. */
  #define IPMI_TIMEOUT_TIME	1000
 
-@@ -579,6 +585,9 @@ struct ipmi_smi {
-
- 	atomic_t stats[IPMI_NUM_STATS];
-
-+	/* The number of user in this interface */
-+	atomic_t user_count;
-+
- 	/*
- 	 * run_to_completion duplicate of smb_info, smi_info
- 	 * and ipmi_serial_info structures. Used to decrease numbers of
-@@ -1182,9 +1191,11 @@ static void free_user_work(struct work_struct *work)
- {
- 	struct ipmi_user *user = container_of(work, struct ipmi_user,
- 					      remove_work);
-+	struct ipmi_smi *intf = user->intf;
-
- 	cleanup_srcu_struct(&user->release_barrier);
- 	vfree(user);
-+	atomic_dec(&intf->user_count);
+@@ -916,6 +922,30 @@ unsigned int ipmi_addr_length(int addr_type)
  }
+ EXPORT_SYMBOL(ipmi_addr_length);
 
- int ipmi_create_user(unsigned int          if_num,
-@@ -1230,6 +1241,12 @@ int ipmi_create_user(unsigned int          if_num,
- 	goto out_kfree;
++static void intf_msg_count(struct ipmi_smi *intf,
++			   unsigned int *hp_count, unsigned int *count)
++{
++	struct ipmi_smi_msg *msg;
++	unsigned long flags;
++	int hp_msg_count = 0, msg_count = 0;
++	int run_to_completion = intf->run_to_completion;
++
++	if (!run_to_completion)
++		spin_lock_irqsave(&intf->xmit_msgs_lock, flags);
++	if (!intf->in_shutdown) {
++		list_for_each_entry(msg, &intf->hp_xmit_msgs, link)
++			hp_msg_count++;
++
++		list_for_each_entry(msg, &intf->xmit_msgs, link)
++			msg_count++;
++	}
++	if (!run_to_completion)
++		spin_unlock_irqrestore(&intf->xmit_msgs_lock, flags);
++
++	*hp_count = hp_msg_count;
++	*count = msg_count;
++}
++
+ static int deliver_response(struct ipmi_smi *intf, struct ipmi_recv_msg *msg)
+ {
+ 	int rv = 0;
+@@ -2299,6 +2329,7 @@ static int i_ipmi_request(struct ipmi_user     *user,
+ {
+ 	struct ipmi_smi_msg *smi_msg;
+ 	struct ipmi_recv_msg *recv_msg;
++	unsigned hp_msg_count, msg_count;
+ 	int rv = 0;
 
-  found:
-+	if (atomic_inc_return(&intf->user_count) > default_max_users) {
-+		atomic_dec(&intf->user_count);
+ 	if (supplied_recv)
+@@ -2330,6 +2361,12 @@ static int i_ipmi_request(struct ipmi_user     *user,
+ 		goto out_err;
+ 	}
+
++	intf_msg_count(intf, &hp_msg_count, &msg_count);
++	if ((hp_msg_count + msg_count) > default_max_messages) {
 +		rv = -EBUSY;
-+		goto out_kfree;
++		goto out_err;
 +	}
 +
- 	INIT_WORK(&new_user->remove_work, free_user_work);
-
- 	rv = init_srcu_struct(&new_user->release_barrier);
-@@ -3548,6 +3565,7 @@ int ipmi_add_smi(struct module         *owner,
- 	spin_lock_init(&intf->events_lock);
- 	spin_lock_init(&intf->watch_lock);
- 	atomic_set(&intf->event_waiters, 0);
-+	atomic_set(&intf->user_count, 0);
- 	intf->ticks_to_req_ev = IPMI_REQUEST_EV_TIME;
- 	INIT_LIST_HEAD(&intf->waiting_events);
- 	intf->waiting_events_count = 0;
+ 	recv_msg->user = user;
+ 	if (user)
+ 		/* The put happens when the message is freed. */
 --
 2.25.1
 

@@ -2,63 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B824EB6F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC784EB6F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239629AbiC2Xtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
+        id S230432AbiC2XuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiC2Xts (ORCPT
+        with ESMTP id S239514AbiC2Xty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:49:48 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EE4204AB2
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:48:04 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id i63so20854257vsi.5
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:48:04 -0700 (PDT)
+        Tue, 29 Mar 2022 19:49:54 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CA8204C9F
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:48:08 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id m18so14139008plx.3
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:48:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8tmKMpracc+vzrKxdsOIMu2LUegKfN68WirpEeCdLMc=;
-        b=Jk64ykSS7DXFVmVlpjB6aVtEAQBlhxw2+iwNoVh7qz8XUkJRg6Jy0anx36zMCkM3I4
-         O/ds7STTqNKNyFN498alDKXdsNqklwhxHDLBP5jwz4xnLVXV+EwdSBXHrq35KGqNrPR5
-         p2o0yg+zuRJIufzptMa41LgNMftIgymSLIVMfUWm43fcw393vrNUCU01RNjtOQ1e2Cgx
-         /OBLUvbwE/bJ8YFIBDy82kyPRLPvOI39dJzYo7ywIeNsdeoblm+3CaCORsxD3dTte+F9
-         FXuPN4WOQLrQWw1h2nXGrp2j1krYEVK00YOirmfMT7u5tnP8cicgu0TWiKhx8npV0DUu
-         PepA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=k9zNH8eck7B2fqpSHhtjQeS2/0DdhWXUpHBJSuxKOv8=;
+        b=laMf07yySldwhTJdf1DNpFBQdKfmIe/udTZIfmSv7noXMTdG9OSeh2ZOTifk/VxW7W
+         /0qaWI+OIPWuWqh8829MPDsHpwXOKZf3GvbG9HOsl7q0M9zxgIdACJYJ2QFW+00b6IMl
+         wZ2ypU6WshzDuGWYltk/gCBUhLvo2RQOyU61//80w2nFZSfUwsDNyHkrRphdRWy7gXq6
+         fohaBr7Mn9/13s83/DhlM5uI1IafNFhkoUI4rD79RyfZ0uTkb9qAomBkNOrNrNPOQ+gP
+         k5Co4ANfaity67+ihz73dlRVtZzvhHae6zDw04Huec1jfNF3maJSKVL/Jjwac8cQkJWV
+         vplg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8tmKMpracc+vzrKxdsOIMu2LUegKfN68WirpEeCdLMc=;
-        b=MBZvvli0hUzNMQt/rLbb5YtxkvlLrfEtX8ZQ1meepOQeFWACDWioEc/Y3qfdjsuAky
-         m3WB5/rTYFnkWSZWZ5SfZsVfgO78XKUeqEQuFTHJ8NJ+ajsJTYgMez5LUmM9zQbuzyS7
-         hmnqOFA9llGf4JXHD3MAwHcwBQpP1KOc9n0rUeow+YylQcsvkM6XSz9IqEXqtYPsPSLS
-         FDPDbCSLEWjpFqLb4Sc3zbYCSDWPLdxb+IeBH+riK19edLWgpLCOYnjRr0AcIrUJERlC
-         DbsrREMdLH9wpBekBB9eymtrmeNWtOx4NZ6qlVSEG7Gy2OJbmZW58qX+W9+qJ2wlTKGz
-         n4PQ==
-X-Gm-Message-State: AOAM532MiyNee9msbQ+gAwKztv/iToIZVnRUy6tfYdxe0i9fimzujpaQ
-        E5T1G4pm/wsY2swR5dZC/qphHkUueO4g59FLQcm5Yw==
-X-Google-Smtp-Source: ABdhPJxq66M7JyuhwG8ca2iZlDoiS3CzQpJn0Rhl7b1jnyzcgwfi9+bkxSiv144NAIarUy8DkJxAGdixygwdgowTwU8=
-X-Received: by 2002:a05:6102:3576:b0:325:46eb:fdde with SMTP id
- bh22-20020a056102357600b0032546ebfddemr18709850vsb.11.1648597683115; Tue, 29
- Mar 2022 16:48:03 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=k9zNH8eck7B2fqpSHhtjQeS2/0DdhWXUpHBJSuxKOv8=;
+        b=Ujqwy8ZEF6OcP5CzdfSb0WZ7UKMdccrs8mDTQjtOu0KDlpeLVdjmbhWe4RnhvNWLhb
+         AAPqV9xcFo7TBkzeQs1Fpn4ahdjFlecE8E4lkbOsZpnU9WU3gNptIx2Z2oPLeGwdUOJt
+         IIOVucNLzdHpAaffvCAIRVKHWblWumB2qUn4LAtDJ9uC5Q27tsd/Yq4IB1tcMltuSqg8
+         8/xjV2wlzW0EsyLchR27I++k39FnCxpb7lWThNwny36t5n8JkRDEPZY6xpzAJLZ3pgM5
+         FlI824OQFRgYskaClOncWe4WhlGrZjQu439RKGMHIoNYY6Ro6MmhGPjW0XZLGB3/owrs
+         GpUg==
+X-Gm-Message-State: AOAM531EesLLJv4+G0h02ZymUip5UNuXHjPQCmsRr7AKlNnhC7tT1qYi
+        4O+pTfG2dKt/H+mpSVyPJA+3sw==
+X-Google-Smtp-Source: ABdhPJwi0XSuejkaAFbg1D/khFYUdTlk19+zKFj7wtL6dE/9hSWn+IJ+E/tQR25dvxGUxBT5WJy72w==
+X-Received: by 2002:a17:903:1210:b0:14f:973e:188d with SMTP id l16-20020a170903121000b0014f973e188dmr31927885plh.61.1648597688097;
+        Tue, 29 Mar 2022 16:48:08 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id e12-20020a056a001a8c00b004fab88d7de8sm20808407pfv.132.2022.03.29.16.48.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 16:48:07 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 23:48:03 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] KVM: x86: Use static calls to reduce kvm_pmu_ops
+ overhead
+Message-ID: <YkOas2UgOsUnhMkZ@google.com>
+References: <20220307115920.51099-1-likexu@tencent.com>
+ <20220307115920.51099-5-likexu@tencent.com>
 MIME-Version: 1.0
-References: <20220322221517.2510440-1-eranian@google.com> <20220324145902.GG8939@worktop.programming.kicks-ass.net>
- <CABPqkBTVFNOW0Y-suYVRjf07aBC41gEw1m4Ym78sR39BRzLDcQ@mail.gmail.com>
- <20220325082855.GL8939@worktop.programming.kicks-ass.net> <CABPqkBSNG=kLae6dN9iCuyuMVAvt-n+waW9SL4AfNDCOc3px0A@mail.gmail.com>
-In-Reply-To: <CABPqkBSNG=kLae6dN9iCuyuMVAvt-n+waW9SL4AfNDCOc3px0A@mail.gmail.com>
-From:   Stephane Eranian <eranian@google.com>
-Date:   Tue, 29 Mar 2022 16:47:52 -0700
-Message-ID: <CABPqkBQ6ZyqSzQyJeNW5GE22V1sygB3zz5JQ45AT1TxMnwWScg@mail.gmail.com>
-Subject: Re: [PATCH v7 00/13] perf/x86/amd: Add AMD Fam19h Branch Sampling support
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kim.phillips@amd.com,
-        acme@redhat.com, jolsa@redhat.com, songliubraving@fb.com,
-        rafael@kernel.org, ravi.bangoria@amd.com, Sandipan.Das@amd.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220307115920.51099-5-likexu@tencent.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -70,53 +76,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 2:58 PM Stephane Eranian <eranian@google.com> wrote:
->
-> On Fri, Mar 25, 2022 at 1:29 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Thu, Mar 24, 2022 at 10:31:38PM -0700, Stephane Eranian wrote:
-> > > On Thu, Mar 24, 2022 at 7:59 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > >
-> > > > On Tue, Mar 22, 2022 at 03:15:04PM -0700, Stephane Eranian wrote:
-> > > > > V7 makes the following changes:
-> > > > >    - rebased to 5.17-rc8
-> > > > >    - Restrict BRS to be used only with RETIRED_TAKEN_BRANCH event in order to
-> > > > >      avoid adding more skid to other events in case that are monitored
-> > > > >      concurrently
-> > > > >    - fixed bugs in the perf tool enhanced error handling for IBS and BRS
-> > > >
-> > > > But afaict you failed to pick up the build fixes I did in my tree :/ Let
-> > > > me try and be careful preserving those while munging this in.
-> > >
-> > > Sorry. I missed that. I can resubmit if you prefer.
-> >
-> > Nah, fixed it up again.. Even converted to static_call() this time.
-> >
-> > Could you please test this branch?
->
-> Started testing. BRS does not come up so far. Let me debug this.
->
-False alarm. I had not forced the config option. With the config
-option enabled, it works as expected.
-I just found a minor issue in case BRS is not enabled. To be
-consistent, we should do:
+On Mon, Mar 07, 2022, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
+> 
+> Use static calls to improve kvm_pmu_ops performance. Introduce the
+> definitions that will be used by a subsequent patch to actualize the
+> savings. Add a new kvm-x86-pmu-ops.h header that can be used for the
+> definition of static calls. This header is also intended to be
+> used to simplify the defition of amd_pmu_ops and intel_pmu_ops.
 
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -1265,7 +1265,7 @@ static inline s64 amd_brs_adjust_period(s64 period)
- #else
- static inline int amd_brs_init(void)
- {
--       return 0;
-+       return -EOPNOTSUPP;
- }
-
-Thanks.
-
-> >
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=perf/amd
-> >
-> > I've since done more Changelog edits, and I should do a comment with the
-> > static_call_mod() usage, but I think this ought to work.
-> >
-> > At least it now actually builds...
+This is stale, there are no subsequent patches and I think we decided to not fill
+vendor ops with the ops.h headers.  I'll tweak it when sending v3.1.

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CE44EAFE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 164214EAFE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238266AbiC2PJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
+        id S238302AbiC2PJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238260AbiC2PJj (ORCPT
+        with ESMTP id S238268AbiC2PJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:09:39 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0081EC61E;
-        Tue, 29 Mar 2022 08:07:56 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id yy13so35801652ejb.2;
-        Tue, 29 Mar 2022 08:07:56 -0700 (PDT)
+        Tue, 29 Mar 2022 11:09:42 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643F61E95C5;
+        Tue, 29 Mar 2022 08:07:57 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id p15so35762333ejc.7;
+        Tue, 29 Mar 2022 08:07:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hIr5PvQf5fAOI0436U7wwcVh5jl/xQHKrpc6xbFom/g=;
-        b=fxKfzTApBxSRYrsYaJILMTwr/PE06U274HGvZsBw+QCZfWWgIfpfXExXXHsNFXHV7g
-         F1gWxlTF7mTpZjkF9S16CyiRvmrWnSdkSNlBO45OD+XX/Fq/JAcZYJlQwuWlh5hFS4Od
-         nkZic3NB4C25FqSWV7Nxgj9blOtLP9+3CHecdoelJvkoT4/qIEJu/K9dix6Zlvjwswti
-         ef9z35DzxkKXKxcx9TWipXeCNJiUM8jHk02SGr+1Ri4vDjQz2x5g+IvJFey/txsPumPU
-         8ZlUJaKOI0S2DNNU128p+MwRNCiSg/0v++D1YJHyc6Hj4MdWWC+qUk1dEzCtYM5UhP5N
-         GYNA==
+        bh=MYpKknBwdTIHXp3EH6GGOHhFZcaVOITrMZHNhkcAA1w=;
+        b=nvWzwn6Kwi8lUvfA2/fNc5u28we559b8GN4u5QymfkMYMrxDtfJ+jWnolKFkHKy2O3
+         //1hMuD92JZ24dYqmPyQs7cVtDVZiKyaNj8hDMNOG4RJpRKU1MDy0Xp4WpH8ZMbiBR1Y
+         18IJNan6iOhYtugNMSGf6iqqDqsh1Ijl3G4uiARJ6yXFRLcRvrnTxAO4WXEuP57dyFHi
+         0xiZAdhlf3EacOwB9VJSrNkCf6B5AhTMPsYiUsbp6FYHxb/smVg4a7HxvHJ70C8PmcEi
+         SRyCWf/PI4JPMry08RerDroL5OhGpCIeLu7Wa0L4UAto1/E9lVXX1N0OcbKj4YjAC7AY
+         /LRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hIr5PvQf5fAOI0436U7wwcVh5jl/xQHKrpc6xbFom/g=;
-        b=A9DBOkkGINUKlHPARpURna13xeW09SU9eoO5w0/imxKCdmXmDv4VzQvA08QvkH12yE
-         A5fTiqN6+rvx8737IMd71LHi4MUOKbaxuNTkvuseaCCWzWgaMoLjgjLNNknmOJut7nln
-         FaAk0k97dP4czHlkvriInlj+D9XZL1JL8tJj23S3vkErBLKkNUVQP2SWNVOfDl/UDx4Q
-         8ICcx727ddo7lzxSlKB1+D46z9GA+wlVD0Xom/6+3/aPq6+s8Dd1ki123Ijxm5Qj0/EB
-         /AnlD0ScCk7VlFD48hf6Yo/gYCaiur6sh7fV7os1jorTVm48Uj8vjvQN7mnlBfYrl9ln
-         FUsQ==
-X-Gm-Message-State: AOAM532B8/MQCVRBzmVD37b0/4Q0y8ah6aAp2oZ4tNddcpQJUrzksW6H
-        UiQvk03bErrAeqhxnSoYr3Q=
-X-Google-Smtp-Source: ABdhPJzdWuR/Ip7WHPKwZ8Ei1Ym2WuXobIb/szldrSwb7qxobdqcCVGvEeOwV4+Df3ERQcmyHFFWEA==
-X-Received: by 2002:a17:907:72c5:b0:6da:e99e:226c with SMTP id du5-20020a17090772c500b006dae99e226cmr35385241ejc.515.1648566474746;
-        Tue, 29 Mar 2022 08:07:54 -0700 (PDT)
+        bh=MYpKknBwdTIHXp3EH6GGOHhFZcaVOITrMZHNhkcAA1w=;
+        b=NhX5/oUPhXXSBP4RDgHONpWskw4ae45YTR2Z1Pz5hEcgnSqho5CIcVtrtlLAyjX7TO
+         1kYEAHsztjY6+xgkRQ5ymSu15/V3GuBmmmppJB5p378EuUgxNGmwHbQn/mRLTAcqUGV7
+         42PQvuLZwqZEJV7Cb3fwK8T0qf2gXLS6KufFfvwJmEL9AeuPv5QsW7QUEyHT755rOTl7
+         J9AWl0EXmZuhijdTcSQfKexRzw4zDrEPWlBOpXHAp4HiwoxGXLlYK+MHoewX/yEfMW9M
+         8fCZ5KpZ4kz5dqlU4Afx+eNijFhPB+UysVm22buJqwQ+Nw/RsPAK9JMzHyaDBNMcD3KE
+         owmQ==
+X-Gm-Message-State: AOAM530MsJSH6UdYeXQWlVhflQ2e01ScAj8wJTjrkbQJuEAsbn5EdgZY
+        v382QduFIFhxzcMM8rOtVog=
+X-Google-Smtp-Source: ABdhPJwnJgoYnTwOGYH2Z0mhJZWq0fYlCj1lQly4mmTbPKZEtCfU3cBVSnflbmJFd/H9M8NdARwTeg==
+X-Received: by 2002:a17:906:6a1b:b0:6e0:b38b:f74c with SMTP id qw27-20020a1709066a1b00b006e0b38bf74cmr25710711ejc.46.1648566475860;
+        Tue, 29 Mar 2022 08:07:55 -0700 (PDT)
 Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id eq7-20020a056402298700b00419d8d46a8asm3261643edb.39.2022.03.29.08.07.53
+        by smtp.gmail.com with ESMTPSA id eq7-20020a056402298700b00419d8d46a8asm3261643edb.39.2022.03.29.08.07.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 08:07:53 -0700 (PDT)
+        Tue, 29 Mar 2022 08:07:55 -0700 (PDT)
 From:   Johan Jonker <jbx6244@gmail.com>
 To:     heiko@sntech.de, zhangqing@rock-chips.com
 Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
         sboyd@kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/6] dt-bindings: clock: fix rk3399 cru clock issues
-Date:   Tue, 29 Mar 2022 17:07:40 +0200
-Message-Id: <20220329150742.22093-4-jbx6244@gmail.com>
+Subject: [PATCH v2 5/6] arm64: dts: rockchip: rk3399: use generic node name for pmucru
+Date:   Tue, 29 Mar 2022 17:07:41 +0200
+Message-Id: <20220329150742.22093-5-jbx6244@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220329150742.22093-1-jbx6244@gmail.com>
 References: <20220329150742.22093-1-jbx6244@gmail.com>
@@ -72,47 +72,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current rk3399 cru DT node gives warnings like:
-'clocks' is a dependency of 'assigned-clocks'.
-
-With the YAML conversion somehow "assigned-xxx" properties where added.
-If a proper clock is added to the cru node these properties are no longer
-needed, so removed them. Currently only one clock will be added, so limit
-the clock maxItems to 1. Add a clock name to be able to differentiate
-and filter bogus entries.
+The node names should be generic, so fix this for the rk3399 pmucru node
+and rename it to "clock-controller".
 
 Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
- .../bindings/clock/rockchip,rk3399-cru.yaml       | 15 +++------------
- 1 file changed, 3 insertions(+), 12 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3399-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3399-cru.yaml
-index 18a009311..54da1e31e 100644
---- a/Documentation/devicetree/bindings/clock/rockchip,rk3399-cru.yaml
-+++ b/Documentation/devicetree/bindings/clock/rockchip,rk3399-cru.yaml
-@@ -46,19 +46,10 @@ properties:
-     const: 1
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+index 88f26d89e..01c08a2aa 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+@@ -1413,7 +1413,7 @@
+ 		clock-names = "apb_pclk";
+ 	};
  
-   clocks:
--    minItems: 1
--
--  assigned-clocks:
--    minItems: 1
--    maxItems: 64
--
--  assigned-clock-parents:
--    minItems: 1
--    maxItems: 64
-+    maxItems: 1
- 
--  assigned-clock-rates:
--    minItems: 1
--    maxItems: 64
-+  clock-names:
-+    const: xin24m
- 
-   rockchip,grf:
-     $ref: /schemas/types.yaml#/definitions/phandle
+-	pmucru: pmu-clock-controller@ff750000 {
++	pmucru: clock-controller@ff750000 {
+ 		compatible = "rockchip,rk3399-pmucru";
+ 		reg = <0x0 0xff750000 0x0 0x1000>;
+ 		rockchip,grf = <&pmugrf>;
 -- 
 2.20.1
 

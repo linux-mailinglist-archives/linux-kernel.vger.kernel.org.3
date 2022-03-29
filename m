@@ -2,65 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E6B4EA6A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 06:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF6A4EA6A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 06:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232091AbiC2Efn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 00:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
+        id S232101AbiC2Ell (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 00:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231463AbiC2Efj (ORCPT
+        with ESMTP id S230295AbiC2Elj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 00:35:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA08164F9;
-        Mon, 28 Mar 2022 21:33:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F70F613EF;
-        Tue, 29 Mar 2022 04:33:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7621C2BBE4;
-        Tue, 29 Mar 2022 04:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648528435;
-        bh=5dIB0sxX2lYZvf6q2/JasfE5c9SjoX2u6XVBPnKxdEE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tTUVZy56vvtMa/80ckzceNeLXsipjdpOiYLG5fITqgQ3K11etN6s4by/QIvF9syPp
-         FOW/sA3pq9+VoOfdXnlpx/+d5brcX4a4z4xmk0RQ4Sm2Hnon0ns61vCT/gD30jqZsE
-         KMpeM4EdAf/WMXC6oOI+r9Ij5P+hbKv+kKUCloyoYS4Embeb5qJCDzY06woXIuPZdD
-         DWSRmY6207Gpegb2jdRBex4HVqJcbgY4k4o30SHIi3849cJ2OvfVROguiO+owU3r5U
-         2BQwPcjnOk+ITrZ8ku/sp2rUH6s6+fSdaf3LgTgOQUX8pRGyVx93VwZQ6voKzatxrU
-         HoqRTrUXlMn+g==
-Date:   Mon, 28 Mar 2022 21:33:53 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Mingbao Sun <sunmingbao@tom.com>
-Cc:     Sagi Grimberg <sagi@grimberg.me>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
-        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
-        libin.zhang@dell.com, ao.sun@dell.com
-Subject: Re: [PATCH v2 2/3] nvme-tcp: support specifying the
- congestion-control
-Message-ID: <20220328213353.4aca75bd@kernel.org>
-In-Reply-To: <20220329104806.00000126@tom.com>
-References: <20220311103414.8255-1-sunmingbao@tom.com>
-        <20220311103414.8255-2-sunmingbao@tom.com>
-        <7121e4be-0e25-dd5f-9d29-0fb02cdbe8de@grimberg.me>
-        <20220325201123.00002f28@tom.com>
-        <b7b5106a-9c0d-db49-00ab-234756955de8@grimberg.me>
-        <20220329104806.00000126@tom.com>
+        Tue, 29 Mar 2022 00:41:39 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3320F76E38
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 21:39:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648528797; x=1680064797;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2ejbOjj87Foc8zOioqooV8OCloynScGgyi42rcyoCec=;
+  b=neIrvDGACJgqUDAwQqmt8wDebQXkv1KrcYcbKZU0CBgkZYe/lqaOVp8N
+   YiaWtmuJZBX7l8oMJi459Xw4nm/4ZFwC/B3eUm1esUejeGoKzZZUNdyIs
+   mizxI6kOv0foxoCKn90QxrXkUm9JHqHuZva278gFLEOXEhm+BiC7C0ZCW
+   lRLGTXnEfW0RFc3qk/H0/L242+IfAahNGmTJSA8w+EFdv3hagdu0e6vzl
+   JuUHlmjYlLJ1YJOPMQdZpMLirDzmj7MV7WnONJWEhCFZGtCtqjE8W6ki1
+   nuWkScv8hwQ6+VBTOCCQCJrYeDg7VWCGnntpFO6b88i1xCwQLtHTdS6db
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="239092069"
+X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
+   d="scan'208";a="239092069"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 21:39:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
+   d="scan'208";a="502756124"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 28 Mar 2022 21:39:55 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nZ3e6-0002eM-H8; Tue, 29 Mar 2022 04:39:54 +0000
+Date:   Tue, 29 Mar 2022 12:39:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Qianggui Song <qianggui.song@amlogic.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: drivers/pinctrl/meson/pinctrl-meson-s4.c:178:27: warning: unused
+ variable 'tdm_sclk1_c_pins'
+Message-ID: <202203291224.XHa6U5lx-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,40 +63,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Mar 2022 10:48:06 +0800 Mingbao Sun wrote:
-> A server in a data-center with the following 2 NICs:
->=20
->     - NIC_fron-end, for interacting with clients through WAN
->       (high latency, ms-level)
->=20
->     - NIC_back-end, for interacting with NVMe/TCP target through LAN
->       (low latency, ECN-enabled, ideal for dctcp)
->=20
-> This server interacts with clients (handling requests) via the fron-end
-> network and accesses the NVMe/TCP storage via the back-end network.
-> This is a normal use case, right?
+Hi Qianggui,
 
-Well, if you have clearly separated networks you can set the congestion
-control algorithm per route, right? man ip-route, search congctl.
+FYI, the error/warning still remains.
 
-> For the client devices, we can=E2=80=99t determine their congestion-contr=
-ol.
-> But normally it=E2=80=99s cubic by default (per the CONFIG_DEFAULT_TCP_CO=
-NG).
-> So if we change the default congestion control on the server to dctcp
-> on behalf of the NVMe/TCP traffic of the LAN side, it could at the
-> same time change the congestion-control of the front-end sockets
-> to dctcp while the congestion-control of the client-side is cubic.
-> So this is an unexpected scenario.
->=20
-> In addition, distributed storage products like the following also have
-> the above problem:
->=20
->     - The product consists of a cluster of servers.
->=20
->     - Each server serves clients via its front-end NIC
->      (WAN, high latency).
->=20
->     - All servers interact with each other via NVMe/TCP via back-end NIC
->      (LAN, low latency, ECN-enabled, ideal for dctcp).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1930a6e739c4b4a654a69164dbe39e554d228915
+commit: 775214d389c259c77ff2b4de50bdaab5c9bd5db3 pinctrl: meson: add pinctrl driver support for Meson-S4 Soc
+date:   8 weeks ago
+config: arm64-randconfig-r015-20220328 (https://download.01.org/0day-ci/archive/20220329/202203291224.XHa6U5lx-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=775214d389c259c77ff2b4de50bdaab5c9bd5db3
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 775214d389c259c77ff2b4de50bdaab5c9bd5db3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/pinctrl/meson/
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/pinctrl/meson/pinctrl-meson-s4.c:178:27: warning: unused variable 'tdm_sclk1_c_pins' [-Wunused-const-variable]
+   static const unsigned int tdm_sclk1_c_pins[]            = { GPIOC_3 };
+                             ^
+   1 warning generated.
+
+
+vim +/tdm_sclk1_c_pins +178 drivers/pinctrl/meson/pinctrl-meson-s4.c
+
+   173	
+   174	/* Bank C func4 */
+   175	static const unsigned int tdm_d2_c_pins[]		= { GPIOC_0 };
+   176	static const unsigned int tdm_d3_c_pins[]		= { GPIOC_1 };
+   177	static const unsigned int tdm_fs1_c_pins[]		= { GPIOC_2 };
+ > 178	static const unsigned int tdm_sclk1_c_pins[]		= { GPIOC_3 };
+   179	static const unsigned int mclk_1_c_pins[]		= { GPIOC_4 };
+   180	static const unsigned int tdm_d4_c_pins[]		= { GPIOC_5 };
+   181	static const unsigned int tdm_d5_c_pins[]		= { GPIOC_6 };
+   182	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

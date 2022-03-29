@@ -2,133 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017404EA894
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 09:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FFFF4EA89A
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 09:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233488AbiC2HfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 03:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
+        id S233511AbiC2HjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 03:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233472AbiC2HfJ (ORCPT
+        with ESMTP id S231801AbiC2Hi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 03:35:09 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5633E64D3;
-        Tue, 29 Mar 2022 00:33:24 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a02:3030:a:f397:f6bc:b726:2678:839f])
+        Tue, 29 Mar 2022 03:38:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BE548388;
+        Tue, 29 Mar 2022 00:37:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D434B1F434C3;
-        Tue, 29 Mar 2022 08:33:22 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648539203;
-        bh=6168akkeItinnefCNizxCX6qty+XlEyo8LTc/EhMHyA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TfICraTN9dPWVshI9ejFuM3OX2hFoRD5nKosTH5g67vwjeXewf8wTD/SF5u6n7PrN
-         EnMshmHt8DYMnG89m0nwlWnmkcwRGUkrvqsP+n2t9g01xI37wA+XLebyOxR0ZMia6F
-         vP+/wYs8obUoAX4lgY0vJ0W7weHyn6x9KQXStKF2JVswKPJxDhtkTocV1ZBDoysAUg
-         kcIX6skZLT/4VG9kV1o0tywt6I9JGrroedxusx6cq27IYJ70KDj3WYyy5rXMLfbYpE
-         kM/RczV2Nq51Vpsnp6jx+hXJ1FDIiczEzEaUoPfNe58xxLiWmnOjqR1I+OvEstUk0Z
-         G8K+1WzbNLfVw==
-Date:   Tue, 29 Mar 2022 09:33:19 +0200
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     James_Lin <Ping-lei.Lin@mediatek.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Ming Qian <ming.qian@nxp.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, Sherlock.Chang@mediatek.com,
-        TM.Wu@mediatek.com
-Subject: Re: [PATCH] Signed-off-by: James_Lin <Ping-lei.Lin@mediatek.com>
-Message-ID: <20220329073319.7da77tpgt523zksg@basti-XPS-13-9310>
-References: <20220329071407.17703-1-Ping-lei.Lin@mediatek.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2FC661554;
+        Tue, 29 Mar 2022 07:37:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C80BC340ED;
+        Tue, 29 Mar 2022 07:37:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648539435;
+        bh=+etXV8lANDE8ZS57f0zCn3WwYkPsh0BB3chSoBhHPDk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TCyEpZUpEGLqePzgXmHk89RG4p4AdNes/ZGbDlmoMyPOpbEISigo1OSFIeg5TaFHx
+         zbtM/4mu5R+lka88E/TGn4fb+Pgm2gjIA+NDb8o6/LfTkVp/+LGIu7/Q/NYF2M/giP
+         dO5Lffhd3XOAMcJTzFM9CKRcnsAvxujMee4Wp90Lvz0FlOrC7C6iB4jJvpavzxXj8z
+         J4wTzlm/UowGn0gbqTc5TTsaEjN3z1w0KNxgyc/e0m3WgE8b9YlHJu5CtQ+KBNW8/h
+         T0XS/a4GmO8+bvBp7aXzMbwCpSyRuTNxgG6jflHuKYAAqp++pFr+ddm+7lNrP4RarZ
+         ck5SK7AzqiI+A==
+Message-ID: <c9b0b3e5-28f3-67a2-6456-d63f3232e432@kernel.org>
+Date:   Tue, 29 Mar 2022 10:37:10 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220329071407.17703-1-Ping-lei.Lin@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/2] memory: omap-gpmc: Allow building as a module
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     miquel.raynal@bootlin.com, tony@atomide.com, vigneshr@ti.com,
+        kishon@ti.com, nm@ti.com, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220328111319.1236-1-rogerq@kernel.org>
+ <20220328111319.1236-3-rogerq@kernel.org>
+ <8a55260d-7354-028b-8439-475a9fbfe092@kernel.org>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <8a55260d-7354-028b-8439-475a9fbfe092@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey James,
+Hi Krzysztof,
 
-Looks like something went wrong during the creation of the patch.
+On 28/03/2022 16:11, Krzysztof Kozlowski wrote:
+> On 28/03/2022 13:13, Roger Quadros wrote:
+>> Allow OMAP_GPMC to be built as a module.
+>>
+>> Remove redundant of_match_node() call before
+>> of_platform_default_populate() as the latter takes
+>> care of matching with of_default_bus_match_table.
+> 
+> Split this part to separate commit, please. It does not look related to
+> making it a module.
 
-The patch needs a commit subject line, a description what it does and
-the SOB has to beneath that description.
+Actually it is related. Without that change build fails
+as it cannot find symbol 'of_default_bus_match_table'
 
-Greetings,
-Sebastian
+Maybe I'll mention it in commit log.
 
-On 29.03.2022 15:14, James_Lin wrote:
->diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
->index dda0f0aa78b8..ebb807c33e57 100644
->--- a/drivers/media/usb/uvc/uvc_driver.c
->+++ b/drivers/media/usb/uvc/uvc_driver.c
->@@ -154,6 +154,11 @@ static struct uvc_format_desc uvc_fmts[] = {
-> 		.guid		= UVC_GUID_FORMAT_H264,
-> 		.fcc		= V4L2_PIX_FMT_H264,
-> 	},
->+	{
->+		.name		= "H.265",
->+		.guid		= UVC_GUID_FORMAT_H265,
->+		.fcc		= V4L2_PIX_FMT_H265,
->+	},
-> 	{
-> 		.name		= "Greyscale 8 L/R (Y8I)",
-> 		.guid		= UVC_GUID_FORMAT_Y8I,
->diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
->index 143230b3275b..41f4d8c33f2a 100644
->--- a/drivers/media/usb/uvc/uvcvideo.h
->+++ b/drivers/media/usb/uvc/uvcvideo.h
->@@ -139,6 +139,9 @@
-> #define UVC_GUID_FORMAT_H264 \
-> 	{ 'H',  '2',  '6',  '4', 0x00, 0x00, 0x10, 0x00, \
-> 	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
->+#define UVC_GUID_FORMAT_H265 \
->+	{ 'H',  '2',  '6',  '5', 0x00, 0x00, 0x10, 0x00, \
->+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-> #define UVC_GUID_FORMAT_Y8I \
-> 	{ 'Y',  '8',  'I',  ' ', 0x00, 0x00, 0x10, 0x00, \
-> 	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
->diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
->index 96e307fe3aab..aeaeb29307a4 100644
->--- a/drivers/media/v4l2-core/v4l2-ioctl.c
->+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
->@@ -1402,6 +1402,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
-> 		case V4L2_PIX_FMT_JPEG:		descr = "JFIF JPEG"; break;
-> 		case V4L2_PIX_FMT_DV:		descr = "1394"; break;
-> 		case V4L2_PIX_FMT_MPEG:		descr = "MPEG-1/2/4"; break;
->+		case V4L2_PIX_FMT_H265:		descr = "H.265"; break;
-> 		case V4L2_PIX_FMT_H264:		descr = "H.264"; break;
-> 		case V4L2_PIX_FMT_H264_NO_SC:	descr = "H.264 (No Start Codes)"; break;
-> 		case V4L2_PIX_FMT_H264_MVC:	descr = "H.264 MVC"; break;
->diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
->index 3768a0a80830..636e4236bfb8 100644
->--- a/include/uapi/linux/videodev2.h
->+++ b/include/uapi/linux/videodev2.h
->@@ -691,6 +691,7 @@ struct v4l2_pix_format {
-> #define V4L2_PIX_FMT_JPEG     v4l2_fourcc('J', 'P', 'E', 'G') /* JFIF JPEG     */
-> #define V4L2_PIX_FMT_DV       v4l2_fourcc('d', 'v', 's', 'd') /* 1394          */
-> #define V4L2_PIX_FMT_MPEG     v4l2_fourcc('M', 'P', 'E', 'G') /* MPEG-1/2/4 Multiplexed */
->+#define V4L2_PIX_FMT_H265     v4l2_fourcc('H', '2', '6', '5') /* H265 with start codes */
-> #define V4L2_PIX_FMT_H264     v4l2_fourcc('H', '2', '6', '4') /* H264 with start codes */
-> #define V4L2_PIX_FMT_H264_NO_SC v4l2_fourcc('A', 'V', 'C', '1') /* H264 without start codes */
-> #define V4L2_PIX_FMT_H264_MVC v4l2_fourcc('M', '2', '6', '4') /* H264 MVC */
->-- 
->2.18.0
->
+> 
+>>
+>> Move compatible match table to the end where it is usually expected.
+>>
+>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+>> ---
+>>  drivers/memory/Kconfig     |  2 +-
+>>  drivers/memory/omap-gpmc.c | 44 +++++++++++++++++++++-----------------
+>>  2 files changed, 25 insertions(+), 21 deletions(-)
+>>
+>> diff --git a/drivers/memory/Kconfig b/drivers/memory/Kconfig
+>> index da2af9c38fe3..4debd4b2c8da 100644
+>> --- a/drivers/memory/Kconfig
+>> +++ b/drivers/memory/Kconfig
+>> @@ -103,7 +103,7 @@ config TI_EMIF
+>>  	  temperature changes
+>>  
+>>  config OMAP_GPMC
+>> -	bool "Texas Instruments OMAP SoC GPMC driver"
+>> +	tristate "Texas Instruments OMAP SoC GPMC driver"
+>>  	depends on OF_ADDRESS || COMPILE_TEST
+>>  	select GPIOLIB
+>>  	help
+>> diff --git a/drivers/memory/omap-gpmc.c b/drivers/memory/omap-gpmc.c
+>> index ed11887c1b7c..6fdb76cc3bc9 100644
+>> --- a/drivers/memory/omap-gpmc.c
+>> +++ b/drivers/memory/omap-gpmc.c
+>> @@ -12,6 +12,7 @@
+>>  #include <linux/cpu_pm.h>
+>>  #include <linux/irq.h>
+>>  #include <linux/kernel.h>
+>> +#include <linux/module.h>
+>>  #include <linux/init.h>
+>>  #include <linux/err.h>
+>>  #include <linux/clk.h>
+>> @@ -1889,16 +1890,6 @@ int gpmc_cs_program_settings(int cs, struct gpmc_settings *p)
+>>  }
+>>  
+>>  #ifdef CONFIG_OF
+>> -static const struct of_device_id gpmc_dt_ids[] = {
+>> -	{ .compatible = "ti,omap2420-gpmc" },
+>> -	{ .compatible = "ti,omap2430-gpmc" },
+>> -	{ .compatible = "ti,omap3430-gpmc" },	/* omap3430 & omap3630 */
+>> -	{ .compatible = "ti,omap4430-gpmc" },	/* omap4430 & omap4460 & omap543x */
+>> -	{ .compatible = "ti,am3352-gpmc" },	/* am335x devices */
+>> -	{ .compatible = "ti,am64-gpmc" },
+>> -	{ }
+>> -};
+>> -
+>>  static void gpmc_cs_set_name(int cs, const char *name)
+>>  {
+>>  	struct gpmc_cs_data *gpmc = &gpmc_cs[cs];
+>> @@ -2257,11 +2248,9 @@ static int gpmc_probe_generic_child(struct platform_device *pdev,
+>>  	if (!of_platform_device_create(child, NULL, &pdev->dev))
+>>  		goto err_child_fail;
+>>  
+>> -	/* is child a common bus? */
+>> -	if (of_match_node(of_default_bus_match_table, child))
+>> -		/* create children and other common bus children */
+>> -		if (of_platform_default_populate(child, NULL, &pdev->dev))
+>> -			goto err_child_fail;
+>> +	/* create children and other common bus children */
+>> +	if (of_platform_default_populate(child, NULL, &pdev->dev))
+>> +		goto err_child_fail;
+>>  
+>>  	return 0;
+>>  
+>> @@ -2278,6 +2267,8 @@ static int gpmc_probe_generic_child(struct platform_device *pdev,
+>>  	return ret;
+>>  }
+>>  
+>> +static const struct of_device_id gpmc_dt_ids[];
+>> +
+>>  static int gpmc_probe_dt(struct platform_device *pdev)
+>>  {
+>>  	int ret;
+>> @@ -2644,6 +2635,19 @@ static int gpmc_resume(struct device *dev)
+>>  
+>>  static SIMPLE_DEV_PM_OPS(gpmc_pm_ops, gpmc_suspend, gpmc_resume);
+>>  
+>> +#ifdef CONFIG_OF
+>> +static const struct of_device_id gpmc_dt_ids[] = {
+>> +	{ .compatible = "ti,omap2420-gpmc" },
+>> +	{ .compatible = "ti,omap2430-gpmc" },
+>> +	{ .compatible = "ti,omap3430-gpmc" },	/* omap3430 & omap3630 */
+>> +	{ .compatible = "ti,omap4430-gpmc" },	/* omap4430 & omap4460 & omap543x */
+>> +	{ .compatible = "ti,am3352-gpmc" },	/* am335x devices */
+>> +	{ .compatible = "ti,am64-gpmc" },
+>> +	{ }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, gpmc_dt_ids);
+>> +#endif
+>> +
+>>  static struct platform_driver gpmc_driver = {
+>>  	.probe		= gpmc_probe,
+>>  	.remove		= gpmc_remove,
+>> @@ -2654,8 +2658,8 @@ static struct platform_driver gpmc_driver = {
+>>  	},
+>>  };
+>>  
+>> -static __init int gpmc_init(void)
+>> -{
+>> -	return platform_driver_register(&gpmc_driver);
+>> -}
+>> -postcore_initcall(gpmc_init);
+>> +module_platform_driver(gpmc_driver);
+>> +
+>> +MODULE_DESCRIPTION("Texas Instruments GPMC driver");
+>> +MODULE_ALIAS("platform:" DEVICE_NAME);
+> 
+> Why do you need this alias?
+
+Not required. I'll remove it.
+
+> 
+>> +MODULE_LICENSE("GPL v2");
+> 
+> 
+> Best regards,
+> Krzysztof
+
+--
+cheers,
+-roger

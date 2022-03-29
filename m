@@ -2,337 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3CA4EB3CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 21:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990E64EB3DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 21:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240798AbiC2TDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 15:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S240793AbiC2TGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 15:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240777AbiC2TDl (ORCPT
+        with ESMTP id S233995AbiC2TGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 15:03:41 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1461FE1251
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 12:01:58 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id o8so15596580pgf.9
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 12:01:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2XeIM1SVjYsGalPDLQxopalWmUCHnrUjVEEJ+tulJdw=;
-        b=fkATFbG5P1QdsRl3f5I5TTNI5ChWdFQqj0PejuKROxLUJnUOxzgKe+W4LhC5IZAI4H
-         YtsmX3rK45fXNWubfbpZPqb9DnxrrAbfux1L4qkhlnrcAasThinipJ2Q3eV/AR/L8pQY
-         cRcROodkTR03YOK9g3nobLnLQ905Gk1gr+g/5/aOMWcSLRh80tKrndhIfqqoN+N3vRsS
-         DIOkXafKz0QlgKRKQ9CcqexPq7225Bm1SKVztp6KtFJXqZwd53geDw7ldIZ4DNNPAqx+
-         3sIDGdLWnk5KF2cMv6hxUP0l3WPVCea9ErtR4WnbKShs+t9nnnof7J9xgjZLKizrsTPW
-         Bp7A==
+        Tue, 29 Mar 2022 15:06:51 -0400
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19EC122220;
+        Tue, 29 Mar 2022 12:05:03 -0700 (PDT)
+Received: by mail-oi1-f175.google.com with SMTP id t21so15100518oie.11;
+        Tue, 29 Mar 2022 12:05:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2XeIM1SVjYsGalPDLQxopalWmUCHnrUjVEEJ+tulJdw=;
-        b=zhsAinN3BDTURDC7+GoUTjURBoGbwdP+O0zJcRGySwW54mMloR3zX5AokC1Jc7pm6h
-         sVoQ6ljoyhFSSQAASxhmASqwGJ40knFtIpozBo8F9JwV5PYwcdTmFRHZSeU4yBy6aGN8
-         RN1QfUsUVWKs26KWDfbig9T2NwR6+1jBdF5VDNPSVM+zRcrJiLTNWyfFAyAgIfwzw1NT
-         fQtTglT1PtMtjGgtP1s187u2FprZ9JpJT2czWNQVs86ECpu/qcZRUPqDVvIWcRvyEcvQ
-         g14I4zR1FSltYnHZyrvVEm0zsC+rdQE8V+IkXcdQP8aQf1aH4BwQCURaGcwgEvhhM918
-         N0/Q==
-X-Gm-Message-State: AOAM530cMkRUonNzUm4Y7mAauF3iLvD7oBmhk+Okw4Y0ytKqHafAeIyP
-        Hx6MzIMppdM6pjg1CW2Boy4tyg==
-X-Google-Smtp-Source: ABdhPJzEpA97rJvGQuEnxLNNeV8mQMFbR/iU9G4YS04U64x9rSctBZQKrTxpUvsX+m2/3qlD8psMvg==
-X-Received: by 2002:a63:7888:0:b0:398:91:7b5e with SMTP id t130-20020a637888000000b0039800917b5emr3047768pgc.212.1648580517007;
-        Tue, 29 Mar 2022 12:01:57 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id ip1-20020a17090b314100b001c7b10fe359sm3975575pjb.5.2022.03.29.12.01.55
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=v1oONrnLlRXGbMfvDqdmlw1VwUihrZs/319cP9C0i2s=;
+        b=BkA3LuaMXzDy/sr5tI7+WCpdUZZ4vhuyOVKljUb+1yZUEUgs7Z8mALScWnzpWiVeIg
+         Y65qYAPnPh8Djt8vIdv/JErPVKlKuKkGOcLBanu/kEyKbrShldTc0SpDS8DP1mZiexeE
+         mXxIVW5C11gf5bwBWJv1klfLklju1ZmUR6D6okm7UbOByp4YPrqyUkssTaxVqvQhevXI
+         Gu9nW5A08Y3VtJuH6phxkXqdbqTUV1Bbe76AOImekvwMkAFQUbSjCQnhl7PGxxpNk+z/
+         bq4f1zVqGHP8nvlSKqWkrvRv3dXYPG5iZOxb6nomGEwEfrot19ypxtro+fPW32cLyNUD
+         XelA==
+X-Gm-Message-State: AOAM532gkNzeJn2rdaYAapwuxmmwuu8NBvJseqawYkeBE6dh2LIRqU+9
+        MrMelbUjSmGZgrDwn65AGBOAjW0uDA==
+X-Google-Smtp-Source: ABdhPJyXRr4zxXyWQ9FG9aYqpt0gXmHwOT5iuYgCBFk9X2WBHWElBXyZOF2Hf/klYpci/snl1JFIbw==
+X-Received: by 2002:a05:6808:1804:b0:2f7:69ab:a06f with SMTP id bh4-20020a056808180400b002f769aba06fmr325060oib.41.1648580702835;
+        Tue, 29 Mar 2022 12:05:02 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 21-20020a056870121500b000ddb064e097sm8459972oan.31.2022.03.29.12.05.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 12:01:55 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 19:01:52 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com
-Subject: Re: [PATCH v5 10/13] KVM: Register private memslot to memory backing
- store
-Message-ID: <YkNXoCBjfpfI67QF@google.com>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
- <20220310140911.50924-11-chao.p.peng@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310140911.50924-11-chao.p.peng@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 29 Mar 2022 12:05:01 -0700 (PDT)
+Received: (nullmailer pid 1067576 invoked by uid 1000);
+        Tue, 29 Mar 2022 19:05:00 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-spi@vger.kernel.org
+In-Reply-To: <20220329112717.252647-1-krzysztof.kozlowski@linaro.org>
+References: <20220329112717.252647-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 1/2] spi: dt-bindings: qcom,spi-geni-qcom: convert to dtschema
+Date:   Tue, 29 Mar 2022 14:05:00 -0500
+Message-Id: <1648580700.635474.1067575.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022, Chao Peng wrote:
-> Add 'notifier' to memslot to make it a memfile_notifier node and then
-> register it to memory backing store via memfile_register_notifier() when
-> memslot gets created. When memslot is deleted, do the reverse with
-> memfile_unregister_notifier(). Note each KVM memslot can be registered
-> to different memory backing stores (or the same backing store but at
-> different offset) independently.
+On Tue, 29 Mar 2022 13:27:16 +0200, Krzysztof Kozlowski wrote:
+> Convert the GENI based Qualcomm Universal Peripheral (QUP) Serial
+> Peripheral Interface (SPI) bindings to DT Schema.
 > 
-> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> The original bindings in TXT were not complete, so add during conversion
+> properties already used in DTS and/or in the driver: reg-names, dmas,
+> interconnects, operating points and power-domains.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  include/linux/kvm_host.h |  1 +
->  virt/kvm/kvm_main.c      | 75 ++++++++++++++++++++++++++++++++++++----
->  2 files changed, 70 insertions(+), 6 deletions(-)
+>  .../bindings/spi/qcom,spi-geni-qcom.txt       |  39 ------
+>  .../bindings/spi/qcom,spi-geni-qcom.yaml      | 131 ++++++++++++++++++
+>  2 files changed, 131 insertions(+), 39 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.txt
+>  create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
 > 
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 6e1d770d6bf8..9b175aeca63f 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -567,6 +567,7 @@ struct kvm_memory_slot {
->  	struct file *private_file;
->  	loff_t private_offset;
->  	struct memfile_pfn_ops *pfn_ops;
-> +	struct memfile_notifier notifier;
->  };
->  
->  static inline bool kvm_slot_is_private(const struct kvm_memory_slot *slot)
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index d11a2628b548..67349421eae3 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -840,6 +840,37 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
->  
->  #endif /* CONFIG_MMU_NOTIFIER && KVM_ARCH_WANT_MMU_NOTIFIER */
->  
-> +#ifdef CONFIG_MEMFILE_NOTIFIER
-> +static inline int kvm_memfile_register(struct kvm_memory_slot *slot)
 
-This is a good oppurtunity to hide away the memfile details a bit.  Maybe
-kvm_private_mem_{,un}register()?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> +{
-> +	return memfile_register_notifier(file_inode(slot->private_file),
-> +					 &slot->notifier,
-> +					 &slot->pfn_ops);
-> +}
-> +
-> +static inline void kvm_memfile_unregister(struct kvm_memory_slot *slot)
-> +{
-> +	if (slot->private_file) {
-> +		memfile_unregister_notifier(file_inode(slot->private_file),
-> +					    &slot->notifier);
-> +		fput(slot->private_file);
+yamllint warnings/errors:
 
-This should not do fput(), it makes the helper imbalanced with respect to the
-register path and will likely lead to double fput().  Indeed, if preparing the
-region fails, __kvm_set_memory_region() will double up on fput() due to checking
-its local "file" for null, not slot->private for null.
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.example.dt.yaml:0:0: /example-0/spi@880000/tpm@0: failed to match any schema with compatible: ['google,cr50']
 
-> +		slot->private_file = NULL;
-> +	}
-> +}
-> +
-> +#else /* !CONFIG_MEMFILE_NOTIFIER */
-> +
-> +static inline int kvm_memfile_register(struct kvm_memory_slot *slot)
-> +{
+doc reference errors (make refcheckdocs):
 
-This should WARN_ON_ONCE().  Ditto for unregister.
+See https://patchwork.ozlabs.org/patch/1610589
 
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static inline void kvm_memfile_unregister(struct kvm_memory_slot *slot)
-> +{
-> +}
-> +
-> +#endif /* CONFIG_MEMFILE_NOTIFIER */
-> +
->  #ifdef CONFIG_HAVE_KVM_PM_NOTIFIER
->  static int kvm_pm_notifier_call(struct notifier_block *bl,
->  				unsigned long state,
-> @@ -884,6 +915,9 @@ static void kvm_destroy_dirty_bitmap(struct kvm_memory_slot *memslot)
->  /* This does not remove the slot from struct kvm_memslots data structures */
->  static void kvm_free_memslot(struct kvm *kvm, struct kvm_memory_slot *slot)
->  {
-> +	if (slot->flags & KVM_MEM_PRIVATE)
-> +		kvm_memfile_unregister(slot);
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-With fput() move out of unregister, this needs to be:
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-	if (slot->flags & KVM_MEM_PRIVATE) {
-		kvm_private_mem_unregister(slot);
-		fput(slot->private_file);
-	}
-> +
->  	kvm_destroy_dirty_bitmap(slot);
->  
->  	kvm_arch_free_memslot(kvm, slot);
-> @@ -1738,6 +1772,12 @@ static int kvm_set_memslot(struct kvm *kvm,
->  		kvm_invalidate_memslot(kvm, old, invalid_slot);
->  	}
->  
-> +	if (new->flags & KVM_MEM_PRIVATE && change == KVM_MR_CREATE) {
-> +		r = kvm_memfile_register(new);
-> +		if (r)
-> +			return r;
-> +	}
+pip3 install dtschema --upgrade
 
-This belongs in kvm_prepare_memory_region().  The shenanigans for DELETE and MOVE
-are special.
+Please check and re-submit.
 
-> +
->  	r = kvm_prepare_memory_region(kvm, old, new, change);
->  	if (r) {
->  		/*
-> @@ -1752,6 +1792,10 @@ static int kvm_set_memslot(struct kvm *kvm,
->  		} else {
->  			mutex_unlock(&kvm->slots_arch_lock);
->  		}
-> +
-> +		if (new->flags & KVM_MEM_PRIVATE && change == KVM_MR_CREATE)
-> +			kvm_memfile_unregister(new);
-> +
->  		return r;
->  	}
->  
-> @@ -1817,6 +1861,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
->  	enum kvm_mr_change change;
->  	unsigned long npages;
->  	gfn_t base_gfn;
-> +	struct file *file = NULL;
-
-Nit, naming this private_file would help understand its use.  Though I think it's
-easier to not have a local variable.  More below.
-
->  	int as_id, id;
->  	int r;
->  
-> @@ -1890,14 +1935,24 @@ int __kvm_set_memory_region(struct kvm *kvm,
->  			return 0;
->  	}
->  
-> +	if (mem->flags & KVM_MEM_PRIVATE) {
-> +		file = fdget(region_ext->private_fd).file;
-
-This can use fget() instead of fdget().
-
-> +		if (!file)
-> +			return -EINVAL;
-> +	}
-> +
->  	if ((change == KVM_MR_CREATE || change == KVM_MR_MOVE) &&
-> -	    kvm_check_memslot_overlap(slots, id, base_gfn, base_gfn + npages))
-> -		return -EEXIST;
-> +	    kvm_check_memslot_overlap(slots, id, base_gfn, base_gfn + npages)) {
-> +		r = -EEXIST;
-> +		goto out;
-> +	}
->  
->  	/* Allocate a slot that will persist in the memslot. */
->  	new = kzalloc(sizeof(*new), GFP_KERNEL_ACCOUNT);
-> -	if (!new)
-> -		return -ENOMEM;
-> +	if (!new) {
-> +		r = -ENOMEM;
-> +		goto out;
-> +	}
->  
->  	new->as_id = as_id;
->  	new->id = id;
-> @@ -1905,10 +1960,18 @@ int __kvm_set_memory_region(struct kvm *kvm,
->  	new->npages = npages;
->  	new->flags = mem->flags;
->  	new->userspace_addr = mem->userspace_addr;
-> +	new->private_file = file;
-> +	new->private_offset = mem->flags & KVM_MEM_PRIVATE ?
-> +			      region_ext->private_offset : 0;
-
-"new" is zero-allocated, so all the private stuff, including the fget(), can be
-wrapped in a single KVM_MEM_PRIVATE check.  Moving fget() eliminates the number
-of gotos needed (the above -EEXIST and -ENOMEM paths don't need to be modified).
-
->  	r = kvm_set_memslot(kvm, old, new, change);
-> -	if (r)
-> -		kfree(new);
-> +	if (!r)
-> +		return r;
-
-Use goto, e.g.
-
-	if (r)
-		goto out;
-
-	return 0;
-
-Burying the happy path in a taken if-statement is confusing and error prone,
-mostly because it breaks well-established kernel patterns.  Note, there's no need
-for a separate out_free since new->private_file will be NULL in either case.  I
-don't have a strong preference, I just find it easier to read code that's more
-explicit, but I'm a-ok collapsing them into a single label.
-
-	if ((change == KVM_MR_CREATE || change == KVM_MR_MOVE) &&
-	    kvm_check_memslot_overlap(slots, id, base_gfn, base_gfn + npages))
-		return -EEXIST;
-
-	/* Allocate a slot that will persist in the memslot. */
-	new = kzalloc(sizeof(*new), GFP_KERNEL_ACCOUNT);
-	if (!new)
-		return -ENOMEM;
-
-	new->as_id = as_id;
-	new->id = id;
-	new->base_gfn = base_gfn;
-	new->npages = npages;
-	new->flags = mem->flags;
-	new->userspace_addr = mem->userspace_addr;
-
-	if (mem->flags & KVM_MEM_PRIVATE) {
-		new->private_file = fget(mem->private_fd);
-		if (!new->private_file) {
-			r = -EINVAL;
-			goto out_free;
-		}
-		new->private_offset = mem->private_offset;
-	}
-
-	r = kvm_set_memslot(kvm, old, new, change);
-	if (r)
-		goto out;
-
-	return 0;
-
-out:
-	if (new->private_file)
-		fput(new->private_file);
-
-out_free:
-	kfree(new);
-	return r;

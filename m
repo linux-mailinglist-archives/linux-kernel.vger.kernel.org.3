@@ -2,139 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C359A4EB6BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A234EB6BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240420AbiC2X2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33704 "EHLO
+        id S240475AbiC2X2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240323AbiC2X2O (ORCPT
+        with ESMTP id S240436AbiC2X2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:28:14 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4858F186F8F
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:26:30 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id i11so7705700plg.12
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FyT36mVFWHHmMaSNyNgttXeXWMR6GXiSODHEfHAzs+E=;
-        b=ba0JAx2n4kkjoAQZJSqFJ69WwtL9z52owYSJ/KvYr9qfAEVMgIjcQHCDGPl6xQDA9F
-         WoEhch7+l7DkM+nzyTxnQfvvtAqvX0ZgUlPGdQbz/iF99L0mJ8YzON6BFMsVkG3f0M6j
-         ngfRX4ko8C/xzX0qHIRWhfrzT9fqYeJF1rkBO9TQ5vqXnGUf9qOlt7cUyvdwmXG8EQbJ
-         D8mzrro8Jk5++JdkZPrPAEljZgGdhBE3F9w7DPw4v6duLNJ+IrMwnL+BCHDKfTXAE77T
-         nWYiR792di2q+VxOaVkzWT+iuCGnfRCgI9r8MVIW6tZGcAVzKSgMZm0ClndvRxWcLRKx
-         xlqA==
+        Tue, 29 Mar 2022 19:28:22 -0400
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CD919CCD6;
+        Tue, 29 Mar 2022 16:26:38 -0700 (PDT)
+Received: by mail-ot1-f51.google.com with SMTP id o20-20020a9d7194000000b005cb20cf4f1bso13801074otj.7;
+        Tue, 29 Mar 2022 16:26:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=FyT36mVFWHHmMaSNyNgttXeXWMR6GXiSODHEfHAzs+E=;
-        b=ZjbIG5DIg1wu72tc+UKD8USsDMU2osDTfUhfJDAqcupUUObbO6fQZdOMz4j5c/qRtp
-         i1e63nDwADnzyqXqZALeeHQTgF3rH+rnvXAK26KmD1D8H68imACNAvUnFGkscTmVrUiY
-         ZkrEmRfiFfOE/Qz2y8gW07paSgDr5+UsWnDnz3Bl5+WJaNpCVaXtjtsSCFiw+TvsU//q
-         yuceTki/fL7VhmQAQtV0bcJ0uIzQhm8LJWbIQ9q+kH8407YOX07XItlhjs5o9PwPqus+
-         te4Px72tK6X47LybPiBwqeMoL0SPYyMHuR1Mjr521PEZsTpWV3oFwLQ+WJ6wVAQka25e
-         uQ6g==
-X-Gm-Message-State: AOAM532KtJozv7gWTdt6r2s4FrBj6IwadU7NN1LT6qMtBZvnwxYH4Wic
-        tloj5IDXfGr0B9IcFlPA3mPQ+g==
-X-Google-Smtp-Source: ABdhPJwnOb3NjFRKz1nmRlqh+ZvHsNMeDbIoEzibgQi4hxNEPlUdqkFegwqHxwwedq2s7qqe61C/mA==
-X-Received: by 2002:a17:902:d70e:b0:156:1b99:e909 with SMTP id w14-20020a170902d70e00b001561b99e909mr9037358ply.155.1648596389575;
-        Tue, 29 Mar 2022 16:26:29 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id t10-20020a056a00138a00b004fa9c9fda44sm21128713pfg.89.2022.03.29.16.26.28
+        bh=Onx8whWtYNziaSOWeikFCxBSNS52wmmziZDYwpwSOs0=;
+        b=tOEP9uEz2GH5PsSAqDupyOI5TxOy6wGK1pEYeN67WfbryD7pxP9oYVcc2s7ChCWgyJ
+         lNLqaFyLDe8nduQ1nDtb2/dmwqseMwl8wlIy0Jd3HWDC3GSUyWeXuFDa0fUVjRhssrgv
+         M7UExso35iHa2VYp8PuMV0rJZEkcWIs1xbzC8/a0hXgfYkS+GScwfuQ8tMI8u5XjQkrV
+         l+XuRtyJ5NjTZW1AVZzPqG5sENR4Z6LQ2ZwOyAu7O/unfiM66xk06xwhr8nSf5JfOol+
+         S/o5WXdSejDm/RrAm1W31i0eawv9+VSmmUnERakh4UoN2INOYaurQBovf0qkwv8xKhFo
+         WlLw==
+X-Gm-Message-State: AOAM531iONOylcpS0QM84fdmV+vUAR8f+JQGYR2DLXYTWqBPH+uli/OL
+        OnJUi0j0S2Bz0s0CRpVZesAbyJR6og==
+X-Google-Smtp-Source: ABdhPJwgMeIuk1f9wBngw9sMNVUFDANIzQF6qRJJfG+W5rTEJltAFjng0HItLceLMRGMH3tlj1E5wg==
+X-Received: by 2002:a05:6830:82a:b0:5b2:36d5:1603 with SMTP id t10-20020a056830082a00b005b236d51603mr2173120ots.240.1648596397558;
+        Tue, 29 Mar 2022 16:26:37 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q12-20020a4ad54c000000b003245ac0a745sm9268545oos.22.2022.03.29.16.26.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 16:26:28 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 23:26:25 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] KVM: x86: Move kvm_ops_static_call_update() to
- x86.c
-Message-ID: <YkOVofVoJD6s1W7I@google.com>
-References: <20220307115920.51099-1-likexu@tencent.com>
- <20220307115920.51099-2-likexu@tencent.com>
- <YkOPT7TJf74C2Wq8@google.com>
+        Tue, 29 Mar 2022 16:26:36 -0700 (PDT)
+Received: (nullmailer pid 1552943 invoked by uid 1000);
+        Tue, 29 Mar 2022 23:26:35 -0000
+Date:   Tue, 29 Mar 2022 18:26:35 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Trevor Wu <trevor.wu@mediatek.com>
+Cc:     yc.hung@mediatek.com, broonie@kernel.org, miles.chen@mediatek.com,
+        alsa-devel@alsa-project.org, aaronyu@google.com, tiwai@suse.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, linux-mediatek@lists.infradead.org,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        devicetree@vger.kernel.org, tzungbi@google.com
+Subject: Re: [PATCH v4 6/6] ASoC: dt-bindings: mediatek: mt8195: support
+ mt8195-mt6359-max98390-rt5682
+Message-ID: <YkOVq9XA9VGSNqzc@robh.at.kernel.org>
+References: <20220324053851.27350-1-trevor.wu@mediatek.com>
+ <20220324053851.27350-7-trevor.wu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YkOPT7TJf74C2Wq8@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220324053851.27350-7-trevor.wu@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022, Sean Christopherson wrote:
-> On Mon, Mar 07, 2022, Like Xu wrote:
-> > From: Like Xu <likexu@tencent.com>
-> > 
-> > The kvm_ops_static_call_update() is defined in kvm_host.h. That's
-> > completely unnecessary, it should have exactly one caller,
-> > kvm_arch_hardware_setup().  As a prep match, move
-> > kvm_ops_static_call_update() to x86.c, then it can reference
-> > the kvm_pmu_ops stuff.
-> > 
-> > Suggested-by: Sean Christopherson <seanjc@google.com>
-> > Signed-off-by: Like Xu <likexu@tencent.com>
-> > ---
+On Thu, 24 Mar 2022 13:38:51 +0800, Trevor Wu wrote:
+> This patch adds compatible string "mediatek,mt8195-mt6359-max98390-rt5682"
+> to support mt8195 board with mt6359, max98390 and rt5682.
 > 
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/sound/mt8195-mt6359.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Actually, I take that back.  If we pass in @ops, and do some other minor tweaks
-along the way, then we can make kvm_pmu_ops static.
-
-I'll post a very compile-tested-only v3.1, trying to generate diffs against your
-series is going to be painful due to conflicts.  The changes aren't big, just
-annoying.
-
-Below is the diff for this patch.  Then in patch 2, kvm_ops_update() adds a call
-to kvm_pmu_ops_update().  Patch 3 just tweaks the call to use ops->pmu_ops instead
-of ops->runtime_ops->pmu_ops.  Patch 4 becomes purely code shuffling (I think).
-
----
- arch/x86/kvm/x86.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 9cb8672aab92..99aa2d16845a 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11595,8 +11595,10 @@ void kvm_arch_hardware_disable(void)
- 	drop_user_return_notifiers();
- }
-
--static inline void kvm_ops_static_call_update(void)
-+static inline void kvm_ops_update(struct kvm_x86_init_ops *ops)
- {
-+	memcpy(&kvm_x86_ops, ops->runtime_ops, sizeof(kvm_x86_ops));
-+
- #define __KVM_X86_OP(func) \
- 	static_call_update(kvm_x86_##func, kvm_x86_ops.func);
- #define KVM_X86_OP(func) \
-@@ -11623,8 +11625,7 @@ int kvm_arch_hardware_setup(void *opaque)
- 	if (r != 0)
- 		return r;
-
--	memcpy(&kvm_x86_ops, ops->runtime_ops, sizeof(kvm_x86_ops));
--	kvm_ops_static_call_update();
-+	kvm_ops_update(ops);
-
- 	kvm_register_perf_callbacks(ops->handle_intel_pt_intr);
-
-
-base-commit: bd6b09f0754bea388a189d544ce11d83206579a2
---
-
+Acked-by: Rob Herring <robh@kernel.org>

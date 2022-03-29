@@ -2,78 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E67804EAED5
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0AAA4EAEE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237553AbiC2Nx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 09:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
+        id S237594AbiC2N4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 09:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237697AbiC2Nw1 (ORCPT
+        with ESMTP id S234222AbiC2N4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 09:52:27 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20381959C2
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:50:43 -0700 (PDT)
+        Tue, 29 Mar 2022 09:56:36 -0400
+Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.144.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767771E3E33
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:54:53 -0700 (PDT)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway31.websitewelcome.com (Postfix) with ESMTP id 00D748A6CC
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:54:53 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id ZCHEn8FVMHnotZCHEn1dRS; Tue, 29 Mar 2022 08:52:52 -0500
+X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=57/4y/ohZjXaSPqFsFf+MEyeDJA1H5R3F1dc2TLdTvQ=; b=J+WxSsdP5WbMw6G0tUtNCsUaPs
-        PwFa58iCP2s/bAtVgD95gOUEVStNvwoJ3MCKvME/CJLVs8Ohzi87+zVtjZ2+CZKiG0YSb5W7LUxay
-        bviJEvD69mcdDeirE2f0Uydrbib/NqA5+UwlW3urkofgJziMT1j0useFfDtqwCUHXngiDA1A9l/VP
-        JZIsigSM6fYx7WmS0ldjwqqjpPdikzRWh7qO9DGgU1UYdkjOitJyoDVh8GmN+pgKq4hcRBuh/ui4p
-        bXUEUZXlfLUvJj72RaMLPVy11Oeu2U7Kg9qg+MCUFze4vVayNN1c5fKqV294c3AC7VSojYGVIsi6G
-        V+BcgDzw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nZCF4-000KZD-AM; Tue, 29 Mar 2022 13:50:38 +0000
-Date:   Tue, 29 Mar 2022 14:50:38 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/8] mm/vmscan: introduce helper function
- reclaim_page_list()
-Message-ID: <YkMOrjhxkqMx45Es@casper.infradead.org>
-References: <20220329132619.18689-1-linmiaohe@huawei.com>
- <20220329132619.18689-4-linmiaohe@huawei.com>
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=R8VF1083Jml6bSlqQeVvGDZxIbXB4VClUDd8cNl8HqA=; b=ycg/a9dlJnrsrXw2QIi/hOynJz
+        YapMKagNgi0vMp0GKaSr32e2PIXcmtWBEGCIkRUbEDIFRzkBAbqKOr9vwcCt/gwl2/RmYmxlbDwkc
+        9irvStDtwQR1PmxXGudquz6OypiepTQyImdwe86pa2qNZ+RBuuzFhvfjW8UYrAbVPqd0T9MNXdgU2
+        GsCNUaso2xsF8byuJGCZZ8Fu7zTMQHxp0LxKZ+T7dZRFOegM8Xv9lhn0dn2oyMuj+gfN5KuX2d71l
+        /zHjs+zTOn4H2vXsh38qxOjPkyq6NOLnzP08v7IukXPeYIKRnd3vSoZ22hmGWKFxT6imnN4wfFsHq
+        9C00d64A==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54542)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nZCHD-00353G-Re; Tue, 29 Mar 2022 13:52:51 +0000
+Message-ID: <ad6373ce-ad60-e54c-139c-b4b807f3531c@roeck-us.net>
+Date:   Tue, 29 Mar 2022 06:52:50 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220329132619.18689-4-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Xu Yilun <yilun.xu@intel.com>,
+        Tom Rix <trix@redhat.com>, Jean Delvare <jdelvare@suse.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+References: <20220328115226.3042322-1-michael@walle.cc>
+ <YkGwjjUz+421O2E1@lunn.ch>
+ <ab64105b-c48d-cdf2-598a-3e0a2e261b27@roeck-us.net>
+ <e87c3ab2a0c188dced27bf83fc444c40@walle.cc>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v1 0/2] hwmon: introduce hwmon_sanitize()
+In-Reply-To: <e87c3ab2a0c188dced27bf83fc444c40@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nZCHD-00353G-Re
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54542
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 8
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 09:26:14PM +0800, Miaohe Lin wrote:
-> -unsigned long reclaim_pages(struct list_head *page_list)
-> +static inline unsigned int reclaim_page_list(struct list_head *page_list, struct pglist_data *pgdat)
->  {
-> -	int nid = NUMA_NO_NODE;
-> -	unsigned int nr_reclaimed = 0;
-> -	LIST_HEAD(node_page_list);
->  	struct reclaim_stat dummy_stat;
-> +	unsigned int nr_reclaimed;
->  	struct page *page;
-> -	unsigned int noreclaim_flag;
->  	struct scan_control sc = {
->  		.gfp_mask = GFP_KERNEL,
->  		.may_writepage = 1,
-> @@ -2529,6 +2526,24 @@ unsigned long reclaim_pages(struct list_head *page_list)
->  		.no_demotion = 1,
->  	};
->  
-> +	nr_reclaimed = shrink_page_list(page_list, pgdat, &sc, &dummy_stat, false);
-> +	while (!list_empty(page_list)) {
-> +		page = lru_to_page(page_list);
-> +		list_del(&page->lru);
-> +		putback_lru_page(page);
+On 3/28/22 15:50, Michael Walle wrote:
+> Am 2022-03-28 18:27, schrieb Guenter Roeck:
+>> On 3/28/22 05:56, Andrew Lunn wrote:
+>>>> I'm not sure how to handle this correctly, as this touches both the
+>>>> network tree and the hwmon tree. Also, the GPY PHY temperature senors
+>>>> driver would use it.
+>>>
+>>> There are a few options:
+>>>
+>>> 1) Get the hwmon_sanitize_name() merged into hwmon, ask for a stable
+>>> branch, and get it merged into netdev net-next.
+>>>
+>>> 2) Have the hwmon maintainers ACK the change and agree that it can be
+>>> merged via netdev.
+>>>
+>>> Probably the second option is easiest, and since it is not touching
+>>> the core of hwmon, it is unlikely to cause merge conflicts.
+>>>
+>>
+>> No, it isn't the easiest solution because it also modifies a hwmon
+>> driver to use it.
+> 
+> So that leaves us with option 1? The next version will contain the
+> additional patch which moves the hwmon_is_bad_char() from the include
+> to the core and make it private. That will then need an immutable
+> branch from netdev to get merged back into hwmon before that patch
+> can be applied, right?
 
-Why wouldn't you use a folio here?
+We can not control if someone else starts using the function before
+it is removed. As pointed out, the immutable branch needs to be from hwmon,
+and the patch to make hwmon_is_bad_char private can only be applied
+after all of its users are gone from the mainline kernel.
 
+I would actually suggest to allocate the new string as part of the
+function and have it return a pointer to a new string. Something like
+	char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
+and
+         char *hwmon_sanitize_name(const char *name);
+
+because the string duplication is also part of all calling code.
+
+Guenter

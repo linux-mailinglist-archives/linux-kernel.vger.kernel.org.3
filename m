@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96D34EB19F
+	by mail.lfdr.de (Postfix) with ESMTP id 420E64EB19D
 	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239474AbiC2QOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 12:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
+        id S239505AbiC2QOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 12:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239449AbiC2QOg (ORCPT
+        with ESMTP id S239463AbiC2QOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 12:14:36 -0400
+        Tue, 29 Mar 2022 12:14:37 -0400
 Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B99D18A3CA
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:12:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7779118A7A9
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:12:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1648570368;
-        bh=UD9AGV7S0dnlaF0ygMA6XYvPffRpI5mf5hdlfJggF9s=;
+        s=s201512; t=1648570370;
+        bh=aAXDyKsO8jXDtyhMPTwAZKjc892ePbm35jRlP4haFc4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=V0f6u1UTi+VOLeODAX760H3KcGqDQTCRJsTzScaV98hqTVdUGXNOFiY/58f9Hr/CX
-         5PjIT+tmMlVmHo3b3RdsfvXShc9D/Nw45j2qksYuwXZtcNdQIhtvD3UDAn+cz0nQ6P
-         yzQLKif6OGPE3CUlEe0e3ZLKcOB6SpMG0J34ctsA=
+        b=em5CSPiWKpgx5a3Eucxg/RUypdU76PZpbL7bO7/WK7A6Xy3VMJU9fq/UCHUOkA+ob
+         AOJC87mGspcWHbUtpGjvNjdtDn2q7kYEFwk8gD34K86rp9DXpmbYG9ROmhVGmJMWAp
+         Tu2Wq+lEwyg4LudZyNQEG9M7kTBW24+AAfU2rV2s=
 Received: from localhost.localdomain ([120.245.132.52])
         by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
         id 32C96631; Wed, 30 Mar 2022 00:12:44 +0800
-X-QQ-mid: xmsmtpt1648570367tm9uph8v1
-Message-ID: <tencent_ADBE84293031AFCF8E409D87E2BE9B0FF507@qq.com>
-X-QQ-XMAILINFO: Mv3le6n+CjtdA9uBreSmaTkKIwE+yRqjVvY7VQCyFQThKBA86m0zs41YIiLQKv
-         w+FEv3g5oNGMJV8kPhmNpb4sRpPq2wttYCuI5YqL/Lp2BqtmwfhwZfEjBzNqm+6QmJVm9hzo808Q
-         jz2GALOxR4HjarEpma/gN0GeGNYh25TCv+EbASISleoHb79d63XRCYLsSe74WRTKQFpy9ZzGXzbi
-         JJBDjFTSranocEHnBCLep5RACPhlrMn1NdjoCyYakjQXofwuuM7dhig6nsiTsrHEM1l6g2dDLCLB
-         SKhXNxvGe4YRoA2EPvg+vwkscDFHyJtj89sUyVc7XhXvdYH4eKwh95Umjs1XxLTuryGrKvtk2FyY
-         i+ECGdIZ64pZThoUPFDUfod55rOip5f18NkUM5zExNHe4jEVYCdLleBckuvph8h+71zS/nJLa1Fb
-         3f7nEBaoBfSBeW8t7foZMLiIWysBZriWAwMbVbTRUToe/RcMvL1EzHVrFryX/cOWdUYBeWQf+n2M
-         wfM3Ru0tJawg2rxZJvnDeOXAVe+ILmFQ+f+FZQbJT6XAcOJomua2RLpD5cIfuyDbxEe7cbp8gabj
-         H3TmrOhhH+RAhEn3jYDbvxxnwaPrD1CJ6tngYBqA/7fdL6DW3CudkyJ1FW91Zs+pMceWqHVndTyF
-         yHHpoQxpbYvrNCqRv2L+m3U5WL4nYI4nXgyp0DzaOUCoXwrUuTEUQgnkqopu9XnOTWH/Ybwa/Nzn
-         T31+Kk7DTs6Zyei9c2uYlPb4wwdLD8n0a9oTGrlNO2Fp3oCWvGuJnd6a7aHkuL3sYFQ4N0Y0UgNF
-         tT7oX1yvV653q6+nD/7LjcYdVYyX8s8GbBONJuyY7PN4TWPwyLH5hBab/Q99uzilF9r50ie+cvtr
-         FBJnKrIt/khfAqzecTklcJJqNteB5UGGvC8vohpR9LF2WRAdCJL0Ny+fyVITBqFauGzXYaXHbA
+X-QQ-mid: xmsmtpt1648570368tseiwrc1y
+Message-ID: <tencent_18DFCE075E9FCD148D18C7676CE0C4836306@qq.com>
+X-QQ-XMAILINFO: NfHsM/dq2nWI4ewsMg299y37wdAjrnGr9L5yG7fIszAh32UC9XJ0qYNLPJ/kB6
+         jTaz4bb7/au7PNKRl1saTGtxN6w+fR7g7TVvxOIvunBMqV2wEbHvfuwZuTVKGq2S8Vprf7yY+8Uy
+         3N+CUISeOqYC6rTu9q2qV+aIWjGO2fzFaNNGkVox8m+LQOQBvQbOcEKUGnSGLr30VJdH4P4z3hpc
+         4GzAY0LodAyTb8KGT8Bxu80TS4B2LJXxJh4gkfpv/Gg1eRtlxxzVrJel7cBHQ4qS896zEV7yNpW5
+         TyNQrZ22XRD+2LcwNLFNIOPO/QvtN8vo+s51yBlTpqEbh+xBuX7ItA8bkBuBR3B2rrSmuo8xEEDu
+         EXPcO1B+3XVM2JVwddS6h5VMujAi9A8S2FChhUG1vAevVjL2i8eI0khttOcvmdc9UPAUmN1Lutti
+         Xx6ry/+pZH5BCJIakupvTNLLgUwwvhCPqjYkBRWYChjWFbdYu3ZzUtNGl+jg+XNeSMHgHC8Mrlw8
+         77PjYaOuy9i6hZk1F/0FfgMhVVjjAdku6ipVEmN17ya987oYYIuQtTyx8QhIItTHNpE+vgV8M06N
+         q4XBI9ftvRGg50IsLvJhr6cBjl7O/c2I+luNuaHhqfGINj3ckX5IO5P4NSy/zHyG0hNm7U7FkNXw
+         jjZTeXoS8z9D4L7iYF1aVJVmg/zEkEr22DD3D/0Oi79FirE/Hfrgyt52F1KYuqWHMjhgHen3pxLO
+         Wf+LsjFk4m8TtnhNl4lQOufJkHsgm3yqHnlEN9bmi+CIiwPXRYCugsJ+kB+KrhqKNZsi7fqBZwoo
+         ZFBzmQiPy59XAbac4NrRoQ2ETG3U0KfpETCNGvmfPdgat1ePmHz5NoQjRN1jT/BLy0UPGWmhjvB5
+         LkZsSn2Mz+R7aj6F/b6BId433MiY4GiKkAImRnvEsAGTXBzNNq8AR//2EO71pP76PDgdmZJfPEdY
+         6mBCBq/Lx2afIFd7uXew==
 From:   Chen Guanqiao <chen.chenchacha@foxmail.com>
 To:     minyard@acm.org, openipmi-developer@lists.sourceforge.net,
         linux-kernel@vger.kernel.org
 Cc:     Chen Guanqiao <chen.chenchacha@foxmail.com>
-Subject: [PATCH v2 2/4] ipmi: msghandler: Add a limit for the number of messages
-Date:   Wed, 30 Mar 2022 00:12:40 +0800
-X-OQ-MSGID: <20220329161242.76457-3-chen.chenchacha@foxmail.com>
+Subject: [PATCH v2 3/4] ipmi: msghandler: Get the number of users and messages through sysfs
+Date:   Wed, 30 Mar 2022 00:12:41 +0800
+X-OQ-MSGID: <20220329161242.76457-4-chen.chenchacha@foxmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220329161242.76457-1-chen.chenchacha@foxmail.com>
 References: <20220329161242.76457-1-chen.chenchacha@foxmail.com>
@@ -63,86 +64,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The administrator sets the limit for the number of messages by modifying
-/sys/module/ipmi_msghandler/parameters/default_max_msgs.
-
-Before create a message, count the number of outstanding messages, if
-the number reaches the limit, it will return a busy.
+The administrator reads the user_count and msg_count file
+corresponding the ipmi device, ipmi traverse all intf, and count
+the number of users and messages.
 
 Signed-off-by: Chen Guanqiao <chen.chenchacha@foxmail.com>
 ---
- drivers/char/ipmi/ipmi_msghandler.c | 37 +++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ drivers/char/ipmi/ipmi_msghandler.c | 71 +++++++++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
 
 diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
-index 7886c8337368..80ab88702c5f 100644
+index 80ab88702c5f..a188dc7e7135 100644
 --- a/drivers/char/ipmi/ipmi_msghandler.c
 +++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -151,6 +151,12 @@ module_param(default_max_users, uint, 0644);
- MODULE_PARM_DESC(default_max_users,
- 		 "The maximum number of users per interface");
-
-+/* The default maximum number of outstanding messages per intf */
-+static unsigned int default_max_messages = 100;
-+module_param(default_max_messages, uint, 0644);
-+MODULE_PARM_DESC(default_max_messages,
-+		 "The maximum number of outstanding messages per interface");
-+
- /* Call every ~1000 ms. */
- #define IPMI_TIMEOUT_TIME	1000
-
-@@ -916,6 +922,30 @@ unsigned int ipmi_addr_length(int addr_type)
+@@ -922,6 +922,19 @@ unsigned int ipmi_addr_length(int addr_type)
  }
  EXPORT_SYMBOL(ipmi_addr_length);
 
-+static void intf_msg_count(struct ipmi_smi *intf,
-+			   unsigned int *hp_count, unsigned int *count)
++static unsigned int intf_user_count(struct ipmi_smi *intf)
 +{
-+	struct ipmi_smi_msg *msg;
-+	unsigned long flags;
-+	int hp_msg_count = 0, msg_count = 0;
-+	int run_to_completion = intf->run_to_completion;
++	struct ipmi_user *user;
++	int index, count = 0;
 +
-+	if (!run_to_completion)
-+		spin_lock_irqsave(&intf->xmit_msgs_lock, flags);
-+	if (!intf->in_shutdown) {
-+		list_for_each_entry(msg, &intf->hp_xmit_msgs, link)
-+			hp_msg_count++;
++	index = srcu_read_lock(&intf->users_srcu);
++	list_for_each_entry_rcu(user, &intf->users, link)
++		count++;
++	srcu_read_unlock(&intf->users_srcu, index);
 +
-+		list_for_each_entry(msg, &intf->xmit_msgs, link)
-+			msg_count++;
-+	}
-+	if (!run_to_completion)
-+		spin_unlock_irqrestore(&intf->xmit_msgs_lock, flags);
-+
-+	*hp_count = hp_msg_count;
-+	*count = msg_count;
++	return count;
 +}
 +
- static int deliver_response(struct ipmi_smi *intf, struct ipmi_recv_msg *msg)
+ static void intf_msg_count(struct ipmi_smi *intf,
+ 			   unsigned int *hp_count, unsigned int *count)
  {
- 	int rv = 0;
-@@ -2299,6 +2329,7 @@ static int i_ipmi_request(struct ipmi_user     *user,
- {
- 	struct ipmi_smi_msg *smi_msg;
- 	struct ipmi_recv_msg *recv_msg;
-+	unsigned hp_msg_count, msg_count;
- 	int rv = 0;
+@@ -2760,6 +2773,42 @@ static int bmc_get_device_id(struct ipmi_smi *intf, struct bmc_device *bmc,
+ 	return __bmc_get_device_id(intf, bmc, id, guid_set, guid, -1);
+ }
 
- 	if (supplied_recv)
-@@ -2330,6 +2361,12 @@ static int i_ipmi_request(struct ipmi_user     *user,
- 		goto out_err;
- 	}
-
-+	intf_msg_count(intf, &hp_msg_count, &msg_count);
-+	if ((hp_msg_count + msg_count) > default_max_messages) {
-+		rv = -EBUSY;
-+		goto out_err;
-+	}
++static unsigned int get_user_count(void)
++{
++	struct ipmi_smi *intf;
++	int index;
++	unsigned int count = 0;
 +
- 	recv_msg->user = user;
- 	if (user)
- 		/* The put happens when the message is freed. */
++	index = srcu_read_lock(&ipmi_interfaces_srcu);
++	list_for_each_entry_rcu(intf, &ipmi_interfaces, link)
++		count += intf_user_count(intf);
++	srcu_read_unlock(&ipmi_interfaces_srcu, index);
++
++	return count;
++}
++
++static void get_msg_count(unsigned int *hp_count, unsigned int *count)
++{
++	struct ipmi_smi *intf;
++	int index;
++
++	*hp_count = 0;
++	*count = 0;
++
++	index = srcu_read_lock(&ipmi_interfaces_srcu);
++	list_for_each_entry_rcu(intf, &ipmi_interfaces, link) {
++		int hp_msg_count = 0, msg_count = 0;
++
++		rcu_read_lock();
++		intf_msg_count(intf, &hp_msg_count, &msg_count);
++		rcu_read_unlock();
++
++		*hp_count += hp_msg_count;
++		*count += msg_count;
++	}
++	srcu_read_unlock(&ipmi_interfaces_srcu, index);
++}
++
+ static ssize_t device_id_show(struct device *dev,
+ 			      struct device_attribute *attr,
+ 			      char *buf)
+@@ -2929,6 +2978,26 @@ static ssize_t guid_show(struct device *dev, struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RO(guid);
+
++static ssize_t user_count_show(struct device *dev, struct device_attribute *attr,
++			       char *buf)
++{
++	unsigned int user_count = get_user_count();
++
++	return snprintf(buf, 20, "%u\n", user_count);
++}
++static DEVICE_ATTR_ADMIN_RO(user_count);
++
++static ssize_t msg_count_show(struct device *dev, struct device_attribute *attr,
++			      char *buf)
++{
++	unsigned int hp_count, count;
++
++	get_msg_count(&hp_count, &count);
++
++	return snprintf(buf, 40, "hp msg:%u, msg:%u\n", hp_count, count);
++}
++static DEVICE_ATTR_ADMIN_RO(msg_count);
++
+ static struct attribute *bmc_dev_attrs[] = {
+ 	&dev_attr_device_id.attr,
+ 	&dev_attr_provides_device_sdrs.attr,
+@@ -2940,6 +3009,8 @@ static struct attribute *bmc_dev_attrs[] = {
+ 	&dev_attr_product_id.attr,
+ 	&dev_attr_aux_firmware_revision.attr,
+ 	&dev_attr_guid.attr,
++	&dev_attr_user_count.attr,
++	&dev_attr_msg_count.attr,
+ 	NULL
+ };
+
 --
 2.25.1
 

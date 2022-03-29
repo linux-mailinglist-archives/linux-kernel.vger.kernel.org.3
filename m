@@ -2,69 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE59B4EB73E
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373694EB748
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241230AbiC2X4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
+        id S241327AbiC3AAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 20:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241293AbiC2X4e (ORCPT
+        with ESMTP id S241298AbiC3AAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:56:34 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19790BF59;
-        Tue, 29 Mar 2022 16:54:50 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id s11so17265326pfu.13;
-        Tue, 29 Mar 2022 16:54:50 -0700 (PDT)
+        Tue, 29 Mar 2022 20:00:46 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E211A824
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:59:03 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id yy13so38265459ejb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:59:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LHFIzlMHcD6qDSToyvl5dbn+nrgausa4lYRWBBJH19I=;
-        b=p9di60D48ivYtNgPnBsoYU638rald7+YwO7G9bXpnCNkl5b2QhXxBuTBqdgauIvS3r
-         89gnjBFR5nK3jUvuVPKaNxcolrTNT1gDlxTNfIQU9okqUmBA3gw3swPqNHe5VL2jVdVZ
-         yLUfDE4ETCu4ROdmeBkJZcm7xtGFQbYcJAhBDtQGoSDYNFKh1I7HOskXhmtsbdSzTa/m
-         GTCAy6rLqrzOGu8Y9gCb3SgBDBNi8IO9Do4jY/Pp7Em5w+AQlRbrqGjS/Srusq5LMPhc
-         C6iFpIEEQ/Og8OZlXeE++4RyuAMfPhZItMuHjbYK1KuOAc2wrkzhRdX2KdeAwDKdu0rg
-         CW7A==
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=mbCzJfln3VqMM3D8LXGLhg65sP9l5FOJf1oTlsWIEkc=;
+        b=UxK9BwFdx+NtfkRowsHUY2uy2BdczHjejvZGksCdFIqMauZ6RAecwBRXXfSqYbinuH
+         uhmw/4W4mpStLdpF2rw8s9GhpFzipietHCq7CJ1a3b2CXLD4AFjSV6z7VYnKVb1SqiVC
+         BZo7ZffpZG5A6WKqwBfDFYeJmMA/t9IwFulJ2mLen7c+ihvtxChCFusK0u6GZaaGW/b/
+         Qecrq9pMx46kvD+Xw3zdV9QcCWFCOv1ZgVqyRj+qgC1Odwgw6ydIjaWggOSjgNHqbgKw
+         0HEMGyfpnWOhBiT/BGCntZgxlH6Tob+k1gi3FM+vzS8r/0PPOxhF4tbQoGRFscHOWjs+
+         DTBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LHFIzlMHcD6qDSToyvl5dbn+nrgausa4lYRWBBJH19I=;
-        b=MKoJalFrkjV0TmWxwa5JfszBCIMVYKgDVc0Xy3/DtFzJ0cyCevpwUleHbw73qlCP9E
-         ssMIAdhAIDu8Rv0f+B2cXIGqLxqsRuAGUnCkRC1Lo3KPe+L5RgaS+KQLGsCYqbUFqojQ
-         um++ZpZ1vfSizTJHyGXNstgTEwYv/0x1NnTCPvV7Xm2F/2xMoIaurw/kuulu0oYUoVhr
-         xSN3OUJohuAT1WWES9PTKMFr7jTzfARAvjw3DUddYwFlgjCahLSFmNjPDzQ71OCTmg7R
-         VsV39iDqAo4NgbbVp7ZnyTfttK1Or9OUSHshj8gDYp+yNoAD0q3eC4NVZ5ebb2fLknlS
-         tn0g==
-X-Gm-Message-State: AOAM533O8gYpi4SOcuZau4WahHAGedp2oDL2jxDmGFwDn/r9SPatxpj7
-        2llH2ifaa4AQz2qNA7U7jS1dmYkiBdslOAUNAuk=
-X-Google-Smtp-Source: ABdhPJx1EjSr4a8bjD+W/X5zUF4e6t2htlaLzYE+lDOnWUbSx2ZNCz200Jnr8Z2IHVB2lx+hAbbjyXca3/XDr6FkAuE=
-X-Received: by 2002:a05:6a00:995:b0:4fb:607d:444c with SMTP id
- u21-20020a056a00099500b004fb607d444cmr11351045pfg.69.1648598089571; Tue, 29
- Mar 2022 16:54:49 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mbCzJfln3VqMM3D8LXGLhg65sP9l5FOJf1oTlsWIEkc=;
+        b=DOAoOdclwP97dT1A5WBynTHlQSVnVJqoWK77JGwdMvMrhUbUEfE+vowZZ5WidS2MVp
+         pmlTySCBoMIC+a1upzZqv17rf3jbxeX2JE1211wLVGCA+nDxIh8JBzvFU8d6AipUa/uh
+         dlIPhlJLmO0YEV1o+o3g2vYxSa8BV6jqGFKdbwowFuhbYlfVfJRkymYW7SwCNeOWNHeD
+         O5qURrIZZZvUkYTfVCeA5+Onaz83mEDuR5herdBlP0JG3uG0QRT7J5Alc13hxoL642O5
+         jvK8DBaHq4Ga+ssMtmgE5+KFfGlQ52UJ+8Ht6WEqhf3Fw0h/XebEacOp1CNT+bAqahYT
+         mMDQ==
+X-Gm-Message-State: AOAM531qaOkRWuFWQK/9RzKpRURhWHCTmBcsmyfDqOiQGL/yE4DfEe8e
+        3U9ARmAzBdMxj+I8g3o2w/8=
+X-Google-Smtp-Source: ABdhPJwPUU34aRSvV0n1CShYWuJFkXrvLHDh1Zd8NAWwoi08dOwN46Km3ovGkTkOhQZf9qG+uiwztA==
+X-Received: by 2002:a17:907:c06:b0:6e0:9149:8047 with SMTP id ga6-20020a1709070c0600b006e091498047mr6064002ejc.765.1648598341805;
+        Tue, 29 Mar 2022 16:59:01 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id r29-20020a50c01d000000b00415fb0dc793sm9206295edb.47.2022.03.29.16.59.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 29 Mar 2022 16:59:01 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 23:59:00 +0000
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Wei Yang <richard.weiyang@gmail.com>,
+        "Huang, Ying" <ying.huang@intel.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        mgorman@techsingularity.net
+Subject: Re: [PATCH 2/2] mm/vmscan: make sure wakeup_kswapd with managed zone
+Message-ID: <20220329235900.3slpqbgjqgjv4y2e@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20220327024101.10378-1-richard.weiyang@gmail.com>
+ <20220327024101.10378-2-richard.weiyang@gmail.com>
+ <8735j2opd9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <20220329004146.2xdswvrm2qu7f47x@master>
+ <875ynxh9lg.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <20220329015230.hneciyfxoxtvfytl@master>
+ <YkJte/L4jZv47FOO@casper.infradead.org>
 MIME-Version: 1.0
-References: <20220329181935.2183-1-beaub@linux.microsoft.com>
- <CAADnVQ+XpoCjL-rSz2hj05L21s8NtMJuWYC14b9Mvk7XE5KT_g@mail.gmail.com>
- <20220329201057.GA2549@kbox> <CAADnVQ+gm4yU9S6y+oeR3TNj82kKX0gk4ey9gVnKXKWy1Js4-A@mail.gmail.com>
- <20220329231137.GA3357@kbox>
-In-Reply-To: <20220329231137.GA3357@kbox>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 29 Mar 2022 16:54:38 -0700
-Message-ID: <CAADnVQKCuK0GmRbOJjyce4Hwiq0ieqthVdnqdPbHT_qKqV5rzw@mail.gmail.com>
-Subject: Re: [PATCH] tracing/user_events: Add eBPF interface for user_event
- created events
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkJte/L4jZv47FOO@casper.infradead.org>
+User-Agent: NeoMutt/20170113 (1.7.2)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,89 +80,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 4:11 PM Beau Belgrave <beaub@linux.microsoft.com> wrote:
+On Tue, Mar 29, 2022 at 03:22:51AM +0100, Matthew Wilcox wrote:
+>On Tue, Mar 29, 2022 at 01:52:30AM +0000, Wei Yang wrote:
+>> @@ -1985,14 +1985,13 @@ static bool migrate_balanced_pgdat(struct pglist_data *pgdat,
+>>  			continue;
+>>  
+>>  		/* Avoid waking kswapd by allocating pages_to_migrate pages. */
+>> -		if (!zone_watermark_ok(zone, 0,
+>> +		if (zone_watermark_ok(zone, 0,
+>>  				       high_wmark_pages(zone) +
+>>  				       nr_migrate_pages,
+>>  				       ZONE_MOVABLE, 0))
 >
-> On Tue, Mar 29, 2022 at 03:31:31PM -0700, Alexei Starovoitov wrote:
-> > On Tue, Mar 29, 2022 at 1:11 PM Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> > >
-> > > On Tue, Mar 29, 2022 at 12:50:40PM -0700, Alexei Starovoitov wrote:
-> > > > On Tue, Mar 29, 2022 at 11:19 AM Beau Belgrave
-> > > > <beaub@linux.microsoft.com> wrote:
-> > > > >
-> > > > > Send user_event data to attached eBPF programs for user_event based perf
-> > > > > events.
-> > > > >
-> > > > > Add BPF_ITER flag to allow user_event data to have a zero copy path into
-> > > > > eBPF programs if required.
-> > > > >
-> > > > > Update documentation to describe new flags and structures for eBPF
-> > > > > integration.
-> > > > >
-> > > > > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-> > > >
-> > > > The commit describes _what_ it does, but says nothing about _why_.
-> > > > At present I see no use out of bpf and user_events connection.
-> > > > The whole user_events feature looks redundant to me.
-> > > > We have uprobes and usdt. It doesn't look to me that
-> > > > user_events provide anything new that wasn't available earlier.
-> > >
-> > > A lot of the why, in general, for user_events is covered in the first
-> > > change in the series.
-> > > Link: https://lore.kernel.org/all/20220118204326.2169-1-beaub@linux.microsoft.com/
-> > >
-> > > The why was also covered in Linux Plumbers Conference 2021 within the
-> > > tracing microconference.
-> > >
-> > > An example of why we want user_events:
-> > > Managed code running that emits data out via Open Telemetry.
-> > > Since it's managed there isn't a stub location to patch, it moves.
-> > > We watch the Open Telemetry spans in an eBPF program, when a span takes
-> > > too long we collect stack data and perform other actions.
-> > > With user_events and perf we can monitor the entire system from the root
-> > > container without having to have relay agents within each
-> > > cgroup/namespace taking up resources.
-> > > We do not need to enter each cgroup mnt space and determine the correct
-> > > patch location or the right version of each binary for processes that
-> > > use user_events.
-> > >
-> > > An example of why we want eBPF integration:
-> > > We also have scenarios where we are live decoding the data quickly.
-> > > Having user_data fed directly to eBPF lets us cast the data coming in to
-> > > a struct and decode very very quickly to determine if something is
-> > > wrong.
-> > > We can take that data quickly and put it into maps to perform further
-> > > aggregation as required.
-> > > We have scenarios that have "skid" problems, where we need to grab
-> > > further data exactly when the process that had the problem was running.
-> > > eBPF lets us do all of this that we cannot easily do otherwise.
-> > >
-> > > Another benefit from user_events is the tracing is much faster than
-> > > uprobes or others using int 3 traps. This is critical to us to enable on
-> > > production systems.
-> >
-> > None of it makes sense to me.
+>Someone's done the silly thing of lining up all of these with spaces,
+>so either all these lines also need to be shrunk by one space, or you
+>need to break that convention and just go to a reasonable number of
+>tabs.  I'd do it like this:
 >
-> Sorry.
+>		if (zone_watermark_ok(zone, 0,
+>				high_wmark_pages(zone) + nr_migrate_pages,
+>				ZONE_MOVABLE, 0))
 >
-> > To take advantage of user_events user space has to be modified
-> > and writev syscalls inserted.
+>but not everybody would.
 >
-> Yes, both user_events and lttng require user space modifications to do
-> tracing correctly. The syscall overheads are real, and the cost depends
-> on the mitigations around spectre/meltdown.
+>> @@ -2040,16 +2040,11 @@ static int numamigrate_isolate_page(pg_data_t *pgdat, struct page *page)
+>>  		return 0;
+>>  
+>>  	/* Avoid migrating to a node that is nearly full */
+>> -	if (!migrate_balanced_pgdat(pgdat, nr_pages)) {
+>> -		int z;
+>> -
+>> +	if ((zone = migrate_balanced_pgdat(pgdat, nr_pages))) {
 >
-> > This is not cheap and I cannot see a production system using this interface.
+>Linus had a rant about this style recently.  He much prefers:
 >
-> But you are fine with uprobe costs? uprobes appear to be much more costly
-> than a syscall approach on the hardware I've run on.
+>	zone = migrate_balanced_pgdat(pgdat, nr_pages);
+>	if (zone) {
 >
-> > All you did is a poor man version of lttng that doesn't rely
-> > on such heavy instrumentation.
+>(the exception is for while loops:
 >
-> Well I am a frugal person. :)
+>	while ((zone = migrate_balanced_pgdat(pgdat, nr_pages)) != NULL)
 >
-> This work has solved some critical issues we've been having, and I would
-> appreciate a review of the code if possible.
+>where he wants to see the comparison against NULL instead of the awkard
+>double-bracket)
 
-It's a NACK to connect bpf and user_events.
-I would remove user_events from the kernel too.
+Matthew,
+
+Thanks for your suggestion, I would change this later.
+
+-- 
+Wei Yang
+Help you, Help me

@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE0E4EB707
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19EE54EB708
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241179AbiC2Xww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43244 "EHLO
+        id S241191AbiC2XxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239629AbiC2Xwt (ORCPT
+        with ESMTP id S241182AbiC2Xww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:52:49 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DA01CAF14
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:51:05 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id p9-20020a63f449000000b0035ec8c16f0bso1266013pgk.11
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:51:05 -0700 (PDT)
+        Tue, 29 Mar 2022 19:52:52 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA7B205BD0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:51:08 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id g1-20020a170902fe0100b00153f95629f7so8039785plj.12
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:51:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=xn6dD0NDRkWndk+qkMADvSMilfrLo/OBZLvoP8lMgT4=;
-        b=Zv6ZvG4i+G6qdX4EyMXuTo4rE1/1buf4+IA8KvqZucAn6jB+7rx1ho6dvdO/bZWd+y
-         9kEN1uShJTlpKhNHX4Zu/v910yYCZS8JI86sfUKOfiJU7KgBiEca7WkJ3MXzUeq1qZly
-         klS4V9lj/zuBmWxAgjvvRzDTGmxq4A0y9KlO2P/QG6fxNlIkXXaXboA/fi7lUSQiRoFd
-         +Bmsf/UjchaUHOoi/YxbWJqOhu0IBRf8YSgVfqc6T5usvIUdbWPdSYh08Qt7KYwu8UGB
-         kxu1zlaWPYgVNdZY6VYFMUR6N1oJJNnQitrdP4c4xmZC4dseEBrcDtGV5+Q3APUio0vV
-         1AyA==
+        bh=rUm8X861zRhcP7IH2r62TLmqODWxaakk5bqj/4FKees=;
+        b=lp+161YCBaksKfEsnop3WkW2sEbYQsYlWsIIuCpFR565hGaN4ctyrwOY9c+qBVVxN7
+         u398mF45ljWlgcx64gdh62+mdMl2nuwyT8FHRa4HvIccIqkdeqgLqb/PV620/wm5eb2J
+         JiyBcN6V/RGFa/m4VwCCpJ7LFCyCWrxfd1Nc63OKDa6jTTlMz5X+rK3yuiDhnSacBNpO
+         eH8LXepxAiEpd0i1nc7SRogXfkLYeIjCfVeJ+wShhqWXthXGdEQ3+yF8g5bs0HfPEAwy
+         18RRAypPvc17L9Hb6tP74IZ9KHhlitfn9yRfgjJUAVp9YH9Ad9+DNMPxjvLAjM1FvZg7
+         HBkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=xn6dD0NDRkWndk+qkMADvSMilfrLo/OBZLvoP8lMgT4=;
-        b=oEpfPbDLcjgr32ewT2hYjDygm5xJCI58vdOcB+mcW/crxG5Xinudp2k/ymUz0ajDIF
-         Pyrm2prf5X393CpBzRz2DpxPy/+b6AeMgnmb7BTWyccChUa5u9a1IvrGvT5d09YfeaNu
-         i0J4MbdXQPghpyG1ytttUPX7NZlxL7qNGOy2Lyi2BOvqctkIpvs/Z7HaoHm/wz9nWV4n
-         CwtIfNIe6Ztmho6vSpTMyYmzFLIL0qTN9Tere8sY8DiEVDUfgfVqn6XkBPcFIQeUbvE7
-         KRglu8CoGYtXEXj0UVKHaSViY5Sp0F0CwD7IhmmfG2uRlm1QgQc93eC6veYFe4Pf9vaY
-         yb3Q==
-X-Gm-Message-State: AOAM532nBuD6htMF7J59b2bOsyuYZz7bwFhI4STAMHF/huDoA8qvxohA
-        WKgN/lEHs4XxaFytjJNyRHf/DmrbBd8=
-X-Google-Smtp-Source: ABdhPJz8DKtXUDzVuwe4lXRByg3SXE/K90HbdG1Lp6s5S6ujIgdHPcCZ3v2xBfAmrxf+cEch6FwfDIdQ4o8=
+        bh=rUm8X861zRhcP7IH2r62TLmqODWxaakk5bqj/4FKees=;
+        b=4Cc2zT2WaX+NunX2Vm6Xw531M19H0AO1zNFRWRDuB0GalxIIGeLxZAA1XBBjveJiWk
+         HLEGt+heN9mXLF+Hd4DGu+oCaB/q8IRoRKp/gY97RYoifmKTx3tS4e6oaNFRgCZV0CH/
+         aaa02VdTvTNZm0+K5RvVybdWSDhMlfgiUqNq9fcthlHndnYK5jW7SFjDU/DYK9FDdrG/
+         Lj44Jlh2LcQ27GQ8KdSIZwb81QlqX0RFCGucO+nfi7opJQXTFVO5MGnHONDjLLTaZTRJ
+         hsxSJU86YBhjXEdSjZH1dVbgd6wBL4gVCtcEKtMotu2SYEvlqsesnXXclkXcPnZgyzAn
+         96FA==
+X-Gm-Message-State: AOAM530ymuY8oWAiG8iumGExa3VIfnCvw6vrPEgj9cV3o8GuW5/Adj9F
+        QkACA7hY9JicApsV1doQFKBSdxlAvu4=
+X-Google-Smtp-Source: ABdhPJx+bv7YCHgDCbGLE+StVp2R1OFLwih633YA0wO8603nhVXNZi9ZdvZc6kSwNCXUPR7imoqSBzZpdTY=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90b:3a81:b0:1c6:834e:cd61 with SMTP id
- om1-20020a17090b3a8100b001c6834ecd61mr1699386pjb.149.1648597865466; Tue, 29
- Mar 2022 16:51:05 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:858b:b0:1c6:5bc8:781a with SMTP id
+ m11-20020a17090a858b00b001c65bc8781amr166639pjn.0.1648597867298; Tue, 29 Mar
+ 2022 16:51:07 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 29 Mar 2022 23:50:51 +0000
+Date:   Tue, 29 Mar 2022 23:50:52 +0000
 In-Reply-To: <20220329235054.3534728-1-seanjc@google.com>
-Message-Id: <20220329235054.3534728-2-seanjc@google.com>
+Message-Id: <20220329235054.3534728-3-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220329235054.3534728-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v3.1 1/4] KVM: x86: Move kvm_ops_static_call_update() to x86.c
+Subject: [PATCH v3.1 2/4] KVM: x86: Copy kvm_pmu_ops by value to eliminate
+ layer of indirection
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -66,7 +67,7 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,83 +76,241 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Like Xu <likexu@tencent.com>
 
-The kvm_ops_static_call_update() is defined in kvm_host.h. That's
-completely unnecessary, it should have exactly one caller,
-kvm_arch_hardware_setup().  Move the helper to x86.c and have it do the
-actual memcpy() of the ops in addition to the static call updates.  This
-will also allow for cleanly giving kvm_pmu_ops static_call treatment.
+Replace the kvm_pmu_ops pointer in common x86 with an instance of the
+struct to save one pointer dereference when invoking functions. Copy the
+struct by value to set the ops during kvm_init().
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Like Xu <likexu@tencent.com>
-[sean: Move memcpy() into the helper and rename accordingly]
+[sean: Move pmc_is_enabled(), make kvm_pmu_ops static]
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/include/asm/kvm_host.h | 14 --------------
- arch/x86/kvm/x86.c              | 19 +++++++++++++++++--
- 2 files changed, 17 insertions(+), 16 deletions(-)
+ arch/x86/kvm/pmu.c | 54 ++++++++++++++++++++++++++++------------------
+ arch/x86/kvm/pmu.h |  7 ++----
+ arch/x86/kvm/x86.c |  2 ++
+ 3 files changed, 37 insertions(+), 26 deletions(-)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 9694dd5e6ccc..df4e057b0417 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1557,20 +1557,6 @@ extern struct kvm_x86_ops kvm_x86_ops;
- #define KVM_X86_OP_OPTIONAL_RET0 KVM_X86_OP
- #include <asm/kvm-x86-ops.h>
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index eca39f56c231..bb0b1ad0fda5 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -49,6 +49,18 @@
+  *        * AMD:   [0 .. AMD64_NUM_COUNTERS-1] <=> gp counters
+  */
  
--static inline void kvm_ops_static_call_update(void)
--{
--#define __KVM_X86_OP(func) \
--	static_call_update(kvm_x86_##func, kvm_x86_ops.func);
--#define KVM_X86_OP(func) \
--	WARN_ON(!kvm_x86_ops.func); __KVM_X86_OP(func)
--#define KVM_X86_OP_OPTIONAL __KVM_X86_OP
--#define KVM_X86_OP_OPTIONAL_RET0(func) \
--	static_call_update(kvm_x86_##func, (void *)kvm_x86_ops.func ? : \
--					   (void *)__static_call_return0);
--#include <asm/kvm-x86-ops.h>
--#undef __KVM_X86_OP
--}
--
- #define __KVM_HAVE_ARCH_VM_ALLOC
- static inline struct kvm *kvm_arch_alloc_vm(void)
- {
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index d3a9ce07a565..99aa2d16845a 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11595,6 +11595,22 @@ void kvm_arch_hardware_disable(void)
- 	drop_user_return_notifiers();
- }
- 
-+static inline void kvm_ops_update(struct kvm_x86_init_ops *ops)
-+{
-+	memcpy(&kvm_x86_ops, ops->runtime_ops, sizeof(kvm_x86_ops));
++static struct kvm_pmu_ops kvm_pmu_ops __read_mostly;
 +
-+#define __KVM_X86_OP(func) \
-+	static_call_update(kvm_x86_##func, kvm_x86_ops.func);
-+#define KVM_X86_OP(func) \
-+	WARN_ON(!kvm_x86_ops.func); __KVM_X86_OP(func)
-+#define KVM_X86_OP_OPTIONAL __KVM_X86_OP
-+#define KVM_X86_OP_OPTIONAL_RET0(func) \
-+	static_call_update(kvm_x86_##func, (void *)kvm_x86_ops.func ? : \
-+					   (void *)__static_call_return0);
-+#include <asm/kvm-x86-ops.h>
-+#undef __KVM_X86_OP
++void kvm_pmu_ops_update(const struct kvm_pmu_ops *pmu_ops)
++{
++	memcpy(&kvm_pmu_ops, pmu_ops, sizeof(kvm_pmu_ops));
 +}
 +
- int kvm_arch_hardware_setup(void *opaque)
++static inline bool pmc_is_enabled(struct kvm_pmc *pmc)
++{
++	return kvm_pmu_ops.pmc_is_enabled(pmc);
++}
++
+ static void kvm_pmi_trigger_fn(struct irq_work *irq_work)
  {
- 	struct kvm_x86_init_ops *ops = opaque;
-@@ -11609,8 +11625,7 @@ int kvm_arch_hardware_setup(void *opaque)
- 	if (r != 0)
- 		return r;
+ 	struct kvm_pmu *pmu = container_of(irq_work, struct kvm_pmu, irq_work);
+@@ -213,7 +225,7 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+ 			  ARCH_PERFMON_EVENTSEL_CMASK |
+ 			  HSW_IN_TX |
+ 			  HSW_IN_TX_CHECKPOINTED))) {
+-		config = kvm_x86_ops.pmu_ops->pmc_perf_hw_id(pmc);
++		config = kvm_pmu_ops.pmc_perf_hw_id(pmc);
+ 		if (config != PERF_COUNT_HW_MAX)
+ 			type = PERF_TYPE_HARDWARE;
+ 	}
+@@ -263,7 +275,7 @@ void reprogram_fixed_counter(struct kvm_pmc *pmc, u8 ctrl, int idx)
  
--	memcpy(&kvm_x86_ops, ops->runtime_ops, sizeof(kvm_x86_ops));
--	kvm_ops_static_call_update();
-+	kvm_ops_update(ops);
+ 	pmc->current_config = (u64)ctrl;
+ 	pmc_reprogram_counter(pmc, PERF_TYPE_HARDWARE,
+-			      kvm_x86_ops.pmu_ops->pmc_perf_hw_id(pmc),
++			      kvm_pmu_ops.pmc_perf_hw_id(pmc),
+ 			      !(en_field & 0x2), /* exclude user */
+ 			      !(en_field & 0x1), /* exclude kernel */
+ 			      pmi);
+@@ -272,7 +284,7 @@ EXPORT_SYMBOL_GPL(reprogram_fixed_counter);
  
- 	kvm_register_perf_callbacks(ops->handle_intel_pt_intr);
+ void reprogram_counter(struct kvm_pmu *pmu, int pmc_idx)
+ {
+-	struct kvm_pmc *pmc = kvm_x86_ops.pmu_ops->pmc_idx_to_pmc(pmu, pmc_idx);
++	struct kvm_pmc *pmc = kvm_pmu_ops.pmc_idx_to_pmc(pmu, pmc_idx);
  
+ 	if (!pmc)
+ 		return;
+@@ -294,7 +306,7 @@ void kvm_pmu_handle_event(struct kvm_vcpu *vcpu)
+ 	int bit;
+ 
+ 	for_each_set_bit(bit, pmu->reprogram_pmi, X86_PMC_IDX_MAX) {
+-		struct kvm_pmc *pmc = kvm_x86_ops.pmu_ops->pmc_idx_to_pmc(pmu, bit);
++		struct kvm_pmc *pmc = kvm_pmu_ops.pmc_idx_to_pmc(pmu, bit);
+ 
+ 		if (unlikely(!pmc || !pmc->perf_event)) {
+ 			clear_bit(bit, pmu->reprogram_pmi);
+@@ -316,7 +328,7 @@ void kvm_pmu_handle_event(struct kvm_vcpu *vcpu)
+ /* check if idx is a valid index to access PMU */
+ bool kvm_pmu_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int idx)
+ {
+-	return kvm_x86_ops.pmu_ops->is_valid_rdpmc_ecx(vcpu, idx);
++	return kvm_pmu_ops.is_valid_rdpmc_ecx(vcpu, idx);
+ }
+ 
+ bool is_vmware_backdoor_pmc(u32 pmc_idx)
+@@ -366,7 +378,7 @@ int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
+ 	if (is_vmware_backdoor_pmc(idx))
+ 		return kvm_pmu_rdpmc_vmware(vcpu, idx, data);
+ 
+-	pmc = kvm_x86_ops.pmu_ops->rdpmc_ecx_to_pmc(vcpu, idx, &mask);
++	pmc = kvm_pmu_ops.rdpmc_ecx_to_pmc(vcpu, idx, &mask);
+ 	if (!pmc)
+ 		return 1;
+ 
+@@ -382,22 +394,22 @@ int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
+ void kvm_pmu_deliver_pmi(struct kvm_vcpu *vcpu)
+ {
+ 	if (lapic_in_kernel(vcpu)) {
+-		if (kvm_x86_ops.pmu_ops->deliver_pmi)
+-			kvm_x86_ops.pmu_ops->deliver_pmi(vcpu);
++		if (kvm_pmu_ops.deliver_pmi)
++			kvm_pmu_ops.deliver_pmi(vcpu);
+ 		kvm_apic_local_deliver(vcpu->arch.apic, APIC_LVTPC);
+ 	}
+ }
+ 
+ bool kvm_pmu_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
+ {
+-	return kvm_x86_ops.pmu_ops->msr_idx_to_pmc(vcpu, msr) ||
+-		kvm_x86_ops.pmu_ops->is_valid_msr(vcpu, msr);
++	return kvm_pmu_ops.msr_idx_to_pmc(vcpu, msr) ||
++		kvm_pmu_ops.is_valid_msr(vcpu, msr);
+ }
+ 
+ static void kvm_pmu_mark_pmc_in_use(struct kvm_vcpu *vcpu, u32 msr)
+ {
+ 	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+-	struct kvm_pmc *pmc = kvm_x86_ops.pmu_ops->msr_idx_to_pmc(vcpu, msr);
++	struct kvm_pmc *pmc = kvm_pmu_ops.msr_idx_to_pmc(vcpu, msr);
+ 
+ 	if (pmc)
+ 		__set_bit(pmc->idx, pmu->pmc_in_use);
+@@ -405,13 +417,13 @@ static void kvm_pmu_mark_pmc_in_use(struct kvm_vcpu *vcpu, u32 msr)
+ 
+ int kvm_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ {
+-	return kvm_x86_ops.pmu_ops->get_msr(vcpu, msr_info);
++	return kvm_pmu_ops.get_msr(vcpu, msr_info);
+ }
+ 
+ int kvm_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ {
+ 	kvm_pmu_mark_pmc_in_use(vcpu, msr_info->index);
+-	return kvm_x86_ops.pmu_ops->set_msr(vcpu, msr_info);
++	return kvm_pmu_ops.set_msr(vcpu, msr_info);
+ }
+ 
+ /* refresh PMU settings. This function generally is called when underlying
+@@ -420,7 +432,7 @@ int kvm_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+  */
+ void kvm_pmu_refresh(struct kvm_vcpu *vcpu)
+ {
+-	kvm_x86_ops.pmu_ops->refresh(vcpu);
++	kvm_pmu_ops.refresh(vcpu);
+ }
+ 
+ void kvm_pmu_reset(struct kvm_vcpu *vcpu)
+@@ -428,7 +440,7 @@ void kvm_pmu_reset(struct kvm_vcpu *vcpu)
+ 	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+ 
+ 	irq_work_sync(&pmu->irq_work);
+-	kvm_x86_ops.pmu_ops->reset(vcpu);
++	kvm_pmu_ops.reset(vcpu);
+ }
+ 
+ void kvm_pmu_init(struct kvm_vcpu *vcpu)
+@@ -436,7 +448,7 @@ void kvm_pmu_init(struct kvm_vcpu *vcpu)
+ 	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+ 
+ 	memset(pmu, 0, sizeof(*pmu));
+-	kvm_x86_ops.pmu_ops->init(vcpu);
++	kvm_pmu_ops.init(vcpu);
+ 	init_irq_work(&pmu->irq_work, kvm_pmi_trigger_fn);
+ 	pmu->event_count = 0;
+ 	pmu->need_cleanup = false;
+@@ -468,14 +480,14 @@ void kvm_pmu_cleanup(struct kvm_vcpu *vcpu)
+ 		      pmu->pmc_in_use, X86_PMC_IDX_MAX);
+ 
+ 	for_each_set_bit(i, bitmask, X86_PMC_IDX_MAX) {
+-		pmc = kvm_x86_ops.pmu_ops->pmc_idx_to_pmc(pmu, i);
++		pmc = kvm_pmu_ops.pmc_idx_to_pmc(pmu, i);
+ 
+ 		if (pmc && pmc->perf_event && !pmc_speculative_in_use(pmc))
+ 			pmc_stop_counter(pmc);
+ 	}
+ 
+-	if (kvm_x86_ops.pmu_ops->cleanup)
+-		kvm_x86_ops.pmu_ops->cleanup(vcpu);
++	if (kvm_pmu_ops.cleanup)
++		kvm_pmu_ops.cleanup(vcpu);
+ 
+ 	bitmap_zero(pmu->pmc_in_use, X86_PMC_IDX_MAX);
+ }
+@@ -505,7 +517,7 @@ static inline bool eventsel_match_perf_hw_id(struct kvm_pmc *pmc,
+ 	unsigned int config;
+ 
+ 	pmc->eventsel &= (ARCH_PERFMON_EVENTSEL_EVENT | ARCH_PERFMON_EVENTSEL_UMASK);
+-	config = kvm_x86_ops.pmu_ops->pmc_perf_hw_id(pmc);
++	config = kvm_pmu_ops.pmc_perf_hw_id(pmc);
+ 	pmc->eventsel = old_eventsel;
+ 	return config == perf_hw_id;
+ }
+@@ -533,7 +545,7 @@ void kvm_pmu_trigger_event(struct kvm_vcpu *vcpu, u64 perf_hw_id)
+ 	int i;
+ 
+ 	for_each_set_bit(i, pmu->all_valid_pmc_idx, X86_PMC_IDX_MAX) {
+-		pmc = kvm_x86_ops.pmu_ops->pmc_idx_to_pmc(pmu, i);
++		pmc = kvm_pmu_ops.pmc_idx_to_pmc(pmu, i);
+ 
+ 		if (!pmc || !pmc_is_enabled(pmc) || !pmc_speculative_in_use(pmc))
+ 			continue;
+diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+index 7a7b8d5b775e..cbe9987f9cba 100644
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -41,6 +41,8 @@ struct kvm_pmu_ops {
+ 	void (*cleanup)(struct kvm_vcpu *vcpu);
+ };
+ 
++void kvm_pmu_ops_update(const struct kvm_pmu_ops *pmu_ops);
++
+ static inline u64 pmc_bitmask(struct kvm_pmc *pmc)
+ {
+ 	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
+@@ -88,11 +90,6 @@ static inline bool pmc_is_fixed(struct kvm_pmc *pmc)
+ 	return pmc->type == KVM_PMC_FIXED;
+ }
+ 
+-static inline bool pmc_is_enabled(struct kvm_pmc *pmc)
+-{
+-	return kvm_x86_ops.pmu_ops->pmc_is_enabled(pmc);
+-}
+-
+ static inline bool kvm_valid_perf_global_ctrl(struct kvm_pmu *pmu,
+ 						 u64 data)
+ {
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 99aa2d16845a..6f1676fab6c5 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -11609,6 +11609,8 @@ static inline void kvm_ops_update(struct kvm_x86_init_ops *ops)
+ 					   (void *)__static_call_return0);
+ #include <asm/kvm-x86-ops.h>
+ #undef __KVM_X86_OP
++
++	kvm_pmu_ops_update(ops->runtime_ops->pmu_ops);
+ }
+ 
+ int kvm_arch_hardware_setup(void *opaque)
 -- 
 2.35.1.1021.g381101b075-goog
 

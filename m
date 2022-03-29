@@ -2,140 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9DBA4EA955
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 10:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 938404EA95B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 10:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234004AbiC2IeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 04:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
+        id S234009AbiC2Ieg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 04:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233989AbiC2IeN (ORCPT
+        with ESMTP id S234057AbiC2Iea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 04:34:13 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073D6EF0A5;
-        Tue, 29 Mar 2022 01:32:28 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id C8AFC580117;
-        Tue, 29 Mar 2022 04:32:25 -0400 (EDT)
-Received: from imap49 ([10.202.2.99])
-  by compute5.internal (MEProxy); Tue, 29 Mar 2022 04:32:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=g+MRVCTHkd5UITx1/MCA0rtdiS/Q7gdlkLwbx1
-        Cvlxo=; b=UCo5xVnvSc2K5kqHRzTJYLeCTDsbjgl6xT1NBykQQVKMp4Ur92CcFO
-        AVM/JayZKVAC/L65NLtrgIbuEHLVwP1Co3xz7FvhPeYlG1Aa5OHK5Qzj2LLMcBlE
-        WDtU+9q9xR4065u7bzMG2cnDmDNge9YR3DUCJyjxKPy6ijNuBxr2WhIiWtmAFGLx
-        CaVwyLl64hj1MiG3Uig1TLYu4vrIGHosrlS82ja6VAHEBoC5JYmZ2CKUWQMpqg+p
-        LhX0oBQIe2SVGDKB1tl9YuLNvxELH4cOL2WMDEfBEJeyYF2z/QfC0sM0WfFEA9jv
-        yiENlM4gRwAggRNn+gcXyaRjlMVLYwRQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=g+MRVCTHkd5UITx1/
-        MCA0rtdiS/Q7gdlkLwbx1Cvlxo=; b=JQKycoTgRna0MzP3EC2Bm6lralytF7Tvt
-        lO0V5VJRByINopZ+fWpwTMDpmc9b/kA60ODT10jjyv7RLyd3OIx56kYmaRKvKXC+
-        9qywkBjHLtg84fuHVkJ82sdvyWSVvO7j8dRzTPrBA5cWRk2mWM6v+O/RybVFk6XN
-        1317aXIiz7LSlCY9H/UvNDXEnOEWcl2X8I5I9ZMOO6mUX7BmtuqNX/TOlTncnjxM
-        vnb/YbOBUfwse4qT7wmShdeh7Zr9gvKg4veBUWBzDumgWjl4uoEolDtlj0LQms3L
-        KmnJxQzF1LHoY56R0OmEIx4KCtCggE0RHmifBELWQFRqbXe/dRoUQ==
-X-ME-Sender: <xms:GMRCYi9lAlRf_jy7QNeRahO_YXR-VhpiMkQ_YloAqeAlNIQCJYksiQ>
-    <xme:GMRCYitrNz2rRmWvgRBDL9li4UdVscERnbnixCB8cuM7YHtD6CAt27u0YdYH6glcG
-    xVRD9PHWS3Uu0dLBA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudehledgtddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
-    rhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecuggftrf
-    grthhtvghrnhephefhfeekgfekudevheffheeihedujeefjeevjeefudfgfeeutdeuvdeh
-    hfevueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghnughrvgifsegrjhdrihgurdgruh
-X-ME-Proxy: <xmx:GMRCYoCb5efEYVXCkjDv6RMqt50vpeN1UgDVvgcJYHA7Q7yrh-bcyw>
-    <xmx:GMRCYqehW6WYsT5oizMPuHR-1iStUAS0tj_iRWm6Rvh2pxQnybYqzA>
-    <xmx:GMRCYnOid8_hb9g4tQfGh5YCQefCRBpCLNIYlNoVWZYfWgt5M14Cig>
-    <xmx:GcRCYhUHyBdj-xhT55yXBJuRVssviSpjCt6GNkSVx49WFreCEk1xiw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 599DFF6043F; Tue, 29 Mar 2022 04:32:24 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4911-g925b585eab-fm-20220323.003-g925b585e
-Mime-Version: 1.0
-Message-Id: <a2542d9f-581a-49be-8e70-722fd98ab6f1@www.fastmail.com>
-In-Reply-To: <YkK691VG6ON/6Ysn@atomide.com>
-References: <20220328000915.15041-1-ansuelsmth@gmail.com>
- <CAFr9PXkgrRe-=E=GhNnZ4w1x_FMb97-_RmX6ND1vEd74_TbZSw@mail.gmail.com>
- <YkK691VG6ON/6Ysn@atomide.com>
-Date:   Tue, 29 Mar 2022 19:02:04 +1030
-From:   "Andrew Jeffery" <andrew@aj.id.au>
-To:     "Tony Lindgren" <tony@atomide.com>,
-        "Daniel Palmer" <daniel@0x0f.com>
-Cc:     "Ansuel Smith" <ansuelsmth@gmail.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-actions@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-omap@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@axis.com, linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
-        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org,
-        linux-unisoc@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-realtek-soc@lists.infradead.org
-Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,WEIRD_QUOTING autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 29 Mar 2022 04:34:30 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A6B144B70;
+        Tue, 29 Mar 2022 01:32:46 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a02:3030:a:f397:f6bc:b726:2678:839f])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 4656A1F43A5D;
+        Tue, 29 Mar 2022 09:32:45 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648542765;
+        bh=AEzY3zrel2SS59cX50Wh3lYNuek+9mxJ6I+jtREm89w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YU6hJCLNE9jMBwWLxpeDSpOSZJt1hv0VfFyYfnkFKmetpz+pDRUVq2l+wy6UvVfaf
+         fv73dNpr3VKyh25uf67PDgtDxWExJU8FyoniTAb4Q2QPR5vaxQKSXTlHUSWrnKxO/L
+         FABs4PvSz3EeoPrOZ2W3hQWFAauzkMqAdbHR8r8TkQVAy/mhAjdZGxT1ZvfLaABHIs
+         t77vF2Zr3JnrwIpt0sEw97I8uEvoYdDeEZ7peQTuhQU0pVJLsojs+65nqS5IJeoLlX
+         CDGVKKCRvmAAh7a8YCxbP+PTOuDkCmf30eil9fOKUifvuZ9TimFzmtXvGWozg3AaVl
+         aY+GYz/QFvfmg==
+Date:   Tue, 29 Mar 2022 10:32:41 +0200
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 02/24] media: doc: Document dual use of H.264
+ pic_num/frame_num
+Message-ID: <20220329083241.ctatuvbbhkvswokl@basti-XPS-13-9310>
+References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
+ <20220328195936.82552-3-nicolas.dufresne@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220328195936.82552-3-nicolas.dufresne@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 28.03.2022 15:59, Nicolas Dufresne wrote:
+>These two fields needs documentation as they have dual meaning. It is also
 
+s/needs/need/
 
-On Tue, 29 Mar 2022, at 18:23, Tony Lindgren wrote:
-> Hi,
->
-> * Daniel Palmer <daniel@0x0f.com> [220328 08:53]:
->> Hi Ansuel
->> 
->> On Mon, 28 Mar 2022 at 09:09, Ansuel Smith <ansuelsmth@gmail.com> wrote:
->> >
->> > Hi,
->> > as the title say, the intention of this ""series"" is to finally categorize
->> > the ARM dts directory in subdirectory for each oem.
->> 
->> While I agree with this change and think it's for the good (browsing
->> the ARM dts directory at the moment is frustrating..) I think
->> buildroot and others need to be told about this as it'll potentially
->> break their kernel build scripting for ARM and probably messes up the
->> configs they have for existing boards.
->
-> Yeah.. And ideally this would be done in smaller steps as these will
-> conflict with all the other pending patches.
->
-> For example, I have a pile of pending omap clock clean-up dts patches
-> posted and tested waiting for v5.19-rc1 to apply. I'd rather not start
-> redoing or fixing up the patches with sed :)
->
-> What I'd like to have see is that at some point when suitable we move
-> one machine at a time with a script if possible.. Maybe the dtb files
-> generated would need to remain in the current directory until all of
-> the machine dts files are moved? That should help with the build
-> scripting too probably :)
+>confusing since pic_num is a derived value from frame_num, so this should
+>help application developpers. If we ever need to make a V2 of this API, I
 
-There's probably some reason not to, but could we symlink the new paths 
-in the subdirectories to the existing files to handle the transition? 
-Then do the move to remove the symlinks at some future point.
+s/developpers/developers/
+(seems to be a common typo among native French speakers ;))
 
-Andrew
+>would suggest to remove pic_num entirely.
+
+I think that suggestion should be placed as a FIXME/TODO comment into the
+source code as it is way easier to find for future developers creating a V2.
+
+>
+>Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+
+>---
+> .../media/v4l/ext-ctrls-codec-stateless.rst            | 10 ++++++++--
+> 1 file changed, 8 insertions(+), 2 deletions(-)
+>
+>diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
+>index 6541e4c32b26..f634f20bcfbe 100644
+>--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
+>+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
+>@@ -649,10 +649,16 @@ Stateless Codec Control ID
+>         :c:type:`timeval` in struct :c:type:`v4l2_buffer` to a __u64.
+>     * - __u32
+>       - ``pic_num``
+>-      -
+>+      - For short term reference, this should match the derived value PicNum
+>+	(8-28) and for long term references it should match the derived value
+
+Minor suggestion, for short term you use singular (reference) and for
+long term you use plural (references), I would stick to one of both.
+(Below you only use plural so maybe stick to plural here as well)
+
+>+	LongTermPicNum (8-29). Note that pic_num is the same as FrameNumWrap
+>+	for frame decoding.
+>     * - __u16
+>       - ``frame_num``
+>-      -
+>+      - For short term references, this should match the frame_num value from
+>+	the slice header syntax (the driver will wrap the value if neeeded). For
+>+	long term references, this should be set to the value of
+>+	long_term_frame_idx describes in the dec_ref_pic_marking() syntax.
+
+s/describes/described/
+
+Greetings,
+Sebastian
+
+>     * - __u8
+>       - ``fields``
+>       - Specifies how the DPB entry is referenced. See :ref:`Reference Fields <h264_ref_fields>`
+>-- 
+>2.34.1
+>

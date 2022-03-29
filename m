@@ -2,75 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604C44EB626
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1076D4EB628
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238069AbiC2Wlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 18:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
+        id S238079AbiC2Wl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 18:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237738AbiC2Wlp (ORCPT
+        with ESMTP id S238115AbiC2Wly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 18:41:45 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10C4232110
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:40:00 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id n207-20020a25d6d8000000b0063bd7a74ae4so8699478ybg.21
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:40:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=55JjpPbk3Y7WOpykUyXt7wH1TGQR1/LtZdMUbAvIVMs=;
-        b=qX3i/Nw/HqKEYHup8amZuE+i2wPURXKr/5BAcB7jIFF0+msEMixUa3UgLAJ50Se7OV
-         uyr1nQ6tC+OzNsJhFFNKJpFlRYQEOdfrdmiIWYryZa9U+Oubgo07ryvepE9B6ETZ1VoG
-         UgCgRUKM31ncZtpopbDAkAKfN/EYCNoCtyOncNGFR1OywMDt0C/fRIEKMz658xXY3sXz
-         rSCP5IEfR/m1/WpN3EHDf6KpUXvKTWPuCkcrboqxZxIzmtVZ70BVZAu4gwl4Usln/kv1
-         nnP/oWRnTdxeamBSk6xxLsmD1wCbX6Qj0YN0PFJL5eqJ/dKthgzcbg5NZVw8Qz3vRyo1
-         Fraw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=55JjpPbk3Y7WOpykUyXt7wH1TGQR1/LtZdMUbAvIVMs=;
-        b=f/8oLvtPepfX64PUh3h8trsJN03K3+83dUumXs8GvDa8cjSXBPfMY4YwQRpaZWlPvQ
-         KQg6jIIz6MVh06SRP+FfLa1ArLDERzCtYiI3r/uSmR1g29LyKD0wDVwwnVPn49iTpPQL
-         KPBVQKoOwsMG9oFNSRdmyZs3mq4/4Sy7NqYLzhQzjGRcIoynfjmI06V4K1yiNW4lHaWj
-         TCpNfk9S3yZqAghBhnlPb9B+y/5FIWnteK8LQFY5VKfz/WkzAqBhiAimAm90BPwoxP+I
-         Bv9GaH5SldBi6oBlNVBWXbyOOSdSmdlWxXkZ9pzzpqIOOzg5iidqDuU7IF+mszHlLKrn
-         DWNQ==
-X-Gm-Message-State: AOAM533JF+lwcU2ZKEDDxlWN1VmHFYJJDJzUanOl1V9vdzq50eWxoNcs
-        ZB0bc4IA7jFo7wv6uEVeZ/IPUYrIHneolOpSYBI=
-X-Google-Smtp-Source: ABdhPJySXpfYyG6+zVpTR4IIDEDIftMPbYNbI9MH3Y4DgnMswi8Vyagy7p0fxXZFTK+T6UpIhTF2rkLIX8Tq2/alwxU=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:75a:7c26:987c:fd71])
- (user=ndesaulniers job=sendgmr) by 2002:a25:26c4:0:b0:633:64d4:2b84 with SMTP
- id m187-20020a2526c4000000b0063364d42b84mr29292732ybm.428.1648593600139; Tue,
- 29 Mar 2022 15:40:00 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 15:39:56 -0700
-In-Reply-To: <CAKwvOdmYzH91bzNus+RcZGSgCQGY8UKt0-2JvtqQAh=w+CeiuQ@mail.gmail.com>
-Message-Id: <20220329223956.486608-1-ndesaulniers@google.com>
-Mime-Version: 1.0
-References: <CAKwvOdmYzH91bzNus+RcZGSgCQGY8UKt0-2JvtqQAh=w+CeiuQ@mail.gmail.com>
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1648593596; l=4543;
- s=20211004; h=from:subject; bh=5slE50Y/sReDbpFV50LnX2HSeC48C/EwsulabxEX2AY=;
- b=qrVKmwgB+c+z+CeXQOhS6rjRIAZu/2Wrsrlcq7EKGqSdZjeyWxrfJNKXWI3wHnZmJLb/M85Dploc
- 41bx/78uD5Tx5oHMxesWB1z9dYo+509XZkUz0pdnf8rnJ9/hmR+r
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v2] net, uapi: remove inclusion of arpa/inet.h
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     Jon Maloy <jmaloy@redhat.com>, Ying Xue <ying.xue@windriver.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Tue, 29 Mar 2022 18:41:54 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95372325CE
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:40:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648593605; x=1680129605;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=9ZxjrWRQCn+QQnHcEkTsysVidpslLyjF9+Y3Xn6wT/0=;
+  b=KW6PN9cx8i/VARrW8clBKUM+rWmNUxyAbA8VZbqyPy1rxGLhKKQkjm1t
+   3vSQRYuIYFipPla/W8lDVEIVdY3NIPOX5wbO8pgRS2dvkSO10LnsQUNRf
+   SNfxXQAxxCmLBPqwi5b+gHSmYPXX/Ega1bUmO0PiiPTLumb5bkVybxyf0
+   0mFe5F3ohThha0hBbwvrdT5Z0i683iLe20AyWdT9UIMnD+hEnBCdsXRJG
+   2AjtZbaHrvUSi2X/sFjtzgR7dDxZRuAgYkgmBeE73+M6i3bnxLLsntvpt
+   FPCT4ga1c0d8LZrJacx+1WwCoQMH5Zu5442RWkG2aX3lY5Bfr668vZxgp
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="256969867"
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="256969867"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 15:40:05 -0700
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="605075895"
+Received: from acstuden-mobl.amr.corp.intel.com (HELO [10.209.45.17]) ([10.209.45.17])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 15:40:04 -0700
+Message-ID: <3842f49f-d940-333b-74ad-55d1521209cb@intel.com>
+Date:   Tue, 29 Mar 2022 15:40:06 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Jagdish Gediya <jvgediya@linux.ibm.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com,
+        baolin.wang@linux.alibaba.com, dave.hansen@linux.intel.com,
+        ying.huang@intel.com
+References: <20220329115222.8923-1-jvgediya@linux.ibm.com>
+ <55161160-1084-c81d-d116-00f5bcaa1268@intel.com>
+ <YkM3/vKRoy8/fnvD@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH] mm: migrate: set demotion targets differently
+In-Reply-To: <YkM3/vKRoy8/fnvD@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,133 +66,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Testing out CONFIG_UAPI_HEADER_TEST=y with a prebuilt Bionic sysroot
-from Android's SDK, I encountered an error:
+On 3/29/22 09:46, Jagdish Gediya wrote:
+>> I'd love to see some more information about *why* the current code
+>> doesn't work.  Is it purely a bug or was it mis-designed?
+> I think the design seems to be intended because as per the comment
+> in the current code, it was known that there are limits to the node
+> sharing as a demotion target.
 
-  HDRTEST usr/include/linux/fsi.h
-In file included from <built-in>:1:
-In file included from ./usr/include/linux/tipc_config.h:46:
-prebuilts/ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/arpa/inet.h:39:1:
-error: unknown type name 'in_addr_t'
-in_addr_t inet_addr(const char* __s);
-^
+Ahh, that makes sense.
 
-This is because Bionic has a bug in its inclusion chain. I sent a patch
-to fix that, but looking closer at include/uapi/linux/tipc_config.h,
-there's a comment that it includes arpa/inet.h for ntohs;
-but ntohs is not defined in any UAPI header. For now, reuse the
-definitions from include/linux/byteorder/generic.h, since the various
-conversion functions do exist in UAPI headers:
-include/uapi/linux/byteorder/big_endian.h
-include/uapi/linux/byteorder/little_endian.h
+You've got some slow memory that's not really associated closely enough
+with an initiator node to be used exclusively for demotions from that
+node.  The original code was really intended for demotions when the
+system is made up of relatively identical building blocks, like one CPU
+with two kinds of memory attached.
 
-Link: https://android-review.googlesource.com/c/platform/bionic/+/2048127
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- include/uapi/linux/tipc_config.h | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
-
-diff --git a/include/uapi/linux/tipc_config.h b/include/uapi/linux/tipc_config.h
-index 4dfc05651c98..2c494b7ae008 100644
---- a/include/uapi/linux/tipc_config.h
-+++ b/include/uapi/linux/tipc_config.h
-@@ -43,10 +43,6 @@
- #include <linux/tipc.h>
- #include <asm/byteorder.h>
- 
--#ifndef __KERNEL__
--#include <arpa/inet.h> /* for ntohs etc. */
--#endif
--
- /*
-  * Configuration
-  *
-@@ -257,6 +253,10 @@ struct tlv_desc {
- #define TLV_SPACE(datalen) (TLV_ALIGN(TLV_LENGTH(datalen)))
- #define TLV_DATA(tlv) ((void *)((char *)(tlv) + TLV_LENGTH(0)))
- 
-+#define __htonl(x) __cpu_to_be32(x)
-+#define __htons(x) __cpu_to_be16(x)
-+#define __ntohs(x) __be16_to_cpu(x)
-+
- static inline int TLV_OK(const void *tlv, __u16 space)
- {
- 	/*
-@@ -269,33 +269,33 @@ static inline int TLV_OK(const void *tlv, __u16 space)
- 	 */
- 
- 	return (space >= TLV_SPACE(0)) &&
--		(ntohs(((struct tlv_desc *)tlv)->tlv_len) <= space);
-+		(__ntohs(((struct tlv_desc *)tlv)->tlv_len) <= space);
- }
- 
- static inline int TLV_CHECK(const void *tlv, __u16 space, __u16 exp_type)
- {
- 	return TLV_OK(tlv, space) &&
--		(ntohs(((struct tlv_desc *)tlv)->tlv_type) == exp_type);
-+		(__ntohs(((struct tlv_desc *)tlv)->tlv_type) == exp_type);
- }
- 
- static inline int TLV_GET_LEN(struct tlv_desc *tlv)
- {
--	return ntohs(tlv->tlv_len);
-+	return __ntohs(tlv->tlv_len);
- }
- 
- static inline void TLV_SET_LEN(struct tlv_desc *tlv, __u16 len)
- {
--	tlv->tlv_len = htons(len);
-+	tlv->tlv_len = __htons(len);
- }
- 
- static inline int TLV_CHECK_TYPE(struct tlv_desc *tlv,  __u16 type)
- {
--	return (ntohs(tlv->tlv_type) == type);
-+	return (__ntohs(tlv->tlv_type) == type);
- }
- 
- static inline void TLV_SET_TYPE(struct tlv_desc *tlv, __u16 type)
- {
--	tlv->tlv_type = htons(type);
-+	tlv->tlv_type = __htons(type);
- }
- 
- static inline int TLV_SET(void *tlv, __u16 type, void *data, __u16 len)
-@@ -305,8 +305,8 @@ static inline int TLV_SET(void *tlv, __u16 type, void *data, __u16 len)
- 
- 	tlv_len = TLV_LENGTH(len);
- 	tlv_ptr = (struct tlv_desc *)tlv;
--	tlv_ptr->tlv_type = htons(type);
--	tlv_ptr->tlv_len  = htons(tlv_len);
-+	tlv_ptr->tlv_type = __htons(type);
-+	tlv_ptr->tlv_len  = __htons(tlv_len);
- 	if (len && data) {
- 		memcpy(TLV_DATA(tlv_ptr), data, len);
- 		memset((char *)TLV_DATA(tlv_ptr) + len, 0, TLV_SPACE(len) - tlv_len);
-@@ -348,7 +348,7 @@ static inline void *TLV_LIST_DATA(struct tlv_list_desc *list)
- 
- static inline void TLV_LIST_STEP(struct tlv_list_desc *list)
- {
--	__u16 tlv_space = TLV_ALIGN(ntohs(list->tlv_ptr->tlv_len));
-+	__u16 tlv_space = TLV_ALIGN(__ntohs(list->tlv_ptr->tlv_len));
- 
- 	list->tlv_ptr = (struct tlv_desc *)((char *)list->tlv_ptr + tlv_space);
- 	list->tlv_space -= tlv_space;
-@@ -404,9 +404,9 @@ static inline int TCM_SET(void *msg, __u16 cmd, __u16 flags,
- 
- 	msg_len = TCM_LENGTH(data_len);
- 	tcm_hdr = (struct tipc_cfg_msg_hdr *)msg;
--	tcm_hdr->tcm_len   = htonl(msg_len);
--	tcm_hdr->tcm_type  = htons(cmd);
--	tcm_hdr->tcm_flags = htons(flags);
-+	tcm_hdr->tcm_len   = __htonl(msg_len);
-+	tcm_hdr->tcm_type  = __htons(cmd);
-+	tcm_hdr->tcm_flags = __htons(flags);
- 	if (data_len && data) {
- 		memcpy(TCM_DATA(msg), data, data_len);
- 		memset((char *)TCM_DATA(msg) + data_len, 0, TCM_SPACE(data_len) - msg_len);
-
-base-commit: 5efabdadcf4a5b9a37847ecc85ba71cf2eff0fcf
--- 
-2.35.1.1021.g381101b075-goog
+I think what you're doing here makes sense.  The only thing I'll say is
+that, at some point, we need to stop messing with the demotion order
+that the kernel comes up with.  It's not going to be able to handle
+*everything* perfectly.  We're probably not at the point that we should
+stop enhancing the kernel-generated demotion order, but let's at least
+keep in mind that we should stop eventually.
 

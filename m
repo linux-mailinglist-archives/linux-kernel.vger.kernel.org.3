@@ -2,133 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5254F4EB266
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 19:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2BB4EB2E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 19:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240020AbiC2RCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 13:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
+        id S240336AbiC2Rtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 13:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbiC2RCh (ORCPT
+        with ESMTP id S230123AbiC2Rtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 13:02:37 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0434E3EB88
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 10:00:54 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id r23so21449021edb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 10:00:53 -0700 (PDT)
+        Tue, 29 Mar 2022 13:49:33 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E819F6E4
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 10:47:50 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id n18so18290978plg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 10:47:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BPKs3suq1SgwSX2Q9VZX8LKJW7ayWPXQUfm1Ivff7Yg=;
-        b=F/2SYHD88iDJ7+pjQBONixePXir6QXcvw8CfxAJqR8XP7+Y5PhUSIgoAqVmMU+jmbc
-         hIPpXnmU8FZa3G85hY6f9oG77VaQi2vhrO/Zx1Hl1Ol4nJVnRESIZYT0MKxpQKG20myz
-         ijUqrtKbN4pUIXFBR+koaQg5nqwRuQu5piJeJGZpzEjKvVEeflBtxdf3oFnSBIyhfAX2
-         HZfmlTC32O0zmhEnDWeCzyLVQtqpXMBysZSbn06xzxq5mhrTTylJSOxMOdJ/zk0zxoM9
-         NVxMaVbzHV/L4I3ppSWTxUauBVImumSbms90mWkBvL/TqeknNzVaXhbf34czzAJqjgJn
-         7upg==
+        d=vesoftinfo.com; s=google;
+        h=to:subject:from:message-id:disposition-notification-to:date
+         :user-agent:mime-version:content-transfer-encoding:content-language;
+        bh=RHsR56WCcRTSomH7cO9DvvwrgGrQTVTZcFsqWeoDy38=;
+        b=Q+8ANRiGHpkBuJLnVKDGjRRxoNVn5Uy/BwqpV67IR+K+QXvZI6rRrkK09FdLdjh3CG
+         mICSr7KtD8BPJgMu0jD3IkMRzy2w076Z5iCip5yN+uIZ3JOVoegMIqWhsX1N7WrEX3D6
+         4F1FTbwBmzqDGCx+S07hsULxWLhH7tfTltveHGpBb8UzFvxjtkbP93maF5F2fBSyALVi
+         IwEplNbtOo5jjSGpQhy6SAlOLtHEwfyQZV5tuhAOGMYCafbI1HVdmubXcyDhicJxCWFn
+         WNSoQkzgCFTjy9gRntysZ/+fLdKm2SePH8LwiqR8LeCmYf/dWAvyB/hrMGErDDn4GZtE
+         Tkcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BPKs3suq1SgwSX2Q9VZX8LKJW7ayWPXQUfm1Ivff7Yg=;
-        b=ybXllko0mWF1wZBcaNbdtgomLWdLXqzHCTEendtFY1XaeOt/zQFiPBEiNVgSZTOpAt
-         JTr6nH9MJRzIFEu6HNRfTH41XVaeT0mQqFUWGj99iUbkWAhIB5p1+Fd+0cgWh265074p
-         GiKBbPLUiMNyrmqGTi4EAs3GOw0F5AvoLpDmJ6TAfhNVAfYX7eTx6ArwRicvgytyJukz
-         qcxNoDWI8UAm3ZPogKjWObyVgVqeDbF3SiFBDJ274g4rW2A06LhL+utasCbhmbuaxnCx
-         +AcqTLjOJrrkjLF6kd10aGSGdENHH14tNOLrYodwsEusT3tc/92jIzVGJWf30pWcAn2s
-         QKCQ==
-X-Gm-Message-State: AOAM533KqpuWtAxgDthBDmpcZPjQi7lIKCeymSShJ/um7Zp65WMvzhdg
-        5Sf4iQpnZM8j00Xhz3VXFSw=
-X-Google-Smtp-Source: ABdhPJw37lXtVfuQrFwFlV0EXWgi+RpMtuLezJR109NVeOyq7+/UWRXue9+RusATHM8TRMeZnCqahA==
-X-Received: by 2002:a05:6402:914:b0:419:a627:ef6f with SMTP id g20-20020a056402091400b00419a627ef6fmr5731279edz.67.1648573252351;
-        Tue, 29 Mar 2022 10:00:52 -0700 (PDT)
-Received: from leap.localnet (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
-        by smtp.gmail.com with ESMTPSA id p10-20020a170906604a00b006e07c76f3d7sm6851961ejj.210.2022.03.29.10.00.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 10:00:51 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dan.carpenter@oracle.com
-Cc:     David Kershner <david.kershner@unisys.com>,
-        sparmaintainer@unisys.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: unisys: Properly test debugfs_create_dir() return values
-Date:   Tue, 29 Mar 2022 19:00:49 +0200
-Message-ID: <2030244.KlZ2vcFHjT@leap>
-In-Reply-To: <20220322083858.16887-1-fmdefrancesco@gmail.com>
-References: <20220322083858.16887-1-fmdefrancesco@gmail.com>
+        h=x-gm-message-state:to:subject:from:message-id
+         :disposition-notification-to:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=RHsR56WCcRTSomH7cO9DvvwrgGrQTVTZcFsqWeoDy38=;
+        b=EPjvWmK1wc5rsFGgkpVpQB9l4yWW2QNHgVff64awavXVS4xDVQFXQ8i0mDXSPHCUu7
+         u/wCfZn6XyzDGC7chsdRoyiVs3SXxKp1XO5SaM6B2DAx4u3Vqb6ydEi/NrmCy/T7bVzv
+         Ut6IWQkFSsRIGEIlchjtLCu1Qf+2LSBjqtB41pSYIBAFF7833xIv5E0gHN6j5oWf9Kf9
+         fy3O2croeZeEBdLL1HgC4CegNtpt7z4JZhjrlzWuOlmaOtO00jqSyga1jUD+7NieRBw9
+         Vra7+WGiPF1MDVJZSO3wUql5iwkbHSSga6Z5sFkBDBf8T1vefVGl6hVt29xV6zj2KvK2
+         BAiQ==
+X-Gm-Message-State: AOAM530nsocrhv3tXq55XePdRzgQOsHqNBG+2nK8VDMghokqSVjCbCU7
+        kRDUw5/VwtYgenJ6OtIPTS9nNft9Pl1oHA==
+X-Google-Smtp-Source: ABdhPJx/V6gCvMqk6B9YjU8NKzLlL07eqS36XUyFzI26GNwAAuOnRkFlXW1+yO/tnxUZwJOQOWjB7A==
+X-Received: by 2002:a17:902:7ec1:b0:156:17a4:a2f8 with SMTP id p1-20020a1709027ec100b0015617a4a2f8mr9237806plb.155.1648576069220;
+        Tue, 29 Mar 2022 10:47:49 -0700 (PDT)
+Received: from ?IPv6:2405:201:d001:4dc4:7937:3c53:a94:a69f? ([2405:201:d001:4dc4:7937:3c53:a94:a69f])
+        by smtp.gmail.com with ESMTPSA id nv11-20020a17090b1b4b00b001c71b0bf18bsm3759766pjb.11.2022.03.29.10.47.47
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 29 Mar 2022 10:47:48 -0700 (PDT)
+To:     linux-kernel@vger.kernel.org
+Subject: Wine List
+From:   Jessica Pontius <jessicap@vesoftinfo.com>
+Message-ID: <7921d9d4-a7ec-6d2f-4604-fb3698e91465@vesoftinfo.com>
+Date:   Tue, 29 Mar 2022 13:01:14 -0400
+User-Agent: Mozilla/5.0 (Windows NT 6.3; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="ISO-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On marted=EC 22 marzo 2022 09:38:58 CEST Fabio M. De Francesco wrote:
-> debugfs_create_dir() returns a pointers to a dentry objects. On failures
-> it returns errors. Currently the values returned to visornic_probe()
-> seem to be tested for being equal to NULL in case of failures.
->=20
-> Properly test with "if (IS_ERR())" and then assign the correct error=20
-> value to the "err" variable.
->=20
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
->  drivers/staging/unisys/visornic/visornic_main.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/staging/unisys/visornic/visornic_main.c b/drivers/st=
-aging/unisys/visornic/visornic_main.c
-> index 643432458105..58d03f3d3173 100644
-> --- a/drivers/staging/unisys/visornic/visornic_main.c
-> +++ b/drivers/staging/unisys/visornic/visornic_main.c
-> @@ -1922,11 +1922,11 @@ static int visornic_probe(struct visor_device *de=
-v)
->  	/* create debug/sysfs directories */
->  	devdata->eth_debugfs_dir =3D debugfs_create_dir(netdev->name,
->  						      visornic_debugfs_dir);
-> -	if (!devdata->eth_debugfs_dir) {
-> +	if (IS_ERR(devdata->eth_debugfs_dir)) {
->  		dev_err(&dev->device,
->  			"%s debugfs_create_dir %s failed\n",
->  			__func__, netdev->name);
-> -		err =3D -ENOMEM;
-> +		err =3D PTR_ERR(devdata->eth_debugfs_dir);
->  		goto cleanup_register_netdev;
->  	}
-> =20
-> --=20
-> 2.34.1
->=20
-Hi Greg, Dan,
 
-Now I have time to rework this patch but, if I'm not misunderstanding, you=
-=20
-asked for two contrasting works to do here...
+Hello,
 
-Dan wrote that "[in] this case you can delete the whole devdata->eth_debugf=
-s_dir=20
-and the related code.".
+Would you be interested in acquiring an email list of "Wine Lovers List" from USA?
 
-Greg wrote that "We really shouldn't be checking this value at all.  There'=
-s=20
-no reason to check the return value of a debugfs_* call. Can you fix up the=
- code to
-do that instead?".
+We also have data for Beer Enthusiasts List, Liquor Enthusiasts List, Beverage Enthusiasts List and many more.
 
-I'm confused because they look like two incompatible requests. What should =
-I do?
+Each record in the list contains Contact Name (First, Middle and Last Name), Mailing Address, List type and Opt-in email address.
 
-Thanks,
+All the contacts are opt-in verified, 100% permission based and can be used for unlimited multi-channel marketing.
 
-=46abio M. De Francesco
+Please let me know your thoughts towards procuring the Wine Lovers List.
 
+Best Regards,
+Jessica Pontius
+Research Analyst
+
+We respect your privacy, if you do not wish to receive any further emails from our end, please reply with a subject "Remove".
 

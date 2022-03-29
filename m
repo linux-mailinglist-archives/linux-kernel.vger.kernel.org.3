@@ -2,51 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFA14EABB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7564EABB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235429AbiC2K5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 06:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48768 "EHLO
+        id S235438AbiC2K52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 06:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232269AbiC2K5I (ORCPT
+        with ESMTP id S235225AbiC2K5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 06:57:08 -0400
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 785051B78B;
-        Tue, 29 Mar 2022 03:55:25 -0700 (PDT)
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 29 Mar 2022 19:55:24 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id D73092058B50;
-        Tue, 29 Mar 2022 19:55:24 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 29 Mar 2022 19:55:24 +0900
-Received: from [10.212.183.172] (unknown [10.212.183.172])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id E9630B62B7;
-        Tue, 29 Mar 2022 19:55:23 +0900 (JST)
-Subject: Re: [PATCH] dt-bindings: PCI: uniphier: Convert uniphier-pcie.txt to
- json-schema
-To:     Rob Herring <robh@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1648433498-23450-1-git-send-email-hayashi.kunihiko@socionext.com>
- <1648471865.799906.2153573.nullmailer@robh.at.kernel.org>
- <YkHhF7dF9SYS2qTx@robh.at.kernel.org>
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Message-ID: <0c71c397-c48f-46e4-1813-2d7fbb029be7@socionext.com>
-Date:   Tue, 29 Mar 2022 19:55:23 +0900
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Tue, 29 Mar 2022 06:57:22 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3699E1D317;
+        Tue, 29 Mar 2022 03:55:37 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 905851F4399D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648551336;
+        bh=BkZPje0ko1RmCOeaZCQI6Aif1v92KYxg2RWub0qs3h8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fm3OdlCmMJLmpoBlTsVUEIEc8hA+qRakTJt355ubrkrs8fTrHqj1xrg0jaS71Mtx4
+         v1SzYfySxtz0h7F0BdfqgcwD5rw/p1P9/NIFnhm4kamId/J0t9xKThI5PJ1bekqvX+
+         JpYTkvYiu57KBPel8szadY6HJP6kkPo2ji2sKnOvIwiw1ppZZjZe/I8f7yPZkpuaox
+         PnmTnghFGlqj7deWCvL5jlDVw9bQCb5TUHyNn33A+ID/1vh+WP5bIQxTM+kn+OFGyr
+         3S0BqXREluIaVVgD52cGTRk8RMEn7KvuGH0eLVVg5bS/q0Zu/W3CbLroJ/hvsHk6MW
+         FnCkbsHYB05qg==
+Message-ID: <ea0f7cdd-0fae-fb66-3171-f0870384e6aa@collabora.com>
+Date:   Tue, 29 Mar 2022 12:55:33 +0200
 MIME-Version: 1.0
-In-Reply-To: <YkHhF7dF9SYS2qTx@robh.at.kernel.org>
-Content-Type: text/plain; charset=iso-2022-jp; format=flowed; delsp=yes
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] rpmsg: mtk_rpmsg: Fix circular locking dependency
 Content-Language: en-US
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     bjorn.andersson@linaro.org, matthias.bgg@gmail.com,
+        pihsun@chromium.org, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20220114144737.375621-1-angelogioacchino.delregno@collabora.com>
+ <20220217190349.GA477215@p14s>
+ <ad306275-cd38-e6ad-55cc-0f7c4bdfcecf@collabora.com>
+ <20220218180111.GA574087@p14s>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220218180111.GA574087@p14s>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,52 +60,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-
-On 2022/03/29 1:23, Rob Herring wrote:
-> On Mon, Mar 28, 2022 at 07:51:05AM -0500, Rob Herring wrote:
->> On Mon, 28 Mar 2022 11:11:38 +0900, Kunihiko Hayashi wrote:
->>> Convert the file into a JSON description at the yaml format.
+Il 18/02/22 19:01, Mathieu Poirier ha scritto:
+> On Fri, Feb 18, 2022 at 10:16:51AM +0100, AngeloGioacchino Del Regno wrote:
+>> Il 17/02/22 20:03, Mathieu Poirier ha scritto:
+>>> Hi Angelo,
 >>>
->>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
->>> ---
->>>   .../bindings/pci/socionext,uniphier-pcie.yaml | 100
-> ++++++++++++++++++
->>>   .../devicetree/bindings/pci/uniphier-pcie.txt |  82 --------------
->>>   MAINTAINERS                                   |   2 +-
->>>   3 files changed, 101 insertions(+), 83 deletions(-)
->>>   create mode 100644
-> Documentation/devicetree/bindings/pci/socionext,uniphier-pcie.yaml
->>>   delete mode 100644
-> Documentation/devicetree/bindings/pci/uniphier-pcie.txt
+>>> On Fri, Jan 14, 2022 at 03:47:37PM +0100, AngeloGioacchino Del Regno wrote:
+>>>> During execution of the worker that's used to register rpmsg devices
+>>>> we are safely locking the channels mutex but, when creating a new
+>>>> endpoint for such devices, we are registering a IPI on the SCP, which
+>>>> then makes the SCP to trigger an interrupt, lock its own mutex and in
+>>>> turn register more subdevices.
+>>>> This creates a circular locking dependency situation, as the mtk_rpmsg
+>>>> channels_lock will then depend on the SCP IPI lock.
+>>>>
+>>>> [   18.014514]  Possible unsafe locking scenario:
+>>>> [   18.014515]        CPU0                    CPU1
+>>>> [   18.014517]        ----                    ----
+>>>> [   18.045467]   lock(&mtk_subdev->channels_lock);
+>>>> [   18.045474]                                lock(&scp->ipi_desc[i].lock);
+>>>
+>>> I spent well over an hour tracing through the meanders of the code to end up in
+>>> scp_ipi_register() which, I think, leads to the above.  But from there I don't
+>>> see how an IPI can come in and that tells me my assumption is wrong.
+>>>
+>>> Can you give more details on the events that lead to the above?  I'm not saying
+>>> there is no problem, I just need to understand it.
 >>>
 >>
->> Running 'make dtbs_check' with the schema in this patch gives the
->> following warnings. Consider if they are expected or the schema is
->> incorrect. These may not be new warnings.
+>> Hi Mathieu,
 >>
->> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
->> This will change in the future.
+>> I understand that following this flow without the assistance of the actual
+>> hardware may be a little confusing, so, no worries.
 >>
->> Full log is available here: https://patchwork.ozlabs.org/patch/1609988
+>> drivers/remoteproc/mtk_scp.c - this driver manages the SCP (obviously, a
+>> remote processor)
+>> drivers/remoteproc/mtk_scp_ipi.c - public functions for kernel SCP IPC
 >>
+>> Flow:
+>> - MediaTek SCP gets probed
+>> - RPMSG starts, we start probing "something", like google,cros-ec-rpmsg
+>> - mtk_rpmsg: creates endpoint; IPI handler is registered here.
 >>
->> pcie@66000000: compatible: ['socionext,uniphier-pcie', 'snps,dw-pcie']
-> is too long
->> 	arch/arm64/boot/dts/socionext/uniphier-ld20-akebi96.dt.yaml
->> 	arch/arm64/boot/dts/socionext/uniphier-ld20-global.dt.yaml
->> 	arch/arm64/boot/dts/socionext/uniphier-ld20-ref.dt.yaml
->> 	arch/arm64/boot/dts/socionext/uniphier-pxs3-ref.dt.yaml
+>>           ( more flow )
+>>
+>> - mtk_rpmsg: mtk_rpmsg_ns_cb() -> mtk_rpmsg_create_device(), channel is
+>>               added to the channels list, worker gets scheduled
 > 
-> Ignore this if your intent is to fix these by dropping 'snps,dw-pcie'. I
-> think that is the right thing to do. 'snps,dw-pcie' is not too
-> meaningful.
+> To me the above is out of order.  The name space endpoint is registered as part
+> of the remote processor start sequence.  From there an IPI with ns_ipi_id comes in
+> and then cros_ec_rpmsg_probe() is called.  The above seems to imply the
+> opposite.
+> 
+>>
+>>
+>> Now for the part that produces the real issue:
+>>
+>> label_a:
+>>
+>> *** RPMSG MUTEX LOCK ***
+> 
+> By this I take you mean the subdev->channels_lock mutex.
+> 
+>> - mtk_rpmsg: ## Go through multiple channels ##, call mtk_rpmsg_register_device()
+>>
+>> - Registered device tries to communicate through RPMSG
+>> - .send() or .trysend() (depending on the device) is called: send_ipi()
+>>      *** SCP MUTEX LOCK ***
+> 
+> And this one is either scp->send_lock or scp->ipi_desc[i].lock.
+> 
+>>     - mtk_scp_ipi: Data written, ACK? ok -> return 0
+>>      *** SCP MUTEX UNLOCK ***
+>>
+>> - mtk_scp_ipi: **** INTERRUPT!!! **** New RPMSG NS available? -> create channel
+>>            goto label_a;
+>>
+>> *** RPMSG MUTEX UNLOCK ***
+>>
+>>
+>> Pardon me for keeping some things in this flow implicit, but that was done to
+>> simplify it as much as possible as to try to make you understand the situation.
+> 
+> I certainly appreciate the effort but the above does not provide me with a clear
+> path that causes the lock to happen.  As I said in my last reply I don't doubt
+> there is a lock contention but the provided information doesn't allow to
+> understand how it happens.
+> 
+> All I am looking for is one scenario with all mutexes and functions calls
+> involved.
+> 
 
-I see. I should remove "snps,dw-pcie" from the existing devicetree, so
-I'll fix it as a devicetree patch.
+Hello Mathieu,
+I'm sorry for leaving this unresolved for a long time, had to work on other
+things in the meanwhile.
 
-Thank you,
+I'm not sure what you need, can you please help me to give you the
+issue background that you require?
 
----
-Best Regards
-Kunihiko Hayashi
+In the meanwhile, here's full debugging info coming from the kmsg:
+
+https://paste.debian.net/1235967/
+
+Thanks,
+Angelo
+
+> Thanks,
+> Mathieu
+> 
+>>
+>> Cheers,
+>> Angelo
+>>
+>>> Thanks,
+>>> Mathieu
+>>>
+>>>> [   18.228399]                                lock(&mtk_subdev->channels_lock);
+>>>> [   18.228405]   lock(&scp->ipi_desc[i].lock);
+>>>> [   18.264405]
+>>>>
+>>>> To solve this, simply unlock the channels_lock mutex before calling
+>>>> mtk_rpmsg_register_device() and relock it right after, as safety is
+>>>> still ensured by the locking mechanism that happens right after
+>>>> through SCP.
+>>>> Notably, mtk_rpmsg_register_device() does not even require locking.
+>>>>
+>>>> Fixes: 7017996951fd ("rpmsg: add rpmsg support for mt8183 SCP.")
+>>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>> ---
+>>>>    drivers/rpmsg/mtk_rpmsg.c | 2 ++
+>>>>    1 file changed, 2 insertions(+)
+>>>>
+>>>> diff --git a/drivers/rpmsg/mtk_rpmsg.c b/drivers/rpmsg/mtk_rpmsg.c
+>>>> index 5b4404b8be4c..d1213c33da20 100644
+>>>> --- a/drivers/rpmsg/mtk_rpmsg.c
+>>>> +++ b/drivers/rpmsg/mtk_rpmsg.c
+>>>> @@ -234,7 +234,9 @@ static void mtk_register_device_work_function(struct work_struct *register_work)
+>>>>    		if (info->registered)
+>>>>    			continue;
+>>>> +		mutex_unlock(&subdev->channels_lock);
+>>>>    		ret = mtk_rpmsg_register_device(subdev, &info->info);
+>>>> +		mutex_lock(&subdev->channels_lock);
+>>>>    		if (ret) {
+>>>>    			dev_err(&pdev->dev, "Can't create rpmsg_device\n");
+>>>>    			continue;
+>>>> -- 
+>>>> 2.33.1
+>>>>
+>>
+>>
+>>

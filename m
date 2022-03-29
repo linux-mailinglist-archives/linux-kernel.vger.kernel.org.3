@@ -2,68 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504D44EB2BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 19:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C62D24EB2C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 19:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240234AbiC2Rgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 13:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        id S240246AbiC2Rg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 13:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235834AbiC2Rgo (ORCPT
+        with ESMTP id S240237AbiC2Rg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 13:36:44 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB20A23BE2
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 10:35:00 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id bi12so36652905ejb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 10:35:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sweetwater-ai.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zL8Qb+2gKSP2c6o2DRoz5Oq4k0aSHrt0NlsFQOW67pQ=;
-        b=BOgBq3juIQwFAKc4hAgJLiwRVOGTVSjvDHh2EK3sajCMpKygdODuNG6y0+hFSGcaIa
-         Qd65rAj2ejL1UlKrdXnPIYCSdl5FyHF3g03b+Lwu4dELr+S96YdQFMNjyj35bTCudeEB
-         QIB3gvuBYc+WW9XsLaUUJYFYbAySfwsthCKyjVOxbfpmGSqOuVsUctRimJM/qCWaL8CU
-         lduSPE9cjjqAbeT4cWjwOl4lk3JeOglENj0yWdD352QfnyyZxmUaJa7rbMCD4F/dvB5h
-         Eq7VgIvB0cERyEEMpXzhbtfhQGlrNuTziQvpiNbqJhYt7s5mZWXKiuFu7curSqEWctvM
-         scng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zL8Qb+2gKSP2c6o2DRoz5Oq4k0aSHrt0NlsFQOW67pQ=;
-        b=dYAzShMWkQiKCYIAL658bEn8mU3/zJUTybU2AxAapW5pgT+E1Cuc1ubeI1F5hREbTC
-         R8VLetyMQDMnagD3kyyA+9HcgvCXs3HpAxwaIg4O3308IfxkDMuuBCFmxXAxg3HjHIuj
-         lhiDnYA5MlXWQi44f67SaqeyDUfqHB6069JYXcRZtooLUfBMAlySeizuarqKnL9UyOlT
-         wqe/wOvuwnH9ij3AxtqCc90FY7Ts4/ppJ+jFoUhPEP2+4CfcJol1ndoHKJoQH9CDgBYD
-         9+x24WFoEmfetwBV11E9dYzarsVVNgjc1Gu10bILT7kzFdcwJDM1UlOxJZD2bZ7MDRZi
-         /plQ==
-X-Gm-Message-State: AOAM533o87ibiqZBA5RVdbBi5NuXlZsEak78M0CtfVuBZ2fk5SdvOV9g
-        m9flumPK39WPGthwEeYKuieLuVV6etfLOrhdEehebA==
-X-Google-Smtp-Source: ABdhPJzRQY6KZHmBGeWvlLVF+akUYt2iHYoWgMy/f3hjH6kMin6Jwj0Cd/JjJv1GykQD/uqIwQKGWmhz+xmGyNO2+Mg=
-X-Received: by 2002:a17:907:3e16:b0:6df:b4f0:5cc2 with SMTP id
- hp22-20020a1709073e1600b006dfb4f05cc2mr35937852ejc.285.1648575299439; Tue, 29
- Mar 2022 10:34:59 -0700 (PDT)
+        Tue, 29 Mar 2022 13:36:56 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C377D33E9E;
+        Tue, 29 Mar 2022 10:35:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1648575309; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ydnHfdEEE0cGh6LLp0gLHchr/PKeynmaO3DCRfqS8HA=;
+        b=zT3ds71tygHqEtam0GxwVSYvIN6zC+o3vlPdEROo1KmNjd9Lytb/tuDBWH0+ngULRl6ZOg
+        tR3AOOUrxW6Ix95y5pMyo13nJCcMvQpGhR6U6otajP+TZK2x9dkWwrIhlc6D0alP4pw9gh
+        cHm/9lTvIKvCdZHpN/Xwuy0xbSzswww=
+Date:   Tue, 29 Mar 2022 18:34:58 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 12/12] Documentation: iio: Document high-speed DMABUF
+ based API
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-iio@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        Christian =?iso-8859-1?b?S/ZuaWc=?= <christian.koenig@amd.com>
+Message-Id: <AUOI9R.I8SSZ2CC5S2W2@crapouillou.net>
+In-Reply-To: <YkMSmcQy1sKQJ5rJ@phenom.ffwll.local>
+References: <20220207125933.81634-1-paul@crapouillou.net>
+        <20220207130140.81891-1-paul@crapouillou.net>
+        <20220207130140.81891-2-paul@crapouillou.net>
+        <YkLJU7Pp98CPIHfY@phenom.ffwll.local> <Z63I9R.MKYUKBH4V8L41@crapouillou.net>
+        <YkMSmcQy1sKQJ5rJ@phenom.ffwll.local>
 MIME-Version: 1.0
-References: <20220328111828.1554086-1-sashal@kernel.org> <20220328111828.1554086-16-sashal@kernel.org>
- <YkH5mhYokPB87FtE@google.com> <YkMoCe+uX6UxfaeM@mit.edu>
-In-Reply-To: <YkMoCe+uX6UxfaeM@mit.edu>
-From:   Michael Brooks <m@sweetwater.ai>
-Date:   Tue, 29 Mar 2022 10:34:49 -0700
-Message-ID: <CAOnCY6TNVHLX06mvMZFnNwVx3yE20qnqeGY7fbTx4c2XbyVVEw@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.17 16/43] random: use computational hash for
- entropy extraction
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     Eric Biggers <ebiggers@google.com>,
-        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,38 +57,311 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I agree with Ted,  this patch is just to start the discussion on how
-we can safely remove these locks for the improvement of safety and
-security.  Both boot and interrupt benchmarks stand to benefit from a
-patch like this, so it is worth a deep dive.
 
-Feedback welcome, I am always looking for ways I can be a better
-engineer, and a better hacker and a better person. And we are all here
-to make the very best kernel.
 
-Regards,
-Micahel
+Le mar., mars 29 2022 at 16:07:21 +0200, Daniel Vetter=20
+<daniel@ffwll.ch> a =E9crit :
+> On Tue, Mar 29, 2022 at 10:47:23AM +0100, Paul Cercueil wrote:
+>>  Hi Daniel,
+>>=20
+>>  Le mar., mars 29 2022 at 10:54:43 +0200, Daniel Vetter=20
+>> <daniel@ffwll.ch> a
+>>  =E9crit :
+>>  > On Mon, Feb 07, 2022 at 01:01:40PM +0000, Paul Cercueil wrote:
+>>  > >  Document the new DMABUF based API.
+>>  > >
+>>  > >  v2: - Explicitly state that the new interface is optional and=20
+>> is
+>>  > >        not implemented by all drivers.
+>>  > >      - The IOCTLs can now only be called on the buffer FD=20
+>> returned by
+>>  > >        IIO_BUFFER_GET_FD_IOCTL.
+>>  > >      - Move the page up a bit in the index since it is core=20
+>> stuff
+>>  > > and not
+>>  > >        driver-specific.
+>>  > >
+>>  > >  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  > >  ---
+>>  > >   Documentation/driver-api/dma-buf.rst |  2 +
+>>  > >   Documentation/iio/dmabuf_api.rst     | 94
+>>  > > ++++++++++++++++++++++++++++
+>>  > >   Documentation/iio/index.rst          |  2 +
+>>  > >   3 files changed, 98 insertions(+)
+>>  > >   create mode 100644 Documentation/iio/dmabuf_api.rst
+>>  > >
+>>  > >  diff --git a/Documentation/driver-api/dma-buf.rst
+>>  > > b/Documentation/driver-api/dma-buf.rst
+>>  > >  index 2cd7db82d9fe..d3c9b58d2706 100644
+>>  > >  --- a/Documentation/driver-api/dma-buf.rst
+>>  > >  +++ b/Documentation/driver-api/dma-buf.rst
+>>  > >  @@ -1,3 +1,5 @@
+>>  > >  +.. _dma-buf:
+>>  > >  +
+>>  > >   Buffer Sharing and Synchronization
+>>  > >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>  > >
+>>  > >  diff --git a/Documentation/iio/dmabuf_api.rst
+>>  > > b/Documentation/iio/dmabuf_api.rst
+>>  > >  new file mode 100644
+>>  > >  index 000000000000..43bb2c1b9fdc
+>>  > >  --- /dev/null
+>>  > >  +++ b/Documentation/iio/dmabuf_api.rst
+>>  > >  @@ -0,0 +1,94 @@
+>>  > >  +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>  > >  +High-speed DMABUF interface for IIO
+>>  > >  +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>  > >  +
+>>  > >  +1. Overview
+>>  > >  +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>  > >  +
+>>  > >  +The Industrial I/O subsystem supports access to buffers=20
+>> through a
+>>  > > file-based
+>>  > >  +interface, with read() and write() access calls through the=20
+>> IIO
+>>  > > device's dev
+>>  > >  +node.
+>>  > >  +
+>>  > >  +It additionally supports a DMABUF based interface, where the
+>>  > > userspace
+>>  > >  +application can allocate and append DMABUF objects to the=20
+>> buffer's
+>>  > > queue.
+>>  > >  +This interface is however optional and is not available in all
+>>  > > drivers.
+>>  > >  +
+>>  > >  +The advantage of this DMABUF based interface vs. the read()
+>>  > >  +interface, is that it avoids an extra copy of the data=20
+>> between the
+>>  > >  +kernel and userspace. This is particularly useful for=20
+>> high-speed
+>>  > >  +devices which produce several megabytes or even gigabytes of=20
+>> data
+>>  > > per
+>>  > >  +second.
+>>  > >  +
+>>  > >  +The data in this DMABUF interface is managed at the=20
+>> granularity of
+>>  > >  +DMABUF objects. Reducing the granularity from byte level to=20
+>> block
+>>  > > level
+>>  > >  +is done to reduce the userspace-kernelspace synchronization
+>>  > > overhead
+>>  > >  +since performing syscalls for each byte at a few Mbps is just=20
+>> not
+>>  > >  +feasible.
+>>  > >  +
+>>  > >  +This of course leads to a slightly increased latency. For this
+>>  > > reason an
+>>  > >  +application can choose the size of the DMABUFs as well as how=20
+>> many
+>>  > > it
+>>  > >  +allocates. E.g. two DMABUFs would be a traditional double=20
+>> buffering
+>>  > >  +scheme. But using a higher number might be necessary to avoid
+>>  > >  +underflow/overflow situations in the presence of scheduling
+>>  > > latencies.
+>>  >
+>>  > So this reads a lot like reinventing io-uring with pre-registered
+>>  > O_DIRECT
+>>  > memory ranges. Except it's using dma-buf and hand-rolling a lot of
+>>  > pieces
+>>  > instead of io-uring and O_DIRECT.
+>>=20
+>>  I don't see how io_uring would help us. It's an async I/O=20
+>> framework, does it
+>>  allow us to access a kernel buffer without copying the data? Does=20
+>> it allow
+>>  us to zero-copy the data to a network interface?
+>=20
+> With networking, do you mean rdma, or some other kind of networking?
+> Anything else than rdma doesn't support dma-buf, and I don't think it=20
+> will
+> likely ever do so. Similar it's really tricky to glue dma-buf support=20
+> into
+> the block layer.
 
-On Tue, Mar 29, 2022 at 8:39 AM Theodore Ts'o <tytso@mit.edu> wrote:
->
-> On Mon, Mar 28, 2022 at 06:08:26PM +0000, Eric Biggers wrote:
-> > On Mon, Mar 28, 2022 at 07:18:00AM -0400, Sasha Levin wrote:
-> > > From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-> > >
-> > > [ Upstream commit 6e8ec2552c7d13991148e551e3325a624d73fac6 ]
-> > >
-> >
-> > I don't think it's a good idea to start backporting random commits to random.c
-> > that weren't marked for stable.  There were a lot of changes in v5.18, and
-> > sometimes they relate to each other in subtle ways, so the individual commits
-> > aren't necessarily safe to pick.
-> >
-> > IMO, you shouldn't backport any non-stable-Cc'ed commits to random.c unless
-> > Jason explicitly reviews the exact sequence of commits that you're backporting.
->
-> Especially this commit in general, which is making a fundamental
-> change in how we extract entropy.  We should be very careful about
-> taking such changes into stable; a release or two of additonal "soak"
-> time would be a good idea before these go into the LTS releases in particular.
->
->                                           - Ted
+By networking I mean standard sockets. If I'm not mistaken, Jonathan=20
+Lemon's work on zctap was to add dma-buf import/export support to=20
+standard sockets.
+
+> Wrt io_uring, yes it's async, but that's not the point. The point is=20
+> that
+> with io_uring you pre-register ranges for reads and writes to target,
+> which in combination with O_DIRECT, makes it effectively (and=20
+> efficient!)
+> zero-copy. Plus it has full integration with both networking and=20
+> normal
+> file io, which dma-buf just doesn't have.
+>=20
+> Like you _cannot_ do zero copy from a dma-buf into a normal file. You
+> absolutely can do the same with io_uring.
+
+I believe io_uring does zero-copy the same way as splice(), by=20
+duplicating/moving pages? Because that wouldn't work with DMA coherent=20
+memory, which is contiguous and not backed by pages.
+
+>>  > At least if the entire justification for dma-buf support is=20
+>> zero-copy
+>>  > support between the driver and userspace it's _really_ not the=20
+>> right
+>>  > tool
+>>  > for the job. dma-buf is for zero-copy between devices, with cpu=20
+>> access
+>>  > from userpace (or kernel fwiw) being very much the exception (and=20
+>> often
+>>  > flat-out not supported at all).
+>>=20
+>>  We want both. Using dma-bufs for the driver/userspace interface is a
+>>  convenience as we then have a unique API instead of two distinct=20
+>> ones.
+>>=20
+>>  Why should CPU access from userspace be the exception? It works=20
+>> fine for IIO
+>>  dma-bufs. You keep warning about this being a terrible design, but=20
+>> I simply
+>>  don't see it.
+>=20
+> It depends really on what you're trying to do, and there's extremely=20
+> high
+> chances it will simply not work.
+
+Well it does work though. The userspace interface is stupidly simple=20
+here - one dma-buf, backed by DMA coherent memory, is enqueued for=20
+processing by the DMA. The userspace calling the "sync" ioctl on the=20
+dma-buf will block until the transfer is complete, and then userspace=20
+can access it again.
+
+
+> Unless you want to do zero copy with a gpu, or something which is in=20
+> that
+> ecosystem of accelerators and devices, then dma-buf is probably not=20
+> what
+> you're looking for.
+> -Daniel
+
+I want to do zero-copy between a IIO device and the network/USB, and=20
+right now there is absolutely nothing in place that allows me to do=20
+that. So I have to get creative.
+
+Cheers,
+-Paul
+
+>>=20
+>>  > >  +
+>>  > >  +2. User API
+>>  > >  +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>  > >  +
+>>  > >  +``IIO_BUFFER_DMABUF_ALLOC_IOCTL(struct iio_dmabuf_alloc_req=20
+>> *)``
+>>  > > =20
+>> +----------------------------------------------------------------
+>>  > >  +
+>>  > >  +Each call will allocate a new DMABUF object. The return value=20
+>> (if
+>>  > > not
+>>  > >  +a negative errno value as error) will be the file descriptor=20
+>> of
+>>  > > the new
+>>  > >  +DMABUF.
+>>  > >  +
+>>  > >  +``IIO_BUFFER_DMABUF_ENQUEUE_IOCTL(struct iio_dmabuf *)``
+>>  > >  +--------------------------------------------------------
+>>  > >  +
+>>  > >  +Place the DMABUF object into the queue pending for hardware
+>>  > > process.
+>>  > >  +
+>>  > >  +These two IOCTLs have to be performed on the IIO buffer's file
+>>  > >  +descriptor, obtained using the `IIO_BUFFER_GET_FD_IOCTL`=20
+>> ioctl.
+>>  > >  +
+>>  > >  +3. Usage
+>>  > >  +=3D=3D=3D=3D=3D=3D=3D=3D
+>>  > >  +
+>>  > >  +To access the data stored in a block by userspace the block=20
+>> must be
+>>  > >  +mapped to the process's memory. This is done by calling=20
+>> mmap() on
+>>  > > the
+>>  > >  +DMABUF's file descriptor.
+>>  > >  +
+>>  > >  +Before accessing the data through the map, you must use the
+>>  > >  +DMA_BUF_IOCTL_SYNC(struct dma_buf_sync *) ioctl, with the
+>>  > >  +DMA_BUF_SYNC_START flag, to make sure that the data is=20
+>> available.
+>>  > >  +This call may block until the hardware is done with this=20
+>> block.
+>>  > > Once
+>>  > >  +you are done reading or writing the data, you must use this=20
+>> ioctl
+>>  > > again
+>>  > >  +with the DMA_BUF_SYNC_END flag, before enqueueing the DMABUF=20
+>> to the
+>>  > >  +kernel's queue.
+>>  > >  +
+>>  > >  +If you need to know when the hardware is done with a DMABUF,=20
+>> you
+>>  > > can
+>>  > >  +poll its file descriptor for the EPOLLOUT event.
+>>  > >  +
+>>  > >  +Finally, to destroy a DMABUF object, simply call close() on=20
+>> its
+>>  > > file
+>>  > >  +descriptor.
+>>  > >  +
+>>  > >  +For more information about manipulating DMABUF objects, see:
+>>  > > :ref:`dma-buf`.
+>>  > >  +
+>>  > >  +A typical workflow for the new interface is:
+>>  > >  +
+>>  > >  +    for block in blocks:
+>>  > >  +      DMABUF_ALLOC block
+>>  > >  +      mmap block
+>>  > >  +
+>>  > >  +    enable buffer
+>>  > >  +
+>>  > >  +    while !done
+>>  > >  +      for block in blocks:
+>>  > >  +        DMABUF_ENQUEUE block
+>>  > >  +
+>>  > >  +        DMABUF_SYNC_START block
+>>  > >  +        process data
+>>  > >  +        DMABUF_SYNC_END block
+>>  > >  +
+>>  > >  +    disable buffer
+>>  > >  +
+>>  > >  +    for block in blocks:
+>>  > >  +      close block
+>>  > >  diff --git a/Documentation/iio/index.rst
+>>  > > b/Documentation/iio/index.rst
+>>  > >  index 58b7a4ebac51..669deb67ddee 100644
+>>  > >  --- a/Documentation/iio/index.rst
+>>  > >  +++ b/Documentation/iio/index.rst
+>>  > >  @@ -9,4 +9,6 @@ Industrial I/O
+>>  > >
+>>  > >      iio_configfs
+>>  > >
+>>  > >  +   dmabuf_api
+>>  > >  +
+>>  > >      ep93xx_adc
+>>  > >  --
+>>  > >  2.34.1
+>>  > >
+>>  >
+>>  > --
+>>  > Daniel Vetter
+>>  > Software Engineer, Intel Corporation
+>>  > http://blog.ffwll.ch
+>>=20
+>>=20
+>=20
+> --
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
+
+

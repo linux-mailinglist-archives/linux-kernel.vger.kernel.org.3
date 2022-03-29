@@ -2,110 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1EBC4EB1E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149FE4EB1E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239681AbiC2Qi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 12:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
+        id S239715AbiC2Qlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 12:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234114AbiC2Qiz (ORCPT
+        with ESMTP id S239693AbiC2Qld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 12:38:55 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA3973058
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:37:12 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id bq8so22325618ejb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:37:12 -0700 (PDT)
+        Tue, 29 Mar 2022 12:41:33 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718F0D0A93
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:39:50 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id l129so6788385pga.3
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:39:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fbJk0tnKIVIGfOYC3TDZlX4uGjeQKwVPpyRczD7tbFk=;
-        b=K22KiM1d/xsIZkexASjSgNs8svDl3aD0kPeEa1JQfSfINsXxJ7HcVaM8mccdfRxXBj
-         1JlsSV3RtwXllgCf6PYJH+ZAN1lYhTedkQhP8XJ7qkfnEyldYxkMp3FlnFHkXjUntFXL
-         7cat0tJr/MYu4d+EWFFGx9P44wtA1tUDrjH54=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B7X/SW5dIcuJorsyWOPkH3Xc7Hk0RJcObO8ZrXId3WA=;
+        b=NH1roOSch+YoOEXaWKIzmOxBveJHFdm8/dml59eyNfbL9DmO41sZnWUHuxHOgdx1RA
+         u0lG04RD6VNEBhhdLiXas/UJeZUiOkWXVGysAzNhgarG+UvvHKo+wON6vz9m51NEbVqo
+         FdZTPuTeyi3GesCkEV83IM5GKgRl6Q5gh4z6o6GaJYzS4EvljEO6B7Wb7QKR0xD50xnm
+         L2sF2cyyC3gd3klBTzq657dbwAILZuf7IeeMmqzGYYgwWEdNDbIU8JMOhymR0AKX/Aqj
+         CdWiL/tkZzoynmszcdTdG0A8TTh/wUVYyI2mNuX8vlP4wTRW8e8bpNYEUD3yFbeAdJMC
+         rubg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fbJk0tnKIVIGfOYC3TDZlX4uGjeQKwVPpyRczD7tbFk=;
-        b=vAt/Ev6hFyDw9DX4EL4I2lZtMo/6ES9mwU+2nUCe7Wso8XGOJ/KrhGxvx4eQNV25pA
-         znklYgDi5hUqeekCOlvFcMOXMuSdwsUpYOEJsELGUHI3dq1slTd2lVj7xEb+bCr3RpfG
-         GkUoLYp9G3KKUZCpxfwfoGUYtVbqsoNFFWWgxa5jVB7xi0eWbH6PYw73+mTYlnUbqJjp
-         rn3TWeEj6RI22nQ36I/4KoBuC84wY37X/+TFyiw9zg5XMtzG2Js4KjAIwhFmQ+5mR0ZH
-         LR7E9Pb4p2McdFEHiTnl3CifFL41W3HUD6bhzu1ij0nbKiFAWC77ythPhIAZhaUlkQN/
-         kJ9Q==
-X-Gm-Message-State: AOAM530zaHtVcZQ6J063NCd+PI5X8HsH3pJzygf/CKnhbVHR2Tr5ypLh
-        rrEZFgOtY9iimHKsg5ESGsDS3/HpK0BeUyDN
-X-Google-Smtp-Source: ABdhPJw1kjX7GRfdwqVfhgiUzOsumnpeaLoThqFGgHcsimMy0r3RLGZxTJoVaAKxco7t+Ql2G14G0g==
-X-Received: by 2002:a17:906:c148:b0:6e0:2196:9251 with SMTP id dp8-20020a170906c14800b006e021969251mr35190887ejc.180.1648571830513;
-        Tue, 29 Mar 2022 09:37:10 -0700 (PDT)
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
-        by smtp.gmail.com with ESMTPSA id hg11-20020a1709072ccb00b006cee4fb36c7sm7188298ejc.64.2022.03.29.09.37.08
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 09:37:08 -0700 (PDT)
-Received: by mail-wm1-f45.google.com with SMTP id n35so10668198wms.5
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:37:08 -0700 (PDT)
-X-Received: by 2002:a1c:7518:0:b0:37c:7eb:f255 with SMTP id
- o24-20020a1c7518000000b0037c07ebf255mr677656wmc.29.1648571827704; Tue, 29 Mar
- 2022 09:37:07 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B7X/SW5dIcuJorsyWOPkH3Xc7Hk0RJcObO8ZrXId3WA=;
+        b=LrLZvlvP8d4qA+mUzL2kLLgx1Sa+KjEmwV/2mSc4t8qc1GOAQviBOTEhc/VdddMFHj
+         cUsjqLRhyCOQr7fR4/sb3ti3GZTY7rkvQXPQBDUDqH2LwQpiEpdOlXaNwxsDju1FZMGM
+         zIQGJZpZXOXeHog4W8lIxY7S3Phi/aT8T5CUwBtwYpZGREDZLU8diMursOyfdesCCXqQ
+         5CVOFFSSMPCTqig5lGso+h28HGeDeRdd+7utPsZ2C159V+qHesXRPqXEgLExRzfMGwGG
+         GDXtPKBZY++qycZXUEznjGseWvBIXQshcaYNQbFdQafiWnPMx8PFgS+/DXbuhSSyzlkH
+         LHOg==
+X-Gm-Message-State: AOAM530HZV+RfpvF0yOOHOTjLBZjsL7FdHb+LMorg9Ourx00rThbiwHf
+        C/CqEGgF39ZbtmzDCznQtII=
+X-Google-Smtp-Source: ABdhPJzMGlZcJFn1ySAiNV9AlQxwM0Xt0xfmAn2dGlv33qUTU+6q7vCn6/uO48y1A2pLgypzpr8IMw==
+X-Received: by 2002:a62:e213:0:b0:4fa:6b13:3a9a with SMTP id a19-20020a62e213000000b004fa6b133a9amr29012514pfi.18.1648571990008;
+        Tue, 29 Mar 2022 09:39:50 -0700 (PDT)
+Received: from localhost.localdomain (li567-56.members.linode.com. [192.155.81.56])
+        by smtp.gmail.com with ESMTPSA id q7-20020a17090a178700b001c97d3614e5sm3382093pja.33.2022.03.29.09.39.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 09:39:48 -0700 (PDT)
+From:   Jeff Xie <xiehuan09@gmail.com>
+To:     rostedt@goodmis.org
+Cc:     mingo@redhat.com, mhiramat@kernel.org, zanussi@kernel.org,
+        linux-kernel@vger.kernel.org, Jeff Xie <xiehuan09@gmail.com>
+Subject: [PATCH 0/3] tracing: make tp_printk work on syscall tracepoints
+Date:   Wed, 30 Mar 2022 00:39:28 +0800
+Message-Id: <20220329163931.710555-1-xiehuan09@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220324134819.v2.1.I816014b6c62da5a33af5021f3cc35cea66552c00@changeid>
- <CAD=FV=UdRzeHio5Vo+zmXDt9a8oUwXiZyHvxkqjx4HVcrx7W-g@mail.gmail.com>
-In-Reply-To: <CAD=FV=UdRzeHio5Vo+zmXDt9a8oUwXiZyHvxkqjx4HVcrx7W-g@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 29 Mar 2022 09:36:54 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WqO1E_pvChX-mBy3T+bOuWt+SoJD2MgW2Njzxosohxhw@mail.gmail.com>
-Message-ID: <CAD=FV=WqO1E_pvChX-mBy3T+bOuWt+SoJD2MgW2Njzxosohxhw@mail.gmail.com>
-Subject: Re: [PATCH v2] panel-edp: drm/panel-edp: Add AUO B133UAN01
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Currently the tp_printk option has no effect on syscall tracepoint.
+When adding the kernel option parameter tp_printk, then:
 
-On Thu, Mar 24, 2022 at 1:51 PM Doug Anderson <dianders@chromium.org> wrote:
->
-> Hi,
->
-> On Thu, Mar 24, 2022 at 1:48 PM Matthias Kaehlcke <mka@chromium.org> wrote:
-> >
-> > Add support for the AUO B133UAN01 13.3" WUXGA panel.
-> >
-> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> > ---
-> >
-> > Changes in v2:
-> > - autodetect and configure the panel based on the EDID data instead of
-> >   relying on a compatible string and hardcoded mode settings.
-> >
-> >  drivers/gpu/drm/panel/panel-edp.c | 1 +
-> >  1 file changed, 1 insertion(+)
->
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
->
-> Given the trivial nature of this change, I'll plan to land it in a few
-> days barring someone else yelling about it.
+echo 1 > /sys/kernel/debug/tracing/events/syscalls/enable
 
-I modified the patch subject slightly since the extra "panel-edp:"
-prefix was redundant, then pushed to drm-misc-next:
+When running any application, no trace information is printed on the
+terminal.
 
-ec57376fba5a drm/panel-edp: Add AUO B133UAN01
+Now added printk for syscall tracepoints.
 
--Doug
+Jeff Xie (3):
+  tracing: make tracepoint_iter_lock public
+  tracing: make tracepoint_printk_key public
+  tracing: make tp_printk work on syscall tracepoints
+
+ kernel/trace/trace.c          |  4 ++--
+ kernel/trace/trace.h          |  2 ++
+ kernel/trace/trace_syscalls.c | 25 +++++++++++++++++++++++++
+ 3 files changed, 29 insertions(+), 2 deletions(-)
+
+-- 
+2.25.1
+

@@ -2,102 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B38D4EB51C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 23:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 199784EB526
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 23:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233329AbiC2VSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 17:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
+        id S233537AbiC2VY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 17:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231886AbiC2VSs (ORCPT
+        with ESMTP id S231886AbiC2VY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 17:18:48 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F4B1D41BE
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 14:17:04 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id f38so33778324ybi.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 14:17:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1NmdHbhnl/vRItSEWqZfS578eYz0Ln76M7w3+17SBng=;
-        b=nnNp2K9C0PhtBCZ9DlF+5HkNtJtSFxGCTe+rj/yzMLI7t8hiUYwTIqIX7DjUb2Ej+l
-         YZJn4iEApNAcehGis3mzjUOYIlnzVRouSbGMm6iXFNxUZ+KoTMHAVElD+A4wwZmCd/B0
-         eEEbLLsLZFZEcsXXT0Lo5ktPGfgsMiW2ylL9g+GOabkqDWyMZ1h1SM1Pf4lmXgs/D+7I
-         gXS3N7nI5IDy0LRBZ4AehTCJ1hAF298ax1wzj0Ii9zBxM8U3GjQ0lFRhOsj8guh34ZnJ
-         wCCDM9vUrfgM5TSoshOYj3qBD4m2Ny8MZNGXo+h+RQmlgcxRSkD4XP6KR3exbwSYnVXH
-         m04Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1NmdHbhnl/vRItSEWqZfS578eYz0Ln76M7w3+17SBng=;
-        b=X6XQV7oD4gK06gN8j2Gb9kZ56WeeFVfTrCxIWCkB2GJEz9NWXh5GK8PLbGC8G46DD3
-         NjOKqfIDBHa7o1+0FS6kQc6p+zmxhLoe3jJNU5SHbQE5d+htIXEd1KmQgki/W0iWJwoe
-         Y3qFUD+NsY5fAKTxOnwm8ZLmoZ8+7n+4+r38U6EY/zts8N5y5kYw5GyhmptZxMFHt1kz
-         jxWi2Xt9/fLYEJrAu95qyU/FtKfN8b6q1iXeP/t3QYbZhzIgmT0zYAt6QE/cixTjyd7i
-         L1g+JrOntj6TSPxMB8aZ21prhmRESEH3BbVXtcS556ix/nj72NefDzegJlftryC9vL+4
-         LNtA==
-X-Gm-Message-State: AOAM532sy4GfsTT6iP5abbw2TTYaSPbK73d73dt/5vW81yDMw55VgBlZ
-        TWj7qMSYNNkk6xYQXBgylV95M7259yQOILVQUHqd1A==
-X-Google-Smtp-Source: ABdhPJykJ5Ut7PIceBwZraoLzJOYrOlgWf2VUP56VuJtpRcHz881r39za7FgGIqkZzFEF9YvREaj+sXPJsynCiusvbw=
-X-Received: by 2002:a25:2497:0:b0:633:c1d0:e7bb with SMTP id
- k145-20020a252497000000b00633c1d0e7bbmr30780376ybk.291.1648588623439; Tue, 29
- Mar 2022 14:17:03 -0700 (PDT)
+        Tue, 29 Mar 2022 17:24:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2249022030B
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 14:22:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 712EBB81A2C
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 21:22:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B5AC34100;
+        Tue, 29 Mar 2022 21:22:38 +0000 (UTC)
+Date:   Tue, 29 Mar 2022 17:22:36 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        joel@joelfernandes.org
+Subject: Re: sched_core_balance() releasing interrupts with pi_lock held
+Message-ID: <20220329172236.48683eb5@gandalf.local.home>
+In-Reply-To: <20220321133037.7d0d0c7f@gandalf.local.home>
+References: <20220308161455.036e9933@gandalf.local.home>
+        <20220315174606.02959816@gandalf.local.home>
+        <20220316202734.GJ8939@worktop.programming.kicks-ass.net>
+        <20220316210341.GD14330@worktop.programming.kicks-ass.net>
+        <20220321133037.7d0d0c7f@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220304135134.47827-1-yann.gautier@foss.st.com>
- <20220304135134.47827-2-yann.gautier@foss.st.com> <CACRpkdYQz+-im3n-r0_8RKL7so2bHS=aZobty4BbzixmPzms-Q@mail.gmail.com>
- <0bc53018-fce4-4104-fa47-6e60d2367d69@foss.st.com> <20220329153114.GA58120@thinkpad>
- <71b10ce2-7b87-14d5-c8e4-3a4598c889e0@foss.st.com> <20220329173322.GC58120@thinkpad>
-In-Reply-To: <20220329173322.GC58120@thinkpad>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 29 Mar 2022 23:16:51 +0200
-Message-ID: <CACRpkdaiOhMGzuWPwoRLZ05HyM8BO_-cZt4TiAqAYQvDaJA-mA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: mmc: mmci: add a property to disable DMA LLI
-To:     Manivannan Sadhasivam <mani@kernel.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Yann Gautier <yann.gautier@foss.st.com>, ulf.hansson@linaro.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Marek Vasut <marex@denx.de>, kernel@dh-electronics.com,
-        Grzegorz Szymaszek <gszymaszek@short.pl>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 7:33 PM Manivannan Sadhasivam <mani@kernel.org> wrote:
-> [Yann]
-> > As for Prabhakar's answer, the IDMA here is inside our IP, and not used in
-> > any other IP. So I'm not sure it is really relevant to move that to another
-> > dmaengine driver.
+On Mon, 21 Mar 2022 13:30:37 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> On Wed, 16 Mar 2022 22:03:41 +0100
+> Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> > Does something like the below (untested in the extreme) help?  
+> 
+> Hi Peter,
+> 
+> This has been tested extensively by the ChromeOS team and said that it does
+> appear to fix the problem.
+> 
+> Could you get this into mainline, and tag it for stable so that it can be
+> backported to the appropriate stable releases?
+> 
+> Thanks for the fix!
 >
-> Okay, I think this justification makes sense. I was worried of DMA IPs that get
-> sandwiched into many peripherals like the one on Renesas platforms. It turned
-> out that each subsystem has to add internal DMA support for it :/
 
-That is a justified worry.
+Hi Peter,
 
-Qualcomm has "BAM DMA" (I think it is called?) which is added to each IP
-that needs DMA. drivers/mmc/host/mmci_qcom_dml.c
-It's for older Qualcomm platforms but I *think* it is actually not just used
-for the MMCI, just noone ever got around to adding it to any other
-peripheral? Srini do you know?
+I just don't want you to forget about this :-)
 
-Yours,
-Linus Walleij
+-- Steve

@@ -2,61 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D544D4EAA37
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 557964EAA43
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234530AbiC2JN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 05:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
+        id S234533AbiC2JQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 05:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234531AbiC2JNz (ORCPT
+        with ESMTP id S232677AbiC2JQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 05:13:55 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB519A9AB;
-        Tue, 29 Mar 2022 02:12:12 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KSP1519TXzfZFW;
-        Tue, 29 Mar 2022 17:10:33 +0800 (CST)
-Received: from kwepemi500013.china.huawei.com (7.221.188.120) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 29 Mar 2022 17:12:10 +0800
-Received: from kwepemi500013.china.huawei.com ([7.221.188.120]) by
- kwepemi500013.china.huawei.com ([7.221.188.120]) with mapi id 15.01.2308.021;
- Tue, 29 Mar 2022 17:12:10 +0800
-From:   zhengyongjun <zhengyongjun3@huawei.com>
-To:     Paolo Abeni <pabeni@redhat.com>, "andrew@lunn.ch" <andrew@lunn.ch>,
-        "vivien.didelot@gmail.com" <vivien.didelot@gmail.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "vladimir.oltean@nxp.com" <vladimir.oltean@nxp.com>,
-        "claudiu.manoil@nxp.com" <claudiu.manoil@nxp.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>
-Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0hdIG5ldDogZHNhOiBmZWxpeDogZml4IHBvc3NpYmxl?=
- =?utf-8?Q?_NULL_pointer_dereference?=
-Thread-Topic: [PATCH] net: dsa: felix: fix possible NULL pointer dereference
-Thread-Index: AQHYQ0VCxcMD8urjZU2VYgBSBGj7r6zVifmAgACJZUA=
-Date:   Tue, 29 Mar 2022 09:12:10 +0000
-Message-ID: <42986bf785de4d1aac454a9463f46915@huawei.com>
-References: <20220329081214.124061-1-zhengyongjun3@huawei.com>
- <b4d4ee6c553f9cd983d12f88eb6a12ca3cb39962.camel@redhat.com>
-In-Reply-To: <b4d4ee6c553f9cd983d12f88eb6a12ca3cb39962.camel@redhat.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.176.64]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 29 Mar 2022 05:16:36 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2133.outbound.protection.outlook.com [40.107.117.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDF42CE3D;
+        Tue, 29 Mar 2022 02:14:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KMt7LhBbsuvTUFj6rhv6/OH/aTvMUaMFKNS/Et9VpNla7Ogt182iK3wPkX/K69IWiFPdlVp404IcQAG57eNUjWf6FXMoTQJWbUrVHtecYa/TFHIrnBqUzMmGWv1fbNHFVxVtDeUvHu/7sYJFVNWr7bzKpEJTlh14U3+xHAops3r+Tko6Hm8QJGOEHdbo29LGRnyaFXWpHXgFJrpB9uOOl4YRJggthp1oqAagFxUkxSg41PTgEB0u2DQ9Dal82QFlvCp8SBiLEevF0w165t54NHPUCPx86n18FPFwL0Wv0ag8n+/XtozhpS5kE7kjmBzVNk25k3v6O1z+Ilr6x+cTvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k9qJr6LBAYeL9XxDnwMviKxgPa80VYlDabQ3MTbAi/w=;
+ b=R5bfJlSkaHS3bALlDljtyKeJQB5lsf33W6vjM29sRrg35p2rhxSqBBJ9EdvNXGnrfTH2h3JcK1eLDRjJkusMhVRJd7rUFFS/Pc1YAHHui9GukCq8Pp6SooAt6ahW0nf31VSS16W6a05chYZM3EKEJSKBTgyU0cqZOUhKli6WtpSnbEAsc2wdid0CCHcy4EDfC4WRVPL8GVgwCXjvdhrUTYZu+hniUFErprzahCwA4Vh4iLcjhRHAKWQC0iY523nmSleeNcQnizETbxnrhEQVaFY4XS7dFZx0ullnCcdTVF5K4XAvGFAkii9Gr89ilD6fZQ84JWXePSpm0q2xe/egSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k9qJr6LBAYeL9XxDnwMviKxgPa80VYlDabQ3MTbAi/w=;
+ b=nhjGeExpTwcwvyEEwv2PD248/c9vNchHATeL36VFHqKFR4wtLkbjAr7tb9Ix9xaBKQhMNaXAfayeIu903WTp3BdO0Nn2FDwK7VK9915iaxPA82DDq6en68e83kst4hEqBsGUGRhrrhovRjI+REO2LbO0g7x0yfuLt5IDmr5+oVE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
+ by KL1PR0601MB3875.apcprd06.prod.outlook.com (2603:1096:820:21::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Tue, 29 Mar
+ 2022 09:14:50 +0000
+Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
+ ([fe80::49ef:baa:8c3b:cb3d]) by SL2PR06MB3082.apcprd06.prod.outlook.com
+ ([fe80::49ef:baa:8c3b:cb3d%5]) with mapi id 15.20.5102.023; Tue, 29 Mar 2022
+ 09:14:50 +0000
+From:   Qing Wang <wangqing@vivo.com>
+To:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wang Qing <wangqing@vivo.com>
+Subject: [PATCH] video: fbdev: use if else instead
+Date:   Tue, 29 Mar 2022 02:14:32 -0700
+Message-Id: <1648545274-14481-1-git-send-email-wangqing@vivo.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: HK0PR01CA0066.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:a6::30) To SL2PR06MB3082.apcprd06.prod.outlook.com
+ (2603:1096:100:37::17)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8d7a2ed9-91a8-44fd-b7f9-08da116493d8
+X-MS-TrafficTypeDiagnostic: KL1PR0601MB3875:EE_
+X-Microsoft-Antispam-PRVS: <KL1PR0601MB3875ABF0F6BA626A1903B631BD1E9@KL1PR0601MB3875.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OR2CNc4ZO5NYKRFxzaqU2djaXjKKCjtbuC3RD7uMBepG0EnHbu2VXUMKMD+Y/f2F+frCOlmOC8KcFol59jcoUr7JuEYQulJLzNpDL+/qU+fhRO7pbeWEANPdgh7GH5vqTXnIyOev1U8EMpwtjwdiJ1wSn/d5eDNuBkeFInAdMmFH2U+lWuJFaM71/gCma6GzslSqhaboiZ/Hg0nnjs4skpM1C11vra7q+qjweclvcgcC5Dvg0mQmRYCNRWJfYyN6LA36dxsvg1teoBfgXS0UGd08Ic6CplpBwvuXsbLF055UyRiFhyKe46l3j0N8qbyo+ZCLy0Q72dPUFPQ5IWi6tCxXJSvUNY1PJrXZBU4aULw1oHRgENGQZfKjzjb9ySBrmOkMWlnND25YmGsyzF6qZTXjNA3IHMUKYAOqZMqbHNBRmZc6wIeoQKaulrMmPZgpyDfFE+vPzcEeT4CWcRFVcYvoaquCr0u9W7FzdCNHmQHC7wy//WcDidIm+pCg5lR75xoPYVU8kHarY3+Kq5Z4UXenAs5wTbCVrAND2zjYH/Qu/kIFyipHwWaN7hJprNg42kFIO5X6VCmyWGnct6xfcEWPkjD6O/70vFs3ljh4BBua/EDB8k5V6ivY4YrEBE0WxB4lfLFqK9I9Y9wiYQIBRR9KksYsKjVCz8LHAB0OZdjjNmSA0pZG6r3wgFbw2Sy9p/CiufFZPFiMOoWb6tP7zA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(5660300002)(66946007)(6666004)(6486002)(83380400001)(508600001)(38350700002)(38100700002)(8676002)(66556008)(66476007)(4326008)(86362001)(6512007)(36756003)(2616005)(52116002)(107886003)(2906002)(6506007)(316002)(4744005)(186003)(26005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Txi3YtUjb0AdXfUiZvzBA0LtjhWPyBzW0LXrxPbvlacpgl7Rz7WrfkUQffWj?=
+ =?us-ascii?Q?CaRZ3SQ0Gj44oHDkqzfAlarIDKtFVfiJ3og/ysHlJjjR/L2xpoFdv/Dnt1g1?=
+ =?us-ascii?Q?KlhQ/yhthyVX/5HGwliBYeY+EbBEqZL8cMKZC4LUlbBtnaPJG8bvDfO+fKPQ?=
+ =?us-ascii?Q?4Iv+FGsBAobd6oM9JxmSNY9sPKaDudn+DHjhd7vo+dpM14WPocrbQ7hYBIET?=
+ =?us-ascii?Q?ykqJmcp5Cei5O0/0dPjinoOQIIce526MNWkQTPurfnQx6EDaE5425g2XxmqS?=
+ =?us-ascii?Q?zmVxmq2GJ3mKqyYSbCXxRzElIUkPE/5CsZq+VOjafvEM/Yypx1R/61pdsy8r?=
+ =?us-ascii?Q?d3rH1F0q7/qmIeMSoJyD/m1+5sni7tivznh3bSlBGArRp32WR5WSgmKvJeb9?=
+ =?us-ascii?Q?7tmL5nt+lEnL5E3FZqVQsSBrC0h9HRgyAtr53GzTP4Byr3eipQW/myql50Fj?=
+ =?us-ascii?Q?6Kg4Rfx9wzy7kyGOCtVFpWFcsRRD4bU9GAM+SdC+zs83/wHvmN+3Gp2+oi4m?=
+ =?us-ascii?Q?s+SQYtBfazlIp/t0SRiaTEy5m0gXFzGRhD7YOQcetN5DdqVeqv1EhrGDbPvq?=
+ =?us-ascii?Q?MsuCWrURdTLuBBUk72AZhNpRm/NL3ZHsdjrvdMkXRpBr9D71Seq+pcW6pgGD?=
+ =?us-ascii?Q?jj/KfHYrvuG/eRwmNTGIO4OK5kznZOPOc625cniw1e8irFmAER/k9m4krXud?=
+ =?us-ascii?Q?6llon1EA1QY0BWpk9r132/fYKzwtXS0TZXYS5WI/cUpbabZ71BCUjW5uvxXs?=
+ =?us-ascii?Q?pW+58Wd1bIgJ0mnf9FXtrZ0UTKtb0NIKFeKYbqv06jzIbGgH+2MCYsS4mSJm?=
+ =?us-ascii?Q?dLodR9nwm0nh/fS9Y07pQDVLvz3uC84iF+SyI1DowJO2USo1wfg6aMCYMuJE?=
+ =?us-ascii?Q?B2hSxLY/kvSep/fua+WZqGUP9U+puBt1wbMTGC9lSoXQgDrWZYSLHd249YNP?=
+ =?us-ascii?Q?TIwN4URuvl3w2L32HilHcoLBhiJEN1Sew9pC2qUd441ZC51OaFPSnL6ooFqx?=
+ =?us-ascii?Q?QReOFRDSzBM9IBxBPHpzf/EKcDFcU1WW7LBFK2tY9itPQgrCejAJJsn7JwQk?=
+ =?us-ascii?Q?d1XUzQhruU3rAy4rMv5fq5DJ0Kk+j42C3XqQeETUKyl+TcHHsGdCF+crTlzK?=
+ =?us-ascii?Q?jTwp0ETteFwNSMLUSR558FpEpFgg3ixOBx5WNFE444PJ5uJNqVN395FLvYkh?=
+ =?us-ascii?Q?zdzM0C3MpeWNsc268j094wHRYJUJevkKViMkyOkY4pusAhFJ6xIxGdyYQgrQ?=
+ =?us-ascii?Q?e7kDdJ5u80ilWIYzy0O8r23fttEePLAtMSjsS5jwTBb4XpUuxvuZzdNoGRU3?=
+ =?us-ascii?Q?4lGj0Qu0LkPQfD6leNe000tx2abQ2LpbasN8OZcfoFycOI4AHyCPdAb9CyZX?=
+ =?us-ascii?Q?MDb/fbJYYG2FIB3fghA3Faw+OEaM1nSr/KghR4QMPP1VXHxaWjy6ufRXuyGF?=
+ =?us-ascii?Q?CS8o1tEwnd535C4rlZ3Sz9BoTc7WbE57auCSBe5uKsklTV4Xpb0cXZ8IQ0wJ?=
+ =?us-ascii?Q?GLkOflW6TYJUk5330maIFYTXnyF3d4XbaILSUmBloksFvI7n6BYDwUn8Nv3S?=
+ =?us-ascii?Q?DXe7Un+ZRJs3EWPA+7yV5HlawTzXomTguZqW5jZVbjop9hvW5j/EZuHNfdUe?=
+ =?us-ascii?Q?QEeRo0Z8SEZ9iDSozGypL/dMUZMiUHM/TEx7ZEiP1m8UwzAikME56SCB9/GN?=
+ =?us-ascii?Q?omb12yEcpwSlrdpuQjkpb3Q3vPXrjCupjnPabVRPJ4Faaovp/casL7R9l3XI?=
+ =?us-ascii?Q?5CpCdjw0pQ=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d7a2ed9-91a8-44fd-b7f9-08da116493d8
+X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2022 09:14:50.3545
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: l5dQByppMut8i/M2N+ZxeVpluNNWPEtmi1R1usSAfqqS/c+bLmOr930Pe6jde5JW0SfeDGrL/gKJHFgZ4RAGQg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB3875
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,22 +114,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhhbmtzIGZvciBwb2ludCBvdXQgbXkgbWlzdGFrZSA6KQ0KLS0tLS3pgq7ku7bljp/ku7YtLS0t
-LQ0K5Y+R5Lu25Lq6OiBQYW9sbyBBYmVuaSBbbWFpbHRvOnBhYmVuaUByZWRoYXQuY29tXSANCuWP
-kemAgeaXtumXtDogMjAyMuW5tDPmnIgyOeaXpSAxNzowMA0K5pS25Lu25Lq6OiB6aGVuZ3lvbmdq
-dW4gPHpoZW5neW9uZ2p1bjNAaHVhd2VpLmNvbT47IGFuZHJld0BsdW5uLmNoOyB2aXZpZW4uZGlk
-ZWxvdEBnbWFpbC5jb207IGYuZmFpbmVsbGlAZ21haWwuY29tOyBkYXZlbUBkYXZlbWxvZnQubmV0
-OyBrdWJhQGtlcm5lbC5vcmc7IG5ldGRldkB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2
-Z2VyLmtlcm5lbC5vcmcNCuaKhOmAgTogdmxhZGltaXIub2x0ZWFuQG54cC5jb207IGNsYXVkaXUu
-bWFub2lsQG54cC5jb207IGFsZXhhbmRyZS5iZWxsb25pQGJvb3RsaW4uY29tOyBVTkdMaW51eERy
-aXZlckBtaWNyb2NoaXAuY29tDQrkuLvpopg6IFJlOiBbUEFUQ0hdIG5ldDogZHNhOiBmZWxpeDog
-Zml4IHBvc3NpYmxlIE5VTEwgcG9pbnRlciBkZXJlZmVyZW5jZQ0KDQpIZWxsbywNCg0KT24gVHVl
-LCAyMDIyLTAzLTI5IGF0IDA4OjEyICswMDAwLCBaaGVuZyBZb25nanVuIHdyb3RlOg0KPiBBcyB0
-aGUgcG9zc2libGUgZmFpbHVyZSBvZiB0aGUgYWxsb2NhdGlvbiwga3phbGxvYygpIG1heSByZXR1
-cm4gTlVMTCANCj4gcG9pbnRlci4NCj4gVGhlcmVmb3JlLCBpdCBzaG91bGQgYmUgYmV0dGVyIHRv
-IGNoZWNrIHRoZSAnc2dpJyBpbiBvcmRlciB0byBwcmV2ZW50IA0KPiB0aGUgZGVyZWZlcmVuY2Ug
-b2YgTlVMTCBwb2ludGVyLg0KPiANCj4gRml4ZXM6IDIzYWUzYTc4Nzc3MTggKCJuZXQ6IGRzYTog
-ZmVsaXg6IGFkZCBzdHJlYW0gZ2F0ZSBzZXR0aW5ncyBmb3IgcHNmcHEiKS4NCg0KSXQgbG9va3Mg
-bGlrZSB0aGUgZml4ZXMgdGFnIGhhcyBiZWVuIGNvcnJ1cHRlZCAodHJhaWxpbmcgJ3EnKS4gV291
-bGQgeW91IG1pbmQgcG9zdGluZyBhIHYyIHdpdGggdGhhdCBmaXhlZCA/DQoNClRoYW5rcywNCg0K
-UGFvbG8NCg0K
+From: Wang Qing <wangqing@vivo.com>
+
+use if and else instead of consequent if(A) and if (!A)
+
+Signed-off-by: Wang Qing <wangqing@vivo.com>
+---
+ drivers/video/fbdev/pxafb.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+ mode change 100644 => 100755 drivers/video/fbdev/pxafb.c
+
+diff --git a/drivers/video/fbdev/pxafb.c b/drivers/video/fbdev/pxafb.c
+index f1551e0..8ad91c2
+--- a/drivers/video/fbdev/pxafb.c
++++ b/drivers/video/fbdev/pxafb.c
+@@ -2256,10 +2256,10 @@ static int pxafb_probe(struct platform_device *dev)
+ 			goto failed;
+ 		for (i = 0; i < inf->num_modes; i++)
+ 			inf->modes[i] = pdata->modes[i];
++	} else {
++		inf = of_pxafb_of_mach_info(&dev->dev);
+ 	}
+ 
+-	if (!pdata)
+-		inf = of_pxafb_of_mach_info(&dev->dev);
+ 	if (IS_ERR_OR_NULL(inf))
+ 		goto failed;
+ 
+-- 
+2.7.4
+

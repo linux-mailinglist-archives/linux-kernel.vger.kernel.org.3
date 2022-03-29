@@ -2,183 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 442694EA70C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 07:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFCF4EA70B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 07:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232374AbiC2FWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 01:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
+        id S232402AbiC2FWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 01:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231225AbiC2FWW (ORCPT
+        with ESMTP id S232377AbiC2FWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 01:22:22 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2B9199E2D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 22:20:39 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id bq24so12363926lfb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 22:20:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YXrL0xLSyQXecvNQfhvGNckTeDRtmwC5AuLnoj6aIyk=;
-        b=UZIGwhAS05pYmB+VYJpx3L7dlB7t/wp3TC5bIMTmHyCYUxjQ9l3nOazmIDqY72DfsX
-         gkX9RTs/KCYKqdAlqm4qERduIWGo/bAtRFjI7/WakEg1Mqid1d9/KOdvMFcSMH01EiLq
-         kbGh0iaRKP1JU13btIy6UF3lt/af3yr6y70AE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YXrL0xLSyQXecvNQfhvGNckTeDRtmwC5AuLnoj6aIyk=;
-        b=IcQy01EOASe3WEPwE3Gz/vUwHTZUDnmIr4hHXtjEWQ00Eyb6sXNqj2xEUxtuc4wkpg
-         8ph2BF3Wr3IxAS9piE1h0z69LJlu4s7zoQepaDkDG1bo/Ju9V6Oe7z1/th9dzRiJzGe2
-         WRYiB+Gvgjg0wSYJwZ+9zAP1rBVqrpAB/IZGOON+w2uz0vebGpuoc+x4mUAJvCJSXbJL
-         09aYt3vuCxR2sFzNf6MxU6L4DS55lpE85qQr23GoCbrDqYZkfAHxbHsB1B2gxxSIsclC
-         M9C6SLzBYYNNXdKE8wNuXl33Hk9IZwcQ9/HOsnEGy2Dqa8uR4Nno9JemtwAJGNgTNXRa
-         zpiA==
-X-Gm-Message-State: AOAM532OFyzIFOEK777WiqYPI4pmRnHOPTUX5R34p65ConuQftsxZ1Sa
-        XCPf5/zZwvity/zgV80QieXFKueJSudhPxqC
-X-Google-Smtp-Source: ABdhPJzl6EEwOLE9w9shTsykXuhNGwAqTSOqAdv3Jh+8iAH/9jqexkt1C1IFaKDeDjEuG3T+XVLlWg==
-X-Received: by 2002:a05:6512:2613:b0:448:5164:689d with SMTP id bt19-20020a056512261300b004485164689dmr1012240lfb.526.1648531236860;
-        Mon, 28 Mar 2022 22:20:36 -0700 (PDT)
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
-        by smtp.gmail.com with ESMTPSA id l18-20020a194952000000b00445bf2c3b83sm1857656lfj.58.2022.03.28.22.20.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Mar 2022 22:20:35 -0700 (PDT)
-Received: by mail-lf1-f42.google.com with SMTP id w7so28327125lfd.6
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 22:20:35 -0700 (PDT)
-X-Received: by 2002:a19:e048:0:b0:448:2caa:7ed2 with SMTP id
- g8-20020a19e048000000b004482caa7ed2mr1028168lfj.449.1648531234178; Mon, 28
- Mar 2022 22:20:34 -0700 (PDT)
+        Tue, 29 Mar 2022 01:22:41 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052E9199E3E
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 22:20:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648531259; x=1680067259;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TINLsHuDin6UBvvL9KGMyuxZ8onKVbUsFmaoevT5osY=;
+  b=aTH7vrGdxjm8hYx9AV4Gf3yGKcedFMYSjYqJGkhnnYSRXqEn3YzfV+KM
+   1GaNSzX43wI19GPPVo0+4tlGtqbe+qBUCnFeFi3dN2shEJRezALk/BO+K
+   Bc5zxLCPEBhWIW9945nPOv/ofMBNE+BPA7EwLRMhr2icC4rBkjmsiSUA8
+   KD+h4Qw+b9NGKYRP0ZJA19nrWFg0ldRuqDEI9u3FB+/A8PUk6Oc/ZR1Pk
+   QZIi5a5vnQ5Q72mS7fv55O5gx0cAVUMaHMYd0FXCZzLtD/5rv0ijQzHXo
+   uwrO8ysDgceuHdguQky/LdBYNxJqgPCaoT9zh72D7lSew3fuyAqa4zIMS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="241318114"
+X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
+   d="scan'208";a="241318114"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 22:20:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
+   d="scan'208";a="502764394"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 28 Mar 2022 22:20:56 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nZ4Hn-0002gn-K4; Tue, 29 Mar 2022 05:20:55 +0000
+Date:   Tue, 29 Mar 2022 13:20:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:arm64/linux/devel/kmalloc-minalign 11/11]
+ arch/arm64/include/asm/cache.h:51:44: error: missing binary operator before
+ token "("
+Message-ID: <202203291356.qd9QDdwo-lkp@intel.com>
 MIME-Version: 1.0
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <87bl1kunjj.fsf@email.froward.int.ebiederm.org> <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
- <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org> <87tubyx0rg.fsf_-_@email.froward.int.ebiederm.org>
- <87a6d9pr5t.fsf_-_@email.froward.int.ebiederm.org> <CAHk-=wj2u3MT5Ukaw9aAB-0oSs9S58kuRNqqy5AL-GTn9LNGkA@mail.gmail.com>
- <87r16lmnsq.fsf@email.froward.int.ebiederm.org> <CAHk-=wiVB8npX4B3D48PjqHjKa8geRjMhcFSgmtYDPp05eZymA@mail.gmail.com>
-In-Reply-To: <CAHk-=wiVB8npX4B3D48PjqHjKa8geRjMhcFSgmtYDPp05eZymA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 28 Mar 2022 22:20:17 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiPKKU7zFeg06a05R6abB1tWrHR28z-E5vVvk+2xgXHHA@mail.gmail.com>
-Message-ID: <CAHk-=wiPKKU7zFeg06a05R6abB1tWrHR28z-E5vVvk+2xgXHHA@mail.gmail.com>
-Subject: Re: [GIT PULL] ptrace: Cleanups for v5.18
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Alexey Gladkov <legion@kernel.org>, Kyle Huey <me@kylehuey.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linux API <linux-api@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 9:49 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> So if you have both a branch and a tag named 'xyz', you generally need
-> to disambiguate them when you use them. That will make git happy,
-> because now it's not ambiguous any more.
+tree:   https://github.com/ammarfaizi2/linux-block arm64/linux/devel/kmalloc-minalign
+head:   96a378f120e08f205dad5abcc348f0628d2db801
+commit: 96a378f120e08f205dad5abcc348f0628d2db801 [11/11] arm64: Allow arch_kmalloc_minalign() of 8 if CLIDR_EL1.LoC == 0
+config: arm64-buildonly-randconfig-r006-20220328 (https://download.01.org/0day-ci/archive/20220329/202203291356.qd9QDdwo-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/96a378f120e08f205dad5abcc348f0628d2db801
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block arm64/linux/devel/kmalloc-minalign
+        git checkout 96a378f120e08f205dad5abcc348f0628d2db801
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-On a similar but very different issue: this is not the only kind of
-naming ambiguity you can have.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-For example, try this insane thing:
+All error/warnings (new ones prefixed by >>):
 
-    git tag Makefile
+   In file included from include/linux/cache.h:6,
+                    from include/linux/printk.h:9,
+                    from include/asm-generic/bug.h:22,
+                    from arch/arm64/include/asm/bug.h:26,
+                    from include/linux/bug.h:5,
+                    from include/linux/mmdebug.h:5,
+                    from include/linux/gfp.h:5,
+                    from include/linux/slab.h:15,
+                    from mm/slab.c:90:
+>> arch/arm64/include/asm/cache.h:51:33: warning: "__alignof__" is not defined, evaluates to 0 [-Wundef]
+      51 | #define ARCH_KMALLOC_MINALIGN   __alignof__(unsigned long long)
+         |                                 ^~~~~~~~~~~
+   include/linux/slab.h:214:26: note: in expansion of macro 'ARCH_KMALLOC_MINALIGN'
+     214 | #define KMALLOC_MIN_SIZE ARCH_KMALLOC_MINALIGN
+         |                          ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/slab.h:305:33: note: in expansion of macro 'KMALLOC_MIN_SIZE'
+     305 | #define SLAB_OBJ_MIN_SIZE      (KMALLOC_MIN_SIZE < 16 ? \
+         |                                 ^~~~~~~~~~~~~~~~
+   mm/slab.c:163:36: note: in expansion of macro 'SLAB_OBJ_MIN_SIZE'
+     163 |                                 <= SLAB_OBJ_MIN_SIZE) ? 1 : 0)
+         |                                    ^~~~~~~~~~~~~~~~~
+   mm/slab.c:165:5: note: in expansion of macro 'FREELIST_BYTE_INDEX'
+     165 | #if FREELIST_BYTE_INDEX
+         |     ^~~~~~~~~~~~~~~~~~~
+>> arch/arm64/include/asm/cache.h:51:44: error: missing binary operator before token "("
+      51 | #define ARCH_KMALLOC_MINALIGN   __alignof__(unsigned long long)
+         |                                            ^
+   include/linux/slab.h:214:26: note: in expansion of macro 'ARCH_KMALLOC_MINALIGN'
+     214 | #define KMALLOC_MIN_SIZE ARCH_KMALLOC_MINALIGN
+         |                          ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/slab.h:305:33: note: in expansion of macro 'KMALLOC_MIN_SIZE'
+     305 | #define SLAB_OBJ_MIN_SIZE      (KMALLOC_MIN_SIZE < 16 ? \
+         |                                 ^~~~~~~~~~~~~~~~
+   mm/slab.c:163:36: note: in expansion of macro 'SLAB_OBJ_MIN_SIZE'
+     163 |                                 <= SLAB_OBJ_MIN_SIZE) ? 1 : 0)
+         |                                    ^~~~~~~~~~~~~~~~~
+   mm/slab.c:165:5: note: in expansion of macro 'FREELIST_BYTE_INDEX'
+     165 | #if FREELIST_BYTE_INDEX
+         |     ^~~~~~~~~~~~~~~~~~~
 
-that creates a tag called 'Makefile' (pointing to your current HEAD, of course).
 
-Now, guess what happens when you then do
+vim +51 arch/arm64/include/asm/cache.h
 
-    git log Makefile
+    42	
+    43	/*
+    44	 * Memory returned by kmalloc() may be used for DMA, so we must make
+    45	 * sure that all such allocations are cache aligned. Otherwise,
+    46	 * unrelated code may cause parts of the buffer to be read into the
+    47	 * cache before the transfer is done, causing old data to be seen by
+    48	 * the CPU.
+    49	 */
+    50	#define ARCH_DMA_MINALIGN	(128)
+  > 51	#define ARCH_KMALLOC_MINALIGN	__alignof__(unsigned long long)
+    52	
 
-that's right - git once again notices that you are doing something ambiguous.
-
-In fact, git will be *so* unhappy about this kind of ambiguity that
-(unlike the 'tag vs branch' case) it will not prefer one version of
-reality over the other, and simply consider this to be a fatal error,
-and say
-
-    fatal: ambiguous argument 'Makefile': both revision and filename
-    Use '--' to separate paths from revisions, like this:
-    'git <command> [<revision>...] -- [<file>...]'
-
-and as a result you will hopefully go "Oh, I didn't mean to have that
-tag at all" and just remove the bogus tagname.
-
-Because you probably made it by mistake.
-
-But you *can* choose to say
-
-   git log Makefile --
-
-or
-
-   git log refs/tags/Makefile
-
-to make it clear that no, 'Makefile' is not the pathname in the
-repository, you really mean the tag 'Makefile'.
-
-Or use
-
-  git log -- Makefile
-
-or
-
-    git log ./Makefile
-
-to say "yeah, I meant the _pathname_ 'Makefile', not the tag".
-
-Or, if you just like playing games, do
-
-    git log Makefile -- Makefile
-
-if you want to track the history of the path 'Makefile' starting at
-the tag 'Makefile'.
-
-But don't actually do this for real. There's a reason git notices these things.
-
-Using ambiguous branch names (whether ambiguous with tag-names or with
-filenames) is a pain that is not worth it in practice. Git will
-notice, and git will allow you to work around it, but it's just a
-BadIdea(tm) despite that.
-
-But you probably want to be aware of issues like this if you script
-things around git, though.
-
-That "--" form in particular is generally the one you want to use for
-scripting, if you want to allow people to do anything they damn well
-please. It's the "Give them rope" syntax.
-
-Of course, a much more common reason for "--" for pathname separation,
-and one you may already be familiar with, is that you want to see the
-history of a pathname that is not *currently* a pathname, but was one
-at some point in the past.
-
-So in my current kernel tree, doing
-
-    $ git log arch/nds32/
-
-will actually cause an error, because of "unknown revision or path not
-in the working tree".
-
-But if you really want to see the history of that now-deleted
-architecture, you do
-
-    $ git log -- arch/nds32/
-
-and it's all good.
-
-This concludes today's sermon on git,
-
-             Linus
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

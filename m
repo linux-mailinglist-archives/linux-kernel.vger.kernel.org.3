@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06BC4EB54E
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 23:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9EF4EB554
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 23:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234302AbiC2Vbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 17:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
+        id S234497AbiC2VeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 17:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233643AbiC2Vbe (ORCPT
+        with ESMTP id S234386AbiC2VeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 17:31:34 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C098B9198
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 14:29:51 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2e689dfe112so154931027b3.20
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 14:29:51 -0700 (PDT)
+        Tue, 29 Mar 2022 17:34:16 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B70A239336
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 14:32:30 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id lr4so29290983ejb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 14:32:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=P5TBHdIxT5bdh0NQZGvXp/Hfim7NoVNfBg9iw+ca+K0=;
-        b=HhFAIZ94MLVFsWOVvsIkSSweYvqqN7xSSA9KtgRCmq6gyQYdJcs84SZvkqEErXkn4N
-         AY4Lj7CDJATk0JC6zrjsWvQM6UbBQP35+WfovgmHaNZpWv1WXg0yLavRhl61cUxUosxW
-         3lQQYaQvGKKqLMGg8HTrDTuLafjWzbfoqZ8Y337ObvoVkaW37P5REd2ug6dvF80uJWk6
-         ZNe4aZw/fHGI4nRJU9UJdnFAK4IxBknkxdXelWlWcJCmuLDWTx/xAHMzIOXN6dHAZF+U
-         NYkP6Mjtr7VyEzVdtDyzQb63BphW2zQ0uDgT0YsaMvQQIAn/LPdsqra5wy/tVPwWk/5o
-         1v2A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZNJQ60t9ow46nPLDTL0lGrHwboox4GQw0/vTKn1ZL5A=;
+        b=lnCZC0DpxNBLUffB2oLIpMxBrnBLwD0WpNwv5f4uqc5YgSJI4TrtRUIQf/bb9rxUed
+         AtfCIuaRpS5iFubDPmmKV3V/46+wzs/EDPYr8LSgwndpCVpOsBh6enFI6o6nFZVS5olq
+         qTFPzcWj0F+8AgEs2wEDFQ29eb+bYS+jHElB1GmX5Y/wIvCgxthpJ9u41nbuJBrhXYQx
+         sfkOfFov7NlGx0boBMgMYs5msdyhwv4Z+xIyZFg/hY25oyySfW/0Bb7QLLEaZEVPxMAK
+         //gQhJubH1DN1qykwZxJe9fbnx+4xLuVBh7veoFkeq6OxHhylLUivsrLDF2kk1FD6CoX
+         35FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=P5TBHdIxT5bdh0NQZGvXp/Hfim7NoVNfBg9iw+ca+K0=;
-        b=LoDTqlXvcxDuvv4bpfosSZAWo1/zgw8fvusiCFFxUbZAy4y4F5c6rvawMLpczwq/h9
-         MD9/G4NK0ajfFPOhTXpQtVG7SuWaCIaLG7q7MhQivfS6jsTyg8IJgt6SuB+6xh7TIuQv
-         6JFmbJEstV3VOpB5QS0dpwdg+t4Qm17XCDGlnBpF+W4eVbj7XWq6+Tz8B/395Kb8+tq0
-         yDtwKRmRlzby+snvsMFa57NXGjyzsDKJSe7hOtVUVG0iWRxV8mV85AV0XRY7wzg8dIgI
-         k1Bu5tNXMag3JfdCjv0hgF42V7m1UFXrCpy/iz4q/0eE7G8VDFuQ+MWiRMYMp3GP8vOr
-         QuQA==
-X-Gm-Message-State: AOAM5322R2laovR2NzzNN2bvJqXaq3lKu5JCVKQgXhPYexnI/f8PpFQY
-        qCcWFUB3AJXE8OF5ZqNUyXkJl2mndtzDqjhaI1Q=
-X-Google-Smtp-Source: ABdhPJx4DYVDNRXhsBzxHfrEovi5p3Dz+VcZ+tQlnV4+qvZtjYsgBZ0ChGWdDjIZbZ39iVvA8dGCAKJfLmz/zc877NU=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:75a:7c26:987c:fd71])
- (user=ndesaulniers job=sendgmr) by 2002:a0d:f105:0:b0:2d1:1f59:80fc with SMTP
- id a5-20020a0df105000000b002d11f5980fcmr32641683ywf.77.1648589390535; Tue, 29
- Mar 2022 14:29:50 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 14:29:45 -0700
-Message-Id: <20220329212946.2861648-1-ndesaulniers@google.com>
-Mime-Version: 1.0
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1648589385; l=1718;
- s=20211004; h=from:subject; bh=puW+jMxS7VYBp0FC4lUNV4G4u9ugxnkqCqfUK1sNtjs=;
- b=jIFU9u0n6sVPD4xJZbyKcG1HWfk8Dgm8nGXkyfCihVlwRmUDpE+ROWm/SVRbyxBzNH7gVNDk+B+C
- H5Y8OtyfB/NaAG6tx1rXNaNl064F2W4jrX3a+pOoJjoXXtFJEIg5
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH] net, uapi: remove inclusion of arpa/inet.h
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     Jon Maloy <jmaloy@redhat.com>, Ying Xue <ying.xue@windriver.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZNJQ60t9ow46nPLDTL0lGrHwboox4GQw0/vTKn1ZL5A=;
+        b=TNsxhwRHujBv6i3Hi/eH0du8dxvJiATLFFaBaIyYuNAeFCvPlRRsZgpwWwsoCOD8sp
+         Q0i7CvhPSlGHzA0uOreN9Bmp01zaPdThxd7GkPvd1YVfOrWiGRmwzEdBeghNIqOUT81b
+         jQbjVVDRMH01FoAfizJAfQ3tJtx3nr8SfHYaxOEESpjGv8wY68JgiaWb+nBUq8Xb0pRW
+         3zexWabAJbLapwU3Rv3t64NM4dc/bUlkaeGx1o51dKg6+aOdzOLoiNg9TQqkyhMHG6iW
+         g8GDKxZD3Ii7A1Mpxs/cVFIQN6EcznyaMfIcuA4k70IBMTofM/3j2aW2Mp1emMPDjO7c
+         6l5g==
+X-Gm-Message-State: AOAM531fk6NLnS2ysrlHTBFGHptdjACNv8WniWWXDQ8AW6KlbB6EAyR2
+        dmXa9gOn+RZz14k7eosFUPfTvKiDoKNNwoznESR/fA==
+X-Google-Smtp-Source: ABdhPJy4BTMYt2cEtBSbmfC31i1s9R0oGmoVOfOD2HZA+Zfy6cogEZxNy+3Fb9rktahrlflKpbi84cW4L/9tBA7+n80=
+X-Received: by 2002:a17:907:eab:b0:6da:8ec5:d386 with SMTP id
+ ho43-20020a1709070eab00b006da8ec5d386mr36400202ejc.668.1648589548764; Tue, 29
+ Mar 2022 14:32:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220329103919.2376818-1-lv.ruyi@zte.com.cn> <CAGS_qxpCHgp7ToQV9UALPy-4nyHDcdpWOCCd3duz-L6EgYPpOg@mail.gmail.com>
+In-Reply-To: <CAGS_qxpCHgp7ToQV9UALPy-4nyHDcdpWOCCd3duz-L6EgYPpOg@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 29 Mar 2022 17:32:17 -0400
+Message-ID: <CAFd5g46xma=yCYYNhupXkQmM=u1-ts3L0JhkX-Ueo21QxsMtmA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: add null pointer check
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     cgel.zte@gmail.com, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,50 +68,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Testing out CONFIG_UAPI_HEADER_TEST=y with a prebuilt Bionic sysroot
-from Android's SDK, I encountered an error:
+On Tue, Mar 29, 2022 at 3:29 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Tue, Mar 29, 2022 at 5:39 AM <cgel.zte@gmail.com> wrote:
+> >
+> > From: Lv Ruyi <lv.ruyi@zte.com.cn>
+> >
+> > kmalloc and kcalloc is a memory allocation function which can return NULL
+> > when some internal memory errors happen. Add null pointer check to avoid
+> > dereferencing null pointer.
+> >
+> > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+> > ---
+> >  lib/kunit/executor.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> > index 22640c9ee819..be21d0451367 100644
+> > --- a/lib/kunit/executor.c
+> > +++ b/lib/kunit/executor.c
+> > @@ -71,9 +71,13 @@ kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
+> >
+> >         /* Use memcpy to workaround copy->name being const. */
+> >         copy = kmalloc(sizeof(*copy), GFP_KERNEL);
+> > +       if (!copy)
+> > +               return NULL;
+>
+> While this is technically correct to check, in this context it's less clear.
+> If we can't allocate this memory, we likely can't run any subsequent
+> tests, either because the test cases will want to allocate some memory
+> and/or KUnit will need to allocate some for internal bookkeeping.
+>
+> The existing code (and by extension this patch) "handles" OOM
+> situations by silently dropping test suites/cases.
+> So I sort of intentionally figured we should let it crash early in
+> this case since that's probably more debuggable.
+>
+> This code does check for NULL returns earlier on in the call chain, i.e.
+>
+> first in kunit_filter_suites()
+>    158          copy = kmalloc_array(max, sizeof(*filtered.start), GFP_KERNEL);
+>    159          filtered.start = copy;
+>    160          if (!copy) { /* won't be able to run anything, return
+> an empty set */
+>    161                  filtered.end = copy;
+>    162                  return filtered;
+>    163          }
+>
+> and second in kunit_filter_subsuite()
+>    107          filtered = kmalloc_array(n + 1, sizeof(*filtered), GFP_KERNEL);
+>    108          if (!filtered)
+>    109                  return NULL;
+>
+> The first kmalloc_array() is our first allocation in this file.
+> If we can't handle that, then things are really going wrong, and I
+> assumed there'd be plenty of debug messages in dmesg, so silently
+> returning is probably fine.
+> The second one also felt similar.
+>
+> So I think that
+> * it's highly unlikely that we pass those checks and fail on these new
+> ones (we're not allocating much)
+> * if we do fail, this is now harder to debug since it's partially
+> running tests, partially not
+>
+> Should we instead rework the code to more clearly signal allocation
+> errors instead of overloading NULL to mean "no matches or error?"
+> Or maybe just adding some pr_err() calls is sufficient.
 
-  HDRTEST usr/include/linux/fsi.h
-In file included from <built-in>:1:
-In file included from ./usr/include/linux/tipc_config.h:46:
-prebuilts/ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/arpa/inet.h:39:1:
-error: unknown type name 'in_addr_t'
-in_addr_t inet_addr(const char* __s);
-^
+I think we should either return an err ptr, or log something (maybe both).
 
-This is because Bionic has a bug in its inclusion chain. I sent a patch
-to fix that, but looking closer at include/uapi/linux/tipc_config.h,
-there's a comment that it includes arpa/inet.h for ntohs; but ntohs is
-already defined in include/linux/byteorder/generic.h which is already
-included in include/uapi/linux/tipc_config.h. There are no __KERNEL__
-guards on include/linux/byteorder/generic.h's definition of ntohs. So
-besides fixing Bionic, it looks like we can additionally remove this
-unnecessary header inclusion.
+But yeah, I agree with you Daniel, I don't like overloading NULL.
 
-Link: https://android-review.googlesource.com/c/platform/bionic/+/2048127
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- include/uapi/linux/tipc_config.h | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/include/uapi/linux/tipc_config.h b/include/uapi/linux/tipc_config.h
-index 4dfc05651c98..b38374d5f192 100644
---- a/include/uapi/linux/tipc_config.h
-+++ b/include/uapi/linux/tipc_config.h
-@@ -43,10 +43,6 @@
- #include <linux/tipc.h>
- #include <asm/byteorder.h>
- 
--#ifndef __KERNEL__
--#include <arpa/inet.h> /* for ntohs etc. */
--#endif
--
- /*
-  * Configuration
-  *
-
-base-commit: 5efabdadcf4a5b9a37847ecc85ba71cf2eff0fcf
-prerequisite-patch-id: 0c2abf2af8051f4b37a70ef11b7d2fc2a3ec7181
--- 
-2.35.1.1021.g381101b075-goog
-
+> >         memcpy(copy, suite, sizeof(*copy));
+> >
+> >         filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
+> > +       if (!filtered)
+> > +               return NULL;
+> >
+> >         n = 0;
+> >         kunit_suite_for_each_test_case(suite, test_case) {
+> > --
+> > 2.25.1
+> >

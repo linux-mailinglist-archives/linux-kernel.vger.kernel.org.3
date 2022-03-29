@@ -2,76 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0A84EAD1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA6E4EAD24
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236292AbiC2M2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 08:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
+        id S236304AbiC2MbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 08:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232550AbiC2M22 (ORCPT
+        with ESMTP id S233739AbiC2MbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 08:28:28 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100C14D9D7;
-        Tue, 29 Mar 2022 05:26:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AD714210FD;
-        Tue, 29 Mar 2022 12:26:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648556803; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GHCym1FAfk584NsBbZrS25WXA0fFraZHorF91Z4iPvM=;
-        b=ASediyECI19f//wM1oXpm6I2b+9U65HF9mqs1lX3VAaIC85MNereMsnIDLw5YjjjUB2Jlm
-        l7q28MaBy3X9NJH+i7oySHQ0xlkitEb1glicBEzuVIUOBtSqaYNu8IRF8pRp6EmkoMUUbo
-        y5Fp1q3wjyFIXty7vC9lLMUeybaGpLw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648556803;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GHCym1FAfk584NsBbZrS25WXA0fFraZHorF91Z4iPvM=;
-        b=qAguEPr7+9CTLyj/+Fh9mGF4gyppAwvriarmrAxPsvcYg1hAaBa12CZcK7rN4bOoG/U09t
-        Znh21U7xO0EXE5Cw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 50A3513A7E;
-        Tue, 29 Mar 2022 12:26:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id PkZPEQP7QmIGHgAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 29 Mar 2022 12:26:43 +0000
-Date:   Tue, 29 Mar 2022 14:26:42 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Terry Bowman <terry.bowman@amd.com>
-Subject: Re: [PULL REQUEST] i2c for v5.18
-Message-ID: <20220329142642.11692e8f@endymion.delvare>
-In-Reply-To: <YkIF9OqbZQ8yinz8@ninjato>
-References: <Yj19RH3qpzQsIV/O@shikoro>
-        <CAHk-=wgoeUc15-8Wu8U=4FnwhgmyU3C13R107oigbmJRpi_sZA@mail.gmail.com>
-        <YkIF9OqbZQ8yinz8@ninjato>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Tue, 29 Mar 2022 08:31:12 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8438751E63
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:29:24 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id m30so24595883wrb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:29:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=JWAxhkpD2i8UZ8j248lkUJk4oN/7cNs/WUDnK2ILLuA=;
+        b=GXvbOt7cHYG+zEcO53/N0pAGW4E6Xl+/x6z8j5FHdbaoRxQOml+aT8B7lfjtZDLDui
+         A/AoLBLJRQq07raSX00sgQ2CsnEcSVC84nB88L8RHknLhGnBmoSHcYDjTY3WRgStgsgG
+         7J3Q5gETTjx0A6/QY1WSynU7lnhuDecPZcXuP5MXNu0h847ctq1I0oqN1+tua6wWIw71
+         0trbdunuN57IRr4bDy7d6h5MqwDacimQr8DiODsFuAN1AtPJet0vWJbzHqCb7k7SdcmJ
+         DvUvwp03o2m/oD1pGx+YU65rt+A7TpHp0yiKvac1jsO9r9b9mb5Xf1tf4VZFMfVlrDd6
+         df2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=JWAxhkpD2i8UZ8j248lkUJk4oN/7cNs/WUDnK2ILLuA=;
+        b=yiru0cLazpGOwEE2FkRKzF+eTdd6O8y8ODbnKZIXgfUhuOZrYn6bXpyH23/xh9HiP4
+         bELOwLkpnzjcikygSOKRAJTiH1KlSOM5e3u4QJ6KpKkMh69GlnnktVaSheh/R6tk5bVE
+         nm072mnwS5WsO5ev87F+chIiicRCUlCIMkUE1gQOdQsOx4jLE2tYT4myD/oBnJOn9PYY
+         vifRJtTGW/sbmqBCQD3b4xCKyPrvY4yAhrj/SVLZ5N9uqH52WCW0XPOb3rQupNtRdtAm
+         DOs1uvF6o4ickSINeNFyL5mNJ05iwBcx4kWjGORg3IAnQCZFuH3kqP1w9zbnuGG2TXQZ
+         4YoA==
+X-Gm-Message-State: AOAM530FYEwKJM/E7S24Ri0KRXoYFKhhEHJtKk3+j/rvdvOD+MIJVLLP
+        r7XmN8up+IoSWxjIEfM/Q0GvJA==
+X-Google-Smtp-Source: ABdhPJxkcUlDSsFDn76pfiNwEFTu8HNkSQvKzGIgeEr33H8pn3eGua5djb1jxK+d7MFlXjOAHbcZlw==
+X-Received: by 2002:a05:6000:508:b0:1e4:a027:d147 with SMTP id a8-20020a056000050800b001e4a027d147mr30848053wrf.315.1648556962971;
+        Tue, 29 Mar 2022 05:29:22 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:a663:978b:3ffb:7dc3? ([2001:861:44c0:66c0:a663:978b:3ffb:7dc3])
+        by smtp.gmail.com with ESMTPSA id k40-20020a05600c1ca800b0038c6c8b7fa8sm2195017wms.25.2022.03.29.05.29.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 05:29:22 -0700 (PDT)
+Message-ID: <3697fe0f-7b6b-764f-8cdb-d925c0944fb0@baylibre.com>
+Date:   Tue, 29 Mar 2022 14:29:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 4/5] pinctrl: meson: Replace custom code by
+ gpiochip_count() call
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+References: <20220325200338.54270-1-andriy.shevchenko@linux.intel.com>
+ <20220325200338.54270-4-andriy.shevchenko@linux.intel.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <20220325200338.54270-4-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,100 +92,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus, Wolfram,
-
-On Mon, 28 Mar 2022 21:01:08 +0200, Wolfram Sang wrote:
-> On Sat, Mar 26, 2022 at 12:58:36PM -0700, Linus Torvalds wrote:
-> > It feels odd/wrong to use the piix4 driver for the AMD MMIO case on SB800.
-> > 
-> > Would it not have made more sense to just make that a separate driver?
-> > 
-> > It feels like now the piix4 driver has a lot of "if SB800" for the
-> > probing code, and then a lot of "if (mmio)" at runtime.
-> > 
-> > I've pulled this, but just wanted to mention this "that looks a bit
-> > odd". How much code is actually _shared_ in the SB800 case?
-> > 
-> > I'm not insisting on splitting this up - maybe it all makes sense. I'm
-> > just questioning it.  
+On 25/03/2022 21:03, Andy Shevchenko wrote:
+> Since we have generic function to count GPIO controller nodes
+> under given device, there is no need to open code it. Replace
+> custom code by gpiochip_count() call.
 > 
-> Adding Jean to CC, he maintains the PC-style drivers.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>   drivers/pinctrl/meson/pinctrl-meson.c | 28 ++++++++++++---------------
+>   1 file changed, 12 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/meson/pinctrl-meson.c b/drivers/pinctrl/meson/pinctrl-meson.c
+> index 49851444a6e3..7db70d4e214a 100644
+> --- a/drivers/pinctrl/meson/pinctrl-meson.c
+> +++ b/drivers/pinctrl/meson/pinctrl-meson.c
+> @@ -49,6 +49,7 @@
+>   #include <linux/pinctrl/pinctrl.h>
+>   #include <linux/pinctrl/pinmux.h>
+>   #include <linux/platform_device.h>
+> +#include <linux/property.h>
+>   #include <linux/regmap.h>
+>   #include <linux/seq_file.h>
+>   
+> @@ -662,27 +663,22 @@ static struct regmap *meson_map_resource(struct meson_pinctrl *pc,
+>   	return devm_regmap_init_mmio(pc->dev, base, &meson_regmap_config);
+>   }
+>   
+> -static int meson_pinctrl_parse_dt(struct meson_pinctrl *pc,
+> -				  struct device_node *node)
+> +static int meson_pinctrl_parse_dt(struct meson_pinctrl *pc)
+>   {
+> -	struct device_node *np, *gpio_np = NULL;
+> +	struct device_node *gpio_np;
+> +	unsigned int chips;
+>   
+> -	for_each_child_of_node(node, np) {
+> -		if (!of_find_property(np, "gpio-controller", NULL))
+> -			continue;
+> -		if (gpio_np) {
+> -			dev_err(pc->dev, "multiple gpio nodes\n");
+> -			of_node_put(np);
+> -			return -EINVAL;
+> -		}
+> -		gpio_np = np;
+> -	}
+> -
+> -	if (!gpio_np) {
+> +	chips = gpiochip_count(pc->dev);
+> +	if (!chips) {
+>   		dev_err(pc->dev, "no gpio node found\n");
+>   		return -EINVAL;
+>   	}
+> +	if (chips > 1) {
+> +		dev_err(pc->dev, "multiple gpio nodes\n");
+> +		return -EINVAL;
+> +	}
+>   
+> +	gpio_np = to_of_node(device_get_named_child_node(pc->dev, "gpio-controller"));
+>   	pc->of_node = gpio_np;
+>   
+>   	pc->reg_mux = meson_map_resource(pc, gpio_np, "mux");
+> @@ -751,7 +747,7 @@ int meson_pinctrl_probe(struct platform_device *pdev)
+>   	pc->dev = dev;
+>   	pc->data = (struct meson_pinctrl_data *) of_device_get_match_data(dev);
+>   
+> -	ret = meson_pinctrl_parse_dt(pc, dev->of_node);
+> +	ret = meson_pinctrl_parse_dt(pc);
+>   	if (ret)
+>   		return ret;
+>   
 
-Well, that's a legitimate question, that I asked myself before many
-times to be honest.
-
-To understand why things are the way they are, you have to dig through
-the history of the driver. Originally it was a driver for Intel
-chipsets (82371 aka PIIX4, then 82443 aka 440BX). Then support was
-added for various clones (Victory66 and several ServerWorks chipsets)
-which were fully compatible (modulo the srvrworks_csb5_delay quirk).
-
-Then ATI came with compatible chipsets as well (IXP200, IXP300 and
-IXP400). These were still very similar to the original Intel design,
-with a single SMBus controller driving a single SMBus port. So far so
-good.
-
-Where things started diverging is with the ATI SB700, which introduced
-a second SMBus controller. Then came the ATI SB800, which introduced a
-4-port multiplexer on top of the main SMBus controller. Then AMD bought
-ATI and the new chipsets came with new PCI device IDs and a slightly
-different configuration procedure, plus a potential conflict with the
-IMC which require extra care. The move of the latest AMD chipsets to
-MMIO is only one more diverging step in this list.
-
-The reason why I find a driver split difficult is because there's no
-clear line where to cut. We could have a driver with MMIO support and
-one without, as suggested by Linus. But we could also move the line and
-have a driver with multiplexer + MMIO support, and one with neither
-[1]. Or a driver with aux port + multiplexer + MMIO support, and one
-with neither. None of these cuts is obviously "the good one", they are
-all pretty arbitrary.
-
-In all cases, that's going to duplicate a fair amount of code, as the
-SMBus block itself is still exactly the same. So at least
-piix4_transaction(), piix4_access(), piix4_add_adapter() and
-piix4_func() would be needed by both drivers. If we don't want to
-duplicate the code, we'd have to create a shared module that both
-drivers would rely on. While a clean design, it does not really go in
-the direction of simplification.
-
-If we split on MMIO support then the amount of duplicated (or shared)
-code would be even larger, as it would also include support of the aux
-port, multiplexing and IMC conflict workaround.
-
-The real question here is, what do we win by having 2 drivers? We better
-win something, because that's a large amount of work, and renaming a
-driver can make life difficult for downstream (it breaks blacklisting,
-preset module parameters, requires kernel configuration and packaging
-adjustments, etc). And a split is even worse than a rename, as some of
-these changes then become conditional.
-
-In the end, the only benefit I can see is a reduced memory footprint on
-old systems, which could use the "simple" driver which would be very
-close to what the i2c-piix4 driver looked like 15 years ago. I don't
-think that's a goal worth pursuing though, as the number of users of
-these old chipsets must very small by now.
-
-On the other hand, the benefit for the users of recent hardware is
-marginal, as removing support for the oldest chipsets from the current
-driver wouldn't remove much code in the end. A rough estimation would
-be between 50 and 100 lines removed, which for a 1159-line driver isn't
-really meaningful.
-
-Plus, from a maintenance perspective, two drivers instead of one will
-automatically mean more work (maybe not much, but still).
-
-And this is how I came to the conclusion that, despite the weird
-feeling that there are too many conditionals in the i2c-piix4 driver,
-there's nothing smart that can be done to get rid of them, and we just
-have to live with them.
-
-[1] That would put the support of the SB700 in one driver, and the
-support of the SB800 in another, while they share the same PCI device
-ID (but with a different revision range). So both drivers would load on
-such systems by default, wasting memory.
-
--- 
-Jean Delvare
-SUSE L3 Support
-7
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>

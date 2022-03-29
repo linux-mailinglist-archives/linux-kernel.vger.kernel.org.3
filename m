@@ -2,145 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 862CB4EA41E
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 02:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A96B4EA426
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 02:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbiC2AVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 20:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50276 "EHLO
+        id S231389AbiC2AZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 20:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbiC2AV3 (ORCPT
+        with ESMTP id S231346AbiC2AZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 20:21:29 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0EC1A8446;
-        Mon, 28 Mar 2022 17:19:47 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id b17so3567640qvf.12;
-        Mon, 28 Mar 2022 17:19:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J4KWyw+cBk0gVXSu6o+Qb1G52uK0CGpmkgICaiSVqZs=;
-        b=Qk858fVefCwfKCcCvuirzO8bJ3QEwDEAfm3XTiLYVS2FLCILT82FPyoy0htIbrMnjl
-         mfN5YSilnRArHiQSunYS8crTFlFs9Ky4qPptKklEunn2UFJaTlj29f44qLFaZh1BzTst
-         ecokfV7WxIKiWif0kiedmSTT8qvQVO7f8j5K8k/nOeivXtzyvtW5TSQ+qrAe3+fCp+Ei
-         WqE5HEFKXIlgTunCPHBinajoalBYS4GzfB+fGUVTJCLSahTPb9i9/UiNo1sqNrdYpFz1
-         Uh2rNQgCSUiNhrqGedcD3ySUd0hrtiPbRAAaf7mX8QunxNAJ5SyZLtYLtru67kVwxoRA
-         3ESw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J4KWyw+cBk0gVXSu6o+Qb1G52uK0CGpmkgICaiSVqZs=;
-        b=va3ZebGlDT5yJEt/1GiPtemErlece8reFcC2lJSMx8QYr8/3hBZO9xbIpPMBdEMzXw
-         nma8S/RZOZ6xgsKSaeR0YNqLs5dQqD5XB7AckpVLOVeugXkxDwUbO6Ih5ynxyOYTrgTi
-         m0GkZrmb7Y4UQQN65/yuKZrDm6mdgOO8RsvXx6G2qXHvPFdlo9/Im4xIbBI14hvQ6icN
-         hlak52URaIAiBscyjooH9sHFocxBiH5BfLR5dBtNRhrwfxNx7G4zyxegVAmxtG2dR4ER
-         u21HYsOP57R5+lOrTFR/wFR6+3DxT/y7/5xbAMK9E8oTuereOPlk/rWYlmMAA5ojf5YN
-         gwlQ==
-X-Gm-Message-State: AOAM532twfOAy0T1h72yVXmfTzGkzoS8FNOE/aMWT9YrpDb5Esw5YEtI
-        JYR12QQ2FLNwwhRDI76SEQu3Tv60wX8OvGiGObqpnVcNxSQre7Sv
-X-Google-Smtp-Source: ABdhPJzY7Spohg7KN8yaF7RFjnYSwUWMIYI/+E9RRCjsD7lKw1zcdkgUYs4iRHD/pWxInEtfi4Kax4tFZCZdvAqSAkc=
-X-Received: by 2002:a05:6214:1043:b0:441:1a79:12a5 with SMTP id
- l3-20020a056214104300b004411a7912a5mr23595610qvr.42.1648513186553; Mon, 28
- Mar 2022 17:19:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220328230008.3587975-1-tansuresh@google.com> <20220328230008.3587975-2-tansuresh@google.com>
-In-Reply-To: <20220328230008.3587975-2-tansuresh@google.com>
-From:   "Oliver O'Halloran" <oohall@gmail.com>
-Date:   Tue, 29 Mar 2022 11:19:35 +1100
-Message-ID: <CAOSf1CHnaKrSH0XwKMBuUmMAuc2q6MaHaZPqVoUia9MYqMjgGg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] driver core: Support asynchronous driver shutdown
-To:     Tanjore Suresh <tansuresh@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nvme@lists.infradead.org,
-        linux-pci <linux-pci@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Mar 2022 20:25:46 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CBB2EC;
+        Mon, 28 Mar 2022 17:24:04 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id AA157580367;
+        Mon, 28 Mar 2022 20:24:01 -0400 (EDT)
+Received: from imap49 ([10.202.2.99])
+  by compute5.internal (MEProxy); Mon, 28 Mar 2022 20:24:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; bh=YVcOcYXKVU4PEK
+        ENIKD3lZlfbqMF8OkXUPWQPtT0ZzA=; b=GV8iKIgkifB/LyajStlhIzzaA2PqSU
+        rEPGZBnWRziuDMlxEaU3fjhl0DHmyiueo1E3rsDwPrq1dyaythjr8LeJ4NZ3kmFH
+        v7J0UO7b64vG5VRtrXZ/OicN/3vDmtLy+M6As/zf5/EYH2TO2OF+YIkppderpdcN
+        ocuY8KYW/dUFglcgTgXnC/6f5bvCH2TNkniwuNDGczxXDBDNnP2nHRX3u9u0y3Go
+        2HHhDpJUS8OMLXTkUmRtrROlDXASYpEdp57tTxY7G7Ci6RHcafVgGiKZGpjbHNDZ
+        //P9ySL7tvarTkKke+QN7H1PCcvhD3CsMcxHphO+TJq7W+71Q2wgIxYw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=YVcOcYXKVU4PEKENIKD3lZlfbqMF8OkXUPWQPtT0Z
+        zA=; b=MfUF/QO1w2kk8LobJGDnDjGmGT9HUgvaIsBRcZJH4NP16C60y/NJslTt7
+        orhhkgHh49rbOiH30mg+9nD++QY3WWgzSB2sDT9Qr4nBx6DPKrUBtQOsEMz/dHsj
+        tnZTX8+5b3lvOKKTTCyQClpi0fsj22EquswXftZXPkMfoj2QCv1jAapgIQLAxfMF
+        S0z3hjnx7eO2S93c8UZottn5LmdiG0YcFFuK5zB8/ar7yCvc0Jy0dFV5KjDfSzzb
+        3LrydgytiTwdKd8S3tKaPDcolfNGWpjEyPMA80KKZ8LEsNOU94avhhnY8yVPYBI+
+        z15/ibq45vK+JxVduu76w45M0nzjQ==
+X-ME-Sender: <xms:oFFCYs9K0yagZswp7rFBq_h4vFfHgzOKyc_TzBu90N89g92vvi8M3A>
+    <xme:oFFCYkvw9h1jnh95ii6UH3c9xPcsfcQHqQiMHfK2AbFZHDfMquci3iY3KqTCG7jHE
+    woyrhqOfmB1RNSngg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudehkedgfedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedftehn
+    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
+    frrghtthgvrhhnpedvgeekheegfedvhfethefhudetteegueeggfeiieegueehkedugedt
+    kefglefgheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhgurhgvfiesrghjrdhiugdrrghu
+X-ME-Proxy: <xmx:oVFCYiAKjCQA5Zb05U61crJ5MlOJCJLgZQqyWNA7a6PSqL49ds9rcQ>
+    <xmx:oVFCYsd7HLs87jVXkH1pk4ddv_005tSApo64HS9hBsjced9RxeZQlg>
+    <xmx:oVFCYhNCDSxTTbHGsk6l4iYUYPZLYU9gbpl7DI-t2s9QTshCOjdDqA>
+    <xmx:oVFCYjVxoE5j7ipqETgwLEOiheaMjFzqbcptYMrhCgrHpWjYJYVlwQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E057EF6043F; Mon, 28 Mar 2022 20:24:00 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4911-g925b585eab-fm-20220323.003-g925b585e
+Mime-Version: 1.0
+Message-Id: <d5e6c96b-5882-4602-93cb-b08a65bfa37e@www.fastmail.com>
+In-Reply-To: <D9AFAC3C-46CA-4C40-8559-FD6934411CAB@goldelico.com>
+References: <20220328000915.15041-1-ansuelsmth@gmail.com>
+ <YkG2RPrtPaBNXb7a@latitude>
+ <D9AFAC3C-46CA-4C40-8559-FD6934411CAB@goldelico.com>
+Date:   Tue, 29 Mar 2022 10:53:40 +1030
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        "Ansuel Smith" <ansuelsmth@gmail.com>
+Cc:     "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-actions@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org,
+        chrome-platform@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
+        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
+        linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org,
+        linux-unisoc@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-realtek-soc@lists.infradead.org
+Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 10:35 AM Tanjore Suresh <tansuresh@google.com> wrote:
+
+
+On Tue, 29 Mar 2022, at 00:20, H. Nikolaus Schaller wrote:
+>> Am 28.03.2022 um 15:21 schrieb Jonathan Neusch=C3=A4fer <j.neuschaefe=
+r@gmx.net>:
+>>=20
+>> Or maybe bcm instead of broadcom. Not sure which is preferred by
+>> Broadcom people.
 >
-> This changes the bus driver interface with additional entry points
-> to enable devices to implement asynchronous shutdown. The existing
-> synchronous interface to shutdown is unmodified and retained for
-> backward compatibility.
->
-> This changes the common device shutdown code to enable devices to
-> participate in asynchronous shutdown implementation.
+> Maybe it should always follow the list of vendor prefixes as we are=20
+> talking about DTS?
 
-nice to see someone looking at improving the shutdown path
++1 (if we're actually going to do this). That would neuter most the=20
+mistakes and discussion and can be extracted from the dts files=20
+themselves.
 
-> Signed-off-by: Tanjore Suresh <tansuresh@google.com>
-> ---
->  drivers/base/core.c        | 39 +++++++++++++++++++++++++++++++++++++-
->  include/linux/device/bus.h | 10 ++++++++++
->  2 files changed, 48 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 3d6430eb0c6a..359e7067e8b8 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -4479,6 +4479,7 @@ EXPORT_SYMBOL_GPL(device_change_owner);
-> *snip*
-
-This all seems a bit dangerous and I'm wondering what systems you've
-tested these changes with. I had a look at implementing something
-similar a few years ago and one case that always concerned me was
-embedded systems where the PCIe root complex also has a driver bound.
-Say you've got the following PCIe topology:
-
-00:00.0 - root port
-01:00.0 - nvme drive
-
-With the current implementation of device_shutdown() we can guarantee
-that the child device (the nvme) is shut down before we start trying
-to shut down the parent device (the root complex) so there's no
-possibility of deadlocks and other dependency headaches. With this
-implementation of async shutdown we lose that guarantee and I'm not
-sure what the consequences are. Personally I was never able to
-convince myself it was safe, but maybe you're braver than I am :)
-
-That all said, there's probably only a few kinds of device that will
-really want to implement async shutdown support so maybe you can
-restrict it to leaf devices and flip the ordering around to something
-like:
-
-for_each_device(dev) {
-   if (can_async(dev) && has_no_children(dev))
-      start_async_shutdown(dev)
-}
-wait_for_all_async_shutdowns_to_finish()
-
-// tear down the remaining system devices synchronously
-for_each_device(dev)
-   do_sync_shutdown(dev)
-
->  /*
-> diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
-> index a039ab809753..e261819601e9 100644
-> --- a/include/linux/device/bus.h
-> +++ b/include/linux/device/bus.h
-> @@ -93,6 +101,8 @@ struct bus_type {
->         void (*sync_state)(struct device *dev);
->         void (*remove)(struct device *dev);
->         void (*shutdown)(struct device *dev);
-> +       void (*shutdown_pre)(struct device *dev);
-> +       void (*shutdown_post)(struct device *dev);
-
-Call them shutdown_async_start() / shutdown_async_end() or something
-IMO. These names are not at all helpful and they're easy to mix up
-their role with the class based shutdown_pre / _post
+Andrew

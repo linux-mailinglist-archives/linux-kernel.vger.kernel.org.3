@@ -2,322 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A794EAD15
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0A84EAD1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236271AbiC2M1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 08:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
+        id S236292AbiC2M2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 08:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232550AbiC2M06 (ORCPT
+        with ESMTP id S232550AbiC2M22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 08:26:58 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE134D637
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:25:14 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V8Z.XYI_1648556711;
-Received: from 30.0.141.87(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V8Z.XYI_1648556711)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 29 Mar 2022 20:25:11 +0800
-Message-ID: <b7d1ab3b-e92c-d3aa-72cb-b80cc1a61e85@linux.alibaba.com>
-Date:   Tue, 29 Mar 2022 20:26:05 +0800
+        Tue, 29 Mar 2022 08:28:28 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100C14D9D7;
+        Tue, 29 Mar 2022 05:26:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id AD714210FD;
+        Tue, 29 Mar 2022 12:26:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648556803; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GHCym1FAfk584NsBbZrS25WXA0fFraZHorF91Z4iPvM=;
+        b=ASediyECI19f//wM1oXpm6I2b+9U65HF9mqs1lX3VAaIC85MNereMsnIDLw5YjjjUB2Jlm
+        l7q28MaBy3X9NJH+i7oySHQ0xlkitEb1glicBEzuVIUOBtSqaYNu8IRF8pRp6EmkoMUUbo
+        y5Fp1q3wjyFIXty7vC9lLMUeybaGpLw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648556803;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GHCym1FAfk584NsBbZrS25WXA0fFraZHorF91Z4iPvM=;
+        b=qAguEPr7+9CTLyj/+Fh9mGF4gyppAwvriarmrAxPsvcYg1hAaBa12CZcK7rN4bOoG/U09t
+        Znh21U7xO0EXE5Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 50A3513A7E;
+        Tue, 29 Mar 2022 12:26:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id PkZPEQP7QmIGHgAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 29 Mar 2022 12:26:43 +0000
+Date:   Tue, 29 Mar 2022 14:26:42 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Terry Bowman <terry.bowman@amd.com>
+Subject: Re: [PULL REQUEST] i2c for v5.18
+Message-ID: <20220329142642.11692e8f@endymion.delvare>
+In-Reply-To: <YkIF9OqbZQ8yinz8@ninjato>
+References: <Yj19RH3qpzQsIV/O@shikoro>
+        <CAHk-=wgoeUc15-8Wu8U=4FnwhgmyU3C13R107oigbmJRpi_sZA@mail.gmail.com>
+        <YkIF9OqbZQ8yinz8@ninjato>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] mm: migrate: set demotion targets differently
-To:     Jagdish Gediya <jvgediya@linux.ibm.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com,
-        dave.hansen@linux.intel.com, ying.huang@intel.com
-References: <20220329115222.8923-1-jvgediya@linux.ibm.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20220329115222.8923-1-jvgediya@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jagdish,
+Hi Linus, Wolfram,
 
-On 3/29/2022 7:52 PM, Jagdish Gediya wrote:
-> The current implementation to identify the demotion
-> targets limits some of the opportunities to share
-> the demotion targets between multiple source nodes.
+On Mon, 28 Mar 2022 21:01:08 +0200, Wolfram Sang wrote:
+> On Sat, Mar 26, 2022 at 12:58:36PM -0700, Linus Torvalds wrote:
+> > It feels odd/wrong to use the piix4 driver for the AMD MMIO case on SB800.
+> > 
+> > Would it not have made more sense to just make that a separate driver?
+> > 
+> > It feels like now the piix4 driver has a lot of "if SB800" for the
+> > probing code, and then a lot of "if (mmio)" at runtime.
+> > 
+> > I've pulled this, but just wanted to mention this "that looks a bit
+> > odd". How much code is actually _shared_ in the SB800 case?
+> > 
+> > I'm not insisting on splitting this up - maybe it all makes sense. I'm
+> > just questioning it.  
 > 
-> Implement a logic to identify the loop in the demotion
-> targets such that all the possibilities of demotion can
-> be utilized. Don't share the used targets between all
-> the nodes, instead create the used targets from scratch
-> for each individual node based on for what all node this
-> node is a demotion target. This helps to share the demotion
-> targets without missing any possible way of demotion.
-> 
-> e.g. with below NUMA topology, where node 0 & 1 are
-> cpu + dram nodes, node 2 & 3 are equally slower memory
-> only nodes, and node 4 is slowest memory only node,
-> 
-> available: 5 nodes (0-4)
-> node 0 cpus: 0 1
-> node 0 size: n MB
-> node 0 free: n MB
-> node 1 cpus: 2 3
-> node 1 size: n MB
-> node 1 free: n MB
-> node 2 cpus:
-> node 2 size: n MB
-> node 2 free: n MB
-> node 3 cpus:
-> node 3 size: n MB
-> node 3 free: n MB
-> node 4 cpus:
-> node 4 size: n MB
-> node 4 free: n MB
-> node distances:
-> node   0   1   2   3   4
->    0:  10  20  40  40  80
->    1:  20  10  40  40  80
->    2:  40  40  10  40  80
->    3:  40  40  40  10  80
->    4:  80  80  80  80  10
-> 
-> The existing implementation gives below demotion targets,
-> 
-> node    demotion_target
->   0              3, 2
->   1              4
->   2              X
->   3              X
->   4		X
-> 
-> With this patch applied, below are the demotion targets,
-> 
-> node    demotion_target
->   0              3, 2
->   1              3, 2
->   2              3
->   3              4
->   4		X
+> Adding Jean to CC, he maintains the PC-style drivers.
 
-Node 2 and node 3 both are slow memory and have same distance, why node 
-2 should demote cold memory to node 3? They should have the same target 
-demotion node 4, which is the slowest memory node, right?
+Well, that's a legitimate question, that I asked myself before many
+times to be honest.
 
-> 
-> e.g. with below NUMA topology, where node 0, 1 & 2 are
-> cpu + dram nodes and node 3 is slow memory node,
-> 
-> available: 4 nodes (0-3)
-> node 0 cpus: 0 1
-> node 0 size: n MB
-> node 0 free: n MB
-> node 1 cpus: 2 3
-> node 1 size: n MB
-> node 1 free: n MB
-> node 2 cpus: 4 5
-> node 2 size: n MB
-> node 2 free: n MB
-> node 3 cpus:
-> node 3 size: n MB
-> node 3 free: n MB
-> node distances:
-> node   0   1   2   3
->    0:  10  20  20  40
->    1:  20  10  20  40
->    2:  20  20  10  40
->    3:  40  40  40  10
-> 
-> The existing implementation gives below demotion targets,
-> 
-> node    demotion_target
->   0              3
->   1              X
->   2              X
->   3              X
-> 
-> With this patch applied, below are the demotion targets,
-> 
-> node    demotion_target
->   0              3
->   1              3
->   2              3
->   3              X
+To understand why things are the way they are, you have to dig through
+the history of the driver. Originally it was a driver for Intel
+chipsets (82371 aka PIIX4, then 82443 aka 440BX). Then support was
+added for various clones (Victory66 and several ServerWorks chipsets)
+which were fully compatible (modulo the srvrworks_csb5_delay quirk).
 
-Sounds reasonable.
+Then ATI came with compatible chipsets as well (IXP200, IXP300 and
+IXP400). These were still very similar to the original Intel design,
+with a single SMBus controller driving a single SMBus port. So far so
+good.
 
-> 
-> with below NUMA topology, where node 0 & 2 are cpu + dram
-> nodes and node 1 & 3 are slow memory nodes,
-> 
-> available: 4 nodes (0-3)
-> node 0 cpus: 0 1
-> node 0 size: n MB
-> node 0 free: n MB
-> node 1 cpus:
-> node 1 size: n MB
-> node 1 free: n MB
-> node 2 cpus: 2 3
-> node 2 size: n MB
-> node 2 free: n MB
-> node 3 cpus:
-> node 3 size: n MB
-> node 3 free: n MB
-> node distances:
-> node   0   1   2   3
->    0:  10  40  20  80
->    1:  40  10  80  80
->    2:  20  80  10  40
->    3:  80  80  40  10
-> 
-> The existing implementation gives below demotion targets,
-> 
-> node    demotion_target
->   0              3
->   1              X
->   2              3
->   3              X
+Where things started diverging is with the ATI SB700, which introduced
+a second SMBus controller. Then came the ATI SB800, which introduced a
+4-port multiplexer on top of the main SMBus controller. Then AMD bought
+ATI and the new chipsets came with new PCI device IDs and a slightly
+different configuration procedure, plus a potential conflict with the
+IMC which require extra care. The move of the latest AMD chipsets to
+MMIO is only one more diverging step in this list.
 
-If I understand correctly, this is not true. The demotion route should 
-be as below with existing implementation:
-node 0 ---> node 1
-node 1 ---> X
-node 2 ---> node 3
-node 3 ---> X
+The reason why I find a driver split difficult is because there's no
+clear line where to cut. We could have a driver with MMIO support and
+one without, as suggested by Linus. But we could also move the line and
+have a driver with multiplexer + MMIO support, and one with neither
+[1]. Or a driver with aux port + multiplexer + MMIO support, and one
+with neither. None of these cuts is obviously "the good one", they are
+all pretty arbitrary.
 
-> 
-> With this patch applied, below are the demotion targets,
-> 
-> node    demotion_target
->   0              1
->   1              3
->   2              3
->   3              X
-> 
-> As it can be seen above, node 3 can be demotion target for node
-> 1 but existing implementation doesn't configure it that way. It
-> is better to move pages from node 1 to node 3 instead of moving
-> it from node 1 to swap.
+In all cases, that's going to duplicate a fair amount of code, as the
+SMBus block itself is still exactly the same. So at least
+piix4_transaction(), piix4_access(), piix4_add_adapter() and
+piix4_func() would be needed by both drivers. If we don't want to
+duplicate the code, we'd have to create a shared module that both
+drivers would rely on. While a clean design, it does not really go in
+the direction of simplification.
 
-Which means node 3 is the slowest memory node?
+If we split on MMIO support then the amount of duplicated (or shared)
+code would be even larger, as it would also include support of the aux
+port, multiplexing and IMC conflict workaround.
 
-> 
-> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
-> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> ---
->   mm/migrate.c | 75 ++++++++++++++++++++++++++++------------------------
->   1 file changed, 41 insertions(+), 34 deletions(-)
-> 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 3d60823afd2d..7ec8d934e706 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -2381,10 +2381,13 @@ static int establish_migrate_target(int node, nodemask_t *used,
->    */
->   static void __set_migration_target_nodes(void)
->   {
-> -	nodemask_t next_pass	= NODE_MASK_NONE;
-> -	nodemask_t this_pass	= NODE_MASK_NONE;
->   	nodemask_t used_targets = NODE_MASK_NONE;
->   	int node, best_distance;
-> +	nodemask_t *src_nodes;
-> +
-> +	src_nodes = kcalloc(nr_node_ids, sizeof(nodemask_t), GFP_KERNEL);
-> +	if (!src_nodes)
-> +		return;
->   
->   	/*
->   	 * Avoid any oddities like cycles that could occur
-> @@ -2393,29 +2396,39 @@ static void __set_migration_target_nodes(void)
->   	 */
->   	disable_all_migrate_targets();
->   
-> -	/*
-> -	 * Allocations go close to CPUs, first.  Assume that
-> -	 * the migration path starts at the nodes with CPUs.
-> -	 */
-> -	next_pass = node_states[N_CPU];
-> -again:
-> -	this_pass = next_pass;
-> -	next_pass = NODE_MASK_NONE;
-> -	/*
-> -	 * To avoid cycles in the migration "graph", ensure
-> -	 * that migration sources are not future targets by
-> -	 * setting them in 'used_targets'.  Do this only
-> -	 * once per pass so that multiple source nodes can
-> -	 * share a target node.
-> -	 *
-> -	 * 'used_targets' will become unavailable in future
-> -	 * passes.  This limits some opportunities for
-> -	 * multiple source nodes to share a destination.
-> -	 */
-> -	nodes_or(used_targets, used_targets, this_pass);
-> +	for_each_online_node(node) {
-> +		int tmp_node;
->   
-> -	for_each_node_mask(node, this_pass) {
->   		best_distance = -1;
-> +		used_targets = NODE_MASK_NONE;
-> +
-> +		/*
-> +		 * Avoid adding same node as the demotion target.
-> +		 */
-> +		node_set(node, used_targets);
-> +
-> +		/*
-> +		 * Add CPU NUMA nodes to the used target list so that it
-> +		 * won't be considered a demotion target.
-> +		 */
-> +		nodes_or(used_targets, used_targets, node_states[N_CPU]);
-> +
-> +		/*
-> +		 * Add all nodes that has appeared as source node of demotion
-> +		 * for this target node.
-> +		 *
-> +		 * To avoid cycles in the migration "graph", ensure
-> +		 * that migration sources are not future targets by
-> +		 * setting them in 'used_targets'.
-> +		 */
-> +		for_each_node_mask(tmp_node, src_nodes[node])
-> +			nodes_or(used_targets, used_targets, src_nodes[tmp_node]);
-> +
-> +		/*
-> +		 * Now update the demotion src nodes with other nodes in graph
-> +		 * which got computed above.
-> +		 */
-> +		nodes_or(src_nodes[node], src_nodes[node], used_targets);
->   
->   		/*
->   		 * Try to set up the migration path for the node, and the target
-> @@ -2434,20 +2447,14 @@ static void __set_migration_target_nodes(void)
->   				best_distance = node_distance(node, target_node);
->   
->   			/*
-> -			 * Visit targets from this pass in the next pass.
-> -			 * Eventually, every node will have been part of
-> -			 * a pass, and will become set in 'used_targets'.
-> +			 * Add this node in the src_nodes list so that we can
-> +			 * detect the looping.
->   			 */
-> -			node_set(target_node, next_pass);
-> +			node_set(node, src_nodes[target_node]);
->   		} while (1);
->   	}
-> -	/*
-> -	 * 'next_pass' contains nodes which became migration
-> -	 * targets in this pass.  Make additional passes until
-> -	 * no more migrations targets are available.
-> -	 */
-> -	if (!nodes_empty(next_pass))
-> -		goto again;
-> +
-> +	kfree(src_nodes);
->   }
->   
->   /*
+The real question here is, what do we win by having 2 drivers? We better
+win something, because that's a large amount of work, and renaming a
+driver can make life difficult for downstream (it breaks blacklisting,
+preset module parameters, requires kernel configuration and packaging
+adjustments, etc). And a split is even worse than a rename, as some of
+these changes then become conditional.
+
+In the end, the only benefit I can see is a reduced memory footprint on
+old systems, which could use the "simple" driver which would be very
+close to what the i2c-piix4 driver looked like 15 years ago. I don't
+think that's a goal worth pursuing though, as the number of users of
+these old chipsets must very small by now.
+
+On the other hand, the benefit for the users of recent hardware is
+marginal, as removing support for the oldest chipsets from the current
+driver wouldn't remove much code in the end. A rough estimation would
+be between 50 and 100 lines removed, which for a 1159-line driver isn't
+really meaningful.
+
+Plus, from a maintenance perspective, two drivers instead of one will
+automatically mean more work (maybe not much, but still).
+
+And this is how I came to the conclusion that, despite the weird
+feeling that there are too many conditionals in the i2c-piix4 driver,
+there's nothing smart that can be done to get rid of them, and we just
+have to live with them.
+
+[1] That would put the support of the SB700 in one driver, and the
+support of the SB800 in another, while they share the same PCI device
+ID (but with a different revision range). So both drivers would load on
+such systems by default, wasting memory.
+
+-- 
+Jean Delvare
+SUSE L3 Support
+7

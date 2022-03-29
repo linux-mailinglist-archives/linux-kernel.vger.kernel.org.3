@@ -2,113 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27FEB4EAFFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F5D4EB004
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238345AbiC2PMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
+        id S238353AbiC2PN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234378AbiC2PMG (ORCPT
+        with ESMTP id S236641AbiC2PNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:12:06 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B17522CC;
-        Tue, 29 Mar 2022 08:10:21 -0700 (PDT)
-Received: from mail-wm1-f54.google.com ([209.85.128.54]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MYtoe-1nUrt61Sro-00UrdT; Tue, 29 Mar 2022 17:10:20 +0200
-Received: by mail-wm1-f54.google.com with SMTP id r204-20020a1c44d5000000b0038ccb70e239so1406116wma.3;
-        Tue, 29 Mar 2022 08:10:20 -0700 (PDT)
-X-Gm-Message-State: AOAM531uCDccBNB8TxD4GKHG3zBHalbonhtDBgEVZqpf1zLHjY56dGFm
-        8K4aoSgYFJKYwVsOvig2G3pJkljG/E5xBFoGkbw=
-X-Google-Smtp-Source: ABdhPJy1J5xaryus8X4nFV6ubkK8diotbwfxO4GiSu5zF+wuBLiP5QA+mjqckcwLSa9RHUv88mORXl0v0ubH+5QCE64=
-X-Received: by 2002:a05:600c:1e0b:b0:38c:9ac5:b486 with SMTP id
- ay11-20020a05600c1e0b00b0038c9ac5b486mr100357wmb.71.1648566619950; Tue, 29
- Mar 2022 08:10:19 -0700 (PDT)
+        Tue, 29 Mar 2022 11:13:25 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A506D22C8C4
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:11:41 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-259-r5FGFD-GNYGMmQmbomJ2Yg-1; Tue, 29 Mar 2022 16:11:38 +0100
+X-MC-Unique: r5FGFD-GNYGMmQmbomJ2Yg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Tue, 29 Mar 2022 16:11:37 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Tue, 29 Mar 2022 16:11:36 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tip-commits@vger.kernel.org" 
+        <linux-tip-commits@vger.kernel.org>
+CC:     Joerg Roedel <jroedel@suse.de>, Borislav Petkov <bp@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: [tip: x86/urgent] x86/sev: Unroll string mmio with
+ CC_ATTR_GUEST_UNROLL_STRING_IO
+Thread-Topic: [tip: x86/urgent] x86/sev: Unroll string mmio with
+ CC_ATTR_GUEST_UNROLL_STRING_IO
+Thread-Index: AQHYQ3q5K+q7CKVgC0KvrzjgS2c7UKzWdi0w
+Date:   Tue, 29 Mar 2022 15:11:36 +0000
+Message-ID: <77dbe1d412dd4ade8cc666f5c2474665@AcuMS.aculab.com>
+References: <20220321093351.23976-1-joro@8bytes.org>
+ <164856473151.389.17789498051927031377.tip-bot2@tip-bot2>
+In-Reply-To: <164856473151.389.17789498051927031377.tip-bot2@tip-bot2>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <cover.1648551070.git.tonyhuang.sunplus@gmail.com> <46aad49867912fc57b669fc54fdb28638cccfcd9.1648551070.git.tonyhuang.sunplus@gmail.com>
-In-Reply-To: <46aad49867912fc57b669fc54fdb28638cccfcd9.1648551070.git.tonyhuang.sunplus@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 29 Mar 2022 17:10:03 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0CLA33CTerXJ=bK+myhyHp_utoLnTX-NzMgjeb7icAGg@mail.gmail.com>
-Message-ID: <CAK8P3a0CLA33CTerXJ=bK+myhyHp_utoLnTX-NzMgjeb7icAGg@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] mmc: Add mmc driver for Sunplus SP7021
-To:     Tony Huang <tonyhuang.sunplus@gmail.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, lhjeff911@gmail.com,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        Tony Huang <tony.huang@sunplus.com>, lh.kuo@sunplus.com
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:OW6ybkuzuYCfxijmsioYK+OSNW7E2KgMfVayWbofgwQomK+oPCP
- wXw4bApq9HvOJPG2tWxRbIV9+afCXeH4UfQlSS7kTVqazSIj48S+9O+vfEU3JCdnruU0HZI
- ooneO1/e8kk3rOmeHPdkvhJnyjDhDgFvbh7wG+aWXVYFyKgSlC204Oypz4t7J8ZD9YsanZU
- AK2l31XA2xkNNCoxmBxuA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+9itSpFYgyk=:13dbzQkzEwFSyL+fpVeNvL
- 8wSlv9F1PvRAw3PVGCZ3H4ukXgWvdJvJCiwwJCXyeLQTvW8PNQpoNOnGRII26kc2T+Vkao7+G
- iXxh0kTZmFOnFsKHjCZS0eMw7FiQJsz62F7PpSehd7hrCZuV9R66HARFGtbLoFIM4+sJnS2Rk
- ZByHWMIV4ScG/6SLPXOaCLvrGUHfVcq8KxQ4cVNxb8KvauecPXHAk6vj3M00rSyrUKHbmz8I+
- qFMOLz47sC12u1gaof3lLWwEjgmWtwUfji7Jy65HSGcfKF7yWf32DBKAQCEd1mRI8WDpKV1Hj
- F1H87KcezNy75KX2i4Ek8zCuR8Xt0/9nEaQUMyeOmbq0/MliBMBrBuQDEtcQ6EV93L93hloOp
- oMlvDi6g/R5mGr33260HgB7y85EhAGLttVLFs4N0BV3ayDS8vL7p9yx2LeUTpSz85pTv192JW
- k0NsXBFUa74SgEALxWIAnOZvNbpH6XNnCEBcCC0U1+6iE4OLzJYOjVmgJRU+fwJ+OX2M0ihFc
- VQHpg9s63MRwQ+Z2uyBEeOxOfHGVo7X1HZm1BfHBtxySKmpGnDJOYCWGCmRwpSwG3AFEL4H4J
- FUGTs4xQdYaLqyneUJNCxQ4YY5QBKwH5QOeBadNmpAnmD++oTpMrhr1GKZtTwZvNkce/nyInR
- tWFNUF1xiQacWQN9sPCHad9rVIylSrP4xfqMz7FkwKAnEghezegjYCrMV/vbCJ0se8Es=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 4:42 PM Tony Huang <tonyhuang.sunplus@gmail.com> wrote:
->
-> Add mmc driver for Sunplus SP7021
->
-> Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
+SXNuJ3QgdGhpcyBwYXRjaCBlbnRpcmVseSBicm9rZW4/DQpFdmVuIHRoZSAnbm9ybWFsJyBrZXJu
+ZWwgZnVuY3Rpb25zIGFyZSBicm9rZW4uDQoNCm1lbWNweV90b2lvKCkgYW5kIG1lbWNweV9mcm9t
+aW8oKSBuZWVkIHRvIGJlIHVzaW5nIDY0Yml0DQphY2Nlc3NlcyB0byBJTyBzcGFjZS4NCg0KVGhl
+eSB1c2VkIHRvIGJlIGltcGxlbWVudGVkIHVzaW5nIG1lbWNweSgpIC0gYnV0IHRoYXQgY2FuIGVu
+ZA0KdXAgYmVpbmcgJ3JlcCBtb3ZzYicgd2hpY2ggaXMgYWx3YXlzIGJ5dGUgY29waWVzIG9uIHVu
+Y2FjaGVkDQptZW1vcnkuDQpJIHRob3VnaHQgdGhhdCBoYWQgYmVlbiBmaXhlZCB0byB1c2VkIGEg
+YmV0dGVyIGNvcHkgbG9vcC4NCg0KCURhdmlkDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0t
+LS0NCj4gRnJvbTogdGlwLWJvdDJAbGludXRyb25peC5kZSA8dGlwLWJvdDJAbGludXRyb25peC5k
+ZT4NCj4gU2VudDogMjkgTWFyY2ggMjAyMiAxNTozOQ0KPiBUbzogbGludXgtdGlwLWNvbW1pdHNA
+dmdlci5rZXJuZWwub3JnDQo+IENjOiBKb2VyZyBSb2VkZWwgPGpyb2VkZWxAc3VzZS5kZT47IEJv
+cmlzbGF2IFBldGtvdiA8YnBAc3VzZS5kZT47IFRvbSBMZW5kYWNreQ0KPiA8dGhvbWFzLmxlbmRh
+Y2t5QGFtZC5jb20+OyBzdGFibGVAdmdlci5rZXJuZWwub3JnOyB4ODZAa2VybmVsLm9yZzsgbGlu
+dXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBbdGlwOiB4ODYvdXJnZW50XSB4
+ODYvc2V2OiBVbnJvbGwgc3RyaW5nIG1taW8gd2l0aCBDQ19BVFRSX0dVRVNUX1VOUk9MTF9TVFJJ
+TkdfSU8NCj4gDQo+IFRoZSBmb2xsb3dpbmcgY29tbWl0IGhhcyBiZWVuIG1lcmdlZCBpbnRvIHRo
+ZSB4ODYvdXJnZW50IGJyYW5jaCBvZiB0aXA6DQo+IA0KPiBDb21taXQtSUQ6ICAgICA0MDA5YTRh
+YzgyZGQ5NWI4Y2QyYjYyYmQzMDAxOTQ3Njk4M2YwYWZmDQo+IEdpdHdlYjogICAgICAgIGh0dHBz
+Oi8vZ2l0Lmtlcm5lbC5vcmcvdGlwLzQwMDlhNGFjODJkZDk1YjhjZDJiNjJiZDMwMDE5NDc2OTgz
+ZjBhZmYNCj4gQXV0aG9yOiAgICAgICAgSm9lcmcgUm9lZGVsIDxqcm9lZGVsQHN1c2UuZGU+DQo+
+IEF1dGhvckRhdGU6ICAgIE1vbiwgMjEgTWFyIDIwMjIgMTA6MzM6NTEgKzAxOjAwDQo+IENvbW1p
+dHRlcjogICAgIEJvcmlzbGF2IFBldGtvdiA8YnBAc3VzZS5kZT4NCj4gQ29tbWl0dGVyRGF0ZTog
+VHVlLCAyOSBNYXIgMjAyMiAxNTo1OToxNiArMDI6MDANCj4gDQo+IHg4Ni9zZXY6IFVucm9sbCBz
+dHJpbmcgbW1pbyB3aXRoIENDX0FUVFJfR1VFU1RfVU5ST0xMX1NUUklOR19JTw0KPiANCj4gVGhl
+IGlvLXNwZWNpZmljIG1lbWNweS9tZW1zZXQgZnVuY3Rpb25zIHVzZSBzdHJpbmcgbW1pbyBhY2Nl
+c3NlcyB0byBkbw0KPiB0aGVpciB3b3JrLiBVbmRlciBTRVYsIHRoZSBoeXBlcnZpc29yIGNhbid0
+IGVtdWxhdGUgdGhlc2UgaW5zdHJ1Y3Rpb25zDQo+IGJlY2F1c2UgdGhleSByZWFkL3dyaXRlIGRp
+cmVjdGx5IGZyb20vdG8gZW5jcnlwdGVkIG1lbW9yeS4NCj4gDQo+IEtWTSB3aWxsIGluamVjdCBh
+IHBhZ2UgZmF1bHQgZXhjZXB0aW9uIGludG8gdGhlIGd1ZXN0IHdoZW4gaXQgaXMgYXNrZWQNCj4g
+dG8gZW11bGF0ZSBzdHJpbmcgbW1pbyBpbnN0cnVjdGlvbnMgZm9yIGFuIFNFViBndWVzdDoNCj4g
+DQo+ICAgQlVHOiB1bmFibGUgdG8gaGFuZGxlIHBhZ2UgZmF1bHQgZm9yIGFkZHJlc3M6IGZmZmZj
+OTAwMDAwNjUwNjgNCj4gICAjUEY6IHN1cGVydmlzb3IgcmVhZCBhY2Nlc3MgaW4ga2VybmVsIG1v
+ZGUNCj4gICAjUEY6IGVycm9yX2NvZGUoMHgwMDAwKSAtIG5vdC1wcmVzZW50IHBhZ2UNCj4gICBQ
+R0QgODAwMDEwMDAwMDA2NyBQNEQgODAwMDEwMDAwMDA2NyBQVUQgODAwMDEwMDBmYjA2NyBQTUQg
+ODAwMDEwMDBmYzA2NyBQVEUgODAwMDAwMDBmZWQ0MDE3Mw0KPiAgIE9vcHM6IDAwMDAgWyMxXSBQ
+UkVFTVBUIFNNUCBOT1BUSQ0KPiAgIENQVTogMCBQSUQ6IDEgQ29tbTogc3dhcHBlci8wIE5vdCB0
+YWludGVkIDUuMTcuMC1yYzcgIzMNCj4gDQo+IEFzIHN0cmluZyBtbWlvIGZvciBhbiBTRVYgZ3Vl
+c3QgY2FuIG5vdCBiZSBzdXBwb3J0ZWQgYnkgdGhlDQo+IGh5cGVydmlzb3IsIHVucm9sbCB0aGUg
+aW5zdHJ1Y3Rpb25zIGZvciBDQ19BVFRSX0dVRVNUX1VOUk9MTF9TVFJJTkdfSU8NCj4gZW5hYmxl
+ZCBrZXJuZWxzLg0KPiANCj4gVGhpcyBpc3N1ZSBhcHBlYXJzIHdoZW4ga2VybmVscyBhcmUgbGF1
+bmNoZWQgaW4gcmVjZW50IGxpYnZpcnQtbWFuYWdlZA0KPiBTRVYgdmlydHVhbCBtYWNoaW5lcywg
+YmVjYXVzZSB2aXJ0LWluc3RhbGwgc3RhcnRlZCB0byBhZGQgYSB0cG0tY3JiDQo+IGRldmljZSB0
+byB0aGUgZ3Vlc3QgYnkgZGVmYXVsdCBhbmQgcHJvYWN0aXZlbHkgYmVjYXVzZSwgcmFpc2luczoN
+Cj4gDQo+ICAgaHR0cHM6Ly9naXRodWIuY29tL3ZpcnQtbWFuYWdlci92aXJ0LW1hbmFnZXIvY29t
+bWl0L2ViNThjMDlmNDg4YjA2MzNlZDFlZWEwMTJjZDMxMWU0ODg2NDQwMWUNCj4gDQo+IGFuZCBh
+cyB0aGF0IGNvbW1pdCBzYXlzLCB0aGUgZGVmYXVsdCBhZGRpbmcgb2YgYSBUUE0gY2FuIGJlIGRp
+c2FibGVkDQo+IHdpdGggInZpcnQtaW5zdGFsbCAuLi4gLS10cG0gbm9uZSIuDQo+IA0KPiBUaGUg
+a2VybmVsIGRyaXZlciBmb3IgdHBtLWNyYiB1c2VzIG1lbWNweV90by9mcm9tX2lvKCkgZnVuY3Rp
+b25zIHRvDQo+IGFjY2VzcyBNTUlPIG1lbW9yeSwgcmVzdWx0aW5nIGluIGEgcGFnZS1mYXVsdCBp
+bmplY3RlZCBieSBLVk0gYW5kDQo+IGNyYXNoaW5nIHRoZSBrZXJuZWwgYXQgYm9vdC4NCj4gDQo+
+ICAgWyBicDogTWFzc2FnZSBhbmQgZXh0ZW5kIGNvbW1pdCBtZXNzYWdlLiBdDQo+IA0KPiBGaXhl
+czogZDhhYTdlZWE3OGExICgneDg2L21tOiBBZGQgU2VjdXJlIEVuY3J5cHRlZCBWaXJ0dWFsaXph
+dGlvbiAoU0VWKSBzdXBwb3J0JykNCj4gU2lnbmVkLW9mZi1ieTogSm9lcmcgUm9lZGVsIDxqcm9l
+ZGVsQHN1c2UuZGU+DQo+IFNpZ25lZC1vZmYtYnk6IEJvcmlzbGF2IFBldGtvdiA8YnBAc3VzZS5k
+ZT4NCj4gUmV2aWV3ZWQtYnk6IFRvbSBMZW5kYWNreSA8dGhvbWFzLmxlbmRhY2t5QGFtZC5jb20+
+DQo+IENjOiA8c3RhYmxlQHZnZXIua2VybmVsLm9yZz4NCj4gTGluazogaHR0cHM6Ly9sb3JlLmtl
+cm5lbC5vcmcvci8yMDIyMDMyMTA5MzM1MS4yMzk3Ni0xLWpvcm9AOGJ5dGVzLm9yZw0KPiAtLS0N
+Cj4gIGFyY2gveDg2L2xpYi9pb21lbS5jIHwgNjUgKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKy0tLS0tLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDU3IGluc2VydGlvbnMoKyksIDgg
+ZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYvbGliL2lvbWVtLmMgYi9h
+cmNoL3g4Ni9saWIvaW9tZW0uYw0KPiBpbmRleCBkZjUwNDUxLi4zZTJmMzNmIDEwMDY0NA0KPiAt
+LS0gYS9hcmNoL3g4Ni9saWIvaW9tZW0uYw0KPiArKysgYi9hcmNoL3g4Ni9saWIvaW9tZW0uYw0K
+PiBAQCAtMjIsNyArMjIsNyBAQCBzdGF0aWMgX19hbHdheXNfaW5saW5lIHZvaWQgcmVwX21vdnMo
+dm9pZCAqdG8sIGNvbnN0IHZvaWQgKmZyb20sIHNpemVfdCBuKQ0KPiAgCQkgICAgIDogIm1lbW9y
+eSIpOw0KPiAgfQ0KPiANCj4gLXZvaWQgbWVtY3B5X2Zyb21pbyh2b2lkICp0bywgY29uc3Qgdm9s
+YXRpbGUgdm9pZCBfX2lvbWVtICpmcm9tLCBzaXplX3QgbikNCj4gK3N0YXRpYyB2b2lkIHN0cmlu
+Z19tZW1jcHlfZnJvbWlvKHZvaWQgKnRvLCBjb25zdCB2b2xhdGlsZSB2b2lkIF9faW9tZW0gKmZy
+b20sIHNpemVfdCBuKQ0KPiAgew0KPiAgCWlmICh1bmxpa2VseSghbikpDQo+ICAJCXJldHVybjsN
+Cj4gQEAgLTM4LDkgKzM4LDggQEAgdm9pZCBtZW1jcHlfZnJvbWlvKHZvaWQgKnRvLCBjb25zdCB2
+b2xhdGlsZSB2b2lkIF9faW9tZW0gKmZyb20sIHNpemVfdCBuKQ0KPiAgCX0NCj4gIAlyZXBfbW92
+cyh0bywgKGNvbnN0IHZvaWQgKilmcm9tLCBuKTsNCj4gIH0NCj4gLUVYUE9SVF9TWU1CT0wobWVt
+Y3B5X2Zyb21pbyk7DQo+IA0KPiAtdm9pZCBtZW1jcHlfdG9pbyh2b2xhdGlsZSB2b2lkIF9faW9t
+ZW0gKnRvLCBjb25zdCB2b2lkICpmcm9tLCBzaXplX3QgbikNCj4gK3N0YXRpYyB2b2lkIHN0cmlu
+Z19tZW1jcHlfdG9pbyh2b2xhdGlsZSB2b2lkIF9faW9tZW0gKnRvLCBjb25zdCB2b2lkICpmcm9t
+LCBzaXplX3QgbikNCj4gIHsNCj4gIAlpZiAodW5saWtlbHkoIW4pKQ0KPiAgCQlyZXR1cm47DQo+
+IEBAIC01NiwxNCArNTUsNjQgQEAgdm9pZCBtZW1jcHlfdG9pbyh2b2xhdGlsZSB2b2lkIF9faW9t
+ZW0gKnRvLCBjb25zdCB2b2lkICpmcm9tLCBzaXplX3QgbikNCj4gIAl9DQo+ICAJcmVwX21vdnMo
+KHZvaWQgKil0bywgKGNvbnN0IHZvaWQgKikgZnJvbSwgbik7DQo+ICB9DQo+ICsNCj4gK3N0YXRp
+YyB2b2lkIHVucm9sbGVkX21lbWNweV9mcm9taW8odm9pZCAqdG8sIGNvbnN0IHZvbGF0aWxlIHZv
+aWQgX19pb21lbSAqZnJvbSwgc2l6ZV90IG4pDQo+ICt7DQo+ICsJY29uc3Qgdm9sYXRpbGUgY2hh
+ciBfX2lvbWVtICppbiA9IGZyb207DQo+ICsJY2hhciAqb3V0ID0gdG87DQo+ICsJaW50IGk7DQo+
+ICsNCj4gKwlmb3IgKGkgPSAwOyBpIDwgbjsgKytpKQ0KPiArCQlvdXRbaV0gPSByZWFkYigmaW5b
+aV0pOw0KPiArfQ0KPiArDQo+ICtzdGF0aWMgdm9pZCB1bnJvbGxlZF9tZW1jcHlfdG9pbyh2b2xh
+dGlsZSB2b2lkIF9faW9tZW0gKnRvLCBjb25zdCB2b2lkICpmcm9tLCBzaXplX3QgbikNCj4gK3sN
+Cj4gKwl2b2xhdGlsZSBjaGFyIF9faW9tZW0gKm91dCA9IHRvOw0KPiArCWNvbnN0IGNoYXIgKmlu
+ID0gZnJvbTsNCj4gKwlpbnQgaTsNCj4gKw0KPiArCWZvciAoaSA9IDA7IGkgPCBuOyArK2kpDQo+
+ICsJCXdyaXRlYihpbltpXSwgJm91dFtpXSk7DQo+ICt9DQo+ICsNCj4gK3N0YXRpYyB2b2lkIHVu
+cm9sbGVkX21lbXNldF9pbyh2b2xhdGlsZSB2b2lkIF9faW9tZW0gKmEsIGludCBiLCBzaXplX3Qg
+YykNCj4gK3sNCj4gKwl2b2xhdGlsZSBjaGFyIF9faW9tZW0gKm1lbSA9IGE7DQo+ICsJaW50IGk7
+DQo+ICsNCj4gKwlmb3IgKGkgPSAwOyBpIDwgYzsgKytpKQ0KPiArCQl3cml0ZWIoYiwgJm1lbVtp
+XSk7DQo+ICt9DQo+ICsNCj4gK3ZvaWQgbWVtY3B5X2Zyb21pbyh2b2lkICp0bywgY29uc3Qgdm9s
+YXRpbGUgdm9pZCBfX2lvbWVtICpmcm9tLCBzaXplX3QgbikNCj4gK3sNCj4gKwlpZiAoY2NfcGxh
+dGZvcm1faGFzKENDX0FUVFJfR1VFU1RfVU5ST0xMX1NUUklOR19JTykpDQo+ICsJCXVucm9sbGVk
+X21lbWNweV9mcm9taW8odG8sIGZyb20sIG4pOw0KPiArCWVsc2UNCj4gKwkJc3RyaW5nX21lbWNw
+eV9mcm9taW8odG8sIGZyb20sIG4pOw0KPiArfQ0KPiArRVhQT1JUX1NZTUJPTChtZW1jcHlfZnJv
+bWlvKTsNCj4gKw0KPiArdm9pZCBtZW1jcHlfdG9pbyh2b2xhdGlsZSB2b2lkIF9faW9tZW0gKnRv
+LCBjb25zdCB2b2lkICpmcm9tLCBzaXplX3QgbikNCj4gK3sNCj4gKwlpZiAoY2NfcGxhdGZvcm1f
+aGFzKENDX0FUVFJfR1VFU1RfVU5ST0xMX1NUUklOR19JTykpDQo+ICsJCXVucm9sbGVkX21lbWNw
+eV90b2lvKHRvLCBmcm9tLCBuKTsNCj4gKwllbHNlDQo+ICsJCXN0cmluZ19tZW1jcHlfdG9pbyh0
+bywgZnJvbSwgbik7DQo+ICt9DQo+ICBFWFBPUlRfU1lNQk9MKG1lbWNweV90b2lvKTsNCj4gDQo+
+ICB2b2lkIG1lbXNldF9pbyh2b2xhdGlsZSB2b2lkIF9faW9tZW0gKmEsIGludCBiLCBzaXplX3Qg
+YykNCj4gIHsNCj4gLQkvKg0KPiAtCSAqIFRPRE86IG1lbXNldCBjYW4gbWFuZ2xlIHRoZSBJTyBw
+YXR0ZXJucyBxdWl0ZSBhIGJpdC4NCj4gLQkgKiBwZXJoYXBzIGl0IHdvdWxkIGJlIGJldHRlciB0
+byB1c2UgYSBkdW1iIG9uZToNCj4gLQkgKi8NCj4gLQltZW1zZXQoKHZvaWQgKilhLCBiLCBjKTsN
+Cj4gKwlpZiAoY2NfcGxhdGZvcm1faGFzKENDX0FUVFJfR1VFU1RfVU5ST0xMX1NUUklOR19JTykp
+IHsNCj4gKwkJdW5yb2xsZWRfbWVtc2V0X2lvKGEsIGIsIGMpOw0KPiArCX0gZWxzZSB7DQo+ICsJ
+CS8qDQo+ICsJCSAqIFRPRE86IG1lbXNldCBjYW4gbWFuZ2xlIHRoZSBJTyBwYXR0ZXJucyBxdWl0
+ZSBhIGJpdC4NCj4gKwkJICogcGVyaGFwcyBpdCB3b3VsZCBiZSBiZXR0ZXIgdG8gdXNlIGEgZHVt
+YiBvbmU6DQo+ICsJCSAqLw0KPiArCQltZW1zZXQoKHZvaWQgKilhLCBiLCBjKTsNCj4gKwl9DQo+
+ICB9DQo+ICBFWFBPUlRfU1lNQk9MKG1lbXNldF9pbyk7DQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVz
+cyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEg
+MVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-There should be a description of the device in the changelog, not just the same
-text as the subject.
-
-> +static void spmmc_request(struct mmc_host *mmc, struct mmc_request *mrq)
-> +{
-> +       struct spmmc_host *host = mmc_priv(mmc);
-> +       struct mmc_data *data;
-> +       struct mmc_command *cmd;
-> +       int ret;
-> +
-> +       ret = mutex_lock_interruptible(&host->mrq_lock);
-> +       if (ret)
-> +               return;
-
-I don't think it's valid to just return here when you get a signal. If
-nothing can
-handle the signal, doesn't it just hang?
-
-It also appears that you don't release the mutex until the tasklet runs,
-but it is not valid to release a mutex from a different context.
-
-You should get a warning about this when running a kernel with lockdep
-enabled at compile time. Please rework the locking to make this work.
-
-> +#endif /* ifdef CONFIG_PM_RUNTIME */
-> +
-> +static const struct dev_pm_ops spmmc_pm_ops = {
-> +       SET_SYSTEM_SLEEP_PM_OPS(spmmc_pm_suspend, spmmc_pm_resume)
-> +#ifdef CONFIG_PM_RUNTIME
-> +       SET_RUNTIME_PM_OPS(spmmc_pm_runtime_suspend, spmmc_pm_runtime_resume, NULL)
-> +#endif
-> +};
-> +#endif /* ifdef CONFIG_PM */
-
-It's better to use SYSTEM_SLEEP_PM_OPS/RUNTIME_PM_OPS instead
-of the SET_ version, then you can remove all the #ifdef checks.
-
-       Arnd

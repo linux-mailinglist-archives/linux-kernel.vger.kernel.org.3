@@ -2,94 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D8B4EB6FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1FEA4EB6FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241120AbiC2Xue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
+        id S235540AbiC2Xu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241047AbiC2Xu1 (ORCPT
+        with ESMTP id S241116AbiC2XuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:50:27 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2182BCD
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:48:43 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id lr4so29781275ejb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:48:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HjRkKcTIdEtSJ5qdAlFxYDjytEDuq9kJF/JdJHhM/W0=;
-        b=Npg9tE2QGOUSet55NeMISOUe/KIPJ3btjDh/22dgXKu1PpUjyv7Vk4Y/oRPiEkY82w
-         hcBWY3k/GnJzyqfD4xQV4QmOaihQ9S571CWdWE6Cu8zWij4iaT8ZVKe3C07i5W1s9yHA
-         u4s+WgscKOGxKTYoLeUTkD75HZzK1F9xtclR9/zvyzyl8m6FfkdAbAJxj6cFf3Qy5Q6y
-         BCC2yBo3UCRTBxjsP+uR8EWlc+sD8rIIGt0T5lBt4cOWoPSu3m+SUniVC/lX0MAT5zCl
-         k6YdzBgp18h/6qfbpOIIuQ9CDuXGv22P10E/2zK5bCpdPdeAZVEvspBdUAunRZvcM3Wm
-         mI8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HjRkKcTIdEtSJ5qdAlFxYDjytEDuq9kJF/JdJHhM/W0=;
-        b=avJXFYxdMzijMRhX4pH15oK4njhxehntCLSe8bms0KEMHWxPnmhuyuKhXPaa12Y1n1
-         OUC7vbBsyzhhXWf6/4QwQtAqs9qBRdCBcvFjXQNEGZOVab0uQxVExPFcW304ynMKBdRV
-         GCWLbyXYHyxS5Gy374ojd4BdyCVGBkGjsAYkCrF4WFSvHrfWF2J6+U7qYMSiYTl7j1xW
-         98I19himAo5VnQdXK0JGe/yxTE2uhI4+5rNgBNCnZckpNjq/omkY+OK7QquXnZNa/hZD
-         T4zzO1V9c/HjNp/UH1wYahoas70qKShyXMxgl/VXgfjF2pwDKX0RdcIjGO8XX0yIYSY9
-         xFHg==
-X-Gm-Message-State: AOAM530UTPPYdczmzWVWN8evoQIt66k8HJlSQFS5XWGbEioKB/z0ufso
-        /SXViav6Ziv5orp5Ujc2JWU+gbe7cJe4HzV5/103Bw==
-X-Google-Smtp-Source: ABdhPJzx3gWELIECgfbIZ7X/BnP3w6wKOVDzcjJ3/ACk+h5YKfJf8FHobuoDG15x3ba5Y2mpQHNA+QM/IqRkoW+athY=
-X-Received: by 2002:a17:907:1622:b0:6df:d1a2:d4a3 with SMTP id
- hb34-20020a170907162200b006dfd1a2d4a3mr35877982ejc.542.1648597722027; Tue, 29
- Mar 2022 16:48:42 -0700 (PDT)
+        Tue, 29 Mar 2022 19:50:21 -0400
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 661E064EA;
+        Tue, 29 Mar 2022 16:48:34 -0700 (PDT)
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 30 Mar 2022 08:48:33 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 968F82058B50;
+        Wed, 30 Mar 2022 08:48:33 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 30 Mar 2022 08:48:33 +0900
+Received: from [10.212.182.122] (unknown [10.212.182.122])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 83659B62B7;
+        Wed, 30 Mar 2022 08:48:32 +0900 (JST)
+Subject: Re: [PATCH 3/3] dt-bindings: phy: uniphier-ahci: Fix missing
+ reset-names
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <1648433152-23126-1-git-send-email-hayashi.kunihiko@socionext.com>
+ <1648433152-23126-4-git-send-email-hayashi.kunihiko@socionext.com>
+ <2e0be70f-f800-e3f8-363e-6598468fa091@linaro.org>
+ <54a88acd-49ed-01f6-4108-b74bc653a612@socionext.com>
+ <1ff5682f-3f59-8635-631f-d648e604044f@linaro.org>
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Message-ID: <1dbe4ef7-25bc-2f8a-6ce5-3a39453a8b1c@socionext.com>
+Date:   Wed, 30 Mar 2022 08:48:32 +0900
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <cover.1648593132.git.marcelo.schmitt1@gmail.com> <9b8233e89227617a2cb47d85c654603c6583323d.1648593132.git.marcelo.schmitt1@gmail.com>
-In-Reply-To: <9b8233e89227617a2cb47d85c654603c6583323d.1648593132.git.marcelo.schmitt1@gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 29 Mar 2022 18:48:30 -0500
-Message-ID: <CAGS_qxoEZmAHVHQHJsnaALXmmODQono24qLbQr98FKqRUXmCNQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] Documentation: dev-tools: Add a section for static
- analysis tools
-To:     Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-Cc:     corbet@lwn.net, mchehab+huawei@kernel.org, davidgow@google.com,
-        linux-doc@vger.kernel.org, linux-sparse@vger.kernel.org,
-        cocci@inria.fr, smatch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
-        dan.carpenter@oracle.com, julia.lawall@inria.fr
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1ff5682f-3f59-8635-631f-d648e604044f@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 6:22 PM Marcelo Schmitt
-<marcelo.schmitt1@gmail.com> wrote:
->
-> Complement the Kernel Testing Guide documentation page by adding a
-> section about static analysis tools.
->
-> Signed-off-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-> Acked-by: Daniel Latypov <dlatypov@google.com>
-> Acked-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Reviewed-by: David Gow <davidgow@google.com>
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
-> Change log:
-> - Brought generic tool characteristics to the intro paragraph
-> - Made explicit that these tools run at compile time
-> - Added a note of caution about false positives
-> - Updated Coccinelle info to make it sound better and be more skimmable
+Hi Krzysztof,
 
-This looks a lot nicer to me!
-Thanks for doing this.
+On 2022/03/29 20:45, Krzysztof Kozlowski wrote:
+> On 29/03/2022 12:55, Kunihiko Hayashi wrote:
+>> Hi Krzysztof,
+>>
+>> Thank you for reviewing.
+>>
+>> On 2022/03/29 3:58, Krzysztof Kozlowski wrote:
+>>> On 28/03/2022 04:05, Kunihiko Hayashi wrote:
+>>>> Add missing "phy" reset-names to fix the following warning:
+>>>>
+>>>>     uniphier-pro4-ace.dtb: ahci-phy@10: resets: [[26, 28], [26, 12], [26,
+>>>> 30], [36, 0], [36, 1], [36, 2]] is too long
+>>>>         From schema:
+>>>> Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+>>>>     uniphier-pro4-ace.dtb: ahci-phy@10: reset-names: 'oneOf' conditional
+>>>> failed, one must be fixed:
+>>>>         ['link', 'gio', 'phy', 'pm', 'tx', 'rx'] is too long
+>>>>         From schema:
+>>>> Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+>>>
+>>> There is no ahci-phy in current sources...
+>>
+>> Oops, I'm going to add ahci controller to the existing devicetree,
+>> but not yet. I shouldn't write the future warning in the commit message,
+>> so I'll fix it.
+>>
+>>>>
+>>>> Fixes: 34f92b67621f ("dt-bindings: phy: uniphier-ahci: Add bindings for
+>>>> Pro4 SoC")
+>>>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+>>>> ---
+>>>>    .../devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml   | 3 ++-
+>>>>    1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git
+>>>> a/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+>>>> b/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+>>>> index 3b400a85b44a..14f7579e7daa 100644
+>>>> ---
+>>>> a/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+>>>> +++
+>>>> b/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+>>>> @@ -43,13 +43,14 @@ properties:
+>>>>
+>>>>      resets:
+>>>>        minItems: 2
+>>>> -    maxItems: 5
+>>>> +    maxItems: 6
+>>>>
+>>>>      reset-names:
+>>>>        oneOf:
+>>>
+>>> As a separate commit, this oneOf should be converted into allOf:if:then:
+>>> cases which will enforce the resets per compatible.
+>>>
+>>> Can you do that as well?
+>>
+>> Ok, I've found some examples using "allOf:if:them:" cases,
+>> so I'll try to convert it with another commit.
+>>
+> 
+> For an example, you can take a look at (linux-next):
+> Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.yaml
+> 
+> and clocks/clock-names properties.
 
-Daniel
+Thanks for your suggestion.
+I understand how to write it and am trying to convert the *-names to this case.
+
+I also found such cases and some mistakes in the other phys (usb3 and pcie),
+so I'll fix and resend them next.
+
+Thank you,
+
+---
+Best Regards
+Kunihiko Hayashi

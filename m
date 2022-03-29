@@ -2,152 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5044EB58D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E374EB590
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235795AbiC2WGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 18:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
+        id S235847AbiC2WHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 18:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235689AbiC2WGl (ORCPT
+        with ESMTP id S232491AbiC2WHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 18:06:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38D9235DCD
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:04:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648591496;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IBLVNEPOUf5WmMPDsR6Y4RldMomDgegBLpjKSzD4JRA=;
-        b=JLHV1TI5dOZ/MWOs/vk6MHKAZPjdI113aN/CSiVGSWI22mHerM5KOmTJXt1six4jHUHo7e
-        tkYXCcq5z+JfczSZNnnbBaYqBeIG9L8z/2UF42U94ujbSaBbUVJz5VOMJwUBce17+i/2fT
-        +kCs+PyPekonz0VaIvarXcQq0GgIT2g=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-629-ZmXwXS_eOV-9d7RzHXXpYg-1; Tue, 29 Mar 2022 18:04:55 -0400
-X-MC-Unique: ZmXwXS_eOV-9d7RzHXXpYg-1
-Received: by mail-wr1-f69.google.com with SMTP id 15-20020adf808f000000b00203e488fa4eso5354224wrl.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:04:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IBLVNEPOUf5WmMPDsR6Y4RldMomDgegBLpjKSzD4JRA=;
-        b=fLri+k49/yULhLG+lWBYjjM9QXZTF3KtLC/maQvzeaXfzqWHhoL/+F2oLrtomAuCVb
-         vIZLq2bNPvZYpQA4HXzHBNmm3PtSmWxJv1WDsLIm8okqQ4JvzZrU03/2lSJoRNM30FZU
-         1b7ECdpmWrkHz1Z5313xq5hQhquiroj6z+bikDuPvyhGwg0YJ/UhT3LjV8ZJ8AZtooC+
-         WAfwS+ji3N/vX7bGH8NEfzUddvIxVxm4uAMbib0WHMtNGxOZ4dPcGlxFVzaIXfb/2TTU
-         VIShuxUYlFsEnpXWnt90bJSlot/ayWGGc9ZBUjipUgYXD1YWmfZieCchyupbaoI/8nmN
-         vXkw==
-X-Gm-Message-State: AOAM533KZOCOkpJxWK74oVkwd5x5lpib4kyuKhoTHkH1IzMgLjLsIpnU
-        EH1QJyJ0p5qUaBuYj8/qi/grW9DMPXLfpa3x79GAFd0D9OOOYZcEz3kJYXgJdUhEVKNGRChLLgs
-        Ae0epBOwbYqaisjcTCu0XlHCe
-X-Received: by 2002:a05:6000:1848:b0:204:e90:cb55 with SMTP id c8-20020a056000184800b002040e90cb55mr33430809wri.58.1648591493929;
-        Tue, 29 Mar 2022 15:04:53 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxZklsWDLtlBufF6gMqI6XIA4yF+Av43mfXR6BICacO/J+twKmWzR7EUSvOK/qjb3IJxAX0yw==
-X-Received: by 2002:a05:6000:1848:b0:204:e90:cb55 with SMTP id c8-20020a056000184800b002040e90cb55mr33430788wri.58.1648591493646;
-        Tue, 29 Mar 2022 15:04:53 -0700 (PDT)
-Received: from redhat.com ([2.52.9.207])
-        by smtp.gmail.com with ESMTPSA id j16-20020a05600c191000b0038ca3500494sm5309811wmq.27.2022.03.29.15.04.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 15:04:53 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 18:04:48 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Keir Fraser <keirf@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re:
-Message-ID: <20220329175426-mutt-send-email-mst@kernel.org>
-References: <20220325050947-mutt-send-email-mst@kernel.org>
- <CACGkMEvioAVMmB+ab2xXB2YPECtwi1J55u8mRRk9-JAjFSZ8vg@mail.gmail.com>
- <20220325060659-mutt-send-email-mst@kernel.org>
- <CACGkMEu4mRfNbJXJtAFzhyd55fD7phUDKnVtYW0aqRnQmT_bYw@mail.gmail.com>
- <20220328015757-mutt-send-email-mst@kernel.org>
- <CACGkMEu+fax6YYwhfbc1yoSxv6o1FTQyrOheVTmUfqGvmbAEfA@mail.gmail.com>
- <20220328062452-mutt-send-email-mst@kernel.org>
- <87fsn1f96e.ffs@tglx>
- <20220329100859-mutt-send-email-mst@kernel.org>
- <87v8vweie2.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87v8vweie2.ffs@tglx>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 29 Mar 2022 18:07:41 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4655AB91A7;
+        Tue, 29 Mar 2022 15:05:56 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id BED6AC009; Wed, 30 Mar 2022 00:05:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1648591551; bh=JcJk3NcTD//GtEmRNH6tsnNKdy80/1cNJm+0T/WWJ8c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pOV3Gwq+eOiks8TWwwlwywD+gD20R4AbvcuzbhwJidUGyqanwA1Szjbm8NgvytQfu
+         ej0/TTJw1e9oRoNxycVRY6SIXcir7efBWBABJbkTeMuIXSr6va9QnHgo3ZJwjoNcYo
+         qWtvmMZbunPnB9X0n6wXrDBPxR6O9eyC1rOsxBPj6Krq5ISNXPHk/0cZzD7g/Es9ZH
+         0gjgzSFrvMGZvxB4LsZU6Nc+MSwQhskUBwd+86793V5XWY5lJnGDM4jQyPs73ajjAm
+         N0v/K2uJ+dKsHkp0MVGrCRwr8wamUd9Ix1/s4o8EYublcd2vRvSAzviMBgYY5fLBtj
+         moS0cQ9NAFrDQ==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 35B23C009;
+        Wed, 30 Mar 2022 00:05:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1648591550; bh=JcJk3NcTD//GtEmRNH6tsnNKdy80/1cNJm+0T/WWJ8c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FGPoWDZymW6j4tZG8qP9yEZVT7iCrkF6UEcCEVorRqoJI6bDk/IHQ0/GgVYlslC0z
+         vq+IjwE3X1k1tB/IP2MewdtHgipfLOy8XTlxid8S8c/1uFHcA60qcevYGYR494WQ2r
+         f43qACTF3gtUi+6SfOaImRF5ROBP22Zq0kzwUJH/rTmgvDSUb6hTMUhXXe4xJecj2Y
+         Vp4WkzvzeYzNttGTlbegzcHDA2eU+TRMhJNdzWwA8o2zoveUKRPaGKRdmFiB6WObfJ
+         qlKs9pDmrT7HCv8y1ojlgFCS6GUjvFALE2FPclFYL+M0mN1UaZS2aSWdpo86+Dzoub
+         NZStCyIOfvpWQ==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 98330da0;
+        Tue, 29 Mar 2022 22:05:43 +0000 (UTC)
+Date:   Wed, 30 Mar 2022 07:05:28 +0900
+From:   asmadeus@codewreck.org
+To:     syzbot <syzbot+bde0f89deacca7c765b8@syzkaller.appspotmail.com>
+Cc:     davem@davemloft.net, ericvh@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux_oss@crudebyte.com,
+        lucho@ionkov.net, netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net
+Subject: Re: [syzbot] possible deadlock in p9_write_work
+Message-ID: <YkOCqJ4WDObmaAcn@codewreck.org>
+References: <0000000000009523b605db620972@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0000000000009523b605db620972@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 08:13:57PM +0200, Thomas Gleixner wrote:
-> On Tue, Mar 29 2022 at 10:37, Michael S. Tsirkin wrote:
-> > On Tue, Mar 29, 2022 at 10:35:21AM +0200, Thomas Gleixner wrote:
-> > We are trying to fix the driver since at the moment it does not
-> > have the dev->ok flag at all.
-> >
-> > And I suspect virtio is not alone in that.
-> > So it would have been nice if there was a standard flag
-> > replacing the driver-specific dev->ok above, and ideally
-> > would also handle the case of an interrupt triggering
-> > too early by deferring the interrupt until the flag is set.
-> >
-> > And in fact, it does kind of exist: IRQF_NO_AUTOEN, and you would call
-> > enable_irq instead of dev->ok = true, except
-> > - it doesn't work with affinity managed IRQs
-> > - it does not work with shared IRQs
-> >
-> > So using dev->ok as you propose above seems better at this point.
+syzbot wrote on Tue, Mar 29, 2022 at 02:23:17PM -0700:
+> ======================================================
+> WARNING: possible circular locking dependency detected
+> 5.17.0-next-20220328-syzkaller #0 Not tainted
+> ------------------------------------------------------
+> kworker/1:1/26 is trying to acquire lock:
+> ffff88807eece460 (sb_writers#3){.+.+}-{0:0}, at: p9_fd_write net/9p/trans_fd.c:428 [inline]
+> ffff88807eece460 (sb_writers#3){.+.+}-{0:0}, at: p9_write_work+0x25e/0xca0 net/9p/trans_fd.c:479
 > 
-> Unless there is a big enough amount of drivers which could make use of a
-> generic mechanism for that.
+> but task is already holding lock:
+> ffffc90000a1fda8 ((work_completion)(&m->wq)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
 > 
-> >> If any driver does this in the wrong order, then the driver is
-> >> broken.
-> > 
-> > I agree, however:
-> > $ git grep synchronize_irq `git grep -l request_irq drivers/net/`|wc -l
-> > 113
-> > $ git grep -l request_irq drivers/net/|wc -l
-> > 397
-> >
-> > I suspect there are more drivers which in theory need the
-> > synchronize_irq dance but in practice do not execute it.
+> which lock already depends on the new lock.
 > 
-> That really depends on when the driver requests the interrupt, when
-> it actually enables the interrupt in the device itself
+> 
+> the existing dependency chain (in reverse order) is:
+> 
+> -> #3 ((work_completion)(&m->wq)){+.+.}-{0:0}:
+>        process_one_work+0x905/0x1610 kernel/workqueue.c:2265
+>        worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+>        kthread+0x2e9/0x3a0 kernel/kthread.c:376
+>        ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+> 
+> -> #2 ((wq_completion)events){+.+.}-{0:0}:
+>        flush_workqueue+0x164/0x1440 kernel/workqueue.c:2831
+>        flush_scheduled_work include/linux/workqueue.h:583 [inline]
+>        ext4_put_super+0x99/0x1150 fs/ext4/super.c:1202
+>        generic_shutdown_super+0x14c/0x400 fs/super.c:462
+>        kill_block_super+0x97/0xf0 fs/super.c:1394
+>        deactivate_locked_super+0x94/0x160 fs/super.c:332
+>        deactivate_super+0xad/0xd0 fs/super.c:363
+>        cleanup_mnt+0x3a2/0x540 fs/namespace.c:1186
+>        task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+>        resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+>        exit_to_user_mode_loop kernel/entry/common.c:183 [inline]
+>        exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:215
+>        __syscall_exit_to_user_mode_work kernel/entry/common.c:297 [inline]
+>        syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:308
+>        do_syscall_64+0x42/0x80 arch/x86/entry/common.c:86
+>        entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> -> #1 (&type->s_umount_key#32){++++}-{3:3}:
+>        down_read+0x98/0x440 kernel/locking/rwsem.c:1461
+>        iterate_supers+0xdb/0x290 fs/super.c:692
+>        drop_caches_sysctl_handler+0xdb/0x110 fs/drop_caches.c:62
+>        proc_sys_call_handler+0x4a1/0x6e0 fs/proc/proc_sysctl.c:604
+>        call_write_iter include/linux/fs.h:2080 [inline]
+>        do_iter_readv_writev+0x3d1/0x640 fs/read_write.c:726
+>        do_iter_write+0x182/0x700 fs/read_write.c:852
+>        vfs_iter_write+0x70/0xa0 fs/read_write.c:893
+>        iter_file_splice_write+0x723/0xc70 fs/splice.c:689
+>        do_splice_from fs/splice.c:767 [inline]
+>        direct_splice_actor+0x110/0x180 fs/splice.c:936
+>        splice_direct_to_actor+0x34b/0x8c0 fs/splice.c:891
+>        do_splice_direct+0x1a7/0x270 fs/splice.c:979
+>        do_sendfile+0xae0/0x1240 fs/read_write.c:1246
+>        __do_sys_sendfile64 fs/read_write.c:1305 [inline]
+>        __se_sys_sendfile64 fs/read_write.c:1297 [inline]
+>        __x64_sys_sendfile64+0x149/0x210 fs/read_write.c:1297
+>        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>        do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
+>        entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> -> #0 (sb_writers#3){.+.+}-{0:0}:
+>        check_prev_add kernel/locking/lockdep.c:3096 [inline]
+>        check_prevs_add kernel/locking/lockdep.c:3219 [inline]
+>        validate_chain kernel/locking/lockdep.c:3834 [inline]
+>        __lock_acquire+0x2ac6/0x56c0 kernel/locking/lockdep.c:5060
+>        lock_acquire kernel/locking/lockdep.c:5672 [inline]
+>        lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5637
+>        percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+>        __sb_start_write include/linux/fs.h:1728 [inline]
+>        sb_start_write include/linux/fs.h:1798 [inline]
+>        file_start_write include/linux/fs.h:2815 [inline]
+>        kernel_write fs/read_write.c:564 [inline]
+>        kernel_write+0x2ac/0x540 fs/read_write.c:555
+>        p9_fd_write net/9p/trans_fd.c:428 [inline]
+>        p9_write_work+0x25e/0xca0 net/9p/trans_fd.c:479
+>        process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+>        worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+>        kthread+0x2e9/0x3a0 kernel/kthread.c:376
+>        ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
 
-This last point does not matter since we are talking about protecting
-against buggy/malicious devices. They can inject the interrupt anyway
-even if driver did not configure it.
 
-> and how the
-> interrupt service routine works.
-> 
-> So just doing that grep dance does not tell much. You really have to do
-> a case by case analysis.
-> 
-> Thanks,
-> 
->         tglx
+So p9_write_work cannot write because there's.. a backing ext4 umount (I
+assume it's been mounted with trans fd with an ext4 file) and a
+drop_caches stuck in parallel, and we just got caught in the crossfire ?
 
+I'm not sure why it got stuck there but that doesn't look like anything
+we can do about it, using trans fd with filesystem backed files isn't a
+usage we care about in the first place, maybe there's a way to refuse
+these and only keep sockets but I don't really see the point of
+artificially limiting the interface (unless using a 9p mount with a file
+could have security implications I don't see)
 
-I agree. In fact, at least for network the standard approach is to
-request interrupts in the open call, virtio net is unusual
-in doing it in probe. We should consider changing that.
-Jason?
-
+wontfix/dontcare for me,
 -- 
-MST
-
+Dominique

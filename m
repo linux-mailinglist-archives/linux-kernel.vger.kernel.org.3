@@ -2,80 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06A234EB6BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8337F4EB6C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240475AbiC2X2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
+        id S240486AbiC2XaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240436AbiC2X2W (ORCPT
+        with ESMTP id S229512AbiC2XaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:28:22 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CD919CCD6;
-        Tue, 29 Mar 2022 16:26:38 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id o20-20020a9d7194000000b005cb20cf4f1bso13801074otj.7;
-        Tue, 29 Mar 2022 16:26:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Onx8whWtYNziaSOWeikFCxBSNS52wmmziZDYwpwSOs0=;
-        b=tOEP9uEz2GH5PsSAqDupyOI5TxOy6wGK1pEYeN67WfbryD7pxP9oYVcc2s7ChCWgyJ
-         lNLqaFyLDe8nduQ1nDtb2/dmwqseMwl8wlIy0Jd3HWDC3GSUyWeXuFDa0fUVjRhssrgv
-         M7UExso35iHa2VYp8PuMV0rJZEkcWIs1xbzC8/a0hXgfYkS+GScwfuQ8tMI8u5XjQkrV
-         l+XuRtyJ5NjTZW1AVZzPqG5sENR4Z6LQ2ZwOyAu7O/unfiM66xk06xwhr8nSf5JfOol+
-         S/o5WXdSejDm/RrAm1W31i0eawv9+VSmmUnERakh4UoN2INOYaurQBovf0qkwv8xKhFo
-         WlLw==
-X-Gm-Message-State: AOAM531iONOylcpS0QM84fdmV+vUAR8f+JQGYR2DLXYTWqBPH+uli/OL
-        OnJUi0j0S2Bz0s0CRpVZesAbyJR6og==
-X-Google-Smtp-Source: ABdhPJwgMeIuk1f9wBngw9sMNVUFDANIzQF6qRJJfG+W5rTEJltAFjng0HItLceLMRGMH3tlj1E5wg==
-X-Received: by 2002:a05:6830:82a:b0:5b2:36d5:1603 with SMTP id t10-20020a056830082a00b005b236d51603mr2173120ots.240.1648596397558;
-        Tue, 29 Mar 2022 16:26:37 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q12-20020a4ad54c000000b003245ac0a745sm9268545oos.22.2022.03.29.16.26.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 16:26:36 -0700 (PDT)
-Received: (nullmailer pid 1552943 invoked by uid 1000);
-        Tue, 29 Mar 2022 23:26:35 -0000
-Date:   Tue, 29 Mar 2022 18:26:35 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Trevor Wu <trevor.wu@mediatek.com>
-Cc:     yc.hung@mediatek.com, broonie@kernel.org, miles.chen@mediatek.com,
-        alsa-devel@alsa-project.org, aaronyu@google.com, tiwai@suse.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, linux-mediatek@lists.infradead.org,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        devicetree@vger.kernel.org, tzungbi@google.com
-Subject: Re: [PATCH v4 6/6] ASoC: dt-bindings: mediatek: mt8195: support
- mt8195-mt6359-max98390-rt5682
-Message-ID: <YkOVq9XA9VGSNqzc@robh.at.kernel.org>
-References: <20220324053851.27350-1-trevor.wu@mediatek.com>
- <20220324053851.27350-7-trevor.wu@mediatek.com>
+        Tue, 29 Mar 2022 19:30:10 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC05F39;
+        Tue, 29 Mar 2022 16:28:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648596505; x=1680132505;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=gzmBCGI/MQMl41/e4XEdKaqxJlbBNFcUeD2Jf3KlOBU=;
+  b=C/1FVXQZkriNjtU139F7egvtv32Kn606nZ43ERfLSPyOQmIGqPh2yz9i
+   Hkm56Dnnzjtk01CoGdkgsqzWhpwL3551WfCiCjWU+m61oNdCVtS4BkxWV
+   2fUtPW++tUZjxCuLxhgju5ybhQ2RZ0dKcOapTaDeopHn7Kudv28Tdc6Hk
+   xRMa6SY2cLzazMZg6Q56sBzWZO0rlWy3mmtSPha64bBhRqQm7Pi95oJ+y
+   4zKilNVoY4V0m92DN3FpiBN8XNgAWUFFeM4q4FHIjKKIGJsgTYbrRCOg1
+   kMQgia38ZPYjUn4DOfgiG2smd8PX2+B4jTb7rQFoXZ2eJQGD++nS1JKLk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="345835729"
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="345835729"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 16:28:20 -0700
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="585783066"
+Received: from jaleon-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.255.95.100])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 16:28:17 -0700
+Message-ID: <a2728619ef71add19d9b87af554fd2fc9bc0b7e0.camel@intel.com>
+Subject: Re: [PATCH v2 01/21] x86/virt/tdx: Detect SEAM
+From:   Kai Huang <kai.huang@intel.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>
+Date:   Wed, 30 Mar 2022 12:28:14 +1300
+In-Reply-To: <20220329175234.GA1915371@ls.amr.corp.intel.com>
+References: <cover.1647167475.git.kai.huang@intel.com>
+         <a258224c26b6a08400d9a8678f5d88f749afe51e.1647167475.git.kai.huang@intel.com>
+         <BN9PR11MB527657C2AA8B9ACD94C9D5468C189@BN9PR11MB5276.namprd11.prod.outlook.com>
+         <51982ec477e43c686c5c64731715fee528750d85.camel@intel.com>
+         <BN9PR11MB52765EE37C00F0FFA01447968C1D9@BN9PR11MB5276.namprd11.prod.outlook.com>
+         <20220329175234.GA1915371@ls.amr.corp.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324053851.27350-7-trevor.wu@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Mar 2022 13:38:51 +0800, Trevor Wu wrote:
-> This patch adds compatible string "mediatek,mt8195-mt6359-max98390-rt5682"
-> to support mt8195 board with mt6359, max98390 and rt5682.
+On Tue, 2022-03-29 at 10:52 -0700, Isaku Yamahata wrote:
+> On Mon, Mar 28, 2022 at 08:10:47AM +0000,
+> "Tian, Kevin" <kevin.tian@intel.com> wrote:
 > 
-> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
-> ---
->  Documentation/devicetree/bindings/sound/mt8195-mt6359.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> > > From: Huang, Kai <kai.huang@intel.com>
+> > > Sent: Monday, March 28, 2022 11:55 AM
+> > > 
+> > > SEAMRR and TDX KeyIDs are configured by BIOS and they are static during
+> > > machine's runtime.  On the other hand, TDX module can be updated and
+> > > reinitialized at runtime (not supported in this series but will be supported in
+> > > the future).  Theoretically, even P-SEAMLDR can be updated at runtime
+> > > (although
+> > > I think unlikely to be supported in Linux).  Therefore I think detecting
+> > > SEAMRR
+> > > and TDX KeyIDs at boot fits better.
+> > 
+> > If those info are static it's perfectly fine to detect them until they are
+> > required... and following are not solid cases (e.g. just exposing SEAM
+> > alone doesn't tell the availability of TDX) but let's also hear the opinions
+> > from others.
 > 
+> One use case is cloud use case.  If TDX module is initialized dynamically at
+> runtime, cloud management system wants to know if the physical machine is
+> capable of TDX in addition to if TDX module is initialized.  Also how many TDs
+> can be run on the machine even when TDX module is not initialized yet.  The
+> management system will schedule TDs based on those information.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Thanks Isaku.  I'll keep current way for now.
+
+-- 
+Thanks,
+-Kai
+
+

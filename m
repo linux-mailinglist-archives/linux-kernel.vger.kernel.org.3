@@ -2,208 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B184EB2C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 19:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A0C94EB2DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 19:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240266AbiC2Rkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 13:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
+        id S240294AbiC2Roc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 13:44:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240261AbiC2Rkk (ORCPT
+        with ESMTP id S233032AbiC2Rob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 13:40:40 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8992F2E0A1
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 10:38:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648575537; x=1680111537;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BdPlvWarzhHsLaFQ8fFSDfcrHEVxYxEW9ZW8dC/aUMo=;
-  b=iZur4f7kxSiyU+evCHG7FAcEVzMUII/yqfsjMNU8T1C8dFvxz2BNRzr+
-   kIK6ZqnisgIgoXgSXKldSORFeum92jFLJ3+WDvfbAu/SbXJ/cuMJ5CV8a
-   +Rfm9WQSk9alOagD7/bau6/t+/pA2ku8uzu0cEFfIxgdLHZrXGVLRQM3U
-   +AFy05wLzbS7BCRBDTIT2RzvO1h1wYFSffWImVXyYrdBdWsGcywYP7EA3
-   IlzBnoZATuDjh+RUPtvHL7KoamcJkbxqWj5TkrSz+gMYXlRQdH7JrbxXS
-   gS76dEsOVU9ylgJJhtHQAUk5wu+CB8bNfpTeedp7jL0ey4PQZyh1ScKeS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="241475529"
-X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="241475529"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 10:38:57 -0700
-X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="694798153"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 10:38:56 -0700
-Date:   Tue, 29 Mar 2022 10:42:19 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Jason Gunthorpe" <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>, jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v2 7/8] iommu/vt-d: Delete supervisor/kernel SVA
-Message-ID: <20220329104219.4445af35@jacob-builder>
-In-Reply-To: <BN9PR11MB5276B2AB27F5AD50BC18AE718C139@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20220315050713.2000518-1-jacob.jun.pan@linux.intel.com>
-        <20220315050713.2000518-8-jacob.jun.pan@linux.intel.com>
-        <BN9PR11MB5276B2AB27F5AD50BC18AE718C139@BN9PR11MB5276.namprd11.prod.outlook.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 29 Mar 2022 13:44:31 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A07241B41;
+        Tue, 29 Mar 2022 10:42:46 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2e6ceb45174so152116737b3.8;
+        Tue, 29 Mar 2022 10:42:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AJXMMgvpvdXkeVHlSYm/0JRtdhSL15VbRYdhQ9gVfCg=;
+        b=LloscU5gnTaweuy2xhexeLJvsE/0jLAOXMuv+WP64uMeqWgCyk6DF9WEQZSESIlIEz
+         5EvJPQtraWZExyiM/pAH5W2CpviGIg0N74edPBwbFCM2PHVydbuIpIRoaSBuRf9is04c
+         Yydxl4dmtmKtzoCjTk8a2emXW+L93dxTIEvaVK6uyD+WVkh/PKDRuodetdZGlIYSG8Ts
+         PE8D5Mook2UbQt7pHkv1EXVjZc0evEvjQXUIkXAlPgN2d9YALCAoXdoeGaDsKXehKHHH
+         BJq7S/FGXiWhwbTKtpmLqOMBKZjcpE0Z2U5TpP8S39a34wlVdeZAhmPy3GnMD7VeG8zP
+         JYfQ==
+X-Gm-Message-State: AOAM530HANUdnDU6KHCPFu4mbqHWjgVLIvydcvQ0+vvT93x9iXhpSU1U
+        veq7O+1aYdMkPd8/Mt3i0xsjDeNJArVxLFTRazg=
+X-Google-Smtp-Source: ABdhPJyZlDnEpwReCMzcOAElpRHV+WsJfUfWYH4Ci5dPdO5TT7zL122F3R2ywvBUaIMAOORIrQORAFpYmAt1X+5glbk=
+X-Received: by 2002:a81:bc5:0:b0:2e6:dcfe:bfcb with SMTP id
+ 188-20020a810bc5000000b002e6dcfebfcbmr28263841ywl.19.1648575765728; Tue, 29
+ Mar 2022 10:42:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220325022219.829-1-chang.seok.bae@intel.com> <20220325022219.829-4-chang.seok.bae@intel.com>
+In-Reply-To: <20220325022219.829-4-chang.seok.bae@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 29 Mar 2022 19:42:34 +0200
+Message-ID: <CAJZ5v0iysvXEs-+L0PuBj1RH+ByGPNotOSgT21TYnUuiwK+hSQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] intel_idle: Add a new flag to initialize the AMX state
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kevin,
+On Fri, Mar 25, 2022 at 3:30 AM Chang S. Bae <chang.seok.bae@intel.com> wrote:
+>
+> The non-initialized AMX state can be the cause of C-state demotion from C6
+> to C1E. This low-power idle state may improve power savings and thus result
+> in a higher available turbo frequency budget.
+>
+> This behavior is implementation-specific. Initialize the state for the C6
+> entrance of Sapphire Rapids as needed.
+>
+> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+> Tested-by : Zhang Rui <rui.zhang@intel.com>
+> Cc: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
 
-On Fri, 18 Mar 2022 06:16:58 +0000, "Tian, Kevin" <kevin.tian@intel.com>
-wrote:
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-> > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > Sent: Tuesday, March 15, 2022 1:07 PM
-> > 
-> > In-kernel DMA with PASID should use DMA API now, remove supervisor
-> > PASID
-> > SVA support. Remove special cases in bind mm and page request service.
-> > 
-> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>  
-> 
-> so you removed all the references to SVM_FLAG_SUPERVISOR_MODE
-> but the definition is still kept in include/linux/intel-svm.h...
-> 
-Good catch, will remove.
+and I'm expecting this to be routed along with the rest of the series.
 
-> > ---
-> >  drivers/iommu/intel/svm.c | 42 ++++++++-------------------------------
-> >  1 file changed, 8 insertions(+), 34 deletions(-)
-> > 
-> > diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-> > index 2c53689da461..37d6218f173b 100644
-> > --- a/drivers/iommu/intel/svm.c
-> > +++ b/drivers/iommu/intel/svm.c
-> > @@ -516,11 +516,10 @@ static void intel_svm_free_pasid(struct mm_struct
-> > *mm)
-> > 
-> >  static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
-> >  					   struct device *dev,
-> > -					   struct mm_struct *mm,
-> > -					   unsigned int flags)
-> > +					   struct mm_struct *mm)
-> >  {
-> >  	struct device_domain_info *info = get_domain_info(dev);
-> > -	unsigned long iflags, sflags;
-> > +	unsigned long iflags, sflags = 0;
-> >  	struct intel_svm_dev *sdev;
-> >  	struct intel_svm *svm;
-> >  	int ret = 0;
-> > @@ -533,16 +532,13 @@ static struct iommu_sva
-> > *intel_svm_bind_mm(struct intel_iommu *iommu,
-> > 
-> >  		svm->pasid = mm->pasid;
-> >  		svm->mm = mm;
-> > -		svm->flags = flags;
-> >  		INIT_LIST_HEAD_RCU(&svm->devs);
-> > 
-> > -		if (!(flags & SVM_FLAG_SUPERVISOR_MODE)) {
-> > -			svm->notifier.ops = &intel_mmuops;
-> > -			ret = mmu_notifier_register(&svm->notifier,
-> > mm);
-> > -			if (ret) {
-> > -				kfree(svm);
-> > -				return ERR_PTR(ret);
-> > -			}
-> > +		svm->notifier.ops = &intel_mmuops;
-> > +		ret = mmu_notifier_register(&svm->notifier, mm);
-> > +		if (ret) {
-> > +			kfree(svm);
-> > +			return ERR_PTR(ret);
-> >  		}
-> > 
-> >  		ret = pasid_private_add(svm->pasid, svm);
-> > @@ -583,8 +579,6 @@ static struct iommu_sva *intel_svm_bind_mm(struct
-> > intel_iommu *iommu,
-> >  	}
-> > 
-> >  	/* Setup the pasid table: */
-> > -	sflags = (flags & SVM_FLAG_SUPERVISOR_MODE) ?
-> > -			PASID_FLAG_SUPERVISOR_MODE : 0;
-> >  	sflags |= cpu_feature_enabled(X86_FEATURE_LA57) ?
-> > PASID_FLAG_FL5LP : 0;
-> >  	spin_lock_irqsave(&iommu->lock, iflags);
-> >  	ret = intel_pasid_setup_first_level(iommu, dev, mm->pgd, mm-  
-> > >pasid,  
-> > @@ -957,7 +951,7 @@ static irqreturn_t prq_event_thread(int irq, void
-> > *d)
-> >  			 * to unbind the mm while any page faults are
-> > outstanding.
-> >  			 */
-> >  			svm = pasid_private_find(req->pasid);
-> > -			if (IS_ERR_OR_NULL(svm) || (svm->flags &
-> > SVM_FLAG_SUPERVISOR_MODE))
-> > +			if (IS_ERR_OR_NULL(svm))
-> >  				goto bad_req;
-> >  		}
-> > 
-> > @@ -1011,29 +1005,9 @@ static irqreturn_t prq_event_thread(int irq, void
-> > *d)
-> >  struct iommu_sva *intel_svm_bind(struct device *dev, struct mm_struct
-> > *mm, void *drvdata)
-> >  {
-> >  	struct intel_iommu *iommu = device_to_iommu(dev, NULL, NULL);
-> > -	unsigned int flags = 0;
-> >  	struct iommu_sva *sva;
-> >  	int ret;
-> > 
-> > -	if (drvdata)
-> > -		flags = *(unsigned int *)drvdata;
-> > -
-> > -	if (flags & SVM_FLAG_SUPERVISOR_MODE) {
-> > -		if (!ecap_srs(iommu->ecap)) {
-> > -			dev_err(dev, "%s: Supervisor PASID not
-> > supported\n",
-> > -				iommu->name);
-> > -			return ERR_PTR(-EOPNOTSUPP);
-> > -		}
-> > -
-> > -		if (mm) {
-> > -			dev_err(dev, "%s: Supervisor PASID with user
-> > provided mm\n",
-> > -				iommu->name);
-> > -			return ERR_PTR(-EINVAL);
-> > -		}
-> > -
-> > -		mm = &init_mm;
-> > -	}
-> > -
-> >  	mutex_lock(&pasid_mutex);
-> >  	ret = intel_svm_alloc_pasid(dev, mm, flags);
-> >  	if (ret) {
-> > --
-> > 2.25.1  
-> 
-
-
-Thanks,
-
-Jacob
+> ---
+> Changes from v2:
+> * Remove an unnecessary backslash (Rafael Wysocki).
+>
+> Changes from v1:
+> * Simplify the code with a new flag (Rui).
+> * Rebase on Artem's patches for SPR intel_idle.
+> * Massage the changelog.
+> ---
+>  drivers/idle/intel_idle.c | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index b7640cfe0020..d35790890a3f 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -54,6 +54,7 @@
+>  #include <asm/intel-family.h>
+>  #include <asm/mwait.h>
+>  #include <asm/msr.h>
+> +#include <asm/fpu/api.h>
+>
+>  #define INTEL_IDLE_VERSION "0.5.1"
+>
+> @@ -100,6 +101,11 @@ static unsigned int mwait_substates __initdata;
+>   */
+>  #define CPUIDLE_FLAG_ALWAYS_ENABLE     BIT(15)
+>
+> +/*
+> + * Initialize large xstate for the C6-state entrance.
+> + */
+> +#define CPUIDLE_FLAG_INIT_XSTATE       BIT(16)
+> +
+>  /*
+>   * MWAIT takes an 8-bit "hint" in EAX "suggesting"
+>   * the C-state (top nibble) and sub-state (bottom nibble)
+> @@ -134,6 +140,9 @@ static __cpuidle int intel_idle(struct cpuidle_device *dev,
+>         if (state->flags & CPUIDLE_FLAG_IRQ_ENABLE)
+>                 local_irq_enable();
+>
+> +       if (state->flags & CPUIDLE_FLAG_INIT_XSTATE)
+> +               fpu_idle_fpregs();
+> +
+>         mwait_idle_with_hints(eax, ecx);
+>
+>         return index;
+> @@ -154,8 +163,12 @@ static __cpuidle int intel_idle(struct cpuidle_device *dev,
+>  static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
+>                                        struct cpuidle_driver *drv, int index)
+>  {
+> -       unsigned long eax = flg2MWAIT(drv->states[index].flags);
+>         unsigned long ecx = 1; /* break on interrupt flag */
+> +       struct cpuidle_state *state = &drv->states[index];
+> +       unsigned long eax = flg2MWAIT(state->flags);
+> +
+> +       if (state->flags & CPUIDLE_FLAG_INIT_XSTATE)
+> +               fpu_idle_fpregs();
+>
+>         mwait_idle_with_hints(eax, ecx);
+>
+> @@ -790,7 +803,8 @@ static struct cpuidle_state spr_cstates[] __initdata = {
+>         {
+>                 .name = "C6",
+>                 .desc = "MWAIT 0x20",
+> -               .flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
+> +               .flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED |
+> +                                          CPUIDLE_FLAG_INIT_XSTATE,
+>                 .exit_latency = 290,
+>                 .target_residency = 800,
+>                 .enter = &intel_idle,
+> --
+> 2.17.1
+>

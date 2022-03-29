@@ -2,231 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56CD44EAA58
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A6D4EAA60
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234566AbiC2JUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 05:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
+        id S231886AbiC2JVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 05:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233563AbiC2JUB (ORCPT
+        with ESMTP id S230313AbiC2JVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 05:20:01 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3F12F6;
-        Tue, 29 Mar 2022 02:18:17 -0700 (PDT)
+        Tue, 29 Mar 2022 05:21:03 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F08205CE
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 02:19:17 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22T8oRmn012700;
+        Tue, 29 Mar 2022 09:18:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=JMG4+cwSkWY3qdleRgysvcdh88DR7UPaS9+8svIu08E=;
+ b=XER0h57czevqOQLKQpGaMyWzlw7Cc97UjqyiYmeNNKFrJrp9VhnnmdiONq0HQw2jky9x
+ M2H9ES3HFqBjPNbL+6kpb3iOJ+R14Fq057M2W34zXz5Fgv1Id4782mAlEGHVCLL6UE+6
+ KqwFg8vKbnrIkypTC3TUUoIipMm/7ZpKnjHpy89a1nnlS4c0xEEQO4UcSkPD3vB5VVAY
+ lI1VovxFYBd1AuZ2iNYpuecKdONaDkwwynS1CQWKHPOa0z2eQ0JIgVVWKHOKpXgGlbzd
+ 1XHV7kzOf56M8tBhhaZScLuWgDZMBTGECUE8IQk2l9ZVzglNK7fXs772DBqe3Blr7KAE zA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f1se0e3gv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 29 Mar 2022 09:18:53 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22T9BPLS111834;
+        Tue, 29 Mar 2022 09:18:52 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2041.outbound.protection.outlook.com [104.47.66.41])
+        by aserp3020.oracle.com with ESMTP id 3f1tmyjsns-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 29 Mar 2022 09:18:52 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NIOESTcYI77w6gWutpvkuhVWeMBuXJ2kevteOGTG3ReQfw0ggEErwGyTXVouK3UVRfkxoHzrXJ+KzJwmxt7xmz1Y6dZ8lzYYqDtGvwEoEfvxpi/jN6GxqUJQvTpFWk2x6S0/XXgP9vgP5QBcSMUuLOpJRMqDGC24jKGoaWgwqZP3k+mw+NFhx4L7rbbMj9qOFjsvAorTy5LmCaGgGdLS5s0HT1GlBvR1VHJDaBCvq6GGaFDdgnOmwc8ps6bjnDiRf+iW+90PEqdDrrsG9LpMB6A2xbWn+C6u5qjD3S2QAPr7/hYjiqR6nb0j1vIulzLbL8xDRUACCm44nqv4Wyx6zQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JMG4+cwSkWY3qdleRgysvcdh88DR7UPaS9+8svIu08E=;
+ b=Y1QcqiDMXnxvFqnne4WLCJVJyWas119p81o6RgvQi++AgWeeOMYYV1BZexXDZKa/57VmUmfx3jLi/NZK6xPjCfvYk3rFLPgRSwVSqiCrkdEfCrN76oeBshCW/Z6/zwM8uUdYVUlWp6TakxsIOftFdnj2eLlbADSs0b4tu6PPYKAkoP9IPaYWcfYPmYyfjpafQdS+xU136O2Qaqo2DS4LmFwNhDZdzdagELaAMbDBk16UBkpN5/4kOjAobLrOqJJiiejpvR+ssErFyZM0WvZiSBI8qlsuPDuz/W/V8M6dkYTX7EWbSGcd2PnDNUiH1iEUeT4CNsBnw33ptaEBximt5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648545498; x=1680081498;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=Cx9rR3X1Kpvsk+Ci5W3oD70XaG6Cd3BLEKYeqbVODNY=;
-  b=CEf2X+zzMK6DyAbBwVty8BggRYO3AHgtRd9o2QbFDuNdPdA24mZ2b2kz
-   24s0126PT5lWIBNM8q8cXbhp+8S0IqXXYk+6zu+8yT9Vr4fxaCrdHUDUj
-   aHgi4ydtJfcpBB29hHwbY88pV95MhpnF7DxscS2sedMzQKlLUhahdlEiV
-   I=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 29 Mar 2022 02:18:17 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 02:18:16 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 29 Mar 2022 02:18:16 -0700
-Received: from [10.216.26.55] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 29 Mar
- 2022 02:18:09 -0700
-Subject: Re: [PATCH v3 3/3] usb: dwc: host: add xhci_plat_priv quirk
- XHCI_SKIP_PHY_INIT
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>
-References: <1648103831-12347-1-git-send-email-quic_c_sanm@quicinc.com>
- <1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com>
- <YjxjxplpOpDC2JLs@kuha.fi.intel.com>
- <4c2a28ad-b866-1b65-e73a-4eda0596cea2@linux.intel.com>
- <Yj2nPa6/Y01P5aCY@kuha.fi.intel.com>
- <4619c75c-cd34-82f2-56e1-a8bcb6d97177@linux.intel.com>
- <Yj3h4p/kmZTvMz0O@kuha.fi.intel.com>
-From:   "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>
-Message-ID: <fae54b27-9ae2-ecfc-69ae-40e5f5e1afbe@quicinc.com>
-Date:   Tue, 29 Mar 2022 14:48:05 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.2.1
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JMG4+cwSkWY3qdleRgysvcdh88DR7UPaS9+8svIu08E=;
+ b=vB+zuvszbzviDuqnIp0XZ2B37WtMHtpbcLl4YmHgz5xUS6uV7lr/AdFig+qm1+eAASPd0aBzDzIKRnbGk6d+e9bJywDV+Q7v0aX+S3ibn96i/g/ucz6EMDo2DZyrLYiyVrAkvbWlghj/c83uGMJf0k3YGGFAWo+c6+IMozYb9Iw=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by CY4PR10MB1384.namprd10.prod.outlook.com
+ (2603:10b6:903:30::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.22; Tue, 29 Mar
+ 2022 09:18:49 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::d4e7:ee60:f060:e20c]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::d4e7:ee60:f060:e20c%7]) with mapi id 15.20.5081.025; Tue, 29 Mar 2022
+ 09:18:49 +0000
+Date:   Tue, 29 Mar 2022 12:18:27 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benjamin Philip <benjamin.philip495@gmail.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Samuel =?iso-8859-1?Q?Sj=F6berg?= <info@samuelsjoberg.se>,
+        Charlie Sands <sandsch@northvilleschools.net>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev, ira.weiny@intel.com
+Subject: Re: [PATCH v2] staging: rts5208: Convert kmap() to kmap_local_page()
+Message-ID: <20220329091827.GY3293@kadam>
+References: <20220329055539.29299-1-fmdefrancesco@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220329055539.29299-1-fmdefrancesco@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNAP275CA0015.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4c::20)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-In-Reply-To: <Yj3h4p/kmZTvMz0O@kuha.fi.intel.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ae133bfb-950c-43bc-ae36-08da11652272
+X-MS-TrafficTypeDiagnostic: CY4PR10MB1384:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR10MB1384594C5E5CB3463C60852A8E1E9@CY4PR10MB1384.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tZENSE1aFC8KX4Ek8p1V7B5DR+w55S2kfmtr/j9VdWjOpfCmK2BNL/8RweU+w9zAx8ctF9c8US8EXvh3qhVBA1GtXjj0nAP5BKPnTV45SzEjV0Q8CLvlcFLRfRvcPJf6+jsEynIN2rkl+yTIOb5ApgZA85pVvLhtgjlM9VckxzmZMDUyambcrexD5y27pB7ujkKuPvuYGq106UNTV0z46aa7QX+3YElQ2BECIpHF+qV+Dv3uK4OVVasHHiYM5pvNEp4H0Blyd1JFwsg/fwiXkkF7bdfBIRRsKxj6biWZ6W1ctYnYG8n/Cvlv/IN5Ahy+Be9/PEFiBMxTCazxWcR4UK9cKj94U+F6mV/vVeOdHZ41tIszsifrL3B6imPM8ed21yXlNhTDr7ca/77MzcUqSDacDf00QMkmRi0D6FVanuoXbPWyTjKRLye/L9SIFNhiOHOIvx0/5He795oGV3IfcqXB9ZLxLZXrRPEDzWGn5UHt+7rF2yrHvPKnfz7z8voKdJFL+LjZNLGBUYOdwFzBNLoM8NHJrlBLNKEJdbeE1x9+HhpLrnFrn6y87vpJ8GlltD+ZlByhABHQpL/Ny/Ca0jm35eHe02POcUegGsi3Zpcm63aiWRugJrcrMNjFIurWWHbc0KQW8zkg5O0k0Ib6yFL0yHWIV9l6Ie47Yg/Mf9NatuN3t9rCvFPkOt9v3KKq2D4D89Z98dju1P1Q5P9Hpw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(26005)(1076003)(9686003)(6916009)(83380400001)(186003)(6506007)(33716001)(6486002)(316002)(508600001)(52116002)(66946007)(66556008)(8676002)(4326008)(54906003)(6666004)(66476007)(6512007)(2906002)(4744005)(44832011)(38350700002)(86362001)(38100700002)(5660300002)(7416002)(8936002)(33656002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Bsvpps6J7O2wnhcdqHk4U8c7U44Juu4GAYJ9+mXzy6BZLaUEum1HkDPk4liZ?=
+ =?us-ascii?Q?Yn1D955DjeSLO/IBWS7If4kQemTtdtA0fRuYAjealxE5THjOJ6vsGRokfyLe?=
+ =?us-ascii?Q?pW3IdzMInE79rRnfv52/zoD0+8xWnpTINIB0OTQSqnBFgeE0k5EmdgWZOT68?=
+ =?us-ascii?Q?Qyc4pltgQbba9wxlwXYD+PtxPksZ3eeOXdK783idw/0lQeFoVYqtt9QL5bZX?=
+ =?us-ascii?Q?sZtrG2sWVDEyA0Rugs4m0D1qUIucOHp5bwgKtg3Gx+C4uMwGBBMQLa1LJGjk?=
+ =?us-ascii?Q?pFARF6DtqH//V0RlXm5Wh2+s/znc9omzTMfUEE9xiwljBweAlO/8gvePsu0u?=
+ =?us-ascii?Q?Ts8AqbM3r5KQX6fpapO2lwkgTRIhoryY+cTzU3jfBmY6LldvYGdCeq0qOcyC?=
+ =?us-ascii?Q?Op55MzIUN0/PGT3d8V6dDGOsPr5CBjD5VvHKO9tZ88jJxPnycUk67PsIUh9e?=
+ =?us-ascii?Q?/eg27cn+HL6JciC+m1blBEMK7sTnfff1f3jjI7i8vCnuL0PRMkh8L1halqtE?=
+ =?us-ascii?Q?Hh5kFzORagrmUbEDMCbPt/j1HE9of8cmA0UgzZSBb3Yw1kbFpA4VstGJuX5E?=
+ =?us-ascii?Q?GFpPAb/IwHcRqMZtU/scq55ppQFwbKZozfgC6uUVqQmzwl++6GWJpkBRNxFO?=
+ =?us-ascii?Q?cqoAwkva4JjUgZaEB8/+yIQtjkUKm+0HARTZI50znAD8cusmfaFeBoRToBkT?=
+ =?us-ascii?Q?Ri358Esrtu64rP8Z3u03LTeg6zM2Vp+vspOe9tuQ6Ix0njAsImSrP6QvbL6V?=
+ =?us-ascii?Q?LblpujF1DjXKyG+S4nqkbYuelimlm1L1NkwFdKV5gt53hRS7zHE2b0gAAfWN?=
+ =?us-ascii?Q?73ENh0e9yVvxLnv+jgiZt6xHoX5xJYJP25JBxcGUYWhiD5lWRXNrTwAvghnk?=
+ =?us-ascii?Q?RvZ7/tY9Ww3P6Hzq7gKsf81Rf6VMvbakEHlLO7AOZt0SZG1b6W374ZiObSHK?=
+ =?us-ascii?Q?n5WUpukKiFDzwC/Z+qnVV3j7oxIZB3hUgeGyYhNsf+nmie6Jsu2DdkWTBGBd?=
+ =?us-ascii?Q?37wA4XTWzdu3xjBSAAPeFVDbEjBM2P+MItw+ARkmk4Flj/ujyHM6EDVYf9no?=
+ =?us-ascii?Q?XIoqODUK0Xtir9m7gvG7m1NdfAc9xIK9TzFa6khtLEq/Sx6M7E7k93VWDK19?=
+ =?us-ascii?Q?QrvT8y93ao0I3IlkrPyvixqJjWkK3f84jVArrOFFYYBX+zaFlT1zR7tM2PxO?=
+ =?us-ascii?Q?YAQAkU65EpH+pnv84conIx8/boKbANtAIF+hw3IBVdHX+erL7DaxUC1dDOaM?=
+ =?us-ascii?Q?P5WdJEk84zimi4Y0W7a/9ZCume5lUeuiNOvbmVGCD7UOuhbKENmULUrC8mA2?=
+ =?us-ascii?Q?+4Qw9C1+hVASrAhrZnUi+y8+l98FIIbF0KzxhKSvMxncqc83Y/cbtfDHXm1o?=
+ =?us-ascii?Q?Y0ia+PAMPmpQEyxVsIN0/yq56Hx6I9vTOwL748uE0MPD5F1vZ32svakJptkc?=
+ =?us-ascii?Q?Vw3pa5VC3B0I7WPKZJOd9twtrbiss8I/6It5uxuPsp4u67YMM6Aw4P6nBPSO?=
+ =?us-ascii?Q?c3KwpKiX4sz2CclwwoMBscySgT6+N2XK3kMizyhhwPlvqVFqS2pw16ILVMoe?=
+ =?us-ascii?Q?XiSBa6tzSz5T89bkllC8Vgkid7J6DNmcQWEmaudfy+XB8zWhluP2OU+sqmox?=
+ =?us-ascii?Q?i2EJCvyLDnwjgzmkAmIRapf51KNv72XONV0YuSiE0YvpYXcc9EPZ3JGaT1Wh?=
+ =?us-ascii?Q?YDdehe3DxcvcEcJlAQErJDIZWojTHMOWRlMeN1tWyW1P0owYKP9hEHL9P8Ny?=
+ =?us-ascii?Q?fhrrZDsPIMqB9aZAS2JOhA0Lpvh3XRE=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae133bfb-950c-43bc-ae36-08da11652272
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2022 09:18:49.5531
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QwW0a9gNbueWhVRZHfexAyPEbKmtvzMBMnh3ZD3BAG+REncgf0nGINNjtG7F9uNEKt/TE1fMSXdytNoSkT6SFmPk6sUIRLD5+nQmK21eyY0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1384
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10300 signatures=694973
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 spamscore=0
+ phishscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203290055
+X-Proofpoint-ORIG-GUID: rMDKRT1-srd-AmE1ba_0Klox0ocjOROm
+X-Proofpoint-GUID: rMDKRT1-srd-AmE1ba_0Klox0ocjOROm
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mathias,Heikki
+On Tue, Mar 29, 2022 at 07:55:39AM +0200, Fabio M. De Francesco wrote:
+> diff --git a/drivers/staging/rts5208/rtsx_transport.c b/drivers/staging/rts5208/rtsx_transport.c
+> index 805dc18fac0a..56b6cc845619 100644
+> --- a/drivers/staging/rts5208/rtsx_transport.c
+> +++ b/drivers/staging/rts5208/rtsx_transport.c
+> @@ -92,13 +92,11 @@ unsigned int rtsx_stor_access_xfer_buf(unsigned char *buffer,
+>  			while (sglen > 0) {
+>  				unsigned int plen = min(sglen, (unsigned int)
+>  						PAGE_SIZE - poff);
+> -				unsigned char *ptr = kmap(page);
+>  
+>  				if (dir == TO_XFER_BUF)
+> -					memcpy(ptr + poff, buffer + cnt, plen);
+> +					memcpy_to_page(page + poff, 0, buffer + cnt, plen);
 
-On 3/25/2022 9:08 PM, Heikki Krogerus wrote:
-> On Fri, Mar 25, 2022 at 04:33:27PM +0200, Mathias Nyman wrote:
->> On 25.3.2022 13.27, Heikki Krogerus wrote:
->>> On Fri, Mar 25, 2022 at 12:36:22AM +0200, Mathias Nyman wrote:
->>>> On 24.3.2022 14.27, Heikki Krogerus wrote:
->>>>> On Thu, Mar 24, 2022 at 12:07:11PM +0530, Sandeep Maheswaram wrote:
->>>>>> Currently the phy init is done from dwc3 and also xhci which makes the
->>>>>> runtime_usage value 2 for the phy which causes issue during runtime
->>>>>> suspend. When we run the below command the runtime_status still shows
->>>>>> active.
->>>>>> echo auto > /sys/bus/platform/devices/88e3000.phy/power/control
->>>>>>
->>>>>> dwc3 manages PHY by own DRD driver, so skip the management by
->>>>>> HCD core by setting this quirk.
->>>>>>
->>>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->>>>>> ---
->>>>>>   drivers/usb/dwc3/host.c | 13 +++++++++++++
->>>>>>   1 file changed, 13 insertions(+)
->>>>>>
->>>>>> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
->>>>>> index eda8719..d4fcf06 100644
->>>>>> --- a/drivers/usb/dwc3/host.c
->>>>>> +++ b/drivers/usb/dwc3/host.c
->>>>>> @@ -13,6 +13,12 @@
->>>>>>   #include <linux/platform_device.h>
->>>>>>   
->>>>>>   #include "core.h"
->>>>>> +#include <linux/usb/xhci-plat.h>
->>>>>> +#include <linux/usb/xhci-quirks.h>
->>>>>> +
->>>>>> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
->>>>>> +	.quirks = XHCI_SKIP_PHY_INIT,
->>>>>> +};
->>>>>>   
->>>>>>   static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
->>>>>>   					int irq, char *name)
->>>>>> @@ -122,6 +128,13 @@ int dwc3_host_init(struct dwc3 *dwc)
->>>>>>   		}
->>>>>>   	}
->>>>>>   
->>>>>> +	ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
->>>>>> +			sizeof(xhci_plat_dwc3_xhci));
->>>>>> +	if (ret) {
->>>>>> +		dev_err(dwc->dev, "failed to add data to xHCI\n");
->>>>>> +		goto err;
->>>>>> +	}
->>>>>> +
->>>>>>   	ret = platform_device_add(xhci);
->>>>>>   	if (ret) {
->>>>>>   		dev_err(dwc->dev, "failed to register xHCI device\n");
->>>>> I think you should just use device property:
->>>>>
->>>> This was suggested in an earlier series, but was rejected as it also added
->>>> the property as a device tree parameter.
->>>>
->>>> I think adding more device properties can be messy in the long run, especially if we
->>>> need to add them for many of the existing xhci quirks.
->>>> We also end up with a mix where some device properties are listed as device tree
->>>> parameters, and some not.
->>>>
->>>> Defining xhci quirks and platform data structure in headers shared with dwc3 and cdns3
->>>> allow those drivers to easily set any existing xhci quirk, or other possible optional
->>>> callbacks.
->>>>
->>>> cdns3 driver is already doing this, but it includes the full xhci.h header.
->>>> This series cleans up that a bit so cdns3 will only include xhci quirk bits and
->>>> platform data structure.
->>>>
->>>> On the downside we add a couple xhci related header files to include/linux/usb/
->>>> Let me know if you see any other issues I missed with this approach.
->>> The problem here is that these drivers are now coupled together, and
->>> that should not be taken lightly. We have a dependency hell in our
->>> hands with a lot of drivers, and the culprit is always platform data.
->>>
->>> Build-in device properties may be messy, but I would still say they
->>> are less messy than those quirk flags - you got to admit, they are a
->>> mess. The benefit from build-in properties is in any case the fact
->>> that they remove the need to couple these drivers together.
->> Agree, quirk bits are messy. Any suggestion that would work with
->> PCI xHCI devices, devicetree, and "pure" platform devices?
-> I think xHCI driver should always be able to rely on being able to
-> read this kind of information from the fwnode. If there is no actual
-> firmware node (DT or ACPI), or if it's missing some information, the
-> glue driver needs to populate software node for the xHCI.
->
-> Right now I just want to avoid having to pass the quirks using
-> platform data from drivers such as drivers/usb/cdns3/host.c and
-> drivers/usb/dwc3/host.c to xHCI.
->
-> One way we could do that is by defining compatibility ID for both of
-> them that we provide using a single device property (like I guess DT
-> does). Then based on that compatibility ID, xhci-plat.c can set the
-> actual "static" quirk flags. That we could already do easily. How
-> would that sound to you?
+You meant:
 
-This was my previous patch where I was using device tree property. 
-Should we go ahead with this approach?
+	memcpy_to_page(page, poff, buffer + cnt, plen);
 
-https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com/
+>  				else
+> -					memcpy(buffer + cnt, ptr + poff, plen);
+> -				kunmap(page);
+> +					memcpy_from_page(buffer + cnt, page + poff, 0, plen);
 
-Any further changes to this ?
+Same.
 
-Regards
+regards,
+dan carpenter
 
-Sandeep
-
->
->>> You can also use something like naming convention if you are worried
->>> about confusion between devicetree properties and build-in only
->>> properties ("build-in:skip-phy-init" or whatever), and of course
->>> require that each of the build-in only property is documented clearly
->>> in drivers/usb/host/xhci-plat.c. But this in any case really can not
->>> be justification for a platform data blob just so you can avoid using
->>> the properties - honestly, it really should to be the other way
->>> around.
->>>
->>> Platform data is in practice always problematic. On top of the driver
->>> coupling, it creates maintenance burden, code duplication, etc. Please
->>> don't just accept it lightly. I'm telling you, for hacks like this, the
->>> build-in device properties is a much much safer bet.
->>>
->> Fair enough.
->>
->> Any idea if there's a long term solution for platform devices?
->> Adding some type of "compatibility" id to platform devices in addition to name?
-> We don't need to touch the platform devices if, and when, we have
-> always the fwnode. The "compatibility" id should always be possible to
-> pick from the fwnode.
->
->> Also just noticed cdns3 driver passes a function pointer via platform_data to
->> xhci-plat. This should be cleared up as well.
-> Looks like a PM quirk. For that I would propose this:
-> https://lore.kernel.org/linux-acpi/20201029105941.63410-2-heikki.krogerus@linux.intel.com/
->
-> So with that you can supply separate PM operations for your software
-> fwnode. When ever the device suspends, the suspend quirk is also
-> executed. xHCI core does not need to know about it.
->
-> Yeah, I guess I need to finish that series...
->
-> thanks,
->

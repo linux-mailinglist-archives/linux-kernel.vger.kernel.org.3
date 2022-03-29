@@ -2,98 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CE74EA729
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 07:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B606C4EA733
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 07:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232491AbiC2Fdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 01:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
+        id S232505AbiC2Fl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 01:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbiC2Fda (ORCPT
+        with ESMTP id S231612AbiC2Flz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 01:33:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A92232D19;
-        Mon, 28 Mar 2022 22:31:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 845A2B80E5E;
-        Tue, 29 Mar 2022 05:31:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B19C34100;
-        Tue, 29 Mar 2022 05:31:44 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="bD1y1M7K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1648531901;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0DnQZrbeMIl/jPEL4/NKQa5kO0JP14Wyo3i+LOhThwg=;
-        b=bD1y1M7KWSGBLRw4W/83PYO7ezAjW2nCVq+4u4ERRn0NWFsjB0xmgVFtAUyMNo52PISYxg
-        GCfBDbH8ifjATEh7Y/zQILB5PEyxSLgjC1Od2h56OxOOQ64ejsHgOGrWSB3Jo7LPweEVDT
-        f+GGhIY5+oPosV/+6BJdi3QH/hrulK8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b2f47cc8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 29 Mar 2022 05:31:41 +0000 (UTC)
-Received: by mail-yb1-f179.google.com with SMTP id e203so20884929ybc.12;
-        Mon, 28 Mar 2022 22:31:40 -0700 (PDT)
-X-Gm-Message-State: AOAM530IzVIaO3kQsFoXa/gaMLMcsFixM0jYuGgNXAqcTVj/NnBpDVKx
-        Heqva2c4x+Y4Tw30M4X84DjpR653RhjbEOfkTKk=
-X-Google-Smtp-Source: ABdhPJwFAnSwrfSjbcLI6+p0f1ulm4t4V/JJ5gZl8ZD3byHHDsFzm9CK1g3baSj456k5LxpPylLbJ2gSKU/8vedAUUU=
-X-Received: by 2002:a25:2517:0:b0:634:63cb:68fe with SMTP id
- l23-20020a252517000000b0063463cb68femr25915454ybl.271.1648531900027; Mon, 28
- Mar 2022 22:31:40 -0700 (PDT)
+        Tue, 29 Mar 2022 01:41:55 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E929831935
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 22:40:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648532413; x=1680068413;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tknkKS8klJn8jY0SolaOVo53TFN54BvuIWRpHY8TEAU=;
+  b=gvJSPbAUKZAH4uddy/clx5OY0YiMbpn+fSZiHaijOJdGOLygJUYLTDGM
+   bkYCpD3/vf0MKfNdFEj+W+ER1uXocV7Hd+mOPR06dJ7eeQd57lJIsV589
+   OGo8wljnyzcUMXuXfip0fCAUJlhJ09xwRcgW6n2bUORFIhSwKX9WxvJMk
+   ToPLasmTsqkYmuvesdUNW5iL/T6gQ2KAL+dMfHUcjTpg0opmexIi03Yu7
+   wqblOnPiS2+HTDnShL76JeOdojdF/D76s9NL+fstMc0qNdqko8x+uMKwM
+   HW+AzV28jJdkajVFsBiZ17pa7nW1aQjHWLlOvCVTO1eC9ASxN4n82az3b
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="259136959"
+X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
+   d="scan'208";a="259136959"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 22:40:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
+   d="scan'208";a="694603557"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by fmsmga001.fm.intel.com with ESMTP; 28 Mar 2022 22:40:10 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>
+Cc:     Eric Auger <eric.auger@redhat.com>, Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH RFC v2 00/11] iommu: SVA and IOPF refactoring
+Date:   Tue, 29 Mar 2022 13:37:49 +0800
+Message-Id: <20220329053800.3049561-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220328111828.1554086-1-sashal@kernel.org> <20220328111828.1554086-16-sashal@kernel.org>
- <YkH5mhYokPB87FtE@google.com>
-In-Reply-To: <YkH5mhYokPB87FtE@google.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 29 Mar 2022 01:31:29 -0400
-X-Gmail-Original-Message-ID: <CAHmME9oTiJ5ZTtsecisOp7cLurm+r0gOtPSozgPvr+phDjiACQ@mail.gmail.com>
-Message-ID: <CAHmME9oTiJ5ZTtsecisOp7cLurm+r0gOtPSozgPvr+phDjiACQ@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.17 16/43] random: use computational hash for
- entropy extraction
-To:     Eric Biggers <ebiggers@google.com>
-Cc:     Sasha Levin <sashal@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sasha,
+Hi,
 
-On Mon, Mar 28, 2022 at 2:08 PM Eric Biggers <ebiggers@google.com> wrote:
->
-> On Mon, Mar 28, 2022 at 07:18:00AM -0400, Sasha Levin wrote:
-> > From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-> >
-> > [ Upstream commit 6e8ec2552c7d13991148e551e3325a624d73fac6 ]
-> >
->
-> I don't think it's a good idea to start backporting random commits to random.c
-> that weren't marked for stable.  There were a lot of changes in v5.18, and
-> sometimes they relate to each other in subtle ways, so the individual commits
-> aren't necessarily safe to pick.
->
-> IMO, you shouldn't backport any non-stable-Cc'ed commits to random.c unless
-> Jason explicitly reviews the exact sequence of commits that you're backporting.
+The former part of this series refactors the IOMMU SVA code by assigning
+an SVA type of iommu_domain to a shared virtual address and replacing
+sva_bind/unbind iommu ops with attach/detach_dev_pasid domain ops.
 
-I'm inclined to agree with Eric here that you might be a bit careful
-about autosel'ing 5.18, given how extensive the changes were. In
-theory they should all be properly sequenced so that nothing breaks,
-but I'd still be cautious. However, if you want, maybe we can work out
-some plan for backporting. I'll take a look and maybe will ping you on
-IRC about it.
+The latter part changes the existing I/O page fault handling framework
+from only serving SVA to a generic one. Any driver or component could
+handle the I/O page faults for its domain in its own way by installing
+an I/O page fault handler.
 
-Jason
+This series overlaps with another series posted here [1]. For the
+convenience of review, I included all relevant patches in this series.
+We will solve the overlap problem later.
+
+This series is also available on github here [2].
+
+[1] https://lore.kernel.org/lkml/20220315050713.2000518-1-jacob.jun.pan@linux.intel.com/
+[2] https://github.com/LuBaolu/intel-iommu/commits/iommu-sva-refactoring-v2
+
+Please help review and suggest.
+
+Best regards,
+baolu
+
+Change log:
+v1:
+ - https://lore.kernel.org/linux-iommu/20220320064030.2936936-1-baolu.lu@linux.intel.com/
+ - Initial post.
+
+v2:
+ - Add sva domain life cycle management to avoid race between unbind and
+   page fault handling.
+ - Use a single domain for each mm.
+ - Return a single sva handler for the same binding.
+ - Add a new helper to meet singleton group requirement.
+ - Rework the SVA domain allocation for arm smmu v3 driver and move the
+   pasid_bit initialization to device probe.
+ - Drop the patch "iommu: Handle IO page faults directly".
+ - Add mmget_not_zero(mm) in SVA page fault handler.
+
+Lu Baolu (11):
+  iommu: Add pasid_bits field in struct dev_iommu
+  iommu: Add iommu_group_singleton_lockdown()
+  iommu/sva: Add iommu_domain type for SVA
+  iommu: Add attach/detach_dev_pasid domain ops
+  iommu/vt-d: Remove SVM_FLAG_SUPERVISOR_MODE suport
+  iommu/vt-d: Add SVA domain support
+  arm-smmu-v3/sva: Add SVA domain support
+  iommu/sva: Use attach/detach_pasid_dev in SVA interfaces
+  iommu: Remove SVA related callbacks from iommu ops
+  iommu: Per-domain I/O page fault handling
+  iommu: Rename iommu-sva-lib.{c,h}
+
+ include/linux/intel-iommu.h                   |   5 +-
+ include/linux/iommu.h                         | 107 ++++--
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |  25 +-
+ .../iommu/{iommu-sva-lib.h => iommu-sva.h}    |  12 +-
+ .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   |  85 ++---
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |  28 +-
+ drivers/iommu/intel/iommu.c                   |  20 +-
+ drivers/iommu/intel/svm.c                     | 135 +++-----
+ drivers/iommu/io-pgfault.c                    |  72 +---
+ drivers/iommu/iommu-sva-lib.c                 |  71 ----
+ drivers/iommu/iommu-sva.c                     | 307 ++++++++++++++++++
+ drivers/iommu/iommu.c                         | 208 ++++++------
+ drivers/iommu/Makefile                        |   2 +-
+ 13 files changed, 655 insertions(+), 422 deletions(-)
+ rename drivers/iommu/{iommu-sva-lib.h => iommu-sva.h} (80%)
+ delete mode 100644 drivers/iommu/iommu-sva-lib.c
+ create mode 100644 drivers/iommu/iommu-sva.c
+
+-- 
+2.25.1
+

@@ -2,100 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE084EB31C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 20:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD8D4EB32F
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 20:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240445AbiC2SHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 14:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
+        id S240465AbiC2SLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 14:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240427AbiC2SHm (ORCPT
+        with ESMTP id S240462AbiC2SL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 14:07:42 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545E8B1AA5;
-        Tue, 29 Mar 2022 11:05:59 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id u26so21590608eda.12;
-        Tue, 29 Mar 2022 11:05:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GGrpFH5phWb+a/AcSK50FO4nyjVG2fRoM+DCfzaYwlA=;
-        b=F1xbWJaHXTIAhapaNMV6NPLmO7MCVyQwAalWZh0xnJcZHt4W+oPxaGfC3mgHZvD2ga
-         3vKPwOyjCTRCZQtCb9LT7cxUUXXHxex+n+38icpk19Gjz20gQXicGsHsEt0JMdLzdZso
-         54k8cRC2FNN0lM87RTnlvl23w+lqZ06NYhg0b7aqHXN+6tZr766kq32Vb+6XaTMoAlRl
-         Z1b/CZy+IXmAv/DgGwO3GLIhRCLJ3rjeR+ZPffK1sugB93HubGFq4uXrT2NFmHG5Cp5Y
-         9bz74YiOjRG51t6ewy1tQ2ChWnJesl7OTKwof0KgtqHLkKA4MdEaA3S/RfRb9qR5wLLK
-         zAyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GGrpFH5phWb+a/AcSK50FO4nyjVG2fRoM+DCfzaYwlA=;
-        b=l7zVV5PSdsKX2T4HaGBOXRo9tlBDNBgUstQupudUTwwM6d+hAqiG+CV2ZgzUqMlp93
-         aTY2TNYDgqW/XtRj4IvzojANtoiaS+HVYrQ2XBsD9XnskW+8idu0KiJFouo+QAZ4DmQw
-         bY4QFWz5p5p+zJ/1TqnLgF0d5SLwjUQfmSYDj1zfVFNG870XHegyGoNQZaMf+iBCaay/
-         o0mE6KvPUct3nFYamljUYlyaEYXtN9nNLmOKFpouQxNA/dQ0U3km4kV2bFEfmiZ3ymRc
-         Yw5LWcth93BF8tgGyHa+T6sLXksKVFD8to9UZJKTaJqGVPsAlpFIC3JhSxabwTCZ4gYb
-         uFNQ==
-X-Gm-Message-State: AOAM530CTdZBDnernZrSAYZprMCXubY8C+I/5fhjLBFaQ5cJ6w6h4waA
-        mDNgNswuYPTC494pJDUR+xJoPBmaZ2c=
-X-Google-Smtp-Source: ABdhPJw3kPT+km8qTjd04hgMG3/SJUcXDRsW6sh05uEGi7WFXacU6sNBumsFy1mCmMB8DL0PQIsx2g==
-X-Received: by 2002:a05:6402:14b:b0:418:d06e:5d38 with SMTP id s11-20020a056402014b00b00418d06e5d38mr6148877edu.90.1648577157850;
-        Tue, 29 Mar 2022 11:05:57 -0700 (PDT)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id j21-20020a170906255500b006e08c4862ccsm6443616ejb.96.2022.03.29.11.05.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 11:05:57 -0700 (PDT)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de, zhangqing@rock-chips.com
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] arm64: rockchip: add clocks property to cru node rk3368
-Date:   Tue, 29 Mar 2022 20:05:50 +0200
-Message-Id: <20220329180550.31043-2-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220329180550.31043-1-jbx6244@gmail.com>
-References: <20220329180550.31043-1-jbx6244@gmail.com>
+        Tue, 29 Mar 2022 14:11:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AAA27B05
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 11:09:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5EB96B81813
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 18:09:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0B40C340ED;
+        Tue, 29 Mar 2022 18:09:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648577381;
+        bh=/pZfUjwnCrvFojpuNSnniNhny5IfONJsKbqaSoUTGXs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vQkrLMTxowmVwtRXi8+jjcco1uue4Dlnjq97hDbkfpp0ny71FIETW7bxzZ62Qd+Am
+         H+tm3tHIroup+XG7mmMnkG4p/bI8eZv1Qu1iBuBPunp5inSQoT4AfXC/2IXWet1B2l
+         j6rvuGNPTzq/4m96oUHtdELA7dfDtQzL+ugtVtjSVC91vnl/t0RqtBZaawdmeQ6g1L
+         QVSHStAn/90/5k7VEfB6CC2M9MU65AV+E6AIBC69iFZNepUJun6v4ObJpi0L0pqKT2
+         ACKS03JR9X02unMsWlirs/0oUlQL70QyLPzdNRGLYKb1AzjO5AciSGsJ9ce6AACg/s
+         wwbrjO2HtZbnQ==
+Date:   Tue, 29 Mar 2022 11:09:40 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [f2fs-dev] [PATCH v3] f2fs: introduce data read/write showing
+ path info
+Message-ID: <YkNLZPRMDwmVml1w@google.com>
+References: <20220321223315.3228326-1-jaegeuk@kernel.org>
+ <YjkUvRKhyX8AUoTm@google.com>
+ <YkJ5anzBIyQkiHfU@google.com>
+ <101f4cb6-37bf-0ac3-3838-7aab7e648352@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <101f4cb6-37bf-0ac3-3838-7aab7e648352@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add clocks and clock-names because the device has to have
-at least one input clock.
-Also in case someone wants to add properties that start with
-assign-xxx to fix warnings like:
-'clocks' is a dependency of 'assigned-clocks'
+On 03/29, Chao Yu wrote:
+> On 2022/3/29 11:13, Jaegeuk Kim wrote:
+> > This was used in Android for a long time. Let's upstream it.
+> 
+> Could you please explain more about its usage?
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- arch/arm64/boot/dts/rockchip/rk3368.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+I found ioblame and ioshark in android are using it to understand app/file/IO
+traffic. Once we have this in AOSP, I'm thinking to change one by one.
+The android-mainline is also deprecating the custom tracepoints as well.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3368.dtsi b/arch/arm64/boot/dts/rockchip/rk3368.dtsi
-index c99da9032..4f0b5feaa 100644
---- a/arch/arm64/boot/dts/rockchip/rk3368.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3368.dtsi
-@@ -747,6 +747,8 @@
- 	cru: clock-controller@ff760000 {
- 		compatible = "rockchip,rk3368-cru";
- 		reg = <0x0 0xff760000 0x0 0x1000>;
-+		clocks = <&xin24m>;
-+		clock-names = "xin24m";
- 		rockchip,grf = <&grf>;
- 		#clock-cells = <1>;
- 		#reset-cells = <1>;
--- 
-2.20.1
+https://android-review.googlesource.com/c/kernel/common/+/2045529
 
+> 
+> > 
+> > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> 
+> The code part looks clean.
+> 
+> Reviewed-by: Chao Yu <chao@kernel.org>
+> 
+> Thanks,

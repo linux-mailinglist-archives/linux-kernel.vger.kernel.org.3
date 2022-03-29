@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05C24EA518
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADBEB4EA524
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbiC2CV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 22:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48724 "EHLO
+        id S230343AbiC2CWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 22:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiC2CVz (ORCPT
+        with ESMTP id S230104AbiC2CWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 22:21:55 -0400
+        Mon, 28 Mar 2022 22:22:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BFB26AE5;
-        Mon, 28 Mar 2022 19:20:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2649243144;
+        Mon, 28 Mar 2022 19:21:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52775612E7;
-        Tue, 29 Mar 2022 02:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9D874C34116;
-        Tue, 29 Mar 2022 02:20:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C31661287;
+        Tue, 29 Mar 2022 02:21:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18222C340EC;
+        Tue, 29 Mar 2022 02:21:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648520412;
-        bh=7tCMCMPuUQttg9oTD+WAEzEg653WkNq0hmSvOYen7V8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=caMxr6fDV4u+cSaPojbk6/qE+Z/UZNfMD97IBPB8837y7t2BFO2lUDw9mKxUd5sWC
-         qfEANuTKQCL+lfL4uVeTWVTz/gvV6K4/I3z+3N5S3RkiG6H29vvdqqOmeSwhtTgL4r
-         cB6fVmfku5GytF6CKaK0EHL+S/NsdmSD6eP1G69Y0HqpFoIGvwSkK54Fo+R+Gz0ymc
-         Y7MKJB0WxfuNj0TQHAev/lz/ERd05o4teaSw5yJNXiYFjsUGsu9fWoP0Qu2H7RDewe
-         MpU8mXYG2qjNEKXvSLB6HcZZYQwcTow8+M4cVyeLxqwQzd+M208xukow19uRXmouVi
-         K2qmzuOL6sc4Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7D707F0384C;
-        Tue, 29 Mar 2022 02:20:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1648520464;
+        bh=HKtkQksT8pneWdeXaLVwESB0pNlyHOGRqkTcQiY+g0c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PJzOqvrDu60jUZsGYcWpApGltLUMYc1ETr/LrdPrBQkVqSTRlM3RXnHqIYtghy84G
+         9wcL0lLhKGQ6+4sJFniMqdQgoffHmASoVqLzjh9zIa7R23E8eczEJ0hkGPv+hCc9bG
+         iE6vdyrzk1aa0DXp5OutbSYKOaGO94bYZo0uML7WmgJeHaXgIoKVkuhuDomNgYgFWw
+         d5Ilh9c58JykNAAjr0KBv94/9gsSa/wAd8yzmWBdXhrVfhD6sa8RHOzEgMYwHA20WT
+         GkA0+kVfMDoGqF3oVKL9I3f2R5A4vmQ7MmY4BdkxchSRXi/FLvpqvVGCYhO8Pt2HID
+         G28ZhpeSe7Iug==
+Date:   Mon, 28 Mar 2022 19:21:03 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     menglong8.dong@gmail.com
+Cc:     dsahern@kernel.org, pabeni@redhat.com, rostedt@goodmis.org,
+        mingo@redhat.com, xeb@mail.ru, davem@davemloft.net,
+        yoshfuji@linux-ipv6.org, imagedong@tencent.com,
+        edumazet@google.com, kafai@fb.com, talalahmad@google.com,
+        keescook@chromium.org, alobakin@pm.me, flyingpeng@tencent.com,
+        mengensun@tencent.com, dongli.zhang@oracle.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        benbjiang@tencent.com
+Subject: Re: [PATCH net-next v5 0/4] net: icmp: add skb drop reasons to icmp
+Message-ID: <20220328192103.4df73760@kernel.org>
+In-Reply-To: <20220328042737.118812-1-imagedong@tencent.com>
+References: <20220328042737.118812-1-imagedong@tencent.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: Fix maximum permitted number of arguments check
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164852041251.3757.17634633994890271955.git-patchwork-notify@kernel.org>
-Date:   Tue, 29 Mar 2022 02:20:12 +0000
-References: <20220324164238.1274915-1-ytcoode@gmail.com>
-In-Reply-To: <20220324164238.1274915-1-ytcoode@gmail.com>
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,27 +60,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Fri, 25 Mar 2022 00:42:38 +0800 you wrote:
-> Since the m->arg_size array can hold up to MAX_BPF_FUNC_ARGS argument
-> sizes, it's ok that nargs is equal to MAX_BPF_FUNC_ARGS.
+On Mon, 28 Mar 2022 12:27:33 +0800 menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
 > 
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-> ---
->  kernel/bpf/btf.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()"),
+> we added the support of reporting the reasons of skb drops to kfree_skb
+> tracepoint. And in this series patches, reasons for skb drops are added
+> to ICMP protocol.
 
-Here is the summary with links:
-  - [bpf-next] bpf: Fix maximum permitted number of arguments check
-    https://git.kernel.org/bpf/bpf/c/c29a4920dfca
+# Form letter - net-next is closed
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+We have already sent the networking pull request for 5.18
+and therefore net-next is closed for new drivers, features,
+code refactoring and optimizations. We are currently accepting
+bug fixes only.
 
+Please repost when net-next reopens after 5.18-rc1 is cut.
 
+RFC patches sent for review only are obviously welcome at any time.

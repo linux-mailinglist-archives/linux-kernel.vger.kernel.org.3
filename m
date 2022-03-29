@@ -2,177 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0044EAEFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 688BB4EAF00
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237714AbiC2OF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 10:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39368 "EHLO
+        id S237726AbiC2OFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 10:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235896AbiC2OFY (ORCPT
+        with ESMTP id S237724AbiC2OFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 10:05:24 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84699C2E
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:03:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648562621; x=1680098621;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=N7ljZpLuhVxvG1lByeWMuXSfovsfSjMocKlsX1aE0+o=;
-  b=Ld2nj0SjsvUbgrVQkhSZYurdRUUf+ISVVP3lN1GW0CaxOT9PW4C5WENO
-   qd8YDRyIDYq+uktPpMrgUG6VAvN7F631/1puYIX3RMj6vFck0fVC03F95
-   gMEHsf36jS++u7sBUPlS1eQngNfO7wVtmm1T01/MzxjVoav1qolZK/bTs
-   7mvn0UMa9+fPbvX5dnNNcXEegiYpszzao/gPAmajtT8RNEbodEeR3qjj0
-   jKD2YBBlCEcLDOANsWMaWl5/aaCHD0OleTX7rnr/wmPzA7XIZnvuQPfSP
-   jTAvnvJXh77piTMaEPjMkDp5HvJof9gu7tFvCUB4OECWhMylHGgCtuOGn
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="259443498"
-X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="259443498"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 07:03:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="585586371"
-Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 29 Mar 2022 07:03:12 -0700
-Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nZCRD-0000I4-R1; Tue, 29 Mar 2022 14:03:11 +0000
-Date:   Tue, 29 Mar 2022 22:02:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@elte.hu>, Adrian Bunk <bunk@stusta.de>,
-        Randy Dunlap <rdunlap@xenotime.net>,
-        Michel Lespinasse <walken@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [hnaz-mm:master 478/481] kernel/synchro-test.c:393:49: warning:
- variable 'zeros' set but not used
-Message-ID: <202203292115.plWUiMYU-lkp@intel.com>
+        Tue, 29 Mar 2022 10:05:44 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EACB1D1927
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:04:01 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id e189so19112586oia.8
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:04:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=26rvEBCNIFiRO8lw0d4ibLwjH7rNC+2FXHQhaFfFi9E=;
+        b=ClXdxEY3sYedDz8iLRgAFKARKUjU5okvKpYyQSsMMD5NzCa+TyiWwwmHtDaV41nHtw
+         polqdshnlc02Bto5VshYz3O083Qe3KF89GPEwcRSmrHVbAzP4lbI5029v//MLnRoMbc3
+         RufyhpHYcgWkp9OhHvBBICGjkylEXgbpjfXuy0I32eILASBlJe+QjntYbIC1qYBkWmTj
+         4uRxEbeXUB9UNVzapyDtDfVnvTouMlhB2pkCdT0AeFhkwP68tap0/47jP//V2oOvvDd1
+         m0VPLqILesImaHeD502rDWoZXaimIdhtfH3AxVHwVxN6xLAuWZq8SN0dPtcobFQ4ZwJh
+         XMeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=26rvEBCNIFiRO8lw0d4ibLwjH7rNC+2FXHQhaFfFi9E=;
+        b=uFyJAxCVOxOptkOEmHMcnrViv1CGbrbkcqDgGpal4G8LgZxSXhRl/t5SAYuYbtCaXs
+         axk4usQoPOaVS2gL0doImHF+2KiaziR64/sP/G9j/lo4eGAhsRvamdIPmw+x1lmsmRJD
+         J7YP1D1PCxtox2PqBbBJ/B74w/R+9TddBcGQQxOTLxTJCGKBcQ12V3lXIHA2QRXl4PxS
+         SeNhuhmcPhrcoWs0nyuH3KSkT8qwgLD2+yp2GeQkUMdcrkNEKsRS+jRJU8I10lXa0voL
+         S9P6J8wYjqf10prP8K07KjPxi1yhEtQglWrO7qXpeUlxm1bQWcHcvTOeosOJrOKBTThx
+         s9wQ==
+X-Gm-Message-State: AOAM53106+8hfwiWrlsYKGl2KKfa7SiPazt9OsjpYAFgFCZGfdIHussQ
+        mMWC+ie3XTjHkW5leW7hVqPbDKIzO9HARI4Qe6J1qoth4Pg=
+X-Google-Smtp-Source: ABdhPJwEG8czZRwrZzoQM9EwBge0o+Kn+7s3e3Zig8YFeVV+qnxNWy/SXdPGQPyeOvK2t8Loctb+sokhI4gNCCkQJww=
+X-Received: by 2002:aca:d04:0:b0:2ef:8b45:d235 with SMTP id
+ 4-20020aca0d04000000b002ef8b45d235mr1372144oin.253.1648562640275; Tue, 29 Mar
+ 2022 07:04:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220324231000.4072275-1-tsung-hua.lin@amd.com> <20220329085239.157527-1-tsung-hua.lin@amd.com>
+In-Reply-To: <20220329085239.157527-1-tsung-hua.lin@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 29 Mar 2022 10:03:49 -0400
+Message-ID: <CADnq5_OXPXZ4hHv3Jndifd0kQ=kvJnypB3JcW5mNsjzjQ7JPLg@mail.gmail.com>
+Subject: Re: drm/amdgpu: Disable ABM when AC mode
+To:     Ryan Lin <tsung-hua.lin@amd.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jake Wang <haonan.wang2@amd.com>,
+        David Airlie <airlied@linux.ie>, Leon.Li@amd.com,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>, Wyatt Wood <wyatt.wood@amd.com>,
+        Anthony Koo <Anthony.Koo@amd.com>,
+        Jack Zhang <Jack.Zhang1@amd.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Leo Li <sunpeng.li@amd.com>, Sean Paul <seanpaul@chromium.org>,
+        =?UTF-8?Q?St=C3=A9phane_Marchesin?= <marcheu@chromium.org>,
+        Evan Quan <evan.quan@amd.com>, shaoyunl <shaoyun.liu@amd.com>,
+        Pratik Vishwakarma <Pratik.Vishwakarma@amd.com>,
+        Sathishkumar S <sathishkumar.sundararaju@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Po-Ting Chen <robin.chen@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/hnaz/linux-mm master
-head:   673977c1d5c4c5bc15abf8f01ebaddc66116a9cd
-commit: 52880bd2b8272052d5ccf95f94704a959796c9f6 [478/481] mutex subsystem, synchro-test module
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220329/202203292115.plWUiMYU-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/hnaz/linux-mm/commit/52880bd2b8272052d5ccf95f94704a959796c9f6
-        git remote add hnaz-mm https://github.com/hnaz/linux-mm
-        git fetch --no-tags hnaz-mm master
-        git checkout 52880bd2b8272052d5ccf95f94704a959796c9f6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+On Tue, Mar 29, 2022 at 4:56 AM Ryan Lin <tsung-hua.lin@amd.com> wrote:
+>
+> Disable ABM feature when the system is running on AC mode to get
+> the more perfect contrast of the display.
+>
+> v2: remove "UPSTREAM" from the subject.
+>
+> Signed-off-by: Ryan Lin <tsung-hua.lin@amd.com>
+>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c      |  4 ++
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c    |  1 +
+>  drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c | 58 ++++++++++++-------
+>  drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h       |  1 +
+>  4 files changed, 42 insertions(+), 22 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+> index c560c1ab62ecb..bc8bb9aad2e36 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+> @@ -822,6 +822,10 @@ static int amdgpu_acpi_event(struct notifier_block *nb,
+>         struct amdgpu_device *adev = container_of(nb, struct amdgpu_device, acpi_nb);
+>         struct acpi_bus_event *entry = (struct acpi_bus_event *)data;
+>
+> +       if (strcmp(entry->device_class, "battery") == 0) {
+> +               adev->pm.ac_power = power_supply_is_system_supplied() > 0;
+> +       }
+> +
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Is this change necessary?  As I said before, we already update
+adev->pm.ac_power a few lines later in amdgpu_pm_acpi_event_handler().
+If there is something wrong with that code, please adjust as
+necessary.
 
-All warnings (new ones prefixed by >>):
+Alex
 
-   kernel/synchro-test.c:267:2: error: implicit declaration of function 'complete_and_exit' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           complete_and_exit(&sp_comp[N], 0);
-           ^
-   kernel/synchro-test.c:268:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   }
-   ^
-   kernel/synchro-test.c:288:2: error: implicit declaration of function 'complete_and_exit' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           complete_and_exit(&mx_comp[N], 0);
-           ^
-   kernel/synchro-test.c:289:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   }
-   ^
-   kernel/synchro-test.c:309:2: error: implicit declaration of function 'complete_and_exit' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           complete_and_exit(&sm_comp[N], 0);
-           ^
-   kernel/synchro-test.c:310:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   }
-   ^
-   kernel/synchro-test.c:332:2: error: implicit declaration of function 'complete_and_exit' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           complete_and_exit(&rd_comp[N], 0);
-           ^
-   kernel/synchro-test.c:333:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   }
-   ^
-   kernel/synchro-test.c:355:2: error: implicit declaration of function 'complete_and_exit' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           complete_and_exit(&wr_comp[N], 0);
-           ^
-   kernel/synchro-test.c:356:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   }
-   ^
-   kernel/synchro-test.c:383:2: error: implicit declaration of function 'complete_and_exit' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           complete_and_exit(&dg_comp[N], 0);
-           ^
-   kernel/synchro-test.c:384:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   }
-   ^
->> kernel/synchro-test.c:393:49: warning: variable 'zeros' set but not used [-Wunused-but-set-variable]
-           unsigned int tot = 0, max = 0, min = UINT_MAX, zeros = 0, cnt;
-                                                          ^
-   1 warning and 12 errors generated.
-
-
-vim +/zeros +393 kernel/synchro-test.c
-
-   390	
-   391	static unsigned int total(const char *what, unsigned int counts[], int num)
-   392	{
- > 393		unsigned int tot = 0, max = 0, min = UINT_MAX, zeros = 0, cnt;
-   394		int loop;
-   395	
-   396		for (loop = 0; loop < num; loop++) {
-   397			cnt = counts[loop];
-   398	
-   399			if (cnt == 0) {
-   400				zeros++;
-   401				min = 0;
-   402				continue;
-   403			}
-   404	
-   405			tot += cnt;
-   406			if (tot > max)
-   407				max = tot;
-   408			if (tot < min)
-   409				min = tot;
-   410		}
-   411	
-   412		if (verbose && tot > 0) {
-   413			printk("%s:", what);
-   414	
-   415			for (loop = 0; loop < num; loop++) {
-   416				cnt = counts[loop];
-   417	
-   418				if (cnt == 0)
-   419					printk(" zzz");
-   420				else
-   421					printk(" %d%%", cnt * 100 / tot);
-   422			}
-   423	
-   424			printk("\n");
-   425		}
-   426	
-   427		return tot;
-   428	}
-   429	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>         if (strcmp(entry->device_class, ACPI_AC_CLASS) == 0) {
+>                 if (power_supply_is_system_supplied() > 0)
+>                         DRM_DEBUG_DRIVER("pm: AC\n");
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> index abfcc1304ba0c..3a0afe7602727 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> @@ -3454,6 +3454,7 @@ int amdgpu_device_init(struct amdgpu_device *adev,
+>
+>         adev->gfx.gfx_off_req_count = 1;
+>         adev->pm.ac_power = power_supply_is_system_supplied() > 0;
+> +       adev->pm.old_ac_power = true;
+>
+>         atomic_set(&adev->throttling_logging_enabled, 1);
+>         /*
+> diff --git a/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c b/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
+> index 54a1408c8015c..478a734b66926 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
+> @@ -23,6 +23,8 @@
+>   *
+>   */
+>
+> +#include <linux/power_supply.h>
+> +#include "amdgpu.h"
+>  #include "dmub_abm.h"
+>  #include "dce_abm.h"
+>  #include "dc.h"
+> @@ -51,6 +53,7 @@
+>  #define DISABLE_ABM_IMMEDIATELY 255
+>
+>
+> +extern uint amdgpu_dm_abm_level;
+>
+>  static void dmub_abm_enable_fractional_pwm(struct dc_context *dc)
+>  {
+> @@ -117,28 +120,6 @@ static void dmub_abm_init(struct abm *abm, uint32_t backlight)
+>         dmub_abm_enable_fractional_pwm(abm->ctx);
+>  }
+>
+> -static unsigned int dmub_abm_get_current_backlight(struct abm *abm)
+> -{
+> -       struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
+> -       unsigned int backlight = REG_READ(BL1_PWM_CURRENT_ABM_LEVEL);
+> -
+> -       /* return backlight in hardware format which is unsigned 17 bits, with
+> -        * 1 bit integer and 16 bit fractional
+> -        */
+> -       return backlight;
+> -}
+> -
+> -static unsigned int dmub_abm_get_target_backlight(struct abm *abm)
+> -{
+> -       struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
+> -       unsigned int backlight = REG_READ(BL1_PWM_TARGET_ABM_LEVEL);
+> -
+> -       /* return backlight in hardware format which is unsigned 17 bits, with
+> -        * 1 bit integer and 16 bit fractional
+> -        */
+> -       return backlight;
+> -}
+> -
+>  static bool dmub_abm_set_level(struct abm *abm, uint32_t level)
+>  {
+>         union dmub_rb_cmd cmd;
+> @@ -148,6 +129,9 @@ static bool dmub_abm_set_level(struct abm *abm, uint32_t level)
+>         int edp_num;
+>         uint8_t panel_mask = 0;
+>
+> +       if (power_supply_is_system_supplied() > 0)
+> +               level = 0;
+> +
+>         get_edp_links(dc->dc, edp_links, &edp_num);
+>
+>         for (i = 0; i < edp_num; i++) {
+> @@ -170,6 +154,36 @@ static bool dmub_abm_set_level(struct abm *abm, uint32_t level)
+>         return true;
+>  }
+>
+> +static unsigned int dmub_abm_get_current_backlight(struct abm *abm)
+> +{
+> +       struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
+> +       unsigned int backlight = REG_READ(BL1_PWM_CURRENT_ABM_LEVEL);
+> +       struct dc_context *dc = abm->ctx;
+> +       struct amdgpu_device *adev = dc->driver_context;
+> +
+> +       if (adev->pm.ac_power != adev->pm.old_ac_power) {
+> +               dmub_abm_set_level(abm, amdgpu_dm_abm_level);
+> +               adev->pm.ac_power = power_supply_is_system_supplied() > 0;
+> +               adev->pm.old_ac_power = adev->pm.ac_power;
+> +       }
+> +
+> +       /* return backlight in hardware format which is unsigned 17 bits, with
+> +        * 1 bit integer and 16 bit fractional
+> +        */
+> +       return backlight;
+> +}
+> +
+> +static unsigned int dmub_abm_get_target_backlight(struct abm *abm)
+> +{
+> +       struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
+> +       unsigned int backlight = REG_READ(BL1_PWM_TARGET_ABM_LEVEL);
+> +
+> +       /* return backlight in hardware format which is unsigned 17 bits, with
+> +        * 1 bit integer and 16 bit fractional
+> +        */
+> +       return backlight;
+> +}
+> +
+>  static bool dmub_abm_init_config(struct abm *abm,
+>         const char *src,
+>         unsigned int bytes,
+> diff --git a/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h b/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
+> index f6e0e7d8a0077..de459411a0e83 100644
+> --- a/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
+> +++ b/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
+> @@ -445,6 +445,7 @@ struct amdgpu_pm {
+>         uint32_t                smu_prv_buffer_size;
+>         struct amdgpu_bo        *smu_prv_buffer;
+>         bool ac_power;
+> +       bool old_ac_power;
+>         /* powerplay feature */
+>         uint32_t pp_feature;
+>
+> --
+> 2.25.1
+>

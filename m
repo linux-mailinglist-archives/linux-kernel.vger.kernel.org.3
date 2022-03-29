@@ -2,196 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D574EAFED
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A204EAFF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238337AbiC2PKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
+        id S238301AbiC2PKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238301AbiC2PJt (ORCPT
+        with ESMTP id S237736AbiC2PKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:09:49 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37F11EC62B;
-        Tue, 29 Mar 2022 08:08:04 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a02:3030:a:f397:f6bc:b726:2678:839f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 21DAC1F440C1;
-        Tue, 29 Mar 2022 16:08:03 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648566483;
-        bh=C6t3ZinGAFBOT9ORWc/HRpzQcPD7wWIHP5FykwdIt7c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KXC2rrIJW+aom9t1Juphld1TuKPK1diMvGZvn5F2iONYT+4InqEOI4k4mEDOCaYbL
-         /Gj6zyIsX4GK0+avYdTCfxd0csR9jCaiozukIHHAHuzdbLnUUYFt3pbutam2bR+q/b
-         w2uoVlynxtVFwFkgH7Wks6yKEQYw/4Jj5vhdJi9G/pCAQRpCcrawi7LE7HtZY9giaV
-         Qh2BojzVa8gRaTe6DOfnb1ntTQZahK9a76Vk5zUAsfrpWDrR5GM9tkF+/Kspcg/a26
-         U2A3Y963K0knxPCeizLYFpe/MHScBw+3XP2C4wbFCYWbek4nxSG9BHBKZaX7do6MO5
-         cjpals4Wwk+wA==
-Date:   Tue, 29 Mar 2022 17:08:00 +0200
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 06/24] media: v4l2: Trace calculated p/b0/b1 initial
- reflist
-Message-ID: <20220329150800.siu2yaaolesf6dgs@basti-XPS-13-9310>
-References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
- <20220328195936.82552-7-nicolas.dufresne@collabora.com>
+        Tue, 29 Mar 2022 11:10:35 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65811FCD39
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:08:50 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id s8so16122240pfk.12
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:08:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IYBiB3u6pgGszqmXJWRnNvzAS97qt4GQexZ8YkymLeQ=;
+        b=OLc41CD7VhQmZwLRan5dplB/3HewcV8wG9FMkJl9THtcfjL5vmGIH9A10/FnRAcO8p
+         wUNQzWzyVkVZuAQxE8HN6wk4m8kjAp2SKXxYWX0RDsRVk0M17mVSRAT3ycydsxcmO4EX
+         lw4t5dtBGymqukkwUr3e6/hsteX1dd8zYl7Hlh/oeatvwO7v0DkQ016ouZUun8p71MfH
+         zZfcNX1u8XQcwUJ2s42t1ZT0N45/Hy/ugOeacurwfgEKGftLLAwrod2cOGYKSTL1fTgY
+         phPy0mFeLVDSCL76CG4eKPkqCvsLyGBMH0kNgHC5i1ybHjHFhNDh3mzh9ixAemSwuSOP
+         gBkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IYBiB3u6pgGszqmXJWRnNvzAS97qt4GQexZ8YkymLeQ=;
+        b=w6tFsLIQrshuShdSHX3lUpKel9g3asnZtGrfWSOJPPYXYXVq0wAEHCM4rCRTd6ciZL
+         2ptkUyW94ncgE3KJiSBSaC6hPVrFWQsqETH3Rlph6u4eU/KAR02qvxAo0fi9L2VlUBQI
+         km7cZ/BIYUhYynbYIz7Q3KRq+GTVOEdjuOjX8JtOZ2bdWD26vfPrLosE05jKxIw/69L8
+         hy95FOC1jWBz87Fm9kaK1Qpw+0QYBm2tE9pw0X/+5mz5eSUKRBZKqFlf54hqKmYolWto
+         IT6Apuv36+CgUefS7XtmYk/IQ2QmOlB+gJ5WF1sQTBB+Xu9FbWkiJlY5DrDmO2isk1pW
+         m3LQ==
+X-Gm-Message-State: AOAM531Vf7hJ99iaRaLDTwZJ47f15eyeLOGG9SdZCW8/cqig/LU9cstD
+        1ORLM2y9xZt9KQ2SFiOvMrmxWQWr5R4okQ==
+X-Google-Smtp-Source: ABdhPJwMfMVbzAiD5UdmKQNww9aqdfrUiLy4V5t1ofj/8Dmu3KkG2VH7U7xVD64jJtvC3qlGk5i6ag==
+X-Received: by 2002:a05:6a02:283:b0:342:703e:1434 with SMTP id bk3-20020a056a02028300b00342703e1434mr2336093pgb.74.1648566530096;
+        Tue, 29 Mar 2022 08:08:50 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id l10-20020a056a00140a00b004c55d0dcbd1sm20516065pfu.120.2022.03.29.08.08.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 08:08:48 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 09:08:46 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     bjorn.andersson@linaro.org, matthias.bgg@gmail.com,
+        pihsun@chromium.org, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH] rpmsg: mtk_rpmsg: Fix circular locking dependency
+Message-ID: <20220329150846.GA3767550@p14s>
+References: <20220114144737.375621-1-angelogioacchino.delregno@collabora.com>
+ <20220217190349.GA477215@p14s>
+ <ad306275-cd38-e6ad-55cc-0f7c4bdfcecf@collabora.com>
+ <20220218180111.GA574087@p14s>
+ <ea0f7cdd-0fae-fb66-3171-f0870384e6aa@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220328195936.82552-7-nicolas.dufresne@collabora.com>
+In-Reply-To: <ea0f7cdd-0fae-fb66-3171-f0870384e6aa@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Nicolas,
-
-On 28.03.2022 15:59, Nicolas Dufresne wrote:
->This is crucial in verifying that the ordering is right, specially with
->more complex sorting needed for field decoding.
-
-How about:
-
-"""
-Add debug print statements to print the content of P & B reference
-lists, to verify that the ordering of the generated reference lists is
-correct. This is escpecially important for the field decoding mode,
-where sorting is more complex.
-"""
-
+On Tue, Mar 29, 2022 at 12:55:33PM +0200, AngeloGioacchino Del Regno wrote:
+> Il 18/02/22 19:01, Mathieu Poirier ha scritto:
+> > On Fri, Feb 18, 2022 at 10:16:51AM +0100, AngeloGioacchino Del Regno wrote:
+> > > Il 17/02/22 20:03, Mathieu Poirier ha scritto:
+> > > > Hi Angelo,
+> > > > 
+> > > > On Fri, Jan 14, 2022 at 03:47:37PM +0100, AngeloGioacchino Del Regno wrote:
+> > > > > During execution of the worker that's used to register rpmsg devices
+> > > > > we are safely locking the channels mutex but, when creating a new
+> > > > > endpoint for such devices, we are registering a IPI on the SCP, which
+> > > > > then makes the SCP to trigger an interrupt, lock its own mutex and in
+> > > > > turn register more subdevices.
+> > > > > This creates a circular locking dependency situation, as the mtk_rpmsg
+> > > > > channels_lock will then depend on the SCP IPI lock.
+> > > > > 
+> > > > > [   18.014514]  Possible unsafe locking scenario:
+> > > > > [   18.014515]        CPU0                    CPU1
+> > > > > [   18.014517]        ----                    ----
+> > > > > [   18.045467]   lock(&mtk_subdev->channels_lock);
+> > > > > [   18.045474]                                lock(&scp->ipi_desc[i].lock);
+> > > > 
+> > > > I spent well over an hour tracing through the meanders of the code to end up in
+> > > > scp_ipi_register() which, I think, leads to the above.  But from there I don't
+> > > > see how an IPI can come in and that tells me my assumption is wrong.
+> > > > 
+> > > > Can you give more details on the events that lead to the above?  I'm not saying
+> > > > there is no problem, I just need to understand it.
+> > > > 
+> > > 
+> > > Hi Mathieu,
+> > > 
+> > > I understand that following this flow without the assistance of the actual
+> > > hardware may be a little confusing, so, no worries.
+> > > 
+> > > drivers/remoteproc/mtk_scp.c - this driver manages the SCP (obviously, a
+> > > remote processor)
+> > > drivers/remoteproc/mtk_scp_ipi.c - public functions for kernel SCP IPC
+> > > 
+> > > Flow:
+> > > - MediaTek SCP gets probed
+> > > - RPMSG starts, we start probing "something", like google,cros-ec-rpmsg
+> > > - mtk_rpmsg: creates endpoint; IPI handler is registered here.
+> > > 
+> > >           ( more flow )
+> > > 
+> > > - mtk_rpmsg: mtk_rpmsg_ns_cb() -> mtk_rpmsg_create_device(), channel is
+> > >               added to the channels list, worker gets scheduled
+> > 
+> > To me the above is out of order.  The name space endpoint is registered as part
+> > of the remote processor start sequence.  From there an IPI with ns_ipi_id comes in
+> > and then cros_ec_rpmsg_probe() is called.  The above seems to imply the
+> > opposite.
+> > 
+> > > 
+> > > 
+> > > Now for the part that produces the real issue:
+> > > 
+> > > label_a:
+> > > 
+> > > *** RPMSG MUTEX LOCK ***
+> > 
+> > By this I take you mean the subdev->channels_lock mutex.
+> > 
+> > > - mtk_rpmsg: ## Go through multiple channels ##, call mtk_rpmsg_register_device()
+> > > 
+> > > - Registered device tries to communicate through RPMSG
+> > > - .send() or .trysend() (depending on the device) is called: send_ipi()
+> > >      *** SCP MUTEX LOCK ***
+> > 
+> > And this one is either scp->send_lock or scp->ipi_desc[i].lock.
+> > 
+> > >     - mtk_scp_ipi: Data written, ACK? ok -> return 0
+> > >      *** SCP MUTEX UNLOCK ***
+> > > 
+> > > - mtk_scp_ipi: **** INTERRUPT!!! **** New RPMSG NS available? -> create channel
+> > >            goto label_a;
+> > > 
+> > > *** RPMSG MUTEX UNLOCK ***
+> > > 
+> > > 
+> > > Pardon me for keeping some things in this flow implicit, but that was done to
+> > > simplify it as much as possible as to try to make you understand the situation.
+> > 
+> > I certainly appreciate the effort but the above does not provide me with a clear
+> > path that causes the lock to happen.  As I said in my last reply I don't doubt
+> > there is a lock contention but the provided information doesn't allow to
+> > understand how it happens.
+> > 
+> > All I am looking for is one scenario with all mutexes and functions calls
+> > involved.
+> > 
+> 
+> Hello Mathieu,
+> I'm sorry for leaving this unresolved for a long time, had to work on other
+> things in the meanwhile.
 >
->Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Tested-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 
-Greetings,
-Sebastian
+I also had to move on and as such details related to this patch have mostly
+vanished from my memory.
 
->---
-> drivers/media/v4l2-core/v4l2-h264.c | 86 +++++++++++++++++++++++++++++
-> 1 file changed, 86 insertions(+)
->
->diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
->index d5698c981973..c9e18fd51d78 100644
->--- a/drivers/media/v4l2-core/v4l2-h264.c
->+++ b/drivers/media/v4l2-core/v4l2-h264.c
->@@ -241,6 +241,87 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
-> 	return poca < pocb ? -1 : 1;
-> }
->
->+static char ref_type_to_char (u8 ref_type)
->+{
->+	switch (ref_type) {
->+	case V4L2_H264_FRAME_REF:
->+		return 'f';
->+	case V4L2_H264_TOP_FIELD_REF:
->+		return 't';
->+	case V4L2_H264_BOTTOM_FIELD_REF:
->+		return 'b';
->+	}
->+
->+	return '?';
->+}
->+
->+static const char *format_ref_list_p(const struct v4l2_h264_reflist_builder *builder,
->+				     struct v4l2_h264_reference *reflist,
->+				     char *out_str, const int len)
->+{
->+	int n = 0, i;
->+
->+	n += snprintf(out_str + n, len - n, "|");
->+
->+	for (i = 0; i < builder->num_valid; i++) {
->+		/* this is pic_num for frame and frame_num (wrapped) for field,
->+		 * but for frame pic_num is equal to frame_num (wrapped).
->+		 */
->+		int frame_num = builder->refs[reflist[i].index].frame_num;
->+		bool longterm = builder->refs[reflist[i].index].longterm;
->+
->+		n += scnprintf(out_str + n, len - n, "%i%c%c|",
->+			       frame_num, longterm ? 'l' : 's',
->+			       ref_type_to_char (reflist[i].fields));
->+	}
->+
->+	return out_str;
->+}
->+
->+static void print_ref_list_p(const struct v4l2_h264_reflist_builder *builder,
->+			     struct v4l2_h264_reference *reflist)
->+{
->+	char buf[1024];
->+
->+	pr_debug("ref_pic_list_p (cur_poc %u%c) %s\n",
->+		 builder->cur_pic_order_count,
->+		 ref_type_to_char(builder->cur_pic_fields),
->+		 format_ref_list_p(builder, reflist, buf, sizeof(buf)));
->+}
->+
->+static const char *format_ref_list_b(const struct v4l2_h264_reflist_builder *builder,
->+				     struct v4l2_h264_reference *reflist,
->+				     char *out_str, const int len)
->+{
->+	int n = 0, i;
->+
->+	n += snprintf(out_str + n, len - n, "|");
->+
->+	for (i = 0; i < builder->num_valid; i++) {
->+		int frame_num = builder->refs[reflist[i].index].frame_num;
->+		u32 poc = v4l2_h264_get_poc(builder, reflist + i);
->+		bool longterm = builder->refs[reflist[i].index].longterm;
->+
->+		n += scnprintf(out_str + n, len - n, "%i%c%c|",
->+			       longterm ? frame_num : poc,
->+			       longterm ? 'l' : 's',
->+			       ref_type_to_char(reflist[i].fields));
->+	}
->+
->+	return out_str;
->+}
->+
->+static void print_ref_list_b(const struct v4l2_h264_reflist_builder *builder,
->+			     struct v4l2_h264_reference *reflist, u8 list_num)
->+{
->+	char buf[1024];
->+
->+	pr_debug("ref_pic_list_b%u (cur_poc %u%c) %s",
->+		 list_num, builder->cur_pic_order_count,
->+		 ref_type_to_char (builder->cur_pic_fields),
->+		 format_ref_list_b(builder, reflist, buf, sizeof(buf)));
->+}
->+
-> /**
->  * v4l2_h264_build_p_ref_list() - Build the P reference list
->  *
->@@ -261,6 +342,8 @@ v4l2_h264_build_p_ref_list(const struct v4l2_h264_reflist_builder *builder,
-> 	       sizeof(builder->unordered_reflist[0]) * builder->num_valid);
-> 	sort_r(reflist, builder->num_valid, sizeof(*reflist),
-> 	       v4l2_h264_p_ref_list_cmp, NULL, builder);
->+
->+	print_ref_list_p(builder, reflist);
-> }
-> EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
->
->@@ -296,6 +379,9 @@ v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
-> 	if (builder->num_valid > 1 &&
-> 	    !memcmp(b1_reflist, b0_reflist, builder->num_valid))
-> 		swap(b1_reflist[0], b1_reflist[1]);
->+
->+	print_ref_list_b(builder, b0_reflist, 0);
->+	print_ref_list_b(builder, b1_reflist, 1);
-> }
-> EXPORT_SYMBOL_GPL(v4l2_h264_build_b_ref_lists);
->
->-- 
->2.34.1
->
+> I'm not sure what you need, can you please help me to give you the
+> issue background that you require?
+> 
+> In the meanwhile, here's full debugging info coming from the kmsg:
+> 
+> https://paste.debian.net/1235967/
+
+I will review this pastebin along with the explanation you had provided earlier
+in this thread - maybe I'll get it this time... But that will take some time as
+I have 5 other patchsets to review before looking at this again.
+
+> 
+> Thanks,
+> Angelo
+> 
+> > Thanks,
+> > Mathieu
+> > 
+> > > 
+> > > Cheers,
+> > > Angelo
+> > > 
+> > > > Thanks,
+> > > > Mathieu
+> > > > 
+> > > > > [   18.228399]                                lock(&mtk_subdev->channels_lock);
+> > > > > [   18.228405]   lock(&scp->ipi_desc[i].lock);
+> > > > > [   18.264405]
+> > > > > 
+> > > > > To solve this, simply unlock the channels_lock mutex before calling
+> > > > > mtk_rpmsg_register_device() and relock it right after, as safety is
+> > > > > still ensured by the locking mechanism that happens right after
+> > > > > through SCP.
+> > > > > Notably, mtk_rpmsg_register_device() does not even require locking.
+> > > > > 
+> > > > > Fixes: 7017996951fd ("rpmsg: add rpmsg support for mt8183 SCP.")
+> > > > > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > > > > ---
+> > > > >    drivers/rpmsg/mtk_rpmsg.c | 2 ++
+> > > > >    1 file changed, 2 insertions(+)
+> > > > > 
+> > > > > diff --git a/drivers/rpmsg/mtk_rpmsg.c b/drivers/rpmsg/mtk_rpmsg.c
+> > > > > index 5b4404b8be4c..d1213c33da20 100644
+> > > > > --- a/drivers/rpmsg/mtk_rpmsg.c
+> > > > > +++ b/drivers/rpmsg/mtk_rpmsg.c
+> > > > > @@ -234,7 +234,9 @@ static void mtk_register_device_work_function(struct work_struct *register_work)
+> > > > >    		if (info->registered)
+> > > > >    			continue;
+> > > > > +		mutex_unlock(&subdev->channels_lock);
+> > > > >    		ret = mtk_rpmsg_register_device(subdev, &info->info);
+> > > > > +		mutex_lock(&subdev->channels_lock);
+> > > > >    		if (ret) {
+> > > > >    			dev_err(&pdev->dev, "Can't create rpmsg_device\n");
+> > > > >    			continue;
+> > > > > -- 
+> > > > > 2.33.1
+> > > > > 
+> > > 
+> > > 
+> > > 

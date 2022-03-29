@@ -2,152 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08AC74EAC8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 13:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A432F4EAC98
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 13:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236048AbiC2LrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 07:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
+        id S236074AbiC2LsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 07:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236033AbiC2LrI (ORCPT
+        with ESMTP id S236049AbiC2LsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 07:47:08 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429B16C481
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 04:45:24 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id r13so34549296ejd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 04:45:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=j1x0lkzEnz6Ag44boIJpxEzXaCp1e5GyDI+ZSQvxZtE=;
-        b=J38b0s4L1M9EoJm3AoZIhtKKxJc5xiO3PZs9l7XK4JKx+6X0mIIS+yQF/WSkclBfoD
-         /tNa2dX49JQAdTDdCmS+yvySa0CNgsm0Xu+Wp/ViSqaUA2hJ2gt8rV2+CjmES1qeqaGE
-         w9SdDucCp94NRMpHBdOHefy0Vbp01P5h2pe5wQ09Xfv5MmaPLeXURIwuQ7vIJesy3b2Z
-         KDUhJt52NB486vqv+LInhLiTKq3joUmbAQdd7K5MUnFC7asMPxQWJK+zIUSw1G5CQZBH
-         tNYXAANyVGBirRKEu5z/sUEzPKxwSzCN8Jhp91p9IPDZYdufjQe7FmyVgxqEQQD7GfAR
-         LFcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=j1x0lkzEnz6Ag44boIJpxEzXaCp1e5GyDI+ZSQvxZtE=;
-        b=f+8+9+C332DeqySRAPNe4G1RcxHzxVTuDAlAFaFJMZiHAWjG648bLnasIzlageGdr9
-         3GjYMoKaLEuWX1noc10XZ0bB8GuuF39eQ0X0gdUNyz24uee60mjNJc41XKFTVgCGB/qZ
-         CLPc1wl0vgWpae63HC1qLdqrIoIZ0McJUJnwY9nk9E9QaxlpiZbz3Q3UXYcDXsNxinnp
-         roxiTEnlffKeETFxGESg2nmQ2k9rXITqDTwsUdWXau54/tO947UIdfVFsyaUi1Gm4FYE
-         AksnnKc+jvdvZkQWV9ikBpZslamBCmgytXeNCnyeRNgfxUnb+4nVMAc8wsag0OBhPaVN
-         EVtA==
-X-Gm-Message-State: AOAM532n4T/QqnlM8ozvAt+ySMG81OAPInzMfjfKPgfCyPfn+ZSzImZ6
-        xN9sWoOyqjHrXUtUMhOEBHCtHQ==
-X-Google-Smtp-Source: ABdhPJxo/IibVl8TCMJ3rirN0I5mcKTdxml5fi0IRvVtodGPnTfjiczC0H5+KUVS1X1GtE9CD0kVYA==
-X-Received: by 2002:a17:906:66cb:b0:6cf:e4f7:9504 with SMTP id k11-20020a17090666cb00b006cfe4f79504mr34474024ejp.142.1648554322817;
-        Tue, 29 Mar 2022 04:45:22 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id jg15-20020a170907970f00b006e0466dcc42sm6991145ejc.134.2022.03.29.04.45.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 04:45:22 -0700 (PDT)
-Message-ID: <1ff5682f-3f59-8635-631f-d648e604044f@linaro.org>
-Date:   Tue, 29 Mar 2022 13:45:21 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 3/3] dt-bindings: phy: uniphier-ahci: Fix missing
- reset-names
-Content-Language: en-US
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
+        Tue, 29 Mar 2022 07:48:04 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E092F1B3706;
+        Tue, 29 Mar 2022 04:46:17 -0700 (PDT)
+X-UUID: 8c69af8fea974dc29c2576ef8282580f-20220329
+X-UUID: 8c69af8fea974dc29c2576ef8282580f-20220329
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 605020872; Tue, 29 Mar 2022 19:46:12 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 29 Mar 2022 19:46:11 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 29 Mar 2022 19:46:11 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1648433152-23126-1-git-send-email-hayashi.kunihiko@socionext.com>
- <1648433152-23126-4-git-send-email-hayashi.kunihiko@socionext.com>
- <2e0be70f-f800-e3f8-363e-6598468fa091@linaro.org>
- <54a88acd-49ed-01f6-4108-b74bc653a612@socionext.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <54a88acd-49ed-01f6-4108-b74bc653a612@socionext.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Wenbin Mei <wenbin.mei@mediatek.com>
+CC:     <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <ryder.lee@kernel.org>, <wenst@chromium.org>,
+        <chunfeng.yun@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+Subject: [PATCH v12 0/3] Add basic SoC support for mediatek mt8195
+Date:   Tue, 29 Mar 2022 19:45:37 +0800
+Message-ID: <20220329114540.17140-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.15.GIT
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/03/2022 12:55, Kunihiko Hayashi wrote:
-> Hi Krzysztof,
-> 
-> Thank you for reviewing.
-> 
-> On 2022/03/29 3:58, Krzysztof Kozlowski wrote:
->> On 28/03/2022 04:05, Kunihiko Hayashi wrote:
->>> Add missing "phy" reset-names to fix the following warning:
->>>
->>>    uniphier-pro4-ace.dtb: ahci-phy@10: resets: [[26, 28], [26, 12], [26,
->>> 30], [36, 0], [36, 1], [36, 2]] is too long
->>>        From schema:
->>> Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
->>>    uniphier-pro4-ace.dtb: ahci-phy@10: reset-names: 'oneOf' conditional
->>> failed, one must be fixed:
->>>        ['link', 'gio', 'phy', 'pm', 'tx', 'rx'] is too long
->>>        From schema:
->>> Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
->>
->> There is no ahci-phy in current sources...
-> 
-> Oops, I'm going to add ahci controller to the existing devicetree,
-> but not yet. I shouldn't write the future warning in the commit message,
-> so I'll fix it.
-> 
->>>
->>> Fixes: 34f92b67621f ("dt-bindings: phy: uniphier-ahci: Add bindings for
->>> Pro4 SoC")
->>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
->>> ---
->>>   .../devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml   | 3 ++-
->>>   1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> diff --git
->>> a/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
->>> b/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
->>> index 3b400a85b44a..14f7579e7daa 100644
->>> ---
->>> a/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
->>> +++
->>> b/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
->>> @@ -43,13 +43,14 @@ properties:
->>>
->>>     resets:
->>>       minItems: 2
->>> -    maxItems: 5
->>> +    maxItems: 6
->>>
->>>     reset-names:
->>>       oneOf:
->>
->> As a separate commit, this oneOf should be converted into allOf:if:then:
->> cases which will enforce the resets per compatible.
->>
->> Can you do that as well?
-> 
-> Ok, I've found some examples using "allOf:if:them:" cases,
-> so I'll try to convert it with another commit.
-> 
+This series adds basic SoC support for Mediatek's SoC MT8195.
 
-For an example, you can take a look at (linux-next):
-Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.yaml
+---
+Changes in v12:
+  - update mtk-sd.yaml to extend reg property and fix yamllint error
+  - add xhci nodes and move xhci3 property (usb2-lpm-disable) to evb.dts
+Changes in v11:
+  - rebase on 5.17-rc4
+Changes in v10:
+  - clean CC list
+Changes in v9:
+  - remove duplicated cpus dt-bindings patch in v8
+Changes in v8:
+  - v7 mediatek,spi-mtk-nor.yaml patch is applied in branch for-5.17 at 
+    kernel/git/broonie/spi.git
+  - v7 pinctrl-mt8195.yaml patch is applied in branch for-next at 
+    kernel/git/linusw/linux-pinctrl.git
+  - add cortex-a78 compatible to cpus dt-bindings
+  - add mediatek,drive-strength-adv property to pinctrl dt-bindings
+  - fix evb dts
+    - remove i2c nodes with disabled status from dts
+    - fix pin properties not match pinctrl dt-bindings
+    - remove unnecessary u3port*
+  - fix dtsi
+    - fix node format
+    - reorder oscillator* nodes 
+    - fix node name of cpu idle nodes
+    - remove clock-frequency property in the timer node
+    - reorder clock and clock names in usb nodes
+Changes in v7:
+  - refine title of spi-nor dt-bindings patch
+  - refine commit message of pinctrl dt-bindings patch
+  - update pinctrl-mt8195.yaml
+    - change property pattern from 'pins' to '^pins'
+    - update examples with new property in descriptions
+    - add new example
+  - drop '_' from node names of pinctrl subnodes in mt8195-evb.dts
+Changes in v6:
+  - rebase on 5.16-rc1
+  - add new clock name to spi-nor dt-bindings
+  - add "pins" property in pinctrl dt-bindings
+  - fix fails of dtbs_checks
+    - remove "arm,armv8" not matched in yaml from cpu compatile
+    - fix node name of xhci
+    - remvoe xhci upstreaming wakeup properties
+    - remove xhci unused properties address-cells and size-cells
+    - fix node name of ufs-phy 
+    - fix node name of spi-nor
+    - fix node name and sub-nodes of pinctrl
+    - fix mmc compatible
+Changes in v5:
+  - enable basic nodes in mt8195-evb.dts
+  - remove dedicated clock nodes
+  - add mmc2 node
+  - fix interrupt number of pinctrl node
+  - update clock nodes to apply internal fixes
+  - add dt-bindings for perficfg node
 
-and clocks/clock-names properties.
+v4 thread:
+https://lore.kernel.org/all/20210922093303.23720-2-seiya.wang@mediatek.com/
+v3 thread:
+https://lore.kernel.org/all/20210601075350.31515-2-seiya.wang@mediatek.com/
+v2 thread:
+https://lore.kernel.org/all/20210319023427.16711-10-seiya.wang@mediatek.com/
+v1 thread:
+https://lore.kernel.org/all/20210316111443.3332-11-seiya.wang@mediatek.com/
+---
 
+Tinghan Shen (3):
+  dt-bindings: mmc: mtk-sd: fix yamllint error
+  dt-bindings: mmc: mtk-sd: increase reg maxItems
+  arm64: dts: Add mediatek SoC mt8195 and evaluation board
 
-Best regards,
-Krzysztof
+ .../devicetree/bindings/mmc/mtk-sd.yaml       |    6 +-
+ arch/arm64/boot/dts/mediatek/Makefile         |    1 +
+ arch/arm64/boot/dts/mediatek/mt8195-evb.dts   |  173 +++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 1045 +++++++++++++++++
+ 4 files changed, 1223 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8195.dtsi
+
+-- 
+2.18.0
+

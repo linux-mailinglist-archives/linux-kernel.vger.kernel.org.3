@@ -2,76 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B5B4EA434
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 02:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB414EA449
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 02:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbiC2Ag7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 20:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
+        id S231649AbiC2Ane (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 20:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbiC2Ag5 (ORCPT
+        with ESMTP id S231641AbiC2Anb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 20:36:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4F1163E28
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 17:35:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE70C611A9
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 00:35:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 55925C340EC;
-        Tue, 29 Mar 2022 00:35:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648514115;
-        bh=RP/rsrwTEzK5EI5hSyfx5wsVMb4+dW8n5/BFuKGFcvk=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=jk7dZaeV9DMWN9euWvQof9pl6628yp6C0+wqDkPfQqDKcHI2/auqtuaDCHfZSJscP
-         cU3iyNse5wvNjyx45EjK0dO4OV+xHdstd9qv3krCx5MDyogSPbpSiggDAHQZbsMsUT
-         APmRQN/KuCHFe41Uef4fn71uTC6foNwhC9NhzQcADpu9hhQVntQphMXl0DI8UTdNXh
-         Ysujihz56AaVuoJqjcJYP3pavoF8uiXl3AHhlUFBeRbXYpRZIGUyCJ6QEMwUInama5
-         SZRIBe/3Pvl38TVac1u5uJu2zcG6CKVZtV8VVhn1/wQWeVd80AW1VolFrbgGpM3FFh
-         lCgl4VQ5ToG/w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 430F8EAC081;
-        Tue, 29 Mar 2022 00:35:15 +0000 (UTC)
-Subject: Re: [GIT PULL] ucounts: Fix shm ucounts for v5.18
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <87ilrxprck.fsf@email.froward.int.ebiederm.org>
-References: <20220322080918.59861-1-linmiaohe@huawei.com> <87ilrxprck.fsf@email.froward.int.ebiederm.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <87ilrxprck.fsf@email.froward.int.ebiederm.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ucount-rlimit-for-v5.18
-X-PR-Tracked-Commit-Id: e97824ff663ce3509fe040431c713182c2f058b1
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0a815d0135f1be20c1a04d07f7573a26272ef846
-Message-Id: <164851411526.5550.12163658715769141934.pr-tracker-bot@kernel.org>
-Date:   Tue, 29 Mar 2022 00:35:15 +0000
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        akpm@linux-foundation.org, hughd@google.com, legion@kernel.org,
+        Mon, 28 Mar 2022 20:43:31 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6211722030B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 17:41:49 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id pv16so32012203ejb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 17:41:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=0b52Q/UfwrxflFU9LmcGLJ4e39trW7MxqP3FSaolBUg=;
+        b=Tpg/+5VbOWVkwV19w/jrJOoTY65GPvHxwUlxOD6jI+i+KG/1Hxf0Br1p09PoWg/LI1
+         2XcB7Bb2dgSuJeEvypwrTy5k7SArTutGzL5c5J+kS3nnZOlAwZgYJVV2PObN027BL9H+
+         NCJ3qc6maTMo9f9FBf2KiYSYB6qI/tVS4L7zcIb6aK9gZmb6ichssxz6zOeXN5CdirEP
+         GciT9gyOQOlnzD8ygNbzOkxSsHSRkwnfyqWg6Wu39jD0dGvY+ckFhc56Fo/dYuW5GN1P
+         AM0tv/kfOb2duaeB1GzOkyKZ5i77NtjwWxwdmEq0rB1l4C31lwcIo1VVofFLSEzxCaw8
+         +G+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=0b52Q/UfwrxflFU9LmcGLJ4e39trW7MxqP3FSaolBUg=;
+        b=nw9rSqHMngmDo+xmOgAXzZzDfaQrKUjmbLAFXAztLmX2H0Thq6+Ps9wEv1jVygA+co
+         dxNK/GwiEN7QNQVm+2vgzALGfbysOjp5OtSgg7wfbu/niq9H7MPPatyO9BWNHC9sNIp7
+         hosHujkCYi59A9wqT6aizM7O0iQkOOxb90O/vqR0iUKvXHIcE07tkjNz4SvAgGHKOKb1
+         m+jNd30NO1wmJZO62jFF4kw5wHTlLrecO4fXymkCcbO/ki1dQtoYj2VIFN6loAQwkkZw
+         U+H+ZTwdXQH8fOdfLGG4Uxt+/MNQigtpYj5EuHeA1yUODySGlTf4w2FE2FoNk9N7tFJ7
+         yvbg==
+X-Gm-Message-State: AOAM530wVGJQRMMIk6kXGE+GlsDeDVo8Pojj4UeLkdDsa2E9Scpdq0y7
+        resCZJnrywyM8ucLZlNEppA=
+X-Google-Smtp-Source: ABdhPJwPndap81VB5uO0DtCc4P4BgJYATuwNHYUdQYc2RrXQgVYeFQKvM0nHI5W0ahLm43JHcpKOaA==
+X-Received: by 2002:a17:907:7214:b0:6dd:e8fe:3e9 with SMTP id dr20-20020a170907721400b006dde8fe03e9mr31480515ejc.51.1648514507859;
+        Mon, 28 Mar 2022 17:41:47 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id ky5-20020a170907778500b006d1b2dd8d4csm6513592ejc.99.2022.03.28.17.41.47
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 28 Mar 2022 17:41:47 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 00:41:46 +0000
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Miaohe Lin <linmiaohe@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        mgorman@techsingularity.net
+Subject: Re: [PATCH 2/2] mm/vmscan: make sure wakeup_kswapd with managed zone
+Message-ID: <20220329004146.2xdswvrm2qu7f47x@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20220327024101.10378-1-richard.weiyang@gmail.com>
+ <20220327024101.10378-2-richard.weiyang@gmail.com>
+ <8735j2opd9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8735j2opd9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 28 Mar 2022 18:52:43 -0500:
+On Mon, Mar 28, 2022 at 09:08:34AM +0800, Huang, Ying wrote:
+>Hi, Wei,
+>
+>Wei Yang <richard.weiyang@gmail.com> writes:
+>
+>> wakeup_kswapd() only wake up kswapd when the zone is managed.
+>>
+>> For two callers of wakeup_kswapd(), they are node perspective.
+>>
+>>   * wake_all_kswapds
+>>   * numamigrate_isolate_page
+>>
+>> If we picked up a !managed zone, this is not we expected.
+>>
+>> This patch makes sure we pick up a managed zone for wakeup_kswapd().
+>>
+>> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+>> ---
+>>  mm/migrate.c    | 2 +-
+>>  mm/page_alloc.c | 2 ++
+>>  2 files changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/mm/migrate.c b/mm/migrate.c
+>> index 3d60823afd2d..c4b654c0bdf0 100644
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -2046,7 +2046,7 @@ static int numamigrate_isolate_page(pg_data_t *pgdat, struct page *page)
+>>  		if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING))
+>>  			return 0;
+>>  		for (z = pgdat->nr_zones - 1; z >= 0; z--) {
+>> -			if (populated_zone(pgdat->node_zones + z))
+>> +			if (managed_zone(pgdat->node_zones + z))
+>
+>This looks good to me!  Thanks!  It seems that we can replace
+>populated_zone() in migrate_balanced_pgdat() too.  Right?
+>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ucount-rlimit-for-v5.18
+Yes, you are right. I didn't spot this.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0a815d0135f1be20c1a04d07f7573a26272ef846
+While this patch comes from the clue of wakeup_kswapd(), I am not sure it is
+nice to put it in this patch together.
 
-Thank you!
+Which way you prefer to include this: merge the change into this one, or a
+separate one?
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Wei Yang
+Help you, Help me

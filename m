@@ -2,184 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 618A34EA4EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4654EA4F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiC2CHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 22:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52102 "EHLO
+        id S230086AbiC2CON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 22:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiC2CHI (ORCPT
+        with ESMTP id S229549AbiC2COM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 22:07:08 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2B42E9CF
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 19:05:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648519526; x=1680055526;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=CD43qK+AfcCULQ1+tD6UAMseC0SXJNBZ8tTh+WUghbQ=;
-  b=JZEMUtzoSgzyHhypl2TpY++t+he6Mylqo5lJJZdsy/9ET04zQzXE3BbE
-   HyAPzcnaAsne1of27NjJDD7FYlxCrOeczXYnOed+9RVKm6BXuqLZ99iWW
-   imDE/p5EO4CPdZpBnJ3IGOfDl6dAY/MgjLBRTLxdpB9lDnFcXWnzMlyeX
-   y5DDMFX3W9E4aQq7MMQG097iNmp73GiJRCGX1gsaAGzdm2+Y4GdkTpRy5
-   4ZowmQR2zyCoqkf9zhc0RgsGQ4aA/BJ3hGIqgD8xPkxr4nDfL5aBy5dba
-   C70lQJ2LELfPOQXONinUtO07WU3M/Pc7LhSQJJIOZJmQb3X5YZU8j7g47
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="257970485"
-X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="257970485"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 19:05:24 -0700
-X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="564196031"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 19:05:22 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Wei Yang <richard.weiyang@gmail.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mgorman@techsingularity.net
-Subject: Re: [PATCH 2/2] mm/vmscan: make sure wakeup_kswapd with managed zone
-References: <20220327024101.10378-1-richard.weiyang@gmail.com>
-        <20220327024101.10378-2-richard.weiyang@gmail.com>
-        <8735j2opd9.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <20220329004146.2xdswvrm2qu7f47x@master>
-        <875ynxh9lg.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <20220329015230.hneciyfxoxtvfytl@master>
-Date:   Tue, 29 Mar 2022 10:05:20 +0800
-In-Reply-To: <20220329015230.hneciyfxoxtvfytl@master> (Wei Yang's message of
-        "Tue, 29 Mar 2022 01:52:30 +0000")
-Message-ID: <871qylfr8f.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 28 Mar 2022 22:14:12 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DD423F3B5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 19:12:29 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KSCkM1X1MzZfh8;
+        Tue, 29 Mar 2022 10:12:11 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 29 Mar 2022 10:12:26 +0800
+Subject: Re: [PATCH] mm: shmem: make shmem_init return void
+To:     Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     Hugh Dickins <hughd@google.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220328112707.22217-1-linmiaohe@huawei.com>
+ <CAMZfGtXccwgR6TxNJc6aYV+WGJvAWWAz=RXEHNWDwjKfV49JuA@mail.gmail.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <67fb3ff7-f46a-985d-94ac-698885eb43c5@huawei.com>
+Date:   Tue, 29 Mar 2022 10:12:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMZfGtXccwgR6TxNJc6aYV+WGJvAWWAz=RXEHNWDwjKfV49JuA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wei Yang <richard.weiyang@gmail.com> writes:
-
-> On Tue, Mar 29, 2022 at 08:43:23AM +0800, Huang, Ying wrote:
-> [...]
->>>>> --- a/mm/migrate.c
->>>>> +++ b/mm/migrate.c
->>>>> @@ -2046,7 +2046,7 @@ static int numamigrate_isolate_page(pg_data_t *pgdat, struct page *page)
->>>>>  		if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING))
->>>>>  			return 0;
->>>>>  		for (z = pgdat->nr_zones - 1; z >= 0; z--) {
->>>>> -			if (populated_zone(pgdat->node_zones + z))
->>>>> +			if (managed_zone(pgdat->node_zones + z))
->>>>
->>>>This looks good to me!  Thanks!  It seems that we can replace
->>>>populated_zone() in migrate_balanced_pgdat() too.  Right?
->>>>
->>>
->>> Yes, you are right. I didn't spot this.
->>>
->>> While this patch comes from the clue of wakeup_kswapd(), I am not sure it is
->>> nice to put it in this patch together.
->>>
->>> Which way you prefer to include this: merge the change into this one, or a
->>> separate one?
+On 2022/3/28 22:50, Muchun Song wrote:
+> On Mon, Mar 28, 2022 at 7:44 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
 >>
->>Either is OK for me.
+>> The return value of shmem_init is never used. So we can make it
+>> return void now.
 >>
->
-> After reading the code, I am willing to do a little simplification. Does this
-> look good to you?
->
-> From 85c8a5cd708ada3e9f5b0409413407b7be1bc446 Mon Sep 17 00:00:00 2001
-> From: Wei Yang <richard.weiyang@gmail.com>
-> Date: Tue, 29 Mar 2022 09:24:36 +0800
-> Subject: [PATCH] mm/migrate.c: return valid zone for wakeup_kswapd from
->  migrate_balanced_pgdat()
->
-> To wakeup kswapd, we need to iterate pgdat->node_zones and get the
-> proper zone. While this work has already been done in
-> migrate_balanced_pgdat().
->
-> Let's return the valid zone directly instead of do the iteration again.
->
-> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-> ---
->  mm/migrate.c | 21 ++++++++-------------
->  1 file changed, 8 insertions(+), 13 deletions(-)
->
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 5adc55b5347c..b086bd781956 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1973,7 +1973,7 @@ SYSCALL_DEFINE6(move_pages, pid_t, pid, unsigned long, nr_pages,
->   * Returns true if this is a safe migration target node for misplaced NUMA
->   * pages. Currently it only checks the watermarks which is crude.
->   */
-> -static bool migrate_balanced_pgdat(struct pglist_data *pgdat,
-> +static struct zone *migrate_balanced_pgdat(struct pglist_data *pgdat,
->  				   unsigned long nr_migrate_pages)
->  {
->  	int z;
-> @@ -1985,14 +1985,13 @@ static bool migrate_balanced_pgdat(struct pglist_data *pgdat,
->  			continue;
->  
->  		/* Avoid waking kswapd by allocating pages_to_migrate pages. */
-> -		if (!zone_watermark_ok(zone, 0,
-> +		if (zone_watermark_ok(zone, 0,
->  				       high_wmark_pages(zone) +
->  				       nr_migrate_pages,
->  				       ZONE_MOVABLE, 0))
-> -			continue;
-> -		return true;
-> +			return zone;
->  	}
-> -	return false;
-> +	return NULL;
->  }
->  
->  static struct page *alloc_misplaced_dst_page(struct page *page,
-> @@ -2032,6 +2031,7 @@ static int numamigrate_isolate_page(pg_data_t *pgdat, struct page *page)
->  	int page_lru;
->  	int nr_pages = thp_nr_pages(page);
->  	int order = compound_order(page);
-> +	struct zone *zone;
->  
->  	VM_BUG_ON_PAGE(order && !PageTransHuge(page), page);
->  
-> @@ -2040,16 +2040,11 @@ static int numamigrate_isolate_page(pg_data_t *pgdat, struct page *page)
->  		return 0;
->  
->  	/* Avoid migrating to a node that is nearly full */
-> -	if (!migrate_balanced_pgdat(pgdat, nr_pages)) {
-> -		int z;
-> -
-> +	if ((zone = migrate_balanced_pgdat(pgdat, nr_pages))) {
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> ---
+>>  include/linux/shmem_fs.h | 2 +-
+>>  mm/shmem.c               | 9 ++++-----
+>>  2 files changed, 5 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
+>> index ab51d3cd39bd..3e915cc550bc 100644
+>> --- a/include/linux/shmem_fs.h
+>> +++ b/include/linux/shmem_fs.h
+>> @@ -56,7 +56,7 @@ static inline struct shmem_inode_info *SHMEM_I(struct inode *inode)
+>>   * Functions in mm/shmem.c called directly from elsewhere:
+>>   */
+>>  extern const struct fs_parameter_spec shmem_fs_parameters[];
+>> -extern int shmem_init(void);
+>> +extern void shmem_init(void);
+>>  extern int shmem_init_fs_context(struct fs_context *fc);
+>>  extern struct file *shmem_file_setup(const char *name,
+>>                                         loff_t size, unsigned long flags);
+>> diff --git a/mm/shmem.c b/mm/shmem.c
+>> index 529c9ad3e926..26e09a022087 100644
+>> --- a/mm/shmem.c
+>> +++ b/mm/shmem.c
+>> @@ -3879,7 +3879,7 @@ static struct file_system_type shmem_fs_type = {
+>>         .fs_flags       = FS_USERNS_MOUNT,
+>>  };
+>>
+>> -int __init shmem_init(void)
+>> +void __init shmem_init(void)
+>>  {
+>>         int error;
+>>
+>> @@ -3904,14 +3904,13 @@ int __init shmem_init(void)
+>>         else
+>>                 shmem_huge = SHMEM_HUGE_NEVER; /* just in case it was patched */
+>>  #endif
+>> -       return 0;
+>> +       return;
+>>
+>>  out1:
+>>         unregister_filesystem(&shmem_fs_type);
+>>  out2:
+>>         shmem_destroy_inodecache();
+>>         shm_mnt = ERR_PTR(error);
+>> -       return error;
+>>  }
+>>
+>>  #if defined(CONFIG_TRANSPARENT_HUGEPAGE) && defined(CONFIG_SYSFS)
+>> @@ -3989,14 +3988,14 @@ static struct file_system_type shmem_fs_type = {
+>>         .fs_flags       = FS_USERNS_MOUNT,
+>>  };
+>>
+>> -int __init shmem_init(void)
+>> +void __init shmem_init(void)
+>>  {
+>>         BUG_ON(register_filesystem(&shmem_fs_type) != 0);
+>>
+>>         shm_mnt = kern_mount(&shmem_fs_type);
+>>         BUG_ON(IS_ERR(shm_mnt));
+>>
+>> -       return 0;
+>> +       return;
+> 
+> Weird. Using return at the end of a void function.
 
-I think that this reverses the original semantics.  Originally, we give
-up and wake up kswapd if there's no enough free pages on the target
-node.  But now, you give up and wake up if there's enough free pages.
+Thanks for review. And thanks Andrew for kindly fixing this. :)
 
-Best Regards,
-Huang, Ying
+> .
+> 
 
->  		if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING))
->  			return 0;
-> -		for (z = pgdat->nr_zones - 1; z >= 0; z--) {
-> -			if (managed_zone(pgdat->node_zones + z))
-> -				break;
-> -		}
-> -		wakeup_kswapd(pgdat->node_zones + z, 0, order, ZONE_MOVABLE);
-> +
-> +		wakeup_kswapd(zone, 0, order, ZONE_MOVABLE);
->  		return 0;
->  	}
->  
-> -- 
->
-> 2.33.1

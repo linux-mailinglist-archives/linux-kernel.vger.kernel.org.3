@@ -2,103 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 954C34EB6A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1264EB6A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239989AbiC2XXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
+        id S240053AbiC2XXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbiC2XXK (ORCPT
+        with ESMTP id S231459AbiC2XXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:23:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B13E1184B57
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:21:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648596085;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vnEVLzN6wtV9JQalUxoL87eeycMaKfu2BZqOrOuPk4E=;
-        b=NG6ek5Ue9ncyj9C4wv6UjsQb7VRWVPgP6WC2nAI3g6VM9OJVVOdsLuA7DOqlmY5k1zPWaB
-        yxAF86UqkVirqcebJ9w4JIus/UrrYeFHksz6OG5T8DhaJzEWUDeG8Jii4969S3g7HUZ290
-        81Rn5TBcYAzRt9oit50yoXcIWapz8kw=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-RHgmY5DaOje41mcdHGvnAw-1; Tue, 29 Mar 2022 19:21:24 -0400
-X-MC-Unique: RHgmY5DaOje41mcdHGvnAw-1
-Received: by mail-qt1-f200.google.com with SMTP id o15-20020ac8698f000000b002e1db0c88d0so15991150qtq.17
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:21:24 -0700 (PDT)
+        Tue, 29 Mar 2022 19:23:39 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C54184B48;
+        Tue, 29 Mar 2022 16:21:55 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-dee0378ce7so10047342fac.4;
+        Tue, 29 Mar 2022 16:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=Upj0YaAjIHg7LwZ8gYjFdHojisRvoPEaU9Jk8lm3iwE=;
+        b=GhRQuIo5ZO/bfsxkkU42vkWb+WpXXnvB58zDU+aQa52kujXmaLh+dI9T9txmY6lwsF
+         0RiuRQGcpIWmBrqvNe8+BTEwtdA8AEcm+q+Zk+hGoqmz2MlN2lvrmROxVYK3AvZEpUe+
+         alrwAtT/dbEjJ95WnJRnxrCunkATzsQb7bbR207luGyQsQYJW3qk2hykGIO+/F/iLd68
+         tdAU0cj1D3bUz+49uQY28XYw1jmXmPClT9dN0hjd72Gh1TOMbtONGFtPnuYqd1I9hPzM
+         zFx0SUP6xui9taWYPHKd+wchqpxGEJ+oqSR6Y/OcWLFdha2wBxKfzqA9XE0wTm2L9o92
+         /2DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=vnEVLzN6wtV9JQalUxoL87eeycMaKfu2BZqOrOuPk4E=;
-        b=YMIuy9wcCtWvjUXPCZFRg/tNphwrR2zO/UUvrhXK4QSROk+WGq2HHY6e2mtvcU/CbD
-         mnAkbFB2bU/iwe3L9ZaT77X35yRIajFV9AeZvLeBFcI0hYI8iR8m00YYqlcivTo7Hts3
-         Sxz98r0so+2U2wQd8rMb3sg7ovI2mWoJ4SUIx6NbCVjUAVl4NnZaFDW9PNhGwbkP+PeX
-         Z6giOiWjFx8sb/RcQHK7Ppp/EiTyFnyr44MJMMkbHXfS3Dswxnn49i0lpAEHmqv/pDaf
-         fPzlfNiV3o26mXqI3tv3MQMD3X2FIsXKfBYV/YE4mZDA3rK2ii76o9WTiPWvRQRPH0k7
-         pT8Q==
-X-Gm-Message-State: AOAM533aPg0EJePC0K2yAxXI+JxNUyLV/9MMgbXIC4FW6mOdt/5yJmwR
-        /fpD5jxE0RILAIB0r17Qh/ImWP6m3ZOV3LoPqSbogPBpsUglEYtoF9cDVdFcQuhsHZ44I78W10W
-        481jKMnnCAdIvgRZoXWUxxsE5
-X-Received: by 2002:a05:620a:1a99:b0:680:f33c:dbd3 with SMTP id bl25-20020a05620a1a9900b00680f33cdbd3mr2912678qkb.17.1648596083862;
-        Tue, 29 Mar 2022 16:21:23 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwaMl8cwEN02JVbghXfjiOKK5vbmlk7rHZYxrkXCYwKhBHbTy3z6OejWxFNRFl2ohGsizFJXg==
-X-Received: by 2002:a05:620a:1a99:b0:680:f33c:dbd3 with SMTP id bl25-20020a05620a1a9900b00680f33cdbd3mr2912659qkb.17.1648596083595;
-        Tue, 29 Mar 2022 16:21:23 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id q8-20020a05622a030800b002e1c9304db8sm15819272qtw.38.2022.03.29.16.21.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 16:21:23 -0700 (PDT)
-Subject: Re: [PATCH] media: staging: atomisp: rework reading the id and
- revision values
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, nathan@kernel.org,
-        ndesaulniers@google.com, hverkuil-cisco@xs4all.nl, vrzh@vrzh.net,
-        tomi.valkeinen@ideasonboard.com, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20220326191853.2914552-1-trix@redhat.com>
- <YkN0w5NxLcBFes1b@paasikivi.fi.intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <2ab474d8-ee4e-44b5-ab3c-38b72135a27f@redhat.com>
-Date:   Tue, 29 Mar 2022 16:21:20 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=Upj0YaAjIHg7LwZ8gYjFdHojisRvoPEaU9Jk8lm3iwE=;
+        b=F9poJy3M7TN6THBlrt1M1KE+LB5jzAJQeEgXMTpQwppPXc3HTX2kMnkTvIFQdx7HqI
+         4kGfY/Tb1pGxBVufLchuAcxc2aqRvAZgGdRfPfEfCGb+IGe0pDLyRraHxbSLpyqjKwQA
+         cV7VGHTJE3DsMlwIpm+SJiAj5++bnsuzuW9niJ523gaZG5fHokjPHCeZivSN4lYqKfrw
+         csllA1gPr5x8ib4piDBF3XSQnaIe2NTeb1xHcvdyn2lgMU6wlaj6m4GyS+JM/txksyT5
+         XrzQjgyyAnRblg4cX9/9dNJbnZzJa67JaUb89jBlf+5Usxf0f726Mp7+tiFKyrZuhlOv
+         DLtg==
+X-Gm-Message-State: AOAM530kRqOlaysw/vE/LelGWV3ZHQugvMj/toG6tisfagipb3gr9+Ce
+        uNaRAh6Sj9NJ+lhDW6WPMKQ=
+X-Google-Smtp-Source: ABdhPJwt2GsmCq6MTV2PLGWD0zAbfAjRcS3J+9Y8MBRZ76lEqH/agkWdziL8qQpkkZl8OoqBGpw73g==
+X-Received: by 2002:a05:6871:811:b0:dd:b8ea:6bb1 with SMTP id q17-20020a056871081100b000ddb8ea6bb1mr869561oap.43.1648596114721;
+        Tue, 29 Mar 2022 16:21:54 -0700 (PDT)
+Received: from marsc.168.1.7 ([2804:d57:1503:f300:282c:2283:f732:e1c7])
+        by smtp.gmail.com with ESMTPSA id a30-20020a4ad1de000000b00320fccd02cfsm9364788oos.5.2022.03.29.16.21.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 16:21:54 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 20:21:48 -0300
+From:   Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+To:     corbet@lwn.net, mchehab+huawei@kernel.org, dlatypov@google.com,
+        davidgow@google.com
+Cc:     linux-doc@vger.kernel.org, linux-sparse@vger.kernel.org,
+        cocci@inria.fr, smatch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+        dan.carpenter@oracle.com, julia.lawall@inria.fr
+Subject: [PATCH v2 0/2] Add a section for static analysis tools
+Message-ID: <cover.1648593132.git.marcelo.schmitt1@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <YkN0w5NxLcBFes1b@paasikivi.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'll do a resend.
+Hi,
 
-I use git send-mail, sooo not sure what went wrong.
+Thanks to everybody who commented on v1 for your kind and much helpful feedback.
 
-Tom
+I tried to add suggestions and ideas while keeping the text concise.
+Also, I took Dan and Julia's comments and included them into the
+documentation (patch 2) because I think they were very helpful in
+comparing the tools.
+I didn't feel comfortable adding something comparing Sparse and
+Coccinelle directly as I'm not an expert with any of these tools either.
+Anyhow, that can be something to do in the future.
 
-On 3/29/22 2:06 PM, Sakari Ailus wrote:
-> On Sat, Mar 26, 2022 at 12:18:53PM -0700, trix@redhat.com wrote:
->
-> Hi Tom,
->
-> It seems that somehow the Content-type header of your patch  is
-> application/octet-stream. I.e. not text.
->
+Thanks,
+Marcelo
+
+Marcelo Schmitt (2):
+  Documentation: dev-tools: Add a section for static analysis tools
+  Documentation: dev-tools: Enhance static analysis section with
+    discussion
+
+ Documentation/dev-tools/testing-overview.rst | 64 ++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
+
+-- 
+2.35.1
 

@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAB44EAD43
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A41A4EAD44
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234213AbiC2Mm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 08:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
+        id S236422AbiC2Mmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 08:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236376AbiC2MmP (ORCPT
+        with ESMTP id S236381AbiC2MmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 08:42:15 -0400
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9662013F2
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:40:32 -0700 (PDT)
-Received: by mail-ed1-x54a.google.com with SMTP id v15-20020a50f08f000000b0041902200ab4so10938751edl.22
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:40:32 -0700 (PDT)
+        Tue, 29 Mar 2022 08:42:20 -0400
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432CF20289C
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:40:34 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id u13-20020a50a40d000000b00419028f7f96so10939301edb.21
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:40:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=3CQYkeXdj1XVJNClFGQhidAhDBObT15U+enV+/AhM6A=;
-        b=Rs1GnbfzAh48GyKvXrTviY6xmcPrSlCBrhBam52FN5lKhGkSSoDXuC/+sTSLnCX5XO
-         /i4ncOwVT391qnv8EZbsDSgMBgczL/nCzy9Jqzu/nf38q/o+9kZr7KSlVoUWiViJ9870
-         M0b0YE9E38a6zKyq5m0p8rIATZFa84ILdXxkvPpuNk7AfC4/9N8vExikGAHybh4Pb0rX
-         8KcC4OmYsI0xN2dW728NWEU8I1Adn92Xl7Ph9hUyWVnxsPmYOh4rsrvl7JDTJxDDCuk+
-         Va2vfsVuAq80Q0B5XplgXmEPTnrJ0hx+BQmCkMVH18sZhimHpdOgC1BUg2+kBBmprNgo
-         nutA==
+        bh=8AKHIAUMGhsnollvhsjHBd8Sk5jMCuogkkUw2fq2mio=;
+        b=XcHMPrIunHEB7bnidvOWVqGkL2poJnCfl3iM5yKiBsKR6gSu8Wixo56EriIryx1DRp
+         ygH60Tu95F9/meUZw/hUVe5ooSEvV4DUyL+AnjgINrfQqz23fqsQ/Urcza7iRtW9piEV
+         THlnQvDWO68UWi/+f1lgxFSyUR51bTc8P/jVxtWV8kXPBWeM+/Vw42NYvsdPHbIvLwKl
+         BtRHlbH4A6DhSIcH+duqkqgGkt1gIGp9zkGZLXy9w5ZW5bKRdMPnBS9mX2KVQ6Pv+KK4
+         P1gagNsItDlHvWIoB7ysOglwXcmuxg7hOzImH2QfoKH5JQ//E60JCop3/Ya58UM8UMrt
+         o7bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=3CQYkeXdj1XVJNClFGQhidAhDBObT15U+enV+/AhM6A=;
-        b=PiHPj49wTnzCJT8B6hf91x4L1jrGSaNe10CZCuqcpVaY50BcsfYHTOfxP0FGI/5HRO
-         e3q1dQhkdyDlEF9PxVU4RH/ncJ3ph4eO4V0edwqB389oyh4Z+QhaQi+iQGhA2/UM3juX
-         i5lmFjfGRWuUpnoIJFxsORb4Ug5vGlUihpA0DiOnLnCsQ83+gowEGZahIF/Ph5Dch0uC
-         D1q6F4to6twtdXK5CuhiqYVszkPG9ZRpQZdH+b4MspVjFQkZxXPWiOXgIOUWGnzMMFzq
-         BKi3uk9oz4z94EdrKfvAKXzKrezblBCsc5XPf1jQkzvVC5tqa8MC/MXfWKJ2xj+Qey1Z
-         MlXw==
-X-Gm-Message-State: AOAM531VIoSxIpxC98jDFJjPz+JRiymlQrDeCULFRKzfjaradk5eB3ER
-        X18s3TIGs/W2K6W4tS9yblZ2Z6m1RGM=
-X-Google-Smtp-Source: ABdhPJwxfLc7E5CGNpFchMAnZqVrfibLaBjl6ZrGzY59hWiYTgmr/LPloRQjIFWbW4/icF3FYORBAEJgcTc=
+        bh=8AKHIAUMGhsnollvhsjHBd8Sk5jMCuogkkUw2fq2mio=;
+        b=bAC4x1R1Qp0F830lGnPL4+lPcK964lLDsCy9PMBYnVMUk76UiycJGYFIZGLmqpfIlu
+         Ygabd2QdlnTnSvhbnaCGaK9+QjK5AWxTUrspjxgilxoTj+lSwWT60qzVIhtP/jln52a/
+         rc8Zw7dMs4NfzL0D/JEs94NLgXzuKpeWvvZx5pBVb6WCudXLcsaxEEvkRrtziG6RW5tO
+         ONlyL3+qlYXZ6hhO/a/VclxWKkZ2ZqJHF1Ae3shAMypd6bS7iOxwES7Cer3WRpgHMpyZ
+         PCDCop8pdpLjmb3A2TxHPu1DH2DWm2PhW4WHE+Maqses6/oOj7DlwMyB5Serbwj3tFWO
+         W4/Q==
+X-Gm-Message-State: AOAM531xFArYAKVw7A4KdlLLj1ABPPiBzoJzm5pBoVN6UZe5HKqxZxaC
+        WmntLrlj6XkGfezeL9j/SUOo7X+3hF0=
+X-Google-Smtp-Source: ABdhPJwvUW8uBcv5kN+9WJ7X27ALOaTkbkLM5E0yAmcoJPh2fi12GxrbHP+7afPcQ2MGB4Oun8BxCd/6FeU=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:36eb:759:798f:98c3])
- (user=glider job=sendgmr) by 2002:a17:906:9c82:b0:6df:c5f0:d456 with SMTP id
- fj2-20020a1709069c8200b006dfc5f0d456mr34088614ejc.287.1648557630566; Tue, 29
- Mar 2022 05:40:30 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 14:39:30 +0200
+ (user=glider job=sendgmr) by 2002:a17:906:5d03:b0:6df:a042:d6d5 with SMTP id
+ g3-20020a1709065d0300b006dfa042d6d5mr33258222ejt.678.1648557633185; Tue, 29
+ Mar 2022 05:40:33 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 14:39:31 +0200
 In-Reply-To: <20220329124017.737571-1-glider@google.com>
-Message-Id: <20220329124017.737571-2-glider@google.com>
+Message-Id: <20220329124017.737571-3-glider@google.com>
 Mime-Version: 1.0
 References: <20220329124017.737571-1-glider@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v2 01/48] x86: add missing include to sparsemem.h
+Subject: [PATCH v2 02/48] stackdepot: reserve 5 extra bits in depot_stack_handle_t
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -88,42 +88,154 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Vyukov <dvyukov@google.com>
+Some users (currently only KMSAN) may want to use spare bits in
+depot_stack_handle_t. Let them do so by adding @extra_bits to
+__stack_depot_save() to store arbitrary flags, and providing
+stack_depot_get_extra_bits() to retrieve those flags.
 
-sparsemem.h:34:32: error: unknown type name 'phys_addr_t'
-extern int phys_to_target_node(phys_addr_t start);
-                               ^
-sparsemem.h:36:39: error: unknown type name 'u64'
-extern int memory_add_physaddr_to_nid(u64 start);
-                                      ^
-Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/Ifae221ce85d870d8f8d17173bd44d5cf9be2950f
+Link: https://linux-review.googlesource.com/id/I0587f6c777667864768daf07821d594bce6d8ff9
 ---
- arch/x86/include/asm/sparsemem.h | 2 ++
- 1 file changed, 2 insertions(+)
+ include/linux/stackdepot.h |  8 ++++++++
+ lib/stackdepot.c           | 29 ++++++++++++++++++++++++-----
+ 2 files changed, 32 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/include/asm/sparsemem.h b/arch/x86/include/asm/sparsemem.h
-index 6a9ccc1b2be5d..64df897c0ee30 100644
---- a/arch/x86/include/asm/sparsemem.h
-+++ b/arch/x86/include/asm/sparsemem.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_X86_SPARSEMEM_H
- #define _ASM_X86_SPARSEMEM_H
+diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
+index 17f992fe6355b..fd641d266bead 100644
+--- a/include/linux/stackdepot.h
++++ b/include/linux/stackdepot.h
+@@ -14,9 +14,15 @@
+ #include <linux/gfp.h>
  
-+#include <linux/types.h>
-+
- #ifdef CONFIG_SPARSEMEM
+ typedef u32 depot_stack_handle_t;
++/*
++ * Number of bits in the handle that stack depot doesn't use. Users may store
++ * information in them.
++ */
++#define STACK_DEPOT_EXTRA_BITS 5
+ 
+ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+ 					unsigned int nr_entries,
++					unsigned int extra_bits,
+ 					gfp_t gfp_flags, bool can_alloc);
+ 
  /*
-  * generic non-linear memory support:
+@@ -41,6 +47,8 @@ depot_stack_handle_t stack_depot_save(unsigned long *entries,
+ unsigned int stack_depot_fetch(depot_stack_handle_t handle,
+ 			       unsigned long **entries);
+ 
++unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle);
++
+ int stack_depot_snprint(depot_stack_handle_t handle, char *buf, size_t size,
+ 		       int spaces);
+ 
+diff --git a/lib/stackdepot.c b/lib/stackdepot.c
+index bf5ba9af05009..6dc11a3b7b88e 100644
+--- a/lib/stackdepot.c
++++ b/lib/stackdepot.c
+@@ -42,7 +42,8 @@
+ #define STACK_ALLOC_OFFSET_BITS (STACK_ALLOC_ORDER + PAGE_SHIFT - \
+ 					STACK_ALLOC_ALIGN)
+ #define STACK_ALLOC_INDEX_BITS (DEPOT_STACK_BITS - \
+-		STACK_ALLOC_NULL_PROTECTION_BITS - STACK_ALLOC_OFFSET_BITS)
++		STACK_ALLOC_NULL_PROTECTION_BITS - \
++		STACK_ALLOC_OFFSET_BITS - STACK_DEPOT_EXTRA_BITS)
+ #define STACK_ALLOC_SLABS_CAP 8192
+ #define STACK_ALLOC_MAX_SLABS \
+ 	(((1LL << (STACK_ALLOC_INDEX_BITS)) < STACK_ALLOC_SLABS_CAP) ? \
+@@ -55,6 +56,7 @@ union handle_parts {
+ 		u32 slabindex : STACK_ALLOC_INDEX_BITS;
+ 		u32 offset : STACK_ALLOC_OFFSET_BITS;
+ 		u32 valid : STACK_ALLOC_NULL_PROTECTION_BITS;
++		u32 extra : STACK_DEPOT_EXTRA_BITS;
+ 	};
+ };
+ 
+@@ -73,6 +75,14 @@ static int next_slab_inited;
+ static size_t depot_offset;
+ static DEFINE_RAW_SPINLOCK(depot_lock);
+ 
++unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle)
++{
++	union handle_parts parts = { .handle = handle };
++
++	return parts.extra;
++}
++EXPORT_SYMBOL(stack_depot_get_extra_bits);
++
+ static bool init_stack_slab(void **prealloc)
+ {
+ 	if (!*prealloc)
+@@ -136,6 +146,7 @@ depot_alloc_stack(unsigned long *entries, int size, u32 hash, void **prealloc)
+ 	stack->handle.slabindex = depot_index;
+ 	stack->handle.offset = depot_offset >> STACK_ALLOC_ALIGN;
+ 	stack->handle.valid = 1;
++	stack->handle.extra = 0;
+ 	memcpy(stack->entries, entries, flex_array_size(stack, entries, size));
+ 	depot_offset += required_size;
+ 
+@@ -320,6 +331,7 @@ EXPORT_SYMBOL_GPL(stack_depot_fetch);
+  *
+  * @entries:		Pointer to storage array
+  * @nr_entries:		Size of the storage array
++ * @extra_bits:		Flags to store in unused bits of depot_stack_handle_t
+  * @alloc_flags:	Allocation gfp flags
+  * @can_alloc:		Allocate stack slabs (increased chance of failure if false)
+  *
+@@ -331,6 +343,10 @@ EXPORT_SYMBOL_GPL(stack_depot_fetch);
+  * If the stack trace in @entries is from an interrupt, only the portion up to
+  * interrupt entry is saved.
+  *
++ * Additional opaque flags can be passed in @extra_bits, stored in the unused
++ * bits of the stack handle, and retrieved using stack_depot_get_extra_bits()
++ * without calling stack_depot_fetch().
++ *
+  * Context: Any context, but setting @can_alloc to %false is required if
+  *          alloc_pages() cannot be used from the current context. Currently
+  *          this is the case from contexts where neither %GFP_ATOMIC nor
+@@ -340,10 +356,11 @@ EXPORT_SYMBOL_GPL(stack_depot_fetch);
+  */
+ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+ 					unsigned int nr_entries,
++					unsigned int extra_bits,
+ 					gfp_t alloc_flags, bool can_alloc)
+ {
+ 	struct stack_record *found = NULL, **bucket;
+-	depot_stack_handle_t retval = 0;
++	union handle_parts retval = { .handle = 0 };
+ 	struct page *page = NULL;
+ 	void *prealloc = NULL;
+ 	unsigned long flags;
+@@ -427,9 +444,11 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+ 		free_pages((unsigned long)prealloc, STACK_ALLOC_ORDER);
+ 	}
+ 	if (found)
+-		retval = found->handle.handle;
++		retval.handle = found->handle.handle;
+ fast_exit:
+-	return retval;
++	retval.extra = extra_bits;
++
++	return retval.handle;
+ }
+ EXPORT_SYMBOL_GPL(__stack_depot_save);
+ 
+@@ -449,6 +468,6 @@ depot_stack_handle_t stack_depot_save(unsigned long *entries,
+ 				      unsigned int nr_entries,
+ 				      gfp_t alloc_flags)
+ {
+-	return __stack_depot_save(entries, nr_entries, alloc_flags, true);
++	return __stack_depot_save(entries, nr_entries, 0, alloc_flags, true);
+ }
+ EXPORT_SYMBOL_GPL(stack_depot_save);
 -- 
 2.35.1.1021.g381101b075-goog
 

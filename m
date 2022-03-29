@@ -2,158 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263704EAE9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C94E04EAEA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237389AbiC2Niv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 09:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
+        id S236806AbiC2NkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 09:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232707AbiC2Nip (ORCPT
+        with ESMTP id S234409AbiC2NkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 09:38:45 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2504D622;
-        Tue, 29 Mar 2022 06:37:01 -0700 (PDT)
+        Tue, 29 Mar 2022 09:40:24 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E72D1CFCD
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:38:39 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id k125so14042018qkf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:38:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1648561022; x=1680097022;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FLEOBRkzAfL2PZRc8RnlDc3tQ904HRcvIZPvcxUbURY=;
-  b=QZv0NETnCcdvkfnYXiUOmmDi5omZJEvlgwhkSQC9zxOeO1BK74Zh2H3M
-   Y3Fjvjj0gK2XLsdCeGEqq2x0Vg1RF750fdy/DILwjXkdbLrc33oTnkFTT
-   VL5tMR57yEtqXyr2A268269Po/zOe0Lbwdjlr/aYTUHwxaFRNskkCuVq/
-   6kiQHJuGPBEBQ34oKbGeBaIjyUrq30SpGNQbKNEnAgvGt9SR+ZNvwWO3V
-   UvY7Qey7PbGZSiqidgo92tx6zl5489osGW7gf2dD8eCigbXwomuSrv2at
-   AbKPgI7Zg4k1EMT1dgjp9BJkFTYwh0UW19sL7CKgi4YcUCXVT7KHsU7Q6
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,220,1643670000"; 
-   d="scan'208";a="22963306"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 29 Mar 2022 15:37:00 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 29 Mar 2022 15:37:00 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 29 Mar 2022 15:37:00 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1648561020; x=1680097020;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FLEOBRkzAfL2PZRc8RnlDc3tQ904HRcvIZPvcxUbURY=;
-  b=GmYeNLeXFB7lSAZNTL8jQETB1zjYVuckdROH/ap769zBDepLJ1cH+jcC
-   SNtdHAqQLTLHz7WElCRDDiru2L0S7/ZR4NShmj43X42FkBaxAetlxF+UG
-   36mY4ZFkGAzAGgGm/SS7oKJjzOdrVRdox0yTQ0OD+6YiKkRupto0ixTZU
-   pAOsU4uk51ieC2ntJmv0dTkoiB0sUq3zPEPVxiB05NYddWYE4E5Xg6tnn
-   Lc72ggXblIsV0h1w6n7D9XHpNUtGpQKIXadrWzz1jO+JIasLvqR8W8Fb4
-   jll6YfSwhCTVysDyHRW10KsNvsBvunqkD5tvmgoVxQuBiUlwWszhFOIDM
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,220,1643670000"; 
-   d="scan'208";a="22963305"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 29 Mar 2022 15:37:00 +0200
-Received: from schifferm-ubuntu (SCHIFFERM-M2.tq-net.de [10.121.49.14])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id EEA58280065;
-        Tue, 29 Mar 2022 15:36:59 +0200 (CEST)
-Message-ID: <c6178cd21a61d47d399cbee79d2c2f4b62dfa479.camel@ew.tq-group.com>
-Subject: Re: (EXT) RE: [PATCH] serial: Revert RS485 polarity change on UART
- open
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Lukas Wunner <lukas@wunner.de>
-Date:   Tue, 29 Mar 2022 15:36:59 +0200
-In-Reply-To: <df0034da2db14b6b9993c37422a6711d@AcuMS.aculab.com>
-References: <20220329085050.311408-1-matthias.schiffer@ew.tq-group.com>
-         <20220329100328.GA2090@wunner.de>
-         <b2f29129f966685105e09781620b85c8f4f1a88e.camel@ew.tq-group.com>
-         <749eee7dd2c7464a8c4d9ea5972205fa@AcuMS.aculab.com>
-         <82266d339e09ad16963e16014cd836fa670b3a0c.camel@ew.tq-group.com>
-         <df0034da2db14b6b9993c37422a6711d@AcuMS.aculab.com>
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=Ol3Hp+YMfuySWgvy8mFMxAXv90sbOTJsuyiieSGKpH0=;
+        b=uWtiNW8FCMmk0oKEj1lpvSj6VTxqSChA1CLjNhZgh4nNFksWEZJP3UhpiHRorzgYVS
+         GDKURNQ2RSYUcE1e/4lLkzfcxqdQRRan2aowWp6Rn9zo897pbtFCxhAKAqyxn7ci8e4T
+         AQhxJRFOLpBmd8WEdBUcGa6sJSWhPBQCcpHWmGTFlZYVstybbVayYQaMMh5GDO/AmjJq
+         EGAihYlBDg3YTxi6gETdllsFzYUw8a60NGW1+hFpj7gD7EUaZIQd4FwP1xl8pGBWXXGF
+         EsGq4yPW6ImAeQGFBiAV95QkDeQI8YZ7EZMTdnAJ7W8llq7qSib0w/U+dWwIFy9Sb295
+         H9OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=Ol3Hp+YMfuySWgvy8mFMxAXv90sbOTJsuyiieSGKpH0=;
+        b=sae3140HVtovwMPHiGOhIkkPDuWfqvDSctv0nWJCsAAf7yI+XvdmX7LOvCPwYuLBTP
+         osm84CDkgKx3ktQELGUzKaQBnbh4jwskzyc5OkcH0MX1mVq7xc5JagQD015udSl6OyQa
+         S3wXEkzjpWjPEicAhw+dMSOGxOMEVrTJzrU+idbLV2QnYaPYuojHlksnPCB8iVNimUzz
+         SXqxNMnob5ThGZTxVwtPDCmLLc63VJsr2RY75m0EsBQPVU9Tvs5XlN3oZCCgLvWKq/5P
+         Fe56xa2yEV4IjJNR5ixrAJHk7DRpw/EjAKAMakuW2vazwlkxPjEqQxihniVlBz8SfNTy
+         Thcg==
+X-Gm-Message-State: AOAM531HT0a57CzocBpdJ72wG5iJqx4cerKaeW3H86tWn8Q5jN+Y12ip
+        KrDLuvTs0T2Sv/gdQRsui++Glg==
+X-Google-Smtp-Source: ABdhPJx2ys3r6Td+fhKB2RWe9KMZbIu2iD6bmzq/KiPUzkPdG2Oc2JFJ7L6ZgRrS826lRxgALCpzxw==
+X-Received: by 2002:a05:620a:4311:b0:67e:8a0f:4cd5 with SMTP id u17-20020a05620a431100b0067e8a0f4cd5mr20367074qko.363.1648561118001;
+        Tue, 29 Mar 2022 06:38:38 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
+        by smtp.gmail.com with ESMTPSA id g1-20020ae9e101000000b0067d4bfffc57sm9168660qkm.117.2022.03.29.06.38.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 06:38:37 -0700 (PDT)
+Message-ID: <cb6a47f29c8ff3b6259d8f4b25da6a2d8b57bfba.camel@ndufresne.ca>
+Subject: Re: [PATCH] staging: media: hantro: Fix typos
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-media@vger.kernel.org
+Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:HANTRO VPU CODEC DRIVER" 
+        <linux-rockchip@lists.infradead.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Tue, 29 Mar 2022 09:38:36 -0400
+In-Reply-To: <20220326183603.66797-1-sebastian.fricke@collabora.com>
+References: <20220326183603.66797-1-sebastian.fricke@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-29 at 13:19 +0000, David Laight wrote:
-> From: Matthias Schiffer
-> > Sent: 29 March 2022 14:03
-> > 
-> > On Tue, 2022-03-29 at 12:55 +0000, David Laight wrote:
-> > > From: Matthias Schiffer
-> > > > Sent: 29 March 2022 11:39
-> > > ...
-> > > > I guess that would work. The fact that even the different
-> > > > variants of the 8250 are implemented inconsistently makes this
-> > > > especially ugly... It certainly puts a damper on the efforts to
-> > > > make
-> > > > the handling of RS485 in serial drivers more generic.
-> > > 
-> > > One thing to remember is that RS232 (IIRC really V.38) line
-> > > driver
-> > > chips are typically inverting.
-> > > 
-> > > So the modem signals on a TTL level output will have the
-> > > opposite polarity to that required on the actual connector.
-> > > 
-> > > Normally a UART will have an 'active high' register bit for
-> > > a modem signal that drives and 'active low' pin so you get
-> > > the correct polarity with an inverting line driver.
-> > > 
-> > > 	David
-> > > 
-> > 
-> > Indeed. As far as I can tell, this property of UARTs is what got us
-> > into this mess: Some people interpreted SER_RS485_RTS_ON_SEND as
-> > "set
-> > the RTS flag in the MCR register on send", while other thought it
-> > should mean "set the RTS pin to high on send", leading to opposite
-> > behaviours in different UART drivers (and even different UART
-> > variants
-> > in the same driver, in the case of the 8250 family).
-> 
-> Hmmm... A complete mess.
-> The 'RTS pin' that needs to go high is the one on the (typically) 'D'
-> connector after the inverting line driver.
-> Not the pin on the uart package.
-> I'd expect TTL level serial interfaces to require active low
-> modem signals.
-> 
-> If RS485 is trying to do half duplex using RTS (request to send)
-> and CTS (clear to send) you've typically got bigger problems
-> than asserting RTS before a transmit.
-> The real problem is removing RTS once the last transmit data bit
-> (the stop bit) has left the UART pin.
-> I've used local loopback (tx to rx) to detect that in the past.
-> 
-> Of course, if it is just doing flow control that should use RFS
-> (ready for sending) to indicate space in the receive fifo but
-> using the RTS pin instead that is a different matter.
-> 
-> 	David
-> 
+Thanks Sebastian.
 
+Le samedi 26 mars 2022 =C3=A0 19:36 +0100, Sebastian Fricke a =C3=A9crit=C2=
+=A0:
+> Fix typos in comments within the Hantro driver.
+>=20
+> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 
-I'm aware of the difficulties of deasserting RTS after the transmission
-is complete, but that's completely orthogonal to the issue I'm trying
-to solve right now :)
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-Regards,
-Matthias
+> ---
+>  drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 2 +-
+>  drivers/staging/media/hantro/hantro_hevc.c        | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/=
+staging/media/hantro/hantro_g2_hevc_dec.c
+> index c524af41baf5..c0645e335fc9 100644
+> --- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> +++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> @@ -406,7 +406,7 @@ static int set_ref(struct hantro_ctx *ctx)
+> =20
+>  	set_ref_pic_list(ctx);
+> =20
+> -	/* We will only keep the references picture that are still used */
+> +	/* We will only keep the reference pictures that are still used */
+>  	ctx->hevc_dec.ref_bufs_used =3D 0;
+> =20
+>  	/* Set up addresses of DPB buffers */
+> diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging=
+/media/hantro/hantro_hevc.c
+> index b49a41d7ae91..9c351f7fe6bd 100644
+> --- a/drivers/staging/media/hantro/hantro_hevc.c
+> +++ b/drivers/staging/media/hantro/hantro_hevc.c
+> @@ -59,7 +59,7 @@ dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *c=
+tx,
+>  	struct hantro_hevc_dec_hw_ctx *hevc_dec =3D &ctx->hevc_dec;
+>  	int i;
+> =20
+> -	/* Find the reference buffer in already know ones */
+> +	/* Find the reference buffer in already known ones */
+>  	for (i =3D 0;  i < NUM_REF_PICTURES; i++) {
+>  		if (hevc_dec->ref_bufs_poc[i] =3D=3D poc) {
+>  			hevc_dec->ref_bufs_used |=3D 1 << i;
 

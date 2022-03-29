@@ -2,134 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B57D54EB606
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C15434EB60C
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237532AbiC2WcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 18:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45296 "EHLO
+        id S237498AbiC2Wda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 18:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237469AbiC2WcC (ORCPT
+        with ESMTP id S236806AbiC2Wd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 18:32:02 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAEB81194
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:30:18 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id w7so32741559lfd.6
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:30:18 -0700 (PDT)
+        Tue, 29 Mar 2022 18:33:26 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C696A1C5526;
+        Tue, 29 Mar 2022 15:31:42 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id w8so18893962pll.10;
+        Tue, 29 Mar 2022 15:31:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=pVfFf2LUiJ+lsVTn/1q73IQZHWiUdzX5dxpnEtrh5/M=;
-        b=Jrjr0c4GoXhREc6Y0AuBp/HQXw7DCz11gV9pvXQC2uHO/Lx+rb0jidySb0jUtdMDjI
-         3DuH9EqKXs0rVWa8iBLD6aFZjOeBWOQDnC6sOP1EzlxLCrsLBZQC6OiDfwZf5MeOcCD+
-         9+brZg2Ra5mOgBJrkdC4VJUTwfgpSN4R2FUOBWpGID2cA76JzRyNDWDZAFPBAhfmXGXr
-         9vsXT3zp4tYzYpMabRRa2K6THyetJCe0KpvV+RzTMc1A5SzCG+axrcLPnE2dtec0u4x7
-         dZxzaT9jB/LYFsDSDsd9kS4o4p7QfijPX2RhruEONplfcG0vvh6+dzPHsIcajGsJ14j1
-         4mKA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OX10xLhNulTBcdU5muA8JTM3Au0wWeRUYrKCzsEHaU0=;
+        b=XulX9SUn7wpdo6Fv0r2P+0LXSb/g25UbI2y0CULw/8zpw73PJi31NAptJj/hMfqqBA
+         Js94HsIZCiFgQY6UJ0HziKiPkGGirLUY4jeZ3AEZ1JFtGUCL4ii6U0HyIUHAvWHWjFv+
+         yvgK1MiYg55maIktd/hI3NNTZ9Ag3WTM8jvfMDwpAwl5TGj4BfBFXSi92blY7ckHU3fJ
+         bsslItjIJ7wPi7OA6PABXdcnv2SJMzsMqm5XYvmebE7IwRUXn3nejlvvTmg6KzoUvc8J
+         yUVQrKNz7rwgW6WBGmpsII1/uAd/jdm1Caw5zb6yZn0zpUi072JW3y4EuFm3WxvKlSlf
+         mBOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=pVfFf2LUiJ+lsVTn/1q73IQZHWiUdzX5dxpnEtrh5/M=;
-        b=E7rP/BtT1Se3YWaHCzAsOWd27h/lszaDqANJQQwEyX02AQp+iNT+NY4EuB1J2l2gs5
-         EiZCqEO7tOZirAh37yjqPqmeM4RgzZbYoxIGvUsPQDj/I79nZ10xiuLBeWaBYgzKIVnh
-         yUu7Ntb8Rr4+NP0Dht28r2ymWBAfFVXt47rJ1qmXBqIamamRa0AwZYhZlLkl85uWuUW3
-         eQCkwOjUfJsvnSujr/Sa1PTiuxNJpF9a9deZRB5TyRG8ynJsS+taj8o7yJIhuBNr3NfR
-         GPfoO0FyLAZXo3ehRsvB/sZZFgn3Ymkw75TDBivF1aUPJFV/XtciWYVSOBGH+ZW1Xn/c
-         0Mpw==
-X-Gm-Message-State: AOAM531Cp10iARoWW2D11rvePTDt8aEs9O4+M6b5/kaPDVQ/vfMk1GGD
-        WNOYJKR/wXqRR5KDG3iI3mtm8w==
-X-Google-Smtp-Source: ABdhPJwjPyIRXEqSaJ3aXsai40mgW0ySP5DWFmKQLoiwZAkLzP+t506D6D+qytxazIQad66XZ7nyZQ==
-X-Received: by 2002:a05:6512:1398:b0:445:bcef:e4fd with SMTP id p24-20020a056512139800b00445bcefe4fdmr4506411lfa.398.1648593016505;
-        Tue, 29 Mar 2022 15:30:16 -0700 (PDT)
-Received: from [192.168.0.120] ([2.92.192.13])
-        by smtp.gmail.com with ESMTPSA id h22-20020a0565123c9600b0044a3b2549c1sm2129416lfv.165.2022.03.29.15.30.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 15:30:16 -0700 (PDT)
-Message-ID: <7e7c19f3-ec6a-9a82-5b6f-04edbdc7040d@openvz.org>
-Date:   Wed, 30 Mar 2022 01:30:15 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OX10xLhNulTBcdU5muA8JTM3Au0wWeRUYrKCzsEHaU0=;
+        b=NQbMkEx+agDDlg72EAIDn0uyk8Yshju5B0sZCLQgN5sMMGwJUrYr5UrNdLQY9xvnCj
+         dapG6fqZFeB5eDvlmMqAU/GduwJhje7kmaYQlo0f8Ou11ic9O4UIN/BRLHB9eY+kpEDF
+         54VUNJ90J55xE3EBfwjULw2PIwv67eyU5AI/qX/nAHU9rf8R+ubM0GO7s6RbH0nhWzbM
+         eb9hCGR7LK0125PBNisnLJwlxq9X07spu0Gz77WRIEoA6w/BUerM/p7UJ9Caq6Kz4KPF
+         VvruyzFDsnoHJFVab+DyVpyXQCMjlB59aDjrXU3BVYTIDU04t5K1HcAy+91jfJV/UfcM
+         tyEA==
+X-Gm-Message-State: AOAM533fih4eVM7+xsXo38oQdsCm713aqvX4kUFhRFjKO+kNYtxBl1I0
+        JJ9ozRrArJdQKATp2Btfw9iSRd6NL/DkuxRKv668kZ6a
+X-Google-Smtp-Source: ABdhPJzzU9nKYDwnoo0b0tNBKKyIBKwuVtrdgvN/rFLkzfaoP2XTKh8Ld0Ov8YjVYWmKALwefbzUCOijuGRruyzouis=
+X-Received: by 2002:a17:90b:4b45:b0:1c7:cc71:fdf7 with SMTP id
+ mi5-20020a17090b4b4500b001c7cc71fdf7mr1425270pjb.33.1648593102302; Tue, 29
+ Mar 2022 15:31:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [dm-devel] [PATCH 3/4] dm-qcow2: Introduce driver to create block
- devices over QCOW2 files
-Content-Language: en-US
-From:   Kirill Tkhai <kirill.tkhai@openvz.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     agk@redhat.com, snitzer@redhat.com, dm-devel@redhat.com,
-        song@kernel.org, linux-kernel@vger.kernel.org,
-        khorenko@virtuozzo.com, axboe@kernel.dk,
-        linux-block@vger.kernel.org
-References: <164846619932.251310.3668540533992131988.stgit@pro>
- <164846631540.251310.2398727490395218229.stgit@pro>
- <YkMK1cmWyEJGoMB+@infradead.org>
- <241b972d-5f78-6282-4f67-131a2566d479@openvz.org>
-In-Reply-To: <241b972d-5f78-6282-4f67-131a2566d479@openvz.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220329181935.2183-1-beaub@linux.microsoft.com>
+ <CAADnVQ+XpoCjL-rSz2hj05L21s8NtMJuWYC14b9Mvk7XE5KT_g@mail.gmail.com> <20220329201057.GA2549@kbox>
+In-Reply-To: <20220329201057.GA2549@kbox>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 29 Mar 2022 15:31:31 -0700
+Message-ID: <CAADnVQ+gm4yU9S6y+oeR3TNj82kKX0gk4ey9gVnKXKWy1Js4-A@mail.gmail.com>
+Subject: Re: [PATCH] tracing/user_events: Add eBPF interface for user_event
+ created events
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.03.2022 18:24, Kirill Tkhai wrote:
-> On 29.03.2022 16:34, Christoph Hellwig wrote:
->> On Mon, Mar 28, 2022 at 02:18:35PM +0300, Kirill Tkhai wrote:
->>> The driver is request based, since this allows to use blk-mq
->>> merging of request. Driver splits requests itself, and every
->>> request (i.e., qio) after splitting fits a single cluster.
->>> (In some cases it is worth to create bigger splits, and this
->>> is a subject of further optimizations).
->>
->> Nak, please don't do that.  If you want finer grained processing use
->> a bio based driver, not a request based one.  This is just getting us
->> into tons of problems.
-> 
-> Could you explain what you mean? Why shouldn't I use generic bio merging
-> code, but implementing my own merging? Which problems you point?
-> 
-> Generic blk-mq is well tested and lots of people work on its performance.
-> It's not obvious reason I should better implement own realization.
+On Tue, Mar 29, 2022 at 1:11 PM Beau Belgrave <beaub@linux.microsoft.com> wrote:
+>
+> On Tue, Mar 29, 2022 at 12:50:40PM -0700, Alexei Starovoitov wrote:
+> > On Tue, Mar 29, 2022 at 11:19 AM Beau Belgrave
+> > <beaub@linux.microsoft.com> wrote:
+> > >
+> > > Send user_event data to attached eBPF programs for user_event based perf
+> > > events.
+> > >
+> > > Add BPF_ITER flag to allow user_event data to have a zero copy path into
+> > > eBPF programs if required.
+> > >
+> > > Update documentation to describe new flags and structures for eBPF
+> > > integration.
+> > >
+> > > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+> >
+> > The commit describes _what_ it does, but says nothing about _why_.
+> > At present I see no use out of bpf and user_events connection.
+> > The whole user_events feature looks redundant to me.
+> > We have uprobes and usdt. It doesn't look to me that
+> > user_events provide anything new that wasn't available earlier.
+>
+> A lot of the why, in general, for user_events is covered in the first
+> change in the series.
+> Link: https://lore.kernel.org/all/20220118204326.2169-1-beaub@linux.microsoft.com/
+>
+> The why was also covered in Linux Plumbers Conference 2021 within the
+> tracing microconference.
+>
+> An example of why we want user_events:
+> Managed code running that emits data out via Open Telemetry.
+> Since it's managed there isn't a stub location to patch, it moves.
+> We watch the Open Telemetry spans in an eBPF program, when a span takes
+> too long we collect stack data and perform other actions.
+> With user_events and perf we can monitor the entire system from the root
+> container without having to have relay agents within each
+> cgroup/namespace taking up resources.
+> We do not need to enter each cgroup mnt space and determine the correct
+> patch location or the right version of each binary for processes that
+> use user_events.
+>
+> An example of why we want eBPF integration:
+> We also have scenarios where we are live decoding the data quickly.
+> Having user_data fed directly to eBPF lets us cast the data coming in to
+> a struct and decode very very quickly to determine if something is
+> wrong.
+> We can take that data quickly and put it into maps to perform further
+> aggregation as required.
+> We have scenarios that have "skid" problems, where we need to grab
+> further data exactly when the process that had the problem was running.
+> eBPF lets us do all of this that we cannot easily do otherwise.
+>
+> Another benefit from user_events is the tracing is much faster than
+> uprobes or others using int 3 traps. This is critical to us to enable on
+> production systems.
 
-In addition to this message. Possible, I confused you with patch description. Let I explain on example.
-
-There are a lot cases, when block device receives sequential bios, which
-consist of one page. The driver wants to have these bios are merged together because of
-it's not a good idea to call call_write_iter() for each of such 1-page bios.
-
-The same time, in QCOW2 format two sequential clusters may be placed inconsequently.
-For instance, let we have 1Mb cluster size and mapping:
-
-virtual device range      range inside QCOW2 file
-[0Mb, 1Mb]            ->  [20Mb, 21Mb]
-[1Mb, 2Mb]            ->  [30Mb, 31Mb].
-
-This may happen because of cluster #1 were allocated later than cluster #0.
-In case of a request going to [512K, 1.5Mb], it intersects cluster boundary
-and we want to split it into two. Otherwise it impossible to call call_write_iter().
-
-Solving the problem with 1-page bios, an implementing own elevator for only driver
-does not look a good idea. Making an elevator with performance comparable with
-generic block layer's is not a trivial task. At least it will require the same
-amount of code that block layer has. This is not a solution for a single driver.
-
-From the driver side, it tells block layer about optimal IO size, so the number
-of splits should gravitate to zero.
-
-Looking at another drivers like loop and nbd, they both are request based.
-Necessity to split a request to fit a filesystem extent is not a reason to stop
-merging loop requests, isn't it?! Also, nbd merges bios despite they are splitted
-by qemu-nbd in userspace level to fit 1 cluster boundary just like my driver does.
-Because, this is the only way. I've already tried another way, when I started
-writing this driver as bio-based. But then found that this is not a good solution,
-and converted it in request-based.
-
-Kirill
+None of it makes sense to me.
+To take advantage of user_events user space has to be modified
+and writev syscalls inserted.
+This is not cheap and I cannot see a production system using this interface.
+All you did is a poor man version of lttng that doesn't rely
+on such heavy instrumentation.

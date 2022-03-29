@@ -2,80 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAEB34EB69B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 954C34EB6A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239715AbiC2XTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
+        id S239989AbiC2XXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiC2XTQ (ORCPT
+        with ESMTP id S231459AbiC2XXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:19:16 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D13ADD4A;
-        Tue, 29 Mar 2022 16:17:32 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 31C6A1F44074
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648595851;
-        bh=vNOmry5ThwZXsotfcrBezmCsAHRH+JMNFUfaSsIR1GY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=D4P34mYNJY6M7Oz8ATv7zNF8aeyzQ2jScIuorEl7BXVhy3SrlRhjvPvzZczvzXyKa
-         WjScuOK6EJM040rfOLlkgvoeO7A0n4GrlLpbl+l1agHYy0on9x+TpKw0dZVmZYCSgW
-         c5ZdbL4hVqVe6DfgZw9LMT8DhovSzp3goCLGL/tsGNX4tstvvytqBS84uxiZMSq2hx
-         kNK86GV8wFomze2ERyiokH6qPpIC+4p0WT3BfjEmciFMar+6uLSNba2MvG9+Sga0De
-         DE7RccOC5/qo9tk0dibZzuU1oRwS+x7gqXYDGGEeN5JTnlbYhaevaY8M+yKE50vfRy
-         UU9LWMInwT2wA==
-Message-ID: <74a98688-67ad-6f8d-da1e-8fa0b32cff71@collabora.com>
-Date:   Wed, 30 Mar 2022 02:17:27 +0300
+        Tue, 29 Mar 2022 19:23:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B13E1184B57
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:21:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648596085;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vnEVLzN6wtV9JQalUxoL87eeycMaKfu2BZqOrOuPk4E=;
+        b=NG6ek5Ue9ncyj9C4wv6UjsQb7VRWVPgP6WC2nAI3g6VM9OJVVOdsLuA7DOqlmY5k1zPWaB
+        yxAF86UqkVirqcebJ9w4JIus/UrrYeFHksz6OG5T8DhaJzEWUDeG8Jii4969S3g7HUZ290
+        81Rn5TBcYAzRt9oit50yoXcIWapz8kw=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-RHgmY5DaOje41mcdHGvnAw-1; Tue, 29 Mar 2022 19:21:24 -0400
+X-MC-Unique: RHgmY5DaOje41mcdHGvnAw-1
+Received: by mail-qt1-f200.google.com with SMTP id o15-20020ac8698f000000b002e1db0c88d0so15991150qtq.17
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:21:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=vnEVLzN6wtV9JQalUxoL87eeycMaKfu2BZqOrOuPk4E=;
+        b=YMIuy9wcCtWvjUXPCZFRg/tNphwrR2zO/UUvrhXK4QSROk+WGq2HHY6e2mtvcU/CbD
+         mnAkbFB2bU/iwe3L9ZaT77X35yRIajFV9AeZvLeBFcI0hYI8iR8m00YYqlcivTo7Hts3
+         Sxz98r0so+2U2wQd8rMb3sg7ovI2mWoJ4SUIx6NbCVjUAVl4NnZaFDW9PNhGwbkP+PeX
+         Z6giOiWjFx8sb/RcQHK7Ppp/EiTyFnyr44MJMMkbHXfS3Dswxnn49i0lpAEHmqv/pDaf
+         fPzlfNiV3o26mXqI3tv3MQMD3X2FIsXKfBYV/YE4mZDA3rK2ii76o9WTiPWvRQRPH0k7
+         pT8Q==
+X-Gm-Message-State: AOAM533aPg0EJePC0K2yAxXI+JxNUyLV/9MMgbXIC4FW6mOdt/5yJmwR
+        /fpD5jxE0RILAIB0r17Qh/ImWP6m3ZOV3LoPqSbogPBpsUglEYtoF9cDVdFcQuhsHZ44I78W10W
+        481jKMnnCAdIvgRZoXWUxxsE5
+X-Received: by 2002:a05:620a:1a99:b0:680:f33c:dbd3 with SMTP id bl25-20020a05620a1a9900b00680f33cdbd3mr2912678qkb.17.1648596083862;
+        Tue, 29 Mar 2022 16:21:23 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwaMl8cwEN02JVbghXfjiOKK5vbmlk7rHZYxrkXCYwKhBHbTy3z6OejWxFNRFl2ohGsizFJXg==
+X-Received: by 2002:a05:620a:1a99:b0:680:f33c:dbd3 with SMTP id bl25-20020a05620a1a9900b00680f33cdbd3mr2912659qkb.17.1648596083595;
+        Tue, 29 Mar 2022 16:21:23 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id q8-20020a05622a030800b002e1c9304db8sm15819272qtw.38.2022.03.29.16.21.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 16:21:23 -0700 (PDT)
+Subject: Re: [PATCH] media: staging: atomisp: rework reading the id and
+ revision values
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, nathan@kernel.org,
+        ndesaulniers@google.com, hverkuil-cisco@xs4all.nl, vrzh@vrzh.net,
+        tomi.valkeinen@ideasonboard.com, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20220326191853.2914552-1-trix@redhat.com>
+ <YkN0w5NxLcBFes1b@paasikivi.fi.intel.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <2ab474d8-ee4e-44b5-ab3c-38b72135a27f@redhat.com>
+Date:   Tue, 29 Mar 2022 16:21:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 9/9] drm/msm: Add a way for userspace to allocate GPU iova
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Emma Anholt <emma@anholt.net>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        David Airlie <airlied@linux.ie>, linux-arm-msm@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Sean Paul <sean@poorly.run>, freedreno@lists.freedesktop.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <20220329230105.601666-1-robdclark@gmail.com>
- <20220329230105.601666-10-robdclark@gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220329230105.601666-10-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <YkN0w5NxLcBFes1b@paasikivi.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I'll do a resend.
 
-On 3/30/22 02:00, Rob Clark wrote:
-> +static int msm_ioctl_gem_info_set_iova(struct drm_device *dev,
-> +		struct drm_file *file, struct drm_gem_object *obj,
-> +		uint64_t iova)
-> +{
-> +	struct msm_drm_private *priv = dev->dev_private;
-> +	struct msm_file_private *ctx = file->driver_priv;
-> +
-> +	if (!priv->gpu)
-> +		return -EINVAL;
-> +
-> +	/* Only supported if per-process address space is supported: */
-> +	if (priv->gpu->aspace == ctx->aspace)
-> +		return -EINVAL;
+I use git send-mail, sooo not sure what went wrong.
 
-nit: -EOPNOTSUPP ?
+Tom
+
+On 3/29/22 2:06 PM, Sakari Ailus wrote:
+> On Sat, Mar 26, 2022 at 12:18:53PM -0700, trix@redhat.com wrote:
+>
+> Hi Tom,
+>
+> It seems that somehow the Content-type header of your patch  is
+> application/octet-stream. I.e. not text.
+>
+

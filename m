@@ -2,186 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A10524EA627
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 05:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 117064EA62A
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 05:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbiC2Dkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 23:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
+        id S231842AbiC2DmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 23:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231820AbiC2Dka (ORCPT
+        with ESMTP id S230284AbiC2DmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 23:40:30 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC20BC36
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 20:38:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648525127; x=1680061127;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WRQSg4qbwD4cPhoXsxHqJZSzOQfwrxLT7gElVrrW7W4=;
-  b=cs6YBv8jN2qX4EDYnL6tMSwq8XnbFDKqZoZON9iIXxRWNHJDwWF8LGPP
-   Yo0xE3Wvk0bEF739Bnvzct6KmLCxXq30we3IAnwgznxq6ncrxYS+iF0iA
-   PJdNOqy02olmh44YnPtRWIrM+iEiw5s6RzQmNeyC3RPImOM+FJwHijxsP
-   78cQ9BdFfo20WXPWCrKPO9VTvsaflK4Y8If0shVJJKySCMKAxyViuCcVj
-   CwTGSZUwiHAr64kD1g5zjGQA4kWQwQ5+yd62VkZPHmq/GNyV4nHpXnHuH
-   shmaYvc8uk2zxCoWav9XXMqIN+1BWqaLskBBp14P/pcobHAiDg+TzIB6c
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="257982225"
-X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="257982225"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 20:38:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="585421978"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 28 Mar 2022 20:38:45 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nZ2gu-0002bR-Dh; Tue, 29 Mar 2022 03:38:44 +0000
-Date:   Tue, 29 Mar 2022 11:37:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: xillybus_of.c:undefined reference to `devm_platform_ioremap_resource'
-Message-ID: <202203291145.R3ZUlhsW-lkp@intel.com>
+        Mon, 28 Mar 2022 23:42:12 -0400
+Received: from mx0a-000eb902.pphosted.com (mx0a-000eb902.pphosted.com [205.220.165.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68844692AA;
+        Mon, 28 Mar 2022 20:40:30 -0700 (PDT)
+Received: from pps.filterd (m0220296.ppops.net [127.0.0.1])
+        by mx0a-000eb902.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22T2hnWc016113;
+        Mon, 28 Mar 2022 22:40:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garmin.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pps1;
+ bh=VjoPx5LTKAMGV5nyWuXtTjAE239uDy2ltNla0qwtaic=;
+ b=DvANNHNMimFydYGP7po5XsILsIVshvffTCvREOW+ulp090ohCGpe9Sghh50FubOSr13v
+ 0t06OwwROe9bzuvHMLakYn06CR2DdhSlSmRUG8i1EOqdAxOkp2SXh8yB03f918peSJwS
+ jliiCd/GbQBSkZR8zZp935ENLQ8jw5K+aWg4sFusEXTmLs8PAE1qVxZ3L4mtO+8QbMkg
+ JbeFiihvsyYx10N0TsphGyRZ5ZPH1fDbB/i8TM8Dxnnw3dcjSYqowSdEe4kanDC22WUc
+ qmg/XuyuotP+OPtF2ybyhWUonr8aHcRDQPC8fdY4SuIqqvSANax8yK8r1CYoSZoY+khC 8A== 
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2170.outbound.protection.outlook.com [104.47.59.170])
+        by mx0a-000eb902.pphosted.com (PPS) with ESMTPS id 3f2075m3vf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Mar 2022 22:40:29 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZkWL2vCcYeGgDB0Xz/He4G5rHJh0paGhLy3hozvGhjzTXQSZtWXUPJ4sLKbkgyH8TVv4Z+HgZRsbobBxHWAlyQNT65G79e80WQYnYvB03xZkY4GESN+VqgI1LQ0v5pjiyIXVem6beKTVuShKRXYfuG6ngi+Xi0yEqramFbNkLojoYF9DLbZdrpF0ARax1sz1KWFQ2AEToNGmJ/Lk97JVfBS+L6pSTiQ06FloX2zJGFUJ7slLGv9cS4BRLhDLA0YU3wXcJNqmFf6BEqXMXXE0m2uLFHcMLunNPjJs03PPd+7IHl4vWWtIzMiWTJxYio5HDOq1pyuGZ4nciwTvyS98CA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VjoPx5LTKAMGV5nyWuXtTjAE239uDy2ltNla0qwtaic=;
+ b=EOfAwXC3qFgZZWjSCoSigueI4UqKSLItIBynyifbY8dXFjk7SPsWnynfugyt2cMJPPJcHaytfmsBvhfOtO/OJgKe0HdpK/iCQ0EaQ0+M07Z+/EYup7fl0cZVLqZXQ6AbEbARez/+J2RG+AvSQKaqf2GkTUWmpXUjCIZ2zTuKb+KasdRarH4EJhtfUW4k69j2hgJGOlNdP3lArq9Hz4JPOlwuEQ4AupK0c4W1iWM01oSogxH5ToziCWKMZzvQgFRfG9jSLijlFIu6w5O+Kj/6JwCGmJudOwYghD1qzgi0ADOxW1ZnqilZhOHvm7LDdTHcei5LmwG5mkW1rBZT2fhDUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=temperror (sender ip
+ is 204.77.163.244) smtp.rcpttodomain=gmail.com smtp.mailfrom=garmin.com;
+ dmarc=temperror action=none header.from=garmin.com; dkim=none (message not
+ signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garmin.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VjoPx5LTKAMGV5nyWuXtTjAE239uDy2ltNla0qwtaic=;
+ b=THGp2CiNjzLxCm63T5ZVGkyi5irQ4CaY3KnRwiXeDpfKBkerMBAagrscl1NwqyauvCZ1Cmud061otTguwJ1SwCou+7ScUkGQajpitVJiHk2qHOXIlh179aka0xbkQJ1seTzMdz5xhZdmklhEQW6H/ZzNzcoPXAmRXxSDKzA1V0wQTWMI86XZbO5q4VwgLmPn7T+repDrVxZohzvdo8LS6Nb+RR+bd/GHR9pnT/hPy2ZBP9yyjaVQgcJMzRVPcrYQwv1P9mesdkuubgajgbw4hlwsBUkPR1Wwq6eWFEHLJ+ew0DYgknVqoEHW1b0nVfxMMEtZq/eK2fboMl1whICVJQ==
+Received: from BN6PR16CA0042.namprd16.prod.outlook.com (2603:10b6:405:14::28)
+ by DM5PR04MB1245.namprd04.prod.outlook.com (2603:10b6:4:42::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.18; Tue, 29 Mar
+ 2022 03:40:25 +0000
+Received: from BN7NAM10FT047.eop-nam10.prod.protection.outlook.com
+ (2603:10b6:405:14:cafe::52) by BN6PR16CA0042.outlook.office365.com
+ (2603:10b6:405:14::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.18 via Frontend
+ Transport; Tue, 29 Mar 2022 03:40:25 +0000
+X-MS-Exchange-Authentication-Results: spf=temperror (sender IP is
+ 204.77.163.244) smtp.mailfrom=garmin.com; dkim=none (message not signed)
+ header.d=none;dmarc=temperror action=none header.from=garmin.com;
+Received-SPF: TempError (protection.outlook.com: error in processing during
+ lookup of garmin.com: DNS Timeout)
+Received: from edgetransport.garmin.com (204.77.163.244) by
+ BN7NAM10FT047.mail.protection.outlook.com (10.13.156.126) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5102.18 via Frontend Transport; Tue, 29 Mar 2022 03:40:24 +0000
+Received: from OLAWPA-EXMB12.ad.garmin.com (10.5.144.16) by
+ olawpa-edge5.garmin.com (10.60.4.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Mon, 28 Mar 2022 22:40:16 -0500
+Received: from [10.30.196.25] (10.5.209.17) by OLAWPA-EXMB12.ad.garmin.com
+ (10.5.144.16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 28 Mar
+ 2022 22:40:23 -0500
+Message-ID: <531dfd9a-267e-dce0-0aed-cda8ccdf7853@garmin.com>
+Date:   Mon, 28 Mar 2022 22:40:16 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2] input: Add Marine Navigation Keycodes
+Content-Language: en-US
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+CC:     <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20210622235708.8828-1-matthew.stephenson2@garmin.com>
+ <20220126211224.28590-1-Shelby.Heffron@garmin.com>
+ <Yg9EmVAHpEpmnLok@google.com>
+From:   Shelby Heffron <Shelby.Heffron@garmin.com>
+In-Reply-To: <Yg9EmVAHpEpmnLok@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: OLAWPA-EXMB1.ad.garmin.com (10.5.144.23) To
+ OLAWPA-EXMB12.ad.garmin.com (10.5.144.16)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 55acdc06-dc9e-422f-6cac-08da1135db9e
+X-MS-TrafficTypeDiagnostic: DM5PR04MB1245:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR04MB12455756DF40B5468FB03BE3F21E9@DM5PR04MB1245.namprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /kxHFv4RFfdxS5YBZt3DsGjz5BGyDuFY501DKNz7v+790wRsSKYVSgRQc0IkjEaExQHb8JYWKJ5pP1pSgynWifXuaJwt5Rsz+fZt0NNC/N8U3XOf+iv5sJ9P/2zAm7NmbX0VYs53hUjnw5Kby9nWG3EKXo7Wt0hHlPLv1AAY7EaUSRh0mKCyOLhEa8rtBC0gTkL4HpN7Lt+Rtx4cTJGvMxZSJimNjbT84IaZLq4DJwd8sjrfTi+cn6Q19jN4kwnFjJaaeDnmo3V0/aKmz0+z6Y3VDtXacukuoHOfwdLbZcVF2hKixXSuE3MxGrlZZItyJOUqNH5q+ZVucU17WDyvk4DAu7o8C3GdJCYRBQF+5taW3Djz6bdusTvY87JayWejkS0M5D+eaxQu7ezbyLaKr8OhDpfDhqNy06Cd08l446YOZDp1lQDQ9ge+mOx3PIS4vqI6jhru5baIp47d04cUJuEtBh/wPOeyhKO7upfXxCraajLKVUF1hoDss0hedb2wOzVDuhTJWYerEG2CPLqDO31d1WtIqC1V6C8M0c/xZY73JlWwx67J2RjvCVvFwHNt4HO5Z08bNnHeA3X14KHnYHpI4x0LB7b0lxvyrsxyumOdW2mzNB9DHtqRibBLUGlJN/oWWECgHGe3Ox/z6JzyDzCv4vA03IZv9iVWOvVawH1/Mb5bSI9QRAEbJQJ9kTH2liI/ieAVLjbcFx1FRHkkfg==
+X-Forefront-Antispam-Report: CIP:204.77.163.244;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:edgetransport.garmin.com;PTR:extedge.garmin.com;CAT:NONE;SFS:(13230001)(46966006)(36840700001)(40470700004)(31696002)(316002)(86362001)(8676002)(6916009)(47076005)(7636003)(70586007)(82310400004)(54906003)(16576012)(356005)(40460700003)(70206006)(4326008)(5660300002)(336012)(26005)(36860700001)(63370400001)(63350400001)(2906002)(186003)(6666004)(4744005)(83380400001)(426003)(2616005)(508600001)(31686004)(36756003)(8936002)(43740500002);DIR:OUT;SFP:1102;
+X-OriginatorOrg: garmin.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2022 03:40:24.0784
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55acdc06-dc9e-422f-6cac-08da1135db9e
+X-MS-Exchange-CrossTenant-Id: 38d0d425-ba52-4c0a-a03e-2a65c8e82e2d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38d0d425-ba52-4c0a-a03e-2a65c8e82e2d;Ip=[204.77.163.244];Helo=[edgetransport.garmin.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN7NAM10FT047.eop-nam10.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR04MB1245
+X-Proofpoint-ORIG-GUID: FMcisUfcmaBXghi1ZPs9xt3PqSUw4p7v
+X-Proofpoint-GUID: FMcisUfcmaBXghi1ZPs9xt3PqSUw4p7v
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-29_01,2022-03-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 phishscore=0
+ spamscore=0 mlxlogscore=786 bulkscore=0 suspectscore=0 impostorscore=0
+ mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203290021
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
+Hi Dmitry,
 
-FYI, the error/warning still remains.
+Please let me know if you think that any additional changes are needed
+on this patch.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   cffb2b72d3ed47f5093d128bd44d9ce136b6b5af
-commit: a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a hwrng: ks-sa - Add dependency on IOMEM and OF
-date:   1 year, 4 months ago
-config: s390-randconfig-r044-20220327 (https://download.01.org/0day-ci/archive/20220329/202203291145.R3ZUlhsW-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
+Thank you.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+________________________________
 
-All errors (new ones prefixed by >>):
-
-   s390-linux-ld: kernel/dma/coherent.o: in function `dma_init_coherent_memory':
-   coherent.c:(.text+0x220): undefined reference to `memremap'
-   s390-linux-ld: coherent.c:(.text+0x2d2): undefined reference to `memunmap'
-   s390-linux-ld: kernel/dma/coherent.o: in function `dma_declare_coherent_memory':
-   coherent.c:(.text+0x410): undefined reference to `memunmap'
-   s390-linux-ld: drivers/irqchip/irq-al-fic.o: in function `al_fic_init_dt':
-   irq-al-fic.c:(.init.text+0x2e): undefined reference to `of_iomap'
-   s390-linux-ld: irq-al-fic.c:(.init.text+0x1e2): undefined reference to `iounmap'
-   s390-linux-ld: drivers/irqchip/irq-imx-intmux.o: in function `imx_intmux_probe':
-   irq-imx-intmux.c:(.text+0x382): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/phy/marvell/phy-mvebu-a3700-utmi.o: in function `mvebu_a3700_utmi_phy_probe':
-   phy-mvebu-a3700-utmi.c:(.text+0xbc): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/clk/clk-fixed-mmio.o: in function `fixed_mmio_clk_setup':
-   clk-fixed-mmio.c:(.text+0x32): undefined reference to `of_iomap'
-   s390-linux-ld: clk-fixed-mmio.c:(.text+0x50): undefined reference to `iounmap'
-   s390-linux-ld: drivers/dma/fsl-edma.o: in function `fsl_edma_probe':
-   fsl-edma.c:(.text+0xb24): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: fsl-edma.c:(.text+0xbb2): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/dma/qcom/hidma.o: in function `hidma_probe':
-   hidma.c:(.text+0x388): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: hidma.c:(.text+0x3bc): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/dma/ti/edma.o: in function `edma_xbar_event_map':
-   edma.c:(.text+0x568): undefined reference to `of_address_to_resource'
-   s390-linux-ld: edma.c:(.text+0x590): undefined reference to `devm_ioremap'
-   s390-linux-ld: drivers/dma/ti/edma.o: in function `edma_probe':
-   edma.c:(.text+0x2678): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/dma/ti/omap-dma.o: in function `omap_dma_probe':
-   omap-dma.c:(.text+0x540): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/dma/ti/dma-crossbar.o: in function `ti_am335x_xbar_probe':
-   dma-crossbar.c:(.text+0x270): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/dma/ti/dma-crossbar.o: in function `ti_dra7_xbar_probe':
-   dma-crossbar.c:(.text+0x7a0): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_close':
-   dpaa2-console.c:(.text+0x72): undefined reference to `iounmap'
-   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_probe':
-   dpaa2-console.c:(.text+0xbe): undefined reference to `of_address_to_resource'
-   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_generic_console_open.constprop.0':
-   dpaa2-console.c:(.text+0x172): undefined reference to `ioremap'
-   s390-linux-ld: dpaa2-console.c:(.text+0x19c): undefined reference to `iounmap'
-   s390-linux-ld: dpaa2-console.c:(.text+0x1b2): undefined reference to `ioremap'
-   s390-linux-ld: dpaa2-console.c:(.text+0x286): undefined reference to `iounmap'
-   s390-linux-ld: drivers/char/hw_random/exynos-trng.o: in function `exynos_trng_probe':
-   exynos-trng.c:(.text+0x27e): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/meson-rng.o: in function `meson_rng_probe':
-   meson-rng.c:(.text+0xa6): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/mtk-rng.o: in function `mtk_rng_probe':
-   mtk-rng.c:(.text+0x22e): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/hw_random/npcm-rng.o: in function `npcm_rng_probe':
-   npcm-rng.c:(.text+0x1e8): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/char/xillybus/xillybus_of.o: in function `xilly_drv_probe':
->> xillybus_of.c:(.text+0x144): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/mfd/sun6i-prcm.o: in function `sun6i_prcm_probe':
-   sun6i-prcm.c:(.text+0x7c): undefined reference to `mfd_add_devices'
-   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `arc_rimi_exit':
-   arc-rimi.c:(.exit.text+0x2e): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `arcrimi_found':
-   arc-rimi.c:(.init.text+0xc4): undefined reference to `ioremap'
-   s390-linux-ld: arc-rimi.c:(.init.text+0x142): undefined reference to `iounmap'
-   s390-linux-ld: arc-rimi.c:(.init.text+0x2b2): undefined reference to `iounmap'
-   s390-linux-ld: arc-rimi.c:(.init.text+0x338): undefined reference to `ioremap'
-   s390-linux-ld: arc-rimi.c:(.init.text+0x3f8): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `check_mirror':
-   arc-rimi.c:(.text.unlikely+0x54): undefined reference to `ioremap'
-   s390-linux-ld: arc-rimi.c:(.text.unlikely+0x78): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/ethernet/altera/altera_tse_main.o: in function `request_and_map':
-   altera_tse_main.c:(.text+0x90a): undefined reference to `devm_ioremap'
-   s390-linux-ld: drivers/net/ethernet/smsc/smc91c92_cs.o: in function `smc91c92_config':
-   smc91c92_cs.c:(.text+0x1f7c): undefined reference to `ioremap'
-   s390-linux-ld: smc91c92_cs.c:(.text+0x23c4): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/ethernet/smsc/smc91c92_cs.o: in function `smc91c92_detach':
-   smc91c92_cs.c:(.text+0x2868): undefined reference to `iounmap'
-   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
-   cistpl.c:(.text+0x238): undefined reference to `iounmap'
-   s390-linux-ld: cistpl.c:(.text+0x24a): undefined reference to `ioremap'
-   s390-linux-ld: cistpl.c:(.text+0x2a2): undefined reference to `ioremap'
-   s390-linux-ld: cistpl.c:(.text+0x2b2): undefined reference to `iounmap'
-   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
-   cistpl.c:(.text+0xda2): undefined reference to `iounmap'
-   s390-linux-ld: drivers/watchdog/sirfsoc_wdt.o: in function `sirfsoc_wdt_probe':
-   sirfsoc_wdt.c:(.text+0xde): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_init':
-   timer-of.c:(.init.text+0x96): undefined reference to `of_iomap'
-   s390-linux-ld: timer-of.c:(.init.text+0x2ca): undefined reference to `iounmap'
-   s390-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_cleanup':
-   timer-of.c:(.init.text+0x354): undefined reference to `iounmap'
-   s390-linux-ld: drivers/clocksource/timer-microchip-pit64b.o: in function `mchp_pit64b_dt_init_timer':
-   timer-microchip-pit64b.c:(.init.text+0xda): undefined reference to `of_iomap'
-   s390-linux-ld: timer-microchip-pit64b.c:(.init.text+0x456): undefined reference to `iounmap'
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MFD_SUN6I_PRCM
-   Depends on HAS_IOMEM && (ARCH_SUNXI || COMPILE_TEST
-   Selected by
-   - CLK_SUNXI_PRCM_SUN6I && COMMON_CLK && CLK_SUNXI
-   - CLK_SUNXI_PRCM_SUN8I && COMMON_CLK && CLK_SUNXI
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+CONFIDENTIALITY NOTICE: This email and any attachments are for the sole use=
+ of the intended recipient(s) and contain information that may be Garmin co=
+nfidential and/or Garmin legally privileged. If you have received this emai=
+l in error, please notify the sender by reply email and delete the message.=
+ Any disclosure, copying, distribution or use of this communication (includ=
+ing attachments) by someone other than the intended recipient is prohibited=
+. Thank you.

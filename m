@@ -2,187 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0573B4EB71D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 563DD4EB704
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241345AbiC2Xxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45418 "EHLO
+        id S241159AbiC2Xwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241318AbiC2Xx2 (ORCPT
+        with ESMTP id S239629AbiC2Xwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:53:28 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1770D21A8BC;
-        Tue, 29 Mar 2022 16:51:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AE73E210E4;
-        Tue, 29 Mar 2022 23:51:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648597895; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fUqsktX1Dv6qEK49ZdefTv/pOyZaEMsB1qtsMGhOrI4=;
-        b=LvNolslLWWnhLdL/xjqxOHqkEMnr1D2s2zo0ZkV7o4M61dzgurAVy4d+4feES/DzhFlvBA
-        Rwmaqp1DJD194Fis6kF6LpmUVovPGYtCPJsjN+6ncbXteQIE6K5e0huLuNB0kbxZSF3cRq
-        B4q7NuCJVrWUsoRRDFHbzkkFQXKbIK4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648597895;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fUqsktX1Dv6qEK49ZdefTv/pOyZaEMsB1qtsMGhOrI4=;
-        b=QOa9e9vj7wV7WsyjC3Pj4tX/B/UhY320L+3XytQmEOmOmBS9JgR9QB46s/Bkan94wyYnjP
-        JXPSJwFAzw/4QvAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7F53A13A7E;
-        Tue, 29 Mar 2022 23:51:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id E/MiD4KbQ2IvLwAAMHmgww
-        (envelope-from <neilb@suse.de>); Tue, 29 Mar 2022 23:51:30 +0000
-Subject: [PATCH 03/10] MM: move responsibility for setting SWP_FS_OPS to
- ->swap_activate
-From:   NeilBrown <neilb@suse.de>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        David Howells <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Date:   Wed, 30 Mar 2022 10:49:41 +1100
-Message-ID: <164859778123.29473.17908205846599043598.stgit@noble.brown>
-In-Reply-To: <164859751830.29473.5309689752169286816.stgit@noble.brown>
-References: <164859751830.29473.5309689752169286816.stgit@noble.brown>
-User-Agent: StGit/0.23
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 29 Mar 2022 19:52:47 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFED1CAF14
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:51:04 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id o13-20020a17090ab88d00b001c96a912b04so2277713pjr.5
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=WvAzX2UFzrcmnGH2vmugmzpfgQULkOHCxxh3/x0LXYU=;
+        b=BPlx2KF1D8FGHH5fvfR/iEDQ83SwMjjzz/qj+xyb30YOS3YUQMblHjgRJ47tO+skVq
+         k6IZmMkCv88Xu+AlID712AQM1WVpN61JbneX5V7OvxF/VO9waSGZV3kWefJSDRzm88Ov
+         fs8GR01P+siNqRTGplL0gZZCRzy3YhMmHVGeV4Wyv+0GXtpdtUbTYGKNVLNQQd05qC9o
+         D1lPrKR2tVKLPyDTBAGVSLjkj49pXIF3j/kgkMfHYgSBpk7PJFFoW6RAri6eXDDQaCkw
+         ICHc2Kb/grs2xK///Gu7nfWGBxgJ6Y5LbE+GtwAQjr20+91orcJUiRLsXkGU4plOytYI
+         xJdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=WvAzX2UFzrcmnGH2vmugmzpfgQULkOHCxxh3/x0LXYU=;
+        b=3aVq80HUC29AU+S8ozQEzcVZqhiMlLzkEEEYch5aGlGE/9AW27PtY3WT4JeqXHJyJt
+         zRlyvO00IBtku2I+aOX7yeEa8vwBr62iKzOJ/KzZmrKgjFKETSG8wc5+v96FXXodboN0
+         q0dqq4NHf06rLHi51vb67LApJ85M4Da6AQDI6GC5Z2Dmy5DYr8myjVhc6dA3bTJeSp12
+         +9Ddp9c7v7G7SooMF+Kfh6p7awudy6ZE1P+vOvPG8Nz/gFhgJF6UE/c/crGF031aXlV0
+         TbFBmH4EIP6sYdXBfRZVJqm5gEWV4spZLRyayr4exdgurZ7X6PNMPSVDm/ikoHlceGS3
+         KTnA==
+X-Gm-Message-State: AOAM53119x/PXcfaZ3UBFHFGVcE/SU1qKhJq+IHBzSM2knWG01OOEOoF
+        I9CvNXxfE3oTCsdgf2jhLiv8u0eKl6A=
+X-Google-Smtp-Source: ABdhPJx7118GWysS/qqYEiOU63qQ829NqxgTMLaXG2hSAvMcoVU8gU73LCEArubw1Cu4QyMD/CisSipYb+Y=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:902:9f98:b0:154:a809:7f0f with SMTP id
+ g24-20020a1709029f9800b00154a8097f0fmr32287189plq.118.1648597863760; Tue, 29
+ Mar 2022 16:51:03 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue, 29 Mar 2022 23:50:50 +0000
+Message-Id: <20220329235054.3534728-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
+Subject: [PATCH v3.1 0/4] KVM: x86: Use static calls to reduce kvm_pmu_ops overhead
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a filesystem wishes to handle all swap IO itself (via ->direct_IO and
-->readpage), rather than just providing devices addresses for
-submit_bio(), SWP_FS_OPS must be set.
-Currently the protocol for setting this it to have ->swap_activate
-return zero.  In that case SWP_FS_OPS is set, and add_swap_extent()
-is called for the entire file.
+This is a minor iteration on Like's v3 to allow kvm_pmu_ops (the global
+variable, not the struct) be static.  I ran the PMU unit tests and compiled,
+but otherwise it's untested.  Strongly recommend waiting for Like to give
+a thumbs up before applying :-)
 
-This is a little clumsy as different return values for ->swap_activate
-have quite different meanings, and it makes it hard to search for which
-filesystems require SWP_FS_OPS to be set.
+[*] https://lore.kernel.org/all/20220307115920.51099-1-likexu@tencent.com
 
-So remove the special meaning of a zero return, and require the
-filesystem to set SWP_FS_OPS if it so desires, and to always call
-add_swap_extent() as required.
+Like Xu (4):
+  KVM: x86: Move kvm_ops_static_call_update() to x86.c
+  KVM: x86: Copy kvm_pmu_ops by value to eliminate layer of indirection
+  KVM: x86: Move .pmu_ops to kvm_x86_init_ops and tag as __initdata
+  KVM: x86: Use static calls to reduce kvm_pmu_ops overhead
 
-Currently only NFS and CIFS return zero for add_swap_extent().
+ arch/x86/include/asm/kvm-x86-pmu-ops.h | 31 ++++++++++++
+ arch/x86/include/asm/kvm_host.h        | 17 +------
+ arch/x86/kvm/pmu.c                     | 66 ++++++++++++++++++--------
+ arch/x86/kvm/pmu.h                     |  7 +--
+ arch/x86/kvm/svm/pmu.c                 |  2 +-
+ arch/x86/kvm/svm/svm.c                 |  2 +-
+ arch/x86/kvm/vmx/pmu_intel.c           |  2 +-
+ arch/x86/kvm/vmx/vmx.c                 |  2 +-
+ arch/x86/kvm/x86.c                     | 21 +++++++-
+ 9 files changed, 102 insertions(+), 48 deletions(-)
+ create mode 100644 arch/x86/include/asm/kvm-x86-pmu-ops.h
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: NeilBrown <neilb@suse.de>
----
- fs/cifs/file.c       |    3 ++-
- fs/nfs/file.c        |   13 +++++++++++--
- include/linux/swap.h |    6 ++++++
- mm/swapfile.c        |   10 +++-------
- 4 files changed, 22 insertions(+), 10 deletions(-)
 
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index 60f43bff7ccb..050f463580f3 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -4927,7 +4927,8 @@ static int cifs_swap_activate(struct swap_info_struct *sis,
- 	 * from reading or writing the file
- 	 */
- 
--	return 0;
-+	sis->flags |= SWP_FS_OPS;
-+	return add_swap_extent(sis, 0, sis->max, 0);
- }
- 
- static void cifs_swap_deactivate(struct file *file)
-diff --git a/fs/nfs/file.c b/fs/nfs/file.c
-index 2df2a5392737..66136dca0ad5 100644
---- a/fs/nfs/file.c
-+++ b/fs/nfs/file.c
-@@ -488,6 +488,7 @@ static int nfs_swap_activate(struct swap_info_struct *sis, struct file *file,
- {
- 	unsigned long blocks;
- 	long long isize;
-+	int ret;
- 	struct rpc_clnt *clnt = NFS_CLIENT(file->f_mapping->host);
- 	struct inode *inode = file->f_mapping->host;
- 
-@@ -500,9 +501,17 @@ static int nfs_swap_activate(struct swap_info_struct *sis, struct file *file,
- 		return -EINVAL;
- 	}
- 
-+	ret = rpc_clnt_swap_activate(clnt);
-+	if (ret)
-+		return ret;
-+	ret = add_swap_extent(sis, 0, sis->max, 0);
-+	if (ret < 0) {
-+		rpc_clnt_swap_deactivate(clnt);
-+		return ret;
-+	}
- 	*span = sis->pages;
--
--	return rpc_clnt_swap_activate(clnt);
-+	sis->flags |= SWP_FS_OPS;
-+	return ret;
- }
- 
- static void nfs_swap_deactivate(struct file *file)
-diff --git a/include/linux/swap.h b/include/linux/swap.h
-index 6bc9e21262de..e18b7edccc1d 100644
---- a/include/linux/swap.h
-+++ b/include/linux/swap.h
-@@ -570,6 +570,12 @@ static inline swp_entry_t get_swap_page(struct page *page)
- 	return entry;
- }
- 
-+static inline int add_swap_extent(struct swap_info_struct *sis,
-+				  unsigned long start_page,
-+				  unsigned long nr_pages, sector_t start_block)
-+{
-+	return -EINVAL;
-+}
- #endif /* CONFIG_SWAP */
- 
- #ifdef CONFIG_THP_SWAP
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 2650927a009b..8710c9c29862 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -2244,13 +2244,9 @@ static int setup_swap_extents(struct swap_info_struct *sis, sector_t *span)
- 
- 	if (mapping->a_ops->swap_activate) {
- 		ret = mapping->a_ops->swap_activate(sis, swap_file, span);
--		if (ret >= 0)
--			sis->flags |= SWP_ACTIVATED;
--		if (!ret) {
--			sis->flags |= SWP_FS_OPS;
--			ret = add_swap_extent(sis, 0, sis->max, 0);
--			*span = sis->pages;
--		}
-+		if (ret < 0)
-+			return ret;
-+		sis->flags |= SWP_ACTIVATED;
- 		return ret;
- 	}
- 
-
+base-commit: 19164ad08bf668bca4f4bfbaacaa0a47c1b737a6
+-- 
+2.35.1.1021.g381101b075-goog
 

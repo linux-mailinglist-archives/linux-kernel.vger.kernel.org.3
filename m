@@ -2,116 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938404EA95B
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 10:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BF0C4EA960
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 10:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234009AbiC2Ieg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 04:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
+        id S230229AbiC2IfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 04:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234057AbiC2Iea (ORCPT
+        with ESMTP id S234012AbiC2IfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 04:34:30 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A6B144B70;
-        Tue, 29 Mar 2022 01:32:46 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a02:3030:a:f397:f6bc:b726:2678:839f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 4656A1F43A5D;
-        Tue, 29 Mar 2022 09:32:45 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648542765;
-        bh=AEzY3zrel2SS59cX50Wh3lYNuek+9mxJ6I+jtREm89w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YU6hJCLNE9jMBwWLxpeDSpOSZJt1hv0VfFyYfnkFKmetpz+pDRUVq2l+wy6UvVfaf
-         fv73dNpr3VKyh25uf67PDgtDxWExJU8FyoniTAb4Q2QPR5vaxQKSXTlHUSWrnKxO/L
-         FABs4PvSz3EeoPrOZ2W3hQWFAauzkMqAdbHR8r8TkQVAy/mhAjdZGxT1ZvfLaABHIs
-         t77vF2Zr3JnrwIpt0sEw97I8uEvoYdDeEZ7peQTuhQU0pVJLsojs+65nqS5IJeoLlX
-         CDGVKKCRvmAAh7a8YCxbP+PTOuDkCmf30eil9fOKUifvuZ9TimFzmtXvGWozg3AaVl
-         aY+GYz/QFvfmg==
-Date:   Tue, 29 Mar 2022 10:32:41 +0200
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 02/24] media: doc: Document dual use of H.264
- pic_num/frame_num
-Message-ID: <20220329083241.ctatuvbbhkvswokl@basti-XPS-13-9310>
-References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
- <20220328195936.82552-3-nicolas.dufresne@collabora.com>
+        Tue, 29 Mar 2022 04:35:00 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0716D5F8C5;
+        Tue, 29 Mar 2022 01:33:17 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nZ7Hv-0005q3-GQ; Tue, 29 Mar 2022 10:33:15 +0200
+Message-ID: <5f660108-8812-383c-83e4-29ee0558d623@leemhuis.info>
+Date:   Tue, 29 Mar 2022 10:33:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220328195936.82552-3-nicolas.dufresne@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        az0123456@gmx.de,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Bug 215726 - si2157.c: mention name of the missing firmware file
+To:     Antti Palosaari <crope@iki.fi>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Robert Schlabbach <robert_s@gmx.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1648542798;bfa706d1;
+X-HE-SMSGID: 1nZ7Hv-0005q3-GQ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.03.2022 15:59, Nicolas Dufresne wrote:
->These two fields needs documentation as they have dual meaning. It is also
+Hi, this is your Linux kernel regression tracker.
 
-s/needs/need/
+I noticed a regression report in bugzilla.kernel.org that afaics nobody
+acted upon since it was reported about a week ago, that's why I decided
+to forward it to the lists and all people that seemed to be relevant
+here. To quote from https://bugzilla.kernel.org/show_bug.cgi?id=215726 :
 
->confusing since pic_num is a derived value from frame_num, so this should
->help application developpers. If we ever need to make a V2 of this API, I
+> I get the following error messages when trying to use si2157.ko in linux 5.17:
+> si2157 13-0060: found a 'Silicon Labs Si2157-A30 ROM 0x50'
+> si2157 13-0060: Can't continue without a firmware
+> I did work in linux 5.16.16 without a firmware file. Unfortunately the driver does not tell me the name of the missing firmware file.
 
-s/developpers/developers/
-(seems to be a common typo among native French speakers ;))
+Could somebody take a look into this? Or was this discussed somewhere
+else already? Or even fixed?
 
->would suggest to remove pic_num entirely.
+Anyway, to get this tracked:
 
-I think that suggestion should be placed as a FIXME/TODO comment into the
-source code as it is way easier to find for future developers creating a V2.
+#regzbot introduced: v5.16..v5.17
+#regzbot from: az0123456@gmx.de <az0123456@gmx.de>
+#regzbot title: media: si2157.c: mention name of the missing firmware file
+#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215726
 
->
->Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
->---
-> .../media/v4l/ext-ctrls-codec-stateless.rst            | 10 ++++++++--
-> 1 file changed, 8 insertions(+), 2 deletions(-)
->
->diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
->index 6541e4c32b26..f634f20bcfbe 100644
->--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
->+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
->@@ -649,10 +649,16 @@ Stateless Codec Control ID
->         :c:type:`timeval` in struct :c:type:`v4l2_buffer` to a __u64.
->     * - __u32
->       - ``pic_num``
->-      -
->+      - For short term reference, this should match the derived value PicNum
->+	(8-28) and for long term references it should match the derived value
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
 
-Minor suggestion, for short term you use singular (reference) and for
-long term you use plural (references), I would stick to one of both.
-(Below you only use plural so maybe stick to plural here as well)
+-- 
+Additional information about regzbot:
 
->+	LongTermPicNum (8-29). Note that pic_num is the same as FrameNumWrap
->+	for frame decoding.
->     * - __u16
->       - ``frame_num``
->-      -
->+      - For short term references, this should match the frame_num value from
->+	the slice header syntax (the driver will wrap the value if neeeded). For
->+	long term references, this should be set to the value of
->+	long_term_frame_idx describes in the dec_ref_pic_marking() syntax.
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and the references documentation:
 
-s/describes/described/
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
 
-Greetings,
-Sebastian
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
 
->     * - __u8
->       - ``fields``
->       - Specifies how the DPB entry is referenced. See :ref:`Reference Fields <h264_ref_fields>`
->-- 
->2.34.1
->
+Hint for reporters: when reporting a regression it's in your interest to
+CC the regression list and tell regzbot about the issue, as that ensures
+the regression makes it onto the radar of the Linux kernel's regression
+tracker -- that's in your interest, as it ensures your report won't fall
+through the cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include 'Link:' tag in the patch descriptions pointing to all reports
+about the issue. This has been expected from developers even before
+regzbot showed up for reasons explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'.

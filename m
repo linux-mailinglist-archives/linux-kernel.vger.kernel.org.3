@@ -2,132 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECC04EA575
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F484EA576
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiC2CuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 22:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
+        id S231166AbiC2Cv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 22:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiC2Ct5 (ORCPT
+        with ESMTP id S230033AbiC2Cvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 22:49:57 -0400
-Received: from smtp.tom.com (smtprz02.163.net [106.3.154.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C27A4617D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 19:48:11 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by vip-app02.163.net (Postfix) with ESMTP id 9A1DE440106
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 10:48:10 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
-        t=1648522090; bh=UxIN0gCQWDCPxHwAlV5GfBTdHsvgwdbGdcBxlAMphuU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TItiNbo1FHWTYF+aGHjG2PeBXJVFxoU2jVRHsyUMg/kPJ2x8yB1ebm9pb6/xp86fj
-         etIEqkvkNdXiMFTXAvfMwxUMwQvqNLnWnz8ZNm2b11sDMXedjU8um8sTg/GRD9It+f
-         O2GIZs/I1+A3LttPkHVOsD1noHItP7I14fhjWI0Y=
-Received: from localhost (HELO smtp.tom.com) ([127.0.0.1])
-          by localhost (TOM SMTP Server) with SMTP ID 1189854655
-          for <linux-kernel@vger.kernel.org>;
-          Tue, 29 Mar 2022 10:48:10 +0800 (CST)
-X-Virus-Scanned: Debian amavisd-new at mxtest.tom.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
-        t=1648522090; bh=UxIN0gCQWDCPxHwAlV5GfBTdHsvgwdbGdcBxlAMphuU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TItiNbo1FHWTYF+aGHjG2PeBXJVFxoU2jVRHsyUMg/kPJ2x8yB1ebm9pb6/xp86fj
-         etIEqkvkNdXiMFTXAvfMwxUMwQvqNLnWnz8ZNm2b11sDMXedjU8um8sTg/GRD9It+f
-         O2GIZs/I1+A3LttPkHVOsD1noHItP7I14fhjWI0Y=
-Received: from localhost (unknown [101.93.196.13])
-        by antispamvip.163.net (Postfix) with ESMTPA id E79AA15411AE;
-        Tue, 29 Mar 2022 10:48:06 +0800 (CST)
-Date:   Tue, 29 Mar 2022 10:48:06 +0800
-From:   Mingbao Sun <sunmingbao@tom.com>
-To:     Sagi Grimberg <sagi@grimberg.me>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
-        libin.zhang@dell.com, ao.sun@dell.com
-Subject: Re: [PATCH v2 2/3] nvme-tcp: support specifying the
- congestion-control
-Message-ID: <20220329104806.00000126@tom.com>
-In-Reply-To: <b7b5106a-9c0d-db49-00ab-234756955de8@grimberg.me>
-References: <20220311103414.8255-1-sunmingbao@tom.com>
-        <20220311103414.8255-2-sunmingbao@tom.com>
-        <7121e4be-0e25-dd5f-9d29-0fb02cdbe8de@grimberg.me>
-        <20220325201123.00002f28@tom.com>
-        <b7b5106a-9c0d-db49-00ab-234756955de8@grimberg.me>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
+        Mon, 28 Mar 2022 22:51:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4D21B0BFA;
+        Mon, 28 Mar 2022 19:50:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8474961331;
+        Tue, 29 Mar 2022 02:50:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D2981C340F3;
+        Tue, 29 Mar 2022 02:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648522211;
+        bh=VFNVDTJ88SUpJ6Zwq7mqd7EHeXLrQ/aFLmwE8fbPIoY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Wiv+6vWDp7qX8bzfacwID+uNFwJHaNdMAJt/Ohnc8ju0QIdFFy/BrZVkWWMrCDRCC
+         1Xi+QY+z+WcoLnp/PPEyaHCC/Erqed26StqL6H8xiszgXD9FiRHrEy20rPMJQwuD/5
+         X05OstagM9aAFCwbcl5ZBWBN+iT4H2Gc8rWJ8hnD3OQJn61Y+oeg1Hzo7KxwPUQl84
+         JH3CR1hXMORW5efTx65bq6d0HxJB6JLZsKJq5XSOGaQh4aB6BBaNMgLO19d0IZE5K6
+         6fVC49d9+mUFId2If0XznpVDQo2+UYuHl09vZisHQyBBHOoW3PemNNX+j582HeGu+P
+         E49rA+3USGvdQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B46A5E7BB0B;
+        Tue, 29 Mar 2022 02:50:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3 0/4] kprobes: rethook: x86: Replace kretprobe
+ trampoline with rethook
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164852221173.18072.2644155030177980593.git-patchwork-notify@kernel.org>
+Date:   Tue, 29 Mar 2022 02:50:11 +0000
+References: <164826160914.2455864.505359679001055158.stgit@devnote2>
+In-Reply-To: <164826160914.2455864.505359679001055158.stgit@devnote2>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     ast@kernel.org, andrii.nakryiko@gmail.com, x86@kernel.org,
+        peterz@infradead.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com,
+        dan.carpenter@oracle.com, kernel-janitors@vger.kernel.org,
+        rostedt@goodmis.org, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> As I said, TCP can be tuned in various ways, congestion being just one
-> of them. I'm sure you can find a workload where rmem/wmem will make
-> a difference.
+Hello:
 
-agree.
-but the difference for the knob of rmem/wmem is:
-we could enlarge rmem/wmem for NVMe/TCP via sysctl,
-and it would not bring downside to any other sockets whose
-rmem/wmem are not explicitly specified.
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-> In addition, based on my knowledge, application specific TCP level
-> tuning (like congestion) is not really a common thing to do. So why in
-> nvme-tcp?
->=20
-> So to me at least, it is not clear why we should add it to the driver.
+On Sat, 26 Mar 2022 11:26:49 +0900 you wrote:
+> Hi,
+> 
+> Here are the 3rd version for generic kretprobe and kretprobe on x86 for
+> replacing the kretprobe trampoline with rethook. The previous version
+> is here[1]
+> 
+> [1] https://lore.kernel.org/all/164821817332.2373735.12048266953420821089.stgit@devnote2/T/#u
+> 
+> [...]
 
-As mentioned in the commit message, though we can specify the
-congestion-control of NVMe_over_TCP via sysctl or writing
-'/proc/sys/net/ipv4/tcp_congestion_control', but this also
-changes the congestion-control of all the future TCP sockets on
-the same host that have not been explicitly assigned the
-congestion-control, thus bringing potential impaction on their
-performance.
+Here is the summary with links:
+  - [bpf-next,v3,1/4] kprobes: Use rethook for kretprobe if possible
+    https://git.kernel.org/bpf/bpf/c/73f9b911faa7
+  - [bpf-next,v3,2/4] x86,rethook,kprobes: Replace kretprobe with rethook on x86
+    https://git.kernel.org/bpf/bpf/c/f3a112c0c40d
+  - [bpf-next,v3,3/4] x86,rethook: Fix arch_rethook_trampoline() to generate a complete pt_regs
+    https://git.kernel.org/bpf/bpf/c/0ef6f5c09371
+  - [bpf-next,v3,4/4] x86,kprobes: Fix optprobe trampoline to generate complete pt_regs
+    https://git.kernel.org/bpf/bpf/c/45c23bf4d1a4
 
-For example:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-A server in a data-center with the following 2 NICs:
 
-    - NIC_fron-end, for interacting with clients through WAN
-      (high latency, ms-level)
-
-    - NIC_back-end, for interacting with NVMe/TCP target through LAN
-      (low latency, ECN-enabled, ideal for dctcp)
-
-This server interacts with clients (handling requests) via the fron-end
-network and accesses the NVMe/TCP storage via the back-end network.
-This is a normal use case, right?
-
-For the client devices, we can=E2=80=99t determine their congestion-control.
-But normally it=E2=80=99s cubic by default (per the CONFIG_DEFAULT_TCP_CONG=
-).
-So if we change the default congestion control on the server to dctcp
-on behalf of the NVMe/TCP traffic of the LAN side, it could at the
-same time change the congestion-control of the front-end sockets
-to dctcp while the congestion-control of the client-side is cubic.
-So this is an unexpected scenario.
-
-In addition, distributed storage products like the following also have
-the above problem:
-
-    - The product consists of a cluster of servers.
-
-    - Each server serves clients via its front-end NIC
-     (WAN, high latency).
-
-    - All servers interact with each other via NVMe/TCP via back-end NIC
-     (LAN, low latency, ECN-enabled, ideal for dctcp).

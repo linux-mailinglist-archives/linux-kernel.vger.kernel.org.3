@@ -2,96 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3E64EB66D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9826C4EB64A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239639AbiC2XCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48768 "EHLO
+        id S238781AbiC2XCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239217AbiC2XCf (ORCPT
+        with ESMTP id S238637AbiC2XCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:02:35 -0400
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E019A4E3A8;
-        Tue, 29 Mar 2022 16:00:49 -0700 (PDT)
-Received: by mail-oo1-f46.google.com with SMTP id p10-20020a056820044a00b00320d7d4af22so3330774oou.4;
-        Tue, 29 Mar 2022 16:00:49 -0700 (PDT)
+        Tue, 29 Mar 2022 19:02:00 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F44E496BC;
+        Tue, 29 Mar 2022 16:00:16 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id i11so18982931plr.1;
+        Tue, 29 Mar 2022 16:00:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=o8GRMi4BaOngdJPfp9V0+F4LD+JDrrKljXWdP6AfpMg=;
+        b=M65jFxPlVkdE37G6xltsUGPVyQxAPAQc77jbKKmsJWdTPzFSMHnocL4rTktfNhOlEf
+         JL566q6XWf6wARvbFknVfUEdIvYokyLyzycTNKQ1ChztkZqerMu476RVSjsRfA9TiHkl
+         4bWhBuAQpSy+t9K/YlffBtPxPvKb4q8CndxznH45dgJX9xhjbNilZh5ujFrQ3PX6I//V
+         zWni7Y1AYcbtj7AaIORQMKlvD8xw2TmPotEDVgIa9g18VFTcvr3ty7WJVkWPSdfJPTMq
+         MQJcKmRZo5DnlNLPf/J+e8S6DgvRnrj1ROcHa9CHBykVRtYn9vPZokJeShJOl73xZPdl
+         ePTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0ufsH4kPmkwYwUY4XrUsn1zP4xDV7A/GblHEkZpfic4=;
-        b=wY9q5p2BWT09dM4HY7NO7JepkpuzMT6AjkaCbJp959bQNLoL3gGhe192v7LV+I2nRM
-         veiO9umvfkAuPkSuxvFwZY2TqJp58UrJC/mf2Z/SDqukoni6nFGqAbYcM8Dv88EK9ECx
-         2MswD06F7wQyQnhyplFRXbJvmAc2gMI4qDLm//kdGF+lcqzXWAzC53R9LLNfu5DXpeRX
-         MJTDc395F0hPpPA25dby3gQqDyDfdBA8o0m7ZN1bGm9yMCIPk2Ee1j7ONyZFUo1L7wES
-         EbC1WMqWDvCHpYEvXpl+ZoH93IL6lwFxyM6hHT3RjeU/YAj6/J/Cmd/rG0y2xJxEBvRl
-         j1cw==
-X-Gm-Message-State: AOAM531clsUXr3DbCF88FrjM/GNdg4X+5Sjy6VsvXEZOfjYt1EzQFPnm
-        bxJ1bsP4I+DO8CmSaGVMIQ==
-X-Google-Smtp-Source: ABdhPJy7C1m1dEvCRktWVO5I/Fo2UO/XKIY/6vOY1H7aF/ef2qykqq61ZyIH386G0Fd71hfq7+6S8w==
-X-Received: by 2002:a4a:2f0f:0:b0:320:f7cd:58d2 with SMTP id p15-20020a4a2f0f000000b00320f7cd58d2mr1912170oop.85.1648594849162;
-        Tue, 29 Mar 2022 16:00:49 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m17-20020a0568301e7100b005b256697d7csm9487340otr.72.2022.03.29.16.00.47
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=o8GRMi4BaOngdJPfp9V0+F4LD+JDrrKljXWdP6AfpMg=;
+        b=uk/nc9ARAsJSMkhz+ibSOojUXSp/fUC8yZFmnhNwdFlmj8XeohqSjHmkBIzW6P1mIz
+         OIphQs92Bgj6ZSCTDt1Hu1CXEtdfcXEV3hjjoMioAq0+WFD/Lf1QnETTWD0VhYsmJj5p
+         tYtXPI1Muo8oKuijk+HUROsyCk0MsffsdXYrhQqlaAP3wtwdGztOnINo7aTeJ0gU/9Qu
+         07UqozJoBw/RfGJ7Mj1NJqIXf/StOddxEDKnReH5HQKCNcCGCmDDD1rRrMkMLSM/G1T7
+         PDzuHKUYVgzGONEYkosymli9CoOyzVjGCYwHN5SYMp7KcYwfbBfxWF7KWsUgg7lVj9ei
+         JsDQ==
+X-Gm-Message-State: AOAM5319KjuYOqF+dN/l5iJBAKK29GTnERtkvAA+0rc6JYm7lwUInIqs
+        RwIkSH5HmiSUHePUTGuASlPwaarT8Io=
+X-Google-Smtp-Source: ABdhPJzAvBrlwtlVkQ9fKjD9KB7sU16jv8DVYU8hDEq60nLNnO5WnwWatNyurWLGlMtThb3Ay5vbbQ==
+X-Received: by 2002:a17:902:e748:b0:153:b484:bdf4 with SMTP id p8-20020a170902e74800b00153b484bdf4mr31957764plf.66.1648594815849;
+        Tue, 29 Mar 2022 16:00:15 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
+        by smtp.gmail.com with ESMTPSA id k10-20020a056a00168a00b004f7e2a550ccsm21301092pfc.78.2022.03.29.16.00.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 16:00:48 -0700 (PDT)
-Received: (nullmailer pid 1509915 invoked by uid 1000);
-        Tue, 29 Mar 2022 23:00:46 -0000
-Date:   Tue, 29 Mar 2022 18:00:46 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Axe Yang <axe.yang@mediatek.com>
-Cc:     Tian Tao <tiantao6@hisilicon.com>,
-        Satya Tangirala <satyat@google.com>, linux-mmc@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-mediatek@lists.infradead.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        angelogioacchino.delregno@collabora.com,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        devicetree@vger.kernel.org, Yue Hu <huyue2@yulong.com>,
-        linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, Lucas Stach <dev@lynxeye.de>
-Subject: Re: [PATCH v9 1/3] dt-bindings: mmc: mtk-sd: extend interrupts and
- pinctrls properties
-Message-ID: <YkOPnkFz2DDx7Qr0@robh.at.kernel.org>
-References: <20220329032913.8750-1-axe.yang@mediatek.com>
- <20220329032913.8750-2-axe.yang@mediatek.com>
+        Tue, 29 Mar 2022 16:00:14 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Emma Anholt <emma@anholt.net>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        linux-kernel@vger.kernel.org (open list),
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Wang Qing <wangqing@vivo.com>,
+        Yangtao Li <tiny.windzz@gmail.com>
+Subject: [PATCH 0/9] drm/msm: Userspace allocated GPU addresses
+Date:   Tue, 29 Mar 2022 16:00:48 -0700
+Message-Id: <20220329230105.601666-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220329032913.8750-2-axe.yang@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Mar 2022 11:29:11 +0800, Axe Yang wrote:
-> Extend interrupts and pinctrls for SDIO wakeup interrupt feature.
-> This feature allow SDIO devices alarm asynchronous interrupt to host
-> even when host stop providing clock to SDIO card. An extra wakeup
-> interrupt and pinctrl states for SDIO DAT1 pin state switching are
-> required in this scenario.
-> 
-> Signed-off-by: Axe Yang <axe.yang@mediatek.com>
-> ---
->  .../devicetree/bindings/mmc/mtk-sd.yaml         | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
-> 
+From: Rob Clark <robdclark@chromium.org>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+The first five paches are various cleanups and simplifications.  The
+next two get rid of redundant vma lookups in the submit and retire
+paths.  Following that, fenced vma lets us indicate a fence value
+following which the vma is no longer used, which is needed because
+otherwise userspace could observe the signaled fence prior to
+retire_submits() finishing.  (With userspace allocated GPU addresses
+userspace is tracking when a buffer is no longer used and it's vma can
+be deleted.)  And finally the last patch adds the new uabi for user-
+space allocated iova.
+
+Rob Clark (9):
+  drm/msm/gem: Move prototypes
+  drm/msm/gpu: Drop duplicate fence counter
+  drm/msm/gem: Split out inuse helper
+  drm/msm/gem: Drop PAGE_SHIFT for address space mm
+  drm/msm: Drop msm_gem_iova()
+  drm/msm/gem: Rework vma lookup and pin
+  drm/msm/gem: Split vma lookup and pin
+  drm/msm/gem: Add fenced vma unpin
+  drm/msm: Add a way for userspace to allocate GPU iova
+
+ drivers/gpu/drm/msm/adreno/a5xx_gpu.c   |   2 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c   |   2 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c   |   2 +-
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c |  14 ++-
+ drivers/gpu/drm/msm/msm_drv.c           |  21 ++++
+ drivers/gpu/drm/msm/msm_drv.h           |  23 ----
+ drivers/gpu/drm/msm/msm_fb.c            |  16 ++-
+ drivers/gpu/drm/msm/msm_fence.c         |   6 +-
+ drivers/gpu/drm/msm/msm_fence.h         |   3 +
+ drivers/gpu/drm/msm/msm_gem.c           | 151 ++++++++++++++----------
+ drivers/gpu/drm/msm/msm_gem.h           |  47 +++++++-
+ drivers/gpu/drm/msm/msm_gem_submit.c    |  17 ++-
+ drivers/gpu/drm/msm/msm_gem_vma.c       |  59 ++++++---
+ drivers/gpu/drm/msm/msm_gpu.c           |   8 +-
+ drivers/gpu/drm/msm/msm_gpu.h           |   2 +-
+ drivers/gpu/drm/msm/msm_ringbuffer.c    |  12 +-
+ drivers/gpu/drm/msm/msm_ringbuffer.h    |   1 -
+ include/uapi/drm/msm_drm.h              |   3 +
+ 18 files changed, 258 insertions(+), 131 deletions(-)
+
+-- 
+2.35.1
+

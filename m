@@ -2,219 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29244EAF63
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3274EAF64
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236587AbiC2Oju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 10:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33076 "EHLO
+        id S237962AbiC2Okj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 10:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233612AbiC2Ojq (ORCPT
+        with ESMTP id S232360AbiC2Okh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 10:39:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E67222F3FC
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:38:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648564682;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Tue, 29 Mar 2022 10:40:37 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284FA1BE8E;
+        Tue, 29 Mar 2022 07:38:54 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 14:38:51 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1648564732;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=phRSkDpN4Oul95zrD2pvhXv5WfnDRoZp6xYqZyAQWOU=;
-        b=gRo1ISOuPOV5EeXS7oQ31PT4RttW8uuRkiE1AuY4gY7V2ktPQN550kOg1s3BNe7DPOHL9g
-        EBCkdhO52mLS57Dt1n4e+Wn/CmQisZo7ZNWHJDcJmx+AFxkkPOXPuT0WfKC6ZxtijGHkD+
-        3EgfkSWi28VX1h0PkoK8jVEh+2vabkU=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-477-3NYwaVlYMnqORkdNeASr1g-1; Tue, 29 Mar 2022 10:38:00 -0400
-X-MC-Unique: 3NYwaVlYMnqORkdNeASr1g-1
-Received: by mail-wm1-f72.google.com with SMTP id i6-20020a1c5406000000b0038c97ed0db5so6896390wmb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:37:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=phRSkDpN4Oul95zrD2pvhXv5WfnDRoZp6xYqZyAQWOU=;
-        b=68wGoVg27UeHKXlnDYqOybkyY/ZPXmeHPDD5CK0YUAlHUa2dFlkp2ruIn+NkHUiI4U
-         EV+5C17j2T2NyjSFTMLF3JofjJXOdw31FavUhfyT205mGPdJe4LKvwd7mMSaL9kYJT3y
-         Hd+8IxQ4SbgDdc7p5KTV9sF81fkEDUwhogGXmeIhzp7cXrPQhNwreBtl448SsKZV2VA6
-         zsWKDIe2UpWt4N7tZyMM8c2xAmLoayZIFvawpKtsHfbgXFvB9IrV9P7qGLfAfC14a89C
-         qDT4FFQM56xT+uZonsHovARTu13Jw/K0NVocUiGKs819L0jWJT5/ilTre3tIBiyis4KN
-         Ljnw==
-X-Gm-Message-State: AOAM532aCP8nCCrP+W+h9zmrumCoNd+CnskfuzXylLE9ihUPJnI5uBGh
-        T+YqzMU744LoB4AfBs2M1p9ytYMbgoNNwLFOHONd1wEau7kmzz0dlAUnmURpIFNIea6StHxmzT/
-        e99EcX9PWXrKIYnY30ufSbSDi
-X-Received: by 2002:a1c:f413:0:b0:37b:d1de:5762 with SMTP id z19-20020a1cf413000000b0037bd1de5762mr7472943wma.108.1648564678948;
-        Tue, 29 Mar 2022 07:37:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwHdbEkKXOoWfvK6LYBI3WT4Tuyh2gv+TYwixKz1bLZ9mvPfp452vVOpd5o/3N7r+dWpmKawA==
-X-Received: by 2002:a1c:f413:0:b0:37b:d1de:5762 with SMTP id z19-20020a1cf413000000b0037bd1de5762mr7472914wma.108.1648564678647;
-        Tue, 29 Mar 2022 07:37:58 -0700 (PDT)
-Received: from redhat.com ([2.52.9.207])
-        by smtp.gmail.com with ESMTPSA id 14-20020a056000154e00b00203f8adde0csm19010792wry.32.2022.03.29.07.37.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 07:37:57 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 10:37:53 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Keir Fraser <keirf@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re:
-Message-ID: <20220329100859-mutt-send-email-mst@kernel.org>
-References: <Yj1hkpyUqJE9sQ2p@redhat.com>
- <CACGkMEunsuWhn+aB2dM7noU257M9JV6jDjkQXLyOA+GjEoz_iw@mail.gmail.com>
- <20220325050947-mutt-send-email-mst@kernel.org>
- <CACGkMEvioAVMmB+ab2xXB2YPECtwi1J55u8mRRk9-JAjFSZ8vg@mail.gmail.com>
- <20220325060659-mutt-send-email-mst@kernel.org>
- <CACGkMEu4mRfNbJXJtAFzhyd55fD7phUDKnVtYW0aqRnQmT_bYw@mail.gmail.com>
- <20220328015757-mutt-send-email-mst@kernel.org>
- <CACGkMEu+fax6YYwhfbc1yoSxv6o1FTQyrOheVTmUfqGvmbAEfA@mail.gmail.com>
- <20220328062452-mutt-send-email-mst@kernel.org>
- <87fsn1f96e.ffs@tglx>
+        bh=UKckQnJOCfFqfkTupAwTwDN05oNgl1gAN+rYy9bq1BI=;
+        b=p6X8I/iXjdvz6+wd+KAFnD9tBOy93HKq/k/FhRlMljpHBa9Ut4dRlWMtvAL1pm5O71aqpz
+        5v+4m943DfafWNggIPxMihH0x69HrmrYTTelb2+2xmNeGt6q7JE5lGydDpFXP23/HKt9yo
+        wnsd57y0s8B5U4LN1XbuYQQtOn4rqcghjmuc3HhGUOeN2Q/XVpkrrs6ovO598wrfuHbcd6
+        LQMjY39dmYrPd8hA/7V7q+9P9ibgDxZ3m5h94cC68zVHIRJT5qQylwVEAci9d4mDzUp+Lo
+        VK9rAoKF4U7a96CXHLKkF01qbyfSlqiKhnIv2QHM3Vh3f45uxUoeKelf1YPGAA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1648564732;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UKckQnJOCfFqfkTupAwTwDN05oNgl1gAN+rYy9bq1BI=;
+        b=czlzVgzmPl7yrwhj24UTyxzAdUNvV6369/G6xbAHdpCdG2BrBz85+FI27cea7nBkP+kbCy
+        yE+Nc53q/iBbN9Dg==
+From:   "tip-bot2 for Joerg Roedel" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/sev: Unroll string mmio with
+ CC_ATTR_GUEST_UNROLL_STRING_IO
+Cc:     Joerg Roedel <jroedel@suse.de>, Borislav Petkov <bp@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        <stable@vger.kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220321093351.23976-1-joro@8bytes.org>
+References: <20220321093351.23976-1-joro@8bytes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87fsn1f96e.ffs@tglx>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <164856473151.389.17789498051927031377.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 10:35:21AM +0200, Thomas Gleixner wrote:
-> On Mon, Mar 28 2022 at 06:40, Michael S. Tsirkin wrote:
-> > On Mon, Mar 28, 2022 at 02:18:22PM +0800, Jason Wang wrote:
-> >> > > So I think we might talk different issues:
-> >> > >
-> >> > > 1) Whether request_irq() commits the previous setups, I think the
-> >> > > answer is yes, since the spin_unlock of desc->lock (release) can
-> >> > > guarantee this though there seems no documentation around
-> >> > > request_irq() to say this.
-> >> > >
-> >> > > And I can see at least drivers/video/fbdev/omap2/omapfb/dss/dispc.c is
-> >> > > using smp_wmb() before the request_irq().
-> 
-> That's a complete bogus example especially as there is not a single
-> smp_rmb() which pairs with the smp_wmb().
-> 
-> >> > > And even if write is ordered we still need read to be ordered to be
-> >> > > paired with that.
-> >
-> > IMO it synchronizes with the CPU to which irq is
-> > delivered. Otherwise basically all drivers would be broken,
-> > wouldn't they be?
-> > I don't know whether it's correct on all platforms, but if not
-> > we need to fix request_irq.
-> 
-> There is nothing to fix:
-> 
-> request_irq()
->    raw_spin_lock_irq(desc->lock);       // ACQUIRE
->    ....
->    raw_spin_unlock_irq(desc->lock);     // RELEASE
-> 
-> interrupt()
->    raw_spin_lock(desc->lock);           // ACQUIRE
->    set status to IN_PROGRESS
->    raw_spin_unlock(desc->lock);         // RELEASE
->    invoke handler()
-> 
-> So anything which the driver set up _before_ request_irq() is visible to
-> the interrupt handler. No?
-> >> What happens if an interrupt is raised in the middle like:
-> >> 
-> >> smp_store_release(dev->irq_soft_enabled, true)
-> >> IRQ handler
-> >> synchornize_irq()
-> 
-> This is bogus. The obvious order of things is:
-> 
->     dev->ok = false;
->     request_irq();
-> 
->     moar_setup();
->     synchronize_irq();  // ACQUIRE + RELEASE
->     dev->ok = true;
-> 
-> The reverse operation on teardown:
-> 
->     dev->ok = false;
->     synchronize_irq();  // ACQUIRE + RELEASE
-> 
->     teardown();
-> 
-> So in both cases a simple check in the handler is sufficient:
-> 
-> handler()
->     if (!dev->ok)
->     	return;
+The following commit has been merged into the x86/urgent branch of tip:
 
+Commit-ID:     4009a4ac82dd95b8cd2b62bd30019476983f0aff
+Gitweb:        https://git.kernel.org/tip/4009a4ac82dd95b8cd2b62bd30019476983f0aff
+Author:        Joerg Roedel <jroedel@suse.de>
+AuthorDate:    Mon, 21 Mar 2022 10:33:51 +01:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Tue, 29 Mar 2022 15:59:16 +02:00
 
-Thanks a lot for the analysis Thomas. This is more or less what I was
-thinking.
+x86/sev: Unroll string mmio with CC_ATTR_GUEST_UNROLL_STRING_IO
 
-> 
-> I'm not understanding what you folks are trying to "fix" here.
+The io-specific memcpy/memset functions use string mmio accesses to do
+their work. Under SEV, the hypervisor can't emulate these instructions
+because they read/write directly from/to encrypted memory.
 
-We are trying to fix the driver since at the moment it does not
-have the dev->ok flag at all.
+KVM will inject a page fault exception into the guest when it is asked
+to emulate string mmio instructions for an SEV guest:
 
+  BUG: unable to handle page fault for address: ffffc90000065068
+  #PF: supervisor read access in kernel mode
+  #PF: error_code(0x0000) - not-present page
+  PGD 8000100000067 P4D 8000100000067 PUD 80001000fb067 PMD 80001000fc067 PTE 80000000fed40173
+  Oops: 0000 [#1] PREEMPT SMP NOPTI
+  CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc7 #3
 
-And I suspect virtio is not alone in that.
-So it would have been nice if there was a standard flag
-replacing the driver-specific dev->ok above, and ideally
-would also handle the case of an interrupt triggering
-too early by deferring the interrupt until the flag is set.
+As string mmio for an SEV guest can not be supported by the
+hypervisor, unroll the instructions for CC_ATTR_GUEST_UNROLL_STRING_IO
+enabled kernels.
 
-And in fact, it does kind of exist: IRQF_NO_AUTOEN, and you would call
-enable_irq instead of dev->ok = true, except
-- it doesn't work with affinity managed IRQs
-- it does not work with shared IRQs
+This issue appears when kernels are launched in recent libvirt-managed
+SEV virtual machines, because virt-install started to add a tpm-crb
+device to the guest by default and proactively because, raisins:
 
-So using dev->ok as you propose above seems better at this point.
+  https://github.com/virt-manager/virt-manager/commit/eb58c09f488b0633ed1eea012cd311e48864401e
 
-> If any
-> driver does this in the wrong order, then the driver is broken.
+and as that commit says, the default adding of a TPM can be disabled
+with "virt-install ... --tpm none".
 
-I agree, however:
-$ git grep synchronize_irq `git grep -l request_irq drivers/net/`|wc -l
-113
-$ git grep -l request_irq drivers/net/|wc -l
-397
+The kernel driver for tpm-crb uses memcpy_to/from_io() functions to
+access MMIO memory, resulting in a page-fault injected by KVM and
+crashing the kernel at boot.
 
-I suspect there are more drivers which in theory need the
-synchronize_irq dance but in practice do not execute it.
+  [ bp: Massage and extend commit message. ]
 
+Fixes: d8aa7eea78a1 ('x86/mm: Add Secure Encrypted Virtualization (SEV) support')
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220321093351.23976-1-joro@8bytes.org
+---
+ arch/x86/lib/iomem.c | 65 +++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 57 insertions(+), 8 deletions(-)
 
-> Sure, you can do the same with:
-> 
->     dev->ok = false;
->     request_irq();
->     moar_setup();
->     smp_wmb();
->     dev->ok = true;
-> 
-> for the price of a smp_rmb() in the interrupt handler:
-> 
-> handler()
->     if (!dev->ok)
->     	return;
->     smp_rmb();
-> 
-> but that's only working for the setup case correctly and not for
-> teardown.
-> 
-> Thanks,
-> 
->         tglx
-
+diff --git a/arch/x86/lib/iomem.c b/arch/x86/lib/iomem.c
+index df50451..3e2f33f 100644
+--- a/arch/x86/lib/iomem.c
++++ b/arch/x86/lib/iomem.c
+@@ -22,7 +22,7 @@ static __always_inline void rep_movs(void *to, const void *from, size_t n)
+ 		     : "memory");
+ }
+ 
+-void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
++static void string_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
+ {
+ 	if (unlikely(!n))
+ 		return;
+@@ -38,9 +38,8 @@ void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
+ 	}
+ 	rep_movs(to, (const void *)from, n);
+ }
+-EXPORT_SYMBOL(memcpy_fromio);
+ 
+-void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
++static void string_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
+ {
+ 	if (unlikely(!n))
+ 		return;
+@@ -56,14 +55,64 @@ void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
+ 	}
+ 	rep_movs((void *)to, (const void *) from, n);
+ }
++
++static void unrolled_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
++{
++	const volatile char __iomem *in = from;
++	char *out = to;
++	int i;
++
++	for (i = 0; i < n; ++i)
++		out[i] = readb(&in[i]);
++}
++
++static void unrolled_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
++{
++	volatile char __iomem *out = to;
++	const char *in = from;
++	int i;
++
++	for (i = 0; i < n; ++i)
++		writeb(in[i], &out[i]);
++}
++
++static void unrolled_memset_io(volatile void __iomem *a, int b, size_t c)
++{
++	volatile char __iomem *mem = a;
++	int i;
++
++	for (i = 0; i < c; ++i)
++		writeb(b, &mem[i]);
++}
++
++void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
++{
++	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO))
++		unrolled_memcpy_fromio(to, from, n);
++	else
++		string_memcpy_fromio(to, from, n);
++}
++EXPORT_SYMBOL(memcpy_fromio);
++
++void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
++{
++	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO))
++		unrolled_memcpy_toio(to, from, n);
++	else
++		string_memcpy_toio(to, from, n);
++}
+ EXPORT_SYMBOL(memcpy_toio);
+ 
+ void memset_io(volatile void __iomem *a, int b, size_t c)
+ {
+-	/*
+-	 * TODO: memset can mangle the IO patterns quite a bit.
+-	 * perhaps it would be better to use a dumb one:
+-	 */
+-	memset((void *)a, b, c);
++	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO)) {
++		unrolled_memset_io(a, b, c);
++	} else {
++		/*
++		 * TODO: memset can mangle the IO patterns quite a bit.
++		 * perhaps it would be better to use a dumb one:
++		 */
++		memset((void *)a, b, c);
++	}
+ }
+ EXPORT_SYMBOL(memset_io);

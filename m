@@ -2,248 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AD54EAADF
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCDB4EAAE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234905AbiC2KA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 06:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
+        id S234918AbiC2KBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 06:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231864AbiC2KA1 (ORCPT
+        with ESMTP id S231526AbiC2KBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 06:00:27 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68ABF3BF91;
-        Tue, 29 Mar 2022 02:58:44 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id r13so23969444wrr.9;
-        Tue, 29 Mar 2022 02:58:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Cqxr6OhCLAeis14Ai1MXs5IbZsdF6NcwLCK9JA8OCCk=;
-        b=APkLu1nrcJCt/DUy6IoHQg+vXFfPUQpIBuInTdRsn9n+DSItES39e8hU5u3bRelbyB
-         RymW7jdF2JhdotCR/QQ8OAdIj1/IPVJT3LXE7aiQ8rb+UPFgIdpFOk4U3DtB7q1wXliw
-         8EgXvGen5NVyIzI5lgOQB7WSMNfyP9yN2RpYRxYm31LxnREzsSyd1tFUkQBRXjYWZu7o
-         adexctW1y40/DCBI7WHJL6o0EY3bKZ/CY0zixRissxuynDmho4ND2RwV+qddNCW7QFWN
-         Idce5bpc1guxX9+YSz309F2GuQNMRf4M3ZjEEKTMUK+Iumyrk8itZSVBpBVQRl+jl4kD
-         XBMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Cqxr6OhCLAeis14Ai1MXs5IbZsdF6NcwLCK9JA8OCCk=;
-        b=C1J/DyGkTE9RhJMj5aaimMhJuuBB/qRuPnQ0ONyiJtEDRZoCWN6gWZqe7O6TsApQ17
-         mp3bKZgxl3R9yJ38QqqY25z0F8XnpuSDbs1h2K5FiZ0CZGwYqdT7XC/k17z7+iLe5e0d
-         e3rCBBY1ByI+ZiSbnaqeXRvwNqKaY3kk5JpbuoU6cMNj3m50YS9l01DbsHaxWeng0qPq
-         lyYUo1dhy2gzodCh/YmwV8tSAd/Ixzq/wpzwegzTvtIPTjb9p40vMx8Zudjhow8U7gSi
-         HRdbxtSB8EikdNkekQSpLJOCeaVX3Prk8ACZHp03xWybLhSr5t4v9a/x09smrlWgFqDr
-         I6kg==
-X-Gm-Message-State: AOAM533+KDG7Ome39VsnMH1AFMLaz7niwcHX5doPqzPnpPPwrnXHAmOX
-        SoPQ7ods4KL0GUDBO8+TfUY=
-X-Google-Smtp-Source: ABdhPJzxnYdYXMhuUZ0oZHT2rxzYUX+MKBj+eCpNozcEdgx5kp2txaItFhIM1PdWk5f+lsuYwpzm3g==
-X-Received: by 2002:a5d:588c:0:b0:205:7f17:3901 with SMTP id n12-20020a5d588c000000b002057f173901mr29825326wrf.359.1648547922831;
-        Tue, 29 Mar 2022 02:58:42 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id p23-20020a1c5457000000b0038c98c12ea9sm1812512wmi.1.2022.03.29.02.58.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 02:58:42 -0700 (PDT)
-Message-ID: <9e4e1905-6c43-44c6-e812-58d802baf88b@gmail.com>
-Date:   Tue, 29 Mar 2022 11:58:41 +0200
+        Tue, 29 Mar 2022 06:01:21 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEBA4B85B;
+        Tue, 29 Mar 2022 02:59:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6CF8ECE1928;
+        Tue, 29 Mar 2022 09:59:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AF64C2BBE4;
+        Tue, 29 Mar 2022 09:59:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648547974;
+        bh=vzjLU8ab0grTtVHaa3X1pUiBpScWWczex6d0LCSx96o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bgu4FcQ3yRdqLKgv3jq1VSMcskv4N6rz5SNsU+Gd4DuUheCUqCR0YJv9Udcw8OTa3
+         f9kwjt5kdARd8XxidgW913nsva+bmVThVlj5OIrcrGUh3BoKx0G1l7oPDfG4dg2g9W
+         OOALjEEH3yByEOoxAx9pkkIPJyiaT77dMqWTH467vER+XzrZvD43FkTMnyMWmmioDf
+         6aHlW6K9PPMf1HLrqClpXQ94g5vBw0Cg/NvnILR9P6x6TdcFMpLPkYunAAPIkcdf5x
+         GtthBCbF090SvTpT0hHDxK6FhfGsX3bPk+TsdgBzGeEiMtPQ6cE4NelGo16X2EBbc9
+         ZeC3ANeioSRxg==
+Date:   Tue, 29 Mar 2022 10:59:33 +0100
+From:   Filipe Manana <fdmanana@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Filipe Manana <fdmanana@suse.com>,
+        David Sterba <dsterba@suse.com>, clm@fb.com, jbacik@fb.com,
+        linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.17 17/21] btrfs: reset last_reflink_trans after
+ fsyncing inode
+Message-ID: <YkLYhad7iX2Bv/j1@debian9.Home>
+References: <20220328194157.1585642-1-sashal@kernel.org>
+ <20220328194157.1585642-17-sashal@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 16/22] arm64: dts: mt8192: Add vcodec lat and core
- nodes
-Content-Language: en-US
-To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Hui Liu <hui.liu@mediatek.com>
-References: <20220318144534.17996-1-allen-kh.cheng@mediatek.com>
- <20220318144534.17996-17-allen-kh.cheng@mediatek.com>
- <70350446-9e89-3c7b-d515-22cb2ed5a9ca@gmail.com>
- <af19b42faf9a510578e48d6f497e7d2069327195.camel@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <af19b42faf9a510578e48d6f497e7d2069327195.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220328194157.1585642-17-sashal@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 29/03/2022 11:09, allen-kh.cheng wrote:
-> Hi Matthias,
+On Mon, Mar 28, 2022 at 03:41:52PM -0400, Sasha Levin wrote:
+> From: Filipe Manana <fdmanana@suse.com>
 > 
-> On Fri, 2022-03-25 at 16:22 +0100, Matthias Brugger wrote:
->>
->> On 18/03/2022 15:45, Allen-KH Cheng wrote:
->>> Add vcodec lat and core nodes for mt8192 SoC.
->>>
->>> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
->>> ---
->>>    arch/arm64/boot/dts/mediatek/mt8192.dtsi | 61
->>> ++++++++++++++++++++++++
->>>    1 file changed, 61 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
->>> b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
->>> index 63893779b193..71ad3adeed51 100644
->>> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
->>> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
->>> @@ -1285,6 +1285,67 @@
->>>    			power-domains = <&spm
->>> MT8192_POWER_DOMAIN_ISP2>;
->>>    		};
->>>    
->>> +		vcodec_dec: vcodec-dec@16000000 {
->>> +			compatible = "mediatek,mt8192-vcodec-dec";
->>> +			reg = <0 0x16000000 0 0x1000>;	/* VDEC_SYS
->>> */
->>> +			mediatek,scp = <&scp>;
->>> +			iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
->>> +			#address-cells = <2>;
->>> +			#size-cells = <2>;
->>> +			ranges = <0 0 0 0x16000000 0 0x26000>;
->>> +
->>> +			vcodec_lat: vcodec-lat@10000 {
->>> +				compatible = "mediatek,mtk-vcodec-lat";
->>> +				reg = <0x0 0x10000 0 0x800>;		
->>> /* VDEC_MISC */
->>> +				interrupts = <GIC_SPI 426
->>> IRQ_TYPE_LEVEL_HIGH 0>;
->>> +				iommus = <&iommu0
->>> M4U_PORT_L5_VDEC_LAT0_VLD_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L5_VDEC_LAT0_VLD2_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L5_VDEC_LAT0_AVC_MV_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L5_VDEC_LAT0_PRED_RD_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L5_VDEC_LAT0_TILE_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L5_VDEC_LAT0_WDMA_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L5_VDEC_LAT0_RG_CTRL_DMA_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L5_VDEC_UFO_ENC_EXT>;
->>> +				clocks = <&topckgen CLK_TOP_VDEC_SEL>,
->>> +					 <&vdecsys_soc
->>> CLK_VDEC_SOC_VDEC>,
->>> +					 <&vdecsys_soc
->>> CLK_VDEC_SOC_LAT>,
->>> +					 <&vdecsys_soc
->>> CLK_VDEC_SOC_LARB1>,
->>> +					 <&topckgen
->>> CLK_TOP_MAINPLL_D4>;
->>> +				clock-names = "vdec-sel", "vdec-soc-
->>> vdec", "vdec-soc-lat",
->>> +					      "vdec-vdec", "vdec-top";
->>
->> Clock names do not match binding description. We have superfluous
->> "vdec-"
->> prefix. Same holds for mtk-vcodec-core. Anway I applied that patch as
->> the driver
->> does not care about the clock name. In any case it would be good if
->> you could
->> send a follow-up patch to fix the clock name.
->>
->> Applied, thanks
->>
+> [ Upstream commit 23e3337faf73e5bb2610697977e175313d48acb0 ]
 > 
-> Sorry, This is our mistake. those clk names should not append "vdec-"
-> prefix from Rob's suggestion [1]. ('vdec-' is redundant)
+> When an inode has a last_reflink_trans matching the current transaction,
+> we have to take special care when logging its checksums in order to
+> avoid getting checksum items with overlapping ranges in a log tree,
+> which could result in missing checksums after log replay (more on that
+> in the changelogs of commit 40e046acbd2f36 ("Btrfs: fix missing data
+> checksums after replaying a log tree") and commit e289f03ea79bbc ("btrfs:
+> fix corrupt log due to concurrent fsync of inodes with shared extents")).
+> We also need to make sure a full fsync will copy all old file extent
+> items it finds in modified leaves, because they might have been copied
+> from some other inode.
 > 
-> Please drop this patch in v5.18-next/dts64.  I will send the corrected
-> version.
+> However once we fsync an inode, we don't need to keep paying the price of
+> that extra special care in future fsyncs done in the same transaction,
+> unless the inode is used for another reflink operation or the full sync
+> flag is set on it (truncate, failure to allocate extent maps for holes,
+> and other exceptional and infrequent cases).
 > 
+> So after we fsync an inode reset its last_unlink_trans to zero. In case
+> another reflink happens, we continue to update the last_reflink_trans of
+> the inode, just as before. Also set last_reflink_trans to the generation
+> of the last transaction that modified the inode whenever we need to set
+> the full sync flag on the inode, just like when we need to load an inode
+> from disk after eviction.
+> 
+> Signed-off-by: Filipe Manana <fdmanana@suse.com>
+> Signed-off-by: David Sterba <dsterba@suse.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-Ok, I dropped the commit from the branch for now.
+What's the motivation to backport this to stable?
 
-> I apologize any inconvenience caused.
+It doesn't fix a bug or any regression, as far as I know at least.
+Or is it to make some other backport easier?
+
+Thanks.
+
+> ---
+>  fs/btrfs/btrfs_inode.h | 30 ++++++++++++++++++++++++++++++
+>  fs/btrfs/file.c        |  7 +++----
+>  fs/btrfs/inode.c       | 12 +++++-------
+>  fs/btrfs/reflink.c     |  5 ++---
+>  fs/btrfs/tree-log.c    |  8 ++++++++
+>  5 files changed, 48 insertions(+), 14 deletions(-)
 > 
-
-No worries.
-
-Regards,
-Matthias
-
-> [1] https://lore.kernel.org/all/YYFCaHI%2FDASUz+Vu@robh.at.kernel.org/
-> 
-> Thanks,
-> Allen
-> 
->>> +				assigned-clocks = <&topckgen
->>> CLK_TOP_VDEC_SEL>;
->>> +				assigned-clock-parents = <&topckgen
->>> CLK_TOP_MAINPLL_D4>;
->>> +				power-domains = <&spm
->>> MT8192_POWER_DOMAIN_VDEC>;
->>> +			};
->>> +
->>> +			vcodec_core: vcodec-core@25000 {
->>> +				compatible = "mediatek,mtk-vcodec-
->>> core";
->>> +				reg = <0 0x25000 0 0x1000>;	/*
->>> VDEC_CORE_MISC */
->>> +				interrupts = <GIC_SPI 425
->>> IRQ_TYPE_LEVEL_HIGH 0>;
->>> +				iommus = <&iommu0
->>> M4U_PORT_L4_VDEC_MC_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L4_VDEC_UFO_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L4_VDEC_PP_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L4_VDEC_PRED_RD_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L4_VDEC_PRED_WR_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L4_VDEC_PPWRAP_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L4_VDEC_TILE_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L4_VDEC_VLD_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L4_VDEC_VLD2_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L4_VDEC_AVC_MV_EXT>,
->>> +					 <&iommu0
->>> M4U_PORT_L4_VDEC_RG_CTRL_DMA_EXT>;
->>> +				clocks = <&topckgen CLK_TOP_VDEC_SEL>,
->>> +					 <&vdecsys CLK_VDEC_VDEC>,
->>> +					 <&vdecsys CLK_VDEC_LAT>,
->>> +					 <&vdecsys CLK_VDEC_LARB1>,
->>> +					 <&topckgen
->>> CLK_TOP_MAINPLL_D4>;
->>> +				clock-names = "vdec-sel", "vdec-soc-
->>> vdec", "vdec-soc-lat",
->>> +					      "vdec-vdec", "vdec-top";
->>> +				assigned-clocks = <&topckgen
->>> CLK_TOP_VDEC_SEL>;
->>> +				assigned-clock-parents = <&topckgen
->>> CLK_TOP_MAINPLL_D4>;
->>> +				power-domains = <&spm
->>> MT8192_POWER_DOMAIN_VDEC2>;
->>> +			};
->>> +		};
->>> +
->>>    		larb5: larb@1600d000 {
->>>    			compatible = "mediatek,mt8192-smi-larb";
->>>    			reg = <0 0x1600d000 0 0x1000>;
+> diff --git a/fs/btrfs/btrfs_inode.h b/fs/btrfs/btrfs_inode.h
+> index b3e46aabc3d8..d0b52b106041 100644
+> --- a/fs/btrfs/btrfs_inode.h
+> +++ b/fs/btrfs/btrfs_inode.h
+> @@ -333,6 +333,36 @@ static inline void btrfs_set_inode_last_sub_trans(struct btrfs_inode *inode)
+>  	spin_unlock(&inode->lock);
+>  }
+>  
+> +/*
+> + * Should be called while holding the inode's VFS lock in exclusive mode or in a
+> + * context where no one else can access the inode concurrently (during inode
+> + * creation or when loading an inode from disk).
+> + */
+> +static inline void btrfs_set_inode_full_sync(struct btrfs_inode *inode)
+> +{
+> +	set_bit(BTRFS_INODE_NEEDS_FULL_SYNC, &inode->runtime_flags);
+> +	/*
+> +	 * The inode may have been part of a reflink operation in the last
+> +	 * transaction that modified it, and then a fsync has reset the
+> +	 * last_reflink_trans to avoid subsequent fsyncs in the same
+> +	 * transaction to do unnecessary work. So update last_reflink_trans
+> +	 * to the last_trans value (we have to be pessimistic and assume a
+> +	 * reflink happened).
+> +	 *
+> +	 * The ->last_trans is protected by the inode's spinlock and we can
+> +	 * have a concurrent ordered extent completion update it. Also set
+> +	 * last_reflink_trans to ->last_trans only if the former is less than
+> +	 * the later, because we can be called in a context where
+> +	 * last_reflink_trans was set to the current transaction generation
+> +	 * while ->last_trans was not yet updated in the current transaction,
+> +	 * and therefore has a lower value.
+> +	 */
+> +	spin_lock(&inode->lock);
+> +	if (inode->last_reflink_trans < inode->last_trans)
+> +		inode->last_reflink_trans = inode->last_trans;
+> +	spin_unlock(&inode->lock);
+> +}
+> +
+>  static inline bool btrfs_inode_in_log(struct btrfs_inode *inode, u64 generation)
+>  {
+>  	bool ret = false;
+> diff --git a/fs/btrfs/file.c b/fs/btrfs/file.c
+> index a0179cc62913..f38cc706a6cf 100644
+> --- a/fs/btrfs/file.c
+> +++ b/fs/btrfs/file.c
+> @@ -2474,7 +2474,7 @@ static int fill_holes(struct btrfs_trans_handle *trans,
+>  	hole_em = alloc_extent_map();
+>  	if (!hole_em) {
+>  		btrfs_drop_extent_cache(inode, offset, end - 1, 0);
+> -		set_bit(BTRFS_INODE_NEEDS_FULL_SYNC, &inode->runtime_flags);
+> +		btrfs_set_inode_full_sync(inode);
+>  	} else {
+>  		hole_em->start = offset;
+>  		hole_em->len = end - offset;
+> @@ -2495,8 +2495,7 @@ static int fill_holes(struct btrfs_trans_handle *trans,
+>  		} while (ret == -EEXIST);
+>  		free_extent_map(hole_em);
+>  		if (ret)
+> -			set_bit(BTRFS_INODE_NEEDS_FULL_SYNC,
+> -					&inode->runtime_flags);
+> +			btrfs_set_inode_full_sync(inode);
+>  	}
+>  
+>  	return 0;
+> @@ -2850,7 +2849,7 @@ int btrfs_replace_file_extents(struct btrfs_inode *inode,
+>  	 * maps for the replacement extents (or holes).
+>  	 */
+>  	if (extent_info && !extent_info->is_new_extent)
+> -		set_bit(BTRFS_INODE_NEEDS_FULL_SYNC, &inode->runtime_flags);
+> +		btrfs_set_inode_full_sync(inode);
+>  
+>  	if (ret)
+>  		goto out_trans;
+> diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
+> index 5aace4c13519..3783fdf78da8 100644
+> --- a/fs/btrfs/inode.c
+> +++ b/fs/btrfs/inode.c
+> @@ -423,7 +423,7 @@ static noinline int cow_file_range_inline(struct btrfs_inode *inode, u64 start,
+>  		goto out;
+>  	}
+>  
+> -	set_bit(BTRFS_INODE_NEEDS_FULL_SYNC, &inode->runtime_flags);
+> +	btrfs_set_inode_full_sync(inode);
+>  out:
+>  	/*
+>  	 * Don't forget to free the reserved space, as for inlined extent
+> @@ -4882,8 +4882,7 @@ int btrfs_cont_expand(struct btrfs_inode *inode, loff_t oldsize, loff_t size)
+>  						cur_offset + hole_size - 1, 0);
+>  			hole_em = alloc_extent_map();
+>  			if (!hole_em) {
+> -				set_bit(BTRFS_INODE_NEEDS_FULL_SYNC,
+> -					&inode->runtime_flags);
+> +				btrfs_set_inode_full_sync(inode);
+>  				goto next;
+>  			}
+>  			hole_em->start = cur_offset;
+> @@ -6146,7 +6145,7 @@ static struct inode *btrfs_new_inode(struct btrfs_trans_handle *trans,
+>  	 * sync since it will be a full sync anyway and this will blow away the
+>  	 * old info in the log.
+>  	 */
+> -	set_bit(BTRFS_INODE_NEEDS_FULL_SYNC, &BTRFS_I(inode)->runtime_flags);
+> +	btrfs_set_inode_full_sync(BTRFS_I(inode));
+>  
+>  	key[0].objectid = objectid;
+>  	key[0].type = BTRFS_INODE_ITEM_KEY;
+> @@ -8740,7 +8739,7 @@ static int btrfs_truncate(struct inode *inode, bool skip_writeback)
+>  	 * extents beyond i_size to drop.
+>  	 */
+>  	if (control.extents_found > 0)
+> -		set_bit(BTRFS_INODE_NEEDS_FULL_SYNC, &BTRFS_I(inode)->runtime_flags);
+> +		btrfs_set_inode_full_sync(BTRFS_I(inode));
+>  
+>  	return ret;
+>  }
+> @@ -10027,8 +10026,7 @@ static int __btrfs_prealloc_file_range(struct inode *inode, int mode,
+>  
+>  		em = alloc_extent_map();
+>  		if (!em) {
+> -			set_bit(BTRFS_INODE_NEEDS_FULL_SYNC,
+> -				&BTRFS_I(inode)->runtime_flags);
+> +			btrfs_set_inode_full_sync(BTRFS_I(inode));
+>  			goto next;
+>  		}
+>  
+> diff --git a/fs/btrfs/reflink.c b/fs/btrfs/reflink.c
+> index a3930da4eb3f..e37a61ad87df 100644
+> --- a/fs/btrfs/reflink.c
+> +++ b/fs/btrfs/reflink.c
+> @@ -277,7 +277,7 @@ static int clone_copy_inline_extent(struct inode *dst,
+>  						  path->slots[0]),
+>  			    size);
+>  	btrfs_update_inode_bytes(BTRFS_I(dst), datal, drop_args.bytes_found);
+> -	set_bit(BTRFS_INODE_NEEDS_FULL_SYNC, &BTRFS_I(dst)->runtime_flags);
+> +	btrfs_set_inode_full_sync(BTRFS_I(dst));
+>  	ret = btrfs_inode_set_file_extent_range(BTRFS_I(dst), 0, aligned_end);
+>  out:
+>  	if (!ret && !trans) {
+> @@ -575,8 +575,7 @@ static int btrfs_clone(struct inode *src, struct inode *inode,
+>  		 * replaced file extent items.
+>  		 */
+>  		if (last_dest_end >= i_size_read(inode))
+> -			set_bit(BTRFS_INODE_NEEDS_FULL_SYNC,
+> -				&BTRFS_I(inode)->runtime_flags);
+> +			btrfs_set_inode_full_sync(BTRFS_I(inode));
+>  
+>  		ret = btrfs_replace_file_extents(BTRFS_I(inode), path,
+>  				last_dest_end, destoff + len - 1, NULL, &trans);
+> diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
+> index 6bc8834ac8f7..607527a924c2 100644
+> --- a/fs/btrfs/tree-log.c
+> +++ b/fs/btrfs/tree-log.c
+> @@ -5836,6 +5836,14 @@ static int btrfs_log_inode(struct btrfs_trans_handle *trans,
+>  	if (inode_only != LOG_INODE_EXISTS)
+>  		inode->last_log_commit = inode->last_sub_trans;
+>  	spin_unlock(&inode->lock);
+> +
+> +	/*
+> +	 * Reset the last_reflink_trans so that the next fsync does not need to
+> +	 * go through the slower path when logging extents and their checksums.
+> +	 */
+> +	if (inode_only == LOG_INODE_ALL)
+> +		inode->last_reflink_trans = 0;
+> +
+>  out_unlock:
+>  	mutex_unlock(&inode->log_mutex);
+>  out:
+> -- 
+> 2.34.1
 > 

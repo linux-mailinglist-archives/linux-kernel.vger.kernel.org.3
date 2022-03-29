@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4654EA4F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5744EA4F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiC2CON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 22:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
+        id S230111AbiC2CPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 22:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiC2COM (ORCPT
+        with ESMTP id S230095AbiC2CPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 22:14:12 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DD423F3B5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 19:12:29 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KSCkM1X1MzZfh8;
-        Tue, 29 Mar 2022 10:12:11 +0800 (CST)
+        Mon, 28 Mar 2022 22:15:21 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78CE62DE
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 19:13:38 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KSCgM1bGYz9spN;
+        Tue, 29 Mar 2022 10:09:35 +0800 (CST)
 Received: from [10.174.177.76] (10.174.177.76) by
  canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 29 Mar 2022 10:12:26 +0800
-Subject: Re: [PATCH] mm: shmem: make shmem_init return void
-To:     Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Hugh Dickins <hughd@google.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220328112707.22217-1-linmiaohe@huawei.com>
- <CAMZfGtXccwgR6TxNJc6aYV+WGJvAWWAz=RXEHNWDwjKfV49JuA@mail.gmail.com>
+ 15.1.2308.21; Tue, 29 Mar 2022 10:13:36 +0800
+Subject: Re: [PATCH v3] mm/mempolicy: fix mpol_new leak in
+ shared_policy_replace
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     <mhocko@suse.com>, <kosaki.motohiro@jp.fujitsu.com>,
+        <mgorman@suse.de>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220322104345.36379-1-linmiaohe@huawei.com>
+ <20220325172907.57dd381b746563be5dc77097@linux-foundation.org>
+ <c8625168-4a40-1f6c-47b1-2c9194d3d4b3@huawei.com>
+ <20220328142629.6ab7c5312d9ec154ccc502b2@linux-foundation.org>
 From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <67fb3ff7-f46a-985d-94ac-698885eb43c5@huawei.com>
-Date:   Tue, 29 Mar 2022 10:12:26 +0800
+Message-ID: <8575a7af-eacf-db06-4e48-b825f37575db@huawei.com>
+Date:   Tue, 29 Mar 2022 10:13:36 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <CAMZfGtXccwgR6TxNJc6aYV+WGJvAWWAz=RXEHNWDwjKfV49JuA@mail.gmail.com>
+In-Reply-To: <20220328142629.6ab7c5312d9ec154ccc502b2@linux-foundation.org>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -54,78 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/28 22:50, Muchun Song wrote:
-> On Mon, Mar 28, 2022 at 7:44 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
->>
->> The return value of shmem_init is never used. So we can make it
->> return void now.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  include/linux/shmem_fs.h | 2 +-
->>  mm/shmem.c               | 9 ++++-----
->>  2 files changed, 5 insertions(+), 6 deletions(-)
->>
->> diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
->> index ab51d3cd39bd..3e915cc550bc 100644
->> --- a/include/linux/shmem_fs.h
->> +++ b/include/linux/shmem_fs.h
->> @@ -56,7 +56,7 @@ static inline struct shmem_inode_info *SHMEM_I(struct inode *inode)
->>   * Functions in mm/shmem.c called directly from elsewhere:
->>   */
->>  extern const struct fs_parameter_spec shmem_fs_parameters[];
->> -extern int shmem_init(void);
->> +extern void shmem_init(void);
->>  extern int shmem_init_fs_context(struct fs_context *fc);
->>  extern struct file *shmem_file_setup(const char *name,
->>                                         loff_t size, unsigned long flags);
->> diff --git a/mm/shmem.c b/mm/shmem.c
->> index 529c9ad3e926..26e09a022087 100644
->> --- a/mm/shmem.c
->> +++ b/mm/shmem.c
->> @@ -3879,7 +3879,7 @@ static struct file_system_type shmem_fs_type = {
->>         .fs_flags       = FS_USERNS_MOUNT,
->>  };
->>
->> -int __init shmem_init(void)
->> +void __init shmem_init(void)
->>  {
->>         int error;
->>
->> @@ -3904,14 +3904,13 @@ int __init shmem_init(void)
->>         else
->>                 shmem_huge = SHMEM_HUGE_NEVER; /* just in case it was patched */
->>  #endif
->> -       return 0;
->> +       return;
->>
->>  out1:
->>         unregister_filesystem(&shmem_fs_type);
->>  out2:
->>         shmem_destroy_inodecache();
->>         shm_mnt = ERR_PTR(error);
->> -       return error;
->>  }
->>
->>  #if defined(CONFIG_TRANSPARENT_HUGEPAGE) && defined(CONFIG_SYSFS)
->> @@ -3989,14 +3988,14 @@ static struct file_system_type shmem_fs_type = {
->>         .fs_flags       = FS_USERNS_MOUNT,
->>  };
->>
->> -int __init shmem_init(void)
->> +void __init shmem_init(void)
->>  {
->>         BUG_ON(register_filesystem(&shmem_fs_type) != 0);
->>
->>         shm_mnt = kern_mount(&shmem_fs_type);
->>         BUG_ON(IS_ERR(shm_mnt));
->>
->> -       return 0;
->> +       return;
+On 2022/3/29 5:26, Andrew Morton wrote:
+> On Sat, 26 Mar 2022 14:46:28 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
 > 
-> Weird. Using return at the end of a void function.
+>> On 2022/3/26 8:29, Andrew Morton wrote:
+>>> On Tue, 22 Mar 2022 18:43:45 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+>>>
+>>>> If mpol_new is allocated but not used in restart loop, mpol_new will be
+>>>> freed via mpol_put before returning to the caller.  But refcnt is not
+>>>> initialized yet, so mpol_put could not do the right things and might leak
+>>>> the unused mpol_new. This would happen if mempolicy was updated on the
+>>>> shared shmem file while the sp->lock has been dropped during the memory
+>>>> allocation.
+>>>>
+>>>> This issue could be triggered easily with the below code snippet if there
+>>>> are many processes doing the below work at the same time:
+>>>>
+>>>>   shmid = shmget((key_t)5566, 1024 * PAGE_SIZE, 0666|IPC_CREAT);
+>>>>   shm = shmat(shmid, 0, 0);
+>>>>   loop many times {
+>>>>     mbind(shm, 1024 * PAGE_SIZE, MPOL_LOCAL, mask, maxnode, 0);
+>>>>     mbind(shm + 128 * PAGE_SIZE, 128 * PAGE_SIZE, MPOL_DEFAULT, mask,
+>>>>           maxnode, 0);
+>>>>   }
+>>>>
+>>>> ...
+>>>>
+>>>> --- a/mm/mempolicy.c
+>>>> +++ b/mm/mempolicy.c
+>>>> @@ -2733,6 +2733,7 @@ static int shared_policy_replace(struct shared_policy *sp, unsigned long start,
+>>>>  	mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
+>>>>  	if (!mpol_new)
+>>>>  		goto err_out;
+>>>> +	refcount_set(&mpol_new->refcnt, 1);
+>>>>  	goto restart;
+>>>>  }
+>>>
+>>> Two other sites in this file do
+>>>
+>>> 	atomic_set(&policy->refcnt, 1);
+>>>
+>>>
+>>> Could we please instead have a little helper function which does the
+>>> kmem_cache_alloc()+refcount_set()?> .
+>>
+>> There are usecases like below:
+>>
+>> 	struct mempolicy *new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
+>> 	*new = *old;
+>> 	^^^^^^^^^^^^
+>> 	refcount_set(&new->refcnt, 1);
+>>
+>> If we use helper function to do kmem_cache_alloc()+refcount_set() above, separate
+>> refcount_set(&new->refcnt, 1) is still needed as old is copied to new and overwrites
+>> the refcnt field. So that little helper function might not work. Or am I miss something?
+>>
+> 
+> Hm, spose so.  I guess the helper doesn't add much in that case.
+> 
+> Can we please redo this on mainline?  I'm not happy with the bloat
+> which refcnt_t adds and I think I'll drop
+> mm-mempolicy-convert-from-atomic_t-to-refcount_t-on-mempolicy-refcnt.patch.
 
-Thanks for review. And thanks Andrew for kindly fixing this. :)
+Will do this soon. Many thanks.
 
 > .
 > 

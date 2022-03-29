@@ -2,145 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446C44EA49F
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 03:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F8F4EA4A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 03:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbiC2BdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 21:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
+        id S229700AbiC2Bhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 21:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiC2BdT (ORCPT
+        with ESMTP id S229441AbiC2Bhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 21:33:19 -0400
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70C046B35;
-        Mon, 28 Mar 2022 18:31:37 -0700 (PDT)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-d6ca46da48so17168674fac.12;
-        Mon, 28 Mar 2022 18:31:37 -0700 (PDT)
+        Mon, 28 Mar 2022 21:37:33 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7252F1AA4B0;
+        Mon, 28 Mar 2022 18:35:52 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id o5so29137869ybe.2;
+        Mon, 28 Mar 2022 18:35:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UUMDHkRP/8Kobp4SqOhIfI5YC+CFPdiLYdQuQeo5ONc=;
+        b=ds3x1f5M4qmFLSp9i1Lf8czpJ2ro20lGW+k29/7Je9+ABb8oScKI06t0yhPbG8Kq0S
+         bZ2C20GpcKLmlxeZ77SBo3m/MqXCjWS7JFdxV0Wci2OhW3/6zO7CJ+nvVx2R0k+tT3st
+         0gtMwhXqWxJ3ULbDnuVyJjUJZl8hAKfQ4+TfMHPKff0ehsR8kziHfIJm/2vtl1SZxwEg
+         bujOSANdLiz2pTHsXsWc/czK4ZHFCme4KtKuacXoO9ckL4brvR6p/6b56dTgWNuFYjhU
+         ZcRJ3hqaw9b0IGS7tva0ZoQP8G+S7OTVCeTDp9BeBleuaSEu6XCKu+puegfofCW2t5r2
+         ZSDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=hOkp2b7cCGdHLUJIn9iwgpkz8KjzZSClL6Y3bsniN08=;
-        b=VLa5FoT4kkOPBzrqKZelc50x/bukOpE74vhMnoCoOg6NMBDHD6ry62CyTJGyt3Df1N
-         Yw2oobuYE1ED2AWWfaxnuSI0/QMsSFMOnI7W4VH6sP5GXvj0cFl69sohe6Exa0Jr91VQ
-         DdiyujMOicAoOi8HXqR3PG1TMFcTRQZ08fzE8OjmfbCMs0euc86lyQElqLZhoXJWKfBS
-         qwh02SOWuLXyt+GprRQij3UdCG52DywDVe0qVAayLcfw7VIox230WNmBJtUtKO+NlCap
-         x+3ZpqvjOi82rZm/O/ENfCvURXfbtWeN5DJU7Q1WjOsP9RUzZAeudv2OQjeCjJbAsJWl
-         Yveg==
-X-Gm-Message-State: AOAM530WXBRcufYuiFqpm0TyJJ/oAn+aeqZ8uoNbBOVbVMBaTKVXpb4c
-        TDKx4ZbJfLwyPPpjRiSg6A==
-X-Google-Smtp-Source: ABdhPJwMspGsWseezeQN7a6YfynW2z7z862xFVW7VEkyda1K80XIrGigHCp4ABfQUofLXCydksAoJg==
-X-Received: by 2002:a05:6870:51c9:b0:da:b3f:2b75 with SMTP id b9-20020a05687051c900b000da0b3f2b75mr1030761oaj.276.1648517497176;
-        Mon, 28 Mar 2022 18:31:37 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v24-20020a9d5a18000000b005ad458facbdsm8286256oth.27.2022.03.28.18.31.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 18:31:36 -0700 (PDT)
-Received: (nullmailer pid 3490320 invoked by uid 1000);
-        Tue, 29 Mar 2022 01:31:35 -0000
-Date:   Mon, 28 Mar 2022 20:31:35 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Dave Airlie <airlied@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Subject: [GIT PULL] Devicetree fixes for v5.18, take 1
-Message-ID: <YkJhd/QX64LDANXN@robh.at.kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UUMDHkRP/8Kobp4SqOhIfI5YC+CFPdiLYdQuQeo5ONc=;
+        b=DQXdOFQjNmO09ai6abbqCNe+rSdeC+3chUWp5h6G2a7WSrJbivrhc6TnluqhvyhUN9
+         YG4K3Gw+QhXJif4HGzZVYXQOUVe+d7vXol+1jjdwNKL/4m1ajCrOxdw5mPFGceHLKnk9
+         sRtxySAHcfCnaPIG+8UsbuJAsM7OO4tQB0jl4/4mKHFR0bJYllGgdN1gKpAcbN0Z+lPd
+         1y5iRYTdV6F7PwI5Og+vOHWGHSzVhcLncQrKLSLlv+LNoLr7D85iZDe+jCPUxaLbH/fb
+         jJnyxisoqRcyWw+LyvOiK0EB8GEn8Y7WDV229kqopuNRPfl2ce2+sLvefn8XVMvYGyFQ
+         iXJg==
+X-Gm-Message-State: AOAM532TfdnVMctriHoSs7FtUspqoWM9p45CXipSjlxig2ZrZalbuDAd
+        ghrJ8cmEHdmYca03i2cdSWBATFgDUMG7Ni3ohww=
+X-Google-Smtp-Source: ABdhPJwMicyHr4xbXXojEjRJ03bg1BdpiBkV88I0GL3Zt5Cq/INEqoCBMdWWNfR7Tvl3MMcPhTbTsWgRwj+E1Je693A=
+X-Received: by 2002:a25:d456:0:b0:633:6b35:bcf5 with SMTP id
+ m83-20020a25d456000000b006336b35bcf5mr25408116ybf.239.1648517751767; Mon, 28
+ Mar 2022 18:35:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1648461096.git.zong.li@sifive.com> <7cc9a7b5f7e6c28fc9eb172c441b5aed2159b8a0.1648461096.git.zong.li@sifive.com>
+In-Reply-To: <7cc9a7b5f7e6c28fc9eb172c441b5aed2159b8a0.1648461096.git.zong.li@sifive.com>
+From:   Bin Meng <bmeng.cn@gmail.com>
+Date:   Tue, 29 Mar 2022 09:35:40 +0800
+Message-ID: <CAEUhbmUYZ=htiQUwiLZuBufj7=p6ATR752N+qUn-=Gy7Uz04Uw@mail.gmail.com>
+Subject: Re: [PATCH v8 1/4] dt-bindings: dma-engine: sifive,fu540: Add
+ dma-channels property and modify compatible
+To:     Zong Li <zong.li@sifive.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        krzysztof.kozlowski@canonical.com,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Bin Meng <bin.meng@windriver.com>,
+        Green Wan <green.wan@sifive.com>, vkoul@kernel.org,
+        dmaengine@vger.kernel.org, devicetree <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Rob Herring <robh@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Mon, Mar 28, 2022 at 7:56 PM Zong Li <zong.li@sifive.com> wrote:
+>
+> Add dma-channels property, then we can determine how many channels there
+> by device tree, rather than statically defining it in PDMA driver.
+> In addition, we also modify the compatible for PDMA versioning scheme.
+>
+> Signed-off-by: Zong Li <zong.li@sifive.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  .../bindings/dma/sifive,fu540-c000-pdma.yaml  | 19 +++++++++++++++++--
+>  1 file changed, 17 insertions(+), 2 deletions(-)
+>
 
-I haven't seen any progress fixing the MediaTek DRM binding issues, so 
-I've applied the fixes here and a few others (also MediaTek, sigh). 
-There's still a QCom DRM fix pending that hopefully lands before rc1.
-
-Please pull.
-
-Rob
-
-
-The following changes since commit 7203062171db6669f746d14148c4af76af619e74:
-
-  Merge tag 'tty-5.18-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty (2022-03-28 13:00:51 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git tags/devicetree-fixes-for-5.18-1
-
-for you to fetch changes up to 22a41e9a5044bf3519f05b4a00e99af34bfeb40c:
-
-  dt-bindings: Fix missing '/schemas' in $ref paths (2022-03-28 20:17:55 -0500)
-
-----------------------------------------------------------------
-Devicetree fixes for v5.18, take 1:
-
-- Clean-up missing '/schemas' in $ref paths
-
-- Fix MediaTek Vcodec decoder example 'dma-ranges' errors
-
-- Expand available values of PBL for snps,dwmac to fix warnings in
-  mediatek-dwmac.yaml example
-
-- Fix warnings in MediaTek display bindings
-
-----------------------------------------------------------------
-AngeloGioacchino Del Regno (3):
-      dt-bindings: display: mediatek, mutex: Fix mediatek, gce-events type
-      dt-bindings: display: mediatek, ovl: Fix 'iommu' required property typo
-      dt-bindings: display: mediatek: Fix examples on new bindings
-
-Biao Huang (1):
-      dt-bindings: net: snps,dwmac: modify available values of PBL
-
-Rob Herring (2):
-      dt-bindings: media: mediatek,vcodec: Fix addressing cell sizes
-      dt-bindings: Fix missing '/schemas' in $ref paths
-
-jason-jh.lin (1):
-      Revert "dt-bindings: display: mediatek: add ethdr definition for mt8195"
-
- .../devicetree/bindings/arm/apple/apple,pmgr.yaml  |   2 +-
- .../bindings/display/mediatek/mediatek,aal.yaml    |  23 +++-
- .../bindings/display/mediatek/mediatek,ccorr.yaml  |  23 +++-
- .../bindings/display/mediatek/mediatek,color.yaml  |  23 +++-
- .../bindings/display/mediatek/mediatek,dither.yaml |  23 +++-
- .../bindings/display/mediatek/mediatek,dpi.yaml    |   3 +-
- .../bindings/display/mediatek/mediatek,dsc.yaml    |  23 +++-
- .../bindings/display/mediatek/mediatek,ethdr.yaml  | 147 ---------------------
- .../bindings/display/mediatek/mediatek,gamma.yaml  |  23 +++-
- .../bindings/display/mediatek/mediatek,merge.yaml  |  49 +++----
- .../bindings/display/mediatek/mediatek,mutex.yaml  |  27 ++--
- .../bindings/display/mediatek/mediatek,od.yaml     |  14 +-
- .../bindings/display/mediatek/mediatek,ovl-2l.yaml |  26 ++--
- .../bindings/display/mediatek/mediatek,ovl.yaml    |  28 ++--
- .../display/mediatek/mediatek,postmask.yaml        |  23 +++-
- .../bindings/display/mediatek/mediatek,rdma.yaml   |  28 ++--
- .../bindings/display/mediatek/mediatek,split.yaml  |  17 ++-
- .../bindings/display/mediatek/mediatek,ufoe.yaml   |  19 ++-
- .../bindings/display/mediatek/mediatek,wdma.yaml   |  26 ++--
- .../media/mediatek,vcodec-subdev-decoder.yaml      | 122 +++++++++--------
- .../devicetree/bindings/net/dsa/dsa-port.yaml      |   2 +-
- .../devicetree/bindings/net/snps,dwmac.yaml        |   6 +-
- .../devicetree/bindings/soc/qcom/qcom,geni-se.yaml |   2 +-
- .../bindings/spi/mediatek,spi-mtk-nor.yaml         |   2 +-
- .../bindings/spi/qcom,spi-qcom-qspi.yaml           |   2 +-
- .../devicetree/bindings/spi/sprd,spi-adi.yaml      |   2 +-
- .../devicetree/bindings/usb/mediatek,mtu3.yaml     |   4 +-
- .../devicetree/bindings/usb/mediatek,musb.yaml     |   2 +-
- 28 files changed, 338 insertions(+), 353 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
+Reviewed-by: Bin Meng <bmeng.cn@gmail.com>

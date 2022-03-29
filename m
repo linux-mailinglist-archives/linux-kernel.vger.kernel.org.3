@@ -2,78 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96AE34EB3C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 21:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AFB4EB3D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 21:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240752AbiC2TC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 15:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
+        id S240783AbiC2TDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 15:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236673AbiC2TCu (ORCPT
+        with ESMTP id S233414AbiC2TDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 15:02:50 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F26BD2FC;
-        Tue, 29 Mar 2022 12:01:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 20A95CE1A3E;
-        Tue, 29 Mar 2022 19:01:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C048C2BBE4;
-        Tue, 29 Mar 2022 19:01:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648580461;
-        bh=togKQAXsg4SClR+CCOpzzRuF4/TzbRxrDLH3EE/6RsA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=CsL56iRwae5VMWCfqiwlBxjDb9qb4ZTZ5GMZw+wJJi1B81g/sVRF9rmxgaxLCksxB
-         UrICQ2cTeZUXA5WwDcuT52gwi9QgjJuIVmI+1oALy1ETzWrnoGfs71AdHQJlibooCB
-         TJgwwF0IjpDeivB9RvLjhnL0XJ2Sl9yofkBOq7F9vgOlLO6Rk+F/JjRRB2oTJAd0X9
-         NXkjEF5F8nac+ZMPXMzKHCX1ESY+N+Z9lLo1mOIVNv3lPVcyo+VxYaYxY3+v4jWkqA
-         H2jVj4Wom8Kv7VCOBCynxx6TTy5SM+Q3cgAG1Tvf7VZ9y9HRpvXb3crTSoHJ1Dp7Jc
-         xAV8M9Cm7tE5Q==
-Date:   Tue, 29 Mar 2022 14:00:59 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        bhelgaas@google.com, arnd@arndb.de, akpm@linux-foundation.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] PCI: Remove the deprecated "pci-dma-compat.h" API
-Message-ID: <20220329190059.GA1621960@bhelgaas>
+        Tue, 29 Mar 2022 15:03:34 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C915AE1254;
+        Tue, 29 Mar 2022 12:01:50 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id n63-20020a1c2742000000b0038d0c31db6eso2083274wmn.1;
+        Tue, 29 Mar 2022 12:01:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R3zMo+uDtp2l+2kaX1Lp74xR1gw/ziE5ozZsnq4hQ8k=;
+        b=U+PDa1smVYwC3pwXcJQc790e48a0STXHiJ1Tob4ZhZoOp359ppRiQcIiaruJv4Wonw
+         vtGz291Bq4w0J332K00NGOGkTfqExMDhH7mrTif2Ci+lxQZFI47qvSACcVIamsVQKuLs
+         /UtkQTP3EyFjF9oFQg5iTDAgeqdbOKGJLcTHCfzi11U5u131O6A7BpsZ5uFkyOd4CkqB
+         7W/jshZwoROJnQ/czND4bmqo018rQ5HtLCDsIFC3fWDbNX7e1rIpXsvlC/m0bxguZbNy
+         hS0ex9YQURLG4ZwalU3bmxGgm7oOxduNVuQR/7GA9DXN8v5Li/sQ/9qlc+K9sMrWJOE/
+         9UaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R3zMo+uDtp2l+2kaX1Lp74xR1gw/ziE5ozZsnq4hQ8k=;
+        b=XxKrOpBMW01WB/E18W0vAprExU4UfV8cA0UEMkvl+vNvR13wBUHKO9OgHKHSXMmpFo
+         XqU1aZgC+yoJvIOFrreqI+Lr7JVT/YNOGNXmJwSAW1Cndtk0gPC7va8uPkA5Zu1hLHdj
+         A4WUlC5ZXq138TalNrtb6wdW4m3XBafSwWNo469yIdf/NP5o+/glwW+3Cv7VIo8OOAjH
+         /kAEs4kvgZnWP8I8ZFnwCLsPIjgpFzm07rEloA3Fz5khvUGUv3ymxVEttABPZG40TKud
+         Rdjoq7YrP88niOFmyShyyOUiqzGx++StdhvSIhKIFubcxq8Bay6dfADu5el4bFZxEYyQ
+         P9Gg==
+X-Gm-Message-State: AOAM530PRGwgREVJK7c8rcH6vWR1WXErejJIOY+Ag1sEiJljFo0eNuW5
+        pkWq3ZXDHssqfKt9rQZ4i7I=
+X-Google-Smtp-Source: ABdhPJztfYohtHoyBbHivKC+K8e7yMSDnLaeZ2arGqm7/qRuJ+I4cwrg3KZKsxzzBqJCb9PiJYomfg==
+X-Received: by 2002:a05:600c:1d26:b0:38e:2c97:6f19 with SMTP id l38-20020a05600c1d2600b0038e2c976f19mr916630wms.89.1648580509138;
+        Tue, 29 Mar 2022 12:01:49 -0700 (PDT)
+Received: from alaa-emad ([41.37.132.115])
+        by smtp.gmail.com with ESMTPSA id j16-20020a05600c191000b0038ca3500494sm4884687wmq.27.2022.03.29.12.01.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 12:01:48 -0700 (PDT)
+From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, eng.alaamohamedsoliman.am@gmail.com
+Subject: [PATCH] media:av7110:av7110_av.c remove blank line
+Date:   Tue, 29 Mar 2022 21:01:33 +0200
+Message-Id: <20220329190133.6243-1-eng.alaamohamedsoliman.am@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkNNWy649S9i6Vbd@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 11:18:03AM -0700, Christoph Hellwig wrote:
-> On Thu, Mar 10, 2022 at 11:30:22AM -0600, Bjorn Helgaas wrote:
-> > Christoph mentioned several other trees that this depends on, and
-> > those would likely be in linux-next, but not yet in Linus' tree.  The
-> > above poking around is from the tip of Linus' tree, which was the
-> > wrong place for me to look.
-> > 
-> > But I did the same in current linux-next, 71941773e143 ("Add
-> > linux-next specific files for 20220310"), and still found quite a few
-> > uses.  Some are in comments, printks, coccinelle scripts, etc.  I
-> > would assume we'd want to remove them all?
-> 
-> I'm not sure there is much of a point to clean up the historic
-> comments, but it would be a nice cleanup.  I'd very much like to
-> queue up this patch now that all the actual symbol references
-> are gone now.  Are you ok with that?
+according to checkpatch.pl results
+"CHECK: Please don't use multiple blank lines"
+after lines 73 and 78 ,I removed the blank lines
 
-Yep, I'm OK with that.  I *would* like to see at least
-Documentation/PCI/pci.rst updated soonish (it still refers to
-pci_set_dma_mask() and friends).
+Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+---
+ drivers/staging/media/av7110/av7110_av.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Bjorn
+diff --git a/drivers/staging/media/av7110/av7110_av.c b/drivers/staging/media/av7110/av7110_av.c
+index 91f4866c7e59..1544f120e8b1 100644
+--- a/drivers/staging/media/av7110/av7110_av.c
++++ b/drivers/staging/media/av7110/av7110_av.c
+@@ -70,12 +70,10 @@
+ #define PIECE_RATE	 0x40
+ #define SEAM_SPLICE	 0x20
+ 
+-
+ static void p_to_t(u8 const *buf, long int length, u16 pid,
+ 		   u8 *counter, struct dvb_demux_feed *feed);
+ static int write_ts_to_decoder(struct av7110 *av7110, int type, const u8 *buf, size_t len);
+ 
+-
+ int av7110_record_cb(struct dvb_filter_pes2ts *p2t, u8 *buf, size_t len)
+ {
+ 	struct dvb_demux_feed *dvbdmxfeed = (struct dvb_demux_feed *) p2t->priv;
+-- 
+2.35.1
+

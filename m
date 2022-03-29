@@ -2,150 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A7A4EACCB
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9705D4EACCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236176AbiC2MDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 08:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
+        id S236181AbiC2MDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 08:03:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236165AbiC2MDT (ORCPT
+        with ESMTP id S236184AbiC2MD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 08:03:19 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58C66302
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:01:36 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id w127so18748729oig.10
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:01:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ehEFZcYrASqbAc6jhYepxilgTtwp09yvtYpdMuhCCT4=;
-        b=WBWtSlgW0p5oyOGwsz7SJGDGSXCJRRcSzVbR7Y6+Lhl7rjildBSauyXcNlnhOSjpMZ
-         ZRKFVOZXexxjZ1tWhfkobK7zlYzPQB2FWbtCi/Y9JVkiJ+yW3DxnTVxmneqxIjBWbtEw
-         Cf2WahhGlg/f3SDCvkMu2j3iFHwJMBO007lnt96b5sqsCER2LFzU9YYm6hQeu1MxNDrr
-         cqRSvdudI7LkVzxrIRdW9Fas50jg9p3s1psjcAtuk9g2Z+mF1L42sPOY5eMYy86CCfPN
-         U/ftL/qkkQZqLTb1ELksInGgL3aKgF+GRmgGS1LtFUJQ7xRIN2Bdya+Ij8kng7aNyo1N
-         s1UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ehEFZcYrASqbAc6jhYepxilgTtwp09yvtYpdMuhCCT4=;
-        b=c0lGO1nTYyL6gFj3BE7KZZqAPAxpV/FL5syqVy3DhzoAhWCAsNAI49oVRpTkopTtGy
-         P+Gw4DUsvGUXArmHHCVbXKC5cGa2Re5YZXIp0vqshI8z5tcrG41GTCBmJoJ9SxqrFewI
-         an7xOzIHGYIXwdeNFAy00EHhd1IHrRS/WIw3vaok1b9llGfGIzyRzyRDibcJxCmjAa0P
-         gkWExOBtXdjWuEj+XNP9TymQmFNqAqM9eXxX3WdTu0S+tALzFsTxx4U6PhKWZ8gyV117
-         +WtaoQJUs9zKU5SxsRUN1+Q/0BIl0xy1COAe3dCdF080erwNwLyYh9rra621ttzVcNUg
-         aUHQ==
-X-Gm-Message-State: AOAM533lTPrc7I7TttxO0YmgdBxLhKy7GvqnMHsk7smIW8CROCnBqmtX
-        8RI2+FcBnDmlWUZ/g0r5O6oRed4jtNZ0Uk8BItqQUQ==
-X-Google-Smtp-Source: ABdhPJyFsxcS2Y8brGth5S0LA5+NbL+9QCiz64jOeuZSPkBhTeLeF6HPo07YXZxBoIE1oW67ddCnM60hMm5zr7qifuc=
-X-Received: by 2002:a05:6808:16a4:b0:2f7:1fd1:f48 with SMTP id
- bb36-20020a05680816a400b002f71fd10f48mr1065976oib.163.1648555294201; Tue, 29
- Mar 2022 05:01:34 -0700 (PDT)
+        Tue, 29 Mar 2022 08:03:29 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A095BD0E
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:01:45 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KSSpX4blyz4xNm;
+        Tue, 29 Mar 2022 23:01:40 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1648555304;
+        bh=01mxyWDLRIt5kimROuqbPGIxm1dCV7lRCsI+Du/e0Ss=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=L3kBFENcYSTJQ6cWgshgm35f9FNB8Ew3X782WdaRMzj5n1w6uL8J0Z/9Ys116iCFS
+         3PKWwyLdvJr7Urq5zfhmzBHcNgBvtBFVrXcYgUJcLmLdW1ydcCQ87VcVAvUsX5BuNm
+         WBZuEPhmLtbthCqRlOVX2bbziX37DusGS6BuAtrp4Di10dnmOkWG+QgHwwm8zOu8Yu
+         ZN9UUWjSbHiLGVna/Gx2iXrBrD8HB7QI4Y2ePlRHcqGzwi508PLBVR2T5X7UsVNl0c
+         nY6Jcm5fJsxWdKA6Re61fRVd9yvLa+Eq0akkxggx2ECh4uGtyOXf5hKVkr8ZbFYdyM
+         vfcsSLcgEpWTA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
+In-Reply-To: <20220328195920.dqlfra3lcardko6r@treble>
+References: <20220318105140.43914-1-sv@linux.ibm.com>
+ <20220318105140.43914-4-sv@linux.ibm.com>
+ <YjR6kHq4c/rjCTpr@hirez.programming.kicks-ass.net>
+ <0b55f122-4760-c1ba-840a-0911cefec2ad@csgroup.eu>
+ <20220328195920.dqlfra3lcardko6r@treble>
+Date:   Tue, 29 Mar 2022 23:01:38 +1100
+Message-ID: <87mth9ezml.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <00000000000079c56a05ba1c18c3@google.com> <000000000000b8cdba05dae41558@google.com>
- <CACT4Y+bWiUfw4YEx7x9rCb80SwbQPfFfSWP6-7cYxOSs5vw39A@mail.gmail.com> <20220329115011.5fyhukqlfvvzojbg@riteshh-domain>
-In-Reply-To: <20220329115011.5fyhukqlfvvzojbg@riteshh-domain>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 29 Mar 2022 14:01:22 +0200
-Message-ID: <CACT4Y+ZhCWZhrzt9bW-Q=munq9RC+eow8zCpJU1fzFiEGQa+6w@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in ext4_xattr_set_entry (4)
-To:     Ritesh Harjani <ritesh.list@gmail.com>
-Cc:     syzbot <syzbot+4cb1e27475bf90a9b926@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, cmaiolino@redhat.com,
-        lczerner@redhat.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sjc@chobot.com,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu, wanjiabing@vivo.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Mar 2022 at 13:50, Ritesh Harjani <ritesh.list@gmail.com> wrote:
+Josh Poimboeuf <jpoimboe@redhat.com> writes:
+> On Sun, Mar 27, 2022 at 09:09:20AM +0000, Christophe Leroy wrote:
+>> Second point is the endianess and 32/64 selection, especially when 
+>> crossbuilding. There is already some stuff regarding endianess based on 
+>> bswap_if_needed() but that's based on constant selection at build time 
+>> and I couldn't find an easy way to set it conditionaly based on the 
+>> target being built.
+>>
+>> Regarding 32/64 selection, there is almost nothing, it's based on using 
+>> type 'long' which means that at the time being the target and the build 
+>> platform must both be 32 bits or 64 bits.
+>> 
+>> For both cases (endianess and 32/64) I think the solution should 
+>> probably be to start with the fileformat of the object file being 
+>> reworked by objtool.
 >
-> On 22/03/25 07:18AM, Dmitry Vyukov wrote:
-> > On Wed, 23 Mar 2022 at 16:07, syzbot
-> > <syzbot+4cb1e27475bf90a9b926@syzkaller.appspotmail.com> wrote:
-> > >
-> > > syzbot suspects this issue was fixed by commit:
-> > >
-> > > commit 6e47a3cc68fc525428297a00524833361ebbb0e9
-> > > Author: Lukas Czerner <lczerner@redhat.com>
-> > > Date:   Wed Oct 27 14:18:52 2021 +0000
-> > >
-> > >     ext4: get rid of super block and sbi from handle_mount_ops()
-> > >
-> > > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=100bc10b700000
-> > > start commit:   f8ad8187c3b5 fs/pipe: allow sendfile() to pipe again
-> > > git tree:       upstream
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=96b123631a6700e9
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=4cb1e27475bf90a9b926
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11131f94d00000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c3761b500000
-> > >
-> > > If the result looks correct, please mark the issue as fixed by replying with:
-> > >
-> > > #syz fix: ext4: get rid of super block and sbi from handle_mount_ops()
-> > >
-> > > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> >
-> > Looks reasonable:
-> >
-> > #syz fix: ext4: get rid of super block and sbi from handle_mount_ops()
->
-> Sorry, I might have missed some discussion maybe.
-> But why do we think that this patch could fix the reported bug?
-> Because I see this patch from Lukas is a part of "ext4: new mount API
-> conversion" patch series. This I guess has nothing to do with the reported call
-> stack, no?
->
-> Or am I missing anything?
+> Do we really need to detect the endianness/bitness at runtime?  Objtool
+> is built with the kernel, why not just build-in the same target
+> assumptions as the kernel itself?
 
-Hi Ritesh,
+I don't think we need runtime detection. But it will need to support
+basically most combinations of objtool running as 32-bit/64-bit LE/BE
+while the kernel it's analysing is 32-bit/64-bit LE/BE.
 
-It looked reasonable because the identified patch is in ext4 and the
-bug is also in ext4 + the bisection log looked reasonable + there were
-no other suggestions/corrections. In such a case it's better to close
-the bug with at least some reasonable fix, then let it pile to
-hundreds of other unclosed bugs and prevent reporting of new bugs.
-
-
-
-> BUG: KASAN: use-after-free in ext4_xattr_set_entry+0x3151/0x3780 fs/ext4/xattr.c:1586
-> Read of size 4 at addr ffff888030c00004 by task syz-executor392/11280
+>> What are current works in progress on objtool ? Should I wait Josh's 
+>> changes before starting looking at all this ? Should I wait for anything 
+>> else ?
 >
-> CPU: 0 PID: 11280 Comm: syz-executor392 Not tainted 5.11.0-rc5-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Call Trace:
->  __dump_stack lib/dump_stack.c:79 [inline]
->  dump_stack+0x107/0x163 lib/dump_stack.c:120
->  print_address_description.constprop.0.cold+0x5b/0x2f8 mm/kasan/report.c:230
->  __kasan_report mm/kasan/report.c:396 [inline]
->  kasan_report.cold+0x79/0xd5 mm/kasan/report.c:413
->  ext4_xattr_set_entry+0x3151/0x3780 fs/ext4/xattr.c:1586
->  ext4_xattr_ibody_set+0x78/0x2b0 fs/ext4/xattr.c:2224
->  ext4_xattr_set_handle+0x8f4/0x13e0 fs/ext4/xattr.c:2380
->  ext4_xattr_set+0x13a/0x340 fs/ext4/xattr.c:2493
->  __vfs_setxattr+0x10e/0x170 fs/xattr.c:177
->  __vfs_setxattr_noperm+0x11a/0x4c0 fs/xattr.c:208
->  __vfs_setxattr_locked+0x1bf/0x250 fs/xattr.c:266
->  vfs_setxattr+0x135/0x320 fs/xattr.c:291
->  setxattr+0x1ff/0x290 fs/xattr.c:553
->  path_setxattr+0x170/0x190 fs/xattr.c:572
->  __do_sys_setxattr fs/xattr.c:587 [inline]
->  __se_sys_setxattr fs/xattr.c:583 [inline]
->  __x64_sys_setxattr+0xc0/0x160 fs/xattr.c:583
->  do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+> I'm not making any major changes to the code, just shuffling things
+> around to make the interface more modular.  I hope to have something
+> soon (this week).  Peter recently added a big feature (Intel IBT) which
+> is already in -next.
 >
+> Contributions are welcome, with the understanding that you'll help
+> maintain it ;-)
 >
-> -ritesh
+> Some years ago Kamalesh Babulal had a prototype of objtool for ppc64le
+> which did the full stack validation.  I'm not sure what ever became of
+> that.
+
+From memory he was starting to clean the patches up in late 2019, but I
+guess that probably got derailed by COVID. AFAIK he never posted
+anything. Maybe someone at IBM has a copy internally (Naveen?).
+
+> FWIW, there have been some objtool patches for arm64 stack validation,
+> but the arm64 maintainers have been hesitant to get on board with
+> objtool, as it brings a certain maintenance burden.  Especially for the
+> full stack validation and ORC unwinder.  But if you only want inline
+> static calls and/or mcount then it'd probably be much easier to
+> maintain.
+
+I would like to have the stack validation, but I am also worried about
+the maintenance burden.
+
+I guess we start with mcount, which looks pretty minimal judging by this
+series, and see how we go from there.
+
+cheers

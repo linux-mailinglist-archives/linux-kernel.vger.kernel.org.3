@@ -2,97 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C924EB2F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 19:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B39364EB2F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 19:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240350AbiC2RyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 13:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
+        id S240374AbiC2Ry2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 13:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240343AbiC2RyP (ORCPT
+        with ESMTP id S240351AbiC2RyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 13:54:15 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12501ED05D
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 10:52:31 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id bg10so36678488ejb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 10:52:31 -0700 (PDT)
+        Tue, 29 Mar 2022 13:54:21 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FC11ED05D;
+        Tue, 29 Mar 2022 10:52:37 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id p4-20020a17090ad30400b001c7ca87c05bso2508586pju.1;
+        Tue, 29 Mar 2022 10:52:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6WzK0iEK1tA2vwWOojnK+sRWtG13aOccwS9qWJMzFmw=;
-        b=eRTnso2DqyGizkbBzNBOPjTRvAPn3ud895nlnWhPZ4UjGAm0OZxfB37FkU+nLvw6Cx
-         OjNt45Va6PSjR4jK/bub1G1Q3eTo2GeQB+9pmTpO4CEGMm7rql+cSZ6Fk7LljiP+p10C
-         lxPJry/Sh5OS2akJE+Ov36FPSfFSIUMNK+CUkcmjeNbw5ebd8aKUtviSH7NrYxnUal9v
-         ZfK1nt8TTht/oGsn1JXKfPS1WbWw3Q7+dKjy0p0lvMt7OfpCHQtlvvmCSVRY3NAuMarF
-         eEYs9Y4FfbPI1RoXStyWd/49c6fAbwgFa8ui0Ba0QbKPeSvOkII27LGSKggdYimqvZpK
-         U24g==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pQtwmQnPApqxl6a1qQafAVmNSaeDO1TUxN8vDTFvE9o=;
+        b=kcAhcgdBWZB/5xNlBMsZ8SeU1XU7vhJRw5PdIqWOGc/QGZezZM+p0Ev0+T1+4lz9um
+         vVfPWqcOQT16tsjVm4NHi4g88OJHtxIRg6SbbUU2wTyIFlZW3kErv1o9kN1osamqxZMd
+         18omSGkrGcViPmFtc+Ztyw8WevNcOFhnEShRcxOIAvHd4fFLQpY6xIqAORoB7/H0ZWx8
+         +O49D87VS33nHHSLgfGb6169Ua/ovkJoBltcgoC2Ggc9bgNObvH70KbYUfWK/j4vcNua
+         2Bk5PfNECfwoCPt85yOti6qg0fCctJAoGoftKkRDvboxXLKMJn6FQYki7s/Nj5Np3t4q
+         8pGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6WzK0iEK1tA2vwWOojnK+sRWtG13aOccwS9qWJMzFmw=;
-        b=5CH8Tb8P39lYXxl+XQTcYcW8dThLKy9yBuNPMU7ePkJbnIpCMo0ffc4snZ2HSW6fhw
-         91exmKdejQiFNLn6KnpwqxGAmhIUX5NFwMfh/nXCc70CqMZSJ49QU1cD6Xc+J4eHwzDO
-         iHgXH2bpQsiNHmEN0bXOg3Lb5cAQk7UPHI6L5xTxXqf/AKLe1ddnj+Ji7XlxTjf60Vem
-         NDIBdkzgVLZV0nntWKtBUqAUELwYxF/9csWQ+aPVUMJ3rudIEBNlXUZygd5Z9n+CMYjA
-         VUkBmaA3F/9ADfpYnvktn9gP/Avly00wQvv6KPJogdSzgVIipCXWwRwtvleYwfx5KlzI
-         BQ3A==
-X-Gm-Message-State: AOAM531AyxVDkfplw8RETFygn1b2eNZN73pCgxjbtHe1Cux1PxjzNj4G
-        vGWTnQRUwnbecpsJSWV6C8vKv9ErmIIGefvl4a7mww==
-X-Google-Smtp-Source: ABdhPJzx0jIB+gd95cXgDa86T7iu7mfLoNBMM7kkuNLnofhq390upFsiPfmT/1TUlLYpMv2RfthsZvb3eTbeyPWrUYk=
-X-Received: by 2002:a17:906:5d08:b0:6da:b4ea:937 with SMTP id
- g8-20020a1709065d0800b006dab4ea0937mr37059399ejt.446.1648576349854; Tue, 29
- Mar 2022 10:52:29 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pQtwmQnPApqxl6a1qQafAVmNSaeDO1TUxN8vDTFvE9o=;
+        b=Ra1cX6vTKkr9l8y5c6VusjkJcOlNuYfeTqlmZLvmIjbSOzeBoqS/XJtCxWmOKjekL0
+         Ff4pw/ctKTdR65d8Me0GdduMmkjm7PMV3mtOfwrU95ovi6T/Mvwdk6XTYmsvxDpuoNQW
+         YC5czLvvaSYl9JEM0cG+m3VabRavKeHmWtUlDOMVAebjpeVZYU58QWZp/olsVZPCx6jv
+         XURVf2OLCz4Ncg+I5y9kf4BqzSSp8WpjyNrpKa0xPWNK+CPC4jnv0QwvpuELreulz5/n
+         wk+1E2ztSgi9R4H5buLUMUc+wSuu4mMUmVtM3v2G0+kCgero3eoB5mjlsrNEylmgPFoe
+         nFXQ==
+X-Gm-Message-State: AOAM532FI15FZK45VXbgjMIkMqPq5ixkD44R1X2sW4kSC+Uv3BOM4wbM
+        KKIOr/BZ17M2z87vIYeIIak=
+X-Google-Smtp-Source: ABdhPJwYGa5KMAEW7uS9gBKnxEtSXxrla89FTrBVEJvRlifU/5KAvcPBT73SyAy/Hje6IOTbvvCwAw==
+X-Received: by 2002:a17:903:186:b0:154:3606:7a73 with SMTP id z6-20020a170903018600b0015436067a73mr31930870plg.89.1648576356704;
+        Tue, 29 Mar 2022 10:52:36 -0700 (PDT)
+Received: from localhost ([192.55.54.52])
+        by smtp.gmail.com with ESMTPSA id 132-20020a62168a000000b004f40e8b3133sm21624407pfw.188.2022.03.29.10.52.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 10:52:36 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 10:52:34 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     "Huang, Kai" <kai.huang@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        isaku.yamahata@gmail.com
+Subject: Re: [PATCH v2 01/21] x86/virt/tdx: Detect SEAM
+Message-ID: <20220329175234.GA1915371@ls.amr.corp.intel.com>
+References: <cover.1647167475.git.kai.huang@intel.com>
+ <a258224c26b6a08400d9a8678f5d88f749afe51e.1647167475.git.kai.huang@intel.com>
+ <BN9PR11MB527657C2AA8B9ACD94C9D5468C189@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <51982ec477e43c686c5c64731715fee528750d85.camel@intel.com>
+ <BN9PR11MB52765EE37C00F0FFA01447968C1D9@BN9PR11MB5276.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-References: <20220328035951.1817417-1-tjmercier@google.com>
- <20220328035951.1817417-5-tjmercier@google.com> <YkHH/0Use7F30UUE@phenom.ffwll.local>
- <CABdmKX01p6g_iHsB6dd4Wwh=8iLdYiUqdY6_yyA5ax2YNHt6tQ@mail.gmail.com> <YkLGbL5Z3HVCyVkK@phenom.ffwll.local>
-In-Reply-To: <YkLGbL5Z3HVCyVkK@phenom.ffwll.local>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Tue, 29 Mar 2022 10:52:18 -0700
-Message-ID: <CABdmKX3gTAohaOwkNccGrQyXN9tzT-oEVibO5ZPF+eP+Vq=AOg@mail.gmail.com>
-Subject: Re: [RFC v4 4/8] dmabuf: heaps: export system_heap buffers with GPU
- cgroup charging
-To:     "T.J. Mercier" <tjmercier@google.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Daniel Vetter <daniel@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB52765EE37C00F0FFA01447968C1D9@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,261 +87,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 1:42 AM Daniel Vetter <daniel@ffwll.ch> wrote:
->
-> On Mon, Mar 28, 2022 at 11:28:24AM -0700, T.J. Mercier wrote:
-> > On Mon, Mar 28, 2022 at 7:36 AM Daniel Vetter <daniel@ffwll.ch> wrote:
-> > >
-> > > On Mon, Mar 28, 2022 at 03:59:43AM +0000, T.J. Mercier wrote:
-> > > > From: Hridya Valsaraju <hridya@google.com>
-> > > >
-> > > > All DMA heaps now register a new GPU cgroup device upon creation, a=
-nd the
-> > > > system_heap now exports buffers associated with its GPU cgroup devi=
-ce for
-> > > > tracking purposes.
-> > > >
-> > > > Signed-off-by: Hridya Valsaraju <hridya@google.com>
-> > > > Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> > > >
-> > > > ---
-> > > > v3 changes
-> > > > Use more common dual author commit message format per John Stultz.
-> > > >
-> > > > v2 changes
-> > > > Move dma-buf cgroup charge transfer from a dma_buf_op defined by ev=
-ery
-> > > > heap to a single dma-buf function for all heaps per Daniel Vetter a=
-nd
-> > > > Christian K=C3=B6nig.
-> > >
-> > > Apologies for being out of the loop quite a bit. I scrolled through t=
-his
-> > > all and I think it looks good to get going.
-> > >
-> > > The only thing I have is whether we should move the cgroup controller=
-s out
-> > > of dma-buf heaps, since that's rather android centric. E.g.
-> > > - a system gpucg_device which is used by all the various single page
-> > >   allocators (dma-buf heap but also shmem helpers and really anything
-> > >   else)
-> > > - same for cma, again both for dma-buf heaps and also for the gem cma
-> > >   helpers in drm
-> >
-> > Thanks Daniel, in general that makes sense to me as an approach to
-> > making this more universal. However for the Android case I'm not sure
-> > if the part about a single system gpucg_device would be sufficient,
-> > because there are at least 12 different graphics related heaps that
-> > could potentially be accounted/limited differently. [1]  So that
-> > raises the question of how fine grained we want this to be... I tend
-> > towards separating them all, but I haven't formed a strong opinion
-> > about this at the moment. It sounds like you are in favor of a
-> > smaller, more rigidly defined set of them? Either way, we need to add
-> > code for accounting at points where we know memory is specifically for
-> > graphics use and not something else right? (I.E. Whether it is a
-> > dma-buf heap or somewhere like drm_gem_object_init.) So IIUC the only
-> > question is what to use for the gpucg_device(s) at these locations.
->
-> We don't have 12 in upstream, so this is a lot easier here :-)
->
-> I'm not exactly sure why you have such a huge pile of them.
->
-> For gem buffers it would be fairly similar to what you've done for dma-bu=
-f
-> heaps I think, with the various helper libraries (drivers stopped
-> hand-rolling their gem buffer) setting the right accounting group. And
-> yeah for system memory I think we'd need to have standard ones, for drive=
-r
-> specific ones it's kinda different.
->
-> > [1] https://cs.android.com/android/platform/superproject/+/master:hardw=
-are/google/graphics/common/libion/ion.cpp;l=3D39-50
-> >
-> > >
-> > > Otherwise this will only work on non-upstream android where gpu drive=
-rs
-> > > allocate everything from dma-buf heap. If you use something like the =
-x86
-> > > android project with mesa drivers, then driver-internal buffers will =
-be
-> > > allocated through gem and not through dma-buf heaps. Or at least I th=
-ink
-> > > that's how it works.
-> > >
-> > > But also meh, we can fix this fairly easily later on by adding these
-> > > standard gpucg_dev somwehere with a bit of kerneldoc.
-> >
-> > This is what I was thinking would happen next, but IDK if anyone sees
-> > a more central place to do this type of use-specific accounting.
->
-> Hm I just realized ... are the names in the groups abi? If yes then I
-> think we need to fix this before we merge anything.
-> -Daniel
+On Mon, Mar 28, 2022 at 08:10:47AM +0000,
+"Tian, Kevin" <kevin.tian@intel.com> wrote:
 
-Do you mean the set of possible names being part of the ABI for GPU
-cgroups? I'm not exactly sure what you mean here.
-
-The name is a settable string inside the gpucg_device struct, and
-right now the docs say it must be from a string literal but this can
-be changed. The only one this patchset adds is "system", which comes
-from the name field in its dma_heap_export_info struct when it's first
-created (and that string is hardcoded). The heap gpucg_devices are all
-registered from one spot in dma-heap.c, so maybe we should append
-"-heap" to the gpucg_device names there so "system" is available for a
-standardized name. Let me make those two changes, and I will also
-rebase this series before resending.
-
-
-
->
+> > From: Huang, Kai <kai.huang@intel.com>
+> > Sent: Monday, March 28, 2022 11:55 AM
 > >
-> > >
-> > > Anyway has my all my ack, but don't count this as my in-depth review =
-:-)
-> > > -Daniel
-> >
-> > Thanks again for taking a look!
-> > >
-> > > > ---
-> > > >  drivers/dma-buf/dma-heap.c          | 27 +++++++++++++++++++++++++=
-++
-> > > >  drivers/dma-buf/heaps/system_heap.c |  3 +++
-> > > >  include/linux/dma-heap.h            | 11 +++++++++++
-> > > >  3 files changed, 41 insertions(+)
-> > > >
-> > > > diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.=
-c
-> > > > index 8f5848aa144f..885072427775 100644
-> > > > --- a/drivers/dma-buf/dma-heap.c
-> > > > +++ b/drivers/dma-buf/dma-heap.c
-> > > > @@ -7,6 +7,7 @@
-> > > >   */
-> > > >
-> > > >  #include <linux/cdev.h>
-> > > > +#include <linux/cgroup_gpu.h>
-> > > >  #include <linux/debugfs.h>
-> > > >  #include <linux/device.h>
-> > > >  #include <linux/dma-buf.h>
-> > > > @@ -31,6 +32,7 @@
-> > > >   * @heap_devt                heap device node
-> > > >   * @list             list head connecting to list of heaps
-> > > >   * @heap_cdev                heap char device
-> > > > + * @gpucg_dev                gpu cgroup device for memory accounti=
-ng
-> > > >   *
-> > > >   * Represents a heap of memory from which buffers can be made.
-> > > >   */
-> > > > @@ -41,6 +43,9 @@ struct dma_heap {
-> > > >       dev_t heap_devt;
-> > > >       struct list_head list;
-> > > >       struct cdev heap_cdev;
-> > > > +#ifdef CONFIG_CGROUP_GPU
-> > > > +     struct gpucg_device gpucg_dev;
-> > > > +#endif
-> > > >  };
-> > > >
-> > > >  static LIST_HEAD(heap_list);
-> > > > @@ -216,6 +221,26 @@ const char *dma_heap_get_name(struct dma_heap =
-*heap)
-> > > >       return heap->name;
-> > > >  }
-> > > >
-> > > > +#ifdef CONFIG_CGROUP_GPU
-> > > > +/**
-> > > > + * dma_heap_get_gpucg_dev() - get struct gpucg_device for the heap=
-.
-> > > > + * @heap: DMA-Heap to get the gpucg_device struct for.
-> > > > + *
-> > > > + * Returns:
-> > > > + * The gpucg_device struct for the heap. NULL if the GPU cgroup co=
-ntroller is
-> > > > + * not enabled.
-> > > > + */
-> > > > +struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap)
-> > > > +{
-> > > > +     return &heap->gpucg_dev;
-> > > > +}
-> > > > +#else /* CONFIG_CGROUP_GPU */
-> > > > +struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap)
-> > > > +{
-> > > > +     return NULL;
-> > > > +}
-> > > > +#endif /* CONFIG_CGROUP_GPU */
-> > > > +
-> > > >  struct dma_heap *dma_heap_add(const struct dma_heap_export_info *e=
-xp_info)
-> > > >  {
-> > > >       struct dma_heap *heap, *h, *err_ret;
-> > > > @@ -288,6 +313,8 @@ struct dma_heap *dma_heap_add(const struct dma_=
-heap_export_info *exp_info)
-> > > >       list_add(&heap->list, &heap_list);
-> > > >       mutex_unlock(&heap_list_lock);
-> > > >
-> > > > +     gpucg_register_device(dma_heap_get_gpucg_dev(heap), exp_info-=
->name);
-> > > > +
-> > > >       return heap;
-> > > >
-> > > >  err2:
-> > > > diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/=
-heaps/system_heap.c
-> > > > index ab7fd896d2c4..752a05c3cfe2 100644
-> > > > --- a/drivers/dma-buf/heaps/system_heap.c
-> > > > +++ b/drivers/dma-buf/heaps/system_heap.c
-> > > > @@ -395,6 +395,9 @@ static struct dma_buf *system_heap_allocate(str=
-uct dma_heap *heap,
-> > > >       exp_info.ops =3D &system_heap_buf_ops;
-> > > >       exp_info.size =3D buffer->len;
-> > > >       exp_info.flags =3D fd_flags;
-> > > > +#ifdef CONFIG_CGROUP_GPU
-> > > > +     exp_info.gpucg_dev =3D dma_heap_get_gpucg_dev(heap);
-> > > > +#endif
-> > > >       exp_info.priv =3D buffer;
-> > > >       dmabuf =3D dma_buf_export(&exp_info);
-> > > >       if (IS_ERR(dmabuf)) {
-> > > > diff --git a/include/linux/dma-heap.h b/include/linux/dma-heap.h
-> > > > index 0c05561cad6e..e447a61d054e 100644
-> > > > --- a/include/linux/dma-heap.h
-> > > > +++ b/include/linux/dma-heap.h
-> > > > @@ -10,6 +10,7 @@
-> > > >  #define _DMA_HEAPS_H
-> > > >
-> > > >  #include <linux/cdev.h>
-> > > > +#include <linux/cgroup_gpu.h>
-> > > >  #include <linux/types.h>
-> > > >
-> > > >  struct dma_heap;
-> > > > @@ -59,6 +60,16 @@ void *dma_heap_get_drvdata(struct dma_heap *heap=
-);
-> > > >   */
-> > > >  const char *dma_heap_get_name(struct dma_heap *heap);
-> > > >
-> > > > +/**
-> > > > + * dma_heap_get_gpucg_dev() - get a pointer to the struct gpucg_de=
-vice for the
-> > > > + * heap.
-> > > > + * @heap: DMA-Heap to retrieve gpucg_device for.
-> > > > + *
-> > > > + * Returns:
-> > > > + * The gpucg_device struct for the heap.
-> > > > + */
-> > > > +struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap)=
-;
-> > > > +
-> > > >  /**
-> > > >   * dma_heap_add - adds a heap to dmabuf heaps
-> > > >   * @exp_info:                information needed to register this h=
-eap
-> > > > --
-> > > > 2.35.1.1021.g381101b075-goog
-> > > >
-> > >
-> > > --
-> > > Daniel Vetter
-> > > Software Engineer, Intel Corporation
-> > > http://blog.ffwll.ch
->
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
+> > SEAMRR and TDX KeyIDs are configured by BIOS and they are static during
+> > machine's runtime.  On the other hand, TDX module can be updated and
+> > reinitialized at runtime (not supported in this series but will be supported in
+> > the future).  Theoretically, even P-SEAMLDR can be updated at runtime
+> > (although
+> > I think unlikely to be supported in Linux).  Therefore I think detecting
+> > SEAMRR
+> > and TDX KeyIDs at boot fits better.
+> 
+> If those info are static it's perfectly fine to detect them until they are
+> required... and following are not solid cases (e.g. just exposing SEAM
+> alone doesn't tell the availability of TDX) but let's also hear the opinions
+> from others.
+
+One use case is cloud use case.  If TDX module is initialized dynamically at
+runtime, cloud management system wants to know if the physical machine is
+capable of TDX in addition to if TDX module is initialized.  Also how many TDs
+can be run on the machine even when TDX module is not initialized yet.  The
+management system will schedule TDs based on those information.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>

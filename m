@@ -2,146 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC58D4EAAB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C444EAAB8
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234830AbiC2Jrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 05:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        id S234835AbiC2Jt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 05:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234822AbiC2Jr2 (ORCPT
+        with ESMTP id S233341AbiC2Jt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 05:47:28 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6036C239328;
-        Tue, 29 Mar 2022 02:45:43 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id EA89221639;
-        Tue, 29 Mar 2022 09:45:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648547141; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 29 Mar 2022 05:49:26 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AF523B3F8;
+        Tue, 29 Mar 2022 02:47:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1648547260; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+dqucqQN1ALb/6wOF00wF6WHMeIumOZO4cG4WbujdwI=;
-        b=s07/9nEeGWPktpdqgBhc2Wjc+x7/izJtcw46LQOkIvL6bL4T+iBeCsNjFabuDbInl1fo2N
-        PJWNwisPNwGcdX04IHaCP8bvjoLwobUE5l34XPV7N9FmL5yWjTO2H9CiMDG8sVR2amRpD7
-        7RJOb/9sTUSHLjWfGlo75KGuOknz8Ig=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648547141;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+dqucqQN1ALb/6wOF00wF6WHMeIumOZO4cG4WbujdwI=;
-        b=F0AKx8BeZHidsbPcaJQQ7MGyATO5DhAGrn13lFAwnPHcVkscUZnrnMSAfmd7kMklihVBP7
-        aoNJ8q0VgrnSnRCA==
-Received: from suse.de (unknown [10.163.43.106])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E61ACA3B9D;
-        Tue, 29 Mar 2022 09:45:40 +0000 (UTC)
-Date:   Tue, 29 Mar 2022 10:45:38 +0100
-From:   Mel Gorman <mgorman@suse.de>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, frederic@kernel.org, tglx@linutronix.de,
-        mtosatti@redhat.com, linux-rt-users@vger.kernel.org,
-        vbabka@suse.cz, cl@linux.com, paulmck@kernel.org,
-        willy@infradead.org
-Subject: Re: [PATCH 0/2] mm/page_alloc: Remote per-cpu lists drain support
-Message-ID: <20220329094538.GJ4363@suse.de>
-References: <20220208100750.1189808-1-nsaenzju@redhat.com>
- <20220303114550.GE4363@suse.de>
- <3c24840e8378c69224974f321ec5c06a36a33dd3.camel@redhat.com>
- <20220325104800.GI4363@suse.de>
- <d21d742154cbd6d2b7546533655810e0bf7dd82f.camel@redhat.com>
+        bh=e8RgERyOiW+i+GwydncfsHV1G1M1TmxHobeUS8u9jq4=;
+        b=Z/BO0tiDIQpKj0a5aKQmLM7Y9WyMII/XnpqKHAjueN1dLp3XhBsqxs4GcLXarRrNnn07Gv
+        Kmskxk6LAOg9r/RBxVE3j29PkKi8Myc0t4dAA4CVEKmTjhCA7Lvap82oM26LP4xTWMshGB
+        RfDhQY5k2tc5ylIDMTc25PAUZQfTE08=
+Date:   Tue, 29 Mar 2022 10:47:23 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 12/12] Documentation: iio: Document high-speed DMABUF
+ based API
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-iio@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        Christian =?iso-8859-1?b?S/ZuaWc=?= <christian.koenig@amd.com>
+Message-Id: <Z63I9R.MKYUKBH4V8L41@crapouillou.net>
+In-Reply-To: <YkLJU7Pp98CPIHfY@phenom.ffwll.local>
+References: <20220207125933.81634-1-paul@crapouillou.net>
+        <20220207130140.81891-1-paul@crapouillou.net>
+        <20220207130140.81891-2-paul@crapouillou.net>
+        <YkLJU7Pp98CPIHfY@phenom.ffwll.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <d21d742154cbd6d2b7546533655810e0bf7dd82f.camel@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 03:51:43PM +0200, Nicolas Saenz Julienne wrote:
-> > Now we don't explicitly have this pattern because there isn't an
-> > obvious this_cpu_read() for example but it can accidentally happen for
-> > counting. __count_zid_vm_events -> __count_vm_events -> raw_cpu_add is
-> > an example although a harmless one.
-> > 
-> > Any of the mod_page_state ones are more problematic though because we
-> > lock one PCP but potentially update the per-cpu pcp stats of another CPU
-> > of a different PCP that we have not locked and those counters must be
-> > accurate.
-> 
-> But IIUC vmstats don't track pcplist usage (i.e. adding a page into the local
-> pcplist doesn't affect the count at all). It is only when interacting with the
-> buddy allocator that they get updated. It makes sense for the CPU that
-> adds/removes pages from the allocator to do the stat update, regardless of the
-> page's journey.
-> 
+Hi Daniel,
 
-It probably doesn't, I didn't audit it. As I said, it's subtle which is
-why I'm wary of relying on accidental safety of getting a per-cpu pointer
-that may not be stable. Even if it was ok *now*, I would worry that it
-would break in the future. There already has been cases where patches
-tried to move vmstats outside the appropriate locking accidentally.
+Le mar., mars 29 2022 at 10:54:43 +0200, Daniel Vetter=20
+<daniel@ffwll.ch> a =E9crit :
+> On Mon, Feb 07, 2022 at 01:01:40PM +0000, Paul Cercueil wrote:
+>>  Document the new DMABUF based API.
+>>=20
+>>  v2: - Explicitly state that the new interface is optional and is
+>>        not implemented by all drivers.
+>>      - The IOCTLs can now only be called on the buffer FD returned by
+>>        IIO_BUFFER_GET_FD_IOCTL.
+>>      - Move the page up a bit in the index since it is core stuff=20
+>> and not
+>>        driver-specific.
+>>=20
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  ---
+>>   Documentation/driver-api/dma-buf.rst |  2 +
+>>   Documentation/iio/dmabuf_api.rst     | 94=20
+>> ++++++++++++++++++++++++++++
+>>   Documentation/iio/index.rst          |  2 +
+>>   3 files changed, 98 insertions(+)
+>>   create mode 100644 Documentation/iio/dmabuf_api.rst
+>>=20
+>>  diff --git a/Documentation/driver-api/dma-buf.rst=20
+>> b/Documentation/driver-api/dma-buf.rst
+>>  index 2cd7db82d9fe..d3c9b58d2706 100644
+>>  --- a/Documentation/driver-api/dma-buf.rst
+>>  +++ b/Documentation/driver-api/dma-buf.rst
+>>  @@ -1,3 +1,5 @@
+>>  +.. _dma-buf:
+>>  +
+>>   Buffer Sharing and Synchronization
+>>   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>=20
+>>  diff --git a/Documentation/iio/dmabuf_api.rst=20
+>> b/Documentation/iio/dmabuf_api.rst
+>>  new file mode 100644
+>>  index 000000000000..43bb2c1b9fdc
+>>  --- /dev/null
+>>  +++ b/Documentation/iio/dmabuf_api.rst
+>>  @@ -0,0 +1,94 @@
+>>  +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>  +High-speed DMABUF interface for IIO
+>>  +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>  +
+>>  +1. Overview
+>>  +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>  +
+>>  +The Industrial I/O subsystem supports access to buffers through a=20
+>> file-based
+>>  +interface, with read() and write() access calls through the IIO=20
+>> device's dev
+>>  +node.
+>>  +
+>>  +It additionally supports a DMABUF based interface, where the=20
+>> userspace
+>>  +application can allocate and append DMABUF objects to the buffer's=20
+>> queue.
+>>  +This interface is however optional and is not available in all=20
+>> drivers.
+>>  +
+>>  +The advantage of this DMABUF based interface vs. the read()
+>>  +interface, is that it avoids an extra copy of the data between the
+>>  +kernel and userspace. This is particularly useful for high-speed
+>>  +devices which produce several megabytes or even gigabytes of data=20
+>> per
+>>  +second.
+>>  +
+>>  +The data in this DMABUF interface is managed at the granularity of
+>>  +DMABUF objects. Reducing the granularity from byte level to block=20
+>> level
+>>  +is done to reduce the userspace-kernelspace synchronization=20
+>> overhead
+>>  +since performing syscalls for each byte at a few Mbps is just not
+>>  +feasible.
+>>  +
+>>  +This of course leads to a slightly increased latency. For this=20
+>> reason an
+>>  +application can choose the size of the DMABUFs as well as how many=20
+>> it
+>>  +allocates. E.g. two DMABUFs would be a traditional double buffering
+>>  +scheme. But using a higher number might be necessary to avoid
+>>  +underflow/overflow situations in the presence of scheduling=20
+>> latencies.
+>=20
+> So this reads a lot like reinventing io-uring with pre-registered=20
+> O_DIRECT
+> memory ranges. Except it's using dma-buf and hand-rolling a lot of=20
+> pieces
+> instead of io-uring and O_DIRECT.
 
-> > It *might* still be safe but it's subtle, it could be easily accidentally
-> > broken in the future and it would be hard to detect because it would be
-> > very slow corruption of VM counters like NR_FREE_PAGES that must be
-> > accurate.
-> 
-> What does accurate mean here? vmstat consumers don't get accurate data, only
-> snapshots.
+I don't see how io_uring would help us. It's an async I/O framework,=20
+does it allow us to access a kernel buffer without copying the data?=20
+Does it allow us to zero-copy the data to a network interface?
 
-They are accurate in that they have "Eventual Consistency".
-zone_page_state_snapshot exists to get a more accurate count but there is
-always some drift but it still is accurate eventually. There is a clear
-distinction between VM counters which can be inaccurate they are just to
-assist debugging and vmstats like NR_FREE_PAGES that the kernel uses to
-make decisions. It potentially gets very problematic if a per-cpu pointer
-acquired from one zone gets migrated to another zone and the wrong vmstat
-is updated. It *might* still be ok, I haven't audited it but if there is a
-possible that two CPUs can be doing a RMW on one per-cpu vmstat structure,
-it will corrupt and it'll be difficult to detect.
+> At least if the entire justification for dma-buf support is zero-copy
+> support between the driver and userspace it's _really_ not the right=20
+> tool
+> for the job. dma-buf is for zero-copy between devices, with cpu access
+> from userpace (or kernel fwiw) being very much the exception (and=20
+> often
+> flat-out not supported at all).
 
-> And as I comment above you can't infer information about pcplist
-> usage from these stats. So, I see no real need for CPU locality when updating
-> them (which we're still retaining nonetheless, as per my comment above), the
-> only thing that is really needed is atomicity, achieved by disabling IRQs (and
-> preemption on RT). And this, even with your solution, is achieved through the
-> struct zone's spin_lock (plus a preempt_disable() in RT).
-> 
+We want both. Using dma-bufs for the driver/userspace interface is a=20
+convenience as we then have a unique API instead of two distinct ones.
 
-Yes, but under the series I had, I was using local_lock to stabilise what
-CPU is being used before acquiring the per-cpu pointer. Strictly speaking,
-it doesn't need a local_lock but the local_lock is clearer in terms of
-what is being protected and it works with PROVE_LOCKING which already
-caught a problematic softirq interaction for me when developing the series.
+Why should CPU access from userspace be the exception? It works fine=20
+for IIO dma-bufs. You keep warning about this being a terrible design,=20
+but I simply don't see it.
 
-> All in all, my point is that none of the stats are affected by the change, nor
-> have a dependency with the pcplists handling. And if we ever have the need to
-> pin vmstat updates to pcplist usage they should share the same pcp structure.
-> That said, I'm happy with either solution as long as we get remote pcplist
-> draining. So if still unconvinced, let me know how can I help. I have access to
-> all sorts of machines to validate perf results, time to review, or even to move
-> the series forward.
-> 
+Cheers,
+-Paul
 
-I also want the remote draining for PREEMPT_RT to avoid interference
-of isolated CPUs due to workqueue activity but whatever the solution, I
-would be happier if the per-cpu lock is acquired with the CPU stablised
-and covers the scope of any vmstat delta updates stored in the per-cpu
-structure.  The earliest I will be rebasing my series is 5.18-rc1 as I
-see limited value in basing it on 5.17 aiming for a 5.19 merge window.
+>>  +
+>>  +2. User API
+>>  +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>  +
+>>  +``IIO_BUFFER_DMABUF_ALLOC_IOCTL(struct iio_dmabuf_alloc_req *)``
+>>  +----------------------------------------------------------------
+>>  +
+>>  +Each call will allocate a new DMABUF object. The return value (if=20
+>> not
+>>  +a negative errno value as error) will be the file descriptor of=20
+>> the new
+>>  +DMABUF.
+>>  +
+>>  +``IIO_BUFFER_DMABUF_ENQUEUE_IOCTL(struct iio_dmabuf *)``
+>>  +--------------------------------------------------------
+>>  +
+>>  +Place the DMABUF object into the queue pending for hardware=20
+>> process.
+>>  +
+>>  +These two IOCTLs have to be performed on the IIO buffer's file
+>>  +descriptor, obtained using the `IIO_BUFFER_GET_FD_IOCTL` ioctl.
+>>  +
+>>  +3. Usage
+>>  +=3D=3D=3D=3D=3D=3D=3D=3D
+>>  +
+>>  +To access the data stored in a block by userspace the block must be
+>>  +mapped to the process's memory. This is done by calling mmap() on=20
+>> the
+>>  +DMABUF's file descriptor.
+>>  +
+>>  +Before accessing the data through the map, you must use the
+>>  +DMA_BUF_IOCTL_SYNC(struct dma_buf_sync *) ioctl, with the
+>>  +DMA_BUF_SYNC_START flag, to make sure that the data is available.
+>>  +This call may block until the hardware is done with this block.=20
+>> Once
+>>  +you are done reading or writing the data, you must use this ioctl=20
+>> again
+>>  +with the DMA_BUF_SYNC_END flag, before enqueueing the DMABUF to the
+>>  +kernel's queue.
+>>  +
+>>  +If you need to know when the hardware is done with a DMABUF, you=20
+>> can
+>>  +poll its file descriptor for the EPOLLOUT event.
+>>  +
+>>  +Finally, to destroy a DMABUF object, simply call close() on its=20
+>> file
+>>  +descriptor.
+>>  +
+>>  +For more information about manipulating DMABUF objects, see:=20
+>> :ref:`dma-buf`.
+>>  +
+>>  +A typical workflow for the new interface is:
+>>  +
+>>  +    for block in blocks:
+>>  +      DMABUF_ALLOC block
+>>  +      mmap block
+>>  +
+>>  +    enable buffer
+>>  +
+>>  +    while !done
+>>  +      for block in blocks:
+>>  +        DMABUF_ENQUEUE block
+>>  +
+>>  +        DMABUF_SYNC_START block
+>>  +        process data
+>>  +        DMABUF_SYNC_END block
+>>  +
+>>  +    disable buffer
+>>  +
+>>  +    for block in blocks:
+>>  +      close block
+>>  diff --git a/Documentation/iio/index.rst=20
+>> b/Documentation/iio/index.rst
+>>  index 58b7a4ebac51..669deb67ddee 100644
+>>  --- a/Documentation/iio/index.rst
+>>  +++ b/Documentation/iio/index.rst
+>>  @@ -9,4 +9,6 @@ Industrial I/O
+>>=20
+>>      iio_configfs
+>>=20
+>>  +   dmabuf_api
+>>  +
+>>      ep93xx_adc
+>>  --
+>>  2.34.1
+>>=20
+>=20
+> --
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
 
--- 
-Mel Gorman
-SUSE Labs
+

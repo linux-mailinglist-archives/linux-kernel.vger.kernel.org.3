@@ -2,137 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15434EB60C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7754EB60F
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237498AbiC2Wda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 18:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
+        id S237594AbiC2WfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 18:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236806AbiC2Wd0 (ORCPT
+        with ESMTP id S237593AbiC2WfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 18:33:26 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C696A1C5526;
-        Tue, 29 Mar 2022 15:31:42 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id w8so18893962pll.10;
-        Tue, 29 Mar 2022 15:31:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OX10xLhNulTBcdU5muA8JTM3Au0wWeRUYrKCzsEHaU0=;
-        b=XulX9SUn7wpdo6Fv0r2P+0LXSb/g25UbI2y0CULw/8zpw73PJi31NAptJj/hMfqqBA
-         Js94HsIZCiFgQY6UJ0HziKiPkGGirLUY4jeZ3AEZ1JFtGUCL4ii6U0HyIUHAvWHWjFv+
-         yvgK1MiYg55maIktd/hI3NNTZ9Ag3WTM8jvfMDwpAwl5TGj4BfBFXSi92blY7ckHU3fJ
-         bsslItjIJ7wPi7OA6PABXdcnv2SJMzsMqm5XYvmebE7IwRUXn3nejlvvTmg6KzoUvc8J
-         yUVQrKNz7rwgW6WBGmpsII1/uAd/jdm1Caw5zb6yZn0zpUi072JW3y4EuFm3WxvKlSlf
-         mBOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OX10xLhNulTBcdU5muA8JTM3Au0wWeRUYrKCzsEHaU0=;
-        b=NQbMkEx+agDDlg72EAIDn0uyk8Yshju5B0sZCLQgN5sMMGwJUrYr5UrNdLQY9xvnCj
-         dapG6fqZFeB5eDvlmMqAU/GduwJhje7kmaYQlo0f8Ou11ic9O4UIN/BRLHB9eY+kpEDF
-         54VUNJ90J55xE3EBfwjULw2PIwv67eyU5AI/qX/nAHU9rf8R+ubM0GO7s6RbH0nhWzbM
-         eb9hCGR7LK0125PBNisnLJwlxq9X07spu0Gz77WRIEoA6w/BUerM/p7UJ9Caq6Kz4KPF
-         VvruyzFDsnoHJFVab+DyVpyXQCMjlB59aDjrXU3BVYTIDU04t5K1HcAy+91jfJV/UfcM
-         tyEA==
-X-Gm-Message-State: AOAM533fih4eVM7+xsXo38oQdsCm713aqvX4kUFhRFjKO+kNYtxBl1I0
-        JJ9ozRrArJdQKATp2Btfw9iSRd6NL/DkuxRKv668kZ6a
-X-Google-Smtp-Source: ABdhPJzzU9nKYDwnoo0b0tNBKKyIBKwuVtrdgvN/rFLkzfaoP2XTKh8Ld0Ov8YjVYWmKALwefbzUCOijuGRruyzouis=
-X-Received: by 2002:a17:90b:4b45:b0:1c7:cc71:fdf7 with SMTP id
- mi5-20020a17090b4b4500b001c7cc71fdf7mr1425270pjb.33.1648593102302; Tue, 29
- Mar 2022 15:31:42 -0700 (PDT)
+        Tue, 29 Mar 2022 18:35:16 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE1CD76C3
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:33:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648593211; x=1680129211;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gJUVHXuYif343W5kwl53LsjF/P1U/FFSXed6oIWSZgo=;
+  b=EvSjBq6BY6uf/+EKPMZLXOMU9qOPY4boMVV13nB76/lJcBwZdgzUnGGg
+   kG+p+YXqvzp0a8ouoBZ61sSX7sB4xYIu/e+bv1ZMJ2gtK8r5L0zrjevuU
+   vSowcjH/8J+re49u+keOM5f6kBGC1/U/VxDc5JC4v3DXM0Uk1kbCsBn8k
+   sea5+6yPMMnExsSc7p1tDSpjGOSmWWdOJpQVjaAtN4L2iqt+Jec2WJ0kQ
+   tM+AgkHK17sPEqwY/DTyNxzsV54Z1RgdaYc2ZP91SCrjbwOT6snzuHRhn
+   5uSR36pJ32+l9XGhlqLeTgM4yuea70xCxGRk0rkrIo7YhQKYuegV6qY1Q
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="259361728"
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="259361728"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 15:33:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="585767823"
+Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 29 Mar 2022 15:33:30 -0700
+Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nZKP3-0000jm-I2; Tue, 29 Mar 2022 22:33:29 +0000
+Date:   Wed, 30 Mar 2022 06:32:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [andersson:wip/sc8180x-next-20220301-take2 5/27]
+ drivers/gpu/drm/msm/dp/dp_hpd.c:83: undefined reference to
+ `typec_mux_unregister'
+Message-ID: <202203300600.W7zSpGZl-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220329181935.2183-1-beaub@linux.microsoft.com>
- <CAADnVQ+XpoCjL-rSz2hj05L21s8NtMJuWYC14b9Mvk7XE5KT_g@mail.gmail.com> <20220329201057.GA2549@kbox>
-In-Reply-To: <20220329201057.GA2549@kbox>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 29 Mar 2022 15:31:31 -0700
-Message-ID: <CAADnVQ+gm4yU9S6y+oeR3TNj82kKX0gk4ey9gVnKXKWy1Js4-A@mail.gmail.com>
-Subject: Re: [PATCH] tracing/user_events: Add eBPF interface for user_event
- created events
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 1:11 PM Beau Belgrave <beaub@linux.microsoft.com> wrote:
->
-> On Tue, Mar 29, 2022 at 12:50:40PM -0700, Alexei Starovoitov wrote:
-> > On Tue, Mar 29, 2022 at 11:19 AM Beau Belgrave
-> > <beaub@linux.microsoft.com> wrote:
-> > >
-> > > Send user_event data to attached eBPF programs for user_event based perf
-> > > events.
-> > >
-> > > Add BPF_ITER flag to allow user_event data to have a zero copy path into
-> > > eBPF programs if required.
-> > >
-> > > Update documentation to describe new flags and structures for eBPF
-> > > integration.
-> > >
-> > > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-> >
-> > The commit describes _what_ it does, but says nothing about _why_.
-> > At present I see no use out of bpf and user_events connection.
-> > The whole user_events feature looks redundant to me.
-> > We have uprobes and usdt. It doesn't look to me that
-> > user_events provide anything new that wasn't available earlier.
->
-> A lot of the why, in general, for user_events is covered in the first
-> change in the series.
-> Link: https://lore.kernel.org/all/20220118204326.2169-1-beaub@linux.microsoft.com/
->
-> The why was also covered in Linux Plumbers Conference 2021 within the
-> tracing microconference.
->
-> An example of why we want user_events:
-> Managed code running that emits data out via Open Telemetry.
-> Since it's managed there isn't a stub location to patch, it moves.
-> We watch the Open Telemetry spans in an eBPF program, when a span takes
-> too long we collect stack data and perform other actions.
-> With user_events and perf we can monitor the entire system from the root
-> container without having to have relay agents within each
-> cgroup/namespace taking up resources.
-> We do not need to enter each cgroup mnt space and determine the correct
-> patch location or the right version of each binary for processes that
-> use user_events.
->
-> An example of why we want eBPF integration:
-> We also have scenarios where we are live decoding the data quickly.
-> Having user_data fed directly to eBPF lets us cast the data coming in to
-> a struct and decode very very quickly to determine if something is
-> wrong.
-> We can take that data quickly and put it into maps to perform further
-> aggregation as required.
-> We have scenarios that have "skid" problems, where we need to grab
-> further data exactly when the process that had the problem was running.
-> eBPF lets us do all of this that we cannot easily do otherwise.
->
-> Another benefit from user_events is the tracing is much faster than
-> uprobes or others using int 3 traps. This is critical to us to enable on
-> production systems.
+tree:   https://github.com/andersson/kernel wip/sc8180x-next-20220301-take2
+head:   4e9e94d03691fd0820dcff8d0877ddb280b01f88
+commit: e4014b0e8a0a46349e91bfb9ef44a59d5a4a2771 [5/27] drm/msm/dp: Add typec_mux implementation
+config: microblaze-randconfig-r006-20220327 (https://download.01.org/0day-ci/archive/20220330/202203300600.W7zSpGZl-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/andersson/kernel/commit/e4014b0e8a0a46349e91bfb9ef44a59d5a4a2771
+        git remote add andersson https://github.com/andersson/kernel
+        git fetch --no-tags andersson wip/sc8180x-next-20220301-take2
+        git checkout e4014b0e8a0a46349e91bfb9ef44a59d5a4a2771
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=microblaze SHELL=/bin/bash
 
-None of it makes sense to me.
-To take advantage of user_events user space has to be modified
-and writev syscalls inserted.
-This is not cheap and I cannot see a production system using this interface.
-All you did is a poor man version of lttng that doesn't rely
-on such heavy instrumentation.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   microblaze-linux-ld: drivers/gpu/drm/msm/dp/dp_hpd.o: in function `dp_hpd_unregister_typec_mux':
+>> drivers/gpu/drm/msm/dp/dp_hpd.c:83: undefined reference to `typec_mux_unregister'
+   microblaze-linux-ld: drivers/gpu/drm/msm/dp/dp_hpd.o: in function `dp_hpd_mux_set':
+>> drivers/gpu/drm/msm/dp/dp_hpd.c:55: undefined reference to `typec_mux_get_drvdata'
+   microblaze-linux-ld: drivers/gpu/drm/msm/dp/dp_hpd.o: in function `dp_hpd_get':
+>> drivers/gpu/drm/msm/dp/dp_hpd.c:109: undefined reference to `typec_mux_register'
+>> microblaze-linux-ld: drivers/gpu/drm/msm/dp/dp_hpd.c:83: undefined reference to `typec_mux_unregister'
+
+
+vim +83 drivers/gpu/drm/msm/dp/dp_hpd.c
+
+    52	
+    53	static int dp_hpd_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
+    54	{
+  > 55		struct dp_hpd_private *dp_hpd = typec_mux_get_drvdata(mux);
+    56		struct dp_usbpd *usbpd = &dp_hpd->dp_usbpd;
+    57		struct typec_displayport_data *dp_data = state->data;
+    58		int pin_assign = 0;
+    59	
+    60		if (dp_data) {
+    61			pin_assign = DP_CONF_GET_PIN_ASSIGN(dp_data->conf);
+    62			usbpd->hpd_irq = !!(dp_data->status & DP_STATUS_IRQ_HPD);
+    63			usbpd->multi_func = pin_assign == DP_PIN_ASSIGN_C || DP_PIN_ASSIGN_E;
+    64		}
+    65	
+    66		if (!pin_assign) {
+    67			if (dp_hpd->connected) {
+    68				dp_hpd->connected = false;
+    69				dp_hpd->dp_cb->disconnect(dp_hpd->dev);
+    70			}
+    71		} else if (!dp_hpd->connected) {
+    72			dp_hpd->connected = true;
+    73			dp_hpd->dp_cb->configure(dp_hpd->dev);
+    74		} else {
+    75			dp_hpd->dp_cb->attention(dp_hpd->dev);
+    76		}
+    77	
+    78		return 0;
+    79	}
+    80	
+    81	static void dp_hpd_unregister_typec_mux(void *data)
+    82	{
+  > 83		typec_mux_unregister(data);
+    84	}
+    85	
+    86	struct dp_usbpd *dp_hpd_get(struct device *dev, struct dp_usbpd_cb *cb)
+    87	{
+    88		struct typec_mux_desc mux_desc = {};
+    89		struct dp_hpd_private *dp_hpd;
+    90		int rc;
+    91	
+    92		if (!cb) {
+    93			pr_err("invalid cb data\n");
+    94			return ERR_PTR(-EINVAL);
+    95		}
+    96	
+    97		dp_hpd = devm_kzalloc(dev, sizeof(*dp_hpd), GFP_KERNEL);
+    98		if (!dp_hpd)
+    99			return ERR_PTR(-ENOMEM);
+   100	
+   101		dp_hpd->dev = dev;
+   102		dp_hpd->dp_cb = cb;
+   103	
+   104		dp_hpd->dp_usbpd.connect = dp_hpd_connect;
+   105	
+   106		mux_desc.fwnode = dev->fwnode;
+   107		mux_desc.set = dp_hpd_mux_set;
+   108		mux_desc.drvdata = dp_hpd;
+ > 109		dp_hpd->mux = typec_mux_register(dev, &mux_desc);
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

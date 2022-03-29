@@ -2,93 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5A84EA878
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 09:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 748614EA87C
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 09:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233360AbiC2H02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 03:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
+        id S233376AbiC2H2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 03:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231810AbiC2H00 (ORCPT
+        with ESMTP id S229502AbiC2H2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 03:26:26 -0400
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB17098581
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 00:24:44 -0700 (PDT)
-Received: by mail-vk1-xa33.google.com with SMTP id d129so9260359vkh.13
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 00:24:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linbit-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pL+Cp4iZbwgLcxUWKxODDZPNpYMnhx3erX4iFxsT0IY=;
-        b=T2X5MvUivqE5mgGVO92sTOil53SIfwWtVoWix5F1x5/LbLmTJinRQzydeIjsOg+oYm
-         pKDi6tgHEHYKB3OTiYFgcyri+RIF4Qn9qCIuKBnQ1Ol/qoEXzmd+qvThYxVafmsd6YDd
-         3UpcuL/FjUuxWcpFOoyJFuVabitOWYdb87YBN4vgSkLQRa3MovqdaeuuHzbtqdC8ModF
-         4y/cffHuq9h74/FNSFBBxy5AHd26Gv6zhaEEGx++3d5FVkVSDcR5K58YEvvQiFM9FtZq
-         z87LdY/aWEQ2eZk6XGd97IZzuVcXmea6pv2SlMJqokJ9cY6SzGdMyMCMZw1lYb4rHAYy
-         +QZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pL+Cp4iZbwgLcxUWKxODDZPNpYMnhx3erX4iFxsT0IY=;
-        b=leeJsw7Qfr39kpU1ig8lEFA4aAOgPDGe2gWYx9qYqeTeOLH7jMnITBBku1FySnk896
-         fjEkzNsh4/IvGk6Rf+dL7C0xHjcc19M2OOd8kcHbw+HP0fZUjVSJWRld+/iLCzpu8QnK
-         Iypd4LFFJAprbGnCWRiAe0QhmtJVnKox3llOkdObzj+6wY+6oHJnl9ZptlQpOtDg4JEu
-         MMbESQP/8T54bNk7QKSC8LMQxhpqJs76HbSn0M02R5SnvR73gkaqUwy1wr2ER4bk8YiX
-         YDZT4EMT+CiYiP5MHe72juBkzMUEpoG3lTFFnhH7zA1DJfuQiCOyBdEWMbmjWBJagrTv
-         X2qg==
-X-Gm-Message-State: AOAM532IH96gF+AuXyi+FrrIWZpHTYU7aY4RsKSFCYPXdOZmkAzgUxw1
-        Mw4GA/Nu0Fugj3HsiEB6Wu+XDocGGmAl6lWlBxvFNqNJruq1ww==
-X-Google-Smtp-Source: ABdhPJx+IvOLBtbExo85GXpQ1kupYL8mOSu3U3yGjfkVfzkRpmTZcfCSmQYoicsRKDWxcSVJxNJYCXyWphBtDzrQDWQ=
-X-Received: by 2002:a1f:6a82:0:b0:33f:7eeb:5989 with SMTP id
- f124-20020a1f6a82000000b0033f7eeb5989mr15757736vkc.29.1648538683833; Tue, 29
- Mar 2022 00:24:43 -0700 (PDT)
+        Tue, 29 Mar 2022 03:28:00 -0400
+Received: from ha.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1A282467F4;
+        Tue, 29 Mar 2022 00:26:17 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by ha.nfschina.com (Postfix) with ESMTP id BF6B51E80D7E;
+        Tue, 29 Mar 2022 15:25:42 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from ha.nfschina.com ([127.0.0.1])
+        by localhost (ha.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9r--XoVcY8pM; Tue, 29 Mar 2022 15:25:40 +0800 (CST)
+Received: from [18.165.124.108] (unknown [101.228.248.165])
+        (Authenticated sender: yuzhe@nfschina.com)
+        by ha.nfschina.com (Postfix) with ESMTPA id 6921A1E80D70;
+        Tue, 29 Mar 2022 15:25:39 +0800 (CST)
+Message-ID: <49b93407-dee3-b3bb-6d36-d6f94e9b16bf@nfschina.com>
+Date:   Tue, 29 Mar 2022 15:26:11 +0800
 MIME-Version: 1.0
-References: <20220329070618.GA20396@lst.de>
-In-Reply-To: <20220329070618.GA20396@lst.de>
-From:   Philipp Reisner <philipp.reisner@linbit.com>
-Date:   Tue, 29 Mar 2022 09:24:33 +0200
-Message-ID: <CADGDV=XrhzSxLyES9dtKj1-cQq6Zh32psipLJCoDGRNzAYaZwA@mail.gmail.com>
-Subject: Re: state of drbd in mainline
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Jens Axboe <axboe@kernel.dk>, drbd-dev@lists.linbit.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] KVM: arm64: vgic-debug: remove unnecessary type castings
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
+        kernel-janitors@vger.kernel.org
+References: <20220328103836.2829-1-yuzhe@nfschina.com>
+ <87h77ifbbd.wl-maz@kernel.org>
+ <0f4cf955-ca2b-626f-867e-5a0ecfe68ca1@nfschina.com>
+ <87r16li6e7.wl-maz@kernel.org>
+From:   yuzhe <yuzhe@nfschina.com>
+In-Reply-To: <87r16li6e7.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RDNS_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph,
+在 2022/3/29 15:07, Marc Zyngier 写道:
 
-what do you expect for the DRBD changes? Usually, they fall into the
-category: yes, obviously. When you are changing the block layer in
-this way, then that is necessary for the in-tree DRBD code.
-
-Regarding users: Yes, there are users of the in-tree DRBD code. Very
-big corporations. And, yes, we see pressure building up that we get
-our act together and re-sync the in-tree DRBD with the out-of tree
-DRBD.
-
-best regards,
- Phil
-
-
-On Tue, Mar 29, 2022 at 9:06 AM Christoph Hellwig <hch@lst.de> wrote:
+> On Tue, 29 Mar 2022 07:14:16 +0100,
+> yuzhe <yuzhe@nfschina.com> wrote:
+>>>> @@ -229,7 +229,7 @@ static void print_irq_state(struct seq_file *s, struct vgic_irq *irq,
+>>>>      static int vgic_debug_show(struct seq_file *s, void *v)
+>>>>    {
+>>>> -	struct kvm *kvm = (struct kvm *)s->private;
+>>>> +	struct kvm *kvm = s->private;
+>>>>    	struct vgic_state_iter *iter = (struct vgic_state_iter *)v;
+>>> How about you fully get rid of the unnecessary casts then?
+>>>
+>>> 	M.
+>> I don't know what you exactly mean. I follow the
+>> kernel-janitors/TODO List to get rid of the unnecessary casts.  And
+>> I checked all the code in the arch directory and found these issues.
+> Let me quote the lines again:
 >
-> Hi all,
+>>>>      static int vgic_debug_show(struct seq_file *s, void *v)
+> [...]
+>>>>    	struct vgic_state_iter *iter = (struct vgic_state_iter *)v;
+> Do you see what I mean?
 >
-> while I've been reworking large parts of the block layer over the
-> last months I've basically never gotten drbd reviews, and in general
-> drbd seems to be completely maintained upstream.  Do we even have users
-> for it?  Is it time to drop drbd from the kernel tree?
->
-> Thanks,
->         Christoph
+> 	M.
+
+Got it, thanks. I will check again and resubmit.
+
+yuzhe
+

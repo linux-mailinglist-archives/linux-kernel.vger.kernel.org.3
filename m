@@ -2,115 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD054EADDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B7F4EADF3
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236991AbiC2MyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 08:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
+        id S233793AbiC2M5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 08:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237214AbiC2MxD (ORCPT
+        with ESMTP id S237045AbiC2M4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 08:53:03 -0400
-Received: from smtp-bc08.mail.infomaniak.ch (smtp-bc08.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc08])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474411AF2B;
-        Tue, 29 Mar 2022 05:51:09 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KSTvc1kLVzMq173;
-        Tue, 29 Mar 2022 14:51:08 +0200 (CEST)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4KSTvb754VzlhMbh;
-        Tue, 29 Mar 2022 14:51:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1648558268;
-        bh=smcHkSzsHA9UZrPxO4w4wuj0alDdabBqgJAayQUQddQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0Spx8mfvteAOpN5mHxVWCFqncvkCGz4WPO4np6Z2DNZsi685wIXBij4Q3qpCU9Ld2
-         FYuOBVwBQZf04SFcEHQwAnZS+4Nwf8pOPhvrFsZI9Vl11zKUyHZvi0UwUZpKkk05T9
-         e4rIBNgAen+ssbWfvNqAQUta5mFhqHmg5KMuu870=
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jann Horn <jannh@google.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [PATCH v2 12/12] landlock: Add design choices documentation for filesystem access rights
-Date:   Tue, 29 Mar 2022 14:51:17 +0200
-Message-Id: <20220329125117.1393824-13-mic@digikod.net>
-In-Reply-To: <20220329125117.1393824-1-mic@digikod.net>
-References: <20220329125117.1393824-1-mic@digikod.net>
+        Tue, 29 Mar 2022 08:56:50 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A175A0AE
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:53:45 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id j13so17531402plj.8
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:53:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=H+yRyS1d98IcrBQFZB9iiSX2T4SDFA0//etts+xx4xA=;
+        b=1pslRGrN6XglfZNraIDgwb+dTS7GLxRkQPZso9STUANxT6OprvFvoXCs5iZNULpR+X
+         amHu9WaFS3xEGBVG+qwC1n7q2SOLW1qXN4uKS0gPJiWtH5bbuHalsJO9KyAv5GMzRmRT
+         WwWlDk3b5j8H3ktTMVhPx7RxJqyNOqGzv30XJPiMBXhljWX3fsk40rvcHardjHedTUyK
+         tXJjoRd53F/qbrbOHJrcr2ArcRtahOEeQDvSQVejEOQzxE59PylUdAPyhRLD0JqW2kmz
+         cpfacwGZu5igPX9MWCW+vuY6aI46qjOswKbR/AmoLN4yE+SnQ2+HJrcwDq9cd9hZC0eG
+         c11A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=H+yRyS1d98IcrBQFZB9iiSX2T4SDFA0//etts+xx4xA=;
+        b=GaYPYPqOXF8cNUUyFQbLcJJqAliIiL/HCOH4S0A2BQLi24uuOUfLgN0pN8Sgrf3JLY
+         WBzOZb+3jsW3Z6R2V3ETe2UPhvw+aA+NM0bB/FAwkgJms9pdR4YNn2dPtsH/bxKFtlC1
+         VL7eeafp7k+P+6zKKwG5HfncKaGtW3YzVtKw6DqwhEDunbJl6ujO3bQOiUz70jqleT6p
+         F8Vh7cDmhGEavioxxmTQDybUKT1YR3ahNl4l+xUD+msabSCrjRzshw5fgqPJd+HDEpWO
+         WoZie9mVt0Xy609jQF+QOja9f4XQn4WAqA0127BmKtAxtaygo+UeyvGScCfRh9qCh1PC
+         QH0g==
+X-Gm-Message-State: AOAM532bL9kgoJpdJDohnSI7qS/f0VVfTbDS+GTXeH6kLUCqsRuXP1o0
+        kUFMg0zdnnZQH0c2XFnOMmw6Qg==
+X-Google-Smtp-Source: ABdhPJxmIuKDNw+xtyBa2P/G7A0/9sbdJw2K8K/UeRrneWzIe0Wxgn+sqcZQ74rLrruxtnUkjbRnug==
+X-Received: by 2002:a17:902:f70f:b0:153:ebfe:21b3 with SMTP id h15-20020a170902f70f00b00153ebfe21b3mr30462409plo.119.1648558425372;
+        Tue, 29 Mar 2022 05:53:45 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id n4-20020a637204000000b00398522203a2sm5730641pgc.80.2022.03.29.05.53.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 05:53:44 -0700 (PDT)
+Message-ID: <a3e78af2-b0e3-9a97-5bbd-4bdbc5c5a58d@kernel.dk>
+Date:   Tue, 29 Mar 2022 06:53:43 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH -next RFC 0/6] improve large random io for HDD
+Content-Language: en-US
+To:     Yu Kuai <yukuai3@huawei.com>, andriy.shevchenko@linux.intel.com,
+        john.garry@huawei.com, ming.lei@redhat.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+References: <20220329094048.2107094-1-yukuai3@huawei.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220329094048.2107094-1-yukuai3@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mickaël Salaün <mic@linux.microsoft.com>
+On 3/29/22 3:40 AM, Yu Kuai wrote:
+> There is a defect for blk-mq compare to blk-sq, specifically split io
+> will end up discontinuous if the device is under high io pressure, while
+> split io will still be continuous in sq, this is because:
+> 
+> 1) split bio is issued one by one, if one bio can't get tag, it will go
+> to wail. - patch 2
+> 2) each time 8(or wake batch) requests is done, 8 waiters will be woken up.
+> Thus if a thread is woken up, it will unlikey to get multiple tags.
+> - patch 3,4
+> 3) new io can preempt tag even if there are lots of threads waiting for
+> tags. - patch 5
+> 
+> Test environment:
+> x86 vm, nr_requests is set to 64, queue_depth is set to 32 and
+> max_sectors_kb is set to 128.
+> 
+> I haven't tested this patchset on physical machine yet, I'll try later
+> if anyone thinks this approch is meaningful.
 
-Reviewed-by: Paul Moore <paul@paul-moore.com>
-Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-Link: https://lore.kernel.org/r/20220329125117.1393824-13-mic@digikod.net
----
+A real machine test would definitely be a requirement. What real world
+uses cases is this solving? These days most devices have plenty of tags,
+and I would not really expect tag starvation to be much of a concern.
 
-Changes since v1:
-* Add Reviewed-by: Paul Moore.
-* Update date.
----
- Documentation/security/landlock.rst | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+However, I do think there's merrit in fixing the unfairness we have
+here. But not at the cost of all of this. Why not just simply enforce
+more strict ordering of tag allocations? If someone is waiting, you get
+to wait too.
 
-diff --git a/Documentation/security/landlock.rst b/Documentation/security/landlock.rst
-index 3df68cb1d10f..eb4905993a59 100644
---- a/Documentation/security/landlock.rst
-+++ b/Documentation/security/landlock.rst
-@@ -7,7 +7,7 @@ Landlock LSM: kernel documentation
- ==================================
- 
- :Author: Mickaël Salaün
--:Date: March 2021
-+:Date: March 2022
- 
- Landlock's goal is to create scoped access-control (i.e. sandboxing).  To
- harden a whole system, this feature should be available to any process,
-@@ -42,6 +42,21 @@ Guiding principles for safe access controls
- * Computation related to Landlock operations (e.g. enforcing a ruleset) shall
-   only impact the processes requesting them.
- 
-+Design choices
-+==============
-+
-+Filesystem access rights
-+------------------------
-+
-+All access rights are tied to an inode and what can be accessed through it.
-+Reading the content of a directory doesn't imply to be allowed to read the
-+content of a listed inode.  Indeed, a file name is local to its parent
-+directory, and an inode can be referenced by multiple file names thanks to
-+(hard) links.  Being able to unlink a file only has a direct impact on the
-+directory, not the unlinked inode.  This is the reason why
-+`LANDLOCK_ACCESS_FS_REMOVE_FILE` or `LANDLOCK_ACCESS_FS_REFER` are not allowed
-+to be tied to files but only to directories.
-+
- Tests
- =====
- 
+And I don't see much utility at all in tracking how many splits (and
+hence tags) would be required. Is this really a common issue, tons of
+splits and needing many tags? Why not just enforce the strict ordering
+as mentioned above, not allowing new allocators to get a tag if others
+are waiting, but perhaps allow someone submitting a string of splits to
+indeed keep allocating.
+
+Yes, it'll be less efficient to still wake one-by-one, but honestly do
+we really care about that? If you're stalled on waiting for other IO to
+finish and release a tag, that isn't very efficient to begin with and
+doesn't seem like a case worth optimizing for me.
+
 -- 
-2.35.1
+Jens Axboe
 

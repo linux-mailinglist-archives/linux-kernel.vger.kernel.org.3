@@ -2,60 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC664EA493
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 03:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA8B4EA496
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 03:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiC2B00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 21:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35322 "EHLO
+        id S229662AbiC2B2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 21:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiC2B0Y (ORCPT
+        with ESMTP id S229446AbiC2B2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 21:26:24 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1163665F5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 18:24:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648517083; x=1680053083;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Mu17qYsjkCHyz1+QOh7SLV+fK9EV9Jl13PPWrJf+Dmk=;
-  b=c5CneQSLlHDWPYZD25jmiZKRrKlVvT2SFZkubN6RDpnkxFhuxI/NR+/c
-   FH9PtB408Z+Dof/JA42PiaFeihmJ8SusdcQ8/56k5iApP+puibUqeGW6m
-   hd/icPqfMGk5CiNLz8l4/U5+UapoVoUmtzEdxMRvlgYNp48Ymgx0f8/L6
-   BRJpTnOspyVLGe4f3t0a0zKWlWRtXRcnUF0FZRKJYxTWpmJs4vV6WBOfG
-   SouvtSzM/wYyIXTSCTADWIwb0xb/tE9VWAzQ79ZW9wK3hECa8W0lSbHai
-   XxftdwVQkI2a2M77z98LQVSMAO6t6DeH/ykjCW/rdGoiBd6nrMbUuqtdZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="345572294"
-X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="345572294"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 18:24:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
-   d="scan'208";a="546179180"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 28 Mar 2022 18:24:41 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nZ0bA-0002UR-IL; Tue, 29 Mar 2022 01:24:40 +0000
-Date:   Tue, 29 Mar 2022 09:24:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Pirko <jiri@nvidia.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [jpirko-mlxsw:jiri_devel_linecards 84/97]
- drivers/net/netdevsim/dev.c:638:14: error: too many arguments to function
- call, expected 3, have 4
-Message-ID: <202203290946.i4BOVfVX-lkp@intel.com>
+        Mon, 28 Mar 2022 21:28:30 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A001D65FB;
+        Mon, 28 Mar 2022 18:26:43 -0700 (PDT)
+X-UUID: 4ca7773ddab04d6b921383b775c93caf-20220329
+X-UUID: 4ca7773ddab04d6b921383b775c93caf-20220329
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 604441078; Tue, 29 Mar 2022 09:26:39 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 29 Mar 2022 09:26:38 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 29 Mar 2022 09:26:37 +0800
+Message-ID: <e41e909f85e3891edb6b66d7d5a810af103113c8.camel@mediatek.com>
+Subject: Re: [PATCH v3, 03/10] dt-bindings: media: mtk-vcodec: Adds encoder
+ cores dt-bindings for mt8195
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Maoguang Meng" <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 29 Mar 2022 09:26:37 +0800
+In-Reply-To: <YkG8ka1xY2k+HWi1@robh.at.kernel.org>
+References: <20220317082230.23622-1-irui.wang@mediatek.com>
+         <20220317082230.23622-4-irui.wang@mediatek.com>
+         <Yj4s0zcHxz3U3wlc@robh.at.kernel.org>
+         <ab2b24eeb51048227ad7b2ac659617a7da5b2e45.camel@mediatek.com>
+         <YkG8ka1xY2k+HWi1@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,92 +75,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_linecards
-head:   7acc15a4d5cd40bc4ab8bafe3f376adacd6f4bb2
-commit: 9f172debd1c3d2de76650ee4e20aaa1bc31bb79e [84/97] netdevsim: allow port objects to be linked with line cards
-config: i386-randconfig-a014-20220328 (https://download.01.org/0day-ci/archive/20220329/202203290946.i4BOVfVX-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jpirko/linux_mlxsw/commit/9f172debd1c3d2de76650ee4e20aaa1bc31bb79e
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw jiri_devel_linecards
-        git checkout 9f172debd1c3d2de76650ee4e20aaa1bc31bb79e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/netdevsim/
+Dear Rob,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Many thanks for your attention.
 
-All errors (new ones prefixed by >>):
+On Mon, 2022-03-28 at 08:48 -0500, Rob Herring wrote:
+> On Sat, Mar 26, 2022 at 10:00:55AM +0800, Irui Wang wrote:
+> > Dear Rob,
+> > 
+> > Thanks for your review and comments.
+> > 
+> > On Fri, 2022-03-25 at 15:57 -0500, Rob Herring wrote:
+> > > On Thu, Mar 17, 2022 at 04:22:23PM +0800, Irui Wang wrote:
+> > > > Adds encoder cores dt-bindings for mt8195.
+> > > 
+> > > Why?
+> > 
+> > mt8195 has two h264 encoder cores and we want to enable both of
+> > them.
+> > the original encoder bindings file is for single core which may can
+> > not
+> > handle it, so we new a core dt-bindings. We will think about it
+> > again
+> > about this dt-bindings.
+> > > 
+> > > > 
+> > > > Signed-off-by: Irui Wang <irui.wang@mediatek.com>
+> > > > ---
+> > > >  .../media/mediatek,vcodec-encoder-core.yaml   | 181
+> > > > ++++++++++++++++++
+> > > >  .../media/mediatek,vcodec-encoder.yaml        |   1 -
+> > > >  2 files changed, 181 insertions(+), 1 deletion(-)
+> > > >  create mode 100644
+> > > > Documentation/devicetree/bindings/media/mediatek,vcodec-
+> > > > encoder-
+> > > > core.yaml
+> > > > 
+> > > > diff --git
+> > > > a/Documentation/devicetree/bindings/media/mediatek,vcodec-
+> > > > encoder-
+> > > > core.yaml
+> > > > b/Documentation/devicetree/bindings/media/mediatek,vcodec-
+> > > > encoder-
+> > > > core.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..fcfb48900c76
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-
+> > > > encoder-core.yaml
+> > > > @@ -0,0 +1,181 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > +
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: "
+> > > > 
+http://devicetree.org/schemas/media/mediatek,vcodec-encoder-core.yaml#
+> > > > "
+> > > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> > > > +
+> > > > +title: Mediatek Video Encoder Accelerator With Multi Core
+> > > > +
+> > > > +maintainers:
+> > > > +  - Irui Wang <irui.wang@mediatek.com>
+> > > > +
+> > > > +description: |
+> > > > +  Mediatek Video Encode is the video encode hardware present
+> > > > in
+> > > > Mediatek
+> > > > +  SoCs which supports high resolution encoding
+> > > > functionalities.
+> > > > Required
+> > > > +  parent and child device node.
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    items:
+> > > > +      - enum:
+> > > > +          - mediatek,mt8195-vcodec-enc
+> > > > +
+> > > > +  mediatek,scp:
+> > > > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > > > +    description: |
+> > > > +      The node of system control processor (SCP), using
+> > > > +      the remoteproc & rpmsg framework.
+> > > > +
+> > > > +  mediatek,venc-multi-core:
+> > > > +    type: boolean
+> > > > +    description: |
+> > > > +      Indicates whether the encoder has multiple cores or not.
+> > > 
+> > > Isn't this implied by how many child nodes you have?
+> > 
+> > It implies that we have child nodes, distinguish with single
+> > core,  
+> 
+> Just check if you have a child node or not.
+Yes.
+> 
+> 
+> > > > +  iommus:
+> > > > +    minItems: 1
+> > > > +    maxItems: 32
+> > > 
+> > > You really have up to 32 IOMMUs?
+> > 
+> > Currently, totally 27 IOMMUs and used 9 of them.
+> > > 
+> > > > +    description: |
+> > > > +      List of the hardware port in respective IOMMU block for
+> > > > current Socs.
+> > > > +      Refer to bindings/iommu/mediatek,iommu.yaml.
+> > > > +
+> > > > +  dma-ranges:
+> > > > +    maxItems: 1
+> > > > +    description: |
+> > > > +      Describes the physical address space of IOMMU maps to
+> > > > memory.
+> > > > +
+> > > > +  "#address-cells":
+> > > > +    const: 2
+> > > > +
+> > > > +  "#size-cells":
+> > > > +    const: 2
+> > > > +
+> > > > +  ranges: true
+> > > > +
+> > > > +# Required child node:
+> > > > +patternProperties:
+> > > > +  "^venc-core@[0-9a-f]+$":
+> > > > +    type: object
+> > > > +    description: |
+> > > > +      The video encoder core device node which should be added
+> > > > as
+> > > > subnodes to
+> > > > +      the main venc node.
+> > > > +
+> > > > +    properties:
+> > > > +      compatible:
+> > > > +        items:
+> > > > +         - const: mediatek,mtk-venc-core
+> > > > +
+> > > > +      reg:
+> > > > +        maxItems: 1
+> > > > +
+> > > > +      mediatek,core-id:
+> > > > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +        description: |
+> > > > +          Current encoder core id.
+> > > 
+> > > What is this for and what does its value correspond to in the
+> > > h/w.
+> > > We 
+> > > generally don't do made up indices in DT.
+> > 
+> > It's for encoder core id, core@1a020000 must be core-0, 
+> > core@1b020000
+> > must be core-1, we add this property in each child node, so we can 
+> > get core-id in drivers. If it can't ref "uint32" types yaml, would 
+> > you mind giving some more suggestions ?
+> 
+> I still don't understand why it is needed. What is 'core-0'?
+> 
+> Is there some functional difference between the cores? If so,
+> describe 
+> that difference.
+> 
+> Rob
 
->> drivers/net/netdevsim/dev.c:638:14: error: too many arguments to function call, expected 3, have 4
-                                             NULL, i);
-                                                   ^
-   drivers/net/netdevsim/dev.c:612:1: note: '__nsim_dev_port_add' declared here
-   __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-   ^
->> drivers/net/netdevsim/dev.c:651:39: error: too many arguments to function call, expected single argument 'nsim_dev_port', have 3 arguments
-                           __nsim_dev_port_del(nsim_dev_port, NULL, i);
-                           ~~~~~~~~~~~~~~~~~~~                ^~~~~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^
-   drivers/net/netdevsim/dev.c:614:13: note: '__nsim_dev_port_del' declared here
-   static void __nsim_dev_port_del(struct nsim_dev_port *nsim_dev_port);
-               ^
->> drivers/net/netdevsim/dev.c:1393:12: error: conflicting types for '__nsim_dev_port_add'
-   static int __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-              ^
-   drivers/net/netdevsim/dev.c:612:1: note: previous declaration is here
-   __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-   ^
-   drivers/net/netdevsim/dev.c:1503:14: error: too many arguments to function call, expected 3, have 4
-                                             NULL, i);
-                                                   ^
-   drivers/net/netdevsim/dev.c:612:1: note: '__nsim_dev_port_add' declared here
-   __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-   ^
-   drivers/net/netdevsim/dev.c:1839:27: error: too many arguments to function call, expected 3, have 4
-                                             nsim_dev_linecard, port_index);
-                                                                ^~~~~~~~~~
-   drivers/net/netdevsim/dev.c:612:1: note: '__nsim_dev_port_add' declared here
-   __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-   ^
-   5 errors generated.
+They are two different pieces of hardware, it's our encoder hardware
+design. There are two encoder hardware cores inside MT8195, named core0
+and core1(we can rename it, but core id should be declared),
+for core0, its module base address is 0x1A02_0000, uses IOMMU
+"vdo0_iommu" and power domain "POWER_DOMAIN_VENC",
+for core1, its module base address is 0x1B02_0000, uses IOMMU
+"vpp_iommu" and power domain "POWER_DOMAIN_VENC_CORE1".
+So the two encoder cores have their own base, IRQ, clock, power, etc.
+Each core can encode independently, moreover, they can work together
+for higher performance. 
+We will describe more details in YAML about it if it's OK for you.
 
+Thanks
+Best Regards.
 
-vim +638 drivers/net/netdevsim/dev.c
-
-   629	
-   630	static int nsim_esw_switchdev_enable(struct nsim_dev *nsim_dev,
-   631					     struct netlink_ext_ack *extack)
-   632	{
-   633		struct nsim_dev_port *nsim_dev_port, *tmp;
-   634		int i, err;
-   635	
-   636		for (i = 0; i < nsim_dev_get_vfs(nsim_dev); i++) {
-   637			err = __nsim_dev_port_add(nsim_dev, NSIM_DEV_PORT_TYPE_VF,
- > 638						  NULL, i);
-   639			if (err) {
-   640				NL_SET_ERR_MSG_MOD(extack, "Failed to initialize VFs' netdevsim ports");
-   641				pr_err("Failed to initialize VF id=%d. %d.\n", i, err);
-   642				goto err_port_add_vfs;
-   643			}
-   644		}
-   645		nsim_dev->esw_mode = DEVLINK_ESWITCH_MODE_SWITCHDEV;
-   646		return 0;
-   647	
-   648	err_port_add_vfs:
-   649		list_for_each_entry_safe(nsim_dev_port, tmp, &nsim_dev->port_list, list)
-   650			if (nsim_dev_port_is_vf(nsim_dev_port))
- > 651				__nsim_dev_port_del(nsim_dev_port, NULL, i);
-   652		return err;
-   653	}
-   654	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

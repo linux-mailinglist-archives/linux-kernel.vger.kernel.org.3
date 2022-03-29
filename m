@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B2F4EABB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E804EABBF
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235447AbiC2K5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 06:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
+        id S235468AbiC2K62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 06:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235443AbiC2K5o (ORCPT
+        with ESMTP id S235439AbiC2K6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 06:57:44 -0400
+        Tue, 29 Mar 2022 06:58:24 -0400
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F9111D317;
-        Tue, 29 Mar 2022 03:56:01 -0700 (PDT)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 29 Mar 2022 19:56:00 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 8B7AF2058443;
-        Tue, 29 Mar 2022 19:56:00 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 29 Mar 2022 19:56:00 +0900
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E9051DA7C;
+        Tue, 29 Mar 2022 03:56:39 -0700 (PDT)
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 29 Mar 2022 19:56:38 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 9A3C42058B50;
+        Tue, 29 Mar 2022 19:56:38 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 29 Mar 2022 19:56:38 +0900
 Received: from [10.212.183.172] (unknown [10.212.183.172])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id D8F11B62B7;
-        Tue, 29 Mar 2022 19:55:58 +0900 (JST)
-Subject: Re: [PATCH 3/3] dt-bindings: phy: uniphier-ahci: Fix missing
- reset-names
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 90509B62B7;
+        Tue, 29 Mar 2022 19:56:37 +0900 (JST)
+Subject: Re: [PATCH] dt-bindings: gpio: uniphier: Add hogs parsing
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1648433152-23126-1-git-send-email-hayashi.kunihiko@socionext.com>
- <1648433152-23126-4-git-send-email-hayashi.kunihiko@socionext.com>
- <2e0be70f-f800-e3f8-363e-6598468fa091@linaro.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <1648430916-21988-1-git-send-email-hayashi.kunihiko@socionext.com>
+ <9f7355de-8154-7ff2-ce29-c89ccfb89cab@linaro.org>
 From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Message-ID: <54a88acd-49ed-01f6-4108-b74bc653a612@socionext.com>
-Date:   Tue, 29 Mar 2022 19:55:58 +0900
+Message-ID: <81864a56-f48b-a41a-614b-16128f3850a9@socionext.com>
+Date:   Tue, 29 Mar 2022 19:56:37 +0900
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <2e0be70f-f800-e3f8-363e-6598468fa091@linaro.org>
+In-Reply-To: <9f7355de-8154-7ff2-ce29-c89ccfb89cab@linaro.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -58,61 +56,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Krzysztof,
 
-Thank you for reviewing.
-
-On 2022/03/29 3:58, Krzysztof Kozlowski wrote:
-> On 28/03/2022 04:05, Kunihiko Hayashi wrote:
->> Add missing "phy" reset-names to fix the following warning:
+On 2022/03/29 4:04, Krzysztof Kozlowski wrote:
+> On 28/03/2022 03:28, Kunihiko Hayashi wrote:
+>> Allow parsing GPIO controller children nodes with GPIO hogs to fix the
+>> following warning:
 >>
->>    uniphier-pro4-ace.dtb: ahci-phy@10: resets: [[26, 28], [26, 12], [26,
->> 30], [36, 0], [36, 1], [36, 2]] is too long
+>>    uniphier-ld11-ref.dtb: gpio@55000000: 'xirq0-hog' does not match any of
+>> the regexes: 'pinctrl-[0-9]+'
 >>        From schema:
->> Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
->>    uniphier-pro4-ace.dtb: ahci-phy@10: reset-names: 'oneOf' conditional
->> failed, one must be fixed:
->>        ['link', 'gio', 'phy', 'pm', 'tx', 'rx'] is too long
->>        From schema:
->> Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
-> 
-> There is no ahci-phy in current sources...
-
-Oops, I'm going to add ahci controller to the existing devicetree,
-but not yet. I shouldn't write the future warning in the commit message,
-so I'll fix it.
-
+>> Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
 >>
->> Fixes: 34f92b67621f ("dt-bindings: phy: uniphier-ahci: Add bindings for
->> Pro4 SoC")
 >> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 >> ---
->>   .../devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml   | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>   .../devicetree/bindings/gpio/socionext,uniphier-gpio.yaml  | 7 +++++++
+>>   1 file changed, 7 insertions(+)
 >>
 >> diff --git
->> a/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
->> b/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
->> index 3b400a85b44a..14f7579e7daa 100644
->> ---
->> a/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
->> +++
->> b/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
->> @@ -43,13 +43,14 @@ properties:
+>> a/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
+>> b/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
+>> index bcafa494ed7a..b6f5963a2ae6 100644
+>> --- a/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
+>> +++ b/Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
+>> @@ -52,6 +52,13 @@ properties:
+>>         <child-interrupt-base parent-interrupt-base length> triplets.
+>>       $ref: /schemas/types.yaml#/definitions/uint32-matrix
 >>
->>     resets:
->>       minItems: 2
->> -    maxItems: 5
->> +    maxItems: 6
->>
->>     reset-names:
->>       oneOf:
+>> +patternProperties:
+>> +  "^(.+-hog(-[0-9]+)?)$":
 > 
-> As a separate commit, this oneOf should be converted into allOf:if:then:
-> cases which will enforce the resets per compatible.
-> 
-> Can you do that as well?
+> The outer () are not needed.
 
-Ok, I've found some examples using "allOf:if:them:" cases,
-so I'll try to convert it with another commit.
+Surely, the "()" can be removed.
+
+>> +    type: object
+> 
+> You need also properties. See for example:
+> Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
+
+I see. I should list the valid properties in patternProperties.
+I'll add it.
 
 Thank you,
 

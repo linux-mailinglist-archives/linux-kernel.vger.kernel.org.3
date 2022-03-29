@@ -2,123 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B0A4EB6AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 594C04EB6B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240144AbiC2XYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
+        id S240206AbiC2XZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236546AbiC2XYl (ORCPT
+        with ESMTP id S240153AbiC2XZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:24:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDED3185452;
-        Tue, 29 Mar 2022 16:22:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76D5E60FA2;
-        Tue, 29 Mar 2022 23:22:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CACDBC2BBE4;
-        Tue, 29 Mar 2022 23:22:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648596176;
-        bh=fyyI03YUsRLxwjzWMxbmnfhC7VJBY/raoIuviwH/S14=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=kdEr5XTK7Pj+Oiu0mRYwSRc4hLAw215MubZByZjF+HqXi3ZIaPeSGIuOYv2k3NRjA
-         rmjGm4qkjSpcBoURvYA0r60KX7c8pcqUqO+TPenafgVFXp0QOsugCphqAoY+9M+BNt
-         t9F9oIZCjSG/HVuj+SQsC66yj5rpVsS48qsUUSaJQlwB6P7JqDcFqNBu1t1R8Q4oeM
-         WAJBi6FM/a9crU2EuXjd5IvDgJIpJp8+6TxqlQ/TnfH/xO+L8oV5V0u0uDwUtPHjWp
-         V/29RHEX8zXe2VcnR235DF2Me6ftO643lMaFWAHIMO8pVf657qYGIFHNS1RlFEE2jV
-         nKbL4P2NdzxNA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 609815C0A0D; Tue, 29 Mar 2022 16:22:56 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 16:22:56 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     David Vernet <void@manifault.com>
-Cc:     frederic@kernel.org, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        linux-kernel@vger.kernel.org, mathieu.desnoyers@efficios.com,
-        quic_neeraju@quicinc.com, rcu@vger.kernel.org, rostedt@goodmis.org
-Subject: Re: [PATCH] rcu_sync: Fix comment to properly reflect
- rcu_sync_exit() behavior
-Message-ID: <20220329232256.GE4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220329222612.1001586-1-void@manifault.com>
+        Tue, 29 Mar 2022 19:25:09 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A6B182DAF;
+        Tue, 29 Mar 2022 16:23:22 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id z8so20535253oix.3;
+        Tue, 29 Mar 2022 16:23:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XPzvHUJFcmrmwBdLqv88phqCPGJz+AlJYWNEiHZ+N9k=;
+        b=kv0gkWrKiGBy8kYA4uYrQ1vrivtKVfzqOyTvCj+p//11dTmhxCKTaLhU4ihHXdOGJ+
+         EPBxOP94TQqKyAzQw16ZSCf0Q+KrvjahcXqouAlSnK0trik/L+5SiYi51LU8kzDiAk3U
+         DMdYEIeZzyQUqIcYWxYqMDJd9ef96WJ/yvJrLNby/7RHZ8sjjA1Z4RrblYwyR86n21GE
+         U2gyVHQVvANKcmiQGb/1APnAQQnnyRpCwMgyr8pi9ZY0x0Oi66zuS/15RlNdVL4ZdNE3
+         Rf0IHJShFGcgrB9qbdW89h9J6ehCrxlMNzySC96KMwlna3arfnkwzEEdANfL4KTtAjAt
+         0dTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XPzvHUJFcmrmwBdLqv88phqCPGJz+AlJYWNEiHZ+N9k=;
+        b=GbbjDTiaWn9paHpAuoQVFfp5LEDdMKZm2Il2aNf4a1X3WmmdghtdnO87XinAIW5ykH
+         PyaZID721DFYgHxMD2s09lhhz3enGmpumplakTXnk0KxyGTyaR8JyesnDYxVoJ1ceLZH
+         YL5in5SpVgc2NyQXT30yi4FwDpobQnsRwc+g6Z8JD1lETVT6//bZj9bQGSZAjAuERqSn
+         EPI/uYb/NlZiONfTCDyafw2mSBA8h+sZ8iBn02mJb7zXZV/PuaSKCFDBUJzhMHtzjf9+
+         XK4HHSdWork8675TbKRxcymB6ekJopxnjIuPDkY1U/RuS87y6X8ocvQticAt2Cfd7VYp
+         o5Rw==
+X-Gm-Message-State: AOAM530SlsBgUZie3NnwMRKsXRFfZHE7h33BO+XJbwHY75Jibx2BzUhM
+        bHyRXnVEZluSj2hPmHagSWU=
+X-Google-Smtp-Source: ABdhPJzLQP2ylpqyfwQ0/iHWuE5kgaqVA+koSF2KnxNt0QjXk6vd3PbeNN2JVnO26ZeoR+Z9yWlUig==
+X-Received: by 2002:aca:4b50:0:b0:2ef:b47:294a with SMTP id y77-20020aca4b50000000b002ef0b47294amr701959oia.69.1648596201324;
+        Tue, 29 Mar 2022 16:23:21 -0700 (PDT)
+Received: from marsc.168.1.7 ([2804:d57:1503:f300:282c:2283:f732:e1c7])
+        by smtp.gmail.com with ESMTPSA id s6-20020a4ae546000000b0032480834193sm8863192oot.46.2022.03.29.16.23.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 16:23:21 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 20:23:14 -0300
+From:   Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+To:     corbet@lwn.net, mchehab+huawei@kernel.org, dlatypov@google.com,
+        davidgow@google.com
+Cc:     linux-doc@vger.kernel.org, linux-sparse@vger.kernel.org,
+        cocci@inria.fr, smatch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+        dan.carpenter@oracle.com, julia.lawall@inria.fr
+Subject: [PATCH v2 2/2] Documentation: dev-tools: Enhance static analysis
+ section with discussion
+Message-ID: <11f4750c6d4c175994dfd36d1ff385f68f61bd02.1648593132.git.marcelo.schmitt1@gmail.com>
+References: <cover.1648593132.git.marcelo.schmitt1@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220329222612.1001586-1-void@manifault.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1648593132.git.marcelo.schmitt1@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 03:26:13PM -0700, David Vernet wrote:
-> rcu_sync_enter() is an rcu_sync API used by updaters which forces RCU
-> readers (e.g. percpu-rwsem) to take a slow-path during an update. It does
-> this by setting the gp_state of the rcu_sync object to GP_ENTER (i.e. > 0).
-> In this state, readers will take a "slow path", such as having percpu-rwsem
-> readers wait on a semaphore rather than just incrementing a reader count.
-> When the updater has completed their work, they must invoke rcu_sync_exit()
-> to signal to readers that they may again take their fastpaths.
-> 
-> rcu_sync_enter() currently has a comment that stipulates that a later call
-> to rcu_sync_exit() (by an updater) will re-enable reader "slowpaths". This
-> patch corrects the comment to properly reflect that rcu_sync_exit()
-> re-enables reader fastpaths.
-> 
-> Signed-off-by: David Vernet <void@manifault.com>
+Enhance the static analysis tools section with a discussion on when to
+use each of them.
 
-Good eyes, thank you!
+This was mainly taken from Dan Carpenter and Julia Lawall's comments on
+the previous documentation patch for static analysis tools.
 
-As usual, I could not resist the urge to wordsmith.  Please take a look
-at the following to see if I messed something up.
+Lore: https://lore.kernel.org/linux-doc/20220329090911.GX3293@kadam/T/#mb97770c8e938095aadc3ee08f4ac7fe32ae386e6
 
-							Thanx, Paul
+Signed-off-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+Cc: Dan Carpenter <dan.carpenter@oracle.com>
+Cc: Julia Lawall <julia.lawall@inria.fr>
+---
+ Documentation/dev-tools/testing-overview.rst | 33 ++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-------------------------------------------------------------------------
+diff --git a/Documentation/dev-tools/testing-overview.rst b/Documentation/dev-tools/testing-overview.rst
+index b5e02dd3fd94..91e479045d3a 100644
+--- a/Documentation/dev-tools/testing-overview.rst
++++ b/Documentation/dev-tools/testing-overview.rst
+@@ -146,3 +146,36 @@ Documentation/dev-tools/coccinelle.rst documentation page for details.
+ 
+ Beware, though, that static analysis tools suffer from **false positives**.
+ Errors and warns need to be evaluated carefully before attempting to fix them.
++
++When to use Sparse and Smatch
++-----------------------------
++
++Sparse is useful for type checking, detecting places that use ``__user``
++pointers improperly, or finding endianness bugs. Sparse runs much faster than
++Smatch.
++
++Smatch does flow analysis and, if allowed to build the function database, it
++also does cross function analysis. Smatch tries to answer questions like where
++is this buffer allocated? How big is it? Can this index be controlled by the
++user? Is this variable larger than that variable?
++
++It's generally easier to write checks in Smatch than it is to write checks in
++Sparse. Nevertheless, there are some overlaps between Sparse and Smatch checks
++because there is no reason for re-implementing Sparse's check in Smatch.
++
++Strong points of Smatch and Coccinelle
++--------------------------------------
++
++Coccinelle is probably the easiest for writing checks. It works before the
++pre-compiler so it's easier to check for bugs in macros using Coccinelle.
++Coccinelle also writes patches fixes for you which no other tool does.
++
++With Coccinelle you can do a mass conversion from
++``kmalloc(x * size, GFP_KERNEL)`` to ``kmalloc_array(x, size, GFP_KERNEL)``, and
++that's really useful. If you just created a Smatch warning and try to push the
++work of converting on to the maintainers they would be annoyed. You'd have to
++argue about each warning if can really overflow or not.
++
++Coccinelle does no analysis of variable values, which is the strong point of
++Smatch. On the other hand, Coccinelle allows you to do simple things in a simple
++way.
+-- 
+2.35.1
 
-commit b89e06a95c05009bcf31949814c42bc420f414a6
-Author: David Vernet <void@manifault.com>
-Date:   Tue Mar 29 15:26:13 2022 -0700
-
-    rcu_sync: Fix comment to properly reflect rcu_sync_exit() behavior
-    
-    The rcu_sync_enter() function is used by updaters to force RCU readers
-    (e.g. percpu-rwsem) to use their slow paths during an update.  This is
-    accomplished by setting the ->gp_state of the rcu_sync structure to
-    GP_ENTER.  In the case of percpu-rwsem, the readers' slow path waits on
-    a semaphore instead of just incrementing a reader count.  Each updater
-    invokes the rcu_sync_exit() function to signal to readers that they
-    may again take their fastpaths.  The rcu_sync_exit() function sets the
-    ->gp_state of the rcu_sync structure to GP_EXIT, and if all goes well,
-    after a grace period the ->gp_state reverts back to GP_IDLE.
-    
-    Unfortunately, the rcu_sync_enter() function currently has a comment
-    incorrectly stating that rcu_sync_exit() (by an updater) will re-enable
-    reader "slowpaths".  This patch changes the comment to state that this
-    function re-enables reader fastpaths.
-    
-    Signed-off-by: David Vernet <void@manifault.com>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/kernel/rcu/sync.c b/kernel/rcu/sync.c
-index 33d896d85902..5cefc702158f 100644
---- a/kernel/rcu/sync.c
-+++ b/kernel/rcu/sync.c
-@@ -111,7 +111,7 @@ static void rcu_sync_func(struct rcu_head *rhp)
-  * a slowpath during the update.  After this function returns, all
-  * subsequent calls to rcu_sync_is_idle() will return false, which
-  * tells readers to stay off their fastpaths.  A later call to
-- * rcu_sync_exit() re-enables reader slowpaths.
-+ * rcu_sync_exit() re-enables reader fastpaths.
-  *
-  * When called in isolation, rcu_sync_enter() must wait for a grace
-  * period, however, closely spaced calls to rcu_sync_enter() can

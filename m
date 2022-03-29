@@ -2,97 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3FC4EB263
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5254F4EB266
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 19:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240010AbiC2RBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 13:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
+        id S240020AbiC2RCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 13:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbiC2RB3 (ORCPT
+        with ESMTP id S231454AbiC2RCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 13:01:29 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648062AE3D;
-        Tue, 29 Mar 2022 09:59:46 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id n18so18171158plg.5;
-        Tue, 29 Mar 2022 09:59:46 -0700 (PDT)
+        Tue, 29 Mar 2022 13:02:37 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0434E3EB88
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 10:00:54 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id r23so21449021edb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 10:00:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=67yHXoFmcX0ZazheDKYQVpHoB656ZGpg7LX2oma8XGY=;
-        b=l1oIEc6kFQcKGLgIxGfSwqNZBvaZGfVzYIpmLE5Rh6nGhFdWOqxOLcEiD5UGOeShLo
-         a3iUDj7MTnw1ZVoumywlaRlOqrOguzQaaUg8sl/W8xYELNabR0FkepIhxq53qWfWRHqT
-         ocM2HSkoX6c1ycU+gtCJdRWBI5LQV8B2NcIE2eGHLknFjpgkEJzAV6QEilvZPsFmftqT
-         gEf10uCzq4cyr50t7r+MHukvbyXMswobdfj+UiEjLCGz8uU2kyzlTjXvCPVu1iLyYPLF
-         hpLrTonQaPEFCwIiW4cB09XczJYAql+ov2htCytwylqN1iQbCWxBZsm43uimxjTneIJO
-         mdzg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=BPKs3suq1SgwSX2Q9VZX8LKJW7ayWPXQUfm1Ivff7Yg=;
+        b=F/2SYHD88iDJ7+pjQBONixePXir6QXcvw8CfxAJqR8XP7+Y5PhUSIgoAqVmMU+jmbc
+         hIPpXnmU8FZa3G85hY6f9oG77VaQi2vhrO/Zx1Hl1Ol4nJVnRESIZYT0MKxpQKG20myz
+         ijUqrtKbN4pUIXFBR+koaQg5nqwRuQu5piJeJGZpzEjKvVEeflBtxdf3oFnSBIyhfAX2
+         HZfmlTC32O0zmhEnDWeCzyLVQtqpXMBysZSbn06xzxq5mhrTTylJSOxMOdJ/zk0zxoM9
+         NVxMaVbzHV/L4I3ppSWTxUauBVImumSbms90mWkBvL/TqeknNzVaXhbf34czzAJqjgJn
+         7upg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=67yHXoFmcX0ZazheDKYQVpHoB656ZGpg7LX2oma8XGY=;
-        b=qW7fwf0jpUOKgTZbodWyDeOBBNklE7Vn+zOU9PL6m9vBUnvd2aRfD93cZ+4h3DhHeL
-         EiVX8R9xKtcUXU7TLkPRUAlSEfTHdDwbHiUNxv2WQNVtNWCTVNqEvwYRg7gLLkfQMEjW
-         EDKc3SAZKrtImE/ry4QqiKnBUjnZ7pFkOgL5Sl+h80Oneasa+KTszwONj9dLFu7mYGsp
-         KGNBis3LDMwABTxOIqsZiqcx50wgEjfTF0Kw05L6TuDDEqMv1MTqLaoMxusaaVL2UvQp
-         2SRHxCe1B50pYE/fropfW3V67UdtBxYnjD35aVYUV+31oeBZUw2ulPx+SvdQoGUjAtCK
-         ypZg==
-X-Gm-Message-State: AOAM530UEc7FKTRIHu6CaquZBFCbNWQwLX9eoaCUSunlDOKYR7lEEpN1
-        r0FIL4h6SjO/AR8SShjSnaY=
-X-Google-Smtp-Source: ABdhPJwzy42BlJVB0bBm4Ge7A7WVOaCsDi/5yGBrI0VAwZfeGFTf8i7B6I5tAtAaOfrhDGFcEZ17Ug==
-X-Received: by 2002:a17:902:f68f:b0:154:759c:c78 with SMTP id l15-20020a170902f68f00b00154759c0c78mr30853829plg.49.1648573185719;
-        Tue, 29 Mar 2022 09:59:45 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:7749])
-        by smtp.gmail.com with ESMTPSA id qe15-20020a17090b4f8f00b001c6f4991cd4sm3571258pjb.45.2022.03.29.09.59.44
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=BPKs3suq1SgwSX2Q9VZX8LKJW7ayWPXQUfm1Ivff7Yg=;
+        b=ybXllko0mWF1wZBcaNbdtgomLWdLXqzHCTEendtFY1XaeOt/zQFiPBEiNVgSZTOpAt
+         JTr6nH9MJRzIFEu6HNRfTH41XVaeT0mQqFUWGj99iUbkWAhIB5p1+Fd+0cgWh265074p
+         GiKBbPLUiMNyrmqGTi4EAs3GOw0F5AvoLpDmJ6TAfhNVAfYX7eTx6ArwRicvgytyJukz
+         qcxNoDWI8UAm3ZPogKjWObyVgVqeDbF3SiFBDJ274g4rW2A06LhL+utasCbhmbuaxnCx
+         +AcqTLjOJrrkjLF6kd10aGSGdENHH14tNOLrYodwsEusT3tc/92jIzVGJWf30pWcAn2s
+         QKCQ==
+X-Gm-Message-State: AOAM533KqpuWtAxgDthBDmpcZPjQi7lIKCeymSShJ/um7Zp65WMvzhdg
+        5Sf4iQpnZM8j00Xhz3VXFSw=
+X-Google-Smtp-Source: ABdhPJw37lXtVfuQrFwFlV0EXWgi+RpMtuLezJR109NVeOyq7+/UWRXue9+RusATHM8TRMeZnCqahA==
+X-Received: by 2002:a05:6402:914:b0:419:a627:ef6f with SMTP id g20-20020a056402091400b00419a627ef6fmr5731279edz.67.1648573252351;
+        Tue, 29 Mar 2022 10:00:52 -0700 (PDT)
+Received: from leap.localnet (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
+        by smtp.gmail.com with ESMTPSA id p10-20020a170906604a00b006e07c76f3d7sm6851961ejj.210.2022.03.29.10.00.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 09:59:45 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 29 Mar 2022 06:59:43 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, kaleshsingh@google.com,
-        Kenny.Ho@amd.com, mkoutny@suse.com, skhan@linuxfoundation.org,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [RFC v4 2/8] cgroup: gpu: Add a cgroup controller for allocator
- attribution of GPU memory
-Message-ID: <YkM6/57mVxoNfSvm@slm.duckdns.org>
-References: <20220328035951.1817417-1-tjmercier@google.com>
- <20220328035951.1817417-3-tjmercier@google.com>
+        Tue, 29 Mar 2022 10:00:51 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dan.carpenter@oracle.com
+Cc:     David Kershner <david.kershner@unisys.com>,
+        sparmaintainer@unisys.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: unisys: Properly test debugfs_create_dir() return values
+Date:   Tue, 29 Mar 2022 19:00:49 +0200
+Message-ID: <2030244.KlZ2vcFHjT@leap>
+In-Reply-To: <20220322083858.16887-1-fmdefrancesco@gmail.com>
+References: <20220322083858.16887-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328035951.1817417-3-tjmercier@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="ISO-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,16 +72,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On marted=EC 22 marzo 2022 09:38:58 CEST Fabio M. De Francesco wrote:
+> debugfs_create_dir() returns a pointers to a dentry objects. On failures
+> it returns errors. Currently the values returned to visornic_probe()
+> seem to be tested for being equal to NULL in case of failures.
+>=20
+> Properly test with "if (IS_ERR())" and then assign the correct error=20
+> value to the "err" variable.
+>=20
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+>  drivers/staging/unisys/visornic/visornic_main.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/staging/unisys/visornic/visornic_main.c b/drivers/st=
+aging/unisys/visornic/visornic_main.c
+> index 643432458105..58d03f3d3173 100644
+> --- a/drivers/staging/unisys/visornic/visornic_main.c
+> +++ b/drivers/staging/unisys/visornic/visornic_main.c
+> @@ -1922,11 +1922,11 @@ static int visornic_probe(struct visor_device *de=
+v)
+>  	/* create debug/sysfs directories */
+>  	devdata->eth_debugfs_dir =3D debugfs_create_dir(netdev->name,
+>  						      visornic_debugfs_dir);
+> -	if (!devdata->eth_debugfs_dir) {
+> +	if (IS_ERR(devdata->eth_debugfs_dir)) {
+>  		dev_err(&dev->device,
+>  			"%s debugfs_create_dir %s failed\n",
+>  			__func__, netdev->name);
+> -		err =3D -ENOMEM;
+> +		err =3D PTR_ERR(devdata->eth_debugfs_dir);
+>  		goto cleanup_register_netdev;
+>  	}
+> =20
+> --=20
+> 2.34.1
+>=20
+Hi Greg, Dan,
 
-On Mon, Mar 28, 2022 at 03:59:41AM +0000, T.J. Mercier wrote:
-> The API/UAPI can be extended to set per-device/total allocation limits
-> in the future.
+Now I have time to rework this patch but, if I'm not misunderstanding, you=
+=20
+asked for two contrasting works to do here...
 
-This total thing kinda bothers me. Can you please provide some concrete
-examples of how this and per-device limits would be used?
+Dan wrote that "[in] this case you can delete the whole devdata->eth_debugf=
+s_dir=20
+and the related code.".
 
-Thanks.
+Greg wrote that "We really shouldn't be checking this value at all.  There'=
+s=20
+no reason to check the return value of a debugfs_* call. Can you fix up the=
+ code to
+do that instead?".
 
--- 
-tejun
+I'm confused because they look like two incompatible requests. What should =
+I do?
+
+Thanks,
+
+=46abio M. De Francesco
+
+

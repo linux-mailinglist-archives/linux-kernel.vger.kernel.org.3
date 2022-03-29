@@ -2,136 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B6A4EACC6
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A7A4EACCB
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236162AbiC2MBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 08:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44518 "EHLO
+        id S236176AbiC2MDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 08:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232480AbiC2MBt (ORCPT
+        with ESMTP id S236165AbiC2MDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 08:01:49 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C7860D2;
-        Tue, 29 Mar 2022 05:00:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648555206; x=1680091206;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=W97RVxU6FU90i0ZBblRp2YTYj4F8zwDfNEJUFaHimOo=;
-  b=Ety0D08o2tcaUYk42I5sF+JjazLsmlty2GVvu+VqZ65OSfGpllfr/TCH
-   h1cRiWEL83YjYGbpdQlaR09p3FPQqgxjUKj/q1pZBUSCQpORvs9CrRPQt
-   WXhmt/kswSTvP52dQPIdFGS8o5nHxJ/2bSR09nUMs8N+YAjEwi+40mhNA
-   B8AhuswPCckgyd+/qF3VSg5as0GYHVt+7v16JYF2MUN+KFDpklOth8228
-   S7cHZYrcO61l7S8rW1gLCmaEDB7xKcQyvtVQmggu5/b0ey3UyP5dPKcjW
-   aqFlkc0OYXjVCgfYSY0qth2tJ7JPK9wqGJtF7feXZ1oYgGTZffkivK6kr
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="284130650"
-X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="284130650"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 05:00:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="604737288"
-Received: from boxer.igk.intel.com (HELO boxer) ([10.102.20.173])
-  by fmsmga008.fm.intel.com with ESMTP; 29 Mar 2022 05:00:01 -0700
-Date:   Tue, 29 Mar 2022 14:00:01 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Ivan Vecera <ivecera@redhat.com>
-Cc:     netdev@vger.kernel.org, poros@redhat.com, mschmidt@redhat.com,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Krzysztof Kazimierczak <krzysztof.kazimierczak@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "moderated list:INTEL ETHERNET DRIVERS" 
-        <intel-wired-lan@lists.osuosl.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>
-Subject: Re: [PATCH net] ice: Fix logic of getting XSK pool associated with
- Tx queue
-Message-ID: <YkL0wfgyCq5s8vdu@boxer>
-References: <20220329102752.1481125-1-ivecera@redhat.com>
+        Tue, 29 Mar 2022 08:03:19 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58C66302
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:01:36 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id w127so18748729oig.10
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:01:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ehEFZcYrASqbAc6jhYepxilgTtwp09yvtYpdMuhCCT4=;
+        b=WBWtSlgW0p5oyOGwsz7SJGDGSXCJRRcSzVbR7Y6+Lhl7rjildBSauyXcNlnhOSjpMZ
+         ZRKFVOZXexxjZ1tWhfkobK7zlYzPQB2FWbtCi/Y9JVkiJ+yW3DxnTVxmneqxIjBWbtEw
+         Cf2WahhGlg/f3SDCvkMu2j3iFHwJMBO007lnt96b5sqsCER2LFzU9YYm6hQeu1MxNDrr
+         cqRSvdudI7LkVzxrIRdW9Fas50jg9p3s1psjcAtuk9g2Z+mF1L42sPOY5eMYy86CCfPN
+         U/ftL/qkkQZqLTb1ELksInGgL3aKgF+GRmgGS1LtFUJQ7xRIN2Bdya+Ij8kng7aNyo1N
+         s1UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ehEFZcYrASqbAc6jhYepxilgTtwp09yvtYpdMuhCCT4=;
+        b=c0lGO1nTYyL6gFj3BE7KZZqAPAxpV/FL5syqVy3DhzoAhWCAsNAI49oVRpTkopTtGy
+         P+Gw4DUsvGUXArmHHCVbXKC5cGa2Re5YZXIp0vqshI8z5tcrG41GTCBmJoJ9SxqrFewI
+         an7xOzIHGYIXwdeNFAy00EHhd1IHrRS/WIw3vaok1b9llGfGIzyRzyRDibcJxCmjAa0P
+         gkWExOBtXdjWuEj+XNP9TymQmFNqAqM9eXxX3WdTu0S+tALzFsTxx4U6PhKWZ8gyV117
+         +WtaoQJUs9zKU5SxsRUN1+Q/0BIl0xy1COAe3dCdF080erwNwLyYh9rra621ttzVcNUg
+         aUHQ==
+X-Gm-Message-State: AOAM533lTPrc7I7TttxO0YmgdBxLhKy7GvqnMHsk7smIW8CROCnBqmtX
+        8RI2+FcBnDmlWUZ/g0r5O6oRed4jtNZ0Uk8BItqQUQ==
+X-Google-Smtp-Source: ABdhPJyFsxcS2Y8brGth5S0LA5+NbL+9QCiz64jOeuZSPkBhTeLeF6HPo07YXZxBoIE1oW67ddCnM60hMm5zr7qifuc=
+X-Received: by 2002:a05:6808:16a4:b0:2f7:1fd1:f48 with SMTP id
+ bb36-20020a05680816a400b002f71fd10f48mr1065976oib.163.1648555294201; Tue, 29
+ Mar 2022 05:01:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220329102752.1481125-1-ivecera@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <00000000000079c56a05ba1c18c3@google.com> <000000000000b8cdba05dae41558@google.com>
+ <CACT4Y+bWiUfw4YEx7x9rCb80SwbQPfFfSWP6-7cYxOSs5vw39A@mail.gmail.com> <20220329115011.5fyhukqlfvvzojbg@riteshh-domain>
+In-Reply-To: <20220329115011.5fyhukqlfvvzojbg@riteshh-domain>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 29 Mar 2022 14:01:22 +0200
+Message-ID: <CACT4Y+ZhCWZhrzt9bW-Q=munq9RC+eow8zCpJU1fzFiEGQa+6w@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in ext4_xattr_set_entry (4)
+To:     Ritesh Harjani <ritesh.list@gmail.com>
+Cc:     syzbot <syzbot+4cb1e27475bf90a9b926@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, cmaiolino@redhat.com,
+        lczerner@redhat.com, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sjc@chobot.com,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu, wanjiabing@vivo.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 12:27:51PM +0200, Ivan Vecera wrote:
-> Function ice_tx_xsk_pool() used to get XSK buffer pool associated
-> with XDP Tx queue returns NULL when number of ordinary Tx queues
-> is not equal to num_possible_cpus().
-> 
-> The function computes XDP Tx queue ID as an expression
-> `ring->q_index - vsi->num_xdp_txq` but this is wrong because
-> XDP Tx queues are placed after ordinary ones so the correct
-> formula is `ring->q_index - vsi->alloc_txq`.
-> 
-> Prior commit 792b2086584f ("ice: fix vsi->txq_map sizing") number
-> of XDP Tx queues was equal to number of ordinary Tx queues so
-> the bug in mentioned function was hidden.
-> 
-> Reproducer:
-> host# ethtool -L ens7f0 combined 1
-> host# ./xdpsock -i ens7f0 -q 0 -t -N
-> samples/bpf/xdpsock_user.c:kick_tx:794: errno: 6/"No such device or address"
-> 
->  sock0@ens7f0:0 txonly xdp-drv
->                 pps         pkts        0.00
-> rx              0           0
-> tx              0           0
-> 
-> Fixes: 2d4238f55697 ("ice: Add support for AF_XDP")
-> Fixes: 792b2086584f ("ice: fix vsi->txq_map sizing")
-> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+On Tue, 29 Mar 2022 at 13:50, Ritesh Harjani <ritesh.list@gmail.com> wrote:
+>
+> On 22/03/25 07:18AM, Dmitry Vyukov wrote:
+> > On Wed, 23 Mar 2022 at 16:07, syzbot
+> > <syzbot+4cb1e27475bf90a9b926@syzkaller.appspotmail.com> wrote:
+> > >
+> > > syzbot suspects this issue was fixed by commit:
+> > >
+> > > commit 6e47a3cc68fc525428297a00524833361ebbb0e9
+> > > Author: Lukas Czerner <lczerner@redhat.com>
+> > > Date:   Wed Oct 27 14:18:52 2021 +0000
+> > >
+> > >     ext4: get rid of super block and sbi from handle_mount_ops()
+> > >
+> > > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=100bc10b700000
+> > > start commit:   f8ad8187c3b5 fs/pipe: allow sendfile() to pipe again
+> > > git tree:       upstream
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=96b123631a6700e9
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=4cb1e27475bf90a9b926
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11131f94d00000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c3761b500000
+> > >
+> > > If the result looks correct, please mark the issue as fixed by replying with:
+> > >
+> > > #syz fix: ext4: get rid of super block and sbi from handle_mount_ops()
+> > >
+> > > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> >
+> > Looks reasonable:
+> >
+> > #syz fix: ext4: get rid of super block and sbi from handle_mount_ops()
+>
+> Sorry, I might have missed some discussion maybe.
+> But why do we think that this patch could fix the reported bug?
+> Because I see this patch from Lukas is a part of "ext4: new mount API
+> conversion" patch series. This I guess has nothing to do with the reported call
+> stack, no?
+>
+> Or am I missing anything?
 
-Thanks for this fix! I did exactly the same patch yesterday and it's
-already applied to bpf tree:
+Hi Ritesh,
 
-https://lore.kernel.org/bpf/20220328142123.170157-5-maciej.fijalkowski@intel.com/T/#u
+It looked reasonable because the identified patch is in ext4 and the
+bug is also in ext4 + the bisection log looked reasonable + there were
+no other suggestions/corrections. In such a case it's better to close
+the bug with at least some reasonable fix, then let it pile to
+hundreds of other unclosed bugs and prevent reporting of new bugs.
 
-Maciej
 
-> ---
->  drivers/net/ethernet/intel/ice/ice.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/ice/ice.h b/drivers/net/ethernet/intel/ice/ice.h
-> index b0b27bfcd7a2..d4f1874df7d0 100644
-> --- a/drivers/net/ethernet/intel/ice/ice.h
-> +++ b/drivers/net/ethernet/intel/ice/ice.h
-> @@ -710,7 +710,7 @@ static inline struct xsk_buff_pool *ice_tx_xsk_pool(struct ice_tx_ring *ring)
->  	struct ice_vsi *vsi = ring->vsi;
->  	u16 qid;
->  
-> -	qid = ring->q_index - vsi->num_xdp_txq;
-> +	qid = ring->q_index - vsi->alloc_txq;
->  
->  	if (!ice_is_xdp_ena_vsi(vsi) || !test_bit(qid, vsi->af_xdp_zc_qps))
->  		return NULL;
-> -- 
-> 2.34.1
-> 
+
+> BUG: KASAN: use-after-free in ext4_xattr_set_entry+0x3151/0x3780 fs/ext4/xattr.c:1586
+> Read of size 4 at addr ffff888030c00004 by task syz-executor392/11280
+>
+> CPU: 0 PID: 11280 Comm: syz-executor392 Not tainted 5.11.0-rc5-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Call Trace:
+>  __dump_stack lib/dump_stack.c:79 [inline]
+>  dump_stack+0x107/0x163 lib/dump_stack.c:120
+>  print_address_description.constprop.0.cold+0x5b/0x2f8 mm/kasan/report.c:230
+>  __kasan_report mm/kasan/report.c:396 [inline]
+>  kasan_report.cold+0x79/0xd5 mm/kasan/report.c:413
+>  ext4_xattr_set_entry+0x3151/0x3780 fs/ext4/xattr.c:1586
+>  ext4_xattr_ibody_set+0x78/0x2b0 fs/ext4/xattr.c:2224
+>  ext4_xattr_set_handle+0x8f4/0x13e0 fs/ext4/xattr.c:2380
+>  ext4_xattr_set+0x13a/0x340 fs/ext4/xattr.c:2493
+>  __vfs_setxattr+0x10e/0x170 fs/xattr.c:177
+>  __vfs_setxattr_noperm+0x11a/0x4c0 fs/xattr.c:208
+>  __vfs_setxattr_locked+0x1bf/0x250 fs/xattr.c:266
+>  vfs_setxattr+0x135/0x320 fs/xattr.c:291
+>  setxattr+0x1ff/0x290 fs/xattr.c:553
+>  path_setxattr+0x170/0x190 fs/xattr.c:572
+>  __do_sys_setxattr fs/xattr.c:587 [inline]
+>  __se_sys_setxattr fs/xattr.c:583 [inline]
+>  __x64_sys_setxattr+0xc0/0x160 fs/xattr.c:583
+>  do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+>
+>
+> -ritesh

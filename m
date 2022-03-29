@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6DE4EA65C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 06:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5208E4EA64B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 06:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbiC2EWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 00:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
+        id S231935AbiC2EKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 00:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231919AbiC2EW2 (ORCPT
+        with ESMTP id S231598AbiC2EKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 00:22:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5216F23B3D5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 21:20:46 -0700 (PDT)
+        Tue, 29 Mar 2022 00:10:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF1511A6366
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 21:08:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648527644;
+        s=mimecast20190719; t=1648526935;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NBrZonGtyPiYVHPrtXOiyOTwxwGC7d31Hs1pwiySqI4=;
-        b=Q/IEEpePc42Q3nEsWcsDg5I35HDT0U38/5Ri3sEm7YGoFHtw96DYQKSosyUaFtYNahk0m6
-        G4nlHcx7Hx1+lvFjbx3LJ7QjMPD8joyHPRejruYop4bIptEDU8YfGovnqD6667mTuidJef
-        hJinf6+irra+awdyQIKGHU68M+Qeo1c=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=FdtzVbHEVVTrIVUf/a9wd2B8iWz4QyPeNZt3tZlqNJw=;
+        b=hBJJFrDzfpMGkDcBRZ2zAvloUUGvPBFLnVnwyw9HStSwHtuJe1DKcfvyWJhLkwll0LPa24
+        y6nJEOC7nv+kVCJ+yJxg81JxPHUmr4s7zIzB4Nz89DUq2U6azeoJodiy7ZEfPKSLpRwXKE
+        7SxRjtIUm2TVGByWd4w0HIyNYYqK/cA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-43-59RoqxS8OZ-T4NjDV1YHpg-1; Tue, 29 Mar 2022 00:09:01 -0400
-X-MC-Unique: 59RoqxS8OZ-T4NjDV1YHpg-1
+ us-mta-30-v0vLYg4mMxOiw9lxARYWRw-1; Tue, 29 Mar 2022 00:08:53 -0400
+X-MC-Unique: v0vLYg4mMxOiw9lxARYWRw-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B672A1C05ABA;
-        Tue, 29 Mar 2022 04:08:48 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E0ABA802809;
+        Tue, 29 Mar 2022 04:08:52 +0000 (UTC)
 Received: from localhost.localdomain (ovpn-13-210.pek2.redhat.com [10.72.13.210])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 41400401E64;
-        Tue, 29 Mar 2022 04:08:45 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 76108401E64;
+        Tue, 29 Mar 2022 04:08:49 +0000 (UTC)
 From:   Jason Wang <jasowang@redhat.com>
 To:     mst@redhat.com, jasowang@redhat.com
 Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 2/3] vdpa: mlx5: synchronize driver status with CVQ
-Date:   Tue, 29 Mar 2022 12:08:39 +0800
-Message-Id: <20220329040840.3419-2-jasowang@redhat.com>
+        linux-kernel@vger.kernel.org, Eli Cohen <elic@nvidia.com>
+Subject: [PATCH V2 3/3] vdpa/mlx5: Use consistent RQT size
+Date:   Tue, 29 Mar 2022 12:08:40 +0800
+Message-Id: <20220329040840.3419-3-jasowang@redhat.com>
 In-Reply-To: <20220329040840.3419-1-jasowang@redhat.com>
 References: <20220329040840.3419-1-jasowang@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,212 +60,216 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, CVQ doesn't have any synchronization with the driver
-status. Then CVQ emulation code run in the middle of:
+From: Eli Cohen <elic@nvidia.com>
 
-1) device reset
-2) device status changed
-3) map updating
+The current code evaluates RQT size based on the configured number of
+virtqueues. This can raise an issue in the following scenario:
 
-The will lead several unexpected issue like trying to execute CVQ
-command after the driver has been teared down.
+Assume MQ was negotiated.
+1. mlx5_vdpa_set_map() gets called.
+2. handle_ctrl_mq() is called setting cur_num_vqs to some value, lower
+   than the configured max VQs.
+3. A second set_map gets called, but now a smaller number of VQs is used
+   to evaluate the size of the RQT.
+4. handle_ctrl_mq() is called with a value larger than what the RQT can
+   hold. This will emit errors and the driver state is compromised.
 
-Fixing this by using reslock to synchronize CVQ emulation code with
-the driver status changing:
+To fix this, we use a new field in struct mlx5_vdpa_net to hold the
+required number of entries in the RQT. This value is evaluated in
+mlx5_vdpa_set_driver_features() where we have the negotiated features
+all set up.
 
-- protect the whole device reset, status changing and set_map()
-  updating with reslock
-- protect the CVQ handler with the reslock and check
-  VIRTIO_CONFIG_S_DRIVER_OK in the CVQ handler
+In addtion to that, we take into consideration the max capability of RQT
+entries early when the device is added so we don't need to take consider
+it when creating the RQT.
 
-This will guarantee that:
+Last, we remove the use of mlx5_vdpa_max_qps() which just returns the
+max_vas / 2 and make the code clearer.
 
-1) CVQ handler won't work if VIRTIO_CONFIG_S_DRIVER_OK is not set
-2) CVQ handler will see a consistent state of the driver instead of
-   the partial one when it is running in the middle of the
-   teardown_driver() or setup_driver().
-
-Cc: 5262912ef3cfc ("vdpa/mlx5: Add support for control VQ and MAC setting")
-Signed-off-by: Jason Wang <jasowang@redhat.com>
+Fixes: 52893733f2c5 ("vdpa/mlx5: Add multiqueue support")
+Signed-off-by: Eli Cohen <elic@nvidia.com>
 ---
-Changes since V1:
-- document the lock requirement
-- protect the whole .set_map()
----
- drivers/vdpa/mlx5/net/mlx5_vnet.c | 51 ++++++++++++++++++++++---------
- 1 file changed, 37 insertions(+), 14 deletions(-)
+ drivers/vdpa/mlx5/net/mlx5_vnet.c | 61 +++++++++++--------------------
+ 1 file changed, 21 insertions(+), 40 deletions(-)
 
 diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-index b2afd2b6fbca..53b8c1a68f90 100644
+index 53b8c1a68f90..61bec1ed0bc9 100644
 --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
 +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-@@ -1616,11 +1616,17 @@ static void mlx5_cvq_kick_handler(struct work_struct *work)
- 	mvdev = wqent->mvdev;
- 	ndev = to_mlx5_vdpa_ndev(mvdev);
- 	cvq = &mvdev->cvq;
-+
-+	mutex_lock(&ndev->reslock);
-+
-+	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK))
-+		goto out;
-+
- 	if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_CTRL_VQ)))
--		return;
-+		goto out;
- 
- 	if (!cvq->ready)
--		return;
-+		goto out;
- 
- 	while (true) {
- 		err = vringh_getdesc_iotlb(&cvq->vring, &cvq->riov, &cvq->wiov, &cvq->head,
-@@ -1658,6 +1664,9 @@ static void mlx5_cvq_kick_handler(struct work_struct *work)
- 		queue_work(mvdev->wq, &wqent->work);
- 		break;
- 	}
-+
-+out:
-+	mutex_unlock(&ndev->reslock);
+@@ -161,6 +161,7 @@ struct mlx5_vdpa_net {
+ 	struct mlx5_flow_handle *rx_rule_mcast;
+ 	bool setup;
+ 	u32 cur_num_vqs;
++	u32 rqt_size;
+ 	struct notifier_block nb;
+ 	struct vdpa_callback config_cb;
+ 	struct mlx5_vdpa_wq_ent cvq_ent;
+@@ -204,17 +205,12 @@ static __virtio16 cpu_to_mlx5vdpa16(struct mlx5_vdpa_dev *mvdev, u16 val)
+ 	return __cpu_to_virtio16(mlx5_vdpa_is_little_endian(mvdev), val);
  }
  
- static void mlx5_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
-@@ -2132,7 +2141,7 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb
- 		goto err_mr;
- 
- 	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK))
--		return 0;
-+		goto err_mr;
- 
- 	restore_channels_info(ndev);
- 	err = setup_driver(mvdev);
-@@ -2147,12 +2156,14 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb
- 	return err;
- }
- 
-+/* reslock must be held for this function */
- static int setup_driver(struct mlx5_vdpa_dev *mvdev)
+-static inline u32 mlx5_vdpa_max_qps(int max_vqs)
+-{
+-	return max_vqs / 2;
+-}
+-
+ static u16 ctrl_vq_idx(struct mlx5_vdpa_dev *mvdev)
  {
- 	struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
+ 	if (!(mvdev->actual_features & BIT_ULL(VIRTIO_NET_F_MQ)))
+ 		return 2;
+ 
+-	return 2 * mlx5_vdpa_max_qps(mvdev->max_vqs);
++	return mvdev->max_vqs;
+ }
+ 
+ static bool is_ctrl_vq_idx(struct mlx5_vdpa_dev *mvdev, u16 idx)
+@@ -1236,25 +1232,13 @@ static void teardown_vq(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *
+ static int create_rqt(struct mlx5_vdpa_net *ndev)
+ {
+ 	__be32 *list;
+-	int max_rqt;
+ 	void *rqtc;
+ 	int inlen;
+ 	void *in;
+ 	int i, j;
+ 	int err;
+-	int num;
+-
+-	if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_MQ)))
+-		num = 1;
+-	else
+-		num = ndev->cur_num_vqs / 2;
+ 
+-	max_rqt = min_t(int, roundup_pow_of_two(num),
+-			1 << MLX5_CAP_GEN(ndev->mvdev.mdev, log_max_rqt_size));
+-	if (max_rqt < 1)
+-		return -EOPNOTSUPP;
+-
+-	inlen = MLX5_ST_SZ_BYTES(create_rqt_in) + max_rqt * MLX5_ST_SZ_BYTES(rq_num);
++	inlen = MLX5_ST_SZ_BYTES(create_rqt_in) + ndev->rqt_size * MLX5_ST_SZ_BYTES(rq_num);
+ 	in = kzalloc(inlen, GFP_KERNEL);
+ 	if (!in)
+ 		return -ENOMEM;
+@@ -1263,12 +1247,12 @@ static int create_rqt(struct mlx5_vdpa_net *ndev)
+ 	rqtc = MLX5_ADDR_OF(create_rqt_in, in, rqt_context);
+ 
+ 	MLX5_SET(rqtc, rqtc, list_q_type, MLX5_RQTC_LIST_Q_TYPE_VIRTIO_NET_Q);
+-	MLX5_SET(rqtc, rqtc, rqt_max_size, max_rqt);
++	MLX5_SET(rqtc, rqtc, rqt_max_size, ndev->rqt_size);
+ 	list = MLX5_ADDR_OF(rqtc, rqtc, rq_num[0]);
+-	for (i = 0, j = 0; i < max_rqt; i++, j += 2)
+-		list[i] = cpu_to_be32(ndev->vqs[j % (2 * num)].virtq_id);
++	for (i = 0, j = 0; i < ndev->rqt_size; i++, j += 2)
++		list[i] = cpu_to_be32(ndev->vqs[j % ndev->cur_num_vqs].virtq_id);
+ 
+-	MLX5_SET(rqtc, rqtc, rqt_actual_size, max_rqt);
++	MLX5_SET(rqtc, rqtc, rqt_actual_size, ndev->rqt_size);
+ 	err = mlx5_vdpa_create_rqt(&ndev->mvdev, in, inlen, &ndev->res.rqtn);
+ 	kfree(in);
+ 	if (err)
+@@ -1282,19 +1266,13 @@ static int create_rqt(struct mlx5_vdpa_net *ndev)
+ static int modify_rqt(struct mlx5_vdpa_net *ndev, int num)
+ {
+ 	__be32 *list;
+-	int max_rqt;
+ 	void *rqtc;
+ 	int inlen;
+ 	void *in;
+ 	int i, j;
  	int err;
  
--	mutex_lock(&ndev->reslock);
-+	WARN_ON(!mutex_is_locked(&ndev->reslock));
-+
- 	if (ndev->setup) {
- 		mlx5_vdpa_warn(mvdev, "setup driver called for already setup driver\n");
- 		err = 0;
-@@ -2182,7 +2193,6 @@ static int setup_driver(struct mlx5_vdpa_dev *mvdev)
- 		goto err_fwd;
- 	}
- 	ndev->setup = true;
--	mutex_unlock(&ndev->reslock);
+-	max_rqt = min_t(int, roundup_pow_of_two(ndev->cur_num_vqs / 2),
+-			1 << MLX5_CAP_GEN(ndev->mvdev.mdev, log_max_rqt_size));
+-	if (max_rqt < 1)
+-		return -EOPNOTSUPP;
+-
+-	inlen = MLX5_ST_SZ_BYTES(modify_rqt_in) + max_rqt * MLX5_ST_SZ_BYTES(rq_num);
++	inlen = MLX5_ST_SZ_BYTES(modify_rqt_in) + ndev->rqt_size * MLX5_ST_SZ_BYTES(rq_num);
+ 	in = kzalloc(inlen, GFP_KERNEL);
+ 	if (!in)
+ 		return -ENOMEM;
+@@ -1305,10 +1283,10 @@ static int modify_rqt(struct mlx5_vdpa_net *ndev, int num)
+ 	MLX5_SET(rqtc, rqtc, list_q_type, MLX5_RQTC_LIST_Q_TYPE_VIRTIO_NET_Q);
  
- 	return 0;
+ 	list = MLX5_ADDR_OF(rqtc, rqtc, rq_num[0]);
+-	for (i = 0, j = 0; i < max_rqt; i++, j += 2)
++	for (i = 0, j = 0; i < ndev->rqt_size; i++, j += 2)
+ 		list[i] = cpu_to_be32(ndev->vqs[j % num].virtq_id);
  
-@@ -2193,23 +2203,23 @@ static int setup_driver(struct mlx5_vdpa_dev *mvdev)
- err_rqt:
- 	teardown_virtqueues(ndev);
- out:
--	mutex_unlock(&ndev->reslock);
- 	return err;
- }
+-	MLX5_SET(rqtc, rqtc, rqt_actual_size, max_rqt);
++	MLX5_SET(rqtc, rqtc, rqt_actual_size, ndev->rqt_size);
+ 	err = mlx5_vdpa_modify_rqt(&ndev->mvdev, in, inlen, ndev->res.rqtn);
+ 	kfree(in);
+ 	if (err)
+@@ -1582,7 +1560,7 @@ static virtio_net_ctrl_ack handle_ctrl_mq(struct mlx5_vdpa_dev *mvdev, u8 cmd)
  
-+/* reslock must be held for this function */
- static void teardown_driver(struct mlx5_vdpa_net *ndev)
- {
--	mutex_lock(&ndev->reslock);
-+
-+	WARN_ON(!mutex_is_locked(&ndev->reslock));
-+
- 	if (!ndev->setup)
--		goto out;
-+		return;
+ 		newqps = mlx5vdpa16_to_cpu(mvdev, mq.virtqueue_pairs);
+ 		if (newqps < VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MIN ||
+-		    newqps > mlx5_vdpa_max_qps(mvdev->max_vqs))
++		    newqps > ndev->rqt_size)
+ 			break;
  
- 	remove_fwd_to_tir(ndev);
- 	destroy_tir(ndev);
- 	destroy_rqt(ndev);
- 	teardown_virtqueues(ndev);
- 	ndev->setup = false;
--out:
--	mutex_unlock(&ndev->reslock);
- }
- 
- static void clear_vqs_ready(struct mlx5_vdpa_net *ndev)
-@@ -2230,6 +2240,8 @@ static void mlx5_vdpa_set_status(struct vdpa_device *vdev, u8 status)
- 
- 	print_status(mvdev, status, true);
- 
-+	mutex_lock(&ndev->reslock);
-+
- 	if ((status ^ ndev->mvdev.status) & VIRTIO_CONFIG_S_DRIVER_OK) {
- 		if (status & VIRTIO_CONFIG_S_DRIVER_OK) {
- 			err = setup_driver(mvdev);
-@@ -2239,16 +2251,19 @@ static void mlx5_vdpa_set_status(struct vdpa_device *vdev, u8 status)
- 			}
- 		} else {
- 			mlx5_vdpa_warn(mvdev, "did not expect DRIVER_OK to be cleared\n");
--			return;
-+			goto err_clear;
- 		}
- 	}
- 
- 	ndev->mvdev.status = status;
-+	mutex_unlock(&ndev->reslock);
- 	return;
- 
- err_setup:
- 	mlx5_vdpa_destroy_mr(&ndev->mvdev);
- 	ndev->mvdev.status |= VIRTIO_CONFIG_S_FAILED;
-+err_clear:
-+	mutex_unlock(&ndev->reslock);
- }
- 
- static int mlx5_vdpa_reset(struct vdpa_device *vdev)
-@@ -2258,6 +2273,8 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev)
- 
- 	print_status(mvdev, 0, true);
- 	mlx5_vdpa_info(mvdev, "performing device reset\n");
-+
-+	mutex_lock(&ndev->reslock);
- 	teardown_driver(ndev);
- 	clear_vqs_ready(ndev);
- 	mlx5_vdpa_destroy_mr(&ndev->mvdev);
-@@ -2270,6 +2287,7 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev)
- 		if (mlx5_vdpa_create_mr(mvdev, NULL))
- 			mlx5_vdpa_warn(mvdev, "create MR failed\n");
- 	}
-+	mutex_unlock(&ndev->reslock);
- 
- 	return 0;
- }
-@@ -2305,19 +2323,24 @@ static u32 mlx5_vdpa_get_generation(struct vdpa_device *vdev)
- static int mlx5_vdpa_set_map(struct vdpa_device *vdev, struct vhost_iotlb *iotlb)
- {
- 	struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
-+	struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
- 	bool change_map;
+ 		if (ndev->cur_num_vqs == 2 * newqps) {
+@@ -1946,7 +1924,7 @@ static int setup_virtqueues(struct mlx5_vdpa_dev *mvdev)
  	int err;
+ 	int i;
  
-+	mutex_lock(&ndev->reslock);
+-	for (i = 0; i < 2 * mlx5_vdpa_max_qps(mvdev->max_vqs); i++) {
++	for (i = 0; i < mvdev->max_vqs; i++) {
+ 		err = setup_vq(ndev, &ndev->vqs[i]);
+ 		if (err)
+ 			goto err_vq;
+@@ -2017,9 +1995,11 @@ static int mlx5_vdpa_set_driver_features(struct vdpa_device *vdev, u64 features)
+ 
+ 	ndev->mvdev.actual_features = features & ndev->mvdev.mlx_features;
+ 	if (ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_MQ))
+-		ndev->cur_num_vqs = 2 * mlx5vdpa16_to_cpu(mvdev, ndev->config.max_virtqueue_pairs);
++		ndev->rqt_size = mlx5vdpa16_to_cpu(mvdev, ndev->config.max_virtqueue_pairs);
+ 	else
+-		ndev->cur_num_vqs = 2;
++		ndev->rqt_size = 1;
 +
- 	err = mlx5_vdpa_handle_set_map(mvdev, iotlb, &change_map);
- 	if (err) {
- 		mlx5_vdpa_warn(mvdev, "set map failed(%d)\n", err);
--		return err;
-+		goto err;
++	ndev->cur_num_vqs = 2 * ndev->rqt_size;
+ 
+ 	update_cvq_info(mvdev);
+ 	return err;
+@@ -2486,7 +2466,7 @@ static void init_mvqs(struct mlx5_vdpa_net *ndev)
+ 	struct mlx5_vdpa_virtqueue *mvq;
+ 	int i;
+ 
+-	for (i = 0; i < 2 * mlx5_vdpa_max_qps(ndev->mvdev.max_vqs); ++i) {
++	for (i = 0; i < ndev->mvdev.max_vqs; ++i) {
+ 		mvq = &ndev->vqs[i];
+ 		memset(mvq, 0, offsetof(struct mlx5_vdpa_virtqueue, ri));
+ 		mvq->index = i;
+@@ -2606,7 +2586,8 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+ 		return -EOPNOTSUPP;
  	}
  
- 	if (change_map)
--		return mlx5_vdpa_change_map(mvdev, iotlb);
-+		err = mlx5_vdpa_change_map(mvdev, iotlb);
+-	max_vqs = MLX5_CAP_DEV_VDPA_EMULATION(mdev, max_num_virtio_queues);
++	max_vqs = min_t(int, MLX5_CAP_DEV_VDPA_EMULATION(mdev, max_num_virtio_queues),
++			1 << MLX5_CAP_GEN(mdev, log_max_rqt_size));
+ 	if (max_vqs < 2) {
+ 		dev_warn(mdev->device,
+ 			 "%d virtqueues are supported. At least 2 are required\n",
+@@ -2670,7 +2651,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+ 		ndev->mvdev.mlx_features |= BIT_ULL(VIRTIO_NET_F_MAC);
+ 	}
  
--	return 0;
-+err:
-+	mutex_unlock(&ndev->reslock);
-+	return err;
- }
+-	config->max_virtqueue_pairs = cpu_to_mlx5vdpa16(mvdev, mlx5_vdpa_max_qps(max_vqs));
++	config->max_virtqueue_pairs = cpu_to_mlx5vdpa16(mvdev, max_vqs / 2);
+ 	mvdev->vdev.dma_dev = &mdev->pdev->dev;
+ 	err = mlx5_vdpa_alloc_resources(&ndev->mvdev);
+ 	if (err)
+@@ -2697,7 +2678,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+ 	ndev->nb.notifier_call = event_handler;
+ 	mlx5_notifier_register(mdev, &ndev->nb);
+ 	mvdev->vdev.mdev = &mgtdev->mgtdev;
+-	err = _vdpa_register_device(&mvdev->vdev, 2 * mlx5_vdpa_max_qps(max_vqs) + 1);
++	err = _vdpa_register_device(&mvdev->vdev, max_vqs + 1);
+ 	if (err)
+ 		goto err_reg;
  
- static void mlx5_vdpa_free(struct vdpa_device *vdev)
 -- 
 2.18.1
 

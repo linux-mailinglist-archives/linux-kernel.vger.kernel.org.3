@@ -2,126 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815074EA5A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 05:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06574EA5B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 05:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbiC2DDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 23:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58756 "EHLO
+        id S231425AbiC2DEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 23:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbiC2DC6 (ORCPT
+        with ESMTP id S230050AbiC2DEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 23:02:58 -0400
-Received: from out0-129.mail.aliyun.com (out0-129.mail.aliyun.com [140.205.0.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110DA24372C;
-        Mon, 28 Mar 2022 20:01:15 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047199;MF=darcy.sh@antgroup.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---.NF0ngh4_1648522872;
-Received: from localhost(mailfrom:darcy.sh@antgroup.com fp:SMTPD_---.NF0ngh4_1648522872)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 29 Mar 2022 11:01:13 +0800
-From:   "SU Hang" <darcy.sh@antgroup.com>
-To:     seanjc@google.com, kvm@vger.kernel.org
-Cc:     "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
-        "SU Hang" <darcy.sh@antgroup.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, <x86@kernel.org>,
-        "Paolo Bonzini" <pbonzini@redhat.com>,
-        "=?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?=" <rkrcmar@redhat.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/2] KVM: x86/mmu: Derive EPT violation RWX bits from EPTE RWX bits
-Date:   Tue, 29 Mar 2022 11:01:07 +0800
-Message-Id: <20220329030108.97341-3-darcy.sh@antgroup.com>
-X-Mailer: git-send-email 2.32.0.3.g01195cf9f
-In-Reply-To: <20220329030108.97341-1-darcy.sh@antgroup.com>
-References: <20220329030108.97341-1-darcy.sh@antgroup.com>
+        Mon, 28 Mar 2022 23:04:07 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F5D1FE55C
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 20:02:24 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id e203so20511215ybc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 20:02:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZJF2ROwWswfObVh+2bG7an1ccg+/dGsZVnoMIY0qAho=;
+        b=gSJ30XwFfgCjoj7FODAJINpGCvebtxMjLRGGevotz+9ZlBRkCUMeU8L9h6Bnq4EbdD
+         9mlPKz6SV+vXTltegjU1HzpHmPAcimoAChXTplAr29Yo3iT2YnWV8F1wvC2scvGK8NfH
+         oox99sFrFwk6+yWK0lR5qBeAlnNKyjBsDOX5XwmMR8UH6piEfvXDOEkd/XJ1WNiyt+dS
+         d5kTuz1eBV1QwXKxN67DbDIAoE122Q2X7jUNHB74UY4t51ikyj8aVEU1w4Rh9fJMFetX
+         /QHNt0pSkoMhCW4VQJqY1Zo6idopu36g3Em7DYg1Ql5qdWkZpbMJC8vkBzbay9DbREp4
+         rK7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZJF2ROwWswfObVh+2bG7an1ccg+/dGsZVnoMIY0qAho=;
+        b=JbzF2kH0dn8NQkrAgpSlngaJ820KgwybPJ97o9OjsNOPSlfEe33LE2QgIJHu7gKBR4
+         RYto2SKs+1Oc+4dqncMfGwBpB/3jjSvGvhYOnN5uvc7hofyfa/U8cKhF2D4FFeznUHIC
+         CI72URa58QjJ1PxDidDxmPqmNg9qThioHEru9ZJPfYo0qz/LrLH2Xtg9eKWB6dazka2o
+         ZDtml+YxgGhJUY0caw/Hqli750pL4TyakqpcBznVgpiRiLYNpToup45mKBvA7v7feRlw
+         L9zmvPw5sdsiDOWrII9xSrIQK3p/3M2on5Fwp1G74gULnj2idmVatrx24Hma5kwrnR9p
+         GTCw==
+X-Gm-Message-State: AOAM530ayGDcbDl2H9oWxUND7xtseyoSTsPUh2kxmR499mE+dF+LT/iQ
+        KFrgcP6z8K7xF03cyVHIbgl51LmHRXAB/vildP2gIw==
+X-Google-Smtp-Source: ABdhPJw8uLz2f4kWeQOV9VmVcaiJBylPdGmsHXEuxkEvtSgsM3oqrwPYO0E6tmuL6ic+5M22rbQ6iH9E/dyLDCcKG1o=
+X-Received: by 2002:a25:cdca:0:b0:633:c810:6ca with SMTP id
+ d193-20020a25cdca000000b00633c81006camr26311135ybf.261.1648522944149; Mon, 28
+ Mar 2022 20:02:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220328132843.16624-1-songmuchun@bytedance.com>
+ <CANpmjNO=vMYhL_Uf3ewXvfWoan3q+cYjWV0jEze7toKSh2HRjg@mail.gmail.com>
+ <CAMZfGtWfudKnm71uNQtS-=+3_m25nsfPDo8-vZYzrktQbxHUMA@mail.gmail.com>
+ <CAMZfGtVkp+xCM3kgLHRNRFUs_fus0f3Ry_jFv8QaSWLfnkXREg@mail.gmail.com> <CANpmjNMszqqOF6TA1RmE93=xRU9pA5oc4RBoAtS+sBWwvS5y4w@mail.gmail.com>
+In-Reply-To: <CANpmjNMszqqOF6TA1RmE93=xRU9pA5oc4RBoAtS+sBWwvS5y4w@mail.gmail.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 29 Mar 2022 11:01:45 +0800
+Message-ID: <CAMZfGtXoMhji2TeF7gC13DMD4r3md72-CRXFc2BTfwmOx-K=xw@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH v2] mm: kfence: fix objcgs vector allocation
+To:     Marco Elver <elver@google.com>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xiongchun duan <duanxiongchun@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+On Tue, Mar 29, 2022 at 2:58 AM Marco Elver <elver@google.com> wrote:
+>
+> On Mon, 28 Mar 2022 at 17:54, Muchun Song <songmuchun@bytedance.com> wrote:
+> [...]
+> > > >
+> > > > Btw, how did you test this?
+> > > >
+> >
+> > I have tested it with syzkaller with the following configs.
+> > And I didn't find any issues.
+> >
+> > CONFIG_KFENCE=y
+> > CONFIG_KFENCE_SAMPLE_INTERVAL=10
+> > CONFIG_KFENCE_NUM_OBJECTS=2550
+> > CONFIG_KFENCE_DEFERRABLE=n
+> > CONFIG_KFENCE_STATIC_KEYS=y
+> > CONFIG_KFENCE_STRESS_TEST_FAULTS=0
+>
+> Hmm, I would have expected that you have some definitive test case
+> that shows the issue, and with the patch the issue is gone. Were there
+> issues triggered by syzkaller w/o this patch?
+>
 
-Derive the mask of RWX bits reported on EPT violations from the mask of
-RWX bits that are shoved into EPT entries; the layout is the same, the
-EPT violation bits are simply shifted by three.  Use the new shift and a
-slight copy-paste of the mask derivation instead of completely open
-coding the same to convert between the EPT entry bits and the exit
-qualification when synthesizing a nested EPT Violation.
+I have tested this patch with the following patch and without this patch.
+Then we'll see the BUG_ON meaning both objcg vector and object are
+allocated from kfence pool.
 
-No functional change intended.
+diff --git a/mm/slab.h b/mm/slab.h
+index c7f2abc2b154..1d8d15522a2e 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -519,6 +519,8 @@ static inline void
+memcg_slab_post_alloc_hook(struct kmem_cache *s,
+                                continue;
+                        }
 
-Cc: SU Hang <darcy.sh@antgroup.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/include/asm/vmx.h     | 7 +------
- arch/x86/kvm/mmu/paging_tmpl.h | 8 +++++++-
- arch/x86/kvm/vmx/vmx.c         | 4 +---
- 3 files changed, 9 insertions(+), 10 deletions(-)
-
-diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
-index 3586d4aeaac7..46bc7072f6a2 100644
---- a/arch/x86/include/asm/vmx.h
-+++ b/arch/x86/include/asm/vmx.h
-@@ -543,17 +543,12 @@ enum vm_entry_failure_code {
- #define EPT_VIOLATION_ACC_READ_BIT	0
- #define EPT_VIOLATION_ACC_WRITE_BIT	1
- #define EPT_VIOLATION_ACC_INSTR_BIT	2
--#define EPT_VIOLATION_READABLE_BIT	3
--#define EPT_VIOLATION_WRITABLE_BIT	4
--#define EPT_VIOLATION_EXECUTABLE_BIT	5
- #define EPT_VIOLATION_GVA_IS_VALID_BIT	7
- #define EPT_VIOLATION_GVA_TRANSLATED_BIT 8
- #define EPT_VIOLATION_ACC_READ		(1 << EPT_VIOLATION_ACC_READ_BIT)
- #define EPT_VIOLATION_ACC_WRITE		(1 << EPT_VIOLATION_ACC_WRITE_BIT)
- #define EPT_VIOLATION_ACC_INSTR		(1 << EPT_VIOLATION_ACC_INSTR_BIT)
--#define EPT_VIOLATION_READABLE		(1 << EPT_VIOLATION_READABLE_BIT)
--#define EPT_VIOLATION_WRITABLE		(1 << EPT_VIOLATION_WRITABLE_BIT)
--#define EPT_VIOLATION_EXECUTABLE	(1 << EPT_VIOLATION_EXECUTABLE_BIT)
-+#define EPT_VIOLATION_RWX_MASK		(VMX_EPT_RWX_MASK << EPT_VIOLATION_RWX_SHIFT)
- #define EPT_VIOLATION_GVA_IS_VALID	(1 << EPT_VIOLATION_GVA_IS_VALID_BIT)
- #define EPT_VIOLATION_GVA_TRANSLATED	(1 << EPT_VIOLATION_GVA_TRANSLATED_BIT)
-
-diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-index db594366f60c..a4a9d7f2d3bd 100644
---- a/arch/x86/kvm/mmu/paging_tmpl.h
-+++ b/arch/x86/kvm/mmu/paging_tmpl.h
-@@ -531,7 +531,13 @@ static int FNAME(walk_addr_generic)(struct guest_walker *walker,
- 			vcpu->arch.exit_qualification |= EPT_VIOLATION_ACC_READ;
- 		if (fetch_fault)
- 			vcpu->arch.exit_qualification |= EPT_VIOLATION_ACC_INSTR;
--		vcpu->arch.exit_qualification |= (pte_access & 0x7) << 3;
++                       BUG_ON(is_kfence_address(p[i]) &&
+is_kfence_address(slab_objcgs(slab)));
 +
-+		/*
-+		 * Note, pte_access holds the raw RWX bits from the EPTE, not
-+		 * ACC_*_MASK flags!
-+		 */
-+		vcpu->arch.exit_qualification |= (pte_access & VMX_EPT_RWX_MASK) <<
-+						 EPT_VIOLATION_RWX_SHIFT;
- 	}
- #endif
- 	walker->fault.address = addr;
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 5b629acafa69..9c1f6d3dceef 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -5410,9 +5410,7 @@ static int handle_ept_violation(struct kvm_vcpu *vcpu)
- 	error_code |= (exit_qualification & EPT_VIOLATION_ACC_INSTR)
- 		      ? PFERR_FETCH_MASK : 0;
- 	/* ept page table entry is present? */
--	error_code |= (exit_qualification &
--		       (EPT_VIOLATION_READABLE | EPT_VIOLATION_WRITABLE |
--			EPT_VIOLATION_EXECUTABLE))
-+	error_code |= (exit_qualification & EPT_VIOLATION_RWX_MASK)
- 		      ? PFERR_PRESENT_MASK : 0;
-
- 	error_code |= (exit_qualification & EPT_VIOLATION_GVA_TRANSLATED) != 0 ?
---
-2.32.0.3.g01195cf9f
-
+                        off = obj_to_index(s, slab, p[i]);
+                        obj_cgroup_get(objcg);
+                        slab_objcgs(slab)[off] = objcg;

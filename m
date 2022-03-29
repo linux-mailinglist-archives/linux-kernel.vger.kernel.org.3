@@ -2,108 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785744EB0D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5141B4EB0D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238885AbiC2PjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
+        id S236421AbiC2Pjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238867AbiC2PjC (ORCPT
+        with ESMTP id S238886AbiC2Pja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:39:02 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9776424F28A
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:37:18 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id e22so21397510ioe.11
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:37:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=gLd51ggOlUdHIwZ00EZlLb4mWuNUvjnU3+SzIZdxmOk=;
-        b=K57WW/FddBde/rRXMUA9BaYE3N0lAuDneUX1KCIBFxf4CXh4Z4eKQOUqC788YMGaXX
-         MQF7yOu4tf8KM9LcmtcceBE2QTiyQQM/8vESJFK5zLjXOr7BViiSBXqZ/+143NMwIIdc
-         orlNUiAl/hdFW4dDa9vE//ejvyaewYcHdewJE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=gLd51ggOlUdHIwZ00EZlLb4mWuNUvjnU3+SzIZdxmOk=;
-        b=rj3xObjTKkxKc4pvpCcm+5R8kqrVZVmqKjEMzypHTAcOYe5w5immADMXEHxz+z5jiH
-         3V0NiadAu7T6YO3o+Rv3Af7N8UDSeDQMKfWmlCpy6F6B+fTaB0GAcGd4ULETFmo+XExv
-         lY7upP1QtZyJFI8Q0bSOKdF9ti0tDGz6lA6RYLo1abvm943PVGG0xbNi/D3afE3ahCDU
-         C5IP2m8Hs99sKOsUodX2t4rXev3f4wFdUwF9191MH3mGtRwxi28x8LzGPgZrNRf+oojl
-         dtOyR1DqASajKmMD15EOYZm/k2DNtA3Efpgc6rSga4fB0WXK/X8iUfARieo7L+kvlOMe
-         CG8Q==
-X-Gm-Message-State: AOAM5308dm7XVKAbIzZxyGqyynTOPUrcTf2voQK8OwhCii0VfmyVUpJf
-        w4+kFejLL3fEyVqhwaDgvn57IQ==
-X-Google-Smtp-Source: ABdhPJwCzXCHjBRdz35SXshxWvTj2yFFE0frjiP5HGkRVMCtMtFRNLjnUjRXfQCtSR1PiZiMusPBYg==
-X-Received: by 2002:a6b:400b:0:b0:64c:77aa:40a6 with SMTP id k11-20020a6b400b000000b0064c77aa40a6mr5480515ioa.101.1648568237910;
-        Tue, 29 Mar 2022 08:37:17 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id f20-20020a6be814000000b00649d9a4db2asm9706513ioh.27.2022.03.29.08.37.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 08:37:17 -0700 (PDT)
-Subject: Re: [PATCH v5 0/2] selftests/resctrl: Print a message if the result
- of MBM&CMT tests is failed on Intel CPU
-To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220323080928.1586408-1-tan.shaopeng@jp.fujitsu.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <1920a6b6-bc1b-31db-4c1b-efccc189daa5@linuxfoundation.org>
-Date:   Tue, 29 Mar 2022 09:37:17 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 29 Mar 2022 11:39:30 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA78324F2A1;
+        Tue, 29 Mar 2022 08:37:45 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:35::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 89F04732;
+        Tue, 29 Mar 2022 15:37:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 89F04732
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1648568265; bh=LgqYNts+7wvT/aAKZ340NN7yfd+hMq7kPJubjS/JS6E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Y305iODNnNT5eTqKcaYOJebWLpfgVS/GlQsI4TxgjwQxgmjm64XMIlthMkV0ZhsXm
+         +ODVEARtBBXxsSxteGHpyjdZAirBHKdf5sK3Ds0dFNRgdydmnYtj4qwWTVuiWYF8CX
+         MIwPgQGYSRs28aw8aRdv6H+BmxWLuaPOe+CViWAyvZZXXxxnZh5+XG1HVVOggzZXjm
+         VZiMjlkw7vPLgEAVVnmML3eje617Hdc13hAD4nmAS0XXP3wj2ErKmImnysbp+OQbr1
+         qMTMdZWGWRQ89n/97+nApaYDmNavPOFDSpGNZLFloFA30XoCI6SD7f/N2o3kbogRWf
+         u+on9alYZDw/g==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     linux-doc@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Akira Yokosawa <akiyks@gmail.com>
+Subject: [PATCH v2] docs: Add a document on how to fix a messy diffstat
+Date:   Tue, 29 Mar 2022 09:37:45 -0600
+Message-ID: <87wngc6a7q.fsf@meer.lwn.net>
 MIME-Version: 1.0
-In-Reply-To: <20220323080928.1586408-1-tan.shaopeng@jp.fujitsu.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/22 2:09 AM, Shaopeng Tan wrote:
-> Hello,
-> 
-> The aim of this series is to print a message to let users know a possible
-> cause of failure, if the result of MBM&CMT tests is failed on Intel CPU.
-> In order to detect Intel vendor, I extended AMD vendor detect function.
-> 
-> Difference from v4:
-> - Fixed the typos.
-> - Changed "get_vendor() != ARCH_AMD" to "get_vendor() == ARCH_INTEL".
-> - Reorder the declarations based on line length from longest to shortest.
-> https://lore.kernel.org/lkml/20220316055940.292550-1-tan.shaopeng@jp.fujitsu.com/ [PATCH v4]
-> 
-> This patch series is based on v5.17.
-> 
-> Shaopeng Tan (2):
->    selftests/resctrl: Extend CPU vendor detection
->    selftests/resctrl: Print a message if the result of MBM&CMT tests is
->      failed on Intel CPU
-> 
->   tools/testing/selftests/resctrl/cat_test.c    |  2 +-
->   tools/testing/selftests/resctrl/resctrl.h     |  5 ++-
->   .../testing/selftests/resctrl/resctrl_tests.c | 45 +++++++++++++------
->   tools/testing/selftests/resctrl/resctrlfs.c   |  2 +-
->   4 files changed, 37 insertions(+), 17 deletions(-)
-> 
+A branch with merges in will sometimes create a diffstat containing a lot
+of unrelated work at "git request-pull" time.  Create a document based on
+Linus's advice (found in the links below) and add it to the maintainer
+manual in the hope of saving some wear on Linus's keyboard going forward.
 
-I can queue this up for Linux 5.18-rc2. Thanks for fixing the error
-path with clear messages for failures.
+Link: https://lore.kernel.org/lkml/CAHk-=wg3wXH2JNxkQi+eLZkpuxqV+wPiHhw_Jf7ViH33Sw7PHA@mail.gmail.com/
+Link: https://lore.kernel.org/lkml/CAHk-=wgXbSa8yq8Dht8at+gxb_idnJ7X5qWZQWRBN4_CUPr=eQ@mail.gmail.com/
+Acked-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+---
+v2: Various tweaks suggested by Borislav, Bagas, and Akira
 
-thanks,
--- Shuah
+ Documentation/maintainer/index.rst          |  1 +
+ Documentation/maintainer/messy-diffstat.rst | 96 +++++++++++++++++++++
+ 2 files changed, 97 insertions(+)
+ create mode 100644 Documentation/maintainer/messy-diffstat.rst
+
+diff --git a/Documentation/maintainer/index.rst b/Documentation/maintainer/index.rst
+index f0a60435b124..3e03283c144e 100644
+--- a/Documentation/maintainer/index.rst
++++ b/Documentation/maintainer/index.rst
+@@ -12,6 +12,7 @@ additions to this manual.
+    configure-git
+    rebasing-and-merging
+    pull-requests
++   messy-diffstat
+    maintainer-entry-profile
+    modifying-patches
+ 
+diff --git a/Documentation/maintainer/messy-diffstat.rst b/Documentation/maintainer/messy-diffstat.rst
+new file mode 100644
+index 000000000000..c015f66d7621
+--- /dev/null
++++ b/Documentation/maintainer/messy-diffstat.rst
+@@ -0,0 +1,96 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=====================================
++Handling messy pull-request diffstats
++=====================================
++
++Subsystem maintainers routinely use ``git request-pull`` as part of the
++process of sending work upstream.  Normally, the result includes a nice
++diffstat that shows which files will be touched and how much of each will
++be changed.  Occasionally, though, a repository with a relatively
++complicated development history will yield a massive diffstat containing a
++great deal of unrelated work.  The result looks ugly and obscures what the
++pull request is actually doing.  This document describes what is happening
++and how to fix things up; it is derived from The Wisdom of Linus Torvalds,
++found in Linus1_ and Linus2_.
++
++.. _Linus1: https://lore.kernel.org/lkml/CAHk-=wg3wXH2JNxkQi+eLZkpuxqV+wPiHhw_Jf7ViH33Sw7PHA@mail.gmail.com/
++.. _Linus2: https://lore.kernel.org/lkml/CAHk-=wgXbSa8yq8Dht8at+gxb_idnJ7X5qWZQWRBN4_CUPr=eQ@mail.gmail.com/
++
++A Git development history proceeds as a series of commits.  In a simplified
++manner, mainline kernel development looks like this::
++
++  ... vM --- vN-rc1 --- vN-rc2 --- vN-rc3 --- ... --- vN-rc7 --- vN
++
++If one wants to see what has changed between two points, a command like
++this will do the job::
++
++  $ git diff --stat --summary vN-rc2..vN-rc3
++
++Here, there are two clear points in the history; Git will essentially
++"subtract" the beginning point from the end point and display the resulting
++differences.  The requested operation is unambiguous and easy enough to
++understand.
++
++When a subsystem maintainer creates a branch and commits changes to it, the
++result in the simplest case is a history that looks like::
++
++  ... vM --- vN-rc1 --- vN-rc2 --- vN-rc3 --- ... --- vN-rc7 --- vN
++                          |
++                          +-- c1 --- c2 --- ... --- cN
++
++If that maintainer now uses ``git diff`` to see what has changed between
++the mainline branch (let's call it "linus") and cN, there are still two
++clear endpoints, and the result is as expected.  So a pull request
++generated with ``git request-pull`` will also be as expected.  But now
++consider a slightly more complex development history::
++
++  ... vM --- vN-rc1 --- vN-rc2 --- vN-rc3 --- ... --- vN-rc7 --- vN
++                |         |
++                |         +-- c1 --- c2 --- ... --- cN
++                |                   /
++                +-- x1 --- x2 --- x3
++
++Our maintainer has created one branch at vN-rc1 and another at vN-rc2; the
++two were then subsequently merged into c2.  Now a pull request generated
++for cN may end up being messy indeed, and developers often end up wondering
++why.
++
++What is happening here is that there are no longer two clear end points for
++the ``git diff`` operation to use.  The development culminating in cN
++started in two different places; to generate the diffstat, ``git diff``
++ends up having pick one of them and hoping for the best.  If the diffstat
++starts at vN-rc1, it may end up including all of the changes between there
++and the second origin end point (vN-rc2), which is certainly not what our
++maintainer had in mind.  With all of that extra junk in the diffstat, it
++may be impossible to tell what actually happened in the changes leading up
++to cN.
++
++Maintainers often try to resolve this problem by, for example, rebasing the
++branch or performing another merge with the linus branch, then recreating
++the pull request.  This approach tends not to lead to joy at the receiving
++end of that pull request; rebasing and/or merging just before pushing
++upstream is a well-known way to get a grumpy response.
++
++So what is to be done?  The best response when confronted with this
++situation is to indeed to do a merge with the branch you intend your work
++to be pulled into, but to do it privately, as if it were the source of
++shame.  Create a new, throwaway branch and do the merge there::
++
++  ... vM --- vN-rc1 --- vN-rc2 --- vN-rc3 --- ... --- vN-rc7 --- vN
++                |         |                                      |
++                |         +-- c1 --- c2 --- ... --- cN           |
++                |                   /               |            |
++                +-- x1 --- x2 --- x3                +------------+-- TEMP
++
++The merge operation resolves all of the complications resulting from the
++multiple beginning points, yielding a coherent result that contains only
++the differences from the mainline branch.  Now it will be possible to
++generate a diffstat with the desired information::
++
++  $ git diff -C --stat --summary linus..TEMP
++
++Save the output from this command, then simply delete the TEMP branch;
++definitely do not expose it to the outside world.  Take the saved diffstat
++output and edit it into the messy pull request, yielding a result that
++shows what is really going on.  That request can then be sent upstream.
+-- 
+2.35.1
+

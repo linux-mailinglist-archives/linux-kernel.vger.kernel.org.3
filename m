@@ -2,42 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83484EA8A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 09:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4E84EA8AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 09:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233518AbiC2Hqc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 29 Mar 2022 03:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
+        id S233537AbiC2HsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 03:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbiC2Hqa (ORCPT
+        with ESMTP id S231801AbiC2Hr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 03:46:30 -0400
-Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9E719E09A
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 00:44:47 -0700 (PDT)
-Received: from mailer.emlix.com (p5098be52.dip0.t-ipconnect.de [80.152.190.82])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id B84455F850;
-        Tue, 29 Mar 2022 09:44:45 +0200 (CEST)
-From:   Rolf Eike Beer <eb@emlix.com>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] sched: use TASK_USER_PRIO() instead of open coding it
-Date:   Tue, 29 Mar 2022 09:44:30 +0200
-Message-ID: <5667632.X0gI6VCO9r@mobilepool36.emlix.com>
+        Tue, 29 Mar 2022 03:47:58 -0400
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCEA1C391B;
+        Tue, 29 Mar 2022 00:46:16 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id w4so23468477wrg.12;
+        Tue, 29 Mar 2022 00:46:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rpBdm54k3hpAJiNzkv6c+hlup42nSLv/yZ6rcxWnLSY=;
+        b=IdMBuD8LnI+HL0crshDcWtnEpvBH7IbiTq0zCsQrOULxe99rzlzFZxLf1eX0sicliE
+         L1+UiKY9WqdoYXA816Qhk2TZlZloTiyTU3aN7OJ2Fb9oIvjvjf+csLe+UexLybd9LKkX
+         23kCiy/oewvkaN/d2BYogD6eMgG3gO/oAdBAnqzgmVleuQkGzqetIqQvLJnuQq06isu9
+         ATT3817ZPs/rXNAl7eQS1vO5dm+rBVlUdKSZek6oQ+FhMyOxI6K2Op2NPs1VSqtKjJon
+         BBF6Yj3/+FV0yK6D+7wHvU7e7/KTn6PoA2bjJtmhoovNSs25D16kPynFgKAKIpJQ7Wxs
+         wy8A==
+X-Gm-Message-State: AOAM532QI+WzGX4CLpBdbHUtJbPZaV/vRKmgMpVezp0h0Wlq16CGul8e
+        wYFbEbCeITH/OFcCjJnjfYo=
+X-Google-Smtp-Source: ABdhPJyfRXcJMYQfm/T0Xmp6DW40AVrN8t6gvbYC575ZZz3IPPUDF/qI9Epa4K9hd3rOOQQW3cNbmw==
+X-Received: by 2002:a05:6000:12c3:b0:203:e0e0:7d18 with SMTP id l3-20020a05600012c300b00203e0e07d18mr28850582wrx.46.1648539972774;
+        Tue, 29 Mar 2022 00:46:12 -0700 (PDT)
+Received: from [192.168.64.180] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
+        by smtp.gmail.com with ESMTPSA id p30-20020a05600c1d9e00b0038cc9d6ff0bsm1527133wms.33.2022.03.29.00.46.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 00:46:12 -0700 (PDT)
+Message-ID: <15f24dcd-9a62-8bab-271c-baa9cc693d8d@grimberg.me>
+Date:   Tue, 29 Mar 2022 10:46:08 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/3] nvme-tcp: support specifying the
+ congestion-control
+Content-Language: en-US
+To:     Mingbao Sun <sunmingbao@tom.com>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
+        libin.zhang@dell.com, ao.sun@dell.com
+References: <20220311103414.8255-1-sunmingbao@tom.com>
+ <20220311103414.8255-2-sunmingbao@tom.com>
+ <7121e4be-0e25-dd5f-9d29-0fb02cdbe8de@grimberg.me>
+ <20220325201123.00002f28@tom.com>
+ <b7b5106a-9c0d-db49-00ab-234756955de8@grimberg.me>
+ <20220329104806.00000126@tom.com>
+From:   Sagi Grimberg <sagi@grimberg.me>
+In-Reply-To: <20220329104806.00000126@tom.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,49 +79,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Rolf Eike Beer <eb@emlix.com>
----
- kernel/sched/core.c  | 2 +-
- kernel/trace/trace.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index d575b4914925..c01c49aa4e77 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1281,7 +1281,7 @@ int tg_nop(struct task_group *tg, void *data)
- 
- static void set_load_weight(struct task_struct *p, bool update_load)
- {
--	int prio = p->static_prio - MAX_RT_PRIO;
-+	int prio = TASK_USER_PRIO(p);
- 	struct load_weight *load = &p->se.load;
- 
- 	/*
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index f4de111fa18f..f8ab47a87fd0 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -1782,7 +1782,7 @@ __update_max_tr(struct trace_array *tr, struct task_struct *tsk, int cpu)
- 	else
- 		max_data->uid = task_uid(tsk);
- 
--	max_data->nice = tsk->static_prio - 20 - MAX_RT_PRIO;
-+	max_data->nice = TASK_USER_PRIO(tsk) - 20;
- 	max_data->policy = tsk->policy;
- 	max_data->rt_priority = tsk->rt_priority;
- 
--- 
-2.35.1
+>> As I said, TCP can be tuned in various ways, congestion being just one
+>> of them. I'm sure you can find a workload where rmem/wmem will make
+>> a difference.
+> 
+> agree.
+> but the difference for the knob of rmem/wmem is:
+> we could enlarge rmem/wmem for NVMe/TCP via sysctl,
+> and it would not bring downside to any other sockets whose
+> rmem/wmem are not explicitly specified.
 
+It can most certainly affect them, positively or negatively, depends
+on the use-case.
 
--- 
-Rolf Eike Beer, emlix GmbH, https://www.emlix.com
-Fon +49 551 30664-0, Fax +49 551 30664-11
-Gothaer Platz 3, 37083 Göttingen, Germany
-Sitz der Gesellschaft: Göttingen, Amtsgericht Göttingen HR B 3160
-Geschäftsführung: Heike Jordan, Dr. Uwe Kracke – Ust-IdNr.: DE 205 198 055
+>> In addition, based on my knowledge, application specific TCP level
+>> tuning (like congestion) is not really a common thing to do. So why in
+>> nvme-tcp?
+>>
+>> So to me at least, it is not clear why we should add it to the driver.
+> 
+> As mentioned in the commit message, though we can specify the
+> congestion-control of NVMe_over_TCP via sysctl or writing
+> '/proc/sys/net/ipv4/tcp_congestion_control', but this also
+> changes the congestion-control of all the future TCP sockets on
+> the same host that have not been explicitly assigned the
+> congestion-control, thus bringing potential impaction on their
+> performance.
+> 
+> For example:
+> 
+> A server in a data-center with the following 2 NICs:
+> 
+>      - NIC_fron-end, for interacting with clients through WAN
+>        (high latency, ms-level)
+> 
+>      - NIC_back-end, for interacting with NVMe/TCP target through LAN
+>        (low latency, ECN-enabled, ideal for dctcp)
+> 
+> This server interacts with clients (handling requests) via the fron-end
+> network and accesses the NVMe/TCP storage via the back-end network.
+> This is a normal use case, right?
+> 
+> For the client devices, we can’t determine their congestion-control.
+> But normally it’s cubic by default (per the CONFIG_DEFAULT_TCP_CONG).
+> So if we change the default congestion control on the server to dctcp
+> on behalf of the NVMe/TCP traffic of the LAN side, it could at the
+> same time change the congestion-control of the front-end sockets
+> to dctcp while the congestion-control of the client-side is cubic.
+> So this is an unexpected scenario.
+> 
+> In addition, distributed storage products like the following also have
+> the above problem:
+> 
+>      - The product consists of a cluster of servers.
+> 
+>      - Each server serves clients via its front-end NIC
+>       (WAN, high latency).
+> 
+>      - All servers interact with each other via NVMe/TCP via back-end NIC
+>       (LAN, low latency, ECN-enabled, ideal for dctcp).
 
-emlix - smart embedded open source
+Separate networks are still not application (nvme-tcp) specific and as
+mentioned, we have a way to control that. IMO, this still does not
+qualify as solid justification to add this to nvme-tcp.
 
-
+What do others think?

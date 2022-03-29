@@ -2,103 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197DF4EB480
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E014EB483
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbiC2UNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 16:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
+        id S229899AbiC2UOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 16:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiC2UNk (ORCPT
+        with ESMTP id S229512AbiC2UOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 16:13:40 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FB22325E0
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 13:11:56 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id b16so22423262ioz.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 13:11:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5Hh0vVsE5NsIgTehOa3nlosmMfHWGMN9c6MMyMO5zeA=;
-        b=RCfMNSkuStRnGHPd8TI50xmq7vkhNjP1+3HBy1AUUbB8DmgOc0CeB/s2yIVkc0VV2q
-         bb3IaX3O/QNfu92Et0gyXFhsOA9+CYX0+sQvitrSQuqIIs8b0WiXb+e0us6ol5URb8z5
-         q2JYqiKu2DmH3w+opGujLnnCMgY8VxNseu1l4+qsFtWTHcfhP3prOnA81Huz615X6ma/
-         gGzH73c7SVkFU6q37izzYhwLRK0ZDbBPXEgEug8Oxc4rOSNPVfPhSO+xh9sWe42t8nDo
-         KIcWdKHr/IWvGkjhIAHQF7+f6dWr5jxI5Hna+4bIEpHK9u5eMgTrk3/iVHYFKcPZKr/J
-         wvyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5Hh0vVsE5NsIgTehOa3nlosmMfHWGMN9c6MMyMO5zeA=;
-        b=iO2itVPFSzEyH+5KjZw99FbwUZtd2cA55TXIgJXyN+D2Fi64/MBOrOM0WRzB82Fcah
-         gnJ5rrDhuVPrMVERHW+suN6LGL5Nuxgwa57ztNdIFoZlFbqnan+o4BPXXVwZ6WGRSwYT
-         J9C7/44VrJ6i/vXG7HqOHQAzDpUxM4shnuAnh1jNwQXiZtV6c5W0sOUJBumuGUlQBKac
-         NX+JOH1ps4u2ige2HJ87gR6d+niOzzbVmSZmmbDZMu3DHVx2KFmmaux3ZWJaab4IrpLA
-         VyHAFgksOsTGOpp5NeTQkYcu5R3L5I46MGYV/HfLdF1ByDVVMbjV1LPuz+FSLUjbfzaS
-         1Cnw==
-X-Gm-Message-State: AOAM532j8SayfuzSB0UFoubCQyzFJXpeH919fYd9SOxGZosKyWX9MLTq
-        gOVyNXRPmTpLLLeBF+TOv5htvdzT+2/1oBnb/Io=
-X-Google-Smtp-Source: ABdhPJyCArHsnFq1o+gDamX8A/FwJjCgzvbDIxBdKui/ziva4Bj/hhbmEWYcj6j0CFZqKXC43krf+JbpRKNmgtj1nJo=
-X-Received: by 2002:a05:6638:2113:b0:321:4e19:b04d with SMTP id
- n19-20020a056638211300b003214e19b04dmr18181370jaj.71.1648584716304; Tue, 29
- Mar 2022 13:11:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1648049113.git.andreyknvl@google.com> <CANpmjNP_bWMzSkW=Q8Lc7yRWw8as_FoBpD-zwcweAiSBVn-Fsw@mail.gmail.com>
- <CA+fCnZeiR4v72P1fbF1AP=RqViCnkdtES0NtcmN6-R-_9NS4kQ@mail.gmail.com>
-In-Reply-To: <CA+fCnZeiR4v72P1fbF1AP=RqViCnkdtES0NtcmN6-R-_9NS4kQ@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 29 Mar 2022 22:11:45 +0200
-Message-ID: <CA+fCnZcPOfBuOMiXsaQzWMYxG=L_QGVgLDAdNWmYciA0JT+Deg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] kasan, arm64, scs, stacktrace: collect stack
- traces from Shadow Call Stack
-To:     Marco Elver <elver@google.com>
-Cc:     andrey.konovalov@linux.dev,
-        Alexander Potapenko <glider@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 29 Mar 2022 16:14:41 -0400
+Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B790239311;
+        Tue, 29 Mar 2022 13:12:55 -0700 (PDT)
+Received: from 1nZICx-0007HB-V6 by out3c.electric.net with emc1-ok (Exim 4.94.2)
+        (envelope-from <kris@embeddedTS.com>)
+        id 1nZICy-0007J1-Va; Tue, 29 Mar 2022 13:12:52 -0700
+Received: by emcmailer; Tue, 29 Mar 2022 13:12:52 -0700
+Received: from [66.210.251.27] (helo=mail.embeddedts.com)
+        by out3c.electric.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <kris@embeddedTS.com>)
+        id 1nZICx-0007HB-V6; Tue, 29 Mar 2022 13:12:51 -0700
+Received: from tsdebian.Massive (unknown [75.164.75.221])
+        by mail.embeddedts.com (Postfix) with ESMTPSA id D61591A26E;
+        Tue, 29 Mar 2022 13:12:50 -0700 (MST)
+From:   Kris Bahnsen <kris@embeddedTS.com>
+To:     linux-kernel@vger.kernel.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org
+Cc:     Mark Featherston <mark@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>
+Subject: [PATCH RESEND] can: Fix Links to Technologic Systems web resources
+Date:   Tue, 29 Mar 2022 13:12:29 -0700
+Message-Id: <20220329201229.16279-1-kris@embeddedTS.com>
+X-Mailer: git-send-email 2.11.0
+X-Outbound-IP: 66.210.251.27
+X-Env-From: kris@embeddedTS.com
+X-Proto: esmtps
+X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
+X-HELO: mail.embeddedts.com
+X-TLS:  TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
+X-Authenticated_ID: 
+X-Virus-Status: Scanned by VirusSMART (c)
+X-Virus-Status: Scanned by VirusSMART (b)
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Message-Id:Date:To:From; bh=1AF4SMujYEjsxrPiY/0MQSh8GtDisDk4QVhRBaTaEE0=;b=QxQNSvsXs/FaPwYkm/bZrGiCV3TX3U/bmhlBAs7XrTuAaIXvAAbngMivse9lVCZbFLczhVXjYAEYoGvRrBa4ffnecqzbXzo38UYq8kf9Vpf41yuL4MAObXr46c5Ue0DNJvVwdjzk6km4C8PMLW1VrAXvDPEJ/wmwZjXmn9ZIPGvA7UxCzXiHBzW10+cbgLimHbqZArZcIUvTS3yMFlPUA+ZrKAiAhQdwkJzY3C4ISk99T7XBMN2rTEfGbMRPBR1HYTeElgprh9Q0lVMyo8nL9dUj2Altv5sp9DM8SYihiSY6jRBnf9UJQQgTDU9PA8FoMyTJbXEAyzlP9SQaVKSqmw==;
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 8:36 PM Andrey Konovalov <andreyknvl@gmail.com> wrote:
->
-> On Mon, Mar 28, 2022 at 2:36 PM Marco Elver <elver@google.com> wrote:
-> >
-> > > Changes v1->v2:
-> > > - Provide a kernel-wide stack_trace_save_shadow() interface for collecting
-> > >   stack traces from shadow stack.
-> > > - Use ptrauth_strip_insn_pac() and READ_ONCE_NOCHECK, see the comments.
-> > > - Get SCS pointer from x18, as per-task value is meant to save the SCS
-> > >   value on CPU switches.
-> > > - Collect stack frames from SDEI and IRQ contexts.
-> >
-> > Do any of these new changes introduce new (noticeable) overhead (in
-> > particular patch 2)?
->
-> I'll measure the overheads and include the results into v3. Thanks!
+Technologic Systems has rebranded as embeddedTS with the current
+domain eventually going offline. Update web/doc URLs to correct
+resource locations.
 
-Hm, looks like the overhead is overly significant: ~5%. I'll explore a
-different approach in v3 instead.
+Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+---
+This is a resend as the prior patch was accidentally marked as a series
+
+ drivers/net/can/sja1000/Kconfig  | 2 +-
+ drivers/net/can/sja1000/tscan1.c | 7 +++----
+ 2 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/net/can/sja1000/Kconfig b/drivers/net/can/sja1000/Kconfig
+index 110071b26921..4b2f9cb17fc3 100644
+--- a/drivers/net/can/sja1000/Kconfig
++++ b/drivers/net/can/sja1000/Kconfig
+@@ -107,7 +107,7 @@ config CAN_TSCAN1
+ 	depends on ISA
+ 	help
+ 	  This driver is for Technologic Systems' TSCAN-1 PC104 boards.
+-	  http://www.embeddedarm.com/products/board-detail.php?product=TS-CAN1
++	  https://www.embeddedts.com/products/TS-CAN1
+ 	  The driver supports multiple boards and automatically configures them:
+ 	  PLD IO base addresses are read from jumpers JP1 and JP2,
+ 	  IRQ numbers are read from jumpers JP4 and JP5,
+diff --git a/drivers/net/can/sja1000/tscan1.c b/drivers/net/can/sja1000/tscan1.c
+index 3dbba8d61afb..f3862bed3d40 100644
+--- a/drivers/net/can/sja1000/tscan1.c
++++ b/drivers/net/can/sja1000/tscan1.c
+@@ -5,10 +5,9 @@
+  * Copyright 2010 Andre B. Oliveira
+  */
+ 
+-/*
+- * References:
+- * - Getting started with TS-CAN1, Technologic Systems, Jun 2009
+- *	http://www.embeddedarm.com/documentation/ts-can1-manual.pdf
++/* References:
++ * - Getting started with TS-CAN1, Technologic Systems, Feb 2022
++ *	https://docs.embeddedts.com/TS-CAN1
+  */
+ 
+ #include <linux/init.h>
+-- 
+2.11.0
+

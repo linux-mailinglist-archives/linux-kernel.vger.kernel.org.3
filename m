@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82AE4EB5ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F3A4EB603
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237269AbiC2Wb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 18:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
+        id S237435AbiC2Wb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 18:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237266AbiC2Wb1 (ORCPT
+        with ESMTP id S237389AbiC2Wb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 18:31:27 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C776768987
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:29:41 -0700 (PDT)
-Received: from [192.168.4.54] (cpe-70-95-196-11.san.res.rr.com [70.95.196.11])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2919F20DEDF6;
-        Tue, 29 Mar 2022 15:29:41 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2919F20DEDF6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1648592981;
-        bh=iij0r/nUjujgqq3T5710JDnd1VMgPYhOYYBxSdc2+Q8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Uiejwv+LNnOg/dtgLhVagdkqjHFBAYCxmK+CTab8Bz9o/jKu54O2HwGHTCbL8hoMR
-         o6S2HQ2J1n+oQQm0XItjgwZgR6za8rgUEQapT4+qspz3vX4Ii1Ddxb7uCQNA0lb4D1
-         wV9WddlbfTeqVnWb5+DCR34Ah8W/BhaApJCnzoKk=
-Message-ID: <9e8f32c4-1198-dca5-915f-0b31ce1436b4@linux.microsoft.com>
-Date:   Tue, 29 Mar 2022 15:29:41 -0700
+        Tue, 29 Mar 2022 18:31:56 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB207EA17;
+        Tue, 29 Mar 2022 15:30:10 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id BDAD71F441AF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648593008;
+        bh=UixZDeRTrhsKgzzqeAfm88dzf7voTXF+9DAsFdXgx0E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dyeLb4CUcnoS6OTYufOPl9rds549X/ysJ1Nkf+RZtUFca1Wj4/mSy5TeTvJjyrtTV
+         h8zlfY5lMwt8dNnnPWBZBQEnccS7ul1GfzKC1ojCH8NgTaEKTPR/3wvFBxFwOlJw27
+         Njd0g1n7M7+95c+9BodNYbmVV4wF3nSyF4m98mg4irkgx7GITVIeJLDgeMYsIIwjEU
+         U4YvwVgVfZuutU/VXE2Z+TdBIlqcUPpWphH8igtk0YQw9QzKmSmxawnpSX+M5/9YUQ
+         lkzlRUYWtAK2qKXyht+fHU0jFkWJDV2/2PhPCRx37pRxzJJiYlONUwevIUMPLNh92F
+         S0x7VC5ezhgvQ==
+Date:   Tue, 29 Mar 2022 18:30:02 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
+Cc:     broonie@kernel.org, robh+dt@kernel.org, tzungbi@google.com,
+        angelogioacchino.delregno@collabora.com, aaronyu@google.com,
+        matthias.bgg@gmail.com, trevor.wu@mediatek.com, linmq006@gmail.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Tzung-Bi Shih <tzungbi@kernel.org>
+Subject: Re: [v7 2/4] ASoC: mediatek: mt8192: refactor for I2S3 DAI link of
+ speaker
+Message-ID: <20220329223002.uo7kiemopkh7ak4x@notapiano>
+References: <20220324064511.10665-1-jiaxin.yu@mediatek.com>
+ <20220324064511.10665-3-jiaxin.yu@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] arm64: mm: Do not defer reserve_crashkernel() if only
- ZONE_DMA32
-Content-Language: en-US
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Pasha Tatashin <pasha.tatashin@soleen.com>
-References: <20220325055315.25671-1-wangkefeng.wang@huawei.com>
-From:   Vijay Balakrishna <vijayb@linux.microsoft.com>
-In-Reply-To: <20220325055315.25671-1-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220324064511.10665-3-jiaxin.yu@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,117 +60,206 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jiaxin,
 
-
-On 3/24/2022 10:53 PM, Kefeng Wang wrote:
-> The kernel could be benifit due to BLOCK_MAPPINGS, see commit
-> 031495635b46 ("arm64: Do not defer reserve_crashkernel() for
-> platforms with no DMA memory zones"), if there is only with
-> ZONE_DMA32, we could set arm64_dma_phys_limit to max_zone_phys(32)
-> earlier in arm64_memblock_init(), then we will benifit too.
-
-Thanks for noticing platforms with just ZONE_DMA32 config can also 
-benefit BLOCK_MAPPINGS.  I assume you have access to one where you 
-notice the difference with proposed changes and able to test.  I did 
-test proposed changes on SoC we use with IOMMU (no ZONE_DMA configs 
-enabled).
-
-Nits --
-- benifit -> benefit
-- consider making commit message clear, "then we will.." seems you are 
-referring to platforms with just ZONE_DMA32 config enabled
-- to reflect new change consider updating comment added in commit 
-031495635b46
-
+On Thu, Mar 24, 2022 at 02:45:09PM +0800, Jiaxin Yu wrote:
+> MT8192 platform will use rt1015 or rt105p codec, so through the
+> snd_soc_of_get_dai_link_codecs() to complete the configuration
+> of dai_link's codecs.
 > 
-> Cc: Vijay Balakrishna <vijayb@linux.microsoft.com>
-> Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
-> Cc: Will Deacon <will@kernel.org>
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-
-Reviewed-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
-
+> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
 > ---
->   arch/arm64/mm/init.c | 18 ++++++++++--------
->   arch/arm64/mm/mmu.c  |  6 ++----
->   2 files changed, 12 insertions(+), 12 deletions(-)
+>  .../mt8192/mt8192-mt6359-rt1015-rt5682.c      | 108 ++++++++++--------
+>  1 file changed, 59 insertions(+), 49 deletions(-)
 > 
-> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-> index 8ac25f19084e..9dded8779d72 100644
-> --- a/arch/arm64/mm/init.c
-> +++ b/arch/arm64/mm/init.c
-> @@ -157,14 +157,14 @@ static phys_addr_t __init max_zone_phys(unsigned int zone_bits)
->   	return min(zone_mask, memblock_end_of_DRAM() - 1) + 1;
->   }
->   
-> +phys_addr_t __ro_after_init dma32_phys_limit;
->   static void __init zone_sizes_init(unsigned long min, unsigned long max)
->   {
->   	unsigned long max_zone_pfns[MAX_NR_ZONES]  = {0};
-> -	unsigned int __maybe_unused acpi_zone_dma_bits;
-> -	unsigned int __maybe_unused dt_zone_dma_bits;
-> -	phys_addr_t __maybe_unused dma32_phys_limit = max_zone_phys(32);
+> diff --git a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
+> index ee91569c0911..837c2ccd5b3d 100644
+> --- a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
+> +++ b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
+> @@ -604,17 +604,9 @@ SND_SOC_DAILINK_DEFS(i2s2,
+>  		     DAILINK_COMP_ARRAY(COMP_DUMMY()),
+>  		     DAILINK_COMP_ARRAY(COMP_EMPTY()));
+>  
+> -SND_SOC_DAILINK_DEFS(i2s3_rt1015,
+> +SND_SOC_DAILINK_DEFS(i2s3,
+>  		     DAILINK_COMP_ARRAY(COMP_CPU("I2S3")),
+> -		     DAILINK_COMP_ARRAY(COMP_CODEC(RT1015_DEV0_NAME,
+> -						   RT1015_CODEC_DAI),
+> -					COMP_CODEC(RT1015_DEV1_NAME,
+> -						   RT1015_CODEC_DAI)),
+> -		     DAILINK_COMP_ARRAY(COMP_EMPTY()));
 > -
->   #ifdef CONFIG_ZONE_DMA
-> +	unsigned int acpi_zone_dma_bits;
-> +	unsigned int dt_zone_dma_bits;
+> -SND_SOC_DAILINK_DEFS(i2s3_rt1015p,
+> -		     DAILINK_COMP_ARRAY(COMP_CPU("I2S3")),
+> -		     DAILINK_COMP_ARRAY(COMP_CODEC("rt1015p", "HiFi")),
+> +		     DAILINK_COMP_ARRAY(COMP_EMPTY()),
+>  		     DAILINK_COMP_ARRAY(COMP_EMPTY()));
+>  
+>  SND_SOC_DAILINK_DEFS(i2s5,
+> @@ -929,6 +921,7 @@ static struct snd_soc_dai_link mt8192_mt6359_dai_links[] = {
+>  		.dpcm_playback = 1,
+>  		.ignore_suspend = 1,
+>  		.be_hw_params_fixup = mt8192_i2s_hw_params_fixup,
+> +		SND_SOC_DAILINK_REG(i2s3),
+>  	},
+>  	{
+>  		.name = "I2S5",
+> @@ -1100,55 +1093,64 @@ static struct snd_soc_card mt8192_mt6359_rt1015p_rt5682_card = {
+>  	.num_dapm_routes = ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682_routes),
+>  };
+>  
+> +static int mt8192_mt6359_card_set_be_link(struct snd_soc_card *card,
+> +					  struct snd_soc_dai_link *link,
+> +					  struct device_node *node,
+> +					  char *link_name)
+> +{
+> +	int ret;
 > +
->   	acpi_zone_dma_bits = fls64(acpi_iort_dma_get_max_cpu_address());
->   	dt_zone_dma_bits = fls64(of_dma_get_max_cpu_address(NULL));
->   	zone_dma_bits = min3(32U, dt_zone_dma_bits, acpi_zone_dma_bits);
-> @@ -173,8 +173,6 @@ static void __init zone_sizes_init(unsigned long min, unsigned long max)
->   #endif
->   #ifdef CONFIG_ZONE_DMA32
->   	max_zone_pfns[ZONE_DMA32] = PFN_DOWN(dma32_phys_limit);
-> -	if (!arm64_dma_phys_limit)
-> -		arm64_dma_phys_limit = dma32_phys_limit;
->   #endif
->   	max_zone_pfns[ZONE_NORMAL] = max;
->   
-> @@ -336,8 +334,12 @@ void __init arm64_memblock_init(void)
->   
->   	early_init_fdt_scan_reserved_mem();
->   
-> -	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
-> +	dma32_phys_limit = max_zone_phys(32);
-> +	if (!IS_ENABLED(CONFIG_ZONE_DMA)) {
-> +		if (IS_ENABLED(CONFIG_ZONE_DMA32))
-> +			arm64_dma_phys_limit = dma32_phys_limit;
->   		reserve_crashkernel();
+> +	if (node && strcmp(link->name, link_name) == 0) {
+> +		ret = snd_soc_of_get_dai_link_codecs(card->dev, node, link);
+> +		if (ret < 0) {
+> +			dev_err_probe(card->dev, ret, "get dai link codecs fail\n");
+> +			return ret;
+> +		}
 > +	}
->   
->   	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
->   }
-> @@ -385,7 +387,7 @@ void __init bootmem_init(void)
->   	 * request_standard_resources() depends on crashkernel's memory being
->   	 * reserved, so do it here.
->   	 */
-> -	if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
-> +	if (IS_ENABLED(CONFIG_ZONE_DMA))
->   		reserve_crashkernel();
->   
->   	memblock_dump_all();
-> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> index 626ec32873c6..23734481318a 100644
-> --- a/arch/arm64/mm/mmu.c
-> +++ b/arch/arm64/mm/mmu.c
-> @@ -529,8 +529,7 @@ static void __init map_mem(pgd_t *pgdp)
->   
->   #ifdef CONFIG_KEXEC_CORE
->   	if (crash_mem_map) {
-> -		if (IS_ENABLED(CONFIG_ZONE_DMA) ||
-> -		    IS_ENABLED(CONFIG_ZONE_DMA32))
-> +		if (IS_ENABLED(CONFIG_ZONE_DMA))
->   			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
->   		else if (crashk_res.end)
->   			memblock_mark_nomap(crashk_res.start,
-> @@ -571,8 +570,7 @@ static void __init map_mem(pgd_t *pgdp)
->   	 * through /sys/kernel/kexec_crash_size interface.
->   	 */
->   #ifdef CONFIG_KEXEC_CORE
-> -	if (crash_mem_map &&
-> -	    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) {
-> +	if (crash_mem_map && !IS_ENABLED(CONFIG_ZONE_DMA)) {
->   		if (crashk_res.end) {
->   			__map_memblock(pgdp, crashk_res.start,
->   				       crashk_res.end + 1,
+> +
+> +	return 0;
+> +}
+> +
+>  static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
+>  {
+>  	struct snd_soc_card *card;
+> -	struct device_node *platform_node, *hdmi_codec;
+> +	struct device_node *platform_node, *hdmi_codec, *speaker_codec;
+>  	int ret, i;
+>  	struct snd_soc_dai_link *dai_link;
+>  	struct mt8192_mt6359_priv *priv;
+>  
+> -	platform_node = of_parse_phandle(pdev->dev.of_node,
+> -					 "mediatek,platform", 0);
+> -	if (!platform_node) {
+> -		dev_err(&pdev->dev, "Property 'platform' missing or invalid\n");
+> +	card = (struct snd_soc_card *)of_device_get_match_data(&pdev->dev);
+> +	if (!card)
+>  		return -EINVAL;
+> +	card->dev = &pdev->dev;
+> +
+> +	platform_node = of_parse_phandle(pdev->dev.of_node, "mediatek,platform", 0);
+> +	if (!platform_node) {
+> +		ret = -EINVAL;
+> +		dev_err_probe(&pdev->dev, ret, "Property 'platform' missing or invalid\n");
+> +		goto err_platform_node;
+>  	}
+>  
+> -	card = (struct snd_soc_card *)of_device_get_match_data(&pdev->dev);
+> -	if (!card) {
+> +	hdmi_codec = of_parse_phandle(pdev->dev.of_node, "mediatek,hdmi-codec", 0);
+> +	if (!hdmi_codec) {
+>  		ret = -EINVAL;
+> -		goto put_platform_node;
+> +		dev_err_probe(&pdev->dev, ret, "Property 'hdmi-codec' missing or invalid\n");
+> +		goto err_hdmi_codec;
+
+You're making hdmi-codec a required property, since now the driver fails to
+probe without it. Is it really required though? The driver code still checks for
+the presence of hdmi_codec before using it, so shouldn't it be fine to let it be
+optional?
+
+If it is really required now though, then I guess at least the dt-binding should
+be updated accordingly. (Although I think this would technically break the ABI?)
+
+Thanks,
+Nícolas
+
+>  	}
+> -	card->dev = &pdev->dev;
+>  
+> -	hdmi_codec = of_parse_phandle(pdev->dev.of_node,
+> -				      "mediatek,hdmi-codec", 0);
+> +	speaker_codec = of_get_child_by_name(pdev->dev.of_node, "speaker-codecs");
+> +	if (!speaker_codec) {
+> +		ret = -EINVAL;
+> +		dev_err_probe(&pdev->dev, ret, "Property 'speaker-codecs' missing or invalid\n");
+> +		goto err_speaker_codec;
+> +	}
+>  
+>  	for_each_card_prelinks(card, i, dai_link) {
+> -		if (strcmp(dai_link->name, "I2S3") == 0) {
+> -			if (card == &mt8192_mt6359_rt1015_rt5682_card) {
+> -				dai_link->ops = &mt8192_rt1015_i2s_ops;
+> -				dai_link->cpus = i2s3_rt1015_cpus;
+> -				dai_link->num_cpus =
+> -					ARRAY_SIZE(i2s3_rt1015_cpus);
+> -				dai_link->codecs = i2s3_rt1015_codecs;
+> -				dai_link->num_codecs =
+> -					ARRAY_SIZE(i2s3_rt1015_codecs);
+> -				dai_link->platforms = i2s3_rt1015_platforms;
+> -				dai_link->num_platforms =
+> -					ARRAY_SIZE(i2s3_rt1015_platforms);
+> -			} else if (card == &mt8192_mt6359_rt1015p_rt5682_card) {
+> -				dai_link->cpus = i2s3_rt1015p_cpus;
+> -				dai_link->num_cpus =
+> -					ARRAY_SIZE(i2s3_rt1015p_cpus);
+> -				dai_link->codecs = i2s3_rt1015p_codecs;
+> -				dai_link->num_codecs =
+> -					ARRAY_SIZE(i2s3_rt1015p_codecs);
+> -				dai_link->platforms = i2s3_rt1015p_platforms;
+> -				dai_link->num_platforms =
+> -					ARRAY_SIZE(i2s3_rt1015p_platforms);
+> -			}
+> +		ret = mt8192_mt6359_card_set_be_link(card, dai_link, speaker_codec, "I2S3");
+> +		if (ret) {
+> +			dev_err_probe(&pdev->dev, ret, "%s set speaker_codec fail\n",
+> +				      dai_link->name);
+> +			goto err_probe;
+>  		}
+>  
+>  		if (hdmi_codec && strcmp(dai_link->name, "TDM") == 0) {
+> @@ -1156,6 +1158,9 @@ static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
+>  			dai_link->ignore = 0;
+>  		}
+>  
+> +		if (strcmp(dai_link->codecs[0].dai_name, RT1015_CODEC_DAI) == 0)
+> +			dai_link->ops = &mt8192_rt1015_i2s_ops;
+> +
+>  		if (!dai_link->platforms->name)
+>  			dai_link->platforms->of_node = platform_node;
+>  	}
+> @@ -1163,22 +1168,27 @@ static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
+>  	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+>  	if (!priv) {
+>  		ret = -ENOMEM;
+> -		goto put_hdmi_codec;
+> +		goto err_probe;
+>  	}
+>  	snd_soc_card_set_drvdata(card, priv);
+>  
+>  	ret = mt8192_afe_gpio_init(&pdev->dev);
+>  	if (ret) {
+> -		dev_err(&pdev->dev, "init gpio error %d\n", ret);
+> -		goto put_hdmi_codec;
+> +		dev_err_probe(&pdev->dev, ret, "%s init gpio error\n", __func__);
+> +		goto err_probe;
+>  	}
+>  
+>  	ret = devm_snd_soc_register_card(&pdev->dev, card);
+> +	if (ret)
+> +		dev_err_probe(&pdev->dev, ret, "%s snd_soc_register_card fail\n", __func__);
+>  
+> -put_hdmi_codec:
+> +err_probe:
+> +	of_node_put(speaker_codec);
+> +err_speaker_codec:
+>  	of_node_put(hdmi_codec);
+> -put_platform_node:
+> +err_hdmi_codec:
+>  	of_node_put(platform_node);
+> +err_platform_node:
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.18.0
+> 
+> 

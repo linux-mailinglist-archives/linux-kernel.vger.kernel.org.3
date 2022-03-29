@@ -2,125 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508594EAB17
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 988B84EAB19
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235028AbiC2KSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 06:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59408 "EHLO
+        id S235034AbiC2KTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 06:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233484AbiC2KSq (ORCPT
+        with ESMTP id S233484AbiC2KTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 06:18:46 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2045.outbound.protection.outlook.com [40.107.94.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9096B23DEA9
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 03:17:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XZX39efLATe3CYsMLkaKJyJl9qlkt9+AhZpgRijMofTKjz6ZVCGGvdMiEEw6X2LMRNTmUiDCXmMBVh+7zPfGgi1GnXs/2kRABY3LgrVOZqhVrBsjEE4oJdi+KYUEcBDV8m0uVaUO3dwgn4OGDP3IQnpDjEW+CJ8l/BybyhZVnbKTzGJPXDCk0MtSc/H795L3ux1j9kOGflSdDvt7aZRbdgGGnQoF7dGvc45jzQ9St4YAb7deSOk40Aju034wWckzhIhFiWyow7ODR9jL7DU+OP/i9GzshQQFxPPlW+s93DoWKtleAntlXHtsr4/hT3ICZ3vNTNxjuqib1vlf0w9a9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vDCjO0F8jlQ67pMFDIjxjOOSSN8ODOpvFB/69ocZT+k=;
- b=hDe+9PAZMHRZTisHby9WglQa/N+eeV23egNqE4Wh1FmCpEA6iibLGT/hYBbhbmYnXYnuCewz1Wrw1+ibe+F7raL7PRJw/21/MNj2mhGRKxr1FkWDL+n6Lllc++TewlbF2qd/M5ODnvWRFdZIYaPxWNH3ERl9ysDQy+Tomx8qqdji0zgSvNh0FswtUQtbM/MOvlJ0n50F7KL3ECSQRezdujvjqTZ0OO4xwNj2Qdn0TP860TwCwX3cLJzzsilqU0paKkymoW/9l+sSaBlV1pVlw30FiKtBUWamqAYsVMeMw+qutYQGVP9RycLGlPNNZvoxu1peOJC6LfdySiBD8af0dA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vDCjO0F8jlQ67pMFDIjxjOOSSN8ODOpvFB/69ocZT+k=;
- b=j4nRRYxK9qRFhE50hxqDgqRgEj+f+sU40/ArQl41B2IxYgShA75UIU8YFDCSDj8VNKbbEO4J70F1rga7yH+qBApx2twGpEWwEsJSgGF8oxOAtsJ6trTp2NOI7lEte3G28Sgk8xrHe5jqIXfsKhZvn1aDXWWtVbwLlEKQarjlN+M=
-Received: from BN9PR12MB5257.namprd12.prod.outlook.com (2603:10b6:408:11e::16)
- by BN7PR12MB2707.namprd12.prod.outlook.com (2603:10b6:408:2f::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Tue, 29 Mar
- 2022 10:17:00 +0000
-Received: from BN9PR12MB5257.namprd12.prod.outlook.com
- ([fe80::c1c8:b797:3144:571d]) by BN9PR12MB5257.namprd12.prod.outlook.com
- ([fe80::c1c8:b797:3144:571d%7]) with mapi id 15.20.5102.023; Tue, 29 Mar 2022
- 10:17:00 +0000
-From:   "Zhang, Hawking" <Hawking.Zhang@amd.com>
-To:     kernel test robot <lkp@intel.com>,
-        "Ziya, Mohammad zafar" <Mohammadzafar.Ziya@amd.com>
-CC:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Zhou1, Tao" <Tao.Zhou1@amd.com>
-Subject: Recall: [PATCH] drm/amdgpu/vcn: fix semicolon.cocci warnings
-Thread-Topic: [PATCH] drm/amdgpu/vcn: fix semicolon.cocci warnings
-Thread-Index: AQHYQ1YgGmY97m3wH0iRqEbTLi2umw==
-X-CallingTelephoneNumber: IPM.Note
-X-VoiceMessageDuration: 1
-X-FaxNumberOfPages: 0
-Date:   Tue, 29 Mar 2022 10:17:00 +0000
-Message-ID: <BN9PR12MB52574FD57DD34E37A72555D8FC1E9@BN9PR12MB5257.namprd12.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 43893804-0da3-4694-56c8-08da116d4338
-x-ms-traffictypediagnostic: BN7PR12MB2707:EE_
-x-microsoft-antispam-prvs: <BN7PR12MB2707863E1D5DCEF5C41A21EFFC1E9@BN7PR12MB2707.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: XT697D0ED9U1emglPz+C+/qeS7NI0XMeAjXxmBZ2vfemH2I7mYdiSpU+4BP9rRwGMZawdueK+5S9/yp1NqMsKDdt54McKcaEfpUg+b6juq+/bMehVJFl9rp52KLuY4sNX3TGlMBwxFD5BVrbEAbD3csIoD6xmRDfgWt1ZbAOgjP2wPyGRqtyeNT9df8XaQZyQZgfvte4nQQGj5ckRhs/MrQuWmMRxC8CBDt+mJXM8KzTDolm4EheQWUkkOqBy3yUak2fMv9axx/g+B1LnF9HCg3P0MSeshqloUwN+nsjtHVlGmwI4djcNuVnn3ei9GkyWhiUOp9s6oXCuRZzZ2Nr5aEaw2vXsWqn5OUlTM8KduTXsHfUWDSkj/HnBCPlijRUF0EoKx5FN9IKWHyfSKOj+y2OWImpi3MdDKhNZ77g0EWV4JCOewQgPai3uT11hM5jWsZwVTwnrK87Jmi1seqTUFMdVaJDBvjYH6tUIUc64+aA68Rrr9T3n4dYkXDkbMKks5GSjhw7HOeSuP0CYyEMmTQweFvOCvxWf1kc2pOdg49q7i/I7SV3163NwRDFag59C7bKenHpoLVz3ZyKb8c9QUSvBi89iz3AhfvXAlkyqr4a+0GnCSjWsnIX8BQSOOvcX/T8dN8nUCUZ6gii99fWvrW8aL7c3xWHFzOKCj1ULj3Z+wvt55dkjuDLSwLYcRfP5JkfVAJzSN804XMiYiPthQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5257.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(508600001)(7696005)(52536014)(4326008)(66476007)(8936002)(66446008)(316002)(66946007)(5660300002)(558084003)(64756008)(9686003)(38070700005)(86362001)(122000001)(6636002)(76116006)(55016003)(66556008)(8676002)(71200400001)(33656002)(54906003)(83380400001)(38100700002)(2906002)(186003)(110136005)(26005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?p9YT8kLGp+JImax+kG/yy6CZmSqbxTrb3AKFxsAXXvNLYMwIRx/feH+J0QOh?=
- =?us-ascii?Q?+ixapPbWpTL3Mego+Wy56aXMc1VK2emxYW9BYvI8eqPqru2meTwz7xvYcJ+N?=
- =?us-ascii?Q?S2oWYkTp2j4fMlI86ix4L01Z8BSBWgn+iCfYKn0om5k7iwpQqfZfVm41dSNH?=
- =?us-ascii?Q?vHZIqeUNA+lh8FdojnJLmY5Far02i+nEUhGPqflYwtXdG1hzAMIn5gWmgUtW?=
- =?us-ascii?Q?yTQQJHyKQSsBptbzH0JPg/VTLjZ8j0DwS+mbfhshB0GE29IQny+SVhDCK238?=
- =?us-ascii?Q?ubRSNszP+CbIB4BW2n2pfRYzP/0c/GTcJHJzXP0mFGb8kB81QFsc6jDJQBjh?=
- =?us-ascii?Q?egDR84C0zkd7EIyrcUdqr/MKBLcen9Sv94bPYMZUFR6AJ5JEfLgp4Zwhx9Zy?=
- =?us-ascii?Q?EqmimFetKd4JOi7DXgi2gNKZXuvis65fD5eYNa1t/yl9wgb9Zp2iu8FtelL0?=
- =?us-ascii?Q?ju6Vanm58gNtTLFjFFmdXqg+2lrSiWArwGs09kPAAkYEJAk5/19c4wlfS8oK?=
- =?us-ascii?Q?xjRlKvcVnq0j+prxTCVCzzfcwuKURoJf422h/njoIlG4ir9EzZP+5PP++kQi?=
- =?us-ascii?Q?REwYdR840qB3RwRhijs2PgDdfTEoa2Uu6TLiWYG+2EuZurS9A8QZz9FGLACW?=
- =?us-ascii?Q?aZ5p14HZMZV2zfxRRhv1WJr3nd/fiavnaHJaGIMo4D+1T2B+xn1MPYNsdPNp?=
- =?us-ascii?Q?l2LfniqjiOPqPxFs9/R3niD5xZQMGaIze3aYI1wiF3eIJ/azSX2zl1er2lVl?=
- =?us-ascii?Q?YQde0cYCzNSXkNb8zJ6lF3B9+lfnVB/VedWjAMU/gTMdNdEou/4jyusz6CmJ?=
- =?us-ascii?Q?cDShsNrJnK8S4xf907u7NcGuJ15fSy8R90fzK5pZDobCsslrskSXKIJaV1K2?=
- =?us-ascii?Q?GW67yQE6EJEzU64CY/KpA1R1K/16rglncoM4/Z2wYRiM9K4W+eN93grw9wIC?=
- =?us-ascii?Q?h46wG2kPxscHzJQeP25bxU3AWOxQrXGJKxjGecnQCWCNVHidQizKlM3TfpmR?=
- =?us-ascii?Q?jmqo1ANFiauRoHPtLp5hkppNW7vdVQ3k52qfnUGwETekkBgNlEwaq7K3y8UI?=
- =?us-ascii?Q?7Jw9SlgHThzmu+8ZyBbN9tLVfjXpW4GuZkT074ZGFdX+mu4owNyTf1L49FQN?=
- =?us-ascii?Q?N3UKB8BKK0w8a3Te91tvJLI485/Y5gDP0sawGwmSQQl/PVIYwYOaHksXqFXi?=
- =?us-ascii?Q?0lhkczPubwqHrvIrUzB2T9561rk6E7A75hJsa2QEbN9b6A4gBeBFPcyg6bU1?=
- =?us-ascii?Q?mmG+OJsZ3W8Sp3Pnp+M31dfono/6xcq15SUEUhOc4WfUjkjG6UPyVNZO7n18?=
- =?us-ascii?Q?SKjXODSdWbxngHXLBPVl7klh5AViLBqKcm+WtaedOiCMR/nYN+SUAr4pFOhk?=
- =?us-ascii?Q?v7W1Ok4b+XHCBDb6ZctYs+GoOK/bGgy1nC9IxqUnIUciK8GrvFZVJI7//vBa?=
- =?us-ascii?Q?L7TyBj3/QDbDdFKmb7Ylsi46jwkU44V/eprPnZ4Ra7CvlY317bKpp1wFjg7b?=
- =?us-ascii?Q?UJZ2QLFlBJ2Lndj9BnJZ8aLFyoQ/krWlKAzqfeh2kbsKIeBofp1Pntijo01J?=
- =?us-ascii?Q?yNsMH0j94xyvE2HEWVn2CooCMWp/2WUVB2OAXQEuhgrJE7byDGReJM2PB6T5?=
- =?us-ascii?Q?1aSkx1coXmrZQhsorqn551wcKCA+2ChcADrgobO+mGFS7g70FzPZu3vxDOm5?=
- =?us-ascii?Q?QFfWy6ulH4rE7u8Zgr6mWc0g68k3/lpoqXH8n8VFqZ33nVtHNlv/fdlKVvWt?=
- =?us-ascii?Q?oJgZUmjU5g=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 29 Mar 2022 06:19:30 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BA723EC44
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 03:17:47 -0700 (PDT)
+Received: from integral2.. (unknown [182.2.70.161])
+        by gnuweeb.org (Postfix) with ESMTPSA id 7C3C57E723;
+        Tue, 29 Mar 2022 10:17:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1648549066;
+        bh=p6CC/jfVTuTMclxACxIJzVSw2cj7ScCDiF3lvHfIH8c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=O2R6IyY7xGzSDUhlnU49BcXJSpUn8tf4WT0gD1HETn8gL3jEDRqRVAG1E6lHAQKVz
+         OXdd2y6QvVqkaYGLXSccsvUt/ROqJTcs5ce8niRgIXa9GVmWXJaEigrbuuK5ofnZI2
+         6senbYTs3wr4JNBAPhUezSqm7F1mR7w9NLHECq6AbLJtBWUokHoSDh0hBDFIlYhDq/
+         E2lQv66kxmyXoVsUztSsUibN7Az+FLjU+v4OWS6oVJaCX0mzau2SPZ7ybDQ2gxXbSw
+         kIAh5pL5IeXPW5Jt6wMD2BuPggwUHYpRvuCnva2Hm8YoVHEujrj9sgMW9xmJjEhCMD
+         mELk1S/dRDFxQ==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Nugraha <richiisei@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+Subject: [PATCH v2 0/9] Add dynamic memory allocator support for nolibc
+Date:   Tue, 29 Mar 2022 17:17:28 +0700
+Message-Id: <20220329101737.58985-1-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5257.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43893804-0da3-4694-56c8-08da116d4338
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2022 10:17:00.2438
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ej8zdwuyLUILovGEir1O74uMESVt8ZvyWydU4/FMjjRPuy9DwjcPq/BJfvFfBhuCMk5xA6F3IFvlzq5o5lRxlg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2707
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zhang, Hawking would like to recall the message, "[PATCH] drm/amdgpu/vcn: f=
-ix semicolon.cocci warnings".=
+Hi,
+
+This is a patchset v2 to add dynamic memory allocator support
+for nolibc after 2 RFCs, please review the changes carefully.
+
+@@ Changelog:
+---
+   Link v1: https://lore.kernel.org/lkml/20220324073039.140946-1-ammarfaizi2@gnuweeb.org
+   v1 -> v2:
+     - Sync with Paul's tree.
+     - Drop 2 patches that tried to remove register variables
+       (comment from Willy).
+     - Make the patch that replaces `asm` with `__asm__` the
+       second patch (comment from Willy).
+
+   Link RFC v2: https://lore.kernel.org/lkml/20220322102115.186179-1-ammarfaizi2@gnuweeb.org
+   RFC v2 -> v1:
+     - Rebase, sync with Paul's tree.
+     - Add new 3 patches [PATCH 03/11], [PATCH 04/11], [PATCH 05/11].
+
+     [PATCH 02/11]
+     - Append Reviewed-by tag from Nick.
+     - s/Removing/remove/
+
+     [PATCH 06/11]
+     - Use the same pattern for syscall6, regardless using GCC or Clang
+      (comment from David).
+     - Use appropriate constraints for syscall6 instead of always using
+      register variables (comment from David).
+
+     [PATCH 09/11]
+     - Round up the malloc() allocation to 4096 (comment from David).
+     - Don't realloc() if we still have enough memory to contain the
+       requested new size (comment from David).
+     - Fix conflict with getenv() fix (after rebase).
+
+   Link RFC v1: https://lore.kernel.org/lkml/20220320093750.159991-1-ammarfaizi2@gnuweeb.org
+   RFC v1 -> RFC v2:
+    - Add 2 new patches [PATCH 5/8] and [PATCH 7/8].
+
+    [PATCH 2/8]
+    - Remove all `.global _start` for all build (GCC and Clang) instead of
+      removing all `.weak _start` for clang build (Comment from Willy).
+
+    [PATCH 3/8]
+    - Fix %ebp saving method. Don't use redzone, i386 doesn't have a redzone
+      (comment from David and Alviro).
+
+    [PATCH 6/8]
+    - Move container_of() and offsetof() macro to types.h with a
+      separate patch (comment from Willy).
+
+    [PATCH 8/8]
+    - Update strdup and strndup implementation, use strlen and strnlen to get
+      the string length first (comment from Willy and Alviro).
+    - Fix the subject line prefix, it was "tools/include/string: ", it should be
+      "tools/nolibc/string: ".
+    - Update the commit message.
+
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+Ammar Faizi (9):
+  tools/nolibc: x86-64: Update System V ABI document link
+  tools/nolibc: Replace `asm` with `__asm__`
+  tools/nolibc: Remove .global _start from the entry point code
+  tools/nolibc: i386: Implement syscall with 6 arguments
+  tools/nolibc/sys: Implement `mmap()` and `munmap()`
+  tools/nolibc/types: Implement `offsetof()` and `container_of()` macro
+  tools/nolibc/stdlib: Implement `malloc()`, `calloc()`, `realloc()` and `free()`
+  tools/nolibc/string: Implement `strnlen()`
+  tools/include/string: Implement `strdup()` and `strndup()`
+
+ tools/include/nolibc/arch-aarch64.h | 75 +++++++++++++-------------
+ tools/include/nolibc/arch-arm.h     | 59 +++++++++++----------
+ tools/include/nolibc/arch-i386.h    | 80 +++++++++++++++++-----------
+ tools/include/nolibc/arch-mips.h    | 63 +++++++++++-----------
+ tools/include/nolibc/arch-riscv.h   | 75 +++++++++++++-------------
+ tools/include/nolibc/arch-x86_64.h  | 75 +++++++++++++-------------
+ tools/include/nolibc/stdlib.h       | 81 +++++++++++++++++++++++++++++
+ tools/include/nolibc/string.h       | 41 +++++++++++++++
+ tools/include/nolibc/sys.h          | 62 ++++++++++++++++++++++
+ tools/include/nolibc/types.h        | 11 ++++
+ 10 files changed, 417 insertions(+), 205 deletions(-)
+
+
+base-commit: 2eb9d6a49acd4f12078967c33e9786e084fe6407
+-- 
+Ammar Faizi
+

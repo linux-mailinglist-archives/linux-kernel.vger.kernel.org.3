@@ -2,145 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 557964EAA43
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE9A4EAA45
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234533AbiC2JQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 05:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45484 "EHLO
+        id S234545AbiC2JQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 05:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbiC2JQg (ORCPT
+        with ESMTP id S234542AbiC2JQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 05:16:36 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2133.outbound.protection.outlook.com [40.107.117.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDF42CE3D;
-        Tue, 29 Mar 2022 02:14:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KMt7LhBbsuvTUFj6rhv6/OH/aTvMUaMFKNS/Et9VpNla7Ogt182iK3wPkX/K69IWiFPdlVp404IcQAG57eNUjWf6FXMoTQJWbUrVHtecYa/TFHIrnBqUzMmGWv1fbNHFVxVtDeUvHu/7sYJFVNWr7bzKpEJTlh14U3+xHAops3r+Tko6Hm8QJGOEHdbo29LGRnyaFXWpHXgFJrpB9uOOl4YRJggthp1oqAagFxUkxSg41PTgEB0u2DQ9Dal82QFlvCp8SBiLEevF0w165t54NHPUCPx86n18FPFwL0Wv0ag8n+/XtozhpS5kE7kjmBzVNk25k3v6O1z+Ilr6x+cTvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k9qJr6LBAYeL9XxDnwMviKxgPa80VYlDabQ3MTbAi/w=;
- b=R5bfJlSkaHS3bALlDljtyKeJQB5lsf33W6vjM29sRrg35p2rhxSqBBJ9EdvNXGnrfTH2h3JcK1eLDRjJkusMhVRJd7rUFFS/Pc1YAHHui9GukCq8Pp6SooAt6ahW0nf31VSS16W6a05chYZM3EKEJSKBTgyU0cqZOUhKli6WtpSnbEAsc2wdid0CCHcy4EDfC4WRVPL8GVgwCXjvdhrUTYZu+hniUFErprzahCwA4Vh4iLcjhRHAKWQC0iY523nmSleeNcQnizETbxnrhEQVaFY4XS7dFZx0ullnCcdTVF5K4XAvGFAkii9Gr89ilD6fZQ84JWXePSpm0q2xe/egSg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k9qJr6LBAYeL9XxDnwMviKxgPa80VYlDabQ3MTbAi/w=;
- b=nhjGeExpTwcwvyEEwv2PD248/c9vNchHATeL36VFHqKFR4wtLkbjAr7tb9Ix9xaBKQhMNaXAfayeIu903WTp3BdO0Nn2FDwK7VK9915iaxPA82DDq6en68e83kst4hEqBsGUGRhrrhovRjI+REO2LbO0g7x0yfuLt5IDmr5+oVE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
- by KL1PR0601MB3875.apcprd06.prod.outlook.com (2603:1096:820:21::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Tue, 29 Mar
- 2022 09:14:50 +0000
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::49ef:baa:8c3b:cb3d]) by SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::49ef:baa:8c3b:cb3d%5]) with mapi id 15.20.5102.023; Tue, 29 Mar 2022
- 09:14:50 +0000
-From:   Qing Wang <wangqing@vivo.com>
-To:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH] video: fbdev: use if else instead
-Date:   Tue, 29 Mar 2022 02:14:32 -0700
-Message-Id: <1648545274-14481-1-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: HK0PR01CA0066.apcprd01.prod.exchangelabs.com
- (2603:1096:203:a6::30) To SL2PR06MB3082.apcprd06.prod.outlook.com
- (2603:1096:100:37::17)
+        Tue, 29 Mar 2022 05:16:45 -0400
+Received: from out28-52.mail.aliyun.com (out28-52.mail.aliyun.com [115.124.28.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168379BAE9;
+        Tue, 29 Mar 2022 02:15:01 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07702377|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00585561-0.00836691-0.985777;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047187;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.NFILkml_1648545298;
+Received: from sunxibot.allwinnertech.com(mailfrom:kant@allwinnertech.com fp:SMTPD_---.NFILkml_1648545298)
+          by smtp.aliyun-inc.com(33.37.68.114);
+          Tue, 29 Mar 2022 17:14:59 +0800
+From:   Kant Fan <kant@allwinnertech.com>
+To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        allwinner-opensource-support@allwinnertech.com
+Subject: [RESEND] devfreq: governor: Save void *data in the governor userspace
+Date:   Tue, 29 Mar 2022 17:14:49 +0800
+Message-Id: <20220329091449.105308-1-kant@allwinnertech.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8d7a2ed9-91a8-44fd-b7f9-08da116493d8
-X-MS-TrafficTypeDiagnostic: KL1PR0601MB3875:EE_
-X-Microsoft-Antispam-PRVS: <KL1PR0601MB3875ABF0F6BA626A1903B631BD1E9@KL1PR0601MB3875.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OR2CNc4ZO5NYKRFxzaqU2djaXjKKCjtbuC3RD7uMBepG0EnHbu2VXUMKMD+Y/f2F+frCOlmOC8KcFol59jcoUr7JuEYQulJLzNpDL+/qU+fhRO7pbeWEANPdgh7GH5vqTXnIyOev1U8EMpwtjwdiJ1wSn/d5eDNuBkeFInAdMmFH2U+lWuJFaM71/gCma6GzslSqhaboiZ/Hg0nnjs4skpM1C11vra7q+qjweclvcgcC5Dvg0mQmRYCNRWJfYyN6LA36dxsvg1teoBfgXS0UGd08Ic6CplpBwvuXsbLF055UyRiFhyKe46l3j0N8qbyo+ZCLy0Q72dPUFPQ5IWi6tCxXJSvUNY1PJrXZBU4aULw1oHRgENGQZfKjzjb9ySBrmOkMWlnND25YmGsyzF6qZTXjNA3IHMUKYAOqZMqbHNBRmZc6wIeoQKaulrMmPZgpyDfFE+vPzcEeT4CWcRFVcYvoaquCr0u9W7FzdCNHmQHC7wy//WcDidIm+pCg5lR75xoPYVU8kHarY3+Kq5Z4UXenAs5wTbCVrAND2zjYH/Qu/kIFyipHwWaN7hJprNg42kFIO5X6VCmyWGnct6xfcEWPkjD6O/70vFs3ljh4BBua/EDB8k5V6ivY4YrEBE0WxB4lfLFqK9I9Y9wiYQIBRR9KksYsKjVCz8LHAB0OZdjjNmSA0pZG6r3wgFbw2Sy9p/CiufFZPFiMOoWb6tP7zA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(5660300002)(66946007)(6666004)(6486002)(83380400001)(508600001)(38350700002)(38100700002)(8676002)(66556008)(66476007)(4326008)(86362001)(6512007)(36756003)(2616005)(52116002)(107886003)(2906002)(6506007)(316002)(4744005)(186003)(26005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Txi3YtUjb0AdXfUiZvzBA0LtjhWPyBzW0LXrxPbvlacpgl7Rz7WrfkUQffWj?=
- =?us-ascii?Q?CaRZ3SQ0Gj44oHDkqzfAlarIDKtFVfiJ3og/ysHlJjjR/L2xpoFdv/Dnt1g1?=
- =?us-ascii?Q?KlhQ/yhthyVX/5HGwliBYeY+EbBEqZL8cMKZC4LUlbBtnaPJG8bvDfO+fKPQ?=
- =?us-ascii?Q?4Iv+FGsBAobd6oM9JxmSNY9sPKaDudn+DHjhd7vo+dpM14WPocrbQ7hYBIET?=
- =?us-ascii?Q?ykqJmcp5Cei5O0/0dPjinoOQIIce526MNWkQTPurfnQx6EDaE5425g2XxmqS?=
- =?us-ascii?Q?zmVxmq2GJ3mKqyYSbCXxRzElIUkPE/5CsZq+VOjafvEM/Yypx1R/61pdsy8r?=
- =?us-ascii?Q?d3rH1F0q7/qmIeMSoJyD/m1+5sni7tivznh3bSlBGArRp32WR5WSgmKvJeb9?=
- =?us-ascii?Q?7tmL5nt+lEnL5E3FZqVQsSBrC0h9HRgyAtr53GzTP4Byr3eipQW/myql50Fj?=
- =?us-ascii?Q?6Kg4Rfx9wzy7kyGOCtVFpWFcsRRD4bU9GAM+SdC+zs83/wHvmN+3Gp2+oi4m?=
- =?us-ascii?Q?s+SQYtBfazlIp/t0SRiaTEy5m0gXFzGRhD7YOQcetN5DdqVeqv1EhrGDbPvq?=
- =?us-ascii?Q?MsuCWrURdTLuBBUk72AZhNpRm/NL3ZHsdjrvdMkXRpBr9D71Seq+pcW6pgGD?=
- =?us-ascii?Q?jj/KfHYrvuG/eRwmNTGIO4OK5kznZOPOc625cniw1e8irFmAER/k9m4krXud?=
- =?us-ascii?Q?6llon1EA1QY0BWpk9r132/fYKzwtXS0TZXYS5WI/cUpbabZ71BCUjW5uvxXs?=
- =?us-ascii?Q?pW+58Wd1bIgJ0mnf9FXtrZ0UTKtb0NIKFeKYbqv06jzIbGgH+2MCYsS4mSJm?=
- =?us-ascii?Q?dLodR9nwm0nh/fS9Y07pQDVLvz3uC84iF+SyI1DowJO2USo1wfg6aMCYMuJE?=
- =?us-ascii?Q?B2hSxLY/kvSep/fua+WZqGUP9U+puBt1wbMTGC9lSoXQgDrWZYSLHd249YNP?=
- =?us-ascii?Q?TIwN4URuvl3w2L32HilHcoLBhiJEN1Sew9pC2qUd441ZC51OaFPSnL6ooFqx?=
- =?us-ascii?Q?QReOFRDSzBM9IBxBPHpzf/EKcDFcU1WW7LBFK2tY9itPQgrCejAJJsn7JwQk?=
- =?us-ascii?Q?d1XUzQhruU3rAy4rMv5fq5DJ0Kk+j42C3XqQeETUKyl+TcHHsGdCF+crTlzK?=
- =?us-ascii?Q?jTwp0ETteFwNSMLUSR558FpEpFgg3ixOBx5WNFE444PJ5uJNqVN395FLvYkh?=
- =?us-ascii?Q?zdzM0C3MpeWNsc268j094wHRYJUJevkKViMkyOkY4pusAhFJ6xIxGdyYQgrQ?=
- =?us-ascii?Q?e7kDdJ5u80ilWIYzy0O8r23fttEePLAtMSjsS5jwTBb4XpUuxvuZzdNoGRU3?=
- =?us-ascii?Q?4lGj0Qu0LkPQfD6leNe000tx2abQ2LpbasN8OZcfoFycOI4AHyCPdAb9CyZX?=
- =?us-ascii?Q?MDb/fbJYYG2FIB3fghA3Faw+OEaM1nSr/KghR4QMPP1VXHxaWjy6ufRXuyGF?=
- =?us-ascii?Q?CS8o1tEwnd535C4rlZ3Sz9BoTc7WbE57auCSBe5uKsklTV4Xpb0cXZ8IQ0wJ?=
- =?us-ascii?Q?GLkOflW6TYJUk5330maIFYTXnyF3d4XbaILSUmBloksFvI7n6BYDwUn8Nv3S?=
- =?us-ascii?Q?DXe7Un+ZRJs3EWPA+7yV5HlawTzXomTguZqW5jZVbjop9hvW5j/EZuHNfdUe?=
- =?us-ascii?Q?QEeRo0Z8SEZ9iDSozGypL/dMUZMiUHM/TEx7ZEiP1m8UwzAikME56SCB9/GN?=
- =?us-ascii?Q?omb12yEcpwSlrdpuQjkpb3Q3vPXrjCupjnPabVRPJ4Faaovp/casL7R9l3XI?=
- =?us-ascii?Q?5CpCdjw0pQ=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d7a2ed9-91a8-44fd-b7f9-08da116493d8
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2022 09:14:50.3545
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: l5dQByppMut8i/M2N+ZxeVpluNNWPEtmi1R1usSAfqqS/c+bLmOr930Pe6jde5JW0SfeDGrL/gKJHFgZ4RAGQg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB3875
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Qing <wangqing@vivo.com>
+The member void *data in the structure devfreq can be overwrite
+by governor_userspace. For example:
+1. The device driver assigned the devfreq governor to simple_ondemand
+by the function devfreq_add_device() and init the devfreq member
+void *data to a pointer of a static structure devfreq_simple_ondemand_data
+by the function devfreq_add_device().
+2. The user changed the devfreq governor to userspace by the command
+"echo userspace > /sys/class/devfreq/.../governor".
+3. The governor userspace alloced a dynamic memory for the struct
+userspace_data and assigend the member void *data of devfreq to
+this memory by the function userspace_init().
+4. The user changed the devfreq governor back to simple_ondemand
+by the command "echo simple_ondemand > /sys/class/devfreq/.../governor".
+5. The governor userspace exited and assigned the member void *data
+in the structure devfreq to NULL by the function userspace_exit().
+6. The governor simple_ondemand fetched the static information of
+devfreq_simple_ondemand_data in the function
+devfreq_simple_ondemand_func() but the member void *data of devfreq was
+assigned to NULL by the function userspace_exit().
+7. The information of upthreshold and downdifferential is lost
+and the governor simple_ondemand can't work correctly.
 
-use if and else instead of consequent if(A) and if (!A)
+The member void *data in the structure devfreq is designed for
+a static pointer used in a governor and inited by the function
+devfreq_add_device(). So if a governor want to use void *data
+to do some other things, it must save void *data in the init()
+function and restore void *data in the exit() function.
 
-Signed-off-by: Wang Qing <wangqing@vivo.com>
+Signed-off-by: Kant Fan <kant@allwinnertech.com>
 ---
- drivers/video/fbdev/pxafb.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
- mode change 100644 => 100755 drivers/video/fbdev/pxafb.c
+ drivers/devfreq/governor_userspace.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/video/fbdev/pxafb.c b/drivers/video/fbdev/pxafb.c
-index f1551e0..8ad91c2
---- a/drivers/video/fbdev/pxafb.c
-+++ b/drivers/video/fbdev/pxafb.c
-@@ -2256,10 +2256,10 @@ static int pxafb_probe(struct platform_device *dev)
- 			goto failed;
- 		for (i = 0; i < inf->num_modes; i++)
- 			inf->modes[i] = pdata->modes[i];
-+	} else {
-+		inf = of_pxafb_of_mach_info(&dev->dev);
+diff --git a/drivers/devfreq/governor_userspace.c b/drivers/devfreq/governor_userspace.c
+index ab9db7adb3ad..dbbb448dcbcf 100644
+--- a/drivers/devfreq/governor_userspace.c
++++ b/drivers/devfreq/governor_userspace.c
+@@ -17,6 +17,7 @@
+ struct userspace_data {
+ 	unsigned long user_frequency;
+ 	bool valid;
++	void *saved_data;
+ };
+ 
+ static int devfreq_userspace_func(struct devfreq *df, unsigned long *freq)
+@@ -91,6 +92,7 @@ static int userspace_init(struct devfreq *devfreq)
+ 		goto out;
  	}
+ 	data->valid = false;
++	data->saved_data = devfreq->data;
+ 	devfreq->data = data;
  
--	if (!pdata)
--		inf = of_pxafb_of_mach_info(&dev->dev);
- 	if (IS_ERR_OR_NULL(inf))
- 		goto failed;
+ 	err = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
+@@ -100,6 +102,8 @@ static int userspace_init(struct devfreq *devfreq)
  
+ static void userspace_exit(struct devfreq *devfreq)
+ {
++	struct userspace_data *data = devfreq->data;
++	void *saved_data = data->saved_data;
+ 	/*
+ 	 * Remove the sysfs entry, unless this is being called after
+ 	 * device_del(), which should have done this already via kobject_del().
+@@ -108,7 +112,7 @@ static void userspace_exit(struct devfreq *devfreq)
+ 		sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
+ 
+ 	kfree(devfreq->data);
+-	devfreq->data = NULL;
++	devfreq->data = saved_data;
+ }
+ 
+ static int devfreq_userspace_handler(struct devfreq *devfreq,
 -- 
-2.7.4
+2.29.0
 

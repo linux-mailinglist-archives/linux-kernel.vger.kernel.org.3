@@ -2,67 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EBD84EB44E
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 21:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119AB4EB449
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 21:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241077AbiC2TxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 15:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
+        id S241120AbiC2TxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 15:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241081AbiC2Twt (ORCPT
+        with ESMTP id S241086AbiC2Twu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 15:52:49 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297E418B78E;
-        Tue, 29 Mar 2022 12:51:05 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id bq8so23322934ejb.10;
-        Tue, 29 Mar 2022 12:51:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l+XhA8TgVWNCg73BbGOG2hhIxLPG+B7tircTLTVq07s=;
-        b=qSQKf469VMGOEcouWjg6eL1N7sLjZ6aziqkMKqa75RXLidLD5mIGh40AcfK05FOuyP
-         ivYNGtSvUPN32R3aa40f/2iEyfGUsaXWl/dws/5Eg5grO9bwqK5hOPM7IfrDXgYhFMfJ
-         J0/bfxMJiLmdjad5pF3Tj0wK09bYnbkm2jJVPVxsFQCHu973Pkme+AoBF3ZsWAsUGMv2
-         ubcf+y1UD0maPYglC5rEo0UgxMcpJVMxq5Fa37qigHq0ZBrigwGfzM9bl6zqhRwskHgK
-         jLpDjrBsJjsiS5PzbsakNxGC6iijTmG+XNh9I+t+CYQ6rEyrBmRxOANcqmU2A97Tv/sa
-         ymGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l+XhA8TgVWNCg73BbGOG2hhIxLPG+B7tircTLTVq07s=;
-        b=ouqA8kAj9T9HlWmoRRg43uREY8W4L+XTrusypx9kGg6iEV6CiIZcK8LLIC9Jznd1WJ
-         IEvxGcC8UUzZ+5w5mNPAd+HpPv8AvzfpTMpwZZdSmHXVaCttTUsR0PvXqkSiVTQEfJRs
-         4Uu4YiINDSssWg/S6mpfthgoSFlXcMspe0tWvXJ1pOfnJ/UJhjZC75kUPgensU0qWUEQ
-         ZSWHpaPdvvxKy0+ZEvZC0ZSm8F06zJMisyuY2hHVhPQZ4P87gK/MD5RneQT14qiw2ZOO
-         0TId1y2pSd7vvq5vjWSdYrDhY6KmX9fNmobkosYANkaVBt6H2MBfrSGtdubYy9nn+Xzy
-         sjHg==
-X-Gm-Message-State: AOAM532AGK7UCuj5bmigVMe0qYicsVkUtodmjsrvFlO9Lm609LU8r6aI
-        vYCWHFFLgMeZPQLCSXQHX9Y=
-X-Google-Smtp-Source: ABdhPJzemaLV/PAuTjVl1105qt6YXlT40w60HAOGOEbmRL3gCpb0Bs4J3g18kYsjrGj7mfY43h0bnw==
-X-Received: by 2002:a17:907:72c5:b0:6d6:e749:da41 with SMTP id du5-20020a17090772c500b006d6e749da41mr37598321ejc.591.1648583463507;
-        Tue, 29 Mar 2022 12:51:03 -0700 (PDT)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id n27-20020a1709062bdb00b006da975173bfsm7546041ejg.170.2022.03.29.12.51.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 12:51:03 -0700 (PDT)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de, zhangqing@rock-chips.com
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] dt-bindings: clock: convert rockchip,px30-cru.txt to YAML
-Date:   Tue, 29 Mar 2022 21:50:57 +0200
-Message-Id: <20220329195057.15571-1-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        Tue, 29 Mar 2022 15:52:50 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A52A18B277
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 12:51:03 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id CB0A82C028E;
+        Tue, 29 Mar 2022 19:51:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1648583460;
+        bh=BNF2UMylQFUCmmIZXcvoQ329GJFVKaMW/CAJjK9WuQ0=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=Y0hVUzewhYM8L8Vui/dU1oY5bKeGvAXvvgXLPbax8R32hPu5tM+Nno5ZEPF7ZXQ/R
+         3QGrBjAOyUxwV9Bko5MiB0stn0ouyzzWMgC7zJXtesD31y3bH0fpEJoOPg12f0lwMX
+         Q/Gtryq6kYBwxmrA1wbVvJNINvoZ76bt7wfdSsLeHUUbHHuTFalmuEprw2xFfBG2ke
+         y79H8C6Ve4YgvbUJiWh3X9eGYEueKYgNLE1GmLvJ/xyoN+GXBo73q5SdSIAa6eIh3K
+         ElrOyeI0W+SHJvDN5boy5UhtGRFVSoMjop6MQln7gP28NBfUQspwrkahKCxt6AgmjK
+         4413MexXmo09Q==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B624363240001>; Wed, 30 Mar 2022 08:51:00 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.32; Wed, 30 Mar 2022 08:51:00 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.033; Wed, 30 Mar 2022 08:51:00 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh@kernel.org>
+CC:     "andrew@lunn.ch" <andrew@lunn.ch>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "huziji@marvell.com" <huziji@marvell.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v4 2/2] dt-bindings: mmc: xenon: Convert to JSON schema
+Thread-Topic: [PATCH v4 2/2] dt-bindings: mmc: xenon: Convert to JSON schema
+Thread-Index: AQHYQwBQxHzoaq5k202Ou7T2PLN3cqzVZnGAgAAXboCAAG7SgA==
+Date:   Tue, 29 Mar 2022 19:50:59 +0000
+Message-ID: <6e118704-3c63-929e-ebf0-9a78fbed5daa@alliedtelesis.co.nz>
+References: <20220329000231.3544810-1-chris.packham@alliedtelesis.co.nz>
+ <20220329000231.3544810-3-chris.packham@alliedtelesis.co.nz>
+ <1648554629.870840.350362.nullmailer@robh.at.kernel.org>
+ <d4c477b3-0cf2-e495-6a54-5fcd0301cc14@kernel.org>
+In-Reply-To: <d4c477b3-0cf2-e495-6a54-5fcd0301cc14@kernel.org>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F2F2FAA0294065438213375A3B0291C0@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=o8Y5sQTvuykA:10 a=VwQbUJbxAAAA:8 a=q3wFjaZLP3K7T2WVW-8A:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,197 +86,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert rockchip,px30-cru.txt to YAML.
-
-Changes against original bindings:
-  Use compatible string: "rockchip,px30-pmucru"
-
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- .../bindings/clock/rockchip,px30-cru.txt      | 70 --------------
- .../bindings/clock/rockchip,px30-cru.yaml     | 96 +++++++++++++++++++
- 2 files changed, 96 insertions(+), 70 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/clock/rockchip,px30-cru.txt
- create mode 100644 Documentation/devicetree/bindings/clock/rockchip,px30-cru.yaml
-
-diff --git a/Documentation/devicetree/bindings/clock/rockchip,px30-cru.txt b/Documentation/devicetree/bindings/clock/rockchip,px30-cru.txt
-deleted file mode 100644
-index 55e78cdde..000000000
---- a/Documentation/devicetree/bindings/clock/rockchip,px30-cru.txt
-+++ /dev/null
-@@ -1,70 +0,0 @@
--* Rockchip PX30 Clock and Reset Unit
--
--The PX30 clock controller generates and supplies clock to various
--controllers within the SoC and also implements a reset controller for SoC
--peripherals.
--
--Required Properties:
--
--- compatible: PMU for CRU should be "rockchip,px30-pmu-cru"
--- compatible: CRU should be "rockchip,px30-cru"
--- reg: physical base address of the controller and length of memory mapped
--  region.
--- clocks: A list of phandle + clock-specifier pairs for the clocks listed
--          in clock-names
--- clock-names: Should contain the following:
--  - "xin24m" for both PMUCRU and CRU
--  - "gpll" for CRU (sourced from PMUCRU)
--- #clock-cells: should be 1.
--- #reset-cells: should be 1.
--
--Optional Properties:
--
--- rockchip,grf: phandle to the syscon managing the "general register files"
--  If missing, pll rates are not changeable, due to the missing pll lock status.
--
--Each clock is assigned an identifier and client nodes can use this identifier
--to specify the clock which they consume. All available clocks are defined as
--preprocessor macros in the dt-bindings/clock/px30-cru.h headers and can be
--used in device tree sources. Similar macros exist for the reset sources in
--these files.
--
--External clocks:
--
--There are several clocks that are generated outside the SoC. It is expected
--that they are defined using standard clock bindings with following
--clock-output-names:
-- - "xin24m" - crystal input - required,
-- - "xin32k" - rtc clock - optional,
-- - "i2sx_clkin" - external I2S clock - optional,
-- - "gmac_clkin" - external GMAC clock - optional
--
--Example: Clock controller node:
--
--	pmucru: clock-controller@ff2bc000 {
--		compatible = "rockchip,px30-pmucru";
--		reg = <0x0 0xff2bc000 0x0 0x1000>;
--		#clock-cells = <1>;
--		#reset-cells = <1>;
--	};
--
--	cru: clock-controller@ff2b0000 {
--		compatible = "rockchip,px30-cru";
--		reg = <0x0 0xff2b0000 0x0 0x1000>;
--		rockchip,grf = <&grf>;
--		#clock-cells = <1>;
--		#reset-cells = <1>;
--	};
--
--Example: UART controller node that consumes the clock generated by the clock
--  controller:
--
--	uart0: serial@ff030000 {
--		compatible = "rockchip,px30-uart", "snps,dw-apb-uart";
--		reg = <0x0 0xff030000 0x0 0x100>;
--		interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&pmucru SCLK_UART0_PMU>, <&pmucru PCLK_UART0_PMU>;
--		clock-names = "baudclk", "apb_pclk";
--		reg-shift = <2>;
--		reg-io-width = <4>;
--	};
-diff --git a/Documentation/devicetree/bindings/clock/rockchip,px30-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,px30-cru.yaml
-new file mode 100644
-index 000000000..aa095f375
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/rockchip,px30-cru.yaml
-@@ -0,0 +1,96 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/rockchip,px30-cru.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Rockchip PX30 Clock and Reset Unit (CRU)
-+
-+maintainers:
-+  - Elaine Zhang <zhangqing@rock-chips.com>
-+  - Heiko Stuebner <heiko@sntech.de>
-+
-+description: |
-+  The PX30 clock controller generates and supplies clocks to various
-+  controllers within the SoC and also implements a reset controller for SoC
-+  peripherals.
-+  Each clock is assigned an identifier and client nodes can use this identifier
-+  to specify the clock which they consume. All available clocks are defined as
-+  preprocessor macros in the dt-bindings/clock/px30-cru.h headers and can be
-+  used in device tree sources. Similar macros exist for the reset sources in
-+  these files.
-+  There are several clocks that are generated outside the SoC. It is expected
-+  that they are defined using standard clock bindings with following
-+  clock-output-names:
-+    - "xin24m"     - crystal input       - required
-+    - "xin32k"     - rtc clock           - optional
-+    - "i2sx_clkin" - external I2S clock  - optional
-+    - "gmac_clkin" - external GMAC clock - optional
-+
-+properties:
-+  compatible:
-+    enum:
-+      - rockchip,px30-cru
-+      - rockchip,px30-pmucru
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#clock-cells":
-+    const: 1
-+
-+  "#reset-cells":
-+    const: 1
-+
-+  clocks:
-+    minItems: 1
-+    items:
-+      - description: Clock for both PMUCRU and CRU
-+      - description: Clock for CRU (sourced from PMUCRU)
-+
-+  clock-names:
-+    minItems: 1
-+    items:
-+      - const: xin24m
-+      - const: gpll
-+
-+  rockchip,grf:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      Phandle to the syscon managing the "general register files" (GRF),
-+      if missing pll rates are not changeable, due to the missing pll
-+      lock status.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - "#clock-cells"
-+  - "#reset-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/px30-cru.h>
-+
-+    pmucru: clock-controller@ff2bc000 {
-+      compatible = "rockchip,px30-pmucru";
-+      reg = <0xff2bc000 0x1000>;
-+      clocks = <&xin24m>;
-+      clock-names = "xin24m";
-+      rockchip,grf = <&grf>;
-+      #clock-cells = <1>;
-+      #reset-cells = <1>;
-+    };
-+
-+    cru: clock-controller@ff2b0000 {
-+      compatible = "rockchip,px30-cru";
-+      reg = <0xff2b0000 0x1000>;
-+      clocks = <&xin24m>, <&pmucru PLL_GPLL>;
-+      clock-names = "xin24m", "gpll";
-+      rockchip,grf = <&grf>;
-+      #clock-cells = <1>;
-+      #reset-cells = <1>;
-+    };
--- 
-2.20.1
-
+DQpPbiAzMC8wMy8yMiAwMjoxNCwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gT24gMjkv
+MDMvMjAyMiAxMzo1MCwgUm9iIEhlcnJpbmcgd3JvdGU6DQo+PiBPbiBUdWUsIDI5IE1hciAyMDIy
+IDEzOjAyOjMxICsxMzAwLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPj4+IENvbnZlcnQgdGhlIG1h
+cnZlbGwseGVub24tc2RoY2kgYmluZGluZyB0byBKU09OIHNjaGVtYS4gQ3VycmVudGx5IHRoZQ0K
+Pj4+IGluLXRyZWUgZHRzIGZpbGVzIGRvbid0IHZhbGlkYXRlIGJlY2F1c2UgdGhleSB1c2Ugc2Ro
+Y2lAIGluc3RlYWQgb2YgbW1jQA0KPj4+IGFzIHJlcXVpcmVkIGJ5IHRoZSBnZW5lcmljIG1tYy1j
+b250cm9sbGVyIHNjaGVtYS4NCj4+Pg0KPj4+IFRoZSBjb21wYXRpYmxlICJtYXJ2ZWxsLHNkaGNp
+LXhlbm9uIiB3YXMgbm90IGRvY3VtZW50ZWQgaW4gdGhlIG9sZA0KPj4+IGJpbmRpbmcgYnV0IGl0
+IGFjY29tcGFuaWVzIHRoZSBvZiAibWFydmVsbCxhcm1hZGEtMzcwMC1zZGhjaSIgaW4gdGhlDQo+
+Pj4gYXJtYWRhLTM3eHggU29DIGR0c2kgc28gdGhpcyBjb21iaW5hdGlvbiBpcyBhZGRlZCB0byB0
+aGUgbmV3IGJpbmRpbmcNCj4+PiBkb2N1bWVudC4NCj4+Pg0KPj4+IFNpZ25lZC1vZmYtYnk6IENo
+cmlzIFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCj4+PiBSZXZp
+ZXdlZC1ieTogS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6a0BrZXJuZWwub3JnPg0KPj4+IC0tLQ0K
+Pj4+DQo+Pj4gTm90ZXM6DQo+Pj4gICAgICBDaGFuZ2VzIGluIHY0Og0KPj4+ICAgICAgLSBBZGQg
+cmV2aWV3IGZyb20gS3J6eXN6dG9mDQo+Pj4gICAgICAtIFNxdWFzaCBpbiBhZGRpdGlvbiBvZiBt
+YXJ2ZWxsLHNkaGNpLXhlbm9uIHdpdGggYW4gZXhwbGFuYXRpb24gaW4gdGhlDQo+Pj4gICAgICAg
+IGNvbW1pdCBtZXNzYWdlDQo+Pj4gICAgICBDaGFuZ2VzIGluIHYzOg0KPj4+ICAgICAgLSBEb24n
+dCBhY2NlcHQgYXA4MDcgd2l0aG91dCBhcDgwNg0KPj4+ICAgICAgLSBBZGQgcmVmOiBzdHJpbmcg
+Zm9yIHBhZC10eXBlDQo+Pj4gICAgICBDaGFuZ2VzIGluIHYyOg0KPj4+ICAgICAgLSBVcGRhdGUg
+TUFJTlRBSU5FUlMgZW50cnkNCj4+PiAgICAgIC0gSW5jb3Jwb3JhdGUgZmVlZGJhY2sgZnJvbSBL
+cnp5c3p0b2YNCj4+Pg0KPj4+ICAgLi4uL2JpbmRpbmdzL21tYy9tYXJ2ZWxsLHhlbm9uLXNkaGNp
+LnR4dCAgICAgIHwgMTczIC0tLS0tLS0tLS0tDQo+Pj4gICAuLi4vYmluZGluZ3MvbW1jL21hcnZl
+bGwseGVub24tc2RoY2kueWFtbCAgICAgfCAyNzUgKysrKysrKysrKysrKysrKysrDQo+Pj4gICBN
+QUlOVEFJTkVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDIgKy0NCj4+
+PiAgIDMgZmlsZXMgY2hhbmdlZCwgMjc2IGluc2VydGlvbnMoKyksIDE3NCBkZWxldGlvbnMoLSkN
+Cj4+PiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
+Z3MvbW1jL21hcnZlbGwseGVub24tc2RoY2kudHh0DQo+Pj4gICBjcmVhdGUgbW9kZSAxMDA2NDQg
+RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21tYy9tYXJ2ZWxsLHhlbm9uLXNkaGNp
+LnlhbWwNCj4+Pg0KPj4gTXkgYm90IGZvdW5kIGVycm9ycyBydW5uaW5nICdtYWtlIERUX0NIRUNL
+RVJfRkxBR1M9LW0gZHRfYmluZGluZ19jaGVjaycNCj4+IG9uIHlvdXIgcGF0Y2ggKERUX0NIRUNL
+RVJfRkxBR1MgaXMgbmV3IGluIHY1LjEzKToNCj4+DQo+PiB5YW1sbGludCB3YXJuaW5ncy9lcnJv
+cnM6DQo+Pg0KPj4gZHRzY2hlbWEvZHRjIHdhcm5pbmdzL2Vycm9yczoNCj4+IC9idWlsZHMvcm9i
+aGVycmluZy9saW51eC1kdC1yZXZpZXcvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
+L21tYy9tYXJ2ZWxsLHhlbm9uLXNkaGNpLmV4YW1wbGUuZHQueWFtbDogbW1jQGFhMDAwMDogY29t
+cGF0aWJsZTogJ29uZU9mJyBjb25kaXRpb25hbCBmYWlsZWQsIG9uZSBtdXN0IGJlIGZpeGVkOg0K
+Pj4gCVsnbWFydmVsbCxhcm1hZGEtMzcwMC1zZGhjaSddIGlzIHRvbyBzaG9ydA0KPj4gCSdtYXJ2
+ZWxsLGFybWFkYS0zNzAwLXNkaGNpJyBpcyBub3Qgb25lIG9mIFsnbWFydmVsbCxhcm1hZGEtY3Ax
+MTAtc2RoY2knLCAnbWFydmVsbCxhcm1hZGEtYXA4MDYtc2RoY2knXQ0KPj4gCSdtYXJ2ZWxsLGFy
+bWFkYS1hcDgwNy1zZGhjaScgd2FzIGV4cGVjdGVkDQo+PiAJRnJvbSBzY2hlbWE6IC9idWlsZHMv
+cm9iaGVycmluZy9saW51eC1kdC1yZXZpZXcvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
+bmdzL21tYy9tYXJ2ZWxsLHhlbm9uLXNkaGNpLnlhbWwNCj4+IC9idWlsZHMvcm9iaGVycmluZy9s
+aW51eC1kdC1yZXZpZXcvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21tYy9tYXJ2
+ZWxsLHhlbm9uLXNkaGNpLmV4YW1wbGUuZHQueWFtbDogbW1jQGFiMDAwMDogY29tcGF0aWJsZTog
+J29uZU9mJyBjb25kaXRpb25hbCBmYWlsZWQsIG9uZSBtdXN0IGJlIGZpeGVkOg0KPj4gCVsnbWFy
+dmVsbCxhcm1hZGEtMzcwMC1zZGhjaSddIGlzIHRvbyBzaG9ydA0KPj4gCSdtYXJ2ZWxsLGFybWFk
+YS0zNzAwLXNkaGNpJyBpcyBub3Qgb25lIG9mIFsnbWFydmVsbCxhcm1hZGEtY3AxMTAtc2RoY2kn
+LCAnbWFydmVsbCxhcm1hZGEtYXA4MDYtc2RoY2knXQ0KPj4gCSdtYXJ2ZWxsLGFybWFkYS1hcDgw
+Ny1zZGhjaScgd2FzIGV4cGVjdGVkDQo+PiAJRnJvbSBzY2hlbWE6IC9idWlsZHMvcm9iaGVycmlu
+Zy9saW51eC1kdC1yZXZpZXcvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21tYy9t
+YXJ2ZWxsLHhlbm9uLXNkaGNpLnlhbWwNCj4+DQo+PiBkb2MgcmVmZXJlbmNlIGVycm9ycyAobWFr
+ZSByZWZjaGVja2RvY3MpOg0KPiBDaHJpcywgeW91ciBvd24gZHQgYmluZGluZyBkb2VzIG5vdCBw
+YXNzIGl0J3MgY2hlY2sgKGV4YW1wbGUpLi4uDQo+DQo+IEFmdGVyIHVwZGF0aW5nIHRoZSBjb21w
+YXRpYmxlcywgeW91IG5lZWQgdG8gY2hlY2sgdGhlIGV4YW1wbGUuIFRoZQ0KPiBleGFtcGxlcyBh
+cmUgYW55d2F5IGR1cGxpY2F0aW5nIGNvbW1vbiBzdHVmZiwgc28gaGFsZiBvZiB0aGVtIGNvdWxk
+IGJlDQo+IHJlbW92ZWQuDQoNClllYWggc2lsbHkgbWUuIEkgc3RhcnRlZCB0YWtpbmcgc2hvcnQg
+Y3V0cyB0byBydW4gZHRfYmluZGluZ19jaGVjayANCmR0YnNfY2hlY2sgYXMgb25lIGNvbW1hbmQg
+YnV0IHRoZW4gdGhlIGR0X2JpbmRpbmdzX2NoZWNrIG91dHB1dCBzY3JvbGxlZCANCm9mZiB0aGUg
+dG9wIG9mIG15IHRlcm1pbmFsLg0KDQpBcyBmb3IgdGhlIGV4YW1wbGVzIHRoZW1zZWx2ZXMgSSB3
+YW50IHRvIGxlYXZlIHdoYXQncyB0aGVyZSBhcyBhIGZhaXJseSANCmRpcmVjdCB0cmFuc2xhdGlv
+biBvZiB0aGUgb2xkIGJpbmRpbmcuIElmIHdlIGNvbnNpZGVyIHRoZW0gdW5uZWNlc3NhcnkgDQpy
+ZW1vdmluZyB0aGVtIGNhbiBiZSBkb25lIGFzIGEgZm9sbG93LXVwLg0KDQo+DQo+IEJlc3QgcmVn
+YXJkcywNCj4gS3J6eXN6dG9m

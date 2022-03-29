@@ -2,357 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB394EAE9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263704EAE9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237384AbiC2Nio convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 29 Mar 2022 09:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
+        id S237389AbiC2Niv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 09:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232707AbiC2Nim (ORCPT
+        with ESMTP id S232707AbiC2Nip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 09:38:42 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FB94D610;
-        Tue, 29 Mar 2022 06:36:58 -0700 (PDT)
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KSVtJ61gGz67kMk;
-        Tue, 29 Mar 2022 21:35:04 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Tue, 29 Mar 2022 15:36:56 +0200
-Received: from localhost (10.202.226.41) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 29 Mar
- 2022 14:36:55 +0100
-Date:   Tue, 29 Mar 2022 14:36:53 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     Jonathan Cameron <jic23@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Alexandru Ardelean" <ardeleanalex@gmail.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v2 05/12] iio: core: Add new DMABUF interface
- infrastructure
-Message-ID: <20220329143653.000057d4@Huawei.com>
-In-Reply-To: <VDXG9R.5IH6K0N3FLTA3@crapouillou.net>
-References: <20220207125933.81634-1-paul@crapouillou.net>
-        <20220207125933.81634-6-paul@crapouillou.net>
-        <20220328183701.02884cc3@jic23-huawei>
-        <VDXG9R.5IH6K0N3FLTA3@crapouillou.net>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Tue, 29 Mar 2022 09:38:45 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2504D622;
+        Tue, 29 Mar 2022 06:37:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1648561022; x=1680097022;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=FLEOBRkzAfL2PZRc8RnlDc3tQ904HRcvIZPvcxUbURY=;
+  b=QZv0NETnCcdvkfnYXiUOmmDi5omZJEvlgwhkSQC9zxOeO1BK74Zh2H3M
+   Y3Fjvjj0gK2XLsdCeGEqq2x0Vg1RF750fdy/DILwjXkdbLrc33oTnkFTT
+   VL5tMR57yEtqXyr2A268269Po/zOe0Lbwdjlr/aYTUHwxaFRNskkCuVq/
+   6kiQHJuGPBEBQ34oKbGeBaIjyUrq30SpGNQbKNEnAgvGt9SR+ZNvwWO3V
+   UvY7Qey7PbGZSiqidgo92tx6zl5489osGW7gf2dD8eCigbXwomuSrv2at
+   AbKPgI7Zg4k1EMT1dgjp9BJkFTYwh0UW19sL7CKgi4YcUCXVT7KHsU7Q6
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,220,1643670000"; 
+   d="scan'208";a="22963306"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 29 Mar 2022 15:37:00 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 29 Mar 2022 15:37:00 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 29 Mar 2022 15:37:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1648561020; x=1680097020;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=FLEOBRkzAfL2PZRc8RnlDc3tQ904HRcvIZPvcxUbURY=;
+  b=GmYeNLeXFB7lSAZNTL8jQETB1zjYVuckdROH/ap769zBDepLJ1cH+jcC
+   SNtdHAqQLTLHz7WElCRDDiru2L0S7/ZR4NShmj43X42FkBaxAetlxF+UG
+   36mY4ZFkGAzAGgGm/SS7oKJjzOdrVRdox0yTQ0OD+6YiKkRupto0ixTZU
+   pAOsU4uk51ieC2ntJmv0dTkoiB0sUq3zPEPVxiB05NYddWYE4E5Xg6tnn
+   Lc72ggXblIsV0h1w6n7D9XHpNUtGpQKIXadrWzz1jO+JIasLvqR8W8Fb4
+   jll6YfSwhCTVysDyHRW10KsNvsBvunqkD5tvmgoVxQuBiUlwWszhFOIDM
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,220,1643670000"; 
+   d="scan'208";a="22963305"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 29 Mar 2022 15:37:00 +0200
+Received: from schifferm-ubuntu (SCHIFFERM-M2.tq-net.de [10.121.49.14])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id EEA58280065;
+        Tue, 29 Mar 2022 15:36:59 +0200 (CEST)
+Message-ID: <c6178cd21a61d47d399cbee79d2c2f4b62dfa479.camel@ew.tq-group.com>
+Subject: Re: (EXT) RE: [PATCH] serial: Revert RS485 polarity change on UART
+ open
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Lukas Wunner <lukas@wunner.de>
+Date:   Tue, 29 Mar 2022 15:36:59 +0200
+In-Reply-To: <df0034da2db14b6b9993c37422a6711d@AcuMS.aculab.com>
+References: <20220329085050.311408-1-matthias.schiffer@ew.tq-group.com>
+         <20220329100328.GA2090@wunner.de>
+         <b2f29129f966685105e09781620b85c8f4f1a88e.camel@ew.tq-group.com>
+         <749eee7dd2c7464a8c4d9ea5972205fa@AcuMS.aculab.com>
+         <82266d339e09ad16963e16014cd836fa670b3a0c.camel@ew.tq-group.com>
+         <df0034da2db14b6b9993c37422a6711d@AcuMS.aculab.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.202.226.41]
-X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Mar 2022 19:44:19 +0100
-Paul Cercueil <paul@crapouillou.net> wrote:
+On Tue, 2022-03-29 at 13:19 +0000, David Laight wrote:
+> From: Matthias Schiffer
+> > Sent: 29 March 2022 14:03
+> > 
+> > On Tue, 2022-03-29 at 12:55 +0000, David Laight wrote:
+> > > From: Matthias Schiffer
+> > > > Sent: 29 March 2022 11:39
+> > > ...
+> > > > I guess that would work. The fact that even the different
+> > > > variants of the 8250 are implemented inconsistently makes this
+> > > > especially ugly... It certainly puts a damper on the efforts to
+> > > > make
+> > > > the handling of RS485 in serial drivers more generic.
+> > > 
+> > > One thing to remember is that RS232 (IIRC really V.38) line
+> > > driver
+> > > chips are typically inverting.
+> > > 
+> > > So the modem signals on a TTL level output will have the
+> > > opposite polarity to that required on the actual connector.
+> > > 
+> > > Normally a UART will have an 'active high' register bit for
+> > > a modem signal that drives and 'active low' pin so you get
+> > > the correct polarity with an inverting line driver.
+> > > 
+> > > 	David
+> > > 
+> > 
+> > Indeed. As far as I can tell, this property of UARTs is what got us
+> > into this mess: Some people interpreted SER_RS485_RTS_ON_SEND as
+> > "set
+> > the RTS flag in the MCR register on send", while other thought it
+> > should mean "set the RTS pin to high on send", leading to opposite
+> > behaviours in different UART drivers (and even different UART
+> > variants
+> > in the same driver, in the case of the 8250 family).
+> 
+> Hmmm... A complete mess.
+> The 'RTS pin' that needs to go high is the one on the (typically) 'D'
+> connector after the inverting line driver.
+> Not the pin on the uart package.
+> I'd expect TTL level serial interfaces to require active low
+> modem signals.
+> 
+> If RS485 is trying to do half duplex using RTS (request to send)
+> and CTS (clear to send) you've typically got bigger problems
+> than asserting RTS before a transmit.
+> The real problem is removing RTS once the last transmit data bit
+> (the stop bit) has left the UART pin.
+> I've used local loopback (tx to rx) to detect that in the past.
+> 
+> Of course, if it is just doing flow control that should use RFS
+> (ready for sending) to indicate space in the receive fifo but
+> using the RTS pin instead that is a different matter.
+> 
+> 	David
+> 
 
-> Hi Jonathan,
-> 
-> Le lun., mars 28 2022 at 18:37:01 +0100, Jonathan Cameron 
-> <jic23@kernel.org> a écrit :
-> > On Mon,  7 Feb 2022 12:59:26 +0000
-> > Paul Cercueil <paul@crapouillou.net> wrote:
-> >   
-> >>  Add the necessary infrastructure to the IIO core to support a new
-> >>  optional DMABUF based interface.
-> >> 
-> >>  The advantage of this new DMABUF based interface vs. the read()
-> >>  interface, is that it avoids an extra copy of the data between the
-> >>  kernel and userspace. This is particularly userful for high-speed  
-> > 
-> > useful
-> >   
-> >>  devices which produce several megabytes or even gigabytes of data 
-> >> per
-> >>  second.
-> >> 
-> >>  The data in this new DMABUF interface is managed at the granularity 
-> >> of
-> >>  DMABUF objects. Reducing the granularity from byte level to block 
-> >> level
-> >>  is done to reduce the userspace-kernelspace synchronization overhead
-> >>  since performing syscalls for each byte at a few Mbps is just not
-> >>  feasible.
-> >> 
-> >>  This of course leads to a slightly increased latency. For this 
-> >> reason an
-> >>  application can choose the size of the DMABUFs as well as how many 
-> >> it
-> >>  allocates. E.g. two DMABUFs would be a traditional double buffering
-> >>  scheme. But using a higher number might be necessary to avoid
-> >>  underflow/overflow situations in the presence of scheduling 
-> >> latencies.
-> >> 
-> >>  As part of the interface, 2 new IOCTLs have been added:
-> >> 
-> >>  IIO_BUFFER_DMABUF_ALLOC_IOCTL(struct iio_dmabuf_alloc_req *):
-> >>   Each call will allocate a new DMABUF object. The return value (if 
-> >> not
-> >>   a negative errno value as error) will be the file descriptor of 
-> >> the new
-> >>   DMABUF.
-> >> 
-> >>  IIO_BUFFER_DMABUF_ENQUEUE_IOCTL(struct iio_dmabuf *):
-> >>   Place the DMABUF object into the queue pending for hardware 
-> >> process.
-> >> 
-> >>  These two IOCTLs have to be performed on the IIO buffer's file
-> >>  descriptor, obtained using the IIO_BUFFER_GET_FD_IOCTL() ioctl.  
-> > 
-> > Just to check, do they work on the old deprecated chardev route? 
-> > Normally
-> > we can directly access the first buffer without the ioctl.  
-> 
-> They do not. I think it's fine this way, since as you said, the old 
-> chardev route is deprecated. But I can add support for it with enough 
-> peer pressure.
-Agreed. Definitely fine to not support the 'old way'.
 
-J
-> 
-> >> 
-> >>  To access the data stored in a block by userspace the block must be
-> >>  mapped to the process's memory. This is done by calling mmap() on 
-> >> the
-> >>  DMABUF's file descriptor.
-> >> 
-> >>  Before accessing the data through the map, you must use the
-> >>  DMA_BUF_IOCTL_SYNC(struct dma_buf_sync *) ioctl, with the
-> >>  DMA_BUF_SYNC_START flag, to make sure that the data is available.
-> >>  This call may block until the hardware is done with this block. Once
-> >>  you are done reading or writing the data, you must use this ioctl 
-> >> again
-> >>  with the DMA_BUF_SYNC_END flag, before enqueueing the DMABUF to the
-> >>  kernel's queue.
-> >> 
-> >>  If you need to know when the hardware is done with a DMABUF, you can
-> >>  poll its file descriptor for the EPOLLOUT event.
-> >> 
-> >>  Finally, to destroy a DMABUF object, simply call close() on its file
-> >>  descriptor.
-> >> 
-> >>  A typical workflow for the new interface is:
-> >> 
-> >>    for block in blocks:
-> >>      DMABUF_ALLOC block
-> >>      mmap block
-> >> 
-> >>    enable buffer
-> >> 
-> >>    while !done
-> >>      for block in blocks:
-> >>        DMABUF_ENQUEUE block
-> >> 
-> >>        DMABUF_SYNC_START block
-> >>        process data
-> >>        DMABUF_SYNC_END block
-> >> 
-> >>    disable buffer
-> >> 
-> >>    for block in blocks:
-> >>      close block  
-> > 
-> > Given my very limited knowledge of dma-buf, I'll leave commenting
-> > on the flow to others who know if this looks 'standards' or not ;)
-> > 
-> > Code looks sane to me..  
-> 
-> Thanks.
-> 
-> Cheers,
-> -Paul
-> 
-> >> 
-> >>  v2: Only allow the new IOCTLs on the buffer FD created with
-> >>      IIO_BUFFER_GET_FD_IOCTL().
-> >> 
-> >>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> >>  ---
-> >>   drivers/iio/industrialio-buffer.c | 55 
-> >> +++++++++++++++++++++++++++++++
-> >>   include/linux/iio/buffer_impl.h   |  8 +++++
-> >>   include/uapi/linux/iio/buffer.h   | 29 ++++++++++++++++
-> >>   3 files changed, 92 insertions(+)
-> >> 
-> >>  diff --git a/drivers/iio/industrialio-buffer.c 
-> >> b/drivers/iio/industrialio-buffer.c
-> >>  index 94eb9f6cf128..72f333a519bc 100644
-> >>  --- a/drivers/iio/industrialio-buffer.c
-> >>  +++ b/drivers/iio/industrialio-buffer.c
-> >>  @@ -17,6 +17,7 @@
-> >>   #include <linux/fs.h>
-> >>   #include <linux/cdev.h>
-> >>   #include <linux/slab.h>
-> >>  +#include <linux/mm.h>
-> >>   #include <linux/poll.h>
-> >>   #include <linux/sched/signal.h>
-> >> 
-> >>  @@ -1520,11 +1521,65 @@ static int iio_buffer_chrdev_release(struct 
-> >> inode *inode, struct file *filep)
-> >>   	return 0;
-> >>   }
-> >> 
-> >>  +static int iio_buffer_enqueue_dmabuf(struct iio_buffer *buffer,
-> >>  +				     struct iio_dmabuf __user *user_buf)
-> >>  +{
-> >>  +	struct iio_dmabuf dmabuf;
-> >>  +
-> >>  +	if (!buffer->access->enqueue_dmabuf)
-> >>  +		return -EPERM;
-> >>  +
-> >>  +	if (copy_from_user(&dmabuf, user_buf, sizeof(dmabuf)))
-> >>  +		return -EFAULT;
-> >>  +
-> >>  +	if (dmabuf.flags & ~IIO_BUFFER_DMABUF_SUPPORTED_FLAGS)
-> >>  +		return -EINVAL;
-> >>  +
-> >>  +	return buffer->access->enqueue_dmabuf(buffer, &dmabuf);
-> >>  +}
-> >>  +
-> >>  +static int iio_buffer_alloc_dmabuf(struct iio_buffer *buffer,
-> >>  +				   struct iio_dmabuf_alloc_req __user *user_req)
-> >>  +{
-> >>  +	struct iio_dmabuf_alloc_req req;
-> >>  +
-> >>  +	if (!buffer->access->alloc_dmabuf)
-> >>  +		return -EPERM;
-> >>  +
-> >>  +	if (copy_from_user(&req, user_req, sizeof(req)))
-> >>  +		return -EFAULT;
-> >>  +
-> >>  +	if (req.resv)
-> >>  +		return -EINVAL;
-> >>  +
-> >>  +	return buffer->access->alloc_dmabuf(buffer, &req);
-> >>  +}
-> >>  +
-> >>  +static long iio_buffer_chrdev_ioctl(struct file *filp,
-> >>  +				    unsigned int cmd, unsigned long arg)
-> >>  +{
-> >>  +	struct iio_dev_buffer_pair *ib = filp->private_data;
-> >>  +	struct iio_buffer *buffer = ib->buffer;
-> >>  +	void __user *_arg = (void __user *)arg;
-> >>  +
-> >>  +	switch (cmd) {
-> >>  +	case IIO_BUFFER_DMABUF_ALLOC_IOCTL:
-> >>  +		return iio_buffer_alloc_dmabuf(buffer, _arg);
-> >>  +	case IIO_BUFFER_DMABUF_ENQUEUE_IOCTL:
-> >>  +		/* TODO: support non-blocking enqueue operation */
-> >>  +		return iio_buffer_enqueue_dmabuf(buffer, _arg);
-> >>  +	default:
-> >>  +		return IIO_IOCTL_UNHANDLED;
-> >>  +	}
-> >>  +}
-> >>  +
-> >>   static const struct file_operations iio_buffer_chrdev_fileops = {
-> >>   	.owner = THIS_MODULE,
-> >>   	.llseek = noop_llseek,
-> >>   	.read = iio_buffer_read,
-> >>   	.write = iio_buffer_write,
-> >>  +	.unlocked_ioctl = iio_buffer_chrdev_ioctl,
-> >>  +	.compat_ioctl = compat_ptr_ioctl,
-> >>   	.poll = iio_buffer_poll,
-> >>   	.release = iio_buffer_chrdev_release,
-> >>   };
-> >>  diff --git a/include/linux/iio/buffer_impl.h 
-> >> b/include/linux/iio/buffer_impl.h
-> >>  index e2ca8ea23e19..728541bc2c63 100644
-> >>  --- a/include/linux/iio/buffer_impl.h
-> >>  +++ b/include/linux/iio/buffer_impl.h
-> >>  @@ -39,6 +39,9 @@ struct iio_buffer;
-> >>    *                      device stops sampling. Calles are balanced 
-> >> with @enable.
-> >>    * @release:		called when the last reference to the buffer is 
-> >> dropped,
-> >>    *			should free all resources allocated by the buffer.
-> >>  + * @alloc_dmabuf:	called from userspace via ioctl to allocate one 
-> >> DMABUF.
-> >>  + * @enqueue_dmabuf:	called from userspace via ioctl to queue this 
-> >> DMABUF
-> >>  + *			object to this buffer. Requires a valid DMABUF fd.
-> >>    * @modes:		Supported operating modes by this buffer type
-> >>    * @flags:		A bitmask combination of INDIO_BUFFER_FLAG_*
-> >>    *
-> >>  @@ -68,6 +71,11 @@ struct iio_buffer_access_funcs {
-> >> 
-> >>   	void (*release)(struct iio_buffer *buffer);
-> >> 
-> >>  +	int (*alloc_dmabuf)(struct iio_buffer *buffer,
-> >>  +			    struct iio_dmabuf_alloc_req *req);
-> >>  +	int (*enqueue_dmabuf)(struct iio_buffer *buffer,
-> >>  +			      struct iio_dmabuf *block);
-> >>  +
-> >>   	unsigned int modes;
-> >>   	unsigned int flags;
-> >>   };
-> >>  diff --git a/include/uapi/linux/iio/buffer.h 
-> >> b/include/uapi/linux/iio/buffer.h
-> >>  index 13939032b3f6..e4621b926262 100644
-> >>  --- a/include/uapi/linux/iio/buffer.h
-> >>  +++ b/include/uapi/linux/iio/buffer.h
-> >>  @@ -5,6 +5,35 @@
-> >>   #ifndef _UAPI_IIO_BUFFER_H_
-> >>   #define _UAPI_IIO_BUFFER_H_
-> >> 
-> >>  +#include <linux/types.h>
-> >>  +
-> >>  +#define IIO_BUFFER_DMABUF_SUPPORTED_FLAGS	0x00000000
-> >>  +
-> >>  +/**
-> >>  + * struct iio_dmabuf_alloc_req - Descriptor for allocating IIO 
-> >> DMABUFs
-> >>  + * @size:	the size of a single DMABUF
-> >>  + * @resv:	reserved
-> >>  + */
-> >>  +struct iio_dmabuf_alloc_req {
-> >>  +	__u64 size;
-> >>  +	__u64 resv;
-> >>  +};
-> >>  +
-> >>  +/**
-> >>  + * struct iio_dmabuf - Descriptor for a single IIO DMABUF object
-> >>  + * @fd:		file descriptor of the DMABUF object
-> >>  + * @flags:	one or more IIO_BUFFER_DMABUF_* flags
-> >>  + * @bytes_used:	number of bytes used in this DMABUF for the data 
-> >> transfer.
-> >>  + *		If zero, the full buffer is used.
-> >>  + */
-> >>  +struct iio_dmabuf {
-> >>  +	__u32 fd;
-> >>  +	__u32 flags;
-> >>  +	__u64 bytes_used;
-> >>  +};
-> >>  +
-> >>   #define IIO_BUFFER_GET_FD_IOCTL			_IOWR('i', 0x91, int)
-> >>  +#define IIO_BUFFER_DMABUF_ALLOC_IOCTL		_IOW('i', 0x92, struct 
-> >> iio_dmabuf_alloc_req)
-> >>  +#define IIO_BUFFER_DMABUF_ENQUEUE_IOCTL		_IOW('i', 0x93, struct 
-> >> iio_dmabuf)
-> >> 
-> >>   #endif /* _UAPI_IIO_BUFFER_H_ */  
-> >   
-> 
-> 
+I'm aware of the difficulties of deasserting RTS after the transmission
+is complete, but that's completely orthogonal to the issue I'm trying
+to solve right now :)
+
+Regards,
+Matthias
 

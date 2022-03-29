@@ -2,125 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2C14EA48F
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 03:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC664EA493
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 03:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiC2BX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 21:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53194 "EHLO
+        id S229637AbiC2B00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 21:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiC2BX2 (ORCPT
+        with ESMTP id S229446AbiC2B0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 21:23:28 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1082C117;
-        Mon, 28 Mar 2022 18:21:45 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id t2so14449112pfj.10;
-        Mon, 28 Mar 2022 18:21:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=nGUt+aj/CNfWrM2Ds8HvT/Dl56Vks6aVB/g96nW8bf8=;
-        b=CDT/BuavpP8mQxwjlPaichjpYYhA3Pw5JcLcuD/nscNa9g9fnbkC3tpHyJqdSexocF
-         zFhQRERUhpt+lkdFizRqiSfEzjvH94C69yp6cRX2WnpK9ax1Z/pulaCRMCJkMmdtu1/m
-         kqKBw8HtGQgdVEFMMuJdfWWoounDtqP92su7IXtOCPxCVpFWJgwZ555vugcwen10Bw+Y
-         3zFCWzY8DEZAiRXmmsAlMptcmOJ0l3XDPVmDWbCKj5Ez/+UmTuJyDO8oYwBixSrRCL8o
-         AJtCVg3evK6iTcQA0t3sBdngLoQRMxexm4kaWSC404LdoglxH6F8HdK7Hjzuv+zjydj0
-         +ftQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=nGUt+aj/CNfWrM2Ds8HvT/Dl56Vks6aVB/g96nW8bf8=;
-        b=pbRbXNtOSt4TPlN+S49vV48hkSFOrKAkja5uE6QKJmpf2Ns4DO1p+nWVqrnvRFP1H6
-         VlEwRZep/+AMPz47H9gnWdC0lo/lHz2a6XbpE7W5ym/BNdAEyIJ6JkF7ApKuk82KCw81
-         otxs5Z/MRG7/xEAaB858pEILZ+njh84ipVLWp5upW6/4gEthZZwOhtP4pdwvrWwDgjTx
-         lN3spEkRl4zF6vsFzdffiCWhwOPwf+K5+EHk+FCXinmL3t3h2GNNJGrJVaTEVAp+Wami
-         MW+PBlgMjo9C98zuoI+10GIVPY6Z4RWsBGMlcb5GUD7FQwsM8kdzlqBOUAKxCXXFy6Rk
-         D34Q==
-X-Gm-Message-State: AOAM532M0JmgTs2urqlVmTVTNzDql9aXkzSdvCpcF8DKr3itlxiDwiKH
-        ThWfQDJDFvmZUodgR3545XM=
-X-Google-Smtp-Source: ABdhPJwDvk6CTkxu40Th8VYA7G8Ypnxcz3UfPRvUwaSKEbrhu8GZ/6nnc6yLDNCGDEC1DyUuejQVKQ==
-X-Received: by 2002:a63:5020:0:b0:382:4781:7f4c with SMTP id e32-20020a635020000000b0038247817f4cmr176192pgb.230.1648516904993;
-        Mon, 28 Mar 2022 18:21:44 -0700 (PDT)
-Received: from localhost ([119.3.119.18])
-        by smtp.gmail.com with ESMTPSA id i15-20020a63b30f000000b003803aee35a2sm13711447pgf.31.2022.03.28.18.21.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 28 Mar 2022 18:21:44 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
-Subject: [PATCH v2] soc: soc-dapm: fix two incorrect uses of list iterator
-Date:   Tue, 29 Mar 2022 09:21:34 +0800
-Message-Id: <20220329012134.9375-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Mar 2022 21:26:24 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1163665F5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 18:24:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648517083; x=1680053083;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Mu17qYsjkCHyz1+QOh7SLV+fK9EV9Jl13PPWrJf+Dmk=;
+  b=c5CneQSLlHDWPYZD25jmiZKRrKlVvT2SFZkubN6RDpnkxFhuxI/NR+/c
+   FH9PtB408Z+Dof/JA42PiaFeihmJ8SusdcQ8/56k5iApP+puibUqeGW6m
+   hd/icPqfMGk5CiNLz8l4/U5+UapoVoUmtzEdxMRvlgYNp48Ymgx0f8/L6
+   BRJpTnOspyVLGe4f3t0a0zKWlWRtXRcnUF0FZRKJYxTWpmJs4vV6WBOfG
+   SouvtSzM/wYyIXTSCTADWIwb0xb/tE9VWAzQ79ZW9wK3hECa8W0lSbHai
+   XxftdwVQkI2a2M77z98LQVSMAO6t6DeH/ykjCW/rdGoiBd6nrMbUuqtdZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="345572294"
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="345572294"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 18:24:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="546179180"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 28 Mar 2022 18:24:41 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nZ0bA-0002UR-IL; Tue, 29 Mar 2022 01:24:40 +0000
+Date:   Tue, 29 Mar 2022 09:24:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Pirko <jiri@nvidia.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jpirko-mlxsw:jiri_devel_linecards 84/97]
+ drivers/net/netdevsim/dev.c:638:14: error: too many arguments to function
+ call, expected 3, have 4
+Message-ID: <202203290946.i4BOVfVX-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These two bug are here:
-	list_for_each_entry_safe_continue(w, n, list,
-					power_list);
-	list_for_each_entry_safe_continue(w, n, list,
-					power_list);
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_linecards
+head:   7acc15a4d5cd40bc4ab8bafe3f376adacd6f4bb2
+commit: 9f172debd1c3d2de76650ee4e20aaa1bc31bb79e [84/97] netdevsim: allow port objects to be linked with line cards
+config: i386-randconfig-a014-20220328 (https://download.01.org/0day-ci/archive/20220329/202203290946.i4BOVfVX-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jpirko/linux_mlxsw/commit/9f172debd1c3d2de76650ee4e20aaa1bc31bb79e
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw jiri_devel_linecards
+        git checkout 9f172debd1c3d2de76650ee4e20aaa1bc31bb79e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/netdevsim/
 
-After the list_for_each_entry_safe_continue() exits, the list iterator
-will always be a bogus pointer which point to an invalid struct objdect
-containing HEAD member. The funciton poniter 'w->event' will be a
-invalid value which can lead to a control-flow hijack if the 'w' can be
-controlled.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The original intention was to continue the outer list_for_each_entry_safe()
-loop with the same entry if w->event is NULL, but misunderstanding the
-meaning of list_for_each_entry_safe_continue().
+All errors (new ones prefixed by >>):
 
-So just add a 'continue;' to fix the bug.
+>> drivers/net/netdevsim/dev.c:638:14: error: too many arguments to function call, expected 3, have 4
+                                             NULL, i);
+                                                   ^
+   drivers/net/netdevsim/dev.c:612:1: note: '__nsim_dev_port_add' declared here
+   __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
+   ^
+>> drivers/net/netdevsim/dev.c:651:39: error: too many arguments to function call, expected single argument 'nsim_dev_port', have 3 arguments
+                           __nsim_dev_port_del(nsim_dev_port, NULL, i);
+                           ~~~~~~~~~~~~~~~~~~~                ^~~~~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+   #define NULL ((void *)0)
+                ^
+   drivers/net/netdevsim/dev.c:614:13: note: '__nsim_dev_port_del' declared here
+   static void __nsim_dev_port_del(struct nsim_dev_port *nsim_dev_port);
+               ^
+>> drivers/net/netdevsim/dev.c:1393:12: error: conflicting types for '__nsim_dev_port_add'
+   static int __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
+              ^
+   drivers/net/netdevsim/dev.c:612:1: note: previous declaration is here
+   __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
+   ^
+   drivers/net/netdevsim/dev.c:1503:14: error: too many arguments to function call, expected 3, have 4
+                                             NULL, i);
+                                                   ^
+   drivers/net/netdevsim/dev.c:612:1: note: '__nsim_dev_port_add' declared here
+   __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
+   ^
+   drivers/net/netdevsim/dev.c:1839:27: error: too many arguments to function call, expected 3, have 4
+                                             nsim_dev_linecard, port_index);
+                                                                ^~~~~~~~~~
+   drivers/net/netdevsim/dev.c:612:1: note: '__nsim_dev_port_add' declared here
+   __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
+   ^
+   5 errors generated.
 
-Cc: stable@vger.kernel.org
-Fixes: 163cac061c973 ("ASoC: Factor out DAPM sequence execution")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
 
-changes since v1:
- - use continue statement instead (Mark Brown)
+vim +638 drivers/net/netdevsim/dev.c
 
-v1:https://lore.kernel.org/lkml/20220327082138.13696-1-xiam0nd.tong@gmail.com/
+   629	
+   630	static int nsim_esw_switchdev_enable(struct nsim_dev *nsim_dev,
+   631					     struct netlink_ext_ack *extack)
+   632	{
+   633		struct nsim_dev_port *nsim_dev_port, *tmp;
+   634		int i, err;
+   635	
+   636		for (i = 0; i < nsim_dev_get_vfs(nsim_dev); i++) {
+   637			err = __nsim_dev_port_add(nsim_dev, NSIM_DEV_PORT_TYPE_VF,
+ > 638						  NULL, i);
+   639			if (err) {
+   640				NL_SET_ERR_MSG_MOD(extack, "Failed to initialize VFs' netdevsim ports");
+   641				pr_err("Failed to initialize VF id=%d. %d.\n", i, err);
+   642				goto err_port_add_vfs;
+   643			}
+   644		}
+   645		nsim_dev->esw_mode = DEVLINK_ESWITCH_MODE_SWITCHDEV;
+   646		return 0;
+   647	
+   648	err_port_add_vfs:
+   649		list_for_each_entry_safe(nsim_dev_port, tmp, &nsim_dev->port_list, list)
+   650			if (nsim_dev_port_is_vf(nsim_dev_port))
+ > 651				__nsim_dev_port_del(nsim_dev_port, NULL, i);
+   652		return err;
+   653	}
+   654	
 
----
- sound/soc/soc-dapm.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/sound/soc/soc-dapm.c b/sound/soc/soc-dapm.c
-index b06c5682445c..fb43b331a36e 100644
---- a/sound/soc/soc-dapm.c
-+++ b/sound/soc/soc-dapm.c
-@@ -1687,8 +1687,7 @@ static void dapm_seq_run(struct snd_soc_card *card,
- 		switch (w->id) {
- 		case snd_soc_dapm_pre:
- 			if (!w->event)
--				list_for_each_entry_safe_continue(w, n, list,
--								  power_list);
-+				continue;
- 
- 			if (event == SND_SOC_DAPM_STREAM_START)
- 				ret = w->event(w,
-@@ -1700,8 +1699,7 @@ static void dapm_seq_run(struct snd_soc_card *card,
- 
- 		case snd_soc_dapm_post:
- 			if (!w->event)
--				list_for_each_entry_safe_continue(w, n, list,
--								  power_list);
-+				continue;
- 
- 			if (event == SND_SOC_DAPM_STREAM_START)
- 				ret = w->event(w,
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

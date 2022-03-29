@@ -2,347 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1260C4EACB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 13:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52E14EACBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 13:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235975AbiC2Lzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 07:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
+        id S236140AbiC2MAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 08:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbiC2Lzt (ORCPT
+        with ESMTP id S231408AbiC2MAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 07:55:49 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76099102412
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 04:54:06 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22TAubA3003715;
-        Tue, 29 Mar 2022 11:53:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=conyvQf8XjC2LWLDYPlNRdWkszq5PT9EHp5Y/fLsMS0=;
- b=rp0qKjYEolsBjezQO4VWYwwy9Hmn0IAFTnSbjjCFQbfm+0vTu7xByYMoub+BBntK9dnn
- aj8i5RvdaEUxqMxF7pd/Zg7mf761XZGl9NHHJhS7mzx1NWxBx3B8/+pHJJ7FitLa8G9w
- ndTa+IqFKbRYIlJy4fN2TtOsysdLBaIf+wmj+kRNgZEcn9PuS6KH1bHXAOuWWyXMgMsU
- Aa83/6WZNd98s4AHLt9Jb0beNghpDqtE9yjlVRoRmtQglF2G8TMHMbEjcqR240N4dDZ9
- 1xYRaBDKtalPXNoEFXl2yDVX/Ax6gGBqDXrpB7b7Z5qUuyy7m+ET7/MMpdtA3dkrHTG6 ew== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f40t8155r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Mar 2022 11:53:01 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22TBXavr009500;
-        Tue, 29 Mar 2022 11:53:01 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f40t8154w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Mar 2022 11:53:01 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22TBlWMV025990;
-        Tue, 29 Mar 2022 11:52:59 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03fra.de.ibm.com with ESMTP id 3f1tf8w5n5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Mar 2022 11:52:59 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22TBqt6F49742194
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 29 Mar 2022 11:52:55 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BDEE7A4055;
-        Tue, 29 Mar 2022 11:52:55 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E2883A4040;
-        Tue, 29 Mar 2022 11:52:51 +0000 (GMT)
-Received: from li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com.com (unknown [9.211.138.152])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 29 Mar 2022 11:52:51 +0000 (GMT)
-From:   Jagdish Gediya <jvgediya@linux.ibm.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com,
-        baolin.wang@linux.alibaba.com, dave.hansen@linux.intel.com,
-        ying.huang@intel.com, Jagdish Gediya <jvgediya@linux.ibm.com>
-Subject: [PATCH] mm: migrate: set demotion targets differently
-Date:   Tue, 29 Mar 2022 17:22:22 +0530
-Message-Id: <20220329115222.8923-1-jvgediya@linux.ibm.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 29 Mar 2022 08:00:17 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B93F68;
+        Tue, 29 Mar 2022 04:58:32 -0700 (PDT)
+X-UUID: c8bcceb5174544d4afa4109c63bc03db-20220329
+X-UUID: c8bcceb5174544d4afa4109c63bc03db-20220329
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <zhiyong.tao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 459133733; Tue, 29 Mar 2022 19:58:28 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 29 Mar 2022 19:58:27 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 29 Mar 2022 19:58:25 +0800
+From:   Zhiyong Tao <zhiyong.tao@mediatek.com>
+To:     <lee.jones@linaro.org>, <robh+dt@kernel.org>,
+        <matthias.bgg@gmail.com>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <eddie.huang@mediatek.com>,
+        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <fshao@chromium.org>
+CC:     <srv_heupstream@mediatek.com>, <hui.liu@mediatek.com>,
+        <zhiyong.tao@mediatek.com>, <hsin-hsiung.wang@mediatek.com>,
+        <sean.wang@mediatek.com>, <macpaul.lin@mediatek.com>,
+        <wen.su@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v1 0/1] Mediatek PMIC patch
+Date:   Tue, 29 Mar 2022 19:58:23 +0800
+Message-ID: <20220329115824.13005-1-zhiyong.tao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 4iqCGoE360v-Hv0WvFhRW4x68rjDpAws
-X-Proofpoint-GUID: RBdx2Q8H1y_rLXn0qj7CHHLgHModN_GE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-29_02,2022-03-29_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- clxscore=1011 impostorscore=0 phishscore=0 priorityscore=1501 mlxscore=0
- suspectscore=0 spamscore=0 mlxlogscore=999 adultscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203290067
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current implementation to identify the demotion
-targets limits some of the opportunities to share
-the demotion targets between multiple source nodes.
+This patch fix pwrap time out issue.
 
-Implement a logic to identify the loop in the demotion
-targets such that all the possibilities of demotion can
-be utilized. Don't share the used targets between all
-the nodes, instead create the used targets from scratch
-for each individual node based on for what all node this
-node is a demotion target. This helps to share the demotion
-targets without missing any possible way of demotion.
+Zhiyong.Tao (1):
+  pwrap: mediatek: fix wait time out issue
 
-e.g. with below NUMA topology, where node 0 & 1 are
-cpu + dram nodes, node 2 & 3 are equally slower memory
-only nodes, and node 4 is slowest memory only node,
+ drivers/soc/mediatek/mtk-pmic-wrap.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+ mode change 100644 => 100755 drivers/soc/mediatek/mtk-pmic-wrap.c
 
-available: 5 nodes (0-4)
-node 0 cpus: 0 1
-node 0 size: n MB
-node 0 free: n MB
-node 1 cpus: 2 3
-node 1 size: n MB
-node 1 free: n MB
-node 2 cpus:
-node 2 size: n MB
-node 2 free: n MB
-node 3 cpus:
-node 3 size: n MB
-node 3 free: n MB
-node 4 cpus:
-node 4 size: n MB
-node 4 free: n MB
-node distances:
-node   0   1   2   3   4
-  0:  10  20  40  40  80
-  1:  20  10  40  40  80
-  2:  40  40  10  40  80
-  3:  40  40  40  10  80
-  4:  80  80  80  80  10
+--
+2.18.0 
 
-The existing implementation gives below demotion targets,
-
-node    demotion_target
- 0              3, 2
- 1              4
- 2              X
- 3              X
- 4		X
-
-With this patch applied, below are the demotion targets,
-
-node    demotion_target
- 0              3, 2
- 1              3, 2
- 2              3
- 3              4
- 4		X
-
-e.g. with below NUMA topology, where node 0, 1 & 2 are
-cpu + dram nodes and node 3 is slow memory node,
-
-available: 4 nodes (0-3)
-node 0 cpus: 0 1
-node 0 size: n MB
-node 0 free: n MB
-node 1 cpus: 2 3
-node 1 size: n MB
-node 1 free: n MB
-node 2 cpus: 4 5
-node 2 size: n MB
-node 2 free: n MB
-node 3 cpus:
-node 3 size: n MB
-node 3 free: n MB
-node distances:
-node   0   1   2   3
-  0:  10  20  20  40
-  1:  20  10  20  40
-  2:  20  20  10  40
-  3:  40  40  40  10
-
-The existing implementation gives below demotion targets,
-
-node    demotion_target
- 0              3
- 1              X
- 2              X
- 3              X
-
-With this patch applied, below are the demotion targets,
-
-node    demotion_target
- 0              3
- 1              3
- 2              3
- 3              X
-
-with below NUMA topology, where node 0 & 2 are cpu + dram
-nodes and node 1 & 3 are slow memory nodes,
-
-available: 4 nodes (0-3)
-node 0 cpus: 0 1
-node 0 size: n MB
-node 0 free: n MB
-node 1 cpus:
-node 1 size: n MB
-node 1 free: n MB
-node 2 cpus: 2 3
-node 2 size: n MB
-node 2 free: n MB
-node 3 cpus:
-node 3 size: n MB
-node 3 free: n MB
-node distances:
-node   0   1   2   3
-  0:  10  40  20  80
-  1:  40  10  80  80
-  2:  20  80  10  40
-  3:  80  80  40  10
-
-The existing implementation gives below demotion targets,
-
-node    demotion_target
- 0              3
- 1              X
- 2              3
- 3              X
-
-With this patch applied, below are the demotion targets,
-
-node    demotion_target
- 0              1
- 1              3
- 2              3
- 3              X
-
-As it can be seen above, node 3 can be demotion target for node
-1 but existing implementation doesn't configure it that way. It
-is better to move pages from node 1 to node 3 instead of moving
-it from node 1 to swap.
-
-Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
-Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
----
- mm/migrate.c | 75 ++++++++++++++++++++++++++++------------------------
- 1 file changed, 41 insertions(+), 34 deletions(-)
-
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 3d60823afd2d..7ec8d934e706 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -2381,10 +2381,13 @@ static int establish_migrate_target(int node, nodemask_t *used,
-  */
- static void __set_migration_target_nodes(void)
- {
--	nodemask_t next_pass	= NODE_MASK_NONE;
--	nodemask_t this_pass	= NODE_MASK_NONE;
- 	nodemask_t used_targets = NODE_MASK_NONE;
- 	int node, best_distance;
-+	nodemask_t *src_nodes;
-+
-+	src_nodes = kcalloc(nr_node_ids, sizeof(nodemask_t), GFP_KERNEL);
-+	if (!src_nodes)
-+		return;
- 
- 	/*
- 	 * Avoid any oddities like cycles that could occur
-@@ -2393,29 +2396,39 @@ static void __set_migration_target_nodes(void)
- 	 */
- 	disable_all_migrate_targets();
- 
--	/*
--	 * Allocations go close to CPUs, first.  Assume that
--	 * the migration path starts at the nodes with CPUs.
--	 */
--	next_pass = node_states[N_CPU];
--again:
--	this_pass = next_pass;
--	next_pass = NODE_MASK_NONE;
--	/*
--	 * To avoid cycles in the migration "graph", ensure
--	 * that migration sources are not future targets by
--	 * setting them in 'used_targets'.  Do this only
--	 * once per pass so that multiple source nodes can
--	 * share a target node.
--	 *
--	 * 'used_targets' will become unavailable in future
--	 * passes.  This limits some opportunities for
--	 * multiple source nodes to share a destination.
--	 */
--	nodes_or(used_targets, used_targets, this_pass);
-+	for_each_online_node(node) {
-+		int tmp_node;
- 
--	for_each_node_mask(node, this_pass) {
- 		best_distance = -1;
-+		used_targets = NODE_MASK_NONE;
-+
-+		/*
-+		 * Avoid adding same node as the demotion target.
-+		 */
-+		node_set(node, used_targets);
-+
-+		/*
-+		 * Add CPU NUMA nodes to the used target list so that it
-+		 * won't be considered a demotion target.
-+		 */
-+		nodes_or(used_targets, used_targets, node_states[N_CPU]);
-+
-+		/*
-+		 * Add all nodes that has appeared as source node of demotion
-+		 * for this target node.
-+		 *
-+		 * To avoid cycles in the migration "graph", ensure
-+		 * that migration sources are not future targets by
-+		 * setting them in 'used_targets'.
-+		 */
-+		for_each_node_mask(tmp_node, src_nodes[node])
-+			nodes_or(used_targets, used_targets, src_nodes[tmp_node]);
-+
-+		/*
-+		 * Now update the demotion src nodes with other nodes in graph
-+		 * which got computed above.
-+		 */
-+		nodes_or(src_nodes[node], src_nodes[node], used_targets);
- 
- 		/*
- 		 * Try to set up the migration path for the node, and the target
-@@ -2434,20 +2447,14 @@ static void __set_migration_target_nodes(void)
- 				best_distance = node_distance(node, target_node);
- 
- 			/*
--			 * Visit targets from this pass in the next pass.
--			 * Eventually, every node will have been part of
--			 * a pass, and will become set in 'used_targets'.
-+			 * Add this node in the src_nodes list so that we can
-+			 * detect the looping.
- 			 */
--			node_set(target_node, next_pass);
-+			node_set(node, src_nodes[target_node]);
- 		} while (1);
- 	}
--	/*
--	 * 'next_pass' contains nodes which became migration
--	 * targets in this pass.  Make additional passes until
--	 * no more migrations targets are available.
--	 */
--	if (!nodes_empty(next_pass))
--		goto again;
-+
-+	kfree(src_nodes);
- }
- 
- /*
--- 
-2.35.1
 

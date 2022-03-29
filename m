@@ -2,60 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA35E4EA7FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 08:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB484EA800
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 08:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233082AbiC2Gia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 02:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46338 "EHLO
+        id S233092AbiC2Gi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 02:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232553AbiC2Gi0 (ORCPT
+        with ESMTP id S232553AbiC2Gi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 02:38:26 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471DD1D41B3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 23:36:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=BLn23ZPzFztDmKi1r1MS0HG3EmTPbihADR06egULMkA=; b=FU+QQA9ZpAEVDVXWOFgSWn4vAe
-        vCDQ7JhwFailgLwyMcxDwEGJ+pkh3+xhmPZhhGiUlulrXd+bIjD1HH3LmxvaNMppNncIBvBTzXNNE
-        x6QsZ14Ohy4VXLMmOecd5F8fYphuQoWcq0Uitr2CCXm3VIM0xrEtjtg5rBsSpp7WqMg4INJgATACR
-        wZ1CoPa4EflUhSEIb+Z8xsDTycAEU6tE6WOmfBKsv0LTvyaQAB7LJ3XgML5+UiS0rMQTsuLFDVBg+
-        2FhvZ3hkHKAqYJMUYyFnqVrbPpx/lwELDbCRjLS2KiSgCpXi37EFDawQ8L4scnU9H3Bviyyh0Bpyh
-        ZM8dZ5gQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nZ5T6-00BDGn-0A; Tue, 29 Mar 2022 06:36:40 +0000
-Date:   Mon, 28 Mar 2022 23:36:39 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Rolf Eike Beer <eb@emlix.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: mm: use mmap_assert_write_locked() instead of open coding it
-Message-ID: <YkKo93R1Fm0JXXtS@infradead.org>
-References: <5827758.TJ1SttVevJ@mobilepool36.emlix.com>
+        Tue, 29 Mar 2022 02:38:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A883F1D7893;
+        Mon, 28 Mar 2022 23:37:13 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2AF9223A;
+        Mon, 28 Mar 2022 23:37:13 -0700 (PDT)
+Received: from [10.57.7.161] (unknown [10.57.7.161])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 829F13F718;
+        Mon, 28 Mar 2022 23:37:10 -0700 (PDT)
+Message-ID: <8c4ae309-bc3a-2c16-d312-7ae7cc5b3c61@arm.com>
+Date:   Tue, 29 Mar 2022 07:37:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5827758.TJ1SttVevJ@mobilepool36.emlix.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RESEND][PATCH 7/8] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        Pierre.Gondois@arm.com, ionela.voinescu@arm.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        mka@chromium.org, nm@ti.com, sboyd@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, cristian.marussi@arm.com,
+        sudeep.holla@arm.com, matthias.bgg@gmail.com
+References: <20220321095729.20655-1-lukasz.luba@arm.com>
+ <20220321095729.20655-8-lukasz.luba@arm.com>
+ <20220328032729.mutbjailxbmylffs@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220328032729.mutbjailxbmylffs@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 10:24:51AM +0200, Rolf Eike Beer wrote:
-> In case the lock is actually not held at this point this also avoids a
-> stale lock reference if built with NDEBUG.
 
-The change looks good:
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+On 3/28/22 04:27, Viresh Kumar wrote:
+> On 21-03-22, 09:57, Lukasz Luba wrote:
+>> The Energy Model can now be artificial, which means the power values
+>> are mathematically generated to leverage EAS while not expected to be on
+>> an uniform scale with other devices providing power information. If this
+>> EM type is in use, the thermal governor IPA should not be allowed to
+>> operate, since the relation between cooling devices is not properly
+>> defined. Thus, it might be possible that big GPU has lower power values
+>> than a Little CPU. To mitigate a misbehaviour of the thermal control
+>> algorithm, simply do not register the cooling device as IPA's power
+>> actor.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   drivers/thermal/cpufreq_cooling.c | 2 +-
+>>   drivers/thermal/devfreq_cooling.c | 8 +++++---
+>>   2 files changed, 6 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+>> index 0bfb8eebd126..b8151d95a806 100644
+>> --- a/drivers/thermal/cpufreq_cooling.c
+>> +++ b/drivers/thermal/cpufreq_cooling.c
+>> @@ -328,7 +328,7 @@ static inline bool em_is_sane(struct cpufreq_cooling_device *cpufreq_cdev,
+>>   	struct cpufreq_policy *policy;
+>>   	unsigned int nr_levels;
+>>   
+>> -	if (!em)
+>> +	if (!em || em_is_artificial(em))
+>>   		return false;
+>>   
+>>   	policy = cpufreq_cdev->policy;
+>> diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
+>> index 4310cb342a9f..b04dcbbf721a 100644
+>> --- a/drivers/thermal/devfreq_cooling.c
+>> +++ b/drivers/thermal/devfreq_cooling.c
+>> @@ -358,6 +358,7 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+>>   	struct thermal_cooling_device *cdev;
+>>   	struct device *dev = df->dev.parent;
+>>   	struct devfreq_cooling_device *dfc;
+>> +	struct em_perf_domain *em;
+>>   	char *name;
+>>   	int err, num_opps;
+>>   
+>> @@ -367,8 +368,9 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+>>   
+>>   	dfc->devfreq = df;
+>>   
+>> -	dfc->em_pd = em_pd_get(dev);
+>> -	if (dfc->em_pd) {
+>> +	em = em_pd_get(dev);
+>> +	if (em && !em_is_artificial(em)) {
+>> +		dfc->em_pd = em;
+>>   		devfreq_cooling_ops.get_requested_power =
+>>   			devfreq_cooling_get_requested_power;
+>>   		devfreq_cooling_ops.state2power = devfreq_cooling_state2power;
+>> @@ -379,7 +381,7 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+>>   		num_opps = em_pd_nr_perf_states(dfc->em_pd);
+>>   	} else {
+>>   		/* Backward compatibility for drivers which do not use IPA */
+>> -		dev_dbg(dev, "missing EM for cooling device\n");
+>> +		dev_dbg(dev, "missing proper EM for cooling device\n");
+>>   
+>>   		num_opps = dev_pm_opp_get_opp_count(dev);
+> 
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> 
 
-But I don't think NDEBUG is a thing in the kernel.
+Thank you Viresh for the ACK!

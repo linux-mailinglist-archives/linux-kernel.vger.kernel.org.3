@@ -2,73 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4344EB3C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 20:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96AE34EB3C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 21:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240747AbiC2TBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 15:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
+        id S240752AbiC2TC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 15:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233414AbiC2TBS (ORCPT
+        with ESMTP id S236673AbiC2TCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 15:01:18 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BFB6972B;
-        Tue, 29 Mar 2022 11:59:33 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 29 Mar 2022 15:02:50 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F26BD2FC;
+        Tue, 29 Mar 2022 12:01:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9E29D21A3C;
-        Tue, 29 Mar 2022 18:59:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648580372; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=M66GhZe9D7qdNGZfGxtVYXFdPB17L/eVci5Q35NKtCU=;
-        b=HgMxx8nAALzazkyZ4NbkvzaG+Lws6pkHx7doK6pIZ6xcaXhV1+3Kt0Ezql+ahlnTBjmGXC
-        D+7jCLzsgd58k2esGMPkDqw0MleG9+rBcHUf+2to1VM7AdStt/GP5x2PXDFjcdiojhcXEe
-        /LVa0dN9kPcdYQGxdPv/F/gr7EOrcW8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648580372;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=M66GhZe9D7qdNGZfGxtVYXFdPB17L/eVci5Q35NKtCU=;
-        b=oqSe923tTqJK8QAT79UXlScANn4Vk36IhVSv72dLOZjvHnvhh2dP+OPfpOzUdkVJ9vcrZS
-        gK6B7SEKOANmMrCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 773BB13A7E;
-        Tue, 29 Mar 2022 18:59:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9AxmHBRXQ2J3TwAAMHmgww
-        (envelope-from <hare@suse.de>); Tue, 29 Mar 2022 18:59:32 +0000
-Message-ID: <7b7dbb47-c7cf-36f7-1d6b-2f943a7a2a1f@suse.de>
-Date:   Tue, 29 Mar 2022 20:59:32 +0200
+        by sin.source.kernel.org (Postfix) with ESMTPS id 20A95CE1A3E;
+        Tue, 29 Mar 2022 19:01:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C048C2BBE4;
+        Tue, 29 Mar 2022 19:01:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648580461;
+        bh=togKQAXsg4SClR+CCOpzzRuF4/TzbRxrDLH3EE/6RsA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=CsL56iRwae5VMWCfqiwlBxjDb9qb4ZTZ5GMZw+wJJi1B81g/sVRF9rmxgaxLCksxB
+         UrICQ2cTeZUXA5WwDcuT52gwi9QgjJuIVmI+1oALy1ETzWrnoGfs71AdHQJlibooCB
+         TJgwwF0IjpDeivB9RvLjhnL0XJ2Sl9yofkBOq7F9vgOlLO6Rk+F/JjRRB2oTJAd0X9
+         NXkjEF5F8nac+ZMPXMzKHCX1ESY+N+Z9lLo1mOIVNv3lPVcyo+VxYaYxY3+v4jWkqA
+         H2jVj4Wom8Kv7VCOBCynxx6TTy5SM+Q3cgAG1Tvf7VZ9y9HRpvXb3crTSoHJ1Dp7Jc
+         xAV8M9Cm7tE5Q==
+Date:   Tue, 29 Mar 2022 14:00:59 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        bhelgaas@google.com, arnd@arndb.de, akpm@linux-foundation.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] PCI: Remove the deprecated "pci-dma-compat.h" API
+Message-ID: <20220329190059.GA1621960@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] aha152x: Stop using struct scsi_pointer
-Content-Language: en-US
-To:     Finn Thain <fthain@linux-m68k.org>,
-        "Juergen E. Fischer" <fischer@norbit.de>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@infradead.org>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <bdc1264b6dd331150bffb737958cab8c9c068fa1.1648070977.git.fthain@linux-m68k.org>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <bdc1264b6dd331150bffb737958cab8c9c068fa1.1648070977.git.fthain@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkNNWy649S9i6Vbd@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,22 +55,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/22 22:29, Finn Thain wrote:
-> Remove aha152x_cmd_priv.scsi_pointer by moving the necessary members
-> into aha152x_cmd_priv proper.
+On Tue, Mar 29, 2022 at 11:18:03AM -0700, Christoph Hellwig wrote:
+> On Thu, Mar 10, 2022 at 11:30:22AM -0600, Bjorn Helgaas wrote:
+> > Christoph mentioned several other trees that this depends on, and
+> > those would likely be in linux-next, but not yet in Linus' tree.  The
+> > above poking around is from the tip of Linus' tree, which was the
+> > wrong place for me to look.
+> > 
+> > But I did the same in current linux-next, 71941773e143 ("Add
+> > linux-next specific files for 20220310"), and still found quite a few
+> > uses.  Some are in comments, printks, coccinelle scripts, etc.  I
+> > would assume we'd want to remove them all?
 > 
-> Tested with an Adaptec SlimSCSI APA-1460A card.
-> 
-> Cc: Christoph Hellwig <hch@infradead.org>
-> Suggested-by: Christoph Hellwig <hch@infradead.org>
-> Signed-off-by: Finn Thain <fthain@linux-m68k.org>
-> ---
->   drivers/scsi/aha152x.c | 235 ++++++++++++++++++++---------------------
->   1 file changed, 113 insertions(+), 122 deletions(-)
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+> I'm not sure there is much of a point to clean up the historic
+> comments, but it would be a nice cleanup.  I'd very much like to
+> queue up this patch now that all the actual symbol references
+> are gone now.  Are you ok with that?
 
-Cheers,
+Yep, I'm OK with that.  I *would* like to see at least
+Documentation/PCI/pci.rst updated soonish (it still refers to
+pci_set_dma_mask() and friends).
 
-Hannes
-
+Bjorn

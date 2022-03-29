@@ -2,61 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D59A4EB45B
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A094EB46D
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241099AbiC2UAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 16:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
+        id S229680AbiC2UJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 16:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235687AbiC2UAM (ORCPT
+        with ESMTP id S229472AbiC2UJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 16:00:12 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F9DDF1E
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 12:58:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648583908; x=1680119908;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6lXzXPNeWSTZUKpGd3f1DaStNivl3hsDdk61LrorPAo=;
-  b=bp83OO7zxePMZs1hkZvUppQqyBFhJ3lhdRwu69vm1a4K2VvwWYL6YOKP
-   ZDtGAHDZiGl9NUDN1JLZ4IfkshSono18/XVrHdymhB6DvBkKYTvKJft0h
-   hlXGhT4Iq9en8L2jJ8TjK8zW9filVUcyb83z/E3VUQZONuVJtNmQGqEI/
-   CTlUejL/PpudckRwXd4nCm10nQ6kFmPlhkYoCl8treV/05V6cfzoQk84U
-   8Rg51kAPGFD4jCDIHyo0WN4UHdhKe2oUbDnsgMXnRyLsIjmjvpeXDJPqg
-   ymjE2t9a4P+z+BhIwTdQKkuGEoxmSdfVNxCWJVy+UYpbC90gVsHvA6+pZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="246850540"
-X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="246850540"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 12:58:27 -0700
-X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="564919141"
-Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 12:58:27 -0700
-Date:   Tue, 29 Mar 2022 13:00:53 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Fabio Aiuto <fabioaiuto83@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Muhammad Usama Anjum <musamaanjum@gmail.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH] staging: rtl8723bs: Remove redundant else branches.
-Message-ID: <20220329200053.GA1170989@alison-desk>
-References: <20220329140904.GA3566@ubuntu>
+        Tue, 29 Mar 2022 16:09:02 -0400
+X-Greylist: delayed 371 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 29 Mar 2022 13:07:18 PDT
+Received: from email.studentenwerk.mhn.de (dresden.studentenwerk.mhn.de [141.84.225.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A842013FF;
+        Tue, 29 Mar 2022 13:07:17 -0700 (PDT)
+Received: from mailhub.studentenwerk.mhn.de (mailhub.studentenwerk.mhn.de [127.0.0.1])
+        by email.studentenwerk.mhn.de (Postfix) with ESMTPS id 4KSgRg1YJXzRhSp;
+        Tue, 29 Mar 2022 22:01:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwm.de; s=stwm-20170627;
+        t=1648584063;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pJC4NSVW4gwhBSN+CvduaIYW64z7cizjcVpdotN7+JE=;
+        b=THIpnCV+y28ayxUrv+11JJqMnliscPyGxRKyzgpbPVCDBb/utAkyPtxlIo+OUMQzvd4UCn
+        C6phrnBP9ytO23TwrdT/COf13trWKEKpBiMCwO4u4qqNPpM1Gv18eyfH6JwvHObcq/KaCL
+        TMQx14d9qrn6TqjSCGphbxD7BxRqYZyUlmZmgk8CDL0h71q/inRKzlutsPTs8K3HmPO1XU
+        ot902kmJthbbRWXJH4qio2HV831Zpd4480ew/1yhsLP8Bk/kbPluZub6/SxNsI+6zimLX2
+        grL/qqLI1bq7cOU8ujGmwZvwUgJCI2cvW85L7FVSdrFX9Jiba8D1QK7DaN35ww==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220329140904.GA3566@ubuntu>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Date:   Tue, 29 Mar 2022 22:01:15 +0200
+From:   Wolfgang Walter <linux@stwm.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Philipp Reisner <philipp.reisner@linbit.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        drbd-dev@lists.linbit.com
+Subject: Re: [Drbd-dev] state of drbd in mainline
+In-Reply-To: <20220329073254.GA20691@lst.de>
+References: <20220329070618.GA20396@lst.de>
+ <CADGDV=UgjZAbmAN-2bO1nyDvA=XCC9Lf2dxWHZ0BwxF12nnztQ@mail.gmail.com>
+ <20220329073254.GA20691@lst.de>
+Message-ID: <ff5bc3eb8fa27845cefa2f96e5241972@stwm.de>
+X-Sender: linux@stwm.de
+Organization: =?UTF-8?Q?Studentenwerk_M=C3=BCnchen?=
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,137 +60,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sevinj,
-
-You can do this to make sure your commit msg 'looks' similar to
-others in the file:
-
-$git log --pretty=oneline --abbrev-commit
-
-d6ad258ae15d staging: rtl8723bs: Remove redundant else branches.
-24e65aac9457 staging: rtl8723bs: remove rf type branching (fourth patch)
-167fc30e8e51 staging: rtl8723bs: remove unused macros
-d7361874468f staging: rtl8723bs: fix camel case in struct wlan_bcn_info
-6994aa430368 staging: rtl8723bs: fix camel case in struct ndis_802_11_ssid
-
-That tells me the 'Remove' should not start with an uppercase and
-there should be no period at the end of line. Note that I look at this
-per patch, because different drivers and subsystems have different
-conventions. The point is to try to discern the prevailing style,
-and follow it.
-
-Please check the get_maintainers instruction in the first patch tutorial.
-I only got this: 
-
-$ git show HEAD | perl scripts/get_maintainer.pl --separator , --nokeywords --nogit --nogit-fallback --norolestats
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>,linux-staging@lists.linux.dev,linux-kernel@vger.kernel.org
-
-
-On Tue, Mar 29, 2022 at 07:09:04AM -0700, Sevinj Aghayeva wrote:
-
-Please state the 'why' of this patch. ie something like:
-Adhere to Linux kernel coding style.
-
-> This patch fixes the following checkpatch.pl warning:
-The phrases 'This patch' is frowned upon as unecessarily wordy.
-Perhaps simply:
-Reported by checkpatch:
-
-You have another patch in flight with similar things to update.
-Please post a v2 of that one that addresses the feedback given
-here.
-
-I thought both patches had good scope in that they addressed multiple
-instances of the same issue in a single file.
-
-Thanks!
-Alison
-
+Am 2022-03-29 09:32, schrieb Christoph Hellwig:
+> On Tue, Mar 29, 2022 at 09:22:26AM +0200, Philipp Reisner wrote:
+>> Hi Christoph,
+>> 
+>> what do you expect for the DRBD changes? Usually, they fall into the
+>> category: yes, obviously. When you are changing the block layer in 
+>> this
+>> way, then that is necessary for the in-tree DRBD code.
+>> 
+>> Regarding users: Yes, there are users of the in-tree DRBD code. Very 
+>> big
+>> corporations. And, yes, we see pressure building up that we get our 
+>> act
+>> together and re-sync the in-tree DRBD with the out-of tree DRBD.
 > 
-> WARNING: else is not generally useful after a break or return
+> The complete lack of bug reports and maintainer interaction usually
+> suggests low to no use and heavy bitrot.  If that is not the case
+> here that's fine, just asking..
 > 
-> Signed-off-by: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-> ---
->  .../staging/rtl8723bs/core/rtw_ieee80211.c    | 32 ++++++++-----------
->  1 file changed, 13 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/staging/rtl8723bs/core/rtw_ieee80211.c b/drivers/staging/rtl8723bs/core/rtw_ieee80211.c
-> index b449be537376..27de086903e2 100644
-> --- a/drivers/staging/rtl8723bs/core/rtw_ieee80211.c
-> +++ b/drivers/staging/rtl8723bs/core/rtw_ieee80211.c
-> @@ -94,16 +94,14 @@ bool rtw_is_cckratesonly_included(u8 *rate)
->  
->  int rtw_check_network_type(unsigned char *rate, int ratelen, int channel)
->  {
-> -	if (channel > 14) {
-> +	if (channel > 14)
->  		return WIRELESS_INVALID;
-> -	} else { /*  could be pure B, pure G, or B/G */
-> -		if (rtw_is_cckratesonly_included(rate))
-> -			return WIRELESS_11B;
-> -		else if (rtw_is_cckrates_included(rate))
-> -			return	WIRELESS_11BG;
-> -		else
-> -			return WIRELESS_11G;
-> -	}
-> +	/* could be pure B, pure G, or B/G */
-> +	if (rtw_is_cckratesonly_included(rate))
-> +		return WIRELESS_11B;
-> +	if (rtw_is_cckrates_included(rate))
-> +		return WIRELESS_11BG;
-> +	return WIRELESS_11G;
->  }
->  
->  u8 *rtw_set_fixed_ie(unsigned char *pbuf, unsigned int len, unsigned char *source,
-> @@ -151,11 +149,10 @@ u8 *rtw_get_ie(u8 *pbuf, signed int index, signed int *len, signed int limit)
->  		if (*p == index) {
->  			*len = *(p + 1);
->  			return p;
-> -		} else {
-> -			tmp = *(p + 1);
-> -			p += (tmp + 2);
-> -			i += (tmp + 2);
->  		}
-> +		tmp = *(p + 1);
-> +		p += (tmp + 2);
-> +		i += (tmp + 2);
->  		if (i >= limit)
->  			break;
->  	}
-> @@ -199,9 +196,8 @@ u8 *rtw_get_ie_ex(u8 *in_ie, uint in_len, u8 eid, u8 *oui, u8 oui_len, u8 *ie, u
->  				*ielen = in_ie[cnt+1]+2;
->  
->  			break;
-> -		} else {
-> -			cnt += in_ie[cnt+1]+2; /* goto next */
->  		}
-> +		cnt += in_ie[cnt+1]+2; /* goto next */
->  	}
->  
->  	return target_ie;
-> @@ -697,9 +693,8 @@ u8 *rtw_get_wps_ie(u8 *in_ie, uint in_len, u8 *wps_ie, uint *wps_ielen)
->  			cnt += in_ie[cnt+1]+2;
->  
->  			break;
-> -		} else {
-> -			cnt += in_ie[cnt+1]+2; /* goto next */
->  		}
-> +		cnt += in_ie[cnt+1]+2; /* goto next */
->  	}
->  
->  	return wpsie_ptr;
-> @@ -748,9 +743,8 @@ u8 *rtw_get_wps_attr(u8 *wps_ie, uint wps_ielen, u16 target_attr_id, u8 *buf_att
->  				*len_attr = attr_len;
->  
->  			break;
-> -		} else {
-> -			attr_ptr += attr_len; /* goto next */
->  		}
-> +		attr_ptr += attr_len; /* goto next */
->  	}
->  
->  	return target_attr_ptr;
-> -- 
-> 2.25.1
-> 
-> 
+> _______________________________________________
+> drbd-dev mailing list
+> drbd-dev@lists.linbit.com
+> https://lists.linbit.com/mailman/listinfo/drbd-dev
+
+We use the in-tree DRBD with LTS (actually 5.15.32 and 5.4.188) and 
+depend on it. It just works. We never had any issues in the last 5 
+years.
+
+Regards
+-- 
+Wolfgang Walter
+Studentenwerk München
+Anstalt des öffentlichen Rechts

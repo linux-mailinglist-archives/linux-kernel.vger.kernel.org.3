@@ -2,162 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E464EA971
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 10:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFA14EA970
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 10:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234055AbiC2IhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 04:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
+        id S231997AbiC2IhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 04:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbiC2IhH (ORCPT
+        with ESMTP id S234058AbiC2IhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 04:37:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA5D23F39B
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 01:35:24 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648542922;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jxo2fANONHqaPhhHVOh0yDywiTjWcuYhsxdsXZUuyQc=;
-        b=RStcuUQ735QvEvgn2gP9AapfqEBcHTu1/DqKNr5yru+C2lPrbU7b6ZlpJrZYw+cb2pk4+6
-        nMaWjBzg4BrnqZtn3NtLo6Loaxlh3Rm6ODAZmD66KvnqwqDbzUmfJcA8yXZy6GnJikR7zx
-        /RIT/57HJRUE7VufPGF3asvKSms60au634m5gN0olLRQ1KVzJFMzTqYLErSz647Akq2j08
-        c6E5tK9MbNWaIRTnrp9q1Zzi4fBmFSbUNu5rC9z4PsvKvJZXcmT4zSHbwHTa8/cx9t+hWo
-        Q/zWFyoHDs8GzU2Y2LuWGB7no7RIx77oKYN+KdJsAfVJ/wPDV0iIKZTkOfImmQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648542922;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jxo2fANONHqaPhhHVOh0yDywiTjWcuYhsxdsXZUuyQc=;
-        b=jrfi9eIOoNRFIhbQjDceJgTfM2tvd35PV2BCmvdNn6rpaFI3gczf6bRiJsPo+vNhrCd0YM
-        sXtUVGrgLpd8SgCQ==
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Cc:     virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Keir Fraser <keirf@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re:
-In-Reply-To: <20220328062452-mutt-send-email-mst@kernel.org>
-References: <Yj1hkpyUqJE9sQ2p@redhat.com>
- <CACGkMEunsuWhn+aB2dM7noU257M9JV6jDjkQXLyOA+GjEoz_iw@mail.gmail.com>
- <20220325050947-mutt-send-email-mst@kernel.org>
- <CACGkMEvioAVMmB+ab2xXB2YPECtwi1J55u8mRRk9-JAjFSZ8vg@mail.gmail.com>
- <20220325060659-mutt-send-email-mst@kernel.org>
- <CACGkMEu4mRfNbJXJtAFzhyd55fD7phUDKnVtYW0aqRnQmT_bYw@mail.gmail.com>
- <20220328015757-mutt-send-email-mst@kernel.org>
- <CACGkMEu+fax6YYwhfbc1yoSxv6o1FTQyrOheVTmUfqGvmbAEfA@mail.gmail.com>
- <20220328062452-mutt-send-email-mst@kernel.org>
-Date:   Tue, 29 Mar 2022 10:35:21 +0200
-Message-ID: <87fsn1f96e.ffs@tglx>
+        Tue, 29 Mar 2022 04:37:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D5F23F9FD;
+        Tue, 29 Mar 2022 01:35:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2E1CB81289;
+        Tue, 29 Mar 2022 08:35:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2044C2BBE4;
+        Tue, 29 Mar 2022 08:35:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648542929;
+        bh=/IgiTLHO0OlmIrIOxlJIDS4eEAqr6nu6wDTstJjIgNg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=tJFB+r/SF5mC07nLTbLLNlPW6S62rOVp4XyNU2BfsZjCzpWoQZoCjYgqH1R1XtaMV
+         P7LlPPKUJPtK6/+4lhIijF9awnHTtz2NTLgRRwCq13c+/CnlWZrSw4qO48+BLShhP7
+         9ZRRFr6X6lGwD5vL+TtLOdk1tlj8cF8+MJWsa0HubaTmrDzlxrT3B1jv4AO5h4zAdg
+         igMCXYm4EdfdDHmX72QWWmDGhOi4cjTyZ1EbP0v96sZfVrrukWh0/79iOFoKaVlL9i
+         /EquZQq2pa0rVea0eN1rbt34a0ipzFGTaBW5g00p/PPvN0R0yxHkPJ49vxAnq4FOOe
+         iSCXh7awMPgNg==
+Message-ID: <128b1d74-1ce6-bb50-cb44-50e4743186d6@kernel.org>
+Date:   Tue, 29 Mar 2022 11:35:24 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/2] memory: omap-gpmc: Allow building as a module
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     miquel.raynal@bootlin.com, tony@atomide.com, vigneshr@ti.com,
+        kishon@ti.com, nm@ti.com, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220328111319.1236-1-rogerq@kernel.org>
+ <20220328111319.1236-3-rogerq@kernel.org>
+ <8a55260d-7354-028b-8439-475a9fbfe092@kernel.org>
+ <c9b0b3e5-28f3-67a2-6456-d63f3232e432@kernel.org>
+ <def0fe2c-645e-1dbc-8a1a-dd7393176891@kernel.org>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <def0fe2c-645e-1dbc-8a1a-dd7393176891@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28 2022 at 06:40, Michael S. Tsirkin wrote:
-> On Mon, Mar 28, 2022 at 02:18:22PM +0800, Jason Wang wrote:
->> > > So I think we might talk different issues:
->> > >
->> > > 1) Whether request_irq() commits the previous setups, I think the
->> > > answer is yes, since the spin_unlock of desc->lock (release) can
->> > > guarantee this though there seems no documentation around
->> > > request_irq() to say this.
->> > >
->> > > And I can see at least drivers/video/fbdev/omap2/omapfb/dss/dispc.c is
->> > > using smp_wmb() before the request_irq().
 
-That's a complete bogus example especially as there is not a single
-smp_rmb() which pairs with the smp_wmb().
 
->> > > And even if write is ordered we still need read to be ordered to be
->> > > paired with that.
->
-> IMO it synchronizes with the CPU to which irq is
-> delivered. Otherwise basically all drivers would be broken,
-> wouldn't they be?
-> I don't know whether it's correct on all platforms, but if not
-> we need to fix request_irq.
+On 29/03/2022 11:02, Krzysztof Kozlowski wrote:
+> On 29/03/2022 09:37, Roger Quadros wrote:
+>> Hi Krzysztof,
+>>
+>> On 28/03/2022 16:11, Krzysztof Kozlowski wrote:
+>>> On 28/03/2022 13:13, Roger Quadros wrote:
+>>>> Allow OMAP_GPMC to be built as a module.
+>>>>
+>>>> Remove redundant of_match_node() call before
+>>>> of_platform_default_populate() as the latter takes
+>>>> care of matching with of_default_bus_match_table.
+>>>
+>>> Split this part to separate commit, please. It does not look related to
+>>> making it a module.
+>>
+>> Actually it is related. Without that change build fails
+>> as it cannot find symbol 'of_default_bus_match_table'
+> 
+> Hm, because of missing EXPORT?
 
-There is nothing to fix:
+Yes, only module build fails. Built-in is fine.
 
-request_irq()
-   raw_spin_lock_irq(desc->lock);       // ACQUIRE
-   ....
-   raw_spin_unlock_irq(desc->lock);     // RELEASE
+> 
+> Then it is related although to me removal of redundant code still could
+> be split to separate commit. But I do not insist, if you mention it in
+> commit msg.
 
-interrupt()
-   raw_spin_lock(desc->lock);           // ACQUIRE
-   set status to IN_PROGRESS
-   raw_spin_unlock(desc->lock);         // RELEASE
-   invoke handler()
+OK. Thanks.
+> 
+> 
+> Best regards,
+> Krzysztof
 
-So anything which the driver set up _before_ request_irq() is visible to
-the interrupt handler. No?
-
->> What happens if an interrupt is raised in the middle like:
->> 
->> smp_store_release(dev->irq_soft_enabled, true)
->> IRQ handler
->> synchornize_irq()
-
-This is bogus. The obvious order of things is:
-
-    dev->ok = false;
-    request_irq();
-
-    moar_setup();
-    synchronize_irq();  // ACQUIRE + RELEASE
-    dev->ok = true;
-
-The reverse operation on teardown:
-
-    dev->ok = false;
-    synchronize_irq();  // ACQUIRE + RELEASE
-
-    teardown();
-
-So in both cases a simple check in the handler is sufficient:
-
-handler()
-    if (!dev->ok)
-    	return;
-
-I'm not understanding what you folks are trying to "fix" here. If any
-driver does this in the wrong order, then the driver is broken.
-
-Sure, you can do the same with:
-
-    dev->ok = false;
-    request_irq();
-    moar_setup();
-    smp_wmb();
-    dev->ok = true;
-
-for the price of a smp_rmb() in the interrupt handler:
-
-handler()
-    if (!dev->ok)
-    	return;
-    smp_rmb();
-
-but that's only working for the setup case correctly and not for
-teardown.
-
-Thanks,
-
-        tglx
+--
+cheers,
+-roger

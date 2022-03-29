@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61C24EA666
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 06:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A49E4EA694
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 06:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232005AbiC2E0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 00:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
+        id S232011AbiC2Ebf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 00:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbiC2E0A (ORCPT
+        with ESMTP id S230339AbiC2Ebb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 00:26:00 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD86723D478
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 21:24:17 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id t19so14315507qtc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 21:24:17 -0700 (PDT)
+        Tue, 29 Mar 2022 00:31:31 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DDA31DE8
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 21:29:48 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id n63-20020a1c2742000000b0038d0c31db6eso709466wmn.1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 21:29:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version;
-        bh=OHsT30LerQF22ZxAY4E0nr/Vxbvqe+9c/4GeB7Fivh8=;
-        b=N+EsFZUrQDyjVloHimvvkYMsBgu+pa6DpbKwo+Zcn2AxLUESRVqEjt2to46fJ2NUZg
-         AzegJhQvpu/oMaXxe7Ef0ilxAaQCNfXXzN8lxRKApiPg1nEizVbJV3CC2v0R2nyXY2nZ
-         Q/ibW8cZ7KpjArRqRtxJT3mSnwHkIyxGiqQzifXo82mD6vG0oTjoBl+WtnIypAUAIyHN
-         ve1axsAWd2HS8Gvi62dLmA8M+cVyF9VtBp1hAVd9Ic5RSpnr4uz/b9t+E1eam6CnDDQX
-         WpSLm9u+UboXF0Gwu5txXNOsAmealYGJgJyNdxyxu07iy40atTHv2zy3N4qsJ2wyg9Av
-         kHgA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GlF2aB+JhCu4/YboCkIwevoV0JCWHKYkpHYec+xK8yU=;
+        b=sH5UDzlazOMgp/F0QFc7WyE98B2OJE1eeHbu1tNEDrCnXNabQkTaN6IbyOt6cfyLtT
+         FjjRe/BwF6+Soxf1jFwaxxImiU+kqpK1gFNTD4x6tE/mGnPGoCJcUSTm1C/H0aF9Uy+r
+         5opp6MDhAM3Bgx9Lc1YhmVVAjXcW++9QE95jjsFKt4aixqGktffLme1hfzjIFf/Ffq0k
+         9+iJ27O8W+TivIe8oGJ6G7HJEu4iHT8V/YPICbSZozFybaym4lDwOOSQWEs6f15y2oen
+         J0nCycu2a6/2NXhEyfOP5BSHcuOofrm4ThB/pxYxDRJhOYiGx12JjBoVNXEBd3wkbEli
+         ZOkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version;
-        bh=OHsT30LerQF22ZxAY4E0nr/Vxbvqe+9c/4GeB7Fivh8=;
-        b=Z6GahYoiqNOcVkQ12Ex7xSaaL44sEzzcQGXN/adw8OtRC89jXhhdCoi6YxWV4P9rwZ
-         ATF7QKCEfY7QYXGB+57dHSy4zgUuYRxKiZX+bVYqYmcNp1K34L8N/MLvAqgbsx0VxsJF
-         kG/MJzjAJYkl1e+pjY+p5z13Icr04yHVCJZbSyXBbmhVfu8yx37NrQ9zFhHkdfqymTFf
-         18V+G8frBPa1mK7xt6X36WgUUg+LQx3AxBAiJnl2T/cTUMa7Gyquy6vtEwnzernZbofh
-         BWVShg9Atnut7/8WAif7XeJv5oMX+hs86XZj7aCyWj6VTRGsdq8W6+C5u/R5Wc5RmCu1
-         lS8Q==
-X-Gm-Message-State: AOAM533yXAlUO4U7xd1TTkjf0saIcup4DT+6BXONETAVEwezpewhaD/6
-        7BFtCK3TDY1OJEX3nmPmlNZmrQ==
-X-Google-Smtp-Source: ABdhPJxfTzQF/4ZAeYVD42hLjotpcitS/7MwiAfMdWth5B6XyDL4W++zJKi7NeSloasokbh5SUekxQ==
-X-Received: by 2002:ac8:4417:0:b0:2e1:b5bb:3474 with SMTP id j23-20020ac84417000000b002e1b5bb3474mr25252083qtn.18.1648527856325;
-        Mon, 28 Mar 2022 21:24:16 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id x12-20020a05620a12ac00b0067d4bfffc59sm8790217qki.118.2022.03.28.21.24.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 21:24:16 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 21:24:00 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Matthew Wilcox <willy@infradead.org>
-cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: WARNING: mm/workingset.c:567 shadow_lru_isolate
-Message-ID: <55db706b-9bce-b820-7d88-6392374cd4fc@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GlF2aB+JhCu4/YboCkIwevoV0JCWHKYkpHYec+xK8yU=;
+        b=vNP3ENyDwhMJPkltTkWWmnM7xOG5LsfKTzl6OEvb6o9kX7gbZzRg4+xQzHtuVN/qfz
+         B8T+sZGnzLYKuLq6pOfD7Gq0IuOwNxrPONhwa3D7oawmiuDM9Wcr75dXGtrklM3zaBkY
+         p8FR/hrWejxCFuspL4YL3T2I9ZWwO2RIsZngzP5rmeOm6F+xIEzK0SVEp/JtSiHL/Iqj
+         Xl1ZT8KR9mk3zD6AdmZUpGimomDkIOJf9P28Wy8p6mGOa/vOas5dg4+A+9kfgl3z0N1b
+         kLyUH6PQ3X7NBIrME5IUQRssvxQ51+GZaSzQSjGiVFfEvjRJViU92Od8ZMkY3tD5cVsY
+         inqg==
+X-Gm-Message-State: AOAM530duiIo2hi0YxGr+lxG6hehN51IwizfhttmpkJq27+jSUbz0mL5
+        +8HbJBsocG02ThX9SZ8KUGmBMzN5L9BkoBEvALgX2w==
+X-Google-Smtp-Source: ABdhPJyNFK7OBo01/MPtifFb+6i74vavXN/36eXTCKIvjxpkj92xS+4Xt+srORBU3PHcnLIAaPsTL5GBgeOa809iVtY=
+X-Received: by 2002:a7b:c541:0:b0:38c:b0ed:31c4 with SMTP id
+ j1-20020a7bc541000000b0038cb0ed31c4mr3961723wmk.141.1648528186728; Mon, 28
+ Mar 2022 21:29:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <YkImfPbNOzQBq5ZD@marsc.168.1.7>
+In-Reply-To: <YkImfPbNOzQBq5ZD@marsc.168.1.7>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 29 Mar 2022 12:29:35 +0800
+Message-ID: <CABVgOSkPwn9bQgXTmrnMRuxy5cyeNxoUgrXFX_ayw0UBW9O7=g@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: dev-tools: Add a section for static
+ analysis tools
+To:     Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-sparse@vger.kernel.org, cocci@inria.fr,
+        smatch@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -70,119 +74,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sunday's linux.git, under tmpfs swapping load (including
-ext4 file readonly THPs and shmem THPs), gave me the:
+On Tue, Mar 29, 2022 at 5:20 AM Marcelo Schmitt
+<marcelo.schmitt1@gmail.com> wrote:
+>
+> Complement the Kernel Testing Guide documentation page by adding a
+> section about static analysis tools.
+>
+> Signed-off-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+> ---
+> Hey everyone,
+>
+> I think this patch can be a good addition to the documentation as
+> discussed in the thread for the testing guide documentation page:
+> Link: https://lore.kernel.org/linux-doc/CABVgOS=2iYtqTVdxwH=mcFpcSuLP4cpJ4s6PKP4Gc-SH6jidgQ@mail.gmail.com/
+>
+> If you think it would be worth it, I can try making something more
+> elaborated. Maybe provide some guidance on when to use each tool.
+> I've been studying how Linux device drivers are tested.
+> Here's a post I wrote talking about some testing tools.
+> Link: https://marcelosc.gitlab.io/how-is-linux-tested/
+>
+> Best regards,
+> Marcelo
+>
 
-	if (WARN_ON_ONCE(!node->nr_values))
-		goto out_invalid;
-	if (WARN_ON_ONCE(node->count != node->nr_values))
-		goto out_invalid;
+Thanks a lot for adding to this, and for writing that blog post, which
+I think is an excellent overview itself. I'd definitely like to see
+more of it work its way into this document. (While we've largely stuck
+to tools which are in-tree thus far, I think we'd definitely benefit
+from discussion of, for example, the different CI systems.)
 
-from mm/workingset.c - log below.  I did see these on mmotm before
-the merge window, but only now got around to bisecting them.  And
-the bisection, confirmed by revert, arrives surprisingly at:
+One thing which isn't totally clear is when to use one of these tools
+instead of another. This is a bit awkward, given that there is a bit
+more overlap (and the existing documentation is less clear), but
+comparing the "calling this specific kernel function incorrectly is
+causing this very specific bug" nature of Coccinelle with the "there's
+a bunch of typechecking so you can statically prove you didn't forget
+an endianness conversion somewhere" things sparse does.
 
-820c4e2e6f51 ("mm/vmscan: Free non-shmem folios without splitting them")
+(Take those with a grain of salt, though, as I confess to not being an
+expert with any of these tools...)
 
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -1739,8 +1739,8 @@ static unsigned int shrink_page_list(struct list_head *page_list,
- 				/* Adding to swap updated mapping */
- 				mapping = page_mapping(page);
- 			}
--		} else if (unlikely(PageTransHuge(page))) {
--			/* Split file THP */
-+		} else if (PageSwapBacked(page) && PageTransHuge(page)) {
-+			/* Split shmem THP */
- 			if (split_folio_to_list(folio, page_list))
- 				goto keep_locked;
- 		}
+I've added a few other ideas inline, below, which you can take or
+leave as you see fit. Either way, I think this is a great improvement
+on not talking about static analysis tools at all, so thanks.
 
-I'm not familiar with workingset.c, I'll make no guesses, over to you!
+Reviewed-by: David Gow <davidgow@google.com>
 
-Hugh
+Cheers,
+-- David
 
-[ 1470.572186] ------------[ cut here ]------------
-[ 1470.574478] WARNING: CPU: 1 PID: 47 at mm/workingset.c:567 shadow_lru_isolate+0x84/0x128
-[ 1470.575570] CPU: 1 PID: 47 Comm: kswapd0 Not tainted 5.18.0-rc0 #2
-[ 1470.576592] Hardware name: LENOVO 20HQS0EG02/20HQS0EG02, BIOS N1MET54W (1.39 ) 04/16/2019
-[ 1470.577836] RIP: 0010:shadow_lru_isolate+0x84/0x128
-[ 1470.579170] Code: 89 ff 4c 8d 73 e8 e8 16 f4 ff ff 83 ca ff be 09 00 00 00 4c 89 f7 e8 91 3c 05 00 4c 89 ef e8 e9 25 7d 00 8a 43 eb 84 c0 75 04 <0f> 0b eb 2a 3a 43 ea 74 04 0f 0b eb 21 48 c7 c6 6a f7 1f 81 4c 89
-[ 1470.580669] RSP: 0018:ffff888000e0bba0 EFLAGS: 00010046
-[ 1470.582173] RAX: 0000000080000000 RBX: ffff888016c21510 RCX: 8bc9d3bc33ed677c
-[ 1470.583755] RDX: 0000000000000003 RSI: ffffffff823f436f RDI: 00000000ffffffff
-[ 1470.585303] RBP: ffff888000e0bbc8 R08: 0000000000000078 R09: 00000000000c8386
-[ 1470.586860] R10: 0000000000000001 R11: ffff888000e055b8 R12: ffff8880166c99d0
-[ 1470.588518] R13: ffff8880010dd180 R14: ffff888016c214f8 R15: ffff8880010dd1c0
-[ 1470.590154] FS:  0000000000000000(0000) GS:ffff88803ec80000(0000) knlGS:0000000000000000
-[ 1470.591743] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 1470.593296] CR2: 0000555555694f50 CR3: 000000000f940005 CR4: 00000000003706e0
-[ 1470.594824] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[ 1470.596198] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[ 1470.597581] Call Trace:
-[ 1470.598907]  <TASK>
-[ 1470.600267]  __list_lru_walk_one+0x84/0xf2
-[ 1470.601629]  ? workingset_update_node+0x84/0x84
-[ 1470.602977]  list_lru_walk_one_irq+0x59/0x74
-[ 1470.604324]  ? workingset_update_node+0x84/0x84
-[ 1470.605657]  scan_shadow_nodes+0x29/0x2b
-[ 1470.607073]  do_shrink_slab+0x1d0/0x33d
-[ 1470.608477]  shrink_slab+0x98/0x100
-[ 1470.609880]  shrink_node_memcgs+0x136/0x182
-[ 1470.611164]  shrink_node+0x220/0x3d9
-[ 1470.612446]  balance_pgdat+0x216/0x3cb
-[ 1470.613715]  ? lock_is_held_type+0xcf/0x10f
-[ 1470.615010]  kswapd+0x189/0x1ae
-[ 1470.616285]  ? balance_pgdat+0x3cb/0x3cb
-[ 1470.617481]  kthread+0xee/0xf6
-[ 1470.618690]  ? kthread_exit+0x1f/0x1f
-[ 1470.619932]  ret_from_fork+0x1f/0x30
-[ 1470.621110]  </TASK>
-[ 1470.622237] irq event stamp: 76862920
-[ 1470.623284] hardirqs last  enabled at (76862919): [<ffffffff819d1ee3>] _raw_spin_unlock_irq+0x23/0x42
-[ 1470.624373] hardirqs last disabled at (76862920): [<ffffffff819d1c96>] _raw_spin_lock_irq+0x17/0x4c
-[ 1470.625540] softirqs last  enabled at (76861226): [<ffffffff81c0036f>] __do_softirq+0x36f/0x3aa
-[ 1470.626752] softirqs last disabled at (76861195): [<ffffffff811049cd>] __irq_exit_rcu+0x85/0xc1
-[ 1470.627957] ---[ end trace 0000000000000000 ]---
-[ 1470.629407] ------------[ cut here ]------------
-[ 1470.630849] WARNING: CPU: 1 PID: 47 at mm/workingset.c:569 shadow_lru_isolate+0x8d/0x128
-[ 1470.632264] CPU: 1 PID: 47 Comm: kswapd0 Tainted: G        W         5.18.0-rc0 #2
-[ 1470.633729] Hardware name: LENOVO 20HQS0EG02/20HQS0EG02, BIOS N1MET54W (1.39 ) 04/16/2019
-[ 1470.635202] RIP: 0010:shadow_lru_isolate+0x8d/0x128
-[ 1470.636601] Code: ff ff 83 ca ff be 09 00 00 00 4c 89 f7 e8 91 3c 05 00 4c 89 ef e8 e9 25 7d 00 8a 43 eb 84 c0 75 04 0f 0b eb 2a 3a 43 ea 74 04 <0f> 0b eb 21 48 c7 c6 6a f7 1f 81 4c 89 f7 e8 71 ca 7a 00 ba 01 00
-[ 1470.638206] RSP: 0018:ffff888000e0bba0 EFLAGS: 00010087
-[ 1470.639811] RAX: 0000000080000020 RBX: ffff888016c4d020 RCX: 8bc9d3bc33ed677c
-[ 1470.641470] RDX: 0000000000000003 RSI: ffffffff823f436f RDI: 00000000ffffffff
-[ 1470.643072] RBP: ffff888000e0bbc8 R08: 0000000000000078 R09: 00000000000c8386
-[ 1470.644688] R10: 0000000000000001 R11: ffff888000e055b8 R12: ffff888016c54910
-[ 1470.646312] R13: ffff8880010dd180 R14: ffff888016c4d008 R15: ffff8880010dd1c0
-[ 1470.648341] FS:  0000000000000000(0000) GS:ffff88803ec80000(0000) knlGS:0000000000000000
-[ 1470.649820] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 1470.651404] CR2: 0000555555694f50 CR3: 000000000f940005 CR4: 00000000003706e0
-[ 1470.651408] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[ 1470.651411] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[ 1470.655817] Call Trace:
-[ 1470.655821]  <TASK>
-[ 1470.655824]  __list_lru_walk_one+0x84/0xf2
-[ 1470.660171]  ? workingset_update_node+0x84/0x84
-[ 1470.660178]  list_lru_walk_one_irq+0x59/0x74
-[ 1470.662784]  ? workingset_update_node+0x84/0x84
-[ 1470.662791]  scan_shadow_nodes+0x29/0x2b
-[ 1470.662795]  do_shrink_slab+0x1d0/0x33d
-[ 1470.662800]  shrink_slab+0x98/0x100
-[ 1470.662805]  shrink_node_memcgs+0x136/0x182
-[ 1470.662810]  shrink_node+0x220/0x3d9
-[ 1470.662814]  balance_pgdat+0x216/0x3cb
-[ 1470.662818]  ? lock_is_held_type+0xcf/0x10f
-[ 1470.662824]  kswapd+0x189/0x1ae
-[ 1470.662828]  ? balance_pgdat+0x3cb/0x3cb
-[ 1470.662833]  kthread+0xee/0xf6
-[ 1470.662838]  ? kthread_exit+0x1f/0x1f
-[ 1470.662843]  ret_from_fork+0x1f/0x30
-[ 1470.662849]  </TASK>
-[ 1470.662851] irq event stamp: 76862966
-[ 1470.662854] hardirqs last  enabled at (76862965): [<ffffffff819d1ee3>] _raw_spin_unlock_irq+0x23/0x42
-[ 1470.662860] hardirqs last disabled at (76862966): [<ffffffff819d1c96>] _raw_spin_lock_irq+0x17/0x4c
-[ 1470.662866] softirqs last  enabled at (76862958): [<ffffffff81c0036f>] __do_softirq+0x36f/0x3aa
-[ 1470.662871] softirqs last disabled at (76862925): [<ffffffff811049cd>] __irq_exit_rcu+0x85/0xc1
-[ 1470.662877] ---[ end trace 0000000000000000 ]---
+>  Documentation/dev-tools/testing-overview.rst | 29 ++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+>
+> diff --git a/Documentation/dev-tools/testing-overview.rst b/Documentation/dev-tools/testing-overview.rst
+> index 65feb81edb14..b00511109a9d 100644
+> --- a/Documentation/dev-tools/testing-overview.rst
+> +++ b/Documentation/dev-tools/testing-overview.rst
+> @@ -115,3 +115,32 @@ that none of these errors are occurring during the test.
+>  Some of these tools integrate with KUnit or kselftest and will
+>  automatically fail tests if an issue is detected.
+>
+> +Static Analysis Tools
+> +======================
+> +
+> +In addition to testing a running kernel, one may also scout for bugs by
+> +analyzing the source code semantics. Three tools are well known for serving this
+> +purpose.
+
+It might be worth being a bit more explicit that these run _at compile time_.
+
+Maybe this would also be the right place to document CONFIG_WERROR?
+Though that is slightly different yet again...
+
+> +
+> +Sparse can help test the kernel by performing type-checking, lock checking,
+> +value range checking, in addition to reporting various errors and warnings while
+> +examining the code. See the Documentation/dev-tools/sparse.rst documentation
+> +page for details on how to use it.
+
+It'd be nice to give an example of the extended type-checking here.
+e.g., endianness checks: https://lwn.net/Articles/205624/
+
+> +
+> +Smatch extends Sparse and provides additional checks for programming logic
+> +mistakes such as missing breaks in switch statements, unused return values on
+> +error checking, forgetting to set an error code in the return of an error path,
+> +etc. Smatch also has tests against more serious issues such as integer
+> +overflows, null pointer dereferences, and memory leaks. See the project page at
+> +http://smatch.sourceforge.net/.
+> +
+> +We also have Coccinelle as an option within static analyzers. Coccinelle is
+
+Nit: _maybe_ it's worth simplifying this to just "Coccinelle is
+another static analyzer" or similar, so that all of these paragraphs
+start with the name of the tool being talked about. That makes it a
+bit easier to skim the page.
+
+> +often used to aid collateral evolution of source code, but it can also help to
+
+Nit: It's not entirely obvious what "collateral evolution of source
+code" is. Would "refactoring" be close enough?
+
+> +avoid certain bugs that have been expressed semantically. The types of tests
+> +available include API tests, tests for correct usage of kernel iterators, checks
+> +for the soundness of free operations, analysis of locking behavior, and further
+> +tests known to help keep consistent kernel usage. See the
+> +Documentation/dev-tools/coccinelle.rst documentation page for details.
+
+Maybe talk about how Coccinelle is matching specific (and often
+kernel-specific) patterns?
+
+> +
+> +These static analysis tools support running tests on the whole source tree or
+> +over a specific file or directory.
+> --
+> 2.35.1
+>

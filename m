@@ -2,84 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C46F4EB544
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 23:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEAAD4EB546
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 23:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233971AbiC2V2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 17:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
+        id S234175AbiC2V3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 17:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233931AbiC2V2c (ORCPT
+        with ESMTP id S234087AbiC2V3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 17:28:32 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747F62335E9;
-        Tue, 29 Mar 2022 14:26:47 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id e189so20314082oia.8;
-        Tue, 29 Mar 2022 14:26:47 -0700 (PDT)
+        Tue, 29 Mar 2022 17:29:19 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BB4239306
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 14:27:35 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id h4so14407025edr.3
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 14:27:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x5Kf4tIOrW+TXVLfToUnNnc77oMmkd7cGdwQs3kzn5E=;
+        b=Q3rNjLjzz3gs978QUv6jP8uCoY3jVNFRY6pnshB6MtmFG7vA2Sit1U7E5MPSfa+Rk0
+         PErHcuDYc+mDXNrdrGyszuN/0nv0rvy09XmBqsXB/DHm2IZuXJ8mPtXBgkBehaqEWEYG
+         v+yBtAMI+fTI1jRF+prEPRxTl0p1KNh94oJR9EV/+L1uYi5tK+3jpNcIIHLzqdgPr7CN
+         74ClmqXbHJ/6wmIWI4aPsMGSc5zEGoyPIMHa1cj9j1r98GjRjR8/x2ol1P3hXRPcrkaL
+         GOvpeCZ42Vvca2n0XnRINkbQSgiJd1Ure4ABlhBUbklR+ZgCr3Om3sP/7mW7UsGZUqWT
+         zs7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mRUk/Z16L8Pkrou4H/BvsBwcGT5LseABEy44enEdci8=;
-        b=65+0eIX8TlpkV2eT6bYhx+KJDh/sBWJ8lZIzFdGIN7C6puNnf6AKqGu27lESB7kEB4
-         nvAwDb5qPWeQqV+SOUZyk4LKx9uyRkRituxkUBTyrUpOxAXndZ7jPA0N6qgjALcidsvE
-         55oieAUEAE1nnNk16nUDJ3dpPuL6tckVUZh+DyzAR4N1xupgtGWfznxuk7Pc9pjAXSwh
-         tulYkZUyXL1s+60qPSvOUHnxkAYdONO5hCqf7GqYEJXE7o3qSl5b6JqIaffhdmiEdYRe
-         I0YfTbntHJFfV4WKOGORbmdHNZLQNnJVo0Fjz19sOeBRF1YFNik2j1HfRs8Ho5RqHdIa
-         tqvg==
-X-Gm-Message-State: AOAM533fXPHDHz1qYJYuVmjvSa40kNru4jOf8HIwGDSngGS8i7M8KOMx
-        QxBZRTDQf7w8izT9wK0GgQ==
-X-Google-Smtp-Source: ABdhPJxP0vjhdA7REtwegrkHKlgY97oyRSH1RDZNNuyl4ZBbY6WakBe7RjkOHxB9GgptLI4NcGVH1g==
-X-Received: by 2002:a05:6808:f07:b0:2da:4916:578c with SMTP id m7-20020a0568080f0700b002da4916578cmr572061oiw.239.1648589206800;
-        Tue, 29 Mar 2022 14:26:46 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a32-20020a056870a1a000b000d458b1469dsm9854110oaf.10.2022.03.29.14.26.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 14:26:46 -0700 (PDT)
-Received: (nullmailer pid 1357565 invoked by uid 1000);
-        Tue, 29 Mar 2022 21:26:45 -0000
-Date:   Tue, 29 Mar 2022 16:26:45 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Lee Jones <lee.jones@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
-Subject: Re: [PATCH] dt-bindings: extcon: maxim,max77843: fix ports type
-Message-ID: <YkN5lSmIijTlMLXs@robh.at.kernel.org>
-References: <20220310073258.24060-1-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x5Kf4tIOrW+TXVLfToUnNnc77oMmkd7cGdwQs3kzn5E=;
+        b=TZ482Y/AcCLtdU7LAn1bYDtaoxXNUbhTL002IfSzFzy4dFWJXt6gsgmMiKI6n3YuPM
+         C2kWDlg5DlEjLwRQIbmFVFfHUipLEHJelI9CjaWvFHdcVvfKsf63V1Jdl+ir+iViu6ir
+         Kmux7PFHPJ0bIK9w5FtelixtJSm0KOI6BOHXy4scl6sExE/eqjDc9bxBEV9pCZ0YUHs2
+         y8NIktmioLfZBJ3iXxuC4Q6yJkFcme7vxgPKSKreAFiBt59mG9PvKLO4eM4Nyro8lYCy
+         YYJt0zYILkgbeJ0ZrMeY9WoRcp8ADtWj/PG78nAxfBgu2PhMBrlPwjAyMkABTUwz3OaG
+         IwQg==
+X-Gm-Message-State: AOAM533YXih+GJj41fYyHSzMfXo3xKZhFPxIwSF4WehCXHGSNhPk0uh6
+        Wm/CBCmdvrHJVj0WaLffi9N+J6HQeOugIJZqUXaOvQ==
+X-Google-Smtp-Source: ABdhPJxLl4nDWjhDn9MDxFoq2paLjPe4jmT3iGnfqwDbvQcl0/wz7iO0WhBwZrKB8nf8+weeT8q+yjqELi4kBzuJ8+s=
+X-Received: by 2002:a05:6402:1cc1:b0:413:2b12:fc49 with SMTP id
+ ds1-20020a0564021cc100b004132b12fc49mr7190427edb.118.1648589253782; Tue, 29
+ Mar 2022 14:27:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310073258.24060-1-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220131212341.1082577-1-dlatypov@google.com>
+In-Reply-To: <20220131212341.1082577-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 29 Mar 2022 17:27:22 -0400
+Message-ID: <CAFd5g46z_RBMWRTfJB5h_sdkaEaJCOwnnkUER0fPSPQ6ac5_6A@mail.gmail.com>
+Subject: Re: [PATCH v2] Documentation: kunit: fix path to .kunitconfig in start.rst
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Yifan Yuan <alpc_metic@live.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022 08:32:58 +0100, Krzysztof Kozlowski wrote:
-> The "ports" property can contain multiple ports as name suggests, so it
-> should be using "ports" type from device graphs.
-> 
-> Reported-by: Rob Herring <robh@kernel.org>
-> Fixes: 9729cad0278b ("dt-bindings: extcon: maxim,max77843: Add MAX77843 bindings")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> 
-> ---
-> 
-> Hi Lee,
-> 
-> This is a fix for a commit in your next branch.
-> ---
->  Documentation/devicetree/bindings/extcon/maxim,max77843.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+On Mon, Jan 31, 2022 at 4:23 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Commit ddbd60c779b4 ("kunit: use --build_dir=.kunit as default") changed
+> the default --build_dir, which had the side effect of making
+> `.kunitconfig` move to `.kunit/.kunitconfig`.
+>
+> However, the first few lines of kunit/start.rst never got updated, oops.
+>
+> Fix this by telling people to run kunit.py first, which will
+> automatically generate the .kunit directory and .kunitconfig file, and
+> then edit the file manually as desired.
+>
+> Reported-by: Yifan Yuan <alpc_metic@live.com>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-Applied, thanks!
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

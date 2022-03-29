@@ -2,51 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1FD4EB6ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 393B04EB6F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240929AbiC2XoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
+        id S240984AbiC2Xod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240857AbiC2XoN (ORCPT
+        with ESMTP id S240857AbiC2Xoa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:44:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA411B9FF0;
-        Tue, 29 Mar 2022 16:42:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3425E60B87;
-        Tue, 29 Mar 2022 23:42:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6581DC2BBE4;
-        Tue, 29 Mar 2022 23:42:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648597348;
-        bh=MrHQhXwSYe7wuAHoXwri9dn/u2Jxc+Bw4MgcH442JPY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=t7nynPXr3AKbk+DCnktnM7nDlmDBbRTYkxFvRwyWZ+iVZHrse9TZionGhzih+r3DH
-         PaSwYv/l8bMP3/3pKzkGeNpPiDQMy3pxqiX2QfoFKn0WF49Q1vq11tBXVfpNXa73GF
-         D0J7vXLN0N3iH6Zob8WZ3qrXrxa8oCnWrjSvwlorsainfLQU34uEzOPK6HZViS8JmC
-         Q82CYak5bw7dxLxeHzFTWK7/ilItDNFEVmVv4/FLNAtfLQx4m5GBCVPBzhSgMtg+KO
-         1B/1i4E8PoH8RpodaUc4AmyUD58jjpvMDJGiHqJLYiKq1qiJRArOcdlOwm29N88oRB
-         49bZ96tKeYggw==
-Date:   Tue, 29 Mar 2022 18:42:26 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Shlomo Pongratz <shlomopongratz@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrew.maier@eideticom.com, logang@deltatee.com,
-        bhelgaas@google.com, jgg@nvidia.com,
-        Shlomo Pongratz <shlomop@pliops.com>
-Subject: Re: [PATCH V3 1/1] Intel Sky Lake-E host root ports check.
-Message-ID: <20220329234226.GA1644397@bhelgaas>
+        Tue, 29 Mar 2022 19:44:30 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5673B1C0242
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:42:46 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id i4so16756034qti.7
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:42:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/9ICMDkbZ/BHW7l0E0NZMwZLmdw7tSdXzR2xCVHhHAo=;
+        b=pYXDBjJDb+dbjQ/3ODUqx57lRmHy0aPtNi6mwxpRyAkKuTKmgdsI83g+cG5+oNx2yD
+         qCwk3xeJKhf6nBxzrwDBoiSSnbkpWY/oxJJvbC9cOjyXXCTTDpnpnkhfHLha/MAVS+sr
+         PCuPoZQkGfl8hO6DgRJGas7eolS12pq/qcvSrI7EtWq++5Rt10s3NVV9ayqfj/1j31S0
+         v5fRqKSMYfPBlrBCdC0P30ZvoNxw7yAGtIeX0Ae5x4R5ABhg28b7NILZ19SG7WvoQDvI
+         p4k2rOmOMw5+07hlThWHrVGehwdiJdthEJi0T/5OA9zk6HKrXLE0hzWsCAhiDgrr2/sm
+         fxVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/9ICMDkbZ/BHW7l0E0NZMwZLmdw7tSdXzR2xCVHhHAo=;
+        b=0Jyn0Lz9P224eVR7NIAp5QO0Oi3/fxdF1CQdKmz4l7X88R3epl6SAJ0zQkR/sjf5jH
+         TDvSF6uWqMggIt6lJwkMGpIh/VIT5s+1/lPUwzL734mKwivSUR66US/H9+7CUzdKovO3
+         T7x37jvpSGaJvorF3kQAVyHXbjOng+u1mfatKZfBm2QMSYLTJfsEMuKoCGSohO2AQggL
+         +m+kMvSYgS4Kv5TaZ/KCSJLAgx3VT9Ryy8jbE6+NqrLrXOmFkODUqgAaPRF98KOTM6oi
+         tbD6phz7NPCgPDDb4Htv1npncinjC3XoClGqYU5OevbEGq4PTtWxPzWjsNlyIww9v6mc
+         YP2Q==
+X-Gm-Message-State: AOAM530tX3sYGYjb4pTSozXPdkjrLwmLg3xE1qLeyEk18ucp4g4cl4jz
+        yX4ng66EB0cDN9V6GlCdc5vx9XHFN5K/4BIeTC+7Og==
+X-Google-Smtp-Source: ABdhPJyhA6gEvRaSJQ/N2n8asLWJrqezWtFAUeoxqD4EjMwtMLuewr3k8IYbUNZYgd1lZ9X7Mkj7Ub9GDpLe/HftT+s=
+X-Received: by 2002:ac8:5a46:0:b0:2e2:2edd:374 with SMTP id
+ o6-20020ac85a46000000b002e22edd0374mr30344820qta.295.1648597365427; Tue, 29
+ Mar 2022 16:42:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220329104321.4712-2-shlomop@pliops.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220329230105.601666-1-robdclark@gmail.com> <20220329230105.601666-10-robdclark@gmail.com>
+In-Reply-To: <20220329230105.601666-10-robdclark@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 30 Mar 2022 02:42:34 +0300
+Message-ID: <CAA8EJpqHCfLLKHzA8jTmLhdJCne31eWYqKjXBtTDGko3CF1_Hg@mail.gmail.com>
+Subject: Re: [PATCH 9/9] drm/msm: Add a way for userspace to allocate GPU iova
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Emma Anholt <emma@anholt.net>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,125 +76,232 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please update the subject line to match the style of previous ones.
+On Wed, 30 Mar 2022 at 02:00, Rob Clark <robdclark@gmail.com> wrote:
+>
+> From: Rob Clark <robdclark@chromium.org>
+>
+> The motivation at this point is mainly native userspace mesa driver in a
+> VM guest.  The one remaining synchronous "hotpath" is buffer allocation,
+> because guest needs to wait to know the bo's iova before it can start
+> emitting cmdstream/state that references the new bo.  By allocating the
+> iova in the guest userspace, we no longer need to wait for a response
+> from the host, but can just rely on the allocation request being
+> processed before the cmdstream submission.  Allocation faulures (OoM,
 
-On Tue, Mar 29, 2022 at 01:43:21PM +0300, Shlomo Pongratz wrote:
-> On commit 7b94b53db34f ("PCI/P2PDMA: Add Intel Sky Lake-E Root Ports B, C, D to the whitelist")
-> Andrew Maier added the Sky Lake-E additional devices
-> 2031, 2032 and 2033 root ports to the already existing 2030 device.
-> 
-> The Intel devices 2030, 2031, 2032 and 2033 which are ports A, B, C and D,
-> and if all exist they will occupy slots 0 till 3 in that order.
-> 
-> Now if for example device 2030 is missing then there will no device on slot 0, but
-> other devices can reside on other slots according to there port.
-> For this reason the test that insisted that the bridge should be on slot 0 was modified
-> to support bridges that are not on slot 0.
+failures
 
-I can't really parse the above, but "there port" is surely incorrect.
+> etc) would just be treated as context-lost (ie. GL_GUILTY_CONTEXT_RESET)
+> or subsequent allocations (or readpix, etc) can raise GL_OUT_OF_MEMORY.
+>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
 
-Wrap the commit log to fit in 80 columns like previous commits.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-> Signed-off-by: Shlomo Pongratz <shlomop@pliops.com>
+Minor nits (above and below).
+
 > ---
->  drivers/pci/p2pdma.c | 42 +++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 37 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
-> index 30b1df3c9d2f..c088d4ab64f4 100644
-> --- a/drivers/pci/p2pdma.c
-> +++ b/drivers/pci/p2pdma.c
-> @@ -307,6 +307,7 @@ static const struct pci_p2pdma_whitelist_entry {
->  	unsigned short device;
->  	enum {
->  		REQ_SAME_HOST_BRIDGE	= 1 << 0,
-> +		IS_ROOT_PORT		= 1 << 1,
->  	} flags;
->  } pci_p2pdma_whitelist[] = {
->  	/* Intel Xeon E5/Core i7 */
-> @@ -316,15 +317,38 @@ static const struct pci_p2pdma_whitelist_entry {
->  	{PCI_VENDOR_ID_INTEL,	0x2f00, REQ_SAME_HOST_BRIDGE},
->  	{PCI_VENDOR_ID_INTEL,	0x2f01, REQ_SAME_HOST_BRIDGE},
->  	/* Intel SkyLake-E */
-> -	{PCI_VENDOR_ID_INTEL,	0x2030, 0},
-> -	{PCI_VENDOR_ID_INTEL,	0x2031, 0},
-> -	{PCI_VENDOR_ID_INTEL,	0x2032, 0},
-> -	{PCI_VENDOR_ID_INTEL,	0x2033, 0},
-> +	{PCI_VENDOR_ID_INTEL,	0x2030, IS_ROOT_PORT},
-> +	{PCI_VENDOR_ID_INTEL,	0x2031, IS_ROOT_PORT},
-> +	{PCI_VENDOR_ID_INTEL,	0x2032, IS_ROOT_PORT},
-> +	{PCI_VENDOR_ID_INTEL,	0x2033, IS_ROOT_PORT},
->  	{PCI_VENDOR_ID_INTEL,	0x2020, 0},
->  	{PCI_VENDOR_ID_INTEL,	0x09a2, 0},
->  	{}
->  };
->  
-> +/*
-> + * The functionality of thisunction can be integrated into
-> + * __host_bridge_whitelist function but this will make the code
-> + * less readable
-> + */
-
-Comment seems probably unnecessary, but "thisunction" is wrong.
-
-> +static bool pci_is_root_port(struct pci_dev *root)
+>  drivers/gpu/drm/msm/adreno/adreno_gpu.c | 10 ++++++
+>  drivers/gpu/drm/msm/msm_drv.c           | 21 +++++++++++
+>  drivers/gpu/drm/msm/msm_gem.c           | 48 +++++++++++++++++++++++++
+>  drivers/gpu/drm/msm/msm_gem.h           |  8 +++++
+>  drivers/gpu/drm/msm/msm_gem_vma.c       |  2 ++
+>  include/uapi/drm/msm_drm.h              |  3 ++
+>  6 files changed, 92 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> index 6385ab06632f..4caae0229518 100644
+> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> @@ -281,6 +281,16 @@ int adreno_get_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
+>         case MSM_PARAM_SUSPENDS:
+>                 *value = gpu->suspend_count;
+>                 return 0;
+> +       case MSM_PARAM_VA_START:
+> +               if (ctx->aspace == gpu->aspace)
+> +                       return -EINVAL;
+> +               *value = ctx->aspace->va_start;
+> +               return 0;
+> +       case MSM_PARAM_VA_SIZE:
+> +               if (ctx->aspace == gpu->aspace)
+> +                       return -EINVAL;
+> +               *value = ctx->aspace->va_size;
+> +               return 0;
+>         default:
+>                 DBG("%s: invalid param: %u", gpu->name, param);
+>                 return -EINVAL;
+> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+> index a5eed5738ac8..7394312cf075 100644
+> --- a/drivers/gpu/drm/msm/msm_drv.c
+> +++ b/drivers/gpu/drm/msm/msm_drv.c
+> @@ -719,6 +719,23 @@ static int msm_ioctl_gem_info_iova(struct drm_device *dev,
+>         return msm_gem_get_iova(obj, ctx->aspace, iova);
+>  }
+>
+> +static int msm_ioctl_gem_info_set_iova(struct drm_device *dev,
+> +               struct drm_file *file, struct drm_gem_object *obj,
+> +               uint64_t iova)
 > +{
-> +	const struct pci_p2pdma_whitelist_entry *entry;
-> +	unsigned short vendor, device;
+> +       struct msm_drm_private *priv = dev->dev_private;
+> +       struct msm_file_private *ctx = file->driver_priv;
 > +
-> +	vendor = root->vendor;
-> +	device = root->device;
+> +       if (!priv->gpu)
+> +               return -EINVAL;
 > +
-> +	for (entry = pci_p2pdma_whitelist; entry->vendor; entry++) {
-> +		if (vendor != entry->vendor || device != entry->device)
-> +			continue;
+> +       /* Only supported if per-process address space is supported: */
+> +       if (priv->gpu->aspace == ctx->aspace)
+> +               return -EINVAL;
 > +
-> +		if (entry->flags & IS_ROOT_PORT)
-> +			return true;
-> +	}
-> +	return false;
+> +       return msm_gem_set_iova(obj, ctx->aspace, iova);
+> +}
+> +
+>  static int msm_ioctl_gem_info(struct drm_device *dev, void *data,
+>                 struct drm_file *file)
+>  {
+> @@ -733,6 +750,7 @@ static int msm_ioctl_gem_info(struct drm_device *dev, void *data,
+>         switch (args->info) {
+>         case MSM_INFO_GET_OFFSET:
+>         case MSM_INFO_GET_IOVA:
+> +       case MSM_INFO_SET_IOVA:
+>                 /* value returned as immediate, not pointer, so len==0: */
+>                 if (args->len)
+>                         return -EINVAL;
+> @@ -757,6 +775,9 @@ static int msm_ioctl_gem_info(struct drm_device *dev, void *data,
+>         case MSM_INFO_GET_IOVA:
+>                 ret = msm_ioctl_gem_info_iova(dev, file, obj, &args->value);
+>                 break;
+> +       case MSM_INFO_SET_IOVA:
+> +               ret = msm_ioctl_gem_info_set_iova(dev, file, obj, args->value);
+> +               break;
+>         case MSM_INFO_SET_NAME:
+>                 /* length check should leave room for terminating null: */
+>                 if (args->len >= sizeof(msm_obj->name)) {
+> diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
+> index bf4af17e2f1e..3122ba308f31 100644
+> --- a/drivers/gpu/drm/msm/msm_gem.c
+> +++ b/drivers/gpu/drm/msm/msm_gem.c
+> @@ -525,6 +525,54 @@ int msm_gem_get_iova(struct drm_gem_object *obj,
+>         return ret;
+>  }
+>
+> +static int clear_iova(struct drm_gem_object *obj,
+> +                     struct msm_gem_address_space *aspace)
+> +{
+> +       struct msm_gem_vma *vma = lookup_vma(obj, aspace);
+> +
+> +       if (!vma)
+> +               return 0;
+> +
+> +       if (vma->inuse)
+
+msm_gem_vma_inuse() ?
+
+> +               return -EBUSY;
+> +
+> +       msm_gem_purge_vma(vma->aspace, vma);
+> +       msm_gem_close_vma(vma->aspace, vma);
+> +       del_vma(vma);
+> +
+> +       return 0;
+> +}
+> +
+> +/*
+> + * Get the requested iova but don't pin it.  Fails if the requested iova is
+> + * not available.  Doesn't need a put because iovas are currently valid for
+> + * the life of the object.
+> + *
+> + * Setting an iova of zero will clear the vma.
+> + */
+> +int msm_gem_set_iova(struct drm_gem_object *obj,
+> +                    struct msm_gem_address_space *aspace, uint64_t iova)
+> +{
+> +       int ret = 0;
+> +
+> +       msm_gem_lock(obj);
+> +       if (!iova) {
+> +               ret = clear_iova(obj, aspace);
+> +       } else {
+> +               struct msm_gem_vma *vma;
+> +               vma = get_vma_locked(obj, aspace, iova, iova + obj->size);
+> +               if (IS_ERR(vma)) {
+> +                       ret = PTR_ERR(vma);
+> +               } else if (GEM_WARN_ON(vma->iova != iova)) {
+> +                       clear_iova(obj, aspace);
+> +                       ret = -ENOSPC;
+> +               }
+> +       }
+> +       msm_gem_unlock(obj);
+> +
+> +       return ret;
 > +}
 > +
 >  /*
->   * This lookup function tries to find the PCI device corresponding to a given
->   * host bridge.
-> @@ -333,6 +357,11 @@ static const struct pci_p2pdma_whitelist_entry {
->   * bus->devices list and that the devfn is 00.0. These assumptions should hold
->   * for all the devices in the whitelist above.
->   *
-> + * The method above will work in most cases but not for all.
-> + * Note that the Intel devices 2030, 2031, 2032 and 2033 are ports A, B, C and D.
-> + * Consider on a bus X only port C has devices connected to it so in the PCI scan only
-> + * device 8086:2032 on 0000:X:02.0 will be found as bridges with no children are ignored
-
-Wrap to 80 columns.
-
-Apparently there's something super special about Sky Lake?  Whatever
-it is that's special needs to be explained somewhere.
-
-> + *
->   * This function is equivalent to pci_get_slot(host->bus, 0), however it does
->   * not take the pci_bus_sem lock seeing __host_bridge_whitelist() must not
->   * sleep.
-> @@ -350,7 +379,9 @@ static struct pci_dev *pci_host_bridge_dev(struct pci_host_bridge *host)
->  
->  	if (!root)
->  		return NULL;
-> -	if (root->devfn != PCI_DEVFN(0, 0))
+>   * Unpin a iova by updating the reference counts. The memory isn't actually
+>   * purged until something else (shrinker, mm_notifier, destroy, etc) decides
+> diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
+> index 38d66e1248b1..efa2e5c19f1e 100644
+> --- a/drivers/gpu/drm/msm/msm_gem.h
+> +++ b/drivers/gpu/drm/msm/msm_gem.h
+> @@ -38,6 +38,12 @@ struct msm_gem_address_space {
+>
+>         /* @faults: the number of GPU hangs associated with this address space */
+>         int faults;
 > +
-> +	/* Intel Sky Lake-E host root ports can be on no zero slot */
-> +	if (root->devfn != PCI_DEVFN(0, 0) && !pci_is_root_port(root))
->  		return NULL;
->  
->  	return root;
-> @@ -372,6 +403,7 @@ static bool __host_bridge_whitelist(struct pci_host_bridge *host,
->  	for (entry = pci_p2pdma_whitelist; entry->vendor; entry++) {
->  		if (vendor != entry->vendor || device != entry->device)
->  			continue;
+> +       /** @va_start: lowest possible address to allocate */
+> +       uint64_t va_start;
 > +
->  		if (entry->flags & REQ_SAME_HOST_BRIDGE && !same_host_bridge)
->  			return false;
->  
-> -- 
-> 2.17.1
-> 
+> +       /** @va_size: the size of the address space (in bytes) */
+> +       uint64_t va_size;
+>  };
+>
+>  struct msm_gem_address_space *
+> @@ -144,6 +150,8 @@ struct msm_gem_vma *msm_gem_get_vma_locked(struct drm_gem_object *obj,
+>                                            struct msm_gem_address_space *aspace);
+>  int msm_gem_get_iova(struct drm_gem_object *obj,
+>                 struct msm_gem_address_space *aspace, uint64_t *iova);
+> +int msm_gem_set_iova(struct drm_gem_object *obj,
+> +               struct msm_gem_address_space *aspace, uint64_t iova);
+>  int msm_gem_get_and_pin_iova_range(struct drm_gem_object *obj,
+>                 struct msm_gem_address_space *aspace, uint64_t *iova,
+>                 u64 range_start, u64 range_end);
+> diff --git a/drivers/gpu/drm/msm/msm_gem_vma.c b/drivers/gpu/drm/msm/msm_gem_vma.c
+> index 6f9a402450f9..354f91aff573 100644
+> --- a/drivers/gpu/drm/msm/msm_gem_vma.c
+> +++ b/drivers/gpu/drm/msm/msm_gem_vma.c
+> @@ -182,6 +182,8 @@ msm_gem_address_space_create(struct msm_mmu *mmu, const char *name,
+>         spin_lock_init(&aspace->lock);
+>         aspace->name = name;
+>         aspace->mmu = mmu;
+> +       aspace->va_start = va_start;
+> +       aspace->va_size  = size;
+>
+>         drm_mm_init(&aspace->mm, va_start, size);
+>
+> diff --git a/include/uapi/drm/msm_drm.h b/include/uapi/drm/msm_drm.h
+> index 794ad1948497..3c7b097c4e3d 100644
+> --- a/include/uapi/drm/msm_drm.h
+> +++ b/include/uapi/drm/msm_drm.h
+> @@ -84,6 +84,8 @@ struct drm_msm_timespec {
+>  #define MSM_PARAM_SYSPROF    0x0b  /* WO: 1 preserves perfcntrs, 2 also disables suspend */
+>  #define MSM_PARAM_COMM       0x0c  /* WO: override for task->comm */
+>  #define MSM_PARAM_CMDLINE    0x0d  /* WO: override for task cmdline */
+> +#define MSM_PARAM_VA_START   0x0e  /* RO: start of valid GPU iova range */
+> +#define MSM_PARAM_VA_SIZE    0x0f  /* RO: size of valid GPU iova range (bytes) */
+>
+>  /* For backwards compat.  The original support for preemption was based on
+>   * a single ring per priority level so # of priority levels equals the #
+> @@ -135,6 +137,7 @@ struct drm_msm_gem_new {
+>  #define MSM_INFO_GET_IOVA      0x01   /* get iova, returned by value */
+>  #define MSM_INFO_SET_NAME      0x02   /* set the debug name (by pointer) */
+>  #define MSM_INFO_GET_NAME      0x03   /* get debug name, returned by pointer */
+> +#define MSM_INFO_SET_IOVA      0x04   /* set the iova, passed by value */
+>
+>  struct drm_msm_gem_info {
+>         __u32 handle;         /* in */
+> --
+> 2.35.1
+>
+
+
+-- 
+With best wishes
+Dmitry

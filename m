@@ -2,115 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE9A4EAA45
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735724EAA47
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234545AbiC2JQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 05:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
+        id S234554AbiC2JRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 05:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234542AbiC2JQp (ORCPT
+        with ESMTP id S232677AbiC2JRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 05:16:45 -0400
-Received: from out28-52.mail.aliyun.com (out28-52.mail.aliyun.com [115.124.28.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168379BAE9;
-        Tue, 29 Mar 2022 02:15:01 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07702377|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00585561-0.00836691-0.985777;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047187;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.NFILkml_1648545298;
-Received: from sunxibot.allwinnertech.com(mailfrom:kant@allwinnertech.com fp:SMTPD_---.NFILkml_1648545298)
-          by smtp.aliyun-inc.com(33.37.68.114);
-          Tue, 29 Mar 2022 17:14:59 +0800
-From:   Kant Fan <kant@allwinnertech.com>
-To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        allwinner-opensource-support@allwinnertech.com
-Subject: [RESEND] devfreq: governor: Save void *data in the governor userspace
-Date:   Tue, 29 Mar 2022 17:14:49 +0800
-Message-Id: <20220329091449.105308-1-kant@allwinnertech.com>
-X-Mailer: git-send-email 2.29.0
+        Tue, 29 Mar 2022 05:17:03 -0400
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CF19AE5E
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 02:15:18 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:d553:ff0a:6830:6bde])
+        by laurent.telenet-ops.be with bizsmtp
+        id C9FD2700F49QC44019FDU9; Tue, 29 Mar 2022 11:15:15 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nZ7wW-007EWe-QI; Tue, 29 Mar 2022 11:15:12 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nZ7wW-00BsDN-9q; Tue, 29 Mar 2022 11:15:12 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Dung Nguyen <dung.nguyen.zy@renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v3] memory: renesas-rpc-if: Fix HF/OSPI data transfer in Manual mode
+Date:   Tue, 29 Mar 2022 11:15:08 +0200
+Message-Id: <ad6ef2af754c8163f825d3a199d64f910d63f802.1648545212.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The member void *data in the structure devfreq can be overwrite
-by governor_userspace. For example:
-1. The device driver assigned the devfreq governor to simple_ondemand
-by the function devfreq_add_device() and init the devfreq member
-void *data to a pointer of a static structure devfreq_simple_ondemand_data
-by the function devfreq_add_device().
-2. The user changed the devfreq governor to userspace by the command
-"echo userspace > /sys/class/devfreq/.../governor".
-3. The governor userspace alloced a dynamic memory for the struct
-userspace_data and assigend the member void *data of devfreq to
-this memory by the function userspace_init().
-4. The user changed the devfreq governor back to simple_ondemand
-by the command "echo simple_ondemand > /sys/class/devfreq/.../governor".
-5. The governor userspace exited and assigned the member void *data
-in the structure devfreq to NULL by the function userspace_exit().
-6. The governor simple_ondemand fetched the static information of
-devfreq_simple_ondemand_data in the function
-devfreq_simple_ondemand_func() but the member void *data of devfreq was
-assigned to NULL by the function userspace_exit().
-7. The information of upthreshold and downdifferential is lost
-and the governor simple_ondemand can't work correctly.
+HyperFlash devices fail to probe:
 
-The member void *data in the structure devfreq is designed for
-a static pointer used in a governor and inited by the function
-devfreq_add_device(). So if a governor want to use void *data
-to do some other things, it must save void *data in the init()
-function and restore void *data in the exit() function.
+    rpc-if-hyperflash rpc-if-hyperflash: probing of hyperbus device failed
 
-Signed-off-by: Kant Fan <kant@allwinnertech.com>
+In HyperFlash or Octal-SPI Flash mode, the Transfer Data Enable bits
+(SPIDE) in the Manual Mode Enable Setting Register (SMENR) are derived
+from half of the transfer size, cfr. the rpcif_bits_set() helper
+function.  However, rpcif_reg_{read,write}() does not take the bus size
+into account, and does not double all Manual Mode Data Register access
+sizes when communicating with a HyperFlash or Octal-SPI Flash device.
+
+Fix this, and avoid the back-and-forth conversion between transfer size
+and Transfer Data Enable bits, by explicitly storing the transfer size
+in struct rpcif, and using that value to determine access size in
+rpcif_reg_{read,write}().
+
+Enforce that the "high" Manual Mode Read/Write Data Registers
+(SM[RW]DR1) are only used for 8-byte data accesses.
+While at it, forbid writing to the Manual Mode Read Data Registers,
+as they are read-only.
+
+Fixes: fff53a551db50f5e ("memory: renesas-rpc-if: Correct QSPI data transfer in Manual mode")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> [QSPI]
 ---
- drivers/devfreq/governor_userspace.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Lightly (read-only) tested on:
+  - Salvator-XS, ULCB, Ebisu-4D, and Draak (with R-Car H3 ES1.1 and
+    ES2.0, M3-W ES1.0, M3-N ES1.0, E3 ES1.0, and D3 ES1.0) with
+    HyperFlash,
+  - Falcon with R-Car V3U ES1.0 with QSPI.
 
-diff --git a/drivers/devfreq/governor_userspace.c b/drivers/devfreq/governor_userspace.c
-index ab9db7adb3ad..dbbb448dcbcf 100644
---- a/drivers/devfreq/governor_userspace.c
-+++ b/drivers/devfreq/governor_userspace.c
-@@ -17,6 +17,7 @@
- struct userspace_data {
- 	unsigned long user_frequency;
- 	bool valid;
-+	void *saved_data;
- };
+v3:
+  - Add Tested-by,
+  - Update comments to match changed code,
+  - Add explicit {read,write}l() for the 4/8 byte case, to increase
+    readability,
+  - Remove redundant break statements,
+  - Tested HyperFlash on more boards and SoCs.
+
+v2:
+  - Use rpc->xfer_size instead of SPIDE register reads and
+    rpc->bus_size.
+      Note: Alternatively, rpcif_manual_xfer() could bypass regmap and
+      use {read,write}[bwl]() directly, cfr. commit 0d37f69cacb33435
+      ("memory: renesas-rpc-if: Correct QSPI data transfer in Manual
+      mode") in the BSP.
+  - HF dirmap reads are confirmed to work on R-Car M3-W,
+  - Drop RFC.
+---
+ drivers/memory/renesas-rpc-if.c | 60 +++++++++++++++++++++++++--------
+ include/memory/renesas-rpc-if.h |  1 +
+ 2 files changed, 47 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
+index e4cc64f560196d55..64582b54400da2ba 100644
+--- a/drivers/memory/renesas-rpc-if.c
++++ b/drivers/memory/renesas-rpc-if.c
+@@ -164,25 +164,39 @@ static const struct regmap_access_table rpcif_volatile_table = {
  
- static int devfreq_userspace_func(struct devfreq *df, unsigned long *freq)
-@@ -91,6 +92,7 @@ static int userspace_init(struct devfreq *devfreq)
- 		goto out;
- 	}
- 	data->valid = false;
-+	data->saved_data = devfreq->data;
- 	devfreq->data = data;
  
- 	err = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
-@@ -100,6 +102,8 @@ static int userspace_init(struct devfreq *devfreq)
- 
- static void userspace_exit(struct devfreq *devfreq)
+ /*
+- * Custom accessor functions to ensure SMRDR0 and SMWDR0 are always accessed
+- * with proper width. Requires SMENR_SPIDE to be correctly set before!
++ * Custom accessor functions to ensure SM[RW]DR[01] are always accessed with
++ * proper width.  Requires rpcif.xfer_size to be correctly set before!
+  */
+ static int rpcif_reg_read(void *context, unsigned int reg, unsigned int *val)
  {
-+	struct userspace_data *data = devfreq->data;
-+	void *saved_data = data->saved_data;
- 	/*
- 	 * Remove the sysfs entry, unless this is being called after
- 	 * device_del(), which should have done this already via kobject_del().
-@@ -108,7 +112,7 @@ static void userspace_exit(struct devfreq *devfreq)
- 		sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
+ 	struct rpcif *rpc = context;
  
- 	kfree(devfreq->data);
--	devfreq->data = NULL;
-+	devfreq->data = saved_data;
- }
+-	if (reg == RPCIF_SMRDR0 || reg == RPCIF_SMWDR0) {
+-		u32 spide = readl(rpc->base + RPCIF_SMENR) & RPCIF_SMENR_SPIDE(0xF);
+-
+-		if (spide == 0x8) {
++	switch (reg) {
++	case RPCIF_SMRDR0:
++	case RPCIF_SMWDR0:
++		switch (rpc->xfer_size) {
++		case 1:
+ 			*val = readb(rpc->base + reg);
+ 			return 0;
+-		} else if (spide == 0xC) {
++
++		case 2:
+ 			*val = readw(rpc->base + reg);
+ 			return 0;
+-		} else if (spide != 0xF) {
++
++		case 4:
++		case 8:
++			*val = readl(rpc->base + reg);
++			return 0;
++
++		default:
+ 			return -EILSEQ;
+ 		}
++
++	case RPCIF_SMRDR1:
++	case RPCIF_SMWDR1:
++		if (rpc->xfer_size != 8)
++			return -EILSEQ;
++		break;
+ 	}
  
- static int devfreq_userspace_handler(struct devfreq *devfreq,
+ 	*val = readl(rpc->base + reg);
+@@ -193,18 +207,34 @@ static int rpcif_reg_write(void *context, unsigned int reg, unsigned int val)
+ {
+ 	struct rpcif *rpc = context;
+ 
+-	if (reg == RPCIF_SMRDR0 || reg == RPCIF_SMWDR0) {
+-		u32 spide = readl(rpc->base + RPCIF_SMENR) & RPCIF_SMENR_SPIDE(0xF);
+-
+-		if (spide == 0x8) {
++	switch (reg) {
++	case RPCIF_SMWDR0:
++		switch (rpc->xfer_size) {
++		case 1:
+ 			writeb(val, rpc->base + reg);
+ 			return 0;
+-		} else if (spide == 0xC) {
++
++		case 2:
+ 			writew(val, rpc->base + reg);
+ 			return 0;
+-		} else if (spide != 0xF) {
++
++		case 4:
++		case 8:
++			writel(val, rpc->base + reg);
++			return 0;
++
++		default:
+ 			return -EILSEQ;
+ 		}
++
++	case RPCIF_SMWDR1:
++		if (rpc->xfer_size != 8)
++			return -EILSEQ;
++		break;
++
++	case RPCIF_SMRDR0:
++	case RPCIF_SMRDR1:
++		return -EPERM;
+ 	}
+ 
+ 	writel(val, rpc->base + reg);
+@@ -469,6 +499,7 @@ int rpcif_manual_xfer(struct rpcif *rpc)
+ 
+ 			smenr |= RPCIF_SMENR_SPIDE(rpcif_bits_set(rpc, nbytes));
+ 			regmap_write(rpc->regmap, RPCIF_SMENR, smenr);
++			rpc->xfer_size = nbytes;
+ 
+ 			memcpy(data, rpc->buffer + pos, nbytes);
+ 			if (nbytes == 8) {
+@@ -533,6 +564,7 @@ int rpcif_manual_xfer(struct rpcif *rpc)
+ 			regmap_write(rpc->regmap, RPCIF_SMENR, smenr);
+ 			regmap_write(rpc->regmap, RPCIF_SMCR,
+ 				     rpc->smcr | RPCIF_SMCR_SPIE);
++			rpc->xfer_size = nbytes;
+ 			ret = wait_msg_xfer_end(rpc);
+ 			if (ret)
+ 				goto err_out;
+diff --git a/include/memory/renesas-rpc-if.h b/include/memory/renesas-rpc-if.h
+index 7c93f5177532f187..9c0ad64b8d292d49 100644
+--- a/include/memory/renesas-rpc-if.h
++++ b/include/memory/renesas-rpc-if.h
+@@ -72,6 +72,7 @@ struct rpcif {
+ 	enum rpcif_type type;
+ 	enum rpcif_data_dir dir;
+ 	u8 bus_size;
++	u8 xfer_size;
+ 	void *buffer;
+ 	u32 xferlen;
+ 	u32 smcr;
 -- 
-2.29.0
+2.25.1
 

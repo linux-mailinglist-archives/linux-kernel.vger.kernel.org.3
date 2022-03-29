@@ -2,121 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388294EAD35
+	by mail.lfdr.de (Postfix) with ESMTP id 853144EAD36
 	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236357AbiC2MdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 08:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47306 "EHLO
+        id S236371AbiC2MdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 08:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236347AbiC2Mcm (ORCPT
+        with ESMTP id S236464AbiC2MdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 08:32:42 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33CD15E15A
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:30:58 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3142B1FD33;
-        Tue, 29 Mar 2022 12:30:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648557057; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=trOfLROgG8rrZXeZzfky88Jb98XW04xNbBBa4hKdWsg=;
-        b=BLAjs2+0cO7VRE5RMviDoDRwBupWoU2GzDTN6DvbU/pBFlXBbB8AUWebG4fDX/09dVyog/
-        z75Xx/CybAAYG0XbXmRzlFj14syQZVwz5JYcnoFLt5B6DL8aKKDXMSukmCLlNNY+sJYtj7
-        mgY8/4pZRe8PjmmEJRnP7kvmhC71gHc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648557057;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=trOfLROgG8rrZXeZzfky88Jb98XW04xNbBBa4hKdWsg=;
-        b=33b4r67p/sOIsD7UMIUtcNmjcaXyTroMy82G7APJMnRYwCwTJxabzAMbG5nifW7t8ZWqM1
-        QwnNL0RVd3U93iCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B83B213A7E;
-        Tue, 29 Mar 2022 12:30:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id imS7KgD8QmIPIAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 29 Mar 2022 12:30:56 +0000
-Date:   Tue, 29 Mar 2022 14:30:54 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     kernel test robot <lkp@intel.com>, Wolfram Sang <wsa@kernel.org>
-Cc:     Terry Bowman <terry.bowman@amd.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Robert Richter <rrichter@amd.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [watchdog-next:v5.18-rc1 12/13]
- drivers/watchdog/sp5100_tco.c:345:6: warning: assignment to 'struct
- resource *' from 'int' makes pointer from integer without a cast
-Message-ID: <20220329143054.13a0057d@endymion.delvare>
-In-Reply-To: <202203280446.sZhhsZYx-lkp@intel.com>
-References: <202203280446.sZhhsZYx-lkp@intel.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Tue, 29 Mar 2022 08:33:04 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093AB5E15A
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:31:21 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id i4so5750292wrb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:31:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=y9RUNc9u4NDcWzkzWpNKYsTxGVbukHkl4DrmNzDmOrM=;
+        b=hlBOatvIQkfNLpHHQsqkeaqrF/vl5iO2zvTCN65flMcbf741w5RUPcJZpqNmzIqriI
+         SsPAeScVhnDBFnt1AGXNEH5ugBtcSohfRpJyNFkpHSfeRBpSULLaclDOH/bzjt5ou+Q0
+         Qzmx25AMCN8bjeowkUU/mfrMZ6Scb8XW4lzm6SaK7QXadh7pb3Hm0lCm8Aa3Ezwy6Pjo
+         n2I2lYJ1wr+JC0NXQpfnrLRDDnw5Rl9KRh6Y0+OcJ307B79ikNOaPLv2/CzZVFTEi8Ru
+         IxiEf2TNJbt1f5oeUpPMPF9gy9uVwsVGxDG4jq1mRd11aXNsUS9tfOa7vus37KGgrP8L
+         ZMmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=y9RUNc9u4NDcWzkzWpNKYsTxGVbukHkl4DrmNzDmOrM=;
+        b=UlB/ox3ySFY8wuZdDbsJt5UChv2pdKI3p8odCKOSi0/H2A48fxKh/o3L+uyLHE8LDm
+         mz3ar9r0+rIN5i1oLDTA6+eVsnUSe9+3NWLr+0iKFa95pGu3IyoPCgM3XURdYcVHaVSD
+         HaKmKSRKdq1cdqyNARTE7CyR3gYyBRfdsp1g8hGA5F4M1SNwt9WXZ4w6Xu65v4lO83OJ
+         fOb3TAF+qZFVUdJjp99CVqExw7naAm+7FBCJde5yS4Rie5Xge8EQJd0FKjDICBawJDID
+         Ax4FIRw8IohW9A/pArunvlngLB+DTg6veXGkSvh87c1FeG20S1eWPDD/5RrX0MtjDK6n
+         pvZw==
+X-Gm-Message-State: AOAM533W9zFvLrSboNTp0u2TEaoQQTQelTN2W7xrB9iWj/Ipnmm6ZJz2
+        94V1W/yiqPiUsSQJIZMP8f/1rQ==
+X-Google-Smtp-Source: ABdhPJy72PAhTXZFXupmbBsCmVeopApvYCfXr8IgWNONOJ/JYSPSNiev16r0QIGal9vCCZsc/AI4yA==
+X-Received: by 2002:adf:e346:0:b0:205:97d0:50db with SMTP id n6-20020adfe346000000b0020597d050dbmr28982595wrj.257.1648557079428;
+        Tue, 29 Mar 2022 05:31:19 -0700 (PDT)
+Received: from google.com (110.121.148.146.bc.googleusercontent.com. [146.148.121.110])
+        by smtp.gmail.com with ESMTPSA id m2-20020a1c2602000000b0038ca9ffac53sm2136981wmm.11.2022.03.29.05.31.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 05:31:18 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 14:31:14 +0200
+From:   "Steinar H. Gunderson" <sesse@google.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        He Kuang <hekuang@huawei.com>
+Subject: Re: [PATCH] perf intel-pt: Synthesize cycle events
+Message-ID: <YkL8EpWaeZ1US8t2@google.com>
+References: <YjDUO6bbyfGw/u0C@google.com>
+ <52903e58-e74c-5ea0-36b4-277ea3610af4@intel.com>
+ <YjGdoGy4Z2UUG9S9@google.com>
+ <ef780335-7dc6-3a23-54a8-b6fc9c8a2ed3@intel.com>
+ <YjHfGrZovk3N/H0f@google.com>
+ <371faf0d-f794-4a2e-0a1c-9d454d7c8b12@intel.com>
+ <YjhUjotmo+kYvoNP@google.com>
+ <ffa56520-09b5-9c5d-7733-6767d2f8e350@intel.com>
+ <YjiuoEUL6jH32cBi@google.com>
+ <Yjm5stBpRC0g4G8s@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yjm5stBpRC0g4G8s@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Tue, Mar 22, 2022 at 12:57:38PM +0100, Steinar H. Gunderson wrote:
+> and this is evidently fatal. So for whatever reason, the sample address
+> is attributed to some symbol, and that symbol is assumed to have a
+> single range (is this even necessarily true?), we refuse the event,
+> and then we fail the entire report. (It doesn't happen with --stdio,
+> though!)
 
-On Mon, 28 Mar 2022 04:50:02 +0800, kernel test robot wrote:
-> tree:   git://www.linux-watchdog.org/linux-watchdog-next.git v5.18-rc1
-> head:   826270373f17fd8ebd10753ca0a5fd2ceb1dc38e
-> commit: 0578fff4aae5bce3f09875f58e68e9ffbab8daf5 [12/13] Watchdog: sp5100_tco: Add initialization using EFCH MMIO
-> config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220328/202203280446.sZhhsZYx-lkp@intel.com/config)
-> compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
-> reproduce (this is a W=1 build):
->         git remote add watchdog-next git://www.linux-watchdog.org/linux-watchdog-next.git
->         git fetch --no-tags watchdog-next v5.18-rc1
->         git checkout 0578fff4aae5bce3f09875f58e68e9ffbab8daf5
->         # save the config file to linux build tree
->         mkdir build_dir
->         make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/watchdog/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    drivers/watchdog/sp5100_tco.c: In function 'sp5100_tco_setupdevice_mmio':
->    drivers/watchdog/sp5100_tco.c:345:8: error: implicit declaration of function 'request_mem_region_muxed'; did you mean 'request_mem_region'? [-Werror=implicit-function-declaration]
->      345 |  res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
->          |        ^~~~~~~~~~~~~~~~~~~~~~~~
->          |        request_mem_region
-> >> drivers/watchdog/sp5100_tco.c:345:6: warning: assignment to 'struct resource *' from 'int' makes pointer from integer without a cast [-Wint-conversion]  
->      345 |  res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
->          |      ^
->    cc1: some warnings being treated as errors
+I think I traced this. The basic issue is this routine, which compares
+two symbols (to see if they should be combined for the sake of perf
+report):
 
-This function is added in the i2c tree, that was supposed to be merged
-before the watchdog tree for v5.18-rc1. Were the merge requests sent in
-the wrong order maybe?
+  int64_t _sort__sym_cmp(struct symbol *sym_l, struct symbol *sym_r)
+  {
+          if (!sym_l || !sym_r)
+                  return cmp_null(sym_l, sym_r);
 
-Either way, the problem will solve itself automatically as soon as
-Wolfram's pull request for the i2c tree is processed (might have
-already happened by now) so this can be ignored.
+          if (sym_l == sym_r)
+                  return 0;
 
--- 
-Jean Delvare
-SUSE L3 Support
+          if (sym_l->inlined || sym_r->inlined) {
+                  int ret = strcmp(sym_l->name, sym_r->name);
+
+                  if (ret)
+                          return ret;
+                  if ((sym_l->start <= sym_r->end) && (sym_l->end >= sym_r->start))
+                          return 0;
+          }
+
+          if (sym_l->start != sym_r->start)
+                  return (int64_t)(sym_r->start - sym_l->start);
+
+          return (int64_t)(sym_r->end - sym_l->end);
+  }
+
+The problem is that part comparing sym_l->start and sym_r->end. I'm not
+entirely sure what the logic here is, but it seems to me that the
+intention is that if sym_l is a subset of sym_r, it collapses them.
+However, it seems to assume that [start,end] is inclusive, whereas it is
+generally [start,end) in later code. This means that if you have e.g.
+a symbol [0x1000,0x1010) which is then inlined as the very first thing
+in the adjacent function [0x1010,0x1030) (say, sym_r is the inlined
+symbol [0x1010,0x1020)), _sort__sym_cmp will indeed collapse them.
+This causes the ERANGE problem later, as you can have 0x1005 being
+mapped to a hist_entry correpsonding to the symbol [0x1010,0x1030).
+It seems this logic was indeed added to fix ERANGE problems in 2019
+(see 7346195e8), but it is seemingly incomplete.
+
+If I change <= to < and >= to >, it stops erroring out; however, I'm
+still not sure whether this is actually right. Doesn't the collapsing
+then depend on what order the entries happen to be added in, ie.,
+whether the larger symbol comes first or last?
+
+/* Steinar */

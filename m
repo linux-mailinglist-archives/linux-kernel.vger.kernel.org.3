@@ -2,87 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58FD44EA7DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 08:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D40474EA7E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 08:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233044AbiC2Gce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 02:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
+        id S233057AbiC2Gdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 02:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbiC2Gcd (ORCPT
+        with ESMTP id S230358AbiC2Gdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 02:32:33 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FE71959CC;
-        Mon, 28 Mar 2022 23:30:49 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 08:30:45 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1648535447;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BPMbslHvcWl9AuG65q7i4FLjo8NvVN67J002+wav/FY=;
-        b=z5k01oUOKZTixIWULLUcr508q/nMMT4tEEjUge5ZQhzBEYr5bPRwiQs5vJj69dJ8aKWe0l
-        jS8wDg+MxF5n3WIOpjYprknAz/fsRet90+HfSfbSpsXDmQz8PHqwVbo5tp/crRjl8EvIAx
-        rZhQ9IxuO6UVMLbFCJsH6IWU7PFRCUUA0GjlXNDWXQFsbJeclC6zdaQLTIYNmz/2sxskDr
-        aWELyVDtoySPAKA7Dzz4wvMzsDOzuChceYIe/QRlTD2wnf2ANI6RCFPgiZ8NdmZY1MwYXA
-        IF6jphQxssXXlq5Idttg7mrH3MOnpCJjfSRUI3J/uL0fki1lgqnz04LPhr4X2Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1648535447;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BPMbslHvcWl9AuG65q7i4FLjo8NvVN67J002+wav/FY=;
-        b=GQrvXCOItrac/je83cPCtN63EkGHkvcRnczk/iwqe7CV0yuSFNYWm+SEQQ7E05EByC9PsT
-        itHjLIsLol12wLCg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Peter Hurley <peter@hurleysoftware.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Esben Haabendal <esben@geanix.com>,
-        Steven Walter <stevenrwalter@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        =?utf-8?B?QW5kcsOp?= Pribil <a.pribil@beck-ipc.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-rt-users@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] RT scheduling policies for workqueues
-Message-ID: <YkKnlUUsufZPiZxM@linutronix.de>
-References: <20220323145600.2156689-1-linux@rasmusvillemoes.dk>
- <YkGIhYKJG+w4L7ge@linutronix.de>
- <20220328100927.5ax34nea7sp7jdsy@pengutronix.de>
- <YkHyzcfiyjLfIVOo@slm.duckdns.org>
+        Tue, 29 Mar 2022 02:33:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB608199E02;
+        Mon, 28 Mar 2022 23:31:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8947EB815AA;
+        Tue, 29 Mar 2022 06:31:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FD40C2BBE4;
+        Tue, 29 Mar 2022 06:31:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648535517;
+        bh=qQdEegtTay97bdLFpDoQhHXRXAb8Gb7e6nlf1kKCkVk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XC8bQVeQEmhTJk/J+uyEhRZ4t4eJ4J5h0wqWTevizVDXWn0WM/OeI65K9IhfoPNoN
+         W/xSTBLECpgkuX85RagScxcKu0QM6GQU305VIkG0DXsxm1UBzhrlI1J8KzgUOg7X+r
+         WWX8Iq+sQjENxQt7jEzFKg9HhjAmk3lIVnPZbAlqdsx51JU4hhrUyCWmwqTHUbqQVx
+         Ab7nb8ByDqBxvdE5F+Sv1BABrZjJ+BJOADiCxhioMsJehaF6xraVtQ85f7XJKCUh50
+         LuXe+ALG9iGEORdqEf87r0r0dj1U8oEd8sX5JoOPp7pf1iNTsgJ9clgzrBcZ2A7rnb
+         WUr0CD89snmVw==
+Date:   Tue, 29 Mar 2022 12:01:52 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] dt-bindings: display: msm: dsi: remove address/size cells
+Message-ID: <YkKmPSesQfS6RLCD@matsya>
+References: <20220328152923.90623-1-krzysztof.kozlowski@linaro.org>
+ <CAA8EJprWoxWwk5EWEfWdLquPR+2=u6V0-v1-+wHMHOk8HiEyNw@mail.gmail.com>
+ <YkHtY9absUjmqmW7@matsya>
+ <12b0056b-8032-452b-f325-6f36037b5a80@linaro.org>
+ <CAL_Jsq+6rx0UU6ryH+z_8KLQqKKuhTCnh=Oft2F03bcze+EV0Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YkHyzcfiyjLfIVOo@slm.duckdns.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAL_Jsq+6rx0UU6ryH+z_8KLQqKKuhTCnh=Oft2F03bcze+EV0Q@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-28 07:39:25 [-1000], Tejun Heo wrote:
-> Hello,
-Hi,
-
-> I wonder whether it'd be useful to provide a set of wrappers which can make
-> switching between workqueue and kworker easy. Semantics-wise, they're
-> already mostly aligned and it shouldn't be too difficult to e.g. make an
-> unbounded workqueue be backed by a dedicated kthread_worker instead of
-> shared pool depending on a flag, or even allow switching dynamically.
-
-This could work. For the tty layer it could use 'lowlatency' attribute
-to decide which implementation makes sense.
-
-> Thanks.
+On 28-03-22, 13:21, Rob Herring wrote:
+> On Mon, Mar 28, 2022 at 12:18 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> >
+> > On 28/03/2022 19:16, Vinod Koul wrote:
+> > > On 28-03-22, 19:43, Dmitry Baryshkov wrote:
+> > >> On Mon, 28 Mar 2022 at 18:30, Krzysztof Kozlowski
+> > >> <krzysztof.kozlowski@linaro.org> wrote:
+> > >>>
+> > >>> The DSI node is not a bus and the children do not have unit addresses.
+> > >>>
+> > >>> Reported-by: Vinod Koul <vkoul@kernel.org>
+> > >>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > >>
+> > >> NAK.
+> > >> DSI panels are children of the DSI device tree node with the reg = <0>; address.
+> > >> This is the convention used by other platforms too (see e.g.
+> > >> arch/arm64/boot/dts/freescale/imx8mq-evk.dts).
+> > >
+> > > So we should add reg = 0, i will update my dtsi fix
+> > >
+> >
+> > To "ports" node? No. The reg=0 is for children of the bus, so the
+> > panels. How to combine both without warnings - ports and panel@0 - I
+> > don't know yet...
 > 
+> I don't think that should case a warning. Or at least it's one we turn off.
 
-Sebastian
+Well in this case I think we might need a fix:
+Here is the example quoted in the binding. We have ports{} and then the
+two port@0 and port@1 underneath.
+
+So it should be okay to drop #address-cells/#size-cells from dsi node
+but keep in ports node...
+
+Thoughts...?
+
+
+     dsi@ae94000 {
+           compatible = "qcom,mdss-dsi-ctrl";
+           reg = <0x0ae94000 0x400>;
+           reg-names = "dsi_ctrl";
+
+           #address-cells = <1>;
+           #size-cells = <0>;
+
+           interrupt-parent = <&mdss>;
+           interrupts = <4>;
+
+           clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
+                    <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
+                    <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
+                    <&dispcc DISP_CC_MDSS_ESC0_CLK>,
+                    <&dispcc DISP_CC_MDSS_AHB_CLK>,
+                    <&dispcc DISP_CC_MDSS_AXI_CLK>;
+           clock-names = "byte",
+                         "byte_intf",
+                         "pixel",
+                         "core",
+                         "iface",
+                         "bus";
+
+           phys = <&dsi0_phy>;
+           phy-names = "dsi";
+
+           assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>, <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
+           assigned-clock-parents = <&dsi_phy 0>, <&dsi_phy 1>;
+
+           power-domains = <&rpmhpd SC7180_CX>;
+           operating-points-v2 = <&dsi_opp_table>;
+
+           ports {
+                  #address-cells = <1>;
+                  #size-cells = <0>;
+
+                  port@0 {
+                          reg = <0>;
+                          dsi0_in: endpoint {
+                                   remote-endpoint = <&dpu_intf1_out>;
+                          };
+                  };
+
+                  port@1 {
+                          reg = <1>;
+                          dsi0_out: endpoint {
+                                   remote-endpoint = <&sn65dsi86_in>;
+                                   data-lanes = <0 1 2 3>;
+                          };
+                  };
+           };
+     };
+
+> 
+> Rob
+
+-- 
+~Vinod

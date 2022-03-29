@@ -2,144 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0F24EB017
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 812934EB019
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238412AbiC2PWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
+        id S238430AbiC2PWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235516AbiC2PWA (ORCPT
+        with ESMTP id S235516AbiC2PWH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:22:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05FC97CB02
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:20:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648567215;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OLZFkHPd84+mMxkqVvITeO3JzREE8dZrviAJPbx3+4I=;
-        b=AXq1IUaNJxTCUm5PrXXl/AxbxZYRPmQFblPyyvIQQIT/t+PwYuCvyfx+XNW3SWaAXyg39e
-        6rJzDVDDM9bQ3w0PqESPWio3/+8Kn0WayVRX2kxAaJhNrwCYQpt1hQZxe8o134JzYYdZJL
-        a5oLBSfMT6RHJbyrYaKKwY4fG3GEw84=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-578-W1OjL56oN_2guaUe-84Avw-1; Tue, 29 Mar 2022 11:20:12 -0400
-X-MC-Unique: W1OjL56oN_2guaUe-84Avw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 78BC2296A62D;
-        Tue, 29 Mar 2022 15:20:11 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.8.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 30A34400F24;
-        Tue, 29 Mar 2022 15:20:11 +0000 (UTC)
-Date:   Tue, 29 Mar 2022 11:20:09 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] arch/arm64: Fix topology initialization for core
- scheduling
-Message-ID: <YkMjqfBSyT3NOrWB@lorien.usersys.redhat.com>
-References: <20220322160304.26229-1-pauld@redhat.com>
- <1a546197-872b-7762-68ac-d5e6bb6d19aa@arm.com>
+        Tue, 29 Mar 2022 11:22:07 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F647CB02
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:20:24 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id u103so32098693ybi.9
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:20:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=mqf77QeoL5E8gq/UNbdnceI0Lqcn9TnB8ZcBKbA//HY=;
+        b=gzfose0LqAREB7zRFZHRdNffeFoQlP8t4o4t8O+im03BrN8m99rmINX5UePPZJdCiI
+         kMOYFj16jCWs/XA5tlLbXYovRDJrZL9S7pOUws5JSPWv8SKhcmpPp4D5pWhNr2yv6WhG
+         i4wjTXUsf6VAWxZq1VSq/jOT916GRkv75TyZnUse/j8N5PiuCT5rYpMNAcMhwBqRXe4J
+         g80Uro+2EmhRXPMTFTjqXHDqWu7nAO/cXZtoMEpng1yojJhZYGaXK2aRPQZM1IGb77s2
+         nvhUYbJtyb2I4zLJ4zBYT9Iqi+OoxlzngK05QW4gWIzWFlF1oL+aDuizguL3sy3as+DR
+         nrwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=mqf77QeoL5E8gq/UNbdnceI0Lqcn9TnB8ZcBKbA//HY=;
+        b=nxD62EdzajmUJRAJ/8aEcSg+nIHNGAy9x/bUi0ESGUOkg/HWv9+XCjggFTKZGjVxCJ
+         RF1/dtaoDOfyuUZsrbqD6gWG/PoyerXAJKkm6l+3iLK09+rhHCoEfPIyqQxrUbO5eyYj
+         1EdyssSEXttz06cwm+ol5LR1a343IU12CnPwMA/jt6IIDu/yLWgMYlf7WTK/MogLhfsB
+         fMbjrsUbwWqUHTYJtUqvKsR3C0mDH4wM9lHgpG5LHU1bATXrLpMSwOu7EqEB5B1MVQoU
+         vCp6KGTAOuUSksXsJ/G/2M5SjY7xfwlw0cezhv03vy5H4AaN4lk7SvOEjDl4H1N66Xd6
+         4cvA==
+X-Gm-Message-State: AOAM530sPVZH24Ge6oCHqq9ZLJLl83ehVBBom6KgpqGKDDNeeqo5ZFeH
+        DrkRqO7OaWOrgqY3axqc/p9s68MvYAygEWrcmDfddw==
+X-Google-Smtp-Source: ABdhPJwTGzMwHTVoUHzH/SEOKRVgEO0IwzEv+Q8tSvRoNS9k6jrg6Gq+mgZ9LssHpyLF5AKwYur63FvMHokmW40AQPM=
+X-Received: by 2002:a25:9909:0:b0:624:57e:d919 with SMTP id
+ z9-20020a259909000000b00624057ed919mr29166744ybn.494.1648567223068; Tue, 29
+ Mar 2022 08:20:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1a546197-872b-7762-68ac-d5e6bb6d19aa@arm.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 29 Mar 2022 20:50:12 +0530
+Message-ID: <CA+G9fYsd+zXJqsxuYkWLQo0aYwmqLVA_YeBu+sr546bGA+1Nfg@mail.gmail.com>
+Subject: WARNING: at arch/x86/kvm/../../../virt/kvm/kvm_main.c:3156 mark_page_dirty_in_slot
+To:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kvm list <kvm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 04:02:22PM +0200 Dietmar Eggemann wrote:
-> On 22/03/2022 17:03, Phil Auld wrote:
-> > Some arm64 rely on store_cpu_topology() to setup the real topology.
-> > This needs to be done before the call to notify_cpu_starting() which
-> > tell the scheduler about the cpu otherwise the core scheduling data
-> > structures are setup in a way that does not match the actual topology.
-> > 
-> > Without this change stress-ng (which enables core scheduling in its prctl 
-> > tests) causes a warning and then a crash (trimmed for legibility):
-> > 
-> > [ 1853.805168] ------------[ cut here ]------------
-> > [ 1853.809784] task_rq(b)->core != rq->core
-> > [ 1853.809792] WARNING: CPU: 117 PID: 0 at kernel/sched/fair.c:11102 cfs_prio_less+0x1b4/0x1c4
-> > ...
-> > [ 1854.015210] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
-> > ...
-> > [ 1854.231256] Call trace:
-> > [ 1854.233689]  pick_next_task+0x3dc/0x81c
-> > [ 1854.237512]  __schedule+0x10c/0x4cc
-> > [ 1854.240988]  schedule_idle+0x34/0x54
-> > 
-> > Fixes: 9edeaea1bc45 ("sched: Core-wide rq->lock")
-> > Signed-off-by: Phil Auld <pauld@redhat.com>
-> > ---
-> > This is a similar issue to 
-> >   f2703def339c ("MIPS: smp: fill in sibling and core maps earlier") 
-> > which fixed it for MIPS.
-> 
-> I assume this is for a machine which relies on MPIDR-based setup
-> (package_id == -1)? I.e. it doesn't have proper ACPI/(DT) data for
-> topology setup.
+While running kselftest kvm test cases on x86_64 devices the following
+kernel warning was reported.
 
-Yes, that's my understanding. No PPTT.
-
-> 
-> Tried on a ThunderX2 by disabling parse_acpi_topology() but then I end
-> up with a machine w/o SMT, so `stress-ng --prctl N` doesn't show this issue.
->
-> Which machine were you using?
-
-This instance is an HPE Apollo 70 set to smt-4.  I believe it's ThunderX2
-chips.
-
-ARM (CN9980-2200LG4077-Y21-G) 
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
+  git_sha: 1930a6e739c4b4a654a69164dbe39e554d228915
+  git_describe: v5.17-12882-g1930a6e739c4
+  kernel_version: 5.17.0
+  kernel-config: https://builds.tuxbuild.com/272RGo17Agp9s62duqGs3mP2d0S/config
 
 
-Thanks,
-Phil
+# selftests: kvm: evmcs_test
+# Running L1 which uses EVMCS to run L2
+# Injecting NMI into L1 before L2 had a chance to run after restore
+# Trying extra KVM_GET_NESTED_STATE/KVM_SET_NESTED_STATE cycle
+ok 4 selftests: kvm: evmcs_test
+# selftests: kvm: emulator_error_test
+# module parameter 'allow_smaller_maxphyaddr' is not set.  Skipping test.
+ok 5 selftests: kvm: emulator_error_test
+# selftests: kvm: hyperv_clock
+[   62.510388] ------------[ cut here ]------------
+[   62.515064] WARNING: CPU: 1 PID: 915 at
+arch/x86/kvm/../../../virt/kvm/kvm_main.c:3156
+mark_page_dirty_in_slot+0xba/0xd0
+[   62.525968] Modules linked in: x86_pkg_temp_thermal fuse
+[   62.531307] CPU: 1 PID: 915 Comm: hyperv_clock Not tainted 5.17.0 #1
+[   62.537691] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[   62.545185] RIP: 0010:mark_page_dirty_in_slot+0xba/0xd0
+[   62.550452] Code: 89 ea 09 c6 e8 57 d4 00 00 5b 41 5c 41 5d 41 5e
+5d c3 48 8b 83 c0 00 00 00 49 63 d5 f0 48 0f ab 10 5b 41 5c 41 5d 41
+5e 5d c3 <0f> 0b 5b 41 5c 41 5d 41 5e 5d c3 0f 1f 44 00 00 eb 80 0f 1f
+40 00
+[   62.569265] RSP: 0018:ffffa347c1663b50 EFLAGS: 00010246
+[   62.574502] RAX: 0000000080000000 RBX: ffff8f01149ce600 RCX: 0000000000000000
+[   62.581700] RDX: 0000000000000000 RSI: ffffffffa302ab31 RDI: ffffffffa302ab31
+[   62.588874] RBP: ffffa347c1663b70 R08: 0000000000000000 R09: 0000000000000001
+[   62.596046] R10: 0000000000000001 R11: 0000000000000000 R12: ffffa347c1665000
+[   62.603213] R13: 0000000000000022 R14: 0000000000000000 R15: 0000000000000004
+[   62.610389] FS:  00007fe3799c1740(0000) GS:ffff8f041fc80000(0000)
+knlGS:0000000000000000
+[   62.618697] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   62.624467] CR2: 0000000000000000 CR3: 000000010614e004 CR4: 00000000003726e0
+[   62.631684] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   62.638833] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[   62.646009] Call Trace:
+[   62.648480]  <TASK>
+[   62.650604]  __kvm_write_guest_page+0xc8/0x100
+[   62.655112]  kvm_write_guest+0x61/0xb0
+[   62.658884]  kvm_hv_invalidate_tsc_page+0xd3/0x140
+[   62.663699]  ? kvm_hv_invalidate_tsc_page+0x72/0x140
+[   62.668684]  kvm_arch_vm_ioctl+0x20f/0xbc0
+[   62.672798]  ? __lock_acquire+0x3af/0x2450
+[   62.676956]  ? __this_cpu_preempt_check+0x13/0x20
+[   62.681706]  kvm_vm_ioctl+0x6f1/0xe20
+[   62.685423]  ? ktime_get_coarse_real_ts64+0xc7/0xd0
+[   62.690323]  ? __this_cpu_preempt_check+0x13/0x20
+[   62.695048]  ? lockdep_hardirqs_on+0x7e/0x100
+[   62.699423]  ? blk_log_with_error+0x3b/0x70
+[   62.703644]  ? __audit_syscall_entry+0xcd/0x130
+[   62.708220]  ? selinux_file_ioctl+0xa6/0x130
+[   62.712542]  ? selinux_file_ioctl+0xa6/0x130
+[   62.716869]  __x64_sys_ioctl+0x91/0xc0
+[   62.720686]  do_syscall_64+0x5c/0x80
+[   62.724305]  ? __this_cpu_preempt_check+0x13/0x20
+[   62.729059]  ? lock_is_held_type+0xdd/0x130
+[   62.733264]  ? do_syscall_64+0x69/0x80
+[   62.737069]  ? __this_cpu_preempt_check+0x13/0x20
+[   62.741791]  ? lockdep_hardirqs_on+0x7e/0x100
+[   62.746219]  ? syscall_exit_to_user_mode+0x3e/0x50
+[   62.751082]  ? do_syscall_64+0x69/0x80
+[   62.754904]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[   62.760027] RIP: 0033:0x7fe3792bf8f7
+[   62.763687] Code: b3 66 90 48 8b 05 a1 35 2c 00 64 c7 00 26 00 00
+00 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00
+00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 71 35 2c 00 f7 d8 64 89
+01 48
+[   62.782497] RSP: 002b:00007ffe035acf38 EFLAGS: 00000246 ORIG_RAX:
+0000000000000010
+[   62.790131] RAX: ffffffffffffffda RBX: 000000004030ae7b RCX: 00007fe3792bf8f7
+[   62.797334] RDX: 00007ffe035acf70 RSI: 000000004030ae7b RDI: 0000000000000006
+[   62.804539] RBP: 0000000000000007 R08: 000000000040e320 R09: 0000000000000007
+[   62.811737] R10: 000000000004da6b R11: 0000000000000246 R12: 00007fe3799c7000
+[   62.818914] R13: 0000000000000007 R14: 00000000000058cb R15: 00000000000e8f42
+[   62.826141]  </TASK>
+[   62.828378] irq event stamp: 6435
+[   62.831765] hardirqs last  enabled at (6445): [<ffffffffa3272a88>]
+__up_console_sem+0x58/0x60
+[   62.840354] hardirqs last disabled at (6454): [<ffffffffa3272a6d>]
+__up_console_sem+0x3d/0x60
+[   62.848944] softirqs last  enabled at (6392): [<ffffffffa4600341>]
+__do_softirq+0x341/0x4cc
+[   62.857362] softirqs last disabled at (6473): [<ffffffffa31ef29f>]
+irq_exit_rcu+0xdf/0x140
+[   62.865700] ---[ end trace 0000000000000000 ]---
+ok 6 selftests: kvm: hyperv_clock
 
-> 
-> >  arch/arm64/kernel/smp.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-> > index 27df5c1e6baa..3b46041f2b97 100644
-> > --- a/arch/arm64/kernel/smp.c
-> > +++ b/arch/arm64/kernel/smp.c
-> > @@ -234,6 +234,7 @@ asmlinkage notrace void secondary_start_kernel(void)
-> >  	 * Log the CPU info before it is marked online and might get read.
-> >  	 */
-> >  	cpuinfo_store_cpu();
-> > +	store_cpu_topology(cpu);
-> >  
-> >  	/*
-> >  	 * Enable GIC and timers.
-> > @@ -242,7 +243,6 @@ asmlinkage notrace void secondary_start_kernel(void)
-> >  
-> >  	ipi_setup(cpu);
-> >  
-> > -	store_cpu_topology(cpu);
-> >  	numa_add_cpu(cpu);
-> >  
-> >  	/*
-> 
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
--- 
+--
+Linaro LKFT
+https://lkft.linaro.org
 
+[1] https://lkft.validation.linaro.org/scheduler/job/4805876#L1528

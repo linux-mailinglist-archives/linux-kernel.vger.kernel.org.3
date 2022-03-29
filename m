@@ -2,84 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CDF4EB691
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6374EB696
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239806AbiC2XPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:15:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
+        id S239872AbiC2XQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239799AbiC2XP1 (ORCPT
+        with ESMTP id S229955AbiC2XQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:15:27 -0400
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9D81CB2A;
-        Tue, 29 Mar 2022 16:13:43 -0700 (PDT)
-Received: by mail-oi1-f179.google.com with SMTP id 12so20506039oix.12;
-        Tue, 29 Mar 2022 16:13:43 -0700 (PDT)
+        Tue, 29 Mar 2022 19:16:43 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A6CB71;
+        Tue, 29 Mar 2022 16:14:59 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id w8so18971422pll.10;
+        Tue, 29 Mar 2022 16:14:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GVyk3VeB+5cu02fn2mqPCn1EetZXu1aDKXOdGuWh/Ds=;
+        b=McZcb7XmFsqQa/36lU8fFgx8zDKaMXEP9iqDrkYQiLEIs2Nms1+cipVVMp9Au0qSbO
+         Px2cgZmTpQzQCmxn6lSV3XCJfb/VSWlGZ2DMsgwF6rU1xyVX5HkfCJzVVGcQFkimGMkJ
+         9YZzmeu8ZGDrL1q7Z0eJRgYJo8T5NA+lqqH7/d23YfodZHL7/WW37fSpwrxNM27E/w81
+         ENhPZhyjzg/45Yhhh9OIf9KId2qP8kIPKK2PWHGs5T/sNGKLM6baFdE1SRsXIQxpS2D7
+         NxsM7mB5xRJY2Z9+beRrmqzmRvoFQk7p23MGcE+/ZmCD5RThlYwQlIyk3Z4yY9+9/9uV
+         WByA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IExzvSw3a194l6T1N/gwY3qoCvj4gnDhEAY3Ha2H9NY=;
-        b=m771FAU1p7i0yvOBh/ERXgGDRMj9lxc8ZaIVFbsziRKlPzolEqWiuoV2zonqHz0n2i
-         HV26q/BcywvK3VtZNUwD1JVMGLGVlI0S0SplnT64xDVJkADyusViZVGhNcPbfAadJ0LA
-         WkbvbNkL45Zo0fNxsF1NxjfJMUZojR7OiCOjLOEppop95rUjXvOeIAaQqqKJt6xMly6t
-         e7+JDIfVuPv70V2oNFhBU4ZoE3WUTOO3KVdPSmTByopwtXmOZxGY4Dw3962j9AqYS6rL
-         YQAc3T9j3Ttbw0ShC03iLqkrYF9yNW5cTCnBCilMAytoHChZI9qrPnHm39NPiYerZMvH
-         RGxg==
-X-Gm-Message-State: AOAM531zzHLpeh0rbiZig4HwlyGgI4QQmuqptBa/DioOTJTFZs8/ZAz/
-        0aECypybv2hJcfwRYMRHI9yJW445qg==
-X-Google-Smtp-Source: ABdhPJyWbndVtnhZaOGxEK/6LBjkh8P9MSyR1tz8YaNIP/1OyKH/D8GFHdQieHcEBMcWDY8Iaw2XEw==
-X-Received: by 2002:aca:4043:0:b0:2ef:f455:7ac9 with SMTP id n64-20020aca4043000000b002eff4557ac9mr679218oia.71.1648595623047;
-        Tue, 29 Mar 2022 16:13:43 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m16-20020a9d4c90000000b005cb214bef81sm9721558otf.43.2022.03.29.16.13.41
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GVyk3VeB+5cu02fn2mqPCn1EetZXu1aDKXOdGuWh/Ds=;
+        b=EtqNS2AwbF09cBqrMNxBBky/gSeDgFS5vTTrj/ac9Dwh9X6jDcsh6jDyAjTVRwvQRj
+         DL/ibr+b3iw4Ka38AQr2rMKelaq5eQp20eseqtwP+EDOXY+T6CB7/bgVb1blbSkbgx1i
+         6FjDRWE58gfDDDW1qsYrau+uwUT3ounYDGgaYSLOEjeShJAkdbqTAZCniNWkf7m32fuh
+         d8s03P2O+cn5F18fhuSFy36qkvJMy/Esu2j2noCC3f62BBz+FVTAgOqUFQG5VVjvDp2Z
+         ozQ6kIuEOzaudaQr0Mb0gO81nT2q7YiTJ7qeGz5SsyKOUJr0argPAHpiJMuTOXFEWLrs
+         fWXQ==
+X-Gm-Message-State: AOAM533TitaMv66ACpA0VErkffQMImhjPmyNuOVsAIEk3BNn0W1Qg+Jc
+        tyEuK+eAnOsOKCiThjpd3mU=
+X-Google-Smtp-Source: ABdhPJwmtKuwYq2XJxrZVYHeNhf7EWn2H2TFkD0FothD52FPa3avc11q27bQUw4qun3Uz8pU9AW5cg==
+X-Received: by 2002:a17:90a:de98:b0:1c7:1bed:67f7 with SMTP id n24-20020a17090ade9800b001c71bed67f7mr1572000pjv.199.1648595698633;
+        Tue, 29 Mar 2022 16:14:58 -0700 (PDT)
+Received: from localhost.localdomain ([180.150.111.33])
+        by smtp.gmail.com with ESMTPSA id j14-20020a056a00174e00b004f66ce6367bsm23336390pfc.147.2022.03.29.16.14.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 16:13:42 -0700 (PDT)
-Received: (nullmailer pid 1531833 invoked by uid 1000);
-        Tue, 29 Mar 2022 23:13:41 -0000
-Date:   Tue, 29 Mar 2022 18:13:41 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
-Cc:     matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        aaronyu@google.com, linmq006@gmail.com,
-        linux-arm-kernel@lists.infradead.org, tzungbi@google.com,
-        linux-kernel@vger.kernel.org, broonie@kernel.org,
-        trevor.wu@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        angelogioacchino.delregno@collabora.com, robh+dt@kernel.org
-Subject: Re: [v7 1/4] ASoC: dt-bindings: mt8192-mt6359: add new compatible
- and new properties
-Message-ID: <YkOSpctgU9w9xhh0@robh.at.kernel.org>
-References: <20220324064511.10665-1-jiaxin.yu@mediatek.com>
- <20220324064511.10665-2-jiaxin.yu@mediatek.com>
+        Tue, 29 Mar 2022 16:14:57 -0700 (PDT)
+From:   Jamie Bainbridge <jamie.bainbridge@gmail.com>
+To:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Jamie Bainbridge <jamie.bainbridge@gmail.com>,
+        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 net] sctp: count singleton chunks in assoc user stats
+Date:   Wed, 30 Mar 2022 09:13:42 +1000
+Message-Id: <c2abe2f2ba779cbb453e65a7ddae1654baa17623.1648595611.git.jamie.bainbridge@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324064511.10665-2-jiaxin.yu@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Mar 2022 14:45:08 +0800, Jiaxin Yu wrote:
-> 1. Adds new compatible string "mt8192_mt6359_rt1015p_rt5682s" for machine
-> with rt1015p and rt5682s.
-> 2. Adds new property "headset-codec" for getting headset codec.
-> 3. Adds new property "speaker-codecs" for getting speaker codecs.
-> 
-> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> ---
->  .../sound/mt8192-mt6359-rt1015-rt5682.yaml    | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
-> 
+Singleton chunks (INIT, HEARTBEAT PMTU probes, and SHUTDOWN-
+COMPLETE) are not counted in SCTP_GET_ASOC_STATS "sas_octrlchunks"
+counter available to the assoc owner.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+These are all control chunks so they should be counted as such.
+
+Add counting of singleton chunks so they are properly accounted for.
+
+Fixes: 196d67593439 ("sctp: Add support to per-association
+statistics via a new SCTP_GET_ASSOC_STATS call")
+
+Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
+---
+ net/sctp/outqueue.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/net/sctp/outqueue.c b/net/sctp/outqueue.c
+index a18609f608fb786b2532a4febbd72a9737ab906c..bed34918b41f24810677adc0cd4fbd0859396a02 100644
+--- a/net/sctp/outqueue.c
++++ b/net/sctp/outqueue.c
+@@ -914,6 +914,7 @@ static void sctp_outq_flush_ctrl(struct sctp_flush_ctx *ctx)
+ 				ctx->asoc->base.sk->sk_err = -error;
+ 				return;
+ 			}
++			ctx->asoc->stats.octrlchunks++;
+ 			break;
+ 
+ 		case SCTP_CID_ABORT:
+@@ -939,6 +940,7 @@ static void sctp_outq_flush_ctrl(struct sctp_flush_ctx *ctx)
+ 		case SCTP_CID_HEARTBEAT:
+ 			if (chunk->pmtu_probe) {
+ 				sctp_packet_singleton(ctx->transport, chunk, ctx->gfp);
++				ctx->asoc->stats.octrlchunks++;
+ 				break;
+ 			}
+ 			fallthrough;
+-- 
+2.35.1
+

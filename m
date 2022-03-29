@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169224EA9C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 10:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 270A24EA9CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 10:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233818AbiC2IxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 04:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40784 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234240AbiC2IxH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S234242AbiC2IxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 29 Mar 2022 04:53:07 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E1C55BDD
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 01:51:24 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-de48295467so18023321fac.2
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 01:51:24 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234238AbiC2Iwt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 29 Mar 2022 04:52:49 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2619451E5A;
+        Tue, 29 Mar 2022 01:51:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Sd/uPbCy+ySZT+qPihwZYiLaTHG+pfVJ3nw0jfPbprI=;
-        b=NFpGKRrAos0oJUYWKsapTWH2MnHxaeIss6UYZhqmckncq81qDbcJndUBTT2QOeMvUc
-         DKA25vx5N/s80BDkUO9s69+EJc3zpV0rOj/SjkZSFDX+81xs2xmQp/Jh3KcdotLEBp7R
-         GRAYR2mCnkSWVa8BKWdApIJYvzwksRaeIA1oqDi7jhIxs3d5m0h3PzQxm9MwieCFR96G
-         h/MgyGuW/RhXnhhIVeeUPgJkPYiyRmH6JRXi9NtVu8SqwWoxlD+tf507yJqqKcnPSg1B
-         EJ3b8dVmRDWMh8PaW0fWDt4/TizHuKhfia0WhpCwpgw6CtU28lI8Vu7tmQwaQhiaMG3c
-         AI0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Sd/uPbCy+ySZT+qPihwZYiLaTHG+pfVJ3nw0jfPbprI=;
-        b=c3qrGbdWiRTLqq+0n6Q98VGI2itKIJcqA4qwp/Hf/c42sN/GTVuefkyaoX5nfRDg1E
-         FLf2LCKmL3upZjR1v00O7loL+JInf2B02leV7SwiigCYTjqftAM8bsMxe+F8BubDYG+P
-         m5CJ9H2sX9JyTUzjqvdl3Apu3g3F2ffA8l3qvk4UjZALKOwxlWUeo7GJJhISs/k4xZAO
-         GpWLEDWumGmmb9uuxPF/Ph2rudDdlGQDpE9esLberl7dVlB5UuTyZJOdbSkeYM0s/3n/
-         JIdEyeokKddy+HUHy/hrRA4hWXwjoQjyMV+fjrUGkX641hr+suM00/w2ecl+RsTI8ioK
-         jcXw==
-X-Gm-Message-State: AOAM530lessDLG8Q35y+5DA48XcIU6roLyG2blhl4avFEhuyp/t6v/oZ
-        vLbe7lwOA8PJMrheW9htzXalKWrB5xAso/nyJUS7hQ==
-X-Google-Smtp-Source: ABdhPJzvEhD1ChOqnTr7YHf9ZKDvTxDrDGlXzyFwe0eVAAXipoLOC+EstvVHjMcZN1Ky/ep+sjdiKXzamyP2trQdNVQ=
-X-Received: by 2002:a05:6870:700f:b0:dd:9f77:9a97 with SMTP id
- u15-20020a056870700f00b000dd9f779a97mr1638894oae.146.1648543883596; Tue, 29
- Mar 2022 01:51:23 -0700 (PDT)
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1648543865; x=1680079865;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wWjkIsGoRiHdG4LM9QjPl/bqZpReNK5RcM9UVleK3mw=;
+  b=B/LEcAqrLIBOv2FnFFlIoYTbhf5KrkcjpWjSVjnLtv3EWUt8MWmQn/YM
+   gQxOx68OfTLViQewQl9BN48BzHSAyNq9fvkrGzt1xQaA3CyepQN2RtSAQ
+   M2Uph0WgHgf+QorVEC06yTvxZyOzNiaJyzbKlpPYA8rpnHknQapLgN23T
+   SIS5WEbbHmWNGJ0qpgQl7zCYWKH2inbOn/FT861wvrsm6qe00uKTYa7Lr
+   yvB0a5uRt8/bL9WCtFiGR3xAnRviotlgORj1OMmb4oxLpOtp7hCerzGJJ
+   +nZyViWsl5xhFHn4YRrWaasi/SCtavgPTM9iIIh8YofrvOiD63F2G8hLc
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,219,1643670000"; 
+   d="scan'208";a="22954136"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 29 Mar 2022 10:51:02 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 29 Mar 2022 10:51:02 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 29 Mar 2022 10:51:02 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1648543862; x=1680079862;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wWjkIsGoRiHdG4LM9QjPl/bqZpReNK5RcM9UVleK3mw=;
+  b=QnE21zjVvkmAd27D8EsS86mdmONZwM+HOwPgYUSQiDVnnsYDKln6YqXl
+   OmVNDhiYFx/Bp9SJHkUZzCLOm5mqZAYchtNIoUEfrTeTZjnNXtsSujAx4
+   2hRgsMh6hFDxBKLVCmF67V9xuGvDB0V3NvJUC+Zc23k9A/3N2ARR1FbKx
+   akYeJdHw/sMW8dAAxzhhjPumbIt+ixH4k/gw8dR1TQnbmS/k6M32YqTJ+
+   /Ewm4RryjznrgfTj/CDDSAZ4zjfsv4lOeJ9LQ2Xx0yC1jVelMdIO1rzuj
+   wr3cGjsdIZn+Hb21E1aFaBubxnFHM0hRIBkBYSWUklcIeuw3qlBnIHoeB
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,219,1643670000"; 
+   d="scan'208";a="22954135"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 29 Mar 2022 10:51:02 +0200
+Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.201.138])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id C47F3280065;
+        Tue, 29 Mar 2022 10:51:01 +0200 (CEST)
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>
+Cc:     Russell King <linux@armlinux.org.uk>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Subject: [PATCH] serial: Revert RS485 polarity change on UART open
+Date:   Tue, 29 Mar 2022 10:50:50 +0200
+Message-Id: <20220329085050.311408-1-matthias.schiffer@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220314200148.2695206-1-kaleshsingh@google.com> <20220314200148.2695206-3-kaleshsingh@google.com>
-In-Reply-To: <20220314200148.2695206-3-kaleshsingh@google.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Tue, 29 Mar 2022 09:50:47 +0100
-Message-ID: <CA+EHjTysueEjwwNREbtvy2wh89n89wFVpM2xM34kGeTx+e7QFQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/8] KVM: arm64: Introduce pkvm_alloc_private_va_range()
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
-        surenb@google.com, kernel-team@android.com,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andrew Scull <ascull@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,222 +79,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kalesh,
+While the change of the RS485 polarity in
+commit d3b3404df318 ("serial: Fix incorrect rs485 polarity on uart open")
+might have made sense based on the original intention of the
+rs485-rts-active-low flag (*), this is not how it is implemented in
+various drivers:
 
-On Mon, Mar 14, 2022 at 8:03 PM Kalesh Singh <kaleshsingh@google.com> wrote:
->
-> pkvm_hyp_alloc_private_va_range() can be used to reserve private VA ranges
-> in the pKVM nVHE hypervisor. Allocations are aligned based on the order of
-> the requested size.
->
-> This will be used to implement stack guard pages for pKVM nVHE hypervisor
-> (in a subsequent patch in the series).
->
-> Credits to Quentin Perret <qperret@google.com> for the idea of moving
-> private VA allocation out of __pkvm_create_private_mapping()
->
-> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+At least the 8250 and the i.MX UART drivers interpret rs485-rts-active-low
+the other way around. For these drivers, said change broke the initial
+state of the RTS pin after opening the UART, making it impossible to
+receive data until after the first send.
 
-Tested-by: Fuad Tabba <tabba@google.com>
-Reviewed-by: Fuad Tabba <tabba@google.com>
+I considered fixing up the drivers to match the polarity used for the
+initial state, however doing so would break all existing Device Trees
+that configure RS485 for one of these drivers. Reverting the change
+makes RS485 work correctly again on these devices.
 
-Thanks,
-/fuad
+[(*) My understanding of the mentioned commit's description is that
+rs485-rts-active-low should have referred to the electical signal level
+of the RTS pin, rather than the logical RTS state as understood by the
+UART controller.]
 
+Fixes: d3b3404df318 ("serial: Fix incorrect rs485 polarity on uart open")
+Fixes: 2dd8a74fddd2 ("serial: core: Initialize rs485 RTS polarity already on probe")
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+---
 
-> ---
->
-> Changes in v6:
->   - Update kernel-doc for pkvm_alloc_private_va_range() and add
->     return description, per Stephen
->   - Update pkvm_alloc_private_va_range() to return an int error code,
->     per Stephen
->   - Update __pkvm_create_private_mapping to return an in error code,
->     per Quentin
->   - Update callers of __pkvm_create_private_mapping() to handle new
->     return value and params.
->
-> Changes in v5:
->   - Align private allocations based on the order of their size, per Marc
->
-> Changes in v4:
->   - Handle null ptr in pkvm_alloc_private_va_range() and replace
->     IS_ERR_OR_NULL checks in callers with IS_ERR checks, per Fuad
->   - Fix kernel-doc comments format, per Fuad
->   - Format __pkvm_create_private_mapping() prototype args (< 80 col), per Fuad
->
-> Changes in v3:
->   - Handle null ptr in IS_ERR_OR_NULL checks, per Mark
->
-> Changes in v2:
->   - Allow specifying an alignment for the private VA allocations, per Marc
->
->
->  arch/arm64/kvm/hyp/include/nvhe/mm.h |  6 ++-
->  arch/arm64/kvm/hyp/nvhe/hyp-main.c   | 18 ++++++-
->  arch/arm64/kvm/hyp/nvhe/mm.c         | 78 ++++++++++++++++++----------
->  3 files changed, 72 insertions(+), 30 deletions(-)
->
-> diff --git a/arch/arm64/kvm/hyp/include/nvhe/mm.h b/arch/arm64/kvm/hyp/include/nvhe/mm.h
-> index 2d08510c6cc1..42d8eb9bfe72 100644
-> --- a/arch/arm64/kvm/hyp/include/nvhe/mm.h
-> +++ b/arch/arm64/kvm/hyp/include/nvhe/mm.h
-> @@ -19,8 +19,10 @@ int hyp_back_vmemmap(phys_addr_t phys, unsigned long size, phys_addr_t back);
->  int pkvm_cpu_set_vector(enum arm64_hyp_spectre_vector slot);
->  int pkvm_create_mappings(void *from, void *to, enum kvm_pgtable_prot prot);
->  int pkvm_create_mappings_locked(void *from, void *to, enum kvm_pgtable_prot prot);
-> -unsigned long __pkvm_create_private_mapping(phys_addr_t phys, size_t size,
-> -                                           enum kvm_pgtable_prot prot);
-> +int __pkvm_create_private_mapping(phys_addr_t phys, size_t size,
-> +                                 enum kvm_pgtable_prot prot,
-> +                                 unsigned long *haddr);
-> +int pkvm_alloc_private_va_range(size_t size, unsigned long *haddr);
->
->  static inline void hyp_vmemmap_range(phys_addr_t phys, unsigned long size,
->                                      unsigned long *start, unsigned long *end)
-> diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-main.c b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
-> index 5e2197db0d32..3cea4b6ac23e 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/hyp-main.c
-> +++ b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
-> @@ -160,7 +160,23 @@ static void handle___pkvm_create_private_mapping(struct kvm_cpu_context *host_ct
->         DECLARE_REG(size_t, size, host_ctxt, 2);
->         DECLARE_REG(enum kvm_pgtable_prot, prot, host_ctxt, 3);
->
-> -       cpu_reg(host_ctxt, 1) = __pkvm_create_private_mapping(phys, size, prot);
-> +       /*
-> +        * __pkvm_create_private_mapping() populates a pointer with the
-> +        * hypervisor start address of the allocation.
-> +        *
-> +        * However, handle___pkvm_create_private_mapping() hypercall crosses the
-> +        * EL1/EL2 boundary so the pointer would not be valid in this context.
-> +        *
-> +        * Instead pass the allocation address as the return value (or return
-> +        * ERR_PTR() on failure).
-> +        */
-> +       unsigned long haddr;
-> +       int err = __pkvm_create_private_mapping(phys, size, prot, &haddr);
-> +
-> +       if (err)
-> +               haddr = (unsigned long)ERR_PTR(err);
-> +
-> +       cpu_reg(host_ctxt, 1) = haddr;
->  }
->
->  static void handle___pkvm_prot_finalize(struct kvm_cpu_context *host_ctxt)
-> diff --git a/arch/arm64/kvm/hyp/nvhe/mm.c b/arch/arm64/kvm/hyp/nvhe/mm.c
-> index cdbe8e246418..670f11349070 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/mm.c
-> +++ b/arch/arm64/kvm/hyp/nvhe/mm.c
-> @@ -37,36 +37,60 @@ static int __pkvm_create_mappings(unsigned long start, unsigned long size,
->         return err;
->  }
->
-> -unsigned long __pkvm_create_private_mapping(phys_addr_t phys, size_t size,
-> -                                           enum kvm_pgtable_prot prot)
-> +/**
-> + * pkvm_alloc_private_va_range - Allocates a private VA range.
-> + * @size:      The size of the VA range to reserve.
-> + * @haddr:     The hypervisor virtual start address of the allocation.
-> + *
-> + * The private virtual address (VA) range is allocated above __io_map_base
-> + * and aligned based on the order of @size.
-> + *
-> + * Return: 0 on success or negative error code on failure.
-> + */
-> +int pkvm_alloc_private_va_range(size_t size, unsigned long *haddr)
->  {
-> -       unsigned long addr;
-> -       int err;
-> +       unsigned long base, addr;
-> +       int ret = 0;
->
->         hyp_spin_lock(&pkvm_pgd_lock);
->
-> -       size = PAGE_ALIGN(size + offset_in_page(phys));
-> -       addr = __io_map_base;
-> -       __io_map_base += size;
-> +       /* Align the allocation based on the order of its size */
-> +       addr = ALIGN(__io_map_base, PAGE_SIZE << get_order(size));
->
-> -       /* Are we overflowing on the vmemmap ? */
-> -       if (__io_map_base > __hyp_vmemmap) {
-> -               __io_map_base -= size;
-> -               addr = (unsigned long)ERR_PTR(-ENOMEM);
-> -               goto out;
-> -       }
-> +       /* The allocated size is always a multiple of PAGE_SIZE */
-> +       base = addr + PAGE_ALIGN(size);
->
-> -       err = kvm_pgtable_hyp_map(&pkvm_pgtable, addr, size, phys, prot);
-> -       if (err) {
-> -               addr = (unsigned long)ERR_PTR(err);
-> -               goto out;
-> +       /* Are we overflowing on the vmemmap ? */
-> +       if (!addr || base > __hyp_vmemmap)
-> +               ret = -ENOMEM;
-> +       else {
-> +               __io_map_base = base;
-> +               *haddr = addr;
->         }
->
-> -       addr = addr + offset_in_page(phys);
-> -out:
->         hyp_spin_unlock(&pkvm_pgd_lock);
->
-> -       return addr;
-> +       return ret;
-> +}
-> +
-> +int __pkvm_create_private_mapping(phys_addr_t phys, size_t size,
-> +                                 enum kvm_pgtable_prot prot,
-> +                                 unsigned long *haddr)
-> +{
-> +       unsigned long addr;
-> +       int err;
-> +
-> +       size += offset_in_page(phys);
-> +       err = pkvm_alloc_private_va_range(size, &addr);
-> +       if (err)
-> +               return err;
-> +
-> +       err = __pkvm_create_mappings(addr, size, phys, prot);
-> +       if (err)
-> +               return err;
-> +
-> +       *haddr = addr + offset_in_page(phys);
-> +       return err;
->  }
->
->  int pkvm_create_mappings_locked(void *from, void *to, enum kvm_pgtable_prot prot)
-> @@ -146,7 +170,8 @@ int pkvm_cpu_set_vector(enum arm64_hyp_spectre_vector slot)
->  int hyp_map_vectors(void)
->  {
->         phys_addr_t phys;
-> -       void *bp_base;
-> +       unsigned long bp_base;
-> +       int ret;
->
->         if (!kvm_system_needs_idmapped_vectors()) {
->                 __hyp_bp_vect_base = __bp_harden_hyp_vecs;
-> @@ -154,13 +179,12 @@ int hyp_map_vectors(void)
->         }
->
->         phys = __hyp_pa(__bp_harden_hyp_vecs);
-> -       bp_base = (void *)__pkvm_create_private_mapping(phys,
-> -                                                       __BP_HARDEN_HYP_VECS_SZ,
-> -                                                       PAGE_HYP_EXEC);
-> -       if (IS_ERR_OR_NULL(bp_base))
-> -               return PTR_ERR(bp_base);
-> +       ret = __pkvm_create_private_mapping(phys, __BP_HARDEN_HYP_VECS_SZ,
-> +                                           PAGE_HYP_EXEC, &bp_base);
-> +       if (ret)
-> +               return ret;
->
-> -       __hyp_bp_vect_base = bp_base;
-> +       __hyp_bp_vect_base = (void *)bp_base;
->
->         return 0;
->  }
-> --
-> 2.35.1.723.g4982287a31-goog
->
+Skimming through a few other drivers with RS485 support, many other
+implementation are in agreement with the 8250 and i.MX drivers. This seems
+to be the case for the OMAP and the STM32 drivers. The PL011 driver on the
+other hand seems to disagree, so it will need to be fixed if the intention
+is to make all drivers consistent (preferable by someone who is familiar
+with that hardware and can test the change).
+
+It is unfortunate that different drivers disagree here, as any fix to
+make things more consistent will break some users. One way to avoid that
+would be to deprecate the rs485-rts-active-low flag altogether and replace
+it with something new that is implemented consistently...
+
+I can also propose a clarification for the DT binding documentation, if
+this revert is how we want to proceed with the issue.
+
+ drivers/tty/serial/serial_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 6a8963caf954..c1c8bd712a59 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -2390,7 +2390,7 @@ uart_configure_port(struct uart_driver *drv, struct uart_state *state,
+ 		spin_lock_irqsave(&port->lock, flags);
+ 		port->mctrl &= TIOCM_DTR;
+ 		if (port->rs485.flags & SER_RS485_ENABLED &&
+-		    !(port->rs485.flags & SER_RS485_RTS_AFTER_SEND))
++		    !(port->rs485.flags & SER_RS485_RTS_ON_SEND))
+ 			port->mctrl |= TIOCM_RTS;
+ 		port->ops->set_mctrl(port, port->mctrl);
+ 		spin_unlock_irqrestore(&port->lock, flags);
+-- 
+2.25.1
+

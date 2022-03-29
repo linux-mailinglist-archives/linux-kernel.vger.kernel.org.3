@@ -2,97 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5AED4EB1DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1EBC4EB1E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239052AbiC2QcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 12:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46952 "EHLO
+        id S239681AbiC2Qi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 12:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239658AbiC2QcO (ORCPT
+        with ESMTP id S234114AbiC2Qiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 12:32:14 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C8B24221E;
-        Tue, 29 Mar 2022 09:30:30 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id h4so13554614edr.3;
-        Tue, 29 Mar 2022 09:30:30 -0700 (PDT)
+        Tue, 29 Mar 2022 12:38:55 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA3973058
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:37:12 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id bq8so22325618ejb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:37:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rup4gmFVRMm1Db1xKcQ9C4DJyayglE33FgITP93feZI=;
-        b=f8zqtGcfvk0wEpNaAgaCylr34j14R+MDTTY9qugHrR1MIk/oAlUmCHAAvTannf6ZUz
-         sLY36RDHN0pt3a7GCMLxHiNojdB3MLuSBUkzIZVRHTWGX8DquOLPps7qp5PIyNinj13i
-         58KwUPz25LTZe2Di6xx4zhdb7FBfiDAevjCdMJ2J5oNvt+Rahrnk5wf/XJAxuPp10CMI
-         Z3tQ7GMhTvu/hyfb0/8je/fK7yqsHvbZv3PrmOf4GL7WrhCZiMSzH2g85ObyMspop5Kc
-         vRtkCdcF0QXVz/ZXU4dI+I6PNZm2YhPBZsVRXsi9ZelyDjWZvTA4Qf+PO7RUCWIH3GJW
-         0lyw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fbJk0tnKIVIGfOYC3TDZlX4uGjeQKwVPpyRczD7tbFk=;
+        b=K22KiM1d/xsIZkexASjSgNs8svDl3aD0kPeEa1JQfSfINsXxJ7HcVaM8mccdfRxXBj
+         1JlsSV3RtwXllgCf6PYJH+ZAN1lYhTedkQhP8XJ7qkfnEyldYxkMp3FlnFHkXjUntFXL
+         7cat0tJr/MYu4d+EWFFGx9P44wtA1tUDrjH54=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rup4gmFVRMm1Db1xKcQ9C4DJyayglE33FgITP93feZI=;
-        b=IMOsVFrgVkzpt2smsoDhDnqswo8LzWWhtHNQzSNuftUk3ggRkNFKUJl4WpZc7zHKUD
-         dPLRizjChI5xdqJF6mByXSoqysrEEOche0m7MRdzL+BrK0wbFNerCfrUkX9WUz09VyMZ
-         pHPHSQMwM35DOTm6zoeBiqMq3WUDmILuVm7nB6WdYLWpwuL2LdRFPvHo4etQ1E1S0V5B
-         nFdtq6Yi0erGU2KHLNPvin+8waObf6pfMMc+IPBuub90oDcN4wwl9MHGZaAv5PJ2oYdA
-         ZQ5xoTjy+Tt+n2SptUGNUra08HhuDwGhUQ78cP2T0HeQoUYaJ4j1kpce3nNH/e0p1Qgj
-         U1nQ==
-X-Gm-Message-State: AOAM532VuZ+mXCuvqcvoQF1nif37YGD0udkDxbbqehp2WaBFLF8bcQnJ
-        LxucGJwGivvkbBPUYEJHSuc=
-X-Google-Smtp-Source: ABdhPJzTy7FW/+WGlMtP1pToBeoHtes0f1brjP90ukaULF4+ONZLw0bw81tdrnAqoB2Cm4GbqnRReA==
-X-Received: by 2002:a50:d90f:0:b0:418:8a5a:14b2 with SMTP id t15-20020a50d90f000000b004188a5a14b2mr5538105edj.241.1648571429156;
-        Tue, 29 Mar 2022 09:30:29 -0700 (PDT)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id k26-20020a056402049a00b004197b0867e0sm8601179edv.42.2022.03.29.09.30.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 09:30:28 -0700 (PDT)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de, zhangqing@rock-chips.com
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/3] arm64: rockchip: add clocks property to cru node rk3328
-Date:   Tue, 29 Mar 2022 18:30:16 +0200
-Message-Id: <20220329163016.27458-3-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220329163016.27458-1-jbx6244@gmail.com>
-References: <20220329163016.27458-1-jbx6244@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fbJk0tnKIVIGfOYC3TDZlX4uGjeQKwVPpyRczD7tbFk=;
+        b=vAt/Ev6hFyDw9DX4EL4I2lZtMo/6ES9mwU+2nUCe7Wso8XGOJ/KrhGxvx4eQNV25pA
+         znklYgDi5hUqeekCOlvFcMOXMuSdwsUpYOEJsELGUHI3dq1slTd2lVj7xEb+bCr3RpfG
+         GkUoLYp9G3KKUZCpxfwfoGUYtVbqsoNFFWWgxa5jVB7xi0eWbH6PYw73+mTYlnUbqJjp
+         rn3TWeEj6RI22nQ36I/4KoBuC84wY37X/+TFyiw9zg5XMtzG2Js4KjAIwhFmQ+5mR0ZH
+         LR7E9Pb4p2McdFEHiTnl3CifFL41W3HUD6bhzu1ij0nbKiFAWC77ythPhIAZhaUlkQN/
+         kJ9Q==
+X-Gm-Message-State: AOAM530zaHtVcZQ6J063NCd+PI5X8HsH3pJzygf/CKnhbVHR2Tr5ypLh
+        rrEZFgOtY9iimHKsg5ESGsDS3/HpK0BeUyDN
+X-Google-Smtp-Source: ABdhPJw1kjX7GRfdwqVfhgiUzOsumnpeaLoThqFGgHcsimMy0r3RLGZxTJoVaAKxco7t+Ql2G14G0g==
+X-Received: by 2002:a17:906:c148:b0:6e0:2196:9251 with SMTP id dp8-20020a170906c14800b006e021969251mr35190887ejc.180.1648571830513;
+        Tue, 29 Mar 2022 09:37:10 -0700 (PDT)
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
+        by smtp.gmail.com with ESMTPSA id hg11-20020a1709072ccb00b006cee4fb36c7sm7188298ejc.64.2022.03.29.09.37.08
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 09:37:08 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id n35so10668198wms.5
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:37:08 -0700 (PDT)
+X-Received: by 2002:a1c:7518:0:b0:37c:7eb:f255 with SMTP id
+ o24-20020a1c7518000000b0037c07ebf255mr677656wmc.29.1648571827704; Tue, 29 Mar
+ 2022 09:37:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220324134819.v2.1.I816014b6c62da5a33af5021f3cc35cea66552c00@changeid>
+ <CAD=FV=UdRzeHio5Vo+zmXDt9a8oUwXiZyHvxkqjx4HVcrx7W-g@mail.gmail.com>
+In-Reply-To: <CAD=FV=UdRzeHio5Vo+zmXDt9a8oUwXiZyHvxkqjx4HVcrx7W-g@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 29 Mar 2022 09:36:54 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WqO1E_pvChX-mBy3T+bOuWt+SoJD2MgW2Njzxosohxhw@mail.gmail.com>
+Message-ID: <CAD=FV=WqO1E_pvChX-mBy3T+bOuWt+SoJD2MgW2Njzxosohxhw@mail.gmail.com>
+Subject: Re: [PATCH v2] panel-edp: drm/panel-edp: Add AUO B133UAN01
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add clocks property to rk3328 cru node to fix warnings like:
-'clocks' is a dependency of 'assigned-clocks'
+Hi,
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- arch/arm64/boot/dts/rockchip/rk3328.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+On Thu, Mar 24, 2022 at 1:51 PM Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Thu, Mar 24, 2022 at 1:48 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+> >
+> > Add support for the AUO B133UAN01 13.3" WUXGA panel.
+> >
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
+> >
+> > Changes in v2:
+> > - autodetect and configure the panel based on the EDID data instead of
+> >   relying on a compatible string and hardcoded mode settings.
+> >
+> >  drivers/gpu/drm/panel/panel-edp.c | 1 +
+> >  1 file changed, 1 insertion(+)
+>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>
+> Given the trivial nature of this change, I'll plan to land it in a few
+> days barring someone else yelling about it.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3328.dtsi b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-index 73418fd2f..8ceac0388 100644
---- a/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-@@ -758,6 +758,8 @@
- 	cru: clock-controller@ff440000 {
- 		compatible = "rockchip,rk3328-cru";
- 		reg = <0x0 0xff440000 0x0 0x1000>;
-+		clocks = <&xin24m>;
-+		clock-names = "xin24m";
- 		rockchip,grf = <&grf>;
- 		#clock-cells = <1>;
- 		#reset-cells = <1>;
--- 
-2.20.1
+I modified the patch subject slightly since the extra "panel-edp:"
+prefix was redundant, then pushed to drm-misc-next:
 
+ec57376fba5a drm/panel-edp: Add AUO B133UAN01
+
+-Doug

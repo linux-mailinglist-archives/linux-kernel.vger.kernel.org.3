@@ -2,118 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E6C4EAF9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30144EAFA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238121AbiC2OwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 10:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52070 "EHLO
+        id S238128AbiC2OxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 10:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235720AbiC2OwQ (ORCPT
+        with ESMTP id S234762AbiC2OxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 10:52:16 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CB84DF4F;
-        Tue, 29 Mar 2022 07:50:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=S+Tu0Dayg2CTLGhBbl0yg+lgxmDq6qIFjiz7b1KSHxM=;
-        t=1648565433; x=1649775033; b=luoiZwb+tWrBpkhXN5hEJMnMh+15TqG7ksUZ7LkStX5WoCY
-        OzpGNC7aRxwKABLZRLR5knBVrisB7NumgCrGs1tpZzvyAYciERjW9oBwNjZXT/pfNEjlkOHtDlzI9
-        5UwGYhOwnQNZSseP0Fl65/swtIn2wrp3s0Ro6KCw1tRXVDTqaob7uT8nrzhuNRffxKUPUhPe/XxMC
-        hRvShE/5O7LXMjBnedWOMZecqsLcN44n8jiLllpNJeMpuDOT97AlXhzPJcOCdQcLHOE/LQoKHzXdu
-        Pqq5j+SJ+9IhRu6D79kUK3Sy86K1OUzRB3tVgBDqPMIkm3oq3IamSf4lpRozjloA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1nZDAg-0021FO-OZ;
-        Tue, 29 Mar 2022 16:50:10 +0200
-Message-ID: <5b39d572e619c812109af7a1b8028bfb8353efda.camel@sipsolutions.net>
-Subject: Re: [RFC v1 07/10] iio: light: opt3001: add roadtest
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Date:   Tue, 29 Mar 2022 16:50:09 +0200
-In-Reply-To: <20220329144319.GA4474@axis.com>
-References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
-         <20220311162445.346685-8-vincent.whitchurch@axis.com>
-         <CAFd5g47O2PbqaUZRoioRROtywTm=6t7cVgHqO7qc0ZGewQk16A@mail.gmail.com>
-         <20220318154927.GA32172@axis.com>
-         <1e61b0f21794e67fb4e87dc41fab90829d3c7cd6.camel@sipsolutions.net>
-         <20220329144319.GA4474@axis.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Tue, 29 Mar 2022 10:53:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923BD517E6
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:51:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BBA3616BE
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 14:51:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CF9CC2BBE4;
+        Tue, 29 Mar 2022 14:51:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648565497;
+        bh=+utyFpCgB9/BoZfxFp+h+l4laC2+NOLMzF+IdJYwTP4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G4kHok8yHdkFr6K/a5gMUvm7K4WOIU2IREt5YVihKQeWhdEWWSMwI5S9IFMRm84cO
+         A5GBHZPg0MpglN5xKLlm/RSYWcunRovXo17h76l2krJbTMr7TjslCPf4HgCem4sGQG
+         n3UME4DZXlUhD/9KhlApoJgk8SWEtWSuE0mEHvB0=
+Date:   Tue, 29 Mar 2022 16:51:34 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Nam Cao <namcaov@gmail.com>
+Cc:     sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: sm750fb: add necessary #include in
+ sm750_accel.h, sm750_cursor.h
+Message-ID: <YkMc9p4nd/4+2fkf@kroah.com>
+References: <20220318165046.33745-1-namcaov@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220318165046.33745-1-namcaov@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-29 at 16:43 +0200, Vincent Whitchurch wrote:
+On Fri, Mar 18, 2022 at 05:50:46PM +0100, Nam Cao wrote:
+> In sm750_cursor.h, struct lynx_cursor is used without including the
+> header file where this struct is defined. Similar thing is seen in
+> sm750_accel.h.
 > 
-> I'm aware of vhost-user, but AFAICS QEMU needs glue for each device type
-> to be able to actually hook up vhost-user implementations to the devices
-> it exposes to the guest via the virtio PCI device.  See e.g.
-> hw/virtio/vhost-user-i2c-pci.c and hw/virtio/vhost-user-i2c.c in QEMU.
-
-Oh, I wasn't aware of that.
-
-> That is what I meant was missing for virtio-gpio, there seems to be an
-> in-progress patch set for that here though:
->  https://lore.kernel.org/all/cover.1641987128.git.viresh.kumar@linaro.org/
+> The module can still be compiled because there is "#include "sm750.h""
+> before every "#include "sm750_accel.h"" and "#include "sm750_cursor.h"".
+> However, the order of #include should not affect the ability to compile.
 > 
-> Similarly, glue for something like arch/um/drivers/virt-pci.c does not
-> exist in QEMU.
+> Add "#include "sm750.h"" to sm750_accel.h and sm750_cursor.h.
 > 
-> Or perhaps you are implying that hw/virtio/vhost-user-i2c* in QEMU are
-> not strictly needed?
-
-I _thought_ that was the case, but honestly, that was just from reading
-about it, not looking at the code. Thinking about it though, I don't
-need special glue in UML, just passing the device ID on the command
-line? So not sure what they need the glue for. Looking at the code, it's
-not really much though? Not sure, I guess you need somebody more
-familiar with qemu here, sorry.
-
-> > Wohoo! This makes me very happy, finally somebody else who uses it :-)
+> Signed-off-by: Nam Cao <namcaov@gmail.com>
+> ---
+>  drivers/staging/sm750fb/sm750_accel.h  | 2 ++
+>  drivers/staging/sm750fb/sm750_cursor.h | 2 ++
+>  2 files changed, 4 insertions(+)
 > 
-> Yes, thanks for that feature, it works well to speed up tests and also
-> has a knack for triggering race conditions (the RTC use-after-free for
-> example).
+> diff --git a/drivers/staging/sm750fb/sm750_accel.h b/drivers/staging/sm750fb/sm750_accel.h
+> index 2c79cb730a0a..fe6ff196272c 100644
+> --- a/drivers/staging/sm750fb/sm750_accel.h
+> +++ b/drivers/staging/sm750fb/sm750_accel.h
+> @@ -2,6 +2,8 @@
+>  #ifndef ACCEL_H__
+>  #define ACCEL_H__
+>  
+> +#include "sm750.h"
+> +
+>  #define HW_ROP2_COPY 0xc
+>  #define HW_ROP2_XOR 0x6
+>  
+> diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
+> index b59643dd61ed..f023b691ac0b 100644
+> --- a/drivers/staging/sm750fb/sm750_cursor.h
+> +++ b/drivers/staging/sm750fb/sm750_cursor.h
+> @@ -2,6 +2,8 @@
+>  #ifndef LYNX_CURSOR_H__
+>  #define LYNX_CURSOR_H__
+>  
+> +#include "sm750.h"
+> +
+>  /* hw_cursor_xxx works for voyager,718 and 750 */
+>  void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
+>  void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
+> -- 
+> 2.25.1
 > 
-> Time travel however sometimes triggers some WARN_ONs from the core
-> timekeeping code. I haven't seen them when running the test suites, but
-> they show up if the system under UML is idle for several (wall time)
-> seconds.  I haven't had a chance to investigate it further though, but I
-> can dig up the splats if you are interested.
+> 
 
-Oh, I haven't seen that, and I'm pretty sure I've had systems idle for
-very long periods of time passing inside (think weeks) ...
+I think the current code is fine, given that this is not actually
+"fixing" anything.  If you wish to unwind all of the #include mess in
+this driver, that would be fine, but I doubt it really is worth it.  You
+really should not need more than 1 .h file for a single module, this one
+is split up way too much.
 
-So yeah, if you have some splats (ideally with corresponding kernel
-configs), I'd be interested.
+thanks,
 
-johannes
+greg k-h

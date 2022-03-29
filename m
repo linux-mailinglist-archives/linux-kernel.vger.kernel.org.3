@@ -2,152 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803C04EA56C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CECC04EA575
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbiC2CsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 22:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57668 "EHLO
+        id S231253AbiC2CuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 22:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231124AbiC2CsL (ORCPT
+        with ESMTP id S231211AbiC2Ct5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 22:48:11 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AADD1A5D5F
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 19:46:29 -0700 (PDT)
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220329024626epoutp014d375ffaaf28d177525031947cc4f9d6~gugMuQTQI0566005660epoutp01b
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 02:46:26 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220329024626epoutp014d375ffaaf28d177525031947cc4f9d6~gugMuQTQI0566005660epoutp01b
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1648521986;
-        bh=Jb0zVmXE6FZXq1tlAr4YAjL1vUog6bxPPj7i8N6C7MI=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=I2uy2rU3LvZ93uIQ/KckuVybhE+uY5dYpXE32/MV/MoS4rSCTbUovh61TNsu+3nuP
-         yJyk5yargmtBF3PkN24wFzKuUlAHUfmGX0qjTN9BLJ/a3+eFex/Vu4uRydXu51oUSr
-         frYMP6xCqgCPWfXk0SzCTFoOdKbioJbWleGyk7wM=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20220329024625epcas1p43212b4fb9e4759d1232d065af0dcf4fa~gugMPIIzR0984209842epcas1p45;
-        Tue, 29 Mar 2022 02:46:25 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.38.250]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4KSDTr31Pmz4x9Pt; Tue, 29 Mar
-        2022 02:46:24 +0000 (GMT)
-X-AuditID: b6c32a36-203ff70000002055-2f-624272fc68a2
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        64.69.08277.CF272426; Tue, 29 Mar 2022 11:46:20 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: [PATCH 0/8] memblock: introduce memsize showing reserved memory
-Reply-To: jaewon31.kim@samsung.com
-Sender: Jaewon Kim <jaewon31.kim@samsung.com>
-From:   Jaewon Kim <jaewon31.kim@samsung.com>
-To:     Mike Rapoport <rppt@kernel.org>,
-        Jaewon Kim <jaewon31.kim@samsung.com>
-CC:     "vbabka@suse.cz" <vbabka@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        YongTaek Lee <ytk.lee@samsung.com>,
-        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <YkB/gzP6tOpDktoZ@kernel.org>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220329024620epcms1p7633018e83f54e532761008a60da5254f@epcms1p7>
-Date:   Tue, 29 Mar 2022 11:46:20 +0900
-X-CMS-MailID: 20220329024620epcms1p7633018e83f54e532761008a60da5254f
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 101P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOJsWRmVeSWpSXmKPExsWy7bCmru6fIqckgylLDS3mrF/DZvHykKZF
-        9+aZjBa9718xWVzeNYfN4t6a/6wWR9ZvZ7KY3djHaPF4PbcDp8fOWXfZPTat6mTz2PRpErvH
-        iRm/WTz6tqxi9Diz4Ai7x+dNcgHsUdk2GamJKalFCql5yfkpmXnptkrewfHO8aZmBoa6hpYW
-        5koKeYm5qbZKLj4Bum6ZOUCHKSmUJeaUAoUCEouLlfTtbIryS0tSFTLyi0tslVILUnIKzAr0
-        ihNzi0vz0vXyUkusDA0MjEyBChOyM54eXspSsJy/4u6Tp8wNjDN5uhg5OSQETCSmTD/P1sXI
-        xSEksINR4u7MS8xdjBwcvAKCEn93CIPUCAv4SLxvmsUOYgsJKEmc/XGFHSKuK9HUvZoFxGYT
-        0JZ4v2ASK0iriICXxJ23HiAjmQWWMklsuNHEDLGLV2JG+1MWCFtaYvvyrYwgNqeAlsSO/Z1Q
-        cVGJm6vfssPY74/NZ4SwRSRa752FmiMo8eDnbqi4lMS57uNMIHslBCIkXuxRhwjnSLzfOYcV
-        wjaXeLahBWwkr4CvRN/Ss2wgNouAqsTuuQehVrlI3Fh7CWwks4C8xPa3c8ChwCygKbF+lz5E
-        iaLEzt9zGWE+adj4mx2dzSzAJ/Huaw8rTHzHvCdMELaaRMuzr1BxGYm//56xTmBUmoUI51lI
-        Fs9CWLyAkXkVo1hqQXFuemqxYYERPGqT83M3MYJTqJbZDsZJbz/oHWJk4mA8xCjBwawkwit7
-        1j5JiDclsbIqtSg/vqg0J7X4EKMp0MsTmaVEk/OBSTyvJN7QxNLAxMzIxMLY0thMSZx31bTT
-        iUIC6YklqdmpqQWpRTB9TBycUg1MZZV1psIW2ZXVQpHrH2u3rT/0q9eu8XyMl5Od2pR/k+em
-        7TH8tnxutX/99M3uV75eWC6nf/zvxz52zQn3/vinpa+M8p1pePZR0teiTRkKJkfeG0+oqYi+
-        q3/79FeGE2a/mBXS3p7jnvA3N66kKju+nrU9tW6potOzwj+zXCYd4Oz+1nuxYcM/yT+Bjcvk
-        +hQWe9X1iNzaGLT1UDaHY/2KHwKbd8kw7BU+8fjNL1fmu55F6jefljL56N7eteDEql3JX+ak
-        TeJXbu4tZ9g19clmX5GrGke2LOgruHDKeU3BFul3pyd86Y+VFks8Zh5qkWP8ZMnqlHiji0K+
-        8llshesYZu/xEFzo4Zz8xKHc9CyTEktxRqKhFnNRcSIAZ9gvfCoEAAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220324065919epcas1p4c79da5f6ec4fa0311409ca24a38785d8
-References: <YkB/gzP6tOpDktoZ@kernel.org> <YkAU2JlcX7nlvbwp@kernel.org>
-        <Yj1zVkryTVoAnxsX@kernel.org>
-        <20220324070158.22969-1-jaewon31.kim@samsung.com>
-        <20220325083846epcms1p372559472ceb511cc45d39c110563063a@epcms1p3>
-        <20220327135347epcms1p13faf0f2b7d98d3b59b25e903678d9c48@epcms1p1>
-        <CGME20220324065919epcas1p4c79da5f6ec4fa0311409ca24a38785d8@epcms1p7>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Mar 2022 22:49:57 -0400
+Received: from smtp.tom.com (smtprz02.163.net [106.3.154.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C27A4617D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 19:48:11 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by vip-app02.163.net (Postfix) with ESMTP id 9A1DE440106
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 10:48:10 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
+        t=1648522090; bh=UxIN0gCQWDCPxHwAlV5GfBTdHsvgwdbGdcBxlAMphuU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TItiNbo1FHWTYF+aGHjG2PeBXJVFxoU2jVRHsyUMg/kPJ2x8yB1ebm9pb6/xp86fj
+         etIEqkvkNdXiMFTXAvfMwxUMwQvqNLnWnz8ZNm2b11sDMXedjU8um8sTg/GRD9It+f
+         O2GIZs/I1+A3LttPkHVOsD1noHItP7I14fhjWI0Y=
+Received: from localhost (HELO smtp.tom.com) ([127.0.0.1])
+          by localhost (TOM SMTP Server) with SMTP ID 1189854655
+          for <linux-kernel@vger.kernel.org>;
+          Tue, 29 Mar 2022 10:48:10 +0800 (CST)
+X-Virus-Scanned: Debian amavisd-new at mxtest.tom.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=mail;
+        t=1648522090; bh=UxIN0gCQWDCPxHwAlV5GfBTdHsvgwdbGdcBxlAMphuU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TItiNbo1FHWTYF+aGHjG2PeBXJVFxoU2jVRHsyUMg/kPJ2x8yB1ebm9pb6/xp86fj
+         etIEqkvkNdXiMFTXAvfMwxUMwQvqNLnWnz8ZNm2b11sDMXedjU8um8sTg/GRD9It+f
+         O2GIZs/I1+A3LttPkHVOsD1noHItP7I14fhjWI0Y=
+Received: from localhost (unknown [101.93.196.13])
+        by antispamvip.163.net (Postfix) with ESMTPA id E79AA15411AE;
+        Tue, 29 Mar 2022 10:48:06 +0800 (CST)
+Date:   Tue, 29 Mar 2022 10:48:06 +0800
+From:   Mingbao Sun <sunmingbao@tom.com>
+To:     Sagi Grimberg <sagi@grimberg.me>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
+        libin.zhang@dell.com, ao.sun@dell.com
+Subject: Re: [PATCH v2 2/3] nvme-tcp: support specifying the
+ congestion-control
+Message-ID: <20220329104806.00000126@tom.com>
+In-Reply-To: <b7b5106a-9c0d-db49-00ab-234756955de8@grimberg.me>
+References: <20220311103414.8255-1-sunmingbao@tom.com>
+        <20220311103414.8255-2-sunmingbao@tom.com>
+        <7121e4be-0e25-dd5f-9d29-0fb02cdbe8de@grimberg.me>
+        <20220325201123.00002f28@tom.com>
+        <b7b5106a-9c0d-db49-00ab-234756955de8@grimberg.me>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> > 
->> >--------- Original Message ---------
->> >Sender : Mike Rapoport <rppt@kernel.org>
->> >Date : 2022-03-27 16:40 (GMT+9)
->> >Title : Re: [PATCH 0/8] memblock: introduce memsize showing reserved memory
->> > 
->> > 
->> >I'm still not following. The reserved region sizes are available in the
->> >existing memblock debugfs.
->> >Why the names are important? What is the value of having names for *some*
->> >of the reserved regions?
->> 
->> Hi
->> 
->> There are many memory regions in memblock debugfs memory/reserved, and some might
->> be splited or merged with other region. Among regions in debugfs, we can't find 
->> the one we defined in device tree. Especially it is difficult to find the region we
->> described size only without start address.
->> 
->> On mobile environment, memory is used by not only CPU but also GPU, Camera, Secure
->> world, Audio, ETC. To support them, there are many reserved regions described in
->> device tree. So the name is quite important to recognize a region. And with thename
->> we can compare reserved memory map with other map.
->
->You still didn't describe your use case. What is the problem your patches
->are trying to solve? Why is it important to know what is the use of particular
->reserved region? 
->
->You propose complex mechanism that seems to fit very particular scenario
->and sprinkle some calls to this mechanism at random places because you need
->to "compare reserved memory map with other map".
->
->Does not sound convincing to me, sorry.
+> As I said, TCP can be tuned in various ways, congestion being just one
+> of them. I'm sure you can find a workload where rmem/wmem will make
+> a difference.
 
-As I said serveral times, I want a simple knob showing all reserved memory status.
-The current debugfs, device tree do not show all those information I want. I think you also know that.
- i.e. late freed pages, splited or merged memblock, address defined at boot time, kernel size, ETC. 
+agree.
+but the difference for the knob of rmem/wmem is:
+we could enlarge rmem/wmem for NVMe/TCP via sysctl,
+and it would not bring downside to any other sockets whose
+rmem/wmem are not explicitly specified.
 
-Anyway I think I touched too many points to do this. Let me drop this.
+> In addition, based on my knowledge, application specific TCP level
+> tuning (like congestion) is not really a common thing to do. So why in
+> nvme-tcp?
+>=20
+> So to me at least, it is not clear why we should add it to the driver.
 
->
->> Thank you
->> Jaewon Kim
->
->-- 
->Sincerely yours,
->Mike.
->
+As mentioned in the commit message, though we can specify the
+congestion-control of NVMe_over_TCP via sysctl or writing
+'/proc/sys/net/ipv4/tcp_congestion_control', but this also
+changes the congestion-control of all the future TCP sockets on
+the same host that have not been explicitly assigned the
+congestion-control, thus bringing potential impaction on their
+performance.
+
+For example:
+
+A server in a data-center with the following 2 NICs:
+
+    - NIC_fron-end, for interacting with clients through WAN
+      (high latency, ms-level)
+
+    - NIC_back-end, for interacting with NVMe/TCP target through LAN
+      (low latency, ECN-enabled, ideal for dctcp)
+
+This server interacts with clients (handling requests) via the fron-end
+network and accesses the NVMe/TCP storage via the back-end network.
+This is a normal use case, right?
+
+For the client devices, we can=E2=80=99t determine their congestion-control.
+But normally it=E2=80=99s cubic by default (per the CONFIG_DEFAULT_TCP_CONG=
+).
+So if we change the default congestion control on the server to dctcp
+on behalf of the NVMe/TCP traffic of the LAN side, it could at the
+same time change the congestion-control of the front-end sockets
+to dctcp while the congestion-control of the client-side is cubic.
+So this is an unexpected scenario.
+
+In addition, distributed storage products like the following also have
+the above problem:
+
+    - The product consists of a cluster of servers.
+
+    - Each server serves clients via its front-end NIC
+     (WAN, high latency).
+
+    - All servers interact with each other via NVMe/TCP via back-end NIC
+     (LAN, low latency, ECN-enabled, ideal for dctcp).

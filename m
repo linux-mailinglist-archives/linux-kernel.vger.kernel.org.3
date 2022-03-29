@@ -2,226 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D1E4EA630
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 05:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF474EA635
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 05:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbiC2Dvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 23:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
+        id S231876AbiC2D6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 23:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbiC2Dvl (ORCPT
+        with ESMTP id S229765AbiC2D61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 23:51:41 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3601F15FF8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 20:49:55 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220329034953epoutp016e573d78639cd893454a8a9c82a78fab~gvXmMLA4c0102901029epoutp01W
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 03:49:53 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220329034953epoutp016e573d78639cd893454a8a9c82a78fab~gvXmMLA4c0102901029epoutp01W
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1648525793;
-        bh=PS7xjfk7eSwGLAi/Q3oQyLCdyKqSh7gNFdsMgNu3oEk=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=NJ3FKO0SexvCUom5lmq38pbK9n97OGUtOQks6/IGGcRZbcL8TR5UQZ5TQzIQHzDLB
-         EBEef5OmGDNuKd4my3672ww5vqu2FWiCY23PinolwSRJfKpcwuvQGTYYi3ShJOgb2k
-         hkjyFIrh3sUO9P+ihFgJpOWb91crvqU1kg45wRKc=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20220329034952epcas2p30b60294081e0903c5ddc4125a1222ece~gvXlkKTTa2083920839epcas2p3T;
-        Tue, 29 Mar 2022 03:49:52 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.102]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4KSFv167Rcz4x9QH; Tue, 29 Mar
-        2022 03:49:49 +0000 (GMT)
-X-AuditID: b6c32a46-bffff70000023ea8-b5-624281dd3fbb
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3B.F8.16040.DD182426; Tue, 29 Mar 2022 12:49:49 +0900 (KST)
-Mime-Version: 1.0
-Subject: Re: [PATCH 0/5] Add support for Axis, ARTPEC-8 PCIe driver
-Reply-To: wangseok.lee@samsung.com
-Sender: =?UTF-8?B?7J207JmV7ISd?= <wangseok.lee@samsung.com>
-From:   =?UTF-8?B?7J207JmV7ISd?= <wangseok.lee@samsung.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>
-CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "kernel@axis.com" <kernel@axis.com>,
-        =?UTF-8?B?7KCE66y46riw?= <moonki.jun@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <fd3478ba-ebb9-c1bf-1823-dc03de80b76e@kernel.org>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220329034949epcms2p1717d820646c878f314b03e07c2d092ba@epcms2p1>
-Date:   Tue, 29 Mar 2022 12:49:49 +0900
-X-CMS-MailID: 20220329034949epcms2p1717d820646c878f314b03e07c2d092ba
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrJJsWRmVeSWpSXmKPExsWy7bCmqe7dRqckg68HRSyWNGVYvDykaTH/
-        yDlWi+eHZjFbfGpRtbjwtIfN4uWse2wW589vYLdo6PnNanHkzUdmi/3HVzJZXN41h83i7Lzj
-        bBYTVn1jsXjz+wW7xbnFmRate4+wW+y8c4LZQchjzbw1jB7X1wV4LNhU6rFpVSebx5Mr05k8
-        Ni+p9+jbsorR4/iN7UwenzfJBXBGZdtkpCampBYppOYl56dk5qXbKnkHxzvHm5oZGOoaWlqY
-        KynkJeam2iq5+AToumXmAL2ipFCWmFMKFApILC5W0rezKcovLUlVyMgvLrFVSi1IySkwL9Ar
-        TswtLs1L18tLLbEyNDAwMgUqTMjO2HlxP1vBRceKm2/bmRoY39t3MXJySAiYSOz6uoGli5GL
-        Q0hgB6PElEOvWLsYOTh4BQQl/u4QBqkRFnCW+He7lRnEFhJQktixZh4zRNxa4tOUyywgNpuA
-        pcTF1oeMIHNEBL4xScz+8YoNxGEWuM0sMf/5exaIbbwSM9qfQtnSEtuXb2UEWcYpYCfxZpk7
-        RFhD4seyXmYIW1Ti5uq37DD2+2PzGSFsEYnWe2ehagQlHvzcDRWXkljw5BArhF0tsf/vbyYI
-        u4FRov9+KsgqCQF9iR3XjUHCvAK+EhtP9oONYRFQlVi2/R3UKheJ25t3g8WZBbQlli18zQzS
-        yiygKbF+lz7EFGWJI7fgfmrY+Jsdnc0swCfRcfgvXHzHvCdQx6hJzFu5k3kCo/IsRDjPQrJr
-        FsKuBYzMqxjFUguKc9NTi40KjOBRm5yfu4kRnKa13HYwTnn7Qe8QIxMH4yFGCQ5mJRFe2bP2
-        SUK8KYmVValF+fFFpTmpxYcYTYG+nMgsJZqcD8wUeSXxhiaWBiZmZobmRqYG5krivF4pGxKF
-        BNITS1KzU1MLUotg+pg4OKUamNT+VhUl/vn89VpTUEvgbE315kMfEmwdZv2wf1UYpXln+mKr
-        4+8PTrUPkpO5OdttTquFimWhi8tyLaX7r6QEN01121XHfDWz42W0xKUiKYnW/MA8zic97EoF
-        i6OPNL2Y+HPfhreOxyeoOV17wefBcPzgLxHjU5KR4uctj0uUxT79kBH5LvTiq9l3LTomVHFF
-        /jRumJLBsv/thwuzNB4X+CtN5at+w+fouMx6y/OICa6TZ6qbvwjY3fbO0G62tPyjZOF/Lq8z
-        b9tc43Sy3CWz7FrUO9UTeXYJ70TndG3YtUAicmWkuLqs4F+jmJMLUgNuG/mxcq87odU69emk
-        4p8bl8ZV9J18Lf/MJIzfN7pOXYmlOCPRUIu5qDgRAKvHCopcBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1
-References: <fd3478ba-ebb9-c1bf-1823-dc03de80b76e@kernel.org>
-        <564c7092-d6a3-7766-d83f-9762075d055f@kernel.org>
-        <0716d9e4-24e1-d16c-162c-00a8664296e1@kernel.org>
-        <20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1@epcms2p7>
-        <20220328090200epcms2p8637d2a2e09a3a627be776586b80c8adf@epcms2p8>
-        <20220328112918epcms2p44bfdd6ef74c14f04bae6a475054860b6@epcms2p4>
-        <CGME20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1@epcms2p1>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 28 Mar 2022 23:58:27 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF12A65B6;
+        Mon, 28 Mar 2022 20:56:44 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id y16so3440910pju.4;
+        Mon, 28 Mar 2022 20:56:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=iOk6JIffNayUkevvRGbPEy7BxILIghcR3ACILdtVQ/A=;
+        b=mHnieJwMGGIyOTLgSitqGcvQtd1arJHPkUpV3KCDhD78bGVTuVE4OSFbs8PjTOfHe8
+         6V73zkiq7sM3jDbiNUyZGnQ+DENX+L4axq0pfxSIqPqQxcoHOF6dxSbIzsSgytCyky7g
+         M1bXBZ2eMdUh/G/M/EcVL7Q+JqjM2ketFGchKOEqRcK53c/RKzyOab9UZodIXUQU9mOr
+         T5InOgIXp98DV4OJCC61HfC5R0S9Fd5twScqfSgYfrwx03nZ8SVKOpYPH/KMxMCit+kC
+         CWieSMAwBp4zkUnVJohFDf440iPjwJKZFHW7OVZJ/9vHFNii7PzPRjaAe16sDoxqHgQK
+         dr+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=iOk6JIffNayUkevvRGbPEy7BxILIghcR3ACILdtVQ/A=;
+        b=ALbuDb/VnqSil96/ln+/W1RltbX3WMa22mQe26q2kUUXCVs3L1Obetmwl6hkkHE2Kh
+         b80OfwKKzcTHqVodmwkhxwh+gzMCTT36s5c/N0L/Iu9wX9rSgas9ws90C5CiLn3PokcT
+         /Q73nviucErKDHiQ+TURNd8ovv2ozjU+wyRIdchQnKqO2BkOJ1o5YWV/OjUWQFG9xIEj
+         rXqFSFTEm63bbps37TDohoCILRYzleSOCMUto2DrIo2DWSnZRJRk9zzwagsdksacvSSG
+         I14n74SpKSE8q5ITx1s2Q6AI4hQw2Z5eB5GxQaI8ax6+iD8ODOkwI5sq6vCrdmsuEgqI
+         Kj9w==
+X-Gm-Message-State: AOAM531xLLKswiRU0oppVXmx9B5a2d8FRUl39lCzBVw5qtkKV/gCLvyZ
+        CKUONALxkyPAPvuq6nziAEw=
+X-Google-Smtp-Source: ABdhPJwHarnnOb/wYCh7Y9bUSdXstuTQhgu0M/kAwvbQqCQ+H3MBf9S5wUTVtFf98K5gVNpREwlrqg==
+X-Received: by 2002:a17:90b:4c49:b0:1c7:d6c1:bb0f with SMTP id np9-20020a17090b4c4900b001c7d6c1bb0fmr2433153pjb.230.1648526204288;
+        Mon, 28 Mar 2022 20:56:44 -0700 (PDT)
+Received: from ubuntu.huawei.com ([119.3.119.18])
+        by smtp.googlemail.com with ESMTPSA id h189-20020a636cc6000000b0039841f669bcsm5520083pgc.78.2022.03.28.20.56.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 20:56:43 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     trond.myklebust@hammerspace.com, anna@kernel.org
+Cc:     bhalevy@panasas.com, bharrosh@panasas.com,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH v2] NFSv4/pNFS: fix incorrect uses of list iterator
+Date:   Tue, 29 Mar 2022 11:56:33 +0800
+Message-Id: <20220329035633.14380-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> --------- Original Message ---------
-> Sender : Krzysztof Kozlowski=C2=A0<krzk=40kernel.org>=0D=0A>=20Date=20:=
-=202022-03-28=2020:44=20(GMT+9)=0D=0A>=20Title=20:=20Re:=20=5BPATCH=200/5=
-=5D=20Add=20support=20for=20Axis,=20ARTPEC-8=20PCIe=20driver=0D=0A>=20=0D=
-=0A>=20On=C2=A028/03/2022=C2=A013:29,=C2=A0=EC=9D=B4=EC=99=95=EC=84=9D=C2=
-=A0wrote:=0D=0A>>>=C2=A0---------=C2=A0Original=C2=A0Message=C2=A0---------=
-=0D=0A>>>=C2=A0Sender=C2=A0:=C2=A0Krzysztof=C2=A0Kozlowski=C2=A0<krzk=40ker=
-nel.org>=0D=0A>>>=C2=A0Date=C2=A0:=C2=A02022-03-28=C2=A018:38=C2=A0(GMT+9)=
-=0D=0A>>>=C2=A0Title=C2=A0:=C2=A0Re:=C2=A0=5BPATCH=C2=A00/5=5D=C2=A0Add=C2=
-=A0support=C2=A0for=C2=A0Axis,=C2=A0ARTPEC-8=C2=A0PCIe=C2=A0driver=0D=0A>>>=
-=0D=0A>>>=C2=A0On=C2=A028/03/2022=C2=A011:02,=C2=A0=EC=9D=B4=EC=99=95=EC=84=
-=9D=C2=A0wrote:=0D=0A>>>>>=C2=A0=C2=A0---------=C2=A0Original=C2=A0Message=
-=C2=A0---------=0D=0A>>>>>=C2=A0=C2=A0Sender=C2=A0:=C2=A0Krzysztof=C2=A0Koz=
-lowski=C2=A0<krzk=40kernel.org>=0D=0A>>>>>=C2=A0=C2=A0Date=C2=A0:=C2=A02022=
--03-28=C2=A016:12=C2=A0(GMT+9)=0D=0A>>>>>=C2=A0=C2=A0Title=C2=A0:=C2=A0Re:=
-=C2=A0=5BPATCH=C2=A00/5=5D=C2=A0Add=C2=A0support=C2=A0for=C2=A0Axis,=C2=A0A=
-RTPEC-8=C2=A0PCIe=C2=A0driver=0D=0A>>>>>=0D=0A>>>>>=C2=A0=C2=A0On=C2=A028/0=
-3/2022=C2=A003:44,=C2=A0=EC=9D=B4=EC=99=95=EC=84=9D=C2=A0wrote:=0D=0A>>>>>>=
-=C2=A0=C2=A0=C2=A0This=C2=A0series=C2=A0patches=C2=A0include=C2=A0newly=C2=
-=A0PCIe=C2=A0support=C2=A0for=C2=A0Axis=C2=A0ARTPEC-8=C2=A0SoC.=0D=0A>>>>>>=
-=C2=A0=C2=A0=C2=A0ARTPEC-8=C2=A0is=C2=A0the=C2=A0SoC=C2=A0platform=C2=A0of=
-=C2=A0Axis=C2=A0Communications.=0D=0A>>>>>>=C2=A0=C2=A0=C2=A0PCIe=C2=A0cont=
-roller=C2=A0driver=C2=A0and=C2=A0phy=C2=A0driver=C2=A0have=C2=A0been=C2=A0n=
-ewly=C2=A0added.=0D=0A>>>>>>=C2=A0=C2=A0=C2=A0There=C2=A0is=C2=A0also=C2=A0=
-a=C2=A0new=C2=A0MAINTAINER=C2=A0in=C2=A0the=C2=A0addition=C2=A0of=C2=A0phy=
-=C2=A0driver.=0D=0A>>>>>>=C2=A0=C2=A0=C2=A0PCIe=C2=A0controller=C2=A0is=C2=
-=A0designed=C2=A0based=C2=A0on=C2=A0Design-Ware=C2=A0PCIe=C2=A0controller=
-=C2=A0IP=0D=0A>>>>>>=C2=A0=C2=A0=C2=A0and=C2=A0PCIe=C2=A0phy=C2=A0is=C2=A0d=
-esinged=C2=A0based=C2=A0on=C2=A0SAMSUNG=C2=A0PHY=C2=A0IP.=0D=0A>>>>>>=C2=A0=
-=C2=A0=C2=A0It=C2=A0also=C2=A0includes=C2=A0modifications=C2=A0to=C2=A0the=
-=C2=A0Design-Ware=C2=A0controller=C2=A0driver=C2=A0to=C2=A0=0D=0A>>>>>>=C2=
-=A0=C2=A0=C2=A0run=C2=A0the=C2=A064bit-based=C2=A0ARTPEC-8=C2=A0PCIe=C2=A0c=
-ontroller=C2=A0driver.=0D=0A>>>>>>=C2=A0=C2=A0=C2=A0It=C2=A0consists=C2=A0o=
-f=C2=A06=C2=A0patches=C2=A0in=C2=A0total.=0D=0A>>>>>>=C2=A0=C2=A0=C2=A0=0D=
-=0A>>>>>>=C2=A0=C2=A0=C2=A0This=C2=A0series=C2=A0has=C2=A0been=C2=A0tested=
-=C2=A0on=C2=A0AXIS=C2=A0SW=C2=A0bring-up=C2=A0board=C2=A0=0D=0A>>>>>>=C2=A0=
-=C2=A0=C2=A0with=C2=A0ARTPEC-8=C2=A0chipset.=0D=0A>>>>>=0D=0A>>>>>=C2=A0=C2=
-=A0You=C2=A0lost=C2=A0mail=C2=A0threading.=C2=A0This=C2=A0makes=C2=A0readin=
-g=C2=A0this=C2=A0difficult=C2=A0for=C2=A0us.=C2=A0Plus=0D=0A>>>>>=C2=A0=C2=
-=A0you=C2=A0sent=C2=A0something=C2=A0non-applicable=C2=A0(patch=C2=A0=232),=
-=C2=A0so=C2=A0please=C2=A0resend.=0D=0A>>>>>=0D=0A>>>>>=C2=A0=C2=A0Knowing=
-=C2=A0recent=C2=A0Samsung=C2=A0reluctance=C2=A0to=C2=A0extend=C2=A0existing=
-=C2=A0drivers=C2=A0and=C2=A0always=0D=0A>>>>>=C2=A0=C2=A0duplicate,=C2=A0pl=
-ease=C2=A0provide=C2=A0description/analysis=C2=A0why=C2=A0this=C2=A0driver=
-=C2=A0cannot=C2=A0be=0D=0A>>>>>=C2=A0=C2=A0combined=C2=A0with=C2=A0existing=
-=C2=A0driver.=C2=A0The=C2=A0answer=C2=A0like:=C2=A0we=C2=A0need=C2=A0severa=
-l=C2=A0syscon=0D=0A>>>>>=C2=A0=C2=A0because=C2=A0we=C2=A0do=C2=A0not=C2=A0i=
-mplement=C2=A0other=C2=A0frameworks=C2=A0(like=C2=A0interconnect)=C2=A0are=
-=C2=A0not=0D=0A>>>>>=C2=A0=C2=A0valid.=0D=0A>>>>>=0D=0A>>>>>=C2=A0=C2=A0Bes=
-t=C2=A0regards,=0D=0A>>>>>=C2=A0=C2=A0Krzysztof=0D=0A>>>>=C2=A0=C2=A0=0D=0A=
->>>>=C2=A0=C2=A0Hello,=C2=A0Krzysztof=0D=0A>>>>=C2=A0=C2=A0Thanks=C2=A0for=
-=C2=A0your=C2=A0review.=0D=0A>>>>=C2=A0=C2=A0=0D=0A>>>>=C2=A0=C2=A0patch=23=
-2=C2=A0was=C2=A0sent=C2=A0to=C2=A0the=C2=A0wrong=C2=A0format=C2=A0so=C2=A0s=
-ent=C2=A0again.=0D=0A>>>>=C2=A0=C2=A0Sorry=C2=A0for=C2=A0causing=C2=A0confu=
-sion.=0D=0A>>>=C2=A0=C2=A0=0D=0A>>>=C2=A0The=C2=A0first=C2=A0sending=C2=A0w=
-as=C2=A0HTML.=C2=A0Second=C2=A0was=C2=A0broken=C2=A0text,=C2=A0so=C2=A0stil=
-l=C2=A0not=C2=A0working.=0D=0A>>>=0D=0A>>>=C2=A0Please=C2=A0resend=C2=A0eve=
-rything=C2=A0with=C2=A0proper=C2=A0threading.=0D=0A>>=C2=A0=0D=0A>>=C2=A0He=
-llo,=C2=A0Krzysztof=0D=0A>>=C2=A0=0D=0A>>=C2=A0I=C2=A0sent=C2=A0patch=232=
-=C2=A0three=C2=A0times.=0D=0A>>=C2=A0due=C2=A0to=C2=A0the=C2=A0influence=C2=
-=A0of=C2=A0the=C2=A0email=C2=A0system,=0D=0A>>=C2=A0there=C2=A0was=C2=A0som=
-ething=C2=A0wrong=C2=A0with=C2=A0the=C2=A0first=C2=A0and=C2=A0second=C2=A0m=
-ails.=0D=0A>>=C2=A0Sorry=C2=A0for=C2=A0causing=C2=A0confusion.=0D=0A>>=C2=
-=A0Did=C2=A0you=C2=A0receive=C2=A0the=C2=A0third=C2=A0patch=C2=A0i=C2=A0sen=
-t=C2=A0you?=0D=0A>=20=0D=0A>=20Maybe,=C2=A0I=C2=A0don't=C2=A0know.=C2=A0It'=
-s=C2=A0not=C2=A0threaded=C2=A0so=C2=A0it's=C2=A0difficult=C2=A0to=C2=A0find=
-=C2=A0it=0D=0A>=20among=C2=A0other=C2=A0100=C2=A0emails...=0D=0A=0D=0AI=20t=
-hink=20you=20also=20received=20a=20normal=20patch=23=202.=0D=0A=0D=0A>>=C2=
-=A0=C2=A0=0D=0A>>>>=C2=A0=C2=A0This=C2=A0patch=C2=A0is=C2=A0specialized=C2=
-=A0in=C2=A0Artpec-8,=C2=A0=0D=0A>>>>=C2=A0=C2=A0the=C2=A0SoC=C2=A0Platform=
-=C2=A0of=C2=A0Axis=C2=A0Communication,=C2=A0and=C2=A0is=C2=A0newly=C2=A0app=
-lied.=0D=0A>>>>=C2=A0=C2=A0Since=C2=A0the=C2=A0target=C2=A0SoC=C2=A0platfor=
-m=C2=A0is=C2=A0different=C2=A0from=C2=A0the=C2=A0driver=C2=A0previously=C2=
-=A0=0D=0A>>>>=C2=A0=C2=A0used=C2=A0by=C2=A0Samsung,=C2=A0it=C2=A0is=C2=A0di=
-fficult=C2=A0to=C2=A0merge=C2=A0with=C2=A0the=C2=A0existing=C2=A0driver.=0D=
-=0A>>>=0D=0A>>>=C2=A0Recently=C2=A0I=C2=A0always=C2=A0saw=C2=A0such=C2=A0an=
-swers=C2=A0and=C2=A0sometimes=C2=A0it=C2=A0was=C2=A0true,=C2=A0sometimes=0D=
-=0A>>>=C2=A0not.=C2=A0What=C2=A0is=C2=A0exactly=C2=A0different?=0D=0A>>>=0D=
-=0A>>>=C2=A0Best=C2=A0regards,=0D=0A>>>=C2=A0Krzysztof=0D=0A>>=C2=A0=0D=0A>=
->=C2=A0The=C2=A0main=C2=A0reason=C2=A0this=C2=A0patch=C2=A0should=C2=A0be=
-=C2=A0added=C2=A0is=C2=A0that=0D=0A>>=C2=A0this=C2=A0patch=C2=A0is=C2=A0not=
-=C2=A0the=C2=A0driver=C2=A0applied=C2=A0to=C2=A0exynos=C2=A0platform.=0D=0A=
->=20=0D=0A>=20Still=C2=A0this=C2=A0does=C2=A0not=C2=A0explain=C2=A0why=C2=
-=A0you=C2=A0need=C2=A0separate=C2=A0driver.=0D=0A=0D=0APCIe=20driver=20of=
-=20artpec-8=20is=20not=20available=20in=20exynos=20platform.=0D=0Abecause=
-=20the=20PCIe=20of=20artpec=20and=20exynos=20have=20very=20different=20=0D=
-=0Ahardware=20in=20SoC=20design.=0D=0ANot=20only=20it=20is=20the=20SoC=20di=
-fferent,=20=0D=0Abut=20the=20hardware=20design=20of=20PCIe=20is=20also=20di=
-fferent.=0D=0ATherefore,=20we=20are=20using=20driver's=20compatible=20=0D=
-=0Aas=20axis,=20artpec8-pcie=20rather=20than=20samsung,=20artpec8-pcie.=0D=
-=0A=0D=0A>>=C2=A0Because=C2=A0the=C2=A0SoC=C2=A0platform=C2=A0is=C2=A0diffe=
-rent,=C2=A0=0D=0A>>=C2=A0the=C2=A0IP=C2=A0configuration=C2=A0of=C2=A0PCIe=
-=C2=A0is=C2=A0also=C2=A0different.=0D=0A>=20=0D=0A>=20What=C2=A0is=C2=A0exa=
-ctly=C2=A0different?=C2=A0Usually=C2=A0drivers=C2=A0can=C2=A0support=C2=A0I=
-P=C2=A0blocks=C2=A0with=0D=0A>=20some=C2=A0differences...=0D=0A>=20=0D=0A>>=
-=C2=A0We=C2=A0will=C2=A0organize=C2=A0a=C2=A0driver=C2=A0for=C2=A0Artpec-8=
-=C2=A0platform=C2=A0and=C2=A0=0D=0A>>=C2=A0if=C2=A0there=C2=A0is=C2=A0no=C2=
-=A0special=C2=A0reason,=C2=A0maintain=C2=A0this=C2=A0=0D=0A>>=C2=A0without=
-=C2=A0adding=C2=A0it=C2=A0from=C2=A0the=C2=A0next=C2=A0series.=0D=0A>=20=0D=
-=0A>=20I=C2=A0don't=C2=A0understand=C2=A0this.=0D=0A>=20=0D=0A>=20=0D=0A>=
-=20Best=C2=A0regards,=0D=0A>=20Krzysztof=0D=0A=0D=0AAlso,=20as=20you=20know=
-,=0D=0Aexynos=20driver=20is=20designed=20according=20to=20exynos=20SoC=20pl=
-atform,=0D=0Aso=20both=20function=20and=20variable=20names=20start=20with=
-=20exynos.=0D=0ACompared=20to=20the=20existing=20exynos=20driver,=20=0D=0Ay=
-ou=20can=20see=20that=20the=20structure=20and=20type=20of=20function=20are=
-=20different.=0D=0AFor=20this=20reason,=20it=20is=20difficult=20to=20use=20=
-the=20existing=20exynos=20driver=20=0D=0Afor=20artpec.=0D=0AOur=20idea=20is=
-=20to=20register=20a=20new=20PCIe=20driver=20for=20artpec-8=20SoC=20platfor=
-m=20=0D=0Aand=20maintain=20it=20in=20the=20future.=0D=0A=0D=0AThanks.
+The bug is here:
+	if (!server ||
+	server->pnfs_curr_ld->id != dev->cbd_layout_type) {
+
+The list iterator value 'server' will *always* be set and non-NULL
+by list_for_each_entry_rcu, so it is incorrect to assume that the
+iterator value will be NULL if the list is empty or no element is
+found (In fact, it will be a bogus pointer to an invalid struct
+object containing the HEAD, which is used for above check at next
+outer loop). Otherwise it may bypass the check in theory (if
+server->pnfs_curr_ld->id == dev->cbd_layout_type, 'server' now is
+a bogus pointer) and lead to invalid memory access passing the check.
+
+Furthermore, even if we have a valid pointer, nothing pins the super
+block, and so the struct nfs_server could end up getting freed while
+we're using it.
+
+Since all we want is a pointer to the struct pnfs_layoutdriver_type,
+let's skip all the iteration over super blocks, and just use API to
+find the layout driver directly. And to avoid use last found 'ld'
+which may not exists any more, just call the API for every 'dev'.
+
+At the same time, move the code to make the logic clearer.
+
+Cc: stable@vger.kernel.org
+Fixes: 1be5683b03a76 ("pnfs: CB_NOTIFY_DEVICEID")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+---
+
+changes since v1:
+ - use API to find the layout driver directly (Trond Myklebust)
+ - avoid use last found 'ld' (Xiaomeng Tong)
+ - code movement (Xiaomeng Tong)
+
+v1:https://lore.kernel.org/lkml/20220327080230.12134-1-xiam0nd.tong@gmail.com/
+
+---
+ fs/nfs/callback_proc.c | 32 ++++++++++----------------------
+ fs/nfs/pnfs.c          |  5 +++++
+ fs/nfs/pnfs.h          |  1 +
+ 3 files changed, 16 insertions(+), 22 deletions(-)
+
+diff --git a/fs/nfs/callback_proc.c b/fs/nfs/callback_proc.c
+index c343666d9a42..579887749870 100644
+--- a/fs/nfs/callback_proc.c
++++ b/fs/nfs/callback_proc.c
+@@ -358,39 +358,27 @@ __be32 nfs4_callback_devicenotify(void *argp, void *resp,
+ 				  struct cb_process_state *cps)
+ {
+ 	struct cb_devicenotifyargs *args = argp;
++	const struct pnfs_layoutdriver_type *ld;
+ 	uint32_t i;
+-	__be32 res = 0;
+-	struct nfs_client *clp = cps->clp;
+-	struct nfs_server *server = NULL;
+ 
+-	if (!clp) {
+-		res = cpu_to_be32(NFS4ERR_OP_NOT_IN_SESSION);
+-		goto out;
++	if (!cps->clp) {
++		kfree(args->devs);
++		return cpu_to_be32(NFS4ERR_OP_NOT_IN_SESSION);
+ 	}
+ 
+ 	for (i = 0; i < args->ndevs; i++) {
+ 		struct cb_devicenotifyitem *dev = &args->devs[i];
+ 
+-		if (!server ||
+-		    server->pnfs_curr_ld->id != dev->cbd_layout_type) {
+-			rcu_read_lock();
+-			list_for_each_entry_rcu(server, &clp->cl_superblocks, client_link)
+-				if (server->pnfs_curr_ld &&
+-				    server->pnfs_curr_ld->id == dev->cbd_layout_type) {
+-					rcu_read_unlock();
+-					goto found;
+-				}
+-			rcu_read_unlock();
+-			continue;
++		ld = pnfs_find_layoutdriver(dev->cbd_layout_type);
++		if (ld) {
++			nfs4_delete_deviceid(ld, cps->clp,
++						&dev->cbd_dev_id);
++			module_put(ld->owner);
+ 		}
+-
+-	found:
+-		nfs4_delete_deviceid(server->pnfs_curr_ld, clp, &dev->cbd_dev_id);
+ 	}
+ 
+-out:
+ 	kfree(args->devs);
+-	return res;
++	return 0;
+ }
+ 
+ /*
+diff --git a/fs/nfs/pnfs.c b/fs/nfs/pnfs.c
+index 7c9090a28e5c..112c36977feb 100644
+--- a/fs/nfs/pnfs.c
++++ b/fs/nfs/pnfs.c
+@@ -92,6 +92,11 @@ find_pnfs_driver(u32 id)
+ 	return local;
+ }
+ 
++const struct pnfs_layoutdriver_type *pnfs_find_layoutdriver(u32 id)
++{
++	return find_pnfs_driver(id);
++}
++
+ void
+ unset_pnfs_layoutdriver(struct nfs_server *nfss)
+ {
+diff --git a/fs/nfs/pnfs.h b/fs/nfs/pnfs.h
+index f4d7548d67b2..873ea8fe945b 100644
+--- a/fs/nfs/pnfs.h
++++ b/fs/nfs/pnfs.h
+@@ -234,6 +234,7 @@ struct pnfs_devicelist {
+ 
+ extern int pnfs_register_layoutdriver(struct pnfs_layoutdriver_type *);
+ extern void pnfs_unregister_layoutdriver(struct pnfs_layoutdriver_type *);
++extern const struct pnfs_layoutdriver_type *pnfs_find_layoutdriver(u32 id);
+ 
+ /* nfs4proc.c */
+ extern size_t max_response_pages(struct nfs_server *server);
+-- 
+2.17.1
+

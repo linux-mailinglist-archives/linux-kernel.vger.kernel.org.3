@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7CB4EB076
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6794EB07B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234320AbiC2PbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
+        id S238646AbiC2PbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238587AbiC2PbA (ORCPT
+        with ESMTP id S238586AbiC2Pa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:31:00 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0357F954B;
-        Tue, 29 Mar 2022 08:29:17 -0700 (PDT)
+        Tue, 29 Mar 2022 11:30:59 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67233F7F51;
+        Tue, 29 Mar 2022 08:29:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648567757; x=1680103757;
+  t=1648567756; x=1680103756;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=of6aC29MFt/gFsErfEks/90Bjvx9npiRIawi0g8JJ7E=;
-  b=hyRYld4NDmOkFRP7s51f6/pe1DGgIY9oxXnkT37EqYQdjC7V7/32imhc
-   Dsi2h+7aBtpQ0WvSYS7omUV6YhaaiyRDJlXx05rsZo7xN0nFCKlNS6Xt8
-   s/pgwTvyTQJZf3wORn51zxE/XcGn9kUl6DxRpVWVP9akgW9Ctji1kYPP0
-   Ql3Eot+H28SOWHWuUBpNXKyb2v73KUfGkVrji0X/cN2l49RMMudhvoGME
-   cTGcby+x6FlKtSKhgu4uc6fENZ6KuDvNYaBVXnkjJ0BEs0W6W+HGHjfGD
-   QZqRamircyNrGBL+lgx6oJw5qtmMVX4JpLwIW1C5mh04+OgAKbWhgIWKG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="239207789"
+  bh=DNunbYDvPM71E+oAn/SOKUWabTWxhBKKB0W3yFW6B0c=;
+  b=bjOmGtbIwl5B9iEEPikudLtvoL4m23hYlRzPC5NQwrAs25FMYKbDvQg8
+   pujaMaCgQvYfPGK0GXfitvCZLlgbWezZzcFOINmf4NZwVKBp7YHwZsGSt
+   9NGnCUrENozqv7tJ7hGSeBp6+HOGhoc7bwcKWC0wJpROFCkoGPJzxOkEf
+   bK0+cIZvkBWUDCBJypuWE9lKSm1E76bL2DbXY0MkiM9tR9F90FjaQSUYl
+   I2NPsPRrZcHSBX2giaQMSBkZYf0RwpY1LABNsF877CjEtpgJPR8XE1uCa
+   pQDJd/7rKXZH56UqcXo1QoNV1C8SNb1lFLktJGsUmgpyJ0j+vLv9neF4s
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="241430660"
 X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="239207789"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 08:29:15 -0700
+   d="scan'208";a="241430660"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 08:29:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="564710306"
+   d="scan'208";a="653044837"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 29 Mar 2022 08:29:07 -0700
+  by orsmga004.jf.intel.com with ESMTP; 29 Mar 2022 08:29:07 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 02BDB11E; Tue, 29 Mar 2022 18:29:28 +0300 (EEST)
+        id 17FB01A1; Tue, 29 Mar 2022 18:29:29 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Qianggui Song <qianggui.song@amlogic.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -72,59 +72,51 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [PATCH v2 01/13] gpiolib: Introduce for_each_gpiochip_node() loop helper
-Date:   Tue, 29 Mar 2022 18:29:14 +0300
-Message-Id: <20220329152926.50958-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 02/13] gpiolib: Introduce gpiochip_node_count() helper
+Date:   Tue, 29 Mar 2022 18:29:15 +0300
+Message-Id: <20220329152926.50958-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220329152926.50958-1-andriy.shevchenko@linux.intel.com>
 References: <20220329152926.50958-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce for_each_gpiochip_node() loop helper which iterates over
-the GPIO controller child nodes of a given device.
+The gpiochip_node_count() helper iterates over the device child nodes that
+have the "gpio-controller" property set. It returns the number of such nodes
+under a given device.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- include/linux/gpio/driver.h | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ include/linux/gpio/driver.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
-index be2fc9b15cf3..e6b9c17614ef 100644
+index e6b9c17614ef..bc2ea9f65022 100644
 --- a/include/linux/gpio/driver.h
 +++ b/include/linux/gpio/driver.h
-@@ -3,13 +3,14 @@
- #define __LINUX_GPIO_DRIVER_H
+@@ -755,4 +755,16 @@ static inline void gpiochip_unlock_as_irq(struct gpio_chip *gc,
+ 	device_for_each_child_node(dev, child)					\
+ 		if (!fwnode_property_present(child, "gpio-controller")) {} else
  
- #include <linux/device.h>
--#include <linux/types.h>
- #include <linux/irq.h>
- #include <linux/irqchip/chained_irq.h>
- #include <linux/irqdomain.h>
- #include <linux/lockdep.h>
- #include <linux/pinctrl/pinctrl.h>
- #include <linux/pinctrl/pinconf-generic.h>
-+#include <linux/property.h>
-+#include <linux/types.h>
- 
- struct gpio_desc;
- struct seq_file;
-@@ -750,4 +751,8 @@ static inline void gpiochip_unlock_as_irq(struct gpio_chip *gc,
- }
- #endif /* CONFIG_GPIOLIB */
- 
-+#define for_each_gpiochip_node(dev, child)					\
-+	device_for_each_child_node(dev, child)					\
-+		if (!fwnode_property_present(child, "gpio-controller")) {} else
++static inline unsigned int gpiochip_node_count(struct device *dev)
++{
++	struct fwnode_handle *child;
++	unsigned int count;
++
++	count = 0;
++	for_each_gpiochip_node(dev, child)
++		count++;
++
++	return count;
++}
 +
  #endif /* __LINUX_GPIO_DRIVER_H */
 -- 

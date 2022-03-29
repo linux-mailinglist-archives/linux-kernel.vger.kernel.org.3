@@ -2,224 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC334EAA50
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56CD44EAA58
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234583AbiC2JSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 05:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
+        id S234566AbiC2JUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 05:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234566AbiC2JRn (ORCPT
+        with ESMTP id S233563AbiC2JUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 05:17:43 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2117.outbound.protection.outlook.com [40.107.117.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80978242203
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 02:15:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mresjIIuVNtApdY2hr8695raQbxAIRAv+VQNXm7r0gGEOr3Nqp+obeobD376PHumlJ+djwneAs05txWS4rh5PHoIvMTGLdyBM4bV5cXMLdcVkcV8SdTQD2dBH45CmgInWTQrH9UB5ZIQlX4TiLhodGiecTSXsKTuwhshZAiWFZHpueZlWdwLFzJJJiB0b04nPKk7KvrsbYpvqq4fNA6ObxLhUNLfLdd4sw4pzWSbzBKs1M/mLkiTAk0zMUKG0tFoVauq3P/kELCV0uQDslw+zbEp9DBImTKBUbid0owjSm441jfqwOxoR4xw2JcPUPzsLaiXGWgB1o99WwtCAWZ/2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tfxfMiE8KIP0uQqbk8jDdt0PDGO8YvrOLwwBhOLEFcE=;
- b=ZAheoA7n1U2Cd0y3Ire5K1jlEtmtGVUJx3IOlciWhDU/QZI9PF8YFi3Q6oNLd8uIuDFpzymB/msNBGHi5ZNotqOVQcBc7oC01Cm+V/ivC1/dYzH6gUrYU1GgUa7xtgghhuzHgr1JVSnUXKC44nhGp22IBnve3kpgf/NKITWy96g0GN2h9jjnx91EZHuUE4BpGciFq9bseeJxG6Q1kREJT3jvkjZ3dRRbHX5/Cm/X/twTcO+/lh8WNu+ZVFCLM7Z/sMlhyXP84Slqtfh0lcPf8HUccRHBO775ybGdPScN7/iaYTyy6LM67jz6p3EzM5XIoIdAKQseLuVGWm8KFptuGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tfxfMiE8KIP0uQqbk8jDdt0PDGO8YvrOLwwBhOLEFcE=;
- b=nTKLFYP+FhN299dkAmTkmQvJhWbJ/eXLlAihEXY9P5uyQIh7sbX6RXoc84di49wMWhIxuk5FbiPRg9Y+S3esO+07ykySRbZCpLYJyL1INZUu98rS5hXarTPq4xTqInovpj+/pV/DLkOqioDC86WWk0Dh0ohf75bPCxfF2uC55Yw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
- by KL1PR0601MB3875.apcprd06.prod.outlook.com (2603:1096:820:21::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Tue, 29 Mar
- 2022 09:15:53 +0000
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::49ef:baa:8c3b:cb3d]) by SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::49ef:baa:8c3b:cb3d%5]) with mapi id 15.20.5102.023; Tue, 29 Mar 2022
- 09:15:53 +0000
-From:   Qing Wang <wangqing@vivo.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH 3/3] arm64: add arm64 default topology
-Date:   Tue, 29 Mar 2022 02:15:21 -0700
-Message-Id: <1648545322-14531-4-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1648545322-14531-1-git-send-email-wangqing@vivo.com>
-References: <1648545322-14531-1-git-send-email-wangqing@vivo.com>
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0214.apcprd02.prod.outlook.com
- (2603:1096:201:20::26) To SL2PR06MB3082.apcprd06.prod.outlook.com
- (2603:1096:100:37::17)
+        Tue, 29 Mar 2022 05:20:01 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3F12F6;
+        Tue, 29 Mar 2022 02:18:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648545498; x=1680081498;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=Cx9rR3X1Kpvsk+Ci5W3oD70XaG6Cd3BLEKYeqbVODNY=;
+  b=CEf2X+zzMK6DyAbBwVty8BggRYO3AHgtRd9o2QbFDuNdPdA24mZ2b2kz
+   24s0126PT5lWIBNM8q8cXbhp+8S0IqXXYk+6zu+8yT9Vr4fxaCrdHUDUj
+   aHgi4ydtJfcpBB29hHwbY88pV95MhpnF7DxscS2sedMzQKlLUhahdlEiV
+   I=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 29 Mar 2022 02:18:17 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 02:18:16 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 29 Mar 2022 02:18:16 -0700
+Received: from [10.216.26.55] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 29 Mar
+ 2022 02:18:09 -0700
+Subject: Re: [PATCH v3 3/3] usb: dwc: host: add xhci_plat_priv quirk
+ XHCI_SKIP_PHY_INIT
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>
+References: <1648103831-12347-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com>
+ <YjxjxplpOpDC2JLs@kuha.fi.intel.com>
+ <4c2a28ad-b866-1b65-e73a-4eda0596cea2@linux.intel.com>
+ <Yj2nPa6/Y01P5aCY@kuha.fi.intel.com>
+ <4619c75c-cd34-82f2-56e1-a8bcb6d97177@linux.intel.com>
+ <Yj3h4p/kmZTvMz0O@kuha.fi.intel.com>
+From:   "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>
+Message-ID: <fae54b27-9ae2-ecfc-69ae-40e5f5e1afbe@quicinc.com>
+Date:   Tue, 29 Mar 2022 14:48:05 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.2.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4f5c8c76-e270-4f3c-4abe-08da1164b93a
-X-MS-TrafficTypeDiagnostic: KL1PR0601MB3875:EE_
-X-Microsoft-Antispam-PRVS: <KL1PR0601MB387566B4E1AEC00CE36922FEBD1E9@KL1PR0601MB3875.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nCMQ99KH1g+1HfV5LzBTOIMOsY/Bpbhjm2jhHQ51zsGPHIpVDrfBz7YQUDRcqnqYJpEIVLhNeZEyDaSNFTLFlglmZYHWtdrbgqs8xI/c4EtcSS6Qmqx1uDzJxE0FvR4p7qcacDpdXyq/8y2cNkFG0ApsdgdvGiZS51oyRmLdP6Y+HRwm779W1Dpv1+SbLIeQO6cVNgpvsu6u2eFHQrh4OnijkxJMMGnb4aoSHuzgdNnpywfttNDEnniDD/SQ+zDuxvJdDF5WTvdO+q2t5cPsokLhMTOoZqDQDzD4az4FUe5QwDCY/eudCGSHVn43OwdB/foV56fXzLjlFEmoWOBBIG5GtcZnhBjCkC5Vn+9rszgPJ0D7xyxiMfFrr17uYGpTVrjGp1pNaQe1IqtSUDZNCfSRE7kPq0JYAVvd6Y6itNizriHGY7hQWvESvqnWPy6R6Psuk7kfr6YsMng/518Q4QA96XpFYh07clLswO75Snhd7lBMYe8/rEo2Lg/MsY1zEjsXotrQqpwHVW5RWyN3EsJu1wICVVIlR9a3ze2a5Q9aYSPqbNU+bopp8LJl8Vj0p1nCrjOhZS8qF/FtlXavEbHufTE6QgaiZU0VtTdx6R/rbJ4RZvPSobT8ogd5Fa3eyx+mrKALIa3G6RF3wU2JC1PUi02sFDuEwEIqhLCSFjJXF1O+XhnMgX7YaEfZUzlnsrl2RDfOCp9fUYQRFrAkw0d2hn7Iul8vx0RlrUm1YMcunfYQKU15p0X9WohE8bwM
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(5660300002)(66946007)(110136005)(6666004)(6486002)(508600001)(38350700002)(38100700002)(8676002)(66556008)(66476007)(4326008)(7416002)(86362001)(6512007)(921005)(36756003)(2616005)(52116002)(107886003)(2906002)(6506007)(316002)(186003)(26005)(21314003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?N3HXbwc7rbDQOe2RnCG+MjqJO0jb+0ZPJh8Ev8pL2ESWw7xqxmXt14bo4u2f?=
- =?us-ascii?Q?2Q4sWrEpddzjmmuOxWaukRVo7DMMik4dKLlqm03HlUL+vuB82qbJy5Gov8Pc?=
- =?us-ascii?Q?kJW9VR0PtkzoxmGrXnU4hlRhQz/4L9XJh+YFfvNp6KMe9GX9Uns0J9CH1UWv?=
- =?us-ascii?Q?y7Yqv+zQ11LSwaRMRE9WEHoQSULcgxP2HNIXdyLY/mAKA/jjbZOj/TWQAWnN?=
- =?us-ascii?Q?QRp5k0jQB47SmhI9dDM809aINy/akzdK2LyKCUaNw1oMt6krmLmQZX1MXjW6?=
- =?us-ascii?Q?qgBjEr2kBkp5k2kZmgZ72INtC774L/ldg+QWoqVH/iD0LaDwMLiMTtrNRF3Q?=
- =?us-ascii?Q?fVj6A8/Qnn2q7/R8Xk29URaJWYg3RRhSK5onBm6VKnbjuYkeUcEg2k2N562b?=
- =?us-ascii?Q?0msSIZMmlxEpIXOBh5KJ4TZ+KeuvIXOFvqK8bn8HBTOGvZtXBWGo1Sq0QVIf?=
- =?us-ascii?Q?HU7a8FpNfjIl/PwyJvl80/jG2MVm0JF9Cthm7nl0dfz0uKZ3N1hfWrXKm5Hc?=
- =?us-ascii?Q?mQ7mGlxdafPFhr9g/DGv8CUepq3hp9TfiTTOS9jfkmmaBDqRoskY4WvFFsxm?=
- =?us-ascii?Q?ylV6j59GeBFh+yryDjhr5tKiAX75/+h2PFeo4hynfbG0oQTnuJAIZc4sYrqR?=
- =?us-ascii?Q?w2V4g4wauEvSTD2xTCgYRo3uzWNpIgwLxw/aBqp2X2CqokkVPkruCNGfI4Mw?=
- =?us-ascii?Q?Pk9AK32jeLBNZkJZw0oZnlkqZM3xuhpN2cDdx/g662bDZyRBuCT1Msjl6kE5?=
- =?us-ascii?Q?kI9kwRfizrLhzM1UWUK0YRT2z67J6Fev479YuHH+OLFEKDW8l8Hn5ax3SSRM?=
- =?us-ascii?Q?z2vAGErgrO1UQ1nOdr6PgtsHDuM3jxqICx4MdOpWxzeJKqEA0tb1540GMmFk?=
- =?us-ascii?Q?qC9+ej2QtdRoeh5c75OokUJdFtwi5b3uSl6LCIYr1eAtGBUKBQc92fhqgfrj?=
- =?us-ascii?Q?MT/jNAZeiSjXBrzc7AiB9Vt5d0FYMx6XlkX0lMsFuveD4BAEKfUuGp+o3ILj?=
- =?us-ascii?Q?6Py2RGdE+qT+GDC6+djj/93NJmRK/g2c5uu0szAZOOAChoR+PlUG6gVapeqg?=
- =?us-ascii?Q?w2m1MbBqOfUI3F7opUalteC9io+IS3PxhBpsSlrETF+Mn/HwqSY/o281vcT8?=
- =?us-ascii?Q?Lg4mIFyDOQLR45G74r7jeqPKi2eQlnty6DdAXdH84D+1dJjRKM+BllSuW4px?=
- =?us-ascii?Q?YFNgRavT+Flk9GaZ42WJ0AgreP3Ch8ULjNcP65f6iUmpWJDn4DFfjFnwCsMT?=
- =?us-ascii?Q?sKMR22XSG28sn6w3lTLzUMFN2wk6oMFW/ppxXQsM35VYMTFh3K77fwakMW9/?=
- =?us-ascii?Q?5gYFkJPjstZ1TlqdkouMPcEnonzkxpnHXXU6p1B8Z0IWEwqWxbXNai2o0UHy?=
- =?us-ascii?Q?/lo3WKjqpy/BeELRsKHbzWTyd4iRS4q/cVtqdGbbWjYD6J4dslyIYxVLVgNG?=
- =?us-ascii?Q?z/gMBNDG3cfm93R+6OyP3FJRlaYO+Q8Qk0H0h9Pk5r0vNaTrbFkNr8Lm0/JD?=
- =?us-ascii?Q?MxLuazHkytmP/KPvJ3PsvkPb1TU5GzgQR4iChnCcfFQ8W1Su5NNxYkWvMdA9?=
- =?us-ascii?Q?63TRLWt8Hg6fUSRG5gS5OQM8l6PL/2HoYCsG86b36yJIFsVuUF/HTdRwFU2y?=
- =?us-ascii?Q?RqY9ERmKmjqOuIp1RsoiVGhSTjRUb4Wagj3FKRuM+nOjgdraI/1KFNyLW/Dt?=
- =?us-ascii?Q?T/zqNuTwFUnhmJ4cESuBxAFG1hmPGpNm1Vkia1blkkrJDg49RvQj0w3EYeAQ?=
- =?us-ascii?Q?MQ1f/FB9FA=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4f5c8c76-e270-4f3c-4abe-08da1164b93a
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2022 09:15:52.9915
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wl8/v+SKoEjnS3xvcBHnI2e23yk5dojU37v0Dbm+h9ZKXaTM1hB+gPI+Turjlph1ez9lA5KaAwJHJKZY61Lyrw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB3875
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yj3h4p/kmZTvMz0O@kuha.fi.intel.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Qing <wangqing@vivo.com>
+Hi Mathias,Heikki
 
-default_topology does not fit arm64, especially CPU and cache topology.
-Add arm64_topology, so we can do more based on CONFIG_GENERIC_ARCH_TOPOLOGY.
+On 3/25/2022 9:08 PM, Heikki Krogerus wrote:
+> On Fri, Mar 25, 2022 at 04:33:27PM +0200, Mathias Nyman wrote:
+>> On 25.3.2022 13.27, Heikki Krogerus wrote:
+>>> On Fri, Mar 25, 2022 at 12:36:22AM +0200, Mathias Nyman wrote:
+>>>> On 24.3.2022 14.27, Heikki Krogerus wrote:
+>>>>> On Thu, Mar 24, 2022 at 12:07:11PM +0530, Sandeep Maheswaram wrote:
+>>>>>> Currently the phy init is done from dwc3 and also xhci which makes the
+>>>>>> runtime_usage value 2 for the phy which causes issue during runtime
+>>>>>> suspend. When we run the below command the runtime_status still shows
+>>>>>> active.
+>>>>>> echo auto > /sys/bus/platform/devices/88e3000.phy/power/control
+>>>>>>
+>>>>>> dwc3 manages PHY by own DRD driver, so skip the management by
+>>>>>> HCD core by setting this quirk.
+>>>>>>
+>>>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>>>>>> ---
+>>>>>>   drivers/usb/dwc3/host.c | 13 +++++++++++++
+>>>>>>   1 file changed, 13 insertions(+)
+>>>>>>
+>>>>>> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+>>>>>> index eda8719..d4fcf06 100644
+>>>>>> --- a/drivers/usb/dwc3/host.c
+>>>>>> +++ b/drivers/usb/dwc3/host.c
+>>>>>> @@ -13,6 +13,12 @@
+>>>>>>   #include <linux/platform_device.h>
+>>>>>>   
+>>>>>>   #include "core.h"
+>>>>>> +#include <linux/usb/xhci-plat.h>
+>>>>>> +#include <linux/usb/xhci-quirks.h>
+>>>>>> +
+>>>>>> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
+>>>>>> +	.quirks = XHCI_SKIP_PHY_INIT,
+>>>>>> +};
+>>>>>>   
+>>>>>>   static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
+>>>>>>   					int irq, char *name)
+>>>>>> @@ -122,6 +128,13 @@ int dwc3_host_init(struct dwc3 *dwc)
+>>>>>>   		}
+>>>>>>   	}
+>>>>>>   
+>>>>>> +	ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
+>>>>>> +			sizeof(xhci_plat_dwc3_xhci));
+>>>>>> +	if (ret) {
+>>>>>> +		dev_err(dwc->dev, "failed to add data to xHCI\n");
+>>>>>> +		goto err;
+>>>>>> +	}
+>>>>>> +
+>>>>>>   	ret = platform_device_add(xhci);
+>>>>>>   	if (ret) {
+>>>>>>   		dev_err(dwc->dev, "failed to register xHCI device\n");
+>>>>> I think you should just use device property:
+>>>>>
+>>>> This was suggested in an earlier series, but was rejected as it also added
+>>>> the property as a device tree parameter.
+>>>>
+>>>> I think adding more device properties can be messy in the long run, especially if we
+>>>> need to add them for many of the existing xhci quirks.
+>>>> We also end up with a mix where some device properties are listed as device tree
+>>>> parameters, and some not.
+>>>>
+>>>> Defining xhci quirks and platform data structure in headers shared with dwc3 and cdns3
+>>>> allow those drivers to easily set any existing xhci quirk, or other possible optional
+>>>> callbacks.
+>>>>
+>>>> cdns3 driver is already doing this, but it includes the full xhci.h header.
+>>>> This series cleans up that a bit so cdns3 will only include xhci quirk bits and
+>>>> platform data structure.
+>>>>
+>>>> On the downside we add a couple xhci related header files to include/linux/usb/
+>>>> Let me know if you see any other issues I missed with this approach.
+>>> The problem here is that these drivers are now coupled together, and
+>>> that should not be taken lightly. We have a dependency hell in our
+>>> hands with a lot of drivers, and the culprit is always platform data.
+>>>
+>>> Build-in device properties may be messy, but I would still say they
+>>> are less messy than those quirk flags - you got to admit, they are a
+>>> mess. The benefit from build-in properties is in any case the fact
+>>> that they remove the need to couple these drivers together.
+>> Agree, quirk bits are messy. Any suggestion that would work with
+>> PCI xHCI devices, devicetree, and "pure" platform devices?
+> I think xHCI driver should always be able to rely on being able to
+> read this kind of information from the fwnode. If there is no actual
+> firmware node (DT or ACPI), or if it's missing some information, the
+> glue driver needs to populate software node for the xHCI.
+>
+> Right now I just want to avoid having to pass the quirks using
+> platform data from drivers such as drivers/usb/cdns3/host.c and
+> drivers/usb/dwc3/host.c to xHCI.
+>
+> One way we could do that is by defining compatibility ID for both of
+> them that we provide using a single device property (like I guess DT
+> does). Then based on that compatibility ID, xhci-plat.c can set the
+> actual "static" quirk flags. That we could already do easily. How
+> would that sound to you?
 
-arm64_xxx_flags() prefer to get the cache attribute from DT.
+This was my previous patch where I was using device tree property. 
+Should we go ahead with this approach?
 
-Signed-off-by: Wang Qing <wangqing@vivo.com>
----
- arch/arm64/kernel/smp.c | 56 +++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com/
 
-diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-index 27df5c1..d245012
---- a/arch/arm64/kernel/smp.c
-+++ b/arch/arm64/kernel/smp.c
-@@ -715,6 +715,60 @@ void __init smp_init_cpus(void)
- 	}
- }
- 
-+#ifdef CONFIG_SCHED_CLUSTER
-+static int arm64_cluster_flags(const struct cpumask *cpu_map)
-+{
-+	int flag = cpu_cluster_flags();
-+	int ret = cpu_share_private_cache(cpu_map);
-+	if (ret == 1)
-+		flag |= SD_SHARE_PKG_RESOURCES;
-+	else if (ret == 0)
-+		flag &= ~SD_SHARE_PKG_RESOURCES;
-+
-+	return flag;
-+}
-+#endif
-+
-+#ifdef CONFIG_SCHED_MC
-+static int arm64_core_flags(const struct cpumask *cpu_map)
-+{
-+	int flag = cpu_core_flags();
-+	int ret = cpu_share_private_cache(cpu_map);
-+	if (ret == 1)
-+		flag |= SD_SHARE_PKG_RESOURCES;
-+	else if (ret == 0)
-+		flag &= ~SD_SHARE_PKG_RESOURCES;
-+
-+	return flag;
-+}
-+#endif
-+
-+static int arm64_die_flags(const struct cpumask *cpu_map)
-+{
-+	int flag = 0;
-+	int ret = cpu_share_private_cache(cpu_map);
-+	if (ret == 1)
-+		flag |= SD_SHARE_PKG_RESOURCES;
-+	else if (ret == 0)
-+		flag &= ~SD_SHARE_PKG_RESOURCES;
-+
-+	return flag;
-+}
-+
-+static struct sched_domain_topology_level arm64_topology[] = {
-+#ifdef CONFIG_SCHED_SMT
-+	{ cpu_smt_mask, cpu_smt_flags, SD_INIT_NAME(SMT) },
-+#endif
-+#ifdef CONFIG_SCHED_CLUSTER
-+	{ cpu_clustergroup_mask, arm64_cluster_flags, SD_INIT_NAME(CLS) },
-+#endif
-+#ifdef CONFIG_SCHED_MC
-+	{ cpu_coregroup_mask, arm64_core_flags, SD_INIT_NAME(MC) },
-+#endif
-+	{ cpu_cpu_mask, arm64_die_flags, SD_INIT_NAME(DIE) },
-+	{ NULL, },
-+};
-+
- void __init smp_prepare_cpus(unsigned int max_cpus)
- {
- 	const struct cpu_operations *ops;
-@@ -723,6 +777,8 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
- 	unsigned int this_cpu;
- 
- 	init_cpu_topology();
-+	init_cpu_cache_topology();
-+	set_sched_topology(arm64_topology);
- 
- 	this_cpu = smp_processor_id();
- 	store_cpu_topology(this_cpu);
--- 
-2.7.4
+Any further changes to this ?
 
+Regards
+
+Sandeep
+
+>
+>>> You can also use something like naming convention if you are worried
+>>> about confusion between devicetree properties and build-in only
+>>> properties ("build-in:skip-phy-init" or whatever), and of course
+>>> require that each of the build-in only property is documented clearly
+>>> in drivers/usb/host/xhci-plat.c. But this in any case really can not
+>>> be justification for a platform data blob just so you can avoid using
+>>> the properties - honestly, it really should to be the other way
+>>> around.
+>>>
+>>> Platform data is in practice always problematic. On top of the driver
+>>> coupling, it creates maintenance burden, code duplication, etc. Please
+>>> don't just accept it lightly. I'm telling you, for hacks like this, the
+>>> build-in device properties is a much much safer bet.
+>>>
+>> Fair enough.
+>>
+>> Any idea if there's a long term solution for platform devices?
+>> Adding some type of "compatibility" id to platform devices in addition to name?
+> We don't need to touch the platform devices if, and when, we have
+> always the fwnode. The "compatibility" id should always be possible to
+> pick from the fwnode.
+>
+>> Also just noticed cdns3 driver passes a function pointer via platform_data to
+>> xhci-plat. This should be cleared up as well.
+> Looks like a PM quirk. For that I would propose this:
+> https://lore.kernel.org/linux-acpi/20201029105941.63410-2-heikki.krogerus@linux.intel.com/
+>
+> So with that you can supply separate PM operations for your software
+> fwnode. When ever the device suspends, the suspend quirk is also
+> executed. xHCI core does not need to know about it.
+>
+> Yeah, I guess I need to finish that series...
+>
+> thanks,
+>

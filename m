@@ -2,149 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119AB4EB449
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 21:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED32D4EB44F
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 21:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241120AbiC2TxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 15:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
+        id S241089AbiC2TxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 15:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241086AbiC2Twu (ORCPT
+        with ESMTP id S241086AbiC2TxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 15:52:50 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A52A18B277
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 12:51:03 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id CB0A82C028E;
-        Tue, 29 Mar 2022 19:51:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1648583460;
-        bh=BNF2UMylQFUCmmIZXcvoQ329GJFVKaMW/CAJjK9WuQ0=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=Y0hVUzewhYM8L8Vui/dU1oY5bKeGvAXvvgXLPbax8R32hPu5tM+Nno5ZEPF7ZXQ/R
-         3QGrBjAOyUxwV9Bko5MiB0stn0ouyzzWMgC7zJXtesD31y3bH0fpEJoOPg12f0lwMX
-         Q/Gtryq6kYBwxmrA1wbVvJNINvoZ76bt7wfdSsLeHUUbHHuTFalmuEprw2xFfBG2ke
-         y79H8C6Ve4YgvbUJiWh3X9eGYEueKYgNLE1GmLvJ/xyoN+GXBo73q5SdSIAa6eIh3K
-         ElrOyeI0W+SHJvDN5boy5UhtGRFVSoMjop6MQln7gP28NBfUQspwrkahKCxt6AgmjK
-         4413MexXmo09Q==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B624363240001>; Wed, 30 Mar 2022 08:51:00 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.32; Wed, 30 Mar 2022 08:51:00 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.033; Wed, 30 Mar 2022 08:51:00 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh@kernel.org>
-CC:     "andrew@lunn.ch" <andrew@lunn.ch>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "huziji@marvell.com" <huziji@marvell.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v4 2/2] dt-bindings: mmc: xenon: Convert to JSON schema
-Thread-Topic: [PATCH v4 2/2] dt-bindings: mmc: xenon: Convert to JSON schema
-Thread-Index: AQHYQwBQxHzoaq5k202Ou7T2PLN3cqzVZnGAgAAXboCAAG7SgA==
-Date:   Tue, 29 Mar 2022 19:50:59 +0000
-Message-ID: <6e118704-3c63-929e-ebf0-9a78fbed5daa@alliedtelesis.co.nz>
-References: <20220329000231.3544810-1-chris.packham@alliedtelesis.co.nz>
- <20220329000231.3544810-3-chris.packham@alliedtelesis.co.nz>
- <1648554629.870840.350362.nullmailer@robh.at.kernel.org>
- <d4c477b3-0cf2-e495-6a54-5fcd0301cc14@kernel.org>
-In-Reply-To: <d4c477b3-0cf2-e495-6a54-5fcd0301cc14@kernel.org>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F2F2FAA0294065438213375A3B0291C0@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Tue, 29 Mar 2022 15:53:08 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED4318CD3C
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 12:51:20 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id z134so16253754vsz.8
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 12:51:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=6KN4lGULDBsmAO8WThInhf6RYTnI5drESVjIjVz8PHc=;
+        b=GdQvZT+cRoZIRbqYEvwgpZe9nM/H19BwopzQDlTvbYaUPlH9LGSxU/i3gNMBD2jSnQ
+         rHLwWsnenUoE1vKS64nOoic4sDSuUFSiEv4d1Wa6pIkvnqxW1CS8TZP77hHsuT2ekbBe
+         CYKVYwlIr3ekjwLW5X1qh/7M05P9ptL0agopo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=6KN4lGULDBsmAO8WThInhf6RYTnI5drESVjIjVz8PHc=;
+        b=h4Xco0NxT05tEUrdmQICUfgrrqyDxyf/MpcHyGO649LS/UzYHd/91bp9YjA++lLBt1
+         2tAbZBTaxQPVqC+8LOncZ2p2cHwYBc1GY+bYcS4er2H67Yyixx9gTMPo4VAed5nv3YOX
+         MxnpD9jQNrCGqYNXLLGKOcdmuAJTbKdlNRLOaEiild3HaWoSGclLBTmLbZqOzBOZn5P+
+         ztT4jCqm14ExlnnlMuHd0WQf+KqLeN+1MGjNk1RWD+6UX0wJoW/AzKS6AzlmrnqB20O/
+         qHzicyX7kwC4wa63GXh/0Et5Us+NZqp9A/IB+wtjlaL/kJlpkrFBtrviMPwoj1ZRHOG3
+         aiIw==
+X-Gm-Message-State: AOAM533lFTdSXjcnJLgxnopxn0WzonK6Xru3BXF6jpsmrgZgDDsLXFKq
+        mPSjWJv6kquH7PgIIHFY6l9Cwg==
+X-Google-Smtp-Source: ABdhPJzmokjNJZMEhATEPoPFN5QTKP5EuXkayczo45VGQFgBWWNLyktfB7rENHAJV3aHOLdcRmlTgg==
+X-Received: by 2002:a67:cf0d:0:b0:325:7e1e:60e7 with SMTP id y13-20020a67cf0d000000b003257e1e60e7mr13325078vsl.13.1648583479909;
+        Tue, 29 Mar 2022 12:51:19 -0700 (PDT)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-32-216-209-220-127.dsl.bell.ca. [216.209.220.127])
+        by smtp.gmail.com with ESMTPSA id l76-20020a1ffe4f000000b0034330308d00sm220873vki.43.2022.03.29.12.51.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 12:51:18 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 15:51:17 -0400
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     corbet@lwn.net
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: [PATCH] Documentation: kernel-hacking: minor edits for style
+Message-ID: <20220329195117.azs4kaflc6ksfzdh@meerkat.local>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5772; h=from:subject;
+ bh=Wa5/59CNpSEJn9Xl9p23TnXz0O9e8A8DvCs/HEwQWOI=;
+ b=owGbwMvMwCW27YjM47CUmTmMp9WSGJKck06arr3K/ubUDoMdq7fLuz1+v6G3fRcf/+m3XcKLZLN+
+ 6c5v7yhlYRDjYpAVU2Qp2xe7KajwoYdceo8pzBxWJpAhDFycAjARZS6GvxI6Jw4ebXyYJHOyLKNpQ+
+ WNIxL1nYuPrLMoFZkmUx+id4SR4eZyfe7NfxX5p9/+rXXF9YaGUsdlpV132AvXfHwXfZfDjREA
+X-Developer-Key: i=konstantin@linuxfoundation.org; a=openpgp;
+ fpr=DE0E66E32F1FDD0902666B96E63EDCA9329DD07E
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=o8Y5sQTvuykA:10 a=VwQbUJbxAAAA:8 a=q3wFjaZLP3K7T2WVW-8A:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiAzMC8wMy8yMiAwMjoxNCwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gT24gMjkv
-MDMvMjAyMiAxMzo1MCwgUm9iIEhlcnJpbmcgd3JvdGU6DQo+PiBPbiBUdWUsIDI5IE1hciAyMDIy
-IDEzOjAyOjMxICsxMzAwLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPj4+IENvbnZlcnQgdGhlIG1h
-cnZlbGwseGVub24tc2RoY2kgYmluZGluZyB0byBKU09OIHNjaGVtYS4gQ3VycmVudGx5IHRoZQ0K
-Pj4+IGluLXRyZWUgZHRzIGZpbGVzIGRvbid0IHZhbGlkYXRlIGJlY2F1c2UgdGhleSB1c2Ugc2Ro
-Y2lAIGluc3RlYWQgb2YgbW1jQA0KPj4+IGFzIHJlcXVpcmVkIGJ5IHRoZSBnZW5lcmljIG1tYy1j
-b250cm9sbGVyIHNjaGVtYS4NCj4+Pg0KPj4+IFRoZSBjb21wYXRpYmxlICJtYXJ2ZWxsLHNkaGNp
-LXhlbm9uIiB3YXMgbm90IGRvY3VtZW50ZWQgaW4gdGhlIG9sZA0KPj4+IGJpbmRpbmcgYnV0IGl0
-IGFjY29tcGFuaWVzIHRoZSBvZiAibWFydmVsbCxhcm1hZGEtMzcwMC1zZGhjaSIgaW4gdGhlDQo+
-Pj4gYXJtYWRhLTM3eHggU29DIGR0c2kgc28gdGhpcyBjb21iaW5hdGlvbiBpcyBhZGRlZCB0byB0
-aGUgbmV3IGJpbmRpbmcNCj4+PiBkb2N1bWVudC4NCj4+Pg0KPj4+IFNpZ25lZC1vZmYtYnk6IENo
-cmlzIFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCj4+PiBSZXZp
-ZXdlZC1ieTogS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6a0BrZXJuZWwub3JnPg0KPj4+IC0tLQ0K
-Pj4+DQo+Pj4gTm90ZXM6DQo+Pj4gICAgICBDaGFuZ2VzIGluIHY0Og0KPj4+ICAgICAgLSBBZGQg
-cmV2aWV3IGZyb20gS3J6eXN6dG9mDQo+Pj4gICAgICAtIFNxdWFzaCBpbiBhZGRpdGlvbiBvZiBt
-YXJ2ZWxsLHNkaGNpLXhlbm9uIHdpdGggYW4gZXhwbGFuYXRpb24gaW4gdGhlDQo+Pj4gICAgICAg
-IGNvbW1pdCBtZXNzYWdlDQo+Pj4gICAgICBDaGFuZ2VzIGluIHYzOg0KPj4+ICAgICAgLSBEb24n
-dCBhY2NlcHQgYXA4MDcgd2l0aG91dCBhcDgwNg0KPj4+ICAgICAgLSBBZGQgcmVmOiBzdHJpbmcg
-Zm9yIHBhZC10eXBlDQo+Pj4gICAgICBDaGFuZ2VzIGluIHYyOg0KPj4+ICAgICAgLSBVcGRhdGUg
-TUFJTlRBSU5FUlMgZW50cnkNCj4+PiAgICAgIC0gSW5jb3Jwb3JhdGUgZmVlZGJhY2sgZnJvbSBL
-cnp5c3p0b2YNCj4+Pg0KPj4+ICAgLi4uL2JpbmRpbmdzL21tYy9tYXJ2ZWxsLHhlbm9uLXNkaGNp
-LnR4dCAgICAgIHwgMTczIC0tLS0tLS0tLS0tDQo+Pj4gICAuLi4vYmluZGluZ3MvbW1jL21hcnZl
-bGwseGVub24tc2RoY2kueWFtbCAgICAgfCAyNzUgKysrKysrKysrKysrKysrKysrDQo+Pj4gICBN
-QUlOVEFJTkVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDIgKy0NCj4+
-PiAgIDMgZmlsZXMgY2hhbmdlZCwgMjc2IGluc2VydGlvbnMoKyksIDE3NCBkZWxldGlvbnMoLSkN
-Cj4+PiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
-Z3MvbW1jL21hcnZlbGwseGVub24tc2RoY2kudHh0DQo+Pj4gICBjcmVhdGUgbW9kZSAxMDA2NDQg
-RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21tYy9tYXJ2ZWxsLHhlbm9uLXNkaGNp
-LnlhbWwNCj4+Pg0KPj4gTXkgYm90IGZvdW5kIGVycm9ycyBydW5uaW5nICdtYWtlIERUX0NIRUNL
-RVJfRkxBR1M9LW0gZHRfYmluZGluZ19jaGVjaycNCj4+IG9uIHlvdXIgcGF0Y2ggKERUX0NIRUNL
-RVJfRkxBR1MgaXMgbmV3IGluIHY1LjEzKToNCj4+DQo+PiB5YW1sbGludCB3YXJuaW5ncy9lcnJv
-cnM6DQo+Pg0KPj4gZHRzY2hlbWEvZHRjIHdhcm5pbmdzL2Vycm9yczoNCj4+IC9idWlsZHMvcm9i
-aGVycmluZy9saW51eC1kdC1yZXZpZXcvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
-L21tYy9tYXJ2ZWxsLHhlbm9uLXNkaGNpLmV4YW1wbGUuZHQueWFtbDogbW1jQGFhMDAwMDogY29t
-cGF0aWJsZTogJ29uZU9mJyBjb25kaXRpb25hbCBmYWlsZWQsIG9uZSBtdXN0IGJlIGZpeGVkOg0K
-Pj4gCVsnbWFydmVsbCxhcm1hZGEtMzcwMC1zZGhjaSddIGlzIHRvbyBzaG9ydA0KPj4gCSdtYXJ2
-ZWxsLGFybWFkYS0zNzAwLXNkaGNpJyBpcyBub3Qgb25lIG9mIFsnbWFydmVsbCxhcm1hZGEtY3Ax
-MTAtc2RoY2knLCAnbWFydmVsbCxhcm1hZGEtYXA4MDYtc2RoY2knXQ0KPj4gCSdtYXJ2ZWxsLGFy
-bWFkYS1hcDgwNy1zZGhjaScgd2FzIGV4cGVjdGVkDQo+PiAJRnJvbSBzY2hlbWE6IC9idWlsZHMv
-cm9iaGVycmluZy9saW51eC1kdC1yZXZpZXcvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
-bmdzL21tYy9tYXJ2ZWxsLHhlbm9uLXNkaGNpLnlhbWwNCj4+IC9idWlsZHMvcm9iaGVycmluZy9s
-aW51eC1kdC1yZXZpZXcvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21tYy9tYXJ2
-ZWxsLHhlbm9uLXNkaGNpLmV4YW1wbGUuZHQueWFtbDogbW1jQGFiMDAwMDogY29tcGF0aWJsZTog
-J29uZU9mJyBjb25kaXRpb25hbCBmYWlsZWQsIG9uZSBtdXN0IGJlIGZpeGVkOg0KPj4gCVsnbWFy
-dmVsbCxhcm1hZGEtMzcwMC1zZGhjaSddIGlzIHRvbyBzaG9ydA0KPj4gCSdtYXJ2ZWxsLGFybWFk
-YS0zNzAwLXNkaGNpJyBpcyBub3Qgb25lIG9mIFsnbWFydmVsbCxhcm1hZGEtY3AxMTAtc2RoY2kn
-LCAnbWFydmVsbCxhcm1hZGEtYXA4MDYtc2RoY2knXQ0KPj4gCSdtYXJ2ZWxsLGFybWFkYS1hcDgw
-Ny1zZGhjaScgd2FzIGV4cGVjdGVkDQo+PiAJRnJvbSBzY2hlbWE6IC9idWlsZHMvcm9iaGVycmlu
-Zy9saW51eC1kdC1yZXZpZXcvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21tYy9t
-YXJ2ZWxsLHhlbm9uLXNkaGNpLnlhbWwNCj4+DQo+PiBkb2MgcmVmZXJlbmNlIGVycm9ycyAobWFr
-ZSByZWZjaGVja2RvY3MpOg0KPiBDaHJpcywgeW91ciBvd24gZHQgYmluZGluZyBkb2VzIG5vdCBw
-YXNzIGl0J3MgY2hlY2sgKGV4YW1wbGUpLi4uDQo+DQo+IEFmdGVyIHVwZGF0aW5nIHRoZSBjb21w
-YXRpYmxlcywgeW91IG5lZWQgdG8gY2hlY2sgdGhlIGV4YW1wbGUuIFRoZQ0KPiBleGFtcGxlcyBh
-cmUgYW55d2F5IGR1cGxpY2F0aW5nIGNvbW1vbiBzdHVmZiwgc28gaGFsZiBvZiB0aGVtIGNvdWxk
-IGJlDQo+IHJlbW92ZWQuDQoNClllYWggc2lsbHkgbWUuIEkgc3RhcnRlZCB0YWtpbmcgc2hvcnQg
-Y3V0cyB0byBydW4gZHRfYmluZGluZ19jaGVjayANCmR0YnNfY2hlY2sgYXMgb25lIGNvbW1hbmQg
-YnV0IHRoZW4gdGhlIGR0X2JpbmRpbmdzX2NoZWNrIG91dHB1dCBzY3JvbGxlZCANCm9mZiB0aGUg
-dG9wIG9mIG15IHRlcm1pbmFsLg0KDQpBcyBmb3IgdGhlIGV4YW1wbGVzIHRoZW1zZWx2ZXMgSSB3
-YW50IHRvIGxlYXZlIHdoYXQncyB0aGVyZSBhcyBhIGZhaXJseSANCmRpcmVjdCB0cmFuc2xhdGlv
-biBvZiB0aGUgb2xkIGJpbmRpbmcuIElmIHdlIGNvbnNpZGVyIHRoZW0gdW5uZWNlc3NhcnkgDQpy
-ZW1vdmluZyB0aGVtIGNhbiBiZSBkb25lIGFzIGEgZm9sbG93LXVwLg0KDQo+DQo+IEJlc3QgcmVn
-YXJkcywNCj4gS3J6eXN6dG9m
+Rusty's kernel-hacking guides provide important information, however
+they are written in a narrative style that some readers may interpret as
+off-putting. Since the goal is to make kernel documentation accessible
+to as many new developers as possible, it's best to avoid the turns of
+phrase that require a specific cultural context to properly understand.
+
+Signed-off-by: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+---
+ Documentation/kernel-hacking/hacking.rst | 36 ++++++++++++------------
+ Documentation/kernel-hacking/locking.rst |  5 +---
+ 2 files changed, 19 insertions(+), 22 deletions(-)
+
+diff --git a/Documentation/kernel-hacking/hacking.rst b/Documentation/kernel-hacking/hacking.rst
+index 55bd37a2efb0..ebd9d90882ea 100644
+--- a/Documentation/kernel-hacking/hacking.rst
++++ b/Documentation/kernel-hacking/hacking.rst
+@@ -112,8 +112,7 @@ time, although different tasklets can run simultaneously.
+ .. warning::
+ 
+     The name 'tasklet' is misleading: they have nothing to do with
+-    'tasks', and probably more to do with some bad vodka Alexey
+-    Kuznetsov had at the time.
++    'tasks'.
+ 
+ You can tell you are in a softirq (or tasklet) using the
+ :c:func:`in_softirq()` macro (``include/linux/preempt.h``).
+@@ -290,8 +289,8 @@ userspace.
+     Unlike :c:func:`put_user()` and :c:func:`get_user()`, they
+     return the amount of uncopied data (ie. 0 still means success).
+ 
+-[Yes, this moronic interface makes me cringe. The flamewar comes up
+-every year or so. --RR.]
++[Yes, this objectionable interface makes me cringe. The flamewar comes
++up every year or so. --RR.]
+ 
+ The functions may sleep implicitly. This should never be called outside
+ user context (it makes no sense), with interrupts disabled, or a
+@@ -645,8 +644,9 @@ names in development kernels; this is not done just to keep everyone on
+ their toes: it reflects a fundamental change (eg. can no longer be
+ called with interrupts on, or does extra checks, or doesn't do checks
+ which were caught before). Usually this is accompanied by a fairly
+-complete note to the linux-kernel mailing list; search the archive.
+-Simply doing a global replace on the file usually makes things **worse**.
++complete note to the appropriate kernel development mailing list; search
++the archives. Simply doing a global replace on the file usually makes
++things **worse**.
+ 
+ Initializing structure members
+ ------------------------------
+@@ -723,14 +723,14 @@ Putting Your Stuff in the Kernel
+ In order to get your stuff into shape for official inclusion, or even to
+ make a neat patch, there's administrative work to be done:
+ 
+--  Figure out whose pond you've been pissing in. Look at the top of the
+-   source files, inside the ``MAINTAINERS`` file, and last of all in the
+-   ``CREDITS`` file. You should coordinate with this person to make sure
+-   you're not duplicating effort, or trying something that's already
+-   been rejected.
++-  Figure out who are the owners of the code you've been modifying. Look
++   at the top of the source files, inside the ``MAINTAINERS`` file, and
++   last of all in the ``CREDITS`` file. You should coordinate with these
++   people to make sure you're not duplicating effort, or trying something
++   that's already been rejected.
+ 
+-   Make sure you put your name and EMail address at the top of any files
+-   you create or mangle significantly. This is the first place people
++   Make sure you put your name and email address at the top of any files
++   you create or modify significantly. This is the first place people
+    will look when they find a bug, or when **they** want to make a change.
+ 
+ -  Usually you want a configuration option for your kernel hack. Edit
+@@ -748,11 +748,11 @@ make a neat patch, there's administrative work to be done:
+    can usually just add a "obj-$(CONFIG_xxx) += xxx.o" line. The syntax
+    is documented in ``Documentation/kbuild/makefiles.rst``.
+ 
+--  Put yourself in ``CREDITS`` if you've done something noteworthy,
+-   usually beyond a single file (your name should be at the top of the
+-   source files anyway). ``MAINTAINERS`` means you want to be consulted
+-   when changes are made to a subsystem, and hear about bugs; it implies
+-   a more-than-passing commitment to some part of the code.
++-  Put yourself in ``CREDITS`` if you consider what you've done
++   noteworthy, usually beyond a single file (your name should be at the
++   top of the source files anyway). ``MAINTAINERS`` means you want to be
++   consulted when changes are made to a subsystem, and hear about bugs;
++   it implies a more-than-passing commitment to some part of the code.
+ 
+ -  Finally, don't forget to read
+    ``Documentation/process/submitting-patches.rst`` and possibly
+diff --git a/Documentation/kernel-hacking/locking.rst b/Documentation/kernel-hacking/locking.rst
+index 4cbd50edf277..6805ae6e86e6 100644
+--- a/Documentation/kernel-hacking/locking.rst
++++ b/Documentation/kernel-hacking/locking.rst
+@@ -941,8 +941,7 @@ lock.
+ 
+ A classic problem here is when you provide callbacks or hooks: if you
+ call these with the lock held, you risk simple deadlock, or a deadly
+-embrace (who knows what the callback will do?). Remember, the other
+-programmers are out to get you, so don't do this.
++embrace (who knows what the callback will do?).
+ 
+ Overzealous Prevention Of Deadlocks
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@@ -952,8 +951,6 @@ grabs a read lock, searches a list, fails to find what it wants, drops
+ the read lock, grabs a write lock and inserts the object has a race
+ condition.
+ 
+-If you don't see why, please stay away from my code.
+-
+ Racing Timers: A Kernel Pastime
+ -------------------------------
+ 
+-- 
+2.35.1
+

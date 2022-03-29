@@ -2,73 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 715304EB456
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 21:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DB34EB45E
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241096AbiC2T7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 15:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
+        id S241116AbiC2UAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 16:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241082AbiC2T7K (ORCPT
+        with ESMTP id S241108AbiC2UAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 15:59:10 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873217807C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 12:57:26 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id w8so18606151pll.10
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 12:57:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=osandov-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yIT4p7ShXHLUNOjV8CvgepES5xgtr9srlJOvqbKocNI=;
-        b=kjeNyVLDw5gfpGN6mw79/GvJcQUnO9h4KG7JQXWW7+lMBvuE7+gpRGnoM9tHv09Qv9
-         t2l3lEwvIoLb/JEa5uMXY2LTipPPBIBgtR+UiX4uOtoeAnzCROOS0e5tya/scJYnCTPL
-         e0d8gYrRvsICGZMjGtanaku1+tmyy4ceY3YSr1RnDFPNKD3Rh2+0TbZgzAWAHGw/TlDM
-         1bMrL0m33jyeKj8iwYCHUoMtOroc3r1Uc0pYHtQulZjZRKzFNdrssTorQDj4I/z7kPVD
-         ZqSmsB62Lv0WoghLr31QWyoOFI513dDOm68umOnNz8WCRUC4fIPgqQf3K1FUKyqD6qeW
-         x0OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yIT4p7ShXHLUNOjV8CvgepES5xgtr9srlJOvqbKocNI=;
-        b=vHaXzfvud/MWqOIwWqkfmripmkj/ca7tL3zjHY0wVgU21Q0KhiptijFws8rQwDxGHS
-         9oIEBvkmyb8KhAJt5sDvXSmGLRW0oYL9FXZnbGifPbmEYwrvLv6Dx3GE2y5Dw5kSk5TF
-         lFdmze0qapNpEj5hQ9ry2FFX6+ZaCiFfJ8Fn5FlD/S8Fj7yfkHbvsbaK4u57RJvhrGao
-         UXoDfpnvAsoqg/ou6WVgFfGCxR4Eseafy84Qz03IkKRGh3QRNBHhJz+hq5ENn4M7uN2s
-         N0KvOZxINffvexUtVGiAZwaYijvey+itICjnFUuPY6EWHc7UzzyL6IW1mjsxk+pC1Rom
-         0QSw==
-X-Gm-Message-State: AOAM530XLSEURLZ7sPor1hRsP2NH+YpYA01D8502/LBNajWa+OcoErKx
-        J07xHdW4abJEUenKIVAfjP7cfBlQxdHXIQ==
-X-Google-Smtp-Source: ABdhPJxXbNP+DG2LiBZF6CN5/bbP5jCUmTbPtiuDEPEq6c1AqNZk16Ydy4+mvxb/OeMYAKyvPv7t1A==
-X-Received: by 2002:a17:902:e0ca:b0:156:24d4:23e7 with SMTP id e10-20020a170902e0ca00b0015624d423e7mr6462076pla.13.1648583845945;
-        Tue, 29 Mar 2022 12:57:25 -0700 (PDT)
-Received: from relinquished.localdomain ([2620:10d:c090:400::5:421])
-        by smtp.gmail.com with ESMTPSA id u15-20020a056a00098f00b004faa58d44eesm21890847pfg.145.2022.03.29.12.57.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 12:57:25 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 12:57:23 -0700
-From:   Omar Sandoval <osandov@osandov.com>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Omar Sandoval <osandov@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Nikolay Borisov <nborisov@suse.com>,
-        David Sterba <dsterba@suse.com>, clm@fb.com, jbacik@fb.com,
-        linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.17 12/21] btrfs: don't advance offset for
- compressed bios in btrfs_csum_one_bio()
-Message-ID: <YkNko1BcsyDt2QUS@relinquished.localdomain>
-References: <20220328194157.1585642-1-sashal@kernel.org>
- <20220328194157.1585642-12-sashal@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328194157.1585642-12-sashal@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        Tue, 29 Mar 2022 16:00:50 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B9315FFE;
+        Tue, 29 Mar 2022 12:59:06 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 660C65C01BB;
+        Tue, 29 Mar 2022 15:59:05 -0400 (EDT)
+Received: from imap47 ([10.202.2.97])
+  by compute3.internal (MEProxy); Tue, 29 Mar 2022 15:59:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=ECeje11hlUWWc7
+        ahU+melr+v3923TUV1SOEn+aMSwfc=; b=IDkyQ8wvClEa9bEVHsgEqxUSqV0Cqf
+        0X7a5NoChmomd/wU1PWKAzdiPjS8DgkvrrqPi6Wv0Uta2ngB9z/OnTkK5lkyVx0q
+        1u7KmRN4XcTAFWSq/SH4SBA7jOUsYsvH/VoZQt6NCJ3z4hD5abm1Z2qOHjFTUDil
+        UpwTPJa4ZNACsyT38uouIFQA4nBUP+5bcJsy8XlvSA8IqWhcbOPQ5szbncCB78NC
+        ZXaHGW8YBtjqX9rNqG4PN0pvyRZqPlTOuNRrpj6rntgWEaMXEyyXLoFj3pr3XwNS
+        cBWpfnOPwud9JERKOCiPSNm+DA92TbRbK3iZyC0XX+AKrdvqsi6LwYtQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=ECeje11hlUWWc7ahU+melr+v3923TUV1SOEn+aMSw
+        fc=; b=MXBIEYDu0Diu7AlV79qmpfV03zUCN1oIh30QqCzW2JH0EBCCiKmllCFjl
+        FHIBVeFNemPwI9U8LbzqFRgJTWgO9ot149wgeULc9+lmBHKkMV2+Jo55eLcauOJd
+        VaV1TND7gvEFTXr9vmsL0M3pjb/8diL9ECBh4QUYpHqALVeY0KBTeStCNi9rVXMb
+        YR7l392wToBSdZ2rfhDFUJZMes3IlZFNrO43zIBI4prttkCZxYoVaV5lS2qdbdLT
+        f47kBEaKl7ZKNtOhosOFwnliOXguDnQ/lvyFGzg7gdRxtLwLiuj60Bxb//dOFmMc
+        OTLQfju6c7tMuFomfwDq2g0CANarA==
+X-ME-Sender: <xms:B2VDYiEnOrERQd-p9wWp-eftG2L8MPSZqc0sLH7oVVbwJLlosE-EyA>
+    <xme:B2VDYjVrTK0qZeBjRKyddoXoKpyS3KNkneLa8MjMfpjYC67AU_bOjVEr2JRyiPUrY
+    ErtloDAUWU7_GRwuO0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeitddguddukecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdfu
+    vhgvnhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtf
+    frrghtthgvrhhnpeetueduleetfeeuledvleehheeivedvhfekheejjeduhfeileffffdu
+    hfekieelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:B2VDYsKbFzSBts_hisz_R4QUxzHx0zcNz3-jedNjie8uqSA22XZL6g>
+    <xmx:B2VDYsEJuXuGPkiroERW54xpqXxJPkeSdKAfcHOQHU3zQKFzhrQGMQ>
+    <xmx:B2VDYoVRvIT0BjVz8fpeNtd7BrIReH8gbQfIdrHryTJABYn-LINxvQ>
+    <xmx:CWVDYhNPHo1q35d7aYeXWAoLtOGKsy73hJ8Z-bzeseDd6mwKB8yChQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 8FE2F2740137; Tue, 29 Mar 2022 15:59:03 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4911-g925b585eab-fm-20220323.003-g925b585e
+Mime-Version: 1.0
+Message-Id: <74a36bce-3d6e-4124-add1-8ed44ba2c80d@www.fastmail.com>
+In-Reply-To: <20220329183817.21656-1-povik+lin@cutebit.org>
+References: <20220329183817.21656-1-povik+lin@cutebit.org>
+Date:   Tue, 29 Mar 2022 21:58:43 +0200
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     =?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        "Hector Martin" <marcan@marcan.st>,
+        "Michael Ellerman" <mpe@ellerman.id.au>
+Cc:     "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
+        "Paul Mackerras" <paulus@samba.org>,
+        "Jean Delvare" <khali@linux-fr.org>,
+        "Olof Johansson" <olof@lixom.net>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Janne Grunau" <j@jannau.net>
+Subject: Re: [PATCH] i2c: pasemi: Wait for write xfers to finish
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,47 +92,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 03:41:47PM -0400, Sasha Levin wrote:
-> From: Omar Sandoval <osandov@fb.com>
-> 
-> [ Upstream commit e331f6b19f8adde2307588bb325ae5de78617c20 ]
-> 
-> btrfs_csum_one_bio() loops over each filesystem block in the bio while
-> keeping a cursor of its current logical position in the file in order to
-> look up the ordered extent to add the checksums to. However, this
-> doesn't make much sense for compressed extents, as a sector on disk does
-> not correspond to a sector of decompressed file data. It happens to work
-> because:
-> 
-> 1) the compressed bio always covers one ordered extent
-> 2) the size of the bio is always less than the size of the ordered
->    extent
-> 
-> However, the second point will not always be true for encoded writes.
-> 
-> Let's add a boolean parameter to btrfs_csum_one_bio() to indicate that
-> it can assume that the bio only covers one ordered extent. Since we're
-> already changing the signature, let's get rid of the contig parameter
-> and make it implied by the offset parameter, similar to the change we
-> recently made to btrfs_lookup_bio_sums(). Additionally, let's rename
-> nr_sectors to blockcount to make it clear that it's the number of
-> filesystem blocks, not the number of 512-byte sectors.
-> 
-> Reviewed-by: Josef Bacik <josef@toxicpanda.com>
-> Reviewed-by: Nikolay Borisov <nborisov@suse.com>
-> Signed-off-by: Omar Sandoval <osandov@fb.com>
-> Signed-off-by: David Sterba <dsterba@suse.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+On Tue, Mar 29, 2022, at 20:38, Martin Povi=C5=A1er wrote:
+> Wait for completion of write transfers before returning from the drive=
+r.
+> At first sight it may seem advantageous to leave write transfers queued
+> for the controller to carry out on its own time, but there's a couple =
+of
+> issues with it:
+>
+>  * Driver doesn't check for FIFO space.
+
+Maybe we should also check that in a follow-up patch :-)
+
+>
+>  * The queued writes can complete while the driver is in its I2C read
+>    transfer path which means it will get confused by the raising of
+>    XEN (the 'transaction ended' signal). This can cause a spurious
+>    ENODATA error due to premature reading of the MRXFIFO register.
+>
+> Adding the wait fixes some unreliability issues with the driver. There=
+'s
+> some efficiency cost to it (especially with pasemi_smb_waitready doing
+> its polling), but that will be alleviated once the driver receives
+> interrupt support.
+>
+> Fixes: beb58aa39e6e ("i2c: PA Semi SMBus driver")
+> Signed-off-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
 > ---
->  fs/btrfs/compression.c |  2 +-
->  fs/btrfs/ctree.h       |  2 +-
->  fs/btrfs/file-item.c   | 37 +++++++++++++++++--------------------
->  fs/btrfs/inode.c       |  8 ++++----
->  4 files changed, 23 insertions(+), 26 deletions(-)
 
-Hi, Sasha,
+Reviewed-by: Sven Peter <sven@svenpeter.dev>
 
-This patch doesn't fix a real bug, so it should be dropped from both
-5.16 and 5.17.
+>
+> Tested on Apple's t8103 chip. To my knowledge the PA Semi controller
+> in its pre-Apple occurences behaves the same as far as this patch is
+> concerned.
+>
+>  drivers/i2c/busses/i2c-pasemi-core.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/i2c/busses/i2c-pasemi-core.c=20
+> b/drivers/i2c/busses/i2c-pasemi-core.c
+> index 7728c8460dc0..9028ffb58cc0 100644
+> --- a/drivers/i2c/busses/i2c-pasemi-core.c
+> +++ b/drivers/i2c/busses/i2c-pasemi-core.c
+> @@ -137,6 +137,12 @@ static int pasemi_i2c_xfer_msg(struct i2c_adapter=20
+> *adapter,
+>=20
+>  		TXFIFO_WR(smbus, msg->buf[msg->len-1] |
+>  			  (stop ? MTXFIFO_STOP : 0));
+> +
+> +		if (stop) {
+> +			err =3D pasemi_smb_waitready(smbus);
+> +			if (err)
+> +				goto reset_out;
+> +		}
 
-Thanks!
+Looks like pasemi_smb_xfer doesn't suffer from the same issue.
+I wonder if every device connected to the bus on the original PA Semi bo=
+ards
+only used that path and that's why no one noticed it.
+
+
+Sven
+

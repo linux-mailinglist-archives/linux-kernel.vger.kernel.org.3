@@ -2,126 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 155F74EAB30
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828484EAB33
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235125AbiC2KZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 06:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
+        id S235132AbiC2K2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 06:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233905AbiC2KZf (ORCPT
+        with ESMTP id S232093AbiC2K2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 06:25:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E462A251;
-        Tue, 29 Mar 2022 03:23:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 040CF611DF;
-        Tue, 29 Mar 2022 10:23:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 871E5C340ED;
-        Tue, 29 Mar 2022 10:23:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648549432;
-        bh=XJLnOhavV8EgimN80lCNvH8tMMHjSYGDC4GO3Sa86+Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TfFXzVSxU4r6703Rsr5iLbRlNhe4Jfbhy7sMLarQXy1M2/LHRZNZ3uJTR6+T9VOxc
-         OUs3nWeF7CZ8ELRK06MGP8gRp8bxeeJyvGrM8HwJ6bzk9aehX0T5zm/5ZYIO0eH3WB
-         2Cp9nGFw/zSyRW3Bf0T9eze0s9yF4aEtV3tlk35ElsSrvAl2SXaPj1qNu81LgokOTu
-         +skCc2O7iWVLFAdMQ2+mqXrKWQyAWEL5by70VQiyjqt9KVzK+xZpMZpqH+EFvGZhGI
-         XDuP2jiNDvUTd805YI+qc+1be4zKqxzwEoJZg+s9vwEMOhocpTr/XnaXy571ftL+eX
-         W/hv/mQelwSnQ==
-Date:   Tue, 29 Mar 2022 12:23:47 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Fedor Pchelkin <aissur0002@gmail.com>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/4] file: Fix file descriptor leak in copy_fd_bitmaps()
-Message-ID: <20220329102347.iu6mlbv5c76ci3j7@wittgenstein>
-References: <20220326114009.1690-1-aissur0002@gmail.com>
- <CAHk-=wijnsoGpoXRvY9o-MYow_xNXxaHg5vWJ5Z3GaXiWeg+dg@mail.gmail.com>
- <CAHk-=wgiTa-Cf+CyChsSHe-zrsps=GMwsEqFE3b_cgWUjxUSmw@mail.gmail.com>
- <2698031.BEx9A2HvPv@fedor-zhuzhzhalka67>
- <CAHk-=wh2Ao+OgnWSxHsJodXiLwtaUndXSkuhh9yKnA3iXyBLEA@mail.gmail.com>
+        Tue, 29 Mar 2022 06:28:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4F9F2AE3A
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 03:27:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648549618;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z3VdtsV7Mt0HPHZ2S0nq3Ho3kOS/p9vrNcK6WqWifvc=;
+        b=gNWqY6JsYJJ6g7pwz2ExexUk0Mtun4Fo/9J1/CAchaahIISRi1oWzhqlMwB0cEzSH11G6d
+        ++eP7y2DIgWW/u9XLeyuWB7tzaQk6hr10VS3oIenaLihqoF01TV2haFuNRhxWDJl10jSK8
+        VOHb8X8QZrEj0BKepTfclF6adk0bJAE=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-497-8ma5bdNwMqWsaYR3EVv_UQ-1; Tue, 29 Mar 2022 06:26:57 -0400
+X-MC-Unique: 8ma5bdNwMqWsaYR3EVv_UQ-1
+Received: by mail-lj1-f200.google.com with SMTP id f12-20020a2e918c000000b002496651f1d6so7293418ljg.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 03:26:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Z3VdtsV7Mt0HPHZ2S0nq3Ho3kOS/p9vrNcK6WqWifvc=;
+        b=PbqMJucudJqeO0jZIF0crbLRcf/vyvuUu7cVBGThZgTopaH2lpFcNifnz9yHVSQw9P
+         3MnakrErbBBJKOtBN/9K9U9HCo0X9O+U4hKxKm4rOayB3Z69TMdxGtcFjqvyP04H2Pv7
+         T9r1DktOKX5Ty5nR9F+InZIJPqySHRwC8Spzf+E0GXOHZOnCLn8SQweEZHQsB4ooNujv
+         iM6hBm+xE+0QQFcSb83hLo3vRgpBqcEE94qtHrc2QjnOYRQazTUOdWyXxD3iin31xjOU
+         HFerRRJYLc6HiXtvokQRuHUJWqGKJ2KB4TdXea2VAKnGXzr+QK0xRa9UkAg22vu4culj
+         xcbQ==
+X-Gm-Message-State: AOAM5301RbpaiHvluAMhq3nS8PqMtYtAcnWsMu1h+IEH+51Q8RqLbSm6
+        uwNC9RNX9A6NWeM+cEU3/idICVEfUNJ2Jvs4Fnzc5byRqnbU1v5tToJ8NQDxOgOEwMBgJw3s7yV
+        JC92xLl64ZPMoMdXFpbWHtj1jYZ2SiG0B0WogY7fT
+X-Received: by 2002:a05:6512:3d8f:b0:44a:2c65:8323 with SMTP id k15-20020a0565123d8f00b0044a2c658323mr2087411lfv.52.1648549614359;
+        Tue, 29 Mar 2022 03:26:54 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw1sVP3a3GKLVknaZbCgRPHgMmBx1vaBwHT/RpPgJKTOtXXlYxC14ENXweDZzGDz6dIshQw/oGN2NHbJngOKrU=
+X-Received: by 2002:a05:6512:3d8f:b0:44a:2c65:8323 with SMTP id
+ k15-20020a0565123d8f00b0044a2c658323mr2087385lfv.52.1648549614069; Tue, 29
+ Mar 2022 03:26:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wh2Ao+OgnWSxHsJodXiLwtaUndXSkuhh9yKnA3iXyBLEA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220311032233.GD18612@xsang-OptiPlex-9020>
+In-Reply-To: <20220311032233.GD18612@xsang-OptiPlex-9020>
+From:   Bruno Goncalves <bgoncalv@redhat.com>
+Date:   Tue, 29 Mar 2022 12:26:43 +0200
+Message-ID: <CA+QYu4osuzA+V5Th29SOsS1FnAZgdsaTc_qNPyPp=GH+q1LZYQ@mail.gmail.com>
+Subject: Re: [fs] 37da949345: xfstests.generic.374.fail
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Nikolay Borisov <nborisov@suse.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        lkp@lists.01.org, lkp@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 27, 2022 at 03:21:18PM -0700, Linus Torvalds wrote:
-> On Sun, Mar 27, 2022 at 2:53 PM <aissur0002@gmail.com> wrote:
-> >
-> > I am sorry, that was my first attempt to contribute to the kernel and
-> > I messed up a little bit with the patch tag: it is actually a single,
-> > standalone patch and there has been nothing posted previously.
-> 
-> No problem, thanks for clarifying.
-> 
-> But the patch itself in that case is missing some detail, since it
-> clearly doesn't apply to upstream.
-> 
-> Anyway:
-> 
-> > In few words, an error occurs while executing close_range() call with
-> > CLOSE_RANGE_UNSHARE flag: in __close_range() the value of
-> > max_unshare_fds (later used as max_fds in dup_fd() and copy_fd_bitmaps())
-> > can be an arbitrary number.
-> >
-> >   if (max_fd >= last_fd(files_fdtable(cur_fds)))
-> >     max_unshare_fds = fd;
-> >
-> > and not be a multiple of BITS_PER_LONG or BITS_PER_BYTE.
-> 
-> Very good, that's the piece I was missing. I only looked in fs/file.c,
-> and missed how that max_unshare_fds gets passed from __close_range()
-> into fork.c for unshare_fd() and then back to file.c and dup_fd(). And
-> then affects sane_fdtable_size().
-> 
-> I _think_ it should be sufficient to just do something like
-> 
->        max_fds = ALIGN(max_fds, BITS_PER_LONG)
-> 
-> in sane_fdtable_size(), but honestly, I haven't actually thought about
-> it all that much. That's just a gut feel without really analyzing
-> things - sane_fdtable_size() really should never return a value that
-> isn't BITS_PER_LONG aligned.
-> 
-> And that whole close_range() is why I added Christian Brauner to the
-> participant list, though, so let's see if Christian has any comments.
-> 
-> Christian?
+On Fri, Mar 11, 2022 at 4:23 AM kernel test robot <oliver.sang@intel.com> w=
+rote:
+>
+>
+>
+> Greeting,
+>
+> FYI, we noticed the following commit (built with gcc-9):
+>
+> commit: 37da9493451c35886a11bfe45d62adc27d9c46b3 ("fs: allow cross-vfsmou=
+nt reflink/dedupe")
+> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
+>
+> in testcase: xfstests
+> version: xfstests-x86_64-1de1db8-1_20220217
+> with following parameters:
+>
+>         disk: 4HDD
+>         fs: btrfs
+>         test: generic-group-18
+>         ucode: 0xec
+>
+> test-description: xfstests is a regression test suite for xfs and other f=
+iles ystems.
+> test-url: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
+>
+>
+> on test machine: 4 threads Intel(R) Xeon(R) CPU E3-1225 v5 @ 3.30GHz with=
+ 16G memory
+>
+> caused below changes (please refer to attached dmesg/kmsg for entire log/=
+backtrace):
+>
+>
+>
+>
+> If you fix the issue, kindly add following tag
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+>
+> 2022-03-10 14:43:23 export TEST_DIR=3D/fs/sda1
+> 2022-03-10 14:43:23 export TEST_DEV=3D/dev/sda1
+> 2022-03-10 14:43:23 export FSTYP=3Dbtrfs
+> 2022-03-10 14:43:23 export SCRATCH_MNT=3D/fs/scratch
+> 2022-03-10 14:43:23 mkdir /fs/scratch -p
+> 2022-03-10 14:43:23 export SCRATCH_DEV_POOL=3D"/dev/sda2 /dev/sda3 /dev/s=
+da4"
+> 2022-03-10 14:43:23 sed "s:^:generic/:" //lkp/benchmarks/xfstests/tests/g=
+eneric-group-18
+> 2022-03-10 14:43:23 ./check generic/360 generic/361 generic/362 generic/3=
+63 generic/364 generic/365 generic/366 generic/367 generic/368 generic/369 =
+generic/370 generic/371 generic/372 generic/373 generic/374 generic/375 gen=
+eric/376 generic/377 generic/378 generic/379
+> FSTYP         -- btrfs
+> PLATFORM      -- Linux/x86_64 lkp-skl-d06 5.17.0-rc7-00085-g37da9493451c =
+#1 SMP Thu Mar 10 21:42:40 CST 2022
+> MKFS_OPTIONS  -- /dev/sda2
+> MOUNT_OPTIONS -- /dev/sda2 /fs/scratch
+>
+> generic/360      1s
+> generic/361      12s
+> generic/362     [not run] this test requires richacl support on $SCRATCH_=
+DEV
+> generic/363     [not run] this test requires richacl support on $SCRATCH_=
+DEV
+> generic/364     [not run] this test requires richacl support on $SCRATCH_=
+DEV
+> generic/365     [not run] this test requires richacl support on $SCRATCH_=
+DEV
+> generic/366     [not run] this test requires richacl support on $SCRATCH_=
+DEV
+> generic/367     [not run] this test requires richacl support on $SCRATCH_=
+DEV
+> generic/368     [not run] this test requires richacl support on $SCRATCH_=
+DEV
+> generic/369     [not run] this test requires richacl support on $SCRATCH_=
+DEV
+> generic/370     [not run] this test requires richacl support on $SCRATCH_=
+DEV
+> generic/371      68s
+> generic/372     [not run] Explicit SHARED flag reporting not support by f=
+ilesystem type: btrfs
+> generic/373     - output mismatch (see /lkp/benchmarks/xfstests/results//=
+generic/373.out.bad)
+>     --- tests/generic/373.out   2022-02-17 11:55:00.000000000 +0000
+>     +++ /lkp/benchmarks/xfstests/results//generic/373.out.bad   2022-03-1=
+0 14:44:54.201679653 +0000
+>     @@ -3,7 +3,6 @@
+>      Mount otherdir
+>      Create file
+>      Reflink one file to another
+>     -cp: failed to clone 'OTHER_DIR/test-373/otherfiles' from 'SCRATCH_MN=
+T/test-373/file': Invalid cross-device link
+>      Check output
+>      2d61aa54b58c2e94403fb092c3dbc027  SCRATCH_MNT/test-373/file
+>      Unmount otherdir
+>     ...
+>     (Run 'diff -u /lkp/benchmarks/xfstests/tests/generic/373.out /lkp/ben=
+chmarks/xfstests/results//generic/373.out.bad'  to see the entire diff)
+> generic/374     - output mismatch (see /lkp/benchmarks/xfstests/results//=
+generic/374.out.bad)
+>     --- tests/generic/374.out   2022-02-17 11:55:00.000000000 +0000
+>     +++ /lkp/benchmarks/xfstests/results//generic/374.out.bad   2022-03-1=
+0 14:44:55.890679630 +0000
+>     @@ -3,7 +3,8 @@
+>      Mount otherdir
+>      Create file
+>      Dedupe one file to another
+>     -XFS_IOC_FILE_EXTENT_SAME: Invalid cross-device link
+>     +deduped 65536/65536 bytes at offset 0
+>     +64 KiB, 1 ops; 0.0018 sec (33.967 MiB/sec and 543.4783 ops/sec)
+>      Check output
+>     ...
+>     (Run 'diff -u /lkp/benchmarks/xfstests/tests/generic/374.out /lkp/ben=
+chmarks/xfstests/results//generic/374.out.bad'  to see the entire diff)
+> generic/375      1s
+> generic/376      2s
+> generic/377      1s
+> generic/378      1s
+> generic/379     [not run] disk quotas not supported by this filesystem ty=
+pe: btrfs
+> Ran: generic/360 generic/361 generic/362 generic/363 generic/364 generic/=
+365 generic/366 generic/367 generic/368 generic/369 generic/370 generic/371=
+ generic/372 generic/373 generic/374 generic/375 generic/376 generic/377 ge=
+neric/378 generic/379
+> Not run: generic/362 generic/363 generic/364 generic/365 generic/366 gene=
+ric/367 generic/368 generic/369 generic/370 generic/372 generic/379
+> Failures: generic/373 generic/374
+> Failed 2 of 20 tests
+>
+>
 
-(Sorry, I was heads-deep in some other fs work and went into airplaine
-mode. I'm back.)
+We are also able to reproduce this on mainline kernel with gcc12, the
+problem seems to have been introduced by [1].
 
-So I investigated a similar report a little while back and I spent quite
-a lot of time trying to track this down but didn't find the cause.
-If you'd call:
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
+it/?id=3D5191290407668028179f2544a11ae9b57f0bcf07
 
-close_range(131, -1, CLOSE_RANGE_UNSHARE);
+Bruno
+>
+>
+> To reproduce:
+>
+>         git clone https://github.com/intel/lkp-tests.git
+>         cd lkp-tests
+>         sudo bin/lkp install job.yaml           # job file is attached in=
+ this email
+>         bin/lkp split-job --compatible job.yaml # generate the yaml file =
+for lkp run
+>         sudo bin/lkp run generated-yaml-file
+>
+>         # if come across any failure that blocks the test,
+>         # please remove ~/.lkp and /lkp dir to run from a clean state.
+>
+>
+>
+> ---
+> 0-DAY CI Kernel Test Service
+> https://lists.01.org/hyperkitty/list/lkp@lists.01.org
+>
+> Thanks,
+> Oliver Sang
+>
 
-for an fdtable that is smaller than 131 then we'd call:
-
-unshare_fd(..., 131)
-\dup_fd(..., 131)
-  \sane_fdtable_size(..., 131)
-
-So sane_fdtable_size() would return 131 which is not aligned. This
-couldn't happen before CLOSE_RANGE_UNSHARE afaict. I'll try to do a
-repro with this with your suggested fix applied.
-
-Christian

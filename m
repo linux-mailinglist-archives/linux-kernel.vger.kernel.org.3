@@ -2,129 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCFAF4EA71C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 07:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CE74EA729
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 07:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbiC2F2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 01:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35184 "EHLO
+        id S232491AbiC2Fdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 01:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231912AbiC2F2B (ORCPT
+        with ESMTP id S231612AbiC2Fda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 01:28:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915541D78B3;
-        Mon, 28 Mar 2022 22:26:19 -0700 (PDT)
+        Tue, 29 Mar 2022 01:33:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A92232D19;
+        Mon, 28 Mar 2022 22:31:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BE0161449;
-        Tue, 29 Mar 2022 05:26:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FD36C2BBE4;
-        Tue, 29 Mar 2022 05:26:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648531578;
-        bh=F94j0WiJmE2n0U54lTd9JyGb37irQw7Kn+4tBx3Tek8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rfKOAIHc3UKdfQCh+KF0GLb4Ygz1rsSRoqsaN84U/rjKkufMQbBDESgGP71GMbPRB
-         llDZ5wx/fJIZ16qJwRp0QHtsq7IJqi1JgBVHVqJDZp6dVfGR+KLr/7rhPq76AqBd9H
-         JXsh0GTY+o2gfJf8MwG4LgrU4wShbcwBMR65lAXs=
-Date:   Tue, 29 Mar 2022 07:26:15 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tanjore Suresh <tansuresh@google.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v1 0/3] Asynchronous shutdown interface and example
- implementation
-Message-ID: <YkKYd3DIduUyuEso@kroah.com>
-References: <20220328230008.3587975-1-tansuresh@google.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 845A2B80E5E;
+        Tue, 29 Mar 2022 05:31:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B19C34100;
+        Tue, 29 Mar 2022 05:31:44 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="bD1y1M7K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1648531901;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0DnQZrbeMIl/jPEL4/NKQa5kO0JP14Wyo3i+LOhThwg=;
+        b=bD1y1M7KWSGBLRw4W/83PYO7ezAjW2nCVq+4u4ERRn0NWFsjB0xmgVFtAUyMNo52PISYxg
+        GCfBDbH8ifjATEh7Y/zQILB5PEyxSLgjC1Od2h56OxOOQ64ejsHgOGrWSB3Jo7LPweEVDT
+        f+GGhIY5+oPosV/+6BJdi3QH/hrulK8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b2f47cc8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 29 Mar 2022 05:31:41 +0000 (UTC)
+Received: by mail-yb1-f179.google.com with SMTP id e203so20884929ybc.12;
+        Mon, 28 Mar 2022 22:31:40 -0700 (PDT)
+X-Gm-Message-State: AOAM530IzVIaO3kQsFoXa/gaMLMcsFixM0jYuGgNXAqcTVj/NnBpDVKx
+        Heqva2c4x+Y4Tw30M4X84DjpR653RhjbEOfkTKk=
+X-Google-Smtp-Source: ABdhPJwFAnSwrfSjbcLI6+p0f1ulm4t4V/JJ5gZl8ZD3byHHDsFzm9CK1g3baSj456k5LxpPylLbJ2gSKU/8vedAUUU=
+X-Received: by 2002:a25:2517:0:b0:634:63cb:68fe with SMTP id
+ l23-20020a252517000000b0063463cb68femr25915454ybl.271.1648531900027; Mon, 28
+ Mar 2022 22:31:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328230008.3587975-1-tansuresh@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220328111828.1554086-1-sashal@kernel.org> <20220328111828.1554086-16-sashal@kernel.org>
+ <YkH5mhYokPB87FtE@google.com>
+In-Reply-To: <YkH5mhYokPB87FtE@google.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 29 Mar 2022 01:31:29 -0400
+X-Gmail-Original-Message-ID: <CAHmME9oTiJ5ZTtsecisOp7cLurm+r0gOtPSozgPvr+phDjiACQ@mail.gmail.com>
+Message-ID: <CAHmME9oTiJ5ZTtsecisOp7cLurm+r0gOtPSozgPvr+phDjiACQ@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 5.17 16/43] random: use computational hash for
+ entropy extraction
+To:     Eric Biggers <ebiggers@google.com>
+Cc:     Sasha Levin <sashal@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 04:00:05PM -0700, Tanjore Suresh wrote:
-> Problem:
-> 
-> Some of our machines are configured with  many NVMe devices and
-> are validated for strict shutdown time requirements. Each NVMe
-> device plugged into the system, typicaly takes about 4.5 secs
-> to shutdown. A system with 16 such NVMe devices will takes
-> approximately 80 secs to shutdown and go through reboot.
-> 
-> The current shutdown APIs as defined at bus level is defined to be
-> synchronous. Therefore, more devices are in the system the greater
-> the time it takes to shutdown. This shutdown time significantly
-> contributes the machine reboot time.
-> 
-> Solution:
-> 
-> This patch set proposes an asynchronous shutdown interface at bus level,
-> modifies the core driver, device shutdown routine to exploit the
-> new interface while maintaining backward compatibility with synchronous
-> implementation already existing (Patch 1 of 3) and exploits new interface
-> to enable all PCI-E based devices to use asynchronous interface semantics
-> if necessary (Patch 2 of 3). The implementation at PCI-E level also works
-> in a backward compatible way, to allow exiting device implementation
-> to work with current synchronous semantics. Only show cases an example
-> implementation for NVMe device to exploit this asynchronous shutdown
-> interface. (Patch 3 of 3).
-> 
-> Tanjore Suresh (3):
->   driver core: Support asynchronous driver shutdown
->   PCI: Support asynchronous shutdown
->   nvme: Add async shutdown support
-> 
->  drivers/base/core.c        | 39 ++++++++++++++++++-
->  drivers/nvme/host/core.c   | 28 +++++++++----
->  drivers/nvme/host/nvme.h   |  8 ++++
->  drivers/nvme/host/pci.c    | 80 ++++++++++++++++++++++++--------------
->  drivers/pci/pci-driver.c   | 17 ++++++--
->  include/linux/device/bus.h | 10 +++++
->  include/linux/pci.h        |  2 +
->  7 files changed, 144 insertions(+), 40 deletions(-)
-> 
-> -- 
-> 2.35.1.1021.g381101b075-goog
-> 
+Hi Sasha,
 
-Hi,
+On Mon, Mar 28, 2022 at 2:08 PM Eric Biggers <ebiggers@google.com> wrote:
+>
+> On Mon, Mar 28, 2022 at 07:18:00AM -0400, Sasha Levin wrote:
+> > From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+> >
+> > [ Upstream commit 6e8ec2552c7d13991148e551e3325a624d73fac6 ]
+> >
+>
+> I don't think it's a good idea to start backporting random commits to random.c
+> that weren't marked for stable.  There were a lot of changes in v5.18, and
+> sometimes they relate to each other in subtle ways, so the individual commits
+> aren't necessarily safe to pick.
+>
+> IMO, you shouldn't backport any non-stable-Cc'ed commits to random.c unless
+> Jason explicitly reviews the exact sequence of commits that you're backporting.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+I'm inclined to agree with Eric here that you might be a bit careful
+about autosel'ing 5.18, given how extensive the changes were. In
+theory they should all be properly sequenced so that nothing breaks,
+but I'd still be cautious. However, if you want, maybe we can work out
+some plan for backporting. I'll take a look and maybe will ping you on
+IRC about it.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+Jason

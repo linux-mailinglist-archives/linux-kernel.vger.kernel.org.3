@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 551714EB026
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2744EB025
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238472AbiC2PYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
+        id S238494AbiC2PYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238461AbiC2PYh (ORCPT
+        with ESMTP id S238464AbiC2PYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 29 Mar 2022 11:24:37 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F64207A22
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EF921C04D
         for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:22:54 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 9688D1F426BC
+        with ESMTPSA id 1BDE81F426BF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1648567373;
-        bh=6c/KgMvY7HJBn90Jzacn0twKyDB1AkNzgEYMPrA8qkQ=;
+        bh=1LY9QgdlXhZN0ZJtVH71yykyQQc/7fSR67bBdC4ee0M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZXof7AoaFQ2OsLo51YP+KlhHXCFSDhiQxNQJHu5KGLwJkEyvPOpLVhmcTvQX6ESWA
-         zib2QHLwsqYM0PAiTfAuu7eVA7Dif0udcAw3UZBu1KOS/QCmAEyyHmFqz8lMfaxDC+
-         kwrHkU4pg5o2BZtiOcwY/QCt0Pk+mQGv1FY5UBOkAQSwrvt7oHIMRtL7NhfZjb/uUb
-         iGUbWQTaKyCJoicHj/JnS++f1s12wtkhC+jFbdtuQHwUqXwpghRfVkvYlD6MAUW7VX
-         uiK/Sh8gZ5S/2eg8R7bOF7orvdoR4BlBA+yUNAaoQ2CglvufH6M3qDmeSTUGW0ZUej
-         tLuC7u7Pw53vw==
+        b=MPLrlly/RZOVYUL7J2NURkqWyGjULbYbq3aDWnd/zGhoI8DhCs7KH50NE3jn/FGy5
+         oGXEDgF9dWYCE8RXL3Ma0op0lw+FokADB/aokLce9LewUlsoYT1/qNmEbG9pnwMQxc
+         7yP0G8kL3vP/rhYEFPD753GhWtASP4c31xgylS0hvfatUJs1HiUw2N2X1P1a+hl5Tu
+         XoAOoVdAY9neSQxUNR+b4qfZmMYWV+Z2li45JEMNoTU1IU6HGlYwJBoo56/EETH2VB
+         gFHS6rtTu3XE1RLMDCwLVPKtSZii4k+M8yxxU8wba6zDoMqXodTTHjO0m4EecSvHrH
+         DKRT9Pw0Wg32A==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -35,9 +35,9 @@ Cc:     nfraprado@collabora.com, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 2/3] soc: mediatek: pwrap: Switch to devm_platform_ioremap_resource_byname()
-Date:   Tue, 29 Mar 2022 17:22:44 +0200
-Message-Id: <20220329152245.124341-2-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 3/3] soc: mediatek: pwrap: Move and check return value of platform_get_irq()
+Date:   Tue, 29 Mar 2022 17:22:45 +0200
+Message-Id: <20220329152245.124341-3-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220329152245.124341-1-angelogioacchino.delregno@collabora.com>
 References: <20220329152245.124341-1-angelogioacchino.delregno@collabora.com>
@@ -53,48 +53,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to simplify ioremapping resources, instead of calling
-platform_get_resource_byname() and then devm_ioremap_resource(),
-simply call devm_platform_ioremap_resource_byname().
+Move the call to platform_get_irq() earlier in the probe function
+and check for its return value: if no interrupt is specified, it
+wouldn't make sense to try to call devm_request_irq() so, in that
+case, we can simply return early.
+
+Moving the platform_get_irq() call also makes it possible to use
+one less goto, as clocks aren't required at that stage.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/soc/mediatek/mtk-pmic-wrap.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/soc/mediatek/mtk-pmic-wrap.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c b/drivers/soc/mediatek/mtk-pmic-wrap.c
-index 8f34b0d6c34e..755b8d00faa9 100644
+index 755b8d00faa9..72d82fe2e230 100644
 --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
 +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
-@@ -2191,7 +2191,6 @@ static int pwrap_probe(struct platform_device *pdev)
- 	struct pmic_wrapper *wrp;
- 	struct device_node *np = pdev->dev.of_node;
- 	const struct of_device_id *of_slave_id = NULL;
--	struct resource *res;
+@@ -2204,6 +2204,10 @@ static int pwrap_probe(struct platform_device *pdev)
+ 	if (!wrp)
+ 		return -ENOMEM;
  
- 	if (np->child)
- 		of_slave_id = of_match_node(of_slave_match_tbl, np->child);
-@@ -2211,8 +2210,7 @@ static int pwrap_probe(struct platform_device *pdev)
- 	wrp->slave = of_slave_id->data;
- 	wrp->dev = &pdev->dev;
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
++
+ 	platform_set_drvdata(pdev, wrp);
  
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "pwrap");
--	wrp->base = devm_ioremap_resource(wrp->dev, res);
-+	wrp->base = devm_platform_ioremap_resource_byname(pdev, "pwrap");
- 	if (IS_ERR(wrp->base))
- 		return PTR_ERR(wrp->base);
+ 	wrp->master = of_device_get_match_data(&pdev->dev);
+@@ -2316,7 +2320,6 @@ static int pwrap_probe(struct platform_device *pdev)
+ 	if (HAS_CAP(wrp->master->caps, PWRAP_CAP_INT1_EN))
+ 		pwrap_writel(wrp, wrp->master->int1_en_all, PWRAP_INT1_EN);
  
-@@ -2226,9 +2224,7 @@ static int pwrap_probe(struct platform_device *pdev)
- 	}
- 
- 	if (HAS_CAP(wrp->master->caps, PWRAP_CAP_BRIDGE)) {
--		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
--				"pwrap-bridge");
--		wrp->bridge_base = devm_ioremap_resource(wrp->dev, res);
-+		wrp->bridge_base = devm_platform_ioremap_resource_byname(pdev, "pwrap-bridge");
- 		if (IS_ERR(wrp->bridge_base))
- 			return PTR_ERR(wrp->bridge_base);
- 
+-	irq = platform_get_irq(pdev, 0);
+ 	ret = devm_request_irq(wrp->dev, irq, pwrap_interrupt,
+ 			       IRQF_TRIGGER_HIGH,
+ 			       "mt-pmic-pwrap", wrp);
 -- 
 2.35.1
 

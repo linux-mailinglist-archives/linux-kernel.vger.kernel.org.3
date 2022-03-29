@@ -2,151 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D334EAFF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FEB4EAFFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238326AbiC2PKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        id S238345AbiC2PMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238318AbiC2PKl (ORCPT
+        with ESMTP id S234378AbiC2PMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:10:41 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F89C203A6B;
-        Tue, 29 Mar 2022 08:08:57 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-d39f741ba0so18992548fac.13;
-        Tue, 29 Mar 2022 08:08:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9MI9Y0hjLEdGkyBn4a4gJ7Wyi0ARALBjm+l4Te7k6eY=;
-        b=rt+pi0heUTMFlD3lSIoBTXXHeO9bYGwc/dHBsA0GoEbjCw1g9TjfHyHNIbnWBaP/oR
-         +awkseq5+l7PTjuEx/5pkdouqzYCBZe+1bNOavfVshq9roa6HullT9YWOk4IjW4274As
-         HU9exJOTzNM9AZPeN62MN5Wtu7DvC/Ax1oglSj8MHS3lRlclxzaP+4k0wpfgZHMHZOgt
-         TD0mOWvNJl4khK6wgFq74/SkyIajpK+rv5wzhzlR0uAOUtcnJag5uWg6Pne+nAsUqdqV
-         5tjqCu0tHu8xK7a2GfPImxUWiAsCeS6ZfZ6gyZtbTuoJXZ50hiZyVF47W8kHP/Bm8bYL
-         G00Q==
-X-Gm-Message-State: AOAM532j/ZTECFkpRN66voVlsAoLcd7IhBRvoE0NZOiSZMzxwI83Oikc
-        518t12we3pMwaIkRFfb4jg==
-X-Google-Smtp-Source: ABdhPJzRxexG0L1mdf99NN5f59K5nX3DNtXTbLk6WqzsW6LOT2KNboRu9Ho4Ve3cYaW1RXUHrNkTOw==
-X-Received: by 2002:a05:6870:461d:b0:de:4705:7fe8 with SMTP id z29-20020a056870461d00b000de47057fe8mr29959oao.221.1648566536694;
-        Tue, 29 Mar 2022 08:08:56 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g8-20020a9d2d88000000b005b238f7551csm8724772otb.53.2022.03.29.08.08.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 08:08:55 -0700 (PDT)
-Received: (nullmailer pid 680061 invoked by uid 1000);
-        Tue, 29 Mar 2022 15:08:53 -0000
-Date:   Tue, 29 Mar 2022 10:08:53 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/16] PCI: dwc: Add IP-core version detection procedure
-Message-ID: <YkMhBdrd9Bq4hzjq@robh.at.kernel.org>
-References: <20220324013734.18234-1-Sergey.Semin@baikalelectronics.ru>
- <20220324013734.18234-6-Sergey.Semin@baikalelectronics.ru>
+        Tue, 29 Mar 2022 11:12:06 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B17522CC;
+        Tue, 29 Mar 2022 08:10:21 -0700 (PDT)
+Received: from mail-wm1-f54.google.com ([209.85.128.54]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MYtoe-1nUrt61Sro-00UrdT; Tue, 29 Mar 2022 17:10:20 +0200
+Received: by mail-wm1-f54.google.com with SMTP id r204-20020a1c44d5000000b0038ccb70e239so1406116wma.3;
+        Tue, 29 Mar 2022 08:10:20 -0700 (PDT)
+X-Gm-Message-State: AOAM531uCDccBNB8TxD4GKHG3zBHalbonhtDBgEVZqpf1zLHjY56dGFm
+        8K4aoSgYFJKYwVsOvig2G3pJkljG/E5xBFoGkbw=
+X-Google-Smtp-Source: ABdhPJy1J5xaryus8X4nFV6ubkK8diotbwfxO4GiSu5zF+wuBLiP5QA+mjqckcwLSa9RHUv88mORXl0v0ubH+5QCE64=
+X-Received: by 2002:a05:600c:1e0b:b0:38c:9ac5:b486 with SMTP id
+ ay11-20020a05600c1e0b00b0038c9ac5b486mr100357wmb.71.1648566619950; Tue, 29
+ Mar 2022 08:10:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324013734.18234-6-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1648551070.git.tonyhuang.sunplus@gmail.com> <46aad49867912fc57b669fc54fdb28638cccfcd9.1648551070.git.tonyhuang.sunplus@gmail.com>
+In-Reply-To: <46aad49867912fc57b669fc54fdb28638cccfcd9.1648551070.git.tonyhuang.sunplus@gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 29 Mar 2022 17:10:03 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0CLA33CTerXJ=bK+myhyHp_utoLnTX-NzMgjeb7icAGg@mail.gmail.com>
+Message-ID: <CAK8P3a0CLA33CTerXJ=bK+myhyHp_utoLnTX-NzMgjeb7icAGg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] mmc: Add mmc driver for Sunplus SP7021
+To:     Tony Huang <tonyhuang.sunplus@gmail.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, lhjeff911@gmail.com,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        Tony Huang <tony.huang@sunplus.com>, lh.kuo@sunplus.com
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:OW6ybkuzuYCfxijmsioYK+OSNW7E2KgMfVayWbofgwQomK+oPCP
+ wXw4bApq9HvOJPG2tWxRbIV9+afCXeH4UfQlSS7kTVqazSIj48S+9O+vfEU3JCdnruU0HZI
+ ooneO1/e8kk3rOmeHPdkvhJnyjDhDgFvbh7wG+aWXVYFyKgSlC204Oypz4t7J8ZD9YsanZU
+ AK2l31XA2xkNNCoxmBxuA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+9itSpFYgyk=:13dbzQkzEwFSyL+fpVeNvL
+ 8wSlv9F1PvRAw3PVGCZ3H4ukXgWvdJvJCiwwJCXyeLQTvW8PNQpoNOnGRII26kc2T+Vkao7+G
+ iXxh0kTZmFOnFsKHjCZS0eMw7FiQJsz62F7PpSehd7hrCZuV9R66HARFGtbLoFIM4+sJnS2Rk
+ ZByHWMIV4ScG/6SLPXOaCLvrGUHfVcq8KxQ4cVNxb8KvauecPXHAk6vj3M00rSyrUKHbmz8I+
+ qFMOLz47sC12u1gaof3lLWwEjgmWtwUfji7Jy65HSGcfKF7yWf32DBKAQCEd1mRI8WDpKV1Hj
+ F1H87KcezNy75KX2i4Ek8zCuR8Xt0/9nEaQUMyeOmbq0/MliBMBrBuQDEtcQ6EV93L93hloOp
+ oMlvDi6g/R5mGr33260HgB7y85EhAGLttVLFs4N0BV3ayDS8vL7p9yx2LeUTpSz85pTv192JW
+ k0NsXBFUa74SgEALxWIAnOZvNbpH6XNnCEBcCC0U1+6iE4OLzJYOjVmgJRU+fwJ+OX2M0ihFc
+ VQHpg9s63MRwQ+Z2uyBEeOxOfHGVo7X1HZm1BfHBtxySKmpGnDJOYCWGCmRwpSwG3AFEL4H4J
+ FUGTs4xQdYaLqyneUJNCxQ4YY5QBKwH5QOeBadNmpAnmD++oTpMrhr1GKZtTwZvNkce/nyInR
+ tWFNUF1xiQacWQN9sPCHad9rVIylSrP4xfqMz7FkwKAnEghezegjYCrMV/vbCJ0se8Es=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 04:37:23AM +0300, Serge Semin wrote:
-> Since DWC PCIe v4.70a the controller version and version type can be read
-> from the PORT_LOGIC.PCIE_VERSION_OFF and PORT_LOGIC.PCIE_VERSION_TYPE_OFF
-> registers respectively. Seeing the generic code has got version-dependent
-> parts let's use these registers to find out the controller version.  The
-> detection procedure is executed for both RC and EP modes right after the
-> platform-specific initialization. We can't do that earlier since the
-> glue-drivers can perform the DBI-related setups there including the bus
-> reference clocks activation, without which the CSRs just can't be read.
-> 
-> Note the CSRs content is zero on the older DWC PCIe controller. In that
-> case we have no choice but to rely on the platform setup.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> ---
->  .../pci/controller/dwc/pcie-designware-ep.c   |  2 ++
->  .../pci/controller/dwc/pcie-designware-host.c |  2 ++
->  drivers/pci/controller/dwc/pcie-designware.c  | 24 +++++++++++++++++++
->  drivers/pci/controller/dwc/pcie-designware.h  |  6 +++++
->  4 files changed, 34 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> index 7c9315fffe24..3b981d13cca9 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> @@ -645,6 +645,8 @@ int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
->  	u32 reg;
->  	int i;
->  
-> +	dw_pcie_version_detect(pci);
-> +
->  	hdr_type = dw_pcie_readb_dbi(pci, PCI_HEADER_TYPE) &
->  		   PCI_HEADER_TYPE_MASK;
->  	if (hdr_type != PCI_HEADER_TYPE_NORMAL) {
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> index 8364ea234e88..8f0d473ff770 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> @@ -398,6 +398,8 @@ int dw_pcie_host_init(struct pcie_port *pp)
->  		}
->  	}
->  
-> +	dw_pcie_version_detect(pci);
-> +
->  	dw_pcie_iatu_detect(pci);
->  
->  	dw_pcie_setup_rc(pp);
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> index c21373c6cb51..49c494d82042 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> @@ -16,6 +16,30 @@
->  #include "../../pci.h"
->  #include "pcie-designware.h"
->  
-> +void dw_pcie_version_detect(struct dw_pcie *pci)
+On Tue, Mar 29, 2022 at 4:42 PM Tony Huang <tonyhuang.sunplus@gmail.com> wrote:
+>
+> Add mmc driver for Sunplus SP7021
+>
+> Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
+
+There should be a description of the device in the changelog, not just the same
+text as the subject.
+
+> +static void spmmc_request(struct mmc_host *mmc, struct mmc_request *mrq)
 > +{
-> +	u32 ver;
+> +       struct spmmc_host *host = mmc_priv(mmc);
+> +       struct mmc_data *data;
+> +       struct mmc_command *cmd;
+> +       int ret;
 > +
-> +	/* The content of the CSR is zero on DWC PCIe older than v4.70a */
-> +	ver = dw_pcie_readl_dbi(pci, PCIE_VERSION_NUMBER);
-> +	if (!ver)
-> +		return;
+> +       ret = mutex_lock_interruptible(&host->mrq_lock);
+> +       if (ret)
+> +               return;
+
+I don't think it's valid to just return here when you get a signal. If
+nothing can
+handle the signal, doesn't it just hang?
+
+It also appears that you don't release the mutex until the tasklet runs,
+but it is not valid to release a mutex from a different context.
+
+You should get a warning about this when running a kernel with lockdep
+enabled at compile time. Please rework the locking to make this work.
+
+> +#endif /* ifdef CONFIG_PM_RUNTIME */
 > +
-> +	if (pci->version && pci->version != ver)
-> +		dev_warn(pci->dev, "Versions don't match (%08x != %08x)\n",
-> +			 pci->version, ver);
+> +static const struct dev_pm_ops spmmc_pm_ops = {
+> +       SET_SYSTEM_SLEEP_PM_OPS(spmmc_pm_suspend, spmmc_pm_resume)
+> +#ifdef CONFIG_PM_RUNTIME
+> +       SET_RUNTIME_PM_OPS(spmmc_pm_runtime_suspend, spmmc_pm_runtime_resume, NULL)
+> +#endif
+> +};
+> +#endif /* ifdef CONFIG_PM */
 
-Trust the h/w is correct until we have a known case where it isn't. Just 
-read the h/w reg if pci->version is zero.
+It's better to use SYSTEM_SLEEP_PM_OPS/RUNTIME_PM_OPS instead
+of the SET_ version, then you can remove all the #ifdef checks.
 
-I would suspect as-is this will give some warnings. No doubt there is 
-some platform with multiple revs of Si that didn't change their version 
-in the driver. Or the author just guessed on the version that picked the 
-right paths in the driver.
-
-Rob
+       Arnd

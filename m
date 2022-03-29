@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 619114EA78D
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 07:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E43574EA78F
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 07:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232754AbiC2Fz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 01:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
+        id S232771AbiC2F5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 01:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbiC2Fz4 (ORCPT
+        with ESMTP id S231578AbiC2F53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 01:55:56 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7436117C90;
-        Mon, 28 Mar 2022 22:54:14 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id b189so13272997qkf.11;
-        Mon, 28 Mar 2022 22:54:14 -0700 (PDT)
+        Tue, 29 Mar 2022 01:57:29 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C0423D588
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 22:55:46 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id h23so23179174wrb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 22:55:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Pv+YK+YGh5jKY9olKETrPHwQ2n/4aGK/xdNlhbRhxZE=;
-        b=bzfdyo0uWDEELn9OY8t+TxbY1Ftpv5siDPYc9FfEkJVioVH+JcBmi4NXkU3ExK4txJ
-         V4wcKhhNtNJj/mSRct/VeLhvQ/xVpG+cstkFDYUCPLDX7Ancm8YxbX7cVKvXBS1Scrqf
-         RqYBvlZVwjxP+E3A14MYIgKwNfi4PO8Esj9PM4uH1PrSiDct7BJkTyqtYUG/ooWacNOf
-         /0f7m0CtjQTpx+bpWNEX5nmGTzq26HAwaRLvizDU0bdcKh6MawRNNR3/SvZBeuIV2Wgn
-         P/+rF+neDixlfmZ+g0aODbF+n6mAUD7WYaIwmK5bTgIxe4vX4+x2yvvfjeCUTnnGBNN8
-         UemQ==
+        bh=Lp6iFcVQQfN6RB1G5twPiDqbYeVPiefY9x2TyOoT1Lo=;
+        b=ViQll1CKhjxzTW1n2Vrc7m+gaQSejBQC5RnFdieKXLkHgNnyfCsP1zIt7sxaOWvzji
+         CdfS8mTV8gM9Iedi2NKvCWF9urVA+EqAiJpqyMXXAssDgWrC1ZdaWi3qA0lQCGvI5Vdk
+         45MDiLFKmDNQSKp9Zw4NW/oDDd4y8QsLmT8/zSRnNPb9P2wkG6Tlo31rBQlpbKXHSHV9
+         RBgfOTaFq7LHsl8h3DqDtVi2NqIjrRBchDAd4U+PJeRjCifYVDI7iHlwUHAQ8cUseVAL
+         Rs/EVZ2fmAFEkkwx6hgpxKS51VjBKUSVCFL/ga9NjDBqqTlFX99ayUdxbei9laS3cyuv
+         tFrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Pv+YK+YGh5jKY9olKETrPHwQ2n/4aGK/xdNlhbRhxZE=;
-        b=itCTQZtf7yzmgEjeN5fn83ck4V1MSTiY391q22MMm4suwjmXYHWK0nfQFqNfeRdHA1
-         2M0uL8zvoX3thCrUQeV4RW79S49+8Zo9LitKm5lRVG0YhbY4WmiNk+Jgyifti30aMoUr
-         7OVxdR4t0texIQpHQXnA4IM+6qVLFX42lGOlh5X6KE8bim+91jpsPHYwZP2sGsg46eC4
-         aVyRFmASc/nElrKsb/8SGxit8EkacNHY8NzNz8Byx4wM4E6sc/8QsL7SmyV+Ateu2YJW
-         BcZlug754WDnZgy7kqFijHmrSlG4xv5RibGBxp2FzqfJIRBqvwWsJiYjEjjlJs430xM8
-         Mfag==
-X-Gm-Message-State: AOAM533NqyCX+zyaUOdSQzbi0HXdTdZltoO2JCZFZAqL9pw4vHHig/Dk
-        /zxwiWlKPuOrJohgT8sj7SM=
-X-Google-Smtp-Source: ABdhPJwJBS651D1AOrfIEPFs1X/yrROJZ3kEVo8OVq7tmILjMxKIkGAGhWkCC4zP5kwnrkYuwYYK0g==
-X-Received: by 2002:ae9:f448:0:b0:67e:1929:1782 with SMTP id z8-20020ae9f448000000b0067e19291782mr19142197qkl.578.1648533254133;
-        Mon, 28 Mar 2022 22:54:14 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id m14-20020a05622a054e00b002e2072cffe6sm13749111qtx.5.2022.03.28.22.54.10
+        bh=Lp6iFcVQQfN6RB1G5twPiDqbYeVPiefY9x2TyOoT1Lo=;
+        b=uPWMUBB3L3Ojl8J6MJCxiVhdTZNAReN9HPBgVVC/HFlAGcsl3EGhd1Oby+NsNJxMM8
+         Xwj4Y8dKd5hzOzxlf58dQTNY+Z+166Gcnc7B8kXpXLeB2ZcRrWer9SJe8zQVJozsbU7G
+         HQASQMINp/jL52gnfU06SoGgEFOAnAwsHLm7m1uz1vHHD2d5lfH/+SGz5zox51N8VKJC
+         HfxxvTV+g+Yujp5UfjSyXwbNm4nc5OlYAY0KXPB0DexgCHNQ3ZsFK9m0Cf2RVF1JTlAg
+         /o6im7hGwtaWKFmXxTWRpDt0kV69JM69wOF6q4sU18DmgxSBbEn1uPizn423l9yLxsTk
+         n+Ew==
+X-Gm-Message-State: AOAM531mR2+QUsn2RcxaGSZ9Ew17wG2H5g02SKz8AA4TS3wJiJQmVp/Z
+        QuL0im3duMakUmUDPSfwcQE=
+X-Google-Smtp-Source: ABdhPJxWGBSOJPkXKd7AjnRno9Xor5TPQgfWQJbe5VcF9z0USi9NW7m8DhKdyuDe3ssVKrP4H7qY0g==
+X-Received: by 2002:a5d:584f:0:b0:204:1749:2ce7 with SMTP id i15-20020a5d584f000000b0020417492ce7mr28885199wrf.584.1648533344729;
+        Mon, 28 Mar 2022 22:55:44 -0700 (PDT)
+Received: from localhost.localdomain (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
+        by smtp.gmail.com with ESMTPSA id i6-20020adffc06000000b00203f2828075sm13865382wrr.19.2022.03.28.22.55.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 22:54:13 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     balbi@kernel.org
-Cc:     gregkh@linuxfoundation.org, peter.chen@kernel.or,
-        christophe.jaillet@wanadoo.fr, skhan@linuxfoundation.org,
-        lv.ruyi@zte.com.cn, johan@kernel.org, jakobkoschel@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] usb: gadget: udc: add NULL pointer check
-Date:   Tue, 29 Mar 2022 05:54:07 +0000
-Message-Id: <20220329055407.2375626-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 28 Mar 2022 22:55:43 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benjamin Philip <benjamin.philip495@gmail.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Colin Ian King <colin.king@intel.com>,
+        =?UTF-8?q?Samuel=20Sj=C3=B6berg?= <info@samuelsjoberg.se>,
+        Charlie Sands <sandsch@northvilleschools.net>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev, ira.weiny@intel.com
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH v2] staging: rts5208: Convert kmap() to kmap_local_page()
+Date:   Tue, 29 Mar 2022 07:55:39 +0200
+Message-Id: <20220329055539.29299-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,32 +76,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+The use of kmap() is being deprecated in favor of kmap_local_page()
+where it is feasible.
 
-kzalloc() is a memory allocation function which can return NULL when some
-internal memory errors happen. It is safer to check NULL pointer.
+With kmap_local_page(), the mapping is per thread, CPU local and not
+globally visible. Therefore rtsx_stor_access_xfer_buf() is a function
+where the use of kmap_local_page() in place of kmap() is correctly
+suited.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Convert to kmap_local_page() but, instead of open coding it, use the
+helpers memcpy_to_page() and memcpy_from_page().
+
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 ---
- drivers/usb/gadget/udc/mv_udc_core.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/udc/mv_udc_core.c
-index fdb17d86cd65..f52eb3f2420a 100644
---- a/drivers/usb/gadget/udc/mv_udc_core.c
-+++ b/drivers/usb/gadget/udc/mv_udc_core.c
-@@ -2231,6 +2231,10 @@ static int mv_udc_probe(struct platform_device *pdev)
+v1 -> v2: Rework the commit message and use the appropriate helpers
+instead of open coding the use of kmap_local_page()/kunmap_local_page().
+(Many thanks to Ira Weiny <ira.weiny@intel.com>).
+
+ drivers/staging/rts5208/rtsx_transport.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/staging/rts5208/rtsx_transport.c b/drivers/staging/rts5208/rtsx_transport.c
+index 805dc18fac0a..56b6cc845619 100644
+--- a/drivers/staging/rts5208/rtsx_transport.c
++++ b/drivers/staging/rts5208/rtsx_transport.c
+@@ -92,13 +92,11 @@ unsigned int rtsx_stor_access_xfer_buf(unsigned char *buffer,
+ 			while (sglen > 0) {
+ 				unsigned int plen = min(sglen, (unsigned int)
+ 						PAGE_SIZE - poff);
+-				unsigned char *ptr = kmap(page);
  
- 	/* allocate a small amount of memory to get valid address */
- 	udc->status_req->req.buf = kzalloc(8, GFP_KERNEL);
-+	if (!udc->status_req->req.buf) {
-+		retval = -ENOMEM;
-+		goto err_destroy_dma;
-+	}
- 	udc->status_req->req.dma = DMA_ADDR_INVALID;
+ 				if (dir == TO_XFER_BUF)
+-					memcpy(ptr + poff, buffer + cnt, plen);
++					memcpy_to_page(page + poff, 0, buffer + cnt, plen);
+ 				else
+-					memcpy(buffer + cnt, ptr + poff, plen);
+-				kunmap(page);
++					memcpy_from_page(buffer + cnt, page + poff, 0, plen);
  
- 	udc->resume_state = USB_STATE_NOTATTACHED;
+ 				/* Start at the beginning of the next page */
+ 				poff = 0;
 -- 
-2.25.1
+2.34.1
 

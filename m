@@ -2,110 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B49A4EAEA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6894EAEA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237435AbiC2Nme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 09:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38232 "EHLO
+        id S237444AbiC2Nn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 09:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235417AbiC2Nmc (ORCPT
+        with ESMTP id S235417AbiC2Nnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 09:42:32 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C19527E2
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:40:49 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id ke15so14335387qvb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:40:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=OX8uzX6cgkseXeRBYjHM47D6ZNq3XzBbHTvAN/4NfGI=;
-        b=sFtk4eBC34EHTFHpofTMUaiDbxm3jMEFknlxuJ7E8YKR0t/sJcRsdn4blofaCgMRYj
-         BSUJ1+NAP6PulVGl9DMx8VZVRII71wc6m5gXub+QXqaqpVzvb45nwvJdC2pKVDRAsyuI
-         WX7FopRIBjNrAM/Z9kYPOqTwAmE4vBHezRQBlMimsNC7JywP6zv6ViDsLIFo1sCOmNv8
-         Yvmh2KNDpSyiBi4A2wziBEkiXZ2EhRC8Tn9hDjRFDFPwCmVTPF4viVZsJEcn125h7C91
-         7FlgWkdx8nflgF7VohVqBqGyhglYNolDunbrMkQFFpe7r0V2PuNlWLL81BzO8Si3EOfs
-         kdkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=OX8uzX6cgkseXeRBYjHM47D6ZNq3XzBbHTvAN/4NfGI=;
-        b=K6qwyjpL2JBMU7MeAXb3Dli4g4gChFSA/TZW3d05bnsZu3gDnWN3iLUftRl/z7/7nT
-         scVV9ssFOarCsURHOriUtxmQSK248oRnGGkPS54evBBRUNftk9VuV5t8M0OsEMusIOdo
-         5OPKkNUCztNvfnBbBsMTg4z8dWw/q4GRTx8LfmWQU1zeFxpS5HEPh4O++uA8j/6NruM6
-         GjrKCWhVQl4JTODRchHUqy1KXXm8beiLEzbOlivRNmdubtZ6ifw3HVXXE6XHYvidpUAH
-         vMJIGfYY0+539fEG/vhs25mobfVlP1MmccbG6N0FWqoK+PMU8TKdRrixJWimecf5th2g
-         mPxg==
-X-Gm-Message-State: AOAM5318fADIyLQGBufKPjtLX/ZKg6QrlQhM1E+9cqXB6Y2PeO0bPpBi
-        uku8VInXjOLToMml4+SxXC5vLA==
-X-Google-Smtp-Source: ABdhPJwHaZa4QGYsWt/LUhJpekp72RsXv+ubveLeD4EjzM+7VH63XURE9ZZ3SS373zSjgJ9Nvbo+yQ==
-X-Received: by 2002:a05:6214:4112:b0:441:720:8434 with SMTP id kc18-20020a056214411200b0044107208434mr26593457qvb.23.1648561248500;
-        Tue, 29 Mar 2022 06:40:48 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id y66-20020a37af45000000b0067dc0fc539fsm9684780qke.86.2022.03.29.06.40.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 06:40:48 -0700 (PDT)
-Message-ID: <515bd7309493ef0b920bd8e20d856de2959ba3b7.camel@ndufresne.ca>
-Subject: Re: [PATCH] staging: media: rkvdec: Update TODO list
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-media@vger.kernel.org
-Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:HANTRO VPU CODEC DRIVER" 
-        <linux-rockchip@lists.infradead.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Tue, 29 Mar 2022 09:40:47 -0400
-In-Reply-To: <20220326183715.67332-2-sebastian.fricke@collabora.com>
-References: <20220326183715.67332-1-sebastian.fricke@collabora.com>
-         <20220326183715.67332-2-sebastian.fricke@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+        Tue, 29 Mar 2022 09:43:55 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C69D5B3D6
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:42:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648561332; x=1680097332;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bvzHM8usULaiZ+dlYU28pB9Yr/14ERu2KQhlxv7TE4k=;
+  b=iqkHKg6HWwlHa87LxhYvVG4FOUBgFWAEBl8xeJNFHUraUvXbDMJO7Vut
+   BY4t7zWrt46eGb7lwwJyevOvsMbbFELe7kcCsF/A/lG/BwtdTiU6jkhJT
+   zSmysFGmJKIs+nQZYjlxw0pXA/tZJXJzr86wdsBTet9MF5vJHDLlKqLfy
+   IKf5dc0pSdv2gaxzT7X30nrLNtAtbm3GIqf8rM4LvgI6rKwuJnS8uJ5oO
+   8zI4cMzczXCgVqByznSCWPihTJtjj41VAviApQYqNl6XyIJdhiiM4yjQM
+   QsSNcJ9h/+0UJPugSsik4Kq1GogRGHDyq6RE+JaAnIV15OF1nOwa2v2KY
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="319949718"
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="319949718"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 06:42:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="652975214"
+Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 29 Mar 2022 06:42:10 -0700
+Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nZC6r-0000GF-V0; Tue, 29 Mar 2022 13:42:09 +0000
+Date:   Tue, 29 Mar 2022 21:41:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: lib/stackinit_kunit.c:334:1: sparse: sparse: Using plain integer as
+ NULL pointer
+Message-ID: <202203292149.t3xqiQ2d-lkp@intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le samedi 26 mars 2022 =C3=A0 19:37 +0100, Sebastian Fricke a =C3=A9crit=C2=
-=A0:
-> VP9 support has been added to the driver by f25709c4ff15.
-> And the VP9 uABI was merged with b88dbe38dca8.
->=20
-> The remaining codec that keeps this driver in staging is HEVC.
-> Update the TODO list accordingly.
->=20
-> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1930a6e739c4b4a654a69164dbe39e554d228915
+commit: 02788ebcf521fe78c24eb221fd1ed7f86792c330 lib: stackinit: Convert to KUnit
+date:   8 days ago
+config: powerpc-randconfig-s032-20220327 (https://download.01.org/0day-ci/archive/20220329/202203292149.t3xqiQ2d-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=02788ebcf521fe78c24eb221fd1ed7f86792c330
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 02788ebcf521fe78c24eb221fd1ed7f86792c330
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
->  drivers/staging/media/rkvdec/TODO | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/staging/media/rkvdec/TODO b/drivers/staging/media/rk=
-vdec/TODO
-> index e0f0f12f0ac5..2c0779383276 100644
-> --- a/drivers/staging/media/rkvdec/TODO
-> +++ b/drivers/staging/media/rkvdec/TODO
-> @@ -1,6 +1,6 @@
-> -* Support for VP9 is planned for this driver.
-> +* Support for HEVC is planned for this driver.
-> =20
-> -  Given the V4L controls for those CODECs will be part of
-> +  Given the V4L controls for that CODEC will be part of
->    the uABI, it will be required to have the driver in staging.
-> =20
->    For this reason, we are keeping this driver in staging for now.
 
+sparse warnings: (new ones prefixed by >>)
+>> lib/stackinit_kunit.c:334:1: sparse: sparse: Using plain integer as NULL pointer
+>> lib/stackinit_kunit.c:334:1: sparse: sparse: Using plain integer as NULL pointer
+>> lib/stackinit_kunit.c:334:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:336:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:336:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:336:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:336:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:336:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:336:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:336:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:336:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:336:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:336:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:337:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:337:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:337:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:337:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:337:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:337:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:338:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:338:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:338:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:338:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:338:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:338:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:338:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:338:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:338:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:338:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:339:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:339:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:339:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:339:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:339:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:339:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:339:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:339:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:339:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:339:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:340:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:340:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:340:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:340:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:340:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:340:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:341:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:341:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:341:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:344:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:344:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:344:1: sparse: sparse: Using plain integer as NULL pointer
+   lib/stackinit_kunit.c:346:1: sparse: sparse: Using plain integer as NULL pointer
+
+vim +334 lib/stackinit_kunit.c
+
+   303	
+   304	#define DEFINE_SCALAR_TEST(name, init, xfail)			\
+   305			DEFINE_TEST(name ## _ ## init, name, SCALAR,	\
+   306				    init, xfail)
+   307	
+   308	#define DEFINE_SCALAR_TESTS(init, xfail)			\
+   309			DEFINE_SCALAR_TEST(u8, init, xfail);		\
+   310			DEFINE_SCALAR_TEST(u16, init, xfail);		\
+   311			DEFINE_SCALAR_TEST(u32, init, xfail);		\
+   312			DEFINE_SCALAR_TEST(u64, init, xfail);		\
+   313			DEFINE_TEST(char_array_ ## init, unsigned char,	\
+   314				    STRING, init, xfail)
+   315	
+   316	#define DEFINE_STRUCT_TEST(name, init, xfail)			\
+   317			DEFINE_TEST(name ## _ ## init,			\
+   318				    struct test_ ## name, STRUCT, init, \
+   319				    xfail)
+   320	
+   321	#define DEFINE_STRUCT_TESTS(init, xfail)			\
+   322			DEFINE_STRUCT_TEST(small_hole, init, xfail);	\
+   323			DEFINE_STRUCT_TEST(big_hole, init, xfail);	\
+   324			DEFINE_STRUCT_TEST(trailing_hole, init, xfail);	\
+   325			DEFINE_STRUCT_TEST(packed, init, xfail)
+   326	
+   327	#define DEFINE_STRUCT_INITIALIZER_TESTS(base, xfail)		\
+   328			DEFINE_STRUCT_TESTS(base ## _ ## partial,	\
+   329					    xfail);			\
+   330			DEFINE_STRUCT_TESTS(base ## _ ## all, xfail)
+   331	
+   332	/* These should be fully initialized all the time! */
+   333	DEFINE_SCALAR_TESTS(zero, ALWAYS_PASS);
+ > 334	DEFINE_STRUCT_TESTS(zero, ALWAYS_PASS);
+   335	/* Struct initializers: padding may be left uninitialized. */
+   336	DEFINE_STRUCT_INITIALIZER_TESTS(static, STRONG_PASS);
+   337	DEFINE_STRUCT_INITIALIZER_TESTS(dynamic, STRONG_PASS);
+   338	DEFINE_STRUCT_INITIALIZER_TESTS(runtime, STRONG_PASS);
+   339	DEFINE_STRUCT_INITIALIZER_TESTS(assigned_static, STRONG_PASS);
+   340	DEFINE_STRUCT_INITIALIZER_TESTS(assigned_dynamic, STRONG_PASS);
+   341	DEFINE_STRUCT_TESTS(assigned_copy, ALWAYS_FAIL);
+   342	/* No initialization without compiler instrumentation. */
+   343	DEFINE_SCALAR_TESTS(none, STRONG_PASS);
+   344	DEFINE_STRUCT_TESTS(none, BYREF_PASS);
+   345	/* Initialization of members with __user attribute. */
+   346	DEFINE_TEST(user, struct test_user, STRUCT, none, USER_PASS);
+   347	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,72 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB31C4EB0D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AED4EB0DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238913AbiC2Pk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
+        id S238930AbiC2Pl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234581AbiC2Pkz (ORCPT
+        with ESMTP id S234581AbiC2PlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:40:55 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECE111BD98;
-        Tue, 29 Mar 2022 08:39:08 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 22TFcn3E001516
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Mar 2022 11:38:50 -0400
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id AE79A15C3ECA; Tue, 29 Mar 2022 11:38:49 -0400 (EDT)
-Date:   Tue, 29 Mar 2022 11:38:49 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Eric Biggers <ebiggers@google.com>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Tue, 29 Mar 2022 11:41:21 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E70C11DD31;
+        Tue, 29 Mar 2022 08:39:38 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a02:3030:a:f397:f6bc:b726:2678:839f])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 998CA1F44125;
+        Tue, 29 Mar 2022 16:39:36 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648568376;
+        bh=RmMYegltDNam5mXaZuwSibKGEKbYr+OvryeCrWUQldI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UX1M4W77IDWQE4xDV2ibg1R5STraO8nHmsbBMjWiMmMrFz9kTSduuOp04EA3bc6X8
+         ErS+VODG0CrL9iVnIcs3VYgBHd878GxiiegO229PcRp8mt4IbCtV+DWBS2g2rUvGxQ
+         A5Jw4EzM+PUhzNuXG90Y93f1XHbp0L/AXnsliak2SwYl09LEjZ8HN4F4UUd4b6MSXl
+         3IYlMDhAtkENZ4PxzsTo6Z930rCaKqQFed5ILPJoNy8hNCYCi9CUeMXzUeVIGb9AhI
+         PTfDl3dt8NNAK2CVl18fR0AoDu6OoqwHdDpeWACoyvMxZNucIci6U9XFaiK4w2mJgm
+         wqm6UMb84FCJg==
+Date:   Tue, 29 Mar 2022 17:39:33 +0200
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.17 16/43] random: use computational hash for
- entropy extraction
-Message-ID: <YkMoCe+uX6UxfaeM@mit.edu>
-References: <20220328111828.1554086-1-sashal@kernel.org>
- <20220328111828.1554086-16-sashal@kernel.org>
- <YkH5mhYokPB87FtE@google.com>
+        kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 16/24] media: rkvdec: Ensure decoded resolution fit
+ coded resolution
+Message-ID: <20220329153933.nrbqhayyivqskrcf@basti-XPS-13-9310>
+References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
+ <20220328195936.82552-17-nicolas.dufresne@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <YkH5mhYokPB87FtE@google.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220328195936.82552-17-nicolas.dufresne@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 06:08:26PM +0000, Eric Biggers wrote:
-> On Mon, Mar 28, 2022 at 07:18:00AM -0400, Sasha Levin wrote:
-> > From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-> > 
-> > [ Upstream commit 6e8ec2552c7d13991148e551e3325a624d73fac6 ]
-> > 
-> 
-> I don't think it's a good idea to start backporting random commits to random.c
-> that weren't marked for stable.  There were a lot of changes in v5.18, and
-> sometimes they relate to each other in subtle ways, so the individual commits
-> aren't necessarily safe to pick.
-> 
-> IMO, you shouldn't backport any non-stable-Cc'ed commits to random.c unless
-> Jason explicitly reviews the exact sequence of commits that you're backporting.
+Hey Nicolas,
 
-Especially this commit in general, which is making a fundamental
-change in how we extract entropy.  We should be very careful about
-taking such changes into stable; a release or two of additonal "soak"
-time would be a good idea before these go into the LTS releases in particular.
+On 28.03.2022 15:59, Nicolas Dufresne wrote:
+>From: Jonas Karlman <jonas@kwiboo.se>
+>
+>Ensure decoded CAPTURE buffer resolution is larger or equal to the coded
+>OPTUPT buffer resolution.
 
-     	      	     	  	       	  - Ted
+s/OPTUPT/OUTPUT/
+
+>
+>Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+
+>---
+> drivers/staging/media/rkvdec/rkvdec.c | 2 ++
+> 1 file changed, 2 insertions(+)
+>
+>diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+>index 05824f1997f7..22c0382c579e 100644
+>--- a/drivers/staging/media/rkvdec/rkvdec.c
+>+++ b/drivers/staging/media/rkvdec/rkvdec.c
+>@@ -269,6 +269,8 @@ static int rkvdec_try_capture_fmt(struct file *file, void *priv,
+> 		pix_mp->pixelformat = coded_desc->decoded_fmts[0];
+>
+> 	/* Always apply the frmsize constraint of the coded end. */
+
+s/frmsize/framesize/
+s/constraint/constraints/
+s/coded end/coded format/
+
+Greetings,
+Sebastian
+
+>+	pix_mp->width = max(pix_mp->width, ctx->coded_fmt.fmt.pix_mp.width);
+>+	pix_mp->height = max(pix_mp->height, ctx->coded_fmt.fmt.pix_mp.height);
+> 	v4l2_apply_frmsize_constraints(&pix_mp->width,
+> 				       &pix_mp->height,
+> 				       &coded_desc->frmsize);
+>-- 
+>2.34.1
+>

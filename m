@@ -2,393 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE5B4EAAF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2B34EAAFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234957AbiC2KFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 06:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
+        id S234963AbiC2KIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 06:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234948AbiC2KFv (ORCPT
+        with ESMTP id S232312AbiC2KIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 06:05:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26ADB2E69E;
-        Tue, 29 Mar 2022 03:04:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A238560F76;
-        Tue, 29 Mar 2022 10:04:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A91DEC2BBE4;
-        Tue, 29 Mar 2022 10:04:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648548247;
-        bh=nr47TaXn48D8slbwYCAyzXRqVq92t0M60VmfjnMG1tA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oZcFPsMUs7K2l+2bfVmJyELTheLbvIU0suxvoMseI92s3cyZTGZwZVAgpi23+Gn0n
-         DHPERA99gNn8aPqVQ6E6QHw7qZ+LD+gAdxXA+p9U85ocL0Phk8pJG+ALCGYJM0r/C6
-         WQi5Dnf7GyKBampGtwJxYTatXUAcoKPhulNfquSI8wNvbLQJbwaEvU7bTxxOum+dxx
-         fhowZWKHNCDkGlQYMMP/mdVqESKP0GS1GMl6M1nliSVN7i3T+mQuAtLpClZWoBRBjN
-         lQRggM2N6rFIZYYNJrP4n+keZfmKFmYAzwUcWJ8OyYSYCsbU0cobtHx1MBgdKhDRZM
-         /Q9OLrWtGhfqA==
-Date:   Tue, 29 Mar 2022 11:04:04 +0100
-From:   Filipe Manana <fdmanana@kernel.org>
-To:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH 1/2] btrfs: Factor out allocating an array of pages.
-Message-ID: <YkLZlEfKeuB1Xtlp@debian9.Home>
-References: <cover.1648497027.git.sweettea-kernel@dorminy.me>
- <8a8c3d39c858a1b8610ea967a50c2572c7604f5e.1648497027.git.sweettea-kernel@dorminy.me>
+        Tue, 29 Mar 2022 06:08:09 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04EB126FBA
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 03:06:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648548386; x=1680084386;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gfRPINAbslO5k93JHWZ2VTZZmEQcd+O2QJg906UFH0s=;
+  b=KPVsXh037eENwpfozItSQGl/NACWZaMFmRzKnA0tmiQYfg9dejcXKo/R
+   yVvkhfMwRMmjNoXmZOHlLrtea2WryhmQygYspRsgbHO9WBhK8gJMx1cdb
+   XLyONyeX59GcFRuoTWZfEXODpBGk3RiTALxAJszHfR6wo4RB22WpoQRon
+   HCrtyg9ok1iqJBvsGfthBJsAYgeeHyu5Ss2gmdSqML23ydPLonmJNgShM
+   fGFyotCnT6pAIfzBGr04EEmkZcdEPgqD+Fp8lcG/vHmIf7oqwOwQlfGHQ
+   oNa+gmQI59YGroqFnLyH0OoBwUoPGkNHs+8kLvdGX6qmhpf7aFj6HZvca
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="246702871"
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="246702871"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 03:06:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="639275077"
+Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 29 Mar 2022 03:06:24 -0700
+Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nZ8k4-00005V-2H; Tue, 29 Mar 2022 10:06:24 +0000
+Date:   Tue, 29 Mar 2022 18:05:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mohammad Zafar Ziya <Mohammadzafar.ziya@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Tao Zhou <tao.zhou1@amd.com>
+Subject: [PATCH] drm/amdgpu/vcn: fix semicolon.cocci warnings
+Message-ID: <20220329100533.GA65173@a6f38b584785>
+References: <202203291820.47RoPjxh-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8a8c3d39c858a1b8610ea967a50c2572c7604f5e.1648497027.git.sweettea-kernel@dorminy.me>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202203291820.47RoPjxh-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 04:14:27PM -0400, Sweet Tea Dorminy wrote:
-> Several functions currently populate an array of page pointers one
-> allocated page at a time; factor out the common code so as to allow
-> improvements to all of the sites at once.
-> 
-> Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-> ---
->  fs/btrfs/check-integrity.c |  8 +++-----
->  fs/btrfs/compression.c     | 37 +++++++++++++++--------------------
->  fs/btrfs/ctree.c           | 25 ++++++++++++++++++++++++
->  fs/btrfs/ctree.h           |  2 ++
->  fs/btrfs/extent_io.c       | 40 +++++++++++++++++++++++---------------
->  fs/btrfs/inode.c           | 10 ++++------
->  fs/btrfs/raid56.c          | 30 ++++------------------------
->  7 files changed, 78 insertions(+), 74 deletions(-)
-> 
-> diff --git a/fs/btrfs/check-integrity.c b/fs/btrfs/check-integrity.c
-> index 7e9f90fa0388..366d5a80f3c5 100644
-> --- a/fs/btrfs/check-integrity.c
-> +++ b/fs/btrfs/check-integrity.c
-> @@ -1553,11 +1553,9 @@ static int btrfsic_read_block(struct btrfsic_state *state,
->  		return -ENOMEM;
->  	block_ctx->datav = block_ctx->mem_to_free;
->  	block_ctx->pagev = (struct page **)(block_ctx->datav + num_pages);
-> -	for (i = 0; i < num_pages; i++) {
-> -		block_ctx->pagev[i] = alloc_page(GFP_NOFS);
-> -		if (!block_ctx->pagev[i])
-> -			return -1;
-> -	}
-> +	ret = btrfs_alloc_page_array(num_pages, block_ctx->pagev);
-> +	if (ret)
-> +		return ret;
->  
->  	dev_bytenr = block_ctx->dev_bytenr;
->  	for (i = 0; i < num_pages;) {
-> diff --git a/fs/btrfs/compression.c b/fs/btrfs/compression.c
-> index be476f094300..0fc663b757fb 100644
-> --- a/fs/btrfs/compression.c
-> +++ b/fs/btrfs/compression.c
-> @@ -801,8 +801,6 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
->  	struct extent_map_tree *em_tree;
->  	struct compressed_bio *cb;
->  	unsigned int compressed_len;
-> -	unsigned int nr_pages;
-> -	unsigned int pg_index;
->  	struct bio *comp_bio = NULL;
->  	const u64 disk_bytenr = bio->bi_iter.bi_sector << SECTOR_SHIFT;
->  	u64 cur_disk_byte = disk_bytenr;
-> @@ -812,7 +810,8 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
->  	u64 em_start;
->  	struct extent_map *em;
->  	blk_status_t ret;
-> -	int faili = 0;
-> +	int r;
-> +	int i;
->  	u8 *sums;
->  
->  	em_tree = &BTRFS_I(inode)->extent_tree;
-> @@ -855,25 +854,20 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
->  	cb->compress_type = extent_compress_type(bio_flags);
->  	cb->orig_bio = bio;
->  
-> -	nr_pages = DIV_ROUND_UP(compressed_len, PAGE_SIZE);
-> -	cb->compressed_pages = kcalloc(nr_pages, sizeof(struct page *),
-> +	cb->nr_pages = DIV_ROUND_UP(compressed_len, PAGE_SIZE);
-> +	cb->compressed_pages = kcalloc(cb->nr_pages, sizeof(struct page *),
->  				       GFP_NOFS);
->  	if (!cb->compressed_pages) {
->  		ret = BLK_STS_RESOURCE;
-> -		goto fail1;
-> +		goto fail;
->  	}
->  
-> -	for (pg_index = 0; pg_index < nr_pages; pg_index++) {
-> -		cb->compressed_pages[pg_index] = alloc_page(GFP_NOFS);
-> -		if (!cb->compressed_pages[pg_index]) {
-> -			faili = pg_index - 1;
-> -			ret = BLK_STS_RESOURCE;
-> -			goto fail2;
-> -		}
-> +	r = btrfs_alloc_page_array(cb->nr_pages, cb->compressed_pages);
-> +	if (r) {
-> +		ret = BLK_STS_RESOURCE;
-> +		goto fail;
->  	}
-> -	faili = nr_pages - 1;
-> -	cb->nr_pages = nr_pages;
-> -
-> +	
->  	add_ra_bio_pages(inode, em_start + em_len, cb);
->  
->  	/* include any pages we added in add_ra-bio_pages */
-> @@ -949,14 +943,15 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
->  	}
->  	return BLK_STS_OK;
->  
-> -fail2:
-> -	while (faili >= 0) {
-> -		__free_page(cb->compressed_pages[faili]);
-> -		faili--;
-> +fail:
-> +	if (cb->compressed_pages) {
-> +		for (i = 0; i < cb->nr_pages; i++) {
-> +			if (cb->compressed_pages[i])
-> +				__free_page(cb->compressed_pages[i]);
-> +		}
->  	}
->  
->  	kfree(cb->compressed_pages);
-> -fail1:
->  	kfree(cb);
->  out:
->  	free_extent_map(em);
-> diff --git a/fs/btrfs/ctree.c b/fs/btrfs/ctree.c
-> index 1e24695ede0a..4e81e75c8e7c 100644
-> --- a/fs/btrfs/ctree.c
-> +++ b/fs/btrfs/ctree.c
-> @@ -90,6 +90,31 @@ void btrfs_free_path(struct btrfs_path *p)
->  	kmem_cache_free(btrfs_path_cachep, p);
->  }
->  
-> +/**
-> + * btrfs_alloc_page_array() - allocate an array of pages.
-> + *
-> + * @nr_pages: the number of pages to request
-> + * @page_array: the array to fill with pages. Any existing non-null entries in
-> + * 	the array will be skipped.
-> + *
-> + * Return: 0 if all pages were able to be allocated; -ENOMEM otherwise, and the
-> + * caller is responsible for freeing all non-null page pointers in the array.
-> + */
-> +int btrfs_alloc_page_array(unsigned long nr_pages, struct page **page_array)
-> +{
-> +	int i;
-> +	for (i = 0; i < nr_pages; i++) {
-> +		struct page *page;
-> +		if (page_array[i])
-> +			continue;
-> +		page = alloc_page(GFP_NOFS);
-> +		if (!page)
-> +			return -ENOMEM;
-> +		page_array[i] = page;
-> +	}
-> +	return 0;
-> +}
+From: kernel test robot <lkp@intel.com>
 
-Adding this helper to ctree.c is odd, as this is a module that implements
-a btree and exports functions related to btree operations and btree nodes/leaves.
+drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c:1951:2-3: Unneeded semicolon
 
-All the use cases for this helper relate to IO operations, so extent_io.c
-is perhaps a better fit.
 
-Thanks.
+ Remove unneeded semicolon.
 
-> +
->  /*
->   * path release drops references on the extent buffers in the path
->   * and it drops any locks held by this path
-> diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
-> index 7328fb17b7f5..e835a2bfb60a 100644
-> --- a/fs/btrfs/ctree.h
-> +++ b/fs/btrfs/ctree.h
-> @@ -2969,6 +2969,8 @@ void btrfs_release_path(struct btrfs_path *p);
->  struct btrfs_path *btrfs_alloc_path(void);
->  void btrfs_free_path(struct btrfs_path *p);
->  
-> +int btrfs_alloc_page_array(unsigned long nr_pages, struct page **page_array);
-> +
->  int btrfs_del_items(struct btrfs_trans_handle *trans, struct btrfs_root *root,
->  		   struct btrfs_path *path, int slot, int nr);
->  static inline int btrfs_del_item(struct btrfs_trans_handle *trans,
-> diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
-> index 53b59944013f..c1c8d770f43a 100644
-> --- a/fs/btrfs/extent_io.c
-> +++ b/fs/btrfs/extent_io.c
-> @@ -5898,9 +5898,9 @@ __alloc_extent_buffer(struct btrfs_fs_info *fs_info, u64 start,
->  struct extent_buffer *btrfs_clone_extent_buffer(const struct extent_buffer *src)
->  {
->  	int i;
-> -	struct page *p;
->  	struct extent_buffer *new;
->  	int num_pages = num_extent_pages(src);
-> +	int r;
->  
->  	new = __alloc_extent_buffer(src->fs_info, src->start, src->len);
->  	if (new == NULL)
-> @@ -5913,22 +5913,23 @@ struct extent_buffer *btrfs_clone_extent_buffer(const struct extent_buffer *src)
->  	 */
->  	set_bit(EXTENT_BUFFER_UNMAPPED, &new->bflags);
->  
-> +	memset(new->pages, 0, sizeof(*new->pages) * num_pages);
-> +	r = btrfs_alloc_page_array(num_pages, new->pages);
-> +	if (r) {
-> +		btrfs_release_extent_buffer(new);
-> +		return NULL;
-> +	}
-> +
->  	for (i = 0; i < num_pages; i++) {
->  		int ret;
-> +		struct page *p = new->pages[i];
->  
-> -		p = alloc_page(GFP_NOFS);
-> -		if (!p) {
-> -			btrfs_release_extent_buffer(new);
-> -			return NULL;
-> -		}
->  		ret = attach_extent_buffer_page(new, p, NULL);
->  		if (ret < 0) {
-> -			put_page(p);
->  			btrfs_release_extent_buffer(new);
->  			return NULL;
->  		}
->  		WARN_ON(PageDirty(p));
-> -		new->pages[i] = p;
->  		copy_page(page_address(p), page_address(src->pages[i]));
->  	}
->  	set_extent_buffer_uptodate(new);
-> @@ -5942,31 +5943,38 @@ struct extent_buffer *__alloc_dummy_extent_buffer(struct btrfs_fs_info *fs_info,
->  	struct extent_buffer *eb;
->  	int num_pages;
->  	int i;
-> +	int r;
->  
->  	eb = __alloc_extent_buffer(fs_info, start, len);
->  	if (!eb)
->  		return NULL;
->  
->  	num_pages = num_extent_pages(eb);
-> +	r = btrfs_alloc_page_array(num_pages, eb->pages);
-> +	if (r)
-> +		goto err;
-> +
->  	for (i = 0; i < num_pages; i++) {
->  		int ret;
-> +		struct page *p = eb->pages[i];
->  
-> -		eb->pages[i] = alloc_page(GFP_NOFS);
-> -		if (!eb->pages[i])
-> -			goto err;
-> -		ret = attach_extent_buffer_page(eb, eb->pages[i], NULL);
-> -		if (ret < 0)
-> +		ret = attach_extent_buffer_page(eb, p, NULL);
-> +		if (ret < 0) {
->  			goto err;
-> +		}
->  	}
-> +
->  	set_extent_buffer_uptodate(eb);
->  	btrfs_set_header_nritems(eb, 0);
->  	set_bit(EXTENT_BUFFER_UNMAPPED, &eb->bflags);
->  
->  	return eb;
->  err:
-> -	for (; i > 0; i--) {
-> -		detach_extent_buffer_page(eb, eb->pages[i - 1]);
-> -		__free_page(eb->pages[i - 1]);
-> +	for (i = 0; i < num_pages; i++) {
-> +		if (eb->pages[i]) {
-> +			detach_extent_buffer_page(eb, eb->pages[i]);
-> +			__free_page(eb->pages[i]);
-> +		}
->  	}
->  	__free_extent_buffer(eb);
->  	return NULL;
-> diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
-> index c7b15634fe70..121858652a09 100644
-> --- a/fs/btrfs/inode.c
-> +++ b/fs/btrfs/inode.c
-> @@ -10427,13 +10427,11 @@ static ssize_t btrfs_encoded_read_regular(struct kiocb *iocb,
->  	pages = kcalloc(nr_pages, sizeof(struct page *), GFP_NOFS);
->  	if (!pages)
->  		return -ENOMEM;
-> -	for (i = 0; i < nr_pages; i++) {
-> -		pages[i] = alloc_page(GFP_NOFS);
-> -		if (!pages[i]) {
-> -			ret = -ENOMEM;
-> -			goto out;
-> +	ret = btrfs_alloc_page_array(nr_pages, pages);
-> +	if (ret) {
-> +		ret = -ENOMEM;
-> +		goto out;
->  		}
-> -	}
->  
->  	ret = btrfs_encoded_read_regular_fill_pages(inode, start, disk_bytenr,
->  						    disk_io_size, pages);
-> diff --git a/fs/btrfs/raid56.c b/fs/btrfs/raid56.c
-> index 0e239a4c3b26..ea7a9152b1cc 100644
-> --- a/fs/btrfs/raid56.c
-> +++ b/fs/btrfs/raid56.c
-> @@ -1026,37 +1026,15 @@ static struct btrfs_raid_bio *alloc_rbio(struct btrfs_fs_info *fs_info,
->  /* allocate pages for all the stripes in the bio, including parity */
->  static int alloc_rbio_pages(struct btrfs_raid_bio *rbio)
->  {
-> -	int i;
-> -	struct page *page;
-> -
-> -	for (i = 0; i < rbio->nr_pages; i++) {
-> -		if (rbio->stripe_pages[i])
-> -			continue;
-> -		page = alloc_page(GFP_NOFS);
-> -		if (!page)
-> -			return -ENOMEM;
-> -		rbio->stripe_pages[i] = page;
-> -	}
-> -	return 0;
-> +	return btrfs_alloc_page_array(rbio->nr_pages, rbio->stripe_pages);
->  }
->  
->  /* only allocate pages for p/q stripes */
->  static int alloc_rbio_parity_pages(struct btrfs_raid_bio *rbio)
->  {
-> -	int i;
-> -	struct page *page;
-> -
-> -	i = rbio_stripe_page_index(rbio, rbio->nr_data, 0);
-> -
-> -	for (; i < rbio->nr_pages; i++) {
-> -		if (rbio->stripe_pages[i])
-> -			continue;
-> -		page = alloc_page(GFP_NOFS);
-> -		if (!page)
-> -			return -ENOMEM;
-> -		rbio->stripe_pages[i] = page;
-> -	}
-> -	return 0;
-> +	int data_pages = rbio_stripe_page_index(rbio, rbio->nr_data, 0);
-> +	return btrfs_alloc_page_array(rbio->nr_pages - data_pages,
-> +				      rbio->stripe_pages + data_pages);
->  }
->  
->  /*
-> -- 
-> 2.35.1
-> 
+Generated by: scripts/coccinelle/misc/semicolon.cocci
+
+Fixes: dcf23795ffe2 ("drm/amdgpu/vcn: Add VCN ras error query support")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
+
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git amd-staging-drm-next
+head:   fc0c15fb4751de221eeb82b7a83fe3935f56b931
+commit: dcf23795ffe2e1235a22c24260157086d2da38aa [5/6] drm/amdgpu/vcn: Add VCN ras error query support
+:::::: branch date: 25 hours ago
+:::::: commit date: 25 hours ago
+
+ drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c
++++ b/drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c
+@@ -1948,7 +1948,7 @@ static uint32_t vcn_v2_6_query_poison_by
+ 		break;
+ 	default:
+ 		break;
+-	};
++	}
+ 
+ 	if (poison_stat)
+ 		dev_info(adev->dev, "Poison detected in VCN%d, sub_block%d\n",

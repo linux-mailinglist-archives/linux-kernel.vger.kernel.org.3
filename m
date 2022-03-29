@@ -2,76 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EDE74EB508
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 23:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3054EB510
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 23:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233076AbiC2VID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 17:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
+        id S233183AbiC2VM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 17:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232495AbiC2VIB (ORCPT
+        with ESMTP id S232495AbiC2VM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 17:08:01 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5651890D8;
-        Tue, 29 Mar 2022 14:06:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648587977; x=1680123977;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RzJHCbmjmJfFhs4f7385Z702T3TtRLJI9GtPCkU8DNQ=;
-  b=QQ6gNiijkf3gbD1pRradtdpoxbCjKQUQ87/9+x4n09SuzvRBSSNg+i0I
-   0Y8MOrXCd3/nqTUgB/oVMt+AXH3Dq8zBMQ0RsEYstqQ7Ich3MtJkZEYxg
-   1fYJZyqV9IUnEkXbOu4LZAadF0wl5I1KHeq9mDd+FyX6mo15Wf9jBnYSs
-   lU0maXYJ9VUUUUTGjfhDjuYb2f3mJKC9fI7x2JBQIdrOD+/chjQfdVeM3
-   3rWEeoDWs78UJLTZXr4qd9GQCkgUGeseR+CFaF6wiAHEmqNhU7QbTfd1N
-   DXx2XqAgw3Isg4KOGNu2sWSZY5mIZ1gFG9YdgVVdLaBb3jGVoKhATphqF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="284276897"
-X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="284276897"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 14:06:16 -0700
-X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="653283314"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 14:06:13 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 3CAD6203C9;
-        Wed, 30 Mar 2022 00:06:11 +0300 (EEST)
-Date:   Wed, 30 Mar 2022 00:06:11 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     trix@redhat.com
-Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, nathan@kernel.org,
-        ndesaulniers@google.com, hverkuil-cisco@xs4all.nl, vrzh@vrzh.net,
-        tomi.valkeinen@ideasonboard.com, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] media: staging: atomisp: rework reading the id and
- revision values
-Message-ID: <YkN0w5NxLcBFes1b@paasikivi.fi.intel.com>
-References: <20220326191853.2914552-1-trix@redhat.com>
+        Tue, 29 Mar 2022 17:12:57 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D627522F;
+        Tue, 29 Mar 2022 14:11:10 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KSj0R6zgHz4xMW;
+        Wed, 30 Mar 2022 08:11:03 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1648588264;
+        bh=1Nc2RkEcQOeDjzDUY7/xY8ML0T2ks4OpiKgL3VVN9N8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=neFkzFWsRTLN3REES2VTb0ywd5Y5QxCsvH+q8PXEND/FxO76DYKll7uM/qrgtCDLI
+         said9PwQk5vU5APMhPSoDdvxZ++jBBeSE+Y5MTQaFesI97xyLcpSyzLdiO5o3Mv+cw
+         xa640BUQsJmHq9mpmeud2F8t0WtiDpULkBiKniyJglZDYAruF7ei+m59qlpYksJD6d
+         rbvOXyvVieiZcFFbbfc+oPBficqps5/sgygLCejPRafKkBQfdTv2bBYrcnFObwZWru
+         pe+9fIRNgcvlk4v5VgGINZ4d5l6wiO9yFNf7je9scstqXBa+trYIsbnVYdAicEXbpU
+         iFxVm0FFSACnA==
+Date:   Wed, 30 Mar 2022 08:11:02 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Chris Leech <cleech@redhat.com>, Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the block tree
+Message-ID: <20220330081102.1adb284c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220326191853.2914552-1-trix@redhat.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ZWh8+u/w_It_LRO7a6.25Jh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 26, 2022 at 12:18:53PM -0700, trix@redhat.com wrote:
+--Sig_/ZWh8+u/w_It_LRO7a6.25Jh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Tom,
+Hi all,
 
-It seems that somehow the Content-type header of your patch  is
-application/octet-stream. I.e. not text.
+Commit
 
--- 
-Sakari Ailus
+  d6d6742772d7 ("nvme: fix RCU hole that allowed for endless looping in mul=
+tipath round robin")
+
+is missing a Signed-off-by from its author.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ZWh8+u/w_It_LRO7a6.25Jh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJDdeYACgkQAVBC80lX
+0GxEaggAmxPHYaZ6YcSnazVJFLylk/hvLIjtkfRYiZVJlhne4fSWFTMdxNhB3dw4
+YjMc9yEVovrjtPWvatI95M2v1iOhVl9/gY6dRE9fp7e7elg1NYb3nCSL/IdnDyKi
+jBUny4fzOckZxnJYfd2mOqgUue5x6XziCQpJgkfis/rs0Sps5U7v6ZXHBGtCYNlD
+lmmGqjnu3y9o/WJyNZE26QA1GA3fwiBLSZg7HKpCsXYTDuwGUOAROpDKwxNs5zRr
+/+5iEXaZIk8ythBQtPXZPN2TLbWqagosnlNhel3bb+GZ/yFVFkdDT0jqmZn8Xxu+
+vK0DFZGtDJX6mv5NmBgPMQKZXCv2UQ==
+=Vj9u
+-----END PGP SIGNATURE-----
+
+--Sig_/ZWh8+u/w_It_LRO7a6.25Jh--

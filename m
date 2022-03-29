@@ -2,67 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976194EA7D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 08:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 419EA4EA7CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 08:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233013AbiC2GYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 02:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
+        id S233000AbiC2GYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 02:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbiC2GYm (ORCPT
+        with ESMTP id S230389AbiC2GYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 02:24:42 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B79248796;
-        Mon, 28 Mar 2022 23:23:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648534981; x=1680070981;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LGHjg3qF0bpzNQmkUJjP9bOiDDKsBlBNT5AfybakNZs=;
-  b=m9z+50WhAjvf0LUKvr7vs3SqQ4+RzV/G8DfvCA3uvTGWzL4OR/NvOhRQ
-   xBixCv8NRnp6VtB1IfzZCove5XBrK/pG3lbiq9aF/jrJKMot7REV4XF2M
-   Ivfq8OTKWYNHIZejjU+GrmpSYZCXZ2Ro96NDwhoUvekMvbj7Ta6aL1NxR
-   z7LP5713niLnfy61zwoK24KOC52LX3A3I8xB6b6iJWmJ50jNP8hV0+BXJ
-   QQR2BgyUN8pqh7IGmRQyIGTD1KeHoHZSwd2WDNhu8vX7pVjsZPEdXgdb5
-   MHnJDKQ5fxww4qyAZHpeMXz3o7CoACeo0Ce+jbocmc8q7UlgJSACIAFEM
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="284068763"
-X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="284068763"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 23:23:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="585455264"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 28 Mar 2022 23:22:58 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nZ5Fq-0002jq-3h; Tue, 29 Mar 2022 06:22:58 +0000
-Date:   Tue, 29 Mar 2022 14:22:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Huang Rui <ray.huang@amd.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     kbuild-all@lists.01.org,
-        "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v2 1/3] cpufreq: Export acpu_cpufreq_exit for other
- drivers to call
-Message-ID: <202203291412.G3zBxLNx-lkp@intel.com>
-References: <20220329015947.565-2-mario.limonciello@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220329015947.565-2-mario.limonciello@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        Tue, 29 Mar 2022 02:24:18 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F3024878C
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 23:22:33 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220329062227epoutp0203454de75ffac218bdc33e5cf220f3a2~gxcznd14I0605406054epoutp02j
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:22:27 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220329062227epoutp0203454de75ffac218bdc33e5cf220f3a2~gxcznd14I0605406054epoutp02j
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1648534947;
+        bh=N51PSQTtmOXZTnikqsTn+4JvQLS/DokmO4Rw6FKKyok=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=Zm+j0moQXMFHEM9s3rgQzuSVNMrePZu3S+KbcNC3NV9ZoEoi2z82im0RZ6eNcfwiS
+         28RTCfV3jXnqUUqzK5DBRFB8Rim9XAxLSbkApSYO0BPInI62UVhs1ltcLaKszhGiG7
+         Ezin9uemqyIwQ+6KDo/5PF/oD0zGhhgg6cszB1so=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20220329062226epcas2p42c9e83f9fefb9ef9276a3575005cdfc2~gxcy7dADK1074710747epcas2p4N;
+        Tue, 29 Mar 2022 06:22:26 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.68]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4KSKH411lvz4x9Q1; Tue, 29 Mar
+        2022 06:22:24 +0000 (GMT)
+X-AuditID: b6c32a45-4fdff700000228cc-17-6242a59cdbf1
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D2.48.10444.C95A2426; Tue, 29 Mar 2022 15:22:20 +0900 (KST)
+Mime-Version: 1.0
+Subject: Re: [PATCH 4/5] phy: Add ARTPEC-8 PCIe PHY driver
+Reply-To: wangseok.lee@samsung.com
+Sender: =?UTF-8?B?7J207JmV7ISd?= <wangseok.lee@samsung.com>
+From:   =?UTF-8?B?7J207JmV7ISd?= <wangseok.lee@samsung.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        "lars.persson@axis.com" <lars.persson@axis.com>
+CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "kernel@axis.com" <kernel@axis.com>,
+        =?UTF-8?B?7KCE66y46riw?= <moonki.jun@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <da2351be-1fca-4269-cb7b-9dcd6a01b2dc@kernel.org>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220329062220epcms2p2e66ed043478fd6c40906863cead7e8de@epcms2p2>
+Date:   Tue, 29 Mar 2022 15:22:20 +0900
+X-CMS-MailID: 20220329062220epcms2p2e66ed043478fd6c40906863cead7e8de
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrJJsWRmVeSWpSXmKPExsWy7bCmhe6cpU5JBtP36lgsacqweHlI02L+
+        kXOsFs8PzWK2+NSianHhaQ+bxctZ99gszp/fwG7R0POb1eLIm4/MFvuPr2SyuLxrDpvF2XnH
+        2SwmrPrGYvHm9wt2i3OLMy1a9x5ht9h55wSzg5DHmnlrGD2urwvwWLCp1GPTqk42jydXpjN5
+        bF5S79G3ZRWjx/Eb25k8Pm+SC+CMyrbJSE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQw
+        V1LIS8xNtVVy8QnQdcvMAXpFSaEsMacUKBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgXqBX
+        nJhbXJqXrpeXWmJlaGBgZApUmJCd0fnhO3vBAd6Knp6ZzA2MXbxdjJwcEgImEteftrJ1MXJx
+        CAnsYJTYuXsvkMPBwSsgKPF3hzBIjbCAlcS+xknMILaQgJLEjjXzmCHi1hKfplxmAbHZBCwl
+        LrY+ZASZIyLwjUli9o9XYEOZBW4zS8x//p4FYhuvxIz2p1C2tMT25VsZQWxOATuJd0vnMEPE
+        NSR+LOuFskUlbq5+yw5jvz82nxHCFpFovXcWqkZQ4sHP3VBxKYkFTw6xQtjVEvv//maCsBsY
+        Jfrvp4I8JiGgL7HjujHEj74SX1tqQCpYBFQl7va8hep0kbh87xDYRGYBbYllC18zg5QzC2hK
+        rN+lDzFEWeLILbifGjb+ZkdnMwvwSXQc/gsX3zHvCdQtahLzVu5knsCoPAsRzrOQ7JqFsGsB
+        I/MqRrHUguLc9NRiowJDeNQm5+duYgSnaS3XHYyT337QO8TIxMF4iFGCg1lJhFf2rH2SEG9K
+        YmVValF+fFFpTmrxIUZToC8nMkuJJucDM0VeSbyhiaWBiZmZobmRqYG5kjivV8qGRCGB9MSS
+        1OzU1ILUIpg+Jg5OqQamuZV1MxT3WKRyfJi6OPiK5SHpfsnJHz7eW7k1tODkgbedG521ZFY/
+        O8B0fNrbGeE5TCFpphPb5lq0L9bNshRWyw/cvjzkyYpps8s/dH8VS9Yv/eFaceQG4yqNO3Pn
+        d90P3/O+Jfi845+7m/bMEX2ScvG0x7v2bU8+3Y49nyTHJtCfb2fEI1Pz0oJ1xR2TNgmXOTl3
+        zy0TlEtcnnrc7vLk3Qcs1tYKbCtIScm/Elb989xaJU3D4+ruaU8XdNvs4GhlttHiO1bF3hDz
+        NmtCu8/9inzX7/M9627pKCu57ZWX5HeWX9FQfevW3pzmrNvKq+Ye83/lX7r5zqvKC2XGFrkP
+        ai5O/nghWjHqc8FcxdO3lFiKMxINtZiLihMBF+7RclwEAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220328021832epcms2p6b6294b824c64404c437d0fd7f09369a4
+References: <da2351be-1fca-4269-cb7b-9dcd6a01b2dc@kernel.org>
+        <20220328021832epcms2p6b6294b824c64404c437d0fd7f09369a4@epcms2p6>
+        <CGME20220328021832epcms2p6b6294b824c64404c437d0fd7f09369a4@epcms2p2>
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,55 +111,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on v5.17 next-20220329]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/Improve-usability-for-amd-pstate/20220329-100211
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220329/202203291412.G3zBxLNx-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/86835efc7d91d9fc921d7d425b1fdab9c13feafb
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mario-Limonciello/Improve-usability-for-amd-pstate/20220329-100211
-        git checkout 86835efc7d91d9fc921d7d425b1fdab9c13feafb
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/cpufreq/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/cpufreq/acpi-cpufreq.c:1036:13: warning: no previous prototype for 'acpi_cpufreq_exit' [-Wmissing-prototypes]
-    1036 | void __exit acpi_cpufreq_exit(void)
-         |             ^~~~~~~~~~~~~~~~~
-
-
-vim +/acpi_cpufreq_exit +1036 drivers/cpufreq/acpi-cpufreq.c
-
-  1035	
-> 1036	void __exit acpi_cpufreq_exit(void)
-  1037	{
-  1038		pr_debug("%s\n", __func__);
-  1039	
-  1040		acpi_cpufreq_boost_exit();
-  1041	
-  1042		cpufreq_unregister_driver(&acpi_cpufreq_driver);
-  1043	
-  1044		free_acpi_perf_data();
-  1045	}
-  1046	EXPORT_SYMBOL_GPL(acpi_cpufreq_exit);
-  1047	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> --------- Original Message ---------
+> Sender : Krzysztof Kozlowski=C2=A0<krzk=40kernel.org>=0D=0A>=20Date=20:=
+=202022-03-28=2022:09=20(GMT+9)=0D=0A>=20Title=20:=20Re:=20=5BPATCH=204/5=
+=5D=20phy:=20Add=20ARTPEC-8=20PCIe=20PHY=20driver=0D=0A>=20=C2=A0=0D=0A>=20=
+On=C2=A028/03/2022=C2=A004:18,=C2=A0=EC=9D=B4=EC=99=95=EC=84=9D=C2=A0wrote:=
+=0D=0A>>=C2=A0Add=C2=A0support=C2=A0Axis,=C2=A0ARTPEC-8=C2=A0SoC.=0D=0A>>=
+=C2=A0ARTPEC-8=C2=A0is=C2=A0the=C2=A0SoC=C2=A0platform=C2=A0of=C2=A0Axis=C2=
+=A0Communications.=0D=0A>>=C2=A0This=C2=A0is=C2=A0based=C2=A0on=C2=A0arm64=
+=C2=A0and=C2=A0support=C2=A0GEN4=C2=A0&=C2=A02lane.=0D=0A>>=C2=A0This=C2=A0=
+driver=C2=A0provides=C2=A0PHY=C2=A0interface=C2=A0for=C2=A0ARTPEC-8=C2=A0So=
+C=C2=A0PCIe=C2=A0controller,=0D=0A>>=C2=A0based=C2=A0on=C2=A0Samsung=C2=A0P=
+CIe=C2=A0PHY=C2=A0IP.=0D=0A>>=C2=A0=0D=0A>=20=0D=0A>=20You=C2=A0already=C2=
+=A0sent=C2=A0it=C2=A0on=C2=A028th=C2=A0of=C2=A0January=C2=A0and=C2=A0did=C2=
+=A0not=C2=A0respond=C2=A0to=C2=A0my=C2=A0comments.=0D=0A>=20=0D=0A>=20Pleas=
+e=C2=A0do=C2=A0not=C2=A0resend=C2=A0same/similar=C2=A0code,=C2=A0but=C2=A0i=
+nstead=C2=A0respond=C2=A0to=C2=A0comments=0D=0A>=20received=C2=A0earlier.=
+=0D=0A>=20=0D=0A>=20Best=C2=A0regards,=0D=0A>=20Krzysztof=0D=0AHello,=20Krz=
+ysztof=0D=0A=0D=0AYes,=20you=20are=20right.=0D=0AI=20have=20sent=20a=20patc=
+h=20set=20this=20time,=20=0D=0Aincluding=20parts=20that=20need=20to=20be=20=
+modified=20in=20the=20previously=20sent=20patch.=0D=0APlease=20ignore=20pre=
+viously=20sent=20patch=20and=20refer=20to=20the=20new=20patch=20set.=0D=0AI=
+=20also=20replied=20to=20the=20previous=20e-mail,=0D=0Abut=20the=20email=20=
+address=20was=20wrong=20and=20returned.=0D=0A=0D=0AThanks.

@@ -2,66 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 055EB4EAF81
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840934EAF83
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238048AbiC2OpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 10:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
+        id S238057AbiC2Opt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 10:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbiC2OpJ (ORCPT
+        with ESMTP id S238056AbiC2Opn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 10:45:09 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E441B18;
-        Tue, 29 Mar 2022 07:43:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1648565004;
-  x=1680101004;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=L47xfLiHlkRBU0nCT6T9a07/4+JwPYPON+iZ1KiPThE=;
-  b=JuTUF3AUQKf3oLdWgwj6vvoaLU7e5aEmOZLSAPqiJScRL+fYtaxvTB4v
-   QpCFG2tYWTmSG23dQqtvhEzD7LmI9AUV0TSphk4c9v0OfvswBlLmRr9+i
-   yQuEzYnlFlJg3wj7PFuIajmuQ9ucA6KWw93aSqs4Rl1fzQQeI9csBWoes
-   VbNdiCLvV4HVMfpbJbNYjSKC804sLELTHBEtLzH4+GC3qwQXOiO7OxND7
-   TVcRNH9A9PSBMzWL3ehjN1MohRMCjIc+X0qzxE4CiEn9UPZ3QsaGDvA99
-   9Qg4CzskUYmwFuesWV0/Zj5FhLTD8CAzkF0SvYxQDqocbFhKIugNnd5dW
-   Q==;
-Date:   Tue, 29 Mar 2022 16:43:19 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Johannes Berg <johannes@sipsolutions.net>
-CC:     Brendan Higgins <brendanhiggins@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [RFC v1 07/10] iio: light: opt3001: add roadtest
-Message-ID: <20220329144319.GA4474@axis.com>
-References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
- <20220311162445.346685-8-vincent.whitchurch@axis.com>
- <CAFd5g47O2PbqaUZRoioRROtywTm=6t7cVgHqO7qc0ZGewQk16A@mail.gmail.com>
- <20220318154927.GA32172@axis.com>
- <1e61b0f21794e67fb4e87dc41fab90829d3c7cd6.camel@sipsolutions.net>
+        Tue, 29 Mar 2022 10:45:43 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5708F366A7
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:43:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=t7Q+jhI9UZJhIWE2/oqDfYhFA25P+HJW56muMmn3X9U=; b=S56/59mjT/XoUOayZae2jx8dZD
+        WdZ98U/Zj60LEJcCEdPp8ehpChTRTa6y+NAMe1wWQCp4DQfmUjDJNwxh4tdTkp5qc5uQfkWom9vam
+        NUasl9Gk/Unj1vdPVYN3yvwgZvFvWCmkS0wWUsTHlMqpMqRiPAbCs9eO8bTOn6xmjVKXs1b9Wsnw5
+        8eYW4ELbrhnuC4ZF6KHa/IE+IyVvSI2RIVMifsf9lfKSOWblxNDgtNbyX12FEkHSSTzJIt+V8x6UF
+        t3S83extJu7IyBuRtYMWGo62SyhKC7ziFiJSj7CLvwF2lPxGiKYaA1GVvkNvBLAu8nHq/F4+bjq3P
+        zeQjqlJw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nZD4Y-000Mmz-7c; Tue, 29 Mar 2022 14:43:50 +0000
+Date:   Tue, 29 Mar 2022 15:43:50 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: WARNING: mm/workingset.c:567 shadow_lru_isolate
+Message-ID: <YkMbJoBIriAHG0cc@casper.infradead.org>
+References: <55db706b-9bce-b820-7d88-6392374cd4fc@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1e61b0f21794e67fb4e87dc41fab90829d3c7cd6.camel@sipsolutions.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <55db706b-9bce-b820-7d88-6392374cd4fc@google.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,91 +51,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 09:09:02PM +0100, Johannes Berg wrote:
-> On Fri, 2022-03-18 at 16:49 +0100, Vincent Whitchurch wrote:
-> > - We use virtio-i2c and virtio-gpio and use virtio-uml which uses the
-> >   vhost-user API to communicate from UML to the backend.  The latest
-> >   version of QEMU has support for vhost-user-i2c, but vhost-user-gpio
-> >   doesn't seem to have been merged yet, so work is needed on the QEMU
-> >   side.  This will also be true for other buses in the future, if they
-> >   are implemented with new virtio devices.
-> > 
-> > - For MMIO, UML has virtio-mmio which allows implementing any PCIe
-> >   device (and by extension any platform device) outside of UML, but last
-> >   I checked, upstream QEMU did not have something similar.
+On Mon, Mar 28, 2022 at 09:24:00PM -0700, Hugh Dickins wrote:
+> Sunday's linux.git, under tmpfs swapping load (including
+> ext4 file readonly THPs and shmem THPs), gave me the:
 > 
-> I think you have this a bit fuzzy.
+> 	if (WARN_ON_ONCE(!node->nr_values))
+> 		goto out_invalid;
+
+Fun.  I'm assuming it's actually the ext4 file ROTHP that causes the
+issue ... but really, I don't think it matters to fixing the bug.
+
+> 	if (WARN_ON_ONCE(node->count != node->nr_values))
+> 		goto out_invalid;
 > 
-> The virtio_uml[.c] you speak of is the "bus" driver for virtio in UML.
-> Obviously, qemu has support for virtio, so you don't need those bits.
+> from mm/workingset.c - log below.  I did see these on mmotm before
+> the merge window, but only now got around to bisecting them.  And
+> the bisection, confirmed by revert, arrives surprisingly at:
 > 
-> Now, virtio_uml is actually the virtio (bus) driver inside the kernel,
-> like you'd have virtio-mmio/virtio-pci in qemu. However, virtio_uml
-> doesn't implement the devices in the hypervisor, where most qemu devices
-> are implemented, but uses vhost-user to run the device implementation in
-> a separate userspace. [1]
+> 820c4e2e6f51 ("mm/vmscan: Free non-shmem folios without splitting them")
 > 
-> Now we're talking about vhost-user to talk to the device, and qemu
-> supports this as well, in fact the vhost-user spec is part of qemu:
-> https://git.qemu.org/?p=qemu.git;a=blob;f=docs/system/devices/vhost-user.rst;h=86128114fa3788a73679f0af38e141021087c828;hb=1d60bb4b14601e38ed17384277aa4c30c57925d3
-> https://www.qemu.org/docs/master/interop/vhost-user.html
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -1739,8 +1739,8 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+>  				/* Adding to swap updated mapping */
+>  				mapping = page_mapping(page);
+>  			}
+> -		} else if (unlikely(PageTransHuge(page))) {
+> -			/* Split file THP */
+> +		} else if (PageSwapBacked(page) && PageTransHuge(page)) {
+> +			/* Split shmem THP */
+>  			if (split_folio_to_list(folio, page_list))
+>  				goto keep_locked;
+>  		}
 > 
-> The docs on how to use it are here:
-> https://www.qemu.org/docs/master/system/devices/vhost-user.html
+> I'm not familiar with workingset.c, I'll make no guesses, over to you!
+
+OK, so the overall point of this part of workingset.c is that we used
+to simply remove pages from the page cache when they fell off the end
+of the LRU.  Now we replace them with a shadow entry (obviously shmem is
+different here which is why you're so unfamiliar with it).  The problem
+with this is that we still tie up radix tree nodes tracking how old the
+pages would have been.  So workingset puts nodes which only have shadow
+entries on an LRU and will remove old radix tree nodes when there's
+enough memory pressure.
+
+These WARN_ON messages are supposed to be checking the invariant that
+the nodes we're deleting only contain shadow entries; no real pages.
+When the first one fires, it says there are _no_ shadow entries in this
+node, and if we get to the second one, we're seeing a node with N entries,
+but M of them are shadow entries and M != N.  That shouldn't be
+possible; we should only put nodes on the list when nr_values is
+positive and equal to count (see workingset_update_node()).
+
+OK, so why are we hitting this now?  Before, we'd split the THP,
+creating 8 new radix tree nodes, all of which would contain 64 shadow
+entries and get put on the LRU.  What _should_ be happening after the
+commit that we bisect to is that the node->count is unaffected, but
+node->nr_values increases by 8.  I'll investigate a little bit, but
+may ask you to add some debug if I'm having trouble reproducing it.
+
+> Hugh
 > 
-> So once you have a device implementation (regardless of whether it's for
-> use with any of the virtio-i2c, arch/um/drivers/virt-pci.c, virtio-gpio,
-> virtio-net, ... drivers) you can actually connect it to virtual machines
-> running as UML or in qemu.
-
-I'm aware of vhost-user, but AFAICS QEMU needs glue for each device type
-to be able to actually hook up vhost-user implementations to the devices
-it exposes to the guest via the virtio PCI device.  See e.g.
-hw/virtio/vhost-user-i2c-pci.c and hw/virtio/vhost-user-i2c.c in QEMU.
-
-That is what I meant was missing for virtio-gpio, there seems to be an
-in-progress patch set for that here though:
- https://lore.kernel.org/all/cover.1641987128.git.viresh.kumar@linaro.org/
-
-Similarly, glue for something like arch/um/drivers/virt-pci.c does not
-exist in QEMU.
-
-Or perhaps you are implying that hw/virtio/vhost-user-i2c* in QEMU are
-not strictly needed?
-
-> (Actually, that's not strictly true today since it's
-> arch/um/drivers/virt-pci.c and I didn't get a proper device ID assigned
-> etc since it was for experimentation, I guess if we make this more
-> commonly used then we should move it to drivers/pci/controller/virtio-
-> pci.c and actually specify it in the OASIS virtio spec., at the very
-> least it'd have to be possible to compile this and lib/logic_iomem.c on
-> x86, but that's possible. Anyway I think PCI(e) is probably low on your
-> list of things ...)
-
-PCI is not that interesting, no, but platform devices are.  I did some
-experiments early on with arch/um/drivers/virt-pci.c and a corresponding
-backend along with a simple PCI driver which probes all devicetree nodes
-under it, and I was able to use this to get some platform drivers
-working.
-
+> [ 1470.572186] ------------[ cut here ]------------
+> [ 1470.574478] WARNING: CPU: 1 PID: 47 at mm/workingset.c:567 shadow_lru_isolate+0x84/0x128
+> [ 1470.575570] CPU: 1 PID: 47 Comm: kswapd0 Not tainted 5.18.0-rc0 #2
+> [ 1470.576592] Hardware name: LENOVO 20HQS0EG02/20HQS0EG02, BIOS N1MET54W (1.39 ) 04/16/2019
+> [ 1470.577836] RIP: 0010:shadow_lru_isolate+0x84/0x128
+> [ 1470.579170] Code: 89 ff 4c 8d 73 e8 e8 16 f4 ff ff 83 ca ff be 09 00 00 00 4c 89 f7 e8 91 3c 05 00 4c 89 ef e8 e9 25 7d 00 8a 43 eb 84 c0 75 04 <0f> 0b eb 2a 3a 43 ea 74 04 0f 0b eb 21 48 c7 c6 6a f7 1f 81 4c 89
+> [ 1470.580669] RSP: 0018:ffff888000e0bba0 EFLAGS: 00010046
+> [ 1470.582173] RAX: 0000000080000000 RBX: ffff888016c21510 RCX: 8bc9d3bc33ed677c
+> [ 1470.583755] RDX: 0000000000000003 RSI: ffffffff823f436f RDI: 00000000ffffffff
+> [ 1470.585303] RBP: ffff888000e0bbc8 R08: 0000000000000078 R09: 00000000000c8386
+> [ 1470.586860] R10: 0000000000000001 R11: ffff888000e055b8 R12: ffff8880166c99d0
+> [ 1470.588518] R13: ffff8880010dd180 R14: ffff888016c214f8 R15: ffff8880010dd1c0
+> [ 1470.590154] FS:  0000000000000000(0000) GS:ffff88803ec80000(0000) knlGS:0000000000000000
+> [ 1470.591743] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [ 1470.593296] CR2: 0000555555694f50 CR3: 000000000f940005 CR4: 00000000003706e0
+> [ 1470.594824] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [ 1470.596198] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [ 1470.597581] Call Trace:
+> [ 1470.598907]  <TASK>
+> [ 1470.600267]  __list_lru_walk_one+0x84/0xf2
+> [ 1470.601629]  ? workingset_update_node+0x84/0x84
+> [ 1470.602977]  list_lru_walk_one_irq+0x59/0x74
+> [ 1470.604324]  ? workingset_update_node+0x84/0x84
+> [ 1470.605657]  scan_shadow_nodes+0x29/0x2b
+> [ 1470.607073]  do_shrink_slab+0x1d0/0x33d
+> [ 1470.608477]  shrink_slab+0x98/0x100
+> [ 1470.609880]  shrink_node_memcgs+0x136/0x182
+> [ 1470.611164]  shrink_node+0x220/0x3d9
+> [ 1470.612446]  balance_pgdat+0x216/0x3cb
+> [ 1470.613715]  ? lock_is_held_type+0xcf/0x10f
+> [ 1470.615010]  kswapd+0x189/0x1ae
+> [ 1470.616285]  ? balance_pgdat+0x3cb/0x3cb
+> [ 1470.617481]  kthread+0xee/0xf6
+> [ 1470.618690]  ? kthread_exit+0x1f/0x1f
+> [ 1470.619932]  ret_from_fork+0x1f/0x30
+> [ 1470.621110]  </TASK>
+> [ 1470.622237] irq event stamp: 76862920
+> [ 1470.623284] hardirqs last  enabled at (76862919): [<ffffffff819d1ee3>] _raw_spin_unlock_irq+0x23/0x42
+> [ 1470.624373] hardirqs last disabled at (76862920): [<ffffffff819d1c96>] _raw_spin_lock_irq+0x17/0x4c
+> [ 1470.625540] softirqs last  enabled at (76861226): [<ffffffff81c0036f>] __do_softirq+0x36f/0x3aa
+> [ 1470.626752] softirqs last disabled at (76861195): [<ffffffff811049cd>] __irq_exit_rcu+0x85/0xc1
+> [ 1470.627957] ---[ end trace 0000000000000000 ]---
+> [ 1470.629407] ------------[ cut here ]------------
+> [ 1470.630849] WARNING: CPU: 1 PID: 47 at mm/workingset.c:569 shadow_lru_isolate+0x8d/0x128
+> [ 1470.632264] CPU: 1 PID: 47 Comm: kswapd0 Tainted: G        W         5.18.0-rc0 #2
+> [ 1470.633729] Hardware name: LENOVO 20HQS0EG02/20HQS0EG02, BIOS N1MET54W (1.39 ) 04/16/2019
+> [ 1470.635202] RIP: 0010:shadow_lru_isolate+0x8d/0x128
+> [ 1470.636601] Code: ff ff 83 ca ff be 09 00 00 00 4c 89 f7 e8 91 3c 05 00 4c 89 ef e8 e9 25 7d 00 8a 43 eb 84 c0 75 04 0f 0b eb 2a 3a 43 ea 74 04 <0f> 0b eb 21 48 c7 c6 6a f7 1f 81 4c 89 f7 e8 71 ca 7a 00 ba 01 00
+> [ 1470.638206] RSP: 0018:ffff888000e0bba0 EFLAGS: 00010087
+> [ 1470.639811] RAX: 0000000080000020 RBX: ffff888016c4d020 RCX: 8bc9d3bc33ed677c
+> [ 1470.641470] RDX: 0000000000000003 RSI: ffffffff823f436f RDI: 00000000ffffffff
+> [ 1470.643072] RBP: ffff888000e0bbc8 R08: 0000000000000078 R09: 00000000000c8386
+> [ 1470.644688] R10: 0000000000000001 R11: ffff888000e055b8 R12: ffff888016c54910
+> [ 1470.646312] R13: ffff8880010dd180 R14: ffff888016c4d008 R15: ffff8880010dd1c0
+> [ 1470.648341] FS:  0000000000000000(0000) GS:ffff88803ec80000(0000) knlGS:0000000000000000
+> [ 1470.649820] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [ 1470.651404] CR2: 0000555555694f50 CR3: 000000000f940005 CR4: 00000000003706e0
+> [ 1470.651408] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [ 1470.651411] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [ 1470.655817] Call Trace:
+> [ 1470.655821]  <TASK>
+> [ 1470.655824]  __list_lru_walk_one+0x84/0xf2
+> [ 1470.660171]  ? workingset_update_node+0x84/0x84
+> [ 1470.660178]  list_lru_walk_one_irq+0x59/0x74
+> [ 1470.662784]  ? workingset_update_node+0x84/0x84
+> [ 1470.662791]  scan_shadow_nodes+0x29/0x2b
+> [ 1470.662795]  do_shrink_slab+0x1d0/0x33d
+> [ 1470.662800]  shrink_slab+0x98/0x100
+> [ 1470.662805]  shrink_node_memcgs+0x136/0x182
+> [ 1470.662810]  shrink_node+0x220/0x3d9
+> [ 1470.662814]  balance_pgdat+0x216/0x3cb
+> [ 1470.662818]  ? lock_is_held_type+0xcf/0x10f
+> [ 1470.662824]  kswapd+0x189/0x1ae
+> [ 1470.662828]  ? balance_pgdat+0x3cb/0x3cb
+> [ 1470.662833]  kthread+0xee/0xf6
+> [ 1470.662838]  ? kthread_exit+0x1f/0x1f
+> [ 1470.662843]  ret_from_fork+0x1f/0x30
+> [ 1470.662849]  </TASK>
+> [ 1470.662851] irq event stamp: 76862966
+> [ 1470.662854] hardirqs last  enabled at (76862965): [<ffffffff819d1ee3>] _raw_spin_unlock_irq+0x23/0x42
+> [ 1470.662860] hardirqs last disabled at (76862966): [<ffffffff819d1c96>] _raw_spin_lock_irq+0x17/0x4c
+> [ 1470.662866] softirqs last  enabled at (76862958): [<ffffffff81c0036f>] __do_softirq+0x36f/0x3aa
+> [ 1470.662871] softirqs last disabled at (76862925): [<ffffffff811049cd>] __irq_exit_rcu+0x85/0xc1
+> [ 1470.662877] ---[ end trace 0000000000000000 ]---
 > 
-> >  - Also, some paths in this driver needs a modification to be tested
-> >    under roadtest.  It uses wait_event_timeout() with a fixed value, but
-> >    we cannot guarantee that this constraint is met in the test
-> >    environment since it depends on things like CPU load on the host.
-> > 
-> >    (Also, we use UML's "time travel" feature which essentially
-> >    fast-forwards through idle time, so the constraint can never be met
-> >    in practice.)
-> 
-> Wohoo! This makes me very happy, finally somebody else who uses it :-)
-
-Yes, thanks for that feature, it works well to speed up tests and also
-has a knack for triggering race conditions (the RTC use-after-free for
-example).
-
-Time travel however sometimes triggers some WARN_ONs from the core
-timekeeping code. I haven't seen them when running the test suites, but
-they show up if the system under UML is idle for several (wall time)
-seconds.  I haven't had a chance to investigate it further though, but I
-can dig up the splats if you are interested.

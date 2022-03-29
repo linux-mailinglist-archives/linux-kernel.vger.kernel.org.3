@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9D24EB0E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E214EB0EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238935AbiC2PqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
+        id S238856AbiC2Prb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238934AbiC2Pp7 (ORCPT
+        with ESMTP id S234652AbiC2Pr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:45:59 -0400
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1FA12769
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:44:15 -0700 (PDT)
-Received: by mail-vk1-xa36.google.com with SMTP id c4so9987259vkq.9
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:44:15 -0700 (PDT)
+        Tue, 29 Mar 2022 11:47:27 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E9B3A721
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:45:44 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id d30so854407pjk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:45:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linbit-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cFXlp32xQw7/OjMn3uGU844211qFMDFeLujMZW6rFtE=;
-        b=JqKDQ8MKvspOvGXGqMIk6wdMVNm2l+b4NyGw6XjLHvS4btBEqsAfnlyweRKHI4yMJG
-         ghyNvZ3eYnf2Zor1uhlE1bG1HzDFRUTP7PMo7n3K63z+CtY6PMp+ACAjJZfIbgzqFp90
-         dgEixgbPzK/xbL2DhnDrF0A+GFWKW9kK5u5AiazLqE+YSJHzqmcTH/kU2+j0gmpSo/K+
-         tzBUrvWpmsdBIMHKH+y1Y7W42wYDLHBvBmnbvUvRxmd7Lr7PrD3kr+k+USKm9anB8Kbh
-         icgrwgZdiP1VOnpV3IhtWS9kmwb6OgSbkglXY/R7vfdcXfv2gdQA86buPDgejlP+0TIA
-         jNbw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iBWbnx9nmzpAVk+ZjuUdTpMYBLq8k4If2dmnAQXSRqs=;
+        b=CAlgzMvhKAuMBP/KNFNTLpGMzTNRw/jYBSJHv9/OXpabr64KZM2xwneiShOr2va39m
+         CIxaq0Wp5DRppuVj+7eStv93DZ5PDZRXJdeCrNwy6O+U9acfEg2mC8/6/9KOCEESP1F2
+         2xn5DXtmr0vr1//0yuIcgFqgnd+/ldRQjqtPDcfKid+7a/er8uhKS+02120dtLnSRLuu
+         yBrjtK/0p4WQciARh/7hfX/qV49payYKLzPaXPBTv6QuLSu8Wx401aFUDWIzCpohRpjx
+         SmajDmBcOmDru3W6XB1xLty3R4BBBgn89IBHDNJNB9sibTsB1+x9OmvcaMMo29g/kGOR
+         Vn0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cFXlp32xQw7/OjMn3uGU844211qFMDFeLujMZW6rFtE=;
-        b=YIg8AkzZofQ7OBrblvw1d8ATT2nR+V20UHqd4iRnxCtndLMOzSlCZ3MIdU78ECI75T
-         Ukxs0tnDwaTGfdBBktcQAn+M1T5tSM5MZrQbXZfi8BP/GSbm8CTNnzDh6XmYEXDk5BTB
-         Hko0UcFM6S/hkoConD1LFGqBTr3CozIvnaAP2HhP3uAgxdPrIzg/xQMplnFwFoAOZQRr
-         DMG+Gf6Ba+tlLcmzAkMOre+L/bYZhB2DJkH6FIG0OxFhog1BbOmhje/jB4tef6HOPciq
-         hc81jer1xnqBv7rQifyXpzWGve2mjR/WjbOnQGjFPxkFEf6baps3Ws6Rstr8jXo3nHcY
-         XlSw==
-X-Gm-Message-State: AOAM5306rJug2XG8zA3ordzkWb8mF7VlFIvxDKHe9mq8IPE0vH4n3M+b
-        VQV3vyT0UM+NQiNZEicTCCI41K8jL9K5mSEOGyXP4GfLGFajXQ==
-X-Google-Smtp-Source: ABdhPJyW12LjVa8kn/B0znyep6GosCNAp/KjjP9BVBaJg4O8d/25oaPhxtDrGS8yhBe02srwIag4mfxCnCj/FF/ECuM=
-X-Received: by 2002:a1f:6a82:0:b0:33f:7eeb:5989 with SMTP id
- f124-20020a1f6a82000000b0033f7eeb5989mr17894292vkc.29.1648568654813; Tue, 29
- Mar 2022 08:44:14 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iBWbnx9nmzpAVk+ZjuUdTpMYBLq8k4If2dmnAQXSRqs=;
+        b=xKdYy5PeXhvHznlg/C+UVwNlA/SncrYlKj/XqYvn/XwnlJ+tMOx/vZPbMOk5zHp6Ax
+         yCka2PzGrJUAzbe/1ybSZLahsLmKQRhWmKPL8vIHnTMXlIFM9xhOUdBV5FhXTy1xG7rA
+         MZqq5ENka8OdSQ0GFxlaYbJk1BQPDLZl0aJc5bfwCv9+Lv5ESUrpMH3JtQPhjySKDnaJ
+         eJoFiJExwC5fed+nsymcbMzWJLluYFDvvRvqub6GgdTO/tDwh91DH170oNC3uuNKPGRi
+         qorQ59637IWgFb5CQcywPNXoBBvNAaSqvbl6eVSFD1AYbxllixdlNqSoOkJv+ToNKl2Z
+         ICOg==
+X-Gm-Message-State: AOAM531pQBehkAgwtqDgPgjmus1MUUnFssm1NLFcYXgwvzk2h9LzX1KG
+        BNelQF37xcU8cheolGXynZL7FQ==
+X-Google-Smtp-Source: ABdhPJzz19Rg+Su10Np5HFxc79yFW1oMkdOJLvHJr7FrwyKx+yX7c483JS7yzqqD2oF7eq7kBNbMwg==
+X-Received: by 2002:a17:90b:4b89:b0:1c8:105a:2262 with SMTP id lr9-20020a17090b4b8900b001c8105a2262mr178749pjb.225.1648568744396;
+        Tue, 29 Mar 2022 08:45:44 -0700 (PDT)
+Received: from localhost.localdomain ([2409:8a28:e65:74c0:705b:241a:6dc0:a4ac])
+        by smtp.gmail.com with ESMTPSA id u19-20020a056a00125300b004fafa43330csm17930733pfi.163.2022.03.29.08.45.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 08:45:43 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, eranian@google.com
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH v4 0/4] perf/core: Fixes for cgroup events
+Date:   Tue, 29 Mar 2022 23:45:19 +0800
+Message-Id: <20220329154523.86438-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220329070618.GA20396@lst.de> <CADGDV=UgjZAbmAN-2bO1nyDvA=XCC9Lf2dxWHZ0BwxF12nnztQ@mail.gmail.com>
- <20220329073254.GA20691@lst.de> <CADGDV=U5jwe0CZ12174cMahfD_h-GsBswWaA1VOJbHaC1nsrUw@mail.gmail.com>
- <f9d89282-3a67-ad97-149f-52325e23607c@kernel.dk>
-In-Reply-To: <f9d89282-3a67-ad97-149f-52325e23607c@kernel.dk>
-From:   Philipp Reisner <philipp.reisner@linbit.com>
-Date:   Tue, 29 Mar 2022 17:44:03 +0200
-Message-ID: <CADGDV=WN2TFR6dO7ZdiQ2ijPjs+7HSsvk0ZCHsHj6ZG5t-oEdA@mail.gmail.com>
-Subject: Re: state of drbd in mainline
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,43 +70,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jens, my intention is to keep it in-tree, and at some point update it.
-Regarding your questions:
+Hi,
 
-[...]
+This patchset mainly fix a race problem between cgroup_migrate_execute()
+and perf_cgroup_sched_out/in().
 
-> - Why aren't the drbd maintainers responding to posted patches? They seem
->   to simply be ignored, and I'm left to pickup the trivial ones that look
->   fine to me. In-kernel drbd appears largely unmaintained, and has been for
->   years.
+v4:
+ - delete patch 3 in v3 that remove event_filter_match() in
+   merge_sched_in(), which is wrong since the hybrid system
+   implemented PMU specific filter_match callback. Thanks Kan.
 
-The team here has grown, we are busy. Since you started to pick up the
-trivial patches yourself, I thought it is not necessary that I collect them and
-send a pull request in merge-window time.
+v3:
+ - put two fix patches together in patch 4
+ - delete percpu cpu_perf_cgroup, just use cpuctx->cgrp to compare
+ - reorganize these patches' order
 
-> - Even if out-of-band communication is used for in-kernel users of drbd,
->   that doesn't result in any patches or fixes that should go upstream?
+v2:
+ - split into two patches to fix the race problem for easier review
+ - use cpuctx->cgrp when start ctx time and delete unused task argument
+ - use cpuctx->cgrp when update ctx time from cgroup perf_event
+ - always set cpuctx->cgrp when the first cgroup event enabled
+ - remove obselete comments
 
-This one:
-https://patchwork.kernel.org/project/linux-block/patch/20210426163032.3454129-1-christoph.boehmwalder@linbit.com/
-(relevant to users that have DRBD on top of md raid)
+v1:
+ - https://lore.kernel.org/lkml/20220308135948.55336-1-zhouchengming@bytedance.com/
 
-> - If there's zero activity for in-kernel drbd, all users are using the
->   out-of-tree version?
 
-There are users of the in-tree version, some with huge fleets.
-Some do not need the newer out-of-tree DRBD, and the in-tree version is a
-lot easier to compile. You need coccinelle for the out-of-tree version,
-and that can already be a hindering barrier for some.
+Chengming Zhou (4):
+  perf/core: Don't pass task around when ctx sched in
+  perf/core: Use perf_cgroup_info->active to check if cgroup is active
+  perf/core: Fix perf_cgroup_switch()
+  perf/core: Always set cpuctx cgrp when enable cgroup event
 
-> As far as I can tell, drbd upstream is stone cold dead, and has been for
-> years. Why shouldn't it just get removed?
+ kernel/events/core.c | 209 +++++++++++--------------------------------
+ 1 file changed, 52 insertions(+), 157 deletions(-)
 
-Because there are users.
+-- 
+2.35.1
 
-> Is it just bait to get people to use an out-of-tree version?
-
-No.
-
-> --
-> Jens Axboe

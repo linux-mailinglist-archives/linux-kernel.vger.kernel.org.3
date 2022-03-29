@@ -2,249 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688BB4EAF00
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4484EAF04
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237726AbiC2OFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 10:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
+        id S237724AbiC2OGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 10:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237724AbiC2OFo (ORCPT
+        with ESMTP id S232306AbiC2OGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 10:05:44 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EACB1D1927
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:04:01 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id e189so19112586oia.8
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:04:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=26rvEBCNIFiRO8lw0d4ibLwjH7rNC+2FXHQhaFfFi9E=;
-        b=ClXdxEY3sYedDz8iLRgAFKARKUjU5okvKpYyQSsMMD5NzCa+TyiWwwmHtDaV41nHtw
-         polqdshnlc02Bto5VshYz3O083Qe3KF89GPEwcRSmrHVbAzP4lbI5029v//MLnRoMbc3
-         RufyhpHYcgWkp9OhHvBBICGjkylEXgbpjfXuy0I32eILASBlJe+QjntYbIC1qYBkWmTj
-         4uRxEbeXUB9UNVzapyDtDfVnvTouMlhB2pkCdT0AeFhkwP68tap0/47jP//V2oOvvDd1
-         m0VPLqILesImaHeD502rDWoZXaimIdhtfH3AxVHwVxN6xLAuWZq8SN0dPtcobFQ4ZwJh
-         XMeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=26rvEBCNIFiRO8lw0d4ibLwjH7rNC+2FXHQhaFfFi9E=;
-        b=uFyJAxCVOxOptkOEmHMcnrViv1CGbrbkcqDgGpal4G8LgZxSXhRl/t5SAYuYbtCaXs
-         axk4usQoPOaVS2gL0doImHF+2KiaziR64/sP/G9j/lo4eGAhsRvamdIPmw+x1lmsmRJD
-         J7YP1D1PCxtox2PqBbBJ/B74w/R+9TddBcGQQxOTLxTJCGKBcQ12V3lXIHA2QRXl4PxS
-         SeNhuhmcPhrcoWs0nyuH3KSkT8qwgLD2+yp2GeQkUMdcrkNEKsRS+jRJU8I10lXa0voL
-         S9P6J8wYjqf10prP8K07KjPxi1yhEtQglWrO7qXpeUlxm1bQWcHcvTOeosOJrOKBTThx
-         s9wQ==
-X-Gm-Message-State: AOAM53106+8hfwiWrlsYKGl2KKfa7SiPazt9OsjpYAFgFCZGfdIHussQ
-        mMWC+ie3XTjHkW5leW7hVqPbDKIzO9HARI4Qe6J1qoth4Pg=
-X-Google-Smtp-Source: ABdhPJwEG8czZRwrZzoQM9EwBge0o+Kn+7s3e3Zig8YFeVV+qnxNWy/SXdPGQPyeOvK2t8Loctb+sokhI4gNCCkQJww=
-X-Received: by 2002:aca:d04:0:b0:2ef:8b45:d235 with SMTP id
- 4-20020aca0d04000000b002ef8b45d235mr1372144oin.253.1648562640275; Tue, 29 Mar
- 2022 07:04:00 -0700 (PDT)
+        Tue, 29 Mar 2022 10:06:49 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409B9163E06
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:05:05 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22TDhVIM012937;
+        Tue, 29 Mar 2022 14:04:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=dJlka0qXhPU7f2TFEHuFeLpBGs5SfiPowXo2kN2nvp4=;
+ b=YvfydyhpmeHBCAiYU/qJA71LxRTmxlwreSKyC9oMHIJSN+8yMqCdu70Pb+2KPbP74sY1
+ lslEAqFWAejC59+2/rSq/8+fD7DTOLFj8DOQDKiIvyIzdxLOrUYwGCsHH2158VnSGtD1
+ 7EZ8eopFZdlU9f5Tx+pqDres5iv3s8MrB2MuacK5qlpfTeG3yfe8hsTJqqqS7Pq5TQfF
+ Gu0h6cet4/MLQSHwJcNErkY+Yt8aoUtNu7Mthyo6rqKoKpo/6OZI1fe4IpK6Kcjqwg0I
+ NdpvTATbEhcI+F4Z0LBb7XR/vMYivmNY8VJroolJVqWl2eskAH5cnqdOcokuMtQN4Tz9 fQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f40q1ca11-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Mar 2022 14:04:58 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22TDhTku002677;
+        Tue, 29 Mar 2022 14:04:58 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f40q1ca08-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Mar 2022 14:04:58 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22TE4SDT015994;
+        Tue, 29 Mar 2022 14:04:55 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3f1tf8xbum-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Mar 2022 14:04:55 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22TE4r5i35062128
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 29 Mar 2022 14:04:53 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 93A0642042;
+        Tue, 29 Mar 2022 14:04:53 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 172B742041;
+        Tue, 29 Mar 2022 14:04:50 +0000 (GMT)
+Received: from li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com (unknown [9.211.138.152])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 29 Mar 2022 14:04:49 +0000 (GMT)
+Date:   Tue, 29 Mar 2022 19:34:32 +0530
+From:   Jagdish Gediya <jvgediya@linux.ibm.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com,
+        dave.hansen@linux.intel.com, ying.huang@intel.com
+Subject: Re: [PATCH] mm: migrate: set demotion targets differently
+Message-ID: <YkMR8OY779Bcri3I@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
+References: <20220329115222.8923-1-jvgediya@linux.ibm.com>
+ <b7d1ab3b-e92c-d3aa-72cb-b80cc1a61e85@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20220324231000.4072275-1-tsung-hua.lin@amd.com> <20220329085239.157527-1-tsung-hua.lin@amd.com>
-In-Reply-To: <20220329085239.157527-1-tsung-hua.lin@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 29 Mar 2022 10:03:49 -0400
-Message-ID: <CADnq5_OXPXZ4hHv3Jndifd0kQ=kvJnypB3JcW5mNsjzjQ7JPLg@mail.gmail.com>
-Subject: Re: drm/amdgpu: Disable ABM when AC mode
-To:     Ryan Lin <tsung-hua.lin@amd.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Jake Wang <haonan.wang2@amd.com>,
-        David Airlie <airlied@linux.ie>, Leon.Li@amd.com,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>, Wyatt Wood <wyatt.wood@amd.com>,
-        Anthony Koo <Anthony.Koo@amd.com>,
-        Jack Zhang <Jack.Zhang1@amd.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Leo Li <sunpeng.li@amd.com>, Sean Paul <seanpaul@chromium.org>,
-        =?UTF-8?Q?St=C3=A9phane_Marchesin?= <marcheu@chromium.org>,
-        Evan Quan <evan.quan@amd.com>, shaoyunl <shaoyun.liu@amd.com>,
-        Pratik Vishwakarma <Pratik.Vishwakarma@amd.com>,
-        Sathishkumar S <sathishkumar.sundararaju@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Po-Ting Chen <robin.chen@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b7d1ab3b-e92c-d3aa-72cb-b80cc1a61e85@linux.alibaba.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: B7PKZ-dEYCU-cfMUGvoteWTL5sfq-7mL
+X-Proofpoint-ORIG-GUID: fRhK3oXVRX1J-cp-LaRsZNqr41sO579Y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-29_05,2022-03-29_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ mlxscore=0 clxscore=1015 impostorscore=0 bulkscore=0 priorityscore=1501
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203290086
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 4:56 AM Ryan Lin <tsung-hua.lin@amd.com> wrote:
+On Tue, Mar 29, 2022 at 08:26:05PM +0800, Baolin Wang wrote:
+Hi Baolin,
+> Hi Jagdish,
+> 
+> On 3/29/2022 7:52 PM, Jagdish Gediya wrote:
+> > The current implementation to identify the demotion
+> > targets limits some of the opportunities to share
+> > the demotion targets between multiple source nodes.
+> > 
+> > Implement a logic to identify the loop in the demotion
+> > targets such that all the possibilities of demotion can
+> > be utilized. Don't share the used targets between all
+> > the nodes, instead create the used targets from scratch
+> > for each individual node based on for what all node this
+> > node is a demotion target. This helps to share the demotion
+> > targets without missing any possible way of demotion.
+> > 
+> > e.g. with below NUMA topology, where node 0 & 1 are
+> > cpu + dram nodes, node 2 & 3 are equally slower memory
+> > only nodes, and node 4 is slowest memory only node,
+> > 
+> > available: 5 nodes (0-4)
+> > node 0 cpus: 0 1
+> > node 0 size: n MB
+> > node 0 free: n MB
+> > node 1 cpus: 2 3
+> > node 1 size: n MB
+> > node 1 free: n MB
+> > node 2 cpus:
+> > node 2 size: n MB
+> > node 2 free: n MB
+> > node 3 cpus:
+> > node 3 size: n MB
+> > node 3 free: n MB
+> > node 4 cpus:
+> > node 4 size: n MB
+> > node 4 free: n MB
+> > node distances:
+> > node   0   1   2   3   4
+> >    0:  10  20  40  40  80
+> >    1:  20  10  40  40  80
+> >    2:  40  40  10  40  80
+> >    3:  40  40  40  10  80
+> >    4:  80  80  80  80  10
+> > 
+> > The existing implementation gives below demotion targets,
+> > 
+> > node    demotion_target
+> >   0              3, 2
+> >   1              4
+> >   2              X
+> >   3              X
+> >   4		X
+> > 
+> > With this patch applied, below are the demotion targets,
+> > 
+> > node    demotion_target
+> >   0              3, 2
+> >   1              3, 2
+> >   2              3
+> >   3              4
+> >   4		X
+> 
+> Node 2 and node 3 both are slow memory and have same distance, why node 2
+> should demote cold memory to node 3? They should have the same target
+> demotion node 4, which is the slowest memory node, right?
+> 
+Current demotion target finding algorithm works based on best distance, as distance between node 2 & 3 is 40 and distance between node 2 & 4 is 80, node 2 demotes to node 3.
+> > 
+> > e.g. with below NUMA topology, where node 0, 1 & 2 are
+> > cpu + dram nodes and node 3 is slow memory node,
+> > 
+> > available: 4 nodes (0-3)
+> > node 0 cpus: 0 1
+> > node 0 size: n MB
+> > node 0 free: n MB
+> > node 1 cpus: 2 3
+> > node 1 size: n MB
+> > node 1 free: n MB
+> > node 2 cpus: 4 5
+> > node 2 size: n MB
+> > node 2 free: n MB
+> > node 3 cpus:
+> > node 3 size: n MB
+> > node 3 free: n MB
+> > node distances:
+> > node   0   1   2   3
+> >    0:  10  20  20  40
+> >    1:  20  10  20  40
+> >    2:  20  20  10  40
+> >    3:  40  40  40  10
+> > 
+> > The existing implementation gives below demotion targets,
+> > 
+> > node    demotion_target
+> >   0              3
+> >   1              X
+> >   2              X
+> >   3              X
+> > 
+> > With this patch applied, below are the demotion targets,
+> > 
+> > node    demotion_target
+> >   0              3
+> >   1              3
+> >   2              3
+> >   3              X
+> 
+> Sounds reasonable.
+> 
+> > 
+> > with below NUMA topology, where node 0 & 2 are cpu + dram
+> > nodes and node 1 & 3 are slow memory nodes,
+> > 
+> > available: 4 nodes (0-3)
+> > node 0 cpus: 0 1
+> > node 0 size: n MB
+> > node 0 free: n MB
+> > node 1 cpus:
+> > node 1 size: n MB
+> > node 1 free: n MB
+> > node 2 cpus: 2 3
+> > node 2 size: n MB
+> > node 2 free: n MB
+> > node 3 cpus:
+> > node 3 size: n MB
+> > node 3 free: n MB
+> > node distances:
+> > node   0   1   2   3
+> >    0:  10  40  20  80
+> >    1:  40  10  80  80
+> >    2:  20  80  10  40
+> >    3:  80  80  40  10
+> > 
+> > The existing implementation gives below demotion targets,
+> > 
+> > node    demotion_target
+> >   0              3
+> >   1              X
+> >   2              3
+> >   3              X
+> 
+> If I understand correctly, this is not true. The demotion route should be as
+> below with existing implementation:
+> node 0 ---> node 1
+> node 1 ---> X
+> node 2 ---> node 3
+> node 3 ---> X
+> 
+Its typo, It should be 0 -> 1, Will correct it in v2.
+> > 
+> > With this patch applied, below are the demotion targets,
+> > 
+> > node    demotion_target
+> >   0              1
+> >   1              3
+> >   2              3
+> >   3              X
+> > 
+> > As it can be seen above, node 3 can be demotion target for node
+> > 1 but existing implementation doesn't configure it that way. It
+> > is better to move pages from node 1 to node 3 instead of moving
+> > it from node 1 to swap.
+> 
+> Which means node 3 is the slowest memory node?
 >
-> Disable ABM feature when the system is running on AC mode to get
-> the more perfect contrast of the display.
->
-> v2: remove "UPSTREAM" from the subject.
->
-> Signed-off-by: Ryan Lin <tsung-hua.lin@amd.com>
->
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c      |  4 ++
->  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c    |  1 +
->  drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c | 58 ++++++++++++-------
->  drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h       |  1 +
->  4 files changed, 42 insertions(+), 22 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
-> index c560c1ab62ecb..bc8bb9aad2e36 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
-> @@ -822,6 +822,10 @@ static int amdgpu_acpi_event(struct notifier_block *nb,
->         struct amdgpu_device *adev = container_of(nb, struct amdgpu_device, acpi_nb);
->         struct acpi_bus_event *entry = (struct acpi_bus_event *)data;
->
-> +       if (strcmp(entry->device_class, "battery") == 0) {
-> +               adev->pm.ac_power = power_supply_is_system_supplied() > 0;
-> +       }
-> +
-
-Is this change necessary?  As I said before, we already update
-adev->pm.ac_power a few lines later in amdgpu_pm_acpi_event_handler().
-If there is something wrong with that code, please adjust as
-necessary.
-
-Alex
-
->         if (strcmp(entry->device_class, ACPI_AC_CLASS) == 0) {
->                 if (power_supply_is_system_supplied() > 0)
->                         DRM_DEBUG_DRIVER("pm: AC\n");
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> index abfcc1304ba0c..3a0afe7602727 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> @@ -3454,6 +3454,7 @@ int amdgpu_device_init(struct amdgpu_device *adev,
->
->         adev->gfx.gfx_off_req_count = 1;
->         adev->pm.ac_power = power_supply_is_system_supplied() > 0;
-> +       adev->pm.old_ac_power = true;
->
->         atomic_set(&adev->throttling_logging_enabled, 1);
->         /*
-> diff --git a/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c b/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
-> index 54a1408c8015c..478a734b66926 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dce/dmub_abm.c
-> @@ -23,6 +23,8 @@
->   *
->   */
->
-> +#include <linux/power_supply.h>
-> +#include "amdgpu.h"
->  #include "dmub_abm.h"
->  #include "dce_abm.h"
->  #include "dc.h"
-> @@ -51,6 +53,7 @@
->  #define DISABLE_ABM_IMMEDIATELY 255
->
->
-> +extern uint amdgpu_dm_abm_level;
->
->  static void dmub_abm_enable_fractional_pwm(struct dc_context *dc)
->  {
-> @@ -117,28 +120,6 @@ static void dmub_abm_init(struct abm *abm, uint32_t backlight)
->         dmub_abm_enable_fractional_pwm(abm->ctx);
->  }
->
-> -static unsigned int dmub_abm_get_current_backlight(struct abm *abm)
-> -{
-> -       struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
-> -       unsigned int backlight = REG_READ(BL1_PWM_CURRENT_ABM_LEVEL);
-> -
-> -       /* return backlight in hardware format which is unsigned 17 bits, with
-> -        * 1 bit integer and 16 bit fractional
-> -        */
-> -       return backlight;
-> -}
-> -
-> -static unsigned int dmub_abm_get_target_backlight(struct abm *abm)
-> -{
-> -       struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
-> -       unsigned int backlight = REG_READ(BL1_PWM_TARGET_ABM_LEVEL);
-> -
-> -       /* return backlight in hardware format which is unsigned 17 bits, with
-> -        * 1 bit integer and 16 bit fractional
-> -        */
-> -       return backlight;
-> -}
-> -
->  static bool dmub_abm_set_level(struct abm *abm, uint32_t level)
->  {
->         union dmub_rb_cmd cmd;
-> @@ -148,6 +129,9 @@ static bool dmub_abm_set_level(struct abm *abm, uint32_t level)
->         int edp_num;
->         uint8_t panel_mask = 0;
->
-> +       if (power_supply_is_system_supplied() > 0)
-> +               level = 0;
-> +
->         get_edp_links(dc->dc, edp_links, &edp_num);
->
->         for (i = 0; i < edp_num; i++) {
-> @@ -170,6 +154,36 @@ static bool dmub_abm_set_level(struct abm *abm, uint32_t level)
->         return true;
->  }
->
-> +static unsigned int dmub_abm_get_current_backlight(struct abm *abm)
-> +{
-> +       struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
-> +       unsigned int backlight = REG_READ(BL1_PWM_CURRENT_ABM_LEVEL);
-> +       struct dc_context *dc = abm->ctx;
-> +       struct amdgpu_device *adev = dc->driver_context;
-> +
-> +       if (adev->pm.ac_power != adev->pm.old_ac_power) {
-> +               dmub_abm_set_level(abm, amdgpu_dm_abm_level);
-> +               adev->pm.ac_power = power_supply_is_system_supplied() > 0;
-> +               adev->pm.old_ac_power = adev->pm.ac_power;
-> +       }
-> +
-> +       /* return backlight in hardware format which is unsigned 17 bits, with
-> +        * 1 bit integer and 16 bit fractional
-> +        */
-> +       return backlight;
-> +}
-> +
-> +static unsigned int dmub_abm_get_target_backlight(struct abm *abm)
-> +{
-> +       struct dce_abm *dce_abm = TO_DMUB_ABM(abm);
-> +       unsigned int backlight = REG_READ(BL1_PWM_TARGET_ABM_LEVEL);
-> +
-> +       /* return backlight in hardware format which is unsigned 17 bits, with
-> +        * 1 bit integer and 16 bit fractional
-> +        */
-> +       return backlight;
-> +}
-> +
->  static bool dmub_abm_init_config(struct abm *abm,
->         const char *src,
->         unsigned int bytes,
-> diff --git a/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h b/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
-> index f6e0e7d8a0077..de459411a0e83 100644
-> --- a/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
-> +++ b/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
-> @@ -445,6 +445,7 @@ struct amdgpu_pm {
->         uint32_t                smu_prv_buffer_size;
->         struct amdgpu_bo        *smu_prv_buffer;
->         bool ac_power;
-> +       bool old_ac_power;
->         /* powerplay feature */
->         uint32_t pp_feature;
->
-> --
-> 2.25.1
->
+Node 1 and 3 are equally slower but 1 is near to 0 and 3 is near to 2. Basically you can think of it like node 1 is slow memory logical node near to node 0 and node 3 is slow memory logical node near to node 2.
+> > 
+> > Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+> > Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> > ---
+> >   mm/migrate.c | 75 ++++++++++++++++++++++++++++------------------------
+> >   1 file changed, 41 insertions(+), 34 deletions(-)
+> > 
+> > diff --git a/mm/migrate.c b/mm/migrate.c
+> > index 3d60823afd2d..7ec8d934e706 100644
+> > --- a/mm/migrate.c
+> > +++ b/mm/migrate.c
+> > @@ -2381,10 +2381,13 @@ static int establish_migrate_target(int node, nodemask_t *used,
+> >    */
+> >   static void __set_migration_target_nodes(void)
+> >   {
+> > -	nodemask_t next_pass	= NODE_MASK_NONE;
+> > -	nodemask_t this_pass	= NODE_MASK_NONE;
+> >   	nodemask_t used_targets = NODE_MASK_NONE;
+> >   	int node, best_distance;
+> > +	nodemask_t *src_nodes;
+> > +
+> > +	src_nodes = kcalloc(nr_node_ids, sizeof(nodemask_t), GFP_KERNEL);
+> > +	if (!src_nodes)
+> > +		return;
+> >   	/*
+> >   	 * Avoid any oddities like cycles that could occur
+> > @@ -2393,29 +2396,39 @@ static void __set_migration_target_nodes(void)
+> >   	 */
+> >   	disable_all_migrate_targets();
+> > -	/*
+> > -	 * Allocations go close to CPUs, first.  Assume that
+> > -	 * the migration path starts at the nodes with CPUs.
+> > -	 */
+> > -	next_pass = node_states[N_CPU];
+> > -again:
+> > -	this_pass = next_pass;
+> > -	next_pass = NODE_MASK_NONE;
+> > -	/*
+> > -	 * To avoid cycles in the migration "graph", ensure
+> > -	 * that migration sources are not future targets by
+> > -	 * setting them in 'used_targets'.  Do this only
+> > -	 * once per pass so that multiple source nodes can
+> > -	 * share a target node.
+> > -	 *
+> > -	 * 'used_targets' will become unavailable in future
+> > -	 * passes.  This limits some opportunities for
+> > -	 * multiple source nodes to share a destination.
+> > -	 */
+> > -	nodes_or(used_targets, used_targets, this_pass);
+> > +	for_each_online_node(node) {
+> > +		int tmp_node;
+> > -	for_each_node_mask(node, this_pass) {
+> >   		best_distance = -1;
+> > +		used_targets = NODE_MASK_NONE;
+> > +
+> > +		/*
+> > +		 * Avoid adding same node as the demotion target.
+> > +		 */
+> > +		node_set(node, used_targets);
+> > +
+> > +		/*
+> > +		 * Add CPU NUMA nodes to the used target list so that it
+> > +		 * won't be considered a demotion target.
+> > +		 */
+> > +		nodes_or(used_targets, used_targets, node_states[N_CPU]);
+> > +
+> > +		/*
+> > +		 * Add all nodes that has appeared as source node of demotion
+> > +		 * for this target node.
+> > +		 *
+> > +		 * To avoid cycles in the migration "graph", ensure
+> > +		 * that migration sources are not future targets by
+> > +		 * setting them in 'used_targets'.
+> > +		 */
+> > +		for_each_node_mask(tmp_node, src_nodes[node])
+> > +			nodes_or(used_targets, used_targets, src_nodes[tmp_node]);
+> > +
+> > +		/*
+> > +		 * Now update the demotion src nodes with other nodes in graph
+> > +		 * which got computed above.
+> > +		 */
+> > +		nodes_or(src_nodes[node], src_nodes[node], used_targets);
+> >   		/*
+> >   		 * Try to set up the migration path for the node, and the target
+> > @@ -2434,20 +2447,14 @@ static void __set_migration_target_nodes(void)
+> >   				best_distance = node_distance(node, target_node);
+> >   			/*
+> > -			 * Visit targets from this pass in the next pass.
+> > -			 * Eventually, every node will have been part of
+> > -			 * a pass, and will become set in 'used_targets'.
+> > +			 * Add this node in the src_nodes list so that we can
+> > +			 * detect the looping.
+> >   			 */
+> > -			node_set(target_node, next_pass);
+> > +			node_set(node, src_nodes[target_node]);
+> >   		} while (1);
+> >   	}
+> > -	/*
+> > -	 * 'next_pass' contains nodes which became migration
+> > -	 * targets in this pass.  Make additional passes until
+> > -	 * no more migrations targets are available.
+> > -	 */
+> > -	if (!nodes_empty(next_pass))
+> > -		goto again;
+> > +
+> > +	kfree(src_nodes);
+> >   }
+> >   /*

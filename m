@@ -2,140 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4255F4EB225
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC334EB21E
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239854AbiC2Qt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 12:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58804 "EHLO
+        id S239872AbiC2Qsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 12:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235285AbiC2QtY (ORCPT
+        with ESMTP id S239852AbiC2Qsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 12:49:24 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF206211F
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:47:41 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22TFsrMr003612;
-        Tue, 29 Mar 2022 16:47:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=GGKNeV/gY92UXzgFNtB6asnSVh287RpznEXVzvvgBFk=;
- b=AF4URul67qeOefpDxVANug9r+TNMEK44sxYcen5D+rSAqlOAkvlaPJCub17GpEVK5Qyj
- hOlE33T1COdoBe9bqFC9BpKcyvYr9lKD+Mf9LOfMpQFU7V/qMZQ3OESnkJhh4ycL5IJT
- w2ZFH/Mk6Gh7hebeYEjNum9NU3VE+19nJ9RjhMJq8xbuZWDLeaAFCO9mZM5seFyMyuxl
- fMnm0W+MHyysNVcWnDHdszFgyTUY5qjyvevOoglCvxysqABG/Z/LjlF95k1T5QrIZQv/
- dcsFW0whYB/axkeGeT4bGX31lireYuzSgSl9LAfsQcPDeOuZDl3UGaXw5FnF8edGtICc kA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f40t885n7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Mar 2022 16:47:35 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22TGgvuM016680;
-        Tue, 29 Mar 2022 16:47:35 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f40t885mh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Mar 2022 16:47:34 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22TGlCdW027362;
-        Tue, 29 Mar 2022 16:47:32 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma05fra.de.ibm.com with ESMTP id 3f1tf8wng0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Mar 2022 16:47:32 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22TGlTck30474540
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 29 Mar 2022 16:47:29 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B9701A4057;
-        Tue, 29 Mar 2022 16:47:29 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5FE01A4055;
-        Tue, 29 Mar 2022 16:47:10 +0000 (GMT)
-Received: from li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com (unknown [9.43.18.42])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 29 Mar 2022 16:47:08 +0000 (GMT)
-Date:   Tue, 29 Mar 2022 22:16:54 +0530
-From:   Jagdish Gediya <jvgediya@linux.ibm.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com,
-        baolin.wang@linux.alibaba.com, dave.hansen@linux.intel.com,
-        ying.huang@intel.com
-Subject: Re: [PATCH] mm: migrate: set demotion targets differently
-Message-ID: <YkM3/vKRoy8/fnvD@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
-References: <20220329115222.8923-1-jvgediya@linux.ibm.com>
- <55161160-1084-c81d-d116-00f5bcaa1268@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <55161160-1084-c81d-d116-00f5bcaa1268@intel.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: SkFLX3C5bmzK9TV7PYHEGpA4HH6tJK2R
-X-Proofpoint-GUID: 8G7qoZUOfJiNX9tvu8Kl53pBaSM1mHST
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-29_06,2022-03-29_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- clxscore=1011 impostorscore=0 phishscore=0 priorityscore=1501 mlxscore=0
- suspectscore=0 spamscore=0 mlxlogscore=530 adultscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203290095
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 29 Mar 2022 12:48:43 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A96EA6E3E
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:46:58 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id h19so15393770pfv.1
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:46:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Mll/pMxUBALsnuYtHp2CgJeJZP8oeqCPx7ZbOSMz7Mk=;
+        b=SVp6nz7Mh4KGeAB6sUGxDOz4z9VibRyKENDnrJ03jjNe4K9FIb4z9fxd907+hI1okf
+         96JKIbPjjOt64CqsI1CYXwEooyBDNjCPc2ORwWsRV4f9Fqs4rDQHI6xyRPRQ4Qy+3Hpa
+         UJ1C8d30sJWZ1GnA+vCKkeUj5qgGbwwoKMJuct3QJzqUvpOcB2OIjLPzDUL6J4Ioi1ZG
+         HPJzM2Sm00b9sONxIBibkMoGPmguJh1w+b3k7TlGYCNCuwyJED257GahKPNiJR8Edo5U
+         wCrYd2pTV7wQbn682vnV12jCSbK+/IutXk/taMZW/ZewZ3WJrBIU+ekgiVa6/8SH6BEx
+         M3Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=Mll/pMxUBALsnuYtHp2CgJeJZP8oeqCPx7ZbOSMz7Mk=;
+        b=UZjy997rEdeMkEu3STPGtfPPBgUJ7bylNVRU6lagIIkM3/xdzjh1jy6l4wzwtTDy3k
+         zEXr5HeIAC/jatugLag7XE2SILWoAHLzvm1Vw2s7I/bxlBDC23WvmZHVUbDqp3iB+1fy
+         6OSAlgXE5QeWuOtWcsQypqUSXV0vSmjGoJPA+uMb9bE4PQSO1cfZg8ZXpmNsLm+hYoX3
+         xWMIn9ilgXYx0/q/bNIF2a5YD4p0OqJkC4ebUmheoAhfskpQLzeWGJCk/o7gH5MThY2L
+         SqPuuSxp7FrpzZjFUtoGe7Lp4hIEGQQl1v+qjo/2BkGtRNDExE8OvZlhbWyDZjEqgpTN
+         9K7Q==
+X-Gm-Message-State: AOAM5323HktVHWAcafdWkWEWndw7gPwtMTq2ozKhBwQ3QUjSMkFOfvrD
+        L0FLHPnNuEwoNlykwhjWGkd2fw==
+X-Google-Smtp-Source: ABdhPJybC4NPgtQQoB80BKs5OokRMkw6fanDwLE97kLL8FlQw1sxVz5LiZzjhvIfVg5/O4RnvDXNPw==
+X-Received: by 2002:a05:6a00:21c6:b0:4fa:914c:2c2b with SMTP id t6-20020a056a0021c600b004fa914c2c2bmr28739586pfj.56.1648572417640;
+        Tue, 29 Mar 2022 09:46:57 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id z126-20020a633384000000b0039858053bafsm5876859pgz.27.2022.03.29.09.46.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 09:46:57 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 09:46:57 -0700 (PDT)
+X-Google-Original-Date: Tue, 29 Mar 2022 09:46:35 PDT (-0700)
+Subject:     Re: linux-next: build warning after merge of the risc-v tree
+In-Reply-To: <20220329133412.591d6882@canb.auug.org.au>
+CC:     Paul Walmsley <paul@pwsan.com>, Atish Patra <atishp@rivosinc.com>,
+        atishp@atishpatra.org, Atish Patra <atishp@rivosinc.com>,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Message-ID: <mhng-f46f3c64-24e0-4284-a6cb-71266e61e9ef@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 07:31:12AM -0700, Dave Hansen wrote:
-> On 3/29/22 04:52, Jagdish Gediya wrote:
-> > The current implementation to identify the demotion
-> > targets limits some of the opportunities to share
-> > the demotion targets between multiple source nodes.
-> 
-> This changelog is a bit unsatisfying.  It basically says: the current
-> code isn't working, throw some more code at the problem.
+On Mon, 28 Mar 2022 19:34:12 PDT (-0700), Stephen Rothwell wrote:
+> Hi all,
+>
+> After merging the risc-v tree, today's linux-next build (htmldocs)
+> produced this warning:
+>
+> Documentation/riscv/index.rst:5: WARNING: toctree contains reference to nonexisting document 'riscv/pmu'
+>
+> Introduced by commit
+>
+>   23b1f18326ec ("Documentation: riscv: Remove the old documentation")
+>
+> This is actually in Linus' tree.  Sorry I missed it when it was
+> introduced.
 
-The current code works but it doesn't utilize all the possibilities
-for the demotion. One of the comment in the current code says that
-'used_targets will become unavailable in future passes. This limits
-some opportunities for multiple source nodes to share a destination.'
-This patch removes those limitation. The current limitation is single
-used_target nodemask sharing between all the nodes, This patch prepares
-the used_targets from scratch for each individual node and then tries
-to avoid the looping based on what demotion targets are not possible
-for that particular node based on the data we accumulate in newly
-defined src_nodes array.
-
-For example, with below numa topology where node 0,1 & 2 are cpu + dram
-node and node 3 is slow memory node,
-node   0   1   2   3
-  0:  10  20  20  40
-  1:  20  10  20  40
-  2:  20  20  10  40
-  3:  40  40  40  10
-
-once node 3 is utilized for node 0, it can not be shared for node 1 & 2
-because in current code, used_targets will have that set even when we
-find demotion targets for  1 & 2.
-
-> I'd love to see some more information about *why* the current code
-> doesn't work.  Is it purely a bug or was it mis-designed?
-
-I think the design seems to be intended because as per the comment
-in the current code, it was known that there are limits to the node
-sharing as a demotion target.
-
-> I actually wrote it intending for it to handle cases like you describe
-> while not leaving lots of nodes without demotion targets.
-
-if you see the examples I have given in the commit message, the current
-code misses many opportunities for the demotion, so current
-implementation to avoid the looping is not the best as I have explained
-above, that is where this patch is required.
+I guess I missed it too.  I just sent a patch to fix it up.

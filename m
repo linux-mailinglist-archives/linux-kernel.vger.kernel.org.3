@@ -2,82 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC0AA4EA5B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 05:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E634EA5B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 05:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbiC2DIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 23:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48620 "EHLO
+        id S231459AbiC2DJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 23:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiC2DIH (ORCPT
+        with ESMTP id S230050AbiC2DJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 23:08:07 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5030923D580
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 20:06:25 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id pv16so32425368ejb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 20:06:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=majIMrAQJV71YPzSlBnjkczvH04u3JpSgRpru/mKNwI=;
-        b=OE/8XdZO0U1XwOdwZvKOmB9ArHGGxYHjLRGdSkCxg/SYfVDAtoQCtWsh4SAe/8PX/d
-         GQz2Vd4fGWPxakJKTFWNrjJuZ6p5SkdYnAEUHFQ/biR3bCF1tmGqUPNt44Jd/0/2HycX
-         WsXE7vUKg1jjEUbRbgStj58DRxWSyf7hHwJYgONyrLjmQkGOR2Lj4RlJPx+DWnaACI+H
-         2BbvFtlucYyFuNW5aSSa2r6RBogTJ57QVCtPVyRwm/xlvzhZZJOtes7XiIkU7um6hq3+
-         bAK7nLgvTslXo2vIupN1jI+CxSwrxNLVKm6SOSBQMopSotjY/b3+t6cxB4WhPsVIEQlx
-         Xf1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=majIMrAQJV71YPzSlBnjkczvH04u3JpSgRpru/mKNwI=;
-        b=e3YrcgMP+brhlVgmqVlbKhH4q52MxpeM6bfMkyg/kO9IQKW0Y3g3sLAGzELDiV87TH
-         20o66DgphI8ILMOWBm9QerpzwA2hmDa/bgIKnAy6deZObDqbsk+uZrCEcafPLX+EdsYs
-         9le5Mug6eaQMwHNTFWqU890ZZvot3iawuy03sTnRMZF1oZDzCQrCDGa1QG/ThU0gF18o
-         nlKLoL1c2xvbSewi2SEwN8+ift3dXZzjkHbLzvCA1rhh1FBbdkpOsqJ5CCcW130wKnNL
-         P2UmasTmaKFfPXZRKmvtfWGEqstTyAsanSWrObVA0nvAaW8biPXN6xF9MNWDtfhhAbWA
-         IIdQ==
-X-Gm-Message-State: AOAM530PYCQKydv4UGEXptZbfGYPlaaH6BvVq1i/LpiEkn6egQiwCzwQ
-        k7rtYmb8af7hA7AfbkeAFWfS0gpLGeZv4G0cIIfmotMMJQ==
-X-Google-Smtp-Source: ABdhPJwxvKXjuRQLM5CXz8zQ/1TTqz+2aEfCtwrrfzLfU6uyWbEAJ1kHAmQY140LuR+JY9XFlHXnUw9EA4TFucXN2Kk=
-X-Received: by 2002:a17:907:7fab:b0:6e0:6f26:123e with SMTP id
- qk43-20020a1709077fab00b006e06f26123emr31459725ejc.29.1648523183789; Mon, 28
- Mar 2022 20:06:23 -0700 (PDT)
+        Mon, 28 Mar 2022 23:09:08 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24FD23D585;
+        Mon, 28 Mar 2022 20:07:24 -0700 (PDT)
+X-UUID: 4ec0f3a111b64b12bd33f018795d3e71-20220329
+X-UUID: 4ec0f3a111b64b12bd33f018795d3e71-20220329
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <jianjun.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1172233676; Tue, 29 Mar 2022 11:07:20 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 29 Mar 2022 11:07:19 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 29 Mar 2022 11:07:16 +0800
+From:   Jianjun Wang <jianjun.wang@mediatek.com>
+To:     Ryder Lee <ryder.lee@mediatek.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+CC:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <jieyy.yang@mediatek.com>,
+        <chuanjia.liu@mediatek.com>, <qizhong.cheng@mediatek.com>,
+        <jian.yang@mediatek.com>
+Subject: [PATCH v2] PCI: mediatek-gen3: Print LTSSM state when PCIe link down
+Date:   Tue, 29 Mar 2022 11:07:15 +0800
+Message-ID: <20220329030715.7975-1-jianjun.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220326094654.2361956-1-yang.yang29@zte.com.cn>
- <202203270449.WBYQF9X3-lkp@intel.com> <62426553.1c69fb81.bb808.345c@mx.google.com>
-In-Reply-To: <62426553.1c69fb81.bb808.345c@mx.google.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 28 Mar 2022 23:06:12 -0400
-Message-ID: <CAHC9VhRNuoPH6AySUbe6h2D6kghhezyVQtTAvm-t-fTpXH6XwQ@mail.gmail.com>
-Subject: Re: [PATCH] audit: do a quick exit when syscall number is invalid
-To:     CGEL <cgel.zte@gmail.com>
-Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        eparis@redhat.com, linux-audit@redhat.com, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 9:48 PM CGEL <cgel.zte@gmail.com> wrote:
-> Sorry could anybody give a hand to solve this? It works well on x86_64 and arm64.
-> I have no alpha environment and not familiar to this arch, much thanks!
+Print current LTSSM state when PCIe link down instead of the register
+value, make it easier to get the link status.
 
-Regardless of if this is fixed, I'm not convinced this is something we
-want to merge.  After all, a process executed a syscall and we should
-process it like any other; just because it happens to be an
-unrecognized syscall on a particular kernel build doesn't mean it
-isn't security relevant (probing for specific syscall numbers may be a
-useful attack fingerprint).
+Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+Changes in v2:
+Print both of the register value and the LTSSM state.
+---
+ drivers/pci/controller/pcie-mediatek-gen3.c | 41 ++++++++++++++++++++-
+ 1 file changed, 40 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
+index 6745076a02b9..c24e03c198b7 100644
+--- a/drivers/pci/controller/pcie-mediatek-gen3.c
++++ b/drivers/pci/controller/pcie-mediatek-gen3.c
+@@ -153,6 +153,37 @@ struct mtk_gen3_pcie {
+ 	DECLARE_BITMAP(msi_irq_in_use, PCIE_MSI_IRQS_NUM);
+ };
+ 
++/* LTSSM state in PCIE_LTSSM_STATUS_REG bit[28:24] */
++static const char *const ltssm_str[] = {
++	"detect.quiet",			/* 0x00 */
++	"detect.active",		/* 0x01 */
++	"polling.active",		/* 0x02 */
++	"polling.compliance",		/* 0x03 */
++	"polling.configuration",	/* 0x04 */
++	"config.linkwidthstart",	/* 0x05 */
++	"config.linkwidthaccept",	/* 0x06 */
++	"config.lanenumwait",		/* 0x07 */
++	"config.lanenumaccept",		/* 0x08 */
++	"config.complete",		/* 0x09 */
++	"config.idle",			/* 0x0A */
++	"recovery.receiverlock",	/* 0x0B */
++	"recovery.equalization",	/* 0x0C */
++	"recovery.speed",		/* 0x0D */
++	"recovery.receiverconfig",	/* 0x0E */
++	"recovery.idle",		/* 0x0F */
++	"L0",				/* 0x10 */
++	"L0s",				/* 0x11 */
++	"L1.entry",			/* 0x12 */
++	"L1.idle",			/* 0x13 */
++	"L2.idle",			/* 0x14 */
++	"L2.transmitwake",		/* 0x15 */
++	"disable",			/* 0x16 */
++	"loopback.entry",		/* 0x17 */
++	"loopback.active",		/* 0x18 */
++	"loopback.exit",		/* 0x19 */
++	"hotreset",			/* 0x1A */
++};
++
+ /**
+  * mtk_pcie_config_tlp_header() - Configure a configuration TLP header
+  * @bus: PCI bus to query
+@@ -327,8 +358,16 @@ static int mtk_pcie_startup_port(struct mtk_gen3_pcie *pcie)
+ 				 !!(val & PCIE_PORT_LINKUP), 20,
+ 				 PCI_PM_D3COLD_WAIT * USEC_PER_MSEC);
+ 	if (err) {
++		const char *ltssm_state;
++		int ltssm_index;
++
+ 		val = readl_relaxed(pcie->base + PCIE_LTSSM_STATUS_REG);
+-		dev_err(pcie->dev, "PCIe link down, ltssm reg val: %#x\n", val);
++		ltssm_index = PCIE_LTSSM_STATE(val);
++		ltssm_state = ltssm_index >= ARRAY_SIZE(ltssm_str) ?
++			      "Unknown state" : ltssm_str[ltssm_index];
++		dev_err(pcie->dev,
++			"PCIe link down, current ltssm state: %s (%#x)\n",
++			ltssm_state, val);
+ 		return err;
+ 	}
+ 
 -- 
-paul-moore.com
+2.18.0
+

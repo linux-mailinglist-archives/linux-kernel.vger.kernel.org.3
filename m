@@ -2,131 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E3B4EB10F
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14EE74EB112
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239035AbiC2Px5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
+        id S238921AbiC2PyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238845AbiC2Px4 (ORCPT
+        with ESMTP id S238845AbiC2PyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:53:56 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A51164D25
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:52:12 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id b16so21512267ioz.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:52:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9NtXRZP0DYrWCoTLKXqVYrEtOzP8J+6Ei1YBGnCYRsE=;
-        b=wCSJ2RWIKFAo7QsFAVi6ZWOvSkSRf5ZKLSOUpBb9nQkzdcrMK8gOq9wpt8YxhDqXDF
-         DDkkq+RCP19Sm1wge4VwYyJ7Jx60NeJpfsMHoxpjUDTTQLqiUGD/KxjennUi2i92fiS6
-         Fxtgzrj661RrvkbhfG7k6NuaE7l7LICC21hZKUaSLD+Za7l9WUvZpaOXAwtkF18HOlKQ
-         GDmv32qyNMzsOc9yYAh8sqaPyx5XWJio+BcVuJat4MR0UeIoolyK0ELfaTv/54ffE29u
-         8HPpSs6egTIFH+cEqdBNZPR6X5Z2k5dO4D/1R6sLdG3bhFDGWuIlffI7WrBPGb1x1KlV
-         /uFg==
+        Tue, 29 Mar 2022 11:54:16 -0400
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43CEF22C8C2;
+        Tue, 29 Mar 2022 08:52:33 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id k25-20020a056830151900b005b25d8588dbso13028326otp.4;
+        Tue, 29 Mar 2022 08:52:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9NtXRZP0DYrWCoTLKXqVYrEtOzP8J+6Ei1YBGnCYRsE=;
-        b=XR8sGbogW3TUXqXo6fgNyPwnyTZTINZekz0SVq2o9p7wRJMJcLN4GjO/FVRt5VnS4T
-         Qjqn/eHkk5mL4llPynPMCD1lxveE3i/IsslOyS6purXX4QUs5oUSoW398inyHWbjTi5p
-         3f35PrWtfCIFCI19t/srtQaQsQ5IT7bC0YDti1L3wqKtkCRUFW9jhrndmvt2a1e6ItZB
-         mitAo9px2J0yYtm/mh/TSmWWbv31R+LqhDLDc9MbW/9G8ZAfCySgj4bPc8wmbdqaZZyt
-         bNTH7MRDZ2+KQM4mTeaC/Z0pTMSH4IEptKvIn2h0c3TfRvL7cDjudldH2Ehb/FgN4AJ5
-         oWhA==
-X-Gm-Message-State: AOAM5326atvlIZRhbgA7kbhMAeFiXpWkmeoS6wkGoqSg9Nytwn8NeuSg
-        ixTIJcf/BdgrgfrhufZFaW8udg==
-X-Google-Smtp-Source: ABdhPJxK5IS/HuiP8JcWwj9DK/HbLT5Wlcg0zY7+VPt8mzJDCkPMc9snfKatO2/yJkfl0axTG6Pdmw==
-X-Received: by 2002:a05:6638:13c4:b0:31a:886a:625d with SMTP id i4-20020a05663813c400b0031a886a625dmr15382057jaj.211.1648569131699;
-        Tue, 29 Mar 2022 08:52:11 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id c2-20020a92cf02000000b002c9ae102048sm4267972ilo.77.2022.03.29.08.52.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 08:52:11 -0700 (PDT)
-Message-ID: <3c42b1ed-7c03-64e6-409e-e92247288cac@kernel.dk>
-Date:   Tue, 29 Mar 2022 09:52:07 -0600
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=53EmT+0Iq+omqog9hMr5TTHzAfJsIFc7d5dRnXaOt/M=;
+        b=bQCYhcqHZiYofvN3bGLNEHdT+KCxqODKi2B0KxWgSr8IEntcla+T/YLOMXgZ5cIp+B
+         axJkPqYxHweWspaR19k1iEmNetpgG7BznONpH/lZ30zn5jx9mGhvInuHVdgWfafrkvNB
+         h5v0O8eiO5R+MyHTzjQBmax57MLyXXbhabG2upDphiqTMQ5jA+NxlkLrKjIGC+74tqbB
+         DQ9I9D9oBHfC4amNQaWkYABHpyxksOyOTFAli144OWi61tRXcG8ICIM9/38LersN/Wau
+         xz6jYqrMN8Afx42yGZCS4TIdw255b04bQ3Z0B1QMdzkMlpUf2XaK1gZDPw1sm7yQXejP
+         qhuw==
+X-Gm-Message-State: AOAM532CsLyzPrWAVz5RswYyXAbf00ZXTIiI9MW8LAwGyzIv1Lpv5aTN
+        YgrCByg8tDmC9pJyn2EZnOo/Nl3NGw==
+X-Google-Smtp-Source: ABdhPJxC5Hfm9CPFftdhNmRBujVYhVRHBBUN06bjxcKnKO/caVZGn/GJf5+6eZLXAAmSoxm06F8jyA==
+X-Received: by 2002:a9d:1991:0:b0:5cd:b2a1:5c50 with SMTP id k17-20020a9d1991000000b005cdb2a15c50mr1389734otk.217.1648569152513;
+        Tue, 29 Mar 2022 08:52:32 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w7-20020a9d6387000000b005b2265711fcsm7520205otk.16.2022.03.29.08.52.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 08:52:31 -0700 (PDT)
+Received: (nullmailer pid 753124 invoked by uid 1000);
+        Tue, 29 Mar 2022 15:52:30 -0000
+Date:   Tue, 29 Mar 2022 10:52:30 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] dt-bindings: display: msm: dsi: remove address/size cells
+Message-ID: <YkMrPnRbsl3FBig8@robh.at.kernel.org>
+References: <20220328152923.90623-1-krzysztof.kozlowski@linaro.org>
+ <CAA8EJprWoxWwk5EWEfWdLquPR+2=u6V0-v1-+wHMHOk8HiEyNw@mail.gmail.com>
+ <YkHtY9absUjmqmW7@matsya>
+ <12b0056b-8032-452b-f325-6f36037b5a80@linaro.org>
+ <CAL_Jsq+6rx0UU6ryH+z_8KLQqKKuhTCnh=Oft2F03bcze+EV0Q@mail.gmail.com>
+ <YkKmPSesQfS6RLCD@matsya>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: state of drbd in mainline
-Content-Language: en-US
-To:     Philipp Reisner <philipp.reisner@linbit.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220329070618.GA20396@lst.de>
- <CADGDV=UgjZAbmAN-2bO1nyDvA=XCC9Lf2dxWHZ0BwxF12nnztQ@mail.gmail.com>
- <20220329073254.GA20691@lst.de>
- <CADGDV=U5jwe0CZ12174cMahfD_h-GsBswWaA1VOJbHaC1nsrUw@mail.gmail.com>
- <f9d89282-3a67-ad97-149f-52325e23607c@kernel.dk>
- <CADGDV=WN2TFR6dO7ZdiQ2ijPjs+7HSsvk0ZCHsHj6ZG5t-oEdA@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CADGDV=WN2TFR6dO7ZdiQ2ijPjs+7HSsvk0ZCHsHj6ZG5t-oEdA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkKmPSesQfS6RLCD@matsya>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/22 9:44 AM, Philipp Reisner wrote:
-> Jens, my intention is to keep it in-tree, and at some point update it.
-> Regarding your questions:
-
-That'd be great, but it's been years since there was any significant
-updates to the in-kernel drbd... I would strongly suggest that the
-in-kernel be brought closer to what people are mostly running, as it
-stands it's basically unmaintained.
-
->> - Why aren't the drbd maintainers responding to posted patches? They seem
->>   to simply be ignored, and I'm left to pickup the trivial ones that look
->>   fine to me. In-kernel drbd appears largely unmaintained, and has been for
->>   years.
+On Tue, Mar 29, 2022 at 12:01:52PM +0530, Vinod Koul wrote:
+> On 28-03-22, 13:21, Rob Herring wrote:
+> > On Mon, Mar 28, 2022 at 12:18 PM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> > >
+> > > On 28/03/2022 19:16, Vinod Koul wrote:
+> > > > On 28-03-22, 19:43, Dmitry Baryshkov wrote:
+> > > >> On Mon, 28 Mar 2022 at 18:30, Krzysztof Kozlowski
+> > > >> <krzysztof.kozlowski@linaro.org> wrote:
+> > > >>>
+> > > >>> The DSI node is not a bus and the children do not have unit addresses.
+> > > >>>
+> > > >>> Reported-by: Vinod Koul <vkoul@kernel.org>
+> > > >>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > >>
+> > > >> NAK.
+> > > >> DSI panels are children of the DSI device tree node with the reg = <0>; address.
+> > > >> This is the convention used by other platforms too (see e.g.
+> > > >> arch/arm64/boot/dts/freescale/imx8mq-evk.dts).
+> > > >
+> > > > So we should add reg = 0, i will update my dtsi fix
+> > > >
+> > >
+> > > To "ports" node? No. The reg=0 is for children of the bus, so the
+> > > panels. How to combine both without warnings - ports and panel@0 - I
+> > > don't know yet...
+> > 
+> > I don't think that should case a warning. Or at least it's one we turn off.
 > 
-> The team here has grown, we are busy. Since you started to pick up the
-> trivial patches yourself, I thought it is not necessary that I collect
-> them and send a pull request in merge-window time.
+> Well in this case I think we might need a fix:
+> Here is the example quoted in the binding. We have ports{} and then the
+> two port@0 and port@1 underneath.
 
-That's just one part of it, the fact that the out-of-tree drbd has been
-drifting further and further away from the in-kernel one is a big
-problem. For trivial patches, I have no issue picking them up. But
-silence on your side is not very helpful. Please review and ack patches.
-If I see it acked, then I can easily pick it up.
+It's the #address-cells/#size-cells under 'ports' that applies to 'port' 
+nodes. As 'ports' has no address (reg) itself, it doesn't need 
+#address-cells/#size-cells in its parent node.
 
->> - Even if out-of-band communication is used for in-kernel users of drbd,
->>   that doesn't result in any patches or fixes that should go upstream?
 > 
-> This one:
-> https://patchwork.kernel.org/project/linux-block/patch/20210426163032.3454129-1-christoph.boehmwalder@linbit.com/
-> (relevant to users that have DRBD on top of md raid)
+> So it should be okay to drop #address-cells/#size-cells from dsi node
+> but keep in ports node...
 
-That's a single patch, from a year ago. Not a strong counter point,
-looks more like it's proving my case...
+Yes.
 
->> - If there's zero activity for in-kernel drbd, all users are using the
->>   out-of-tree version?
-> 
-> There are users of the in-tree version, some with huge fleets.
-> Some do not need the newer out-of-tree DRBD, and the in-tree version is a
-> lot easier to compile. You need coccinelle for the out-of-tree version,
-> and that can already be a hindering barrier for some.
+> Thoughts...?
 
-The main discrepancy here is that there are apparently huge numbers of
-in-tree users, yet no fixes or patches at all making it to mainline.
-Either drbd is bug free and doesn't require any fixes at all, which I
-very much would doubt, or fixes aren't being sent upstream.
+But I thought a panel@0 node was being added? If so then you need to add 
+them back.
 
--- 
-Jens Axboe
-
+Rob

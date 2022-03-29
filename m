@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AE44EAD69
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248954EAD5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236532AbiC2Mnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 08:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
+        id S236479AbiC2Mn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 08:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236458AbiC2Mm7 (ORCPT
+        with ESMTP id S236528AbiC2Mm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 29 Mar 2022 08:42:59 -0400
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0F9220336
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:41:09 -0700 (PDT)
-Received: by mail-ed1-x54a.google.com with SMTP id s9-20020a50d489000000b00418d556edbdso10959907edi.4
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:41:09 -0700 (PDT)
+Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D90220B1B
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:41:11 -0700 (PDT)
+Received: by mail-ej1-x649.google.com with SMTP id jx2-20020a170907760200b006dfc374c502so8134023ejc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:41:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=FHzHVDPYZMTi95ptCkFXfySj60BESZp+qG5LjWpEp7c=;
-        b=sWW5tRocZxxBnyH5c+5bB9SrN8yBbtlo2fkEMJuym0RIhB42RkiLDf+Mt3MIvJwiyJ
-         7j0vQ9s012H9UhxvQGmO+OVLPDT4DOl4vdbuAKldQJWeBJMxzqghX+s69XDhPtPnFmSZ
-         ln18qWHYMmGUWOUIknOM0Bl7/4fn3Ax931TwAMeVd4qkvriskK/u0kVEIOnyYuiKjd5B
-         kjzHcwWRbWcIxcxK6/78moEPo1Rs5jsyltN2n8NJo34SDw3L3nYlRBVlVJYFqaAjGTWX
-         /iZyyw30rrol8h6QI3lmyhTL/EJEuNjLY2dUKHqXYZa6vP163p1YbzZ9JXRJ4sZt3h97
-         4xOQ==
+        bh=sAExT7SSSN10XTsfQtAC8lmzod9gG+fvZFiYZO+nEYE=;
+        b=D6F1SQpsqCx29Z1hyC0VZ9QPHGSIXqGIXoKTX1t41Ec2/BI7aZiEaJshNZSDnAZ7nS
+         N0yqCJQ1PeJoGgtRjd8nBmpux8LP0+eBYvj27cf5rvJF2ttWc9OSvKWGhvOFaPjbxaN2
+         iLVvCLMm9/YCzNogYHden+UNUQUg7Gu8PKy6sCZn5PGrBo+vg4vbm5DyaR/Hu6lfTDxe
+         bBZIR0eLro+O+0mwMGrZMyVEi8Yrq+V0gNiY+vIntbaE/O8ubQGR276mculXvjUvzEt3
+         F9sCA4kDsGFBoicnwuxq29jXZYbDMu4MZup8guVtOlSWws6VucaX5kmprRui40j9NH5o
+         h+ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=FHzHVDPYZMTi95ptCkFXfySj60BESZp+qG5LjWpEp7c=;
-        b=UTGwQkS/ureRQrwSWHjN8KN3GSb4Y6gEIAEx0/Vba7RJACDK3hjTXcD+B5rESdK91P
-         4kr7lRCe9GMFXDlj9Yez9hcQZX89WHrKa0IgEEr6nGhL3imYevaVCZ1HhVhzUXThnUAk
-         16ipUZ872vMaAVkyzaGlQabrdH8EeNep6fUSl0EZX9otcI040MIEaayQiFqLFp+wUx/C
-         k+PCQREmXl/tZqgfOqJ0XlGntVbbImxqtz1opmyxnP5qLQvjqRrk7CKQmzyaZzzV64dU
-         fQ4NW7D9KuVlKh2zfh1FCZ1tAWtLUa4azKxz42/3Z/W/Iih3XFZsyDxsbwyv68UDg3OJ
-         5I0g==
-X-Gm-Message-State: AOAM531aiGktYKIamhARcHvRPJ3z+za2yEMdEkpfGGlGyuij5wVYLA2n
-        47zVqPojJ2mEizQ/tcvWfhCryBCsipg=
-X-Google-Smtp-Source: ABdhPJxIjE0+jxZBSo1pLmOTWSGay+gWDn7tl9m8Nl4sQMVHZ9JOsMlLrJDRqSA80Wdi3w3BwjBTXdlkc28=
+        bh=sAExT7SSSN10XTsfQtAC8lmzod9gG+fvZFiYZO+nEYE=;
+        b=X/RbhvhXIWXiqbVsL4ONfUFh5K3isUgNrlk2Pjf3h8hoH0hwzLuei2njOJmxiywFrm
+         N2EvZKxq29G3VizrrE4HZuzmSOqqJEF2xRFwonNRLHCwWewvmqTP2zhfU21eWwxshveX
+         mBeCbKSBjWwUA8Xj7zBuTxlm1j+EJIRQ16YUP2ft5m4AUSF3IWg28y0FeI3TbJ3e0x3J
+         iB28WYXfEjrPjjxLT8rgZ1HnhjYu3buzIjAlrEyFqxgA3+HLeBDH5Bnfwg9/HQiAwS40
+         YL8TC6V4HAQtSdlUIcDJOs//C5pOTD5572z4VGWJXZJ01vKSrnUVn0/EwCdi4t8mm2vk
+         cFcg==
+X-Gm-Message-State: AOAM531dBHivvGKk62Sd4lOrrywhIab3oyFWv+G0y4QnOTvKtViUIpBC
+        /bdWNjYjw6GO2Ahfq+m4WKeb2XYYs14=
+X-Google-Smtp-Source: ABdhPJxiJ9oKFDmYGNh7Br69DkPJpOkn+XAOKfovDuKDd9aMeedhy/6xJEB6s/tleVFOHEB0WVg/Meo2NMo=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:36eb:759:798f:98c3])
- (user=glider job=sendgmr) by 2002:a17:906:a1d3:b0:6d0:80ea:2fde with SMTP id
- bx19-20020a170906a1d300b006d080ea2fdemr33544446ejb.344.1648557667490; Tue, 29
- Mar 2022 05:41:07 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 14:39:43 +0200
+ (user=glider job=sendgmr) by 2002:a05:6402:d69:b0:418:f7bd:b076 with SMTP id
+ ec41-20020a0564020d6900b00418f7bdb076mr4306755edb.268.1648557669972; Tue, 29
+ Mar 2022 05:41:09 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 14:39:44 +0200
 In-Reply-To: <20220329124017.737571-1-glider@google.com>
-Message-Id: <20220329124017.737571-15-glider@google.com>
+Message-Id: <20220329124017.737571-16-glider@google.com>
 Mime-Version: 1.0
 References: <20220329124017.737571-1-glider@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v2 14/48] kmsan: implement kmsan_init(), initialize READ_ONCE_NOCHECK()
+Subject: [PATCH v2 15/48] kmsan: disable instrumentation of unsupported common
+ kernel code
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -88,179 +89,84 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmsan_init() is a macro that takes a possibly uninitialized value and
-returns an initialized value of the same type. It can be used e.g. in
-cases when a value comes from non-instrumented code to avoid false
-positive reports.
+EFI stub cannot be linked with KMSAN runtime, so we disable
+instrumentation for it.
 
-In particular, we use kmsan_init() in READ_ONCE_NOCHECK() so that it
-returns initialized values. This helps defeat false positives e.g. from
-leftover stack contents accessed by stack unwinders.
+Instrumenting kcov, stackdepot or lockdep leads to infinite recursion
+caused by instrumentation hooks calling instrumented code again.
+
+This patch was previously part of "kmsan: disable KMSAN instrumentation
+for certain kernel parts", but was split away per Mark Rutland's
+request.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/Icd1260073666f944922f031bfb6762379ba1fa38
+Link: https://linux-review.googlesource.com/id/I41ae706bd3474f074f6a870bfc3f0f90e9c720f7
 ---
- include/asm-generic/rwonce.h |  5 +++--
- include/linux/kmsan-checks.h | 40 ++++++++++++++++++++++++++++++++++++
- mm/kmsan/Makefile            |  5 ++++-
- mm/kmsan/annotations.c       | 28 +++++++++++++++++++++++++
- 4 files changed, 75 insertions(+), 3 deletions(-)
- create mode 100644 mm/kmsan/annotations.c
+ drivers/firmware/efi/libstub/Makefile | 1 +
+ kernel/Makefile                       | 1 +
+ kernel/locking/Makefile               | 3 ++-
+ lib/Makefile                          | 1 +
+ 4 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/include/asm-generic/rwonce.h b/include/asm-generic/rwonce.h
-index 8d0a6280e9824..7cf993af8e1ea 100644
---- a/include/asm-generic/rwonce.h
-+++ b/include/asm-generic/rwonce.h
-@@ -25,6 +25,7 @@
- #include <linux/compiler_types.h>
- #include <linux/kasan-checks.h>
- #include <linux/kcsan-checks.h>
-+#include <linux/kmsan-checks.h>
+diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+index d0537573501e9..81432d0c904b1 100644
+--- a/drivers/firmware/efi/libstub/Makefile
++++ b/drivers/firmware/efi/libstub/Makefile
+@@ -46,6 +46,7 @@ GCOV_PROFILE			:= n
+ # Sanitizer runtimes are unavailable and cannot be linked here.
+ KASAN_SANITIZE			:= n
+ KCSAN_SANITIZE			:= n
++KMSAN_SANITIZE			:= n
+ UBSAN_SANITIZE			:= n
+ OBJECT_FILES_NON_STANDARD	:= y
  
- /*
-  * Yes, this permits 64-bit accesses on 32-bit architectures. These will
-@@ -69,14 +70,14 @@ unsigned long __read_once_word_nocheck(const void *addr)
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 56f4ee97f3284..80f6cfb60c020 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -39,6 +39,7 @@ KCOV_INSTRUMENT_kcov.o := n
+ KASAN_SANITIZE_kcov.o := n
+ KCSAN_SANITIZE_kcov.o := n
+ UBSAN_SANITIZE_kcov.o := n
++KMSAN_SANITIZE_kcov.o := n
+ CFLAGS_kcov.o := $(call cc-option, -fno-conserve-stack) -fno-stack-protector
  
- /*
-  * Use READ_ONCE_NOCHECK() instead of READ_ONCE() if you need to load a
-- * word from memory atomically but without telling KASAN/KCSAN. This is
-+ * word from memory atomically but without telling KASAN/KCSAN/KMSAN. This is
-  * usually used by unwinding code when walking the stack of a running process.
-  */
- #define READ_ONCE_NOCHECK(x)						\
- ({									\
- 	compiletime_assert(sizeof(x) == sizeof(unsigned long),		\
- 		"Unsupported access size for READ_ONCE_NOCHECK().");	\
--	(typeof(x))__read_once_word_nocheck(&(x));			\
-+	kmsan_init((typeof(x))__read_once_word_nocheck(&(x)));		\
- })
+ # Don't instrument error handlers
+diff --git a/kernel/locking/Makefile b/kernel/locking/Makefile
+index d51cabf28f382..ea925731fa40f 100644
+--- a/kernel/locking/Makefile
++++ b/kernel/locking/Makefile
+@@ -5,8 +5,9 @@ KCOV_INSTRUMENT		:= n
  
- static __no_kasan_or_inline
-diff --git a/include/linux/kmsan-checks.h b/include/linux/kmsan-checks.h
-index a6522a0c28df9..ecd8336190fc0 100644
---- a/include/linux/kmsan-checks.h
-+++ b/include/linux/kmsan-checks.h
-@@ -14,6 +14,44 @@
+ obj-y += mutex.o semaphore.o rwsem.o percpu-rwsem.o
  
- #ifdef CONFIG_KMSAN
+-# Avoid recursion lockdep -> KCSAN -> ... -> lockdep.
++# Avoid recursion lockdep -> sanitizer -> ... -> lockdep.
+ KCSAN_SANITIZE_lockdep.o := n
++KMSAN_SANITIZE_lockdep.o := n
  
-+/*
-+ * Helper functions that mark the return value initialized.
-+ * See mm/kmsan/annotations.c.
-+ */
-+u8 kmsan_init_1(u8 value);
-+u16 kmsan_init_2(u16 value);
-+u32 kmsan_init_4(u32 value);
-+u64 kmsan_init_8(u64 value);
-+
-+static inline void *kmsan_init_ptr(void *ptr)
-+{
-+	return (void *)kmsan_init_8((u64)ptr);
-+}
-+
-+static inline char kmsan_init_char(char value)
-+{
-+	return (u8)kmsan_init_1((u8)value);
-+}
-+
-+#define __decl_kmsan_init_type(type, fn) unsigned type : fn, signed type : fn
-+
-+/**
-+ * kmsan_init - Make the value initialized.
-+ * @val: 1-, 2-, 4- or 8-byte integer that may be treated as uninitialized by
-+ *       KMSAN.
-+ *
-+ * Return: value of @val that KMSAN treats as initialized.
-+ */
-+#define kmsan_init(val)                                                        \
-+	(							\
-+	(typeof(val))(_Generic((val),				\
-+		__decl_kmsan_init_type(char, kmsan_init_1),	\
-+		__decl_kmsan_init_type(short, kmsan_init_2),	\
-+		__decl_kmsan_init_type(int, kmsan_init_4),	\
-+		__decl_kmsan_init_type(long, kmsan_init_8),	\
-+		char : kmsan_init_char,				\
-+		void * : kmsan_init_ptr)(val)))
-+
- /**
-  * kmsan_poison_memory() - Mark the memory range as uninitialized.
-  * @address: address to start with.
-@@ -48,6 +86,8 @@ void kmsan_check_memory(const void *address, size_t size);
+ ifdef CONFIG_FUNCTION_TRACER
+ CFLAGS_REMOVE_lockdep.o = $(CC_FLAGS_FTRACE)
+diff --git a/lib/Makefile b/lib/Makefile
+index 300f569c626b0..0ac9b38ec172e 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -269,6 +269,7 @@ obj-$(CONFIG_IRQ_POLL) += irq_poll.o
+ CFLAGS_stackdepot.o += -fno-builtin
+ obj-$(CONFIG_STACKDEPOT) += stackdepot.o
+ KASAN_SANITIZE_stackdepot.o := n
++KMSAN_SANITIZE_stackdepot.o := n
+ KCOV_INSTRUMENT_stackdepot.o := n
  
- #else
- 
-+#define kmsan_init(value) (value)
-+
- static inline void kmsan_poison_memory(const void *address, size_t size,
- 				       gfp_t flags)
- {
-diff --git a/mm/kmsan/Makefile b/mm/kmsan/Makefile
-index a80dde1de7048..73b705cbf75b9 100644
---- a/mm/kmsan/Makefile
-+++ b/mm/kmsan/Makefile
-@@ -1,9 +1,11 @@
--obj-y := core.o instrumentation.o hooks.o report.o shadow.o
-+obj-y := core.o instrumentation.o hooks.o report.o shadow.o annotations.o
- 
- KMSAN_SANITIZE := n
- KCOV_INSTRUMENT := n
- UBSAN_SANITIZE := n
- 
-+KMSAN_SANITIZE_kmsan_annotations.o := y
-+
- # Disable instrumentation of KMSAN runtime with other tools.
- CC_FLAGS_KMSAN_RUNTIME := -fno-stack-protector
- CC_FLAGS_KMSAN_RUNTIME += $(call cc-option,-fno-conserve-stack)
-@@ -11,6 +13,7 @@ CC_FLAGS_KMSAN_RUNTIME += -DDISABLE_BRANCH_PROFILING
- 
- CFLAGS_REMOVE.o = $(CC_FLAGS_FTRACE)
- 
-+CFLAGS_annotations.o := $(CC_FLAGS_KMSAN_RUNTIME)
- CFLAGS_core.o := $(CC_FLAGS_KMSAN_RUNTIME)
- CFLAGS_hooks.o := $(CC_FLAGS_KMSAN_RUNTIME)
- CFLAGS_instrumentation.o := $(CC_FLAGS_KMSAN_RUNTIME)
-diff --git a/mm/kmsan/annotations.c b/mm/kmsan/annotations.c
-new file mode 100644
-index 0000000000000..8ccde90bcd12b
---- /dev/null
-+++ b/mm/kmsan/annotations.c
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KMSAN annotations.
-+ *
-+ * The kmsan_init_SIZE functions reside in a separate translation unit to
-+ * prevent inlining them. Clang may inline functions marked with
-+ * __no_sanitize_memory attribute into functions without it, which effectively
-+ * results in ignoring the attribute.
-+ *
-+ * Copyright (C) 2017-2022 Google LLC
-+ * Author: Alexander Potapenko <glider@google.com>
-+ *
-+ */
-+
-+#include <linux/export.h>
-+#include <linux/kmsan-checks.h>
-+
-+#define DECLARE_KMSAN_INIT(size, t)                                            \
-+	__no_sanitize_memory t kmsan_init_##size(t value)                      \
-+	{                                                                      \
-+		return value;                                                  \
-+	}                                                                      \
-+	EXPORT_SYMBOL(kmsan_init_##size)
-+
-+DECLARE_KMSAN_INIT(1, u8);
-+DECLARE_KMSAN_INIT(2, u16);
-+DECLARE_KMSAN_INIT(4, u32);
-+DECLARE_KMSAN_INIT(8, u64);
+ obj-$(CONFIG_REF_TRACKER) += ref_tracker.o
 -- 
 2.35.1.1021.g381101b075-goog
 

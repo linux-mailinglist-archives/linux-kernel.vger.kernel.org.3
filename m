@@ -2,114 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562A74EB3E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 21:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6D34EB3ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 21:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240828AbiC2TJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 15:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
+        id S240850AbiC2TL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 15:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237945AbiC2TJf (ORCPT
+        with ESMTP id S237945AbiC2TL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 15:09:35 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9853618FAEA
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 12:07:51 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id a17so21800596edm.9
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 12:07:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yhgPOGAVmyQr7JxdPjvW6xGasXtlIg7HxSen89iggoA=;
-        b=OCLOATCC9xXHVe4a0iMgeyHyhhwx8hbFCql6lAWZvnXG6d3sl/0QVexDFmktE2G0cM
-         Lv3SQOqZ6DCUE2xARSMBDfBg0pj5nfqD2mFIixTpQ5gGMGTIc25MrGY7yqM+tzPPm76o
-         KsDOA9necaa8FVNViYZzmvRu1l1+k+Sqx2rweYEub8JliEyRHYUoHu0G/XgflEel9NhZ
-         hj/Ikup+9G9g8s4rozkVh3YwNMT/UepwWnlki6SL8MUnK/lWFxEnpa4veLB993w9o/yH
-         jZUcfeO5X9eQK3dOFmBvHk0oF+UmtemkpeZ9qBQo70c5sRVpDxHc8DFPyzbdTAbxtm7F
-         OOWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yhgPOGAVmyQr7JxdPjvW6xGasXtlIg7HxSen89iggoA=;
-        b=1i5+37Hspe8o3cN+K0z7XCYI2f0ue9mwckQ9dWLAUocwOTmok3vezyCiJ8h0bK00Wb
-         eE+hz6WrpYHelFWFsli0jU0b9eHLexoUEg9DBTbnz6DNqgpXitnzgRJM5OOPHuSjoe6B
-         nJTgK2FgBJKkFUpDDDBfLiipERWDTCh27UD/Z3rkaMucUhdj88f26aaigWrfB+g9bu5h
-         3qTaEeZxVyu5mgJNjiZjQTiGaRPExfnyx27rPUHUwP+5IBc8kwewIbzlW+PiSN8QQ9q3
-         zv8oovYXPYWruwOQDkPCz1+Sr0ABKFdJNCZvTkJ2HqCUV4RScWn/3MV0Pm04reOGU94l
-         tMrA==
-X-Gm-Message-State: AOAM533SUns1LY+RVjCoMwH54nsiryQPr+PnDIK7lmcrBUw9Oy1Ykt1p
-        UmqbV39ThHvBcUDdsIWQC0cTtQ==
-X-Google-Smtp-Source: ABdhPJwZDEHSCgrPPVgyK2IEKdK01rzfZ1/0otBReDcM0nkYrFyjBbB5TNRPyJ1p2EYESvb6AhyExQ==
-X-Received: by 2002:a05:6402:2065:b0:407:eb07:740 with SMTP id bd5-20020a056402206500b00407eb070740mr6480403edb.406.1648580870206;
-        Tue, 29 Mar 2022 12:07:50 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id k12-20020aa7c38c000000b0041939d9ccd0sm8789447edq.81.2022.03.29.12.07.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 12:07:49 -0700 (PDT)
-Message-ID: <98910392-a7f0-3ba5-1aff-165dac8be0c6@linaro.org>
-Date:   Tue, 29 Mar 2022 21:07:48 +0200
+        Tue, 29 Mar 2022 15:11:26 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBD67DE0F
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 12:09:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648580983; x=1680116983;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PSxZTOt0Cvmx7FmWkk2gmN8a33ZxTGlRQ9L5GmXrg9s=;
+  b=G2Oq+QNK7jlBZk5T3bb2ePwfN5QbmjxXIw1ECLONR4Bd1Hm9FOu0olPh
+   qkq0ywcjww7DZURTsG33I0FllmScY0K0D42w9CFikiF98cZucmPp0Qwk/
+   /Sll8RspNXWfCXdM1mfH4YE0DACnvf6dGI5KVtOZXIO4o3dQEy35dre8c
+   EqGoa/2P70ryLG2d5Mv8+AktegvJv9xf8QmmMF/zKYIJ1HMNrdcCcH23U
+   3LppJy4QzpEbmT59jXRLhZU2FGiXNshAxEmENeKwEVznLDVVW3maGOIMG
+   ByEvCVO/JdAAGnl/zn7Ka9TQlMqE77eKguCcpz6eGXFNqysxkJOuTV+DD
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="246834600"
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="246834600"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 12:09:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="521566781"
+Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 29 Mar 2022 12:09:35 -0700
+Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nZHDi-0000Zg-CZ; Tue, 29 Mar 2022 19:09:34 +0000
+Date:   Wed, 30 Mar 2022 03:08:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Casper Andersson <casper.casan@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: sparx5_switchdev.c:undefined reference to `br_vlan_enabled'
+Message-ID: <202203300320.7mLe6ehJ-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] spi: dt-bindings: qcom,spi-geni-qcom: convert to
- dtschema
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-spi@vger.kernel.org
-References: <20220329112717.252647-1-krzysztof.kozlowski@linaro.org>
- <1648580700.635474.1067575.nullmailer@robh.at.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1648580700.635474.1067575.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/03/2022 21:05, Rob Herring wrote:
-> On Tue, 29 Mar 2022 13:27:16 +0200, Krzysztof Kozlowski wrote:
->> Convert the GENI based Qualcomm Universal Peripheral (QUP) Serial
->> Peripheral Interface (SPI) bindings to DT Schema.
->>
->> The original bindings in TXT were not complete, so add during conversion
->> properties already used in DTS and/or in the driver: reg-names, dmas,
->> interconnects, operating points and power-domains.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  .../bindings/spi/qcom,spi-geni-qcom.txt       |  39 ------
->>  .../bindings/spi/qcom,spi-geni-qcom.yaml      | 131 ++++++++++++++++++
->>  2 files changed, 131 insertions(+), 39 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.txt
->>  create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
->>
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.example.dt.yaml:0:0: /example-0/spi@880000/tpm@0: failed to match any schema with compatible: ['google,cr50']
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1930a6e739c4b4a654a69164dbe39e554d228915
+commit: 3bacfccdcb2d3268adaf66d2ff4024251a93b916 net: sparx5: Add mdb handlers
+date:   8 days ago
+config: riscv-randconfig-r026-20220329 (https://download.01.org/0day-ci/archive/20220330/202203300320.7mLe6ehJ-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3bacfccdcb2d3268adaf66d2ff4024251a93b916
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 3bacfccdcb2d3268adaf66d2ff4024251a93b916
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
 
-I will try to find some better example for the child device (or skip it?).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-Best regards,
-Krzysztof
+   riscv64-linux-ld: drivers/net/ethernet/microchip/sparx5/sparx5_switchdev.o: in function `sparx5_handle_port_mdb_del.constprop.0':
+>> sparx5_switchdev.c:(.text+0x1e98): undefined reference to `br_vlan_enabled'
+   riscv64-linux-ld: drivers/net/ethernet/microchip/sparx5/sparx5_switchdev.o: in function `.L679':
+   sparx5_switchdev.c:(.text+0x25e8): undefined reference to `br_vlan_enabled'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

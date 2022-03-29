@@ -2,64 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8554EA4D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 03:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 528134EA4D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiC2CBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 22:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
+        id S229931AbiC2CBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 22:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiC2CBF (ORCPT
+        with ESMTP id S229526AbiC2CBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 22:01:05 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628CAAE68
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 18:59:23 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id i11so16347645plr.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 18:59:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=Q2tEzc6qqUTq/8x9S+eo1Cjz2mjNMrLq0btC0WZqnOM=;
-        b=Bj5rWMMqUgL/GsAyNikkuLD6Fiapi3KQknPLIqpvdw6qNvpOodVRhqD6Zx8YE7Kb5e
-         3AUWVNw6NUkGik5KKu4qU/k5YSyrktA1aACy9otYtuR7WMO4E223UxWy4Brc9wvDB0/O
-         uEM2mp7QVYOo6yXgu2rWNnRCJbCzraQILh34397i0OhyjQNSxrr2MQBLAr1ouwfiq0pY
-         bIP7nYqAoKu5ZKSwDqeIBUHJpxTy8GdT1OGVKoWSCDVTp7NOdvI5E16vben5U3PJ7B0y
-         oVIQTTqyZfbfFpg60kfS5hpXGY0saEXIlfNLCcD5lYt72/l0ZHNZISmY5sXkxhwZBJfQ
-         N/BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Q2tEzc6qqUTq/8x9S+eo1Cjz2mjNMrLq0btC0WZqnOM=;
-        b=U+6lKhI23nN6HErHz72t3AU8V52qTVxgyjMmQASL3mopQRyB329RE54u4wBOUEIInC
-         2XbSm108XYVCLUVsqRfxE5AOqiJSWET23HDnpRDFxTdW0oKQ+z87sC3sZbhOI5Vq+0AA
-         NBWV+ranm/XDJ4CZGvK9Ge4iLHrJY05aMoM4NvE0UgMkuot6nyh4Doa+GKyVYixixx7A
-         leQOV04E4Aetrvdit33oWRzc68FJhBXrdOI16/X42djn+/VdedjQlUTCC5Ga7Q519HPF
-         M23G+gUxcPH7F9+UT15cW2rJnRUVb8JEIgCvPS0zE9him1MD1GP9NRt5H72SK7jF9Tv2
-         LKkQ==
-X-Gm-Message-State: AOAM533RtNscQd//SBWj8rknEEYBjDvfAqHxTZnvz4iif3tT5UjprMA9
-        69FZYqM6xGWYpjuLMXmUVJQ=
-X-Google-Smtp-Source: ABdhPJyFcCNoQ/NPBV248dgiFpK3SjyUeJt5otlQ2gLkLeX9M1U17rD6APQ7GfI1hPe30uxQGJncyg==
-X-Received: by 2002:a17:902:728f:b0:156:24d3:ae1a with SMTP id d15-20020a170902728f00b0015624d3ae1amr3094825pll.9.1648519162988;
-        Mon, 28 Mar 2022 18:59:22 -0700 (PDT)
-Received: from ubuntu.huawei.com ([119.3.119.18])
-        by smtp.googlemail.com with ESMTPSA id hg5-20020a17090b300500b001c795eedcffsm736287pjb.13.2022.03.28.18.59.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 18:59:22 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     vaibhav.sr@gmail.com
-Cc:     dan.carpenter@oracle.com, mgreer@animalcreek.com, johan@kernel.org,
-        elder@kernel.org, gregkh@linuxfoundation.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [PATCH] greybus: audio_codec: initialize data to silence static checker warnings
-Date:   Tue, 29 Mar 2022 09:59:13 +0800
-Message-Id: <20220329015913.10420-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 28 Mar 2022 22:01:41 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2053.outbound.protection.outlook.com [40.107.101.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105882DABC;
+        Mon, 28 Mar 2022 19:00:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nDGlRmU4fiL2Vs4PAjHdZf1xmMMUc5hPe4L0j/sigXntABXGMwWdEPRfeaYvKsMGpACInVWOfnj0ydMg1f9EaN4lLIMfl2OnL6G3H9Z6qbqvAo91dQWULcTjXf2PUEveVAeDOBBwBc2mk9hupfaew5aEfdPhVD7AQM6cIdNmKbniUC97SWJZeW3T9zzoSMmer+uithI+9h1joV1/4S4E9QlkaVpOqq+2dCFlchaxvGmS4989AfG5KVBjUKg0xrczhn99mzOV/PNzodezN+hb6JTx0UZFyCL1rlg3kHyiT49DAywFrTCFPKf5ddLJtE2THBaglrQoOW57ij9oqjhzCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6R9CutUOCPj83R0gfrxiFPsR2YFMa4Uon1fvdCtIkLw=;
+ b=EALR4oO/n4S5zta8bYtFS4fiMx1QQjU9fLAWdf2QGMKpCj3JtD7lsbeqd0GEQy77dtdmXOgtZPOXK++Dn654MRFIkA2Tlv3QFn84ZFIOYDk8dW17I1zwMIusfJ0EwMriBdR1VINTMe3CDNA1FbiOHHak2to/VRtEFeUBrwGaxYJTOSYL5sA7sBagrWKS0/UPzUIgYPrV34jcrukypE6uPgb6J572GlT1EDB/f2eVTDcHClQtltiHCzudaW0sPpCEpLG+ySh8nvujP2CdM9qT8InbuEyMgppDdvlHmfrX2axIQp6uAaIq7R1YKI/30O9q0XWjGye053EDufcZTf8PdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6R9CutUOCPj83R0gfrxiFPsR2YFMa4Uon1fvdCtIkLw=;
+ b=k6xjCa8LaY1PSVSSWbKLcPwaKtg3POA4RZZZKEXq9ApVXXazzSMOUtT+n9RAzV9pQsrOU/EDJ9TgAiwwgnjY/SJ0seIHSmIqfQslgKIgzuHcSXhJ+I7Te65P90Ma+0GLX2bXKhTJH2iimy6AvZuVdSdxhAEyN0gw/RsXs6YStd8=
+Received: from DS7PR03CA0246.namprd03.prod.outlook.com (2603:10b6:5:3b3::11)
+ by SA0PR12MB4575.namprd12.prod.outlook.com (2603:10b6:806:73::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Tue, 29 Mar
+ 2022 01:59:58 +0000
+Received: from DM6NAM11FT049.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b3:cafe::7c) by DS7PR03CA0246.outlook.office365.com
+ (2603:10b6:5:3b3::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.18 via Frontend
+ Transport; Tue, 29 Mar 2022 01:59:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT049.mail.protection.outlook.com (10.13.172.188) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5102.17 via Frontend Transport; Tue, 29 Mar 2022 01:59:57 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 28 Mar
+ 2022 20:59:53 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Huang Rui <ray.huang@amd.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+CC:     "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v2 0/3] Improve usability for amd-pstate
+Date:   Mon, 28 Mar 2022 20:59:44 -0500
+Message-ID: <20220329015947.565-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 28c8167e-01e5-4128-dbda-08da1127d394
+X-MS-TrafficTypeDiagnostic: SA0PR12MB4575:EE_
+X-Microsoft-Antispam-PRVS: <SA0PR12MB4575069DA5BAB57CA9B209DBE21E9@SA0PR12MB4575.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eM2ERgQ9+Qfn4VgRP9gQbPoa1tDhY4tYsYpFaOEXDKh0jpPiDEDSmFuaHPpTGKxKMrM/izAw76syabhDBRq2IO7oikZvAgmvWpIPq3zGeozayMXpCV/bWEEBA2MR3rDi+dZt/ImflT3lk0FHZb3mJfg1qU8uXPh3eIe/xMU6t8hkxBeqGvpCe7jFcvDV3bOgkiyHUJJeq5SDFe6xsV4PLdbVcY6j/sGJVTDhskbyxrVRx1bWmISsgtXHROuRFoLI2u/PnREIQsD/e/oWUXZY/XI9f32wWlxTpKAV6CwqnuXmeokcJ8vo6vNWypoHuEagzDWcoFtR1tbVCv2EH7ZcN1NSvoi0naLqnQr7nLTa7WMpZfPTIwd4MtfIVvOlk7LE3PHOqKk7MZgO+Sc75n7gFLfzM1gKF/4sipJE+Q2pF4R4kXTFAD6mMtKiAr6QEpoZ8OugsDbRMdliUcwI9jLg3KnjYFDUYe7iT0HY+w09PTgjaETqmFfDYrLaniKdjj7kr7lxT1rPjBY99KcinwECTOGjDpekjq61gSydhAP3Zzws7mYP2jf85C7urh9dQN73uRbXlbp9gJlwCiwqwOc9Xwp9Me9/XDDv8QJHCCihm0BDOGUhmKsj3kQ7iXwM/7JqJGGmOiuITw0afNmxUWANaeSF01BHWo4P5aq3hbzsK0UcpRTNs11C2JBhFfYg+ZjeEJyGp9RGoDW/RPPmpVEOtw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(7696005)(6666004)(316002)(44832011)(8936002)(70586007)(8676002)(40460700003)(82310400004)(70206006)(336012)(2906002)(16526019)(2616005)(26005)(426003)(186003)(1076003)(86362001)(83380400001)(36756003)(36860700001)(5660300002)(508600001)(4326008)(110136005)(47076005)(81166007)(54906003)(356005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2022 01:59:57.6397
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28c8167e-01e5-4128-dbda-08da1127d394
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT049.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4575
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,50 +101,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These three declares are here:
-	struct gbaudio_data_connection *data;
+There has recently been some news coverage about `amd-pstate` being in
+5.17, but this news also mentioned that it's a bit difficult to use.
 
-Since all three of these functions check for if the codec->module_list is
-empty at the start of the function so these are not real bugs to bypass
-'if (!data) {'. To avoid static checker warnings like Smatch, initialize
-the data with NULL.
+You need to either block init calls, or compile the module into the kernel
+to force it to take precedence over acpi-cpufreq.
 
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
- drivers/staging/greybus/audio_codec.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+This series aims to improve the usability of amd-pstate so that distros
+can compile as a module, but users can still use it (relatively) easily.
 
-diff --git a/drivers/staging/greybus/audio_codec.c b/drivers/staging/greybus/audio_codec.c
-index b589cf6b1d03..939e05af4dcf 100644
---- a/drivers/staging/greybus/audio_codec.c
-+++ b/drivers/staging/greybus/audio_codec.c
-@@ -397,7 +397,7 @@ static int gbcodec_hw_params(struct snd_pcm_substream *substream,
- 	u8 sig_bits, channels;
- 	u32 format, rate;
- 	struct gbaudio_module_info *module;
--	struct gbaudio_data_connection *data;
-+	struct gbaudio_data_connection *data = NULL;
- 	struct gb_bundle *bundle;
- 	struct gbaudio_codec_info *codec = dev_get_drvdata(dai->dev);
- 	struct gbaudio_stream_params *params;
-@@ -498,7 +498,7 @@ static int gbcodec_prepare(struct snd_pcm_substream *substream,
- {
- 	int ret;
- 	struct gbaudio_module_info *module;
--	struct gbaudio_data_connection *data;
-+	struct gbaudio_data_connection *data = NULL;
- 	struct gb_bundle *bundle;
- 	struct gbaudio_codec_info *codec = dev_get_drvdata(dai->dev);
- 	struct gbaudio_stream_params *params;
-@@ -562,7 +562,7 @@ static int gbcodec_prepare(struct snd_pcm_substream *substream,
- static int gbcodec_mute_stream(struct snd_soc_dai *dai, int mute, int stream)
- {
- 	int ret;
--	struct gbaudio_data_connection *data;
-+	struct gbaudio_data_connection *data = NULL;
- 	struct gbaudio_module_info *module;
- 	struct gb_bundle *bundle;
- 	struct gbaudio_codec_info *codec = dev_get_drvdata(dai->dev);
+A new module parameter is included that will force amd-pstate to take
+precedence and a module table to let it load automatically on such systems.
+
+With the patches in this series a user can make a file
+/etc/modprobe.d/amd-pstate.conf:
+
+options amd-pstate replace=1
+
+Then upon the next reboot amd-pstate should load automatically even if
+acpi-cpufreq was included on the system.
+
+Mario Limonciello (3):
+  cpufreq: Export acpu_cpufreq_exit for other drivers to call
+  cpufreq: amd-pstate: Allow replacing acpi-cpufreq when loaded
+  cpufreq: amd-pstate: Add a module device table
+
+ drivers/cpufreq/acpi-cpufreq.c |  3 ++-
+ drivers/cpufreq/amd-pstate.c   | 30 +++++++++++++++++++++++++++---
+ 2 files changed, 29 insertions(+), 4 deletions(-)
+
 -- 
-2.17.1
+2.34.1
 

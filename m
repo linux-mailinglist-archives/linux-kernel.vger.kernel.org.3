@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828964EAB1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84FC14EAB22
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235080AbiC2KTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 06:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
+        id S235098AbiC2KUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 06:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235048AbiC2KTr (ORCPT
+        with ESMTP id S235093AbiC2KTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 06:19:47 -0400
+        Tue, 29 Mar 2022 06:19:54 -0400
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47AC23F398
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 03:18:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795722405BD
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 03:18:05 -0700 (PDT)
 Received: from integral2.. (unknown [182.2.70.161])
-        by gnuweeb.org (Postfix) with ESMTPSA id 632E27E72A;
-        Tue, 29 Mar 2022 10:17:57 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 151CE7E734;
+        Tue, 29 Mar 2022 10:18:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1648549081;
-        bh=sOa5bTrQEKERvFJedlayh1Unbt9LOKPwsCzeI50Bj1k=;
+        s=default; t=1648549085;
+        bh=DJZFv4JotEMo5L83nTqipusJFM8ZYgW9v7ot8diz0vk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lx/7IuFTk6fAH3rYLwr/TJtsTaUHd3qTJqK3lcjI/hhU25WOBbGYuKY+Mj8ceN5r9
-         rokZey+MbRFLdlrhTRRWlmeJS4uX3W41mpW/z5cNbO74neTuvt2hHNNEqWCcuw56nS
-         AdbA0hKG4w7mjEtBtJloml4CGj8b9N6IdAvEIMz+7/m2h7tbq+d1kSMmUfHo9fBJo0
-         BTd0yG2LtbHaaNTVdBo2IcvtDE8cRCH1Kg2CIuIQ+a0COLQOrxORp/xmVZqTQ5TgsN
-         xTEBIWaqDWvCTOV2N+UyIQ9IDxTUUsIJ+pRkhnKO2lY6sr4/NGjUq7iypI17bKvJWJ
-         N3kZ5duH8YYuA==
+        b=VQtJiwB00c4DkarcuHtgJpo5lMxauXI6ZY2BAAz027atQbihyJahtmO5ASq05SpoE
+         ER3x8AqZZW9Y9A3fvGB15CFuVCrQV4XyqQnmfHXEJ1FURvektiK4j2H45gOiTdEBYG
+         IimqHvHsTCdJqTS+3pShi5ZkhSbvAXYehNuUwpjVu0FLR7MxmD5DSd8O3Z/3u+VsEB
+         A9/hbEPCnBmGEWuWkStjGKZ4GmjbArtmA/2E4Fux7IB+7JP9kR/txZuXAktrIcbSlu
+         B36r1OxolWe0Sb7enkTZcTd44Ys++bsNJC/MVcDpSZnhaHFHOseDbsbNhWaqE4FzNM
+         RT15qfrBhKR1Q==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Willy Tarreau <w@1wt.eu>
 Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
@@ -35,12 +35,10 @@ Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
         Nugraha <richiisei@gmail.com>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        x86@kernel.org, llvm@lists.linux.dev,
-        David Laight <David.Laight@ACULAB.COM>
-Subject: [PATCH v2 4/9] tools/nolibc: i386: Implement syscall with 6 arguments
-Date:   Tue, 29 Mar 2022 17:17:32 +0700
-Message-Id: <20220329101737.58985-5-ammarfaizi2@gnuweeb.org>
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+Subject: [PATCH v2 5/9] tools/nolibc/sys: Implement `mmap()` and `munmap()`
+Date:   Tue, 29 Mar 2022 17:17:33 +0700
+Message-Id: <20220329101737.58985-6-ammarfaizi2@gnuweeb.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220329101737.58985-1-ammarfaizi2@gnuweeb.org>
 References: <20220329101737.58985-1-ammarfaizi2@gnuweeb.org>
@@ -55,79 +53,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On i386, the 6th argument of syscall goes in %ebp. However, both Clang
-and GCC cannot use %ebp in the clobber list and in the "r" constraint
-without using -fomit-frame-pointer. To make it always available for
-any kind of compilation, the below workaround is implemented.
+Implement mmap() and munmap(). Currently, they are only available for
+architecures that have my_syscall6 macro. For architectures that don't
+have, this function will return -1 with errno set to ENOSYS (Function
+not implemented).
 
-  1) Push the 6-th argument.
-  2) Push %ebp.
-  3) Load the 6-th argument from 4(%esp) to %ebp.
-  4) Do the syscall (int $0x80).
-  5) Pop %ebp (restore the old value of %ebp).
-  6) Add %esp by 4 (undo the stack pointer).
+This has been tested on x86 and i386.
 
-Cc: x86@kernel.org
-Cc: llvm@lists.linux.dev
-Link: https://lore.kernel.org/lkml/2e335ac54db44f1d8496583d97f9dab0@AcuMS.aculab.com
-Suggested-by: David Laight <David.Laight@ACULAB.COM>
+Notes for i386:
+ 1) The common mmap() syscall implementation uses __NR_mmap2 instead
+    of __NR_mmap.
+
+ 2) The offset must be shifted-right by 12-bit.
+
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ===
 @@ Changelog:
 
-   Link v1: https://lore.gnuweeb.org/gwml/20220324073039.140946-7-ammarfaizi2@gnuweeb.org
+   Link v1: https://lore.gnuweeb.org/gwml/20220324073039.140946-8-ammarfaizi2@gnuweeb.org
    v1 -> v2:
     * No changes *
 
-   Link RFC v2: https://lore.kernel.org/lkml/20220322102115.186179-4-ammarfaizi2@gnuweeb.org
+   Link RFC v2: https://lore.kernel.org/lkml/20220322102115.186179-5-ammarfaizi2@gnuweeb.org
    RFC v2 -> v1:
-    - Use the same pattern for syscall6, regardless using GCC or Clang
-      (comment from David).
-    - Use appropriate constraints for syscall6 instead of always using
-      register variables (comment from David).
+    * No changes *
 
-   Link RFC v1: https://lore.kernel.org/llvm/20220320093750.159991-4-ammarfaizi2@gnuweeb.org
+   Link RFC v1: https://lore.kernel.org/lkml/20220320093750.159991-5-ammarfaizi2@gnuweeb.org
    RFC v1 -> RFC v2:
-    - Fix %ebp saving method. Don't use redzone, i386 doesn't have a redzone
-      (comment from David and Alviro).
+    * No changes *
 ---
- tools/include/nolibc/arch-i386.h | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ tools/include/nolibc/sys.h | 62 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
-index 10aada40680d..d7e7212346e2 100644
---- a/tools/include/nolibc/arch-i386.h
-+++ b/tools/include/nolibc/arch-i386.h
-@@ -167,6 +167,29 @@ struct sys_stat_struct {
- 	_ret;                                                                 \
- })
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 4d4308d5d111..08491070387b 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -14,6 +14,7 @@
+ #include <asm/unistd.h>
+ #include <asm/signal.h>  // for SIGCHLD
+ #include <asm/ioctls.h>
++#include <asm/mman.h>
+ #include <linux/fs.h>
+ #include <linux/loop.h>
+ #include <linux/time.h>
+@@ -675,6 +676,67 @@ int mknod(const char *path, mode_t mode, dev_t dev)
+ 	return ret;
+ }
  
-+#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)	\
-+({								\
-+	long _eax  = (long)(num);				\
-+	long _arg6 = (long)(arg6); /* Always in memory */	\
-+	__asm__ volatile (					\
-+		"pushl	%[_arg6]\n\t"				\
-+		"pushl	%%ebp\n\t"				\
-+		"movl	4(%%esp),%%ebp\n\t"			\
-+		"int	$0x80\n\t"				\
-+		"popl	%%ebp\n\t"				\
-+		"addl	$4,%%esp\n\t"				\
-+		: "+a"(_eax)		/* %eax */		\
-+		: "b"(arg1),		/* %ebx */		\
-+		  "c"(arg2),		/* %ecx */		\
-+		  "d"(arg3),		/* %edx */		\
-+		  "S"(arg4),		/* %esi */		\
-+		  "D"(arg5),		/* %edi */		\
-+		  [_arg6]"m"(_arg6)	/* memory */		\
-+		: "memory", "cc"				\
-+	);							\
-+	_eax;							\
-+})
++#ifndef MAP_SHARED
++#define MAP_SHARED		0x01	/* Share changes */
++#define MAP_PRIVATE		0x02	/* Changes are private */
++#define MAP_SHARED_VALIDATE	0x03	/* share + validate extension flags */
++#endif
 +
- /* startup code */
++#ifndef MAP_FAILED
++#define MAP_FAILED ((void *)-1)
++#endif
++
++static __attribute__((unused))
++void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
++	       off_t offset)
++{
++#ifndef my_syscall6
++	/* Function not implemented. */
++	return -ENOSYS;
++#else
++
++	int n;
++
++#if defined(__i386__)
++	n = __NR_mmap2;
++	offset >>= 12;
++#else
++	n = __NR_mmap;
++#endif
++
++	return (void *)my_syscall6(n, addr, length, prot, flags, fd, offset);
++#endif
++}
++
++static __attribute__((unused))
++void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
++{
++	void *ret = sys_mmap(addr, length, prot, flags, fd, offset);
++
++	if ((unsigned long)ret >= -4095UL) {
++		SET_ERRNO(-(long)ret);
++		ret = MAP_FAILED;
++	}
++	return ret;
++}
++
++static __attribute__((unused))
++int sys_munmap(void *addr, size_t length)
++{
++	return my_syscall2(__NR_munmap, addr, length);
++}
++
++static __attribute__((unused))
++int munmap(void *addr, size_t length)
++{
++	int ret = sys_munmap(addr, length);
++
++	if (ret < 0) {
++		SET_ERRNO(-ret);
++		ret = -1;
++	}
++	return ret;
++}
+ 
  /*
-  * i386 System V ABI mandates:
+  * int mount(const char *source, const char *target,
 -- 
 Ammar Faizi
 

@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E674EB401
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 21:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18EBE4EB40B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 21:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240915AbiC2TPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 15:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
+        id S240911AbiC2TXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 15:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240899AbiC2TPe (ORCPT
+        with ESMTP id S234102AbiC2TXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 15:15:34 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FDA24BC6;
-        Tue, 29 Mar 2022 12:13:51 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2372421980;
-        Tue, 29 Mar 2022 19:13:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648581230; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8vITF4y5I3Qh2gV4oA1G6ENMes/c4yf/oaIqSyELU/A=;
-        b=ck65D7u93Kgsw+DJKq0LsvxejQOPTajh6zrG90DpA9EQ0RVdKIP7h7cZ3UXAOgNycSqrnJ
-        tPbDwyldcWKsLH9w5HGRVvMWq/78FFfIg7g9nFhTLjIXOafVpxWDw2U54l3oZoy1B9zYvx
-        VyAV7j9n8xo3o08As3ERBzoJipB8VcI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648581230;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8vITF4y5I3Qh2gV4oA1G6ENMes/c4yf/oaIqSyELU/A=;
-        b=TqVsSeCz/588wD5Fm9vxZ4m41p58zhiATVblsqqooXov50DRQ0dIpT9mwtOqVZ15qVmmOK
-        vfe9GHN0kqOBkbAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 66A3313A7E;
-        Tue, 29 Mar 2022 19:13:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id t7ScFW1aQ2IOVQAAMHmgww
-        (envelope-from <osalvador@suse.de>); Tue, 29 Mar 2022 19:13:49 +0000
-Date:   Tue, 29 Mar 2022 21:13:47 +0200
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Rik van Riel <riel@surriel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        kernel-team@fb.com, Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] mm,hwpoison: unmap poisoned page before invalidation
-Message-ID: <YkNaa9zF8wZb+cFa@localhost.localdomain>
-References: <20220325161428.5068d97e@imladris.surriel.com>
+        Tue, 29 Mar 2022 15:23:22 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538F63AA61;
+        Tue, 29 Mar 2022 12:21:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1648581688;
+        bh=YKGLLajiWM4+txgQG1y+xnhwR4uQqHF1m5v9e2rrGqk=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=QUVZCtTi/gNNs/GgNEt/jk/KE0h+JdBVQgMpHNVt6lO9nMEO39UG0HY2SCMsgsZ1h
+         j7JGm8T5MNgSYlRZO0BMQU7xzmO1PHrF1jzX7lqNOk8cpKYK/HCEG6zibcXXze47Iy
+         CpRIlqACpmfyrCYdxDWQ6vMpqA15JPArzKNy20oE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [91.65.110.57] ([91.65.110.57]) by web-mail.gmx.net
+ (3c-app-gmx-bs54.server.lan [172.19.170.138]) (via HTTP); Tue, 29 Mar 2022
+ 21:21:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220325161428.5068d97e@imladris.surriel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Message-ID: <trinity-2ca61ae4-4f05-454d-94fd-d41e1afbec2f-1648581688394@3c-app-gmx-bs54>
+From:   Robert Schlabbach <robert_s@gmx.net>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Antti Palosaari <crope@iki.fi>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Bug 215726 - si2157.c: mention name of the missing firmware
+ file
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 29 Mar 2022 21:21:28 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <5f660108-8812-383c-83e4-29ee0558d623@leemhuis.info>
+References: <5f660108-8812-383c-83e4-29ee0558d623@leemhuis.info>
+Content-Transfer-Encoding: quoted-printable
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:YGuQiANBFW6fdT74J1oXl5Bso1V2fH9bq3wlNnu62Wz/O35rDADmOSmTMSVhKLgKRXh8Y
+ MriX/2c7Aw//PJZ0otIvRWk+calDWtJi5mLfNrz+Hw4jvGOissaSrJqhZXyEI937ScYbmjj2MRBf
+ 1x12AUnDHIicomCHMcfYrdPlBuR4IQDjAkE5qNO0NnyOGUpsp5i3Pw1iluJ6jJZnpjunuwBMPCb2
+ iB3M3YTaiuRZ0zYd6l8N0ZB3laPCHOFukq6pcOf4peVDWLnIwOuEgtRw28WdPBSZ7yCWTcyue1cS
+ 94=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:x3xM+rGwV/0=:vdC65pZCywfZCJuMc1x/C8
+ hRz3bF/RWRD4q5hxTLtZvN3wbMUH+IqT+wGCIMCmQEONaSmiqXctofPtXBz3Z7XfeSBbaG4xK
+ lnP+wAVTHeDuWRJFy5DQEDVsygm5yNQTF1nzUy1iMZPr2rIATMubC0loGkejNbvY8cv0ePGt4
+ MuV4ozYrAaS0DYhXSxXfzmHn2nhLzNUDqSW5IDHGV2JCCSuUmAjUwvDx4Lk+EtLBlVO/9VMxy
+ SmuJcVEXqOkVNg0YniIYfp9gKYyh6ZZWm//yBGrSuTT0XDXE93k+R4pfgLjROy63RjQnOPeyd
+ mj0e2dSYJNnB+mKnXFiqqaePqnJ9KZtQmeU6+xN4TS1SbhOALrz9IlXfcrvnHuGZz3sPexY1s
+ Qe3ZxTIOvtV/9SOfUzNOpP3/UzNSdr3tpdM79jl1icVp9rwwvXjt1BBxy3fuEzqLug6tE1ywB
+ 1ENvKl0a3/IcgKZgUCXWDgAi3Lnh14psR9NsMqBLmwlTtBNAfsmitlCQ7fMDKES60qpsGlJkX
+ zjgwUxX7SPhZNRPZsFPwRGAxd8ydLtYh9FpbatV+zNxbB4T4nkXurtC8D9Mkw4lWVmHyl6BlR
+ AB7UOxIvpxD5OvoGTmp2kEdGyVcEImR15ONf5peg0urmV1+UdmTG9OBFLnu+0XcSVxsklEk2G
+ ap/RylD3yMqc+0VhUCB/EIcXD5JccXavhnPGPl0f23u1Eme7scMTmO9h27ZjIU6pKKWBIpZel
+ dUEHkzxbQQzVT5X9RmUaU18m2HVHCktIUnR774QgoxfawMr/Hoao1M8tC2h9BGl7eSYLJlYr3
+ eJUVjFW
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,72 +74,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 04:14:28PM -0400, Rik van Riel wrote:
-> In some cases it appears the invalidation of a hwpoisoned page
-> fails because the page is still mapped in another process. This
-> can cause a program to be continuously restarted and die when
-> it page faults on the page that was not invalidated. Avoid that
-> problem by unmapping the hwpoisoned page when we find it.
-> 
-> Another issue is that sometimes we end up oopsing in finish_fault,
-> if the code tries to do something with the now-NULL vmf->page.
-> I did not hit this error when submitting the previous patch because
-> there are several opportunities for alloc_set_pte to bail out before
-> accessing vmf->page, and that apparently happened on those systems,
-> and most of the time on other systems, too.
-> 
-> However, across several million systems that error does occur a
-> handful of times a day. It can be avoided by returning VM_FAULT_NOPAGE
-> which will cause do_read_fault to return before calling finish_fault.
-> 
-> Fixes: e53ac7374e64 ("mm: invalidate hwpoison page cache page in fault path")
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Miaohe Lin <linmiaohe@huawei.com>
-> Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: stable@vger.kernel.org
+Hi Thorsten,
 
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
+the patch linked in the bugzilla ticket:
 
-> ---
->  mm/memory.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index be44d0b36b18..76e3af9639d9 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3918,14 +3918,18 @@ static vm_fault_t __do_fault(struct vm_fault *vmf)
->  		return ret;
->  
->  	if (unlikely(PageHWPoison(vmf->page))) {
-> +		struct page *page = vmf->page;
->  		vm_fault_t poisonret = VM_FAULT_HWPOISON;
->  		if (ret & VM_FAULT_LOCKED) {
-> +			if (page_mapped(page))
-> +				unmap_mapping_pages(page_mapping(page),
-> +						    page->index, 1, false);
->  			/* Retry if a clean page was removed from the cache. */
-> -			if (invalidate_inode_page(vmf->page))
-> -				poisonret = 0;
-> -			unlock_page(vmf->page);
-> +			if (invalidate_inode_page(page))
-> +				poisonret = VM_FAULT_NOPAGE;
-> +			unlock_page(page);
->  		}
-> -		put_page(vmf->page);
-> +		put_page(page);
->  		vmf->page = NULL;
->  		return poisonret;
->  	}
-> -- 
-> 2.35.1
-> 
-> 
-> 
+https://lore=2Ekernel=2Eorg/linux-media/6f84b7f4-3ede-ae55-e99b-a9d4108c80=
+e2@gmail=2Ecom/
 
--- 
-Oscar Salvador
-SUSE Labs
+should indeed fix the issue=2E The error was that the rom_id and required
+fields were swapped in the table, so the non-zero rom_id was taken as a
+"true" required boolean value, thus incorrectly evaluating that the
+chip requires a firmware file to operate when in fact it does not=2E
+
+I have tested the patch and found it worked for me=2E But I do not know
+how to push this further along:
+
+https://patchwork=2Elinuxtv=2Eorg/project/linux-media/patch/6f84b7f4-3ede-=
+ae55-e99b-a9d4108c80e2@gmail=2Ecom/
+
+Best Regards,
+-Robert Schlabbach
+
+=C2=A0
+
+Gesendet:=C2=A0Dienstag, 29=2E M=C3=A4rz 2022 um 10:33 Uhr
+Von:=C2=A0"Thorsten Leemhuis" <regressions@leemhuis=2Einfo>
+An:=C2=A0"Antti Palosaari" <crope@iki=2Efi>, "Mauro Carvalho Chehab" <mche=
+hab+huawei@kernel=2Eorg>, "Robert Schlabbach" <robert_s@gmx=2Enet>
+Cc:=C2=A0"regressions@lists=2Elinux=2Edev" <regressions@lists=2Elinux=2Ede=
+v>, az0123456@gmx=2Ede, "Linux Media Mailing List" <linux-media@vger=2Ekern=
+el=2Eorg>, "Linux Kernel Mailing List" <linux-kernel@vger=2Ekernel=2Eorg>
+Betreff:=C2=A0Bug 215726 - si2157=2Ec: mention name of the missing firmwar=
+e file
+Hi, this is your Linux kernel regression tracker=2E
+
+I noticed a regression report in bugzilla=2Ekernel=2Eorg that afaics nobod=
+y
+acted upon since it was reported about a week ago, that's why I decided
+to forward it to the lists and all people that seemed to be relevant
+here=2E To quote from https://bugzilla=2Ekernel=2Eorg/show_bug=2Ecgi?id=3D=
+215726 :
+
+> I get the following error messages when trying to use si2157=2Eko in lin=
+ux 5=2E17:
+> si2157 13-0060: found a 'Silicon Labs Si2157-A30 ROM 0x50'
+> si2157 13-0060: Can't continue without a firmware
+> I did work in linux 5=2E16=2E16 without a firmware file=2E Unfortunately=
+ the driver does not tell me the name of the missing firmware file=2E
+
+Could somebody take a look into this? Or was this discussed somewhere
+else already? Or even fixed?
+

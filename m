@@ -2,80 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DC14EAF46
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A34ED4EAF49
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237892AbiC2OeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 10:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
+        id S237563AbiC2OeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 10:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233669AbiC2OeH (ORCPT
+        with ESMTP id S237888AbiC2OeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 10:34:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D88911EAC3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:32:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648564340;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3NTC2O5UqSLOKbW0agyM8oilF1S8f+JMxF8NsHszr5I=;
-        b=eO3xyNT1zq6N7VAFLbPwMeHCeSOZaHo4hDSXQUbGUkR8lI1vuxeeoKHWXoTLP5vsgYE2AA
-        bcdCj42Z/Y6GuKpAq1LmUbNzx+eGDVLtjh8w0Ph7AEpr/6xwY+vjOwXbpm5EFEOZXIxQ7q
-        zsnVa/gmJzdJ12qZQvQ2ZToUIVE+G7Y=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-440-HS-dUNi7PuCbYBDC3hesFA-1; Tue, 29 Mar 2022 10:32:19 -0400
-X-MC-Unique: HS-dUNi7PuCbYBDC3hesFA-1
-Received: by mail-ej1-f72.google.com with SMTP id gv17-20020a1709072bd100b006dfcc7f7962so8289763ejc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:32:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3NTC2O5UqSLOKbW0agyM8oilF1S8f+JMxF8NsHszr5I=;
-        b=H3SocoVNpOUWJL26Lwvy2rrDDaSEYnCRUzR8pdb2rFDjsP4GqLQ80wSG/i2dzAigO9
-         rexUMv59jbemCc1GtxgvkymPyIigW5EZoAV1NyHmiBdoZFKX+dyewGkxb0d6sGlX84Or
-         vMP0GB3H/OjyVFVIPAs6v6dIseMlY3IDv5IEgC0WQ5fr+YJ7qSOtXROcCWQE4tYqU+I/
-         zAs95En8MBt7MMVZEdwbhXGGMnG+XnYloeJZEUs/7VVGz77C9d5PHT4GwpzwikT0xiiA
-         6YwDYItRyHMQi5fLZAjfsWfi80SMLkLMNpVKe7GcPpcdD6yvOZEyXcvAZqDluwUhHCmR
-         jkCQ==
-X-Gm-Message-State: AOAM531uHI3sUNzcEsNh+3bmLJHlU9XguSnT9w0DjCNfpNvpAWEVKpgi
-        AMLVqmPx6HDQmMU+p9YZLW5MQVw3JzrN8PoJzEywu/9WMmCquywdMQOT+hqHoX78wiN4pq13ZXX
-        UzqFC7q+Ox/3ZBPW97fzdI5jb
-X-Received: by 2002:a17:906:3014:b0:6da:f381:4dfe with SMTP id 20-20020a170906301400b006daf3814dfemr34560933ejz.670.1648564336780;
-        Tue, 29 Mar 2022 07:32:16 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxJSdb46ORlD+p9ezyvlfV8z61gWh9/PZmrjgJXkKdgGnfy41M5n+RaGWNsY5JBkZpBYt+veg==
-X-Received: by 2002:a17:906:3014:b0:6da:f381:4dfe with SMTP id 20-20020a170906301400b006daf3814dfemr34560789ejz.670.1648564335270;
-        Tue, 29 Mar 2022 07:32:15 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id do8-20020a170906c10800b006dfe680dbfcsm7234307ejc.43.2022.03.29.07.32.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 07:32:14 -0700 (PDT)
-Message-ID: <5c26a42e-c9b3-45f0-a651-6835b01bd869@redhat.com>
-Date:   Tue, 29 Mar 2022 16:32:13 +0200
+        Tue, 29 Mar 2022 10:34:08 -0400
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345371D0CE;
+        Tue, 29 Mar 2022 07:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1648564346; x=1680100346;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=3JsFdDl+un7ffLUD/HA9lrhBJaTGqmFQNbp178PyeGw=;
+  b=o17MlotP6+UE/fzjTsT8g1Ju/Pe40KN6x1FeKtPZUbVRoVuNnL5e1IKQ
+   66XrmBec1m8SzL0jzf3ti4Wl3/bjfnHmg5hwe82xUmcwZp4O3fyr8C1Yc
+   mfZlfy/IWSM/6/WO9Jol8xX36+wT2PkoJIU/DEGhMMEEUnKmAoq76QSPN
+   8=;
+X-IronPort-AV: E=Sophos;i="5.90,220,1643673600"; 
+   d="scan'208";a="185081582"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-98691110.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 29 Mar 2022 14:32:23 +0000
+Received: from EX13MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1e-98691110.us-east-1.amazon.com (Postfix) with ESMTPS id C7F4D81268;
+        Tue, 29 Mar 2022 14:32:16 +0000 (UTC)
+Received: from EX13D02UWC004.ant.amazon.com (10.43.162.236) by
+ EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Tue, 29 Mar 2022 14:32:15 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX13D02UWC004.ant.amazon.com (10.43.162.236) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Tue, 29 Mar 2022 14:32:15 +0000
+Received: from dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com
+ (172.19.181.128) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ Server id 15.0.1497.32 via Frontend Transport; Tue, 29 Mar 2022 14:32:14
+ +0000
+Received: by dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com (Postfix, from userid 5131138)
+        id CDB13254B; Tue, 29 Mar 2022 14:32:14 +0000 (UTC)
+From:   Ali Saidi <alisaidi@amazon.com>
+To:     <leo.yan@linaro.org>
+CC:     <Nick.Forrington@arm.com>, <acme@kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <alisaidi@amazon.com>,
+        <andrew.kilroy@arm.com>, <benh@kernel.crashing.org>,
+        <german.gomez@arm.com>, <james.clark@arm.com>,
+        <john.garry@huawei.com>, <jolsa@kernel.org>, <kjain@linux.ibm.com>,
+        <lihuafei1@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
+        <mingo@redhat.com>, <namhyung@kernel.org>, <peterz@infradead.org>,
+        <will@kernel.org>
+Subject: Re: [PATCH v4 2/4] perf arm-spe: Use SPE data source for neoverse cores
+Date:   Tue, 29 Mar 2022 14:32:14 +0000
+Message-ID: <20220329143214.12707-1-alisaidi@amazon.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220328130547.GA360814@leoy-ThinkPad-X240s>
+References: <20220328130547.GA360814@leoy-ThinkPad-X240s>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 2/4] input/i8042: Merge quirk tables
-Content-Language: en-US
-To:     Werner Sembach <wse@tuxedocomputers.com>,
-        dmitry.torokhov@gmail.com, tiwai@suse.de, mpdesouza@suse.com,
-        arnd@arndb.de, samuel@cavoj.net, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220329142718.30921-2-wse@tuxedocomputers.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220329142718.30921-2-wse@tuxedocomputers.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,1653 +76,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 3/29/22 16:27, Werner Sembach wrote:
-> Merge i8042 quirk tables to reduce code duplication for devices that need
-> more than one quirk. Before every quirk had its own table with devices
-> needing that quirk. If a new quirk needed to be added a new table had to
-> be created. When a device needed multiple quirks, it appeared in multiple
-> tables. Now only one table called i8042_dmi_quirk_table exists. In it every
-> device has one entry and required quirks are coded in the .driver_data
-> field of the struct dmi_system_id used by this table. Multiple quirks for
-> one device can be applied by bitwise-or of the new SERIO_QUIRK_* defines.
+Hi Leo,
+
+On Mon, 28 Mar 2022 21:05:47 +0800, Leo Yan wrote:
+> Hi Ali,
 > 
-> Also align quirkable options with command line parameters and make vendor
-> wide quirks per device overwriteable on a per device basis. The first match
-> is honored while following matches are ignored. So when a vendor wide quirk
-> is defined in the table, a device can inserted before and therefore
-> ignoring the vendor wide define.
+> On Mon, Mar 28, 2022 at 03:08:05AM +0000, Ali Saidi wrote:
 > 
-> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-> ---
->  drivers/input/serio/i8042-x86ia64io.h | 1100 +++++++++++++------------
->  1 file changed, 595 insertions(+), 505 deletions(-)
+> [...]
 > 
-> diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
-> index 91c6f24b4837..1d2b34aac0c7 100644
-> --- a/drivers/input/serio/i8042-x86ia64io.h
-> +++ b/drivers/input/serio/i8042-x86ia64io.h
-> @@ -67,654 +67,735 @@ static inline void i8042_write_command(int val)
->  
->  #include <linux/dmi.h>
->  
-> -static const struct dmi_system_id __initconst i8042_dmi_noloop_table[] = {
-> +#define SERIO_QUIRK_NOKBD		BIT(0)
-> +#define SERIO_QUIRK_NOAUX		BIT(1)
-> +#define SERIO_QUIRK_NOMUX		BIT(2)
-> +#define SERIO_QUIRK_FORCEMUX		BIT(3)
-> +#define SERIO_QUIRK_UNLOCK		BIT(4)
-> +#define SERIO_QUIRK_PROBE_DEFER		BIT(5)
-> +#define SERIO_QUIRK_RESET_ALWAYS	BIT(6)
-> +#define SERIO_QUIRK_RESET_NEVER		BIT(7)
-> +#define SERIO_QUIRK_DIECT		BIT(8)
-> +#define SERIO_QUIRK_DUMBKBD		BIT(9)
-> +#define SERIO_QUIRK_NOLOOP		BIT(10)
-> +#define SERIO_QUIRK_NOTIMEOUT		BIT(11)
-> +#define SERIO_QUIRK_KBDRESET		BIT(12)
-> +#define SERIO_QUIRK_DRITEK		BIT(13)
-> +#define SERIO_QUIRK_NOPNP		BIT(14)
-> +
-> +/* Quirk table for different mainboards. Options similar or identical to i8042
-> + * module parameters.
-> + * ORDERING IS IMPORTANT! The first match will be apllied and the rest ignored.
-> + * This allows entries to overwrite vendor wide quirks on a per device basis.
-> + * Where this is irrelevant, entries are sorted case sensitive by DMI_SYS_VENDOR
-> + * and/or DMI_BOARD_VENDOR to make it easier to avoid dublicate entries.
-> + */
-> +static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
->  	{
-> -		/*
-> -		 * Arima-Rioworks HDAMB -
-> -		 * AUX LOOP command does not raise AUX IRQ
-> -		 */
->  		.matches = {
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "RIOWORKS"),
-> -			DMI_MATCH(DMI_BOARD_NAME, "HDAMB"),
-> -			DMI_MATCH(DMI_BOARD_VERSION, "Rev E"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "ALIENWARE"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Sentia"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* ASUS G1S */
->  		.matches = {
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "ASUSTeK Computer Inc."),
-> -			DMI_MATCH(DMI_BOARD_NAME, "G1S"),
-> -			DMI_MATCH(DMI_BOARD_VERSION, "1.0"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "X750LN"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
-> -		/* ASUS P65UP5 - AUX LOOP command does not raise AUX IRQ */
-> +		/* Asus X450LCP */
->  		.matches = {
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "ASUSTeK Computer INC."),
-> -			DMI_MATCH(DMI_BOARD_NAME, "P/I-P65UP5"),
-> -			DMI_MATCH(DMI_BOARD_VERSION, "REV 2.X"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "X450LCP"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_NEVER)
->  	},
->  	{
-> +		/* ASUS ZenBook UX425UA */
->  		.matches = {
->  			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "X750LN"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX425UA"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_PROBE_DEFER | SERIO_QUIRK_RESET_NEVER)
->  	},
->  	{
-> +		/* ASUS ZenBook UM325UA */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Compaq"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME , "ProLiant"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "8500"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_PROBE_DEFER | SERIO_QUIRK_RESET_NEVER)
->  	},
-> +	/*
-> +	 * On some Asus laptops, just running self tests cause problems.
-> +	 */
->  	{
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Compaq"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME , "ProLiant"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "DL760"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-> +			DMI_MATCH(DMI_CHASSIS_TYPE, "10"), /* Notebook */
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_NEVER)
->  	},
->  	{
-> -		/* Dell Embedded Box PC 3000 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Embedded Box PC 3000"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-> +			DMI_MATCH(DMI_CHASSIS_TYPE, "31"), /* Convertible Notebook */
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_NEVER)
->  	},
->  	{
-> -		/* OQO Model 01 */
-> +		/* ASUS P65UP5 - AUX LOOP command does not raise AUX IRQ */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "OQO"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "ZEPTO"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "00"),
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "ASUSTeK Computer INC."),
-> +			DMI_MATCH(DMI_BOARD_NAME, "P/I-P65UP5"),
-> +			DMI_MATCH(DMI_BOARD_VERSION, "REV 2.X"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
-> -		/* ULI EV4873 - AUX LOOP does not work properly */
-> +		/* ASUS G1S */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "ULI"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "EV4873"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "5a"),
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "ASUSTeK Computer Inc."),
-> +			DMI_MATCH(DMI_BOARD_NAME, "G1S"),
-> +			DMI_MATCH(DMI_BOARD_VERSION, "1.0"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
-> -		/* Microsoft Virtual Machine */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Virtual Machine"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "VS2005R2"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 1360"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Medion MAM 2070 */
-> +		/* Acer Aspire 5710 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "MAM 2070"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "5a"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5710"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Medion Akoya E7225 */
-> +		/* Acer Aspire 7738 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Medion"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Akoya E7225"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "1.0"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 7738"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Blue FB5601 */
-> +		/* Acer Aspire 5536 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "blue"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "FB5601"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "M606"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5536"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "0100"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Gigabyte M912 */
-> +		/*
-> +		 * Acer Aspire 5738z
-> +		 * Touchpad stops working in mux mode when dis- + re-enabled
-> +		 * with the touchpad enable/disable toggle hotkey
-> +		 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "GIGABYTE"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "M912"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "01"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5738"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Gigabyte M1022M netbook */
-> +		/* Acer Aspire One 150 */
->  		.matches = {
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co.,Ltd."),
-> -			DMI_MATCH(DMI_BOARD_NAME, "M1022E"),
-> -			DMI_MATCH(DMI_BOARD_VERSION, "1.02"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "AOA150"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
->  	{
-> -		/* Gigabyte Spring Peak - defines wrong chassis type */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "GIGABYTE"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Spring Peak"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire A114-31"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
->  	{
-> -		/* Gigabyte T1005 - defines wrong chassis type ("Other") */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "GIGABYTE"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "T1005"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire A314-31"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
->  	{
-> -		/* Gigabyte T1005M/P - defines wrong chassis type ("Other") */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "GIGABYTE"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "T1005M/P"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire A315-31"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
->  	{
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "HP Pavilion dv9700"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "Rev 1"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire ES1-132"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
->  	{
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "PEGATRON CORPORATION"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "C15B"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire ES1-332"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
->  	{
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "ByteSpeed LLC"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "ByteSpeed Laptop C15B"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire ES1-432"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
-> -	{ }
-> -};
-> -
-> -/*
-> - * Some Fujitsu notebooks are having trouble with touchpads if
-> - * active multiplexing mode is activated. Luckily they don't have
-> - * external PS/2 ports so we can safely disable it.
-> - * ... apparently some Toshibas don't like MUX mode either and
-> - * die horrible death on reboot.
-> - */
-> -static const struct dmi_system_id __initconst i8042_dmi_nomux_table[] = {
->  	{
-> -		/* Fujitsu Lifebook P7010/P7010D */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "P7010"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate Spin B118-RN"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
-> +	/*
-> +	 * Some Wistron based laptops need us to explicitly enable the 'Dritek
-> +	 * keyboard extension' to make their extra keys start generating scancodes.
-> +	 * Originally, this was just confined to older laptops, but a few Acer laptops
-> +	 * have turned up in 2007 that also need this again.
-> +	 */
->  	{
-> -		/* Fujitsu Lifebook P7010 */
-> +		/* Acer Aspire 5100 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU SIEMENS"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "0000000000"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5100"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_DRITEK)
->  	},
->  	{
-> -		/* Fujitsu Lifebook P5020D */
-> +		/* Acer Aspire 5610 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "LifeBook P Series"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5610"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_DRITEK)
->  	},
->  	{
-> -		/* Fujitsu Lifebook S2000 */
-> +		/* Acer Aspire 5630 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "LifeBook S Series"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5630"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_DRITEK)
->  	},
->  	{
-> -		/* Fujitsu Lifebook S6230 */
-> +		/* Acer Aspire 5650 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "LifeBook S6230"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5650"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_DRITEK)
->  	},
->  	{
-> -		/* Fujitsu Lifebook T725 laptop */
-> +		/* Acer Aspire 5680 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK T725"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5680"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_DRITEK)
->  	},
->  	{
-> -		/* Fujitsu Lifebook U745 */
-> +		/* Acer Aspire 5720 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK U745"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5720"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_DRITEK)
->  	},
->  	{
-> -		/* Fujitsu T70H */
-> +		/* Acer Aspire 9110 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "FMVLT70H"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 9110"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_DRITEK)
->  	},
->  	{
-> -		/* Fujitsu-Siemens Lifebook T3010 */
-> +		/* Acer TravelMate 660 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU SIEMENS"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK T3010"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 660"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_DRITEK)
->  	},
->  	{
-> -		/* Fujitsu-Siemens Lifebook E4010 */
-> +		/* Acer TravelMate 2490 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU SIEMENS"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK E4010"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 2490"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_DRITEK)
->  	},
->  	{
-> -		/* Fujitsu-Siemens Amilo Pro 2010 */
-> +		/* Acer TravelMate 4280 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU SIEMENS"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "AMILO Pro V2010"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 4280"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_DRITEK)
->  	},
->  	{
-> -		/* Fujitsu-Siemens Amilo Pro 2030 */
-> +		/* Amoi M636/A737 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU SIEMENS"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "AMILO PRO V2030"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Amoi Electronics CO.,LTD."),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "M636/A737 platform"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/*
-> -		 * No data is coming from the touchscreen unless KBC
-> -		 * is in legacy mode.
-> -		 */
-> -		/* Panasonic CF-29 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Matsushita"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "CF-29"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "ByteSpeed LLC"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "ByteSpeed Laptop C15B"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
-> -		/*
-> -		 * HP Pavilion DV4017EA -
-> -		 * errors on MUX ports are reported without raising AUXDATA
-> -		 * causing "spurious NAK" messages.
-> -		 */
-> +		/* Compal HEL80I */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Pavilion dv4000 (EA032EA#ABF)"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "COMPAL"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "HEL80I"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/*
-> -		 * HP Pavilion ZT1000 -
-> -		 * like DV4017EA does not raise AUXERR for errors on MUX ports.
-> -		 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "HP Pavilion Notebook PC"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "HP Pavilion Notebook ZT1000"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Compaq"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "ProLiant"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "8500"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
-> -		/*
-> -		 * HP Pavilion DV4270ca -
-> -		 * like DV4017EA does not raise AUXERR for errors on MUX ports.
-> -		 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Pavilion dv4000 (EH476UA#ABL)"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Compaq"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "ProLiant"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "DL760"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
-> +		/* Advent 4211 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Satellite P10"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "DIXONSXP"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Advent 4211"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
->  	{
-> +		/* Dell Embedded Box PC 3000 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "EQUIUM A110"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Embedded Box PC 3000"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
-> +		/* Dell XPS M1530 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "SATELLITE C850D"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "XPS M1530"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> +		/* Dell Vostro 1510 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "ALIENWARE"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Sentia"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Vostro1510"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Sharp Actius MM20 */
-> +		/* Dell Vostro V13 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "SHARP"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "PC-MM20 Series"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Vostro V13"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_NOTIMEOUT)
->  	},
->  	{
-> -		/* Sony Vaio FS-115b */
-> +		/* Dell Vostro 1320 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Sony Corporation"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "VGN-FS115B"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Vostro 1320"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
->  	{
-> -		/*
-> -		 * Sony Vaio FZ-240E -
-> -		 * reset and GET ID commands issued via KBD port are
-> -		 * sometimes being delivered to AUX3.
-> -		 */
-> +		/* Dell Vostro 1520 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Sony Corporation"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "VGN-FZ240E"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Vostro 1520"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
->  	{
-> -		/*
-> -		 * Most (all?) VAIOs do not have external PS/2 ports nor
-> -		 * they implement active multiplexing properly, and
-> -		 * MUX discovery usually messes up keyboard/touchpad.
-> -		 */
-> +		/* Dell Vostro 1720 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Sony Corporation"),
-> -			DMI_MATCH(DMI_BOARD_NAME, "VAIO"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Vostro 1720"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
->  	{
-> -		/* Amoi M636/A737 */
-> +		/* Entroware Proteus */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Amoi Electronics CO.,LTD."),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "M636/A737 platform"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Entroware"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Proteus"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "EL07R4"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS)
->  	},
-> +	/*
-> +	 * Some Fujitsu notebooks are having trouble with touchpads if
-> +	 * active multiplexing mode is activated. Luckily they don't have
-> +	 * external PS/2 ports so we can safely disable it.
-> +	 * ... apparently some Toshibas don't like MUX mode either and
-> +	 * die horrible death on reboot.
-> +	 */
->  	{
-> -		/* Lenovo 3000 n100 */
-> +		/* Fujitsu Lifebook P7010/P7010D */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "076804U"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "P7010"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Lenovo XiaoXin Air 12 */
-> +		/* Fujitsu Lifebook P5020D */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "80UN"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "LifeBook P Series"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> +		/* Fujitsu Lifebook S2000 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 1360"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "LifeBook S Series"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Acer Aspire 5710 */
-> +		/* Fujitsu Lifebook S6230 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5710"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "LifeBook S6230"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Acer Aspire 7738 */
-> +		/* Fujitsu Lifebook T725 laptop */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 7738"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK T725"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_NOTIMEOUT)
->  	},
->  	{
-> -		/* Gericom Bellagio */
-> +		/* Fujitsu Lifebook U745 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Gericom"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "N34AS6"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK U745"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* IBM 2656 */
-> +		/* Fujitsu T70H */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "IBM"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "2656"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "FMVLT70H"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Dell XPS M1530 */
-> +		/* Fujitsu A544 laptop */
-> +		/* https://bugzilla.redhat.com/show_bug.cgi?id=1111138 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "XPS M1530"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK A544"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOTIMEOUT)
->  	},
->  	{
-> -		/* Compal HEL80I */
-> +		/* Fujitsu AH544 laptop */
-> +		/* https://bugzilla.kernel.org/show_bug.cgi?id=69731 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "COMPAL"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "HEL80I"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK AH544"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOTIMEOUT)
->  	},
->  	{
-> -		/* Dell Vostro 1510 */
-> +		/* Fujitsu U574 laptop */
-> +		/* https://bugzilla.kernel.org/show_bug.cgi?id=69731 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Vostro1510"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK U574"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOTIMEOUT)
->  	},
->  	{
-> -		/* Acer Aspire 5536 */
-> +		/* Fujitsu UH554 laptop */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5536"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "0100"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK UH544"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOTIMEOUT)
->  	},
->  	{
-> -		/* Dell Vostro V13 */
-> +		/* Fujitsu Lifebook P7010 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Vostro V13"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU SIEMENS"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "0000000000"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Newer HP Pavilion dv4 models */
-> +		/* Fujitsu-Siemens Lifebook T3010 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "HP Pavilion dv4 Notebook PC"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU SIEMENS"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK T3010"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Asus X450LCP */
-> +		/* Fujitsu-Siemens Lifebook E4010 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "X450LCP"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU SIEMENS"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK E4010"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Avatar AVIU-145A6 */
-> +		/* Fujitsu-Siemens Amilo Pro 2010 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Intel"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "IC4I"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU SIEMENS"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "AMILO Pro V2010"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* TUXEDO BU1406 */
-> +		/* Fujitsu-Siemens Amilo Pro 2030 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "N24_25BU"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU SIEMENS"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "AMILO PRO V2030"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Lenovo LaVie Z */
-> +		/* Gigabyte M912 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "Lenovo LaVie Z"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "GIGABYTE"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "M912"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "01"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
-> -		/*
-> -		 * Acer Aspire 5738z
-> -		 * Touchpad stops working in mux mode when dis- + re-enabled
-> -		 * with the touchpad enable/disable toggle hotkey
-> -		 */
-> +		/* Gigabyte Spring Peak - defines wrong chassis type */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5738"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "GIGABYTE"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Spring Peak"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
-> -		/* Entroware Proteus */
-> +		/* Gigabyte T1005 - defines wrong chassis type ("Other") */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Entroware"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Proteus"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "EL07R4"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "GIGABYTE"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "T1005"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
-> -	{ }
-> -};
-> -
-> -static const struct dmi_system_id i8042_dmi_forcemux_table[] __initconst = {
->  	{
-> -		/*
-> -		 * Sony Vaio VGN-CS series require MUX or the touch sensor
-> -		 * buttons will disturb touchpad operation
-> -		 */
-> +		/* Gigabyte T1005M/P - defines wrong chassis type ("Other") */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Sony Corporation"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "VGN-CS"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "GIGABYTE"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "T1005M/P"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
-> -	{ }
-> -};
-> -
-> -/*
-> - * On some Asus laptops, just running self tests cause problems.
-> - */
-> -static const struct dmi_system_id i8042_dmi_noselftest_table[] = {
-> +	/*
-> +	 * Some laptops need keyboard reset before probing for the trackpad to get
-> +	 * it detected, initialised & finally work.
-> +	 */
->  	{
-> +		/* Gigabyte P35 v2 - Elantech touchpad */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-> -			DMI_MATCH(DMI_CHASSIS_TYPE, "10"), /* Notebook */
-> -		},
-> -	}, {
-> -		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-> -			DMI_MATCH(DMI_CHASSIS_TYPE, "31"), /* Convertible Notebook */
-> +			DMI_MATCH(DMI_SYS_VENDOR, "GIGABYTE"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "P35V2"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_KBDRESET)
->  	},
-> -	{ }
-> -};
-> -static const struct dmi_system_id __initconst i8042_dmi_reset_table[] = {
-> -	{
-> -		/* MSI Wind U-100 */
-> +		{
-> +		/* Aorus branded Gigabyte X3 Plus - Elantech touchpad */
->  		.matches = {
-> -			DMI_MATCH(DMI_BOARD_NAME, "U-100"),
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "MICRO-STAR INTERNATIONAL CO., LTD"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "GIGABYTE"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "X3"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_KBDRESET)
->  	},
->  	{
-> -		/* LG Electronics X110 */
-> +		/* Gigabyte P34 - Elantech touchpad */
->  		.matches = {
-> -			DMI_MATCH(DMI_BOARD_NAME, "X110"),
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "LG Electronics Inc."),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "GIGABYTE"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "P34"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_KBDRESET)
->  	},
->  	{
-> -		/* Acer Aspire One 150 */
-> +		/* Gigabyte P57 - Elantech touchpad */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "AOA150"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "GIGABYTE"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "P57"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_KBDRESET)
->  	},
->  	{
-> +		/* Gericom Bellagio */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire A114-31"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Gericom"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "N34AS6"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> +		/* Gigabyte M1022M netbook */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire A314-31"),
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co.,Ltd."),
-> +			DMI_MATCH(DMI_BOARD_NAME, "M1022E"),
-> +			DMI_MATCH(DMI_BOARD_VERSION, "1.02"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire A315-31"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "HP Pavilion dv9700"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "Rev 1"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
-> +		/*
-> +		 * HP Pavilion DV4017EA -
-> +		 * errors on MUX ports are reported without raising AUXDATA
-> +		 * causing "spurious NAK" messages.
-> +		 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire ES1-132"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Pavilion dv4000 (EA032EA#ABF)"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> +		/*
-> +		 * HP Pavilion ZT1000 -
-> +		 * like DV4017EA does not raise AUXERR for errors on MUX ports.
-> +		 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire ES1-332"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "HP Pavilion Notebook PC"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "HP Pavilion Notebook ZT1000"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> +		/*
-> +		 * HP Pavilion DV4270ca -
-> +		 * like DV4017EA does not raise AUXERR for errors on MUX ports.
-> +		 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire ES1-432"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Pavilion dv4000 (EH476UA#ABL)"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> +		/* Newer HP Pavilion dv4 models */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate Spin B118-RN"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "HP Pavilion dv4 Notebook PC"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_NOTIMEOUT)
->  	},
->  	{
-> -		/* Advent 4211 */
-> +		/* IBM 2656 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "DIXONSXP"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Advent 4211"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "IBM"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "2656"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Medion Akoya Mini E1210 */
-> +		/* Avatar AVIU-145A6 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "MEDION"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "E1210"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Intel"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "IC4I"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Medion Akoya E1222 */
-> +		/* Intel MBO Desktop D845PESV */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "MEDION"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "E122X"),
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "Intel Corporation"),
-> +			DMI_MATCH(DMI_BOARD_NAME, "D845PESV"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOPNP)
->  	},
->  	{
-> -		/* Mivvy M310 */
-> +		/*
-> +		 * Intel NUC D54250WYK - does not have i8042 controller but
-> +		 * declares PS/2 devices in DSDT.
-> +		 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "VIOOO"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "N10"),
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "Intel Corporation"),
-> +			DMI_MATCH(DMI_BOARD_NAME, "D54250WYK"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOPNP)
->  	},
->  	{
-> -		/* Dell Vostro 1320 */
-> +		/* Lenovo 3000 n100 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Vostro 1320"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "076804U"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Dell Vostro 1520 */
-> +		/* Lenovo XiaoXin Air 12 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Vostro 1520"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "80UN"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Dell Vostro 1720 */
-> +		/* Lenovo LaVie Z */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Vostro 1720"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "Lenovo LaVie Z"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
->  		/* Lenovo Ideapad U455 */
-> @@ -722,6 +803,7 @@ static const struct dmi_system_id __initconst i8042_dmi_reset_table[] = {
->  			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
->  			DMI_MATCH(DMI_PRODUCT_NAME, "20046"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
->  	{
->  		/* Lenovo ThinkPad L460 */
-> @@ -729,13 +811,7 @@ static const struct dmi_system_id __initconst i8042_dmi_reset_table[] = {
->  			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
->  			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L460"),
->  		},
-> -	},
-> -	{
-> -		/* Clevo P650RS, 650RP6, Sager NP8152-S, and others */
-> -		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "P65xRP"),
-> -		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
->  	{
->  		/* Lenovo ThinkPad Twist S230u */
-> @@ -743,275 +819,269 @@ static const struct dmi_system_id __initconst i8042_dmi_reset_table[] = {
->  			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
->  			DMI_MATCH(DMI_PRODUCT_NAME, "33474HU"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
->  	{
-> -		/* Entroware Proteus */
-> +		/* LG Electronics X110 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Entroware"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Proteus"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "EL07R4"),
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "LG Electronics Inc."),
-> +			DMI_MATCH(DMI_BOARD_NAME, "X110"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
-> -	{ }
-> -};
-> -
-> -#ifdef CONFIG_PNP
-> -static const struct dmi_system_id __initconst i8042_dmi_nopnp_table[] = {
->  	{
-> -		/* Intel MBO Desktop D845PESV */
-> +		/* Medion Akoya Mini E1210 */
->  		.matches = {
-> -			DMI_MATCH(DMI_BOARD_NAME, "D845PESV"),
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "Intel Corporation"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "MEDION"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "E1210"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
->  	{
-> -		/*
-> -		 * Intel NUC D54250WYK - does not have i8042 controller but
-> -		 * declares PS/2 devices in DSDT.
-> -		 */
-> +		/* Medion Akoya E1222 */
->  		.matches = {
-> -			DMI_MATCH(DMI_BOARD_NAME, "D54250WYK"),
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "Intel Corporation"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "MEDION"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "E122X"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
->  	{
->  		/* MSI Wind U-100 */
->  		.matches = {
-> -			DMI_MATCH(DMI_BOARD_NAME, "U-100"),
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "MICRO-STAR INTERNATIONAL CO., LTD"),
-> -		},
-> -	},
-> -	{
-> -		/* Acer Aspire 5 A515 */
-> -		.matches = {
-> -			DMI_MATCH(DMI_BOARD_NAME, "Grumpy_PK"),
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "PK"),
-> -		},
-> -	},
-> -	{ }
-> -};
-> -
-> -static const struct dmi_system_id i8042_dmi_laptop_table[] __initconst = {
-> -	{
-> -		.matches = {
-> -			DMI_MATCH(DMI_CHASSIS_TYPE, "8"), /* Portable */
-> -		},
-> -	},
-> -	{
-> -		.matches = {
-> -			DMI_MATCH(DMI_CHASSIS_TYPE, "9"), /* Laptop */
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "MICRO-STAR INTERNATIONAL CO., LTD"),
-> +			DMI_MATCH(DMI_BOARD_NAME, "U-100"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS | SERIO_QUIRK_NOPNP)
->  	},
->  	{
-> +		/*
-> +		 * No data is coming from the touchscreen unless KBC
-> +		 * is in legacy mode.
-> +		 */
-> +		/* Panasonic CF-29 */
->  		.matches = {
-> -			DMI_MATCH(DMI_CHASSIS_TYPE, "10"), /* Notebook */
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Matsushita"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "CF-29"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> +		/* Medion Akoya E7225 */
->  		.matches = {
-> -			DMI_MATCH(DMI_CHASSIS_TYPE, "14"), /* Sub-Notebook */
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Medion"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Akoya E7225"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "1.0"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
-> -	{ }
-> -};
-> -#endif
-> -
-> -static const struct dmi_system_id __initconst i8042_dmi_notimeout_table[] = {
->  	{
-> -		/* Dell Vostro V13 */
-> +		/* Microsoft Virtual Machine */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Vostro V13"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Virtual Machine"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "VS2005R2"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
-> -		/* Newer HP Pavilion dv4 models */
-> +		/* Medion MAM 2070 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "HP Pavilion dv4 Notebook PC"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "MAM 2070"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "5a"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
-> -		/* Fujitsu A544 laptop */
-> -		/* https://bugzilla.redhat.com/show_bug.cgi?id=1111138 */
-> +		/* TUXEDO BU1406 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK A544"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "N24_25BU"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Fujitsu AH544 laptop */
-> -		/* https://bugzilla.kernel.org/show_bug.cgi?id=69731 */
-> +		/* Clevo P650RS, 650RP6, Sager NP8152-S, and others */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK AH544"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "P65xRP"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
->  	{
-> -		/* Fujitsu Lifebook T725 laptop */
-> +		/* OQO Model 01 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK T725"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "OQO"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "ZEPTO"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "00"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
-> -		/* Fujitsu U574 laptop */
-> -		/* https://bugzilla.kernel.org/show_bug.cgi?id=69731 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK U574"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "PEGATRON CORPORATION"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "C15B"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
-> -		/* Fujitsu UH554 laptop */
-> +		/* Acer Aspire 5 A515 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "LIFEBOOK UH544"),
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "PK"),
-> +			DMI_MATCH(DMI_BOARD_NAME, "Grumpy_PK"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOPNP)
->  	},
-> -	{ }
-> -};
-> -
-> -/*
-> - * Some Wistron based laptops need us to explicitly enable the 'Dritek
-> - * keyboard extension' to make their extra keys start generating scancodes.
-> - * Originally, this was just confined to older laptops, but a few Acer laptops
-> - * have turned up in 2007 that also need this again.
-> - */
-> -static const struct dmi_system_id __initconst i8042_dmi_dritek_table[] = {
->  	{
-> -		/* Acer Aspire 5100 */
-> +		/* ULI EV4873 - AUX LOOP does not work properly */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5100"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "ULI"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "EV4873"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "5a"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
-> -		/* Acer Aspire 5610 */
-> +		/*
-> +		 * Arima-Rioworks HDAMB -
-> +		 * AUX LOOP command does not raise AUX IRQ
-> +		 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5610"),
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "RIOWORKS"),
-> +			DMI_MATCH(DMI_BOARD_NAME, "HDAMB"),
-> +			DMI_MATCH(DMI_BOARD_VERSION, "Rev E"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
->  	{
-> -		/* Acer Aspire 5630 */
-> +		/* Sharp Actius MM20 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5630"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "SHARP"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "PC-MM20 Series"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Acer Aspire 5650 */
-> +		/*
-> +		 * Sony Vaio FZ-240E -
-> +		 * reset and GET ID commands issued via KBD port are
-> +		 * sometimes being delivered to AUX3.
-> +		 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5650"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Sony Corporation"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "VGN-FZ240E"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Acer Aspire 5680 */
-> +		/*
-> +		 * Most (all?) VAIOs do not have external PS/2 ports nor
-> +		 * they implement active multiplexing properly, and
-> +		 * MUX discovery usually messes up keyboard/touchpad.
-> +		 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5680"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Sony Corporation"),
-> +			DMI_MATCH(DMI_BOARD_NAME, "VAIO"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Acer Aspire 5720 */
-> +		/* Sony Vaio FS-115b */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 5720"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Sony Corporation"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "VGN-FS115B"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Acer Aspire 9110 */
-> +		/*
-> +		 * Sony Vaio VGN-CS series require MUX or the touch sensor
-> +		 * buttons will disturb touchpad operation
-> +		 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "Aspire 9110"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Sony Corporation"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "VGN-CS"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_FORCEMUX)
->  	},
->  	{
-> -		/* Acer TravelMate 660 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 660"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Satellite P10"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Acer TravelMate 2490 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 2490"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "EQUIUM A110"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
->  	{
-> -		/* Acer TravelMate 4280 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 4280"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "SATELLITE C850D"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOMUX)
->  	},
-> -	{ }
-> -};
-> -
-> -/*
-> - * Some laptops need keyboard reset before probing for the trackpad to get
-> - * it detected, initialised & finally work.
-> - */
-> -static const struct dmi_system_id __initconst i8042_dmi_kbdreset_table[] = {
->  	{
-> -		/* Gigabyte P35 v2 - Elantech touchpad */
-> +		/* Mivvy M310 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "GIGABYTE"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "P35V2"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "VIOOO"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "N10"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_RESET_ALWAYS)
->  	},
-> -		{
-> -		/* Aorus branded Gigabyte X3 Plus - Elantech touchpad */
-> +	/*
-> +	 * Some laptops need keyboard reset before probing for the trackpad to get
-> +	 * it detected, initialised & finally work.
-> +	 */
-> +	{
-> +		/* Schenker XMG C504 - Elantech touchpad */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "GIGABYTE"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "X3"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "XMG"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "C504"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_KBDRESET)
->  	},
->  	{
-> -		/* Gigabyte P34 - Elantech touchpad */
-> +		/* Blue FB5601 */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "GIGABYTE"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "P34"),
-> +			DMI_MATCH(DMI_SYS_VENDOR, "blue"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "FB5601"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "M606"),
->  		},
-> +		.driver_data = (void *)(SERIO_QUIRK_NOLOOP)
->  	},
-> +	{ }
-> +};
-> +
-> +#ifdef CONFIG_PNP
-> +static const struct dmi_system_id i8042_dmi_laptop_table[] __initconst = {
->  	{
-> -		/* Gigabyte P57 - Elantech touchpad */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "GIGABYTE"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "P57"),
-> +			DMI_MATCH(DMI_CHASSIS_TYPE, "8"), /* Portable */
->  		},
->  	},
->  	{
-> -		/* Schenker XMG C504 - Elantech touchpad */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "XMG"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "C504"),
-> +			DMI_MATCH(DMI_CHASSIS_TYPE, "9"), /* Laptop */
->  		},
->  	},
-> -	{ }
-> -};
-> -
-> -static const struct dmi_system_id i8042_dmi_probe_defer_table[] __initconst = {
->  	{
-> -		/* ASUS ZenBook UX425UA */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX425UA"),
-> +			DMI_MATCH(DMI_CHASSIS_TYPE, "10"), /* Notebook */
->  		},
->  	},
->  	{
-> -		/* ASUS ZenBook UM325UA */
->  		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
-> +			DMI_MATCH(DMI_CHASSIS_TYPE, "14"), /* Sub-Notebook */
->  		},
->  	},
->  	{ }
->  };
-> +#endif
->  
->  #endif /* CONFIG_X86 */
->  
-> @@ -1167,11 +1237,6 @@ static int __init i8042_pnp_init(void)
->  	bool pnp_data_busted = false;
->  	int err;
->  
-> -#ifdef CONFIG_X86
-> -	if (dmi_check_system(i8042_dmi_nopnp_table))
-> -		i8042_nopnp = true;
-> -#endif
-> -
->  	if (i8042_nopnp) {
->  		pr_info("PNP detection disabled\n");
->  		return 0;
-> @@ -1275,6 +1340,59 @@ static inline int i8042_pnp_init(void) { return 0; }
->  static inline void i8042_pnp_exit(void) { }
->  #endif /* CONFIG_PNP */
->  
-> +
-> +#ifdef CONFIG_X86
-> +static void __init i8042_check_quirks(void)
-> +{
-> +	const struct dmi_system_id *device_quirk_info;
-> +	uintptr_t quirks;
-> +
-> +	device_quirk_info = dmi_first_match(i8042_dmi_quirk_table);
-> +	if (!device_quirk_info)
-> +		return;
-> +
-> +	quirks = (uintptr_t)device_quirk_info->driver_data;
-> +
-> +	if (quirks & SERIO_QUIRK_NOKBD)
-> +		i8042_nokbd = true;
-> +	if (quirks & SERIO_QUIRK_NOAUX)
-> +		i8042_noaux = true;
-> +	if (quirks & SERIO_QUIRK_NOMUX)
-> +		i8042_nomux = true;
-> +	if (quirks & SERIO_QUIRK_FORCEMUX)
-> +		i8042_nomux = false;
-> +	if (quirks & SERIO_QUIRK_UNLOCK)
-> +		i8042_unlock = true;
-> +	if (quirks & SERIO_QUIRK_PROBE_DEFER)
-> +		i8042_probe_defer = true;
-> +	/* Honor module parameter when value is not default */
-> +	if (i8042_reset == I8042_RESET_DEFAULT) {
-> +		if (quirks & SERIO_QUIRK_RESET_ALWAYS)
-> +			i8042_reset = I8042_RESET_ALWAYS;
-> +		if (quirks & SERIO_QUIRK_RESET_NEVER)
-> +			i8042_reset = I8042_RESET_NEVER;
-> +	}
-> +	if (quirks & SERIO_QUIRK_DIECT)
-> +		i8042_direct = true;
-> +	if (quirks & SERIO_QUIRK_DUMBKBD)
-> +		i8042_dumbkbd = true;
-> +	if (quirks & SERIO_QUIRK_NOLOOP)
-> +		i8042_noloop = true;
-> +	if (quirks & SERIO_QUIRK_NOTIMEOUT)
-> +		i8042_notimeout = true;
-> +	if (quirks & SERIO_QUIRK_KBDRESET)
-> +		i8042_kbdreset = true;
-> +	if (quirks & SERIO_QUIRK_DRITEK)
-> +		i8042_dritek = true;
-> +#ifdef CONFIG_PNP
-> +	if (quirks & SERIO_QUIRK_NOPNP)
-> +		i8042_nopnp = true;
-> +#endif
-> +}
-> +#else
-> +static inline void i8042_check_quirks(void) {}
-> +#endif
-> +
->  static int __init i8042_platform_init(void)
->  {
->  	int retval;
-> @@ -1297,45 +1415,17 @@ static int __init i8042_platform_init(void)
->  	i8042_kbd_irq = I8042_MAP_IRQ(1);
->  	i8042_aux_irq = I8042_MAP_IRQ(12);
->  
-> -	retval = i8042_pnp_init();
-> -	if (retval)
-> -		return retval;
-> -
->  #if defined(__ia64__)
-> -        i8042_reset = I8042_RESET_ALWAYS;
-> +	i8042_reset = I8042_RESET_ALWAYS;
->  #endif
->  
-> -#ifdef CONFIG_X86
-> -	/* Honor module parameter when value is not default */
-> -	if (i8042_reset == I8042_RESET_DEFAULT) {
-> -		if (dmi_check_system(i8042_dmi_reset_table))
-> -			i8042_reset = I8042_RESET_ALWAYS;
-> -
-> -		if (dmi_check_system(i8042_dmi_noselftest_table))
-> -			i8042_reset = I8042_RESET_NEVER;
-> -	}
-> -
-> -	if (dmi_check_system(i8042_dmi_noloop_table))
-> -		i8042_noloop = true;
-> -
-> -	if (dmi_check_system(i8042_dmi_nomux_table))
-> -		i8042_nomux = true;
-> -
-> -	if (dmi_check_system(i8042_dmi_forcemux_table))
-> -		i8042_nomux = false;
-> -
-> -	if (dmi_check_system(i8042_dmi_notimeout_table))
-> -		i8042_notimeout = true;
-> -
-> -	if (dmi_check_system(i8042_dmi_dritek_table))
-> -		i8042_dritek = true;
-> -
-> -	if (dmi_check_system(i8042_dmi_kbdreset_table))
-> -		i8042_kbdreset = true;
-> +	i8042_check_quirks();
->  
-> -	if (dmi_check_system(i8042_dmi_probe_defer_table))
-> -		i8042_probe_defer = true;
-> +	retval = i8042_pnp_init();
-> +	if (retval)
-> +		return retval;
->  
-> +#ifdef CONFIG_X86
->  	/*
->  	 * A20 was already enabled during early kernel init. But some buggy
->  	 * BIOSes (in MSI Laptops) require A20 to be enabled using 8042 to
+> > > > > > +	case ARM_SPE_NV_PEER_CORE:
+> > > > > > +		data_src->mem_lvl = PERF_MEM_LVL_HIT;
+> > > > > > +		data_src->mem_snoop = PERF_MEM_SNOOP_HITM;
+> > > > > > +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_ANY_CACHE;
+> > > > > 
+> > > > > Peer core contains its local L1 cache, so I think we can set the
+> > > > > memory level L1 to indicate this case.
+> > > > It could be either the L1 or the L2. All the neoverse cores have private L2
+> > > > caches and we don't know. 
+> > > 
+> > > How about set both L1 and L2 cache together for this case?
+> > > 
+> > > Although 'L1 | L2' cannot tell the exact cache level, I think it's
+> > > better than use ANY_CACHE, at least this can help us to distinguish
+> > > from other data source types if we avoid to use ANY_CACHE for all of
+> > > them.
+> > 
+> > This seems much more confusing then the ambiguity of where the line came from
+> > and is only possible with the deprecated mem_lvl enconding.  It will make
+> > perf_mem__lvl_scnprintf() print the wrong thing and anyone who is trying to
+> > attribute a line to a single cache will find that the sum of the number of hits
+> > is greater than the number of accesses which also seems terribly confusing.
+> 
+> Understand.  I considered the potential issue for
+> perf_mem__lvl_scnprintf(), actually it supports printing multipl cache
+> levels for 'mem_lvl', by conjuncting with 'or' it composes the multiple
+> cache levels.  We might need to extend a bit for another field
+> 'mem_lvlnum'.
+> 
+> Agreed that there would have inaccurate issue for statistics, it's fine
+> for me to use ANY_CACHE in this patch set.
 
+Thanks!
+
+> 
+> I still think we should consider to extend the memory levels to
+> demonstrate clear momory hierarchy on Arm archs, I personally like the
+> definitions for "PEER_CORE", "LCL_CLSTR", "PEER_CLSTR" and "SYS_CACHE",
+> though these cache levels are not precise like L1/L2/L3 levels, they can
+> help us to map very well for the cache topology on Arm archs and without
+> any confusion.  We could take this as an enhancement if you don't want
+> to bother the current patch set's upstreaming.
+
+I'd like to do this in a separate patch, but I have one other proposal. The
+Neoverse cores L2 is strictly inclusive of the L1, so even if it's in the L1,
+it's also in the L2. Given that the Graviton systems and afaik the Ampere
+systems don't have any cache between the L2 and the SLC, thus anything from
+PEER_CORE, LCL_CLSTR, or PEER_CLSTR would hit in the L2, perhaps we
+should just set L2 for these cases? German, are you good with this for now? 
+
+> > > > > For this data source type and below types, though they indicate
+> > > > > the snooping happens, but it doesn't mean the data in the cache line
+> > > > > is in 'modified' state.  If set flag PERF_MEM_SNOOP_HITM, I personally
+> > > > > think this will mislead users when report the result.
+> > > > 
+> > > > I'm of the opposite opinion. If the data wasn't modified, it will likely be
+> > > > found in the lower-level shared cache and the transaction wouldn't require a
+> > > > cache-to-cache transfer of the modified data, so the most common case when we
+> > > > source a line out of another cores cache will be if it was "modifiable" in that
+> > > > cache. 
+> > > 
+> > > Let's still use MOSI protocol as example.  I think there have two
+> > > cases: on case is the peer cache line is in 'Shared' state and another
+> > > case is the peer cache line is in 'Owned' state.
+> > > 
+> > > Quotes the wiki page for these two cases:
+> > > 
+> > > "When the cache block is in the Shared (S) state and there is a
+> > > snooped bus read (BusRd) transaction, then the block stays in the same
+> > > state and generates no more transactions as all the cache blocks have
+> > > the same value including the main memory and it is only being read,
+> > > not written into."
+> > > 
+> > > "While in the Owner (O) state and there is a snooped read request
+> > > (BusRd), the block remains in the same state while flushing (Flush)
+> > > the data for the other processor to read from it."
+> > > 
+> > > Seems to me, it's reasonable to set HTIM flag when the snooping happens
+> > > for the cache line line is in the Modified (M) state.
+> > > 
+> > > Again, my comment is based on the literal understanding; so please
+> > > correct if have any misunderstanding at here.
+> > 
+> > Per the CMN TRM, "The SLC allocation policy is exclusive for data lines, except
+> > where sharing patterns are detected," so if a line is shared among caches it
+> > will likely also be in the SLC (and thus we'd get an L3 hit). 
+> > 
+> > If there is one copy of the cache line and that cache line needs to transition
+> > from one core to another core, I don't believe it matters if it was truly
+> > modified or not because the core already had permission to modify it and the
+> > transaction is just as costly (ping ponging between core caches). This is the
+> > one thing I really want to be able to uniquely identify as any cacheline doing
+> > this that isn't a lock is a place where optimization is likely possible. 
+> 
+> I understood that your point that if big amount of transitions within
+> multiple cores hit the same cache line, it would be very likely caused
+> by the cache line's Modified state so we set PERF_MEM_SNOOP_HITM flag
+> for easier reviewing.
+
+And that from a dataflow perspective if the line is owned (and could be
+modifiable) vs. was actually modified is really the less interesting bit. 
+
+> Alternatively, I think it's good to pick up the patch series "perf c2c:
+> Sort cacheline with all loads" [1], rather than relying on HITM tag, the
+> patch series extends a new option "-d all" for perf c2c, so it displays
+> the suspecious false sharing cache lines based on load/store ops and
+> thread infos.  The main reason for holding on th patch set is due to we
+> cannot verify it with Arm SPE at that time point, as the time being Arm
+> SPE trace data was absent both store ops and data source packets.
+
+Looking at examples I don't, at least from my system, data-source isn't set for
+stores, only for loads. 
+
+> I perfer to set PERF_MEM_SNOOP_HIT flag in this patch set and we can
+> upstream the patch series "perf c2c: Sort cacheline with all loads"
+> (only needs upstreaming patches 01, 02, 03, 10, 11, the rest patches
+> have been merged in the mainline kernel).
+> 
+> If this is fine for you, I can respin the patch series for "perf c2c".
+> Or any other thoughts?
+
+I think this is a nice option to have in the tool-box, but from my point of
+view, I'd like someone who is familiar with c2c output on x86 to come to an
+arm64 system and be able to zero in on a ping-ponging line like they would
+otherwise. Highlighting a line that is moving between cores frequently which is
+likely in the exclusive state by tagging it an HITM accomplishes this and will
+make it easier to find these cases.  Your approach also has innaccurancies and
+wouldn't be able to differentiate between core X accessing a line a lot followed
+by core Y acessing a line alot vs the cores ping-ponging.  Yes, I agree that we
+will "overcount" HITM, but I don't think this is particularly bad and it does
+specifically highlight the core-2-core transfers that are likely a performance
+issue easily and it will result in easier identification of areas of false or
+true sharing and improve performance.
+
+Thanks,
+Ali

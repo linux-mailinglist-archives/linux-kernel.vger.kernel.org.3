@@ -2,182 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE03B4EAEB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CFF4EAEBF
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237491AbiC2Ntv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 09:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
+        id S237498AbiC2NvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 09:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbiC2Ntu (ORCPT
+        with ESMTP id S234087AbiC2NvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 09:49:50 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E86317B8B3;
-        Tue, 29 Mar 2022 06:48:05 -0700 (PDT)
+        Tue, 29 Mar 2022 09:51:18 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819F969281
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:49:35 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id g9-20020a17090ace8900b001c7cce3c0aeso2028734pju.2
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:49:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1648561686; x=1680097686;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=G3O4xklk20yOcU6Q2jl6Oe/Zbim2TxkIAg6MIEKJXN0=;
-  b=DYJLfht3vhrKXFQl21LlTZwPqh0AGJSbPm+M1FFkWJEKN7fz7TM2BASZ
-   1cw7s1NFG3ryfZcsGKursPb++2CkyKXhoJkgvOqkEfWNrTX0pPaHjlshe
-   G2tfeVaTlfHSedVSF/5641xicAtJBHzJGDa0OsbgCIgt2EnCqe1OezEMG
-   c=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 29 Mar 2022 06:48:05 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 06:48:05 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 29 Mar 2022 06:47:24 -0700
-Received: from [10.253.79.253] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 29 Mar
- 2022 06:47:21 -0700
-Message-ID: <7c0bed05-a071-82f3-3162-64b88bbe7dc2@quicinc.com>
-Date:   Tue, 29 Mar 2022 21:47:18 +0800
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DdqwlImXrfao84vCHBrZYdsfDtapi0otjvjw/TD7gAs=;
+        b=iqmBctwaR3RnMvlGbfAY9TefMgdpgPs5uTFnScOMAg7WCye0WWGUkpPFAhBNOx6r7X
+         7xbZLOsB1kf93MKkXiauUeHte6cMJQCWg8asM67oms0HaCmzDyQIXBOb84j+6oJthZNW
+         NGw3IQOqZD0a3q/6QqOXLCTkJC5iXA/i1gb4icEhNapcEGT4XYNP3m4EWTCdI4dHz2Vk
+         wyxu0v8qqP24AnkXN9DxEJdRfba89K846CIvOrB94f/L5wC4PKYmrr+1/BcyhjNlHdlT
+         7YOMNiaENUWkeJEkji8G+ikHaeuCX17BWmjKWjOjM4F5ReBHm5idgE8oiFkBuBnH1aXZ
+         yk0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DdqwlImXrfao84vCHBrZYdsfDtapi0otjvjw/TD7gAs=;
+        b=dYSzWq1dfVzhfd4tpv2v0TtfzHO5ScU/rY//dTnFnST6Ufza4C7CMoqPb58hHHDJX8
+         ZYsmMxRtXVIHEMuRM/Tl1V3D43Cg6W8uGhHBdn2tDst2L0fVw48MVFcnl8NiM31KVQYN
+         5tjw5xuBUCRa19DudAJLkeuo4RMF72uLIzk9w58F8Jxgh4lo4k8DRFnTPzrMqc4X+KVQ
+         cU24YpE54zC6VYboiVghkPNe2a1Smh9MolGIK8kJQTGQGwbpUnT8Jtt/3pehKEmm9jok
+         AeDO9TLhXcibEqkW4t3STs240q8+8Otjfa36B+MjLvNK3HL1w/9jc3GT71/stZ12nSaN
+         EOUg==
+X-Gm-Message-State: AOAM533PHhER8iZIdyd8FH3SZfyYnrX0NivemnrkqKtP708fqTkB5T8T
+        siTMzQvKzBTy2Xcy5UDiFS7uYA==
+X-Google-Smtp-Source: ABdhPJxpMRY/A3rB7g8dnvTTe8NY23xQXPqq1uhJ9JnzOsx7Vi++6ue4mirhtJluGTHkVJDk33bdkA==
+X-Received: by 2002:a17:902:e5cc:b0:154:1c96:2e5b with SMTP id u12-20020a170902e5cc00b001541c962e5bmr30655333plf.94.1648561774945;
+        Tue, 29 Mar 2022 06:49:34 -0700 (PDT)
+Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.239])
+        by smtp.gmail.com with ESMTPSA id o14-20020a056a0015ce00b004fab49cd65csm20911293pfu.205.2022.03.29.06.49.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 06:49:34 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     dan.j.williams@intel.com, willy@infradead.org, jack@suse.cz,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        apopple@nvidia.com, shy828301@gmail.com, rcampbell@nvidia.com,
+        hughd@google.com, xiyuyang19@fudan.edu.cn,
+        kirill.shutemov@linux.intel.com, zwisler@kernel.org,
+        hch@infradead.org
+Cc:     linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        duanxiongchun@bytedance.com, smuchun@gmail.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v6 0/6] Fix some bugs related to ramp and dax
+Date:   Tue, 29 Mar 2022 21:48:47 +0800
+Message-Id: <20220329134853.68403-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 01/10] Use IDR to maintain all the enabled sources'
- paths.
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>
-References: <20220324121734.21531-1-quic_jinlmao@quicinc.com>
- <20220324121734.21531-2-quic_jinlmao@quicinc.com>
- <YjxjXnXAXVXfZqr/@kroah.com>
- <e78ff137-fc5e-ff00-0e57-91304288d860@quicinc.com>
- <YjylKhBslN+5sKRx@kroah.com>
-From:   Jinlong Mao <quic_jinlmao@quicinc.com>
-In-Reply-To: <YjylKhBslN+5sKRx@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+This series is based on next-20220225.
 
-On 3/25/2022 1:06 AM, Greg Kroah-Hartman wrote:
-> On Thu, Mar 24, 2022 at 10:23:19PM +0800, Jinlong Mao wrote:
->> Hi Greg,
->>
->> Thanks for your review.
->>
->> On 3/24/2022 8:26 PM, Greg Kroah-Hartman wrote:
->>> On Thu, Mar 24, 2022 at 08:17:25PM +0800, Mao Jinlong wrote:
->>>> Use hash length of the source's device name to map to the pointer
->>>> of the enabled path. Using IDR will be more efficient than using
->>>> the list. And there could be other sources except STM and CPU etms
->>>> in the new HWs. It is better to maintain all the paths together.
->>>>
->>>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
->>>> ---
->>>>    drivers/hwtracing/coresight/coresight-core.c | 75 +++++++-------------
->>>>    1 file changed, 26 insertions(+), 49 deletions(-)
->>> Your subject line is odd.  Please put back the driver subsystem in the
->>> subject line so that it makes more sense.
->> I will update the subject in next version.
->>> And how have you measured "more efficient"?
->> Using IDR would be better than doing a sequential search as there will be
->> much more device  in future.
-> How many "more"?  Where does the trade off of speed for complexity help?
-> How much faster is this really?  You can't claim performance
-> improvements without any proof :)
-There is about 40 trace sources in our internal device. I believe there 
-will be more cpu cores, then
-there will be more etm sources. IDR here is used to store the path of 
-both etm
-sources and other sources which aren't associated with CPU.  Use IDR is 
-not more complicated
-than using list. It will also save the time of searching the path when 
-coresight_disable.
-I tested in internal device. The test case is that enable all the 
-sources, disable the source one
-by one to check the search time.
+Patch 1-2 fix a cache flush bug, because subsequent patches depend on
+those on those changes, there are placed in this series.  Patch 3-4
+are preparation for fixing a dax bug in patch 5.  Patch 6 is code cleanup
+since the previous patch remove the usage of follow_invalidate_pte().
 
-Use list to store paths:
+v6:
+- Collect Reviewed-by from Christoph Hellwig.
+- Fold dax_entry_mkclean() into dax_writeback_one().
 
-               sh-7687    [005] ....   342.113099: __coresight_disable: 
-====search path start==== source_0
-               sh-7687    [005] ....   342.113127: __coresight_disable: 
-====search path end==== source_0
-               sh-7693    [005] ....   342.542216: __coresight_disable: 
-====search path start==== source_1
-               sh-7693    [005] ....   342.542244: __coresight_disable: 
-====search path end==== source_1
-               sh-7699    [005] ....   342.929083: __coresight_disable: 
-====search path start==== source_2
-               sh-7699    [005] ....   342.929106: __coresight_disable: 
-====search path end==== source_2
-               sh-7711    [005] ....   343.760688: __coresight_disable: 
-====search path start==== source_3
-               sh-7711    [005] ....   343.760713: __coresight_disable: 
-====search path end==== source_3
-               sh-7717    [005] ....   344.172353: __coresight_disable: 
-====search path start==== source_4
-               sh-7717    [005] ....   344.172381: __coresight_disable: 
-====search path end==== source_4
+v5:
+- Collect Reviewed-by from Dan Williams.
+- Fix panic reported by kernel test robot <oliver.sang@intel.com>.
+- Remove pmdpp parameter from follow_invalidate_pte() and fold it into follow_pte().
 
+v4:
+- Fix compilation error on riscv.
 
-Use IDR to store paths:
+v3:
+- Based on next-20220225.
 
-              sh-7156    [006] ....    223.294228: __coresight_disable: 
-====search path start==== source_0
-               sh-7156    [006] ....   223.294237: __coresight_disable: 
-====search path end==== source_0
-               sh-7162    [006] ....   223.690153: __coresight_disable: 
-====search path start==== source_1
-               sh-7162    [006] ....   223.690163: __coresight_disable: 
-====search path end==== source_1
-               sh-7168    [006] ....   224.110670: __coresight_disable: 
-====search path start==== source_2
-               sh-7168    [006] ....   224.110679: __coresight_disable: 
-====search path end==== source_2
-            <...>-7180    [006] ....   224.929315: __coresight_disable: 
-====search path start==== source_3
-            <...>-7180    [006] ....   224.929324: __coresight_disable: 
-====search path end==== source_3
-            <...>-7186    [006] ....   225.343617: __coresight_disable: 
-====search path start==== source_4
-            <...>-7186    [006] ....   225.343626: __coresight_disable: 
-====search path end==== source_4
+v2:
+- Avoid the overly long line in lots of places suggested by Christoph.
+- Fix a compiler warning reported by kernel test robot since pmd_pfn()
+  is not defined when !CONFIG_TRANSPARENT_HUGEPAGE on powerpc architecture.
+- Split a new patch 4 for preparation of fixing the dax bug.
 
- From the log, Searching the path from the IDR takes about 9us for each 
-source.
-Searching the path from the list takes about 23 ~ 28us for the source. 
-Use IDR saves much time.
+Muchun Song (6):
+  mm: rmap: fix cache flush on THP pages
+  dax: fix cache flush on PMD-mapped pages
+  mm: rmap: introduce pfn_mkclean_range() to cleans PTEs
+  mm: pvmw: add support for walking devmap pages
+  dax: fix missing writeprotect the pte entry
+  mm: simplify follow_invalidate_pte()
 
-Thanks
+ fs/dax.c             | 98 +++++++---------------------------------------------
+ include/linux/mm.h   |  3 --
+ include/linux/rmap.h |  3 ++
+ mm/internal.h        | 26 +++++++++-----
+ mm/memory.c          | 81 ++++++++++++-------------------------------
+ mm/page_vma_mapped.c | 16 ++++-----
+ mm/rmap.c            | 68 +++++++++++++++++++++++++++++-------
+ 7 files changed, 119 insertions(+), 176 deletions(-)
 
-Jinlong Mao
->
-> thanks,
->
-> greg k-h
+-- 
+2.11.0
+

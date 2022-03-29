@@ -2,169 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36FF4EABBA
+	by mail.lfdr.de (Postfix) with ESMTP id 52B2F4EABB9
 	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235465AbiC2K56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 06:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
+        id S235447AbiC2K5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 06:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235439AbiC2K52 (ORCPT
+        with ESMTP id S235443AbiC2K5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 06:57:28 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2077.outbound.protection.outlook.com [40.107.96.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55A51DA7C;
-        Tue, 29 Mar 2022 03:55:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rld5Dw/oHxx10UnKP74OdYsCmvcbW8+DS/S52UwrjssOxaWHSV/b0YsDJCLGw/C34jgYn0IZm1M0jHRqXXZdu5J8/b1/Y2yu6mNhwTT5p2uKlAcz9UQRvVrbcXrn2YeU7YEn/7fMTWUqU+DCob1eQgzJibkx2a0TFb58UZTKO22Zfqavn2BfqP7OCaPq09OKi/7118JagzJQ0J0ARXEQUDG1uaFyI5nUOFepzdfoupLMwfMtOXgQslwiMYOm/kPbEcmFsuoSrCMlw//qMg8tE8nlPZjGHYC1/rM4xoiMx1oNEjgrvVYwvlKxjbd4Q1rIwJiRJIOrEqS3JoW0/3BEVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q+rxYqEwZWmRmCTwl/UKEaXhHn1OmSOhZ/DVpDT5RIE=;
- b=FL4kRS0fckiEz+0UFz/ZMUoguPmZDIv/Ao9sTlmwQY4DNSdY3FNAYBzHA5J/pSqD5pFgKn7AJSDY/TGnAGBtBOqJE+LTj8sPChpDXSpeDKxqzL02Pp9TrP1YPXFK1Q5tGuBkCDD1cEOoaDdiDUMS8zcK7TfKhiDSPvtRgkGlXpk5sdsLP3sK/goPz7LP/bR2J+rjqsMmubDBPUvcSSJqQEjQUERzS628BPjVTZfF2c2BjI2yjKUUwu4MLnm61UX9T5bQYsAWPimMVf6Cufj6NahudPgFZEwsIvAtlOr1ef3ARC9s5PsTnO2QxH6oHYzU9layv1HjT/FmfttzW2CHIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q+rxYqEwZWmRmCTwl/UKEaXhHn1OmSOhZ/DVpDT5RIE=;
- b=bR7uFOTuMEi8FDIL+tsr4tkq/Wkcs/5ihMzd/xf/xovhT+cZm/2KbREyWMvaiPg05QKpR44IE0wWHUNO0bztY5+xsicynMplXUVYi4bvNdVZ18GBt4vsQy8rJ5QLxZE99rfyvWUgWa+x39ayF80XsZIRJO5NHes0eSqV6ckqjtj2eVCbdd4Qkiw9myoFVq5l5Ms0Xl4VjFHpZKT0pDQYerGR8iM//dV979lxzWhy8ic/Vd7f3nMN1UUspGjasLMKsR3yc4B9whX0ZySuuRpbV+0fL9HelZs2XO3WeOaSb3Sq33Hqk2iIOuzijOHVVG+W2kpqDOgqpWzCl9uH4I2KFg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
- MWHPR12MB1534.namprd12.prod.outlook.com (2603:10b6:301:10::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5102.22; Tue, 29 Mar 2022 10:55:44 +0000
-Received: from DM8PR12MB5445.namprd12.prod.outlook.com
- ([fe80::e0d3:d505:3bd6:e79]) by DM8PR12MB5445.namprd12.prod.outlook.com
- ([fe80::e0d3:d505:3bd6:e79%5]) with mapi id 15.20.5102.023; Tue, 29 Mar 2022
- 10:55:44 +0000
-Message-ID: <b70d47e7-5e1b-a23f-80af-eaa255a103e3@nvidia.com>
-Date:   Tue, 29 Mar 2022 11:55:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] drm: tegra: fix memory leak in error handling path
-Content-Language: en-US
-To:     cgel.zte@gmail.com, thierry.reding@gmail.com
-Cc:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-References: <20220329103747.2376753-1-lv.ruyi@zte.com.cn>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20220329103747.2376753-1-lv.ruyi@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS9PR06CA0324.eurprd06.prod.outlook.com
- (2603:10a6:20b:45b::13) To DM8PR12MB5445.namprd12.prod.outlook.com
- (2603:10b6:8:24::7)
+        Tue, 29 Mar 2022 06:57:44 -0400
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F9111D317;
+        Tue, 29 Mar 2022 03:56:01 -0700 (PDT)
+Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
+  by mx.socionext.com with ESMTP; 29 Mar 2022 19:56:00 +0900
+Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
+        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 8B7AF2058443;
+        Tue, 29 Mar 2022 19:56:00 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 29 Mar 2022 19:56:00 +0900
+Received: from [10.212.183.172] (unknown [10.212.183.172])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id D8F11B62B7;
+        Tue, 29 Mar 2022 19:55:58 +0900 (JST)
+Subject: Re: [PATCH 3/3] dt-bindings: phy: uniphier-ahci: Fix missing
+ reset-names
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <1648433152-23126-1-git-send-email-hayashi.kunihiko@socionext.com>
+ <1648433152-23126-4-git-send-email-hayashi.kunihiko@socionext.com>
+ <2e0be70f-f800-e3f8-363e-6598468fa091@linaro.org>
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Message-ID: <54a88acd-49ed-01f6-4108-b74bc653a612@socionext.com>
+Date:   Tue, 29 Mar 2022 19:55:58 +0900
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e21cb0ca-87d0-4060-74aa-08da1172ac24
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1534:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR12MB1534AFD7D2F944D3233C790CD91E9@MWHPR12MB1534.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JGfQ75pO55O3K2G0R6Nv+c1ireSbQQ9ojAWjrfbgd8JnM5Gcjr6iolnZ4zKTWjzcmTNKzmC+6fI0gmL7Z79q50j3lttN7mf7wgvYE9GMQ3DzOEoN6Ba4IkzN++fchoGukNKdJl9pPz27FA1EPH+nAMRYaLo+1Wuu3AyFsvHqnOj4z8ZsUcr2CyGntFDplBviWfADiqWUsfmheaZhy+Ze5Qdgs8tjryLdWvo0EPO08pz21MoRo9iuI0jFpgZc84N/zAns+zPTNBZNZztvYiUKfxYpiulJD3Xc/HoDyUxijnN7GF6mFMi5cajYD9Sz32+rUlP1GbW2EkrRc39sh1XA50/U6fx73nqw0f4qRocMUFij4gd2xID5b/xrzredEIkP6cmuPBSKuOHyIAdlRSiXWp3kQNR+lv9ZC1cPEPZ0sMeiV4pomwp42qO3rO+cN/V1uy446qRMEhRQviYNoVAa3SYGV6qRzDYH8WdhUPzGRjcc1K8b+mrdMdzW3kakplnXq0HFdr2kK91Fq1Tm0lIHJrQN6bdP6BWZ44lMLc4fvyv68igPLvkj9W/ZLLRiFuc3g+Kois43W+HtNM4/0OmVlpDuEDLl96+K83JrW1qVENACOYr+m/lwx1uD8Q9liBQNLQloQ7AxNyTbUPKAB2CKR7m1TSREuoXNevCQnyRJ3b3TULHPjXIctlBDWMCPoleY8CL7QFg1u1urCF2mS0GyBSlMbzXcbwqjRTmqCWA5A+O3dmMy2Zm3VFXvqBBvSXH5bxM2VJPcktGTJLATTZ5R9zK7C5RD/LIAEy0zFThsrB48i6Xdv1TcNOtdwmmJQO6s
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(2906002)(53546011)(6512007)(6506007)(2616005)(6666004)(31696002)(55236004)(86362001)(83380400001)(66946007)(508600001)(186003)(36756003)(26005)(66476007)(6486002)(4326008)(54906003)(316002)(5660300002)(966005)(8936002)(31686004)(66556008)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?djFEQU1ZOVN3Um9JbTNETzNMY3RRUS80UUpLOWVNNCszWndIRitBd0duOThR?=
- =?utf-8?B?ZUp5ME9tOWl4VUtseGMrN1NFckl3TTlXemtxVjk3UC9NdUI2Z282cmU1VGdI?=
- =?utf-8?B?aVMwR3BuSWxiajArU0QrTTJuUVlVckJUN0doQ3RiRTJVeVZQUEkwMW5NMkZo?=
- =?utf-8?B?U3cvMzFobDExbEwrcXdldE84L0FMY0wvQzNWdDBaajZIRGs5NGlPSlhHcmZt?=
- =?utf-8?B?Y3hIWCt2Q2IwR1owenpzeUVZR1FUYndaVlFlOTR6eitoMVpZVCt4Z1RzMVZI?=
- =?utf-8?B?SVlWZ3E2eTdHU0N2Ynd3UFBNaXQ1L01walpaS1lzcHVSZGlXN2poN2lHRUJT?=
- =?utf-8?B?L1J5eVdzdW1wOEhIcUZRMWllMnpvK1FpUWdiZlNTV1NmY1dkVkR6eGEyZFV5?=
- =?utf-8?B?QWxCQVJaYTZ4NFFidHZqK0NqMnAwamZVTXNJbHZzcS9MMmVsa0g3dEZwTFBY?=
- =?utf-8?B?bFBGK1NwQWxmVFZ3THIrSFR6Yy9xZEdrVi9lM1pMN0FmYXpSczAzMWkxclVG?=
- =?utf-8?B?a1BTRG5QZXNvNGRyK3BzaVFySXYyV3VWQWRnTVBUb21iTjd5TGVXUVY0QlVI?=
- =?utf-8?B?akRGclh3ZE9lT0phM3ZkZDNmMk9GVHF5VWdyV1hZMHBGdGp0N29xazdSWCtZ?=
- =?utf-8?B?WjcxWXhvRytEcHdDL0xCZ0JsbmVBRWpqTHhhT3ZrdzJrUk16SHRKSHRFMEF2?=
- =?utf-8?B?L2FJWnhQTzZTei9QVG5UdFZ5c3lBbUlubzJoYURYUVJINEpacC9Td0pNd01l?=
- =?utf-8?B?emkwME0yM2prQzdlR0ZXY3dRWTZ5VTZzb1hhY3QxK1NzTTRmNStiNFZsLzNs?=
- =?utf-8?B?MWJ5RURZM1JxZ1RVd3dIdE4xQlJmUnI1QVQ0WkFJa3ZadTJuM1IrdkJnb0pq?=
- =?utf-8?B?WFQzS1JRTkZCdGs4Y3NRZ2loL3lrY3VhdVRxU2ttYnRtQU1reGhDcnlGNU12?=
- =?utf-8?B?VjcxQUNVOUlUZndMZDc4SXRuamY1WDJuSE0rbnFtdTV1Q3I5TS8vbGtZWjlt?=
- =?utf-8?B?N1NVODVCc015WUJFY0tJdnhGVThIQjQ4My9LVFBMZkZWajROelRIN3h2STJx?=
- =?utf-8?B?N3ZJS1hiVEN5MjFNM2NwZjd1UGkzQUc4WXJuaURJU2dQM0RucUMwWVZyMERS?=
- =?utf-8?B?S2hwSkhiT3gwNWRSbkc4Mm11emZ2TGJyVHFONDBCRXVMWDNYK2ZJOHU4dm11?=
- =?utf-8?B?eHkvTkNnNVdUcWdvbnMxOFBtNUczOVJsWUY3cE1BT1ZTbnNDVGxRNVFyQVNy?=
- =?utf-8?B?TVhUQmgrMGMvTWZZbWJBcmwrcldGVE5RcWpCalh2V2hHak92MWF6VEpUNG9O?=
- =?utf-8?B?RGxaR005SUJhNVIvdFJSVVBtbW9pTkNLRUZPdlJpUUtMV2ZxYUtJejRCUDhQ?=
- =?utf-8?B?VTIxTmdTUEcrTTRYbE9SOXZ3OEFMcDFNQnEzZDdZUlhKY3hQNWJUR3J4SGQy?=
- =?utf-8?B?c3doYUxJdXpVTjFhTkl2RitKWWNNUDlIWEROUWo0ZTR1S3lmSTFhSm1hWEJU?=
- =?utf-8?B?YXNtT3BUbkVBcmx5UllwK0Nhbi9NYWZlSWxGeFIrUHovZGNVcm9qZWloZTJE?=
- =?utf-8?B?QVRNUno2Y1VpMXBGdmVVTHM0Q0VwMlpVdi9QbDZPVGVzNDlwMVpmQndyV1A2?=
- =?utf-8?B?RkNKRmphWXd2M2FIdjZiZXJsMWxjYU9UR1NFTWdWWDBBYk1xdCtxSnk3a0FF?=
- =?utf-8?B?K3ZDV0R4NFRNL21KVHhzejg5eTRBQWlDRSthNStyK29JM2dQYTNjeVFLM2c3?=
- =?utf-8?B?S1VLT09hUDJIWmVHQlFIejFTeG5QWkYzVkIvbjdpSGduUXdXdHlyK1kzZHg4?=
- =?utf-8?B?UTdOT3AzNmtCdEhDU2JXOUFvbW80ajVqaldVWXpUOVFSL3JmVEd6NXBCSlNt?=
- =?utf-8?B?TEcycnJyMFRsbC9IOHJGenBSamQ1Z05uMmN6VE5xR3BmQmdOaDdEN3N6K1d0?=
- =?utf-8?B?TmJ5d0xnMWNYNFk3Nk9ScFZYQzJlOUZibEtuVG51ckNhRFhTLzkxYW0xU0JN?=
- =?utf-8?B?eXFBcHVqRTJWNXNybU9kc1hDZ0FabWtyV3lFUzhMZjdrR2xacXVkeXB2bEx4?=
- =?utf-8?B?TS9qVEpUYVJ5aVN0NzFWajlYV1NSWnFzN3U3eGJtL3NtNEZXK2NFVWttL0Y3?=
- =?utf-8?B?c0pVVFBNWXFyNW5uMU1iYWUwL0E0RlNwYnBuT3krMG5kSjJsblZHaWtrRk9U?=
- =?utf-8?B?d3psNzFtQkk3VzFCMUhLQXBpZ1ZGVHdmdzFkRER5aXNydTIxOEgvNFYvQ2xn?=
- =?utf-8?B?amF1MnVyNGpGbXdUNjVWRnhrV2J0dUZGVDlFT0dRSUZmZnJFZ01nWVNiSXh3?=
- =?utf-8?B?OG05aTV3L2oycDJYSHUyd3JXeGdLVFRmaXF1a0lwQ0N0Q1lJc1JHUT09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e21cb0ca-87d0-4060-74aa-08da1172ac24
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2022 10:55:44.1016
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: J5ZGJRUQHUA3j12PVIqOjnjY7d4r08nfUp533DiBedoGlj6YSxDvjlKcOe1keEpCYGfx5fCVyuGIuUNzY5B28Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1534
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <2e0be70f-f800-e3f8-363e-6598468fa091@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Krzysztof,
 
-On 29/03/2022 11:37, cgel.zte@gmail.com wrote:
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+Thank you for reviewing.
+
+On 2022/03/29 3:58, Krzysztof Kozlowski wrote:
+> On 28/03/2022 04:05, Kunihiko Hayashi wrote:
+>> Add missing "phy" reset-names to fix the following warning:
+>>
+>>    uniphier-pro4-ace.dtb: ahci-phy@10: resets: [[26, 28], [26, 12], [26,
+>> 30], [36, 0], [36, 1], [36, 2]] is too long
+>>        From schema:
+>> Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+>>    uniphier-pro4-ace.dtb: ahci-phy@10: reset-names: 'oneOf' conditional
+>> failed, one must be fixed:
+>>        ['link', 'gio', 'phy', 'pm', 'tx', 'rx'] is too long
+>>        From schema:
+>> Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
 > 
-> Before leave the nvdec_load_firmware, we shuold free virt which is alloced
+> There is no ahci-phy in current sources...
 
-s/shuold/should
-s/alloced/allocated
+Oops, I'm going to add ahci controller to the existing devicetree,
+but not yet. I shouldn't write the future warning in the commit message,
+so I'll fix it.
 
-> by dma_alloc_coherent, so change "return err" to "goto cleanup".
+>>
+>> Fixes: 34f92b67621f ("dt-bindings: phy: uniphier-ahci: Add bindings for
+>> Pro4 SoC")
+>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+>> ---
+>>   .../devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml   | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git
+>> a/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+>> b/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+>> index 3b400a85b44a..14f7579e7daa 100644
+>> ---
+>> a/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+>> +++
+>> b/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.yaml
+>> @@ -43,13 +43,14 @@ properties:
+>>
+>>     resets:
+>>       minItems: 2
+>> -    maxItems: 5
+>> +    maxItems: 6
+>>
+>>     reset-names:
+>>       oneOf:
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-> ---
->   drivers/gpu/drm/tegra/nvdec.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> As a separate commit, this oneOf should be converted into allOf:if:then:
+> cases which will enforce the resets per compatible.
 > 
-> diff --git a/drivers/gpu/drm/tegra/nvdec.c b/drivers/gpu/drm/tegra/nvdec.c
-> index 79e1e88203cf..a14863346bfa 100644
-> --- a/drivers/gpu/drm/tegra/nvdec.c
-> +++ b/drivers/gpu/drm/tegra/nvdec.c
-> @@ -209,7 +209,7 @@ static int nvdec_load_firmware(struct nvdec *nvdec)
->   
->   		err = dma_mapping_error(nvdec->dev, iova);
->   		if (err < 0)
-> -			return err;
-> +			goto cleanup;
+> Can you do that as well?
 
+Ok, I've found some examples using "allOf:if:them:" cases,
+so I'll try to convert it with another commit.
 
-Actually, I think that the correct fix here would be the same as what 
-was done for VIC ...
+Thank you,
 
-https://lore.kernel.org/linux-mm/6b86f6e530b504a5eee864af10e2ae1570d7b645.1639157090.git.robin.murphy@arm.com/
-
-Jon
-
--- 
-nvpublic
+---
+Best Regards
+Kunihiko Hayashi

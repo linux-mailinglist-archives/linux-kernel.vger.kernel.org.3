@@ -2,127 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14EE74EB112
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E554EB123
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238921AbiC2PyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
+        id S239078AbiC2P6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238845AbiC2PyQ (ORCPT
+        with ESMTP id S239071AbiC2P6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:54:16 -0400
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43CEF22C8C2;
-        Tue, 29 Mar 2022 08:52:33 -0700 (PDT)
-Received: by mail-ot1-f54.google.com with SMTP id k25-20020a056830151900b005b25d8588dbso13028326otp.4;
-        Tue, 29 Mar 2022 08:52:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=53EmT+0Iq+omqog9hMr5TTHzAfJsIFc7d5dRnXaOt/M=;
-        b=bQCYhcqHZiYofvN3bGLNEHdT+KCxqODKi2B0KxWgSr8IEntcla+T/YLOMXgZ5cIp+B
-         axJkPqYxHweWspaR19k1iEmNetpgG7BznONpH/lZ30zn5jx9mGhvInuHVdgWfafrkvNB
-         h5v0O8eiO5R+MyHTzjQBmax57MLyXXbhabG2upDphiqTMQ5jA+NxlkLrKjIGC+74tqbB
-         DQ9I9D9oBHfC4amNQaWkYABHpyxksOyOTFAli144OWi61tRXcG8ICIM9/38LersN/Wau
-         xz6jYqrMN8Afx42yGZCS4TIdw255b04bQ3Z0B1QMdzkMlpUf2XaK1gZDPw1sm7yQXejP
-         qhuw==
-X-Gm-Message-State: AOAM532CsLyzPrWAVz5RswYyXAbf00ZXTIiI9MW8LAwGyzIv1Lpv5aTN
-        YgrCByg8tDmC9pJyn2EZnOo/Nl3NGw==
-X-Google-Smtp-Source: ABdhPJxC5Hfm9CPFftdhNmRBujVYhVRHBBUN06bjxcKnKO/caVZGn/GJf5+6eZLXAAmSoxm06F8jyA==
-X-Received: by 2002:a9d:1991:0:b0:5cd:b2a1:5c50 with SMTP id k17-20020a9d1991000000b005cdb2a15c50mr1389734otk.217.1648569152513;
-        Tue, 29 Mar 2022 08:52:32 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w7-20020a9d6387000000b005b2265711fcsm7520205otk.16.2022.03.29.08.52.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 08:52:31 -0700 (PDT)
-Received: (nullmailer pid 753124 invoked by uid 1000);
-        Tue, 29 Mar 2022 15:52:30 -0000
-Date:   Tue, 29 Mar 2022 10:52:30 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] dt-bindings: display: msm: dsi: remove address/size cells
-Message-ID: <YkMrPnRbsl3FBig8@robh.at.kernel.org>
-References: <20220328152923.90623-1-krzysztof.kozlowski@linaro.org>
- <CAA8EJprWoxWwk5EWEfWdLquPR+2=u6V0-v1-+wHMHOk8HiEyNw@mail.gmail.com>
- <YkHtY9absUjmqmW7@matsya>
- <12b0056b-8032-452b-f325-6f36037b5a80@linaro.org>
- <CAL_Jsq+6rx0UU6ryH+z_8KLQqKKuhTCnh=Oft2F03bcze+EV0Q@mail.gmail.com>
- <YkKmPSesQfS6RLCD@matsya>
+        Tue, 29 Mar 2022 11:58:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B1A4D24E
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:57:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1396612CA
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:57:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB7B1C340ED;
+        Tue, 29 Mar 2022 15:57:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648569426;
+        bh=3Xtfj0qdi5cXHLbJKQrGPNIsGSjLL6x0WLhsq+/v46Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OmOYMWUoCDRUBDheu6cIabeycMxE8ZjS8OWKaCZ7bUP1WyIBshy8ru93pCcunhuC2
+         APv+6B7Qgwnhfkynl8IKjhSimJFM9FiM7N4c7PJ/7y3kw2WpjPvbnwSDZ0RQUmzJMI
+         UG1jPO9nUogrIaJchgZqXVixvvOwiGlDU7zv7dXw=
+Date:   Tue, 29 Mar 2022 17:57:03 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     xkernel.wang@foxmail.com
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: r8188eu: check the return value of kzalloc()
+Message-ID: <YkMsTz/iJdgmUxtS@kroah.com>
+References: <tencent_B489FA9F0FC49CF92A77916394E225DC4705@qq.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YkKmPSesQfS6RLCD@matsya>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <tencent_B489FA9F0FC49CF92A77916394E225DC4705@qq.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 12:01:52PM +0530, Vinod Koul wrote:
-> On 28-03-22, 13:21, Rob Herring wrote:
-> > On Mon, Mar 28, 2022 at 12:18 PM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> > >
-> > > On 28/03/2022 19:16, Vinod Koul wrote:
-> > > > On 28-03-22, 19:43, Dmitry Baryshkov wrote:
-> > > >> On Mon, 28 Mar 2022 at 18:30, Krzysztof Kozlowski
-> > > >> <krzysztof.kozlowski@linaro.org> wrote:
-> > > >>>
-> > > >>> The DSI node is not a bus and the children do not have unit addresses.
-> > > >>>
-> > > >>> Reported-by: Vinod Koul <vkoul@kernel.org>
-> > > >>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > >>
-> > > >> NAK.
-> > > >> DSI panels are children of the DSI device tree node with the reg = <0>; address.
-> > > >> This is the convention used by other platforms too (see e.g.
-> > > >> arch/arm64/boot/dts/freescale/imx8mq-evk.dts).
-> > > >
-> > > > So we should add reg = 0, i will update my dtsi fix
-> > > >
-> > >
-> > > To "ports" node? No. The reg=0 is for children of the bus, so the
-> > > panels. How to combine both without warnings - ports and panel@0 - I
-> > > don't know yet...
-> > 
-> > I don't think that should case a warning. Or at least it's one we turn off.
+On Fri, Mar 25, 2022 at 02:53:30PM +0800, xkernel.wang@foxmail.com wrote:
+> From: Xiaoke Wang <xkernel.wang@foxmail.com>
 > 
-> Well in this case I think we might need a fix:
-> Here is the example quoted in the binding. We have ports{} and then the
-> two port@0 and port@1 underneath.
-
-It's the #address-cells/#size-cells under 'ports' that applies to 'port' 
-nodes. As 'ports' has no address (reg) itself, it doesn't need 
-#address-cells/#size-cells in its parent node.
-
+> kzalloc() is a memory allocation function which can return NULL when
+> some internal memory errors happen. So it is better to check the return
+> of it to prevent potential wrong memory access.
 > 
-> So it should be okay to drop #address-cells/#size-cells from dsi node
-> but keep in ports node...
+> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+> ---
+>  drivers/staging/r8188eu/core/rtw_p2p.c  | 2 ++
+>  drivers/staging/r8188eu/core/rtw_xmit.c | 6 ++++++
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/drivers/staging/r8188eu/core/rtw_p2p.c b/drivers/staging/r8188eu/core/rtw_p2p.c
+> index e2b6cf2..503c4a5 100644
+> --- a/drivers/staging/r8188eu/core/rtw_p2p.c
+> +++ b/drivers/staging/r8188eu/core/rtw_p2p.c
+> @@ -35,6 +35,8 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
+>  	DBG_88E("%s\n", __func__);
+>  
+>  	pdata_attr = kzalloc(MAX_P2P_IE_LEN, GFP_KERNEL);
+> +	if (!pdata_attr)
+> +		return 0;
 
-Yes.
+0 is not an error.  Please propagate this error backwards properly.
 
-> Thoughts...?
+>  
+>  	pstart = pdata_attr;
+>  	pcur = pdata_attr;
+> diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+> index 46fe62c..1696272 100644
+> --- a/drivers/staging/r8188eu/core/rtw_xmit.c
+> +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+> @@ -180,6 +180,10 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+>  	pxmitpriv->free_xmit_extbuf_cnt = num_xmit_extbuf;
+>  
+>  	rtw_alloc_hwxmits(padapter);
+> +	if (!pxmitpriv->hwxmits) {
+> +		res = _FAIL;
+> +		goto exit;
+> +	}
 
-But I thought a panel@0 node was being added? If so then you need to add 
-them back.
+You just leaked memory resources :(
 
-Rob
+How did you test this?
+
+
+>  	rtw_init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
+>  
+>  	for (i = 0; i < 4; i++)
+> @@ -1524,6 +1528,8 @@ void rtw_alloc_hwxmits(struct adapter *padapter)
+>  	pxmitpriv->hwxmit_entry = HWXMIT_ENTRY;
+>  
+>  	pxmitpriv->hwxmits = kzalloc(sizeof(struct hw_xmit) * pxmitpriv->hwxmit_entry, GFP_KERNEL);
+> +	if (!pxmitpriv->hwxmits)
+> +		return;
+
+You have to return an error, you can not keep going as if all is well.
+
+Please always be VERY careful with these types of fixes.  Especially if
+you have not tested them.
+
+thanks,
+
+greg k-h

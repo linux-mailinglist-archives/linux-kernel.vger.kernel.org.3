@@ -2,62 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0D24EAA9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A90854EAA9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234763AbiC2Ji6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 05:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46114 "EHLO
+        id S234766AbiC2JjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 05:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234761AbiC2JiS (ORCPT
+        with ESMTP id S234768AbiC2JjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 05:38:18 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B5897B97;
-        Tue, 29 Mar 2022 02:36:27 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id i11so5826628plg.12;
-        Tue, 29 Mar 2022 02:36:27 -0700 (PDT)
+        Tue, 29 Mar 2022 05:39:14 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971819AE60;
+        Tue, 29 Mar 2022 02:37:30 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id p17so17117588plo.9;
+        Tue, 29 Mar 2022 02:37:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NFEP+4MzWHajoB14yHUulSCyNblEw9o47q75qU5Tdek=;
-        b=jbxChcH6l4E4+rE6SOYlHXS9Cprn1w9u+jMBk/N41JCaLIqM5klcHOBtUvIqHVkR/B
-         IYTdf7iBrN+c3otifH3LJQMVngaRFUJyn+r3jjbj3QRTt8hhI1tzdp5J9cuF7H8U0JaE
-         dO473oyPRq1h2XJevGdUsh4jMZ0WbWxdj0vVwjotTB/YmwNED6h0AmBkILACSj3dPtUD
-         SUgraLli5FAw/AuvntHGDFHtXr249U1JgrM+8GfdhR1Q1AU6k2vUIt6szpZhJDahs9z4
-         IFlFLg1jMTysTsEv469yZ44A1Nx2y8ZwGMFFFTvigku45af374VcpCEJ+Yu2bx3Y7eCa
-         +Ojw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/zlJA40sSqkljYS0OOWnIqBOc+WjJedBF8aU/fcWTTY=;
+        b=GBpUDTqwoyA1YYDK+A7hIOVsqpUIHtyd/XQW8jY8XkvByC5xhT/PWj9sqv/yxYnYHp
+         gOeRaBrFhbKni1j+MuVX52A4RdYJJcQtxv45xbcpUBBYgF4+CReT7Snzd25nnic7Rppr
+         3/cTePEtG2Bb17U1K3CMQdeWyb/pxazFOpG7sVwbvvljBxN0wHheusTlmH6nuGYLSoZs
+         BLiGXTruyAUPpDP9ormZQOpE3c4nShEHDPt2TP6PtSi+FgPjY6xEBDBvOcbkCNqODsG0
+         kID+Dg2CnCsIskzc/ZUcV+1o6uqqReAmWuUCy+D+/zktcl0CfjdidksF90j8N2uGaS6j
+         3xfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NFEP+4MzWHajoB14yHUulSCyNblEw9o47q75qU5Tdek=;
-        b=4V3I2DfVG0vwF06dOGjTEBEGS7jluTcJbVn2kID2KVCIeFzNnx5Vya4IGD1ZQVHooN
-         pp4WDH91ovm0h72Fe9KoOGIidwCyUsu4b96ZblhAWY7ZMXs4oju92C8LjPkQk0HhtRAB
-         QvlyIwV2oNyJruRHk5FKlxbMt5XYKF9+ZRkW7/nCtrLQnTjjGfC1yUHezeVb2NFhfLhD
-         udC0HFpB4IqvnIH0NvJcaqAA6XKBl+Rcxo32P5EWlTIEgYlXR22oj/0Y0xphzd/Z73up
-         RwSyqkE/A6G59uu5/68o+sqntsy/dn1feaqqoX01NkBFCsf8Kv2wRSZIFy64DuvR4/bD
-         Yi+Q==
-X-Gm-Message-State: AOAM530qIFwMx/4AQMTzjBEZGj/sTQNTYkZ5XFL3oEN2BDd+Oj1ppqbI
-        lRrsVj5k0q8x2/FGvwMa1FKAi+w1Wg2aXjY3fdQ=
-X-Google-Smtp-Source: ABdhPJyiiZjRrT2knI3JEfT8yuNbK5HSyhUBWSoBfyY6qYaKeeIQnfmm7TN4ToPJZQ830POk1h/Ri8E7uK+43J86QB8=
-X-Received: by 2002:a17:90b:3850:b0:1c6:572e:f39a with SMTP id
- nl16-20020a17090b385000b001c6572ef39amr3630800pjb.233.1648546586563; Tue, 29
- Mar 2022 02:36:26 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/zlJA40sSqkljYS0OOWnIqBOc+WjJedBF8aU/fcWTTY=;
+        b=xn7tJLA5KtRIvCJ7RT5Zj4YRGfsw10SG/Ytp0QnJvRYDnfIF//LpQ5rkD+3KZd4rp+
+         gm67Q/AsMCZJi2Li8LptdXtq463AoGUaBYT/310m/COi6j9SyDGxtzBABgFoPYHY7kOU
+         nLP04ACWPKybDo2G4SGucQINcWpjlP2iELhdsaUjJ0eXcfClMxHfgTvheFEO3lCKxPDF
+         sN32MPOPMhtSyF/sOfpOmCnUkItn8vJqzhy2xfV5nEvtBUd6xAVQgnCAmIPTt7ld97nk
+         CwPLIiI5KpJVb3NBvpmwzX55r+1PqZsKq+OhgpzPuBGnAwGtJ03Wiad3DeRONfKDT7tR
+         k3PQ==
+X-Gm-Message-State: AOAM531gaOprSe0ZTQANOK2yEx+ZP3MOn7mV2dT//dLkXW1amINibtBG
+        ee0cXQ2Wr/TfKliet6w+86s=
+X-Google-Smtp-Source: ABdhPJzT3dIG8SJFhjVfTkrfD3JKvEXGlgzY5FjXT20ao6Jple9/qf6KIxNrTIGZ95Toq+rymdekSQ==
+X-Received: by 2002:a17:902:6b8b:b0:14d:66c4:f704 with SMTP id p11-20020a1709026b8b00b0014d66c4f704mr30087841plk.53.1648546649959;
+        Tue, 29 Mar 2022 02:37:29 -0700 (PDT)
+Received: from localhost ([14.96.13.220])
+        by smtp.gmail.com with ESMTPSA id b16-20020a056a000cd000b004fadb6f0290sm19167984pfv.11.2022.03.29.02.37.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 02:37:29 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 15:07:53 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Hao Luo <haoluo@google.com>
+Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC bpf-next 0/2] Mmapable task local storage.
+Message-ID: <20220329093753.26wc3noelqrwlrcj@apollo.legion>
+References: <20220324234123.1608337-1-haoluo@google.com>
+ <9cdf860d-8370-95b5-1688-af03265cc874@fb.com>
+ <CA+khW7g3hy61qnvtqUizaW+qB6wk=Y9cjivhORshOk=ZzTXJ-A@mail.gmail.com>
+ <CA+khW7iq+UKsfQxdT3QpSqPUFN8gQWWDLoQ9zxB=uWTs63AZEA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220327052028.2013-1-xiam0nd.tong@gmail.com>
-In-Reply-To: <20220327052028.2013-1-xiam0nd.tong@gmail.com>
-From:   Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Date:   Tue, 29 Mar 2022 11:36:15 +0200
-Message-ID: <CAMeQTsboqXW-UeL9+E0vztTg_08w3WxvNhx-HqOdNc9yYJ4V+w@mail.gmail.com>
-Subject: Re: [PATCH] gma500: fix an incorrect NULL check on list iterator
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+khW7iq+UKsfQxdT3QpSqPUFN8gQWWDLoQ9zxB=uWTs63AZEA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -68,54 +77,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 27, 2022 at 7:20 AM Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
+On Mon, Mar 28, 2022 at 11:16:15PM IST, Hao Luo wrote:
+> On Mon, Mar 28, 2022 at 10:39 AM Hao Luo <haoluo@google.com> wrote:
+> >
+> > Hi Yonghong,
+> >
+> > On Fri, Mar 25, 2022 at 12:16 PM Yonghong Song <yhs@fb.com> wrote:
+> > >
+> > > On 3/24/22 4:41 PM, Hao Luo wrote:
+> > > > Some map types support mmap operation, which allows userspace to
+> > > > communicate with BPF programs directly. Currently only arraymap
+> > > > and ringbuf have mmap implemented.
+> > > >
+> > > > However, in some use cases, when multiple program instances can
+> > > > run concurrently, global mmapable memory can cause race. In that
+> > > > case, userspace needs to provide necessary synchronizations to
+> > > > coordinate the usage of mapped global data. This can be a source
+> > > > of bottleneck.
+> > >
+> > > I can see your use case here. Each calling process can get the
+> > > corresponding bpf program task local storage data through
+> > > mmap interface. As you mentioned, there is a tradeoff
+> > > between more memory vs. non-global synchronization.
+> > >
+> > > I am thinking that another bpf_iter approach can retrieve
+> > > the similar result. We could implement a bpf_iter
+> > > for task local storage map, optionally it can provide
+> > > a tid to retrieve the data for that particular tid.
+> > > This way, user space needs an explicit syscall, but
+> > > does not need to allocate more memory than necessary.
+> > >
+> > > WDYT?
+> > >
+> >
+> > Thanks for the suggestion. I have two thoughts about bpf_iter + tid and mmap:
+> >
+> > - mmap prevents the calling task from reading other task's value.
+> > Using bpf_iter, one can pass other task's tid to get their values. I
+> > assume there are two potential ways of passing tid to bpf_iter: one is
+> > to use global data in bpf prog, the other is adding tid parameterized
+> > iter_link. For the first, it's not easy for unpriv tasks to use. For
+> > the second, we need to create one iter_link object for each interested
+> > tid. It may not be easy to use either.
+> >
+> > - Regarding adding an explicit syscall. I thought about adding
+> > write/read syscalls for task local storage maps, just like reading
+> > values from iter_link. Writing or reading task local storage map
+> > updates/reads the current task's value. I think this could achieve the
+> > same effect as mmap.
+> >
 >
-> The bug is here:
->         return crtc;
+> Actually, my use case of using mmap on task local storage is to allow
+> userspace to pass FDs into bpf prog. Some of the helpers I want to add
+> need to take an FD as parameter and the bpf progs can run
+> concurrently, thus using global data is racy. Mmapable task local
+> storage is the best solution I can find for this purpose.
 >
-> The list iterator value 'crtc' will *always* be set and non-NULL by
-> list_for_each_entry(), so it is incorrect to assume that the iterator
-> value will be NULL if the list is empty or no element is found.
+> Song also mentioned to me offline, that mmapable task local storage
+> may be useful for his use case.
 >
-> To fix the bug, return 'crtc' when found, otherwise return NULL.
+> I am actually open to other proposals.
 >
-> Cc: stable@vger.kernel.org
-> fixes: 89c78134cc54d ("gma500: Add Poulsbo support")
-> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-Thanks for the patch
+You could also use a syscall prog, and use bpf_prog_test_run to update local
+storage for current. Data can be passed for that specific prog invocation using
+ctx. You might have to enable bpf_task_storage helpers in it though, since they
+are not allowed to be called right now.
 
-Applied to drm-misc-next
+> > > >
+> > > > It would be great to have a mmapable local storage in that case.
+> > > > This patch adds that.
+> > > >
+> > > > Mmap isn't BPF syscall, so unpriv users can also use it to
+> > > > interact with maps.
+> > > >
+> > > > Currently the only way of allocating mmapable map area is using
+> > > > vmalloc() and it's only used at map allocation time. Vmalloc()
+> > > > may sleep, therefore it's not suitable for maps that may allocate
+> > > > memory in an atomic context such as local storage. Local storage
+> > > > uses kmalloc() with GFP_ATOMIC, which doesn't sleep. This patch
+> > > > uses kmalloc() with GFP_ATOMIC as well for mmapable map area.
+> > > >
+> > > > Allocating mmapable memory has requirment on page alignment. So we
+> > > > have to deliberately allocate more memory than necessary to obtain
+> > > > an address that has sdata->data aligned at page boundary. The
+> > > > calculations for mmapable allocation size, and the actual
+> > > > allocation/deallocation are packaged in three functions:
+> > > >
+> > > >   - bpf_map_mmapable_alloc_size()
+> > > >   - bpf_map_mmapable_kzalloc()
+> > > >   - bpf_map_mmapable_kfree()
+> > > >
+> > > > BPF local storage uses them to provide generic mmap API:
+> > > >
+> > > >   - bpf_local_storage_mmap()
+> > > >
+> > > > And task local storage adds the mmap callback:
+> > > >
+> > > >   - task_storage_map_mmap()
+> > > >
+> > > > When application calls mmap on a task local storage, it gets its
+> > > > own local storage.
+> > > >
+> > > > Overall, mmapable local storage trades off memory with flexibility
+> > > > and efficiency. It brings memory fragmentation but can make programs
+> > > > stateless. Therefore useful in some cases.
+> > > >
+> > > > Hao Luo (2):
+> > > >    bpf: Mmapable local storage.
+> > > >    selftests/bpf: Test mmapable task local storage.
+> > > >
+> > > >   include/linux/bpf.h                           |  4 +
+> > > >   include/linux/bpf_local_storage.h             |  5 +-
+> > > >   kernel/bpf/bpf_local_storage.c                | 73 +++++++++++++++++--
+> > > >   kernel/bpf/bpf_task_storage.c                 | 40 ++++++++++
+> > > >   kernel/bpf/syscall.c                          | 67 +++++++++++++++++
+> > > >   .../bpf/prog_tests/task_local_storage.c       | 38 ++++++++++
+> > > >   .../bpf/progs/task_local_storage_mmapable.c   | 38 ++++++++++
+> > > >   7 files changed, 257 insertions(+), 8 deletions(-)
+> > > >   create mode 100644 tools/testing/selftests/bpf/progs/task_local_storage_mmapable.c
+> > > >
 
--Patrik
-
-> ---
->  drivers/gpu/drm/gma500/psb_intel_display.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/gma500/psb_intel_display.c b/drivers/gpu/drm/gma500/psb_intel_display.c
-> index d5f95212934e..42d1a733e124 100644
-> --- a/drivers/gpu/drm/gma500/psb_intel_display.c
-> +++ b/drivers/gpu/drm/gma500/psb_intel_display.c
-> @@ -535,14 +535,15 @@ void psb_intel_crtc_init(struct drm_device *dev, int pipe,
->
->  struct drm_crtc *psb_intel_get_crtc_from_pipe(struct drm_device *dev, int pipe)
->  {
-> -       struct drm_crtc *crtc = NULL;
-> +       struct drm_crtc *crtc;
->
->         list_for_each_entry(crtc, &dev->mode_config.crtc_list, head) {
->                 struct gma_crtc *gma_crtc = to_gma_crtc(crtc);
-> +
->                 if (gma_crtc->pipe == pipe)
-> -                       break;
-> +                       return crtc;
->         }
-> -       return crtc;
-> +       return NULL;
->  }
->
->  int gma_connector_clones(struct drm_device *dev, int type_mask)
-> --
-> 2.17.1
->
+--
+Kartikeya

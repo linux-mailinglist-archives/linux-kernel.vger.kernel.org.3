@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4064EAC64
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 13:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D1EA4EAC67
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 13:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235904AbiC2LgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 07:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
+        id S235908AbiC2LiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 07:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234229AbiC2LgB (ORCPT
+        with ESMTP id S229938AbiC2LiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 07:36:01 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C014B27CED;
-        Tue, 29 Mar 2022 04:34:14 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id gp15-20020a17090adf0f00b001c7cd11b0b3so1754691pjb.3;
-        Tue, 29 Mar 2022 04:34:14 -0700 (PDT)
+        Tue, 29 Mar 2022 07:38:09 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1953424F34;
+        Tue, 29 Mar 2022 04:36:27 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id 9so17414445iou.5;
+        Tue, 29 Mar 2022 04:36:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xJxDL1SNTaKnpVlTXGlfkqsJg1j05V/c8caKh7MyTzc=;
-        b=erLq8z3hz7HGoGBev359f2q+e7U2gr6L+kklmARvKRjQheIINCWiRuhZKkpYNps42n
-         9SjECMP0G46mJnNRt0sLYxpUbtJnYzde8fKpKacmVeFCYNvZ7vfL/odEf9gkxEyKhwDF
-         /6Qvle4mQ5Op1/kgkydkvfwxJCU29mvqAuUYf3oDI8Q40rBxqQ4OBHyyIQ4e00imXIDY
-         jdZbIID6ftYlr82O8sRL7UnuxlCpDoolsvgYg6pFmcZ+WosLSuVwrVFs2LfSgcCd8lRL
-         kfuMaE/t4wwSajfHNheZz63pfv0Xc45VAR4y6y3GDczV2DiQ0mKJtt3c39lNXlEGuaug
-         bg4g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jSnr/fL0DOHnOTrzVso1/gX7ks14ss+/hLpuSw8JUMk=;
+        b=p4Qf3pkFfcFoMoNLcvVXecWMKYYbperuvwOHYqgbq/5cOLFFZQjj77PpAC9YrllV0M
+         00ttiaWF8Qh+KjW6LJLLkRENhMAt+eGroFTqvIwVFeJfdmDFZa1iW+69X8nlTo7YpobS
+         AxmtfxjAOZJCQOeYcShSNuFt6GvAq2xKKdkJ7tQuga3lQTqWFMQfPcJbm0oJoCvumGy8
+         sn03q4r0oxfwoD8/tSDSBEdLR0gMAp5Q8mBdMswW+DvTTBNNAgrRaxooH6OnAj0kn700
+         dC46QlyfIg9IF7X/f/8qaMvYpaRgJ1o5i7mmRZGIPgm3YE8K5SYFeEs/1okPMCQ2WYux
+         BvfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xJxDL1SNTaKnpVlTXGlfkqsJg1j05V/c8caKh7MyTzc=;
-        b=OsK0l1/gmTF7iDo64S7BdSVVTrqMaivuSEpq5k/s/V2KAH/BkDTzzMnrarJ5HCvXqh
-         i2Dv9a9GA0/A0jp+88UDczC7SP3qKb7bbS6rbrkSO9RlmmiJI0n/jHcujqyVQOtRj/Cc
-         0WZRoQfmvnocH76AOHDKkwnwBTFzg8TXiyuXrJ8MuyUZMNbN1ZmT/Jd2ThDeUTCXf8er
-         xn6Op1KOuDpxl2tZgZ2aEaf7mvcwedaeA+muxPfvDx6xKrCkY7zXzY6kICsdc+mJpQro
-         hZu9jhLUwCivUVCNqUT6vgLbzIQrS7lF9+c/GNkAwH0/KaX8TK0BliGZvUWyjs1SeQbi
-         +/1w==
-X-Gm-Message-State: AOAM533/0RXaFsCSZnnPOvo5WDKITdh40tVdybDp9+sLBXomlolU1d1z
-        VGC+sVWbYSnUvhlO4xGMCII=
-X-Google-Smtp-Source: ABdhPJx2J2LYEPEANmokpjnwVxL0LJByJY/4p/IcAzKhusLMbMW468vj/8WLD4vwS8kuj13BKPpodw==
-X-Received: by 2002:a17:90a:9f0b:b0:1c6:a876:4157 with SMTP id n11-20020a17090a9f0b00b001c6a8764157mr4058159pjp.173.1648553654183;
-        Tue, 29 Mar 2022 04:34:14 -0700 (PDT)
-Received: from localhost ([122.179.46.149])
-        by smtp.gmail.com with ESMTPSA id p13-20020a056a000b4d00b004faecee6e89sm18987908pfo.208.2022.03.29.04.34.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 04:34:13 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 17:04:11 +0530
-From:   Ritesh Harjani <ritesh.list@gmail.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Ritesh Harjani <riteshh@linux.ibm.com>,
-        fstests <fstests@vger.kernel.org>, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 4/4] generic/677: Add a test to check unwritten extents
- tracking
-Message-ID: <20220329113411.ov6efsdyvbfa4xul@riteshh-domain>
-References: <cover.1647342932.git.riteshh@linux.ibm.com>
- <37d65f1026f2fc1f2d13ab54980de93f4fa34c46.1647342932.git.riteshh@linux.ibm.com>
- <20220315165607.GD8200@magnolia>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jSnr/fL0DOHnOTrzVso1/gX7ks14ss+/hLpuSw8JUMk=;
+        b=EQVFAhpRrYxIMPUIG4BTiVrRmmPg/RBLWBq8XbFUvDbti9ym/rsZCxeNLzfdlaaMaO
+         8A/WGK46yE8mR8NLUIJjlj/5tKJGnnK/vzkouw4kuAOYW0dJ9BjLdotFNQvBqvCXvZfs
+         TnypazbM1u2+cLjoKEl+LsdnXZvLDodJvK+jm6ZIHeEjJ0HlGrnDsfbUDVZ3pIeJe0sV
+         8p1yD8AoDJtCE731ErJ8HRXoEC4tBOFjJlkphuAdGQYT3CcECYdWANPZ2Lq7LBFTL/r9
+         t/+D1plm5Us2sZzDXgcmswZ0SUIUapLleNBPK3Mta76yb5T46vzu1JOVATAMKTxWt3FI
+         XJQw==
+X-Gm-Message-State: AOAM531/RY44HfA7hV3cKWhcDQPbbIbZFfN+MZv+DvloiNOe4iJ7DBjO
+        c9eYJW8USnclnpGiJms83w3bblA2NEx6EThc2uU=
+X-Google-Smtp-Source: ABdhPJwo8TR1LeK9Azsw8K68d4kff01Y0tfhZxcrx73QkjjILHXiyuZ2HAok64MM5yhhF4pH0rVz5LPE+aBk6240sMU=
+X-Received: by 2002:a02:c85c:0:b0:323:7196:6226 with SMTP id
+ r28-20020a02c85c000000b0032371966226mr3970814jao.108.1648553786599; Tue, 29
+ Mar 2022 04:36:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315165607.GD8200@magnolia>
+References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
+ <20220327121404.1702631-3-eugene.shalygin@gmail.com> <CAB95QASpZTz4eMger46WEa9xWJNmARShBUNb7edJA1eij3KBwA@mail.gmail.com>
+ <a1607f0d-9d6c-fb55-d0d2-b57e4fdfda23@roeck-us.net> <CAB95QAQTtVWMs3dOx87G+D_GzGuMjnmPGiYQLqqQiCHT939Upw@mail.gmail.com>
+ <a2a3ab35-7e21-51f9-fee2-67f6686b13c8@roeck-us.net> <CAB95QARqSm=TLsynwfoXUS2+rfi6ghUHekSoPv3JHn0GyaDTdw@mail.gmail.com>
+ <YkHZRzbi54t0pZkO@thelio-3990X>
+In-Reply-To: <YkHZRzbi54t0pZkO@thelio-3990X>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Tue, 29 Mar 2022 13:36:15 +0200
+Message-ID: <CAB95QASaAiuWs8_Gi_qrNiTvkddwzDCeUaHAP=2jTieooe89-g@mail.gmail.com>
+Subject: Re: [PATCH 2/4] hwmon: (asus-ec-sensors) implement locking via the
+ ACPI global lock
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, darcagn@protonmail.com,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,78 +72,4 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/15 09:56AM, Darrick J. Wong wrote:
-> On Tue, Mar 15, 2022 at 07:58:59PM +0530, Ritesh Harjani wrote:
-> > With these sequence of operation (in certain cases like with ext4 fast_commit)
-> > could miss to track unwritten extents during replay phase
-> > (after sudden FS shutdown).
-> >
-> > This fstest adds a test case to test this.
-> >
-> > 5e4d0eba1ccaf19f
-> > ext4: fix fast commit may miss tracking range for FALLOC_FL_ZERO_RANGE
-> >
-> > Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
-> > ---
-> >  tests/generic/677     | 64 +++++++++++++++++++++++++++++++++++++++++++
-> >  tests/generic/677.out |  6 ++++
-> >  2 files changed, 70 insertions(+)
-> >  create mode 100755 tests/generic/677
-> >  create mode 100644 tests/generic/677.out
-> >
-> > diff --git a/tests/generic/677 b/tests/generic/677
-> > new file mode 100755
-> > index 00000000..e316763a
-> > --- /dev/null
-> > +++ b/tests/generic/677
-> > @@ -0,0 +1,64 @@
-> > +#! /bin/bash
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +# Copyright (c) 2022 IBM Corporation.  All Rights Reserved.
-> > +#
-> > +# FS QA Test 677
-> > +#
-> > +# Test below sequence of operation which (w/o below kernel patch) in case of
-> > +# ext4 with fast_commit may misss to track unwritten extents.
-> > +# commit 5e4d0eba1ccaf19f
-> > +# ext4: fix fast commit may miss tracking range for FALLOC_FL_ZERO_RANGE
-> > +#
-> > +. ./common/preamble
-> > +_begin_fstest auto quick log shutdown recoveryloop
-> > +
-> > +# Override the default cleanup function.
-> > +_cleanup()
-> > +{
-> > +	cd /
-> > +	rm -r -f $tmp.*
-> > +}
-> > +
-> > +# Import common functions.
-> > +. ./common/filter
-> > +. ./common/punch
-> > +
-> > +# real QA test starts here
-> > +
-> > +# Modify as appropriate.
-> > +_supported_fs generic
-> > +_require_scratch
-> > +_require_xfs_io_command "fzero"
-> > +_require_xfs_io_command "fiemap"
-> > +
-> > +t1=$SCRATCH_MNT/t1
-> > +
-> > +_scratch_mkfs > $seqres.full 2>&1
-> > +
-> > +_scratch_mount >> $seqres.full 2>&1
-> > +
-> > +bs=$(_get_block_size $SCRATCH_MNT)
->
-> Same comments about blocksize, group names, and
-> _require_scratch_shutdown as the last patch.
-
-Sure, I will fix blocksize and _require_scratch_shutdown part.
-I have added my thoughts above group names in previous patch.
-
-Thanks for reviewing this.
-
--ritesh
+Thank you, Nathan!

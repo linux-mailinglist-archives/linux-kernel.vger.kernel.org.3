@@ -2,275 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 874EB4EA660
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 06:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61C24EA666
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 06:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbiC2EXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 00:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54370 "EHLO
+        id S232005AbiC2E0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 00:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231982AbiC2EXI (ORCPT
+        with ESMTP id S229938AbiC2E0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 00:23:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8214F23B3D9
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 21:21:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648527684;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FdtzVbHEVVTrIVUf/a9wd2B8iWz4QyPeNZt3tZlqNJw=;
-        b=VCWlxbjbdCkuD2QiSLWA0RJkn/sYUrw7kuroE6VR+Rd5pfleITYNNwyvFQoVJsnUh6KJwX
-        i7pr5zKst9+V2+HKabD6D9+Vu3y0AW6FX789VXYnkhlqYF27Bu48Q9SKv6hTKgKguAdVAi
-        saOzQlgjDGcOz/PotpNEJwQFkWbCDWw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-252-aUhgNfJhPs2o-9QYqGgDlA-1; Tue, 29 Mar 2022 00:21:23 -0400
-X-MC-Unique: aUhgNfJhPs2o-9QYqGgDlA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 931A7299E74A;
-        Tue, 29 Mar 2022 04:21:22 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-13-210.pek2.redhat.com [10.72.13.210])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C2C70401DEA;
-        Tue, 29 Mar 2022 04:21:19 +0000 (UTC)
-From:   Jason Wang <jasowang@redhat.com>
-To:     jasowang@redhat.com, mst@redhat.com
-Cc:     elic@nvidia.com, hdanton@sina.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND V2 3/3] vdpa/mlx5: Use consistent RQT size
-Date:   Tue, 29 Mar 2022 12:21:09 +0800
-Message-Id: <20220329042109.4029-3-jasowang@redhat.com>
-In-Reply-To: <20220329042109.4029-1-jasowang@redhat.com>
-References: <20220329042109.4029-1-jasowang@redhat.com>
+        Tue, 29 Mar 2022 00:26:00 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD86723D478
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 21:24:17 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id t19so14315507qtc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 21:24:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version;
+        bh=OHsT30LerQF22ZxAY4E0nr/Vxbvqe+9c/4GeB7Fivh8=;
+        b=N+EsFZUrQDyjVloHimvvkYMsBgu+pa6DpbKwo+Zcn2AxLUESRVqEjt2to46fJ2NUZg
+         AzegJhQvpu/oMaXxe7Ef0ilxAaQCNfXXzN8lxRKApiPg1nEizVbJV3CC2v0R2nyXY2nZ
+         Q/ibW8cZ7KpjArRqRtxJT3mSnwHkIyxGiqQzifXo82mD6vG0oTjoBl+WtnIypAUAIyHN
+         ve1axsAWd2HS8Gvi62dLmA8M+cVyF9VtBp1hAVd9Ic5RSpnr4uz/b9t+E1eam6CnDDQX
+         WpSLm9u+UboXF0Gwu5txXNOsAmealYGJgJyNdxyxu07iy40atTHv2zy3N4qsJ2wyg9Av
+         kHgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version;
+        bh=OHsT30LerQF22ZxAY4E0nr/Vxbvqe+9c/4GeB7Fivh8=;
+        b=Z6GahYoiqNOcVkQ12Ex7xSaaL44sEzzcQGXN/adw8OtRC89jXhhdCoi6YxWV4P9rwZ
+         ATF7QKCEfY7QYXGB+57dHSy4zgUuYRxKiZX+bVYqYmcNp1K34L8N/MLvAqgbsx0VxsJF
+         kG/MJzjAJYkl1e+pjY+p5z13Icr04yHVCJZbSyXBbmhVfu8yx37NrQ9zFhHkdfqymTFf
+         18V+G8frBPa1mK7xt6X36WgUUg+LQx3AxBAiJnl2T/cTUMa7Gyquy6vtEwnzernZbofh
+         BWVShg9Atnut7/8WAif7XeJv5oMX+hs86XZj7aCyWj6VTRGsdq8W6+C5u/R5Wc5RmCu1
+         lS8Q==
+X-Gm-Message-State: AOAM533yXAlUO4U7xd1TTkjf0saIcup4DT+6BXONETAVEwezpewhaD/6
+        7BFtCK3TDY1OJEX3nmPmlNZmrQ==
+X-Google-Smtp-Source: ABdhPJxfTzQF/4ZAeYVD42hLjotpcitS/7MwiAfMdWth5B6XyDL4W++zJKi7NeSloasokbh5SUekxQ==
+X-Received: by 2002:ac8:4417:0:b0:2e1:b5bb:3474 with SMTP id j23-20020ac84417000000b002e1b5bb3474mr25252083qtn.18.1648527856325;
+        Mon, 28 Mar 2022 21:24:16 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id x12-20020a05620a12ac00b0067d4bfffc59sm8790217qki.118.2022.03.28.21.24.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 21:24:16 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 21:24:00 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Matthew Wilcox <willy@infradead.org>
+cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: WARNING: mm/workingset.c:567 shadow_lru_isolate
+Message-ID: <55db706b-9bce-b820-7d88-6392374cd4fc@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eli Cohen <elic@nvidia.com>
+Sunday's linux.git, under tmpfs swapping load (including
+ext4 file readonly THPs and shmem THPs), gave me the:
 
-The current code evaluates RQT size based on the configured number of
-virtqueues. This can raise an issue in the following scenario:
+	if (WARN_ON_ONCE(!node->nr_values))
+		goto out_invalid;
+	if (WARN_ON_ONCE(node->count != node->nr_values))
+		goto out_invalid;
 
-Assume MQ was negotiated.
-1. mlx5_vdpa_set_map() gets called.
-2. handle_ctrl_mq() is called setting cur_num_vqs to some value, lower
-   than the configured max VQs.
-3. A second set_map gets called, but now a smaller number of VQs is used
-   to evaluate the size of the RQT.
-4. handle_ctrl_mq() is called with a value larger than what the RQT can
-   hold. This will emit errors and the driver state is compromised.
+from mm/workingset.c - log below.  I did see these on mmotm before
+the merge window, but only now got around to bisecting them.  And
+the bisection, confirmed by revert, arrives surprisingly at:
 
-To fix this, we use a new field in struct mlx5_vdpa_net to hold the
-required number of entries in the RQT. This value is evaluated in
-mlx5_vdpa_set_driver_features() where we have the negotiated features
-all set up.
+820c4e2e6f51 ("mm/vmscan: Free non-shmem folios without splitting them")
 
-In addtion to that, we take into consideration the max capability of RQT
-entries early when the device is added so we don't need to take consider
-it when creating the RQT.
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -1739,8 +1739,8 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+ 				/* Adding to swap updated mapping */
+ 				mapping = page_mapping(page);
+ 			}
+-		} else if (unlikely(PageTransHuge(page))) {
+-			/* Split file THP */
++		} else if (PageSwapBacked(page) && PageTransHuge(page)) {
++			/* Split shmem THP */
+ 			if (split_folio_to_list(folio, page_list))
+ 				goto keep_locked;
+ 		}
 
-Last, we remove the use of mlx5_vdpa_max_qps() which just returns the
-max_vas / 2 and make the code clearer.
+I'm not familiar with workingset.c, I'll make no guesses, over to you!
 
-Fixes: 52893733f2c5 ("vdpa/mlx5: Add multiqueue support")
-Signed-off-by: Eli Cohen <elic@nvidia.com>
----
- drivers/vdpa/mlx5/net/mlx5_vnet.c | 61 +++++++++++--------------------
- 1 file changed, 21 insertions(+), 40 deletions(-)
+Hugh
 
-diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-index 53b8c1a68f90..61bec1ed0bc9 100644
---- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-+++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-@@ -161,6 +161,7 @@ struct mlx5_vdpa_net {
- 	struct mlx5_flow_handle *rx_rule_mcast;
- 	bool setup;
- 	u32 cur_num_vqs;
-+	u32 rqt_size;
- 	struct notifier_block nb;
- 	struct vdpa_callback config_cb;
- 	struct mlx5_vdpa_wq_ent cvq_ent;
-@@ -204,17 +205,12 @@ static __virtio16 cpu_to_mlx5vdpa16(struct mlx5_vdpa_dev *mvdev, u16 val)
- 	return __cpu_to_virtio16(mlx5_vdpa_is_little_endian(mvdev), val);
- }
- 
--static inline u32 mlx5_vdpa_max_qps(int max_vqs)
--{
--	return max_vqs / 2;
--}
--
- static u16 ctrl_vq_idx(struct mlx5_vdpa_dev *mvdev)
- {
- 	if (!(mvdev->actual_features & BIT_ULL(VIRTIO_NET_F_MQ)))
- 		return 2;
- 
--	return 2 * mlx5_vdpa_max_qps(mvdev->max_vqs);
-+	return mvdev->max_vqs;
- }
- 
- static bool is_ctrl_vq_idx(struct mlx5_vdpa_dev *mvdev, u16 idx)
-@@ -1236,25 +1232,13 @@ static void teardown_vq(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *
- static int create_rqt(struct mlx5_vdpa_net *ndev)
- {
- 	__be32 *list;
--	int max_rqt;
- 	void *rqtc;
- 	int inlen;
- 	void *in;
- 	int i, j;
- 	int err;
--	int num;
--
--	if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_MQ)))
--		num = 1;
--	else
--		num = ndev->cur_num_vqs / 2;
- 
--	max_rqt = min_t(int, roundup_pow_of_two(num),
--			1 << MLX5_CAP_GEN(ndev->mvdev.mdev, log_max_rqt_size));
--	if (max_rqt < 1)
--		return -EOPNOTSUPP;
--
--	inlen = MLX5_ST_SZ_BYTES(create_rqt_in) + max_rqt * MLX5_ST_SZ_BYTES(rq_num);
-+	inlen = MLX5_ST_SZ_BYTES(create_rqt_in) + ndev->rqt_size * MLX5_ST_SZ_BYTES(rq_num);
- 	in = kzalloc(inlen, GFP_KERNEL);
- 	if (!in)
- 		return -ENOMEM;
-@@ -1263,12 +1247,12 @@ static int create_rqt(struct mlx5_vdpa_net *ndev)
- 	rqtc = MLX5_ADDR_OF(create_rqt_in, in, rqt_context);
- 
- 	MLX5_SET(rqtc, rqtc, list_q_type, MLX5_RQTC_LIST_Q_TYPE_VIRTIO_NET_Q);
--	MLX5_SET(rqtc, rqtc, rqt_max_size, max_rqt);
-+	MLX5_SET(rqtc, rqtc, rqt_max_size, ndev->rqt_size);
- 	list = MLX5_ADDR_OF(rqtc, rqtc, rq_num[0]);
--	for (i = 0, j = 0; i < max_rqt; i++, j += 2)
--		list[i] = cpu_to_be32(ndev->vqs[j % (2 * num)].virtq_id);
-+	for (i = 0, j = 0; i < ndev->rqt_size; i++, j += 2)
-+		list[i] = cpu_to_be32(ndev->vqs[j % ndev->cur_num_vqs].virtq_id);
- 
--	MLX5_SET(rqtc, rqtc, rqt_actual_size, max_rqt);
-+	MLX5_SET(rqtc, rqtc, rqt_actual_size, ndev->rqt_size);
- 	err = mlx5_vdpa_create_rqt(&ndev->mvdev, in, inlen, &ndev->res.rqtn);
- 	kfree(in);
- 	if (err)
-@@ -1282,19 +1266,13 @@ static int create_rqt(struct mlx5_vdpa_net *ndev)
- static int modify_rqt(struct mlx5_vdpa_net *ndev, int num)
- {
- 	__be32 *list;
--	int max_rqt;
- 	void *rqtc;
- 	int inlen;
- 	void *in;
- 	int i, j;
- 	int err;
- 
--	max_rqt = min_t(int, roundup_pow_of_two(ndev->cur_num_vqs / 2),
--			1 << MLX5_CAP_GEN(ndev->mvdev.mdev, log_max_rqt_size));
--	if (max_rqt < 1)
--		return -EOPNOTSUPP;
--
--	inlen = MLX5_ST_SZ_BYTES(modify_rqt_in) + max_rqt * MLX5_ST_SZ_BYTES(rq_num);
-+	inlen = MLX5_ST_SZ_BYTES(modify_rqt_in) + ndev->rqt_size * MLX5_ST_SZ_BYTES(rq_num);
- 	in = kzalloc(inlen, GFP_KERNEL);
- 	if (!in)
- 		return -ENOMEM;
-@@ -1305,10 +1283,10 @@ static int modify_rqt(struct mlx5_vdpa_net *ndev, int num)
- 	MLX5_SET(rqtc, rqtc, list_q_type, MLX5_RQTC_LIST_Q_TYPE_VIRTIO_NET_Q);
- 
- 	list = MLX5_ADDR_OF(rqtc, rqtc, rq_num[0]);
--	for (i = 0, j = 0; i < max_rqt; i++, j += 2)
-+	for (i = 0, j = 0; i < ndev->rqt_size; i++, j += 2)
- 		list[i] = cpu_to_be32(ndev->vqs[j % num].virtq_id);
- 
--	MLX5_SET(rqtc, rqtc, rqt_actual_size, max_rqt);
-+	MLX5_SET(rqtc, rqtc, rqt_actual_size, ndev->rqt_size);
- 	err = mlx5_vdpa_modify_rqt(&ndev->mvdev, in, inlen, ndev->res.rqtn);
- 	kfree(in);
- 	if (err)
-@@ -1582,7 +1560,7 @@ static virtio_net_ctrl_ack handle_ctrl_mq(struct mlx5_vdpa_dev *mvdev, u8 cmd)
- 
- 		newqps = mlx5vdpa16_to_cpu(mvdev, mq.virtqueue_pairs);
- 		if (newqps < VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MIN ||
--		    newqps > mlx5_vdpa_max_qps(mvdev->max_vqs))
-+		    newqps > ndev->rqt_size)
- 			break;
- 
- 		if (ndev->cur_num_vqs == 2 * newqps) {
-@@ -1946,7 +1924,7 @@ static int setup_virtqueues(struct mlx5_vdpa_dev *mvdev)
- 	int err;
- 	int i;
- 
--	for (i = 0; i < 2 * mlx5_vdpa_max_qps(mvdev->max_vqs); i++) {
-+	for (i = 0; i < mvdev->max_vqs; i++) {
- 		err = setup_vq(ndev, &ndev->vqs[i]);
- 		if (err)
- 			goto err_vq;
-@@ -2017,9 +1995,11 @@ static int mlx5_vdpa_set_driver_features(struct vdpa_device *vdev, u64 features)
- 
- 	ndev->mvdev.actual_features = features & ndev->mvdev.mlx_features;
- 	if (ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_MQ))
--		ndev->cur_num_vqs = 2 * mlx5vdpa16_to_cpu(mvdev, ndev->config.max_virtqueue_pairs);
-+		ndev->rqt_size = mlx5vdpa16_to_cpu(mvdev, ndev->config.max_virtqueue_pairs);
- 	else
--		ndev->cur_num_vqs = 2;
-+		ndev->rqt_size = 1;
-+
-+	ndev->cur_num_vqs = 2 * ndev->rqt_size;
- 
- 	update_cvq_info(mvdev);
- 	return err;
-@@ -2486,7 +2466,7 @@ static void init_mvqs(struct mlx5_vdpa_net *ndev)
- 	struct mlx5_vdpa_virtqueue *mvq;
- 	int i;
- 
--	for (i = 0; i < 2 * mlx5_vdpa_max_qps(ndev->mvdev.max_vqs); ++i) {
-+	for (i = 0; i < ndev->mvdev.max_vqs; ++i) {
- 		mvq = &ndev->vqs[i];
- 		memset(mvq, 0, offsetof(struct mlx5_vdpa_virtqueue, ri));
- 		mvq->index = i;
-@@ -2606,7 +2586,8 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- 		return -EOPNOTSUPP;
- 	}
- 
--	max_vqs = MLX5_CAP_DEV_VDPA_EMULATION(mdev, max_num_virtio_queues);
-+	max_vqs = min_t(int, MLX5_CAP_DEV_VDPA_EMULATION(mdev, max_num_virtio_queues),
-+			1 << MLX5_CAP_GEN(mdev, log_max_rqt_size));
- 	if (max_vqs < 2) {
- 		dev_warn(mdev->device,
- 			 "%d virtqueues are supported. At least 2 are required\n",
-@@ -2670,7 +2651,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- 		ndev->mvdev.mlx_features |= BIT_ULL(VIRTIO_NET_F_MAC);
- 	}
- 
--	config->max_virtqueue_pairs = cpu_to_mlx5vdpa16(mvdev, mlx5_vdpa_max_qps(max_vqs));
-+	config->max_virtqueue_pairs = cpu_to_mlx5vdpa16(mvdev, max_vqs / 2);
- 	mvdev->vdev.dma_dev = &mdev->pdev->dev;
- 	err = mlx5_vdpa_alloc_resources(&ndev->mvdev);
- 	if (err)
-@@ -2697,7 +2678,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- 	ndev->nb.notifier_call = event_handler;
- 	mlx5_notifier_register(mdev, &ndev->nb);
- 	mvdev->vdev.mdev = &mgtdev->mgtdev;
--	err = _vdpa_register_device(&mvdev->vdev, 2 * mlx5_vdpa_max_qps(max_vqs) + 1);
-+	err = _vdpa_register_device(&mvdev->vdev, max_vqs + 1);
- 	if (err)
- 		goto err_reg;
- 
--- 
-2.18.1
-
+[ 1470.572186] ------------[ cut here ]------------
+[ 1470.574478] WARNING: CPU: 1 PID: 47 at mm/workingset.c:567 shadow_lru_isolate+0x84/0x128
+[ 1470.575570] CPU: 1 PID: 47 Comm: kswapd0 Not tainted 5.18.0-rc0 #2
+[ 1470.576592] Hardware name: LENOVO 20HQS0EG02/20HQS0EG02, BIOS N1MET54W (1.39 ) 04/16/2019
+[ 1470.577836] RIP: 0010:shadow_lru_isolate+0x84/0x128
+[ 1470.579170] Code: 89 ff 4c 8d 73 e8 e8 16 f4 ff ff 83 ca ff be 09 00 00 00 4c 89 f7 e8 91 3c 05 00 4c 89 ef e8 e9 25 7d 00 8a 43 eb 84 c0 75 04 <0f> 0b eb 2a 3a 43 ea 74 04 0f 0b eb 21 48 c7 c6 6a f7 1f 81 4c 89
+[ 1470.580669] RSP: 0018:ffff888000e0bba0 EFLAGS: 00010046
+[ 1470.582173] RAX: 0000000080000000 RBX: ffff888016c21510 RCX: 8bc9d3bc33ed677c
+[ 1470.583755] RDX: 0000000000000003 RSI: ffffffff823f436f RDI: 00000000ffffffff
+[ 1470.585303] RBP: ffff888000e0bbc8 R08: 0000000000000078 R09: 00000000000c8386
+[ 1470.586860] R10: 0000000000000001 R11: ffff888000e055b8 R12: ffff8880166c99d0
+[ 1470.588518] R13: ffff8880010dd180 R14: ffff888016c214f8 R15: ffff8880010dd1c0
+[ 1470.590154] FS:  0000000000000000(0000) GS:ffff88803ec80000(0000) knlGS:0000000000000000
+[ 1470.591743] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1470.593296] CR2: 0000555555694f50 CR3: 000000000f940005 CR4: 00000000003706e0
+[ 1470.594824] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 1470.596198] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[ 1470.597581] Call Trace:
+[ 1470.598907]  <TASK>
+[ 1470.600267]  __list_lru_walk_one+0x84/0xf2
+[ 1470.601629]  ? workingset_update_node+0x84/0x84
+[ 1470.602977]  list_lru_walk_one_irq+0x59/0x74
+[ 1470.604324]  ? workingset_update_node+0x84/0x84
+[ 1470.605657]  scan_shadow_nodes+0x29/0x2b
+[ 1470.607073]  do_shrink_slab+0x1d0/0x33d
+[ 1470.608477]  shrink_slab+0x98/0x100
+[ 1470.609880]  shrink_node_memcgs+0x136/0x182
+[ 1470.611164]  shrink_node+0x220/0x3d9
+[ 1470.612446]  balance_pgdat+0x216/0x3cb
+[ 1470.613715]  ? lock_is_held_type+0xcf/0x10f
+[ 1470.615010]  kswapd+0x189/0x1ae
+[ 1470.616285]  ? balance_pgdat+0x3cb/0x3cb
+[ 1470.617481]  kthread+0xee/0xf6
+[ 1470.618690]  ? kthread_exit+0x1f/0x1f
+[ 1470.619932]  ret_from_fork+0x1f/0x30
+[ 1470.621110]  </TASK>
+[ 1470.622237] irq event stamp: 76862920
+[ 1470.623284] hardirqs last  enabled at (76862919): [<ffffffff819d1ee3>] _raw_spin_unlock_irq+0x23/0x42
+[ 1470.624373] hardirqs last disabled at (76862920): [<ffffffff819d1c96>] _raw_spin_lock_irq+0x17/0x4c
+[ 1470.625540] softirqs last  enabled at (76861226): [<ffffffff81c0036f>] __do_softirq+0x36f/0x3aa
+[ 1470.626752] softirqs last disabled at (76861195): [<ffffffff811049cd>] __irq_exit_rcu+0x85/0xc1
+[ 1470.627957] ---[ end trace 0000000000000000 ]---
+[ 1470.629407] ------------[ cut here ]------------
+[ 1470.630849] WARNING: CPU: 1 PID: 47 at mm/workingset.c:569 shadow_lru_isolate+0x8d/0x128
+[ 1470.632264] CPU: 1 PID: 47 Comm: kswapd0 Tainted: G        W         5.18.0-rc0 #2
+[ 1470.633729] Hardware name: LENOVO 20HQS0EG02/20HQS0EG02, BIOS N1MET54W (1.39 ) 04/16/2019
+[ 1470.635202] RIP: 0010:shadow_lru_isolate+0x8d/0x128
+[ 1470.636601] Code: ff ff 83 ca ff be 09 00 00 00 4c 89 f7 e8 91 3c 05 00 4c 89 ef e8 e9 25 7d 00 8a 43 eb 84 c0 75 04 0f 0b eb 2a 3a 43 ea 74 04 <0f> 0b eb 21 48 c7 c6 6a f7 1f 81 4c 89 f7 e8 71 ca 7a 00 ba 01 00
+[ 1470.638206] RSP: 0018:ffff888000e0bba0 EFLAGS: 00010087
+[ 1470.639811] RAX: 0000000080000020 RBX: ffff888016c4d020 RCX: 8bc9d3bc33ed677c
+[ 1470.641470] RDX: 0000000000000003 RSI: ffffffff823f436f RDI: 00000000ffffffff
+[ 1470.643072] RBP: ffff888000e0bbc8 R08: 0000000000000078 R09: 00000000000c8386
+[ 1470.644688] R10: 0000000000000001 R11: ffff888000e055b8 R12: ffff888016c54910
+[ 1470.646312] R13: ffff8880010dd180 R14: ffff888016c4d008 R15: ffff8880010dd1c0
+[ 1470.648341] FS:  0000000000000000(0000) GS:ffff88803ec80000(0000) knlGS:0000000000000000
+[ 1470.649820] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1470.651404] CR2: 0000555555694f50 CR3: 000000000f940005 CR4: 00000000003706e0
+[ 1470.651408] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 1470.651411] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[ 1470.655817] Call Trace:
+[ 1470.655821]  <TASK>
+[ 1470.655824]  __list_lru_walk_one+0x84/0xf2
+[ 1470.660171]  ? workingset_update_node+0x84/0x84
+[ 1470.660178]  list_lru_walk_one_irq+0x59/0x74
+[ 1470.662784]  ? workingset_update_node+0x84/0x84
+[ 1470.662791]  scan_shadow_nodes+0x29/0x2b
+[ 1470.662795]  do_shrink_slab+0x1d0/0x33d
+[ 1470.662800]  shrink_slab+0x98/0x100
+[ 1470.662805]  shrink_node_memcgs+0x136/0x182
+[ 1470.662810]  shrink_node+0x220/0x3d9
+[ 1470.662814]  balance_pgdat+0x216/0x3cb
+[ 1470.662818]  ? lock_is_held_type+0xcf/0x10f
+[ 1470.662824]  kswapd+0x189/0x1ae
+[ 1470.662828]  ? balance_pgdat+0x3cb/0x3cb
+[ 1470.662833]  kthread+0xee/0xf6
+[ 1470.662838]  ? kthread_exit+0x1f/0x1f
+[ 1470.662843]  ret_from_fork+0x1f/0x30
+[ 1470.662849]  </TASK>
+[ 1470.662851] irq event stamp: 76862966
+[ 1470.662854] hardirqs last  enabled at (76862965): [<ffffffff819d1ee3>] _raw_spin_unlock_irq+0x23/0x42
+[ 1470.662860] hardirqs last disabled at (76862966): [<ffffffff819d1c96>] _raw_spin_lock_irq+0x17/0x4c
+[ 1470.662866] softirqs last  enabled at (76862958): [<ffffffff81c0036f>] __do_softirq+0x36f/0x3aa
+[ 1470.662871] softirqs last disabled at (76862925): [<ffffffff811049cd>] __irq_exit_rcu+0x85/0xc1
+[ 1470.662877] ---[ end trace 0000000000000000 ]---

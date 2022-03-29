@@ -2,97 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879224EA71F
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 07:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E854EA63F
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 06:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbiC2F2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 01:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
+        id S231898AbiC2EFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 00:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231912AbiC2F2t (ORCPT
+        with ESMTP id S229765AbiC2EFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 01:28:49 -0400
-Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9631DB898;
-        Mon, 28 Mar 2022 22:27:04 -0700 (PDT)
-X-UUID: d4b4f838eda744c09a499bf8ad02f325-20220329
-X-Spam-Fingerprint: 0
-X-GW-Reason: 11101
-X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HNeS6uumcgOimgeWuoeaguA==
-X-Content-Feature: ica/max.line-size 167
-        audit/email.address 1
-        meta/cnt.alert 1
-X-UUID: d4b4f838eda744c09a499bf8ad02f325-20220329
-Received: from cs2c.com.cn [(172.17.111.24)] by nksmu.kylinos.cn
-        (envelope-from <lizhenneng@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1875178512; Tue, 29 Mar 2022 11:05:39 +0800
-X-ns-mid: postfix-624277B6-7434123726
-Received: from localhost.localdomain (unknown [172.20.108.41])
-        by cs2c.com.cn (NSMail) with ESMTPA id 4A474383C640;
-        Tue, 29 Mar 2022 03:06:30 +0000 (UTC)
-From:   Zhenneng Li <lizhenneng@kylinos.cn>
-To:     Alex Deucher <alexander.deucher@amd.com>
-Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Evan Quan <evan.quan@amd.com>,
-        Guchun Chen <guchun.chen@amd.com>,
-        Jack Zhang <Jack.Zhang1@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        Kevin Wang <kevin1.wang@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, Zhenneng Li <lizhenneng@kylinos.cn>
-Subject: [PATCH next,v2] kernel: Add 1 ms delay to init handler to fix s3 resume hang
-Date:   Tue, 29 Mar 2022 11:05:47 +0800
-Message-Id: <20220329030547.286265-1-lizhenneng@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+        Tue, 29 Mar 2022 00:05:44 -0400
+X-Greylist: delayed 2774 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Mar 2022 21:04:00 PDT
+Received: from m12-14.163.com (m12-14.163.com [220.181.12.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC7959154E;
+        Mon, 28 Mar 2022 21:04:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=8GnOw8aLVX+558mcqZ
+        IJlHW9BLrvkKBh2upVAmYe9QI=; b=hCotd+P3QlR4WVu9VEYrdGpVlxvkacF+dd
+        pVjxY7fbTEyk6VDSsyqBgELd5Q6Bjq41UFJoDmWEiOyPcf6GBQEAiK3+eMvv8Qn+
+        aLifnmuvJrDF+qmP8tz1Xi3jcuQmkFjLrAftmLKgQ+p67sKT9baUC06NukuySOvk
+        HGy0XgP6k=
+Received: from localhost.localdomain.localdomain (unknown [36.111.64.85])
+        by smtp10 (Coremail) with SMTP id DsCowABHIIhIekJiyaMcDA--.46763S2;
+        Tue, 29 Mar 2022 11:17:32 +0800 (CST)
+From:   daihuaigang129@163.com
+To:     colyli@suse.de, kent.overstreet@gmail.com
+Cc:     linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org,
+        daihuaigang <daihuaigang129@163.com>
+Subject: [PATCH v1] bcache: fix AB-BA deadlock between cache register and cache_set_free
+Date:   Tue, 29 Mar 2022 11:17:25 +0800
+Message-Id: <1648523845-4681-1-git-send-email-daihuaigang129@163.com>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID: DsCowABHIIhIekJiyaMcDA--.46763S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GFy5JFyxZw45Kr15tFWDurg_yoWkJrX_uF
+        WfWFyIg3y5Kr1agr13CayfZ3yjvF1q9wnavFWIyrn3Aa43WF1qkryfZr18Aw15Xa1UGF9x
+        Gr1kKr1F9w1xKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU8yrW3UUUUU==
+X-Originating-IP: [36.111.64.85]
+X-CM-SenderInfo: xgdlx3pdljt0jjrsmqqrwthudrp/xtbBdRLQMlaEB4kVBgABsL
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a workaround for s3 resume hang for r7 340(amdgpu).
-When we test s3 with r7 340 on arm64 platform, graphics card will hang up,
-the error message are as follows:
-Mar  4 01:14:11 greatwall-GW-XXXXXX-XXX kernel: [    1.599374][ 7] [  T291] amdgpu 0000:02:00.0: fb0: amdgpudrmfb frame buffer device
-Mar  4 01:14:11 greatwall-GW-XXXXXX-XXX kernel: [    1.612869][ 7] [  T291] [drm:amdgpu_device_ip_late_init [amdgpu]] *ERROR* late_init of IP block <si_dpm> failed -22
-Mar  4 01:14:11 greatwall-GW-XXXXXX-XXX kernel: [    1.623392][ 7] [  T291] amdgpu 0000:02:00.0: amdgpu_device_ip_late_init failed
-Mar  4 01:14:11 greatwall-GW-XXXXXX-XXX kernel: [    1.630696][ 7] [  T291] amdgpu 0000:02:00.0: Fatal error during GPU init
-Mar  4 01:14:11 greatwall-GW-XXXXXX-XXX kernel: [    1.637477][ 7] [  T291] [drm] amdgpu: finishing device.
+From: daihuaigang <daihuaigang129@163.com>
 
-On the following hardware:
-lspci -nn -s 05:00.0
-05:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Oland [Radeon HD 8570 / R7 240/340 / Radeon 520 OEM] [1002:6611] (rev 87)
+bcache register add kobject_mutex then bch_register_mutex,
+cache_set_free add bch_register_mutex then kobject_mutex.
+fix AB-BA deadlock between cache register and cache_set_free.
 
-Signed-off-by: Zhenneng Li <lizhenneng@kylinos.cn>
+Signed-off-by: daihuaigang <daihuaigang129@163.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/md/bcache/super.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-index 3987ecb24ef4..1eced991b5b2 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -2903,6 +2903,8 @@ static void amdgpu_device_delayed_init_work_handler(struct work_struct *work)
- 		container_of(work, struct amdgpu_device, delayed_init_work.work);
- 	int r;
+diff --git a/drivers/md/bcache/super.c b/drivers/md/bcache/super.c
+index bf3de14..f17953c 100644
+--- a/drivers/md/bcache/super.c
++++ b/drivers/md/bcache/super.c
+@@ -1690,10 +1690,8 @@ static void cache_set_free(struct closure *cl)
+ 	if (ca) {
+ 		ca->set = NULL;
+ 		c->cache = NULL;
+-		kobject_put(&ca->kobj);
+ 	}
  
-+	mdelay(1);
-+
- 	r = amdgpu_ib_ring_tests(adev);
- 	if (r)
- 		DRM_ERROR("ib ring test failed (%d).\n", r);
+-
+ 	if (c->moving_gc_wq)
+ 		destroy_workqueue(c->moving_gc_wq);
+ 	bioset_exit(&c->bio_split);
+@@ -1704,6 +1702,8 @@ static void cache_set_free(struct closure *cl)
+ 
+ 	list_del(&c->list);
+ 	mutex_unlock(&bch_register_lock);
++	if (ca)
++		kobject_put(&ca->kobj);
+ 
+ 	pr_info("Cache set %pU unregistered\n", c->set_uuid);
+ 	wake_up(&unregister_wait);
 -- 
-2.25.1
+1.8.3.1
 

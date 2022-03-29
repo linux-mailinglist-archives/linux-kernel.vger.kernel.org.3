@@ -2,211 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7564EABB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C36FF4EABBA
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235438AbiC2K52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 06:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
+        id S235465AbiC2K56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 06:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235225AbiC2K5W (ORCPT
+        with ESMTP id S235439AbiC2K52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 06:57:22 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3699E1D317;
-        Tue, 29 Mar 2022 03:55:37 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 905851F4399D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648551336;
-        bh=BkZPje0ko1RmCOeaZCQI6Aif1v92KYxg2RWub0qs3h8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fm3OdlCmMJLmpoBlTsVUEIEc8hA+qRakTJt355ubrkrs8fTrHqj1xrg0jaS71Mtx4
-         v1SzYfySxtz0h7F0BdfqgcwD5rw/p1P9/NIFnhm4kamId/J0t9xKThI5PJ1bekqvX+
-         JpYTkvYiu57KBPel8szadY6HJP6kkPo2ji2sKnOvIwiw1ppZZjZe/I8f7yPZkpuaox
-         PnmTnghFGlqj7deWCvL5jlDVw9bQCb5TUHyNn33A+ID/1vh+WP5bIQxTM+kn+OFGyr
-         3S0BqXREluIaVVgD52cGTRk8RMEn7KvuGH0eLVVg5bS/q0Zu/W3CbLroJ/hvsHk6MW
-         FnCkbsHYB05qg==
-Message-ID: <ea0f7cdd-0fae-fb66-3171-f0870384e6aa@collabora.com>
-Date:   Tue, 29 Mar 2022 12:55:33 +0200
-MIME-Version: 1.0
+        Tue, 29 Mar 2022 06:57:28 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2077.outbound.protection.outlook.com [40.107.96.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55A51DA7C;
+        Tue, 29 Mar 2022 03:55:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rld5Dw/oHxx10UnKP74OdYsCmvcbW8+DS/S52UwrjssOxaWHSV/b0YsDJCLGw/C34jgYn0IZm1M0jHRqXXZdu5J8/b1/Y2yu6mNhwTT5p2uKlAcz9UQRvVrbcXrn2YeU7YEn/7fMTWUqU+DCob1eQgzJibkx2a0TFb58UZTKO22Zfqavn2BfqP7OCaPq09OKi/7118JagzJQ0J0ARXEQUDG1uaFyI5nUOFepzdfoupLMwfMtOXgQslwiMYOm/kPbEcmFsuoSrCMlw//qMg8tE8nlPZjGHYC1/rM4xoiMx1oNEjgrvVYwvlKxjbd4Q1rIwJiRJIOrEqS3JoW0/3BEVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q+rxYqEwZWmRmCTwl/UKEaXhHn1OmSOhZ/DVpDT5RIE=;
+ b=FL4kRS0fckiEz+0UFz/ZMUoguPmZDIv/Ao9sTlmwQY4DNSdY3FNAYBzHA5J/pSqD5pFgKn7AJSDY/TGnAGBtBOqJE+LTj8sPChpDXSpeDKxqzL02Pp9TrP1YPXFK1Q5tGuBkCDD1cEOoaDdiDUMS8zcK7TfKhiDSPvtRgkGlXpk5sdsLP3sK/goPz7LP/bR2J+rjqsMmubDBPUvcSSJqQEjQUERzS628BPjVTZfF2c2BjI2yjKUUwu4MLnm61UX9T5bQYsAWPimMVf6Cufj6NahudPgFZEwsIvAtlOr1ef3ARC9s5PsTnO2QxH6oHYzU9layv1HjT/FmfttzW2CHIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q+rxYqEwZWmRmCTwl/UKEaXhHn1OmSOhZ/DVpDT5RIE=;
+ b=bR7uFOTuMEi8FDIL+tsr4tkq/Wkcs/5ihMzd/xf/xovhT+cZm/2KbREyWMvaiPg05QKpR44IE0wWHUNO0bztY5+xsicynMplXUVYi4bvNdVZ18GBt4vsQy8rJ5QLxZE99rfyvWUgWa+x39ayF80XsZIRJO5NHes0eSqV6ckqjtj2eVCbdd4Qkiw9myoFVq5l5Ms0Xl4VjFHpZKT0pDQYerGR8iM//dV979lxzWhy8ic/Vd7f3nMN1UUspGjasLMKsR3yc4B9whX0ZySuuRpbV+0fL9HelZs2XO3WeOaSb3Sq33Hqk2iIOuzijOHVVG+W2kpqDOgqpWzCl9uH4I2KFg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
+ MWHPR12MB1534.namprd12.prod.outlook.com (2603:10b6:301:10::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5102.22; Tue, 29 Mar 2022 10:55:44 +0000
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::e0d3:d505:3bd6:e79]) by DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::e0d3:d505:3bd6:e79%5]) with mapi id 15.20.5102.023; Tue, 29 Mar 2022
+ 10:55:44 +0000
+Message-ID: <b70d47e7-5e1b-a23f-80af-eaa255a103e3@nvidia.com>
+Date:   Tue, 29 Mar 2022 11:55:38 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] rpmsg: mtk_rpmsg: Fix circular locking dependency
+Subject: Re: [PATCH] drm: tegra: fix memory leak in error handling path
 Content-Language: en-US
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     bjorn.andersson@linaro.org, matthias.bgg@gmail.com,
-        pihsun@chromium.org, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20220114144737.375621-1-angelogioacchino.delregno@collabora.com>
- <20220217190349.GA477215@p14s>
- <ad306275-cd38-e6ad-55cc-0f7c4bdfcecf@collabora.com>
- <20220218180111.GA574087@p14s>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220218180111.GA574087@p14s>
+To:     cgel.zte@gmail.com, thierry.reding@gmail.com
+Cc:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+References: <20220329103747.2376753-1-lv.ruyi@zte.com.cn>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <20220329103747.2376753-1-lv.ruyi@zte.com.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: AS9PR06CA0324.eurprd06.prod.outlook.com
+ (2603:10a6:20b:45b::13) To DM8PR12MB5445.namprd12.prod.outlook.com
+ (2603:10b6:8:24::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e21cb0ca-87d0-4060-74aa-08da1172ac24
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1534:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB1534AFD7D2F944D3233C790CD91E9@MWHPR12MB1534.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JGfQ75pO55O3K2G0R6Nv+c1ireSbQQ9ojAWjrfbgd8JnM5Gcjr6iolnZ4zKTWjzcmTNKzmC+6fI0gmL7Z79q50j3lttN7mf7wgvYE9GMQ3DzOEoN6Ba4IkzN++fchoGukNKdJl9pPz27FA1EPH+nAMRYaLo+1Wuu3AyFsvHqnOj4z8ZsUcr2CyGntFDplBviWfADiqWUsfmheaZhy+Ze5Qdgs8tjryLdWvo0EPO08pz21MoRo9iuI0jFpgZc84N/zAns+zPTNBZNZztvYiUKfxYpiulJD3Xc/HoDyUxijnN7GF6mFMi5cajYD9Sz32+rUlP1GbW2EkrRc39sh1XA50/U6fx73nqw0f4qRocMUFij4gd2xID5b/xrzredEIkP6cmuPBSKuOHyIAdlRSiXWp3kQNR+lv9ZC1cPEPZ0sMeiV4pomwp42qO3rO+cN/V1uy446qRMEhRQviYNoVAa3SYGV6qRzDYH8WdhUPzGRjcc1K8b+mrdMdzW3kakplnXq0HFdr2kK91Fq1Tm0lIHJrQN6bdP6BWZ44lMLc4fvyv68igPLvkj9W/ZLLRiFuc3g+Kois43W+HtNM4/0OmVlpDuEDLl96+K83JrW1qVENACOYr+m/lwx1uD8Q9liBQNLQloQ7AxNyTbUPKAB2CKR7m1TSREuoXNevCQnyRJ3b3TULHPjXIctlBDWMCPoleY8CL7QFg1u1urCF2mS0GyBSlMbzXcbwqjRTmqCWA5A+O3dmMy2Zm3VFXvqBBvSXH5bxM2VJPcktGTJLATTZ5R9zK7C5RD/LIAEy0zFThsrB48i6Xdv1TcNOtdwmmJQO6s
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(2906002)(53546011)(6512007)(6506007)(2616005)(6666004)(31696002)(55236004)(86362001)(83380400001)(66946007)(508600001)(186003)(36756003)(26005)(66476007)(6486002)(4326008)(54906003)(316002)(5660300002)(966005)(8936002)(31686004)(66556008)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?djFEQU1ZOVN3Um9JbTNETzNMY3RRUS80UUpLOWVNNCszWndIRitBd0duOThR?=
+ =?utf-8?B?ZUp5ME9tOWl4VUtseGMrN1NFckl3TTlXemtxVjk3UC9NdUI2Z282cmU1VGdI?=
+ =?utf-8?B?aVMwR3BuSWxiajArU0QrTTJuUVlVckJUN0doQ3RiRTJVeVZQUEkwMW5NMkZo?=
+ =?utf-8?B?U3cvMzFobDExbEwrcXdldE84L0FMY0wvQzNWdDBaajZIRGs5NGlPSlhHcmZt?=
+ =?utf-8?B?Y3hIWCt2Q2IwR1owenpzeUVZR1FUYndaVlFlOTR6eitoMVpZVCt4Z1RzMVZI?=
+ =?utf-8?B?SVlWZ3E2eTdHU0N2Ynd3UFBNaXQ1L01walpaS1lzcHVSZGlXN2poN2lHRUJT?=
+ =?utf-8?B?L1J5eVdzdW1wOEhIcUZRMWllMnpvK1FpUWdiZlNTV1NmY1dkVkR6eGEyZFV5?=
+ =?utf-8?B?QWxCQVJaYTZ4NFFidHZqK0NqMnAwamZVTXNJbHZzcS9MMmVsa0g3dEZwTFBY?=
+ =?utf-8?B?bFBGK1NwQWxmVFZ3THIrSFR6Yy9xZEdrVi9lM1pMN0FmYXpSczAzMWkxclVG?=
+ =?utf-8?B?a1BTRG5QZXNvNGRyK3BzaVFySXYyV3VWQWRnTVBUb21iTjd5TGVXUVY0QlVI?=
+ =?utf-8?B?akRGclh3ZE9lT0phM3ZkZDNmMk9GVHF5VWdyV1hZMHBGdGp0N29xazdSWCtZ?=
+ =?utf-8?B?WjcxWXhvRytEcHdDL0xCZ0JsbmVBRWpqTHhhT3ZrdzJrUk16SHRKSHRFMEF2?=
+ =?utf-8?B?L2FJWnhQTzZTei9QVG5UdFZ5c3lBbUlubzJoYURYUVJINEpacC9Td0pNd01l?=
+ =?utf-8?B?emkwME0yM2prQzdlR0ZXY3dRWTZ5VTZzb1hhY3QxK1NzTTRmNStiNFZsLzNs?=
+ =?utf-8?B?MWJ5RURZM1JxZ1RVd3dIdE4xQlJmUnI1QVQ0WkFJa3ZadTJuM1IrdkJnb0pq?=
+ =?utf-8?B?WFQzS1JRTkZCdGs4Y3NRZ2loL3lrY3VhdVRxU2ttYnRtQU1reGhDcnlGNU12?=
+ =?utf-8?B?VjcxQUNVOUlUZndMZDc4SXRuamY1WDJuSE0rbnFtdTV1Q3I5TS8vbGtZWjlt?=
+ =?utf-8?B?N1NVODVCc015WUJFY0tJdnhGVThIQjQ4My9LVFBMZkZWajROelRIN3h2STJx?=
+ =?utf-8?B?N3ZJS1hiVEN5MjFNM2NwZjd1UGkzQUc4WXJuaURJU2dQM0RucUMwWVZyMERS?=
+ =?utf-8?B?S2hwSkhiT3gwNWRSbkc4Mm11emZ2TGJyVHFONDBCRXVMWDNYK2ZJOHU4dm11?=
+ =?utf-8?B?eHkvTkNnNVdUcWdvbnMxOFBtNUczOVJsWUY3cE1BT1ZTbnNDVGxRNVFyQVNy?=
+ =?utf-8?B?TVhUQmgrMGMvTWZZbWJBcmwrcldGVE5RcWpCalh2V2hHak92MWF6VEpUNG9O?=
+ =?utf-8?B?RGxaR005SUJhNVIvdFJSVVBtbW9pTkNLRUZPdlJpUUtMV2ZxYUtJejRCUDhQ?=
+ =?utf-8?B?VTIxTmdTUEcrTTRYbE9SOXZ3OEFMcDFNQnEzZDdZUlhKY3hQNWJUR3J4SGQy?=
+ =?utf-8?B?c3doYUxJdXpVTjFhTkl2RitKWWNNUDlIWEROUWo0ZTR1S3lmSTFhSm1hWEJU?=
+ =?utf-8?B?YXNtT3BUbkVBcmx5UllwK0Nhbi9NYWZlSWxGeFIrUHovZGNVcm9qZWloZTJE?=
+ =?utf-8?B?QVRNUno2Y1VpMXBGdmVVTHM0Q0VwMlpVdi9QbDZPVGVzNDlwMVpmQndyV1A2?=
+ =?utf-8?B?RkNKRmphWXd2M2FIdjZiZXJsMWxjYU9UR1NFTWdWWDBBYk1xdCtxSnk3a0FF?=
+ =?utf-8?B?K3ZDV0R4NFRNL21KVHhzejg5eTRBQWlDRSthNStyK29JM2dQYTNjeVFLM2c3?=
+ =?utf-8?B?S1VLT09hUDJIWmVHQlFIejFTeG5QWkYzVkIvbjdpSGduUXdXdHlyK1kzZHg4?=
+ =?utf-8?B?UTdOT3AzNmtCdEhDU2JXOUFvbW80ajVqaldVWXpUOVFSL3JmVEd6NXBCSlNt?=
+ =?utf-8?B?TEcycnJyMFRsbC9IOHJGenBSamQ1Z05uMmN6VE5xR3BmQmdOaDdEN3N6K1d0?=
+ =?utf-8?B?TmJ5d0xnMWNYNFk3Nk9ScFZYQzJlOUZibEtuVG51ckNhRFhTLzkxYW0xU0JN?=
+ =?utf-8?B?eXFBcHVqRTJWNXNybU9kc1hDZ0FabWtyV3lFUzhMZjdrR2xacXVkeXB2bEx4?=
+ =?utf-8?B?TS9qVEpUYVJ5aVN0NzFWajlYV1NSWnFzN3U3eGJtL3NtNEZXK2NFVWttL0Y3?=
+ =?utf-8?B?c0pVVFBNWXFyNW5uMU1iYWUwL0E0RlNwYnBuT3krMG5kSjJsblZHaWtrRk9U?=
+ =?utf-8?B?d3psNzFtQkk3VzFCMUhLQXBpZ1ZGVHdmdzFkRER5aXNydTIxOEgvNFYvQ2xn?=
+ =?utf-8?B?amF1MnVyNGpGbXdUNjVWRnhrV2J0dUZGVDlFT0dRSUZmZnJFZ01nWVNiSXh3?=
+ =?utf-8?B?OG05aTV3L2oycDJYSHUyd3JXeGdLVFRmaXF1a0lwQ0N0Q1lJc1JHUT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e21cb0ca-87d0-4060-74aa-08da1172ac24
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2022 10:55:44.1016
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: J5ZGJRUQHUA3j12PVIqOjnjY7d4r08nfUp533DiBedoGlj6YSxDvjlKcOe1keEpCYGfx5fCVyuGIuUNzY5B28Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1534
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 18/02/22 19:01, Mathieu Poirier ha scritto:
-> On Fri, Feb 18, 2022 at 10:16:51AM +0100, AngeloGioacchino Del Regno wrote:
->> Il 17/02/22 20:03, Mathieu Poirier ha scritto:
->>> Hi Angelo,
->>>
->>> On Fri, Jan 14, 2022 at 03:47:37PM +0100, AngeloGioacchino Del Regno wrote:
->>>> During execution of the worker that's used to register rpmsg devices
->>>> we are safely locking the channels mutex but, when creating a new
->>>> endpoint for such devices, we are registering a IPI on the SCP, which
->>>> then makes the SCP to trigger an interrupt, lock its own mutex and in
->>>> turn register more subdevices.
->>>> This creates a circular locking dependency situation, as the mtk_rpmsg
->>>> channels_lock will then depend on the SCP IPI lock.
->>>>
->>>> [   18.014514]  Possible unsafe locking scenario:
->>>> [   18.014515]        CPU0                    CPU1
->>>> [   18.014517]        ----                    ----
->>>> [   18.045467]   lock(&mtk_subdev->channels_lock);
->>>> [   18.045474]                                lock(&scp->ipi_desc[i].lock);
->>>
->>> I spent well over an hour tracing through the meanders of the code to end up in
->>> scp_ipi_register() which, I think, leads to the above.  But from there I don't
->>> see how an IPI can come in and that tells me my assumption is wrong.
->>>
->>> Can you give more details on the events that lead to the above?  I'm not saying
->>> there is no problem, I just need to understand it.
->>>
->>
->> Hi Mathieu,
->>
->> I understand that following this flow without the assistance of the actual
->> hardware may be a little confusing, so, no worries.
->>
->> drivers/remoteproc/mtk_scp.c - this driver manages the SCP (obviously, a
->> remote processor)
->> drivers/remoteproc/mtk_scp_ipi.c - public functions for kernel SCP IPC
->>
->> Flow:
->> - MediaTek SCP gets probed
->> - RPMSG starts, we start probing "something", like google,cros-ec-rpmsg
->> - mtk_rpmsg: creates endpoint; IPI handler is registered here.
->>
->>           ( more flow )
->>
->> - mtk_rpmsg: mtk_rpmsg_ns_cb() -> mtk_rpmsg_create_device(), channel is
->>               added to the channels list, worker gets scheduled
-> 
-> To me the above is out of order.  The name space endpoint is registered as part
-> of the remote processor start sequence.  From there an IPI with ns_ipi_id comes in
-> and then cros_ec_rpmsg_probe() is called.  The above seems to imply the
-> opposite.
-> 
->>
->>
->> Now for the part that produces the real issue:
->>
->> label_a:
->>
->> *** RPMSG MUTEX LOCK ***
-> 
-> By this I take you mean the subdev->channels_lock mutex.
-> 
->> - mtk_rpmsg: ## Go through multiple channels ##, call mtk_rpmsg_register_device()
->>
->> - Registered device tries to communicate through RPMSG
->> - .send() or .trysend() (depending on the device) is called: send_ipi()
->>      *** SCP MUTEX LOCK ***
-> 
-> And this one is either scp->send_lock or scp->ipi_desc[i].lock.
-> 
->>     - mtk_scp_ipi: Data written, ACK? ok -> return 0
->>      *** SCP MUTEX UNLOCK ***
->>
->> - mtk_scp_ipi: **** INTERRUPT!!! **** New RPMSG NS available? -> create channel
->>            goto label_a;
->>
->> *** RPMSG MUTEX UNLOCK ***
->>
->>
->> Pardon me for keeping some things in this flow implicit, but that was done to
->> simplify it as much as possible as to try to make you understand the situation.
-> 
-> I certainly appreciate the effort but the above does not provide me with a clear
-> path that causes the lock to happen.  As I said in my last reply I don't doubt
-> there is a lock contention but the provided information doesn't allow to
-> understand how it happens.
-> 
-> All I am looking for is one scenario with all mutexes and functions calls
-> involved.
-> 
 
-Hello Mathieu,
-I'm sorry for leaving this unresolved for a long time, had to work on other
-things in the meanwhile.
-
-I'm not sure what you need, can you please help me to give you the
-issue background that you require?
-
-In the meanwhile, here's full debugging info coming from the kmsg:
-
-https://paste.debian.net/1235967/
-
-Thanks,
-Angelo
-
-> Thanks,
-> Mathieu
+On 29/03/2022 11:37, cgel.zte@gmail.com wrote:
+> From: Lv Ruyi <lv.ruyi@zte.com.cn>
 > 
->>
->> Cheers,
->> Angelo
->>
->>> Thanks,
->>> Mathieu
->>>
->>>> [   18.228399]                                lock(&mtk_subdev->channels_lock);
->>>> [   18.228405]   lock(&scp->ipi_desc[i].lock);
->>>> [   18.264405]
->>>>
->>>> To solve this, simply unlock the channels_lock mutex before calling
->>>> mtk_rpmsg_register_device() and relock it right after, as safety is
->>>> still ensured by the locking mechanism that happens right after
->>>> through SCP.
->>>> Notably, mtk_rpmsg_register_device() does not even require locking.
->>>>
->>>> Fixes: 7017996951fd ("rpmsg: add rpmsg support for mt8183 SCP.")
->>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>>> ---
->>>>    drivers/rpmsg/mtk_rpmsg.c | 2 ++
->>>>    1 file changed, 2 insertions(+)
->>>>
->>>> diff --git a/drivers/rpmsg/mtk_rpmsg.c b/drivers/rpmsg/mtk_rpmsg.c
->>>> index 5b4404b8be4c..d1213c33da20 100644
->>>> --- a/drivers/rpmsg/mtk_rpmsg.c
->>>> +++ b/drivers/rpmsg/mtk_rpmsg.c
->>>> @@ -234,7 +234,9 @@ static void mtk_register_device_work_function(struct work_struct *register_work)
->>>>    		if (info->registered)
->>>>    			continue;
->>>> +		mutex_unlock(&subdev->channels_lock);
->>>>    		ret = mtk_rpmsg_register_device(subdev, &info->info);
->>>> +		mutex_lock(&subdev->channels_lock);
->>>>    		if (ret) {
->>>>    			dev_err(&pdev->dev, "Can't create rpmsg_device\n");
->>>>    			continue;
->>>> -- 
->>>> 2.33.1
->>>>
->>
->>
->>
+> Before leave the nvdec_load_firmware, we shuold free virt which is alloced
+
+s/shuold/should
+s/alloced/allocated
+
+> by dma_alloc_coherent, so change "return err" to "goto cleanup".
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+> ---
+>   drivers/gpu/drm/tegra/nvdec.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/tegra/nvdec.c b/drivers/gpu/drm/tegra/nvdec.c
+> index 79e1e88203cf..a14863346bfa 100644
+> --- a/drivers/gpu/drm/tegra/nvdec.c
+> +++ b/drivers/gpu/drm/tegra/nvdec.c
+> @@ -209,7 +209,7 @@ static int nvdec_load_firmware(struct nvdec *nvdec)
+>   
+>   		err = dma_mapping_error(nvdec->dev, iova);
+>   		if (err < 0)
+> -			return err;
+> +			goto cleanup;
+
+
+Actually, I think that the correct fix here would be the same as what 
+was done for VIC ...
+
+https://lore.kernel.org/linux-mm/6b86f6e530b504a5eee864af10e2ae1570d7b645.1639157090.git.robin.murphy@arm.com/
+
+Jon
+
+-- 
+nvpublic

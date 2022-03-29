@@ -2,75 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585B34EA4A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 03:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 521AD4EA4B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 03:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiC2BiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 21:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
+        id S229769AbiC2Bkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 21:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiC2Bhq (ORCPT
+        with ESMTP id S229473AbiC2Bka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 21:37:46 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1751B1AD1EE;
-        Mon, 28 Mar 2022 18:36:02 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2e612af95e3so168108347b3.9;
-        Mon, 28 Mar 2022 18:36:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j37M+3SnCtzKCPAGBbMVoXAMH6upORtmVyfM4Y9Ajqw=;
-        b=LdpfSVSStPvoqgkN42VPQ/Prmd3SQcVf09RDFyX0Ofr7N6uTn4TAvi/GglNoh55J4c
-         kizpyEYOB+BT1g+Cj54nrVBnfPxJ8c00/I+qrQxIVQAEONk+AanrINYwU8RaMOzsudvd
-         ZK5lIO7YEtDC2B9mNvHFTcNgWOaDEyy/mOdYSKuE07fibuIctiCdaxfMbsouquyokygb
-         b+7N6UhZg5/4uKL64LRGAeXxvdeGFMlx795vocVKVpxB0MdWowEs9HsE8jk4u37RvtPx
-         QM2yAPFuF0XNV9CIJ7LGsbHe3elDRFbDEgsarsjNZDq7xBFadgNGi164PDtXBcLK5XEz
-         5Now==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j37M+3SnCtzKCPAGBbMVoXAMH6upORtmVyfM4Y9Ajqw=;
-        b=Cwcknbu6IwQ+LUVaZFvnpsXLWlxg4MCiUNHcYyaWcbG1Y2C99ze5G43R96YG5IEwZx
-         lUlaOUMX3PLBjEaL4XbOdQR1GznESpuvEXrUREkYeAE4YJ5XsQRNNcqiuU6tMOex7Azo
-         CVautfNxioaigoNTto7R8vGqKgb3P4ZhROzyhVKGSw4SjQL5z1SIZYuDVwcFp+2kOn29
-         l2yWbJ2oUuFmkqkUtCQ7qvPXRLgGUIJVDVqugWwOCo7+JFz7q2i1HqULb3aVT3BF54ww
-         rSJEaY2/69ks3+EVn7vb5IN1IK5rNhviwg+qfSDbdQIH+ByTU0p6xn4GtnohJJbbl7uN
-         xuAg==
-X-Gm-Message-State: AOAM533iWktyFBHUE6eVTlkO5H7/1F4KN73MuIweA9fMHEi7cUvSoB2G
-        7YQcGe8kf0OaVyAbYn8F4shCgW17OgD6Rc3rcfs=
-X-Google-Smtp-Source: ABdhPJzyJyT8X5V51e1K7fepR+2L9t0VvsuCkYfjExKl36NXoz3ygCpGWYsGmK5WiEfbRk5sPEfWgqLr3sSg5hGWAP0=
-X-Received: by 2002:a81:8343:0:b0:2e5:b43c:86eb with SMTP id
- t64-20020a818343000000b002e5b43c86ebmr28290460ywf.153.1648517761368; Mon, 28
- Mar 2022 18:36:01 -0700 (PDT)
+        Mon, 28 Mar 2022 21:40:30 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2137.outbound.protection.outlook.com [40.107.255.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EC52FFF8;
+        Mon, 28 Mar 2022 18:38:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l5sSuaTBXZ1qjjDRL7NZSEVm486rOlsd7alfQVS1FNnoJ4cpGp+nZHiJcVVNScgYvA01YhGQ/4qqb+RUJJIdou8F6MJdmt8Lz4MAn3bBn3wRRcm881n4syuFvt1/SWKsIKzDcuqBq3brX6EL4SeUxa6hRv+pwIp3faoRcjnhcP4cJEls2EWPeE1zkS39T+T9nBt7IWGna5z7dmLmGLqoWtLPG74jd0EsaJJD1XWOf1hdFbgDEZb3/kuEMFWh5EDQJroJkLEOauZ3IcX3NWC1UU9jprIX33L4zTe0FcLPiFj6tmkNFK9nl5kZ5sENalVJk7J5/GtuRSHRrfXwVUqW8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=A8I+I+Lrphv2JvL8E2BXLJDFUqxC0Nt+42ON9Jx8dAk=;
+ b=mLLKQfBRcVM97vGaD4xzNH+kt54gQ9P0dZ0zqbXTj0hmFRfdt61odjN9/82HDDONKiUnQ4V+9LS9OiYzHj08Z4mEc6/GjPiwYY91Ho7AlVY3C3CMyQlR8QhzIkJSVktGPAYm31/wZOpCCVq9ePm85vOWWLFmiRhHrm/JSED7JgLMT0tigfOPQVUvjXR9o7uAoapEm1WiqfYuudxnVW1PlSdOAD4MwIguwtRgbeibZDVd+xDru+sdWVO2RaK2IVZULVhhoAjhuE+2MInksjfh0KC5RwAkSMmMQndyGptcvFc1IobTl5/7xSMRdNSeiy6MmbTupAh3Be+SqSORBgRzow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=A8I+I+Lrphv2JvL8E2BXLJDFUqxC0Nt+42ON9Jx8dAk=;
+ b=xUPfM4iMVD3pztpgGCFqVjb/qQV4PgIVDu7GmZDKFvCV4M4ukz2tLNh48owUE3QhTsYaC/ySJnDR1rrhwKD1b/xAm54cBnpgWgtLjA1NN8T9bJ1XlN+0ruko+yhlutxYmG/qZAq+qLPL+5jkTq3TmmbNP8dQKu+K0yu2HAbm2IXgXlIYvF8siRHd33cPYAVleKBBOuu59rLGP1eDOQ5hyQO8J6TGWPaqVzD//vmDKjOZF3x7AguAkcdnOHpn/6k9keqFzO7aZvyvYhjQN8ZDooSijAQxAsAk7skLKGqbhwNuldrXrFDrHpTT2RcwZqxxp1HlXTyoBUSlNHqXidkyqQ==
+Received: from SG2PR06MB2315.apcprd06.prod.outlook.com (2603:1096:4:b::19) by
+ SEZPR06MB5414.apcprd06.prod.outlook.com (2603:1096:101:65::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5102.16; Tue, 29 Mar 2022 01:38:42 +0000
+Received: from SG2PR06MB2315.apcprd06.prod.outlook.com
+ ([fe80::69db:d6a9:d891:e1fc]) by SG2PR06MB2315.apcprd06.prod.outlook.com
+ ([fe80::69db:d6a9:d891:e1fc%7]) with mapi id 15.20.5102.023; Tue, 29 Mar 2022
+ 01:38:42 +0000
+From:   Howard Chiu <howard_chiu@aspeedtech.com>
+To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Troy Lee <troy_lee@aspeedtech.com>
+Subject: [PATCH v3 0/2] Enable ast2600-evb KVM
+Thread-Topic: [PATCH v3 0/2] Enable ast2600-evb KVM
+Thread-Index: AdhCSKNsviNagc20SGm1dk/H7s7zYQ==
+Date:   Tue, 29 Mar 2022 01:38:41 +0000
+Message-ID: <SG2PR06MB2315A39490DD5282FC6CF2ABE61E9@SG2PR06MB2315.apcprd06.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fa99a85a-4a51-4a32-3c51-08da1124db4e
+x-ms-traffictypediagnostic: SEZPR06MB5414:EE_
+x-microsoft-antispam-prvs: <SEZPR06MB5414A0B880840B53A6858A70E61E9@SEZPR06MB5414.apcprd06.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: orTJW9Q2Wu9H27FMV2S+QMq8N3cKNsp0App0Y3f10pusZYNaHfsahtoSswv+cdSbzHlA9yvsNFIUzdmv877KDHDphIe3dpVxl/faSBm6qyqjc1x+hGVJFPdQxGw1jBcozLcvADgFi4Rx7yFGcI0OAE0Sf+unUWCbHudn+SSZJBGvLa2JnqYnsZC1C3rTIKhosBBVgNCYYuiFXqxZvFpfuZHbzdkVpH4J9urAUFz2j8BXqovCtJj+e8gyC7AoIE0e/BPF+SQrwFv9HpJKGazNllPrFfYEOXHx+mHU9o7DhWOJF1P36xIt0xv6zfGM2jjti8PNIBeg2RICoeJKJrRL/vGnldvP/YT7Yg13nF5Fc4aLIYpQmjuVsZAB+E8U4GbOCAwPz+VqqkbxCXHsHF9JusIW2B1pAgOb8/LhZY7U8t6jZD+HL2yLb7QE9dyFtsZKaf5zfkKUb4WKSceEORCq/lq55gN6K9ANXGoOgETWdiz2JgwPf5Bi/buUM/ZzRW9MnJvyZSCfUV1y+Wd/mkaK0gWpYJfLIerAVVfwRUwXET2jf2XfdOgvUGgCfgw4BuWnLVuxmLQV6gqzHBXWK3POk9jX7h/imUjeEUY6xORbEyK87DvBkW5ZuzoV1AmQpiUGdSG+4cK7SOD5iRZhMGUx9/uzZiGoCJ1WCkhaFaRq8vOy/9dvA+LI14up4Pq2xIUpi0X/l6wcb7c2UnslIc+jeA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB2315.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(39840400004)(136003)(376002)(346002)(396003)(366004)(5660300002)(38100700002)(86362001)(316002)(4744005)(8936002)(38070700005)(33656002)(122000001)(52536014)(2906002)(4326008)(508600001)(186003)(107886003)(71200400001)(26005)(9686003)(6506007)(110136005)(7696005)(66946007)(55016003)(76116006)(66476007)(64756008)(66446008)(66556008)(8676002)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?VC32yxnnPqxLGKQmmBBrAv8MC63iGlr6S9POmlQbocNIYhEussMxvMynSn2a?=
+ =?us-ascii?Q?4qfTnAQ1MYZpgvjUv8yjne6hOjMKpLS6K2l/MuV8jZsGdfZu80FT7+bDLwwh?=
+ =?us-ascii?Q?gNKZaix7IvWvv7OnjI+xcv//1vCVAOPxlDmryq1x79upgPDeBIcj1mKSKg4+?=
+ =?us-ascii?Q?Sm8u00kHXmbuH9AchcAEqUaw+cLdxE2lqKCaJD5xkmLz8TDtFF/+ECOWmuj6?=
+ =?us-ascii?Q?XdZc77KCaYLIgJQWJS4j+o6vTMLSpUNxFv24MdCaEee/G2LkZfXEVx5shB4T?=
+ =?us-ascii?Q?9f2L2ZZgSVrlBBJZnBNHjUVcEhQ6vxCjKaHC7eUl8zw5nTVWx/eVrzP8YWUh?=
+ =?us-ascii?Q?El64E0SGB3Bp6SkV3V32cTbLeFuqiXLXBXxPFFI4ZnRHybLPcCNf2rfj6FBB?=
+ =?us-ascii?Q?k9Kctn9vW2vRKEqU8u466ZxHPGqiikxKAgu1KHMfANTGcBEib34JbRTOPU4Y?=
+ =?us-ascii?Q?Inv0LQ3r5J/SkNMQbTIeG1QBdcE1Bc5Zrzkuk0fl/9ZrbyN6nsc5lpZedCwg?=
+ =?us-ascii?Q?8YHEVO16LK2Vzg70G0lpYMaONtTmlRuasgf0l206R84a9qW7Nofwifxc4ila?=
+ =?us-ascii?Q?Jk+UFde7smH4vIxCTQqOUHTm+3kPESu6NQSWL3MWw5pB1bqlsacNLsZxgyJX?=
+ =?us-ascii?Q?8HvEG3+WJNjJO7ThKHd/kXrqRDaHy/L3DkgGIQ7bN4dvbjRwsnI7V0kdccsS?=
+ =?us-ascii?Q?lQ6YHtubfh5xOoF1b7+dCBDFFPTs+M6wY62RWbCzOlbBGjNVfWFayL560Vcq?=
+ =?us-ascii?Q?nHULKhSTr91EoY3qhvFKdw7RWLyq5ChjGcyc7IbLnKbLyU22VeFV7T7QhZ9E?=
+ =?us-ascii?Q?VtSBAi1QNDG6OlsR1AjVVKGWAU2GhAQbXJ2q7ZmEf8mP5TEGvMHFoUsP3E3m?=
+ =?us-ascii?Q?yviQOLKpZVh4hloFl+88cdnLLE5GKeYOXcmhCe0XOWUighUTCrXYAKmhnniP?=
+ =?us-ascii?Q?JUWBQSJgQId1Wf6BMPE0dSwVj+ji2eBqKJMAY7/GoM2FlbkraRvmDLzKZUun?=
+ =?us-ascii?Q?bN09SWUeEVRrRsMnhODxHjhnRzMCFOY9yZAarbIdom1OXuIR2PKvojbcz9mF?=
+ =?us-ascii?Q?4Qx9o+VMAw1hVOdSFxzbSmfOJOkJYmtoSCWULuNe9L2N4/NRwroi0C5pRV2R?=
+ =?us-ascii?Q?KhxyX4YW5pzmkgZJuU80OUaBIKkYF3CFZJw3biz0YVI6ls5baqgB6VJVwA44?=
+ =?us-ascii?Q?XfyrY5gWYTqkWo89q/tqA5aZUmnlsCui9jcaUtWDzF5kRB05lIObIXquQM87?=
+ =?us-ascii?Q?XY6rCvWBfbNego3nHaJf3ddCXcPA/tXxIs4dG4p/YsTmpltUmjdnoMMBnrCD?=
+ =?us-ascii?Q?O6y1BVMq1ITnjo7VRz9HjIm+Td8YP9Ava4Ro1mwvxk1GGoBPcuVUxtN5XzRd?=
+ =?us-ascii?Q?mefPWfmecIoReCnkZH8Gz0EbIH5EtXhzAoIChSYyvlAaQazCpTD4iXbT4Vqn?=
+ =?us-ascii?Q?KuZquOFIVygW/REpeKm3PwAjrt82C26B+ZFgPvtaDLu6LX9ATboIL2OP903T?=
+ =?us-ascii?Q?Vqz0VkNIGWRWlUUN/OC+5wXcwoTin3XYwKxO8lPwXWSDwSCNJjFnbBi+MXh9?=
+ =?us-ascii?Q?XQkkNf31JwBn1q4gHlx4K++1mH+lLgq0eD9hkVJR+YnfK7mY4ywHyz3Oa2WC?=
+ =?us-ascii?Q?xlTYZ+K89R3aDkJQwHp9ygEoJRc/ImcQ2u2vO3gRnvJDty89gVI/HZAc5O0D?=
+ =?us-ascii?Q?cIZhLJPws2xsPwLG+8cqg61f2lbZa5Z6FogP6/XhlQojC4qP3/ILYecHEb0x?=
+ =?us-ascii?Q?UUkvCcM5m+gDb5zuHCBJx+jc/+gyHYA=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <cover.1648461096.git.zong.li@sifive.com> <f08a95b6582a51712c5b2c3cb859136d07bfa8b9.1648461096.git.zong.li@sifive.com>
-In-Reply-To: <f08a95b6582a51712c5b2c3cb859136d07bfa8b9.1648461096.git.zong.li@sifive.com>
-From:   Bin Meng <bmeng.cn@gmail.com>
-Date:   Tue, 29 Mar 2022 09:35:49 +0800
-Message-ID: <CAEUhbmU9ZYniNNv-WYmeTfxh5MXN1NB_fL32FiOxPpx3d2e1_A@mail.gmail.com>
-Subject: Re: [PATCH v8 4/4] dmaengine: sf-pdma: Get number of channel by
- device tree
-To:     Zong Li <zong.li@sifive.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        krzysztof.kozlowski@canonical.com,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Bin Meng <bin.meng@windriver.com>,
-        Green Wan <green.wan@sifive.com>, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, devicetree <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB2315.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fa99a85a-4a51-4a32-3c51-08da1124db4e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2022 01:38:41.6710
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YhWXIASnbsQNMML+lepBKD9ACSxHjgm+DDtOauMh+IyBbdvSjHJe21PwmUy3tkhISTJIrDtJ9n1xjD/c8wmQCZMpiysUfrKt/FQkihcvOeo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5414
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,21 +123,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 7:38 PM Zong Li <zong.li@sifive.com> wrote:
->
-> It currently assumes that there are always four channels, it would
-> cause the error if there is actually less than four channels. Change
-> that by getting number of channel from device tree.
->
-> For backwards-compatibility, it uses the default value (i.e. 4) when
-> there is no 'dma-channels' information in dts.
->
-> Signed-off-by: Zong Li <zong.li@sifive.com>
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> ---
->  drivers/dma/sf-pdma/sf-pdma.c | 24 ++++++++++++++++--------
->  drivers/dma/sf-pdma/sf-pdma.h |  8 ++------
->  2 files changed, 18 insertions(+), 14 deletions(-)
->
+Change since v2:
+1. Add video engine node back which was removed by commit 645afe7 unintenti=
+onally.
 
-Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
+Change since v1:
+1. Remove video engine node which was added by commit bcee389.
+2. Remove reset definition because the reset is handled by clk-ast2600 driv=
+er currently.
+
+Howard Chiu (2):
+  ARM: dts: aspeed: Add video engine
+  ARM: dts: aspeed: ast2600-evb: Support KVM
+
+ arch/arm/boot/dts/aspeed-ast2600-evb.dts | 39 +++++++++++++++++++-----
+ arch/arm/boot/dts/aspeed-g6.dtsi         | 10 ++++++
+ 2 files changed, 41 insertions(+), 8 deletions(-)
+
+--=20
+2.25.1
+

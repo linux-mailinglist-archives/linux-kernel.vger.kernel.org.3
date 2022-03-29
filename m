@@ -2,84 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E534EB68A
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6D74EB68F
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239715AbiC2XOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36936 "EHLO
+        id S239779AbiC2XOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235262AbiC2XOI (ORCPT
+        with ESMTP id S238645AbiC2XOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:14:08 -0400
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2069219B078;
-        Tue, 29 Mar 2022 16:12:24 -0700 (PDT)
-Received: by mail-ot1-f41.google.com with SMTP id a17-20020a9d3e11000000b005cb483c500dso13784172otd.6;
-        Tue, 29 Mar 2022 16:12:24 -0700 (PDT)
+        Tue, 29 Mar 2022 19:14:53 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB1A1AA492
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:13:09 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id m3so32841172lfj.11
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:13:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lix+Cn9dLRv5V2E2a0f9nB/0OmFi21urXU4sSbZfBWU=;
+        b=sZlEFLJPvaRLE0Rk3RMPGJKferH2Yz3zSwUzew6rdkAv4L0stLWlB/V6CTH0gRoaQS
+         ZDYhZkrHmU8oTwVMdLuZ4n+d8ONA6gyWwrTQwJC4SbiGDxMerlEbjplV5lyVgK/Fr7cZ
+         LBDJU2HsuC0mCfuCgcSw2KhfondlIVL7gnysBbSNFBnQDWiyIFxmZBcqgBzkl1Tvws/J
+         GjCb6qL8nUObrCmsxVVtdQPI4TQlyDZJ5fjXfwagWSAlO3OnXFdVSqYwZpx7iBW/1HgP
+         Mh84r7udN27JJB+YWlgq6++1hEFlx3fH1hkIdJO2uGluNjaTp8Nia71nTH3ZhnUrc3Am
+         9ONQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=19pOzULxVDfXXsKExnM0qOYmlT2C8TqThE9IQo+YRrQ=;
-        b=oKaHVTwnWh2e7vs1GTvXInKaJ5Vk63/HVFNE4xKoyjXpCiY/GY6zLSXZQkSS9JFg7j
-         TjC4kR8TA59z7hB1QW1ZmIljlsWzAcV7hsE2r+R5LUb7QRUF8UVrbCQsKa3HkXQOMFyz
-         ZtOyqXXQJpeV8lbWPf1063WTgjfmArJ9KVnnOkozdYG8kjejvkjM65dvnTmO4G5cKXP3
-         QoBxKBa15yEohMY0k0wiN3BQVq5g5XB16js5n0D5knBcbmdrOSia34uawO2ltMgrmqLe
-         zEKqH4MJNGFXS+ZFk0VTzg6bsH+fn8+c3lGvmvLYZFkwc+9DQEj4ZPkirxgUZzQfCoAo
-         2/Kw==
-X-Gm-Message-State: AOAM5339pkXXHA12lmHY8eerHbukpB3ji8Z3kwW5+kSsub4kiRO50wNN
-        qA4V/QaV9xEU1ovvN9ruiQ0lN1iNyQ==
-X-Google-Smtp-Source: ABdhPJydkK7GxNHz+fTQpfZtCPQLNq4GqZsLPEkqhOP3kWjNeq8sHsTwLBDOrI0EsQ3z7BiRKstoqw==
-X-Received: by 2002:a9d:5a07:0:b0:5cd:afdb:b0da with SMTP id v7-20020a9d5a07000000b005cdafdbb0damr2137782oth.188.1648595543463;
-        Tue, 29 Mar 2022 16:12:23 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o18-20020a9d7652000000b005cbf6f5d7c5sm9678797otl.21.2022.03.29.16.12.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 16:12:22 -0700 (PDT)
-Received: (nullmailer pid 1529180 invoked by uid 1000);
-        Tue, 29 Mar 2022 23:12:21 -0000
-Date:   Tue, 29 Mar 2022 18:12:21 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        alistair23@gmail.com, dmitry.torokhov@gmail.com,
-        robh+dt@kernel.org, andreas@kemnade.info,
-        linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
-        linux-input@vger.kernel.org, rydberg@bitmath.org
-Subject: Re: [PATCH v7 2/4] dt-bindings: input: Add Cypress TT2100
- touchscreen controller
-Message-ID: <YkOSVeLoZfzSAG0I@robh.at.kernel.org>
-References: <20220323120021.361137-1-alistair@alistair23.me>
- <20220323120021.361137-3-alistair@alistair23.me>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lix+Cn9dLRv5V2E2a0f9nB/0OmFi21urXU4sSbZfBWU=;
+        b=BbuC83R5O3443Bv0R9jn7ReimvGsV6tRNOWoCI53rkPEFAMlxbISyIxpJwIL0HMrSY
+         iKr6zxgO0n6LrCEWvcRRixZ7SBxvo57kOzfEbwaiC1E2hCJ6HCwPmSufHmqDaLTyT3iX
+         OaKRdwKHLrnW9Hti9X7Fe26cD7+trk1q6zhqg9lYMIv4+Msg8ZuLN5rir74zSuLNDln9
+         2wAofXmBaGW98LhO72hGwsiXx3KT580qJZXtZUiU37vwrv5f5JTYHG4aXm5Dou/nXl3m
+         diA7kw+NijXD4R8X+knaEUVHg5C6EehLQum2Dq6hGBevDUGYEGQ24eWRM+0hzWXeDZpJ
+         /BSQ==
+X-Gm-Message-State: AOAM530PYj+gVoxZTrNXzSxQk4TCEfD0EogrKHiOQmpeOUN9J1hefb/w
+        moCQsvU9s3w/onOwYltsc9ZNkvBJWFcVgxc3+5zgaA==
+X-Google-Smtp-Source: ABdhPJwOZ3jcZwojGyojTgZxiJdEWLTpoM34ZLQKkLJD2E5imcrvKmtcCfFFNQKvBg/DEaUepLQmvQJzoCy+tY7Axlg=
+X-Received: by 2002:a05:6512:b9e:b0:44a:10eb:9607 with SMTP id
+ b30-20020a0565120b9e00b0044a10eb9607mr4583964lfv.626.1648595587152; Tue, 29
+ Mar 2022 16:13:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220323120021.361137-3-alistair@alistair23.me>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <CAKwvOdmYzH91bzNus+RcZGSgCQGY8UKt0-2JvtqQAh=w+CeiuQ@mail.gmail.com>
+ <20220329223956.486608-1-ndesaulniers@google.com> <20220329160137.0708b1ef@kernel.org>
+In-Reply-To: <20220329160137.0708b1ef@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 29 Mar 2022 16:12:55 -0700
+Message-ID: <CAKwvOdnNqHOvFSqzhS+0wrPfKVvrz2VymAkZatyFTBwRsQtQnw@mail.gmail.com>
+Subject: Re: [PATCH v2] net, uapi: remove inclusion of arpa/inet.h
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Jon Maloy <jmaloy@redhat.com>, Ying Xue <ying.xue@windriver.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Mar 2022 22:00:19 +1000, Alistair Francis wrote:
-> Add the Cypress TrueTouch Generation 5 touchscreen device tree bindings
-> documentation. It can use I2C or SPI bus.
-> This touchscreen can handle some defined zone that are designed and
-> sent as button. To be able to customize the keycode sent, the
-> "linux,code" property in a "button" sub-node can be used.
-> 
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->  .../input/touchscreen/cypress,tt21000.yaml    | 101 ++++++++++++++++++
->  1 file changed, 101 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
-> 
+On Tue, Mar 29, 2022 at 4:01 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Tue, 29 Mar 2022 15:39:56 -0700 Nick Desaulniers wrote:
+> > Testing out CONFIG_UAPI_HEADER_TEST=y with a prebuilt Bionic sysroot
+> > from Android's SDK, I encountered an error:
+> >
+> >   HDRTEST usr/include/linux/fsi.h
+> > In file included from <built-in>:1:
+> > In file included from ./usr/include/linux/tipc_config.h:46:
+> > prebuilts/ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/arpa/inet.h:39:1:
+> > error: unknown type name 'in_addr_t'
+> > in_addr_t inet_addr(const char* __s);
+> > ^
+> >
+> > This is because Bionic has a bug in its inclusion chain. I sent a patch
+> > to fix that, but looking closer at include/uapi/linux/tipc_config.h,
+> > there's a comment that it includes arpa/inet.h for ntohs;
+> > but ntohs is not defined in any UAPI header. For now, reuse the
+> > definitions from include/linux/byteorder/generic.h, since the various
+> > conversion functions do exist in UAPI headers:
+> > include/uapi/linux/byteorder/big_endian.h
+> > include/uapi/linux/byteorder/little_endian.h
+> >
+> > Link: https://android-review.googlesource.com/c/platform/bionic/+/2048127
+> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> > ---
+> >  include/uapi/linux/tipc_config.h | 32 ++++++++++++++++----------------
+> >  1 file changed, 16 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/include/uapi/linux/tipc_config.h b/include/uapi/linux/tipc_config.h
+> > index 4dfc05651c98..2c494b7ae008 100644
+> > --- a/include/uapi/linux/tipc_config.h
+> > +++ b/include/uapi/linux/tipc_config.h
+> > @@ -43,10 +43,6 @@
+> >  #include <linux/tipc.h>
+> >  #include <asm/byteorder.h>
+> >
+> > -#ifndef __KERNEL__
+> > -#include <arpa/inet.h> /* for ntohs etc. */
+> > -#endif
+>
+> Hm, how do we know no user space depends on this include?
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Without the ability to scan all source code in existence, I guess I
+can't prove or disprove that either way.
+
+If this is a reference to "thou shall not break userspace," I don't
+think that was in reference to UAPI headers, libc's, or inclusion
+chains.
+
+Worst case, someone might have to #include <arpa/inet.h> if they were
+relying on transitive dependencies from <linux/tipc_config.h>.  I
+don't think we should be helping people write bad code with such
+transitive dependencies though.
+
+>
+> If nobody screams at us we can try, but then it needs to go into -next,
+> and net-next is closed ATM, you'll need to repost once the merge window
+> is over.
+
+Ack.
+
+>
+> >  /*
+> >   * Configuration
+> >   *
+> > @@ -257,6 +253,10 @@ struct tlv_desc {
+> >  #define TLV_SPACE(datalen) (TLV_ALIGN(TLV_LENGTH(datalen)))
+> >  #define TLV_DATA(tlv) ((void *)((char *)(tlv) + TLV_LENGTH(0)))
+> >
+> > +#define __htonl(x) __cpu_to_be32(x)
+> > +#define __htons(x) __cpu_to_be16(x)
+> > +#define __ntohs(x) __be16_to_cpu(x)
+> > +
+> >  static inline int TLV_OK(const void *tlv, __u16 space)
+> >  {
+> >       /*
+> > @@ -269,33 +269,33 @@ static inline int TLV_OK(const void *tlv, __u16 space)
+> >        */
+> >
+> >       return (space >= TLV_SPACE(0)) &&
+> > -             (ntohs(((struct tlv_desc *)tlv)->tlv_len) <= space);
+> > +             (__ntohs(((struct tlv_desc *)tlv)->tlv_len) <= space);
+>
+> Also why add the defines / macros?
+> We could switch to __cpu_to_be16() etc. directly, it seems.
+
+Sure, I thought they might be more readable, but whatever you all
+prefer.  Will send a v3 once the merge window closes.
+-- 
+Thanks,
+~Nick Desaulniers

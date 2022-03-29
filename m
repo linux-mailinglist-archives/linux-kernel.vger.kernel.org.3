@@ -2,74 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 500BF4EA64D
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 06:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3067C4EA641
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 06:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231942AbiC2EKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 00:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38800 "EHLO
+        id S231915AbiC2EKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 00:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231919AbiC2EKn (ORCPT
+        with ESMTP id S229765AbiC2EKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 00:10:43 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825141DA4A;
-        Mon, 28 Mar 2022 21:09:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648526940; x=1680062940;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=II+YlVdtYYb+Q/uCpREGOhsf8Od4153BKeY2Dz+3nsc=;
-  b=MAshLrMYSKt/K6fiqPK3zP/azTgXW9UNShqvleeRW7kb1o6jM5wtgQXS
-   Ch2eqc37Zm8o1y8WWKNKL+udLBPCLsYcCxbKfL/2ZSOkZ1k1UYlqJTHMx
-   oeWdgTJak1cXc5Vs/RyEZcphYPkWR0WS8q0hLRb0iinDNSZV25252KtS9
-   47dakaw/QhSueFdwgrR9vXXY69u8aYwQEjZHSDNrx3QS9zvMbJNKHom+2
-   ksDD+EPSx6L8uJY+fBw0fDkXaGZIXbYHmHifiU0bgy85D/ylH3EV0MBk/
-   QacIY1D/DbGeOwcLYQJpf+J1SiUjBlqf5YvAG0cJsBe8AcGFp49kYVgAE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="284051281"
-X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="284051281"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 21:09:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="585427795"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 28 Mar 2022 21:08:54 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nZ3A6-0002d5-7k; Tue, 29 Mar 2022 04:08:54 +0000
-Date:   Tue, 29 Mar 2022 12:08:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, corbet@lwn.net,
-        viro@zeniv.linux.org.uk, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kpsingh@kernel.org, shuah@kernel.org,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        zohar@linux.ibm.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH 16/18] bpf-preload: Do kernel mount to ensure that pinned
- objects don't disappear
-Message-ID: <202203291256.TUOyKEtD-lkp@intel.com>
-References: <20220328175033.2437312-17-roberto.sassu@huawei.com>
+        Tue, 29 Mar 2022 00:10:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC4A66D184
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 21:08:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648526928;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/Fki2qhrqzIn3lkIi3YIPXgrFjahMDx8WQomnumvye4=;
+        b=QvN1lLZybAZAnLjcQvqEB5gF9tR9G37GagZ1D5NwDPQn3oNwffZjTdvpVAYfuzDC94A8ig
+        +bsYkRc9bbgCrTrFraCSEX7M+48/rV2myUqL8+QEeaUV4PcgirSNFYAlrrg9FZQ5K/CgXP
+        LX1tEqiCdsa80c/UCumYtHKGzvi73UQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-361-5Thsb0YPO7ijK_drg2Wv1g-1; Tue, 29 Mar 2022 00:08:45 -0400
+X-MC-Unique: 5Thsb0YPO7ijK_drg2Wv1g-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 94741802803;
+        Tue, 29 Mar 2022 04:08:45 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-13-210.pek2.redhat.com [10.72.13.210])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9515C401E64;
+        Tue, 29 Mar 2022 04:08:43 +0000 (UTC)
+From:   Jason Wang <jasowang@redhat.com>
+To:     mst@redhat.com, jasowang@redhat.com
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V2 1/3] vdpa: mlx5: prevent cvq work from hogging CPU
+Date:   Tue, 29 Mar 2022 12:08:38 +0800
+Message-Id: <20220329040840.3419-1-jasowang@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328175033.2437312-17-roberto.sassu@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,54 +57,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roberto,
+A userspace triggerable infinite loop could happen in
+mlx5_cvq_kick_handler() if userspace keeps sending a huge amount of
+cvq requests.
 
-Thank you for the patch! Yet something to improve:
+Fixing this by introducing a quota and re-queue the work if we're out
+of the budget (currently the implicit budget is one) . While at it,
+using a per device work struct to avoid on demand memory allocation
+for cvq.
 
-[auto build test ERROR on bpf-next/master]
-[also build test ERROR on linus/master next-20220328]
-[cannot apply to bpf/master v5.17]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Fixes: 5262912ef3cfc ("vdpa/mlx5: Add support for control VQ and MAC setting")
+Signed-off-by: Jason Wang <jasowang@redhat.com>
+---
+Changes since V1:
+- Using 1 as the budget
+---
+ drivers/vdpa/mlx5/net/mlx5_vnet.c | 21 +++++++++------------
+ 1 file changed, 9 insertions(+), 12 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Roberto-Sassu/bpf-Secure-and-authenticated-preloading-of-eBPF-programs/20220329-015829
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: hexagon-randconfig-r041-20220328 (https://download.01.org/0day-ci/archive/20220329/202203291256.TUOyKEtD-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/eddbb1ec1e92ba00c4acc9f123769265e17e8e40
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Roberto-Sassu/bpf-Secure-and-authenticated-preloading-of-eBPF-programs/20220329-015829
-        git checkout eddbb1ec1e92ba00c4acc9f123769265e17e8e40
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   kernel/bpf/inode.c:25:37: error: use of undeclared identifier 'CONFIG_BPF_PRELOAD_LIST'
-   static char *bpf_preload_list_str = CONFIG_BPF_PRELOAD_LIST;
-                                       ^
->> kernel/bpf/inode.c:1026:13: error: redefinition of 'mount_bpffs'
-   void __init mount_bpffs(void)
-               ^
-   include/linux/bpf.h:1146:27: note: previous definition is here
-   static inline void __init mount_bpffs(void)
-                             ^
-   2 errors generated.
-
-
-vim +/mount_bpffs +1026 kernel/bpf/inode.c
-
-  1025	
-> 1026	void __init mount_bpffs(void)
-
+diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+index d0f91078600e..b2afd2b6fbca 100644
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -163,6 +163,7 @@ struct mlx5_vdpa_net {
+ 	u32 cur_num_vqs;
+ 	struct notifier_block nb;
+ 	struct vdpa_callback config_cb;
++	struct mlx5_vdpa_wq_ent cvq_ent;
+ };
+ 
+ static void free_resources(struct mlx5_vdpa_net *ndev);
+@@ -1616,10 +1617,10 @@ static void mlx5_cvq_kick_handler(struct work_struct *work)
+ 	ndev = to_mlx5_vdpa_ndev(mvdev);
+ 	cvq = &mvdev->cvq;
+ 	if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_CTRL_VQ)))
+-		goto out;
++		return;
+ 
+ 	if (!cvq->ready)
+-		goto out;
++		return;
+ 
+ 	while (true) {
+ 		err = vringh_getdesc_iotlb(&cvq->vring, &cvq->riov, &cvq->wiov, &cvq->head,
+@@ -1653,9 +1654,10 @@ static void mlx5_cvq_kick_handler(struct work_struct *work)
+ 
+ 		if (vringh_need_notify_iotlb(&cvq->vring))
+ 			vringh_notify(&cvq->vring);
++
++		queue_work(mvdev->wq, &wqent->work);
++		break;
+ 	}
+-out:
+-	kfree(wqent);
+ }
+ 
+ static void mlx5_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
+@@ -1663,7 +1665,6 @@ static void mlx5_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
+ 	struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
+ 	struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
+ 	struct mlx5_vdpa_virtqueue *mvq;
+-	struct mlx5_vdpa_wq_ent *wqent;
+ 
+ 	if (!is_index_valid(mvdev, idx))
+ 		return;
+@@ -1672,13 +1673,7 @@ static void mlx5_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
+ 		if (!mvdev->cvq.ready)
+ 			return;
+ 
+-		wqent = kzalloc(sizeof(*wqent), GFP_ATOMIC);
+-		if (!wqent)
+-			return;
+-
+-		wqent->mvdev = mvdev;
+-		INIT_WORK(&wqent->work, mlx5_cvq_kick_handler);
+-		queue_work(mvdev->wq, &wqent->work);
++		queue_work(mvdev->wq, &ndev->cvq_ent.work);
+ 		return;
+ 	}
+ 
+@@ -2668,6 +2663,8 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+ 	if (err)
+ 		goto err_mr;
+ 
++	ndev->cvq_ent.mvdev = mvdev;
++	INIT_WORK(&ndev->cvq_ent.work, mlx5_cvq_kick_handler);
+ 	mvdev->wq = create_singlethread_workqueue("mlx5_vdpa_wq");
+ 	if (!mvdev->wq) {
+ 		err = -ENOMEM;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.18.1
+

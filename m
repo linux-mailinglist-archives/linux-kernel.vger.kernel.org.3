@@ -2,99 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F2F4EA49C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 03:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 446C44EA49F
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 03:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbiC2Bal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 21:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
+        id S229491AbiC2BdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 21:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiC2Baj (ORCPT
+        with ESMTP id S229441AbiC2BdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 21:30:39 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7C817A99;
-        Mon, 28 Mar 2022 18:28:58 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id c11so13525424pgu.11;
-        Mon, 28 Mar 2022 18:28:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=8RWKOtmx36LC8yLEISKBczl/3PqgfL2wdJ+l1FkdZvo=;
-        b=gmqfmXDEr/Jg/JcEXwQ/nAYvX4nu4pGb0MkhP8/V3+vHw2sDt3mmAouBJdogl3FHoN
-         KINdxmZcZpu8iHiRrmgD7JkCVFSslmY1fD8C/gOFuvg6aR2YbomWdBaxjeXiAfG9cJaq
-         2l5oL4+NHXleL7U3dNvCGRD+DEtiSq9M4FU463V6E8hxGwb6TSPUYIsxvDFe8EMpozOu
-         FCBgyTLLIx7Rqf9ikuDLNAHXSbby7NTrM7OVXleuoNh0/4RwcmGBvETds2XNxSxkQeuv
-         YlCCOexSVhM4KK0BQt+45333YxKPCzDi7uhR3YxypzjD/QUbt+o8jf26Xiq0vOKnPwa1
-         752w==
+        Mon, 28 Mar 2022 21:33:19 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70C046B35;
+        Mon, 28 Mar 2022 18:31:37 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-d6ca46da48so17168674fac.12;
+        Mon, 28 Mar 2022 18:31:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=8RWKOtmx36LC8yLEISKBczl/3PqgfL2wdJ+l1FkdZvo=;
-        b=l6wfXvVzB0bl/ASvTwavirPT04eFdVT3Jn+g/QhF0dFNzPyysC1HZfFEYVIioqYAcQ
-         oL4Q2IeEDYCDff3ljZjfE2/eZXeEOprkGE/xFF0zGdp76tNGEFAlZrFz3n7u7EKpeCie
-         Cd1FV7VCKDSA5Qb4GtYNbj/+j5APr3nR8I44LkZvutd26yutAeDUu4EKH8mCuRtnjyRy
-         02ZqoS1vC060Qp615QsNGiJh4bbbQBkSpUXChj3XNBwRrIpqSNGQEWWuCMBvXAP/NDJD
-         KKFaCP5KVh1jG4+2o9+o4/+w645eF4bpToOHFPERFQxEH+T4by/Ye5Gp6cRgS7QgaVMs
-         cAHQ==
-X-Gm-Message-State: AOAM533R/8Qjr3yLsq48yBso9JaTDslAXolVK9e1gjtBxxQO0XTU0vBF
-        cqgNydNkbhgwQmlMWIZsG0A=
-X-Google-Smtp-Source: ABdhPJx3pXQp5CBClxzCKjbibsuK3ueJtHhSUlztbLQ0G6UdL+LbDrcIrkqV57I1BEtcrXg2kbUWbQ==
-X-Received: by 2002:a05:6a00:14c6:b0:4fa:eae3:ffe4 with SMTP id w6-20020a056a0014c600b004faeae3ffe4mr24910871pfu.45.1648517337688;
-        Mon, 28 Mar 2022 18:28:57 -0700 (PDT)
-Received: from localhost ([119.3.119.18])
-        by smtp.gmail.com with ESMTPSA id s10-20020a63a30a000000b003987eaef296sm348236pge.44.2022.03.28.18.28.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 28 Mar 2022 18:28:57 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     broonie@kernel.org
-Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, perex@perex.cz,
-        stable@vger.kernel.org, tiwai@suse.com, xiam0nd.tong@gmail.com
-Subject: Re: [PATCH] soc: soc-dapm: fix two incorrect uses of list iterator
-Date:   Tue, 29 Mar 2022 09:28:48 +0800
-Message-Id: <20220329012848.9564-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <YkHi98GDDWNie7GP@sirena.org.uk>
-References: <YkHi98GDDWNie7GP@sirena.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=hOkp2b7cCGdHLUJIn9iwgpkz8KjzZSClL6Y3bsniN08=;
+        b=VLa5FoT4kkOPBzrqKZelc50x/bukOpE74vhMnoCoOg6NMBDHD6ry62CyTJGyt3Df1N
+         Yw2oobuYE1ED2AWWfaxnuSI0/QMsSFMOnI7W4VH6sP5GXvj0cFl69sohe6Exa0Jr91VQ
+         DdiyujMOicAoOi8HXqR3PG1TMFcTRQZ08fzE8OjmfbCMs0euc86lyQElqLZhoXJWKfBS
+         qwh02SOWuLXyt+GprRQij3UdCG52DywDVe0qVAayLcfw7VIox230WNmBJtUtKO+NlCap
+         x+3ZpqvjOi82rZm/O/ENfCvURXfbtWeN5DJU7Q1WjOsP9RUzZAeudv2OQjeCjJbAsJWl
+         Yveg==
+X-Gm-Message-State: AOAM530WXBRcufYuiFqpm0TyJJ/oAn+aeqZ8uoNbBOVbVMBaTKVXpb4c
+        TDKx4ZbJfLwyPPpjRiSg6A==
+X-Google-Smtp-Source: ABdhPJwMspGsWseezeQN7a6YfynW2z7z862xFVW7VEkyda1K80XIrGigHCp4ABfQUofLXCydksAoJg==
+X-Received: by 2002:a05:6870:51c9:b0:da:b3f:2b75 with SMTP id b9-20020a05687051c900b000da0b3f2b75mr1030761oaj.276.1648517497176;
+        Mon, 28 Mar 2022 18:31:37 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v24-20020a9d5a18000000b005ad458facbdsm8286256oth.27.2022.03.28.18.31.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 18:31:36 -0700 (PDT)
+Received: (nullmailer pid 3490320 invoked by uid 1000);
+        Tue, 29 Mar 2022 01:31:35 -0000
+Date:   Mon, 28 Mar 2022 20:31:35 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Dave Airlie <airlied@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Subject: [GIT PULL] Devicetree fixes for v5.18, take 1
+Message-ID: <YkJhd/QX64LDANXN@robh.at.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Mar 2022 17:31:51 +0100, Mark Brown wrote:
-> On Sun, Mar 27, 2022 at 04:21:38PM +0800, Xiaomeng Tong wrote:
-> 
-> >  		case snd_soc_dapm_pre:
-> > -			if (!w->event)
-> > +			if (!w->event) {
-> >  				list_for_each_entry_safe_continue(w, n, list,
-> >  								  power_list);
-> > +				break;
-> > +			}
-> 
-> This doesn't make much sense.  The intent here seems to clearly be to
-> continue; the loop but this doesn't do that - instead it appears that
-> continue doesn't actually do the equivalent of a continue but rather
-> skips over an entry.  This should instead be replaced with a plain
-> continue statement.
-> 
+Linus,
 
-Yes, you are right. Sorry for a slip of the pen in commit message:
-should be "to *continue* the outer list_for_each_entry_safe() loop"
-not "to break ...".
+I haven't seen any progress fixing the MediaTek DRM binding issues, so 
+I've applied the fixes here and a few others (also MediaTek, sigh). 
+There's still a QCom DRM fix pending that hopefully lands before rc1.
 
-I have resend a PATCH v2 for the fix as you suggested, and cc you.
-Thank you.
+Please pull.
 
-> THe naming of _continue() needs fixing I think - it's just asking to be
-> a bug.  Fortunately there's very few users.
+Rob
 
---
-Xiaomeng Tong
+
+The following changes since commit 7203062171db6669f746d14148c4af76af619e74:
+
+  Merge tag 'tty-5.18-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty (2022-03-28 13:00:51 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git tags/devicetree-fixes-for-5.18-1
+
+for you to fetch changes up to 22a41e9a5044bf3519f05b4a00e99af34bfeb40c:
+
+  dt-bindings: Fix missing '/schemas' in $ref paths (2022-03-28 20:17:55 -0500)
+
+----------------------------------------------------------------
+Devicetree fixes for v5.18, take 1:
+
+- Clean-up missing '/schemas' in $ref paths
+
+- Fix MediaTek Vcodec decoder example 'dma-ranges' errors
+
+- Expand available values of PBL for snps,dwmac to fix warnings in
+  mediatek-dwmac.yaml example
+
+- Fix warnings in MediaTek display bindings
+
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (3):
+      dt-bindings: display: mediatek, mutex: Fix mediatek, gce-events type
+      dt-bindings: display: mediatek, ovl: Fix 'iommu' required property typo
+      dt-bindings: display: mediatek: Fix examples on new bindings
+
+Biao Huang (1):
+      dt-bindings: net: snps,dwmac: modify available values of PBL
+
+Rob Herring (2):
+      dt-bindings: media: mediatek,vcodec: Fix addressing cell sizes
+      dt-bindings: Fix missing '/schemas' in $ref paths
+
+jason-jh.lin (1):
+      Revert "dt-bindings: display: mediatek: add ethdr definition for mt8195"
+
+ .../devicetree/bindings/arm/apple/apple,pmgr.yaml  |   2 +-
+ .../bindings/display/mediatek/mediatek,aal.yaml    |  23 +++-
+ .../bindings/display/mediatek/mediatek,ccorr.yaml  |  23 +++-
+ .../bindings/display/mediatek/mediatek,color.yaml  |  23 +++-
+ .../bindings/display/mediatek/mediatek,dither.yaml |  23 +++-
+ .../bindings/display/mediatek/mediatek,dpi.yaml    |   3 +-
+ .../bindings/display/mediatek/mediatek,dsc.yaml    |  23 +++-
+ .../bindings/display/mediatek/mediatek,ethdr.yaml  | 147 ---------------------
+ .../bindings/display/mediatek/mediatek,gamma.yaml  |  23 +++-
+ .../bindings/display/mediatek/mediatek,merge.yaml  |  49 +++----
+ .../bindings/display/mediatek/mediatek,mutex.yaml  |  27 ++--
+ .../bindings/display/mediatek/mediatek,od.yaml     |  14 +-
+ .../bindings/display/mediatek/mediatek,ovl-2l.yaml |  26 ++--
+ .../bindings/display/mediatek/mediatek,ovl.yaml    |  28 ++--
+ .../display/mediatek/mediatek,postmask.yaml        |  23 +++-
+ .../bindings/display/mediatek/mediatek,rdma.yaml   |  28 ++--
+ .../bindings/display/mediatek/mediatek,split.yaml  |  17 ++-
+ .../bindings/display/mediatek/mediatek,ufoe.yaml   |  19 ++-
+ .../bindings/display/mediatek/mediatek,wdma.yaml   |  26 ++--
+ .../media/mediatek,vcodec-subdev-decoder.yaml      | 122 +++++++++--------
+ .../devicetree/bindings/net/dsa/dsa-port.yaml      |   2 +-
+ .../devicetree/bindings/net/snps,dwmac.yaml        |   6 +-
+ .../devicetree/bindings/soc/qcom/qcom,geni-se.yaml |   2 +-
+ .../bindings/spi/mediatek,spi-mtk-nor.yaml         |   2 +-
+ .../bindings/spi/qcom,spi-qcom-qspi.yaml           |   2 +-
+ .../devicetree/bindings/spi/sprd,spi-adi.yaml      |   2 +-
+ .../devicetree/bindings/usb/mediatek,mtu3.yaml     |   4 +-
+ .../devicetree/bindings/usb/mediatek,musb.yaml     |   2 +-
+ 28 files changed, 338 insertions(+), 353 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml

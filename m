@@ -2,85 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 748614EA87C
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 09:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8E44EA87F
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 09:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233376AbiC2H2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 03:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57302 "EHLO
+        id S233384AbiC2H3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 03:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiC2H2A (ORCPT
+        with ESMTP id S229502AbiC2H3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 03:28:00 -0400
-Received: from ha.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1A282467F4;
-        Tue, 29 Mar 2022 00:26:17 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by ha.nfschina.com (Postfix) with ESMTP id BF6B51E80D7E;
-        Tue, 29 Mar 2022 15:25:42 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from ha.nfschina.com ([127.0.0.1])
-        by localhost (ha.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 9r--XoVcY8pM; Tue, 29 Mar 2022 15:25:40 +0800 (CST)
-Received: from [18.165.124.108] (unknown [101.228.248.165])
-        (Authenticated sender: yuzhe@nfschina.com)
-        by ha.nfschina.com (Postfix) with ESMTPA id 6921A1E80D70;
-        Tue, 29 Mar 2022 15:25:39 +0800 (CST)
-Message-ID: <49b93407-dee3-b3bb-6d36-d6f94e9b16bf@nfschina.com>
-Date:   Tue, 29 Mar 2022 15:26:11 +0800
+        Tue, 29 Mar 2022 03:29:39 -0400
+Received: from out29-77.mail.aliyun.com (out29-77.mail.aliyun.com [115.124.29.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0153724783F
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 00:27:56 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.18044|-1;BR=01201311R171S78rulernew998_84748_2000303;CH=blue;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0509118-0.00316166-0.945926;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047190;MF=victor@allwinnertech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.NFCJAsm_1648538872;
+Received: from sunxibot.allwinnertech.com(mailfrom:victor@allwinnertech.com fp:SMTPD_---.NFCJAsm_1648538872)
+          by smtp.aliyun-inc.com(33.13.255.226);
+          Tue, 29 Mar 2022 15:27:54 +0800
+From:   Victor Hassan <victor@allwinnertech.com>
+To:     linux@armlinux.org.uk, rmk+kernel@armlinux.org.uk,
+        linus.walleij@linaro.org, yanfei.xu@windriver.com, ardb@kernel.org,
+        weidonghui@allwinnertech.com, rdunlap@infradead.org, arnd@arndb.de,
+        mirq-linux@rere.qmqm.pl
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        allwinner-opensource-support@allwinnertech.com
+Subject: [RESEND] ARM: mmu: fix access to illegal address when using earlycon & memblock=debug
+Date:   Tue, 29 Mar 2022 15:27:57 +0800
+Message-Id: <20220329072757.64092-1-victor@allwinnertech.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] KVM: arm64: vgic-debug: remove unnecessary type castings
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
-        kernel-janitors@vger.kernel.org
-References: <20220328103836.2829-1-yuzhe@nfschina.com>
- <87h77ifbbd.wl-maz@kernel.org>
- <0f4cf955-ca2b-626f-867e-5a0ecfe68ca1@nfschina.com>
- <87r16li6e7.wl-maz@kernel.org>
-From:   yuzhe <yuzhe@nfschina.com>
-In-Reply-To: <87r16li6e7.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RDNS_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/3/29 15:07, Marc Zyngier 写道:
+earlycon uses fixmap to create a memory map,
+So we need to close earlycon before closing fixmap,
+otherwise printk will access illegal addresses.
+After creating a new memory map, we open earlycon again.
 
-> On Tue, 29 Mar 2022 07:14:16 +0100,
-> yuzhe <yuzhe@nfschina.com> wrote:
->>>> @@ -229,7 +229,7 @@ static void print_irq_state(struct seq_file *s, struct vgic_irq *irq,
->>>>      static int vgic_debug_show(struct seq_file *s, void *v)
->>>>    {
->>>> -	struct kvm *kvm = (struct kvm *)s->private;
->>>> +	struct kvm *kvm = s->private;
->>>>    	struct vgic_state_iter *iter = (struct vgic_state_iter *)v;
->>> How about you fully get rid of the unnecessary casts then?
->>>
->>> 	M.
->> I don't know what you exactly mean. I follow the
->> kernel-janitors/TODO List to get rid of the unnecessary casts.  And
->> I checked all the code in the arch directory and found these issues.
-> Let me quote the lines again:
->
->>>>      static int vgic_debug_show(struct seq_file *s, void *v)
-> [...]
->>>>    	struct vgic_state_iter *iter = (struct vgic_state_iter *)v;
-> Do you see what I mean?
->
-> 	M.
+Signed-off-by: Victor Hassan <victor@allwinnertech.com>
+---
+ arch/arm/mm/mmu.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Got it, thanks. I will check again and resubmit.
-
-yuzhe
+diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
+index 5e2be37a198e..9b8baa222034 100644
+--- a/arch/arm/mm/mmu.c
++++ b/arch/arm/mm/mmu.c
+@@ -14,6 +14,7 @@
+ #include <linux/fs.h>
+ #include <linux/vmalloc.h>
+ #include <linux/sizes.h>
++#include <linux/console.h>
+ 
+ #include <asm/cp15.h>
+ #include <asm/cputype.h>
+@@ -1697,6 +1698,9 @@ static void __init early_fixmap_shutdown(void)
+ 	pmd_clear(fixmap_pmd(va));
+ 	local_flush_tlb_kernel_page(va);
+ 
++#ifdef CONFIG_FIX_EARLYCON_MEM
++	console_stop(console_drivers);
++#endif
+ 	for (i = 0; i < __end_of_permanent_fixed_addresses; i++) {
+ 		pte_t *pte;
+ 		struct map_desc map;
+@@ -1715,6 +1719,9 @@ static void __init early_fixmap_shutdown(void)
+ 
+ 		create_mapping(&map);
+ 	}
++#ifdef CONFIG_FIX_EARLYCON_MEM
++	console_start(console_drivers);
++#endif
+ }
+ 
+ /*
+-- 
+2.29.0
 

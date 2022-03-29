@@ -2,143 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C484EB641
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:58:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4D64EB643
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238627AbiC2XAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S238707AbiC2XBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238409AbiC2XAC (ORCPT
+        with ESMTP id S238637AbiC2XBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:00:02 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3051035256;
-        Tue, 29 Mar 2022 15:58:18 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-df22f50e0cso3090957fac.3;
-        Tue, 29 Mar 2022 15:58:18 -0700 (PDT)
+        Tue, 29 Mar 2022 19:01:16 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C5C473B7
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:59:32 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id mp6-20020a17090b190600b001c6841b8a52so314825pjb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:59:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mf3QS3aKf3OHFfM5f9hNYG9RXB66tqh8JCr2CM0gjzg=;
+        b=hcCXx4lxQRydW8fhhYenNxDF9eCX3D5z22cl3TUAF0ArEkpyvnaFkMUrZiTD+uxW1b
+         fzLKlTjb1ER8GWLeqEv/GZM0JD2pr+clNaclG5dJYK+b+OsFKiKbi/fiKXt2QtlqAe6d
+         +WiGb1fe7LBdenaLFRkCNV4O+/wq9C21bQ3/7mTUj0rTRnM7IxvhIdWFPbpgwh5lqN77
+         0CuyMzE32y5PIm4wt69WLLkEs74QUcnESHmZShRiegnwC+AbQ3L07AYSyWfuSxkEnn22
+         VpbLYMJeFUxNPAw8sfMq9QxBI8YUuuqfgjXUebc+Trzn0+CrT7vuHi5v0ir7uW0ntOp/
+         AIbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=LWrhu1SJIKP91XWNKb4WbsxhL8e6xpsiZxtyqvL5Z0w=;
-        b=Xnuj1Hx4HXaavx/eFalHV+/z3zIFtcLolNMQIWttsSwwuHN5g/KWqt4Wetzju03Too
-         mcm8pnqSIutkaRMg9MngS7KJdqJl/TBdrDFMdJz37HxsaXl7EVOSCYsBtaMp/BwuUiyl
-         wQ0a3LPR1EMAqiNNPwd0p2qW9/26fvkw+qMgoHWYza/y/PkYHRliwx33Lxe7OO4eko6i
-         FcMHIudyk3nTPNxS7kvhQbbmexz5oWpmCBxQl6q24zKfjhckIpg+p0/8T/Gmu0Xy5g92
-         2f/Am+Z1aFj75FhemntP1sGuqRdBj6/THh3DGQX8x+D99UbwjT9nNPC2u9bZhjabh6FF
-         jsfw==
-X-Gm-Message-State: AOAM533OuZEDdGQLJyp7Vrx9JgkN3gm2k03JdCeKowlwux0M9KGBDrMZ
-        VPiPsCRt289HX3wnKh1kWA==
-X-Google-Smtp-Source: ABdhPJz+emekgDFz5mKWRmNRlRNMSrX19JPwwY5w06pHDZVUQBWmNvGk1+vhyDXsbkBHNm4tAEBj9Q==
-X-Received: by 2002:a05:6870:a106:b0:de:de08:4e3d with SMTP id m6-20020a056870a10600b000dede084e3dmr859501oae.256.1648594697439;
-        Tue, 29 Mar 2022 15:58:17 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k22-20020a056870959600b000d277c48d18sm9802811oao.3.2022.03.29.15.58.15
+        bh=mf3QS3aKf3OHFfM5f9hNYG9RXB66tqh8JCr2CM0gjzg=;
+        b=mDtu0WBjg3NQsixdJrEisB+An4bN9dhSUNk8Zky69ItP3pCgqRcPT7t2goc3wtARWF
+         BwEMsdbB/wzDL1BcUtr8MdsFBx9RgeMSiILd9QkKaOZsQOUwthZiAa1rfJAa0fdS6o90
+         Y21pkZomCFbLqEXJrshO6v7yoe3Ic+hAlr7sZXjYd/OFVIXZHjDw0qfOdZidpoOi3OFF
+         GbVtsgaqGjCqJixJkD22LuRblYudiKjyO2//Yup1jLnDbGI3zIqsqQVlNkSmVm9z6SCg
+         Du0uydJQe5efIHf/S9JnaLOCbvpLh3255tTCOgNXOVnjmKIgV9nBTFApomaZq1cqSK8/
+         2drQ==
+X-Gm-Message-State: AOAM531p1x3lI3iD8XQ1CHvIzWSYhcDd3w0Qnq/Ncs+2aJW172MoeJAT
+        sxwrRK/eUGnVwy6jYGUosc9dJg==
+X-Google-Smtp-Source: ABdhPJzHMuNYqPgKGcciAnrghVvSghsdodOQmBc2A0L2W3nlDYsD7Ul8QdYdevQmBRSuUZeRU5/X+w==
+X-Received: by 2002:a17:90b:2248:b0:1c9:87d5:11eb with SMTP id hk8-20020a17090b224800b001c987d511ebmr1509844pjb.114.1648594771874;
+        Tue, 29 Mar 2022 15:59:31 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id f21-20020a056a00239500b004fb02a7a45bsm17321859pfc.214.2022.03.29.15.59.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 15:58:16 -0700 (PDT)
-Received: (nullmailer pid 1505955 invoked by uid 1000);
-        Tue, 29 Mar 2022 22:58:15 -0000
-Date:   Tue, 29 Mar 2022 17:58:15 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Guillaume Ranquet <granquet@baylibre.com>
-Cc:     airlied@linux.ie, angelogioacchino.delregno@collabora.com,
-        chunfeng.yun@mediatek.com, chunkuang.hu@kernel.org,
-        ck.hu@mediatek.com, daniel@ffwll.ch, deller@gmx.de,
-        jitao.shi@mediatek.com, kishon@ti.com, krzk+dt@kernel.org,
-        maarten.lankhorst@linux.intel.com, matthias.bgg@gmail.com,
-        mripard@kernel.org, p.zabel@pengutronix.de, tzimmermann@suse.de,
-        vkoul@kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, markyacoub@google.com
-Subject: Re: [PATCH v9 03/22] dt-bindings: mediatek,dp_phy: Add Display Port
- PHY binding
-Message-ID: <YkOPB5W7uXkOc72/@robh.at.kernel.org>
-References: <20220327223927.20848-1-granquet@baylibre.com>
- <20220327223927.20848-4-granquet@baylibre.com>
+        Tue, 29 Mar 2022 15:59:31 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 22:59:27 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] KVM: x86: Move kvm_ops_static_call_update() to
+ x86.c
+Message-ID: <YkOPT7TJf74C2Wq8@google.com>
+References: <20220307115920.51099-1-likexu@tencent.com>
+ <20220307115920.51099-2-likexu@tencent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220327223927.20848-4-granquet@baylibre.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220307115920.51099-2-likexu@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 12:39:08AM +0200, Guillaume Ranquet wrote:
-> This phy controller is embedded in the Display Port Controller on mt8195 SoCs.
-
-Sorry, but I think you need to go back to what you had in v8. While yes, 
-the phy and controller IP often do change independently, this h/w looks 
-pretty interwined. 
-
-You could make the controller a phy provider to itself if you wanted.
-
+On Mon, Mar 07, 2022, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> The kvm_ops_static_call_update() is defined in kvm_host.h. That's
+> completely unnecessary, it should have exactly one caller,
+> kvm_arch_hardware_setup().  As a prep match, move
+> kvm_ops_static_call_update() to x86.c, then it can reference
+> the kvm_pmu_ops stuff.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Like Xu <likexu@tencent.com>
 > ---
->  .../bindings/phy/mediatek,dp-phy.yaml         | 43 +++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/mediatek,dp-phy.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/mediatek,dp-phy.yaml b/Documentation/devicetree/bindings/phy/mediatek,dp-phy.yaml
-> new file mode 100644
-> index 000000000000..1f5ffca4e140
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/mediatek,dp-phy.yaml
-> @@ -0,0 +1,43 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (c) 2022 MediaTek
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/mediatek,dp-phy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek Display Port PHY
-> +
-> +maintainers:
-> +  - CK Hu <ck.hu@mediatek.com>
-> +  - Jitao shi <jitao.shi@mediatek.com>
-> +
-> +description: |
-> +  Device tree bindings for the Mediatek (embedded) Display Port PHY
-> +  present on some Mediatek SoCs.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt8195-dp-phy
-> +
-> +  mediatek,dp-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: Phandle to the Display Port node.
-> +
-> +  "#phy-cells":
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - mediatek,dp-syscon
-> +  - "#phy-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    dp_phy: dp-phy {
-> +      compatible = "mediatek,mt8195-dp-phy";
-> +      mediatek,dp-syscon = <&dp_tx>;
-> +      #phy-cells = <0>;
-> +    };
-> -- 
-> 2.34.1
-> 
-> 
+
+Reviewed-by: Sean Christopherson <seanjc@google.com>

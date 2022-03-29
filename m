@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 021B24EADAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C384EAD9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236825AbiC2MvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 08:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
+        id S236718AbiC2Mt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 08:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236812AbiC2MsG (ORCPT
+        with ESMTP id S236831AbiC2MsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 08:48:06 -0400
-Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1954225CB98
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:42:20 -0700 (PDT)
-Received: by mail-ej1-x64a.google.com with SMTP id h22-20020a1709060f5600b006b11a2d3dcfso8126847ejj.4
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:42:19 -0700 (PDT)
+        Tue, 29 Mar 2022 08:48:07 -0400
+Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758BF224749
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:42:22 -0700 (PDT)
+Received: by mail-ej1-x649.google.com with SMTP id gv17-20020a1709072bd100b006dfcc7f7962so8127026ejc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:42:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=eekKcS683P9sWiTSuhgkvdPXp9EdJwN5ZjFsPJMzm7E=;
-        b=nThiYlFFBsJrC6J4CsRmdsKff+pDAxmWAIIBI48Vo80VmKhgV7dastoHrc6SVW9X6d
-         jx/eMpAi1+TKGKqks/kz1GydwiVFtB3s4/Iqslz0Sb0I1p4yER6QQnh5/UL9bNG2RLeo
-         C5XtiIVh5zpbhTTlL5airTyDdq93mQxCRjBtLqk2mbuMHgpMJxTKy/8BxllO8FXvoXri
-         ekBImg/blQGPTzvxUnzHyySXJs6MIGJ9C3qLF6RA9zgxjyAbLcaI48UrWAydgcCoo14J
-         kueGk3ukqrtHmHCvYLUUERRZzvhgDhUfNxGvcRCiVUwTYx9WsgjVrySPvU/5ycGH8wZP
-         hUMA==
+        bh=6EKMd0bjP1WkGhZZPkjCgU25E3DWfYJCasURW7mFnYs=;
+        b=P1k71GssRqu7HsErV73nnblS85PhkUFheLyBFZgmPWLpl7OKiy1Bqi/JlOtZzfJVPy
+         VAc7cvO8fwjHIxHwD4P9pVu2rdNH8e0p6iE439JugyKP3tEZpAogt6YoEY/b5rvhs6YN
+         OlYMWP+8vwtXjv8eNiLfoejuKaPkdCuMEozoeNlW8PpIb+edtD9db/0+pmWKLdNhwURR
+         5E3Lth/p8S4d05TzSLze03fVsfkwrT++EyTKtUjOhLVyC4kbo3lKGGRltm0PtD2GB/IH
+         Q3WE4SbVcH6AFhiknkVN5O3R1HMm1J+ZfOcalpdSexIx4dKDpVcT7q34bBD07dT9kvEi
+         C7Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=eekKcS683P9sWiTSuhgkvdPXp9EdJwN5ZjFsPJMzm7E=;
-        b=TJn4ebmQJbPzt8sSkAnkxqLAeKp3nReVtkDvR6ognjWpL+wvA9ySvjDlWjFv5EFysw
-         kTTlRxx/7xP7Nr+cLARB0H6EdkNGFOtrb+GWxdzbhfbHJsrYuAAHZnky8AbVF4wH0J9u
-         weRVe0snq9GNvTohQfmI2LvlvTMFSF+QnGj+x74wBgdKkjv/D1HJ65lV7Ts+xaOsHd4v
-         7AaGWnRjm+h+hvjQON63bnzmPuSd7lvTCAZv6PDMM3LvOnofPQUcyEWjKvswniBX1w+c
-         jTchsADAXlmQWCQfXs6AmA/7xpjBvUHPhiZ1i45BcyvZZvH7CsIVQL7gJ4NivV94HbQK
-         w6gw==
-X-Gm-Message-State: AOAM530VbnR7Mt6NfuHJCHXW3h79SSOwMOn9npSe3zQa6b5CiXb3dr9S
-        yh9GPPJ6rqnWBVznoWPAeEnJKJ2q3jo=
-X-Google-Smtp-Source: ABdhPJzQ+mzPatwMfV3rPhv+G2Q81dnqKFY/srjOhBDb0t1yefVaA5tyYkGIYP5vkw1Slryk14/AH+9Tlek=
+        bh=6EKMd0bjP1WkGhZZPkjCgU25E3DWfYJCasURW7mFnYs=;
+        b=rPJuR5MEzyzLKzKLm81Sz3UQ4ii9YtT0rVjc7jime4/vS1Lc6FS7XfhYjvdMyHp7tG
+         8TCrefZGujaFe/KvRe3mpezAoR6uryr6KnnSqR39RujTzZuY1MpDcvxZzxye2PNmZ9JY
+         iuMAl24Uay7SlUb4HVLni4aRpltGx+XCCkbnpaA/3EeMpky3gX0OA9t6gghNcdvLrjiL
+         pAKSsNZs5e0LoHDoXF9K/HzxB+xGmhSIRTdr3xx+ZswM2Ef5OPXF82KcPSN1J3rVVQR5
+         GxMNwm6C0Mbka5uIAxGfeZNA11wFb88LA5oMJXMD13WnQNN508K8dTEXxLhNCyQ1lrsc
+         V48g==
+X-Gm-Message-State: AOAM531a6mAMO552v74Dz5dQ7/9kSOIQEZ+u0GdiMEGzKeDvfmFjng5p
+        nXXgJ4Fh75eV0XTknYf0Qnu1f4XX+GA=
+X-Google-Smtp-Source: ABdhPJyN/u61iYoRLkPCDJv7Xs3UegKZjTjkx8b5A87Fx1oaelxWk3uqKnX5mytmcMKvTp7b3Wewv/gEEvA=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:36eb:759:798f:98c3])
- (user=glider job=sendgmr) by 2002:a50:c010:0:b0:418:d53c:24ec with SMTP id
- r16-20020a50c010000000b00418d53c24ecmr4358428edb.17.1648557738276; Tue, 29
- Mar 2022 05:42:18 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 14:40:10 +0200
+ (user=glider job=sendgmr) by 2002:a17:906:3042:b0:6cd:20ed:7c5c with SMTP id
+ d2-20020a170906304200b006cd20ed7c5cmr33818169ejd.241.1648557740796; Tue, 29
+ Mar 2022 05:42:20 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 14:40:11 +0200
 In-Reply-To: <20220329124017.737571-1-glider@google.com>
-Message-Id: <20220329124017.737571-42-glider@google.com>
+Message-Id: <20220329124017.737571-43-glider@google.com>
 Mime-Version: 1.0
 References: <20220329124017.737571-1-glider@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v2 41/48] x86: kmsan: skip shadow checks in __switch_to()
+Subject: [PATCH v2 42/48] x86: kmsan: handle open-coded assembly in lib/iomem.c
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -88,60 +88,54 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When instrumenting functions, KMSAN obtains the per-task state (mostly
-pointers to metadata for function arguments and return values) once per
-function at its beginning, using the `current` pointer.
+KMSAN cannot intercept memory accesses within asm() statements.
+That's why we add kmsan_unpoison_memory() and kmsan_check_memory() to
+hint it how to handle memory copied from/to I/O memory.
 
-Every time the instrumented function calls another function, this state
-(`struct kmsan_context_state`) is updated with shadow/origin data of the
-passed and returned values.
-
-When `current` changes in the low-level arch code, instrumented code can
-not notice that, and will still refer to the old state, possibly corrupting
-it or using stale data. This may result in false positive reports.
-
-To deal with that, we need to apply __no_kmsan_checks to the functions
-performing context switching - this will result in skipping all KMSAN
-shadow checks and marking newly created values as initialized,
-preventing all false positive reports in those functions. False negatives
-are still possible, but we expect them to be rare and impersistent.
-
-Suggested-by: Marco Elver <elver@google.com>
 Signed-off-by: Alexander Potapenko <glider@google.com>
-
 ---
-v2:
- -- This patch was previously called "kmsan: skip shadow checks in files
-    doing context switches". Per Mark Rutland's suggestion, we now only
-    skip checks in low-level arch-specific code, as context switches in
-    common code should be invisible to KMSAN. We also apply the checks
-    to precisely the functions performing the context switch instead of
-    the whole file.
-
-Link: https://linux-review.googlesource.com/id/I45e3ed9c5f66ee79b0409d1673d66ae419029bcb
+Link: https://linux-review.googlesource.com/id/Icb16bf17269087e475debf07a7fe7d4bebc3df23
 ---
- arch/x86/kernel/process_64.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/lib/iomem.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index 3402edec236c4..838b1e9808d6f 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -553,6 +553,7 @@ void compat_start_thread(struct pt_regs *regs, u32 new_ip, u32 new_sp, bool x32)
-  * Kprobes not supported here. Set the probe on schedule instead.
-  * Function graph tracer not supported too.
-  */
-+__no_kmsan_checks
- __visible __notrace_funcgraph struct task_struct *
- __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
- {
+diff --git a/arch/x86/lib/iomem.c b/arch/x86/lib/iomem.c
+index df50451d94ef7..2307770f3f4c8 100644
+--- a/arch/x86/lib/iomem.c
++++ b/arch/x86/lib/iomem.c
+@@ -1,6 +1,7 @@
+ #include <linux/string.h>
+ #include <linux/module.h>
+ #include <linux/io.h>
++#include <linux/kmsan-checks.h>
+ 
+ #define movs(type,to,from) \
+ 	asm volatile("movs" type:"=&D" (to), "=&S" (from):"0" (to), "1" (from):"memory")
+@@ -37,6 +38,8 @@ void memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
+ 		n-=2;
+ 	}
+ 	rep_movs(to, (const void *)from, n);
++	/* KMSAN must treat values read from devices as initialized. */
++	kmsan_unpoison_memory(to, n);
+ }
+ EXPORT_SYMBOL(memcpy_fromio);
+ 
+@@ -45,6 +48,8 @@ void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
+ 	if (unlikely(!n))
+ 		return;
+ 
++	/* Make sure uninitialized memory isn't copied to devices. */
++	kmsan_check_memory(from, n);
+ 	/* Align any unaligned destination IO */
+ 	if (unlikely(1 & (unsigned long)to)) {
+ 		movs("b", to, from);
 -- 
 2.35.1.1021.g381101b075-goog
 

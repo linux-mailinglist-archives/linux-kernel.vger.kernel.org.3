@@ -2,106 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F352B4EA7D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 08:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58FD44EA7DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 08:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233034AbiC2G2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 02:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
+        id S233044AbiC2Gce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 02:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbiC2G2q (ORCPT
+        with ESMTP id S232190AbiC2Gcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 02:28:46 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E081312658B;
-        Mon, 28 Mar 2022 23:27:03 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id lr4so24523198ejb.11;
-        Mon, 28 Mar 2022 23:27:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PtQAn5ODW65E3XLXykBMTJorCx3aj9bBwnMut4CnKzE=;
-        b=ZUoGPspv30c62ejTIsHtO5ZU1YfnvxyTw761ZSkw7PAIRbpiJyrNqhceHlBCzOT+ox
-         HNWeKQKTBU15DuAJMio+EmNi2QAvOQZ16uKDq3NqqS03R8RYh76TTIZx+QWkgv3ziwqk
-         5qh3YiHuMWSLWlsBEXjENws+rU7ziUv14tTcHAkdmWYYaipBcmSfvKI0DcGFbQuK8oUz
-         4MM9nNmbmf9d6I4FN7o6iLW0yXts/wwobEhhXi+Gbjo04d4bySLbsTrAXuCdYbOvfLtZ
-         QToVKRvVLo/BxILbZFFdUcrdV3Xbf23s/aJ4ZanSwjpl879tz0LOV1pzk5GkRL/D53bj
-         6fBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PtQAn5ODW65E3XLXykBMTJorCx3aj9bBwnMut4CnKzE=;
-        b=z4leYPTIr9YBdAZIMtPbuH/DNFAbkImvZahrTU3LOClaMsm+tK4Yr1aiiYJsWxfft5
-         w/X/sq3Jfa3PQ9T36sIHzYIl4Khbl45XE7VcM11EYwg2o2QpMi7x/Jd0gL0Osnpqgx3y
-         CbB0dJDpy8QvmuRV250XhaXuLGfOY0Fg68BzpBnSWyScGuHgMtMfSBewljtITa/dol/o
-         DSSZdDHTFOhWp/yEPhtMVIkLqwgCaSCRgEBy1XihBg7thpy2uLFzDRtlMm7xW0VN96WP
-         /aDelXZ8zE64chrsoR3EARczhB09v9X50l4SYzp67ni0vmKbj0+LkGvOXUg8LuHwtTv2
-         7/Yg==
-X-Gm-Message-State: AOAM532eGERR/cwUpCJDffTGvv2+lzUYi8SVq6c493lM9TU/nSA3HSZZ
-        d8X6KWHf7FSL97ZwgNYdTvQWb4jUVKtx6G19t7E=
-X-Google-Smtp-Source: ABdhPJwv7EAbqlOaqfycWFHp6OI01iRpwa1pCm+J5g9v0BWWkcm6DC7nqihg73CpuPCKnajtzH/L2Bf3AFCe7hdHXJE=
-X-Received: by 2002:a17:907:3f8d:b0:6e1:238f:19a0 with SMTP id
- hr13-20020a1709073f8d00b006e1238f19a0mr6762884ejc.439.1648535222371; Mon, 28
- Mar 2022 23:27:02 -0700 (PDT)
+        Tue, 29 Mar 2022 02:32:33 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FE71959CC;
+        Mon, 28 Mar 2022 23:30:49 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 08:30:45 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1648535447;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BPMbslHvcWl9AuG65q7i4FLjo8NvVN67J002+wav/FY=;
+        b=z5k01oUOKZTixIWULLUcr508q/nMMT4tEEjUge5ZQhzBEYr5bPRwiQs5vJj69dJ8aKWe0l
+        jS8wDg+MxF5n3WIOpjYprknAz/fsRet90+HfSfbSpsXDmQz8PHqwVbo5tp/crRjl8EvIAx
+        rZhQ9IxuO6UVMLbFCJsH6IWU7PFRCUUA0GjlXNDWXQFsbJeclC6zdaQLTIYNmz/2sxskDr
+        aWELyVDtoySPAKA7Dzz4wvMzsDOzuChceYIe/QRlTD2wnf2ANI6RCFPgiZ8NdmZY1MwYXA
+        IF6jphQxssXXlq5Idttg7mrH3MOnpCJjfSRUI3J/uL0fki1lgqnz04LPhr4X2Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1648535447;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BPMbslHvcWl9AuG65q7i4FLjo8NvVN67J002+wav/FY=;
+        b=GQrvXCOItrac/je83cPCtN63EkGHkvcRnczk/iwqe7CV0yuSFNYWm+SEQQ7E05EByC9PsT
+        itHjLIsLol12wLCg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Peter Hurley <peter@hurleysoftware.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Esben Haabendal <esben@geanix.com>,
+        Steven Walter <stevenrwalter@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        =?utf-8?B?QW5kcsOp?= Pribil <a.pribil@beck-ipc.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-rt-users@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] RT scheduling policies for workqueues
+Message-ID: <YkKnlUUsufZPiZxM@linutronix.de>
+References: <20220323145600.2156689-1-linux@rasmusvillemoes.dk>
+ <YkGIhYKJG+w4L7ge@linutronix.de>
+ <20220328100927.5ax34nea7sp7jdsy@pengutronix.de>
+ <YkHyzcfiyjLfIVOo@slm.duckdns.org>
 MIME-Version: 1.0
-References: <20220328042737.118812-1-imagedong@tencent.com> <20220328192103.4df73760@kernel.org>
-In-Reply-To: <20220328192103.4df73760@kernel.org>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Tue, 29 Mar 2022 14:26:51 +0800
-Message-ID: <CADxym3aO7SxDaSU1EChqCg3ySRpbuQjqMfaxYYUoPV8h5xBwaQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 0/4] net: icmp: add skb drop reasons to icmp
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     David Ahern <dsahern@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, xeb@mail.ru,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Menglong Dong <imagedong@tencent.com>,
-        Eric Dumazet <edumazet@google.com>, Martin Lau <kafai@fb.com>,
-        Talal Ahmad <talalahmad@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Hao Peng <flyingpeng@tencent.com>,
-        Mengen Sun <mengensun@tencent.com>, dongli.zhang@oracle.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Biao Jiang <benbjiang@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YkHyzcfiyjLfIVOo@slm.duckdns.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 10:21 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Mon, 28 Mar 2022 12:27:33 +0800 menglong8.dong@gmail.com wrote:
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()"),
-> > we added the support of reporting the reasons of skb drops to kfree_skb
-> > tracepoint. And in this series patches, reasons for skb drops are added
-> > to ICMP protocol.
->
-> # Form letter - net-next is closed
+On 2022-03-28 07:39:25 [-1000], Tejun Heo wrote:
+> Hello,
+Hi,
 
-Okay......Is there anywhere to see if net-next is closed? This link saying
-it's open:
+> I wonder whether it'd be useful to provide a set of wrappers which can make
+> switching between workqueue and kworker easy. Semantics-wise, they're
+> already mostly aligned and it shouldn't be too difficult to e.g. make an
+> unbounded workqueue be backed by a dedicated kthread_worker instead of
+> shared pool depending on a flag, or even allow switching dynamically.
 
-http://vger.kernel.org/~davem/net-next.html
+This could work. For the tty layer it could use 'lowlatency' attribute
+to decide which implementation makes sense.
 
->
-> We have already sent the networking pull request for 5.18
-> and therefore net-next is closed for new drivers, features,
-> code refactoring and optimizations. We are currently accepting
-> bug fixes only.
->
-> Please repost when net-next reopens after 5.18-rc1 is cut.
->
-> RFC patches sent for review only are obviously welcome at any time.
+> Thanks.
+> 
+
+Sebastian

@@ -2,112 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141A44EA596
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7474EA599
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbiC2C6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 22:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
+        id S231342AbiC2DAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 23:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiC2C62 (ORCPT
+        with ESMTP id S229598AbiC2C77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 22:58:28 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40DA1C8D82
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 19:56:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648522605; x=1680058605;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Kn+nu2KMp61HXUAJqF8cVr2PTvTqBGDY5M/lzJLyoCE=;
-  b=RdBA2QJ4qjxRI7A7eyoS9NY1oH3ZqRWfJGNvnl2bXIwSYxB1wC1NmK4W
-   56BJ2bYycAuh3t7ikjeBytjLVgsEYetts2lrVeA/bZcexTqq9J2FYn3BL
-   xdBpMF6ecQvFPXBOQE1bQhPvUFRV5ahyQyY7JpwqpStReQdu9QKucX0OA
-   DRSxRBpJtO1JSAL7J+E306Lbc8VeNwTYA0V3TXk+jLYxadVaKVK3/+3AJ
-   KUO3K3BRT9EZfHU7IdSIYzhkbXOxGgu0usuip1s3Hl7GaYZ/yllM9Vy/l
-   6HY4zzO4X3IHuVXQlXyYUICGjjKGcMz19DpKwMbFYWmIXSUJYs2U0RTcJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="319847275"
-X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="319847275"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 19:56:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="546199147"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 28 Mar 2022 19:56:43 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nZ22E-0002ZG-Te; Tue, 29 Mar 2022 02:56:42 +0000
-Date:   Tue, 29 Mar 2022 10:56:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Evan Quan <evan.quan@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../pm/legacy-dpm/kv_dpm.c:1641
- kv_get_acp_boot_level() warn: always true condition '(table->entries[i]->clk
- >= 0) => (0-u32max >= 0)'
-Message-ID: <202203291016.neaMEWPm-lkp@intel.com>
+        Mon, 28 Mar 2022 22:59:59 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720FD26CD;
+        Mon, 28 Mar 2022 19:58:14 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id 10so14193691qtz.11;
+        Mon, 28 Mar 2022 19:58:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2doMNH7ifB03QblJV2sV07sq+r0A6Mdk0Jlzv/ArvaY=;
+        b=AUeM4C6NBE4EMZ2lTC/kkzSz9gJLIrJRpFA4SgUEtFR6sht/NzF1n4U3bovPj4bOQD
+         dIC7H2cgVqJj17X6kuoInrEyZvmkCrKYw7F7H79NWkwh1dfYG3/ZjGexG2viAFTCXaST
+         z3pdNxSnlPBdVtNod0v+QYyAYzJZK4VAJKp0Iweyi1RP2AbkQgOO40/C1kJW+D63lIJE
+         0kTvsA8iW7gKdpP/lj9l12Gy9jQ8wiCbtEsr55TEluNv6xP6mLJ0q+TRm8/JAf1PeSQX
+         Vg0Fg626qCPmg8jE/SgETQiJ/VDwoJkgijLpIyzEVucRBPu0tqlELTDX76M3NZsoMhfl
+         j/bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2doMNH7ifB03QblJV2sV07sq+r0A6Mdk0Jlzv/ArvaY=;
+        b=fLms70K7DXI5vNDticyXa6JHxXfeQ+ocalMqSNy8tb5aE83Z33xhVMq1MzN1CoBGHR
+         KIpYOQREzL2K1HXrMx1QK09PwseXztBSdtuJPgjwFrCV2+sMxl/r9weihfkGb4IJXrYJ
+         KekioPKd6uUnS/qoohimlMCBA+JT4dfaYzIFaojrMwAlx1xjWNU4tl+JlkYmGeueIM3Y
+         3Jscb95w+vnjgrEg2x4y4kmOwHySJUyBjsytA0I1ITKq/Rh2J9u4IhqhBTe+SWYndHqd
+         7NZc3WQaMP/7q1xnGum0XDwjRScvpQizaDvz3cLIXGfWGy36/G/qtnnx64Wn4EIfj02j
+         ekmw==
+X-Gm-Message-State: AOAM5336m4JSbJRwHDxgYx+xeOcJgV+mpg3jWeir3xt4eMi81ZzN6en3
+        +JEc8T6B0f+sAuU/RBn+Oc0=
+X-Google-Smtp-Source: ABdhPJxUiSUsDbfSAFh0QJP/PMH9L27Pm2GNMWaSdSsolWBtkOUCqw9Ms+uD2jae4rk7kuLZuKiZ0Q==
+X-Received: by 2002:ac8:7f81:0:b0:2e1:fd50:24f2 with SMTP id z1-20020ac87f81000000b002e1fd5024f2mr25162533qtj.353.1648522693637;
+        Mon, 28 Mar 2022 19:58:13 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id p13-20020a05622a048d00b002e1ce0c627csm14763118qtx.58.2022.03.28.19.58.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 19:58:13 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: yang.yang29@zte.com.cn
+To:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        firoz.khan@linaro.org, ematsumiya@suse.de
+Cc:     rostedt@goodmis.org, mingo@redhat.com, yang.yang29@zte.com.cn,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] alpha: replace NR_SYSCALLS by NR_syscalls
+Date:   Tue, 29 Mar 2022 02:57:38 +0000
+Message-Id: <20220329025737.2375176-1-yang.yang29@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Evan,
+From: Yang Yang <yang.yang29@zte.com.cn>
 
-First bad commit (maybe != root cause):
+Reference to other arch likes x86_64 or arm64 to do this replacement.
+To solve compile error when using NR_syscalls in kernel[1].
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1930a6e739c4b4a654a69164dbe39e554d228915
-commit: 837d542a09cd533055423dfca7e621a9c1d13c5b drm/amd/pm: relocate the power related headers
-date:   2 months ago
-config: riscv-randconfig-m031-20220327 (https://download.01.org/0day-ci/archive/20220329/202203291016.neaMEWPm-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.2.0
+[1] https://lore.kernel.org/all/202203270449.WBYQF9X3-lkp@intel.com/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+---
+ arch/alpha/include/asm/unistd.h | 2 +-
+ arch/alpha/kernel/entry.S       | 4 ++--
+ kernel/trace/trace.h            | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-smatch warnings:
-drivers/gpu/drm/amd/amdgpu/../pm/legacy-dpm/kv_dpm.c:1641 kv_get_acp_boot_level() warn: always true condition '(table->entries[i]->clk >= 0) => (0-u32max >= 0)'
-
-vim +1641 drivers/gpu/drm/amd/amdgpu/../pm/legacy-dpm/kv_dpm.c
-
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1633  
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1634  static u8 kv_get_acp_boot_level(struct amdgpu_device *adev)
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1635  {
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1636  	u8 i;
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1637  	struct amdgpu_clock_voltage_dependency_table *table =
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1638  		&adev->pm.dpm.dyn_state.acp_clock_voltage_dependency_table;
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1639  
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1640  	for (i = 0; i < table->count; i++) {
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20 @1641  		if (table->entries[i].clk >= 0) /* XXX */
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1642  			break;
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1643  	}
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1644  
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1645  	if (i >= table->count)
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1646  		i = table->count - 1;
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1647  
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1648  	return i;
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1649  }
-a2e73f56fa6282 drivers/gpu/drm/amd/amdgpu/kv_dpm.c Alex Deucher 2015-04-20  1650  
-
-:::::: The code at line 1641 was first introduced by commit
-:::::: a2e73f56fa6282481927ec43aa9362c03c2e2104 drm/amdgpu: Add support for CIK parts
-
-:::::: TO: Alex Deucher <alexander.deucher@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
-
+diff --git a/arch/alpha/include/asm/unistd.h b/arch/alpha/include/asm/unistd.h
+index 986f5da9b7d8..caabd92ea709 100644
+--- a/arch/alpha/include/asm/unistd.h
++++ b/arch/alpha/include/asm/unistd.h
+@@ -4,7 +4,7 @@
+ 
+ #include <uapi/asm/unistd.h>
+ 
+-#define NR_SYSCALLS	__NR_syscalls
++#define NR_syscalls	__NR_syscalls
+ 
+ #define __ARCH_WANT_NEW_STAT
+ #define __ARCH_WANT_OLD_READDIR
+diff --git a/arch/alpha/kernel/entry.S b/arch/alpha/kernel/entry.S
+index e227f3a29a43..966400b925a5 100644
+--- a/arch/alpha/kernel/entry.S
++++ b/arch/alpha/kernel/entry.S
+@@ -454,7 +454,7 @@ entSys:
+ 	SAVE_ALL
+ 	lda	$8, 0x3fff
+ 	bic	$sp, $8, $8
+-	lda	$4, NR_SYSCALLS($31)
++	lda	$4, NR_syscalls($31)
+ 	stq	$16, SP_OFF+24($sp)
+ 	lda	$5, sys_call_table
+ 	lda	$27, sys_ni_syscall
+@@ -585,7 +585,7 @@ strace:
+ 	ldq	$21, 88($sp)
+ 
+ 	/* get the system call pointer.. */
+-	lda	$1, NR_SYSCALLS($31)
++	lda	$1, NR_syscalls($31)
+ 	lda	$2, sys_call_table
+ 	lda	$27, sys_ni_syscall
+ 	cmpult	$0, $1, $1
+diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+index 07d990270e2a..7ad8324db192 100644
+--- a/kernel/trace/trace.h
++++ b/kernel/trace/trace.h
+@@ -25,7 +25,7 @@
+ #include "pid_list.h"
+ 
+ #ifdef CONFIG_FTRACE_SYSCALLS
+-#include <asm/unistd.h>		/* For NR_SYSCALLS	     */
++#include <asm/unistd.h>		/* For NR_syscalls	     */
+ #include <asm/syscall.h>	/* some archs define it here */
+ #endif
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

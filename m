@@ -2,155 +2,393 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E8C4EAAF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE5B4EAAF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234945AbiC2KFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 06:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
+        id S234957AbiC2KFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 06:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234947AbiC2KFd (ORCPT
+        with ESMTP id S234948AbiC2KFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 06:05:33 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903525C650;
-        Tue, 29 Mar 2022 03:03:49 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so945664wmb.4;
-        Tue, 29 Mar 2022 03:03:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XP58J9nMiUBKKZ2mEHu2elDVfOboIj5PiONcCMCt6ic=;
-        b=Yq4sbY+zwUknZYkTIlOVDWtB1bNtPagOZTtgT+2I2V6upHPE6NIOT3L9S27Sx3I/nz
-         bio/avRpFO0w5U5XECzAzLC3az+PrWr7pSssQ/xJN88fnPTBrMKhd+6QqBjuSAIDKJ1R
-         3FrFVS+HUJpZ1BT5HBH8JXJmW2OYL82dENzmIYwQUfTMCi/fAdJrxk2dD8+s+IDs5ZVi
-         54z7C6/HBUWl/N3wRalHWceNxICXqSnmCSkWIqaCs+BQxR8VJDsPLfVJMEj5utTb10R3
-         FgAhPK2IuYpcMppLKB9iXpS+/zIQsSefUrpWdz7iRWN4NR5I08aSY/n1y0aZoo/2OElH
-         bFCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XP58J9nMiUBKKZ2mEHu2elDVfOboIj5PiONcCMCt6ic=;
-        b=V2kOzdoxgi9I5bGchb1BAXT8uUoCwhVQXSz3Djg5ZK5E4PaLLd8I+5bSWQ/2iSwwNf
-         D1mkUwPMsX2DFhIK3dicRN3m3vVzsJfcc3N/VTuVWCLFDe7ISG0FZSfLla8x4THIXcjQ
-         5TM75ynM9mgAIEY5esJ69bNdN6x0M3leNAi3L034vP9MEW3Ta1rlbFBOAatexqASzG0X
-         mHft9rIgOmap4XLni7WfKc2gtXoWP+TpCqqstGuEZV+dEBkM332UIt4A0b7q1F5iFz2Z
-         oNb++SKRgpY/Nw4iO11UC8Huea1WW+ifHaEH9qNdAxm20SbU43wTrefT48vHaCzRVYmS
-         c0Og==
-X-Gm-Message-State: AOAM533B5y4a7fqN34xTwErW/rlf8CqkJ1xdwMSzTlMWYCwWUOCVsC3o
-        OeGd3CMWd+G3A4ilIybJpNMd2dII+Eq5AQ==
-X-Google-Smtp-Source: ABdhPJztz045tZLfgkeJcC3u6Zv7to81fyJuQrvXjzft9fCaGBH8M6rHdf7cy+6YBfYM8gLnYA366A==
-X-Received: by 2002:a05:600c:34ce:b0:38c:a579:944a with SMTP id d14-20020a05600c34ce00b0038ca579944amr5773450wmq.113.1648548228053;
-        Tue, 29 Mar 2022 03:03:48 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id b8-20020a05600c4e0800b0038c6c37efc3sm1811134wmq.12.2022.03.29.03.03.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 03:03:47 -0700 (PDT)
-Message-ID: <ea6868cc-6650-9b69-e328-6b0d31069191@gmail.com>
-Date:   Tue, 29 Mar 2022 12:03:46 +0200
+        Tue, 29 Mar 2022 06:05:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26ADB2E69E;
+        Tue, 29 Mar 2022 03:04:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A238560F76;
+        Tue, 29 Mar 2022 10:04:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A91DEC2BBE4;
+        Tue, 29 Mar 2022 10:04:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648548247;
+        bh=nr47TaXn48D8slbwYCAyzXRqVq92t0M60VmfjnMG1tA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oZcFPsMUs7K2l+2bfVmJyELTheLbvIU0suxvoMseI92s3cyZTGZwZVAgpi23+Gn0n
+         DHPERA99gNn8aPqVQ6E6QHw7qZ+LD+gAdxXA+p9U85ocL0Phk8pJG+ALCGYJM0r/C6
+         WQi5Dnf7GyKBampGtwJxYTatXUAcoKPhulNfquSI8wNvbLQJbwaEvU7bTxxOum+dxx
+         fhowZWKHNCDkGlQYMMP/mdVqESKP0GS1GMl6M1nliSVN7i3T+mQuAtLpClZWoBRBjN
+         lQRggM2N6rFIZYYNJrP4n+keZfmKFmYAzwUcWJ8OyYSYCsbU0cobtHx1MBgdKhDRZM
+         /Q9OLrWtGhfqA==
+Date:   Tue, 29 Mar 2022 11:04:04 +0100
+From:   Filipe Manana <fdmanana@kernel.org>
+To:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Nick Terrell <terrelln@fb.com>, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH 1/2] btrfs: Factor out allocating an array of pages.
+Message-ID: <YkLZlEfKeuB1Xtlp@debian9.Home>
+References: <cover.1648497027.git.sweettea-kernel@dorminy.me>
+ <8a8c3d39c858a1b8610ea967a50c2572c7604f5e.1648497027.git.sweettea-kernel@dorminy.me>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 22/22] arm64: dts: mt8192: Add pwm node
-Content-Language: en-US
-To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Hui Liu <hui.liu@mediatek.com>
-References: <20220318144534.17996-1-allen-kh.cheng@mediatek.com>
- <20220318144534.17996-23-allen-kh.cheng@mediatek.com>
- <51f8baea-6562-1d6b-c409-9c362f0b2fc5@gmail.com>
- <6ab86a35394879cf35fd9d780f8b7ab1695c931b.camel@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <6ab86a35394879cf35fd9d780f8b7ab1695c931b.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8a8c3d39c858a1b8610ea967a50c2572c7604f5e.1648497027.git.sweettea-kernel@dorminy.me>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 29/03/2022 08:51, allen-kh.cheng wrote:
+On Mon, Mar 28, 2022 at 04:14:27PM -0400, Sweet Tea Dorminy wrote:
+> Several functions currently populate an array of page pointers one
+> allocated page at a time; factor out the common code so as to allow
+> improvements to all of the sites at once.
 > 
-> Hi Matthias,
+> Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+> ---
+>  fs/btrfs/check-integrity.c |  8 +++-----
+>  fs/btrfs/compression.c     | 37 +++++++++++++++--------------------
+>  fs/btrfs/ctree.c           | 25 ++++++++++++++++++++++++
+>  fs/btrfs/ctree.h           |  2 ++
+>  fs/btrfs/extent_io.c       | 40 +++++++++++++++++++++++---------------
+>  fs/btrfs/inode.c           | 10 ++++------
+>  fs/btrfs/raid56.c          | 30 ++++------------------------
+>  7 files changed, 78 insertions(+), 74 deletions(-)
 > 
-> On Mon, 2022-03-28 at 13:10 +0200, Matthias Brugger wrote:
->>
->> On 18/03/2022 15:45, Allen-KH Cheng wrote:
->>> Add pwm node for mt8192 SoC.
->>>
->>> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
->>> ---
->>>    arch/arm64/boot/dts/mediatek/mt8192.dtsi | 11 +++++++++++
->>>    1 file changed, 11 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
->>> b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
->>> index f0f0f067c023..ea98b2230f18 100644
->>> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
->>> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
->>> @@ -625,6 +625,17 @@
->>>    			status = "disabled";
->>>    		};
->>>    
->>> +		pwm0: pwm@1100e000 {
->>> +			compatible = "mediatek,mt8183-disp-pwm";
->>> +			reg = <0 0x1100e000 0 0x1000>;
->>> +			interrupts = <GIC_SPI 171 IRQ_TYPE_LEVEL_HIGH
->>> 0>;
->>
->> Binding description is missing interrupt property. Remeber that the
->> DT should
->> describe the HW, so we need to update the binding description.
->> I just wonder what the IRQ signals, as it is not used by the driver.
->> Definitely
->> a good candidate to make the commit message more sound. So please add
->> it there.
->>
->> Thanks!
->> Matthias
->>
-> 
-> For interrupt property, we will send anther patch to update binding
-> and add some information for IRQ into commit message in next version.
-> 
+> diff --git a/fs/btrfs/check-integrity.c b/fs/btrfs/check-integrity.c
+> index 7e9f90fa0388..366d5a80f3c5 100644
+> --- a/fs/btrfs/check-integrity.c
+> +++ b/fs/btrfs/check-integrity.c
+> @@ -1553,11 +1553,9 @@ static int btrfsic_read_block(struct btrfsic_state *state,
+>  		return -ENOMEM;
+>  	block_ctx->datav = block_ctx->mem_to_free;
+>  	block_ctx->pagev = (struct page **)(block_ctx->datav + num_pages);
+> -	for (i = 0; i < num_pages; i++) {
+> -		block_ctx->pagev[i] = alloc_page(GFP_NOFS);
+> -		if (!block_ctx->pagev[i])
+> -			return -1;
+> -	}
+> +	ret = btrfs_alloc_page_array(num_pages, block_ctx->pagev);
+> +	if (ret)
+> +		return ret;
+>  
+>  	dev_bytenr = block_ctx->dev_bytenr;
+>  	for (i = 0; i < num_pages;) {
+> diff --git a/fs/btrfs/compression.c b/fs/btrfs/compression.c
+> index be476f094300..0fc663b757fb 100644
+> --- a/fs/btrfs/compression.c
+> +++ b/fs/btrfs/compression.c
+> @@ -801,8 +801,6 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
+>  	struct extent_map_tree *em_tree;
+>  	struct compressed_bio *cb;
+>  	unsigned int compressed_len;
+> -	unsigned int nr_pages;
+> -	unsigned int pg_index;
+>  	struct bio *comp_bio = NULL;
+>  	const u64 disk_bytenr = bio->bi_iter.bi_sector << SECTOR_SHIFT;
+>  	u64 cur_disk_byte = disk_bytenr;
+> @@ -812,7 +810,8 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
+>  	u64 em_start;
+>  	struct extent_map *em;
+>  	blk_status_t ret;
+> -	int faili = 0;
+> +	int r;
+> +	int i;
+>  	u8 *sums;
+>  
+>  	em_tree = &BTRFS_I(inode)->extent_tree;
+> @@ -855,25 +854,20 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
+>  	cb->compress_type = extent_compress_type(bio_flags);
+>  	cb->orig_bio = bio;
+>  
+> -	nr_pages = DIV_ROUND_UP(compressed_len, PAGE_SIZE);
+> -	cb->compressed_pages = kcalloc(nr_pages, sizeof(struct page *),
+> +	cb->nr_pages = DIV_ROUND_UP(compressed_len, PAGE_SIZE);
+> +	cb->compressed_pages = kcalloc(cb->nr_pages, sizeof(struct page *),
+>  				       GFP_NOFS);
+>  	if (!cb->compressed_pages) {
+>  		ret = BLK_STS_RESOURCE;
+> -		goto fail1;
+> +		goto fail;
+>  	}
+>  
+> -	for (pg_index = 0; pg_index < nr_pages; pg_index++) {
+> -		cb->compressed_pages[pg_index] = alloc_page(GFP_NOFS);
+> -		if (!cb->compressed_pages[pg_index]) {
+> -			faili = pg_index - 1;
+> -			ret = BLK_STS_RESOURCE;
+> -			goto fail2;
+> -		}
+> +	r = btrfs_alloc_page_array(cb->nr_pages, cb->compressed_pages);
+> +	if (r) {
+> +		ret = BLK_STS_RESOURCE;
+> +		goto fail;
+>  	}
+> -	faili = nr_pages - 1;
+> -	cb->nr_pages = nr_pages;
+> -
+> +	
+>  	add_ra_bio_pages(inode, em_start + em_len, cb);
+>  
+>  	/* include any pages we added in add_ra-bio_pages */
+> @@ -949,14 +943,15 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
+>  	}
+>  	return BLK_STS_OK;
+>  
+> -fail2:
+> -	while (faili >= 0) {
+> -		__free_page(cb->compressed_pages[faili]);
+> -		faili--;
+> +fail:
+> +	if (cb->compressed_pages) {
+> +		for (i = 0; i < cb->nr_pages; i++) {
+> +			if (cb->compressed_pages[i])
+> +				__free_page(cb->compressed_pages[i]);
+> +		}
+>  	}
+>  
+>  	kfree(cb->compressed_pages);
+> -fail1:
+>  	kfree(cb);
+>  out:
+>  	free_extent_map(em);
+> diff --git a/fs/btrfs/ctree.c b/fs/btrfs/ctree.c
+> index 1e24695ede0a..4e81e75c8e7c 100644
+> --- a/fs/btrfs/ctree.c
+> +++ b/fs/btrfs/ctree.c
+> @@ -90,6 +90,31 @@ void btrfs_free_path(struct btrfs_path *p)
+>  	kmem_cache_free(btrfs_path_cachep, p);
+>  }
+>  
+> +/**
+> + * btrfs_alloc_page_array() - allocate an array of pages.
+> + *
+> + * @nr_pages: the number of pages to request
+> + * @page_array: the array to fill with pages. Any existing non-null entries in
+> + * 	the array will be skipped.
+> + *
+> + * Return: 0 if all pages were able to be allocated; -ENOMEM otherwise, and the
+> + * caller is responsible for freeing all non-null page pointers in the array.
+> + */
+> +int btrfs_alloc_page_array(unsigned long nr_pages, struct page **page_array)
+> +{
+> +	int i;
+> +	for (i = 0; i < nr_pages; i++) {
+> +		struct page *page;
+> +		if (page_array[i])
+> +			continue;
+> +		page = alloc_page(GFP_NOFS);
+> +		if (!page)
+> +			return -ENOMEM;
+> +		page_array[i] = page;
+> +	}
+> +	return 0;
+> +}
 
-Thanks. Would you mind to send the dt-bindings updates in a series together with 
-the patches from this series that needs changes? This way it will be easier to 
-track the dependencies.
+Adding this helper to ctree.c is odd, as this is a module that implements
+a btree and exports functions related to btree operations and btree nodes/leaves.
 
-Please beware to send dt-binding patches as first of the series, so that Rob 
-Herring can find the rather quick.
+All the use cases for this helper relate to IO operations, so extent_io.c
+is perhaps a better fit.
 
-Thanks!
-Matthias
+Thanks.
 
-> Thanks,
-> Allen
-> 
->>> +			#pwm-cells = <2>;
->>> +			clocks = <&topckgen CLK_TOP_DISP_PWM_SEL>,
->>> +				 <&infracfg CLK_INFRA_DISP_PWM>;
->>> +			clock-names = "main", "mm";
->>> +			status = "disabled";
->>> +		};
->>> +
->>>    		spi1: spi@11010000 {
->>>    			compatible = "mediatek,mt8192-spi",
->>>    				     "mediatek,mt6765-spi";
+> +
+>  /*
+>   * path release drops references on the extent buffers in the path
+>   * and it drops any locks held by this path
+> diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
+> index 7328fb17b7f5..e835a2bfb60a 100644
+> --- a/fs/btrfs/ctree.h
+> +++ b/fs/btrfs/ctree.h
+> @@ -2969,6 +2969,8 @@ void btrfs_release_path(struct btrfs_path *p);
+>  struct btrfs_path *btrfs_alloc_path(void);
+>  void btrfs_free_path(struct btrfs_path *p);
+>  
+> +int btrfs_alloc_page_array(unsigned long nr_pages, struct page **page_array);
+> +
+>  int btrfs_del_items(struct btrfs_trans_handle *trans, struct btrfs_root *root,
+>  		   struct btrfs_path *path, int slot, int nr);
+>  static inline int btrfs_del_item(struct btrfs_trans_handle *trans,
+> diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
+> index 53b59944013f..c1c8d770f43a 100644
+> --- a/fs/btrfs/extent_io.c
+> +++ b/fs/btrfs/extent_io.c
+> @@ -5898,9 +5898,9 @@ __alloc_extent_buffer(struct btrfs_fs_info *fs_info, u64 start,
+>  struct extent_buffer *btrfs_clone_extent_buffer(const struct extent_buffer *src)
+>  {
+>  	int i;
+> -	struct page *p;
+>  	struct extent_buffer *new;
+>  	int num_pages = num_extent_pages(src);
+> +	int r;
+>  
+>  	new = __alloc_extent_buffer(src->fs_info, src->start, src->len);
+>  	if (new == NULL)
+> @@ -5913,22 +5913,23 @@ struct extent_buffer *btrfs_clone_extent_buffer(const struct extent_buffer *src)
+>  	 */
+>  	set_bit(EXTENT_BUFFER_UNMAPPED, &new->bflags);
+>  
+> +	memset(new->pages, 0, sizeof(*new->pages) * num_pages);
+> +	r = btrfs_alloc_page_array(num_pages, new->pages);
+> +	if (r) {
+> +		btrfs_release_extent_buffer(new);
+> +		return NULL;
+> +	}
+> +
+>  	for (i = 0; i < num_pages; i++) {
+>  		int ret;
+> +		struct page *p = new->pages[i];
+>  
+> -		p = alloc_page(GFP_NOFS);
+> -		if (!p) {
+> -			btrfs_release_extent_buffer(new);
+> -			return NULL;
+> -		}
+>  		ret = attach_extent_buffer_page(new, p, NULL);
+>  		if (ret < 0) {
+> -			put_page(p);
+>  			btrfs_release_extent_buffer(new);
+>  			return NULL;
+>  		}
+>  		WARN_ON(PageDirty(p));
+> -		new->pages[i] = p;
+>  		copy_page(page_address(p), page_address(src->pages[i]));
+>  	}
+>  	set_extent_buffer_uptodate(new);
+> @@ -5942,31 +5943,38 @@ struct extent_buffer *__alloc_dummy_extent_buffer(struct btrfs_fs_info *fs_info,
+>  	struct extent_buffer *eb;
+>  	int num_pages;
+>  	int i;
+> +	int r;
+>  
+>  	eb = __alloc_extent_buffer(fs_info, start, len);
+>  	if (!eb)
+>  		return NULL;
+>  
+>  	num_pages = num_extent_pages(eb);
+> +	r = btrfs_alloc_page_array(num_pages, eb->pages);
+> +	if (r)
+> +		goto err;
+> +
+>  	for (i = 0; i < num_pages; i++) {
+>  		int ret;
+> +		struct page *p = eb->pages[i];
+>  
+> -		eb->pages[i] = alloc_page(GFP_NOFS);
+> -		if (!eb->pages[i])
+> -			goto err;
+> -		ret = attach_extent_buffer_page(eb, eb->pages[i], NULL);
+> -		if (ret < 0)
+> +		ret = attach_extent_buffer_page(eb, p, NULL);
+> +		if (ret < 0) {
+>  			goto err;
+> +		}
+>  	}
+> +
+>  	set_extent_buffer_uptodate(eb);
+>  	btrfs_set_header_nritems(eb, 0);
+>  	set_bit(EXTENT_BUFFER_UNMAPPED, &eb->bflags);
+>  
+>  	return eb;
+>  err:
+> -	for (; i > 0; i--) {
+> -		detach_extent_buffer_page(eb, eb->pages[i - 1]);
+> -		__free_page(eb->pages[i - 1]);
+> +	for (i = 0; i < num_pages; i++) {
+> +		if (eb->pages[i]) {
+> +			detach_extent_buffer_page(eb, eb->pages[i]);
+> +			__free_page(eb->pages[i]);
+> +		}
+>  	}
+>  	__free_extent_buffer(eb);
+>  	return NULL;
+> diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
+> index c7b15634fe70..121858652a09 100644
+> --- a/fs/btrfs/inode.c
+> +++ b/fs/btrfs/inode.c
+> @@ -10427,13 +10427,11 @@ static ssize_t btrfs_encoded_read_regular(struct kiocb *iocb,
+>  	pages = kcalloc(nr_pages, sizeof(struct page *), GFP_NOFS);
+>  	if (!pages)
+>  		return -ENOMEM;
+> -	for (i = 0; i < nr_pages; i++) {
+> -		pages[i] = alloc_page(GFP_NOFS);
+> -		if (!pages[i]) {
+> -			ret = -ENOMEM;
+> -			goto out;
+> +	ret = btrfs_alloc_page_array(nr_pages, pages);
+> +	if (ret) {
+> +		ret = -ENOMEM;
+> +		goto out;
+>  		}
+> -	}
+>  
+>  	ret = btrfs_encoded_read_regular_fill_pages(inode, start, disk_bytenr,
+>  						    disk_io_size, pages);
+> diff --git a/fs/btrfs/raid56.c b/fs/btrfs/raid56.c
+> index 0e239a4c3b26..ea7a9152b1cc 100644
+> --- a/fs/btrfs/raid56.c
+> +++ b/fs/btrfs/raid56.c
+> @@ -1026,37 +1026,15 @@ static struct btrfs_raid_bio *alloc_rbio(struct btrfs_fs_info *fs_info,
+>  /* allocate pages for all the stripes in the bio, including parity */
+>  static int alloc_rbio_pages(struct btrfs_raid_bio *rbio)
+>  {
+> -	int i;
+> -	struct page *page;
+> -
+> -	for (i = 0; i < rbio->nr_pages; i++) {
+> -		if (rbio->stripe_pages[i])
+> -			continue;
+> -		page = alloc_page(GFP_NOFS);
+> -		if (!page)
+> -			return -ENOMEM;
+> -		rbio->stripe_pages[i] = page;
+> -	}
+> -	return 0;
+> +	return btrfs_alloc_page_array(rbio->nr_pages, rbio->stripe_pages);
+>  }
+>  
+>  /* only allocate pages for p/q stripes */
+>  static int alloc_rbio_parity_pages(struct btrfs_raid_bio *rbio)
+>  {
+> -	int i;
+> -	struct page *page;
+> -
+> -	i = rbio_stripe_page_index(rbio, rbio->nr_data, 0);
+> -
+> -	for (; i < rbio->nr_pages; i++) {
+> -		if (rbio->stripe_pages[i])
+> -			continue;
+> -		page = alloc_page(GFP_NOFS);
+> -		if (!page)
+> -			return -ENOMEM;
+> -		rbio->stripe_pages[i] = page;
+> -	}
+> -	return 0;
+> +	int data_pages = rbio_stripe_page_index(rbio, rbio->nr_data, 0);
+> +	return btrfs_alloc_page_array(rbio->nr_pages - data_pages,
+> +				      rbio->stripe_pages + data_pages);
+>  }
+>  
+>  /*
+> -- 
+> 2.35.1
 > 

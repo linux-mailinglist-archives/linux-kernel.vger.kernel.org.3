@@ -2,203 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 269614EA925
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 10:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41684EA92C
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 10:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233869AbiC2I1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 04:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
+        id S233885AbiC2I2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 04:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233550AbiC2I1M (ORCPT
+        with ESMTP id S233550AbiC2I17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 04:27:12 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440651877CE;
-        Tue, 29 Mar 2022 01:25:30 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a02:3030:a:f397:f6bc:b726:2678:839f])
+        Tue, 29 Mar 2022 04:27:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D841F687A;
+        Tue, 29 Mar 2022 01:26:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id AD2381F43940;
-        Tue, 29 Mar 2022 09:25:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648542328;
-        bh=f1D9zZ5QeEl1SNAS+500xZ0sHqyx/I137Xd4Cdi9UwQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TjRvs4SHnf8vYHOIcgthNvi7ssgTzAe2Y8menEXMXNm3aJfdeJctChd2AMqWelPeu
-         7h04Ecsj1yqzvdpIoxXpVUDJa0wZ2ZLtUDfj6XMX1xzeEKbOFw06Do9h+/+iSCWMgj
-         rEJISRZMa/1czJKIy9sB+7OSamF40GkC/qTW8ChlDQloiBuJg2e//OpfYpltFo/bJU
-         /FjwiR0LKxB094KxXozCe0PzdsJFlCqt8l9/bdZvm8knhtLVRVbEoYEMV2AvFBG/du
-         YIZQMUZIT7/fQ+U2PvNvHRq6iGHvVv6k5ruS4ibK966DOuwTgS3hyHZhtsXiun0xkJ
-         4KAkyC0fTZ0Zg==
-Date:   Tue, 29 Mar 2022 10:25:26 +0200
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel@collabora.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH v1 01/24] media: h264: Increase reference lists size to 32
-Message-ID: <20220329082526.v64tlnmzjlheuxgu@basti-XPS-13-9310>
-References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
- <20220328195936.82552-2-nicolas.dufresne@collabora.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7DF05B816AA;
+        Tue, 29 Mar 2022 08:26:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27658C34116;
+        Tue, 29 Mar 2022 08:26:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648542374;
+        bh=P64VippWtoDYEoAYe0HzOfZq72o+3xuuZhXnLlrgXKQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BA18187wrbX7cTMSQzq79snzwaUo5Js7LuiMhKNVQ6k43197XlTAEEmHP1wFoZDu0
+         xgSbtGHYkLlsElFzREuGpVV41MsRkf9UO4KnD4yb+mhi4s+pQKLm/tHkH5OX8J4Y3s
+         LhE1zzA1StHqs048cRNqQFjWwotM0hWVtz203rEFeNO9TWIXPAy0ZGiD4sR6vW0fre
+         zNpl9VyoeUnzVObjnEylmYCN+BxgoqSeT/G1B5WEc/KsVF/H2UWyPhxU8KHAehKmwR
+         ZMWQEyxDpAuuLCvkI7OR/mBGLVSoU2YMSFzngEOd+nVjCpjS1gSBcOOL9u3//Rz5Se
+         LbhXNPvCBRhQg==
+Received: by mail-oo1-f54.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so2973499oos.9;
+        Tue, 29 Mar 2022 01:26:14 -0700 (PDT)
+X-Gm-Message-State: AOAM531ydOwT4aefQ27l7KByL9ay665zkG/wOvfAwhPvlaOJPpNy6aED
+        NNz6Fzt9E0cQ61IyuF2+kQx0/KzMUdqBlpQGQUg=
+X-Google-Smtp-Source: ABdhPJwfGCMLk2VB7XvUDpERYxrxLHbFQsesq9dVB+yiEVlxuw1tERLeSRhYva8E1l8LXxwAun4JZTtR9hkxp93TpLU=
+X-Received: by 2002:a4a:3391:0:b0:320:d78b:7957 with SMTP id
+ q139-20020a4a3391000000b00320d78b7957mr561025ooq.60.1648542373173; Tue, 29
+ Mar 2022 01:26:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220328195936.82552-2-nicolas.dufresne@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220326064632.131637-1-mawupeng1@huawei.com>
+In-Reply-To: <20220326064632.131637-1-mawupeng1@huawei.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 29 Mar 2022 10:26:02 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEwzJE8V-tqJJwZ-RqHB3atKJvoRZ8C6_EVM7caNbttxw@mail.gmail.com>
+Message-ID: <CAMj1kXEwzJE8V-tqJJwZ-RqHB3atKJvoRZ8C6_EVM7caNbttxw@mail.gmail.com>
+Subject: Re: [PATCH 0/9] introduce mirrored memory support for arm64
+To:     Wupeng Ma <mawupeng1@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, hpa@zyccr.com,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Joerg Roedel <jroedel@suse.de>, songmuchun@bytedance.com,
+        macro@orcam.me.uk, Frederic Weisbecker <frederic@kernel.org>,
+        W_Armin@gmx.de, John Garry <john.garry@huawei.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        chenhuacai@kernel.org, David Hildenbrand <david@redhat.com>,
+        gpiccoli@igalia.com, Mark Rutland <mark.rutland@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        linux-ia64@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Nicolas,
-
-As mentioned in patch 24 as well:
-The patch series doesn't seem to apply on the latest media tree master
-branch. Looking at your tree I can see that you have commit: ba2c670a
-"media: nxp: Restrict VIDEO_IMX_MIPI_CSIS to ARCH_MXC or COMPILE_TEST
-Laurent Pinchart authored 1 week ago "
-
-But the current head of the media tree is: 71e6d0608e4d
-"media: platform: Remove unnecessary print function dev_err()
-Yang Li authored 13 days ago"
-
-On 28.03.2022 15:59, Nicolas Dufresne wrote:
->This is to accommodate support for field decoding, which splits the top
->and the bottom reference into the reference list.
-
-s/and the bottom reference/and the bottom references/
-
-I think it would be helpful to describe with a bit more detail why field
-decoding requires the 32 entry array instead of the 16 entry array.
-
-How about:
-"""
-In field decoding mode a slice is a sequence of macroblock pairs, where
-each pair contains a top and a bottom macroblock. To accommodate for
-this mode the reference list must be able contain references for both
-top and bottom macroblocks. Double the size of the reference list array
-accordingly.
-"""
-
-I got the info from the specification at 6.3.
-
+On Sat, 26 Mar 2022 at 07:27, Wupeng Ma <mawupeng1@huawei.com> wrote:
 >
->Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
->---
-> drivers/media/v4l2-core/v4l2-h264.c        | 6 +++---
-> drivers/staging/media/hantro/hantro_hw.h   | 6 +++---
-> drivers/staging/media/rkvdec/rkvdec-h264.c | 6 +++---
-> include/media/v4l2-h264.h                  | 8 ++++----
-> 4 files changed, 13 insertions(+), 13 deletions(-)
+> From: Ma Wupeng <mawupeng1@huawei.com>
 >
->diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
->index 0618c6f52214..8d750ee69e74 100644
->--- a/drivers/media/v4l2-core/v4l2-h264.c
->+++ b/drivers/media/v4l2-core/v4l2-h264.c
->@@ -210,7 +210,7 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
->  * v4l2_h264_build_p_ref_list() - Build the P reference list
->  *
->  * @builder: reference list builder context
->- * @reflist: 16 sized array used to store the P reference list. Each entry
->+ * @reflist: 32 sized array used to store the P reference list. Each entry
->  *	     is a v4l2_h264_reference structure
->  *
->  * This functions builds the P reference lists. This procedure is describe in
+> Commit b05b9f5f9dcf ("x86, mirror: x86 enabling - find mirrored memory ranges")
+> introduced mirrored memory support for x86. This support rely on UEFI to
+> report mirrored memory address ranges.  See UEFI 2.5 spec pages 157-158:
+>
+>   http://www.uefi.org/sites/default/files/resources/UEFI%202_5.pdf
+>
+> Arm64 can support this too. So mirrored memory support is added to support
+> arm64.
+>
 
-Oh unrelated to the patch but there is a typo: s/describe/described/
+What is the point of this if the kernel itself is not loaded in
+EFI_MORE_RELIABLE memory? On x86, this is handled by the decompressor,
+but that does not exist on arm64.
 
-Greetings,
-Sebastian
+The problem here is that UEFI defines this as a memory *attribute*
+rather than a memory *type*, which means you cannot allocate
+EFI_MORE_RELIABLE memory easily: you have to iterate over the memory
+map and look for regions with the desired attribute, and allocate
+those pages explicitly. I'd prefer to implement this in the
+bootloader, and only add minimal logic to the stub to respect the
+placement of the kernel by the loader if the loader signals it to do
+so (there are other reasons for this - I will cc you on a patch
+shortly that implements this)
 
->@@ -233,9 +233,9 @@ EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
->  * v4l2_h264_build_b_ref_lists() - Build the B0/B1 reference lists
->  *
->  * @builder: reference list builder context
->- * @b0_reflist: 16 sized array used to store the B0 reference list. Each entry
->+ * @b0_reflist: 32 sized array used to store the B0 reference list. Each entry
->  *		is a v4l2_h264_reference structure
->- * @b1_reflist: 16 sized array used to store the B1 reference list. Each entry
->+ * @b1_reflist: 32 sized array used to store the B1 reference list. Each entry
->  *		is a v4l2_h264_reference structure
->  *
->  * This functions builds the B0/B1 reference lists. This procedure is described
->diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
->index 2bc6b8f088f5..292aaaabaf24 100644
->--- a/drivers/staging/media/hantro/hantro_hw.h
->+++ b/drivers/staging/media/hantro/hantro_hw.h
->@@ -69,9 +69,9 @@ struct hantro_h264_dec_ctrls {
->  * @b1:		B1 reflist
->  */
-> struct hantro_h264_dec_reflists {
->-	struct v4l2_h264_reference p[HANTRO_H264_DPB_SIZE];
->-	struct v4l2_h264_reference b0[HANTRO_H264_DPB_SIZE];
->-	struct v4l2_h264_reference b1[HANTRO_H264_DPB_SIZE];
->+	struct v4l2_h264_reference p[V4L2_H264_REF_LIST_LEN];
->+	struct v4l2_h264_reference b0[V4L2_H264_REF_LIST_LEN];
->+	struct v4l2_h264_reference b1[V4L2_H264_REF_LIST_LEN];
-> };
+This also means that the fake_mem stuff is not going to work: the
+memory map observed by the stub comes straight from the firmware, and
+if the stub needs to be involved in placing (or respecting the
+placement by the loader of) the kernel image, it needs to observe
+those EFI_MORE_RELIABLE regions too. If you don't have access to a
+machine that actually exposes EFI_MORE_RELIABLE memory, I suggest you
+prototype it in QEMU/edk2 instead.
+
+In fact, we have been trying very hard not to touch the firmware
+provided memory map at all on ARM, rather than use it as a scratchpad
+for all kinds of annotations. This means, for instance, that kexec is
+idempotent - the next kernel should not be affected by modifications
+to the memory map applied by the previous kernel.
+
+In summary, implementing kernelcore=mirror for arm64 is fine with me,
+but there are some issues we need to address first.
+
+
+
+
+> Patch #1-#2 introduce efi_fake_mem support for arm64.
+> Patch #3-#4 introduce mirrored memory support form arm64.
+> Patch #5-#7 fix some bugs for arm64 if memory reliable is enabled.
+> Patch #8 disable mirror feature if kernelcore is not specified.
+> Patch #9 remove some redundant code in ia64 efi_init.
 >
-> /**
->diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
->index 3c7f3d87fab4..dff89732ddd0 100644
->--- a/drivers/staging/media/rkvdec/rkvdec-h264.c
->+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
->@@ -100,9 +100,9 @@ struct rkvdec_h264_priv_tbl {
-> #define RKVDEC_H264_DPB_SIZE 16
+> Ma Wupeng (9):
+>   efi: Make efi_print_memmap() public
+>   arm64: efi: Add fake memory support
+>   efi: Make efi_find_mirror() public
+>   arm64/mirror: arm64 enabling - find mirrored memory ranges
+>   mm: Ratelimited mirrored memory related warning messages
+>   mm: Demote warning message in vmemmap_verify() to debug level
+>   mm: Calc the right pfn if page size is not 4K
+>   efi: Disable mirror feature if kernelcore is not specified
+>   ia64/efi: Code simplification in efi_init
 >
-> struct rkvdec_h264_reflists {
->-	struct v4l2_h264_reference p[RKVDEC_H264_DPB_SIZE];
->-	struct v4l2_h264_reference b0[RKVDEC_H264_DPB_SIZE];
->-	struct v4l2_h264_reference b1[RKVDEC_H264_DPB_SIZE];
->+	struct v4l2_h264_reference p[V4L2_H264_REF_LIST_LEN];
->+	struct v4l2_h264_reference b0[V4L2_H264_REF_LIST_LEN];
->+	struct v4l2_h264_reference b1[V4L2_H264_REF_LIST_LEN];
-> 	u8 num_valid;
-> };
+>  .../admin-guide/kernel-parameters.txt         |  4 +-
+>  arch/arm64/kernel/setup.c                     |  3 ++
+>  arch/ia64/kernel/efi.c                        | 37 +-----------------
+>  arch/x86/include/asm/efi.h                    |  5 ---
+>  arch/x86/platform/efi/efi.c                   | 39 -------------------
+>  drivers/firmware/efi/Kconfig                  |  2 +-
+>  drivers/firmware/efi/efi.c                    | 26 +++++++++++++
+>  drivers/firmware/efi/memmap.c                 | 16 ++++++++
+>  include/linux/efi.h                           |  4 ++
+>  include/linux/mm.h                            |  2 +
+>  mm/memblock.c                                 |  4 +-
+>  mm/page_alloc.c                               |  4 +-
+>  mm/sparse-vmemmap.c                           |  2 +-
+>  13 files changed, 60 insertions(+), 88 deletions(-)
 >
->diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
->index ef9a894e3c32..e282fb16ac58 100644
->--- a/include/media/v4l2-h264.h
->+++ b/include/media/v4l2-h264.h
->@@ -37,7 +37,7 @@ struct v4l2_h264_reflist_builder {
-> 		u16 longterm : 1;
-> 	} refs[V4L2_H264_NUM_DPB_ENTRIES];
-> 	s32 cur_pic_order_count;
->-	struct v4l2_h264_reference unordered_reflist[V4L2_H264_NUM_DPB_ENTRIES];
->+	struct v4l2_h264_reference unordered_reflist[V4L2_H264_REF_LIST_LEN];
-> 	u8 num_valid;
-> };
->
->@@ -51,9 +51,9 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
->  * v4l2_h264_build_b_ref_lists() - Build the B0/B1 reference lists
->  *
->  * @builder: reference list builder context
->- * @b0_reflist: 16 sized array used to store the B0 reference list. Each entry
->+ * @b0_reflist: 32 sized array used to store the B0 reference list. Each entry
->  *		is a v4l2_h264_reference structure
->- * @b1_reflist: 16 sized array used to store the B1 reference list. Each entry
->+ * @b1_reflist: 32 sized array used to store the B1 reference list. Each entry
->  *		is a v4l2_h264_reference structure
->  *
->  * This functions builds the B0/B1 reference lists. This procedure is described
->@@ -70,7 +70,7 @@ v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
->  * v4l2_h264_build_p_ref_list() - Build the P reference list
->  *
->  * @builder: reference list builder context
->- * @reflist: 16 sized array used to store the P reference list. Each entry
->+ * @reflist: 32 sized array used to store the P reference list. Each entry
->  *	     is a v4l2_h264_reference structure
->  *
->  * This functions builds the P reference lists. This procedure is describe in
->-- 
->2.34.1
+> --
+> 2.18.0.huawei.25
 >

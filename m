@@ -2,231 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30994EB0BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4FA4EB0BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238547AbiC2Pfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51854 "EHLO
+        id S238767AbiC2PgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235903AbiC2Pfs (ORCPT
+        with ESMTP id S238674AbiC2PgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:35:48 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F23738BD0
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:34:05 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id h63so21388694iof.12
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:34:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7qR3fDUn27oEpIIwllpz0r6x3BaHEzNUBswJgaydd30=;
-        b=Xs4ynKIhvp3D1ePFI2vsI4ssLq9kdvadUuhx+61w0ctFKA1xkx2NcV30/RTf+Xf6Zg
-         DWmwFNCA+/CfwLTDQgkociwIOsBIYU9VFTHMZCUJSElPfKstdZx2O5wCNkKT7hfyb+eN
-         WODxrjNZ6Yrlr042p9ZqwITkMNAvHkhuJ/X4Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7qR3fDUn27oEpIIwllpz0r6x3BaHEzNUBswJgaydd30=;
-        b=FepG94O5OnxPZdm6fO42+f7NzRaHdDWJFsxnDfGYj165voCqM57a+R+1lZS8enOG9P
-         vXoWHCmsKhXcSENe75ZZGm0x7E2FJSw0BhH55nVuhbqZpCYCyMMXYXhoP0p/NxrytcVd
-         VLva72CBvCbx7QQXYzJ6rPuXRIOOvRyd1Gmmv5ENUuHcWUMuvQ+2TnEaeiI5jP1GVWEp
-         BelI/iVzkRCiDQve5WS1XExkZSehwpoIWFQZkZQS0YqeDhCo1ybQBWFJvzSHUtefzBVV
-         lK2ThbFI+JxZ97gBBS0d/koAQc7mEmzuxbYbWbvZeNyc0yymjV0ELTEgctCjHvqPQnQa
-         vtoA==
-X-Gm-Message-State: AOAM5320vfwR4zK5eKdj+LxWEHiqeh47LXcNwJtWrHzxCUway5pv6cfR
-        s5NBGzRmjhYIdKOwsMB/R72uBirveOyTXQ==
-X-Google-Smtp-Source: ABdhPJx2AX43o3h+uLCcArpQc0SLggOdgUuSo3WSpuxdG7Aq+zqPu2dleJYlmXJt6pCLFDzzYVKUpw==
-X-Received: by 2002:a05:6638:1f3:b0:319:f6cf:339b with SMTP id t19-20020a05663801f300b00319f6cf339bmr15837859jaq.69.1648568044279;
-        Tue, 29 Mar 2022 08:34:04 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id y12-20020a056602164c00b00645cdfb42dasm9958465iow.30.2022.03.29.08.34.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 08:34:03 -0700 (PDT)
-Subject: Re: [PATCH v5 1/2] selftests/resctrl: Extend CPU vendor detection
-To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220323080928.1586408-1-tan.shaopeng@jp.fujitsu.com>
- <20220323080928.1586408-2-tan.shaopeng@jp.fujitsu.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <503c663c-1cb1-0a0e-0d0f-eb4a560377c3@linuxfoundation.org>
-Date:   Tue, 29 Mar 2022 09:34:03 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 29 Mar 2022 11:36:06 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD723B03D;
+        Tue, 29 Mar 2022 08:34:23 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a02:3030:a:f397:f6bc:b726:2678:839f])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 8CD3F1F44125;
+        Tue, 29 Mar 2022 16:34:22 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648568062;
+        bh=nGX92UvfWgt2Qv/de13zxyDQ5ZWhrMUfiZ3gbHkaldY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k2sQ2pq+IanUJcoPmS5cQ2dTSCNdmrop2QBRkMayanfPOvpqf4G1Vk3ibBPFQI08d
+         9xZWHReZFrwyveeZ3QZ+Nd0ue4A3tukodjvm5IsdNhsGIwj6sL/W4FFoCRwIr57wP9
+         fP6SCna099Z1aCMb+P4klF15+KT+UhqTRYwep52fpbDtREnjNeaGY4FQfskQ07D/PG
+         j+0VA4o3E264anCZbpKv+7ZWvJJSYU9MAjd5eWp0EOn7uf9Hr6n1YEJIuSCOXKxHeN
+         f6Ja5nAoJnLO1gbtxd1rvZbgIMieoFHYUaSa1dTwYVnH5IVbxCmNJOZNviFTj9Wsd3
+         nKvMaCqOP1oPA==
+Date:   Tue, 29 Mar 2022 17:34:19 +0200
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@collabora.com, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 15/24] media: rkvdec: Enable capture buffer holding
+ for H264
+Message-ID: <20220329153419.2l67xawgabqefcao@basti-XPS-13-9310>
+References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
+ <20220328195936.82552-16-nicolas.dufresne@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <20220323080928.1586408-2-tan.shaopeng@jp.fujitsu.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20220328195936.82552-16-nicolas.dufresne@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/22 2:09 AM, Shaopeng Tan wrote:
-> Currently, the resctrl_tests only has a function to detect AMD vendor.
-> Since when the Intel Sub-NUMA Clustering feature is enabled,
-> Intel CMT and MBM counters may not be accurate,
-> the resctrl_tests also need a function to detect Intel vendor.
-> And in the future, resctrl_tests will need a function to detect different
-> vendors, such as Arm.
-> 
-> Extend the function to detect Intel vendor as well. Also,
-> this function can be easily extended to detect other vendors.
-> 
-> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-> ---
->   tools/testing/selftests/resctrl/cat_test.c    |  2 +-
->   tools/testing/selftests/resctrl/resctrl.h     |  5 ++-
->   .../testing/selftests/resctrl/resctrl_tests.c | 41 ++++++++++++-------
->   tools/testing/selftests/resctrl/resctrlfs.c   |  2 +-
->   4 files changed, 33 insertions(+), 17 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-> index cd4f68388e0f..1c5e90c63254 100644
-> --- a/tools/testing/selftests/resctrl/cat_test.c
-> +++ b/tools/testing/selftests/resctrl/cat_test.c
-> @@ -89,7 +89,7 @@ static int check_results(struct resctrl_val_param *param)
->   
->   	return show_cache_info(sum_llc_perf_miss, no_of_bits, param->span / 64,
->   			       MAX_DIFF, MAX_DIFF_PERCENT, NUM_OF_RUNS,
-> -			       !is_amd, false);
-> +			       get_vendor() == ARCH_INTEL, false);
->   }
->   
->   void cat_test_cleanup(void)
-> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-> index 1ad10c47e31d..f0ded31fb3c7 100644
-> --- a/tools/testing/selftests/resctrl/resctrl.h
-> +++ b/tools/testing/selftests/resctrl/resctrl.h
-> @@ -34,6 +34,9 @@
->   #define L3_MON_PATH		"/sys/fs/resctrl/info/L3_MON"
->   #define L3_MON_FEATURES_PATH	"/sys/fs/resctrl/info/L3_MON/mon_features"
->   
-> +#define ARCH_INTEL     1
-> +#define ARCH_AMD       2
-> +
->   #define PARENT_EXIT(err_msg)			\
->   	do {					\
->   		perror(err_msg);		\
-> @@ -75,8 +78,8 @@ struct resctrl_val_param {
->   extern pid_t bm_pid, ppid;
->   
->   extern char llc_occup_path[1024];
-> -extern bool is_amd;
->   
-> +int get_vendor(void);
->   bool check_resctrlfs_support(void);
->   int filter_dmesg(void);
->   int remount_resctrlfs(bool mum_resctrlfs);
-> diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-> index 973f09a66e1e..3e7cdf1125df 100644
-> --- a/tools/testing/selftests/resctrl/resctrl_tests.c
-> +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-> @@ -13,25 +13,41 @@
->   #define BENCHMARK_ARGS		64
->   #define BENCHMARK_ARG_SIZE	64
->   
-> -bool is_amd;
-> -
-> -void detect_amd(void)
-> +static int detect_vendor(void)
->   {
->   	FILE *inf = fopen("/proc/cpuinfo", "r");
-> +	int vendor_id = 0;
-> +	char *s = NULL;
->   	char *res;
->   
->   	if (!inf)
-> -		return;
-> +		return vendor_id;
->   
->   	res = fgrep(inf, "vendor_id");
->   
-> -	if (res) {
-> -		char *s = strchr(res, ':');
-> +	if (res)
-> +		s = strchr(res, ':');
-> +
-> +	if (s && !strcmp(s, ": GenuineIntel\n"))
-> +		vendor_id = ARCH_INTEL;
-> +	else if (s && !strcmp(s, ": AuthenticAMD\n"))
-> +		vendor_id = ARCH_AMD;
->   
-> -		is_amd = s && !strcmp(s, ": AuthenticAMD\n");
-> -		free(res);
-> -	}
->   	fclose(inf);
-> +	free(res);
-> +	return vendor_id;
-> +}
-> +
-> +int get_vendor(void)
-> +{
-> +	static int vendor = -1;
-> +
-> +	if (vendor == -1)
-> +		vendor = detect_vendor();
-> +	if (vendor == 0)
-> +		ksft_print_msg("Can not get vendor info...\n");
-> +
-> +	return vendor;
->   }
->   
->   static void cmd_help(void)
-> @@ -207,9 +223,6 @@ int main(int argc, char **argv)
->   	if (geteuid() != 0)
->   		return ksft_exit_fail_msg("Not running as root, abort testing.\n");
->   
-> -	/* Detect AMD vendor */
-> -	detect_amd();
-> -
->   	if (has_ben) {
->   		/* Extract benchmark command from command line. */
->   		for (i = ben_ind; i < argc; i++) {
-> @@ -241,10 +254,10 @@ int main(int argc, char **argv)
->   
->   	ksft_set_plan(tests ? : 4);
->   
-> -	if (!is_amd && mbm_test)
-> +	if ((get_vendor() == ARCH_INTEL) && mbm_test)
->   		run_mbm_test(has_ben, benchmark_cmd, span, cpu_no, bw_report);
->   
-> -	if (!is_amd && mba_test)
-> +	if ((get_vendor() == ARCH_INTEL) && mba_test)
->   		run_mba_test(has_ben, benchmark_cmd, span, cpu_no, bw_report);
->   
->   	if (cmt_test)
-> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-> index 5f5a166ade60..6f543e470ad4 100644
-> --- a/tools/testing/selftests/resctrl/resctrlfs.c
-> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
-> @@ -106,7 +106,7 @@ int get_resource_id(int cpu_no, int *resource_id)
->   	char phys_pkg_path[1024];
->   	FILE *fp;
->   
-> -	if (is_amd)
-> +	if (get_vendor() == ARCH_AMD)
->   		sprintf(phys_pkg_path, "%s%d/cache/index3/id",
->   			PHYS_ID_PATH, cpu_no);
->   	else
-> 
+Hey Nicolas,
 
-Looks good to me.
+On 28.03.2022 15:59, Nicolas Dufresne wrote:
+>In order to support interlaced video decoding, the driver must
+>allow holding the capture buffer so that the second field can
+>be decoded into it.
+>
+>Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+>---
+> drivers/staging/media/rkvdec/rkvdec.c | 4 ++++
+> drivers/staging/media/rkvdec/rkvdec.h | 1 +
+> 2 files changed, 5 insertions(+)
+>
+>diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+>index 2df8cf4883e2..05824f1997f7 100644
+>--- a/drivers/staging/media/rkvdec/rkvdec.c
+>+++ b/drivers/staging/media/rkvdec/rkvdec.c
+>@@ -138,6 +138,7 @@ static const struct rkvdec_coded_fmt_desc rkvdec_coded_fmts[] = {
+> 		.ops = &rkvdec_h264_fmt_ops,
+> 		.num_decoded_fmts = ARRAY_SIZE(rkvdec_h264_vp9_decoded_fmts),
+> 		.decoded_fmts = rkvdec_h264_vp9_decoded_fmts,
+>+		.subsystem_flags = VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF,
+> 	},
+> 	{
+> 		.fourcc = V4L2_PIX_FMT_VP9_FRAME,
+>@@ -394,6 +395,9 @@ static int rkvdec_s_output_fmt(struct file *file, void *priv,
+> 	cap_fmt->fmt.pix_mp.ycbcr_enc = f->fmt.pix_mp.ycbcr_enc;
+> 	cap_fmt->fmt.pix_mp.quantization = f->fmt.pix_mp.quantization;
+>
+>+	/* Enable format specific queue feature */
 
-thanks,
--- Shuah
+s/feature/features/
+
+Greetings,
+Sebastian
+
+>+	vq->subsystem_flags |= desc->subsystem_flags;
+>+
+> 	return 0;
+> }
+>
+>diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
+>index 2f4ea1786b93..e37f1a015fa0 100644
+>--- a/drivers/staging/media/rkvdec/rkvdec.h
+>+++ b/drivers/staging/media/rkvdec/rkvdec.h
+>@@ -81,6 +81,7 @@ struct rkvdec_coded_fmt_desc {
+> 	const struct rkvdec_coded_fmt_ops *ops;
+> 	unsigned int num_decoded_fmts;
+> 	const u32 *decoded_fmts;
+>+	u32 subsystem_flags;
+> };
+>
+> struct rkvdec_dev {
+>-- 
+>2.34.1
+>

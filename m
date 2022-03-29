@@ -2,94 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC6A4EB5DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0BF4EB5DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236904AbiC2W10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 18:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
+        id S236932AbiC2W2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 18:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236622AbiC2W1Y (ORCPT
+        with ESMTP id S234777AbiC2W2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 18:27:24 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833261C13D
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:25:40 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id ke15so15518629qvb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:25:40 -0700 (PDT)
+        Tue, 29 Mar 2022 18:28:07 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4073CB0D22
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:26:23 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id bq24so16777632lfb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:26:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=EDIv2NnbA2HoBvysLf3wHiMFJpgyzFX6SdC4PgZ8XbE=;
-        b=E078j+CtyyfVfdi8VFaQaMdt+NElXSLQzSkBfloPiGe2UYTglMBZJz7mpbohxh8F39
-         S+8oZhLeHVKS0ITF6aHCz8jNJLeK5L7/k5RXItXPMyWa6nbWmUAufWcoYpxEMdxyBPNM
-         CmcQpNUwtyC0HhEqmZAPs6nZaRv6F+qnXuwlrM+XztOrZa4XD7ny2FJp+jdlzCXzBdjs
-         Pd5WXBXG0LY1pnRanTcouM6xMyslAf64QA5OaDFcrR7+XR9uZyYcRjUxD+UQrT9oKBcN
-         p4v/9P8minyCaTbqkJ3lEf0kxw2rHo1UX04iVsr+2lez3FyYWm0yKpNW2rXYFClkdG57
-         ourw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Eq/hDx8wKMs4js8aHxkHKYQ3P3T4FpD2LhDpEFtVod8=;
+        b=nBYJRcr2epLmw7W5jj1DyWNoaJ5PytYBRiMKYL/5744Lo+5+ej7neYHnCHJ4YJqphU
+         C5h9ci26W7DViGTe0ndNPnBM4oKxbdfYDOt6SjGf2bUcoaI0RPuAeN7Mbc2ciaNOn3LS
+         +iot8PcYUJ5ZZrLmgcpvnZVXJLHooDPQZeC6omwt6phleOd+J+ALSDxuEWCI0UfCFX3N
+         78NyjyceETkVbQnm5ptEVrkETKMr6mHVGL7GNHO8spoaU75R2kkGGdghwh3+ktCHpvgp
+         1H4tIuOOJ/TQtyn5mnb/Awl39xf2FLcKSvHfstXXb4fS2MThWo3QzUquaKD8DgkxUpmU
+         AK1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=EDIv2NnbA2HoBvysLf3wHiMFJpgyzFX6SdC4PgZ8XbE=;
-        b=Lo39hcKKLb65WOZJ2jaxHfCUUh8+/8JcHDxoUSnqS3ZvhTASda/D8a37YIU1avYTio
-         t5Bm/UnzSxDpf+jWf2HFz5RGbyPIsOQSi0hPjAsk4MnyQjHdfweKARk8zdAEKcOo9VRW
-         pbrTcErZqkqGsnDt2z7c7Rika326LsMYsfdf72VQe6kI7ndZSzPtW4zWjb0mPRaBeS35
-         CQlF5NEntcH7MmSqvGwQJHji7/maTLE+lwQXllx9NuYBr7LjmS7lBiiH0jDs7isqKrkb
-         8TMYNMKA9y83SZ4zQ7z7hsPGkeoSZnCjOhvPUX2V+l9qZ3/8OxEwPhPtJhg4p+mQb2kg
-         TKXw==
-X-Gm-Message-State: AOAM530YiXxAuu4cbu+SBemiOu0BMqVGYhB1dwAW+d3IrXfK3WwTuqmK
-        pS4tJ4SfK9QB7daPZfQ7Tn8=
-X-Google-Smtp-Source: ABdhPJwQeCznI7jJGwMXETg1DyJ2CXIcdL8cnv8H29sEKJ+HqpOlskcyhNZrmoCsSiKDi98S2MQ+6Q==
-X-Received: by 2002:a05:6214:19e9:b0:443:6799:829e with SMTP id q9-20020a05621419e900b004436799829emr7392065qvc.30.1648592739643;
-        Tue, 29 Mar 2022 15:25:39 -0700 (PDT)
-Received: from jaehee-ThinkPad-X1-Extreme ([4.34.18.218])
-        by smtp.gmail.com with ESMTPSA id v5-20020a05622a144500b002e1c7d027b1sm15338135qtx.66.2022.03.29.15.25.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 15:25:38 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 18:25:34 -0400
-From:   Jaehee Park <jhpark1013@gmail.com>
-To:     =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: [PATCH] staging: wfx: remove space at the start of the line
-Message-ID: <20220329222534.GA1002253@jaehee-ThinkPad-X1-Extreme>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Eq/hDx8wKMs4js8aHxkHKYQ3P3T4FpD2LhDpEFtVod8=;
+        b=y4Z0ViuV72YsV6T1iFyXFg4k8FyLptjzM6xbzbrvcyQ3idXS+nHBkZU3g2WMPdqRP3
+         FjVwiDprls6iNITDeaPL9rGdaxc4i61bLK3L2P1Ffl3P6lwbs5HjMmXmKirDC/wXqVx7
+         g+6gN7KQBGSvcjYnkMw5uCgwon78hG9hx1ZTtbt2q2HMaDP54uwFfbfmnV9p8smGBbQ2
+         UonB98JnQecpCcHBo/xluw4aSv3qWBgc8dPStwWOrHIfn4HEXLOncBymvf2YKjqR83c1
+         WCmdlQrfN5ECI1Zrm7msGYoyxmK+YMtXpRmBp423DIOMIVDBhmeiEQYZnEj9/ubkjgai
+         B7yQ==
+X-Gm-Message-State: AOAM532qbh/YRBpPoakLsssjk47fImado45hosnfAbWXRR0G/sHFghue
+        oobNWWZmlLv1y+7wzp+iBcjTin7R9LXtCnOhlqE94Q==
+X-Google-Smtp-Source: ABdhPJz3fitcJ9qiEhta3zosFy6t5FScI80eSjKMeWv3ImRq4Hse8lAvC4NsmaCiNOkGV9qvbZvQvPgFok3UlpIpuZg=
+X-Received: by 2002:a05:6512:108b:b0:44a:6dc2:ffeb with SMTP id
+ j11-20020a056512108b00b0044a6dc2ffebmr4701180lfg.184.1648592781335; Tue, 29
+ Mar 2022 15:26:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220329212946.2861648-1-ndesaulniers@google.com>
+ <CAKwvOdmsnVsW46pTZYCNu-bx5c-aJ8ARMCOsYeMmQHpAw3PtPg@mail.gmail.com> <CAKwvOdnJB5u96fm1w-R-VUayvhq58EQeqZst32NDRscK17Z8pQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdnJB5u96fm1w-R-VUayvhq58EQeqZst32NDRscK17Z8pQ@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 29 Mar 2022 15:26:09 -0700
+Message-ID: <CAKwvOdmYzH91bzNus+RcZGSgCQGY8UKt0-2JvtqQAh=w+CeiuQ@mail.gmail.com>
+Subject: Re: [PATCH] net, uapi: remove inclusion of arpa/inet.h
+To:     Jon Maloy <jmaloy@redhat.com>, Ying Xue <ying.xue@windriver.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        David Howells <dhowells@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove spaces at the start of the line to follow the linux kernel
-coding style. Issue found by checkpatch:
-WARNING: please, no spaces at the start of a line.
+On Tue, Mar 29, 2022 at 3:09 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Tue, Mar 29, 2022 at 2:50 PM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > On Tue, Mar 29, 2022 at 2:29 PM Nick Desaulniers
+> > <ndesaulniers@google.com> wrote:
+> > >
+> > > Testing out CONFIG_UAPI_HEADER_TEST=y with a prebuilt Bionic sysroot
+> > > from Android's SDK, I encountered an error:
+> > >
+> > >   HDRTEST usr/include/linux/fsi.h
+> > > In file included from <built-in>:1:
+> > > In file included from ./usr/include/linux/tipc_config.h:46:
+> > > prebuilts/ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/arpa/inet.h:39:1:
+> > > error: unknown type name 'in_addr_t'
+> > > in_addr_t inet_addr(const char* __s);
+> > > ^
+> >
+> > Oh, this might not quite be the correct fix for this particular issue.
+> >
+> > Cherry picking this diff back into my Android kernel tree, I now observe:
+> >   HDRTEST usr/include/linux/tipc_config.h
+> > In file included from <built-in>:1:
+> > ./usr/include/linux/tipc_config.h:268:4: error: implicit declaration
+> > of function 'ntohs' [-Werror,-Wimplicit-function-declaration]
+> >                 (ntohs(((struct tlv_desc *)tlv)->tlv_len) <= space);
+> >                  ^
+> >
+> > Is there more than one byteorder.h? Oh, I see what I did; ntohs is defined in
+> > linux/byteorder/generic.h
+> > not
+> > usr/include/asm/byteorder.h
+> > Sorry, I saw `byteorder` and mixed up the path with the filename.
+> >
+> > So rather than just remove the latter, I should additionally be adding
+> > the former. Though that then produces
+> >
+> > common/include/linux/byteorder/generic.h:146:9: error: implicit
+> > declaration of function '__cpu_to_le16'
+> > [-Werror,-Wimplicit-function-declaration]
+> >         *var = cpu_to_le16(le16_to_cpu(*var) + val);
+> >                ^
+> >
+> > Oh?
+>
+> Should there be a definition of ntohs (and friends) under
+> include/uapi/linux/ somewhere, rather than have the kernel header
+> include/uapi/linux/tipc_config.h depend on the libc header
+> arpa/inet.h?
+>
+> It looks like we already have
+> include/uapi/linux/byteorder/{big|little}_endian.h to define
+> __be16_to_cpu and friends, just no definition of ntohs under
+> include/uapi/linux/.
+>
+> Also, it looks like include/uapi/linux/ has definitions for
+> __constant_ntohs in
+> include/uapi/linux/byteorder/{big|little}_endian.h.  Should those 2
+> headers also define ntohs (and friends) unprefixed, i.e. the versions
+> that don't depend on constant expressions?
 
-Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
----
- drivers/staging/wfx/main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I think the answer is yes; in addition to the diff in this patch, the
+following seems to be working:
+```
+diff --git a/include/uapi/linux/byteorder/little_endian.h
+b/include/uapi/linux/byteorder/little_endian.h
+index cd98982e7523..c14f2c3728e2 100644
+--- a/include/uapi/linux/byteorder/little_endian.h
++++ b/include/uapi/linux/byteorder/little_endian.h
+@@ -103,5 +103,8 @@ static __always_inline __u16 __be16_to_cpup(const __be16 *p)
+ #define __cpu_to_be16s(x) __swab16s((x))
+ #define __be16_to_cpus(x) __swab16s((x))
 
-diff --git a/drivers/staging/wfx/main.c b/drivers/staging/wfx/main.c
-index b93b16b900c8..e575a81ca2ca 100644
---- a/drivers/staging/wfx/main.c
-+++ b/drivers/staging/wfx/main.c
-@@ -170,7 +170,7 @@ bool wfx_api_older_than(struct wfx_dev *wdev, int major, int minor)
-  *
-  * The PDS file is an array of Time-Length-Value structs.
-  */
-- int wfx_send_pds(struct wfx_dev *wdev, u8 *buf, size_t len)
-+int wfx_send_pds(struct wfx_dev *wdev, u8 *buf, size_t len)
- {
- 	int ret, chunk_type, chunk_len, chunk_num = 0;
- 
++#define htonl(x) __cpu_to_be32(x)
++#define htons(x) __cpu_to_be16(x)
++#define ntohs(x) __be16_to_cpu(x)
+
+ #endif /* _UAPI_LINUX_BYTEORDER_LITTLE_ENDIAN_H */
+```
+I think if I flush out the rest for both endiannesses, then we should
+be in good shape?
+
+>
+> (I wish there was an entry in MAINTAINERS for UAPI questions like this...)
+>
+> >
+> > >
+> > > This is because Bionic has a bug in its inclusion chain. I sent a patch
+> > > to fix that, but looking closer at include/uapi/linux/tipc_config.h,
+> > > there's a comment that it includes arpa/inet.h for ntohs; but ntohs is
+> > > already defined in include/linux/byteorder/generic.h which is already
+> > > included in include/uapi/linux/tipc_config.h. There are no __KERNEL__
+> > > guards on include/linux/byteorder/generic.h's definition of ntohs. So
+> > > besides fixing Bionic, it looks like we can additionally remove this
+> > > unnecessary header inclusion.
+> > >
+> > > Link: https://android-review.googlesource.com/c/platform/bionic/+/2048127
+> > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> > > ---
+> > >  include/uapi/linux/tipc_config.h | 4 ----
+> > >  1 file changed, 4 deletions(-)
+> > >
+> > > diff --git a/include/uapi/linux/tipc_config.h b/include/uapi/linux/tipc_config.h
+> > > index 4dfc05651c98..b38374d5f192 100644
+> > > --- a/include/uapi/linux/tipc_config.h
+> > > +++ b/include/uapi/linux/tipc_config.h
+> > > @@ -43,10 +43,6 @@
+> > >  #include <linux/tipc.h>
+> > >  #include <asm/byteorder.h>
+> > >
+> > > -#ifndef __KERNEL__
+> > > -#include <arpa/inet.h> /* for ntohs etc. */
+> > > -#endif
+> > > -
+> > >  /*
+> > >   * Configuration
+> > >   *
+> > >
+> > > base-commit: 5efabdadcf4a5b9a37847ecc85ba71cf2eff0fcf
+> > > prerequisite-patch-id: 0c2abf2af8051f4b37a70ef11b7d2fc2a3ec7181
+> > > --
+> > > 2.35.1.1021.g381101b075-goog
+> > >
+> >
+> >
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
+>
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
 -- 
-2.25.1
-
+Thanks,
+~Nick Desaulniers

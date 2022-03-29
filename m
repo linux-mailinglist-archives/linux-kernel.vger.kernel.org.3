@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A43A04EAE69
+	by mail.lfdr.de (Postfix) with ESMTP id 0C25E4EAE67
 	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237324AbiC2N1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 09:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
+        id S237261AbiC2N1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 09:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237244AbiC2N1b (ORCPT
+        with ESMTP id S237242AbiC2N1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 09:27:31 -0400
+        Tue, 29 Mar 2022 09:27:30 -0400
 Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E961F5195
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B851D1F6359
         for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:25:47 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KSVgF1Nsvz1GCxj;
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KSVgF4BNMz1GD0v;
         Tue, 29 Mar 2022 21:25:29 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
@@ -26,9 +26,9 @@ From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH 3/8] mm/vmscan: introduce helper function reclaim_page_list()
-Date:   Tue, 29 Mar 2022 21:26:14 +0800
-Message-ID: <20220329132619.18689-4-linmiaohe@huawei.com>
+Subject: [PATCH 4/8] mm/vmscan: save a bit of stack space in shrink_lruvec
+Date:   Tue, 29 Mar 2022 21:26:15 +0800
+Message-ID: <20220329132619.18689-5-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220329132619.18689-1-linmiaohe@huawei.com>
 References: <20220329132619.18689-1-linmiaohe@huawei.com>
@@ -48,94 +48,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce helper function reclaim_page_list() to eliminate the duplicated
-code of doing shrink_page_list() and putback_lru_page. Also We can separate
-node reclaim from node page list operation this way. No functional change
-intended.
+LRU_UNEVICTABLE is not taken into account when shrink lruvec. So we can
+save a bit of stack space by shrinking the array size of nr and targets
+to NR_LRU_LISTS - 1. No functional change intended.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- mm/vmscan.c | 47 +++++++++++++++++++++++------------------------
- 1 file changed, 23 insertions(+), 24 deletions(-)
+ mm/vmscan.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 09b452c4d256..a6e60c78d058 100644
+index a6e60c78d058..ebd8ffb63673 100644
 --- a/mm/vmscan.c
 +++ b/mm/vmscan.c
-@@ -2513,14 +2513,11 @@ static void shrink_active_list(unsigned long nr_to_scan,
- 			nr_deactivate, nr_rotated, sc->priority, file);
- }
+@@ -2862,8 +2862,9 @@ static bool can_age_anon_pages(struct pglist_data *pgdat,
  
--unsigned long reclaim_pages(struct list_head *page_list)
-+static inline unsigned int reclaim_page_list(struct list_head *page_list, struct pglist_data *pgdat)
+ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
  {
--	int nid = NUMA_NO_NODE;
--	unsigned int nr_reclaimed = 0;
--	LIST_HEAD(node_page_list);
- 	struct reclaim_stat dummy_stat;
-+	unsigned int nr_reclaimed;
- 	struct page *page;
--	unsigned int noreclaim_flag;
- 	struct scan_control sc = {
- 		.gfp_mask = GFP_KERNEL,
- 		.may_writepage = 1,
-@@ -2529,6 +2526,24 @@ unsigned long reclaim_pages(struct list_head *page_list)
- 		.no_demotion = 1,
- 	};
- 
-+	nr_reclaimed = shrink_page_list(page_list, pgdat, &sc, &dummy_stat, false);
-+	while (!list_empty(page_list)) {
-+		page = lru_to_page(page_list);
-+		list_del(&page->lru);
-+		putback_lru_page(page);
-+	}
-+
-+	return nr_reclaimed;
-+}
-+
-+unsigned long reclaim_pages(struct list_head *page_list)
-+{
-+	int nid = NUMA_NO_NODE;
-+	unsigned int nr_reclaimed = 0;
-+	LIST_HEAD(node_page_list);
-+	struct page *page;
-+	unsigned int noreclaim_flag;
-+
- 	noreclaim_flag = memalloc_noreclaim_save();
- 
- 	while (!list_empty(page_list)) {
-@@ -2544,28 +2559,12 @@ unsigned long reclaim_pages(struct list_head *page_list)
- 			continue;
- 		}
- 
--		nr_reclaimed += shrink_page_list(&node_page_list,
--						NODE_DATA(nid),
--						&sc, &dummy_stat, false);
--		while (!list_empty(&node_page_list)) {
--			page = lru_to_page(&node_page_list);
--			list_del(&page->lru);
--			putback_lru_page(page);
--		}
--
-+		nr_reclaimed += reclaim_page_list(&node_page_list, NODE_DATA(nid));
- 		nid = NUMA_NO_NODE;
- 	}
- 
--	if (!list_empty(&node_page_list)) {
--		nr_reclaimed += shrink_page_list(&node_page_list,
--						NODE_DATA(nid),
--						&sc, &dummy_stat, false);
--		while (!list_empty(&node_page_list)) {
--			page = lru_to_page(&node_page_list);
--			list_del(&page->lru);
--			putback_lru_page(page);
--		}
--	}
-+	if (!list_empty(&node_page_list))
-+		nr_reclaimed += reclaim_page_list(&node_page_list, NODE_DATA(nid));
- 
- 	memalloc_noreclaim_restore(noreclaim_flag);
- 
+-	unsigned long nr[NR_LRU_LISTS];
+-	unsigned long targets[NR_LRU_LISTS];
++	/* LRU_UNEVICTABLE is not taken into account. */
++	unsigned long nr[NR_LRU_LISTS - 1];
++	unsigned long targets[NR_LRU_LISTS - 1];
+ 	unsigned long nr_to_scan;
+ 	enum lru_list lru;
+ 	unsigned long nr_reclaimed = 0;
 -- 
 2.23.0
 

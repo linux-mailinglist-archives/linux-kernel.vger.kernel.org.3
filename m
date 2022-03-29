@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83CAC4EA838
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 08:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165824EA83B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 08:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233234AbiC2G7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 02:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
+        id S233244AbiC2HA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 03:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbiC2G7O (ORCPT
+        with ESMTP id S231715AbiC2HA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 02:59:14 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54202ED50;
-        Mon, 28 Mar 2022 23:57:30 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a02:3030:a:f397:f6bc:b726:2678:839f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 2BF361F43635;
-        Tue, 29 Mar 2022 07:57:29 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648537049;
-        bh=szOBLpLdwQa32D4Bqsi6fFyIDa3A9/cqpY4tz/Nklrg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BZuw1pQbc6RTFxE4WEZdiGXaQvWl4IjCDX2u0NUtPgKIQqjCWu9rrTazFkSYNn2gr
-         rChbXY4UGnlOVwX8+5YN4wSwCbtz5K/Qp/64K3vmZ9EhOTVQwzGaW2rDC5uAxo5mAs
-         nSmqNNiEhfsl/30adAsMXAhJc63KRG1YQ78ER/6byhknvusLVxTxjUO6cQIKJVQkd4
-         vRRSeIr/FWDxEZREK/L3hmP+9FYHojFWJoJ5ikzHM7d7lg7YtK/JJHGgJ4/xogB4kB
-         4B1xcyFfOvE4grOXmtm3sePfD7zCsHOO/oZ5F+zkfpYZTYb31/juyxyyfLtTi4J6dt
-         oeBKojLYyn9jw==
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] media: docs-rst: Append HEVC specific term
-Date:   Tue, 29 Mar 2022 08:56:56 +0200
-Message-Id: <20220329065657.8509-1-sebastian.fricke@collabora.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 29 Mar 2022 03:00:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66A88326E4;
+        Mon, 28 Mar 2022 23:59:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2746F23A;
+        Mon, 28 Mar 2022 23:59:15 -0700 (PDT)
+Received: from [10.57.7.161] (unknown [10.57.7.161])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 45BFB3F718;
+        Mon, 28 Mar 2022 23:59:13 -0700 (PDT)
+Message-ID: <4db6b25c-dd78-a6ba-02a5-ac2e49996be1@arm.com>
+Date:   Tue, 29 Mar 2022 07:59:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] thermal: devfreq_cooling: use local ops instead of global
+ ops
+Content-Language: en-US
+To:     Kant Fan <kant@allwinnertech.com>, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, javi.merino@kernel.org,
+        edubezval@gmail.com, orjan.eide@arm.com
+Cc:     amitk@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        allwinner-opensource-support@allwinnertech.com,
+        stable@vger.kernel.org
+References: <20220325094436.101419-1-kant@allwinnertech.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220325094436.101419-1-kant@allwinnertech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe the coding tree unit as replacement for the macroblock in the
-HEVC codec. Highlight a key difference of the HEVC codec to predecessors
-like AVC(H.264) to give a better overview of the differences between the
-coding standards.
 
-Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
----
- Documentation/userspace-api/media/v4l/dev-decoder.rst | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/dev-decoder.rst b/Documentation/userspace-api/media/v4l/dev-decoder.rst
-index 3cf2b496f2d0..eb5b1b1e3a51 100644
---- a/Documentation/userspace-api/media/v4l/dev-decoder.rst
-+++ b/Documentation/userspace-api/media/v4l/dev-decoder.rst
-@@ -72,6 +72,11 @@ coded resolution
- coded width
-    width for given coded resolution.
- 
-+coding tree unit
-+   processing unit of the HEVC codec (≘ macroblock units in H.264, VP8, VP9);
-+   can use block structures of up to 64×64 pixels;
-+   Good at sub-partitioning the picture into variable sized structures.
-+
- decode order
-    the order in which frames are decoded; may differ from display order if the
-    coded format includes a feature of frame reordering; for decoders,
-@@ -104,7 +109,8 @@ keyframe
- macroblock
-    a processing unit in image and video compression formats based on linear
-    block transforms (e.g. H.264, VP8, VP9); codec-specific, but for most of
--   popular codecs the size is 16x16 samples (pixels).
-+   popular codecs the size is 16x16 samples (pixels). The HEVC codec uses a
-+   slightly more flexible processing unit called coding tree unit (CTU).
- 
- OUTPUT
-    the source buffer queue; for decoders, the queue of buffers containing
--- 
-2.25.1
+On 3/25/22 09:44, Kant Fan wrote:
+> commit 7b62935828266658714f81d4e9176edad808dc70 upstream.
+> 
+> Fix access illegal address problem in following condition:
+> There are muti devfreq cooling devices in system, some of them register
+> with dfc_power but other does not, power model ops such as state2power will
+> append to global devfreq_cooling_ops when the cooling device with
+> dfc_power register. It makes the cooling device without dfc_power
+> also use devfreq_cooling_ops after appending when register later by
+> of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
+> 
+> IPA governor regards the cooling devices without dfc_power as a power actor
+> because they also have power model ops, and will access illegal address at
+> dfc->power_ops when execute cdev->ops->get_requested_power or
+> cdev->ops->power2state. As the calltrace below shows:
+> 
+> Unable to handle kernel NULL pointer dereference at virtual address
+> 00000008
+> ...
+> calltrace:
+> [<c06e5488>] devfreq_cooling_power2state+0x24/0x184
+> [<c06df420>] power_actor_set_power+0x54/0xa8
+> [<c06e3774>] power_allocator_throttle+0x770/0x97c
+> [<c06dd120>] handle_thermal_trip+0x1b4/0x26c
+> [<c06ddb48>] thermal_zone_device_update+0x154/0x208
+> [<c014159c>] process_one_work+0x1ec/0x36c
+> [<c0141c58>] worker_thread+0x204/0x2ec
+> [<c0146788>] kthread+0x140/0x154
+> [<c01010e8>] ret_from_fork+0x14/0x2c
+> 
+> Fixes: a76caf55e5b35 ("thermal: Add devfreq cooling")
+> Cc: stable@vger.kernel.org # 4.4+
+> Signed-off-by: Kant Fan <kant@allwinnertech.com>
+> ---
+>   drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
+>   1 file changed, 18 insertions(+), 7 deletions(-)
+> 
 
+Looks good. So this patch should be applied for all stable
+kernels starting from v4.4 to v5.12 (the v5.13 and later need
+other patch).
+
+Next time you might use in the subject something like:
+[PATCH 4.4] thermal: devfreq_cooling: use local ops instead of global ops
+It would be better distinguished from your other patch with the
+same subject, which was for mainline and v5.13+

@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62BB04EAB71
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0730D4EAB77
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235251AbiC2Kjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 06:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
+        id S235260AbiC2KkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 06:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235244AbiC2Kji (ORCPT
+        with ESMTP id S235267AbiC2Kjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 06:39:38 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E67CC12E2;
-        Tue, 29 Mar 2022 03:37:55 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id bp39so14815612qtb.6;
-        Tue, 29 Mar 2022 03:37:55 -0700 (PDT)
+        Tue, 29 Mar 2022 06:39:52 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0F9C1C81
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 03:38:07 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id r23so20202715edb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 03:38:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=xKC778etah9QDKKcTZhhCigcf4xPfMmEKK8YhWBFI3U=;
-        b=PDvLAK727ct6dPW56kW/LelNoVohBTmDa2Azjn40F4G+K9/a9FvkOuyluaA7aYxwTl
-         LcAVtUIsDGndq1N/B6ZQp/S4nrRurzW0tiofMGqNg0yefQfbhNzyLc88hURsF1kE0b6R
-         4l24zv5jf4Cg/u/AqQlyU6dLq44h7RFSeudNVrhlp6fRfWCZn/AUAzEioZrCTtO+QrKJ
-         +Z9ju0P6kWUBX1Yjpsy8WGnUlb9ipnEjKh2pOYGaBE88I34X29q3f42xEip1JAKNMV0G
-         Rx+1mmT4qnxxawWkem/Oqg6Qq7dsx+hgI+8tZ/dQ1cPx9COImVqWy61DA+3Vo3VANB8U
-         /5eg==
+        bh=rQgKzNISqArDY7LULCiNgr15+k+211SoiUzs0z+KaHk=;
+        b=UafYkExBfrtQOkXs0hiJM5CMmnfNeMYqVP9WjVGEnnYq+gIQ3xdUWTxcy/UMuNABxN
+         8fOy8AAvQlkGODvupjseBTyoFNfY41656+6Dv5N+h3UI4mrkHKy+r8C0b8y/1aE61UHM
+         YSxkkPuYQA4GFSzaWkjCEY2IfqOExj/vJD54dWbqNlHlei076q/v7lodTN1YOoQtJqHQ
+         IEcvF3s/eknTjgcjt2RHSLwEHIsxqeIZNVIhso/nmf4IdoKhGPDUtqNpbJEG7mCsySlM
+         rGX1m5UZlppE2qqfI5wfyosT12B7RpiI7zSPQBSZfc0SAMVDmIg3JxdaS0d8AvHiuVw4
+         /Avg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=xKC778etah9QDKKcTZhhCigcf4xPfMmEKK8YhWBFI3U=;
-        b=fvcHXjM97gSoQTktpfQjWFpql4M8bxPxdzTJmy0hdt8pbnAz3B/E9jE0bkh4totQt/
-         Zue0bRdq8/xLWOYscqgqVBzfR89ZRs0hO7Z9pz7luZwAGXkMfcsAnpR3ZConWkTpjdwB
-         FO8i6acJbLFXyvJYBXOPN5flxZUBink61OKRYbDPqJZaERUOyo1Yuw0FwciDMBtcXrnh
-         aYWBg58ip48yW2lCH7CJ87mmkdIQWFkfki8RBG1Rs537lBJDWJCLTBRhfC0twWyfptcC
-         bL+p271JsFlK2XjCOD0pcC6ibhSbFl1zM/Cma2gZcRS8JuXeP/nbelgqVhybkg1gfkVF
-         s5vA==
-X-Gm-Message-State: AOAM5338JsMhlHqGCvZhf1kjmSMKaCJiN4Z0dPUjzS1lzt8RcCV7W5tr
-        imhXqMblGkDb4S9M1vQrCK2dHZOczLY=
-X-Google-Smtp-Source: ABdhPJyjvB2r/3wtYP5p9c9+BZYtdAonfE8T69SzZfubL2yGRZlQQpA0YYQnGTkJOcqV2rR+BdnRUQ==
-X-Received: by 2002:a05:622a:89:b0:2e1:b8c7:9975 with SMTP id o9-20020a05622a008900b002e1b8c79975mr26674072qtw.342.1648550274239;
-        Tue, 29 Mar 2022 03:37:54 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id j188-20020a3755c5000000b0067d1c76a09fsm9545713qkb.74.2022.03.29.03.37.51
+        bh=rQgKzNISqArDY7LULCiNgr15+k+211SoiUzs0z+KaHk=;
+        b=EMxDTCFV0/UKGvI9Al2LoVbI/ijrs04cyMPXvVV8ZVqpYfKie/86cdYlu3jCtk3qu5
+         eVPcMZaPKSOKGu0PVJWda+4U0ARLyTjnx2oRYE6vL15ECnBkh4+8bisIyC+SVIY6l1T5
+         bjAk/sSdCRpeqdwHDVret2T+cYx2zFDDhMcu+HRaB64cDJ54bAy1xXuaC+FJDa85sJi/
+         q9IsZpsOLaW4p9VU69vZcWTmgqR4xLA2CUj4ZlJRWUVwXpU04gl5Ss4sQ6svTUJlFrAk
+         KpFACPM0weS+W+KULKLap2J+IPoHUOvqjjp4M+1aCYhqfNZ/7H/BFNvE2zg0AL0VOWed
+         yxTg==
+X-Gm-Message-State: AOAM530lNOiZTsiDfNx/ClVYbzrxyxFfN3lsalkKI5aNYvyuzJP5ks58
+        1Lx30Khxmke1kSGrmGDR9Jg=
+X-Google-Smtp-Source: ABdhPJy8d/gjPOB0IPI+Kq7Zf45dYINkXtS4XeQL8gIcXyfg86a5K8JVNWNO4bhu8TAyEtmaUG3eHA==
+X-Received: by 2002:aa7:cac4:0:b0:418:85b7:adec with SMTP id l4-20020aa7cac4000000b0041885b7adecmr3641052edt.231.1648550286161;
+        Tue, 29 Mar 2022 03:38:06 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
+        by smtp.gmail.com with ESMTPSA id qw39-20020a1709066a2700b006e03017d60csm7058151ejc.54.2022.03.29.03.38.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 03:37:53 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     thierry.reding@gmail.com
-Cc:     airlied@linux.ie, daniel@ffwll.ch, jonathanh@nvidia.com,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] drm: tegra: fix memory leak in error handling path
-Date:   Tue, 29 Mar 2022 10:37:47 +0000
-Message-Id: <20220329103747.2376753-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 29 Mar 2022 03:38:05 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 0/4] staging: r8188eu: refactor two small functions
+Date:   Tue, 29 Mar 2022 12:37:52 +0200
+Message-Id: <20220329103756.6740-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,30 +69,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+This series refactors two small functions to improve readability.
 
-Before leave the nvdec_load_firmware, we shuold free virt which is alloced
-by dma_alloc_coherent, so change "return err" to "goto cleanup".
+Tested on x86_64 with Inter-Tech DMG-02.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
----
- drivers/gpu/drm/tegra/nvdec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Michael Straube (4):
+  staging: r8188eu: refactor rtw_usb_bulk_size_boundary()
+  staging: r8188eu: refactor rtw_inc_and_chk_continual_urb_error()
+  staging: r8188eu: convert rtw_usb_bulk_size_boundary() to bool
+  staging: r8188eu: convert rtw_inc_and_chk_continual_urb_error() to
+    bool
 
-diff --git a/drivers/gpu/drm/tegra/nvdec.c b/drivers/gpu/drm/tegra/nvdec.c
-index 79e1e88203cf..a14863346bfa 100644
---- a/drivers/gpu/drm/tegra/nvdec.c
-+++ b/drivers/gpu/drm/tegra/nvdec.c
-@@ -209,7 +209,7 @@ static int nvdec_load_firmware(struct nvdec *nvdec)
- 
- 		err = dma_mapping_error(nvdec->dev, iova);
- 		if (err < 0)
--			return err;
-+			goto cleanup;
- 	} else {
- 		virt = tegra_drm_alloc(tegra, size, &iova);
- 	}
+ drivers/staging/r8188eu/include/usb_ops.h | 22 ++++++++--------------
+ 1 file changed, 8 insertions(+), 14 deletions(-)
+
 -- 
-2.25.1
+2.35.1
 

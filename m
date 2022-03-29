@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C25E4EAE67
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1B9D4EAE64
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237261AbiC2N1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 09:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
+        id S237306AbiC2N1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 09:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237242AbiC2N1a (ORCPT
+        with ESMTP id S237245AbiC2N1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 09:27:30 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B851D1F6359
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:25:47 -0700 (PDT)
+        Tue, 29 Mar 2022 09:27:31 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163A41F636A
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:25:48 -0700 (PDT)
 Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KSVgF4BNMz1GD0v;
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KSVgF4LvGzcb52;
         Tue, 29 Mar 2022 21:25:29 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
@@ -26,9 +26,9 @@ From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH 4/8] mm/vmscan: save a bit of stack space in shrink_lruvec
-Date:   Tue, 29 Mar 2022 21:26:15 +0800
-Message-ID: <20220329132619.18689-5-linmiaohe@huawei.com>
+Subject: [PATCH 5/8] mm/vmscan: use helper folio_is_file_lru()
+Date:   Tue, 29 Mar 2022 21:26:16 +0800
+Message-ID: <20220329132619.18689-6-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220329132619.18689-1-linmiaohe@huawei.com>
 References: <20220329132619.18689-1-linmiaohe@huawei.com>
@@ -48,31 +48,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LRU_UNEVICTABLE is not taken into account when shrink lruvec. So we can
-save a bit of stack space by shrinking the array size of nr and targets
-to NR_LRU_LISTS - 1. No functional change intended.
+Use helper folio_is_file_lru() to check whether folio is file lru. Minor
+readability improvement.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- mm/vmscan.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ mm/vmscan.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/mm/vmscan.c b/mm/vmscan.c
-index a6e60c78d058..ebd8ffb63673 100644
+index ebd8ffb63673..31e95d627448 100644
 --- a/mm/vmscan.c
 +++ b/mm/vmscan.c
-@@ -2862,8 +2862,9 @@ static bool can_age_anon_pages(struct pglist_data *pgdat,
+@@ -1411,14 +1411,14 @@ static enum page_references folio_check_references(struct folio *folio,
+ 		/*
+ 		 * Activate file-backed executable folios after first usage.
+ 		 */
+-		if ((vm_flags & VM_EXEC) && !folio_test_swapbacked(folio))
++		if ((vm_flags & VM_EXEC) && folio_is_file_lru(folio))
+ 			return PAGEREF_ACTIVATE;
  
- static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
- {
--	unsigned long nr[NR_LRU_LISTS];
--	unsigned long targets[NR_LRU_LISTS];
-+	/* LRU_UNEVICTABLE is not taken into account. */
-+	unsigned long nr[NR_LRU_LISTS - 1];
-+	unsigned long targets[NR_LRU_LISTS - 1];
- 	unsigned long nr_to_scan;
- 	enum lru_list lru;
- 	unsigned long nr_reclaimed = 0;
+ 		return PAGEREF_KEEP;
+ 	}
+ 
+ 	/* Reclaim if clean, defer dirty folios to writeback */
+-	if (referenced_folio && !folio_test_swapbacked(folio))
++	if (referenced_folio && folio_is_file_lru(folio))
+ 		return PAGEREF_RECLAIM_CLEAN;
+ 
+ 	return PAGEREF_RECLAIM;
 -- 
 2.23.0
 

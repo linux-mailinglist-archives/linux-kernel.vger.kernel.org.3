@@ -2,205 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27BE4EB2E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 19:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D23514EB2E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 19:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240339AbiC2Rpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 13:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
+        id S240323AbiC2Rpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 13:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240321AbiC2Rph (ORCPT
+        with ESMTP id S240309AbiC2Rpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 13:45:37 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9940D1F046C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 10:43:54 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id hu11so14953289qvb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 10:43:54 -0700 (PDT)
+        Tue, 29 Mar 2022 13:45:36 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65068DEB8;
+        Tue, 29 Mar 2022 10:43:52 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id p15so36613636ejc.7;
+        Tue, 29 Mar 2022 10:43:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2noiAB4JhD//sQbtMNMDRU7L/9/z/AP4LRXU3Z5+JvY=;
-        b=otNRkeUJnJtKzUMsBnrSWYanbhWeN1Nr/I/fVv2Rq8w/YmJEhFqXr6Rdld/RrqKqq/
-         Q+QQ8gzlwSLGScMxlQeoDphNNODvqG7q/KBtSzPMBramlM33AO68I36uzWljETzdzbWY
-         YsnqA+fY31Sm+w7+q5jq4FGCjr6DS7m2Wlnf1UQ2NgeTlzm8JSaRD+c8FvhlhqMCTFU6
-         WDDWdB+FuCgV80VJHGOOxuoA3iQQa3f+x8z1Q4d4nKPsoKB8P7IkUeG7O41qZTpKYZkC
-         Xa4ZWwSgDht52/RJdVxsEs9kRTRtDL6yjBmtPGOfqbNNYY6pasj9PcjTjlNc+lfWIWNb
-         nKMA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=MehIMCOHPm3o42xMjUspyRsRaGCPZO4k+2JRMM8VP60=;
+        b=Ioy9Hj2QZz5p8Z/D5ukHs4lzEtpu1CXcwGQ+UNVfJhDtlG00LRfk412S3en59kv4Re
+         WkhEr82+A9Icp/37rVNFTZ7xqXaINY6BxwA91tMo50N60XyJWjcmh55PR8288Fs59taM
+         Ct4ZVD65f/yBY5vEHMJ0AoYGhcJvutWLB07q/8vyXX7c4AYWRAMD94kVYhvDYNvvFPMK
+         kB0ZIjQ1/orxaNdAssqD0k0b+wVwSB6yb22fGPdAmvc1RZXT3TXsEn7mjas36G665mMX
+         WzwZ4kUYAOOSZoKnxObBCbvgnIwbV4H+FKnaFF92XFton5X3ClKjR8D/dpepI3WoEh3T
+         ij2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2noiAB4JhD//sQbtMNMDRU7L/9/z/AP4LRXU3Z5+JvY=;
-        b=2KvvTFppWs6C0Ak9BfPM4tx0ZucOe0Tw2XmC2hX+lfsilA2SvBakJLlxX1cAjrBqIr
-         wSv07M2odG94S9P+NPh6sTsAe8+SKJRxhzzufvZIMqtFHc2Yxk3Fk9TMLxPYfM2F+zFg
-         lZUellf79YZBY+2GUe1v/LxWaOkYzX458lAlY8satn42xDxbbfknFomtK21vnlRPYcm7
-         MaJh+BBpB0EIyiVbfpixStmAf5QwiXJfeQvUJcTMQYdvVyYc01HZkJbdMwO9QkNJjr3u
-         F8CSY63GNvFAoz3MNt92WRlJSwo0Gid7twwQSlJMhgToEElbYnSW1Lv3siPviZGCJZ2a
-         hM7g==
-X-Gm-Message-State: AOAM5317vPGx5O0RshqqGeplx9BPBbM4Jfz2xOVO3he0+ddcDIunNgcS
-        KV9rY2xw7xoTBjc6/Iyo/mQQKbeDoXCT4pE4K48h2Q==
-X-Google-Smtp-Source: ABdhPJzS0MyLxNl7VoGIMNAjsfEGHGfg+9QRPDqN6YXeAuaXQZzcG+MJ9zzBtsMr7izpJQNsjGTrAhKsvfpztruHfHs=
-X-Received: by 2002:a05:6214:d8d:b0:441:686e:f2c6 with SMTP id
- e13-20020a0562140d8d00b00441686ef2c6mr27348549qve.44.1648575833484; Tue, 29
- Mar 2022 10:43:53 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MehIMCOHPm3o42xMjUspyRsRaGCPZO4k+2JRMM8VP60=;
+        b=UOxgVmv1kePUmDlqXSSbPuwhcVJuhmqNNpB0t0UKEtx7sP+u9zVxvaYSnLZdECxq9C
+         UbRXW0+KLM8Xu+fQ4QOAhYC1SyKdPDFlN876N7/nNuKnl9jH55HbmscRmsu2nasyZ8Jg
+         NIsmW991opZR7SlzJVky3OWt7TRiUgxJ7NUoaAgtpHYgDsB2fPIZbmxizNyTmy+8Q0/7
+         6hrhh7L3FMNE6GgTwjXy9CbNqw2Zgs6n6W9d1ozBLVflxr/TBErF5QSNx9NSOiWKsBVz
+         KM4hnmpxW3WtbnWKvFZI0qYT0N3gaTt8+NWFfGtFQfvXmoTn123P2402cGYH3SwGxrAK
+         A4cA==
+X-Gm-Message-State: AOAM531IR7g5bzrIqzxgzkIYtN/ss0yJfPe94z4dG+unHhIAcN1U80HL
+        xn4YVHIw5hU+opssc+mJBmk=
+X-Google-Smtp-Source: ABdhPJyzfti3CS/e24Ly5WM74Dz/LkpZUBjNoeNIQqIY56i7iaj94vcNqx1CjI1XHgEUr+qwuY0XUg==
+X-Received: by 2002:a17:906:99c3:b0:6df:a289:ed3a with SMTP id s3-20020a17090699c300b006dfa289ed3amr35708735ejn.660.1648575830776;
+        Tue, 29 Mar 2022 10:43:50 -0700 (PDT)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id e28-20020a170906649c00b006df6dfeb557sm7265737ejm.49.2022.03.29.10.43.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 10:43:50 -0700 (PDT)
+Message-ID: <686f4aab-e41f-ad3d-249c-09fb8da8ef8c@gmail.com>
+Date:   Tue, 29 Mar 2022 19:43:49 +0200
 MIME-Version: 1.0
-References: <20220324234123.1608337-1-haoluo@google.com> <9cdf860d-8370-95b5-1688-af03265cc874@fb.com>
- <CA+khW7g3hy61qnvtqUizaW+qB6wk=Y9cjivhORshOk=ZzTXJ-A@mail.gmail.com>
- <CA+khW7iq+UKsfQxdT3QpSqPUFN8gQWWDLoQ9zxB=uWTs63AZEA@mail.gmail.com> <20220329093753.26wc3noelqrwlrcj@apollo.legion>
-In-Reply-To: <20220329093753.26wc3noelqrwlrcj@apollo.legion>
-From:   Hao Luo <haoluo@google.com>
-Date:   Tue, 29 Mar 2022 10:43:42 -0700
-Message-ID: <CA+khW7jW47SALTfxMKfQoA0Qwqd22GC0z4S5juFTbxLfTSbFEQ@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next 0/2] Mmapable task local storage.
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v1 2/3] arm64: dts: rockchip: fix compatible string rk3328
+ cru node
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        heiko@sntech.de, zhangqing@rock-chips.com
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220329163016.27458-1-jbx6244@gmail.com>
+ <20220329163016.27458-2-jbx6244@gmail.com>
+ <09fa521e-dcf9-b744-da30-86542fd8855e@linaro.org>
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <09fa521e-dcf9-b744-da30-86542fd8855e@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 2:37 AM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
->
-> On Mon, Mar 28, 2022 at 11:16:15PM IST, Hao Luo wrote:
-> > On Mon, Mar 28, 2022 at 10:39 AM Hao Luo <haoluo@google.com> wrote:
-> > >
-> > > Hi Yonghong,
-> > >
-> > > On Fri, Mar 25, 2022 at 12:16 PM Yonghong Song <yhs@fb.com> wrote:
-> > > >
-> > > > On 3/24/22 4:41 PM, Hao Luo wrote:
-> > > > > Some map types support mmap operation, which allows userspace to
-> > > > > communicate with BPF programs directly. Currently only arraymap
-> > > > > and ringbuf have mmap implemented.
-> > > > >
-> > > > > However, in some use cases, when multiple program instances can
-> > > > > run concurrently, global mmapable memory can cause race. In that
-> > > > > case, userspace needs to provide necessary synchronizations to
-> > > > > coordinate the usage of mapped global data. This can be a source
-> > > > > of bottleneck.
-> > > >
-> > > > I can see your use case here. Each calling process can get the
-> > > > corresponding bpf program task local storage data through
-> > > > mmap interface. As you mentioned, there is a tradeoff
-> > > > between more memory vs. non-global synchronization.
-> > > >
-> > > > I am thinking that another bpf_iter approach can retrieve
-> > > > the similar result. We could implement a bpf_iter
-> > > > for task local storage map, optionally it can provide
-> > > > a tid to retrieve the data for that particular tid.
-> > > > This way, user space needs an explicit syscall, but
-> > > > does not need to allocate more memory than necessary.
-> > > >
-> > > > WDYT?
-> > > >
-> > >
-> > > Thanks for the suggestion. I have two thoughts about bpf_iter + tid and mmap:
-> > >
-> > > - mmap prevents the calling task from reading other task's value.
-> > > Using bpf_iter, one can pass other task's tid to get their values. I
-> > > assume there are two potential ways of passing tid to bpf_iter: one is
-> > > to use global data in bpf prog, the other is adding tid parameterized
-> > > iter_link. For the first, it's not easy for unpriv tasks to use. For
-> > > the second, we need to create one iter_link object for each interested
-> > > tid. It may not be easy to use either.
-> > >
-> > > - Regarding adding an explicit syscall. I thought about adding
-> > > write/read syscalls for task local storage maps, just like reading
-> > > values from iter_link. Writing or reading task local storage map
-> > > updates/reads the current task's value. I think this could achieve the
-> > > same effect as mmap.
-> > >
-> >
-> > Actually, my use case of using mmap on task local storage is to allow
-> > userspace to pass FDs into bpf prog. Some of the helpers I want to add
-> > need to take an FD as parameter and the bpf progs can run
-> > concurrently, thus using global data is racy. Mmapable task local
-> > storage is the best solution I can find for this purpose.
-> >
-> > Song also mentioned to me offline, that mmapable task local storage
-> > may be useful for his use case.
-> >
-> > I am actually open to other proposals.
-> >
->
-> You could also use a syscall prog, and use bpf_prog_test_run to update local
-> storage for current. Data can be passed for that specific prog invocation using
-> ctx. You might have to enable bpf_task_storage helpers in it though, since they
-> are not allowed to be called right now.
->
 
-The loading process needs CAP_BPF to load bpf_prog_test_run. I'm
-thinking of allowing any thread including unpriv ones to be able to
-pass data to the prog and update their own storage.
 
-> > > > >
-> > > > > It would be great to have a mmapable local storage in that case.
-> > > > > This patch adds that.
-> > > > >
-> > > > > Mmap isn't BPF syscall, so unpriv users can also use it to
-> > > > > interact with maps.
-> > > > >
-> > > > > Currently the only way of allocating mmapable map area is using
-> > > > > vmalloc() and it's only used at map allocation time. Vmalloc()
-> > > > > may sleep, therefore it's not suitable for maps that may allocate
-> > > > > memory in an atomic context such as local storage. Local storage
-> > > > > uses kmalloc() with GFP_ATOMIC, which doesn't sleep. This patch
-> > > > > uses kmalloc() with GFP_ATOMIC as well for mmapable map area.
-> > > > >
-> > > > > Allocating mmapable memory has requirment on page alignment. So we
-> > > > > have to deliberately allocate more memory than necessary to obtain
-> > > > > an address that has sdata->data aligned at page boundary. The
-> > > > > calculations for mmapable allocation size, and the actual
-> > > > > allocation/deallocation are packaged in three functions:
-> > > > >
-> > > > >   - bpf_map_mmapable_alloc_size()
-> > > > >   - bpf_map_mmapable_kzalloc()
-> > > > >   - bpf_map_mmapable_kfree()
-> > > > >
-> > > > > BPF local storage uses them to provide generic mmap API:
-> > > > >
-> > > > >   - bpf_local_storage_mmap()
-> > > > >
-> > > > > And task local storage adds the mmap callback:
-> > > > >
-> > > > >   - task_storage_map_mmap()
-> > > > >
-> > > > > When application calls mmap on a task local storage, it gets its
-> > > > > own local storage.
-> > > > >
-> > > > > Overall, mmapable local storage trades off memory with flexibility
-> > > > > and efficiency. It brings memory fragmentation but can make programs
-> > > > > stateless. Therefore useful in some cases.
-> > > > >
-> > > > > Hao Luo (2):
-> > > > >    bpf: Mmapable local storage.
-> > > > >    selftests/bpf: Test mmapable task local storage.
-> > > > >
-> > > > >   include/linux/bpf.h                           |  4 +
-> > > > >   include/linux/bpf_local_storage.h             |  5 +-
-> > > > >   kernel/bpf/bpf_local_storage.c                | 73 +++++++++++++++++--
-> > > > >   kernel/bpf/bpf_task_storage.c                 | 40 ++++++++++
-> > > > >   kernel/bpf/syscall.c                          | 67 +++++++++++++++++
-> > > > >   .../bpf/prog_tests/task_local_storage.c       | 38 ++++++++++
-> > > > >   .../bpf/progs/task_local_storage_mmapable.c   | 38 ++++++++++
-> > > > >   7 files changed, 257 insertions(+), 8 deletions(-)
-> > > > >   create mode 100644 tools/testing/selftests/bpf/progs/task_local_storage_mmapable.c
-> > > > >
->
-> --
-> Kartikeya
+On 3/29/22 19:23, Krzysztof Kozlowski wrote:
+> On 29/03/2022 18:30, Johan Jonker wrote:
+>> The rockchip,rk3328-cru.txt file was converted to YAML.
+>> A DT test of the rk3328 cru node gives notifications regarding
+>> the compatible string. Bring it in line with the binding by
+>> removing some unused fall back strings.
+> 
+
+> Are you sure these are unused? rockchip,cru maybe, but what about DTS
+> used out of tree? It's useful to mention that the compatible is not
+> documented (so if there are any out of tree users, it's their fault).
+> 
+> Removal of syscon is different case - why do you think it is unused? Did
+> you check it? It's not a fallback compatible.
+
+Hi,
+
+If someone knows why that was added to the Rockchip tree? Let us
+know.(Elaine ??)
+Other well know locations don't seem to use it.
+
+Please advise.
+
+Johan
+===
+
+https://github.com/torvalds/linux/search?q=rockchip%2Ccru&type=code
+
+https://source.denx.de/search?search=rockchip%2Ccru&group_id=325&project_id=540&scope=&search_code=true&snippets=false&repository_ref=master&nav_source=navbar
+
+https://github.com/rockchip-linux/kernel/search?q=rockchip%2Ccru&type=code
+
+> 
+>>
+>> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+>> ---
+>>  arch/arm64/boot/dts/rockchip/rk3328.dtsi | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/rockchip/rk3328.dtsi b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
+>> index b822533dc..73418fd2f 100644
+>> --- a/arch/arm64/boot/dts/rockchip/rk3328.dtsi
+>> +++ b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
+>> @@ -756,7 +756,7 @@
+>>  	};
+>>  
+>>  	cru: clock-controller@ff440000 {
+>> -		compatible = "rockchip,rk3328-cru", "rockchip,cru", "syscon";
+>> +		compatible = "rockchip,rk3328-cru";
+>>  		reg = <0x0 0xff440000 0x0 0x1000>;
+>>  		rockchip,grf = <&grf>;
+>>  		#clock-cells = <1>;
+> 
+> 
+> Best regards,
+> Krzysztof

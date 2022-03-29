@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E5C4EB1EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4092D4EB1EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239732AbiC2Qls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 12:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
+        id S239743AbiC2Qlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 12:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239731AbiC2Qlo (ORCPT
+        with ESMTP id S239716AbiC2Qlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 29 Mar 2022 12:41:44 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047DFD76E6
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:39:57 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id u22so16370937pfg.6
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:39:56 -0700 (PDT)
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F8FDA0AA
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:40:00 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id c23so18170330plo.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:40:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Zn3k0xfRpBKKjR/NQRBIXL4/yg6sQi2dLv6gXZ5xbYg=;
-        b=pEBReeRd7StGioMrYnVsENfof+Dl/Hnt+YYKqKOonpvKgOta7s5pnN/GpoePEr3dzV
-         iTDedOKV1C7SOsiB5fVmA4H9hQvbYlGOouzFQeSGXl279HA5AaF0E2lp/XtklfWra05y
-         viszAjTq0RL1tmBCB8A+q269HbrowuGlkoeuQswxhpAtiEN8odKvWp1mYS5fkfsiJN4L
-         u+7y29Uh0J2YTTllZqvZHhBS6+S/PzrM3dcjaFds8MBDg+3hn8Rt7zk4TtkU0/7axB2J
-         MzE7CVWeyiYrZ6981phVUeREfpLlvBjdeX+OSCWBCPjgzTNrZtSqduuajVLdux/eGx22
-         n35g==
+        bh=bY4yoSxK19Dtv/Qi8ChzxOAQ2XrcNZsR1mA3eXn+KCA=;
+        b=SjIFPOQOeYzdLloArY51xqeWUzTrssM2d7IsP/MqClZEUugvZ66Ph3KpLWYGhgkgK1
+         e9WR9MN3M3ZlCVufHpEm9iCNy9iYfydQb0zskFruQQEG/x5YDoL2kCk/+IiaoZfLY8AX
+         Fvm5vkf5Zz4cbKMlYXEESlqoJRk9oWAskufD1Hi4Ji91iPVTn99CyDe+zMQdJAsXHK5+
+         SU3kCSYhL8pXPXllmys45XC3T/AOc8b+1ekmQ5Cze7wMrWpVdZJ5eQ6RS2DZd2SeaqWy
+         3PmQbPyA326+7gKLT6PKc0IPacLNt+rvzyaAideoFUTVe0pn2qzg7TUmfR0Pwzo7tsAn
+         5QDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Zn3k0xfRpBKKjR/NQRBIXL4/yg6sQi2dLv6gXZ5xbYg=;
-        b=PmyRtm9hNHo+1XjiqFAa369tQTIP8FlH0UzBpq/b5NX66xPJ7Kve681YHIEQJ/on3G
-         /U2csAswglbRvp7FW632bU0cXK2cAu9bn2U8bl/2ZzsK9LVeaMLNXfXr9cYI+7Vu+vyX
-         zLCwFRT8IX6gdFFSLpNc15Xjvxhx/1Ht1knm6HAnH5rau/KtQ0Njz0RkgSe2zc99o0MZ
-         TWqpAL1P72QmDluaRTn9OfXwnqmWXTomQGrzMGBxlUIbLWutjPrRBN97jh4dp3DqYUF6
-         pi8mzKlsjhfmhmQvgSd+xJeyoEgHgPuvPl9AhjXCCrxsSQU0FsIKUtj2KH21Zqhhj4e2
-         wqPg==
-X-Gm-Message-State: AOAM530Pne60mOuIjQi3q4+Igj7VKEQUtU3rWxzR77ZG6yVo9LroqsCc
-        3z6DuMc7/tuors6VUQt7NU/+7HauO38=
-X-Google-Smtp-Source: ABdhPJy/ExKXSXNUbWFTenDHzvqEUX2aljOKSojax93HUBO9wC6mGlok+/r5Y/5Rv0dL5iYVupU+4g==
-X-Received: by 2002:a63:7804:0:b0:398:1338:86a with SMTP id t4-20020a637804000000b003981338086amr2608992pgc.575.1648571996465;
-        Tue, 29 Mar 2022 09:39:56 -0700 (PDT)
+        bh=bY4yoSxK19Dtv/Qi8ChzxOAQ2XrcNZsR1mA3eXn+KCA=;
+        b=lcLfGZYPdlmz9DuQXAyW3Yy+XEsVBS5rJ4VtDTg94GNx++bsKE27AouzHHjSK7XD2+
+         oRcy/uMGZDNVV4K2o2vgy/iAuXsZ1pLH18j4sdo9/Iel/dk/HAwapGHRiU6cOmQZzEhl
+         FXiKuY6ohMppU8JxPtn3ov+HBwoZI+7fnMGnUs07oMNZh23lCoMR6aExb/Z+IKFvGM16
+         cq6JBDWmLPXi4RsvXU1sI8NxpHqDE0Qggk9oIh1yRYelpG56xwU7IVE3u3pB46AFaxYW
+         Usn7uUr1BYEruhRa64dVbzQPnqlyzb0+eP14ZlpETUKAjbJ6QrBM4ZREU9khOUQOgb/9
+         MBLg==
+X-Gm-Message-State: AOAM531aVSyNFyl160xNqwHXM38pyJQ0nv9Dvs7y/qtk/VobCqdeTq9X
+        AKLtgb5pFVpulKXvbN34Kvo=
+X-Google-Smtp-Source: ABdhPJxBkSIPLYad0oKjzpBuMYmlICuVylSZ3I0YzFxmXwwHpF8D3NHNdq1nhfAQ3+xaTp2YrOKvxA==
+X-Received: by 2002:a17:903:1204:b0:156:29c3:d9d with SMTP id l4-20020a170903120400b0015629c30d9dmr4803013plh.28.1648571999956;
+        Tue, 29 Mar 2022 09:39:59 -0700 (PDT)
 Received: from localhost.localdomain (li567-56.members.linode.com. [192.155.81.56])
-        by smtp.gmail.com with ESMTPSA id q7-20020a17090a178700b001c97d3614e5sm3382093pja.33.2022.03.29.09.39.53
+        by smtp.gmail.com with ESMTPSA id q7-20020a17090a178700b001c97d3614e5sm3382093pja.33.2022.03.29.09.39.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 09:39:55 -0700 (PDT)
+        Tue, 29 Mar 2022 09:39:59 -0700 (PDT)
 From:   Jeff Xie <xiehuan09@gmail.com>
 To:     rostedt@goodmis.org
 Cc:     mingo@redhat.com, mhiramat@kernel.org, zanussi@kernel.org,
         linux-kernel@vger.kernel.org, Jeff Xie <xiehuan09@gmail.com>
-Subject: [PATCH 2/3] tracing: make tracepoint_printk_key public
-Date:   Wed, 30 Mar 2022 00:39:30 +0800
-Message-Id: <20220329163931.710555-3-xiehuan09@gmail.com>
+Subject: [PATCH 3/3] tracing: make tp_printk work on syscall tracepoints
+Date:   Wed, 30 Mar 2022 00:39:31 +0800
+Message-Id: <20220329163931.710555-4-xiehuan09@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220329163931.710555-1-xiehuan09@gmail.com>
 References: <20220329163931.710555-1-xiehuan09@gmail.com>
@@ -70,39 +70,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The syscall tracepoints need tracepoint_printk_key for the tp_printk work.
+Adding printk for syscall tracepoints for the tp_printk work.
 
 Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
 ---
- kernel/trace/trace.c | 2 +-
- kernel/trace/trace.h | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ kernel/trace/trace_syscalls.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 867f00473f9f..8efee5d339b9 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -88,7 +88,7 @@ void __init disable_tracing_selftest(const char *reason)
- struct trace_iterator *tracepoint_print_iter;
- int tracepoint_printk;
- static bool tracepoint_printk_stop_on_boot __initdata;
--static DEFINE_STATIC_KEY_FALSE(tracepoint_printk_key);
-+DEFINE_STATIC_KEY_FALSE(tracepoint_printk_key);
+diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
+index f755bde42fd0..9798122166d3 100644
+--- a/kernel/trace/trace_syscalls.c
++++ b/kernel/trace/trace_syscalls.c
+@@ -290,6 +290,25 @@ static int __init syscall_enter_define_fields(struct trace_event_call *call)
+ 	return ret;
+ }
  
- /* For tracers that don't implement custom flags */
- static struct tracer_opt dummy_tracer_opt[] = {
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index 7ce345699ac2..f44a9510209c 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -1524,6 +1524,7 @@ static inline void *event_file_data(struct file *filp)
- extern struct mutex event_mutex;
- extern struct list_head ftrace_events;
- extern spinlock_t tracepoint_iter_lock;
-+DECLARE_STATIC_KEY_FALSE(tracepoint_printk_key);
++static void syscall_output_printk(struct trace_entry *ent,
++		struct trace_event_file *trace_file, struct trace_array *tr)
++{
++	unsigned long flags;
++	struct trace_iterator *iter = tracepoint_print_iter;
++	struct trace_event *event = &trace_file->event_call->event;
++
++	spin_lock_irqsave(&tracepoint_iter_lock, flags);
++
++	trace_seq_init(&iter->seq);
++	iter->ent = ent;
++	iter->tr = tr;
++	event->funcs->trace(iter, 0, event);
++	trace_seq_putc(&iter->seq, 0);
++	pr_info("%s", iter->seq.buffer);
++
++	spin_unlock_irqrestore(&tracepoint_iter_lock, flags);
++}
++
+ static void ftrace_syscall_enter(void *data, struct pt_regs *regs, long id)
+ {
+ 	struct trace_array *tr = data;
+@@ -333,6 +352,9 @@ static void ftrace_syscall_enter(void *data, struct pt_regs *regs, long id)
+ 	syscall_get_arguments(current, regs, args);
+ 	memcpy(entry->args, args, sizeof(unsigned long) * sys_data->nb_args);
  
- extern const struct file_operations event_trigger_fops;
- extern const struct file_operations event_hist_fops;
++	if (static_key_false(&tracepoint_printk_key.key))
++		syscall_output_printk(&entry->ent, trace_file, tr);
++
+ 	event_trigger_unlock_commit(trace_file, buffer, event, entry,
+ 				    trace_ctx);
+ }
+@@ -376,6 +398,9 @@ static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
+ 	entry->nr = syscall_nr;
+ 	entry->ret = syscall_get_return_value(current, regs);
+ 
++	if (static_key_false(&tracepoint_printk_key.key))
++		syscall_output_printk(&entry->ent, trace_file, tr);
++
+ 	event_trigger_unlock_commit(trace_file, buffer, event, entry,
+ 				    trace_ctx);
+ }
 -- 
 2.25.1
 

@@ -2,127 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2124EAF90
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4399F4EAF98
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236062AbiC2Os5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 10:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
+        id S238115AbiC2OvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 10:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238100AbiC2Ost (ORCPT
+        with ESMTP id S238088AbiC2OvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 10:48:49 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEC5A94C5;
-        Tue, 29 Mar 2022 07:47:06 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-de3ca1efbaso18917452fac.9;
-        Tue, 29 Mar 2022 07:47:06 -0700 (PDT)
+        Tue, 29 Mar 2022 10:51:09 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F794B406
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:49:25 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id y38so29320281ybi.8
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:49:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2oha13URciMJUMHsLdhAfLwBD02pEz7fymz7j2GuO7o=;
+        b=wBWob6xx+smvegWHYDHGVSH5Rfy37d3hz6zthZZcPFemFXoA+nsASFgP6NQiFKIbE3
+         vWIaox+AyVGgFCHkBQkOiDBOn4JA/4PQ9Srx+8oeWQboWEFG+Oz0XPK/RretvIxeSW2v
+         axIdcy+Z1oXPU8Yf1w1g4a9iSZjUFYlSOEOLV9B4L0YWFMIKobHYcFIt0CnHukEXPskB
+         3cta2MzhxPDYRyaqirp0WllWgLzPr2jsd3uUNvKaeOCN0mvIi8Eu5G/gKdZ9Dx4Izhj5
+         mXptXWPiFDrvKAG0r5K7m/8Nh827vevOIIuMJj3QhQ46ytdI51ANoB/QArDmvQD4qk6+
+         mvNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aNacSkhtv5IJOB39+Ynb54nY/qoQFWMGRXyHWBxG+7Y=;
-        b=0MJS3FKGQvT25KuuUgAQeQGNkykjGu/RIiMwo6dA5wLxx6ZBkFh1S8qgyxkuahZIDb
-         nelr8V2XbEQAF9PI4ZdWOpsJjhnfNp9hR5Jd5nTE+xjXK+3gs6Diu/BUFbVV3jY/BaYQ
-         wRcmbFXoNXCFD8bJ6KwX7N2GBUlXlu61MFU/74rDUTDFeJg2VqID1T8KM4oStyLGSGKW
-         nNqY3fDxIRGls9BIoOvcD0DiQxwcwce7G+S8fDdXlMLNh6sWhHxWNyQ1889lBtxxAxlj
-         0/LFDPwlwhI/8cX37KNnB4ddF5O3iDV16RKfb0ZDeGKVhwpxq/lJfa07SNXtyKUgUCPK
-         AWsw==
-X-Gm-Message-State: AOAM532/FOEz4i/Zsep+mBKewRjtCZzEleOaOfhSPxv8Pjy6nBWAHCtM
-        c3QKK5biSX5s6fkDmbCxqbikRv34cQ==
-X-Google-Smtp-Source: ABdhPJxlmvBOjomcLq2SRUquEzBWLffZw3P2b+KP+xjs/3Rn7ha/syyvw9fwqdrvqE9O1XpHRRdK9g==
-X-Received: by 2002:a05:6870:e253:b0:dd:a40e:ae92 with SMTP id d19-20020a056870e25300b000dda40eae92mr1619644oac.233.1648565225325;
-        Tue, 29 Mar 2022 07:47:05 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h8-20020a056830400800b005cdceb42261sm6068792ots.66.2022.03.29.07.47.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 07:47:04 -0700 (PDT)
-Received: (nullmailer pid 643208 invoked by uid 1000);
-        Tue, 29 Mar 2022 14:47:02 -0000
-Date:   Tue, 29 Mar 2022 09:47:02 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/16] PCI: dwc: Add more verbose link-up message
-Message-ID: <YkMb5lT91ZveLTgg@robh.at.kernel.org>
-References: <20220324013734.18234-1-Sergey.Semin@baikalelectronics.ru>
- <20220324013734.18234-4-Sergey.Semin@baikalelectronics.ru>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2oha13URciMJUMHsLdhAfLwBD02pEz7fymz7j2GuO7o=;
+        b=O2vaNSfw52W3A3JTxL9nwWR6cnxzvhNl1/FzsX0h6urCBzflkcr7Sx6WZVStAgPbWd
+         0+n1Xm6RYfA0ctWmn4GLRRTPOl9KltzM3vVcn6IIJxTdVg2JtlsX+dLRnYZLvLsKNBOD
+         W0x0ZVCXQt6TTkz/pb1nagNH7j8LeAXyMqku0uM/naGfAo5r9BmoFpMmE58VLil+3x2G
+         rPFr04LYMnBS86QI+K1C6gCUf++8L5i1uX/Wghoodkn0S35gKtSnr6gIZTxeFNWHV7F6
+         wWfLRLBJRAcYE4003exVJS3PhLmgmFdESoG/VIzHNVADGjdUhhdZfXlDRkDlKE//c2IF
+         Iz6A==
+X-Gm-Message-State: AOAM531oNTkUXh+3Zz2scZ4nARMG5cYlmZb1bS2KJVmBEo4rD+y7mcDH
+        f80Ec0ys4bKHBgEbl2919alG+kfZOZS3aqlyFC/luQ==
+X-Google-Smtp-Source: ABdhPJzNMO0WNloIJZHTbvtLBwdcrxAvJey28Sdrtc06nKCudh6Qlw+sP4mWnWff33jmxA1NY5T8kuC5m/fNpf0cxVg=
+X-Received: by 2002:a25:9909:0:b0:624:57e:d919 with SMTP id
+ z9-20020a259909000000b00624057ed919mr29015853ybn.494.1648565364194; Tue, 29
+ Mar 2022 07:49:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324013734.18234-4-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <CA+G9fYsntwPrwk39VfsAjRwoSNnb3nX8kCEUa=Gxit7_pfD6bg@mail.gmail.com>
+ <8c81e8ad-6741-b5ed-cf0a-5a302d51d40a@linuxfoundation.org>
+ <20220325161203.7000698c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com> <08c5c6f3-e340-eaee-b725-9ec1a4988b84@linuxfoundation.org>
+In-Reply-To: <08c5c6f3-e340-eaee-b725-9ec1a4988b84@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 29 Mar 2022 20:19:10 +0530
+Message-ID: <CA+G9fYsjP2+20YLbKTFU-4_v+VLq6MfaagjERL9PWETs+sX8Zg@mail.gmail.com>
+Subject: Re: kselftest: net: tls: hangs
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 04:37:21AM +0300, Serge Semin wrote:
-> Printing just "link up" isn't that much informative especially when it
-> comes to working with the PCI Express bus. Even if the link is up, due to
-> multiple reasons the bus performance can degrade to slower speeds or to
-> narrower width than both Root Port and its partner is capable of. In that
-> case it would be handy to know the link specifications as early as
-> possible. So let's add a more verbose message to the busy-wait link-state
-> method, which will contain the link speed generation and the PCIe bus
-> width in case if the link up state is discovered. Otherwise an error will
-> be printed to the system log.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> ---
->  drivers/pci/controller/dwc/pcie-designware.c | 22 +++++++++++++++-----
->  1 file changed, 17 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> index 6e81264fdfb4..f1693e25afcb 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> @@ -528,14 +528,26 @@ int dw_pcie_wait_for_link(struct dw_pcie *pci)
->  
->  	/* Check if the link is up or not */
->  	for (retries = 0; retries < LINK_WAIT_MAX_RETRIES; retries++) {
-> -		if (dw_pcie_link_up(pci)) {
-> -			dev_info(pci->dev, "Link up\n");
-> -			return 0;
-> -		}
-> +		if (dw_pcie_link_up(pci))
-> +			break;
-> +
->  		usleep_range(LINK_WAIT_USLEEP_MIN, LINK_WAIT_USLEEP_MAX);
->  	}
->  
-> -	dev_info(pci->dev, "Phy link never came up\n");
-> +	if (retries < LINK_WAIT_MAX_RETRIES) {
-> +		u32 offset, val;
-> +
-> +		offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> +		val = dw_pcie_readw_dbi(pci, offset + PCI_EXP_LNKSTA);
-> +
-> +		dev_info(pci->dev, "PCIe Gen.%u x%u link up\n",
-> +			 FIELD_GET(PCI_EXP_LNKSTA_CLS, val),
-> +			 FIELD_GET(PCI_EXP_LNKSTA_NLW, val));
+Hi Jakub,
 
-Given these are standard registers can we do this in the core code? The 
-main issue I think is that the config space accessors don't work until 
-you create the bus struct. That still should be early enough.
+> >> This seems to be the problem perhaps.
+> >>
+> >> Jakub, any thoughts. The last change to tls.c was a while back.
+> >
+> > Yes, sorry, kicked off a build and got distracted.
+> >
+> > I can repro the failures, TLS=n in the config I must have not tested
+> > that in the new cases.
 
-I think it is possible some implementations don't report the link state 
-in these registers. Maybe we don't really need to care.
+Thanks for investigation and reproducing the test failures.
 
-Rob
+> >
+> > But I can't repro the hung, and we have a timer at the hardness level
+> > IIUC so IDK how this could "hang"?
+
+Did you get a chance to build and test with the config file that I
+have provided ?
+I am using kselftest-merge configs for my daily CI system [1] on gitlab.
+
+If you think the Kconfig is a test
+
+> > Naresh, is there any stack trace in the logs? Can you repro on Linus's
+> > tree?
+
+There is no stack trace print, it was only hung.
+
+> I couldn't reproduce this either - I have TLS=m
+
+If you want to reproduce the same build or re-use the bzImage /
+vmlinux / System.map
+you may check the provided link [1].
+
+Step to reproduce [1]:
+
+# TuxMake supports the concept of runtimes.
+# See https://docs.tuxmake.org/runtimes/, for that to work it requires
+# that you install podman or docker on your system.
+#
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
+# Original tuxmake command with fragments listed below.
+
+tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-11
+--kconfig defconfig --kconfig-add
+https://raw.githubusercontent.com/Linaro/meta-lkft/sumo/recipes-kernel/linux/files/lkft.config
+--kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/sumo/recipes-kernel/linux/files/lkft-crypto.config
+--kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/sumo/recipes-kernel/linux/files/distro-overrides.config
+--kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/sumo/recipes-kernel/linux/files/systemd.config
+--kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/sumo/recipes-kernel/linux/files/virtio.config
+--kconfig-add CONFIG_IGB=y --kconfig-add
+CONFIG_UNWINDER_FRAME_POINTER=y cpupower headers kernel kselftest
+kselftest-merge modules
+
+
+[1] https://builds.tuxbuild.com/26mKij4yB5Q6WUpOyHHEoHLstVJ/
+
+- Naresh

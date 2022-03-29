@@ -2,132 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D20F24EB584
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5044EB58D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235641AbiC2WE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 18:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
+        id S235795AbiC2WGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 18:06:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235595AbiC2WEY (ORCPT
+        with ESMTP id S235689AbiC2WGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 18:04:24 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35075175385;
-        Tue, 29 Mar 2022 15:02:40 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 17so25256578ljw.8;
-        Tue, 29 Mar 2022 15:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to;
-        bh=GFh+hu29pLGd1yFJqG3TD5ib8w39W4JQGiYky9bmdEA=;
-        b=Uul80CmlA5J9+LprVKWbEBNT+SmpX7fuHJuj2ZcNq5lQoGbXiK7l08X9mWZUnyQ9xj
-         JGG6phzP2JIgAVM7Ck+/uPDofSFZS9DiEe+vTdfqlpktGqi5ac7BkNwpDuVFGoxB1j/L
-         kiTUpYuWVv1NpO5CD/u3+wXPH+VkKXOxXU0EKfbfEIs9OIrNH5DeSfkqq0ywl+G16oUs
-         EjjTffPfQWSLwPTUxIsp9apeOAkSzbzkNz+6u6mon973oumaMEcdCiHqApsz0Veblhsd
-         qGyeBpLbqSDPrXgY78vgDjWeIZHmYGtPl54GxQn+x5B1VeLWM6M7Ui77iW8/TQ/Q1xEu
-         yH0g==
+        Tue, 29 Mar 2022 18:06:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38D9235DCD
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:04:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648591496;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IBLVNEPOUf5WmMPDsR6Y4RldMomDgegBLpjKSzD4JRA=;
+        b=JLHV1TI5dOZ/MWOs/vk6MHKAZPjdI113aN/CSiVGSWI22mHerM5KOmTJXt1six4jHUHo7e
+        tkYXCcq5z+JfczSZNnnbBaYqBeIG9L8z/2UF42U94ujbSaBbUVJz5VOMJwUBce17+i/2fT
+        +kCs+PyPekonz0VaIvarXcQq0GgIT2g=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-629-ZmXwXS_eOV-9d7RzHXXpYg-1; Tue, 29 Mar 2022 18:04:55 -0400
+X-MC-Unique: ZmXwXS_eOV-9d7RzHXXpYg-1
+Received: by mail-wr1-f69.google.com with SMTP id 15-20020adf808f000000b00203e488fa4eso5354224wrl.3
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:04:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to;
-        bh=GFh+hu29pLGd1yFJqG3TD5ib8w39W4JQGiYky9bmdEA=;
-        b=QTZ6asthYglorU/F7oLyGZ9cRfytm8GAX3IHw7yrVzMqOxEqabJWlUB/DrqZf+55cB
-         QG8oF3V0zdD4RPNqsqLxcL7kOGq5twy52DkMybyz3dS3/aSd3Wy/0ypqXR/LvYistaek
-         YyNw84d+tTaGxVe1KlxwITGinYOXkLA8WZJobVD3Vio5vg/vRA92N9W0UTpcvHxerMqP
-         ++JumkdHJzTrsdjghuFnxFq/SB+o3m4+5SWzGGDz0WuUFoFmax8D3BAqUPqR9he43bxi
-         YK90bp+3DICwZpI/AhA0jSqVd/1RCuSXyjImnQlDGVm/mQAsHBESjJIPNlJeg/LbS3nt
-         uhSQ==
-X-Gm-Message-State: AOAM531QncgtY/96RR74Nej+3w5U9y7r1yjRLT2lbIJdS6ui1C/I5YCd
-        HYF1CNxoE3cjS9lkKDP3nbo=
-X-Google-Smtp-Source: ABdhPJwoHVOneGk1MKkV++hihnKGasRhaKJqXGRhP23iN10zifJJPhye88xL0pFF5DtY6cv59xPRXg==
-X-Received: by 2002:a2e:b7c1:0:b0:249:7a91:bba1 with SMTP id p1-20020a2eb7c1000000b002497a91bba1mr4503477ljo.276.1648591358215;
-        Tue, 29 Mar 2022 15:02:38 -0700 (PDT)
-Received: from [192.168.1.11] ([94.103.225.225])
-        by smtp.gmail.com with ESMTPSA id i2-20020a196d02000000b004488dae6d45sm2114104lfc.52.2022.03.29.15.02.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 15:02:37 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------787Zf0iirh0AwihTJK1ygKXK"
-Message-ID: <419a9bb8-cb68-8add-e7be-275a48b2126d@gmail.com>
-Date:   Wed, 30 Mar 2022 01:02:36 +0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IBLVNEPOUf5WmMPDsR6Y4RldMomDgegBLpjKSzD4JRA=;
+        b=fLri+k49/yULhLG+lWBYjjM9QXZTF3KtLC/maQvzeaXfzqWHhoL/+F2oLrtomAuCVb
+         vIZLq2bNPvZYpQA4HXzHBNmm3PtSmWxJv1WDsLIm8okqQ4JvzZrU03/2lSJoRNM30FZU
+         1b7ECdpmWrkHz1Z5313xq5hQhquiroj6z+bikDuPvyhGwg0YJ/UhT3LjV8ZJ8AZtooC+
+         WAfwS+ji3N/vX7bGH8NEfzUddvIxVxm4uAMbib0WHMtNGxOZ4dPcGlxFVzaIXfb/2TTU
+         VIShuxUYlFsEnpXWnt90bJSlot/ayWGGc9ZBUjipUgYXD1YWmfZieCchyupbaoI/8nmN
+         vXkw==
+X-Gm-Message-State: AOAM533KZOCOkpJxWK74oVkwd5x5lpib4kyuKhoTHkH1IzMgLjLsIpnU
+        EH1QJyJ0p5qUaBuYj8/qi/grW9DMPXLfpa3x79GAFd0D9OOOYZcEz3kJYXgJdUhEVKNGRChLLgs
+        Ae0epBOwbYqaisjcTCu0XlHCe
+X-Received: by 2002:a05:6000:1848:b0:204:e90:cb55 with SMTP id c8-20020a056000184800b002040e90cb55mr33430809wri.58.1648591493929;
+        Tue, 29 Mar 2022 15:04:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxZklsWDLtlBufF6gMqI6XIA4yF+Av43mfXR6BICacO/J+twKmWzR7EUSvOK/qjb3IJxAX0yw==
+X-Received: by 2002:a05:6000:1848:b0:204:e90:cb55 with SMTP id c8-20020a056000184800b002040e90cb55mr33430788wri.58.1648591493646;
+        Tue, 29 Mar 2022 15:04:53 -0700 (PDT)
+Received: from redhat.com ([2.52.9.207])
+        by smtp.gmail.com with ESMTPSA id j16-20020a05600c191000b0038ca3500494sm5309811wmq.27.2022.03.29.15.04.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 15:04:53 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 18:04:48 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Keir Fraser <keirf@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re:
+Message-ID: <20220329175426-mutt-send-email-mst@kernel.org>
+References: <20220325050947-mutt-send-email-mst@kernel.org>
+ <CACGkMEvioAVMmB+ab2xXB2YPECtwi1J55u8mRRk9-JAjFSZ8vg@mail.gmail.com>
+ <20220325060659-mutt-send-email-mst@kernel.org>
+ <CACGkMEu4mRfNbJXJtAFzhyd55fD7phUDKnVtYW0aqRnQmT_bYw@mail.gmail.com>
+ <20220328015757-mutt-send-email-mst@kernel.org>
+ <CACGkMEu+fax6YYwhfbc1yoSxv6o1FTQyrOheVTmUfqGvmbAEfA@mail.gmail.com>
+ <20220328062452-mutt-send-email-mst@kernel.org>
+ <87fsn1f96e.ffs@tglx>
+ <20220329100859-mutt-send-email-mst@kernel.org>
+ <87v8vweie2.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [syzbot] general protection fault in dma_fence_array_first
-Content-Language: en-US
-To:     syzbot <syzbot+5c943fe38e86d615cac2@syzkaller.appspotmail.com>,
-        christian.koenig@amd.com, daniel.vetter@ffwll.ch,
-        dri-devel@lists.freedesktop.org, gustavo@padovan.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, sumit.semwal@linaro.org,
-        syzkaller-bugs@googlegroups.com
-References: <0000000000008eedfe05db620952@google.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <0000000000008eedfe05db620952@google.com>
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87v8vweie2.ffs@tglx>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------787Zf0iirh0AwihTJK1ygKXK
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-
-On 3/30/22 00:23, syzbot wrote:
-> Hello,
+On Tue, Mar 29, 2022 at 08:13:57PM +0200, Thomas Gleixner wrote:
+> On Tue, Mar 29 2022 at 10:37, Michael S. Tsirkin wrote:
+> > On Tue, Mar 29, 2022 at 10:35:21AM +0200, Thomas Gleixner wrote:
+> > We are trying to fix the driver since at the moment it does not
+> > have the dev->ok flag at all.
+> >
+> > And I suspect virtio is not alone in that.
+> > So it would have been nice if there was a standard flag
+> > replacing the driver-specific dev->ok above, and ideally
+> > would also handle the case of an interrupt triggering
+> > too early by deferring the interrupt until the flag is set.
+> >
+> > And in fact, it does kind of exist: IRQF_NO_AUTOEN, and you would call
+> > enable_irq instead of dev->ok = true, except
+> > - it doesn't work with affinity managed IRQs
+> > - it does not work with shared IRQs
+> >
+> > So using dev->ok as you propose above seems better at this point.
 > 
-> syzbot found the following issue on:
+> Unless there is a big enough amount of drivers which could make use of a
+> generic mechanism for that.
 > 
-> HEAD commit:    8515d05bf6bc Add linux-next specific files for 20220328
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1694e21b700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=530c68bef4e2b8a8
-> dashboard link: https://syzkaller.appspot.com/bug?extid=5c943fe38e86d615cac2
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1467313b700000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=121b7cb9700000
+> >> If any driver does this in the wrong order, then the driver is
+> >> broken.
+> > 
+> > I agree, however:
+> > $ git grep synchronize_irq `git grep -l request_irq drivers/net/`|wc -l
+> > 113
+> > $ git grep -l request_irq drivers/net/|wc -l
+> > 397
+> >
+> > I suspect there are more drivers which in theory need the
+> > synchronize_irq dance but in practice do not execute it.
 > 
-> The issue was bisected to:
+> That really depends on when the driver requests the interrupt, when
+> it actually enables the interrupt in the device itself
+
+This last point does not matter since we are talking about protecting
+against buggy/malicious devices. They can inject the interrupt anyway
+even if driver did not configure it.
+
+> and how the
+> interrupt service routine works.
 > 
-> commit 519f490db07e1a539490612f376487f61e48e39c
-> Author: Christian König <christian.koenig@amd.com>
-> Date:   Fri Mar 11 09:32:26 2022 +0000
+> So just doing that grep dance does not tell much. You really have to do
+> a case by case analysis.
 > 
->      dma-buf/sync-file: fix warning about fence containers
+> Thanks,
 > 
-
-There is ZERO_PTR dereference caused by passing 0 to krealloc_array(). 
-Code should not try to reduce allocated memory area if index is equal to 0
-
-#syz test:
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+>         tglx
 
 
+I agree. In fact, at least for network the standard approach is to
+request interrupts in the open call, virtio net is unusual
+in doing it in probe. We should consider changing that.
+Jason?
 
+-- 
+MST
 
-With regards,
-Pavel Skripkin
---------------787Zf0iirh0AwihTJK1ygKXK
-Content-Type: text/plain; charset=UTF-8; name="ph"
-Content-Disposition: attachment; filename="ph"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvZG1hLWJ1Zi9zeW5jX2ZpbGUuYyBiL2RyaXZlcnMvZG1h
-LWJ1Zi9zeW5jX2ZpbGUuYwppbmRleCBiOGRlYTRlYzEyM2IuLjYwY2I0MjY2ZTc3ZiAxMDA2
-NDQKLS0tIGEvZHJpdmVycy9kbWEtYnVmL3N5bmNfZmlsZS5jCisrKyBiL2RyaXZlcnMvZG1h
-LWJ1Zi9zeW5jX2ZpbGUuYwpAQCAtMjY0LDcgKzI2NCw3IEBAIHN0YXRpYyBzdHJ1Y3Qgc3lu
-Y19maWxlICpzeW5jX2ZpbGVfbWVyZ2UoY29uc3QgY2hhciAqbmFtZSwgc3RydWN0IHN5bmNf
-ZmlsZSAqYSwKIAlpZiAoaW5kZXggPT0gMCkKIAkJYWRkX2ZlbmNlKGZlbmNlcywgJmluZGV4
-LCBkbWFfZmVuY2VfZ2V0X3N0dWIoKSk7CiAKLQlpZiAobnVtX2ZlbmNlcyA+IGluZGV4KSB7
-CisJaWYgKGluZGV4ICYmIG51bV9mZW5jZXMgPiBpbmRleCkgewogCQlzdHJ1Y3QgZG1hX2Zl
-bmNlICoqdG1wOwogCiAJCS8qIEtlZXAgZ29pbmcgZXZlbiB3aGVuIHJlZHVjaW5nIHRoZSBz
-aXplIGZhaWxlZCAqLwo=
-
---------------787Zf0iirh0AwihTJK1ygKXK--

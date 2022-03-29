@@ -2,130 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8CC4EB25A
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDCED4EB25B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239989AbiC2Q7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 12:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
+        id S240001AbiC2Q7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 12:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbiC2Q7I (ORCPT
+        with ESMTP id S231454AbiC2Q7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 12:59:08 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76BEAB0D13;
-        Tue, 29 Mar 2022 09:57:25 -0700 (PDT)
-Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D622820DECF5;
-        Tue, 29 Mar 2022 09:57:24 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D622820DECF5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1648573045;
-        bh=y4az3WkefbkCxNOR94uEneUMzG1hS7Ex1VtRu+4P1Bo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IdcQGez5VpXMC13T34f3NRA32xpcJEd4uifF7Z6OeMFNtGAKR0TqJDL1H9QEkvIOs
-         U+6EQhI2kt56AE62BCRK3yTBQzi0laG/ssqeocAEr+SShu8W7KmUs9driHbH6y3jUh
-         fVXZhAf2HG3/ivXbo6dGbtMKMQK14LavBKD9/4To=
-Date:   Tue, 29 Mar 2022 09:57:18 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Beau Belgrave <beaub@microsoft.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: Re: Comments on new user events ABI
-Message-ID: <20220329165718.GA10381@kbox>
-References: <2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com>
- <20220329002935.2869-1-beaub@linux.microsoft.com>
- <1014535694.197402.1648570634323.JavaMail.zimbra@efficios.com>
- <CAADnVQK=GCuhTHz=iwv0r7Y37gYvt_UBzkfFJmNT+uR0z+7Myw@mail.gmail.com>
+        Tue, 29 Mar 2022 12:59:39 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E56B0D13;
+        Tue, 29 Mar 2022 09:57:56 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id gb19so18087971pjb.1;
+        Tue, 29 Mar 2022 09:57:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=94zP/jLn1L+Xrank8hwMs73OTAQl/2oxOGU8uUoGhTI=;
+        b=W1xfrD0nMlE4TBaKt9iksGu5nMHAKpP7NliAWLypf0K0qenTxU4EELYpz0X3KXiiTx
+         bzntRG43EGSIxpZJhNuBlJ2PudeZnte3O0M5cwrr9FMj59HLQppyFRVlYhi/nuiBtdNo
+         9YToBE3ptd3Uhr8TaQqfFRwABlpWyO7oERcNXxkyaFOygY/4BZPgdn4n3hM+Fg3dH4sh
+         9exd7djH694obC67d5qmvy98iU6C13AqLS6mAyZv2hb1DlnpchhsgKherEvYct8HiEnm
+         4ozhME6Rvu4UYrILqoLWp2lgy5+ksCr16XR3o+XV5XTdJoMfeqGoZGQzVDVdn6SICCzl
+         Mgjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=94zP/jLn1L+Xrank8hwMs73OTAQl/2oxOGU8uUoGhTI=;
+        b=MtXp7LzCRWFZgLRw5dBaW9Bp/gZrQIDh8jKr/y5SY3plwgu6eb4dKDq7Drtw/zeCTo
+         pOdDd3N7ozr/8eg/oXhvdpm8op/ca8MjZUzRyofxwsi8X4f2ca1EUoRVwf5/FVuHZeP5
+         7mHGyVMxzfE1t8ErUkVMMdroC5torxx6Z5AfwV7JPA60uAEZNaf4impoANo3Vm38YGvm
+         ppZD/g8f6qgypwkqBn0dviE5OVVYuIqfcsr7SGaJVjND4+Ohktax1JmDJDFmB8iwK3b4
+         R87E/bCIJDT820LHjSxWl+w7gtJA6SeaxnF0k6Hz+fNtnijUc+Odh6HcGt6U9/ViM+YY
+         XqIA==
+X-Gm-Message-State: AOAM531hs7LhzVaXtN8r6bwNgyD9R0le01bBo55qI/KlH4uONWe+idwb
+        K5+MRJE9SpVgb4aAvnjocbQ=
+X-Google-Smtp-Source: ABdhPJw5hqO9n5W68aIyFix6+aqAO9D2sR5YOlrwcYOt/n8Z2BiEvOzeNScxpb60v+N662TLqh/9xQ==
+X-Received: by 2002:a17:90b:4ccb:b0:1c9:c1de:9c9d with SMTP id nd11-20020a17090b4ccb00b001c9c1de9c9dmr71545pjb.105.1648573075693;
+        Tue, 29 Mar 2022 09:57:55 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:7749])
+        by smtp.gmail.com with ESMTPSA id x38-20020a056a0018a600b004fafd05ac3fsm17848303pfh.37.2022.03.29.09.57.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 09:57:55 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 29 Mar 2022 06:57:53 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Peter Hurley <peter@hurleysoftware.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Esben Haabendal <esben@geanix.com>,
+        Steven Walter <stevenrwalter@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        =?iso-8859-1?Q?Andr=E9?= Pribil <a.pribil@beck-ipc.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-rt-users@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] RT scheduling policies for workqueues
+Message-ID: <YkM6keHS22ajPks5@slm.duckdns.org>
+References: <20220323145600.2156689-1-linux@rasmusvillemoes.dk>
+ <YkGIhYKJG+w4L7ge@linutronix.de>
+ <20220328100927.5ax34nea7sp7jdsy@pengutronix.de>
+ <YkHyzcfiyjLfIVOo@slm.duckdns.org>
+ <YkKnlUUsufZPiZxM@linutronix.de>
+ <8b21ad64-ea9c-84f2-c798-222c9383e3de@rasmusvillemoes.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAADnVQK=GCuhTHz=iwv0r7Y37gYvt_UBzkfFJmNT+uR0z+7Myw@mail.gmail.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <8b21ad64-ea9c-84f2-c798-222c9383e3de@rasmusvillemoes.dk>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 09:25:52AM -0700, Alexei Starovoitov wrote:
-> On Tue, Mar 29, 2022 at 9:17 AM Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
-> >
-> > >
-> > >> include/uapi/linux/user_events.h:
-> > >>
-> > >> struct user_bpf_iter {
-> > >>
-> > >>         /* Offset of the data within the first iovec */
-> > >>         __u32 iov_offset;
-> > >>
-> > >>         /* Number of iovec structures */
-> > >>         __u32 nr_segs;
-> > >>
-> > >>         /* Pointer to iovec structures */
-> > >>         const struct iovec *iov;
-> > >>
-> > >>                            ^ a pointer in a uapi header is usually a no-go. This should be a u64.
-> > >> };
-> > >>
-> > >> include/uapi/linux/user_events.h:
-> > >>
-> > >> struct user_bpf_context {
-> > >>
-> > >>         /* Data type being passed (see union below) */
-> > >>         __u32 data_type;
-> > >>
-> > >>         /* Length of the data */
-> > >>         __u32 data_len;
-> > >>
-> > >>         /* Pointer to data, varies by data type */
-> > >>         union {
-> > >>                 /* Kernel data (data_type == USER_BPF_DATA_KERNEL) */
-> > >>                 void *kdata;
-> > >>
-> > >>                 /* User data (data_type == USER_BPF_DATA_USER) */
-> > >>                 void *udata;
-> > >>
-> > >>                 /* Direct iovec (data_type == USER_BPF_DATA_ITER) */
-> > >>                 struct user_bpf_iter *iter;
-> > >>
-> > >>                                ^ likewise for the 3 pointers above. Should be u64 in uapi headers.
-> > >>         };
-> > >> };
-> > >>
-> > >
-> > > The bpf structs are only used within a BPF program. At that point the pointer
-> > > sizes should all align, right?
-> >
-> > I must admit I do not know enough about the eBPF uapi practices to answer this.
-> > [CCing Alexei on this]
-> 
-> Mathieu,
-> 
-> Thanks for flagging.
-> 
-> Whoever added this user_bpf* stuff please remove it immediately.
-> It was never reviewed by bpf maintainers.
-> 
-> It's a hard Nack to add a bpf interface to user_events.
+Hello,
 
-Sorry about that, I'm sending a patch to remove this.
+On Tue, Mar 29, 2022 at 10:33:19AM +0200, Rasmus Villemoes wrote:
+> On 29/03/2022 08.30, Sebastian Andrzej Siewior wrote:
+> > On 2022-03-28 07:39:25 [-1000], Tejun Heo wrote:
+> >> Hello,
+> > Hi,
+> > 
+> >> I wonder whether it'd be useful to provide a set of wrappers which can make
+> >> switching between workqueue and kworker easy. Semantics-wise, they're
+> >> already mostly aligned and it shouldn't be too difficult to e.g. make an
+> >> unbounded workqueue be backed by a dedicated kthread_worker instead of
+> >> shared pool depending on a flag, or even allow switching dynamically.
+> 
+> Well, that would certainly not make it any easier for userspace to
+> discover the thread it needs to chrt().
 
-I'll have another patch to add it back in out to bpf and trace-devel for
-review.
+Each workqueue have a name and it's not difficult to make dedicated workers
+created this way to inherit the name. From user's pov, it's not that
+complicated - if kttyd (or whatever) is present, the user can twiddle with
+its scheduling class and priority.
 
-Thanks,
--Beau
+Thanks.
+
+-- 
+tejun

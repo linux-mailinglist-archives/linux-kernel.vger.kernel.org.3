@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30144EAFA2
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4BF4EAFA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238128AbiC2OxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 10:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
+        id S238140AbiC2Oxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 10:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234762AbiC2OxV (ORCPT
+        with ESMTP id S238134AbiC2Oxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 10:53:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923BD517E6
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:51:38 -0700 (PDT)
+        Tue, 29 Mar 2022 10:53:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656E9517F9
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:52:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BBA3616BE
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 14:51:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CF9CC2BBE4;
-        Tue, 29 Mar 2022 14:51:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3BDA616B4
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 14:52:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10CDAC2BBE4;
+        Tue, 29 Mar 2022 14:52:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648565497;
-        bh=+utyFpCgB9/BoZfxFp+h+l4laC2+NOLMzF+IdJYwTP4=;
+        s=korg; t=1648565523;
+        bh=ygapdfH/Ii7vo/qtN9Pa/zO23wJORAjFHM72S2gg9Q4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G4kHok8yHdkFr6K/a5gMUvm7K4WOIU2IREt5YVihKQeWhdEWWSMwI5S9IFMRm84cO
-         A5GBHZPg0MpglN5xKLlm/RSYWcunRovXo17h76l2krJbTMr7TjslCPf4HgCem4sGQG
-         n3UME4DZXlUhD/9KhlApoJgk8SWEtWSuE0mEHvB0=
-Date:   Tue, 29 Mar 2022 16:51:34 +0200
+        b=PdtlWBcq06p8V7jqC7uioRxcyIcfFMl3Lpk6UKeMxl5f4rDqHN1wp4mLu+mpgCu/N
+         ZBGdXnVy730dp2eUs6lBPmCJA4qWL8PZmgg41vYcGiL5hagnUGhDE9d7aFGr92cpLn
+         TUJAcN1R+LBkmqkJLuQ+2N90YrhaYCxvxhAAVytw=
+Date:   Tue, 29 Mar 2022 16:52:00 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Nam Cao <namcaov@gmail.com>
-Cc:     sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        straube.linux@gmail.com, linux@roeck-us.net,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: sm750fb: add necessary #include in
- sm750_accel.h, sm750_cursor.h
-Message-ID: <YkMc9p4nd/4+2fkf@kroah.com>
-References: <20220318165046.33745-1-namcaov@gmail.com>
+Subject: Re: [PATCH] staging: r8188eu: Fix misspelling in comment
+Message-ID: <YkMdEIMHrYBPGYzK@kroah.com>
+References: <1647831314-25511-1-git-send-email-baihaowen@meizu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220318165046.33745-1-namcaov@gmail.com>
+In-Reply-To: <1647831314-25511-1-git-send-email-baihaowen@meizu.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,60 +52,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 05:50:46PM +0100, Nam Cao wrote:
-> In sm750_cursor.h, struct lynx_cursor is used without including the
-> header file where this struct is defined. Similar thing is seen in
-> sm750_accel.h.
+On Mon, Mar 21, 2022 at 10:55:14AM +0800, Haowen Bai wrote:
+> The original error is as below shows:
 > 
-> The module can still be compiled because there is "#include "sm750.h""
-> before every "#include "sm750_accel.h"" and "#include "sm750_cursor.h"".
-> However, the order of #include should not affect the ability to compile.
+> CHECK: 'associcated' may be misspelled - perhaps 'associated'?
 > 
-> Add "#include "sm750.h"" to sm750_accel.h and sm750_cursor.h.
-> 
-> Signed-off-by: Nam Cao <namcaov@gmail.com>
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
 > ---
->  drivers/staging/sm750fb/sm750_accel.h  | 2 ++
->  drivers/staging/sm750fb/sm750_cursor.h | 2 ++
->  2 files changed, 4 insertions(+)
+>  drivers/staging/r8188eu/core/rtw_ap.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/staging/sm750fb/sm750_accel.h b/drivers/staging/sm750fb/sm750_accel.h
-> index 2c79cb730a0a..fe6ff196272c 100644
-> --- a/drivers/staging/sm750fb/sm750_accel.h
-> +++ b/drivers/staging/sm750fb/sm750_accel.h
-> @@ -2,6 +2,8 @@
->  #ifndef ACCEL_H__
->  #define ACCEL_H__
+> diff --git a/drivers/staging/r8188eu/core/rtw_ap.c b/drivers/staging/r8188eu/core/rtw_ap.c
+> index 1675e2e..e02dd8e 100644
+> --- a/drivers/staging/r8188eu/core/rtw_ap.c
+> +++ b/drivers/staging/r8188eu/core/rtw_ap.c
+> @@ -819,7 +819,7 @@ static int rtw_ht_operation_update(struct adapter *padapter)
 >  
-> +#include "sm750.h"
-> +
->  #define HW_ROP2_COPY 0xc
->  #define HW_ROP2_XOR 0x6
+>  void associated_clients_update(struct adapter *padapter, u8 updated)
+>  {
+> -	/* update associcated stations cap. */
+> +	/* update associated stations cap. */
+>  	if (updated) {
+>  		struct list_head *phead, *plist;
+>  		struct sta_info *psta = NULL;
+> @@ -972,7 +972,7 @@ void bss_cap_update_on_sta_join(struct adapter *padapter, struct sta_info *psta)
+>  		update_beacon(padapter, _HT_ADD_INFO_IE_, NULL, true);
+>  	}
 >  
-> diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
-> index b59643dd61ed..f023b691ac0b 100644
-> --- a/drivers/staging/sm750fb/sm750_cursor.h
-> +++ b/drivers/staging/sm750fb/sm750_cursor.h
-> @@ -2,6 +2,8 @@
->  #ifndef LYNX_CURSOR_H__
->  #define LYNX_CURSOR_H__
+> -	/* update associcated stations cap. */
+> +	/* update associated stations cap. */
+>  	associated_clients_update(padapter,  beacon_updated);
 >  
-> +#include "sm750.h"
-> +
->  /* hw_cursor_xxx works for voyager,718 and 750 */
->  void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
->  void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
+>  	DBG_88E("%s, updated =%d\n", __func__, beacon_updated);
+> @@ -1036,7 +1036,7 @@ u8 bss_cap_update_on_sta_leave(struct adapter *padapter, struct sta_info *psta)
+>  		update_beacon(padapter, _HT_ADD_INFO_IE_, NULL, true);
+>  	}
+>  
+> -	/* update associcated stations cap. */
+> +	/* update associated stations cap. */
+>  
+>  	DBG_88E("%s, updated =%d\n", __func__, beacon_updated);
+>  
 > -- 
-> 2.25.1
+> 2.7.4
 > 
 > 
 
-I think the current code is fine, given that this is not actually
-"fixing" anything.  If you wish to unwind all of the #include mess in
-this driver, that would be fine, but I doubt it really is worth it.  You
-really should not need more than 1 .h file for a single module, this one
-is split up way too much.
-
-thanks,
-
-greg k-h
+Does not apply to my tree :(

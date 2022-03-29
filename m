@@ -2,82 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183B24EAF1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C634EAF21
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237800AbiC2OSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 10:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58198 "EHLO
+        id S237809AbiC2OUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 10:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237585AbiC2OSG (ORCPT
+        with ESMTP id S237690AbiC2OUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 10:18:06 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAF4E389A
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:16:22 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id u16so25049402wru.4
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:16:22 -0700 (PDT)
+        Tue, 29 Mar 2022 10:20:09 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4666B21AF
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:18:25 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id t40so7707156uad.2
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:18:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ApZndiwJNJZl0SipZbpbx1y3pSTDGsI2OYESYfSgmRI=;
-        b=szLF4na2paIg1s4iZdbmJ8mCpPYLmW48qK3wdxRxIPWBTrhi0gaLJ1W1LAdCGuoVTA
-         p8eWWU9aJBFQbKIsvCydcMEpWAQZ+XWzoxxSi8UCOZGPTCFHnM1ry3jCNQIyyWZrT9dK
-         9nQL8s7AujVQyG0XZkaj8mW7qtEV+FyPmNNcnFZ9CSPz0Y9zUIyPiy5ViC8OfbMSdBly
-         4Jo6W73cr5FpJlTlcYbqFY4vkpk2Op+vUNsllbVrQle/JWpjB6MWoQewc9ySt/RthV1D
-         N/koCU1lPJthZdyVJbuh3RBJv8PkGy6KjvZiRcBXe3wMHPdKo03yAiYyuN2s+qN181D7
-         ZXZQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=cWmRjwSemdnUKvrif89Q11C8fxbCrVXCYfNEiZMLp48=;
+        b=q2ewAGHIrHEqsse3MYwNWKox28h9JIed3X6fJpNooeICE1Kt4QtdQOImgpmeDWiSDc
+         r7+GfcC5i1C0W0u3X9Hegeg6lo0HrkPB1k3KJvG9i+52dEOw+rqXOgFLeZh+476+iHVH
+         Y+8TPyv1ihgnFjwC22yrT15foN2sQvk95rya+clZAxky0Tey7y4geNi38BXomndjxAfa
+         Dzs30CbA5ePn8qJBzSd3Qjeqp4c4DPhTo3bxa4lHxgZ5AupOmpygDGqp+fFBuVyTZkWM
+         cbhfNP+KdUgVwxB22SmF+7iJxaElkcb2heES2k3nFoZLXqweGhG7bUGLaAO+pkenHMhE
+         1/nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ApZndiwJNJZl0SipZbpbx1y3pSTDGsI2OYESYfSgmRI=;
-        b=StnNOZL+g4/w5+OCnTLJ/0jBZCpaVAW+zYsO2YG58t8FAXWwY1sCCbhjpVX4ijJ7lA
-         tZnbNL35O5AuRqiFPTGEkmMiVu2sBo40A++QLvM3+NoMMzs0oKqU0ZRg+l23it+tRiS6
-         /tCIyiV6Tcz1loe3d1hpZSS9TSJezR0/bFpzcZhUW7pAsvzrIXlIqhk/j5q5RqzPhEvS
-         YnxjTln5sX4dUBJCSTn34E2vp+5eNxBLH4T9gt4MsEQLdfKW3vjw7fbp5bS9HA7uj1ji
-         NeIFsp1n+3KZ3EPh5xx2H4mVsfWD7Gc8d1BVAbNUCI1/3+FsjhNmY2fu3zNB3qcQBB/F
-         gAKQ==
-X-Gm-Message-State: AOAM532raJgZ/IMn/PXVtMpnVuohw6F9FbVabJYuPwtfx7vmlj457Z4I
-        q0ecZqNzQ+wPxfhfYabzz9ykqg==
-X-Google-Smtp-Source: ABdhPJzoCt9FnR7gH0jRnO98pHDPc8I6nVcblqa6U4wrKW0EyTEOFSa98+n1XELxAHldPTuzcpRVOQ==
-X-Received: by 2002:a5d:58f2:0:b0:205:7f1b:9dc7 with SMTP id f18-20020a5d58f2000000b002057f1b9dc7mr31327403wrd.109.1648563375739;
-        Tue, 29 Mar 2022 07:16:15 -0700 (PDT)
-Received: from google.com (110.121.148.146.bc.googleusercontent.com. [146.148.121.110])
-        by smtp.gmail.com with ESMTPSA id n15-20020a05600c500f00b0038cfb1a43d6sm2371826wmr.24.2022.03.29.07.16.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 07:16:14 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 16:16:11 +0200
-From:   "Steinar H. Gunderson" <sesse@google.com>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf intel-pt: Synthesize cycle events
-Message-ID: <YkMUq/qrzEg5Mj1N@google.com>
-References: <52903e58-e74c-5ea0-36b4-277ea3610af4@intel.com>
- <YjGdoGy4Z2UUG9S9@google.com>
- <ef780335-7dc6-3a23-54a8-b6fc9c8a2ed3@intel.com>
- <YjHfGrZovk3N/H0f@google.com>
- <371faf0d-f794-4a2e-0a1c-9d454d7c8b12@intel.com>
- <YjhUjotmo+kYvoNP@google.com>
- <ffa56520-09b5-9c5d-7733-6767d2f8e350@intel.com>
- <YjiuoEUL6jH32cBi@google.com>
- <Yjm5stBpRC0g4G8s@google.com>
- <YkL8EpWaeZ1US8t2@google.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=cWmRjwSemdnUKvrif89Q11C8fxbCrVXCYfNEiZMLp48=;
+        b=4yoFxc3+j0sTUahyMdpLM1KZnpIkZVWIGsy2eRV0p2k4YQxyRYkwYN7sAxl4wDTQAM
+         zUsbvihVHIoe4epxAchKFf9KWw7Xn3c2M26hkS1hhwi7dsbSjPPNhjrn9sVvVLNh/6cq
+         uoWPUAYnETTXq9kYyCCu5xQ0ham/KJDUf3tyRAoLgLG+xw10bE5e7hpg0XpQU921fBlO
+         Z668sQv5oMeY05jfI5SIIndchGqegqX8DO95yCECn4/f+WHczVFrNYPqa9XlMJFG8EME
+         zjMVuzJhTyAxjwrc29E31n2ondRjXVFDVw7FrWpQJ+4ihGa1FxConsDSz3oIkXFgO4zh
+         i9vw==
+X-Gm-Message-State: AOAM532DNvsRPAEM3mb3JqAyJEd/aUyf9oAEammWcWVKutm8RW4jL/Ep
+        HxWBRzFrTmstlo6rAuh3emyvKeSe5liHL4CvONFxYFKF2sk4EnKt4VI=
+X-Google-Smtp-Source: ABdhPJyCSCHgfeq1oXV2sIj9KyyT5a30IvRYPoptoOkpn8WaD3zTzGAa3H78hHjG8lRG4haLyJibn2W92CHDfMnD8sc=
+X-Received: by 2002:ab0:44a3:0:b0:358:b93c:c9e6 with SMTP id
+ n32-20020ab044a3000000b00358b93cc9e6mr16735235uan.81.1648563504023; Tue, 29
+ Mar 2022 07:18:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkL8EpWaeZ1US8t2@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+From:   Andrea Gelmini <andrea.gelmini@gmail.com>
+Date:   Tue, 29 Mar 2022 16:18:07 +0200
+Message-ID: <CAK-xaQb5epQjGCokTLc+vNrS_tp-8DVU3+poxn7WYX4eJaxTDA@mail.gmail.com>
+Subject: UBSAN: array-index-out-of-bounds in megaraid_sas_fp.c (5.15.0 and 5.17.1)
+To:     linux-kernel@vger.kernel.org
+Cc:     yang.lee@linux.alibaba.com, bvanassche@acm.org, nitesh@redhat.com,
+        martin.petersen@oracle.com, sumit.saxena@broadcom.com,
+        jing.yangyang@zte.com.cn, colin.king@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,49 +63,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 02:31:14PM +0200, Steinar H. Gunderson wrote:
->   int64_t _sort__sym_cmp(struct symbol *sym_l, struct symbol *sym_r)
->   {
->           if (!sym_l || !sym_r)
->                   return cmp_null(sym_l, sym_r);
-> 
->           if (sym_l == sym_r)
->                   return 0;
-> 
->           if (sym_l->inlined || sym_r->inlined) {
->                   int ret = strcmp(sym_l->name, sym_r->name);
-> 
->                   if (ret)
->                           return ret;
->                   if ((sym_l->start <= sym_r->end) && (sym_l->end >= sym_r->start))
->                           return 0;
->           }
-> 
->           if (sym_l->start != sym_r->start)
->                   return (int64_t)(sym_r->start - sym_l->start);
+Hi everybody,
+   we use 12th, 13th and 14th generation Dell servers, Poweredge:
+R720dx, R730dx and 740xd.
 
-Even fixing <= to <, I do get nonsensical results like an inlined
-(and very small) destructor taking 50%+ of CPU time, and having a huge
-call chain under it. It largely goes away (I'm not sure if it's perfect)
-if I remove the entire if (sym_l->inlined || ... branch, but I guess
-it's there for a reason.
+   The disk controllers are PERC: H710P, H730 mini, H730P.
 
-Thinking about it, I wonder if this code breaks the entire tree
-invariant of comparison being transitive. If left _or_ right is inlined,
-it compares them by name, but if not, it compares them by address. So
-you can have three symbols A, B (inline) and C, where A < B (on name),
-B < C (on name) but C < A (on address; assuming C has a lower start
-address than A). That doesn't look good to me.
+   We are using Ubuntu 22.04 on these, without troubles, but at boot
+we have a lot of these kind of complains, both with stock kernel of
+the distro and 5.17.1 (precompiled downloaded from kernel.ubuntu.com).
+So, it works, but I guess it's relevant for developers to see this:
 
-I'm wondering if the right fix would be something like replacing the
-entire if with something like
+dmesg.txt:[    2.241835] UBSAN: array-index-out-of-bounds in
+/build/linux-CNGQTa/linux-5.15.0/drivers/scsi/megaraid/megaraid_sas_fp.c:103:32
+dmesg.txt:[    2.252462] UBSAN: array-index-out-of-bounds in
+/build/linux-CNGQTa/linux-5.15.0/drivers/scsi/megaraid/megaraid_sas_fp.c:103:32
+dmesg.txt:[    2.317949]  ubsan_epilogue+0x9/0x45
+dmesg.txt:[    2.317952]  __ubsan_handle_out_of_bounds.cold+0x44/0x49
+dmesg.txt:[    2.339813] UBSAN: array-index-out-of-bounds in
+/build/linux-CNGQTa/linux-5.15.0/drivers/scsi/megaraid/megaraid_sas_fp.c:115:31
+dmesg.txt:[    2.361435]  ubsan_epilogue+0x9/0x45
+dmesg.txt:[    2.361437]  __ubsan_handle_out_of_bounds.cold+0x44/0x49
+dmesg.txt:[    2.394157] UBSAN: array-index-out-of-bounds in
+/build/linux-CNGQTa/linux-5.15.0/drivers/scsi/megaraid/megaraid_sas_fp.c:125:9
 
-           if (sym_l->inlined && sym_r->inlined &&
-	       strcmp(sym_l->name, sym_r->name) == 0) &&
-	       <keep [start,end) overlap test here>) {
-                   return 0;
-	   }
+   You can find all files related to these machines (dmesg, dmidecode,
+and so on) organized by kernel, installation or liveCD, here:
 
-but I'm not sure.
+    http://mail.gelma.net/PERC
 
-/* Steinar */
+Thanks a lot for your work,
+Gelma

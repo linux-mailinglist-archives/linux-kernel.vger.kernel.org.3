@@ -2,177 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 906E34EB6F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D8B4EB6FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241028AbiC2XuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S241120AbiC2Xue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240992AbiC2XuC (ORCPT
+        with ESMTP id S241047AbiC2Xu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:50:02 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3431E9BBB6;
-        Tue, 29 Mar 2022 16:48:16 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id EC0281F40F3A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648597694;
-        bh=5RCxnQpK5I7Y2zWLKGLxBiVPTh/yCn+uO0KyYdxQQQ8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=a9w3F/vzA0sFlOCcLd85ycKnYywA+CP5LeOCfthZ1gDdaKR6rF7wb+pGb1w3Lzsxb
-         8sKZMKFgzrGhqWiKyZhCBP7uOCaZF2rASpfVv1lDWpm/C6Xt7K67TGxiMUSg6S+/he
-         PK40aipOdT3Am2PfAWvr/S08mVe9IdvC++qY7+BIm/X12tiJMw6OB/8oo7mM9H0cB8
-         /4+gpdn+u+thh9lB0dL8yVtGxPULDQDas6PMYX53E5B4ZV6nBFBxbiaP0ygVJ9Vvx8
-         xXAcf1mdKKJGAbgf+K4GQw+GjQ+yMA46G0hGGJoeI0furZEDcXIJNvh9CWQMRe19+w
-         UF73voLivci6A==
-Message-ID: <22eb6b37-3bcd-71ab-f99f-dc059043b56b@collabora.com>
-Date:   Wed, 30 Mar 2022 02:48:11 +0300
+        Tue, 29 Mar 2022 19:50:27 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2182BCD
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:48:43 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id lr4so29781275ejb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:48:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HjRkKcTIdEtSJ5qdAlFxYDjytEDuq9kJF/JdJHhM/W0=;
+        b=Npg9tE2QGOUSet55NeMISOUe/KIPJ3btjDh/22dgXKu1PpUjyv7Vk4Y/oRPiEkY82w
+         hcBWY3k/GnJzyqfD4xQV4QmOaihQ9S571CWdWE6Cu8zWij4iaT8ZVKe3C07i5W1s9yHA
+         u4s+WgscKOGxKTYoLeUTkD75HZzK1F9xtclR9/zvyzyl8m6FfkdAbAJxj6cFf3Qy5Q6y
+         BCC2yBo3UCRTBxjsP+uR8EWlc+sD8rIIGt0T5lBt4cOWoPSu3m+SUniVC/lX0MAT5zCl
+         k6YdzBgp18h/6qfbpOIIuQ9CDuXGv22P10E/2zK5bCpdPdeAZVEvspBdUAunRZvcM3Wm
+         mI8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HjRkKcTIdEtSJ5qdAlFxYDjytEDuq9kJF/JdJHhM/W0=;
+        b=avJXFYxdMzijMRhX4pH15oK4njhxehntCLSe8bms0KEMHWxPnmhuyuKhXPaa12Y1n1
+         OUC7vbBsyzhhXWf6/4QwQtAqs9qBRdCBcvFjXQNEGZOVab0uQxVExPFcW304ynMKBdRV
+         GCWLbyXYHyxS5Gy374ojd4BdyCVGBkGjsAYkCrF4WFSvHrfWF2J6+U7qYMSiYTl7j1xW
+         98I19himAo5VnQdXK0JGe/yxTE2uhI4+5rNgBNCnZckpNjq/omkY+OK7QquXnZNa/hZD
+         T4zzO1V9c/HjNp/UH1wYahoas70qKShyXMxgl/VXgfjF2pwDKX0RdcIjGO8XX0yIYSY9
+         xFHg==
+X-Gm-Message-State: AOAM530UTPPYdczmzWVWN8evoQIt66k8HJlSQFS5XWGbEioKB/z0ufso
+        /SXViav6Ziv5orp5Ujc2JWU+gbe7cJe4HzV5/103Bw==
+X-Google-Smtp-Source: ABdhPJzx3gWELIECgfbIZ7X/BnP3w6wKOVDzcjJ3/ACk+h5YKfJf8FHobuoDG15x3ba5Y2mpQHNA+QM/IqRkoW+athY=
+X-Received: by 2002:a17:907:1622:b0:6df:d1a2:d4a3 with SMTP id
+ hb34-20020a170907162200b006dfd1a2d4a3mr35877982ejc.542.1648597722027; Tue, 29
+ Mar 2022 16:48:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [Patch v5 1/4] memory: tegra: Add memory controller channels
- support
-Content-Language: en-US
-To:     Ashish Mhetre <amhetre@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
-References: <20220316092525.4554-1-amhetre@nvidia.com>
- <20220316092525.4554-2-amhetre@nvidia.com>
- <83bc4c12-13e3-d239-3845-a3541b1fbb2a@gmail.com>
- <981610f0-374a-b18f-8e3a-445b20edb257@nvidia.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <981610f0-374a-b18f-8e3a-445b20edb257@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1648593132.git.marcelo.schmitt1@gmail.com> <9b8233e89227617a2cb47d85c654603c6583323d.1648593132.git.marcelo.schmitt1@gmail.com>
+In-Reply-To: <9b8233e89227617a2cb47d85c654603c6583323d.1648593132.git.marcelo.schmitt1@gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 29 Mar 2022 18:48:30 -0500
+Message-ID: <CAGS_qxoEZmAHVHQHJsnaALXmmODQono24qLbQr98FKqRUXmCNQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] Documentation: dev-tools: Add a section for static
+ analysis tools
+To:     Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+Cc:     corbet@lwn.net, mchehab+huawei@kernel.org, davidgow@google.com,
+        linux-doc@vger.kernel.org, linux-sparse@vger.kernel.org,
+        cocci@inria.fr, smatch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+        dan.carpenter@oracle.com, julia.lawall@inria.fr
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/25/22 07:50, Ashish Mhetre wrote:
-> 
-> 
-> On 3/19/2022 9:12 PM, Dmitry Osipenko wrote:
->> External email: Use caution opening links or attachments
->>
->>
->> 16.03.2022 12:25, Ashish Mhetre пишет:
->>>  From tegra186 onwards, memory controller support multiple channels.
->>> Add support for mapping address spaces of these channels.
->>> Make sure that number of channels are as expected on each SOC.
->>> During error interrupts from memory controller, appropriate registers
->>> from these channels need to be accessed for logging error info.
->>>
->>> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
->>> ---
->>>   drivers/memory/tegra/mc.c       |  6 ++++
->>>   drivers/memory/tegra/tegra186.c | 52 +++++++++++++++++++++++++++++++++
->>>   drivers/memory/tegra/tegra194.c |  1 +
->>>   drivers/memory/tegra/tegra234.c |  1 +
->>>   include/soc/tegra/mc.h          |  7 +++++
->>>   5 files changed, 67 insertions(+)
->>>
->>> diff --git a/drivers/memory/tegra/mc.c b/drivers/memory/tegra/mc.c
->>> index bf3abb6d8354..3cda1d9ad32a 100644
->>> --- a/drivers/memory/tegra/mc.c
->>> +++ b/drivers/memory/tegra/mc.c
->>> @@ -749,6 +749,12 @@ static int tegra_mc_probe(struct platform_device
->>> *pdev)
->>>        if (IS_ERR(mc->regs))
->>>                return PTR_ERR(mc->regs);
->>>
->>> +     if (mc->soc->ops && mc->soc->ops->map_regs) {
->>> +             err = mc->soc->ops->map_regs(mc, pdev);
->>> +             if (err < 0)
->>> +                     return err;
->>> +     }
->>> +
->>>        mc->debugfs.root = debugfs_create_dir("mc", NULL);
->>>
->>>        if (mc->soc->ops && mc->soc->ops->probe) {
->>> diff --git a/drivers/memory/tegra/tegra186.c
->>> b/drivers/memory/tegra/tegra186.c
->>> index 3d153881abc1..a8a45e6ff1f1 100644
->>> --- a/drivers/memory/tegra/tegra186.c
->>> +++ b/drivers/memory/tegra/tegra186.c
->>> @@ -139,11 +139,62 @@ static int tegra186_mc_probe_device(struct
->>> tegra_mc *mc, struct device *dev)
->>>        return 0;
->>>   }
->>>
->>> +static int tegra186_mc_map_regs(struct tegra_mc *mc,
->>> +                             struct platform_device *pdev)
->>> +{
->>> +     struct device_node *np = pdev->dev.parent->of_node;
->>> +     int num_dt_channels, reg_cells = 0;
->>> +     struct resource *res;
->>> +     int i, ret;
->>> +     u32 val;
->>> +
->>> +     ret = of_property_read_u32(np, "#address-cells", &val);
->>> +     if (ret) {
->>> +             dev_err(&pdev->dev, "missing #address-cells property\n");
->>> +             return ret;
->>> +     }
->>> +
->>> +     reg_cells = val;
->>> +
->>> +     ret = of_property_read_u32(np, "#size-cells", &val);
->>> +     if (ret) {
->>> +             dev_err(&pdev->dev, "missing #size-cells property\n");
->>> +             return ret;
->>> +     }
->>> +
->>> +     reg_cells += val;
->>> +
->>> +     num_dt_channels =
->>> of_property_count_elems_of_size(pdev->dev.of_node, "reg",
->>> +                                                       reg_cells *
->>> sizeof(u32));
->>> +     /*
->>> +      * On tegra186 onwards, memory controller support multiple
->>> channels.
->>> +      * Apart from regular memory controller channels, there is one
->>> broadcast
->>> +      * channel and one for stream-id registers.
->>> +      */
->>> +     if (num_dt_channels < mc->soc->num_channels + 2) {
->>> +             dev_warn(&pdev->dev, "MC channels are missing, please
->>> update\n");
->>
->> Update what?
->>
->>> +             return 0;
->>> +     }
->>> +
->>> +     mc->mcb_regs = devm_platform_get_and_ioremap_resource(pdev, 1,
->>> &res);
->>
->> Can't we name each reg bank individually in the DT and then use
->> devm_platform_ioremap_resource_byname()?
->>
-> That can be done but I think current logic will be better as we can
-> simply ioremap them by running in loop and assigning the mc_regs array.
-> Otherwise there will be like 17 ioremap_byname() individual calls for
-> Tegra194 and Tegra234.
-> Will it be fine having that many ioremap_byname() calls?
-> Also, Tegra186 has 5 channels which are less than Tegra194 and Tegra234.
-> If we go with ioremap_byname() then we'll have to differentiate number
-> of ioremap_byname() calls.
-for (i = 0; i < mc->soc->num_channels; i++) {
-	sprintf(name, "mc%u", i);
-	err = devm_platform_ioremap_resource_byname(dev, name);
-	...
-}
+On Tue, Mar 29, 2022 at 6:22 PM Marcelo Schmitt
+<marcelo.schmitt1@gmail.com> wrote:
+>
+> Complement the Kernel Testing Guide documentation page by adding a
+> section about static analysis tools.
+>
+> Signed-off-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+> Acked-by: Daniel Latypov <dlatypov@google.com>
+> Acked-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Reviewed-by: David Gow <davidgow@google.com>
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> ---
+> Change log:
+> - Brought generic tool characteristics to the intro paragraph
+> - Made explicit that these tools run at compile time
+> - Added a note of caution about false positives
+> - Updated Coccinelle info to make it sound better and be more skimmable
+
+This looks a lot nicer to me!
+Thanks for doing this.
+
+Daniel

@@ -2,180 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F5D4EB004
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBC54EB006
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238353AbiC2PN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
+        id S238360AbiC2POC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236641AbiC2PNZ (ORCPT
+        with ESMTP id S235294AbiC2POA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:13:25 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A506D22C8C4
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:11:41 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-259-r5FGFD-GNYGMmQmbomJ2Yg-1; Tue, 29 Mar 2022 16:11:38 +0100
-X-MC-Unique: r5FGFD-GNYGMmQmbomJ2Yg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Tue, 29 Mar 2022 16:11:37 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Tue, 29 Mar 2022 16:11:36 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tip-commits@vger.kernel.org" 
-        <linux-tip-commits@vger.kernel.org>
-CC:     Joerg Roedel <jroedel@suse.de>, Borislav Petkov <bp@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: RE: [tip: x86/urgent] x86/sev: Unroll string mmio with
- CC_ATTR_GUEST_UNROLL_STRING_IO
-Thread-Topic: [tip: x86/urgent] x86/sev: Unroll string mmio with
- CC_ATTR_GUEST_UNROLL_STRING_IO
-Thread-Index: AQHYQ3q5K+q7CKVgC0KvrzjgS2c7UKzWdi0w
-Date:   Tue, 29 Mar 2022 15:11:36 +0000
-Message-ID: <77dbe1d412dd4ade8cc666f5c2474665@AcuMS.aculab.com>
-References: <20220321093351.23976-1-joro@8bytes.org>
- <164856473151.389.17789498051927031377.tip-bot2@tip-bot2>
-In-Reply-To: <164856473151.389.17789498051927031377.tip-bot2@tip-bot2>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 29 Mar 2022 11:14:00 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64DD22C6D8
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:12:15 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id a17so21078106edm.9
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:12:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares-net.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AxdIJYFQ2HFyaWkSd6aH3B9KrL7/ps4UvmhKce2/pf4=;
+        b=g9siOZ1wQAd1DjJJBP0MTLpMqGR/555P38tKZJY0BVNM/BpJizrUnN5mAB7H5fNM+L
+         vnPkOsZ9BQ+6z0uEHi19RU5MbZG1E8e1CBpgSh9duinJB2AgBE56EjCVwSEyXyJWBurF
+         /P244D1UL9c+KzHdTU8Ttec2Tv2xQ6kENL0R+GZkbmAdyw/KjDZgzRN3Dc4p5C1eXy5v
+         YEgwiV4UZEESj25E5+zlEVygkTDjDeL0l4Ezl+NxQZEFidS1rmnFexjFMnXw9DHfeKax
+         eSXvo625Y4JoO6853tTDFftrxFQHjNVFYZSA1wuLIx0DA85416MfAVOZvQYtsVrrsqN+
+         2tsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AxdIJYFQ2HFyaWkSd6aH3B9KrL7/ps4UvmhKce2/pf4=;
+        b=a0dZbj4Tpl7J+hg+d4I7OWMF/edLkXNQeo3TJYPpX7HW1gwUYQWPpHI4mBzsg9X+pj
+         C2HyrmHkvXcjVVCyQs/iYparY8/W3wVh+3WOIFqkF9wSlE8qgLOb4DVXxPKDbSyCDlJ2
+         xx92jH6M1s9Hm3CsofIHpyt6r0O9tVuTWWHlpoDzgvtFv84wb3qRBVDAQS6YfON/dbfo
+         H4Sc/aU5bbz0osf6GO+4128iP/ezwpDrvfN4RnCDDoCsEDPwuNRuyktWBiJbi0y/vwPi
+         Rubef2fU8TRVtp1ohbMgCetxRK5EV+Bp1ceKdBkXck8uuuWmdhoDKi0VmFkjGz4vYkZM
+         5KuQ==
+X-Gm-Message-State: AOAM531KtjTP3niqO4uM+NYAJxaT+96DIr1TY5/J2aHMu83DpsxI/BAA
+        sMI/hQLhkFgPqsAUexszM6PReg==
+X-Google-Smtp-Source: ABdhPJzeoiD4DWuA6XaK8Uj1ZpZ/FJGBZx6c64C3I7nEU56ECpuZhFAB7WG5VRNkFUOZ/WREWm2cJw==
+X-Received: by 2002:a05:6402:17dc:b0:418:efa5:f445 with SMTP id s28-20020a05640217dc00b00418efa5f445mr5082928edy.125.1648566733974;
+        Tue, 29 Mar 2022 08:12:13 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:505b:327f:c6b6:495c? ([2a02:578:8593:1200:505b:327f:c6b6:495c])
+        by smtp.gmail.com with ESMTPSA id dm8-20020a170907948800b006dfe5b317d3sm7486123ejc.75.2022.03.29.08.12.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 08:12:13 -0700 (PDT)
+Message-ID: <4675337e-d71d-2045-1cab-b81ba9fa2c25@tessares.net>
+Date:   Tue, 29 Mar 2022 17:12:12 +0200
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH perf] perf tools: .git/ORIG_HEAD might not exist
+Content-Language: en-GB
+To:     John Garry <john.garry@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     mptcp@lists.linux.dev, Arnaldo Carvalho de Melo <acme@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220329093120.4173283-1-matthieu.baerts@tessares.net>
+ <e9969b97-3998-d7b2-9fd2-77ddd27969ef@huawei.com>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <e9969b97-3998-d7b2-9fd2-77ddd27969ef@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SXNuJ3QgdGhpcyBwYXRjaCBlbnRpcmVseSBicm9rZW4/DQpFdmVuIHRoZSAnbm9ybWFsJyBrZXJu
-ZWwgZnVuY3Rpb25zIGFyZSBicm9rZW4uDQoNCm1lbWNweV90b2lvKCkgYW5kIG1lbWNweV9mcm9t
-aW8oKSBuZWVkIHRvIGJlIHVzaW5nIDY0Yml0DQphY2Nlc3NlcyB0byBJTyBzcGFjZS4NCg0KVGhl
-eSB1c2VkIHRvIGJlIGltcGxlbWVudGVkIHVzaW5nIG1lbWNweSgpIC0gYnV0IHRoYXQgY2FuIGVu
-ZA0KdXAgYmVpbmcgJ3JlcCBtb3ZzYicgd2hpY2ggaXMgYWx3YXlzIGJ5dGUgY29waWVzIG9uIHVu
-Y2FjaGVkDQptZW1vcnkuDQpJIHRob3VnaHQgdGhhdCBoYWQgYmVlbiBmaXhlZCB0byB1c2VkIGEg
-YmV0dGVyIGNvcHkgbG9vcC4NCg0KCURhdmlkDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0t
-LS0NCj4gRnJvbTogdGlwLWJvdDJAbGludXRyb25peC5kZSA8dGlwLWJvdDJAbGludXRyb25peC5k
-ZT4NCj4gU2VudDogMjkgTWFyY2ggMjAyMiAxNTozOQ0KPiBUbzogbGludXgtdGlwLWNvbW1pdHNA
-dmdlci5rZXJuZWwub3JnDQo+IENjOiBKb2VyZyBSb2VkZWwgPGpyb2VkZWxAc3VzZS5kZT47IEJv
-cmlzbGF2IFBldGtvdiA8YnBAc3VzZS5kZT47IFRvbSBMZW5kYWNreQ0KPiA8dGhvbWFzLmxlbmRh
-Y2t5QGFtZC5jb20+OyBzdGFibGVAdmdlci5rZXJuZWwub3JnOyB4ODZAa2VybmVsLm9yZzsgbGlu
-dXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBbdGlwOiB4ODYvdXJnZW50XSB4
-ODYvc2V2OiBVbnJvbGwgc3RyaW5nIG1taW8gd2l0aCBDQ19BVFRSX0dVRVNUX1VOUk9MTF9TVFJJ
-TkdfSU8NCj4gDQo+IFRoZSBmb2xsb3dpbmcgY29tbWl0IGhhcyBiZWVuIG1lcmdlZCBpbnRvIHRo
-ZSB4ODYvdXJnZW50IGJyYW5jaCBvZiB0aXA6DQo+IA0KPiBDb21taXQtSUQ6ICAgICA0MDA5YTRh
-YzgyZGQ5NWI4Y2QyYjYyYmQzMDAxOTQ3Njk4M2YwYWZmDQo+IEdpdHdlYjogICAgICAgIGh0dHBz
-Oi8vZ2l0Lmtlcm5lbC5vcmcvdGlwLzQwMDlhNGFjODJkZDk1YjhjZDJiNjJiZDMwMDE5NDc2OTgz
-ZjBhZmYNCj4gQXV0aG9yOiAgICAgICAgSm9lcmcgUm9lZGVsIDxqcm9lZGVsQHN1c2UuZGU+DQo+
-IEF1dGhvckRhdGU6ICAgIE1vbiwgMjEgTWFyIDIwMjIgMTA6MzM6NTEgKzAxOjAwDQo+IENvbW1p
-dHRlcjogICAgIEJvcmlzbGF2IFBldGtvdiA8YnBAc3VzZS5kZT4NCj4gQ29tbWl0dGVyRGF0ZTog
-VHVlLCAyOSBNYXIgMjAyMiAxNTo1OToxNiArMDI6MDANCj4gDQo+IHg4Ni9zZXY6IFVucm9sbCBz
-dHJpbmcgbW1pbyB3aXRoIENDX0FUVFJfR1VFU1RfVU5ST0xMX1NUUklOR19JTw0KPiANCj4gVGhl
-IGlvLXNwZWNpZmljIG1lbWNweS9tZW1zZXQgZnVuY3Rpb25zIHVzZSBzdHJpbmcgbW1pbyBhY2Nl
-c3NlcyB0byBkbw0KPiB0aGVpciB3b3JrLiBVbmRlciBTRVYsIHRoZSBoeXBlcnZpc29yIGNhbid0
-IGVtdWxhdGUgdGhlc2UgaW5zdHJ1Y3Rpb25zDQo+IGJlY2F1c2UgdGhleSByZWFkL3dyaXRlIGRp
-cmVjdGx5IGZyb20vdG8gZW5jcnlwdGVkIG1lbW9yeS4NCj4gDQo+IEtWTSB3aWxsIGluamVjdCBh
-IHBhZ2UgZmF1bHQgZXhjZXB0aW9uIGludG8gdGhlIGd1ZXN0IHdoZW4gaXQgaXMgYXNrZWQNCj4g
-dG8gZW11bGF0ZSBzdHJpbmcgbW1pbyBpbnN0cnVjdGlvbnMgZm9yIGFuIFNFViBndWVzdDoNCj4g
-DQo+ICAgQlVHOiB1bmFibGUgdG8gaGFuZGxlIHBhZ2UgZmF1bHQgZm9yIGFkZHJlc3M6IGZmZmZj
-OTAwMDAwNjUwNjgNCj4gICAjUEY6IHN1cGVydmlzb3IgcmVhZCBhY2Nlc3MgaW4ga2VybmVsIG1v
-ZGUNCj4gICAjUEY6IGVycm9yX2NvZGUoMHgwMDAwKSAtIG5vdC1wcmVzZW50IHBhZ2UNCj4gICBQ
-R0QgODAwMDEwMDAwMDA2NyBQNEQgODAwMDEwMDAwMDA2NyBQVUQgODAwMDEwMDBmYjA2NyBQTUQg
-ODAwMDEwMDBmYzA2NyBQVEUgODAwMDAwMDBmZWQ0MDE3Mw0KPiAgIE9vcHM6IDAwMDAgWyMxXSBQ
-UkVFTVBUIFNNUCBOT1BUSQ0KPiAgIENQVTogMCBQSUQ6IDEgQ29tbTogc3dhcHBlci8wIE5vdCB0
-YWludGVkIDUuMTcuMC1yYzcgIzMNCj4gDQo+IEFzIHN0cmluZyBtbWlvIGZvciBhbiBTRVYgZ3Vl
-c3QgY2FuIG5vdCBiZSBzdXBwb3J0ZWQgYnkgdGhlDQo+IGh5cGVydmlzb3IsIHVucm9sbCB0aGUg
-aW5zdHJ1Y3Rpb25zIGZvciBDQ19BVFRSX0dVRVNUX1VOUk9MTF9TVFJJTkdfSU8NCj4gZW5hYmxl
-ZCBrZXJuZWxzLg0KPiANCj4gVGhpcyBpc3N1ZSBhcHBlYXJzIHdoZW4ga2VybmVscyBhcmUgbGF1
-bmNoZWQgaW4gcmVjZW50IGxpYnZpcnQtbWFuYWdlZA0KPiBTRVYgdmlydHVhbCBtYWNoaW5lcywg
-YmVjYXVzZSB2aXJ0LWluc3RhbGwgc3RhcnRlZCB0byBhZGQgYSB0cG0tY3JiDQo+IGRldmljZSB0
-byB0aGUgZ3Vlc3QgYnkgZGVmYXVsdCBhbmQgcHJvYWN0aXZlbHkgYmVjYXVzZSwgcmFpc2luczoN
-Cj4gDQo+ICAgaHR0cHM6Ly9naXRodWIuY29tL3ZpcnQtbWFuYWdlci92aXJ0LW1hbmFnZXIvY29t
-bWl0L2ViNThjMDlmNDg4YjA2MzNlZDFlZWEwMTJjZDMxMWU0ODg2NDQwMWUNCj4gDQo+IGFuZCBh
-cyB0aGF0IGNvbW1pdCBzYXlzLCB0aGUgZGVmYXVsdCBhZGRpbmcgb2YgYSBUUE0gY2FuIGJlIGRp
-c2FibGVkDQo+IHdpdGggInZpcnQtaW5zdGFsbCAuLi4gLS10cG0gbm9uZSIuDQo+IA0KPiBUaGUg
-a2VybmVsIGRyaXZlciBmb3IgdHBtLWNyYiB1c2VzIG1lbWNweV90by9mcm9tX2lvKCkgZnVuY3Rp
-b25zIHRvDQo+IGFjY2VzcyBNTUlPIG1lbW9yeSwgcmVzdWx0aW5nIGluIGEgcGFnZS1mYXVsdCBp
-bmplY3RlZCBieSBLVk0gYW5kDQo+IGNyYXNoaW5nIHRoZSBrZXJuZWwgYXQgYm9vdC4NCj4gDQo+
-ICAgWyBicDogTWFzc2FnZSBhbmQgZXh0ZW5kIGNvbW1pdCBtZXNzYWdlLiBdDQo+IA0KPiBGaXhl
-czogZDhhYTdlZWE3OGExICgneDg2L21tOiBBZGQgU2VjdXJlIEVuY3J5cHRlZCBWaXJ0dWFsaXph
-dGlvbiAoU0VWKSBzdXBwb3J0JykNCj4gU2lnbmVkLW9mZi1ieTogSm9lcmcgUm9lZGVsIDxqcm9l
-ZGVsQHN1c2UuZGU+DQo+IFNpZ25lZC1vZmYtYnk6IEJvcmlzbGF2IFBldGtvdiA8YnBAc3VzZS5k
-ZT4NCj4gUmV2aWV3ZWQtYnk6IFRvbSBMZW5kYWNreSA8dGhvbWFzLmxlbmRhY2t5QGFtZC5jb20+
-DQo+IENjOiA8c3RhYmxlQHZnZXIua2VybmVsLm9yZz4NCj4gTGluazogaHR0cHM6Ly9sb3JlLmtl
-cm5lbC5vcmcvci8yMDIyMDMyMTA5MzM1MS4yMzk3Ni0xLWpvcm9AOGJ5dGVzLm9yZw0KPiAtLS0N
-Cj4gIGFyY2gveDg2L2xpYi9pb21lbS5jIHwgNjUgKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKy0tLS0tLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDU3IGluc2VydGlvbnMoKyksIDgg
-ZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYvbGliL2lvbWVtLmMgYi9h
-cmNoL3g4Ni9saWIvaW9tZW0uYw0KPiBpbmRleCBkZjUwNDUxLi4zZTJmMzNmIDEwMDY0NA0KPiAt
-LS0gYS9hcmNoL3g4Ni9saWIvaW9tZW0uYw0KPiArKysgYi9hcmNoL3g4Ni9saWIvaW9tZW0uYw0K
-PiBAQCAtMjIsNyArMjIsNyBAQCBzdGF0aWMgX19hbHdheXNfaW5saW5lIHZvaWQgcmVwX21vdnMo
-dm9pZCAqdG8sIGNvbnN0IHZvaWQgKmZyb20sIHNpemVfdCBuKQ0KPiAgCQkgICAgIDogIm1lbW9y
-eSIpOw0KPiAgfQ0KPiANCj4gLXZvaWQgbWVtY3B5X2Zyb21pbyh2b2lkICp0bywgY29uc3Qgdm9s
-YXRpbGUgdm9pZCBfX2lvbWVtICpmcm9tLCBzaXplX3QgbikNCj4gK3N0YXRpYyB2b2lkIHN0cmlu
-Z19tZW1jcHlfZnJvbWlvKHZvaWQgKnRvLCBjb25zdCB2b2xhdGlsZSB2b2lkIF9faW9tZW0gKmZy
-b20sIHNpemVfdCBuKQ0KPiAgew0KPiAgCWlmICh1bmxpa2VseSghbikpDQo+ICAJCXJldHVybjsN
-Cj4gQEAgLTM4LDkgKzM4LDggQEAgdm9pZCBtZW1jcHlfZnJvbWlvKHZvaWQgKnRvLCBjb25zdCB2
-b2xhdGlsZSB2b2lkIF9faW9tZW0gKmZyb20sIHNpemVfdCBuKQ0KPiAgCX0NCj4gIAlyZXBfbW92
-cyh0bywgKGNvbnN0IHZvaWQgKilmcm9tLCBuKTsNCj4gIH0NCj4gLUVYUE9SVF9TWU1CT0wobWVt
-Y3B5X2Zyb21pbyk7DQo+IA0KPiAtdm9pZCBtZW1jcHlfdG9pbyh2b2xhdGlsZSB2b2lkIF9faW9t
-ZW0gKnRvLCBjb25zdCB2b2lkICpmcm9tLCBzaXplX3QgbikNCj4gK3N0YXRpYyB2b2lkIHN0cmlu
-Z19tZW1jcHlfdG9pbyh2b2xhdGlsZSB2b2lkIF9faW9tZW0gKnRvLCBjb25zdCB2b2lkICpmcm9t
-LCBzaXplX3QgbikNCj4gIHsNCj4gIAlpZiAodW5saWtlbHkoIW4pKQ0KPiAgCQlyZXR1cm47DQo+
-IEBAIC01NiwxNCArNTUsNjQgQEAgdm9pZCBtZW1jcHlfdG9pbyh2b2xhdGlsZSB2b2lkIF9faW9t
-ZW0gKnRvLCBjb25zdCB2b2lkICpmcm9tLCBzaXplX3QgbikNCj4gIAl9DQo+ICAJcmVwX21vdnMo
-KHZvaWQgKil0bywgKGNvbnN0IHZvaWQgKikgZnJvbSwgbik7DQo+ICB9DQo+ICsNCj4gK3N0YXRp
-YyB2b2lkIHVucm9sbGVkX21lbWNweV9mcm9taW8odm9pZCAqdG8sIGNvbnN0IHZvbGF0aWxlIHZv
-aWQgX19pb21lbSAqZnJvbSwgc2l6ZV90IG4pDQo+ICt7DQo+ICsJY29uc3Qgdm9sYXRpbGUgY2hh
-ciBfX2lvbWVtICppbiA9IGZyb207DQo+ICsJY2hhciAqb3V0ID0gdG87DQo+ICsJaW50IGk7DQo+
-ICsNCj4gKwlmb3IgKGkgPSAwOyBpIDwgbjsgKytpKQ0KPiArCQlvdXRbaV0gPSByZWFkYigmaW5b
-aV0pOw0KPiArfQ0KPiArDQo+ICtzdGF0aWMgdm9pZCB1bnJvbGxlZF9tZW1jcHlfdG9pbyh2b2xh
-dGlsZSB2b2lkIF9faW9tZW0gKnRvLCBjb25zdCB2b2lkICpmcm9tLCBzaXplX3QgbikNCj4gK3sN
-Cj4gKwl2b2xhdGlsZSBjaGFyIF9faW9tZW0gKm91dCA9IHRvOw0KPiArCWNvbnN0IGNoYXIgKmlu
-ID0gZnJvbTsNCj4gKwlpbnQgaTsNCj4gKw0KPiArCWZvciAoaSA9IDA7IGkgPCBuOyArK2kpDQo+
-ICsJCXdyaXRlYihpbltpXSwgJm91dFtpXSk7DQo+ICt9DQo+ICsNCj4gK3N0YXRpYyB2b2lkIHVu
-cm9sbGVkX21lbXNldF9pbyh2b2xhdGlsZSB2b2lkIF9faW9tZW0gKmEsIGludCBiLCBzaXplX3Qg
-YykNCj4gK3sNCj4gKwl2b2xhdGlsZSBjaGFyIF9faW9tZW0gKm1lbSA9IGE7DQo+ICsJaW50IGk7
-DQo+ICsNCj4gKwlmb3IgKGkgPSAwOyBpIDwgYzsgKytpKQ0KPiArCQl3cml0ZWIoYiwgJm1lbVtp
-XSk7DQo+ICt9DQo+ICsNCj4gK3ZvaWQgbWVtY3B5X2Zyb21pbyh2b2lkICp0bywgY29uc3Qgdm9s
-YXRpbGUgdm9pZCBfX2lvbWVtICpmcm9tLCBzaXplX3QgbikNCj4gK3sNCj4gKwlpZiAoY2NfcGxh
-dGZvcm1faGFzKENDX0FUVFJfR1VFU1RfVU5ST0xMX1NUUklOR19JTykpDQo+ICsJCXVucm9sbGVk
-X21lbWNweV9mcm9taW8odG8sIGZyb20sIG4pOw0KPiArCWVsc2UNCj4gKwkJc3RyaW5nX21lbWNw
-eV9mcm9taW8odG8sIGZyb20sIG4pOw0KPiArfQ0KPiArRVhQT1JUX1NZTUJPTChtZW1jcHlfZnJv
-bWlvKTsNCj4gKw0KPiArdm9pZCBtZW1jcHlfdG9pbyh2b2xhdGlsZSB2b2lkIF9faW9tZW0gKnRv
-LCBjb25zdCB2b2lkICpmcm9tLCBzaXplX3QgbikNCj4gK3sNCj4gKwlpZiAoY2NfcGxhdGZvcm1f
-aGFzKENDX0FUVFJfR1VFU1RfVU5ST0xMX1NUUklOR19JTykpDQo+ICsJCXVucm9sbGVkX21lbWNw
-eV90b2lvKHRvLCBmcm9tLCBuKTsNCj4gKwllbHNlDQo+ICsJCXN0cmluZ19tZW1jcHlfdG9pbyh0
-bywgZnJvbSwgbik7DQo+ICt9DQo+ICBFWFBPUlRfU1lNQk9MKG1lbWNweV90b2lvKTsNCj4gDQo+
-ICB2b2lkIG1lbXNldF9pbyh2b2xhdGlsZSB2b2lkIF9faW9tZW0gKmEsIGludCBiLCBzaXplX3Qg
-YykNCj4gIHsNCj4gLQkvKg0KPiAtCSAqIFRPRE86IG1lbXNldCBjYW4gbWFuZ2xlIHRoZSBJTyBw
-YXR0ZXJucyBxdWl0ZSBhIGJpdC4NCj4gLQkgKiBwZXJoYXBzIGl0IHdvdWxkIGJlIGJldHRlciB0
-byB1c2UgYSBkdW1iIG9uZToNCj4gLQkgKi8NCj4gLQltZW1zZXQoKHZvaWQgKilhLCBiLCBjKTsN
-Cj4gKwlpZiAoY2NfcGxhdGZvcm1faGFzKENDX0FUVFJfR1VFU1RfVU5ST0xMX1NUUklOR19JTykp
-IHsNCj4gKwkJdW5yb2xsZWRfbWVtc2V0X2lvKGEsIGIsIGMpOw0KPiArCX0gZWxzZSB7DQo+ICsJ
-CS8qDQo+ICsJCSAqIFRPRE86IG1lbXNldCBjYW4gbWFuZ2xlIHRoZSBJTyBwYXR0ZXJucyBxdWl0
-ZSBhIGJpdC4NCj4gKwkJICogcGVyaGFwcyBpdCB3b3VsZCBiZSBiZXR0ZXIgdG8gdXNlIGEgZHVt
-YiBvbmU6DQo+ICsJCSAqLw0KPiArCQltZW1zZXQoKHZvaWQgKilhLCBiLCBjKTsNCj4gKwl9DQo+
-ICB9DQo+ICBFWFBPUlRfU1lNQk9MKG1lbXNldF9pbyk7DQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVz
-cyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEg
-MVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+Hi John,
 
+On 29/03/2022 12:32, John Garry wrote:
+> On 29/03/2022 10:31, Matthieu Baerts wrote:
+> 
+> Hi Matthieu,
+> 
+> Sorry for the breakage.
+
+That's alright, it happens.
+
+(...)
+
+> Could you please try this:
+> 
+> ---->8------
+> 
+> 
+> From 694964709a7fc2b46c995bb7b1967cc6b129def8 Mon Sep 17 00:00:00 2001
+> From: John Garry <john.garry@huawei.com>
+> Date: Tue, 29 Mar 2022 11:06:46 +0100
+> Subject: [PATCH] perf: Stop depending on .git internal files for
+> building PERF-VERSION-FILE
+> 
+> This essentially reverts commit c72e3f04b45fb2e50cdd81a50c3778c6a57251d8
+> and commit 4e666cdb06eede2069a7b1a96a1359d1c441a3eb.
+> 
+> In commit c72e3f04b45f ("tools/perf/build: Speed up git-version test on
+> re-make"), a makefile dependency on .git/HEAD was added. The background
+> is that running PERF-VERSION-FILE is relatively slow, and commands like
+> "git describe" are particularly slow.
+> 
+> In commit 4e666cdb06ee ("perf tools: Fix dependency for version file
+> creation"), an additional dependency on .git/ORIG_HEAD was added, as
+> .git/HEAD may not change for "git reset --hard HEAD^" command.
+> 
+> However, as discussed with the git community in [0], using git internal
+> files for dependencies is not reliable. Commit 4e666cdb06ee also breaks
+> some build scenarios [1].
+> 
+> As mentioned, c72e3f04b45f was added to speed up the build. However in
+> commit 7572733b8499 ("perf tools: Fix version kernel tag") we removed
+> the call to "git describe", so just revert Makefile.perf back to same as
+> pre c72e3f04b45f and the build should not be so slow, as below:
+> 
+> Pre 7572733b8499:
+> $> time util/PERF-VERSION-GEN
+>   PERF_VERSION = 5.17.rc8.g4e666cdb06ee
+> 
+> real    0m0.110s
+> user    0m0.091s
+> sys     0m0.019s
+> 
+> Post 7572733b8499:
+> $> time util/PERF-VERSION-GEN
+>   PERF_VERSION = 5.17.rc8.g7572733b8499
+> 
+> real    0m0.039s
+> user    0m0.036s
+> sys     0m0.007s
+
+Probably the optimisation to avoid calling this script is indeed no
+longer needed but it is not me to judge.
+
+What I know is that indeed, 'git describe' can be slow while just
+returning the current SHA is supposed to be always quick.
+
+(...)
+
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index 9c935f86d172..ddd03b21bda2 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -691,9 +691,8 @@ $(OUTPUT)common-cmds.h: $(wildcard
+> Documentation/perf-*.txt)
+>  $(SCRIPTS) : % : %.sh
+>      $(QUIET_GEN)$(INSTALL) '$@.sh' '$(OUTPUT)$@'
+> 
+> -$(OUTPUT)PERF-VERSION-FILE: ../../.git/HEAD ../../.git/ORIG_HEAD
+> +$(OUTPUT)PERF-VERSION-FILE: .FORCE-PERF-VERSION-FILE
+
+Regarding my issue, removing the dependence to .git/ORIG_HEAD file fixes
+the issue. So I'm fine to drop my patch and revert the two commits you
+mentioned.
+
+If you send this patch, please do not forget to add a Fixes tag:
+
+  Fixes: 4e666cdb06ee ("perf tools: Fix dependency for version file
+creation")
+
+Cheers,
+Matt
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net

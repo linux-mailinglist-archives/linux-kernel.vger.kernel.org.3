@@ -2,69 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13AAF4EAFE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D574EAFED
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238310AbiC2PJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        id S238337AbiC2PKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238276AbiC2PJn (ORCPT
+        with ESMTP id S238301AbiC2PJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:09:43 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566341EF5DB;
-        Tue, 29 Mar 2022 08:07:59 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id lr4so27352892ejb.11;
-        Tue, 29 Mar 2022 08:07:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=k7V/AdbtuTpQjKQKuRE/DdQ8tDFVesLcfjc5DCvosMQ=;
-        b=kGiY4tb+xGIQRdl+/8PFqwgQ4fTQZmhxcTdZuggrruf6V0o6YtxYMBesBVR2vAwWmM
-         q1bfRdPTBBah2FodC+hww1SZCOb2DCWoqCAnUQwMUUbzLOZ4Xh9zjlbE9xdhmPrKrIRo
-         MebMdMZfDuwbOJN/bTLxm/R9WHDXW2ybB/Oa5rKIsCQ8hNhHq/5yFTPjSv7hrVfNBtKC
-         /h1NWty8q+WV2r7bg4mbyO3nb55uADLf8J+0MoWtRqnCzklkn7m8j6NV59lhuohT0rwB
-         1UWgofotsBTExoauAmrTu0vWrf/uuX9cRkvN1lqar+kxgqTbR79h2j+KjWQiNDQcVA9T
-         H5jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=k7V/AdbtuTpQjKQKuRE/DdQ8tDFVesLcfjc5DCvosMQ=;
-        b=6oVyOd3HAReuKThxhyzlQGjFF0n5Y3Fn/ma1G7a6jcPtbig8bDjdDsrqGo0tjc5tQo
-         AL6PndeZCsoY3SPsSM3KYkRkts/nHKt//Bkz7+/Eody8TxbPHhc0xWwManRzs9R2jede
-         eabMyFaVaHGABP27cH0nM6jzvRjy6liJuh8omr0WIMz1XHcuGe1y0ShKHO00rLebMDuq
-         8jnaF5ZPV/O7itROWEW+3Q0TPOzuxN/8JYTvvrpcH+kgpmTHU/+/tAnlqIX/p8+JNA9k
-         5LxyCaOr0sEnhsgxHAmxyFDmMdo4eW+Rf/hE1yzPC/IVhXTKY3ATg0AyyzeyEyCXxJjq
-         aBVQ==
-X-Gm-Message-State: AOAM532DShXJAgBGf4g9cCTK8vOEkiTWaMDTkfKt1paIxjSF5LH4oe7t
-        oaU8flrvdadt2Xwve923O6I=
-X-Google-Smtp-Source: ABdhPJzXbIomNhFkSZPsDocHiKap3lA3plyPy2CFIhy0FEuXIDdP4JvO30XCZ/ljVHLEF0QyEYJz/Q==
-X-Received: by 2002:a17:906:c0d6:b0:6ca:457e:f1b7 with SMTP id bn22-20020a170906c0d600b006ca457ef1b7mr35045283ejb.399.1648566476904;
-        Tue, 29 Mar 2022 08:07:56 -0700 (PDT)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id eq7-20020a056402298700b00419d8d46a8asm3261643edb.39.2022.03.29.08.07.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 08:07:56 -0700 (PDT)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de, zhangqing@rock-chips.com
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] arm64: dts: rockchip: add clocks property to cru nodes rk3399
-Date:   Tue, 29 Mar 2022 17:07:42 +0200
-Message-Id: <20220329150742.22093-6-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220329150742.22093-1-jbx6244@gmail.com>
-References: <20220329150742.22093-1-jbx6244@gmail.com>
+        Tue, 29 Mar 2022 11:09:49 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37F11EC62B;
+        Tue, 29 Mar 2022 08:08:04 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a02:3030:a:f397:f6bc:b726:2678:839f])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 21DAC1F440C1;
+        Tue, 29 Mar 2022 16:08:03 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648566483;
+        bh=C6t3ZinGAFBOT9ORWc/HRpzQcPD7wWIHP5FykwdIt7c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KXC2rrIJW+aom9t1Juphld1TuKPK1diMvGZvn5F2iONYT+4InqEOI4k4mEDOCaYbL
+         /Gj6zyIsX4GK0+avYdTCfxd0csR9jCaiozukIHHAHuzdbLnUUYFt3pbutam2bR+q/b
+         w2uoVlynxtVFwFkgH7Wks6yKEQYw/4Jj5vhdJi9G/pCAQRpCcrawi7LE7HtZY9giaV
+         Qh2BojzVa8gRaTe6DOfnb1ntTQZahK9a76Vk5zUAsfrpWDrR5GM9tkF+/Kspcg/a26
+         U2A3Y963K0knxPCeizLYFpe/MHScBw+3XP2C4wbFCYWbek4nxSG9BHBKZaX7do6MO5
+         cjpals4Wwk+wA==
+Date:   Tue, 29 Mar 2022 17:08:00 +0200
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 06/24] media: v4l2: Trace calculated p/b0/b1 initial
+ reflist
+Message-ID: <20220329150800.siu2yaaolesf6dgs@basti-XPS-13-9310>
+References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
+ <20220328195936.82552-7-nicolas.dufresne@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220328195936.82552-7-nicolas.dufresne@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,40 +54,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add clocks property to rk3399 cru nodes to fix warnings like:
-'clocks' is a dependency of 'assigned-clocks'.
+Hey Nicolas,
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
+On 28.03.2022 15:59, Nicolas Dufresne wrote:
+>This is crucial in verifying that the ordering is right, specially with
+>more complex sorting needed for field decoding.
 
-Changed V2:
-  add clocks to pmucru node
----
- arch/arm64/boot/dts/rockchip/rk3399.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+How about:
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-index 01c08a2aa..56af1a1d6 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-@@ -1416,6 +1416,8 @@
- 	pmucru: clock-controller@ff750000 {
- 		compatible = "rockchip,rk3399-pmucru";
- 		reg = <0x0 0xff750000 0x0 0x1000>;
-+		clocks = <&xin24m>;
-+		clock-names = "xin24m";
- 		rockchip,grf = <&pmugrf>;
- 		#clock-cells = <1>;
- 		#reset-cells = <1>;
-@@ -1426,6 +1428,8 @@
- 	cru: clock-controller@ff760000 {
- 		compatible = "rockchip,rk3399-cru";
- 		reg = <0x0 0xff760000 0x0 0x1000>;
-+		clocks = <&xin24m>;
-+		clock-names = "xin24m";
- 		rockchip,grf = <&grf>;
- 		#clock-cells = <1>;
- 		#reset-cells = <1>;
--- 
-2.20.1
+"""
+Add debug print statements to print the content of P & B reference
+lists, to verify that the ordering of the generated reference lists is
+correct. This is escpecially important for the field decoding mode,
+where sorting is more complex.
+"""
 
+>
+>Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Tested-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+
+Greetings,
+Sebastian
+
+>---
+> drivers/media/v4l2-core/v4l2-h264.c | 86 +++++++++++++++++++++++++++++
+> 1 file changed, 86 insertions(+)
+>
+>diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
+>index d5698c981973..c9e18fd51d78 100644
+>--- a/drivers/media/v4l2-core/v4l2-h264.c
+>+++ b/drivers/media/v4l2-core/v4l2-h264.c
+>@@ -241,6 +241,87 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
+> 	return poca < pocb ? -1 : 1;
+> }
+>
+>+static char ref_type_to_char (u8 ref_type)
+>+{
+>+	switch (ref_type) {
+>+	case V4L2_H264_FRAME_REF:
+>+		return 'f';
+>+	case V4L2_H264_TOP_FIELD_REF:
+>+		return 't';
+>+	case V4L2_H264_BOTTOM_FIELD_REF:
+>+		return 'b';
+>+	}
+>+
+>+	return '?';
+>+}
+>+
+>+static const char *format_ref_list_p(const struct v4l2_h264_reflist_builder *builder,
+>+				     struct v4l2_h264_reference *reflist,
+>+				     char *out_str, const int len)
+>+{
+>+	int n = 0, i;
+>+
+>+	n += snprintf(out_str + n, len - n, "|");
+>+
+>+	for (i = 0; i < builder->num_valid; i++) {
+>+		/* this is pic_num for frame and frame_num (wrapped) for field,
+>+		 * but for frame pic_num is equal to frame_num (wrapped).
+>+		 */
+>+		int frame_num = builder->refs[reflist[i].index].frame_num;
+>+		bool longterm = builder->refs[reflist[i].index].longterm;
+>+
+>+		n += scnprintf(out_str + n, len - n, "%i%c%c|",
+>+			       frame_num, longterm ? 'l' : 's',
+>+			       ref_type_to_char (reflist[i].fields));
+>+	}
+>+
+>+	return out_str;
+>+}
+>+
+>+static void print_ref_list_p(const struct v4l2_h264_reflist_builder *builder,
+>+			     struct v4l2_h264_reference *reflist)
+>+{
+>+	char buf[1024];
+>+
+>+	pr_debug("ref_pic_list_p (cur_poc %u%c) %s\n",
+>+		 builder->cur_pic_order_count,
+>+		 ref_type_to_char(builder->cur_pic_fields),
+>+		 format_ref_list_p(builder, reflist, buf, sizeof(buf)));
+>+}
+>+
+>+static const char *format_ref_list_b(const struct v4l2_h264_reflist_builder *builder,
+>+				     struct v4l2_h264_reference *reflist,
+>+				     char *out_str, const int len)
+>+{
+>+	int n = 0, i;
+>+
+>+	n += snprintf(out_str + n, len - n, "|");
+>+
+>+	for (i = 0; i < builder->num_valid; i++) {
+>+		int frame_num = builder->refs[reflist[i].index].frame_num;
+>+		u32 poc = v4l2_h264_get_poc(builder, reflist + i);
+>+		bool longterm = builder->refs[reflist[i].index].longterm;
+>+
+>+		n += scnprintf(out_str + n, len - n, "%i%c%c|",
+>+			       longterm ? frame_num : poc,
+>+			       longterm ? 'l' : 's',
+>+			       ref_type_to_char(reflist[i].fields));
+>+	}
+>+
+>+	return out_str;
+>+}
+>+
+>+static void print_ref_list_b(const struct v4l2_h264_reflist_builder *builder,
+>+			     struct v4l2_h264_reference *reflist, u8 list_num)
+>+{
+>+	char buf[1024];
+>+
+>+	pr_debug("ref_pic_list_b%u (cur_poc %u%c) %s",
+>+		 list_num, builder->cur_pic_order_count,
+>+		 ref_type_to_char (builder->cur_pic_fields),
+>+		 format_ref_list_b(builder, reflist, buf, sizeof(buf)));
+>+}
+>+
+> /**
+>  * v4l2_h264_build_p_ref_list() - Build the P reference list
+>  *
+>@@ -261,6 +342,8 @@ v4l2_h264_build_p_ref_list(const struct v4l2_h264_reflist_builder *builder,
+> 	       sizeof(builder->unordered_reflist[0]) * builder->num_valid);
+> 	sort_r(reflist, builder->num_valid, sizeof(*reflist),
+> 	       v4l2_h264_p_ref_list_cmp, NULL, builder);
+>+
+>+	print_ref_list_p(builder, reflist);
+> }
+> EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
+>
+>@@ -296,6 +379,9 @@ v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
+> 	if (builder->num_valid > 1 &&
+> 	    !memcmp(b1_reflist, b0_reflist, builder->num_valid))
+> 		swap(b1_reflist[0], b1_reflist[1]);
+>+
+>+	print_ref_list_b(builder, b0_reflist, 0);
+>+	print_ref_list_b(builder, b1_reflist, 1);
+> }
+> EXPORT_SYMBOL_GPL(v4l2_h264_build_b_ref_lists);
+>
+>-- 
+>2.34.1
+>

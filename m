@@ -2,358 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC864EA69D
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 06:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E6B4EA6A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 06:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbiC2Edm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 00:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        id S232091AbiC2Efn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 00:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230357AbiC2Edk (ORCPT
+        with ESMTP id S231463AbiC2Efj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 00:33:40 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0535832044;
-        Mon, 28 Mar 2022 21:31:58 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id n63-20020a1c2742000000b0038d0c31db6eso711187wmn.1;
-        Mon, 28 Mar 2022 21:31:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=M6q0ziPfO+aI8ZFi1uzU1SciRFsF3Dbngun8DDFrbXw=;
-        b=hzpSSofFNoXc98hBPOpon5UCPE1T5YNufpGDTtxX9Atd4L8cDackUS+6WLQXPK8TNO
-         I27Fb8TU5EWDotTxIbtvQHz6Gx7PDzCkXyXlTxEhUCyjfggx1nP9xcjYodlb1qZnIXEX
-         3Pj7LYir4y2v/0ch6kTYKD/A53kijDbFtjyxsDveJBlmQTFf+QQOsCZE7b2GkKzo8E3U
-         uMHb7ucpS+0EWJN3d3M036J5VputrI2ECwGaXrCzjOV/IOEb8Pihn7hsK087e/JzlesE
-         bXXBMT1xYiQDm6xnrYGQwJvH+q9GamzVmkmPoYWU0iVnw+t7NOb5rA0VRmp7rWRxpLkE
-         9slQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=M6q0ziPfO+aI8ZFi1uzU1SciRFsF3Dbngun8DDFrbXw=;
-        b=2Tp+y5NUeRXDmYjsvBdYmeE4gwBkm4rmMtWoLYGWw/oAwCc8CpiSCN0UswpnB0Zwtz
-         C2KEjF6YDMFIU3c5YQB9U+SIoV+BZjd1xqdIZ7eWWoAvInmxRhUAzXEFcRIoaSNX1cZz
-         fZuSxePPJ3wLmtL+lcjbphcO48imrhUfxNDcZ3POksIR/4zJ5PS5FICrN948PEzI4FSQ
-         pmycBgxxiumiuNdULmB0ikJOoDivKNtQu0nEfcwU37b3TN2HBEReEke+Pnc2A84zIs22
-         bin9s/3Vo1wCa4nvC64q/jh/HeOD7uHNSmMOmR9k3KYPxU3yQ4vJcBvNZLiw1BVC6EwV
-         xMSg==
-X-Gm-Message-State: AOAM533NREb7c1l6Po2XvekNVeiaTEyDr2E5lDa8Mbd4clI5SN7cI5SG
-        /FMQX/FI6/qTqHlsXmR+Oi1jv+eBOYKmtxq6D8o=
-X-Google-Smtp-Source: ABdhPJyGCItzRoYc5wfGtuXFL3PNtrpS4XqPRp3sPlge5FqpimmYPbhCyx5vRKRLPraXCbVmjuxQHQLRavEPkSgDCXg=
-X-Received: by 2002:a05:600c:5029:b0:38c:9768:b4c with SMTP id
- n41-20020a05600c502900b0038c97680b4cmr3886589wmr.123.1648528316414; Mon, 28
- Mar 2022 21:31:56 -0700 (PDT)
+        Tue, 29 Mar 2022 00:35:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA08164F9;
+        Mon, 28 Mar 2022 21:33:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F70F613EF;
+        Tue, 29 Mar 2022 04:33:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7621C2BBE4;
+        Tue, 29 Mar 2022 04:33:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648528435;
+        bh=5dIB0sxX2lYZvf6q2/JasfE5c9SjoX2u6XVBPnKxdEE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tTUVZy56vvtMa/80ckzceNeLXsipjdpOiYLG5fITqgQ3K11etN6s4by/QIvF9syPp
+         FOW/sA3pq9+VoOfdXnlpx/+d5brcX4a4z4xmk0RQ4Sm2Hnon0ns61vCT/gD30jqZsE
+         KMpeM4EdAf/WMXC6oOI+r9Ij5P+hbKv+kKUCloyoYS4Embeb5qJCDzY06woXIuPZdD
+         DWSRmY6207Gpegb2jdRBex4HVqJcbgY4k4o30SHIi3849cJ2OvfVROguiO+owU3r5U
+         2BQwPcjnOk+ITrZ8ku/sp2rUH6s6+fSdaf3LgTgOQUX8pRGyVx93VwZQ6voKzatxrU
+         HoqRTrUXlMn+g==
+Date:   Mon, 28 Mar 2022 21:33:53 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Mingbao Sun <sunmingbao@tom.com>
+Cc:     Sagi Grimberg <sagi@grimberg.me>, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
+        libin.zhang@dell.com, ao.sun@dell.com
+Subject: Re: [PATCH v2 2/3] nvme-tcp: support specifying the
+ congestion-control
+Message-ID: <20220328213353.4aca75bd@kernel.org>
+In-Reply-To: <20220329104806.00000126@tom.com>
+References: <20220311103414.8255-1-sunmingbao@tom.com>
+        <20220311103414.8255-2-sunmingbao@tom.com>
+        <7121e4be-0e25-dd5f-9d29-0fb02cdbe8de@grimberg.me>
+        <20220325201123.00002f28@tom.com>
+        <b7b5106a-9c0d-db49-00ab-234756955de8@grimberg.me>
+        <20220329104806.00000126@tom.com>
 MIME-Version: 1.0
-References: <20220311164628.378849-1-gengcixi@gmail.com> <20220311164628.378849-4-gengcixi@gmail.com>
- <CADBw62pAitwJK6cf_zMo-N=-NGf3Y5S9SPBRcLpbz5yzNefQOQ@mail.gmail.com>
-In-Reply-To: <CADBw62pAitwJK6cf_zMo-N=-NGf3Y5S9SPBRcLpbz5yzNefQOQ@mail.gmail.com>
-From:   Cixi Geng <gengcixi@gmail.com>
-Date:   Tue, 29 Mar 2022 12:31:20 +0800
-Message-ID: <CAF12kFs-=s5Rj42gSfVHYRQ30m2m_gdmAjBmB0cdb7VMS5evjw@mail.gmail.com>
-Subject: Re: [PATCH V2 3/7] iio: adc: sc27xx: structure adjuststment and optimization
-To:     Baolin Wang <baolin.wang7@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>, lgirdwood@gmail.com,
-        Mark Brown <broonie@kernel.org>,
-        =?UTF-8?B?5pyx546J5piOIChZdW1pbmcgWmh1LzExNDU3KQ==?= 
-        <yuming.zhu1@unisoc.com>, linux-iio@vger.kernel.org,
-        Devicetree List <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Baolin Wang <baolin.wang7@gmail.com> =E4=BA=8E2022=E5=B9=B43=E6=9C=8823=E6=
-=97=A5=E5=91=A8=E4=B8=89 21:55=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Sat, Mar 12, 2022 at 12:47 AM Cixi Geng <gengcixi@gmail.com> wrote:
-> >
-> > From: Cixi Geng <cixi.geng1@unisoc.com>
-> >
-> > Introduce one variant device data structure to be compatible
-> > with SC2731 PMIC since it has different scale and ratio calculation
-> > and so on.
-> >
-> > Signed-off-by: Yuming Zhu <yuming.zhu1@unisoc.com>
-> > Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
-> > ---
-> >  drivers/iio/adc/sc27xx_adc.c | 95 ++++++++++++++++++++++++++++++------
-> >  1 file changed, 80 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.=
-c
-> > index aee076c8e2b1..68629fbcfec5 100644
-> > --- a/drivers/iio/adc/sc27xx_adc.c
-> > +++ b/drivers/iio/adc/sc27xx_adc.c
-> > @@ -12,9 +12,9 @@
-> >  #include <linux/slab.h>
-> >
-> >  /* PMIC global registers definition */
-> > -#define SC27XX_MODULE_EN               0xc08
-> > +#define SC2731_MODULE_EN               0xc08
-> >  #define SC27XX_MODULE_ADC_EN           BIT(5)
-> > -#define SC27XX_ARM_CLK_EN              0xc10
-> > +#define SC2731_ARM_CLK_EN              0xc10
-> >  #define SC27XX_CLK_ADC_EN              BIT(5)
-> >  #define SC27XX_CLK_ADC_CLK_EN          BIT(6)
-> >
-> > @@ -78,6 +78,23 @@ struct sc27xx_adc_data {
-> >         int channel_scale[SC27XX_ADC_CHANNEL_MAX];
-> >         u32 base;
-> >         int irq;
-> > +       const struct sc27xx_adc_variant_data *var_data;
-> > +};
-> > +
-> > +/*
-> > + * Since different PMICs of SC27xx series can have different
-> > + * address and ratio, we should save ratio config and base
-> > + * in the device data structure.
-> > + */
-> > +struct sc27xx_adc_variant_data {
-> > +       u32 module_en;
-> > +       u32 clk_en;
-> > +       u32 scale_shift;
-> > +       u32 scale_mask;
-> > +       const struct sc27xx_adc_linear_graph *bscale_cal;
-> > +       const struct sc27xx_adc_linear_graph *sscale_cal;
-> > +       void (*init_scale)(struct sc27xx_adc_data *data);
-> > +       int (*get_ratio)(int channel, int scale);
-> >  };
-> >
-> >  struct sc27xx_adc_linear_graph {
-> > @@ -103,6 +120,17 @@ static struct sc27xx_adc_linear_graph small_scale_=
-graph =3D {
-> >         100, 341,
-> >  };
-> >
-> > +/* Add these for sc2731 pmic, and the [big|small]_scale_graph_calib fo=
-r common's */
-> > +static const struct sc27xx_adc_linear_graph sc2731_big_scale_graph_cal=
-ib =3D {
-> > +       4200, 850,
-> > +       3600, 728,
-> > +};
-> > +
-> > +static const struct sc27xx_adc_linear_graph sc2731_small_scale_graph_c=
-alib =3D {
-> > +       1000, 838,
-> > +       100, 84,
-> > +};
-> > +
-> >  static const struct sc27xx_adc_linear_graph big_scale_graph_calib =3D =
-{
-> >         4200, 856,
-> >         3600, 733,
-> > @@ -130,11 +158,11 @@ static int sc27xx_adc_scale_calibration(struct sc=
-27xx_adc_data *data,
-> >         size_t len;
-> >
-> >         if (big_scale) {
-> > -               calib_graph =3D &big_scale_graph_calib;
-> > +               calib_graph =3D data->var_data->bscale_cal;
-> >                 graph =3D &big_scale_graph;
-> >                 cell_name =3D "big_scale_calib";
-> >         } else {
-> > -               calib_graph =3D &small_scale_graph_calib;
-> > +               calib_graph =3D data->var_data->sscale_cal;
->
-> Now which function will use big_scale_graph_calib and
-> small_scale_graph_calib?  Seems you add an unused warning?
-yes, it is a unused, since these calibs used for sc2730 and sc2720
-I will remove in this patch and add in patch4/7.
->
-> >                 graph =3D &small_scale_graph;
-> >                 cell_name =3D "small_scale_calib";
-> >         }
-> > @@ -160,7 +188,7 @@ static int sc27xx_adc_scale_calibration(struct sc27=
-xx_adc_data *data,
-> >         return 0;
-> >  }
-> >
-> > -static int sc27xx_adc_get_ratio(int channel, int scale)
-> > +static int sc2731_adc_get_ratio(int channel, int scale)
-> >  {
-> >         switch (channel) {
-> >         case 1:
-> > @@ -185,6 +213,21 @@ static int sc27xx_adc_get_ratio(int channel, int s=
-cale)
-> >         return SC27XX_VOLT_RATIO(1, 1);
-> >  }
-> >
-> > +/*
-> > + * According to the datasheet set specific value on some channel.
-> > + */
-> > +static void sc2731_adc_scale_init(struct sc27xx_adc_data *data)
-> > +{
-> > +       int i;
-> > +
-> > +       for (i =3D 0; i < SC27XX_ADC_CHANNEL_MAX; i++) {
-> > +               if (i =3D=3D 5)
-> > +                       data->channel_scale[i] =3D 1;
->
-> Can you add some comments to explain why channel 5 needs to set scale to =
-1?
-In the current software design, SC2731 supports 2 scales, channel 5
-uses big scale, others use smale
-I will add the comment in next version.
->
-> > +               else
-> > +                       data->channel_scale[i] =3D 0;
-> > +       }
-> > +}
-> > +
-> >  static int sc27xx_adc_read(struct sc27xx_adc_data *data, int channel,
-> >                            int scale, int *val)
-> >  {
-> > @@ -208,10 +251,11 @@ static int sc27xx_adc_read(struct sc27xx_adc_data=
- *data, int channel,
-> >                 goto disable_adc;
-> >
-> >         /* Configure the channel id and scale */
-> > -       tmp =3D (scale << SC27XX_ADC_SCALE_SHIFT) & SC27XX_ADC_SCALE_MA=
-SK;
-> > +       tmp =3D (scale << data->var_data->scale_shift) & data->var_data=
-->scale_mask;
-> >         tmp |=3D channel & SC27XX_ADC_CHN_ID_MASK;
-> >         ret =3D regmap_update_bits(data->regmap, data->base + SC27XX_AD=
-C_CH_CFG,
-> > -                                SC27XX_ADC_CHN_ID_MASK | SC27XX_ADC_SC=
-ALE_MASK,
-> > +                                SC27XX_ADC_CHN_ID_MASK |
-> > +                                data->var_data->scale_mask,
-> >                                  tmp);
-> >         if (ret)
-> >                 goto disable_adc;
-> > @@ -262,8 +306,9 @@ static void sc27xx_adc_volt_ratio(struct sc27xx_adc=
-_data *data,
-> >                                   int channel, int scale,
-> >                                   u32 *div_numerator, u32 *div_denomina=
-tor)
-> >  {
-> > -       u32 ratio =3D sc27xx_adc_get_ratio(channel, scale);
-> > +       u32 ratio;
-> >
-> > +       ratio =3D data->var_data->get_ratio(channel, scale);
-> >         *div_numerator =3D ratio >> SC27XX_RATIO_NUMERATOR_OFFSET;
-> >         *div_denominator =3D ratio & SC27XX_RATIO_DENOMINATOR_MASK;
-> >  }
-> > @@ -432,13 +477,13 @@ static int sc27xx_adc_enable(struct sc27xx_adc_da=
-ta *data)
-> >  {
-> >         int ret;
-> >
-> > -       ret =3D regmap_update_bits(data->regmap, SC27XX_MODULE_EN,
-> > +       ret =3D regmap_update_bits(data->regmap, data->var_data->module=
-_en,
-> >                                  SC27XX_MODULE_ADC_EN, SC27XX_MODULE_AD=
-C_EN);
-> >         if (ret)
-> >                 return ret;
-> >
-> >         /* Enable ADC work clock and controller clock */
-> > -       ret =3D regmap_update_bits(data->regmap, SC27XX_ARM_CLK_EN,
-> > +       ret =3D regmap_update_bits(data->regmap, data->var_data->clk_en=
-,
-> >                                  SC27XX_CLK_ADC_EN | SC27XX_CLK_ADC_CLK=
-_EN,
-> >                                  SC27XX_CLK_ADC_EN | SC27XX_CLK_ADC_CLK=
-_EN);
-> >         if (ret)
-> > @@ -456,10 +501,10 @@ static int sc27xx_adc_enable(struct sc27xx_adc_da=
-ta *data)
-> >         return 0;
-> >
-> >  disable_clk:
-> > -       regmap_update_bits(data->regmap, SC27XX_ARM_CLK_EN,
-> > +       regmap_update_bits(data->regmap, data->var_data->clk_en,
-> >                            SC27XX_CLK_ADC_EN | SC27XX_CLK_ADC_CLK_EN, 0=
-);
-> >  disable_adc:
-> > -       regmap_update_bits(data->regmap, SC27XX_MODULE_EN,
-> > +       regmap_update_bits(data->regmap, data->var_data->module_en,
-> >                            SC27XX_MODULE_ADC_EN, 0);
-> >
-> >         return ret;
-> > @@ -470,21 +515,39 @@ static void sc27xx_adc_disable(void *_data)
-> >         struct sc27xx_adc_data *data =3D _data;
-> >
-> >         /* Disable ADC work clock and controller clock */
-> > -       regmap_update_bits(data->regmap, SC27XX_ARM_CLK_EN,
-> > +       regmap_update_bits(data->regmap, data->var_data->clk_en,
-> >                            SC27XX_CLK_ADC_EN | SC27XX_CLK_ADC_CLK_EN, 0=
-);
-> >
-> > -       regmap_update_bits(data->regmap, SC27XX_MODULE_EN,
-> > +       regmap_update_bits(data->regmap, data->var_data->module_en,
-> >                            SC27XX_MODULE_ADC_EN, 0);
-> >  }
-> >
-> > +static const struct sc27xx_adc_variant_data sc2731_data =3D {
-> > +       .module_en =3D SC2731_MODULE_EN,
-> > +       .clk_en =3D SC2731_ARM_CLK_EN,
-> > +       .scale_shift =3D SC27XX_ADC_SCALE_SHIFT,
-> > +       .scale_mask =3D SC27XX_ADC_SCALE_MASK,
-> > +       .bscale_cal =3D &sc2731_big_scale_graph_calib,
-> > +       .sscale_cal =3D &sc2731_small_scale_graph_calib,
-> > +       .init_scale =3D sc2731_adc_scale_init,
-> > +       .get_ratio =3D sc2731_adc_get_ratio,
-> > +};
-> > +
-> >  static int sc27xx_adc_probe(struct platform_device *pdev)
-> >  {
-> >         struct device *dev =3D &pdev->dev;
-> >         struct device_node *np =3D dev->of_node;
-> >         struct sc27xx_adc_data *sc27xx_data;
-> > +       const struct sc27xx_adc_variant_data *pdata;
-> >         struct iio_dev *indio_dev;
-> >         int ret;
-> >
-> > +       pdata =3D of_device_get_match_data(dev);
-> > +       if (!pdata) {
-> > +               dev_err(dev, "No matching driver data found\n");
-> > +               return -EINVAL;
-> > +       }
-> > +
-> >         indio_dev =3D devm_iio_device_alloc(dev, sizeof(*sc27xx_data));
-> >         if (!indio_dev)
-> >                 return -ENOMEM;
-> > @@ -520,6 +583,8 @@ static int sc27xx_adc_probe(struct platform_device =
-*pdev)
-> >         }
-> >
-> >         sc27xx_data->dev =3D dev;
-> > +       sc27xx_data->var_data =3D pdata;
-> > +       sc27xx_data->var_data->init_scale(sc27xx_data);
-> >
-> >         ret =3D sc27xx_adc_enable(sc27xx_data);
-> >         if (ret) {
-> > @@ -546,7 +611,7 @@ static int sc27xx_adc_probe(struct platform_device =
-*pdev)
-> >  }
-> >
-> >  static const struct of_device_id sc27xx_adc_of_match[] =3D {
-> > -       { .compatible =3D "sprd,sc2731-adc", },
-> > +       { .compatible =3D "sprd,sc2731-adc", .data =3D &sc2731_data},
-> >         { }
-> >  };
-> >  MODULE_DEVICE_TABLE(of, sc27xx_adc_of_match);
-> > --
-> > 2.25.1
-> >
->
->
-> --
-> Baolin Wang
+On Tue, 29 Mar 2022 10:48:06 +0800 Mingbao Sun wrote:
+> A server in a data-center with the following 2 NICs:
+>=20
+>     - NIC_fron-end, for interacting with clients through WAN
+>       (high latency, ms-level)
+>=20
+>     - NIC_back-end, for interacting with NVMe/TCP target through LAN
+>       (low latency, ECN-enabled, ideal for dctcp)
+>=20
+> This server interacts with clients (handling requests) via the fron-end
+> network and accesses the NVMe/TCP storage via the back-end network.
+> This is a normal use case, right?
+
+Well, if you have clearly separated networks you can set the congestion
+control algorithm per route, right? man ip-route, search congctl.
+
+> For the client devices, we can=E2=80=99t determine their congestion-contr=
+ol.
+> But normally it=E2=80=99s cubic by default (per the CONFIG_DEFAULT_TCP_CO=
+NG).
+> So if we change the default congestion control on the server to dctcp
+> on behalf of the NVMe/TCP traffic of the LAN side, it could at the
+> same time change the congestion-control of the front-end sockets
+> to dctcp while the congestion-control of the client-side is cubic.
+> So this is an unexpected scenario.
+>=20
+> In addition, distributed storage products like the following also have
+> the above problem:
+>=20
+>     - The product consists of a cluster of servers.
+>=20
+>     - Each server serves clients via its front-end NIC
+>      (WAN, high latency).
+>=20
+>     - All servers interact with each other via NVMe/TCP via back-end NIC
+>      (LAN, low latency, ECN-enabled, ideal for dctcp).
+

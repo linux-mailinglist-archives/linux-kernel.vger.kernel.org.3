@@ -2,254 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10BA4EB615
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9574EB61A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 00:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237738AbiC2Whk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 18:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38188 "EHLO
+        id S237844AbiC2Wig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 18:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237724AbiC2Whg (ORCPT
+        with ESMTP id S237800AbiC2Wie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 18:37:36 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819201FF231
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:35:52 -0700 (PDT)
-Received: from fsav112.sakura.ne.jp (fsav112.sakura.ne.jp [27.133.134.239])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 22TMZomb051290;
-        Wed, 30 Mar 2022 07:35:50 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav112.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav112.sakura.ne.jp);
- Wed, 30 Mar 2022 07:35:50 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav112.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 22TMZo60051287
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 30 Mar 2022 07:35:50 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <385ce718-f965-4005-56b6-34922c4533b8@I-love.SAKURA.ne.jp>
-Date:   Wed, 30 Mar 2022 07:35:47 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [syzbot] possible deadlock in p9_write_work
+        Tue, 29 Mar 2022 18:38:34 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2047.outbound.protection.outlook.com [40.107.243.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DF9210294;
+        Tue, 29 Mar 2022 15:36:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PUZ9ZwtEEXn8mlumrm00/9c9nxgFxcC29mRtSbIUmzWHz9yKwIU+aYDsZoXv4yxw92yc3A5EX06hLJQCs1LC+IQVaoudgnE+xzvl1ZGSv16CacHuQZEleqo7irDDG9tgqUpztMi1+wPYduZ31Chq5r1FppNo0IoQCNcLPhSPVNryFpbo0M+jNIteEmIxNS7aN1Fr4b3nX90muZdzTTJNW4Ub3SmU6krjXYky6qF16FRvHyvmbgtMW1U2j0e6dkk9IU1z2aYVg3BhUJJoar+6Q5AT1svyjmJvnsyg5dssRnlBrrpECMrKZgky6XpZzgnWV8upvW0/fRWjSyvIppO18Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HtyWAEc192MBCLlFzioeIbJ5IvAG6ickW1xETbMtB4k=;
+ b=iQdnY0w2wgpcMGeRYUcs7I25xWcEA1mKMCSk9/TvNB3TGyjAvwSH4p11ELc9AmBL5hV+OGlP295XQtwW1GpOXL8H+Wgx0iSwj6YIfRibeojoVTlftK+NYwbaKZTIc8Utf7SzV+EiwqA2oopt0+EoLyjB7Luit1HNIOa1Q8jmJ7w3+FDhRVEMIJOczWT+VJZhx3zfwP+cx9E9RiA1B3wKQBqkQkZ/A8+hrNzKeEQQhK5st0CcfazunG4MAw5QAPayoqlexXTSaB4bqMHnGa8H+8xaz+y5uO0zGa+wFd2yFTYm1M0kYCIEX7gu7xdC3BqtDLWG9y5sGFT1/VCVBpRt3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HtyWAEc192MBCLlFzioeIbJ5IvAG6ickW1xETbMtB4k=;
+ b=hC6mIM7S7NMZLQ8bVOyHn1KNcrBTwlF4IjFAx6H6itCeuJ7cNRLYygc0TzIbC+ytsURNuNM8Mp66bu3EOLu08FCSO/aEagj9uCdIxn92pbs/RTZyzfjOEBM1tOIgroQM9WjnJL55J4mRVfXezLT+Eu2F7RE8gVYYikOmiaoLXlk9oiDNj29eyF6i5IwMij3HG08Di/c6QZOBTw6ojJJpjP4h5ckqbdtgUYL7qnx+pqOdrQACDKQHWi/NqYr9NOJSRUQ4qjfwBjCRViOBM8fZ+YnTlTFaHmwvIDTPalFyAiFYYRTDvvnq/jf/ThGXtUsfmjafGR7hh5n9Lbf4qpIBIA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4116.namprd12.prod.outlook.com (2603:10b6:a03:210::13)
+ by MWHPR12MB1517.namprd12.prod.outlook.com (2603:10b6:301:10::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.17; Tue, 29 Mar
+ 2022 22:36:45 +0000
+Received: from BY5PR12MB4116.namprd12.prod.outlook.com
+ ([fe80::8940:4e31:b98a:c02b]) by BY5PR12MB4116.namprd12.prod.outlook.com
+ ([fe80::8940:4e31:b98a:c02b%6]) with mapi id 15.20.5123.019; Tue, 29 Mar 2022
+ 22:36:45 +0000
+Message-ID: <afb7c9b5-eb4d-8647-357d-870878ee141d@nvidia.com>
+Date:   Tue, 29 Mar 2022 15:36:46 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 01/11] Documentation: Add HTE subsystem guide
 Content-Language: en-US
-To:     Andrew Perepechko <andrew.perepechko@hpe.com>,
-        Andreas Dilger <adilger@dilger.ca>,
-        "Theodore Ts'o" <tytso@mit.edu>
-References: <0000000000009523b605db620972@google.com>
-Cc:     syzbot <syzbot+bde0f89deacca7c765b8@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net,
-        "open list:EXT4 FILE SYSTEM" <linux-ext4@vger.kernel.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <0000000000009523b605db620972@google.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, smangipudi@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, warthog618@gmail.com,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        robh+dt@kernel.org
+References: <20220329054521.14420-1-dipenp@nvidia.com>
+ <20220329054521.14420-2-dipenp@nvidia.com>
+ <db81d120-039d-f49f-9a48-c91e96777a61@gmail.com>
+X-Nvconfidentiality: public
+From:   Dipen Patel <dipenp@nvidia.com>
+In-Reply-To: <db81d120-039d-f49f-9a48-c91e96777a61@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SJ0PR03CA0073.namprd03.prod.outlook.com
+ (2603:10b6:a03:331::18) To BY5PR12MB4116.namprd12.prod.outlook.com
+ (2603:10b6:a03:210::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 976fbb04-e114-4990-f30b-08da11d49a3e
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1517:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB15179365AD83E7E15FCBD97BAE1E9@MWHPR12MB1517.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vx+XU3ThHMJdRFGCjg1S/NrsDPGbsYE4kyxe+mBYH0FSUiTfLmHJRRl35szqmlLkd1agLrPQ4qJp8jEgvDxQrNj/V/RPaw61BQWhgO6cX277UZvQ77GIt+qEtGzBBko7afPBi+yPf+PBvrEVadCciQuMuSWv6RxXRf86o3Oxkb1BOnv4+lzQIh8Ut2fdprNzZLfquVHRh9DIcUkHKu25+pA2Q2Vz+mroFlrw6hhMmRz3SdZm+SW3Afs1BuZgUt7WW78xkSzLrjShtQc91B5Bvgl0YD1/leXX1QC9HyLkIc/2OejPINlqK1jM/cy1/a6YsT140OC6tFLbLV4mQITsGhD7Pp+1yW45pIY6bxItt3afySQl2/orL9HrH74KMvUsxLnWuLNoyV9iDbt0UnZ2FqYbVBJoLFFvmTZ5r1vDL7f+g87If/8tASqRw/WLYovEd54kYdpC/f+wXdZ2xh11JdwJLbkdX+Seh4PL16pt9+eHp1EsJRWVLvnN5qLaGPgkI9uPM2IlYb1/xiARKqIzYom7ysM89pQvJUwlmJY3FKkzbYdwBvPlGuT8q/mYHmJOnbSfG15JgIxukqrrZOq2aCS9UuunajG3myEfFqhvAZhds1XkLPqW47mGLJJDrJfgYWedkau97zy0ap+hLOjlNgz+OHix78GepYwiW8J+RQ7bN653xlT9JcTjwfo0Y8WYi9ytwem3zO71TP3+x2ttFMO9O2zfRCNII6+f18utxfvnscccrq7vCyp9fbJOLCiZ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4116.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(8936002)(6486002)(7416002)(53546011)(6506007)(2906002)(5660300002)(6512007)(921005)(316002)(8676002)(36756003)(186003)(2616005)(66556008)(31696002)(86362001)(66476007)(66946007)(38100700002)(26005)(83380400001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RHQyMlFqTEVmZ0VKZnVRakpwOXlHMDBkQnZDR2UwVnlnN3JuSkMwTG03TTJM?=
+ =?utf-8?B?SFRmaWQ3OTFrUXZYVDF5NEJSeXNjSmx5bzJQbDVLSE84S3ZZWjBCanZuZDFJ?=
+ =?utf-8?B?bnZrdENFaVBybnozV05qOFNWV2NvSlBSdWw2NWQ4OUpGeEdzRGwyZXhPeUxT?=
+ =?utf-8?B?NUllOGdUaWNaWEdEM1lkU1RBOGdtOHFOdk5KYkE2YXR3K01aQUdYT0tqbms0?=
+ =?utf-8?B?T2JYN2VSL1d0bGNuK3Y5SlZ3S2xycDJMNGJ3TFM1OVRwOTBoWFlXeENFd1kw?=
+ =?utf-8?B?V1dQQXJ5M2c2Wk80Sm9oS1piUUNOR3RvOGp2elFOSnRiQlpGenQxQldBZ2pi?=
+ =?utf-8?B?VlZQV0p0dkcwWml1cE5KTkQyL3E4K2RyQXUxczFYRGdvZk9WK3dGbFZMeG9w?=
+ =?utf-8?B?cXJhMTlEbXdPK3dNdmZpekp2bXovckFaemFHaVhnaWdwNU01eWVkT2dUbTVQ?=
+ =?utf-8?B?Ni96cnY4V0k4S1lwOHR3WFZQS0dlbHRzODdWV1FmakFxTysvVnVzYlNBM0Z5?=
+ =?utf-8?B?Uk1wdlNnTnhpOGw4UUhjK3hoazVseDNWeDAyNU5sQ0pHNVU3N2I3ZXJHaDhX?=
+ =?utf-8?B?ZjQwQjlNditNYTVSYnFWT1o4S1gyZXlvK0lXTDVtVEI2UWcyNFJUVjk0ZGFQ?=
+ =?utf-8?B?VXJmUUNJdU9KZFBwYldQYUYxZ3VWUktDWGIxaFgxYk9ubHFhWnpsZmFoMjNu?=
+ =?utf-8?B?MGU0Y0RtZzB1RlM3MTZnampOZ1ZKdVNHay80eVVqM0RKdUUzTWhiaDZnMlpj?=
+ =?utf-8?B?N3gxa3FsRjdoVTFYMDdjTFgwY245THozdlByYS92b25aRm9CVjdqSDEzSzA3?=
+ =?utf-8?B?QktEM1lYNXNNRHhBL0k2OERWUVh5T0k3ZU9mb2k0QzA2UG5OZFYwc1p5SSt6?=
+ =?utf-8?B?dUZjWmdSU0JJalR2SmUzTjdFcDdyaWFZeDJMVDh6VURzM1ZIVm1ua3N3U2Zj?=
+ =?utf-8?B?VmRGNm4xMGVYWEZ6ZXhSSnIxVVFHa1RRUUVlWW9mZ3ljcXlhZzJjdjdydGYx?=
+ =?utf-8?B?eVNHUDRQalpmZlJkZXl3NDVwUVd5M3ZBdGdBbkU0aXk4UzN2by9CWUR1Sy9q?=
+ =?utf-8?B?Q3lyaStoblVRV1Z6RldlWlVSeDhRbXhaSTdpRnRLeVNnZzBMNHBnSnZvem9H?=
+ =?utf-8?B?d0lDTzlHVVoybjE5bVZwRnArQUhBN1BpdmFsbDQzd0VJeHZjZVZ3NXdlMS9u?=
+ =?utf-8?B?K0FjQmd0ZENFMWFjaCs1Z3JUR3VqVTRkZjBSTWxnQ2o4M0FjNlVxY3IyVHBq?=
+ =?utf-8?B?cFJIVk03b1dBZTdwc1krSmM5ZVBKUDRneGFjNTZicTVNWS9LMmNGNDNPQXU2?=
+ =?utf-8?B?bVBjeCs3NlN3SmpqM1Jna0QwVUgxM25BaDhkYW1KU2xsK2d0dWJVaHlaUTJF?=
+ =?utf-8?B?a3ZCY25BZWtjYjV0VDVvc1hubzQxWmpRbjgrL283VTQ1NWhMTUdUalhrM2U2?=
+ =?utf-8?B?V0VmZ2Y2c256WkNNU1VGTXpzak0vREloNUtHbDNEcWtNSE1paS9yRzhmMDl5?=
+ =?utf-8?B?SzhKaHJYd2R3V3k0QnF2K1lCeXovWWZvRDY4dlM0Kzl5d1BpMVpGWjUyalBG?=
+ =?utf-8?B?TnhabG1jRldLZlZwOUU4aVJEZzNZaEVrOVhQRlZLam54Mis0ZTc0UC9VcTJa?=
+ =?utf-8?B?OUJGOVBiaWM5NDV0ZWRoK2hQU3dreE5TcDRJUmFNd25XSTh6NW9JVU5HVmhk?=
+ =?utf-8?B?MmM0WE95L08xdWJYaWJ6MS9hbDhUSTJWVHNpelVadTNGaU9zKy90TzEreDVs?=
+ =?utf-8?B?RTZKdUdkWlIxZzF5R2lhQktMZEFIQ0tMMlkwK1NVYkdkRUFERTgraUJEcWRs?=
+ =?utf-8?B?eE9Ka1phOGFObVdhMWhFVjJiTFJlcW1ieVg2R3RNbExLV3BiU25GMU4xUWpR?=
+ =?utf-8?B?cCtUWDZFUjFIc3RCWm9zckQ2dGgvdCticXk4dEt2Q1BRckdNRnREbDF3ZHd5?=
+ =?utf-8?B?ejA1dmlPMUlWb0c2eWVlVUM5cjNCU3Q2emdkVEdERlc3MDU2MmNobVhKV0xD?=
+ =?utf-8?B?dUYra2hKbmt4VTVZaXgwTXRjZXgvWUk2MnAwTjFOdmtHL2wxMjRhM0hVejUv?=
+ =?utf-8?B?bFk2UkE1bEtibG9vVCtzR2xaK3NsOTJCdVRSWUwxSlAydm9OUG9BczYvRVlU?=
+ =?utf-8?B?YW51NnlPZDdPYWxqaGxRNVUzRGQ4bCs0eWtrVmxzUVVtUm42Ymdjdk1ZLzdK?=
+ =?utf-8?B?allEZmQyK3lhVWQ2SjJQaytBb2g1em8zZ2dKSmNqM29UUFBKb3o1eVpEWmhs?=
+ =?utf-8?B?Rk43TGVxSytDeTFyYzlTNnNiSHVjVDZrV3oxbnhYNEQwYlNOckJMMS9hUEFn?=
+ =?utf-8?B?dlpJTWV2RmsrK2UyRHUweXFsdUR4dnRucGdFVE1LazlPZ2N3bFdvdz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 976fbb04-e114-4990-f30b-08da11d49a3e
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4116.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2022 22:36:45.2557
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hheumR+KWULKHLJjT2JbROquiA+xIcedRVvka6k9E2tHmNKZHeS9Ijg8w6mblxAd+8YuwJL8vH5jephb7eTAAg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1517
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+Hi Sanjaya,
 
-This seems to be an example of https://lkml.kernel.org/r/49925af7-78a8-a3dd-bce6-cfc02e1a9236@I-love.SAKURA.ne.jp
-introduced by "ext4: truncate during setxattr leads to kernel panic".
+I will address your comments in next patch version.  Thanks for the comment.
 
-Please don't use schedule_work() if you need to use flush_scheduled_work().
+Best,
 
-On 2022/03/30 6:23, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    8515d05bf6bc Add linux-next specific files for 20220328
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=155abcc3700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=530c68bef4e2b8a8
-> dashboard link: https://syzkaller.appspot.com/bug?extid=bde0f89deacca7c765b8
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+bde0f89deacca7c765b8@syzkaller.appspotmail.com
-> 
-> ======================================================
-> WARNING: possible circular locking dependency detected
-> 5.17.0-next-20220328-syzkaller #0 Not tainted
-> ------------------------------------------------------
-> kworker/1:1/26 is trying to acquire lock:
-> ffff88807eece460 (sb_writers#3){.+.+}-{0:0}, at: p9_fd_write net/9p/trans_fd.c:428 [inline]
-> ffff88807eece460 (sb_writers#3){.+.+}-{0:0}, at: p9_write_work+0x25e/0xca0 net/9p/trans_fd.c:479
-> 
-> but task is already holding lock:
-> ffffc90000a1fda8 ((work_completion)(&m->wq)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
-> 
-> which lock already depends on the new lock.
-> 
-> 
-> the existing dependency chain (in reverse order) is:
-> 
-> -> #3 ((work_completion)(&m->wq)){+.+.}-{0:0}:
->        process_one_work+0x905/0x1610 kernel/workqueue.c:2265
->        worker_thread+0x665/0x1080 kernel/workqueue.c:2436
->        kthread+0x2e9/0x3a0 kernel/kthread.c:376
->        ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-> 
-> -> #2 ((wq_completion)events){+.+.}-{0:0}:
->        flush_workqueue+0x164/0x1440 kernel/workqueue.c:2831
->        flush_scheduled_work include/linux/workqueue.h:583 [inline]
->        ext4_put_super+0x99/0x1150 fs/ext4/super.c:1202
->        generic_shutdown_super+0x14c/0x400 fs/super.c:462
->        kill_block_super+0x97/0xf0 fs/super.c:1394
->        deactivate_locked_super+0x94/0x160 fs/super.c:332
->        deactivate_super+0xad/0xd0 fs/super.c:363
->        cleanup_mnt+0x3a2/0x540 fs/namespace.c:1186
->        task_work_run+0xdd/0x1a0 kernel/task_work.c:164
->        resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
->        exit_to_user_mode_loop kernel/entry/common.c:183 [inline]
->        exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:215
->        __syscall_exit_to_user_mode_work kernel/entry/common.c:297 [inline]
->        syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:308
->        do_syscall_64+0x42/0x80 arch/x86/entry/common.c:86
->        entry_SYSCALL_64_after_hwframe+0x44/0xae
-> 
-> -> #1 (&type->s_umount_key#32){++++}-{3:3}:
->        down_read+0x98/0x440 kernel/locking/rwsem.c:1461
->        iterate_supers+0xdb/0x290 fs/super.c:692
->        drop_caches_sysctl_handler+0xdb/0x110 fs/drop_caches.c:62
->        proc_sys_call_handler+0x4a1/0x6e0 fs/proc/proc_sysctl.c:604
->        call_write_iter include/linux/fs.h:2080 [inline]
->        do_iter_readv_writev+0x3d1/0x640 fs/read_write.c:726
->        do_iter_write+0x182/0x700 fs/read_write.c:852
->        vfs_iter_write+0x70/0xa0 fs/read_write.c:893
->        iter_file_splice_write+0x723/0xc70 fs/splice.c:689
->        do_splice_from fs/splice.c:767 [inline]
->        direct_splice_actor+0x110/0x180 fs/splice.c:936
->        splice_direct_to_actor+0x34b/0x8c0 fs/splice.c:891
->        do_splice_direct+0x1a7/0x270 fs/splice.c:979
->        do_sendfile+0xae0/0x1240 fs/read_write.c:1246
->        __do_sys_sendfile64 fs/read_write.c:1305 [inline]
->        __se_sys_sendfile64 fs/read_write.c:1297 [inline]
->        __x64_sys_sendfile64+0x149/0x210 fs/read_write.c:1297
->        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->        do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
->        entry_SYSCALL_64_after_hwframe+0x44/0xae
-> 
-> -> #0 (sb_writers#3){.+.+}-{0:0}:
->        check_prev_add kernel/locking/lockdep.c:3096 [inline]
->        check_prevs_add kernel/locking/lockdep.c:3219 [inline]
->        validate_chain kernel/locking/lockdep.c:3834 [inline]
->        __lock_acquire+0x2ac6/0x56c0 kernel/locking/lockdep.c:5060
->        lock_acquire kernel/locking/lockdep.c:5672 [inline]
->        lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5637
->        percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
->        __sb_start_write include/linux/fs.h:1728 [inline]
->        sb_start_write include/linux/fs.h:1798 [inline]
->        file_start_write include/linux/fs.h:2815 [inline]
->        kernel_write fs/read_write.c:564 [inline]
->        kernel_write+0x2ac/0x540 fs/read_write.c:555
->        p9_fd_write net/9p/trans_fd.c:428 [inline]
->        p9_write_work+0x25e/0xca0 net/9p/trans_fd.c:479
->        process_one_work+0x996/0x1610 kernel/workqueue.c:2289
->        worker_thread+0x665/0x1080 kernel/workqueue.c:2436
->        kthread+0x2e9/0x3a0 kernel/kthread.c:376
->        ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-> 
-> other info that might help us debug this:
-> 
-> Chain exists of:
->   sb_writers#3 --> (wq_completion)events --> (work_completion)(&m->wq)
-> 
->  Possible unsafe locking scenario:
-> 
->        CPU0                    CPU1
->        ----                    ----
->   lock((work_completion)(&m->wq));
->                                lock((wq_completion)events);
->                                lock((work_completion)(&m->wq));
->   lock(sb_writers#3);
-> 
->  *** DEADLOCK ***
-> 
-> 2 locks held by kworker/1:1/26:
->  #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
->  #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
->  #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
->  #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
->  #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
->  #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
->  #1: ffffc90000a1fda8 ((work_completion)(&m->wq)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
-> 
-> stack backtrace:
-> CPU: 1 PID: 26 Comm: kworker/1:1 Not tainted 5.17.0-next-20220328-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Workqueue: events p9_write_work
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2176
->  check_prev_add kernel/locking/lockdep.c:3096 [inline]
->  check_prevs_add kernel/locking/lockdep.c:3219 [inline]
->  validate_chain kernel/locking/lockdep.c:3834 [inline]
->  __lock_acquire+0x2ac6/0x56c0 kernel/locking/lockdep.c:5060
->  lock_acquire kernel/locking/lockdep.c:5672 [inline]
->  lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5637
->  percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
->  __sb_start_write include/linux/fs.h:1728 [inline]
->  sb_start_write include/linux/fs.h:1798 [inline]
->  file_start_write include/linux/fs.h:2815 [inline]
->  kernel_write fs/read_write.c:564 [inline]
->  kernel_write+0x2ac/0x540 fs/read_write.c:555
->  p9_fd_write net/9p/trans_fd.c:428 [inline]
->  p9_write_work+0x25e/0xca0 net/9p/trans_fd.c:479
->  process_one_work+0x996/0x1610 kernel/workqueue.c:2289
->  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
->  kthread+0x2e9/0x3a0 kernel/kthread.c:376
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
->  </TASK>
-> usb 4-1: new high-speed USB device number 72 using dummy_hcd
-> usb 4-1: New USB device found, idVendor=1b3d, idProduct=0193, bcdDevice= 8.4d
-> usb 4-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> usb 4-1: config 0 descriptor??
-> ftdi_sio 4-1:0.0: FTDI USB Serial Device converter detected
-> usb 4-1: Detected FT232RL
-> ftdi_sio ttyUSB0: Unable to read latency timer: -71
-> ftdi_sio ttyUSB0: Unable to write latency timer: -71
-> ftdi_sio 4-1:0.0: GPIO initialisation failed: -71
-> usb 4-1: FTDI USB Serial Device converter now attached to ttyUSB0
-> usb 4-1: USB disconnect, device number 72
-> ftdi_sio ttyUSB0: FTDI USB Serial Device converter now disconnected from ttyUSB0
-> ftdi_sio 4-1:0.0: device disconnected
-> usb 4-1: new high-speed USB device number 73 using dummy_hcd
-> usb 4-1: New USB device found, idVendor=1b3d, idProduct=0193, bcdDevice= 8.4d
-> usb 4-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> usb 4-1: config 0 descriptor??
-> ftdi_sio 4-1:0.0: FTDI USB Serial Device converter detected
-> usb 4-1: Detected FT232RL
-> ftdi_sio ttyUSB0: Unable to read latency timer: -71
-> ftdi_sio ttyUSB0: Unable to write latency timer: -71
-> ftdi_sio 4-1:0.0: GPIO initialisation failed: -71
-> usb 4-1: FTDI USB Serial Device converter now attached to ttyUSB0
-> usb 4-1: USB disconnect, device number 73
-> ftdi_sio ttyUSB0: FTDI USB Serial Device converter now disconnected from ttyUSB0
-> ftdi_sio 4-1:0.0: device disconnected
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> 
+Dipen Patel
 
+On 3/29/22 6:16 AM, Bagas Sanjaya wrote:
+> On 29/03/22 12.45, Dipen Patel wrote:
+>> +============================================
+>> +The Linux Hardware Timestamping Engine (HTE)
+>> +============================================
+>> +
+>> +:Author: Dipen Patel
+>> +
+>
+> Please learn how to convey semantics with rst format, see further comments
+> below.
+>
+>> +This document describes the API that can be used by hardware timestamping
+>> +engine provider and consumer drivers that want to use the hardware timestamping
+>> +engine (HTE) framework. Both consumers and providers must include
+>> +#include <linux/hte.h>.
+>> +
+>
+> Maybe it's better to write as `... providers must ``#include <linux/hte.h>```.
+>
+>> +The HTE framework APIs for the providers
+>> +----------------------------------------
+>> +
+>> +.. kernel-doc:: drivers/hte/hte.c
+>> +   :functions: devm_hte_register_chip hte_push_ts_ns
+>> +
+>> +The HTE framework APIs for the consumers
+>> +----------------------------------------
+>> +
+>> +.. kernel-doc:: drivers/hte/hte.c
+>> +   :functions: devm_of_hte_request_ts_ns hte_req_ts_by_linedata_ns hte_release_ts hte_enable_ts hte_disable_ts hte_get_clk_src_info
+>> +
+>> +The HTE framework public structures
+>> +-----------------------------------
+>> +.. kernel-doc:: include/linux/hte.h
+>> +
+>> +More on the HTE timestamp data
+>> +------------------------------
+>> +The struct hte_ts_data is used to pass timestamp details between the consumers
+>> +and the providers. It expresses timestamp data in nanoseconds in u64 data
+>> +type. For now all the HTE APIs using struct hte_ts_data require tsc to be in
+>> +nanoseconds. An example of the typical hte_ts_data data life cycle, for the
+>> +GPIO line is as follows::
+>> +
+>
+> When we talk about name terms found in actual code (like keywords or variable
+> names), it is customary to enclose them inside inline code (for example,
+> ``struct what`` or ``u64 what``).
+>
+>> + - Monitors GPIO line change.
+>> + - Detects the state change on GPIO line.
+>> + - Converts timestamps in nanoseconds and stores it in tsc.
+>> + - Stores GPIO raw level in raw_level variable if the provider has that
+>> + hardware capability.
+>> + - Pushes this hte_ts_data object to HTE subsystem.
+>> + - HTE subsystem increments seq counter and invokes consumer provided callback.
+>> + Based on callback return value, the HTE core invokes secondary callback in
+>> + the thread context.
+>> +
+>> +HTE subsystem debugfs attributes
+>> +--------------------------------
+>> +HTE subsystem creates debugfs attributes at ``/sys/kernel/debug/hte/``.
+>> +It also creates line/signal-related debugfs attributes at
+>> +``/sys/kernel/debug/hte/<provider>/<label or line id>/``.
+>> +
+>> +`ts_requested`
+>> +        The total number of entities requested from the given provider,
+>> +        where entity is specified by the provider and could represent
+>> +        lines, GPIO, chip signals, buses etc...
+>> +                The attribute will be available at
+>> +        ``/sys/kernel/debug/hte/<provider>/``.
+>> +
+>> +        Read-only value
+>> +
+>> +`total_ts`
+>> +        The total number of entities supported by the provider.
+>> +                The attribute will be available at
+>> +        ``/sys/kernel/debug/hte/<provider>/``.
+>> +
+>> +        Read-only value
+>> +
+>> +`dropped_timestamps`
+>> +        The dropped timestamps for a given line.
+>> +                The attribute will be available at
+>> +        ``/sys/kernel/debug/hte/<provider>/<label or line id>/``.
+>> +
+>> +        Read-only value
+>
+> Since all these debugfs variables are read-only, we can say "Note that all
+> these values are read-only".
+>

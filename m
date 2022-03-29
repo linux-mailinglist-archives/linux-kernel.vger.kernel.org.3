@@ -2,112 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8337F4EB6C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 016D34EB6C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240486AbiC2XaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
+        id S240517AbiC2Xbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiC2XaK (ORCPT
+        with ESMTP id S229512AbiC2Xbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:30:10 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC05F39;
-        Tue, 29 Mar 2022 16:28:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648596505; x=1680132505;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gzmBCGI/MQMl41/e4XEdKaqxJlbBNFcUeD2Jf3KlOBU=;
-  b=C/1FVXQZkriNjtU139F7egvtv32Kn606nZ43ERfLSPyOQmIGqPh2yz9i
-   Hkm56Dnnzjtk01CoGdkgsqzWhpwL3551WfCiCjWU+m61oNdCVtS4BkxWV
-   2fUtPW++tUZjxCuLxhgju5ybhQ2RZ0dKcOapTaDeopHn7Kudv28Tdc6Hk
-   xRMa6SY2cLzazMZg6Q56sBzWZO0rlWy3mmtSPha64bBhRqQm7Pi95oJ+y
-   4zKilNVoY4V0m92DN3FpiBN8XNgAWUFFeM4q4FHIjKKIGJsgTYbrRCOg1
-   kMQgia38ZPYjUn4DOfgiG2smd8PX2+B4jTb7rQFoXZ2eJQGD++nS1JKLk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="345835729"
-X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="345835729"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 16:28:20 -0700
-X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="585783066"
-Received: from jaleon-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.255.95.100])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 16:28:17 -0700
-Message-ID: <a2728619ef71add19d9b87af554fd2fc9bc0b7e0.camel@intel.com>
-Subject: Re: [PATCH v2 01/21] x86/virt/tdx: Detect SEAM
-From:   Kai Huang <kai.huang@intel.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>
-Date:   Wed, 30 Mar 2022 12:28:14 +1300
-In-Reply-To: <20220329175234.GA1915371@ls.amr.corp.intel.com>
-References: <cover.1647167475.git.kai.huang@intel.com>
-         <a258224c26b6a08400d9a8678f5d88f749afe51e.1647167475.git.kai.huang@intel.com>
-         <BN9PR11MB527657C2AA8B9ACD94C9D5468C189@BN9PR11MB5276.namprd11.prod.outlook.com>
-         <51982ec477e43c686c5c64731715fee528750d85.camel@intel.com>
-         <BN9PR11MB52765EE37C00F0FFA01447968C1D9@BN9PR11MB5276.namprd11.prod.outlook.com>
-         <20220329175234.GA1915371@ls.amr.corp.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Tue, 29 Mar 2022 19:31:44 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94701EC48;
+        Tue, 29 Mar 2022 16:30:00 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id t13so14845232pgn.8;
+        Tue, 29 Mar 2022 16:30:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KvFCFp39fcZMgF3qrB2Wxye/PpzuYjmzOhgExsjshNg=;
+        b=SsW+w1ynBPr+p6WJt1nv1wq0HHEkQA/T36bSMU6ljqQaVj1UT5s3a8d6Of+A4VsFRg
+         GZVxQ43NSdtuYkMzTkLVoQJ+lHmv/nk6BpSScWzGqnRtZ7PDbst0E40HCam1KiCnRTDD
+         8zw4B9ezNv49fYGbKLJRP78K6TYMIyHoqC7KaXeySubwQNibcPzInmb1Rv8Z1KbqGUUu
+         TwZyW9EveDrMwWglC5F2WFmVsXczcrr0z+tvs+M9UWkfCE3RJkHZ0l62TqvVyxV2p1bp
+         LwxajxAumXM4aplBmebCiqhGFynrRHdF55NDgNDjPz8ek9gZS3b2osmXXt6W1SqdDgUO
+         GCYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KvFCFp39fcZMgF3qrB2Wxye/PpzuYjmzOhgExsjshNg=;
+        b=nydX/dfN6pGJ1KzMAqAgIdfKrRCu3gvzob8zoGwvQUmOKoFBHAWTDpJkFXiBAQcZ/S
+         Ieet3ml5Z0Dzbjc5cc3Zj1pqRENNxMXAuGolQ0asBP7ZzQJ96WZo6UyDfLFKAjeYXf+X
+         2v6Yi/gre9UJJaQkCQUS0QVmRqD9pWj6jwGws3DwzsrFGNamPK3G99d2ZjxwMQpNn95m
+         B0nOND2/Zxeav9J67ErbtW1LZnWYLJIiYRPVbyB2j30r0u33RqovMk5yY4x70jwuhbvW
+         1oTdCrTqOhQnwjMA/fZVLR+/YfWHI+yIC3HfInDKhKUv91TZGt2o8gR2WGxV3xmP24ce
+         EFDA==
+X-Gm-Message-State: AOAM5317oPTNmAVQyucobrMesHMLMDBfCijjl1jqAVSR+pdKCKIb2GBy
+        Y032XKO0jK3vE1H08Hx4dgM=
+X-Google-Smtp-Source: ABdhPJzD4q0ecXgk/6K8S+DN1g9/+3l9kjxwV+2sM2Fn3Q2wSxOKAR6as2rKejhPoB8u4TlhmVMMiQ==
+X-Received: by 2002:a05:6a00:1824:b0:4f6:dc69:227e with SMTP id y36-20020a056a00182400b004f6dc69227emr30302603pfa.58.1648596600114;
+        Tue, 29 Mar 2022 16:30:00 -0700 (PDT)
+Received: from ast-mbp ([2620:10d:c090:400::5:f900])
+        by smtp.gmail.com with ESMTPSA id b10-20020a056a00114a00b004f784ba5e6asm22022029pfm.17.2022.03.29.16.29.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 16:29:59 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 16:29:56 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Hao Luo <haoluo@google.com>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC bpf-next 0/2] Mmapable task local storage.
+Message-ID: <20220329232956.gbsr65jdbe4lw2m6@ast-mbp>
+References: <20220324234123.1608337-1-haoluo@google.com>
+ <9cdf860d-8370-95b5-1688-af03265cc874@fb.com>
+ <CA+khW7g3hy61qnvtqUizaW+qB6wk=Y9cjivhORshOk=ZzTXJ-A@mail.gmail.com>
+ <CA+khW7iq+UKsfQxdT3QpSqPUFN8gQWWDLoQ9zxB=uWTs63AZEA@mail.gmail.com>
+ <20220329093753.26wc3noelqrwlrcj@apollo.legion>
+ <CA+khW7jW47SALTfxMKfQoA0Qwqd22GC0z4S5juFTbxLfTSbFEQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+khW7jW47SALTfxMKfQoA0Qwqd22GC0z4S5juFTbxLfTSbFEQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-29 at 10:52 -0700, Isaku Yamahata wrote:
-> On Mon, Mar 28, 2022 at 08:10:47AM +0000,
-> "Tian, Kevin" <kevin.tian@intel.com> wrote:
+On Tue, Mar 29, 2022 at 10:43:42AM -0700, Hao Luo wrote:
+> On Tue, Mar 29, 2022 at 2:37 AM Kumar Kartikeya Dwivedi
+> <memxor@gmail.com> wrote:
+> >
+> > On Mon, Mar 28, 2022 at 11:16:15PM IST, Hao Luo wrote:
+> > > On Mon, Mar 28, 2022 at 10:39 AM Hao Luo <haoluo@google.com> wrote:
+> > > >
+> > > > Hi Yonghong,
+> > > >
+> > > > On Fri, Mar 25, 2022 at 12:16 PM Yonghong Song <yhs@fb.com> wrote:
+> > > > >
+> > > > > On 3/24/22 4:41 PM, Hao Luo wrote:
+> > > > > > Some map types support mmap operation, which allows userspace to
+> > > > > > communicate with BPF programs directly. Currently only arraymap
+> > > > > > and ringbuf have mmap implemented.
+> > > > > >
+> > > > > > However, in some use cases, when multiple program instances can
+> > > > > > run concurrently, global mmapable memory can cause race. In that
+> > > > > > case, userspace needs to provide necessary synchronizations to
+> > > > > > coordinate the usage of mapped global data. This can be a source
+> > > > > > of bottleneck.
+> > > > >
+> > > > > I can see your use case here. Each calling process can get the
+> > > > > corresponding bpf program task local storage data through
+> > > > > mmap interface. As you mentioned, there is a tradeoff
+> > > > > between more memory vs. non-global synchronization.
+> > > > >
+> > > > > I am thinking that another bpf_iter approach can retrieve
+> > > > > the similar result. We could implement a bpf_iter
+> > > > > for task local storage map, optionally it can provide
+> > > > > a tid to retrieve the data for that particular tid.
+> > > > > This way, user space needs an explicit syscall, but
+> > > > > does not need to allocate more memory than necessary.
+> > > > >
+> > > > > WDYT?
+> > > > >
+> > > >
+> > > > Thanks for the suggestion. I have two thoughts about bpf_iter + tid and mmap:
+> > > >
+> > > > - mmap prevents the calling task from reading other task's value.
+> > > > Using bpf_iter, one can pass other task's tid to get their values. I
+> > > > assume there are two potential ways of passing tid to bpf_iter: one is
+> > > > to use global data in bpf prog, the other is adding tid parameterized
+> > > > iter_link. For the first, it's not easy for unpriv tasks to use. For
+> > > > the second, we need to create one iter_link object for each interested
+> > > > tid. It may not be easy to use either.
+> > > >
+> > > > - Regarding adding an explicit syscall. I thought about adding
+> > > > write/read syscalls for task local storage maps, just like reading
+> > > > values from iter_link. Writing or reading task local storage map
+> > > > updates/reads the current task's value. I think this could achieve the
+> > > > same effect as mmap.
+> > > >
+> > >
+> > > Actually, my use case of using mmap on task local storage is to allow
+> > > userspace to pass FDs into bpf prog. Some of the helpers I want to add
+> > > need to take an FD as parameter and the bpf progs can run
+> > > concurrently, thus using global data is racy. Mmapable task local
+> > > storage is the best solution I can find for this purpose.
+> > >
+> > > Song also mentioned to me offline, that mmapable task local storage
+> > > may be useful for his use case.
+> > >
+> > > I am actually open to other proposals.
+> > >
+> >
+> > You could also use a syscall prog, and use bpf_prog_test_run to update local
+> > storage for current. Data can be passed for that specific prog invocation using
+> > ctx. You might have to enable bpf_task_storage helpers in it though, since they
+> > are not allowed to be called right now.
+> >
 > 
-> > > From: Huang, Kai <kai.huang@intel.com>
-> > > Sent: Monday, March 28, 2022 11:55 AM
-> > > 
-> > > SEAMRR and TDX KeyIDs are configured by BIOS and they are static during
-> > > machine's runtime.  On the other hand, TDX module can be updated and
-> > > reinitialized at runtime (not supported in this series but will be supported in
-> > > the future).  Theoretically, even P-SEAMLDR can be updated at runtime
-> > > (although
-> > > I think unlikely to be supported in Linux).  Therefore I think detecting
-> > > SEAMRR
-> > > and TDX KeyIDs at boot fits better.
-> > 
-> > If those info are static it's perfectly fine to detect them until they are
-> > required... and following are not solid cases (e.g. just exposing SEAM
-> > alone doesn't tell the availability of TDX) but let's also hear the opinions
-> > from others.
-> 
-> One use case is cloud use case.  If TDX module is initialized dynamically at
-> runtime, cloud management system wants to know if the physical machine is
-> capable of TDX in addition to if TDX module is initialized.  Also how many TDs
-> can be run on the machine even when TDX module is not initialized yet.  The
-> management system will schedule TDs based on those information.
+> The loading process needs CAP_BPF to load bpf_prog_test_run. I'm
+> thinking of allowing any thread including unpriv ones to be able to
+> pass data to the prog and update their own storage.
 
-Thanks Isaku.  I'll keep current way for now.
-
--- 
-Thanks,
--Kai
-
-
+If I understand the use case correctly all of this mmap-ing is only to
+allow unpriv userspace to access a priv map via unpriv mmap() syscall.
+But the map can be accessed as unpriv already.
+Pin it with the world read creds and do map_lookup sys_bpf cmd on it.

@@ -2,154 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABCC74EAC16
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 13:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E96A74EAC5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 13:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235660AbiC2LTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 07:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
+        id S235892AbiC2LeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 07:34:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235271AbiC2LTS (ORCPT
+        with ESMTP id S235501AbiC2LeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 07:19:18 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CAB4DF45;
-        Tue, 29 Mar 2022 04:17:34 -0700 (PDT)
-Received: from kwepemi100022.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KSRn41g4CzCrBv;
-        Tue, 29 Mar 2022 19:15:20 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- kwepemi100022.china.huawei.com (7.221.188.126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 29 Mar 2022 19:17:32 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600015.china.huawei.com
- (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 29 Mar
- 2022 19:17:31 +0800
-From:   ChenXiaoSong <chenxiaosong2@huawei.com>
-To:     <trond.myklebust@hammerspace.com>, <anna@kernel.org>,
-        <bjschuma@netapp.com>
-CC:     <linux-nfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chenxiaosong2@huawei.com>, <liuyongqiang13@huawei.com>,
-        <yi.zhang@huawei.com>, <zhangxiaoxu5@huawei.com>, <tao.lyu@epfl.ch>
-Subject: [PATCH -next 2/2] NFSv4: fix open failure with O_ACCMODE flag
-Date:   Tue, 29 Mar 2022 19:32:08 +0800
-Message-ID: <20220329113208.2466000-3-chenxiaosong2@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220329113208.2466000-1-chenxiaosong2@huawei.com>
-References: <20220329113208.2466000-1-chenxiaosong2@huawei.com>
+        Tue, 29 Mar 2022 07:34:13 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6FD249C7E;
+        Tue, 29 Mar 2022 04:32:31 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id g9-20020a17090ace8900b001c7cce3c0aeso1767428pju.2;
+        Tue, 29 Mar 2022 04:32:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AfDbny6u/L+j/y3hE90n33pQkTnHbTDK6e2Yz12o79s=;
+        b=WagXLbOYo9AF93N8+UD7WpOzf2QxK+6rH/yROSi2V7SLh2azETByEGKN0IxMQ2iJrh
+         cCJn1HODiro4+Tm1PJuLyASh1NFh8399v3/9aP2bMM3ju2RgxPpmlKDKMvlud2bO/F6y
+         qyJkBdMmUecVJ7mCcpQDqFJKjBmSP/lUymswu4dp48CFuv8PfY52Ggz3liZYB838Krlt
+         AppgIlVhyrk4lBO9HsZTN+rFgv9mT6+gPKCkaIfZ6ttvWFsPdrpZb7b1Jr+ftimu1UIl
+         kN3FPmmh3ZHuS9hUQS2/NMn36LL3/2of7bEZR8oqtEeFlQ193PPe1AQ+vVDvBdZqQ/uf
+         yOnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AfDbny6u/L+j/y3hE90n33pQkTnHbTDK6e2Yz12o79s=;
+        b=bhLthlY19ThfXUURF1L3PLfWT0zo3BVdwj3UKIBVSyw/UpgDWcmFVYFSJr9LsG/Euj
+         ytebe4+Sii3wvlBbq79hU2pAywHE30BQSEFDmHHN3ftOxSB4I6cOa/Nrk2cQQXeBCzHq
+         ogO7bbR5i7Weg5iPv2lysdDwl691X7PViorpYrLZcrZUhTRZcVTxE//3MnzTq03XNhP2
+         TDpRu0XYHaXpb5i0L6d1BymN84xvHdOqRGPQCX8x74OaKOMn5A0f+bdonfFih+/UUcKX
+         3bo36/fculy89zY+nEB6xmx/eBzHPZ5w79QuY1TCS3LOuh8GvSmr3A5mSqN3laQhohc8
+         t/WQ==
+X-Gm-Message-State: AOAM533FZj89vOZXpV81I1ufl7KiDSe4MgoctjWIuDGT//BPHi/CkXUl
+        RJzLXuXL0et8cybwrbKjF/E=
+X-Google-Smtp-Source: ABdhPJxq72U5sp7bd/9mEeEbu1RbKNwfMbSC726t7DQLsQNFsA3eqzUQG/6GuqnhT+6Wu4oe1LwH8A==
+X-Received: by 2002:a17:902:a415:b0:153:a1b6:729f with SMTP id p21-20020a170902a41500b00153a1b6729fmr30167919plq.52.1648553550566;
+        Tue, 29 Mar 2022 04:32:30 -0700 (PDT)
+Received: from localhost ([122.179.46.149])
+        by smtp.gmail.com with ESMTPSA id np8-20020a17090b4c4800b001c70aeab380sm2952943pjb.41.2022.03.29.04.32.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 04:32:30 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 17:02:27 +0530
+From:   Ritesh Harjani <ritesh.list@gmail.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Ritesh Harjani <riteshh@linux.ibm.com>,
+        fstests <fstests@vger.kernel.org>, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 3/4] generic/676: Add a new shutdown recovery test
+Message-ID: <20220329113227.ig3cmfwzs7y6oywj@riteshh-domain>
+References: <cover.1647342932.git.riteshh@linux.ibm.com>
+ <3d8c4f7374e97ccee285474efd04b093afe3ee16.1647342932.git.riteshh@linux.ibm.com>
+ <20220315165514.GC8200@magnolia>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315165514.GC8200@magnolia>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-open() with O_ACCMODE|O_DIRECT flags secondly will fail.
+On 22/03/15 09:55AM, Darrick J. Wong wrote:
+> On Tue, Mar 15, 2022 at 07:58:58PM +0530, Ritesh Harjani wrote:
+> > In certain cases (it is noted with ext4 fast_commit feature) that, replay phase
+> > may not delete the right range of blocks (after sudden FS shutdown)
+> > due to some operations which depends on inode->i_size (which during replay of
+> > an inode with fast_commit could be 0 for sometime).
+> > This fstest is added to test for such scenarios for all generic fs.
+> >
+> > This test case is based on the test case shared via Xin Yin.
+> >
+> > Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
+> > ---
+> >  tests/generic/676     | 72 +++++++++++++++++++++++++++++++++++++++++++
+> >  tests/generic/676.out |  7 +++++
+> >  2 files changed, 79 insertions(+)
+> >  create mode 100755 tests/generic/676
+> >  create mode 100644 tests/generic/676.out
+> >
+> > diff --git a/tests/generic/676 b/tests/generic/676
+> > new file mode 100755
+> > index 00000000..315edcdf
+> > --- /dev/null
+> > +++ b/tests/generic/676
+> > @@ -0,0 +1,72 @@
+> > +#! /bin/bash
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +# Copyright (c) 2022 IBM Corporation.  All Rights Reserved.
+> > +#
+> > +# FS QA Test 676
+> > +#
+> > +# This test with ext4 fast_commit feature w/o below patch missed to delete the right
+> > +# range during replay phase, since it depends upon inode->i_size (which might not be
+> > +# stable during replay phase, at least for ext4).
+> > +# 0b5b5a62b945a141: ext4: use ext4_ext_remove_space() for fast commit replay delete range
+> > +# (Based on test case shared by Xin Yin <yinxin.x@bytedance.com>)
+> > +#
+> > +
+> > +. ./common/preamble
+> > +_begin_fstest auto shutdown quick log recoveryloop
+>
+> This isn't a looping recovery test.  Maybe we should create a 'recovery'
+> group for tests that only run once?  I think we already have a few
+> fstests like that.
 
-Reproducer:
-  1. mount -t nfs -o vers=4.2 $server_ip:/ /mnt/
-  2. fd = open("/mnt/file", O_ACCMODE|O_DIRECT|O_CREAT)
-  3. close(fd)
-  4. fd = open("/mnt/file", O_ACCMODE|O_DIRECT)
+I gave it a thought, but I feel it might be unncessary.
+From a developer/tester perspective who wanted to test anything related to
+recovery would then have to use both recovery and recoveryloop.
+Thoughts?
 
-Server nfsd4_decode_share_access() will fail with error nfserr_bad_xdr when
-client use incorrect share access mode of 0.
+>
+> > +
+> > +# Override the default cleanup function.
+> > +_cleanup()
+> > +{
+> > +	cd /
+> > +	rm -r -f $tmp.*
+> > +   _scratch_unmount > /dev/null 2>&1
+>
+> I think the test harness does this for you already, right?
 
-Fix this by using NFS4_SHARE_ACCESS_BOTH share access mode in client,
-just like firstly opening.
+Although, it looks like after running the test by default the run_section() in
+check script, will do _test_unmount and _scratch_unmount.
+But I still feel it's better if the individual test cleans up whatever it did
+while running the test in it's cleanup routine, before exiting.
 
-Fixes: ce4ef7c0a8a05 ("NFS: Split out NFS v4 file operations")
-Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
----
- fs/nfs/dir.c      | 10 ----------
- fs/nfs/internal.h | 10 ++++++++++
- fs/nfs/nfs4file.c |  6 ++++--
- 3 files changed, 14 insertions(+), 12 deletions(-)
+>
+> > +}
+> > +
+> > +# Import common functions.
+> > +. ./common/filter
+> > +. ./common/punch
+> > +
+> > +# real QA test starts here
+> > +
+> > +# Modify as appropriate.
+> > +_supported_fs generic
+> > +_require_scratch
+> > +_require_xfs_io_command "fpunch"
+> > +_require_xfs_io_command "fzero"
+> > +_require_xfs_io_command "fiemap"
+>
+> _require_scratch_shutdown
+>
+> > +
+> > +t1=$SCRATCH_MNT/foo
+> > +t2=$SCRATCH_MNT/bar
+> > +
+> > +_scratch_mkfs > $seqres.full 2>&1
+> > +
+> > +_scratch_mount >> $seqres.full 2>&1
+> > +
+> > +bs=$(_get_block_size $SCRATCH_MNT)
+>
+> _get_file_block_size, in case the file allocation unit isn't the same as
+> the fs blocksize?  (e.g. bigalloc, xfs realtime, etc.)
 
-diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
-index 75cb1cbe4cde..911bdb35eb08 100644
---- a/fs/nfs/dir.c
-+++ b/fs/nfs/dir.c
-@@ -1853,16 +1853,6 @@ const struct dentry_operations nfs4_dentry_operations = {
- };
- EXPORT_SYMBOL_GPL(nfs4_dentry_operations);
- 
--static fmode_t flags_to_mode(int flags)
--{
--	fmode_t res = (__force fmode_t)flags & FMODE_EXEC;
--	if ((flags & O_ACCMODE) != O_WRONLY)
--		res |= FMODE_READ;
--	if ((flags & O_ACCMODE) != O_RDONLY)
--		res |= FMODE_WRITE;
--	return res;
--}
--
- static struct nfs_open_context *create_nfs_open_context(struct dentry *dentry, int open_flags, struct file *filp)
- {
- 	return alloc_nfs_open_context(dentry, flags_to_mode(open_flags), filp);
-diff --git a/fs/nfs/internal.h b/fs/nfs/internal.h
-index 2de7c56a1fbe..58e618a5d88e 100644
---- a/fs/nfs/internal.h
-+++ b/fs/nfs/internal.h
-@@ -42,6 +42,16 @@ static inline bool nfs_lookup_is_soft_revalidate(const struct dentry *dentry)
- 	return true;
- }
- 
-+static inline fmode_t flags_to_mode(int flags)
-+{
-+	fmode_t res = (__force fmode_t)flags & FMODE_EXEC;
-+	if ((flags & O_ACCMODE) != O_WRONLY)
-+		res |= FMODE_READ;
-+	if ((flags & O_ACCMODE) != O_RDONLY)
-+		res |= FMODE_WRITE;
-+	return res;
-+}
-+
- /*
-  * Note: RFC 1813 doesn't limit the number of auth flavors that
-  * a server can return, so make something up.
-diff --git a/fs/nfs/nfs4file.c b/fs/nfs/nfs4file.c
-index c178db86a6e8..e34af48fb4f4 100644
---- a/fs/nfs/nfs4file.c
-+++ b/fs/nfs/nfs4file.c
-@@ -32,6 +32,7 @@ nfs4_file_open(struct inode *inode, struct file *filp)
- 	struct dentry *parent = NULL;
- 	struct inode *dir;
- 	unsigned openflags = filp->f_flags;
-+	fmode_t f_mode;
- 	struct iattr attr;
- 	int err;
- 
-@@ -50,8 +51,9 @@ nfs4_file_open(struct inode *inode, struct file *filp)
- 	if (err)
- 		return err;
- 
-+	f_mode = filp->f_mode;
- 	if ((openflags & O_ACCMODE) == 3)
--		openflags--;
-+		f_mode |= flags_to_mode(openflags);
- 
- 	/* We can't create new files here */
- 	openflags &= ~(O_CREAT|O_EXCL);
-@@ -59,7 +61,7 @@ nfs4_file_open(struct inode *inode, struct file *filp)
- 	parent = dget_parent(dentry);
- 	dir = d_inode(parent);
- 
--	ctx = alloc_nfs_open_context(file_dentry(filp), filp->f_mode, filp);
-+	ctx = alloc_nfs_open_context(file_dentry(filp), f_mode, filp);
- 	err = PTR_ERR(ctx);
- 	if (IS_ERR(ctx))
- 		goto out;
--- 
-2.31.1
+Sure. Agreed. Will make the change.
 
+Thanks
+-ritesh

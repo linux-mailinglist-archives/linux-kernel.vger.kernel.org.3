@@ -2,116 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BBE4EA414
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 02:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B89A4EA404
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 02:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbiC2AF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 20:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48438 "EHLO
+        id S231307AbiC2AGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 20:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbiC2AFY (ORCPT
+        with ESMTP id S231299AbiC2AGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 20:05:24 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E20657D
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 17:03:41 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id x2so16127827plm.7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 17:03:41 -0700 (PDT)
+        Mon, 28 Mar 2022 20:06:03 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B70E14090
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 17:04:21 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id o13so13378078pgc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 17:04:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=13838w1A0QhQMZDXu7rpdESYgPLiCVAkKPIN4iMNrZA=;
-        b=8Lskprpcamyihf734B/BZy9vNp/+G8VNvvQQWbW9cAqGb/JSvZvjSMONWkWnDBOSYe
-         05wKzKiUBXmAPJu8e0/HWvqREo214LsOdFQVL/c6EBXvXRPv9sSED2c0++/5zUyUN4nr
-         o6I0AHOV1sa43McrOVaOtmDwrZRWQ3XybdYkIsAp1O+YBVvAfQPT+yiC0aoFEP2/kVGB
-         oUCqLC2kUNtopL+vO/O4PX1qpDZFnqfuyoqFx12Wcq5Gm4uewISrzNSjW9hkKYH+AGD/
-         NGS15Zsgf3IPYk1K0jc6whYN/D7R4bssKnmMizW2KJ1psdN6k53E1VBkf3J36qb5DSht
-         yuuA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=etgjqyAwbvR6Km5d+2cDKN373f0iHJRr9ymO9u+KgK4=;
+        b=G5YIvVl22ePZITTXQy7vowBlWgCkZizGIGOI6pI2XX9x6vtJv/N8rYqMnVC1NBJmDl
+         Xi+sHsYUIN+SJvKP8OhZ+TiWYKsB4cnA6blgTh8kV07ztljdTDT58Zz7wNd5brW8jMKi
+         MeGC0zhst3Ze45rOieg8y/L1qR1ehb0uYXPOVkW1do58sPgFqUFnszIPRO9ZxP9E/VDu
+         Hg6Vj8ktwcYNsYL0mPC653HM7uXxVOtZT2l2L6hyenJnUzEd16GnIxOc9EHXvkyvvGnf
+         OmD5GfIZ3n5oGbfX95H+OgOqSCiAjQRN+aczvRBQ7z8EFIt+C0RkUgE4xiw6oc4aMGhH
+         c2MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=13838w1A0QhQMZDXu7rpdESYgPLiCVAkKPIN4iMNrZA=;
-        b=wo7dJN1AOv3i14HO1HHLmPv+eyNEBUcCcDn/3T28/0DuSQ6j1blVL+kKN2wqManad7
-         3CEiPqWEjCRrkjubu5cuMIWshC57m/vNWHdVjQhbGZR81E0d4SiktOT9nrbnIesAaXVC
-         cq27SDpaYPqMwk1MjA9GI2OvnM2hzq6NX3Z67JziLLkink/XanImatlVKW9GmHkqVuTY
-         ari5mTl3iwt49KGbud1fl39DHGc+HLH0QkF1/PJbTQXmDCvhsWykpFbo/RBMGD/1F9p8
-         rnhDYQJLu0L2etijE9fs+UI2Q5cEFuMe1nMDuCBhVYqv0BGHyAp2rYXyZMkaErBP3f+O
-         kkDw==
-X-Gm-Message-State: AOAM530oR+7Stdj/H/ZhB28X8oRLbJVx8Qv1Z4kcDZJFXzUdZKRQIPnV
-        rAJgr+2B6AmNHY/07XBTPIPJZQ==
-X-Google-Smtp-Source: ABdhPJy5Dwo5i4hUqAgLaL6hVSsz5nlw4pyTrnTpaz36xmIgt7qWX2hqsO1LZabmM/zsYKeAbaxiMA==
-X-Received: by 2002:a17:902:b208:b0:14f:14e8:1e49 with SMTP id t8-20020a170902b20800b0014f14e81e49mr27413606plr.35.1648512220889;
-        Mon, 28 Mar 2022 17:03:40 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id b16-20020a056a00115000b004f6ff260c9esm16448899pfm.207.2022.03.28.17.03.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Mar 2022 17:03:40 -0700 (PDT)
-Message-ID: <f0a71e7a-5a81-f88f-4aaa-207ec522fb62@kernel.dk>
-Date:   Mon, 28 Mar 2022 18:03:38 -0600
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=etgjqyAwbvR6Km5d+2cDKN373f0iHJRr9ymO9u+KgK4=;
+        b=pF2UWWhLXmUHFE1EpXbMvWdx+Q5ChG1mfeGqmIFp5BWUCgiPFLuR4pXQwAHinlpvR3
+         aT2/EbY+ah5JIPxwM2gvJ6r5YqCXVdGhvVlOt3H5CVJs8Omw7fICXgFSMwp5xiyY79MS
+         +Gj7m9+1vTaR/71GhRC0GllWY17ZN80/8oCDqDxuE4tLI5SJS2y3AOiDgbKetRgmOjJj
+         ESUX5Bx/feFkaFcccIXz8kv35ooTvZ8YTud7fA1Wg46IGDJgg0zp8FA7B4ItnRVVFYw3
+         xyH1kcH5XQwo15S+hNwemYqwUVBtVoTOqrSKsOML+NNE3K79haDWZqJBqxQNUkpwEDW/
+         QbmA==
+X-Gm-Message-State: AOAM5325LvCzfUunnCZupglVVWn4pDKWqzUQt1xnMxikkFHEzFpeKBtC
+        oBM7Qzd9vf3VbdqEA1NIvg4d9A==
+X-Google-Smtp-Source: ABdhPJx8yKtkbTnvKDhEF6CrTpFMthUus1w5B4uh8qOQh+zUkITN5OLbQQgaCn3E+3ynmkMH71yJkQ==
+X-Received: by 2002:a63:e545:0:b0:382:8dd9:a870 with SMTP id z5-20020a63e545000000b003828dd9a870mr11790668pgj.621.1648512260958;
+        Mon, 28 Mar 2022 17:04:20 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 204-20020a6302d5000000b00385f29b02b2sm14336170pgc.50.2022.03.28.17.04.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 17:04:20 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 00:04:16 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Nakajima, Jun" <jun.nakajima@intel.com>
+Cc:     "Lutomirski, Andy" <luto@kernel.org>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        KVM list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>
+Subject: Re: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <YkJNAPPpdiL24kJF@google.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <CALCETrWk1Y47JQC=V028A7Tmc9776Oo4AjgwqRtd9K=XDh6=TA@mail.gmail.com>
+ <7CCE5220-0ACF-48EE-9366-93CABDA91065@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [GIT PULL] ptrace: Cleanups for v5.18
-Content-Language: en-US
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alexey Gladkov <legion@kernel.org>, Kyle Huey <me@kylehuey.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <87bl1kunjj.fsf@email.froward.int.ebiederm.org>
- <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
- <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
- <87tubyx0rg.fsf_-_@email.froward.int.ebiederm.org>
- <87a6d9pr5t.fsf_-_@email.froward.int.ebiederm.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <87a6d9pr5t.fsf_-_@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7CCE5220-0ACF-48EE-9366-93CABDA91065@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/28/22 5:56 PM, Eric W. Biederman wrote:
+On Mon, Mar 28, 2022, Nakajima, Jun wrote:
+> > On Mar 28, 2022, at 1:16 PM, Andy Lutomirski <luto@kernel.org> wrote:
+> > 
+> > On Thu, Mar 10, 2022 at 6:09 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
+> >> 
+> >> This is the v5 of this series which tries to implement the fd-based KVM
+> >> guest private memory. The patches are based on latest kvm/queue branch
+> >> commit:
+> >> 
+> >>  d5089416b7fb KVM: x86: Introduce KVM_CAP_DISABLE_QUIRKS2
+> > 
+> > Can this series be run and a VM booted without TDX?  A feature like
+> > that might help push it forward.
+> > 
+> > —Andy
 > 
-> Linus,
-> 
-> Please pull the ptrace-cleanups-for-v5.18 tag from the git tree:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ptrace-cleanups-for-v5.18
-> 
->   HEAD: dcbc65aac28360df5f5a3b613043ccc0e81da3cf ptrace: Remove duplicated include in ptrace.c
-> 
-> This set of changes removes tracehook.h, moves modification of all of
-> the ptrace fields inside of siglock to remove races, adds a missing
-> permission check to ptrace.c
-> 
-> The removal of tracehook.h is quite significant as it has been a major
-> source of confusion in recent years.  Much of that confusion was
-> around task_work and TIF_NOTIFY_SIGNAL (which I have now decoupled
-> making the semantics clearer).
-> 
-> For people who don't know tracehook.h is a vestiage of an attempt to
-> implement uprobes like functionality that was never fully merged, and
-> was later superseeded by uprobes when uprobes was merged.  For many
-> years now we have been removing what tracehook functionaly a little
-> bit at a time.  To the point where now anything left in tracehook.h is
-> some weird strange thing that is difficult to understand.
+> Since the userspace VMM (e.g. QEMU) loses direct access to private memory of
+> the VM, the guest needs to avoid using the private memory for (virtual) DMA
+> buffers, for example. Otherwise, it would need to use bounce buffers, i.e. we
+> would need changes to the VM. I think we can try that (i.e. add only bounce
+> buffer changes). What do you think?
 
-FWIW, the notify/task_work/io_uring changes look good to me. Thanks for
-cleaning this up, Eric.
+I would love to be able to test this series and run full-blown VMs without TDX or
+SEV hardware.
 
--- 
-Jens Axboe
-
+The other option for getting test coverage is KVM selftests, which don't have an
+existing guest that needs to be enlightened.  Vishal is doing work on that front,
+though I think it's still in early stages.  Long term, selftests will also be great
+for negative testing.

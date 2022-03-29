@@ -2,158 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52ADD4EB6B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D044EB6B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240234AbiC2X1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
+        id S240288AbiC2X1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234124AbiC2X13 (ORCPT
+        with ESMTP id S239989AbiC2X1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:27:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D72818596F
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:25:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648596344;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=j9WAFWoFaJCbtXRV2bAUg/ZVuSKeu2t11Zs3/Bjgv9o=;
-        b=Rbp2lkNXab7ry0MtLn0Ycc/Wygh/1l75l5pUfJ1vkMGRXYH3Pqe9z2tZMJ7pMnXvVdwLc7
-        r0w/IyXp2gzDr/JghWNjaFKAgNry15a3egrlsAtixZNyq+l+4bNKmNOYeeZYZ4WdZajcU2
-        4ywJ5HaWeORTlxktG7L5ilHPFcpn1Cs=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-448-2tIhvgnFOXqarJ00hJy12g-1; Tue, 29 Mar 2022 19:25:43 -0400
-X-MC-Unique: 2tIhvgnFOXqarJ00hJy12g-1
-Received: by mail-qk1-f198.google.com with SMTP id 207-20020a3703d8000000b0067b14f0844dso11490583qkd.22
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:25:43 -0700 (PDT)
+        Tue, 29 Mar 2022 19:27:39 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E189C186166;
+        Tue, 29 Mar 2022 16:25:55 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id 12so20527358oix.12;
+        Tue, 29 Mar 2022 16:25:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=j9WAFWoFaJCbtXRV2bAUg/ZVuSKeu2t11Zs3/Bjgv9o=;
-        b=FBANm61Xa/uwZzPxxIdyUR+jj51hM2WRMAUOKEKvDkDgmyhFvaBEP+eRAT2ny1ZK/J
-         aKNkQaqPcLO2ycUfpkgs0OB3HsEjNvtz5QrApcBTtKvEGktJAcjBTwPa5FurzorluQLl
-         TkXRMoiX8n1MscgIyZfRajFLYyf2NI3nKmJ0/abOBn1mQDhKZbGUerZnH4Qfuf6UrXl/
-         DxAGZUiciJvce/uxGBads+q2YeeVfiffhxCRhiHGEt+n8f2uVQuUiTGmSSqINx8O9uz+
-         oto3ytlqC6dJD63DwdscUqe2GaWx6qog8DVs/nZ4S5bxax8oXCO1li5iqs1+Kf4fg7Mo
-         Jn/A==
-X-Gm-Message-State: AOAM532bmiQvSDzUg29JlN2WTG5mtwlwlySmmm4dvGsWasnrCskxwSDy
-        C6tT4aHp2OC4RrS6tHdPcIh4M6JbME/hnsBV7jj0GVDSeZWuHOU0nRBd9+iCOT7YKG8m1w1gy0t
-        K3aIyjlCCwdUtKxKb1swO8lrp
-X-Received: by 2002:a05:620a:68a:b0:67b:3135:a9aa with SMTP id f10-20020a05620a068a00b0067b3135a9aamr22146762qkh.508.1648596342752;
-        Tue, 29 Mar 2022 16:25:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzOKNeFEhOkGB2fAKKllqYm87EkU8WRMQ94OOyRzsSNA2a9eo8RNLBPMCuy0SqxE+nglW//YQ==
-X-Received: by 2002:a05:620a:68a:b0:67b:3135:a9aa with SMTP id f10-20020a05620a068a00b0067b3135a9aamr22146750qkh.508.1648596342537;
-        Tue, 29 Mar 2022 16:25:42 -0700 (PDT)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id f18-20020a05622a105200b002e1eb06ece3sm15856149qte.31.2022.03.29.16.25.39
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i3uM0pHbtDDVFGxWD9G96SIrY94otn0Eu2ug6AvRCzM=;
+        b=ZaXNSAjBFeZqpmkS941OqWEobXLwIE2quRifxYbv/bZoOtw5DnAVBSpsePz+W/01KL
+         08mLgXHsmTKTjEv94WtbPtHD34rkaf3mi7CKEa+vALnxfuUPwMwXsiW1hfUJdhwyA+Qe
+         fwOa+JqVb2MRFoZRWdnLCdcAi6cSMiaOmDeTP6cMNwbSBmUVBaACVj8PLSqHrwi1okUX
+         rVQZ/vpg6eU8pgSj3Fzj8opvvf7PAEt8Z23YehfGkxM+ul6DE+bvVdO3vQqFnvUXUJj4
+         2Hayg5YgCDHID5Cxt4AtUMc8LAJCEXG7Jkg/lNBGQyE0FVDRGMJsgsxWsHWyNfmBuvg3
+         mIUg==
+X-Gm-Message-State: AOAM531SR/xmL6DUfiyDwd5uQiGi3SLqMh4Kzkyn2mKeicCfV6QMq9R8
+        5s0q8xxmY5/RunBXALoQ7Q==
+X-Google-Smtp-Source: ABdhPJzTFEmfAeacXqDkEiRReji+ZZWVsiht7GJMbos8sjEIydcV+4YyPcEw4tkbeIJVLkAGcs2vJw==
+X-Received: by 2002:a05:6808:13ca:b0:2d0:6e82:6983 with SMTP id d10-20020a05680813ca00b002d06e826983mr715308oiw.5.1648596355043;
+        Tue, 29 Mar 2022 16:25:55 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m16-20020a9d4c90000000b005cb214bef81sm9735902otf.43.2022.03.29.16.25.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 16:25:42 -0700 (PDT)
-From:   trix@redhat.com
-To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        gregkh@linuxfoundation.org, nathan@kernel.org,
-        ndesaulniers@google.com, hverkuil-cisco@xs4all.nl, vrzh@vrzh.net,
-        laurent.pinchart@ideasonboard.com, tomi.valkeinen@ideasonboard.com
-Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [RESEND PATCH] media: staging: atomisp: rework reading the id and revision values
-Date:   Tue, 29 Mar 2022 16:25:26 -0700
-Message-Id: <20220329232526.3238181-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Tue, 29 Mar 2022 16:25:54 -0700 (PDT)
+Received: (nullmailer pid 1551617 invoked by uid 1000);
+        Tue, 29 Mar 2022 23:25:53 -0000
+Date:   Tue, 29 Mar 2022 18:25:53 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dipen Patel <dipenp@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        smangipudi@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        warthog618@gmail.com, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v5 04/11] dt-bindings: Add HTE bindings
+Message-ID: <YkOVgRBtXX0k9zr1@robh.at.kernel.org>
+References: <20220329054521.14420-1-dipenp@nvidia.com>
+ <20220329054521.14420-5-dipenp@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220329054521.14420-5-dipenp@nvidia.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+On Mon, Mar 28, 2022 at 10:45:14PM -0700, Dipen Patel wrote:
+> Introduces HTE devicetree binding details for the HTE subsystem. It
+> includes examples for the consumers, binding details for the providers
+> and specific binding details for the Tegra194 based HTE providers.
+> 
+> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> Changes in v2:
+> - Replace hte with hardware-timestamp for property names
+> - Renamed file
+> - Removed example from the common dt binding file.
+> 
+> Changes in v3:
+> - Addressed grammatical errors.
+> - Removed double plural from the respective properties.
+> - Added dual license.
+> - Prefixed "nvidia" in nvidia specific properties.
+> 
+> Changes in v4:
+> - Corrected make dt_binding_check error.
+> 
+> Changes in v5:
+> - Addressed review comments.
+> 
+>  .../hte/hardware-timestamps-common.yaml       | 29 +++++++
+>  .../devicetree/bindings/hte/hte-consumer.yaml | 43 ++++++++++
+>  .../bindings/hte/nvidia,tegra194-hte.yaml     | 82 +++++++++++++++++++
+>  3 files changed, 154 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hte/hardware-timestamps-common.yaml
+>  create mode 100644 Documentation/devicetree/bindings/hte/hte-consumer.yaml
+>  create mode 100644 Documentation/devicetree/bindings/hte/nvidia,tegra194-hte.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hte/hardware-timestamps-common.yaml b/Documentation/devicetree/bindings/hte/hardware-timestamps-common.yaml
+> new file mode 100644
+> index 000000000000..e8a69ceccd56
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hte/hardware-timestamps-common.yaml
+> @@ -0,0 +1,29 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hte/hardware-timestamps-common.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Hardware timestamp providers
+> +
+> +maintainers:
+> +  - Dipen Patel <dipenp@nvidia.com>
+> +
+> +description:
+> +  Some devices/SoCs have hardware time stamping engines which can use hardware
+> +  means to timestamp entity in realtime. The entity could be anything from
+> +  GPIOs, IRQs, Bus and so on. The hardware timestamp engine (HTE) present
+> +  itself as a provider with the bindings described in this document.
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^hardware-timestamp(@.*|-[0-9a-f])?$"
+> +
+> +  "#hardware-timestamp-cells":
+> +    description:
+> +      Number of cells in a HTE specifier.
+> +
+> +required:
+> +  - "#hardware-timestamp-cells"
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/hte/hte-consumer.yaml b/Documentation/devicetree/bindings/hte/hte-consumer.yaml
+> new file mode 100644
+> index 000000000000..be69f63aa8c3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hte/hte-consumer.yaml
+> @@ -0,0 +1,43 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hte/hte-consumer.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: HTE Consumer Device Tree Bindings
+> +
+> +maintainers:
+> +  - Dipen Patel <dipenp@nvidia.com>
+> +
+> +select: true
+> +
+> +description:
+> +  HTE properties should be named "hardware-timestamps". The exact meaning of
+> +  each hardware-timestamps property must be documented in the device tree
 
-Clang static analysis reports this representative issue
-atomisp-ov2722.c:920:3: warning: 3rd function call
-  argument is an uninitialized value
-  dev_err(&client->dev, "sensor_id_high = 0x%x\n", high);
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The meaning of the cells needs to be documented. You are documenting the 
+meaning of 'hardware-timestamps' here.
 
-high and low are only set when ov2722_read_reg() is successful.
-Reporting the high value when there is an error is not
-meaningful.  The later read for low is not checked.  high
-and low are or-ed together and checked against a non zero
-value.
+> +  binding for each device. An optional property "hardware-timestamp-names" may
+> +  contain a list of strings to label each of the HTE devices listed in the
+> +  "hardware-timestamps" property.
+> +
+> +properties:
+> +  hardware-timestamps:
 
-Remove the unneeded error reporting for high.  Initialize
-high and low to 0 and use the id check to determine if
-the reads were successful
+I'm wondering if we should just drop 'hardware'. What other kind of 
+timestamps are we going to have in DT? software-timestamps? No.
 
-The later read for revision is not checked.  If it
-fails the old high value will be used and the revision
-will be misreported.
 
-Since the revision is only reported and not checked or
-stored it is not necessary to return if the read with
-successful.  This makes the ret variable unnecessary
-so remove it.
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description:
+> +      The list of HTE provider phandle. The provider must document the number
+> +      of cell that must be passed in this property along with phandle.
+> +
+> +  hardware-timestamp-names:
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+> +    description:
+> +      An optional string property.
+> +
+> +dependencies:
+> +  hardware-timestamp-names: [ hardware-timestamps ]
+> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +    hte_irq_consumer {
+> +              hardware-timestamps = <&tegra_hte_lic 0x19>;
+> +              hardware-timestamp-names = "hte-irq";
+> +    };
+> diff --git a/Documentation/devicetree/bindings/hte/nvidia,tegra194-hte.yaml b/Documentation/devicetree/bindings/hte/nvidia,tegra194-hte.yaml
+> new file mode 100644
+> index 000000000000..ce6f1313f52d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hte/nvidia,tegra194-hte.yaml
+> @@ -0,0 +1,82 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hte/nvidia,tegra194-hte.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Tegra194 on chip generic hardware timestamping engine (HTE)
+> +
+> +maintainers:
+> +  - Dipen Patel <dipenp@nvidia.com>
+> +
+> +description:
+> +  Tegra194 SoC has multiple generic hardware timestamping engines (GTE) which
+> +  can monitor subset of GPIO and on chip IRQ lines for the state change, upon
+> +  detection it will record timestamp (taken from system counter) in its
+> +  internal hardware FIFO. It has a bitmap array arranged in 32bit slices where
+> +  each bit represent signal/line to enable or disable for the hardware
+> +  timestamping.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nvidia,tegra194-gte-aon
+> +      - nvidia,tegra194-gte-lic
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  nvidia,int-threshold:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      HTE device generates its interrupt based on this u32 FIFO threshold
+> +      value. The recommended value is 1.
+> +    minimum: 1
+> +    maximum: 256
+> +
+> +  nvidia,slices:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      HTE lines are arranged in 32 bit slice where each bit represents different
+> +      line/signal that it can enable/configure for the timestamp. It is u32
+> +      property and depends on the HTE instance in the chip. The value 3 is for
+> +      GPIO GTE and 11 for IRQ GTE.
+> +    enum: [3, 11]
+> +
+> +  '#hardware-timestamp-cells':
+> +    const: 1
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- .../media/atomisp/i2c/atomisp-ov2722.c        | 20 ++++++++-----------
- 1 file changed, 8 insertions(+), 12 deletions(-)
+Need to describe what the cell represents.
 
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-index da98094d7094..d5d099ac1b70 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-@@ -906,22 +906,17 @@ static int ov2722_get_fmt(struct v4l2_subdev *sd,
- static int ov2722_detect(struct i2c_client *client)
- {
- 	struct i2c_adapter *adapter = client->adapter;
--	u16 high, low;
--	int ret;
-+	u16 high = 0, low = 0;
- 	u16 id;
- 	u8 revision;
- 
- 	if (!i2c_check_functionality(adapter, I2C_FUNC_I2C))
- 		return -ENODEV;
- 
--	ret = ov2722_read_reg(client, OV2722_8BIT,
--			      OV2722_SC_CMMN_CHIP_ID_H, &high);
--	if (ret) {
--		dev_err(&client->dev, "sensor_id_high = 0x%x\n", high);
--		return -ENODEV;
--	}
--	ret = ov2722_read_reg(client, OV2722_8BIT,
--			      OV2722_SC_CMMN_CHIP_ID_L, &low);
-+	ov2722_read_reg(client, OV2722_8BIT,
-+			OV2722_SC_CMMN_CHIP_ID_H, &high);
-+	ov2722_read_reg(client, OV2722_8BIT,
-+			OV2722_SC_CMMN_CHIP_ID_L, &low);
- 	id = (high << 8) | low;
- 
- 	if ((id != OV2722_ID) && (id != OV2720_ID)) {
-@@ -929,8 +924,9 @@ static int ov2722_detect(struct i2c_client *client)
- 		return -ENODEV;
- 	}
- 
--	ret = ov2722_read_reg(client, OV2722_8BIT,
--			      OV2722_SC_CMMN_SUB_ID, &high);
-+	high = 0;
-+	ov2722_read_reg(client, OV2722_8BIT,
-+			OV2722_SC_CMMN_SUB_ID, &high);
- 	revision = (u8)high & 0x0f;
- 
- 	dev_dbg(&client->dev, "sensor_revision = 0x%x\n", revision);
--- 
-2.26.3
-
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - nvidia,slices
+> +  - "#hardware-timestamp-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    tegra_hte_aon: hardware-timestamp@c1e0000 {
+> +              compatible = "nvidia,tegra194-gte-aon";
+> +              reg = <0xc1e0000 0x10000>;
+> +              interrupts = <0 13 0x4>;
+> +              nvidia,int-threshold = <1>;
+> +              nvidia,slices = <3>;
+> +              #hardware-timestamp-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    tegra_hte_lic: hardware-timestamp@3aa0000 {
+> +              compatible = "nvidia,tegra194-gte-lic";
+> +              reg = <0x3aa0000 0x10000>;
+> +              interrupts = <0 11 0x4>;
+> +              nvidia,int-threshold = <1>;
+> +              nvidia,slices = <11>;
+> +              #hardware-timestamp-cells = <1>;
+> +    };
+> +
+> +...
+> -- 
+> 2.17.1
+> 
+> 

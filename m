@@ -2,68 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A396F4EAC77
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 13:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 927D74EAC76
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 13:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235949AbiC2Lkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 07:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
+        id S235947AbiC2Lkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 07:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235387AbiC2Lkv (ORCPT
+        with ESMTP id S235387AbiC2Lkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 07:40:51 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA108EB56
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 04:39:08 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22TBciHg083594;
-        Tue, 29 Mar 2022 06:38:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1648553925;
-        bh=CdYAIN7XqvtYBdmOgn+vkwITmsTrcIGAWqJUkyEBR7Q=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=ytRO/G113p9ql61f/Y/RfElo9oNxC2sqM9KBhDR+NJs9dN1l4W7UF7H2xg4/bVPpZ
-         YbhELC4A0W6j84wa4LC69pR+k9IZzuYyidi1KCb/35B7agKsSK/O+CznkBmxUfxgob
-         bDc6xMZyiDuVICQ0g80U61dIP1yAOzxNb6shmbfM=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22TBci8E094771
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 29 Mar 2022 06:38:44 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 29
- Mar 2022 06:38:44 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 29 Mar 2022 06:38:44 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22TBchVA051849;
-        Tue, 29 Mar 2022 06:38:44 -0500
-Date:   Tue, 29 Mar 2022 17:08:43 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-CC:     Julia Lawall <julia.lawall@inria.fr>, <kbuild-all@lists.01.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mtd: spi-nor: fix minmax.cocci warnings
-Message-ID: <20220329113843.nngzktxoa6c5vxcw@ti.com>
-References: <alpine.DEB.2.22.394.2203260929310.3141@hadrien>
- <9a20ed24-be9d-bbec-19da-56c0ff68cbda@ti.com>
+        Tue, 29 Mar 2022 07:40:33 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF1E23164
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 04:38:50 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id pv16so34575860ejb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 04:38:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zq7C4iKRvGebllBAZvWIf+7v5FAFoQ2UwNc++oi/Xyk=;
+        b=fQrU6QtWl2BlvbvHbYiCFBDjiB5efV4HULcyfbCoE3DWWFazC6Po7Tbxaougb/ju4n
+         YrEfnbVA1Cz95GiJGigQZE9PxLsnILqrr1Lz7kaAPXWmNa3m80YCuDqUecx4h8z7U0Fg
+         WG3M8H+J9ZZDLYZR1cat2kr/vfprHjmWvAKgv5acLY9K1MQ5a9bsqSrtJFy3FLh9UFS7
+         Xki1BQf8g4TrKyGDubNB0a3+nfQ/VRwmMo2ntrl/sy92x6WuWuXx+n/BYKC8jfnEyAGb
+         K9qZH17zwFilagAutbdCK36WKie4tx5/Au93FlARoSjiQFn7b1tPyVIwlyERsWWWanCJ
+         0Xaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zq7C4iKRvGebllBAZvWIf+7v5FAFoQ2UwNc++oi/Xyk=;
+        b=MphOoj5JwM0ue2s8o81bGEEx3qn3qVRNmn5Km6qGcgAZq5Dp0MvGAIBUu9D0t57ioe
+         dpdwpgA+yjuczcWXBseJ6SvyXuw1onRrQRDQFVJmbzZiHHx3iYXydv7HTaR7q9/8wTS9
+         /HS3/qp2EswbuyV2lFHV/Cz0opO9wHZ8g8lCxC3D0XCJfhznpMUDbjlLAeG+pyYAgZhs
+         MK0ga22uu/viJ+OMGsevj9CadDzAdYdjhx9tJ1BT9ifhTs6aJr6UpZhcY9U4Z0jLCDiM
+         9jp0wEWSdPbedP6hsnAKQqign0jkGLWJmRq8X0A32AcAXZ7YUMCJ8PtcYSwiDIEw294n
+         cxcw==
+X-Gm-Message-State: AOAM531VFPfmoNMZJj879LC4J1y61mV5GV9ZduSRS58RlfwrTzbk9m6I
+        iztkgvrcB/Kvx+F+LESfsPI5NITr6XGiUHvp
+X-Google-Smtp-Source: ABdhPJwm2Fi3ujst5BqI4idBxlwsi1QPSj+C52k/wNTafoARGRJny3jh/mBSuUURm9rD8YsQh9roHg==
+X-Received: by 2002:a17:907:6d19:b0:6db:89c8:52e3 with SMTP id sa25-20020a1709076d1900b006db89c852e3mr34739534ejc.754.1648553929117;
+        Tue, 29 Mar 2022 04:38:49 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id dt6-20020a170907728600b006dff778258csm7065347ejc.32.2022.03.29.04.38.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 04:38:48 -0700 (PDT)
+Message-ID: <42f07e63-107a-f8f5-1a44-9a93705516ba@linaro.org>
+Date:   Tue, 29 Mar 2022 13:38:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <9a20ed24-be9d-bbec-19da-56c0ff68cbda@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 4/4] spi: dt-bindings: qcom,spi-qup: convert to dtschema
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220329112902.252937-1-krzysztof.kozlowski@linaro.org>
+ <20220329112902.252937-5-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220329112902.252937-5-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,51 +80,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/03/22 11:28AM, Vignesh Raghavendra wrote:
-> Hi.
+On 29/03/2022 13:29, Krzysztof Kozlowski wrote:
+> Convert the Qualcomm Universal Peripheral (QUP) Serial Peripheral
+> Interface (SPI) bindings to DT Schema.
 > 
-> On 26/03/22 2:00 pm, Julia Lawall wrote:
-> > From: kernel test robot <lkp@intel.com>
-> > 
-> > Use min to simplify the code.
-> > 
-> > Generated by: scripts/coccinelle/misc/minmax.cocci
-> > 
-> > Fixes: 2747bc2106aa ("mtd: spi-nor: Add dual parallel and stacked mode support")
-> > CC: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
-> > ---
-> > 
-> > tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS
-> > head:   1870e0fa79a9d58c6748c34550f3ccea0b515933
-> > commit: 2747bc2106aa429773d9a932c799aa6229595148 [840/1029] mtd: spi-nor: Add dual parallel and stacked mode support
-> > :::::: branch date: 34 hours ago
-> > :::::: commit date: 8 weeks ago
-> > 
-> >  drivers/mtd/spi-nor/core.c |    5 +----
-> >  1 file changed, 1 insertion(+), 4 deletions(-)
-> > 
-> > --- a/drivers/mtd/spi-nor/core.c
-> > +++ b/drivers/mtd/spi-nor/core.c
-> > @@ -2034,10 +2034,7 @@ static int spi_nor_read(struct mtd_info
-> >  						(offset << nor->shift);
-> >  			}
-> >  		}
-> > -		if (len < rem_bank_len)
-> > -			read_len = len;
-> > -		else
-> > -			read_len = rem_bank_len;
-> > +		read_len = min(len, rem_bank_len);
-> 
-> This chunk does not exist in mainline. Seems like xlnx local changes.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../devicetree/bindings/spi/qcom,spi-qup.txt  | 103 ------------------
+>  .../devicetree/bindings/spi/qcom,spi-qup.yaml |  82 ++++++++++++++
+>  2 files changed, 82 insertions(+), 103 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
+>  create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.yaml
 
-Yes. I was very confused for a bit until I realized. It would be nice if 
-upstream maintainers and mailing lists were not Cced if the patch does 
-not target the mainline branch.
+I forgot to update the path in
+Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+I will send a v2 ~tomorrow.
+
+Best regards,
+Krzysztof

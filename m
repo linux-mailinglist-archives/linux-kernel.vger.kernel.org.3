@@ -2,247 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 411984EAA3B
+	by mail.lfdr.de (Postfix) with ESMTP id D861E4EAA3D
 	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 11:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234501AbiC2JNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 05:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
+        id S234522AbiC2JNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 05:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232089AbiC2JNM (ORCPT
+        with ESMTP id S234502AbiC2JNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 05:13:12 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E0D65D2B;
-        Tue, 29 Mar 2022 02:11:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1648545084; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OMAjaC6Xw9SY4zhfvb3pKA4ot1/J4vIm+YtJOA8m/zE=;
-        b=pwWs/q9k23KWG7HgdNFF25NnQ76o5gHr+LF7wTk332YU0sRuDJRoCvHBgjgjDNDYgdyxcb
-        owrNs15C2GzTF2MeRMVxffGqYVRQxbS1T/EJFXlMcLzq3P1X3S8AiXiQEIv1AZuXP/Jyn2
-        A0rcspXWffbD9k4wC1psO2d0Y1p4V3Q=
-Date:   Tue, 29 Mar 2022 10:11:14 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 00/12] iio: buffer-dma: write() and new DMABUF based
- API
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-iio@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linaro-mm-sig@lists.linaro.org,
-        Alexandru Ardelean <ardeleanalex@gmail.com>,
-        Christian =?iso-8859-1?b?S/ZuaWc=?= <christian.koenig@amd.com>
-Message-Id: <QI1I9R.GDPWLM86I45S@crapouillou.net>
-In-Reply-To: <YkLEXJzs8ukrxG8s@phenom.ffwll.local>
-References: <20220207125933.81634-1-paul@crapouillou.net>
-        <20220213184616.669b490b@jic23-huawei>
-        <N8XC7R.5FP2M8552CGT3@crapouillou.net> <YkLEXJzs8ukrxG8s@phenom.ffwll.local>
+        Tue, 29 Mar 2022 05:13:18 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0039A9AB
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 02:11:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=b3Yrb0NuzwsS2/56fyOFME8dNLT
+        D46th/ew7CyWBPdo=; b=T5K59klaYVviJYxX6pcJbDLJorzxh8igbwgjSS9rGtt
+        E1bSMfP6X3cBnH3KSfiiyDi6Oq7yx4zpdBKy5KQM+Ohcm4A5NRlTtXJIyqf9Onw+
+        SZ01N09u80r4gP1gLnJqQFaDW0iD5PWWLLVXsXeBZO2apKX3nFG3uuEXTnTGLVlQ
+        =
+Received: (qmail 1716952 invoked from network); 29 Mar 2022 11:11:31 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 Mar 2022 11:11:31 +0200
+X-UD-Smtp-Session: l3s3148p1@VBqS0FfbHKggAQnoAFHmAKNSQL+AeJes
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-gpio@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH v8 0/1] gpio: add simple logic analyzer using polling
+Date:   Tue, 29 Mar 2022 11:11:25 +0200
+Message-Id: <20220329091126.4730-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-13; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+Here is the next version of the sloppy GPIO logic analyzer. Changes
+since last version:
 
-Le mar., mars 29 2022 at 10:33:32 +0200, Daniel Vetter=20
-<daniel@ffwll.ch> a =E9crit :
-> On Tue, Feb 15, 2022 at 05:43:35PM +0000, Paul Cercueil wrote:
->>  Hi Jonathan,
->>=20
->>  Le dim., f=E9vr. 13 2022 at 18:46:16 +0000, Jonathan Cameron
->>  <jic23@kernel.org> a =E9crit :
->>  > On Mon,  7 Feb 2022 12:59:21 +0000
->>  > Paul Cercueil <paul@crapouillou.net> wrote:
->>  >
->>  > >  Hi Jonathan,
->>  > >
->>  > >  This is the V2 of my patchset that introduces a new userspace
->>  > > interface
->>  > >  based on DMABUF objects to complement the fileio API, and adds
->>  > > write()
->>  > >  support to the existing fileio API.
->>  >
->>  > Hi Paul,
->>  >
->>  > It's been a little while. Perhaps you could summarize the various=20
->> view
->>  > points around the appropriateness of using DMABUF for this?
->>  > I appreciate it is a tricky topic to distil into a brief summary=20
->> but
->>  > I know I would find it useful even if no one else does!
->>=20
->>  So we want to have a high-speed interface where buffers of samples=20
->> are
->>  passed around between IIO devices and other devices (e.g. USB or=20
->> network),
->>  or made available to userspace without copying the data.
->>=20
->>  DMABUF is, at least in theory, exactly what we need. Quoting the
->>  documentation
->>  (https://www.kernel.org/doc/html/v5.15/driver-api/dma-buf.html):
->>  "The dma-buf subsystem provides the framework for sharing buffers=20
->> for
->>  hardware (DMA) access across multiple device drivers and=20
->> subsystems, and for
->>  synchronizing asynchronous hardware access. This is used, for=20
->> example, by
->>  drm =B4prime=A1 multi-GPU support, but is of course not limited to=20
->> GPU use
->>  cases."
->>=20
->>  The problem is that right now DMABUF is only really used by DRM,=20
->> and to
->>  quote Daniel, "dma-buf looks like something super generic and=20
->> useful, until
->>  you realize that there's a metric ton of gpu/accelerator bagage=20
->> piled in".
->>=20
->>  Still, it seems to be the only viable option. We could add a custom
->>  buffer-passing interface, but that would mean implementing the same
->>  buffer-passing interface on the network and USB stacks, and before=20
->> we know
->>  it we re-invented DMABUFs.
->=20
-> dma-buf also doesn't support sharing with network and usb stacks, so=20
-> I'm a
-> bit confused why exactly this is useful?
+* white space fix found by Andy, thanks!
+* rebased to v5.17
 
-There is an attempt to get dma-buf support in the network stack, called=20
-"zctap". Last patchset was sent last november. USB stack does not=20
-support dma-buf, but we can add it later I guess.
+For those new to this sloppy GPIO logic analyzer, here is a small
+excerpt from a previous cover-letter with the links updated:
 
-> So yeah unless there's some sharing going on with gpu stuff (for data
-> processing maybe) I'm not sure this makes a lot of sense really. Or at
-> least some zero-copy sharing between drivers, but even that would
-> minimally require a dma-buf import ioctl of some sorts. Which I either
-> missed or doesn't exist.
+===
 
-We do want zero-copy between drivers, the network stack, and the USB=20
-stack. It's not just about having a userspace interface.
+Here is the next update of the in-kernel logic analyzer based on GPIO
+polling with local irqs disabled. It has been tested locally and
+remotely. It provided satisfactory results. Besides the driver, there is
+also a script which isolates a CPU to achieve the best possible result.
+I am aware of the latency limitations. However, the intention is for
+debugging only, not mass production. Especially for remote debugging and
+to get a first impression, this has already been useful. Documentation
+is within the patch, to get a better idea what this is all about.
 
-> If there's none of that then just hand-roll your buffer handling code
-> (xarray is cheap to use in terms of code for this), you can always add
-> dma-buf import/export later on when the need arises.
->=20
-> Scrolling through patches you only have dma-buf export, but no=20
-> importing,
-> so the use-case that works is with one of the existing subsystems that
-> supporting dma-buf importing.
->=20
-> I think minimally we need the use-case (in form of code) that needs=20
-> the
-> buffer sharing here.
+A branch is here:
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/gpio-logic-analyzer-v8
 
-I'll try with zctap and report back.
+And an eLinux-wiki page with a picture of a result is here:
+https://elinux.org/Kernel_GPIO_Logic_analyzer
 
-Cheers,
--Paul
+I've used the analyzer in a few more scenarios and on multiple SoCs
+(Renesas R-Car H3 and M3-W) and was happy with the outcome. Looking
+forward to other tests and comments. From my side this is good to go.
 
->>  > >
->>  > >  Changes since v1:
->>  > >
->>  > >  - the patches that were merged in v1 have been (obviously)=20
->> dropped
->>  > > from
->>  > >    this patchset;
->>  > >  - the patch that was setting the write-combine cache setting=20
->> has
->>  > > been
->>  > >    dropped as well, as it was simply not useful.
->>  > >  - [01/12]:
->>  > >      * Only remove the outgoing queue, and keep the incoming=20
->> queue,
->>  > > as we
->>  > >        want the buffer to start streaming data as soon as it is
->>  > > enabled.
->>  > >      * Remove IIO_BLOCK_STATE_DEQUEUED, since it is now=20
->> functionally
->>  > > the
->>  > >        same as IIO_BLOCK_STATE_DONE.
->>  > >  - [02/12]:
->>  > >      * Fix block->state not being reset in
->>  > >        iio_dma_buffer_request_update() for output buffers.
->>  > >      * Only update block->bytes_used once and add a comment=20
->> about
->>  > > why we
->>  > >        update it.
->>  > >      * Add a comment about why we're setting a different state=20
->> for
->>  > > output
->>  > >        buffers in iio_dma_buffer_request_update()
->>  > >      * Remove useless cast to bool (!!) in iio_dma_buffer_io()
->>  > >  - [05/12]:
->>  > >      Only allow the new IOCTLs on the buffer FD created with
->>  > >      IIO_BUFFER_GET_FD_IOCTL().
->>  > >  - [12/12]:
->>  > >      * Explicitly state that the new interface is optional and=20
->> is
->>  > >        not implemented by all drivers.
->>  > >      * The IOCTLs can now only be called on the buffer FD=20
->> returned by
->>  > >        IIO_BUFFER_GET_FD_IOCTL.
->>  > >      * Move the page up a bit in the index since it is core=20
->> stuff
->>  > > and not
->>  > >        driver-specific.
->>  > >
->>  > >  The patches not listed here have not been modified since v1.
->>  > >
->>  > >  Cheers,
->>  > >  -Paul
->>  > >
->>  > >  Alexandru Ardelean (1):
->>  > >    iio: buffer-dma: split iio_dma_buffer_fileio_free() function
->>  > >
->>  > >  Paul Cercueil (11):
->>  > >    iio: buffer-dma: Get rid of outgoing queue
->>  > >    iio: buffer-dma: Enable buffer write support
->>  > >    iio: buffer-dmaengine: Support specifying buffer direction
->>  > >    iio: buffer-dmaengine: Enable write support
->>  > >    iio: core: Add new DMABUF interface infrastructure
->>  > >    iio: buffer-dma: Use DMABUFs instead of custom solution
->>  > >    iio: buffer-dma: Implement new DMABUF based userspace API
->>  > >    iio: buffer-dmaengine: Support new DMABUF based userspace API
->>  > >    iio: core: Add support for cyclic buffers
->>  > >    iio: buffer-dmaengine: Add support for cyclic buffers
->>  > >    Documentation: iio: Document high-speed DMABUF based API
->>  > >
->>  > >   Documentation/driver-api/dma-buf.rst          |   2 +
->>  > >   Documentation/iio/dmabuf_api.rst              |  94 +++
->>  > >   Documentation/iio/index.rst                   |   2 +
->>  > >   drivers/iio/adc/adi-axi-adc.c                 |   3 +-
->>  > >   drivers/iio/buffer/industrialio-buffer-dma.c  | 610
->>  > > ++++++++++++++----
->>  > >   .../buffer/industrialio-buffer-dmaengine.c    |  42 +-
->>  > >   drivers/iio/industrialio-buffer.c             |  60 ++
->>  > >   include/linux/iio/buffer-dma.h                |  38 +-
->>  > >   include/linux/iio/buffer-dmaengine.h          |   5 +-
->>  > >   include/linux/iio/buffer_impl.h               |   8 +
->>  > >   include/uapi/linux/iio/buffer.h               |  30 +
->>  > >   11 files changed, 749 insertions(+), 145 deletions(-)
->>  > >   create mode 100644 Documentation/iio/dmabuf_api.rst
->>  > >
->>  >
->>=20
->>=20
->=20
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
+===
 
+Thanks and happy hacking,
+
+   Wolfram
+
+
+Wolfram Sang (1):
+  gpio: add sloppy logic analyzer using polling
+
+ .../dev-tools/gpio-sloppy-logic-analyzer.rst  |  91 +++++
+ Documentation/dev-tools/index.rst             |   1 +
+ drivers/gpio/Kconfig                          |  17 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-sloppy-logic-analyzer.c     | 340 ++++++++++++++++++
+ tools/gpio/gpio-sloppy-logic-analyzer         | 230 ++++++++++++
+ 6 files changed, 680 insertions(+)
+ create mode 100644 Documentation/dev-tools/gpio-sloppy-logic-analyzer.rst
+ create mode 100644 drivers/gpio/gpio-sloppy-logic-analyzer.c
+ create mode 100755 tools/gpio/gpio-sloppy-logic-analyzer
+
+-- 
+2.30.2
 

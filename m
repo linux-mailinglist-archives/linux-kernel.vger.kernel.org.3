@@ -2,110 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742D54EAEFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0044EAEFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 16:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237709AbiC2OEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 10:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
+        id S237714AbiC2OF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 10:05:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237697AbiC2OEJ (ORCPT
+        with ESMTP id S235896AbiC2OFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 10:04:09 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83889206ED1
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:02:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 380F723A;
-        Tue, 29 Mar 2022 07:02:26 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E44C63F73B;
-        Tue, 29 Mar 2022 07:02:24 -0700 (PDT)
-Message-ID: <1a546197-872b-7762-68ac-d5e6bb6d19aa@arm.com>
-Date:   Tue, 29 Mar 2022 16:02:22 +0200
+        Tue, 29 Mar 2022 10:05:24 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84699C2E
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 07:03:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648562621; x=1680098621;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=N7ljZpLuhVxvG1lByeWMuXSfovsfSjMocKlsX1aE0+o=;
+  b=Ld2nj0SjsvUbgrVQkhSZYurdRUUf+ISVVP3lN1GW0CaxOT9PW4C5WENO
+   qd8YDRyIDYq+uktPpMrgUG6VAvN7F631/1puYIX3RMj6vFck0fVC03F95
+   gMEHsf36jS++u7sBUPlS1eQngNfO7wVtmm1T01/MzxjVoav1qolZK/bTs
+   7mvn0UMa9+fPbvX5dnNNcXEegiYpszzao/gPAmajtT8RNEbodEeR3qjj0
+   jKD2YBBlCEcLDOANsWMaWl5/aaCHD0OleTX7rnr/wmPzA7XIZnvuQPfSP
+   jTAvnvJXh77piTMaEPjMkDp5HvJof9gu7tFvCUB4OECWhMylHGgCtuOGn
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="259443498"
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="259443498"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 07:03:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="585586371"
+Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 29 Mar 2022 07:03:12 -0700
+Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nZCRD-0000I4-R1; Tue, 29 Mar 2022 14:03:11 +0000
+Date:   Tue, 29 Mar 2022 22:02:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@elte.hu>, Adrian Bunk <bunk@stusta.de>,
+        Randy Dunlap <rdunlap@xenotime.net>,
+        Michel Lespinasse <walken@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [hnaz-mm:master 478/481] kernel/synchro-test.c:393:49: warning:
+ variable 'zeros' set but not used
+Message-ID: <202203292115.plWUiMYU-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] arch/arm64: Fix topology initialization for core
- scheduling
-Content-Language: en-US
-To:     Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220322160304.26229-1-pauld@redhat.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20220322160304.26229-1-pauld@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2022 17:03, Phil Auld wrote:
-> Some arm64 rely on store_cpu_topology() to setup the real topology.
-> This needs to be done before the call to notify_cpu_starting() which
-> tell the scheduler about the cpu otherwise the core scheduling data
-> structures are setup in a way that does not match the actual topology.
-> 
-> Without this change stress-ng (which enables core scheduling in its prctl 
-> tests) causes a warning and then a crash (trimmed for legibility):
-> 
-> [ 1853.805168] ------------[ cut here ]------------
-> [ 1853.809784] task_rq(b)->core != rq->core
-> [ 1853.809792] WARNING: CPU: 117 PID: 0 at kernel/sched/fair.c:11102 cfs_prio_less+0x1b4/0x1c4
-> ...
-> [ 1854.015210] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
-> ...
-> [ 1854.231256] Call trace:
-> [ 1854.233689]  pick_next_task+0x3dc/0x81c
-> [ 1854.237512]  __schedule+0x10c/0x4cc
-> [ 1854.240988]  schedule_idle+0x34/0x54
-> 
-> Fixes: 9edeaea1bc45 ("sched: Core-wide rq->lock")
-> Signed-off-by: Phil Auld <pauld@redhat.com>
-> ---
-> This is a similar issue to 
->   f2703def339c ("MIPS: smp: fill in sibling and core maps earlier") 
-> which fixed it for MIPS.
+tree:   https://github.com/hnaz/linux-mm master
+head:   673977c1d5c4c5bc15abf8f01ebaddc66116a9cd
+commit: 52880bd2b8272052d5ccf95f94704a959796c9f6 [478/481] mutex subsystem, synchro-test module
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220329/202203292115.plWUiMYU-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/hnaz/linux-mm/commit/52880bd2b8272052d5ccf95f94704a959796c9f6
+        git remote add hnaz-mm https://github.com/hnaz/linux-mm
+        git fetch --no-tags hnaz-mm master
+        git checkout 52880bd2b8272052d5ccf95f94704a959796c9f6
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-I assume this is for a machine which relies on MPIDR-based setup
-(package_id == -1)? I.e. it doesn't have proper ACPI/(DT) data for
-topology setup.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tried on a ThunderX2 by disabling parse_acpi_topology() but then I end
-up with a machine w/o SMT, so `stress-ng --prctl N` doesn't show this issue.
+All warnings (new ones prefixed by >>):
 
-Which machine were you using?
+   kernel/synchro-test.c:267:2: error: implicit declaration of function 'complete_and_exit' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           complete_and_exit(&sp_comp[N], 0);
+           ^
+   kernel/synchro-test.c:268:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
+   }
+   ^
+   kernel/synchro-test.c:288:2: error: implicit declaration of function 'complete_and_exit' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           complete_and_exit(&mx_comp[N], 0);
+           ^
+   kernel/synchro-test.c:289:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
+   }
+   ^
+   kernel/synchro-test.c:309:2: error: implicit declaration of function 'complete_and_exit' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           complete_and_exit(&sm_comp[N], 0);
+           ^
+   kernel/synchro-test.c:310:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
+   }
+   ^
+   kernel/synchro-test.c:332:2: error: implicit declaration of function 'complete_and_exit' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           complete_and_exit(&rd_comp[N], 0);
+           ^
+   kernel/synchro-test.c:333:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
+   }
+   ^
+   kernel/synchro-test.c:355:2: error: implicit declaration of function 'complete_and_exit' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           complete_and_exit(&wr_comp[N], 0);
+           ^
+   kernel/synchro-test.c:356:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
+   }
+   ^
+   kernel/synchro-test.c:383:2: error: implicit declaration of function 'complete_and_exit' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           complete_and_exit(&dg_comp[N], 0);
+           ^
+   kernel/synchro-test.c:384:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
+   }
+   ^
+>> kernel/synchro-test.c:393:49: warning: variable 'zeros' set but not used [-Wunused-but-set-variable]
+           unsigned int tot = 0, max = 0, min = UINT_MAX, zeros = 0, cnt;
+                                                          ^
+   1 warning and 12 errors generated.
 
->  arch/arm64/kernel/smp.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-> index 27df5c1e6baa..3b46041f2b97 100644
-> --- a/arch/arm64/kernel/smp.c
-> +++ b/arch/arm64/kernel/smp.c
-> @@ -234,6 +234,7 @@ asmlinkage notrace void secondary_start_kernel(void)
->  	 * Log the CPU info before it is marked online and might get read.
->  	 */
->  	cpuinfo_store_cpu();
-> +	store_cpu_topology(cpu);
->  
->  	/*
->  	 * Enable GIC and timers.
-> @@ -242,7 +243,6 @@ asmlinkage notrace void secondary_start_kernel(void)
->  
->  	ipi_setup(cpu);
->  
-> -	store_cpu_topology(cpu);
->  	numa_add_cpu(cpu);
->  
->  	/*
 
+vim +/zeros +393 kernel/synchro-test.c
+
+   390	
+   391	static unsigned int total(const char *what, unsigned int counts[], int num)
+   392	{
+ > 393		unsigned int tot = 0, max = 0, min = UINT_MAX, zeros = 0, cnt;
+   394		int loop;
+   395	
+   396		for (loop = 0; loop < num; loop++) {
+   397			cnt = counts[loop];
+   398	
+   399			if (cnt == 0) {
+   400				zeros++;
+   401				min = 0;
+   402				continue;
+   403			}
+   404	
+   405			tot += cnt;
+   406			if (tot > max)
+   407				max = tot;
+   408			if (tot < min)
+   409				min = tot;
+   410		}
+   411	
+   412		if (verbose && tot > 0) {
+   413			printk("%s:", what);
+   414	
+   415			for (loop = 0; loop < num; loop++) {
+   416				cnt = counts[loop];
+   417	
+   418				if (cnt == 0)
+   419					printk(" zzz");
+   420				else
+   421					printk(" %d%%", cnt * 100 / tot);
+   422			}
+   423	
+   424			printk("\n");
+   425		}
+   426	
+   427		return tot;
+   428	}
+   429	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

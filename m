@@ -2,138 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6914EB4B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0884EB4C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbiC2UdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 16:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54322 "EHLO
+        id S231565AbiC2Ukg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 16:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiC2UdV (ORCPT
+        with ESMTP id S229612AbiC2Uke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 16:33:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2DF4433A0B
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 13:31:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648585897;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ep24nhUy1NfqZYcqo2uvggmox6RnZ/7P2SEhxMzfOyM=;
-        b=O1hblq2eBc0glFG6lH4v1TzDmvIKB3R+/JpF29SbwUC5a+Q56/jpdGiPC0+X+O0xEcVvej
-        kkuq/FLnXH0qCAu7seKIZllLlvi7ph0VzjwerRPId/cKSU011kQ/JxOkdPJBcBw+txbOH0
-        KgVr5MCnINTf6OFH7LHl/y4TsnPbaAo=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-460-3WkAAZOcOq-CkFeJDiqBDg-1; Tue, 29 Mar 2022 16:31:33 -0400
-X-MC-Unique: 3WkAAZOcOq-CkFeJDiqBDg-1
-Received: by mail-wm1-f72.google.com with SMTP id 2-20020a1c0202000000b0038c71e8c49cso4318wmc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 13:31:33 -0700 (PDT)
+        Tue, 29 Mar 2022 16:40:34 -0400
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20F949F00;
+        Tue, 29 Mar 2022 13:38:48 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id j83so20213876oih.6;
+        Tue, 29 Mar 2022 13:38:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ep24nhUy1NfqZYcqo2uvggmox6RnZ/7P2SEhxMzfOyM=;
-        b=Dm6Z/wMNiw+XiZOzOMXrFeaSguXy0oreTGWKlW6Vo4nHDZjIKnIDXWNoQJydYiP0cy
-         TerZTR+Q1epsNYUQPex6gL1gJe4JHd/IBu28FNMOZaLrcHZVYV2VteSGmAg87VvTPa37
-         e3zNWO8Cp7NIsdj8LfaqnULwsSmyETafc64Itd8OQOR88K4JXZVFS8TbC4fnjQR7kjsA
-         5H1zs+4bz86XlEsHuRZ0BMdPwiZ9/EwXeKVZhhIdLSl0Z/psaf/n+UwuAZj2/lWxp1Mj
-         OGgZj7gDsGCrJ3k7Nj8m7WHe1bSvvEhG/ugpAAPqOwGq4O96O0D+vkF7MJyF5Jsk+PY7
-         ZMuw==
-X-Gm-Message-State: AOAM531a0l9Li6wNeXkgE2p1SvvM8qfu+oIw6O1jh7vOKWjMUpa2PQWn
-        jv5Yt9t6POIEFYX1j3YmyggNfYaJJX5X+XjG9+UctVUPmhl+AhHAbf/xB4nShqlFU76Uv7DKQTL
-        Ho+ZVQxs20LF3HL9pKH+37q0Q
-X-Received: by 2002:adf:e2cc:0:b0:203:e8ba:c709 with SMTP id d12-20020adfe2cc000000b00203e8bac709mr33615675wrj.713.1648585892559;
-        Tue, 29 Mar 2022 13:31:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwBmMNc4KsEsOZNqGNoV8S7Z3pC1zatXcvDbPiEslZ3NI4NbZQOv6xaXesMrj4EBZ0rxoQ3jQ==
-X-Received: by 2002:adf:e2cc:0:b0:203:e8ba:c709 with SMTP id d12-20020adfe2cc000000b00203e8bac709mr33615658wrj.713.1648585892284;
-        Tue, 29 Mar 2022 13:31:32 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:8ca6:a836:a237:fed1? ([2001:b07:6468:f312:8ca6:a836:a237:fed1])
-        by smtp.googlemail.com with ESMTPSA id r12-20020a5d6c6c000000b00203ec2b1255sm20257578wrz.60.2022.03.29.13.31.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 13:31:31 -0700 (PDT)
-Message-ID: <d8f5f25d-e544-dea7-2474-6d98fea39cbc@redhat.com>
-Date:   Tue, 29 Mar 2022 22:31:30 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4TtgqB+qx7XVjHzfNHtzxULilxnRMCv4wkN1Lk/S1ms=;
+        b=mIVt5XRF+JiSH2GOfs26FcIig2Vz8WO88Yje9GQC67Bms+O6apqFPrubFQtSFD5Uru
+         +/tOy3TAuUPTz3h8te9GVQCt40Ep4OnlwDtSRgDLKYheUaqRgyZc8RhDrVyfjPaGQuGd
+         1FqFRp/1TyjMn77Kw+tFV6wVO7+ZaiixZBMhVm2nhgmp9A0Zl6VhPpqazdg1Fa+F1NGP
+         z2hSlUWd/orn3ejJ0EWBpBh4V0heXe2LO8W6QK+9VmtvTai2uku/qwXr0xLJ5LZfum4N
+         4Xtof7F4gNp1zdmc6Ru1BxMJrSrQvKbx4wU59tGqVf25cQvl9QiSheTJTngQei+QdV76
+         pcig==
+X-Gm-Message-State: AOAM532VhZlHr4ufV+X64KU5vpEx8y8xiq1q5NtYbWa0E64eQ7XU2YbY
+        NmZ28n8KFmDIACKCrca+rg==
+X-Google-Smtp-Source: ABdhPJwQ4FlupI7A/BX1ZpZC7myqHedGwWuamCYndsUFew8tbRsRgZX1033348l40PCDg2B778mnZg==
+X-Received: by 2002:aca:2418:0:b0:2ee:f7da:795f with SMTP id n24-20020aca2418000000b002eef7da795fmr499152oic.276.1648586327975;
+        Tue, 29 Mar 2022 13:38:47 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ep36-20020a056870a9a400b000de98fe4869sm8295009oab.35.2022.03.29.13.38.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 13:38:47 -0700 (PDT)
+Received: (nullmailer pid 1228499 invoked by uid 1000);
+        Tue, 29 Mar 2022 20:38:45 -0000
+Date:   Tue, 29 Mar 2022 15:38:45 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>
+Cc:     Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        ryder.lee@kernel.org, wenst@chromium.org, chunfeng.yun@mediatek.com
+Subject: Re: [PATCH v12 2/3] dt-bindings: mmc: mtk-sd: increase reg maxItems
+Message-ID: <YkNuVTkTCfVJBFz+@robh.at.kernel.org>
+References: <20220329114540.17140-1-tinghan.shen@mediatek.com>
+ <20220329114540.17140-3-tinghan.shen@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH V2 0/4] KVM: X86: Add and use shadow page with level
- expanded or acting as pae_root
-Content-Language: en-US
-To:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Lai Jiangshan <jiangshan.ljs@antgroup.com>
-References: <20220329153604.507475-1-jiangshanlai@gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220329153604.507475-1-jiangshanlai@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220329114540.17140-3-tinghan.shen@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/22 17:36, Lai Jiangshan wrote:
-> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+On Tue, Mar 29, 2022 at 07:45:39PM +0800, Tinghan Shen wrote:
+> Add optional host top register base for the reg binding description.
 > 
-> (Request For Help for testing on AMD machine with 32 bit L1 hypervisor,
-> see information below)
+> Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/mmc/mtk-sd.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> KVM handles root pages specially for these cases:
+> diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> index 7032f7adf3ca..6d41bcec900f 100644
+> --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> @@ -40,7 +40,8 @@ properties:
+>            - const: mediatek,mt8183-mmc
+>  
+>    reg:
+> -    maxItems: 1
+> +    minItems: 1
+> +    maxItems: 2
+
+If more than 1 entry, then you need to define what each one is.
+
+>  
+>    clocks:
+>      description:
+> -- 
+> 2.18.0
 > 
-> direct mmu (nonpaping for 32 bit guest):
-> 	gCR0_PG=0
-> shadow mmu (shadow paping for 32 bit guest):
-> 	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE=0
-> 	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE=1
-> direct mmu (NPT for 32bit host):
-> 	hEFER_LMA=0
-> shadow nested NPT (for 32bit L1 hypervisor):
-> 	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE=0,hEFER_LMA=0
-> 	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE=1,hEFER_LMA=0
-> 	gCR0_PG=1,gEFER_LMA=0,gCR4_PSE={0|1},hEFER_LMA=1,hCR4_LA57={0|1}
-> Shadow nested NPT for 64bit L1 hypervisor:
-> 	gEFER_LMA=1,gCR4_LA57=0,hEFER_LMA=1,hCR4_LA57=1
 > 
-> They are either using special roots or matched the condition
-> ((mmu->shadow_root_level > mmu->root_level) && !mm->direct_map)
-> (refered as level expansion) or both.
-> 
-> All the cases are using special roots except the last one.
-> Many cases are doing level expansion including the last one.
-
-Hi Jiangshan,
-
-so the main difference between direct and passthrough shadow pages is 
-that passthrough pages can have indirect children.  A direct page maps 
-the page at sp->gfn, while a passthrough page maps the page _table_ at 
-sp->gfn.  Is this correct?
-
-If so, I think there is a difference between a passthrough page that
-maps a level-2 page from level-4, and a passthrough page that maps a
-level-3 page from level-4.  If that is true, a single bit in the role
-is not enough.
-
-One way to handle this could be to have a single field "mapping_level"
-that subsumes both "direct" and "passthrough".  direct==1
-would correspond to "mapping_level == 0"; direct==0 && passthrough==0 
-would be "mapping_level == level"; anything in the middle would be a 
-passthrough page in your series.
-
-What do you think?
-
-Thanks,
-
-Paolo
-

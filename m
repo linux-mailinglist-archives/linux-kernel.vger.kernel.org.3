@@ -2,113 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF3F4EB020
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C142B4EB024
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238451AbiC2PXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
+        id S238462AbiC2PYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbiC2PX3 (ORCPT
+        with ESMTP id S233521AbiC2PYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:23:29 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CA37CB02;
-        Tue, 29 Mar 2022 08:21:45 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4FBEE1FD0A;
-        Tue, 29 Mar 2022 15:21:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1648567304; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=n/czKHIPapnBxpdu79ODwmVGjcsUIWEmGzncRJ5TN4Q=;
-        b=lbxalIk0hgBTc9ZrvdtVK14x3u1oqMDVbsoiIWRU/HZAKUtFdn9xuq+x4VdQSqRv2NIzra
-        6u7dg24T8Ka4DRgQdxJkMClNHbD8rd8VMmEUcF8AeBfKYtvlHup2tBTYs1n4gYuW4kxpnl
-        lnJuwJXKKePEEilmmgnC19er+O83O34=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 755B913AB1;
-        Tue, 29 Mar 2022 15:21:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hsZZGwckQ2LkcwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 29 Mar 2022 15:21:43 +0000
-Date:   Tue, 29 Mar 2022 17:21:42 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, kaleshsingh@google.com,
-        Kenny.Ho@amd.com, skhan@linuxfoundation.org,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [RFC v4 5/8] dmabuf: Add gpu cgroup charge transfer function
-Message-ID: <20220329152142.GA15794@blackbody.suse.cz>
-References: <20220328035951.1817417-1-tjmercier@google.com>
- <20220328035951.1817417-6-tjmercier@google.com>
+        Tue, 29 Mar 2022 11:24:04 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0B9207A0A
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:22:21 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id x1-20020a056e020f0100b002c98fce9c13so4828969ilj.3
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:22:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=rJF02FUqA+BGhfpQq15X1gdE3Vmrsf58Y4lCUEm8TvI=;
+        b=KCPDzrgCCMMgVLUVZkDolmALGjSkBqN1Dxktu5Og+obYj9UHwfiM0am4gjxOwEgISv
+         2QKgwk7fhnpH1EnxzuIbHZUqocIWlvI4VroOswoOeIDJiF1YhbyccQAvG+jDsWWP8zrW
+         fUuYKn80rtATqn3sC1V2l7Zycw7KIdV4JGWVk5FbtWkBVRJrbFwqUCO/rCRpKgwQuIR8
+         xc3veLVTJLDEAcSisSYGGlWX/ClrDCvUqfL0Re7XvYcHU7QeOgT7mT+AwmyDd9nxCYqh
+         hNr6AY6yNeYC8+yvcmUD5UeeSwmahUhLHcq4EschpgANYLqtdZkTYzeEDQJ6/PMpd+/u
+         cj4g==
+X-Gm-Message-State: AOAM5306fhbj51tKtPFzKNXwcpwhEGMR4mSKIbWYZRWXpHBVdMkESsxp
+        SiOfuz0cG7WdNcuf80HzuXAm60kACdGzxoOzOvestyBve2Tf
+X-Google-Smtp-Source: ABdhPJwEhecZIWBhxu8UENb5AeqD1ufIoK+sgyDfNUmc7z61COVL6a53khHIMSakMoWjBb+RJewOyFGLdk2Xc4iTXNnNiCEpnWLN
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328035951.1817417-6-tjmercier@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a02:5b85:0:b0:319:ff85:ff5 with SMTP id
+ g127-20020a025b85000000b00319ff850ff5mr17038951jab.250.1648567340853; Tue, 29
+ Mar 2022 08:22:20 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 08:22:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bd6ee505db5cfec6@google.com>
+Subject: [syzbot] memory leak in gs_usb_probe
+From:   syzbot <syzbot+4d0ae90a195b269f102d@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
+        netdev@vger.kernel.org, pabeni@redhat.com, pfink@christ-es.de,
+        syzkaller-bugs@googlegroups.com, wg@grandegger.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi.
+Hello,
 
-On Mon, Mar 28, 2022 at 03:59:44AM +0000, "T.J. Mercier" <tjmercier@google.com> wrote:
-> From: Hridya Valsaraju <hridya@google.com>
-> 
-> The dma_buf_charge_transfer function provides a way for processes to
+syzbot found the following issue on:
 
-(s/dma_bug_charge_transfer/dma_bug_transfer_charge/)
+HEAD commit:    52deda9551a0 Merge branch 'akpm' (patches from Andrew)
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12b472dd700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9ca2a67ddb20027f
+dashboard link: https://syzkaller.appspot.com/bug?extid=4d0ae90a195b269f102d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e96e1d700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12f8b513700000
 
-> transfer charge of a buffer to a different process. This is essential
-> for the cases where a central allocator process does allocations for
-> various subsystems, hands over the fd to the client who requested the
-> memory and drops all references to the allocated memory.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4d0ae90a195b269f102d@syzkaller.appspotmail.com
 
-I understood from [1] some buffers are backed by regular RAM. How are
-these charges going to be transferred (if so)?
+BUG: memory leak
+unreferenced object 0xffff88810e4fc300 (size 96):
+  comm "kworker/1:1", pid 25, jiffies 4294948102 (age 15.080s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff843fcc08>] kmalloc include/linux/slab.h:581 [inline]
+    [<ffffffff843fcc08>] gs_make_candev drivers/net/can/usb/gs_usb.c:1065 [inline]
+    [<ffffffff843fcc08>] gs_usb_probe.cold+0x69e/0x8b8 drivers/net/can/usb/gs_usb.c:1191
+    [<ffffffff82d0a687>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
+    [<ffffffff82712d87>] call_driver_probe drivers/base/dd.c:517 [inline]
+    [<ffffffff82712d87>] really_probe.part.0+0xe7/0x380 drivers/base/dd.c:596
+    [<ffffffff8271312c>] really_probe drivers/base/dd.c:558 [inline]
+    [<ffffffff8271312c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:755
+    [<ffffffff8271322a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:785
+    [<ffffffff82713a96>] __device_attach_driver+0xf6/0x140 drivers/base/dd.c:902
+    [<ffffffff8270fcf7>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:427
+    [<ffffffff82713612>] __device_attach+0x122/0x260 drivers/base/dd.c:973
+    [<ffffffff82711966>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:487
+    [<ffffffff8270dd4b>] device_add+0x5fb/0xdf0 drivers/base/core.c:3405
+    [<ffffffff82d07ac2>] usb_set_configuration+0x8f2/0xb80 drivers/usb/core/message.c:2170
+    [<ffffffff82d181ac>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
+    [<ffffffff82d09d5c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
+    [<ffffffff82712d87>] call_driver_probe drivers/base/dd.c:517 [inline]
+    [<ffffffff82712d87>] really_probe.part.0+0xe7/0x380 drivers/base/dd.c:596
+    [<ffffffff8271312c>] really_probe drivers/base/dd.c:558 [inline]
+    [<ffffffff8271312c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:755
+    [<ffffffff8271322a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:785
+
+BUG: memory leak
+unreferenced object 0xffff88810e4fc280 (size 96):
+  comm "kworker/1:1", pid 25, jiffies 4294948819 (age 7.910s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff843fcc08>] kmalloc include/linux/slab.h:581 [inline]
+    [<ffffffff843fcc08>] gs_make_candev drivers/net/can/usb/gs_usb.c:1065 [inline]
+    [<ffffffff843fcc08>] gs_usb_probe.cold+0x69e/0x8b8 drivers/net/can/usb/gs_usb.c:1191
+    [<ffffffff82d0a687>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
+    [<ffffffff82712d87>] call_driver_probe drivers/base/dd.c:517 [inline]
+    [<ffffffff82712d87>] really_probe.part.0+0xe7/0x380 drivers/base/dd.c:596
+    [<ffffffff8271312c>] really_probe drivers/base/dd.c:558 [inline]
+    [<ffffffff8271312c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:755
+    [<ffffffff8271322a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:785
+    [<ffffffff82713a96>] __device_attach_driver+0xf6/0x140 drivers/base/dd.c:902
+    [<ffffffff8270fcf7>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:427
+    [<ffffffff82713612>] __device_attach+0x122/0x260 drivers/base/dd.c:973
+    [<ffffffff82711966>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:487
+    [<ffffffff8270dd4b>] device_add+0x5fb/0xdf0 drivers/base/core.c:3405
+    [<ffffffff82d07ac2>] usb_set_configuration+0x8f2/0xb80 drivers/usb/core/message.c:2170
+    [<ffffffff82d181ac>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
+    [<ffffffff82d09d5c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
+    [<ffffffff82712d87>] call_driver_probe drivers/base/dd.c:517 [inline]
+    [<ffffffff82712d87>] really_probe.part.0+0xe7/0x380 drivers/base/dd.c:596
+    [<ffffffff8271312c>] really_probe drivers/base/dd.c:558 [inline]
+    [<ffffffff8271312c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:755
+    [<ffffffff8271322a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:785
 
 
-Thanks,
-Michal
 
-[1]
-https://lore.kernel.org/r/CABdmKX2NSAKMC6rReMYfo2SSVNxEXcS466hk3qF6YFt-j-+_NQ@mail.gmail.com
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D3E4EA697
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 06:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 208674EA698
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 06:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbiC2Ebt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 00:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
+        id S232060AbiC2Ebw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 00:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232041AbiC2Ebo (ORCPT
+        with ESMTP id S232046AbiC2Ebs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 00:31:44 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7727326D9;
-        Mon, 28 Mar 2022 21:30:01 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id y6so14008857plg.2;
-        Mon, 28 Mar 2022 21:30:01 -0700 (PDT)
+        Tue, 29 Mar 2022 00:31:48 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75F431DFD;
+        Mon, 28 Mar 2022 21:30:04 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id c2so13810006pga.10;
+        Mon, 28 Mar 2022 21:30:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=33VyKW7pU2vJes/nt4T4RlOrxbfe6Pv3wVbPF5ZvFrY=;
-        b=UKAiIZ38d8lZ+gHBxvL8z70mMrPg9GsupwvrfvtKN7N2KjzwGxGQLUDmuDYSRZ4YCf
-         5eSbvYPFXmI3reRY4WQ+sK0yvfMzUJzbvHf+iyVrwWtCqQ0RgPKw9bGgjI2wqjudVpTO
-         fDWhX0JAJqGI9wS8lIddspWcTm5vUXPjO/GqHNTg0Tv8YySJvlJUqfxjQcZhARA8s37V
-         s2HbYSAMuS3aW6viDCr7GTYO7AqYi/gTJICwBoBpngTVPIlxMv/l7MM03Ah2YVCMvUX2
-         Rl8xHIEtmseO/LbOX+O2rpWOMIis87Ho93AGEukpt1bQBDIznx9y7Mpib1OmZNJ9WI96
-         01ag==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=iDv+72tnbPCd3DSLzaLYf0PTI9YrKoCtiTHll5hbSxo=;
+        b=jJnV3Ih/oQvR9wHom+3vpmtd3WXbglHQxRDbZr9Q5Tc7KHuzA1EEQhUEe57ncOvz5G
+         r4R3qDGTfcXPHn0GCXivRC8r/dM4Y95AkcXP+e87zNJDHF8lFNlkaHEz9xNazptn0ac7
+         S+g87nqAQhyIbCqH78tDCUl7ETMEb7ascQZfeSsnbShExQjeZAYpaXhmXC3CuCtZed/2
+         hLxew3DWwdqSB3QvsQ2ckrXxDinmONmrAEK4lshzSJV4MxTqQH7jojUmkYZ35VGlsQCc
+         MO+PoFHMnqDWL4eQB5p25G4awe1UT32IM/mbASZS2+50LJmtwvJSc6SsO07XhPl3tfIN
+         rYRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=33VyKW7pU2vJes/nt4T4RlOrxbfe6Pv3wVbPF5ZvFrY=;
-        b=VAJxhApsPAXbvGBcwR8GmBjeYTkCgekcnodI/Z48mbGZdY/mnZrv2ICvBR48670bYE
-         QQJyiIUEZQqQ8C1EYHf69THk7d+5vn964/9Q6GiVThDmP6iYIkiiKR0Rz9LxkLHKG2a3
-         PStuJk/ZClqyhZDM4rkqkM2P0veDWPWeN+ISqgUvQVWPji/BtY4qqtUcHzBlRzmjpFQh
-         51JJtnw3N6ouJw9wLx3iCvbHEoGFP5br97kRr+cTTzy0PYB44Xn87wE5K/ZI93T2y3l3
-         HZL022Q9pmyec+tQns1fr+Y7ETC3m1W2G4PJyazYHrlaqzUOyihFyA9ANwZv26d0A2hr
-         QXhg==
-X-Gm-Message-State: AOAM533X5qKj8REb9Nc5w98DTK+Ab/BsXMUd5M19mVyRz+WMuqI3voOM
-        eRKhxdYjYkThWjlQsUKGQEYxJ+oID1GL16dz
-X-Google-Smtp-Source: ABdhPJy0Co0aUdUfWkKUzbXORaiwjXBK6Ys+uEAItYtRJgyBaFdunNz2w1KfWckB7XAilRJsUGFd5A==
-X-Received: by 2002:a17:90b:224f:b0:1c9:949e:2202 with SMTP id hk15-20020a17090b224f00b001c9949e2202mr2573849pjb.56.1648528200803;
-        Mon, 28 Mar 2022 21:30:00 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=iDv+72tnbPCd3DSLzaLYf0PTI9YrKoCtiTHll5hbSxo=;
+        b=XkDKQcYgoOm6117rE1nL7LIDpSuuy03UYKySuLVztaYT8yj+w7Yl8amCpN4Ya/84zk
+         eEhdmrug5gcMJ0hE3hCaeJOWfEwPFh7FCdjyWIh96mIFTb/4+4PAlF5b2WQlQUUqcp+b
+         S7Kz4xFjPoCjHnqF83fbExzqaqRJKAi6Si49aK9snX4/kUrSeZzpFhNFESaun4H7H6Tw
+         KOhn+el5QgXFV2NEcVnuhXJSq5dt18WUbX82M0bvNcIqSi7U+vAwrmstwbfpNkvKAEkT
+         wK/mbuc1cSvnIZcWBH1jmJ16KoWbbA9R//O1ZnUPUGddPf67g23b1N6LtYumJBVzfwpW
+         ixEA==
+X-Gm-Message-State: AOAM530iIhdmXHfIEDGH8+k/RYIXfRc0hrJbuWlHq7HtrLe1Bu7QhkQM
+        G6yrMajW0CTWz0f5A/T42e95AEV15G/d7srE
+X-Google-Smtp-Source: ABdhPJyvyJiYFgSNnFXkb+GtudDniCtET5BHrKjd/lCTO//44FydLMM3GMybITqswKXMHeU6+3CjpQ==
+X-Received: by 2002:a63:4421:0:b0:385:d870:d598 with SMTP id r33-20020a634421000000b00385d870d598mr604204pga.361.1648528203991;
+        Mon, 28 Mar 2022 21:30:03 -0700 (PDT)
 Received: from ubuntu.mate (subs32-116-206-28-55.three.co.id. [116.206.28.55])
-        by smtp.gmail.com with ESMTPSA id z13-20020a17090a468d00b001c7db8e6ac7sm1055075pjf.40.2022.03.28.21.29.57
+        by smtp.gmail.com with ESMTPSA id z13-20020a17090a468d00b001c7db8e6ac7sm1055075pjf.40.2022.03.28.21.30.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 21:29:59 -0700 (PDT)
+        Mon, 28 Mar 2022 21:30:03 -0700 (PDT)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     linux-doc@vger.kernel.org
 Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
@@ -56,10 +56,12 @@ Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] Documentation: siphash: formatting fixes
-Date:   Tue, 29 Mar 2022 11:29:50 +0700
-Message-Id: <20220329042952.10100-1-bagasdotme@gmail.com>
+Subject: [PATCH 1/2] Documentation: siphash: convert danger note to warning for HalfSipHash
+Date:   Tue, 29 Mar 2022 11:29:51 +0700
+Message-Id: <20220329042952.10100-2-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220329042952.10100-1-bagasdotme@gmail.com>
+References: <20220329042952.10100-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,25 +74,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Formatting fixes for Documentation/security/siphash.rst. The shortlog
-should be self-explanatory.
+Render danger paragraph into warning block for emphasization.
 
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: Eric Biggers <ebiggers@google.com>
 Cc: Herbert Xu <herbert@gondor.apana.org.au>
 Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Documentation/security/siphash.rst | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Bagas Sanjaya (2):
-  Documentation: siphash: convert danger note to warning for HalfSipHash
-  Documentation: siphash: enclose HalfSipHash usage example in the
-    literal block
-
- Documentation/security/siphash.rst | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
-
-
-base-commit: f443e374ae131c168a065ea1748feac6b2e76613
+diff --git a/Documentation/security/siphash.rst b/Documentation/security/siphash.rst
+index bd9363025fcbc1..42794a7e052f1e 100644
+--- a/Documentation/security/siphash.rst
++++ b/Documentation/security/siphash.rst
+@@ -121,12 +121,12 @@ even scarier, uses an easily brute-forcable 64-bit key (with a 32-bit output)
+ instead of SipHash's 128-bit key. However, this may appeal to some
+ high-performance `jhash` users.
+ 
+-Danger!
+-
+-Do not ever use HalfSipHash except for as a hashtable key function, and only
+-then when you can be absolutely certain that the outputs will never be
+-transmitted out of the kernel. This is only remotely useful over `jhash` as a
+-means of mitigating hashtable flooding denial of service attacks.
++.. warning::
++   Do not ever use HalfSipHash except for as a hashtable key function, and
++   only then when you can be absolutely certain that the outputs will never
++   be transmitted out of the kernel. This is only remotely useful over
++   `jhash` as a means of mitigating hashtable flooding denial of service
++   attacks.
+ 
+ Generating a HalfSipHash key
+ ============================
 -- 
 An old man doll... just what I always wanted! - Clara
 

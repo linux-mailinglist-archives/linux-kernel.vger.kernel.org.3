@@ -2,110 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899524EA7B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 08:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1D54EA7B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 08:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232934AbiC2GQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 02:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
+        id S232949AbiC2GQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 02:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbiC2GQH (ORCPT
+        with ESMTP id S232939AbiC2GQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 02:16:07 -0400
-Received: from ha.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7ADD9549A;
-        Mon, 28 Mar 2022 23:14:23 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by ha.nfschina.com (Postfix) with ESMTP id 6261E1E80D78;
-        Tue, 29 Mar 2022 14:13:47 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from ha.nfschina.com ([127.0.0.1])
-        by localhost (ha.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id BrCJMHfyAm77; Tue, 29 Mar 2022 14:13:44 +0800 (CST)
-Received: from [18.165.124.108] (unknown [101.228.248.165])
-        (Authenticated sender: yuzhe@nfschina.com)
-        by ha.nfschina.com (Postfix) with ESMTPA id EB7331E80D75;
-        Tue, 29 Mar 2022 14:13:43 +0800 (CST)
-Message-ID: <0f4cf955-ca2b-626f-867e-5a0ecfe68ca1@nfschina.com>
-Date:   Tue, 29 Mar 2022 14:14:16 +0800
+        Tue, 29 Mar 2022 02:16:21 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF354247C33;
+        Mon, 28 Mar 2022 23:14:38 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0V8XENYr_1648534472;
+Received: from 30.225.24.46(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V8XENYr_1648534472)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 29 Mar 2022 14:14:34 +0800
+Message-ID: <597372bf-06dc-defa-0628-a1c140235c1e@linux.alibaba.com>
+Date:   Tue, 29 Mar 2022 14:14:32 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] KVM: arm64: vgic-debug: remove unnecessary type castings
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
-        kernel-janitors@vger.kernel.org
-References: <20220328103836.2829-1-yuzhe@nfschina.com>
- <87h77ifbbd.wl-maz@kernel.org>
-From:   yuzhe <yuzhe@nfschina.com>
-In-Reply-To: <87h77ifbbd.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RDNS_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [Linux-cachefs] [PATCH v6 03/22] cachefiles: notify user daemon
+ with anon_fd when looking up cookie
+Content-Language: en-US
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+To:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org
+Cc:     gregkh@linuxfoundation.org, fannaihao@baidu.com,
+        tao.peng@linux.alibaba.com, willy@infradead.org,
+        linux-kernel@vger.kernel.org, tianzichen@kuaishou.com,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        linux-fsdevel@vger.kernel.org, luodaowen.backend@bytedance.com,
+        eguan@linux.alibaba.com, gerry@linux.alibaba.com,
+        torvalds@linux-foundation.org
+References: <20220325122223.102958-1-jefflexu@linux.alibaba.com>
+ <20220325122223.102958-4-jefflexu@linux.alibaba.com>
+In-Reply-To: <20220325122223.102958-4-jefflexu@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/3/28 21:36, Marc Zyngier 写道:
 
-> On Mon, 28 Mar 2022 11:38:36 +0100,
-> yuzhe <yuzhe@nfschina.com> wrote:
->> remove unnecessary castings, from "void *" to "struct kvm *"
->>
->> Signed-off-by: yuzhe <yuzhe@nfschina.com>
->> ---
->>   arch/arm64/kvm/vgic/vgic-debug.c | 8 ++++----
->>   1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/arch/arm64/kvm/vgic/vgic-debug.c b/arch/arm64/kvm/vgic/vgic-debug.c
->> index f38c40a76251..927e5c1f650d 100644
->> --- a/arch/arm64/kvm/vgic/vgic-debug.c
->> +++ b/arch/arm64/kvm/vgic/vgic-debug.c
->> @@ -82,7 +82,7 @@ static bool end_of_vgic(struct vgic_state_iter *iter)
->>   
->>   static void *vgic_debug_start(struct seq_file *s, loff_t *pos)
->>   {
->> -	struct kvm *kvm = (struct kvm *)s->private;
->> +	struct kvm *kvm = s->private;
->>   	struct vgic_state_iter *iter;
->>   
->>   	mutex_lock(&kvm->lock);
->> @@ -110,7 +110,7 @@ static void *vgic_debug_start(struct seq_file *s, loff_t *pos)
->>   
->>   static void *vgic_debug_next(struct seq_file *s, void *v, loff_t *pos)
->>   {
->> -	struct kvm *kvm = (struct kvm *)s->private;
->> +	struct kvm *kvm = s->private;
->>   	struct vgic_state_iter *iter = kvm->arch.vgic.iter;
->>   
->>   	++*pos;
->> @@ -122,7 +122,7 @@ static void *vgic_debug_next(struct seq_file *s, void *v, loff_t *pos)
->>   
->>   static void vgic_debug_stop(struct seq_file *s, void *v)
->>   {
->> -	struct kvm *kvm = (struct kvm *)s->private;
->> +	struct kvm *kvm = s->private;
->>   	struct vgic_state_iter *iter;
->>   
->>   	/*
->> @@ -229,7 +229,7 @@ static void print_irq_state(struct seq_file *s, struct vgic_irq *irq,
->>   
->>   static int vgic_debug_show(struct seq_file *s, void *v)
->>   {
->> -	struct kvm *kvm = (struct kvm *)s->private;
->> +	struct kvm *kvm = s->private;
->>   	struct vgic_state_iter *iter = (struct vgic_state_iter *)v;
-> How about you fully get rid of the unnecessary casts then?
->
-> 	M.
 
-I don't know what you exactly mean. I follow the kernel-janitors/TODO List to get rid of the unnecessary casts.
-And I checked all the code in the arch directory and found these issues.
+On 3/25/22 8:22 PM, Jeffle Xu wrote:
 
+> diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
+> index e80673d0ab97..8a0f1b691aca 100644
+> --- a/fs/cachefiles/internal.h
+> +++ b/fs/cachefiles/internal.h
+> @@ -15,6 +15,8 @@
+>  
+> +/*
+> + * ondemand.c
+> + */
+> +#ifdef CONFIG_CACHEFILES_ONDEMAND
+> +extern ssize_t cachefiles_ondemand_daemon_read(struct cachefiles_cache *cache,
+> +					       char __user *_buffer,
+> +					       size_t buflen);
+> +
+> +extern int cachefiles_ondemand_cinit(struct cachefiles_cache *cache,
+> +				     char *args);
+> +
+> +extern int cachefiles_ondemand_init_object(struct cachefiles_object *object);
+> +
+> +#else
+
+> +ssize_t cachefiles_ondemand_daemon_read(struct cachefiles_cache *cache,
+> +					char __user *_buffer, size_t buflen)
+
+Needs to be declared as static inline ...
+
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static inline int cachefiles_ondemand_init_object(struct cachefiles_object *object)
+> +{
+> +	return 0;
+> +}
+> +#endif
+
+
+-- 
+Thanks,
+Jeffle

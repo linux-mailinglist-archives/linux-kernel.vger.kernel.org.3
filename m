@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671734EB4A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76FCA4EB4A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:22:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbiC2UXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 16:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
+        id S231740AbiC2UXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 16:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiC2UXf (ORCPT
+        with ESMTP id S231363AbiC2UXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 16:23:35 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA81023B3DF
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 13:21:51 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id pv16so37466649ejb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 13:21:51 -0700 (PDT)
+        Tue, 29 Mar 2022 16:23:36 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A6012221F
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 13:21:52 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id c62so22005691edf.5
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 13:21:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3IFwCjklhdRZF/g42Am6ngyzxVzMgTYWvicG6NBlRjM=;
-        b=G1iMqA5VrU8bfNiRqfkjPG99D1FghY/aI+iNYv291Gxlg440Cq8gTnfKzjelxam0wL
-         tGDRpmqIKmY7K26DQiGGl8m9Yu1RA8uXgLLBBGbwZssgCXtRlavVLAwIhsevmQZlU2A4
-         QAbZWLsxkAvNXPOJHp75CKhv/nJZ85mDxxbDxfqPqqP+owbqfrlU8EB1ZLkOXG45jJ/5
-         lvnCR7E3S1ngFJP1rRfIMP9ARiXcA/CsSQZ+XsJIuLkBzxhlGbwgrkhDWPoNZbxFOZ1p
-         uVrCaZiVhXaiZ+1vGPfowv0crlrwdSHzmdtSGpO6fwxJzXVeF/HI1kzYOucGaEhbaoNx
-         JHYQ==
+        bh=pXzC7B+G1Vq7z1Rm7bBrok4K1ZSPCYyPSAJ9Zp074Sw=;
+        b=q3vf2bCmZ1ZNNDsHVj7VTUOZLT75ckZ+jzRTjxI79ZK+r+8N7HyjTOv8g1xVew7qrp
+         yv3aQOyyx4HhhSbJsA4UnbTAVgeeQxw8zQMKDSy3h4ZNu2XJhoPnpfuh/fbxd43IUFGT
+         Y/3Rbf6KrXPtt18ROsuEXWlwIqbeiQWg8hxICPLyKUS0Cfk5YC8Y8rWk52nTgOqnw5HR
+         smIsJNAVpgssK5M1Q0nQeM9U/f5+ZoiQBSesQW767NVM11xiMbxKv5s7KBG2WzQvZKb3
+         tJGl2/f7dI/hLUEgK4mnvAdwJkUk089iZpPFeskba3V0FxPDNxOhSOOZoW1Qe8kF5NSL
+         DswQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3IFwCjklhdRZF/g42Am6ngyzxVzMgTYWvicG6NBlRjM=;
-        b=bRfuiO7Q8TautE68NJ44Bpri6Uv25aBSLx6J0w1aPCzkNkPgkvARo+VDvk57RP2iLS
-         I6T8FOD/KaldPgKCT9uEDtmTWNGqhUFUAc+ou9hmpvAYe8IP3Ml6me+LwMZ60yTP1Z3+
-         Vkr5BxMyvv6EyetutgGpmxChEo2O6NBWUNvJvP6Wt8Anf7zdbxT754s7CAeKtwpYTVQy
-         RKZRYHTUuXDq5hRNjTeD3XuNJVbRvs2VKXkGlYaUw9/sBveG+6WGLyZwZxEtCc+Sx2BD
-         kPZKnBPFURvoaV2OIVoRQFTmamzbeJoEw3ar6p7ctd5e3ElWuot2JXrXZseqHlqHn4Gi
-         wwlw==
-X-Gm-Message-State: AOAM533a5zV4a3U4DHBlCPsAegJjh+37Jiq30N10LJnzN8tQ/YjRYBQ8
-        5jweJnolB7ks3g641ygM2Lw=
-X-Google-Smtp-Source: ABdhPJwrIj+5MAnCgW7GIyGwt8R/AGvQIxzLAUowU6Dz+8h8/P33LuxJRRVek/UUeeFM5V+OKNM61Q==
-X-Received: by 2002:a17:906:3283:b0:6ce:78f9:fafd with SMTP id 3-20020a170906328300b006ce78f9fafdmr37454449ejw.534.1648585310502;
-        Tue, 29 Mar 2022 13:21:50 -0700 (PDT)
+        bh=pXzC7B+G1Vq7z1Rm7bBrok4K1ZSPCYyPSAJ9Zp074Sw=;
+        b=IHbOPfc6wB1kU1xypiQEvtKTgWuG2+rV5PU9yt0KV/cn+pHOmiPzAthJxkeON4HAdt
+         HIGm3H8kpmIyzAJkMKoFZLVcnEortL3m7zJF89U0AvomLtlqEk+wpLGqN9+VqlDtUR2t
+         rkFYgA4JYuBzwTpYUNn6fI4kYy9j705ClqcMgIN0oO95r0ZsmZ5dIf2X/wsRfaOD4i0G
+         08w8+aXqvXRkrSQNdSQ5a93TmFJPmdWMd/YMl4Xb0hYp689hn8Gx78x4QSXC1nRD8OR9
+         9PZcEJUA4kuRL4l/M4lovlzdzvXlH9PAYz9Jy6trmDs3bjpymMi3Q1pmVsGCzmOt1XMC
+         kk5A==
+X-Gm-Message-State: AOAM532eGMMBaFEBLoHHMTATbaEpX445QVLryIGgsplrztzI+niR+NKr
+        ZXj6w6E1/PI+lxK7ktt01jk=
+X-Google-Smtp-Source: ABdhPJwjjdL5AxQOccoKR3owW99Y8879dAR8FYcnUW7XGN1zAHBGFL2zRoplCkFqRzGWCsFRR+nvxw==
+X-Received: by 2002:a05:6402:3689:b0:419:d380:ddbc with SMTP id ej9-20020a056402368900b00419d380ddbcmr6819875edb.230.1648585311330;
+        Tue, 29 Mar 2022 13:21:51 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
-        by smtp.gmail.com with ESMTPSA id ss12-20020a170907038c00b006e0ec9e806dsm3938111ejb.136.2022.03.29.13.21.49
+        by smtp.gmail.com with ESMTPSA id ss12-20020a170907038c00b006e0ec9e806dsm3938111ejb.136.2022.03.29.13.21.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 29 Mar 2022 13:21:50 -0700 (PDT)
 From:   Michael Straube <straube.linux@gmail.com>
@@ -53,9 +53,9 @@ To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH v2 2/8] staging: r8188eu: remove HW_VAR_MLME_DISCONNECT from SetHwReg8188EU()
-Date:   Tue, 29 Mar 2022 22:21:35 +0200
-Message-Id: <20220329202141.7028-3-straube.linux@gmail.com>
+Subject: [PATCH v2 3/8] staging: r8188eu: rename some macros to upper case
+Date:   Tue, 29 Mar 2022 22:21:36 +0200
+Message-Id: <20220329202141.7028-4-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220329202141.7028-1-straube.linux@gmail.com>
 References: <20220329202141.7028-1-straube.linux@gmail.com>
@@ -71,105 +71,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SetHwReg8188EU() is called with HW_VAR_MLME_DISCONNECT only from
-functions in rtw_mlme_ext.c. Move the functionality into a static
-function in rtw_mlme_ext.c and remove the HW_VAR_MLME_DISCONNECT case
-from SetHwReg8188EU(). This is part of the ongoing effort to get rid
-of the unwanted hal layer.
+Rename some macros to upper case to avoid camel case and improve
+readability. While at it, remove some unused macros.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
 v2: no changes
 
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 19 ++++++++++++++++---
- drivers/staging/r8188eu/hal/usb_halinit.c   | 11 -----------
- drivers/staging/r8188eu/include/hal_intf.h  |  1 -
- 3 files changed, 16 insertions(+), 15 deletions(-)
+ drivers/staging/r8188eu/hal/usb_halinit.c       | 12 ++++++------
+ drivers/staging/r8188eu/include/rtl8188e_spec.h | 10 +++-------
+ 2 files changed, 9 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index c0a1efcd8b28..4a9321e6e327 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -6799,13 +6799,26 @@ void mlmeext_sta_add_event_callback(struct adapter *padapter, struct sta_info *p
- 	update_sta_info(padapter, psta);
- }
- 
-+static void mlme_disconnect(struct adapter *adapter)
-+{
-+	/* Set RCR to not to receive data frame when NO LINK state */
-+	/* reject all data frames */
-+	rtw_write16(adapter, REG_RXFLTMAP2, 0x00);
-+
-+	/* reset TSF */
-+	rtw_write8(adapter, REG_DUAL_TSF_RST, (BIT(0) | BIT(1)));
-+
-+	/* disable update TSF */
-+	rtw_write8(adapter, REG_BCN_CTRL, rtw_read8(adapter, REG_BCN_CTRL) | BIT(4));
-+}
-+
- void mlmeext_sta_del_event_callback(struct adapter *padapter)
- {
- 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
- 	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
- 
- 	if (is_client_associated_to_ap(padapter) || is_IBSS_empty(padapter)) {
--		SetHwReg8188EU(padapter, HW_VAR_MLME_DISCONNECT, NULL);
-+		mlme_disconnect(padapter);
- 		SetHwReg8188EU(padapter, HW_VAR_BSSID, null_addr);
- 
- 		/* restore to initial setting. */
-@@ -7169,7 +7182,7 @@ u8 join_cmd_hdl(struct adapter *padapter, u8 *pbuf)
- 		/* set MSR to nolink -> infra. mode */
- 		Set_MSR(padapter, _HW_STATE_STATION_);
- 
--		SetHwReg8188EU(padapter, HW_VAR_MLME_DISCONNECT, NULL);
-+		mlme_disconnect(padapter);
- 	}
- 
- 	rtw_antenna_select_cmd(padapter, pparm->network.PhyInfo.Optimum_antenna, false);
-@@ -7265,7 +7278,7 @@ u8 disconnect_hdl(struct adapter *padapter, unsigned char *pbuf)
- 	if (is_client_associated_to_ap(padapter))
- 		issue_deauth_ex(padapter, pnetwork->MacAddress, WLAN_REASON_DEAUTH_LEAVING, param->deauth_timeout_ms / 100, 100);
- 
--	SetHwReg8188EU(padapter, HW_VAR_MLME_DISCONNECT, NULL);
-+	mlme_disconnect(padapter);
- 	SetHwReg8188EU(padapter, HW_VAR_BSSID, null_addr);
- 
- 	/* restore to initial setting. */
 diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index 0186f8bf73c7..8e4b84f51a3c 100644
+index 8e4b84f51a3c..8dc90f9636b5 100644
 --- a/drivers/staging/r8188eu/hal/usb_halinit.c
 +++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -1024,17 +1024,6 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
- 				ResumeTxBeacon(Adapter);
+@@ -1148,19 +1148,19 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
+ 				AcmCtrl = AcmCtrl | 0x1;
+ 
+ 			if (acm_ctrl & BIT(3))
+-				AcmCtrl |= AcmHw_VoqEn;
++				AcmCtrl |= ACMHW_VOQEN;
+ 			else
+-				AcmCtrl &= (~AcmHw_VoqEn);
++				AcmCtrl &= (~ACMHW_VOQEN);
+ 
+ 			if (acm_ctrl & BIT(2))
+-				AcmCtrl |= AcmHw_ViqEn;
++				AcmCtrl |= ACMHW_VIQEN;
+ 			else
+-				AcmCtrl &= (~AcmHw_ViqEn);
++				AcmCtrl &= (~ACMHW_VIQEN);
+ 
+ 			if (acm_ctrl & BIT(1))
+-				AcmCtrl |= AcmHw_BeqEn;
++				AcmCtrl |= ACMHW_BEQEN;
+ 			else
+-				AcmCtrl &= (~AcmHw_BeqEn);
++				AcmCtrl &= (~ACMHW_BEQEN);
+ 
+ 			rtw_write8(Adapter, REG_ACMHWCTRL, AcmCtrl);
  		}
- 		break;
--	case HW_VAR_MLME_DISCONNECT:
--		/* Set RCR to not to receive data frame when NO LINK state */
--		/* reject all data frames */
--		rtw_write16(Adapter, REG_RXFLTMAP2, 0x00);
--
--		/* reset TSF */
--		rtw_write8(Adapter, REG_DUAL_TSF_RST, (BIT(0) | BIT(1)));
--
--		/* disable update TSF */
--		rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL) | BIT(4));
--		break;
- 	case HW_VAR_MLME_SITESURVEY:
- 		if (*((u8 *)val)) { /* under sitesurvey */
- 			/* config RCR to receive different BSSID & not to receive data frame */
-diff --git a/drivers/staging/r8188eu/include/hal_intf.h b/drivers/staging/r8188eu/include/hal_intf.h
-index 77069cbc1e07..d481cc759e27 100644
---- a/drivers/staging/r8188eu/include/hal_intf.h
-+++ b/drivers/staging/r8188eu/include/hal_intf.h
-@@ -13,7 +13,6 @@ enum hw_variables {
- 	HW_VAR_BSSID,
- 	HW_VAR_BASIC_RATE,
- 	HW_VAR_CORRECT_TSF,
--	HW_VAR_MLME_DISCONNECT,
- 	HW_VAR_MLME_SITESURVEY,
- 	HW_VAR_MLME_JOIN,
- 	HW_VAR_SLOT_TIME,
+diff --git a/drivers/staging/r8188eu/include/rtl8188e_spec.h b/drivers/staging/r8188eu/include/rtl8188e_spec.h
+index edae053e350e..ef42c4b2f20c 100644
+--- a/drivers/staging/r8188eu/include/rtl8188e_spec.h
++++ b/drivers/staging/r8188eu/include/rtl8188e_spec.h
+@@ -998,13 +998,9 @@ Current IOREG MAP
+ #define STOP_BCNQ		BIT(6)
+ 
+ /* 2 ACMHWCTRL */
+-#define	AcmHw_HwEn		BIT(0)
+-#define	AcmHw_BeqEn		BIT(1)
+-#define	AcmHw_ViqEn		BIT(2)
+-#define	AcmHw_VoqEn		BIT(3)
+-#define	AcmHw_BeqStatus		BIT(4)
+-#define	AcmHw_ViqStatus		BIT(5)
+-#define	AcmHw_VoqStatus		BIT(6)
++#define ACMHW_BEQEN		BIT(1)
++#define ACMHW_VIQEN		BIT(2)
++#define ACMHW_VOQEN		BIT(3)
+ 
+ /* 	0x0600h ~ 0x07FFh	WMAC Configuration */
+ /* 2APSD_CTRL */
 -- 
 2.35.1
 

@@ -2,111 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B25C4EB46F
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6764EB471
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbiC2UKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 16:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
+        id S229982AbiC2UKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 16:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiC2UKu (ORCPT
+        with ESMTP id S229472AbiC2UKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 16:10:50 -0400
-Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0537D205F4;
-        Tue, 29 Mar 2022 13:09:03 -0700 (PDT)
-Received: from 1nZI9D-000AzV-W6 by out3d.electric.net with emc1-ok (Exim 4.94.2)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1nZI9F-000B2y-TT; Tue, 29 Mar 2022 13:09:01 -0700
-Received: by emcmailer; Tue, 29 Mar 2022 13:09:01 -0700
-Received: from [66.210.251.27] (helo=mail.embeddedts.com)
-        by out3d.electric.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1nZI9D-000AzV-W6; Tue, 29 Mar 2022 13:09:00 -0700
-Received: from tsdebian.Massive (unknown [75.164.75.221])
-        by mail.embeddedts.com (Postfix) with ESMTPSA id 3179C1A4A6;
-        Tue, 29 Mar 2022 13:08:59 -0700 (MST)
-From:   Kris Bahnsen <kris@embeddedTS.com>
-To:     linux-kernel@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org
-Cc:     Mark Featherston <mark@embeddedTS.com>,
-        Kris Bahnsen <kris@embeddedTS.com>
-Subject: [PATCH 1/2] can: Fix Links to Technologic Systems web resources
-Date:   Tue, 29 Mar 2022 13:08:44 -0700
-Message-Id: <20220329200844.16073-1-kris@embeddedTS.com>
-X-Mailer: git-send-email 2.11.0
-X-Outbound-IP: 66.210.251.27
-X-Env-From: kris@embeddedTS.com
-X-Proto: esmtps
-X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
-X-HELO: mail.embeddedts.com
-X-TLS:  TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
-X-Authenticated_ID: 
-X-Virus-Status: Scanned by VirusSMART (c)
-X-Virus-Status: Scanned by VirusSMART (b)
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Message-Id:Date:To:From; bh=JNdbgRoUfWZLQJBtZuhC+ncgaaoQIfxSElXYcdEKvd0=;b=FUdhajRHHjeiHlt1lD4lDFI4YIzg70BFuuBk/XXpcUD4UDElcaNCWPDiFxlvTnch0KvtQN59Dxg4H4/Z2AsHG9eEFuiFjpaSgwMVUVGH5FoIvtjf7mPvlaudY/+NXpLfg2u9U9WrUkP8LPRmnUFRd5PxAavRJ+1pCNp/dCU7uOyIiItTEfs1ArqAlsPszeeQYLBTCL5dFxPNOHcSFQKizOjF2JN+2JBbkaAkMXVXH+HLplYpPXZ1X0yP0eIgQ+nil1ooMXFtNYfjcxZS5Js0bm1dP+0jIgYxQaopIJgYghm6vVE1ZNlI1VcYfn+m9Zibvv8OoLkIMNyjg+YakGqvSg==;
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 29 Mar 2022 16:10:46 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE6E62D2;
+        Tue, 29 Mar 2022 13:09:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648584543; x=1680120543;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jJBFAHQdu8LK3MnfBlyd4ynLCpZPwxsuj3ERMXvrSf4=;
+  b=hEAEFeepfv2P9VPz1L21QzHrsUdbaFWR4jcJNruqBw1KBHjXqljSK0/l
+   XEmtVYSVJ+B1VzyOzQCbhbgQMCQjg6GWJJ0SPWXJL57py+dfgexlmUxx/
+   TGxGDVqROpqtIOLMGL3p7N0yC8eTY/QfP6ffokeVJUuDtU8KdNhlA8tmJ
+   +yTrV9wKjiCkktecKCVvNMLnkCIUZ3hvkjcgXLx5N5XcSoI8kq8iImUHL
+   6WcnQYDuZmvZUv3IvBi111kGs0zYrvM4WAPklgj+rRGuBy2YK9vnZ6aF1
+   2YeBeoxk509+ShJs6dn7kXRHiVZzqO6rUj/SMdtybiQi4lI9NW9MJapTr
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="345798713"
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="345798713"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 13:08:16 -0700
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="694848177"
+Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 13:08:15 -0700
+Date:   Tue, 29 Mar 2022 13:10:21 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+Cc:     outreachy@lists.linux.dev, mchehab@kernel.org,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media:av7110:av7110_av.c remove blank line
+Message-ID: <20220329201021.GA1171096@alison-desk>
+References: <20220329190133.6243-1-eng.alaamohamedsoliman.am@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220329190133.6243-1-eng.alaamohamedsoliman.am@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Technologic Systems has rebranded as embeddedTS with the current
-domain eventually going offline. Update web/doc URLs to correct
-resource locations.
+On Tue, Mar 29, 2022 at 09:01:33PM +0200, Alaa Mohamed wrote:
+> according to checkpatch.pl results
+> "CHECK: Please don't use multiple blank lines"
+> after lines 73 and 78 ,I removed the blank lines
+> 
+> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+> ---
+>  drivers/staging/media/av7110/av7110_av.c | 2 --
 
-Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
----
- drivers/net/can/sja1000/Kconfig  | 2 +-
- drivers/net/can/sja1000/tscan1.c | 7 +++----
- 2 files changed, 4 insertions(+), 5 deletions(-)
+Hi Alaa,
 
-diff --git a/drivers/net/can/sja1000/Kconfig b/drivers/net/can/sja1000/Kconfig
-index 110071b26921..4b2f9cb17fc3 100644
---- a/drivers/net/can/sja1000/Kconfig
-+++ b/drivers/net/can/sja1000/Kconfig
-@@ -107,7 +107,7 @@ config CAN_TSCAN1
- 	depends on ISA
- 	help
- 	  This driver is for Technologic Systems' TSCAN-1 PC104 boards.
--	  http://www.embeddedarm.com/products/board-detail.php?product=TS-CAN1
-+	  https://www.embeddedts.com/products/TS-CAN1
- 	  The driver supports multiple boards and automatically configures them:
- 	  PLD IO base addresses are read from jumpers JP1 and JP2,
- 	  IRQ numbers are read from jumpers JP4 and JP5,
-diff --git a/drivers/net/can/sja1000/tscan1.c b/drivers/net/can/sja1000/tscan1.c
-index 3dbba8d61afb..f3862bed3d40 100644
---- a/drivers/net/can/sja1000/tscan1.c
-+++ b/drivers/net/can/sja1000/tscan1.c
-@@ -5,10 +5,9 @@
-  * Copyright 2010 Andre B. Oliveira
-  */
- 
--/*
-- * References:
-- * - Getting started with TS-CAN1, Technologic Systems, Jun 2009
-- *	http://www.embeddedarm.com/documentation/ts-can1-manual.pdf
-+/* References:
-+ * - Getting started with TS-CAN1, Technologic Systems, Feb 2022
-+ *	https://docs.embeddedts.com/TS-CAN1
-  */
- 
- #include <linux/init.h>
--- 
-2.11.0
+We are not taking cleanup patches in drivers/staging/media.
+It's documented in here https://kernelnewbies.org/Outreachyfirstpatch
+and I will repost the restriction on this list as the discussion
+occurred a few days before the contribution period began.
 
+If you look at the git history on this file, you'll see it is
+on it's way out of the kernel, not on it's way in!
+
+Please look at my feedback to Rebecca and Sevinj recent checkpatch
+cleanups as guidance for your next (non-media) cleanup patch.
+
+Thanks!
+Alison
+
+
+
+
+
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/staging/media/av7110/av7110_av.c b/drivers/staging/media/av7110/av7110_av.c
+> index 91f4866c7e59..1544f120e8b1 100644
+> --- a/drivers/staging/media/av7110/av7110_av.c
+> +++ b/drivers/staging/media/av7110/av7110_av.c
+> @@ -70,12 +70,10 @@
+>  #define PIECE_RATE	 0x40
+>  #define SEAM_SPLICE	 0x20
+>  
+> -
+>  static void p_to_t(u8 const *buf, long int length, u16 pid,
+>  		   u8 *counter, struct dvb_demux_feed *feed);
+>  static int write_ts_to_decoder(struct av7110 *av7110, int type, const u8 *buf, size_t len);
+>  
+> -
+>  int av7110_record_cb(struct dvb_filter_pes2ts *p2t, u8 *buf, size_t len)
+>  {
+>  	struct dvb_demux_feed *dvbdmxfeed = (struct dvb_demux_feed *) p2t->priv;
+> -- 
+> 2.35.1
+> 
+> 

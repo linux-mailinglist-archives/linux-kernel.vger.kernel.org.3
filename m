@@ -2,139 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E624EB4B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B16984EB4B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbiC2U2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 16:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35416 "EHLO
+        id S230417AbiC2Ua6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 16:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232126AbiC2U2L (ORCPT
+        with ESMTP id S229612AbiC2Ua5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 16:28:11 -0400
-Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.51.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A770CA9969
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 13:26:27 -0700 (PDT)
-Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id F2BEDC0D4F
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 15:26:26 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id ZIQ6nz8LJb6UBZIQ6n46fJ; Tue, 29 Mar 2022 15:26:26 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=MGJIj6LR5/dj1D1aLADvu0DWbqeTReXZvYG/C4cvdVo=; b=QGOkJb7I8X80501zSDB5EFAY4E
-        L4ufW5Y9FDmz81Fy9SxBS3aWcox5IeQki2CmpD5G1natHax563ajwCgivzn7nOD6ll32rQO4RBVEB
-        n/xJvTPuNzB7LlpzKrrRZSaRLt7vkX30reLuM0bCjwukH5CTq1SDJINQiY49NpMbyAwqNOD7CFo5v
-        lkAsWB5TxUdESYcNqks529rxyEz+EL9NFuSLflRyiUpZOfS7nyxceIQyKIm4fJwt+HAnzEfKViIed
-        s/eHKpX82de4jKJZv8GaIzIJe/gB92NWZchKZn5GFAWjhtZgbRINUy6VgRMc3TJO7S7ZxdzmP+vHo
-        tXikhR7Q==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54544)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nZIQ6-003Biv-K6; Tue, 29 Mar 2022 20:26:26 +0000
-Message-ID: <1239901b-9b4a-53ef-be86-1aa8337e0f31@roeck-us.net>
-Date:   Tue, 29 Mar 2022 13:26:25 -0700
+        Tue, 29 Mar 2022 16:30:57 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717A231229;
+        Tue, 29 Mar 2022 13:29:13 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22TJbjs6012612;
+        Tue, 29 Mar 2022 20:28:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=RtpygqGfs5OGAozMDI4lFQBuJtECTlK2JppjdTXC0OA=;
+ b=I+pOmgGjBWbPwZeizBHesRHCf59i53k6k8vZsXCPCxTL/HDkrj531domu2XntGZgsWSD
+ 6XOflbHVyz1hxjehHurWqozr9g9A5Wo71Qd4FKPeSNs+BUKv7bjQxtV6o2sG7vW7dTfA
+ jeBLFYcVepjmV6EGAQUDLguEFqzkK52mmtMk/bIB4nGOk6S367+7UdIVNjN+sOglT9iN
+ gm3U/LCUaOEv+KIVlnkbI0KUzof+av4cO5n/pgwhYOYoi/rkwvsk3s4A++rcGbRLmXkF
+ nwdpYXIyeyw3r0VNHptJlP23GCUkGBxxZJtwwtupz1YnUCTWitVK8fmo9UyTDRDx+mhG hQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f409rvvu4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Mar 2022 20:28:55 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22TKQMxt025808;
+        Tue, 29 Mar 2022 20:28:54 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f409rvvtn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Mar 2022 20:28:54 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22TKNNmQ000755;
+        Tue, 29 Mar 2022 20:28:53 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma01dal.us.ibm.com with ESMTP id 3f1tf9vsb5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Mar 2022 20:28:53 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22TKSqYt56885704
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 29 Mar 2022 20:28:52 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6B6B1112061;
+        Tue, 29 Mar 2022 20:28:52 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 15A61112063;
+        Tue, 29 Mar 2022 20:28:48 +0000 (GMT)
+Received: from [9.160.79.229] (unknown [9.160.79.229])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 29 Mar 2022 20:28:47 +0000 (GMT)
+Message-ID: <7696ba46-91c7-7119-bd68-b3521459cf37@linux.ibm.com>
+Date:   Tue, 29 Mar 2022 23:28:45 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
+Subject: Re: [PATCH v8 0/4] Allow guest access to EFI confidential computing
+ secret area
 Content-Language: en-US
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     darcagn@protonmail.com, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220327121404.1702631-1-eugene.shalygin@gmail.com>
- <20220327121404.1702631-2-eugene.shalygin@gmail.com>
- <16a36e23-bab2-4314-54ea-ff6b1011e6d7@roeck-us.net>
- <CAB95QATxYy5aj97P=S=L-kGE9dppuEbTYq=K=HGMBuZYVUBR4g@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info
- struct for board data
-In-Reply-To: <CAB95QATxYy5aj97P=S=L-kGE9dppuEbTYq=K=HGMBuZYVUBR4g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Borislav Petkov <bp@suse.de>
+Cc:     linux-efi@vger.kernel.org, Ashish Kalra <ashish.kalra@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Andrew Scull <ascull@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Lenny Szubowicz <lszubowi@redhat.com>,
+        Peter Gonda <pgonda@google.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
+        Jim Cadden <jcadden@ibm.com>,
+        Daniele Buono <dbuono@linux.vnet.ibm.com>,
+        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>
+References: <20220228114254.1099945-1-dovmurik@linux.ibm.com>
+ <YjydSNnG6EJ1KWx0@zn.tnic>
+ <f2fb7553-0313-6393-c93c-2bb6619086dc@linux.ibm.com>
+ <YkNQNzNa02Sndu+q@zn.tnic>
+From:   Dov Murik <dovmurik@linux.ibm.com>
+In-Reply-To: <YkNQNzNa02Sndu+q@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nZIQ6-003Biv-K6
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54544
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 1
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: faAw94u_RZeNLLhUORJVBKERuDDuG3NZ
+X-Proofpoint-ORIG-GUID: 5pIjdB5JlrxwcElAbLVLY6fDYwE_hTUS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-29_08,2022-03-29_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ adultscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
+ impostorscore=0 suspectscore=0 spamscore=0 phishscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203290109
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/22 12:22, Eugene Shalygin wrote:
-> On Tue, 29 Mar 2022 at 15:44, Guenter Roeck <linux@roeck-us.net> wrote:
->>>
->>>    struct ec_sensors_data {
->>> -     unsigned long board_sensors;
->>> +     struct ec_board_info board_info;
->>
->> Please explain why this needs to be the entire structure and not
->> just a pointer to it.
+
+
+On 29/03/2022 21:30, Borislav Petkov wrote:
+
 > 
-> I marked the board_info array as __initconst assuming that this large
-> array will be unloaded from memory after the init phase, while we keep
-> only a single element. Is that assumption incorrect?
+> So now that I think of it, it would be even nicer if the fact whether
+> guest debugging is allowed, were available to the guest *very early*
+> during boot. Because I think the most important cases where you'd want
+> to singlestep a SEV* guest with the qemu gdbstub is early guest kernel
+> boot code. So it would be cool if we'd have access to the debugging
+> setting that early.
 > 
+> Lemme have a look at your patches in detail to get an idea what's
+> happening there.
 
-What happens if you build the driver into the kernel and then instantiate
-and de-instantiate it multiple times ?
+Is efi_config_parse_tables() early enough?  That's where we learn for
+the first time that the firmware has a launch-secrets area that we can
+look at.
 
->>> +static int sensor_count(const struct ec_board_info *board)
->>> +{
->>> +     return hweight_long(board->sensors);
->>> +}
->>
->> This function is called several times. Does it really make sense, or is it
->> necessary, to re-calculate the number of sensors over and over again
->> instead of keeping it in ec->nr_sensors as before ? What are the benefits ?
->> Unless there is a good explanation I see that as unrelated and unnecessary
->> change.
-> 
-> This had something to do with data deduplication. However, I need the
-> count value only for looping over the sensor array, thus I can as well
-> add an invalid element to the end of the array. I rushed to submit
-> this driver to replace the wmi one, and it still has an artifact for
-> the WMI code I'd like to get rid of eventually, which is the read
-> buffer and the registers array. This will remove all the nr_ variables
-> and two dynamically allocated arrays. I will understand, of course, if
-> you ask to submit that refactoring separately.
-> 
+We can add there (say, next to the call to efi_tpm_eventlog_init()) a
+code to:
 
-The rule of "one logical change per patch" still applies. If you start
-intermixing parts of future clean-up efforts into current patches, you'll
-see a very unhappy maintainer - especially since this change makes up
-a significant part of this patch, complicates review significantly,
-and makes me wonder if other unrelated changes are included that I don't
-see right now due to all the noise.
+1. map the secret area (ioremap_encrypted())
+2. parse the table, look for the "sev debug enabled" GUID.
+3. set the value of the kernel variable that we can later use anywhere.
 
-Besides, at least in this patch, I don't buy the "deduplication" argument.
-Keeping a single additional variable in a data structure is much simpler
-and straightforward than calling hweight_long() several times. I'd call
-that "complification".
 
-Guenter
+Of course Ard might know about a better mechanism or place to do that.
+
+
+-Dov

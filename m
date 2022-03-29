@@ -2,192 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EBF4EAE76
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B734EACD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237277AbiC2N3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 09:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43398 "EHLO
+        id S236199AbiC2MEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 08:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236241AbiC2N3b (ORCPT
+        with ESMTP id S236191AbiC2MEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 09:29:31 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF851FAA02;
-        Tue, 29 Mar 2022 06:27:47 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id r64so10307023wmr.4;
-        Tue, 29 Mar 2022 06:27:47 -0700 (PDT)
+        Tue, 29 Mar 2022 08:04:16 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFEB6302
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:02:32 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22T8oU78028587;
+        Tue, 29 Mar 2022 12:02:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=4tzEHONs8Ktkexl1JN856D4c2Ta4AE7eRchtNiNQIpc=;
+ b=UVQXq7AlMkilK2y8IlD4Hxm/4QqNlq/onledqby50WTFXyk8ESRc/+80kQ05ti1jcqn9
+ ngXXE9x0eYmgniQHCec26A0WUd2YYagXG4b3JMD7bf5Ur87RI9pmUcj+hZTfp/HO3x6k
+ 0gUfVaSf11lcBmiYfvJqsMn1mMN/JCXZXVpFrUvoy8yEiLOkBrIvPrtCrHXQjHmDwC6/
+ TmbX250qi9MbsmqbpZl0Pw0C51vpZYyf7jE2ODT49ma+9xu1Y4aa+EgN25SoIfPggwho
+ uCUiTOH+rf0lPnU5w/gIjlWvCv/RrrsWDiAphPQr6TApjTon8YV/Yey+GHenx+UaXOc+ GQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80] (may be forged))
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f1tqb69m9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 29 Mar 2022 12:02:08 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22TC263r009207;
+        Tue, 29 Mar 2022 12:02:07 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2105.outbound.protection.outlook.com [104.47.55.105])
+        by userp3030.oracle.com with ESMTP id 3f1qxqea20-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 29 Mar 2022 12:02:07 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=izhrNl4PSYubacAesmRPVwWdSZ9ER2pob9hRdTwn7/DGqYghFetGINEP2BVhPPwdw7K+D6nQgb7SofwfVC2IuO/4QbMbBu23t5vZjd2wbatuVRacdnJX/B6W6tjDkb/XAxQ9bXEMAlAc9qL5wB0jO5d+E+kAlgy9+7TGFmu2vC8kjR7LuGCL0y2y71mzNwNBAqq4W06F3wIVf608FD+cqmzQFwJFq3dyTo16waV7tLdt+WzxSGqW8C4YNwgqEsTDr8OGuBzqQqEucL/TwZiv39RYuTcRTf3CNROAV05xeWwo9/vMJkP2o9Vuo+pLDJfDp+nENVC/wskg86nwtj9ZJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4tzEHONs8Ktkexl1JN856D4c2Ta4AE7eRchtNiNQIpc=;
+ b=Ijf96+bFId0B9NwDZxXKzKglG9Lrs4rqCAAfPNO7xvTpxH/UxTiUI0kVhRW0N1KpYp3IG3iLBtGzs0u53uYIgRgLL1p+shYgD5w0NNzc823DOoubZo/zPtA4mq0/+rKk02LtZrvQkNzC3uuA2fdIpQDflMeX9dvljfjM02tK8EbliJT+66PKk/6JNLHSf9YbMyoMjza5LnMYez7A1bpLSaPo3T3gCpSCmzmc7SnDMAuANdJ4djaZf3v1Qu23ZIorIkRw93X9cmIIHH4QeorcI9VCSJoU9/7wvdPhqtLWl2Toi/XjXUyUBa+Ecu7LWgoGJ3VchMItuYMq8Bq0Q3Sz6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=G7wKFxgcRTyIz5IG5tUGfB7pPXreJmvY/K1sYJIVl3I=;
-        b=I00DfUbeycyG0Dw8STKxnaghIk9ou0vzsESvQVIMlrT8eVhJ76sub43aulNKFPwOcL
-         UxrZOHCljyEJ/HaDNgCUIWBpBVJkWgK72ksZvBA9QY9H26c0L2pomM05DJyeVdODJT1L
-         ZDfmiULPqoY2YzMsRX9s3BZ6fZr0wWScSEvGAiN9EQhsRv4ZtMXuYOhzvXy24lUBQ6bK
-         U212hp2O1hlrhP4Lp/BXhgcuubNm0q3C4fqZCCg6NFMcEZcjVMCujqezRMtTGXjKH7oa
-         0ZByXf7N6pXKbL6bthUbJE+CpVy+hujtl+uEEi1+0UgZK+4eW7VFAsNQ9iZNA1q+EUqB
-         EltA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=G7wKFxgcRTyIz5IG5tUGfB7pPXreJmvY/K1sYJIVl3I=;
-        b=ci3zHiAebBy1wPfbrr/kpTqx3K2h0o8aQB0VVGYl15zWUPsUOZLpMXJwBAS40cU+um
-         MnEPd77zbNFQlbgxrPdKJ36Am8YKVEIKGi/1PZEc7ZR24JexuFmhs7I8b7AA2D8vO1NC
-         +41GeEv5rd85at3Tyr0IKVYmUoM0PdLK3bPv7GkP2csJpKQTHF5iU4I0zP4Fwvec9BLr
-         RmSh0lJenvjjzSPIr5iI420FqhqZAQ+R8GDLjq+0Vvbq5mh9Qwn4ZjAScIFjv8EGcpYK
-         p/mfFXlMvUu1lfaQH9iGtY4KBejrfWW+LUEQGsu7nE2mAhxVoAJHLfJNmucFA5QU+vUM
-         Uvcg==
-X-Gm-Message-State: AOAM5301UfoDLv+TbhW6fQMYLZPfJq+5PeLCtuUBFwRuDp6u8EKjOSyJ
-        ZEcefdOOc0wWo1i68YDuLOA=
-X-Google-Smtp-Source: ABdhPJxIZSXxt+SSJ4Wc109LDmTnDkbhvm93ISr03t8O0S/WPjtqWVCeq9qxFzIweZuojWFD/xazLQ==
-X-Received: by 2002:a05:600c:4f82:b0:38c:9185:1ecd with SMTP id n2-20020a05600c4f8200b0038c91851ecdmr6880980wmq.130.1648560465761;
-        Tue, 29 Mar 2022 06:27:45 -0700 (PDT)
-Received: from Ansuel-xps.localdomain (93-42-66-93.ip85.fastwebnet.it. [93.42.66.93])
-        by smtp.gmail.com with ESMTPSA id 11-20020a05600c26cb00b0037ff53511f2sm2193197wmv.31.2022.03.29.06.27.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 06:27:44 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 06:56:02 +0200
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-omap@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
-        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org,
-        linux-unisoc@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-realtek-soc@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
-Message-ID: <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain>
-References: <20220328000915.15041-1-ansuelsmth@gmail.com>
- <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4tzEHONs8Ktkexl1JN856D4c2Ta4AE7eRchtNiNQIpc=;
+ b=EZGQr+5ihRuLvqZyU2g99GYDeANutK7ZQf0cFbEjjR6+A7zfrivCUIY+r+FYSQW9la7UJ8tAydY1o8kTkF3+t+oYytad61EOOVTMuPce8wBBJl95PhbXJnFcl0Hsb7asGA+yBIHmAFqMfdDqQrBSCFXwWcpQ8G1qmRUJd/MA5Rc=
+Received: from MN2PR10MB4191.namprd10.prod.outlook.com (2603:10b6:208:1d1::14)
+ by DM6PR10MB3290.namprd10.prod.outlook.com (2603:10b6:5:1aa::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.18; Tue, 29 Mar
+ 2022 12:02:05 +0000
+Received: from MN2PR10MB4191.namprd10.prod.outlook.com
+ ([fe80::bd63:ee61:5870:7b23]) by MN2PR10MB4191.namprd10.prod.outlook.com
+ ([fe80::bd63:ee61:5870:7b23%4]) with mapi id 15.20.5102.023; Tue, 29 Mar 2022
+ 12:02:05 +0000
+Message-ID: <3752c4c3-120f-e520-1cb0-cca7e8adac2d@oracle.com>
+Date:   Tue, 29 Mar 2022 17:31:47 +0530
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH] drm/v3d: Use kvcalloc
+Content-Language: en-US
+To:     Melissa Wen <mwen@igalia.com>
+Cc:     Emma Anholt <emma@anholt.net>, David Airlie <airlied@linux.ie>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        dan.carpenter@oracle.com, Melissa Wen <mwen@igalia.com>
+References: <20220312152656.51625-1-harshit.m.mogalapalli@oracle.com>
+ <20220328122536.cobmqclwtl2ca6k4@mail.igalia.com>
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+In-Reply-To: <20220328122536.cobmqclwtl2ca6k4@mail.igalia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA1PR0101CA0027.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:22::13) To MN2PR10MB4191.namprd10.prod.outlook.com
+ (2603:10b6:208:1d1::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        WEIRD_QUOTING autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6883885f-2ad0-4d6c-7b7e-08da117bf11f
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3290:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB329073169F82B36E5415A540C21E9@DM6PR10MB3290.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Lh4/XhMbGGd1TAm9SGveKqRgZS/8oIaTBZRsnzBIsptOHYue50i+E5kio3LbNXKsBi2Ypi8DrbA8Rkzj8dPZsBm/d0T4OAyIXDyZq5sRabVEeLgUg7Q3P7KuHvDCG5s/crrQlg5JjSaIhJuNcGQmOfPtUvTfno1lGyucSSKNH2SpvD+48RhrdusH/PrbvMUnJRvN1opryNcDjxU0Hk59FJKBEdF3k6VcWbGJkxK5ptzmQUX+06O6GBhncbh1BCbdLKjwZxPyuUNY5ClW9WTIKACEg5+iuUoj9gU4DXMDYyLzT4oJemHgMkQe++T0aL8IFi3M1geeZ/VGMmcAImPV7j7nmUNK8buppapzXz6tzYDqfc1zlCDYAEkTn7CuENH+LTkwfVlELeLNLOVSkEXN++CePz5/WiHWQfhaGxpYJtFspzvxA4aQt9RFtkcBbkFJHK/wh43Nfi5alVCJJUKRBUfBq5/Fzp6fmfswls66zS/ABkwft0DNLt6W1fpse223fkXWrV1Ra2YN6e4iOuQ/ZPMtUHPtiM1k6B6fAGgQ3QxOUzE7s1OBUTo8nqxAoIkFNMRwrbq+UDEuZS0Gt+Em1kVLogY7MRfVdPzESbqQyXI8gA9BGfkxli2AKqMf0ezr0AGwHur2lX8quN3LluwafHU3SoR0lcxA6qgh47l6aUUms9tSqOQUi/oB0uOuK/shCEeZcQZ2M0/Plkgz6twszxxPmytwvHgG5hEc1dZ4L/M=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR10MB4191.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(966005)(6666004)(508600001)(2616005)(2906002)(6512007)(6506007)(53546011)(6486002)(8936002)(5660300002)(6916009)(31686004)(38100700002)(66556008)(83380400001)(54906003)(316002)(86362001)(31696002)(66946007)(26005)(66476007)(8676002)(4326008)(186003)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NnBNSUNXZWovUlNEL0VFZXQzVGozanROWlhnSjI3V3pOSkRIb3dvTnJKc1lh?=
+ =?utf-8?B?bVhmMG5UKzZieFhpemJOaS9wNS8vanJmQ0FGVEpYaGl4RTMvK3FDRWhpQU1Q?=
+ =?utf-8?B?YUptVGpDTkVpMHhDRUdBeU1RSFI0N0ovelRxVk1pa1RlcVhxdG1ITE80Mjd4?=
+ =?utf-8?B?ODk1SU9DVEJsOVgxN2FIOEhEaEVUQTZrRDRFaEpXbjhzcS9hNXFEMlFvR2Jm?=
+ =?utf-8?B?RXFrMVE4SmY3OERxb3dRalFwdmRUVjFoUExsaGMzSVhRRXJxTU5tandMZDZp?=
+ =?utf-8?B?Mm9jbWsrMEJidTF4SWxPczV4enJSOXcvZEd6eTJUMHViaFQxMktzMmdUN2kv?=
+ =?utf-8?B?djg1eVBOdmMyNXpVam5lSW9IcjZDVlczNUJlblZOT25QeWNVL2NoRTJZSVFY?=
+ =?utf-8?B?RXlpc0ZvWXNZdVp4ZUJ1dUU3WXRkVDR4Nm8ybVJQcktnR1p6ZVZvREM1YXNj?=
+ =?utf-8?B?WkkvRlRIYUFDQXd0RWZvYjVMN1ZGcFNoOWE0V1VEVVV0SlM2bGVTNGZEZVNM?=
+ =?utf-8?B?UnNheFN6QXhabEZ5NzA0SWRsVXBHdEFqL0VsdU5KZkJGYm8zQXY4SG56VElv?=
+ =?utf-8?B?b1lzYktmeDJDaWVZQzZiem5mcWNhUnNMNWp0TVJuaUdaL2pHbHUrOEtkKzlw?=
+ =?utf-8?B?dzZSSHVnUEo0NE9XMS9qeFEwdkJjVzRZeW9QeVF6bGcyQ1ZKQlJ2RmdHWEdZ?=
+ =?utf-8?B?TlVJSTJKaEFOV0lrMlJpUzM4bUZTUlFWZFVwb3QxTmdaUlJFMzZQcEZ5YjVL?=
+ =?utf-8?B?RFIzelp6UlpZZ015SVMxMmthUmRMK29scUtzT0pQOE1YL2hXMXZNTkRUVUI4?=
+ =?utf-8?B?MllqYXVwRjJxdjRXQUtLZXVEZFQ4V2tUb2FhWXRxNS85S0JkUkpYcGdvMGtO?=
+ =?utf-8?B?bE00aC9HL2VkazBvWGZTOHZBL0JleFl1VFpSWlJaVWYxcEdjR0piZ2tVTk8y?=
+ =?utf-8?B?ajJWenoyTmJhTVEwTExkSC9SRjZTY3RLaDBlWUMzczBjQjEvdit6cWJzOFNG?=
+ =?utf-8?B?Z29QS3ZVQ25nV0w5Uk1BOHNqYVdBU0xvRUFLYjM0ZXZLOGVTUFovRVp4OHhi?=
+ =?utf-8?B?T2lldkpuclc0SlZCaXRhUDkra2p0SjFWZmNueXFJa3ExNmV4TW1Yd2VEdERF?=
+ =?utf-8?B?aHdaaEc4S3NRU294NHR1dUdTUDZsVVVxTHd4NmVuYjRPVEord1Jad1c5RDZx?=
+ =?utf-8?B?amphWllHb0ZWN0M4M1JPNUtKRFNUelV2cU54cUlwVEl4SmlTaytwQS9qeVJY?=
+ =?utf-8?B?ZEw2RTBmbk5sOHhDdXJDd2t4dDdtRkFDNzRhSllxRDZndjhtS1dxMHFVVmZs?=
+ =?utf-8?B?WkMyUnhlM1J6M251MUY1TWtEdjkvRTlQelJXa2tWMXZiZWJ5YU8vbkV0bEVN?=
+ =?utf-8?B?UGI5TitYQVVGNnlsZlczbDRPUjRXRmk3MDFBM3pZajV5NnV2a0hTMFRpMlRj?=
+ =?utf-8?B?KzgrZ0J4OVdRL0d1dzVmajNZemJTUlJMcjFiZkh5VjZ3em1lcWhDWHcrcG9i?=
+ =?utf-8?B?bGV3QWpHNjNnek5QMHkwRnA5Sm5UUmFnYnU0dXhsRUxxR3Z1TDZBN0FFSm9t?=
+ =?utf-8?B?U3FGSUtLQURPdUsyQUtGK05CNzh5K2RLYzJaVnVuaTdCazRkbWh4ZDEyWHBM?=
+ =?utf-8?B?TEI4Qmh4WUN3R1R4emJ5cDA0UzRjU1hOTEdCUE5rVjQyVVhJT0FHbjdCRGlX?=
+ =?utf-8?B?SGFpaXFZcy82azIzSHZMZGNrSlRzcVk3VlVYYWFQUkluVFN6WFRtd2JPNXhC?=
+ =?utf-8?B?UThnYklxN1RKZG9aMitTQnNlUjZwR0wvMkIwWHlwbG8yLzl5aXVwVDJEcEpC?=
+ =?utf-8?B?N2RLNytvNCsrOHJnV3d4UTFyRkhzWFdGbFRBRUlXOUNaMlUwelVNVGdHUXlF?=
+ =?utf-8?B?cU9YRzF6SThHYU5temhubmE5d3NrMUtHYjUzQXZIMlNrUGkwTjQxUUJJZk5z?=
+ =?utf-8?B?cCsxdDE1TmhHM3g5NWYyTVNHaEhDUDE0Ti9xNG9OSnBMb2ROeEtqUHZtdUVl?=
+ =?utf-8?B?eDJVOUZNQnZEWkg0QU1zd1hJazZiYW4xWW9lMk5Rb2hkTS8wVFBZQlBSQTFn?=
+ =?utf-8?B?bmJ6bjkvZUhIK3I1ekFMQkFZRWpiZGIrNVJ4a1pUTmJaQ2tkTUs5b282UHE2?=
+ =?utf-8?B?VmcycThuaEtWZnF4bWYrOG4rQlVNUTRCdnprMTNQUFg1cEowRk1ic1ErWXA0?=
+ =?utf-8?B?N1F5Q1E2T0E1NXlRWXRRRmVNRXlSWlVZUTg1R3NSMWhkREJRY2NMbFlYWW5y?=
+ =?utf-8?B?anZjd2lxUnFQVHF5bG1KL2x2YkpRMldmOXNFMVBPM1hUSktuZ1B4STR4Zko2?=
+ =?utf-8?B?QTMrQkhCMU1UdHh6aWlXNW1JL21iWDB5RUJLb3MycGU0bW56dUFjb1ViZC9a?=
+ =?utf-8?Q?OmC44tzueidOK78+hbhAEtyyZ3+mpeu8eYLT4?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6883885f-2ad0-4d6c-7b7e-08da117bf11f
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR10MB4191.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2022 12:02:05.2867
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qByGj+uy1O8Os9aAVBlnICzbMI7Ali6FGtmc4omyEaqZjxn2KIGnYApZeCFKYnNkl3lTGWnHcI67OSGK30+UPv7xdnSR2GdX8olAv7cPB1c4EI4W1oifqPQxlLVXKgJj
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3290
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10300 signatures=694973
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 bulkscore=0
+ adultscore=0 spamscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203290073
+X-Proofpoint-GUID: vOOYQCulSxC3zrP5vjIu14imTEWihdZG
+X-Proofpoint-ORIG-GUID: vOOYQCulSxC3zrP5vjIu14imTEWihdZG
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 03:20:18PM +0200, Krzysztof Kozlowski wrote:
-> On 28/03/2022 02:09, Ansuel Smith wrote:
-> > Hi,
-> > as the title say, the intention of this ""series"" is to finally categorize
-> > the ARM dts directory in subdirectory for each oem.
-> > 
-> > The main reason for this is that it became unpractical to handle 2600
-> > dts files and try to even understand/edit/check the situation for a
-> > specific target.
-> > 
-> > In arm64 we already have this kind of separation and I honestly think
-> > that this was never proposed for ARM due to the fact that there are
-> > 2600+ files to sort and the fact that it will be a mess to merge this
-> > entirely but IMHO with a little bit of effort we can finally solve this
-> > problem and have a well organized directory just like arm64.
-> > 
-> > Some prerequisite on how this work was done:
-> > - This comes entirely from a python script created by me for the task.
-> >   linked here [1]
-> > - I had to manually categorize all the different arch in the makefile
-> >   based on the oem. I searched every arch on the internet trying to
-> >   understand the correct oem. I hope they are correct but I would love
-> >   some comments about them.
-> > - This current ""series"" is all squashed in one big commit to better
-> >   receive comments for this. The final version ideally would have all
-> >   changes in separate commits. The script can already do this, it's just
-> >   commented.
-> > 
-> > Here is a list of some discoveries while doing all the sorting.
-> > These are totally additional reason why we need this.
-> > 
-> > While creating the script I discovered some funny things:
-> > - We have orphan dts! There are dts that are never compiled and are
-> >   there just for reference. We would never have noticed this without this
-> >   change and probably nobody noticed it. They are currently all listed
-> >   in the python script.
-> > - We have dtsi shared across different oem. My current solution for them
-> >   is: NOT SORT THEM and leave them in the generic directory and create a
-> >   link in each oem dts that points to these dtsi. This is to try in
-> >   every way possible to skip any additional changes to the dts.
-> >   Current dtsi that suffers from this are only 3. (listed in the script)
-> > - arm64 dts and dtsi reference ARM dts. Obviously this change would cause
-> >   broken include for these special dtsi. The script creates a dependency
-> >   table of the entire arm64 directory and fix every broken dependency
-> >   (hoping they all use a sane include logic... regex is used to parse
-> >   all the different dependency)
-> > 
-> > So in short the script does the following steps:
-> > 1. Enumerate all the action to do... (dts to move, scan dependency for
-> >    the dts...)
-> > 2. Generate the arm64 dependency
-> > 3. Creates the Makefile
-> > 4. Generate the Makefiles for the current oem
-> > 5. Move all the related dts and dtsi for the current oem
-> > 6. Check broken dependency and fix them by editing the dts and writing
-> >    the correct include (or fix any symbolic link)
-> > 
-> > This is an output that describes all the things done by the script [2]
-> > 
-> > I really hope I didn't commit any logic mistake in the script but most
-> > of the work should be done.
-> > 
+On 28/03/22 5:55 pm, Melissa Wen wrote:
+> On 03/12, Harshit Mogalapalli wrote:
+>> kvcalloc is same as kvmalloc_array + __GFP_ZERO.
+>>
+>> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+>> ---
+>>   drivers/gpu/drm/v3d/v3d_gem.c | 5 ++---
+>>   1 file changed, 2 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/v3d/v3d_gem.c b/drivers/gpu/drm/v3d/v3d_gem.c
+>> index c7ed2e1cbab6..f7d37228461e 100644
+>> --- a/drivers/gpu/drm/v3d/v3d_gem.c
+>> +++ b/drivers/gpu/drm/v3d/v3d_gem.c
+>> @@ -308,9 +308,8 @@ v3d_lookup_bos(struct drm_device *dev,
+>>   		return -EINVAL;
+>>   	}
+>>   
+>> -	job->bo = kvmalloc_array(job->bo_count,
+>> -				 sizeof(struct drm_gem_cma_object *),
+>> -				 GFP_KERNEL | __GFP_ZERO);
+>> +	job->bo = kvcalloc(job->bo_count, sizeof(struct drm_gem_cma_object *),
+>> +			   GFP_KERNEL);
 > 
-> +Cc Arnd and Olof,
+> Hi Harshit,
+> Hi Melissa,
+
+> This change seems valid to me, but I believe, in this point, v3d should
+> move to use the DRM function `drm_gem_objects_lookup()`, and then your
+> change goes there, since drm_get_objects_lookup() has the same issue
+> you're pointing. What do you think?
 > 
-> Ansuel,
-> Thanks for you patch. Please cc the SoC maintainers in such submissions.
-> It seems that you got some quite nice discussion, but still the core
-> folks are not Cced, so no one would be able to take your patch...
->
+Thanks for looking at the patch.
 
-I had some problem with gmail and sending mail too much users. I put Rob
-and You and all the various list to try to workaround the "gmail spam
-protection"
+Yes, you are right, the issue is same there as well.
 
-> I am pretty sure we were discussing such split idea in the past and it
-> did not get traction, but I cannot recall the exact discussion.
+Few other similar instances in drm/ subsystem.
+
+drivers/gpu/drm/drm_gem.c:700 drm_gem_objects_lookup() warn: Please 
+consider using kvcalloc instead
+drivers/gpu/drm/ttm/ttm_tt.c:99 ttm_tt_alloc_page_directory() warn: 
+Please consider using kvcalloc instead
+drivers/gpu/drm/ttm/ttm_tt.c:108 ttm_dma_tt_alloc_page_directory() warn: 
+Please consider using kvcalloc instead
+drivers/gpu/drm/ttm/ttm_tt.c:121 ttm_sg_tt_alloc_page_directory() warn: 
+Please consider using kvcalloc instead
+drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c:541 amdgpu_cs_parser_bos() warn: 
+Please consider using kvcalloc instead
+drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_svm.c:152 
+svm_range_dma_map_dev() warn: Please consider using kvcalloc instead
+drivers/gpu/drm/v3d/v3d_gem.c:311 v3d_lookup_bos() warn: Please consider 
+using kvcalloc instead
+drivers/gpu/drm/vc4/vc4_gem.c:746 vc4_cl_lookup_bos() warn: Please 
+consider using kvcalloc instead
+drivers/gpu/drm/lima/lima_gem.c:42 lima_heap_alloc() warn: Please 
+consider using kvcalloc instead
+drivers/gpu/drm/panfrost/panfrost_drv.c:147 panfrost_lookup_bos() warn: 
+Please consider using kvcalloc instead
+drivers/gpu/drm/panfrost/panfrost_mmu.c:452 
+panfrost_mmu_map_fault_addr() warn: Please consider using kvcalloc instead
+drivers/gpu/drm/panfrost/panfrost_mmu.c:460 
+panfrost_mmu_map_fault_addr() warn: Please consider using kvcalloc instead
+
+Tool Used: Smatch.
+
+> I already sent a patchset to replace steps in v3d_lookup_bos() by
+> drm_gem_objects_lookup(), as I mentioned. The patchset is here:
+> https://patchwork.freedesktop.org/series/101610/
+> Willing to review it? ^
 > 
 
-I think the main issue here is how to handle bot and how problematic is
-to merge this. As written in the cover letter the final version of this
-should be a big series of 50+ patch with every commit specific to each
-oem. In theory we should be able to merge the different oem separately
-and try to at least start the categorization. 
-Another idea I got to at least have a "migration path" is to convert
-every dts in the dts/ directory to a symbolic link that target the dts
-in the correct oem. But I assume that would fix only part of the problem
-and git am will still be problematic.
+Sorry Melissa, I am still a beginner, Can't review it.
 
-> To me the idea is good but will cause huge `git am` conflicts.
-> Cherry-picks, backports and merges should nicely detect path renames,
-> but git am (and b4 am) I think cannot.
+Regards,
+Harshit
+
+> Thanks,
 > 
+> Melissa
+> 
+>>   	if (!job->bo) {
+>>   		DRM_DEBUG("Failed to allocate validated BO pointers\n");
+>>   		return -ENOMEM;
+>> -- 
+>> 2.31.1
+>>
 
-I know but we should really consider this kind of change. The current
-state of the dts/ directory is embarassing and keeping it that way cause
-only more problems and makes this even more difficult.
-Hope we find a solution and fix this for good!
-
-> Best regards,
-> Krzysztof
-
--- 
-	Ansuel

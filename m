@@ -2,97 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD834EAB95
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FAB4EAB99
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235373AbiC2KsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 06:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
+        id S235377AbiC2KtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 06:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235105AbiC2KsF (ORCPT
+        with ESMTP id S234675AbiC2KtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 06:48:05 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDC12487B8;
-        Tue, 29 Mar 2022 03:46:23 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B3162218F2;
-        Tue, 29 Mar 2022 10:46:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1648550781; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RXUSr0X/OHwTP/biM/aptOlOarSjj143JBWUeUahRO4=;
-        b=zizPa5FaVHvWbtWboCJrQErjt4ri7XTkke0agNui/r7WTQLWdwuYyKAKoeKF+R1KQ3z+3t
-        gMTCS9CM/UVIrreLPyLs5snZS5J3Q9164XqF3g2mAEK5S8hh0DWE5cFI1JEAnBww28KB7T
-        /D9OeTEJEdcsywB0g8aZ8UeaQZgGF10=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1648550781;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RXUSr0X/OHwTP/biM/aptOlOarSjj143JBWUeUahRO4=;
-        b=E1I0b1yt/ZVOBITzt2gmpMsiMuaXnfYmN7DJONqxVe/CI6Po9m4wJ4VrdnWYvkdEPEpkrl
-        0TK0mxpEMFCXBNAA==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 70EA6A3B82;
-        Tue, 29 Mar 2022 10:46:19 +0000 (UTC)
-Date:   Tue, 29 Mar 2022 12:46:19 +0200 (CEST)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>, Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Tue, 29 Mar 2022 06:49:01 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DB32487B8;
+        Tue, 29 Mar 2022 03:47:19 -0700 (PDT)
+Received: from integral2.. (unknown [182.2.70.161])
+        by gnuweeb.org (Postfix) with ESMTPSA id 640277E723;
+        Tue, 29 Mar 2022 10:47:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1648550838;
+        bh=mgU2darmCFoLaZ5GAG6W8b9ruZ6543VExVSpSw3Vi1o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YuEPtaLIaHFLRGRdg0RjlpgjRyDSErHAC4+vwsGam7QMa8fKdTVk/ePxn4c5RPz5G
+         ZZQ8cDhBqkAOzu8bH54ZZ33QM6spgIDztifayZ5t0Pxfb1TcrBXjQVe2QLtSfkP9a2
+         aHgAod/qK74kdQ2wek5zteu6Yv59mG+RFoa1XNGO2rDSxOOCs2Qj2T4UbNVlSTVsMa
+         jNRqkXD8h2dFDFRXxVTEpWkXL7Ut9k7sHdgz+o3qrkvgflfERn+vFB2hiZci9kWxK0
+         /RJOlXLnNYbor6ch5eguP45FacOyrsnV4wHOSJPbBc3aUJfwvYn41c3xTE9/XHeY5N
+         Jxw7+cG8PDBVw==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH] livepatch: Remove klp_arch_set_pc() and
- asm/livepatch.h
-In-Reply-To: <e029c7cfde436f6bbf99148ab14dc2da99add503.1648447981.git.christophe.leroy@csgroup.eu>
-Message-ID: <alpine.LSU.2.21.2203291245580.31302@pobox.suse.cz>
-References: <e029c7cfde436f6bbf99148ab14dc2da99add503.1648447981.git.christophe.leroy@csgroup.eu>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Linux Edac Mailing List <linux-edac@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stable Kernel <stable@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        x86 Mailing List <x86@kernel.org>
+Subject: [PATCH v6 0/2] Two x86 fixes
+Date:   Tue, 29 Mar 2022 17:47:03 +0700
+Message-Id: <20220329104705.65256-1-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Mar 2022, Christophe Leroy wrote:
+Hi,
 
-> All three versions of klp_arch_set_pc() do exactly the same: they
-> call ftrace_instruction_pointer_set().
-> 
-> Call ftrace_instruction_pointer_set() directly and remove
-> klp_arch_set_pc().
-> 
-> As klp_arch_set_pc() was the only thing remaining in asm/livepatch.h
-> on x86 and s390, remove asm/livepatch.h
-> 
-> livepatch.h remains on powerpc but its content is exclusively used
-> by powerpc specific code.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+This is the v6 of two x86 fixes.
 
-Acked-by: Miroslav Benes <mbenes@suse.cz>
+1) x86/delay: Fix the wrong Assembly constraint in delay_loop() function.
+2) x86/MCE/AMD: Fix memory leak when `threshold_create_bank()` fails.
 
-M
+## Changelog
+
+v6:
+  - Remove unnecessary Cc tags.
+  - Undo the stable mark for patch 1.
+  - Update commit message, emphasize the danger when the compiler
+    decides to inline the function.
+  - Fix the Fixes tag sha1 in patch 1.
+  - Change the helper function name to __threshold_remove_device().
+
+v5:
+  - Mark patch #1 for stable.
+  - Commit message improvement for patch #1 and #2.
+  - Fold in changes from Yazen and Alviro (for patch #2).
+
+v4:
+  - Address comment from Greg, sha1 commit Fixes only needs
+    to be 12 chars.
+  - Add the author of the fixed commit to the CC list.
+
+v3:
+  - Fold in changes from Alviro, the previous version is still
+    leaking @bank[n].
+
+v2:
+  - Fix wrong copy/paste.
+
+Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+Ammar Faizi (2):
+  x86/delay: Fix the wrong asm constraint in `delay_loop()`
+  x86/MCE/AMD: Fix memory leak when `threshold_create_bank()` fails
+
+ arch/x86/kernel/cpu/mce/amd.c | 32 +++++++++++++++++++-------------
+ arch/x86/lib/delay.c          |  4 ++--
+ 2 files changed, 21 insertions(+), 15 deletions(-)
+
+
+base-commit: 1930a6e739c4b4a654a69164dbe39e554d228915
+-- 
+Ammar Faizi
+

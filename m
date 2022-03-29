@@ -2,136 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7474EA599
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 039C04EA59A
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbiC2DAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 23:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
+        id S231363AbiC2DAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 23:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiC2C77 (ORCPT
+        with ESMTP id S231359AbiC2DAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 22:59:59 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720FD26CD;
-        Mon, 28 Mar 2022 19:58:14 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id 10so14193691qtz.11;
-        Mon, 28 Mar 2022 19:58:14 -0700 (PDT)
+        Mon, 28 Mar 2022 23:00:09 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766D892876
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 19:58:27 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id jx9so16108353pjb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 19:58:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2doMNH7ifB03QblJV2sV07sq+r0A6Mdk0Jlzv/ArvaY=;
-        b=AUeM4C6NBE4EMZ2lTC/kkzSz9gJLIrJRpFA4SgUEtFR6sht/NzF1n4U3bovPj4bOQD
-         dIC7H2cgVqJj17X6kuoInrEyZvmkCrKYw7F7H79NWkwh1dfYG3/ZjGexG2viAFTCXaST
-         z3pdNxSnlPBdVtNod0v+QYyAYzJZK4VAJKp0Iweyi1RP2AbkQgOO40/C1kJW+D63lIJE
-         0kTvsA8iW7gKdpP/lj9l12Gy9jQ8wiCbtEsr55TEluNv6xP6mLJ0q+TRm8/JAf1PeSQX
-         Vg0Fg626qCPmg8jE/SgETQiJ/VDwoJkgijLpIyzEVucRBPu0tqlELTDX76M3NZsoMhfl
-         j/bQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9fotObbMpyiaSJTVr0Qrjpwe6XllSSEz1lK4iYWy6A0=;
+        b=nji4DHr3QLzVlxKT2yhmeV+lZux+De0GXrDozrN9twH4AhNyvW21NCvDp3EXs5aimt
+         G/2JpNvbg0Q2Mir7/x2l/OkXALngSIjrwtLv2zCDW0Bj6ay150cJbDHRQ34P1d/J3CeN
+         D4zjEaD1HOR5MFwPO8WScGbEv0+Snpdh5Q1UlGFI/TqRF279SOnabnNGc4NDtxCWUhq6
+         d2SRO4jPv2aHRZRKMIEg09tguYsvARXfC0agcl3GLCaN7kaZwwQbpNZ2XnQToG8Y52K2
+         9UaFzBefTECsMqMpGG4p7OP79Bi0b94YaLn7NlpWo6bmfSHZ7LvJz77L5s1VFjjep0E0
+         Ej+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=2doMNH7ifB03QblJV2sV07sq+r0A6Mdk0Jlzv/ArvaY=;
-        b=fLms70K7DXI5vNDticyXa6JHxXfeQ+ocalMqSNy8tb5aE83Z33xhVMq1MzN1CoBGHR
-         KIpYOQREzL2K1HXrMx1QK09PwseXztBSdtuJPgjwFrCV2+sMxl/r9weihfkGb4IJXrYJ
-         KekioPKd6uUnS/qoohimlMCBA+JT4dfaYzIFaojrMwAlx1xjWNU4tl+JlkYmGeueIM3Y
-         3Jscb95w+vnjgrEg2x4y4kmOwHySJUyBjsytA0I1ITKq/Rh2J9u4IhqhBTe+SWYndHqd
-         7NZc3WQaMP/7q1xnGum0XDwjRScvpQizaDvz3cLIXGfWGy36/G/qtnnx64Wn4EIfj02j
-         ekmw==
-X-Gm-Message-State: AOAM5336m4JSbJRwHDxgYx+xeOcJgV+mpg3jWeir3xt4eMi81ZzN6en3
-        +JEc8T6B0f+sAuU/RBn+Oc0=
-X-Google-Smtp-Source: ABdhPJxUiSUsDbfSAFh0QJP/PMH9L27Pm2GNMWaSdSsolWBtkOUCqw9Ms+uD2jae4rk7kuLZuKiZ0Q==
-X-Received: by 2002:ac8:7f81:0:b0:2e1:fd50:24f2 with SMTP id z1-20020ac87f81000000b002e1fd5024f2mr25162533qtj.353.1648522693637;
-        Mon, 28 Mar 2022 19:58:13 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id p13-20020a05622a048d00b002e1ce0c627csm14763118qtx.58.2022.03.28.19.58.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 19:58:13 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: yang.yang29@zte.com.cn
-To:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        firoz.khan@linaro.org, ematsumiya@suse.de
-Cc:     rostedt@goodmis.org, mingo@redhat.com, yang.yang29@zte.com.cn,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] alpha: replace NR_SYSCALLS by NR_syscalls
-Date:   Tue, 29 Mar 2022 02:57:38 +0000
-Message-Id: <20220329025737.2375176-1-yang.yang29@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        bh=9fotObbMpyiaSJTVr0Qrjpwe6XllSSEz1lK4iYWy6A0=;
+        b=mx3C4v1HZLajE/iKzgsANTSSjMNaTcsgoe3OLhRaJdF5yvq+e1W0aT+WfqQ62bcHJl
+         bg9jmz+8OY8miF1GWo1KSR1mp4a4mqwAJTkDjsN5ndZyhwxBuYrT21WmC3Iyz513MnNH
+         VLyJODqDaWLwRuPyZchd1iGq7WwfwC2+q0D2T9eVT++aT4YofN/qy7Arx/eJPKAaIoeA
+         eGGqcGSnVXamt5nYnMNuCMOr8xE5fq+i92zx0H4xKkptGYB2yup9YppNw0KWAvf96zxM
+         pcoxR9+rJ/rF9CQvUyP9IEC8u4LJa7lxO8OfLvVTMQu/m3+SotHkVNKttNNB52r/5zNO
+         7oQw==
+X-Gm-Message-State: AOAM533Nmk7WnPnvm1lKy/vGbr75oCCyPSIGqCW/awhob5NWywAqt6sF
+        YOQ9LRsPhLhRTvU4XT7GDqKCGw==
+X-Google-Smtp-Source: ABdhPJymAs3pZnzXytpLwLpqwa6yRhdpRiao6RquaXPwapfqpjgyqQJR9zEoO53wZ4MYIwPjbyDusQ==
+X-Received: by 2002:a17:90b:3a8a:b0:1c6:47fe:c9b0 with SMTP id om10-20020a17090b3a8a00b001c647fec9b0mr2206634pjb.151.1648522706664;
+        Mon, 28 Mar 2022 19:58:26 -0700 (PDT)
+Received: from ?IPV6:2409:8a28:e65:74c0:705b:241a:6dc0:a4ac? ([2409:8a28:e65:74c0:705b:241a:6dc0:a4ac])
+        by smtp.gmail.com with ESMTPSA id m15-20020a638c0f000000b003827bfe1f5csm13943758pgd.7.2022.03.28.19.58.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 19:58:26 -0700 (PDT)
+Message-ID: <e037ef13-dd83-a820-5b91-56d48481c7f8@bytedance.com>
+Date:   Tue, 29 Mar 2022 10:58:15 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [External] Re: [PATCH] sched/fair: fix broken bandwidth control
+ with nohz_full
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com, Frederic Weisbecker <fweisbec@gmail.com>
+References: <20220328110751.39987-1-zhouchengming@bytedance.com>
+ <20220328132047.GD8939@worktop.programming.kicks-ass.net>
+ <c0465b27-328a-1288-fb50-d4c6321c8b4d@bytedance.com>
+ <YkHRmv/OcABIB0wP@hirez.programming.kicks-ass.net>
+ <6fc49cff-f8a1-8b09-5a25-a64e5d07d258@bytedance.com>
+ <YkHal1m3pnxGoQ1Y@hirez.programming.kicks-ass.net>
+ <20220328124454.08ab6126@gandalf.local.home>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <20220328124454.08ab6126@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yang <yang.yang29@zte.com.cn>
+On 2022/3/29 00:44, Steven Rostedt wrote:
+> On Mon, 28 Mar 2022 17:56:07 +0200
+> Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+>>> echo $$ > test/cgroup.procs
+>>> taskset -c 1 bash -c "while true; do let i++; done"  --> will be throttled  
+>>
+>> Ofcourse.. I'm arguing that bandiwdth control and NOHZ_FULL are somewhat
+>> mutually exclusive, use-case wise. So I really don't get why you'd want
+>> them both.
+> 
+> Is it?
+> 
+> One use case I can see for having both is for having a deadline task that
+> needs to get something done in a tight deadline. NOHZ_FULL means "do not
+> interrupt this task when it is the top priority task on the CPU and is
+> running in user space".
 
-Reference to other arch likes x86_64 or arm64 to do this replacement.
-To solve compile error when using NR_syscalls in kernel[1].
+Yes, this is similar with our use-case.
 
-[1] https://lore.kernel.org/all/202203270449.WBYQF9X3-lkp@intel.com/
+> 
+> Why is it mutually exclusive to have a deadline task that does not want to
+> be interrupted by timer interrupts?
+> 
+> Just because the biggest pushers of NOHZ_FULL is for those that are running
+> RT tasks completely in user space and event want to fault if it ever goes
+> into the kernel, doesn't mean that's the only use case.
+> 
+> Chengming brought up VMs. That's a case to want to control the bandwidth,
+> but also not interrupt them with timer interrupts when they are running as
+> the top priority task on a CPU.
 
-Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
----
- arch/alpha/include/asm/unistd.h | 2 +-
- arch/alpha/kernel/entry.S       | 4 ++--
- kernel/trace/trace.h            | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Agree. NOHZ_FULL means don't want timer interrupts when running mostly in
+user space or guest mode, bandwidth control just means need to go into kernel
+to schedule out only when its quota used up. We shouldn't make them mutually
+exclusive.
 
-diff --git a/arch/alpha/include/asm/unistd.h b/arch/alpha/include/asm/unistd.h
-index 986f5da9b7d8..caabd92ea709 100644
---- a/arch/alpha/include/asm/unistd.h
-+++ b/arch/alpha/include/asm/unistd.h
-@@ -4,7 +4,7 @@
- 
- #include <uapi/asm/unistd.h>
- 
--#define NR_SYSCALLS	__NR_syscalls
-+#define NR_syscalls	__NR_syscalls
- 
- #define __ARCH_WANT_NEW_STAT
- #define __ARCH_WANT_OLD_READDIR
-diff --git a/arch/alpha/kernel/entry.S b/arch/alpha/kernel/entry.S
-index e227f3a29a43..966400b925a5 100644
---- a/arch/alpha/kernel/entry.S
-+++ b/arch/alpha/kernel/entry.S
-@@ -454,7 +454,7 @@ entSys:
- 	SAVE_ALL
- 	lda	$8, 0x3fff
- 	bic	$sp, $8, $8
--	lda	$4, NR_SYSCALLS($31)
-+	lda	$4, NR_syscalls($31)
- 	stq	$16, SP_OFF+24($sp)
- 	lda	$5, sys_call_table
- 	lda	$27, sys_ni_syscall
-@@ -585,7 +585,7 @@ strace:
- 	ldq	$21, 88($sp)
- 
- 	/* get the system call pointer.. */
--	lda	$1, NR_SYSCALLS($31)
-+	lda	$1, NR_syscalls($31)
- 	lda	$2, sys_call_table
- 	lda	$27, sys_ni_syscall
- 	cmpult	$0, $1, $1
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index 07d990270e2a..7ad8324db192 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -25,7 +25,7 @@
- #include "pid_list.h"
- 
- #ifdef CONFIG_FTRACE_SYSCALLS
--#include <asm/unistd.h>		/* For NR_SYSCALLS	     */
-+#include <asm/unistd.h>		/* For NR_syscalls	     */
- #include <asm/syscall.h>	/* some archs define it here */
- #endif
- 
--- 
-2.25.1
+Thanks.
 
+> 
+> -- Steve

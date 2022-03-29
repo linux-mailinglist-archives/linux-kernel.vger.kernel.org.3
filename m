@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4CFF4EAEBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C10134EAEC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237498AbiC2NvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 09:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        id S234087AbiC2Nv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 09:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234087AbiC2NvS (ORCPT
+        with ESMTP id S237500AbiC2NvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 09:51:18 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819F969281
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:49:35 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id g9-20020a17090ace8900b001c7cce3c0aeso2028734pju.2
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:49:35 -0700 (PDT)
+        Tue, 29 Mar 2022 09:51:25 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEEC9A9BB
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:49:42 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id d30so456547pjk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:49:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DdqwlImXrfao84vCHBrZYdsfDtapi0otjvjw/TD7gAs=;
-        b=iqmBctwaR3RnMvlGbfAY9TefMgdpgPs5uTFnScOMAg7WCye0WWGUkpPFAhBNOx6r7X
-         7xbZLOsB1kf93MKkXiauUeHte6cMJQCWg8asM67oms0HaCmzDyQIXBOb84j+6oJthZNW
-         NGw3IQOqZD0a3q/6QqOXLCTkJC5iXA/i1gb4icEhNapcEGT4XYNP3m4EWTCdI4dHz2Vk
-         wyxu0v8qqP24AnkXN9DxEJdRfba89K846CIvOrB94f/L5wC4PKYmrr+1/BcyhjNlHdlT
-         7YOMNiaENUWkeJEkji8G+ikHaeuCX17BWmjKWjOjM4F5ReBHm5idgE8oiFkBuBnH1aXZ
-         yk0A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Xp6qCxwTnE0C1FxChih956SdBv3W6L+dQXT7C0J3Dts=;
+        b=7dvqFGIZamDh6z2A7HqI+S0QNO4F3ZMglCOrx6y5hhx5QhuJeI8ofBVTiND7e6IZ2V
+         m3lUYzObTIB/gdTZFA4KQD4DVsVBtwZ8tSMWVw+36xNQvtuPiVUrYb0u+Y3+2lro1C/F
+         zPYEz7Vt8YKGhinn+4PXZ3dukjN0B1MbiKgtAlv1rGMO4ZQpvr71RTKO76fB44QtchOm
+         abY0vvsDPKb/HSm86BzJ17VHR5e2mrLwsVZuC/1Ttk6sY1o74EUfeVjNCyd0bQ7PiVCl
+         3BXyud3hnwNvDSI2kGuWLZy+j235vtliI5g0/WHD/uaa16qqBriGcKHkz9VNYKXowtrs
+         NR9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DdqwlImXrfao84vCHBrZYdsfDtapi0otjvjw/TD7gAs=;
-        b=dYSzWq1dfVzhfd4tpv2v0TtfzHO5ScU/rY//dTnFnST6Ufza4C7CMoqPb58hHHDJX8
-         ZYsmMxRtXVIHEMuRM/Tl1V3D43Cg6W8uGhHBdn2tDst2L0fVw48MVFcnl8NiM31KVQYN
-         5tjw5xuBUCRa19DudAJLkeuo4RMF72uLIzk9w58F8Jxgh4lo4k8DRFnTPzrMqc4X+KVQ
-         cU24YpE54zC6VYboiVghkPNe2a1Smh9MolGIK8kJQTGQGwbpUnT8Jtt/3pehKEmm9jok
-         AeDO9TLhXcibEqkW4t3STs240q8+8Otjfa36B+MjLvNK3HL1w/9jc3GT71/stZ12nSaN
-         EOUg==
-X-Gm-Message-State: AOAM533PHhER8iZIdyd8FH3SZfyYnrX0NivemnrkqKtP708fqTkB5T8T
-        siTMzQvKzBTy2Xcy5UDiFS7uYA==
-X-Google-Smtp-Source: ABdhPJxpMRY/A3rB7g8dnvTTe8NY23xQXPqq1uhJ9JnzOsx7Vi++6ue4mirhtJluGTHkVJDk33bdkA==
-X-Received: by 2002:a17:902:e5cc:b0:154:1c96:2e5b with SMTP id u12-20020a170902e5cc00b001541c962e5bmr30655333plf.94.1648561774945;
-        Tue, 29 Mar 2022 06:49:34 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Xp6qCxwTnE0C1FxChih956SdBv3W6L+dQXT7C0J3Dts=;
+        b=S7gR+SfGn2gSDTFR0qIoSkyt5kHhxU2VJD8reCnO5jbMka6LT9zMP0jTlmRxdpDCnP
+         hI9RAFUQQrYKm4dDZ8AWJu59dPA8RI4lpNFCi+FqnUgQ/fJ3ufbIa0KG386HTzRUWwUy
+         0GgSNoNfLa8t79mlnpNZ7A/bWw/F6W4H5sUiMTCOJWVlFlXalZH3M0OBYfujFqYfxp4E
+         NmYIG8rqM6lKFjKD0VD5zePSFWlwT7Osxk+ZZWV8nHZVk+YYUZzDU/j0udztIzS16lZk
+         YYeuk1Pb6eWZnJFLl4xcdR0a8svIJrVjZHeUGYhszbZKok8Eq25WpGnMT1I2WRjd+5Nz
+         JaHA==
+X-Gm-Message-State: AOAM530MVY2FpaXBtyY1XIVO/lKZ316XXIeQRzFbxiRzC0JyWJehJjwv
+        gDGKp6D/0PCZmKsVtA4Ag4J6ew==
+X-Google-Smtp-Source: ABdhPJzL1DT1WGANxca1cudkBoNvw0RQh0wE19/V2uhTvOrIsqwOC1l/X6irJPErT8PhUYtRlg0EqQ==
+X-Received: by 2002:a17:903:32c7:b0:154:19dd:fd43 with SMTP id i7-20020a17090332c700b0015419ddfd43mr31879012plr.150.1648561782107;
+        Tue, 29 Mar 2022 06:49:42 -0700 (PDT)
 Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id o14-20020a056a0015ce00b004fab49cd65csm20911293pfu.205.2022.03.29.06.49.28
+        by smtp.gmail.com with ESMTPSA id o14-20020a056a0015ce00b004fab49cd65csm20911293pfu.205.2022.03.29.06.49.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 06:49:34 -0700 (PDT)
+        Tue, 29 Mar 2022 06:49:41 -0700 (PDT)
 From:   Muchun Song <songmuchun@bytedance.com>
 To:     dan.j.williams@intel.com, willy@infradead.org, jack@suse.cz,
         viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
@@ -58,11 +58,14 @@ To:     dan.j.williams@intel.com, willy@infradead.org, jack@suse.cz,
 Cc:     linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         duanxiongchun@bytedance.com, smuchun@gmail.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH v6 0/6] Fix some bugs related to ramp and dax
-Date:   Tue, 29 Mar 2022 21:48:47 +0800
-Message-Id: <20220329134853.68403-1-songmuchun@bytedance.com>
+        Muchun Song <songmuchun@bytedance.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH v6 1/6] mm: rmap: fix cache flush on THP pages
+Date:   Tue, 29 Mar 2022 21:48:48 +0800
+Message-Id: <20220329134853.68403-2-songmuchun@bytedance.com>
 X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+In-Reply-To: <20220329134853.68403-1-songmuchun@bytedance.com>
+References: <20220329134853.68403-1-songmuchun@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,51 +78,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series is based on next-20220225.
+The flush_cache_page() only remove a PAGE_SIZE sized range from the cache.
+However, it does not cover the full pages in a THP except a head page.
+Replace it with flush_cache_range() to fix this issue. At least, no
+problems were found due to this. Maybe because the architectures that
+have virtual indexed caches is less.
 
-Patch 1-2 fix a cache flush bug, because subsequent patches depend on
-those on those changes, there are placed in this series.  Patch 3-4
-are preparation for fixing a dax bug in patch 5.  Patch 6 is code cleanup
-since the previous patch remove the usage of follow_invalidate_pte().
+Fixes: f27176cfc363 ("mm: convert page_mkclean_one() to use page_vma_mapped_walk()")
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Reviewed-by: Yang Shi <shy828301@gmail.com>
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+---
+ mm/rmap.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-v6:
-- Collect Reviewed-by from Christoph Hellwig.
-- Fold dax_entry_mkclean() into dax_writeback_one().
-
-v5:
-- Collect Reviewed-by from Dan Williams.
-- Fix panic reported by kernel test robot <oliver.sang@intel.com>.
-- Remove pmdpp parameter from follow_invalidate_pte() and fold it into follow_pte().
-
-v4:
-- Fix compilation error on riscv.
-
-v3:
-- Based on next-20220225.
-
-v2:
-- Avoid the overly long line in lots of places suggested by Christoph.
-- Fix a compiler warning reported by kernel test robot since pmd_pfn()
-  is not defined when !CONFIG_TRANSPARENT_HUGEPAGE on powerpc architecture.
-- Split a new patch 4 for preparation of fixing the dax bug.
-
-Muchun Song (6):
-  mm: rmap: fix cache flush on THP pages
-  dax: fix cache flush on PMD-mapped pages
-  mm: rmap: introduce pfn_mkclean_range() to cleans PTEs
-  mm: pvmw: add support for walking devmap pages
-  dax: fix missing writeprotect the pte entry
-  mm: simplify follow_invalidate_pte()
-
- fs/dax.c             | 98 +++++++---------------------------------------------
- include/linux/mm.h   |  3 --
- include/linux/rmap.h |  3 ++
- mm/internal.h        | 26 +++++++++-----
- mm/memory.c          | 81 ++++++++++++-------------------------------
- mm/page_vma_mapped.c | 16 ++++-----
- mm/rmap.c            | 68 +++++++++++++++++++++++++++++-------
- 7 files changed, 119 insertions(+), 176 deletions(-)
-
+diff --git a/mm/rmap.c b/mm/rmap.c
+index fc46a3d7b704..723682ddb9e8 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -970,7 +970,8 @@ static bool page_mkclean_one(struct folio *folio, struct vm_area_struct *vma,
+ 			if (!pmd_dirty(*pmd) && !pmd_write(*pmd))
+ 				continue;
+ 
+-			flush_cache_page(vma, address, folio_pfn(folio));
++			flush_cache_range(vma, address,
++					  address + HPAGE_PMD_SIZE);
+ 			entry = pmdp_invalidate(vma, address, pmd);
+ 			entry = pmd_wrprotect(entry);
+ 			entry = pmd_mkclean(entry);
 -- 
 2.11.0
 

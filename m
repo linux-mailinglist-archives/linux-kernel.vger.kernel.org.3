@@ -2,31 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37AFF4EA60F
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 05:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9D24EA60E
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 05:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231752AbiC2DbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 23:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
+        id S231774AbiC2DbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 23:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbiC2DbI (ORCPT
+        with ESMTP id S231751AbiC2DbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 23:31:08 -0400
+        Mon, 28 Mar 2022 23:31:12 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEF922516;
-        Mon, 28 Mar 2022 20:29:25 -0700 (PDT)
-X-UUID: 2e9cf0dfc85040648f5ca15c27faad94-20220329
-X-UUID: 2e9cf0dfc85040648f5ca15c27faad94-20220329
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C9A22511;
+        Mon, 28 Mar 2022 20:29:28 -0700 (PDT)
+X-UUID: 37f346dd27064e2b9bdc2b9176fd9a05-20220329
+X-UUID: 37f346dd27064e2b9bdc2b9176fd9a05-20220329
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
         (envelope-from <axe.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2097871714; Tue, 29 Mar 2022 11:29:20 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 29 Mar 2022 11:29:18 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 410693803; Tue, 29 Mar 2022 11:29:22 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 29 Mar 2022 11:29:21 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 29 Mar
+ 2022 11:29:20 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 29 Mar 2022 11:29:16 +0800
+ Transport; Tue, 29 Mar 2022 11:29:18 +0800
 From:   Axe Yang <axe.yang@mediatek.com>
 To:     Ulf Hansson <ulf.hansson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -48,9 +52,9 @@ CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v9 1/3] dt-bindings: mmc: mtk-sd: extend interrupts and pinctrls properties
-Date:   Tue, 29 Mar 2022 11:29:11 +0800
-Message-ID: <20220329032913.8750-2-axe.yang@mediatek.com>
+Subject: [PATCH v9 2/3] mmc: core: Add support for SDIO wakeup interrupt
+Date:   Tue, 29 Mar 2022 11:29:12 +0800
+Message-ID: <20220329032913.8750-3-axe.yang@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220329032913.8750-1-axe.yang@mediatek.com>
 References: <20220329032913.8750-1-axe.yang@mediatek.com>
@@ -67,57 +71,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend interrupts and pinctrls for SDIO wakeup interrupt feature.
-This feature allow SDIO devices alarm asynchronous interrupt to host
-even when host stop providing clock to SDIO card. An extra wakeup
-interrupt and pinctrl states for SDIO DAT1 pin state switching are
-required in this scenario.
+If wakeup-source flag is set in host dts node, parse EAI information
+from SDIO CCCR interrupt externsion segment for in-band wakeup. If
+async interrupt is supported by SDIO card then enable it and set
+enable_async_irq flag in sdio_cccr structure to 1. The parse flow is
+implemented in sdio_read_cccr().
 
+Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Signed-off-by: Axe Yang <axe.yang@mediatek.com>
 ---
- .../devicetree/bindings/mmc/mtk-sd.yaml         | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ drivers/mmc/core/sdio.c  | 17 +++++++++++++++++
+ include/linux/mmc/card.h |  8 +++++++-
+ include/linux/mmc/sdio.h |  5 +++++
+ 3 files changed, 29 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-index 297ada03e3de..3872a6ce2867 100644
---- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-+++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-@@ -69,12 +69,22 @@ properties:
-       - const: ahb_cg
- 
-   interrupts:
--    maxItems: 1
-+    description:
-+      Should at least contain MSDC GIC interrupt. To support SDIO in-band wakeup, an extended
-+      interrupt is required and be configured as wakeup source irq.
-+    minItems: 1
-+    maxItems: 2
- 
-   pinctrl-names:
-+    description:
-+      Should at least contain default and state_uhs. To support SDIO in-band wakeup, dat1 pin
-+      will be switched between GPIO mode and SDIO DAT1 mode, state_eint and state_dat1 are
-+      mandatory in this scenarios.
-+    minItems: 2
-     items:
-       - const: default
-       - const: state_uhs
-+      - const: state_eint
- 
-   pinctrl-0:
-     description:
-@@ -86,6 +96,11 @@ properties:
-       should contain uhs mode pin ctrl.
-     maxItems: 1
- 
-+  pinctrl-2:
-+    description:
-+      should switch dat1 pin to GPIO mode.
-+    maxItems: 1
+diff --git a/drivers/mmc/core/sdio.c b/drivers/mmc/core/sdio.c
+index 25799accf8a0..4898c5e9a299 100644
+--- a/drivers/mmc/core/sdio.c
++++ b/drivers/mmc/core/sdio.c
+@@ -226,6 +226,23 @@ static int sdio_read_cccr(struct mmc_card *card, u32 ocr)
+ 				card->sw_caps.sd3_drv_type |= SD_DRIVER_TYPE_C;
+ 			if (data & SDIO_DRIVE_SDTD)
+ 				card->sw_caps.sd3_drv_type |= SD_DRIVER_TYPE_D;
 +
-   assigned-clocks:
-     description:
-       PLL of the source clock.
++			if (card->host->pm_caps & MMC_PM_WAKE_SDIO_IRQ) {
++				ret = mmc_io_rw_direct(card, 0, 0, SDIO_CCCR_INTERRUPT_EXT, 0,
++						       &data);
++				if (ret)
++					goto out;
++
++				if (data & SDIO_INTERRUPT_EXT_SAI) {
++					data |= SDIO_INTERRUPT_EXT_EAI;
++					ret = mmc_io_rw_direct(card, 1, 0, SDIO_CCCR_INTERRUPT_EXT,
++							       data, NULL);
++					if (ret)
++						goto out;
++
++					card->cccr.enable_async_irq = 1;
++				}
++			}
+ 		}
+ 
+ 		/* if no uhs mode ensure we check for high speed */
+diff --git a/include/linux/mmc/card.h b/include/linux/mmc/card.h
+index 37f975875102..968650c0b345 100644
+--- a/include/linux/mmc/card.h
++++ b/include/linux/mmc/card.h
+@@ -219,7 +219,8 @@ struct sdio_cccr {
+ 				wide_bus:1,
+ 				high_power:1,
+ 				high_speed:1,
+-				disable_cd:1;
++				disable_cd:1,
++				enable_async_irq:1;
+ };
+ 
+ struct sdio_cis {
+@@ -343,6 +344,11 @@ static inline bool mmc_large_sector(struct mmc_card *card)
+ 	return card->ext_csd.data_sector_size == 4096;
+ }
+ 
++static inline int mmc_card_enable_async_irq(struct mmc_card *card)
++{
++	return card->cccr.enable_async_irq;
++}
++
+ bool mmc_card_is_blockaddr(struct mmc_card *card);
+ 
+ #define mmc_card_mmc(c)		((c)->type == MMC_TYPE_MMC)
+diff --git a/include/linux/mmc/sdio.h b/include/linux/mmc/sdio.h
+index 2a05d1ac4f0e..1ef400f28642 100644
+--- a/include/linux/mmc/sdio.h
++++ b/include/linux/mmc/sdio.h
+@@ -159,6 +159,11 @@
+ #define  SDIO_DTSx_SET_TYPE_A	(1 << SDIO_DRIVE_DTSx_SHIFT)
+ #define  SDIO_DTSx_SET_TYPE_C	(2 << SDIO_DRIVE_DTSx_SHIFT)
+ #define  SDIO_DTSx_SET_TYPE_D	(3 << SDIO_DRIVE_DTSx_SHIFT)
++
++#define SDIO_CCCR_INTERRUPT_EXT	0x16
++#define SDIO_INTERRUPT_EXT_SAI	(1 << 0)
++#define SDIO_INTERRUPT_EXT_EAI	(1 << 1)
++
+ /*
+  * Function Basic Registers (FBR)
+  */
 -- 
 2.25.1
 

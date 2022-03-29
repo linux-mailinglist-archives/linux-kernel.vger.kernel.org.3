@@ -2,211 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E9C4EB3FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 21:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8AC4EB3FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 21:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240882AbiC2TOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 15:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
+        id S240890AbiC2TPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 15:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238969AbiC2TOu (ORCPT
+        with ESMTP id S238969AbiC2TPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 15:14:50 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BF8B6D1C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 12:13:06 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id z128so15629543pgz.2
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 12:13:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1sRXKTYViBqnNTxehrfiPd1DYbEATFyG4C7S2pQ8qtk=;
-        b=pc8wAJj+CGPClFtc4+6SxMMF/hTDKxwPn6EK6m+9FfRx27Qyy31qCAugysYpXwlHiK
-         a0kUGxK6Xfyusctttk3qEf0tK6tcNRZVC0ueQWru0qGnf/xQLnN9yB4UEhBh55GBLxLt
-         cFjVzP27q2Jbjet5ZlPU3AzKv8YUQVETYTNGVpsh9BLXbZGgX7Laxe7Wbsh1pkzmNQd5
-         RT1DHO3tEEfJFNloe7cH+mP9GhmOEje2wvBrJ7X8qHIVfsdTFM8N3zeTBWAQPouP/7Qc
-         E+5bWo7OtgVpxMuq7z9X5OGWkMU+uUppgPyk83J8z1ADfUaMuhzNtfpxuM8aS7z8GBcU
-         BCkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1sRXKTYViBqnNTxehrfiPd1DYbEATFyG4C7S2pQ8qtk=;
-        b=UbPzMxO/dhJfTMwHX1j4XFNGgLyu5uNBnD1pKAWUpHy7LRqelwM5FD8okAAvWVHy1k
-         9aaXwI8WbQlJ2JqvHeYNz/MyZTDCmvo4ooLaqVzLUltoNIm2H0qPVLwRaBo6+x6XS5QT
-         qnBMGpHcylYwnmIifRlwb3O5EIWBBTQPcuAun4u7dSTQtztXWRR9amkap7pvAKPBFHR2
-         NrKbKA/0E5z+lDkWipvrcFwvp12KbLEACd1rtpNfbGaJgv0skdcmJv/cMD0VJB2MhyCg
-         CInFrCYPIGiX6hwMhJpPLvQNWS2fwVehuY2zw3ZYM7R1ZPwDxaPa+4wjcUbaC09gBjrf
-         4YLg==
-X-Gm-Message-State: AOAM532P31ZX6Rf0W6rdhhBthBwIagu2WdYIUja33+zImAYt9FK5wt2I
-        22TJGLATjCwdWBiLCQ5t1GQN1A==
-X-Google-Smtp-Source: ABdhPJyYp/V6OUPnq1zyxa80O7VCUFqnzL/BqLshFvCAlq+hazZ3NircvxGibV5N8Gx554xqH7ZZkA==
-X-Received: by 2002:a05:6a00:1c95:b0:4fa:81f5:b9d4 with SMTP id y21-20020a056a001c9500b004fa81f5b9d4mr7825994pfw.49.1648581185482;
-        Tue, 29 Mar 2022 12:13:05 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id r11-20020a17090b050b00b001c741fd4890sm3627743pjz.9.2022.03.29.12.13.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 12:13:04 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 19:13:00 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
+        Tue, 29 Mar 2022 15:15:14 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D338B1EEDC;
+        Tue, 29 Mar 2022 12:13:30 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8631A21A2B;
+        Tue, 29 Mar 2022 19:13:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648581209; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zzux7evVbtH+m7VA+DSlcqgknENtBIaS5EV1mQ6pGsA=;
+        b=uQFfaFfHCFQbQq37zmyxuyq31d0Ap5jMuUdXvezuuG9OE/Zyhxrzb6XJQIbQin9a/bABys
+        TXfwrvWNtB47YzOJWjEVccoIvq19a4EmQlwln5TRGBIJlBh61eFERcGZyX36qXclNmeKa3
+        cDI0Mp6fg/PucyIh5fXcc5tyVx9BKA8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648581209;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zzux7evVbtH+m7VA+DSlcqgknENtBIaS5EV1mQ6pGsA=;
+        b=rUivqUqMHgCFVcFiGO8lOlw4ogru8KE7msvD3CVxl1qQ5+6B29DwCaWhA7n16Hyu7AmFdJ
+        2MHlhHiJKWyaAjBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D17FF13A7E;
+        Tue, 29 Mar 2022 19:13:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NOfnL1haQ2LHVAAAMHmgww
+        (envelope-from <osalvador@suse.de>); Tue, 29 Mar 2022 19:13:28 +0000
+Date:   Tue, 29 Mar 2022 21:13:27 +0200
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Rik van Riel <riel@surriel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        kernel-team@fb.com, Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Johannes Weiner <hannes@cmpxchg.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com
-Subject: Re: [PATCH v5 12/13] KVM: Expose KVM_MEM_PRIVATE
-Message-ID: <YkNaPLVLk/pO0zjr@google.com>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
- <20220310140911.50924-13-chao.p.peng@linux.intel.com>
+        stable@vger.kernel.org
+Subject: Re: [PATCH] mm,hwpoison: unmap poisoned page before invalidation
+Message-ID: <YkNaVxe5Vso9DGl+@localhost.localdomain>
+References: <20220325161428.5068d97e@imladris.surriel.com>
+ <YkF5Jd6fauTRvVVg@localhost.localdomain>
+ <47936edb3b0f9c9f04f0d0d2e7f38383a22b6a3d.camel@surriel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220310140911.50924-13-chao.p.peng@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <47936edb3b0f9c9f04f0d0d2e7f38383a22b6a3d.camel@surriel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022, Chao Peng wrote:
-> KVM_MEM_PRIVATE is not exposed by default but architecture code can turn
-> on it by implementing kvm_arch_private_memory_supported().
+On Tue, Mar 29, 2022 at 11:49:53AM -0400, Rik van Riel wrote:
+
+> It results in us returning to userspace as if the page
+> fault had been handled, resulting in a second fault on
+> the same address.
 > 
-> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> ---
->  include/linux/kvm_host.h |  1 +
->  virt/kvm/kvm_main.c      | 24 +++++++++++++++++++-----
->  2 files changed, 20 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 186b9b981a65..0150e952a131 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1432,6 +1432,7 @@ bool kvm_arch_dy_has_pending_interrupt(struct kvm_vcpu *vcpu);
->  int kvm_arch_post_init_vm(struct kvm *kvm);
->  void kvm_arch_pre_destroy_vm(struct kvm *kvm);
->  int kvm_arch_create_vm_debugfs(struct kvm *kvm);
-> +bool kvm_arch_private_memory_supported(struct kvm *kvm);
->  
->  #ifndef __KVM_HAVE_ARCH_VM_ALLOC
->  /*
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 52319f49d58a..df5311755a40 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -1485,10 +1485,19 @@ static void kvm_replace_memslot(struct kvm *kvm,
->  	}
->  }
->  
-> -static int check_memory_region_flags(const struct kvm_userspace_memory_region *mem)
-> +bool __weak kvm_arch_private_memory_supported(struct kvm *kvm)
-> +{
-> +	return false;
-> +}
-> +
-> +static int check_memory_region_flags(struct kvm *kvm,
-> +				const struct kvm_userspace_memory_region *mem)
->  {
->  	u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
->  
-> +	if (kvm_arch_private_memory_supported(kvm))
-> +		valid_flags |= KVM_MEM_PRIVATE;
-> +
->  #ifdef __KVM_HAVE_READONLY_MEM
->  	valid_flags |= KVM_MEM_READONLY;
->  #endif
-> @@ -1900,7 +1909,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
->  	int as_id, id;
->  	int r;
->  
-> -	r = check_memory_region_flags(mem);
-> +	r = check_memory_region_flags(kvm, mem);
->  	if (r)
->  		return r;
->  
-> @@ -1913,10 +1922,12 @@ int __kvm_set_memory_region(struct kvm *kvm,
->  		return -EINVAL;
->  	if (mem->guest_phys_addr & (PAGE_SIZE - 1))
->  		return -EINVAL;
-> -	/* We can read the guest memory with __xxx_user() later on. */
->  	if ((mem->userspace_addr & (PAGE_SIZE - 1)) ||
-> -	    (mem->userspace_addr != untagged_addr(mem->userspace_addr)) ||
-> -	     !access_ok((void __user *)(unsigned long)mem->userspace_addr,
-> +	    (mem->userspace_addr != untagged_addr(mem->userspace_addr)))
-> +		return -EINVAL;
-> +	/* We can read the guest memory with __xxx_user() later on. */
-> +	if (!(mem->flags & KVM_MEM_PRIVATE) &&
-> +	    !access_ok((void __user *)(unsigned long)mem->userspace_addr,
+> However, now the page is no longer in the page cache,
+> and we can read it in from disk, to a page that is not
+> hardware poisoned, and we can then use that second page
+> without issues.
 
-This should sanity check private_offset for private memslots.  At a bare minimum,
-wrapping should be disallowed.
+Ok, I see, thanks a lot for the explanation Rik.
 
->  			mem->memory_size))
->  		return -EINVAL;
->  	if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_MEM_SLOTS_NUM)
-> @@ -1957,6 +1968,9 @@ int __kvm_set_memory_region(struct kvm *kvm,
->  		if ((kvm->nr_memslot_pages + npages) < kvm->nr_memslot_pages)
->  			return -EINVAL;
->  	} else { /* Modify an existing slot. */
-> +		/* Private memslots are immutable, they can only be deleted. */
-> +		if (mem->flags & KVM_MEM_PRIVATE)
-> +			return -EINVAL;
 
-These sanity checks belong in "KVM: Register private memslot to memory backing store",
-e.g. that patch is "broken" without the immutability restriction.  It's somewhat moot
-because the code is unreachable, but it makes reviewing confusing/difficult.
-
-But rather than move the sanity checks back, I think I'd prefer to pull all of patch 10
-here.  I think it also makes sense to drop "KVM: Use memfile_pfn_ops to obtain pfn for
-private pages" and add the pointer in "struct kvm_memory_slot" in patch "KVM: Extend the
-memslot to support fd-based private memory", with the use of the ops folded into
-"KVM: Handle page fault for private memory".  Adding code to KVM and KVM-x86 in a single
-patch is ok, and overall makes things easier to review because the new helpers have a
-user right away, especially since there will be #ifdeffery.
-
-I.e. end up with something like:
-
-  mm: Introduce memfile_notifier
-  mm/shmem: Restrict MFD_INACCESSIBLE memory against RLIMIT_MEMLOCK
-  KVM: Extend the memslot to support fd-based private memory
-  KVM: Use kvm_userspace_memory_region_ext
-  KVM: Add KVM_EXIT_MEMORY_ERROR exit
-  KVM: Handle page fault for private memory
-  KVM: Register private memslot to memory backing store
-  KVM: Zap existing KVM mappings when pages changed in the private fd
-  KVM: Enable and expose KVM_MEM_PRIVATE
-
->  		if ((mem->userspace_addr != old->userspace_addr) ||
->  		    (npages != old->npages) ||
->  		    ((mem->flags ^ old->flags) & KVM_MEM_READONLY))
-> -- 
-> 2.17.1
-> 
+-- 
+Oscar Salvador
+SUSE Labs

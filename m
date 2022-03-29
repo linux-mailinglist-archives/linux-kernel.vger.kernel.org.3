@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01534EA9CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 10:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 169224EA9C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 10:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234261AbiC2IxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 04:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
+        id S233818AbiC2IxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 04:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234301AbiC2Iw5 (ORCPT
+        with ESMTP id S234240AbiC2IxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 04:52:57 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86225419F
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 01:51:14 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-de3eda6b5dso18046713fac.0
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 01:51:14 -0700 (PDT)
+        Tue, 29 Mar 2022 04:53:07 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E1C55BDD
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 01:51:24 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-de48295467so18023321fac.2
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 01:51:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=J/eRk2ImRzThvCuDLwHzf4xR9PAnPCdQO7PLIDrEyk0=;
-        b=nnyN0eihHxUrf+TwB7MLpcpSf2tlQiGtoqCXDg7me/90+B5CbLAw5kc3Bi+PsvIN08
-         G/8PYgbLWcDtMgLWGyssOW3y5RdhVrfh4XcLmCEEtCPfd18v+MUQRD5U8f3uChLsoBTU
-         0xzbkVUbS8C+VVZk3Ug5I7bK/oK7wYc1FbF0vlj4egoDQdFVPOrIymd7LKW6fye9Rm+r
-         ucXN1UdGW7STFAWgSHaE9lZ0OH0Un4+/C+b1NrE/lDou7KCXORuAhRPGPlQEv1hCgMia
-         E4YNeclPGTx8FxuxSLv2kOdtOiNPxd/YwlTD6QgLVtPoNvf+1rR2rNKgToxFg624S4Lh
-         3Ttg==
+        bh=Sd/uPbCy+ySZT+qPihwZYiLaTHG+pfVJ3nw0jfPbprI=;
+        b=NFpGKRrAos0oJUYWKsapTWH2MnHxaeIss6UYZhqmckncq81qDbcJndUBTT2QOeMvUc
+         DKA25vx5N/s80BDkUO9s69+EJc3zpV0rOj/SjkZSFDX+81xs2xmQp/Jh3KcdotLEBp7R
+         GRAYR2mCnkSWVa8BKWdApIJYvzwksRaeIA1oqDi7jhIxs3d5m0h3PzQxm9MwieCFR96G
+         h/MgyGuW/RhXnhhIVeeUPgJkPYiyRmH6JRXi9NtVu8SqwWoxlD+tf507yJqqKcnPSg1B
+         EJ3b8dVmRDWMh8PaW0fWDt4/TizHuKhfia0WhpCwpgw6CtU28lI8Vu7tmQwaQhiaMG3c
+         AI0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=J/eRk2ImRzThvCuDLwHzf4xR9PAnPCdQO7PLIDrEyk0=;
-        b=xrYzhX0aFyrDBHa6ILe3WZVLwEYkZd6KGVuGVt2oRTzV7PZtXsBAp0/ahAAqrINjjM
-         dvlxgXIA3gsaoAi3BWruZlKVqxfhOto+lYti6hGa28m9YDETw7vD4/97M4ZZS4kiFGlw
-         fllqpqERPPkXENury5ZcCkoopCUNwgTDvNz4LE7DlpcOyED0lLGdiotkbhwwq2vUcccH
-         7f04Kooi3WUeFH7z4xsSm9RkDTGUENkNKmoyTobLSXJcWdhm16DwGTAkRF1yG+aUkmCz
-         vvzO4WhyHkEbfV4I4WfuBVj4gQxhKYiyYmGXSwFjWZzfgXvdcJt1LnFYO27US+LDzXYl
-         OGGg==
-X-Gm-Message-State: AOAM532dVFO53/Noy8GTmh/yKq9TnFRWlYj8qAFUp4hk4Va/RwBy9/Il
-        VcZjUIpH6hjMdaWpHPZEIdth9aBDlH/Nvx/MxXVrzw==
-X-Google-Smtp-Source: ABdhPJwBs4l3xPrJ86QqdOmfqcuVD/NvIViycAprqNRRQDkwaU6W1i5RBinZQBRbLLzO2uklz/Epgwa7l41lkeLUKZ4=
-X-Received: by 2002:a05:6870:8196:b0:dd:e471:8bb5 with SMTP id
- k22-20020a056870819600b000dde4718bb5mr814608oae.294.1648543874076; Tue, 29
- Mar 2022 01:51:14 -0700 (PDT)
+        bh=Sd/uPbCy+ySZT+qPihwZYiLaTHG+pfVJ3nw0jfPbprI=;
+        b=c3qrGbdWiRTLqq+0n6Q98VGI2itKIJcqA4qwp/Hf/c42sN/GTVuefkyaoX5nfRDg1E
+         FLf2LCKmL3upZjR1v00O7loL+JInf2B02leV7SwiigCYTjqftAM8bsMxe+F8BubDYG+P
+         m5CJ9H2sX9JyTUzjqvdl3Apu3g3F2ffA8l3qvk4UjZALKOwxlWUeo7GJJhISs/k4xZAO
+         GpWLEDWumGmmb9uuxPF/Ph2rudDdlGQDpE9esLberl7dVlB5UuTyZJOdbSkeYM0s/3n/
+         JIdEyeokKddy+HUHy/hrRA4hWXwjoQjyMV+fjrUGkX641hr+suM00/w2ecl+RsTI8ioK
+         jcXw==
+X-Gm-Message-State: AOAM530lessDLG8Q35y+5DA48XcIU6roLyG2blhl4avFEhuyp/t6v/oZ
+        vLbe7lwOA8PJMrheW9htzXalKWrB5xAso/nyJUS7hQ==
+X-Google-Smtp-Source: ABdhPJzvEhD1ChOqnTr7YHf9ZKDvTxDrDGlXzyFwe0eVAAXipoLOC+EstvVHjMcZN1Ky/ep+sjdiKXzamyP2trQdNVQ=
+X-Received: by 2002:a05:6870:700f:b0:dd:9f77:9a97 with SMTP id
+ u15-20020a056870700f00b000dd9f779a97mr1638894oae.146.1648543883596; Tue, 29
+ Mar 2022 01:51:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220314200148.2695206-1-kaleshsingh@google.com> <20220314200148.2695206-2-kaleshsingh@google.com>
-In-Reply-To: <20220314200148.2695206-2-kaleshsingh@google.com>
+References: <20220314200148.2695206-1-kaleshsingh@google.com> <20220314200148.2695206-3-kaleshsingh@google.com>
+In-Reply-To: <20220314200148.2695206-3-kaleshsingh@google.com>
 From:   Fuad Tabba <tabba@google.com>
-Date:   Tue, 29 Mar 2022 09:50:38 +0100
-Message-ID: <CA+EHjTxx7RoLods=9xz4RZF3FSFZdH+7kwcHCurpUqAD+mtgzA@mail.gmail.com>
-Subject: Re: [PATCH v6 1/8] KVM: arm64: Introduce hyp_alloc_private_va_range()
+Date:   Tue, 29 Mar 2022 09:50:47 +0100
+Message-ID: <CA+EHjTysueEjwwNREbtvy2wh89n89wFVpM2xM34kGeTx+e7QFQ@mail.gmail.com>
+Subject: Re: [PATCH v6 2/8] KVM: arm64: Introduce pkvm_alloc_private_va_range()
 To:     Kalesh Singh <kaleshsingh@google.com>
 Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
         surenb@google.com, kernel-team@android.com,
@@ -66,7 +66,7 @@ Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
         "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
         Stephen Boyd <swboyd@chromium.org>,
         Andrew Scull <ascull@google.com>,
-        Andrew Jones <drjones@redhat.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -83,20 +83,19 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Kalesh,
 
-
-On Mon, Mar 14, 2022 at 8:02 PM Kalesh Singh <kaleshsingh@google.com> wrote:
+On Mon, Mar 14, 2022 at 8:03 PM Kalesh Singh <kaleshsingh@google.com> wrote:
 >
-> hyp_alloc_private_va_range() can be used to reserve private VA ranges
-> in the nVHE hypervisor. Allocations are aligned based on the order of
+> pkvm_hyp_alloc_private_va_range() can be used to reserve private VA ranges
+> in the pKVM nVHE hypervisor. Allocations are aligned based on the order of
 > the requested size.
 >
-> This will be used to implement stack guard pages for KVM nVHE hypervisor
-> (nVHE Hyp mode / not pKVM), in a subsequent patch in the series.
+> This will be used to implement stack guard pages for pKVM nVHE hypervisor
+> (in a subsequent patch in the series).
+>
+> Credits to Quentin Perret <qperret@google.com> for the idea of moving
+> private VA allocation out of __pkvm_create_private_mapping()
 >
 > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-
-This looks good to me. I have also tested this entire series, and your
-enhancements will make debugging easier.
 
 Tested-by: Fuad Tabba <tabba@google.com>
 Reviewed-by: Fuad Tabba <tabba@google.com>
@@ -105,148 +104,199 @@ Thanks,
 /fuad
 
 
-
 > ---
 >
 > Changes in v6:
->   - Update kernel-doc for hyp_alloc_private_va_range()
->     and add return description, per Stephen
->   - Update hyp_alloc_private_va_range() to return an int error code,
+>   - Update kernel-doc for pkvm_alloc_private_va_range() and add
+>     return description, per Stephen
+>   - Update pkvm_alloc_private_va_range() to return an int error code,
 >     per Stephen
->   - Replace IS_ERR() checks with IS_ERR_VALUE() check, per Stephen
->   - Clean up goto, per Stephen
+>   - Update __pkvm_create_private_mapping to return an in error code,
+>     per Quentin
+>   - Update callers of __pkvm_create_private_mapping() to handle new
+>     return value and params.
 >
 > Changes in v5:
 >   - Align private allocations based on the order of their size, per Marc
 >
 > Changes in v4:
->   - Handle null ptr in hyp_alloc_private_va_range() and replace
+>   - Handle null ptr in pkvm_alloc_private_va_range() and replace
 >     IS_ERR_OR_NULL checks in callers with IS_ERR checks, per Fuad
 >   - Fix kernel-doc comments format, per Fuad
+>   - Format __pkvm_create_private_mapping() prototype args (< 80 col), per Fuad
 >
 > Changes in v3:
 >   - Handle null ptr in IS_ERR_OR_NULL checks, per Mark
 >
+> Changes in v2:
+>   - Allow specifying an alignment for the private VA allocations, per Marc
 >
->  arch/arm64/include/asm/kvm_mmu.h |  1 +
->  arch/arm64/kvm/mmu.c             | 66 +++++++++++++++++++++-----------
->  2 files changed, 45 insertions(+), 22 deletions(-)
 >
-> diff --git a/arch/arm64/include/asm/kvm_mmu.h b/arch/arm64/include/asm/kvm_mmu.h
-> index 81839e9a8a24..3cc9aa25f510 100644
-> --- a/arch/arm64/include/asm/kvm_mmu.h
-> +++ b/arch/arm64/include/asm/kvm_mmu.h
-> @@ -153,6 +153,7 @@ static __always_inline unsigned long __kern_hyp_va(unsigned long v)
->  int kvm_share_hyp(void *from, void *to);
->  void kvm_unshare_hyp(void *from, void *to);
->  int create_hyp_mappings(void *from, void *to, enum kvm_pgtable_prot prot);
-> +int hyp_alloc_private_va_range(size_t size, unsigned long *haddr);
->  int create_hyp_io_mappings(phys_addr_t phys_addr, size_t size,
->                            void __iomem **kaddr,
->                            void __iomem **haddr);
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index bc2aba953299..7326d683c500 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -457,23 +457,22 @@ int create_hyp_mappings(void *from, void *to, enum kvm_pgtable_prot prot)
->         return 0;
+>  arch/arm64/kvm/hyp/include/nvhe/mm.h |  6 ++-
+>  arch/arm64/kvm/hyp/nvhe/hyp-main.c   | 18 ++++++-
+>  arch/arm64/kvm/hyp/nvhe/mm.c         | 78 ++++++++++++++++++----------
+>  3 files changed, 72 insertions(+), 30 deletions(-)
+>
+> diff --git a/arch/arm64/kvm/hyp/include/nvhe/mm.h b/arch/arm64/kvm/hyp/include/nvhe/mm.h
+> index 2d08510c6cc1..42d8eb9bfe72 100644
+> --- a/arch/arm64/kvm/hyp/include/nvhe/mm.h
+> +++ b/arch/arm64/kvm/hyp/include/nvhe/mm.h
+> @@ -19,8 +19,10 @@ int hyp_back_vmemmap(phys_addr_t phys, unsigned long size, phys_addr_t back);
+>  int pkvm_cpu_set_vector(enum arm64_hyp_spectre_vector slot);
+>  int pkvm_create_mappings(void *from, void *to, enum kvm_pgtable_prot prot);
+>  int pkvm_create_mappings_locked(void *from, void *to, enum kvm_pgtable_prot prot);
+> -unsigned long __pkvm_create_private_mapping(phys_addr_t phys, size_t size,
+> -                                           enum kvm_pgtable_prot prot);
+> +int __pkvm_create_private_mapping(phys_addr_t phys, size_t size,
+> +                                 enum kvm_pgtable_prot prot,
+> +                                 unsigned long *haddr);
+> +int pkvm_alloc_private_va_range(size_t size, unsigned long *haddr);
+>
+>  static inline void hyp_vmemmap_range(phys_addr_t phys, unsigned long size,
+>                                      unsigned long *start, unsigned long *end)
+> diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-main.c b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> index 5e2197db0d32..3cea4b6ac23e 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> @@ -160,7 +160,23 @@ static void handle___pkvm_create_private_mapping(struct kvm_cpu_context *host_ct
+>         DECLARE_REG(size_t, size, host_ctxt, 2);
+>         DECLARE_REG(enum kvm_pgtable_prot, prot, host_ctxt, 3);
+>
+> -       cpu_reg(host_ctxt, 1) = __pkvm_create_private_mapping(phys, size, prot);
+> +       /*
+> +        * __pkvm_create_private_mapping() populates a pointer with the
+> +        * hypervisor start address of the allocation.
+> +        *
+> +        * However, handle___pkvm_create_private_mapping() hypercall crosses the
+> +        * EL1/EL2 boundary so the pointer would not be valid in this context.
+> +        *
+> +        * Instead pass the allocation address as the return value (or return
+> +        * ERR_PTR() on failure).
+> +        */
+> +       unsigned long haddr;
+> +       int err = __pkvm_create_private_mapping(phys, size, prot, &haddr);
+> +
+> +       if (err)
+> +               haddr = (unsigned long)ERR_PTR(err);
+> +
+> +       cpu_reg(host_ctxt, 1) = haddr;
 >  }
 >
-> -static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
-> -                                       unsigned long *haddr,
-> -                                       enum kvm_pgtable_prot prot)
-> +
+>  static void handle___pkvm_prot_finalize(struct kvm_cpu_context *host_ctxt)
+> diff --git a/arch/arm64/kvm/hyp/nvhe/mm.c b/arch/arm64/kvm/hyp/nvhe/mm.c
+> index cdbe8e246418..670f11349070 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/mm.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/mm.c
+> @@ -37,36 +37,60 @@ static int __pkvm_create_mappings(unsigned long start, unsigned long size,
+>         return err;
+>  }
+>
+> -unsigned long __pkvm_create_private_mapping(phys_addr_t phys, size_t size,
+> -                                           enum kvm_pgtable_prot prot)
 > +/**
-> + * hyp_alloc_private_va_range - Allocates a private VA range.
+> + * pkvm_alloc_private_va_range - Allocates a private VA range.
 > + * @size:      The size of the VA range to reserve.
 > + * @haddr:     The hypervisor virtual start address of the allocation.
 > + *
-> + * The private virtual address (VA) range is allocated below io_map_base
+> + * The private virtual address (VA) range is allocated above __io_map_base
 > + * and aligned based on the order of @size.
 > + *
 > + * Return: 0 on success or negative error code on failure.
 > + */
-> +int hyp_alloc_private_va_range(size_t size, unsigned long *haddr)
+> +int pkvm_alloc_private_va_range(size_t size, unsigned long *haddr)
 >  {
->         unsigned long base;
->         int ret = 0;
+> -       unsigned long addr;
+> -       int err;
+> +       unsigned long base, addr;
+> +       int ret = 0;
 >
-> -       if (!kvm_host_owns_hyp_mappings()) {
-> -               base = kvm_call_hyp_nvhe(__pkvm_create_private_mapping,
-> -                                        phys_addr, size, prot);
-> -               if (IS_ERR_OR_NULL((void *)base))
-> -                       return PTR_ERR((void *)base);
-> -               *haddr = base;
-> -
-> -               return 0;
-> -       }
-> -
->         mutex_lock(&kvm_hyp_pgd_mutex);
+>         hyp_spin_lock(&pkvm_pgd_lock);
 >
->         /*
-> @@ -484,30 +483,53 @@ static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
->          *
->          * The allocated size is always a multiple of PAGE_SIZE.
->          */
-> -       size = PAGE_ALIGN(size + offset_in_page(phys_addr));
-> -       base = io_map_base - size;
-> +       base = io_map_base - PAGE_ALIGN(size);
-> +
+> -       size = PAGE_ALIGN(size + offset_in_page(phys));
+> -       addr = __io_map_base;
+> -       __io_map_base += size;
 > +       /* Align the allocation based on the order of its size */
-> +       base = ALIGN_DOWN(base, PAGE_SIZE << get_order(size));
+> +       addr = ALIGN(__io_map_base, PAGE_SIZE << get_order(size));
 >
->         /*
->          * Verify that BIT(VA_BITS - 1) hasn't been flipped by
->          * allocating the new area, as it would indicate we've
->          * overflowed the idmap/IO address range.
->          */
-> -       if ((base ^ io_map_base) & BIT(VA_BITS - 1))
-> +       if (!base || (base ^ io_map_base) & BIT(VA_BITS - 1))
->                 ret = -ENOMEM;
->         else
-> -               io_map_base = base;
-> +               *haddr = io_map_base = base;
+> -       /* Are we overflowing on the vmemmap ? */
+> -       if (__io_map_base > __hyp_vmemmap) {
+> -               __io_map_base -= size;
+> -               addr = (unsigned long)ERR_PTR(-ENOMEM);
+> -               goto out;
+> -       }
+> +       /* The allocated size is always a multiple of PAGE_SIZE */
+> +       base = addr + PAGE_ALIGN(size);
 >
->         mutex_unlock(&kvm_hyp_pgd_mutex);
+> -       err = kvm_pgtable_hyp_map(&pkvm_pgtable, addr, size, phys, prot);
+> -       if (err) {
+> -               addr = (unsigned long)ERR_PTR(err);
+> -               goto out;
+> +       /* Are we overflowing on the vmemmap ? */
+> +       if (!addr || base > __hyp_vmemmap)
+> +               ret = -ENOMEM;
+> +       else {
+> +               __io_map_base = base;
+> +               *haddr = addr;
+>         }
 >
+> -       addr = addr + offset_in_page(phys);
+> -out:
+>         hyp_spin_unlock(&pkvm_pgd_lock);
+>
+> -       return addr;
 > +       return ret;
 > +}
 > +
-> +static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
-> +                                       unsigned long *haddr,
-> +                                       enum kvm_pgtable_prot prot)
+> +int __pkvm_create_private_mapping(phys_addr_t phys, size_t size,
+> +                                 enum kvm_pgtable_prot prot,
+> +                                 unsigned long *haddr)
 > +{
 > +       unsigned long addr;
-> +       int ret = 0;
+> +       int err;
 > +
-> +       if (!kvm_host_owns_hyp_mappings()) {
-> +               addr = kvm_call_hyp_nvhe(__pkvm_create_private_mapping,
-> +                                        phys_addr, size, prot);
-> +               if (IS_ERR_VALUE(addr))
-> +                       return addr;
-> +               *haddr = addr;
+> +       size += offset_in_page(phys);
+> +       err = pkvm_alloc_private_va_range(size, &addr);
+> +       if (err)
+> +               return err;
 > +
-> +               return 0;
-> +       }
+> +       err = __pkvm_create_mappings(addr, size, phys, prot);
+> +       if (err)
+> +               return err;
 > +
-> +       size += offset_in_page(phys_addr);
-> +       ret = hyp_alloc_private_va_range(size, &addr);
->         if (ret)
-> -               goto out;
-> +               return ret;
->
-> -       ret = __create_hyp_mappings(base, size, phys_addr, prot);
-> +       ret = __create_hyp_mappings(addr, size, phys_addr, prot);
->         if (ret)
-> -               goto out;
-> +               return ret;
->
-> -       *haddr = base + offset_in_page(phys_addr);
-> -out:
-> +       *haddr = addr + offset_in_page(phys_addr);
->         return ret;
+> +       *haddr = addr + offset_in_page(phys);
+> +       return err;
 >  }
 >
+>  int pkvm_create_mappings_locked(void *from, void *to, enum kvm_pgtable_prot prot)
+> @@ -146,7 +170,8 @@ int pkvm_cpu_set_vector(enum arm64_hyp_spectre_vector slot)
+>  int hyp_map_vectors(void)
+>  {
+>         phys_addr_t phys;
+> -       void *bp_base;
+> +       unsigned long bp_base;
+> +       int ret;
+>
+>         if (!kvm_system_needs_idmapped_vectors()) {
+>                 __hyp_bp_vect_base = __bp_harden_hyp_vecs;
+> @@ -154,13 +179,12 @@ int hyp_map_vectors(void)
+>         }
+>
+>         phys = __hyp_pa(__bp_harden_hyp_vecs);
+> -       bp_base = (void *)__pkvm_create_private_mapping(phys,
+> -                                                       __BP_HARDEN_HYP_VECS_SZ,
+> -                                                       PAGE_HYP_EXEC);
+> -       if (IS_ERR_OR_NULL(bp_base))
+> -               return PTR_ERR(bp_base);
+> +       ret = __pkvm_create_private_mapping(phys, __BP_HARDEN_HYP_VECS_SZ,
+> +                                           PAGE_HYP_EXEC, &bp_base);
+> +       if (ret)
+> +               return ret;
+>
+> -       __hyp_bp_vect_base = bp_base;
+> +       __hyp_bp_vect_base = (void *)bp_base;
+>
+>         return 0;
+>  }
 > --
 > 2.35.1.723.g4982287a31-goog
 >

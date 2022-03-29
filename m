@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E014EB483
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E2D44EB48A
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 22:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbiC2UOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 16:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
+        id S229889AbiC2URU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 16:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiC2UOl (ORCPT
+        with ESMTP id S229492AbiC2URS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 16:14:41 -0400
-Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B790239311;
-        Tue, 29 Mar 2022 13:12:55 -0700 (PDT)
-Received: from 1nZICx-0007HB-V6 by out3c.electric.net with emc1-ok (Exim 4.94.2)
+        Tue, 29 Mar 2022 16:17:18 -0400
+Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B936E6177;
+        Tue, 29 Mar 2022 13:15:34 -0700 (PDT)
+Received: from 1nZIFW-0009Pn-Ul by out3a.electric.net with emc1-ok (Exim 4.94.2)
         (envelope-from <kris@embeddedTS.com>)
-        id 1nZICy-0007J1-Va; Tue, 29 Mar 2022 13:12:52 -0700
-Received: by emcmailer; Tue, 29 Mar 2022 13:12:52 -0700
+        id 1nZIFZ-0009XP-UH; Tue, 29 Mar 2022 13:15:33 -0700
+Received: by emcmailer; Tue, 29 Mar 2022 13:15:33 -0700
 Received: from [66.210.251.27] (helo=mail.embeddedts.com)
-        by out3c.electric.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        by out3a.electric.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <kris@embeddedTS.com>)
-        id 1nZICx-0007HB-V6; Tue, 29 Mar 2022 13:12:51 -0700
+        id 1nZIFW-0009Pn-Ul; Tue, 29 Mar 2022 13:15:30 -0700
 Received: from tsdebian.Massive (unknown [75.164.75.221])
-        by mail.embeddedts.com (Postfix) with ESMTPSA id D61591A26E;
-        Tue, 29 Mar 2022 13:12:50 -0700 (MST)
+        by mail.embeddedts.com (Postfix) with ESMTPSA id C7A591A272;
+        Tue, 29 Mar 2022 13:15:29 -0700 (MST)
 From:   Kris Bahnsen <kris@embeddedTS.com>
-To:     linux-kernel@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Mark Featherston <mark@embeddedTS.com>,
         Kris Bahnsen <kris@embeddedTS.com>
-Subject: [PATCH RESEND] can: Fix Links to Technologic Systems web resources
-Date:   Tue, 29 Mar 2022 13:12:29 -0700
-Message-Id: <20220329201229.16279-1-kris@embeddedTS.com>
+Subject: [PATCH] gpio: ts5500: Fix Links to Technologic Systems web resources
+Date:   Tue, 29 Mar 2022 13:14:26 -0700
+Message-Id: <20220329201426.16396-1-kris@embeddedTS.com>
 X-Mailer: git-send-email 2.11.0
 X-Outbound-IP: 66.210.251.27
 X-Env-From: kris@embeddedTS.com
@@ -49,7 +48,7 @@ X-Virus-Status: Scanned by VirusSMART (c)
 X-Virus-Status: Scanned by VirusSMART (b)
 X-FM-Delivery-Delay: 15749372,23518412
 X-PolicySMART: 13164782, 15749372, 26810492
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Message-Id:Date:To:From; bh=1AF4SMujYEjsxrPiY/0MQSh8GtDisDk4QVhRBaTaEE0=;b=QxQNSvsXs/FaPwYkm/bZrGiCV3TX3U/bmhlBAs7XrTuAaIXvAAbngMivse9lVCZbFLczhVXjYAEYoGvRrBa4ffnecqzbXzo38UYq8kf9Vpf41yuL4MAObXr46c5Ue0DNJvVwdjzk6km4C8PMLW1VrAXvDPEJ/wmwZjXmn9ZIPGvA7UxCzXiHBzW10+cbgLimHbqZArZcIUvTS3yMFlPUA+ZrKAiAhQdwkJzY3C4ISk99T7XBMN2rTEfGbMRPBR1HYTeElgprh9Q0lVMyo8nL9dUj2Altv5sp9DM8SYihiSY6jRBnf9UJQQgTDU9PA8FoMyTJbXEAyzlP9SQaVKSqmw==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Message-Id:Date:To:From; bh=Ova3RVzwrcDYWmTjEHu+W4p1BfrGT55Uv819Sc7ao44=;b=Dg3KpvuHxiCftV98uwxHz3TaRQS+A+KMfmn21yaXs+Zd7Q3MNVewH9CoHD1MaSNbRjflD3+7FQ45Iv3WsIucBJxJ7QCxXvTHJt3BLP/m0nF2uFY8ym6vkJT6BQdtBlYNWIBnFylQBE5no8429CnCqX6X2Vw+2dnrcE0izMV2OnvkHnssQKim1TgMFwGWfshTqRHvW32IaezHl0IXlNJNNXprLcrGM2e7YqHI2AXRO9gzkbkS9tjVnFcGmifSlTwiWxGV2oQD6GYB0STj8gGrnruiCUwpGZ9HgSoZEVk8MartGI5MAYSCdlLwaflDB7n1RrZXrLFv7m5LugGA7WKngg==;
 X-FM-Delivery-Delay: 15749372,23518412
 X-PolicySMART: 13164782, 15749372, 26810492
 X-FM-Delivery-Delay: 15749372,23518412
@@ -72,43 +71,27 @@ resource locations.
 
 Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
 ---
-This is a resend as the prior patch was accidentally marked as a series
+ drivers/gpio/gpio-ts5500.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- drivers/net/can/sja1000/Kconfig  | 2 +-
- drivers/net/can/sja1000/tscan1.c | 7 +++----
- 2 files changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/net/can/sja1000/Kconfig b/drivers/net/can/sja1000/Kconfig
-index 110071b26921..4b2f9cb17fc3 100644
---- a/drivers/net/can/sja1000/Kconfig
-+++ b/drivers/net/can/sja1000/Kconfig
-@@ -107,7 +107,7 @@ config CAN_TSCAN1
- 	depends on ISA
- 	help
- 	  This driver is for Technologic Systems' TSCAN-1 PC104 boards.
--	  http://www.embeddedarm.com/products/board-detail.php?product=TS-CAN1
-+	  https://www.embeddedts.com/products/TS-CAN1
- 	  The driver supports multiple boards and automatically configures them:
- 	  PLD IO base addresses are read from jumpers JP1 and JP2,
- 	  IRQ numbers are read from jumpers JP4 and JP5,
-diff --git a/drivers/net/can/sja1000/tscan1.c b/drivers/net/can/sja1000/tscan1.c
-index 3dbba8d61afb..f3862bed3d40 100644
---- a/drivers/net/can/sja1000/tscan1.c
-+++ b/drivers/net/can/sja1000/tscan1.c
-@@ -5,10 +5,9 @@
-  * Copyright 2010 Andre B. Oliveira
+diff --git a/drivers/gpio/gpio-ts5500.c b/drivers/gpio/gpio-ts5500.c
+index b159e92a3612..8e03614c7a24 100644
+--- a/drivers/gpio/gpio-ts5500.c
++++ b/drivers/gpio/gpio-ts5500.c
+@@ -11,11 +11,11 @@
+  * Actually, the following platforms have DIO support:
+  *
+  * TS-5500:
+- *   Documentation: http://wiki.embeddedarm.com/wiki/TS-5500
++ *   Documentation: https://docs.embeddedts.com/TS-5500
+  *   Blocks: DIO1, DIO2 and LCD port.
+  *
+  * TS-5600:
+- *   Documentation: http://wiki.embeddedarm.com/wiki/TS-5600
++ *   Documentation: https://docs.embeddedts.com/TS-5600
+  *   Blocks: LCD port (identical to TS-5500 LCD).
   */
  
--/*
-- * References:
-- * - Getting started with TS-CAN1, Technologic Systems, Jun 2009
-- *	http://www.embeddedarm.com/documentation/ts-can1-manual.pdf
-+/* References:
-+ * - Getting started with TS-CAN1, Technologic Systems, Feb 2022
-+ *	https://docs.embeddedts.com/TS-CAN1
-  */
- 
- #include <linux/init.h>
 -- 
 2.11.0
 

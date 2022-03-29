@@ -2,75 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC314EAED1
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1424EAED4
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 15:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237577AbiC2NwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 09:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
+        id S236708AbiC2Nxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 09:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237570AbiC2NwB (ORCPT
+        with ESMTP id S237625AbiC2NwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 09:52:01 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE081186F9C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:50:17 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id h19so14967023pfv.1
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:50:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pquxx3qH2nuqmnC96VcgoZZu7sN0crimqByO4QYpxLI=;
-        b=oQLhz53anwt4ILImkOxJ+rt/T/W68dglu9K98xYhD8rw+vwfthUTW0dlUF8vK73ffS
-         Kv3IyJwBAManxnSc7qMd6HVrXGOcrmlEd9PUFM1/o4FKfPU7W/CIfqGtKeBwLXPu1Q4t
-         rxxXG/rtme18YD+1HWkiEXrBu84RD8iXJNM00tyT9mm1bqKI5JGbw4yzwyfnFxAVrXbd
-         Yk9O3W0irr+zwnhCLF3Xcvf/NWQURV1ee5Et+3KdaXBWcOjGFYjeMP2EgatcjC/6D/uG
-         tQoLY1hSo0kNxBNJcz1UQn+rraUqyPegGACymxj/UrrDw/JhKQZPhtl4M52HOW6NNfsf
-         RFKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pquxx3qH2nuqmnC96VcgoZZu7sN0crimqByO4QYpxLI=;
-        b=kT+/nLO3Jbq85sNX3CqQwE7Y88W73I70LfcfgCbHnIebtq/JsVI6NHfQRNB87FXg6t
-         yNHzst2nP9dWJ+BQlON7qF+SGAg/higghCsir9YCQGlV2sNI+vHpFgowuYS8sAF4inXt
-         TVhqwq4W+Jopj5tMld+8jCmN8pS/tQEfIJGnK2IxiLIJrzUwo3FkqlvuNlr1gQiylhn6
-         4A2biSp7ezvRaKFWbDJ+S4pYYhl7A/C0kfWWfrO3BKbe+okr31Yv7eDVqgCIyg6rHGI7
-         hd7lWqz+/iHblQ+VU00KtxzLC48prRaUSp/bucyEhXsxowGcKlfM85vFAXCl8eb2kwUI
-         t7UQ==
-X-Gm-Message-State: AOAM531YWhRsjQHeQaMiWcW8N+h+KgGojiNgawurwVFKbWuuy64VFfIc
-        RFXcUcfs1UpLHdxVOuR/a0db7Q==
-X-Google-Smtp-Source: ABdhPJyTEtUT0mAGxDz5bcPBQWC+tSTA07XI+vJ4sxeO4APu0XKS8tsBFbZC6aGY6wMBrL/C65Wt8Q==
-X-Received: by 2002:a63:f418:0:b0:382:b4f6:5f95 with SMTP id g24-20020a63f418000000b00382b4f65f95mr2084659pgi.619.1648561817153;
-        Tue, 29 Mar 2022 06:50:17 -0700 (PDT)
-Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id o14-20020a056a0015ce00b004fab49cd65csm20911293pfu.205.2022.03.29.06.50.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 06:50:16 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     dan.j.williams@intel.com, willy@infradead.org, jack@suse.cz,
-        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
-        apopple@nvidia.com, shy828301@gmail.com, rcampbell@nvidia.com,
-        hughd@google.com, xiyuyang19@fudan.edu.cn,
-        kirill.shutemov@linux.intel.com, zwisler@kernel.org,
-        hch@infradead.org
-Cc:     linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        duanxiongchun@bytedance.com, smuchun@gmail.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v6 6/6] mm: simplify follow_invalidate_pte()
-Date:   Tue, 29 Mar 2022 21:48:53 +0800
-Message-Id: <20220329134853.68403-7-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-In-Reply-To: <20220329134853.68403-1-songmuchun@bytedance.com>
-References: <20220329134853.68403-1-songmuchun@bytedance.com>
+        Tue, 29 Mar 2022 09:52:20 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549FB19059D
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 06:50:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=ODMBabnsXoaSPQ4J62+3KQQ9EqF6RtG+JR584HtkzK4=; b=VVb09FbrukffSXfPwT0Cd2Ue23
+        F8NA988Wzmuv2kVkdI7kL8O619md0CaBEj69NYvCSjiKDkhZk76ZPTvfnFsOoaX5AKivqz7rlkiVQ
+        jfmNy7Ho+j3YsoYgoEqqVjVUU33yY2svthZnW5nvDNe/YKS1WmeqoX2KYgQaQiB/jg/3vqbJ2aFbf
+        O7FratjUm9+R0GHsdApXhgiv14LlbjGmiavwpoZ+q+7k2myzVOZGPfCcCZQDVNxPaGEU8qYJDKxYT
+        F/mU3nmGSIM1WoH7YHmpuyKzntTAsyfYjGaEP0rMwUBO3F52PbYQ7m2IIvfnzg9VvqZ8B4gw6Cp0i
+        PBZXK8HA==;
+Received: from [2001:4bb8:18c:41aa:1dc5:164d:d6fd:e657] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nZCEx-00CQJ4-A3; Tue, 29 Mar 2022 13:50:31 +0000
+Date:   Tue, 29 Mar 2022 15:50:24 +0200
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
+Subject: [GIT PULL] dma-mapping updates for Linux 5.18
+Message-ID: <YkMOoNaIpyQf/LKL@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,149 +48,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only user (DAX) of range and pmdpp parameters of follow_invalidate_pte()
-is gone, it is safe to remove them and make it static to simlify the code.
-This is revertant of the following commits:
+The following changes since commit 0280e3c58f92b2fe0e8fbbdf8d386449168de4a8:
 
-  097963959594 ("mm: add follow_pte_pmd()")
-  a4d1a8852513 ("dax: update to new mmu_notifier semantic")
+  Merge tag 'nfs-for-5.17-1' of git://git.linux-nfs.org/projects/anna/linux-nfs (2022-01-25 20:16:03 +0200)
 
-There is only one caller of the follow_invalidate_pte().  So just fold it
-into follow_pte() and remove it.
+are available in the Git repository at:
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
----
- include/linux/mm.h |  3 --
- mm/memory.c        | 81 ++++++++++++++++--------------------------------------
- 2 files changed, 23 insertions(+), 61 deletions(-)
+  git://git.infradead.org/users/hch/dma-mapping.git tags/dma-mapping-5.18
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index c9bada4096ac..be7ec4c37ebe 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1871,9 +1871,6 @@ void free_pgd_range(struct mmu_gather *tlb, unsigned long addr,
- 		unsigned long end, unsigned long floor, unsigned long ceiling);
- int
- copy_page_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma);
--int follow_invalidate_pte(struct mm_struct *mm, unsigned long address,
--			  struct mmu_notifier_range *range, pte_t **ptepp,
--			  pmd_t **pmdpp, spinlock_t **ptlp);
- int follow_pte(struct mm_struct *mm, unsigned long address,
- 	       pte_t **ptepp, spinlock_t **ptlp);
- int follow_pfn(struct vm_area_struct *vma, unsigned long address,
-diff --git a/mm/memory.c b/mm/memory.c
-index cc6968dc8e4e..84f7250e6cd1 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -4964,9 +4964,29 @@ int __pmd_alloc(struct mm_struct *mm, pud_t *pud, unsigned long address)
- }
- #endif /* __PAGETABLE_PMD_FOLDED */
- 
--int follow_invalidate_pte(struct mm_struct *mm, unsigned long address,
--			  struct mmu_notifier_range *range, pte_t **ptepp,
--			  pmd_t **pmdpp, spinlock_t **ptlp)
-+/**
-+ * follow_pte - look up PTE at a user virtual address
-+ * @mm: the mm_struct of the target address space
-+ * @address: user virtual address
-+ * @ptepp: location to store found PTE
-+ * @ptlp: location to store the lock for the PTE
-+ *
-+ * On a successful return, the pointer to the PTE is stored in @ptepp;
-+ * the corresponding lock is taken and its location is stored in @ptlp.
-+ * The contents of the PTE are only stable until @ptlp is released;
-+ * any further use, if any, must be protected against invalidation
-+ * with MMU notifiers.
-+ *
-+ * Only IO mappings and raw PFN mappings are allowed.  The mmap semaphore
-+ * should be taken for read.
-+ *
-+ * KVM uses this function.  While it is arguably less bad than ``follow_pfn``,
-+ * it is not a good general-purpose API.
-+ *
-+ * Return: zero on success, -ve otherwise.
-+ */
-+int follow_pte(struct mm_struct *mm, unsigned long address,
-+	       pte_t **ptepp, spinlock_t **ptlp)
- {
- 	pgd_t *pgd;
- 	p4d_t *p4d;
-@@ -4989,35 +5009,9 @@ int follow_invalidate_pte(struct mm_struct *mm, unsigned long address,
- 	pmd = pmd_offset(pud, address);
- 	VM_BUG_ON(pmd_trans_huge(*pmd));
- 
--	if (pmd_huge(*pmd)) {
--		if (!pmdpp)
--			goto out;
--
--		if (range) {
--			mmu_notifier_range_init(range, MMU_NOTIFY_CLEAR, 0,
--						NULL, mm, address & PMD_MASK,
--						(address & PMD_MASK) + PMD_SIZE);
--			mmu_notifier_invalidate_range_start(range);
--		}
--		*ptlp = pmd_lock(mm, pmd);
--		if (pmd_huge(*pmd)) {
--			*pmdpp = pmd;
--			return 0;
--		}
--		spin_unlock(*ptlp);
--		if (range)
--			mmu_notifier_invalidate_range_end(range);
--	}
--
- 	if (pmd_none(*pmd) || unlikely(pmd_bad(*pmd)))
- 		goto out;
- 
--	if (range) {
--		mmu_notifier_range_init(range, MMU_NOTIFY_CLEAR, 0, NULL, mm,
--					address & PAGE_MASK,
--					(address & PAGE_MASK) + PAGE_SIZE);
--		mmu_notifier_invalidate_range_start(range);
--	}
- 	ptep = pte_offset_map_lock(mm, pmd, address, ptlp);
- 	if (!pte_present(*ptep))
- 		goto unlock;
-@@ -5025,38 +5019,9 @@ int follow_invalidate_pte(struct mm_struct *mm, unsigned long address,
- 	return 0;
- unlock:
- 	pte_unmap_unlock(ptep, *ptlp);
--	if (range)
--		mmu_notifier_invalidate_range_end(range);
- out:
- 	return -EINVAL;
- }
--
--/**
-- * follow_pte - look up PTE at a user virtual address
-- * @mm: the mm_struct of the target address space
-- * @address: user virtual address
-- * @ptepp: location to store found PTE
-- * @ptlp: location to store the lock for the PTE
-- *
-- * On a successful return, the pointer to the PTE is stored in @ptepp;
-- * the corresponding lock is taken and its location is stored in @ptlp.
-- * The contents of the PTE are only stable until @ptlp is released;
-- * any further use, if any, must be protected against invalidation
-- * with MMU notifiers.
-- *
-- * Only IO mappings and raw PFN mappings are allowed.  The mmap semaphore
-- * should be taken for read.
-- *
-- * KVM uses this function.  While it is arguably less bad than ``follow_pfn``,
-- * it is not a good general-purpose API.
-- *
-- * Return: zero on success, -ve otherwise.
-- */
--int follow_pte(struct mm_struct *mm, unsigned long address,
--	       pte_t **ptepp, spinlock_t **ptlp)
--{
--	return follow_invalidate_pte(mm, address, NULL, ptepp, NULL, ptlp);
--}
- EXPORT_SYMBOL_GPL(follow_pte);
- 
- /**
--- 
-2.11.0
+for you to fetch changes up to 8ddde07a3d285a0f3cec14924446608320fdc013:
 
+  dma-mapping: benchmark: extract a common header file for map_benchmark definition (2022-03-10 07:41:14 +0100)
+
+----------------------------------------------------------------
+dma-mapping updates for Linux 5.18
+
+ - do not zero buffer in set_memory_decrypted (Kirill A. Shutemov)
+ - fix return value of dma-debug __setup handlers (Randy Dunlap)
+ - swiotlb cleanups (Robin Murphy)
+ - remove most remaining users of the pci-dma-compat.h API
+   (Christophe JAILLET)
+ - share the ABI header for the DMA map_benchmark with userspace
+   (Tian Tao)
+ - update the maintainer for DMA MAPPING BENCHMARK (Xiang Chen)
+ - remove CONFIG_DMA_REMAP (me)
+
+----------------------------------------------------------------
+Christoph Hellwig (1):
+      dma-mapping: remove CONFIG_DMA_REMAP
+
+Christophe JAILLET (5):
+      alpha: Remove usage of the deprecated "pci-dma-compat.h" API
+      agp/intel: Remove usage of the deprecated "pci-dma-compat.h" API
+      sparc: Remove usage of the deprecated "pci-dma-compat.h" API
+      rapidio/tsi721: Remove usage of the deprecated "pci-dma-compat.h" API
+      media: v4l2-pci-skeleton: Remove usage of the deprecated "pci-dma-compat.h" API
+
+Kirill A. Shutemov (1):
+      swiotlb: do not zero buffer in set_memory_decrypted()
+
+Randy Dunlap (1):
+      dma-debug: fix return value of __setup handlers
+
+Robin Murphy (3):
+      swiotlb: simplify debugfs setup
+      swiotlb: tidy up includes
+      swiotlb: simplify array allocation
+
+Tian Tao (1):
+      dma-mapping: benchmark: extract a common header file for map_benchmark definition
+
+Xiang Chen (1):
+      MAINTAINERS: update maintainer list of DMA MAPPING BENCHMARK
+
+ MAINTAINERS                                     |  2 +-
+ arch/alpha/include/asm/floppy.h                 |  7 ++-
+ arch/alpha/kernel/pci_iommu.c                   | 12 ++--
+ arch/arm/Kconfig                                |  2 +-
+ arch/sparc/kernel/ioport.c                      |  2 +-
+ arch/xtensa/Kconfig                             |  2 +-
+ drivers/char/agp/intel-gtt.c                    | 26 ++++-----
+ drivers/iommu/dma-iommu.c                       | 14 ++---
+ drivers/rapidio/devices/tsi721.c                |  8 +--
+ include/linux/map_benchmark.h                   | 31 ++++++++++
+ kernel/dma/Kconfig                              |  7 +--
+ kernel/dma/Makefile                             |  2 +-
+ kernel/dma/debug.c                              |  4 +-
+ kernel/dma/direct.c                             | 18 +++---
+ kernel/dma/map_benchmark.c                      | 25 +-------
+ kernel/dma/swiotlb.c                            | 76 ++++++++-----------------
+ samples/v4l/v4l2-pci-skeleton.c                 |  2 +-
+ tools/testing/selftests/dma/dma_map_benchmark.c | 25 +-------
+ 18 files changed, 105 insertions(+), 160 deletions(-)
+ create mode 100644 include/linux/map_benchmark.h

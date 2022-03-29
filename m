@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6021F4EA4C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 03:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 784424EA4C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 03:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbiC2Btt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 21:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
+        id S229852AbiC2ByQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 21:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiC2Btr (ORCPT
+        with ESMTP id S229811AbiC2ByO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 21:49:47 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7361F378E
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 18:48:05 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id r127so12990354qke.13
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 18:48:05 -0700 (PDT)
+        Mon, 28 Mar 2022 21:54:14 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C2921DF2B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 18:52:32 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id bg10so32164448ejb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 18:52:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AawDJ9kX/dAfzHx8j8PvkYqiVyZFKLPmskAntPro/To=;
-        b=a5A8uLsByHU7JvaEt9P7XTkP1mWUj4kIq9Yk/hz+ELfy8pECsQa5KhUSoO/NpolSOr
-         VQQVWPqXXc4YezEz1VbD5Z61yfpd+7dXlhG74VyznreIhFV8uFKG6DxZ1s1dQFkIa0qS
-         antmHlMyBpbnpoGBdiSCEkMCfIMPJVlYXs6mSxiiF/W3O+DaFmB6XHf87+DkhCHZXbfW
-         bgiH/j0JWtql9Pnd6EXiW9+ZalmN6/MdHeyOaFdO0uDoR68WMvDj/cxak3oAJioQ/q6C
-         O4v7byJIJvi54li671HSwRLccwgd95afj/3BbdwNdGQ/ouWstbsD9EZVaX+JYpulnG3P
-         V97g==
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=KpVGdHj74P7XQGPM3pM2LQ+cRYtvOqSnEZu9etZOojQ=;
+        b=kkMSMgZZ0DGOn6pWx/qsBRGaKk0JuB18O5WbomMN63ewhbBYa7bekXdclyT9Z+sMrb
+         2Aw0QR7GdSKNdp2xX4r8GE2++IZQVC/0lP5PLLIfZdO+in8D0ixE71Kd8hrN6JdbAbXK
+         x7/rk+aKE6zR8ojQWAx3EAl2x7gbiCNbg/aAINlryNfMFnJpdd/1eO05Y8TIWeMuTRPN
+         6OmqHblS0aksfDiBgjhaj8kVH9E1cU3CoAhACyNmG031S00tSVFJsPVJRyuRj335l/gb
+         gSqECW1SEOJ4+Yz+mf/uoC9lDRAfN6EuIPe0LoL90X5QjIhlOwoKCHSL79OfSf8gxLIa
+         nOXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AawDJ9kX/dAfzHx8j8PvkYqiVyZFKLPmskAntPro/To=;
-        b=B+i3s6NlEglCXs3upJ9Gscaz/7K1rdtSXg1iQPzkFQ9w84McebqaE9+9ysAN4O0cU4
-         ekJyNq84HE2xGzXU9T5LxGvNLN9u/RLz4GAggz9SsbDlxwPYWKzGwcrbD20kGX0zXfTB
-         MXGwC6PFIlyvk2pAivAo9GsiPAkO7braGlLkItn577650zytvcc0uMUhwzwskTnFfutV
-         vpsSdQsLej/F9u4wNX/alIj9HKmpBj5huUtSm4CSwpEHisYDJJV9X/g/KH7m2so3hkw+
-         EdglF/GR/1qTIsUSGrxZbP+LBygnJy4FEwje0FhIq0OYYHgI3YvL1MxgZEgePe4ysHJM
-         MCiw==
-X-Gm-Message-State: AOAM533OVKDQN1fxASNs0F8JvSrKsDqPXJ4FZXOQUH5Nj8v7pwTUCev/
-        f+BhyMItHf5tMVylNNFXzVo=
-X-Google-Smtp-Source: ABdhPJygSH5aMysv6jIECEWNSss09AECuOVINBykvHLmuRLTI4v4iiXnecfZGswBNs49QRnrZQj+aQ==
-X-Received: by 2002:a05:620a:458a:b0:67d:7140:5a6d with SMTP id bp10-20020a05620a458a00b0067d71405a6dmr18283592qkb.387.1648518484564;
-        Mon, 28 Mar 2022 18:48:04 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id h22-20020a05620a245600b0067d6dae634csm9946284qkn.9.2022.03.28.18.48.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 18:48:03 -0700 (PDT)
-Message-ID: <62426553.1c69fb81.bb808.345c@mx.google.com>
-X-Google-Original-Message-ID: <20220329014801.GA2374506@cgel.zte@gmail.com>
-Date:   Tue, 29 Mar 2022 01:48:01 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        paul@paul-moore.com
-Cc:     paul@paul-moore.com, eparis@redhat.com, linux-audit@redhat.com,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] audit: do a quick exit when syscall number is invalid
-References: <20220326094654.2361956-1-yang.yang29@zte.com.cn>
- <202203270449.WBYQF9X3-lkp@intel.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KpVGdHj74P7XQGPM3pM2LQ+cRYtvOqSnEZu9etZOojQ=;
+        b=aBuFE5jlwWsoQwD9ylP48SdJi9GKaPNLonf16CYnWVNyWw9i00aqb7Ywu+GERC8UaM
+         KtmA+DbABE5qUVUsoW6qwnRBtCXqYutHOYHY/dcKDYW5fYXK7MIFPopfWOB7eGGjJuBd
+         jxngeb18Qg5V/Ahtv/gLChdxlfyerYZEkjDpWegNjdtQf1flUTamI9InZA+nre7B3iyc
+         bj+oCbhYjfwN55H22Z0ysLGizrZogvXXDRdGV4F0oBdVrFKARHGkXadj1RtJhMzGXUJX
+         xRE6YBX0m9FhJsiyfISPZfJS5VrFh2XF3MEZLY7N6X3aZ+Qn/r+Mf/Tw+rLKZTjMeE/S
+         SWUw==
+X-Gm-Message-State: AOAM533gCWguk0nQBpVzSHhNzI6EQwhV/Bxu1lbWZtfR3k22VYadnYE9
+        5BaVWw2Nz70fWv4y7BFNYR8=
+X-Google-Smtp-Source: ABdhPJxpVMPBi30qgsX3RURVT5sDN9/nanGT1Gb25mA1wLuAcuQvZm3Gr8YuWpRSwKHdGvOBss8Bzw==
+X-Received: by 2002:a17:906:19c6:b0:6ce:98a4:5ee6 with SMTP id h6-20020a17090619c600b006ce98a45ee6mr31254880ejd.567.1648518750878;
+        Mon, 28 Mar 2022 18:52:30 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id mp33-20020a1709071b2100b006db6dea7f9dsm6598058ejc.168.2022.03.28.18.52.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 28 Mar 2022 18:52:30 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 01:52:30 +0000
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        mgorman@techsingularity.net
+Subject: Re: [PATCH 2/2] mm/vmscan: make sure wakeup_kswapd with managed zone
+Message-ID: <20220329015230.hneciyfxoxtvfytl@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20220327024101.10378-1-richard.weiyang@gmail.com>
+ <20220327024101.10378-2-richard.weiyang@gmail.com>
+ <8735j2opd9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <20220329004146.2xdswvrm2qu7f47x@master>
+ <875ynxh9lg.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202203270449.WBYQF9X3-lkp@intel.com>
+In-Reply-To: <875ynxh9lg.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,99 +77,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 27, 2022 at 04:55:01AM +0800, kernel test robot wrote:
-> Hi,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on pcmoore-audit/next]
-> [also build test ERROR on v5.17 next-20220325]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/audit-do-a-quick-exit-when-syscall-number-is-invalid/20220326-174904
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
-> config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220327/202203270449.WBYQF9X3-lkp@intel.com/config)
-> compiler: alpha-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/052b1a11a0bec23358ecc22ad9b085590efd3057
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review cgel-zte-gmail-com/audit-do-a-quick-exit-when-syscall-number-is-invalid/20220326-174904
->         git checkout 052b1a11a0bec23358ecc22ad9b085590efd3057
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from include/linux/init.h:5,
->                     from kernel/auditsc.c:34:
->    kernel/auditsc.c: In function '__audit_syscall_exit':
-> >> kernel/auditsc.c:2081:61: error: 'NR_syscalls' undeclared (first use in this function); did you mean 'si_syscall'?
->     2081 |             unlikely(context->major < 0 || context->major > NR_syscalls))
->          |                                                             ^~~~~~~~~~~
+On Tue, Mar 29, 2022 at 08:43:23AM +0800, Huang, Ying wrote:
+[...]
+>>>> --- a/mm/migrate.c
+>>>> +++ b/mm/migrate.c
+>>>> @@ -2046,7 +2046,7 @@ static int numamigrate_isolate_page(pg_data_t *pgdat, struct page *page)
+>>>>  		if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING))
+>>>>  			return 0;
+>>>>  		for (z = pgdat->nr_zones - 1; z >= 0; z--) {
+>>>> -			if (populated_zone(pgdat->node_zones + z))
+>>>> +			if (managed_zone(pgdat->node_zones + z))
+>>>
+>>>This looks good to me!  Thanks!  It seems that we can replace
+>>>populated_zone() in migrate_balanced_pgdat() too.  Right?
+>>>
+>>
+>> Yes, you are right. I didn't spot this.
+>>
+>> While this patch comes from the clue of wakeup_kswapd(), I am not sure it is
+>> nice to put it in this patch together.
+>>
+>> Which way you prefer to include this: merge the change into this one, or a
+>> separate one?
+>
+>Either is OK for me.
+>
 
-Sorry could anybody give a hand to solve this? It works well on x86_64 and arm64.
-I have no alpha environment and not familiar to this arch, much thanks!
+After reading the code, I am willing to do a little simplification. Does this
+look good to you?
 
->    include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
->       78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
->          |                                             ^
->    kernel/auditsc.c:2081:61: note: each undeclared identifier is reported only once for each function it appears in
->     2081 |             unlikely(context->major < 0 || context->major > NR_syscalls))
->          |                                                             ^~~~~~~~~~~
->    include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
->       78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
->          |                                             ^
-> 
-> 
-> vim +2081 kernel/auditsc.c
-> 
->   2063	
->   2064	/**
->   2065	 * __audit_syscall_exit - deallocate audit context after a system call
->   2066	 * @success: success value of the syscall
->   2067	 * @return_code: return value of the syscall
->   2068	 *
->   2069	 * Tear down after system call.  If the audit context has been marked as
->   2070	 * auditable (either because of the AUDIT_STATE_RECORD state from
->   2071	 * filtering, or because some other part of the kernel wrote an audit
->   2072	 * message), then write out the syscall information.  In call cases,
->   2073	 * free the names stored from getname().
->   2074	 */
->   2075	void __audit_syscall_exit(int success, long return_code)
->   2076	{
->   2077		struct audit_context *context = audit_context();
->   2078	
->   2079		if (!context || context->dummy ||
->   2080		    context->context != AUDIT_CTX_SYSCALL ||
-> > 2081		    unlikely(context->major < 0 || context->major > NR_syscalls))
->   2082			goto out;
->   2083	
->   2084		/* this may generate CONFIG_CHANGE records */
->   2085		if (!list_empty(&context->killed_trees))
->   2086			audit_kill_trees(context);
->   2087	
->   2088		/* run through both filters to ensure we set the filterkey properly */
->   2089		audit_filter_syscall(current, context);
->   2090		audit_filter_inodes(current, context);
->   2091		if (context->current_state < AUDIT_STATE_RECORD)
->   2092			goto out;
->   2093	
->   2094		audit_return_fixup(context, success, return_code);
->   2095		audit_log_exit();
->   2096	
->   2097	out:
->   2098		audit_reset_context(context);
->   2099	}
->   2100	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+From 85c8a5cd708ada3e9f5b0409413407b7be1bc446 Mon Sep 17 00:00:00 2001
+From: Wei Yang <richard.weiyang@gmail.com>
+Date: Tue, 29 Mar 2022 09:24:36 +0800
+Subject: [PATCH] mm/migrate.c: return valid zone for wakeup_kswapd from
+ migrate_balanced_pgdat()
+
+To wakeup kswapd, we need to iterate pgdat->node_zones and get the
+proper zone. While this work has already been done in
+migrate_balanced_pgdat().
+
+Let's return the valid zone directly instead of do the iteration again.
+
+Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+---
+ mm/migrate.c | 21 ++++++++-------------
+ 1 file changed, 8 insertions(+), 13 deletions(-)
+
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 5adc55b5347c..b086bd781956 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -1973,7 +1973,7 @@ SYSCALL_DEFINE6(move_pages, pid_t, pid, unsigned long, nr_pages,
+  * Returns true if this is a safe migration target node for misplaced NUMA
+  * pages. Currently it only checks the watermarks which is crude.
+  */
+-static bool migrate_balanced_pgdat(struct pglist_data *pgdat,
++static struct zone *migrate_balanced_pgdat(struct pglist_data *pgdat,
+ 				   unsigned long nr_migrate_pages)
+ {
+ 	int z;
+@@ -1985,14 +1985,13 @@ static bool migrate_balanced_pgdat(struct pglist_data *pgdat,
+ 			continue;
+ 
+ 		/* Avoid waking kswapd by allocating pages_to_migrate pages. */
+-		if (!zone_watermark_ok(zone, 0,
++		if (zone_watermark_ok(zone, 0,
+ 				       high_wmark_pages(zone) +
+ 				       nr_migrate_pages,
+ 				       ZONE_MOVABLE, 0))
+-			continue;
+-		return true;
++			return zone;
+ 	}
+-	return false;
++	return NULL;
+ }
+ 
+ static struct page *alloc_misplaced_dst_page(struct page *page,
+@@ -2032,6 +2031,7 @@ static int numamigrate_isolate_page(pg_data_t *pgdat, struct page *page)
+ 	int page_lru;
+ 	int nr_pages = thp_nr_pages(page);
+ 	int order = compound_order(page);
++	struct zone *zone;
+ 
+ 	VM_BUG_ON_PAGE(order && !PageTransHuge(page), page);
+ 
+@@ -2040,16 +2040,11 @@ static int numamigrate_isolate_page(pg_data_t *pgdat, struct page *page)
+ 		return 0;
+ 
+ 	/* Avoid migrating to a node that is nearly full */
+-	if (!migrate_balanced_pgdat(pgdat, nr_pages)) {
+-		int z;
+-
++	if ((zone = migrate_balanced_pgdat(pgdat, nr_pages))) {
+ 		if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING))
+ 			return 0;
+-		for (z = pgdat->nr_zones - 1; z >= 0; z--) {
+-			if (managed_zone(pgdat->node_zones + z))
+-				break;
+-		}
+-		wakeup_kswapd(pgdat->node_zones + z, 0, order, ZONE_MOVABLE);
++
++		wakeup_kswapd(zone, 0, order, ZONE_MOVABLE);
+ 		return 0;
+ 	}
+ 
+-- 
+2.33.1
+
+
+>Best Regards,
+>Huang, Ying
+
+-- 
+Wei Yang
+Help you, Help me

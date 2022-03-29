@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95EDB4EB72C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0573B4EB71D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241335AbiC2XyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
+        id S241345AbiC2Xxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241199AbiC2Xxl (ORCPT
+        with ESMTP id S241318AbiC2Xx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:53:41 -0400
+        Tue, 29 Mar 2022 19:53:28 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4314C2220DE;
-        Tue, 29 Mar 2022 16:51:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1770D21A8BC;
+        Tue, 29 Mar 2022 16:51:37 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D2912218F9;
-        Tue, 29 Mar 2022 23:51:46 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id AE73E210E4;
+        Tue, 29 Mar 2022 23:51:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648597906; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1648597895; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sLvvpukBNWt13VBBabTsBNGnhJSKURMdgbwJ9UivCME=;
-        b=1UD9aAQ8orYrMK0d0F0TErQntCJpTfs64QKgUga1VfuazRBB++sMQf8lzTP7dKndQHHGOp
-        4DbHUWSK64s0l0Uwk11IgeOybARpFK+xyPMcYTnAzjRWk2bQtidgvc/iF5HluPfYchA5Sp
-        CAa7jCFUKUw1pUDVqC/CaHAnyc0+Y/E=
+        bh=fUqsktX1Dv6qEK49ZdefTv/pOyZaEMsB1qtsMGhOrI4=;
+        b=LvNolslLWWnhLdL/xjqxOHqkEMnr1D2s2zo0ZkV7o4M61dzgurAVy4d+4feES/DzhFlvBA
+        Rwmaqp1DJD194Fis6kF6LpmUVovPGYtCPJsjN+6ncbXteQIE6K5e0huLuNB0kbxZSF3cRq
+        B4q7NuCJVrWUsoRRDFHbzkkFQXKbIK4=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648597906;
+        s=susede2_ed25519; t=1648597895;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sLvvpukBNWt13VBBabTsBNGnhJSKURMdgbwJ9UivCME=;
-        b=36zu8erF3HUybCY//DfF0XMJtYIgpph+i5zjMsGzt+6uxRgaFQutxNcn5EKYzSLC8tpzjS
-        kP8JveVby32aqlBQ==
+        bh=fUqsktX1Dv6qEK49ZdefTv/pOyZaEMsB1qtsMGhOrI4=;
+        b=QOa9e9vj7wV7WsyjC3Pj4tX/B/UhY320L+3XytQmEOmOmBS9JgR9QB46s/Bkan94wyYnjP
+        JXPSJwFAzw/4QvAg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E3A4313A7E;
-        Tue, 29 Mar 2022 23:51:42 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7F53A13A7E;
+        Tue, 29 Mar 2022 23:51:30 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id qZkrJ46bQ2I1LwAAMHmgww
-        (envelope-from <neilb@suse.de>); Tue, 29 Mar 2022 23:51:42 +0000
-Subject: [PATCH 04/10] MM: reclaim mustn't enter FS for SWP_FS_OPS swap-space
+        id E/MiD4KbQ2IvLwAAMHmgww
+        (envelope-from <neilb@suse.de>); Tue, 29 Mar 2022 23:51:30 +0000
+Subject: [PATCH 03/10] MM: move responsibility for setting SWP_FS_OPS to
+ ->swap_activate
 From:   NeilBrown <neilb@suse.de>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Christoph Hellwig <hch@infradead.org>,
         David Howells <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Date:   Wed, 30 Mar 2022 10:49:41 +1100
-Message-ID: <164859778124.29473.16176717935781721855.stgit@noble.brown>
+Message-ID: <164859778123.29473.17908205846599043598.stgit@noble.brown>
 In-Reply-To: <164859751830.29473.5309689752169286816.stgit@noble.brown>
 References: <164859751830.29473.5309689752169286816.stgit@noble.brown>
 User-Agent: StGit/0.23
@@ -73,130 +74,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If swap-out is using filesystem operations (SWP_FS_OPS), then it is not
-safe to enter the FS for reclaim.
-So only down-grade the requirement for swap pages to __GFP_IO after
-checking that SWP_FS_OPS are not being used.
+If a filesystem wishes to handle all swap IO itself (via ->direct_IO and
+->readpage), rather than just providing devices addresses for
+submit_bio(), SWP_FS_OPS must be set.
+Currently the protocol for setting this it to have ->swap_activate
+return zero.  In that case SWP_FS_OPS is set, and add_swap_extent()
+is called for the entire file.
 
-This makes the calculation of "may_enter_fs" slightly more complex, so
-move it into a separate function.  with that done, there is little value
-in maintaining the bool variable any more.  So replace the
-may_enter_fs variable with a may_enter_fs() function.  This removes any
-risk for the variable becoming out-of-date.
+This is a little clumsy as different return values for ->swap_activate
+have quite different meanings, and it makes it hard to search for which
+filesystems require SWP_FS_OPS to be set.
+
+So remove the special meaning of a zero return, and require the
+filesystem to set SWP_FS_OPS if it so desires, and to always call
+add_swap_extent() as required.
+
+Currently only NFS and CIFS return zero for add_swap_extent().
 
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: NeilBrown <neilb@suse.de>
 ---
- mm/swap.h   |    8 ++++++++
- mm/vmscan.c |   29 ++++++++++++++++++++---------
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ fs/cifs/file.c       |    3 ++-
+ fs/nfs/file.c        |   13 +++++++++++--
+ include/linux/swap.h |    6 ++++++
+ mm/swapfile.c        |   10 +++-------
+ 4 files changed, 22 insertions(+), 10 deletions(-)
 
-diff --git a/mm/swap.h b/mm/swap.h
-index f8265bf0ce00..e19f185df5e2 100644
---- a/mm/swap.h
-+++ b/mm/swap.h
-@@ -50,6 +50,10 @@ struct page *swap_cluster_readahead(swp_entry_t entry, gfp_t flag,
- struct page *swapin_readahead(swp_entry_t entry, gfp_t flag,
- 			      struct vm_fault *vmf);
+diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+index 60f43bff7ccb..050f463580f3 100644
+--- a/fs/cifs/file.c
++++ b/fs/cifs/file.c
+@@ -4927,7 +4927,8 @@ static int cifs_swap_activate(struct swap_info_struct *sis,
+ 	 * from reading or writing the file
+ 	 */
  
-+static inline unsigned int page_swap_flags(struct page *page)
-+{
-+	return page_swap_info(page)->flags;
-+}
- #else /* CONFIG_SWAP */
- static inline int swap_readpage(struct page *page, bool do_poll)
- {
-@@ -129,5 +133,9 @@ static inline void clear_shadow_from_swap_cache(int type, unsigned long begin,
- {
+-	return 0;
++	sis->flags |= SWP_FS_OPS;
++	return add_swap_extent(sis, 0, sis->max, 0);
  }
  
-+static inline unsigned int page_swap_flags(struct page *page)
+ static void cifs_swap_deactivate(struct file *file)
+diff --git a/fs/nfs/file.c b/fs/nfs/file.c
+index 2df2a5392737..66136dca0ad5 100644
+--- a/fs/nfs/file.c
++++ b/fs/nfs/file.c
+@@ -488,6 +488,7 @@ static int nfs_swap_activate(struct swap_info_struct *sis, struct file *file,
+ {
+ 	unsigned long blocks;
+ 	long long isize;
++	int ret;
+ 	struct rpc_clnt *clnt = NFS_CLIENT(file->f_mapping->host);
+ 	struct inode *inode = file->f_mapping->host;
+ 
+@@ -500,9 +501,17 @@ static int nfs_swap_activate(struct swap_info_struct *sis, struct file *file,
+ 		return -EINVAL;
+ 	}
+ 
++	ret = rpc_clnt_swap_activate(clnt);
++	if (ret)
++		return ret;
++	ret = add_swap_extent(sis, 0, sis->max, 0);
++	if (ret < 0) {
++		rpc_clnt_swap_deactivate(clnt);
++		return ret;
++	}
+ 	*span = sis->pages;
+-
+-	return rpc_clnt_swap_activate(clnt);
++	sis->flags |= SWP_FS_OPS;
++	return ret;
+ }
+ 
+ static void nfs_swap_deactivate(struct file *file)
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index 6bc9e21262de..e18b7edccc1d 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -570,6 +570,12 @@ static inline swp_entry_t get_swap_page(struct page *page)
+ 	return entry;
+ }
+ 
++static inline int add_swap_extent(struct swap_info_struct *sis,
++				  unsigned long start_page,
++				  unsigned long nr_pages, sector_t start_block)
 +{
-+	return 0;
++	return -EINVAL;
 +}
  #endif /* CONFIG_SWAP */
- #endif /* _MM_SWAP_H */
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 60378d36ec77..9150754bf2b8 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -1502,6 +1502,22 @@ static unsigned int demote_page_list(struct list_head *demote_pages,
- 	return nr_succeeded;
- }
  
-+static bool may_enter_fs(struct page *page, gfp_t gfp_mask)
-+{
-+	if (gfp_mask & __GFP_FS)
-+		return true;
-+	if (!PageSwapCache(page) || !(gfp_mask & __GFP_IO))
-+		return false;
-+	/*
-+	 * We can "enter_fs" for swap-cache with only __GFP_IO
-+	 * providing this isn't SWP_FS_OPS.
-+	 * ->flags can be updated non-atomicially (scan_swap_map_slots),
-+	 * but that will never affect SWP_FS_OPS, so the data_race
-+	 * is safe.
-+	 */
-+	return !data_race(page_swap_flags(page) & SWP_FS_OPS);
-+}
-+
- /*
-  * shrink_page_list() returns the number of reclaimed pages
-  */
-@@ -1528,7 +1544,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
- 		struct page *page;
- 		struct folio *folio;
- 		enum page_references references = PAGEREF_RECLAIM;
--		bool dirty, writeback, may_enter_fs;
-+		bool dirty, writeback;
- 		unsigned int nr_pages;
+ #ifdef CONFIG_THP_SWAP
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index 2650927a009b..8710c9c29862 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -2244,13 +2244,9 @@ static int setup_swap_extents(struct swap_info_struct *sis, sector_t *span)
  
- 		cond_resched();
-@@ -1553,9 +1569,6 @@ static unsigned int shrink_page_list(struct list_head *page_list,
- 		if (!sc->may_unmap && page_mapped(page))
- 			goto keep_locked;
+ 	if (mapping->a_ops->swap_activate) {
+ 		ret = mapping->a_ops->swap_activate(sis, swap_file, span);
+-		if (ret >= 0)
+-			sis->flags |= SWP_ACTIVATED;
+-		if (!ret) {
+-			sis->flags |= SWP_FS_OPS;
+-			ret = add_swap_extent(sis, 0, sis->max, 0);
+-			*span = sis->pages;
+-		}
++		if (ret < 0)
++			return ret;
++		sis->flags |= SWP_ACTIVATED;
+ 		return ret;
+ 	}
  
--		may_enter_fs = (sc->gfp_mask & __GFP_FS) ||
--			(PageSwapCache(page) && (sc->gfp_mask & __GFP_IO));
--
- 		/*
- 		 * The number of dirty pages determines if a node is marked
- 		 * reclaim_congested. kswapd will stall and start writing
-@@ -1598,7 +1611,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
- 		 *    not to fs). In this case mark the page for immediate
- 		 *    reclaim and continue scanning.
- 		 *
--		 *    Require may_enter_fs because we would wait on fs, which
-+		 *    Require may_enter_fs() because we would wait on fs, which
- 		 *    may not have submitted IO yet. And the loop driver might
- 		 *    enter reclaim, and deadlock if it waits on a page for
- 		 *    which it is needed to do the write (loop masks off
-@@ -1630,7 +1643,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
- 
- 			/* Case 2 above */
- 			} else if (writeback_throttling_sane(sc) ||
--			    !PageReclaim(page) || !may_enter_fs) {
-+			    !PageReclaim(page) || !may_enter_fs(page, sc->gfp_mask)) {
- 				/*
- 				 * This is slightly racy - end_page_writeback()
- 				 * might have just cleared PageReclaim, then
-@@ -1720,8 +1733,6 @@ static unsigned int shrink_page_list(struct list_head *page_list,
- 						goto activate_locked_split;
- 				}
- 
--				may_enter_fs = true;
--
- 				/* Adding to swap updated mapping */
- 				mapping = page_mapping(page);
- 			}
-@@ -1792,7 +1803,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
- 
- 			if (references == PAGEREF_RECLAIM_CLEAN)
- 				goto keep_locked;
--			if (!may_enter_fs)
-+			if (!may_enter_fs(page, sc->gfp_mask))
- 				goto keep_locked;
- 			if (!sc->may_writepage)
- 				goto keep_locked;
 
 

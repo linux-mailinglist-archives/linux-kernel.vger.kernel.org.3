@@ -2,332 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77DE64EB70F
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB294EB727
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241271AbiC2XxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43618 "EHLO
+        id S241333AbiC2Xx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241197AbiC2Xwz (ORCPT
+        with ESMTP id S241292AbiC2Xxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:52:55 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE67204C8E
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:51:11 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id b4-20020a170902e94400b0015309b5c481so8040777pll.6
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:51:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=poq6HhoJ5C86Jvzu6FLzn1emdPhg3i74xPs1BHgN3lo=;
-        b=FbYxYTHdbMKLV6p+W5MYMbinAsdWrgodXVcFSyNwOB3OYZ60lth5g55jSeiP4byD40
-         ZQD/wuclgwcIes+Nt5TB7SOGuxXUcnbQDrBOeArU6Ws3ASIb7+nS3DjzyBtj1z35NPXt
-         oqngHr4/M1Wy6JhfMB4ZxEVi/S4EMUK17NtUHmkPOB1L0QsirotMxoGbzSCPLMNf1gOo
-         4FVe+6sCGrzeJhRx6BmKhxdlXjYSdIs+O3HI5HoroTu22rr9YzGGDU+5pEnf+7UB5mLE
-         ABfOUgDNQ0n+rtBQOqgyK6BddM3lFT2ZiV3Vp4aIORJlZH/4Wrvdj3tch99Qe3ywX+1v
-         xFGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=poq6HhoJ5C86Jvzu6FLzn1emdPhg3i74xPs1BHgN3lo=;
-        b=8LLrGH6jpmsSWGBwAHfEnQyK7/ENHgd85cs68NiwV5j5gm0VLGFIAIFeLQAGBhwzcF
-         Nr7dKqQPtN13QXMTZ6oQn0GpW8lKXu3q+sb7p4N82bYea9/d4wRUObtIkv7RgELChiUY
-         1LhkS3I+gibO9CB5ZHC3u2K5mu2HUMXjVnx30Dd5Bu4SL4WVz5Rqm8uPhMoXFZhPl5ge
-         yLjpi1svqtJGwhJXK8NtRRccgKdla8upXS9lP2Sm1N/UFzAuMlH3KrWbBluAGKQpasws
-         Bygf8l3UcVOy/lf1Thv1WBTp1plgNI1gq1D6VfK/1YTQanTtwXXB0QdRcYYBiqMo46W7
-         0wJw==
-X-Gm-Message-State: AOAM530tufzlG3GUpdU/F1SM51w8XGTvu9tnG6cPjyNv1HfwGcigshj0
-        nFSZsrKdYRdwSD/G93DHTs7thkKL4r4=
-X-Google-Smtp-Source: ABdhPJxNozzSCrFK/1c3W05ocHmHw/K4lDUBdSTbJsIHmX2gNG9K/ClvnDKF2ubC0OEkmnDRLVnh26RR+RQ=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:24c6:b0:4fd:9038:74f0 with SMTP id
- d6-20020a056a0024c600b004fd903874f0mr3483855pfv.63.1648597870721; Tue, 29 Mar
- 2022 16:51:10 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 29 Mar 2022 23:50:54 +0000
-In-Reply-To: <20220329235054.3534728-1-seanjc@google.com>
-Message-Id: <20220329235054.3534728-5-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220329235054.3534728-1-seanjc@google.com>
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v3.1 4/4] KVM: x86: Use static calls to reduce kvm_pmu_ops overhead
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 29 Mar 2022 19:53:40 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C62A215928;
+        Tue, 29 Mar 2022 16:51:44 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 880CFC020; Wed, 30 Mar 2022 01:51:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1648597903; bh=jLOdyVM2slFwDQ6ud3EEJpcePnsBDvL67+l3rWTkEK0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qpnOrvYuaFA3wQMV1QjxFc8hS9HuoBPuPaq5FjOsy05p2Ql45LIYYqk4ONVkk19jd
+         X3qUe8g6050dw+ebDxZUC2yskbMFRLDT2vIglWTIIR4oe9o+glMUkrQf/oht/3YHGS
+         gAG6IqwtisESrx1Jn/rxirNjq3O7S/smEY3hjJynBuXIBwFYNeng4ltVP3X9gks7l+
+         10Qd6ZRZldcIxofUXcx+xq+9WdXZQugWuYwzYGCFpydTWIMZgjC6k+d5j5H44XXKE2
+         EbHi28+pi9NDTq2S+DXTbYkzTJZG+zHf06YV8Xz0EkZ/w7k8OB0R+PcahMAHd1Dq+c
+         eNoFTMWf9sLyQ==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 1FEACC009;
+        Wed, 30 Mar 2022 01:51:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1648597902; bh=jLOdyVM2slFwDQ6ud3EEJpcePnsBDvL67+l3rWTkEK0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PtVWwq7Fo8GoQcPMIfURyPC1Sxs2eFO7I9eHzWRfkrBqQ1/Tp+ZokCO8TkM6rUnBx
+         bh7zXNjZp12DBuR+nOfVujMJowryR1AG3JUusOdB9CZ5bRClxCVAN5nYlQ5YC+gCY7
+         c44Uff4jSsNNN0bh/hSpK7MxecqojFAX8YwJrPFKPRzf0oB7kU6NXhUdjrWllu35E0
+         e5KeOsEaHU6fawu/Cwctv91iZ3cdbLVMHSJSrZHsbKIFMmrLLoLJ2gfkXvMEg08aON
+         u6/oEp3yNAtlLTrBIYnq4RrREgHuajzFphEfg2z/2OQQGIceem5EcZi5mYQ3bYNQ2s
+         4VUbim3sqct5A==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 1051c843;
+        Tue, 29 Mar 2022 23:51:36 +0000 (UTC)
+Date:   Wed, 30 Mar 2022 08:51:21 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc:     Andrew Perepechko <andrew.perepechko@hpe.com>,
+        Andreas Dilger <adilger@dilger.ca>,
+        Theodore Ts'o <tytso@mit.edu>,
+        syzbot <syzbot+bde0f89deacca7c765b8@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net,
+        "open list:EXT4 FILE SYSTEM" <linux-ext4@vger.kernel.org>
+Subject: Re: [syzbot] possible deadlock in p9_write_work
+Message-ID: <YkObebLZMp5AyRpr@codewreck.org>
+References: <0000000000009523b605db620972@google.com>
+ <385ce718-f965-4005-56b6-34922c4533b8@I-love.SAKURA.ne.jp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <385ce718-f965-4005-56b6-34922c4533b8@I-love.SAKURA.ne.jp>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+Tetsuo Handa wrote on Wed, Mar 30, 2022 at 07:35:47AM +0900:
+> This seems to be an example of
+> https://lkml.kernel.org/r/49925af7-78a8-a3dd-bce6-cfc02e1a9236@I-love.SAKURA.ne.jp
+> introduced by "ext4: truncate during setxattr leads to kernel panic".
 
-Use static calls to improve kvm_pmu_ops performance, following the same
-pattern and naming scheme used by kvm-x86-ops.h.
+Thanks for the pointer
 
-Here are the worst fenced_rdtsc() cycles numbers for the kvm_pmu_ops
-functions that is most often called (up to 7 digits of calls) when running
-a single perf test case in a guest on an ICX 2.70GHz host (mitigations=on):
+> Please don't use schedule_work() if you need to use flush_scheduled_work().
 
-		|	legacy	|	static call
-------------------------------------------------------------
-.pmc_idx_to_pmc	|	1304840	|	994872 (+23%)
-.pmc_is_enabled	|	978670	|	1011750 (-3%)
-.msr_idx_to_pmc	|	47828	|	41690 (+12%)
-.is_valid_msr	|	28786	|	30108 (-4%)
+In this case we don't call flush_scheduled_work -- ext4 does.
+The problem is mixing in the two subsystems when someone (e.g. syzbot)
+opens an ext4 file and passes that fd to 9p when mounting with e.g.
+mount -t 9p -o rfdno=<no>,wfdno=<no>
 
-Signed-off-by: Like Xu <likexu@tencent.com>
-[sean: Handle static call updates in pmu.c, tweak changelog]
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/include/asm/kvm-x86-pmu-ops.h | 31 ++++++++++++++
- arch/x86/kvm/pmu.c                     | 56 ++++++++++++++++----------
- 2 files changed, 65 insertions(+), 22 deletions(-)
- create mode 100644 arch/x86/include/asm/kvm-x86-pmu-ops.h
+Frankly that's just not something I consider useful, interacting through
+9p to a local file doesn't make sense except for testing.
 
-diff --git a/arch/x86/include/asm/kvm-x86-pmu-ops.h b/arch/x86/include/asm/kvm-x86-pmu-ops.h
-new file mode 100644
-index 000000000000..fdfd8e06fee6
---- /dev/null
-+++ b/arch/x86/include/asm/kvm-x86-pmu-ops.h
-@@ -0,0 +1,31 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#if !defined(KVM_X86_PMU_OP) || !defined(KVM_X86_PMU_OP_OPTIONAL)
-+BUILD_BUG_ON(1)
-+#endif
-+
-+/*
-+ * KVM_X86_PMU_OP() and KVM_X86_PMU_OP_OPTIONAL() are used to help generate
-+ * both DECLARE/DEFINE_STATIC_CALL() invocations and
-+ * "static_call_update()" calls.
-+ *
-+ * KVM_X86_PMU_OP_OPTIONAL() can be used for those functions that can have
-+ * a NULL definition, for example if "static_call_cond()" will be used
-+ * at the call sites.
-+ */
-+KVM_X86_PMU_OP(pmc_perf_hw_id)
-+KVM_X86_PMU_OP(pmc_is_enabled)
-+KVM_X86_PMU_OP(pmc_idx_to_pmc)
-+KVM_X86_PMU_OP(rdpmc_ecx_to_pmc)
-+KVM_X86_PMU_OP(msr_idx_to_pmc)
-+KVM_X86_PMU_OP(is_valid_rdpmc_ecx)
-+KVM_X86_PMU_OP(is_valid_msr)
-+KVM_X86_PMU_OP(get_msr)
-+KVM_X86_PMU_OP(set_msr)
-+KVM_X86_PMU_OP(refresh)
-+KVM_X86_PMU_OP(init)
-+KVM_X86_PMU_OP(reset)
-+KVM_X86_PMU_OP_OPTIONAL(deliver_pmi)
-+KVM_X86_PMU_OP_OPTIONAL(cleanup)
-+
-+#undef KVM_X86_PMU_OP
-+#undef KVM_X86_PMU_OP_OPTIONAL
-diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-index bb0b1ad0fda5..618f529f1c4d 100644
---- a/arch/x86/kvm/pmu.c
-+++ b/arch/x86/kvm/pmu.c
-@@ -51,14 +51,28 @@
- 
- static struct kvm_pmu_ops kvm_pmu_ops __read_mostly;
- 
-+#define KVM_X86_PMU_OP(func)					     \
-+	DEFINE_STATIC_CALL_NULL(kvm_x86_pmu_##func,			     \
-+				*(((struct kvm_pmu_ops *)0)->func));
-+#define KVM_X86_PMU_OP_OPTIONAL KVM_X86_PMU_OP
-+#include <asm/kvm-x86-pmu-ops.h>
-+
- void kvm_pmu_ops_update(const struct kvm_pmu_ops *pmu_ops)
- {
- 	memcpy(&kvm_pmu_ops, pmu_ops, sizeof(kvm_pmu_ops));
-+
-+#define __KVM_X86_PMU_OP(func) \
-+	static_call_update(kvm_x86_pmu_##func, kvm_pmu_ops.func);
-+#define KVM_X86_PMU_OP(func) \
-+	WARN_ON(!kvm_pmu_ops.func); __KVM_X86_PMU_OP(func)
-+#define KVM_X86_PMU_OP_OPTIONAL __KVM_X86_PMU_OP
-+#include <asm/kvm-x86-pmu-ops.h>
-+#undef __KVM_X86_PMU_OP
- }
- 
- static inline bool pmc_is_enabled(struct kvm_pmc *pmc)
- {
--	return kvm_pmu_ops.pmc_is_enabled(pmc);
-+	return static_call(kvm_x86_pmu_pmc_is_enabled)(pmc);
- }
- 
- static void kvm_pmi_trigger_fn(struct irq_work *irq_work)
-@@ -225,7 +239,7 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
- 			  ARCH_PERFMON_EVENTSEL_CMASK |
- 			  HSW_IN_TX |
- 			  HSW_IN_TX_CHECKPOINTED))) {
--		config = kvm_pmu_ops.pmc_perf_hw_id(pmc);
-+		config = static_call(kvm_x86_pmu_pmc_perf_hw_id)(pmc);
- 		if (config != PERF_COUNT_HW_MAX)
- 			type = PERF_TYPE_HARDWARE;
- 	}
-@@ -275,7 +289,7 @@ void reprogram_fixed_counter(struct kvm_pmc *pmc, u8 ctrl, int idx)
- 
- 	pmc->current_config = (u64)ctrl;
- 	pmc_reprogram_counter(pmc, PERF_TYPE_HARDWARE,
--			      kvm_pmu_ops.pmc_perf_hw_id(pmc),
-+			      static_call(kvm_x86_pmu_pmc_perf_hw_id)(pmc),
- 			      !(en_field & 0x2), /* exclude user */
- 			      !(en_field & 0x1), /* exclude kernel */
- 			      pmi);
-@@ -284,7 +298,7 @@ EXPORT_SYMBOL_GPL(reprogram_fixed_counter);
- 
- void reprogram_counter(struct kvm_pmu *pmu, int pmc_idx)
- {
--	struct kvm_pmc *pmc = kvm_pmu_ops.pmc_idx_to_pmc(pmu, pmc_idx);
-+	struct kvm_pmc *pmc = static_call(kvm_x86_pmu_pmc_idx_to_pmc)(pmu, pmc_idx);
- 
- 	if (!pmc)
- 		return;
-@@ -306,7 +320,7 @@ void kvm_pmu_handle_event(struct kvm_vcpu *vcpu)
- 	int bit;
- 
- 	for_each_set_bit(bit, pmu->reprogram_pmi, X86_PMC_IDX_MAX) {
--		struct kvm_pmc *pmc = kvm_pmu_ops.pmc_idx_to_pmc(pmu, bit);
-+		struct kvm_pmc *pmc = static_call(kvm_x86_pmu_pmc_idx_to_pmc)(pmu, bit);
- 
- 		if (unlikely(!pmc || !pmc->perf_event)) {
- 			clear_bit(bit, pmu->reprogram_pmi);
-@@ -328,7 +342,7 @@ void kvm_pmu_handle_event(struct kvm_vcpu *vcpu)
- /* check if idx is a valid index to access PMU */
- bool kvm_pmu_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int idx)
- {
--	return kvm_pmu_ops.is_valid_rdpmc_ecx(vcpu, idx);
-+	return static_call(kvm_x86_pmu_is_valid_rdpmc_ecx)(vcpu, idx);
- }
- 
- bool is_vmware_backdoor_pmc(u32 pmc_idx)
-@@ -378,7 +392,7 @@ int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
- 	if (is_vmware_backdoor_pmc(idx))
- 		return kvm_pmu_rdpmc_vmware(vcpu, idx, data);
- 
--	pmc = kvm_pmu_ops.rdpmc_ecx_to_pmc(vcpu, idx, &mask);
-+	pmc = static_call(kvm_x86_pmu_rdpmc_ecx_to_pmc)(vcpu, idx, &mask);
- 	if (!pmc)
- 		return 1;
- 
-@@ -394,22 +408,21 @@ int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
- void kvm_pmu_deliver_pmi(struct kvm_vcpu *vcpu)
- {
- 	if (lapic_in_kernel(vcpu)) {
--		if (kvm_pmu_ops.deliver_pmi)
--			kvm_pmu_ops.deliver_pmi(vcpu);
-+		static_call_cond(kvm_x86_pmu_deliver_pmi)(vcpu);
- 		kvm_apic_local_deliver(vcpu->arch.apic, APIC_LVTPC);
- 	}
- }
- 
- bool kvm_pmu_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
- {
--	return kvm_pmu_ops.msr_idx_to_pmc(vcpu, msr) ||
--		kvm_pmu_ops.is_valid_msr(vcpu, msr);
-+	return static_call(kvm_x86_pmu_msr_idx_to_pmc)(vcpu, msr) ||
-+		static_call(kvm_x86_pmu_is_valid_msr)(vcpu, msr);
- }
- 
- static void kvm_pmu_mark_pmc_in_use(struct kvm_vcpu *vcpu, u32 msr)
- {
- 	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
--	struct kvm_pmc *pmc = kvm_pmu_ops.msr_idx_to_pmc(vcpu, msr);
-+	struct kvm_pmc *pmc = static_call(kvm_x86_pmu_msr_idx_to_pmc)(vcpu, msr);
- 
- 	if (pmc)
- 		__set_bit(pmc->idx, pmu->pmc_in_use);
-@@ -417,13 +430,13 @@ static void kvm_pmu_mark_pmc_in_use(struct kvm_vcpu *vcpu, u32 msr)
- 
- int kvm_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- {
--	return kvm_pmu_ops.get_msr(vcpu, msr_info);
-+	return static_call(kvm_x86_pmu_get_msr)(vcpu, msr_info);
- }
- 
- int kvm_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- {
- 	kvm_pmu_mark_pmc_in_use(vcpu, msr_info->index);
--	return kvm_pmu_ops.set_msr(vcpu, msr_info);
-+	return static_call(kvm_x86_pmu_set_msr)(vcpu, msr_info);
- }
- 
- /* refresh PMU settings. This function generally is called when underlying
-@@ -432,7 +445,7 @@ int kvm_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
-  */
- void kvm_pmu_refresh(struct kvm_vcpu *vcpu)
- {
--	kvm_pmu_ops.refresh(vcpu);
-+	static_call(kvm_x86_pmu_refresh)(vcpu);
- }
- 
- void kvm_pmu_reset(struct kvm_vcpu *vcpu)
-@@ -440,7 +453,7 @@ void kvm_pmu_reset(struct kvm_vcpu *vcpu)
- 	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
- 
- 	irq_work_sync(&pmu->irq_work);
--	kvm_pmu_ops.reset(vcpu);
-+	static_call(kvm_x86_pmu_reset)(vcpu);
- }
- 
- void kvm_pmu_init(struct kvm_vcpu *vcpu)
-@@ -448,7 +461,7 @@ void kvm_pmu_init(struct kvm_vcpu *vcpu)
- 	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
- 
- 	memset(pmu, 0, sizeof(*pmu));
--	kvm_pmu_ops.init(vcpu);
-+	static_call(kvm_x86_pmu_init)(vcpu);
- 	init_irq_work(&pmu->irq_work, kvm_pmi_trigger_fn);
- 	pmu->event_count = 0;
- 	pmu->need_cleanup = false;
-@@ -480,14 +493,13 @@ void kvm_pmu_cleanup(struct kvm_vcpu *vcpu)
- 		      pmu->pmc_in_use, X86_PMC_IDX_MAX);
- 
- 	for_each_set_bit(i, bitmask, X86_PMC_IDX_MAX) {
--		pmc = kvm_pmu_ops.pmc_idx_to_pmc(pmu, i);
-+		pmc = static_call(kvm_x86_pmu_pmc_idx_to_pmc)(pmu, i);
- 
- 		if (pmc && pmc->perf_event && !pmc_speculative_in_use(pmc))
- 			pmc_stop_counter(pmc);
- 	}
- 
--	if (kvm_pmu_ops.cleanup)
--		kvm_pmu_ops.cleanup(vcpu);
-+	static_call_cond(kvm_x86_pmu_cleanup)(vcpu);
- 
- 	bitmap_zero(pmu->pmc_in_use, X86_PMC_IDX_MAX);
- }
-@@ -517,7 +529,7 @@ static inline bool eventsel_match_perf_hw_id(struct kvm_pmc *pmc,
- 	unsigned int config;
- 
- 	pmc->eventsel &= (ARCH_PERFMON_EVENTSEL_EVENT | ARCH_PERFMON_EVENTSEL_UMASK);
--	config = kvm_pmu_ops.pmc_perf_hw_id(pmc);
-+	config = static_call(kvm_x86_pmu_pmc_perf_hw_id)(pmc);
- 	pmc->eventsel = old_eventsel;
- 	return config == perf_hw_id;
- }
-@@ -545,7 +557,7 @@ void kvm_pmu_trigger_event(struct kvm_vcpu *vcpu, u64 perf_hw_id)
- 	int i;
- 
- 	for_each_set_bit(i, pmu->all_valid_pmc_idx, X86_PMC_IDX_MAX) {
--		pmc = kvm_pmu_ops.pmc_idx_to_pmc(pmu, i);
-+		pmc = static_call(kvm_x86_pmu_pmc_idx_to_pmc)(pmu, i);
- 
- 		if (!pmc || !pmc_is_enabled(pmc) || !pmc_speculative_in_use(pmc))
- 			continue;
+If that is a real problem, the simplest way out would be to just forbid
+non-socket FDs if it's something we can check.
 -- 
-2.35.1.1021.g381101b075-goog
-
+Dominique

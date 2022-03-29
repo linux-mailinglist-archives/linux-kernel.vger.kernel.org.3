@@ -2,115 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39364EB2F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 19:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD374EB2FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 19:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240374AbiC2Ry2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 13:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
+        id S240380AbiC2R5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 13:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240351AbiC2RyV (ORCPT
+        with ESMTP id S240364AbiC2R5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 13:54:21 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FC11ED05D;
-        Tue, 29 Mar 2022 10:52:37 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id p4-20020a17090ad30400b001c7ca87c05bso2508586pju.1;
-        Tue, 29 Mar 2022 10:52:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pQtwmQnPApqxl6a1qQafAVmNSaeDO1TUxN8vDTFvE9o=;
-        b=kcAhcgdBWZB/5xNlBMsZ8SeU1XU7vhJRw5PdIqWOGc/QGZezZM+p0Ev0+T1+4lz9um
-         vVfPWqcOQT16tsjVm4NHi4g88OJHtxIRg6SbbUU2wTyIFlZW3kErv1o9kN1osamqxZMd
-         18omSGkrGcViPmFtc+Ztyw8WevNcOFhnEShRcxOIAvHd4fFLQpY6xIqAORoB7/H0ZWx8
-         +O49D87VS33nHHSLgfGb6169Ua/ovkJoBltcgoC2Ggc9bgNObvH70KbYUfWK/j4vcNua
-         2Bk5PfNECfwoCPt85yOti6qg0fCctJAoGoftKkRDvboxXLKMJn6FQYki7s/Nj5Np3t4q
-         8pGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pQtwmQnPApqxl6a1qQafAVmNSaeDO1TUxN8vDTFvE9o=;
-        b=Ra1cX6vTKkr9l8y5c6VusjkJcOlNuYfeTqlmZLvmIjbSOzeBoqS/XJtCxWmOKjekL0
-         Ff4pw/ctKTdR65d8Me0GdduMmkjm7PMV3mtOfwrU95ovi6T/Mvwdk6XTYmsvxDpuoNQW
-         YC5czLvvaSYl9JEM0cG+m3VabRavKeHmWtUlDOMVAebjpeVZYU58QWZp/olsVZPCx6jv
-         XURVf2OLCz4Ncg+I5y9kf4BqzSSp8WpjyNrpKa0xPWNK+CPC4jnv0QwvpuELreulz5/n
-         wk+1E2ztSgi9R4H5buLUMUc+wSuu4mMUmVtM3v2G0+kCgero3eoB5mjlsrNEylmgPFoe
-         nFXQ==
-X-Gm-Message-State: AOAM532FI15FZK45VXbgjMIkMqPq5ixkD44R1X2sW4kSC+Uv3BOM4wbM
-        KKIOr/BZ17M2z87vIYeIIak=
-X-Google-Smtp-Source: ABdhPJwYGa5KMAEW7uS9gBKnxEtSXxrla89FTrBVEJvRlifU/5KAvcPBT73SyAy/Hje6IOTbvvCwAw==
-X-Received: by 2002:a17:903:186:b0:154:3606:7a73 with SMTP id z6-20020a170903018600b0015436067a73mr31930870plg.89.1648576356704;
-        Tue, 29 Mar 2022 10:52:36 -0700 (PDT)
-Received: from localhost ([192.55.54.52])
-        by smtp.gmail.com with ESMTPSA id 132-20020a62168a000000b004f40e8b3133sm21624407pfw.188.2022.03.29.10.52.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 10:52:36 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 10:52:34 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "Huang, Kai" <kai.huang@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        isaku.yamahata@gmail.com
-Subject: Re: [PATCH v2 01/21] x86/virt/tdx: Detect SEAM
-Message-ID: <20220329175234.GA1915371@ls.amr.corp.intel.com>
-References: <cover.1647167475.git.kai.huang@intel.com>
- <a258224c26b6a08400d9a8678f5d88f749afe51e.1647167475.git.kai.huang@intel.com>
- <BN9PR11MB527657C2AA8B9ACD94C9D5468C189@BN9PR11MB5276.namprd11.prod.outlook.com>
- <51982ec477e43c686c5c64731715fee528750d85.camel@intel.com>
- <BN9PR11MB52765EE37C00F0FFA01447968C1D9@BN9PR11MB5276.namprd11.prod.outlook.com>
+        Tue, 29 Mar 2022 13:57:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1C607CB1B
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 10:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648576531;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kGMPBJ//O6psjBzV1vVr4GcYMJAivjV7NQg3N1Zfl8Y=;
+        b=Cd82R2C0YPzyHM+8S+NAzSLJCUlCav66xWoQmY0b82enRwEqiHmj6rVvBFPfCm1pH0yzH2
+        /g5iSi5pEC3iAdt91JrzmGulGgYMcOETkh8L9IwDtOUnu3qIXeU+FieRn4FedrV8C5+Xw5
+        VFGbhZp2PpmQvIKT+AAmDNv+CFYJA3g=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-592--kr4w_ZuMVKcTYXJskxZ_Q-1; Tue, 29 Mar 2022 13:55:28 -0400
+X-MC-Unique: -kr4w_ZuMVKcTYXJskxZ_Q-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 26A4D899ED4;
+        Tue, 29 Mar 2022 17:55:27 +0000 (UTC)
+Received: from ceranb (unknown [10.40.192.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B2258401E2A;
+        Tue, 29 Mar 2022 17:55:23 +0000 (UTC)
+Date:   Tue, 29 Mar 2022 19:55:22 +0200
+From:   Ivan Vecera <ivecera@redhat.com>
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc:     netdev@vger.kernel.org, poros@redhat.com, mschmidt@redhat.com,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Krzysztof Kazimierczak <krzysztof.kazimierczak@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        "moderated list:INTEL ETHERNET DRIVERS" 
+        <intel-wired-lan@lists.osuosl.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:XDP (eXpress Data Path)" <bpf@vger.kernel.org>
+Subject: Re: [PATCH net] ice: Fix logic of getting XSK pool associated with
+ Tx queue
+Message-ID: <20220329195522.63d332fb@ceranb>
+In-Reply-To: <YkL0wfgyCq5s8vdu@boxer>
+References: <20220329102752.1481125-1-ivecera@redhat.com>
+        <YkL0wfgyCq5s8vdu@boxer>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB52765EE37C00F0FFA01447968C1D9@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 08:10:47AM +0000,
-"Tian, Kevin" <kevin.tian@intel.com> wrote:
+On Tue, 29 Mar 2022 14:00:01 +0200
+Maciej Fijalkowski <maciej.fijalkowski@intel.com> wrote:
 
-> > From: Huang, Kai <kai.huang@intel.com>
-> > Sent: Monday, March 28, 2022 11:55 AM
-> >
-> > SEAMRR and TDX KeyIDs are configured by BIOS and they are static during
-> > machine's runtime.  On the other hand, TDX module can be updated and
-> > reinitialized at runtime (not supported in this series but will be supported in
-> > the future).  Theoretically, even P-SEAMLDR can be updated at runtime
-> > (although
-> > I think unlikely to be supported in Linux).  Therefore I think detecting
-> > SEAMRR
-> > and TDX KeyIDs at boot fits better.
+> Thanks for this fix! I did exactly the same patch yesterday and it's
+> already applied to bpf tree:
 > 
-> If those info are static it's perfectly fine to detect them until they are
-> required... and following are not solid cases (e.g. just exposing SEAM
-> alone doesn't tell the availability of TDX) but let's also hear the opinions
-> from others.
+> https://lore.kernel.org/bpf/20220328142123.170157-5-maciej.fijalkowski@intel.com/T/#u
+> 
+> Maciej
 
-One use case is cloud use case.  If TDX module is initialized dynamically at
-runtime, cloud management system wants to know if the physical machine is
-capable of TDX in addition to if TDX module is initialized.  Also how many TDs
-can be run on the machine even when TDX module is not initialized yet.  The
-management system will schedule TDs based on those information.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Thanks for info... Nice human race condition ;-)
+
+I.
+

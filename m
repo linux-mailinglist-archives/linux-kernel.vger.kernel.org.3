@@ -2,169 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505744EA50F
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED39A4EA513
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 04:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbiC2CSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 22:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
+        id S230253AbiC2CVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 22:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiC2CSt (ORCPT
+        with ESMTP id S229986AbiC2CVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 22:18:49 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6007DE13
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 19:17:05 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id y10so19039622edv.7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 19:17:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=OgOwwwPtBqtH2Nfvw1oTQa9WeHu8kROOmi+nT3PQOWs=;
-        b=V7+/CQTv/H4n6YyDO8BLudQHcJgZxpoNa9CD/3M3UIY/1jEZXiWxext68upgmuvFwF
-         BjngFaVv5dGVhg4VDJI5HYCL6/kzbJXP7GRK754XfWFlOyw4Z9ApV049UlrmyqTyM4Zv
-         kkfiZEncbpF3dD3yofGwLrJ9Y8U0zARijB2jtTZx9kBPdoVTNiJhCYOUp+gBvrwQ6lVC
-         w2+Dd7W5+5Z9DjOX89fTRhJlos0ncJXGJa1SgdOfIGQ0TgOgDBI0Xqnsy0z+7seCrSQ+
-         C8UWfBv35a+04581MsPqEEpXrGQpKxiKZu2MrOwsZUy+uI7Zz9nfoKYBt1qVIsrcp2ph
-         dS6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=OgOwwwPtBqtH2Nfvw1oTQa9WeHu8kROOmi+nT3PQOWs=;
-        b=ixl94wOkaqCMOQ1ILIHYZHUZTI+5vefSLzQnRD2ufG1vmx78GO0Opi+7o/uvzXPvm3
-         YV56GUEmeyb6EiYEgMwV0B843jpWQsYsNbEt3GRK3KFlSQN/G8svPMSb4n1fvPeHoHeH
-         JQ93s7lLZF8WWFv+KbhO2HbBv+01RjigyUhzMg6M7nsLxMvDSfnWR2NuqPZF8pswUw3o
-         azD5MRwbEYe94lb9mMCrkF73mWjYYhneLInsqY/tb+gfdf0UKBhq4TKyBSqT8bAN14yP
-         ae3GTCEfqC4FnjVrshF3EIC92LjvLj7YU8xJsxWlb/gykQhDsras4PI88cQoyyXho9qb
-         z7TQ==
-X-Gm-Message-State: AOAM533lnjZlsuXDI5zZebt6znUGexTdbrOoVXsjNJHX0n7/X0C63HLs
-        zlkqXu14jjK9Z1DsFc9VXLToua3EvchMtQXkCO4=
-X-Google-Smtp-Source: ABdhPJyuFLNxU6tDwxqf3G3+4NkWH0WP5fgIDlKCEEToOCDFNckn0o8usGU5L7W468nFbMiVibAYURDgefwZiDNvWq0=
-X-Received: by 2002:a50:d592:0:b0:415:e599:4166 with SMTP id
- v18-20020a50d592000000b00415e5994166mr1251977edi.195.1648520224123; Mon, 28
- Mar 2022 19:17:04 -0700 (PDT)
+        Mon, 28 Mar 2022 22:21:36 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C992717D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Mar 2022 19:19:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 49AF521985;
+        Tue, 29 Mar 2022 02:19:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648520392; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZPkIZ/XPkzUw3GjYvyN+kAbsucuIGnV2jh6uGeU7IYw=;
+        b=Nqd4JoQK6yUWhkcVCPx/L2AnKtO3DnEXQc+fbSPNlZADjl1RQ/AnZKioJKNOMqj7uCYtte
+        mlyfhrqR5G7T5aodZkGOTeXBCdZNP/AwPQmbqi5WUXVgRfnzaAuIRFfKGk65mptVqC2znn
+        JkIyadYj/SBG+Zs/5tJVyDYX0u1jq4Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648520392;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZPkIZ/XPkzUw3GjYvyN+kAbsucuIGnV2jh6uGeU7IYw=;
+        b=DzeLs96G9pLdG7R6oZoAvgLb8XvdopgoKAISiuJ/595Gh3Qw9DQ58FbSPP1yZSrbGym2qc
+        edOnjsVfueSeb7Dw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A0BED13A7E;
+        Tue, 29 Mar 2022 02:19:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 2eezE8dsQmLhNQAAMHmgww
+        (envelope-from <ematsumiya@suse.de>); Tue, 29 Mar 2022 02:19:51 +0000
+Date:   Mon, 28 Mar 2022 23:19:41 -0300
+From:   Enzo Matsumiya <ematsumiya@suse.de>
+To:     CGEL <cgel.zte@gmail.com>
+Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        paul@paul-moore.com, kbuild-all@lists.01.org,
+        Zeal Robot <zealci@zte.com.cn>, linux-kernel@vger.kernel.org,
+        eparis@redhat.com, Yang Yang <yang.yang29@zte.com.cn>,
+        linux-audit@redhat.com
+Subject: Re: [PATCH] audit: do a quick exit when syscall number is invalid
+Message-ID: <20220329021941.ai3d6fgrkyd5ylto@cyberdelia>
+References: <20220326094654.2361956-1-yang.yang29@zte.com.cn>
+ <202203270449.WBYQF9X3-lkp@intel.com>
+ <62426553.1c69fb81.bb808.345c@mx.google.com>
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Tue, 29 Mar 2022 03:16:55 +0100
-Message-ID: <CAHpNFcMxWJHfjAbAX+5uLsd7LaK1Kfo2DArFMOeSMt1pkeFh2w@mail.gmail.com>
-Subject: Dev/Random : 4096-bit LFSR used for entropy collection : Submission 118
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <62426553.1c69fb81.bb808.345c@mx.google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dev/Random : 4096-bit LFSR used for entropy collection
+On 03/29, CGEL wrote:
+>>    In file included from include/linux/init.h:5,
+>>                     from kernel/auditsc.c:34:
+>>    kernel/auditsc.c: In function '__audit_syscall_exit':
+>> >> kernel/auditsc.c:2081:61: error: 'NR_syscalls' undeclared (first use in this function); did you mean 'si_syscall'?
+>>     2081 |             unlikely(context->major < 0 || context->major > NR_syscalls))
+>>          |                                                             ^~~~~~~~~~~
+>
+>Sorry could anybody give a hand to solve this? It works well on x86_64 and arm64.
+>I have no alpha environment and not familiar to this arch, much thanks!
 
-Basically the HASH is what makes a difference, In respect to BLAKE2
-running out of entropy...
-An internal backup PKI AES/Blake2 Secondary HASH stored in Kernel...
-
-Bear in mind that the backup seed is worked from quality Random & is
-99% unique : "We are The 99%"
-
-This keeps simple Pseudo numbers from being the bearer of predictable
-kernel Security behavior,
-Nothing wrong with keeping more! & we can for system device pools for example!
-
-For reference core HASH reserve storage can be per type:
-
-Main groups for Secondary hash main leaf HASH:
-
-/Dev
-/Memory
-/Storage
-/Keys
-/Con
-
-Rupert S
-
-*RAND OP Ubuntu :
-https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
-
-https://pollinate.n-helix.com
-
-https://science.n-helix.com/2018/12/rng.html
-
-https://science.n-helix.com/2022/02/rdseed.html
-
-https://science.n-helix.com/2017/04/rng-and-random-web.html
-
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
+Sorry, no experience either, but from a quick look at arch/alpha/include/asm/unistd.h
+shows that it's called NR_SYSCALLS for alpha arch, for whatever reason.
 
 
-Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
+HTH
 
-https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
-
-https://science.n-helix.com/2022/03/ice-ssrtp.html
-
-https://science.n-helix.com/2021/11/ihmtes.html
-
-https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
-https://science.n-helix.com/2021/11/wave-focus-anc.html
-https://science.n-helix.com/2021/12/3d-audio-plugin.html
-
-https://aka.ms/win10rng
-
-"https://www.spinics.net/lists/stable/msg543787.html
-
-From: "Jason A. Donenfeld" <Jason@xxxxxxxxx>
-
-[ Upstream commit 6e8ec2552c7d13991148e551e3325a624d73fac6 ]
-
-The current 4096-bit LFSR used for entropy collection had a few
-desirable attributes for the context in which it was created. For
-example, the state was huge, which meant that /dev/random would be able
-to output quite a bit of accumulated entropy before blocking. It was
-also, in its time, quite fast at accumulating entropy byte-by-byte,
-which matters given the varying contexts in which mix_pool_bytes() is
-called. And its diffusion was relatively high, which meant that changes
-would ripple across several words of state rather quickly.
-
-However, it also suffers from a few security vulnerabilities. In
-particular, inputs learned by an attacker can be undone, but moreover,
-if the state of the pool leaks, its contents can be controlled and
-entirely zeroed out. I've demonstrated this attack with this SMT2
-script, <https://xn--4db.cc/5o9xO8pb>, which Boolector/CaDiCal solves in
-a matter of seconds on a single core of my laptop, resulting in little
-proof of concept C demonstrators such as <https://xn--4db.cc/jCkvvIaH/c>.
-
-For basically all recent formal models of RNGs, these attacks represent
-a significant cryptographic flaw. But how does this manifest
-practically? If an attacker has access to the system to such a degree
-that he can learn the internal state of the RNG, arguably there are
-other lower hanging vulnerabilities -- side-channel, infoleak, or
-otherwise -- that might have higher priority. On the other hand, seed
-files are frequently used on systems that have a hard time generating
-much entropy on their own, and these seed files, being files, often leak
-or are duplicated and distributed accidentally, or are even seeded over
-the Internet intentionally, where their contents might be recorded or
-tampered with. Seen this way, an otherwise quasi-implausible
-vulnerability is a bit more practical than initially thought.
-
-Another aspect of the current mix_pool_bytes() function is that, while
-its performance was arguably competitive for the time in which it was
-created, it's no longer considered so. This patch improves performance
-significantly: on a high-end CPU, an i7-11850H, it improves performance
-of mix_pool_bytes() by 225%, and on a low-end CPU, a Cortex-A7, it
-improves performance by 103%.
-
-This commit replaces the LFSR of mix_pool_bytes() with a straight-
-forward cryptographic hash function, BLAKE2s, which is already in use
-for pool extraction. Universal hashing with a secret seed was considered
-too, something along the lines of <https://eprint.iacr.org/2013/338>,
-but the requirement for a secret seed makes for a chicken & egg problem.
-Instead we go with a formally proven scheme using a computational hash
-function, described in sections 5.1, 6.4, and B.1.8 of
-<https://eprint.iacr.org/2019/198>."
+Enzo

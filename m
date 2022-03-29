@@ -2,87 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5934EB680
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A044EB685
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 01:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239182AbiC2XLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 19:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55238 "EHLO
+        id S239552AbiC2XNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 19:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239470AbiC2XLj (ORCPT
+        with ESMTP id S235262AbiC2XN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 19:11:39 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F918EA76B
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:09:55 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id g8so15384029qke.2
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 16:09:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aEhUDD4h6uAblZYdEqK3WfYH78cRJFucwHHJvJpj9po=;
-        b=w8xu9XnmFHc5caQlAGfwzcIkBfTpogJyC/Z8FpIG+9cIP3gR2zRYtoUaWiHzPZuBsG
-         HQneZzTbvoXPu2yMmtyeQNis5QeWwbocvt4HHrIwN1RV7UyzTATwZqwmcVPtC3dwZslc
-         9PIYisICUth6zmHVftQ0am2evsMdXpXbWvEdj0OMz2hq3Z69aKjuLLiB6H1NHl8H61pt
-         DxIR5dTh4zN8XlngUUjGIa8DNvHTNSNAmPEAIF/kooUnJlwwjGwjm5vQgiu93BCwCMln
-         DoFcFIGw+hHrOX0v52ma/X2KnyWqF/28Q3ofS1EWuLHZpJ6K3IsfC17RX2fsgBu/RWf8
-         uOPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aEhUDD4h6uAblZYdEqK3WfYH78cRJFucwHHJvJpj9po=;
-        b=OL8XgzbesH1FotojmFXTSsNwpGSUWXlcb60wj5CHwKpsXtx2LVM4tzlGPuosTu0lmH
-         h93IwHHe9rhNCm2EchAwBdkpd/mklzNxn3uvigwu0cSAJyMCsn43kKVxrM8q/ZY0NETS
-         a+0rRf0IHE5KlpbpIRVB0uu+qdkwZqkko855vNWqTAGo3jsGNcVuA2gcqv/TdeY2EQWl
-         hso225McCklUZnIBrFhs4ydxjRuvlzfICz0CsvtVakiMvYCL6GfjdK2kvfzIJMCiLXd8
-         S+YUtTeykx8+8qDxuu9HqkoYuU07upxgasIcKPwwWYnpYVe5M8JZp7MYkwDMr2+b172H
-         XtiQ==
-X-Gm-Message-State: AOAM531psD5fbxbHWK6Rk0arrycXyvO+MQSfucHgChGgb/CJgMFc7ajR
-        +5QaNqdgdLcYpJ1oKZ+CNbEwl+MGvF3NJFVwNs8+PtIwLwE=
-X-Google-Smtp-Source: ABdhPJyLdObA37xboAWKWrjWol8cD8HdyMOGLCYHULnJO8ksydrxdWJIytU1sr7bpMvVWokokD9NAS8l5HilJGmwql4=
-X-Received: by 2002:a05:620a:2442:b0:67f:65f6:bad2 with SMTP id
- h2-20020a05620a244200b0067f65f6bad2mr22390896qkn.203.1648595394698; Tue, 29
- Mar 2022 16:09:54 -0700 (PDT)
+        Tue, 29 Mar 2022 19:13:28 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6287F18F23C;
+        Tue, 29 Mar 2022 16:11:44 -0700 (PDT)
+Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
+        by linux.microsoft.com (Postfix) with ESMTPSA id CB61E20DEE31;
+        Tue, 29 Mar 2022 16:11:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CB61E20DEE31
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1648595504;
+        bh=zlzTxp+08vt3bMLHgmFGGXahGNx5lIFl8D8SrSqydk8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LpSkVUYEhTTL7DLJeD/qpcTOpkU8sd7SVuQKZqa9PJxD9lH32ZACJSueKOFHMhjix
+         LmAT8ofaPLypSywQivSyPqpOB4Llc69QQNZxDdaC+47FPD4ecm8FlPgBLuQ8k2jXWn
+         DoKloMJnqTrnht7HwRXmsyUhpeRycvRYP3kmqZb0=
+Date:   Tue, 29 Mar 2022 16:11:37 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] tracing/user_events: Add eBPF interface for user_event
+ created events
+Message-ID: <20220329231137.GA3357@kbox>
+References: <20220329181935.2183-1-beaub@linux.microsoft.com>
+ <CAADnVQ+XpoCjL-rSz2hj05L21s8NtMJuWYC14b9Mvk7XE5KT_g@mail.gmail.com>
+ <20220329201057.GA2549@kbox>
+ <CAADnVQ+gm4yU9S6y+oeR3TNj82kKX0gk4ey9gVnKXKWy1Js4-A@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220329230105.601666-1-robdclark@gmail.com> <20220329230105.601666-2-robdclark@gmail.com>
-In-Reply-To: <20220329230105.601666-2-robdclark@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 30 Mar 2022 02:09:43 +0300
-Message-ID: <CAA8EJpqnS1qJS9CkR6s7nBSJcfL=i-gvX+PSpajoQOK6FmuWjg@mail.gmail.com>
-Subject: Re: [PATCH 1/9] drm/msm/gem: Move prototypes
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQ+gm4yU9S6y+oeR3TNj82kKX0gk4ey9gVnKXKWy1Js4-A@mail.gmail.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 at 02:00, Rob Clark <robdclark@gmail.com> wrote:
->
-> From: Rob Clark <robdclark@chromium.org>
->
-> These belong more cleanly in the gem header.
->
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
+On Tue, Mar 29, 2022 at 03:31:31PM -0700, Alexei Starovoitov wrote:
+> On Tue, Mar 29, 2022 at 1:11 PM Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> >
+> > On Tue, Mar 29, 2022 at 12:50:40PM -0700, Alexei Starovoitov wrote:
+> > > On Tue, Mar 29, 2022 at 11:19 AM Beau Belgrave
+> > > <beaub@linux.microsoft.com> wrote:
+> > > >
+> > > > Send user_event data to attached eBPF programs for user_event based perf
+> > > > events.
+> > > >
+> > > > Add BPF_ITER flag to allow user_event data to have a zero copy path into
+> > > > eBPF programs if required.
+> > > >
+> > > > Update documentation to describe new flags and structures for eBPF
+> > > > integration.
+> > > >
+> > > > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+> > >
+> > > The commit describes _what_ it does, but says nothing about _why_.
+> > > At present I see no use out of bpf and user_events connection.
+> > > The whole user_events feature looks redundant to me.
+> > > We have uprobes and usdt. It doesn't look to me that
+> > > user_events provide anything new that wasn't available earlier.
+> >
+> > A lot of the why, in general, for user_events is covered in the first
+> > change in the series.
+> > Link: https://lore.kernel.org/all/20220118204326.2169-1-beaub@linux.microsoft.com/
+> >
+> > The why was also covered in Linux Plumbers Conference 2021 within the
+> > tracing microconference.
+> >
+> > An example of why we want user_events:
+> > Managed code running that emits data out via Open Telemetry.
+> > Since it's managed there isn't a stub location to patch, it moves.
+> > We watch the Open Telemetry spans in an eBPF program, when a span takes
+> > too long we collect stack data and perform other actions.
+> > With user_events and perf we can monitor the entire system from the root
+> > container without having to have relay agents within each
+> > cgroup/namespace taking up resources.
+> > We do not need to enter each cgroup mnt space and determine the correct
+> > patch location or the right version of each binary for processes that
+> > use user_events.
+> >
+> > An example of why we want eBPF integration:
+> > We also have scenarios where we are live decoding the data quickly.
+> > Having user_data fed directly to eBPF lets us cast the data coming in to
+> > a struct and decode very very quickly to determine if something is
+> > wrong.
+> > We can take that data quickly and put it into maps to perform further
+> > aggregation as required.
+> > We have scenarios that have "skid" problems, where we need to grab
+> > further data exactly when the process that had the problem was running.
+> > eBPF lets us do all of this that we cannot easily do otherwise.
+> >
+> > Another benefit from user_events is the tracing is much faster than
+> > uprobes or others using int 3 traps. This is critical to us to enable on
+> > production systems.
+> 
+> None of it makes sense to me.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Sorry.
 
+> To take advantage of user_events user space has to be modified
+> and writev syscalls inserted.
 
+Yes, both user_events and lttng require user space modifications to do
+tracing correctly. The syscall overheads are real, and the cost depends
+on the mitigations around spectre/meltdown.
 
--- 
-With best wishes
-Dmitry
+> This is not cheap and I cannot see a production system using this interface.
+
+But you are fine with uprobe costs? uprobes appear to be much more costly
+than a syscall approach on the hardware I've run on.
+
+> All you did is a poor man version of lttng that doesn't rely
+> on such heavy instrumentation.
+
+Well I am a frugal person. :)
+
+This work has solved some critical issues we've been having, and I would
+appreciate a review of the code if possible.
+
+Thanks,
+-Beau

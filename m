@@ -2,156 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A261C4EB0D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 785744EB0D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238904AbiC2Pjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40104 "EHLO
+        id S238885AbiC2PjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238893AbiC2Pjb (ORCPT
+        with ESMTP id S238867AbiC2PjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:39:31 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017D225279F
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:37:47 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2e5757b57caso187859217b3.4
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:37:47 -0700 (PDT)
+        Tue, 29 Mar 2022 11:39:02 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9776424F28A
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:37:18 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id e22so21397510ioe.11
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:37:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=cdiQn4MDYBZT4MD+COiiujM149rg5cmUvhmDH4fWhAI=;
-        b=b0FFvlB+8/wM/+w8iI8lE3ZS1QMXytKOW4Cd8OhonyTCVfrB84LSEiNtPADXgnwKgl
-         N+ZiZJwyZfFo12Ku19vtLdM8bGKMUoBbqeZfKMl00u5tCdsmeS7yK9jciIMY65MA5Leh
-         wi7Vi6n17nHUdocZtBuEF0AfuX37TtK3WKvQjR3nmDnEsDi+Sr4TAxOEamyJ1xSBSmCe
-         4Pwh7A+3X82yrIM0K7qQjp/6hfecVXgWXVdpSDFEju9zKhESv8854khenVmLUnxFipPo
-         Buzkkyx8o6TwydErWCWb7snbfCJa755Z52eELhBcDUkvsuMykgHRWeBQ2eiFPsbGrvz3
-         PeAA==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=gLd51ggOlUdHIwZ00EZlLb4mWuNUvjnU3+SzIZdxmOk=;
+        b=K57WW/FddBde/rRXMUA9BaYE3N0lAuDneUX1KCIBFxf4CXh4Z4eKQOUqC788YMGaXX
+         MQF7yOu4tf8KM9LcmtcceBE2QTiyQQM/8vESJFK5zLjXOr7BViiSBXqZ/+143NMwIIdc
+         orlNUiAl/hdFW4dDa9vE//ejvyaewYcHdewJE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=cdiQn4MDYBZT4MD+COiiujM149rg5cmUvhmDH4fWhAI=;
-        b=F/LIvyTOQPnnM0etq5ve9Er3cwXw71SkafNR+AmDUPaMyrJ1O+9F9wcPgkkUj+GDD1
-         xak1HEq/c6Yjkz3CD0zbwt8fP7SoZpNjrWBPtTP3sDxU/9nQi3SMuDTXpbRX4/coW+8e
-         cd2HKr3ecuM+8SeTHcaiANb66WruU358oof9K7CRtdd2LoKhuGHvBwMWul/iXJt6q+fk
-         V9f4BFfGtAFybaHovtjo0qkPbsLlHZWG+rkTsCD1eko4g0a5KtZ+yHbJgpzLnFfqICe8
-         s5KiGCvGwb8hdU0k/YrOGdLBF6nmmMmRZm6ttmFDUnvNfWFl46tV5e3cBb2Gb+lym//C
-         V/CA==
-X-Gm-Message-State: AOAM530TsglzB28k2k8dGuPtRlHXAq+ATiF6xbaQ7RIW5KZfXaNMfZbE
-        TRDC821wdVnUdihDB4NfvxMKxSu5Dhi645W9ROPqOI+pYMfrpw==
-X-Google-Smtp-Source: ABdhPJy264N9elL1uOkqTXbYsKQktV0xNWVZwrTTKjVZDqGQCViM7C+xgfzXs+Ws9tjYbgAAQVu8W3L5CmwVqLyLbVo=
-X-Received: by 2002:a0d:ccca:0:b0:2e6:2b53:3f16 with SMTP id
- o193-20020a0dccca000000b002e62b533f16mr32560002ywd.35.1648568266768; Tue, 29
- Mar 2022 08:37:46 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=gLd51ggOlUdHIwZ00EZlLb4mWuNUvjnU3+SzIZdxmOk=;
+        b=rj3xObjTKkxKc4pvpCcm+5R8kqrVZVmqKjEMzypHTAcOYe5w5immADMXEHxz+z5jiH
+         3V0NiadAu7T6YO3o+Rv3Af7N8UDSeDQMKfWmlCpy6F6B+fTaB0GAcGd4ULETFmo+XExv
+         lY7upP1QtZyJFI8Q0bSOKdF9ti0tDGz6lA6RYLo1abvm943PVGG0xbNi/D3afE3ahCDU
+         C5IP2m8Hs99sKOsUodX2t4rXev3f4wFdUwF9191MH3mGtRwxi28x8LzGPgZrNRf+oojl
+         dtOyR1DqASajKmMD15EOYZm/k2DNtA3Efpgc6rSga4fB0WXK/X8iUfARieo7L+kvlOMe
+         CG8Q==
+X-Gm-Message-State: AOAM5308dm7XVKAbIzZxyGqyynTOPUrcTf2voQK8OwhCii0VfmyVUpJf
+        w4+kFejLL3fEyVqhwaDgvn57IQ==
+X-Google-Smtp-Source: ABdhPJwCzXCHjBRdz35SXshxWvTj2yFFE0frjiP5HGkRVMCtMtFRNLjnUjRXfQCtSR1PiZiMusPBYg==
+X-Received: by 2002:a6b:400b:0:b0:64c:77aa:40a6 with SMTP id k11-20020a6b400b000000b0064c77aa40a6mr5480515ioa.101.1648568237910;
+        Tue, 29 Mar 2022 08:37:17 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id f20-20020a6be814000000b00649d9a4db2asm9706513ioh.27.2022.03.29.08.37.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 08:37:17 -0700 (PDT)
+Subject: Re: [PATCH v5 0/2] selftests/resctrl: Print a message if the result
+ of MBM&CMT tests is failed on Intel CPU
+To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220323080928.1586408-1-tan.shaopeng@jp.fujitsu.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <1920a6b6-bc1b-31db-4c1b-efccc189daa5@linuxfoundation.org>
+Date:   Tue, 29 Mar 2022 09:37:17 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Tue, 29 Mar 2022 23:37:10 +0800
-Message-ID: <CAMZfGtU1sbsrnCbCKi_By8VTGN1CA1s4A=s1NcHzRunDUpGXgQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/4] mm: hugetlb_vmemmap: introduce STRUCT_PAGE_SIZE_IS_POWER_OF_2
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        David Hildenbrand <david@redhat.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220323080928.1586408-1-tan.shaopeng@jp.fujitsu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 1:11 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Wed, Mar 23, 2022 at 9:57 PM Muchun Song <songmuchun@bytedance.com> wrote:
-> >
-> > If the size of "struct page" is not the power of two and this
-> > feature is enabled, then the vmemmap pages of HugeTLB will be
-> > corrupted after remapping (panic is about to happen in theory).
-> > But this only exists when !CONFIG_MEMCG && !CONFIG_SLUB on
-> > x86_64.  However, it is not a conventional configuration nowadays.
-> > So it is not a real word issue, just the result of a code review.
-> > But we have to prevent anyone from configuring that combined
-> > configuration.  In order to avoid many checks like "is_power_of_2
-> > (sizeof(struct page))" through mm/hugetlb_vmemmap.c.  Introduce
-> > STRUCT_PAGE_SIZE_IS_POWER_OF_2 to detect if the size of struct
-> > page is power of 2 and make this feature depends on this new
-> > config.  Then we could prevent anyone do any unexpected
-> > configuration.
-> >
-> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> > ---
-> >  Kbuild                           | 14 ++++++++++++++
-> >  fs/Kconfig                       |  1 +
-> >  include/linux/mm_types.h         |  2 ++
-> >  mm/Kconfig                       |  3 +++
-> >  mm/hugetlb_vmemmap.c             |  6 ------
-> >  mm/struct_page_size.c            | 19 +++++++++++++++++++
-> >  scripts/check_struct_page_po2.sh |  9 +++++++++
-> >  7 files changed, 48 insertions(+), 6 deletions(-)
-> >  create mode 100644 mm/struct_page_size.c
-> >  create mode 100755 scripts/check_struct_page_po2.sh
-> >
-> > diff --git a/Kbuild b/Kbuild
-> > index fa441b98c9f6..21415c3b2728 100644
-> > --- a/Kbuild
-> > +++ b/Kbuild
-> > @@ -37,6 +37,20 @@ $(offsets-file): arch/$(SRCARCH)/kernel/asm-offsets.s FORCE
-> >         $(call filechk,offsets,__ASM_OFFSETS_H__)
-> >
-> >  #####
-> > +# Generate struct_page_size.h.
-> > +
-> > +struct_page_size-file := include/generated/struct_page_size.h
-> > +
-> > +always-y := $(struct_page_size-file)
-> > +targets := mm/struct_page_size.s
-> > +
-> > +mm/struct_page_size.s: $(timeconst-file) $(bounds-file)
-> > +
-> > +$(struct_page_size-file): mm/struct_page_size.s FORCE
-> > +       $(call filechk,offsets,__LINUX_STRUCT_PAGE_SIZE_H__)
-> > +       $(Q)$(MAKE) -f $(srctree)/Makefile syncconfig
->
->
-> No, please do not do this.
-> It is terrible to feed back this to Kconfig again.
+On 3/23/22 2:09 AM, Shaopeng Tan wrote:
+> Hello,
+> 
+> The aim of this series is to print a message to let users know a possible
+> cause of failure, if the result of MBM&CMT tests is failed on Intel CPU.
+> In order to detect Intel vendor, I extended AMD vendor detect function.
+> 
+> Difference from v4:
+> - Fixed the typos.
+> - Changed "get_vendor() != ARCH_AMD" to "get_vendor() == ARCH_INTEL".
+> - Reorder the declarations based on line length from longest to shortest.
+> https://lore.kernel.org/lkml/20220316055940.292550-1-tan.shaopeng@jp.fujitsu.com/ [PATCH v4]
+> 
+> This patch series is based on v5.17.
+> 
+> Shaopeng Tan (2):
+>    selftests/resctrl: Extend CPU vendor detection
+>    selftests/resctrl: Print a message if the result of MBM&CMT tests is
+>      failed on Intel CPU
+> 
+>   tools/testing/selftests/resctrl/cat_test.c    |  2 +-
+>   tools/testing/selftests/resctrl/resctrl.h     |  5 ++-
+>   .../testing/selftests/resctrl/resctrl_tests.c | 45 +++++++++++++------
+>   tools/testing/selftests/resctrl/resctrlfs.c   |  2 +-
+>   4 files changed, 37 insertions(+), 17 deletions(-)
+> 
 
-OK. I'll remove syncconfig.
+I can queue this up for Linux 5.18-rc2. Thanks for fixing the error
+path with clear messages for failures.
 
->
-> If you know this happens on !CONFIG_MEMCG && !CONFIG_SLUB on x86_64,
-> why don't you add this dependency directly?
-
-It is not enough since the size of the struct page also depends on
-LAST_CPUPID_NOT_IN_PAGE_FLAGS && CONFIG_SLAB.
-We cannot know the result of LAST_CPUPID_NOT_IN_PAGE_FLAGS in
-Kconfig.
-
->
->
-> If you want to avoid the run-time check,
-> why don't you use  BUILD_BUG_ON() ?
->
-
-Now I have another solution to avoid the run-time check.
-We could use macro STRUCT_PAGE_SIZE_IS_POWER_OF_2
-to do that like the following.
-
-#ifdef STRUCT_PAGE_SIZE_IS_POWER_OF_2
-/* code */
-#endif
-
-Thanks.
+thanks,
+-- Shuah

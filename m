@@ -2,214 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A765D4EA3F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 02:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE564EA3F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 02:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbiC1X6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Mar 2022 19:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
+        id S231248AbiC2ACB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Mar 2022 20:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiC1X6i (ORCPT
+        with ESMTP id S231229AbiC2ACA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Mar 2022 19:58:38 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CF3137F5E;
-        Mon, 28 Mar 2022 16:56:56 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:58544)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nYzEF-00FvWG-5d; Mon, 28 Mar 2022 17:56:55 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:41530 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nYzED-005Hs8-2U; Mon, 28 Mar 2022 17:56:54 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alexey Gladkov <legion@kernel.org>, Kyle Huey <me@kylehuey.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>, <linux-api@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, <linux-kernel@vger.kernel.org>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
-        <87bl1kunjj.fsf@email.froward.int.ebiederm.org>
-        <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
-        <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
-        <87tubyx0rg.fsf_-_@email.froward.int.ebiederm.org>
-Date:   Mon, 28 Mar 2022 18:56:46 -0500
-In-Reply-To: <87tubyx0rg.fsf_-_@email.froward.int.ebiederm.org> (Eric
-        W. Biederman's message of "Tue, 15 Mar 2022 18:18:59 -0500")
-Message-ID: <87a6d9pr5t.fsf_-_@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 28 Mar 2022 20:02:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51ED512D;
+        Mon, 28 Mar 2022 17:00:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1025B81135;
+        Tue, 29 Mar 2022 00:00:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A3B0C340ED;
+        Tue, 29 Mar 2022 00:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648512015;
+        bh=wCMbvr56VtoEx/Ol49u4LneQr9c9hrBl8R0OVViTao0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LnMp6jIMGfrZN1pIQk4fIJPhe7ZJn1YCkvNZkwJUNNYun+F00vG5mDe2fDgBN/9Qf
+         ls5NBi4VOuMQlA9UVOysHFGWIXJ6e3BzpJyR4rajlrQ6wh+dRWiHrJpL0jktvcwVvB
+         qF+9mbeYz2xX2yUYL2/D88UGHfC9jN+rzaDTG+gw705BwvjmZVVgOe8CsSGjmiwEIq
+         Zr6P/RjHkD4Vh3dUMqo8vMdZqm0lrNHLNqY3infXEQyt6T5TsCrJ303lAdRQJdCCUb
+         Mx79rdEHojemjFv8GYkNYzR0sLBzq4/VhhQQlQ8WjqQc5bmatSk/DJvEuE3zJ908Nm
+         5UIAjI6rNk9OA==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Networking mid-5.18-merge-window tactical update
+Date:   Mon, 28 Mar 2022 17:00:14 -0700
+Message-Id: <20220329000014.1509077-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nYzED-005Hs8-2U;;;mid=<87a6d9pr5t.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+Tf8du8XGTtxjfBiYpwsvd8V8xcfv+BF8=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Linus Torvalds <torvalds@linux-foundation.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1483 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 3.6 (0.2%), b_tie_ro: 2.4 (0.2%), parse: 0.71
-        (0.0%), extract_message_metadata: 9 (0.6%), get_uri_detail_list: 2.2
-        (0.1%), tests_pri_-1000: 9 (0.6%), tests_pri_-950: 0.92 (0.1%),
-        tests_pri_-900: 0.77 (0.1%), tests_pri_-90: 66 (4.5%), check_bayes: 65
-        (4.4%), b_tokenize: 10 (0.7%), b_tok_get_all: 10 (0.7%), b_comp_prob:
-        1.81 (0.1%), b_tok_touch_all: 41 (2.8%), b_finish: 0.67 (0.0%),
-        tests_pri_0: 1383 (93.2%), check_dkim_signature: 0.39 (0.0%),
-        check_dkim_adsp: 1.46 (0.1%), poll_dns_idle: 0.33 (0.0%),
-        tests_pri_10: 1.77 (0.1%), tests_pri_500: 6 (0.4%), rewrite_mail: 0.00
-        (0.0%)
-Subject: [GIT PULL] ptrace: Cleanups for v5.18
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus!
 
-Linus,
+Small batch of fixes so we can fast forward cleanly and
+bring in the BPF x86 patches on Thursday.
 
-Please pull the ptrace-cleanups-for-v5.18 tag from the git tree:
+The following changes since commit 169e77764adc041b1dacba84ea90516a895d43b2:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ptrace-cleanups-for-v5.18
+  Merge tag 'net-next-5.18' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next (2022-03-24 13:13:26 -0700)
 
-  HEAD: dcbc65aac28360df5f5a3b613043ccc0e81da3cf ptrace: Remove duplicated include in ptrace.c
+are available in the Git repository at:
 
-This set of changes removes tracehook.h, moves modification of all of
-the ptrace fields inside of siglock to remove races, adds a missing
-permission check to ptrace.c
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.18-rc0
 
-The removal of tracehook.h is quite significant as it has been a major
-source of confusion in recent years.  Much of that confusion was
-around task_work and TIF_NOTIFY_SIGNAL (which I have now decoupled
-making the semantics clearer).
+for you to fetch changes up to 20695e9a9fd39103d1b0669470ae74030b7aa196:
 
-For people who don't know tracehook.h is a vestiage of an attempt to
-implement uprobes like functionality that was never fully merged, and
-was later superseeded by uprobes when uprobes was merged.  For many
-years now we have been removing what tracehook functionaly a little
-bit at a time.  To the point where now anything left in tracehook.h is
-some weird strange thing that is difficult to understand.
+  Revert "selftests: net: Add tls config dependency for tls selftests" (2022-03-28 16:15:54 -0700)
 
-Eric W. Biederman (15):
-      ptrace: Move ptrace_report_syscall into ptrace.h
-      ptrace/arm: Rename tracehook_report_syscall report_syscall
-      ptrace: Create ptrace_report_syscall_{entry,exit} in ptrace.h
-      ptrace: Remove arch_syscall_{enter,exit}_tracehook
-      ptrace: Remove tracehook_signal_handler
-      task_work: Remove unnecessary include from posix_timers.h
-      task_work: Introduce task_work_pending
-      task_work: Call tracehook_notify_signal from get_signal on all architectures
-      task_work: Decouple TIF_NOTIFY_SIGNAL and task_work
-      signal: Move set_notify_signal and clear_notify_signal into sched/signal.h
-      resume_user_mode: Remove #ifdef TIF_NOTIFY_RESUME in set_notify_resume
-      resume_user_mode: Move to resume_user_mode.h
-      tracehook: Remove tracehook.h
-      ptrace: Move setting/clearing ptrace_message into ptrace_stop
-      ptrace: Return the signal to continue with from ptrace_stop
+----------------------------------------------------------------
+Networking fixes, including fixes from netfilter.
 
-Jann Horn (1):
-      ptrace: Check PTRACE_O_SUSPEND_SECCOMP permission on PTRACE_SEIZE
+Current release - regressions:
 
-Yang Li (1):
-      ptrace: Remove duplicated include in ptrace.c
+ - llc: only change llc->dev when bind() succeeds, fix null-deref
 
+Current release - new code bugs:
 
- MAINTAINERS                          |   1 -
- arch/Kconfig                         |   5 +-
- arch/alpha/kernel/ptrace.c           |   5 +-
- arch/alpha/kernel/signal.c           |   4 +-
- arch/arc/kernel/ptrace.c             |   5 +-
- arch/arc/kernel/signal.c             |   4 +-
- arch/arm/kernel/ptrace.c             |  12 +-
- arch/arm/kernel/signal.c             |   4 +-
- arch/arm64/kernel/ptrace.c           |  14 +--
- arch/arm64/kernel/signal.c           |   4 +-
- arch/csky/kernel/ptrace.c            |   5 +-
- arch/csky/kernel/signal.c            |   4 +-
- arch/h8300/kernel/ptrace.c           |   5 +-
- arch/h8300/kernel/signal.c           |   4 +-
- arch/hexagon/kernel/process.c        |   4 +-
- arch/hexagon/kernel/signal.c         |   1 -
- arch/hexagon/kernel/traps.c          |   6 +-
- arch/ia64/kernel/process.c           |   4 +-
- arch/ia64/kernel/ptrace.c            |   6 +-
- arch/ia64/kernel/signal.c            |   1 -
- arch/m68k/kernel/ptrace.c            |   5 +-
- arch/m68k/kernel/signal.c            |   4 +-
- arch/microblaze/kernel/ptrace.c      |   5 +-
- arch/microblaze/kernel/signal.c      |   4 +-
- arch/mips/kernel/ptrace.c            |   5 +-
- arch/mips/kernel/signal.c            |   4 +-
- arch/nds32/include/asm/syscall.h     |   2 +-
- arch/nds32/kernel/ptrace.c           |   5 +-
- arch/nds32/kernel/signal.c           |   4 +-
- arch/nios2/kernel/ptrace.c           |   5 +-
- arch/nios2/kernel/signal.c           |   4 +-
- arch/openrisc/kernel/ptrace.c        |   5 +-
- arch/openrisc/kernel/signal.c        |   4 +-
- arch/parisc/kernel/ptrace.c          |   7 +-
- arch/parisc/kernel/signal.c          |   4 +-
- arch/powerpc/kernel/ptrace/ptrace.c  |   8 +-
- arch/powerpc/kernel/signal.c         |   4 +-
- arch/riscv/kernel/ptrace.c           |   5 +-
- arch/riscv/kernel/signal.c           |   4 +-
- arch/s390/include/asm/entry-common.h |   1 -
- arch/s390/kernel/ptrace.c            |   1 -
- arch/s390/kernel/signal.c            |   5 +-
- arch/sh/kernel/ptrace_32.c           |   5 +-
- arch/sh/kernel/signal_32.c           |   4 +-
- arch/sparc/kernel/ptrace_32.c        |   5 +-
- arch/sparc/kernel/ptrace_64.c        |   5 +-
- arch/sparc/kernel/signal32.c         |   1 -
- arch/sparc/kernel/signal_32.c        |   4 +-
- arch/sparc/kernel/signal_64.c        |   4 +-
- arch/um/kernel/process.c             |   4 +-
- arch/um/kernel/ptrace.c              |   5 +-
- arch/x86/kernel/ptrace.c             |   1 -
- arch/x86/kernel/signal.c             |   5 +-
- arch/x86/mm/tlb.c                    |   1 +
- arch/xtensa/kernel/ptrace.c          |   5 +-
- arch/xtensa/kernel/signal.c          |   4 +-
- block/blk-cgroup.c                   |   2 +-
- fs/coredump.c                        |   1 -
- fs/exec.c                            |   1 -
- fs/io-wq.c                           |   6 +-
- fs/io_uring.c                        |  11 +-
- fs/proc/array.c                      |   1 -
- fs/proc/base.c                       |   1 -
- include/asm-generic/syscall.h        |   2 +-
- include/linux/entry-common.h         |  47 +-------
- include/linux/entry-kvm.h            |   2 +-
- include/linux/posix-timers.h         |   1 -
- include/linux/ptrace.h               |  81 ++++++++++++-
- include/linux/resume_user_mode.h     |  64 ++++++++++
- include/linux/sched/signal.h         |  17 +++
- include/linux/task_work.h            |   5 +
- include/linux/tracehook.h            | 226 -----------------------------------
- include/uapi/linux/ptrace.h          |   2 +-
- kernel/entry/common.c                |  19 +--
- kernel/entry/kvm.c                   |   9 +-
- kernel/exit.c                        |   3 +-
- kernel/livepatch/transition.c        |   1 -
- kernel/ptrace.c                      |  47 +++++---
- kernel/seccomp.c                     |   1 -
- kernel/signal.c                      |  62 +++++-----
- kernel/task_work.c                   |   4 +-
- kernel/time/posix-cpu-timers.c       |   1 +
- mm/memcontrol.c                      |   2 +-
- security/apparmor/domain.c           |   1 -
- security/selinux/hooks.c             |   1 -
- 85 files changed, 372 insertions(+), 495 deletions(-)
+ - smc: fix a memory leak in smc_sysctl_net_exit()
 
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+ - dsa: realtek: make interface drivers depend on OF
 
+Previous releases - regressions:
+
+ - sched: act_ct: fix ref leak when switching zones
+
+Previous releases - always broken:
+
+ - netfilter: egress: report interface as outgoing
+
+ - vsock/virtio: enable VQs early on probe and finish the setup
+   before using them
+
+Misc:
+
+ - memcg: enable accounting for nft objects
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+
+----------------------------------------------------------------
+Alvin Šipraga (1):
+      net: dsa: realtek: make interface drivers depend on OF
+
+Bjorn Andersson (1):
+      net: stmmac: dwmac-qcom-ethqos: Enable RGMII functional clock on resume
+
+Casper Andersson (2):
+      net: sparx5: Remove unused GLAG handling in PGID
+      net: sparx5: Refactor mdb handling according to feedback
+
+Damien Le Moal (1):
+      net: bnxt_ptp: fix compilation error
+
+David S. Miller (2):
+      Merge branch 'hns3-fixes'
+      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
+
+Duoming Zhou (1):
+      net/x25: Fix null-ptr-deref caused by x25_disconnect
+
+Eric Dumazet (2):
+      llc: only change llc->dev when bind() succeeds
+      net/smc: fix a memory leak in smc_sysctl_net_exit()
+
+Florian Fainelli (1):
+      net: phy: broadcom: Fix brcm_fet_config_init()
+
+Greg Jesionowski (1):
+      net: usb: ax88179_178a: add Allied Telesis AT-UMCs
+
+Guangbin Huang (1):
+      net: hns3: fix phy can not link up when autoneg off and reset
+
+Hao Chen (4):
+      net: hns3: fix ethtool tx copybreak buf size indicating not aligned issue
+      net: hns3: add max order judgement for tx spare buffer
+      net: hns3: add netdev reset check for hns3_set_tunable()
+      net: hns3: add NULL pointer check for hns3_set/get_ringparam()
+
+Ido Schimmel (1):
+      selftests: test_vxlan_under_vrf: Fix broken test case
+
+Jakub Kicinski (5):
+      Merge branch 'vsock-virtio-enable-vqs-early-on-probe-and-finish-the-setup-before-using-them'
+      Merge branch 'net-sparx5-refactor-based-on-feedback-on'
+      Merge branch 'net-hns3-add-some-fixes-for-net'
+      selftests: tls: skip cmsg_to_pipe tests with TLS=n
+      Revert "selftests: net: Add tls config dependency for tls selftests"
+
+Jian Shen (4):
+      net: hns3: fix bug when PF set the duplicate MAC address for VFs
+      net: hns3: fix port base vlan add fail when concurrent with reset
+      net: hns3: add vlan list lock to protect vlan list
+      net: hns3: refine the process when PF set VF VLAN
+
+Johannes Berg (1):
+      net: move net_unlink_todo() out of the header
+
+Marcelo Ricardo Leitner (1):
+      net/sched: act_ct: fix ref leak when switching zones
+
+Naresh Kamboju (1):
+      selftests: net: Add tls config dependency for tls selftests
+
+Pablo Neira Ayuso (1):
+      netfilter: nf_conntrack_tcp: preserve liberal flag in tcp options
+
+Peng Li (1):
+      net: hns3: clean residual vf config after disable sriov
+
+Phil Sutter (1):
+      netfilter: egress: Report interface as outgoing
+
+Randy Dunlap (1):
+      net: sparx5: depends on PTP_1588_CLOCK_OPTIONAL
+
+Stefano Garzarella (3):
+      vsock/virtio: initialize vdev->priv before using VQs
+      vsock/virtio: read the negotiated features before using VQs
+      vsock/virtio: enable VQs early on probe
+
+Tom Rix (2):
+      qlcnic: dcb: default to returning -EOPNOTSUPP
+      octeontx2-af: initialize action variable
+
+Vasily Averin (1):
+      memcg: enable accounting for nft objects
+
+Vladimir Oltean (1):
+      net: enetc: report software timestamping via SO_TIMESTAMPING
+
+Wen Gu (1):
+      net/smc: Send out the remaining data in sndbuf before close
+
+Xiaomeng Tong (1):
+      net: dsa: bcm_sf2_cfp: fix an incorrect NULL check on list iterator
+
+Zheng Yongjun (1):
+      net: sparx5: switchdev: fix possible NULL pointer dereference
+
+ drivers/net/dsa/bcm_sf2_cfp.c                      |   6 +-
+ drivers/net/dsa/realtek/Kconfig                    |   2 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c      |   6 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.h      |   2 +-
+ .../net/ethernet/freescale/enetc/enetc_ethtool.c   |   5 +-
+ drivers/net/ethernet/hisilicon/hns3/hnae3.h        |   3 +
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.c    |  44 +++++-
+ drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c |  23 ++-
+ .../ethernet/hisilicon/hns3/hns3pf/hclge_main.c    | 173 +++++++++++++++++----
+ .../ethernet/hisilicon/hns3/hns3pf/hclge_main.h    |   4 +
+ .../ethernet/hisilicon/hns3/hns3pf/hclge_mdio.c    |   4 +-
+ .../ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c  |   5 +
+ .../net/ethernet/marvell/octeontx2/af/rvu_npc.c    |  15 +-
+ drivers/net/ethernet/microchip/sparx5/Kconfig      |   1 +
+ .../net/ethernet/microchip/sparx5/sparx5_fdma.c    |   2 +
+ .../ethernet/microchip/sparx5/sparx5_mactable.c    |  19 +--
+ .../net/ethernet/microchip/sparx5/sparx5_main.h    |   7 +-
+ .../net/ethernet/microchip/sparx5/sparx5_pgid.c    |  20 +--
+ .../ethernet/microchip/sparx5/sparx5_switchdev.c   |  18 +--
+ .../net/ethernet/microchip/sparx5/sparx5_vlan.c    |   7 +
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h    |  10 +-
+ .../ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c    |   7 +
+ drivers/net/phy/broadcom.c                         |  21 +++
+ drivers/net/usb/ax88179_178a.c                     |  51 ++++++
+ include/linux/netdevice.h                          |  10 --
+ include/linux/netfilter_netdev.h                   |   2 +-
+ net/core/dev.c                                     |  10 ++
+ net/llc/af_llc.c                                   |  59 ++++---
+ net/netfilter/core.c                               |   2 +-
+ net/netfilter/nf_conntrack_proto_tcp.c             |  17 +-
+ net/netfilter/nf_tables_api.c                      |  44 +++---
+ net/sched/act_ct.c                                 |  15 +-
+ net/smc/smc_close.c                                |   3 +
+ net/smc/smc_sysctl.c                               |   5 +
+ net/vmw_vsock/virtio_transport.c                   |  11 +-
+ net/x25/af_x25.c                                   |  11 +-
+ .../testing/selftests/net/test_vxlan_under_vrf.sh  |   8 +-
+ tools/testing/selftests/net/tls.c                  |   6 +
+ 38 files changed, 464 insertions(+), 194 deletions(-)

@@ -2,97 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31E24EAAF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E8C4EAAF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 12:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234937AbiC2KFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 06:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
+        id S234945AbiC2KFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 06:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiC2KFP (ORCPT
+        with ESMTP id S234947AbiC2KFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 06:05:15 -0400
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0106E5A588;
-        Tue, 29 Mar 2022 03:03:30 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 6E128102EF014;
-        Tue, 29 Mar 2022 12:03:28 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 4C2A6371B2; Tue, 29 Mar 2022 12:03:28 +0200 (CEST)
-Date:   Tue, 29 Mar 2022 12:03:28 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Subject: Re: [PATCH] serial: Revert RS485 polarity change on UART open
-Message-ID: <20220329100328.GA2090@wunner.de>
-References: <20220329085050.311408-1-matthias.schiffer@ew.tq-group.com>
+        Tue, 29 Mar 2022 06:05:33 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903525C650;
+        Tue, 29 Mar 2022 03:03:49 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so945664wmb.4;
+        Tue, 29 Mar 2022 03:03:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XP58J9nMiUBKKZ2mEHu2elDVfOboIj5PiONcCMCt6ic=;
+        b=Yq4sbY+zwUknZYkTIlOVDWtB1bNtPagOZTtgT+2I2V6upHPE6NIOT3L9S27Sx3I/nz
+         bio/avRpFO0w5U5XECzAzLC3az+PrWr7pSssQ/xJN88fnPTBrMKhd+6QqBjuSAIDKJ1R
+         3FrFVS+HUJpZ1BT5HBH8JXJmW2OYL82dENzmIYwQUfTMCi/fAdJrxk2dD8+s+IDs5ZVi
+         54z7C6/HBUWl/N3wRalHWceNxICXqSnmCSkWIqaCs+BQxR8VJDsPLfVJMEj5utTb10R3
+         FgAhPK2IuYpcMppLKB9iXpS+/zIQsSefUrpWdz7iRWN4NR5I08aSY/n1y0aZoo/2OElH
+         bFCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XP58J9nMiUBKKZ2mEHu2elDVfOboIj5PiONcCMCt6ic=;
+        b=V2kOzdoxgi9I5bGchb1BAXT8uUoCwhVQXSz3Djg5ZK5E4PaLLd8I+5bSWQ/2iSwwNf
+         D1mkUwPMsX2DFhIK3dicRN3m3vVzsJfcc3N/VTuVWCLFDe7ISG0FZSfLla8x4THIXcjQ
+         5TM75ynM9mgAIEY5esJ69bNdN6x0M3leNAi3L034vP9MEW3Ta1rlbFBOAatexqASzG0X
+         mHft9rIgOmap4XLni7WfKc2gtXoWP+TpCqqstGuEZV+dEBkM332UIt4A0b7q1F5iFz2Z
+         oNb++SKRgpY/Nw4iO11UC8Huea1WW+ifHaEH9qNdAxm20SbU43wTrefT48vHaCzRVYmS
+         c0Og==
+X-Gm-Message-State: AOAM533B5y4a7fqN34xTwErW/rlf8CqkJ1xdwMSzTlMWYCwWUOCVsC3o
+        OeGd3CMWd+G3A4ilIybJpNMd2dII+Eq5AQ==
+X-Google-Smtp-Source: ABdhPJztz045tZLfgkeJcC3u6Zv7to81fyJuQrvXjzft9fCaGBH8M6rHdf7cy+6YBfYM8gLnYA366A==
+X-Received: by 2002:a05:600c:34ce:b0:38c:a579:944a with SMTP id d14-20020a05600c34ce00b0038ca579944amr5773450wmq.113.1648548228053;
+        Tue, 29 Mar 2022 03:03:48 -0700 (PDT)
+Received: from [192.168.1.145] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id b8-20020a05600c4e0800b0038c6c37efc3sm1811134wmq.12.2022.03.29.03.03.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 03:03:47 -0700 (PDT)
+Message-ID: <ea6868cc-6650-9b69-e328-6b0d31069191@gmail.com>
+Date:   Tue, 29 Mar 2022 12:03:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220329085050.311408-1-matthias.schiffer@ew.tq-group.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 22/22] arm64: dts: mt8192: Add pwm node
+Content-Language: en-US
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>,
+        Hui Liu <hui.liu@mediatek.com>
+References: <20220318144534.17996-1-allen-kh.cheng@mediatek.com>
+ <20220318144534.17996-23-allen-kh.cheng@mediatek.com>
+ <51f8baea-6562-1d6b-c409-9c362f0b2fc5@gmail.com>
+ <6ab86a35394879cf35fd9d780f8b7ab1695c931b.camel@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <6ab86a35394879cf35fd9d780f8b7ab1695c931b.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[cc += Ilpo, Lino]
-
-On Tue, Mar 29, 2022 at 10:50:50AM +0200, Matthias Schiffer wrote:
-> While the change of the RS485 polarity in
-> commit d3b3404df318 ("serial: Fix incorrect rs485 polarity on uart open")
-> might have made sense based on the original intention of the
-> rs485-rts-active-low flag (*), this is not how it is implemented in
-> various drivers:
-[...]
-> [(*) My understanding of the mentioned commit's description is that
-> rs485-rts-active-low should have referred to the electical signal level
-> of the RTS pin, rather than the logical RTS state as understood by the
-> UART controller.]
-
-Since RTS is often just a GPIO on a pin controller that's configured
-to function as RTS, my expectation would be that the same rules apply
-to RTS polarity as those that apply to *any* GPIO.
-
-According to Documentation/devicetree/bindings/gpio/gpio.txt:
-
-"A gpio-specifier should contain a flag indicating the GPIO polarity; active-
- high or active-low. If it does, the following best practices should be
- followed:
- The gpio-specifier's polarity flag should represent the physical level at the
-                                                         ^^^^^^^^^^^^^^
- GPIO controller that achieves (or represents, for inputs) a logically asserted
- value at the device."
 
 
-> At least the 8250 and the i.MX UART drivers interpret rs485-rts-active-low
+On 29/03/2022 08:51, allen-kh.cheng wrote:
+> 
+> Hi Matthias,
+> 
+> On Mon, 2022-03-28 at 13:10 +0200, Matthias Brugger wrote:
+>>
+>> On 18/03/2022 15:45, Allen-KH Cheng wrote:
+>>> Add pwm node for mt8192 SoC.
+>>>
+>>> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+>>> ---
+>>>    arch/arm64/boot/dts/mediatek/mt8192.dtsi | 11 +++++++++++
+>>>    1 file changed, 11 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+>>> b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+>>> index f0f0f067c023..ea98b2230f18 100644
+>>> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+>>> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+>>> @@ -625,6 +625,17 @@
+>>>    			status = "disabled";
+>>>    		};
+>>>    
+>>> +		pwm0: pwm@1100e000 {
+>>> +			compatible = "mediatek,mt8183-disp-pwm";
+>>> +			reg = <0 0x1100e000 0 0x1000>;
+>>> +			interrupts = <GIC_SPI 171 IRQ_TYPE_LEVEL_HIGH
+>>> 0>;
+>>
+>> Binding description is missing interrupt property. Remeber that the
+>> DT should
+>> describe the HW, so we need to update the binding description.
+>> I just wonder what the IRQ signals, as it is not used by the driver.
+>> Definitely
+>> a good candidate to make the commit message more sound. So please add
+>> it there.
+>>
+>> Thanks!
+>> Matthias
+>>
+> 
+> For interrupt property, we will send anther patch to update binding
+> and add some information for IRQ into commit message in next version.
+> 
 
-Which 8250 driver are you referring to specifically?  When developing
-d3b3404df318, I tested with 8250_bcm2835aux.c and amba-pl011.c.  Both
-worked exactly the way they should.
+Thanks. Would you mind to send the dt-bindings updates in a series together with 
+the patches from this series that needs changes? This way it will be easier to 
+track the dependencies.
 
-If imx.c and others have historically interpreted rs485-rts-active-low
-to mean that the physical level is "high" when active, then we could just
-amend imx_uart_probe() such that after calling uart_get_rs485_mode(),
-the SER_RS485_RTS_ON_SEND and SER_RS485_RTS_AFTER_SEND bits are
-flipped.  Would that work for you?
+Please beware to send dt-binding patches as first of the series, so that Rob 
+Herring can find the rather quick.
 
-I'll go through the drivers to check which ones are affected.  I'm sorry
-that you're seeing breakage, it's surprising to me that these different
-interpretations of rs485-rts-active-low exist.
+Thanks!
+Matthias
 
-Thanks,
-
-Lukas
+> Thanks,
+> Allen
+> 
+>>> +			#pwm-cells = <2>;
+>>> +			clocks = <&topckgen CLK_TOP_DISP_PWM_SEL>,
+>>> +				 <&infracfg CLK_INFRA_DISP_PWM>;
+>>> +			clock-names = "main", "mm";
+>>> +			status = "disabled";
+>>> +		};
+>>> +
+>>>    		spi1: spi@11010000 {
+>>>    			compatible = "mediatek,mt8192-spi",
+>>>    				     "mediatek,mt6765-spi";
+> 

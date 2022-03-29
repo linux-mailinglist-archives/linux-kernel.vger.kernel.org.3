@@ -2,173 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A21A4EB18B
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FCD74EB19B
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 18:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239388AbiC2QN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 12:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
+        id S239435AbiC2QOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 12:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239380AbiC2QNX (ORCPT
+        with ESMTP id S234424AbiC2QOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 12:13:23 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BFC17B8AF;
-        Tue, 29 Mar 2022 09:11:39 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id DE1601F441C5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648570298;
-        bh=2Yb3Ka8BcEOdrGgwzHg98hqEfa2Tzhh5f7Ghg6XGoYw=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=Ce//0ZK8OkkQPZrOu1tnGLymrZ02UytdcZZ2GDChk3b+KiGn0U8hSg39Y2+ZcVer0
-         2roxyhxjTELbluDV3jx9XUbxt2grkmNWrG3khvND8SpttdVasneTYdtU92sAepcaET
-         hiADleAbqtfRXkqOyBUHmSodTxQuWXS9u/wjMxDdoH7RuhtgIsHiejckJbQC9aiM1g
-         0zYknaDWmRO6wb5bB7YUjcnIv/pD4TFo9v0OynWI1UiZb4pRzxBEkiUWAaubfRaAd7
-         b0qcRuPU0/Y1rrDxsoZ8AWhlmJ8Cry4wkOI9a3Im1dr7z9QlUMx6xG7IEl5a7j5qCu
-         /9WCrxImWM/2Q==
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     yebin <yebin10@huawei.com>
-Cc:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jack@suse.cz>, <lczerner@redhat.com>
-Subject: Re: [PATCH -next] ext4: fix warning in ext4_handle_inode_extension
-Organization: Collabora
-References: <20220326065351.761952-1-yebin10@huawei.com>
-        <87sfr2qdc8.fsf@collabora.com> <62426226.6060903@huawei.com>
-Date:   Tue, 29 Mar 2022 12:11:33 -0400
-In-Reply-To: <62426226.6060903@huawei.com> (yebin's message of "Tue, 29 Mar
-        2022 09:34:30 +0800")
-Message-ID: <87fsn0rb62.fsf@collabora.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Tue, 29 Mar 2022 12:14:33 -0400
+Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72191877F2
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 09:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1648570366;
+        bh=plXQD20lQSzZsGQoCpi+P8XSYcFNpRSGduCnfS0GTkU=;
+        h=From:To:Cc:Subject:Date;
+        b=dCIMk3uy6U/ecJMb/ifOpvekCEc5WAFEjnGeqPVdPezbPfi1qsKXMsN301a0WCco/
+         Qab7U69GN5NWSCkAb+K7S9/s5DtfzcCEokDtlle8qpB3rBtdDeWM586e8YUfiPY1IU
+         Xpij+RRjwAGj5nu0mB4UxeJLtt9A7D8DIGbrSfyY=
+Received: from localhost.localdomain ([120.245.132.52])
+        by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
+        id 32C96631; Wed, 30 Mar 2022 00:12:44 +0800
+X-QQ-mid: xmsmtpt1648570364twlbk78iv
+Message-ID: <tencent_9D994CB589E97D7605023F5CF51D7DA4F50A@qq.com>
+X-QQ-XMAILINFO: OMWm0AbyvxL+nDZ7vqp4YyGvUM+RaNvkyO5/mPxfy0VDt3hvjjTxH72ZE0svhb
+         BND5Vi4zyQj7Ou32QjC7Ug2XhbrLf9uRcKLylz9I7lQHEIdw4+W+Jxdy/MFf8EvfFE9uixVZ30+C
+         yje6kmwm0Wwp8LiW6LXFpeM8CfwEmCw1ojABUkI4iPxu+PnjFFkWj053DY+nqcUiYn0nZQw2uNIt
+         ddA+KF5moCqMggH/ctgPHygRd9ME8h852CWVpkookTYYH1G7hcMvbE4GoKvUDvtA3CnHUjJKnBoN
+         H6Hg+NdIVMF6Dfkf2inHpN60dwBOTl3dLRxIKbQSa4zurXcBcv+4JTTLoqToZaMGab7Zqxqc9LTQ
+         0eI7zFE24/2eNg6pkxBlt21slxCjRLnnIpLMXzmOYgHxsWpJ7SPbr56p4Ev037bS19W7+adi8F/y
+         Ml3HS54dMbdAjnqTP4UbcH62AJf9jva2emCR0J09csNwRA43YC1DAbElL42n/tfibvNp2GpnG5T0
+         XtwLznXTHWVRzh4EfOdzIjyS4WbmBuCrMIo84w5n+4+/T6BW8e4ZsHO35YHRtFliWdOhuuODhd9z
+         nEuRkTPWRnxqybL9b8QP11a/9AgePMMHpWKRw5FwiMSwDrztRkFR/zM6yJZDyNvuZXROuzcipDxZ
+         CghNvram0cpq89hOGSO9vfeKxIT5IB4AhwIG1wuLwdH9MhYhtZ4XfvYfWpH4rWFTuVvqMth2xFyv
+         ZfJRAD0RKDkgoy+7oM9QVeDQuET+jrrHC7/0D+D2wT6S+t0Yd5m3vTQCNq60KFzUkCcexCtn8Gl1
+         2uqXIZpyIj4q0ZhpmOJH0s4AMNXJcDAjxHLkNSjl7ZqwloqF919AI8Ni4U4hECWVfMVZlq4qTVYK
+         svm9tH7Y5zqS8byK1NaHalrLQsTndlWu/AA99P2eRm6ESBm+/Ya65yDaUZOw8httPbQyRb3HpT
+From:   Chen Guanqiao <chen.chenchacha@foxmail.com>
+To:     minyard@acm.org, openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Cc:     Chen Guanqiao <chen.chenchacha@foxmail.com>
+Subject: [PATCH v2 0/4] add limit on the total number of users and oustanding messages
+Date:   Wed, 30 Mar 2022 00:12:38 +0800
+X-OQ-MSGID: <20220329161242.76457-1-chen.chenchacha@foxmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-yebin <yebin10@huawei.com> writes:
+In some case, ipmi is frequently accessed, and the communication of bmc
+device is blocked, ipmi will consume a large amount of memory.
 
-> On 2022/3/28 23:57, Gabriel Krisman Bertazi wrote:
->> Ye Bin <yebin10@huawei.com> writes:
->>
->>> We got issue as follows:
->>> EXT4-fs error (device loop0) in ext4_reserve_inode_write:5741: Out of memory
->>> EXT4-fs error (device loop0): ext4_setattr:5462: inode #13: comm syz-executor.0: mark_inode_dirty error
->>> EXT4-fs error (device loop0) in ext4_setattr:5519: Out of memory
->>> EXT4-fs error (device loop0): ext4_ind_map_blocks:595: inode #13: comm syz-executor.0: Can't allocate blocks for non-extent mapped inodes with bigalloc
->>> ------------[ cut here ]------------
->>> WARNING: CPU: 1 PID: 4361 at fs/ext4/file.c:301 ext4_file_write_iter+0x11c9/0x1220
->>> Modules linked in:
->>> CPU: 1 PID: 4361 Comm: syz-executor.0 Not tainted 5.10.0+ #1
->>> RIP: 0010:ext4_file_write_iter+0x11c9/0x1220
->>> RSP: 0018:ffff924d80b27c00 EFLAGS: 00010282
->>> RAX: ffffffff815a3379 RBX: 0000000000000000 RCX: 000000003b000000
->>> RDX: ffff924d81601000 RSI: 00000000000009cc RDI: 00000000000009cd
->>> RBP: 000000000000000d R08: ffffffffbc5a2c6b R09: 0000902e0e52a96f
->>> R10: ffff902e2b7c1b40 R11: ffff902e2b7c1b40 R12: 000000000000000a
->>> R13: 0000000000000001 R14: ffff902e0e52aa10 R15: ffffffffffffff8b
->>> FS:  00007f81a7f65700(0000) GS:ffff902e3bc80000(0000) knlGS:0000000000000000
->>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>> CR2: ffffffffff600400 CR3: 000000012db88001 CR4: 00000000003706e0
->>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->>> Call Trace:
->>>   do_iter_readv_writev+0x2e5/0x360
->>>   do_iter_write+0x112/0x4c0
->>>   do_pwritev+0x1e5/0x390
->>>   __x64_sys_pwritev2+0x7e/0xa0
->>>   do_syscall_64+0x37/0x50
->>>   entry_SYSCALL_64_after_hwframe+0x44/0xa9
->>>
->>> Above issue may happen as follows:
->>> Assume
->>> inode.i_size=4096
->>> EXT4_I(inode)->i_disksize=4096
->>>
->>> step 1: set inode->i_isize = 8192
->>> ext4_setattr
->>>    if (attr->ia_size != inode->i_size)
->>>      EXT4_I(inode)->i_disksize = attr->ia_size;
->>>      rc = ext4_mark_inode_dirty
->>>         ext4_reserve_inode_write
->>>            ext4_get_inode_loc
->>>              __ext4_get_inode_loc
->>>                sb_getblk --> return -ENOMEM
->>>     ...
->>>     if (!error)  ->will not update i_size
->>>       i_size_write(inode, attr->ia_size);
->>> Now:
->>> inode.i_size=4096
->>> EXT4_I(inode)->i_disksize=8192
->>>
->>> step 2: Direct write 4096 bytes
->>> ext4_file_write_iter
->>>   ext4_dio_write_iter
->>>     iomap_dio_rw ->return error
->>>   if (extend)
->>>     ext4_handle_inode_extension
->>>       WARN_ON_ONCE(i_size_read(inode) < EXT4_I(inode)->i_disksize);
->>> ->Then trigger warning.
->>>
->>> To solve above issue, if mark inode dirty failed in ext4_setattr just
->>> set 'EXT4_I(inode)->i_disksize' with old value.
->>>
->>> Signed-off-by: Ye Bin <yebin10@huawei.com>
->>> ---
->>>   fs/ext4/inode.c | 4 ++++
->>>   1 file changed, 4 insertions(+)
->>>
->>> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
->>> index 90fd6f7b6209..8adf1f802f6c 100644
->>> --- a/fs/ext4/inode.c
->>> +++ b/fs/ext4/inode.c
->>> @@ -5384,6 +5384,7 @@ int ext4_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
->>>   	if (attr->ia_valid & ATTR_SIZE) {
->>>   		handle_t *handle;
->>>   		loff_t oldsize = inode->i_size;
->>> +		loff_t old_disksize;
->>>   		int shrink = (attr->ia_size < inode->i_size);
->>>     		if (!(ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS)))
->>> {
->>> @@ -5455,6 +5456,7 @@ int ext4_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
->>>   					inode->i_sb->s_blocksize_bits);
->>>     			down_write(&EXT4_I(inode)->i_data_sem);
->>> +			old_disksize = EXT4_I(inode)->i_disksize;
->>>   			EXT4_I(inode)->i_disksize = attr->ia_size;
->>>   			rc = ext4_mark_inode_dirty(handle, inode);
->>>   			if (!error)
->>> @@ -5466,6 +5468,8 @@ int ext4_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
->>>   			 */
->>>   			if (!error)
->>>   				i_size_write(inode, attr->ia_size);
->>> +			else
->>> +				EXT4_I(inode)->i_disksize = old_disksize;
->> Shouldn't this always be done if ext4_mark_inode_dirty fails?
->>
->> if (rc)
->>      EXT4_I(inode)->i_disksize = old_disksize;
->>
->> Otherwise you hit the same issue if (!error && rc), no?
->
-> In fact, '(!error && rc)' condition is always unsatisfied.
->
-> ext4_setattr
-> ...
-> down_write(&EXT4_I(inode)->i_data_sem);
-> EXT4_I(inode)->i_disksize = attr->ia_size;
-> rc = ext4_mark_inode_dirty(handle, inode);
-> *if (!error) **
-> **        error = rc;*
+This patch provides some limits for the number of user and messages in
+ipmi.
 
-Oh right. sorry for the noise.
+In addition, this patch also provides a method to view the current number
+of users and messages in ipmi, Used to diagnose and troubleshoot issues.
+and introduce a simple interface to clear the message queue.
 
--- 
-Gabriel Krisman Bertazi
+Changelog v2:
+- Add a limit on the number of users
+- Add a less rigid limit on the number of oustanding messages
+- The interface for viewing the number of users and messages is retained
+- The interface for cleanup messages is retained
+
+Chen Guanqiao (4):
+  ipmi: msghandler: Add a limit for the number of users
+  ipmi: msghandler: Add a limit for the number of messages
+  ipmi: msghandler: Get the number of users and messages through sysfs
+  ipmi: msghandler: Add a interface to clean message queue in sysfs
+
+ drivers/char/ipmi/ipmi_msghandler.c | 207 ++++++++++++++++++++++++++++
+ 1 file changed, 207 insertions(+)
+
+--
+2.25.1
+

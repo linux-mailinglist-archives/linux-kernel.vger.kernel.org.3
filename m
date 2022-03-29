@@ -2,128 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E134EAFC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E264EAFCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 17:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238222AbiC2PEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 11:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
+        id S238233AbiC2PJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 11:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238217AbiC2PEm (ORCPT
+        with ESMTP id S238217AbiC2PJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:04:42 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B3518C0DC
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:02:59 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id r7so10497487wmq.2
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 08:02:59 -0700 (PDT)
+        Tue, 29 Mar 2022 11:09:12 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33031D97E1;
+        Tue, 29 Mar 2022 08:07:28 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id d7so9920848vkd.11;
+        Tue, 29 Mar 2022 08:07:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=moLFBme3l1MFSRqv3HwjWFIls+K2bshAzpdyHy0MNyk=;
-        b=NjZgkuVQxWE5kDMvScRuxs+9TFNgXSyY+QQCXH6ML3o//up532bifrBrmytwgWxciz
-         aLk0JzAznjSCGyAgCoDPBtfKxaxGFqv4E7AGvY0xm25dtMcMiuKVnHiKuklpYR4RkDMs
-         wra+3Glwhas7Hs5uHVUqz3lkYqmv+Gc1IiorsAcvH4lfl6cz/3MWu6jPL7lyXoqa/8xI
-         ZY8YLtPwbHgcIopLU1rWyNvQ8JhrTCkl0IhSnQ2elJ0qRfIDXq5bSwfESxE/kXGe3+l7
-         baxKRnMq+OFDOTwZfyqorUsTndZ2tUNa4AwBnEXEVEQQqHIO7FAUqyWGEjJtNPX8RbG9
-         Mc/A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6dL8ykdo2TpdicCbVFJ+b9rPqwKy1QzxLEm2fg/qf9s=;
+        b=a5i1Ei9XQv2AtldpcYmJQ1uaqHsitwi3Ic7P9FWjeKGuGXrSLWX6iFokuPRzEEBXcZ
+         NvkrsrjCfxbnLSV94c+wzaLzlb6oncfWm2JEOLISqP5kCdmpNadL0D68H8pq7W1LS9yc
+         uJnnOFkoI9u6iKB39/KnzEazJA9pT61fuhsrEFz6TKWMHBgLEXVycm522YszhVycCYLV
+         XSQXDVL4JeB54gMvfy20vN+oU+R2VZduV1vmGkRlvWnQ2CEwB/+1hB6x8ST++w0B8f/p
+         M1AnT99traHABCsyJqlxQLWxXcnI52IvjbsROUqNTnQXsI5cv0vaak5pqBRzH+UPNi3t
+         YKdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=moLFBme3l1MFSRqv3HwjWFIls+K2bshAzpdyHy0MNyk=;
-        b=A4PE8sKcNzc3hDhRfOMXe/AnqGruNhzFmbh01khDx2nnfJWQ7x9zpsHTi7BQn5CY9L
-         9bfINH5fIy5/m5yUuxpRTgArgs30GYnXPsj1cgATSb9zy28uXfaTwUD2TX5CXAICG8hk
-         /AcoF9QlMNc3JEZdOIHgFtFMTb0J1Vr3teznTjdH7KPQXgJwOOdw9PqvRidrdrekHtx8
-         pDbgnMPA7KXnOIODJZgKibPFh07Jo+uZYTwRPDxNVIBX0J6Fgmds6qLLFWs9KmAYfJud
-         /F5DAlLscbT/uJMQs0ZcDXWvWj4Ung2EFIAgZ/GMrelbXLGwFZDIT1EdvcxVkQIFr14t
-         /XXg==
-X-Gm-Message-State: AOAM530BUbq5C4/9kymJkntTTZAVPIvwZv8dPXrA3pBb60ssDqYdR9gR
-        J721CplAte2agKkbin4HDxY=
-X-Google-Smtp-Source: ABdhPJyLlZsIm4LXUAyjPuGNL42MJl4z/IdaIzJgFCWreFpO5AzXezgcyOPB95pFjd+FJPKcKl/rgQ==
-X-Received: by 2002:a05:600c:1d95:b0:38c:f943:c20c with SMTP id p21-20020a05600c1d9500b0038cf943c20cmr62758wms.19.1648566178086;
-        Tue, 29 Mar 2022 08:02:58 -0700 (PDT)
-Received: from leap.localnet (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
-        by smtp.gmail.com with ESMTPSA id r65-20020a1c4444000000b0038c48dd23b9sm3724849wma.5.2022.03.29.08.02.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 08:02:56 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Philip <benjamin.philip495@gmail.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Samuel =?ISO-8859-1?Q?Sj=F6berg?= <info@samuelsjoberg.se>,
-        Charlie Sands <sandsch@northvilleschools.net>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev, ira.weiny@intel.com
-Subject: Re: [PATCH v2] staging: rts5208: Convert kmap() to kmap_local_page()
-Date:   Tue, 29 Mar 2022 17:02:54 +0200
-Message-ID: <4055501.1IzOArtZ34@leap>
-In-Reply-To: <20220329091827.GY3293@kadam>
-References: <20220329055539.29299-1-fmdefrancesco@gmail.com> <20220329091827.GY3293@kadam>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6dL8ykdo2TpdicCbVFJ+b9rPqwKy1QzxLEm2fg/qf9s=;
+        b=rQzWtsjE/O1XBYLjRP3Wlwx6bUdIL7inVJZwfKJQCtHC+5J++kjCKKC0Ah6EvMV0+Y
+         sOx87Yb8ENqRqO4cW7T0GeiqdlfdimKoYcNqQYW/VUBsCrlTtm/1gMLV9Fk/mgCcStOc
+         eA7xBk/FMD47rcxvsFih9c0i7jOFpbZrNvV9Xch7Iq0ZAuhkVcDtbN058/1u0WIFdXnp
+         OQjP8oUeC88HlUhDYJhI9dvu02rtHwnbLIPBT4npOh2wwM/Y8f4TmQffQRKV50/5WAKo
+         c90j0v3fWglnUoSdT54F7wO6dBcoPrPbBtUszrOk2twNFbjK8K5LJxcjb5+Dgp0vL/jH
+         4O0w==
+X-Gm-Message-State: AOAM533IcVnhyLanBZx9fqQfaEUnebSY2cjstCKj665OgfPm8vZpyafn
+        Ti9KJiiXag46IGavYhFblc2Zp6VtaQYSLYtDaZY=
+X-Google-Smtp-Source: ABdhPJy1bmeShH0XQoqyWcNVAEnZEepMRmKvZPL9Ixw8YVdO2TSoKkfwtLPxd6qO/mPx5Fxn3/WDrlCb1ejRZK+jw5s=
+X-Received: by 2002:a1f:da47:0:b0:33f:1398:210e with SMTP id
+ r68-20020a1fda47000000b0033f1398210emr17942890vkg.12.1648566446434; Tue, 29
+ Mar 2022 08:07:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220310045358.224350-1-jeremy.linton@arm.com>
+In-Reply-To: <20220310045358.224350-1-jeremy.linton@arm.com>
+From:   Peter Robinson <pbrobinson@gmail.com>
+Date:   Tue, 29 Mar 2022 15:07:15 +0000
+Message-ID: <CALeDE9MU=YrXD04zCamEgY9fYT_cxGBV5Cu0_hetoVb6Mwrp4Q@mail.gmail.com>
+Subject: Re: [PATCH] net: bcmgenet: Use stronger register read/writes to
+ assure ordering
+To:     Jeremy Linton <jeremy.linton@arm.com>, stable@vger.kernel.org
+Cc:     netdev@vger.kernel.org, opendmb@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, kuba@kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On marted? 29 marzo 2022 11:18:27 CEST Dan Carpenter wrote:
-> On Tue, Mar 29, 2022 at 07:55:39AM +0200, Fabio M. De Francesco wrote:
-> > diff --git a/drivers/staging/rts5208/rtsx_transport.c b/drivers/staging/rts5208/rtsx_transport.c
-> > index 805dc18fac0a..56b6cc845619 100644
-> > --- a/drivers/staging/rts5208/rtsx_transport.c
-> > +++ b/drivers/staging/rts5208/rtsx_transport.c
-> > @@ -92,13 +92,11 @@ unsigned int rtsx_stor_access_xfer_buf(unsigned char *buffer,
-> >  			while (sglen > 0) {
-> >  				unsigned int plen = min(sglen, (unsigned int)
-> >  						PAGE_SIZE - poff);
-> > -				unsigned char *ptr = kmap(page);
-> >  
-> >  				if (dir == TO_XFER_BUF)
-> > -					memcpy(ptr + poff, buffer + cnt, plen);
-> > +					memcpy_to_page(page + poff, 0, buffer + cnt, plen);
-> 
-> You meant:
-> 
-> 	memcpy_to_page(page, poff, buffer + cnt, plen);
-> 
+On Thu, Mar 10, 2022 at 4:54 AM Jeremy Linton <jeremy.linton@arm.com> wrote:
+>
+> GCC12 appears to be much smarter about its dependency tracking and is
+> aware that the relaxed variants are just normal loads and stores and
+> this is causing problems like:
+>
+> [  210.074549] ------------[ cut here ]------------
+> [  210.079223] NETDEV WATCHDOG: enabcm6e4ei0 (bcmgenet): transmit queue 1 timed out
+> [  210.086717] WARNING: CPU: 1 PID: 0 at net/sched/sch_generic.c:529 dev_watchdog+0x234/0x240
+> [  210.095044] Modules linked in: genet(E) nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat]
+> [  210.146561] ACPI CPPC: PCC check channel failed for ss: 0. ret=-110
+> [  210.146927] CPU: 1 PID: 0 Comm: swapper/1 Tainted: G            E     5.17.0-rc7G12+ #58
+> [  210.153226] CPPC Cpufreq:cppc_scale_freq_workfn: failed to read perf counters
+> [  210.161349] Hardware name: Raspberry Pi Foundation Raspberry Pi 4 Model B/Raspberry Pi 4 Model B, BIOS EDK2-DEV 02/08/2022
+> [  210.161353] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [  210.161358] pc : dev_watchdog+0x234/0x240
+> [  210.161364] lr : dev_watchdog+0x234/0x240
+> [  210.161368] sp : ffff8000080a3a40
+> [  210.161370] x29: ffff8000080a3a40 x28: ffffcd425af87000 x27: ffff8000080a3b20
+> [  210.205150] x26: ffffcd425aa00000 x25: 0000000000000001 x24: ffffcd425af8ec08
+> [  210.212321] x23: 0000000000000100 x22: ffffcd425af87000 x21: ffff55b142688000
+> [  210.219491] x20: 0000000000000001 x19: ffff55b1426884c8 x18: ffffffffffffffff
+> [  210.226661] x17: 64656d6974203120 x16: 0000000000000001 x15: 6d736e617274203a
+> [  210.233831] x14: 2974656e65676d63 x13: ffffcd4259c300d8 x12: ffffcd425b07d5f0
+> [  210.241001] x11: 00000000ffffffff x10: ffffcd425b07d5f0 x9 : ffffcd4258bdad9c
+> [  210.248171] x8 : 00000000ffffdfff x7 : 000000000000003f x6 : 0000000000000000
+> [  210.255341] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000001000
+> [  210.262511] x2 : 0000000000001000 x1 : 0000000000000005 x0 : 0000000000000044
+> [  210.269682] Call trace:
+> [  210.272133]  dev_watchdog+0x234/0x240
+> [  210.275811]  call_timer_fn+0x3c/0x15c
+> [  210.279489]  __run_timers.part.0+0x288/0x310
+> [  210.283777]  run_timer_softirq+0x48/0x80
+> [  210.287716]  __do_softirq+0x128/0x360
+> [  210.291392]  __irq_exit_rcu+0x138/0x140
+> [  210.295243]  irq_exit_rcu+0x1c/0x30
+> [  210.298745]  el1_interrupt+0x38/0x54
+> [  210.302334]  el1h_64_irq_handler+0x18/0x24
+> [  210.306445]  el1h_64_irq+0x7c/0x80
+> [  210.309857]  arch_cpu_idle+0x18/0x2c
+> [  210.313445]  default_idle_call+0x4c/0x140
+> [  210.317470]  cpuidle_idle_call+0x14c/0x1a0
+> [  210.321584]  do_idle+0xb0/0x100
+> [  210.324737]  cpu_startup_entry+0x30/0x8c
+> [  210.328675]  secondary_start_kernel+0xe4/0x110
+> [  210.333138]  __secondary_switched+0x94/0x98
+>
+> The assumption when these were relaxed seems to be that device memory
+> would be mapped non reordering, and that other constructs
+> (spinlocks/etc) would provide the barriers to assure that packet data
+> and in memory rings/queues were ordered with respect to device
+> register reads/writes. This itself seems a bit sketchy, but the real
+> problem with GCC12 is that it is moving the actual reads/writes around
+> at will as though they were independent operations when in truth they
+> are not, but the compiler can't know that. When looking at the
+> assembly dumps for many of these routines its possible to see very
+> clean, but not strictly in program order operations occurring as the
+> compiler would be free to do if these weren't actually register
+> reads/write operations.
+>
+> Its possible to suppress the timeout with a liberal bit of dma_mb()'s
+> sprinkled around but the device still seems unable to reliably
+> send/receive data. A better plan is to use the safer readl/writel
+> everywhere.
+>
+> Since this partially reverts an older commit, which notes the use of
+> the relaxed variants for performance reasons. I would suggest that
+> any performance problems with this commit are targeted at relaxing only
+> the performance critical code paths after assuring proper barriers.
+>
+> Fixes: 69d2ea9c79898 ("net: bcmgenet: Use correct I/O accessors")
+> Reported-by: Peter Robinson <pbrobinson@gmail.com>
+> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
 
-Yes, correct. I meant exactly what you wrote.
+This is now in Linus's tree as commit 8d3ea3d402db would be good to
+get it int 5.17.x
 
-It's the first time that I use these API and, after 30 seconds look at their 
-prototypes, I thought that either have the same semantics.
-
-I don't yet know if I'm wrong. However, even if either were correct, yours 
-would be more consistent and elegant. Therefore, I am going to change these
-calls and submit a v3.
-
-Thanks for your review,
-
-Fabio M. De Francesco
-
-> >  				else
-> > -					memcpy(buffer + cnt, ptr + poff, plen);
-> > -				kunmap(page);
-> > +					memcpy_from_page(buffer + cnt, page + poff, 0, plen);
-> 
-> Same.
-> 
-> regards,
-> dan carpenter
-> 
-> 
-
-
-
-
+> ---
+>  drivers/net/ethernet/broadcom/genet/bcmgenet.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> index 87f1056e29ff..e907a2df299c 100644
+> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> @@ -76,7 +76,7 @@ static inline void bcmgenet_writel(u32 value, void __iomem *offset)
+>         if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
+>                 __raw_writel(value, offset);
+>         else
+> -               writel_relaxed(value, offset);
+> +               writel(value, offset);
+>  }
+>
+>  static inline u32 bcmgenet_readl(void __iomem *offset)
+> @@ -84,7 +84,7 @@ static inline u32 bcmgenet_readl(void __iomem *offset)
+>         if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
+>                 return __raw_readl(offset);
+>         else
+> -               return readl_relaxed(offset);
+> +               return readl(offset);
+>  }
+>
+>  static inline void dmadesc_set_length_status(struct bcmgenet_priv *priv,
+> --
+> 2.35.1
+>

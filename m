@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A41A4EAD44
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077384EAD45
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 14:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236422AbiC2Mmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 08:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
+        id S236434AbiC2Mmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 08:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236381AbiC2MmU (ORCPT
+        with ESMTP id S236388AbiC2MmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 08:42:20 -0400
+        Tue, 29 Mar 2022 08:42:24 -0400
 Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432CF20289C
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:40:34 -0700 (PDT)
-Received: by mail-ed1-x549.google.com with SMTP id u13-20020a50a40d000000b00419028f7f96so10939301edb.21
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:40:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916AB204C9F
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:40:37 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id b71-20020a509f4d000000b00418d658e9d1so10842329edf.19
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 05:40:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=8AKHIAUMGhsnollvhsjHBd8Sk5jMCuogkkUw2fq2mio=;
-        b=XcHMPrIunHEB7bnidvOWVqGkL2poJnCfl3iM5yKiBsKR6gSu8Wixo56EriIryx1DRp
-         ygH60Tu95F9/meUZw/hUVe5ooSEvV4DUyL+AnjgINrfQqz23fqsQ/Urcza7iRtW9piEV
-         THlnQvDWO68UWi/+f1lgxFSyUR51bTc8P/jVxtWV8kXPBWeM+/Vw42NYvsdPHbIvLwKl
-         BtRHlbH4A6DhSIcH+duqkqgGkt1gIGp9zkGZLXy9w5ZW5bKRdMPnBS9mX2KVQ6Pv+KK4
-         P1gagNsItDlHvWIoB7ysOglwXcmuxg7hOzImH2QfoKH5JQ//E60JCop3/Ya58UM8UMrt
-         o7bg==
+        bh=hetjka8F+4smAU2DbrfLtuY9Keg4VAYWsS2h7SzTHpM=;
+        b=cHcpM//qa8SvJJrjPOG9wtT4Hj5D6kD8ib68SB0Mqb0q0PO5BtYL9X9Qere7Y8XjxC
+         bOM2jC9VPziu2bY4mbcytTILLbSgpj6V9GVCh6WxioXetMKQTjrwkM8t/un72VJ5Mtgo
+         iN8edkLwGflJ0otqfb1a7ajaVSPA/j+RPaBGepgVwwsEbS3i0p4LMpfh/BW0+mkCnvMU
+         Dy9dZon78osDnNaQChTznTJymR927G4ea5V6szrz6kTy1ZvwLWbYPa/cpH3vDDIjeqkx
+         FCLP31BQXYYVkPw5/Wg74buUelJiPy1QB+ObNDqL4zRzTdeyCzo8GYIkh1l7+0BmBJHW
+         d2Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=8AKHIAUMGhsnollvhsjHBd8Sk5jMCuogkkUw2fq2mio=;
-        b=bAC4x1R1Qp0F830lGnPL4+lPcK964lLDsCy9PMBYnVMUk76UiycJGYFIZGLmqpfIlu
-         Ygabd2QdlnTnSvhbnaCGaK9+QjK5AWxTUrspjxgilxoTj+lSwWT60qzVIhtP/jln52a/
-         rc8Zw7dMs4NfzL0D/JEs94NLgXzuKpeWvvZx5pBVb6WCudXLcsaxEEvkRrtziG6RW5tO
-         ONlyL3+qlYXZ6hhO/a/VclxWKkZ2ZqJHF1Ae3shAMypd6bS7iOxwES7Cer3WRpgHMpyZ
-         PCDCop8pdpLjmb3A2TxHPu1DH2DWm2PhW4WHE+Maqses6/oOj7DlwMyB5Serbwj3tFWO
-         W4/Q==
-X-Gm-Message-State: AOAM531xFArYAKVw7A4KdlLLj1ABPPiBzoJzm5pBoVN6UZe5HKqxZxaC
-        WmntLrlj6XkGfezeL9j/SUOo7X+3hF0=
-X-Google-Smtp-Source: ABdhPJwvUW8uBcv5kN+9WJ7X27ALOaTkbkLM5E0yAmcoJPh2fi12GxrbHP+7afPcQ2MGB4Oun8BxCd/6FeU=
+        bh=hetjka8F+4smAU2DbrfLtuY9Keg4VAYWsS2h7SzTHpM=;
+        b=J4WzGm2HO1Z7sKMY89GJAws58lKdcUX3DaSfVJBtZbj0P7LqvS7ZGqRAnEy5tUfxyD
+         +LM1z9MJib/m9JPkX6L2dJuq3vapBb8uyvEIC4m7mRNNcZ2OUa1YBCQ1qLPFtbr74/8R
+         FWoWrtH+KRcKm5O09oY0xPscYy+oY1VwJMs1QxP48IabD8eOkyMyaZfICIe8JmjfS6WL
+         Lhue5rO3LelUA4li4V0J2IUOJWpimuHJMmElob7AxDuyJUQETJlcp2hdJMo+JscfaFFW
+         G2VTfyPs/EUNTXmT9wf54a6KWo0m9qUoy0Uz1J7LHtFMKNYDrFVijX/EU872q1/QJJy2
+         RyUw==
+X-Gm-Message-State: AOAM530XlJbi/3tBQMIB+lJrM8PKWhnNMsVgE+wXC0btaf+M5bhxtPhp
+        4vcptq88O99klUDkFLHfjTYa2R1zM94=
+X-Google-Smtp-Source: ABdhPJyG5Cqqhqcj/H0YOQo5c9+FB/qfdcBot+5TAfkkvUFt0c3NMnQ9bJxFD4PL2W5gYj33TH1h8vNqlJU=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:36eb:759:798f:98c3])
- (user=glider job=sendgmr) by 2002:a17:906:5d03:b0:6df:a042:d6d5 with SMTP id
- g3-20020a1709065d0300b006dfa042d6d5mr33258222ejt.678.1648557633185; Tue, 29
- Mar 2022 05:40:33 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 14:39:31 +0200
+ (user=glider job=sendgmr) by 2002:aa7:c3d6:0:b0:419:2370:4856 with SMTP id
+ l22-20020aa7c3d6000000b0041923704856mr4374152edr.180.1648557635703; Tue, 29
+ Mar 2022 05:40:35 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 14:39:32 +0200
 In-Reply-To: <20220329124017.737571-1-glider@google.com>
-Message-Id: <20220329124017.737571-3-glider@google.com>
+Message-Id: <20220329124017.737571-4-glider@google.com>
 Mime-Version: 1.0
 References: <20220329124017.737571-1-glider@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v2 02/48] stackdepot: reserve 5 extra bits in depot_stack_handle_t
+Subject: [PATCH v2 03/48] kasan: common: adapt to the new prototype of __stack_depot_save()
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -88,154 +88,36 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some users (currently only KMSAN) may want to use spare bits in
-depot_stack_handle_t. Let them do so by adding @extra_bits to
-__stack_depot_save() to store arbitrary flags, and providing
-stack_depot_get_extra_bits() to retrieve those flags.
+Pass extra_bits=0, as KASAN does not intend to store additional
+information in the stack handle. No functional change.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/I0587f6c777667864768daf07821d594bce6d8ff9
+Link: https://linux-review.googlesource.com/id/I932d8f4f11a41b7483e0d57078744cc94697607a
 ---
- include/linux/stackdepot.h |  8 ++++++++
- lib/stackdepot.c           | 29 ++++++++++++++++++++++++-----
- 2 files changed, 32 insertions(+), 5 deletions(-)
+ mm/kasan/common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
-index 17f992fe6355b..fd641d266bead 100644
---- a/include/linux/stackdepot.h
-+++ b/include/linux/stackdepot.h
-@@ -14,9 +14,15 @@
- #include <linux/gfp.h>
+diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+index 92196562687b6..1182388ed3e0e 100644
+--- a/mm/kasan/common.c
++++ b/mm/kasan/common.c
+@@ -36,7 +36,7 @@ depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc)
+ 	unsigned int nr_entries;
  
- typedef u32 depot_stack_handle_t;
-+/*
-+ * Number of bits in the handle that stack depot doesn't use. Users may store
-+ * information in them.
-+ */
-+#define STACK_DEPOT_EXTRA_BITS 5
- 
- depot_stack_handle_t __stack_depot_save(unsigned long *entries,
- 					unsigned int nr_entries,
-+					unsigned int extra_bits,
- 					gfp_t gfp_flags, bool can_alloc);
- 
- /*
-@@ -41,6 +47,8 @@ depot_stack_handle_t stack_depot_save(unsigned long *entries,
- unsigned int stack_depot_fetch(depot_stack_handle_t handle,
- 			       unsigned long **entries);
- 
-+unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle);
-+
- int stack_depot_snprint(depot_stack_handle_t handle, char *buf, size_t size,
- 		       int spaces);
- 
-diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-index bf5ba9af05009..6dc11a3b7b88e 100644
---- a/lib/stackdepot.c
-+++ b/lib/stackdepot.c
-@@ -42,7 +42,8 @@
- #define STACK_ALLOC_OFFSET_BITS (STACK_ALLOC_ORDER + PAGE_SHIFT - \
- 					STACK_ALLOC_ALIGN)
- #define STACK_ALLOC_INDEX_BITS (DEPOT_STACK_BITS - \
--		STACK_ALLOC_NULL_PROTECTION_BITS - STACK_ALLOC_OFFSET_BITS)
-+		STACK_ALLOC_NULL_PROTECTION_BITS - \
-+		STACK_ALLOC_OFFSET_BITS - STACK_DEPOT_EXTRA_BITS)
- #define STACK_ALLOC_SLABS_CAP 8192
- #define STACK_ALLOC_MAX_SLABS \
- 	(((1LL << (STACK_ALLOC_INDEX_BITS)) < STACK_ALLOC_SLABS_CAP) ? \
-@@ -55,6 +56,7 @@ union handle_parts {
- 		u32 slabindex : STACK_ALLOC_INDEX_BITS;
- 		u32 offset : STACK_ALLOC_OFFSET_BITS;
- 		u32 valid : STACK_ALLOC_NULL_PROTECTION_BITS;
-+		u32 extra : STACK_DEPOT_EXTRA_BITS;
- 	};
- };
- 
-@@ -73,6 +75,14 @@ static int next_slab_inited;
- static size_t depot_offset;
- static DEFINE_RAW_SPINLOCK(depot_lock);
- 
-+unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle)
-+{
-+	union handle_parts parts = { .handle = handle };
-+
-+	return parts.extra;
-+}
-+EXPORT_SYMBOL(stack_depot_get_extra_bits);
-+
- static bool init_stack_slab(void **prealloc)
- {
- 	if (!*prealloc)
-@@ -136,6 +146,7 @@ depot_alloc_stack(unsigned long *entries, int size, u32 hash, void **prealloc)
- 	stack->handle.slabindex = depot_index;
- 	stack->handle.offset = depot_offset >> STACK_ALLOC_ALIGN;
- 	stack->handle.valid = 1;
-+	stack->handle.extra = 0;
- 	memcpy(stack->entries, entries, flex_array_size(stack, entries, size));
- 	depot_offset += required_size;
- 
-@@ -320,6 +331,7 @@ EXPORT_SYMBOL_GPL(stack_depot_fetch);
-  *
-  * @entries:		Pointer to storage array
-  * @nr_entries:		Size of the storage array
-+ * @extra_bits:		Flags to store in unused bits of depot_stack_handle_t
-  * @alloc_flags:	Allocation gfp flags
-  * @can_alloc:		Allocate stack slabs (increased chance of failure if false)
-  *
-@@ -331,6 +343,10 @@ EXPORT_SYMBOL_GPL(stack_depot_fetch);
-  * If the stack trace in @entries is from an interrupt, only the portion up to
-  * interrupt entry is saved.
-  *
-+ * Additional opaque flags can be passed in @extra_bits, stored in the unused
-+ * bits of the stack handle, and retrieved using stack_depot_get_extra_bits()
-+ * without calling stack_depot_fetch().
-+ *
-  * Context: Any context, but setting @can_alloc to %false is required if
-  *          alloc_pages() cannot be used from the current context. Currently
-  *          this is the case from contexts where neither %GFP_ATOMIC nor
-@@ -340,10 +356,11 @@ EXPORT_SYMBOL_GPL(stack_depot_fetch);
-  */
- depot_stack_handle_t __stack_depot_save(unsigned long *entries,
- 					unsigned int nr_entries,
-+					unsigned int extra_bits,
- 					gfp_t alloc_flags, bool can_alloc)
- {
- 	struct stack_record *found = NULL, **bucket;
--	depot_stack_handle_t retval = 0;
-+	union handle_parts retval = { .handle = 0 };
- 	struct page *page = NULL;
- 	void *prealloc = NULL;
- 	unsigned long flags;
-@@ -427,9 +444,11 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
- 		free_pages((unsigned long)prealloc, STACK_ALLOC_ORDER);
- 	}
- 	if (found)
--		retval = found->handle.handle;
-+		retval.handle = found->handle.handle;
- fast_exit:
--	return retval;
-+	retval.extra = extra_bits;
-+
-+	return retval.handle;
+ 	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
+-	return __stack_depot_save(entries, nr_entries, flags, can_alloc);
++	return __stack_depot_save(entries, nr_entries, 0, flags, can_alloc);
  }
- EXPORT_SYMBOL_GPL(__stack_depot_save);
  
-@@ -449,6 +468,6 @@ depot_stack_handle_t stack_depot_save(unsigned long *entries,
- 				      unsigned int nr_entries,
- 				      gfp_t alloc_flags)
- {
--	return __stack_depot_save(entries, nr_entries, alloc_flags, true);
-+	return __stack_depot_save(entries, nr_entries, 0, alloc_flags, true);
- }
- EXPORT_SYMBOL_GPL(stack_depot_save);
+ void kasan_set_track(struct kasan_track *track, gfp_t flags)
 -- 
 2.35.1.1021.g381101b075-goog
 

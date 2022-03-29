@@ -2,98 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA614EABEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 13:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9404EABF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 29 Mar 2022 13:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235548AbiC2LJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 07:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
+        id S235575AbiC2LLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 07:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235556AbiC2LJJ (ORCPT
+        with ESMTP id S232456AbiC2LLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 07:09:09 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C617026107;
-        Tue, 29 Mar 2022 04:07:24 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id e203so22089219ybc.12;
-        Tue, 29 Mar 2022 04:07:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DKGDPd33h/ATv4J4XO1IkueCMjSvnZm6IMyLd4ES814=;
-        b=EQgZe02QCAY+nUAJ0SZq3XSr76Pwa0LWYCsFzPtNPEsdyZWX/YZDQXl0sSHB56c4mu
-         UE4kMswtjyAVryNti07QpKbb3R3H2/8+iJpY+zesF1diqwsB1PjtZAlv0X2ogJ/TYtmV
-         ncbzf+VY0n2Ik7V5iA+gGXMdr+0bDOenxA6qm5rOoD4iVPtRHkhDFu3m9/Dokcpl7nay
-         YqMLpaV6SrB5vRy+/K4RGymo7BN084l34Fvx18N3s4UaVkgdEfnReJKHmtSndr+E8+jl
-         /yJqU9LmScIWoOW4/H9bZUKxayurvgnunlQWP2Qwnc1st8SRTHRKwIs2QlejtvFxdopG
-         QqnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DKGDPd33h/ATv4J4XO1IkueCMjSvnZm6IMyLd4ES814=;
-        b=dyNbvAzCZxwi+eBScWLQj68ZNRI5PbwlcEFR/3TobWN51q8halAgrVXg4R6oz/xpmh
-         xWGuZA73/5/LTXlS4xXfpirZneqin8jXuu+la/cNwhRDVTQQpo4/JCsyxRu8RpLpm7xL
-         22RLsuq7kiYPowG6//ywHwwUe92ku1RlvGqvOzGtVerUg6Oy8XIVRpPTdS18I+0GuzbT
-         fB92snnBViPdUM6GpJKAUKZwrb6uCnp52NJerZqeFFFzdah2+0HgQ/92eNcTDuG2rlog
-         wkaFrgz0bPcJQzbVZo0IUM/6ifU/Vs7LhonAckxDsz9Xr4io9nlyleQUa4VicKxmDmWy
-         Aydg==
-X-Gm-Message-State: AOAM533at5PLXlgy18qwzpyVWEioR48UPhiNkPJWLxd+N8OFtjKOjqpu
-        KvQfgKXoXWdILZEvkQM70Y6WZ6TjKzKsMGQ6qbY=
-X-Google-Smtp-Source: ABdhPJxugplLaRknO6i+6leR0kQkRWR95XOSCEZHfh0swZ29OBN2fFErEAmzySovfJhahdvuW1vYDGkOOxk6pQa42R4=
-X-Received: by 2002:a5b:906:0:b0:633:93a1:32c4 with SMTP id
- a6-20020a5b0906000000b0063393a132c4mr26481002ybq.376.1648552043867; Tue, 29
- Mar 2022 04:07:23 -0700 (PDT)
+        Tue, 29 Mar 2022 07:11:11 -0400
+Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD77E35DEB
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 04:09:27 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
+ (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 29 Mar
+ 2022 19:09:20 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Tue, 29 Mar
+ 2022 19:09:19 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Haowen Bai <baihaowen@meizu.com>, <linux-staging@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH V3] staging: r8188eu: Directly return _SUCCESS instead of using local ret variable
+Date:   Tue, 29 Mar 2022 19:09:17 +0800
+Message-ID: <1648552158-24203-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1648551967-23627-1-git-send-email-baihaowen@meizu.com>
+References: <1648551967-23627-1-git-send-email-baihaowen@meizu.com>
 MIME-Version: 1.0
-References: <20220322115148.3870-1-dharamhans87@gmail.com>
-In-Reply-To: <20220322115148.3870-1-dharamhans87@gmail.com>
-From:   Dharmendra Hans <dharamhans87@gmail.com>
-Date:   Tue, 29 Mar 2022 16:37:12 +0530
-Message-ID: <CACUYsyG=RmUkX0b_0_1PmC4B_Oute5DnAf-xxFOr6h95ArPZDg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] FUSE: Implement atomic lookup + open
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-124.meizu.com (172.16.1.124) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 5:22 PM Dharmendra Singh <dharamhans87@gmail.com> wrote:
->
-> In FUSE, as of now, uncached lookups are expensive over the wire.
-> E.g additional latencies and stressing (meta data) servers from
-> thousands of clients. These lookup calls possibly can be avoided
-> in some cases. Incoming two patches addresses this issue.
->
-> First patch handles the case where we open first time a file/dir or create
-> a file (O_CREAT) but do a lookup first on it. After lookup is performed
-> we make another call into libfuse to open the file. Now these two separate
-> calls into libfuse can be combined and performed as a single call into
-> libfuse.
->
-> Second patch handles the case when we are opening an already existing file
-> (positive dentry). Before this open call, we re-validate the inode and
-> this re-validation does a lookup on the file and verify the inode.
-> This separate lookup also can be avoided (for non-dir) and combined
-> with open call into libfuse.
->
-> Here is the link to the libfuse pull request which implements atomic open
-> https://github.com/libfuse/libfuse/pull/644
->
-> I am going to post performance results shortly.
->
->
-> Dharmendra Singh (2):
->   FUSE: Implement atomic lookup + open
->   FUSE: Avoid lookup in d_revalidate()
+As init_mlme_ext_priv function always returns SUCCESS , We can change
+return type from int to void.
 
-A gentle reminder to look into the above patch set.
+fixes coccinelle warning:
+./drivers/staging/r8188eu/core/rtw_mlme_ext.c:357:5-8: Unneeded variable: "res".
+ Return "_SUCCESS" on line 380
+
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+V1->V2: split into two patches.
+V2->V3: change return type from int to void.
+
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c    | 5 +----
+ drivers/staging/r8188eu/include/rtw_mlme_ext.h | 2 +-
+ drivers/staging/r8188eu/os_dep/os_intfs.c      | 8 +-------
+ 3 files changed, 3 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+index 10d5f12..ff48293 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+@@ -352,9 +352,8 @@ static u8 init_channel_set(struct adapter *padapter, u8 ChannelPlan, struct rt_c
+ 	return chanset_size;
+ }
+ 
+-int	init_mlme_ext_priv(struct adapter *padapter)
++void init_mlme_ext_priv(struct adapter *padapter)
+ {
+-	int	res = _SUCCESS;
+ 	struct registry_priv *pregistrypriv = &padapter->registrypriv;
+ 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
+ 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
+@@ -376,8 +375,6 @@ int	init_mlme_ext_priv(struct adapter *padapter)
+ 	pmlmeext->mlmeext_init = true;
+ 
+ 	pmlmeext->active_keep_alive_check = true;
+-
+-	return res;
+ }
+ 
+ void free_mlme_ext_priv(struct mlme_ext_priv *pmlmeext)
+diff --git a/drivers/staging/r8188eu/include/rtw_mlme_ext.h b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+index 0c555ea..827ac6c 100644
+--- a/drivers/staging/r8188eu/include/rtw_mlme_ext.h
++++ b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+@@ -419,7 +419,7 @@ struct mlme_ext_priv {
+ 	u8 active_keep_alive_check;
+ };
+ 
+-int init_mlme_ext_priv(struct adapter *adapter);
++void init_mlme_ext_priv(struct adapter *adapter);
+ int init_hw_mlme_ext(struct adapter *padapter);
+ void free_mlme_ext_priv (struct mlme_ext_priv *pmlmeext);
+ extern void init_mlme_ext_timer(struct adapter *padapter);
+diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
+index 550721e..ca1c4df 100644
+--- a/drivers/staging/r8188eu/os_dep/os_intfs.c
++++ b/drivers/staging/r8188eu/os_dep/os_intfs.c
+@@ -490,10 +490,7 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
+ 	init_wifidirect_info(padapter, P2P_ROLE_DISABLE);
+ 	reset_global_wifidirect_info(padapter);
+ 
+-	if (init_mlme_ext_priv(padapter) == _FAIL) {
+-		dev_err(dvobj_to_dev(padapter->dvobj), "init_mlme_ext_priv failed\n");
+-		goto free_mlme_priv;
+-	}
++	init_mlme_ext_priv(padapter);
+ 
+ 	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL) {
+ 		dev_err(dvobj_to_dev(padapter->dvobj), "_rtw_init_xmit_priv failed\n");
+@@ -534,9 +531,6 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
+ free_mlme_ext:
+ 	free_mlme_ext_priv(&padapter->mlmeextpriv);
+ 
+-free_mlme_priv:
+-	rtw_free_mlme_priv(&padapter->mlmepriv);
+-
+ free_evt_priv:
+ 	rtw_free_evt_priv(&padapter->evtpriv);
+ 
+-- 
+2.7.4
+

@@ -2,337 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB3C4EBAD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30864EBAD4
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243340AbiC3GdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 02:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
+        id S243357AbiC3Gem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 02:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235426AbiC3GdA (ORCPT
+        with ESMTP id S235426AbiC3Ge3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 02:33:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD46656431;
-        Tue, 29 Mar 2022 23:31:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52699616C3;
-        Wed, 30 Mar 2022 06:31:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB0DDC340EC;
-        Wed, 30 Mar 2022 06:31:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648621874;
-        bh=65x8jxunnWlKGQolcMnrPvWIBfk8CfZE3BJfWaU0rFw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=J6IJZ0QXTwdvlRFt6h6sHzVRZBkQhjrBNkqKWyn4hz8syhJPT8zcTIw3rQ2KOraRm
-         0cTzNjP9OB99o6Ei/fY1OzQvNNvaUnl9/8ScUaKWTY2kFaExs87Ze10onHVQr+ZS5s
-         IXpwaWjCl9OLfwd/C/Q0zBzGqbrv6v6tL7cvR7gTm7MqFMCfQ8vt4L9FrDHRwy9BKQ
-         Dr5YhSBzJMisuiq7RGT+LkfJdfmSe7Ml8ri1QVMRMO+JNYouqroN6lzAHDBVAsYICz
-         R8HOLuUov7eutQuOELHmkVJUNSUA2RkKUate8NC+YydwWOpf9pdPhWMlAN11z9nbMb
-         o1QVyeNtG1sMw==
-Date:   Wed, 30 Mar 2022 15:31:10 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Beau Belgrave <beaub@microsoft.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: Re: Comments on new user events ABI
-Message-Id: <20220330153110.10c3f2236b1cd5759f0b5c79@kernel.org>
-In-Reply-To: <20220329215421.GA2997@kbox>
-References: <2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com>
-        <20220329002935.2869-1-beaub@linux.microsoft.com>
-        <1014535694.197402.1648570634323.JavaMail.zimbra@efficios.com>
-        <20220329215421.GA2997@kbox>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Wed, 30 Mar 2022 02:34:29 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B80856747
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:32:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648621964; x=1680157964;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bnpQGFzpq9naOkvNK34rDVJEaDIOw4S3tixJfFa+j8w=;
+  b=ctoHhCaEPr7zOzpZTM/daIke62Q5LDcc7aSiH0HduvrZtUyAjujDrXsn
+   O1EsrUfnlxctO2bH7esRLJmmG7O8QNcqfbrpSWfxjfULmAFXsNQIPDbky
+   p9eXGwijSzQINuxjNyJj9mnrzLvriuzy1aVtUHo/gSYRLscFrjye76yhR
+   KoNRhfRydBn+RMn2ZfauVEtcLVcr+Qs1CW3hE9K/4U8XK1ghjgv+8lo6m
+   AHCnCdaTUMUUK73+UCKzEJPUGEt8Q5dl/n2CJP5qY2JHgO3mTLUnOUwJO
+   y0GEv9P0aj7EExkU45nMM8Cep8f+rYeE/bscR2WMf0+lVFdklRfvdumUx
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="259643826"
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="259643826"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 23:32:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="605275046"
+Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 29 Mar 2022 23:32:42 -0700
+Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nZRsn-00013d-S8; Wed, 30 Mar 2022 06:32:41 +0000
+Date:   Wed, 30 Mar 2022 14:32:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Charan Teja Reddy <charante@codeaurora.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Suren Baghdasaryan <surenb@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 5835/5872] mm/compaction.c:766:15: error: redefinition of
+ 'isolate_and_split_free_page'
+Message-ID: <202203301416.uykWxBeR-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Mar 2022 14:54:21 -0700
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
+head:   07055bfd3d810d41a38354693dfaa55a6f8c0025
+commit: 8cd9aa93b7269460e8d5e4407738f21fe5d6e720 [5835/5872] ANDROID: implement wrapper for reverse migration
+config: arm64-randconfig-r036-20220327 (https://download.01.org/0day-ci/archive/20220330/202203301416.uykWxBeR-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/8cd9aa93b7269460e8d5e4407738f21fe5d6e720
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
+        git checkout 8cd9aa93b7269460e8d5e4407738f21fe5d6e720
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-> On Tue, Mar 29, 2022 at 12:17:14PM -0400, Mathieu Desnoyers wrote:
-> > ----- On Mar 28, 2022, at 8:29 PM, Beau Belgrave beaub@linux.microsoft.com wrote:
-> > 
-> > >> ----- On Mar 28, 2022, at 4:24 PM, Mathieu Desnoyers
-> > >> mathieu.desnoyers@efficios.com wrote:
-> 
-> [..]
-> 
-> > >> I also don't get what user-space is expected to do differently if FTRACE vs
-> > >> PERF is enabled, considering that it gates a writev() to a file descriptor
-> > >> associated with /sys/kernel/debug/tracing/user_events_data.
-> > >> 
-> > > 
-> > > The intention wasn't for user-space to check the byte other than non-zero.
-> > > User processes could do that, but it's more so administration tools can see
-> > > where the events are registered if they cannot be closed and the state of the
-> > > machine.
-> > 
-> > Administration tools could simply use a seqfile interface and parse text. I
-> > don't expect those to be performance-sensitive at all. So we should not design
-> > the overhead-sensitive mmap'd ABI (enable flags) for administration tools.
-> > 
-> > > Maybe you have a slicker way to do this, but it seems to check a bit in the
-> > > page would involve at least a byte read followed by a mask or shift?
-> > 
-> > I suspect the minimum cost in terms of instruction would be to have the mask
-> > prepared in advance (when the event is registered), and therefore the instructions
-> > required on the user-space fast-path would be a load followed by a mask (&).
-> > 
-> > > That seems more expensive than checking a byte?
-> > 
-> > It is one single extra ALU instruction on the fast-path, indeed. But we have to
-> > be careful about optimizing too much for a non-representative microbenchmark
-> > and missing the big picture, which includes L1/L2 cache lines and TLB load overhead
-> > when tracing a real-life workloads.
-> > 
-> > On modern x86 CPUs, an ALU instruction takes around 0.3ns, which is a few
-> > orders of magnitude faster than a cache miss. Using bit-wise rather than
-> > byte-wise indexing increases functional density of those enable flags by a
-> > factor 8, which lessens the amount of cpu cache required by that same factor.
-> > 
-> > So as soon as the workload running on the system fills the CPU L1 or L2 caches,
-> > when the number of user events registered scales up, and when the checks for
-> > events enabled are done frequently enough, evicting fewer cache lines becomes
-> > more important than the extra instruction required to apply the mask on the
-> > fast-path.
-> > 
-> 
-> Ok, makes sense. This will give us more events as well, something I hear
-> some complaints about.
-> 
-> > > 
-> > >> I would have rather thought that tracers implemented in user-space could
-> > >> register
-> > >> themselves, and then there could be one
-> > >> /sys/kernel/debug/tracing/user_events_status
-> > >> per tracer. Considering that all kernel tracers use the same ABI to write an
-> > >> event,
-> > >> and then dispatch this event internally within the kernel to each registered
-> > >> tracer, I would expect to have a single memory mapping for all those (e.g. a
-> > >> /sys/kernel/debug/tracing/user_events_status/kernel_tracers file).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I'm not sure you understand the meaning of per-event flag, but as far as I know
-the reason of those per-event flags may be same reason of SDT semaphore. The event
-which is NOT traced from kernel(via perf or via ftrace) needs to be skipped because
-preparing the user-event arguments (e.g. getting a variable "name" in user-space
-language runtime) may take a long time.
+All errors (new ones prefixed by >>):
 
-> > >> Then eventually if we have other user-space tracers such as lttng-ust with its
-> > >> their own user-space code performing tracing in a shared memory ring buffer, it
-> > >> would make sense to allow it to register its own
-> > >> /sys/kernel/debug/tracing/user_events_status/lttng_ust file, with its own
-> > >> indexes.
-> > >> 
-> > > 
-> > > I don't follow that. The intention is to get user processes to participate with
-> > > trace_events and the built-in tooling. When would a user-space tracer be used
-> > > instead of perf/ftrace?
-> > > 
-> > > It seems like a feature request?
-> > 
-> > It can very well be out of scope for the user events, and I'm fine with that.
-> > I was merely considering how the user events could be leveraged by tracers
-> > implemented purely in user-space. But if the stated goal of this feature is
-> > really to call into kernel tracers through a writev(), then I suspect that
-> > supporting purely user-space tracers is indeed out of scope.
-> > 
-> 
-> That was the goal with this ABI, are there maybe ways we can change the
-> ABI to accomodate this later without shutting that out?
-
-Beau, would you have any plan to make a tracer-tool application?
-I thought this ABI is for adding "logger" like interface for perf/ftrace (or BPF,
-that will be a long way).
-
-> 
-> > > 
-> > >> If this facility is ever used by lttng-ust to enable user-space tracing, I would
-> > >> not
-> > >> want to take the overhead of calling writev for the sake of kernel tracers if
-> > >> those are disabled.
-
-I think this is totally different design with the lttng-ust, which collects event data
-in user-space and kernel-space separately. Users will use them properly according
-to the situation and purpose.
-
-> > > If they were disabled the byte wouldn't be set, right? So no writev overhead.
-> > > 
-> > > Seems I'm missing something.
-> > 
-> > I was wondering whether we could leverage the user events bit-enable ABI for
-> > tracers which are not implemented within the Linux kernel (e.g. LTTng-UST).
-> > But I suspect it might be better for me to re-implement this in user-space
-> > over shared memory.
-> > 
-> 
-> Perhaps.
-
-Sorry, I actually doubt it, since it relays on the user space program which
-correctly works and write the event correct way (this is why I had asked you
-to verify the event format at writev). Or perhaps we can verify it when merging
-the shared pages...
-
-> > > 
-> > >> So perhaps in the short-term there is no need to implement the user-space tracer
-> > >> registration ABI, but I would have expected a simple bitmap for
-> > >> /sys/kernel/debug/tracing/user_events_data/kernel_tracers rather than the
-> > >> bytewise index, because as far as the kernel tracers are concerned, providing
-> > >> the bit to tell userspace instrumentation exactly which tracers are internally
-> > >> enabled within the kernel does not appear to be of any use other than increasing
-> > >> the footprint on the actively used cpu cache lines.
-
-I agreed with this.
-
-> > >> * user_events_data page faults
-> > >> 
-> > >> If my understanding is correct, when the user-space program's memory containing
-> > >> the payload passed to writev() to a user_events_data file descriptor is kicked
-> > >> out from the page cache between fault_in_iov_iter_readable and its use by the
-> > >> tracers due to high memory pressure, the writev() will fail with -EFAULT and
-> > >> the data will be discarded unless user-space somehow handles this error (which
-> > >> is not handled in the samples/user_events/sample.c example program). It is good
-> > >> that the memory is faulted in immediately before calling the tracers, but
-> > >> considering that it is not mlock'd, should we make more effort to ensure the
-> > >> tracers are able to handle page faults ?
-
-I think this should be handled by user-space implementation (retry?).
-
-> > >> Integration of the work done by Michael Jeanson and myself on faultable
-> > >> tracepoint
-> > >> would allow the tracepoint probes to take page faults. Then, further
-> > >> modifications
-> > >> in the kernel tracers would be needed to handle those page faults.
-
-Interesting.
-
-> > > Is this something that can be done later or does it require ABI changes?
-> > > 
-> > > I would love to never miss data due to page faults.
-> > 
-> > This is internal to the user events, tracepoint, and kernel tracers
-> > implementation. I don't expect this to modify the user events ABI.
-> > 
-> > The only thing that might require some thinking ABI-wise is how the ring
-> > buffers are exposed to user-space consumers, because we would want to
-> > allow taking page faults between space reservation and commit.
-> > 
-> > The LTTng ring buffer has been supporting this out of the box for years
-> > now, but this may be trickier for other kernel tracers, for which allowing
-> > preemption between reserve and commit has never been a requirement until
-> > now.
-> > 
-> 
-> I'll let Steven comment on that one.
-> 
-> > > 
-> > >> 
-> > >> * user_reg name_args and write_index vs purely user-space tracers
-> > >> 
-> > >> That part of the user event registration (event layout and ID allocation)
-> > >> appears
-> > >> to be intrinsically tied to the kernel tracers and the expected event layout.
-> > >> This
-> > >> seems fine as long as the only users we consider are the kernel tracers, but it
-> > >> appears to be less relevant for purely user-space tracers. Actually, tying the
-> > >> mmap'd event enable mechanism with the event ID and description makes me wonder
-> > >> whether it might be better to have LTTng-UST implement its own shared-memory
-> > >> based
-> > >> "fast-event-enabling" mechanism rather than use this user-event ABI. The other
-> > >> advantage of doing all of this in user-space would be to allow many instances
-> > >> of this bitmap to exist on a given system, e.g. one per container in a
-> > >> multi-container
-> > >> system, rather than requiring this to be a global kernel-wide singleton, and to
-> > >> use
-> > >> it from a non-privileged user.
-> > >> 
-> > > 
-> > > We have some conversation going about using namespaces/cgroups to isolation
-> > > containers with bitmaps/status pages. The main thing I personally want to be
-> > > able to do is from the root namespace see all the events in the descendents
-> > > easily via perf, eBPF or ftrace.
-> > > 
-> > > Link:
-> > > https://lore.kernel.org/linux-trace-devel/20220316232009.7952988633787ef1003f13b0@kernel.org/
-> > > 
-> > 
-> > I see that a notion close to "tracing namespaces" comes up in this thread. This is something
-> > I brought forward at the last Linux Plumbers Conference aiming to facilitate system call tracing
-> > for a given container (or from a process hierarchy). I suspect the tracing namespace could also
-> > be tied to a set of kernel buffers, and to a user events "domain". I think this concept could
-> > neatly solve many of our container-related isolation issues here. As you say, it should probably
-> > be a hierarchical namespace.
-> > 
-> 
-> Agreed.
-
-Great :-)
-
-> > >> Some comments about the implementation:
-> > [...]
-> > > 
-> > >> 
-> > >>         return user_events_write_core(file, &i);
-> > >> }
-> > >> 
-> > >> include/uapi/linux/user_events.h:
-> > >> 
-> > >> struct user_reg {
-> > >> 
-> > >>         /* Input: Size of the user_reg structure being used */
-> > >>         __u32 size;
-> > >> 
-> > >>         /* Input: Pointer to string with event name, description and flags */
-> > >>         __u64 name_args;
-> > >> 
-> > >>         /* Output: Byte index of the event within the status page */
-> > >>         __u32 status_index;
-> > >> 
-> > >>         /* Output: Index of the event to use when writing data */
-> > >>         __u32 write_index;
-> > >> };
-> > >> 
-> > >> As this structure is expected to grow, and the user-space sample program uses
-> > >> "sizeof()"
-> > >> to figure out its size (which includes padding), I would be more comfortable if
-> > >> this was
-> > >> a packed structure rather than non-packed, because as fields are added, it's
-> > >> tricky to
-> > >> figure out from the kernel perspective whether the size received are fields that
-> > >> user-space
-> > >> is aware of, or if this is just padding.
+>> mm/compaction.c:766:15: error: redefinition of 'isolate_and_split_free_page'
+   unsigned long isolate_and_split_free_page(struct page *page,
+                 ^
+   include/linux/compaction.h:241:22: note: previous definition is here
+   static unsigned long isolate_and_split_free_page(struct page *page,
+                        ^
+   1 error generated.
 
 
-Indeed, any user-space exposed structure should be packed or correctly aligned,
-because those can be built on many architectures.
+vim +/isolate_and_split_free_page +766 mm/compaction.c
 
-
-Thank you,
-
-> > >> 
-> > > 
-> > > I think that would be a good idea, Steven?
-> > 
-> > [leaving this for Steven to answer]
-> > 
->
+   765	
+ > 766	unsigned long isolate_and_split_free_page(struct page *page,
+   767							struct list_head *list)
+   768	{
+   769		unsigned long isolated;
+   770		unsigned int order;
+   771	
+   772		if (!PageBuddy(page))
+   773			return 0;
+   774	
+   775		order = buddy_order(page);
+   776		isolated = __isolate_free_page(page, order);
+   777		if (!isolated)
+   778			return 0;
+   779	
+   780		set_page_private(page, order);
+   781		list_add(&page->lru, list);
+   782	
+   783		split_map_pages(list);
+   784	
+   785		return isolated;
+   786	}
+   787	EXPORT_SYMBOL_GPL(isolate_and_split_free_page);
+   788	
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+0-DAY CI Kernel Test Service
+https://01.org/lkp

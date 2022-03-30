@@ -2,492 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759E44ECF8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 00:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40EDC4ECF92
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 00:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351600AbiC3WUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 18:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
+        id S242506AbiC3WYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 18:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351534AbiC3WU3 (ORCPT
+        with ESMTP id S233653AbiC3WYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 18:20:29 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B9127B33;
-        Wed, 30 Mar 2022 15:18:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648678723; x=1680214723;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=H1KpTa0+fBlmVghgQCEOE2xle7VZSq8pDfmVLiOn1qo=;
-  b=JjbqMzFVYIQEpW5kNJ3YqGaHAEolEvANByBRh4Yk9KnwVy6Im7nplpak
-   RoLDlAuWYYv/mybHT3PSIvuo2XNXU1M9emblS5rDIJpyyxgc7FrvOOOII
-   9rhq0Sn08/99qQdx28BmN/7g1YwrwRvO9iWpWdYfA+HQeHfuw17e8XkL6
-   mcjPqwVhrfSdXzIbr/1pCzqiLLw7ib3EXg1tutJHnI55vjWE/Rzj9o/M9
-   Q9PramKp5ZFQjS5yHnj1vQMVrPSc9T2Br4FaxAbuw3zW62iXtEqRWIcD6
-   S2XxqzE8NQGYrC6AFZEF7szwqpoOfSosEsNwUEqns5dCBr482N10af60J
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="346095999"
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="346095999"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 15:18:25 -0700
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="788171913"
-Received: from ksanitha-mobl3.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.209.123.221])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 15:18:24 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: [PATCH v2 6/6] tools/tdx: Add a sample attestation user app
-Date:   Wed, 30 Mar 2022 15:18:05 -0700
-Message-Id: <9247fade9db5ae6eb183b2f92fdedb898282376a.1648664666.git.sathyanarayanan.kuppuswamy@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1648664666.git.sathyanarayanan.kuppuswamy@intel.com>
-References: <cover.1648664666.git.sathyanarayanan.kuppuswamy@intel.com>
+        Wed, 30 Mar 2022 18:24:41 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2122.outbound.protection.outlook.com [40.107.220.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A459D3D1D6;
+        Wed, 30 Mar 2022 15:22:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XusHHFp7ES4zGpxOaZmj1y4f6lqmLQlmiQEa20PQ3cVyY4JiUNTI4C4ZXj0O7NjrFFWhhvdgu+XseVWw8l18ld/y6UYo8ZseYX2JlODEW5G+0M3dpNaXEPY/j5b8QxDnEV0GenPbNksyFVnl1Dc9FaEetBzL8s9lOwx32mscuNQDlfT2wNgn0PJutIBo1xdnQl/d7xIp0gK3NhMJU87eUuXbbGiIWoUJI829Jldz9cVs4rfhY+ySHGomnWzNuKqVSit2W0+Yp0mkNxT0yLVakS1V3+R/fR/pV6i2F+IK2aYsSDkFMg9VZqXhGW0kTpNNesULiD6Vq9x63Km/M6ujHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZUV2gZ1ZLVS9B0Ekm+Cz8C66aQNMQba/onju2UF4b0I=;
+ b=V9jTVHqrv7e3V0g+5c78hbcwsDsGOhp2GaU49LEmHpOyGFjeCCmrbPikR9GQhfN2S+pM9DLHy30aG6AzB3z/QWKG3y2FrgOmaleNJxJ5dL+LYgGP+6bzlcPj0XpdfiM4SCuFM4mj+saAHl7Ql4LLcvEWQu7z9KOYRBf3n6K40ggfAm0O55AX+xSc9kwnFmxhA8UL4RCUV1qzgoJQ0JHgNDe7YrnO+1zfzziUvvuA2kgdGFsvOUUtH1UJ6KMkK8INTBewmRSpvTEx5ThJ8Z1kDv+K3jZEeZz8S7thsPYOAqGe8nh0NgOFIJpWe1PINtRlZyjZV+gj4fAr+mkOCHvKBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hammerspace.com; dmarc=pass action=none
+ header.from=hammerspace.com; dkim=pass header.d=hammerspace.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hammerspace.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZUV2gZ1ZLVS9B0Ekm+Cz8C66aQNMQba/onju2UF4b0I=;
+ b=CzXbm7x4b/m4CL/3u7GMz4GxHH6ja3xvgoSxzpRD71GRbM22tUV1B7SYNYjsKBtVUQNIIWHeNSzqReLG2St4zHlcxNN0bpHW585iLptoMOf355SAJqGqTdfIfUum4rJSUa2coMJYwR88KIGFOllmHxUSnroiP52HtnK/JerAD24=
+Received: from CH0PR13MB5084.namprd13.prod.outlook.com (2603:10b6:610:111::7)
+ by DM6PR13MB2553.namprd13.prod.outlook.com (2603:10b6:5:cb::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.10; Wed, 30 Mar
+ 2022 22:22:52 +0000
+Received: from CH0PR13MB5084.namprd13.prod.outlook.com
+ ([fe80::c0b:4fda:5713:9006]) by CH0PR13MB5084.namprd13.prod.outlook.com
+ ([fe80::c0b:4fda:5713:9006%7]) with mapi id 15.20.5123.021; Wed, 30 Mar 2022
+ 22:22:52 +0000
+From:   Trond Myklebust <trondmy@hammerspace.com>
+To:     "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
+CC:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] Please pull NFS client changes for Linux 5.18
+Thread-Topic: [GIT PULL] Please pull NFS client changes for Linux 5.18
+Thread-Index: AQHYQ6Q4oVl0Qpju8kuE1WA18VVEPazYPZGAgAAdHgCAACdrgA==
+Date:   Wed, 30 Mar 2022 22:22:52 +0000
+Message-ID: <4eed252caf56f16c290f0c54b5d850d4eab5dc1b.camel@hammerspace.com>
+References: <7b0576d8d49bbd358767620218c1966e8fe9a883.camel@hammerspace.com>
+         <CAHk-=wh-hs_q-sL6PNptfVmNm7tWrt24o4-YR74Fxo+fdKsmxA@mail.gmail.com>
+         <c5401981cb21674bdd3ffd9cc4fac9fe48fb8265.camel@hammerspace.com>
+In-Reply-To: <c5401981cb21674bdd3ffd9cc4fac9fe48fb8265.camel@hammerspace.com>
+Accept-Language: en-US, en-GB
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=hammerspace.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b9892ffe-f082-424c-6f41-08da129bd4d8
+x-ms-traffictypediagnostic: DM6PR13MB2553:EE_
+x-microsoft-antispam-prvs: <DM6PR13MB25533CBB9B1862C0D4D60F0FB81F9@DM6PR13MB2553.namprd13.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3sv9rnj0Xv9ICcRhhRrXuVX0YFZSnZlbUnXpKUDV9aa/5vtcb5Bfvs5sIIwmYuGZYnCzy3f/37EbEnESD7xSo8kzU+lxtm3mSEJiW8F5qFMppNxexM6NFQahe+Mv4tsw2hExOD2hwiuAhir4i2HHPcqAmOrBK4vRpMky1lq93Sua8szEmae/czHVyIj6rl1YQsNlwcBY3bwrWMBRd39XxH7/3lHQg3wjCUYyOILKC/53Tum96Xd43ay/uJd6+5+Mx7/1Fbu908GNZKf21epBsvg5sSALGIcunxaks3uiYkBMqKPwZqox7lTKjVpW+FWuSWKMMroQjKsjeC5ueoWYGD9XuNVHKJqsCOkGnqROgFdCZRaz+zMEx/H6+MwFuhnA8JFfS4cLmPwpEJtJZAazbBmMhRd65gYI4Lk8+6sFor28aZPYWgYXW2JnldTlOjXaChl2AEY/ffx81JmczMH6c34lXTBrKNjQjZiPXLZlvOThRM3/FWwn6/G0QAMjEWAXsvy0Vhlaax95V+bf/tR2cRgDm0QgbANaATiSfD4kVTTWkxn4lQ8lTpqBcrjwPEdbLtys2haLmN+ZpUTwWEXijSlfdkKpNn67neTxP8tk9G2d2Q3RLvqnb6pLSy06b2VlwJOlw3915aKN/Qg/krddVdEgxlZSkaflhD+kb/YAXPgmI0rh7qBZRKFwCOZdRaa7dQDA8T84LTqyAmbpYBvtXuusoHjzacdxl5IW8b2McBHfF28rrUho03KMcIRhBHM/
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR13MB5084.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(6506007)(8936002)(6512007)(36756003)(6916009)(54906003)(2616005)(26005)(86362001)(316002)(186003)(53546011)(71200400001)(38070700005)(5660300002)(2906002)(508600001)(8676002)(122000001)(6486002)(38100700002)(4326008)(66556008)(76116006)(66946007)(66476007)(64756008)(66446008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cFNPcmdxUHFseG9TZ2xCMVRCdWRpM2Z4S3F2enY2eVRYRTExR2hoU1ZpVGxr?=
+ =?utf-8?B?aEl5eVRaOHpmeHJkM2s3dHhhS1h1MGdQeld5VUpWZXdQNUN5YkJMNjJ1Mml1?=
+ =?utf-8?B?eFZWemhkdVlvdWZpYjBVOXowZnZQbUIram83aWM4V1ljWnBZei9Nd0o1K0d6?=
+ =?utf-8?B?dEJZbi9ra0MraUxmeTlUNFEwVWhJT1dWbkhxN2FnYXhTM2NYbzFnS0F4OXoy?=
+ =?utf-8?B?bG8xc0lLbllxdkcxN2NJd0FoRzJNLzdnU3VlUUJmZTI1L1RYMlMvN0lFYmpC?=
+ =?utf-8?B?K1NBTXAxc1VnY1pUb05Hb3hKRU1XL0hobERzYXhkUDhVTzZPQmZOZlNkYUlY?=
+ =?utf-8?B?NnBlVWZidzRubU9RVEpIMDRjKzJZUE1LSHFZNHRIWkR3N3Y0Mjl4MVI4WFYr?=
+ =?utf-8?B?aDZpbDhZUlNUREsrd09RNzU3ZjhXTjVkS0MzWWpONjYzN2Zhd2p1YWFqZlJW?=
+ =?utf-8?B?dW04QzhQQVlzaVJieStuelpFRTNwTlplSzcvamhPTGZMOHhzU3NnTkpadTZK?=
+ =?utf-8?B?TXE1Q0xqZkFZWmlIUS9YWTFJaloySHdJRkh6L09jWFNTZHNoQUNWcDY0VnVz?=
+ =?utf-8?B?Ry9CeXhBaDZCUExSNUhlV3RqcTlQYWJWc0hUNGU2MDRLN0xDVUlWK0lZWFFt?=
+ =?utf-8?B?UVMzNmgvUzZzSTB1MkNxQkNERDE0UjE2dlBjU2hGWmJ5bHZRbUlpZnBDTWNq?=
+ =?utf-8?B?cGZnOUFUM2hsU2hJRDJHUUFGamRHT1hwL0s2blNraTE4R2Zxc1B3Y21rWmdI?=
+ =?utf-8?B?Y2JsOFpPOUxuMEdUZWEvY1ppVkF3REVZSDlIdmNBQmZXMHBXc2hsYXhMN1pE?=
+ =?utf-8?B?MlhjeDNtK3BUV0tVWVJQUlp3bzFOZ2F1c2VlTmlwcXZqSlVscEJKWmppQVR5?=
+ =?utf-8?B?enowa1oramtTUS9TR0JHMGVqSUJ1WVh6OTAvZU5KRzQxaExPSzZRRWF5N0pQ?=
+ =?utf-8?B?Z1FjNzEzTXFtMHVJNFpidVVBcXdPa3hUT0ttakNQalNJM2RwSmZXcGVsSW1S?=
+ =?utf-8?B?NTFGK2FJMkJwTTBtZVVJWk44VWhEaUdDYndOUzJvZmZNdkorN2dJYWEvUFZ2?=
+ =?utf-8?B?anFkcHBNVkplaXMvdUVQbzdvUzA3ZFNoeXA4Ylp6QW54dGtueitsSCt1SVA5?=
+ =?utf-8?B?VEY4Z1cxTDF3UXhoR0xvRjRUYW5US3g5SjRFN2V4NnVtQmdUY3Z0a3krbFNs?=
+ =?utf-8?B?RmY5VnlxQ2VGRnJaeGpabk56ZEF6THZIWnJEcWVGNnhCeFZLdWliU0dOTHR3?=
+ =?utf-8?B?UFZITDhXZ1RrSGJHWTI2bmE4Wlk5REV1V0psKzd4UXZrVmF1YVI2a0xqWTYy?=
+ =?utf-8?B?eTgwK1lHazAzbStSQ21nUG94MDd0WUw4ZXlWVTREaEZwZWFNWUZYS0dXTloz?=
+ =?utf-8?B?OUFiTHREMzlWVmFQNEtuOTVjYlRUQm1GM1daVW5JU3dVV0dHVzBKU1VHOGdo?=
+ =?utf-8?B?dk1XU0grSWxta2owRHNFY0Nsa2dhT3d4aUpCaysxUnVzYUF1OTdkcG1ZT2FC?=
+ =?utf-8?B?R2JMc0FENmZZQ284bys5WCs5aC9jbEl0b29vMjFXQ3o1RHlBQk0waEV4UGZr?=
+ =?utf-8?B?cTFobEVuQVpuRXg3TDBxTG00M0Y3Ymc1ZTdMYm1hRWZwdlh3cGlLQWcxMUR5?=
+ =?utf-8?B?QmR2RHVUQ28wdVQ5Rzh5dXNVR0hqK3N1aTdqNmcwN0dPTmsxcWdTQTlLZWtz?=
+ =?utf-8?B?NzlBTXowaVZJWU5yL1dXNG9OTURJQ2tWS21jZUJRVFFqb1JkdjNqcEV2M1Va?=
+ =?utf-8?B?eWxFdzFJelVtUTdkM0QwQ0d3TmtQUDdBaXJsUm11dm4reHc1RVpqQzR3QW9B?=
+ =?utf-8?B?ek5FUTJpejlXOHhLVktCMW5rRmtRQ1NqTTZ2NVF6WWhSS0MyR09tREFNRjJ4?=
+ =?utf-8?B?bmVmRm9BSG80cHcrTjdpeWJPVFEwNVR6N2czbXZJeFNvMUtnUHFWaW5PTFEr?=
+ =?utf-8?B?TUFaamFLMU9vOWtHMTZ6S3JMRzJUNTQ4NTkrRFBzaUxXSHQ1Y3NOdkRlM2F3?=
+ =?utf-8?B?TWRtaFJXZ0dqS2Z4andLZk1lNzR6bEtHOFZrQnRENU8yN050NVlCbGI1Mmpm?=
+ =?utf-8?B?aHlVNVZxdjR0RXNXWVhXTkZjS3QrK0QySkJIdVNwejNiTGZLVGN3R1Evckpi?=
+ =?utf-8?B?TkVlVU5LRlpWV2xxb294bkZRbTE1emFCZE41S1UrWmtINlZEUUJoQjhCdUtW?=
+ =?utf-8?B?dlZ4L3k1NDI5OEhDR0dBNm85eituNEh5U1lGelBKRUZ5YWJ4aGhnalJLVitw?=
+ =?utf-8?B?VzVwcVhGSi9xOFE2S1d3VVR3dFRRalpoV2NLdGpsVk4yTHV5Y28raGtjUm0y?=
+ =?utf-8?B?UkRIYjI2TTFYQnJ6cmJXZmF1aFg1NGl3bEkrNTF5S0NycDlXN2h2Njl5Q25Q?=
+ =?utf-8?Q?NDrY8sru3QdeNeu0=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <977A16527FC77C49B389AD230B870F35@namprd13.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: hammerspace.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR13MB5084.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b9892ffe-f082-424c-6f41-08da129bd4d8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2022 22:22:52.6062
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 0d4fed5c-3a70-46fe-9430-ece41741f59e
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: L0thXlRYcewr1QHmNbD+ibPXuHksOOW3TdmPBJY2QJTyjPzIf4SpBZiawReP98KyXCme21zHjHKV04lIb6XZyg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB2553
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This application uses the misc device /dev/tdx-attest to get TDREPORT
-from the TDX Module or request quote from the VMM.
-
-It tests following attestation features:
-
-  - Get report using TDX_CMD_GET_TDREPORT IOCTL.
-  - Using report data request quote from VMM using TDX_CMD_GEN_QUOTE IOCTL.
-  - Get the quote size using TDX_CMD_GET_QUOTE_SIZE IOCTL.
-
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
----
- tools/Makefile                              |  16 +-
- tools/arch/x86/tdx/Makefile                 |  19 ++
- tools/arch/x86/tdx/attest/.gitignore        |   2 +
- tools/arch/x86/tdx/attest/Makefile          |  24 ++
- tools/arch/x86/tdx/attest/tdx-attest-test.c | 263 ++++++++++++++++++++
- 5 files changed, 321 insertions(+), 3 deletions(-)
- create mode 100644 tools/arch/x86/tdx/Makefile
- create mode 100644 tools/arch/x86/tdx/attest/.gitignore
- create mode 100644 tools/arch/x86/tdx/attest/Makefile
- create mode 100644 tools/arch/x86/tdx/attest/tdx-attest-test.c
-
-diff --git a/tools/Makefile b/tools/Makefile
-index db2f7b8ebed5..87b597754a55 100644
---- a/tools/Makefile
-+++ b/tools/Makefile
-@@ -30,6 +30,7 @@ help:
- 	@echo '  selftests              - various kernel selftests'
- 	@echo '  bootconfig             - boot config tool'
- 	@echo '  spi                    - spi tools'
-+	@echo '  tdx                    - TDX related test tools'
- 	@echo '  tmon                   - thermal monitoring and tuning tool'
- 	@echo '  tracing                - misc tracing tools'
- 	@echo '  turbostat              - Intel CPU idle stats and freq reporting tool'
-@@ -97,11 +98,14 @@ freefall: FORCE
- kvm_stat: FORCE
- 	$(call descend,kvm/$@)
- 
-+tdx: FORCE
-+	$(call descend,arch/x86/$@)
-+
- all: acpi cgroup counter cpupower gpio hv firewire \
- 		perf selftests bootconfig spi turbostat usb \
- 		virtio vm bpf x86_energy_perf_policy \
- 		tmon freefall iio objtool kvm_stat wmi \
--		pci debugging tracing
-+		pci debugging tracing tdx
- 
- acpi_install:
- 	$(call descend,power/$(@:_install=),install)
-@@ -127,13 +131,16 @@ freefall_install:
- kvm_stat_install:
- 	$(call descend,kvm/$(@:_install=),install)
- 
-+tdx_install:
-+	$(call descend,arch/x86/$(@:_install=),install)
-+
- install: acpi_install cgroup_install counter_install cpupower_install gpio_install \
- 		hv_install firewire_install iio_install \
- 		perf_install selftests_install turbostat_install usb_install \
- 		virtio_install vm_install bpf_install x86_energy_perf_policy_install \
- 		tmon_install freefall_install objtool_install kvm_stat_install \
- 		wmi_install pci_install debugging_install intel-speed-select_install \
--		tracing_install
-+		tracing_install tdx_install
- 
- acpi_clean:
- 	$(call descend,power/acpi,clean)
-@@ -172,11 +179,14 @@ freefall_clean:
- build_clean:
- 	$(call descend,build,clean)
- 
-+tdx_clean:
-+	$(call descend,arch/x86/$(@:_clean=),clean)
-+
- clean: acpi_clean cgroup_clean counter_clean cpupower_clean hv_clean firewire_clean \
- 		perf_clean selftests_clean turbostat_clean bootconfig_clean spi_clean usb_clean virtio_clean \
- 		vm_clean bpf_clean iio_clean x86_energy_perf_policy_clean tmon_clean \
- 		freefall_clean build_clean libbpf_clean libsubcmd_clean \
- 		gpio_clean objtool_clean leds_clean wmi_clean pci_clean firmware_clean debugging_clean \
--		intel-speed-select_clean tracing_clean
-+		intel-speed-select_clean tracing_clean tdx_clean
- 
- .PHONY: FORCE
-diff --git a/tools/arch/x86/tdx/Makefile b/tools/arch/x86/tdx/Makefile
-new file mode 100644
-index 000000000000..64217dd21d5c
---- /dev/null
-+++ b/tools/arch/x86/tdx/Makefile
-@@ -0,0 +1,19 @@
-+# SPDX-License-Identifier: GPL-2.0
-+include ../../../scripts/Makefile.include
-+
-+all: attest
-+
-+clean: attest_clean
-+
-+install: attest_install
-+
-+attest:
-+	$(call descend,attest)
-+
-+attest_install:
-+	$(call descend,attest,install)
-+
-+attest_clean:
-+	$(call descend,attest,clean)
-+
-+.PHONY: all install clean attest latency_install latency_clean
-diff --git a/tools/arch/x86/tdx/attest/.gitignore b/tools/arch/x86/tdx/attest/.gitignore
-new file mode 100644
-index 000000000000..5f819a8a6c49
---- /dev/null
-+++ b/tools/arch/x86/tdx/attest/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+tdx-attest-test
-diff --git a/tools/arch/x86/tdx/attest/Makefile b/tools/arch/x86/tdx/attest/Makefile
-new file mode 100644
-index 000000000000..e5ae961c988d
---- /dev/null
-+++ b/tools/arch/x86/tdx/attest/Makefile
-@@ -0,0 +1,24 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Makefile for vm tools
-+#
-+VAR_CFLAGS := $(shell pkg-config --cflags libtracefs 2>/dev/null)
-+VAR_LDLIBS := $(shell pkg-config --libs libtracefs 2>/dev/null)
-+
-+TARGETS = tdx-attest-test
-+CFLAGS = -static -Wall -I../../../../include -Wextra -g -O2 $(VAR_CFLAGS)
-+LDFLAGS = -lpthread $(VAR_LDLIBS)
-+
-+all: $(TARGETS)
-+
-+%: %.c
-+	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
-+
-+clean:
-+	$(RM) tdx-attest-test
-+
-+prefix ?= /usr/local
-+sbindir ?= ${prefix}/sbin
-+
-+install: all
-+	install -d $(DESTDIR)$(sbindir)
-+	install -m 755 -p $(TARGETS) $(DESTDIR)$(sbindir)
-diff --git a/tools/arch/x86/tdx/attest/tdx-attest-test.c b/tools/arch/x86/tdx/attest/tdx-attest-test.c
-new file mode 100644
-index 000000000000..ce7b8e77c772
---- /dev/null
-+++ b/tools/arch/x86/tdx/attest/tdx-attest-test.c
-@@ -0,0 +1,263 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * tdx-attest-test.c - utility to test TDX attestation feature.
-+ *
-+ * Copyright (C) 2021 - 2022 Intel Corporation. All rights reserved.
-+ *
-+ * Author: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-+ *
-+ */
-+
-+#include <linux/types.h>
-+#include <linux/ioctl.h>
-+#include <sys/ioctl.h>
-+#include <sys/stat.h>
-+#include <sys/types.h>
-+#include <stdio.h>
-+#include <ctype.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <limits.h>
-+#include <stdbool.h>
-+#include <getopt.h>
-+#include <stdint.h> /* uintmax_t */
-+#include <sys/mman.h>
-+#include <time.h>
-+
-+#include "../../../../../include/uapi/misc/tdx.h"
-+
-+#define devname		"/dev/tdx-attest"
-+
-+#define HEX_DUMP_SIZE	16
-+#define MAX_ROW_SIZE	70
-+
-+/* length of trans_len */
-+#define REPORT_HEADER_SIZE	4
-+/* version, status, in_len, out_len */
-+#define QUOTE_HEADER_SIZE	24
-+
-+#define ATTESTATION_TEST_BIN_VERSION "0.1"
-+
-+struct tdx_attest_args {
-+	bool is_dump_data;
-+	bool is_get_tdreport;
-+	bool is_get_quote_size;
-+	bool is_gen_quote;
-+	bool debug_mode;
-+	char *out_file;
-+};
-+
-+struct tdx_quote_blob {
-+	uint64_t version;
-+	uint64_t status;
-+	uint32_t in_len;
-+	uint32_t out_len;
-+	int8_t trans_len[4];
-+	uint8_t data;
-+};
-+
-+static void print_hex_dump(const char *title, const char *prefix_str,
-+			   const void *buf, int len)
-+{
-+	const __u8 *ptr = buf;
-+	int i, rowsize = HEX_DUMP_SIZE;
-+
-+	if (!len || !buf)
-+		return;
-+
-+	printf("\t\t%s", title);
-+
-+	for (i = 0; i < len; i++) {
-+		if (!(i % rowsize))
-+			printf("\n%s%.8x:", prefix_str, i);
-+		printf(" %.2x", ptr[i]);
-+	}
-+
-+	printf("\n");
-+}
-+
-+static void gen_report_data(__u8 *report_data, bool dump_data)
-+{
-+	int i;
-+
-+	srand(time(NULL));
-+
-+	for (i = 0; i < TDX_REPORT_DATA_LEN; i++)
-+		report_data[i] = rand();
-+
-+	if (dump_data)
-+		print_hex_dump("\n\t\tTDX report data\n", " ",
-+			       report_data, TDX_REPORT_DATA_LEN);
-+}
-+
-+static int get_tdreport(int devfd, bool dump_data, __u8 *report_data)
-+{
-+	__u8 tdrdata[TDX_TDREPORT_LEN] = {0};
-+	int ret;
-+
-+	if (!report_data)
-+		report_data = tdrdata;
-+
-+	gen_report_data(report_data, dump_data);
-+
-+	ret = ioctl(devfd, TDX_CMD_GET_TDREPORT, report_data);
-+	if (ret) {
-+		printf("TDX_CMD_GET_TDREPORT ioctl() %d failed\n", ret);
-+		return -EIO;
-+	}
-+
-+	if (dump_data)
-+		print_hex_dump("\n\t\tTDX tdreport data\n", " ", report_data,
-+			       TDX_TDREPORT_LEN);
-+
-+	return 0;
-+}
-+
-+static __u64 get_quote_size(int devfd)
-+{
-+	int ret;
-+	__u64 quote_size;
-+
-+	ret = ioctl(devfd, TDX_CMD_GET_QUOTE_SIZE, &quote_size);
-+	if (ret) {
-+		printf("TDX_CMD_GET_QUOTE_SIZE ioctl() %d failed\n", ret);
-+		return -EIO;
-+	}
-+
-+	printf("Quote size: %lld\n", quote_size);
-+
-+	return quote_size;
-+}
-+
-+static int gen_quote(int devfd, bool dump_data)
-+{
-+	__u64 quote_size, quote_new_size;
-+	struct tdx_quote_blob *quote_blob;
-+	struct tdx_gen_quote getquote_arg;
-+	__u8 *quote_data;
-+	int ret;
-+
-+	quote_size = get_quote_size(devfd);
-+
-+	quote_new_size = sizeof(*quote_blob) + sizeof(char) * quote_size;
-+
-+	quote_data = malloc(quote_new_size);
-+	if (!quote_data) {
-+		printf("%s queue data alloc failed\n", devname);
-+		return -ENOMEM;
-+	}
-+
-+	quote_blob = (struct tdx_quote_blob *)quote_data;
-+
-+	ret = get_tdreport(devfd, dump_data, &quote_blob->data);
-+	if (ret) {
-+		printf("TDX_CMD_GET_TDREPORT ioctl() %d failed\n", ret);
-+		goto done;
-+	}
-+
-+	quote_blob->version = 1;
-+	quote_blob->status = 0;
-+	quote_blob->trans_len[0] = (uint8_t)((TDX_TDREPORT_LEN >> 24) & 0xFF);
-+	quote_blob->trans_len[1] = (uint8_t)((TDX_TDREPORT_LEN >> 16) & 0xFF);
-+	quote_blob->trans_len[2] = (uint8_t)((TDX_TDREPORT_LEN >> 8) & 0xFF);
-+	quote_blob->trans_len[3] = (uint8_t)((TDX_TDREPORT_LEN) & 0xFF);
-+	quote_blob->in_len = REPORT_HEADER_SIZE + TDX_TDREPORT_LEN;
-+	quote_blob->out_len = quote_new_size - QUOTE_HEADER_SIZE;
-+
-+	getquote_arg.buf = quote_data;
-+	getquote_arg.len = quote_new_size;
-+
-+	ret = ioctl(devfd, TDX_CMD_GEN_QUOTE, &getquote_arg);
-+	if (ret) {
-+		printf("TDX_CMD_GEN_QUOTE ioctl() %d failed\n", ret);
-+		goto done;
-+	}
-+
-+	print_hex_dump("\n\t\tTDX Quote data\n", " ", &quote_blob->data,
-+		       quote_size);
-+
-+done:
-+	free(quote_data);
-+
-+	return ret;
-+}
-+
-+static void usage(void)
-+{
-+	puts("\nUsage:\n");
-+	puts("tdx_attest [options]\n");
-+
-+	puts("Attestation device test utility.");
-+
-+	puts("\nOptions:\n");
-+	puts(" -d, --dump                Dump tdreport/tdquote data");
-+	puts(" -r, --get-tdreport        Get TDREPORT data");
-+	puts(" -g, --gen-quote           Generate TDQUOTE");
-+	puts(" -s, --get-quote-size      Get TDQUOTE size");
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int ret, devfd;
-+	struct tdx_attest_args args = {0};
-+
-+	static const struct option longopts[] = {
-+		{ "dump",           no_argument,       NULL, 'd' },
-+		{ "get-tdreport",   required_argument, NULL, 'r' },
-+		{ "gen-quote",      required_argument, NULL, 'g' },
-+		{ "gen-quote-size", required_argument, NULL, 's' },
-+		{ "version",        no_argument,       NULL, 'V' },
-+		{ NULL,             0, NULL, 0 }
-+	};
-+
-+	while ((ret = getopt_long(argc, argv, "hdrgsV", longopts,
-+				  NULL)) != -1) {
-+		switch (ret) {
-+		case 'd':
-+			args.is_dump_data = true;
-+			break;
-+		case 'r':
-+			args.is_get_tdreport = true;
-+			break;
-+		case 'g':
-+			args.is_gen_quote = true;
-+			break;
-+		case 's':
-+			args.is_get_quote_size = true;
-+			break;
-+		case 'h':
-+			usage();
-+			return 0;
-+		case 'V':
-+			printf("Version: %s\n", ATTESTATION_TEST_BIN_VERSION);
-+			return 0;
-+		default:
-+			printf("Invalid options\n");
-+			usage();
-+			return -EINVAL;
-+		}
-+	}
-+
-+	devfd = open(devname, O_RDWR | O_SYNC);
-+	if (devfd < 0) {
-+		printf("%s open() failed\n", devname);
-+		return -ENODEV;
-+	}
-+
-+	if (args.is_get_quote_size)
-+		get_quote_size(devfd);
-+
-+	if (args.is_get_tdreport)
-+		get_tdreport(devfd, args.is_dump_data, NULL);
-+
-+	if (args.is_gen_quote)
-+		gen_quote(devfd, args.is_dump_data);
-+
-+	close(devfd);
-+
-+	return 0;
-+}
--- 
-2.25.1
-
+T24gV2VkLCAyMDIyLTAzLTMwIGF0IDE2OjAxIC0wNDAwLCBUcm9uZCBNeWtsZWJ1c3Qgd3JvdGU6
+DQo+IE9uIFdlZCwgMjAyMi0wMy0zMCBhdCAxMToxNyAtMDcwMCwgTGludXMgVG9ydmFsZHMgd3Jv
+dGU6DQo+ID4gT24gVHVlLCBNYXIgMjksIDIwMjIgYXQgMTI6MzYgUE0gVHJvbmQgTXlrbGVidXN0
+DQo+ID4gPHRyb25kbXlAaGFtbWVyc3BhY2UuY29tPiB3cm90ZToNCj4gPiA+IA0KPiA+ID4gLSBS
+ZWFkZGlyIGZpeGVzIHRvIGltcHJvdmUgY2FjaGVhYmlsaXR5IG9mIGxhcmdlIGRpcmVjdG9yaWVz
+IHdoZW4NCj4gPiA+IHRoZXJlDQo+ID4gPiDCoCBhcmUgbXVsdGlwbGUgcmVhZGVycyBhbmQgd3Jp
+dGVycy4NCj4gPiANCj4gPiBTbyBJIG9ubHkgdG9vayBhIGxvb2sgYXQgdGhpcyBwYXJ0IG5vdy4g
+SSd2ZSBvYnZpb3VzbHkgYWxyZWFkeQ0KPiA+IHB1bGxlZA0KPiA+IGl0LCBidXQgdGhhdCB1c2Ug
+b2YgJ3h4aGFzaCgpJyBqdXN0IG1hZGUgbWUgZ28gIldoYWFhPyINCj4gPiANCj4gPiBJdCdzIGNs
+YWltZWQgdGhhdCBpdCdzIHVzZWQgYmVjYXVzZSBvZiBpdHMgZXh0cmVtZSBwZXJmb3JtYW5jZSwg
+YnV0DQo+ID4gdGhlIHBlcmZvcm1hbmNlIG51bWJlcnMgY29tZSBmcm9tIHVzaW5nIGl0IGFzIGEg
+YmxvY2sgaGFzaC4NCj4gPiANCj4gPiBUaGF0J3Mgbm90IHdoYXQgbmZzIGRvZXMuDQo+ID4gDQo+
+ID4gVGhlIG5mcyBjb2RlIGp1c3QgZG9lcw0KPiA+IA0KPiA+IMKgwqDCoCB4eGhhc2goJmNvb2tp
+ZSwgc2l6ZW9mKGNvb2tpZSksIDApICYgTkZTX1JFQURESVJfQ09PS0lFX01BU0s7DQo+ID4gDQo+
+ID4gd2hlcmUgdGhhdCAiY29va2llIiBpcyBqdXN0IGEgNjQtYml0IGVudGl0eS4gQW5kIHRoZW4g
+aXQgbWFza3Mgb2ZmDQo+ID4gZXZlcnl0aGluZyBidXQgMTggYml0cy4NCj4gPiANCj4gPiBJcyB0
+aGF0ICpyZWFsbHkqIGFwcHJvcHJpYXRlIHVzZSBvZiBhIG5ldyBoYXNoIGZ1bmN0aW9uPw0KPiA+
+IA0KPiA+IFdoeSBpcyB0aGlzIG5vdCBqdXN0IGRvaW5nDQo+ID4gDQo+ID4gwqAgI2luY2x1ZGUg
+PGhhc2guaD4NCj4gPiANCj4gPiDCoCBoYXNoXzY0KGNvb2tpZSwgMTgpOw0KPiA+IA0KPiA+IHdo
+aWNoIGlzIGEgbG90IG1vcmUgb2J2aW91cyB0aGFuIHh4aGFzaCgpLg0KPiA+IA0KPiA+IElmIHRo
+ZXJlIHJlYWxseSBhcmUgc29tZSBzZXJpb3VzIHByb2JsZW1zIHdpdGggdGhlIHBlcmZlY3RseQ0K
+PiA+IHN0YW5kYXJkDQo+ID4gaGFzaCgpIGZ1bmN0aW9uYWxpdHksIEkgdGhpbmsgeW91IHNob3Vs
+ZCBkb2N1bWVudCB0aGVtLg0KPiA+IA0KPiA+IEJlY2F1c2UganVzdCByYW5kb21seSBwaWNraW5n
+IHh4aGFzaCgpIHdpdGhvdXQgZXhwbGFpbmluZyBfd2h5XyB5b3UNCj4gPiBjYW4ndCBqdXN0IHVz
+ZSB0aGUgc2FtZSBzaW1wbGUgdGhpbmcgd2UgdXNlIGVsc2V3aGVyZSBpcyB2ZXJ5IG9kZC4NCj4g
+PiANCj4gPiBPciByYXRoZXIsIHdoZW4gdGhlIG9ubHkgZG9jdW1lbnRhdGlvbiBpcyAicGVyZm9y
+bWFuY2UiLCB0aGVuIEkNCj4gPiB0aGluaw0KPiA+IHRoZSByZWd1bGFyICJoYXNoXzY0KCkiIGlz
+IHRoZSBvYnZpb3VzIGFuZCB0cml2aWFsIGNob2ljZS4NCj4gPiANCj4gPiDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIExpbnVzDQo+IA0KPiBNeSBtYWluIHdvcnJ5IHdhcyB0aGF0
+IGhhc2hfNjQoKSB3b3VsZCBoYXZlIHRvbyBtYW55IGNvbGxpc2lvbnMuDQo+IFNpbmNlDQo+IHRo
+aXMgaXMgdXNpbmcgY3Vja29vIG5lc3RpbmcsIHRoYXQgd291bGQgYmUgYSBwcm9ibGVtLg0KPiAN
+Cj4gSSBkaWQgc29tZSBxdWljayBzdHVkaWVzIGFmdGVyIEkgZ290IHlvdXIgZW1haWwsIGFuZCBp
+dCBzZWVtcyBhcyBpZg0KPiBteQ0KPiBjb25jZXJucyB3ZXJlIHVuZm91bmRlZC4gSSd2ZSB0ZXN0
+ZWQgYm90aCBhIGxpbmVhciBpbmRleCBhbmQgYSBzYW1wbGUNCj4gb2YgZXh0NCBnZXRkZW50cyBv
+ZmZzZXRzLg0KPiBXaGlsZSB0aGUgc2FtcGxlIG9mIGV4dDQgb2Zmc2V0cyBkaWQgc2hvdyBhIGxh
+cmdlciBudW1iZXIgb2YNCj4gY29sbGlzaW9ucw0KPiB0aGFuIGEgc2ltcGxlIGxpbmVhciBpbmRl
+eCwgaXQgd2Fzbid0IHRvbyB0ZXJyaWJsZSAoMyBjb2xsaXNpb25zIGluIGENCj4gc2FtcGxlIG9m
+IDkwMDAgZW50cmllcykuDQoNCkFjdHVhbGx5LCBsZXQgbWUgY29ycmVjdCB0aGF0Lg0KDQpXaXRo
+IDkxNzUgZXh0NCBvZmZzZXRzLCBJIHNlZSAxNTcgY29sbGlzaW9ucyAoPT0gaGFzaCBidWNrZXRz
+IHdpdGggPiAxDQplbnRyeSkuIFNvIGhhc2hfNjQoKSBkb2VzIHBlcmZvcm0gbGVzcyB3ZWxsIHdo
+ZW4geW91J3JlIGhhc2hpbmcgYSB2YWx1ZQ0KdGhhdCBpcyBhbHJlYWR5IGEgaGFzaC4NCg0KPiBU
+aGUgbGluZWFyIGluZGV4IHNob3dlZCBubyBjb2xsaXNpb25zIHVwIHRvIGFib3V0IDEwMDAwMCBl
+bnRyaWVzLg0KDQpUaGlzIGlzIHVuY2hhbmdlZCwgc28gd2l0aCBYRlMgYW5kIGJ0cmZzIGFzIHRo
+ZSBleHBvcnRlZCBmaWxlc3lzdGVtcywNCndlIHNob3VsZCBub3QgaGF2ZSBhIHByb2JsZW0uDQoN
+Cj4gDQo+IFNvLCBJJ2QgYmUgT0sgd2l0aCBjaGFuZ2luZyB0byBoYXNoXzY0KCkgYW5kIHdpbGwg
+cXVldWUgdXAgYSBidWdmaXgNCj4gZm9yDQo+IGl0LiBJIHNob3VsZCBoYXZlIGRvbmUgdGhpcyBz
+dHVkeSBlYXJsaWVyLi4uDQo+IA0KDQotLSANClRyb25kIE15a2xlYnVzdA0KTGludXggTkZTIGNs
+aWVudCBtYWludGFpbmVyLCBIYW1tZXJzcGFjZQ0KdHJvbmQubXlrbGVidXN0QGhhbW1lcnNwYWNl
+LmNvbQ0KDQoNCg==

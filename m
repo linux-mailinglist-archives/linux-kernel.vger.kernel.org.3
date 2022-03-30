@@ -2,111 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240574ECCF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 21:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 561854ECCEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 21:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350547AbiC3TJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 15:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47428 "EHLO
+        id S1350519AbiC3TJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 15:09:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350513AbiC3THq (ORCPT
+        with ESMTP id S1344730AbiC3TJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 15:07:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9ACC3206D;
-        Wed, 30 Mar 2022 12:05:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C2D1B81D56;
-        Wed, 30 Mar 2022 19:05:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A0D2C340EE;
-        Wed, 30 Mar 2022 19:05:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648667157;
-        bh=K/Hh5iZiT3Tgk4PM6Gqemuqu9GkWgUOCQ66X/KVmIBg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=XznOoE8f3EmTAn1Cpr8DrpPIzGWff+sVsZjMOCNpPyi34T+KR2Frr8ybxfnXrNy60
-         +VhQ/Eg5u0Qt9tTncB+cykfd0xQo23Pd6o3gTpq2gjgV4ZjZ4q2sb6GVKXJlaVqOUN
-         MaKD1A/eVUzHIZyYBuqgiTCzgSAI7Q8vN/0gifKzw4WLUW3skKgTnIX3iGL5f3M97Y
-         6VTFeiyTHNQf4Anw3mtnu9rabM9fguWihBQBxIhTyofYZoYw95MMewQRe8I4LPXrbf
-         RCtTtVfOfcnfvljz6MW3mQxGV4o8flHEjFZTYUNSvDPcIrHM7XN9eHf+msD6JxC414
-         6A3nJ/N7W9MiQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id EEA585C12E4; Wed, 30 Mar 2022 12:05:56 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 12:05:56 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     frederic@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu-tasks: Check the atomic variable
- trc_n_readers_need_end again when wait timeout
-Message-ID: <20220330190556.GL4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220330112014.2587148-1-qiang1.zhang@intel.com>
+        Wed, 30 Mar 2022 15:09:00 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC5513B
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 12:07:13 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0CA815C0134;
+        Wed, 30 Mar 2022 15:07:11 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Wed, 30 Mar 2022 15:07:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        joshtriplett.org; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; bh=cvAOyEGtBc9js1
+        DsvkUO4so00gLzRIk/BnPZ0/pNBvE=; b=cO5+rq/Ys35FQxCxZY3VnvV26UYfrf
+        hKwc06/v/E4RzECYkPUE7+9LA92vijvwOpuY4GjGUXFi9rwkq66svtqrHdWW9XTj
+        JXFDJeLdhssGVC0kO0XleAZtLAkdvk4RP2MbAjbDBLSIOzGQ9V7BBLcRZbf2EN3O
+        9QrDyaKzoRMhrjvTt099lvsrkFI6c3DmgRSV1RLHKfr1TWauTm0V8USASjPTvcfq
+        hX8k08zfZi+S+NBVncub2U0iYzI6q+lHWMwGPYai/N30slHy4FkvwtuBUtdSKEqk
+        RpiL/wNHmE8zIU5iN798hx6h2A1kneh+ZGXJ9ruQ0Bi5xacms8r5Q4zQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=cvAOyEGtBc9js1Dsv
+        kUO4so00gLzRIk/BnPZ0/pNBvE=; b=KLZv7MMgmX6jpFtxfPWWPZrDnK+qS2sm8
+        khtRW4sKvk1KhJ9Qi6Z+kMWY//Ovv5fLwo8F51hvGqMM1oFXa+ARMPw7VE6csz2C
+        42JzsQS4tttQUwQw6P3ZVfhX6xYJkFz7RLg9eQhuymHooC+Pp16wG1KTmKzNT7Du
+        uCBsT/c8JhPhs8hY6d2MURQijG9uThfg+r5/J+BDvQ7m6+VICnpmw8O6txo1k7OG
+        t9hxrAQXcuk0xml5aHJYkv4VJpVhjq9HpAi4xHL7qfxnO1azU5G159i+uLTB2Uif
+        Ee5VYzOSnrTRzABHhn06lTS2gkVOKGWaqf95C7PMPPf0w7b4b9wvA==
+X-ME-Sender: <xms:XqpEYoiNukWyDxsLsUNu__yTtaFjcUuylHAyLiZO2kS8A632zZEmRA>
+    <xme:XqpEYhCP7Pxkg0gBOEGpxyo0lsPb8vBYQDm9mmP9IQ535XMMn40b2FAajlWNYw2B_
+    k-k0B-DHXj6vkcWt8g>
+X-ME-Received: <xmr:XqpEYgGiYfOnnqBQfhQSDHvjaprgpD8fX69mv-xXLshkTuSCdshW9SKW0kUgH22e0FvRjWM_q--UGgfDXOo02vWL0e2TVg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeivddgudeffecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomheplfhoshhh
+    ucfvrhhiphhlvghtthcuoehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeegtdfgfeeghfevgeelgfefieegudeuheekkedtueeutefgheff
+    veegueeiteehteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhg
+X-ME-Proxy: <xmx:XqpEYpRM7tNrw7mZZ-I0eezBbnzdvnqIKse28wa1aICoFGB7KSff1A>
+    <xmx:XqpEYlxX94HbVPNPLIkL8hFZrg0sYo1Cg0mU_BB57hUcuj_3eh8F6g>
+    <xmx:XqpEYn52g2Ai9YB5eQTN6ncNyWCxwCGkNaKkXtqfhEkGE31QdvukKg>
+    <xmx:X6pEYmrWAmzhEnkglb3_KglJvxKtfDHwABcHXQeVnufmNn8rjKjAKg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 30 Mar 2022 15:07:09 -0400 (EDT)
+Date:   Wed, 30 Mar 2022 12:07:08 -0700
+From:   Josh Triplett <josh@joshtriplett.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: Re: 9def39be4e96 ("x86: Support compiling out human-friendly
+ processor feature names")
+Message-ID: <YkSqXNd6yd2WqhDn@localhost>
+References: <YkQxVM4PZMrLs9z1@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220330112014.2587148-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YkQxVM4PZMrLs9z1@zn.tnic>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 07:20:14PM +0800, Zqiang wrote:
-> When the trc_wait waitqueue timeout, the atomic variable
-> trc_n_readers_need_end need to be checked again, perhaps the
-> conditions have been established at this time, avoid invalid
-> stall information output.
+On Wed, Mar 30, 2022 at 12:30:44PM +0200, Borislav Petkov wrote:
+> I'm assuming the commit in subject was part of the tinyconfig effort
 
-But are you actually seeing this invalid stall information?  Either way,
-please seem my comments and question below.
+Yes.
 
-Please don't get me wrong, we do have similar checks for normal vanilla
-RCU stall warnings, for example, this statement in print_other_cpu_stall()
-in kernel/rcu/tree_stall.h:
+> and I'm also assuming that effort is long gone now.
 
-	pr_err("INFO: Stall ended before state dump start\n");
+tinyconfig still exists, and people still use it. The effort to make the
+kernel even *smaller* is not as actively developed as it used to be, but
+there's still an ongoing effort to prevent it from regressing and
+getting *larger*.
 
-However, the approach used there did benefit from significant real-world
-experience with its absence.  ;-)
+I still get regular mails every time tinyconfig gets larger, and I
+regularly send responses to those asking people to add kconfig options.
+(For instance, this commonly results in making sure that new syscalls
+get put behind a kconfig option.) I don't have the bandwidth to maintain
+a dedicated tree for new patches making the kernel smaller, but I do try
+to make sure the situation doesn't get worse.
 
-							Thanx, Paul
-
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> ---
->  kernel/rcu/tasks.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-> index 65d6e21a607a..b73a2b362d6b 100644
-> --- a/kernel/rcu/tasks.h
-> +++ b/kernel/rcu/tasks.h
-> @@ -1544,7 +1544,7 @@ static void rcu_tasks_trace_postgp(struct rcu_tasks *rtp)
->  				trc_wait,
->  				atomic_read(&trc_n_readers_need_end) == 0,
->  				READ_ONCE(rcu_task_stall_timeout));
-
-If I understand correctly, this patch is intended to handle a situation
-where the wait_event_idle_exclusive_timeout() timed out, but where the
-value of trc_n_readers_need_end decreased to zero just at this point.
-If so, please see my question below.  If not, please show me the exact
-sequence of events leading up to the problem.
-
-> -		if (ret)
-> +		if (ret || !atomic_read(&trc_n_readers_need_end))
->  			break;  // Count reached zero.
-
-Couldn't the value of trc_n_readers_need_end decrease to zero right
-here, still resulting in invalid stall information?
-
->  		// Stall warning time, so make a list of the offenders.
->  		rcu_read_lock();
-> -- 
-> 2.25.1
-> 
+- Josh Triplett

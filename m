@@ -2,125 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5A44ECC49
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A314ECC4D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350452AbiC3Sbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:31:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
+        id S1350580AbiC3ScB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237396AbiC3SbW (ORCPT
+        with ESMTP id S1350534AbiC3Sbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:31:22 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2127.outbound.protection.outlook.com [40.107.20.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC352DD57
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:28:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bocV2xOGoH4EnZzzOYYH/1tsTO2upJ8nqYchRUByD6m37T8fc0yQDrge+r6aSAq/9vqk0L8edURb10VlBJWSuDshCfc4pQGexfF+Ek+tk0c3SXduUlFiakQ5qKODMwNkGMYvGEcH9d1+fpl76Oqpm2kEg4LZ2p7d+k368a8HWgADackK9drJ8WF14bxB/dnYl67FZx6zbd8vW3bumfHQvgFG0vto/vVKec4VRJCl5k/G3XXBSIKmYs7AeLGZ2GOVRcdo3QWCuRxULQ/gQm2CP5ABorRJPji1SaER9FYrC04yNKcpN493Q37pdLIPrb2OJiqzpc3dEEaAcV7ASjYpog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EUpdsr84ucuMox3wVndBbJQM+nA+hcmPNi5xzqj9rMI=;
- b=SNwaISwRok4LtrPvb5auz7UCxqJp4lTZJnC/bHK/5fPNmTJPRUQ+NlTVVFi/8uMl7RHP887LZQEpJZQ/WuK4ratBRGpWMkC0Uz+gn5zvvcfZcA9XEIDP7VmpnptcCjfdrpDyDNsUn3SphSBUggoDg70SD4GeLiHjem6V2W7SjrCMrhhUK6vP1cAqxIXB7H4FBB7doV3Mjfdu+Bh6Nux6TFJLUbhp43stLAe6Z1d5Tyurhb5Kqgyf/HrhZQuWN6nn9M2lX5qiEyI1JtVmYgZzrKT5P9KPN6z/veP6QDHpOLhTtcDndFlOYL0jdK6CId+LNtsNepHqVScK+I2BceaEfg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 217.111.95.7) smtp.rcpttodomain=kernel.org smtp.mailfrom=arri.de; dmarc=none
- action=none header.from=arri.de; dkim=none (message not signed); arc=none
+        Wed, 30 Mar 2022 14:31:35 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4361E5BE42
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:28:25 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2e68c93bb30so177293977b3.18
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:28:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=arrigroup.onmicrosoft.com; s=selector1-arrigroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EUpdsr84ucuMox3wVndBbJQM+nA+hcmPNi5xzqj9rMI=;
- b=OlUbXMZfpiDlV+J65EL30rWyMLPxk60mjTtYV3q/I9MPPa2IGX/SyB+HNZbU+lcsucvtx7fWytLmRN9tN3kU9NXmMVpVSz6xdE6cs9nedJ6DqQGh1aDYw64Ej7kljM00VfKeVUDcRDMrsdbB5KXtQiSZi1NBdMLZwy/YvwrW4Is=
-Received: from AM5PR0202CA0005.eurprd02.prod.outlook.com
- (2603:10a6:203:69::15) by AS8PR07MB7399.eurprd07.prod.outlook.com
- (2603:10a6:20b:2a3::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.20; Wed, 30 Mar
- 2022 18:27:58 +0000
-Received: from VE1EUR02FT011.eop-EUR02.prod.protection.outlook.com
- (2603:10a6:203:69:cafe::52) by AM5PR0202CA0005.outlook.office365.com
- (2603:10a6:203:69::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.13 via Frontend
- Transport; Wed, 30 Mar 2022 18:27:58 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.7)
- smtp.mailfrom=arri.de; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arri.de;
-Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
- designate 217.111.95.7 as permitted sender) receiver=protection.outlook.com;
- client-ip=217.111.95.7; helo=mta.arri.de;
-Received: from mta.arri.de (217.111.95.7) by
- VE1EUR02FT011.mail.protection.outlook.com (10.152.12.150) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5123.19 via Frontend Transport; Wed, 30 Mar 2022 18:27:57 +0000
-Received: from localhost.localdomain (192.168.54.86) by mta.arri.de
- (10.10.18.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 30 Mar
- 2022 20:27:56 +0200
-From:   Christian Eggers <ceggers@arri.de>
-To:     Ard Biesheuvel <ardb@kernel.org>
-CC:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>
-Subject: Re: CONFIG_THUMB2_KERNEL=y boot failure after Spectre BHB fixes
-Date:   Wed, 30 Mar 2022 20:27:56 +0200
-Message-ID: <1896453.PYKUYFuaPT@localhost.localdomain>
-Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
-In-Reply-To: <CAMj1kXGbNtJPEowha8=vFgjdv_m2viHJ2Q7AqtJeqOPLa8-1Sg@mail.gmail.com>
-References: <YipOoAaBIHjeCKOq@dev-arch.thelio-3990X> <10062923.nUPlyArG6x@localhost.localdomain> <CAMj1kXGbNtJPEowha8=vFgjdv_m2viHJ2Q7AqtJeqOPLa8-1Sg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Originating-IP: [192.168.54.86]
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c1d615a3-8e94-4cfb-f55a-08da127b03a5
-X-MS-TrafficTypeDiagnostic: AS8PR07MB7399:EE_
-X-Microsoft-Antispam-PRVS: <AS8PR07MB7399C9CAFD62CD45107452CFBF1F9@AS8PR07MB7399.eurprd07.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GfTqCbK9Fvw0Hq4l0yF4PkTlnYGHGLPW/bOAplUO9+KS4va+x0n4ydjV4ALynKIyad3FGx9Q8Pfesxi2ToA7oVPh2rpPnZRjhpTsznrYVjq9M/biQYwbcFX8KRnreEPQNV0i8ndYA8/ljHYl+NsStsM1ValuBfMX7mB8bgdzlKNA6jBBxha+nd87Y8SJGWDiIgWK1LRI5XoPP7P2SYL1xDv0hY83gEqL6gP/q5jesoId1v+bEmshvKt33DfuRCTgaM2PLnUTWbdpr1ucOBWvs//c1xR62RpCV6fLNqKGlYrBmlBO/uVi+E1FTuXdRebYCLQkvcw07Fy4OAeJQ69FywPyRyooK35Ww3tOvOFxnWFMe5OfHXw5aCVsqh0S9TuDxYCIIJHhDPZTsDD4YEVqf+I6T2y4n4fxGgF9nCE7hHhVNVu4VujltN5eJrKbu6KrmEj5EGvSoLOV85+BdsAevqtqXi9cqI8F/lKVAggk7yjw0qbgQ5J+Y4dIu+jDnU+AH0y6AHlS1oqZ9rNBM6ZFP2om6G3290AJ4ixpeSdNJ1KIdv5aGOLuMO/Cs5Ds7NPIC1o+hLh+MDrWE4FqUJz7GNJ5zUWinJkqmVsp4sj91uHSxpg9cdN5at2IkuD//t6Ica65mCp9pecx0kmqbnFm/wy+bSMVxWwxYf3rla5KFQZ4ps7R6ZQvhZ+ROphmesQ9lWGSA+kHHfu1RlUCPNaM+w==
-X-Forefront-Antispam-Report: CIP:217.111.95.7;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(82310400004)(70586007)(70206006)(4326008)(8676002)(316002)(336012)(6862004)(426003)(16526019)(186003)(7696005)(26005)(40460700003)(8936002)(4744005)(36916002)(81166007)(356005)(5660300002)(9686003)(83380400001)(86362001)(2906002)(508600001)(47076005)(55016003)(54906003)(36860700001)(36900700001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: arri.de
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 18:27:57.7363
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c1d615a3-8e94-4cfb-f55a-08da127b03a5
-X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.7];Helo=[mta.arri.de]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR02FT011.eop-EUR02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR07MB7399
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=69G4sVrTM6Oebk85axmgqm6tVz3OwOvgPCpKMqCiPco=;
+        b=KAkhCBn3gEwaVnHCrhjznheQGY1GcCBdnWrxtjIFYBR2rk4OJFJ31gVI8tVCx6sj8u
+         qH85S3m5RZXFjlMJBVo/mTONjglm5wXv+jTcfufhRlcZqejW8H7XgGLqfVP7AjC7n0eM
+         7HP9ssmEL+278QYUiKC/5WDRmyP8ixj8xgNdY32mOx/HXCVXCuVV9Pph2dXMjjR241g7
+         88UR6Tcb5NmhsduVZ3TtT9jvmrKJ8ZDTdhVTVRCgo9WleoyQZenniBdvfpVvf5VKcQQo
+         r3TTQuLFB3NO9NQ0VcFYFrU0Mu4m9p5k/wtYCBS20lw+TSK2QCq174JUxbx4rg6qxAxC
+         gR9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=69G4sVrTM6Oebk85axmgqm6tVz3OwOvgPCpKMqCiPco=;
+        b=ONZA3/87QodjSB6ut5pHbxg9I7X931v+jI3h0Obl78u+zW62yj+8DwGQbkuNv8dwA5
+         n2z8RZl1Ws2Piy4RFadP05GrPVSbjEWxH5HP2ZGpXwD1mJEJrcAvJR/7LsyPiIouAevL
+         S83WrYWUmWVWuL1y8NeRwv34m9losqp0XRNFCz/z8P/GW2FC+815MDhdmJDBOE7sbghW
+         10RkSM9iUxJZjyfj/tWBmvM5vU9TUS4uttaOMd1iYK9A1/CytLU8ESjtw8sgn8Lwn/ob
+         1b4qAvmww/BgF9f4eLsDK3yCgCbDlci2Tqu4mdLkIKCyxtTwarwH/7puThA471mzIu5U
+         a4uQ==
+X-Gm-Message-State: AOAM531VL0N04RlgDpUrAoaexAOFMwhZGGCdxmyjHI5N6iqCroZrpVkT
+        5Y+J4e7V5KCTjgFKPz7i3nHrygzODwhV
+X-Google-Smtp-Source: ABdhPJypHixg49BP/nRHIZXftzFoLrN29bvmk/CgxMF7bcwNtHjoOkCy1TnNXK6tDuqfVn+gOXleajOvms2h
+X-Received: from pigloo.svl.corp.google.com ([2620:15c:2c5:13:1db:3f32:3ad1:f38])
+ (user=jmeurin job=sendgmr) by 2002:a81:af4c:0:b0:2e5:b051:6353 with SMTP id
+ x12-20020a81af4c000000b002e5b0516353mr1068237ywj.518.1648664904545; Wed, 30
+ Mar 2022 11:28:24 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 11:28:13 -0700
+In-Reply-To: <20220207163409.19c3bc4c@xps13>
+Message-Id: <20220330182816.1177341-1-jmeurin@google.com>
+Mime-Version: 1.0
+References: <20220207163409.19c3bc4c@xps13>
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Subject: [PATCH] Fix the size of the header read buffer.
+From:   Jean-Marc Eurin <jmeurin@google.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jean-Marc Eurin <jmeurin@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, 30 March 2022, 19:42:31 CEST, Ard Biesheuvel wrote:
-> On Wed, 30 Mar 2022 at 19:33, Christian Eggers <ceggers@arri.de> wrote:
-> >
-> > I just switched to v5.15.31-rt38 which already includes
-> > 6c7cb60bff7a ("ARM: fix Thumb2 regression")
-> >
-> > This kernel boots fine now, even with CONFIG_HARDEN_BRANCH_HISTORY=y. After
-> > applying the patch series from Ard, the system still boots fine.
-> >
-> > I haven't any understanding what these patches do. Is there anything I shall
-> > test?
-> >
-> 
-> Thanks for confirming. The first fix affects all Thumb2
-> configurations, my patch only affects Thumb2 configurations that
-> actually enable the loop8 mitigation for Spectre-BHB.
-> 
-> What type of CPU are you booting on?
-> 
+The read buffer size depends on the MTDOOPS_HEADER_SIZE.
 
-NXP i.MX6ULL (ARM Cortex-A7).
+Tested: Changed the header size, it doesn't panic, header is still
+read/written correctly.
 
+Signed-off-by: Jean-Marc Eurin <jmeurin@google.com>
+---
+ drivers/mtd/mtdoops.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/mtd/mtdoops.c b/drivers/mtd/mtdoops.c
+index 227df24387df..09a26747f490 100644
+--- a/drivers/mtd/mtdoops.c
++++ b/drivers/mtd/mtdoops.c
+@@ -223,7 +223,7 @@ static void find_next_position(struct mtdoops_context *cxt)
+ {
+ 	struct mtd_info *mtd = cxt->mtd;
+ 	int ret, page, maxpos = 0;
+-	u32 count[2], maxcount = 0xffffffff;
++	u32 count[MTDOOPS_HEADER_SIZE/sizeof(u32)], maxcount = 0xffffffff;
+ 	size_t retlen;
+ 
+ 	for (page = 0; page < cxt->oops_pages; page++) {
+-- 
+2.35.0.rc2.247.g8bbb082509-goog
 

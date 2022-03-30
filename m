@@ -2,75 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9313E4EBAC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6684EBACA
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243300AbiC3G1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 02:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57450 "EHLO
+        id S243310AbiC3GaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 02:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbiC3G1F (ORCPT
+        with ESMTP id S231327AbiC3GaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 02:27:05 -0400
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36581517F2;
-        Tue, 29 Mar 2022 23:25:18 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id E0CD930002AA1;
-        Wed, 30 Mar 2022 08:25:16 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id D300917F1F; Wed, 30 Mar 2022 08:25:16 +0200 (CEST)
-Date:   Wed, 30 Mar 2022 08:25:16 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     Tanjore Suresh <tansuresh@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v1 0/3] Asynchronous shutdown interface and example
- implementation
-Message-ID: <20220330062516.GA24340@wunner.de>
-References: <20220328230008.3587975-1-tansuresh@google.com>
- <YkO7d7Eel4BVQOy4@kbusch-mbp.dhcp.thefacebook.com>
+        Wed, 30 Mar 2022 02:30:18 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4240655227
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:28:25 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id b15so23192994edn.4
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:28:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jeyVjUl8UxMsfAwAWYqgKhKVc6qpMwqWakUeuaih7vk=;
+        b=tH4KpeMCj1g/eVF2kz2mtjnwDDoDdq4u6CLDQFszL7FihldHG5vOhIz/a7r/h58KI3
+         /Bo9cKFscNeko7YLiHVLzJiy93kkTYhdaDZKeH/IfW+Q9i4GBBYawph65BrFSzAGyKq2
+         1oxCLCRUfZ4/iVDlb5yTMiVb4XhOT5Q+EAZSNnoQHuQ1Nbw8AApsZJZ9kCTtrA8KFtpp
+         5rJgyk1+LDGOW+dH321nzvD2PZ8CJ9/gK8yk5ST+LZzVKLo5Oga/xzIhnSn/7abEyuMC
+         fQEIqCMIyTOGCF0uoziBAP/g9niKcUJNwFUaZYWzIL8fdtWovxqYDDgrrQh/cDW14eOY
+         8pTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jeyVjUl8UxMsfAwAWYqgKhKVc6qpMwqWakUeuaih7vk=;
+        b=acYCdLY6rpNiuYxFmdTyBBD7V0LFEWyH/FlXhDSAPOROi+Z7oUW0ONhAgeFGGVb4Wr
+         7lEUK+oeQqzO3kGI2aSFSuwgR32v4G0jSuPzzQ+nuzmhVgSvShbl9at/cxkUny1SIlsv
+         MCv36r96RxD8kKCFiSTI9k2LOZ5cQ7eXFQTfvsH72/76g9qy+W24KWlJ0Afs0o+5YoqA
+         sTKUJAzP5Xh+arqfasYyt4O8v72vwHbWVydotuvYialz1ZR7+DuExxZ9mUhXblxYcySw
+         EEaw/iEjqNbAW7oQjDt7PqWJ3YSnIqkpIISVGyxGZHepeTFoTxj7A33nCtbW5hY/NhMP
+         734g==
+X-Gm-Message-State: AOAM532Ay4AWoPuHa64rSNnLZfDl7uHz04CAmgLSGv9i97YiqOX/08jh
+        tmk005ZiquFWiv+7t2F3SS3+Alu+YGkvLMwWeVd2PA==
+X-Google-Smtp-Source: ABdhPJzvYAlNbp3AlnGzDTBeNPyTBGecgDc9rfpmjaE3Gzlb2cCIAIeQJFdlTi48g0Ioj91H5O7A4of4kv2EPxgl2xU=
+X-Received: by 2002:a05:6402:43cc:b0:419:2486:6cd2 with SMTP id
+ p12-20020a05640243cc00b0041924866cd2mr8817467edc.334.1648621703622; Tue, 29
+ Mar 2022 23:28:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkO7d7Eel4BVQOy4@kbusch-mbp.dhcp.thefacebook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220329214248.1330868-1-dlatypov@google.com> <CABVgOS=r1HhBRjKmb6RE9MLbxD3TLfOxvATXH-qLHnr9yjO35g@mail.gmail.com>
+In-Reply-To: <CABVgOS=r1HhBRjKmb6RE9MLbxD3TLfOxvATXH-qLHnr9yjO35g@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 30 Mar 2022 01:28:12 -0500
+Message-ID: <CAGS_qxoYJTt-++EGQ23h_FwjrHKfnBbFVivM9gTXZg=0kh57og@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: print clearer error message when there's no
+ TAP output
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 08:07:51PM -0600, Keith Busch wrote:
-> Thanks, I agree we should improve shutdown times. I tried a while ago, but
-> lost track to follow up at the time. Here's the reference, fwiw, though it
-> may be out of date :):
-> 
->   http://lists.infradead.org/pipermail/linux-nvme/2014-May/000826.html
-> 
-> The above solution is similiar to how probe waits on an async domain.
-> Maybe pci can schedule the async shutdown instead of relying on low-level
-> drivers so that everyone implicitly benefits instead of just nvme? I'll
-> double-check if that's reasonable, but I'll look through this series too.
+On Tue, Mar 29, 2022 at 10:17 PM David Gow <davidgow@google.com> wrote:
+>
+> On Wed, Mar 30, 2022 at 5:43 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > Before:
+> > $ ./tools/testing/kunit/kunit.py parse /dev/null
+> > ...
+> > [ERROR] Test : invalid KTAP input!
+> >
+> > After:
+> > $ ./tools/testing/kunit/kunit.py parse /dev/null
+> > ...
+> > [ERROR] Test <missing>: could not find any KTAP output!
+> >
+> > This error message gets printed out when extract_tap_output() yielded no
+> > lines. So while it could be because of malformed KTAP output from KUnit,
+> > it could also be due to to not having any KTAP output at all.
+> >
+> > Try and make the error message here more clear.
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > ---
+>
+> At first I thought that this was "working as intended", but I agree
+> that it's a bit confusing, so changing it is for the best.
+> (And there's no sense getting too bogged down in the philosophical
+> difference between "invalid TAP" and "not valid TAP" :-))
 
-Using the async API seems much more reasonable than adding new callbacks.
+extract_tap_output() returning something means it just saw a TAP header.
+So this error realistically only happens when there's no TAP at all :P
 
-However I'd argue that it shouldn't be necessary to amend any drivers,
-this should all be doable in the driver core:  Basically a device needs
-to wait for its children and device links consumers to shutdown, apart
-from that everything should be able to run asynchronously.
+My allusion to malformed KTAP is in the sense that
+ KTA<random stuff>P ver<more stuff>sion 1
+is malformed.
 
-Thanks,
-
-Lukas
+We could potentially be more completely precise w/ our error message
+and say "no K?TAP header found", but I initially thought this might be
+a bit more user-friendly.

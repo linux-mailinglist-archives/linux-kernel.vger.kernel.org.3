@@ -2,184 +2,740 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97304ECFBF
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 00:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7814ECFC2
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 00:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351667AbiC3Wfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 18:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
+        id S1348858AbiC3Wm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 18:42:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233163AbiC3Wft (ORCPT
+        with ESMTP id S233163AbiC3Wm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 18:35:49 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9DA2F383
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 15:34:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1648679643; x=1680215643;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vN678j8+lGQHG6+BC7HU2l7qEDTv5FwFrbQPKj7VLPs=;
-  b=MEt6H+cud4J4S9iEKZVyh/k+1l12eEctKP+KKpYQgFQJU1BCQj0ctpSD
-   JbQvlavWxVNZAZ7KNL0xnAg+A6Cn7qB1BK108TYoHEHnHgTvAuI8cOHp+
-   bMEZ2OAJl8dZVhuC2Y+1NAKBCYIZs+N7KOkvHyB8feFy9ruRxCkm4wvxx
-   qQ06emqCylJusy2yMIhytROYy0Iv2keHgaF+llylWZpwVa9dpKFplOSPV
-   +UDYp65O6pC8+tZufAyhldbCqw/iithHSRzSVROrG5V4CNZ1cs1mve6TA
-   AW+SI3m/TfpBOZlwF9qegBKzWwwxYLSd+KhQSvgUaaGJkeFF+tEhf5cJR
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,223,1643644800"; 
-   d="scan'208";a="195559778"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 31 Mar 2022 06:34:02 +0800
-IronPort-SDR: aJb68MMyve/w9Xz/+XiwPniu2FZVI5Ku1Vk0bD8dgXZiOySck8dHB7DnJB0u+fmCTYpzQhTvr4
- AeVlPNfPc/KtDd5sw3d0qrfHpXJ7B7z3EgjGD9rVgGwjQ3Di+KzW3IN+50rc30RoFzq3GFiBZ+
- BCafZJJwQ82ju38jwdMFTlD3htgjQqKFURwZfC20TLGwfs0OCIlrjisFHynncXHAdtTQIXvW1V
- HUDmf1gV84gHzsqajsC3PPxQ8JHep3Kv6xHGK+qb8jGdVjo/17R+dtR1u1x4ZdzkYrtipReJw/
- MhA3Ix4WDuLdVifnaA4EPOSb
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Mar 2022 15:04:51 -0700
-IronPort-SDR: sy4Z8T6u+cWAyNxu1tHO46HYcxKnl2nEUFXuuMr+hAyHSLxx8ATs4VcqxlJtktx+026XsGwHFe
- 4yEEP/S6/SRkJszxhi509zz9uSNFiRi6CKngERD7nifS4Cmg0AwxDoZcnRmBEhdvwDAgAKZJw1
- +9UyS44+T27pP9tx8P0OlJFI/8O3Q4TxrA+o45FjYhoFrztaw8cFyQSWnQIbgiVheWDMFMkgbB
- rfUy5mcp3ziW46PRa0QYgxoCddyviosVaHt/9LiWT1i45AvSK8lf75aXnG90Q0R/MIZ2WY6plj
- +yk=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Mar 2022 15:34:02 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KTLnj2rkWz1SHwl
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 15:34:01 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1648679640; x=1651271641; bh=vN678j8+lGQHG6+BC7HU2l7qEDTv5FwFrbQ
-        PKj7VLPs=; b=fwQc1Q3Gbs+KZL3VYfZyM3DmZrjPI/D9DDxAwxv3WANICbDOIsv
-        cHr2L5cVdeYp2BTv1MRV1RVAF3xv/fo9ETy9R6rGktf4tJb2ouBgU62ymA3qurCA
-        Q3B5C3B6Oq27l02THM16d66wICOLBoZJLr9iCstmfczsaWNPbTm40WMqCsqT/omW
-        IKe01d+Q5r4m7+EASguhSIvvwyLZiQsG8G+A98I5U5dQQal+1uBKN8zHYw+QB8DT
-        cK406kfneia7CZeQMsdx7s3cUwzWEysXq9G68XZnvbH+zMJZ5B60G57utepMiFJh
-        JHDg0eJ6pIAT50kxYFnmbf86AKLbfcYyv1A==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id wcwq6rqZKOoY for <linux-kernel@vger.kernel.org>;
-        Wed, 30 Mar 2022 15:34:00 -0700 (PDT)
-Received: from [10.225.163.121] (unknown [10.225.163.121])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KTLng07XLz1Rvlx;
-        Wed, 30 Mar 2022 15:33:58 -0700 (PDT)
-Message-ID: <98afa9c9-28d1-1147-2538-e8c0dfeadde4@opensource.wdc.com>
-Date:   Thu, 31 Mar 2022 07:33:57 +0900
+        Wed, 30 Mar 2022 18:42:57 -0400
+Received: from mxchg03.rrz.uni-hamburg.de (mxchg03.rrz.uni-hamburg.de [134.100.38.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45E213F87
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 15:41:09 -0700 (PDT)
+Authentication-Results: mxchg03.rrz.uni-hamburg.de (amavisd-new);
+        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
+        header.d=uni-hamburg.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=uni-hamburg.de;
+         h=content-transfer-encoding:content-type:content-type
+        :mime-version:x-mailer:organization:message-id:subject:subject
+        :to:from:from:date:date; s=rrzs002; t=1648680067; x=1649544068;
+         bh=JkLTKVghRdWdrAIo/G4aMffWB2YHgdDmGr/YlZhNkec=; b=zpnCM4tx30eH
+        xAORPtCcMtDbEzIPejGCEwq0Zb9lxOOEsQDtFO0XndqrZhKHgO74WV34xxyOi+HD
+        sXN9CCeK79V2Pg2VvVmBJy4R++Op6Fb6IVmSONq536Id/x6yoSXGfu0fSa75ii/N
+        UvVvK9+RDJCsRmlijjPd25+srcKUP8WgXBc9Fj+GKOT56Bkr7DUATugt9qjwqT/8
+        hUXODdvNgqnkkHJjQfKPi3Dl7wTyrEBDOYZNKi5xQ2O4KFWxaQvtIZlbN2bRmDmy
+        u8ljsBFy4ZSNv/uCBgEvMrZkumuPbZb41UNnTjyubyRJO0dmLO+ZL+D4LsUUtq0A
+        aHIY2iBrsg==
+X-Virus-Scanned: by University of Hamburg ( RRZ / mgw05.rrz.uni-hamburg.de )
+Received: from exchange.uni-hamburg.de (UN-EX-MR08.uni-hamburg.de [134.100.84.75])
+        by mxchg03.rrz.uni-hamburg.de (Postfix) with ESMTPS;
+        Thu, 31 Mar 2022 00:41:07 +0200 (CEST)
+Received: from plasteblaster (89.244.206.108) by UN-EX-MR08.uni-hamburg.de
+ (134.100.84.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Thu, 31 Mar
+ 2022 00:41:06 +0200
+Date:   Thu, 31 Mar 2022 00:41:06 +0200
+From:   "Dr. Thomas Orgis" <thomas.orgis@uni-hamburg.de>
+To:     Balbir Singh <bsingharora@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Eric W. Biederman?missing closing '"' in token?" <ebiederm@xmission.com>, Ismael Luceno <ismael@iodev.co.uk>, <hannes@cmpxchg.org>"
+Illegal-Object: Syntax error in CC: addresses found on vger.kernel.org:
+        CC:     Eric W.Biederman?missing closing '"' in token?" <ebiederm@xmission.com>
+                        ^     ^-missing end of address
+                 \-extraneous tokens in address
+Subject: [PATCH RESEND 2] taskstats: version 12 with thread group and exe
+ info
+Message-ID: <20220331004106.64e5616b@plasteblaster>
+Organization: =?UTF-8?B?VW5pdmVyc2l0w6R0?= Hamburg
+X-Mailer: Claws Mail (x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] riscv: Ensure only ASIDLEN is used for sfence.vma
-Content-Language: en-US
-To:     Alistair Francis <alistair.francis@opensource.wdc.com>,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        linux-riscv@lists.infradead.org, aou@eecs.berkeley.edu
-Cc:     linux-kernel@vger.kernel.org, anup@brainfault.org,
-        atishp@rivosinc.com, guoren@kernel.org,
-        Alistair Francis <alistair.francis@wdc.com>
-References: <20220330214358.3409766-1-alistair.francis@opensource.wdc.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220330214358.3409766-1-alistair.francis@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [89.244.206.108]
+X-ClientProxiedBy: UN-EX-MR03.uni-hamburg.de (134.100.84.70) To
+ UN-EX-MR08.uni-hamburg.de (134.100.84.75)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/22 06:43, Alistair Francis wrote:
-> From: Alistair Francis <alistair.francis@wdc.com>
-> 
-> When we set the value of context.id using __new_context() we set both
-> the asid and the current_version with this return statement in
-> __new_context():
-> 
->     return asid | ver;
-> 
-> This means that when local_flush_tlb_all_asid() is called with the asid
-> specified from context.id we can write the incorrect value.
-> 
-> We get away with this as hardware ignores the extra bits, as the RISC-V
-> specification states:
-> 
-> "bits SXLEN-1:ASIDMAX of the value held in rs2 are reserved for future
-> standard use. Until their use is defined by a standard extension, they
-> should be zeroed by software and ignored by current implementations."
-> 
-> but it is still a bug and worth addressing as we are incorrectly setting
-> extra bits.
-> 
-> This patch uses asid_mask when calling sfence.vma to ensure the asid is
-> always the correct len (ASIDLEN). This is similar to what we do in
-> arch/riscv/mm/context.c.
-> 
-> Fixes: 3f1e782998cd ("riscv: add ASID-based tlbflushing methods")
-> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-> ---
->  arch/riscv/mm/context.c  | 2 +-
->  arch/riscv/mm/tlbflush.c | 2 +-
->  include/linux/mm_types.h | 2 ++
->  3 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
-> index 7acbfbd14557..4329fe54176b 100644
-> --- a/arch/riscv/mm/context.c
-> +++ b/arch/riscv/mm/context.c
-> @@ -22,7 +22,7 @@ DEFINE_STATIC_KEY_FALSE(use_asid_allocator);
->  
->  static unsigned long asid_bits;
->  static unsigned long num_asids;
-> -static unsigned long asid_mask;
-> +unsigned long asid_mask;
->  
->  static atomic_long_t current_version;
->  
-> diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
-> index 37ed760d007c..ef701fa83f36 100644
-> --- a/arch/riscv/mm/tlbflush.c
-> +++ b/arch/riscv/mm/tlbflush.c
-> @@ -42,7 +42,7 @@ static void __sbi_tlb_flush_range(struct mm_struct *mm, unsigned long start,
->  	/* check if the tlbflush needs to be sent to other CPUs */
->  	broadcast = cpumask_any_but(cmask, cpuid) < nr_cpu_ids;
->  	if (static_branch_unlikely(&use_asid_allocator)) {
-> -		unsigned long asid = atomic_long_read(&mm->context.id);
-> +		unsigned long asid = atomic_long_read(&mm->context.id) & asid_mask;
+The task exit struct needs some crucial information to be able
+to provide an enhanced version of process and thread accounting. This
+change provides:
 
-It would be a lot nicer and less error prone to have a small helper
-function for this, no ?
+1. ac_tgid in additon to ac_pid
+2. thread group execution walltime in ac_tgetime
+3. flag AGROUP in ac_flag to indicate the last task
+   in a thread group / process
+4. device ID and inode of task's /proc/self/exe in
+   ac_exe_dev and ac_exe_inode
+5. tools/accounting/procacct as demonstrator
 
->  
->  		if (broadcast) {
->  			sbi_remote_sfence_vma_asid(cmask, start, size, asid);
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 8834e38c06a4..5fa7cc0af853 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -666,6 +666,8 @@ struct mm_struct {
->  
->  extern struct mm_struct init_mm;
->  
-> +extern unsigned long asid_mask;
-> +
->  /* Pointer magic because the dynamic array size confuses some compilers. */
->  static inline void mm_init_cpumask(struct mm_struct *mm)
->  {
+When a task exits, taskstats are reported to userspace including the
+task's pid and ppid, but without the id of the thread group this task
+is part of. Without the tgid, the stats of single tasks cannot be
+correlated to each other as a thread group (process).
 
+The taskstats documentation suggests that on process exit a data set
+consisting of accumulated stats for the whole group is produced. But
+such an additional set of stats is only produced for actually
+multithreaded processes, not groups that had only one thread, and
+also those stats only contain data about delay accounting and not
+the more basic information about CPU and memory resource usage. Adding
+the AGROP flag to be set when the last task of a group exited enables
+determination of process end also for single-threaded processes.
 
+My applicaton basically does enhanced process accounting with
+summed cputime, biggest maxrss, tasks per process. The data is not
+available with the traditional BSD process accounting (which is not
+designed to be extensible) and the taskstats interface allows more
+efficient on-the-fly grouping and summing of the stats, anyway,
+without intermediate disk writes.
+
+Furthermore, I do carry statistics on which exact program binary
+is used how often with associated resources, getting a picture
+on how important which parts of a collection of installed scientific
+software in different versions are, and how well they put load on the
+machine. This is enabled by providing information on /proc/self/exe
+for each task. I assume the two 64-bit fields for device ID and
+inode are more appropriate than the possibly large resolved path
+to keep the data volume down.
+
+Add the tgid to the stats to complete task identification,
+the flag AGROUP to mark the last task of a group, the group wallclock
+time, and inode-based identification of the associated executable file.
+
+Add tools/accounting/procacct.c as a simplified fork of getdelays.c
+to demonstrate process and thread accounting.
+
+Base-commit: 1c24a186398f59c80adb9a967486b65c1423a59d
+
+Signed-off-by: Dr. Thomas Orgis <thomas.orgis@uni-hamburg.de>
+Reviewed-by: Ismael Luceno <ismael@iodev.co.uk>
+---
+ include/uapi/linux/acct.h      |   3 +-
+ include/uapi/linux/taskstats.h |  24 +-
+ kernel/taskstats.c             |  23 ++
+ kernel/tsacct.c                |  10 +-
+ tools/accounting/.gitignore    |   1 +
+ tools/accounting/Makefile      |   2 +-
+ tools/accounting/procacct.c    | 417 +++++++++++++++++++++++++++++++++
+ 7 files changed, 473 insertions(+), 7 deletions(-)
+ create mode 100644 tools/accounting/procacct.c
+
+diff --git a/include/uapi/linux/acct.h b/include/uapi/linux/acct.h
+index 985b89068591..0e591152aa8a 100644
+--- a/include/uapi/linux/acct.h
++++ b/include/uapi/linux/acct.h
+@@ -103,12 +103,13 @@ struct acct_v3
+ /*
+  *  accounting flags
+  */
+-				/* bit set when the process ... */
++				/* bit set when the process/task ... */
+ #define AFORK		0x01	/* ... executed fork, but did not exec */
+ #define ASU		0x02	/* ... used super-user privileges */
+ #define ACOMPAT		0x04	/* ... used compatibility mode (VAX only not used) */
+ #define ACORE		0x08	/* ... dumped core */
+ #define AXSIG		0x10	/* ... was killed by a signal */
++#define AGROUP		0x20	/* ... was the last task of the process (task group) */
+ 
+ #if defined(__BYTE_ORDER) ? __BYTE_ORDER == __BIG_ENDIAN : defined(__BIG_ENDIAN)
+ #define ACCT_BYTEORDER	0x80	/* accounting file is big endian */
+diff --git a/include/uapi/linux/taskstats.h b/include/uapi/linux/taskstats.h
+index 12327d32378f..512b555362ee 100644
+--- a/include/uapi/linux/taskstats.h
++++ b/include/uapi/linux/taskstats.h
+@@ -34,7 +34,7 @@
+  */
+ 
+ 
+-#define TASKSTATS_VERSION	11
++#define TASKSTATS_VERSION	12
+ #define TS_COMM_LEN		32	/* should be >= TASK_COMM_LEN
+ 					 * in linux/sched.h */
+ 
+@@ -48,7 +48,8 @@ struct taskstats {
+ 	__u32	ac_exitcode;		/* Exit status */
+ 
+ 	/* The accounting flags of a task as defined in <linux/acct.h>
+-	 * Defined values are AFORK, ASU, ACOMPAT, ACORE, and AXSIG.
++	 * Defined values are AFORK, ASU, ACOMPAT, ACORE, AXSIG, and AGROUP.
++	 * (AGROUP since version 11).
+ 	 */
+ 	__u8	ac_flag;		/* Record flags */
+ 	__u8	ac_nice;		/* task_nice */
+@@ -173,9 +174,26 @@ struct taskstats {
+ 	/* v10: 64-bit btime to avoid overflow */
+ 	__u64	ac_btime64;		/* 64-bit begin time */
+ 
+-	/* Delay waiting for memory compact */
++	/* v11: Delay waiting for memory compact */
+ 	__u64	compact_count;
+ 	__u64	compact_delay_total;
++
++	/* v12 begin */
++	__u32   ac_tgid;	/* thread group ID */
++	/* Thread group walltime up to now. This is total process walltime if
++	 * AGROUP flag is set.
++	 */
++	__u64	ac_tgetime __attribute__((aligned(8)));
++	/* Lightweight information to identify process binary files.
++	 * This leaves userspace to match this to a file system path, using
++	 * MAJOR() and MINOR() macros to identify a device and mount point,
++	 * the inode to identify the executable file. This is /proc/self/exe
++	 * at the end, so matching the most recent exec(). Values are zero
++	 * for kernel threads.
++	 */
++	__u64   ac_exe_dev;     /* program binary device ID */
++	__u64   ac_exe_inode;   /* program binary inode number */
++	/* v12 end */
+ };
+ 
+ 
+diff --git a/kernel/taskstats.c b/kernel/taskstats.c
+index bcac5a9043aa..72415e22342b 100644
+--- a/kernel/taskstats.c
++++ b/kernel/taskstats.c
+@@ -9,6 +9,7 @@
+ #include <linux/kernel.h>
+ #include <linux/taskstats_kern.h>
+ #include <linux/tsacct_kern.h>
++#include <linux/acct.h>
+ #include <linux/delayacct.h>
+ #include <linux/cpumask.h>
+ #include <linux/percpu.h>
+@@ -153,6 +154,23 @@ static void send_cpu_listeners(struct sk_buff *skb,
+ 	up_write(&listeners->sem);
+ }
+ 
++static void exe_add_tsk(struct taskstats *stats, struct task_struct *tsk)
++{
++	/* No idea if I'm allowed to access that here, now. */
++	struct file *exe_file = get_task_exe_file(tsk);
++
++	if (exe_file) {
++		/* Following cp_new_stat64() in stat.c . */
++		stats->ac_exe_dev =
++			huge_encode_dev(exe_file->f_inode->i_sb->s_dev);
++		stats->ac_exe_inode = exe_file->f_inode->i_ino;
++		fput(exe_file);
++	} else {
++		stats->ac_exe_dev = 0;
++		stats->ac_exe_inode = 0;
++	}
++}
++
+ static void fill_stats(struct user_namespace *user_ns,
+ 		       struct pid_namespace *pid_ns,
+ 		       struct task_struct *tsk, struct taskstats *stats)
+@@ -175,6 +193,9 @@ static void fill_stats(struct user_namespace *user_ns,
+ 
+ 	/* fill in extended acct fields */
+ 	xacct_add_tsk(stats, tsk);
++
++	/* add executable info */
++	exe_add_tsk(stats, tsk);
+ }
+ 
+ static int fill_stats_for_pid(pid_t pid, struct taskstats *stats)
+@@ -620,6 +641,8 @@ void taskstats_exit(struct task_struct *tsk, int group_dead)
+ 		goto err;
+ 
+ 	fill_stats(&init_user_ns, &init_pid_ns, tsk, stats);
++	if (group_dead)
++		stats->ac_flag |= AGROUP;
+ 
+ 	/*
+ 	 * Doesn't matter if tsk is the leader or the last group member leaving
+diff --git a/kernel/tsacct.c b/kernel/tsacct.c
+index 1d261fbe367b..4252f0645b9e 100644
+--- a/kernel/tsacct.c
++++ b/kernel/tsacct.c
+@@ -23,15 +23,20 @@ void bacct_add_tsk(struct user_namespace *user_ns,
+ {
+ 	const struct cred *tcred;
+ 	u64 utime, stime, utimescaled, stimescaled;
+-	u64 delta;
++	u64 now_ns, delta;
+ 	time64_t btime;
+ 
+ 	BUILD_BUG_ON(TS_COMM_LEN < TASK_COMM_LEN);
+ 
+ 	/* calculate task elapsed time in nsec */
+-	delta = ktime_get_ns() - tsk->start_time;
++	now_ns = ktime_get_ns();
++	/* store whole group time first */
++	delta = now_ns - tsk->group_leader->start_time;
+ 	/* Convert to micro seconds */
+ 	do_div(delta, NSEC_PER_USEC);
++	stats->ac_tgetime = delta;
++	delta = now_ns - tsk->start_time;
++	do_div(delta, NSEC_PER_USEC);
+ 	stats->ac_etime = delta;
+ 	/* Convert to seconds for btime (note y2106 limit) */
+ 	btime = ktime_get_real_seconds() - div_u64(delta, USEC_PER_SEC);
+@@ -51,6 +56,7 @@ void bacct_add_tsk(struct user_namespace *user_ns,
+ 	stats->ac_nice	 = task_nice(tsk);
+ 	stats->ac_sched	 = tsk->policy;
+ 	stats->ac_pid	 = task_pid_nr_ns(tsk, pid_ns);
++	stats->ac_tgid   = task_tgid_nr_ns(tsk, pid_ns);
+ 	rcu_read_lock();
+ 	tcred = __task_cred(tsk);
+ 	stats->ac_uid	 = from_kuid_munged(user_ns, tcred->uid);
+diff --git a/tools/accounting/.gitignore b/tools/accounting/.gitignore
+index c45fb4ed4309..522a690aaf3d 100644
+--- a/tools/accounting/.gitignore
++++ b/tools/accounting/.gitignore
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ getdelays
++procacct
+diff --git a/tools/accounting/Makefile b/tools/accounting/Makefile
+index 03687f19cbb1..11def1ad046c 100644
+--- a/tools/accounting/Makefile
++++ b/tools/accounting/Makefile
+@@ -2,7 +2,7 @@
+ CC := $(CROSS_COMPILE)gcc
+ CFLAGS := -I../../usr/include
+ 
+-PROGS := getdelays
++PROGS := getdelays procacct
+ 
+ all: $(PROGS)
+ 
+diff --git a/tools/accounting/procacct.c b/tools/accounting/procacct.c
+new file mode 100644
+index 000000000000..8353d3237e50
+--- /dev/null
++++ b/tools/accounting/procacct.c
+@@ -0,0 +1,417 @@
++// SPDX-License-Identifier: GPL-2.0
++/* procacct.c
++ *
++ * Demonstrator of fetching resource data on task exit, as a way
++ * to accumulate accurate program resource usage statistics, without
++ * prior identification of the programs. For that, the fields for
++ * device and inode of the program executable binary file are also
++ * extracted in addition to the command string.
++ *
++ * The TGID together with the PID and the AGROUP flag allow
++ * identification of threads in a process and single-threaded processes.
++ * The ac_tgetime field gives proper whole-process walltime.
++ *
++ * Written (changed) by Thomas Orgis, University of Hamburg in 2022
++ *
++ * This is a cheap derivation (inheriting the style) of getdelays.c:
++ *
++ * Utility to get per-pid and per-tgid delay accounting statistics
++ * Also illustrates usage of the taskstats interface
++ *
++ * Copyright (C) Shailabh Nagar, IBM Corp. 2005
++ * Copyright (C) Balbir Singh, IBM Corp. 2006
++ * Copyright (c) Jay Lan, SGI. 2006
++ */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <errno.h>
++#include <unistd.h>
++#include <poll.h>
++#include <string.h>
++#include <fcntl.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <sys/socket.h>
++#include <sys/wait.h>
++#include <signal.h>
++
++#include <linux/genetlink.h>
++#include <linux/acct.h>
++#include <linux/taskstats.h>
++#include <linux/kdev_t.h>
++
++/*
++ * Generic macros for dealing with netlink sockets. Might be duplicated
++ * elsewhere. It is recommended that commercial grade applications use
++ * libnl or libnetlink and use the interfaces provided by the library
++ */
++#define GENLMSG_DATA(glh)	((void *)(NLMSG_DATA(glh) + GENL_HDRLEN))
++#define GENLMSG_PAYLOAD(glh)	(NLMSG_PAYLOAD(glh, 0) - GENL_HDRLEN)
++#define NLA_DATA(na)		((void *)((char *)(na) + NLA_HDRLEN))
++#define NLA_PAYLOAD(len)	(len - NLA_HDRLEN)
++
++#define err(code, fmt, arg...)			\
++	do {					\
++		fprintf(stderr, fmt, ##arg);	\
++		exit(code);			\
++	} while (0)
++
++int rcvbufsz;
++char name[100];
++int dbg;
++int print_delays;
++int print_io_accounting;
++int print_task_context_switch_counts;
++
++#define PRINTF(fmt, arg...) {			\
++		if (dbg) {			\
++			printf(fmt, ##arg);	\
++		}				\
++	}
++
++/* Maximum size of response requested or message sent */
++#define MAX_MSG_SIZE	1024
++/* Maximum number of cpus expected to be specified in a cpumask */
++#define MAX_CPUS	32
++
++struct msgtemplate {
++	struct nlmsghdr n;
++	struct genlmsghdr g;
++	char buf[MAX_MSG_SIZE];
++};
++
++char cpumask[100+6*MAX_CPUS];
++
++static void usage(void)
++{
++	fprintf(stderr, "procacct [-v] [-w logfile] [-r bufsize] [-m cpumask]\n");
++	fprintf(stderr, "  -v: debug on\n");
++}
++
++/*
++ * Create a raw netlink socket and bind
++ */
++static int create_nl_socket(int protocol)
++{
++	int fd;
++	struct sockaddr_nl local;
++
++	fd = socket(AF_NETLINK, SOCK_RAW, protocol);
++	if (fd < 0)
++		return -1;
++
++	if (rcvbufsz)
++		if (setsockopt(fd, SOL_SOCKET, SO_RCVBUF,
++				&rcvbufsz, sizeof(rcvbufsz)) < 0) {
++			fprintf(stderr, "Unable to set socket rcv buf size to %d\n",
++				rcvbufsz);
++			goto error;
++		}
++
++	memset(&local, 0, sizeof(local));
++	local.nl_family = AF_NETLINK;
++
++	if (bind(fd, (struct sockaddr *) &local, sizeof(local)) < 0)
++		goto error;
++
++	return fd;
++error:
++	close(fd);
++	return -1;
++}
++
++
++static int send_cmd(int sd, __u16 nlmsg_type, __u32 nlmsg_pid,
++	     __u8 genl_cmd, __u16 nla_type,
++	     void *nla_data, int nla_len)
++{
++	struct nlattr *na;
++	struct sockaddr_nl nladdr;
++	int r, buflen;
++	char *buf;
++
++	struct msgtemplate msg;
++
++	msg.n.nlmsg_len = NLMSG_LENGTH(GENL_HDRLEN);
++	msg.n.nlmsg_type = nlmsg_type;
++	msg.n.nlmsg_flags = NLM_F_REQUEST;
++	msg.n.nlmsg_seq = 0;
++	msg.n.nlmsg_pid = nlmsg_pid;
++	msg.g.cmd = genl_cmd;
++	msg.g.version = 0x1;
++	na = (struct nlattr *) GENLMSG_DATA(&msg);
++	na->nla_type = nla_type;
++	na->nla_len = nla_len + 1 + NLA_HDRLEN;
++	memcpy(NLA_DATA(na), nla_data, nla_len);
++	msg.n.nlmsg_len += NLMSG_ALIGN(na->nla_len);
++
++	buf = (char *) &msg;
++	buflen = msg.n.nlmsg_len;
++	memset(&nladdr, 0, sizeof(nladdr));
++	nladdr.nl_family = AF_NETLINK;
++	while ((r = sendto(sd, buf, buflen, 0, (struct sockaddr *) &nladdr,
++			   sizeof(nladdr))) < buflen) {
++		if (r > 0) {
++			buf += r;
++			buflen -= r;
++		} else if (errno != EAGAIN)
++			return -1;
++	}
++	return 0;
++}
++
++
++/*
++ * Probe the controller in genetlink to find the family id
++ * for the TASKSTATS family
++ */
++static int get_family_id(int sd)
++{
++	struct {
++		struct nlmsghdr n;
++		struct genlmsghdr g;
++		char buf[256];
++	} ans;
++
++	int id = 0, rc;
++	struct nlattr *na;
++	int rep_len;
++
++	strcpy(name, TASKSTATS_GENL_NAME);
++	rc = send_cmd(sd, GENL_ID_CTRL, getpid(), CTRL_CMD_GETFAMILY,
++			CTRL_ATTR_FAMILY_NAME, (void *)name,
++			strlen(TASKSTATS_GENL_NAME)+1);
++	if (rc < 0)
++		return 0;	/* sendto() failure? */
++
++	rep_len = recv(sd, &ans, sizeof(ans), 0);
++	if (ans.n.nlmsg_type == NLMSG_ERROR ||
++	    (rep_len < 0) || !NLMSG_OK((&ans.n), rep_len))
++		return 0;
++
++	na = (struct nlattr *) GENLMSG_DATA(&ans);
++	na = (struct nlattr *) ((char *) na + NLA_ALIGN(na->nla_len));
++	if (na->nla_type == CTRL_ATTR_FAMILY_ID)
++		id = *(__u16 *) NLA_DATA(na);
++
++	return id;
++}
++
++#define average_ms(t, c) (t / 1000000ULL / (c ? c : 1))
++
++static void print_procacct(struct taskstats *t)
++{
++	/* First letter: T is a mere thread, G the last in a group, U  unknown. */
++	printf(
++		"%c pid=%lu tgid=%lu uid=%lu wall=%llu gwall=%llu cpu=%llu vmpeak=%llu rsspeak=%llu dev=%lu:%lu inode=%llu comm=%s\n"
++	,	t->version >= 12 ? (t->ac_flag & AGROUP ? 'P' : 'T') : '?'
++	,	(unsigned long)t->ac_pid
++	,	(unsigned long)(t->version >= 12 ? t->ac_tgid : 0)
++	,	(unsigned long)t->ac_uid
++	,	(unsigned long long)t->ac_etime
++	,	(unsigned long long)(t->version >= 12 ? t->ac_tgetime : 0)
++	,	(unsigned long long)(t->ac_utime+t->ac_stime)
++	,	(unsigned long long)t->hiwater_vm
++	,	(unsigned long long)t->hiwater_rss
++	,	(unsigned long)(t->version >= 12 ? MAJOR(t->ac_exe_dev) : 0)
++	,	(unsigned long)(t->version >= 12 ? MINOR(t->ac_exe_dev) : 0)
++	,	(unsigned long long)(t->version >= 12 ? t->ac_exe_inode : 0)
++	,	t->ac_comm
++	);
++}
++
++void handle_aggr(int mother, struct nlattr *na, int fd)
++{
++	int aggr_len = NLA_PAYLOAD(na->nla_len);
++	int len2 = 0;
++	pid_t rtid = 0;
++
++	na = (struct nlattr *) NLA_DATA(na);
++	while (len2 < aggr_len) {
++		switch (na->nla_type) {
++		case TASKSTATS_TYPE_PID:
++			rtid = *(int *) NLA_DATA(na);
++			PRINTF("PID\t%d\n", rtid);
++			break;
++		case TASKSTATS_TYPE_TGID:
++			rtid = *(int *) NLA_DATA(na);
++			PRINTF("TGID\t%d\n", rtid);
++			break;
++		case TASKSTATS_TYPE_STATS:
++			if (mother == TASKSTATS_TYPE_AGGR_PID)
++				print_procacct((struct taskstats *) NLA_DATA(na));
++			if (fd) {
++				if (write(fd, NLA_DATA(na), na->nla_len) < 0)
++					err(1, "write error\n");
++			}
++			break;
++		case TASKSTATS_TYPE_NULL:
++			break;
++		default:
++			fprintf(stderr, "Unknown nested nla_type %d\n",
++				na->nla_type);
++			break;
++		}
++		len2 += NLA_ALIGN(na->nla_len);
++		na = (struct nlattr *)((char *)na +
++						 NLA_ALIGN(na->nla_len));
++	}
++}
++
++int main(int argc, char *argv[])
++{
++	int c, rc, rep_len, aggr_len, len2;
++	int cmd_type = TASKSTATS_CMD_ATTR_UNSPEC;
++	__u16 id;
++	__u32 mypid;
++
++	struct nlattr *na;
++	int nl_sd = -1;
++	int len = 0;
++	pid_t tid = 0;
++
++	int fd = 0;
++	int write_file = 0;
++	int maskset = 0;
++	char *logfile = NULL;
++	int containerset = 0;
++	char *containerpath = NULL;
++	int cfd = 0;
++	int forking = 0;
++	sigset_t sigset;
++
++	struct msgtemplate msg;
++
++	while (!forking) {
++		c = getopt(argc, argv, "m:vr:");
++		if (c < 0)
++			break;
++
++		switch (c) {
++		case 'w':
++			logfile = strdup(optarg);
++			printf("write to file %s\n", logfile);
++			write_file = 1;
++			break;
++		case 'r':
++			rcvbufsz = atoi(optarg);
++			printf("receive buf size %d\n", rcvbufsz);
++			if (rcvbufsz < 0)
++				err(1, "Invalid rcv buf size\n");
++			break;
++		case 'm':
++			strncpy(cpumask, optarg, sizeof(cpumask));
++			cpumask[sizeof(cpumask) - 1] = '\0';
++			maskset = 1;
++			break;
++		case 'v':
++			printf("debug on\n");
++			dbg = 1;
++			break;
++		default:
++			usage();
++			exit(-1);
++		}
++	}
++	if (!maskset) {
++		maskset = 1;
++		strncpy(cpumask, "1", sizeof(cpumask));
++		cpumask[sizeof(cpumask) - 1] = '\0';
++	}
++	printf("cpumask %s maskset %d\n", cpumask, maskset);
++
++	if (write_file) {
++		fd = open(logfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
++		if (fd == -1) {
++			perror("Cannot open output file\n");
++			exit(1);
++		}
++	}
++
++	nl_sd = create_nl_socket(NETLINK_GENERIC);
++	if (nl_sd < 0)
++		err(1, "error creating Netlink socket\n");
++
++	mypid = getpid();
++	id = get_family_id(nl_sd);
++	if (!id) {
++		fprintf(stderr, "Error getting family id, errno %d\n", errno);
++		goto err;
++	}
++	PRINTF("family id %d\n", id);
++
++	if (maskset) {
++		rc = send_cmd(nl_sd, id, mypid, TASKSTATS_CMD_GET,
++			      TASKSTATS_CMD_ATTR_REGISTER_CPUMASK,
++			      &cpumask, strlen(cpumask) + 1);
++		PRINTF("Sent register cpumask, retval %d\n", rc);
++		if (rc < 0) {
++			fprintf(stderr, "error sending register cpumask\n");
++			goto err;
++		}
++	}
++
++	do {
++		rep_len = recv(nl_sd, &msg, sizeof(msg), 0);
++		PRINTF("received %d bytes\n", rep_len);
++
++		if (rep_len < 0) {
++			fprintf(stderr, "nonfatal reply error: errno %d\n",
++				errno);
++			continue;
++		}
++		if (msg.n.nlmsg_type == NLMSG_ERROR ||
++		    !NLMSG_OK((&msg.n), rep_len)) {
++			struct nlmsgerr *err = NLMSG_DATA(&msg);
++
++			fprintf(stderr, "fatal reply error,  errno %d\n",
++				err->error);
++			goto done;
++		}
++
++		PRINTF("nlmsghdr size=%zu, nlmsg_len=%d, rep_len=%d\n",
++		       sizeof(struct nlmsghdr), msg.n.nlmsg_len, rep_len);
++
++
++		rep_len = GENLMSG_PAYLOAD(&msg.n);
++
++		na = (struct nlattr *) GENLMSG_DATA(&msg);
++		len = 0;
++		while (len < rep_len) {
++			len += NLA_ALIGN(na->nla_len);
++			int mother = na->nla_type;
++
++			PRINTF("mother=%i\n", mother);
++			switch (na->nla_type) {
++			case TASKSTATS_TYPE_AGGR_PID:
++			case TASKSTATS_TYPE_AGGR_TGID:
++				/* For nested attributes, na follows */
++				handle_aggr(mother, na, fd);
++				break;
++			default:
++				fprintf(stderr, "Unexpected nla_type %d\n",
++					na->nla_type);
++			case TASKSTATS_TYPE_NULL:
++				break;
++			}
++			na = (struct nlattr *) (GENLMSG_DATA(&msg) + len);
++		}
++	} while (1);
++done:
++	if (maskset) {
++		rc = send_cmd(nl_sd, id, mypid, TASKSTATS_CMD_GET,
++			      TASKSTATS_CMD_ATTR_DEREGISTER_CPUMASK,
++			      &cpumask, strlen(cpumask) + 1);
++		printf("Sent deregister mask, retval %d\n", rc);
++		if (rc < 0)
++			err(rc, "error sending deregister cpumask\n");
++	}
++err:
++	close(nl_sd);
++	if (fd)
++		close(fd);
++	if (cfd)
++		close(cfd);
++	return 0;
++}
 -- 
-Damien Le Moal
-Western Digital Research
+2.25.1
+

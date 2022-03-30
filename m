@@ -2,60 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC564EC550
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 743FC4EC553
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239521AbiC3NPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 09:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36398 "EHLO
+        id S1345772AbiC3NQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 09:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344304AbiC3NPP (ORCPT
+        with ESMTP id S1344304AbiC3NQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 09:15:15 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD0D110F
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 06:13:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648646008; x=1680182008;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=md34CbOmrYvcdZqOoeqVQTjr9uRxMUd+WE/OgzKyhHc=;
-  b=DGPZloWtg3N7TPR77Vluhte4QiEnwBLBsY8LIvJCRxeXz/GRFbtnOS/u
-   /WYpi1UvmP+bcgL0fazEBw9r7BvB5PdE7vl82W7QnmePCJxAiGTF1hT2Y
-   pT6XTxR3SzVE2/S8HxHASXM267fkM0mlkTpiKTX1xLbSuPhYTH41wgVq+
-   kyJVGrV63TdJ34mrESNNlS22MnnFEnP4edODCqSjVLU81BWeyq+uec/p1
-   6qdCcBVLoSOzIcvw6dfVJzQsghiZFT98hokaY7NIled8LPCByiU2F/S18
-   h+uEnXRhLzm5fK8LxXfWDIntOkYJNuw/Tt4oAK5dut5EHSmqHKiGxqjwl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="247037861"
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="247037861"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 06:13:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="519671175"
-Received: from lkp-server02.sh.intel.com (HELO 1905232cd9fb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 30 Mar 2022 06:13:26 -0700
-Received: from kbuild by 1905232cd9fb with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nZY8c-00003N-5W;
-        Wed, 30 Mar 2022 13:13:26 +0000
-Date:   Wed, 30 Mar 2022 21:13:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.03.24a] BUILD SUCCESS
- b89e06a95c05009bcf31949814c42bc420f414a6
-Message-ID: <62445761.3X5YPVhQWldhfog1%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 30 Mar 2022 09:16:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACD702FFFE
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 06:14:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648646088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ldezc9GK3QLkJKuWMQhPgYUN/ziZJCuKDduMpDPTgac=;
+        b=emGF+PUqS8xbuG/al2Chln071JwVy95OLtSyubSOvayZuICqTGvL06WXX3B+5kQ6a6e8Pv
+        tUg2t8U9rvHqwB2EeQhhuEXmtBS+xiY/aP3GdlxvojNl2vIBCpjnRI5k5lRShy780r2vCI
+        I6aSTcE0W5xRW3m7gMfFW9uJkj6Sd+Q=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-530-yPfonb3mPUuvm8Zswtt61g-1; Wed, 30 Mar 2022 09:14:47 -0400
+X-MC-Unique: yPfonb3mPUuvm8Zswtt61g-1
+Received: by mail-wm1-f70.google.com with SMTP id c126-20020a1c3584000000b00380dee8a62cso7901321wma.8
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 06:14:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=ldezc9GK3QLkJKuWMQhPgYUN/ziZJCuKDduMpDPTgac=;
+        b=i1Mcz2P6epGLzPwHNRil+J5ZkRMVvIY99cWIVABaHqKnFW7CZQfpny3X0w2q/hvj4C
+         tG1FrSW8SB8zWC0aaJY25LOmS8/k2vO3gojNljZC/mcVUo7awm+VzUctbhNWF3hD8605
+         m07KbxOOsbFbIXGU+yUMAOhtgnkUKgzIxxKuw3lqOc/7veBuhW7rib7QKQkXvQafnMIc
+         HC0w4BiI5OwKb9ZpXYPUYZGUNQPjk7kJurm9Qx01WOmrqzg3znwiOyuAuLJGr95pd1P1
+         HTvTV1BrcPb5gxaBA+AshZhEjJAttfaruJdxOeJCuQWVptKvWoo8yEAHBz6JwVTXL8Pr
+         RWDQ==
+X-Gm-Message-State: AOAM531cr9ulTCAc+QWX/TxiNjqiw7WycJmIIsUyI8ACvnHp6o7IkceM
+        n0Poj9XeoX1ANoFTB45Lg+FXEU48bZjqEWOQc6RlD8BWtxbKigYlRyoIzsuOcInQt0dYKa3arfx
+        p7MfoLqIdQ/pbRMD7awcL+65P
+X-Received: by 2002:adf:ec04:0:b0:205:8537:af5c with SMTP id x4-20020adfec04000000b002058537af5cmr35250511wrn.357.1648646085674;
+        Wed, 30 Mar 2022 06:14:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJycL6xQGmW2GqfiTku9O+trJ1+RLopcuDW1jwFCh03mQc+leccCBpVASZhSVjleB7q+OdHkgw==
+X-Received: by 2002:adf:ec04:0:b0:205:8537:af5c with SMTP id x4-20020adfec04000000b002058537af5cmr35250495wrn.357.1648646085406;
+        Wed, 30 Mar 2022 06:14:45 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:2200:178b:7244:2a1f:b5d8? (p200300cbc7052200178b72442a1fb5d8.dip0.t-ipconnect.de. [2003:cb:c705:2200:178b:7244:2a1f:b5d8])
+        by smtp.gmail.com with ESMTPSA id j17-20020a05600c1c1100b0038e389ab62esm1998504wms.9.2022.03.30.06.14.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 06:14:44 -0700 (PDT)
+Message-ID: <57639524-b930-c31b-196b-bafae8c4e374@redhat.com>
+Date:   Wed, 30 Mar 2022 15:14:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 1/2] mm: fix contiguous memmap assumptions about split
+ page
+Content-Language: en-US
+To:     Chen Wandun <chenwandun@huawei.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        willy@infradead.org
+References: <20220330102534.1053240-1-chenwandun@huawei.com>
+ <20220330102534.1053240-2-chenwandun@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220330102534.1053240-2-chenwandun@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,172 +85,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.03.24a
-branch HEAD: b89e06a95c05009bcf31949814c42bc420f414a6  rcu_sync: Fix comment to properly reflect rcu_sync_exit() behavior
+On 30.03.22 12:25, Chen Wandun wrote:
+> It isn't true for only SPARSEMEM configs to assume that a compound page
+> has virtually contiguous page structs, so use nth_page to iterate each
+> page.
 
-elapsed time: 725m
+Is this actually a "fix" or rather a preparation for having very large
+compound pages (>= MAX_ORDER) that we'd be able to split?
 
-configs tested: 151
-configs skipped: 4
+Naive me would think that we'd currently only have order < MAX_ORDER,
+and consequently would always fall into a single memory section where
+the memmap is contiguous.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> 
+> Inspired by:
+> https://lore.kernel.org/linux-mm/20220204195852.1751729-8-willy@infradead.org/
+> 
+> Signed-off-by: Chen Wandun <chenwandun@huawei.com>
+> ---
+>  mm/compaction.c  | 6 +++---
+>  mm/huge_memory.c | 2 +-
+>  mm/page_alloc.c  | 2 +-
+>  3 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/mm/compaction.c b/mm/compaction.c
+> index c3e37aa9ff9e..ddff13b968a2 100644
+> --- a/mm/compaction.c
+> +++ b/mm/compaction.c
+> @@ -87,7 +87,7 @@ static unsigned long release_freepages(struct list_head *freelist)
+>  static void split_map_pages(struct list_head *list)
+>  {
+>  	unsigned int i, order, nr_pages;
+> -	struct page *page, *next;
+> +	struct page *page, *next, *tmp;
+>  	LIST_HEAD(tmp_list);
+>  
+>  	list_for_each_entry_safe(page, next, list, lru) {
+> @@ -101,8 +101,8 @@ static void split_map_pages(struct list_head *list)
+>  			split_page(page, order);
+>  
+>  		for (i = 0; i < nr_pages; i++) {
+> -			list_add(&page->lru, &tmp_list);
+> -			page++;
+> +			tmp = nth_page(page, i);
+> +			list_add(&tmp->lru, &tmp_list);
+>  		}
+>  	}
+>  
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 2fe38212e07c..d77fc2ad581d 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2297,7 +2297,7 @@ static void lru_add_page_tail(struct page *head, struct page *tail,
+>  static void __split_huge_page_tail(struct page *head, int tail,
+>  		struct lruvec *lruvec, struct list_head *list)
+>  {
+> -	struct page *page_tail = head + tail;
+> +	struct page *page_tail = nth_page(head, tail);
+>  
+>  	VM_BUG_ON_PAGE(atomic_read(&page_tail->_mapcount) != -1, page_tail);
+>  
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index f648decfe39d..855211dea13e 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -3513,7 +3513,7 @@ void split_page(struct page *page, unsigned int order)
+>  	VM_BUG_ON_PAGE(!page_count(page), page);
+>  
+>  	for (i = 1; i < (1 << order); i++)
+> -		set_page_refcounted(page + i);
+> +		set_page_refcounted(nth_page(page, i));
+>  	split_page_owner(page, 1 << order);
+>  	split_page_memcg(page, 1 << order);
+>  }
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-mips                 randconfig-c004-20220330
-sh                          landisk_defconfig
-sh                        edosk7760_defconfig
-powerpc                     rainier_defconfig
-um                             i386_defconfig
-xtensa                    smp_lx200_defconfig
-arm                        mini2440_defconfig
-sh                           se7619_defconfig
-sh                          lboxre2_defconfig
-powerpc                    klondike_defconfig
-sparc                       sparc64_defconfig
-sh                          rsk7201_defconfig
-arm                        clps711x_defconfig
-arm                            xcep_defconfig
-arm                          badge4_defconfig
-powerpc                    sam440ep_defconfig
-mips                            ar7_defconfig
-arm                            hisi_defconfig
-ia64                            zx1_defconfig
-sh                         ecovec24_defconfig
-arm                             pxa_defconfig
-arc                                 defconfig
-i386                                defconfig
-mips                           xway_defconfig
-xtensa                       common_defconfig
-sh                            hp6xx_defconfig
-arc                          axs101_defconfig
-sparc                       sparc32_defconfig
-openrisc                            defconfig
-sh                            titan_defconfig
-powerpc                     tqm8548_defconfig
-arm                      integrator_defconfig
-sh                          urquell_defconfig
-sh                          kfr2r09_defconfig
-mips                           ip32_defconfig
-sh                            migor_defconfig
-arm                            pleb_defconfig
-arm                         s3c6400_defconfig
-mips                        vocore2_defconfig
-sh                   sh7724_generic_defconfig
-mips                         bigsur_defconfig
-sh                        sh7757lcr_defconfig
-arm                  randconfig-c002-20220329
-arm                  randconfig-c002-20220327
-arm                  randconfig-c002-20220330
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                 randconfig-a001-20220328
-i386                 randconfig-a003-20220328
-i386                 randconfig-a006-20220328
-i386                 randconfig-a005-20220328
-i386                 randconfig-a004-20220328
-i386                 randconfig-a002-20220328
-x86_64               randconfig-a001-20220328
-x86_64               randconfig-a003-20220328
-x86_64               randconfig-a002-20220328
-x86_64               randconfig-a005-20220328
-x86_64               randconfig-a004-20220328
-x86_64               randconfig-a006-20220328
-riscv                randconfig-r042-20220330
-s390                 randconfig-r044-20220330
-arc                  randconfig-r043-20220330
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                                  kexec
-
-clang tested configs:
-powerpc                     mpc5200_defconfig
-arm                     am200epdkit_defconfig
-mips                   sb1250_swarm_defconfig
-powerpc                   lite5200b_defconfig
-powerpc                     kilauea_defconfig
-riscv                            alldefconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64               randconfig-a016-20220328
-x86_64               randconfig-a012-20220328
-x86_64               randconfig-a011-20220328
-x86_64               randconfig-a014-20220328
-x86_64               randconfig-a013-20220328
-x86_64               randconfig-a015-20220328
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                 randconfig-a015-20220328
-i386                 randconfig-a016-20220328
-i386                 randconfig-a011-20220328
-i386                 randconfig-a012-20220328
-i386                 randconfig-a014-20220328
-i386                 randconfig-a013-20220328
-riscv                randconfig-r042-20220328
-hexagon              randconfig-r045-20220329
-hexagon              randconfig-r045-20220328
-hexagon              randconfig-r045-20220327
-hexagon              randconfig-r041-20220327
-hexagon              randconfig-r045-20220330
-hexagon              randconfig-r041-20220329
-hexagon              randconfig-r041-20220328
-hexagon              randconfig-r041-20220330
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+
+David / dhildenb
+

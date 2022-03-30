@@ -2,67 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFF14EB9B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 06:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A084EB9B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 06:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242608AbiC3Ehi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 00:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
+        id S242621AbiC3EiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 00:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242577AbiC3Ehc (ORCPT
+        with ESMTP id S242667AbiC3EiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 00:37:32 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF952252A
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 21:35:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648614948; x=1680150948;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZoWj1iYnMYM7xNhqLBqkQbeVYvtNJbctzqx4BvnGBYs=;
-  b=T90Klg3M0BHK2reIOaNCcqtqqZ9hFPoyW9G2CAVhzQay9tiJKI/uzFmu
-   XDJ39Ns94pAkpGafUJZOrn3XhvKva0m2f9h6f7BSMsOXJZPrGZDshwLH6
-   RSyrmWofrwUolep3+kw3nyPfW8bnHjt9oK4s8BpqpjHWy4nGDBHVDaMXe
-   DjSYZslg1HI0FtN0q4PKbJC4U8LTbmDessLQJH0Lk4P2a3Apm+rkQzoxh
-   LR4PSAwk1zZOqV9vNw4SKdMyszyEj6z1Owu26gMcF0j8/Ini6szvxxolT
-   SKdG7QHbzLlPIuImzdu55wg05ERXiTtdvlssEzl2lLJbzdFKdfBTbw5P7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="259629452"
-X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="259629452"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 21:35:47 -0700
-X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="565256560"
-Received: from unknown (HELO [10.249.164.87]) ([10.249.164.87])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 21:35:43 -0700
-Message-ID: <d46a3f73-4e0f-c86a-f8f8-ff207bedf4e5@linux.intel.com>
-Date:   Wed, 30 Mar 2022 12:35:40 +0800
+        Wed, 30 Mar 2022 00:38:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E9A22B24;
+        Tue, 29 Mar 2022 21:36:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D60A061560;
+        Wed, 30 Mar 2022 04:36:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE474C340F0;
+        Wed, 30 Mar 2022 04:36:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648614993;
+        bh=pYArpFbewAQPlyehfe9Ax847/durxWMKTHZCv43s+gI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S7zLHVjEdfr3mUJkJ0tsFbL3eqz4As+/Xl9nN0DxlXf1d4VLODh/cirbPzlvT1+NU
+         TxtDV0iL0j1Abe2LBh2Wx9RHVUgC4N/7eXGKl2PhBsWW6tZ+2J8tr/9MuBm0dGOZ6U
+         75q6Fz5jFVmWdPKPkS5e5rEj6gNE+diJhI4Kh4C4=
+Date:   Wed, 30 Mar 2022 06:36:30 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org, lwn@lwn.net,
+        jslaby@suse.cz
+Subject: Re: Stable release process proposal (Was: Linux 5.10.109)
+Message-ID: <YkPeTkf0sG/ns+L4@kroah.com>
+References: <164845571613863@kroah.com>
+ <44e28591-873a-d873-e04a-78dda900a5de@ispras.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
-Subject: Re: [PATCH RFC v2 03/11] iommu/sva: Add iommu_domain type for SVA
-Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@intel.com>
-References: <20220329053800.3049561-1-baolu.lu@linux.intel.com>
- <20220329053800.3049561-4-baolu.lu@linux.intel.com>
- <20220329143848.2e763727@jacob-builder>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220329143848.2e763727@jacob-builder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <44e28591-873a-d873-e04a-78dda900a5de@ispras.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,60 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/30 5:38, Jacob Pan wrote:
->> +static struct iommu_domain *
->> +iommu_sva_alloc_domain(struct device *dev, struct mm_struct *mm)
->> +{
->> +	struct bus_type *bus = dev->bus;
->> +	struct iommu_sva_cookie *cookie;
->> +	struct iommu_domain *domain;
->> +	void *curr;
->> +
->> +	if (!bus || !bus->iommu_ops)
->> +		return NULL;
->> +
->> +	cookie = kzalloc(sizeof(*cookie), GFP_KERNEL);
->> +	if (!cookie)
->> +		return NULL;
->> +
->> +	domain = bus->iommu_ops->domain_alloc(IOMMU_DOMAIN_SVA);
->> +	if (!domain)
->> +		goto err_domain_alloc;
->> +
->> +	cookie->mm = mm;
->> +	cookie->pasid = mm->pasid;
-> How do you manage the mm life cycle? do you require caller take mm reference?
-> Or this should be limited to the current mm?
+On Wed, Mar 30, 2022 at 02:49:00AM +0300, Alexey Khoroshilov wrote:
+> Dear Greg,
 > 
+> First of all, thank you very much for keeping stable maintenance so well.
+> 
+> We (Linux Verification Center of ISPRAS (linuxtesting.org)) are going to
+> join a team of regular testers for releases in 5.10 stable branch (and
+> other branches later). We are deploying some test automation for that
+> and have met an oddity that would to discuss.
+> 
+> Sometimes, like in 5.10.109 release, we have a situation when a
+> released version (5.10.109) differs from the release candidate
+> (5.10.109-rс1). In this case there was a patch "llc: only change
+> llc->dev when bind()succeeds" added to fix a bug in another llc fix.
+> Unfortunately, as Pavel noted, this patch does not fix a bug, but
+> introduces a new one, because another commit b37a46683739 ("netdevice:
+> add the case if dev is NULL") was missed in 5.10 branch.
 
-The existing sva_bind() interface requires the caller to take the mm
-reference before calling it. So mm is safe during sva bind() and
-unbind().
+This happens quite frequently due to issues found in testing.  It's not
+a new thing.
 
-drivers/iommu/iommu.c:
-/**
-  * iommu_sva_bind_device() - Bind a process address space to a device
-  * @dev: the device
-  * @mm: the mm to bind, caller must hold a reference to it
-  * @drvdata: opaque data pointer to pass to bind callback
-  *
-  * Create a bond between device and address space, allowing the device 
-to access
-  * the mm using the returned PASID. If a bond already exists between 
-@device and
-  * @mm, it is returned and an additional reference is taken. Caller 
-must call
-  * iommu_sva_unbind_device() to release each reference.
-  *
-  * iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA) must be called 
-first, to
-  * initialize the required SVA features.
-  *
-  * On error, returns an ERR_PTR value.
-  */
-struct iommu_sva *
-iommu_sva_bind_device(struct device *dev, struct mm_struct *mm, void 
-*drvdata)
+> The problem will be fixed in 5.10.110, but we still have a couple oddities:
+> - we have a release that should not be recommended for use
+> - we have a commit message misleading users when says:
+> 
+>     Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+>     Tested-by: Fox Chen <foxhlchen@gmail.com>
+>     Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+>     Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+>     Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>     Tested-by: Salvatore Bonaccorso <carnil@debian.org>
+>     Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>     Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+>     Tested-by: Guenter Roeck <linux@roeck-us.net>
+> 
+> but actually nobody tested that version.
+> 
+> There are potential modifications in stable release process that can
+> prevent such problems:
+> 
+> (1) to always release rс2 when there are changes in rc1 introduced
+> 
+> (2) to avoid Tested-by: section from release commits in such situations.
+> 
+> Or may be it is overkill and it too complicates maintenance work to be
+> worth. What do you think?
 
-Best regards,
-baolu
+I think it's not worth the extra work on my side for this given the
+already large workload.  What would benifit from this to justify it?
+
+thanks,
+
+greg k-h

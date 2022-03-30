@@ -2,93 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6AB44EBA97
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E454EBA9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243176AbiC3GKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 02:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46522 "EHLO
+        id S243183AbiC3GLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 02:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiC3GKc (ORCPT
+        with ESMTP id S243169AbiC3GLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 02:10:32 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4765D15A1E;
-        Tue, 29 Mar 2022 23:08:44 -0700 (PDT)
-Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MbAtM-1oAi8I1smO-00bcyB; Wed, 30 Mar 2022 08:08:42 +0200
-Received: by mail-wr1-f52.google.com with SMTP id c7so1122052wrd.0;
-        Tue, 29 Mar 2022 23:08:42 -0700 (PDT)
-X-Gm-Message-State: AOAM5310fkRJtrS6jihAZVBqCBnFjzVrhTxXKfGgxC908b4YF5i7OqYL
-        KR+D0++poGqPhrhYK9MbJYIt3fpsSsU9Kd0MTxQ=
-X-Google-Smtp-Source: ABdhPJxb3ayTdwP7GbKNqgnIvGjF8ohxETPSVjrIT/ae8J5nVyT7Tv5Q0wb9WsBju9Q+yhSNMby/JlkVM5NhGe611Ew=
-X-Received: by 2002:a5d:66ca:0:b0:203:fb72:a223 with SMTP id
- k10-20020a5d66ca000000b00203fb72a223mr33812160wrw.12.1648620522122; Tue, 29
- Mar 2022 23:08:42 -0700 (PDT)
+        Wed, 30 Mar 2022 02:11:08 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AD12A24C
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:09:20 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id bu29so34096228lfb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:09:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pT4t7FiXDpWEJ+Gdcq9jt19cTP349yR9JVwGjR03zUk=;
+        b=BEuTLZKeQP6zu3UJzSFP7JaR2YwCnRUrlJkQv4WtpxMCRumMmrfBnrFjl/HB01zmNV
+         ZNzoks2Vuw2ELa4dCEgIM1XblYrH7/XoF7IiRGR7U+RHP6QUiZKMtRF4TvGIHB+ibVBm
+         fuYfCI2pn1BpPo4Fadjzf9jWh6DrCFMQFbGXU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pT4t7FiXDpWEJ+Gdcq9jt19cTP349yR9JVwGjR03zUk=;
+        b=uACLpjY2BvkBPIhz82YeXqEiGVkkL3cv32kSmzUwZVHHc6Bh2ndbsVqxpgSj8VeGPe
+         HaGULqRE/H9Un7/dkav0STtTSZ8kzTGk1uI29HFLyX768XFr0m2zoyJCqY5duV+dRGRZ
+         d97AVvb4l8EVbyH8n7KRwr1NPi1ct9z1efB3w+Xp1QdOL0ai6u22kCGNjAK8eErKwvzw
+         5u7k+OYb43axHzLFPbzmsAWDORlPKxuEWVESpYZS75eLJjmsgj/Z1Xqxb5cFkmBnhc1p
+         vMbQhT/Hygfapm/mBGuEOLhZb3Tps71Y6FHm+jaALcx33cegTf7BkSWp9cRPSEftkk9H
+         nLEg==
+X-Gm-Message-State: AOAM530T9FhRd8An0ASBq1xhxofqsLnQPg5be3PmSCX4CugPOa2D6BDF
+        RyIVjF/MDUzqLv/hTVKTP7biC833/KChKL0H
+X-Google-Smtp-Source: ABdhPJxQyhXixDyyHwut1zaudaOOr9413X7VN4lHqBzf5pDT+wrpm6jziOr6M1IprfHqT8xXlXfuvQ==
+X-Received: by 2002:a19:5f59:0:b0:44a:2040:522f with SMTP id a25-20020a195f59000000b0044a2040522fmr5320995lfj.590.1648620557926;
+        Tue, 29 Mar 2022 23:09:17 -0700 (PDT)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
+        by smtp.gmail.com with ESMTPSA id k18-20020a192d12000000b0044a5ddcf5fcsm2166316lfj.226.2022.03.29.23.09.12
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 23:09:15 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id e16so33934730lfc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:09:12 -0700 (PDT)
+X-Received: by 2002:a05:6512:3055:b0:44a:3914:6603 with SMTP id
+ b21-20020a056512305500b0044a39146603mr5600655lfb.435.1648620551380; Tue, 29
+ Mar 2022 23:09:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220329212946.2861648-1-ndesaulniers@google.com>
- <CAKwvOdmsnVsW46pTZYCNu-bx5c-aJ8ARMCOsYeMmQHpAw3PtPg@mail.gmail.com>
- <CAKwvOdnJB5u96fm1w-R-VUayvhq58EQeqZst32NDRscK17Z8pQ@mail.gmail.com> <CAKwvOdmYzH91bzNus+RcZGSgCQGY8UKt0-2JvtqQAh=w+CeiuQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdmYzH91bzNus+RcZGSgCQGY8UKt0-2JvtqQAh=w+CeiuQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 30 Mar 2022 08:08:25 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a37gvycJ4zbeVvD_=6Npuep52VEP7CrgS-_8y6OXK_U3Q@mail.gmail.com>
-Message-ID: <CAK8P3a37gvycJ4zbeVvD_=6Npuep52VEP7CrgS-_8y6OXK_U3Q@mail.gmail.com>
-Subject: Re: [PATCH] net, uapi: remove inclusion of arpa/inet.h
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Jon Maloy <jmaloy@redhat.com>, Ying Xue <ying.xue@windriver.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        tipc-discussion@lists.sourceforge.net,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>
+References: <20220326114009.1690-1-aissur0002@gmail.com> <2698031.BEx9A2HvPv@fedor-zhuzhzhalka67>
+ <CAHk-=wh2Ao+OgnWSxHsJodXiLwtaUndXSkuhh9yKnA3iXyBLEA@mail.gmail.com>
+ <4705670.GXAFRqVoOG@fedor-zhuzhzhalka67> <CAHk-=wiKhn+VsvK8CiNbC27+f+GsPWvxMVbf7QET+7PQVPadwA@mail.gmail.com>
+ <CAHk-=wjRwwUywAa9TzQUxhqNrQzZJQZvwn1JSET3h=U+3xi8Pg@mail.gmail.com> <YkPo0N/CVHFDlB6v@zx2c4.com>
+In-Reply-To: <YkPo0N/CVHFDlB6v@zx2c4.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 29 Mar 2022 23:08:55 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgPwyQTnSF2s7WSb+KnGn4FTM58NJ+-v-561W7xnDk2OA@mail.gmail.com>
+Message-ID: <CAHk-=wgPwyQTnSF2s7WSb+KnGn4FTM58NJ+-v-561W7xnDk2OA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] file: Fix file descriptor leak in copy_fd_bitmaps()
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Fedor Pchelkin <aissur0002@gmail.com>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Y+sOCBA1aykYnTt/I8gB+NYawWvP+FFAV4GoMRVJt4lgJub9nrG
- gIXDCJcfU2IafBz7hhkB2UrGbP2JLZqITBXgj0cGDft8O6Nfn4USZqi9Lgt0dDCB+JM3Wrh
- CeKoV3DLq6Dz8RJhPnd5j+MDBhNnsyeMomGq3A0kdcBpvNg2KcGoPlbdKgEMzUBV9dLxpQw
- KU8s6gJPOlQ/GzgFxJJrw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gACwt6VXWF4=:v+GG1NbOp+ArW34sQ9lXmm
- 1NU0SactVUOddo/Yw+637coktYUQ6v35PX/mI8CqwIJXuF6VPbAUN2awrEfDWEbYycvHdF4kc
- eByepo7ecgmx5o6GpAESWXTQwJ2L/i/MrK08uI0+Aqvqawvdf/887MQm/RyfGPWpp1ce3wfAg
- RLbjbCXjhWvqah6knB+rP5MiRoxuFc3em1dVtLM04EHo0+7Uuy51a4Si63Ls+aaiq0I8+Mrdf
- uG4HIBtSIx+jzSa97FUKl7JDzRT3dgA/0KxSyaqJSFHshRc4PD0DY10a+mWuNM/TiNcAn3aGZ
- sqZxdST5Qs1KNJy/5Rzr2VqsNW/NLTyvvf1kyd2l4vlFZheAcKn2uIjBAfZnzLSaOT1grqJkY
- mYtI5nISLabJNu61xJkT3OAmb+tGvEWF/XCbqHCs3Fwt07gPTVveIElIEdNl2LnYZR9KGKtIg
- khRQCa0ARkF6Pvg98NK2k2vRvIs6QeJI6JFl6bjzElil1/AxojUT/l653jMHNcpXrf4JwaKoZ
- seyWA2Ot8DSS4LIqldAMmaHoTSfvDzwOUuPmp+At1va19eyXsCdRGRQIPrpOfErgCNzOxV7sz
- btzCub3Z83sa1VTlhPkUmqUjL80U4Cgcxx/bOziai+rfWDIi0NB2H4jzXD3Nx5ZLp4VUKgeOn
- Fs6plBoyZDG/BekQMDXJGpbCA8Hvh/L5xFL2W4bCMqwmtbF1qKBmve2vvTDfK67vUcTM=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 12:26 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
-> On Tue, Mar 29, 2022 at 3:09 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
-> ```
-> diff --git a/include/uapi/linux/byteorder/little_endian.h
-> b/include/uapi/linux/byteorder/little_endian.h
-> index cd98982e7523..c14f2c3728e2 100644
-> --- a/include/uapi/linux/byteorder/little_endian.h
-> +++ b/include/uapi/linux/byteorder/little_endian.h
-> @@ -103,5 +103,8 @@ static __always_inline __u16 __be16_to_cpup(const __be16 *p)
->  #define __cpu_to_be16s(x) __swab16s((x))
->  #define __be16_to_cpus(x) __swab16s((x))
+On Tue, Mar 29, 2022 at 10:21 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
 >
-> +#define htonl(x) __cpu_to_be32(x)
-> +#define htons(x) __cpu_to_be16(x)
-> +#define ntohs(x) __be16_to_cpu(x)
->
+> Peppering some printks, it looks like in `max_fds = ALIGN(max_fds,
+> BITS_PER_LONG);`, max_fds is sometimes 4294967295 before the call, and
+> that ALIGN winds up bringing it to 0.
 
-This is unfortunately a namespace violation, you can't define things in uapi
-headers that conflict with standard library interfaces.
+Gaah. I actually went back and forth on the location of the ALIGN().
 
-         Arnd
+And then ended up putting it where it is for just a "smallest patch"
+reason, which was clearly not the right thing to do.
+
+The easier and more obvious fix was to just make the ALIGN() be at the
+final 'return' statement, but I ended up moving it up just because I
+didn't like how complicated the expression looked.
+
+That was obviously very very wrong of me.
+
+So does it help if you just remove that
+
+        max_fds = ALIGN(max_fds, BITS_PER_LONG);
+
+and instead make the final return be
+
+        return ALIGN(min(count, max_fds), BITS_PER_LONG);
+
+instead?
+
+And now I feel like I should as penance just do what I tried to get
+Christian to do, which was to just integrate the whole "don't even
+bother looking past that passed-in max_fds" in count_open_files().
+
+The whole organization of that "calculate current highest fd, only to
+then ignore it if we didn't want that many file descriptors" is just
+historical baggage.
+
+                 Linus

@@ -2,101 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1391F4EB7EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 03:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60FA74EB7EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 03:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241708AbiC3Bpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 21:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35974 "EHLO
+        id S241709AbiC3BsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 21:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241703AbiC3Bpm (ORCPT
+        with ESMTP id S237034AbiC3BsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 21:45:42 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4096476;
-        Tue, 29 Mar 2022 18:43:58 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id y10so14138224pfa.7;
-        Tue, 29 Mar 2022 18:43:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=JqKr/dTx137KLola/7A49s2uL7z/Ma6HdQ5kniz2p5o=;
-        b=mnv7549VlSPsTZw/dOJDZ+WAhRuKqUG1B4gyLxpABZoIGSwSG16xhrdjRf4Gu/CUy1
-         S1N2rLPbhDAIjVThGQkRksw6burBh6rd8h6PIfUMTx7Rk6i547bqcgEW9AwGiPi5zxYs
-         joeieRV6G+g9EJ842B9Xw4ST5fR4CSWjMVtBFACRFuqRstnFYNqCXUUgV+sk4n9B47Yn
-         5uc2xoQwYT9SjJXgyfX22nDZ0GyGHyq7yRm5NR4gVG2O1VqyDJH9wm34mOkjs+gzrUxv
-         2xGMMGS+5Dmuqdkn+R071AH4Yu3WElPxVMSj70gMLN2WmjD2+z68tr13LuAM0jazNilP
-         dFxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JqKr/dTx137KLola/7A49s2uL7z/Ma6HdQ5kniz2p5o=;
-        b=YN0xP2B9mGovi6qMtGIfW72D7+iuYW06CB2y4MCxEy4pP0mEEEQm5FgtzHCkKiJunA
-         jf8r2fOUcKHcZqT2oc5NKI9hAnFT1+B3LdJ3e4ZDnB+0g4p39dhoccfDv6mzFXJsXv2+
-         Z+2Up5KymjWW5Q3nIVN8uP8XeBY+WoMrnN/tCWi8U+pC6Yx9IeNLWisyj4+S8Vui+h4W
-         QFB2yfw8Po7atCkC6boWrTRkBau4MgYHauJgXM72qP/exMyK2NZW1CC7wlIuUVUSVk6z
-         NWGV+aD/I5szOk6Szp1IxplpYYXwjvl05BWVEVGjtTKYwIzUu9zSkqp7qFtGQv4dJIAr
-         7ouw==
-X-Gm-Message-State: AOAM532N4ybi13RuUWBfT/bRAxw+Cac87AHapT4sgmastTfUM6xH0pCL
-        0ZdC2JBQRBCVn2Imo/lWTAg=
-X-Google-Smtp-Source: ABdhPJyhpoi2BBuNQZTHzfRUkXVsw90dHi5ViQxmTuNrtB3H3xqi9Ey0XLJQFn7NIrYSFeuVOUEqKA==
-X-Received: by 2002:a63:c10e:0:b0:381:6a51:6231 with SMTP id w14-20020a63c10e000000b003816a516231mr4133872pgf.189.1648604637911;
-        Tue, 29 Mar 2022 18:43:57 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id g3-20020a056a001a0300b004fa65cbbf4esm21542294pfv.63.2022.03.29.18.43.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 18:43:57 -0700 (PDT)
-Message-ID: <a619a0da-bd86-e57d-789d-51ee85125be5@gmail.com>
-Date:   Wed, 30 Mar 2022 10:43:54 +0900
+        Tue, 29 Mar 2022 21:48:23 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3477BF56
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 18:46:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648604799; x=1680140799;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qbyCDmYtPUSUSQF/ImiQwGKuEEb49FyM1MQ7n7XgOJ4=;
+  b=LXnlb7tqXD4LNQNeoegwlXuolIPpNgiWZ90a+udH/YL7xTaHs8/jBNiw
+   Dp6Hyna/IqgeN0SiKu+R0fVWZFnT2DdLexGXIj6ZoDIwyqtEkP+XTiWo5
+   osCU9xXhlDNIl/imrubE6GGxlpF+izCAnLtqhNoKW9gtlIG12sI1AhdeH
+   /U5x7GbLn6PwGhR50ZNI20jiva2u/iF5wun2rYtQlGEWKubKUzD4IN9zs
+   NMNXL1uDVP7nJ9ZYxloqWA8E5oDsyPbpHeptNVxS3zcjrEjZVO/xxgkzH
+   lZO8brCOqbS2BfCLryn15r8mWoYE7I36nwzKGL6f5jhE+i4lPNmvf95iV
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="284326795"
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="284326795"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 18:46:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="585815499"
+Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 29 Mar 2022 18:46:37 -0700
+Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nZNPw-0000sL-QU; Wed, 30 Mar 2022 01:46:36 +0000
+Date:   Wed, 30 Mar 2022 09:45:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Subject: arch/arm64/kernel/elfcore.c:25:12: warning: stack frame size (2144)
+ exceeds limit (2048) in 'mte_dump_tag_range'
+Message-ID: <202203300903.AceWJDUu-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] docs: Add a document on how to fix a messy diffstat
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-References: <87wngc6a7q.fsf@meer.lwn.net>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <87wngc6a7q.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Mar 2022 09:37:45 -0600,
-Jonathan Corbet wrote:
-> A branch with merges in will sometimes create a diffstat containing a lot
-> of unrelated work at "git request-pull" time.  Create a document based on
-> Linus's advice (found in the links below) and add it to the maintainer
-> manual in the hope of saving some wear on Linus's keyboard going forward.
-> 
-> Link: https://lore.kernel.org/lkml/CAHk-=wg3wXH2JNxkQi+eLZkpuxqV+wPiHhw_Jf7ViH33Sw7PHA@mail.gmail.com/
-> Link: https://lore.kernel.org/lkml/CAHk-=wgXbSa8yq8Dht8at+gxb_idnJ7X5qWZQWRBN4_CUPr=eQ@mail.gmail.com/
-> Acked-by: Borislav Petkov <bp@suse.de>
-> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
-> ---
-> v2: Various tweaks suggested by Borislav, Bagas, and Akira
+Hi Catalin,
 
-Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
+FYI, the error/warning still remains.
 
-        Thanks, Akira
-> 
->  Documentation/maintainer/index.rst          |  1 +
->  Documentation/maintainer/messy-diffstat.rst | 96 +++++++++++++++++++++
->  2 files changed, 97 insertions(+)
->  create mode 100644 Documentation/maintainer/messy-diffstat.rst
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1c24a186398f59c80adb9a967486b65c1423a59d
+commit: 6dd8b1a0b6cb3ed93d24110e02e67ff9d006610a arm64: mte: Dump the MTE tags in the core file
+date:   6 weeks ago
+config: arm64-randconfig-r002-20220330 (https://download.01.org/0day-ci/archive/20220330/202203300903.AceWJDUu-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6dd8b1a0b6cb3ed93d24110e02e67ff9d006610a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 6dd8b1a0b6cb3ed93d24110e02e67ff9d006610a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
 
-[...]
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/arm64/kernel/elfcore.c:25:12: warning: stack frame size (2144) exceeds limit (2048) in 'mte_dump_tag_range' [-Wframe-larger-than]
+   static int mte_dump_tag_range(struct coredump_params *cprm,
+              ^
+   1 warning generated.
+
+
+vim +/mte_dump_tag_range +25 arch/arm64/kernel/elfcore.c
+
+    23	
+    24	/* Derived from dump_user_range(); start/end must be page-aligned */
+  > 25	static int mte_dump_tag_range(struct coredump_params *cprm,
+    26				      unsigned long start, unsigned long end)
+    27	{
+    28		unsigned long addr;
+    29	
+    30		for (addr = start; addr < end; addr += PAGE_SIZE) {
+    31			char tags[MTE_PAGE_TAG_STORAGE];
+    32			struct page *page = get_dump_page(addr);
+    33	
+    34			/*
+    35			 * get_dump_page() returns NULL when encountering an empty
+    36			 * page table entry that would otherwise have been filled with
+    37			 * the zero page. Skip the equivalent tag dump which would
+    38			 * have been all zeros.
+    39			 */
+    40			if (!page) {
+    41				dump_skip(cprm, MTE_PAGE_TAG_STORAGE);
+    42				continue;
+    43			}
+    44	
+    45			/*
+    46			 * Pages mapped in user space as !pte_access_permitted() (e.g.
+    47			 * PROT_EXEC only) may not have the PG_mte_tagged flag set.
+    48			 */
+    49			if (!test_bit(PG_mte_tagged, &page->flags)) {
+    50				put_page(page);
+    51				dump_skip(cprm, MTE_PAGE_TAG_STORAGE);
+    52				continue;
+    53			}
+    54	
+    55			mte_save_page_tags(page_address(page), tags);
+    56			put_page(page);
+    57			if (!dump_emit(cprm, tags, MTE_PAGE_TAG_STORAGE))
+    58				return 0;
+    59		}
+    60	
+    61		return 1;
+    62	}
+    63	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

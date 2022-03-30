@@ -2,86 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972624ECA38
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D4F4ECA32
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349137AbiC3REY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 13:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
+        id S1349122AbiC3RAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 13:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347451AbiC3REW (ORCPT
+        with ESMTP id S1349113AbiC3RAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 13:04:22 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06E3488B9;
-        Wed, 30 Mar 2022 10:02:36 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 6A19B1F37B;
-        Wed, 30 Mar 2022 17:02:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1648659755;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VasfWrK3j7IlwreFKwcLkVkctNFHSVe9eECMM7KKVk0=;
-        b=SeScyn5F+d+mTlvsj79GjU0n0u5yr7BdDqjHQmkNGvqq88l0IaBR810NRiwF5ZMvh3wJZ2
-        F1yGt4NbmvBUyC7o6JjYD0FtsQMk04jmVYnuUuYJLLbENPnfyyUbrtPF6Ar12/1hcj8QxI
-        r01N1lFD0oWsGBOkotkx8wMBuhugb1o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1648659755;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VasfWrK3j7IlwreFKwcLkVkctNFHSVe9eECMM7KKVk0=;
-        b=eBzgWcrujYbBcLoSAtCHXstgalLAqtPXfG2zn9HYzhh7mFu87JMTXNliQ7CknrnzL0g1wl
-        XvT9sefOPI47tRDQ==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 5D44DA3B83;
-        Wed, 30 Mar 2022 17:02:35 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 5AC53DA7F3; Wed, 30 Mar 2022 18:58:37 +0200 (CEST)
-Date:   Wed, 30 Mar 2022 18:58:37 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH v2 0/2] btrfs: allocate page arrays more efficiently
-Message-ID: <20220330165837.GH2237@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz,
-        Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, Nick Terrell <terrelln@fb.com>,
-        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        kernel-team@fb.com
-References: <cover.1648658235.git.sweettea-kernel@dorminy.me>
+        Wed, 30 Mar 2022 13:00:46 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D902652
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:58:59 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id lr4so34339127ejb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:58:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=tC9xiYjFteTOncjiaBTt8b1lonIMt5KBs2kzaARMTvg=;
+        b=gKilfGZ/BW4ymBas9eTaslJMraxFS69x8emaggw5hq09SM6nYnv9h+AV/76n0VI0oV
+         diIJ1dvJN+Iyfdp/NHmHmzUOK/AdR4GMzuzjkXkLM3ssOqJC0deW4IAX7imMiRryVMIN
+         EuX3A6lcmpNH2R9sEPCFSjiWmFK/9V7Q4WBxUIAyqOa4e2UHy/OUW2A/kumVQAYtHwGF
+         0LZevRFY4+Dp8P4U115YBFCZKlro1ppgzRYDJ2gmZr2v3KKtvvgsqWWX7Rgv+1B8d4i7
+         BjEZvJ5KglcpLyachzbPFEWjCjXho5hmJ05TNYs3Bp+uE2j4sGUf6kvtIJ9p03RcNJd/
+         S08w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=tC9xiYjFteTOncjiaBTt8b1lonIMt5KBs2kzaARMTvg=;
+        b=gUNQ4LoQB5xoTGbTKJ+gC0T1aBk0gkKlR5cD9AXg1cJHnIFtr6JgtLbweMkUu390MV
+         Ox2r6qDdEJyDtJcG3uFaXNomKZUtL6p5bfYN+4f3pqaoIHYfxv2ve1LPgzFFXLwCmAk/
+         xgAh54aKBIrgIlDX953gsIwz1zbS70OMrp34LmRlAd4obEJpN3IBKtsKpfrUcsxGPTVo
+         vIhE/WphtXNivGoTSBHa9d70Zq65k9hAmt+yCDFRi+ysLjfkHqMwRf/Ky5OIlxixNcoP
+         PJ3rrtwWnXnE9a8rLRXjPVqX1U/Gn/Yd4bG5d03/YnrFA71knjRnXArtL6rYfwcgwF++
+         jwAA==
+X-Gm-Message-State: AOAM533YAoSz+CWyucPh+86/9dLt/qnu6ZWVDZpfIhM50XNzs/dN3X4Z
+        MVSRxCrkqsCBDxFzXGijydzD5c7FoIxETWUQg0A=
+X-Google-Smtp-Source: ABdhPJww1SXOxh8nP7o9HrnJ/L1MBAAibUfwnCN0DkBlbqocQ/BR/7lGbG0fiXP7I2EAmgZqSgcPOR/b/3gCtBN78cU=
+X-Received: by 2002:a17:907:980d:b0:6d6:f910:513a with SMTP id
+ ji13-20020a170907980d00b006d6f910513amr447634ejc.643.1648659537865; Wed, 30
+ Mar 2022 09:58:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1648658235.git.sweettea-kernel@dorminy.me>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Wed, 30 Mar 2022 17:58:53 +0100
+Message-ID: <CAHpNFcNLTDRtiLZ4sSTzWpOtX_UgdNOZUowgfKoMrTbJN44V8A@mail.gmail.com>
+Subject: (Security & Performance Profile : RS-PSPVita) +PSP ARM Features &
+ Secure DMA : headers cpufeatures: Sync with the kernel sources https://lkml.org/lkml/2022/3/30/1060
+To:     submissions@vialicensing.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 12:44:05PM -0400, Sweet Tea Dorminy wrote:
-> In several places, btrfs allocates an array of pages, one at a time.  In
-> addition to duplicating code, the mm subsystem provides a helper to
-> allocate multiple pages at once into an array which is suited for our
-> usecase. In the fast path, the batching can result in better allocation
-> decisions and less locking. This changeset first adjusts the users to
-> call a common array-of-pages allocation function, then adjusts that
-> common function to use the batch page allocator.
-> 
-> v2: moved new helper to extent_io.[ch]. Fixed title format.
+(Security & Performance Profile : RS-PSPVita) +PSP ARM Features &
+Secure DMA : headers cpufeatures: Sync with the kernel sources
+https://lkml.org/lkml/2022/3/30/1060
 
-It does not address comments from
-https://lore.kernel.org/linux-btrfs/20220328230909.GW2237@twin.jikos.cz
+So + Properties PSP & for simple reasons ARCH Basics By Creational A-Sym-metry
+
+RS
+
+On the subject of PSP processors : Arm features include NEON2!
+Why not use this to our advantage? if safely potentiated! Every SiMD
+matters after all,
+
+Particularly preparing for the GPU & Audio output!
+As a driver specific the advantages are around 13% improved
+performance & 20% improved code flexibility on SiMD compatibility.
+
+We can also directly utilize for Automated Direct Reactive Secure DMA or ADRSDMA
+
+(signed RS)
+
+ARM Patches 3 arte enabled! https://lkml.org/lkml/2022/3/30/977
+
+*
+
+GPRS for immediate use in all SFR SIM's & SFR Firmware & routers &
+boxes including ADSL & Fibre
+
+Cloudflare Kernels & VM linux, I pretty obviously would like to be
+able to utilise cloudflare Kernel & Linux & cloudflare is very special
+to me
+
+Submissions for review
+
+RS
+
+https://drive.google.com/drive/folders/1X5fUvsXkvBU6td78uq3EdEUJ_S6iUplA?usp=sharing
+
+https://lore.kernel.org/lkml/20220329164117.1449-1-mario.limonciello@amd.com/
+
+https://www.phoronix.com/scan.php?page=news_item&px=AMD-PSP-Sysfs-Expose

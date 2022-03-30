@@ -2,113 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F0B4ECE7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAF84ECE6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351075AbiC3Uns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 16:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
+        id S1351083AbiC3UoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 16:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232155AbiC3Unp (ORCPT
+        with ESMTP id S232155AbiC3UoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 16:43:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D964B21265;
-        Wed, 30 Mar 2022 13:41:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B4FCB81E0B;
-        Wed, 30 Mar 2022 20:41:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A404AC340F0;
-        Wed, 30 Mar 2022 20:41:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648672917;
-        bh=YoLEiYr7FjK+HfANJQQoei+ci9f7JQj4Iv0FSLnVaU0=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ViHSiG1ajt3kn0PkxITnrxY+gbQsNZmldVedxzj8ca92V/aOMjh73kziyWAlF+6VH
-         I/Amj1lssTRnjGnhRLYxmUv0QvXiXKykyOUXAE/2TwJZoDUkEGoNDeUfZpyBrj9Mgd
-         RxH0IeN30ZnBFoqUJY1+dxD1LZI9TRo/HRr42WfyErtZu2yQKytiD+XjeWeYNMtOst
-         wp6++of/YotGQ1emtvWAZmN6o0UHLca3x4KRLsJs0Wt9+KgdytHfK3HjhgbAMg95Z0
-         Q4V5sTFMr29vza6LsH0R9EI2OEFM260E2dU2pzuGNzf258gpcotcEvhqz3PeYZnc8F
-         lzjIF7t1CiKIQ==
-Message-ID: <d44b3fc7ce9f053f978645dfe19018885d372d87.camel@kernel.org>
-Subject: Re: [PATCH v2 1/2] selftests/sgx: Use rip relative addressing for
- encl_stack
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:INTEL SGX" <linux-sgx@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Wed, 30 Mar 2022 23:40:56 +0300
-In-Reply-To: <ef991f0d-d0d2-f422-96d8-0951d593d2a5@intel.com>
-References: <20220322074313.7444-1-jarkko@kernel.org>
-         <7b7732ec-c7ff-cf92-510f-64c83ed985cd@intel.com> <YkRvFkEO8Ic1VdQ8@iki.fi>
-         <0031a4f0-75f6-3104-1825-dcc2528f61b0@intel.com>
-         <f68d472877b7136c32d8770603a3de38de59c322.camel@kernel.org>
-         <ef991f0d-d0d2-f422-96d8-0951d593d2a5@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.42.4 
+        Wed, 30 Mar 2022 16:44:23 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FD143394
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:42:37 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id bn33so29333969ljb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:42:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ICtX8vJXHq3AHfULAa1Lf6IAnjSqmJ3fVv5dGbQwOvQ=;
+        b=TmG125jUIg3Tal8JAqGpY1kVFpBd80svhIAJgBA+U5h1DvQ/UbfOsbOAH24UWI/y3J
+         wZ2l9kUhJreEkDzFc68E1WjyKxnxeZ2H55dxbIve5ixPtq58ejQhcInNC3LrFjWbyDLI
+         DE16c9zjzgbDX5CQaG+WSx5fV3hx7GC1BjeHBEFJNaxYIE/LnEiosr0Ip1h0uo8+K0Vn
+         bAx6eO27KQqwtaUqWgowkVTMOir9tVcmT0j9cUbgKHM8rPps+lCEp5jgaQI4i3PTjmwS
+         oUAFhPeQiZVXpFse7AToqMFVGmt8LUcXgekSdzl03aoI77Txe+NSt2IdUDmxXwdhOYLo
+         eFhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ICtX8vJXHq3AHfULAa1Lf6IAnjSqmJ3fVv5dGbQwOvQ=;
+        b=OQi+Xr9pOlZzO05+FsjldOFDspDpYfsqFgIWMxIybIasV8bgNmXbmSaHfiWOqvDnYj
+         viNbKC3TvaF1cjEC6vitoCkH5s4fT10RFoefrXV9zvN4n+at+eRkEF3/7hXYjqKEHdRe
+         09epBFChPhhTWeZ35MD6FS0nBbXH7odUl3m+FAgIBdgWXi+GlAbUQZz8Hy+xeK5EJA8C
+         ogkeTj9wsHcLVtYSbKFn+yslGlJiuv+qbTOo17JziGoKHIf9WyZnL+oYQ5J5+WFtdg1l
+         eJXM0CIYd4WNzOX9a4araYg3kTerTrh32c0fzjYn4NCQRqZTn2VtDuoUs3/OXM2ZTSV0
+         ZrsQ==
+X-Gm-Message-State: AOAM5327otbmvE0Lxa0CAuRwq/lOuuSlWTTDmMUIP7/X5PrzqyNFATHd
+        /6BPDXzlqYiUZs5YQD6b1Ng=
+X-Google-Smtp-Source: ABdhPJw1zU3I66y4H0SMYqrMyMfkJ/7RIzrRskwK10mMYT+5jMdZe1M3rv4gzdHPdGKJFOo2EWCTvw==
+X-Received: by 2002:a2e:a4a3:0:b0:24a:c0bf:3d32 with SMTP id g3-20020a2ea4a3000000b0024ac0bf3d32mr8381816ljm.161.1648672955447;
+        Wed, 30 Mar 2022 13:42:35 -0700 (PDT)
+Received: from localhost.localdomain (h-82-196-111-188.NA.cust.bahnhof.se. [82.196.111.188])
+        by smtp.gmail.com with ESMTPSA id i1-20020a2e8641000000b00247d94a6ac5sm2532997ljj.2.2022.03.30.13.42.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 13:42:34 -0700 (PDT)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Subject: [PATCH] ASoC: samsung: Constify snd_soc_dapm_{route,widget} structs
+Date:   Wed, 30 Mar 2022 22:42:27 +0200
+Message-Id: <20220330204227.25081-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-03-30 at 13:05 -0700, Reinette Chatre wrote:
->=20
->=20
-> On 3/30/2022 12:03 PM, Jarkko Sakkinen wrote:
-> > On Wed, 2022-03-30 at 10:40 -0700, Reinette Chatre wrote:
-> > > Could you please elaborate how the compiler will fix it up?
-> >=20
-> > Sure.
-> >=20
-> > Here's the disassembly of the RBX version:
-> >=20
-> > [0x000021a9]> pi 1
-> > lea rax, [rbx + loc.encl_stack]
-> >=20
-> > Here's the same with s/RBX/RIP/:
-> >=20
-> > [0x000021a9]> pi 5
-> > lea rax, loc.encl_stack
-> >=20
-> > Compiler will substitute correct offset relative to the RIP,
-> > well, because it can and it makes sense.
->=20
-> It does not make sense to me because, as proven with my test,
-> the two threads end up sharing the same stack memory.
+These structs only have their address assigned to the
+dapm_{routes,widget} fields in the snd_soc_card struct,
+both which are pointers to const data. Make them const to
+allow the compiler to put them in read-only memory.
 
-I see, I need to correct my patch, thanks!
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+---
+ sound/soc/samsung/bells.c      | 4 ++--
+ sound/soc/samsung/littlemill.c | 4 ++--
+ sound/soc/samsung/lowland.c    | 4 ++--
+ sound/soc/samsung/speyside.c   | 4 ++--
+ sound/soc/samsung/tobermory.c  | 4 ++--
+ 5 files changed, 10 insertions(+), 10 deletions(-)
 
-RBX gives correct results because of the binary organization,
-i.e. TCS's are placed to zero offset and forward, and=20
-unrelocated symbol is just compiled in as an untranslated
-offset.
+diff --git a/sound/soc/samsung/bells.c b/sound/soc/samsung/bells.c
+index 8b83f39c3ac9..76998a4a4cad 100644
+--- a/sound/soc/samsung/bells.c
++++ b/sound/soc/samsung/bells.c
+@@ -386,11 +386,11 @@ static struct snd_soc_codec_conf bells_codec_conf[] = {
+ 	},
+ };
+ 
+-static struct snd_soc_dapm_widget bells_widgets[] = {
++static const struct snd_soc_dapm_widget bells_widgets[] = {
+ 	SND_SOC_DAPM_MIC("DMIC", NULL),
+ };
+ 
+-static struct snd_soc_dapm_route bells_routes[] = {
++static const struct snd_soc_dapm_route bells_routes[] = {
+ 	{ "Sub CLK_SYS", NULL, "OPCLK" },
+ 	{ "CLKIN", NULL, "OPCLK" },
+ 
+diff --git a/sound/soc/samsung/littlemill.c b/sound/soc/samsung/littlemill.c
+index 34067cc314ff..26c42892c059 100644
+--- a/sound/soc/samsung/littlemill.c
++++ b/sound/soc/samsung/littlemill.c
+@@ -228,7 +228,7 @@ static const struct snd_kcontrol_new controls[] = {
+ 	SOC_DAPM_PIN_SWITCH("WM1250 Output"),
+ };
+ 
+-static struct snd_soc_dapm_widget widgets[] = {
++static const struct snd_soc_dapm_widget widgets[] = {
+ 	SND_SOC_DAPM_HP("Headphone", NULL),
+ 
+ 	SND_SOC_DAPM_MIC("AMIC", NULL),
+@@ -239,7 +239,7 @@ static struct snd_soc_dapm_widget widgets[] = {
+ 			      SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_POST_PMD),
+ };
+ 
+-static struct snd_soc_dapm_route audio_paths[] = {
++static const struct snd_soc_dapm_route audio_paths[] = {
+ 	{ "Headphone", NULL, "HPOUT1L" },
+ 	{ "Headphone", NULL, "HPOUT1R" },
+ 
+diff --git a/sound/soc/samsung/lowland.c b/sound/soc/samsung/lowland.c
+index 7b12ccd2a9b2..8e4579fdcd7b 100644
+--- a/sound/soc/samsung/lowland.c
++++ b/sound/soc/samsung/lowland.c
+@@ -140,7 +140,7 @@ static const struct snd_kcontrol_new controls[] = {
+ 	SOC_DAPM_PIN_SWITCH("Headphone"),
+ };
+ 
+-static struct snd_soc_dapm_widget widgets[] = {
++static const struct snd_soc_dapm_widget widgets[] = {
+ 	SND_SOC_DAPM_HP("Headphone", NULL),
+ 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
+ 
+@@ -150,7 +150,7 @@ static struct snd_soc_dapm_widget widgets[] = {
+ 	SND_SOC_DAPM_MIC("Main DMIC", NULL),
+ };
+ 
+-static struct snd_soc_dapm_route audio_paths[] = {
++static const struct snd_soc_dapm_route audio_paths[] = {
+ 	{ "Sub IN1", NULL, "HPOUT2L" },
+ 	{ "Sub IN2", NULL, "HPOUT2R" },
+ 
+diff --git a/sound/soc/samsung/speyside.c b/sound/soc/samsung/speyside.c
+index 37b1f4f60b21..1ae1a5aae72f 100644
+--- a/sound/soc/samsung/speyside.c
++++ b/sound/soc/samsung/speyside.c
+@@ -261,7 +261,7 @@ static const struct snd_kcontrol_new controls[] = {
+ 	SOC_DAPM_PIN_SWITCH("Headphone"),
+ };
+ 
+-static struct snd_soc_dapm_widget widgets[] = {
++static const struct snd_soc_dapm_widget widgets[] = {
+ 	SND_SOC_DAPM_HP("Headphone", NULL),
+ 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
+ 
+@@ -271,7 +271,7 @@ static struct snd_soc_dapm_widget widgets[] = {
+ 	SND_SOC_DAPM_MIC("Main DMIC", NULL),
+ };
+ 
+-static struct snd_soc_dapm_route audio_paths[] = {
++static const struct snd_soc_dapm_route audio_paths[] = {
+ 	{ "IN1RN", NULL, "MICB1" },
+ 	{ "IN1RP", NULL, "MICB1" },
+ 	{ "IN1RN", NULL, "MICB2" },
+diff --git a/sound/soc/samsung/tobermory.c b/sound/soc/samsung/tobermory.c
+index 8d3149a47a4c..4a56abfc243e 100644
+--- a/sound/soc/samsung/tobermory.c
++++ b/sound/soc/samsung/tobermory.c
+@@ -130,7 +130,7 @@ static const struct snd_kcontrol_new controls[] = {
+ 	SOC_DAPM_PIN_SWITCH("DMIC"),
+ };
+ 
+-static struct snd_soc_dapm_widget widgets[] = {
++static const struct snd_soc_dapm_widget widgets[] = {
+ 	SND_SOC_DAPM_HP("Headphone", NULL),
+ 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
+ 
+@@ -140,7 +140,7 @@ static struct snd_soc_dapm_widget widgets[] = {
+ 	SND_SOC_DAPM_SPK("Main Speaker", NULL),
+ };
+ 
+-static struct snd_soc_dapm_route audio_paths[] = {
++static const struct snd_soc_dapm_route audio_paths[] = {
+ 	{ "Headphone", NULL, "HPOUTL" },
+ 	{ "Headphone", NULL, "HPOUTR" },
+ 
+-- 
+2.35.1
 
-RPI is given correct results but how the semantics work
-right now is incompatible.
-
-Still, even for kselftest, I would consider a switch
-because that way:
-
-1. You can layout binary however you wan and things
-   won't break.
-2. You can point to any symbol not just stack, if
-   ever need.
-  =20
-I admit it works semantically but it just super
-unrobust.
-
-BR, Jarkko

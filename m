@@ -2,108 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A624ECE82
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456794ECE79
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351094AbiC3Uoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 16:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
+        id S1351097AbiC3Uso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 16:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351086AbiC3Uom (ORCPT
+        with ESMTP id S232265AbiC3Usm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 16:44:42 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B0944A27
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:42:57 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id c23so21607804plo.0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:42:57 -0700 (PDT)
+        Wed, 30 Mar 2022 16:48:42 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91D33702E
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:46:56 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id o10so43962464ejd.1
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:46:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=G2Eo6r97owDtczFfVpJgXwuwxzvJje+iY5MUwcbp6hw=;
-        b=ZyVdrFUSHODjAn6lXuymsg1JdqIUb6/sjDeEVqnj8cdu+O4oEfaI7fgVObXyWbl0gz
-         HmiqDpTQiUePxaehF25QdacbwMcQ2C5KxkCoX+CptKY7WzMaFdEwdDnGHLq4NlmVhgqT
-         aNF9pxUjNnz7RpHHm/3pz187Q5TnIWJJLg/SeanGydlc4aOHohQy8VUAgQK6AYF0w4xw
-         /V4ZhjaE46mj+17Aq/Q6HXbV7HsFqo4Pq99AilRX1iHDtHL6kyBrbsg7YJFvgZ93I+da
-         E+b0lWq3jcosPIyWLPnOF0gkXl3wnyJsK07zMBfljy0RGM9rQ0poX38AWEV/VM7/orBq
-         yafA==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=liD2gfhyOXP3mhvUDL+XuWtoVfvWgJHIwpuC5U6JPEE=;
+        b=BijS/zP6AymqxuQoR02gV+PGo+dpWfopPRZmJwkOHduRid3mu9hR4ccm61zJS6e+0w
+         pBX6Lg4VW4dccyudcGx92+JDud0noTe+M3vSll95HuwhFPJP2QE8lYc2l4SBtqSZAen6
+         AVLoEnPXLiDkTyUe4fxK2fBXaBOoYazUIfTr5z7zgG0S6A4oUgsgTeFoPwjms/sGxDVF
+         VT9TAJB9uiwxDRh2NXQ//OsUBZcZ8Q8dw4IURN8s9oEsUaGQqNkte0BbFoPa3Hu2nJHA
+         g8LBTVLzsLRUme/7SlUa7lrTunEr22AtHV/HXjJ+Smqg6cgk2TYdjln8jlKNAGVke/9/
+         of2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=G2Eo6r97owDtczFfVpJgXwuwxzvJje+iY5MUwcbp6hw=;
-        b=u3la0Dn6IdjEI/l5fTBLxc+0qsjtOok3m1U/fN6AL10ytSVU/viy2gOSYTE+CFeDH4
-         XH6pp5iFRLZw8V1YBQFkfas1AT47iRXMDEbpKTGtzbLWXG+dBvxhr+BhLcAM1xkhVcLw
-         9V8ot4Ajbq86jcUpyzBOO3HJfklkV59s+qDNEdFsYmr3TMqRa2GKpkHQD7MozW5uwoB8
-         weGQOjs2NqxmggrSwe4AqmqHhyXPpW3OqDyigfgbrWxgTdwTPuagTQJWA9MQnpCCHNTr
-         yC3FmQ7OGi4GNvN3LWDEiCUh0qsY1M/Au1z2Fx2HgjOzBfmPKUzLgqWd4a3pJbSiqLXX
-         bRdQ==
-X-Gm-Message-State: AOAM530UCpuH/u9viglMtZuEgR0kdYeJPgHOJSicn5LBxJ2sUqgXycLB
-        f4XSz7Zd/Gw+v5KSj/iVqjv7H6ED0bl7Sg==
-X-Google-Smtp-Source: ABdhPJw6fEr/GwKy79RI7/WOYqE6MiaV+tYZtpjRtJ/Sx57E224WYrZLwj+uQttCNkOgyUQdLhgNvw==
-X-Received: by 2002:a17:90b:4c41:b0:1c7:3fa8:9b6a with SMTP id np1-20020a17090b4c4100b001c73fa89b6amr1660523pjb.120.1648672976582;
-        Wed, 30 Mar 2022 13:42:56 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id a11-20020a056a000c8b00b004fade889fb3sm26069455pfv.18.2022.03.30.13.42.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 13:42:55 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 20:42:52 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chenyi Qiang <chenyi.qiang@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/7] KVM: VMX: Add proper cache tracking for PKRS
-Message-ID: <YkTAzCPZ3zXYDBLj@google.com>
-References: <20220221080840.7369-1-chenyi.qiang@intel.com>
- <20220221080840.7369-3-chenyi.qiang@intel.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=liD2gfhyOXP3mhvUDL+XuWtoVfvWgJHIwpuC5U6JPEE=;
+        b=Q3fjrfEy6pRb61MnoZsS60dhNJJywdAkfutHyV3dyxCh5Jpis9Cnfs9LGHfd0oCuz6
+         NhTE+ISjf0S/wORcUFoW3E6XckE3B3YuiYmuOcbGDqJDUW09TAS/uyXI/4CRoIV2BIpO
+         2KK6+GE/3r1zDMHhOR/LS17ymAtr5a445zdJUNshv5yDU+U57QB9Gj92HdhX4oIVOKWS
+         fB+940GRVXdhDbYjbVMnbBtfrR1sEBsP+6syWuQcX0B6BGNjwVugxmHM91PIH3DQAjWn
+         gNwk/6G968vHE+rVU6yz4TcSSoKx+q5FA1iDnbKSwxVnYBgQVFRhF3gcNhxRQuo7bBJd
+         fEmg==
+X-Gm-Message-State: AOAM531h3bxu1ggjqvOxgqi9n6KVyzRx/AN8zmBZiuhfsP3oCaDv7/qV
+        XPzQb5tm85T6xUSnfkdy2o8BDkyrUdH85T1AObs=
+X-Google-Smtp-Source: ABdhPJy3u2LlHi1bZ3Ou44ILnnhSIDpG885SrYRzSzOGzydktQZAsSTAjuIC0bwX2KLfu4DiWlM27UnAnbmYuOpvYQA=
+X-Received: by 2002:a17:907:7ea6:b0:6db:ca53:9b0a with SMTP id
+ qb38-20020a1709077ea600b006dbca539b0amr1499558ejc.763.1648673214545; Wed, 30
+ Mar 2022 13:46:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221080840.7369-3-chenyi.qiang@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a17:907:160e:0:0:0:0 with HTTP; Wed, 30 Mar 2022 13:46:53
+ -0700 (PDT)
+Reply-To: olejniczakk031@gmail.com
+From:   Olejniczak Krzystof <amaandablessgod@gmail.com>
+Date:   Wed, 30 Mar 2022 12:46:53 -0800
+Message-ID: <CAPWLybxacdB6-UEGjzzHdNSwM+VrE-oiuqhEt+GZJY20xYpFSg@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022, Chenyi Qiang wrote:
-> Add PKRS caching into the standard register caching mechanism in order
-> to take advantage of the availability checks provided by regs_avail.
-> 
-> This is because vcpu->arch.pkrs will be rarely acceesed by KVM, only in
-> the case of host userspace MSR reads and GVA->GPA translation in
-> following patches. It is unnecessary to keep it up-to-date at all times.
+-- 
+Hello,
 
-It might be worth throwing in a blurb that the potential benefits of this caching
-are tenous.
+      I have a business proposal, kindly reply back for more details.
 
-Barring userspace wierdness, the MSR read is not a hot path.
+Regards
 
-permission_fault() is slightly more common, but I would be surprised if caching
-actually provides meaningful performance benefit.  The PKRS checks are done only
-once per virtual access, i.e. only on the final translation, so the cache will get
-a hit if and only if there are multiple translations in a single round of emulation,
-where a "round of emulation" ends upon entry to the guest.  With unrestricted
-guest, i.e. for all intents and purposes every VM using PKRS, there aren't _that_
-many scenarios where KVM will (a) emulate in the first place and (b) emulate enough
-accesses for the caching to be meaningful.
-
-That said, this is basically "free", so I've no objection to adding it.  But I do
-think it's worth documenting that it's nice-to-have so that we don't hesitate to
-rip it out in the future if there's a strong reason to drop the caching.
-
-> Signed-off-by: Chenyi Qiang <chenyi.qiang@intel.com>
-> ---
-
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+Olejniczak Krzystof Marek

@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2CCA4EC2BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185A24EC2D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233806AbiC3MBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
+        id S245200AbiC3MBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344735AbiC3Lxa (ORCPT
+        with ESMTP id S1344767AbiC3Lxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:53:30 -0400
+        Wed, 30 Mar 2022 07:53:33 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B235B26E55D;
-        Wed, 30 Mar 2022 04:49:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC1726C2FF;
+        Wed, 30 Mar 2022 04:49:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5746DB81C37;
-        Wed, 30 Mar 2022 11:49:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3C4CC340F3;
-        Wed, 30 Mar 2022 11:49:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E77EAB81BBA;
+        Wed, 30 Mar 2022 11:49:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E51FC34112;
+        Wed, 30 Mar 2022 11:49:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648640972;
-        bh=8MKOSueqAUGuN31VyJtXZ8WouYprwqTW9CycYNHA2Jw=;
+        s=k20201202; t=1648640976;
+        bh=B+LL6HqRHaXg/j5A4/f7HpsysJBncMEphF9/Mdw/N7Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rpDA1CfQ2ZyjOO7v0FhTlMhKfK6acdfApFGqC6X2v1Y5cCysLKIiJ4Vqn/hzCA20K
-         DHmohNtoeTjsbbQhKaA202fcSyMRlBcPBOxhZpX4lIaACXajPzelmXxj0DbtZw906O
-         VV/yl9G00mEyKY/X1dftqaczSLc2HBh4eVjARY6UVAv2rSrkKYNfmCD8QXLV4qqGkX
-         wlLg+QD5Yk2gxAaf5e25Z1hDAFEj5cG8AUk3XLUlh3cVJ2RY3W6ifKHhtLS5WHoPNM
-         pab7/G/qnFi+PTQMufkmYhYJVV8LVRpfj3c19YMYathVfbR7SpD+BCXMmw2F9PijI1
-         lUQ0bc95PUrGg==
+        b=cs8vojwpVPhQ8EHsRPIOW3bARxTJfVGFFAGqwzhEMxtj3zDTms0W80pz93yXJTmnl
+         PdPMjocKj7xLz4qwehRlgg/poBrMTPiNts4AJGUigLzemx4spXbXy3xQQHTOBg+fQA
+         APtGnLwNJUDJpy4lI5/7+L47awbrnZwtVMNfwc2VJDSAe/ASGOhmQ/7aJ5UCnjtxAY
+         RWTeKF4QY/4zhc5tVctlDhqbUgxk9whgDp3UbNWeVsNeZeqpuwqNomCTx3MxIvE00E
+         i4Mbdhg2oYd2uPm/f/By/IIuAQHFP2TJ943U9q60KiAA255nPObAAg8SlLbb7fpGaU
+         w/LvVdu3Jn9iA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Derek Fang <derek.fang@realtek.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, bardliao@realtek.com,
-        oder_chiou@realtek.com, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 5.16 39/59] ASoC: rt5682s: Fix the wrong jack type detected
-Date:   Wed, 30 Mar 2022 07:48:11 -0400
-Message-Id: <20220330114831.1670235-39-sashal@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.16 41/59] lib/test_lockup: fix kernel pointer check for separate address spaces
+Date:   Wed, 30 Mar 2022 07:48:13 -0400
+Message-Id: <20220330114831.1670235-41-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220330114831.1670235-1-sashal@kernel.org>
 References: <20220330114831.1670235-1-sashal@kernel.org>
@@ -59,138 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Derek Fang <derek.fang@realtek.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit c07ac3ee76e5e5506bca9c03fbbb15e40ab28430 ]
+[ Upstream commit 5a06fcb15b43d1f7bf740c672950122331cb5655 ]
 
-Some powers were changed during the jack insert detection and clk's
-enable/disable in CCF.
-If in parallel, the influence has a chance to detect the wrong jack
-type.
+test_kernel_ptr() uses access_ok() to figure out if a given address
+points to user space instead of kernel space. However on architectures
+that set CONFIG_ALTERNATE_USER_ADDRESS_SPACE, a pointer can be valid
+for both, and the check always fails because access_ok() returns true.
 
-We refer to the below commit of the variant codec (rt5682) to fix
-this issue.
-  ASoC: rt5682: Fix deadlock on resume
+Make the check for user space pointers conditional on the type of
+address space layout.
 
-1. Remove rt5682s_headset_detect in rt5682s_jd_check_handler and
-   use jack_detect_work instead of.
-2. Use dapm mutex used in CCF to protect most of jack_detect_work.
-
-Signed-off-by: Derek Fang <derek.fang@realtek.com>
-Link: https://lore.kernel.org/r/20220223101450.4577-1-derek.fang@realtek.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/rt5682s.c | 26 +++++++++-----------------
- sound/soc/codecs/rt5682s.h |  1 -
- 2 files changed, 9 insertions(+), 18 deletions(-)
+ lib/test_lockup.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/sound/soc/codecs/rt5682s.c b/sound/soc/codecs/rt5682s.c
-index d79b548d23fa..f2a2f3d60925 100644
---- a/sound/soc/codecs/rt5682s.c
-+++ b/sound/soc/codecs/rt5682s.c
-@@ -822,6 +822,7 @@ static void rt5682s_jack_detect_handler(struct work_struct *work)
- {
- 	struct rt5682s_priv *rt5682s =
- 		container_of(work, struct rt5682s_priv, jack_detect_work.work);
-+	struct snd_soc_dapm_context *dapm;
- 	int val, btn_type;
+diff --git a/lib/test_lockup.c b/lib/test_lockup.c
+index 6a0f329a794a..c3fd87d6c2dd 100644
+--- a/lib/test_lockup.c
++++ b/lib/test_lockup.c
+@@ -417,9 +417,14 @@ static bool test_kernel_ptr(unsigned long addr, int size)
+ 		return false;
  
- 	if (!rt5682s->component || !rt5682s->component->card ||
-@@ -832,7 +833,9 @@ static void rt5682s_jack_detect_handler(struct work_struct *work)
- 		return;
- 	}
- 
--	mutex_lock(&rt5682s->jdet_mutex);
-+	dapm = snd_soc_component_get_dapm(rt5682s->component);
+ 	/* should be at least readable kernel address */
+-	if (access_ok((void __user *)ptr, 1) ||
+-	    access_ok((void __user *)ptr + size - 1, 1) ||
+-	    get_kernel_nofault(buf, ptr) ||
++	if (!IS_ENABLED(CONFIG_ALTERNATE_USER_ADDRESS_SPACE) &&
++	    (access_ok((void __user *)ptr, 1) ||
++	     access_ok((void __user *)ptr + size - 1, 1))) {
++		pr_err("user space ptr invalid in kernel: %#lx\n", addr);
++		return true;
++	}
 +
-+	snd_soc_dapm_mutex_lock(dapm);
- 	mutex_lock(&rt5682s->calibrate_mutex);
- 
- 	val = snd_soc_component_read(rt5682s->component, RT5682S_AJD1_CTRL)
-@@ -889,6 +892,9 @@ static void rt5682s_jack_detect_handler(struct work_struct *work)
- 		rt5682s->irq_work_delay_time = 50;
- 	}
- 
-+	mutex_unlock(&rt5682s->calibrate_mutex);
-+	snd_soc_dapm_mutex_unlock(dapm);
-+
- 	snd_soc_jack_report(rt5682s->hs_jack, rt5682s->jack_type,
- 		SND_JACK_HEADSET | SND_JACK_BTN_0 | SND_JACK_BTN_1 |
- 		SND_JACK_BTN_2 | SND_JACK_BTN_3);
-@@ -898,9 +904,6 @@ static void rt5682s_jack_detect_handler(struct work_struct *work)
- 		schedule_delayed_work(&rt5682s->jd_check_work, 0);
- 	else
- 		cancel_delayed_work_sync(&rt5682s->jd_check_work);
--
--	mutex_unlock(&rt5682s->calibrate_mutex);
--	mutex_unlock(&rt5682s->jdet_mutex);
- }
- 
- static void rt5682s_jd_check_handler(struct work_struct *work)
-@@ -908,14 +911,9 @@ static void rt5682s_jd_check_handler(struct work_struct *work)
- 	struct rt5682s_priv *rt5682s =
- 		container_of(work, struct rt5682s_priv, jd_check_work.work);
- 
--	if (snd_soc_component_read(rt5682s->component, RT5682S_AJD1_CTRL)
--		& RT5682S_JDH_RS_MASK) {
-+	if (snd_soc_component_read(rt5682s->component, RT5682S_AJD1_CTRL) & RT5682S_JDH_RS_MASK) {
- 		/* jack out */
--		rt5682s->jack_type = rt5682s_headset_detect(rt5682s->component, 0);
--
--		snd_soc_jack_report(rt5682s->hs_jack, rt5682s->jack_type,
--			SND_JACK_HEADSET | SND_JACK_BTN_0 | SND_JACK_BTN_1 |
--			SND_JACK_BTN_2 | SND_JACK_BTN_3);
-+		schedule_delayed_work(&rt5682s->jack_detect_work, 0);
- 	} else {
- 		schedule_delayed_work(&rt5682s->jd_check_work, 500);
- 	}
-@@ -1323,7 +1321,6 @@ static int rt5682s_hp_amp_event(struct snd_soc_dapm_widget *w,
- 		struct snd_kcontrol *kcontrol, int event)
- {
- 	struct snd_soc_component *component = snd_soc_dapm_to_component(w->dapm);
--	struct rt5682s_priv *rt5682s = snd_soc_component_get_drvdata(component);
- 
- 	switch (event) {
- 	case SND_SOC_DAPM_POST_PMU:
-@@ -1339,8 +1336,6 @@ static int rt5682s_hp_amp_event(struct snd_soc_dapm_widget *w,
- 		snd_soc_component_write(component, RT5682S_BIAS_CUR_CTRL_11, 0x6666);
- 		snd_soc_component_write(component, RT5682S_BIAS_CUR_CTRL_12, 0xa82a);
- 
--		mutex_lock(&rt5682s->jdet_mutex);
--
- 		snd_soc_component_update_bits(component, RT5682S_HP_CTRL_2,
- 			RT5682S_HPO_L_PATH_MASK | RT5682S_HPO_R_PATH_MASK |
- 			RT5682S_HPO_SEL_IP_EN_SW, RT5682S_HPO_L_PATH_EN |
-@@ -1348,8 +1343,6 @@ static int rt5682s_hp_amp_event(struct snd_soc_dapm_widget *w,
- 		usleep_range(5000, 10000);
- 		snd_soc_component_update_bits(component, RT5682S_HP_AMP_DET_CTL_1,
- 			RT5682S_CP_SW_SIZE_MASK, RT5682S_CP_SW_SIZE_L | RT5682S_CP_SW_SIZE_S);
--
--		mutex_unlock(&rt5682s->jdet_mutex);
- 		break;
- 
- 	case SND_SOC_DAPM_POST_PMD:
-@@ -3075,7 +3068,6 @@ static int rt5682s_i2c_probe(struct i2c_client *i2c,
- 
- 	mutex_init(&rt5682s->calibrate_mutex);
- 	mutex_init(&rt5682s->sar_mutex);
--	mutex_init(&rt5682s->jdet_mutex);
- 	rt5682s_calibrate(rt5682s);
- 
- 	regmap_update_bits(rt5682s->regmap, RT5682S_MICBIAS_2,
-diff --git a/sound/soc/codecs/rt5682s.h b/sound/soc/codecs/rt5682s.h
-index 1bf2ef7ce578..397a2531b6f6 100644
---- a/sound/soc/codecs/rt5682s.h
-+++ b/sound/soc/codecs/rt5682s.h
-@@ -1446,7 +1446,6 @@ struct rt5682s_priv {
- 	struct delayed_work jd_check_work;
- 	struct mutex calibrate_mutex;
- 	struct mutex sar_mutex;
--	struct mutex jdet_mutex;
- 
- #ifdef CONFIG_COMMON_CLK
- 	struct clk_hw dai_clks_hw[RT5682S_DAI_NUM_CLKS];
++	if (get_kernel_nofault(buf, ptr) ||
+ 	    get_kernel_nofault(buf, ptr + size - 1)) {
+ 		pr_err("invalid kernel ptr: %#lx\n", addr);
+ 		return true;
 -- 
 2.34.1
 

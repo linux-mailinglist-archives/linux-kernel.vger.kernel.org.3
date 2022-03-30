@@ -2,106 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FEEF4EB9DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 07:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196594EB9E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 07:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242754AbiC3FJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 01:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
+        id S242759AbiC3FL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 01:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242783AbiC3FJ1 (ORCPT
+        with ESMTP id S238349AbiC3FLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 01:09:27 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F5E109A74;
-        Tue, 29 Mar 2022 22:07:40 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id bx5so19542819pjb.3;
-        Tue, 29 Mar 2022 22:07:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tWWVuDo0btT2/lfOVBqa8oH2n81md+EvVR8wHxl5xx4=;
-        b=YuNG3uW4ShT4sdTce8FW9Pou99jKMiqr8ocFlc2GkuZysX9qw7gfg0PCS+Bu9pceyK
-         c656XzzvcIa2uCkLRZHyggPgYD9j9dIgQ1mE2LJNq92eGGADXP82I9HnbEwyGnUIosRL
-         FIh3tKBLbBwr8pUEArmWqCnwh1LO/03o+LBL5OFtAsWLrNvkrGH6lT8UhFtVY1ldTj0x
-         wfsuGs6M541ZLGPJDIB40MMyeWZCdz/bpCtv/t2DOVxbrIoU3yk6GIjszrZfUAUhOaCy
-         8OoqDrwsCqci8T4hFccUQU496UOlKU7hw0SwSU/MYFjFzgWeNddVM4oKInu3OBvb2SqF
-         kfHQ==
+        Wed, 30 Mar 2022 01:11:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 644D19681C
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 22:09:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648616973;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eeYUD3XUajeRCNs/Vt/JYditXRCKbb5+uzBVBz/FB5c=;
+        b=ZAG+WCEkw7kfmeQTywAr/yeGpGkijngbLDw++aAMUDx1kKEUZwSsvfQIQXYExzX46fFOmN
+        UeCUzmYlnDYdOUDgpc4MMkJ8IWyJGppALOPm0HY0F7THQSsbLhBFW0EszpAlnwG/ZrG8MF
+        xC/0H/l+//0UTnQLebfhsFwzhz2GDzs=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-329-yMe8Dnm-OXSy5lWFsjfVng-1; Wed, 30 Mar 2022 01:09:31 -0400
+X-MC-Unique: yMe8Dnm-OXSy5lWFsjfVng-1
+Received: by mail-wm1-f70.google.com with SMTP id c62-20020a1c3541000000b003815245c642so559379wma.6
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 22:09:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tWWVuDo0btT2/lfOVBqa8oH2n81md+EvVR8wHxl5xx4=;
-        b=xtIXqn2cwXpurYw6PVsBpkxTVajVf/F+h4BogOnqMUFMfibdsplroYJgHcsJkJn08K
-         E1GGNyz8bXFiWAsZk06eHv3i+Zl1DewezsiEcNV2obGB82z2m8HR9rHHoY1SLANXT3gn
-         GCMFvTYuYuKQe+qcy06+SrOFySYV2QNBUKUegqKkC868fAmcMleR975if2bH1cLZ8wR1
-         4ze0bOD/IsOUZohyghk78Z4Q1uSvF34VdlztUyT7AgcqOKPmBH8x6JZHmKXHmZJ6Gt8z
-         72Q06QtXlNW68+z+s0Hm7DmWQ8QtGmz9TaNABLIEFzaAaf6nsegaaDP2qivCp8y1m0vu
-         Sazw==
-X-Gm-Message-State: AOAM533IcetttkLMmVfISPKj7022oNj5CL09Q0vGmp6m6VVg9PmBcsZy
-        i+0bC19oF1tcoGEDMXbiIno=
-X-Google-Smtp-Source: ABdhPJyp9QWNhTgc5Twv6R+6yIXZ1rugcdXetn4aug9PJA/QV/6TBKRY3GmdKm7HdxmQIdDKRHnY1A==
-X-Received: by 2002:a17:90b:250c:b0:1c9:8dbf:e730 with SMTP id ns12-20020a17090b250c00b001c98dbfe730mr3042455pjb.104.1648616859934;
-        Tue, 29 Mar 2022 22:07:39 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-16.three.co.id. [180.214.232.16])
-        by smtp.gmail.com with ESMTPSA id k137-20020a633d8f000000b0039800918b00sm13730948pga.77.2022.03.29.22.07.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 22:07:39 -0700 (PDT)
-Message-ID: <476370b7-9325-21a3-2696-d74e326bf160@gmail.com>
-Date:   Wed, 30 Mar 2022 12:07:25 +0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eeYUD3XUajeRCNs/Vt/JYditXRCKbb5+uzBVBz/FB5c=;
+        b=xl23I5HeE0bZJqH2PvIIztf5H83C8e82AXT05Ya/piYdDEF1zua00yoQ8e8glqY05b
+         G/Gl6g2QEmgLn/EbTuiQYLYOOX3o9/KrnUUUbM7UgJw/2V7MqnX0CovgqUkDI05TnkX1
+         SZcOz4CjGXjf6Z+AK0IqwZbOMqrrVzPyAijHpkj/xNJswWgUh8+nGq9gjXhoId00L0oL
+         15w0yfO3ljRHBlVL8FendE9jadzSmUE9pQVaz+gPMidryuqnhG/a2tJBfTu69X+o2C4W
+         +00B1rifoQcnGgSrAlE72Wdk0nGPndIjni5N/EKokk5aQCSU1Y3Aff2m6E9nmkmPnfi+
+         BTUg==
+X-Gm-Message-State: AOAM530pt20GS8YNXqDhsa6svWG4iXmh5/U277DNaLNRPOPRSGm1n+2U
+        7gGefUsl7/4PRWCVQJPFmzqr3mP0lwJXkEHp0vq2Y5PGJPqFP2EJ7ZApzApKHYXrUZ9rYWBVtow
+        kPIAm00KeZ/q7hwkXux1UI7GS
+X-Received: by 2002:adf:908e:0:b0:1e7:bea7:3486 with SMTP id i14-20020adf908e000000b001e7bea73486mr33607451wri.401.1648616970764;
+        Tue, 29 Mar 2022 22:09:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwgm9skh/llpKb0wahMYt3d2fhdEpF8cYwvjfeh9spYqrd2U2SWbZElaXEnLNn1Y8P45g2Flg==
+X-Received: by 2002:adf:908e:0:b0:1e7:bea7:3486 with SMTP id i14-20020adf908e000000b001e7bea73486mr33607435wri.401.1648616970488;
+        Tue, 29 Mar 2022 22:09:30 -0700 (PDT)
+Received: from redhat.com ([2.52.9.207])
+        by smtp.gmail.com with ESMTPSA id az26-20020adfe19a000000b00204154a1d1fsm16140858wrb.88.2022.03.29.22.09.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 22:09:29 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 01:09:24 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Keir Fraser <keirf@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re:
+Message-ID: <20220330010646-mutt-send-email-mst@kernel.org>
+References: <20220325060659-mutt-send-email-mst@kernel.org>
+ <CACGkMEu4mRfNbJXJtAFzhyd55fD7phUDKnVtYW0aqRnQmT_bYw@mail.gmail.com>
+ <20220328015757-mutt-send-email-mst@kernel.org>
+ <CACGkMEu+fax6YYwhfbc1yoSxv6o1FTQyrOheVTmUfqGvmbAEfA@mail.gmail.com>
+ <20220328062452-mutt-send-email-mst@kernel.org>
+ <87fsn1f96e.ffs@tglx>
+ <20220329100859-mutt-send-email-mst@kernel.org>
+ <87v8vweie2.ffs@tglx>
+ <20220329175426-mutt-send-email-mst@kernel.org>
+ <CACGkMEv2j2cJkSFfxTmaRxJ+SH6actSCZsALjvvDUPgg0h-KeA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] docs: Add a document on how to fix a messy diffstat
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <87wngc6a7q.fsf@meer.lwn.net>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <87wngc6a7q.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEv2j2cJkSFfxTmaRxJ+SH6actSCZsALjvvDUPgg0h-KeA@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/03/22 22.37, Jonathan Corbet wrote:
-> +So what is to be done?  The best response when confronted with this
-> +situation is to indeed to do a merge with the branch you intend your work
-> +to be pulled into, but to do it privately, as if it were the source of
-> +shame.  Create a new, throwaway branch and do the merge there::
-> +
-> +  ... vM --- vN-rc1 --- vN-rc2 --- vN-rc3 --- ... --- vN-rc7 --- vN
-> +                |         |                                      |
-> +                |         +-- c1 --- c2 --- ... --- cN           |
-> +                |                   /               |            |
-> +                +-- x1 --- x2 --- x3                +------------+-- TEMP
-> +
-> +The merge operation resolves all of the complications resulting from the
-> +multiple beginning points, yielding a coherent result that contains only
-> +the differences from the mainline branch.  Now it will be possible to
-> +generate a diffstat with the desired information::
-> +
-> +  $ git diff -C --stat --summary linus..TEMP
-> +
-> +Save the output from this command, then simply delete the TEMP branch;
-> +definitely do not expose it to the outside world.  Take the saved diffstat
-> +output and edit it into the messy pull request, yielding a result that
-> +shows what is really going on.  That request can then be sent upstream.
+On Wed, Mar 30, 2022 at 10:38:06AM +0800, Jason Wang wrote:
+> On Wed, Mar 30, 2022 at 6:04 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Tue, Mar 29, 2022 at 08:13:57PM +0200, Thomas Gleixner wrote:
+> > > On Tue, Mar 29 2022 at 10:37, Michael S. Tsirkin wrote:
+> > > > On Tue, Mar 29, 2022 at 10:35:21AM +0200, Thomas Gleixner wrote:
+> > > > We are trying to fix the driver since at the moment it does not
+> > > > have the dev->ok flag at all.
+> > > >
+> > > > And I suspect virtio is not alone in that.
+> > > > So it would have been nice if there was a standard flag
+> > > > replacing the driver-specific dev->ok above, and ideally
+> > > > would also handle the case of an interrupt triggering
+> > > > too early by deferring the interrupt until the flag is set.
+> > > >
+> > > > And in fact, it does kind of exist: IRQF_NO_AUTOEN, and you would call
+> > > > enable_irq instead of dev->ok = true, except
+> > > > - it doesn't work with affinity managed IRQs
+> > > > - it does not work with shared IRQs
+> > > >
+> > > > So using dev->ok as you propose above seems better at this point.
+> > >
+> > > Unless there is a big enough amount of drivers which could make use of a
+> > > generic mechanism for that.
+> > >
+> > > >> If any driver does this in the wrong order, then the driver is
+> > > >> broken.
+> > > >
+> > > > I agree, however:
+> > > > $ git grep synchronize_irq `git grep -l request_irq drivers/net/`|wc -l
+> > > > 113
+> > > > $ git grep -l request_irq drivers/net/|wc -l
+> > > > 397
+> > > >
+> > > > I suspect there are more drivers which in theory need the
+> > > > synchronize_irq dance but in practice do not execute it.
+> > >
+> > > That really depends on when the driver requests the interrupt, when
+> > > it actually enables the interrupt in the device itself
+> >
+> > This last point does not matter since we are talking about protecting
+> > against buggy/malicious devices. They can inject the interrupt anyway
+> > even if driver did not configure it.
+> >
+> > > and how the
+> > > interrupt service routine works.
+> > >
+> > > So just doing that grep dance does not tell much. You really have to do
+> > > a case by case analysis.
+> > >
+> > > Thanks,
+> > >
+> > >         tglx
+> >
+> >
+> > I agree. In fact, at least for network the standard approach is to
+> > request interrupts in the open call, virtio net is unusual
+> > in doing it in probe. We should consider changing that.
+> > Jason?
+> 
+> This probably works only for virtio-net and it looks like not trivial
+> since we don't have a specific core API to request interrupts.
+> 
+> Thanks
 
-Looks OK.
+We'll need a new API, for sure. E.g.  find vqs with no
+callback on probe, and then virtio_request_vq_callbacks separately.
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+The existing API that specifies callbacks during find vqs
+can be used by other drivers.
 
--- 
-An old man doll... just what I always wanted! - Clara
+> >
+> > --
+> > MST
+> >
+

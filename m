@@ -2,131 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7875D4EC5E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 233064EC5E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:45:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346252AbiC3Nq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 09:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
+        id S1346285AbiC3NrR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 30 Mar 2022 09:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346271AbiC3NqW (ORCPT
+        with ESMTP id S237381AbiC3NrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 09:46:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF9BB7520B
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 06:44:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648647876;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F8QQxxoffEN8D0iWzQeDRqRj76sBJ6MkIp9Ef6hGM1Y=;
-        b=ZawGaF0GSV7fOZiURYMmqSCDcmjWqGSgCzFYBZk7RS1SgYY7VW/wV3M9QXP5QxxTm5y2c0
-        s+qN//AjGv2AeKo2hn0CzdirL5zb2szXctLCuCRtRT51Hugsz0MGmpPx97RE92WomIsxJT
-        CRMr+VhgJOoAl4R5JuZMhgGFxlpKJBY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-390-NtZGEiU0PnqW3s2Gsn_boQ-1; Wed, 30 Mar 2022 09:44:31 -0400
-X-MC-Unique: NtZGEiU0PnqW3s2Gsn_boQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA68B899ED9;
-        Wed, 30 Mar 2022 13:44:16 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EF7B0400E545;
-        Wed, 30 Mar 2022 13:44:00 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <YidDznCPSmFmfNwE@iki.fi>
-References: <YidDznCPSmFmfNwE@iki.fi> <20210712170313.884724-1-mic@digikod.net> <20210712170313.884724-6-mic@digikod.net>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     dhowells@redhat.com,
-        =?us-ascii?Q?=3D=3Fiso-8859-1=3FQ=3FMicka=3DEBl?=
-         =?us-ascii?Q?=5FSala=3DFCn=3F=3D?= <mic@digikod.net>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        =?us-ascii?Q?=3D=3Fiso-8859-1=3FQ=3FMicka=3DEBl?=
-         =?us-ascii?Q?=5FSala=3DFCn=3F=3D?= <mic@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v8 5/5] certs: Allow root user to append signed hashes to the blacklist keyring
+        Wed, 30 Mar 2022 09:47:13 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3BB9232A
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 06:45:26 -0700 (PDT)
+Received: from mail-wm1-f45.google.com ([209.85.128.45]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mf0Jg-1oG0vX1VH8-00gXWT for <linux-kernel@vger.kernel.org>; Wed, 30 Mar
+ 2022 15:45:25 +0200
+Received: by mail-wm1-f45.google.com with SMTP id n35so12275927wms.5
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 06:45:25 -0700 (PDT)
+X-Gm-Message-State: AOAM533llxE8Ff4BHRZvCwKPc0qU1ULrPZKNUZSkkP9L4VYrlVEA7s5h
+        fMQ3aTbEeEXUdwdzONd64wKMM3Y9J+msjdG6xIM=
+X-Google-Smtp-Source: ABdhPJyFDtDMU88yCYrJWs8ilBs1qgSlTrY/zkuVFBVQD5a2e8HtDgObtvJMsCBEA8avtDQ005+YpydEfjPyDUO36sQ=
+X-Received: by 2002:a7b:cd13:0:b0:38b:f39c:1181 with SMTP id
+ f19-20020a7bcd13000000b0038bf39c1181mr4752181wmj.20.1648647915002; Wed, 30
+ Mar 2022 06:45:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 30 Mar 2022 14:44:00 +0100
-Message-ID: <2937432.1648647840@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <87zglefhxd.fsf@mpe.ellerman.id.au> <CAHk-=whk4jihDM+zkhZPYRyNO0-YA1_-K9_NyC3EDsX+gkxC-w@mail.gmail.com>
+ <87wngefnsu.fsf@mpe.ellerman.id.au> <20220330112733.GG163591@kunlun.suse.cz> <87k0cbfuf4.fsf@mpe.ellerman.id.au>
+In-Reply-To: <87k0cbfuf4.fsf@mpe.ellerman.id.au>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 30 Mar 2022 15:44:58 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2GCQd4SNpUvZrrEOgJ5OtOgj0PXtORnfe208n7tapzNQ@mail.gmail.com>
+Message-ID: <CAK8P3a2GCQd4SNpUvZrrEOgJ5OtOgj0PXtORnfe208n7tapzNQ@mail.gmail.com>
+Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-5.18-1 tag
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>, jniethe5@gmail.com,
+        ganeshgr@linux.ibm.com, Jason Wang <wangborong@cdjrlc.com>,
+        bigunclemax@gmail.com, Miroslav Benes <mbenes@suse.cz>,
+        hbh25y@gmail.com, Michael Neuling <mikey@neuling.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>, danielhb413@gmail.com,
+        haren@linux.ibm.com, mamatha4@linux.vnet.ibm.com,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Thierry Reding <treding@nvidia.com>,
+        kernel.noureddine@gmail.com, Nathan Lynch <nathanl@linux.ibm.com>,
+        Petr Mladek <pmladek@suse.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>, guozhengkui@vivo.com,
+        kjain@linux.ibm.com, chenjingwen6@huawei.com,
+        Nick Piggin <npiggin@gmail.com>, Scott Wood <oss@buserror.net>,
+        rmclure@linux.ibm.com, maddy@linux.ibm.com,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        psampat@linux.ibm.com, sachinp@linux.ibm.com,
+        Anders Roxell <anders.roxell@linaro.org>,
+        ldufour@linux.ibm.com, Hari Bathini <hbathini@linux.ibm.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        farosas@linux.ibm.com, Geoff Levand <geoff@infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        sourabhjain@linux.ibm.com, Julia Lawall <Julia.Lawall@inria.fr>,
+        Ritesh Harjani <riteshh@linux.ibm.com>, cgel.zte@gmail.com,
+        Vaibhav Jain <vaibhav@linux.ibm.com>, tobias@waldekranz.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jakob Koschel <jakobkoschel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:aJfpSsmsCY0/TZONtBGkjjkdVa9dJdsNgcT+13VdPzSEP81N/+q
+ 49FBVN7TWVTGDM8eM5yUV5yvXng4hMO3TFFsw0zkBqvUbCIHiyckS69Xvt7AwFB2YGmwuU8
+ mGsQLRo6NHxZOUIlKMnlJcn6KDS8N3R11ssGuFaPLHgzK9GRkgczp17p6cKCg7EHxVmGHgZ
+ S2yyULvruQ+LIhWPUJmAw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8ntCkkSA/zw=:QN7U91CGazWMQFgy4OTqIb
+ pRXIK6RMZXjAYrih50Aji/LNbzcwoY4ZZ6oXuKr66h5VM5wO3qkcd5DzX27UaOJbCALPIWXz1
+ 0FA3wiGJ9X9e3vC6uuLEO1JPkPUZhUDKlfaFMBbmJA1h8KcRp288h7hqMcGV22iFMMJ9RK2sZ
+ rVF/UzRLaIL7deW1TmKPtD19E1xAGM2UEpXx9vfXTIKrX5/HfJfYxwovddUydMAqNadHDQXhh
+ rBeowqPNdf/yoCDMJNcwWY3YgUsm6XKlqeuxrxANZCHGi902nxXdks3OoP4WogqO5AVdkPCSh
+ 52L9KsvN4T/3G1ql0Z08SZ9XzQLFb5DE1lqeJBNCzm5NfvnBxQRbAZPvf/yvAXO1LQ8zEoxQ4
+ vp5UQ3jUm7z6wsWturxQY1bqcnYNmnrVwNqmSij3YuWU4cQ500sn6k+LyWSp+zF/wn7ppeebx
+ oCR8/VZee9y6ZXLOgLEkSEPLTtqNG5CnTkLGEbXb6gvjmmc9Za+4xAQglcgaPNy7iAEfTLrkt
+ tDzq2xY35YouLlFJLFG7So5h1+FiD8NR7twOrYb/xVburWmINaASZspqqKOxT8mSvbB4uZWRq
+ HuGQBGFDAOiB0vmROiGRtwdfHATp+nqdzz+T6isaOta7kB07tt/3Qrk/JAtkceGxnhSoVbwqC
+ 8F6jUb4o3wz7cY11GIwmMkRTBry1ljWvVDCHpwoS54s4no276JfT7DigVanjgkVArqYqsq+Vp
+ IMyrpg13AGXjs+9gNHujoqMdzmgUEj2LVOiAnxr/PB7CCQObu3U8B4ufuHQLTa8dI9tel/jbH
+ TXsOjFybsLqzxpeFaKKGGHTvAbxh6LrIiu+ewIXOKzhdO2D+0k=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jarkko Sakkinen <jarkko@kernel.org> wrote:
+On Wed, Mar 30, 2022 at 3:21 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
+> Michal Suchánek <msuchanek@suse.de> writes:
+> > On Mon, Mar 28, 2022 at 08:07:13PM +1100, Michael Ellerman wrote:
+> >> No you're right, we have moved away from them, but not entirely.
+> >>
+> >> Functions descriptors are still used for 64-bit big endian, but they're
+> >> not used for 64-bit little endian, or 32-bit.
+> >
+> > There was a patch to use ABIv2 for ppc64 big endian. I suppose that
+> > would rid usof the gunction descriptors for good.
+>
+> It would be nice.
+>
+> The hesitation in the past was that the GNU toolchain developers don't
+> officially support BE+ELFv2, though it is in use so it does work.
 
-> >  /*
-> >   * Initialise the blacklist
-> >   */
-> >  static int __init blacklist_init(void)
-> >  {
-> >  	const char *const *bl;
-> > +	struct key_restriction *restriction;
-> >=20=20
-> >  	if (register_key_type(&key_type_blacklist) < 0)
-> >  		panic("Can't allocate system blacklist key type\n");
-> >=20=20
-> > +	restriction =3D kzalloc(sizeof(*restriction), GFP_KERNEL);
-> > +	if (!restriction)
-> > +		panic("Can't allocate blacklist keyring restriction\n");
->=20
->=20
-> This prevents me from taking this to my pull request. In moderns standard=
-s,
-> no new BUG_ON(), panic() etc. should never added to the kernel.
+It clearly made sense to wait while BE+ELFv1 was commonly used and
+well tested, but as that is getting less common each year, getting ELFv1
+out of the picture would appear to make the setup less obscure, not more.
 
-I would argue that in this case, though, it is reasonable.  This should only
-be called during kernel initialisation and, as Micka=C3=ABl points out, if =
-you
-can't allocate that small amount of memory, the kernel isn't going to boot
-much further.
-
-> I missed this in my review.
->=20
-> This should rather be e.g.
->=20
->         restriction =3D kzalloc(sizeof(*restriction), GFP_KERNEL);
-> 	if (!restriction) {
-> 		pr_err("Can't allocate blacklist keyring restriction\n");
->                 return 0;
->         }
-
-You can't just return 0.  That indicates success - but if by some miracle, =
-the
-kernel actually gets to a point where userspace can happen, it could mean t=
-hat
-we're missing the security restrictions of the blacklist.
-
-Now, we could defer the panic to add_key_to_revocation_list(), but if you
-can't set in place the required security restrictions, I think it's arguable
-that the kernel either needs to panic or it needs to blacklist everything.
-
-David
-
+       Arnd

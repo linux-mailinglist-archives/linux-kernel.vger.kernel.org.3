@@ -2,189 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9387A4EB853
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 04:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3AB34EB859
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 04:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242004AbiC3Cf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 22:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52528 "EHLO
+        id S242013AbiC3Cib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 22:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241393AbiC3CfY (ORCPT
+        with ESMTP id S237060AbiC3Ci3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 22:35:24 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E1D4E3B9
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 19:33:40 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id p189so11403229wmp.3
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 19:33:39 -0700 (PDT)
+        Tue, 29 Mar 2022 22:38:29 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A7D227C56
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 19:36:44 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id w17-20020a056830111100b005b22c584b93so14048693otq.11
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 19:36:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=01VR+mtOHJ5MnK3jPYwJmK1tuZctcz/daW5u2QrilTU=;
-        b=Qkwn7uMp7u244XBgQyQtuFmS7MJ6U0HNAbtF5eWDyq5IUWXNhV/EQ+S72z9cnyhLfX
-         STgB2bB0iCfCezNpJruDuoneSQN2c5kFGs476HPIIqYfbBu0I3LU/gwCxg7wHlKcEigN
-         ECBnIifU+syHVRCtO66FGoc7qHCwjVlDF4BcJbgkGmnmCYNJtW6QuLhtk4KAgDviVfnt
-         qkHIxx/oTqU2x1uWKKlNI1RAxc6qH0CNZ6jPrDTauIHy/D3jHynGPK9xpDOUsO2GdVA6
-         vzxClaDXyU06nxhHO3cvmsnJDfS0DimgkpuRQADoFbxCrw6g7mq6tJQoEA+axLmzFKeX
-         0XVg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DHEZxSjzJlAPP2uqRqoKSVFTqS9GuHL/yTxHB4u0XZ8=;
+        b=deFHZEmJxRWJscAbTS7+14TIUG1p6cMQHdj7ZGHJ4PaVtO5K8L09p7k69yoG/405N7
+         37WH0U7LaCMTM+sQp/yb/ETrRwwvORNrZZPFtvsiZRpoi44RRZnu+INkK7tHLFuitYzN
+         E3U868ePSbdsHP5H5axaka1tO5sYb1ErrJzCLiJEMuQiPboQRemlpKDYkjBcvltLyJXA
+         8GqVwlC57PMQKicBKnOgwEMOjiJ2HF3cjTfmYUQOPsNf8/7y/vfuAxBiSI6MAMoDIucV
+         k5pvfxSZzVw5FHaZKbLebwK6sOtrRbWlFWy3gGc0oZyUTfIBmAnd1VH35oHCHiaeCE6e
+         hgKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=01VR+mtOHJ5MnK3jPYwJmK1tuZctcz/daW5u2QrilTU=;
-        b=aDmUPWlULNPPYz3P9RQCU6nWKanQURDagZKcbmXF+EC4YLPlp2wjqTCCu993dfQUMl
-         COnXTSTl22X+gRvC4Sqcsyi4fonr4iyF5z10mqoCy1sLS2zSF4gfj8/rjLLTLjpXN2d4
-         kYOQYHnhXpZO8s9F41DYNo2DX6CXz3Vdh/UYTxRd52PX46gI1++nuQp8SAAfTd5WADnv
-         p0j5Pn3yf8F1VmrN9pF0v+BV6N336QjL/HE5i6ruvUQLHEAd4MYg8Xr+lAFv+UYZSon6
-         S486DVxQpPK+J29158Oi2z37EisVYEhQEY3slfLEmPIXwPWbsYU5EZMe5z1eVaT6MGv+
-         bw5A==
-X-Gm-Message-State: AOAM533D+jgwvMBXy9gtRk8gOO1IjcStJVOVepJ3W2bvvYgAHhsvuk5x
-        QlgJeIpZLv3YEGSHushR7BMh0ziCp5fOIrhK26I3Og==
-X-Google-Smtp-Source: ABdhPJx0p3YlVcfgQZDaUWH6xoG2F2i9plm2830vRu83fbPpGb+sj1AedTJ//sDT6nzf4GZvo8a5xPbvdQlcplOZOAU=
-X-Received: by 2002:a7b:c541:0:b0:38c:b0ed:31c4 with SMTP id
- j1-20020a7bc541000000b0038cb0ed31c4mr2199011wmk.141.1648607618418; Tue, 29
- Mar 2022 19:33:38 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DHEZxSjzJlAPP2uqRqoKSVFTqS9GuHL/yTxHB4u0XZ8=;
+        b=bCrIoAF6tYiZl1i2sQap7NQ8kmqr95nAZxLUzCnvc0uIkMWPqT29+8XXTtUfSTxoEC
+         +7ZCSmJukvgwRtX4v72QyUu3FRz8N1r0+C+FuLgOdQkJcAu5m14s1Yk+mhslGXqrTDvU
+         iQOHa3CDtHgq2BpCKi8wj1uFg6ITII94P09iP6cE39ZQvGmty8AC0m2COHc2xvLW6Mfu
+         WFiMfletCAera95Q9hMX0CzqtnXaQO2pSM9F84rriQDf+n3T5CB1yaaD4wnCeGoTGIz2
+         4TSeR+LsVgaZBjdNu8juHLY+ItyQ8WDuaWlLBDM6UbdaUgBc0UN4jDroJ9xzVfaH586j
+         BppA==
+X-Gm-Message-State: AOAM532AKfP5I8WfPOJrD2C9w6v/SB7MezuAeZO5giPUW5WxNYQ7XZkz
+        gVb2cdzMTV9SoSB7utNmauLqXg==
+X-Google-Smtp-Source: ABdhPJyX7nFTb5fNtNKAkBvNdRMgmjcVXyBvRPthDL9QsoLtpEcBDKHG3ePy6i/5GKwyn13gvdCwmw==
+X-Received: by 2002:a9d:77d7:0:b0:5b2:29b0:70cb with SMTP id w23-20020a9d77d7000000b005b229b070cbmr2366290otl.276.1648607804090;
+        Tue, 29 Mar 2022 19:36:44 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id f8-20020a4a8908000000b0032472938f95sm8411542ooi.17.2022.03.29.19.36.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 19:36:43 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Tim Blechmann <tim@klingt.org>
+Subject: [GIT PULL] rpmsg updates for v5.18
+Date:   Tue, 29 Mar 2022 21:36:42 -0500
+Message-Id: <20220330023642.187977-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <cover.1648593132.git.marcelo.schmitt1@gmail.com> <9b8233e89227617a2cb47d85c654603c6583323d.1648593132.git.marcelo.schmitt1@gmail.com>
-In-Reply-To: <9b8233e89227617a2cb47d85c654603c6583323d.1648593132.git.marcelo.schmitt1@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 30 Mar 2022 10:33:27 +0800
-Message-ID: <CABVgOSk7dc_gn14M5Z5WRtHvyFcwrhpmCjf8cE=gypTim9FdPw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] Documentation: dev-tools: Add a section for static
- analysis tools
-To:     Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-sparse@vger.kernel.org, cocci@inria.fr,
-        smatch@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>, julia.lawall@inria.fr
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000007d9a0b05db665f10"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000007d9a0b05db665f10
-Content-Type: text/plain; charset="UTF-8"
+The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
 
-On Wed, Mar 30, 2022 at 7:22 AM Marcelo Schmitt
-<marcelo.schmitt1@gmail.com> wrote:
->
-> Complement the Kernel Testing Guide documentation page by adding a
-> section about static analysis tools.
->
-> Signed-off-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-> Acked-by: Daniel Latypov <dlatypov@google.com>
-> Acked-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Reviewed-by: David Gow <davidgow@google.com>
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
-> Change log:
-> - Brought generic tool characteristics to the intro paragraph
-> - Made explicit that these tools run at compile time
-> - Added a note of caution about false positives
-> - Updated Coccinelle info to make it sound better and be more skimmable
->
+  Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
 
-Looks better to me: most of the things which I feel are still missing
-are added in the next patch.
+are available in the Git repository at:
 
-I think it would be possible to combine the two if you wanted to,
-which might make the overall descriptions of the tools a bit stronger,
-but this works either way.
+  https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rpmsg-v5.18
 
-This is still
-Reviewed-by: David Gow <davidgow@google.com>
+for you to fetch changes up to 8109517b394e6deab5fd21cc5460e82ffed229c6:
 
--- David
+  rpmsg: ctrl: Introduce new RPMSG_CREATE/RELEASE_DEV_IOCTL controls (2022-03-13 11:49:53 -0500)
 
---0000000000007d9a0b05db665f10
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+----------------------------------------------------------------
+rpmsg updates for v5.18
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
-2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
-dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
-jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
-ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
-QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDJ
-QPa2DAGV1L56N90xcIwTWh/m7TNe/V4GYv6RGdg/6zAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjAzMzAwMjMzMzhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAccQVg7q2QE30EtQxS7V1
-pTxBp2qFu2IWhuuMnyjojM2NVsVf4fVERx/rn/dV2/BxpEchf1DnLI5xuMAYV4bCKDLZ0wq6lytn
-1LB/oyDhzDR4dhiKPOsdjJntYmA6dOcEbP6jcTKtQr+1YDTf/rszbUQTnYGGD4Btn5Ab4gQA3Zu3
-DlXMy1BvthP6UXAO7Ccgkk95SAGtX+oDBD4ZQVupYZ+9vNEFNxsi3bC3j0ZyPYC1qyaM6y/+tZyk
-GTF7ZkSu8LOucBCvKUSeoe5ZuBKjy1TQBrFnMDCcv9TkC/ohBF/jtaQ43cwrwZoUiQDIQiBWfOee
-oognkJJPpinB3Evdng==
---0000000000007d9a0b05db665f10--
+The major part of the rpmsg changes for v5.18 relates to improvements in
+the rpmsg char driver, which now allow automatically attaching to rpmsg
+channels as well as initiating new communication channels from the Linux
+side.
+
+The SMD driver is moved to arch_initcall with the purpose of registering
+root clocks earlier during boot. Also in the SMD driver, a workaround
+for the resource power management (RPM) channel is introduced to resolve
+an issue where both the RPM and Linux side waits for the other to close
+the communication established by the bootloader - this unblocks support
+for clocks and regulators on some older Qualcomm platforms.
+
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (1):
+      rpmsg: qcom_smd: Fix redundant channel->registered assignment
+
+Arnaud Pouliquen (8):
+      rpmsg: char: Export eptdev create and destroy functions
+      rpmsg: Create the rpmsg class in core instead of in rpmsg char
+      rpmsg: Move the rpmsg control device from rpmsg_char to rpmsg_ctrl
+      rpmsg: Update rpmsg_chrdev_register_device function
+      rpmsg: char: Refactor rpmsg_chrdev_eptdev_create function
+      rpmsg: char: Add possibility to use default endpoint of the rpmsg device
+      rpmsg: char: Introduce the "rpmsg-raw" channel
+      rpmsg: ctrl: Introduce new RPMSG_CREATE/RELEASE_DEV_IOCTL controls
+
+Konrad Dybcio (1):
+      rpmsg: qcom_smd: Promote to arch_initcall
+
+Luca Weiss (1):
+      rpmsg: smd: allow opening rpm_requests even if already opened
+
+Minghao Chi (CGEL ZTE) (1):
+      rpmsg: use struct_size over open coded arithmetic
+
+Tim Blechmann (1):
+      rpmsg: char: treat rpmsg_trysend() ENOMEM as EAGAIN
+
+ drivers/rpmsg/Kconfig             |   8 ++
+ drivers/rpmsg/Makefile            |   1 +
+ drivers/rpmsg/qcom_glink_native.c |   4 +-
+ drivers/rpmsg/qcom_smd.c          |  13 +-
+ drivers/rpmsg/rpmsg_char.c        | 238 ++++++++++++++-----------------------
+ drivers/rpmsg/rpmsg_char.h        |  46 ++++++++
+ drivers/rpmsg/rpmsg_core.c        |  15 ++-
+ drivers/rpmsg/rpmsg_ctrl.c        | 243 ++++++++++++++++++++++++++++++++++++++
+ drivers/rpmsg/rpmsg_internal.h    |  10 +-
+ drivers/rpmsg/virtio_rpmsg_bus.c  |   2 +-
+ include/uapi/linux/rpmsg.h        |  10 ++
+ 11 files changed, 428 insertions(+), 162 deletions(-)
+ create mode 100644 drivers/rpmsg/rpmsg_char.h
+ create mode 100644 drivers/rpmsg/rpmsg_ctrl.c

@@ -2,92 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CA34EC601
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664294EC5FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346520AbiC3Nws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 09:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
+        id S1346430AbiC3Nxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 09:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346471AbiC3Nwd (ORCPT
+        with ESMTP id S1346524AbiC3Nwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 09:52:33 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8E213CA15;
-        Wed, 30 Mar 2022 06:50:47 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id u26so24468037eda.12;
-        Wed, 30 Mar 2022 06:50:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cFscs9a4lBA8lnwkkutsSsPBXiFXGYRCiVbsg2PtHhk=;
-        b=oCRtzICXcGnyB/eQ+oVQIlB7OaiwlgstHYPMvB0t35KOpq9RjfKcUMPhcNU1QGGk5U
-         ko+WAQ9c/s29BJ2Xi6zT0QOqaKwYa63tKfxYFA6vYTSY+ARO4sJfGg8ulScWZX56axd6
-         +D3aqi00sV8Wlcl9LR8VszDTpAz/JzLLElryVuJsUhJANOGTgPqzBHnjuytvZK5AMM7g
-         3accHYU9lHPfXqyunhqaU7Bfk9rPkDSCDu0b9UvT2RvsT3dUic+e74s1kD+W1X1eCPPN
-         eD7WmauBrYBig6O3sIZTUWrc/RGEP2IWDhoGAP1T2F0Qbw/pNofoNmiWXX/AvIYLAQJB
-         gT6A==
+        Wed, 30 Mar 2022 09:52:49 -0400
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023041480EE;
+        Wed, 30 Mar 2022 06:51:02 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id o20-20020a9d7194000000b005cb20cf4f1bso14932231otj.7;
+        Wed, 30 Mar 2022 06:51:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cFscs9a4lBA8lnwkkutsSsPBXiFXGYRCiVbsg2PtHhk=;
-        b=JdJ/3JJsWFWQRf4dUF+n5bDPihDqthO/WAcxRZdvszYD/DSL4JC6P0utcYdWu0EZfr
-         o2+2WzHxnNy3NAdoplkzi2hKf4qdALjbUHFR5DyO2vFUv9FMLT3YS29828Yw7vC29TWH
-         YfEQv1OtzsHo5N4RpGA7m2soxqcsq1b3TepSck+ig0DaTMQ/dRAz89YiIUbWQ+8iHKaS
-         R4EA49/8bKoJ3gGUgcFJ45em8QRByz0mlImPgbpN2l8ROs8aU64HJwBlJRlXoZsP5LOn
-         wQji2w0FyAcaQmdSwkx/ZUANhjMMNPWzH4kQYHERF7U2nqG3+ZGv+FMNYFNkh11/hCUZ
-         v9pQ==
-X-Gm-Message-State: AOAM533hH0B1WAvOe/HttXAjhDS6DvVaHXwUG5Y0fJh1dQiftgruteGc
-        /J04oThH91TWhXvaaZYFMWY=
-X-Google-Smtp-Source: ABdhPJyCVIJlRb8MMd1Pq+G/UU1G1Oe49NrXcdYhzrtVxeXio5dFpoL9A5Inp56OMsqhxP4WHdszUg==
-X-Received: by 2002:a05:6402:2789:b0:419:5317:7d39 with SMTP id b9-20020a056402278900b0041953177d39mr10689377ede.53.1648648245946;
-        Wed, 30 Mar 2022 06:50:45 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id j21-20020a170906255500b006e08c4862ccsm7369328ejb.96.2022.03.30.06.50.45
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=yHeRiX2bMIx0KbaFEt4HL/mkVxSbe1mp5NhZsTk9FpE=;
+        b=Q3FXTEzQyPmhEjt51ScacM0FKbrL4G6wU2jaHCxMEZe9YK5h75AJTYyFWjQ6LUClQP
+         rUmZFpda415/YHC1kRzbO0TIE09FXTWIYtQY72nvCzxtG4tE2lhwlV1YPU6oh7sNCIgG
+         ZKfFShxJgbWVKMwLPP288DoEX5hNX7ZwQ7yhkdFngKQdzq41aRhcpz2EK5LmdwVl/v76
+         UayWFeFtm7nm/mXPkYm+p1MNwGevbrH0HFYh2pGBXRmG9ceJmpT1NUca19JI8EDcXXK4
+         gDeV7zcqEgUYxG1EMSNbkpuh37OnypfGt6Jk/pDgEe/kE+q/2H+6c/TTyzF8Ekez0d3m
+         bBCQ==
+X-Gm-Message-State: AOAM531dvqybcrePm8E7RlOA6pAYq3BomI45TstNwTARviCHk7XUV/QR
+        BGx6ZvuMiuDWu0KJAwR5Fk72pcyF5g==
+X-Google-Smtp-Source: ABdhPJwJb0gAhNOGxyZyBT1Dysx5h/4ZV6i7rhvJehmKsif+DWOSg8rCnMl2C12b8kUdLQ2IDJ+PZg==
+X-Received: by 2002:a05:6830:812:b0:5af:6b1b:537f with SMTP id r18-20020a056830081200b005af6b1b537fmr3187780ots.194.1648648261611;
+        Wed, 30 Mar 2022 06:51:01 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y3-20020a056870e50300b000d9be6436f1sm9562024oag.29.2022.03.30.06.51.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 06:50:45 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 15:50:43 +0200
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Shunsuke Nakamura <nakamura.shun@fujitsu.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [RFC PATCH v2 4/7] libperf: Introduce perf_{evsel,
- evlist}__open_opt with extensible struct opts
-Message-ID: <YkRgM1obkBQsY2FR@krava>
-References: <20220325043829.224045-1-nakamura.shun@fujitsu.com>
- <20220325043829.224045-5-nakamura.shun@fujitsu.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220325043829.224045-5-nakamura.shun@fujitsu.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Mar 2022 06:51:00 -0700 (PDT)
+Received: (nullmailer pid 2932724 invoked by uid 1000);
+        Wed, 30 Mar 2022 13:50:59 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     David Jander <david@protonic.nl>
+Cc:     devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Robin van der Gracht <robin@protonic.nl>
+In-Reply-To: <20220330073440.3986724-3-david@protonic.nl>
+References: <20220330073440.3986724-1-david@protonic.nl> <20220330073440.3986724-3-david@protonic.nl>
+Subject: Re: [PATCH 2/2] dt-bindings: auxdisplay: holtek,ht16k33.yaml: Add holtek,refuse-primary-fb
+Date:   Wed, 30 Mar 2022 08:50:59 -0500
+Message-Id: <1648648259.965681.2932723.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 01:38:26PM +0900, Shunsuke Nakamura wrote:
+On Wed, 30 Mar 2022 09:34:40 +0200, David Jander wrote:
+> Document the DT property that will cause the holtek auxdisplay driver to
+> back off if it detects that it is the first driver to probe a framebuffer
+> device.
+> 
+> Signed-off-by: David Jander <david@protonic.nl>
+> ---
+>  .../devicetree/bindings/auxdisplay/holtek,ht16k33.yaml         | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
 
-SNIP
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> diff --git a/tools/lib/perf/evsel.c b/tools/lib/perf/evsel.c
-> index b17842581dea..db9b7274feb5 100644
-> --- a/tools/lib/perf/evsel.c
-> +++ b/tools/lib/perf/evsel.c
-> @@ -1,4 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
-> +#ifndef _GNU_SOURCE
-> +#define _GNU_SOURCE
-> +#endif
+yamllint warnings/errors:
 
-I think we can make this global set in Makefile, like we do in perf
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml: properties:holtek,refuse-primary-fb: 'oneOf' conditional failed, one must be fixed:
+	'type' is a required property
+		hint: A vendor boolean property can use "type: boolean"
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml: properties:holtek,refuse-primary-fb: 'oneOf' conditional failed, one must be fixed:
+		'enum' is a required property
+		'const' is a required property
+		hint: A vendor string property with exact values has an implicit type
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml: properties:holtek,refuse-primary-fb: 'oneOf' conditional failed, one must be fixed:
+		'$ref' is a required property
+		'allOf' is a required property
+		hint: A vendor property needs a $ref to types.yaml
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
+	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml: ignoring, error in schema: properties: holtek,refuse-primary-fb
+Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.example.dt.yaml:0:0: /example-0/i2c1/ht16k33@70: failed to match any schema with compatible: ['holtek,ht16k33']
 
-jirka
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1610969
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

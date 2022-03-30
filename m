@@ -2,160 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225D14EBF85
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 13:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 244394EBF8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 13:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343497AbiC3LGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 07:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
+        id S1343510AbiC3LHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 07:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343490AbiC3LGB (ORCPT
+        with ESMTP id S1343490AbiC3LHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:06:01 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E42BC90
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=JnKcrmaUr8MXflidFAPHWOHNq89m
-        zF96ivzsWPZDlp0=; b=yOMfIHgkZLWCbFmZe5XxSBX8AQQOB5Qsl6+WpihJZgRe
-        v7SOTFafZa6jaxDeIjgp3m8SPdsRNHGlOA2Sr+5ay6dOAk4cD5b6TQQ+WcJ+F31Y
-        oxPe3VvZYV/bMU2GFTcf8XRK1ykKDnLzxHGqDQYEH1IkjvhAIv6bptpl13+sOmY=
-Received: (qmail 2163323 invoked from network); 30 Mar 2022 13:04:14 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 30 Mar 2022 13:04:14 +0200
-X-UD-Smtp-Session: l3s3148p1@lwSAgW3b1KkgAQnoAFSoAOQGPeMhapNB
-Date:   Wed, 30 Mar 2022 13:04:14 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     "Gabbasov, Andrew" <Andrew_Gabbasov@mentor.com>
-Cc:     "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "Surachari, Bhuvanesh" <Bhuvanesh_Surachari@mentor.com>
-Subject: Re: [PATCH v2] i2c: rcar: add SMBus block read support
-Message-ID: <YkQ5LkUyicWFLlSJ@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Gabbasov, Andrew" <Andrew_Gabbasov@mentor.com>,
-        "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "Surachari, Bhuvanesh" <Bhuvanesh_Surachari@mentor.com>
-References: <20210922160649.28449-1-andrew_gabbasov@mentor.com>
- <CAMuHMdVVDpBAQR+H1TAnpf65aVbAL0Mm0km7Z9L7+1JuF6n1gQ@mail.gmail.com>
- <000001d7badd$a8512d30$f8f38790$@mentor.com>
- <20211006182314.10585-1-andrew_gabbasov@mentor.com>
- <Yg6ls0zyTDe7LQbK@kunai>
- <0a07902900bc4ecc84bd93a6b85a2e0c@svr-ies-mbx-02.mgc.mentorg.com>
+        Wed, 30 Mar 2022 07:07:35 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6809E08B;
+        Wed, 30 Mar 2022 04:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648638349; x=1680174349;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MYCryOcIAiX8RK8QwL575BHmStD3LWKxFVsGNh49MH4=;
+  b=WS/r60a7PcZTSJ+PkTPqkf4D6IoyZsbahk25nJ4VaiaApd7GLGJqNkhe
+   aqv3w9YhphpLPpLek58Eb15nNMTPLlKmjFNIABbIsuQnKLy6vhCDcGdz3
+   BtWKVKbOxSz+e56LvWnR0ry/iWhvaJ9FtbDBONAxrhjd816cgL52tCNut
+   fcI5Qzt0Z87kYiZ5Ia9C4llDQ/CalhrvJay3/pklv3JYBIQHjwFjBgcIb
+   w7+fGHmNH33TvnyvpW/7NXT0+0FTBh2y0a7x4PBPzqZND7pGCtmGwMwBP
+   ljZEwjgQosjw+mOLZkY6izP2X2dEfKal9AVhihbRv0T5IIxNFhgo7VKvJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="345952115"
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="345952115"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 04:05:49 -0700
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="719933391"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 04:05:47 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 97C3F20365;
+        Wed, 30 Mar 2022 14:05:45 +0300 (EEST)
+Date:   Wed, 30 Mar 2022 14:05:45 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Hangyu Hua <hbh25y@gmail.com>, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: mc: delete redundant code in
+ __media_device_unregister_entity
+Message-ID: <YkQ5ic2b/gaF8cF+@paasikivi.fi.intel.com>
+References: <20220324102752.47077-1-hbh25y@gmail.com>
+ <Yjx2Xm7JmS+E8d7M@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7A78cr3tGLoNFLbr"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0a07902900bc4ecc84bd93a6b85a2e0c@svr-ies-mbx-02.mgc.mentorg.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Yjx2Xm7JmS+E8d7M@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 24, 2022 at 03:47:10PM +0200, Laurent Pinchart wrote:
+> Hi Hangyu,
+> 
+> Thank you for the patch.
+> 
+> On Thu, Mar 24, 2022 at 06:27:52PM +0800, Hangyu Hua wrote:
+> > media_gobj_destroy has already set graph_obj.mdev to NULL. There is no need to
+> > set it again.
+> > 
+> > Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> > ---
+> >  drivers/media/mc/mc-device.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/drivers/media/mc/mc-device.c b/drivers/media/mc/mc-device.c
+> > index cf5e459b1d96..7727c619043e 100644
+> > --- a/drivers/media/mc/mc-device.c
+> > +++ b/drivers/media/mc/mc-device.c
+> > @@ -605,7 +605,6 @@ static void __media_device_unregister_entity(struct media_entity *entity)
+> >  
+> >  	/* invoke entity_notify callbacks to handle entity removal?? */
+> >  
+> > -	entity->graph_obj.mdev = NULL;
 
---7A78cr3tGLoNFLbr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Removed the extra newline above, too. Applied.
 
-Hi Andrew,
+Please run scripts/checkpatch.pl on the patches, too.
 
-thanks for your patience, I can finally work on this issue.
+> >  }
+> >  
+> >  /**
+> 
+> -- 
+> Regards,
+> 
+> Laurent Pinchart
 
-> > You could wire up two R-Car I2C instances, set up one as an I2C slave
-> > handled by the I2C testunit and then use the other instance with
-> > SMBUS_BLOCK_PROC_CALL which also needs RECV_LEN. Check
-> > Documentation/i2c/slave-testunit-backend.rst for details.
->=20
-> You mean physical connection of two R-Car boards via I2C bus,
-> or physical connection of I2C bus wires on the single board, right?
-
-I have two instances on the same board wired.
-
-> It looks like all the boards, that I have access to, do not have
-> I2C bus wires exposed to some connectors, so both variants would
-> require hardware re-wiring modification of the boards, which is
-> not an option for me. Or do I understand you incorrectly and you
-> mean something different?
-
-Probably you understood correctly. Which boards do you have access to?
-I use the EXIO connectors on a Salvator-X(S).
-
-> Most of complexity in my patch is related to DMA transfers support,
-> that I'm trying to retain for SMBus block data transfers too (for the rest
-> of bytes after the first "length" byte). Your simple patch makes
-> the driver perform all M_RECV_LEN transfers in PIO mode only (with no DMA=
- at all),
-> which is probably not quite good (it's a pity to loose existing HW capabi=
-lity,
-> already supported by the driver).
-
-I will have a look into RECV_LEN and DMA. I already started looking into
-it but will need to dive in some more. Stay tuned, I hope to have the
-next response ready this week.
-
-> >  	/* If next received data is the _LAST_, go to new phase. */
-> > -	if (priv->pos + 1 =3D=3D msg->len) {
-> > +	if (priv->pos + 1 =3D=3D msg->len && !recv_len_init) {
->=20
-> If a message contains a single byte after the length byte,
-> when we come here after processing the length (in the same function call),
-> "pos" is 1, "len" is 2, and we indeed are going to process the last byte.
-> However, "recv_len_init" is still "true", and we skip these corresponding
-> register writes, which is probably incorrect.
-> The flag in this case should be re-set back to "false" after length
-> processing and "pos" moving, but I think the variant in my patch
-> (leaving this "if" unchanged, but skipping it on the first pass with "got=
-o")
-> may be even simpler.
-
-I also need to look into this but thank you already for the detailed
-explanation!
-
-> >  	u32 func =3D I2C_FUNC_I2C | I2C_FUNC_SLAVE |
-> > -		   (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
-> > +		   (I2C_FUNC_SMBUS_EMUL_ALL & ~I2C_FUNC_SMBUS_QUICK);
->=20
-> This flags setting adds also I2C_FUNC_SMBUS_BLOCK_PROC_CALL flag,
-> which is missed in my patch. My patch should probably be updated
-> to include it too (if you'll agree to take my variant ;-) ).
-
-Yes, the final version, whatever it will be, should use this new macro.
-
-Until soon,
-
-   Wolfram
-
-
---7A78cr3tGLoNFLbr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJEOS0ACgkQFA3kzBSg
-KbYguQ/+Ld+9afqc4XhIG4nAN+lj+DUkz729gZiU5UB/KxgJa9PPM2YjVmQlLSNB
-5L9eWZfczS4pGcMCTLV+DZ6voo2ZEkTWFZBT7lo+MeymgOxfHDGIm333Oozkta1h
-k1ygwwl+zY15+5diAcTDXSkUd4DkV/MAg97Lkcnlf0VNGLHMkjOB+gpUuC9suqPm
-jGUKfklvlkhH4h5415XyyNYm3n/8wrUyqeJJztVl3NeEIkCAOrQrkmML915ptRd8
-m4najskIiifu69CnScwy+UV0Yr96bTCcy+y55zRvHfJzZdQ6NRFkHItsmQ+8kdiP
-8I2jpJ2fPhHjhmwTs35GCd6/C9XuXQsMizHtx1y44LE5klgZFpefuuQaKbSuXjoc
-XhR8kgRKZXa2mPA/zYi5BPLbKvXU5accFhkX/hk7pEWN9U1HFiC+FNxGlRssV5Fg
-CAzuBb1JmUu+jiGgs8CmS1q+H2ZVPEDYNRlvx4ZTjaIUlC/xslIIViP8e48gqsMK
-MXeAAq7wqiSXmQO8iX8LOlNj8KQ9b58/AW8vVvBbUjxpB3wollCp108+2rXr8alQ
-CzF3LeA1nK3icDxQ1w7FYG31lhFzLokvc1a55K3u5EnCv7qA/unki1miPKJQInIf
-LuUiCsXXTyJjke2dzni/pRwyMirRXroVuwiewjq11efqQaWmc+A=
-=jcun
------END PGP SIGNATURE-----
-
---7A78cr3tGLoNFLbr--
+-- 
+Sakari Ailus

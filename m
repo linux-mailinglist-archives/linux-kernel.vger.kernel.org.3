@@ -2,43 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB9A4EC476
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2644EC47F
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344501AbiC3MkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51284 "EHLO
+        id S1345454AbiC3Mlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245749AbiC3Mhk (ORCPT
+        with ESMTP id S1345118AbiC3MlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 08:37:40 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A2BA66DE;
-        Wed, 30 Mar 2022 05:27:30 -0700 (PDT)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nZXQ7-0005Vx-JJ; Wed, 30 Mar 2022 14:27:27 +0200
-Message-ID: <44abc738-1532-63fa-9cd1-2b3870a963bc@leemhuis.info>
-Date:   Wed, 30 Mar 2022 14:27:26 +0200
+        Wed, 30 Mar 2022 08:41:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE897DF4B4;
+        Wed, 30 Mar 2022 05:30:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26CF5B81C26;
+        Wed, 30 Mar 2022 12:30:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B08C340EE;
+        Wed, 30 Mar 2022 12:30:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648643410;
+        bh=wMFzbAJ1w3I769LKcQvR0OeV1wjnRKl15NqgNqHjMPM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Jooz5o26y2T7lucnkeTlKNAUZ6dwp3eoPFEtxeqpOFFaLNFKr5oWouRbAlRA4eOpU
+         R4GJT0rTVrF95heK9efPmE+2RKbqxBBb6hW6ti3o4Ay0qwCGCcQIlzuGopfhxvI9YH
+         6DVldjBxxNxJPB+tlFbmflOjHnioNZtEYaeFwyij4glVPevgwWQqQH7h7V9QCYoVdX
+         Z7ZLTB/E+L+UkqVieV7+/kkd6Z5x7SR+N4vLdwkNov88B3292HF1u+xGFVA0p8gpyH
+         boOy/oJPqR5/jKoH+gw1Xrxj22CghA0VjZ1uVJ8x2X38JcHH8koY+2XJ4zOiENX9/Q
+         x+1IXAavckAzw==
+Date:   Wed, 30 Mar 2022 13:30:02 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
+Cc:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>, robh+dt@kernel.org, tzungbi@google.com,
+        angelogioacchino.delregno@collabora.com, aaronyu@google.com,
+        matthias.bgg@gmail.com, trevor.wu@mediatek.com, linmq006@gmail.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Tzung-Bi Shih <tzungbi@kernel.org>
+Subject: Re: [v7 2/4] ASoC: mediatek: mt8192: refactor for I2S3 DAI link of
+ speaker
+Message-ID: <YkRNSoBKFvYYyZLu@sirena.org.uk>
+References: <20220324064511.10665-1-jiaxin.yu@mediatek.com>
+ <20220324064511.10665-3-jiaxin.yu@mediatek.com>
+ <20220329223002.uo7kiemopkh7ak4x@notapiano>
+ <dee3fbb7c9f0c3e1f11143db1d6fc4381cab827f.camel@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] Revert "Input: clear BTN_RIGHT/MIDDLE on buttonpads"
-Content-Language: en-US
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        jkosina@suse.cz
-Cc:     tiwai@suse.de, benjamin.tissoires@redhat.com,
-        regressions@leemhuis.info, peter.hutterer@who-t.net,
-        linux-input@vger.kernel.org, stable@vger.kernel.org,
-        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220321184404.20025-1-jose.exposito89@gmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <20220321184404.20025-1-jose.exposito89@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1648643250;87a12d18;
-X-HE-SMSGID: 1nZXQ7-0005Vx-JJ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jOMai26txzsrB1Jf"
+Content-Disposition: inline
+In-Reply-To: <dee3fbb7c9f0c3e1f11143db1d6fc4381cab827f.camel@mediatek.com>
+X-Cookie: Two is company, three is an orgy.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,54 +67,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
 
-On 21.03.22 19:44, José Expósito wrote:
-> This reverts commit 37ef4c19b4c659926ce65a7ac709ceaefb211c40.
-> 
-> The touchpad present in the Dell Precision 7550 and 7750 laptops
-> reports a HID_DG_BUTTONTYPE of type MT_BUTTONTYPE_CLICKPAD. However,
-> the device is not a clickpad, it is a touchpad with physical buttons.
-> 
-> In order to fix this issue, a quirk for the device was introduced in
-> libinput [1] [2] to disable the INPUT_PROP_BUTTONPAD property:
-> 
-> 	[Precision 7x50 Touchpad]
-> 	MatchBus=i2c
-> 	MatchUdevType=touchpad
-> 	MatchDMIModalias=dmi:*svnDellInc.:pnPrecision7?50*
-> 	AttrInputPropDisable=INPUT_PROP_BUTTONPAD
-> 
-> However, because of the change introduced in 37ef4c19b4 ("Input: clear
-> BTN_RIGHT/MIDDLE on buttonpads") the BTN_RIGHT key bit is not mapped
-> anymore breaking the device right click button and making impossible to
-> workaround it in user space.
-> 
-> In order to avoid breakage on other present or future devices, revert
-> the patch causing the issue.
-> 
-> Cc: stable@vger.kernel.org
-> Link: https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/481 [1]
-> Link: https://bugzilla.redhat.com/show_bug.cgi?id=1868789  [2]
-> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-> [...]
+--jOMai26txzsrB1Jf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Jiri, Benjamin, what the status here? Sure, this is not a crucial
-regression and we are in the middle of the merge window, but it looks
-like nothing has happened for a week now. Or was progress made somewhere
-and I just missed it?
+On Wed, Mar 30, 2022 at 10:33:06AM +0800, Jiaxin Yu wrote:
 
-#regzbot ^backmonitor:
-https://lore.kernel.org/stable/s5htubv32s8.wl-tiwai@suse.de/
+> "(Although I think this would technicallybreak the ABI?)"
+> ==> I can't understand this question, could you help explain it in more
+> detail.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+Making a previously optional property required means that systems that
+previously worked may stop working unless they update their DT, DTs may
+be distributed separately to the kernel and perhaps even baked into
+firmware or similar.
 
-P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-reports on my table. I can only look briefly into most of them and lack
-knowledge about most of the areas they concern. I thus unfortunately
-will sometimes get things wrong or miss something important. I hope
-that's not the case here; if you think it is, don't hesitate to tell me
-in a public reply, it's in everyone's interest to set the public record
-straight.
+--jOMai26txzsrB1Jf
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJETUkACgkQJNaLcl1U
+h9DbEwf+JUOC5DnLCotwK80wPY+Rv+Fxpva35UGKpU+JgyM/o50OQtmaefr3nyZ7
+rItM7lPU81Hj7CJv0/hKjwsTmIVugxE7tOao1mBV9wLaStQfn2tx79wtLhiSYeNH
+Ig0F79Jy0tY/TnytxA7d8XYUzguiwLqQIBbC6VHIYfO08FdMyloI+3SILPHK1VM+
+SN23X+R9nG0CJImoNZMP1DDGodHkB9u+YhhB66cULenBpGMVNDKU1cPLTytp3nvP
+bDz70kaMHgFqMgY01LMzQ/1TBfRMm7isoInZl6nGUnDOo9pCzmctaPZyBgRQ5mod
+XaHgRucIShC8OJ16S0YCPs8CfbgvvQ==
+=2Po5
+-----END PGP SIGNATURE-----
+
+--jOMai26txzsrB1Jf--

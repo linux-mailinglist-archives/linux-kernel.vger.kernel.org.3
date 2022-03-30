@@ -2,60 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E2DC4ECCA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C29EF4ECCAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350384AbiC3St2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34680 "EHLO
+        id S243680AbiC3SvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350219AbiC3StP (ORCPT
+        with ESMTP id S1350032AbiC3SvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:49:15 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B834246;
-        Wed, 30 Mar 2022 11:47:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648666049; x=1680202049;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fR98BAS9xxFmuyNkbXQwJSd+XKma8MKivJ5ZtEcuCN4=;
-  b=ivxwl2hSAclmeyO5u0vsCxkjGLW2sBUBxXqa1cL/ZgAbbGGRYNLpv2LY
-   KYuLz2UqjTyhRs5rseU7P8Xdpynhn0oreAKcN9vmLzOlAb4OjwPGH/h1O
-   9Ni7T/u2FGZlmrFENudYLQw9tNwZzbT+9sbb/C+oHqQnGSG94Lo2eJCsX
-   2vCaJ4vbGVU0+YWPBskjQMXYWFYiCOG3OOfwK6lk8IfG0qyT1WfLpKAu3
-   hMlv5Uc9WNxXjb+rK9r1zJsXbqKw1Cp2DtNWqavCT5dCoChAhPlwnj1Sh
-   WZEKDWLispg9dWyEmjIKVbzmwuZrlpWvFfd2t/QxGU5gu8TPXuT8LAjQ9
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="259802776"
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="259802776"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 11:47:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="554770868"
-Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Mar 2022 11:47:27 -0700
-Received: from kbuild by 56431612eabd with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nZdLq-0000K2-S9;
-        Wed, 30 Mar 2022 18:47:26 +0000
-Date:   Thu, 31 Mar 2022 02:46:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/intel/pxa_camera.c:2449:34: warning: unused
- variable 'pxa_camera_of_match'
-Message-ID: <202203310219.HvAOIHBC-lkp@intel.com>
+        Wed, 30 Mar 2022 14:51:09 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170CFDD5
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:49:23 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22UIn5xj022928;
+        Wed, 30 Mar 2022 13:49:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1648666145;
+        bh=wBCBCyFOJB1jndgfQo2090jJ3/rIyQsHevorUy94W+g=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Oc/xAX85u4EwCqPcwER6BCvfIxSNNwW82U4qvbil/9nL2PhhWCXC9FpA0GytgNnr+
+         r1QJkR0sU9K5lRxPt6HXLTMXBGniYiAlNdpXsaED1Md2gn9x6QY60zFX2O9jVYgYgL
+         TcED9o9H3xAuos6YmLzbGuyLY9enQzE6fil7jP/Q=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22UIn5bv116645
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 30 Mar 2022 13:49:05 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 30
+ Mar 2022 13:49:05 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 30 Mar 2022 13:49:05 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22UIn4P8020399;
+        Wed, 30 Mar 2022 13:49:05 -0500
+Date:   Thu, 31 Mar 2022 00:19:04 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     <Tudor.Ambarus@microchip.com>
+CC:     <michael@walle.cc>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
+        <vigneshr@ti.com>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <Nicolas.Ferre@microchip.com>
+Subject: Re: [PATCH v2 4/8] mtd: spi-nor: core: Introduce method for RDID op
+Message-ID: <20220330184904.mjpt2qui4lxyjw37@ti.com>
+References: <20220228111712.111737-1-tudor.ambarus@microchip.com>
+ <20220228111712.111737-5-tudor.ambarus@microchip.com>
+ <20220321122149.dvqyml4riqkr3gqi@ti.com>
+ <32b3449a-66db-3ed1-da96-47e124800500@microchip.com>
+ <20220321173908.tcqx3ygo6qd62ukg@ti.com>
+ <b739a03f-fe3f-7a2d-95fc-00122ca34c39@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <b739a03f-fe3f-7a2d-95fc-00122ca34c39@microchip.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,113 +69,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+On 30/03/22 06:53AM, Tudor.Ambarus@microchip.com wrote:
+> On 3/21/22 19:39, Pratyush Yadav wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > On 21/03/22 01:18PM, Tudor.Ambarus@microchip.com wrote:
+> >> On 3/21/22 14:21, Pratyush Yadav wrote:
+> >>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> >>>
+> >>> On 28/02/22 01:17PM, Tudor Ambarus wrote:
+> >>>> RDID is used in the core to auto detect the flash, but also by some
+> >>>> manufacturer drivers that contain flashes that support Octal DTR mode,
+> >>>> so that they can read the flash ID after the switch to Octal DTR was made
+> >>>> to test if the switch was successful. Introduce a core method for RDID op
+> >>>> to avoid code duplication.
+> >>>>
+> >>>> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> >>>> ---
+> >>>>  drivers/mtd/spi-nor/core.c | 58 ++++++++++++++++++++++++++------------
+> >>>>  drivers/mtd/spi-nor/core.h |  9 ++++++
+> >>>>  2 files changed, 49 insertions(+), 18 deletions(-)
+> >>>>
+> >>>> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> >>>> index b1d6fa65417d..281e3d25f74c 100644
+> >>>> --- a/drivers/mtd/spi-nor/core.c
+> >>>> +++ b/drivers/mtd/spi-nor/core.c
+> >>>> @@ -369,6 +369,41 @@ int spi_nor_write_disable(struct spi_nor *nor)
+> >>>>       return ret;
+> >>>>  }
+> >>>>
+> >>>> +/**
+> >>>> + * spi_nor_read_id() - Read the JEDEC ID.
+> >>>> + * @nor:     pointer to 'struct spi_nor'.
+> >>>> + * @naddr:   number of address bytes to send. Can be zero if the operation
+> >>>> + *           does not need to send an address.
+> >>>> + * @ndummy:  number of dummy bytes to send after an opcode or address. Can
+> >>>> + *           be zero if the operation does not require dummy bytes.
+> >>>> + * @id:              pointer to a DMA-able buffer where the value of the JEDEC ID
+> >>>> + *           will be written.
+> >>>> + * @reg_proto:       the SPI protocol for register operation.
+> >>>> + *
+> >>>> + * Return: 0 on success, -errno otherwise.
+> >>>> + */
+> >>>> +int spi_nor_read_id(struct spi_nor *nor, u8 naddr, u8 ndummy, u8 *id,
+> >>>> +                 enum spi_nor_protocol reg_proto)
+> >>>
+> >>> Nitpick: Could just call it 'proto'.
+> >>
+> >> sure, will update
+> >>
+> >>>
+> >>>> +{
+> >>>> +     int ret;
+> >>>> +
+> >>>> +     if (nor->spimem) {
+> >>>> +             struct spi_mem_op op =
+> >>>> +                     SPI_NOR_READID_OP(naddr, ndummy, id, SPI_NOR_MAX_ID_LEN);
+> >>>> +
+> >>>> +             spi_nor_spimem_setup_op(nor, &op, reg_proto);
+> >>>> +             ret = spi_mem_exec_op(nor->spimem, &op);
+> >>>> +     } else {
+> >>>> +             ret = nor->controller_ops->read_reg(nor, SPINOR_OP_RDID, id,
+> >>>> +                                                 SPI_NOR_MAX_ID_LEN);
+> >>>> +     }
+> >>>> +
+> >>>> +     if (ret)
+> >>>> +             dev_dbg(nor->dev, "error %d reading JEDEC ID\n", ret);
+> >>>
+> >>> I think this message should be in spi_nor_detect(). Let octal DTR enable
+> >>
+> >> As of now every SPI NOR operation that return an error also prints a dbg
+> >> message. I like this because it offers a smaller granularity on the error
+> >> cause.
+> > 
+> > Yes, but I think this message would be misleading. If someone sees
+> > "error reading JEDEC ID", they would think flash detection itself has
+> > failed, not that we failed to switch to Octal DTR mode.
+> > 
+> >>
+> >>> methods print their own, more specific error messages.
+> >>
+> >> How about duplicating the error in the octal dtr enable methods if you
+> >> feel it is worth it?
+> > 
+> > They should at the very least explain that reading ID failed _after_
+> > attempting to switch to Octal DTR. But I think it would just be simpler
+> > if this is not printed here and the caller has the flexibility to
+> > explain the error.
+> 
+> If the first readID fails, the one that identifies the flash, then the
+> octal dtr will not be run, thus a single error message. When octal dtr
+> fails, 2 errors can be printed, one specifying what failed (the read ID
+> command) and the second where it failed (at the octal dtr enable method).
+> But I don't care too much, I'll follow your suggestion.
+> 
+> > 
+> >>
+> >>>
+> >>>> +
+> >>>> +     return ret;
+> >>>> +}
+> >>>> +
+> >>>>  /**
+> >>>>   * spi_nor_read_sr() - Read the Status Register.
+> >>>>   * @nor:     pointer to 'struct spi_nor'.
+> >>>> @@ -1649,28 +1684,15 @@ static const struct flash_info *spi_nor_match_id(struct spi_nor *nor,
+> >>>>       return NULL;
+> >>>>  }
+> >>>>
+> >>>> -static const struct flash_info *spi_nor_read_id(struct spi_nor *nor)
+> >>>> +static const struct flash_info *spi_nor_detect(struct spi_nor *nor)
+> >>>>  {
+> >>>>       const struct flash_info *info;
+> >>>>       u8 *id = nor->bouncebuf;
+> >>>>       int ret;
+> >>>>
+> >>>> -     if (nor->spimem) {
+> >>>> -             struct spi_mem_op op =
+> >>>> -                     SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDID, 1),
+> >>>> -                                SPI_MEM_OP_NO_ADDR,
+> >>>> -                                SPI_MEM_OP_NO_DUMMY,
+> >>>> -                                SPI_MEM_OP_DATA_IN(SPI_NOR_MAX_ID_LEN, id, 1));
+> >>>> -
+> >>>> -             ret = spi_mem_exec_op(nor->spimem, &op);
+> >>>> -     } else {
+> >>>> -             ret = nor->controller_ops->read_reg(nor, SPINOR_OP_RDID, id,
+> >>>> -                                                 SPI_NOR_MAX_ID_LEN);
+> >>>> -     }
+> >>>> -     if (ret) {
+> >>>> -             dev_dbg(nor->dev, "error %d reading JEDEC ID\n", ret);
+> >>>> +     ret = spi_nor_read_id(nor, 0, 0, id, nor->reg_proto);
+> >>>
+> >>> Hmm, I wonder if it is better to explicitly use SNOR_PROTO_1_1_1 so
+> >>> clearly signify that this is intended to use 1S-1S-1S only. What do you
+> >>> think?
+> >>
+> >> I would keep it as it is for now, because it offers flexibility.
+> >> If we ever gonna determine the protocol at runtime this will come in handy
+> >> because it will work without touching the code. JESD216 suggests an algorithm
+> >> that tries to determine the mode depending on the SFDP signature.
+> > 
+> > I was thinking exactly this but came to the opposite conclusion ;-). I
+> > think this would imply that other protocols can be used to detect the
+> > flash which is not true.
+> 
+> It can become true. As you already specified 8d-8d-8d is supported by some flashes
+> and we can implement hooks for their specific 8d-8d-8d readID command. The logic
+> will complicate a bit as one has to adjust the hwcaps before issuing the 8d-8d-8d
+> readID, but it's doable. Otherwise, if the bootloaders pass you the flash in octal
+> dtr mode, you'll have to disable it, issue readID is 1-1-1 and then re-enable it.
 
-First bad commit (maybe != root cause):
+Right.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d888c83fcec75194a8a48ccd283953bdba7b2550
-commit: 95495f2aa9d8df1a7697bab24118544d3568f41d media: platform: place Intel drivers on a separate dir
-date:   2 weeks ago
-config: s390-randconfig-r036-20220330 (https://download.01.org/0day-ci/archive/20220331/202203310219.HvAOIHBC-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=95495f2aa9d8df1a7697bab24118544d3568f41d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 95495f2aa9d8df1a7697bab24118544d3568f41d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/intel/
+> 
+> > 
+> > But I have no strong preferences here. Either is fine by me.
+> 
+> I don't have strong preferences either, but it seems that there's room for discussion
+> on this, so I would keep it for later. Is that fine?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Fine by me. It should be fine without the comment. It is not too hard to 
+see what nor->reg_proto is initialized to.
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/media/platform/intel/pxa_camera.c:12:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/media/platform/intel/pxa_camera.c:12:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/media/platform/intel/pxa_camera.c:12:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/media/platform/intel/pxa_camera.c:2449:34: warning: unused variable 'pxa_camera_of_match' [-Wunused-const-variable]
-   static const struct of_device_id pxa_camera_of_match[] = {
-                                    ^
-   13 warnings generated.
-
-
-vim +/pxa_camera_of_match +2449 drivers/media/platform/intel/pxa_camera.c
-
-7254026cedd42d drivers/media/video/pxa_camera.c               Guennadi Liakhovetski 2011-06-29  2448  
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29 @2449  static const struct of_device_id pxa_camera_of_match[] = {
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2450  	{ .compatible = "marvell,pxa270-qci", },
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2451  	{},
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2452  };
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2453  MODULE_DEVICE_TABLE(of, pxa_camera_of_match);
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2454  
-
-:::::: The code at line 2449 was first introduced by commit
-:::::: e9a1d94fa85542d4f3046ac82d234a3c8349c948 [media] media: pxa_camera device-tree support
-
-:::::: TO: Robert Jarzmik <robert.jarzmik@free.fr>
-:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
+> I can add a comment if you prefer, specifying that at this point nor->reg_proto is in
+> 1-1-1 mode.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

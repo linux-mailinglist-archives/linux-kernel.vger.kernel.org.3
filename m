@@ -2,179 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED4C4ECA0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D694ECA14
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349066AbiC3Qyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 12:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43958 "EHLO
+        id S1349076AbiC3Q4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 12:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349057AbiC3Qyg (ORCPT
+        with ESMTP id S235540AbiC3Q4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:54:36 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC79B295266
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:52:49 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id t2so18582151qtw.9
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:52:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=XJOuIwKVKJoYxuu3h/fPqnOnXuAJfnfjZiDXXpn0snE=;
-        b=W0nG8AGf+ASsomfq42TBWSEBx2Dz6O4Miy4mAlrPzEN13GB02uiM9eIQmcfsrRmKJy
-         K14YOXl/gyqUhfC8SZpnIYmCSA2nUwyYmRIxeZ43f4Q+4MFmPt7QnfvxQAhpWg+TUOMv
-         ac9Bc7b9HAra3K77FCcgbfXQDGQ9KzvaApqiyR5yX6BCD/PhgTvL9Nj/v92Zn4OcLP2W
-         +DcbNv9CdksYxkikiGVKJ06/QIKYnvePM0ohzyyAa95b/BqQYHhZlEgWU7JoDJ4ZrtEw
-         uZedmaUwRdAtByYuFrqllvZv3R4Asz0MmYMV19PihXeatj/WxYMr6eQ25lMpfxhMBEPR
-         /yZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XJOuIwKVKJoYxuu3h/fPqnOnXuAJfnfjZiDXXpn0snE=;
-        b=t9XcAHMdd2rdht7c+/9aFMd1RsPuWhtH6bbhVhG+VtRqMOz63wYzHvNbJippEeyKwA
-         vOwkrJQ2rkHXAgUuOkCXNPIpZjWCdHQDwaQhP4/I8gVTSpbLzsGZGxAduGPKDr7eq39T
-         sGwRSz+MjWWcMsu8e7BemVsxYcgF9RZ7JyzPoxr1DPMRd71tOPzQXnMbvI+i9WGIwUw0
-         QyeFWRQtgxrvzNnPCwIg59Y5M89j7tsLcex7tOZINPJrwhO0FRIgYyM4h7exzmGTEhX1
-         ePAL649LJuX5/wzIoSReZ5VREtPxwacnZ6RnME2QUeRnjMven3HDvfQuiNDYTKYxYNXd
-         iZBA==
-X-Gm-Message-State: AOAM530+I1KtITRrXirUr/167C6RwxqotHl/8KFGU2TH0w8xm8uFmHF9
-        eZK2rq4RsX+mE30kAHmgkSZezIwcV8rj5AK/Zl+GgA==
-X-Google-Smtp-Source: ABdhPJwTrFJQcKlABPDFC6SiWpCj+tgomGjgZ5zXjm8Ti9j9sbsIZeHmmhCLKE6Z1MO+rFlvQQBkuLfnHplv46iq6wo=
-X-Received: by 2002:ac8:5aca:0:b0:2e1:e117:b2ff with SMTP id
- d10-20020ac85aca000000b002e1e117b2ffmr441196qtd.410.1648659168628; Wed, 30
- Mar 2022 09:52:48 -0700 (PDT)
+        Wed, 30 Mar 2022 12:56:00 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE8E13DE2;
+        Wed, 30 Mar 2022 09:54:15 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 1650A2838F5;
+        Wed, 30 Mar 2022 12:54:14 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id INgx71j7V384; Wed, 30 Mar 2022 12:54:13 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 991612837F8;
+        Wed, 30 Mar 2022 12:54:13 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 991612837F8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1648659253;
+        bh=vBhdBJ7dHZ28+lgeKrRzaznue2psKCAuHmp24VjvHtM=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=khuM6+RvN2+2Xnf1a8i3R7S2FKDHzZoT9L3DKIevMYbTz1d3luWfpOT49d+ykn+8x
+         cZt+2rIFSNGIaNlR/9LT3+CDLS0vujSzRxD6mY5c4vS4jBuXwTlbRT+v6F+Fznluw6
+         15crOi0vMumCCR3+pIoIcMWG8oHZhAp4NZjJ0SCTzDoBZpdlGgg+vPngTz81Si6zQf
+         1rvCJa36jHMUKHXPYIMSJ4YGiImxnezEcBD4IVYkis9rxeR1DUw5TyoU8hYBJ5u/Qp
+         oJaT9HY4eqPjeP8+xNjFjf6RKb1B9741aqjNw6cmzqwPnQW9lEHxvbBLgsHdwCHc7M
+         oiWfLwA8UgwLw==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ekmNHHteiH6J; Wed, 30 Mar 2022 12:54:13 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 8674A283B0E;
+        Wed, 30 Mar 2022 12:54:13 -0400 (EDT)
+Date:   Wed, 30 Mar 2022 12:54:13 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <1546405229.199729.1648659253425.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20220329222514.51af6c07@gandalf.local.home>
+References: <20220329222514.51af6c07@gandalf.local.home>
+Subject: Re: [PATCH] tracing: Set user_events to BROKEN
 MIME-Version: 1.0
-References: <20220330164306.2376085-1-pgonda@google.com>
-In-Reply-To: <20220330164306.2376085-1-pgonda@google.com>
-From:   Mingwei Zhang <mizhang@google.com>
-Date:   Wed, 30 Mar 2022 09:52:37 -0700
-Message-ID: <CAL715W+S-SJwXBhYO=_T-9uAPLt6cQ-Hn+_+ehefAh6+kQ_zOA@mail.gmail.com>
-Subject: Re: [PATCH] KVM: SEV: Add cond_resched() to loop in sev_clflush_pages()
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm <kvm@vger.kernel.org>, Sean Christopherson <seanjc@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF98 (Linux)/8.8.15_GA_4232)
+Thread-Topic: tracing: Set user_events to BROKEN
+Thread-Index: 5jQbENgLvFWNlihIx8tKdfIg6R13sQ==
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 9:43 AM Peter Gonda <pgonda@google.com> wrote:
->
-> Add resched to avoid warning from sev_clflush_pages() with large number
-> of pages.
->
-> Signed-off-by: Peter Gonda <pgonda@google.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: kvm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
->
-> ---
-> Here is a warning similar to what I've seen many times running large SEV
-> VMs:
-> [  357.714051] CPU 15: need_resched set for > 52000222 ns (52 ticks) with=
-out schedule
-> [  357.721623] WARNING: CPU: 15 PID: 35848 at kernel/sched/core.c:3733 sc=
-heduler_tick+0x2f9/0x3f0
-> [  357.730222] Modules linked in: kvm_amd uhaul vfat fat hdi2_standard_ft=
-l hdi2_megablocks hdi2_pmc hdi2_pmc_eeprom hdi2 stg elephant_dev_num ccp i2=
-c_mux_ltc4306 i2c_mux i2c_via_ipmi i2c_piix4 google_bmc_usb google_bmc_gpio=
-i2c_mb_common google_bmc_mailbox cdc_acm xhci_pci xhci_hcd sha3_generic gq =
-nv_p2p_glue accel_class
-> [  357.758261] CPU: 15 PID: 35848 Comm: switchto-defaul Not tainted 4.15.=
-0-smp-DEV #11
-> [  357.765912] Hardware name: Google, Inc.                               =
-                        Arcadia_IT_80/Arcadia_IT_80, BIOS 30.20.2-gce 11/05=
-/2021
-> [  357.779372] RIP: 0010:scheduler_tick+0x2f9/0x3f0
-> [  357.783988] RSP: 0018:ffff98558d1c3dd8 EFLAGS: 00010046
-> [  357.789207] RAX: 741f23206aa8dc00 RBX: 0000005349236a42 RCX: 000000000=
-0000007
-> [  357.796339] RDX: 0000000000000006 RSI: 0000000000000002 RDI: ffff98558=
-d1d5a98
-> [  357.803463] RBP: ffff98558d1c3ea0 R08: 0000000000100ceb R09: 000000000=
-0000000
-> [  357.810597] R10: ffff98558c958c00 R11: ffffffff94850740 R12: 000000000=
-31975de
-> [  357.817729] R13: 0000000000000000 R14: ffff98558d1e2640 R15: ffff98525=
-739ea40
-> [  357.824862] FS:  00007f87503eb700(0000) GS:ffff98558d1c0000(0000) knlG=
-S:0000000000000000
-> [  357.832948] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  357.838695] CR2: 00005572fe74b080 CR3: 0000007bea706006 CR4: 000000000=
-0360ef0
-> [  357.845828] Call Trace:
-> [  357.848277]  <IRQ>
-> [  357.850294]  [<ffffffff94411420>] ? tick_setup_sched_timer+0x130/0x130
-> [  357.856818]  [<ffffffff943ed60d>] ? rcu_sched_clock_irq+0x6ed/0x850
-> [  357.863084]  [<ffffffff943fdf02>] ? __run_timers+0x42/0x260
-> [  357.868654]  [<ffffffff94411420>] ? tick_setup_sched_timer+0x130/0x130
-> [  357.875182]  [<ffffffff943fd35b>] update_process_times+0x7b/0x90
-> [  357.881188]  [<ffffffff944114a2>] tick_sched_timer+0x82/0xd0
-> [  357.886845]  [<ffffffff94400671>] __run_hrtimer+0x81/0x200
-> [  357.892331]  [<ffffffff943ff222>] hrtimer_interrupt+0x192/0x450
-> [  357.898252]  [<ffffffff950002fa>] ? __do_softirq+0x2fa/0x33e
-> [  357.903911]  [<ffffffff94e02edc>] smp_apic_timer_interrupt+0xac/0x1d0
-> [  357.910349]  [<ffffffff94e01ef6>] apic_timer_interrupt+0x86/0x90
-> [  357.916347]  </IRQ>
-> [  357.918452] RIP: 0010:clflush_cache_range+0x3f/0x50
-> [  357.923324] RSP: 0018:ffff98529af89cc0 EFLAGS: 00000246 ORIG_RAX: ffff=
-ffffffffff12
-> [  357.930889] RAX: 0000000000000040 RBX: 0000000000038135 RCX: ffff98523=
-3d36000
-> [  357.938013] RDX: ffff985233d36000 RSI: 0000000000001000 RDI: ffff98523=
-3d35000
-> [  357.945145] RBP: ffff98529af89cc0 R08: 0000000000000001 R09: ffffb5753=
-fb23000
-> [  357.952271] R10: 000000000003fe00 R11: 0000000000000008 R12: 000000000=
-0040000
-> [  357.959401] R13: ffff98525739ea40 R14: ffffb5753fb22000 R15: ffff98532=
-a58dd80
-> [  357.966536]  [<ffffffffc07afd41>] svm_register_enc_region+0xd1/0x170 [=
-kvm_amd]
-> [  357.973758]  [<ffffffff94246e8c>] kvm_arch_vm_ioctl+0x84c/0xb00
-> [  357.979677]  [<ffffffff9455980f>] ? handle_mm_fault+0x6ff/0x1370
-> [  357.985683]  [<ffffffff9423412b>] kvm_vm_ioctl+0x69b/0x720
-> [  357.991167]  [<ffffffff945dfd9d>] do_vfs_ioctl+0x47d/0x680
-> [  357.996654]  [<ffffffff945e0188>] SyS_ioctl+0x68/0x90
-> [  358.001706]  [<ffffffff942066f1>] do_syscall_64+0x71/0x110
-> [  358.007192]  [<ffffffff94e00081>] entry_SYSCALL_64_after_hwframe+0x3d/=
-0xa2
->
-> Tested by running a large 256gib SEV VM several times, saw no warnings.
-> Without the change warnings are seen.
->
-> ---
->  arch/x86/kvm/svm/sev.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 75fa6dd268f0..c2fe89ecdb2d 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -465,6 +465,7 @@ static void sev_clflush_pages(struct page *pages[], u=
-nsigned long npages)
->                 page_virtual =3D kmap_atomic(pages[i]);
->                 clflush_cache_range(page_virtual, PAGE_SIZE);
->                 kunmap_atomic(page_virtual);
-> +               cond_resched();
+----- On Mar 29, 2022, at 10:25 PM, rostedt rostedt@goodmis.org wrote:
 
-If you add cond_resched() here, the frequency (once per 4K) might be
-too high. You may want to do it once per X pages, where X could be
-something like 1G/4K?
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> After being merged, user_events become more visible to a wider audience
+> that have concerns with the current API. It is too late to fix this for
+> this release, but instead of a full revert, just mark it as BROKEN (which
+> prevents it from being selected in make config). Then we can work finding
+> a better API. If that fails, then it will need to be completely reverted.
 
->         }
->  }
->
+Hi Steven,
+
+What are the constraints for changing a uapi header after it has been present
+in a kernel release ?
+
+If we are not ready to commit to an ABI, perhaps it would be safer to ensure
+that include/uapi/linux/user_events.h is not installed with the uapi headers
+until it's ready.
+
+Thanks,
+
+Mathieu
+
+> 
+> Link:
+> https://lore.kernel.org/all/2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com/
+> 
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+> kernel/trace/Kconfig | 1 +
+> 1 file changed, 1 insertion(+)
+> 
+> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> index 16a52a71732d..edc8159f63ef 100644
+> --- a/kernel/trace/Kconfig
+> +++ b/kernel/trace/Kconfig
+> @@ -741,6 +741,7 @@ config USER_EVENTS
+> 	bool "User trace events"
+> 	select TRACING
+> 	select DYNAMIC_EVENTS
+> +	depends on BROKEN # API needs to be straighten out
+> 	help
+> 	  User trace events are user-defined trace events that
+> 	  can be used like an existing kernel trace event.  User trace
 > --
-> 2.35.1.1094.g7c7d902a7c-goog
->
+> 2.35.1
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

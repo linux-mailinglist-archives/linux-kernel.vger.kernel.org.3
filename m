@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BFF4EBB68
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7915A4EBB6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243595AbiC3HEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 03:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
+        id S243602AbiC3HGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 03:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243559AbiC3HEw (ORCPT
+        with ESMTP id S238606AbiC3HGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 03:04:52 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEBAE72A7
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 00:03:06 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id yy13so39577863ejb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 00:03:06 -0700 (PDT)
+        Wed, 30 Mar 2022 03:06:37 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D8CE1240
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 00:04:51 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id a17so23266782edm.9
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 00:04:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=oshmNo9QpI++PBeGcUfK8FqiE0bcDHOAFRmb1sC62DQ=;
-        b=k4L+d4Wg3xJWIOSafNRXZNWhQTmcoDKyUDF5jigBkuv5rDoybp1GjNA0AOEWk4KhxR
-         9Ek1wCA4dNwrCI4LrlhCmVdQib3oIuVhZIfPMyyaDsKSlLBFFlrrsu3hXDSi4FCLaq8O
-         bxMPx/L0Ab3u5PXng11itfMgvoFsCVnuSm6IROuxZV4/2/tfmk1By5lfFU7RgUClNHQY
-         hhyYUVFbZnLCvr1l+g2RvBGgWM85Y8kggIevWklVLjjJZ2D5r73TTlmI1ep/tazn38jv
-         2D5DJ7jqiiP9r/QpOl4QjXsmkjbrRtyUEwrD+oGqET1/suW9lbYevp+F7uCV+2lwDyJ8
-         9HLg==
+        bh=PxRWqm3rnpFLGrWU5JqDAPNolxFCPocPImxQoA5xqOc=;
+        b=O1QpS3M8gBG8es3mcBM6JlyFWmfyi+XsiLthiu82vHSqL+/CACsmDsKasu4AiaSeSG
+         TikQdM1udFooOOoQpH9elhb9hg6JEtCT2yDpGYWtoVOTjduHZrtgrIidONthTvV5LW6a
+         61m259KGZr0SI4xr3H6Es/pX0WEzlAAoFZLLlvjC/h7ZL0UlXKp+FjI/Sx89ylkRNEdZ
+         6XGtmAVHiO9c4V+qXE6VmsD+SEzT7MZVxVAmkz4dKpnFSwKFRR0x6mk5lN41/gSDrCi1
+         7/D9hHLs5CxAbQV5DzK/QL9RJLEDlmZQ/LYBzZ2Wze0/AYuEi91rcWobS3ZNrAifrmyk
+         iBeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=oshmNo9QpI++PBeGcUfK8FqiE0bcDHOAFRmb1sC62DQ=;
-        b=QTOX5ys3eky4txVBpF8Sxdzhgm4xod3oIqu7UXaMZqSDlx5sNO5Ev0ZM0XthCXyRwh
-         YMKWqeIvUe3PCqARaMPBmsYr/Elx0MmjBnxliWmwjYeacfBRPagJgyCGYtQ2ZjEH/Wnk
-         LUK0W2WBYc3yixgB7I2kc0F2cf0sJN8exZJ9gO8mdIR+PgstkiHp9+kAJY1xStyrVzdU
-         IGzMcYedjPwp87gLRQfDfux8jihpgyF67ouKb/jVfHVv7K3x7KlO0+FsgmjRpLZE6piJ
-         ImFZTog9aSUcPg+imWwgScZzgOzfVENUXdbl1mT7vai8EvPih42SnZdiv40WehvhX2Gw
-         09NQ==
-X-Gm-Message-State: AOAM530a0koBu1S0GY0gZdcfpjexMMfwSuCZ995S03cLM7O74plZ1Z/t
-        AkEY5O10F2xYP/YCUXyDM0D08A==
-X-Google-Smtp-Source: ABdhPJz5xHARA4VHf0zoxalwHrQm8Dw4UegHI0/zWR/8z1C7CPrOhvZ3Plw3MZxcMWnMCtZoV+Dp5g==
-X-Received: by 2002:a17:907:2cc7:b0:6df:b76d:940d with SMTP id hg7-20020a1709072cc700b006dfb76d940dmr37968892ejc.742.1648623785083;
-        Wed, 30 Mar 2022 00:03:05 -0700 (PDT)
+        bh=PxRWqm3rnpFLGrWU5JqDAPNolxFCPocPImxQoA5xqOc=;
+        b=BoTOyvwl6vZ4ZBSdSFuYw+RpZ7PzotVxx57Ywy+H+CRYtnwNtqNM+Edrh4mmklJFG+
+         SFOoPlo/sP8bgqyb44fJHtNXaDQDiaszZI0Hp7ImdyxKpmsU49QSWsxMeoVqvi4aHUeD
+         ar2fO/xUiD9jo+qWCBymfMledIIZY2mwvckq5QGLwBtaP9P+OJ5KoF3yWa5LHkXRfOsQ
+         pPEsPyo45i0RQUFNMwaoOnD4OOhTURWSxfYi5ektyfdA9b2KP+J5imOAa9P7qcVn2qIm
+         ZdJ8Q/Hgp/8NGtpvXq26RFQrzOZAPfvl4t+qjd8ZOELwgAlNxwWQLDRe8cawDb1er1WJ
+         iy2Q==
+X-Gm-Message-State: AOAM533sXF9zMJPC12bh+cZ62K4ppVi7+cFZ9peYgB+c7MA3BFApmOpb
+        69LAaY4Z+tiV2iemBji49PYa1w==
+X-Google-Smtp-Source: ABdhPJwIXfShLJZQUrVg5NGV9VAbyRRwy3qoOYtRWClHR3idou8IMC8yKvq2rn4dWNEp/IWpHxXayw==
+X-Received: by 2002:a05:6402:2318:b0:413:7645:fa51 with SMTP id l24-20020a056402231800b004137645fa51mr9199019eda.201.1648623890308;
+        Wed, 30 Mar 2022 00:04:50 -0700 (PDT)
 Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id g2-20020aa7dc42000000b00418ef55eabcsm9447609edu.83.2022.03.30.00.03.04
+        by smtp.gmail.com with ESMTPSA id u26-20020a05640207da00b00419a14928e5sm7395555edy.28.2022.03.30.00.04.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 00:03:04 -0700 (PDT)
-Message-ID: <f9d83e70-75cf-56f2-9c3e-05381b12325b@linaro.org>
-Date:   Wed, 30 Mar 2022 09:03:03 +0200
+        Wed, 30 Mar 2022 00:04:49 -0700 (PDT)
+Message-ID: <32c99412-3b65-c52b-8417-efae9245ffb8@linaro.org>
+Date:   Wed, 30 Mar 2022 09:04:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: qcom: update maintainers (drop Akash and
- Mukesh)
+Subject: Re: [PATCH v2] dt-bindings: gpio: uniphier: Add hogs parsing
 Content-Language: en-US
-To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org
-References: <20220329113718.254642-1-krzysztof.kozlowski@linaro.org>
- <20220330054751.GA51248@9a2d8922b8f1>
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <1648617423-8739-1-git-send-email-hayashi.kunihiko@socionext.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220330054751.GA51248@9a2d8922b8f1>
+In-Reply-To: <1648617423-8739-1-git-send-email-hayashi.kunihiko@socionext.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,23 +79,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/03/2022 07:47, Kuldeep Singh wrote:
-> On Tue, Mar 29, 2022 at 01:37:17PM +0200, Krzysztof Kozlowski wrote:
->> Emails to Akash Asthana and Mukesh Savaliya bounce (550: Recipient
->> address rejected: User unknown in virtual alias table), so switch
->> maintainers to Andy and Bjorn (as Qualcomm platform maintainers).
+On 30/03/2022 07:17, Kunihiko Hayashi wrote:
+> Allow parsing GPIO controller children nodes with GPIO hogs to fix the
+> following warning:
 > 
-> Thanks Krzysztof as it was really anonoying to hear bounce emails.
+>   uniphier-ld11-ref.dtb: gpio@55000000: 'xirq0-hog' does not match any of the regexes: 'pinctrl-[0-9]+'
+>       From schema: Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
 > 
-> One thing, I heard bounce from Akash only and not from Mukesh.
-> Did you hear bounce from Mukesh as well?
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> ---
+> 
+> Changes since v1:
+> - Remove outer brackets from a pattern string
+> - Add valid properties to patternProperties
+> - Add gpios to "required:"
+> 
+>  .../bindings/gpio/socionext,uniphier-gpio.yaml  | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
 
-Yes, both:
-550 5.1.1 <msavaliy@codeaurora.org>: Recipient address rejected: User
-unknown in virtual alias table
 
-I think there might be a change in the email domain, so the best would
-be if Akash and Mukesh simply updated the file...
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
 Best regards,

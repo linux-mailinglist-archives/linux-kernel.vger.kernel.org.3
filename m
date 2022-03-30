@@ -2,147 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0134EBD4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9CE4EBD44
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 11:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244634AbiC3JMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 05:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
+        id S244601AbiC3JLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 05:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244627AbiC3JMO (ORCPT
+        with ESMTP id S233791AbiC3JLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 05:12:14 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8DF1DBABA;
-        Wed, 30 Mar 2022 02:10:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648631428; x=1680167428;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=oVBDcKhQPIannLiyreJRo3QEwR2EwOYqp0Enn3LLlPU=;
-  b=Yr1ZIyRQv0GdOE2Bd2km1ts9AU+eBiPh/HTyO7JrJ7bOzgCTNw9+tqza
-   QjqQ/LKwAes0s+EGDbM5xIerfhsp0+IIAo2et+J3A4M0GMCh9lUcgBjNP
-   pOXAFf3WaJE27akbXyandOOh8AM+/NGmQcKOpKUrZ9mjBCzLYMGZc9Gty
-   jVCzGvX8rtjCg+7GrXGHmk9V1ZpFFJL+cND9D3fvn0q4iP73LktSEPN8+
-   azLLSEL5qqNPajLqxar5lLxVwb62T7nRG5mx7I/mZSFfcoJawl66xr5Mi
-   b3IfHsqyKYDtCJRN/tV14IwEzL9vo0WCBxyDvZKt5shuvn7jaFU8Tx0gC
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="258323052"
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="258323052"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 02:10:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="787940080"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga006.fm.intel.com with ESMTP; 30 Mar 2022 02:10:08 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 22U9A6qw001631;
-        Wed, 30 Mar 2022 10:10:06 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Wojciech Drewek <wojciech.drewek@intel.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Marcin Szycik <marcin.szycik@linux.intel.com>,
-        Martyna Szapar-Mudlaw <martyna.szapar-mudlaw@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 net-next 5/5] ice: switch: convert packet template match code to rodata
-Date:   Wed, 30 Mar 2022 11:07:34 +0200
-Message-Id: <20220330090734.2725099-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <PH0PR11MB5782637EA9771D3ED4E56012FD1E9@PH0PR11MB5782.namprd11.prod.outlook.com>
-References: <20220321105954.843154-1-alexandr.lobakin@intel.com> <20220321105954.843154-6-alexandr.lobakin@intel.com> <PH0PR11MB5782637EA9771D3ED4E56012FD1E9@PH0PR11MB5782.namprd11.prod.outlook.com>
+        Wed, 30 Mar 2022 05:11:02 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5031D8331
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 02:09:14 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id p26-20020a05600c1d9a00b0038ccbff1951so376689wms.1
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 02:09:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=pF/hvrI7qLDjIFK1PZiWN5svxVn5RrF/RKLGWeqqmq0=;
+        b=YwlT6ooY5LZVCud47hjD3kjq5J2PtJRsbEtQHc6vflzUEeEpN8odscB+zjLMBN7stW
+         hYn47ImQM/UY4YJ1Ru6twpC8LiFoOQ8LprNtUBavXaqVWHgOHFlbzCx756jylJNV3Yp9
+         6/9t/A3XxA9qdzKF5+nCdP5aHR6tEF5+2GcZZVgmxJOEDmnwspBqLlcncg6zkL5ilwWr
+         b8vlsb4NIVa9svDY8Wdm1gBQxnVAyl5MhAotSnIYqI7Rl+CvQLVQwExfQ3/PiXBnqQzn
+         T//pXYch9DcznS2bDu+JjS2n2XbBY2N86LVJfZG6+M4SUbkHIk7q/1YDNmFmMZKmzNZj
+         1oFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=pF/hvrI7qLDjIFK1PZiWN5svxVn5RrF/RKLGWeqqmq0=;
+        b=QKTJQ76R2lD9gGQRfI/by8tpiBNF4mwslnKz4UcWWJ7XqQoJQJND5u1F6LGPhOzmIJ
+         RsyLXIxMPRtotMhK0WruhqzzX8C9DZ8uCYkgJzAqvfiEJbbCkw4Pc+0bbDbcVzSumY+j
+         QtWBtB9w+4tNCDWlJRUA9XrP0RQfMd9Q1/qHQdCbQixuVZN8gwSdy+6aI8ymVf6rn5px
+         GPSo+M+WdQg1wiFgPfW9ZM4v70JJBov3OI0cFCzs7Gdk+NfyjSIiW25bQ41la8nphxqu
+         w4GEDhS++M1QzYSIJU7aRtIBUfd0NmUxhncrH9DOB71I4AM4xcZ9eQmE4p3qhwl4aCvB
+         hGlA==
+X-Gm-Message-State: AOAM532e5XjWtbEuPna4HZM/4Ea5KoUffvIDaHGN2i/n98zHFsUM+NQD
+        y1k4SLNQsz4vbiUtANdWOcRbYg==
+X-Google-Smtp-Source: ABdhPJziTOza5+DSVLs+SpPhhmrhW5VtbyiLFPjGbJGLbqWH/uguopC9MkTPv25t1gHAv/kwvQCSyg==
+X-Received: by 2002:a7b:c778:0:b0:38c:9064:89fc with SMTP id x24-20020a7bc778000000b0038c906489fcmr3396059wmk.175.1648631353152;
+        Wed, 30 Mar 2022 02:09:13 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:e47f:3cdb:5811:cee8? ([2001:861:44c0:66c0:e47f:3cdb:5811:cee8])
+        by smtp.gmail.com with ESMTPSA id n8-20020a5d5988000000b00203d5f1f3e4sm18249681wri.105.2022.03.30.02.09.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 02:09:12 -0700 (PDT)
+Message-ID: <1b0bc704-a740-ea15-1e90-166905be27d0@baylibre.com>
+Date:   Wed, 30 Mar 2022 11:09:11 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 09/13] pinctrl: meson: Rename REG_* to MREG_*
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Qianggui Song <qianggui.song@amlogic.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        openbmc@lists.ozlabs.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+References: <20220329152926.50958-1-andriy.shevchenko@linux.intel.com>
+ <20220329152926.50958-10-andriy.shevchenko@linux.intel.com>
+ <94e888fe-d8fc-5379-302f-66d64f2ae10b@baylibre.com>
+ <YkM22GwhxV+YKl8l@smile.fi.intel.com>
+ <CAMuHMdWVA834tkeag=WOnHFGuhwZ93PkrgO24OV69Fye1hruLw@mail.gmail.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <CAMuHMdWVA834tkeag=WOnHFGuhwZ93PkrgO24OV69Fye1hruLw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wojciech Drewek <wojciech.drewek@intel.com>
-Date: Tue, 29 Mar 2022 15:12:44 +0000
-
-> Hi Alex,
+On 30/03/2022 10:54, Geert Uytterhoeven wrote:
+> Hi Andy,
 > 
-> > -----Original Message-----
-> > From: Lobakin, Alexandr <alexandr.lobakin@intel.com>
-> > Sent: poniedzialek, 21 marca 2022 12:00
-> > To: intel-wired-lan@lists.osuosl.org
-> > Cc: Lobakin, Alexandr <alexandr.lobakin@intel.com>; Fijalkowski, Maciej <maciej.fijalkowski@intel.com>; Michal Swiatkowski
-> > <michal.swiatkowski@linux.intel.com>; Drewek, Wojciech <wojciech.drewek@intel.com>; Marcin Szycik
-> > <marcin.szycik@linux.intel.com>; Szapar-Mudlaw, Martyna <martyna.szapar-mudlaw@intel.com>; David S. Miller
-> > <davem@davemloft.net>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; netdev@vger.kernel.org; linux-
-> > kernel@vger.kernel.org
-> > Subject: [PATCH v4 net-next 5/5] ice: switch: convert packet template match code to rodata
-> >
-> > Trade text size for rodata size and replace tons of nested if-elses
-> > to the const mask match based structs. The almost entire
-> > ice_find_dummy_packet() now becomes just one plain while-increment
-> > loop. The order in ice_dummy_pkt_profiles[] should be same with the
-> > if-elses order previously, as masks become less and less strict
-> > through the array to follow the original code flow.
-> > Apart from removing 80 locs of 4-level if-elses, it brings a solid
-> > text size optimization:
-> >
-> > add/remove: 0/1 grow/shrink: 1/1 up/down: 2/-1058 (-1056)
-> > Function                                     old     new   delta
-> > ice_fill_adv_dummy_packet                    289     291      +2
-> > ice_adv_add_update_vsi_list                  201       -    -201
-> > ice_add_adv_rule                            2950    2093    -857
-> > Total: Before=414512, After=413456, chg -0.25%
-> > add/remove: 53/52 grow/shrink: 0/0 up/down: 4660/-3988 (672)
-> > RO Data                                      old     new   delta
-> > ice_dummy_pkt_profiles                         -     672    +672
-> > Total: Before=37895, After=38567, chg +1.77%
-> >
-> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-> > Tested-by: Marcin Szycik <marcin.szycik@linux.intel.com>
-> > ---
-> >  drivers/net/ethernet/intel/ice/ice_switch.c | 215 ++++++++++----------
-> >  1 file changed, 108 insertions(+), 107 deletions(-)
-
---- 8< ---
-
-> > +	ICE_PKT_PROFILE(vlan_udp, ICE_PKT_INNER_UDP | ICE_PKT_VLAN),
-> > +	ICE_PKT_PROFILE(udp, ICE_PKT_INNER_UDP),
-> > +	ICE_PKT_PROFILE(vlan_tcp_ipv6, ICE_PKT_INNER_IPV6 | ICE_PKT_VLAN),
-> > +	ICE_PKT_PROFILE(tcp_ipv6, ICE_PKT_INNER_IPV6),
+> On Tue, Mar 29, 2022 at 6:47 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+>> On Tue, Mar 29, 2022 at 06:13:19PM +0200, Neil Armstrong wrote:
+>>> On 29/03/2022 17:29, Andy Shevchenko wrote:
+>>>> Rename REG_* to * as a prerequisite for enabling COMPILE_TEST.
+>>>
+>>> What error do you hit ?
+>>
+>> arch/x86/include/asm/arch_hweight.h:9:17: error: expected identifier before string constant
+>> 9 | #define REG_OUT "a"
+>>    |                 ^~~
 > 
-> I think that in both "vlan_tcp_ipv6" and "tcp_ipv6" we should use ICE_PKT_OUTER_IPV6 instead
-> of ICE_PKT_INNER_IPV6. We are not dealing with tunnels in those cases so inner addresses are 
-> incorrect here.
+> Perhaps REG_{OUT,IN} in arch/x86/include/asm/arch_hweight.h should be
+> renamed instead, as this is a generic header file that can be included
+> anywhere, while the REG_{OUT,IN} definitions are only used locally,
+> in the header file?
 
-Oh, some copy'n'paste braino indeed.
-I'll send a fixup to Tony in a moment.
+Even better, those REG_OUT/REG_IN should be undefined at the end of the header since only
+used in the headers inline functions:
+==============><==================================
+diff --git a/arch/x86/include/asm/arch_hweight.h b/arch/x86/include/asm/arch_hweight.h
+index ba88edd0d58b..139a4b0a2a14 100644
+--- a/arch/x86/include/asm/arch_hweight.h
++++ b/arch/x86/include/asm/arch_hweight.h
+@@ -52,4 +52,7 @@ static __always_inline unsigned long __arch_hweight64(__u64 w)
+  }
+  #endif /* CONFIG_X86_32 */
+
++#undef REG_IN
++#undef REG_OUT
++
+  #endif
+==============><==================================
+
+Neil
 
 > 
-> Thanks,
-> Wojtek
-
-Great catch, thanks for noticing!
-
+> Gr{oetje,eeting}s,
 > 
-> > +	ICE_PKT_PROFILE(vlan_tcp, ICE_PKT_VLAN),
-> > +	ICE_PKT_PROFILE(tcp, 0),
-> > +};
+>                          Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                  -- Linus Torvalds
 
---- 8< ---
-
-> > --
-> > 2.35.1
-
-Al

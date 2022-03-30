@@ -2,196 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6015B4EBACC
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB3C4EBAD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243323AbiC3GbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 02:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39048 "EHLO
+        id S243340AbiC3GdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 02:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243329AbiC3Gaw (ORCPT
+        with ESMTP id S235426AbiC3GdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 02:30:52 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3241456433
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:29:03 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22U3V549001212;
-        Wed, 30 Mar 2022 06:28:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=+tqqQ1zYT5h6rZk7dFpqnP5V+KiyyHy5OqllWqJssrc=;
- b=vAWTd6i04soPrriRTf7ZeRlrkPIOYgmS7waqJECaZrRWxr1btkxoYbwPb5PASjHIwbMD
- /oRU2yIZAAfUVenLitVmPM2Y3r3xA0BLvWNMVKHcAQ3NT6xMtygYr/jxyIUhjynRSRtT
- Xg+2wkrlqJnP7jziThEnpT89siaihPuCgVWbHMR7SuFIoTTLQsIPc/LKYcmfYC0Q1pBV
- bc1QljgF2jgRAZc1VtSiGOxVx2LaBtJj+jfN9dYIKjR1L0DY3yRhr5npGJrK3qIH+f3A
- Mav6XeWv1fY4E6wy27fxY+cUKGHN6K5Xbmzz/wq8gcCwjwd3zvhY10Srm+6y4u2HAI+X +A== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3f1s8crcdy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 30 Mar 2022 06:28:54 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22U6JVR2016561;
-        Wed, 30 Mar 2022 06:28:52 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2040.outbound.protection.outlook.com [104.47.51.40])
-        by userp3020.oracle.com with ESMTP id 3f1v9fk5e2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 30 Mar 2022 06:28:52 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BnHJyiCw3+iaXQZuukZ/MqgXfRjdCZSFz0OeKTiKp6gRsz9lefPdapEYqB50srur/kmZOyZ7IcaOFCmPRtLan7u3LNS0qyfjF0LvIiWhY4MXgMUpZPKNBACgfNcs3b/nDeLhZbO+WwR4ion55I59HZ/WFn6Nrri96jPATpu8bzyoB3tLBiWQL7c3oKTaOtj38pFT/lb636FwoI8w338NpxBTijym4r6aJkcVgIOp04yNmhfBPYUmbZ+nhJPpW2p2PFMEUtddzJkzN2K6GvZV62WAJIEIoMv1FVbYtko2sKj4bkhbtfGQ5oTyA4LoW3CHmCn6wZsAUSfr8Y6l9SCBvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+tqqQ1zYT5h6rZk7dFpqnP5V+KiyyHy5OqllWqJssrc=;
- b=AxkJILcQRozygBKnBlDZjGTN07Py+CTZACXW/i5/+jBCm1cLTUrUxluCXJ+IwfIss4+zYFADmVMO7mKQ6JZjN/Pvb2GCWD43pxaF1NYhLbgjhxvTHlL0pzj2PxQEIJ4AT3ZSRb3NbH6Hw6arxSOXiMg1IeXtceWBYGYH4sshFx1Mfte3bsqBWqifWauwsiG//8oD8Wew4WoNeZ18gvO/1izNZC3tlwEcJDIEsVAJ5uSbNazeBKEOFKXoGeYgxGflwkKh4wgBWnakln/tMDOp49JD5pVdI83zyNis1j9VFikroF0PBxB7n6qBE601jOszDix0Q8B3hlugCB02lGK/TA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+tqqQ1zYT5h6rZk7dFpqnP5V+KiyyHy5OqllWqJssrc=;
- b=isHNO92CAWtvRheneF9fD+e4zuuWNqfdqhahxCyyZ8dhbNyPXmSe4aa66rvaAF6VQ33fG++yEz137fKw/+YlSh0Z+qjNYa0rrFRQFC8h9poe8k4I9PlUUIVjYgJkbNodF4hwVEe5j0fddVQVx4sCEmIb/P1GiSwvglSrZn0lafw=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by DM6PR10MB3610.namprd10.prod.outlook.com
- (2603:10b6:5:150::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Wed, 30 Mar
- 2022 06:28:50 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::d4e7:ee60:f060:e20c]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::d4e7:ee60:f060:e20c%7]) with mapi id 15.20.5081.025; Wed, 30 Mar 2022
- 06:28:50 +0000
-Date:   Wed, 30 Mar 2022 09:28:29 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Alison Schofield <alison.schofield@intel.com>
-Cc:     Rebecca Mckeever <remckee0@gmail.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH] staging: r8188eu: fix suspect code indent for
- conditional statements
-Message-ID: <20220330062829.GF3293@kadam>
-References: <YkK7ABTVt0TCbd18@bertie>
- <20220329161632.GA1169956@alison-desk>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220329161632.GA1169956@alison-desk>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNXP275CA0030.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:18::18)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ca250ed1-e4ac-4403-3b1a-08da12168d5d
-X-MS-TrafficTypeDiagnostic: DM6PR10MB3610:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR10MB3610D8214E01EC5EACEA12B98E1F9@DM6PR10MB3610.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WJ/ctNjpZgG4/jaHk5yGvHRR8qzzznYAXja1Yhbs1x5FU2ZY1lRwKlrWd3RwYOqW/t6TDPXfdUCWeGTLMNKSH0iNRBKMHRwWWdFjkVg13QZdYZL2XI0IkmtaWrCticcugBmTUduy3itSZFaWm8Ictd7h3yFGagrtpvWjoiSIcVCqqUR9LC+6n4EDj9SQJt0bfWJbpllkH65cAItA3znu1X+QesXfCWikM2ISkWJvP6MTxGBIEGPwfBBJtwq1kCU5zts2pDewXeoPBB7moMF7Z2A71s2RZEcL+p0vJPsnWanebADWRHQTDVIH/Lk/ul4PUTrsGymOXF3T+Ag1XtB3RtsGpxbNjghuuDEjgZzQgHdMZneBjauA56EDMYyT6u6yN28W0NEmxSG4Luy/A4sVZnlY8cFSFeASBwqOMUmJ6Vbh0rzgK7dY3wPbjW681ywbKUlcx7BKWZaQfikGZ6vV0vO+b9h2nIDfMHUwLc/ssIlEqbTWpII47B4F6uLgpMH7VkAt+AV8famBxFBMh1qosM1E+gRZvBXBkcMnrfAw0xlZqGX42chcXDro9Szvacze25ObBjdE/gEaiFSph74l2khIPIqQwns9jATscXAGio4WfHbSLVz5Y8c9wiBVKfWs1633jvsegZnE/UoZQmWSRDbyYXioiJXzn1Tu1Age3dgiTHvxOX+wNRvM0I4akqhs1pEw6BLz54pP+Ek/wxzaKg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(8936002)(6506007)(5660300002)(2906002)(9686003)(66946007)(83380400001)(6666004)(6512007)(52116002)(6486002)(1076003)(66476007)(54906003)(66556008)(508600001)(8676002)(86362001)(4326008)(316002)(6916009)(44832011)(33656002)(186003)(26005)(38350700002)(33716001)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Jhfrp0/HOK8oH6GQw3Rcmn3Q+/PN9UWdbbagS69TgqpXzJG5oKPuHBqtmUc5?=
- =?us-ascii?Q?iiwOlhp7TJ+9DkrMXtpVwG2d1jr4JghJyWhy6JTILo1DeTh79VVmq2Vhq2Yl?=
- =?us-ascii?Q?L+nRYx3Cl2NtJGBNU+OOTTd9CNK5h1wIULMsfDPZA4o0v6t0D12zI2wo9//I?=
- =?us-ascii?Q?GizzFJPJL2P5rkmzxoLx33jf9m85UsrwhnjmG5VZJavW+IZigFcef/+TueZ9?=
- =?us-ascii?Q?R4KzQjItGRfwYmThnOlgigEUZ/VzNM268u+9e9ccJ3Pp4I5zjlVM9g7mw5mK?=
- =?us-ascii?Q?lClw5CxK6e6Lk+d+wRjTaECek2PuhbhN0AavVVrKEkJbdXP1doKVSXEfz11d?=
- =?us-ascii?Q?OtZw6xcPbgodDKiQpVfsVxOWNHuTiRmN+SJ5Fa9fdfNRQ6f+5Vb7VY6Vta9j?=
- =?us-ascii?Q?m+4U43eOQx61fxZQYQukVkuoGfysUy6Y1LThfSHRdUHojZs6VqjT+m8tNH5X?=
- =?us-ascii?Q?c4nrAF4nfSckpNcbQuSlyypcwKQjWBPLHqBNqOvKfmvoMnwDYXDoLYfWlt7K?=
- =?us-ascii?Q?3NRrzc9K0NdmZFHrYSoFgSBB3rjHur/JExbYgaSYiCF+QI/6mZRf9yzUATpj?=
- =?us-ascii?Q?lHF0iV8VW2++zLLo7P1Z8d8Ts620thq4ksSR9qs0lgNWS1tL0VUblE14vmD2?=
- =?us-ascii?Q?m+IVNdEaBB3SN7LqzHpaTkm4CtZ8W1EC2rhcRZym8qUEBYDjOnWHkmuBXi5k?=
- =?us-ascii?Q?bwgmuXx8VtRgutAyLDpRt16dBWnXZ7C0iziQGlHUQ7pi+cnKwUGB3pPDIPgC?=
- =?us-ascii?Q?8XXHftBYc76IlPLryLI1zpy1dok53IX5dRTC0XMAOuCICKHYLc0zpsvFrz85?=
- =?us-ascii?Q?+UhVTgQ4JDtevXtDsCAPw9EeEC8NpxncqHmrKQ8pCJyoxI8ksg9hXh0V0iYA?=
- =?us-ascii?Q?MO/F/bEvlEtxfrVhP5hDWaHKbGUVUDjFJeh7Aolhj61AGf22gSLPYInluGHe?=
- =?us-ascii?Q?zHA0yhRN0M9OvpRjeeYcyy6a9/q4i2IPYB5HHDPPq8tuE0zhlvy78oifVfQw?=
- =?us-ascii?Q?PRZR7t99thb0lPpo2p0tlY5qMJGBs/5kEWVQjU9GWYcY5zrpvgb/Z0CgWp9I?=
- =?us-ascii?Q?ybcY51PnJIYLeafsZOBqlsvwjTooMgBlSSXbIcqNbkN1DMbdXcYZoXwAhrHu?=
- =?us-ascii?Q?IckKE2vO5zSVHhy+ajekDEMRnT6F4UR6bzPQbf7V4aUPd7/0C/NHOK/rNch/?=
- =?us-ascii?Q?BYP7semrcXBcIRdefEV0L/g5WucQOVflbAIrebN4HDVMTIm0UhonvtS88yV7?=
- =?us-ascii?Q?wQn5jokeX7fwBEKi3zM3ma+TVPRYATb5zceGA/9ij+sdKwyO03mIezGceSQk?=
- =?us-ascii?Q?VRnPEoWgtTgwHVhOPMCG0lABoo9kKjHguLGfDWOKzXnsRDzXXAxxlE4lQ0AB?=
- =?us-ascii?Q?4oP8eDG73xCgb7dUhsdqdbIyzJkoBaDobhkFYElYHvaXstS2R97oTRdWRlAZ?=
- =?us-ascii?Q?MJ4h94YJ2ypCFzOj38WOq7l11gs6DpLD5DMG0YGzlNBvU2FnaqZ6kIVReVle?=
- =?us-ascii?Q?5iCOvFL4/yNAFg/1HarhphH2Da9mMeotdhSUuiq87Z4JjSzMZ6hu/CM5ElP2?=
- =?us-ascii?Q?+88y5aqUxylc8Slgip2MwN3Ua7DTbrZw4nfZRKrmCTcLLC1RxZ4NezNFXHy/?=
- =?us-ascii?Q?9I2bLWWOgBeuC7J4jblG8FOIXtb32eWiLdtX9eKCgTll5MPZA/zn6eu1XzKe?=
- =?us-ascii?Q?qoK3mv2pPcleAzp9SvMCkRcso+QR3s41lZFByrO8+9YVuOICzOR4H2ANFjxV?=
- =?us-ascii?Q?9d+yHrE2X1A+EPBg+9NRwkJI0ZgVB3w=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca250ed1-e4ac-4403-3b1a-08da12168d5d
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 06:28:50.4748
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zG5PTqL5NmJJJ7PKDaqIYZJ5LO/qwVey+aGvpURnUQxUSZ5BjiRHi7G7vvn0TuziGuAwZqbEO43kq+nKCA9XKzknZpaPfdyrAI7YQHquhCA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3610
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10301 signatures=695566
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 spamscore=0
- adultscore=0 mlxlogscore=999 phishscore=0 suspectscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203300030
-X-Proofpoint-GUID: AAWaIIzi0VzXj6n0twkL5646YYsNZttW
-X-Proofpoint-ORIG-GUID: AAWaIIzi0VzXj6n0twkL5646YYsNZttW
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Mar 2022 02:33:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD46656431;
+        Tue, 29 Mar 2022 23:31:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52699616C3;
+        Wed, 30 Mar 2022 06:31:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB0DDC340EC;
+        Wed, 30 Mar 2022 06:31:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648621874;
+        bh=65x8jxunnWlKGQolcMnrPvWIBfk8CfZE3BJfWaU0rFw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=J6IJZ0QXTwdvlRFt6h6sHzVRZBkQhjrBNkqKWyn4hz8syhJPT8zcTIw3rQ2KOraRm
+         0cTzNjP9OB99o6Ei/fY1OzQvNNvaUnl9/8ScUaKWTY2kFaExs87Ze10onHVQr+ZS5s
+         IXpwaWjCl9OLfwd/C/Q0zBzGqbrv6v6tL7cvR7gTm7MqFMCfQ8vt4L9FrDHRwy9BKQ
+         Dr5YhSBzJMisuiq7RGT+LkfJdfmSe7Ml8ri1QVMRMO+JNYouqroN6lzAHDBVAsYICz
+         R8HOLuUov7eutQuOELHmkVJUNSUA2RkKUate8NC+YydwWOpf9pdPhWMlAN11z9nbMb
+         o1QVyeNtG1sMw==
+Date:   Wed, 30 Mar 2022 15:31:10 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Beau Belgrave <beaub@microsoft.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
+        rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>
+Subject: Re: Comments on new user events ABI
+Message-Id: <20220330153110.10c3f2236b1cd5759f0b5c79@kernel.org>
+In-Reply-To: <20220329215421.GA2997@kbox>
+References: <2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com>
+        <20220329002935.2869-1-beaub@linux.microsoft.com>
+        <1014535694.197402.1648570634323.JavaMail.zimbra@efficios.com>
+        <20220329215421.GA2997@kbox>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I don't really like the focus on commit message minutia...  :/
-Basically everyone can understand the commit message.  There are one or
-two maintainers who will fly into a rage when they see the word "fix"
-in a commit message but I have a simple solution where I just never
-email them again.  My time is too valuable for that nonsense.
+On Tue, 29 Mar 2022 14:54:21 -0700
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
 
-We would have applied this patch as is.  Or I would normally have
-written it like this:
+> On Tue, Mar 29, 2022 at 12:17:14PM -0400, Mathieu Desnoyers wrote:
+> > ----- On Mar 28, 2022, at 8:29 PM, Beau Belgrave beaub@linux.microsoft.com wrote:
+> > 
+> > >> ----- On Mar 28, 2022, at 4:24 PM, Mathieu Desnoyers
+> > >> mathieu.desnoyers@efficios.com wrote:
+> 
+> [..]
+> 
+> > >> I also don't get what user-space is expected to do differently if FTRACE vs
+> > >> PERF is enabled, considering that it gates a writev() to a file descriptor
+> > >> associated with /sys/kernel/debug/tracing/user_events_data.
+> > >> 
+> > > 
+> > > The intention wasn't for user-space to check the byte other than non-zero.
+> > > User processes could do that, but it's more so administration tools can see
+> > > where the events are registered if they cannot be closed and the state of the
+> > > machine.
+> > 
+> > Administration tools could simply use a seqfile interface and parse text. I
+> > don't expect those to be performance-sensitive at all. So we should not design
+> > the overhead-sensitive mmap'd ABI (enable flags) for administration tools.
+> > 
+> > > Maybe you have a slicker way to do this, but it seems to check a bit in the
+> > > page would involve at least a byte read followed by a mask or shift?
+> > 
+> > I suspect the minimum cost in terms of instruction would be to have the mask
+> > prepared in advance (when the event is registered), and therefore the instructions
+> > required on the user-space fast-path would be a load followed by a mask (&).
+> > 
+> > > That seems more expensive than checking a byte?
+> > 
+> > It is one single extra ALU instruction on the fast-path, indeed. But we have to
+> > be careful about optimizing too much for a non-representative microbenchmark
+> > and missing the big picture, which includes L1/L2 cache lines and TLB load overhead
+> > when tracing a real-life workloads.
+> > 
+> > On modern x86 CPUs, an ALU instruction takes around 0.3ns, which is a few
+> > orders of magnitude faster than a cache miss. Using bit-wise rather than
+> > byte-wise indexing increases functional density of those enable flags by a
+> > factor 8, which lessens the amount of cpu cache required by that same factor.
+> > 
+> > So as soon as the workload running on the system fills the CPU L1 or L2 caches,
+> > when the number of user events registered scales up, and when the checks for
+> > events enabled are done frequently enough, evicting fewer cache lines becomes
+> > more important than the extra instruction required to apply the mask on the
+> > fast-path.
+> > 
+> 
+> Ok, makes sense. This will give us more events as well, something I hear
+> some complaints about.
+> 
+> > > 
+> > >> I would have rather thought that tracers implemented in user-space could
+> > >> register
+> > >> themselves, and then there could be one
+> > >> /sys/kernel/debug/tracing/user_events_status
+> > >> per tracer. Considering that all kernel tracers use the same ABI to write an
+> > >> event,
+> > >> and then dispatch this event internally within the kernel to each registered
+> > >> tracer, I would expect to have a single memory mapping for all those (e.g. a
+> > >> /sys/kernel/debug/tracing/user_events_status/kernel_tracers file).
 
-[PATCH] staging: r8188eu: Delete a stray tab in rtw_survey_cmd_callback()
+I'm not sure you understand the meaning of per-event flag, but as far as I know
+the reason of those per-event flags may be same reason of SDT semaphore. The event
+which is NOT traced from kernel(via perf or via ftrace) needs to be skipped because
+preparing the user-event arguments (e.g. getting a variable "name" in user-space
+language runtime) may take a long time.
 
-This code works fine, but the line is indented too far so it's confusing.
-Delete a tab.
+> > >> Then eventually if we have other user-space tracers such as lttng-ust with its
+> > >> their own user-space code performing tracing in a shared memory ring buffer, it
+> > >> would make sense to allow it to register its own
+> > >> /sys/kernel/debug/tracing/user_events_status/lttng_ust file, with its own
+> > >> indexes.
+> > >> 
+> > > 
+> > > I don't follow that. The intention is to get user processes to participate with
+> > > trace_events and the built-in tooling. When would a user-space tracer be used
+> > > instead of perf/ftrace?
+> > > 
+> > > It seems like a feature request?
+> > 
+> > It can very well be out of scope for the user events, and I'm fine with that.
+> > I was merely considering how the user events could be leveraged by tracers
+> > implemented purely in user-space. But if the stated goal of this feature is
+> > really to call into kernel tracers through a writev(), then I suspect that
+> > supporting purely user-space tracers is indeed out of scope.
+> > 
+> 
+> That was the goal with this ABI, are there maybe ways we can change the
+> ABI to accomodate this later without shutting that out?
 
-Signed-off-by: ...
+Beau, would you have any plan to make a tracer-tool application?
+I thought this ABI is for adding "logger" like interface for perf/ftrace (or BPF,
+that will be a long way).
 
-I had reviewed this patch earlier and almost pointed out that both sides
-of the if statement are the same except for the comment.  The "need to
-make timeout handlerOS independent" comment is wrong.  I have not looked
-at the details of the other comment.
+> 
+> > > 
+> > >> If this facility is ever used by lttng-ust to enable user-space tracing, I would
+> > >> not
+> > >> want to take the overhead of calling writev for the sake of kernel tracers if
+> > >> those are disabled.
 
-I did not send my review comments because the patch was fine.  But what
-we want is for the code to look more like this.
+I think this is totally different design with the lttng-ust, which collects event data
+in user-space and kernel-space separately. Users will use them properly according
+to the situation and purpose.
 
-regards,
-dan carpenter
+> > > If they were disabled the byte wouldn't be set, right? So no writev overhead.
+> > > 
+> > > Seems I'm missing something.
+> > 
+> > I was wondering whether we could leverage the user events bit-enable ABI for
+> > tracers which are not implemented within the Linux kernel (e.g. LTTng-UST).
+> > But I suspect it might be better for me to re-implement this in user-space
+> > over shared memory.
+> > 
+> 
+> Perhaps.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index 6eca30124ee8..dcf7b24f95a8 100644
---- a/drivers/staging/r8188eu/core/rtw_cmd.c
-+++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -1404,11 +1404,8 @@ void rtw_survey_cmd_callback(struct adapter *padapter,  struct cmd_obj *pcmd)
- {
- 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
- 
--	if (pcmd->res == H2C_DROPPED) {
-+	if (pcmd->res != H2C_SUCCESS) {
- 		/* TODO: cancel timer and do timeout handler directly... */
--		/* need to make timeout handlerOS independent */
--		_set_timer(&pmlmepriv->scan_to_timer, 1);
--		} else if (pcmd->res != H2C_SUCCESS) {
- 		_set_timer(&pmlmepriv->scan_to_timer, 1);
- 	}
- 
+Sorry, I actually doubt it, since it relays on the user space program which
+correctly works and write the event correct way (this is why I had asked you
+to verify the event format at writev). Or perhaps we can verify it when merging
+the shared pages...
+
+> > > 
+> > >> So perhaps in the short-term there is no need to implement the user-space tracer
+> > >> registration ABI, but I would have expected a simple bitmap for
+> > >> /sys/kernel/debug/tracing/user_events_data/kernel_tracers rather than the
+> > >> bytewise index, because as far as the kernel tracers are concerned, providing
+> > >> the bit to tell userspace instrumentation exactly which tracers are internally
+> > >> enabled within the kernel does not appear to be of any use other than increasing
+> > >> the footprint on the actively used cpu cache lines.
+
+I agreed with this.
+
+> > >> * user_events_data page faults
+> > >> 
+> > >> If my understanding is correct, when the user-space program's memory containing
+> > >> the payload passed to writev() to a user_events_data file descriptor is kicked
+> > >> out from the page cache between fault_in_iov_iter_readable and its use by the
+> > >> tracers due to high memory pressure, the writev() will fail with -EFAULT and
+> > >> the data will be discarded unless user-space somehow handles this error (which
+> > >> is not handled in the samples/user_events/sample.c example program). It is good
+> > >> that the memory is faulted in immediately before calling the tracers, but
+> > >> considering that it is not mlock'd, should we make more effort to ensure the
+> > >> tracers are able to handle page faults ?
+
+I think this should be handled by user-space implementation (retry?).
+
+> > >> Integration of the work done by Michael Jeanson and myself on faultable
+> > >> tracepoint
+> > >> would allow the tracepoint probes to take page faults. Then, further
+> > >> modifications
+> > >> in the kernel tracers would be needed to handle those page faults.
+
+Interesting.
+
+> > > Is this something that can be done later or does it require ABI changes?
+> > > 
+> > > I would love to never miss data due to page faults.
+> > 
+> > This is internal to the user events, tracepoint, and kernel tracers
+> > implementation. I don't expect this to modify the user events ABI.
+> > 
+> > The only thing that might require some thinking ABI-wise is how the ring
+> > buffers are exposed to user-space consumers, because we would want to
+> > allow taking page faults between space reservation and commit.
+> > 
+> > The LTTng ring buffer has been supporting this out of the box for years
+> > now, but this may be trickier for other kernel tracers, for which allowing
+> > preemption between reserve and commit has never been a requirement until
+> > now.
+> > 
+> 
+> I'll let Steven comment on that one.
+> 
+> > > 
+> > >> 
+> > >> * user_reg name_args and write_index vs purely user-space tracers
+> > >> 
+> > >> That part of the user event registration (event layout and ID allocation)
+> > >> appears
+> > >> to be intrinsically tied to the kernel tracers and the expected event layout.
+> > >> This
+> > >> seems fine as long as the only users we consider are the kernel tracers, but it
+> > >> appears to be less relevant for purely user-space tracers. Actually, tying the
+> > >> mmap'd event enable mechanism with the event ID and description makes me wonder
+> > >> whether it might be better to have LTTng-UST implement its own shared-memory
+> > >> based
+> > >> "fast-event-enabling" mechanism rather than use this user-event ABI. The other
+> > >> advantage of doing all of this in user-space would be to allow many instances
+> > >> of this bitmap to exist on a given system, e.g. one per container in a
+> > >> multi-container
+> > >> system, rather than requiring this to be a global kernel-wide singleton, and to
+> > >> use
+> > >> it from a non-privileged user.
+> > >> 
+> > > 
+> > > We have some conversation going about using namespaces/cgroups to isolation
+> > > containers with bitmaps/status pages. The main thing I personally want to be
+> > > able to do is from the root namespace see all the events in the descendents
+> > > easily via perf, eBPF or ftrace.
+> > > 
+> > > Link:
+> > > https://lore.kernel.org/linux-trace-devel/20220316232009.7952988633787ef1003f13b0@kernel.org/
+> > > 
+> > 
+> > I see that a notion close to "tracing namespaces" comes up in this thread. This is something
+> > I brought forward at the last Linux Plumbers Conference aiming to facilitate system call tracing
+> > for a given container (or from a process hierarchy). I suspect the tracing namespace could also
+> > be tied to a set of kernel buffers, and to a user events "domain". I think this concept could
+> > neatly solve many of our container-related isolation issues here. As you say, it should probably
+> > be a hierarchical namespace.
+> > 
+> 
+> Agreed.
+
+Great :-)
+
+> > >> Some comments about the implementation:
+> > [...]
+> > > 
+> > >> 
+> > >>         return user_events_write_core(file, &i);
+> > >> }
+> > >> 
+> > >> include/uapi/linux/user_events.h:
+> > >> 
+> > >> struct user_reg {
+> > >> 
+> > >>         /* Input: Size of the user_reg structure being used */
+> > >>         __u32 size;
+> > >> 
+> > >>         /* Input: Pointer to string with event name, description and flags */
+> > >>         __u64 name_args;
+> > >> 
+> > >>         /* Output: Byte index of the event within the status page */
+> > >>         __u32 status_index;
+> > >> 
+> > >>         /* Output: Index of the event to use when writing data */
+> > >>         __u32 write_index;
+> > >> };
+> > >> 
+> > >> As this structure is expected to grow, and the user-space sample program uses
+> > >> "sizeof()"
+> > >> to figure out its size (which includes padding), I would be more comfortable if
+> > >> this was
+> > >> a packed structure rather than non-packed, because as fields are added, it's
+> > >> tricky to
+> > >> figure out from the kernel perspective whether the size received are fields that
+> > >> user-space
+> > >> is aware of, or if this is just padding.
+
+
+Indeed, any user-space exposed structure should be packed or correctly aligned,
+because those can be built on many architectures.
+
+
+Thank you,
+
+> > >> 
+> > > 
+> > > I think that would be a good idea, Steven?
+> > 
+> > [leaving this for Steven to answer]
+> > 
+>
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

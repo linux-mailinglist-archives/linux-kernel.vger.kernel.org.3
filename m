@@ -2,96 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B504EC5D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5A44EC5D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346206AbiC3Nl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 09:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
+        id S1346257AbiC3Nna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 09:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346174AbiC3Nlr (ORCPT
+        with ESMTP id S1346242AbiC3Nmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 09:41:47 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171BE1EC61;
-        Wed, 30 Mar 2022 06:40:01 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id bh17so2112454ejb.8;
-        Wed, 30 Mar 2022 06:40:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ck7b8QF/9VQw0lUYxwomWRlvrWDSmZJvomns1owBa3I=;
-        b=CN7r8g2tzDccy0k72Zp/OTB3aVy9lV1PiC0RRwNgByOwMNsVx4lCwHqt3pVMmdsoPx
-         40wNmt+BWEZY6SiGjJwwlLub396Yt5TCL9MrzYS9KID9ObvVhWGiKR+Kze2b8jIhuKYq
-         mKfVfTvyTfKnhVx/CUNRPoVJWQkMfJaT4sQoHwrhHqKXsWXrRGtncZUL195kOZDT5dhe
-         A9HEBgiRs++sGrj5deCL1ixW78C+IZBiRjAkqkzoMuzgXULtZA5SZGrUMf/QRKp01YyM
-         F1h2FQB3oITpHCGoD/8Yg5f7FafBBGNRR7mBbBi8UB5kgLQJaN2vo43FQhtrb0LurbcG
-         LY9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ck7b8QF/9VQw0lUYxwomWRlvrWDSmZJvomns1owBa3I=;
-        b=AYzqPM7khZ5zB4+kdQuxlP+suvtCka5vKl3sgp5FnYL5ZSTLrRi1IVJFe8Zu4rF3/Q
-         N+WiOXABMzZQltV6p8X00JsIznAzWJ9gfbUiUpIVTnyPVS7wLMGrLAKRzkwDxpd37j7n
-         Vg62R1g2AXAjiM10MquNdWSQedI51Oiow0HBffwgKEi3lsziG8pl0TsU0FqcDs6KG0HV
-         Ata7RVMHvvdMXfyTXp1OcnkMWWBm/Ph6ykt1B8HcONCVZPUgLQpMy2Win3wgcRud1WCV
-         6cjT/ZWCarBA7umtiVxMehAItizDKh9NjBvbwfEv/LaP4UfDtEykr9cmiydFobsDHe+W
-         S/cQ==
-X-Gm-Message-State: AOAM533FsZJOZUVEDYxztLU19RRAxZs6aCWKTiIKWaMsgq63w4GraAyn
-        HtRGLtJlh5Ldn4ipfT1umlE=
-X-Google-Smtp-Source: ABdhPJxaATFwp3dpqkvLsICnSN/PNJpESkj+croJfWcHn6PDEVwtfrylAntDfL1OIe65hr6qmX/iCA==
-X-Received: by 2002:a17:906:9b8f:b0:6e0:6bcb:fc59 with SMTP id dd15-20020a1709069b8f00b006e06bcbfc59mr41136157ejc.624.1648647599534;
-        Wed, 30 Mar 2022 06:39:59 -0700 (PDT)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id do8-20020a170906c10800b006dfe680dbfcsm8375448ejc.43.2022.03.30.06.39.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 06:39:59 -0700 (PDT)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, linus.walleij@linaro.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] ARM: dts: rockchip: rk3036: rename pcfg_pull_default node name
-Date:   Wed, 30 Mar 2022 15:39:52 +0200
-Message-Id: <20220330133952.1949-2-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220330133952.1949-1-jbx6244@gmail.com>
-References: <20220330133952.1949-1-jbx6244@gmail.com>
+        Wed, 30 Mar 2022 09:42:55 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63BA2253D;
+        Wed, 30 Mar 2022 06:41:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648647670; x=1680183670;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=obCSO7FCOC/HkRFABSryn0g3TBJLEO480/LOICcRXZ4=;
+  b=Nan4HP0K169yn3u8+64VvL4G4Lw+aUUbfcZ+ulLDZE7uJ/dfx2ZeWetA
+   PXS5WYpX9GrkNRc5Ek/jfAR+W2n1qQEWASkcUdnBA5TFMw5SqQafCtOcD
+   jGiXo4aGy7abzJpa7qfzVmlR1DqrzsBYe9/VKRdlmbbGUtfq7ZXkSLbaH
+   Pul8ABNVY87kCKpT5fps2tJ3tCCsILTjpGLGK8QRXiBhJ4y3RrLxACTGU
+   5w46RpKuC3+6HN5BGxxFJ/1InKCrsVIYW3/uBIlOO9nHRW7KC1w139BWN
+   6vSqOuGRhI3SgqxabWof5vWUhyvT8nPpgzj+yQUH6raYcTsgu+AkVvP/D
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="259517539"
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="259517539"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 06:41:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="719978893"
+Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 30 Mar 2022 06:41:05 -0700
+Received: from kbuild by 56431612eabd with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nZYZM-000020-90;
+        Wed, 30 Mar 2022 13:41:04 +0000
+Date:   Wed, 30 Mar 2022 21:40:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     cgel.zte@gmail.com, akpm@linux-foundation.org, david@redhat.com,
+        willy@infradead.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, corbet@lwn.net,
+        yang.yang29@zte.com.cn, yang.shi@linux.alibaba.com,
+        dave.hansen@linux.intel.com, jhubbard@nvidia.com,
+        saravanand@fb.com, minchan@kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        xu xin <xu.xin16@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Subject: Re: [PATCH v4] mm/vmstat: add events for ksm cow
+Message-ID: <202203302113.QzkSLwzk-lkp@intel.com>
+References: <20220330082640.2381401-1-yang.yang29@zte.com.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220330082640.2381401-1-yang.yang29@zte.com.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename pcfg_pull_default node name so that it fits the regex.
+Hi,
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- arch/arm/boot/dts/rk3036.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thank you for the patch! Yet something to improve:
 
-diff --git a/arch/arm/boot/dts/rk3036.dtsi b/arch/arm/boot/dts/rk3036.dtsi
-index c5aa1636a..9b0f04975 100644
---- a/arch/arm/boot/dts/rk3036.dtsi
-+++ b/arch/arm/boot/dts/rk3036.dtsi
-@@ -616,7 +616,7 @@
- 			#interrupt-cells = <2>;
- 		};
- 
--		pcfg_pull_default: pcfg_pull_default {
-+		pcfg_pull_default: pcfg-pull-default {
- 			bias-pull-pin-default;
- 		};
- 
+[auto build test ERROR on hnaz-mm/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/mm-vmstat-add-events-for-ksm-cow/20220330-162859
+base:   https://github.com/hnaz/linux-mm master
+config: hexagon-buildonly-randconfig-r006-20220330 (https://download.01.org/0day-ci/archive/20220330/202203302113.QzkSLwzk-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/48bd13bff24d30af750dd9429638a2563b758611
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review cgel-zte-gmail-com/mm-vmstat-add-events-for-ksm-cow/20220330-162859
+        git checkout 48bd13bff24d30af750dd9429638a2563b758611
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> mm/memory.c:3336:18: error: use of undeclared identifier 'COW_KSM'
+                   count_vm_event(COW_KSM);
+                                  ^
+   1 error generated.
+
+
+vim +/COW_KSM +3336 mm/memory.c
+
+  3229	
+  3230	/*
+  3231	 * This routine handles present pages, when users try to write
+  3232	 * to a shared page. It is done by copying the page to a new address
+  3233	 * and decrementing the shared-page counter for the old page.
+  3234	 *
+  3235	 * Note that this routine assumes that the protection checks have been
+  3236	 * done by the caller (the low-level page fault routine in most cases).
+  3237	 * Thus we can safely just mark it writable once we've done any necessary
+  3238	 * COW.
+  3239	 *
+  3240	 * We also mark the page dirty at this point even though the page will
+  3241	 * change only once the write actually happens. This avoids a few races,
+  3242	 * and potentially makes it more efficient.
+  3243	 *
+  3244	 * We enter with non-exclusive mmap_lock (to exclude vma changes,
+  3245	 * but allow concurrent faults), with pte both mapped and locked.
+  3246	 * We return with mmap_lock still held, but pte unmapped and unlocked.
+  3247	 */
+  3248	static vm_fault_t do_wp_page(struct vm_fault *vmf)
+  3249		__releases(vmf->ptl)
+  3250	{
+  3251		struct vm_area_struct *vma = vmf->vma;
+  3252	
+  3253		if (userfaultfd_pte_wp(vma, *vmf->pte)) {
+  3254			pte_unmap_unlock(vmf->pte, vmf->ptl);
+  3255			return handle_userfault(vmf, VM_UFFD_WP);
+  3256		}
+  3257	
+  3258		/*
+  3259		 * Userfaultfd write-protect can defer flushes. Ensure the TLB
+  3260		 * is flushed in this case before copying.
+  3261		 */
+  3262		if (unlikely(userfaultfd_wp(vmf->vma) &&
+  3263			     mm_tlb_flush_pending(vmf->vma->vm_mm)))
+  3264			flush_tlb_page(vmf->vma, vmf->address);
+  3265	
+  3266		vmf->page = vm_normal_page(vma, vmf->address, vmf->orig_pte);
+  3267		if (!vmf->page) {
+  3268			/*
+  3269			 * VM_MIXEDMAP !pfn_valid() case, or VM_SOFTDIRTY clear on a
+  3270			 * VM_PFNMAP VMA.
+  3271			 *
+  3272			 * We should not cow pages in a shared writeable mapping.
+  3273			 * Just mark the pages writable and/or call ops->pfn_mkwrite.
+  3274			 */
+  3275			if ((vma->vm_flags & (VM_WRITE|VM_SHARED)) ==
+  3276					     (VM_WRITE|VM_SHARED))
+  3277				return wp_pfn_shared(vmf);
+  3278	
+  3279			pte_unmap_unlock(vmf->pte, vmf->ptl);
+  3280			return wp_page_copy(vmf);
+  3281		}
+  3282	
+  3283		/*
+  3284		 * Take out anonymous pages first, anonymous shared vmas are
+  3285		 * not dirty accountable.
+  3286		 */
+  3287		if (PageAnon(vmf->page)) {
+  3288			struct page *page = vmf->page;
+  3289	
+  3290			/*
+  3291			 * We have to verify under page lock: these early checks are
+  3292			 * just an optimization to avoid locking the page and freeing
+  3293			 * the swapcache if there is little hope that we can reuse.
+  3294			 *
+  3295			 * PageKsm() doesn't necessarily raise the page refcount.
+  3296			 */
+  3297			if (PageKsm(page) || page_count(page) > 3)
+  3298				goto copy;
+  3299			if (!PageLRU(page))
+  3300				/*
+  3301				 * Note: We cannot easily detect+handle references from
+  3302				 * remote LRU pagevecs or references to PageLRU() pages.
+  3303				 */
+  3304				lru_add_drain();
+  3305			if (page_count(page) > 1 + PageSwapCache(page))
+  3306				goto copy;
+  3307			if (!trylock_page(page))
+  3308				goto copy;
+  3309			if (PageSwapCache(page))
+  3310				try_to_free_swap(page);
+  3311			if (PageKsm(page) || page_count(page) != 1) {
+  3312				unlock_page(page);
+  3313				goto copy;
+  3314			}
+  3315			/*
+  3316			 * Ok, we've got the only page reference from our mapping
+  3317			 * and the page is locked, it's dark out, and we're wearing
+  3318			 * sunglasses. Hit it.
+  3319			 */
+  3320			unlock_page(page);
+  3321			wp_page_reuse(vmf);
+  3322			return VM_FAULT_WRITE;
+  3323		} else if (unlikely((vma->vm_flags & (VM_WRITE|VM_SHARED)) ==
+  3324						(VM_WRITE|VM_SHARED))) {
+  3325			return wp_page_shared(vmf);
+  3326		}
+  3327	copy:
+  3328		/*
+  3329		 * Ok, we need to copy. Oh, well..
+  3330		 */
+  3331		get_page(vmf->page);
+  3332	
+  3333		pte_unmap_unlock(vmf->pte, vmf->ptl);
+  3334	#ifdef CONFIG_KSM
+  3335		if (PageKsm(vmf->page))
+> 3336			count_vm_event(COW_KSM);
+  3337	#endif
+  3338		return wp_page_copy(vmf);
+  3339	}
+  3340	
+
 -- 
-2.20.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

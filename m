@@ -2,198 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A03594ECAF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D02554ECB11
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349444AbiC3Rri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 13:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
+        id S1345744AbiC3RxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 13:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiC3Rrg (ORCPT
+        with ESMTP id S229717AbiC3RxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 13:47:36 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2DB11987E;
-        Wed, 30 Mar 2022 10:45:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648662349; x=1680198349;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=bhBu1QbtdGHCC2qA88WxU1+lM89JHNS2xL8ubX9vaIE=;
-  b=KA/fjs/cHLcdsW63A2zlYO8k4nWzdUApAGBaQoD9ySGOi3xwccZ8MVhR
-   uRIP/I7qgyEz8lkcdhPRBhdQqsw2gw/f+E4dVQp+M9tl5RPJY6PgZte/c
-   7Nb5Qt8deI0QMBzo7evesl0K4XEtWjIYkUUeK1+Rx2lfnVq6+CHKybpSz
-   0Qi0CPa4t786l9EHhtSrsDraS82jaUn1aY7WYQgpG5MaAw+PLAOfhoNzR
-   RsXvo2/6VleUDx+C9lDZyo8VNcJUl32lPiFhZ+RJvOFYRBXeN2kuhyvJ7
-   JkFkWkgDm4Wbp+LE+0Zvnc3MA8XWNbXRowT+aSPEQL2I9GOeUL6y/Wu24
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="239534457"
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="239534457"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 10:45:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="653974778"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 30 Mar 2022 10:45:44 -0700
-To:     "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-References: <1648103831-12347-1-git-send-email-quic_c_sanm@quicinc.com>
- <1648103831-12347-4-git-send-email-quic_c_sanm@quicinc.com>
- <YjxjxplpOpDC2JLs@kuha.fi.intel.com>
- <4c2a28ad-b866-1b65-e73a-4eda0596cea2@linux.intel.com>
- <Yj2nPa6/Y01P5aCY@kuha.fi.intel.com>
- <4619c75c-cd34-82f2-56e1-a8bcb6d97177@linux.intel.com>
- <Yj3h4p/kmZTvMz0O@kuha.fi.intel.com>
- <fae54b27-9ae2-ecfc-69ae-40e5f5e1afbe@quicinc.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v3 3/3] usb: dwc: host: add xhci_plat_priv quirk
- XHCI_SKIP_PHY_INIT
-Message-ID: <bd694ef9-be57-79f1-e95e-5501c396be25@linux.intel.com>
-Date:   Wed, 30 Mar 2022 20:47:34 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        Wed, 30 Mar 2022 13:53:05 -0400
+Received: from sonic315-54.consmr.mail.gq1.yahoo.com (sonic315-54.consmr.mail.gq1.yahoo.com [98.137.65.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D514B9A
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:51:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.ca; s=s2048; t=1648662675; bh=S9N6/sBVLY/JAPayLt7qbZOjEkabiJDDqpnxGv3U+bs=; h=Date:From:Subject:To:Cc:References:From:Subject:Reply-To; b=eWvDDKEWZriOR5XA9kBYjzxjWWcDA8lF+CQFy6UxdmKIlho8U6b9MWc5d50GrC3+NVGjD2AhLaDAWDPbkmXlkH83RejEzjlAiJQfhLjwQFWdCXxsm069AslT3p/Y2yJ8egjEd9jUoOYSFGxDKIA96gvBqJO1U857oE7zv5AY+4x+UIkrnaq1tg95toEMtQKtDROmpolx3Q9BksLMDbubDFau4LfTTOqnS6G5ViEN9rrl1uyfNBYLNaX35cfKLgfIa98gQkhOSdmWrZYIysXwc2BHMcRPBGQtrnZnNtKAsk65Yf9lqde0/vH25iCUB85iBYu9B2eOTvEjQV+Sdp3o/g==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1648662675; bh=Ki+92tcD5zPlGTaNGnifnzB4BNx7gbEuvhCD2uTaf8x=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=LS2EpQszzDA6Gk/Au11Ncn6Hd9O8El+TKy2fPzvVvp6pMbm7Aj1lCDOGpDe9VwfRFQIZ3KPzLAoA0+cT8MiMRQq4OR4rdgg5NuqUqPI9GNE7xOCX1TWFrvh7Zu08UAJQYJmuu5vXcYwGLBmrIxXVNLkNFOpCanWvjfL8INNSy87ymQt3WSvbRqyf3S66KIZ4KAzRbgQYTT05fPRb/DJyCJ4ssjZP+jOb/L2uWaK5Pm5PKVJ5dIN+PA1WeVbTeDjyGOlP5rCUc8lAk2FrE4p6Q9CuF8MY4gOQEpeBjkGkfvn75BHCcByCHymybV7O/McwNjfh+muEvLLrGCQJpVqiNw==
+X-YMail-OSG: QQbdEVsVM1k4R2Boazup.tObBxhfDZFeV9KJ4xvxBlCqx9j.SGPOSKU74yCbTiJ
+ 1jrdtYPhR4hVAOrFrq6JU2rt_v7LBwQ7CazExg22Ogvy4K0LsV86NqHpHHZ6T7CVgKNITynuakLM
+ svflVxvT.DMtv2zZBPiwK6Pxbo2MrPTh0f5hivaFZIJ7PlzRDGPVugMnokFuWw54w75c.ff6r.sN
+ Nud0AuaMJg1jBhxUY_1J5CMogbEIxQnnYs_NYi4JmAGY8svqsP7KwRYkEC0XkorUBCnQYoxhH.fA
+ imhC3faLMSGBiBUleItrpAWPTR_nxeyhTob7NQ3zzzrzPJLarkKlFQDqQTeDyvQ..Rxw5LkdQwFg
+ XLUN7NA6veAMevw5qJe4QErmSY1fliXBL.pSwF1urIcyrqV2uDWgYCVQoviv0we21Kca6dd5yXyg
+ Md5T7s79v8_LGWx0TFJlOM7BhYsdpoW8fywZPNs8BiSeb9R4H88JOXPHw69nOj22ngxJJ2K_Ntnx
+ hwjH7WLm2RpVvlF0OJnXp0yF8aBfFhaB6FkpIZTZMmiIvq6XOd8ohdGHJsLV1gYtSPYNJ_G9CM2f
+ vUx5u.0KbpWLB8nOogPBx63n4QiobwamP8hbnfvN0m2x0qxM5qahcmgvVBE1HfgY70oD941EekK7
+ iW4YL8cXjWOIeKTOLLhMwwvBE4aeV2w7lgxMqf4n7QOFr9LsIbb22jW2sL9RUCiY__rwG_mJlH3C
+ vd57dO4mywiR0IkqvEz4TpJ2Z1GnvbyYmf9mv6gSJXKPKe10uw.LJEljT7ERNvrK05u2N1xGmhRj
+ 4Er7.C9xpqhE0DP5Gk2DISQYfKHg10g9oUv_0jZh4Tg1qeGPSyUEucl5OkMJeeKnRrvXHdkIXX3_
+ C18kn445QpTBkhvhkgyAPlXsEhEWTGqTg6Cf8TEZt5yBF9oxvP3EdK4.ta.0jKHG79INsffzLy1a
+ v5eeTuLUvbXdJIAr3l4ZHxz2xcKSgB2eJY8bEvWWF8P.qbOcfPq5TW36Pwlk717VFeIMMVlQdzJR
+ bmNOMPA2i2EMUzUrnHuiW_eo750CkiGHPHh56pTMjW2j9cTNGVBen895FWqMOzVx4xkwKjYq6znw
+ UP0VFXqBThjnFiNocpiDYrtQ8kpL_QfTwRsx0iRQWGRksqIjp6sGR8cKykFTDq9F1wgO.NPwPCaT
+ ksSj_qgansF2dj5IBSlp2Bn6Px0t8OkqQKojIqNpAvNd8_4aPZo0DGYq8cZvphKzDTZ1QL32YIzq
+ 1MbYfo9cwyvMNJlSZyk9zWZ658xDgPzztt0euVEqfgPkdhgwgqW8L9ASFLUhCWNsGJxsxyZPOcnK
+ .eG29_VEYWlbLpeLdiiDRetbQ.olJE3oC.9F2YXN_fddCE0TH1.aN83mllO2BK56tM5z1Y.O1BVx
+ 78kPuF4xsizdu8BeKzdi5qRhBMw86vWzl.yEX.yTzayL.tdVtF79p7OAutRTvVWbTvw7f.Uh6thC
+ vuWTPd4r_UbW3MggUt0JiVLpSK0JN1rTwIPki1VtsIR3zWRFSMmgLE3iX8FP0FnIRVTdRniGldKA
+ Jm7t25LpXGXCDBpnmiekjSIDmGbF4SDmwhAtrig8GRa3pUHk1lfiq02MLcl631YWWwn7Al956fP5
+ x53LD1fGQSt6OK1DUrtmw1dzByoB7oJPOgm8QQUdp0n6OYyKDMqlWfEt8d2HAsfWPAITepxlgpyi
+ 9LweaJZrpZgWd3olCRA_ayvGhw11_6CFjjoD24h0Nf7oAkNDSxPsiGg2iIvC9nZzMJWUeYu6SB6_
+ QeL_3y29vj5t1Je9wlBzbg3ciwjUIzF0FETIfmhthTRJLYVESwoRRoLb2fr6JoNYwgjcgpTy_7EY
+ tR7NwgXGjkKdfAHnvULm._MUHri.P6T3Nuaos5a1LKI0w0UwP4cLgby41l0Tn_0jnyIQRKY8roKX
+ kIoyKwlDqbDzWF1nvnzPm9DuEpyqSMljWFIyG9rWG7_rLxH1fWNF8aj3QKudaabbL66hcztKbdvv
+ PnkClKyebtc42MeKtYkyJy4CGJmsPjD.sX_SwV7KLQGsftcJrAdgxZVoWxU5.Sb1BFbi0.Xnj6yP
+ xi8RU83Y4MTsWzimXW72t52odekMjyCm30rVXxOEoNByIplg8G.ny8yn4zuGbjs.lsQpi1uC2cFA
+ gbIo3Ch96c0wlVQiZkSiNCA6PsfJDmgQYGPpf7DtKfYF85RFy380ImOi_Zf3JnsH4ptu6xjM7.DU
+ ddVd_FyN5UjokBJp33gzM_v.DFAl1cG3TMprPlLhgGwYsRzK.DZp7MIi2iDJAiZJBT6h0EDguULV
+ eXvmyEq7JxDBY5Q--
+X-Sonic-MF: <alex_y_xu@yahoo.ca>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.gq1.yahoo.com with HTTP; Wed, 30 Mar 2022 17:51:15 +0000
+Received: by kubenode520.mail-prod1.omega.ne1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 3767e03bf643ceaa3a5f31bec6822e45;
+          Wed, 30 Mar 2022 17:51:11 +0000 (UTC)
+Date:   Wed, 30 Mar 2022 13:51:07 -0400
+From:   "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
+Subject: "dma-mapping: remove CONFIG_DMA_REMAP" causes AMD SME boot fail
+To:     Christoph Hellwig <hch@infradead.org>, regressions@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
 MIME-Version: 1.0
-In-Reply-To: <fae54b27-9ae2-ecfc-69ae-40e5f5e1afbe@quicinc.com>
+Message-Id: <1648659326.eabkokyuym.none@localhost>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+References: <1648659326.eabkokyuym.none.ref@localhost>
+X-Mailer: WebService/1.1.20001 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.3.2022 12.18, Sandeep Maheswaram (Temp) wrote:
-> Hi Mathias,Heikki
-> 
-> On 3/25/2022 9:08 PM, Heikki Krogerus wrote:
->> On Fri, Mar 25, 2022 at 04:33:27PM +0200, Mathias Nyman wrote:
->>> On 25.3.2022 13.27, Heikki Krogerus wrote:
->>>> On Fri, Mar 25, 2022 at 12:36:22AM +0200, Mathias Nyman wrote:
->>>>> On 24.3.2022 14.27, Heikki Krogerus wrote:
->>>>>> On Thu, Mar 24, 2022 at 12:07:11PM +0530, Sandeep Maheswaram wrote:
->>>>>>> Currently the phy init is done from dwc3 and also xhci which makes the
->>>>>>> runtime_usage value 2 for the phy which causes issue during runtime
->>>>>>> suspend. When we run the below command the runtime_status still shows
->>>>>>> active.
->>>>>>> echo auto > /sys/bus/platform/devices/88e3000.phy/power/control
->>>>>>>
->>>>>>> dwc3 manages PHY by own DRD driver, so skip the management by
->>>>>>> HCD core by setting this quirk.
->>>>>>>
->>>>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->>>>>>> ---
->>>>>>>   drivers/usb/dwc3/host.c | 13 +++++++++++++
->>>>>>>   1 file changed, 13 insertions(+)
->>>>>>>
->>>>>>> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
->>>>>>> index eda8719..d4fcf06 100644
->>>>>>> --- a/drivers/usb/dwc3/host.c
->>>>>>> +++ b/drivers/usb/dwc3/host.c
->>>>>>> @@ -13,6 +13,12 @@
->>>>>>>   #include <linux/platform_device.h>
->>>>>>>     #include "core.h"
->>>>>>> +#include <linux/usb/xhci-plat.h>
->>>>>>> +#include <linux/usb/xhci-quirks.h>
->>>>>>> +
->>>>>>> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
->>>>>>> +    .quirks = XHCI_SKIP_PHY_INIT,
->>>>>>> +};
->>>>>>>     static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
->>>>>>>                       int irq, char *name)
->>>>>>> @@ -122,6 +128,13 @@ int dwc3_host_init(struct dwc3 *dwc)
->>>>>>>           }
->>>>>>>       }
->>>>>>>   +    ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
->>>>>>> +            sizeof(xhci_plat_dwc3_xhci));
->>>>>>> +    if (ret) {
->>>>>>> +        dev_err(dwc->dev, "failed to add data to xHCI\n");
->>>>>>> +        goto err;
->>>>>>> +    }
->>>>>>> +
->>>>>>>       ret = platform_device_add(xhci);
->>>>>>>       if (ret) {
->>>>>>>           dev_err(dwc->dev, "failed to register xHCI device\n");
->>>>>> I think you should just use device property:
->>>>>>
->>>>> This was suggested in an earlier series, but was rejected as it also added
->>>>> the property as a device tree parameter.
->>>>>
->>>>> I think adding more device properties can be messy in the long run, especially if we
->>>>> need to add them for many of the existing xhci quirks.
->>>>> We also end up with a mix where some device properties are listed as device tree
->>>>> parameters, and some not.
->>>>>
->>>>> Defining xhci quirks and platform data structure in headers shared with dwc3 and cdns3
->>>>> allow those drivers to easily set any existing xhci quirk, or other possible optional
->>>>> callbacks.
->>>>>
->>>>> cdns3 driver is already doing this, but it includes the full xhci.h header.
->>>>> This series cleans up that a bit so cdns3 will only include xhci quirk bits and
->>>>> platform data structure.
->>>>>
->>>>> On the downside we add a couple xhci related header files to include/linux/usb/
->>>>> Let me know if you see any other issues I missed with this approach.
->>>> The problem here is that these drivers are now coupled together, and
->>>> that should not be taken lightly. We have a dependency hell in our
->>>> hands with a lot of drivers, and the culprit is always platform data.
->>>>
->>>> Build-in device properties may be messy, but I would still say they
->>>> are less messy than those quirk flags - you got to admit, they are a
->>>> mess. The benefit from build-in properties is in any case the fact
->>>> that they remove the need to couple these drivers together.
->>> Agree, quirk bits are messy. Any suggestion that would work with
->>> PCI xHCI devices, devicetree, and "pure" platform devices?
->> I think xHCI driver should always be able to rely on being able to
->> read this kind of information from the fwnode. If there is no actual
->> firmware node (DT or ACPI), or if it's missing some information, the
->> glue driver needs to populate software node for the xHCI.
->>
->> Right now I just want to avoid having to pass the quirks using
->> platform data from drivers such as drivers/usb/cdns3/host.c and
->> drivers/usb/dwc3/host.c to xHCI.
->>
->> One way we could do that is by defining compatibility ID for both of
->> them that we provide using a single device property (like I guess DT
->> does). Then based on that compatibility ID, xhci-plat.c can set the
->> actual "static" quirk flags. That we could already do easily. How
->> would that sound to you?
+Hi,
 
-Sounds good. 
+After a recent kernel update, booting one of my machines causes it to=20
+hang on a black screen. Pressing Lock keys on the USB keyboard does not=20
+turn on the indicators, and the machine does not appear on the Ethernet=20
+network. I don't have a serial port on this machine. I didn't try=20
+netconsole, but I suspect it won't work.
 
-> 
-> This was my previous patch where I was using device tree property. Should we go ahead with this approach?
-> 
-> https://patchwork.kernel.org/project/linux-arm-msm/cover/1636353710-25582-1-git-send-email-quic_c_sanm@quicinc.com/
-> 
-> Any further changes to this ?
+Setting mem_encrypt=3D0 seems to resolve the issue. Reverting f5ff79fddf0e=20
+("dma-mapping: remove CONFIG_DMA_REMAP") also appears to resolve the=20
+issue.
 
-By dropping the DT part of that series we get a similar built-in device property
-solution as Heikki initially suggested.
+The machine in question has an AMD Ryzen 5 1600 and ASRock B450 Pro4.
 
-How about adding the compatibility ID device property that was just suggested?
-Then matching the Id in xhci-plat.c against a static table containing Ids and
-xhci_plat_priv structures, with the needed quirks for dwc3.
-
-Thanks
--Mathias
+Cheers,
+Alex.

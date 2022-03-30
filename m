@@ -2,115 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000334ECDD5
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 22:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFCDD4ECDEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 22:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231921AbiC3UNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 16:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59478 "EHLO
+        id S1350914AbiC3UOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 16:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbiC3UNP (ORCPT
+        with ESMTP id S236684AbiC3UOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 16:13:15 -0400
-Received: from box.fidei.email (box.fidei.email [IPv6:2605:2700:0:2:a800:ff:feba:dc44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226C26542A;
-        Wed, 30 Mar 2022 13:11:30 -0700 (PDT)
-Received: from authenticated-user (box.fidei.email [71.19.144.250])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.fidei.email (Postfix) with ESMTPSA id 9F5038050E;
-        Wed, 30 Mar 2022 16:11:29 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dorminy.me; s=mail;
-        t=1648671089; bh=U5dIQevY506VUTcHlKOqqtmto/0GP4VFy9OThN9O8gM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eW3U6GA4MKB5nVVfcawq/YhI8dpwuxKYCD4LS8h0yfyP5l38+hWLGEksHNn9v025q
-         Dk/bp+vEmqDQWJYfUtZSMYXow25XpdIJyYeLCyp8wXJOvzj61aQKcr0I9LDkSH/eDE
-         baBQLHh0qU3USpFjqTr8EFdabu9NHTTaujwKTSpYrYPQevOPcq/8LWOKZw8aVspt4A
-         CuS3jhqkmrwiFXoTZzuJv12nsnqLebYyM4zRvJnP4KXDgGcfUfrW1Skipq2cxtbiG1
-         Wx/9TLtv6pVj9axFId77+fpykxsd56nLD38OERCSdfzPyM+1Cco4ZWh46VzicoDqev
-         T3fE+SobYW6ng==
-From:   Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, kernel-team@fb.com
-Cc:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
-        Nikolay Borisov <nborisov@suse.com>
-Subject: [PATCH v3 2/2] btrfs: allocate page arrays using bulk page allocator
-Date:   Wed, 30 Mar 2022 16:11:23 -0400
-Message-Id: <ede1d39f7878ee2ed12c1526cc2ec358a2d862cf.1648669832.git.sweettea-kernel@dorminy.me>
-In-Reply-To: <cover.1648669832.git.sweettea-kernel@dorminy.me>
-References: <cover.1648669832.git.sweettea-kernel@dorminy.me>
+        Wed, 30 Mar 2022 16:14:11 -0400
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2A06623A
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:12:25 -0700 (PDT)
+Received: from dslb-178-004-172-185.178.004.pools.vodafone-ip.de ([178.4.172.185] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1nZefx-0007FS-5x; Wed, 30 Mar 2022 22:12:17 +0200
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Martin Kaiser <martin@kaiser.cx>
+Subject: [PATCH 0/2] staging: r8188eu: remove debug code for dumping packets
+Date:   Wed, 30 Mar 2022 22:12:08 +0200
+Message-Id: <20220330201210.175941-1-martin@kaiser.cx>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While calling alloc_page() in a loop is an effective way to populate an
-array of pages, the kernel provides a method to allocate pages in bulk.
-alloc_pages_bulk_array() populates the NULL slots in a page array, trying to
-grab more than one page at a time.
+Remove the remains of debug code to print incoming and outgoing packets.
 
-Unfortunately, it doesn't guarantee allocating all slots in the array,
-but it's easy to call it in a loop and return an error if no progress
-occurs. Similar code can be found in xfs/xfs_buf.c:xfs_buf_alloc_pages().
+Martin Kaiser (2):
+  staging: r8188eu: remove the "dump rx packet" fragments
+  staging: r8188eu: remove the "dump tx packet" fragments
 
-Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-Reviewed-by: Nikolay Borisov <nborisov@suse.com>
----
-Changes in v3:
- - Added a newline after variable declaration
-Changes in v2:
- - Moved from ctree.c to extent_io.c
----
- fs/btrfs/extent_io.c | 24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
+ drivers/staging/r8188eu/core/rtw_recv.c        |  4 ----
+ drivers/staging/r8188eu/hal/usb_halinit.c      | 12 ------------
+ drivers/staging/r8188eu/include/hal_intf.h     |  2 --
+ drivers/staging/r8188eu/include/rtl8188e_hal.h |  3 ---
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c   |  7 -------
+ 5 files changed, 28 deletions(-)
 
-diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
-index ab4c1c4d1b59..b268e47aa2b7 100644
---- a/fs/btrfs/extent_io.c
-+++ b/fs/btrfs/extent_io.c
-@@ -3144,19 +3144,25 @@ static void end_bio_extent_readpage(struct bio *bio)
-  */
- int btrfs_alloc_page_array(unsigned long nr_pages, struct page **page_array)
- {
--	int i;
-+	long allocated = 0;
-+
-+	for (;;) {
-+		long last = allocated;
- 
--	for (i = 0; i < nr_pages; i++) {
--		struct page *page;
-+		allocated = alloc_pages_bulk_array(GFP_NOFS, nr_pages,
-+						   page_array);
-+		if (allocated == nr_pages)
-+			return 0;
- 
--		if (page_array[i])
-+		if (allocated != last)
- 			continue;
--		page = alloc_page(GFP_NOFS);
--		if (!page)
--			return -ENOMEM;
--		page_array[i] = page;
-+		/*
-+		 * During this iteration, no page could be allocated, even
-+		 * though alloc_pages_bulk_array() falls back to alloc_page()
-+		 * if  it could not bulk-allocate. So we must be out of memory.
-+		 */
-+		return -ENOMEM;
- 	}
--	return 0;
- }
- 
- /*
 -- 
-2.35.1
+2.30.2
 

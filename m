@@ -2,144 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C27D14ECD72
+	by mail.lfdr.de (Postfix) with ESMTP id 56FB84ECD70
 	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 21:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbiC3Tqf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 30 Mar 2022 15:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58166 "EHLO
+        id S230259AbiC3Tqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 15:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiC3Tqd (ORCPT
+        with ESMTP id S230200AbiC3Tqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 30 Mar 2022 15:46:33 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F241F4831B
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 12:44:46 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-255-sTVwhZujNvyjZOKRNVF1Hw-1; Wed, 30 Mar 2022 20:44:44 +0100
-X-MC-Unique: sTVwhZujNvyjZOKRNVF1Hw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Wed, 30 Mar 2022 20:44:41 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Wed, 30 Mar 2022 20:44:41 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Charlie Sands' <sandsch@northvilleschools.net>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "Larry.Finger@lwfinger.net" <Larry.Finger@lwfinger.net>,
-        "phil@philpotter.co.uk" <phil@philpotter.co.uk>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>
-Subject: RE: [PATCH V2] staging: r8188eu: Fix sparse endianness warnings
-Thread-Topic: [PATCH V2] staging: r8188eu: Fix sparse endianness warnings
-Thread-Index: AQHYRGdq3t0D07ysn0eWtIbomAsTtKzYUyUw
-Date:   Wed, 30 Mar 2022 19:44:41 +0000
-Message-ID: <4c7f9a23c9f64662bfef2b4452c3cca4@AcuMS.aculab.com>
-References: <YkSnBW70kruOyN9h@sckzor-linux.localdomain>
-In-Reply-To: <YkSnBW70kruOyN9h@sckzor-linux.localdomain>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019E345ACE;
+        Wed, 30 Mar 2022 12:44:48 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id w127so23108425oig.10;
+        Wed, 30 Mar 2022 12:44:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pjsBmPs0l7j1oUF7fQlTyFt6udSAgSvZHxxIq2cVxVg=;
+        b=Zt4ic2/4eeolmTp4xGdY9jHR/mQgUvWijyD+B+gLTfsJCCCL0zQrmj+4j06n/1Bh5V
+         g8anomcJ6tn0vjOc2BOWbTCQWpWy5D6W1mfbvRYh7373rCMGNWEfzqS7eOA94yfbwm0g
+         471O836OZ0+0HZuufHFroyXZ+RKLDl+XTxot7W6EzqqOB93iy4CHt5057Ui7sxtZP4kv
+         X1h+C6WUKF2bGrdMovw4K/9/QPHA1wJfKLE3UydAPNsCpnAp0UrfTNSAqEqsl8SGvaF1
+         F9SUjDOh5aVvKa2efUdn0vDCDM7vZUt/veQG5L9DWlZdbiNQL3jyvEJdjuATEqvxXVHP
+         E/kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pjsBmPs0l7j1oUF7fQlTyFt6udSAgSvZHxxIq2cVxVg=;
+        b=BTlcBdmGqe0g23RDZMbEhWOHalo4reAOUMsxbT2AOa/SGxtWwxUF+bUTjYYFKQ3+7n
+         Siy+V8Ok3mDLm6Q0JCx1gUudNV8TM3G7c4HZGqCI+dlfCID6JMGmB6vFDOkEX4DdAOov
+         MlYBrVqgPTFFZNC+YrdKjPeNRlGvolIzJTmNyVLrV67l/bUfd6mr7aXIVKqIcdn1tkZK
+         uKOk5CZ2jwpT/Jde7dWLibmu9Y6fvka9FW+taP643sP+mIbQZ+4CoRqGRsiASRJJ94jZ
+         /MXzqiS11qaFDKgsTHZalbJZx5BAa+IZNL7epQ4uAvtiRWWADSJFj741aha+Pb+PuZ65
+         /lYQ==
+X-Gm-Message-State: AOAM532SN7GL5MljxK2dASp0ZecrSHKk0Ewz2ZB36V4I42xdYhsn3mL4
+        dAlhebl+Mh80bpcnmV5QC2k=
+X-Google-Smtp-Source: ABdhPJwpUA6Xgeh21wKg5aXRvuZvLzMGjvZRstSWL74fU0t8W0tlmCya43yH85/KKmVPloLzuby3jw==
+X-Received: by 2002:aca:34d6:0:b0:2ef:93b1:27d6 with SMTP id b205-20020aca34d6000000b002ef93b127d6mr788090oia.255.1648669487094;
+        Wed, 30 Mar 2022 12:44:47 -0700 (PDT)
+Received: from t14s.localdomain ([177.220.174.113])
+        by smtp.gmail.com with ESMTPSA id d3-20020a9d2903000000b005cda765f578sm10850188otb.0.2022.03.30.12.44.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 12:44:46 -0700 (PDT)
+Received: by t14s.localdomain (Postfix, from userid 1000)
+        id CCB421D618F; Wed, 30 Mar 2022 16:44:44 -0300 (-03)
+Date:   Wed, 30 Mar 2022 16:44:44 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Jamie Bainbridge <jamie.bainbridge@gmail.com>
+Cc:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 net] sctp: count singleton chunks in assoc user stats
+Message-ID: <YkSzLJ72M5f5EL2L@t14s.localdomain>
+References: <0dfee8c9d17c20f9a87c39dbc57f635d998b08d2.1648609552.git.jamie.bainbridge@gmail.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0dfee8c9d17c20f9a87c39dbc57f635d998b08d2.1648609552.git.jamie.bainbridge@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charlie Sands
-> Sent: 30 March 2022 19:53
+On Wed, Mar 30, 2022 at 01:06:02PM +1000, Jamie Bainbridge wrote:
+> Singleton chunks (INIT, HEARTBEAT PMTU probes, and SHUTDOWN-
+> COMPLETE) are not counted in SCTP_GET_ASOC_STATS "sas_octrlchunks"
+> counter available to the assoc owner.
 > 
-> This patch fixes sparse warnings about the endianness of different
-> pieces of data in the driver.
+> These are all control chunks so they should be counted as such.
 > 
-> Fixes: 15865124feed ("staging: r8188eu: introduce new core dir for
-> RTL8188eu driver")
-> Signed-off-by: Charlie Sands <sandsch@northvilleschools.net>
+> Add counting of singleton chunks so they are properly accounted for.
+> 
+> Fixes: 196d67593439 ("sctp: Add support to per-association statistics via a new SCTP_GET_ASSOC_STATS call")
+> Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
 > ---
-> V2: Added the "fixes" line to the commit at the request of Dan Carpenter.
+>  net/sctp/outqueue.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
->  drivers/staging/r8188eu/core/rtw_br_ext.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
-> index d68611ef22f8..ed41c4e30262 100644
-> --- a/drivers/staging/r8188eu/core/rtw_br_ext.c
-> +++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
-> @@ -70,7 +70,7 @@ static int __nat25_add_pppoe_tag(struct sk_buff *skb, struct pppoe_tag *tag)
->  	struct pppoe_hdr *ph = (struct pppoe_hdr *)(skb->data + ETH_HLEN);
->  	int data_len;
-> 
-> -	data_len = tag->tag_len + TAG_HDR_LEN;
-> +	data_len = be16_to_cpu(tag->tag_len) + TAG_HDR_LEN;
->  	if (skb_tailroom(skb) < data_len)
->  		return -1;
-> 
-> @@ -432,7 +432,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
->  		/*                Handle PPPoE frame                 */
->  		/*---------------------------------------------------*/
->  		struct pppoe_hdr *ph = (struct pppoe_hdr *)(skb->data + ETH_HLEN);
-> -		unsigned short *pMagic;
-> +		__be16 *pMagic;
-> 
->  		switch (method) {
->  		case NAT25_CHECK:
-> @@ -471,7 +471,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
->  						tag->tag_len =
-> htons(MAGIC_CODE_LEN+RTL_RELAY_TAG_LEN+old_tag_len);
-> 
->  						/*  insert the magic_code+client mac in relay tag */
-> -						pMagic = (unsigned short *)tag->tag_data;
-> +						pMagic = (__be16 *)tag->tag_data;
->  						*pMagic = htons(MAGIC_CODE);
-                                              ^ cpu_to_be32()
->  						memcpy(tag->tag_data+MAGIC_CODE_LEN, skb->data+ETH_ALEN,
-> ETH_ALEN);
-> 
-> @@ -557,9 +557,11 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
->  						struct icmp6hdr  *hdr = (struct icmp6hdr *)(skb->data + ETH_HLEN +
-> sizeof(*iph));
->  						hdr->icmp6_cksum = 0;
->  						hdr->icmp6_cksum = csum_ipv6_magic(&iph->saddr, &iph->daddr,
-> -										iph->payload_len,
-> +										be16_to_cpu(iph->payload_len),
->  										IPPROTO_ICMPV6,
-> -										csum_partial((__u8 *)hdr, iph-
-> >payload_len, 0));
-> +										csum_partial((__u8 *)hdr,
-> +										be16_to_cpu(iph->payload_len),
-> +										0));
-
-That line continuation is horrid.
-netdev probably wants the continuation under the (.
-But it might be best to assign the result of csum_partial()
-to a variable.
-
-	David
-
->  					}
->  				}
+> diff --git a/net/sctp/outqueue.c b/net/sctp/outqueue.c
+> index a18609f608fb786b2532a4febbd72a9737ab906c..bed34918b41f24810677adc0cd4fbd0859396a02 100644
+> --- a/net/sctp/outqueue.c
+> +++ b/net/sctp/outqueue.c
+> @@ -914,6 +914,7 @@ static void sctp_outq_flush_ctrl(struct sctp_flush_ctx *ctx)
+>  				ctx->asoc->base.sk->sk_err = -error;
+>  				return;
 >  			}
-> --
+> +			ctx->asoc->stats.octrlchunks++;
+>  			break;
+>  
+>  		case SCTP_CID_ABORT:
+> @@ -939,6 +940,7 @@ static void sctp_outq_flush_ctrl(struct sctp_flush_ctx *ctx)
+>  		case SCTP_CID_HEARTBEAT:
+>  			if (chunk->pmtu_probe) {
+>  				sctp_packet_singleton(ctx->transport, chunk, ctx->gfp);
+> +				ctx->asoc->stats.octrlchunks++;
+
+sctp_packet_singleton can fail. It shouldn't be propagated to the
+socket but octrlchunks shouldn't be incremented then. Not too diferent
+from the one above.
+
+>  				break;
+>  			}
+>  			fallthrough;
+> -- 
 > 2.35.1
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+> 

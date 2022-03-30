@@ -2,145 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEFD54EBE89
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABFA14EBE8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245283AbiC3KUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34280 "EHLO
+        id S245299AbiC3KVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245281AbiC3KUw (ORCPT
+        with ESMTP id S235280AbiC3KVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:20:52 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2FA1B9FF2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:19:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648635546; x=1680171546;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VqIMoe4rh2AjjLMYqjy6/8H3f5VE/vhYCDYIcqeiaJE=;
-  b=MKq0B/J6w6hNNedFaYSg4P8+H6+ctb6aG0/k0A1viAX7SXdqVbWauyos
-   E7lazEArAsJzbQU/G/dwkHOG8969AjETRuzvf/fkfdODuiP27Jq8Rd8pV
-   gmJ6aXooSe53YAcWln2Tvc2yB1SJf3BNCtoL7QjGJFcBXalllyGxYmdwX
-   CCPf5wEa17569EcUwm2ZiiwAYScLQ2x74QJAKHILLbFJlAaaFyx7XBsYp
-   sqhmfAUGNJ7a6a1JcTAmHcUofp32GX2ArKzVH/UY1DAIQqxa5V5ykqZYt
-   aab7/xBh1K5kMf+AARud3kXjiiP35tILnn6xHsKwdHJAZ77t0LAB2jQuq
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="259692265"
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="259692265"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 03:19:06 -0700
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="521838632"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 03:19:02 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 30 Mar 2022 13:18:59 +0300
-Date:   Wed, 30 Mar 2022 13:18:59 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Brad Campbell <lists2009@fnarfbargle.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: Apple Thunderbolt Display chaining
-Message-ID: <YkQuk7E8AbSEiw59@lahna>
-References: <acbb3a86-ea15-47ec-90fa-72fbd94921b1@fnarfbargle.com>
- <YkLt+/kJ54fwCYgy@lahna>
- <0249a7da-9237-806b-b267-7911ad40f4a0@fnarfbargle.com>
- <YkMC4XnfIZix6kBn@lahna>
- <b8894440-41b1-edef-dd2d-5bafabc6fb62@fnarfbargle.com>
+        Wed, 30 Mar 2022 06:21:19 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08FD1C16EA;
+        Wed, 30 Mar 2022 03:19:31 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id A68D41F44516
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648635569;
+        bh=StyztVffLbw1AQ6XJEFjXEnbu7ei/fKPsvU3Dkfn4Bs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RrlST6RaEO6QMgKmX1jwEuDALibTtEYsPZq0s2XWGVXsfxwc3ac5pzNnRlW4vGWtO
+         CmBh6HyoScUsvqsk0/6lNRBLF2bvqHDMKvphI9+gLbIoyn+HQEbDXqK0HQ1omCjGOy
+         GGujG4IVICN5t2dNxBd2dfqsYkVe4Jn9ME1S9Sy991rKt2e4ss4o4rroTmAbipl/CL
+         duzN+7mWx5o65wP1yGhUioncnQeN/6erj2M+YQEmGOykJn0bC2Q3h1HKHwTuySva/R
+         SpT2Lj4qBQH2mktk6YBY8LAtEh24rx9aAsCPOaEIAqkEFI7HMHaLWF0bvFoI04Cow0
+         yU2jaHAgonQjA==
+Message-ID: <2ba661b5-a59b-89f4-7ad7-5eee4da4ce96@collabora.com>
+Date:   Wed, 30 Mar 2022 13:19:25 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b8894440-41b1-edef-dd2d-5bafabc6fb62@fnarfbargle.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [Patch v5 2/4] memory: tegra: Add MC error logging on tegra186
+ onward
+Content-Language: en-US
+To:     Ashish Mhetre <amhetre@nvidia.com>,
+        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, digetx@gmail.com, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
+References: <20220316092525.4554-1-amhetre@nvidia.com>
+ <20220316092525.4554-3-amhetre@nvidia.com>
+ <04bb5ef2-15c3-d561-3572-76dc803275ef@collabora.com>
+ <c5341578-e0a6-4ad7-5b6c-95b31b16faad@nvidia.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <c5341578-e0a6-4ad7-5b6c-95b31b16faad@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, Mar 29, 2022 at 10:06:35PM +0800, Brad Campbell wrote:
-> > Indeed, I did not add this to the "discovery" path yet.
-> > 
-> > I wonder what happens if you change this:
-> > 
-> > +       tunnel = tb_tunnel_alloc_dp(tb, in, out, available_up, available_down,
-> > +                                   first ? 0 : 1);
-> > 
-> > to this in your tree:
-> > 
-> > +       tunnel = tb_tunnel_alloc_dp(tb, in, out, available_up, available_down,
-> > +                                   first ? 1 : 0);
-> > 
+On 3/30/22 12:03, Ashish Mhetre wrote:
 > 
-> Here's where it gets all "Apple..y". On the iMac this does the job no matter which
-> port the chain is plugged into. Boots and displays correctly first time, every time.
 > 
-> It turns out on the laptop, one port works and the other doesn't. Changing the order
-> simply changes which port works. So I assume the EFI sets up the first display using
-> the first lane if it's in the first port, and the second if it's in the second.
+> On 3/30/2022 5:36 AM, Dmitry Osipenko wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 3/16/22 12:25, Ashish Mhetre wrote:
+>>> Add new function 'get_int_channel' in tegra_mc_soc struture which is
+>>> implemented by tegra SOCs which support multiple MC channels. This
+>>> function returns the channel which should be used to get the information
+>>> of interrupts.
+>>> Remove static from tegra30_mc_handle_irq and use it as interrupt handler
+>>> for MC interrupts on tegra186, tegra194 and tegra234 to log the errors.
+>>> Add error specific MC status and address register bits and use them on
+>>> tegra186, tegra194 and tegra234.
+>>> Add error logging for generalized carveout interrupt on tegra186,
+>>> tegra194
+>>> and tegra234.
+>>> Add error logging for route sanity interrupt on tegra194 an tegra234.
+>>> Add register for higher bits of error address which is available on
+>>> tegra194 and tegra234.
+>>> Add a boolean variable 'has_addr_hi_reg' in tegra_mc_soc struture which
+>>> will be true if soc has register for higher bits of memory controller
+>>> error address. Set it true for tegra194 and tegra234.
+>>>
+>>> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
+>>
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+>>
+>> Reported what? You should add this tag only if patch addresses reported
+>> problem. This patch doesn't address anything, hence the tag is
+>> inappropriate, you should remove it.
 > 
-> That means had I managed to perform the first test in the "other port" consistently,
-> it would have worked there also.
+> Okay, smatch warning was reported on v4 of this patch which is fixed in
+> v5. Then I understand that we don't need to add Reported-by if we fix
+> bug in subsequent versions, right?
 
-Can you try the below patch too? I hard-code the lane based on the
-DP adapter number in TBT gen1.
+Right, if the report was made to the in-progress patch, then you
+shouldn't add the tag.
 
-Let's first figure out proper solution to this issue and then look at
-the other one.
-
-diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
-index a473cc7d9a8d..97d36a7bb527 100644
---- a/drivers/thunderbolt/tunnel.c
-+++ b/drivers/thunderbolt/tunnel.c
-@@ -865,6 +865,7 @@ struct tb_tunnel *tb_tunnel_alloc_dp(struct tb *tb, struct tb_port *in,
- 	struct tb_tunnel *tunnel;
- 	struct tb_path **paths;
- 	struct tb_path *path;
-+	int link_nr;
- 
- 	if (WARN_ON(!in->cap_adap || !out->cap_adap))
- 		return NULL;
-@@ -883,22 +884,32 @@ struct tb_tunnel *tb_tunnel_alloc_dp(struct tb *tb, struct tb_port *in,
- 
- 	paths = tunnel->paths;
- 
-+	/*
-+	 * Hard code the lane for both DP IN adapters in first
-+	 * generation hardware. This should follow what the Apple boot
-+	 * firmware does.
-+	 */
-+	if (in->sw->generation == 1)
-+		link_nr = in->port == 11 ? 1 : 0;
-+	else
-+		link_nr = 0;
-+
- 	path = tb_path_alloc(tb, in, TB_DP_VIDEO_HOPID, out, TB_DP_VIDEO_HOPID,
--			     1, "Video");
-+			     link_nr, "Video");
- 	if (!path)
- 		goto err_free;
- 	tb_dp_init_video_path(path);
- 	paths[TB_DP_VIDEO_PATH_OUT] = path;
- 
- 	path = tb_path_alloc(tb, in, TB_DP_AUX_TX_HOPID, out,
--			     TB_DP_AUX_TX_HOPID, 1, "AUX TX");
-+			     TB_DP_AUX_TX_HOPID, link_nr, "AUX TX");
- 	if (!path)
- 		goto err_free;
- 	tb_dp_init_aux_path(path);
- 	paths[TB_DP_AUX_PATH_OUT] = path;
- 
- 	path = tb_path_alloc(tb, out, TB_DP_AUX_RX_HOPID, in,
--			     TB_DP_AUX_RX_HOPID, 1, "AUX RX");
-+			     TB_DP_AUX_RX_HOPID, link_nr, "AUX RX");
- 	if (!path)
- 		goto err_free;
- 	tb_dp_init_aux_path(path);
+If report was made to the patch that was already merged, then you should
+create a new patch that fixes the reported problem and add the
+reported-by to this patch.

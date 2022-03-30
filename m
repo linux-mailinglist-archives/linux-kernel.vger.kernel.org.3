@@ -2,157 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F434EC9ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C68D44EC9EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344370AbiC3Qqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 12:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
+        id S1348977AbiC3QrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 12:47:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348941AbiC3QqZ (ORCPT
+        with ESMTP id S1348958AbiC3QrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:46:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4F151E3E14
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:44:38 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 88ABB1576;
-        Wed, 30 Mar 2022 09:44:38 -0700 (PDT)
-Received: from [10.1.196.218] (eglon.cambridge.arm.com [10.1.196.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ACA3E3F73B;
-        Wed, 30 Mar 2022 09:44:36 -0700 (PDT)
-Subject: Re: [PATCH v3 15/21] x86/resctrl: Abstract __rmid_read()
-To:     Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        Jamie Iles <jamie@nuviainc.com>,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        lcherian@marvell.com, bobo.shaobowang@huawei.com,
-        tan.shaopeng@fujitsu.com
-References: <20220217182110.7176-1-james.morse@arm.com>
- <20220217182110.7176-16-james.morse@arm.com>
- <853b9cfd-504d-0dcb-2a2c-8b8df75a9b60@intel.com>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <c2358bf0-1369-f8c3-6b44-e86a44c5016e@arm.com>
-Date:   Wed, 30 Mar 2022 17:44:29 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Wed, 30 Mar 2022 12:47:07 -0400
+Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48DC2042B1
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:45:16 -0700 (PDT)
+From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1648658714; bh=FcWw9Uk/r4WaK0fxaOvlIHfQF0QAszv5h5nSfagPCsc=;
+        h=From:To:Cc:Subject:Date;
+        b=N2nBqTBORZ9g3fKPtDc13YTkCa69C5+lS47eKXJAoKn3fkY51SzpD0SEYaEqhyL2B
+         lTFaR9l/qMCfEd8CgOjN1KbuP+KAE9OZbdGljkCy8aWsPL1UUWaofLO2GUJ29i1D2K
+         aK5Gmz+Ts221PkrI+63GWDz3cUsDS55sFQH5kPk0=
+To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
+Subject: [PATCH 0/2] Apple ADMAC driver
+Date:   Wed, 30 Mar 2022 18:44:56 +0200
+Message-Id: <20220330164458.93055-1-povik+lin@cutebit.org>
 MIME-Version: 1.0
-In-Reply-To: <853b9cfd-504d-0dcb-2a2c-8b8df75a9b60@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette,
+Hi,
 
-On 16/03/2022 21:52, Reinette Chatre wrote:
-> On 2/17/2022 10:21 AM, James Morse wrote:
->> __rmid_read() selects the specified eventid and returns the counter
->> value from the MSR. The error handling is architecture specific, and
->> handled by the callers, rdtgroup_mondata_show() and __mon_event_count().
->>
->> Error handling should be handled by architecture specific code, as
->> a different architecture may have different requirements. MPAM's
->> counters can report that they are 'not ready', requiring a second
->> read after a short delay. This should be hidden from resctrl.
->>
->> Make __rmid_read() the architecture specific function for reading
->> a counter. Rename it resctrl_arch_rmid_read() and move the error
->> handling into it.
+for your review I am submitting a driver for Audio DMA Controller on
+recent Apple SoCs.
 
->> @@ -180,14 +180,24 @@ static u64 __rmid_read(u32 rmid, enum resctrl_event_id eventid)
->>  	 * are error bits.
->>  	 */
->>  	wrmsr(MSR_IA32_QM_EVTSEL, eventid, rmid);
->> -	rdmsrl(MSR_IA32_QM_CTR, val);
->> +	rdmsrl(MSR_IA32_QM_CTR, msr_val);
->>  
->> -	return val;
->> +	if (msr_val & RMID_VAL_ERROR)
->> +		return -EIO;
->> +	if (msr_val & RMID_VAL_UNAVAIL)
->> +		return -EINVAL;
->> +
->> +	*val = msr_val;
->> +
->> +	return 0;
->>  }
-> 
-> From above we see that resctrl_arch_rmid_read() returns an int that could be
-> -EIO or -EINVAL ...
-> 
-> ...
-> 
->> @@ -319,15 +331,15 @@ static u64 __mon_event_count(u32 rmid, struct rmid_read *rr)
->>  {
->>  	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(rr->r);
->>  	struct mbm_state *m;
->> -	u64 chunks, tval;
->> +	u64 chunks, tval = 0;
->>  
->>  	if (rr->first)
->>  		resctrl_arch_reset_rmid(rr->r, rr->d, rmid, rr->evtid);
->>  
->> -	tval = __rmid_read(rmid, rr->evtid);
->> -	if (tval & (RMID_VAL_ERROR | RMID_VAL_UNAVAIL)) {
->> -		return tval;
->> -	}
->> +	rr->err = resctrl_arch_rmid_read(rmid, rr->evtid, &tval);
->> +	if (rr->err)
->> +		return rr->err;
->> +
-> 
-> Setting rr->err, an int, to the return of resctrl_arch_rmid_read() is ok and
-> can handle the negative error codes, but returning it here means that
-> __mon_event_count()'s return type should be changed,
-> it is currently u64.
+One note I want to leave: The docs appear to be wrong on the residue
+semantics of device_tx_status. They say "In the case of a cyclic
+transfer, it should only take into account the current period."
+But e.g. ALSA expects the residue to be of the full buffer.
 
-Good point. Fixed.
+Martin
 
+Martin Povišer (2):
+  dt-bindings: dma: Add apple,admac binding
+  dmaengine: apple-admac: Add Apple ADMAC driver
 
->> @@ -419,9 +431,14 @@ void mon_event_count(void *info)
->>  		}
->>  	}
->>  
-> 
-> Also take care here ... ret_val in mon_event_count() is still u64 while
-> __mon_event_count() attempts to return negative errors.
+ .../devicetree/bindings/dma/apple,admac.yaml  |  73 ++
+ MAINTAINERS                                   |   2 +
+ drivers/dma/Kconfig                           |   8 +
+ drivers/dma/Makefile                          |   1 +
+ drivers/dma/apple-admac.c                     | 799 ++++++++++++++++++
+ 5 files changed, 883 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/dma/apple,admac.yaml
+ create mode 100644 drivers/dma/apple-admac.c
 
-(yup, fixed)
+-- 
+2.33.0
 
-
->> -	/* Report error if none of rmid_reads are successful */
->> -	if (ret_val)
->> -		rr->val = ret_val;
->> +	/*
->> +	 * __mon_event_count() calls for newly created monitor groups may
->> +	 * report -EINVAL/Unavailable if the monitor hasn't seen any traffic.
->> +	 * If the first call for the control group succeed, discard any error
->> +	 * set by reads of monitor groups.
->> +	 */
-> 
-> Additionally, if the first call fails, but a following read of monitor group
-> succeeds then the first call's error is discarded.
-> 
-> How about if the last sentence is replaced with:
-> "Discard error if any of the monitor event reads succeeded."
-
-Sure,
-
-
-Thanks,
-
-James

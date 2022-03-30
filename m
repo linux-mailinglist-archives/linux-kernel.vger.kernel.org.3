@@ -2,215 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F054ECA1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E324ECA28
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349087AbiC3Q5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 12:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
+        id S1349101AbiC3Q64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 12:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349080AbiC3Q5B (ORCPT
+        with ESMTP id S1349105AbiC3Q6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:57:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA18A38D84
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:55:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648659314;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PSeEyveBA7E0qgl3uhMV5ChCVs00db6iBLbnZKBTXs8=;
-        b=GQc3CMS4N4fXx2y08uFxparnOwAxhP6WzOV1gS5/wD2SGzWNk4nTS6DOEljAQWJyaJE1vm
-        K/bj5cxVghqTC0xZifNcAEfLVZGJC2syDVPMw9V8D5fM/A8e5eayf3o6eNr9syu04BLSOv
-        LHi5fHMJtk23YClQbFZa9exobaf2MkE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-501-H2VXSEa7Os-ua4FKAy_TlA-1; Wed, 30 Mar 2022 12:55:11 -0400
-X-MC-Unique: H2VXSEa7Os-ua4FKAy_TlA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BC3CF101A54C;
-        Wed, 30 Mar 2022 16:55:10 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A50CEC08F11;
-        Wed, 30 Mar 2022 16:55:10 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH] KVM: MMU: propagate alloc_workqueue failure
-Date:   Wed, 30 Mar 2022 12:55:10 -0400
-Message-Id: <20220330165510.213111-1-pbonzini@redhat.com>
+        Wed, 30 Mar 2022 12:58:52 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB324B404
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:57:03 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id z92so25145645ede.13
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:57:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fEzld4oIJa86hl09sRy64K2e8LGIGCRfWuc+U0PWYOs=;
+        b=pz8Axq5e3iFbz7Jw0eIdKg+hWyV0eg5X/OrzwVODe4qALsVNW5P6XCIffz7jZBls1S
+         Ay8G4ifJkD57k5cn7sKOqZqcX8jZz7AiV0A+xfY0usJu+I228VzlXlRNwtFfpvWDYChT
+         tCTa4NX0jot2hZU9MZto6acQS6j1L5ezvPVFwjTq5mozRXGJ/05EDtzB/X0fdtun30yf
+         E7wrNN00iG4bycxxZuXuO6Zu97SotlzoyB98sU++D3zFCPA3T7stPpKNzWvbRrSL+Hzq
+         CLmsL7H9fVbfmMMXR72/C2K+zdLRiND4Sk71buZAy/vXVdCalN6MK04NuIfO07hJu1FF
+         XYsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fEzld4oIJa86hl09sRy64K2e8LGIGCRfWuc+U0PWYOs=;
+        b=59kbOm9+gw43rMVsAD5uWCHV/c6ewld7dyP7jkss2mpu+8Sn/mGpY4vJJgOIlT3iRW
+         DDPgFS0CYFa2KwCsnoSKcd2SIx0e0MzGQokXSgkE4qKRpTgBzZ/uBFAOJWOLF8S5vx22
+         0JXeC7EiG97q4M6fm9MKzhuCQnDiE35tg1+VzOEifrFS79zWVaMNmjpDvIoV/RJJwGFp
+         6oOypeyLf1hpKh9qbMU+zfhd+RCswfuVNE62LgONxQ7aHfSSxt3C0AVUmDsa8A10RwPD
+         D3ZwRTD4et7r0pfcob0qTMZFbESy5OEqEd7RZDN2NTxU6Rv0Mfv6fm73nNkXP6ETKFCA
+         0TFw==
+X-Gm-Message-State: AOAM533nzGZ2NVBljPJiq7dHStZCSP5vRKqv1b/NTRt4P0L8o6ASqPMo
+        /1g4tNeuoMvAcSFgM84F6a7sVg==
+X-Google-Smtp-Source: ABdhPJyCpxyw7R6T+pFO1zsX01vbrvk5lvAApJ9RbFPs/LdEa4c5G+bltActTe6FNicQwS1ouiR2cg==
+X-Received: by 2002:a05:6402:d67:b0:419:48b:a762 with SMTP id ec39-20020a0564020d6700b00419048ba762mr11695300edb.291.1648659422507;
+        Wed, 30 Mar 2022 09:57:02 -0700 (PDT)
+Received: from [192.168.0.164] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id q15-20020a1709060e4f00b006cdf4535cf2sm8394201eji.67.2022.03.30.09.57.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 09:57:01 -0700 (PDT)
+Message-ID: <e13ceaad-d5f7-3c50-774e-28cabb2e1fe6@linaro.org>
+Date:   Wed, 30 Mar 2022 18:57:00 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] dt-bindings: Fix incomplete if/then/else schemas
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Olivier Moysan <olivier.moysan@foss.st.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Dmitry Osipenko <digetx@gmail.com>, linux-iio@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-mmc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, netdev@vger.kernel.org,
+        linux-phy@lists.infradead.org
+References: <20220330145741.3044896-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220330145741.3044896-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If kvm->arch.tdp_mmu_zap_wq cannot be created, the failure has
-to be propagated up to kvm_mmu_init_vm and kvm_arch_init_vm.
-kvm_arch_init_vm also has to undo all the initialization, so
-group all the MMU initialization code at the beginning and
-handle cleaning up of kvm_page_track_init.
+On 30/03/2022 16:57, Rob Herring wrote:
+> A recent review highlighted that the json-schema meta-schema allows any
+> combination of if/then/else schema keywords even though if, then or else
+> by themselves makes little sense. With an added meta-schema to only
+> allow valid combinations, there's a handful of schemas found which need
+> fixing in a variety of ways. Incorrect indentation is the most common
+> issue.
+> 
+> Cc: Lars-Peter Clausen <lars@metafoo.de>
+> Cc: Michael Hennerich <Michael.Hennerich@analog.com>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+> Cc: Olivier Moysan <olivier.moysan@foss.st.com>
+> Cc: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Georgi Djakov <djakov@kernel.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Jonathan Hunter <jonathanh@nvidia.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> Cc: Grygorii Strashko <grygorii.strashko@ti.com>
+> Cc: Dmitry Osipenko <digetx@gmail.com>
+> Cc: linux-iio@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-mmc@vger.kernel.org
+> Cc: linux-tegra@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-phy@lists.infradead.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/iio/adc/adi,ad7476.yaml          |  1 +
+>  .../bindings/iio/adc/st,stm32-dfsdm-adc.yaml  |  8 +-
+>  .../bindings/iio/dac/adi,ad5360.yaml          |  6 +-
+>  .../bindings/interconnect/qcom,rpm.yaml       | 84 +++++++++----------
+>  .../bindings/mmc/nvidia,tegra20-sdhci.yaml    |  2 +
+>  .../bindings/net/ti,davinci-mdio.yaml         |  1 +
+>  .../bindings/phy/nvidia,tegra20-usb-phy.yaml  | 20 ++---
+>  .../bindings/phy/qcom,usb-hs-phy.yaml         | 36 ++++----
+>  .../bindings/regulator/fixed-regulator.yaml   | 34 ++++----
+>  .../bindings/sound/st,stm32-sai.yaml          |  6 +-
+>  .../devicetree/bindings/sram/sram.yaml        | 16 ++--
+>  11 files changed, 108 insertions(+), 106 deletions(-)
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/include/asm/kvm_host.h |  2 +-
- arch/x86/kvm/mmu/mmu.c          | 11 +++++++++--
- arch/x86/kvm/mmu/tdp_mmu.c      | 17 ++++++++++-------
- arch/x86/kvm/mmu/tdp_mmu.h      |  4 ++--
- arch/x86/kvm/x86.c              | 15 ++++++++++-----
- 5 files changed, 32 insertions(+), 17 deletions(-)
+Looks good:
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 0ddc2e67a731..469c7702fad9 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1584,7 +1584,7 @@ void kvm_mmu_module_exit(void);
- 
- void kvm_mmu_destroy(struct kvm_vcpu *vcpu);
- int kvm_mmu_create(struct kvm_vcpu *vcpu);
--void kvm_mmu_init_vm(struct kvm *kvm);
-+int kvm_mmu_init_vm(struct kvm *kvm);
- void kvm_mmu_uninit_vm(struct kvm *kvm);
- 
- void kvm_mmu_after_set_cpuid(struct kvm_vcpu *vcpu);
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 51671cb34fb6..857ba93b5c92 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -5768,17 +5768,24 @@ static void kvm_mmu_invalidate_zap_pages_in_memslot(struct kvm *kvm,
- 	kvm_mmu_zap_all_fast(kvm);
- }
- 
--void kvm_mmu_init_vm(struct kvm *kvm)
-+int kvm_mmu_init_vm(struct kvm *kvm)
- {
- 	struct kvm_page_track_notifier_node *node = &kvm->arch.mmu_sp_tracker;
-+	int r;
- 
-+	INIT_LIST_HEAD(&kvm->arch.active_mmu_pages);
-+	INIT_LIST_HEAD(&kvm->arch.zapped_obsolete_pages);
-+	INIT_LIST_HEAD(&kvm->arch.lpage_disallowed_mmu_pages);
- 	spin_lock_init(&kvm->arch.mmu_unsync_pages_lock);
- 
--	kvm_mmu_init_tdp_mmu(kvm);
-+	r = kvm_mmu_init_tdp_mmu(kvm);
-+	if (r < 0)
-+		return r;
- 
- 	node->track_write = kvm_mmu_pte_write;
- 	node->track_flush_slot = kvm_mmu_invalidate_zap_pages_in_memslot;
- 	kvm_page_track_register_notifier(kvm, node);
-+	return 0;
- }
- 
- void kvm_mmu_uninit_vm(struct kvm *kvm)
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index e7e7876251b3..d7c112a29fe9 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -14,21 +14,24 @@ static bool __read_mostly tdp_mmu_enabled = true;
- module_param_named(tdp_mmu, tdp_mmu_enabled, bool, 0644);
- 
- /* Initializes the TDP MMU for the VM, if enabled. */
--bool kvm_mmu_init_tdp_mmu(struct kvm *kvm)
-+int kvm_mmu_init_tdp_mmu(struct kvm *kvm)
- {
-+	struct workqueue_struct *wq;
-+
- 	if (!tdp_enabled || !READ_ONCE(tdp_mmu_enabled))
--		return false;
-+		return 0;
-+
-+	wq = alloc_workqueue("kvm", WQ_UNBOUND|WQ_MEM_RECLAIM|WQ_CPU_INTENSIVE, 0);
-+	if (IS_ERR(wq))
-+		return PTR_ERR(wq);
- 
- 	/* This should not be changed for the lifetime of the VM. */
- 	kvm->arch.tdp_mmu_enabled = true;
--
- 	INIT_LIST_HEAD(&kvm->arch.tdp_mmu_roots);
- 	spin_lock_init(&kvm->arch.tdp_mmu_pages_lock);
- 	INIT_LIST_HEAD(&kvm->arch.tdp_mmu_pages);
--	kvm->arch.tdp_mmu_zap_wq =
--		alloc_workqueue("kvm", WQ_UNBOUND|WQ_MEM_RECLAIM|WQ_CPU_INTENSIVE, 0);
--
--	return true;
-+	kvm->arch.tdp_mmu_zap_wq = wq;
-+	return 1;
- }
- 
- /* Arbitrarily returns true so that this may be used in if statements. */
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.h b/arch/x86/kvm/mmu/tdp_mmu.h
-index 5e5ef2576c81..647926541e38 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.h
-+++ b/arch/x86/kvm/mmu/tdp_mmu.h
-@@ -72,7 +72,7 @@ u64 *kvm_tdp_mmu_fast_pf_get_last_sptep(struct kvm_vcpu *vcpu, u64 addr,
- 					u64 *spte);
- 
- #ifdef CONFIG_X86_64
--bool kvm_mmu_init_tdp_mmu(struct kvm *kvm);
-+int kvm_mmu_init_tdp_mmu(struct kvm *kvm);
- void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm);
- static inline bool is_tdp_mmu_page(struct kvm_mmu_page *sp) { return sp->tdp_mmu_page; }
- 
-@@ -93,7 +93,7 @@ static inline bool is_tdp_mmu(struct kvm_mmu *mmu)
- 	return sp && is_tdp_mmu_page(sp) && sp->root_count;
- }
- #else
--static inline bool kvm_mmu_init_tdp_mmu(struct kvm *kvm) { return false; }
-+static inline int kvm_mmu_init_tdp_mmu(struct kvm *kvm) { return 0; }
- static inline void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm) {}
- static inline bool is_tdp_mmu_page(struct kvm_mmu_page *sp) { return false; }
- static inline bool is_tdp_mmu(struct kvm_mmu *mmu) { return false; }
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index fe2171b11441..89b6efb7f504 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11629,12 +11629,13 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
- 
- 	ret = kvm_page_track_init(kvm);
- 	if (ret)
--		return ret;
-+		goto out;
-+
-+	ret = kvm_mmu_init_vm(kvm);
-+	if (ret)
-+		goto out_page_track;
- 
- 	INIT_HLIST_HEAD(&kvm->arch.mask_notifier_list);
--	INIT_LIST_HEAD(&kvm->arch.active_mmu_pages);
--	INIT_LIST_HEAD(&kvm->arch.zapped_obsolete_pages);
--	INIT_LIST_HEAD(&kvm->arch.lpage_disallowed_mmu_pages);
- 	INIT_LIST_HEAD(&kvm->arch.assigned_dev_head);
- 	atomic_set(&kvm->arch.noncoherent_dma_count, 0);
- 
-@@ -11666,10 +11667,14 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
- 
- 	kvm_apicv_init(kvm);
- 	kvm_hv_init_vm(kvm);
--	kvm_mmu_init_vm(kvm);
- 	kvm_xen_init_vm(kvm);
- 
- 	return static_call(kvm_x86_vm_init)(kvm);
-+
-+out_page_track:
-+	kvm_page_track_cleanup(kvm);
-+out:
-+	return ret;
- }
- 
- int kvm_arch_post_init_vm(struct kvm *kvm)
--- 
-2.31.1
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+Best regards,
+Krzysztof

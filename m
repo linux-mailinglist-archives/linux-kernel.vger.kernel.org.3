@@ -2,145 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D74EA4EBCCD
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44DD4EBCCF
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244388AbiC3If7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 04:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S244391AbiC3Iit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 04:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235920AbiC3If6 (ORCPT
+        with ESMTP id S235404AbiC3Iiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 04:35:58 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B49267D33;
-        Wed, 30 Mar 2022 01:34:13 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id d142so16092467qkc.4;
-        Wed, 30 Mar 2022 01:34:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NEl4ZyDKfaHyPMaCMLIIWJ8UZ/cbSlx3qxxzXdskCtU=;
-        b=LDq7b0pfnJZF01oqy5hAlAiVxT6eMq7Wcmk+pic3Ja+xHWHCpM3H+VYapR9NexpzfB
-         v9kN1kMRSKC3mwwhJUzsxKxZZ4xHbNRehU66WcwgAz6Kh/tNJhjWRElUXd6NpFztmPRN
-         +rNkUKogg0au71YFk+Qve1jptzJxRtmIN/K5nT+rQwWewlB0S08QxzYkUylE94nfsnWD
-         UR/pCuu1YLJoz7fGP09fzqOeFgfWU9rfPa0qdw08SL3FS7RWEDp2+Hij+STx2VJs3e1m
-         eF+gF8fP36CnQYmUF7si7aTp9NfW0Dg156cTKFl+5xZrkAQGOPzY4hA43qTvAPpdJMuH
-         dA9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NEl4ZyDKfaHyPMaCMLIIWJ8UZ/cbSlx3qxxzXdskCtU=;
-        b=YQa7XKk3bISNx9NJD4CorO0Lgue6cAXHMc3mAo+NnXnilt70dsUsQjnwIco+OKUVGw
-         9x3DU8S6vP8BELIlMrgwSzQMwGEL1+XWl8l7yFUVZ+E7/SYoI0qJpe1+SALLk8b/8swa
-         RN5SqvYYOq7NGpQhDrIaJmmHwt8RZ1YH/EaSlvAM8OuO9SR3mM95IJj2kH0bayLlTAS7
-         O/IMHw+yQo58Obim2B9D1kRqsCu7FhKOWG9SudtL9skN3i558uJEt7VthIV/t2vQ8VbE
-         +AB1gf3QMG6GS+xQWagpQczoPP2SzHX1TI+j/pZm+BH40wM8ji78qkPwhf2K+VG27tsZ
-         KH6Q==
-X-Gm-Message-State: AOAM531ROXEAe8LVsjVHCnN/Yuds4s877QE2CmJsZ2sdLQf6u8fXkZq7
-        T9Ro6mdnkYyEhifGmDxfmlw=
-X-Google-Smtp-Source: ABdhPJxLEk73iI4AYBNyhqSPL7af7D8CCI3uVBSSdDDTHuZ0TK1TqZrrENR8Ez8y24FG624d2SQC6A==
-X-Received: by 2002:a05:620a:450f:b0:67d:b1ee:bd3 with SMTP id t15-20020a05620a450f00b0067db1ee0bd3mr22742284qkp.766.1648629252203;
-        Wed, 30 Mar 2022 01:34:12 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id v9-20020a05620a0a8900b0067db9cc46a9sm10236553qkg.62.2022.03.30.01.34.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 01:34:11 -0700 (PDT)
-Message-ID: <62441603.1c69fb81.4b06b.5a29@mx.google.com>
-X-Google-Original-Message-ID: <20220330083408.GA2381634@cgel.zte@gmail.com>
-Date:   Wed, 30 Mar 2022 08:34:08 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     axboe@kernel.dk, viro@zeniv.linux.org.uk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>
-Subject: Re: [PATCH] block/psi: make PSI annotations of submit_bio only work
- for file pages
-References: <20220316063927.2128383-1-yang.yang29@zte.com.cn>
- <YjiMsGoXoDU+FwsS@cmpxchg.org>
- <623938d1.1c69fb81.52716.030f@mx.google.com>
- <YjnO3p6vvAjeMCFC@cmpxchg.org>
- <20220323061058.GA2343452@cgel.zte@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220323061058.GA2343452@cgel.zte@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Mar 2022 04:38:46 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DAEBC1B
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 01:37:00 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 5AF1121116;
+        Wed, 30 Mar 2022 08:36:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1648629419; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EmjxpDooPJWOLjxfRBCk+sVbwSr/n0kUf6tTe1Pjk90=;
+        b=IsEzx4kNRzDBkXrrhhnNFkUvxRxaipOa4fKzmoL765iygdkdzqcZfGeheAdU+wSEuRWDeJ
+        CZjFu0A3VDrFqOLvAfhbSw9LxMhYj5wz9bIUzO7goVUsf192CG0+UxsOsk4O/SnOwpf36K
+        F7c73Nw9abkp74e8enqg0iXsWkpWTGA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1648629419;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EmjxpDooPJWOLjxfRBCk+sVbwSr/n0kUf6tTe1Pjk90=;
+        b=KlMngwJ4GNXRu3y8lEJV12VYUGRf3nXfcmTfUKeC6wgUB1l/GJRQ4Zn/Dq1Mb1KAo8rDEM
+        bD0vDMOU/w18vwBQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 0D4FBA3B87;
+        Wed, 30 Mar 2022 08:36:59 +0000 (UTC)
+Date:   Wed, 30 Mar 2022 10:36:59 +0200
+Message-ID: <s5hr16jhm50.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     syzbot <syzbot+6e5c88838328e99c7e1c@syzkaller.appspotmail.com>
+Cc:     alsa-devel@alsa-project.org, broonie@kernel.org,
+        kai.vehmanen@linux.intel.com, linux-kernel@vger.kernel.org,
+        o-takashi@sakamocchi.jp, perex@perex.cz,
+        pierre-louis.bossart@linux.intel.com,
+        ranjani.sridharan@linux.intel.com, syzkaller-bugs@googlegroups.com,
+        tiwai@suse.com, zsm@chromium.org
+Subject: Re: [syzbot] possible deadlock in __snd_pcm_lib_xfer
+In-Reply-To: <000000000000381a0d05db622a81@google.com>
+References: <000000000000381a0d05db622a81@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 06:11:03AM +0000, CGEL wrote:
-> On Tue, Mar 22, 2022 at 09:27:58AM -0400, Johannes Weiner wrote:
-> > On Tue, Mar 22, 2022 at 02:47:42AM +0000, CGEL wrote:
-> > > On Mon, Mar 21, 2022 at 10:33:20AM -0400, Johannes Weiner wrote:
-> > > > On Wed, Mar 16, 2022 at 06:39:28AM +0000, cgel.zte@gmail.com wrote:
-> > > > > From: Yang Yang <yang.yang29@zte.com.cn>
-> > > > > 
-> > > > > psi tracks the time spent on submitting the IO of refaulting file pages
-> > > > > and anonymous pages[1]. But after we tracks refaulting anonymous pages
-> > > > > in swap_readpage[2][3], there is no need to track refaulting anonymous
-> > > > > pages in submit_bio.
-> > > > > 
-> > > > > So this patch can reduce redundant calling of psi_memstall_enter. And
-> > > > > make it easier to track refaulting file pages and anonymous pages
-> > > > > separately.
-> > > > 
-> > > > I don't think this is an improvement.
-> > > > 
-> > > > psi_memstall_enter() will check current->in_memstall once, detect the
-> > > > nested call, and bail. Your patch checks PageSwapBacked for every page
-> > > > being added. It's more branches for less robust code.
-> > > 
-> > > We are also working for a new patch to classify different reasons cause
-> > > psi_memstall_enter(): reclaim, thrashing, compact, etc. This will help
-> > > user to tuning sysctl, for example, if user see high compact delay, he
-> > > may try do adjust THP sysctl to reduce the compact delay.
-> > > 
-> > > To support that, we should distinguish what's the reason cause psi in
-> > > submit_io(), this patch does the job.
-> > 
-> > Please submit these patches together then. On its own, this patch
-> > isn't desirable.
-> I think this patch has it's independent value, I try to make a better
-> explain.
+On Tue, 29 Mar 2022 23:32:25 +0200,
+syzbot wrote:
 > 
-> 1) This patch doesn't work it worse or even better
-> After this patch, swap workingset handle is simpler, file workingset
-> handle just has one more check, as below.
-> Before this patch handling swap workingset:
-> 	a) in swap_readpage() call psi_memstall_enter() ->
-> 	b) in __bio_add_page() test if should call bio_set_flag(), true ->
-> 	c) in __bio_add_page() call bio_set_flag()
-> 	d) in submit_bio() test if should call psi_memstall_enter(), true ->
-> 	e) call psi_memstall_enter, detect the nested call, and bail.
-> 	f) call bio_clear_flag if needed.
-> Before this patch handling file page workingset:
-> 	a) in __bio_add_page() test if should call bio_set_flag(), true ->
-> 	...
-> 	b) call bio_clear_flag if needed.
-> After this patch handling swap workingset:
-> 	a) in swap_readpage() call psi_memstall_enter() ->
-> 	b) in __bio_add_page() test if should call bio_set_flag(), one more check, false and return.
-> 	c) in submit_bio() test if should call psi_memstall_enter(), false and return.
-> After this patch handling file pages workingset:
-> 	a) in __bio_add_page() test if should call bio_set_flag(), one more check, true ->
-> 	...
-> 	b) call bio_clear_flag if needed.
+> Hello,
 > 
-> 2) This patch help tools like kprobe to trace different workingset
-> After this patch we know workingset in submit_io() is only cause by file pages.
+> syzbot found the following issue on:
 > 
-> 3) This patch will help code evolution
-> Such as psi classify, getdelays supports counting file pages workingset submit.
+> HEAD commit:    8515d05bf6bc Add linux-next specific files for 20220328
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=15c0acc7700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=530c68bef4e2b8a8
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6e5c88838328e99c7e1c
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14433ca5700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=163bb77d700000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+6e5c88838328e99c7e1c@syzkaller.appspotmail.com
+> 
+> ======================================================
+> WARNING: possible circular locking dependency detected
+> 5.17.0-next-20220328-syzkaller #0 Not tainted
+> ------------------------------------------------------
+> syz-executor329/3588 is trying to acquire lock:
+> ffff8880243c1d28 (&mm->mmap_lock#2){++++}-{3:3}, at: __might_fault+0xa1/0x170 mm/memory.c:5300
+> 
+> but task is already holding lock:
+> ffff88801afef230 (&runtime->buffer_mutex){+.+.}-{3:3}, at: wait_for_avail sound/core/pcm_lib.c:1913 [inline]
+> ffff88801afef230 (&runtime->buffer_mutex){+.+.}-{3:3}, at: __snd_pcm_lib_xfer+0xbca/0x1e20 sound/core/pcm_lib.c:2263
 
-Looking forward to your review, thanks!
+OK, that's a similar issue as we've hit in the past for OSS.
+Now it appears as we're taking a big lock at the whole read/write
+operations.
+
+The fix patch below.
+
+
+Takashi
+
+-- 8< --
+From: Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH] ALSA: pcm: Fix potential AB/BA lock with buffer_mutex and
+ mmap_lock
+
+syzbot caught a potential deadlock between the PCM
+runtime->buffer_mutex and the mm->mmap_lock.  It was brought by the
+recent fix to cover the racy read/write and other ioctls, and in that
+commit, I overlooked a (hopefully only) corner case that may take the
+revert lock, namely, the OSS mmap.  The OSS mmap operation
+exceptionally allows to re-configure the parameters inside the OSS
+syscall, where mm->mmap_mutex is already held.  Meanwhile, the
+copy_from/to_user calls at read/write operation also takes the
+mm->mmap_lock internally, hence it may read to a AB/BA deadlock.
+
+A similar problem was seen in the past and we fixed it with a refcount
+(in commit b248371628aa) -- although this covered only the call paths
+with OSS read/write and OSS ioctls.  Now we need to cover the
+concurrent access via both ALSA and OSS APIs.
+
+This patch addresses the problem above, by replacing the lock in the
+read/write operations with a refcount similar as we've used for OSS.
+The new field, runtime->buffer_accessing, keeps the concurrent
+read/write operations.  Unlike the former buffer_mutex protection,
+this protects only around the copy_from/to_user() calls; the other
+codes are basically protected by the PCM stream lock.  When it's
+already blocked (a negative value), it aborts.  In the ioctl side,
+they check the buffer_accessing, and set to a negative value unless
+it's already being accessed.
+
+Reported-by: syzbot+6e5c88838328e99c7e1c@syzkaller.appspotmail.com
+Fixes: dca947d4d26d ("ALSA: pcm: Fix races among concurrent read/write and buffer changes")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+---
+ include/sound/pcm.h     |  1 +
+ sound/core/pcm.c        |  1 +
+ sound/core/pcm_lib.c    |  9 +++++----
+ sound/core/pcm_native.c | 39 ++++++++++++++++++++++++++++++++-------
+ 4 files changed, 39 insertions(+), 11 deletions(-)
+
+diff --git a/include/sound/pcm.h b/include/sound/pcm.h
+index 314f2779cab5..6b99310b5b88 100644
+--- a/include/sound/pcm.h
++++ b/include/sound/pcm.h
+@@ -402,6 +402,7 @@ struct snd_pcm_runtime {
+ 	struct fasync_struct *fasync;
+ 	bool stop_operating;		/* sync_stop will be called */
+ 	struct mutex buffer_mutex;	/* protect for buffer changes */
++	atomic_t buffer_accessing;	/* >0: in r/w operation, <0: blocked */
+ 
+ 	/* -- private section -- */
+ 	void *private_data;
+diff --git a/sound/core/pcm.c b/sound/core/pcm.c
+index edd9849210f2..977d54320a5c 100644
+--- a/sound/core/pcm.c
++++ b/sound/core/pcm.c
+@@ -970,6 +970,7 @@ int snd_pcm_attach_substream(struct snd_pcm *pcm, int stream,
+ 
+ 	runtime->status->state = SNDRV_PCM_STATE_OPEN;
+ 	mutex_init(&runtime->buffer_mutex);
++	atomic_set(&runtime->buffer_accessing, 0);
+ 
+ 	substream->runtime = runtime;
+ 	substream->private_data = pcm->private_data;
+diff --git a/sound/core/pcm_lib.c b/sound/core/pcm_lib.c
+index a40a35e51fad..1fc7c50ffa62 100644
+--- a/sound/core/pcm_lib.c
++++ b/sound/core/pcm_lib.c
+@@ -1906,11 +1906,9 @@ static int wait_for_avail(struct snd_pcm_substream *substream,
+ 		if (avail >= runtime->twake)
+ 			break;
+ 		snd_pcm_stream_unlock_irq(substream);
+-		mutex_unlock(&runtime->buffer_mutex);
+ 
+ 		tout = schedule_timeout(wait_time);
+ 
+-		mutex_lock(&runtime->buffer_mutex);
+ 		snd_pcm_stream_lock_irq(substream);
+ 		set_current_state(TASK_INTERRUPTIBLE);
+ 		switch (runtime->status->state) {
+@@ -2221,7 +2219,6 @@ snd_pcm_sframes_t __snd_pcm_lib_xfer(struct snd_pcm_substream *substream,
+ 
+ 	nonblock = !!(substream->f_flags & O_NONBLOCK);
+ 
+-	mutex_lock(&runtime->buffer_mutex);
+ 	snd_pcm_stream_lock_irq(substream);
+ 	err = pcm_accessible_state(runtime);
+ 	if (err < 0)
+@@ -2276,6 +2273,10 @@ snd_pcm_sframes_t __snd_pcm_lib_xfer(struct snd_pcm_substream *substream,
+ 			err = -EINVAL;
+ 			goto _end_unlock;
+ 		}
++		if (!atomic_inc_unless_negative(&runtime->buffer_accessing)) {
++			err = -EBUSY;
++			goto _end_unlock;
++		}
+ 		snd_pcm_stream_unlock_irq(substream);
+ 		if (!is_playback)
+ 			snd_pcm_dma_buffer_sync(substream, SNDRV_DMA_SYNC_CPU);
+@@ -2284,6 +2285,7 @@ snd_pcm_sframes_t __snd_pcm_lib_xfer(struct snd_pcm_substream *substream,
+ 		if (is_playback)
+ 			snd_pcm_dma_buffer_sync(substream, SNDRV_DMA_SYNC_DEVICE);
+ 		snd_pcm_stream_lock_irq(substream);
++		atomic_dec(&runtime->buffer_accessing);
+ 		if (err < 0)
+ 			goto _end_unlock;
+ 		err = pcm_accessible_state(runtime);
+@@ -2313,7 +2315,6 @@ snd_pcm_sframes_t __snd_pcm_lib_xfer(struct snd_pcm_substream *substream,
+ 	if (xfer > 0 && err >= 0)
+ 		snd_pcm_update_state(substream, runtime);
+ 	snd_pcm_stream_unlock_irq(substream);
+-	mutex_unlock(&runtime->buffer_mutex);
+ 	return xfer > 0 ? (snd_pcm_sframes_t)xfer : err;
+ }
+ EXPORT_SYMBOL(__snd_pcm_lib_xfer);
+diff --git a/sound/core/pcm_native.c b/sound/core/pcm_native.c
+index 704fdc9ebf91..2b630b2b64be 100644
+--- a/sound/core/pcm_native.c
++++ b/sound/core/pcm_native.c
+@@ -685,6 +685,24 @@ static int snd_pcm_hw_params_choose(struct snd_pcm_substream *pcm,
+ 	return 0;
+ }
+ 
++/* acquire buffer_mutex; if it's in r/w operation, return -EBUSY, otherwise
++ * block the further r/w operations
++ */
++static int snd_pcm_buffer_access_lock(struct snd_pcm_runtime *runtime)
++{
++	if (!atomic_dec_unless_positive(&runtime->buffer_accessing))
++		return -EBUSY;
++	mutex_lock(&runtime->buffer_mutex);
++	return 0; /* keep buffer_mutex */
++}
++
++/* clear r/w access flag and release the buffer_mutex */
++static void snd_pcm_buffer_access_unlock(struct snd_pcm_runtime *runtime)
++{
++	atomic_inc(&runtime->buffer_accessing);
++	mutex_unlock(&runtime->buffer_mutex);
++}
++
+ #if IS_ENABLED(CONFIG_SND_PCM_OSS)
+ #define is_oss_stream(substream)	((substream)->oss.oss)
+ #else
+@@ -695,14 +713,16 @@ static int snd_pcm_hw_params(struct snd_pcm_substream *substream,
+ 			     struct snd_pcm_hw_params *params)
+ {
+ 	struct snd_pcm_runtime *runtime;
+-	int err = 0, usecs;
++	int err, usecs;
+ 	unsigned int bits;
+ 	snd_pcm_uframes_t frames;
+ 
+ 	if (PCM_RUNTIME_CHECK(substream))
+ 		return -ENXIO;
+ 	runtime = substream->runtime;
+-	mutex_lock(&runtime->buffer_mutex);
++	err = snd_pcm_buffer_access_lock(runtime);
++	if (err < 0)
++		return err;
+ 	snd_pcm_stream_lock_irq(substream);
+ 	switch (runtime->status->state) {
+ 	case SNDRV_PCM_STATE_OPEN:
+@@ -820,7 +840,7 @@ static int snd_pcm_hw_params(struct snd_pcm_substream *substream,
+ 			snd_pcm_lib_free_pages(substream);
+ 	}
+  unlock:
+-	mutex_unlock(&runtime->buffer_mutex);
++	snd_pcm_buffer_access_unlock(runtime);
+ 	return err;
+ }
+ 
+@@ -865,7 +885,9 @@ static int snd_pcm_hw_free(struct snd_pcm_substream *substream)
+ 	if (PCM_RUNTIME_CHECK(substream))
+ 		return -ENXIO;
+ 	runtime = substream->runtime;
+-	mutex_lock(&runtime->buffer_mutex);
++	result = snd_pcm_buffer_access_lock(runtime);
++	if (result < 0)
++		return result;
+ 	snd_pcm_stream_lock_irq(substream);
+ 	switch (runtime->status->state) {
+ 	case SNDRV_PCM_STATE_SETUP:
+@@ -884,7 +906,7 @@ static int snd_pcm_hw_free(struct snd_pcm_substream *substream)
+ 	snd_pcm_set_state(substream, SNDRV_PCM_STATE_OPEN);
+ 	cpu_latency_qos_remove_request(&substream->latency_pm_qos_req);
+  unlock:
+-	mutex_unlock(&runtime->buffer_mutex);
++	snd_pcm_buffer_access_unlock(runtime);
+ 	return result;
+ }
+ 
+@@ -1369,12 +1391,15 @@ static int snd_pcm_action_nonatomic(const struct action_ops *ops,
+ 
+ 	/* Guarantee the group members won't change during non-atomic action */
+ 	down_read(&snd_pcm_link_rwsem);
+-	mutex_lock(&substream->runtime->buffer_mutex);
++	res = snd_pcm_buffer_access_lock(substream->runtime);
++	if (res < 0)
++		goto unlock;
+ 	if (snd_pcm_stream_linked(substream))
+ 		res = snd_pcm_action_group(ops, substream, state, false);
+ 	else
+ 		res = snd_pcm_action_single(ops, substream, state);
+-	mutex_unlock(&substream->runtime->buffer_mutex);
++	snd_pcm_buffer_access_unlock(substream->runtime);
++ unlock:
+ 	up_read(&snd_pcm_link_rwsem);
+ 	return res;
+ }
+-- 
+2.31.1
+

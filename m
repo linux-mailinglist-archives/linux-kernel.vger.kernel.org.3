@@ -2,174 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0FC54ECFE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 01:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C014ECFE5
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 01:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351742AbiC3XE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 19:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
+        id S1351756AbiC3XGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 19:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233874AbiC3XE0 (ORCPT
+        with ESMTP id S233874AbiC3XGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 19:04:26 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A40424A2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 16:02:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=k76sQjYdwH9GEGR78t+YtjIIfK9JL2ghgf5N0o/++m8=; b=eF5BVQSbeOClgHQ9ke1fW6aWc4
-        Da3BcIzGSX+bMYaXm9LhEMGTRFAfhYlRl58JNIsrNZ0i91sWJdp29MgVerHGq7AhV3bH2r5wNwKoN
-        nZaW4PJ/QIGDcmWSGuQ5TbAbya278OPBJYCMLHKmMQuLXwGvKtPvQyN2M1e9MvwfHftRLzgig50rP
-        4bCYXA/NSHJ0FWT3cUwzGK+4tmLR5WHccGyOevdy7eM5kMgkLvMBUO0NPj4qJzVGACnkMHRAlbT+e
-        AfG+BUt1IXR+0ys0IgsnluIQLVBvwrl1qNUB5oCyf13B5/ZqYTutir5XE8Q+kTfD+b1afWEfHzsb9
-        AMKwyx5Q==;
-Received: from [165.90.126.25] (helo=killbill.home)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1nZhKf-0003nF-42; Thu, 31 Mar 2022 01:02:29 +0200
-From:   Melissa Wen <mwen@igalia.com>
-To:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
-        Jasdeep Dhillon <jdhillon@amd.com>,
-        chandan.vurdigerenataraj@amd.com, Melissa Wen <mwen@igalia.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/amd/display: protect remaining FPU-code calls on dcn3.1.x
-Date:   Wed, 30 Mar 2022 22:02:04 -0100
-Message-Id: <20220330230204.2473636-1-mwen@igalia.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 30 Mar 2022 19:06:01 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7B1377F2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 16:04:14 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id h11so29705142ljb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 16:04:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tDgQSkHHiSrnRRl+XOyzOTrWuP6P/qs63lMjRlAlumA=;
+        b=H1uwlNadJ0WrOQDMcYJNfFurl6GqhsMtNqCvCiCYzwfrOZQovLUQdtOf10pbURXgQf
+         pxrchutAbzYICc6R04Z6AaQzwmxoEta0W1oCaJa3CR9lP9R/CL+2buSY9c8mRTTeCOOt
+         wKflnsZZ5GulJmTlUyXpc+Ybm951svaYxRDHo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tDgQSkHHiSrnRRl+XOyzOTrWuP6P/qs63lMjRlAlumA=;
+        b=dYz/y8TVfriGDXqX/csW207U8U8jAV+DrgBFXBmusZZ+DcJXtbDBhqKQztQ89T+ReM
+         zXMWhRYVH8i9YQe0lvNKQ4xj5rovycqfHH4H/ghksE87jCDOz1shz/uMLeie6IZtpGCy
+         29w7ub9CabaGSd4rxuVUSxNkQX66XrkVCKqNJnerQYrCVFvTJ7PbjQlGlFmY+QhsgY1C
+         D/0+0c8fA5LCf9jm73rMZ9JghFuDGPV8HuKJ7U0P0jjF0lHEx1jOhsPs0VyAMTzael79
+         B9nEoBK6VN+rjb2zyYLKsUHy1+XgAzpfWbbf1uDDJcUb0gl4He29Uk4pDsxNacdCJWCR
+         4fVg==
+X-Gm-Message-State: AOAM532ZuJB7O/e5H5QSYSnD8bKcDBcd1ENDYgF/5PoW+sL10nOf+J0v
+        kzn3bMryhFd06AoC8X6aLdpqdkoQ3rjtpm1L
+X-Google-Smtp-Source: ABdhPJxlQnMUJvjkuX8C+obyuwpKV63ulFZoBRnIHHioIiBw+6pFQAua7nTeiNVUb7oao49rgDDmgQ==
+X-Received: by 2002:a05:651c:a05:b0:249:8586:3f42 with SMTP id k5-20020a05651c0a0500b0024985863f42mr8488714ljq.349.1648681452486;
+        Wed, 30 Mar 2022 16:04:12 -0700 (PDT)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
+        by smtp.gmail.com with ESMTPSA id bq42-20020a056512152a00b00447431cc768sm2469467lfb.170.2022.03.30.16.04.09
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 16:04:10 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id p10so32514938lfa.12
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 16:04:09 -0700 (PDT)
+X-Received: by 2002:a05:6512:3055:b0:44a:3914:6603 with SMTP id
+ b21-20020a056512305500b0044a39146603mr8634944lfb.435.1648681449455; Wed, 30
+ Mar 2022 16:04:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220330221238.396357-1-zi.yan@sent.com>
+In-Reply-To: <20220330221238.396357-1-zi.yan@sent.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 30 Mar 2022 16:03:53 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whZ7d8Z4rv5oV9+FLEEk_1A1X=JsJaeAmFZzhDxLqDLFg@mail.gmail.com>
+Message-ID: <CAHk-=whZ7d8Z4rv5oV9+FLEEk_1A1X=JsJaeAmFZzhDxLqDLFg@mail.gmail.com>
+Subject: Re: [PATCH] mm: page_alloc: validate buddy before check its migratetype.
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From [1], I realized two other calls to dcn30 code are associated with
-FPU operations and are not protected by DC_FP_* macros:
-* dcn30_populate_dml_writeback_from_context()
-* dcn30_set_mcif_arb_params()
+On Wed, Mar 30, 2022 at 3:12 PM Zi Yan <zi.yan@sent.com> wrote:
+>
+> Fixes: 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallbackable pageblocks with others")
 
-So, since FPU-associated code is not fully isolated in dcn30, and
-dcn3.1.x reuses them, let's wrap their calls properly.
+Oh, btw - should this perhaps be backported further back than that
+alleged "fixes" commit?
 
-Note: this patch complements the fix from [1].
+It does look like maybe the problem potentially existed before too,
+and was just much harder to trigger.
 
-[1] https://lore.kernel.org/amd-gfx/20220329082957.1662655-1-chandan.vurdigerenataraj@amd.com/
+That said, google doesn't find any other reports that look like
+Steven's oops, so maybe it really never happened and backporting isn't
+called for.
 
-Signed-off-by: Melissa Wen <mwen@igalia.com>
----
- .../drm/amd/display/dc/dcn31/dcn31_resource.c | 25 +++++++++++++++++--
- .../drm/amd/display/dc/dcn31/dcn31_resource.h |  9 +++++++
- .../amd/display/dc/dcn315/dcn315_resource.c   |  4 +--
- .../amd/display/dc/dcn316/dcn316_resource.c   |  4 +--
- 4 files changed, 36 insertions(+), 6 deletions(-)
+Or possibly my google-fu is just bad.
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
-index bf130b2435ab..afdfec74ed08 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
-@@ -1735,6 +1735,27 @@ void dcn31_calculate_wm_and_dlg(
- 	DC_FP_END();
- }
- 
-+void
-+dcn31_populate_dml_writeback_from_context(struct dc *dc,
-+					  struct resource_context *res_ctx,
-+					  display_e2e_pipe_params_st *pipes)
-+{
-+	DC_FP_START();
-+	dcn30_populate_dml_writeback_from_context(dc, res_ctx, pipes);
-+	DC_FP_END();
-+}
-+
-+void
-+dcn31_set_mcif_arb_params(struct dc *dc,
-+			  struct dc_state *context,
-+			  display_e2e_pipe_params_st *pipes,
-+			  int pipe_cnt)
-+{
-+	DC_FP_START();
-+	dcn30_set_mcif_arb_params(dc, context, pipes, pipe_cnt);
-+	DC_FP_END();
-+}
-+
- bool dcn31_validate_bandwidth(struct dc *dc,
- 		struct dc_state *context,
- 		bool fast_validate)
-@@ -1806,8 +1827,8 @@ static struct resource_funcs dcn31_res_pool_funcs = {
- 	.add_stream_to_ctx = dcn30_add_stream_to_ctx,
- 	.add_dsc_to_stream_resource = dcn20_add_dsc_to_stream_resource,
- 	.remove_stream_from_ctx = dcn20_remove_stream_from_ctx,
--	.populate_dml_writeback_from_context = dcn30_populate_dml_writeback_from_context,
--	.set_mcif_arb_params = dcn30_set_mcif_arb_params,
-+	.populate_dml_writeback_from_context = dcn31_populate_dml_writeback_from_context,
-+	.set_mcif_arb_params = dcn31_set_mcif_arb_params,
- 	.find_first_free_match_stream_enc_for_link = dcn10_find_first_free_match_stream_enc_for_link,
- 	.acquire_post_bldn_3dlut = dcn30_acquire_post_bldn_3dlut,
- 	.release_post_bldn_3dlut = dcn30_release_post_bldn_3dlut,
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.h b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.h
-index 1ce6509c1ed1..393458015d6a 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.h
-+++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.h
-@@ -50,6 +50,15 @@ int dcn31_populate_dml_pipes_from_context(
- 	struct dc *dc, struct dc_state *context,
- 	display_e2e_pipe_params_st *pipes,
- 	bool fast_validate);
-+void
-+dcn31_populate_dml_writeback_from_context(struct dc *dc,
-+					  struct resource_context *res_ctx,
-+					  display_e2e_pipe_params_st *pipes);
-+void
-+dcn31_set_mcif_arb_params(struct dc *dc,
-+			  struct dc_state *context,
-+			  display_e2e_pipe_params_st *pipes,
-+			  int pipe_cnt);
- void dcn31_update_soc_for_wm_a(struct dc *dc, struct dc_state *context);
- 
- struct resource_pool *dcn31_create_resource_pool(
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c b/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c
-index fadb89326999..06dd064e5997 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c
-@@ -1726,8 +1726,8 @@ static struct resource_funcs dcn315_res_pool_funcs = {
- 	.add_stream_to_ctx = dcn30_add_stream_to_ctx,
- 	.add_dsc_to_stream_resource = dcn20_add_dsc_to_stream_resource,
- 	.remove_stream_from_ctx = dcn20_remove_stream_from_ctx,
--	.populate_dml_writeback_from_context = dcn30_populate_dml_writeback_from_context,
--	.set_mcif_arb_params = dcn30_set_mcif_arb_params,
-+	.populate_dml_writeback_from_context = dcn31_populate_dml_writeback_from_context,
-+	.set_mcif_arb_params = dcn31_set_mcif_arb_params,
- 	.find_first_free_match_stream_enc_for_link = dcn10_find_first_free_match_stream_enc_for_link,
- 	.acquire_post_bldn_3dlut = dcn30_acquire_post_bldn_3dlut,
- 	.release_post_bldn_3dlut = dcn30_release_post_bldn_3dlut,
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c b/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c
-index d73145dab173..5db96ab38dd2 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c
-@@ -1728,8 +1728,8 @@ static struct resource_funcs dcn316_res_pool_funcs = {
- 	.add_stream_to_ctx = dcn30_add_stream_to_ctx,
- 	.add_dsc_to_stream_resource = dcn20_add_dsc_to_stream_resource,
- 	.remove_stream_from_ctx = dcn20_remove_stream_from_ctx,
--	.populate_dml_writeback_from_context = dcn30_populate_dml_writeback_from_context,
--	.set_mcif_arb_params = dcn30_set_mcif_arb_params,
-+	.populate_dml_writeback_from_context = dcn31_populate_dml_writeback_from_context,
-+	.set_mcif_arb_params = dcn31_set_mcif_arb_params,
- 	.find_first_free_match_stream_enc_for_link = dcn10_find_first_free_match_stream_enc_for_link,
- 	.acquire_post_bldn_3dlut = dcn30_acquire_post_bldn_3dlut,
- 	.release_post_bldn_3dlut = dcn30_release_post_bldn_3dlut,
--- 
-2.35.1
-
+                  Linus

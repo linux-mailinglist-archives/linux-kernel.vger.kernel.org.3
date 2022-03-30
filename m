@@ -2,115 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D28104ECB46
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5774ECB5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349683AbiC3SG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
+        id S1349703AbiC3SIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349658AbiC3SGy (ORCPT
+        with ESMTP id S1349768AbiC3SI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:06:54 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AD23AA48
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:05:07 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 17so28809750lji.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:05:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h1gCGwBlFlPL7xlbgg8fVcArt1vxjlSJemINBQ6Dyvg=;
-        b=pMOXFcNHgVw7MlgZ7yYEI8OIqBpCv7hHzDMln+BSnSNY+w1UBH0/mnhDTZYa2wz++N
-         IVZAMs/0+Z7g4aFR7yNZrUVVucG6aeelreqX9D7ZHzcKwl0F7oYarSvbe0tnlzrgvk+6
-         W0K/ANA7r6PjVTNIuVEDV7Cys+j8mpQwF7lLgTlgIL0FYGJD7tQGEPqGPYk9j0eVvPiW
-         eWgbjzjR2B/gVYNdkAUT5ViAdlRMOBHxjDroMB7/wYDFp+qjh11p4MipYiygqNY/hK1W
-         fQ4RILJY0OH1PCnJ/3CWJ4F5ZjF8Q3G96ruwjh2RHp5Ni34Y+kG+Znu09MLeRmtxEh8R
-         rgUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h1gCGwBlFlPL7xlbgg8fVcArt1vxjlSJemINBQ6Dyvg=;
-        b=J2R/uTtVNC6KX2NLyYf+OGAS2fata16zk592T0IokBBZXo4mkp8aXC/1ljcwX7TCu/
-         ltMjWdIQBPR7E5+DuSApTbXNGejsYYD8l561DNeLZVNT5DXbwwtQtZ1JXoKDjXwrwFZh
-         qEs+S740478FVUbQxLp5ngZKDzTXPFM9N8Y8GnKj22rlCBbdHBWNNqAxiPMtFlxhK6V9
-         /hkc07peCZj/8YdXLhUeLrxDaCJHkeC+k2Mf760OX5k6TlWbmvRn9W8elXcIZxhKSY4u
-         h163yNWvMTLPUszRY0w6lBN5zVO1Vr8yDtcUH9qxtauFZXYhpMHsiZ3wAzcDJE6niKG1
-         GygQ==
-X-Gm-Message-State: AOAM533r2oKLDdWiXm5w5eHmdxp4EYvZ0otmWMWV2IFaSnR/20/L84pR
-        YGWcf9YnGEPgGuQLnQJ6pc26PXQszrmuVuw7LjFeQWaqvuI5D+9w
-X-Google-Smtp-Source: ABdhPJzOPCdLzAuEzhP8+XwDRinp5ZhGqb9riWqDAp9YgXyUtPNaoWWz9lFTRmIqu6uYrLte8Tx/X6kn1S35WUT6kUU=
-X-Received: by 2002:a2e:7808:0:b0:24a:eacb:ab9f with SMTP id
- t8-20020a2e7808000000b0024aeacbab9fmr3138533ljc.468.1648663501997; Wed, 30
- Mar 2022 11:05:01 -0700 (PDT)
+        Wed, 30 Mar 2022 14:08:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB70233E81;
+        Wed, 30 Mar 2022 11:06:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43B1160BAD;
+        Wed, 30 Mar 2022 18:06:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2037CC340EE;
+        Wed, 30 Mar 2022 18:06:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648663598;
+        bh=c40oLSuQ05wWwsFeXD0porA4/1RgYoRPdHiOlqdCHXE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kQKiSz1we2LYxuvicJhG6Ebsg1zV7ks2eShcPlJO1sWfP3CbtT1qa9KV5oJs12Dlr
+         Hu0tz7xgQWo2EdZ4f8115s3FccUEPu63qvJxB9Cq2S5QQu52/wIUVNBS+nx2n+BlQp
+         11rvaoZKFK8/TjvZKOW+UB6S2RcS7abmU3ghFZ8wpjm1nWGxobpeV7yZEwFLP80xMQ
+         WIQTyjmXVAYb8WoforyrsHywOyYZEHGMaVu8heEKKpNB3WhDOZxkgRugSt4JbHZBr2
+         rc6+7CVYm73Req1UNo6e/S8+ZFgCgQrVqIfHiTxhJqx5E32wwz5j+Suxmwoh8p26US
+         YMPSajaOPl7hQ==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] drm/msm/gpu: Avoid -Wunused-function with !CONFIG_PM_SLEEP
+Date:   Wed, 30 Mar 2022 11:05:41 -0700
+Message-Id: <20220330180541.62250-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <164847778869.3060675.8115416881394543419.stgit@devnote2>
-In-Reply-To: <164847778869.3060675.8115416881394543419.stgit@devnote2>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 30 Mar 2022 11:04:50 -0700
-Message-ID: <CAKwvOdmAYQZtzGudBjmiRZNjT+VixTdNbJmYmxc7-gQNCsHfrA@mail.gmail.com>
-Subject: Re: [PATCH v5 0/3] bootconfig: Support embedding a bootconfig in
- kernel for non initrd boot
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 7:29 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
-> KNOWN ISSUE:
->
-> According to the report from Padmanabha[3] and my analysis [4], the embedded
-> bootconfig data may not be updated if you do incremental build the kernel
-> with CONFIG_LTO_CLANG_THIN.
->
-> [3] https://lore.kernel.org/all/20220321183500.GA4065@pswork/T/#u
-> [4] https://lore.kernel.org/all/20220327115526.cc4b0ff55fc53c97683c3e4d@kernel.org/
->
-> This seems like clang's LTO Thin mode issue. It may not detect the inline
-> asm depends on external files.
->
-> I think the possible workaround is to split the inline asm which includes
-> '.incbin' directive into an asm file. But this should be done in another
-> seires because there are other features which uses '.incbin'. (e.g.
-> /proc/config.gz)
+When building with CONFIG_PM=y and CONFIG_PM_SLEEP=n (such as ARCH=riscv
+allmodconfig), the following warnings/errors occur:
 
-Hi Masami,
-I saw Padmanabha's report (thanks for the report); sorry for not
-responding sooner, I've been traveling recently for a funeral.
+  drivers/gpu/drm/msm/adreno/adreno_device.c:679:12: error: 'adreno_system_resume' defined but not used [-Werror=unused-function]
+    679 | static int adreno_system_resume(struct device *dev)
+        |            ^~~~~~~~~~~~~~~~~~~~
+  drivers/gpu/drm/msm/adreno/adreno_device.c:655:12: error: 'adreno_system_suspend' defined but not used [-Werror=unused-function]
+    655 | static int adreno_system_suspend(struct device *dev)
+        |            ^~~~~~~~~~~~~~~~~~~~~
+  cc1: all warnings being treated as errors
 
-Any chance we can use
+These functions are only used in SET_SYSTEM_SLEEP_PM_OPS(), which
+evaluates to empty when CONFIG_PM_SLEEP is not set, making these
+functions unused.
 
-CFLAGS_REMOVE_<file>.o := $(CC_FLAGS_LTO)
+Traditionally, these functions are marked as __maybe_unused but in this
+case, there is already an '#ifdef CONFIG_PM' in the code, so just do the
+same thing with CONFIG_PM_SLEEP to resolve the warning.
 
-a la
-commit d2dcd3e37475 ("x86, cpu: disable LTO for cpu.c")
+Fixes: 7e4167c9e021 ("drm/msm/gpu: Park scheduler threads for system suspend")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/gpu/drm/msm/adreno/adreno_device.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-with a comment linking to
-https://github.com/ClangBuiltLinux/linux/issues/1618
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+index 661dfa7681fb..b25915230bab 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_device.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+@@ -621,6 +621,7 @@ static int adreno_runtime_suspend(struct device *dev)
+ 	return gpu->funcs->pm_suspend(gpu);
+ }
+ 
++#ifdef CONFIG_PM_SLEEP
+ static void suspend_scheduler(struct msm_gpu *gpu)
+ {
+ 	int i;
+@@ -681,8 +682,8 @@ static int adreno_system_resume(struct device *dev)
+ 	resume_scheduler(dev_to_gpu(dev));
+ 	return pm_runtime_force_resume(dev);
+ }
+-
+-#endif
++#endif /* CONFIG_PM_SLEEP */
++#endif /* CONFIG_PM */
+ 
+ static const struct dev_pm_ops adreno_pm_ops = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(adreno_system_suspend, adreno_system_resume)
 
-for the Translation Units using .incbin, until we have had more time
-to triage+fix?
-
+base-commit: 05241de1f69eb7f56b0a5e0bec96a7752fad1b2f
 -- 
-Thanks,
-~Nick Desaulniers
+2.35.1
+

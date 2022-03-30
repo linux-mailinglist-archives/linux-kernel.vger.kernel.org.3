@@ -2,152 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5A84EC66B
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5644EC66C
 	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346769AbiC3OYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 10:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
+        id S1346776AbiC3OYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 10:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346778AbiC3OY3 (ORCPT
+        with ESMTP id S1346774AbiC3OYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 10:24:29 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87DC206EF1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:22:39 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id lr4so33424575ejb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:22:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares-net.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=lqQd8DOJ48CVojNKjiKgvQ0Jvy8m0O0FfXmyz3Zfnxc=;
-        b=59TwkFTlgjH3K1vQCveg8eX2zqYEJT4ie7uTL9mP3sX91c0O8YBaGAowj5xbu1sWNi
-         rD4y6d5gWKVgc0sAW4cs1eNqeI6sce1xBtm6ow4dC7J8TleX+uE4qYhUiucwalN+r+Qo
-         Tiis6qfWpX6v41XE+H5mYydo0YtuHHw4ntMuNFb9XE4oW/LsjPH2lwZeGn176KMkXYk3
-         hp7atZxMLPOAm7EDoNU1d91Ohpw01sxkLfatKmKUX5ohTAalgfTyFVQ3NXF1XAml8wf1
-         CC7v1hyKy8uhGMrErL0TMR9oyuZFNV9FQVmzY1/lnsSdaaakL/vpJKBf3QNxqPtnNvHw
-         /reg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lqQd8DOJ48CVojNKjiKgvQ0Jvy8m0O0FfXmyz3Zfnxc=;
-        b=lL3kffr+T56cQzDDBx35fJlIiGGKQDlC6KuUp732nkNtTAHJPkbkJ0cYvX9ESYTGt7
-         botwci3UTQIFqYRdM1RRxoqOYfSLWNhI7dSkpMrKE6xxlWMyHsTw9NDZ6aC7jZAJzaFR
-         nsiFBHYWhpsB3JKzkhkoJffMXSZNeEgIXbZFu1m9hirDwKGXMe2hLhI8wrYGsRaeyoLd
-         1r+owEzYbrvQAwcltyDd0msFRXtJaADqI5cGnNP9bcajEhHXyhpNfFFw/drmRAOl46Vf
-         c24XW8zCqct2K/ajtzzByhK99iFiLO6z/aW2coyB+jJUo+r+TshL6kDXg+e0YyHioQUj
-         PJEQ==
-X-Gm-Message-State: AOAM5339YTwahrrK4WWIpNZuOFZnfBg7+6tW553nRfX0OW5xJgPm7+rK
-        E+TTKibtIpW+F3R5BlK/rGCwsgQV2q3DHQ==
-X-Google-Smtp-Source: ABdhPJxN5TEtsHRQzq3eyOyKNu9bxB/INVQnZPY/VcvdkzULVFqFkeYUVNT6z8Ug6ErUP433gZ7FHg==
-X-Received: by 2002:a17:906:2ac9:b0:6ce:dc0f:9139 with SMTP id m9-20020a1709062ac900b006cedc0f9139mr40540346eje.206.1648650157981;
-        Wed, 30 Mar 2022 07:22:37 -0700 (PDT)
-Received: from [10.44.2.26] (84-199-106-91.ifiber.telenet-ops.be. [84.199.106.91])
-        by smtp.gmail.com with ESMTPSA id gb29-20020a170907961d00b006e00c7b0f5asm8360022ejc.0.2022.03.30.07.22.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 07:22:37 -0700 (PDT)
-Message-ID: <634d9682-dc78-e09a-865c-9eed28aee667@tessares.net>
-Date:   Wed, 30 Mar 2022 16:22:35 +0200
+        Wed, 30 Mar 2022 10:24:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E421EC994
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:22:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E71061495
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:22:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EC6DC340EE;
+        Wed, 30 Mar 2022 14:22:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648650176;
+        bh=dv1aNZtYldOuEtqT+IYDnsm6WbKb5MyDV39CHkAFV98=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cog2ouEKnGqQivGvsBjgP3vYOpgt3zaW228AjW40y+h3Q76csCRZOt7sfpZZ7gmD8
+         hYp0YS2CwFhR+tEX6Zo+kmXlIoy7zFsPdvpOystQlfFVbDg8/YDRIiDax8UYL2DOBM
+         jdXfn7zjL5CM+5N9JmsERPxjVVqnKCP/3M5Avmh8=
+Date:   Wed, 30 Mar 2022 16:22:53 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: Possible case of Race in kobject_get_path()
+Message-ID: <YkRnvQRxokNRp9e+@kroah.com>
+References: <0410ceda-cbdd-43a9-7d9b-4079bcdb6237@quicinc.com>
+ <YkQuFohIp2jSLCcz@kroah.com>
+ <148f4e9b-0584-ccc1-1443-30d41190dfd3@quicinc.com>
+ <YkQ4iz3iZ0cM+FS2@kroah.com>
+ <eda6c7c9-558a-cf3f-1aa4-79988bbbac24@quicinc.com>
+ <YkQ8teUQbNudfEGN@kroah.com>
+ <79640fdc-688f-f545-0ec7-0988d180ba58@quicinc.com>
+ <YkQ/kwQofkGTZ7fX@kroah.com>
+ <f263cb55-2d6d-2d89-c868-52ac0c8f8640@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] perf tools: Stop depending on .git files for building
- PERF-VERSION-FILE
-Content-Language: en-GB
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     John Garry <john.garry@huawei.com>, peterz@infradead.org,
-        mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1648635774-14581-1-git-send-email-john.garry@huawei.com>
- <3a72702f-6cf9-2b6e-0f9c-bf6857ab7ed2@tessares.net>
- <YkRlZhaEgmJ5Q4k/@kernel.org>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <YkRlZhaEgmJ5Q4k/@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f263cb55-2d6d-2d89-c868-52ac0c8f8640@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo,
-
-On 30/03/2022 16:12, Arnaldo Carvalho de Melo wrote:
-> Em Wed, Mar 30, 2022 at 03:22:37PM +0200, Matthieu Baerts escreveu:
->> Hi John,
->>
->> On 30/03/2022 12:22, John Garry wrote:
->>> This essentially reverts commit c72e3f04b45fb2e50cdd81a50c3778c6a57251d8
->>> and commit 4e666cdb06eede2069a7b1a96a1359d1c441a3eb.
->>>
->>> In commit c72e3f04b45f ("tools/perf/build: Speed up git-version test on
->>> re-make"), a makefile dependency on .git/HEAD was added. The background is
->>> that running PERF-VERSION-FILE is relatively slow, and commands like
->>> "git describe" are particularly slow.
->>>
->>> In commit 4e666cdb06ee ("perf tools: Fix dependency for version file
->>> creation"), an additional dependency on .git/ORIG_HEAD was added, as
->>> .git/HEAD may not change for "git reset --hard HEAD^" command. However,
->>> depending on whether we're on a branch or not, a "git cherry-pick" may
->>> not lead to the version being updated.
->>>
->>> As discussed with the git community in [0], using git internal files for
->>> dependencies is not reliable. Commit 4e666cdb06ee also breaks some build
->>> scenarios [1].
->>>
->>> As mentioned, c72e3f04b45f was added to speed up the build. However in
->>> commit 7572733b8499 ("perf tools: Fix version kernel tag") we removed the
->>> call to "git describe", so just revert Makefile.perf back to same as pre
->>> c72e3f04b45f and the build should not be so slow, as below:
->>>
->>> Pre 7572733b8499:
->>> $> time util/PERF-VERSION-GEN
->>>   PERF_VERSION = 5.17.rc8.g4e666cdb06ee
->>>
->>> real    0m0.110s
->>> user    0m0.091s
->>> sys     0m0.019s
->>>
->>> Post 7572733b8499:
->>> $> time util/PERF-VERSION-GEN
->>>   PERF_VERSION = 5.17.rc8.g7572733b8499
->>>
->>> real    0m0.039s
->>> user    0m0.036s
->>> sys     0m0.007s
->>>
->>> [0] https://lore.kernel.org/git/87wngkpddp.fsf@igel.home/T/#m4a4dd6de52fdbe21179306cd57b3761eb07f45f8
->>> [1] https://lore.kernel.org/linux-perf-users/20220329093120.4173283-1-matthieu.baerts@tessares.net/T/#u
->>>
->>> Fixes: 4e666cdb06ee ("perf tools: Fix dependency for version file creation")
->>> Reported-by: Matthieu Baerts <matthieu.baerts@tessares.net>
->>> Signed-off-by: John Garry <john.garry@huawei.com>
->>
->> Thank you for your patch, I just tested it and it also fixes the issue I
->> reported!
+On Wed, Mar 30, 2022 at 06:25:29PM +0530, Mukesh Ojha wrote:
 > 
-> I'm taking this as a:
+> On 3/30/2022 5:01 PM, Greg KH wrote:
+> > On Wed, Mar 30, 2022 at 04:53:41PM +0530, Mukesh Ojha wrote:
+> > > On 3/30/2022 4:49 PM, Greg KH wrote:
+> > > > On Wed, Mar 30, 2022 at 04:44:26PM +0530, Mukesh Ojha wrote:
+> > > > > On 3/30/2022 4:31 PM, Greg KH wrote:
+> > > > > > On Wed, Mar 30, 2022 at 04:14:11PM +0530, Mukesh Ojha wrote:
+> > > > > > > On 3/30/2022 3:46 PM, Greg KH wrote:
+> > > > > > > > On Wed, Mar 30, 2022 at 03:41:04PM +0530, Mukesh Ojha wrote:
+> > > > > > > > > Hi All,
+> > > > > > > > > 
+> > > > > > > > > We are facing one issue where one driver (p1) is trying to register its
+> > > > > > > > > device from driver probe
+> > > > > > > > > and from another path (p2) dev_set_name(new name) done from driver probe of
+> > > > > > > > > the added device whose
+> > > > > > > > > new name length can be more than earlier done in (p1 path) which could
+> > > > > > > > > result in redzone overwritten issue.
+> > > > > > > > I do not understand, what specific driver is doing this so that we can
+> > > > > > > > see an example of this problem?
+> > > > > > > trying to paste some logs of the race.
+> > > > > > > 
+> > > > > > > [ 14.235820][ T503] BUG kmalloc-128 (Tainted: G S O ): Left Redzone
+> > > > > > > overwritten
+> > > > > > What kernel version is this?
+> > > > > 5.10
+> > > > That is very old, is this an issue in 5.17?
+> > > > 
+> > > > > > > [ 14.244189][ T503]
+> > > > > > > -----------------------------------------------------------------------------
+> > > > > > > [ 14.255241][ T503] INFO: 0xffffff87caae0f7d-0xffffff87caae0f7f
+> > > > > > > @offset=3965. First byte 0x2f instead of 0xcc
+> > > > > > > [ 14.265176][ T503] INFO: Allocated in kobject_get_path+0x58/0x100 age=1
+> > > > > > > cpu=0 pid=503
+> > > > > > > [ 14.273111][ T503] kobject_get_path+0x58/0x100
+> > > > > > > [ 14.277747][ T503] kobject_uevent_env+0x120/0x744
+> > > > > > > [ 14.282639][ T503] device_add+0x98c/0x1028
+> > > > > > > [ 14.286925][ T503] *device_register+0x24/0x38*
+> > > > > > > [ 14.291395][ T503] slim_alloc_device+0xdc/0x108 [slimbus]
+> > > > > > > [ 14.296992][ T503] slim_register_controller+0x210/0x2ac [slimbus]
+> > > > > > > [ 14.303291][ T503] qcom_slim_ngd_probe+0x3c/0x348 [slim_qcom_ngd_ctrl]
+> > > > > > > [ 14.310007][ T503] platform_drv_probe+0x60/0x180
+> > > > > > > [ 14.314812][ T503] really_probe+0x208/0xb64
+> > > > > > > [ 14.319184][ T503] driver_probe_device+0x130/0x254
+> > > > > > > [ 14.324159][ T503] __device_attach_driver+0x1e8/0x324
+> > > > > > > [ 14.329399][ T503] __device_attach+0x170/0x364
+> > > > > > > [ 14.334035][ T503] bus_probe_device+0x4c/0x164
+> > > > > > > [ 14.338671][ T503] device_add+0xa60/0x1028
+> > > > > > > [ 14.342957][ T503] platform_device_add+0x260/0x2c8
+> > > > > > > [ 14.347941][ T503] qcom_slim_ngd_ctrl_probe+0x71c/0x804
+> > > > > > > [slim_qcom_ngd_ctrl]
+> > > > > > > [ 14.355177][ T503] INFO: Freed in kobject_uevent_env+0x210/0x744 age=1
+> > > > > > > cpu=4 pid=518
+> > > > > > > [ 14.363018][ T503] do_init_module+0xac/0x494
+> > > > > > > [ 14.367475][ T503] load_module+0x35c0/0x3e54
+> > > > > > > [ 14.371930][ T503] __se_sys_finit_module+0x188/0x1c8
+> > > > > > > [ 14.377086][ T503] __arm64_sys_finit_module+0x20/0x30
+> > > > > > > [ 14.382328][ T503] el0_svc_common+0xdc/0x294
+> > > > > > > [ 14.386786][ T503] el0_svc+0x38/0x9c
+> > > > > > > [ 14.390552][ T503] el0_sync_handler+0x8c/0xf0
+> > > > > > > 
+> > > > > > > 
+> > > > > > > [ 14.490994*][ T503] Redzone ffffff87caae0f7**0*: cc cc cc cc cc cc cc cc cc
+> > > > > > > cc cc cc cc 2f 64 65 .............*/de*
+> > > > > > > [ 14.501185][ T503] Object ffffff87caae0f80: 76 69 63 65 73 2f 70 6c 61 74
+> > > > > > > 66 6f 72 6d 2f 73 vices/platform/s
+> > > > > > > [ 14.511376][ T503] Object ffffff87caae0f90: 6f 63 2f 33 33 34 30 30 30 30
+> > > > > > > 2e 73 6c 69 6d 2f oc/3340000.slim/
+> > > > > > > [ 14.521566][ T503] Object ffffff87caae0fa0: 71 63 6f 6d 2c 73 6c 69 6d 2d
+> > > > > > > 6e 67 64 2e 31 2f qcom,slim-ngd.1/
+> > > > > > > [ 14.531757][ T503] Object ffffff87caae0fb0: 62 74 66 6d 73 6c 69 6d 5f 73
+> > > > > > > 6c 61 76 65 00 00 *btfmslim_slave*..
+> > > > > > > 
+> > > > > > > 
+> > > > > > > 
+> > > > > > > 499 static int btfm_slim_probe(struct slim_device *slim)
+> > > > > > I do not see that function in Linus's tree right now.  Where does it
+> > > > > > come from?
+> > > > > Don't you think, it can be caused by any kernel module.
+> > > > Kernel code do not protect themselves against other kernel code doing
+> > > > abusive things.
+> > > > 
+> > > > Perhaps fix your out-of-tree code to not do this if no in-kernel code is
+> > > > doing this?  Nothing we can do at all about out-of-tree code that we
+> > > > have never seen.
+> > > 
+> > > Thanks for the comment, Greg.
+> > > Why do we make dev_set_name() make it available to module apart from the
+> > > core ?
+> > Because busses can be in a module, just like you should be doing :)
+> > 
+> > Please submit your code upstream for review.
 > 
-> Tested-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-> 
-> Ok?
+> I still did not get why one should not do device name change if
+> dev_set_name() is available for anyone to do name change while
+> kobject_get_path() is running?
 
-Yes, OK for me, thank you!
+I do not see where in the kernel today this is happening.  What code
+changes the name of a device like this?
 
-I never know what maintainers prefer when there is already a
-"Reported-by" tag so I didn't specify it but I will do next time.
+> This is possible race, if we know this is the limitation/issue and would be
+> difficult to address , that is fine and should be documented.
 
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+Again, why are you doing this?  What needs to change the device name in
+this way and what is it racing with?
+
+Without code examples, speculating about all of this is quite difficult
+to discuss.
+
+thanks,
+
+greg k-h

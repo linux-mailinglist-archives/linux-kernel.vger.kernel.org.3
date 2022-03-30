@@ -2,121 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D824EC508
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61704EC510
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345441AbiC3M6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
+        id S1345502AbiC3NBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 09:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345425AbiC3M6c (ORCPT
+        with ESMTP id S1345425AbiC3NBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 08:58:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC381E95F0;
-        Wed, 30 Mar 2022 05:56:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F849609EE;
-        Wed, 30 Mar 2022 12:56:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2BA3C340EC;
-        Wed, 30 Mar 2022 12:56:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648645005;
-        bh=VHo/+AAAdD7AcNL5Os1HfUvU8wmL18pGNJzsepY5ZFQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pV4+Vhu8H9npYiN+2MpM5l1p20Q7roif82TTS4Z8raPdLnd1jZjmE+Hsdr6x4P+Sm
-         JkGQTIypsui3dk71t772m8jtP2whIjcMzKwfv7QIN9SNEYpaUSPpykAby50Rlc3+hu
-         SoS9eysq7f9cbjp7t57/Gg08jpp1sCGhg/+sLSAYX+RyEMDWxsbwK2WHQ/4pMNak8Z
-         jJBsJnQCUL9dpodaRxeQUG1ckZmRAcpKu6SEu/ZrDv6WTWT0+gtiGbr3WWsQFPnWgQ
-         Xom+ogFkXPTY+f11UeZczBkm4zNPLXM6xmXm57cEdH5p188zas8gMWP+yXQH2PG9QJ
-         z5DtDrj4/oduA==
-Date:   Wed, 30 Mar 2022 15:56:41 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Haakon Bugge <haakon.bugge@oracle.com>
-Cc:     Guo Zhengkui <guozhengkui@vivo.com>,
-        Mustafa Ismail <mustafa.ismail@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        OFED mailing list <linux-rdma@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "zhengkui_guo@outlook.com" <zhengkui_guo@outlook.com>
-Subject: Re: [PATCH linux-next] RDMA: simplify if-if to if-else
-Message-ID: <YkRTidagKVgSUGld@unreal>
-References: <20220328130900.8539-1-guozhengkui@vivo.com>
- <YkQ43f9pFnU+BnC7@unreal>
- <76AE36BF-01F9-420B-B7BF-A7C9F523A45C@oracle.com>
- <YkQ/092IYsQxU9bi@unreal>
- <93D39EC2-6C71-45D8-883A-F8DAA6ECFEDF@oracle.com>
+        Wed, 30 Mar 2022 09:01:36 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92785D5E81;
+        Wed, 30 Mar 2022 05:59:49 -0700 (PDT)
+Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KT60y1nY3z67bMY;
+        Wed, 30 Mar 2022 20:57:54 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Wed, 30 Mar 2022 14:59:46 +0200
+Received: from [10.47.83.59] (10.47.83.59) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 30 Mar
+ 2022 13:59:45 +0100
+Message-ID: <08717833-19bb-8aaa-4f24-2989a9f56cd3@huawei.com>
+Date:   Wed, 30 Mar 2022 13:59:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <93D39EC2-6C71-45D8-883A-F8DAA6ECFEDF@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: filesystem corruption with "scsi: core: Reallocate device's
+ budget map on queue depth change"
+To:     Andrea Righi <andrea.righi@canonical.com>,
+        Ming Lei <ming.lei@redhat.com>
+CC:     Martin Wilck <martin.wilck@suse.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <YkQsumJ3lgGsagd2@arighi-desktop>
+ <f7bacce8-b5e5-3ef1-e116-584c01533f69@huawei.com>
+ <YkQ9KoKb+VK06zXi@arighi-desktop>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <YkQ9KoKb+VK06zXi@arighi-desktop>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.83.59]
+X-ClientProxiedBy: lhreml745-chm.china.huawei.com (10.201.108.195) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 12:26:51PM +0000, Haakon Bugge wrote:
-> 
-> 
-> > On 30 Mar 2022, at 13:32, Leon Romanovsky <leon@kernel.org> wrote:
-> > 
-> > On Wed, Mar 30, 2022 at 11:06:03AM +0000, Haakon Bugge wrote:
-> >> 
-> >> 
-> >>> On 30 Mar 2022, at 13:02, Leon Romanovsky <leon@kernel.org> wrote:
-> >>> 
-> >>> On Mon, Mar 28, 2022 at 09:08:59PM +0800, Guo Zhengkui wrote:
-> >>>> `if (!ret)` can be replaced with `else` for simplification.
-> >>>> 
-> >>>> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
-> >>>> ---
-> >>>> drivers/infiniband/hw/irdma/puda.c | 4 ++--
-> >>>> drivers/infiniband/hw/mlx4/mcg.c   | 3 +--
-> >>>> 2 files changed, 3 insertions(+), 4 deletions(-)
-> >>>> 
-> >>> 
-> >>> Thanks,
-> >>> Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-> >> 
-> >> Fix the unbalanced curly brackets at the same time?
-> > 
-> > I think that it is ok to have if () ... else { ... } code.
-> 
-> 
-> Hmm, doesn't the kernel coding style say:
-> 
-> "Do not unnecessarily use braces where a single statement will do."
-> 
-> [snip]
-> 
-> "This does not apply if only one branch of a conditional statement is a single statement; in the latter case use braces in both branches"
+On 30/03/2022 12:21, Andrea Righi wrote:
+> On Wed, Mar 30, 2022 at 11:38:02AM +0100, John Garry wrote:
+>> On 30/03/2022 11:11, Andrea Righi wrote:
+>>> Hello,
+>>>
+>>> after this commit I'm experiencing some filesystem corruptions at boot
+>>> on a power9 box with an aacraid controller.
+>>>
+>>> At the moment I'm running a 5.15.30 kernel; when the filesystem is
+>>> mounted at boot I see the following errors in the console:
 
-ok, if it is written in documentation, let's follow it.
+About "scsi: core: Reallocate device's budget map on queue depth change" 
+being added to a stable kernel, I am not sure if this was really a fix 
+or just a memory optimisation.
 
-Thanks for pointing that out.
+>>>
+>>> Begin: Will now check root file system ... fsck from util-linux 2.36.1
+>>> [/usr/sbin/fsck.ext4 (1) -- /dev/sda2] fsck.ext4 -a -C0 /dev/sda2
+>>> root: clean, 99646/122101760 files, 11187342/488376336 blocks
+>>> done.
+>>> [    4.636613] sd 0:2:0:0: [sda] tag#257 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=0s
+>>> [    4.636655] sd 0:2:0:0: [sda] tag#257 CDB: Read(10) 28 00 00 00 4c 10 00 00 08 00
+>>> [    4.636689] blk_update_request: I/O error, dev sda, sector 19472 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 0
+>>> [    4.636734] sd 0:2:0:0: [sda] tag#258 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=0s
+>>> [    4.636772] sd 0:2:0:0: [sda] tag#258 CDB: Read(10) 28 00 00 00 4c 18 00 00 08 00
+>>> [    4.636796] blk_update_request: I/O error, dev sda, sector 19480 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 0
+>>> [    4.636840] sd 0:2:0:0: [sda] tag#260 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=0s
+>>> [    4.636877] sd 0:2:0:0: [sda] tag#260 CDB: Read(10) 28 00 00 00 4c 28 00 00 08 00
+>>> [    4.636901] blk_update_request: I/O error, dev sda, sector 19496 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 0
+>>> [    4.636944] sd 0:2:0:0: [sda] tag#259 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=0s
+>>> [    4.636971] sd 0:2:0:0: [sda] tag#259 CDB: Read(10) 28 00 00 00 4c 20 00 00 08 00
+>>> [    4.637005] blk_update_request: I/O error, dev sda, sector 19488 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 0
+>>> [    4.637049] sd 0:2:0:0: [sda] tag#262 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=0s
+>>> [    4.637085] sd 0:2:0:0: [sda] tag#262 CDB: Read(10) 28 00 00 00 4c 38 00 00 08 00
+>>> [    4.637118] blk_update_request: I/O error, dev sda, sector 19512 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 0
+>>> [    4.637161] sd 0:2:0:0: [sda] tag#264 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=0s
+>>> [    4.637197] sd 0:2:0:0: [sda] tag#264 CDB: Read(10) 28 00 00 00 4c 48 00 00 08 00
+>>> [    4.637221] blk_update_request: I/O error, dev sda, sector 19528 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 0
+>>> [    4.637270] sd 0:2:0:0: [sda] tag#284 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=0s
+>>> [    4.637306] sd 0:2:0:0: [sda] tag#284 CDB: Read(10) 28 00 00 00 4c e8 00 00 08 00
+>>> [    4.637332] blk_update_request: I/O error, dev sda, sector 19688 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 0
+>>> [    4.637375] sd 0:2:0:0: [sda] tag#286 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=0s
+>>> [    4.637411] sd 0:2:0:0: [sda] tag#286 CDB: Read(10) 28 00 00 00 4c f8 00 00 08 00
+>>> [    4.637444] blk_update_request: I/O error, dev sda, sector 19704 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 0
+>>> [    4.637481] blk_update_request: I/O error, dev sda, sector 19664 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 0
+>>> [    4.637485] sd 0:2:0:0: [sda] tag#282 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=0s
+>>> [    4.637487] sd 0:2:0:0: [sda] tag#287 FAILED Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=0s
+>>> [    4.637491] sd 0:2:0:0: [sda] tag#287 CDB: Read(10) 28 00 00 00 4d 00 00 00 08 00
+>>> [    4.637491] sd 0:2:0:0: [sda] tag#282 CDB: Read(10) 28 00 00 00 4c d8 00 00 08 00
+>>> [    4.637494] blk_update_request: I/O error, dev sda, sector 19672 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 0
+>>> [    4.747771] EXT4-fs (sda2): mounted filesystem with ordered data mode. Opts: (null). Quota mode: none.
+>>>
 
+We need to find where that memory corruption is coming from. Maybe the 
+root is that too many commands are being sent to the disk. Ming?
+
+>>> If I reboot multiple times fsck requires a manual fix and I get dropped
+>>> to the initramfs shell. Some times the filesystem gets corrupted and I
+>>> need to redeploy the box.
+>>>
+>>> If I use the same kernel with this commit reverted I can reboot as many
+>>> times as I want without any failure:
+>>>
+>>>    813c6871f76b ("scsi: core: Reallocate device's budget map on queue depth change")
+>>
+>> I would not have thought that this causes possible corruption.
+>>
+>>>
+>>> For now I've just reverted the commit, but I'll try to add some
+>>> debugging and collect more info.
+>>>
+>>> Let me know if there's any specific test that you want me to try.
+>>>
+>>
+>> Please try this:
+>> https://lore.kernel.org/linux-scsi/yq1ee2kumrh.fsf@ca-mkp.ca.oracle.com/T/#t
+>>
+>> It never made 5.17, which I would have hoped for.
 > 
+> Thanks John! It looks like this one is actually fixing the problem.
+> I rebooted multiple times and I didn't get any I/O error or corruption.
 > 
-> Thxs, Håkon
+> If you want you can add my:
 > 
-> 
-> > 
-> > There is one place that needs an indentation fix, in mlx4, but it is
-> > faster to fix when applying the patch instead of asking to resubmit.
-> > 
-> > thanks
-> > 
-> >> 
-> >> 
-> >> Thxs, Håkon
-> 
+> Tested-by: Andrea Righi <andrea.righi@canonical.com>
+> .
+
+We should prob add something like this also:
+
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -1708,7 +1708,9 @@ static blk_status_t scsi_queue_rq(struct 
+blk_mq_hw_ctx *hctx,
+        blk_status_t ret;
+        int reason;
+
+-       WARN_ON_ONCE(cmd->budget_token < 0);
++       if (WARN_ON_ONCE(cmd->budget_token < 0 ||
++                        cmd->budget_token >= sdev->queue_depth))
++               return BLK_STS_IOERR;
+
+
+Thanks,
+John

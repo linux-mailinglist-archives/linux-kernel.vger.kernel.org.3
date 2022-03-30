@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D134EBE56
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E0704EBE57
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245162AbiC3KHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
+        id S245186AbiC3KH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245156AbiC3KHP (ORCPT
+        with ESMTP id S245181AbiC3KHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:07:15 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87D5E9C93
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:05:27 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id h23so28494422wrb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:05:27 -0700 (PDT)
+        Wed, 30 Mar 2022 06:07:20 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECFCED9E4
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:05:33 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id r13so28469098wrr.9
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:05:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WBMBrrF+3DeGd5Qv19hdc8TZo5LddleFrKa225rKdeY=;
-        b=mQlCez5JnZKNz0wqCAAtkzZdUJtSvOkWuyUhdkhH3ZoqzhXka/V6KZDHleJgUuFsZT
-         tLAJAedTqt7JnGPLUaJhmOOQnUHuzvJrKdsfGYQzKfPCJjqv+3wsPeM/0lEdN1SDAUL9
-         WlQtg2zTY2//rMGjzj70TwcyGfhmUSHITRgrZGeIcEOaK7IFhLTvqkl/PsUEKkV6NueH
-         1YqhIDmkjlTCuWDNH2xUixdyYkANmCcMK7SereHazGu7nfni25VYT2iB7dY1IEGTT4IE
-         krtJPvL3H5G1sucwglNi5rEhbGbM5gVRe1q8yoNi7fTpJk+I4jiLTI7kM4HNURGWsdwO
-         fwWQ==
+        bh=PGQlj9TEsb6f3Qz+wlAvnxY/j23ohMghNrtlMbgqvGc=;
+        b=YmYQ48smNP0yRiczg1vJ2Z0dGEXhbEhzJqvF+sKabr78HkFjZD1Cn+YVGJUqK6d7/l
+         pIQtiW/cT3XRigXiHrKsQBvt1FyUVajkN3G+6fKbkzzfKF0jBlVejXQarSg3djdIkcKg
+         hMNJfPcqLicmS/vn51oDWe41GXrVhgamd0ld0n+EhSAqdx6/11trYILMUsIggXk8NroE
+         cDraBzO0RWTlaibFoDir9ZehlScMVxRfI64GWpmThY5TBoMQ/s+RABbZtpoKCu6K6OC7
+         3CraZOU9AMu+csfIs7bP9wTQNrKWT7BWGVUiWXlFUk541olalL29nFL34lDd58L+8as/
+         /nYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WBMBrrF+3DeGd5Qv19hdc8TZo5LddleFrKa225rKdeY=;
-        b=VTRuiHjmhF1r4ytvhHqj7cHlb2r6Gxz2o6UhrxIdtjf1Bvxs1S7jzNuGI6x8vj8qVN
-         YLMCWIz1Zm9TL1egoYubfDNZ7GCF0nXQRd9KVRglQ143mauKI+6PpYSZgzplA6bRqBoQ
-         6pUOilOSzMdZ8Dxxud6nTNOrJWlAMq8suagtBZJw21nvC59O97gf22/xmpUhPGGnkrv8
-         LqZ1HmwGRazJ99gSmMKxywDRSRG05EC6zBh2n2HyXpkVoOzPxoPCWnoYaxtt2a5QlGj1
-         E/HhrwGCcgub0ISwk6U2DbyqpWXINxxwR51voTKMIbeGQmnZB5oujEvweNf2B7ic464q
-         rWuA==
-X-Gm-Message-State: AOAM530f/OUF63sQ6Ko41tMHz7D5Y9QM8C4b3H5DPQ5gq/yW0S/f7s2X
-        qRqTf9HzeOJgJ4epnlpPNng21Q==
-X-Google-Smtp-Source: ABdhPJyeI927hDXDpa2Qe0RhXe/0azmG0//95pcqn7RkyA9gtZCxFqPGOz2F6G9xEYUzdmklZ0P0YQ==
-X-Received: by 2002:a5d:588c:0:b0:205:7f17:3901 with SMTP id n12-20020a5d588c000000b002057f173901mr35321202wrf.359.1648634726103;
-        Wed, 30 Mar 2022 03:05:26 -0700 (PDT)
+        bh=PGQlj9TEsb6f3Qz+wlAvnxY/j23ohMghNrtlMbgqvGc=;
+        b=oDgFcGBlpwlLB6mFTsqDzJAngQh63t4SaSxAtpvxBJ8YsB6HpuwkyErK5M29kxpX7x
+         ETczzsLS4UnuzcDAcw47Rd1+qUrnkqkUwNvSFHBkCPOFb00W+u4W/z0m4eJSGOYudUFF
+         QJBHOwPY7RFF+svOgBuzJfTVUQuIr4ORZLw6aJTKOYxtmz5eVt6uX7QBD5f6Jz43fzWo
+         XKDfOHoCM+azORUDVVxl7EYiHKPB4Ho5c0NNDH1ikPmIwZHt6XquPvtLQ7OHqORQArh0
+         9vgfrncgs2LvsVtYnYwH2++pEWkN9RW8tQl9W03GW5MqPqov0qciLcOouVTV8qntjv8h
+         N91w==
+X-Gm-Message-State: AOAM532wJY3aYPk9KHe6rXFlH6OJj06RiftOSKPhjbghnZZSsv5L5Vo/
+        oa934dt46w5SlptX/H5TFFb3gQ==
+X-Google-Smtp-Source: ABdhPJwPQTgKhU5pPsl0td3R4tZUBHdwuc8zohS2IhF+KaLZ39qP0ErrK2uISxdTZ7cOwBcsWGqBRg==
+X-Received: by 2002:a5d:6d8b:0:b0:203:e242:5e38 with SMTP id l11-20020a5d6d8b000000b00203e2425e38mr36036111wrs.105.1648634732037;
+        Wed, 30 Mar 2022 03:05:32 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:e34:ed2f:f020:8f92:3217:a3c6:3ee8])
-        by smtp.gmail.com with ESMTPSA id p8-20020a5d4e08000000b002054b5437f2sm16542743wrt.115.2022.03.30.03.05.24
+        by smtp.gmail.com with ESMTPSA id p8-20020a5d4e08000000b002054b5437f2sm16542743wrt.115.2022.03.30.03.05.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 03:05:25 -0700 (PDT)
+        Wed, 30 Mar 2022 03:05:31 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     srinivas.pandruvada@linux.intel.com, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Sasha Levin <sashal@kernel.org>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v2 3/4] tools/thermal: A temperature capture tool
-Date:   Wed, 30 Mar 2022 12:04:43 +0200
-Message-Id: <20220330100444.3846661-4-daniel.lezcano@linaro.org>
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>
+Subject: [PATCH v2 4/4] tools/thermal: Add thermal daemon skeleton
+Date:   Wed, 30 Mar 2022 12:04:44 +0200
+Message-Id: <20220330100444.3846661-5-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
 References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
@@ -75,112 +75,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'thermometer' tool allows to capture the temperature of a set of
-thermal zones defined in a configuration file at a specified rate.
+This change provides a simple daemon skeleton. It is an example of how
+to use the thermal library which wraps all the complex code related to
+the netlink and transforms it into a callback oriented code.
 
-It is designed to have the lowest possible overhead. It will write the
-captured temperature per thermal zone per file so making easier to
-write a gnuplot script.
+The goal of this skeleton is to give a base brick for anyone
+interested in writing its own thermal engine or as an example to rely
+on to write its own thermal monitoring implementation.
+
+In the future, it will evolve with more features and hopefully more
+logic.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- tools/Makefile                             |  16 +-
- tools/thermal/thermometer/Build            |   2 +
- tools/thermal/thermometer/Makefile         |  26 +
- tools/thermal/thermometer/thermometer.8    |  93 ++++
- tools/thermal/thermometer/thermometer.c    | 558 +++++++++++++++++++++
- tools/thermal/thermometer/thermometer.conf |   5 +
- 6 files changed, 697 insertions(+), 3 deletions(-)
- create mode 100644 tools/thermal/thermometer/Build
- create mode 100644 tools/thermal/thermometer/Makefile
- create mode 100644 tools/thermal/thermometer/thermometer.8
- create mode 100644 tools/thermal/thermometer/thermometer.c
- create mode 100644 tools/thermal/thermometer/thermometer.conf
+ tools/Makefile                                |  16 +-
+ tools/thermal/thermal-engine/Build            |   2 +
+ tools/thermal/thermal-engine/Makefile         |  28 ++
+ tools/thermal/thermal-engine/thermal-engine.c | 326 ++++++++++++++++++
+ 4 files changed, 369 insertions(+), 3 deletions(-)
+ create mode 100644 tools/thermal/thermal-engine/Build
+ create mode 100644 tools/thermal/thermal-engine/Makefile
+ create mode 100644 tools/thermal/thermal-engine/thermal-engine.c
 
 diff --git a/tools/Makefile b/tools/Makefile
-index c253cbd27c06..78615f8cb463 100644
+index 78615f8cb463..b71cf39d3c08 100644
 --- a/tools/Makefile
 +++ b/tools/Makefile
-@@ -31,6 +31,7 @@ help:
- 	@echo '  bootconfig             - boot config tool'
+@@ -32,6 +32,7 @@ help:
  	@echo '  spi                    - spi tools'
  	@echo '  tmon                   - thermal monitoring and tuning tool'
-+	@echo '  thermometer            - temperature capture tool'
+ 	@echo '  thermometer            - temperature capture tool'
++	@echo '  thermal-engine         - thermal monitoring tool'
  	@echo '  thermal                - thermal library'
  	@echo '  tracing                - misc tracing tools'
  	@echo '  turbostat              - Intel CPU idle stats and freq reporting tool'
-@@ -95,6 +96,9 @@ turbostat x86_energy_perf_policy intel-speed-select: FORCE
- tmon: FORCE
+@@ -99,6 +100,9 @@ tmon: FORCE
+ thermometer: FORCE
  	$(call descend,thermal/$@)
  
-+thermometer: FORCE
++thermal-engine: FORCE thermal
 +	$(call descend,thermal/$@)
 +
  freefall: FORCE
  	$(call descend,laptop/$@)
  
-@@ -105,7 +109,7 @@ all: acpi cgroup counter cpupower gpio hv firewire \
+@@ -109,7 +113,7 @@ all: acpi cgroup counter cpupower gpio hv firewire \
  		perf selftests bootconfig spi turbostat usb \
  		virtio vm bpf x86_energy_perf_policy \
  		tmon freefall iio objtool kvm_stat wmi \
--		pci debugging tracing thermal
-+		pci debugging tracing thermal thermometer
+-		pci debugging tracing thermal thermometer
++		pci debugging tracing thermal thermometer thermal-engine
  
  acpi_install:
  	$(call descend,power/$(@:_install=),install)
-@@ -128,6 +132,9 @@ turbostat_install x86_energy_perf_policy_install intel-speed-select_install:
- tmon_install:
+@@ -135,6 +139,9 @@ tmon_install:
+ thermometer_install:
  	$(call descend,thermal/$(@:_install=),install)
  
-+thermometer_install:
++thermal-engine_install:
 +	$(call descend,thermal/$(@:_install=),install)
 +
  freefall_install:
  	$(call descend,laptop/$(@:_install=),install)
  
-@@ -140,7 +147,7 @@ install: acpi_install cgroup_install counter_install cpupower_install gpio_insta
+@@ -147,7 +154,7 @@ install: acpi_install cgroup_install counter_install cpupower_install gpio_insta
  		virtio_install vm_install bpf_install x86_energy_perf_policy_install \
  		tmon_install freefall_install objtool_install kvm_stat_install \
  		wmi_install pci_install debugging_install intel-speed-select_install \
--		tracing_install
-+		tracing_install thermometer_install
+-		tracing_install thermometer_install
++		tracing_install thermometer_install thermal-engine_install
  
  acpi_clean:
  	$(call descend,power/acpi,clean)
-@@ -173,6 +180,9 @@ thermal_clean:
- turbostat_clean x86_energy_perf_policy_clean intel-speed-select_clean:
- 	$(call descend,power/x86/$(@:_clean=),clean)
+@@ -183,6 +190,9 @@ turbostat_clean x86_energy_perf_policy_clean intel-speed-select_clean:
+ thermometer_clean:
+ 	$(call descend,thermal/thermometer,clean)
  
-+thermometer_clean:
-+	$(call descend,thermal/thermometer,clean)
++thermal-engine_clean:
++	$(call descend,thermal/thermal-engine,clean)
 +
  tmon_clean:
  	$(call descend,thermal/tmon,clean)
  
-@@ -187,6 +197,6 @@ clean: acpi_clean cgroup_clean counter_clean cpupower_clean hv_clean firewire_cl
+@@ -197,6 +207,6 @@ clean: acpi_clean cgroup_clean counter_clean cpupower_clean hv_clean firewire_cl
  		vm_clean bpf_clean iio_clean x86_energy_perf_policy_clean tmon_clean \
  		freefall_clean build_clean libbpf_clean libsubcmd_clean \
  		gpio_clean objtool_clean leds_clean wmi_clean pci_clean firmware_clean debugging_clean \
--		intel-speed-select_clean tracing_clean thermal_clean
-+		intel-speed-select_clean tracing_clean thermal_clean thermometer_clean
+-		intel-speed-select_clean tracing_clean thermal_clean thermometer_clean
++		intel-speed-select_clean tracing_clean thermal_clean thermometer_clean thermal-engine_clean
  
  .PHONY: FORCE
-diff --git a/tools/thermal/thermometer/Build b/tools/thermal/thermometer/Build
+diff --git a/tools/thermal/thermal-engine/Build b/tools/thermal/thermal-engine/Build
 new file mode 100644
-index 000000000000..2531dda4acdd
+index 000000000000..0c8b65248c80
 --- /dev/null
-+++ b/tools/thermal/thermometer/Build
++++ b/tools/thermal/thermal-engine/Build
 @@ -0,0 +1,2 @@
-+thermometer-y += thermometer.o
++thermal-engine-y += thermal-engine.o
 +
-diff --git a/tools/thermal/thermometer/Makefile b/tools/thermal/thermometer/Makefile
+diff --git a/tools/thermal/thermal-engine/Makefile b/tools/thermal/thermal-engine/Makefile
 new file mode 100644
-index 000000000000..d8f8bc82fe3b
+index 000000000000..6bd05ff89485
 --- /dev/null
-+++ b/tools/thermal/thermometer/Makefile
-@@ -0,0 +1,26 @@
++++ b/tools/thermal/thermal-engine/Makefile
+@@ -0,0 +1,28 @@
 +# SPDX-License-Identifier: GPL-2.0
-+# Makefile for cgroup tools
++# Makefile for thermal tools
 +
 +ifeq ($(srctree),)
 +srctree := $(patsubst %/,%,$(dir $(CURDIR)))
@@ -191,314 +191,259 @@ index 000000000000..d8f8bc82fe3b
 +
 +CFLAGS = -Wall -Wextra
 +CFLAGS += -I$(srctree)/tools/thermal/lib
++CFLAGS += -I$(srctree)/tools/lib/thermal/include
 +
 +LDFLAGS = -L$(srctree)/tools/thermal/lib
++LDFLAGS += -L$(srctree)/tools/lib/thermal
 +LDFLAGS += -lthermal_tools
++LDFLAGS += -lthermal
 +LDFLAGS += -lconfig
++LDFLAGS += -lnl-genl-3 -lnl-3
 +
 +VERSION = 0.0.1
-+TARGET=thermometer
 +
-+all: $(TARGET)
++all: thermal-engine
 +%: %.c
 +	$(CC) $(CFLAGS) -D VERSION=\"$(VERSION)\" -o $@ $^ $(LDFLAGS)
-+
 +clean:
-+	$(RM) $(TARGET)
-diff --git a/tools/thermal/thermometer/thermometer.8 b/tools/thermal/thermometer/thermometer.8
++	$(RM) thermal-engine
+diff --git a/tools/thermal/thermal-engine/thermal-engine.c b/tools/thermal/thermal-engine/thermal-engine.c
 new file mode 100644
-index 000000000000..5242220c12be
+index 000000000000..525520049aa2
 --- /dev/null
-+++ b/tools/thermal/thermometer/thermometer.8
-@@ -0,0 +1,93 @@
-+.TH THERMOMETER 8
-+# SPDX-License-Identifier: GPL-2.0
-+.SH NAME
-+\fBthermometer\fP - A thermal profiling tool
-+
-+.SH SYNOPSIS
-+.ft B
-+.B thermometer
-+.RB [ options ]
-+.RB [ command ]
-+.br
-+.SH DESCRIPTION
-+\fBthermometer \fP captures the thermal zones temperature at a
-+specified sampling period. It is optimized to reduce as much as
-+possible the overhead while doing the temperature acquisition in order
-+to prevent disrupting the running application we may want to profile.
-+
-+This low overhead also allows a high rate sampling for the temperature
-+which could be necessary to spot overshots and undershots.
-+
-+If no configuration file is specified, then all the thermal zones will
-+be monitored at 4Hz, so every 250ms. A configuration file specifies
-+the thermal zone names and the desired sampling period. A thermal zone
-+name can be a regular expression to specify a group of thermal zone.
-+
-+The sampling of the different thermal zones will be written into
-+separate files with the thermal zone name. It is possible to specify a
-+postfix to identify them for example for a specific scenario. The
-+output directory can be specified in addition.
-+
-+Without any parameters, \fBthermometer \fP captures all the thermal
-+zone temperatures every 250ms and write to the current directory the
-+captured files postfixed with the current date.
-+
-+If a running \fBduration\fP is specified or a \fBcommand\fP, the
-+capture ends at the end of the duration if the command did not
-+finished before. The \fBduration\fP can be specified alone as well as
-+the \fBcommand\fP. If none is specified, the capture will continue
-+indefinitively until interrupted by \fBSIGINT\fP or \fBSIGQUIT\fP.
-+.PP
-+
-+.SS Options
-+.PP
-+The \fB-h, --help\fP option shows a short usage help
-+.PP
-+The \fB-o <dir>, --output <dir>\fP option defines the output directory to put the
-+sampling files
-+.PP
-+The \fB-c <config>, --config <config>\fP option specifies the configuration file to use
-+.PP
-+The \fB-d <seconds>, --duration <seconds>\fP option specifies the duration of the capture
-+.PP
-+The \fB-l <loglevel>, --loglevel <loglevel>\fP option sets the loglevel [DEBUG,INFO,NOTICE,WARN,ERROR]
-+.PP
-+The \fB-p <string>, --postfix <string>\fP option appends \fBstring\fP at the end of the capture filenames
-+.PP
-+The \fB-s, --syslog\fP option sets the output to syslog, default is \fBstdout\fP
-+.PP
-+The \fB-w, --overwrite\fP overwrites the output files if they exist
-+.PP
-+
-+.PP
-+
-+.SS "Exit status:"
-+.TP
-+0
-+if OK,
-+.TP
-+1
-+Error with the options specified as parameters
-+.TP
-+2
-+Error when configuring the logging facility
-+.TP
-+3
-+Error when configuring the time
-+.TP
-+4
-+Error in the initialization routine
-+.TP
-+5
-+Error during the runtime
-+
-+.SH Capture file format
-+
-+Every file contains two columns. The first one is the uptime timestamp
-+in order to find a point in time since the system started up if there
-+is any thermal event. The second one is the temperature in milli
-+degree. The first line contains the label of each column.
-+
-+.SH AUTHOR
-+Daniel Lezcano <daniel.lezcano@kernel.org>
-+
-diff --git a/tools/thermal/thermometer/thermometer.c b/tools/thermal/thermometer/thermometer.c
-new file mode 100644
-index 000000000000..cb30a4a039cb
---- /dev/null
-+++ b/tools/thermal/thermometer/thermometer.c
-@@ -0,0 +1,558 @@
++++ b/tools/thermal/thermal-engine/thermal-engine.c
+@@ -0,0 +1,326 @@
 +// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (C) 2022, Linaro Ltd - Daniel Lezcano <daniel.lezcano@linaro.org>
-+#define _GNU_SOURCE
-+#include <dirent.h>
++/*
++ * Thermal monitoring tool based on the thermal netlink events.
++ *
++ * Copyright (C) 2022 Linaro Ltd.
++ *
++ * Author: Daniel Lezcano <daniel.lezcano@kernel.org>
++ */
++#include <errno.h>
 +#include <fcntl.h>
 +#include <getopt.h>
-+#include <regex.h>
-+#include <signal.h>
++#include <libgen.h>
++#include <limits.h>
 +#include <stdio.h>
 +#include <stdlib.h>
 +#include <string.h>
-+#include <sys/stat.h>
-+#include <sys/signalfd.h>
-+#include <sys/timerfd.h>
-+#include <sys/types.h>
-+#include <time.h>
++#include <signal.h>
 +#include <unistd.h>
-+#include <linux/thermal.h>
 +
-+#include <libconfig.h>
++#include <syslog.h>
++
++#include <sys/epoll.h>
++#include <sys/stat.h>
++#include <sys/types.h>
++
++#include <thermal.h>
 +#include "thermal-tools.h"
 +
-+#define CLASS_THERMAL "/sys/class/thermal"
-+
-+enum {
-+	THERMOMETER_SUCCESS = 0,
-+	THERMOMETER_OPTION_ERROR,
-+	THERMOMETER_LOG_ERROR,
-+	THERMOMETER_CONFIG_ERROR,
-+	THERMOMETER_TIME_ERROR,
-+	THERMOMETER_INIT_ERROR,
-+	THERMOMETER_RUNTIME_ERROR
-+};
-+
 +struct options {
-+	int loglvl;
++	int loglevel;
 +	int logopt;
-+	int overwrite;
-+	int duration;
-+	const char *config;
-+	char postfix[PATH_MAX];
-+	char output[PATH_MAX];
++	int interactive;
++	int daemonize;
 +};
 +
-+struct tz_regex {
-+	regex_t regex;
-+	int polling;
++struct thermal_data {
++	struct thermal_zone *tz;
++	struct thermal_handler *th;
 +};
 +
-+struct configuration {
-+	struct tz_regex *tz_regex;
-+	int nr_tz_regex;
-+
-+};
-+
-+struct tz {
-+	FILE *file_out;
-+	int fd_temp;
-+	int fd_timer;
-+	int polling;
-+	const char *name;
-+};
-+
-+struct thermometer {
-+	struct tz *tz;
-+	int nr_tz;
-+};
-+
-+static struct tz_regex *configuration_tz_match(const char *expr,
-+					       struct configuration *config)
++static int show_trip(struct thermal_trip *tt, __maybe_unused void *arg)
 +{
-+	int i;
-+
-+	for (i = 0; i < config->nr_tz_regex; i++) {
-+
-+		if (!regexec(&config->tz_regex[i].regex, expr, 0, NULL, 0))
-+			return &config->tz_regex[i];
-+	}
-+
-+	return NULL;
-+}
-+
-+static int configuration_default_init(struct configuration *config)
-+{
-+	config->tz_regex = realloc(config->tz_regex, sizeof(*config->tz_regex) *
-+				   (config->nr_tz_regex + 1));
-+
-+	if (regcomp(&config->tz_regex[config->nr_tz_regex].regex, ".*",
-+		    REG_NOSUB | REG_EXTENDED)) {
-+		ERROR("Invalid regular expression\n");
-+		return -1;
-+	}
-+
-+	config->tz_regex[config->nr_tz_regex].polling = 250;
-+	config->nr_tz_regex = 1;
++	INFO("trip id=%d, type=%d, temp=%d, hyst=%d\n",
++	     tt->id, tt->type, tt->temp, tt->hyst);
 +
 +	return 0;
 +}
 +
-+static int configuration_init(const char *path, struct configuration *config)
++static int show_temp(struct thermal_zone *tz, __maybe_unused void *arg)
 +{
-+	config_t cfg;
++	thermal_cmd_get_temp(arg, tz);
 +
-+	config_setting_t *tz;
-+	int i, length;
-+
-+	if (path && access(path, F_OK)) {
-+		ERROR("'%s' is not accessible\n", path);
-+		return -1;
-+	}
-+
-+	if (!path && !config->nr_tz_regex) {
-+		INFO("No thermal zones configured, using wildcard for all of them\n");
-+		return configuration_default_init(config);
-+	}
-+
-+	config_init(&cfg);
-+
-+	if (!config_read_file(&cfg, path)) {
-+		ERROR("Failed to parse %s:%d - %s\n", config_error_file(&cfg),
-+		      config_error_line(&cfg), config_error_text(&cfg));
-+
-+		return -1;
-+	}
-+
-+	tz = config_lookup(&cfg, "thermal-zones");
-+	if (!tz) {
-+		ERROR("No thermal zone configured to be monitored\n");
-+		return -1;
-+	}
-+
-+	length = config_setting_length(tz);
-+
-+	INFO("Found %d thermal zone(s) regular expression\n", length);
-+
-+	for (i = 0; i < length; i++) {
-+
-+		config_setting_t *node;
-+		const char *name;
-+		int polling;
-+
-+		node = config_setting_get_elem(tz, i);
-+		if (!node) {
-+			ERROR("Missing node name '%d'\n", i);
-+			return -1;
-+		};
-+
-+		if (!config_setting_lookup_string(node, "name", &name)) {
-+			ERROR("Thermal zone name not found\n");
-+			return -1;
-+		}
-+
-+		if (!config_setting_lookup_int(node, "polling", &polling)) {
-+			ERROR("Polling value not found");
-+			return -1;
-+		}
-+
-+		config->tz_regex = realloc(config->tz_regex, sizeof(*config->tz_regex) *
-+					(config->nr_tz_regex + 1));
-+
-+		if (regcomp(&config->tz_regex[config->nr_tz_regex].regex, name,
-+			    REG_NOSUB | REG_EXTENDED)) {
-+			ERROR("Invalid regular expression '%s'\n", name);
-+			continue;
-+		}
-+
-+		config->tz_regex[config->nr_tz_regex].polling = polling;
-+		config->nr_tz_regex++;
-+
-+		INFO("Thermal zone regular expression '%s' with polling %d\n",
-+		     name, polling);
-+	}
++	INFO("temperature: %d\n", tz->temp);
 +
 +	return 0;
++}
++
++static int show_governor(struct thermal_zone *tz, __maybe_unused void *arg)
++{
++	thermal_cmd_get_governor(arg, tz);
++
++	INFO("governor: '%s'\n", tz->governor);
++
++	return 0;
++}
++
++static int show_tz(struct thermal_zone *tz, __maybe_unused void *arg)
++{
++	INFO("thermal zone '%s', id=%d\n", tz->name, tz->id);
++
++	for_each_thermal_trip(tz->trip, show_trip, NULL);
++
++	show_temp(tz, arg);
++
++	show_governor(tz, arg);
++
++	return 0;
++}
++
++static int tz_create(const char *name, int tz_id, __maybe_unused void *arg)
++{
++	INFO("Thermal zone '%s'/%d created\n", name, tz_id);
++
++	return 0;
++}
++
++static int tz_delete(int tz_id, __maybe_unused void *arg)
++{
++	INFO("Thermal zone %d deleted\n", tz_id);
++
++	return 0;
++}
++
++static int tz_disable(int tz_id, void *arg)
++{
++	struct thermal_data *td = arg;
++	struct thermal_zone *tz = thermal_zone_find_by_id(td->tz, tz_id);
++
++	INFO("Thermal zone %d ('%s') disabled\n", tz_id, tz->name);
++
++	return 0;
++}
++
++static int tz_enable(int tz_id, void *arg)
++{
++	struct thermal_data *td = arg;
++	struct thermal_zone *tz = thermal_zone_find_by_id(td->tz, tz_id);
++
++	INFO("Thermal zone %d ('%s') enabled\n", tz_id, tz->name);
++
++	return 0;
++}
++
++static int trip_high(int tz_id, int trip_id, int temp, void *arg)
++{
++	struct thermal_data *td = arg;
++	struct thermal_zone *tz = thermal_zone_find_by_id(td->tz, tz_id);
++
++	INFO("Thermal zone %d ('%s'): trip point %d crossed way up with %d °C\n",
++	     tz_id, tz->name, trip_id, temp);
++
++	return 0;
++}
++
++static int trip_low(int tz_id, int trip_id, int temp, void *arg)
++{
++	struct thermal_data *td = arg;
++	struct thermal_zone *tz = thermal_zone_find_by_id(td->tz, tz_id);
++
++	INFO("Thermal zone %d ('%s'): trip point %d crossed way down with %d °C\n",
++	     tz_id, tz->name, trip_id, temp);
++
++	return 0;
++}
++
++static int trip_add(int tz_id, int trip_id, int type, int temp, int hyst, __maybe_unused void *arg)
++{
++	INFO("Trip point added %d: id=%d, type=%d, temp=%d, hyst=%d\n",
++	     tz_id, trip_id, type, temp, hyst);
++
++	return 0;
++}
++
++static int trip_delete(int tz_id, int trip_id, __maybe_unused void *arg)
++{
++	INFO("Trip point deleted %d: id=%d\n", tz_id, trip_id);
++
++	return 0;
++}
++
++static int trip_change(int tz_id, int trip_id, int type, int temp,
++		       int hyst, __maybe_unused void *arg)
++{
++	struct thermal_data *td = arg;
++	struct thermal_zone *tz = thermal_zone_find_by_id(td->tz, tz_id);
++
++	INFO("Trip point changed %d: id=%d, type=%d, temp=%d, hyst=%d\n",
++	     tz_id, trip_id, type, temp, hyst);
++
++	tz->trip[trip_id].type = type;
++	tz->trip[trip_id].temp = temp;
++	tz->trip[trip_id].hyst = hyst;
++
++	return 0;
++}
++
++static int cdev_add(const char *name, int cdev_id, int max_state, __maybe_unused void *arg)
++{
++	INFO("Cooling device '%s'/%d (max state=%d) added\n", name, cdev_id, max_state);
++
++	return 0;
++}
++
++static int cdev_delete(int cdev_id, __maybe_unused void *arg)
++{
++	INFO("Cooling device %d deleted", cdev_id);
++
++	return 0;
++}
++
++static int cdev_update(int cdev_id, int cur_state, __maybe_unused void *arg)
++{
++	INFO("cdev:%d state:%d\n", cdev_id, cur_state);
++
++	return 0;
++}
++
++static int gov_change(int tz_id, const char *name, __maybe_unused void *arg)
++{
++	struct thermal_data *td = arg;
++	struct thermal_zone *tz = thermal_zone_find_by_id(td->tz, tz_id);
++
++	INFO("%s: governor changed %s -> %s\n", tz->name, tz->governor, name);
++
++	strcpy(tz->governor, name);
++
++	return 0;
++}
++
++static struct thermal_ops ops = {
++	.events.tz_create	= tz_create,
++	.events.tz_delete	= tz_delete,
++	.events.tz_disable	= tz_disable,
++	.events.tz_enable	= tz_enable,
++	.events.trip_high	= trip_high,
++	.events.trip_low	= trip_low,
++	.events.trip_add	= trip_add,
++	.events.trip_delete	= trip_delete,
++	.events.trip_change	= trip_change,
++	.events.cdev_add	= cdev_add,
++	.events.cdev_delete	= cdev_delete,
++	.events.cdev_update	= cdev_update,
++	.events.gov_change	= gov_change
++};
++
++static int thermal_event(__maybe_unused int fd, __maybe_unused void *arg)
++{
++	struct thermal_data *td = arg;
++
++	return thermal_events_handle(td->th, td);
 +}
 +
 +static void help(const char *cmd)
 +{
-+	printf("%s Version: %s\n", cmd, VERSION);
++	printf("%s : A thermal monitoring engine based on notifications\n", cmd);
 +	printf("Usage: %s [options]\n", cmd);
 +	printf("\t-h, --help\t\tthis help\n");
-+	printf("\t-o, --output <dir>\toutput directory for temperature capture\n");
-+	printf("\t-c, --config <file>\tconfiguration file\n");
-+	printf("\t-d, --duration <seconds>\tcapture duration\n");
-+	printf("\t-l, --loglevel <level>\tlog level: ");
++	printf("\t-d, --daemonize\tcapture duration\n");
++	printf("\t-l <level>, --loglevel <level>\tlog level: ");
 +	printf("DEBUG, INFO, NOTICE, WARN, ERROR\n");
-+	printf("\t-p, --postfix <string>\tpostfix to be happened at the end of the files\n");
 +	printf("\t-s, --syslog\t\toutput to syslog\n");
-+	printf("\t-w, --overwrite\t\toverwrite the temperature capture files if they exist\n");
 +	printf("\n");
 +	exit(0);
 +}
@@ -506,55 +451,35 @@ index 000000000000..cb30a4a039cb
 +static int options_init(int argc, char *argv[], struct options *options)
 +{
 +	int opt;
-+	time_t now = time(NULL);
 +
 +	struct option long_options[] = {
 +		{ "help",	no_argument, NULL, 'h' },
-+		{ "config",	required_argument, NULL, 'c' },
-+		{ "duration",	required_argument, NULL, 'd' },
++		{ "daemonize",	no_argument, NULL, 'd' },
++		{ "syslog",	no_argument, NULL, 's' },
 +		{ "loglevel",	required_argument, NULL, 'l' },
-+		{ "postfix",	required_argument, NULL, 'p' },
-+		{ "output",	required_argument, NULL, 'o' },
-+		{ "syslog",	required_argument, NULL, 's' },
-+		{ "overwrite",	no_argument, NULL, 'w' },
 +		{ 0, 0, 0, 0 }
 +	};
-+
-+	strftime(options->postfix, sizeof(options->postfix),
-+		 "-%Y-%m-%d_%H:%M:%S", gmtime(&now));
 +
 +	while (1) {
 +
 +		int optindex = 0;
 +
-+		opt = getopt_long(argc, argv, "ho:c:d:l:p:sw", long_options, &optindex);
++		opt = getopt_long(argc, argv, "l:dhs", long_options, &optindex);
 +		if (opt == -1)
 +			break;
 +
 +		switch (opt) {
-+		case 'c':
-+			options->config = optarg;
++		case 'l':
++			options->loglevel = log_str2level(optarg);
 +			break;
 +		case 'd':
-+			options->duration = atoi(optarg) * 1000;
-+			break;
-+		case 'l':
-+			options->loglvl = log_str2level(optarg);
-+			break;
-+		case 'h':
-+			help(basename(argv[0]));
-+			break;
-+		case 'p':
-+			strcpy(options->postfix, optarg);
-+			break;
-+		case 'o':
-+			strcpy(options->output, optarg);
++			options->daemonize = 1;
 +			break;
 +		case 's':
 +			options->logopt = TO_SYSLOG;
 +			break;
-+		case 'w':
-+			options->overwrite = 1;
++		case 'h':
++			help(basename(argv[0]));
 +			break;
 +		default: /* '?' */
 +			ERROR("Usage: %s --help\n", argv[0]);
@@ -565,320 +490,55 @@ index 000000000000..cb30a4a039cb
 +	return 0;
 +}
 +
-+static int thermometer_add_tz(const char *path, const char *name, int polling,
-+			      struct thermometer *thermometer)
++enum {
++	THERMAL_ENGINE_SUCCESS = 0,
++	THERMAL_ENGINE_OPTION_ERROR,
++	THERMAL_ENGINE_DAEMON_ERROR,
++	THERMAL_ENGINE_LOG_ERROR,
++	THERMAL_ENGINE_THERMAL_ERROR,
++	THERMAL_ENGINE_MAINLOOP_ERROR,
++};
++
++int main(int argc, char *argv[])
 +{
-+	int fd;
-+	char tz_path[PATH_MAX];
-+
-+	sprintf(tz_path, CLASS_THERMAL"/%s/temp", path);
-+
-+	fd = open(tz_path, O_RDONLY);
-+	if (fd < 0) {
-+		ERROR("Failed to open '%s': %m\n", tz_path);
-+		return -1;
-+	}
-+
-+	thermometer->tz = realloc(thermometer->tz,
-+				  sizeof(*thermometer->tz) * (thermometer->nr_tz + 1));
-+	if (!thermometer->tz) {
-+		ERROR("Failed to allocate thermometer->tz\n");
-+		return -1;
-+	}
-+
-+	thermometer->tz[thermometer->nr_tz].fd_temp = fd;
-+	thermometer->tz[thermometer->nr_tz].name = strdup(name);
-+	thermometer->tz[thermometer->nr_tz].polling = polling;
-+	thermometer->nr_tz++;
-+
-+	INFO("Added thermal zone '%s->%s (polling:%d)'\n", path, name, polling);
-+
-+	return 0;
-+}
-+
-+static int thermometer_init(struct configuration *config,
-+			    struct thermometer *thermometer)
-+{
-+	DIR *dir;
-+	struct dirent *dirent;
-+	struct tz_regex *tz_regex;
-+	const char *tz_dirname = "thermal_zone";
-+
-+	if (mainloop_init()) {
-+		ERROR("Failed to start mainloop\n");
-+		return -1;
-+	}
-+
-+	dir = opendir(CLASS_THERMAL);
-+	if (!dir) {
-+		ERROR("failed to open '%s'\n", CLASS_THERMAL);
-+		return -1;
-+	}
-+
-+	while ((dirent = readdir(dir))) {
-+		char tz_type[THERMAL_NAME_LENGTH];
-+		char tz_path[PATH_MAX];
-+		FILE *tz_file;
-+
-+		if (strncmp(dirent->d_name, tz_dirname, strlen(tz_dirname)))
-+			continue;
-+
-+		sprintf(tz_path, CLASS_THERMAL"/%s/type", dirent->d_name);
-+
-+		tz_file = fopen(tz_path, "r");
-+		if (!tz_file) {
-+			ERROR("Failed to open '%s': %m", tz_path);
-+			continue;
-+		}
-+
-+		fscanf(tz_file, "%s", tz_type);
-+
-+		fclose(tz_file);
-+
-+		tz_regex = configuration_tz_match(tz_type, config);
-+		if (!tz_regex)
-+			continue;
-+
-+		if (thermometer_add_tz(dirent->d_name, tz_type,
-+				       tz_regex->polling, thermometer))
-+			continue;
-+	}
-+
-+	closedir(dir);
-+
-+	return 0;
-+}
-+
-+static int timer_temperature_callback(int fd, void *arg)
-+{
-+	struct tz *tz = arg;
-+	char buf[16] = { 0 };
-+
-+	pread(tz->fd_temp, buf, sizeof(buf), 0);
-+
-+	fprintf(tz->file_out, "%ld %s", getuptimeofday_ms(), buf);
-+
-+	read(fd, buf, sizeof(buf));
-+
-+	return 0;
-+}
-+
-+static int thermometer_start(struct thermometer *thermometer,
-+			     struct options *options)
-+{
-+	struct itimerspec timer_it = { 0 };
-+	char *path;
-+	FILE *f;
-+	int i;
-+
-+	INFO("Capturing %d thermal zone(s) temperature...\n", thermometer->nr_tz);
-+
-+	if (access(options->output, F_OK) && mkdir(options->output, 0700)) {
-+		ERROR("Failed to create directory '%s'\n", options->output);
-+		return -1;
-+	}
-+
-+	for (i = 0; i < thermometer->nr_tz; i++) {
-+
-+		asprintf(&path, "%s/%s%s", options->output,
-+			 thermometer->tz[i].name, options->postfix);
-+
-+		if (!options->overwrite && !access(path, F_OK)) {
-+			ERROR("'%s' already exists\n", path);
-+			return -1;
-+		}
-+
-+		f = fopen(path, "w");
-+		if (!f) {
-+			ERROR("Failed to create '%s':%m\n", path);
-+			return -1;
-+		}
-+
-+		fprintf(f, "timestamp(ms) %s(°mC)\n", thermometer->tz[i].name);
-+
-+		thermometer->tz[i].file_out = f;
-+
-+		DEBUG("Created '%s' file for thermal zone '%s'\n", path, thermometer->tz[i].name);
-+
-+		/*
-+		 * Create polling timer
-+		 */
-+		thermometer->tz[i].fd_timer = timerfd_create(CLOCK_MONOTONIC, 0);
-+		if (thermometer->tz[i].fd_timer < 0) {
-+			ERROR("Failed to create timer for '%s': %m\n",
-+			      thermometer->tz[i].name);
-+			return -1;
-+		}
-+
-+		DEBUG("Watching '%s' every %d ms\n",
-+		      thermometer->tz[i].name, thermometer->tz[i].polling);
-+
-+		timer_it.it_interval = timer_it.it_value =
-+			msec_to_timespec(thermometer->tz[i].polling);
-+
-+		if (timerfd_settime(thermometer->tz[i].fd_timer, 0,
-+				    &timer_it, NULL) < 0)
-+			return -1;
-+
-+		if (mainloop_add(thermometer->tz[i].fd_timer,
-+				 timer_temperature_callback,
-+				 &thermometer->tz[i]))
-+			return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int thermometer_execute(int argc, char *argv[], char *const envp[])
-+{
-+	pid_t pid;
-+
-+	if (!argc)
-+		return 0;
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		ERROR("Failed to fork process: %m");
-+		return -1;
-+	}
-+
-+	if (!pid) {
-+		execvpe(argv[0], argv, envp);
-+		exit(1);
-+	}
-+
-+	return 0;
-+}
-+
-+static int exit_mainloop(__maybe_unused int fd, __maybe_unused void *arg)
-+{
-+	mainloop_exit();
-+
-+	return 0;
-+}
-+
-+static int thermometer_wait(struct options *options)
-+{
-+	int fd;
-+	sigset_t mask;
-+
-+	/*
-+	 * If there is a duration specified, we will exit the mainloop
-+	 * and gracefully close all the files which will flush the
-+	 * file system cache
-+	 */
-+	if (options->duration) {
-+		struct itimerspec timer_it = { 0 };
-+
-+		timer_it.it_value = msec_to_timespec(options->duration);
-+
-+		fd = timerfd_create(CLOCK_MONOTONIC, 0);
-+		if (fd < 0) {
-+			ERROR("Failed to create duration timer: %m\n");
-+			return -1;
-+		}
-+
-+		if (timerfd_settime(fd, 0, &timer_it, NULL)) {
-+			ERROR("Failed to set timer time: %m\n");
-+			return -1;
-+		}
-+
-+		if (mainloop_add(fd, exit_mainloop, NULL)) {
-+			ERROR("Failed to set timer exit mainloop callback\n");
-+			return -1;
-+		}
-+	}
-+
-+	/*
-+	 * We want to catch any keyboard interrupt, as well as child
-+	 * signals if any in order to exit properly
-+	 */
-+	sigemptyset(&mask);
-+	sigaddset(&mask, SIGINT);
-+	sigaddset(&mask, SIGQUIT);
-+	sigaddset(&mask, SIGCHLD);
-+
-+	if (sigprocmask(SIG_BLOCK, &mask, NULL)) {
-+		ERROR("Failed to set sigprocmask: %m\n");
-+		return -1;
-+	}
-+
-+	fd = signalfd(-1, &mask, 0);
-+	if (fd < 0) {
-+		ERROR("Failed to set the signalfd: %m\n");
-+		return -1;
-+	}
-+
-+	if (mainloop_add(fd, exit_mainloop, NULL)) {
-+		ERROR("Failed to set timer exit mainloop callback\n");
-+		return -1;
-+	}
-+
-+	return mainloop(-1);
-+}
-+
-+static int thermometer_stop(struct thermometer *thermometer)
-+{
-+	int i;
-+
-+	INFO("Closing/flushing output files\n");
-+
-+	for (i = 0; i < thermometer->nr_tz; i++)
-+		fclose(thermometer->tz[i].file_out);
-+
-+	return 0;
-+}
-+
-+int main(int argc, char *argv[], char *const envp[])
-+{
++	struct thermal_data td;
 +	struct options options = {
-+		.loglvl = LOG_DEBUG,
++		.loglevel = LOG_INFO,
 +		.logopt = TO_STDOUT,
-+		.output = ".",
 +	};
-+	struct configuration config = { 0 };
-+	struct thermometer thermometer = { 0 };
 +
 +	if (options_init(argc, argv, &options))
-+		return THERMOMETER_OPTION_ERROR;
++		return THERMAL_ENGINE_OPTION_ERROR;
 +
-+	if (log_init(options.loglvl, argv[0], options.logopt))
-+		return THERMOMETER_LOG_ERROR;
++	if (options.daemonize && daemon(0, 0))
++		return THERMAL_ENGINE_DAEMON_ERROR;
 +
-+	if (configuration_init(options.config, &config))
-+		return THERMOMETER_CONFIG_ERROR;
++	if (log_init(options.loglevel, basename(argv[0]), options.logopt))
++		return THERMAL_ENGINE_LOG_ERROR;
 +
-+	if (uptimeofday_init())
-+		return THERMOMETER_TIME_ERROR;
++	td.th = thermal_init(&ops);
++	if (!td.th)
++		return THERMAL_ENGINE_THERMAL_ERROR;
 +
-+	if (thermometer_init(&config, &thermometer))
-+		return THERMOMETER_INIT_ERROR;
++	td.tz = thermal_zone_discover(td.th);
++	if (!td.tz)
++		return THERMAL_ENGINE_THERMAL_ERROR;
 +
-+	if (thermometer_start(&thermometer, &options))
-+		return THERMOMETER_RUNTIME_ERROR;
++	for_each_thermal_zone(td.tz, show_tz, td.th);
 +
-+	if (thermometer_execute(argc - optind, &argv[optind], envp))
-+		return THERMOMETER_RUNTIME_ERROR;
++	if (mainloop_init())
++		return THERMAL_ENGINE_MAINLOOP_ERROR;
 +
-+	if (thermometer_wait(&options))
-+		return THERMOMETER_RUNTIME_ERROR;
++	if (mainloop_add(thermal_events_fd(td.th), thermal_event, &td))
++		return THERMAL_ENGINE_MAINLOOP_ERROR;
 +
-+	if (thermometer_stop(&thermometer))
-+		return THERMOMETER_RUNTIME_ERROR;
++	INFO("Waiting for thermal events ...\n");
 +
-+	return THERMOMETER_SUCCESS;
++	if (mainloop(-1))
++		return THERMAL_ENGINE_MAINLOOP_ERROR;
++
++	return THERMAL_ENGINE_SUCCESS;
 +}
-diff --git a/tools/thermal/thermometer/thermometer.conf b/tools/thermal/thermometer/thermometer.conf
-new file mode 100644
-index 000000000000..456aa269c1b7
---- /dev/null
-+++ b/tools/thermal/thermometer/thermometer.conf
-@@ -0,0 +1,5 @@
-+
-+thermal-zones = (
-+	      {	name = "cluster1-thermal";
-+	      	polling = 100; }
-+      )
 -- 
 2.25.1
 

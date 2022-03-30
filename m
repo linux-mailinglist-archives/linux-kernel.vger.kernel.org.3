@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1959C4ECF8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 00:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 759E44ECF8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 00:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351595AbiC3WUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 18:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
+        id S1351600AbiC3WUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 18:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351519AbiC3WU1 (ORCPT
+        with ESMTP id S1351534AbiC3WU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 18:20:27 -0400
+        Wed, 30 Mar 2022 18:20:29 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C70B24085;
-        Wed, 30 Mar 2022 15:18:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B9127B33;
+        Wed, 30 Mar 2022 15:18:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648678719; x=1680214719;
+  t=1648678723; x=1680214723;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=41Lg8aoTTqvxhP5CfaPMDA9IQBgepoN9Qo3/Kho3ltg=;
-  b=bzqU8joEWaamwXEWXAayRcLFV1Q1nz9KQbwp1ZfNV9G1tzTsurGtJgIq
-   RoXFSCADckhHIedV3vSGPKXJJ6T7jp5kTxGRwDn2q+gim/zb75gKixhSy
-   woOKXhDLALc/kiHR43dI1xjJll9l1uDyqcn1kMRNxzrkeRDE8JjdQ8Ico
-   YXYMxEORXoAuj+XUQ6yD2lutmLZ77Ipeq4Dx4L93JE+JJjwRSfzQ5b30s
-   V4TZSgkxVvxC1EI+i+YJ01V+1+QPuNTAjbmFW4gFgbUF8OH+ia9tXySmx
-   bl6jXPW/13uBRHnMJYCGNJUqlTCoLFLf/Wt8riYB0J6YguqC0+QnB0QTE
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="346095984"
+  bh=H1KpTa0+fBlmVghgQCEOE2xle7VZSq8pDfmVLiOn1qo=;
+  b=JjbqMzFVYIQEpW5kNJ3YqGaHAEolEvANByBRh4Yk9KnwVy6Im7nplpak
+   RoLDlAuWYYv/mybHT3PSIvuo2XNXU1M9emblS5rDIJpyyxgc7FrvOOOII
+   9rhq0Sn08/99qQdx28BmN/7g1YwrwRvO9iWpWdYfA+HQeHfuw17e8XkL6
+   mcjPqwVhrfSdXzIbr/1pCzqiLLw7ib3EXg1tutJHnI55vjWE/Rzj9o/M9
+   Q9PramKp5ZFQjS5yHnj1vQMVrPSc9T2Br4FaxAbuw3zW62iXtEqRWIcD6
+   S2XxqzE8NQGYrC6AFZEF7szwqpoOfSosEsNwUEqns5dCBr482N10af60J
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="346095999"
 X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="346095984"
+   d="scan'208";a="346095999"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 15:18:24 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 15:18:25 -0700
 X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="788171902"
+   d="scan'208";a="788171913"
 Received: from ksanitha-mobl3.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.209.123.221])
   by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 15:18:24 -0700
 From:   Kuppuswamy Sathyanarayanan 
@@ -51,14 +51,13 @@ Cc:     "H . Peter Anvin" <hpa@zytor.com>,
         Tony Luck <tony.luck@intel.com>,
         Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
         platform-driver-x86@vger.kernel.org
-Subject: [PATCH v2 5/6] platform/x86: intel_tdx_attest: Add TDX Guest attestation interface driver
-Date:   Wed, 30 Mar 2022 15:18:04 -0700
-Message-Id: <054b22e81e88379a5a8459c19e89a335531c1bdd.1648664666.git.sathyanarayanan.kuppuswamy@intel.com>
+Subject: [PATCH v2 6/6] tools/tdx: Add a sample attestation user app
+Date:   Wed, 30 Mar 2022 15:18:05 -0700
+Message-Id: <9247fade9db5ae6eb183b2f92fdedb898282376a.1648664666.git.sathyanarayanan.kuppuswamy@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1648664666.git.sathyanarayanan.kuppuswamy@intel.com>
 References: <cover.1648664666.git.sathyanarayanan.kuppuswamy@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -70,420 +69,425 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TDX guest supports encrypted disk as root or secondary drives.
-Decryption keys required to access such drives are usually maintained
-by 3rd party key servers. Attestation is required by 3rd party key
-servers to get the key for an encrypted disk volume, or possibly other
-encrypted services. Attestation is used to prove to the key server that
-the TD guest is running in a valid TD and the kernel and virtual BIOS
-and other environment are secure.
+This application uses the misc device /dev/tdx-attest to get TDREPORT
+from the TDX Module or request quote from the VMM.
 
-During the boot process various components before the kernel accumulate
-hashes in the TDX module, which can then combined into a report. This
-would typically include a hash of the bios, bios configuration, boot
-loader, command line, kernel, initrd.  After checking the hashes the
-key server will securely release the keys.
+It tests following attestation features:
 
-The actual details of the attestation protocol depend on the particular
-key server configuration, but some parts are common and need to
-communicate with the TDX module.
+  - Get report using TDX_CMD_GET_TDREPORT IOCTL.
+  - Using report data request quote from VMM using TDX_CMD_GEN_QUOTE IOCTL.
+  - Get the quote size using TDX_CMD_GET_QUOTE_SIZE IOCTL.
 
-This communication is implemented in the attestation driver.
-
-The supported steps are:
-
-  1. TD guest generates the TDREPORT that contains version information
-     about the Intel TDX module, measurement of the TD, along with a
-     TD-specified nonce.
-  2. TD guest shares the TDREPORT with TD host via GetQuote hypercall
-     which is used by the host to generate a quote via quoting
-     enclave (QE).
-  3. Quote generation completion notification is sent to TD OS via
-     callback interrupt vector configured by TD using
-     SetupEventNotifyInterrupt hypercall.
-  4. After receiving the generated TDQUOTE, a remote verifier can be
-     used to verify the quote and confirm the trustworthiness of the
-     TD.
-
-Attestation agent uses IOCTLs implemented by the attestation driver to
-complete the various steps of the attestation process.
-
-Also note that, explicit access permissions are not enforced in this
-driver because the quote and measurements are not a secret. However
-the access permissions of the device node can be used to set any
-desired access policy. The udev default is usually root access
-only.
-
-TDX_CMD_GEN_QUOTE IOCTL can be used to create an computation on the
-host, but TDX assumes that the host is able to deal with malicious
-guest flooding it anyways.
-
-The interaction with the TDX module is like a RPM protocol here. There
-are several operations (get tdreport, get quote) that need to input a
-blob, and then output another blob. It was considered to use a sysfs
-interface for this, but it doesn't fit well into the standard sysfs
-model for configuring values. It would be possible to do read/write on
-files, but it would need multiple file descriptors, which would be
-somewhat messy. ioctls seems to be the best fitting and simplest model
-here. There is one ioctl per operation, that takes the input blob and
-returns the output blob, and as well as auxiliary ioctls to return the
-blob lengths. The ioctls are documented in the header file. 
-
-[Chenyi Qiang: Proposed struct tdx_gen_quote for passing user buffer]
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 Reviewed-by: Andi Kleen <ak@linux.intel.com>
 Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Acked-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 ---
- drivers/platform/x86/intel/Kconfig            |   1 +
- drivers/platform/x86/intel/Makefile           |   1 +
- drivers/platform/x86/intel/tdx/Kconfig        |  13 +
- drivers/platform/x86/intel/tdx/Makefile       |   3 +
- .../platform/x86/intel/tdx/intel_tdx_attest.c | 230 ++++++++++++++++++
- include/uapi/misc/tdx.h                       |  42 ++++
- 6 files changed, 290 insertions(+)
- create mode 100644 drivers/platform/x86/intel/tdx/Kconfig
- create mode 100644 drivers/platform/x86/intel/tdx/Makefile
- create mode 100644 drivers/platform/x86/intel/tdx/intel_tdx_attest.c
- create mode 100644 include/uapi/misc/tdx.h
+ tools/Makefile                              |  16 +-
+ tools/arch/x86/tdx/Makefile                 |  19 ++
+ tools/arch/x86/tdx/attest/.gitignore        |   2 +
+ tools/arch/x86/tdx/attest/Makefile          |  24 ++
+ tools/arch/x86/tdx/attest/tdx-attest-test.c | 263 ++++++++++++++++++++
+ 5 files changed, 321 insertions(+), 3 deletions(-)
+ create mode 100644 tools/arch/x86/tdx/Makefile
+ create mode 100644 tools/arch/x86/tdx/attest/.gitignore
+ create mode 100644 tools/arch/x86/tdx/attest/Makefile
+ create mode 100644 tools/arch/x86/tdx/attest/tdx-attest-test.c
 
-diff --git a/drivers/platform/x86/intel/Kconfig b/drivers/platform/x86/intel/Kconfig
-index 8e65086bb6c8..a2ed17d67052 100644
---- a/drivers/platform/x86/intel/Kconfig
-+++ b/drivers/platform/x86/intel/Kconfig
-@@ -12,6 +12,7 @@ source "drivers/platform/x86/intel/pmt/Kconfig"
- source "drivers/platform/x86/intel/speed_select_if/Kconfig"
- source "drivers/platform/x86/intel/telemetry/Kconfig"
- source "drivers/platform/x86/intel/wmi/Kconfig"
-+source "drivers/platform/x86/intel/tdx/Kconfig"
+diff --git a/tools/Makefile b/tools/Makefile
+index db2f7b8ebed5..87b597754a55 100644
+--- a/tools/Makefile
++++ b/tools/Makefile
+@@ -30,6 +30,7 @@ help:
+ 	@echo '  selftests              - various kernel selftests'
+ 	@echo '  bootconfig             - boot config tool'
+ 	@echo '  spi                    - spi tools'
++	@echo '  tdx                    - TDX related test tools'
+ 	@echo '  tmon                   - thermal monitoring and tuning tool'
+ 	@echo '  tracing                - misc tracing tools'
+ 	@echo '  turbostat              - Intel CPU idle stats and freq reporting tool'
+@@ -97,11 +98,14 @@ freefall: FORCE
+ kvm_stat: FORCE
+ 	$(call descend,kvm/$@)
  
- config INTEL_HID_EVENT
- 	tristate "Intel HID Event"
-diff --git a/drivers/platform/x86/intel/Makefile b/drivers/platform/x86/intel/Makefile
-index 35f2066578b2..27a6c6c5a83f 100644
---- a/drivers/platform/x86/intel/Makefile
-+++ b/drivers/platform/x86/intel/Makefile
-@@ -11,6 +11,7 @@ obj-$(CONFIG_INTEL_SKL_INT3472)		+= int3472/
- obj-$(CONFIG_INTEL_PMC_CORE)		+= pmc/
- obj-$(CONFIG_INTEL_PMT_CLASS)		+= pmt/
- obj-$(CONFIG_INTEL_SPEED_SELECT_INTERFACE) += speed_select_if/
-+obj-$(CONFIG_INTEL_TDX_GUEST)		+= tdx/
- obj-$(CONFIG_INTEL_TELEMETRY)		+= telemetry/
- obj-$(CONFIG_INTEL_WMI)			+= wmi/
++tdx: FORCE
++	$(call descend,arch/x86/$@)
++
+ all: acpi cgroup counter cpupower gpio hv firewire \
+ 		perf selftests bootconfig spi turbostat usb \
+ 		virtio vm bpf x86_energy_perf_policy \
+ 		tmon freefall iio objtool kvm_stat wmi \
+-		pci debugging tracing
++		pci debugging tracing tdx
  
-diff --git a/drivers/platform/x86/intel/tdx/Kconfig b/drivers/platform/x86/intel/tdx/Kconfig
-new file mode 100644
-index 000000000000..853e3a34c889
---- /dev/null
-+++ b/drivers/platform/x86/intel/tdx/Kconfig
-@@ -0,0 +1,13 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# X86 TDX Platform Specific Drivers
-+#
+ acpi_install:
+ 	$(call descend,power/$(@:_install=),install)
+@@ -127,13 +131,16 @@ freefall_install:
+ kvm_stat_install:
+ 	$(call descend,kvm/$(@:_install=),install)
+ 
++tdx_install:
++	$(call descend,arch/x86/$(@:_install=),install)
 +
-+config INTEL_TDX_ATTESTATION
-+	tristate "Intel TDX attestation driver"
-+	depends on INTEL_TDX_GUEST
-+	help
-+	  The TDX attestation driver provides IOCTL interfaces to the user to
-+	  request TDREPORT from the TDX module or request quote from the VMM
-+	  or to get quote buffer size. It is mainly used to get secure disk
-+	  decryption keys from the key server.
-diff --git a/drivers/platform/x86/intel/tdx/Makefile b/drivers/platform/x86/intel/tdx/Makefile
-new file mode 100644
-index 000000000000..124d6b7b20a0
---- /dev/null
-+++ b/drivers/platform/x86/intel/tdx/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0-only
+ install: acpi_install cgroup_install counter_install cpupower_install gpio_install \
+ 		hv_install firewire_install iio_install \
+ 		perf_install selftests_install turbostat_install usb_install \
+ 		virtio_install vm_install bpf_install x86_energy_perf_policy_install \
+ 		tmon_install freefall_install objtool_install kvm_stat_install \
+ 		wmi_install pci_install debugging_install intel-speed-select_install \
+-		tracing_install
++		tracing_install tdx_install
+ 
+ acpi_clean:
+ 	$(call descend,power/acpi,clean)
+@@ -172,11 +179,14 @@ freefall_clean:
+ build_clean:
+ 	$(call descend,build,clean)
+ 
++tdx_clean:
++	$(call descend,arch/x86/$(@:_clean=),clean)
 +
-+obj-$(CONFIG_INTEL_TDX_ATTESTATION)	+= intel_tdx_attest.o
-diff --git a/drivers/platform/x86/intel/tdx/intel_tdx_attest.c b/drivers/platform/x86/intel/tdx/intel_tdx_attest.c
+ clean: acpi_clean cgroup_clean counter_clean cpupower_clean hv_clean firewire_clean \
+ 		perf_clean selftests_clean turbostat_clean bootconfig_clean spi_clean usb_clean virtio_clean \
+ 		vm_clean bpf_clean iio_clean x86_energy_perf_policy_clean tmon_clean \
+ 		freefall_clean build_clean libbpf_clean libsubcmd_clean \
+ 		gpio_clean objtool_clean leds_clean wmi_clean pci_clean firmware_clean debugging_clean \
+-		intel-speed-select_clean tracing_clean
++		intel-speed-select_clean tracing_clean tdx_clean
+ 
+ .PHONY: FORCE
+diff --git a/tools/arch/x86/tdx/Makefile b/tools/arch/x86/tdx/Makefile
 new file mode 100644
-index 000000000000..0bf78d30e057
+index 000000000000..64217dd21d5c
 --- /dev/null
-+++ b/drivers/platform/x86/intel/tdx/intel_tdx_attest.c
-@@ -0,0 +1,230 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/tools/arch/x86/tdx/Makefile
+@@ -0,0 +1,19 @@
++# SPDX-License-Identifier: GPL-2.0
++include ../../../scripts/Makefile.include
++
++all: attest
++
++clean: attest_clean
++
++install: attest_install
++
++attest:
++	$(call descend,attest)
++
++attest_install:
++	$(call descend,attest,install)
++
++attest_clean:
++	$(call descend,attest,clean)
++
++.PHONY: all install clean attest latency_install latency_clean
+diff --git a/tools/arch/x86/tdx/attest/.gitignore b/tools/arch/x86/tdx/attest/.gitignore
+new file mode 100644
+index 000000000000..5f819a8a6c49
+--- /dev/null
++++ b/tools/arch/x86/tdx/attest/.gitignore
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0
++tdx-attest-test
+diff --git a/tools/arch/x86/tdx/attest/Makefile b/tools/arch/x86/tdx/attest/Makefile
+new file mode 100644
+index 000000000000..e5ae961c988d
+--- /dev/null
++++ b/tools/arch/x86/tdx/attest/Makefile
+@@ -0,0 +1,24 @@
++# SPDX-License-Identifier: GPL-2.0
++# Makefile for vm tools
++#
++VAR_CFLAGS := $(shell pkg-config --cflags libtracefs 2>/dev/null)
++VAR_LDLIBS := $(shell pkg-config --libs libtracefs 2>/dev/null)
++
++TARGETS = tdx-attest-test
++CFLAGS = -static -Wall -I../../../../include -Wextra -g -O2 $(VAR_CFLAGS)
++LDFLAGS = -lpthread $(VAR_LDLIBS)
++
++all: $(TARGETS)
++
++%: %.c
++	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
++
++clean:
++	$(RM) tdx-attest-test
++
++prefix ?= /usr/local
++sbindir ?= ${prefix}/sbin
++
++install: all
++	install -d $(DESTDIR)$(sbindir)
++	install -m 755 -p $(TARGETS) $(DESTDIR)$(sbindir)
+diff --git a/tools/arch/x86/tdx/attest/tdx-attest-test.c b/tools/arch/x86/tdx/attest/tdx-attest-test.c
+new file mode 100644
+index 000000000000..ce7b8e77c772
+--- /dev/null
++++ b/tools/arch/x86/tdx/attest/tdx-attest-test.c
+@@ -0,0 +1,263 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * intel_tdx_attest.c - TDX guest attestation interface driver.
++ * tdx-attest-test.c - utility to test TDX attestation feature.
 + *
-+ * Implements user interface to trigger attestation process and
-+ * read the TD Quote result.
++ * Copyright (C) 2021 - 2022 Intel Corporation. All rights reserved.
 + *
-+ * Copyright (C) 2021-2022 Intel Corporation
++ * Author: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 + *
-+ * Author:
-+ *     Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 + */
-+
-+#define pr_fmt(fmt) "x86/tdx: attest: " fmt
-+
-+#include <linux/module.h>
-+#include <linux/miscdevice.h>
-+#include <linux/uaccess.h>
-+#include <linux/fs.h>
-+#include <linux/mm.h>
-+#include <linux/slab.h>
-+#include <linux/set_memory.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/jiffies.h>
-+#include <linux/io.h>
-+#include <asm/apic.h>
-+#include <asm/tdx.h>
-+#include <asm/irq_vectors.h>
-+#include <uapi/misc/tdx.h>
-+
-+/* Used in Quote memory allocation */
-+#define QUOTE_SIZE			(2 * PAGE_SIZE)
-+/* Used in Get Quote request memory allocation */
-+#define GET_QUOTE_MAX_SIZE		(4 * PAGE_SIZE)
-+/* Get Quote timeout in msec */
-+#define GET_QUOTE_TIMEOUT		(5000)
-+
-+/* Mutex to synchronize attestation requests */
-+static DEFINE_MUTEX(attestation_lock);
-+/* Completion object to track attestation status */
-+static DECLARE_COMPLETION(attestation_done);
-+/* Buffer used to copy report data in attestation handler */
-+static u8 report_data[TDX_REPORT_DATA_LEN] __aligned(64);
-+/* Data pointer used to get TD Quote data in attestation handler */
-+static void *tdquote_data;
-+/* Data pointer used to get TDREPORT data in attestation handler */
-+static void *tdreport_data;
-+/* DMA handle used to allocate and free tdquote DMA buffer */
-+dma_addr_t tdquote_dma_handle;
-+
-+static void attestation_callback_handler(void)
-+{
-+	complete(&attestation_done);
-+}
-+
-+static long tdx_attest_ioctl(struct file *file, unsigned int cmd,
-+			     unsigned long arg)
-+{
-+	void __user *argp = (void __user *)arg;
-+	struct tdx_gen_quote tdquote_req;
-+	long ret = 0;
-+
-+	mutex_lock(&attestation_lock);
-+
-+	switch (cmd) {
-+	case TDX_CMD_GET_TDREPORT:
-+		if (copy_from_user(report_data, argp, TDX_REPORT_DATA_LEN)) {
-+			ret = -EFAULT;
-+			break;
-+		}
-+
-+		/* Generate TDREPORT_STRUCT */
-+		if (tdx_mcall_tdreport(tdreport_data, report_data)) {
-+			ret = -EIO;
-+			break;
-+		}
-+
-+		if (copy_to_user(argp, tdreport_data, TDX_TDREPORT_LEN))
-+			ret = -EFAULT;
-+		break;
-+	case TDX_CMD_GEN_QUOTE:
-+		reinit_completion(&attestation_done);
-+
-+		/* Copy TDREPORT data from user buffer */
-+		if (copy_from_user(&tdquote_req, argp, sizeof(struct tdx_gen_quote))) {
-+			ret = -EFAULT;
-+			break;
-+		}
-+
-+		if (tdquote_req.len <= 0 || tdquote_req.len > GET_QUOTE_MAX_SIZE) {
-+			ret = -EINVAL;
-+			break;
-+		}
-+
-+		if (copy_from_user(tdquote_data, tdquote_req.buf, tdquote_req.len)) {
-+			ret = -EFAULT;
-+			break;
-+		}
-+
-+		/* Submit GetQuote Request */
-+		if (tdx_hcall_get_quote(tdquote_data, GET_QUOTE_MAX_SIZE)) {
-+			ret = -EIO;
-+			break;
-+		}
-+
-+		/* Wait for attestation completion */
-+		ret = wait_for_completion_interruptible_timeout(
-+				&attestation_done,
-+				msecs_to_jiffies(GET_QUOTE_TIMEOUT));
-+		if (ret <= 0) {
-+			ret = -EIO;
-+			break;
-+		}
-+
-+		/* ret will be positive if completed. */
-+		ret = 0;
-+
-+		if (copy_to_user(tdquote_req.buf, tdquote_data, tdquote_req.len))
-+			ret = -EFAULT;
-+
-+		break;
-+	case TDX_CMD_GET_QUOTE_SIZE:
-+		ret = put_user(QUOTE_SIZE, (u64 __user *)argp);
-+		break;
-+	default:
-+		pr_err("cmd %d not supported\n", cmd);
-+		break;
-+	}
-+
-+	mutex_unlock(&attestation_lock);
-+
-+	return ret;
-+}
-+
-+static const struct file_operations tdx_attest_fops = {
-+	.owner		= THIS_MODULE,
-+	.unlocked_ioctl	= tdx_attest_ioctl,
-+	.llseek		= no_llseek,
-+};
-+
-+static struct miscdevice tdx_attest_device = {
-+	.minor          = MISC_DYNAMIC_MINOR,
-+	.name           = "tdx-attest",
-+	.fops           = &tdx_attest_fops,
-+};
-+
-+static int __init tdx_attest_init(void)
-+{
-+	dma_addr_t handle;
-+	long ret = 0;
-+
-+	mutex_lock(&attestation_lock);
-+
-+	ret = misc_register(&tdx_attest_device);
-+	if (ret) {
-+		pr_err("misc device registration failed\n");
-+		mutex_unlock(&attestation_lock);
-+		return ret;
-+	}
-+
-+	/*
-+	 * tdreport_data needs to be 64-byte aligned.
-+	 * Full page alignment is more than enough.
-+	 */
-+	tdreport_data = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, 0);
-+	if (!tdreport_data) {
-+		ret = -ENOMEM;
-+		goto failed;
-+	}
-+
-+	ret = dma_set_coherent_mask(tdx_attest_device.this_device,
-+				    DMA_BIT_MASK(64));
-+	if (ret) {
-+		pr_err("dma set coherent mask failed\n");
-+		goto failed;
-+	}
-+
-+	/* Allocate DMA buffer to get TDQUOTE data from the VMM */
-+	tdquote_data = dma_alloc_coherent(tdx_attest_device.this_device,
-+					  GET_QUOTE_MAX_SIZE, &handle,
-+					  GFP_KERNEL | __GFP_ZERO);
-+	if (!tdquote_data) {
-+		ret = -ENOMEM;
-+		goto failed;
-+	}
-+
-+	tdquote_dma_handle =  handle;
-+
-+	/* Register attestation event notify handler */
-+	tdx_setup_ev_notify_handler(attestation_callback_handler);
-+
-+	mutex_unlock(&attestation_lock);
-+
-+	pr_debug("module initialization success\n");
-+
-+	return 0;
-+
-+failed:
-+	if (tdreport_data)
-+		free_pages((unsigned long)tdreport_data, 0);
-+
-+	misc_deregister(&tdx_attest_device);
-+
-+	mutex_unlock(&attestation_lock);
-+
-+	pr_debug("module initialization failed\n");
-+
-+	return ret;
-+}
-+
-+static void __exit tdx_attest_exit(void)
-+{
-+	mutex_lock(&attestation_lock);
-+
-+	dma_free_coherent(tdx_attest_device.this_device, GET_QUOTE_MAX_SIZE,
-+			  tdquote_data, tdquote_dma_handle);
-+	free_pages((unsigned long)tdreport_data, 0);
-+	misc_deregister(&tdx_attest_device);
-+	/* Unregister attestation event notify handler */
-+	tdx_remove_ev_notify_handler();
-+	mutex_unlock(&attestation_lock);
-+	pr_debug("module is successfully removed\n");
-+}
-+
-+module_init(tdx_attest_init);
-+module_exit(tdx_attest_exit);
-+
-+MODULE_AUTHOR("Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>");
-+MODULE_DESCRIPTION("TDX attestation driver");
-+MODULE_LICENSE("GPL");
-diff --git a/include/uapi/misc/tdx.h b/include/uapi/misc/tdx.h
-new file mode 100644
-index 000000000000..839b9a220022
---- /dev/null
-+++ b/include/uapi/misc/tdx.h
-@@ -0,0 +1,42 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef _UAPI_MISC_TDX_H
-+#define _UAPI_MISC_TDX_H
 +
 +#include <linux/types.h>
 +#include <linux/ioctl.h>
++#include <sys/ioctl.h>
++#include <sys/stat.h>
++#include <sys/types.h>
++#include <stdio.h>
++#include <ctype.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <string.h>
++#include <limits.h>
++#include <stdbool.h>
++#include <getopt.h>
++#include <stdint.h> /* uintmax_t */
++#include <sys/mman.h>
++#include <time.h>
 +
-+/* Input report data length for TDX_CMD_GET_TDREPORT IOCTL request */
-+#define TDX_REPORT_DATA_LEN		64
++#include "../../../../../include/uapi/misc/tdx.h"
 +
-+/* Output TD report data length after TDX_CMD_GET_TDREPORT IOCTL execution */
-+#define TDX_TDREPORT_LEN		1024
++#define devname		"/dev/tdx-attest"
 +
-+/*
-+ * TDX_CMD_GET_TDREPORT IOCTL is used to get TDREPORT data from the TDX
-+ * Module. Users should pass report data of size TDX_REPORT_DATA_LEN bytes
-+ * via user input buffer of size TDX_TDREPORT_LEN. Once IOCTL is successful
-+ * TDREPORT data is copied to the user buffer.
-+ */
-+#define TDX_CMD_GET_TDREPORT		_IOWR('T', 0x01, __u64)
++#define HEX_DUMP_SIZE	16
++#define MAX_ROW_SIZE	70
 +
-+/*
-+ * TDX_CMD_GEN_QUOTE IOCTL is used to request TD QUOTE from the VMM. User
-+ * should pass TD report data of size TDX_TDREPORT_LEN bytes via user input
-+ * buffer of quote size. Once IOCTL is successful quote data is copied back to
-+ * the user buffer.
-+ */
-+#define TDX_CMD_GEN_QUOTE		_IOR('T', 0x02, __u64)
++/* length of trans_len */
++#define REPORT_HEADER_SIZE	4
++/* version, status, in_len, out_len */
++#define QUOTE_HEADER_SIZE	24
 +
-+/*
-+ * TDX_CMD_GET_QUOTE_SIZE IOCTL is used to get the TD Quote size info in bytes.
-+ * This will be used for determining the input buffer allocation size when
-+ * using TDX_CMD_GEN_QUOTE IOCTL.
-+ */
-+#define TDX_CMD_GET_QUOTE_SIZE		_IOR('T', 0x03, __u64)
++#define ATTESTATION_TEST_BIN_VERSION "0.1"
 +
-+struct tdx_gen_quote {
-+	void *buf __user;
-+	size_t len;
++struct tdx_attest_args {
++	bool is_dump_data;
++	bool is_get_tdreport;
++	bool is_get_quote_size;
++	bool is_gen_quote;
++	bool debug_mode;
++	char *out_file;
 +};
 +
-+#endif /* _UAPI_MISC_TDX_H */
++struct tdx_quote_blob {
++	uint64_t version;
++	uint64_t status;
++	uint32_t in_len;
++	uint32_t out_len;
++	int8_t trans_len[4];
++	uint8_t data;
++};
++
++static void print_hex_dump(const char *title, const char *prefix_str,
++			   const void *buf, int len)
++{
++	const __u8 *ptr = buf;
++	int i, rowsize = HEX_DUMP_SIZE;
++
++	if (!len || !buf)
++		return;
++
++	printf("\t\t%s", title);
++
++	for (i = 0; i < len; i++) {
++		if (!(i % rowsize))
++			printf("\n%s%.8x:", prefix_str, i);
++		printf(" %.2x", ptr[i]);
++	}
++
++	printf("\n");
++}
++
++static void gen_report_data(__u8 *report_data, bool dump_data)
++{
++	int i;
++
++	srand(time(NULL));
++
++	for (i = 0; i < TDX_REPORT_DATA_LEN; i++)
++		report_data[i] = rand();
++
++	if (dump_data)
++		print_hex_dump("\n\t\tTDX report data\n", " ",
++			       report_data, TDX_REPORT_DATA_LEN);
++}
++
++static int get_tdreport(int devfd, bool dump_data, __u8 *report_data)
++{
++	__u8 tdrdata[TDX_TDREPORT_LEN] = {0};
++	int ret;
++
++	if (!report_data)
++		report_data = tdrdata;
++
++	gen_report_data(report_data, dump_data);
++
++	ret = ioctl(devfd, TDX_CMD_GET_TDREPORT, report_data);
++	if (ret) {
++		printf("TDX_CMD_GET_TDREPORT ioctl() %d failed\n", ret);
++		return -EIO;
++	}
++
++	if (dump_data)
++		print_hex_dump("\n\t\tTDX tdreport data\n", " ", report_data,
++			       TDX_TDREPORT_LEN);
++
++	return 0;
++}
++
++static __u64 get_quote_size(int devfd)
++{
++	int ret;
++	__u64 quote_size;
++
++	ret = ioctl(devfd, TDX_CMD_GET_QUOTE_SIZE, &quote_size);
++	if (ret) {
++		printf("TDX_CMD_GET_QUOTE_SIZE ioctl() %d failed\n", ret);
++		return -EIO;
++	}
++
++	printf("Quote size: %lld\n", quote_size);
++
++	return quote_size;
++}
++
++static int gen_quote(int devfd, bool dump_data)
++{
++	__u64 quote_size, quote_new_size;
++	struct tdx_quote_blob *quote_blob;
++	struct tdx_gen_quote getquote_arg;
++	__u8 *quote_data;
++	int ret;
++
++	quote_size = get_quote_size(devfd);
++
++	quote_new_size = sizeof(*quote_blob) + sizeof(char) * quote_size;
++
++	quote_data = malloc(quote_new_size);
++	if (!quote_data) {
++		printf("%s queue data alloc failed\n", devname);
++		return -ENOMEM;
++	}
++
++	quote_blob = (struct tdx_quote_blob *)quote_data;
++
++	ret = get_tdreport(devfd, dump_data, &quote_blob->data);
++	if (ret) {
++		printf("TDX_CMD_GET_TDREPORT ioctl() %d failed\n", ret);
++		goto done;
++	}
++
++	quote_blob->version = 1;
++	quote_blob->status = 0;
++	quote_blob->trans_len[0] = (uint8_t)((TDX_TDREPORT_LEN >> 24) & 0xFF);
++	quote_blob->trans_len[1] = (uint8_t)((TDX_TDREPORT_LEN >> 16) & 0xFF);
++	quote_blob->trans_len[2] = (uint8_t)((TDX_TDREPORT_LEN >> 8) & 0xFF);
++	quote_blob->trans_len[3] = (uint8_t)((TDX_TDREPORT_LEN) & 0xFF);
++	quote_blob->in_len = REPORT_HEADER_SIZE + TDX_TDREPORT_LEN;
++	quote_blob->out_len = quote_new_size - QUOTE_HEADER_SIZE;
++
++	getquote_arg.buf = quote_data;
++	getquote_arg.len = quote_new_size;
++
++	ret = ioctl(devfd, TDX_CMD_GEN_QUOTE, &getquote_arg);
++	if (ret) {
++		printf("TDX_CMD_GEN_QUOTE ioctl() %d failed\n", ret);
++		goto done;
++	}
++
++	print_hex_dump("\n\t\tTDX Quote data\n", " ", &quote_blob->data,
++		       quote_size);
++
++done:
++	free(quote_data);
++
++	return ret;
++}
++
++static void usage(void)
++{
++	puts("\nUsage:\n");
++	puts("tdx_attest [options]\n");
++
++	puts("Attestation device test utility.");
++
++	puts("\nOptions:\n");
++	puts(" -d, --dump                Dump tdreport/tdquote data");
++	puts(" -r, --get-tdreport        Get TDREPORT data");
++	puts(" -g, --gen-quote           Generate TDQUOTE");
++	puts(" -s, --get-quote-size      Get TDQUOTE size");
++}
++
++int main(int argc, char **argv)
++{
++	int ret, devfd;
++	struct tdx_attest_args args = {0};
++
++	static const struct option longopts[] = {
++		{ "dump",           no_argument,       NULL, 'd' },
++		{ "get-tdreport",   required_argument, NULL, 'r' },
++		{ "gen-quote",      required_argument, NULL, 'g' },
++		{ "gen-quote-size", required_argument, NULL, 's' },
++		{ "version",        no_argument,       NULL, 'V' },
++		{ NULL,             0, NULL, 0 }
++	};
++
++	while ((ret = getopt_long(argc, argv, "hdrgsV", longopts,
++				  NULL)) != -1) {
++		switch (ret) {
++		case 'd':
++			args.is_dump_data = true;
++			break;
++		case 'r':
++			args.is_get_tdreport = true;
++			break;
++		case 'g':
++			args.is_gen_quote = true;
++			break;
++		case 's':
++			args.is_get_quote_size = true;
++			break;
++		case 'h':
++			usage();
++			return 0;
++		case 'V':
++			printf("Version: %s\n", ATTESTATION_TEST_BIN_VERSION);
++			return 0;
++		default:
++			printf("Invalid options\n");
++			usage();
++			return -EINVAL;
++		}
++	}
++
++	devfd = open(devname, O_RDWR | O_SYNC);
++	if (devfd < 0) {
++		printf("%s open() failed\n", devname);
++		return -ENODEV;
++	}
++
++	if (args.is_get_quote_size)
++		get_quote_size(devfd);
++
++	if (args.is_get_tdreport)
++		get_tdreport(devfd, args.is_dump_data, NULL);
++
++	if (args.is_gen_quote)
++		gen_quote(devfd, args.is_dump_data);
++
++	close(devfd);
++
++	return 0;
++}
 -- 
 2.25.1
 

@@ -2,88 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB6B4EBFD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 13:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCE14EBFD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 13:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343678AbiC3Lee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 07:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343670AbiC3Leb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1343662AbiC3Leb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 30 Mar 2022 07:34:31 -0400
-Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com [203.205.221.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F3C1C2D96
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:32:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1648639963;
-        bh=8fJrMhzqjAXlwfUDxJahr95XCF0ybbs2a5Ofgeo9KHM=;
-        h=From:To:Cc:Subject:Date;
-        b=XxUBsLmS5w86wlD/ebX5/ZdpLrf3OrecZRasUgaVhdIb0n3YRgVhg6XfOIUZb7fTf
-         3yykeu64PU9JsaoRojz9BJygy7lN7FhflAlUQFWx74yC2m84fD504PMeYOjyiYigZo
-         2hFVOZTKn+krt2Apocf8fJZXVTwgCO32wl8DxgrY=
-Received: from localhost.localdomain ([43.227.138.48])
-        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
-        id 8288103E; Wed, 30 Mar 2022 19:32:40 +0800
-X-QQ-mid: xmsmtpt1648639960tfxmvk268
-Message-ID: <tencent_FF6828BEC24B9560FE5D405E998D73633809@qq.com>
-X-QQ-XMAILINFO: NMGzQWUSIfvTbni/KihziXVzkQT7chenEEvQ0U9T8LGHF9mKokFevWkRDB7mgP
-         phdQziLrbDwEstkLvoJuVEs2Jv7hbp3/79y4EHQfbs2EC3CQFpgAnGDFRqKn+iN6MQNWO1jjVdZO
-         yMgEcHGyFOw+0it2PdatDnbOUjSEGSUTIYI49FIPPmSCtEFnzTthzt3ijvYozzLru9sUU8nuQXL9
-         YD4o0DXTCRk2xkbCltn0DKdZ7f2HrJEPcK4l2Sk5/jzNkxxLo2Gbf2oSowAg1lXVsOfSWh/Ne1RL
-         bANkOOUa05NVcVUJCAJEGOqsU/HhM6qM48VsDV5r4MeIOsd2cmjxRtZUmkNlftM9thFd+D9jl+Qb
-         eOw/hVvnRwio0w3wY9MUO2DXLD6HPeSvs28KUvNILoYjz4pYddmCmI4Q4mPHwTjWGnpJ/862qG2M
-         mKYGeFp392TmaC0e8UI+ixI6r0TgLHnaz/Yn2pR2x6wHqkltwt7SifGhbV++9ZHEJ07Fwo5z2S15
-         XRyzk6vvkUR0z+2ujLkf0q7xG//jfflU2MlDqI863PPwwPYFEPdiD/JPaWiNMVyrXhJSTkGoe9V7
-         k2uyNuuKaXdeINzwxrX7j0wSkb5R4Yeny+mcbZZKk6cv7IkQUTg0Wkvm154Lx2TGXopbkRgh9uZA
-         vZhSOPgxgXem5QPTJM+kmjlvkGsKaWMtGJNn6DjlKECS2iP6VETvPrhBQL33N+yhiJI3Bnlc30dA
-         pU40rd3qLVm53AczA1iHHmW2XsdiH30DuHOxU/OLq/iZbmPoAQokGblkgtge0LLir1hY+b/IACoq
-         gZIlItK5HWRssW96A7i2lLbHXmvKGgpr6ljMMpmN8ZmCMDzgwfHjj5zk+NflId54Prb4XnM/+FdF
-         MgXfAskR+5sAPqT04wHwbSZhDMy8nSDfgxi3zveJql4TIcEGtQfzGiEgtz3XFCZPEeHaqgZg0n3Q
-         sOy+eaFqptN9x9K6/0clsyDI9z2pkdvl3hdXAVvUwbxtOh8if3/g==
-From:   xkernel.wang@foxmail.com
-To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] staging: r8188eu: fix a potential memory leak in _rtw_init_cmd_priv()
-Date:   Wed, 30 Mar 2022 19:32:21 +0800
-X-OQ-MSGID: <20220330113221.5520-1-xkernel.wang@foxmail.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234578AbiC3Le2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 30 Mar 2022 07:34:28 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739F71C231D
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:32:43 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id a11so17723338qtb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:32:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yLUVH17Uign6BvR+nDTbfXhu0XLyilVb6NY5dVncXfw=;
+        b=bNxRNv7F13x/jJOsff+xDk0gPlGPDOyrSemkFfl4L44wg4lqMIDbt2LieOwGnTZq/i
+         UDByN8P0ETFO3gZBAgCUWJQEe743l1wBK2B6IwbXcrlE/PZnNFW1NUxWghXeH74sIsTT
+         uWhRffTGlIS1hA1Avx8XQXHwFUz871acsJFssUQZsHgCNQ0wF6PQ6QbmKTpEDebb6qXQ
+         7x3X7In0H4akcpSzxJJ7KM91JBUCTz11squZ+uGVpPIbFB2cLruMZk1ugWxVhl1mEgUJ
+         /gKGIpR/4d2A5/+0xHiWMjElo8vns3shGA8xBxVvD6gpkWSTCnQt2/o/02p2Y9gmzIGb
+         902A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yLUVH17Uign6BvR+nDTbfXhu0XLyilVb6NY5dVncXfw=;
+        b=LjVZpLHSoXT9T6u005PUSmP0S/TSFqpaDx/Fr+SpUmFnLUk7fUa0C9VVLha0D/cigT
+         OOLXPGb34wt3NdMY+JX8b6xrhBYAwhrSfcrU2mi2H0wIS9brdWOI6aLk7+OQU4+6jTtv
+         uOIyddcTaDtRQvSA+DECsFP/M9QpPQn0wvSz/1zfMcq6wnatv/M9pVHL9GHtjq/5GbZ/
+         1zfF5NjaXCcwXXC8PeS8gRmsN0lzJC+Xv4QU+8Bl8KU2ESU+R/UfZU0nF3K3N/LyKJa4
+         ZZ3H7xCSXshox9t7sUOnVa26rTLHRsYWa/f1o6Dk7iaaj1oqiZxqDjFsr9q0WWwKIZJr
+         zD9A==
+X-Gm-Message-State: AOAM53195BPujttCGqlGB8nzuV9zfpp/lFIS+WeLO2T+GwpEynE+BhFL
+        KWwvKFwp4upoODtECXr8t/cCNdv3319g89jt+/yAY/iL7ys=
+X-Google-Smtp-Source: ABdhPJwx+6eprB6Q5XPxYzgTUiqSDOQdVYYmG242HODu6johshrHsDsGJYL1m7iaKoPFFzKcIyGksMtG0596HZPmvb4=
+X-Received: by 2002:ac8:5a46:0:b0:2e2:2edd:374 with SMTP id
+ o6-20020ac85a46000000b002e22edd0374mr32044988qta.295.1648639962608; Wed, 30
+ Mar 2022 04:32:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220329230105.601666-1-robdclark@gmail.com> <20220329230105.601666-4-robdclark@gmail.com>
+In-Reply-To: <20220329230105.601666-4-robdclark@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 30 Mar 2022 14:32:31 +0300
+Message-ID: <CAA8EJpqAaW0Q-QeQObonUqAhdWaw8mPPvChmboH88ttTx+2XGg@mail.gmail.com>
+Subject: Re: [PATCH 3/9] drm/msm/gem: Split out inuse helper
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On Wed, 30 Mar 2022 at 02:00, Rob Clark <robdclark@gmail.com> wrote:
+>
+> From: Rob Clark <robdclark@chromium.org>
+>
+> Prep for a following patch.  While we are at it, convert a few remaining
+> WARN_ON()s to GEM_WARN_ON().
 
-In _rtw_init_cmd_priv(), if `pcmdpriv->rsp_allocated_buf` is allocated
-in failure, `pcmdpriv->cmd_allocated_buf` is not properly released.
-This patch is to free it.
+Well... GEM_WARN_ON doesn't really look like a 'while we are at it'.
+It might be better to split it into a separate commit.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/staging/r8188eu/core/rtw_cmd.c | 2 ++
- 1 file changed, 2 insertions(+)
+>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>  drivers/gpu/drm/msm/msm_gem.c     |  2 +-
+>  drivers/gpu/drm/msm/msm_gem.h     |  1 +
+>  drivers/gpu/drm/msm/msm_gem_vma.c | 15 ++++++++++-----
+>  3 files changed, 12 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
+> index a4f61972667b..f96d1dc72021 100644
+> --- a/drivers/gpu/drm/msm/msm_gem.c
+> +++ b/drivers/gpu/drm/msm/msm_gem.c
+> @@ -938,7 +938,7 @@ void msm_gem_describe(struct drm_gem_object *obj, struct seq_file *m,
+>                                 name, comm ? ":" : "", comm ? comm : "",
+>                                 vma->aspace, vma->iova,
+>                                 vma->mapped ? "mapped" : "unmapped",
+> -                               vma->inuse);
+> +                               msm_gem_vma_inuse(vma));
+>                         kfree(comm);
+>                 }
+>
+> diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
+> index 947ff7d9b471..1b7f0f0b88bf 100644
+> --- a/drivers/gpu/drm/msm/msm_gem.h
+> +++ b/drivers/gpu/drm/msm/msm_gem.h
+> @@ -61,6 +61,7 @@ struct msm_gem_vma {
+>  int msm_gem_init_vma(struct msm_gem_address_space *aspace,
+>                 struct msm_gem_vma *vma, int npages,
+>                 u64 range_start, u64 range_end);
+> +bool msm_gem_vma_inuse(struct msm_gem_vma *vma);
+>  void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
+>                 struct msm_gem_vma *vma);
+>  void msm_gem_unmap_vma(struct msm_gem_address_space *aspace,
+> diff --git a/drivers/gpu/drm/msm/msm_gem_vma.c b/drivers/gpu/drm/msm/msm_gem_vma.c
+> index f914ddbaea89..dc2ae097805e 100644
+> --- a/drivers/gpu/drm/msm/msm_gem_vma.c
+> +++ b/drivers/gpu/drm/msm/msm_gem_vma.c
+> @@ -37,6 +37,11 @@ msm_gem_address_space_get(struct msm_gem_address_space *aspace)
+>         return aspace;
+>  }
+>
+> +bool msm_gem_vma_inuse(struct msm_gem_vma *vma)
+> +{
+> +       return !!vma->inuse;
+> +}
 
-diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index 56910c3..e76015e 100644
---- a/drivers/staging/r8188eu/core/rtw_cmd.c
-+++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -42,6 +42,8 @@ static int _rtw_init_cmd_priv(struct cmd_priv *pcmdpriv)
- 	pcmdpriv->rsp_allocated_buf = kzalloc(MAX_RSPSZ + 4, GFP_KERNEL);
- 
- 	if (!pcmdpriv->rsp_allocated_buf) {
-+		kfree(pcmdpriv->cmd_allocated_buf);
-+		pcmdpriv->cmd_allocated_buf = NULL;
- 		res = _FAIL;
- 		goto exit;
- 	}
+It almost  asks to be a static inline. The patch 04 makes it complex,
+so it's probably not that important.
+
+> +
+>  /* Actually unmap memory for the vma */
+>  void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
+>                 struct msm_gem_vma *vma)
+> @@ -44,7 +49,7 @@ void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
+>         unsigned size = vma->node.size << PAGE_SHIFT;
+>
+>         /* Print a message if we try to purge a vma in use */
+> -       if (WARN_ON(vma->inuse > 0))
+> +       if (GEM_WARN_ON(msm_gem_vma_inuse(vma)))
+>                 return;
+>
+>         /* Don't do anything if the memory isn't mapped */
+> @@ -61,7 +66,7 @@ void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
+>  void msm_gem_unmap_vma(struct msm_gem_address_space *aspace,
+>                 struct msm_gem_vma *vma)
+>  {
+> -       if (!WARN_ON(!vma->iova))
+> +       if (!GEM_WARN_ON(!vma->iova))
+>                 vma->inuse--;
+>  }
+>
+> @@ -73,7 +78,7 @@ msm_gem_map_vma(struct msm_gem_address_space *aspace,
+>         unsigned size = npages << PAGE_SHIFT;
+>         int ret = 0;
+>
+> -       if (WARN_ON(!vma->iova))
+> +       if (GEM_WARN_ON(!vma->iova))
+>                 return -EINVAL;
+>
+>         /* Increase the usage counter */
+> @@ -100,7 +105,7 @@ msm_gem_map_vma(struct msm_gem_address_space *aspace,
+>  void msm_gem_close_vma(struct msm_gem_address_space *aspace,
+>                 struct msm_gem_vma *vma)
+>  {
+> -       if (WARN_ON(vma->inuse > 0 || vma->mapped))
+> +       if (GEM_WARN_ON(msm_gem_vma_inuse(vma) || vma->mapped))
+>                 return;
+>
+>         spin_lock(&aspace->lock);
+> @@ -120,7 +125,7 @@ int msm_gem_init_vma(struct msm_gem_address_space *aspace,
+>  {
+>         int ret;
+>
+> -       if (WARN_ON(vma->iova))
+> +       if (GEM_WARN_ON(vma->iova))
+>                 return -EBUSY;
+>
+>         spin_lock(&aspace->lock);
+> --
+> 2.35.1
+>
+
+
 -- 
+With best wishes
+Dmitry

@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4324EC71F
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82AE54EC74D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347259AbiC3Ovp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 10:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
+        id S1347275AbiC3OwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 10:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347246AbiC3OvZ (ORCPT
+        with ESMTP id S1347268AbiC3Ovz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 10:51:25 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D481659E
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:49:39 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id 14so9988662ily.11
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:49:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=S7jHDD9H3A3SYC5lPe9ohlnX79nRebzt30Q3Ep3X12o=;
-        b=OZ3cEQ5h4qtPgX1AY6RLmB6gT57kvwRHQ79ygDaebLZjiOApKBgJvNSiNC+hGN40JU
-         KFowpuzoi9RAMLTJX0fOxY1oyMHVZHloUrVLxLuOG/UlFNOYGVgGvwa2UU4emiJEzaf9
-         q/b6t2EDuopDh+F9mdxQX6O8ADsK4gowwAsRa9RVPJ5GdcZXQj2mX6/QUQhRN12B8hnH
-         NkupImYcQse6AfeDQRluWPm9O4lLIm1PCY+Y0ru6sks+rFgKWBzTtmSTEYxmLYKnRe/x
-         TPd8nXiKZe260b1aynJD8YblWjvbxaX/g0RFrXX3pPqJAeiHYOnhcG7UGyHQwei5xlG9
-         5gPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=S7jHDD9H3A3SYC5lPe9ohlnX79nRebzt30Q3Ep3X12o=;
-        b=LOrTuaEmMIad9Vl/kW6mGbKJSwq3l/YqwyXde67ykZENWpevM0eOoEYGdbeXi+jbcE
-         /A9NRaXMK0R4hMEtA/jUPt7NtQw+GTiDwecBIegT0T6fWVblaS5ifxCoG3+aTb+gMmxv
-         KRj61cmRWZUDjGpdiBnzyUsDfG8XjDLZIeJl3+cMBp6QOEkom22Ce686WpCuRK0ZxDKC
-         +9hga9qLFxSjc9WHWsVsGpzLbUok8GYOwu75siekFgP/d0IwalvGf0nUYxQPl1kh6XOA
-         w3/Z+54W5/C8i6qz9ckvqEu4QsNReG/dYzcTKk/Q04dbVQ7iwkPAtNqzCY9Q7aHNnFAi
-         hghQ==
-X-Gm-Message-State: AOAM532GD4NjjvIhaZXHYizQ3ZwlAZ5qtMO1Zx02kaQu1upzZYdN2lEF
-        bSiTVxlvWIIfcjtLZ+ObNwDVRA==
-X-Google-Smtp-Source: ABdhPJz3EibI69DwP9lkcaYHyRWrAtLzvk4HhXkWXzgIOSW08I0BfaQQag5PmpjZEv83Snk+VZv0fA==
-X-Received: by 2002:a05:6e02:1e0e:b0:2c6:18c3:9691 with SMTP id g14-20020a056e021e0e00b002c618c39691mr11475070ila.287.1648651778718;
-        Wed, 30 Mar 2022 07:49:38 -0700 (PDT)
-Received: from [127.0.1.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id r9-20020a6b6009000000b006412abddbbbsm11434439iog.24.2022.03.30.07.49.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 07:49:38 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-bcache@vger.kernel.org, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, Song Liu <song@kernel.org>,
-        Coly Li <colyli@suse.de>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        target-devel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
-        linux-raid@vger.kernel.org, linux-block@vger.kernel.org
-In-Reply-To: <20220308061551.737853-1-hch@lst.de>
-References: <20220308061551.737853-1-hch@lst.de>
-Subject: Re: cleanup bio_kmalloc v2
-Message-Id: <164865177761.37391.13379579175408786139.b4-ty@kernel.dk>
-Date:   Wed, 30 Mar 2022 08:49:37 -0600
+        Wed, 30 Mar 2022 10:51:55 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1893B48328
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:50:07 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-136-sIRC0DlJN0S4pc-bPv8wSQ-1; Wed, 30 Mar 2022 15:50:04 +0100
+X-MC-Unique: sIRC0DlJN0S4pc-bPv8wSQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Wed, 30 Mar 2022 15:50:02 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Wed, 30 Mar 2022 15:50:02 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Guenter Roeck' <linux@roeck-us.net>,
+        Michael Walle <michael@walle.cc>,
+        "Xu Yilun" <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
+Thread-Topic: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
+Thread-Index: AQHYREG1rIB0cQMH/kajVzJ0H3I8wazYAMOg
+Date:   Wed, 30 Mar 2022 14:50:02 +0000
+Message-ID: <02545bf1c21b45f78eba5e8b37951748@AcuMS.aculab.com>
+References: <20220329160730.3265481-1-michael@walle.cc>
+ <20220329160730.3265481-2-michael@walle.cc>
+ <75093b82-4625-d806-a4ea-372b74e60c3b@roeck-us.net>
+In-Reply-To: <75093b82-4625-d806-a4ea-372b74e60c3b@roeck-us.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,36 +71,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Mar 2022 07:15:46 +0100, Christoph Hellwig wrote:
-> this series finishes off the bio allocation interface cleanups by dealing
-> with the weirdest member of the famility.  bio_kmalloc combines a kmalloc
-> for the bio and bio_vecs with a hidden bio_init call and magic cleanup
-> semantics.
-> 
-> This series moves a few callers away from bio_kmalloc and then turns
-> bio_kmalloc into a simple wrapper for a slab allocation of a bio and the
-> inline biovecs.  The callers need to manually call bio_init instead with
-> all that entails and the magic that turns bio_put into a kfree goes away
-> as well, allowing for a proper debug check in bio_put that catches
-> accidental use on a bio_init()ed bio.
-> 
-> [...]
-
-Applied, thanks!
-
-[1/5] btrfs: simplify ->flush_bio handling
-      commit: 6978ffddd5bba44e6b7614d52868cf4954e0529b
-[2/5] squashfs: always use bio_kmalloc in squashfs_bio_read
-      commit: 88a39feabf25efbaec775ffb48ea240af198994e
-[3/5] target/pscsi: remove pscsi_get_bio
-      commit: bbccc65bd7c1b22f050b65d8171fbdd8d72cf39c
-[4/5] block: turn bio_kmalloc into a simple kmalloc wrapper
-      commit: 57c47b42f4545b5f8fa288f190c0d68f96bc477f
-[5/5] pktcdvd: stop using bio_reset
-      commit: 1292fb59f283e76f55843d94f066c2f0b91dfb7e
-
-Best regards,
--- 
-Jens Axboe
-
+RnJvbTogR3VlbnRlciBSb2Vjaw0KPiBTZW50OiAzMCBNYXJjaCAyMDIyIDE1OjIzDQo+IE9uIDMv
+MjkvMjIgMDk6MDcsIE1pY2hhZWwgV2FsbGUgd3JvdGU6DQo+ID4gTW9yZSBhbmQgbW9yZSBkcml2
+ZXJzIHdpbGwgY2hlY2sgZm9yIGJhZCBjaGFyYWN0ZXJzIGluIHRoZSBod21vbiBuYW1lDQo+ID4g
+YW5kIGFsbCBhcmUgdXNpbmcgdGhlIHNhbWUgY29kZSBzbmlwcGV0LiBDb25zb2xpZGF0ZSB0aGF0
+IGNvZGUgYnkgYWRkaW5nDQo+ID4gYSBuZXcgaHdtb25fc2FuaXRpemVfbmFtZSgpIGZ1bmN0aW9u
+Lg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBXYWxsZSA8bWljaGFlbEB3YWxsZS5j
+Yz4NCj4gPiAtLS0NCj4gPiAgIERvY3VtZW50YXRpb24vaHdtb24vaHdtb24ta2VybmVsLWFwaS5y
+c3QgfCAgOSArKysrLQ0KPiA+ICAgZHJpdmVycy9od21vbi9od21vbi5jICAgICAgICAgICAgICAg
+ICAgICB8IDQ5ICsrKysrKysrKysrKysrKysrKysrKysrKw0KPiA+ICAgaW5jbHVkZS9saW51eC9o
+d21vbi5oICAgICAgICAgICAgICAgICAgICB8ICAzICsrDQo+ID4gICAzIGZpbGVzIGNoYW5nZWQs
+IDYwIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9E
+b2N1bWVudGF0aW9uL2h3bW9uL2h3bW9uLWtlcm5lbC1hcGkucnN0IGIvRG9jdW1lbnRhdGlvbi9o
+d21vbi9od21vbi1rZXJuZWwtYXBpLnJzdA0KPiA+IGluZGV4IGM0MWViNjEwODEwMy4uMTJmNGE5
+YmNlZjA0IDEwMDY0NA0KPiA+IC0tLSBhL0RvY3VtZW50YXRpb24vaHdtb24vaHdtb24ta2VybmVs
+LWFwaS5yc3QNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2h3bW9uL2h3bW9uLWtlcm5lbC1hcGku
+cnN0DQo+ID4gQEAgLTUwLDYgKzUwLDEwIEBAIHJlZ2lzdGVyL3VucmVnaXN0ZXIgZnVuY3Rpb25z
+OjoNCj4gPg0KPiA+ICAgICB2b2lkIGRldm1faHdtb25fZGV2aWNlX3VucmVnaXN0ZXIoc3RydWN0
+IGRldmljZSAqZGV2KTsNCj4gPg0KPiA+ICsgIGNoYXIgKmh3bW9uX3Nhbml0aXplX25hbWUoY29u
+c3QgY2hhciAqbmFtZSk7DQo+ID4gKw0KPiA+ICsgIGNoYXIgKmRldm1faHdtb25fc2FuaXRpemVf
+bmFtZShzdHJ1Y3QgZGV2aWNlICpkZXYsIGNvbnN0IGNoYXIgKm5hbWUpOw0KPiA+ICsNCj4gPiAg
+IGh3bW9uX2RldmljZV9yZWdpc3Rlcl93aXRoX2dyb3VwcyByZWdpc3RlcnMgYSBoYXJkd2FyZSBt
+b25pdG9yaW5nIGRldmljZS4NCj4gPiAgIFRoZSBmaXJzdCBwYXJhbWV0ZXIgb2YgdGhpcyBmdW5j
+dGlvbiBpcyBhIHBvaW50ZXIgdG8gdGhlIHBhcmVudCBkZXZpY2UuDQo+ID4gICBUaGUgbmFtZSBw
+YXJhbWV0ZXIgaXMgYSBwb2ludGVyIHRvIHRoZSBod21vbiBkZXZpY2UgbmFtZS4gVGhlIHJlZ2lz
+dHJhdGlvbg0KPiA+IEBAIC05Myw3ICs5NywxMCBAQCByZW1vdmFsIHdvdWxkIGJlIHRvbyBsYXRl
+Lg0KPiA+DQo+ID4gICBBbGwgc3VwcG9ydGVkIGh3bW9uIGRldmljZSByZWdpc3RyYXRpb24gZnVu
+Y3Rpb25zIG9ubHkgYWNjZXB0IHZhbGlkIGRldmljZQ0KPiA+ICAgbmFtZXMuIERldmljZSBuYW1l
+cyBpbmNsdWRpbmcgaW52YWxpZCBjaGFyYWN0ZXJzICh3aGl0ZXNwYWNlLCAnKicsIG9yICctJykN
+Cj4gPiAtd2lsbCBiZSByZWplY3RlZC4gVGhlICduYW1lJyBwYXJhbWV0ZXIgaXMgbWFuZGF0b3J5
+Lg0KPiA+ICt3aWxsIGJlIHJlamVjdGVkLiBUaGUgJ25hbWUnIHBhcmFtZXRlciBpcyBtYW5kYXRv
+cnkuIEJlZm9yZSBjYWxsaW5nIGENCj4gPiArcmVnaXN0ZXIgZnVuY3Rpb24geW91IHNob3VsZCBl
+aXRoZXIgdXNlIGh3bW9uX3Nhbml0aXplX25hbWUgb3INCj4gPiArZGV2bV9od21vbl9zYW5pdGl6
+ZV9uYW1lIHRvIHJlcGxhY2UgYW55IGludmFsaWQgY2hhcmFjdGVycyB3aXRoIGFuDQo+ID4gK3Vu
+ZGVyc2NvcmUuDQo+IA0KPiBUaGF0IG5lZWRzIG1vcmUgZGV0YWlscyBhbmQgZGVzZXJ2ZXMgaXRz
+IG93biBwYXJhZ3JhcGguIENhbGxpbmcgb25lIG9mDQo+IHRoZSBmdW5jdGlvbnMgaXMgb25seSBu
+ZWNlc3NhcnkgaWYgdGhlIG9yaWdpbmFsIG5hbWUgZG9lcyBvciBjYW4gaW5jbHVkZQ0KPiB1bnN1
+cHBvcnRlZCBjaGFyYWN0ZXJzOyBhbiB1bmNvbmRpdGlvbmFsICJzaG91bGQiIGlzIHRoZXJlZm9y
+ZSBhIGJpdA0KPiBzdHJvbmcuIEFsc28sIGl0IGlzIGltcG9ydGFudCB0byBtZW50aW9uIHRoYXQg
+dGhlIGZ1bmN0aW9uIGR1cGxpY2F0ZXMNCj4gdGhlIG5hbWUsIGFuZCB0aGF0IGl0IGlzIHRoZSBy
+ZXNwb25zaWJpbGl0eSBvZiB0aGUgY2FsbGVyIHRvIHJlbGVhc2UNCj4gdGhlIG5hbWUgaWYgaHdt
+b25fc2FuaXRpemVfbmFtZSgpIHdhcyBjYWxsZWQgYW5kIHRoZSBkZXZpY2UgaXMgcmVtb3ZlZC4N
+Cg0KTW9yZSB3b3JyeWluZywgYW5kIG5vdCBkb2N1bWVudGVkLCBpcyB0aGF0IHRoZSBidWZmZXIg
+J25hbWUnIHBvaW50cw0KdG8gbXVzdCBwZXJzaXN0Lg0KDQpJU1RNIHRoYXQgdGhlIGttYWxsb2Mo
+KSBpbiBfX2h3bW9uX2RldmljZV9yZWdpc3RlcigpIHNob3VsZCBpbmNsdWRlDQpzcGFjZSBmb3Ig
+YSBjb3B5IG9mIHRoZSBuYW1lLg0KSXQgY2FuIHRoZW4gZG8gd2hhdCBpdCB3aWxsIHdpdGggd2hh
+dGV2ZXIgaXMgcGFzc2VkIGluLg0KDQpPaCB5ZXMsIGl0IGhhcyBteSAnZmF2b3VyaXRlIGNvbnN0
+cnVjdCc6ICBpZiAoIXN0cmxlbihuYW1lKSkgLi4uDQood2VsbCBzdHJbc3RybGVuKHN0cildID0g
+MCBhbHNvIGhhcHBlbnMhKQ0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2Vz
+aWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVL
+DQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 

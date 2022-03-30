@@ -2,140 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 375FF4EBFDC
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 13:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B734EBFE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 13:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343681AbiC3Lgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 07:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36806 "EHLO
+        id S1343692AbiC3Lha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 07:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235330AbiC3Lge (ORCPT
+        with ESMTP id S235330AbiC3Lh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:36:34 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55EE1DB3FB;
-        Wed, 30 Mar 2022 04:34:48 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id C84172223B;
-        Wed, 30 Mar 2022 13:34:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1648640086;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Ph+DJmySTVnCueq7y0elmi8YWqWsk1ZHnb9P8HZcO0s=;
-        b=VOAsdyv3D/mIs0Y3TMWCQDse9A+nwd9W/DIiDoqBbah6UNFoslTueYRFCANVRjf4htRrP1
-        T1c83hgKkM2IkbGlD7KiRhDSJzwUkPR+bMg+pSrUZhtAc0PAw1K86RJZjfuqNMfyWFRH8/
-        2NmPH+5zXkGcJaBRAk+li0u2lOJh+sw=
-From:   Michael Walle <michael@walle.cc>
-To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>
-Subject: [PATCH] arm64: dts: ls1028a: default to OTG mode for USB
-Date:   Wed, 30 Mar 2022 13:34:42 +0200
-Message-Id: <20220330113442.3402940-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
+        Wed, 30 Mar 2022 07:37:29 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F7A1E3765;
+        Wed, 30 Mar 2022 04:35:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648640144; x=1680176144;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WvB6mJ9ryWwQ7CmVODZdOzNBEGHGFiTgCdDbkTsS7Js=;
+  b=EK5Al7l7Is0w9/DsuO0AHaj2snZxjbegcrQo0Gb0Y+0Y82rRnFe2v9fO
+   Lc7W3xk1rYt6IlpujbgfWrQDHoPHsqDLk3/BAuU89G4GGNCNQlRkTLDCg
+   N6y7919zdcYKJ4AtA+Qwj+VJ8X7VbAZBQjdctza6yIxuXYcjAqWullst2
+   PFukbBUXkQ/EnW/lov6M1s+WgcOcxOG2JDudUUs5mZIFqqsc24fRq03Uh
+   JfJChFbX/Sw9hZMoBecvYscLEOFJH0sEium/gr2lhtJll7mtPXV8LdrEX
+   hI9Oq9cTWiJiCuDBBqokRsSGWngapDaz8JakFJ300f2WisKRbkNnylcEN
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="247018452"
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="247018452"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 04:35:44 -0700
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="519649292"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 04:35:35 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nZWbM-009N8T-Sw;
+        Wed, 30 Mar 2022 14:35:00 +0300
+Date:   Wed, 30 Mar 2022 14:35:00 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Qianggui Song <qianggui.song@amlogic.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        openbmc@lists.ozlabs.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH v2 02/13] gpiolib: Introduce gpiochip_node_count() helper
+Message-ID: <YkRAZP+uTi6VUcDG@smile.fi.intel.com>
+References: <20220329152926.50958-1-andriy.shevchenko@linux.intel.com>
+ <20220329152926.50958-3-andriy.shevchenko@linux.intel.com>
+ <CAMuHMdWFENTrXsYq3PKRFBqUL570-pPMG43Vct62=U9cyyF0yQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWFENTrXsYq3PKRFBqUL570-pPMG43Vct62=U9cyyF0yQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At the moment, the dtsi will force the dr_mode to host. This is
-problematic because it will always turn on the Vbus voltage regardless
-if the port is host or device. This might lead to a "shortcut" between
-the two USB endpoints because both might have their Vbus supplies
-enabled. Therefore, the default should be "otg" for any ports which
-aren't host only (from a SoC point of view) and have a user of the dtsi
-file overwrite that explicitly.
+On Wed, Mar 30, 2022 at 12:02:07PM +0200, Geert Uytterhoeven wrote:
+> On Tue, Mar 29, 2022 at 5:29 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
 
-Move the 'dr_mode = "host";' into the board dts. Now that the dtsi
-doesn't set the dr_mode anymore, we can also drop the 'dr_mode = "otg";'
-in the board dts because that is the default value if dr_mode is not
-set.
+...
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts | 1 +
- arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts          | 2 ++
- arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts          | 2 +-
- arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi             | 2 --
- 4 files changed, 4 insertions(+), 3 deletions(-)
+> > +       unsigned int count;
+> 
+> Preinitialize to zero?
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-index fef1bb585dce..68d11a9c67f3 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-@@ -341,5 +341,6 @@ &usb0 {
- };
- 
- &usb1 {
-+	dr_mode = "host";
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-index 19d3952dbffe..5baf060acf93 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-@@ -382,9 +382,11 @@ &sata {
- };
- 
- &usb0 {
-+	dr_mode = "host";
- 	status = "okay";
- };
- 
- &usb1 {
-+	dr_mode = "host";
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-index 68c31cb8eead..e0cd1516d05b 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-@@ -299,10 +299,10 @@ &sata {
- };
- 
- &usb0 {
-+	dr_mode = "host";
- 	status = "okay";
- };
- 
- &usb1 {
--	dr_mode = "otg";
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-index 088271d49139..92465f777603 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-@@ -599,7 +599,6 @@ usb0: usb@3100000 {
- 			compatible = "fsl,ls1028a-dwc3", "snps,dwc3";
- 			reg = <0x0 0x3100000 0x0 0x10000>;
- 			interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
--			dr_mode = "host";
- 			snps,dis_rxdet_inp3_quirk;
- 			snps,quirk-frame-length-adjustment = <0x20>;
- 			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
-@@ -610,7 +609,6 @@ usb1: usb@3110000 {
- 			compatible = "fsl,ls1028a-dwc3", "snps,dwc3";
- 			reg = <0x0 0x3110000 0x0 0x10000>;
- 			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
--			dr_mode = "host";
- 			snps,dis_rxdet_inp3_quirk;
- 			snps,quirk-frame-length-adjustment = <0x20>;
- 			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
+Whatever for what consensus will be achieved. Initially I have that way,
+then I changed.
+
+> > +       count = 0;
+> > +       for_each_gpiochip_node(dev, child)
+> > +               count++;
+> 
+> Regardless:
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Thanks!
+
 -- 
-2.30.2
+With Best Regards,
+Andy Shevchenko
+
 

@@ -2,139 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6598B4EC415
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9274EC434
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239965AbiC3McE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40108 "EHLO
+        id S245031AbiC3Mgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344509AbiC3Mbh (ORCPT
+        with ESMTP id S1345037AbiC3Mfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 08:31:37 -0400
+        Wed, 30 Mar 2022 08:35:42 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9585B3D0;
-        Wed, 30 Mar 2022 05:17:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1164A8303A;
+        Wed, 30 Mar 2022 05:21:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648642639; x=1680178639;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=degjoFghFkob5qL3ehvoGOpozoU5J2XRIt2L6L1iub0=;
-  b=Okt9Oqm+LDLdGXc/frHGOpysiYDcWjPX6TSDTb0sm+U+8pbb0EPbpKnH
-   E84IkigOgB32vk6LO8/eoOeQYL8NYjmYdGoPGgzGQJQBMpmZ5ELJvVl5V
-   rrFxOJwTn2nQL5uzglEgjFfrf0wp0Gx63hlIxlYHLPFCXiQTVBQf0vR+B
-   8rtKaC46TFy/T2RysdOnna/u0kslAKlXet9PmDUXmhyHhpT8mJapGXtj1
-   ASTGWiPe597Dc/uOFFt5pMDf5jcy0CH+0qh4raa/UgLBzPThojks7ZhgF
-   sIt4OU1J8lD5w8ZHQcC+4cBiik/RlZyvQUnhbR3KT6O7iSDYwpOPORZvB
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="345964900"
+  t=1648642894; x=1680178894;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OXzBCDD0s+U+ac+j1S8pe7nAWp2yh4vu1aPuuDcA/hE=;
+  b=WNS5Q/+VIXRt1P9pE7NMIqhuqdvP3iS3x0bL6PMQ1XqeRfmb3giQcN+k
+   xFUK0wOMnL2yb2v9CwQHw48Zl8Bp9RmfB0PNinRYHTliSC9ijg6zM1592
+   nyWUaiSGcFUSZJ7pW/t2j+9pQa3TrctD30meQ7N+QsCVDTFkNJ412/WC4
+   6HmKxl5OJjpB8Jx9y5GlSo5NCmsAZlfWE3uV7KlIhyxzSbC3Tl/mJ41QS
+   XIKsYd8m+KVm/bp4b4e6TLRwlrd5ipZ6CGD4ovmeumcJBwE2tUm/+xWH3
+   rsOxuyWSiSLxoW9wDyyUFNsxSNUPtmOGa1xzBe+oGDTmnFpaABD9zmXyF
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="345965530"
 X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="345964900"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 05:17:19 -0700
+   d="scan'208";a="345965530"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 05:21:18 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="565512740"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 05:17:10 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nZXFc-009OGn-0z;
-        Wed, 30 Mar 2022 15:16:36 +0300
-Date:   Wed, 30 Mar 2022 15:16:35 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Qianggui Song <qianggui.song@amlogic.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        openbmc@lists.ozlabs.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH v2 07/13] pinctrl: renesas: rza1: Switch to use
- for_each_gpiochip_node() helper
-Message-ID: <YkRKI6W4vR/aCr8c@smile.fi.intel.com>
-References: <20220329152926.50958-1-andriy.shevchenko@linux.intel.com>
- <20220329152926.50958-8-andriy.shevchenko@linux.intel.com>
- <CAMuHMdWs+OuxV0cO=XGYvOOJ0Mctwu6fKV5HnkdRBXNKkLE3uQ@mail.gmail.com>
+   d="scan'208";a="837252293"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Mar 2022 05:21:15 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 22UCLE8c019312;
+        Wed, 30 Mar 2022 13:21:14 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        ivecera <ivecera@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        poros <poros@redhat.com>, mschmidt <mschmidt@redhat.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "moderated list:INTEL ETHERNET DRIVERS" 
+        <intel-wired-lan@lists.osuosl.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net v2] ice: Fix MAC address setting
+Date:   Wed, 30 Mar 2022 14:18:35 +0200
+Message-Id: <20220330121835.2737360-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <CO1PR11MB508954503C974FD6D9E162FCD61D9@CO1PR11MB5089.namprd11.prod.outlook.com>
+References: <20220325132524.1765342-1-ivecera@redhat.com> <CO1PR11MB508954503C974FD6D9E162FCD61D9@CO1PR11MB5089.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdWs+OuxV0cO=XGYvOOJ0Mctwu6fKV5HnkdRBXNKkLE3uQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 12:00:27PM +0200, Geert Uytterhoeven wrote:
-> On Tue, Mar 29, 2022 at 5:29 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
+From: Jacob Keller <jacob.e.keller@intel.com>
+Date: Mon, 28 Mar 2022 17:53:19 +0000
 
-...
+Hey netdev maintainers,
 
-> > +       struct fwnode_reference_args of_args;
+> > -----Original Message-----
+> > From: Ivan Vecera <ivecera@redhat.com>
+> > Sent: Friday, March 25, 2022 6:25 AM
+> > To: netdev@vger.kernel.org
+> > Cc: poros <poros@redhat.com>; mschmidt <mschmidt@redhat.com>;
+> > Brandeburg, Jesse <jesse.brandeburg@intel.com>; Nguyen, Anthony L
+> > <anthony.l.nguyen@intel.com>; David S. Miller <davem@davemloft.net>; Jakub
+> > Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; moderated
+> > list:INTEL ETHERNET DRIVERS <intel-wired-lan@lists.osuosl.org>; open list <linux-
+> > kernel@vger.kernel.org>
+> > Subject: [PATCH net v2] ice: Fix MAC address setting
+> > 
+> > Commit 2ccc1c1ccc671b ("ice: Remove excess error variables") merged
+> > the usage of 'status' and 'err' variables into single one in
+> > function ice_set_mac_address(). Unfortunately this causes
+> > a regression when call of ice_fltr_add_mac() returns -EEXIST because
+> > this return value does not indicate an error in this case but
+> > value of 'err' remains to be -EEXIST till the end of the function
+> > and is returned to caller.
+> > 
+> > Prior mentioned commit this does not happen because return value of
+> > ice_fltr_add_mac() was stored to 'status' variable first and
+> > if it was -EEXIST then 'err' remains to be zero.
+> > 
+> > Fix the problem by reset 'err' to zero when ice_fltr_add_mac()
+> > returns -EEXIST.
+> > 
+> > Fixes: 2ccc1c1ccc671b ("ice: Remove excess error variables")
+> > Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+> > ---
 > 
-> fw_args?
-
-Perhaps just args as other drivers do?
-
-...
-
-> > -       chip->label     = devm_kasprintf(rza1_pctl->dev, GFP_KERNEL, "%pOFn",
-> > -                                        np);
-> > +       chip->label     = devm_kasprintf(rza1_pctl->dev, GFP_KERNEL, "%pfw", fwnode);
+> Thanks for the v2. This looks great. Good analysis of how this happened in the commit message, I appreciate that.
 > 
-> This changes the label from e.g. "/soc/pinctrl@fcfe3000/gpio-11" to "gpio-11".
+> Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
 
-Hmm... It seems other way around, i.e. it changes from the name to full name.
+This is an urgent fix, so we would like it to go through -net, not
+IWL.
+It has this Reviewed-by, and also
 
-> %pfwP?
+Acked-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-But conclusion here is correct. Good catch!
+> 
+> >  drivers/net/ethernet/intel/ice/ice_main.c | 7 +++++--
+> >  1 file changed, 5 insertions(+), 2 deletions(-)
+> > 
 
-...
+--- 8< ---
 
-> With the above fixed:
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > --
+> > 2.34.1
 
-Thanks for review and testing!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+Al

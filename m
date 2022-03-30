@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 009FB4ECE53
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C8B4ECE63
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245157AbiC3Uuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 16:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55980 "EHLO
+        id S1351166AbiC3Uut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 16:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351190AbiC3UuT (ORCPT
+        with ESMTP id S1351205AbiC3UuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 16:50:19 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFBA15FD2;
-        Wed, 30 Mar 2022 13:48:16 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id u22so19934846pfg.6;
-        Wed, 30 Mar 2022 13:48:16 -0700 (PDT)
+        Wed, 30 Mar 2022 16:50:24 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B861A28E0A;
+        Wed, 30 Mar 2022 13:48:20 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so1343153pjf.1;
+        Wed, 30 Mar 2022 13:48:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=B/Mh53kPn0QTu3WUX/8jYKpAAkoPl5CFyIRM1My8ikk=;
-        b=kWtT++covG1yMwHPTJ6ztbVXh9M4ZY8UKKYOujYv39WArd2SGh5AgTRFeCiwIRT1t5
-         bQnRf368c+LyW5+/zuQIlApoAjMK/wiHHXBK73S6Ra5XBjRbch8wRhI+Bfp1QZi5lfsg
-         O+wfaaT4uTazIt5Ys3+alG0gasVRuxQ5TqUmbI7LV/WUrimb0Y4aTmCPFHHbd9QYBbQ7
-         IGCiw8UF2N+eu37JJDcUUnepb4LwxIPvM1+X3cVymJ9aRWQLcYz7C8owyiUGZCuiXfTP
-         c6baqineYHWxcPFPaXwA0wY8iZO9Z1tA7B870pu54OW66Om+VlHTgfwP/8NQFU/Jh1+o
-         zjAQ==
+        bh=YhqBYA9LoIJ60EteTk4vCygqpc91SV8qqSrLcG+7bKE=;
+        b=L4SR1WCpED6fkMkYuMq3AOPXc7D+DfBVHRbBTe0mTx0nwQjpoUpWp0yIRLexbteB61
+         CV3lexE8g+SPRee0kIY+szy+eBmElgYVAPlTZa03xsrOwJwWJmc/URyKIgA6L4vso4Sw
+         6p0r/Jaw17uPV6KjeFurzPR3vzmqbeGLyZenexARFf1ct+Sv717Iug03T/3BIbm6Jwfj
+         RQcoMsS82pOjple+UrCxzBEUuhcduUGEKWegSsCLy8xtTXTl6KqgJkN5/2K6gJv1Ki7h
+         9syOyxo+/DSsaFis/bcg5Hvf6/ziLbYmcobQaV5WVExW4mvGxljlzeq54VrNxmVDTFd+
+         lcPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=B/Mh53kPn0QTu3WUX/8jYKpAAkoPl5CFyIRM1My8ikk=;
-        b=lZnV9A1XzgIWpEiyE1StrwwZUEtU/lT0yKF6qZcoaXHngfAtSOdFrakJBvh1ZqCd9/
-         AlssrK9EjbMYJ9mqxO2gajvlVQM+wB/YFSAow8rZ0c9I7mkMsqA/dDd5zX5FYuFApE4y
-         4MP2iKp8jXkzyJ067RSCwo0MLM1tz3NEB5XJ7+Yn1CGxPQVunGUWILS/wH90FUA3yjHD
-         OzHMa3vxIloLLJ0y9jYQi3syi/aKXeT5mUCARn42atEWYiI3wV7TcE2nmTapOn3exxf1
-         5mtJnrerjBp+bTfei/YRZUnU8ekZsvcCobJqPKunpdPaiUugo/453cZLShz714cX2yjL
-         9kog==
-X-Gm-Message-State: AOAM532N4dfgCc2u4CmSCLNUklFyKixIngH/CWtw1EyDT0WHcP+8krjL
-        utbkhdEKSI27dOz6nc5E9AI=
-X-Google-Smtp-Source: ABdhPJyBLXRWfRJM2DV60SzL9CEogUwwWSLdQ8WE5cTv7VGSEFLANNjJGoLp2xmS8if0CRRNrTy1KQ==
-X-Received: by 2002:a63:e1a:0:b0:380:fba9:f6e8 with SMTP id d26-20020a630e1a000000b00380fba9f6e8mr7750362pgl.384.1648673296294;
-        Wed, 30 Mar 2022 13:48:16 -0700 (PDT)
+        bh=YhqBYA9LoIJ60EteTk4vCygqpc91SV8qqSrLcG+7bKE=;
+        b=eEwNK2QWrpx1fAtMy6jRAeXpvkcxTB1/NjC9dj6rx2vVkU2JSPsVnQ6qFneItwhGmJ
+         AS2ew0y2QpYEwhNi+U0YteieLZTd/f6OOzt0HQw+ni5qBGIqWDpaJNS5R60RbZFpukaU
+         6Y2f8JPfaI2ixoSOhTm2ANF9kcspUKi1Xkw0I8L8PNDsgopCYCIC+aEP3N68Q5VjogFM
+         0UZcBe0ChhBszQ4Na8j89i7h0OBkB6c5nWzCUtyqLNHVO78lwL0YatVQJU1XsBKDM/f1
+         xFPefb/LHjtg1+j18YITzgYzwvAL/dzSil8S0GTor2HzHWQpoCWFtggmCpaj+M8F+upW
+         qYvg==
+X-Gm-Message-State: AOAM532jRPzYLSd9k73tRARLIav224qkptZxxPA1bwAxb9HhsYIxPC0h
+        CAnStAvOFerGHU4ydd0mWMs=
+X-Google-Smtp-Source: ABdhPJzliute0Xo12/AQ7Lagh7KmApHVAEXKXm8zAL9n1MqwiTAD6W3ussZ2n3k1etmO+Q5vQGj6MQ==
+X-Received: by 2002:a17:90b:1583:b0:1c7:3736:629c with SMTP id lc3-20020a17090b158300b001c73736629cmr1512606pjb.215.1648673300173;
+        Wed, 30 Mar 2022 13:48:20 -0700 (PDT)
 Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004e1414f0bb1sm26005115pfl.135.2022.03.30.13.48.14
+        by smtp.gmail.com with ESMTPSA id y13-20020a17090a390d00b001c995e0a481sm7264610pjb.30.2022.03.30.13.48.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 13:48:15 -0700 (PDT)
+        Wed, 30 Mar 2022 13:48:19 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
@@ -58,10 +58,15 @@ Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Emma Anholt <emma@anholt.net>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 09/10] drm/msm/gem: Add fenced vma unpin
-Date:   Wed, 30 Mar 2022 13:47:54 -0700
-Message-Id: <20220330204804.660819-10-robdclark@gmail.com>
+Subject: [PATCH v2 10/10] drm/msm: Add a way for userspace to allocate GPU iova
+Date:   Wed, 30 Mar 2022 13:47:55 -0700
+Message-Id: <20220330204804.660819-11-robdclark@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220330204804.660819-1-robdclark@gmail.com>
 References: <20220330204804.660819-1-robdclark@gmail.com>
@@ -79,211 +84,213 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-With userspace allocated iova (next patch), we can have a race condition
-where userspace observes the fence completion and deletes the vma before
-retire_submit() gets around to unpinning the vma.  To handle this, add a
-fenced unpin which drops the refcount but tracks the fence, and update
-msm_gem_vma_inuse() to check any previously unsignaled fences.
+The motivation at this point is mainly native userspace mesa driver in a
+VM guest.  The one remaining synchronous "hotpath" is buffer allocation,
+because guest needs to wait to know the bo's iova before it can start
+emitting cmdstream/state that references the new bo.  By allocating the
+iova in the guest userspace, we no longer need to wait for a response
+from the host, but can just rely on the allocation request being
+processed before the cmdstream submission.  Allocation failures (OoM,
+etc) would just be treated as context-lost (ie. GL_GUILTY_CONTEXT_RESET)
+or subsequent allocations (or readpix, etc) can raise GL_OUT_OF_MEMORY.
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/gpu/drm/msm/msm_fence.c      |  6 ++++--
- drivers/gpu/drm/msm/msm_fence.h      |  3 +++
- drivers/gpu/drm/msm/msm_gem.c        |  2 +-
- drivers/gpu/drm/msm/msm_gem.h        |  9 +++++++--
- drivers/gpu/drm/msm/msm_gem_vma.c    | 28 +++++++++++++++++++++++++---
- drivers/gpu/drm/msm/msm_ringbuffer.c | 12 +++++++++++-
- 6 files changed, 51 insertions(+), 9 deletions(-)
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c | 10 ++++++
+ drivers/gpu/drm/msm/msm_drv.c           | 21 +++++++++++
+ drivers/gpu/drm/msm/msm_gem.c           | 48 +++++++++++++++++++++++++
+ drivers/gpu/drm/msm/msm_gem.h           |  8 +++++
+ drivers/gpu/drm/msm/msm_gem_vma.c       |  2 ++
+ include/uapi/drm/msm_drm.h              |  3 ++
+ 6 files changed, 92 insertions(+)
 
-diff --git a/drivers/gpu/drm/msm/msm_fence.c b/drivers/gpu/drm/msm/msm_fence.c
-index f2cece542c3f..3df255402a33 100644
---- a/drivers/gpu/drm/msm/msm_fence.c
-+++ b/drivers/gpu/drm/msm/msm_fence.c
-@@ -15,6 +15,7 @@ msm_fence_context_alloc(struct drm_device *dev, volatile uint32_t *fenceptr,
- 		const char *name)
- {
- 	struct msm_fence_context *fctx;
-+	static int index = 0;
- 
- 	fctx = kzalloc(sizeof(*fctx), GFP_KERNEL);
- 	if (!fctx)
-@@ -23,6 +24,7 @@ msm_fence_context_alloc(struct drm_device *dev, volatile uint32_t *fenceptr,
- 	fctx->dev = dev;
- 	strncpy(fctx->name, name, sizeof(fctx->name));
- 	fctx->context = dma_fence_context_alloc(1);
-+	fctx->index = index++;
- 	fctx->fenceptr = fenceptr;
- 	spin_lock_init(&fctx->spinlock);
- 
-@@ -34,7 +36,7 @@ void msm_fence_context_free(struct msm_fence_context *fctx)
- 	kfree(fctx);
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+index 6385ab06632f..4caae0229518 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+@@ -281,6 +281,16 @@ int adreno_get_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
+ 	case MSM_PARAM_SUSPENDS:
+ 		*value = gpu->suspend_count;
+ 		return 0;
++	case MSM_PARAM_VA_START:
++		if (ctx->aspace == gpu->aspace)
++			return -EINVAL;
++		*value = ctx->aspace->va_start;
++		return 0;
++	case MSM_PARAM_VA_SIZE:
++		if (ctx->aspace == gpu->aspace)
++			return -EINVAL;
++		*value = ctx->aspace->va_size;
++		return 0;
+ 	default:
+ 		DBG("%s: invalid param: %u", gpu->name, param);
+ 		return -EINVAL;
+diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+index a5eed5738ac8..45523b4123eb 100644
+--- a/drivers/gpu/drm/msm/msm_drv.c
++++ b/drivers/gpu/drm/msm/msm_drv.c
+@@ -719,6 +719,23 @@ static int msm_ioctl_gem_info_iova(struct drm_device *dev,
+ 	return msm_gem_get_iova(obj, ctx->aspace, iova);
  }
  
--static inline bool fence_completed(struct msm_fence_context *fctx, uint32_t fence)
-+bool msm_fence_completed(struct msm_fence_context *fctx, uint32_t fence)
- {
- 	/*
- 	 * Note: Check completed_fence first, as fenceptr is in a write-combine
-@@ -76,7 +78,7 @@ static const char *msm_fence_get_timeline_name(struct dma_fence *fence)
- static bool msm_fence_signaled(struct dma_fence *fence)
- {
- 	struct msm_fence *f = to_msm_fence(fence);
--	return fence_completed(f->fctx, f->base.seqno);
-+	return msm_fence_completed(f->fctx, f->base.seqno);
- }
- 
- static const struct dma_fence_ops msm_fence_ops = {
-diff --git a/drivers/gpu/drm/msm/msm_fence.h b/drivers/gpu/drm/msm/msm_fence.h
-index 17ee3822b423..7f1798c54cd1 100644
---- a/drivers/gpu/drm/msm/msm_fence.h
-+++ b/drivers/gpu/drm/msm/msm_fence.h
-@@ -21,6 +21,8 @@ struct msm_fence_context {
- 	char name[32];
- 	/** context: see dma_fence_context_alloc() */
- 	unsigned context;
-+	/** index: similar to context, but local to msm_fence_context's */
-+	unsigned index;
- 
- 	/**
- 	 * last_fence:
-@@ -56,6 +58,7 @@ struct msm_fence_context * msm_fence_context_alloc(struct drm_device *dev,
- 		volatile uint32_t *fenceptr, const char *name);
- void msm_fence_context_free(struct msm_fence_context *fctx);
- 
-+bool msm_fence_completed(struct msm_fence_context *fctx, uint32_t fence);
- void msm_update_fence(struct msm_fence_context *fctx, uint32_t fence);
- 
- struct dma_fence * msm_fence_alloc(struct msm_fence_context *fctx);
-diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
-index e8107a22c33a..bf4af17e2f1e 100644
---- a/drivers/gpu/drm/msm/msm_gem.c
-+++ b/drivers/gpu/drm/msm/msm_gem.c
-@@ -445,7 +445,7 @@ void msm_gem_unpin_vma_locked(struct drm_gem_object *obj, struct msm_gem_vma *vm
- 
- 	GEM_WARN_ON(!msm_gem_is_locked(obj));
- 
--	msm_gem_unmap_vma(vma->aspace, vma);
-+	msm_gem_unpin_vma(vma);
- 
- 	msm_obj->pin_count--;
- 	GEM_WARN_ON(msm_obj->pin_count < 0);
-diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
-index f98264cf130d..38d66e1248b1 100644
---- a/drivers/gpu/drm/msm/msm_gem.h
-+++ b/drivers/gpu/drm/msm/msm_gem.h
-@@ -49,6 +49,8 @@ struct msm_gem_address_space *
- msm_gem_address_space_create(struct msm_mmu *mmu, const char *name,
- 		u64 va_start, u64 size);
- 
-+struct msm_fence_context;
-+
- struct msm_gem_vma {
- 	struct drm_mm_node node;
- 	uint64_t iova;
-@@ -56,6 +58,9 @@ struct msm_gem_vma {
- 	struct list_head list;    /* node in msm_gem_object::vmas */
- 	bool mapped;
- 	int inuse;
-+	uint32_t fence_mask;
-+	uint32_t fence[MSM_GPU_MAX_RINGS];
-+	struct msm_fence_context *fctx[MSM_GPU_MAX_RINGS];
- };
- 
- int msm_gem_init_vma(struct msm_gem_address_space *aspace,
-@@ -64,8 +69,8 @@ int msm_gem_init_vma(struct msm_gem_address_space *aspace,
- bool msm_gem_vma_inuse(struct msm_gem_vma *vma);
- void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
- 		struct msm_gem_vma *vma);
--void msm_gem_unmap_vma(struct msm_gem_address_space *aspace,
--		struct msm_gem_vma *vma);
-+void msm_gem_unpin_vma(struct msm_gem_vma *vma);
-+void msm_gem_unpin_vma_fenced(struct msm_gem_vma *vma, struct msm_fence_context *fctx);
- int msm_gem_map_vma(struct msm_gem_address_space *aspace,
- 		struct msm_gem_vma *vma, int prot,
- 		struct sg_table *sgt, int size);
-diff --git a/drivers/gpu/drm/msm/msm_gem_vma.c b/drivers/gpu/drm/msm/msm_gem_vma.c
-index 4949899f1fc7..6f9a402450f9 100644
---- a/drivers/gpu/drm/msm/msm_gem_vma.c
-+++ b/drivers/gpu/drm/msm/msm_gem_vma.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include "msm_drv.h"
-+#include "msm_fence.h"
- #include "msm_gem.h"
- #include "msm_mmu.h"
- 
-@@ -39,7 +40,19 @@ msm_gem_address_space_get(struct msm_gem_address_space *aspace)
- 
- bool msm_gem_vma_inuse(struct msm_gem_vma *vma)
- {
--	return !!vma->inuse;
-+	if (vma->inuse > 0)
-+		return true;
-+
-+	while (vma->fence_mask) {
-+		unsigned idx = ffs(vma->fence_mask) - 1;
-+
-+		if (!msm_fence_completed(vma->fctx[idx], vma->fence[idx]))
-+			return true;
-+
-+		vma->fence_mask &= ~BIT(idx);
-+	}
-+
-+	return false;
- }
- 
- /* Actually unmap memory for the vma */
-@@ -63,13 +76,22 @@ void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
- }
- 
- /* Remove reference counts for the mapping */
--void msm_gem_unmap_vma(struct msm_gem_address_space *aspace,
--		struct msm_gem_vma *vma)
-+void msm_gem_unpin_vma(struct msm_gem_vma *vma)
- {
- 	if (!GEM_WARN_ON(!vma->iova))
- 		vma->inuse--;
- }
- 
-+/* Replace pin reference with fence: */
-+void msm_gem_unpin_vma_fenced(struct msm_gem_vma *vma, struct msm_fence_context *fctx)
++static int msm_ioctl_gem_info_set_iova(struct drm_device *dev,
++		struct drm_file *file, struct drm_gem_object *obj,
++		uint64_t iova)
 +{
-+	vma->fctx[fctx->index] = fctx;
-+	vma->fence[fctx->index] = fctx->last_fence;
-+	vma->fence_mask |= BIT(fctx->index);
-+	msm_gem_unpin_vma(vma);
++	struct msm_drm_private *priv = dev->dev_private;
++	struct msm_file_private *ctx = file->driver_priv;
++
++	if (!priv->gpu)
++		return -EINVAL;
++
++	/* Only supported if per-process address space is supported: */
++	if (priv->gpu->aspace == ctx->aspace)
++		return -EOPNOTSUPP;
++
++	return msm_gem_set_iova(obj, ctx->aspace, iova);
 +}
 +
-+/* Map and pin vma: */
- int
- msm_gem_map_vma(struct msm_gem_address_space *aspace,
- 		struct msm_gem_vma *vma, int prot,
-diff --git a/drivers/gpu/drm/msm/msm_ringbuffer.c b/drivers/gpu/drm/msm/msm_ringbuffer.c
-index 3bbf574c3bdc..01f7e4b771ff 100644
---- a/drivers/gpu/drm/msm/msm_ringbuffer.c
-+++ b/drivers/gpu/drm/msm/msm_ringbuffer.c
-@@ -14,9 +14,19 @@ module_param(num_hw_submissions, uint, 0600);
- static struct dma_fence *msm_job_run(struct drm_sched_job *job)
+ static int msm_ioctl_gem_info(struct drm_device *dev, void *data,
+ 		struct drm_file *file)
  {
- 	struct msm_gem_submit *submit = to_msm_submit(job);
-+	struct msm_fence_context *fctx = submit->ring->fctx;
- 	struct msm_gpu *gpu = submit->gpu;
-+	int i;
+@@ -733,6 +750,7 @@ static int msm_ioctl_gem_info(struct drm_device *dev, void *data,
+ 	switch (args->info) {
+ 	case MSM_INFO_GET_OFFSET:
+ 	case MSM_INFO_GET_IOVA:
++	case MSM_INFO_SET_IOVA:
+ 		/* value returned as immediate, not pointer, so len==0: */
+ 		if (args->len)
+ 			return -EINVAL;
+@@ -757,6 +775,9 @@ static int msm_ioctl_gem_info(struct drm_device *dev, void *data,
+ 	case MSM_INFO_GET_IOVA:
+ 		ret = msm_ioctl_gem_info_iova(dev, file, obj, &args->value);
+ 		break;
++	case MSM_INFO_SET_IOVA:
++		ret = msm_ioctl_gem_info_set_iova(dev, file, obj, args->value);
++		break;
+ 	case MSM_INFO_SET_NAME:
+ 		/* length check should leave room for terminating null: */
+ 		if (args->len >= sizeof(msm_obj->name)) {
+diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
+index bf4af17e2f1e..83ded2b7154e 100644
+--- a/drivers/gpu/drm/msm/msm_gem.c
++++ b/drivers/gpu/drm/msm/msm_gem.c
+@@ -525,6 +525,54 @@ int msm_gem_get_iova(struct drm_gem_object *obj,
+ 	return ret;
+ }
  
--	submit->hw_fence = msm_fence_alloc(submit->ring->fctx);
-+	submit->hw_fence = msm_fence_alloc(fctx);
++static int clear_iova(struct drm_gem_object *obj,
++		      struct msm_gem_address_space *aspace)
++{
++	struct msm_gem_vma *vma = lookup_vma(obj, aspace);
 +
-+	for (i = 0; i < submit->nr_bos; i++) {
-+		struct drm_gem_object *obj = &submit->bos[i].obj->base;
++	if (!vma)
++		return 0;
 +
-+		msm_gem_lock(obj);
-+		msm_gem_unpin_vma_fenced(submit->bos[i].vma, fctx);
-+		msm_gem_unlock(obj);
++	if (msm_gem_vma_inuse(vma))
++		return -EBUSY;
++
++	msm_gem_purge_vma(vma->aspace, vma);
++	msm_gem_close_vma(vma->aspace, vma);
++	del_vma(vma);
++
++	return 0;
++}
++
++/*
++ * Get the requested iova but don't pin it.  Fails if the requested iova is
++ * not available.  Doesn't need a put because iovas are currently valid for
++ * the life of the object.
++ *
++ * Setting an iova of zero will clear the vma.
++ */
++int msm_gem_set_iova(struct drm_gem_object *obj,
++		     struct msm_gem_address_space *aspace, uint64_t iova)
++{
++	int ret = 0;
++
++	msm_gem_lock(obj);
++	if (!iova) {
++		ret = clear_iova(obj, aspace);
++	} else {
++		struct msm_gem_vma *vma;
++		vma = get_vma_locked(obj, aspace, iova, iova + obj->size);
++		if (IS_ERR(vma)) {
++			ret = PTR_ERR(vma);
++		} else if (GEM_WARN_ON(vma->iova != iova)) {
++			clear_iova(obj, aspace);
++			ret = -ENOSPC;
++		}
 +	}
++	msm_gem_unlock(obj);
++
++	return ret;
++}
++
+ /*
+  * Unpin a iova by updating the reference counts. The memory isn't actually
+  * purged until something else (shrinker, mm_notifier, destroy, etc) decides
+diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
+index 38d66e1248b1..efa2e5c19f1e 100644
+--- a/drivers/gpu/drm/msm/msm_gem.h
++++ b/drivers/gpu/drm/msm/msm_gem.h
+@@ -38,6 +38,12 @@ struct msm_gem_address_space {
  
- 	pm_runtime_get_sync(&gpu->pdev->dev);
+ 	/* @faults: the number of GPU hangs associated with this address space */
+ 	int faults;
++
++	/** @va_start: lowest possible address to allocate */
++	uint64_t va_start;
++
++	/** @va_size: the size of the address space (in bytes) */
++	uint64_t va_size;
+ };
  
+ struct msm_gem_address_space *
+@@ -144,6 +150,8 @@ struct msm_gem_vma *msm_gem_get_vma_locked(struct drm_gem_object *obj,
+ 					   struct msm_gem_address_space *aspace);
+ int msm_gem_get_iova(struct drm_gem_object *obj,
+ 		struct msm_gem_address_space *aspace, uint64_t *iova);
++int msm_gem_set_iova(struct drm_gem_object *obj,
++		struct msm_gem_address_space *aspace, uint64_t iova);
+ int msm_gem_get_and_pin_iova_range(struct drm_gem_object *obj,
+ 		struct msm_gem_address_space *aspace, uint64_t *iova,
+ 		u64 range_start, u64 range_end);
+diff --git a/drivers/gpu/drm/msm/msm_gem_vma.c b/drivers/gpu/drm/msm/msm_gem_vma.c
+index 6f9a402450f9..354f91aff573 100644
+--- a/drivers/gpu/drm/msm/msm_gem_vma.c
++++ b/drivers/gpu/drm/msm/msm_gem_vma.c
+@@ -182,6 +182,8 @@ msm_gem_address_space_create(struct msm_mmu *mmu, const char *name,
+ 	spin_lock_init(&aspace->lock);
+ 	aspace->name = name;
+ 	aspace->mmu = mmu;
++	aspace->va_start = va_start;
++	aspace->va_size  = size;
+ 
+ 	drm_mm_init(&aspace->mm, va_start, size);
+ 
+diff --git a/include/uapi/drm/msm_drm.h b/include/uapi/drm/msm_drm.h
+index 794ad1948497..3c7b097c4e3d 100644
+--- a/include/uapi/drm/msm_drm.h
++++ b/include/uapi/drm/msm_drm.h
+@@ -84,6 +84,8 @@ struct drm_msm_timespec {
+ #define MSM_PARAM_SYSPROF    0x0b  /* WO: 1 preserves perfcntrs, 2 also disables suspend */
+ #define MSM_PARAM_COMM       0x0c  /* WO: override for task->comm */
+ #define MSM_PARAM_CMDLINE    0x0d  /* WO: override for task cmdline */
++#define MSM_PARAM_VA_START   0x0e  /* RO: start of valid GPU iova range */
++#define MSM_PARAM_VA_SIZE    0x0f  /* RO: size of valid GPU iova range (bytes) */
+ 
+ /* For backwards compat.  The original support for preemption was based on
+  * a single ring per priority level so # of priority levels equals the #
+@@ -135,6 +137,7 @@ struct drm_msm_gem_new {
+ #define MSM_INFO_GET_IOVA	0x01   /* get iova, returned by value */
+ #define MSM_INFO_SET_NAME	0x02   /* set the debug name (by pointer) */
+ #define MSM_INFO_GET_NAME	0x03   /* get debug name, returned by pointer */
++#define MSM_INFO_SET_IOVA	0x04   /* set the iova, passed by value */
+ 
+ struct drm_msm_gem_info {
+ 	__u32 handle;         /* in */
 -- 
 2.35.1
 

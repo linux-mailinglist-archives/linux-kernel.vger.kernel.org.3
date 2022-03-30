@@ -2,171 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE78E4ECEF7
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C51C44ECEFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351313AbiC3Vp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 17:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
+        id S1351331AbiC3VqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 17:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351301AbiC3Vp6 (ORCPT
+        with ESMTP id S1351321AbiC3VqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 17:45:58 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575A75F76
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:44:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1648676650; x=1680212650;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=lASKdYMSMbpY3YMCgBI+0wvBvlgBA48ZwyFm07zjWLU=;
-  b=diCl5m2s8gvhgm8lThUxlyq1GenS0Y1pnOvVYFopGyVpc+XpLU0fzO9x
-   8evvmwgrnullhnCdF6/vZAf3ZaI8EMDJ+1rNagcNzF51PaI+YsdT8L+IR
-   J/dU7sIT7bhjGK7hk7wvqnkhIM806hpU/K+GriBfowNrqjdWtSN6hNw0I
-   8LJoHsYdCV/W1v8k8ZfptIv74aMJNKl1MzEJC1LW1iy1/rukUV8hltNwe
-   j0LyCdvkXEkmLnS8AcLHxC22J9Luxp0enFVOJpa3Yyrru7amcmqinkJH4
-   zQsQpuIFISehdWvvig7ylgBSSrmP4rcxdiyaS4xApov0VK7zGHcL8L82k
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,223,1643644800"; 
-   d="scan'208";a="197584225"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 31 Mar 2022 05:44:09 +0800
-IronPort-SDR: 4GRIFdH9TMjeym8ZqTWhSxNqztqvcshb3t/93pNusSS/yeqXGZvjU3RRfJk8PlpxCl853gzCiS
- +y3aE+FuXflVesNUh24cwIMop0NdC9dwUFqV/3ICokl+1jCPnt5WKZ3qyL1IZ7m4YPRlAiJS9Y
- VW6vVjiFNcooxQMn5pvXjNR5agqO/mBll8SIn8VcKW4V4M1zWsH8uhzVLSXHZhkDy/fJdvSPM1
- 5Vs1odYJztkkE3UNGpcAtfTT7AQJR8EonU76TbTwViaVlpPlyXT0zxy88DvAFRWXo5zkqljXNL
- 3UNChpbmcl3PWXxSZPvmKVQj
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Mar 2022 14:14:59 -0700
-IronPort-SDR: nz9LRtCr74A5e9F8YpM0nyrSwbyZe0Y7xnAlxzV2ue48m5mOJRs4m4r2gjbmk8e6Ngv4rtHFKh
- SDNtWNfeOa2DiHSsgJQWRHq22nI3i0B3nW9jOILHKtBE75TlTUySnoGVk5ymPcZhOx9QOkHahs
- TBmcAKzXeYNcKXTeQSmqxZYd8s46AcFA5/HAroxC4mvQJSusIBenWPWKwToqvjDhP14BAWGlG1
- ei4nQysu98Wh5h0+4I3e8eX6O0okOhAtGZp+UC0aaOWiV54ZWDdLBre0XQHDSVS89ccrIlIGAw
- TFU=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Mar 2022 14:44:09 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KTKh84W68z1SVp1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:44:08 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:mime-version
-        :x-mailer:message-id:date:subject:to:from; s=dkim; t=1648676647;
-         x=1651268648; bh=lASKdYMSMbpY3YMCgBI+0wvBvlgBA48ZwyFm07zjWLU=; b=
-        Gl5NzUDnqI0kjNfdRZ04swsSk5BP+Qbor+W1CKvXHkuYtfMz5Sr2Uc+zXsD8/K5X
-        wkNbfhFMHxENsUtDUDTpeXpCaOa3QBVQbiqaRHSgPUAvP6JAdqavNTyVXscDSvT5
-        5zo6oyUJqiwR9zE9IykUfEA2JqIWpgyYn3HK/v69kjTJ16CbOL5/ec8/3HnTHkOI
-        zlZnN6az9FT48zsbBiwWvInIWgf/e9ZwfAEwP9QkDwhUed9eQAcvIu8PQ/DsEHYk
-        4MWwaTTZU9E+R0Zg0O/BpnEBAcGfZZi1g/TYvYk/D9ZzKggBy7OFRv9cA882dlhn
-        2gBitXSNdzHk0rW1pmLV0A==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id aSWGep7J0jfO for <linux-kernel@vger.kernel.org>;
-        Wed, 30 Mar 2022 14:44:07 -0700 (PDT)
-Received: from toolbox.alistair23.me (unknown [10.225.165.114])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KTKh31mLtz1Rvlx;
-        Wed, 30 Mar 2022 14:44:02 -0700 (PDT)
-From:   Alistair Francis <alistair.francis@opensource.wdc.com>
-To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        linux-riscv@lists.infradead.org, aou@eecs.berkeley.edu
-Cc:     linux-kernel@vger.kernel.org, anup@brainfault.org,
-        atishp@rivosinc.com, guoren@kernel.org,
-        Alistair Francis <alistair.francis@wdc.com>
-Subject: [PATCH v2] riscv: Ensure only ASIDLEN is used for sfence.vma
-Date:   Thu, 31 Mar 2022 07:43:58 +1000
-Message-Id: <20220330214358.3409766-1-alistair.francis@opensource.wdc.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 30 Mar 2022 17:46:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69F2B859;
+        Wed, 30 Mar 2022 14:44:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55FB76171B;
+        Wed, 30 Mar 2022 21:44:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB0C3C34110;
+        Wed, 30 Mar 2022 21:44:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648676656;
+        bh=aM5mAmK19Mmcbly0+Z8gAQpXnfdX++fFzWKDjWvJamA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YVms58oeRQIRHD+lDm8U3Fj7oDVn8CVdEfQPPGYYU+ckHpeztbY2KwDnPChZouShA
+         2qLDA3HcY9KngfFQeVSIStt+7fG6GyMlkiQ5zTZQnxd6Qz8VBToY3c4djMrxe1iT9F
+         84ts3qlMLatnOyh6sIy2p5sw2Gx1OwEylvyL58V31YurGyAvQDv2lPqkHQKhUq0qjZ
+         QCyVRCxfPd8ZMprBCTrST0fL2EzWA2yxY0uVCzsY9Uim5UZDyhydAie2C828cDibAi
+         laIZnPzNWtUUpZs6TQx5DogiLpNC/QRLykiIK5ro96lAlN0B7CbkIcxuRLEu69IGyr
+         x61KZ7RCmF8sw==
+Received: by mail-oi1-f181.google.com with SMTP id e189so23436624oia.8;
+        Wed, 30 Mar 2022 14:44:16 -0700 (PDT)
+X-Gm-Message-State: AOAM533wVN7wmNRoHfg6/dKEvqY6REE5GwjdkxuOq9qhkn6M/kj54RCF
+        jZDtezAloHi5gPNyb9tzIHLGYskvDcuOb1juIZQ=
+X-Google-Smtp-Source: ABdhPJy9FW8z4Z13CGtrAM0Geq+heEQplHHsw3+w6FJjJlrct7i2m/ObXAxCutmtNa0cX1vpgYEaEymrnGT3HsYk52g=
+X-Received: by 2002:aca:674c:0:b0:2d9:c460:707c with SMTP id
+ b12-20020aca674c000000b002d9c460707cmr1139478oiy.126.1648676655872; Wed, 30
+ Mar 2022 14:44:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220330085009.1011614-1-william.xuanziyang@huawei.com>
+ <20220330093925.2d8ee6ca@kernel.org> <20220330132406.633c2da8@kernel.org>
+In-Reply-To: <20220330132406.633c2da8@kernel.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 30 Mar 2022 23:44:04 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHnfOOGR-kDrxXot6JX=ShzKnkoyJjk5ev7Yxew8ogR+A@mail.gmail.com>
+Message-ID: <CAMj1kXHnfOOGR-kDrxXot6JX=ShzKnkoyJjk5ev7Yxew8ogR+A@mail.gmail.com>
+Subject: Re: [PATCH net] net/tls: fix slab-out-of-bounds bug in decrypt_internal
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Eric Biggers <ebiggers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ziyang Xuan <william.xuanziyang@huawei.com>, borisp@nvidia.com,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <netdev@vger.kernel.org>, vakul.garg@nxp.com, davejwatson@fb.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Vadim Fedorenko <vfedorenko@novek.ru>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alistair Francis <alistair.francis@wdc.com>
+On Wed, 30 Mar 2022 at 22:24, Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Wed, 30 Mar 2022 09:39:25 -0700 Jakub Kicinski wrote:
+> > On Wed, 30 Mar 2022 16:50:09 +0800 Ziyang Xuan wrote:
+> > > The memory size of tls_ctx->rx.iv for AES128-CCM is 12 setting in
+> > > tls_set_sw_offload(). The return value of crypto_aead_ivsize()
+> > > for "ccm(aes)" is 16. So memcpy() require 16 bytes from 12 bytes
+> > > memory space will trigger slab-out-of-bounds bug as following:
+> > >
+> > > ==================================================================
+> > > BUG: KASAN: slab-out-of-bounds in decrypt_internal+0x385/0xc40 [tls]
+> > > Read of size 16 at addr ffff888114e84e60 by task tls/10911
+> > >
+> > > Call Trace:
+> > >  <TASK>
+> > >  dump_stack_lvl+0x34/0x44
+> > >  print_report.cold+0x5e/0x5db
+> > >  ? decrypt_internal+0x385/0xc40 [tls]
+> > >  kasan_report+0xab/0x120
+> > >  ? decrypt_internal+0x385/0xc40 [tls]
+> > >  kasan_check_range+0xf9/0x1e0
+> > >  memcpy+0x20/0x60
+> > >  decrypt_internal+0x385/0xc40 [tls]
+> > >  ? tls_get_rec+0x2e0/0x2e0 [tls]
+> > >  ? process_rx_list+0x1a5/0x420 [tls]
+> > >  ? tls_setup_from_iter.constprop.0+0x2e0/0x2e0 [tls]
+> > >  decrypt_skb_update+0x9d/0x400 [tls]
+> > >  tls_sw_recvmsg+0x3c8/0xb50 [tls]
+> > >
+> > > Allocated by task 10911:
+> > >  kasan_save_stack+0x1e/0x40
+> > >  __kasan_kmalloc+0x81/0xa0
+> > >  tls_set_sw_offload+0x2eb/0xa20 [tls]
+> > >  tls_setsockopt+0x68c/0x700 [tls]
+> > >  __sys_setsockopt+0xfe/0x1b0
+> >
+> > Interesting, are you running on non-x86 platform or with some crypto
+> > accelerator? I wonder why we're not hitting it with KASAN and the
+> > selftest we have.
+>
+> I take that back, I can repro on x86 and 5.17, not sure why we're only
+> discovering this now.
+>
+> Noob question for crypto folks, ivsize for AES CCM is reported
+> as 16, but the real nonce size is 13 for TLS (q == 2, n == 13
+> using NIST's variable names AFAICT). Are we required to zero out
+> the rest of the buffer?
+>
 
-When we set the value of context.id using __new_context() we set both
-the asid and the current_version with this return statement in
-__new_context():
+Looking at crypto/ccm.c and the arm64 accelerated implementation, it
+appears the driver takes care of this: the first byte of the IV (q in
+your example, but L in the crypto code) is the number of bytes minus
+one that will be used for the counter, which starts at 0x1 for the CTR
+cipher stream generation but is reset to 0x0 to encrypt the
+authentication tag. Both drivers do a memset() to zero the last q+1
+bytes of the IV.
 
-    return asid | ver;
+> In particular I think I've seen transient crypto failures with
+> SM4 CCM in the past and zeroing the tail of the iv buffer seems
+> to make the tests pass reliably.
+>
 
-This means that when local_flush_tlb_all_asid() is called with the asid
-specified from context.id we can write the incorrect value.
+Yes, that seems like a bug, although there is only a single
+implementation of the combined SM4-CCM transform in the tree, and
+generic SM4 in C would be combined with the CCM chaining mode driver,
+which is also used for generic AES.
 
-We get away with this as hardware ignores the extra bits, as the RISC-V
-specification states:
 
-"bits SXLEN-1:ASIDMAX of the value held in rs2 are reserved for future
-standard use. Until their use is defined by a standard extension, they
-should be zeroed by software and ignored by current implementations."
-
-but it is still a bug and worth addressing as we are incorrectly setting
-extra bits.
-
-This patch uses asid_mask when calling sfence.vma to ensure the asid is
-always the correct len (ASIDLEN). This is similar to what we do in
-arch/riscv/mm/context.c.
-
-Fixes: 3f1e782998cd ("riscv: add ASID-based tlbflushing methods")
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
----
- arch/riscv/mm/context.c  | 2 +-
- arch/riscv/mm/tlbflush.c | 2 +-
- include/linux/mm_types.h | 2 ++
- 3 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
-index 7acbfbd14557..4329fe54176b 100644
---- a/arch/riscv/mm/context.c
-+++ b/arch/riscv/mm/context.c
-@@ -22,7 +22,7 @@ DEFINE_STATIC_KEY_FALSE(use_asid_allocator);
-=20
- static unsigned long asid_bits;
- static unsigned long num_asids;
--static unsigned long asid_mask;
-+unsigned long asid_mask;
-=20
- static atomic_long_t current_version;
-=20
-diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
-index 37ed760d007c..ef701fa83f36 100644
---- a/arch/riscv/mm/tlbflush.c
-+++ b/arch/riscv/mm/tlbflush.c
-@@ -42,7 +42,7 @@ static void __sbi_tlb_flush_range(struct mm_struct *mm,=
- unsigned long start,
- 	/* check if the tlbflush needs to be sent to other CPUs */
- 	broadcast =3D cpumask_any_but(cmask, cpuid) < nr_cpu_ids;
- 	if (static_branch_unlikely(&use_asid_allocator)) {
--		unsigned long asid =3D atomic_long_read(&mm->context.id);
-+		unsigned long asid =3D atomic_long_read(&mm->context.id) & asid_mask;
-=20
- 		if (broadcast) {
- 			sbi_remote_sfence_vma_asid(cmask, start, size, asid);
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 8834e38c06a4..5fa7cc0af853 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -666,6 +666,8 @@ struct mm_struct {
-=20
- extern struct mm_struct init_mm;
-=20
-+extern unsigned long asid_mask;
-+
- /* Pointer magic because the dynamic array size confuses some compilers.=
- */
- static inline void mm_init_cpumask(struct mm_struct *mm)
- {
---=20
-2.35.1
-
+> > > Reserve MAX_IV_SIZE memory space for iv to be compatible with all
+> > > ciphers. And do iv and salt copy like done in tls_do_encryption().
+> > >
+> > > Fixes: f295b3ae9f59 ("net/tls: Add support of AES128-CCM based ciphers")
+> > > Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+> > > ---
+> > >  net/tls/tls_sw.c | 10 +++-------
+> > >  1 file changed, 3 insertions(+), 7 deletions(-)
+> > >
+> > > diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> > > index 0024a692f0f8..6b858f995b23 100644
+> > > --- a/net/tls/tls_sw.c
+> > > +++ b/net/tls/tls_sw.c
+> > > @@ -1456,7 +1456,7 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
+> > >     aead_size = sizeof(*aead_req) + crypto_aead_reqsize(ctx->aead_recv);
+> > >     mem_size = aead_size + (nsg * sizeof(struct scatterlist));
+> > >     mem_size = mem_size + prot->aad_size;
+> > > -   mem_size = mem_size + crypto_aead_ivsize(ctx->aead_recv);
+> > > +   mem_size = mem_size + MAX_IV_SIZE;
+> >
+> > This change is not strictly required for the patch, right?
+> > Can we drop it, and perhaps send as an optimization separately later?
+> >
+> > >     /* Allocate a single block of memory which contains
+> > >      * aead_req || sgin[] || sgout[] || aad || iv.
+> > > @@ -1493,12 +1493,8 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
+> > >             kfree(mem);
+> > >             return err;
+> > >     }
+> > > -   if (prot->version == TLS_1_3_VERSION ||
+> > > -       prot->cipher_type == TLS_CIPHER_CHACHA20_POLY1305)
+> > > -           memcpy(iv + iv_offset, tls_ctx->rx.iv,
+> > > -                  crypto_aead_ivsize(ctx->aead_recv));
+> > > -   else
+> > > -           memcpy(iv + iv_offset, tls_ctx->rx.iv, prot->salt_size);
+> > > +   memcpy(iv + iv_offset, tls_ctx->rx.iv,
+> > > +          prot->iv_size + prot->salt_size);
+> >
+> > If the IV really is 16B then we're passing 4 bytes of uninitialized
+> > data at the end of the buffer, right?
+> >
+> > >     xor_iv_with_seq(prot, iv + iv_offset, tls_ctx->rx.rec_seq);
+>
+> FWIW this is the fix I tested:
+>
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index 0024a692f0f8..dbc6bce01898 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+> @@ -1473,6 +1473,8 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
+>         aad = (u8 *)(sgout + n_sgout);
+>         iv = aad + prot->aad_size;
+>
+> +       /* Prepare IV */
+> +       memset(iv, 0, crypto_aead_ivsize(ctx->aead_recv));
+>         /* For CCM based ciphers, first byte of nonce+iv is a constant */
+>         switch (prot->cipher_type) {
+>         case TLS_CIPHER_AES_CCM_128:
+> @@ -1485,21 +1487,20 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
+>                 break;
+>         }
+>
+> -       /* Prepare IV */
+> -       err = skb_copy_bits(skb, rxm->offset + TLS_HEADER_SIZE,
+> -                           iv + iv_offset + prot->salt_size,
+> -                           prot->iv_size);
+> -       if (err < 0) {
+> -               kfree(mem);
+> -               return err;
+> -       }
+>         if (prot->version == TLS_1_3_VERSION ||
+> -           prot->cipher_type == TLS_CIPHER_CHACHA20_POLY1305)
+> +           prot->cipher_type == TLS_CIPHER_CHACHA20_POLY1305) {
+>                 memcpy(iv + iv_offset, tls_ctx->rx.iv,
+> -                      crypto_aead_ivsize(ctx->aead_recv));
+> -       else
+> +                      prot->iv_size + prot->salt_size);
+> +       } else {
+> +               err = skb_copy_bits(skb, rxm->offset + TLS_HEADER_SIZE,
+> +                                   iv + iv_offset + prot->salt_size,
+> +                                   prot->iv_size);
+> +               if (err < 0) {
+> +                       kfree(mem);
+> +                       return err;
+> +               }
+>                 memcpy(iv + iv_offset, tls_ctx->rx.iv, prot->salt_size);
+> -
+> +       }
+>         xor_iv_with_seq(prot, iv + iv_offset, tls_ctx->rx.rec_seq);
+>
+>         /* Prepare AAD */
+> --
+> 2.34.1
+>
+>

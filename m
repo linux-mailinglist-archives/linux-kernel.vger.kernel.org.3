@@ -2,181 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B6B4EBAFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D1A4EBB09
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242854AbiC3Gq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 02:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
+        id S243145AbiC3GtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 02:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238754AbiC3Gq5 (ORCPT
+        with ESMTP id S243487AbiC3Gsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 02:46:57 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A99E7EB3B
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:45:11 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KSxhJ4N2LzDq8M;
-        Wed, 30 Mar 2022 14:42:56 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 30 Mar 2022 14:45:09 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.21; Wed, 30 Mar 2022 14:45:09 +0800
-Message-ID: <c48b830b-1d85-4093-f913-de8a71f714e6@huawei.com>
-Date:   Wed, 30 Mar 2022 14:45:08 +0800
+        Wed, 30 Mar 2022 02:48:42 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D1289330
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:46:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648622816; x=1680158816;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=1jS6mrvvrk0FhpnC8+5qcpTEmgGUnYdS15XRcziWF2M=;
+  b=MMkJrFRvHc/g/yOWDCq/z6MZM+qSxIQVQCkXjm9/IIdMzabTI1jVSymQ
+   /Co9CgO6WDHony+UtMq+cdfKGKsm5lBRRhui7zKf+hnN3TmHWb0gKms6x
+   4zjrEnhgB8CKBFUxLq3SLldXaluZ6zJEMxxa4M2VhFb6cThDBo37feMht
+   4eqneEzD3JlGNIoRAiQrJYDeEEr6P5qHcc2TU5CZjnFn6cTI7Z+QpM0mw
+   rIgfwD6o+M2PH1HTAoITGj9iKLhcGC2GyiLl2cbn3G7euTJ+8L6WiSdsQ
+   yzvVM1Q9biGq877gwF0SHuUR+vTCZRyQ8NIR9o84HeZFT/Zrmql61InFb
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="345897091"
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="345897091"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 23:46:56 -0700
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="546726375"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 23:46:53 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Jagdish Gediya <jvgediya@linux.ibm.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com,
+        baolin.wang@linux.alibaba.com, dave.hansen@linux.intel.com
+Subject: Re: [PATCH] mm: migrate: set demotion targets differently
+References: <20220329115222.8923-1-jvgediya@linux.ibm.com>
+Date:   Wed, 30 Mar 2022 14:46:51 +0800
+In-Reply-To: <20220329115222.8923-1-jvgediya@linux.ibm.com> (Jagdish Gediya's
+        message of "Tue, 29 Mar 2022 17:22:22 +0530")
+Message-ID: <87pmm4c4ys.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: Re: [PATCH 1/2] arm64: mm: Do not defer reserve_crashkernel() if only
- ZONE_DMA32
-To:     Vijay Balakrishna <vijayb@linux.microsoft.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Pasha Tatashin <pasha.tatashin@soleen.com>, <f.fainelli@gmail.com>
-References: <20220325055315.25671-1-wangkefeng.wang@huawei.com>
- <9e8f32c4-1198-dca5-915f-0b31ce1436b4@linux.microsoft.com>
-Content-Language: en-US
-In-Reply-To: <9e8f32c4-1198-dca5-915f-0b31ce1436b4@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme708-chm.china.huawei.com (10.1.199.104) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Jagdish,
 
-On 2022/3/30 6:29, Vijay Balakrishna wrote:
+Jagdish Gediya <jvgediya@linux.ibm.com> writes:
+
+> The current implementation to identify the demotion
+> targets limits some of the opportunities to share
+> the demotion targets between multiple source nodes.
+
+Yes.  It sounds reasonable to share demotion targets among multiple
+source nodes.
+
+One question, are example machines below are real hardware now or in
+near future?  Or you just think they are possible?
+
+And, before going into the implementation details, I think that we can
+discuss the perfect demotion order firstly.
+
+> Implement a logic to identify the loop in the demotion
+> targets such that all the possibilities of demotion can
+> be utilized. Don't share the used targets between all
+> the nodes, instead create the used targets from scratch
+> for each individual node based on for what all node this
+> node is a demotion target. This helps to share the demotion
+> targets without missing any possible way of demotion.
 >
+> e.g. with below NUMA topology, where node 0 & 1 are
+> cpu + dram nodes, node 2 & 3 are equally slower memory
+> only nodes, and node 4 is slowest memory only node,
 >
-> On 3/24/2022 10:53 PM, Kefeng Wang wrote:
->> The kernel could be benifit due to BLOCK_MAPPINGS, see commit
->> 031495635b46 ("arm64: Do not defer reserve_crashkernel() for
->> platforms with no DMA memory zones"), if there is only with
->> ZONE_DMA32, we could set arm64_dma_phys_limit to max_zone_phys(32)
->> earlier in arm64_memblock_init(), then we will benifit too.
+> available: 5 nodes (0-4)
+> node 0 cpus: 0 1
+> node 0 size: n MB
+> node 0 free: n MB
+> node 1 cpus: 2 3
+> node 1 size: n MB
+> node 1 free: n MB
+> node 2 cpus:
+> node 2 size: n MB
+> node 2 free: n MB
+> node 3 cpus:
+> node 3 size: n MB
+> node 3 free: n MB
+> node 4 cpus:
+> node 4 size: n MB
+> node 4 free: n MB
+> node distances:
+> node   0   1   2   3   4
+>   0:  10  20  40  40  80
+>   1:  20  10  40  40  80
+>   2:  40  40  10  40  80
+>   3:  40  40  40  10  80
+>   4:  80  80  80  80  10
 >
-> Thanks for noticing platforms with just ZONE_DMA32 config can also 
-> benefit BLOCK_MAPPINGS.  I assume you have access to one where you 
-> notice the difference with proposed changes and able to test.  I did 
-> test proposed changes on SoC we use with IOMMU (no ZONE_DMA configs 
-> enabled).
-I backported your patches into 5.10 and tested(unixbench will benifit 
-due to block mapping, only with DMA32 and rodata=false)
+> The existing implementation gives below demotion targets,
 >
-> Nits --
-> - benifit -> benefit
-> - consider making commit message clear, "then we will.." seems you are 
-> referring to platforms with just ZONE_DMA32 config enabled
-> - to reflect new change consider updating comment added in commit 
-> 031495635b46
-Thanks for your reviewing,  will update and test with upstream.
+> node    demotion_target
+>  0              3, 2
+>  1              4
+>  2              X
+>  3              X
+>  4		X
 >
->>
->> Cc: Vijay Balakrishna <vijayb@linux.microsoft.com>
->> Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
->> Cc: Will Deacon <will@kernel.org>
->> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> With this patch applied, below are the demotion targets,
 >
-> Reviewed-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
+> node    demotion_target
+>  0              3, 2
+>  1              3, 2
+>  2              3
+>  3              4
+>  4		X
+
+For such machine, I think the perfect demotion order is,
+
+node    demotion_target
+ 0              2, 3
+ 1              2, 3
+ 2              4
+ 3              4
+ 4              X
+
+> e.g. with below NUMA topology, where node 0, 1 & 2 are
+> cpu + dram nodes and node 3 is slow memory node,
 >
->> ---
->>   arch/arm64/mm/init.c | 18 ++++++++++--------
->>   arch/arm64/mm/mmu.c  |  6 ++----
->>   2 files changed, 12 insertions(+), 12 deletions(-)
->>
->> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
->> index 8ac25f19084e..9dded8779d72 100644
->> --- a/arch/arm64/mm/init.c
->> +++ b/arch/arm64/mm/init.c
->> @@ -157,14 +157,14 @@ static phys_addr_t __init 
->> max_zone_phys(unsigned int zone_bits)
->>       return min(zone_mask, memblock_end_of_DRAM() - 1) + 1;
->>   }
->>   +phys_addr_t __ro_after_init dma32_phys_limit;
-Will make it static, suggested by Florian
->>   static void __init zone_sizes_init(unsigned long min, unsigned long 
->> max)
->>   {
->>       unsigned long max_zone_pfns[MAX_NR_ZONES]  = {0};
->> -    unsigned int __maybe_unused acpi_zone_dma_bits;
->> -    unsigned int __maybe_unused dt_zone_dma_bits;
->> -    phys_addr_t __maybe_unused dma32_phys_limit = max_zone_phys(32);
->> -
->>   #ifdef CONFIG_ZONE_DMA
->> +    unsigned int acpi_zone_dma_bits;
->> +    unsigned int dt_zone_dma_bits;
->> +
->>       acpi_zone_dma_bits = fls64(acpi_iort_dma_get_max_cpu_address());
->>       dt_zone_dma_bits = fls64(of_dma_get_max_cpu_address(NULL));
->>       zone_dma_bits = min3(32U, dt_zone_dma_bits, acpi_zone_dma_bits);
->> @@ -173,8 +173,6 @@ static void __init zone_sizes_init(unsigned long 
->> min, unsigned long max)
->>   #endif
->>   #ifdef CONFIG_ZONE_DMA32
->>       max_zone_pfns[ZONE_DMA32] = PFN_DOWN(dma32_phys_limit);
->> -    if (!arm64_dma_phys_limit)
->> -        arm64_dma_phys_limit = dma32_phys_limit;
->>   #endif
->>       max_zone_pfns[ZONE_NORMAL] = max;
->>   @@ -336,8 +334,12 @@ void __init arm64_memblock_init(void)
->>         early_init_fdt_scan_reserved_mem();
->>   -    if (!IS_ENABLED(CONFIG_ZONE_DMA) && 
->> !IS_ENABLED(CONFIG_ZONE_DMA32))
->> +    dma32_phys_limit = max_zone_phys(32);
->> +    if (!IS_ENABLED(CONFIG_ZONE_DMA)) {
->> +        if (IS_ENABLED(CONFIG_ZONE_DMA32))
->> +            arm64_dma_phys_limit = dma32_phys_limit;
->>           reserve_crashkernel();
->> +    }
->>         high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
->>   }
->> @@ -385,7 +387,7 @@ void __init bootmem_init(void)
->>        * request_standard_resources() depends on crashkernel's memory 
->> being
->>        * reserved, so do it here.
->>        */
->> -    if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
->> +    if (IS_ENABLED(CONFIG_ZONE_DMA))
->>           reserve_crashkernel();
->>         memblock_dump_all();
->> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
->> index 626ec32873c6..23734481318a 100644
->> --- a/arch/arm64/mm/mmu.c
->> +++ b/arch/arm64/mm/mmu.c
->> @@ -529,8 +529,7 @@ static void __init map_mem(pgd_t *pgdp)
->>     #ifdef CONFIG_KEXEC_CORE
->>       if (crash_mem_map) {
->> -        if (IS_ENABLED(CONFIG_ZONE_DMA) ||
->> -            IS_ENABLED(CONFIG_ZONE_DMA32))
->> +        if (IS_ENABLED(CONFIG_ZONE_DMA))
->>               flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
->>           else if (crashk_res.end)
->>               memblock_mark_nomap(crashk_res.start,
->> @@ -571,8 +570,7 @@ static void __init map_mem(pgd_t *pgdp)
->>        * through /sys/kernel/kexec_crash_size interface.
->>        */
->>   #ifdef CONFIG_KEXEC_CORE
->> -    if (crash_mem_map &&
->> -        !IS_ENABLED(CONFIG_ZONE_DMA) && 
->> !IS_ENABLED(CONFIG_ZONE_DMA32)) {
->> +    if (crash_mem_map && !IS_ENABLED(CONFIG_ZONE_DMA)) {
->>           if (crashk_res.end) {
->>               __map_memblock(pgdp, crashk_res.start,
->>                          crashk_res.end + 1,
-> .
+> available: 4 nodes (0-3)
+> node 0 cpus: 0 1
+> node 0 size: n MB
+> node 0 free: n MB
+> node 1 cpus: 2 3
+> node 1 size: n MB
+> node 1 free: n MB
+> node 2 cpus: 4 5
+> node 2 size: n MB
+> node 2 free: n MB
+> node 3 cpus:
+> node 3 size: n MB
+> node 3 free: n MB
+> node distances:
+> node   0   1   2   3
+>   0:  10  20  20  40
+>   1:  20  10  20  40
+>   2:  20  20  10  40
+>   3:  40  40  40  10
+>
+> The existing implementation gives below demotion targets,
+>
+> node    demotion_target
+>  0              3
+>  1              X
+>  2              X
+>  3              X
+>
+> With this patch applied, below are the demotion targets,
+>
+> node    demotion_target
+>  0              3
+>  1              3
+>  2              3
+>  3              X
+
+I think this is perfect already.
+
+> with below NUMA topology, where node 0 & 2 are cpu + dram
+> nodes and node 1 & 3 are slow memory nodes,
+>
+> available: 4 nodes (0-3)
+> node 0 cpus: 0 1
+> node 0 size: n MB
+> node 0 free: n MB
+> node 1 cpus:
+> node 1 size: n MB
+> node 1 free: n MB
+> node 2 cpus: 2 3
+> node 2 size: n MB
+> node 2 free: n MB
+> node 3 cpus:
+> node 3 size: n MB
+> node 3 free: n MB
+> node distances:
+> node   0   1   2   3
+>   0:  10  40  20  80
+>   1:  40  10  80  80
+>   2:  20  80  10  40
+>   3:  80  80  40  10
+>
+> The existing implementation gives below demotion targets,
+>
+> node    demotion_target
+>  0              3
+>  1              X
+>  2              3
+>  3              X
+
+Should be as below as you said in another email of the thread.
+
+node    demotion_target
+ 0              1
+ 1              X
+ 2              3
+ 3              X
+
+> With this patch applied, below are the demotion targets,
+>
+> node    demotion_target
+>  0              1
+>  1              3
+>  2              3
+>  3              X
+
+The original demotion order looks better for me.  1 and 3 are at the
+same level from the perspective of the whole system.
+
+Another example, node 0 & 2 are cpu + dram nodes and node 1 are slow
+memory node near node 0,
+
+available: 3 nodes (0-2)
+node 0 cpus: 0 1
+node 0 size: n MB
+node 0 free: n MB
+node 1 cpus:
+node 1 size: n MB
+node 1 free: n MB
+node 2 cpus: 2 3
+node 2 size: n MB
+node 2 free: n MB
+node distances:
+node   0   1   2
+  0:  10  40  20
+  1:  40  10  80
+  2:  20  80  10
+
+
+Demotion order 1:
+
+node    demotion_target
+ 0              1
+ 1              X
+ 2              X
+
+Demotion order 2:
+
+node    demotion_target
+ 0              1
+ 1              X
+ 2              1
+
+Demotion order 2 looks better.  But I think that demotion order 1 makes
+some sense too (like node reclaim mode).
+
+It seems that,
+
+If a demotion target has same distance to several current demotion
+sources, the demotion target should be shared among the demotion
+sources.
+
+And as Dave pointed out, we may eventually need a mechanism to override
+the default demotion order generated automatically.  So we can just use
+some simple mechanism that makes sense in most cases in kernel
+automatically.  And leave the best demotion for users to some
+customization mechanism.
+
+> As it can be seen above, node 3 can be demotion target for node
+> 1 but existing implementation doesn't configure it that way. It
+> is better to move pages from node 1 to node 3 instead of moving
+> it from node 1 to swap.
+>
+> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+
+Best Regards,
+Huang, Ying
+
+[snip]

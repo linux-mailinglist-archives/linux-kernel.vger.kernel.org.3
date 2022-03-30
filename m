@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5CF4EB9C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 06:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E184EB9CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 06:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242649AbiC3Ev2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 00:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
+        id S242666AbiC3FBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 01:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236198AbiC3Ev1 (ORCPT
+        with ESMTP id S242658AbiC3FB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 00:51:27 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E6C21E08
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 21:49:42 -0700 (PDT)
+        Wed, 30 Mar 2022 01:01:27 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD9150B01
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 21:59:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648615782; x=1680151782;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QkOzsmCZKcLJNDErhXd1TS7XNjyQSLSieo/gpsxySE4=;
-  b=Nt0NWBdxtJ8JyiwdnpXmhNODO72/PlDo7zQhxwUDequQeXs6a4V4B+oi
-   qGJMNVr6IHO8q3Qpu1qRecOE5rIsaJDNEOJO4J0k/CJpUu3faeRR6iM1p
-   bHKCueA5MqMbjQFvhMdWU1nC1dMc+QHRz9N5Bs7dzzfln3r2rzryCTlce
-   aqQb52flGPaWslmpJnBS9v29vk8mOEiDcKz1ZjJKfn+zhLQjMGndYKiZi
-   67rOVIw8NX87x9e9TzPD7eMp85RFgmgCom1xkF7mwYk4PIWU4Z+2CEEio
-   0LxfXmgu+IrSBih2iWOr8rb3nhN6w5oiCoMRfupaR22wmNxbKgGFZaCZu
+  t=1648616382; x=1680152382;
+  h=message-id:date:mime-version:cc:to:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=AAnJAgMuarMezEE6861FCCJv3R52eEQVv1ovXHNPw/g=;
+  b=O8VMFZptVLLR46R3S2ovfEKBNf098tapVKrkBEJcbvbKE1dxMfcwJ/wS
+   jlmzaiHiP478hL+zB99J7dYtAv0oBa2HqKSSH9cCU83LgKK+il7njxlA7
+   glT090ZniIS3nhbCdFRByXpcJkLYo3E0argBrbo9CQTsA707UOv41L4hH
+   51pIOpBh7oFZAxkbNb7p7PoyY+xJOykg9y34X35EAhnHeCN61mOCgu9Mj
+   wsUCOfvoEGIt4aBc4ZlS+Ow4FLq6zO6D/4axfshsLfeOVFFO+t1qX2pNw
+   2UX9E6uQjGv5TvFNkFXTsznQ+OL9+Yjc7gh51LZOVg2ZdseIXBKfdJjy4
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="322627125"
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="257025134"
 X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="322627125"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 21:49:42 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="257025134"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 21:59:41 -0700
 X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="719825054"
-Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 29 Mar 2022 21:49:40 -0700
-Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nZQH6-0000zk-02; Wed, 30 Mar 2022 04:49:40 +0000
-Date:   Wed, 30 Mar 2022 12:49:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Baisong Zhong <zhongbaisong@huawei.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [mcgrof:sysctl-next 6/18] core.c:undefined reference to
- `sched_rt_can_attach'
-Message-ID: <202203301258.O8GJygB7-lkp@intel.com>
+   d="scan'208";a="565271463"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.249.164.87]) ([10.249.164.87])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 21:59:36 -0700
+Message-ID: <9815626e-c42f-81a6-c933-52c1e6f48197@linux.intel.com>
+Date:   Wed, 30 Mar 2022 12:59:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>
+References: <20220329053800.3049561-1-baolu.lu@linux.intel.com>
+ <20220329053800.3049561-3-baolu.lu@linux.intel.com>
+ <BN9PR11MB52760F455B3319789BAB1E0E8C1E9@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH RFC v2 02/11] iommu: Add iommu_group_singleton_lockdown()
+In-Reply-To: <BN9PR11MB52760F455B3319789BAB1E0E8C1E9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,32 +73,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git sysctl-next
-head:   84053cc7ef2f2f86caeea6a8c0944b2f0b3f33ca
-commit: d82a599294a1c50168a2177d49fe0a9a791275c3 [6/18] sched/rt: fix build error when CONFIG_SYSCTL is disable
-config: arm64-randconfig-r023-20220329 (https://download.01.org/0day-ci/archive/20220330/202203301258.O8GJygB7-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=d82a599294a1c50168a2177d49fe0a9a791275c3
-        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
-        git fetch --no-tags mcgrof sysctl-next
-        git checkout d82a599294a1c50168a2177d49fe0a9a791275c3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
+Hi Kevin,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 2022/3/29 16:42, Tian, Kevin wrote:
+>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>> Sent: Tuesday, March 29, 2022 1:38 PM
+>>
+>> Some of the interfaces in the IOMMU core require that only a single
+>> kernel device driver controls the device in the IOMMU group. The
+>> existing method is to check the device count in the IOMMU group in
+>> the interfaces. This is unreliable because any device added to the
+>> IOMMU group later breaks this assumption without notifying the driver
+>> using the interface. This adds iommu_group_singleton_lockdown() that
+>> checks the requirement and locks down the IOMMU group with only single
+>> device driver bound.
+>>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>> ---
+>>   drivers/iommu/iommu.c | 30 ++++++++++++++++++------------
+>>   1 file changed, 18 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+>> index 0c42ece25854..9fb8a5b4491e 100644
+>> --- a/drivers/iommu/iommu.c
+>> +++ b/drivers/iommu/iommu.c
+>> @@ -48,6 +48,7 @@ struct iommu_group {
+>>   	struct list_head entry;
+>>   	unsigned int owner_cnt;
+>>   	void *owner;
+>> +	bool singleton_lockdown;
+>>   };
+>>
+>>   struct group_device {
+>> @@ -968,15 +969,16 @@ void iommu_group_remove_device(struct device
+>> *dev)
+>>   }
+>>   EXPORT_SYMBOL_GPL(iommu_group_remove_device);
+>>
+>> -static int iommu_group_device_count(struct iommu_group *group)
+>> +/* Callers should hold the group->mutex. */
+>> +static bool iommu_group_singleton_lockdown(struct iommu_group *group)
+>>   {
+>> -	struct group_device *entry;
+>> -	int ret = 0;
+>> -
+>> -	list_for_each_entry(entry, &group->devices, list)
+>> -		ret++;
+>> +	if (group->owner_cnt != 1 ||
+>> +	    group->domain != group->default_domain ||
+>> +	    group->owner)
+>> +		return false;
+> 
+> Curious why there will be a case where group uses default_domain
+> while still having a owner? I have the impression that owner is used
+> for userspace DMA where a different domain is used.
 
-All errors (new ones prefixed by >>):
+You are right. The default domain is automatically detached when a user
+is claimed. As long as a user is claimed, the group could only use an
+empty or user-specified domain.
 
-   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
-   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
-   aarch64-linux-ld: kernel/sched/core.o: in function `cpu_cgroup_can_attach':
->> core.c:(.text+0x28c4): undefined reference to `sched_rt_can_attach'
+> 
+>> +	group->singleton_lockdown = true;
+>>
+>> -	return ret;
+>> +	return true;
+>>   }
+> 
+> btw I'm not sure whether this is what SVA requires. IIRC the problem with
+> SVA is because PASID TLP prefix is not counted in PCI packet routing thus
+> a DMA target address with PASID might be treated as P2P if the address
+> falls into the MMIO BAR of other devices in the group. This is why the
+> original code needs to strictly apply SVA in a group containing a single
+> device, instead of a group attached by a single driver, unless we want to
+> reserve those MMIO ranges in CPU VA space.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+You are right. But I don't think the IOMMU core is able to guarantee
+above in a platform/device-agnostic way. Or any suggestions?
+
+I guess this should be somewhat off-loaded to the device driver which
+knows details of the device. The device driver should know this and
+guarantee it before calling
+iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA).
+
+This patch itself just replaces the existing
+"iommu_group_device_count(group) != 1" logic with a new one based on the
+group ownership logistics. The former is obviously not friendly to
+device hot joined afterward.
+
+> 
+> Jean can correct me if my memory is wrong.
+> 
+> Thanks
+> Kevin
+
+Best regards,
+baolu

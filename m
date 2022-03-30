@@ -2,106 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFA14EBE8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8334E4EBEC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245299AbiC3KVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
+        id S245370AbiC3Ka1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235280AbiC3KVT (ORCPT
+        with ESMTP id S242950AbiC3KaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:21:19 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08FD1C16EA;
-        Wed, 30 Mar 2022 03:19:31 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id A68D41F44516
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648635569;
-        bh=StyztVffLbw1AQ6XJEFjXEnbu7ei/fKPsvU3Dkfn4Bs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RrlST6RaEO6QMgKmX1jwEuDALibTtEYsPZq0s2XWGVXsfxwc3ac5pzNnRlW4vGWtO
-         CmBh6HyoScUsvqsk0/6lNRBLF2bvqHDMKvphI9+gLbIoyn+HQEbDXqK0HQ1omCjGOy
-         GGujG4IVICN5t2dNxBd2dfqsYkVe4Jn9ME1S9Sy991rKt2e4ss4o4rroTmAbipl/CL
-         duzN+7mWx5o65wP1yGhUioncnQeN/6erj2M+YQEmGOykJn0bC2Q3h1HKHwTuySva/R
-         SpT2Lj4qBQH2mktk6YBY8LAtEh24rx9aAsCPOaEIAqkEFI7HMHaLWF0bvFoI04Cow0
-         yU2jaHAgonQjA==
-Message-ID: <2ba661b5-a59b-89f4-7ad7-5eee4da4ce96@collabora.com>
-Date:   Wed, 30 Mar 2022 13:19:25 +0300
+        Wed, 30 Mar 2022 06:30:24 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A9F25E9E;
+        Wed, 30 Mar 2022 03:28:38 -0700 (PDT)
+Received: from fraeml708-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KT2fW0wL6z67kNj;
+        Wed, 30 Mar 2022 18:26:43 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml708-chm.china.huawei.com (10.206.15.36) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 30 Mar 2022 12:28:35 +0200
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 30 Mar 2022 11:28:32 +0100
+From:   John Garry <john.garry@huawei.com>
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
+        <matthieu.baerts@tessares.net>
+CC:     <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "John Garry" <john.garry@huawei.com>
+Subject: [PATCH] perf tools: Stop depending on .git files for building PERF-VERSION-FILE
+Date:   Wed, 30 Mar 2022 18:22:54 +0800
+Message-ID: <1648635774-14581-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [Patch v5 2/4] memory: tegra: Add MC error logging on tegra186
- onward
-Content-Language: en-US
-To:     Ashish Mhetre <amhetre@nvidia.com>,
-        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, digetx@gmail.com, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
-References: <20220316092525.4554-1-amhetre@nvidia.com>
- <20220316092525.4554-3-amhetre@nvidia.com>
- <04bb5ef2-15c3-d561-3572-76dc803275ef@collabora.com>
- <c5341578-e0a6-4ad7-5b6c-95b31b16faad@nvidia.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <c5341578-e0a6-4ad7-5b6c-95b31b16faad@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,HEXHASH_WORD,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/22 12:03, Ashish Mhetre wrote:
-> 
-> 
-> On 3/30/2022 5:36 AM, Dmitry Osipenko wrote:
->> External email: Use caution opening links or attachments
->>
->>
->> On 3/16/22 12:25, Ashish Mhetre wrote:
->>> Add new function 'get_int_channel' in tegra_mc_soc struture which is
->>> implemented by tegra SOCs which support multiple MC channels. This
->>> function returns the channel which should be used to get the information
->>> of interrupts.
->>> Remove static from tegra30_mc_handle_irq and use it as interrupt handler
->>> for MC interrupts on tegra186, tegra194 and tegra234 to log the errors.
->>> Add error specific MC status and address register bits and use them on
->>> tegra186, tegra194 and tegra234.
->>> Add error logging for generalized carveout interrupt on tegra186,
->>> tegra194
->>> and tegra234.
->>> Add error logging for route sanity interrupt on tegra194 an tegra234.
->>> Add register for higher bits of error address which is available on
->>> tegra194 and tegra234.
->>> Add a boolean variable 'has_addr_hi_reg' in tegra_mc_soc struture which
->>> will be true if soc has register for higher bits of memory controller
->>> error address. Set it true for tegra194 and tegra234.
->>>
->>> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
->>
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
->>
->> Reported what? You should add this tag only if patch addresses reported
->> problem. This patch doesn't address anything, hence the tag is
->> inappropriate, you should remove it.
-> 
-> Okay, smatch warning was reported on v4 of this patch which is fixed in
-> v5. Then I understand that we don't need to add Reported-by if we fix
-> bug in subsequent versions, right?
+This essentially reverts commit c72e3f04b45fb2e50cdd81a50c3778c6a57251d8
+and commit 4e666cdb06eede2069a7b1a96a1359d1c441a3eb.
 
-Right, if the report was made to the in-progress patch, then you
-shouldn't add the tag.
+In commit c72e3f04b45f ("tools/perf/build: Speed up git-version test on
+re-make"), a makefile dependency on .git/HEAD was added. The background is
+that running PERF-VERSION-FILE is relatively slow, and commands like
+"git describe" are particularly slow.
 
-If report was made to the patch that was already merged, then you should
-create a new patch that fixes the reported problem and add the
-reported-by to this patch.
+In commit 4e666cdb06ee ("perf tools: Fix dependency for version file
+creation"), an additional dependency on .git/ORIG_HEAD was added, as
+.git/HEAD may not change for "git reset --hard HEAD^" command. However,
+depending on whether we're on a branch or not, a "git cherry-pick" may
+not lead to the version being updated.
+
+As discussed with the git community in [0], using git internal files for
+dependencies is not reliable. Commit 4e666cdb06ee also breaks some build
+scenarios [1].
+
+As mentioned, c72e3f04b45f was added to speed up the build. However in
+commit 7572733b8499 ("perf tools: Fix version kernel tag") we removed the
+call to "git describe", so just revert Makefile.perf back to same as pre
+c72e3f04b45f and the build should not be so slow, as below:
+
+Pre 7572733b8499:
+$> time util/PERF-VERSION-GEN
+  PERF_VERSION = 5.17.rc8.g4e666cdb06ee
+
+real    0m0.110s
+user    0m0.091s
+sys     0m0.019s
+
+Post 7572733b8499:
+$> time util/PERF-VERSION-GEN
+  PERF_VERSION = 5.17.rc8.g7572733b8499
+
+real    0m0.039s
+user    0m0.036s
+sys     0m0.007s
+
+[0] https://lore.kernel.org/git/87wngkpddp.fsf@igel.home/T/#m4a4dd6de52fdbe21179306cd57b3761eb07f45f8
+[1] https://lore.kernel.org/linux-perf-users/20220329093120.4173283-1-matthieu.baerts@tessares.net/T/#u
+
+Fixes: 4e666cdb06ee ("perf tools: Fix dependency for version file creation")
+Reported-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Signed-off-by: John Garry <john.garry@huawei.com>
+
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index 9c935f86d172..ddd03b21bda2 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -691,9 +691,8 @@ $(OUTPUT)common-cmds.h: $(wildcard Documentation/perf-*.txt)
+ $(SCRIPTS) : % : %.sh
+ 	$(QUIET_GEN)$(INSTALL) '$@.sh' '$(OUTPUT)$@'
+ 
+-$(OUTPUT)PERF-VERSION-FILE: ../../.git/HEAD ../../.git/ORIG_HEAD
++$(OUTPUT)PERF-VERSION-FILE: .FORCE-PERF-VERSION-FILE
+ 	$(Q)$(SHELL_PATH) util/PERF-VERSION-GEN $(OUTPUT)
+-	$(Q)touch $(OUTPUT)PERF-VERSION-FILE
+ 
+ # These can record PERF_VERSION
+ perf.spec $(SCRIPTS) \
+@@ -1139,21 +1138,12 @@ else
+ 	@echo "FEATURE-DUMP file available in $(OUTPUT)FEATURE-DUMP"
+ endif
+ 
+-#
+-# Trick: if ../../.git does not exist - we are building out of tree for example,
+-# then force version regeneration:
+-#
+-ifeq ($(wildcard ../../.git/HEAD),)
+-    GIT-HEAD-PHONY = ../../.git/HEAD ../../.git/ORIG_HEAD
+-else
+-    GIT-HEAD-PHONY =
+-endif
+ 
+ FORCE:
+ 
+ .PHONY: all install clean config-clean strip install-gtk
+ .PHONY: shell_compatibility_test please_set_SHELL_PATH_to_a_more_modern_shell
+-.PHONY: $(GIT-HEAD-PHONY) TAGS tags cscope FORCE prepare
++.PHONY: .FORCE-PERF-VERSION-FILE TAGS tags cscope FORCE prepare
+ .PHONY: libtraceevent_plugins archheaders
+ 
+ endif # force_fixdep
+-- 
+2.26.2
+

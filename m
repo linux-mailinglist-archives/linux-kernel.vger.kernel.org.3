@@ -2,106 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2D44EC370
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B67F4EC40B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240536AbiC3MWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40026 "EHLO
+        id S1345371AbiC3Mar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347088AbiC3MS4 (ORCPT
+        with ESMTP id S1349036AbiC3M1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 08:18:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E7186620B
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 05:09:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648642143;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uweqLFGJbLof9q3XnJpMcN0HzPoip10nBUyG1VZQn3I=;
-        b=EVQEiSrZUXS3lZGHN3ffwjgTznZkUs1vD8rKDZxcDxf4DEMuyPZFjK2Mbsd+2fvBcubWWn
-        BnsZu8mTMZHNMJgmijL6o65F6koB9rJe1Y4oDrk8XHZzi5KXcFHRtw5AlEZJ21xFaLhvAD
-        Pdk7Kqg1gFFsBYpNiVDJTY9ec41ch8I=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-295-1iMwCPjQODKgEer0mYCpDQ-1; Wed, 30 Mar 2022 08:09:01 -0400
-X-MC-Unique: 1iMwCPjQODKgEer0mYCpDQ-1
-Received: by mail-ed1-f71.google.com with SMTP id c31-20020a509fa2000000b004190d43d28fso12721198edf.9
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 05:09:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uweqLFGJbLof9q3XnJpMcN0HzPoip10nBUyG1VZQn3I=;
-        b=43iuXhSjnlZLKQoWhJ4kOX4nRI5mDhocRtVCU00PhuYJ16aBj0dvvm7PDc5m6mUIz9
-         nOE6fiE73/wQNaI113WPsfX92/yhjW73z2fwpzLFvZNId4H2YXW9c0PJfwzP3c+96eW/
-         QpInbySqd7CGypKdeGes0YEYucfE3Jii892CH0QsQBCJSqKRb8xDnkdPtrPXH152XSXD
-         rAZE2EzGYJ3aSijpTUvoumvSgGZhUglXedeubWxA0BANzFZzc/UwvOlE9xyfGBlwRohe
-         CYxxXEcooa0DvkdCW19kaj0pUn7pmf9fUBiexW+peisM52N+d+t7hgPgdBX3TWBsQNgM
-         hDwg==
-X-Gm-Message-State: AOAM5323JO0Iw7YeK6wmN3QjvFTZytjTif34FdFuhjxbNMLgu0OIuwlw
-        WtgZPHGSB8yiPa6+0cvrj181hy5Y8WIYvjewoHkL76arCO1Op1LYiZcLf5E4AYe3mFSFu7nl8bO
-        +SyR0dfLZmX9t3qtz37Gx3H0g
-X-Received: by 2002:a17:907:6092:b0:6db:ab31:96a2 with SMTP id ht18-20020a170907609200b006dbab3196a2mr38331798ejc.361.1648642140644;
-        Wed, 30 Mar 2022 05:09:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxqK0o157pvMUi7ZACRVTs9KL0PWXwSz46MMFdHFHdke+qjmFhJwWcKrvBjDHTt/zB/odl55A==
-X-Received: by 2002:a17:907:6092:b0:6db:ab31:96a2 with SMTP id ht18-20020a170907609200b006dbab3196a2mr38331771ejc.361.1648642140392;
-        Wed, 30 Mar 2022 05:09:00 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:8ca6:a836:a237:fed1? ([2001:b07:6468:f312:8ca6:a836:a237:fed1])
-        by smtp.googlemail.com with ESMTPSA id l12-20020a056402028c00b00418f7fc4bd8sm9747115edv.91.2022.03.30.05.08.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 05:08:59 -0700 (PDT)
-Message-ID: <00fbd38e-2a9c-fda2-2565-6a53940b43e6@redhat.com>
-Date:   Wed, 30 Mar 2022 14:08:56 +0200
+        Wed, 30 Mar 2022 08:27:10 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B917E2B5199;
+        Wed, 30 Mar 2022 05:12:28 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22UBQkFs026930;
+        Wed, 30 Mar 2022 12:12:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=MUFVyysUdoPdz+GQhkqKxHsF7V7+5wuBxTvpNCjkBHQ=;
+ b=PDYKOx3wxUFSnsD7R97b2PQoJ5lgQO2Md4e0CiPdZD5viSXuSelavKL/RHn/pev1mZMH
+ X+45fRDnJWiU4Qwo/fKAPjsdCoZ/VKMrp/JR1/KOFB2Pb5dEnpCoVy64Jvp1P2uOcbij
+ SG9lrdCnuQptxKFW27X/W35PEO1VeyKsE+XlP9Jyzg/jauief+Y4ho64RNXzfY2O6zgY
+ 2AEFumF8FepOXwntvvmfbjvntAzpC0MRBoMQuSQ/tFcZ5N9L8SzBoHzHd5X22uq+6/JM
+ dze6ewWnew8a1HgX6CceO7eXHRpAK+bGgDEAtxNNIOPO97XPzanjTM4fs8hZ1IA/y/gT yQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f4pbcgxdk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 12:12:02 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22UBdOnf017794;
+        Wed, 30 Mar 2022 12:12:02 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f4pbcgxcq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 12:12:01 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22UBwVWc018090;
+        Wed, 30 Mar 2022 12:11:59 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3f1t3hy9rv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 12:11:59 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22UCBub229622756
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Mar 2022 12:11:57 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D6F3E4C050;
+        Wed, 30 Mar 2022 12:11:56 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 071474C040;
+        Wed, 30 Mar 2022 12:11:56 +0000 (GMT)
+Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.15.152])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Wed, 30 Mar 2022 12:11:55 +0000 (GMT)
+Date:   Wed, 30 Mar 2022 14:11:54 +0200
+From:   Halil Pasic <pasic@linux.ibm.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@toke.dk>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Olha Cherevyk <olha.cherevyk@gmail.com>,
+        iommu <iommu@lists.linux-foundation.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>
+Subject: Re: [REGRESSION] Recent swiotlb DMA_FROM_DEVICE fixes break
+ ath9k-based AP
+Message-ID: <20220330141154.2ed284f1.pasic@linux.ibm.com>
+In-Reply-To: <20220328063723.GA29405@lst.de>
+References: <1812355.tdWV9SEqCh@natalenko.name>
+        <CAHk-=wiwz+Z2MaP44h086jeniG-OpK3c=FywLsCwXV7Crvadrg@mail.gmail.com>
+        <27b5a287-7a33-9a8b-ad6d-04746735fb0c@arm.com>
+        <CAHk-=wip7TCD_+2STTepuEZvGMg6wcz+o=kyFUvHjuKziTMixw@mail.gmail.com>
+        <f88ca616-96d1-82dc-1bc8-b17480e937dd@arm.com>
+        <20220324190216.0efa067f.pasic@linux.ibm.com>
+        <20220325163204.GB16426@lst.de>
+        <87y20x7vaz.fsf@toke.dk>
+        <e077b229-c92b-c9a6-3581-61329c4b4a4b@arm.com>
+        <CAHk-=wgKF5GfLXyVGDQDifh0MpMccDdmBvJBG3dt2+idCa5DzQ@mail.gmail.com>
+        <20220328063723.GA29405@lst.de>
+Organization: IBM
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 8/8] KVM: x86: SVM: remove vgif_enabled()
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20220322172449.235575-1-mlevitsk@redhat.com>
- <20220322172449.235575-9-mlevitsk@redhat.com> <YkOiU2TtxE32xhCu@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YkOiU2TtxE32xhCu@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Ul5-ww-qQk8Gw2JXhdzZFG5qKYbo_d91
+X-Proofpoint-ORIG-GUID: CV3YK3L41YQ9qvUgMuQRgvjVjUTto1XH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-30_04,2022-03-30_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
+ phishscore=0 adultscore=0 impostorscore=0 mlxscore=0 lowpriorityscore=0
+ priorityscore=1501 clxscore=1015 suspectscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203300062
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/22 02:20, Sean Christopherson wrote:
-> It'd be helpful to explicitly call out that KVM always takes V_GIF_ENABLE_MASK
-> from vmcs01, otherwise this looks like it does unintentend things when KVM is
-> runing vmcb02.
+On Mon, 28 Mar 2022 08:37:23 +0200
+Christoph Hellwig <hch@lst.de> wrote:
 
-I will add a note to the commit message.
+> On Fri, Mar 25, 2022 at 11:46:09AM -0700, Linus Torvalds wrote:
+> > I think my list of three different sync cases (not just two! It's not
+> > just about whether to sync for the CPU or the device, it's also about
+> > what direction the data itself is taking) is correct.
+> > 
+> > But maybe I'm wrong.  
+> 
+> At the high level you are correct.  It is all about which direction
+> the data is taking.  That is the direction argument that all the
+> map/unmap/sync call take.  The sync calls then just toggle the ownership.
+> You seem to hate that ownership concept, but I don't see how things
+> could work without that ownership concept as we're going to be in
+> trouble without having that.  And yes, a peek operation could work in
+> some cases, but it would have to be at the cache line granularity.
+> 
+> arch/arc/mm/dma.c has a really good comment how these transfers relate
+> to actual cache operations btw>
+> 
+>  *
+>  *          |   map          ==  for_device     |   unmap     ==  for_cpu
+>  *          |----------------------------------------------------------------
+>  * TO_DEV   |   writeback        writeback      |   none          none
+>  * FROM_DEV |   invalidate       invalidate     |   invalidate*	  invalidate*
 
-More precisely, because KVM does not (as of this patch) support vGIF 
-when L1 runs L2, the vmcb02's V_GIF_MASK and V_GIF_ENABLE_MASK also 
-control L1's GIF and are the same as vmcs01's.
+Very interesting! Does that mean that
 
-Paolo
+memset(buf, 0, size);
+dma_map(buf, size, FROM_DEVICE)
+device does a partial write
+dma_unmap(buf, size, FROM_DEVICE)
+
+may boil down to being the same as without the memset(), because the
+effect of the memset() may get thrown away by the cache invalidate?
+
+That is in this scenario we could actually leak the original content of
+the buffer if we have a non-dma-coherent cache?
+
+Regards,
+Halil 
+
+>  * BIDIR    |   writeback+inv    writeback+inv  |   invalidate    invalidate
+>  *
+>  *     [*] needed for CPU speculative prefetches
 

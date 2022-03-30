@@ -2,118 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA514EBCDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2ACF4EBCE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244409AbiC3IqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 04:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
+        id S244436AbiC3IsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 04:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235006AbiC3Ipy (ORCPT
+        with ESMTP id S244422AbiC3IsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 04:45:54 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A311082D2E
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 01:44:08 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22U6sxkq007737;
-        Wed, 30 Mar 2022 08:43:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type :
- content-transfer-encoding; s=pp1;
- bh=5/FXDwzUbkNVXsjXEmKAp8QeBUiaNFrnJ6vzHszkTzw=;
- b=JEqU6WKJYhkMDvEAQzZJlpb93k4a1s5Uj6WeWzxQ+9hMeCKMC0ARfTVZjRVy9x0bERO4
- G6l+POmlJ3C0RVvJ30oWkjhKR0Mrfw2xjiRBn5TrkAnJtIaOgcS2utckzRf4f0ic37S0
- 5q3VM1V6ElKWbLtIlrh8wfSg7+px6h6NiTB+ZtqOzFvESrUrEqZgnI/Jozw+f4jieusm
- 1thDxJmbpqj4bESA+rotAJBu52H1f5HQfhpwGP4jDKFHeSkGwfKbBr8RxHeXMjIR7Rxx
- EnivpeZQtaQgm6EmSx6cn+DNwKbruQCbL4ZcmIVHbHRBc1b33pBaw2Ys4RjbwIfjSFuN MA== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f3yy51dkh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Mar 2022 08:43:46 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22U8dSAO014124;
-        Wed, 30 Mar 2022 08:43:44 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3f1tf9g1e8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Mar 2022 08:43:44 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22U8hfHm20906240
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 30 Mar 2022 08:43:42 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DEF684C050;
-        Wed, 30 Mar 2022 08:43:41 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CE64D4C04A;
-        Wed, 30 Mar 2022 08:43:41 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed, 30 Mar 2022 08:43:41 +0000 (GMT)
-Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
-        id 8FC3AE027A; Wed, 30 Mar 2022 10:43:41 +0200 (CEST)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] entry: fix compile error in dynamic_irqentry_exit_cond_resched()
-Date:   Wed, 30 Mar 2022 10:43:28 +0200
-Message-Id: <20220330084328.1805665-1-svens@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
+        Wed, 30 Mar 2022 04:48:05 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462AD9D4D7
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 01:46:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648629979; x=1680165979;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9S3rPTNIv2WGwUkveRzKZbZiUovYAhHbssxF+2197lM=;
+  b=Xp1rOJ0h0w/2fwLwIx4qV7eXn+ACpvFdHTx6GFEHJDYN+qVfZWH20NPm
+   wPI96L58HygPdBEhk5Q7R4ykBya00ZpfvJt/Sty3I2Fslu/IjuyzoOmDY
+   0DAMv8Y/IYDZfd50df1Pi9ACaxsP9RjN6UNzuRqBZ3b1WKyobXx6tMDxt
+   07M2M5+YEwqFv+qNgeednzpVSGI7oFUuMPhiGvNlivJgcENCrV3bfF0vn
+   ajKCr0D8zAvuTO0S95KZFZo9CvAcOalDcCDz3pQNSPesTJz3bdt6bSF2h
+   9DdMA+1vyCN0X7gHhMK47Xb5CAY51RaCrCKsQfnIoZCuSWh0eF+MsDlhk
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="246985396"
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="246985396"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 01:46:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="837108365"
+Received: from lkp-server02.sh.intel.com (HELO 7a008980c4ea) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Mar 2022 01:46:15 -0700
+Received: from kbuild by 7a008980c4ea with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nZTy3-00009Y-0V; Wed, 30 Mar 2022 08:46:15 +0000
+Date:   Wed, 30 Mar 2022 16:45:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Shirish S <Shirish.S@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>
+Subject: arch/x86/kernel/cpu/mce/amd.c:552:6: warning: no previous prototype
+ for 'disable_err_thresholding'
+Message-ID: <202203301632.RmI9R5aU-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: OqTPwGfhcINv_K36GiFN04fgoB_efV4L
-X-Proofpoint-ORIG-GUID: OqTPwGfhcINv_K36GiFN04fgoB_efV4L
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-30_03,2022-03-29_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 priorityscore=1501 suspectscore=0 adultscore=0
- impostorscore=0 mlxscore=0 spamscore=0 bulkscore=0 mlxlogscore=999
- malwarescore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2203300042
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel/entry/common.c: In function ‘dynamic_irqentry_exit_cond_resched’:
-kernel/entry/common.c:409:14: error: implicit declaration of function ‘static_key_unlikely’; did you mean ‘static_key_enable’? [-Werror=implicit-function-declaration]
-  409 |         if (!static_key_unlikely(&sk_dynamic_irqentry_exit_cond_resched))
-      |              ^~~~~~~~~~~~~~~~~~~
-      |              static_key_enable
+Hi Shirish,
 
-static_key_unlikely() should be static_branch_unlikely().
+FYI, the error/warning still remains.
 
-Fixes: 99cf983cc8bca ("sched/preempt: Add PREEMPT_DYNAMIC using static keys")
-Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
----
- kernel/entry/common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   965181d7ef7e1a863477536dc328c23a7ebc8a1d
+commit: 30aa3d26edb0f3d7992757287eec0ca588a5c259 x86/MCE/AMD: Carve out the MC4_MISC thresholding quirk
+date:   3 years, 2 months ago
+config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220330/202203301632.RmI9R5aU-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=30aa3d26edb0f3d7992757287eec0ca588a5c259
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 30aa3d26edb0f3d7992757287eec0ca588a5c259
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/cpu/mce/ drivers/gpu/drm/i915/
 
-diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-index ef8d94a98b7e..371ee8914af1 100644
---- a/kernel/entry/common.c
-+++ b/kernel/entry/common.c
-@@ -406,7 +406,7 @@ DEFINE_STATIC_CALL(irqentry_exit_cond_resched, raw_irqentry_exit_cond_resched);
- DEFINE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
- void dynamic_irqentry_exit_cond_resched(void)
- {
--	if (!static_key_unlikely(&sk_dynamic_irqentry_exit_cond_resched))
-+	if (!static_branch_unlikely(&sk_dynamic_irqentry_exit_cond_resched))
- 		return;
- 	raw_irqentry_exit_cond_resched();
- }
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kernel/cpu/mce/amd.c:552:6: warning: no previous prototype for 'disable_err_thresholding' [-Wmissing-prototypes]
+     552 | void disable_err_thresholding(struct cpuinfo_x86 *c)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/disable_err_thresholding +552 arch/x86/kernel/cpu/mce/amd.c
+
+   547	
+   548	/*
+   549	 * Turn off MC4_MISC thresholding banks on all family 0x15 models since
+   550	 * they're not supported there.
+   551	 */
+ > 552	void disable_err_thresholding(struct cpuinfo_x86 *c)
+   553	{
+   554		int i;
+   555		u64 hwcr;
+   556		bool need_toggle;
+   557		u32 msrs[] = {
+   558			0x00000413, /* MC4_MISC0 */
+   559			0xc0000408, /* MC4_MISC1 */
+   560		};
+   561	
+   562		if (c->x86 != 0x15)
+   563			return;
+   564	
+   565		rdmsrl(MSR_K7_HWCR, hwcr);
+   566	
+   567		/* McStatusWrEn has to be set */
+   568		need_toggle = !(hwcr & BIT(18));
+   569	
+   570		if (need_toggle)
+   571			wrmsrl(MSR_K7_HWCR, hwcr | BIT(18));
+   572	
+   573		/* Clear CntP bit safely */
+   574		for (i = 0; i < ARRAY_SIZE(msrs); i++)
+   575			msr_clear_bit(msrs[i], 62);
+   576	
+   577		/* restore old settings */
+   578		if (need_toggle)
+   579			wrmsrl(MSR_K7_HWCR, hwcr);
+   580	}
+   581	
+
 -- 
-2.32.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

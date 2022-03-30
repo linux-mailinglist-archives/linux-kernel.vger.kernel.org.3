@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802154ECF5E
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 00:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF4D4ECF60
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 00:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241583AbiC3WKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 18:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
+        id S1351459AbiC3WNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 18:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233641AbiC3WKD (ORCPT
+        with ESMTP id S233641AbiC3WNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 18:10:03 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B492C271B
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 15:08:14 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id b17so8526159qvf.12
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 15:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SZiNG3ufWqPM1a0cTW4jnJgQNElQaGHtkTjo01VQU4I=;
-        b=MrMWiYyQdINQwVp4gorVlwJbY2td0hmgU/oFNQE3AX6ulipZQWM3VZfF1PuxnzXbPQ
-         s+7n6N9jfFqt9BMx/HsWKed8i1GMk7OS8V/tnboQJnOIRo98PT4ST5wx/yiA9oXvLcyI
-         Iz/InO8LqH7YaQJ3Nn904oMAzpYKJbo+CslovCmLznn7W20dOdKBVyZCkTdns5VthPL2
-         KTfl/1hI1DkypIk69BYPxS1340Yln2MMx2RB+1wh31OIIteFprSvjDcpvfVpOU864J8p
-         RKc8Lx8DlFNrjnh+WIUi8WDsIOrld2ex9L7MzW2ytRTGHK9f9QwA7gKmh14MzcdNku44
-         SmKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SZiNG3ufWqPM1a0cTW4jnJgQNElQaGHtkTjo01VQU4I=;
-        b=XS8SAJWTH3GTGE0RT6Q6o3CL8DczVQlLJ5ckY34fWWN2APuGsH0RrUBoZxHMrCM02Q
-         Tb2M6PAYYSV28DoqlDu8PZwpG/x7FIx5fWVYg/ytrpycN7WP9/ogTvZbxGTsk80Pw2Fd
-         HqXYBG5mSkPuOGaWJNB5UevyWfxo6xNuAgf/GhoAI/kVkbEOYH+hQNeeRWz+ZNRyZHR2
-         fRNuKpxS5T6dq2eHIu54IDhyg3EM431m1QV8ctfiVRP94E6SDs7DpfjxW/6ekfoFrrUV
-         mSfntSbBKstuC7hOaQ1a0YYo8xQEYIrzo5ZU8flxMv+6Of79EvKx0wi6Ju3ncufbysCy
-         1nQA==
-X-Gm-Message-State: AOAM531stIjZbtehhBncuSAkTandrK2RiblDoa7r/8FwAfMU+esMshew
-        QIdaTV4iwUUcWvKvP+L5t8sDu+7JnnsRRrthriccew==
-X-Google-Smtp-Source: ABdhPJxCxZBIWsAez7ZkGk/I9bUyMuxaiqD6go4xQEddYN9/PXcWZpTyR5GqlMGXgxMx7oeLUil/KGE0zAAmBV88l9w=
-X-Received: by 2002:ad4:53a4:0:b0:430:1d8c:18ea with SMTP id
- j4-20020ad453a4000000b004301d8c18eamr1255162qvv.115.1648678093929; Wed, 30
- Mar 2022 15:08:13 -0700 (PDT)
+        Wed, 30 Mar 2022 18:13:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E4A220ED
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 15:12:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D82146178B
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 22:12:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4196DC340EE
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 22:12:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648678322;
+        bh=lHoWMWTBa3YM4ZDyXUSfiun+4hg+TkgrQeAvpXnV8dM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=G+4D0E+N2X4RZG7RuopLwUDRZ5fmnXbKKxlhE4xjxQ/w0V6nsaT2S5OilUzmgwDuY
+         elIksuIWAexVfxRqDRV/L76hI6IECqlxXGPRNIM1SPH1YdKlwFN76MuW0X2j20dTUs
+         f2oRVK8ygsp50zLXE9W7kVnVUs/2NxrOzpmJqe5tswh5yOcsZwJfAF0mnDtWSI5w/J
+         U/+hUJuxgTeaQDc7z4Wu3JjwtJ4fMO2AYLXgECSV9OmFz0AreBYV1/iqKtcu0QXzNu
+         F9CKdRVvvR6tXmSlsSKeGiOkKle2kETuRXleERZLxHn8T5Lao3r8TVsAVxYE4my0pT
+         NwuiXDyS1PaDg==
+Received: by mail-io1-f48.google.com with SMTP id p21so12535117ioj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 15:12:02 -0700 (PDT)
+X-Gm-Message-State: AOAM532dUq/XNztQwjGvepfp5rKwX0VuxF/5QMeIuRmT/PdlVtquBXtI
+        LFfPEhIjxhmIo0/7zs1gRs7XRQqZ7HuWDDPyRQ==
+X-Google-Smtp-Source: ABdhPJwz1I8224QmKi3GJkG495gJ+jibhVHp8fiJgqcR/6al4HLKY11f5Vyz0kFI8Ep0x3RH7WAuWz3ynmlArVoGYjU=
+X-Received: by 2002:a05:6638:3052:b0:317:79e1:8b7f with SMTP id
+ u18-20020a056638305200b0031779e18b7fmr1180334jak.239.1648678321433; Wed, 30
+ Mar 2022 15:12:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com> <1648656179-10347-9-git-send-email-quic_sbillaka@quicinc.com>
-In-Reply-To: <1648656179-10347-9-git-send-email-quic_sbillaka@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 31 Mar 2022 01:08:02 +0300
-Message-ID: <CAA8EJprvE31ex3fCQHZ-=x+EWHK4UZ0qqHRh+rH4dk5TPhmVyw@mail.gmail.com>
-Subject: Re: [PATCH v6 8/8] drm/msm/dp: Handle eDP mode_valid differently from dp
-To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robdclark@gmail.com,
-        seanpaul@chromium.org, swboyd@chromium.org,
-        quic_kalyant@quicinc.com, quic_abhinavk@quicinc.com,
-        dianders@chromium.org, quic_khsieh@quicinc.com,
-        bjorn.andersson@linaro.org, sean@poorly.run, airlied@linux.ie,
-        daniel@ffwll.ch, quic_vproddut@quicinc.com,
-        quic_aravindh@quicinc.com
+References: <20220311101940.3403607-1-tarumizu.kohei@fujitsu.com> <20220311101940.3403607-4-tarumizu.kohei@fujitsu.com>
+In-Reply-To: <20220311101940.3403607-4-tarumizu.kohei@fujitsu.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 30 Mar 2022 17:11:50 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLfDQid2WFDnFDp237wQ+hAx=0g=rumYWWpdJ=aoGf5MA@mail.gmail.com>
+Message-ID: <CAL_JsqLfDQid2WFDnFDp237wQ+hAx=0g=rumYWWpdJ=aoGf5MA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/8] arm64: Add hardware prefetch control support for ARM64
+To:     Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,44 +68,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 at 19:04, Sankeerth Billakanti
-<quic_sbillaka@quicinc.com> wrote:
+On Fri, Mar 11, 2022 at 4:23 AM Kohei Tarumizu
+<tarumizu.kohei@fujitsu.com> wrote:
 >
-> The panel-edp driver modes needs to be validated differently from DP
-> because the link capabilities are not available for EDP by that time.
+> This adds module init/exit code, and creates sysfs attribute files for
+> "stream_detect_prefetcher_enable", "stream_detect_prefetcher_strong"
+> and "stream_detect_prefetcher_dist". This driver works only if part
+> number is FUJITSU_CPU_PART_A64FX at this point. The details of the
+> registers to be read and written in this patch are described below.
 >
-> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-
-This should not be necessary after
-https://patchwork.freedesktop.org/patch/479261/?series=101682&rev=1.
-Could you please check?
-
+> "https://github.com/fujitsu/A64FX/tree/master/doc/"
+>     A64FX_Specification_HPC_Extension_v1_EN.pdf
+>
+> Signed-off-by: Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
 > ---
->  drivers/gpu/drm/msm/dp/dp_display.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index 8bafdd0..f9c7d9a 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -1003,6 +1003,12 @@ enum drm_mode_status dp_bridge_mode_valid(struct drm_bridge *bridge,
->                 return -EINVAL;
->         }
->
-> +       if (dp->connector_type == DRM_MODE_CONNECTOR_eDP) {
-> +               if (mode_pclk_khz > DP_MAX_PIXEL_CLK_KHZ)
-> +                       return MODE_CLOCK_HIGH;
-> +               return MODE_OK;
-> +       }
-> +
->         if ((dp->max_pclk_khz <= 0) ||
->                         (dp->max_pclk_khz > DP_MAX_PIXEL_CLK_KHZ) ||
->                         (mode->clock > dp->max_pclk_khz))
-> --
-> 2.7.4
->
+>  arch/arm64/kernel/pfctl.c | 368 ++++++++++++++++++++++++++++++++++++++
 
+This has nothing to do with arm64 arch other than you access registers
+as sysregs. That's not enough of a reason to put in arch/arm64. Move
+this to drivers/ assuming it continues. I agree that this seems
+questionable to expose to userspace in the first place...
 
--- 
-With best wishes
-Dmitry
+Rob

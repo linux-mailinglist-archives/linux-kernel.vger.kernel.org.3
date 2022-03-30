@@ -2,57 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8494EBF39
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B19254EBF3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245588AbiC3KzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
+        id S245598AbiC3K5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244428AbiC3Ky7 (ORCPT
+        with ESMTP id S244428AbiC3K46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:54:59 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F124EA10
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:53:13 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id c11so17298478pgu.11
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:53:13 -0700 (PDT)
+        Wed, 30 Mar 2022 06:56:58 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E45264F6B;
+        Wed, 30 Mar 2022 03:55:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ajou.ac.kr; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=09LiY6XuBkhT7pabOtfcUnjYwotME+n6Ic9O13LnSSA=;
-        b=YVcf70VGphWsI/5biiq1XHZ2pbFA79z1X1ISPB7HVxClJ1DTfdktvBdsuBEh41nt/T
-         fXyFFu+jysgu+abv/RqgPyBi7t7ZjVa0eLu5LSwHwmKeh83/vd/rv8UIm7z8T9U2nmjZ
-         wVv0SO4Od6P9tVsBsfVr1xQFwK8h2e7jzAwQ0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=09LiY6XuBkhT7pabOtfcUnjYwotME+n6Ic9O13LnSSA=;
-        b=sY/FLYRq5gVIH5rYCB6PnphuZrtFVdm6Lhlgt6xMckfreAAgflp1s3CZU+1/ID3459
-         CqAE4Bh+3oc3H66SycYpbbGIhOeZMaVs6WdRpoO8cf/qtNkoCYfKAIszepFsc+8rdEUT
-         myXVJm/diy/KI99t9XEULMzfCkJqbm4+kOjqvDSSDn4g2crhobJK5XuHY3Lh2oiE1Nsb
-         mnyk2Gu0Q636XWUHD/XxoHS8uRFbM96qc6IAcaGfryr4wJPyTmQ1r1e8SkktHNbGz4/o
-         +ga/bqw288K8ialKay6Kegu8mB73bzVLgMxyHe80qki/d1NvPMAVHTtwIe5X+tVQc4bs
-         5nyA==
-X-Gm-Message-State: AOAM532nLjIL5FWrVFcUBFlxPft658SIrtRfkmRMgjrcuzLoij7yLX/C
-        SYIMoIGyHBJ1/G1GzR3lF5ls5Q==
-X-Google-Smtp-Source: ABdhPJyFVgfcMCHcqtfZCNB0z/EGqFUB/eVb7kFxzaNAfKtXvkx/kpQBdPGb6Y6QUVuVfK4opXM6NA==
-X-Received: by 2002:a63:78ca:0:b0:398:ae5:6515 with SMTP id t193-20020a6378ca000000b003980ae56515mr5763459pgc.345.1648637592923;
-        Wed, 30 Mar 2022 03:53:12 -0700 (PDT)
-Received: from localhost.localdomain ([210.107.197.32])
-        by smtp.googlemail.com with ESMTPSA id ij17-20020a17090af81100b001c67c964d93sm7373967pjb.2.2022.03.30.03.53.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 03:53:12 -0700 (PDT)
-From:   Jonghyeon Kim <tome01@ajou.ac.kr>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Jonghyeon Kim <tome01@ajou.ac.kr>
-Subject: [PATCH] mm/damon: prevent activated scheme from sleeping by deactivated schemes
-Date:   Wed, 30 Mar 2022 19:53:02 +0900
-Message-Id: <20220330105302.32114-1-tome01@ajou.ac.kr>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1648637714; x=1680173714;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=hF95iTc4t1M/e3D7i6dYPtn0iM9iJEhQx/uN5MIoDMQ=;
+  b=wY8XYSJix5RR1MpKLM1SSqEGBUCCeqN3knzH3UZkDQs6e1VrhfPBzMFT
+   Gw6rhaLqxxMAlBOOJeKWpqIA8OpBERR7g4jYvY5y3NiEem1ALbdFWqyjp
+   KrAgDdmnKZYE9mYpxJ7TWV4G579TZu/+U9w7jnSldShrGETOIDx3BQoNB
+   I=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 30 Mar 2022 03:55:13 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 03:55:13 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 30 Mar 2022 03:55:12 -0700
+Received: from [10.216.27.32] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 30 Mar
+ 2022 03:55:07 -0700
+Subject: Re: [PATCH V8 1/7] dt-bindings: mfd: pm8008: Modify the compatible as
+ per driver
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Das Srinagesh <gurus@codeaurora.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_collinsd@quicinc.com>,
+        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
+References: <1648209491-30165-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1648209491-30165-2-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n523f-aAUkj1SUscNgw_Gh=mP8JfXV4u_hNeFhqtfr_Fgg@mail.gmail.com>
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Message-ID: <26e7298c-9337-c4d4-ce32-2a67d727ccfc@quicinc.com>
+Date:   Wed, 30 Mar 2022 16:25:03 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <CAE-0n523f-aAUkj1SUscNgw_Gh=mP8JfXV4u_hNeFhqtfr_Fgg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,46 +76,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the DAMON, the minimum wait time of the schemes decides whether the
-kernel wakes up 'kdamon_fn()'. But since the minimum wait time is
-initialized to zero, there are corner cases against the original objective.
 
-For example, if we have several schemes for one target, and if the wait
-time of the first scheme is zero, the minimum wait time will set zero,
-which means 'kdamond_fn()' should wake up to apply this scheme. However,
-in the following scheme, wait time can be set to non-zero. Thus, the
-mininum wait time will be set to non-zero, which can cause sleeping this
-interval for 'kdamon_fn()' due to one deactivated last scheme.
+On 3/25/2022 11:32 PM, Stephen Boyd wrote:
+> Quoting Satya Priya (2022-03-25 04:58:05)
+>> Modify the compatible string as per the pm8008 mfd driver.
+>> Add reset-gpios property and make interrupts and interrupt-cells
+>> as optional properties, they are not strictly required and may
+>> cause yaml compilation errors when not added in the DT files.
+> Does it have an interrupt controller inside? If so, the properties
+> should be present even if the driver isn't using them.
 
-This commit prevents making DAMON monitoring inactive state due to other
-deactivated schemes.
 
-Signed-off-by: Jonghyeon Kim <tome01@ajou.ac.kr>
----
- mm/damon/core.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Yes it has an interrupt controller but we are not configuring/using any 
+interrupts currently in the DT node. So, if we add the properties under 
+"required" list it throws a make dtbs error. Do you think we can somehow 
+bypass this error?
 
-diff --git a/mm/damon/core.c b/mm/damon/core.c
-index c1e0fed4e877..5ce8d7c867f0 100644
---- a/mm/damon/core.c
-+++ b/mm/damon/core.c
-@@ -1019,12 +1019,15 @@ static int kdamond_wait_activation(struct damon_ctx *ctx)
- 	struct damos *s;
- 	unsigned long wait_time;
- 	unsigned long min_wait_time = 0;
-+	bool init_wait_time = false;
- 
- 	while (!kdamond_need_stop(ctx)) {
- 		damon_for_each_scheme(s, ctx) {
- 			wait_time = damos_wmark_wait_us(s);
--			if (!min_wait_time || wait_time < min_wait_time)
-+			if (!init_wait_time || wait_time < min_wait_time) {
-+				init_wait_time = true;
- 				min_wait_time = wait_time;
-+			}
- 		}
- 		if (!min_wait_time)
- 			return 0;
--- 
-2.17.1
 
+>> Also, change the node name in example to match with the
+>> pm8008_infra DT node.
+>>
+>> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+>> ---
+>> Changes in V5:
+>>   - Remove compatible for regulators node.
+>>   - Move supply nodes of the regulators to chip level.
+>>
+>> Changes in V6:
+>>   - No changes.
+>>
+>> Changes in V7:
+>>   - Removed the intermediate regulators node and added ldos
+>>     directly under mfd node.
+>>
+>> Changes in V8:
+>>   - Change the compatible as per driver, remove interrupts from required
+>>     properties, add reset-gpios and move regulators to separate binding.
+>>
+>>   Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml | 15 ++++++++++-----
+>>   1 file changed, 10 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml b/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml
+>> index ec3138c..12431ea 100644
+>> --- a/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml
+>> +++ b/Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml
+>> @@ -16,7 +16,7 @@ description: |
+>>
+>>   properties:
+>>     compatible:
+>> -    const: qcom,pm8008
+>> +    const: qcom,pm8008-infra
+> Why is the compatible being replaced with -infra postfix?
+
+
+I've changed the compatible after splitting the probe into two parts 
+pm8008-infra-probe and pm8008-regulators-probe. Only reason for change 
+is to make it more readable/understandable.
+
+
+>>     reg:
+>>       description:
+>> @@ -44,6 +44,10 @@ properties:
+>>     "#size-cells":
+>>       const: 0
+>>
+>> +  reset-gpios:
+>> +    description: |
+>> +      Specifies the GPIO to be toggled to bring pm8008 chip out of reset.
+> Remove description. Add maxItems: 1
+
+
+Okay.
+
+
+>> +
+>>   patternProperties:
+>>     "^gpio@[0-9a-f]+$":
+>>       type: object
+>> @@ -88,10 +92,8 @@ patternProperties:
+>>   required:
+>>     - compatible
+>>     - reg
+>> -  - interrupts
+>>     - "#address-cells"
+>>     - "#size-cells"
+>> -  - "#interrupt-cells"
+> Should reset-gpios be required? I'd expect this patch to be adding
+> reset-gpios and making it required and that's about it. Given that
+> there isn't a DT using this compatible upstream so far it looks like we
+> don't need to do anything like worry about backwards compatibility.
+
+
+Okay.
+
+
+>>   additionalProperties: false
+>>
+>> @@ -99,11 +101,12 @@ examples:
+>>     - |
+>>       #include <dt-bindings/mfd/qcom-pm8008.h>
+>>       #include <dt-bindings/interrupt-controller/irq.h>
+>> +    #include <dt-bindings/gpio/gpio.h>
+>>       qupv3_se13_i2c {
+>>         #address-cells = <1>;
+>>         #size-cells = <0>;
+>> -      pm8008i@8 {
+>> -        compatible = "qcom,pm8008";
+>> +      pm8008_infra: pmic@8 {
+> Remove unused phandle.
+
+
+Okay.
+
+
+>> +        compatible = "qcom,pm8008-infra";
+>>           reg = <0x8>;
+>>           #address-cells = <1>;
+>>           #size-cells = <0>;
+>> @@ -113,6 +116,8 @@ examples:
+>>           interrupt-parent = <&tlmm>;
+>>           interrupts = <32 IRQ_TYPE_EDGE_RISING>;
+>>
+>> +        reset-gpios = <&pm8350c_gpios 4 GPIO_ACTIVE_HIGH>;
+>> +
+>>           pm8008_gpios: gpio@c000 {
+>>             compatible = "qcom,pm8008-gpio", "qcom,spmi-gpio";
+>>             reg = <0xc000>;
+>> --
+>> 2.7.4
+>>

@@ -2,146 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D2D4ECC8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78B44ECC92
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345000AbiC3SoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42490 "EHLO
+        id S1350300AbiC3So2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351029AbiC3Snb (ORCPT
+        with ESMTP id S1350471AbiC3SoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:43:31 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B406A517D4;
-        Wed, 30 Mar 2022 11:40:04 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id 10so18904126qtz.11;
-        Wed, 30 Mar 2022 11:40:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to;
-        bh=oMpu/Uq8rY8eahUeZAHaEp88VMX4giAOIULlZrq+voY=;
-        b=oSkpS7AgyvzgbEOaTfVisfi6SR1JA+3VhGV/3mAr2g1PNwOJVuh4nLXbxdbXA0MIcp
-         2sA2laLpD5zPKizoxQwKD3afztwqs9b295kKfrxBw/x7SKuB537Ll4WAhOl3eAOEpjYR
-         OWL3Pqk6i1HPu69vtJObtjMkeXVO8o3BTvsTkVNsquya+u2p6DtIc7nOdpOM7+VrHqGh
-         2egO2EJzr4rb/MEmOeteGY9nTD/eZAayt8TIfIpEgAsqvKhdXUDTFFh4pOKrRjBn3hNq
-         7ETAvyKiyHjrPpplkl20VIJK0Ly7P2U8eqfe9ycYjWdJMjLu6Y3b7vpjXcTuhEvcvgl5
-         HiyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to;
-        bh=oMpu/Uq8rY8eahUeZAHaEp88VMX4giAOIULlZrq+voY=;
-        b=JT+a4tTd9zBNEH7aZR4ayI9TxzH1aLdgwUxkKYbeoxXV4qiWwPmf4rzIf3JhhuH/+G
-         C8uhqivtPd1WhSTh35FE+T1kYnJfmORIChK0VIvxcrfFty0YmVEJFqy5eDmpgdRpmfZB
-         9lk7kaMMBb4yCvfz4jNsn70Z1jEwzVnhDCgZDlTxTdx32q7Ks0bF/Ys9SwGPPi3jpWIA
-         n2slPnroItkfaAFTiSEJuoVUec+2v+Uo7NUVvZqq51UzIvl39mYL8AJ59Ixzk2jLV2IQ
-         v7/+W7VksJTZ51mtg/zntHBsDR/eqND8htCsfBXUR+t9LsdymKEavcSgWVrBnEa3EEa8
-         K3pQ==
-X-Gm-Message-State: AOAM531ueNObnmztfe3jqavf0KdWP3cTBcctTayvyfxBc1p/xigusclG
-        Hxzslj65itpzfK6k9RqDTKX9D2j/bqGBoPR8
-X-Google-Smtp-Source: ABdhPJxIAzQxSCHhvGF3MVeIe6kjzdo5jaBsBnVe9sXN2B2N4eOqVg7AIG9XMIMSr8E3Xlc5SUvl1w==
-X-Received: by 2002:a05:622a:5cc:b0:2e1:ecc9:5a2a with SMTP id d12-20020a05622a05cc00b002e1ecc95a2amr893670qtb.554.1648665603802;
-        Wed, 30 Mar 2022 11:40:03 -0700 (PDT)
-Received: from [192.168.1.115] (cable-217-24.sssnet.com. [24.140.217.24])
-        by smtp.gmail.com with ESMTPSA id d11-20020a05620a166b00b0067e380258e7sm11026242qko.73.2022.03.30.11.40.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 11:40:03 -0700 (PDT)
-Message-ID: <e55edf6f-2aac-87a5-c0f8-363a536b9f92@gmail.com>
-Date:   Wed, 30 Mar 2022 14:40:01 -0400
+        Wed, 30 Mar 2022 14:44:17 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405015D5C3
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:41:01 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22UI0JUA028229;
+        Wed, 30 Mar 2022 18:40:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=yYaqFrYKOsWX0AAm5jWdnXfpOzmVYQfexOdLzGH70SM=;
+ b=JnndgLnUoVoqFUh3c+uTA+ZqCtaSypIDZk1GaVB+Lc24wq/Ohbt7ojtzG2IdlgfAaVmq
+ b231O5PDrITVeBBsr+t17ja3mqv6vwkQEv4JwVJr6Jdn+9z7Lg9Imc3mWXRXI1esS3qB
+ wKyH3kDP+Qe+tqI/rPtyxOzX+DRA8klUcERXqjQOXeAZyHLteRFjcnZM4Iplna/eqr1E
+ jnypdRlUo0p6hZyVt9TBJPxA+4wkuly8LgxfP5mffi6hYQQfE3PuGlvA5X1bkO/wTcuJ
+ i1QCa9bzpvlHoCpvZ7vPYMny73eykBAjPJ8ZDak7KFW8OQsTaqKdJ86XsIqCV9y95zj+ Lg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f4v3vgq71-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 18:40:26 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22UILvrc015655;
+        Wed, 30 Mar 2022 18:40:26 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f4v3vgq6d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 18:40:26 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22UIXYRv024126;
+        Wed, 30 Mar 2022 18:40:24 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3f1tf9h5c7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 18:40:24 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22UIeMib21758426
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Mar 2022 18:40:22 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 17866A405B;
+        Wed, 30 Mar 2022 18:40:22 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CD030A4054;
+        Wed, 30 Mar 2022 18:40:21 +0000 (GMT)
+Received: from localhost (unknown [9.43.30.177])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 30 Mar 2022 18:40:21 +0000 (GMT)
+Date:   Thu, 31 Mar 2022 00:10:20 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+References: <20220318105140.43914-1-sv@linux.ibm.com>
+        <20220318105140.43914-4-sv@linux.ibm.com>
+        <YjR6kHq4c/rjCTpr@hirez.programming.kicks-ass.net>
+        <0b55f122-4760-c1ba-840a-0911cefec2ad@csgroup.eu>
+        <20220328195920.dqlfra3lcardko6r@treble> <87mth9ezml.fsf@mpe.ellerman.id.au>
+        <af262c28-0d73-7ae6-3dd5-2977c9a41f7d@csgroup.eu>
+In-Reply-To: <af262c28-0d73-7ae6-3dd5-2977c9a41f7d@csgroup.eu>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1648665137.s2tuu8nsoa.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: FtdX2iafIxDAA4x2CAq9ARVm1EQ0W8bq
+X-Proofpoint-ORIG-GUID: C0IxmeimH_DRK4fHLec3HEyj_muH7uYI
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-References: <479c5c98-0e0d-072d-dae1-f91629989e46@gmail.com>
- <CAK7LNASxaJMUAS6vgcDX3jwM9LQj7Lz8RX941FQhrDrtJSt6GA@mail.gmail.com>
-From:   Ben Westover <kwestover.kw@gmail.com>
-Subject: Re: [PATCH] riscv: Set SRCARCH to riscv if ARCH is riscv64 or riscv32
-In-Reply-To: <CAK7LNASxaJMUAS6vgcDX3jwM9LQj7Lz8RX941FQhrDrtJSt6GA@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------CNumU1QqguCijxQIViP4s0gy"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-30_06,2022-03-30_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ lowpriorityscore=0 suspectscore=0 clxscore=1015 phishscore=0
+ mlxlogscore=999 adultscore=0 impostorscore=0 priorityscore=1501
+ malwarescore=0 mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2203300090
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------CNumU1QqguCijxQIViP4s0gy
-Content-Type: multipart/mixed; boundary="------------I9woVjAhPvnj4Iqbm0KgwoD0";
- protected-headers="v1"
-From: Ben Westover <kwestover.kw@gmail.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
- Michal Marek <michal.lkml@markovi.net>,
- Nick Desaulniers <ndesaulniers@google.com>
-Message-ID: <e55edf6f-2aac-87a5-c0f8-363a536b9f92@gmail.com>
-Subject: Re: [PATCH] riscv: Set SRCARCH to riscv if ARCH is riscv64 or riscv32
-References: <479c5c98-0e0d-072d-dae1-f91629989e46@gmail.com>
- <CAK7LNASxaJMUAS6vgcDX3jwM9LQj7Lz8RX941FQhrDrtJSt6GA@mail.gmail.com>
-In-Reply-To: <CAK7LNASxaJMUAS6vgcDX3jwM9LQj7Lz8RX941FQhrDrtJSt6GA@mail.gmail.com>
-
---------------I9woVjAhPvnj4Iqbm0KgwoD0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hello Masahiro,
-
-On 3/30/22 11:31 AM, Masahiro Yamada wrote:
-> On Wed, Mar 30, 2022 at 11:34 PM Ben Westover <kwestover.kw@gmail.com> =
-wrote:
->>
->> When riscv64 or riscv32 are used as the value for ARCH during compilat=
-ion, like
->> in tools that get the ARCH value from uname, set SRCARCH to riscv inst=
-ead of
->> failing because the riscv64 and riscv32 targets don't exist.
+Christophe Leroy wrote:
 >=20
-> Can you refer to the code that really needs this?
-Some software like DKMS compiles out-of-tree modules by running `uname -m=
-`and
-using that for the ARCH value. Without this patch, that compilation fails=
- because
-uname shows either riscv64 or riscv32 while riscv should be used.
-This code already exists for sparc and parisc, as well as x86 of course.
+>=20
+> Le 29/03/2022 =C3=A0 14:01, Michael Ellerman a =C3=A9crit=C2=A0:
+>> Josh Poimboeuf <jpoimboe@redhat.com> writes:
+>>> On Sun, Mar 27, 2022 at 09:09:20AM +0000, Christophe Leroy wrote:
+>>>> What are current works in progress on objtool ? Should I wait Josh's
+>>>> changes before starting looking at all this ? Should I wait for anythi=
+ng
+>>>> else ?
+>>>
+>>> I'm not making any major changes to the code, just shuffling things
+>>> around to make the interface more modular.  I hope to have something
+>>> soon (this week).  Peter recently added a big feature (Intel IBT) which
+>>> is already in -next.
+>>>
+>>> Contributions are welcome, with the understanding that you'll help
+>>> maintain it ;-)
+>>>
+>>> Some years ago Kamalesh Babulal had a prototype of objtool for ppc64le
+>>> which did the full stack validation.  I'm not sure what ever became of
+>>> that.
+>>=20
+>>  From memory he was starting to clean the patches up in late 2019, but I
+>> guess that probably got derailed by COVID. AFAIK he never posted
+>> anything. Maybe someone at IBM has a copy internally (Naveen?).
 
-Thanks,
---
-Ben Westover
+Kamalesh had a WIP series to enable stack validation on powerpc. From=20
+what I recall, he was waiting on and/or working with the arm64 folks=20
+around some of the common changes needed in objtool.
 
---------------I9woVjAhPvnj4Iqbm0KgwoD0--
+>>=20
+>>> FWIW, there have been some objtool patches for arm64 stack validation,
+>>> but the arm64 maintainers have been hesitant to get on board with
+>>> objtool, as it brings a certain maintenance burden.  Especially for the
+>>> full stack validation and ORC unwinder.  But if you only want inline
+>>> static calls and/or mcount then it'd probably be much easier to
+>>> maintain.
+>>=20
+>> I would like to have the stack validation, but I am also worried about
+>> the maintenance burden.
+>>=20
+>> I guess we start with mcount, which looks pretty minimal judging by this
+>> series, and see how we go from there.
+>>=20
+>=20
+> I'm not sure mcount is really needed as we have recordmcount, but at=20
+> least it is an easy one to start with and as we have recordmount we can=20
+> easily compare the results and check it works as expected.
 
---------------CNumU1QqguCijxQIViP4s0gy
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+On the contrary, I think support for mcount in objtool is something we=20
+want to get going soon (hopefully, in time for v5.19) given the issues=20
+we are seeing with recordmcount:
+- https://github.com/linuxppc/issues/issues/388
+- https://lore.kernel.org/all/20220211014313.1790140-1-aik@ozlabs.ru/
 
------BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEEOGnacqRhdU6eNmtFwxHF9U6JtpgFAmJEpAEFAwAAAAAACgkQwxHF9U6JtphI
-FQ//eBXMorXQ1ynRB84bL3yXZA7QvEoZagpg10OmqZiMoAOetYtmHt5/JSLJNDZZzV1UkI2rmFvu
-V7mgnY5gRTHVexIO/JmGt21iLpTW/ZXljz1hLoyHxWlAeySHlXgRTGyCzJOJlri89WVKqmjV4ZFy
-OdVP+0WbgCWAo3npLcn8yYEkzXhTIoXSZghiwnfWlWfWryn3TjPkBxi5ncpNDLr2u1Imp0Ps8YVp
-dwd5/o2apPCIJ++vVXs12z/YMvORjBk+iLuQkB42SN3tbaBcZKcK3Fbyqyde9WBre/hHx12vwPNa
-1So3POhnM4xRLxSXEqGQhn1JYA4QlbUTFUNHhSjRvOykMZmtih6owc/J8CCa+9xHpWcn/whN6FCq
-J4MEIWmkospWONCQsbEb/gkpTtDLuYla0T2gkCJ233D4pTXejQvmDDFCYkyQzrcSpprWXaMrKzNR
-BwF4zTWDOQeEQbJlxIssWATiXLAYYJ6PT3yddfTkzNOI3cqDSM2LeBMtUkUQvr63eU/OlzH0ClQi
-RJfpUU3ZNBcM5tR2jJ6HaDlP08Dkwegcq6VRfGt0VNvfBHe9T6kYszssQWMEU4c+PlvSh0ETR1Y1
-sduLfQdTcVgTtLV1ZUMkttnblnII6CT6J90B+d8sahlMMXSM+vQSX3ytrENMmzkXn2ZkzvFDWjDw
-bYQ=
-=jQFd
------END PGP SIGNATURE-----
+- Naveen
 
---------------CNumU1QqguCijxQIViP4s0gy--

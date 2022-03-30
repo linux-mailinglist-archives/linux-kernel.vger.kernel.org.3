@@ -2,109 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE6E4ECC72
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B97FB4ECC70
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:37:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350037AbiC3Si7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
+        id S1350143AbiC3SjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351904AbiC3SeN (ORCPT
+        with ESMTP id S1352492AbiC3SfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:34:13 -0400
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65145FF6;
-        Wed, 30 Mar 2022 11:32:11 -0700 (PDT)
-Received: by mail-oi1-f179.google.com with SMTP id e189so22917940oia.8;
-        Wed, 30 Mar 2022 11:32:11 -0700 (PDT)
+        Wed, 30 Mar 2022 14:35:20 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA4F49FAA
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:33:31 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id y10so25452267edv.7
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:33:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sweetwater-ai.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=dKO0rsHOFyAMpWyi1MHnQVOBdREz93tr5XlY/aCT89k=;
+        b=HuX8hqSNN5CkzIlnxfFjhdrv+0hTKMiO/saHmO8S5JDzFWMGcv/5KDwUAo32rYCysn
+         X77M8eptIyb61789PEkrwWql5tRKB9J77M8fq0MwhTccLCZJLdKGAOoHGL6pWRui9ZTO
+         bMRVaQiHPR78HPQOjJ/go74Pw5Cy8v6E3yw3PoryL1+twgVAmF06wPH7EuNgVtgBBMRY
+         PGRydspLrTf832CuGoWHkQm7PSSelwm6jOkHWjlMi0X52TNW9TWYxb8LuxqrgKpoPByl
+         Xpza3Cb7yNeuPfYSbS/2ylp8aqgwMOMKtcSobjgViLCTbryqSUzJMxoVFksfihYscBks
+         V3Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=p7RLOmPhVN+XXHIq5ojAzjaursZDjvFUP+3MuJu/be8=;
-        b=YTtGdEZF4q9U3TVqwiv86p+A1fI20ofWTZ6qHYziaOPGMHEJkk1QZGVgZZyT+iZJa9
-         mWqwXouMdXXL2sgFfCDXmrmkRTualmvxW3OhfZ3FhdO+pnzqfcd79q1eRE7wAhOd4XMl
-         8tx12q4LaZ4UWs39sKIIymSw+qvxLNsNAhCIX7E90A1q95YahTMJTE6YfRbhagjTB3O7
-         WROjSIFjm3nPvtPtLrHhvq6+bNL9pCXp7/IHnGyzPV+VM7UxyIkIcrlHDNCQFr7ahlr4
-         G4sNn81h3N9jP7zHj65YHHwHIbQrJcTCafoX5NFYRJcxGSvvW9/Af5ypZ2GhooAH5HGw
-         tjrg==
-X-Gm-Message-State: AOAM530IYdHvwZkjbKkamQfPf/ndDjHSAaG4YmQiXxrGhisa7BrPmLIa
-        qn0rMNUrLPmJECQ11sIEtQ==
-X-Google-Smtp-Source: ABdhPJw2WztYoeKhnwsTLdMcSeH7vaNnIsOZGBGNP/EK2mQe1so3+Js3sL3Ti4ohFwUEKlz8rYPu1w==
-X-Received: by 2002:a05:6808:16a7:b0:2f9:39c4:c597 with SMTP id bb39-20020a05680816a700b002f939c4c597mr608435oib.101.1648665131112;
-        Wed, 30 Mar 2022 11:32:11 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q16-20020a9d4b10000000b005b22b93d468sm10322717otf.74.2022.03.30.11.32.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 11:32:10 -0700 (PDT)
-Received: (nullmailer pid 3399406 invoked by uid 1000);
-        Wed, 30 Mar 2022 18:32:10 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Sven Peter <sven@svenpeter.dev>, dmaengine@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-In-Reply-To: <20220330164458.93055-2-povik+lin@cutebit.org>
-References: <20220330164458.93055-1-povik+lin@cutebit.org> <20220330164458.93055-2-povik+lin@cutebit.org>
-Subject: Re: [PATCH 1/2] dt-bindings: dma: Add Apple ADMAC
-Date:   Wed, 30 Mar 2022 13:32:10 -0500
-Message-Id: <1648665130.079263.3399405.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,PP_MIME_FAKE_ASCII_TEXT,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=dKO0rsHOFyAMpWyi1MHnQVOBdREz93tr5XlY/aCT89k=;
+        b=vWnVIP06mjcSsPzzkG1DbVLP3aFrbUEkTrvdjchT8tmjksaWXZ/TexJ6Cd+xi6qYCU
+         fpN0qX2RsToPercNgB+vNuQQqEnmmCm61FnuPS4wAxM+uABJjmhkkbwbdA+am14xtiI3
+         +N3bqtqJoSIei4Zc7B+Q4Rr9Go1M8v053zwDQ6KmkLw/ugoBiPyFkwQMVmPt7rsTGSCN
+         MkE8d0TEI6O/tzdkrIOAcrKEqOp5b+mWeF1VBoCVK4Wsrq1zk80HHWKLXcE6EJAXVhZq
+         vFZjPXQ28OnkWmVKh6ZRbS3ktk92jlRh2uWrTfqNtFCtzSCuy0Lr4YL+NK9F3hhEMIZ5
+         Qjeg==
+X-Gm-Message-State: AOAM5314gU7e+NhrVBOeX/W3ZIKZhUxhhLV0XXnsCuaHosdX+6SnzhwV
+        dz0maYYzPXnmClCY6FJRZbN1acusFHFlb3X6eYiapQ==
+X-Google-Smtp-Source: ABdhPJy4EZDSf9OPi2yzJpr2WG0IVC9oYxrOQ6LZwfMYIux64DzecT6oKH7UaRmQgYGnZbEm3yCppRzJnOe/WI26Qq8=
+X-Received: by 2002:aa7:c704:0:b0:418:ee8f:3fd0 with SMTP id
+ i4-20020aa7c704000000b00418ee8f3fd0mr12314131edq.248.1648665209697; Wed, 30
+ Mar 2022 11:33:29 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220328111828.1554086-1-sashal@kernel.org> <20220328111828.1554086-16-sashal@kernel.org>
+ <CAOnCY6TTx65+Z7bBwgmd8ogrCH78pps59u3_PEbq0fUpd1n_6A@mail.gmail.com>
+ <9e78091d07d74550b591c6a594cd72cc@AcuMS.aculab.com> <CAOnCY6QNPUC-VK+ARLb6i_UskV2CkW+AG5ZqWe_oMGUumL9Gnw@mail.gmail.com>
+In-Reply-To: <CAOnCY6QNPUC-VK+ARLb6i_UskV2CkW+AG5ZqWe_oMGUumL9Gnw@mail.gmail.com>
+From:   Michael Brooks <m@sweetwater.ai>
+Date:   Wed, 30 Mar 2022 11:33:21 -0700
+Message-ID: <CAOnCY6Q9XoAMpeRfA_ghge3mXkGXFsm4fW64hxcbnMdJyx8Y2g@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 5.17 16/43] random: use computational hash for
+ entropy extraction
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Sasha Levin <sashal@kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 18:44:57 +0200, Martin Povišer wrote:
-> Apple's Audio DMA Controller (ADMAC) is used to fetch and store audio
-> samples on Apple SoCs from the "Apple Silicon" family.
-> 
-> Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-> ---
->  .../devicetree/bindings/dma/apple,admac.yaml  | 73 +++++++++++++++++++
->  1 file changed, 73 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/dma/apple,admac.yaml
-> 
+The /dev/random device driver need not concern itself with root
+adversaries as this type of user has permissions to read and overwrite
+memory - this user even possesses permission to replace the kernel elf
+binary with a copy of /dev/random that always returns the number 0 -
+that is their right.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+This whole issue of leaks is because we are relying upon fast but
+insecure hash-function-like methods to extract data from a sensitive
+pool.  LFSR and CRC32 (which was used in an earlier version of
+/dev/random) have similarities to secure hash functions - but "aren't
+good enough for military work" - which is why we are even discussing
+the topic of leakage.
 
-yamllint warnings/errors:
+If we use a secure primitive in the right way - preferably one that is
+faster than SHA1 - such as chcha20 or even faster still AES-NI (both
+in a feedback mode).  Then the leakage is stopped.  If the pool cannot
+leak then we do not need an entropy counter which is the mutex that
+handle_irq_event_percpu() fights over.  This reduces interrupt
+latency, reduces computational load of all interrupts, and helps
+contribute to the pool being less predictable because now an outside
+construct has to account for race conditions.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/dma/apple,admac.example.dt.yaml: example-0: iommu@235004000:reg:0: [2, 889208832, 0, 16384] is too long
-	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/reg.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/dma/apple,admac.example.dt.yaml: example-0: dma-controller@238200000:reg:0: [2, 941621248, 0, 212992] is too long
-	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/reg.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/dma/apple,admac.example.dt.yaml: iommu@235004000: compatible: ['apple,t8103-dart', 'apple,dart'] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iommu/apple,dart.yaml
-Documentation/devicetree/bindings/dma/apple,admac.example.dt.yaml:0:0: /example-0/iommu@235004000: failed to match any schema with compatible: ['apple,t8103-dart', 'apple,dart']
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/dma/apple,admac.example.dt.yaml: dma-controller@238200000: 'dma-channels', 'iommus' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/dma/apple,admac.yaml
+-Michael
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+On Wed, Mar 30, 2022 at 10:10 AM Michael Brooks <m@sweetwater.ai> wrote:
+>
+> Of course I am assuming local user non-root access.  One does not need
+> to reverse the mix operations in order to form a parallel construction
+> - a one way function is sufficient for such a construct as both sides
+> will operate on the data in the same manner.
+>
+> This attack scenario is simply a non-issue in keypoolrandom.
+> https://github.com/TheRook/KeypoolRandom
+>
+> On Wed, Mar 30, 2022 at 9:49 AM David Laight <David.Laight@aculab.com> wr=
+ote:
+> >
+> > From: Michael Brooks
+> > > Sent: 30 March 2022 17:08
+> > ...
+> > > I=E2=80=99d like to describe this bug using mathematics, because that=
+ is how I
+> > > work - I am the kind of person that appreciates rigor.  In this case,
+> > > let's use inductive reasoning to illuminate this issue.
+> > >
+> > > Now, in this attack scenario let =E2=80=9Cp=E2=80=9D be the overall p=
+ool state and let
+> > > =E2=80=9Cn=E2=80=9D be the good unknown values added to the pool.  Fi=
+nally, let =E2=80=9Ck=E2=80=9D be
+> > > the known values - such as jiffies.  If we then describe the ratio of
+> > > unknown uniqueness with known uniqueness as p=3Dn/k then as a k grows
+> > > the overall predictability of the pool approaches an infinite value a=
+s
+> > > k approaches zero.   A parallel pool, let's call it p=E2=80=99 (that =
+is
+> > > pronounced =E2=80=9Cp-prime=E2=80=9D for those who don=E2=80=99t get =
+the notation).  let
+> > > p=E2=80=99=3Dn=E2=80=99/k=E2=80=99. In this case the attacker has no =
+hope of constructing n=E2=80=99,
+> > > but they can construct k=E2=80=99 - therefore the attacker=E2=80=99s =
+parasol model of
+> > > the pool p=E2=80=99 will become more accurate as the attack persists =
+leading
+> > > to p=E2=80=99 =3D p as time->=E2=88=9E.
+> > >
+> > > Q.E.D.
+> >
+> > That rather depends on how the (not) 'randmoness' is added to the pool.
+> > If there are 'r' bits of randomness in the pool and a 'stir in' a pile
+> > of known bits there can still be 'n' bits of randomness in the pool.
+> >
+> > The whole thing really relies on the non-reversability of the final prn=
+g.
+> > Otherwise if you have 'r' bits of randomness in the pool and 'p' bits
+> > in the prng you only need to request 'r + p' bits of output to be able
+> > to solve the 'p + r' simultaneous equations in 'p + r' unknowns
+> > (I think that is in the field {0, 1}).
+> >
+> > The old kernel random number generator that used xor to combine the
+> > outputs of several LFSR is trivially reversable.
+> > It will leak whatever it was seeded with.
+> >
+> > The non-reversability of the pool isn't as important since you need
+> > to reverse the prng as well.
+> >
+> > So while, in some sense, removing 'p' bits from the entropy pool
+> > to seed the prng only leaves 'r - p' bits left.
+> > That is only true if you think the prng is reversable.
+> > Provided 'r > p' (preferably 'r >> p') you can reseed the prng
+> > again (provided you take reasonably random bits) without
+> > really exposing any more state to an attacker.
+> >
+> > Someone doing cat /dev/urandom >/dev/null should just keep reading
+> > values out of the entropy pool.
+> > But if they are discarding the values that shouldn't help them
+> > recover the state of the entropy pool or the prng - even if only
+> > constant values are being added to the pool.
+> >
+> > Really what you mustn't do is delete the bits used to seed the prng
+> > from the entropy pool.
+> > About the only way to actually reduce the randomness of the entropy
+> > pool is if you've discovered what is actually in it, know the
+> > 'stirring' algorithm and feed in data that exactly cancels out
+> > bits that are present already.
+> > I suspect that anything with root access can manage that!
+> > (Although they can just overwrite the entropy pool itself,
+> > and the prng for that matter.)
+> >
+> >         David
+> >
+> > -
+> > Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, M=
+K1 1PT, UK
+> > Registration No: 1397386 (Wales)

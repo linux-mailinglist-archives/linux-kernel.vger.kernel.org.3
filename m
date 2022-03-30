@@ -2,165 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7554EB9D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 07:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B43AA4EB9DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 07:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242702AbiC3FFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 01:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
+        id S242753AbiC3FJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 01:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234045AbiC3FFu (ORCPT
+        with ESMTP id S240719AbiC3FJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 01:05:50 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF6856C2E;
-        Tue, 29 Mar 2022 22:04:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648616645; x=1680152645;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=rG+eVeojlMtCVeV28H/KcdxcNxpO6CTI7mP1qsqgZx0=;
-  b=Ct/ktaZmFqSMMvhnNEJIhHbz7PxXuvLkTL9eaMrmg+x/xVA4LWWU9mcR
-   +a/QFoS99e34Skw8ZHvB7thDh9kWxUS69s3iWfliva+7tfScSaH8+j9vK
-   tIJ5p+THA28MZC1lg1Z83ffloHgI0XSiUERbzTZLDRGeR/8g+SllSUyRj
-   DHBQsQpO37WkDICjpt66eqsAsUDWGk/GifaWY35DqzM7NTgGgkY/OLsmg
-   9Gih7d6kMoOvpre5gfh6nsRJtug/mqO/xHGystYGXcFFSNTBEVCmKi9fD
-   9NSnSWcIzgGwalZ7sUi7GIJGlDMIYdx3NjBCMk91RUU+dtJUi2R2TIXJ1
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="241603573"
-X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="241603573"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 22:04:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="521746192"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga006.jf.intel.com with ESMTP; 29 Mar 2022 22:04:04 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 29 Mar 2022 22:04:04 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 29 Mar 2022 22:04:03 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Tue, 29 Mar 2022 22:04:03 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Tue, 29 Mar 2022 22:04:02 -0700
+        Wed, 30 Mar 2022 01:09:12 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2074.outbound.protection.outlook.com [40.107.223.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51736F2138;
+        Tue, 29 Mar 2022 22:07:28 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YfO6GF4T6skqgdARgeCQrOVlIiczhsVYPQKA5uvvhnL5hEBTxTKJbM/Z14hCEgPHyMvVCrJYGc/GUeBva2BLYfw9ifGVu/lPt5csLjT631dN/NLTOItXR2WVA8whW8hYyI5KXfBTMM6f3a7XeHYakrCKeHOaaWlaHA/4vgTc5Mwd3lZ69dGJYaB1ZpJWhA0tM7K9dlCUoKXWoCVgynMoq6t8S78uhmGRGIM6yBSOz73tcBUc/eba8QHtpJzBc/O5cxRkmOzkMbWdjeD6kx+GFk5l3TPW+TdqavguVFCswv2SmXQprWxGf57SneLtldb4RBpXiLj0QQ501pOL0QAWQQ==
+ b=kL3zbeDPimeSbySZ2JnJmZN9aUktTMn6nTyW8/9t1bEx316lr3LnwHuzIDDq3LJlinr43bL8/JYaNstafA1E6xBdwTeSmH/HzJWU3aRgvlVjLSZbUYBw8ZO1HG+VkqtUmxTKDyoXb1eyfq/LeGio/eKO8SrMHfk44OLTgiqfhweVq/RU/LaQOEARXzppbXVRPzYmnazQkVqO7soQ90Fa6/Y+sLTqkW2VNCo86nj+HiDwth7Mztmw2qZ4TUH2FnjDwtk7QBjHy74p1mfe9HC0v2ZOOhk2zIh4zLe6kf3cb2l66b6woyoXUFuKExc2fMN/qsJ5cjGv1fNCygOq3k+7rw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EB9HTs9I5Ib9Imdm8IuhjQee+gXPRVnSq8Df3KLMV3k=;
- b=SLr8kYVZ5dGaqVkzeh1wqi85/3lJW6qOaxPBqzosQIMpwRnRGueh7k4870UVpqVtOMcbCjUc7DhWG6L27jAYCcy050EbxItyVkgN+gOUolFASHkF99+EITTz9RWPUw8eHbDJ/boaVLfSksIabV6WnItmrq/Tz/KjW2Oy1wgQCx2Z/8G+n/fFeKuogiPec9yEEfCNtE4kC3lEsYNIDpIFT/edAwPdFNFvAzm1CTlBdYV0MB45tL1gRo5JD46LE07q1Dmk4uHaHazYjf4NsYv2nwNAeNg3bup/tIrSw4cEtCgseiZ8Qd+bhizpM6tHICanTpiep5vMUd4ueKFNF7TWKw==
+ bh=c4+RvlehFAIcVUVHJ4wKFMXpcpYasO558cTuaGV+qWc=;
+ b=PY4Zt8mKMZmc/ttzt9T/7XWAvP4rfoOv59zOzDxHxgP5/+72gDfH6IB2SIbgFg0l4wh/YbO7OBkAI9QRTndj4Oq4IT4mlflG8Dw3FpN3pRna9Tr+231spI7PiiRt+TsZ6GwyEtPrGqwEccV575BHq1FO6K1RPugAJlqBaqA9cNrRyG3K83wJ24SMwstoqteRrxGaqwN95FA+RO9cQvAvJYJkhL/sNZ9gGwck+80m938waOY4/AA/O68YeEaksuA2zmT7cyjUc/BMdqu1s+WcX9mJCBTthlRIds3ZIp4LuMGgLmzPub7weNNVyaJjlndJe2IAlBkiGo0ikbOir7ZQyA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5545.namprd11.prod.outlook.com (2603:10b6:408:102::19)
- by MW3PR11MB4764.namprd11.prod.outlook.com (2603:10b6:303:5a::16) with
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=c4+RvlehFAIcVUVHJ4wKFMXpcpYasO558cTuaGV+qWc=;
+ b=CR2MYwS+rfqt8Ki5yRaK+ZnoXfKKV8eNMxAZoi1iGaxEXjRp/P3Xdm5KDAgpHRjws16/9uMe7KnLkxGZeIu9Gi9qBU9S4i8K3NNFtUov795aQXWG0c+6V9tHyj2QKNfflQAHIK9QEFXJPTwqMXFEWNYEx6zqHK+Eol7/2Bi4ZC6A9jbN8X4wgX6UFyla0TMN+1Ujypu6F+quqkAkkp/sIfe2gHpJhPrwPInLx0N+jwHBmuDUvOLjaH7szGIoMilx6RngmFpVYTU7/ySENxcEgcN2xpd062vF6zlBeKogwZWEQhjSiK2tEyE8eR34LCcnEbwzxBjq5zuqgf9IZ5e1Jw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SA0PR12MB4349.namprd12.prod.outlook.com (2603:10b6:806:98::21)
+ by PH7PR12MB5832.namprd12.prod.outlook.com (2603:10b6:510:1d7::6) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Wed, 30 Mar
- 2022 05:04:01 +0000
-Received: from BN9PR11MB5545.namprd11.prod.outlook.com
- ([fe80::8548:a26:d677:6e0e]) by BN9PR11MB5545.namprd11.prod.outlook.com
- ([fe80::8548:a26:d677:6e0e%9]) with mapi id 15.20.5102.023; Wed, 30 Mar 2022
- 05:04:01 +0000
-From:   "Sanil, Shruthi" <shruthi.sanil@intel.com>
-To:     "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-CC:     "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "mgross@linux.intel.com" <mgross@linux.intel.com>,
-        "Thokala, Srikanth" <srikanth.thokala@intel.com>,
-        "Raja Subramanian, Lakshmi Bai" 
-        <lakshmi.bai.raja.subramanian@intel.com>,
-        "Sangannavar, Mallikarjunappa" 
-        <mallikarjunappa.sangannavar@intel.com>
-Subject: RE: [PATCH v10 0/2] Add the driver for Intel Keem Bay SoC timer block
-Thread-Topic: [PATCH v10 0/2] Add the driver for Intel Keem Bay SoC timer
- block
-Thread-Index: AQHYPezSIO7t9zFH8Ui3vYd0dO8YIqzXazWw
-Date:   Wed, 30 Mar 2022 05:04:01 +0000
-Message-ID: <BN9PR11MB55459A4EA8D0599DCB753173F11F9@BN9PR11MB5545.namprd11.prod.outlook.com>
-References: <20220322130005.16045-1-shruthi.sanil@intel.com>
-In-Reply-To: <20220322130005.16045-1-shruthi.sanil@intel.com>
-Accept-Language: en-US
+ 2022 05:07:21 +0000
+Received: from SA0PR12MB4349.namprd12.prod.outlook.com
+ ([fe80::e15c:41ca:1c76:2ef]) by SA0PR12MB4349.namprd12.prod.outlook.com
+ ([fe80::e15c:41ca:1c76:2ef%3]) with mapi id 15.20.5102.023; Wed, 30 Mar 2022
+ 05:07:21 +0000
+Message-ID: <349166ad-7bcc-c550-8636-8342eb098333@nvidia.com>
+Date:   Wed, 30 Mar 2022 10:37:07 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [Patch v5 1/4] memory: tegra: Add memory controller channels
+ support
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.401.20
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 21b54c8f-ffdd-4d03-5b20-08da120ab472
-x-ms-traffictypediagnostic: MW3PR11MB4764:EE_
-x-microsoft-antispam-prvs: <MW3PR11MB4764DE1BDC99AC3CD2A2ADBCF11F9@MW3PR11MB4764.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: PrBCbb3dgQkhLz3EObPRbXMC4RSB10mlNQdZXw2UQB56b86O2P1HctNi/Ry/nZ8YcPtzEQjsC6dwhkZ5/l1vC4sQskxUexTuR4kaZcgO0FygzWq2LPCPaChYmzM3eEvxpTGWDENO6VKNarUSBFxoZ6qN+8OBqUqlBkoRSO4FzafBhhRPbb85eN0C2a/vcT34aU/VlFwhk7Qf7iMUjtNRrPMru14blSzuzj5yXD2tLzm3ukJwcazh6wnciujCxo5FyDvs2747KJ7mlBDp4eb7QnNOY5JaWyWPpSujby5h9jLsqTxu8eK1Fd/Cm1pgGjY2e3tKrO4ip9SuTMg+wB077hZtD4bVt0nEEVY+1QU689Ezsb4godnn1NJCLMhj0ZmR8h00G5f3Dd8oYfyDlvXaUrqp7VFxQ4VsKH++bjQyhlQ5CN9d/6CZFC3UyYKn6w22Q8e0Qw1eWjHxG5/ynjdyaB30dTzqTFYunQNkXPHfX5e6M/YymjR11KcesoUeTWA3eHgJI09Pp2+UEqECBsHKVGm3/hbVLe3V5gDEKSme2BWCLhf800nnvRb3IxeVGFqEYUFL/ojjeZi0hsE0x24hL77fjtuw2p/diasma7NIDhi6/kCfMomkJToXbIbVimLEDSwSK+eY3YqBAFadDQtolvGqkgbwbyD6lvgag7MekKuLQlw8y9jXRb2WqMnpYvRYTalZQz/Dp7nekZ7nLENz+A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5545.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(316002)(38100700002)(55016003)(76116006)(110136005)(52536014)(8936002)(4326008)(6506007)(71200400001)(53546011)(7696005)(33656002)(5660300002)(54906003)(8676002)(66946007)(66476007)(186003)(83380400001)(66556008)(66446008)(38070700005)(2906002)(64756008)(26005)(9686003)(82960400001)(122000001)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?r6hfTERgshd9F/Y/oKBxHq6wLQ4W4zK5s+qjd80CEYR8pnvM7SRTlue+jk6O?=
- =?us-ascii?Q?g9kljG2JJCkPYOz7N+pN9aTzl0DlcS1zw+kc03NoDeQ/CIN4rDMr/NAObKSc?=
- =?us-ascii?Q?YTasjIa+lHh9d74hhFns0XeILX1nCryFUj8RXTwejkSjqPZyXrPl9EJg1wUS?=
- =?us-ascii?Q?gSjsyAnCC1Hn6e8thXY9hh1a9lCPZMN/+0+Gh3X40oJ7MlWM0YiUmsteW64r?=
- =?us-ascii?Q?4E7WNbEkJ96RBHbNMr/KOjWaQP2fG8LOKESk2xeXdYeGMSU5QmmDIOtNGSPf?=
- =?us-ascii?Q?DVOMebO3UgDKNECdFaccvt7bFf++Qn/2Ej+VUW+GGO8X9Y2oQ3qmSFPZ/NS5?=
- =?us-ascii?Q?/d/4BHG472a4fJ1hncChefTCKId30AW9NiecaPjSRNnTknJihHQIqpuwndj+?=
- =?us-ascii?Q?AxT0b7jrrtPhuwuOQ2i6ePp5+1rwBvKW6nsennxkLAYGX4H5EdA7BHeFWZDC?=
- =?us-ascii?Q?J8i1gvPt62VLNBox/BeO59fcA2xRZgozvrivwWvtbWLB6II2d7RkumVK4QHm?=
- =?us-ascii?Q?BHgUyuJJ1xDP99Yz2JXGhwKLw6n5EFlZltQV2Wdx8rSCtSQVerxeGAJl8z/k?=
- =?us-ascii?Q?rR3z1Oh9YH0xzvB0UqtsIr3YXfFPSw32oLSsoPIduaEZ5hg3m52K8bS2LOW5?=
- =?us-ascii?Q?91ZCYbgQzYm/TnvVNnv8+mrotzsgxNJr2HQq6qmv1eS0IqB0asujHzkwzP1z?=
- =?us-ascii?Q?LMAd3XOBFqI7h9qdQr1OTHh/1JfAZnRemR475wAc0lgeeFDDcqhrNJpMJ3p/?=
- =?us-ascii?Q?THhe81bcyv2YB12q4ZkTPdEv20Q+D0Zbqv33c/2J0ZiVogAuzxfEdVRNn6KZ?=
- =?us-ascii?Q?MmfB/l1jgxLu8opkG74BIMGToRtIvMTnIi0fF0SnCMEr95pyB1BsE3SHXHGV?=
- =?us-ascii?Q?tts5ss9LPeCxsUODYIi+1qMv8jVA9JeTCEvA7wzftWX80DMPxFYcA8O47fh8?=
- =?us-ascii?Q?u+HOKMuLRy6A7YEpLkc3/82uzG7WNjjNnOmfl7XmQaL0gDLmjd+e/NpUirZp?=
- =?us-ascii?Q?DL2vC6tYIVA/1SijGcdVUEtUZ80puv1PfplKFixnZTCLj4fKXmTE+NQyr3lq?=
- =?us-ascii?Q?SjrSuk7pz+r5m6oMj3VbbloWR2VKNWDceSwFzjJ/q+AnXk+5l9hdKH9TUjFi?=
- =?us-ascii?Q?Sy2daYdr4CuHJSCYNySklGsrvLSyHfuOeh2aRAiUdqNOVrhXYMT5g31f9HRL?=
- =?us-ascii?Q?nPH3epr8flctZoQXNNScoYGBT5oupYJjcrj3zW5FAn3DuMl91ElXEwlIOuVn?=
- =?us-ascii?Q?lQiJ5rXCd6QWe+XVae9Mb+YzZDZvbnExeuxe5PB2ZfOc5UAjYPqh+9ouMQx5?=
- =?us-ascii?Q?RGdjky55tneIkLjEvNEP7j9OkzLtm3lSfI7euGEwMzMnTKgw9miSMz1FEm43?=
- =?us-ascii?Q?l+vfdPkuJk/Ty/Ct+OCZBZReQFxf8aokUEd6fVAkv8IxKcMwvvqGoxwjjiQ6?=
- =?us-ascii?Q?CPuuX7UZT2Q24AlElD3jmquMnRRjHK7UjMi4zWhS6k9P3lqm2FCARVA0rOlR?=
- =?us-ascii?Q?WuI7ExqYmEWL+1qMHuYBKe05/poQjop0vag2DIbmDLhiWgwOJeylUNJHV/iJ?=
- =?us-ascii?Q?qFh/8AphAKyteICTa27L4Ds8zxHJSvq4DteqsXX+lFYAsWnY2zlwcYqv55mQ?=
- =?us-ascii?Q?f43gF2o7JDB5RjQ7G/X33Hxed3g7OLsJBcVMy5ocjNGk3J0rOy4wrwI8sVyx?=
- =?us-ascii?Q?PP5kxkr2KXjRYjK2My2Cvdhqk+aMlQNfHbcQ7mgF4PmW+P/i1hO353j6p4eN?=
- =?us-ascii?Q?yGT5v+L4fw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
+References: <20220316092525.4554-1-amhetre@nvidia.com>
+ <20220316092525.4554-2-amhetre@nvidia.com>
+ <83bc4c12-13e3-d239-3845-a3541b1fbb2a@gmail.com>
+ <981610f0-374a-b18f-8e3a-445b20edb257@nvidia.com>
+ <22eb6b37-3bcd-71ab-f99f-dc059043b56b@collabora.com>
+From:   Ashish Mhetre <amhetre@nvidia.com>
+In-Reply-To: <22eb6b37-3bcd-71ab-f99f-dc059043b56b@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MA1PR0101CA0021.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:21::31) To SA0PR12MB4349.namprd12.prod.outlook.com
+ (2603:10b6:806:98::21)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ff37fa3a-7d56-4dfc-a28f-08da120b2b9e
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5832:EE_
+X-Microsoft-Antispam-PRVS: <PH7PR12MB5832B8F4119946CF98BE7159CA1F9@PH7PR12MB5832.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CUFsezB19r/7XaQImHfc9221W+UPKsRc3yTA/OHqmyO2p4X90NqDlikgMOxRn5ztoaLAbXSJ4lV5pLHJobRq3lXzHUDgQw8tBTHw/Y9EtmOoRylOzpiqcWz6cFPhy3jaO5shs+A+JlICLDKxpwJRgZY9nYN7xbU6rd3XrF/k8MRvmm57aTNQUtBRngkuwUacA3WP5Vx5njnvvAv2Am+RFCT+oIG5qWc2POEbIEwOYgFkyU/PJSXeUAPq+F/UAOwJ/w1r3gYY4UPac+OUoDNXpe8kZ3IBdHMJ9zVwEhoE8qs3S1POOhwiTVTEkwE8h45gvuMKHTcCJHMRQ5Z/Gk5dTSE8Z8p/t4ICNwHFIt5rWegS8+p+dqVqJaEUtZ9UWbRLCJ0sd0HFZIbbDlm6XpRKeBiEl3w1k/585maoRuVVF5tT2awTjPRWWg0vEUUXn1gpBnwqglDjAIY8bDFYw9ybwApCwb2PK2mB5oLqFCQxFnNMyutVG186q/i2JUOVODI9ruWuIMGOS5WcCCGf/5z2V9G7KVUCu1VL/91QUiDDynzcr8DCoZ8GsElVKerBbaTDwjm58WYmHZAx4YCXBecV4n/VmQFCNgKxDoJ8qzjvdou9dw1UqbLOnlP65bG3FLNC355XF6YDFKhxWVFU0GhOWj06+180Q2b8D0caDhSnXJnt7szY2FfKpK6W1cq6jTKnPLFAPxvX1gg3xVrV4vTG28O79TBiNtM12ITObIpF5Lk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR12MB4349.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(5660300002)(31696002)(2616005)(6512007)(36756003)(55236004)(186003)(107886003)(53546011)(83380400001)(508600001)(6666004)(2906002)(6506007)(6486002)(31686004)(26005)(38100700002)(316002)(110136005)(66556008)(66476007)(4326008)(66946007)(8676002)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TGhqcTRHenU5M1pWb25vRS9LdEsvUzlpSEdaT3FCcWlyMGpzY296TzJFVDdM?=
+ =?utf-8?B?bkI3R2l3ZjRQM1ljbE5ndm9mejExaStnd1FIK05WSVBKcW1pR3U1NU0xUGsw?=
+ =?utf-8?B?dGU5L1hWcE5xUmNiUmxwenRGbWp5VWVESlMydWF0L3hzbFR3U1NBdzNFVXpX?=
+ =?utf-8?B?SDcyejlQWnkyMm5sdXBpQTBKVXpiYWIyMUJUVWM3eDgvd0VzNmJTWG01dk1L?=
+ =?utf-8?B?ejV2Z2Y2UkVHZkRsaDc3ZnZCTGw5MlViL2F0T0cwSWZZS0RtQ1p4MzRrVDcz?=
+ =?utf-8?B?TmJtZFhIRWJpZThzVlhWendPYVArTlZKelZ3K3o0Nmx1YkVIS3N1WTQwMXpj?=
+ =?utf-8?B?Zm9zUlRNd3BEcUVXOFZadWNqbTF1anB2Nk5ER1NCVlFxeXpjTk13b2N2OEtK?=
+ =?utf-8?B?bGRYMzBXdE14dy95Y1Jaald5OG1JS2t0RDA5blVlRVNoSHNCbVVJRExOUjQ3?=
+ =?utf-8?B?MStvdVNxRXBnUWFZTmxHMkh3bjZoVGtQZkZxemtDQ282b3IzVVB5UHgzMG1y?=
+ =?utf-8?B?V3B2UlZ0d0pUNzJrQzV3TGIrUVpvbzViMi9ZWnBEbnlvLzVzRFFPeExjZWpz?=
+ =?utf-8?B?RXZTNDloZlJqRUt4MU1vTTl3V01JMyt1RXBFWkoyTlcvTHVHNnFpQlJ5V3VR?=
+ =?utf-8?B?bUgwSkxJSmphclRpdlVRTy9kaStBZC9GTXJ0T2ZUbHVSRkZFQWRkZHFMaUti?=
+ =?utf-8?B?MXNadjRyK0puMlhPOXAzelNaSmQ3RlVxQjVDbFMrcGtlbEh4VE1kL2ViZERN?=
+ =?utf-8?B?OEhrQnZ0azFrdVFEOUkwWEhxTmxXTTRIY2grblA3MTU1aXB6TGo3UTNGMHll?=
+ =?utf-8?B?QURNaklBS1MxdVdtYWZwOFpQUEFtb1NKOHNoejJqQ3R5cnRDV2M5ZkpDa1Zk?=
+ =?utf-8?B?MVIwTkMvcW9STVQxRHNlNVlpUTR1MytSZ0JmOE5TQWk1Q29Dam9qVmthTWow?=
+ =?utf-8?B?M3FDeE8wSkFkTTRvc2dEMU94L3d0ZTBMVis1ajE1MmdMdnRxVTUwNWZhYjI0?=
+ =?utf-8?B?MHRwTVVBVlhadDdXOW9kSHROaFpydlhlUE9URVN3ZHpTNmNGYWVXTzJ2RUFu?=
+ =?utf-8?B?S2c5YWtnbTVxNGs2dEJUVFE0K1BoNVYzVFppWjNIUWwvaG9EQ0hjR3E5UHdk?=
+ =?utf-8?B?dXRBMVQ1V2k1ODY2Yk5WQS9lckV6ZDYyZ3FSM0ZRRk43RUJXaU5OWGwySFN6?=
+ =?utf-8?B?S2ZBYStTUW5IRUIyTnAzUmlQQ2lXUGZsSThNRmMzbkJOYU1xMDBreWg0OXJ1?=
+ =?utf-8?B?QmRyaEVTdThHbWhYTjE1SVFpNWh5SW8rOStZbk9IcFdESG1DbDRHb0c1dzl2?=
+ =?utf-8?B?amhOcm9oL3phaURWdDRrWDhIeXJGUEpENkNQTU5RazhYV1J3N2NTcTBObXBN?=
+ =?utf-8?B?WWUxWDljZCtVRzNRMTdBN0FzOHkzazlaSHdVRGk4YmpYTjZwUVp0NVJLelVq?=
+ =?utf-8?B?bnB6TjJUYk9ua1BJZWhkSjNCR0hXS090U3BWd3Y3ZW9sYzlFN0xIajZ4VHJS?=
+ =?utf-8?B?U0ExcitTalVRUkJIMjBzUWwvOGg2dnhScVA0RUNZaVd4SjBmRnVySFl5OWtQ?=
+ =?utf-8?B?d0JKTlFzTjM3TlIvZTRsNmdwYUhhb3ZGdmoyV2I5MWp5TEFaR0hKSUcyZUVn?=
+ =?utf-8?B?bFZCVGVRY0g1UmdsaE1hTEQvdjdrNHM4TXZvbjFPS3BnWWlmdVdrdkVNRG84?=
+ =?utf-8?B?Z0JXUm9NWmxIYkFEQXpFU3U5UEhCUWt6aWE0QVFiRE14cENMM1Fna0dRNXZw?=
+ =?utf-8?B?c3pEaFd5VjhCcVJOYmk2cDIvZFA0ZUxaYVQ5NWlHdzVSbEh5engvSk5xVURn?=
+ =?utf-8?B?cTF2ZlhXZ3FUV25XQVRZeDd1RGxMZnFIeTczWE1waFdPQy9BbnM5UVZ6Tjg4?=
+ =?utf-8?B?OHJjWm81U0gvbXFKN3lNUFBWY0dUUUxSa3VJYjBTSkhMZWc4UFZNVVVtK0RN?=
+ =?utf-8?B?YUludWtiQThWVmMzUjFyRlRyT0dXbHkzRUFnRnprVzNiU1IyamFaNGVvb2to?=
+ =?utf-8?B?UkJ5M1Y0bG1OTHlwdVFhdXowZEFqeDBDWkZURkFOcGViNmJ2enBzOUw4SHpk?=
+ =?utf-8?B?SzNhcTk0bWE1VFlHRUs5cDhVa0lra3RtNTNlNHNzUU5nS2x5bHBlQzRGY1ht?=
+ =?utf-8?B?c25TTmRONFlEaGw4QkZsSnhVOGJvYjQ5eFNqRk9aTFV3emxNb01BbXE3QmFC?=
+ =?utf-8?B?UEVBZTM1Rm4wQ3FvYkFNaEUyTlVtVHBVK2drUFZqYks1cXdlZjdSVzNPMys3?=
+ =?utf-8?B?QktzMUVCWG44dGd4U2ZCVjUxd2FEUjhPd0xIUU9JTWJBNlYrRGhUckk1a3NG?=
+ =?utf-8?B?T0hCRWtWWHVFRDY5MEE3QkwzUlFxZ1BTbGI2TVNHQW5aMHRTR0I2Zz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff37fa3a-7d56-4dfc-a28f-08da120b2b9e
+X-MS-Exchange-CrossTenant-AuthSource: SA0PR12MB4349.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5545.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21b54c8f-ffdd-4d03-5b20-08da120ab472
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2022 05:04:01.1931
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 05:07:21.5831
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wgh+Y7QGKYaZ3RNPDW4WNfeJtsefABDwPWEdzHPGbcGT1uaJveL7AgGupu9Ul1ezcUJX9YjDYxrO9/w783OgMQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4764
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: D4Nr+F3f2m2Xvy1bcZ6MhLyTjqIzjFtZ/npUE1VxWQAii9vYrNipRdtzt/UCsgv4moAK03ZoFIN8qwuSHgDRPA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5832
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -168,106 +139,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gentle Reminder!
 
-Regards,
-Shruthi
 
-> -----Original Message-----
-> From: Sanil, Shruthi <shruthi.sanil@intel.com>
-> Sent: Tuesday, March 22, 2022 6:30 PM
-> To: daniel.lezcano@linaro.org; tglx@linutronix.de; robh+dt@kernel.org;
-> linux-kernel@vger.kernel.org; devicetree@vger.kernel.org
-> Cc: andriy.shevchenko@linux.intel.com; mgross@linux.intel.com; Thokala,
-> Srikanth <srikanth.thokala@intel.com>; Raja Subramanian, Lakshmi Bai
-> <lakshmi.bai.raja.subramanian@intel.com>; Sangannavar, Mallikarjunappa
-> <mallikarjunappa.sangannavar@intel.com>; Sanil, Shruthi
-> <shruthi.sanil@intel.com>
-> Subject: [PATCH v10 0/2] Add the driver for Intel Keem Bay SoC timer bloc=
-k
->=20
-> From: Shruthi Sanil <shruthi.sanil@intel.com>
->=20
-> The timer block supports 1 64-bit free running counter and 8 32-bit gener=
-al
-> purpose timers.
->=20
-> Patch 1 holds the device tree binding documentation.
-> Patch 2 holds the device driver.
->=20
-> This driver is tested on the Keem Bay evaluation module board.
->=20
-> Changes since v9:
-> - Updated the error message with the macro FW_BUG wherever applicable.
->=20
-> Changes since v8:
-> - The clockevent stucture has been declared as a global static variable,
->   rather than allocating memory using kzalloc during probing.
-> - Updated the print statement indicating the configuration missing as the=
- FW
-> Bug.
-> - Updated the comments in the function keembay_timer_isr().
-> - Updated the dt-binding to remove 'oneOf' as there is only 1 entry.
-> - Updated the dt-binding description clearly indicating that
->   the descrption is about the undelying HW.
->=20
-> Changes since v7:
-> - Added back the compatible string "intel,keembay-gpt-creg"
->   as an enum to the mfd device node in the device tree bindings.
-> - As the timer is used as a broadcast timer during CPU idle,
->   only one timer is needed. Hence updated the driver accordingly
->   incorporating the review comments.
->=20
-> Changes since v6:
-> - Removed the unused compatible string from the mfd device node
->   to fix the error thrown by the make dt-binding command.
->=20
-> Changes since v5:
-> - Created a MFD device for the common configuration register
->   in the device tree bindings.
-> - Updated the timer driver with the MFD framework to access the
->   common configuration register.
->=20
-> Changes since v4:
-> - Updated the description in the device tree bindings.
-> - Updated the unit address of all the timers and counter
->   in the device tree binding.
->=20
-> Changes since v3:
-> - Update in KConfig file to support COMPILE_TEST for Keem Bay timer.
-> - Update in device tree bindings to remove status field.
-> - Update in device tree bindings to remove 64-bit address space for
->   the child nodes by using non-empty ranges.
->=20
-> Changes since v2:
-> - Add multi timer support.
-> - Update in the device tree binding to support multi timers.
-> - Code optimization.
->=20
-> Changes since v1:
-> - Add support for KEEMBAY_TIMER to get selected through
-> Kconfig.platforms.
-> - Add CLOCK_EVT_FEAT_DYNIRQ as part of clockevent feature.
-> - Avoid overlapping reg regions across 2 device nodes.
-> - Simplify 2 device nodes as 1 because both are from same IP block.
-> - Adapt the driver code according to the new simplified devicetree.
->=20
-> Shruthi Sanil (2):
->   dt-bindings: timer: Add bindings for Intel Keem Bay SoC Timer
->   clocksource: Add Intel Keem Bay timer support
->=20
->  .../bindings/timer/intel,keembay-timer.yaml   | 125 ++++++++++
->  MAINTAINERS                                   |   6 +
->  drivers/clocksource/Kconfig                   |  11 +
->  drivers/clocksource/Makefile                  |   1 +
->  drivers/clocksource/timer-keembay.c           | 226 ++++++++++++++++++
->  5 files changed, 369 insertions(+)
->  create mode 100644
-> Documentation/devicetree/bindings/timer/intel,keembay-timer.yaml
->  create mode 100644 drivers/clocksource/timer-keembay.c
->=20
->=20
-> base-commit: ffb217a13a2eaf6d5bd974fc83036a53ca69f1e2
-> --
-> 2.17.1
+On 3/30/2022 5:18 AM, Dmitry Osipenko wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On 3/25/22 07:50, Ashish Mhetre wrote:
+>>
+>>
+>> On 3/19/2022 9:12 PM, Dmitry Osipenko wrote:
+>>> External email: Use caution opening links or attachments
+>>>
+>>>
+>>> 16.03.2022 12:25, Ashish Mhetre пишет:
+>>>>   From tegra186 onwards, memory controller support multiple channels.
+>>>> Add support for mapping address spaces of these channels.
+>>>> Make sure that number of channels are as expected on each SOC.
+>>>> During error interrupts from memory controller, appropriate registers
+>>>> from these channels need to be accessed for logging error info.
+>>>>
+>>>> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
+>>>> ---
+>>>>    drivers/memory/tegra/mc.c       |  6 ++++
+>>>>    drivers/memory/tegra/tegra186.c | 52 +++++++++++++++++++++++++++++++++
+>>>>    drivers/memory/tegra/tegra194.c |  1 +
+>>>>    drivers/memory/tegra/tegra234.c |  1 +
+>>>>    include/soc/tegra/mc.h          |  7 +++++
+>>>>    5 files changed, 67 insertions(+)
+>>>>
+>>>> diff --git a/drivers/memory/tegra/mc.c b/drivers/memory/tegra/mc.c
+>>>> index bf3abb6d8354..3cda1d9ad32a 100644
+>>>> --- a/drivers/memory/tegra/mc.c
+>>>> +++ b/drivers/memory/tegra/mc.c
+>>>> @@ -749,6 +749,12 @@ static int tegra_mc_probe(struct platform_device
+>>>> *pdev)
+>>>>         if (IS_ERR(mc->regs))
+>>>>                 return PTR_ERR(mc->regs);
+>>>>
+>>>> +     if (mc->soc->ops && mc->soc->ops->map_regs) {
+>>>> +             err = mc->soc->ops->map_regs(mc, pdev);
+>>>> +             if (err < 0)
+>>>> +                     return err;
+>>>> +     }
+>>>> +
+>>>>         mc->debugfs.root = debugfs_create_dir("mc", NULL);
+>>>>
+>>>>         if (mc->soc->ops && mc->soc->ops->probe) {
+>>>> diff --git a/drivers/memory/tegra/tegra186.c
+>>>> b/drivers/memory/tegra/tegra186.c
+>>>> index 3d153881abc1..a8a45e6ff1f1 100644
+>>>> --- a/drivers/memory/tegra/tegra186.c
+>>>> +++ b/drivers/memory/tegra/tegra186.c
+>>>> @@ -139,11 +139,62 @@ static int tegra186_mc_probe_device(struct
+>>>> tegra_mc *mc, struct device *dev)
+>>>>         return 0;
+>>>>    }
+>>>>
+>>>> +static int tegra186_mc_map_regs(struct tegra_mc *mc,
+>>>> +                             struct platform_device *pdev)
+>>>> +{
+>>>> +     struct device_node *np = pdev->dev.parent->of_node;
+>>>> +     int num_dt_channels, reg_cells = 0;
+>>>> +     struct resource *res;
+>>>> +     int i, ret;
+>>>> +     u32 val;
+>>>> +
+>>>> +     ret = of_property_read_u32(np, "#address-cells", &val);
+>>>> +     if (ret) {
+>>>> +             dev_err(&pdev->dev, "missing #address-cells property\n");
+>>>> +             return ret;
+>>>> +     }
+>>>> +
+>>>> +     reg_cells = val;
+>>>> +
+>>>> +     ret = of_property_read_u32(np, "#size-cells", &val);
+>>>> +     if (ret) {
+>>>> +             dev_err(&pdev->dev, "missing #size-cells property\n");
+>>>> +             return ret;
+>>>> +     }
+>>>> +
+>>>> +     reg_cells += val;
+>>>> +
+>>>> +     num_dt_channels =
+>>>> of_property_count_elems_of_size(pdev->dev.of_node, "reg",
+>>>> +                                                       reg_cells *
+>>>> sizeof(u32));
+>>>> +     /*
+>>>> +      * On tegra186 onwards, memory controller support multiple
+>>>> channels.
+>>>> +      * Apart from regular memory controller channels, there is one
+>>>> broadcast
+>>>> +      * channel and one for stream-id registers.
+>>>> +      */
+>>>> +     if (num_dt_channels < mc->soc->num_channels + 2) {
+>>>> +             dev_warn(&pdev->dev, "MC channels are missing, please
+>>>> update\n");
+>>>
+>>> Update what?
+>>>
+>>>> +             return 0;
+>>>> +     }
+>>>> +
+>>>> +     mc->mcb_regs = devm_platform_get_and_ioremap_resource(pdev, 1,
+>>>> &res);
+>>>
+>>> Can't we name each reg bank individually in the DT and then use
+>>> devm_platform_ioremap_resource_byname()?
+>>>
+>> That can be done but I think current logic will be better as we can
+>> simply ioremap them by running in loop and assigning the mc_regs array.
+>> Otherwise there will be like 17 ioremap_byname() individual calls for
+>> Tegra194 and Tegra234.
+>> Will it be fine having that many ioremap_byname() calls?
+>> Also, Tegra186 has 5 channels which are less than Tegra194 and Tegra234.
+>> If we go with ioremap_byname() then we'll have to differentiate number
+>> of ioremap_byname() calls.
+> for (i = 0; i < mc->soc->num_channels; i++) {
+>          sprintf(name, "mc%u", i);
+>          err = devm_platform_ioremap_resource_byname(dev, name);
+>          ...
+> }
 
+Okay, for this reg banks should be named "mc0", "mc1", and so on.
+I will update this in v6.

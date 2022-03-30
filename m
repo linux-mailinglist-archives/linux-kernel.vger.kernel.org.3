@@ -2,126 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE3A4EBC47
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E503A4EBC4D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244073AbiC3IGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 04:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
+        id S244088AbiC3IGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 04:06:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238594AbiC3IG0 (ORCPT
+        with ESMTP id S244083AbiC3IGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 04:06:26 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFB99FE3;
-        Wed, 30 Mar 2022 01:04:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=UxW2mD5WrICDvibAp5foCegbS/EQTtzvOwwvmmQ2hgk=;
-  b=YcNRZzjsrXHrXNzg16ojqkJ8iqhLmsvXBJAxBShDwvZh0fnvAH4KQISA
-   3YwsV/SqmfC4w9S9UrSHmdFORW1S5lcqW0Ot4zMsN38fWtpwM7JtA8tK5
-   io94IeIb+7SFszSh+4lU6idrt9kaOhYBiuvGIkQLt6fmQoJJuEhwnrF8H
-   E=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,222,1643670000"; 
-   d="scan'208";a="29029302"
-Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 10:04:35 +0200
-Date:   Wed, 30 Mar 2022 10:04:31 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: julia@hadrien
-To:     Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-cc:     corbet@lwn.net, mchehab+huawei@kernel.org, dlatypov@google.com,
-        davidgow@google.com, linux-doc@vger.kernel.org,
-        linux-sparse@vger.kernel.org, cocci@inria.fr,
-        smatch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        skhan@linuxfoundation.org, dan.carpenter@oracle.com,
-        julia.lawall@inria.fr
-Subject: Re: [PATCH v2 1/2] Documentation: dev-tools: Add a section for static
- analysis tools
-In-Reply-To: <9b8233e89227617a2cb47d85c654603c6583323d.1648593132.git.marcelo.schmitt1@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2203301003580.2592@hadrien>
-References: <cover.1648593132.git.marcelo.schmitt1@gmail.com> <9b8233e89227617a2cb47d85c654603c6583323d.1648593132.git.marcelo.schmitt1@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Wed, 30 Mar 2022 04:06:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A8B2E9CD;
+        Wed, 30 Mar 2022 01:04:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99850617A1;
+        Wed, 30 Mar 2022 08:04:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B84A9C340EC;
+        Wed, 30 Mar 2022 08:04:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648627496;
+        bh=X2bDIF4+6RoRWE7V+BZ5WnKiuW2qsYmv5VPe4pG97RQ=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=k0NUmR6IxSwYvdeVTcqOAAdN72x6x3B6QaDWf+PPeUPMoeX2bMpcRkNgse6S9FO37
+         6cgcTO8hQZ40B95bdMI5np+rp37HjpVDhpDXc8OJtiszoid04W9zR/qD5/jLt8Bo7s
+         vdxxlUs5bkplk7s1q7N6UvdNksXBGsdrFFWo1OcGAHb3Y1cFMvRCFHgY3PQJCPbUiR
+         N8cdPZBdijt1tPQoq3gvIkNgpnUeNDcix3M4pPVheOEvBxZ71nafAc9IM89nt/0Som
+         q0YBn1+uy+MLZE/0NzUWcztqMmyGb+gKDELTArBfeTQQzBHkz9K3wgxlKHh74lYTJu
+         7dhSFqRQSSEJg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v4] wcn36xx: Implement tx_rate reporting
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220325224212.159690-1-egagnon@squareup.com>
+References: <20220325224212.159690-1-egagnon@squareup.com>
+To:     Edmond Gagnon <egagnon@squareup.com>
+Cc:     Kalle Valo <kvalo@codeaurora.org>,
+        Edmond Gagnon <egagnon@squareup.com>,
+        Benjamin Li <benl@squareup.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, wcn36xx@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <164862749156.10264.5966997435195917442.kvalo@kernel.org>
+Date:   Wed, 30 Mar 2022 08:04:53 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Edmond Gagnon <egagnon@squareup.com> wrote:
 
+> Currently, the driver reports a tx_rate of 6.0 MBit/s no matter the true
+> rate:
+> 
+> root@linaro-developer:~# iw wlan0 link
+> Connected to 6c:f3:7f:eb:9b:92 (on wlan0)
+>         SSID: SQ-DEVICETEST
+>         freq: 5200
+>         RX: 4141 bytes (32 packets)
+>         TX: 2082 bytes (15 packets)
+>         signal: -77 dBm
+>         rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
+>         tx bitrate: 6.0 MBit/s
+> 
+>         bss flags:      short-slot-time
+>         dtim period:    1
+>         beacon int:     100
+> 
+> This patch requests HAL_GLOBAL_CLASS_A_STATS_INFO via a hal_get_stats
+> firmware message and reports it via ieee80211_ops::sta_statistics.
+> 
+> root@linaro-developer:~# iw wlan0 link
+> Connected to 6c:f3:7f:eb:73:b2 (on wlan0)
+>         SSID: SQ-DEVICETEST
+>         freq: 5700
+>         RX: 26788094 bytes (19859 packets)
+>         TX: 1101376 bytes (12119 packets)
+>         signal: -75 dBm
+>         rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
+>         tx bitrate: 108.0 MBit/s VHT-MCS 5 40MHz VHT-NSS 1
+> 
+>         bss flags:      short-slot-time
+>         dtim period:    1
+>         beacon int:     100
+> 
+> Tested on MSM8939 with WCN3680B running firmware CNSS-PR-2-0-1-2-c1-00083,
+> and verified by sniffing frames over the air with Wireshark to ensure the
+> MCS indices match.
+> 
+> Signed-off-by: Edmond Gagnon <egagnon@squareup.com>
+> Reviewed-by: Benjamin Li <benl@squareup.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-On Tue, 29 Mar 2022, Marcelo Schmitt wrote:
+Patch applied to ath-next branch of ath.git, thanks.
 
-> Complement the Kernel Testing Guide documentation page by adding a
-> section about static analysis tools.
->
-> Signed-off-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-> Acked-by: Daniel Latypov <dlatypov@google.com>
-> Acked-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Reviewed-by: David Gow <davidgow@google.com>
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+1216c4d30723 wcn36xx: Implement tx_rate reporting
 
-Acked-by: Julia Lawall <julia.lawall@inria.fr>
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20220325224212.159690-1-egagnon@squareup.com/
 
-> ---
-> Change log:
-> - Brought generic tool characteristics to the intro paragraph
-> - Made explicit that these tools run at compile time
-> - Added a note of caution about false positives
-> - Updated Coccinelle info to make it sound better and be more skimmable
->
->  Documentation/dev-tools/testing-overview.rst | 31 ++++++++++++++++++++
->  1 file changed, 31 insertions(+)
->
-> diff --git a/Documentation/dev-tools/testing-overview.rst b/Documentation/dev-tools/testing-overview.rst
-> index 65feb81edb14..b5e02dd3fd94 100644
-> --- a/Documentation/dev-tools/testing-overview.rst
-> +++ b/Documentation/dev-tools/testing-overview.rst
-> @@ -115,3 +115,34 @@ that none of these errors are occurring during the test.
->  Some of these tools integrate with KUnit or kselftest and will
->  automatically fail tests if an issue is detected.
->
-> +Static Analysis Tools
-> +=====================
-> +
-> +In addition to testing a running kernel, one can also analyze kernel source code
-> +directly (**at compile time**) using **static analysis** tools. The tools
-> +commonly used in the kernel allow one to inspect the whole source tree or just
-> +specific files within it. They make it easier to detect and fix problems during
-> +the development process.
-> +
-> +Sparse can help test the kernel by performing type-checking, lock checking,
-> +value range checking, in addition to reporting various errors and warnings while
-> +examining the code. See the Documentation/dev-tools/sparse.rst documentation
-> +page for details on how to use it.
-> +
-> +Smatch extends Sparse and provides additional checks for programming logic
-> +mistakes such as missing breaks in switch statements, unused return values on
-> +error checking, forgetting to set an error code in the return of an error path,
-> +etc. Smatch also has tests against more serious issues such as integer
-> +overflows, null pointer dereferences, and memory leaks. See the project page at
-> +http://smatch.sourceforge.net/.
-> +
-> +Coccinelle is another static analyzer at our disposal. Coccinelle is often used
-> +to aid refactoring and collateral evolution of source code, but it can also help
-> +to avoid certain bugs that occur in common code patterns. The types of tests
-> +available include API tests, tests for correct usage of kernel iterators, checks
-> +for the soundness of free operations, analysis of locking behavior, and further
-> +tests known to help keep consistent kernel usage. See the
-> +Documentation/dev-tools/coccinelle.rst documentation page for details.
-> +
-> +Beware, though, that static analysis tools suffer from **false positives**.
-> +Errors and warns need to be evaluated carefully before attempting to fix them.
-> --
-> 2.35.1
->
->
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+

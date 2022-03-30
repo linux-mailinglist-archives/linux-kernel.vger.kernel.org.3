@@ -2,153 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBDF4EB85F
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 04:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A39EC4EB866
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 04:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242032AbiC3CkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 22:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
+        id S242057AbiC3Ck4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 22:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242028AbiC3CkK (ORCPT
+        with ESMTP id S242029AbiC3Ckw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 22:40:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7BBB11C0F
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 19:38:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648607900;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0CM6n2cjBcYLkco5zRMxY738qqHj9I2QKT+KjQJ9qIc=;
-        b=QzwFuvijxGgaw635BmJKerSs/ngs9GDBJe7gY8m57yqRo0+VOjmHfXKwYaFLhVmpdS8Wox
-        79DcUV+EqBXOda9VGAxnVGBVXAAB0A2pMvUQ/bD6CixgI2YJl/VhLFkBeAdQyvauGip37s
-        mTD5/rabwHnj/jeH9E8+2kWjrfoTyPE=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-53-kEXbseuZPIaYmyvI74jAlw-1; Tue, 29 Mar 2022 22:38:19 -0400
-X-MC-Unique: kEXbseuZPIaYmyvI74jAlw-1
-Received: by mail-lf1-f72.google.com with SMTP id n2-20020a0565120ac200b0044a2c76f7e1so5926781lfu.5
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 19:38:19 -0700 (PDT)
+        Tue, 29 Mar 2022 22:40:52 -0400
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C670A94C4
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 19:39:07 -0700 (PDT)
+Received: by mail-oo1-xc2a.google.com with SMTP id i8-20020a4a6f48000000b00324ada4b9d9so3396874oof.11
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 19:39:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yfd2pacZwfLZJPHvVrPsqPPBhsNU2+TGNgnyGrMa2qo=;
+        b=qs/2HS8rzDJc9kYzeKXAw0X0Cf/K0wWeI1+3L0OxJbikDgHTekjwVN45eGQkreib/t
+         /pD9KgEdIxz5cMq9jNvHzB2qdObXpYEkKxDpnDwaK1z+eIbeTvU1/q1Zdr13P/EBbCBl
+         8+yaGOCv9U37o484+T1g8Zx1eu/7MigrgDJYFfjDfizKgqiFPjK82NKUoAaHyZOsJuUU
+         ZGPtAEOBvsWUi9rRQ9yiWmJmfmnUDt7PP+MQ6R9JMkUd8m1gEkiQuUFsVQtsZVRsILHw
+         ILo39FJDuhpVwqnMwAguDnmf0U7GuOPgQXcXkxBnRCHsFOkglyBd/oh2ZIfFXAeClnk1
+         l3Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0CM6n2cjBcYLkco5zRMxY738qqHj9I2QKT+KjQJ9qIc=;
-        b=3w2S/2mr91qPn1k6nCcLaGP3M+yatc7+x37YZgcQHBxjNNJvtdZTiSiqWz7cZpMUDv
-         eaWSnAEsXGcx1eOJDpXEQvbULaCElA3ZfxjY81jru53KZPg6jZRBJCmnl+TSThgWYRdL
-         cx1449k8pv5H0O4wU8aw7AJNpHxmwN4ORSeTeRYC8WDnjagRJXizNheUmXHSGKyrCAPV
-         XQ0rZYBXQgqmKcbuEDEGu7MsAXDRPqy33dneIPD21V4e+Q8jV0W4SA4dNBIUJfrJzXwF
-         MVpRmFcvjgIlLq5o5jkGNPaNvMtzqDkDjypObptBka2ub0DUIGKckXVcqsfRvm+ETw4l
-         4Orw==
-X-Gm-Message-State: AOAM530bJ7iNS9XhTLtFAnpNnrJ3g5a3tFTlLoLCowMJxgUkeYABuZdo
-        vs3H9qlfwEnxTWNIVg0iWEiUy//Dcyh4ts54+Q8nclBwR2WUBvF9RaaMH9nOy69Eaink+GwBktm
-        DA0cquNa0cEC5iF05dJ9+mkttcaXqUrLzwkY8Csmf
-X-Received: by 2002:a05:6512:1395:b0:446:d382:79a5 with SMTP id p21-20020a056512139500b00446d38279a5mr5055796lfa.210.1648607897758;
-        Tue, 29 Mar 2022 19:38:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzsMNgPxQtJuVUUXSLLElqIoKTC9ua0/HO5bb6Fcre9c9W6UgWFNe6erYd0w1IGxGq19QreWNW8eV3nM3kpN4Y=
-X-Received: by 2002:a05:6512:1395:b0:446:d382:79a5 with SMTP id
- p21-20020a056512139500b00446d38279a5mr5055782lfa.210.1648607897557; Tue, 29
- Mar 2022 19:38:17 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yfd2pacZwfLZJPHvVrPsqPPBhsNU2+TGNgnyGrMa2qo=;
+        b=sC/CAJmEeNP50VW1/HDGq2YkavHgJi9rrLherBLNBYjXvqu3W1G7A2ldt2WmQuMVt8
+         1v0TlZ3CCElPjZ48YYNRssnQ1W5izo7k/GBuCP5ZRgw82KmG082qIqrTEw7tlx8Dh7ET
+         Ey3GENFO8n0vOmpaBX0F8NZOkR0OkVYGtTNhP7qP2/w7eSn5YzGLysejZXp4w+2d1s3a
+         LfMJlAem5eMkpqdwb4QvuUXw+8GOjB+Q4vkaNAXR1ydQFud3TotR9E2Xh+qZHgaCA9uv
+         3qcZXFyCeD6nrD3fy7zlrskfX+/4t7OZrmi4GSRm1Ph18syWeGjVDPi8WJHrDIU79AT6
+         I86g==
+X-Gm-Message-State: AOAM531HlrfkWxwi7IsFA2wzgKjboAHFCvN2ldHfmBdMPYXUFL4bBvDY
+        EqLFNv2VZmnfal0XwQG6po7BRQ==
+X-Google-Smtp-Source: ABdhPJytZoTwr8j5QP8KWU7bCZ4Ws4NV9u5JLB2etb4WhJUZxgrEyby3ldu2+CSL/jzyN5DOLdEeuw==
+X-Received: by 2002:a4a:8e17:0:b0:321:3fe1:77f0 with SMTP id q23-20020a4a8e17000000b003213fe177f0mr2137259ook.15.1648607947176;
+        Tue, 29 Mar 2022 19:39:07 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id s10-20020a4a3b0a000000b0032486bc11d0sm9712281oos.39.2022.03.29.19.39.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 19:39:06 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Sinthu Raja <sinthu.raja@ti.com>
+Subject: [GIT PULL] hwspinlock updates for v5.18
+Date:   Tue, 29 Mar 2022 21:39:05 -0500
+Message-Id: <20220330023905.188282-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220325050947-mutt-send-email-mst@kernel.org>
- <CACGkMEvioAVMmB+ab2xXB2YPECtwi1J55u8mRRk9-JAjFSZ8vg@mail.gmail.com>
- <20220325060659-mutt-send-email-mst@kernel.org> <CACGkMEu4mRfNbJXJtAFzhyd55fD7phUDKnVtYW0aqRnQmT_bYw@mail.gmail.com>
- <20220328015757-mutt-send-email-mst@kernel.org> <CACGkMEu+fax6YYwhfbc1yoSxv6o1FTQyrOheVTmUfqGvmbAEfA@mail.gmail.com>
- <20220328062452-mutt-send-email-mst@kernel.org> <87fsn1f96e.ffs@tglx>
- <20220329100859-mutt-send-email-mst@kernel.org> <87v8vweie2.ffs@tglx> <20220329175426-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220329175426-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 30 Mar 2022 10:38:06 +0800
-Message-ID: <CACGkMEv2j2cJkSFfxTmaRxJ+SH6actSCZsALjvvDUPgg0h-KeA@mail.gmail.com>
-Subject: Re:
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Keir Fraser <keirf@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 6:04 AM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Tue, Mar 29, 2022 at 08:13:57PM +0200, Thomas Gleixner wrote:
-> > On Tue, Mar 29 2022 at 10:37, Michael S. Tsirkin wrote:
-> > > On Tue, Mar 29, 2022 at 10:35:21AM +0200, Thomas Gleixner wrote:
-> > > We are trying to fix the driver since at the moment it does not
-> > > have the dev->ok flag at all.
-> > >
-> > > And I suspect virtio is not alone in that.
-> > > So it would have been nice if there was a standard flag
-> > > replacing the driver-specific dev->ok above, and ideally
-> > > would also handle the case of an interrupt triggering
-> > > too early by deferring the interrupt until the flag is set.
-> > >
-> > > And in fact, it does kind of exist: IRQF_NO_AUTOEN, and you would call
-> > > enable_irq instead of dev->ok = true, except
-> > > - it doesn't work with affinity managed IRQs
-> > > - it does not work with shared IRQs
-> > >
-> > > So using dev->ok as you propose above seems better at this point.
-> >
-> > Unless there is a big enough amount of drivers which could make use of a
-> > generic mechanism for that.
-> >
-> > >> If any driver does this in the wrong order, then the driver is
-> > >> broken.
-> > >
-> > > I agree, however:
-> > > $ git grep synchronize_irq `git grep -l request_irq drivers/net/`|wc -l
-> > > 113
-> > > $ git grep -l request_irq drivers/net/|wc -l
-> > > 397
-> > >
-> > > I suspect there are more drivers which in theory need the
-> > > synchronize_irq dance but in practice do not execute it.
-> >
-> > That really depends on when the driver requests the interrupt, when
-> > it actually enables the interrupt in the device itself
->
-> This last point does not matter since we are talking about protecting
-> against buggy/malicious devices. They can inject the interrupt anyway
-> even if driver did not configure it.
->
-> > and how the
-> > interrupt service routine works.
-> >
-> > So just doing that grep dance does not tell much. You really have to do
-> > a case by case analysis.
-> >
-> > Thanks,
-> >
-> >         tglx
->
->
-> I agree. In fact, at least for network the standard approach is to
-> request interrupts in the open call, virtio net is unusual
-> in doing it in probe. We should consider changing that.
-> Jason?
+The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
 
-This probably works only for virtio-net and it looks like not trivial
-since we don't have a specific core API to request interrupts.
+  Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
 
-Thanks
+are available in the Git repository at:
 
->
-> --
-> MST
->
+  https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/hwlock-v5.18
 
+for you to fetch changes up to 9a41358972eb35e6e45327035a67adfa4a223ed2:
+
+  hwspinlock: sprd: Use struct_size() helper in devm_kzalloc() (2022-03-11 14:56:57 -0600)
+
+----------------------------------------------------------------
+hwspinlock updates for v5.18
+
+This updates sprd and srm32 drivers to use struct_size() instead of
+their open-coded equivalents. It also cleans up the omap dt-bindings
+example.
+
+----------------------------------------------------------------
+Gustavo A. R. Silva (2):
+      hwspinlock: stm32: Use struct_size() helper in devm_kzalloc()
+      hwspinlock: sprd: Use struct_size() helper in devm_kzalloc()
+
+Sinthu Raja (1):
+      dt-bindings: hwlock: omap: Remove redundant binding example
+
+ .../bindings/hwlock/ti,omap-hwspinlock.yaml        | 33 +---------------------
+ drivers/hwspinlock/sprd_hwspinlock.c               |  3 +-
+ drivers/hwspinlock/stm32_hwspinlock.c              |  4 +--
+ 3 files changed, 3 insertions(+), 37 deletions(-)

@@ -2,167 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94734EC979
+	by mail.lfdr.de (Postfix) with ESMTP id 21FEF4EC977
 	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348712AbiC3QTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 12:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
+        id S1348703AbiC3QS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 12:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348693AbiC3QS6 (ORCPT
+        with ESMTP id S230055AbiC3QS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:18:58 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2831FDEFF
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:17:13 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id d15-20020a9d72cf000000b005cda54187c3so15243510otk.2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:17:13 -0700 (PDT)
+        Wed, 30 Mar 2022 12:18:57 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90BEBE22
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:17:11 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id j21so18496555qta.0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:17:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=vuEnLJ19vsPpEYtmhA/N2c2iE3FXZJsfXS8pCpbwyeI=;
-        b=SVvmOryWc6YP1SQQ2Cc7u/n53zTpzKfv0zGLTzX0DPPxYurtAzkwMQYY0oSCbW9Oq8
-         payS0h5OWpfEZ5+g8dK0xmZc3Vlao1aj8hus9HyYx9/5t6oS+xgmZyl8jIn6oLLhbIUn
-         TZeHBnUfAZVXBAWLRzphGz7eA+oy5BXW+P+fHHUbctjgKxZsL3jhBcnaG6w3A7vQaFjv
-         2kPIgch506HGxpevQX/cvJ0I4YFmJjy307H1aFKYBmK+iW8vEnjIFnRk85XU4GE+KsNx
-         gWMHSBtiJxVMLxKr08bQeaU7dkqZq1dQss2L8eV0GpMI5ptvpZkQwPG5Rf/v2i6+rik0
-         OhIA==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sE79b5xf1pu5spCGHEXKbfq2zO6/d3c8ibhtXAoqtQ8=;
+        b=0MJRsQjAcGaYRmd1h6Pqxr17HDJtykd8JOH+AOEISyH5SHZzxS8LscnZAXcKOFHdVF
+         zpo83KdVFXKzTrrBkdac9nldVOA2KFBimbg7untEnME14A+bruTvVC+WVVPZWOeM7UEo
+         xS8Fc9GofuwWqbcSmn4dufLUSvrWhUF/vl2lQo07i0t9LFTS3FCx4fFPPfIiqLmzUwb1
+         13yjnnWj/PIyED9DcxN/IW7n6ogFQn3BviOTH2hBN18UsUQXbN7p33moYsp6bHRvswCl
+         YhvIlqYNacFE+iHwNivuq04BuVbB8hWfG6zrRXGI0X7QTOkbWjqPaNP+OQoVFqQ4NJik
+         OhTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=vuEnLJ19vsPpEYtmhA/N2c2iE3FXZJsfXS8pCpbwyeI=;
-        b=JuAAwo10pUSTDq/KnGlTP3faoMuUAbomCy8iRrwPoULpDvsL27YArVttGLeKdlZ1Zb
-         8wv045buFNriVYPeTwtckooD25IE/rlQ5bJNINuSymKlx4MYtp8esuA5v5ZQTllw/tc9
-         dZT1uy4k5Bl4OCl0jutxNyTjR/AsXXQ2hgizdzt3PiXCUwNutcvhHIl7BknPuyPkgsJZ
-         g0Uggqn8gem7h1STGHMFw4hVZE4BoYTz3iwR9DEGNFNCwYmaXuPvfiUl551TS6B6PnVT
-         ClO14Cr8RtGZXeXLLou7dQAf5YIodKLtcM0Q64G6vL/JzRzVK8ZPLKXI5VZpJkBORAPw
-         xI7g==
-X-Gm-Message-State: AOAM531f0CQx32Wdu/n9RxM2tZVktIV5fu0FGOrzg+tLORMlSHow6lhz
-        T1hgBUODhUzV6YWlP9qNIN5Nw/czGpI=
-X-Google-Smtp-Source: ABdhPJyQT7UGu+atLDZeY+jfTEIPxsW25O3gOlcaWjwvDX6k0nbakXM6rZgkIMjFnKONnWTP7dK4aA==
-X-Received: by 2002:a9d:62d2:0:b0:5b2:4662:f466 with SMTP id z18-20020a9d62d2000000b005b24662f466mr3517433otk.304.1648657032411;
-        Wed, 30 Mar 2022 09:17:12 -0700 (PDT)
-Received: from quaco.ghostprotocols.net ([187.19.239.165])
-        by smtp.gmail.com with ESMTPSA id m15-20020a9d644f000000b005ce0a146bfcsm836404otl.59.2022.03.30.09.17.11
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sE79b5xf1pu5spCGHEXKbfq2zO6/d3c8ibhtXAoqtQ8=;
+        b=L1KVqBSHVVayxsD+yh1Ft6EbvBWqbTS4yP+bjBEMQlpgnvqa+1kY61h/EBNm3zUqCf
+         rU3gJ8GWUjUotQ3nzWoc5W3O2q50sCp0XVbZ/ShCYME7Zg60vW1L8pfLFouNG0A3mWsf
+         sYB8oxjq08GzqWM9whsT5fZ5cFfeXPEd5bvvOha8HTk3g7RTgos79uXINQkc9wUmSpou
+         jpJW2eOjwtdhtB0KSHtR3zEhP2APlPTCv/cCH3gCQzsD9YRL19mFf6ummVUqeFZeUu/l
+         iNyyto4IPz0TcycjVS8V1iK5Qxxh5gAjVDdq7zDBHlIaMI69OOvrIoqi5G9jiKiAQbqo
+         Cglg==
+X-Gm-Message-State: AOAM532wpymk04nh+yG4/CJVJpZvHV9h+jwEeJKWe18EgdIZzZLuuomg
+        pZlh+aCdxtoRhfvHr9o7GLOfuw==
+X-Google-Smtp-Source: ABdhPJzF/ry2xuy0oHxOMDKGlfKRY6IH7+5YeycyXAPyxi9mB2917VgqHJK8duwayZ5P0FrMTPzVgA==
+X-Received: by 2002:a05:622a:8e:b0:2e1:fee4:8ca2 with SMTP id o14-20020a05622a008e00b002e1fee48ca2mr242426qtw.431.1648657030772;
+        Wed, 30 Mar 2022 09:17:10 -0700 (PDT)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id s13-20020a05620a0bcd00b0067afe7dd3ffsm11684222qki.49.2022.03.30.09.17.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 09:17:11 -0700 (PDT)
-From:   arnaldo.melo@gmail.com
-X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 8D63A40407; Wed, 30 Mar 2022 13:17:08 -0300 (-03)
-Date:   Wed, 30 Mar 2022 13:17:08 -0300
-To:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH FYI] tools headers UAPI: Sync drm/i915_drm.h with the kernel
- sources
-Message-ID: <YkSChHqaOApscFQ0@kernel.org>
+        Wed, 30 Mar 2022 09:17:10 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 12:17:09 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     CGEL <cgel.zte@gmail.com>, axboe@kernel.dk,
+        viro@zeniv.linux.org.uk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        akpm@linux-foundation.org, Yang Yang <yang.yang29@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Subject: Re: [PATCH] block/psi: make PSI annotations of submit_bio only work
+ for file pages
+Message-ID: <YkSChWxuBzEB3Fqn@cmpxchg.org>
+References: <20220316063927.2128383-1-yang.yang29@zte.com.cn>
+ <YjiMsGoXoDU+FwsS@cmpxchg.org>
+ <623938d1.1c69fb81.52716.030f@mx.google.com>
+ <YjnO3p6vvAjeMCFC@cmpxchg.org>
+ <20220323061058.GA2343452@cgel.zte@gmail.com>
+ <62441603.1c69fb81.4b06b.5a29@mx.google.com>
+ <YkRUfuT3jGcqSw1Q@cmpxchg.org>
+ <YkRVSIG6QKfDK/ES@infradead.org>
+ <YkR7NPFIQ9h2AK9h@cmpxchg.org>
+ <YkR9IW1scr2EDBpa@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YkR9IW1scr2EDBpa@infradead.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just FYI, I'm carrying this on the perf tools tree.
+On Wed, Mar 30, 2022 at 08:54:09AM -0700, Christoph Hellwig wrote:
+> On Wed, Mar 30, 2022 at 11:45:56AM -0400, Johannes Weiner wrote:
+> > > FYI, I started redoing that version and I think with all the cleanups
+> > > to filemap.c and the readahead code this can be done fairly nicely now:
+> > > 
+> > > http://git.infradead.org/users/hch/block.git/commitdiff/666abb29c6db870d3941acc5ac19e83fbc72cfd4
+> > 
+> > Yes, it's definitely much nicer now with the MM instantiating the
+> > pages for ->readpage(s).
+> > 
+> > But AFAICS this breaks compressed btrfs (and erofs?) because those
+> > still do additional add_to_page_cache_lru() and bio submissions.
+> 
+> In btrfs, add_ra_bio_pages only passed freshly allocated pages to
+> add_to_page_cache_lru.  These can't really have PageWorkingSet set,
+> can they?  In erofs they can also come from a local page pool, but
+> I think otherwise the same applies.
 
-- Arnaldo
+It's add_to_page_cache_lru() that sets the flag.
 
----
+Basically, when a PageWorkingset (hot) page gets reclaimed, the bit is
+stored in the vacated tree slot. When the entry is brought back in,
+add_to_page_cache_lru() transfers it to the newly allocated page.
 
-To pick up the changes in:
-
-  caa574ffc4aaf4f2 ("drm/i915/uapi: document behaviour for DG2 64K support")
-
-That don't add any new ioctl, so no changes in tooling.
-
-This silences this perf build warning:
-
-  Warning: Kernel ABI header at 'tools/include/uapi/drm/i915_drm.h' differs from latest version at 'include/uapi/drm/i915_drm.h'
-  diff -u tools/include/uapi/drm/i915_drm.h include/uapi/drm/i915_drm.h
-
-Cc: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: Matthew Auld <matthew.auld@intel.com>
-Link: http://lore.kernel.org/lkml/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/include/uapi/drm/i915_drm.h | 45 +++++++++++++++++++++++++++----
- 1 file changed, 40 insertions(+), 5 deletions(-)
-
-diff --git a/tools/include/uapi/drm/i915_drm.h b/tools/include/uapi/drm/i915_drm.h
-index 914ebd9290e5192d..05c3642aaece4429 100644
---- a/tools/include/uapi/drm/i915_drm.h
-+++ b/tools/include/uapi/drm/i915_drm.h
-@@ -1118,10 +1118,16 @@ struct drm_i915_gem_exec_object2 {
- 	/**
- 	 * When the EXEC_OBJECT_PINNED flag is specified this is populated by
- 	 * the user with the GTT offset at which this object will be pinned.
-+	 *
- 	 * When the I915_EXEC_NO_RELOC flag is specified this must contain the
- 	 * presumed_offset of the object.
-+	 *
- 	 * During execbuffer2 the kernel populates it with the value of the
- 	 * current GTT offset of the object, for future presumed_offset writes.
-+	 *
-+	 * See struct drm_i915_gem_create_ext for the rules when dealing with
-+	 * alignment restrictions with I915_MEMORY_CLASS_DEVICE, on devices with
-+	 * minimum page sizes, like DG2.
- 	 */
- 	__u64 offset;
- 
-@@ -3144,11 +3150,40 @@ struct drm_i915_gem_create_ext {
- 	 *
- 	 * The (page-aligned) allocated size for the object will be returned.
- 	 *
--	 * Note that for some devices we have might have further minimum
--	 * page-size restrictions(larger than 4K), like for device local-memory.
--	 * However in general the final size here should always reflect any
--	 * rounding up, if for example using the I915_GEM_CREATE_EXT_MEMORY_REGIONS
--	 * extension to place the object in device local-memory.
-+	 *
-+	 * DG2 64K min page size implications:
-+	 *
-+	 * On discrete platforms, starting from DG2, we have to contend with GTT
-+	 * page size restrictions when dealing with I915_MEMORY_CLASS_DEVICE
-+	 * objects.  Specifically the hardware only supports 64K or larger GTT
-+	 * page sizes for such memory. The kernel will already ensure that all
-+	 * I915_MEMORY_CLASS_DEVICE memory is allocated using 64K or larger page
-+	 * sizes underneath.
-+	 *
-+	 * Note that the returned size here will always reflect any required
-+	 * rounding up done by the kernel, i.e 4K will now become 64K on devices
-+	 * such as DG2.
-+	 *
-+	 * Special DG2 GTT address alignment requirement:
-+	 *
-+	 * The GTT alignment will also need to be at least 2M for such objects.
-+	 *
-+	 * Note that due to how the hardware implements 64K GTT page support, we
-+	 * have some further complications:
-+	 *
-+	 *   1) The entire PDE (which covers a 2MB virtual address range), must
-+	 *   contain only 64K PTEs, i.e mixing 4K and 64K PTEs in the same
-+	 *   PDE is forbidden by the hardware.
-+	 *
-+	 *   2) We still need to support 4K PTEs for I915_MEMORY_CLASS_SYSTEM
-+	 *   objects.
-+	 *
-+	 * To keep things simple for userland, we mandate that any GTT mappings
-+	 * must be aligned to and rounded up to 2MB. The kernel will internally
-+	 * pad them out to the next 2MB boundary. As this only wastes virtual
-+	 * address space and avoids userland having to copy any needlessly
-+	 * complicated PDE sharing scheme (coloring) and only affects DG2, this
-+	 * is deemed to be a good compromise.
- 	 */
- 	__u64 size;
- 	/**
--- 
-2.35.1
-
+add_to_page_cache_lru()
+  filemap_add_folio()
+    __filemap_add_folio(mapping, folio, index, gfp, &shadow)
+      *shadow = *slot
+      *slot = folio
+  if (shadow)
+    workingset_refault(folio, shadow)
+      folio_set_workingset()

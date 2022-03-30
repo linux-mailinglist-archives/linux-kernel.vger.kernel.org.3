@@ -2,199 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5674ECD44
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 21:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F29F94ECD46
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 21:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350813AbiC3Tcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 15:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51160 "EHLO
+        id S1350764AbiC3Tdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 15:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350781AbiC3TcV (ORCPT
+        with ESMTP id S236846AbiC3Tda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 15:32:21 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC24E18D;
-        Wed, 30 Mar 2022 12:30:34 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id i23-20020a9d6117000000b005cb58c354e6so15598379otj.10;
-        Wed, 30 Mar 2022 12:30:34 -0700 (PDT)
+        Wed, 30 Mar 2022 15:33:30 -0400
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CD31929A;
+        Wed, 30 Mar 2022 12:31:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=veUBsLDA8z1kapNgGskRdZV5ZEcmkX6JnZsbhXJYMpc=;
-        b=adILIVBCDTIzWnSlVEVuzyyQeLmZJmMOFHyUGAJczwNVMWoAFV4NAzstETyw1aDTXU
-         PeEQLPvBoGZwnev7kqXDVH894+ZJpStidUvOyd4/1a6OmOqL4s2xBS6X9x8cJk7Oihqe
-         +0/HdD5+tmox7CuSPAksHZtqs2sUxMsx4ttZZY2Z+MG9vnVpDEQzjL4iWBd9R0AMRjb5
-         hTGvCbUVUHgokVFAeJzbaRIPyaomR1Qfb+x/h6uFUfBCu2hUOp9EdtCusdpiPwU+kcPm
-         wtQaZsJmez5fjcTI5em0IZ63LFU6tv0+hT7r7qlJyGmpPbqsVIKRICrNzYwhE75XWGOg
-         r2+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=veUBsLDA8z1kapNgGskRdZV5ZEcmkX6JnZsbhXJYMpc=;
-        b=r/aGcmo2MO9HFDwPtJMN/RBiUCyN4neacn5kvJEPGVAkITXnOjUtvjGutlH0ntk1bV
-         kI5j16IQAcMtpAucC4XHPG9FwmcfsHBP1hC0RmI1whCKZ0LIuomPGV/hRnECmiWNCZRZ
-         aoXfniXm++ABb7un2oqoMYmiXhKZt6HabU8vac3lmJHziQZpcx2lResR8u0kh/uO1j53
-         T8I6th3Wc7dwdAWTal7yJLc8sEptFRYnvqBjD6wt3pV7X1/47cM91NptI31abFQs3GjD
-         ZfoHvyPLZe3+89hn1xty8aB2pxMB59h714zrC3exgw2pCJAF0+VMPfLK4PlOg/dHBdAc
-         qgKw==
-X-Gm-Message-State: AOAM530QqTgQI0TWe1HCTdeRX4IsPSi2I5oU05cdgv8fLU163ZyqQGYE
-        FvernZ9g3j8Dau0KYaV4bx0=
-X-Google-Smtp-Source: ABdhPJxKo3vtGI8m11rbEZM4uy18kOD2uIYcCWzcg87bQPdqYAMGuiXvFLPRZant4BK9y506jlNudQ==
-X-Received: by 2002:a05:6830:3142:b0:5cb:3e2b:e1e with SMTP id c2-20020a056830314200b005cb3e2b0e1emr4070755ots.38.1648668634039;
-        Wed, 30 Mar 2022 12:30:34 -0700 (PDT)
-Received: from marsc.168.1.7 ([2804:30c:b6b:3900:e3fc:1545:cb91:17fb])
-        by smtp.gmail.com with ESMTPSA id 24-20020a056870139800b000dea48c55d1sm8503795oas.39.2022.03.30.12.30.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 12:30:33 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 16:30:29 -0300
-From:   Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-To:     David Gow <davidgow@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-sparse@vger.kernel.org, cocci@inria.fr,
-        smatch@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>, julia.lawall@inria.fr
-Subject: Re: [PATCH v2 2/2] Documentation: dev-tools: Enhance static analysis
- section with discussion
-Message-ID: <YkSv1eUfS9MxotOz@marsc.168.1.7>
-References: <cover.1648593132.git.marcelo.schmitt1@gmail.com>
- <11f4750c6d4c175994dfd36d1ff385f68f61bd02.1648593132.git.marcelo.schmitt1@gmail.com>
- <CABVgOSkb5CpnXDF_m7iy=A7RmN+KmY0T38TeZ4hKbmkdQgt6Yw@mail.gmail.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1648668702; x=1680204702;
+  h=from:to:cc:date:message-id:references:in-reply-to:
+   content-id:content-transfer-encoding:mime-version:subject;
+  bh=/wUg19F4bho3UrdXcKxpKP+dFuU7a5qpHTH21Holqd8=;
+  b=HJIBWfczqoXH3kLS84PAATiHnMg4vxbyl1AydR9VVGzaYZrMvwPPXN5B
+   jmHJb37cCkQhxUdKOFxiiMHdofmt3Hr0zBRsQ9/qR+U7G5j910zPkr/Jz
+   Oh7190LpM+FQXGw3Z7k3NnsOdGv95CI5l6Edd36hSv0rTg1Mobahm4vkw
+   U=;
+X-IronPort-AV: E=Sophos;i="5.90,223,1643673600"; 
+   d="scan'208";a="189068137"
+Subject: Re: [Drbd-dev] state of drbd in mainline
+Thread-Topic: [Drbd-dev] state of drbd in mainline
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-7a21ed79.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP; 30 Mar 2022 19:31:41 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-7a21ed79.us-east-1.amazon.com (Postfix) with ESMTPS id 98E43220F87;
+        Wed, 30 Mar 2022 19:31:40 +0000 (UTC)
+Received: from EX13D21UWA002.ant.amazon.com (10.43.160.246) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Wed, 30 Mar 2022 19:31:32 +0000
+Received: from EX13D23UWA003.ant.amazon.com (10.43.160.194) by
+ EX13D21UWA002.ant.amazon.com (10.43.160.246) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Wed, 30 Mar 2022 19:31:32 +0000
+Received: from EX13D23UWA003.ant.amazon.com ([10.43.160.194]) by
+ EX13D23UWA003.ant.amazon.com ([10.43.160.194]) with mapi id 15.00.1497.033;
+ Wed, 30 Mar 2022 19:31:32 +0000
+From:   "Kiselev, Oleg" <okiselev@amazon.com>
+To:     Philipp Reisner <philipp.reisner@linbit.com>,
+        Jens Axboe <axboe@kernel.dk>
+CC:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
+        "Herrenschmidt, Benjamin" <benh@amazon.com>,
+        "Smith, Stewart" <trawets@amazon.com>
+Thread-Index: AQHYREo/hxsLFmWyRUaMnu9akgwu46zX25aA
+Date:   Wed, 30 Mar 2022 19:31:32 +0000
+Message-ID: <7AD2D6DC-0609-42F9-A481-B6E5C0F58180@amazon.com>
+References: <20220329070618.GA20396@lst.de>
+ <CADGDV=UgjZAbmAN-2bO1nyDvA=XCC9Lf2dxWHZ0BwxF12nnztQ@mail.gmail.com>
+ <20220329073254.GA20691@lst.de>
+ <CADGDV=U5jwe0CZ12174cMahfD_h-GsBswWaA1VOJbHaC1nsrUw@mail.gmail.com>
+ <f9d89282-3a67-ad97-149f-52325e23607c@kernel.dk>
+ <CADGDV=WN2TFR6dO7ZdiQ2ijPjs+7HSsvk0ZCHsHj6ZG5t-oEdA@mail.gmail.com>
+ <3c42b1ed-7c03-64e6-409e-e92247288cac@kernel.dk>
+ <CADGDV=WcTSSC70yG61dazo-WyoLOzp3r+nOk-Eg2x_Ncx=3nRg@mail.gmail.com>
+In-Reply-To: <CADGDV=WcTSSC70yG61dazo-WyoLOzp3r+nOk-Eg2x_Ncx=3nRg@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.43.160.98]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <BBE82A3345660541908687EF8C2DC1D0@amazon.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABVgOSkb5CpnXDF_m7iy=A7RmN+KmY0T38TeZ4hKbmkdQgt6Yw@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/30, David Gow wrote:
-> On Wed, Mar 30, 2022 at 7:23 AM Marcelo Schmitt
-> <marcelo.schmitt1@gmail.com> wrote:
-> >
-> > Enhance the static analysis tools section with a discussion on when to
-> > use each of them.
-> >
-> > This was mainly taken from Dan Carpenter and Julia Lawall's comments on
-> > the previous documentation patch for static analysis tools.
-> >
-> > Lore: https://lore.kernel.org/linux-doc/20220329090911.GX3293@kadam/T/#mb97770c8e938095aadc3ee08f4ac7fe32ae386e6
-> >
-> > Signed-off-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-> > Cc: Dan Carpenter <dan.carpenter@oracle.com>
-> > Cc: Julia Lawall <julia.lawall@inria.fr>
-> > ---
-> 
-> Thanks: this sort of "when to use which tool" information is really
-> what the testing guide page needs.
-> 
-> I'm not familiar enough with these tools that I can really review the
-> details properly, but nothing stands out as obviously wrong to me.
-> I've made a few comments below regardless, but feel free to ignore
-> them if they're not quite right.
-> 
-> Acked-by: David Gow <davidgow@google.com>
-> 
-> Cheers,
-> -- David
-> 
-> >  Documentation/dev-tools/testing-overview.rst | 33 ++++++++++++++++++++
-> >  1 file changed, 33 insertions(+)
-> >
-> > diff --git a/Documentation/dev-tools/testing-overview.rst b/Documentation/dev-tools/testing-overview.rst
-> > index b5e02dd3fd94..91e479045d3a 100644
-> > --- a/Documentation/dev-tools/testing-overview.rst
-> > +++ b/Documentation/dev-tools/testing-overview.rst
-> > @@ -146,3 +146,36 @@ Documentation/dev-tools/coccinelle.rst documentation page for details.
-> >
-> >  Beware, though, that static analysis tools suffer from **false positives**.
-> >  Errors and warns need to be evaluated carefully before attempting to fix them.
-> > +
-> > +When to use Sparse and Smatch
-> > +-----------------------------
-> > +
-> > +Sparse is useful for type checking, detecting places that use ``__user``
-> > +pointers improperly, or finding endianness bugs. Sparse runs much faster than
-> > +Smatch.
-> 
-> Given that the __user pointer and endianness stuff is found as a
-> result of Sparse's type checking support, would rewording this as
-> "Sparse does type checking, such as [detecting places...]" or similar
-> be more clear?
-
-Myabe. I tried changing it a little while adding a bit of information from
-https://lwn.net/Articles/689907/
-
-"Sparse does type checking, such as verifying that annotated variables do not
-cause endianness bugs, detecting places that use ``__user`` pointers improperly,
-and analyzing the compatibility of symbol initializers."
-
-Does it sound better?
-
-> 
-> > +
-> > +Smatch does flow analysis and, if allowed to build the function database, it
-> > +also does cross function analysis. Smatch tries to answer questions like where
-> > +is this buffer allocated? How big is it? Can this index be controlled by the
-> > +user? Is this variable larger than that variable?
-> > +
-> > +It's generally easier to write checks in Smatch than it is to write checks in
-> > +Sparse. Nevertheless, there are some overlaps between Sparse and Smatch checks
-> > +because there is no reason for re-implementing Sparse's check in Smatch.
-> 
-> This last sentence isn't totally clear to me. Should this "because" be "so"?
-
-Smatch uses (is shipped with) a modified Sparse implementation which it uses as
-a C parser. Apparently, Sparse does some checkings while parsing the code for
-Smatch so that's why we have some overlapping between the checks made when we
-run Smatch and the ones made when we run Sparse alone.
-
-I didn't dig into the code, but I guess further modifying Sparse to prevent it
-from doing some types of cheks wouldn't add much to Smatch. That last saying
-should've reflected this fact, but it seems to cause confusion without a proper
-context. Reading the sentence back again, I think we could just drop the last
-part:
-
-"Nevertheless, there are some overlaps between Sparse and Smatch checks."
-
-> 
-> > +
-> > +Strong points of Smatch and Coccinelle
-> > +--------------------------------------
-> > +
-> > +Coccinelle is probably the easiest for writing checks. It works before the
-> > +pre-compiler so it's easier to check for bugs in macros using Coccinelle.
-> > +Coccinelle also writes patches fixes for you which no other tool does.
-> > +
-> > +With Coccinelle you can do a mass conversion from
-> 
-> (Maybe start this with "For example," just to make it clear that this
-> paragraph is mostly following on from how useful it is that Coccinelle
-> produces fixes, not just warnings.)
-
-Will do
-
-> 
-> > +``kmalloc(x * size, GFP_KERNEL)`` to ``kmalloc_array(x, size, GFP_KERNEL)``, and
-> > +that's really useful. If you just created a Smatch warning and try to push the
-> > +work of converting on to the maintainers they would be annoyed. You'd have to
-> > +argue about each warning if can really overflow or not.
-> > +
-> > +Coccinelle does no analysis of variable values, which is the strong point of
-> > +Smatch. On the other hand, Coccinelle allows you to do simple things in a simple
-> > +way.
-> > --
-> > 2.35.1
-> >
+QVdTIFJEUyBpcyBhIG1ham9yIHVzZXIgb2YgZHJiZC4gIFdlIGFyZSBwcm9iYWJseSByZXNwb25z
+aWJsZSBmb3IgdGhlIHN1YnN0YW50aWFsIHBlcmNlbnRhZ2Ugb2YgZHJiZCB1c2VycyBpbiB0aGUg
+d29ybGQuICBXZSBhcmUgY3VycmVudGx5IG9uIGRyYmQtOC40LiAgV2Ugd2lsbCBldmVudHVhbGx5
+IG1pZ3JhdGUgdG8gZHJiZC05LCBidXQgYXQgb3VyIHNjYWxlIHRoaXMgaXNuJ3QgZ29pbmcgdG8g
+aGFwcGVuIHZlcnkgc29vbi4gIA0KDQpUaGUgbGFzdCB0aW1lIHdlIG5lZWRlZCB0byBwYXRjaCBk
+cmJkIHdhcyBiYWNrIGluIDIwMTguICBXZSd2ZSBub3QgZGlhZ25vc2VkIGFueSByZXBvcnRhYmxl
+IGlzc3VlcyB3aXRoIGRyYmQtOC40IGluIHRoZSBwYXN0IH40IHllYXJzLiAgIEl0J3MgYSBzdGFi
+bGUsIG1hdHVyZSBkcml2ZXIuICAgV2Ugd291bGQgcHJlZmVyIGZvciBkcmJkLTggdG8gY29udGlu
+dWUgYmVpbmcgYXZhaWxhYmxlIGluIHRoZSB1cHN0cmVhbSB0cmVlLiAgV2UnZCBhbHNvIHdlbGNv
+bWUgZHJiZC05IGJlaW5nIGF2YWlsYWJsZSBpbi10cmVlIGFzIHNvb24gYXMgcG9zc2libGU6IGl0
+IHdpbGwgbWFrZSBsaWZlIG11Y2ggZWFzaWVyIGZvciBvdGhlciBBV1MgdGVhbXMgdGhhdCBhcmUg
+Y3VycmVudGx5IHdvcmtpbmcgb24gRFJCRCBkZXBsb3ltZW50Lg0KDQrvu79PbiAzLzMwLzIyLCA4
+OjI0IEFNLCAiZHJiZC1kZXYtYm91bmNlc0BsaXN0cy5saW5iaXQuY29tIG9uIGJlaGFsZiBvZiBQ
+aGlsaXBwIFJlaXNuZXIiIDxkcmJkLWRldi1ib3VuY2VzQGxpc3RzLmxpbmJpdC5jb20gb24gYmVo
+YWxmIG9mIHBoaWxpcHAucmVpc25lckBsaW5iaXQuY29tPiB3cm90ZToNCg0KICAgIENBVVRJT046
+IFRoaXMgZW1haWwgb3JpZ2luYXRlZCBmcm9tIG91dHNpZGUgb2YgdGhlIG9yZ2FuaXphdGlvbi4g
+RG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSBjYW4gY29u
+ZmlybSB0aGUgc2VuZGVyIGFuZCBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUuDQoNCg0KDQogICAg
+PiA+IEplbnMsIG15IGludGVudGlvbiBpcyB0byBrZWVwIGl0IGluLXRyZWUsIGFuZCBhdCBzb21l
+IHBvaW50IHVwZGF0ZSBpdC4NCiAgICA+ID4gUmVnYXJkaW5nIHlvdXIgcXVlc3Rpb25zOg0KICAg
+ID4NCiAgICA+IFRoYXQnZCBiZSBncmVhdCwgYnV0IGl0J3MgYmVlbiB5ZWFycyBzaW5jZSB0aGVy
+ZSB3YXMgYW55IHNpZ25pZmljYW50DQogICAgPiB1cGRhdGVzIHRvIHRoZSBpbi1rZXJuZWwgZHJi
+ZC4uLiBJIHdvdWxkIHN0cm9uZ2x5IHN1Z2dlc3QgdGhhdCB0aGUNCiAgICA+IGluLWtlcm5lbCBi
+ZSBicm91Z2h0IGNsb3NlciB0byB3aGF0IHBlb3BsZSBhcmUgbW9zdGx5IHJ1bm5pbmcsIGFzIGl0
+DQogICAgPiBzdGFuZHMgaXQncyBiYXNpY2FsbHkgdW5tYWludGFpbmVkLg0KDQogICAgVGhlIGNo
+YW5nZXMgd2Ugd29ya2VkIG9uIG92ZXIgbWFueSBZZWFycyBpbiB0aGUgbW9yZSByZWNlbnQgZHJi
+ZC05LngNCiAgICBicmFuY2hlcyBhcmUganVzdCB0b28gZnVuZGFtZW50YWwgdG8gZG8gdGhlbSBp
+biBzbWFsbCBjaHVua3MsIHdlIGNvdWxkDQogICAgdXBzdHJlYW0gYml0IGJ5IGJpdC4gIFdlIG5l
+ZWQgdG8gZ2V0IHRoYXQgcmV2aWV3ZWQgaW4gYSBiaWcgc2VyaWVzLiAgSWYgSQ0KICAgIHN0YXJ0
+ZWQgdG8gZHVtcCB0aGVtIG9uIGxpbnV4LWJsb2NrIHJpZ2h0IGF3YXksIG5vYm9keSB3b3VsZCBs
+b29rIGF0IGl0DQogICAgc2VyaW91c2x5LCBzaW5jZSBpdCB3b3VsZCBiZSB0b28gbXVjaC4gIEkg
+aW50ZW5kIHRvIGdldCBwZW9wbGUgZnJvbSByZWQNCiAgICBoYXQvc3VzZSBhc3NpZ25lZCB0byBk
+byBzdWNoIGEgcmV2aWV3LiBUaGVuIHdlIHdpbGwgZG8gdGhhdCBvbiBsaW51eC1ibG9jaywNCiAg
+ICBzbyB0aGF0IGV2ZXJ5b25lIHdobyBjYXJlcyBzZWVzIHdoYXQgaGFwcGVucy4NCg0KICAgIFsu
+Li5dDQogICAgPiBUaGUgbWFpbiBkaXNjcmVwYW5jeSBoZXJlIGlzIHRoYXQgdGhlcmUgYXJlIGFw
+cGFyZW50bHkgaHVnZSBudW1iZXJzIG9mDQogICAgPiBpbi10cmVlIHVzZXJzLCB5ZXQgbm8gZml4
+ZXMgb3IgcGF0Y2hlcyBhdCBhbGwgbWFraW5nIGl0IHRvIG1haW5saW5lLg0KICAgID4gRWl0aGVy
+IGRyYmQgaXMgYnVnIGZyZWUgYW5kIGRvZXNuJ3QgcmVxdWlyZSBhbnkgZml4ZXMgYXQgYWxsLCB3
+aGljaCBJDQogICAgPiB2ZXJ5IG11Y2ggd291bGQgZG91YnQsIG9yIGZpeGVzIGFyZW4ndCBiZWlu
+ZyBzZW50IHVwc3RyZWFtLg0KDQogICAgSXQgaXMgdGhlIGJyb2FkIGNvbnNlbnQgYW1vbmcgdGhl
+IHVzZXJzIG9mIHRoZSBkcmJkLTguNCBicmFuY2ggKHRoYXQgaXMgd2hhdA0KICAgIGlzIGluLXRy
+ZWUpLCBpcyB0aGF0IGl0IHdvcmtzIGZvciBpdHMgcHVycG9zZS4gSXQgaXMgZm9yIHN1cmUgbm90
+IGJ1Zy1mcmVlLA0KICAgIGJ1dCBwZW9wbGUgYXJlIG5vdCBydW5uaW5nIGludG8gYnVncyBhbnlt
+b3JlLiBTbywgY2FsbCBpdCBmcmVlIG9mIHJlbGV2YW50DQogICAgYnVncywgaWYgeW91IHdhbnQu
+ICBObyBuZXcgZmVhdHVyZXMgZ28gaW50byB0aGF0IGJyYW5jaCwgb24gcHVycG9zZS4gVG8ga2Vl
+cA0KICAgIGl0IHRoYXQgd2F5Lg0KDQogICAgSGF2ZSBhIGxvb2sgYXQgdGhhdCBvbmUgcmVhbCBi
+dWctZml4IHRoYXQgd2FzIGlkZW50aWZpZWQgaW4gdGhlIGxhc3QgWWVhci4NCiAgICAyMDIxMDQy
+NjE2MzAzMi4zNDU0MTI5LTEtY2hyaXN0b3BoLmJvZWhtd2FsZGVyQGxpbmJpdC5jb20gPGh0dHBz
+Oi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcHJvamVjdC9saW51eC1ibG9jay9wYXRjaC88YSBocmVm
+PT4vIj5odHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3Byb2plY3QvbGludXgtYmxvY2svcGF0
+Y2gvMjAyMTA0MjYxNjMwMzIuMzQ1NDEyOS0xLWNocmlzdG9waC5ib2VobXdhbGRlckBsaW5iaXQu
+Y29tLw0KDQogICAgV2hlbiBkbyB5b3Ugd2FudCB0byBoYXZlIHRoYXQgcmVwb3N0ZWQgdG8geW91
+Pw0KICAgIHJpZ2h0IG5vdz8gSnVzdCBiZWZvcmUgdGhlIG5leHQgbWVyZ2Ugd2luZG93IG9wZW5z
+Pw0KICAgIF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQog
+ICAgZHJiZC1kZXYgbWFpbGluZyBsaXN0DQogICAgZHJiZC1kZXZAbGlzdHMubGluYml0LmNvbQ0K
+ICAgIGh0dHBzOi8vbGlzdHMubGluYml0LmNvbS9tYWlsbWFuL2xpc3RpbmZvL2RyYmQtZGV2DQoN
+Cg==

@@ -2,172 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B944EBA51
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 07:45:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A134EBA59
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 07:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243029AbiC3FrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 01:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40702 "EHLO
+        id S243039AbiC3FsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 01:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239771AbiC3FrQ (ORCPT
+        with ESMTP id S243045AbiC3Fr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 01:47:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F44D25B922;
-        Tue, 29 Mar 2022 22:45:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6834B81ACC;
-        Wed, 30 Mar 2022 05:45:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFEF2C340F0;
-        Wed, 30 Mar 2022 05:45:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648619129;
-        bh=+dFFtZ8prwqR8keMMZ0czQlcVb6F+bnUCinktbzjtIc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Uyvobwzy0RXtYkwjjXIvWrUilYts+edBdUPQZM6QTkOL7dMDFwsbt96OA77ayQze2
-         +swnS912xaJU2AQwLdu0EI8g+wpw/gVxbug8VUZ7exPros0ydr0CnoQ9VielDTTTeb
-         rLjrtxA60HV/WBFWxHwCIvxzJ8RsyQ2rJ2dekc7pS7KwnnNb/7C09Den0V5NWphuQt
-         9apqy6WAZ6BaMHZTrknVWU2ozgDsR6Vtl/rJh93ImrXSw8gkpzj47r+Inww0ipLErh
-         5hd6N6G6cb+zWK2rdwMQwyZ7S7Wp2/Mhg+TxUQnOrrLS1gaoAntzychfLn4oIH9FtS
-         VV6ER/yzniw8w==
-Date:   Wed, 30 Mar 2022 11:15:24 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dma <dmaengine@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL]: dmaengine updates for v5.18-rc1
-Message-ID: <YkPudJlxlw+Ab3Fi@matsya>
+        Wed, 30 Mar 2022 01:47:56 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB60D25B931;
+        Tue, 29 Mar 2022 22:46:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ShlAuSZLyEq25xAfycHWI7hECNIi/GQOtl1mtKw5Shk=; b=hpQUdyyucc04FsSCWb013XTcO0
+        y2GjL8gVriHew3MYCDqfR8ivlsTCoQ7g8whXxPt36DScOa0Zo6Zj9DDqJWWziGgLmYOJpAfGCm0qq
+        BH77DEtEPOutPjLuav55+27+6J+YBCiF+PSdGg7AfoHRcx/iByOBAWfP1jvPNIXff6RArvYBV8qF0
+        xnpWDCU3i+zCa/FxT/6PAxeN2Nx5zkJXV7JD+75XSBZIxKikg3jWrTOOe6gDK1DULV3xnjxXMX0e0
+        h/JxGdqxaSEruRTcEV2rZgvsEtKc/eSNEqJKpEO88YBfEdbgpkV3cAsUYswOBVFv+kuRmz1KOt5Dn
+        0yyRSCjQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nZR9m-00EMtx-Iy; Wed, 30 Mar 2022 05:46:10 +0000
+Date:   Tue, 29 Mar 2022 22:46:10 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, djwong@kernel.org,
+        dan.j.williams@intel.com, david@fromorbit.com, hch@infradead.org,
+        jane.chu@oracle.com, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v11 5/8] mm: move pgoff_address() to vma_pgoff_address()
+Message-ID: <YkPuooGD139Wpg1v@infradead.org>
+References: <20220227120747.711169-1-ruansy.fnst@fujitsu.com>
+ <20220227120747.711169-6-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220227120747.711169-6-ruansy.fnst@fujitsu.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+On Sun, Feb 27, 2022 at 08:07:44PM +0800, Shiyang Ruan wrote:
+> Since it is not a DAX-specific function, move it into mm and rename it
+> to be a generic helper.
 
-Please pull to receive updates for dmaengine. This time we have bunch of
-driver updates and some new device support.
+FYI, there is a patch in -mm and linux-next:
 
-The following changes since commit 455896c53d5b803733ddd84e1bf8a430644439b6:
+  "mm: rmap: introduce pfn_mkclean_range() to cleans PTEs"
 
-  dmaengine: shdma: Fix runtime PM imbalance on error (2022-02-15 11:04:16 +0530)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git tags/dmaengine-5.18-rc1
-
-for you to fetch changes up to b95044b38425f563404234d96bbb20cc6360c7e1:
-
-  dmaengine: hisi_dma: fix MSI allocate fail when reload hisi_dma (2022-03-11 16:05:39 +0530)
-
-----------------------------------------------------------------
-dmaengine updates for v5.18-rc1
-
-New support:
- - Document RZ/V2L and RZ/G2UL dma binding
- - TI AM62x k3-udma and k3-psil support
-
-Updates:
- - Yaml conversion for Mediatek uart apdma schema
- - Removal of DMA-32 fallback configuration for various drivers
- - imx-sdma updates for channel restart
-
-----------------------------------------------------------------
-Amelie Delaunay (1):
-      dmaengine: stm32-dma: set dma_device max_sg_burst
-
-AngeloGioacchino Del Regno (1):
-      dt-bindings: dma: Convert mtk-uart-apdma to DT schema
-
-Biju Das (2):
-      dt-bindings: dma: rz-dmac: Document RZ/V2L SoC
-      dt-bindings: dma: rz-dmac: Document RZ/G2UL SoC
-
-Cai Huoqing (1):
-      dmaengine: ppc4xx: Make use of the helper macro LIST_HEAD()
-
-Christophe JAILLET (4):
-      dmaengine: iot: Remove useless DMA-32 fallback configuration
-      dmaengine: altera-msgdma: Remove useless DMA-32 fallback configuration
-      dmaengine: qcom_hidma: Remove useless DMA-32 fallback configuration
-      dmaengine: idxd: Remove useless DMA-32 fallback configuration
-
-Dave Jiang (1):
-      dmaengine: idxd: restore traffic class defaults after wq reset
-
-Geert Uytterhoeven (1):
-      dmaengine: fsl-dpaa2-qdma: Drop comma after SoC match table sentinel
-
-Jie Hai (1):
-      dmaengine: hisi_dma: fix MSI allocate fail when reload hisi_dma
-
-Lad Prabhakar (1):
-      dmaengine: sh: Kconfig: Add ARCH_R9A07G054 dependency for RZ_DMAC config option
-
-Sanjay R Mehta (2):
-      dmaengine: ptdma: fix concurrency issue with multiple dma transfer
-      dmaengine: ptdma: handle the cases based on DMA is complete
-
-Tom Rix (2):
-      dmaengine: ti: cleanup comments
-      dmaengine: dw-axi-dmac: cleanup comments
-
-Tomasz Moń (2):
-      dmaengine: imx-sdma: restart cyclic channel if needed
-      dmaengine: imx-sdma: fix cyclic buffer race condition
-
-Vignesh Raghavendra (2):
-      dmaengine: ti: k3-udma: Add AM62x DMSS support
-      dmaengine: ti: k3-psil: Add AM62x PSIL and PDMA data
-
-Vinod Koul (2):
-      Merge tag 'dmaengine-fix-5.17' into next
-      dmaengine: Revert "dmaengine: shdma: Fix runtime PM imbalance on error"
-
-Yang Li (1):
-      dmaengine: imx-sdma: clean up some inconsistent indenting
-
- .../devicetree/bindings/dma/mediatek,uart-dma.yaml | 122 ++++++++++++++
- .../devicetree/bindings/dma/mtk-uart-apdma.txt     |  56 -------
- .../devicetree/bindings/dma/renesas,rz-dmac.yaml   |   4 +-
- drivers/dma/altera-msgdma.c                        |   4 +-
- drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c     |   8 +-
- drivers/dma/dw-axi-dmac/dw-axi-dmac.h              |   2 +-
- drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.h            |   2 +-
- drivers/dma/hisi_dma.c                             |   2 +-
- drivers/dma/idxd/device.c                          |   9 +-
- drivers/dma/idxd/init.c                            |   2 -
- drivers/dma/imx-sdma.c                             |  22 ++-
- drivers/dma/ioat/init.c                            |   2 -
- drivers/dma/ppc4xx/adma.c                          |   2 +-
- drivers/dma/ptdma/ptdma-dmaengine.c                |  24 ++-
- drivers/dma/qcom/hidma.c                           |   4 +-
- drivers/dma/sh/Kconfig                             |   6 +-
- drivers/dma/sh/shdma-base.c                        |   4 +-
- drivers/dma/stm32-dma.c                            |   1 +
- drivers/dma/ti/Makefile                            |   3 +-
- drivers/dma/ti/cppi41.c                            |   6 +-
- drivers/dma/ti/edma.c                              |  10 +-
- drivers/dma/ti/k3-psil-am62.c                      | 186 +++++++++++++++++++++
- drivers/dma/ti/k3-psil-priv.h                      |   1 +
- drivers/dma/ti/k3-psil.c                           |   1 +
- drivers/dma/ti/k3-udma.c                           |   1 +
- drivers/dma/ti/omap-dma.c                          |   2 +-
- 26 files changed, 383 insertions(+), 103 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
- delete mode 100644 Documentation/devicetree/bindings/dma/mtk-uart-apdma.txt
- create mode 100644 drivers/dma/ti/k3-psil-am62.c
-
-Thanks
--- 
-~Vinod
+that adds a vma_pgoff_address which seems like a bit of a superset of
+the one added in this patch, but only is in mm/internal.h.

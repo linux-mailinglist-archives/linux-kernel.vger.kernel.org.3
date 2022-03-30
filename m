@@ -2,83 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 731B14EC2D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064AB4EC3CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344494AbiC3MBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
+        id S1344835AbiC3MDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344845AbiC3Lxl (ORCPT
+        with ESMTP id S1344345AbiC3Lw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:53:41 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8DD26E576
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:49:46 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id m30so28922225wrb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:49:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Zz5V7y6zyX28uzHv7nbJNO/THNVqL6J0WR2WWuQ7SCY=;
-        b=ZUOogO2MuK6NJjubHjbfEz+haJ4Oh6ePGA6/+gd7oK40h63IMjwzaVvnJYUmTxImAs
-         MyvMzaw35CVlu+C1Qwxa9gZov8B7ynpIwE3Kahpcz6sN0ho/mSj65L6ftNnsKk0N0nfj
-         4FD0bVTJb2fmEnKM40jG3JvPfGa1UEDFrVUzYozFy2JbNwdiOUCDqvoRUU5p/1MuvQtk
-         H1t8//3ATlKAdlXRm+jWADGLrIYnbjN2Vd+1QzD13qGQn0d2D1eJ8SeQBqJ9cpJE8m8y
-         rxQTaDbTj6arnFaptoXI1QxDOgI01CGVevoN+fRv/LEDGV5rgU6D1hGjCmYn3/CIg8i5
-         eoDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Zz5V7y6zyX28uzHv7nbJNO/THNVqL6J0WR2WWuQ7SCY=;
-        b=XtdSd5nyWf4yNfkB1PKwtcNdpaDZy2/LhaTzU7bERuL8LIZ7Fi4pyovY72kid7f1rJ
-         VqRN0CkkGoPerLU6bQyDxPRrXZX1jUTHp9hU3u2sT5rdvoDJENo+BWqnXSGsZawG3ero
-         BOQ2raZEHAYITYk8p7WpGLEwHRSq9qHhZMlsRN3hyOcRMsebc5ZU9q+CieKIz9sbEBlo
-         Yo9I44y8RXR8uJWuZsOOuNc6A7/8lWmKwIbtVSEyMCBtysF9QebnDEGXp1i4JomWeoGl
-         QYq/mlrjSkH+a1VEoCs4D/UcuzT+MAI5I+4LmeI1jZtDWc6tea3uQGNR3er6YeHI6Fte
-         ktsQ==
-X-Gm-Message-State: AOAM532LejRYI0rkg7u5t7gZyprPpDNb9DfUxe1+LODc6sJsrdoW7D1v
-        /rRuUmAARxUGIVTF98E6ZuulQA==
-X-Google-Smtp-Source: ABdhPJxlxhSbqKiKCa9E9IGILcoh2/H6PVy3wwrQdQj0w9n8pdqxILCg+dwurPk7Vv6V2VCi3BDOrQ==
-X-Received: by 2002:adf:d1e5:0:b0:205:85f5:656c with SMTP id g5-20020adfd1e5000000b0020585f5656cmr35738237wrd.65.1648640983633;
-        Wed, 30 Mar 2022 04:49:43 -0700 (PDT)
-Received: from ?IPV6:2a01:e34:ed2f:f020:8f92:3217:a3c6:3ee8? ([2a01:e34:ed2f:f020:8f92:3217:a3c6:3ee8])
-        by smtp.googlemail.com with ESMTPSA id z5-20020a05600c0a0500b0037fa93193a8sm5539221wmp.44.2022.03.30.04.49.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 04:49:43 -0700 (PDT)
-Message-ID: <98be733a-62b0-4cf6-ab27-992ea49da5b1@linaro.org>
-Date:   Wed, 30 Mar 2022 13:49:41 +0200
+        Wed, 30 Mar 2022 07:52:58 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D282E68D;
+        Wed, 30 Mar 2022 04:48:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 587B4CE1C4F;
+        Wed, 30 Mar 2022 11:48:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3F3CC340EE;
+        Wed, 30 Mar 2022 11:48:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648640917;
+        bh=FFoYu9xD39rqkIZEOepdvzpRGpwFoRxIoNbHOu8iJoc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WuE4OgVEFUv8xnTFhBLPj35WdoY3gC4kmxPzmVq3PjIGVOhxCEmmww679udk3WrjL
+         Y4fRIyDlCHlUV+VwpfSxVmufsUYYDp4Wy7xcdpYy3G+87/Rd3J9B7UwxCSUiA3h8VS
+         3NRbeil+iSQwmWlakT8Q7iXoslKLOSK044PQ4AxRzLNd0+4pIQVM8EJ2Q8LCW0h/31
+         luHOhcqJQYtHIPRYYbAUyL+sra6Z7N2VieD5xe90z1mb70AABC4traBsuICbSFutfn
+         yg/lOlxM7g9uBbk4PswRTy7VJsMOQPAEWM9227cHwDSXUW+muOJ0Gukr3Dx+evDEod
+         o9mo+a+2uxQCA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org
+Subject: [PATCH AUTOSEL 5.16 03/59] media: staging: media: zoran: fix various V4L2 compliance errors
+Date:   Wed, 30 Mar 2022 07:47:35 -0400
+Message-Id: <20220330114831.1670235-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220330114831.1670235-1-sashal@kernel.org>
+References: <20220330114831.1670235-1-sashal@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 1/4] dt-bindings: timer: Add compatible for Mediatek
- MT8186
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     hsinyi@chromium.org, Thomas Gleixner <tglx@linutronix.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-References: <20220311130732.22706-1-allen-kh.cheng@mediatek.com>
- <20220311130732.22706-2-allen-kh.cheng@mediatek.com>
- <Yitv3IUpCzp1/eGX@robh.at.kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <Yitv3IUpCzp1/eGX@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,26 +59,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2022 16:50, Rob Herring wrote:
-> On Fri, 11 Mar 2022 21:07:29 +0800, Allen-KH Cheng wrote:
->> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
->>
->> This commit adds dt-binding documentation of timer for Mediatek MT8186 SoC
->> Platform.
->>
->> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
->> ---
->>   Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt | 1 +
->>   1 file changed, 1 insertion(+)
->>
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-Applied, thanks
+[ Upstream commit 914941827aad5ecddf9bf3a6dee67fbec1af1fff ]
 
+This fixes several issues found with 'v4l2-compliance -s':
+
+1) read()/write() is supported, but not reported in the capabilities
+2) S_STD(G_STD()) failed: setting the same standard should just return 0.
+3) G_PARM failed to set readbuffers.
+4) different field values in the format vs. what v4l2_buffer reported.
+5) zero the sequence number when starting streaming.
+6) drop VB_USERPTR: makes no sense with dma_contig streaming.
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/staging/media/zoran/zoran_card.c   |  2 +-
+ drivers/staging/media/zoran/zoran_driver.c | 13 ++++++++++---
+ 2 files changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
+index 677d3a26cef4..175654d104c5 100644
+--- a/drivers/staging/media/zoran/zoran_card.c
++++ b/drivers/staging/media/zoran/zoran_card.c
+@@ -811,7 +811,7 @@ static int zoran_init_video_device(struct zoran *zr, struct video_device *video_
+ 	*video_dev = zoran_template;
+ 	video_dev->v4l2_dev = &zr->v4l2_dev;
+ 	video_dev->lock = &zr->lock;
+-	video_dev->device_caps = V4L2_CAP_STREAMING | dir;
++	video_dev->device_caps = V4L2_CAP_STREAMING | V4L2_CAP_READWRITE | dir;
+ 
+ 	strscpy(video_dev->name, ZR_DEVNAME(zr), sizeof(video_dev->name));
+ 	/*
+diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
+index 551db338c7f7..84665637ebb7 100644
+--- a/drivers/staging/media/zoran/zoran_driver.c
++++ b/drivers/staging/media/zoran/zoran_driver.c
+@@ -255,8 +255,6 @@ static int zoran_querycap(struct file *file, void *__fh, struct v4l2_capability
+ 	strscpy(cap->card, ZR_DEVNAME(zr), sizeof(cap->card));
+ 	strscpy(cap->driver, "zoran", sizeof(cap->driver));
+ 	snprintf(cap->bus_info, sizeof(cap->bus_info), "PCI:%s", pci_name(zr->pci_dev));
+-	cap->device_caps = zr->video_dev->device_caps;
+-	cap->capabilities = cap->device_caps | V4L2_CAP_DEVICE_CAPS;
+ 	return 0;
+ }
+ 
+@@ -582,6 +580,9 @@ static int zoran_s_std(struct file *file, void *__fh, v4l2_std_id std)
+ 	struct zoran *zr = video_drvdata(file);
+ 	int res = 0;
+ 
++	if (zr->norm == std)
++		return 0;
++
+ 	if (zr->running != ZORAN_MAP_MODE_NONE)
+ 		return -EBUSY;
+ 
+@@ -739,6 +740,7 @@ static int zoran_g_parm(struct file *file, void *priv, struct v4l2_streamparm *p
+ 	if (parm->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+ 		return -EINVAL;
+ 
++	parm->parm.capture.readbuffers = 9;
+ 	return 0;
+ }
+ 
+@@ -869,6 +871,10 @@ int zr_set_buf(struct zoran *zr)
+ 		vbuf = &buf->vbuf;
+ 
+ 		buf->vbuf.field = V4L2_FIELD_INTERLACED;
++		if (BUZ_MAX_HEIGHT < (zr->v4l_settings.height * 2))
++			buf->vbuf.field = V4L2_FIELD_INTERLACED;
++		else
++			buf->vbuf.field = V4L2_FIELD_TOP;
+ 		vb2_set_plane_payload(&buf->vbuf.vb2_buf, 0, zr->buffer_size);
+ 		vb2_buffer_done(&buf->vbuf.vb2_buf, VB2_BUF_STATE_DONE);
+ 		zr->inuse[0] = NULL;
+@@ -928,6 +934,7 @@ static int zr_vb2_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 		zr->stat_com[j] = cpu_to_le32(1);
+ 		zr->inuse[j] = NULL;
+ 	}
++	zr->vbseq = 0;
+ 
+ 	if (zr->map_mode != ZORAN_MAP_MODE_RAW) {
+ 		pci_info(zr->pci_dev, "START JPG\n");
+@@ -1018,7 +1025,7 @@ int zoran_queue_init(struct zoran *zr, struct vb2_queue *vq, int dir)
+ 	vq->dev = &zr->pci_dev->dev;
+ 	vq->type = dir;
+ 
+-	vq->io_modes = VB2_USERPTR | VB2_DMABUF | VB2_MMAP | VB2_READ | VB2_WRITE;
++	vq->io_modes = VB2_DMABUF | VB2_MMAP | VB2_READ | VB2_WRITE;
+ 	vq->drv_priv = zr;
+ 	vq->buf_struct_size = sizeof(struct zr_buffer);
+ 	vq->ops = &zr_video_qops;
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.34.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog

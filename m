@@ -2,93 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E54CF4EC351
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B164EC333
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:28:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243034AbiC3MUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41166 "EHLO
+        id S238038AbiC3MVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346106AbiC3MEb (ORCPT
+        with ESMTP id S1347051AbiC3MFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 08:04:31 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386833B54D
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:59:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648641546; x=1680177546;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tANUoNzHzK67sN+dxAnpjoWCep2qpLxGxl27vY7/z0A=;
-  b=XiQGN43yrNKks5dmQ8+Nv3hKXPJ4cdq1I7GOnUNSK2IT37HRX5xzvYAt
-   TeEEBwN9h7qECDEe6QKyQJHt8IB0v1LIyCIZc8332NMl03bteEryeMNY3
-   vUvwfpkc1sf5QCgGg19J1F4hKyI/h6J/FpUgpA+Lgg7bcp9eMv/RgCJve
-   K39bIKT5gK46XjvoXwcnK5HS776Tp1f8z46CYinRkZcanM1+IPijO9vFU
-   IIhVWEza0a7jvsqZu2ipKF5hMhM/8IW4Uuo4azOJaztQcYlUuAEz14jH0
-   qSgIosbSFgIXylJjdzP/GdlPWofZVOUDOna76LwDmMyUp7rBH5oKwCzI7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="259239359"
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="259239359"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 04:59:04 -0700
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="565505459"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.215.120]) ([10.254.215.120])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 04:58:59 -0700
-Message-ID: <d2cdd06b-bd66-a422-125c-b1b389c195de@linux.intel.com>
-Date:   Wed, 30 Mar 2022 19:58:57 +0800
+        Wed, 30 Mar 2022 08:05:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3D5299A59;
+        Wed, 30 Mar 2022 05:00:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9D62B81C29;
+        Wed, 30 Mar 2022 12:00:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53970C340F2;
+        Wed, 30 Mar 2022 12:00:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648641652;
+        bh=mGIdFN2hBOqp+cqvzAkpx41arTM1NYj9iwoDe56VnbU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m2ETwEIV+o9p39koZgMWirI+rgblDUpfDI6vNBx/vYoss+7XlcOBAST/AK7yM4438
+         HqVJ9FluaNHAJe4IGJ7MBYVq1qIHV9sTDtZ0JzVBBdgQEYeBFgs9+xWZMsyEmtrJt7
+         ZEy8NPJsAKr+yDujMUrLDsB/rJ8CKtdcNre/6ujebWCknjQj5xFcJNoo1N5TNRbd5h
+         vGcCG/K1rsJzQfqrRJtddx3NvFmvEFCBl+GmKQ463FBOSWmAzkVlE1G5AZr9WlQIOA
+         jWfSrQCanvt4au0srg8O+70kqT1kR+dyIN5Gb6j3Ca5sfV94zCtF9MAk8eHcBGUNhI
+         miNqrxE9x8RtQ==
+Date:   Wed, 30 Mar 2022 13:00:47 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        =?iso-8859-1?Q?P=E9ter?= Ujfalusi 
+        <peter.ujfalusi@linux.intel.com>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
+Subject: Re: [PATCH AUTOSEL 5.17 58/66] ASoC: Intel: Revert "ASoC: Intel:
+ sof_es8336: add quirk for Huawei D15 2021"
+Message-ID: <YkRGb9uDhWV9GQfn@sirena.org.uk>
+References: <20220330114646.1669334-1-sashal@kernel.org>
+ <20220330114646.1669334-58-sashal@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC v2 01/11] iommu: Add pasid_bits field in struct
- dev_iommu
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>
-References: <20220329053800.3049561-1-baolu.lu@linux.intel.com>
- <20220329053800.3049561-2-baolu.lu@linux.intel.com>
- <BN9PR11MB52763DAEC605FD1B21EE4EAF8C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB52763DAEC605FD1B21EE4EAF8C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="utOV3yk5eFjiGqrz"
+Content-Disposition: inline
+In-Reply-To: <20220330114646.1669334-58-sashal@kernel.org>
+X-Cookie: Two is company, three is an orgy.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/30 15:05, Tian, Kevin wrote:
->> From: Lu Baolu<baolu.lu@linux.intel.com>
->> Sent: Tuesday, March 29, 2022 1:38 PM
->>
->> Use this field to save the pasid/ssid bits that a device is able to
->> support with its IOMMU hardware. It is a generic attribute of a device
->> and lifting it into the per-device dev_iommu struct makes it possible
->> to allocate a PASID for device without calls into the IOMMU drivers.
->> Any iommu driver which suports PASID related features should set this
->> field before features are enabled on the devices.
-> Miss a clarification for non-PCI SVA as discussed here:
-> 
-> https://lore.kernel.org/all/85d61ad6-0cf0-ac65-3312-32d0cdeb1b27@linux.intel.com/
 
-Yes. Thanks for the reminding.
+--utOV3yk5eFjiGqrz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-baolu
+On Wed, Mar 30, 2022 at 07:46:37AM -0400, Sasha Levin wrote:
+> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+>=20
+> [ Upstream commit 1b5283483a782f6560999d8d5965b1874d104812 ]
+>=20
+> This reverts commit ce6a70bfce21bb4edb7c0f29ecfb0522fa34ab71.
+>=20
+> The next patch will add run-time detection of the required SSP and
+> this hard-coded quirk is not needed.
+
+This is reverting a commit which was bacported earlier in this series?
+
+--utOV3yk5eFjiGqrz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJERm4ACgkQJNaLcl1U
+h9AI5gf/XYRZRk5VaiBgcNnLN3y2HWSpoxCbcV8Z5WTeqckhdWB5gRYS90qlr+Vs
+6l9fFJF96dq2CfbEneiOv+q1v4J0qI1wt9evoLODgebiq/JrFb+bf5jySjMuqk7Q
+ffhx+AtSB0ZHFHVStm2NCiLXVfU4lY5o/ZAjKPPHbuD8bTncqz9Rxas10dUp2WzC
+kB6xIrs6ZQeI77nevWv0TyBzbPlh3tAcg11TH+OraCOl70AqrdyAKXl7krqLd5A7
+vV5IoU86gM5wK+Z0eOwvqqwzABwogd56dJ7Jv4yDVjcaX1/g4TdpLU52CKHzzsYu
+YclGwQS+jGSdFPlfEvUvL/yNIWbYpg==
+=wWkO
+-----END PGP SIGNATURE-----
+
+--utOV3yk5eFjiGqrz--

@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197834EB78C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 02:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0FB24EB78D
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 02:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241502AbiC3AwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 20:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
+        id S241510AbiC3AyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 20:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241408AbiC3AwC (ORCPT
+        with ESMTP id S241408AbiC3AyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 20:52:02 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BC77EA1D
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:50:18 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id mp11-20020a17090b190b00b001c79aa8fac4so321396pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:50:18 -0700 (PDT)
+        Tue, 29 Mar 2022 20:54:15 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11910CA0E8
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:52:32 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id e22so15749363qvf.9
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:52:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=axtens.net; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=eT0MeMyajG5bIz1AIsmqOI8u1ZS3KpxbDfVQyKevREE=;
-        b=glosbfJnyVdJhuvX0pA9Vc69rYKOhKa1XDLiv4cPj3AhWEHTB8QprWfRPxMLonaS5l
-         QDLdQYDTkqAPc4FvClEiCjxv+yjj7BZU7dBwHiB35XJsT1yT6TqGiomFk5sViaLe8+Ya
-         C0P/UPVTCl0uqbr7lfPEmtT9LrDd0NyfoEmfk=
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=+sHB2K20EL//AH+6So4JQczV3z9OH1YB7s4Uv15wvfE=;
+        b=Jj5lL1O8uvEtVWKfr5l1tByGRVtJko2A30NFWmU4LXBvjqGKBpv5biPxbO2Ic+Qek3
+         WZU21PcjfD8/n2sIDQfKpFvMgSLV8rarGp1zxW4QbskbnV6Ee3ysw835MYA0laLXpveG
+         rcfA+RGtz5lAHLb1YC7wn7AxMSv1IkUz141b0XQ+HiNT+Y1IgmurJrv9WGXaLVdei7k1
+         jHxNZ3v9mIKyfP+DTRb8v+0uWb75QoUio8ND3XebB1vPL6uxiJ4REpwbVbdS7rpX4Edz
+         fo02KAZ1FBPZej+3U72iSvhEb17v817LPtZvS6HOCnUuz+aLs5S1c/CJZGj0tO6ighbG
+         56pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=eT0MeMyajG5bIz1AIsmqOI8u1ZS3KpxbDfVQyKevREE=;
-        b=6JxsmoWEVQldHHjoJGMJ47PFNZ86jGlRpLx65pSd5l/P+WVhdcD4TBAU6MJB29VZKi
-         9zr9VMrHMaI7J/iLcnbB529gtEUwKxZ+4o/fUUuVUWcvQoBChGu/x4ly+1U7FXEL45nq
-         9mU9t0PRR+X0aXgwZNK54DMm1mLkBNo3aTepz2SGfLF0I5YrR6+1CRcnlN9+WMXSOrjo
-         rnnYJvlVeV+G5lrjQVyvT56t6F1G2lCscfa1GHg9XGGHIC3U7vcpBxyhGGSWtW82q1SF
-         RvDj8xq/2tHEFFX1+nZD4CrcWROTBTrKNaU16Z5kLz6ARt45UPNoLRw2zFlyhbC7mTM/
-         RxVA==
-X-Gm-Message-State: AOAM533aIPsou55vu8bWm91vin0ALdybB5MMuteZ5cZD9mtjhCdWbfXQ
-        s7cRjLF7t8NFG+AX4gviBXSmww==
-X-Google-Smtp-Source: ABdhPJxNg9M7rZr3IAGHxXmao5fKjmdSwnqjp1hqMlC9FqastDXDrKbZklDTnnMqU6uCYhILFHGbSg==
-X-Received: by 2002:a17:90a:3181:b0:1c7:6d18:391a with SMTP id j1-20020a17090a318100b001c76d18391amr2024849pjb.30.1648601417790;
-        Tue, 29 Mar 2022 17:50:17 -0700 (PDT)
-Received: from localhost ([2001:4479:e000:e400:e2b8:da3a:1007:145d])
-        by smtp.gmail.com with ESMTPSA id a71-20020a63904a000000b00398666dcf8esm5680440pge.40.2022.03.29.17.50.16
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=+sHB2K20EL//AH+6So4JQczV3z9OH1YB7s4Uv15wvfE=;
+        b=OBiswI1V6Hd6MtGz65dmVKQhSDv3bKuvlloj3pvn3GpdCDiJ1w6ZhAQXiKQnfXone9
+         yo0Zj2lQjhFdQNh4BMrxNMWQ3yxI5dV3Jur9NnADcPwtH/yBCW1cRTT52knlK2j4LIfZ
+         KrxrqFS4HJRSgWlgaGPYtNMFPWaoUS0tIvNKtVd8+wA/eKlMRMomPnp7oWnoY8kaLbqE
+         2c67k+cOaoPD99UCjpTO214absTjPBZnINoutmqwkDXgQX2vFOPMKhszp44DWZOX9Gn0
+         kgrAGlLtdi/zuBILALvjQdWOHuKmNXGtauiIrM6GXadlph1xE4rj8EVu+R8lXNRwRvd2
+         R0tg==
+X-Gm-Message-State: AOAM530p+UuZ3qYMIrC5vuZ3W81z3hP7iC5yOsIECsMpVe2BD7ck3Sbm
+        HoNJPmFOgmXnfhq/1J6GpUs=
+X-Google-Smtp-Source: ABdhPJxgOE1NKI9hmwdJ4V0TgoDjzjZaUV1wkMv6NwanObP7mGxtBqkddhRrCrpYVMH9kHpMTNYh4A==
+X-Received: by 2002:a05:6214:c82:b0:441:1ec7:a225 with SMTP id r2-20020a0562140c8200b004411ec7a225mr28745677qvr.123.1648601551130;
+        Tue, 29 Mar 2022 17:52:31 -0700 (PDT)
+Received: from euclid ([71.58.109.160])
+        by smtp.gmail.com with ESMTPSA id x20-20020ac85f14000000b002e1ee1c56c3sm16759682qta.76.2022.03.29.17.52.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 17:50:17 -0700 (PDT)
-From:   Daniel Axtens <dja@axtens.net>
-To:     konstantin@linuxfoundation.org
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Daniel Axtens <dja@axtens.net>,
-        Emily Strickland <linux@emily.st>
-Subject: Re: [PATCH] Documentation: kernel-hacking: minor edits for style
-Date:   Wed, 30 Mar 2022 11:50:12 +1100
-Message-Id: <20220330005012.3899821-1-dja@axtens.net>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220329195117.azs4kaflc6ksfzdh@meerkat.local>
-References: <20220329195117.azs4kaflc6ksfzdh@meerkat.local>
+        Tue, 29 Mar 2022 17:52:30 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 20:52:29 -0400
+From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: [PATCH v2] staging: rtl8723bs: remove redundant braces in if
+ statements
+Message-ID: <20220330005229.GA318642@euclid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,108 +68,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Konstantin,
+Adhere to Linux kernel coding style.
 
-I agree the document could do with some love. I've got some suggestions to
-make the tips a bit more useful, regardless of where we land on Rusty's
-'iconic' prose.
+Reported by checkpatch:
 
+WARNING: braces {} are not necessary for single statement blocks
+
+Signed-off-by: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
 ---
+ drivers/staging/rtl8723bs/core/rtw_ieee80211.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-Subject: [PATCH] hacking.rst: update for modern git-based workflows
-
-The tips are fun, but they predate git. With git we do things differently.
-Document something closer to what we do.
-
-Reported-by: Emily Strickland <linux@emily.st>
-Signed-off-by: Daniel Axtens <dja@axtens.net>
----
- Documentation/kernel-hacking/hacking.rst | 59 +++++++++++++++++++-----
- 1 file changed, 47 insertions(+), 12 deletions(-)
-
-diff --git a/Documentation/kernel-hacking/hacking.rst b/Documentation/kernel-hacking/hacking.rst
-index 55bd37a2efb0..a4f7d717de3c 100644
---- a/Documentation/kernel-hacking/hacking.rst
-+++ b/Documentation/kernel-hacking/hacking.rst
-@@ -723,15 +723,9 @@ Putting Your Stuff in the Kernel
- In order to get your stuff into shape for official inclusion, or even to
- make a neat patch, there's administrative work to be done:
+diff --git a/drivers/staging/rtl8723bs/core/rtw_ieee80211.c b/drivers/staging/rtl8723bs/core/rtw_ieee80211.c
+index 27de086903e2..68e41d99679d 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_ieee80211.c
++++ b/drivers/staging/rtl8723bs/core/rtw_ieee80211.c
+@@ -335,9 +335,8 @@ int rtw_generate_ie(struct registry_priv *pregistrypriv)
  
---  Figure out whose pond you've been pissing in. Look at the top of the
--   source files, inside the ``MAINTAINERS`` file, and last of all in the
--   ``CREDITS`` file. You should coordinate with this person to make sure
--   you're not duplicating effort, or trying something that's already
--   been rejected.
--
--   Make sure you put your name and EMail address at the top of any files
--   you create or mangle significantly. This is the first place people
--   will look when they find a bug, or when **they** want to make a change.
-+-  Read ``Documentation/process/submitting-patches.rst``. Kernel developers are
-+   a picky bunch, and that document attempts to list what we do and do not like
-+   in our patches.
+ 	ie = rtw_set_ie(ie, WLAN_EID_IBSS_PARAMS, 2, (u8 *)&(pdev_network->configuration.atim_window), &sz);
  
- -  Usually you want a configuration option for your kernel hack. Edit
-    ``Kconfig`` in the appropriate directory. The Config language is
-@@ -748,15 +742,56 @@ make a neat patch, there's administrative work to be done:
-    can usually just add a "obj-$(CONFIG_xxx) += xxx.o" line. The syntax
-    is documented in ``Documentation/kbuild/makefiles.rst``.
+-	if (rateLen > 8) {
++	if (rateLen > 8)
+ 		ie = rtw_set_ie(ie, WLAN_EID_EXT_SUPP_RATES, (rateLen - 8), (pdev_network->supported_rates + 8), &sz);
+-	}
  
-+- Finally, re-read
-+  ``Documentation/process/submitting-patches.rst``. Seriously. Do it.
-+
-+
-+Historical Notes
-+----------------
-+
-+These were previous tips. They've largely become outdated by the adoption of git
-+in the kernel, and creation better tooling generally, but in homage to Rusty's
-+iconic prose, you can still read them here in annotated form.
-+
-+-  Figure out whose pond you've been pissing in. Look at the top of the
-+   source files, inside the ``MAINTAINERS`` file, and last of all in the
-+   ``CREDITS`` file. You should coordinate with this person to make sure
-+   you're not duplicating effort, or trying something that's already
-+   been rejected.
-+
-+.. note::
-+
-+    Use ``scripts/get_maintainer.pl`` these days, don't try to read
-+    ``MAINTAINERS`` manually. Coordinating big changes is still a good idea: use
-+    a mailing list suggested by the script for this purpose. The lists should
-+    have searchable archives as well.
-+
-+   Make sure you put your name and EMail address at the top of any files
-+   you create or mangle significantly. This is the first place people
-+   will look when they find a bug, or when **they** want to make a change.
-+
-+.. note::
-+
-+    With git, putting your name at the top of the file is now less useful.
-+    People will do ``git log`` and ``git blame`` to if they need to find a
-+    specific individual. Still put your name on new files, but only add it to
-+    existing files if you've done really significant changes.
-+
- -  Put yourself in ``CREDITS`` if you've done something noteworthy,
-    usually beyond a single file (your name should be at the top of the
-    source files anyway). ``MAINTAINERS`` means you want to be consulted
-    when changes are made to a subsystem, and hear about bugs; it implies
-    a more-than-passing commitment to some part of the code.
+ 	/* HT Cap. */
+ 	if ((pregistrypriv->wireless_mode & WIRELESS_11_24N) &&
+@@ -366,9 +365,8 @@ unsigned char *rtw_get_wpa_ie(unsigned char *pie, int *wpa_ie_len, int limit)
  
---  Finally, don't forget to read
--   ``Documentation/process/submitting-patches.rst`` and possibly
--   ``Documentation/process/submitting-drivers.rst``.
-+.. note::
-+
-+    ``CREDITS`` is now more of a honour roll of former maintainers. Your
-+    contribution will be immortalised in the git history, you don't need to add
-+    yourself to ``CREDITS`` as well.
-+
-+- As well as reading ``Documentation/process/submitting-patches.rst``,
-+  ``Documentation/process/submitting-drivers.rst`` is possibly useful.
-+
+ 		if (pbuf) {
+ 			/* check if oui matches... */
+-			if (memcmp((pbuf + 2), wpa_oui_type, sizeof(wpa_oui_type))) {
++			if (memcmp((pbuf + 2), wpa_oui_type, sizeof(wpa_oui_type)))
+ 				goto check_next_ie;
+-			}
  
- Kernel Cantrips
- ===============
+ 			/* check version... */
+ 			memcpy((u8 *)&le_tmp, (pbuf + 6), sizeof(val16));
+@@ -493,9 +491,8 @@ int rtw_parse_wpa_ie(u8 *wpa_ie, int wpa_ie_len, int *group_cipher, int *pairwis
+ 	if (is_8021x) {
+ 		if (left >= 6) {
+ 			pos += 2;
+-			if (!memcmp(pos, SUITE_1X, 4)) {
++			if (!memcmp(pos, SUITE_1X, 4))
+ 				*is_8021x = 1;
+-			}
+ 		}
+ 	}
+ 
+@@ -514,9 +511,8 @@ int rtw_parse_wpa2_ie(u8 *rsn_ie, int rsn_ie_len, int *group_cipher, int *pairwi
+ 		return _FAIL;
+ 	}
+ 
+-	if ((*rsn_ie != WLAN_EID_RSN) || (*(rsn_ie+1) != (u8)(rsn_ie_len - 2))) {
++	if ((*rsn_ie != WLAN_EID_RSN) || (*(rsn_ie+1) != (u8)(rsn_ie_len - 2)))
+ 		return _FAIL;
+-	}
+ 
+ 	pos = rsn_ie;
+ 	pos += 4;
 -- 
-2.32.0
+2.25.1
 

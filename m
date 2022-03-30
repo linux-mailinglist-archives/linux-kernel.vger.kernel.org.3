@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA394EC9D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCEE84EC9D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348894AbiC3QpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 12:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
+        id S1348905AbiC3QpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 12:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233326AbiC3Qo4 (ORCPT
+        with ESMTP id S1348899AbiC3QpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:44:56 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44641BE4CF
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:43:10 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id x186-20020a627cc3000000b004fa939658c5so12299383pfc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=5nXtXrVSYraXOswJ0un7Hm7h4MEowJ6UqwfZSK0k/Ho=;
-        b=KeiIrhzTnbxNfQgZB940dzCguVNEiqsc5GU+Ia3dHTg9v3MLhmKmLclbWTPEPhRjQc
-         Yw6Nhb7RjuYwA3ku+Zn6mwKzTJcgxXWnoytSqvgaXKw9zytgardjMdoiv99jWNUI6Kew
-         oelbriE/+VtiBlvubit/TXo9yVqGra5BJR9qTpDpASIrEfFBRFRf+wWzAmMt16cIn2zR
-         Ds4qpj7JKOIq9+hhwoMoGw5gh3ucoS3YqrWjbj3EP7IbYMB4WdHEAj3JAF5xKbCBcfRf
-         k78SJvN9EH5cE4tDT1w75vjwrCa1R4oU0BAUrl6C6sKNem5qu2Dm5uBdwyilOwo6ifNp
-         uDqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=5nXtXrVSYraXOswJ0un7Hm7h4MEowJ6UqwfZSK0k/Ho=;
-        b=LW4fRDe7QF0It27/prgv3160w/6hJ16fZSG7kgfcQE12cXiTdEdcipNhpJnAgYmyBx
-         PQJnvyIldZCH+XaMG5Iq/74hFbHTCjoWtuWVDRCFCjCyyK1fPdk+4hAu0dj+P0dNYlyd
-         O35lXuB1LCmHtajt9Bu5mlrO/aYYpKTgbA+2stwPlrZuz4g7sxfBWhf9n9SE/jdSANk8
-         FxJcMVjMWCF2HRpaxWLrLIJ1a3JLbtxnElAdpL7LfbiUtWJCV7T+DkBXx/Xjx0rH+Gjq
-         z5G/Fi7PqKvLWtzwvkFBi9xTqdbABp4E5daBm8cwBXuU1qOGaJe8rFL15Q73GxM3K01r
-         NtQQ==
-X-Gm-Message-State: AOAM533y5abGdHNOGtF7IbiKbcdYBJq4CKq0xbprBuAT2OcONwbeA6Sp
-        dB6G/uts9aJk8dsogiDs/PFO8JKKP/E=
-X-Google-Smtp-Source: ABdhPJwcTlkloq4QtJPS4G/HHgbttrIqnocT95vp1xV2O3KKx7i5gdZX29AMHSrnOU+jzj+SLb5cPdIUXUo=
-X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:94cc:eed1:3c93:b600])
- (user=pgonda job=sendgmr) by 2002:a17:902:c2d8:b0:154:b384:917b with SMTP id
- c24-20020a170902c2d800b00154b384917bmr216875pla.58.1648658590332; Wed, 30 Mar
- 2022 09:43:10 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 09:43:06 -0700
-Message-Id: <20220330164306.2376085-1-pgonda@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH] KVM: SEV: Add cond_resched() to loop in sev_clflush_pages()
-From:   Peter Gonda <pgonda@google.com>
-To:     kvm@vger.kernel.org
-Cc:     Peter Gonda <pgonda@google.com>,
-        Sean Christopherson <seanjc@google.com>,
+        Wed, 30 Mar 2022 12:45:17 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0744B61
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:43:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD16F23A;
+        Wed, 30 Mar 2022 09:43:31 -0700 (PDT)
+Received: from [10.1.196.218] (eglon.cambridge.arm.com [10.1.196.218])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DACDC3F73B;
+        Wed, 30 Mar 2022 09:43:28 -0700 (PDT)
+Subject: Re: [PATCH v3 07/21] x86/resctrl: Create mba_sc configuration in the
+ rdt_domain
+To:     Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        Jamie Iles <jamie@nuviainc.com>,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        lcherian@marvell.com, bobo.shaobowang@huawei.com,
+        tan.shaopeng@fujitsu.com
+References: <20220217182110.7176-1-james.morse@arm.com>
+ <20220217182110.7176-8-james.morse@arm.com>
+ <40eae910-29fb-4875-c26c-ee901bb49a83@intel.com>
+From:   James Morse <james.morse@arm.com>
+Message-ID: <309a7d32-ea0d-7eb8-2c66-ea4c8efca9dc@arm.com>
+Date:   Wed, 30 Mar 2022 17:43:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
+MIME-Version: 1.0
+In-Reply-To: <40eae910-29fb-4875-c26c-ee901bb49a83@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,106 +57,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add resched to avoid warning from sev_clflush_pages() with large number
-of pages.
+Hi Reinette,
 
-Signed-off-by: Peter Gonda <pgonda@google.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+On 05/03/2022 00:26, Reinette Chatre wrote:
+> On 2/17/2022 10:20 AM, James Morse wrote:
+>> To support resctrl's MBA software controller, the architecture must provide
+>> a second configuration array to hold the mbps_val[] from user-space.
+>>
+>> This complicates the interface between the architecture specific code and
+>> the filesystem portions of resctrl that will move to /fs/, to allow
+>> multiple architectures to support resctrl.
+>>
+>> Make the filesystem parts of resctrl create an array for the mba_sc
+>> values when is_mba_sc() is set to true. The software controller
+>> can be changed to use this, allowing the architecture code to only
+>> consider the values configured in hardware.
 
----
-Here is a warning similar to what I've seen many times running large SEV
-VMs:
-[  357.714051] CPU 15: need_resched set for > 52000222 ns (52 ticks) withou=
-t schedule
-[  357.721623] WARNING: CPU: 15 PID: 35848 at kernel/sched/core.c:3733 sche=
-duler_tick+0x2f9/0x3f0
-[  357.730222] Modules linked in: kvm_amd uhaul vfat fat hdi2_standard_ftl =
-hdi2_megablocks hdi2_pmc hdi2_pmc_eeprom hdi2 stg elephant_dev_num ccp i2c_=
-mux_ltc4306 i2c_mux i2c_via_ipmi i2c_piix4 google_bmc_usb google_bmc_gpioi2=
-c_mb_common google_bmc_mailbox cdc_acm xhci_pci xhci_hcd sha3_generic gq nv=
-_p2p_glue accel_class
-[  357.758261] CPU: 15 PID: 35848 Comm: switchto-defaul Not tainted 4.15.0-=
-smp-DEV #11
-[  357.765912] Hardware name: Google, Inc.                                 =
-                      Arcadia_IT_80/Arcadia_IT_80, BIOS 30.20.2-gce 11/05/2=
-021
-[  357.779372] RIP: 0010:scheduler_tick+0x2f9/0x3f0
-[  357.783988] RSP: 0018:ffff98558d1c3dd8 EFLAGS: 00010046
-[  357.789207] RAX: 741f23206aa8dc00 RBX: 0000005349236a42 RCX: 00000000000=
-00007
-[  357.796339] RDX: 0000000000000006 RSI: 0000000000000002 RDI: ffff98558d1=
-d5a98
-[  357.803463] RBP: ffff98558d1c3ea0 R08: 0000000000100ceb R09: 00000000000=
-00000
-[  357.810597] R10: ffff98558c958c00 R11: ffffffff94850740 R12: 00000000031=
-975de
-[  357.817729] R13: 0000000000000000 R14: ffff98558d1e2640 R15: ffff9852573=
-9ea40
-[  357.824862] FS:  00007f87503eb700(0000) GS:ffff98558d1c0000(0000) knlGS:=
-0000000000000000
-[  357.832948] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  357.838695] CR2: 00005572fe74b080 CR3: 0000007bea706006 CR4: 00000000003=
-60ef0
-[  357.845828] Call Trace:
-[  357.848277]  <IRQ>
-[  357.850294]  [<ffffffff94411420>] ? tick_setup_sched_timer+0x130/0x130
-[  357.856818]  [<ffffffff943ed60d>] ? rcu_sched_clock_irq+0x6ed/0x850
-[  357.863084]  [<ffffffff943fdf02>] ? __run_timers+0x42/0x260
-[  357.868654]  [<ffffffff94411420>] ? tick_setup_sched_timer+0x130/0x130
-[  357.875182]  [<ffffffff943fd35b>] update_process_times+0x7b/0x90
-[  357.881188]  [<ffffffff944114a2>] tick_sched_timer+0x82/0xd0
-[  357.886845]  [<ffffffff94400671>] __run_hrtimer+0x81/0x200
-[  357.892331]  [<ffffffff943ff222>] hrtimer_interrupt+0x192/0x450
-[  357.898252]  [<ffffffff950002fa>] ? __do_softirq+0x2fa/0x33e
-[  357.903911]  [<ffffffff94e02edc>] smp_apic_timer_interrupt+0xac/0x1d0
-[  357.910349]  [<ffffffff94e01ef6>] apic_timer_interrupt+0x86/0x90
-[  357.916347]  </IRQ>
-[  357.918452] RIP: 0010:clflush_cache_range+0x3f/0x50
-[  357.923324] RSP: 0018:ffff98529af89cc0 EFLAGS: 00000246 ORIG_RAX: ffffff=
-ffffffff12
-[  357.930889] RAX: 0000000000000040 RBX: 0000000000038135 RCX: ffff985233d=
-36000
-[  357.938013] RDX: ffff985233d36000 RSI: 0000000000001000 RDI: ffff985233d=
-35000
-[  357.945145] RBP: ffff98529af89cc0 R08: 0000000000000001 R09: ffffb5753fb=
-23000
-[  357.952271] R10: 000000000003fe00 R11: 0000000000000008 R12: 00000000000=
-40000
-[  357.959401] R13: ffff98525739ea40 R14: ffffb5753fb22000 R15: ffff98532a5=
-8dd80
-[  357.966536]  [<ffffffffc07afd41>] svm_register_enc_region+0xd1/0x170 [kv=
-m_amd]
-[  357.973758]  [<ffffffff94246e8c>] kvm_arch_vm_ioctl+0x84c/0xb00
-[  357.979677]  [<ffffffff9455980f>] ? handle_mm_fault+0x6ff/0x1370
-[  357.985683]  [<ffffffff9423412b>] kvm_vm_ioctl+0x69b/0x720
-[  357.991167]  [<ffffffff945dfd9d>] do_vfs_ioctl+0x47d/0x680
-[  357.996654]  [<ffffffff945e0188>] SyS_ioctl+0x68/0x90
-[  358.001706]  [<ffffffff942066f1>] do_syscall_64+0x71/0x110
-[  358.007192]  [<ffffffff94e00081>] entry_SYSCALL_64_after_hwframe+0x3d/0x=
-a2
+...
 
-Tested by running a large 256gib SEV VM several times, saw no warnings.
-Without the change warnings are seen.
+>> @@ -3263,6 +3295,9 @@ void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d)
+>>  		cancel_delayed_work(&d->cqm_limbo);
+>>  	}
+>>  
+>> +	if (is_mba_sc(r))
+>> +		mba_sc_domain_destroy(r, d);
+>> +
+>>  	domain_destroy_mon_state(d);
+>>  }
+>>  
+>> @@ -3309,6 +3344,12 @@ int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d)
+>>  	if (err)
+>>  		return err;
+>>  
+>> +	err = mba_sc_domain_allocate(r, d);
+>> +	if (err) {
+>> +		domain_destroy_mon_state(d);
+>> +		return err;
+>> +	}
+>> +
 
----
- arch/x86/kvm/svm/sev.c | 1 +
- 1 file changed, 1 insertion(+)
+> Thank you for making this all symmetrical. It seems as though the new
+> array is always created but only destroyed when is_mba_sc() is true.
+> Is this correct?
 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 75fa6dd268f0..c2fe89ecdb2d 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -465,6 +465,7 @@ static void sev_clflush_pages(struct page *pages[], uns=
-igned long npages)
- 		page_virtual =3D kmap_atomic(pages[i]);
- 		clflush_cache_range(page_virtual, PAGE_SIZE);
- 		kunmap_atomic(page_virtual);
-+		cond_resched();
- 	}
- }
-=20
---=20
-2.35.1.1094.g7c7d902a7c-goog
+That looks broken. Oops.
 
+I'll fix it to always allocate the array, as that is what domain_setup_ctrlval() does
+today, and it saves the hotplug headache.
+
+
+Thanks,
+
+James

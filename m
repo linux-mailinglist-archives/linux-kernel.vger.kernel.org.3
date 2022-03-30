@@ -2,71 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A872F4EC615
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF454EC61A
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346495AbiC3OAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 10:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
+        id S1346513AbiC3OCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 10:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245501AbiC3OAr (ORCPT
+        with ESMTP id S238147AbiC3OC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 10:00:47 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D53CD316;
-        Wed, 30 Mar 2022 06:59:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=ekBWMhJOJrwEuMsGOrTITmAnhNKuavdbk+/QN6gEvTs=; b=YSvsl56WcO71Nuk3c5QDcSCxxy
-        aqmLXXZtjnnXGU/x8qu7GjHoG3Gp9GlgliYoXWsgeP6v49TZjlQBa95By5+e0IYOPimXw9UdZjqAr
-        gS3NTY/kV27ln73N0wWEoMsk4JzQkWtd5NEp2fVFXSH6qaRpO8TT+G+qmv0wSmRdd13g=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nZYqC-00DK3H-O3; Wed, 30 Mar 2022 15:58:28 +0200
-Date:   Wed, 30 Mar 2022 15:58:28 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     'Guenter Roeck' <linux@roeck-us.net>,
-        'Michael Walle' <michael@walle.cc>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
-Message-ID: <YkRiBAyw2DhIOitg@lunn.ch>
-References: <20220329160730.3265481-1-michael@walle.cc>
- <20220329160730.3265481-2-michael@walle.cc>
- <16d8b45eba7b44e78fa8205e6666f2bd@AcuMS.aculab.com>
- <fa1f64d2-32a1-b8f9-0929-093fbd45d219@roeck-us.net>
- <cf6f672fbaf645f780ae5eab1a955871@AcuMS.aculab.com>
+        Wed, 30 Mar 2022 10:02:27 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E25111434B;
+        Wed, 30 Mar 2022 07:00:41 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 1504180FA;
+        Wed, 30 Mar 2022 13:58:34 +0000 (UTC)
+Date:   Wed, 30 Mar 2022 17:00:39 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, regressions@lists.linux.dev
+Subject: Re: [PATCH v4 8/9] iommu: Remove unused argument in
+ is_attach_deferred
+Message-ID: <YkRiawC2T9g+CHSJ@atomide.com>
+References: <20220216025249.3459465-1-baolu.lu@linux.intel.com>
+ <20220216025249.3459465-9-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cf6f672fbaf645f780ae5eab1a955871@AcuMS.aculab.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220216025249.3459465-9-baolu.lu@linux.intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> So why not error the request to created the hwmon device with
-> an invalid name.
-> The name supplied will soon get fixed - since it is a literal
-> string in the calling driver.
+Hi,
 
-It is often not a literal string in the driver, but something based on
-the DT description of the hardware.
+* Lu Baolu <baolu.lu@linux.intel.com> [700101 02:00]:
+> The is_attach_deferred iommu_ops callback is a device op. The domain
+> argument is unnecessary and never used. Remove it to make code clean.
 
-    Andrew
+Looks like this causes a regression for at least drivers/iommu/omap-iommu.c.
+
+To me it seems the issue is there is no is_attach_deferred implemented, so
+we get a NULL pointer dereference at virtual address 00000008:
+
+__iommu_probe_device from probe_iommu_group+0x2c/0x38
+probe_iommu_group from bus_for_each_dev+0x74/0xbc
+bus_for_each_dev from bus_iommu_probe+0x34/0x2e8
+bus_iommu_probe from bus_set_iommu+0x80/0xc8
+bus_set_iommu from omap_iommu_init+0x88/0xcc
+omap_iommu_init from do_one_initcall+0x44/0x24c
+
+Any ideas for a fix?
+
+It would be good to fix this quickly so we don't end up with a broken
+v5.18-rc1..
+
+For reference, this is mainline commit 41bb23e70b50 ("iommu: Remove unused
+argument in is_attach_deferred").
+
+Regards,
+
+Tony
+
+#regzbot ^introduced 41bb23e70b50

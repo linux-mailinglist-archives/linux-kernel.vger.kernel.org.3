@@ -2,232 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70C14EBAE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D414EBAF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbiC3Gip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 02:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57440 "EHLO
+        id S242621AbiC3GlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 02:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243333AbiC3Gig (ORCPT
+        with ESMTP id S234829AbiC3Gky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 02:38:36 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE5657141
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:36:50 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V8cbA2h_1648622206;
-Received: from 30.30.125.253(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V8cbA2h_1648622206)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 30 Mar 2022 14:36:47 +0800
-Message-ID: <784aee91-6a01-6e67-389e-1e1883796894@linux.alibaba.com>
-Date:   Wed, 30 Mar 2022 14:37:35 +0800
+        Wed, 30 Mar 2022 02:40:54 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826BE21267
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:39:08 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2e592e700acso207650237b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:39:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2jpIraTYVy4+KW5tVKFlrsJ4TJFxRhQCZzwCcMrDysQ=;
+        b=MEWKTEvCsDle3dITB/iGqmG2nuVbFY4r/X0tW7OvlvsFQBtdzGiCXPUGGGi44lgkSG
+         gwBxZJiKD3ibwUHdcdWOoBGjtSk+1IvNkRvPgX/cBIU2ZHktfy3qksn80JuQxFXjbAVz
+         6oueOewMLxUJcQwQpz8VZ5Cdo4lJMtA7Z6FnvvppcNb8xtaoXpkjHyzZxKIPyAJIgTrb
+         POFS5tYdMogwTcND4whrMguNp1FuZ29UKcLkklEG/QM/Ypyx+jevZ3G5znphjgvAFO75
+         GiMR2gj09qMPA30TrN4oz/dUw9hVAlOUei7RzwpHDuHZZoWFdUpnmNdKhHAMOIeECO0Z
+         l/Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2jpIraTYVy4+KW5tVKFlrsJ4TJFxRhQCZzwCcMrDysQ=;
+        b=QifDReleayV5UiZbbxTCQ3kUXEMTHS2QebctlWSRK+S54rjkItTZyjSyG8hbMSuq9v
+         ZDyMTs/Pu6DmNPE/5ZfxDFLYBZChxDbmJg7iZt/Q+3CKjX0Pu00WVI3Q1xrkQ19wdjna
+         V6JjImLGaTM47PRyDPJKDKoPmDVplgUR1MviF2sy5/EwGLn78WanZ4UYggtgnlPJS4k5
+         S8G9EA7GqBgEsnay4H1Q2Fob/PUdnxqXXqw3TP/bu89MzIe+p1jW8IFsKZv0HbaULS3e
+         8j2H34UShfaukuZbY6wnfXIMKUM+34UGkKJbGg7xZRawik/eleVSiKIv9aFBRgCCY9MW
+         /SjA==
+X-Gm-Message-State: AOAM533G7+JJ2CbcXtjVKpFG6ynYZpiA/IAy5SzI9Toy1BFkyQ6aVF3c
+        8kD7boAAsimALPJZUi5MtAN0uHXSLPnXC62ktIXtDw==
+X-Google-Smtp-Source: ABdhPJy3q4c0i4haH+2YtHMErDDuUpBmlm9A2lJLAWorkvOk6avqxhd4F1PThmNVEhAdzByl9EYgJKp6AkzQAFbciKM=
+X-Received: by 2002:a0d:ccca:0:b0:2e6:2b53:3f16 with SMTP id
+ o193-20020a0dccca000000b002e62b533f16mr35680433ywd.35.1648622347570; Tue, 29
+ Mar 2022 23:39:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] mm: migrate: set demotion targets differently
-To:     Jagdish Gediya <jvgediya@linux.ibm.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com,
-        dave.hansen@linux.intel.com, ying.huang@intel.com
-References: <20220329115222.8923-1-jvgediya@linux.ibm.com>
- <b7d1ab3b-e92c-d3aa-72cb-b80cc1a61e85@linux.alibaba.com>
- <YkMR8OY779Bcri3I@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <YkMR8OY779Bcri3I@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220309144000.1470138-1-longman@redhat.com> <CAMZfGtWS581YW4Y8oNU=E_zPnpK=mMdYVSG1F3U3fJNAzBzc+g@mail.gmail.com>
+ <2263666d-5eef-b1fe-d5e3-b166a3185263@redhat.com> <CAMZfGtVG2YcmxY0fECkAYNb=sKXJQhWJqgtMTEpQwxXEXmSOLw@mail.gmail.com>
+ <e93696b7-b678-6f41-9c1e-46aad447ce8d@redhat.com> <YkIIjGk5t4XorQXe@carbon.dhcp.thefacebook.com>
+ <CAMZfGtXhoLso9FN_LwybqUHaZr28_hxmjeuA8T=zQdWWz=FDrA@mail.gmail.com> <07be89ad-e355-69b9-6e36-07beaebf2d8b@redhat.com>
+In-Reply-To: <07be89ad-e355-69b9-6e36-07beaebf2d8b@redhat.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Wed, 30 Mar 2022 14:38:31 +0800
+Message-ID: <CAMZfGtXYH8Lex3hZGW4V8AzmqR03uzJnrBz8z7_1FD_P3Lgk-A@mail.gmail.com>
+Subject: Re: [PATCH-mm v3] mm/list_lru: Optimize memcg_reparent_list_lru_node()
+To:     Waiman Long <longman@redhat.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 30, 2022 at 5:53 AM Waiman Long <longman@redhat.com> wrote:
+>
+> On 3/28/22 21:15, Muchun Song wrote:
+> > On Tue, Mar 29, 2022 at 3:12 AM Roman Gushchin <roman.gushchin@linux.dev> wrote:
+> >> On Sun, Mar 27, 2022 at 08:57:15PM -0400, Waiman Long wrote:
+> >>> On 3/22/22 22:12, Muchun Song wrote:
+> >>>> On Wed, Mar 23, 2022 at 9:55 AM Waiman Long <longman@redhat.com> wrote:
+> >>>>> On 3/22/22 21:06, Muchun Song wrote:
+> >>>>>> On Wed, Mar 9, 2022 at 10:40 PM Waiman Long <longman@redhat.com> wrote:
+> >>>>>>> Since commit 2c80cd57c743 ("mm/list_lru.c: fix list_lru_count_node()
+> >>>>>>> to be race free"), we are tracking the total number of lru
+> >>>>>>> entries in a list_lru_node in its nr_items field.  In the case of
+> >>>>>>> memcg_reparent_list_lru_node(), there is nothing to be done if nr_items
+> >>>>>>> is 0.  We don't even need to take the nlru->lock as no new lru entry
+> >>>>>>> could be added by a racing list_lru_add() to the draining src_idx memcg
+> >>>>>>> at this point.
+> >>>>>> Hi Waiman,
+> >>>>>>
+> >>>>>> Sorry for the late reply.  Quick question: what if there is an inflight
+> >>>>>> list_lru_add()?  How about the following race?
+> >>>>>>
+> >>>>>> CPU0:                               CPU1:
+> >>>>>> list_lru_add()
+> >>>>>>        spin_lock(&nlru->lock)
+> >>>>>>        l = list_lru_from_kmem(memcg)
+> >>>>>>                                        memcg_reparent_objcgs(memcg)
+> >>>>>>                                        memcg_reparent_list_lrus(memcg)
+> >>>>>>                                            memcg_reparent_list_lru()
+> >>>>>>                                                memcg_reparent_list_lru_node()
+> >>>>>>                                                    if (!READ_ONCE(nlru->nr_items))
+> >>>>>>                                                        // Miss reparenting
+> >>>>>>                                                        return
+> >>>>>>        // Assume 0->1
+> >>>>>>        l->nr_items++
+> >>>>>>        // Assume 0->1
+> >>>>>>        nlru->nr_items++
+> >>>>>>
+> >>>>>> IIUC, we use nlru->lock to serialise this scenario.
+> >>>>> I guess this race is theoretically possible but very unlikely since it
+> >>>>> means a very long pause between list_lru_from_kmem() and the increment
+> >>>>> of nr_items.
+> >>>> It is more possible in a VM.
+> >>>>
+> >>>>> How about the following changes to make sure that this race can't happen?
+> >>>>>
+> >>>>> diff --git a/mm/list_lru.c b/mm/list_lru.c
+> >>>>> index c669d87001a6..c31a0a8ad4e7 100644
+> >>>>> --- a/mm/list_lru.c
+> >>>>> +++ b/mm/list_lru.c
+> >>>>> @@ -395,9 +395,10 @@ static void memcg_reparent_list_lru_node(struct
+> >>>>> list_lru *lru, int nid,
+> >>>>>            struct list_lru_one *src, *dst;
+> >>>>>
+> >>>>>            /*
+> >>>>> -        * If there is no lru entry in this nlru, we can skip it
+> >>>>> immediately.
+> >>>>> +        * If there is no lru entry in this nlru and the nlru->lock is free,
+> >>>>> +        * we can skip it immediately.
+> >>>>>             */
+> >>>>> -       if (!READ_ONCE(nlru->nr_items))
+> >>>>> +       if (!READ_ONCE(nlru->nr_items) && !spin_is_locked(&nlru->lock))
+> >>>> I think we also should insert a smp_rmb() between those two loads.
+> >>> Thinking about this some more, I believe that adding spin_is_locked() check
+> >>> will be enough for x86. However, that will likely not be enough for arches
+> >>> with a more relaxed memory semantics. So the safest way to avoid this
+> >>> possible race is to move the check to within the lock critical section,
+> >>> though that comes with a slightly higher overhead for the 0 nr_items case. I
+> >>> will send out a patch to correct that. Thanks for bring this possible race
+> >>> to my attention.
+> >> Yes, I think it's not enough:
+> > I think it may be enough if we insert a smp_rmb() between those two loads.
+> >
+> >> CPU0                                       CPU1
+> >> READ_ONCE(&nlru->nr_items) -> 0
+> >>                                             spin_lock(&nlru->lock);
+> >>                                             nlru->nr_items++;
+> >                                               ^^^
+> >                                               |||
+> >                                               The nlr here is not the
+> > same as the one in CPU0,
+> >                                               since CPU0 have done the
+> > memcg reparting. Then
+> >                                               CPU0 will not miss nlru
+> > reparting.  If I am wrong, please
+> >                                               correct me.  Thanks.
+> >>                                             spin_unlock(&nlru->lock);
+> >> && !spin_is_locked(&nlru->lock) -> 0
+>
+> I just realize that there is another lock/unlock pair in
+> memcg_reparent_objcgs():
+>
+> memcg_reparent_objcgs()
+>      spin_lock_irq()
+>      memcg reparenting
+>      spin_unlock_irq()
+>      percpu_ref_kill()
+>          spin_lock_irqsave()
+>          ...
+>          spin_unlock_irqrestore()
+>
+> This lock/unlock pair in percpu_ref_kill() will stop the reordering of
+> read/write before the memcg reparenting. Now I think just adding a
+> spin_is_locked() check with smp_rmb() should be enough. However, I would
+> like to change the ordering like that:
+>
+> if (!spin_is_locked(&nlru->lock)) {
+>          smp_rmb();
+>          if (!READ_ONCE(nlru->nr_items))
+>                  return;
+> }
 
+Does the following race still exist?
 
-On 3/29/2022 10:04 PM, Jagdish Gediya wrote:
-> On Tue, Mar 29, 2022 at 08:26:05PM +0800, Baolin Wang wrote:
-> Hi Baolin,
->> Hi Jagdish,
->>
->> On 3/29/2022 7:52 PM, Jagdish Gediya wrote:
->>> The current implementation to identify the demotion
->>> targets limits some of the opportunities to share
->>> the demotion targets between multiple source nodes.
->>>
->>> Implement a logic to identify the loop in the demotion
->>> targets such that all the possibilities of demotion can
->>> be utilized. Don't share the used targets between all
->>> the nodes, instead create the used targets from scratch
->>> for each individual node based on for what all node this
->>> node is a demotion target. This helps to share the demotion
->>> targets without missing any possible way of demotion.
->>>
->>> e.g. with below NUMA topology, where node 0 & 1 are
->>> cpu + dram nodes, node 2 & 3 are equally slower memory
->>> only nodes, and node 4 is slowest memory only node,
->>>
->>> available: 5 nodes (0-4)
->>> node 0 cpus: 0 1
->>> node 0 size: n MB
->>> node 0 free: n MB
->>> node 1 cpus: 2 3
->>> node 1 size: n MB
->>> node 1 free: n MB
->>> node 2 cpus:
->>> node 2 size: n MB
->>> node 2 free: n MB
->>> node 3 cpus:
->>> node 3 size: n MB
->>> node 3 free: n MB
->>> node 4 cpus:
->>> node 4 size: n MB
->>> node 4 free: n MB
->>> node distances:
->>> node   0   1   2   3   4
->>>     0:  10  20  40  40  80
->>>     1:  20  10  40  40  80
->>>     2:  40  40  10  40  80
->>>     3:  40  40  40  10  80
->>>     4:  80  80  80  80  10
->>>
->>> The existing implementation gives below demotion targets,
->>>
->>> node    demotion_target
->>>    0              3, 2
->>>    1              4
->>>    2              X
->>>    3              X
->>>    4		X
->>>
->>> With this patch applied, below are the demotion targets,
->>>
->>> node    demotion_target
->>>    0              3, 2
->>>    1              3, 2
->>>    2              3
->>>    3              4
->>>    4		X
->>
->> Node 2 and node 3 both are slow memory and have same distance, why node 2
->> should demote cold memory to node 3? They should have the same target
->> demotion node 4, which is the slowest memory node, right?
->>
-> Current demotion target finding algorithm works based on best distance, as distance between node 2 & 3 is 40 and distance between node 2 & 4 is 80, node 2 demotes to node 3.
+ CPU0:                               CPU1:
+                                        spin_is_locked(&nlru->lock)
+ list_lru_add()
+        spin_lock(&nlru->lock)
+        l = list_lru_from_kmem(memcg)
+                                        memcg_reparent_objcgs(memcg)
+                                        memcg_reparent_list_lrus(memcg)
+                                            memcg_reparent_list_lru()
+                                                memcg_reparent_list_lru_node()
+                                                    if
+(!READ_ONCE(nlru->nr_items))
+                                                        // Miss reparenting
+                                                        return
+        // Assume 0->1
+        l->nr_items++
+        // Assume 0->1
+        nlru->nr_items++
 
-If node 2 can demote to node 3, which means node 3's memory is colder 
-than node 2, right? The accessing time of node 3 should be larger than 
-node 2, then we can demote colder memory to node 3 from node 2.
+>
+> Otherwise, we will have the problem
+>
+> list_lru_add()
+>        spin_lock(&nlru->lock)
+>        l = list_lru_from_kmem(memcg)
+> READ_ONCE(nlru->nr_items);
+>        // Assume 0->1
+>        l->nr_items++
+>        // Assume 0->1
+>        nlru->nr_items++
+>        spin_unlock(&nlru->lock)
+>                                        spin_is_locked()
 
-But node 2 and node 3 are same memory type and have same distance, the 
-accessing time of node 2 and node 3 should be same too, so why add so 
-many page migration between node 2 and node 3? I'm still not sure the 
-benefits.
+You are right.
 
-Huang Ying and Dave, how do you think about this demotion targets?
-
->>>
->>> e.g. with below NUMA topology, where node 0, 1 & 2 are
->>> cpu + dram nodes and node 3 is slow memory node,
->>>
->>> available: 4 nodes (0-3)
->>> node 0 cpus: 0 1
->>> node 0 size: n MB
->>> node 0 free: n MB
->>> node 1 cpus: 2 3
->>> node 1 size: n MB
->>> node 1 free: n MB
->>> node 2 cpus: 4 5
->>> node 2 size: n MB
->>> node 2 free: n MB
->>> node 3 cpus:
->>> node 3 size: n MB
->>> node 3 free: n MB
->>> node distances:
->>> node   0   1   2   3
->>>     0:  10  20  20  40
->>>     1:  20  10  20  40
->>>     2:  20  20  10  40
->>>     3:  40  40  40  10
->>>
->>> The existing implementation gives below demotion targets,
->>>
->>> node    demotion_target
->>>    0              3
->>>    1              X
->>>    2              X
->>>    3              X
->>>
->>> With this patch applied, below are the demotion targets,
->>>
->>> node    demotion_target
->>>    0              3
->>>    1              3
->>>    2              3
->>>    3              X
->>
->> Sounds reasonable.
->>
->>>
->>> with below NUMA topology, where node 0 & 2 are cpu + dram
->>> nodes and node 1 & 3 are slow memory nodes,
->>>
->>> available: 4 nodes (0-3)
->>> node 0 cpus: 0 1
->>> node 0 size: n MB
->>> node 0 free: n MB
->>> node 1 cpus:
->>> node 1 size: n MB
->>> node 1 free: n MB
->>> node 2 cpus: 2 3
->>> node 2 size: n MB
->>> node 2 free: n MB
->>> node 3 cpus:
->>> node 3 size: n MB
->>> node 3 free: n MB
->>> node distances:
->>> node   0   1   2   3
->>>     0:  10  40  20  80
->>>     1:  40  10  80  80
->>>     2:  20  80  10  40
->>>     3:  80  80  40  10
->>>
->>> The existing implementation gives below demotion targets,
->>>
->>> node    demotion_target
->>>    0              3
->>>    1              X
->>>    2              3
->>>    3              X
->>
->> If I understand correctly, this is not true. The demotion route should be as
->> below with existing implementation:
->> node 0 ---> node 1
->> node 1 ---> X
->> node 2 ---> node 3
->> node 3 ---> X
->>
-> Its typo, It should be 0 -> 1, Will correct it in v2.
->>>
->>> With this patch applied, below are the demotion targets,
->>>
->>> node    demotion_target
->>>    0              1
->>>    1              3
->>>    2              3
->>>    3              X
->>>
->>> As it can be seen above, node 3 can be demotion target for node
->>> 1 but existing implementation doesn't configure it that way. It
->>> is better to move pages from node 1 to node 3 instead of moving
->>> it from node 1 to swap.
->>
->> Which means node 3 is the slowest memory node?
->>
-> Node 1 and 3 are equally slower but 1 is near to 0 and 3 is near to 2. Basically you can think of it like node 1 is slow memory logical node near to node 0 and node 3 is slow memory logical node near to node 2.
-
-OK.
+>
+> If spin_is_locked() is before spin_lock() in list_lru_add(),
+> list_lru_from_kmem() is guarantee to get the reparented memcg and so
+> won't added to the reparented lru.
+>

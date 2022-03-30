@@ -2,112 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F614EC9D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD62F4EC9D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348946AbiC3QqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 12:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
+        id S1348931AbiC3QqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 12:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348916AbiC3QqG (ORCPT
+        with ESMTP id S1348899AbiC3QqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:46:06 -0400
-Received: from box.fidei.email (box.fidei.email [IPv6:2605:2700:0:2:a800:ff:feba:dc44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94C71D7639;
-        Wed, 30 Mar 2022 09:44:20 -0700 (PDT)
-Received: from authenticated-user (box.fidei.email [71.19.144.250])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.fidei.email (Postfix) with ESMTPSA id BB99680505;
-        Wed, 30 Mar 2022 12:44:19 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dorminy.me; s=mail;
-        t=1648658660; bh=2vDZxqOwL/Uguo0MetysoT9MQskq4w66hKhbgUWx4og=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rn+gCgUJHYnJ6pCRofwXqyQz3swpxn7noQEe3+0hH1LkMbrG+XvFVzC5D7f07BYvD
-         AfgTpZMFnIZ7ScM3MuMXwQtZGa3MoYU5qOVAA6NEQUAFR2Eyagc4aFYuzpg/kRabp6
-         N53wUyWHbvjdw1it1W3DLoopUnHCFSl5piMgdwFoLX0BVvTfSaAvy4np5Cm7EfoXZv
-         6wLUH0oILhDsd62mIQIkGJbnAa6jU+2JVGCY3NdKJD/5NUMUnNcFt334KHLXawc2xS
-         g65TSbNQobORSO8nxioGjhqvj7frTguZIafak1KFOni7/QC+MNmwRUWsrfdWqbxF9e
-         ZzjtrSJyWDIKg==
-From:   Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, kernel-team@fb.com
-Cc:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
-        Nikolay Borisov <nborisov@suse.com>
-Subject: [PATCH v2 2/2] btrfs: allocate page arrays using bulk page allocator
-Date:   Wed, 30 Mar 2022 12:44:07 -0400
-Message-Id: <4a0be376555602a8ee07b3cb58add0efcce3abd5.1648658236.git.sweettea-kernel@dorminy.me>
-In-Reply-To: <cover.1648658235.git.sweettea-kernel@dorminy.me>
-References: <cover.1648658235.git.sweettea-kernel@dorminy.me>
+        Wed, 30 Mar 2022 12:46:05 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A5F21D760C
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:44:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 41A02153B;
+        Wed, 30 Mar 2022 09:44:18 -0700 (PDT)
+Received: from [10.1.196.218] (eglon.cambridge.arm.com [10.1.196.218])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3081D3F73B;
+        Wed, 30 Mar 2022 09:44:16 -0700 (PDT)
+Subject: Re: [PATCH v3 12/21] x86/resctrl: Calculate bandwidth from the
+ previous __mon_event_count() chunks
+To:     Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        Jamie Iles <jamie@nuviainc.com>,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        lcherian@marvell.com, bobo.shaobowang@huawei.com,
+        tan.shaopeng@fujitsu.com
+References: <20220217182110.7176-1-james.morse@arm.com>
+ <20220217182110.7176-13-james.morse@arm.com>
+ <c4088205-a344-5ef8-15e2-9ccc5d1691ea@intel.com>
+From:   James Morse <james.morse@arm.com>
+Message-ID: <146a1a64-7925-008f-a817-fe0860b30105@arm.com>
+Date:   Wed, 30 Mar 2022 17:44:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <c4088205-a344-5ef8-15e2-9ccc5d1691ea@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While calling alloc_page() in a loop is an effective way to populate an
-array of pages, the kernel provides a method to allocate pages in bulk.
-alloc_pages_bulk_array() populates the NULL slots in a page array, trying to
-grab more than one page at a time.
+Hi Reinette,
 
-Unfortunately, it doesn't guarantee allocating all slots in the array,
-but it's easy to call it in a loop and return an error if no progress
-occurs. Similar code can be found in xfs/xfs_buf.c:xfs_buf_alloc_pages().
+On 05/03/2022 00:27, Reinette Chatre wrote:
+> On 2/17/2022 10:21 AM, James Morse wrote:
+>> mbm_bw_count() is only called by the mbm_handle_overflow() worker once a
+>> second. It reads the hardware register, calculates the bandwidth and
+>> updates m->prev_bw_msr which is used to hold the previous hardware register
+>> value.
+>>
+>> Operating directly on hardware register values makes it difficult to make
+>> this code architecture independent, so that it can be moved to /fs/,
+>> making the mba_sc feature something resctrl supports with no additional
+>> support from the architecture.
+>> Prior to calling mbm_bw_count(), mbm_update() reads from the same hardware
+>> register using __mon_event_count().
+>>
+>> Change mbm_bw_count() to use the current chunks value most recently saved by
+>> __mon_event_count(). This removes an extra call to __rmid_read().
+> 
+>> Instead of using m->prev_msr to calculate the number of chunks seen,
+>> use the rr->val that was updated by __mon_event_count(). This removes a extra
+>> calls to mbm_overflow_count() and get_corrected_mbm_count().
+> 
+> "removes a extra calls" -> "removes an extra call" ?
+> 
+> __mon_event_count() ends with "rr->val += get_corrected_mbm_count()" and
+> it is called twice by mbm_update(). The intention in this change is for
+> mbm_bw_count() to benefit from the rmid read done just before ...
+> but would using rr->val within mbm_bw_count() not result in it getting
+> data from both rmid reads due to the increment?
 
-Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-Reviewed-by: Nikolay Borisov <nborisov@suse.com>
----
-Changes in v2:
- - Moved from ctree.c to extent_io.c
----
- fs/btrfs/extent_io.c | 25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+Yes, bother. I thought those were mutually exclusive, but its __mon_event_count() that
+uses a different struct mbm_state for each set of raw values, not mbm_update().
 
-diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
-index 5700fcc23271..52abad421ba1 100644
---- a/fs/btrfs/extent_io.c
-+++ b/fs/btrfs/extent_io.c
-@@ -3144,17 +3144,24 @@ static void end_bio_extent_readpage(struct bio *bio)
-  */
- int btrfs_alloc_page_array(unsigned long nr_pages, struct page **page_array)
- {
--	int i;
--	for (i = 0; i < nr_pages; i++) {
--		struct page *page;
--		if (page_array[i])
-+	long allocated = 0;
-+	for (;;) {
-+		long last = allocated;
-+
-+		allocated = alloc_pages_bulk_array(GFP_NOFS, nr_pages,
-+						   page_array);
-+		if (allocated == nr_pages)
-+			return 0;
-+
-+		if (allocated != last)
- 			continue;
--		page = alloc_page(GFP_NOFS);
--		if (!page)
--			return -ENOMEM;
--		page_array[i] = page;
-+		/*
-+		 * During this iteration, no page could be allocated, even
-+		 * though alloc_pages_bulk_array() falls back to alloc_page()
-+		 * if  it could not bulk-allocate. So we must be out of memory.
-+		 */
-+		return -ENOMEM;
- 	}
--	return 0;
- }
- 
- /*
--- 
-2.35.1
+[...]
 
+> Should rr.val perhaps be reset before each __mon_event_count() call instead of
+> just at the beginning of mbm_update()?
+
+Yes. This is because the struct rmid_read is just to allow __mon_event_count() to do its
+thing, nothing used to read those values.
+
+
+>> Calculating bandwidth like this means mbm_bw_count() no longer operates
+>> on hardware register values directly.
+
+
+Thanks!
+
+James

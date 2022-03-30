@@ -2,74 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B446B4EB783
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 02:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8D54EB784
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 02:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241477AbiC3Ate (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 20:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
+        id S241487AbiC3Atu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 20:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbiC3Atc (ORCPT
+        with ESMTP id S231342AbiC3Ats (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 20:49:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B89F182D80
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:47:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648601266;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=nAylo5IpwXAoPRELTx8+AnmsJ+Mgi0O7r60sCfc5+XY=;
-        b=gpk1kAPjzB7bl7Wkw8IwDo0ezOtGPN58SjIHdBDyLj/u2x6jJ2oKZXAw1IItmIegG0miec
-        8sZHD8LRjTJcgSXWYxpZvGVUo90cYPTFO+ZBy4iTOpgpUdElXeGZBO0HTk2I/llDHwxAUs
-        YWeHh5BKusnw1vUmwGAUDcATYYVB4Vw=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-520-Ta0Tss2ZObeKJ0-ZKV4TGA-1; Tue, 29 Mar 2022 20:47:44 -0400
-X-MC-Unique: Ta0Tss2ZObeKJ0-ZKV4TGA-1
-Received: by mail-lj1-f199.google.com with SMTP id q5-20020a2e9145000000b002497bf0eaa1so8062744ljg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:47:44 -0700 (PDT)
+        Tue, 29 Mar 2022 20:49:48 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63837182D8A
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:48:05 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id j83so20680129oih.6
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:48:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=L/Z+SxVbLz6ou3wwMOlt3AaF7PE4HzKd6bt7UJffX70=;
+        b=dK3yx5gryzNDPyAAOCVtVbTt6MA3aToJUg/XKmbY9u6v6CDKkg97/nXMI3XNohXqul
+         +odZD9TcwzPCqy0FeM4nvrkc0knqqsdrl7BB9x0QGMI8V09xjhhEOnFD/yz8QQqucqpf
+         PTRspLJIkr2jx2pFIj8KDj7cKxiya5Smh063hd2565QZyZnPgmzq/cDauruSVSuXQfNu
+         0lcjfZKCqricvN3VhZV2/rSX2M7jUb6aEjN8Pa2kI/8CZqTNxjXM8DrYSFxsGlha5Tjw
+         mfxLeXGutfy9L88MiD2lbvCFR6hjYb8AeMzoju847wZxeBYIBP5COfOlzzYQW8ChYzwe
+         1bKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nAylo5IpwXAoPRELTx8+AnmsJ+Mgi0O7r60sCfc5+XY=;
-        b=WR9XLfE3UPZ9iyMpPtc1QUvKQ0kvH4pNbGlV97VlCceByZJ99NlfNkvVZGkn/3764a
-         PTYwkJkSITQTt+SpdxJm2XWX4ZoaoQcclbykCJRb4p0ln14MsGjdv05sGzjP7a5dk/VG
-         MCVwVjQyYu2xs07mUWR/cOb6fFRqfEUsI/55RNcAu9oi7jVnHPsOn3dCc17RL0EoiHv0
-         gxCaxxZsD4In+STeiok7M0/oWR1kokF6Ki05Pe5cx+AaMs05vBxjjWECT3nUbfBhQBZ6
-         Q4X1j9giEWSFUDKifluoht5hNvjZJpiiMF2Xu/4pDLEJB4rqbEMlg6Qji3TY+pmIbNyO
-         zvnw==
-X-Gm-Message-State: AOAM5312MdRasBFQIjrzMr78jyIwrImmGx5BQnUKKL8EbzQ4ZYC01qZU
-        zZA1oX1mf+nfGIbnXyV06JvjG+DVrJdfzCm8EkECuzYAvSXJHoPgmZOBk4J2mg0iPbYdNsobZPy
-        mmRbA7DkCmJ68ESMvEskXDs/a3Qf6rYUnYpy7/UhB8jzi+31f4FoU5GhjQ76DI18Jz0fuGzzKZg
-        I=
-X-Received: by 2002:ac2:4847:0:b0:44a:24b6:7e99 with SMTP id 7-20020ac24847000000b0044a24b67e99mr4826287lfy.279.1648601262857;
-        Tue, 29 Mar 2022 17:47:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzO6TIz7tFG/OsyMvXsipWMnTwVVf/JV9vGBcN4ImwDDVo0wx4BipRownJSPkKzQEAqGyJDPw==
-X-Received: by 2002:ac2:4847:0:b0:44a:24b6:7e99 with SMTP id 7-20020ac24847000000b0044a24b67e99mr4826273lfy.279.1648601262571;
-        Tue, 29 Mar 2022 17:47:42 -0700 (PDT)
-Received: from mjp-Z390-AORUS-MASTER.redhat.com (91-145-109-188.bb.dnainternet.fi. [91.145.109.188])
-        by smtp.gmail.com with ESMTPSA id g12-20020a05651222cc00b0044a1065ca5fsm2146292lfu.304.2022.03.29.17.47.41
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=L/Z+SxVbLz6ou3wwMOlt3AaF7PE4HzKd6bt7UJffX70=;
+        b=miB8IA3/iVPUY8nGXN2pc7CBN2K5C1wosfXaWuWohlLeW5Usg7x4+f3yfoKvOo1Nww
+         5hMfvNyzTAnd+KHvQELJvnwrKdpkZggVPDkXk3h6ZvTmAPIr/pPqj6Jcl1HUBQcoJw8l
+         zUDaQ81/QmetpPo4u6ry01naXmkuTlQincbItKbItTIXX9q/355lhCrOf9kTly4SwcKo
+         ngWEr/TX1dg7AWeU6uv+fzLzMziih7X+oxKmJFWgiYDQDBlg5tfe825DFrZtU9CrX3ZF
+         seQEbTY8vUYHzznvLPAG9UIuUEs2PNdShh+6Wqt60C/VGwy3cpiK/75puaU/Bzi7vrBc
+         /bQg==
+X-Gm-Message-State: AOAM532519L3rHGnjQodIPTF+z8AFFMUU1t/QxhTMhxmqxHR/c0VeCh3
+        ewLVk8rZDZ1vVV0YqEIxzTA=
+X-Google-Smtp-Source: ABdhPJz+BEqfvl9GbjQHynhZTbgEuZapz+Az1wHFJL6oeHdaNVucltGFv4oWTtKFblHw9u4FSRzlLQ==
+X-Received: by 2002:a05:6808:8c7:b0:2ee:f75b:bc20 with SMTP id k7-20020a05680808c700b002eef75bbc20mr812170oij.44.1648601284654;
+        Tue, 29 Mar 2022 17:48:04 -0700 (PDT)
+Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
+        by smtp.gmail.com with ESMTPSA id u16-20020a056808151000b002f734da0881sm7604064oiw.57.2022.03.29.17.48.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 17:47:42 -0700 (PDT)
-From:   mpenttil@redhat.com
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     apopple@nvidia.com, jhubbard@nvidia.com, rcampbell@nvidia.com,
-        jgg@ziepe.ca, vbabka@suse.cz,
-        =?UTF-8?q?Mika=20Penttil=C3=A4?= <mpenttil@redhat.com>
-Subject: [PATCH v6] mm/hmm/test: use char dev with struct device to get device node
-Date:   Wed, 30 Mar 2022 03:47:25 +0300
-Message-Id: <20220330004725.13428-1-mpenttil@redhat.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 29 Mar 2022 17:48:04 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 19:48:03 -0500
+From:   Rebecca Mckeever <remckee0@gmail.com>
+To:     Alison Schofield <alison.schofield@intel.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH] staging: r8188eu: fix suspect code indent for
+ conditional statements
+Message-ID: <YkOowzOkAE5Fr1dW@bertie>
+References: <YkK7ABTVt0TCbd18@bertie>
+ <20220329161632.GA1169956@alison-desk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220329161632.GA1169956@alison-desk>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,107 +75,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mika Penttilä <mpenttil@redhat.com>
+On Tue, Mar 29, 2022 at 09:16:32AM -0700, Alison Schofield wrote:
+> On Tue, Mar 29, 2022 at 02:53:36AM -0500, Rebecca Mckeever wrote:
+> > Align the if and else if branches of the conditional statement
+> > to improve readability. Prevent bugs that could be introduced
+> > if developers misread the code. Issue found by checkpatch.
+> 
+> Thanks for the patch Rebecca!
+> 
+> Lots of stuff done right - passes chkp, compiles, patch is sent to
+> correct recipients, the commit message follows the format of the file.
+> 
+> Let's set a pattern here for all checkpatch related cleanups,
+> for you and others that follow.(Thanks for being the first ;))
+> 
+> Commit msg says 'what'. Commit log says 'why'. Acknowledge that
+> it was found using checkpatch in the commit log also. (In the future
+> you may be acknowledging use of other tools like sparse, coccinelle.)
+> 
+> Note that the 'why' is never that a tool reported an error. The 'why'
+> for these checkpatch reports is usually to follow the Linux Kernel
+> Coding Style.
+> 
+> 'Fix' in the commit message is needlessly generic. Perhaps:
+> [PATCH] staging: r8188eu: align both branches of a conditional statement
+> 
+> Commit log: (what you have is fine in the log)
+> I usually paste in the checkpatch error explicitly so it can be grep'd
+> for. Something like:
+> 
+> Issue found by checkpatch:
+> WARNING: suspect code indent for conditional statements
 
-HMM selftests use an in-kernel pseudo device to emulate device private
-memory. The pseudo device registers a major device range for two pseudo
-device instances. User space has a script that reads /proc/devices in
-order to find the assigned major number, and sends that to mknod(1),
-once for each node.
+There was a section of https://kernelnewbies.org/PatchPhilosophy that suggested
+putting the warning message in the subject line. I thought it would be
+redundant to also put it in the body. Is it a good practice to include the
+warning message in both places?
 
-Change this to properly use cdev and struct device APIs.
+> 
+> Thanks,
+> Alison
+> 
+> > 
+> > Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
+> > ---
+> >  drivers/staging/r8188eu/core/rtw_cmd.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
+> > index 6eca30124ee8..ccc43c0ba433 100644
+> > --- a/drivers/staging/r8188eu/core/rtw_cmd.c
+> > +++ b/drivers/staging/r8188eu/core/rtw_cmd.c
+> > @@ -1408,7 +1408,7 @@ void rtw_survey_cmd_callback(struct adapter *padapter,  struct cmd_obj *pcmd)
+> >  		/* TODO: cancel timer and do timeout handler directly... */
+> >  		/* need to make timeout handlerOS independent */
+> >  		_set_timer(&pmlmepriv->scan_to_timer, 1);
+> > -		} else if (pcmd->res != H2C_SUCCESS) {
+> > +	} else if (pcmd->res != H2C_SUCCESS) {
+> >  		_set_timer(&pmlmepriv->scan_to_timer, 1);
+> >  	}
+> >  
+> > -- 
+> > 2.32.0
+> > 
+> > 
+> 
 
-Delete the /proc/devices parsing from the user-space test script, now
-that it is unnecessary.
-
-Also, deleted an unused field in struct dmirror_device: devmem.
-
-Signed-off-by: Mika Penttilä <mpenttil@redhat.com>
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-Cc: Alistair Popple <apopple@nvidia.com>
-Cc: Ralph Campbell <rcampbell@nvidia.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Vlastimil Babka <vbabka@suse.cz>
----
-v6:
-        - remove device names array
-        - check return value of dev_set_name()
-v5:
-        - fix whitespace
-        . delete unused structure field
-v4:
-        - fix commit log
-v3:
-        - use cdev_device_add() instead of miscdevice
-v2:
-        - Cleanups per review comments from John Hubbard
-        - Added Tested-by and Ccs
-
-
- lib/test_hmm.c                         | 13 ++++++++++---
- tools/testing/selftests/vm/test_hmm.sh |  6 ------
- 2 files changed, 10 insertions(+), 9 deletions(-)
-
-diff --git a/lib/test_hmm.c b/lib/test_hmm.c
-index cfe632047839..7d1f98bc9c9a 100644
---- a/lib/test_hmm.c
-+++ b/lib/test_hmm.c
-@@ -86,7 +86,7 @@ struct dmirror_chunk {
-  */
- struct dmirror_device {
- 	struct cdev		cdevice;
--	struct hmm_devmem	*devmem;
-+	struct device		device;
- 
- 	unsigned int		devmem_capacity;
- 	unsigned int		devmem_count;
-@@ -1227,7 +1227,14 @@ static int dmirror_device_init(struct dmirror_device *mdevice, int id)
- 
- 	cdev_init(&mdevice->cdevice, &dmirror_fops);
- 	mdevice->cdevice.owner = THIS_MODULE;
--	ret = cdev_add(&mdevice->cdevice, dev, 1);
-+	device_initialize(&mdevice->device);
-+	mdevice->device.devt = dev;
-+
-+	ret = dev_set_name(&mdevice->device, "hmm_dmirror%u", id);
-+	if (ret)
-+		return ret;
-+
-+	ret = cdev_device_add(&mdevice->cdevice, &mdevice->device);
- 	if (ret)
- 		return ret;
- 
-@@ -1254,7 +1261,7 @@ static void dmirror_device_remove(struct dmirror_device *mdevice)
- 		kfree(mdevice->devmem_chunks);
- 	}
- 
--	cdev_del(&mdevice->cdevice);
-+	cdev_device_del(&mdevice->cdevice, &mdevice->device);
- }
- 
- static int __init hmm_dmirror_init(void)
-diff --git a/tools/testing/selftests/vm/test_hmm.sh b/tools/testing/selftests/vm/test_hmm.sh
-index 0647b525a625..69f5889f8575 100755
---- a/tools/testing/selftests/vm/test_hmm.sh
-+++ b/tools/testing/selftests/vm/test_hmm.sh
-@@ -41,17 +41,11 @@ check_test_requirements()
- load_driver()
- {
- 	modprobe $DRIVER > /dev/null 2>&1
--	if [ $? == 0 ]; then
--		major=$(awk "\$2==\"HMM_DMIRROR\" {print \$1}" /proc/devices)
--		mknod /dev/hmm_dmirror0 c $major 0
--		mknod /dev/hmm_dmirror1 c $major 1
--	fi
- }
- 
- unload_driver()
- {
- 	modprobe -r $DRIVER > /dev/null 2>&1
--	rm -f /dev/hmm_dmirror?
- }
- 
- run_smoke()
--- 
-2.17.1
-
+Thanks,
+Rebecca

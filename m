@@ -2,66 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A17D4ECD49
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 21:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39644ECD48
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 21:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350794AbiC3Tdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 15:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
+        id S1350828AbiC3Tdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 15:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350282AbiC3Tdg (ORCPT
+        with ESMTP id S1350282AbiC3Tds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 15:33:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEF72B1AB;
-        Wed, 30 Mar 2022 12:31:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9ED20B81D51;
-        Wed, 30 Mar 2022 19:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CAFBC340EC;
-        Wed, 30 Mar 2022 19:31:47 +0000 (UTC)
-Date:   Wed, 30 Mar 2022 15:31:45 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH] tracing: Set user_events to BROKEN
-Message-ID: <20220330153145.2d148b8c@gandalf.local.home>
-In-Reply-To: <CAHk-=wgZ0RccFsUhgKpdh130ydsY57bqaCGRQS7w3-ckgHP=OA@mail.gmail.com>
-References: <20220329222514.51af6c07@gandalf.local.home>
-        <1546405229.199729.1648659253425.JavaMail.zimbra@efficios.com>
-        <CAHk-=wgZ0RccFsUhgKpdh130ydsY57bqaCGRQS7w3-ckgHP=OA@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 30 Mar 2022 15:33:48 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1539A31907;
+        Wed, 30 Mar 2022 12:32:02 -0700 (PDT)
+Received: from g550jk.localnet (a246182.upc-a.chello.nl [62.163.246.182])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 61CE3CB4E4;
+        Wed, 30 Mar 2022 19:32:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1648668720; bh=3DNVwDtsuq84RLI2K9SxbW0zu52l4bles7Y6Cf+v0m0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=paHlFmHyJGZCBHVducC4U0j5/v4wjZzR61VJ7wvflsD+M8R8M52P1jONty71dxzsx
+         1UcHeBwl84mKCDmtGC2S3QMrg1a0P3oJMds2C6wmhAboz46tXJ1/UNqIEDcZmyZkHE
+         2BAXBDMQ8CZFuqwd1iqRihmhVlTEotap1FGeUNwI=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Jack Matthews <jm5112356@gmail.com>
+Cc:     jm5112356@gmail.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ARM: dts: qcom: pm8226: add node for RTC
+Date:   Wed, 30 Mar 2022 21:31:59 +0200
+Message-ID: <6933014.lOV4Wx5bFT@g550jk>
+In-Reply-To: <20220209165742.652890-1-jm5112356@gmail.com>
+References: <20220209052929.651881-1-jm5112356@gmail.com> <20220209165742.652890-1-jm5112356@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 12:28:11 -0700
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
-
-> So maybe it should be marked as
+On Mittwoch, 9. Februar 2022 17:57:41 CEST Jack Matthews wrote:
+> Add a node for PM8226's real time clock.
 > 
->         depends on BROKEN || COMPILE_TEST
+> Signed-off-by: Jack Matthews <jm5112356@gmail.com>
+
+Reviewed-by: Luca Weiss <luca@z3ntu.xyz>
+
+Also on lg-lenok at least "allow-set-time;" seems to allow writing to the RTC. 
+As I'm quite unsure of the reasoning of it normally being read-only and the 
+implementation details behind what might restrict this I don't think we can 
+safely add this to all pm8226.
+
+Regards
+Luca
+
+> ---
+>  arch/arm/boot/dts/qcom-pm8226.dtsi | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> instead?
+> diff --git a/arch/arm/boot/dts/qcom-pm8226.dtsi
+> b/arch/arm/boot/dts/qcom-pm8226.dtsi index 872724490a5d..8ee628ce88a9
+> 100644
+> --- a/arch/arm/boot/dts/qcom-pm8226.dtsi
+> +++ b/arch/arm/boot/dts/qcom-pm8226.dtsi
+> @@ -73,6 +73,13 @@ adc-chan@f {
+>  			};
+>  		};
+> 
+> +		rtc@6000 {
+> +			compatible = "qcom,pm8941-rtc";
+> +			reg = <0x6000>, <0x6100>;
+> +			reg-names = "rtc", "alarm";
+> +			interrupts = <0x0 0x61 0x1 
+IRQ_TYPE_EDGE_RISING>;
+> +		};
+> +
+>  		pm8226_mpps: mpps@a000 {
+>  			compatible = "qcom,pm8226-mpp", "qcom,spmi-
+mpp";
+>  			reg = <0xa000>;
 
-Agreed. I'll send a v2 of the patch.
 
-Thanks,
 
--- Steve
+

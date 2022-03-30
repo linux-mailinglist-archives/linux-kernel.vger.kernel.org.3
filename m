@@ -2,108 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1294ECE71
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B6A4ECE59
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346381AbiC3U5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 16:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
+        id S1351143AbiC3U60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 16:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232316AbiC3U5i (ORCPT
+        with ESMTP id S1351280AbiC3U6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 16:57:38 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E11140E4
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:55:52 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id y27-20020aa79afb000000b004fa7883f756so12646480pfp.18
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:55:52 -0700 (PDT)
+        Wed, 30 Mar 2022 16:58:08 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155D33A709
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:56:22 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id r23so25921739edb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:56:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=fuRrXdsCRqzg+1qCb9I6FDwYnHbmBjFKNJzRCp889gI=;
-        b=M10w2f7BstD7C/YkxqdBqK5uM+YHXdt7cblQWQ+ryWqUdSnZQPYYCoT9drOuZdMz5g
-         YFTUE70bG+zoEU32ySLAFgCYe+4fwMmSQDlAwvoqlpOaK0aZh4ftlk2OeK3LAS2EKyKZ
-         AgbqW1yHnwjI5N1/3M4CAU+5+9umeunbgq0FlA5cLHKEZgKD12jO4iIR+7l6mjq601mI
-         73lpN/8RZ4seREOX6M/D3WFKP7ysHdrmLI6jbzQk3RsOS+P/6DGsZ3a2+FOsBrQRmWdJ
-         2zo1882YSKNtv2UbbrWqSRfzntQlOUv6eI6Sn+eRHOGC7mm+ejJWsq+JRC4K9Mu0cty9
-         JYdQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nrCvj7Yq7SSib6FwgrmdzFU7UXWII5P9ju8EtUscCW0=;
+        b=boNOk7s9MFWRe9Q5TIHyCBcLZAL3UIEBNmLOOWFhXw6emE+CwKKHdvhC0KffHeh0nF
+         M6pQueP4aCRuJFI7dDzsd8w7oMHmH5zQ1LRTPvQqJiDWbX35wE19ft4HqpfvXL9C1Got
+         NCX+Q7kxCou/I+IrAEJ9Str9SLE8Vpfu1F+nizveKZzqZBmp0ZbLt4163c8iNRc9oq8L
+         +OvcysVAV7F4grrtlsY0RpODotiBIJhRyklfusZBaq0zNt0ADmOlhrzyjpVkba5kg+sN
+         XtIoUFtjlMDxb5pCPzyxnwJLsJ9yaQfPKTqYXEV4ifVXSG43LsveuoFab9UFC5oCyEkr
+         VAUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=fuRrXdsCRqzg+1qCb9I6FDwYnHbmBjFKNJzRCp889gI=;
-        b=Bni4Dao9tTyAO1nJtc5vXRZU20FQK9t4e3gxxOQSXYWZE3zLOCL9bQN4HTDINUyldv
-         k0/spexYtHqU6ceTWlrwvnPaBV006+2BX4qaoG3/V7iY9wEXfNSsDpHp94zpSCCFdBo0
-         AUzSc81myqPX4YBlD1qYUWBlWjVukBtQSlqdt7/phAD2+D99m7i2WowNAzkkjI82vxlj
-         I0gdMulJfD8psn8iy11ANn85cxe8pkKjYrDyM2KXEm7romoEPwVqYxR4T1yHnfio7/gN
-         vMlAu5DOgceQvb922M8MZzFZY7YcICNyvZkmwnWPNt6kMe/tcDOpoxJ3IxdN8uBCogWV
-         zr+A==
-X-Gm-Message-State: AOAM532QLpo77oMLXC3Sir4yi2SrxwqQf/JvKPVzMfxdY9gDW57L/ylV
-        zhW0D9CQrQ4gZuLpgoZq3j0upyRXy9X0jg==
-X-Google-Smtp-Source: ABdhPJxOidzSbO2lGNLqW0nT6Qnr1sDRUAC84FarjkZhbKNtYjCY7NQ/XunZAORsrxJd/TuPX7/l1UPcf9uJdQ==
-X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
- (user=wonchung job=sendgmr) by 2002:a05:6a00:1702:b0:4fd:aae0:84a1 with SMTP
- id h2-20020a056a00170200b004fdaae084a1mr1516689pfc.12.1648673752216; Wed, 30
- Mar 2022 13:55:52 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 20:55:43 +0000
-Message-Id: <20220330205543.2064615-1-wonchung@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v2] sound/hda: Add NULL check to component match callback function
-From:   Won Chung <wonchung@google.com>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@google.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Won Chung <wonchung@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nrCvj7Yq7SSib6FwgrmdzFU7UXWII5P9ju8EtUscCW0=;
+        b=qgsc/SeFmaOMySpje5zvrj62NLwOsr0ZrqAoulh38BKpkDVZtkPIj0VvBnGwU/YCQW
+         YfNlPUQssiufR7B0rQ2tTga6e3uLrYsRacw3NS3+KWFTrSFjX3NuJDUu/ZJm5+47JrlL
+         4a2v62PQLhsEhvB/AU4My+xQCo9OIbAE34pLZoSvNuY5bux6CzjrmeRtSTzuPBYLyR+Y
+         45MAaNGdwCsljOxfqjUrrgqS3EsekAVg4c7oA23oFqg2IsQ9rPXQs18MMCN6rN5a0/QR
+         Shcid5Am1IRH+Ahs6u7x4qOgrqugSS364pwK0nO9fY6Mg2eoG4a/856PaWbckPfKfNJM
+         GXBQ==
+X-Gm-Message-State: AOAM531C6bc9ucQyGjL5TOPzghn2UHDP46Tvqi3/95dmRuCfeix57pxv
+        4F2/dXf4DDjAq6oS/AxuBnnfUQWNVqfLddrmqyYtTg==
+X-Google-Smtp-Source: ABdhPJxrjw92bYCs2jMACCLJM4/KOh2wxHOU9997F7UwcQsMWyUFgKpYWFcmr9tg4GWCYtbl/45JU/IvvXHerOIfRxk=
+X-Received: by 2002:a05:6402:3452:b0:418:f963:42a3 with SMTP id
+ l18-20020a056402345200b00418f96342a3mr13302952edc.12.1648673780493; Wed, 30
+ Mar 2022 13:56:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220328035951.1817417-1-tjmercier@google.com>
+ <20220328035951.1817417-3-tjmercier@google.com> <YkM6/57mVxoNfSvm@slm.duckdns.org>
+In-Reply-To: <YkM6/57mVxoNfSvm@slm.duckdns.org>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Wed, 30 Mar 2022 13:56:09 -0700
+Message-ID: <CABdmKX2Gxg35k7QiL2Vn4zWhmQ4UnM-Z8cnOXR0fwBWyJnZ+Ng@mail.gmail.com>
+Subject: Re: [RFC v4 2/8] cgroup: gpu: Add a cgroup controller for allocator
+ attribution of GPU memory
+To:     Tejun Heo <tj@kernel.org>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Component match callback function needs to check if expected data is
-passed to it. Without this check, it can cause a NULL pointer
-dereference when another driver registers a component before i915
-drivers have their component master fully bind.
+On Tue, Mar 29, 2022 at 9:59 AM Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello,
 
-Fixes: 7b882fe3e3e8b ("ALSA: hda - handle multiple i915 device instances")
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Won Chung <wonchung@google.com>
----
-- Add "Fixes" tag
-- Send to stable@vger.kernel.org
+I'm sorry for the delay Tejun, my test device stopped working and my
+attention has been occupied with that.
 
- sound/hda/hdac_i915.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> On Mon, Mar 28, 2022 at 03:59:41AM +0000, T.J. Mercier wrote:
+> > The API/UAPI can be extended to set per-device/total allocation limits
+> > in the future.
+>
+> This total thing kinda bothers me. Can you please provide some concrete
+> examples of how this and per-device limits would be used?
 
-diff --git a/sound/hda/hdac_i915.c b/sound/hda/hdac_i915.c
-index efe810af28c5..958b0975fa40 100644
---- a/sound/hda/hdac_i915.c
-+++ b/sound/hda/hdac_i915.c
-@@ -102,13 +102,13 @@ static int i915_component_master_match(struct device *dev, int subcomponent,
- 	struct pci_dev *hdac_pci, *i915_pci;
- 	struct hdac_bus *bus = data;
- 
--	if (!dev_is_pci(dev))
-+	if (!dev_is_pci(dev) || !bus)
- 		return 0;
- 
- 	hdac_pci = to_pci_dev(bus->dev);
- 	i915_pci = to_pci_dev(dev);
- 
--	if (!strcmp(dev->driver->name, "i915") &&
-+	if (dev->driver && !strcmp(dev->driver->name, "i915") &&
- 	    subcomponent == I915_COMPONENT_AUDIO &&
- 	    connectivity_check(i915_pci, hdac_pci))
- 		return 1;
--- 
-2.35.1.1021.g381101b075-goog
+The use case we have for accounting the total (separate from the
+individual devices) is to include the value as part of bugreports, for
+understanding the system-wide amount of dmabuf allocations. I'm not
+aware of an existing need to limit the total. Admittedly this is just
+the sum over the devices, but we currently maintain out of tree code
+to do this sort of thing today. [1]
 
+The per-device limits would be used to restrict the amount of each
+type of allocation charged to an individual application to prevent
+hogging or to completely prevent access. This limitation is not
+something we have implemented today, but it is on our roadmap.
+
+[1] https://android-review.googlesource.com/c/kernel/common/+/1566704/3/drivers/dma-buf/dma-heap.c
+
+>
+> Thanks.
+>
+> --
+> tejun

@@ -2,129 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB444ECCBD
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CD44ECCC5
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350427AbiC3SzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
+        id S1350361AbiC3S5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350382AbiC3Syt (ORCPT
+        with ESMTP id S1350284AbiC3S5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:54:49 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBD45FF32
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:52:55 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id r2so25839062iod.9
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:52:55 -0700 (PDT)
+        Wed, 30 Mar 2022 14:57:42 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF7E6A43A
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:55:56 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id dr20so43345491ejc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:55:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=northvilleschools.net; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=csFzrGs94hc9ejuvCE+fZueUzzUfTyueT4QFad6sO7A=;
-        b=kbnhEsKnagC3ws+rlRgd+RU28wvTNGRtMhsWmEWwmbYiqPqptlBL+A9mL7v0airgXu
-         nctI+WMn3dDObMW9CsUdJpTlbW4vKrL5pBUyx2pjSAtqZVv+f4VoIF+urD25EjG4nG9u
-         zLzFJIR4zoloxEVaPi2GQ7QjUEqZ9P2Zo2he6oaRZpKVsIm/s2LjMtk1F6dvaljt9fHj
-         O23mashsppwcbvWYUVZkgQs9nBEuiiElBXVO4KUIO2L6k/7d83gLBgZfI/FJ1ci/tLVu
-         sdfVNmsRF/qL4/DMVmAdkYk56XSbbKN/ryP/n2Us/yIx2PBPQQg8HII6vraxFFJ72lWN
-         sMOg==
+        d=linbit-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fS8vexv5y5IlDW6jDa/CJnkMG23qfhzjDUs+WGYeVjg=;
+        b=uE53q3re8iwnjr6tBa9zKY2osZp3Jp7t2TKEQ3SXNl1//qBGvJExj/tsz6E1PgZ3e/
+         LkmwFOYHMXSgAU9TJywuh/3mnW/vMQ9usbvvqFAMx1fQd8lYOWLLVXhbeuUQve3sXZXf
+         Fq5P2qkDbGUh0zMm4KJHlrdljEz+Ehg0sYvMkHQ52hNhhcRfJ+Hcgkw8bLQIV+4lCT35
+         VzaTaenvPApoHdpE75vTR57mqE52fMwU0uKIf/5Km74RZ7c7aJw81Xwvkc12VZoCOT0e
+         7ARVYYfD3GMdixo06qi0wm53i2TqGld6y+YnhLB6+sXfLvzX9Z+/7m5kbKulshiKjXdT
+         4LZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=csFzrGs94hc9ejuvCE+fZueUzzUfTyueT4QFad6sO7A=;
-        b=OOYHZSVZbiLgsEv/8ClzNZKnNXPKy67lnUVjPSE3WirvAtCQu/ckLy/HtaAAOJ4zz6
-         uc0KJXl1p4AbrZt5K8fAZGxGb7fs3/APHdehj2WTYlwZCVAAD/E+xUlO7P3GVvc6NnzA
-         5z2MgAYEhVTk3Y7GWlQOlAB38fvEt6vptS/NCO1xOj3Fmxzxea66B6bSVDAdkLX0oOVF
-         F7LcdOpJawLzZMZ0FeEJNpJZD+z9RJUlKuNp4g17HifLxaLh300G9pkb0EwBzCnyGJNL
-         Se/xfjtlXWsi0m+LAvcXiZuqu+ZBV6HITNidzx/TtDLFi8EzUyS96GErzejyjqXc5ESC
-         vXYA==
-X-Gm-Message-State: AOAM530hvTJ4AvAG6i09Jp+H0a30MmNgxDg92fHCekYliBgbL4Jgs4as
-        T8SibhW3EGeB8cDS14dp7YZCiNEKZ5i+36Hb
-X-Google-Smtp-Source: ABdhPJzf+QgapgXK+iZ4oLIAi54xyUI7HuBOe15v2PKWDvHqC3zBMwB3TdP35jII066WX2V1hkbzwQ==
-X-Received: by 2002:a6b:14a:0:b0:649:a974:9042 with SMTP id 71-20020a6b014a000000b00649a9749042mr12139250iob.81.1648666375278;
-        Wed, 30 Mar 2022 11:52:55 -0700 (PDT)
-Received: from sckzor-linux (d4-50-247-168.col.wideopenwest.com. [50.4.168.247])
-        by smtp.gmail.com with ESMTPSA id k5-20020a6bf705000000b00649a2634725sm11587364iog.17.2022.03.30.11.52.54
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fS8vexv5y5IlDW6jDa/CJnkMG23qfhzjDUs+WGYeVjg=;
+        b=TCF+CnJ9TsbRGF6fA0I8uGmD3vLXutG4R2SPTqyZysxWvccR2y3sf8/tYQz5LH6OdM
+         cdOcT5jlLvT00js10l1pk/wowJSj/yY5YcDRYHqwu4IpDm+btVhnGzb69c5yXobywG1U
+         KPEb8guN0bTFd7hvphRnEZ3pz3f2keL5HbLPR0XnRXcgxqqyx2Kn2iUAFhRBI5r5gvE8
+         Sd44SVYTyzSQO53U/oUIqgbXBv6j5WQP6iqdIxUUAJSuuOD7MSawG1RB1dIU5WW7WDUm
+         IYGBIStxNlBqT0/LEtlnm8X0k2SRy7qN6o7UIc+BvbXTJDQe+TMuQEcjd8RCoqMH3Knf
+         KDQw==
+X-Gm-Message-State: AOAM530ZnJr21Lg5gy+xNQgI02IvSYsOlTvSOYTFqHudtjllibo/93Sh
+        ZJ6tsMlKX20BgzQMM68OpP4kJQ==
+X-Google-Smtp-Source: ABdhPJz+Vt1B8Iq4kvuEZ5n0irgjFoH7JQGrTUQ0hBXINZJsc5RSI/lf6XLpN5R8JUo3VnVHtmsipg==
+X-Received: by 2002:a17:907:16ac:b0:6e0:1646:9121 with SMTP id hc44-20020a17090716ac00b006e016469121mr1136241ejc.194.1648666555117;
+        Wed, 30 Mar 2022 11:55:55 -0700 (PDT)
+Received: from gintonic.linbit (62-99-137-214.static.upcbusiness.at. [62.99.137.214])
+        by smtp.gmail.com with ESMTPSA id nc13-20020a1709071c0d00b006dfa376ee55sm8554639ejc.131.2022.03.30.11.55.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 11:52:54 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 14:52:53 -0400
-From:   Charlie Sands <sandsch@northvilleschools.net>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dan.carpenter@oracle.com
-Subject: [PATCH V2] staging: r8188eu: Fix sparse endianness warnings
-Message-ID: <YkSnBW70kruOyN9h@sckzor-linux.localdomain>
+        Wed, 30 Mar 2022 11:55:54 -0700 (PDT)
+From:   =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>
+To:     Jens Axboe <abxoe@kernel.dk>
+Cc:     Philipp Reisner <philipp.reisner@linbit.com>,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, stable@vger.kernel.org
+Subject: [RESEND PATCH] drbd: fix potential silent data corruption
+Date:   Wed, 30 Mar 2022 20:55:51 +0200
+Message-Id: <20220330185551.3553196-1-christoph.boehmwalder@linbit.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes sparse warnings about the endianness of different
-pieces of data in the driver.
+From: Lars Ellenberg <lars.ellenberg@linbit.com>
 
-Fixes: 15865124feed ("staging: r8188eu: introduce new core dir for
-RTL8188eu driver")
-Signed-off-by: Charlie Sands <sandsch@northvilleschools.net>
+Scenario:
+---------
+
+bio chain generated by blk_queue_split().
+Some split bio fails and propagates its error status to the "parent" bio.
+But then the (last part of the) parent bio itself completes without error.
+
+We would clobber the already recorded error status with BLK_STS_OK,
+causing silent data corruption.
+
+Reproducer:
+-----------
+
+How to trigger this in the real world within seconds:
+
+DRBD on top of degraded parity raid,
+small stripe_cache_size, large read_ahead setting.
+Drop page cache (sysctl vm.drop_caches=1, fadvise "DONTNEED",
+umount and mount again, "reboot").
+
+Cause significant read ahead.
+
+Large read ahead request is split by blk_queue_split().
+Parts of the read ahead that are already in the stripe cache,
+or find an available stripe cache to use, can be serviced.
+Parts of the read ahead that would need "too much work",
+would need to wait for a "stripe_head" to become available,
+are rejected immediately.
+
+For larger read ahead requests that are split in many pieces, it is very
+likely that some "splits" will be serviced, but then the stripe cache is
+exhausted/busy, and the remaining ones will be rejected.
+
+Signed-off-by: Lars Ellenberg <lars.ellenberg@linbit.com>
+Signed-off-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
+Cc: <stable@vger.kernel.org> # 4.13.x
 ---
-V2: Added the "fixes" line to the commit at the request of Dan Carpenter.
+ drivers/block/drbd/drbd_req.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- drivers/staging/r8188eu/core/rtw_br_ext.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
-index d68611ef22f8..ed41c4e30262 100644
---- a/drivers/staging/r8188eu/core/rtw_br_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
-@@ -70,7 +70,7 @@ static int __nat25_add_pppoe_tag(struct sk_buff *skb, struct pppoe_tag *tag)
- 	struct pppoe_hdr *ph = (struct pppoe_hdr *)(skb->data + ETH_HLEN);
- 	int data_len;
- 
--	data_len = tag->tag_len + TAG_HDR_LEN;
-+	data_len = be16_to_cpu(tag->tag_len) + TAG_HDR_LEN;
- 	if (skb_tailroom(skb) < data_len)
- 		return -1;
- 
-@@ -432,7 +432,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
- 		/*                Handle PPPoE frame                 */
- 		/*---------------------------------------------------*/
- 		struct pppoe_hdr *ph = (struct pppoe_hdr *)(skb->data + ETH_HLEN);
--		unsigned short *pMagic;
-+		__be16 *pMagic;
- 
- 		switch (method) {
- 		case NAT25_CHECK:
-@@ -471,7 +471,7 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
- 						tag->tag_len = htons(MAGIC_CODE_LEN+RTL_RELAY_TAG_LEN+old_tag_len);
- 
- 						/*  insert the magic_code+client mac in relay tag */
--						pMagic = (unsigned short *)tag->tag_data;
-+						pMagic = (__be16 *)tag->tag_data;
- 						*pMagic = htons(MAGIC_CODE);
- 						memcpy(tag->tag_data+MAGIC_CODE_LEN, skb->data+ETH_ALEN, ETH_ALEN);
- 
-@@ -557,9 +557,11 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
- 						struct icmp6hdr  *hdr = (struct icmp6hdr *)(skb->data + ETH_HLEN + sizeof(*iph));
- 						hdr->icmp6_cksum = 0;
- 						hdr->icmp6_cksum = csum_ipv6_magic(&iph->saddr, &iph->daddr,
--										iph->payload_len,
-+										be16_to_cpu(iph->payload_len),
- 										IPPROTO_ICMPV6,
--										csum_partial((__u8 *)hdr, iph->payload_len, 0));
-+										csum_partial((__u8 *)hdr,
-+										be16_to_cpu(iph->payload_len),
-+										0));
- 					}
- 				}
- 			}
+diff --git a/drivers/block/drbd/drbd_req.c b/drivers/block/drbd/drbd_req.c
+index c04394518b07..e1e58e91ee58 100644
+--- a/drivers/block/drbd/drbd_req.c
++++ b/drivers/block/drbd/drbd_req.c
+@@ -180,7 +180,8 @@ void start_new_tl_epoch(struct drbd_connection *connection)
+ void complete_master_bio(struct drbd_device *device,
+ 		struct bio_and_error *m)
+ {
+-	m->bio->bi_status = errno_to_blk_status(m->error);
++	if (unlikely(m->error))
++		m->bio->bi_status = errno_to_blk_status(m->error);
+ 	bio_endio(m->bio);
+ 	dec_ap_bio(device);
+ }
 -- 
-2.35.1
+2.32.0
 

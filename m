@@ -2,117 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99904ECE6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 706BD4ECE70
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351254AbiC3Uuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 16:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
+        id S243725AbiC3Uza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 16:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351250AbiC3Uua (ORCPT
+        with ESMTP id S232316AbiC3Uz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 16:50:30 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C914579A
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:48:29 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id r28-20020a63205c000000b00398344a2582so5750113pgm.20
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=/g82k/yLueQhmfK5T8wtfFe4TaWb3pB9z1BLHTV6OJE=;
-        b=ZLwfiXegtOpdGKQO5+Awr7UqpHxHq7YWpZLHThKlwygdWHkEdfaQhUwBLXkLorgM8e
-         VYG9ldW0nT4Snd9SE3sUP5QbAHJZ77MNQT7dfwjvysO3vT5GISBhm4O1LtHn7dI1zwR6
-         orVt/ljchxeEjsT7wFoyMXoNx7+f2n608RHnJRA1r0+bxut21Y+rddwzSWjabl9TwtHA
-         gh/RjUGC5dl9viJn+UvoywL+R7hV4PnFQQvhHcW+MJ+k89ab8tIOFRfQg5BwMc5kry1Q
-         nvVFaUXDRz/FxjzHC60onq/gJvaNvb1meWYkjjvzlcAZ4hs6Ir8fbFeYU4IwgU0af40I
-         SEKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=/g82k/yLueQhmfK5T8wtfFe4TaWb3pB9z1BLHTV6OJE=;
-        b=1hc3IZnx+rqcSd8qzyDrGkIi6h87Oq/uv2jmPDTHyWyQm7FLlxwZaENlr9hT/eA2FN
-         GGZjADOl2AmNWU2UYYA/P2rYaaxzTu1FnVCYgihwLm9ItHYJeVBWOFeWxegIG8mRn/Fv
-         eI6YKwEMY9a7uYNspq6ims463jajV6h7RCCK+HjO1SZopoyR9je5vAZkhXbM7U5mftfR
-         Hq8fbhCVi51JMGFs+bYdIT/0gT9ByYzbtXMmhqLKPGLiZwkqQHotBTiw5HP2lKzcGcwj
-         0Xx3lJkz003X9UDkR2Lh5KPrPY8F/Gm2jFTdbZp6Kvg3840pd3F7chT38V9FFFIZWEjl
-         oChg==
-X-Gm-Message-State: AOAM530664eLOtq7Jd+66wk7h8tyse7wIiHSQrBHatwCYLmMGMEgXg0v
-        aOPoWPg0pKKFzCoAxXwuu04toLY4TjDFgg==
-X-Google-Smtp-Source: ABdhPJwo/TJxx9dwkuOJqRMDbdr8r/HZtULbQKNklDf3TJsj8fxT4i77GccosAsp1qcKZt/IiSQxwD6gUT4Cjg==
-X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
- (user=wonchung job=sendgmr) by 2002:a17:90b:4c44:b0:1c7:1326:ec90 with SMTP
- id np4-20020a17090b4c4400b001c71326ec90mr1666161pjb.87.1648673309036; Wed, 30
- Mar 2022 13:48:29 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 20:48:09 +0000
-Message-Id: <20220330204809.2061497-1-wonchung@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v2] misc/mei: Add NULL check to component match callback functions
-From:   Won Chung <wonchung@google.com>
-To:     Tomas Winkler <tomas.winkler@intel.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@google.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Won Chung <wonchung@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 30 Mar 2022 16:55:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A2E2B25F
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 13:53:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 439FD616A6
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 20:53:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8567FC340EC;
+        Wed, 30 Mar 2022 20:53:39 +0000 (UTC)
+Date:   Wed, 30 Mar 2022 16:53:37 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [BUG] Crash on x86_32 for: mm: page_alloc: avoid merging
+ non-fallbackable pageblocks with others
+Message-ID: <20220330165337.7138810e@gandalf.local.home>
+In-Reply-To: <B7789993-75EC-4F74-B4E6-AF1CC2CBD9D4@nvidia.com>
+References: <20220330154208.71aca532@gandalf.local.home>
+        <CAHk-=whz_8tRNGCr09X59nMW3JBzFLE-g-F-brxd+AkK+RceCw@mail.gmail.com>
+        <B7789993-75EC-4F74-B4E6-AF1CC2CBD9D4@nvidia.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Component match callback functions need to check if expected data is
-passed to them. Without this check, it can cause a NULL pointer
-dereference when another driver registers a component before i915
-drivers have their component master fully bind.
+On Wed, 30 Mar 2022 16:29:28 -0400
+Zi Yan <ziy@nvidia.com> wrote:
 
-Fixes: 1e8d19d9b0dfc ("mei: hdcp: bind only with i915 on the same PCH")
-Fixes: c2004ce99ed73 ("mei: pxp: export pavp client to me client bus")
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Won Chung <wonchung@google.com>
----
-Changes from v1:
-- Add "Fixes" tag
-- Send to stable@vger.kernel.org
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index bdc8f60ae462..83a90e2973b7 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1108,6 +1108,8 @@ static inline void __free_one_page(struct page *page,
+> 
+>                 buddy_pfn = __find_buddy_pfn(pfn, order);
+>                 buddy = page + (buddy_pfn - pfn);
+> +               if (!page_is_buddy(page, buddy, order))
+> +                       goto done_merging;
+>                 buddy_mt = get_pageblock_migratetype(buddy);
+> 
+>                 if (migratetype != buddy_mt
+> 
 
- drivers/misc/mei/hdcp/mei_hdcp.c | 2 +-
- drivers/misc/mei/pxp/mei_pxp.c   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The above did not apply to Linus's tree, nor even the problem commit
+(before or after), but I found where the code is, and added it manually.
 
-diff --git a/drivers/misc/mei/hdcp/mei_hdcp.c b/drivers/misc/mei/hdcp/mei_hdcp.c
-index ec2a4fce8581..843dbc2b21b1 100644
---- a/drivers/misc/mei/hdcp/mei_hdcp.c
-+++ b/drivers/misc/mei/hdcp/mei_hdcp.c
-@@ -784,7 +784,7 @@ static int mei_hdcp_component_match(struct device *dev, int subcomponent,
- {
- 	struct device *base = data;
- 
--	if (strcmp(dev->driver->name, "i915") ||
-+	if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
- 	    subcomponent != I915_COMPONENT_HDCP)
- 		return 0;
- 
-diff --git a/drivers/misc/mei/pxp/mei_pxp.c b/drivers/misc/mei/pxp/mei_pxp.c
-index f7380d387bab..e32a81da8af6 100644
---- a/drivers/misc/mei/pxp/mei_pxp.c
-+++ b/drivers/misc/mei/pxp/mei_pxp.c
-@@ -131,7 +131,7 @@ static int mei_pxp_component_match(struct device *dev, int subcomponent,
- {
- 	struct device *base = data;
- 
--	if (strcmp(dev->driver->name, "i915") ||
-+	if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
- 	    subcomponent != I915_COMPONENT_PXP)
- 		return 0;
- 
--- 
-2.35.1.1021.g381101b075-goog
+It does appear to allow the machine to boot.
 
+-- Steve

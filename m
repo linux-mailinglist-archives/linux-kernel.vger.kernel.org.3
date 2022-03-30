@@ -2,124 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB524EC7BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048254EC7C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347808AbiC3PG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 11:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
+        id S1347819AbiC3PIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 11:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347795AbiC3PGZ (ORCPT
+        with ESMTP id S1347797AbiC3PIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 11:06:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9943185BDC
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 08:04:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648652678;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tw2K5gl/MCSB4/A/fbU1d6ws7c+ie+K5t32hD35xsYk=;
-        b=c6vpyXFSk5rqkJai2V17tt56byBC3Fzs8nWgZjP/ke5HZpC0TbTMb3XBc+uSqJ7PK0BxlP
-        WA38ziMdl4gh7CqPmzzDyHKXreR4Y7NPfjd5okNv2uYYB4vUVEeaWFte/9a+otrW7+di/q
-        6zKdqDnBwm+FGzAZPBWewWWJdfJj7uU=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-558-JuezJQbhMqmkqlRniSWVKw-1; Wed, 30 Mar 2022 11:04:37 -0400
-X-MC-Unique: JuezJQbhMqmkqlRniSWVKw-1
-Received: by mail-il1-f199.google.com with SMTP id x1-20020a056e020f0100b002c98fce9c13so6604837ilj.3
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 08:04:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Tw2K5gl/MCSB4/A/fbU1d6ws7c+ie+K5t32hD35xsYk=;
-        b=DaTjVwAOfbjwW3S3HaoufRySzYYdURazwjzZtqqVSbrNOxoX1pb5JgN2IetvB6MRIw
-         8QNgizeBlPGCR7a8d/4nl3IIOaIXFU0OgGT0UbIsLxDpGxySU1pPzhRl31eQrOPJqqZ9
-         xmMQ3PI8Iq4T8hQPK5wgAXJNsG3/65ZbItW/YmFI4VoMFXskiPPjlVVEk/6BLPSDux1B
-         sumWEPOU8vlNJDksNCMKFNlptansYdiBKC90YeCuza5r4zylRfP3nTxp94rbXOlHIwJZ
-         p0ICObR2PJ9bxHcQV9wVzlo79zTjv3RM2wZAvAIlhx24nJ05GJq3l9/FgVg2yvjUw2vv
-         0oYA==
-X-Gm-Message-State: AOAM533ysvF/qDARTVujvutIkkp4E5Zt0mrgZUMSBYQ9UfegxNoipfAr
-        Iyac4X/D/izOxJEn72FZ9HnG/j3OQNhjh6EL60TOnkkrPqEdEBiDe+WBUNoi5hXGVxC1LrYGbBr
-        MBgETG7NXzOjvJznUSxrqTU/i
-X-Received: by 2002:a05:6638:191d:b0:321:3acb:ac8a with SMTP id p29-20020a056638191d00b003213acbac8amr28070jal.212.1648652676283;
-        Wed, 30 Mar 2022 08:04:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyfihFwMtBBStLXYs+CPqbLhTdE7s40ejm+m3PFDIPROzfPRQ4jcPPTcNt2jC4McnNSgGoDWg==
-X-Received: by 2002:a05:6638:191d:b0:321:3acb:ac8a with SMTP id p29-20020a056638191d00b003213acbac8amr28045jal.212.1648652675990;
-        Wed, 30 Mar 2022 08:04:35 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id h24-20020a6bfb18000000b006497692016bsm11938613iog.15.2022.03.30.08.04.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 08:04:35 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 09:04:34 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH RFC v2 02/11] iommu: Add
- iommu_group_singleton_lockdown()
-Message-ID: <20220330090434.22224951.alex.williamson@redhat.com>
-In-Reply-To: <BN9PR11MB52766A3E3BC82EEF437258198C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20220329053800.3049561-1-baolu.lu@linux.intel.com>
-        <20220329053800.3049561-3-baolu.lu@linux.intel.com>
-        <BN9PR11MB52760F455B3319789BAB1E0E8C1E9@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <20220329114259.GB1716663@nvidia.com>
-        <BN9PR11MB5276239993592FF808726EF68C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <20220330115820.GE1716663@nvidia.com>
-        <BN9PR11MB52766A3E3BC82EEF437258198C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        Wed, 30 Mar 2022 11:08:16 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4512E98F7A
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 08:06:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1E8C23A;
+        Wed, 30 Mar 2022 08:06:28 -0700 (PDT)
+Received: from e120937-lin.home (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A28163F73B;
+        Wed, 30 Mar 2022 08:06:27 -0700 (PDT)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com, cristian.marussi@arm.com
+Subject: [PATCH 00/22] SCMIv3.1 Miscellaneous changes 
+Date:   Wed, 30 Mar 2022 16:05:29 +0100
+Message-Id: <20220330150551.2573938-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 14:18:47 +0000
-"Tian, Kevin" <kevin.tian@intel.com> wrote:
+Hi all,
 
-> +Alex
-> 
-> > From: Tian, Kevin
-> > Sent: Wednesday, March 30, 2022 10:13 PM
-> >   
-> > > From: Jason Gunthorpe
-> > > Sent: Wednesday, March 30, 2022 7:58 PM
-> > >
-> > > On Wed, Mar 30, 2022 at 06:50:11AM +0000, Tian, Kevin wrote:
-> > >  
-> > > > One thing that I'm not very sure is about DMA alias. Even when physically
-> > > > there is only a single device within the group the aliasing could lead
-> > > > to multiple RIDs in the group making it non-singleton. But probably we
-> > > > don't need support SVA on such device until a real demand comes?  
-> > >
-> > > How can we have multiple RIDs in the same group and have only one
-> > > device in the group?  
-> > 
-> > Alex may help throw some insight here. Per what I read from the code
-> > looks like certain device can generate traffic with multiple RIDs.
+this series introduces a bunch of SCMIv3.1 miscellaneous changes to support
+basically all the SCMIv3.1 specification [1] addition with the exclusion of
+the Powercap protocol and driver which will be introduced later on in
+another series.
 
-You only need to look so far as the dma alias quirks to find devices
-that use the wrong RID for DMA.  In general I don't think we have
-enough confidence to say that for all these devices the wrong RID is
-exclusively used versus some combination of both RIDs.  Also, the
-aliased RID is not always a physical device.  Thanks,
+Most notably the series adds:
 
-Alex
+ - supports across all protocols for long resources naming using *_NAME_GET
+   dedicated new commands
+ - Clock protocol Rate change pre and post notifications
+ - Voltage protocol asynchronous voltage level set command
+   (VOLTAGE_LEVEL_SET_COMPLETE delayed response)
+ - Perf protocol power-cost in micro-watts (only internal support)
+ - Perf protocol PERFORMANCE_LIMITS_SET	new checks
+
+Beside this, the series starts with a few general fixes (01-08/22) and a
+couple of refactoring:
+
+ - one (09/22) simply to split out of common.h into a new protocols.h all
+   the  structures needed only by protocol code, so that the protocol
+   implementation can include such reduced header instead of the whole
+   common.h which was growing insanely
+
+ - another around the handling of multi-part commands.
+   SCMI already allowed to issue some commands using a multi-message scheme
+   through which a particularly big response, which could possibly not fit
+   the underlying transport max payload size, could have been split into
+   multiple chunks.
+   Such logic, though, was scattered all across various protocols, leading
+   to a lot of code duplication, so, before adding even more duplication
+   with SCMIv3.1, I split out the common logic to a couple of helpers to
+   handle such mechanism in a common way through some abstract iterators
+   (13/22) and then ported all the protocols users of such mechanism to the
+   common iterators (14,16-18/22).
+
+SCMIv3.1 new features have been tested with an emulated backend server,
+while refactoring has been chekced against a standard SCMI stack running
+on a JUNO.
+
+The series is based on sudeep/for-next/scmi/updates [2] on top of
+
+commit 38a0e5b735d6 ("clk: scmi: Support atomic clock enable/disable API")
+
+Any feedback very welcome,
+
+Thanks,
+Cristian
+
+
+[1]: https://developer.arm.com/documentation/den0056/d/?lang=en
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git/log/?h=for-next/scmi/updates
+---
+
+Cristian Marussi (22):
+  firmware: arm_scmi: Fix sorting of retrieved clock rates
+  firmware: arm_scmi: Make protocols init fail on basic errors
+  firmware: arm_scmi: Fix Base list protocols enumeration
+  firmware: arm_scmi: Validate BASE_DISCOVER_LIST_PROTOCOLS reply
+  firmware: arm_scmi: Dynamically allocate protocols array
+  firmware: arm_scmi: Make name_get operations return a const
+  firmware: arm_scmi: Check CLOCK_RATE_SET_COMPLETE async reply
+  firmware: arm_scmi: Remove unneeded NULL termination of clk name
+  firmware: arm_scmi: Split protocol specific definitions in a dedicated
+    header
+  firmware: arm_scmi: Introduce a common SCMIv3.1 .extended_name_get
+    helper
+  firmware: arm_scmi: Add SCMIv3.1 extended names protocols support
+  firmware: arm_scmi: Parse clock_enable_latency conditionally
+  firmware: arm_scmi: Add iterators for multi-part commands
+  firmware: arm_scmi: Use common iterators in Sensor protocol
+  firmware: arm_scmi: Add SCMIv3.1 SENSOR_AXIS_NAME_GET support
+  firmware: arm_scmi: Use common iterators in Clock protocol
+  firmware: arm_scmi: Use common iterators in Voltage protocol
+  firmware: arm_scmi: Use common iterators in Perf protocol
+  firmware: arm_scmi: Add SCMIv3.1 Clock notifications
+  firmware: arm_scmi: Add SCMIv3.1 VOLTAGE_LEVEL_SET_COMPLETE
+  firmware: arm_scmi: Add SCMI v3.1 Perf power-cost in microwatts
+  firmware: arm_scmi: Add SCMIv3.1 PERFORMANCE_LIMITS_SET checks
+
+ drivers/firmware/arm_scmi/base.c      |  43 +-
+ drivers/firmware/arm_scmi/clock.c     | 337 +++++++++++---
+ drivers/firmware/arm_scmi/common.h    | 225 +--------
+ drivers/firmware/arm_scmi/driver.c    | 165 ++++++-
+ drivers/firmware/arm_scmi/perf.c      | 162 ++++---
+ drivers/firmware/arm_scmi/power.c     |  44 +-
+ drivers/firmware/arm_scmi/protocols.h | 318 +++++++++++++
+ drivers/firmware/arm_scmi/reset.c     |  40 +-
+ drivers/firmware/arm_scmi/sensors.c   | 645 +++++++++++++++-----------
+ drivers/firmware/arm_scmi/system.c    |   9 +-
+ drivers/firmware/arm_scmi/voltage.c   | 218 ++++++---
+ include/linux/scmi_protocol.h         |  31 +-
+ 12 files changed, 1495 insertions(+), 742 deletions(-)
+ create mode 100644 drivers/firmware/arm_scmi/protocols.h
+
+-- 
+2.32.0
 

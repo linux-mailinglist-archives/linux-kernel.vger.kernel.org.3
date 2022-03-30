@@ -2,68 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5644EBCDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA514EBCDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244401AbiC3Ing (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 04:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
+        id S244409AbiC3IqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 04:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235006AbiC3Ine (ORCPT
+        with ESMTP id S235006AbiC3Ipy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 04:43:34 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A32E023
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 01:41:49 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so5504459pjf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 01:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rwRSBUSEXA3FU34gTo5hg2hs3IWB6XODlZLxIewn3eE=;
-        b=ecMHkjGuiBbhyGV8JLkyQK2ociRxD/0kaM5ciztGvXYXwWhhSRmWrSzdij4XKcmh+k
-         0dzxl9xeLie6Q72LgQBVQTawH70WWM6keTZ99EhtHFxXFU1sQLIx/v4Ki8K28DffuLHC
-         lh3ooGHsfo3FiPPYx9BMku7xMdRuuGc3hUL/k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rwRSBUSEXA3FU34gTo5hg2hs3IWB6XODlZLxIewn3eE=;
-        b=sXz5PEzA8d12AatKz13BbBqZ6ms5DZwcbvckti1fi9KJuGIUzff2tz9Tv13c4lZ8W8
-         s5SyH7M1RXixJCcxDTjyVll1KS2s0wtDu1B9lm3OwQR1MzI0OXIndGf1jhtIxmrKgpPI
-         r4+bKZNyCWqtd37qFuVq6WK+0qDuBur/h2F0WBBN5mtRP/hOxyB0y3eanG7d0aJ2LLZ1
-         ckxuiESPyY4UfplVxk+cejWK4xa9GDrVnloYxFt5BNc1qlzNlnanlIv0XQ6soHyTaEnk
-         IkHQA3ZnB/aQlAwtxarz1ZSw9LkM/3Qofv2+K7apvbQuV/7B8h0g7w5g7Ym+pANWwvNz
-         j8YQ==
-X-Gm-Message-State: AOAM530Wh0IJSQYu9asFHsJaZT4ZkTUTJv6JCzryRxM2LaD6aJIka9NX
-        lM68b6RapUl3FEk6umVBcR7kJA==
-X-Google-Smtp-Source: ABdhPJxIp3XBSt2ygSCHL+Tg+EAz9v3I25lJmzsOMUSgz7ZKDrdINXYOsnUvVEkgWDq/yB3LCz/lPA==
-X-Received: by 2002:a17:90a:930b:b0:1bf:ac1f:6585 with SMTP id p11-20020a17090a930b00b001bfac1f6585mr3763996pjo.88.1648629709315;
-        Wed, 30 Mar 2022 01:41:49 -0700 (PDT)
-Received: from google.com ([2401:fa00:8f:203:1719:a115:46dd:6b80])
-        by smtp.gmail.com with ESMTPSA id pj9-20020a17090b4f4900b001c744034e7csm5979133pjb.2.2022.03.30.01.41.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 01:41:48 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 17:41:43 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Jaewon Kim <jaewon31.kim@samsung.com>, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, s.suk@samsung.com,
-        jaewon31.kim@gmail.com
-Subject: Re: [PATCH] zram_drv: add __GFP_NOWARN flag on call to zs_malloc
-Message-ID: <YkQXx+pLr6FxY1XZ@google.com>
-References: <CGME20220330052214epcas1p250cff6b3168a1c9c253e1fe70e68ca8b@epcas1p2.samsung.com>
- <20220330052502.26072-1-jaewon31.kim@samsung.com>
- <YkQPefdRc+hxIXEV@dhcp22.suse.cz>
+        Wed, 30 Mar 2022 04:45:54 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A311082D2E
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 01:44:08 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22U6sxkq007737;
+        Wed, 30 Mar 2022 08:43:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=pp1;
+ bh=5/FXDwzUbkNVXsjXEmKAp8QeBUiaNFrnJ6vzHszkTzw=;
+ b=JEqU6WKJYhkMDvEAQzZJlpb93k4a1s5Uj6WeWzxQ+9hMeCKMC0ARfTVZjRVy9x0bERO4
+ G6l+POmlJ3C0RVvJ30oWkjhKR0Mrfw2xjiRBn5TrkAnJtIaOgcS2utckzRf4f0ic37S0
+ 5q3VM1V6ElKWbLtIlrh8wfSg7+px6h6NiTB+ZtqOzFvESrUrEqZgnI/Jozw+f4jieusm
+ 1thDxJmbpqj4bESA+rotAJBu52H1f5HQfhpwGP4jDKFHeSkGwfKbBr8RxHeXMjIR7Rxx
+ EnivpeZQtaQgm6EmSx6cn+DNwKbruQCbL4ZcmIVHbHRBc1b33pBaw2Ys4RjbwIfjSFuN MA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f3yy51dkh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 08:43:46 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22U8dSAO014124;
+        Wed, 30 Mar 2022 08:43:44 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3f1tf9g1e8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 08:43:44 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22U8hfHm20906240
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Mar 2022 08:43:42 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DEF684C050;
+        Wed, 30 Mar 2022 08:43:41 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CE64D4C04A;
+        Wed, 30 Mar 2022 08:43:41 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed, 30 Mar 2022 08:43:41 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
+        id 8FC3AE027A; Wed, 30 Mar 2022 10:43:41 +0200 (CEST)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] entry: fix compile error in dynamic_irqentry_exit_cond_resched()
+Date:   Wed, 30 Mar 2022 10:43:28 +0200
+Message-Id: <20220330084328.1805665-1-svens@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkQPefdRc+hxIXEV@dhcp22.suse.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: OqTPwGfhcINv_K36GiFN04fgoB_efV4L
+X-Proofpoint-ORIG-GUID: OqTPwGfhcINv_K36GiFN04fgoB_efV4L
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-30_03,2022-03-29_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 priorityscore=1501 suspectscore=0 adultscore=0
+ impostorscore=0 mlxscore=0 spamscore=0 bulkscore=0 mlxlogscore=999
+ malwarescore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2203300042
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,17 +87,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/03/30 10:06), Michal Hocko wrote:
-> On Wed 30-03-22 14:25:02, Jaewon Kim wrote:
-> > The page allocation with GFP_NOIO may fail. And zram can handle this
-> > allocation failure. We do not need to print log for this.
-> 
-> GFP_NOIO doesn't have any special meaning wrt to failures. zram
-> allocates from the memory reclaim context which is a bad design IMHO.
+kernel/entry/common.c: In function ‘dynamic_irqentry_exit_cond_resched’:
+kernel/entry/common.c:409:14: error: implicit declaration of function ‘static_key_unlikely’; did you mean ‘static_key_enable’? [-Werror=implicit-function-declaration]
+  409 |         if (!static_key_unlikely(&sk_dynamic_irqentry_exit_cond_resched))
+      |              ^~~~~~~~~~~~~~~~~~~
+      |              static_key_enable
 
-Agreed.
+static_key_unlikely() should be static_branch_unlikely().
 
-> Is the memory allocation failure gracefully recoverable?
+Fixes: 99cf983cc8bca ("sched/preempt: Add PREEMPT_DYNAMIC using static keys")
+Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+---
+ kernel/entry/common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-No, it's not. I agree that we want to see that allocation warning
-in the logs.
+diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+index ef8d94a98b7e..371ee8914af1 100644
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -406,7 +406,7 @@ DEFINE_STATIC_CALL(irqentry_exit_cond_resched, raw_irqentry_exit_cond_resched);
+ DEFINE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
+ void dynamic_irqentry_exit_cond_resched(void)
+ {
+-	if (!static_key_unlikely(&sk_dynamic_irqentry_exit_cond_resched))
++	if (!static_branch_unlikely(&sk_dynamic_irqentry_exit_cond_resched))
+ 		return;
+ 	raw_irqentry_exit_cond_resched();
+ }
+-- 
+2.32.0
+

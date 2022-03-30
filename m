@@ -2,155 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD524EBEE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7DD04EBEEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245471AbiC3KjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
+        id S245487AbiC3KjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245472AbiC3Ki6 (ORCPT
+        with ESMTP id S245481AbiC3KjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:38:58 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7E12C108;
-        Wed, 30 Mar 2022 03:37:09 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22U97xdG012932;
-        Wed, 30 Mar 2022 12:36:47 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=d4JOb+YHVgrwP+08iqsQrB5MreHyNjkxKYaMVDOBz7o=;
- b=Qr1MR95AWC0XJrGwqmSl7B6W+eMtKVYe2AWGbrrubN0anGR3FrbdKKOXkaFrFGMXjxdE
- NBX+MA1BKZjwVg5hMlJAT0iHHZ4b0ue4FVNReguLmDI0e+bcTgrghPFancPtk3qT62SZ
- hNQP/Y4ySqceRZ2qRAzTVscehZrUJ2jFgM/RU/OrQ69mDdYGQTe6MeZEWAdvNLJO8zYN
- mQOFow6eulzujjBb9feE3Ta0HRBCC/yEgCmDaze1rdvo0X5Xm1gCdHuo4OPoo4tCNQux
- zaeV4L2xg478vju+Cc2oBplClP5oc1sv5j0vMtcRzrgUUZy6lQYL1fVX71R5WJvURl/H uA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f1s4pe9n1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Mar 2022 12:36:47 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 87C1710002A;
-        Wed, 30 Mar 2022 12:36:46 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7F7A521BF5E;
-        Wed, 30 Mar 2022 12:36:46 +0200 (CEST)
-Received: from localhost (10.75.127.44) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 30 Mar 2022 12:36:46
- +0200
-From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <dmaengine@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>
-Subject: [PATCH] dmaengine: stm32-mdma: check the channel availability (secure or not)
-Date:   Wed, 30 Mar 2022 12:36:45 +0200
-Message-ID: <20220330103645.99969-1-amelie.delaunay@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 30 Mar 2022 06:39:10 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD412C673;
+        Wed, 30 Mar 2022 03:37:25 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id z92so23848803ede.13;
+        Wed, 30 Mar 2022 03:37:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zk0PakqhMYo2nFjmrTKxunyt2MpesAgQERWC2WnfNEk=;
+        b=qtB20WeQ8TqlA5Az/Y82F+D7x/DnDTFKbEzzFPSMBk0QRxFPiiRUGmWElNr2kbE9vD
+         Gfcy3Q9HTiwvBsb7+8eSkCqzWmPE42L6sDxbqqgDapgUufsDVmdujlzTukO+yeqnpMxS
+         hs+XySx0uq4x20C9bpF/3udDDwX7Hw1+hV2eQlBYHNd99uNHRN+BlLksKbOnjnXykiG/
+         UU3JwQ+f6jKnjIp37pISID9iryLk7UfNteJgXzLMNvnjAyyPC+fH+oADq0eC0J0Ebhr1
+         ZR5ZC4PM1hMfCWp96oIF4tDmHrETVbhAeZJim8Z1X4WJ/CinwApkMzeozj7SKZQlhUtC
+         /faA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zk0PakqhMYo2nFjmrTKxunyt2MpesAgQERWC2WnfNEk=;
+        b=wYTVN2SWLfBGYocUOMF4MuWqUkTuBD+OgWP5NAbmpzqVefA+kZL55vyBqf2h+qllcL
+         YMjvdmf1vbcLhTxZG2wxIMcRw9Xv2sV1lMfDGvCcFytzvgtXKiS+3zvTZZkUDmmQiHdZ
+         J9jDw382ube3XP2RIv155dWuWhcgUPyhUrwr36J05J482vJdwQzcwIIYh4OUQvwlpWnr
+         qA3cZJyqNhmK4LxTMtLcklRW7pFBRwS+tDdCzslkTIcBAeZAZHA5xBKFbjPpSZqZXYWQ
+         UUd0fQtOEl53mdsj08tVU75W6HSS3hX4JRnwh10/mwTSUzJczW+b5gMg98l7EIgcGw+b
+         oz8g==
+X-Gm-Message-State: AOAM530LfW/p4OUBYKHoG2S70iXjTpF+YRSvH56EwxJUNvPE6zB/MMHr
+        52XZPvqD9kN/y8TATGiawwffg9Nioeg=
+X-Google-Smtp-Source: ABdhPJw9D+m3ZJO4IlSutzipSpKEnO5i52pnHm9z5H4lL7rXz7bfI7kYfdoWNGgI3f6lSq8FklVM3A==
+X-Received: by 2002:a50:8707:0:b0:41a:68df:1a6e with SMTP id i7-20020a508707000000b0041a68df1a6emr9756964edb.31.1648636644169;
+        Wed, 30 Mar 2022 03:37:24 -0700 (PDT)
+Received: from orome ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id h14-20020a056402280e00b0041957289726sm10438767ede.79.2022.03.30.03.37.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 03:37:23 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 12:37:21 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     Ashish Mhetre <amhetre@nvidia.com>, jonathanh@nvidia.com,
+        vdumpa@nvidia.com, will@kernel.org, robin.murphy@arm.com,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, Snikam@nvidia.com,
+        mperttunen@nvidia.com
+Subject: Re: [Patch v1] iommu: arm-smmu: Use arm-smmu-nvidia impl for Tegra234
+Message-ID: <YkQy4W07fe+PlcT/@orome>
+References: <20220329044436.27732-1-amhetre@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-30_03,2022-03-30_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="/KyzvAGB3/jpeRiy"
+Content-Disposition: inline
+In-Reply-To: <20220329044436.27732-1-amhetre@nvidia.com>
+User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-STM32_MDMA_CCR bit[8] is used to enable Secure Mode (SM). If this bit is
-set, it means that all the channel registers are write-protected. So the
-channel is not available for Linux use.
 
-Add stm32_mdma_filter_fn() callback filter and give it to
-__dma_request_chan (instead of dma_get_any_slave_channel()), to exclude the
-channel if it is marked Secure.
+--/KyzvAGB3/jpeRiy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
----
-Already sent few weeks ago. No change since
-https://lore.kernel.org/lkml/20220117100300.14150-1-amelie.delaunay@foss.st.com/
----
- drivers/dma/stm32-mdma.c | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+On Tue, Mar 29, 2022 at 10:14:36AM +0530, Ashish Mhetre wrote:
+> Tegra234 has 2 pairs of ARM MMU-500 instances. Each pair is used
+> together and should be programmed identically.
+> Add compatible string of Tegra234 iommu nodes in arm_smmu_impl_init()
+> so that arm-smmu-nvidia implementation will be used for programming
+> these SMMU instances.
+>=20
+> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
+> ---
+>  drivers/iommu/arm/arm-smmu/arm-smmu-impl.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
-index 6f57ff0e7b37..95e5831e490a 100644
---- a/drivers/dma/stm32-mdma.c
-+++ b/drivers/dma/stm32-mdma.c
-@@ -73,6 +73,7 @@
- #define STM32_MDMA_CCR_WEX		BIT(14)
- #define STM32_MDMA_CCR_HEX		BIT(13)
- #define STM32_MDMA_CCR_BEX		BIT(12)
-+#define STM32_MDMA_CCR_SM		BIT(8)
- #define STM32_MDMA_CCR_PL_MASK		GENMASK(7, 6)
- #define STM32_MDMA_CCR_PL(n)		FIELD_PREP(STM32_MDMA_CCR_PL_MASK, (n))
- #define STM32_MDMA_CCR_TCIE		BIT(5)
-@@ -248,6 +249,7 @@ struct stm32_mdma_device {
- 	u32 nr_channels;
- 	u32 nr_requests;
- 	u32 nr_ahb_addr_masks;
-+	u32 chan_reserved;
- 	struct stm32_mdma_chan chan[STM32_MDMA_MAX_CHANNELS];
- 	u32 ahb_addr_masks[];
- };
-@@ -1456,10 +1458,23 @@ static void stm32_mdma_free_chan_resources(struct dma_chan *c)
- 	chan->desc_pool = NULL;
- }
- 
-+static bool stm32_mdma_filter_fn(struct dma_chan *c, void *fn_param)
-+{
-+	struct stm32_mdma_chan *chan = to_stm32_mdma_chan(c);
-+	struct stm32_mdma_device *dmadev = stm32_mdma_get_dev(chan);
-+
-+	/* Check if chan is marked Secure */
-+	if (dmadev->chan_reserved & BIT(chan->id))
-+		return false;
-+
-+	return true;
-+}
-+
- static struct dma_chan *stm32_mdma_of_xlate(struct of_phandle_args *dma_spec,
- 					    struct of_dma *ofdma)
- {
- 	struct stm32_mdma_device *dmadev = ofdma->of_dma_data;
-+	dma_cap_mask_t mask = dmadev->ddev.cap_mask;
- 	struct stm32_mdma_chan *chan;
- 	struct dma_chan *c;
- 	struct stm32_mdma_chan_config config;
-@@ -1485,7 +1500,7 @@ static struct dma_chan *stm32_mdma_of_xlate(struct of_phandle_args *dma_spec,
- 		return NULL;
- 	}
- 
--	c = dma_get_any_slave_channel(&dmadev->ddev);
-+	c = __dma_request_channel(&mask, stm32_mdma_filter_fn, &config, ofdma->of_node);
- 	if (!c) {
- 		dev_err(mdma2dev(dmadev), "No more channels available\n");
- 		return NULL;
-@@ -1615,6 +1630,10 @@ static int stm32_mdma_probe(struct platform_device *pdev)
- 	for (i = 0; i < dmadev->nr_channels; i++) {
- 		chan = &dmadev->chan[i];
- 		chan->id = i;
-+
-+		if (stm32_mdma_read(dmadev, STM32_MDMA_CCR(i)) & STM32_MDMA_CCR_SM)
-+			dmadev->chan_reserved |= BIT(i);
-+
- 		chan->vchan.desc_free = stm32_mdma_desc_free;
- 		vchan_init(&chan->vchan, dd);
- 	}
--- 
-2.25.1
+I already sent out this patch a couple of months ago, though I realize
+that it still hasn't been applied:
 
+	http://patchwork.ozlabs.org/project/linux-tegra/list/?series=3D276030
+
+Joerg, any chance we can still get that series into v5.18? I've already
+applied patch 4 given that Rob had acked the DT bindings changes. I know
+it's a bit late, but this has been on the list for a couple of months
+and has Rob's Reviewed-by on the bindings and Will's Acked-by on the ARM
+SMMU driver patches.
+
+If it's too late for v5.18, is there anything else you're waiting for so
+that this can go into v5.19?
+
+Thanks,
+Thierry
+
+--/KyzvAGB3/jpeRiy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmJEMuEACgkQ3SOs138+
+s6HlOg//TjNJ4z0WyKy0AxRsqlIcw2z3MucsPxsaWi4GkY7aRO7MwWwkFgO47mZZ
+eQ+C5Jqy6la7Z9jWrpjDqKUDS7LqNIHq0u5sC+i2eEmmk+97aejtm5LwguwOp1qv
+3zq88Yy8OjA+sfH8wwQ3stqmnNNHMS56eqAgNlItBbiDkreYsR75TtAOhu7zrJZa
+UABYC3Uhl4fYAJUiWI9Acf/ggrvCk8q6h/XNL0eRzxXY4s7nvOBWkTJHDqiGlTUG
+TsqGx9w3T5IVbB+gkYMy/vW24HbeE19eYCgSxXXcR2sbBCB/eFXdG9SsfIQiUT37
+KR6nriHdNNmR4mrGQPWfhj1Myo5DW59aRNliWvJWE7lpNpUo1OvIrX7s1WPYIvLn
+ooc7da5IFZgFsD6QQX6DaM58pZeYvMmgzwB2dtbq5D/6UEDlsiSFb4nunHkfVuZO
+yQT+7Xh2ck0kxnugqvEij9UzGXBjLZkeBlUGhs7+0KIUFUekRuh/ppbL1ZtijQNA
+Um4IeRw425O7qRDbBwl/T9sxeKIJif//QbUKrNHCeXaiyRApf54DnQOTbY3YbTdE
+9bTHNbC1Q+fUS92lRe+DpFVUPVvjZeti5lUcFqyfMDrqEumIa7zK9vorP4w6/QQK
+LTCzBjImHuiI7mrEuRkRGFfM6a6emMdmPrVHyyHY4BrM0c8D1tc=
+=8a7i
+-----END PGP SIGNATURE-----
+
+--/KyzvAGB3/jpeRiy--

@@ -2,206 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E224EC949
+	by mail.lfdr.de (Postfix) with ESMTP id C1CF84EC94A
 	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348697AbiC3QId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 12:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
+        id S1348631AbiC3QI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 12:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348696AbiC3QIW (ORCPT
+        with ESMTP id S1348701AbiC3QIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:08:22 -0400
-Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [84.16.66.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D133B23D754
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:06:34 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KTBBc40cpzMprt9;
-        Wed, 30 Mar 2022 18:06:32 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4KTBBZ5nHZzlhPJV;
-        Wed, 30 Mar 2022 18:06:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1648656392;
-        bh=8z/gwYk4igoSvFw5d9ygcqzUz71oGnSSI3aVBjvHzrg=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=S2lhB0PW4iY3T7nJCWRrrxY/EEwhD0huzWX5e8KJOHm5GGVGGjY8iCRzduT1unZj8
-         JG4xoo/fZxx5CFQIGQ1hNdrIQ5/d5AarQVv/fbgm8Ro3omT1l6w9nJK/6OGKmHeHa+
-         Jgh2LeETNI80KsVqtBvJCrnTLRD7VC2cxrAc8gbs=
-Message-ID: <f6cf4112-b7b9-7ad7-dbb0-27304176146f@digikod.net>
-Date:   Wed, 30 Mar 2022 18:06:15 +0200
+        Wed, 30 Mar 2022 12:08:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1829C23D76F;
+        Wed, 30 Mar 2022 09:06:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8F096179B;
+        Wed, 30 Mar 2022 16:06:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0998EC340F2;
+        Wed, 30 Mar 2022 16:06:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648656397;
+        bh=BL5gp9g+4lOt7MP6OWX+etUWh+Qufqk3KhmvfKjHLxk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Zfn2Non3kSBEOnWTt9QLvhBkXdnDzBo9T2WjnFMkn+SdwNlxjoQZnB9KhDABI5xVw
+         vzWkoSatYmuHh/Du7CZbHr5rzuMBCF9e6Z9y/jOuAUfQ8pAzRT1h4CCt/omVnCs1Tg
+         15E224Sw//26e/uTpGetvwFxid8Oav+ifLLxZsEyi/abUc6j+sDASk1ScVmVTJBr52
+         PIOBRoWVz9f3IwdQLebvwdgLW8bXZ/KJF/CbzHpCeMUkmrdSRW+SZMmUDMZ+T3CmZU
+         Cq9C9E7iDyEvwWFFlCJJCVAcxzFJk1G3MUrYhqRpP3/XRhTTQrLqtxKdI3iUcQCMgX
+         Hf4ww8yfhcFhQ==
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2e5827a76f4so224484207b3.6;
+        Wed, 30 Mar 2022 09:06:36 -0700 (PDT)
+X-Gm-Message-State: AOAM533ap4cN1WUXYknJTU8UMmrHmHY+MlkA5ArGC/VrAfM4lSPhenGO
+        RcC4CTj9m9vCGMBU9HRMElNBr8h9e+0QLZj7474=
+X-Google-Smtp-Source: ABdhPJy5KgTK+8wsBvhFLFAPMB5Ayg3DaKACrUkQv9LgK9deowojuaZwPLhTmK6zbZsaPVCnURBd8T1vtv61DqwtabA=
+X-Received: by 2002:a81:13c4:0:b0:2e6:bdb4:6d9f with SMTP id
+ 187-20020a8113c4000000b002e6bdb46d9fmr333573ywt.211.1648656396060; Wed, 30
+ Mar 2022 09:06:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Heimes <christian@python.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>,
-        Kees Cook <keescook@chromium.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Paul Moore <paul@paul-moore.com>,
-        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Steve Dower <steve.dower@python.org>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-References: <20220321161557.495388-1-mic@digikod.net>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
-In-Reply-To: <20220321161557.495388-1-mic@digikod.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220329181935.2183-1-beaub@linux.microsoft.com>
+ <CAADnVQ+XpoCjL-rSz2hj05L21s8NtMJuWYC14b9Mvk7XE5KT_g@mail.gmail.com>
+ <20220329201057.GA2549@kbox> <CAADnVQ+gm4yU9S6y+oeR3TNj82kKX0gk4ey9gVnKXKWy1Js4-A@mail.gmail.com>
+ <20220329231137.GA3357@kbox>
+In-Reply-To: <20220329231137.GA3357@kbox>
+From:   Song Liu <song@kernel.org>
+Date:   Wed, 30 Mar 2022 09:06:24 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4WH4Hn+DaQZui5au=ueG1G5zGYiOACfKm9imG2kGA+KA@mail.gmail.com>
+Message-ID: <CAPhsuW4WH4Hn+DaQZui5au=ueG1G5zGYiOACfKm9imG2kGA+KA@mail.gmail.com>
+Subject: Re: [PATCH] tracing/user_events: Add eBPF interface for user_event
+ created events
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Mar 29, 2022 at 4:11 PM Beau Belgrave <beaub@linux.microsoft.com> wrote:
+>
+> On Tue, Mar 29, 2022 at 03:31:31PM -0700, Alexei Starovoitov wrote:
+> > On Tue, Mar 29, 2022 at 1:11 PM Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> > >
+> > > On Tue, Mar 29, 2022 at 12:50:40PM -0700, Alexei Starovoitov wrote:
+> > > > On Tue, Mar 29, 2022 at 11:19 AM Beau Belgrave
+> > > > <beaub@linux.microsoft.com> wrote:
+> > > > >
+> > > > > Send user_event data to attached eBPF programs for user_event based perf
+> > > > > events.
+> > > > >
+> > > > > Add BPF_ITER flag to allow user_event data to have a zero copy path into
+> > > > > eBPF programs if required.
+> > > > >
+> > > > > Update documentation to describe new flags and structures for eBPF
+> > > > > integration.
+> > > > >
+> > > > > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+> > > >
+> > > > The commit describes _what_ it does, but says nothing about _why_.
+> > > > At present I see no use out of bpf and user_events connection.
+> > > > The whole user_events feature looks redundant to me.
+> > > > We have uprobes and usdt. It doesn't look to me that
+> > > > user_events provide anything new that wasn't available earlier.
+> > >
+> > > A lot of the why, in general, for user_events is covered in the first
+> > > change in the series.
+> > > Link: https://lore.kernel.org/all/20220118204326.2169-1-beaub@linux.microsoft.com/
+> > >
+> > > The why was also covered in Linux Plumbers Conference 2021 within the
+> > > tracing microconference.
+> > >
+> > > An example of why we want user_events:
+> > > Managed code running that emits data out via Open Telemetry.
+> > > Since it's managed there isn't a stub location to patch, it moves.
+> > > We watch the Open Telemetry spans in an eBPF program, when a span takes
+> > > too long we collect stack data and perform other actions.
+> > > With user_events and perf we can monitor the entire system from the root
+> > > container without having to have relay agents within each
+> > > cgroup/namespace taking up resources.
+> > > We do not need to enter each cgroup mnt space and determine the correct
+> > > patch location or the right version of each binary for processes that
+> > > use user_events.
+> > >
+> > > An example of why we want eBPF integration:
+> > > We also have scenarios where we are live decoding the data quickly.
+> > > Having user_data fed directly to eBPF lets us cast the data coming in to
+> > > a struct and decode very very quickly to determine if something is
+> > > wrong.
+> > > We can take that data quickly and put it into maps to perform further
+> > > aggregation as required.
+> > > We have scenarios that have "skid" problems, where we need to grab
+> > > further data exactly when the process that had the problem was running.
+> > > eBPF lets us do all of this that we cannot easily do otherwise.
+> > >
+> > > Another benefit from user_events is the tracing is much faster than
+> > > uprobes or others using int 3 traps. This is critical to us to enable on
+> > > production systems.
+> >
+> > None of it makes sense to me.
+>
+> Sorry.
+>
+> > To take advantage of user_events user space has to be modified
+> > and writev syscalls inserted.
+>
+> Yes, both user_events and lttng require user space modifications to do
+> tracing correctly. The syscall overheads are real, and the cost depends
+> on the mitigations around spectre/meltdown.
+>
+> > This is not cheap and I cannot see a production system using this interface.
+>
+> But you are fine with uprobe costs? uprobes appear to be much more costly
+> than a syscall approach on the hardware I've run on.
 
-What is the status of this pull request? Do you need something more?
+Can we achieve the same/similar performance with sys_bpf(BPF_PROG_RUN)?
 
-Regards,
-  Mickaël
+Thanks,
+Song
 
-
-On 21/03/2022 17:15, Mickaël Salaün wrote:
-> Hi Linus,
-> 
-> This patch series adds a new syscall named trusted_for.  It enables user
-> space to ask the kernel: is this file descriptor's content trusted to be
-> used for this purpose?  The set of usage currently only contains
-> execution, but other may follow (e.g. configuration, sensitive data).
-> If the kernel identifies the file descriptor as trustworthy for this
-> usage, user space should then take this information into account.  The
-> "execution" usage means that the content of the file descriptor is
-> trusted according to the system policy to be executed by user space,
-> which means that it interprets the content or (try to) maps it as
-> executable memory.
-> 
-> A simple system-wide security policy can be set by the system
-> administrator through a sysctl configuration consistent with the mount
-> points or the file access rights.  The documentation explains the
-> prerequisites.
-> 
-> It is important to note that this can only enable to extend access
-> control managed by the kernel.  Hence it enables current access control
-> mechanism to be extended and become a superset of what they can
-> currently control.  Indeed, the security policy could also be delegated
-> to an LSM, either a MAC system or an integrity system.  For instance,
-> this is required to close a major IMA measurement/appraisal interpreter
-> integrity gap by bringing the ability to check the use of scripts.
-> Other uses are expected as well.
-> 
-> For further details, please see the latest cover letter:
-> https://lore.kernel.org/r/20220104155024.48023-1-mic@digikod.net
-> 
-> Commit dae71698b6c5 ("printk: Move back proc_dointvec_minmax_sysadmin()
-> to sysctl.c") was recently added due to the sysctl refactoring.
-> 
-> Commit e674341a90b9 ("selftests/interpreter: fix separate directory
-> build") will fix some test build cases as explained here:
-> https://lore.kernel.org/r/20220119101531.2850400-1-usama.anjum@collabora.com
-> Merging this commit without the new KHDR_INCLUDES is not an issue.
-> The upcoming kselftest pull request is ready:
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=next
-> 
-> This patch series has been open for review for more than three years and
-> got a lot of feedbacks (and bikeshedding) which were all considered.
-> Since I heard no objection, please consider to pull this code for
-> v5.18-rc1 .  These five patches have been successfully tested in the
-> latest linux-next releases for several weeks.
-> 
-> Regards,
->   Mickaël
-> 
-> --
-> The following changes since commit dcb85f85fa6f142aae1fe86f399d4503d49f2b60:
-> 
->    gcc-plugins/stackleak: Use noinstr in favor of notrace (2022-02-03 17:02:21 -0800)
-> 
-> are available in the Git repository at:
-> 
->    git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/trusted-for-v18
-> 
-> for you to fetch changes up to e674341a90b95c3458d684ae25e6891afc3e03ad:
-> 
->    selftests/interpreter: fix separate directory build (2022-03-04 10:56:25 +0100)
-> 
-> ----------------------------------------------------------------
-> Add the trusted_for system call (v18)
-> 
-> The final goal of this patch series is to enable the kernel to be a
-> global policy manager by entrusting processes with access control at
-> their level.  To reach this goal, two complementary parts are required:
-> * user space needs to be able to know if it can trust some file
->    descriptor content for a specific usage;
-> * and the kernel needs to make available some part of the policy
->    configured by the system administrator.
-> 
-> In a nutshell, this is a required building block to control script
-> execution.
-> 
-> For further details see the latest cover letter:
-> https://lore.kernel.org/r/20220104155024.48023-1-mic@digikod.net
-> 
-> ----------------------------------------------------------------
-> Mickaël Salaün (4):
->        printk: Move back proc_dointvec_minmax_sysadmin() to sysctl.c
->        fs: Add trusted_for(2) syscall implementation and related sysctl
->        arch: Wire up trusted_for(2)
->        selftest/interpreter: Add tests for trusted_for(2) policies
-> 
-> Muhammad Usama Anjum (1):
->        selftests/interpreter: fix separate directory build
-> 
->   Documentation/admin-guide/sysctl/fs.rst            |  50 +++
->   arch/alpha/kernel/syscalls/syscall.tbl             |   1 +
->   arch/arm/tools/syscall.tbl                         |   1 +
->   arch/arm64/include/asm/unistd.h                    |   2 +-
->   arch/arm64/include/asm/unistd32.h                  |   2 +
->   arch/ia64/kernel/syscalls/syscall.tbl              |   1 +
->   arch/m68k/kernel/syscalls/syscall.tbl              |   1 +
->   arch/microblaze/kernel/syscalls/syscall.tbl        |   1 +
->   arch/mips/kernel/syscalls/syscall_n32.tbl          |   1 +
->   arch/mips/kernel/syscalls/syscall_n64.tbl          |   1 +
->   arch/mips/kernel/syscalls/syscall_o32.tbl          |   1 +
->   arch/parisc/kernel/syscalls/syscall.tbl            |   1 +
->   arch/powerpc/kernel/syscalls/syscall.tbl           |   1 +
->   arch/s390/kernel/syscalls/syscall.tbl              |   1 +
->   arch/sh/kernel/syscalls/syscall.tbl                |   1 +
->   arch/sparc/kernel/syscalls/syscall.tbl             |   1 +
->   arch/x86/entry/syscalls/syscall_32.tbl             |   1 +
->   arch/x86/entry/syscalls/syscall_64.tbl             |   1 +
->   arch/xtensa/kernel/syscalls/syscall.tbl            |   1 +
->   fs/open.c                                          | 133 ++++++++
->   fs/proc/proc_sysctl.c                              |   2 +-
->   include/linux/syscalls.h                           |   1 +
->   include/linux/sysctl.h                             |   3 +
->   include/uapi/asm-generic/unistd.h                  |   5 +-
->   include/uapi/linux/trusted-for.h                   |  18 +
->   kernel/printk/sysctl.c                             |   9 -
->   kernel/sysctl.c                                    |   9 +
->   tools/testing/selftests/Makefile                   |   1 +
->   tools/testing/selftests/interpreter/.gitignore     |   2 +
->   tools/testing/selftests/interpreter/Makefile       |  21 ++
->   tools/testing/selftests/interpreter/config         |   1 +
->   .../selftests/interpreter/trust_policy_test.c      | 362 +++++++++++++++++++++
->   32 files changed, 625 insertions(+), 12 deletions(-)
->   create mode 100644 include/uapi/linux/trusted-for.h
->   create mode 100644 tools/testing/selftests/interpreter/.gitignore
->   create mode 100644 tools/testing/selftests/interpreter/Makefile
->   create mode 100644 tools/testing/selftests/interpreter/config
->   create mode 100644 tools/testing/selftests/interpreter/trust_policy_test.c
+>
+> > All you did is a poor man version of lttng that doesn't rely
+> > on such heavy instrumentation.
+>
+> Well I am a frugal person. :)
+>
+> This work has solved some critical issues we've been having, and I would
+> appreciate a review of the code if possible.
+>
+> Thanks,
+> -Beau

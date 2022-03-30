@@ -2,66 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C71B4EC676
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEB64EC677
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 16:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346817AbiC3O0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 10:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        id S1346828AbiC3O03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 10:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345491AbiC3O0H (ORCPT
+        with ESMTP id S245102AbiC3O0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 10:26:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0F715FE3;
-        Wed, 30 Mar 2022 07:24:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5FA0B81D4B;
-        Wed, 30 Mar 2022 14:24:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F97DC340EE;
-        Wed, 30 Mar 2022 14:24:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648650258;
-        bh=8mGhUsP282BlInxzYzns/CDUIBuGHFUwBxqH317vbiI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aQkJxwf6qzT0NoAl/UXsj4Hc+5tHiEnQ52giQEXLKNANq8yCfIyEpxPSrkZx5UlhX
-         kME5m6BljI6TEs5IcgxKa/AB7DOGHrCWPlahmcE8cUuW40U+zkdmI65Avc8jWV6Q7M
-         UBzP4RRsJlEF+dKKHEXwIfGnmAVhjRRfJTi9YJ8LSM4ZvHAV/BNoDumoK7SHaa8r6H
-         AFwSkLy+uUkmeU8HFYbTVWaPefLN1A65DhfqTJjQVuKghpq1Awj2I4yZvNhH/wiOIV
-         vMbzyqLs6Zc8BOB8iLN+CWMCsxD/2M3qpxVOocVXf3b8zkjb4gPvAzqxN3YU4ZJsUk
-         cyMELuCjDI3dg==
-Date:   Wed, 30 Mar 2022 15:24:11 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
-Cc:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>, robh+dt@kernel.org, tzungbi@google.com,
-        angelogioacchino.delregno@collabora.com, aaronyu@google.com,
-        matthias.bgg@gmail.com, trevor.wu@mediatek.com, linmq006@gmail.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: Re: [v7 2/4] ASoC: mediatek: mt8192: refactor for I2S3 DAI link of
- speaker
-Message-ID: <YkRoC30JLDMeVi1B@sirena.org.uk>
-References: <20220324064511.10665-1-jiaxin.yu@mediatek.com>
- <20220324064511.10665-3-jiaxin.yu@mediatek.com>
- <20220329223002.uo7kiemopkh7ak4x@notapiano>
- <dee3fbb7c9f0c3e1f11143db1d6fc4381cab827f.camel@mediatek.com>
- <YkRNSoBKFvYYyZLu@sirena.org.uk>
- <61e9fb59448837cfc8e3ec862b711294bcb68872.camel@mediatek.com>
+        Wed, 30 Mar 2022 10:26:24 -0400
+Received: from ns3.fnarfbargle.com (ns3.fnarfbargle.com [103.4.19.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9252B27F
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 07:24:38 -0700 (PDT)
+Received: from [10.8.0.1] (helo=srv.home)
+        by ns3.fnarfbargle.com with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lists2009@fnarfbargle.com>)
+        id 1nZZFU-0004Nk-HQ; Thu, 31 Mar 2022 00:24:36 +1000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=fnarfbargle.com; s=mail; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:References:Cc:To:Subject:From:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=kEnTz9AB7j594d5zirVLoMS5a5W3p3Vab2t0y5WVYfs=; b=LMZmUbV0pDHHcVPCZfEwhogPN2
+        JHPGSVulOHcyBWzilCjDf38r4qukc422I5Aqw6qvIqTub9tJBQWwr5b2lrZoFiIPYj9IwJpp4gx35
+        0Ij0tap/RXSimDNAeuR894rDAEDqsNAupnxuxg3LnKWKQsfu30hj1MP1ejYXWsLwYRGY=;
+Message-ID: <d40f02e5-7274-e834-6e13-82b3dbe11284@fnarfbargle.com>
+Date:   Wed, 30 Mar 2022 22:24:35 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GNUxLScWaSBFpiDm"
-Content-Disposition: inline
-In-Reply-To: <61e9fb59448837cfc8e3ec862b711294bcb68872.camel@mediatek.com>
-X-Cookie: Two is company, three is an orgy.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+From:   Brad Campbell <lists2009@fnarfbargle.com>
+Subject: Re: Apple Thunderbolt Display chaining
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org
+References: <acbb3a86-ea15-47ec-90fa-72fbd94921b1@fnarfbargle.com>
+ <YkLt+/kJ54fwCYgy@lahna>
+ <0249a7da-9237-806b-b267-7911ad40f4a0@fnarfbargle.com>
+ <YkMC4XnfIZix6kBn@lahna>
+ <b8894440-41b1-edef-dd2d-5bafabc6fb62@fnarfbargle.com>
+ <YkQuk7E8AbSEiw59@lahna>
+ <b35e4054-4f22-72a2-4313-77299697af7b@fnarfbargle.com>
+ <YkRebADER3J9ooPM@lahna>
+Content-Language: en-US
+In-Reply-To: <YkRebADER3J9ooPM@lahna>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,47 +61,76 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---GNUxLScWaSBFpiDm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Wed, Mar 30, 2022 at 10:06:24PM +0800, Jiaxin Yu wrote:
-> On Wed, 2022-03-30 at 13:30 +0100, Mark Brown wrote:
+On 30/3/22 21:43, Mika Westerberg wrote:
+> Hi,
+> 
+> On Wed, Mar 30, 2022 at 09:19:52PM +0800, Brad Campbell wrote:
+>> Hey Mika,
+>>
+>> On 30/3/22 18:18, Mika Westerberg wrote:
+>>> Hi,
+>>>
+>>> On Tue, Mar 29, 2022 at 10:06:35PM +0800, Brad Campbell wrote:
+>>>>> Indeed, I did not add this to the "discovery" path yet.
+>>>>>
+>>>>> I wonder what happens if you change this:
+>>>>>
+>>>>> +       tunnel = tb_tunnel_alloc_dp(tb, in, out, available_up, available_down,
+>>>>> +                                   first ? 0 : 1);
+>>>>>
+>>>>> to this in your tree:
+>>>>>
+>>>>> +       tunnel = tb_tunnel_alloc_dp(tb, in, out, available_up, available_down,
+>>>>> +                                   first ? 1 : 0);
+>>>>>
+>>>>
+>>>> Here's where it gets all "Apple..y". On the iMac this does the job no matter which
+>>>> port the chain is plugged into. Boots and displays correctly first time, every time.
+>>>>
+>>>> It turns out on the laptop, one port works and the other doesn't. Changing the order
+>>>> simply changes which port works. So I assume the EFI sets up the first display using
+>>>> the first lane if it's in the first port, and the second if it's in the second.
+>>>>
+>>>> That means had I managed to perform the first test in the "other port" consistently,
+>>>> it would have worked there also.
+>>>
+>>> Can you try the below patch too? I hard-code the lane based on the
+>>> DP adapter number in TBT gen1.
+>>>
+>>> Let's first figure out proper solution to this issue and then look at
+>>> the other one.
+>>>
+>>> diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
+>>> index a473cc7d9a8d..97d36a7bb527 100644
+>>> --- a/drivers/thunderbolt/tunnel.c
+>>> +++ b/drivers/thunderbolt/tunnel.c
+>>> @@ -865,6 +865,7 @@ struct tb_tunnel *tb_tunnel_alloc_dp(struct tb *tb, struct tb_port *in,
+>>
+>> This one works from cold boot on both machines regardless of the port the chain is plugged into.
+>> It fails on both machines on any hotplug with the symptoms of allocating them both the same link.
+>> I added an extra debug into tunnel.c and verified that.
+> 
+> Hm, okay. What if you change this:
+> 
+>   link_nr = in->port == 11 ? 1 : 0;
+> 
+> to this
+> 
+>   link_nr = in->port == 11 ? 0 : 1;
+> 
+> Please also keep the debugging you added too so we can see if it now
+> uses both lanes.
+> 
 
-> > Making a previously optional property required means that systems
-> > that
-> > previously worked may stop working unless they update their DT, DTs
-> > may
-> > be distributed separately to the kernel and perhaps even baked into
-> > firmware or similar.
+Nope, that did the same thing. I wonder though. I'm testing it on the laptop and that reports :
+[    0.442832] thunderbolt 0000:07:00.0:  Thunderbolt 2 Switch: 8086:156d (Revision: 0, TB Version: 2)
 
-> Thank you for your detailed answer. I should keep the driver's behavior
-> consistent with the description of dt-bindings. The "mediatek,hdmi-
-> codec" needs to be set as the required property. Is my understanding
-> right?
+Changing "if (in->sw->generation == 1)" to "if (in->sw->generation == 2)" on the laptop solves that.
 
-The binding document and code should match so if one is changed the
-other needs to be changed too.
+I can't test hotplug properly on the iMac due to the radeon training issue.
 
-In theory we should never change a previously optional property to
-required which would mean that the code should be updated to reflect the
-binding document, however sometimes the DT isn't actually used as a
-stable intereface by anything for a given property or device type so we
-can get away with changing things.
+The laptop still has the issue of a cold boot working in one socket and not the other, but hot plug is working correctly.
 
---GNUxLScWaSBFpiDm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJEaAoACgkQJNaLcl1U
-h9AhxQf+PZuCmGnFAmuUHNlVpmiRjr++vB0m1T22WhLGrda5HR7LQ87SMHwwffi9
-xnkVrr30xgbSxZy7Sn5nfjPAo7EfnomIxlDu50xmlNM5nXoIchxDl83NiGRcHoWT
-RfiId1J9P5ztudpTLcVLbj+uN5rLunutEkcHBWBxKymDy8wLA0nIX9fsER8xk8Zo
-L40Yv45UohIvFclHx21U+eBGenN5kJKih02NQTvbcoy2Cjh/iMCWPprQLpjpY5s8
-s/8dnyUGWx9SUBPfJJdtecq3riFE8MbQQrRLi1P+CaOfIonzYv1L0yEe5+7kBQHR
-WZaz1EZs9fORae+t52imAuWFVCd0kQ==
-=UCGf
------END PGP SIGNATURE-----
-
---GNUxLScWaSBFpiDm--
+Regards,
+Brad

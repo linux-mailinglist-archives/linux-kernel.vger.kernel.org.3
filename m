@@ -2,144 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8D54EB784
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 02:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197834EB78C
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 02:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241487AbiC3Atu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 20:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
+        id S241502AbiC3AwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 20:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbiC3Ats (ORCPT
+        with ESMTP id S241408AbiC3AwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 20:49:48 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63837182D8A
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:48:05 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id j83so20680129oih.6
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:48:05 -0700 (PDT)
+        Tue, 29 Mar 2022 20:52:02 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BC77EA1D
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:50:18 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id mp11-20020a17090b190b00b001c79aa8fac4so321396pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 17:50:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=L/Z+SxVbLz6ou3wwMOlt3AaF7PE4HzKd6bt7UJffX70=;
-        b=dK3yx5gryzNDPyAAOCVtVbTt6MA3aToJUg/XKmbY9u6v6CDKkg97/nXMI3XNohXqul
-         +odZD9TcwzPCqy0FeM4nvrkc0knqqsdrl7BB9x0QGMI8V09xjhhEOnFD/yz8QQqucqpf
-         PTRspLJIkr2jx2pFIj8KDj7cKxiya5Smh063hd2565QZyZnPgmzq/cDauruSVSuXQfNu
-         0lcjfZKCqricvN3VhZV2/rSX2M7jUb6aEjN8Pa2kI/8CZqTNxjXM8DrYSFxsGlha5Tjw
-         mfxLeXGutfy9L88MiD2lbvCFR6hjYb8AeMzoju847wZxeBYIBP5COfOlzzYQW8ChYzwe
-         1bKw==
+        d=axtens.net; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=eT0MeMyajG5bIz1AIsmqOI8u1ZS3KpxbDfVQyKevREE=;
+        b=glosbfJnyVdJhuvX0pA9Vc69rYKOhKa1XDLiv4cPj3AhWEHTB8QprWfRPxMLonaS5l
+         QDLdQYDTkqAPc4FvClEiCjxv+yjj7BZU7dBwHiB35XJsT1yT6TqGiomFk5sViaLe8+Ya
+         C0P/UPVTCl0uqbr7lfPEmtT9LrDd0NyfoEmfk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=L/Z+SxVbLz6ou3wwMOlt3AaF7PE4HzKd6bt7UJffX70=;
-        b=miB8IA3/iVPUY8nGXN2pc7CBN2K5C1wosfXaWuWohlLeW5Usg7x4+f3yfoKvOo1Nww
-         5hMfvNyzTAnd+KHvQELJvnwrKdpkZggVPDkXk3h6ZvTmAPIr/pPqj6Jcl1HUBQcoJw8l
-         zUDaQ81/QmetpPo4u6ry01naXmkuTlQincbItKbItTIXX9q/355lhCrOf9kTly4SwcKo
-         ngWEr/TX1dg7AWeU6uv+fzLzMziih7X+oxKmJFWgiYDQDBlg5tfe825DFrZtU9CrX3ZF
-         seQEbTY8vUYHzznvLPAG9UIuUEs2PNdShh+6Wqt60C/VGwy3cpiK/75puaU/Bzi7vrBc
-         /bQg==
-X-Gm-Message-State: AOAM532519L3rHGnjQodIPTF+z8AFFMUU1t/QxhTMhxmqxHR/c0VeCh3
-        ewLVk8rZDZ1vVV0YqEIxzTA=
-X-Google-Smtp-Source: ABdhPJz+BEqfvl9GbjQHynhZTbgEuZapz+Az1wHFJL6oeHdaNVucltGFv4oWTtKFblHw9u4FSRzlLQ==
-X-Received: by 2002:a05:6808:8c7:b0:2ee:f75b:bc20 with SMTP id k7-20020a05680808c700b002eef75bbc20mr812170oij.44.1648601284654;
-        Tue, 29 Mar 2022 17:48:04 -0700 (PDT)
-Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
-        by smtp.gmail.com with ESMTPSA id u16-20020a056808151000b002f734da0881sm7604064oiw.57.2022.03.29.17.48.03
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=eT0MeMyajG5bIz1AIsmqOI8u1ZS3KpxbDfVQyKevREE=;
+        b=6JxsmoWEVQldHHjoJGMJ47PFNZ86jGlRpLx65pSd5l/P+WVhdcD4TBAU6MJB29VZKi
+         9zr9VMrHMaI7J/iLcnbB529gtEUwKxZ+4o/fUUuVUWcvQoBChGu/x4ly+1U7FXEL45nq
+         9mU9t0PRR+X0aXgwZNK54DMm1mLkBNo3aTepz2SGfLF0I5YrR6+1CRcnlN9+WMXSOrjo
+         rnnYJvlVeV+G5lrjQVyvT56t6F1G2lCscfa1GHg9XGGHIC3U7vcpBxyhGGSWtW82q1SF
+         RvDj8xq/2tHEFFX1+nZD4CrcWROTBTrKNaU16Z5kLz6ARt45UPNoLRw2zFlyhbC7mTM/
+         RxVA==
+X-Gm-Message-State: AOAM533aIPsou55vu8bWm91vin0ALdybB5MMuteZ5cZD9mtjhCdWbfXQ
+        s7cRjLF7t8NFG+AX4gviBXSmww==
+X-Google-Smtp-Source: ABdhPJxNg9M7rZr3IAGHxXmao5fKjmdSwnqjp1hqMlC9FqastDXDrKbZklDTnnMqU6uCYhILFHGbSg==
+X-Received: by 2002:a17:90a:3181:b0:1c7:6d18:391a with SMTP id j1-20020a17090a318100b001c76d18391amr2024849pjb.30.1648601417790;
+        Tue, 29 Mar 2022 17:50:17 -0700 (PDT)
+Received: from localhost ([2001:4479:e000:e400:e2b8:da3a:1007:145d])
+        by smtp.gmail.com with ESMTPSA id a71-20020a63904a000000b00398666dcf8esm5680440pge.40.2022.03.29.17.50.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 17:48:04 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 19:48:03 -0500
-From:   Rebecca Mckeever <remckee0@gmail.com>
-To:     Alison Schofield <alison.schofield@intel.com>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH] staging: r8188eu: fix suspect code indent for
- conditional statements
-Message-ID: <YkOowzOkAE5Fr1dW@bertie>
-References: <YkK7ABTVt0TCbd18@bertie>
- <20220329161632.GA1169956@alison-desk>
+        Tue, 29 Mar 2022 17:50:17 -0700 (PDT)
+From:   Daniel Axtens <dja@axtens.net>
+To:     konstantin@linuxfoundation.org
+Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Daniel Axtens <dja@axtens.net>,
+        Emily Strickland <linux@emily.st>
+Subject: Re: [PATCH] Documentation: kernel-hacking: minor edits for style
+Date:   Wed, 30 Mar 2022 11:50:12 +1100
+Message-Id: <20220330005012.3899821-1-dja@axtens.net>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220329195117.azs4kaflc6ksfzdh@meerkat.local>
+References: <20220329195117.azs4kaflc6ksfzdh@meerkat.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220329161632.GA1169956@alison-desk>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 09:16:32AM -0700, Alison Schofield wrote:
-> On Tue, Mar 29, 2022 at 02:53:36AM -0500, Rebecca Mckeever wrote:
-> > Align the if and else if branches of the conditional statement
-> > to improve readability. Prevent bugs that could be introduced
-> > if developers misread the code. Issue found by checkpatch.
-> 
-> Thanks for the patch Rebecca!
-> 
-> Lots of stuff done right - passes chkp, compiles, patch is sent to
-> correct recipients, the commit message follows the format of the file.
-> 
-> Let's set a pattern here for all checkpatch related cleanups,
-> for you and others that follow.(Thanks for being the first ;))
-> 
-> Commit msg says 'what'. Commit log says 'why'. Acknowledge that
-> it was found using checkpatch in the commit log also. (In the future
-> you may be acknowledging use of other tools like sparse, coccinelle.)
-> 
-> Note that the 'why' is never that a tool reported an error. The 'why'
-> for these checkpatch reports is usually to follow the Linux Kernel
-> Coding Style.
-> 
-> 'Fix' in the commit message is needlessly generic. Perhaps:
-> [PATCH] staging: r8188eu: align both branches of a conditional statement
-> 
-> Commit log: (what you have is fine in the log)
-> I usually paste in the checkpatch error explicitly so it can be grep'd
-> for. Something like:
-> 
-> Issue found by checkpatch:
-> WARNING: suspect code indent for conditional statements
+Hi Konstantin,
 
-There was a section of https://kernelnewbies.org/PatchPhilosophy that suggested
-putting the warning message in the subject line. I thought it would be
-redundant to also put it in the body. Is it a good practice to include the
-warning message in both places?
+I agree the document could do with some love. I've got some suggestions to
+make the tips a bit more useful, regardless of where we land on Rusty's
+'iconic' prose.
 
-> 
-> Thanks,
-> Alison
-> 
-> > 
-> > Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
-> > ---
-> >  drivers/staging/r8188eu/core/rtw_cmd.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-> > index 6eca30124ee8..ccc43c0ba433 100644
-> > --- a/drivers/staging/r8188eu/core/rtw_cmd.c
-> > +++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-> > @@ -1408,7 +1408,7 @@ void rtw_survey_cmd_callback(struct adapter *padapter,  struct cmd_obj *pcmd)
-> >  		/* TODO: cancel timer and do timeout handler directly... */
-> >  		/* need to make timeout handlerOS independent */
-> >  		_set_timer(&pmlmepriv->scan_to_timer, 1);
-> > -		} else if (pcmd->res != H2C_SUCCESS) {
-> > +	} else if (pcmd->res != H2C_SUCCESS) {
-> >  		_set_timer(&pmlmepriv->scan_to_timer, 1);
-> >  	}
-> >  
-> > -- 
-> > 2.32.0
-> > 
-> > 
-> 
+---
 
-Thanks,
-Rebecca
+Subject: [PATCH] hacking.rst: update for modern git-based workflows
+
+The tips are fun, but they predate git. With git we do things differently.
+Document something closer to what we do.
+
+Reported-by: Emily Strickland <linux@emily.st>
+Signed-off-by: Daniel Axtens <dja@axtens.net>
+---
+ Documentation/kernel-hacking/hacking.rst | 59 +++++++++++++++++++-----
+ 1 file changed, 47 insertions(+), 12 deletions(-)
+
+diff --git a/Documentation/kernel-hacking/hacking.rst b/Documentation/kernel-hacking/hacking.rst
+index 55bd37a2efb0..a4f7d717de3c 100644
+--- a/Documentation/kernel-hacking/hacking.rst
++++ b/Documentation/kernel-hacking/hacking.rst
+@@ -723,15 +723,9 @@ Putting Your Stuff in the Kernel
+ In order to get your stuff into shape for official inclusion, or even to
+ make a neat patch, there's administrative work to be done:
+ 
+--  Figure out whose pond you've been pissing in. Look at the top of the
+-   source files, inside the ``MAINTAINERS`` file, and last of all in the
+-   ``CREDITS`` file. You should coordinate with this person to make sure
+-   you're not duplicating effort, or trying something that's already
+-   been rejected.
+-
+-   Make sure you put your name and EMail address at the top of any files
+-   you create or mangle significantly. This is the first place people
+-   will look when they find a bug, or when **they** want to make a change.
++-  Read ``Documentation/process/submitting-patches.rst``. Kernel developers are
++   a picky bunch, and that document attempts to list what we do and do not like
++   in our patches.
+ 
+ -  Usually you want a configuration option for your kernel hack. Edit
+    ``Kconfig`` in the appropriate directory. The Config language is
+@@ -748,15 +742,56 @@ make a neat patch, there's administrative work to be done:
+    can usually just add a "obj-$(CONFIG_xxx) += xxx.o" line. The syntax
+    is documented in ``Documentation/kbuild/makefiles.rst``.
+ 
++- Finally, re-read
++  ``Documentation/process/submitting-patches.rst``. Seriously. Do it.
++
++
++Historical Notes
++----------------
++
++These were previous tips. They've largely become outdated by the adoption of git
++in the kernel, and creation better tooling generally, but in homage to Rusty's
++iconic prose, you can still read them here in annotated form.
++
++-  Figure out whose pond you've been pissing in. Look at the top of the
++   source files, inside the ``MAINTAINERS`` file, and last of all in the
++   ``CREDITS`` file. You should coordinate with this person to make sure
++   you're not duplicating effort, or trying something that's already
++   been rejected.
++
++.. note::
++
++    Use ``scripts/get_maintainer.pl`` these days, don't try to read
++    ``MAINTAINERS`` manually. Coordinating big changes is still a good idea: use
++    a mailing list suggested by the script for this purpose. The lists should
++    have searchable archives as well.
++
++   Make sure you put your name and EMail address at the top of any files
++   you create or mangle significantly. This is the first place people
++   will look when they find a bug, or when **they** want to make a change.
++
++.. note::
++
++    With git, putting your name at the top of the file is now less useful.
++    People will do ``git log`` and ``git blame`` to if they need to find a
++    specific individual. Still put your name on new files, but only add it to
++    existing files if you've done really significant changes.
++
+ -  Put yourself in ``CREDITS`` if you've done something noteworthy,
+    usually beyond a single file (your name should be at the top of the
+    source files anyway). ``MAINTAINERS`` means you want to be consulted
+    when changes are made to a subsystem, and hear about bugs; it implies
+    a more-than-passing commitment to some part of the code.
+ 
+--  Finally, don't forget to read
+-   ``Documentation/process/submitting-patches.rst`` and possibly
+-   ``Documentation/process/submitting-drivers.rst``.
++.. note::
++
++    ``CREDITS`` is now more of a honour roll of former maintainers. Your
++    contribution will be immortalised in the git history, you don't need to add
++    yourself to ``CREDITS`` as well.
++
++- As well as reading ``Documentation/process/submitting-patches.rst``,
++  ``Documentation/process/submitting-drivers.rst`` is possibly useful.
++
+ 
+ Kernel Cantrips
+ ===============
+-- 
+2.32.0
+

@@ -2,115 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 865454EC9C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE164EC9CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348862AbiC3Qis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 12:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
+        id S1348882AbiC3QlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 12:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236846AbiC3Qiq (ORCPT
+        with ESMTP id S1348880AbiC3QlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:38:46 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F7E197AC2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:37:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=HWbPC5h/j58ceCxQlVSc5RvAYIlhggFe0pdxq+KiTPE=; b=ohc2cMwku7X0vVNhI8K19tG2iF
-        uwO+P1yiW7VcQk8CMgq9EFPtfMFJaMmTkhiFga1tEaFJGGWZablr6Pe7JksjV3ecd4CLc6dEN/X4i
-        M2H5zvv4h7OiKykxMtwjlXckE+aKI6WAc6TkiKj5QtneCteTW9PiQc+TN/zrCmP+e1cQuWnIES6SC
-        +7za02u1fvjlc6uCSHGq3WtJd7s8uFdU9jtlG98tSXCtGlcodHnC9dfhl26JGVZmy4763GNFIfxZz
-        TRGeS+ssw57B10Kuq9RcPztTFn96FjyOxjjdORnFDLQlKiCTuc55qFPDozZ+sGZfetTHTlN0Cl8/M
-        xG+Xy6lA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58024)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nZbJY-0003T8-Pt; Wed, 30 Mar 2022 17:36:56 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nZbJX-0006mF-G3; Wed, 30 Mar 2022 17:36:55 +0100
-Date:   Wed, 30 Mar 2022 17:36:55 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Christian Eggers <ceggers@arri.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-Subject: Re: CONFIG_THUMB2_KERNEL=y boot failure after Spectre BHB fixes
-Message-ID: <YkSHJ65qGHO4bonJ@shell.armlinux.org.uk>
-References: <YipOoAaBIHjeCKOq@dev-arch.thelio-3990X>
- <2109354.irdbgypaU6@localhost.localdomain>
- <YkSBJD0oA7zxHS+B@shell.armlinux.org.uk>
- <CAMj1kXGLehBkaG7-t5PZqN+32MS-5BDX-QGOe6ftZnPuNDKicg@mail.gmail.com>
+        Wed, 30 Mar 2022 12:41:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7847A5574F;
+        Wed, 30 Mar 2022 09:39:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20947B81D6E;
+        Wed, 30 Mar 2022 16:39:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6689DC340EC;
+        Wed, 30 Mar 2022 16:39:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648658366;
+        bh=BeSm0k0eIvg+IdQoJLQTmbtEwddZsmDSoeDqhzoge1o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PRsZkNn4eZcZKLrY55cFovgREtH2qxrBKTXbhobYJuWiAc/gX6Wku763F4obQ9BAz
+         w8tnshA8dU+NYkSdF63PQBg7Q6aytF/YkGYnWAvAzH/L09r1ZlQ9Tlj62RCl0zyNbH
+         4xNQ2+KvMJywLq1Td6X27rdYf59pjfY1mnXpDgpiS7mhHF1uUwSgp48cWTjgyigEXf
+         FWFat3wxCXVH5Gb4GzIzPixKEauJRwx4We3AsUld48xgk5ixjujLmk0X1MZxp1+FBl
+         InmEQ9e9GzgJdeMHpnLaYOXPtaqtqhPlO6zYdQnWO25GXrsK3R/pnWvBqnFLNJcr3M
+         evHN2pF54ShNA==
+Date:   Wed, 30 Mar 2022 09:39:25 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Ziyang Xuan <william.xuanziyang@huawei.com>
+Cc:     <borisp@nvidia.com>, <john.fastabend@gmail.com>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <vakul.garg@nxp.com>,
+        <davejwatson@fb.com>, <linux-kernel@vger.kernel.org>,
+        Vadim Fedorenko <vfedorenko@novek.ru>
+Subject: Re: [PATCH net] net/tls: fix slab-out-of-bounds bug in
+ decrypt_internal
+Message-ID: <20220330093925.2d8ee6ca@kernel.org>
+In-Reply-To: <20220330085009.1011614-1-william.xuanziyang@huawei.com>
+References: <20220330085009.1011614-1-william.xuanziyang@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGLehBkaG7-t5PZqN+32MS-5BDX-QGOe6ftZnPuNDKicg@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 06:34:25PM +0200, Ard Biesheuvel wrote:
-> On Wed, 30 Mar 2022 at 18:12, Russell King (Oracle)
-> <linux@armlinux.org.uk> wrote:
-> >
-> > On Tue, Mar 22, 2022 at 06:49:17PM +0100, Christian Eggers wrote:
-> > > Hi Nathan, hi Russel,
-> > >
-> > > I stumbled today over the same problem (no output on serial console
-> > > with v5.15.28-rt36). During `git bisect`, I had also some commits
-> > > where a few lines of output were visible.
-> > >
-> > > At commit 8d9d651ff227 ("ARM: use LOADADDR() to get load address of
-> > > sections"), the system boots up to here:
-> > >
-> > > start_kernel()
-> > > +--setup_arch()
-> > >    +--paging_init()
-> > >       +--devicemaps_init()
-> > >          +--eary_trap_init(vectors_base = 0xC7FFE000)
-> > >             +--copy_from_lma(vectors_base = 0xC7FFE000, __vectors_start=0x0, __vectors_end=0x20)
-> > >                +--__memcpy()
-> > >
-> > >                copy_template.S:113
-> > >                ldr8w   r1, r3, r4, r5, r6, r7, r8, ip, lr, abort=20f
-> > >                r1 = 0
-> > >
-> > >
-> > > With the final v5.15.28-rt36 I found out that the system boots fine
-> > > after disabling CONFIG_HARDEN_BRANCH_HISTORY.
-> > >
-> > > Is there anything else I could analyze? My SoC system is a NXP i.MX6LL
-> > > with a ARMv7 core. I have access to a JTAG debugger.
-> >
-> > I think this is already fixed in mainline. Commit:
-> >
-> > 6c7cb60bff7a ("ARM: fix Thumb2 regression")
-> >
+On Wed, 30 Mar 2022 16:50:09 +0800 Ziyang Xuan wrote:
+> The memory size of tls_ctx->rx.iv for AES128-CCM is 12 setting in
+> tls_set_sw_offload(). The return value of crypto_aead_ivsize()
+> for "ccm(aes)" is 16. So memcpy() require 16 bytes from 12 bytes
+> memory space will trigger slab-out-of-bounds bug as following:
 > 
-> It's still broken - I sent a couple of patches on Monday, among which
-> one to fix the boot issue with loop8 on Thumb2. The problem is 'b . +
-> 4', which produces a narrow encoding, and so it skips the subsequent
-> subs instruction and loops forever.
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in decrypt_internal+0x385/0xc40 [tls]
+> Read of size 16 at addr ffff888114e84e60 by task tls/10911
+> 
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x34/0x44
+>  print_report.cold+0x5e/0x5db
+>  ? decrypt_internal+0x385/0xc40 [tls]
+>  kasan_report+0xab/0x120
+>  ? decrypt_internal+0x385/0xc40 [tls]
+>  kasan_check_range+0xf9/0x1e0
+>  memcpy+0x20/0x60
+>  decrypt_internal+0x385/0xc40 [tls]
+>  ? tls_get_rec+0x2e0/0x2e0 [tls]
+>  ? process_rx_list+0x1a5/0x420 [tls]
+>  ? tls_setup_from_iter.constprop.0+0x2e0/0x2e0 [tls]
+>  decrypt_skb_update+0x9d/0x400 [tls]
+>  tls_sw_recvmsg+0x3c8/0xb50 [tls]
+> 
+> Allocated by task 10911:
+>  kasan_save_stack+0x1e/0x40
+>  __kasan_kmalloc+0x81/0xa0
+>  tls_set_sw_offload+0x2eb/0xa20 [tls]
+>  tls_setsockopt+0x68c/0x700 [tls]
+>  __sys_setsockopt+0xfe/0x1b0
 
-And what's the current status? Sorry, I've way too much email from the
-last 2.5 weeks to find it myself.
+Interesting, are you running on non-x86 platform or with some crypto
+accelerator? I wonder why we're not hitting it with KASAN and the
+selftest we have.
 
-Thanks.
+> Reserve MAX_IV_SIZE memory space for iv to be compatible with all
+> ciphers. And do iv and salt copy like done in tls_do_encryption().
+> 
+> Fixes: f295b3ae9f59 ("net/tls: Add support of AES128-CCM based ciphers")
+> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+> ---
+>  net/tls/tls_sw.c | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
+> 
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index 0024a692f0f8..6b858f995b23 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+> @@ -1456,7 +1456,7 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
+>  	aead_size = sizeof(*aead_req) + crypto_aead_reqsize(ctx->aead_recv);
+>  	mem_size = aead_size + (nsg * sizeof(struct scatterlist));
+>  	mem_size = mem_size + prot->aad_size;
+> -	mem_size = mem_size + crypto_aead_ivsize(ctx->aead_recv);
+> +	mem_size = mem_size + MAX_IV_SIZE;
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+This change is not strictly required for the patch, right?
+Can we drop it, and perhaps send as an optimization separately later?
+
+>  	/* Allocate a single block of memory which contains
+>  	 * aead_req || sgin[] || sgout[] || aad || iv.
+> @@ -1493,12 +1493,8 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
+>  		kfree(mem);
+>  		return err;
+>  	}
+> -	if (prot->version == TLS_1_3_VERSION ||
+> -	    prot->cipher_type == TLS_CIPHER_CHACHA20_POLY1305)
+> -		memcpy(iv + iv_offset, tls_ctx->rx.iv,
+> -		       crypto_aead_ivsize(ctx->aead_recv));
+> -	else
+> -		memcpy(iv + iv_offset, tls_ctx->rx.iv, prot->salt_size);
+> +	memcpy(iv + iv_offset, tls_ctx->rx.iv,
+> +	       prot->iv_size + prot->salt_size);
+
+If the IV really is 16B then we're passing 4 bytes of uninitialized
+data at the end of the buffer, right?
+
+>  	xor_iv_with_seq(prot, iv + iv_offset, tls_ctx->rx.rec_seq);
+>  
+

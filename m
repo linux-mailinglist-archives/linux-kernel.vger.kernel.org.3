@@ -2,105 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD3C4EC8B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF54B4EC8BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348385AbiC3PuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 11:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
+        id S1348402AbiC3Pu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 11:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344628AbiC3PuA (ORCPT
+        with ESMTP id S1348387AbiC3PuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 11:50:00 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA07920E942;
-        Wed, 30 Mar 2022 08:48:10 -0700 (PDT)
-X-UUID: 3b656cbffa5f4f99900f5d676e1ba9e7-20220330
-X-UUID: 3b656cbffa5f4f99900f5d676e1ba9e7-20220330
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1049488280; Wed, 30 Mar 2022 23:48:03 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 30 Mar 2022 23:48:02 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 30 Mar 2022 23:48:01 +0800
-Message-ID: <734fbf254c64668856e987aafe9d7dfd3ec86941.camel@mediatek.com>
-Subject: Re: [v7 2/4] ASoC: mediatek: mt8192: refactor for I2S3 DAI link of
- speaker
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>,
-        <robh+dt@kernel.org>, <tzungbi@google.com>,
-        <angelogioacchino.delregno@collabora.com>, <aaronyu@google.com>,
-        <matthias.bgg@gmail.com>, <trevor.wu@mediatek.com>,
-        <linmq006@gmail.com>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>
-Date:   Wed, 30 Mar 2022 23:48:01 +0800
-In-Reply-To: <YkRoC30JLDMeVi1B@sirena.org.uk>
-References: <20220324064511.10665-1-jiaxin.yu@mediatek.com>
-         <20220324064511.10665-3-jiaxin.yu@mediatek.com>
-         <20220329223002.uo7kiemopkh7ak4x@notapiano>
-         <dee3fbb7c9f0c3e1f11143db1d6fc4381cab827f.camel@mediatek.com>
-         <YkRNSoBKFvYYyZLu@sirena.org.uk>
-         <61e9fb59448837cfc8e3ec862b711294bcb68872.camel@mediatek.com>
-         <YkRoC30JLDMeVi1B@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 30 Mar 2022 11:50:22 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACCD72E095
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 08:48:37 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4945223A;
+        Wed, 30 Mar 2022 08:48:37 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 256963F73B;
+        Wed, 30 Mar 2022 08:48:36 -0700 (PDT)
+Message-ID: <5dc3a40e-f071-3ac8-4bf0-f555b9d94ff1@arm.com>
+Date:   Wed, 30 Mar 2022 17:48:34 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] arch/arm64: Fix topology initialization for core
+ scheduling
+Content-Language: en-US
+To:     Phil Auld <pauld@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220322160304.26229-1-pauld@redhat.com>
+ <1a546197-872b-7762-68ac-d5e6bb6d19aa@arm.com>
+ <YkMjqfBSyT3NOrWB@lorien.usersys.redhat.com>
+ <5a5381cd-813d-7cef-9948-01c3e5e910ef@arm.com>
+ <YkNjGOtG6eb4N8mI@lorien.usersys.redhat.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <YkNjGOtG6eb4N8mI@lorien.usersys.redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-03-30 at 15:24 +0100, Mark Brown wrote:
-> On Wed, Mar 30, 2022 at 10:06:24PM +0800, Jiaxin Yu wrote:
-> > On Wed, 2022-03-30 at 13:30 +0100, Mark Brown wrote:
-> > > Making a previously optional property required means that systems
-> > > that
-> > > previously worked may stop working unless they update their DT,
-> > > DTs
-> > > may
-> > > be distributed separately to the kernel and perhaps even baked
-> > > into
-> > > firmware or similar.
-> > Thank you for your detailed answer. I should keep the driver's
-> > behavior
-> > consistent with the description of dt-bindings. The "mediatek,hdmi-
-> > codec" needs to be set as the required property. Is my
-> > understanding
-> > right?
+On 29/03/2022 21:50, Phil Auld wrote:
+> On Tue, Mar 29, 2022 at 08:55:08PM +0200 Dietmar Eggemann wrote:
+>> On 29/03/2022 17:20, Phil Auld wrote:
+>>> On Tue, Mar 29, 2022 at 04:02:22PM +0200 Dietmar Eggemann wrote:
+>>>> On 22/03/2022 17:03, Phil Auld wrote:
+
+[...]
+
+>>> This instance is an HPE Apollo 70 set to smt-4.  I believe it's ThunderX2
+>>> chips.
+>>>
+>>> ARM (CN9980-2200LG4077-Y21-G) 
+>> I'm using the same processor just with ACPI/PPTT.
+>>
 > 
-> The binding document and code should match so if one is changed the
-> other needs to be changed too.
+> Maybe I'm misinformed about these systems having no PPTT...  
 > 
-> In theory we should never change a previously optional property to
-> required which would mean that the code should be updated to reflect
-> the
-> binding document, however sometimes the DT isn't actually used as a
-> stable intereface by anything for a given property or device type so
-> we
-> can get away with changing things.
+> I'm reclaiming the system. Is there a way I can tell from userspace?
 
-"however sometimes the DT isn't actually used as a stable intereface by
-anything for a given property or device type so we can get away with
-changing things."
+# cat /sys/firmware/acpi/tables/PPTT > pptt.dat
+# iasl -d pptt.dat
+# vim pptt.dsl
 
-Sorry, I don't understand the real idea of this description. Does it
-mean that dt-bindings in this series don't need to be updated, but the
-driver?
+[...]
 
+>> so no SMT sched domain. The MPIDR-based topology fallback code in
+>> store_cpu_topology() forces `cpuid_topo->thread_id  = -1`.
+> 
+> Right. So since I'm getting SMT it must not have package_id == -1.
+> In which case you should be able to reproduce it because it must
+> be that the call the update_siblings_masks() is required.  That
+> appears to only be called from store_cpu_topology() which is
+> after the scheduler has already setup the core pointers.
+> 
+> The fix could be the same but I should reword the commit message
+> since it should effect all SMT arm systems I'd think.
+> 
+> Or maybe the ACPI topology code should call update_sibling_masks(). 
+>>
+>> IMHO this is why on my machine I don't see this issue while running:
+>>
+>> root@oss-apollo7007:~# stress-ng --prctl 256 -t 60
+>> stress-ng: info:  [2388042] dispatching hogs: 256 prctl
+>>
+>> Is there something I miss in my setup to provoke this issue?
+>>
+> 
+> Make sure you have a stress-ng that is new enough and built against
+> headers that have the CORE_SCHED prctls defined.
+
+Ah, I was using a pretty old version 0.11.07. Now I switched to 0.13.12
+which includes:
+
+  9038e442b92d - stress-prctl: add Linux 5.14 PR_SCHED_CORE prctl
+
+To get SCHED_CORE activated in stress-prctl.c, as a quick hack, I had to
+add the definitions of PR_SCHED_CORE, PR_SCHED_CORE_GET, etc. to this file.
+
+Now the issue you described triggers on this machine immediately.

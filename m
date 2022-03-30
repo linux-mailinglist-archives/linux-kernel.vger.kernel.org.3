@@ -2,52 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D194EBBD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7616D4EBC20
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243864AbiC3HgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 03:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
+        id S243974AbiC3HxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 03:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240368AbiC3HgN (ORCPT
+        with ESMTP id S244029AbiC3HxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 03:36:13 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E4B21BC63
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 00:34:24 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6F62F40005;
-        Wed, 30 Mar 2022 07:34:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1648625663;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xPfgkZOladdR15a2MCEBT2OjHxKiQBCr7V4GEPMOqvk=;
-        b=U8eQk5w0WGhtwLRrHpCp6JCQUXsSbioy5hz+rAXIEeHtF0TA6YOOBeHZmp9QGww1Hy9dkP
-        7me1P2rZjd2pPSPTsAVdkITS0xHSgYmJRDnpPFHeQ2m3/UycwmDWBanRJpUboTz/mCGNvh
-        8BLdR2T0nQtDzLZmm0+FJdRlFZPs/aRJwSURDKM/CEn7fbiTEJEN39X/jn63hYU8LUZEk8
-        65TkfTkog5/rVgERANVqI2KWw4AyejfouMUb0uJ2pnNimGg2Ljs8jcUfd25WQvtY58dQvk
-        wrJIqkbuplWEKpatpSeEctHp0H0g9154m6c0hCDqamHWG+6HwxDUdqtdr9jfZw==
-Date:   Wed, 30 Mar 2022 09:34:21 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Jean-Marc Eurin <jmeurin@google.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Create a proper header for the saved mtdoops.
-Message-ID: <20220330093421.35de104d@xps13>
-In-Reply-To: <20220329225328.396209-1-jmeurin@google.com>
-References: <20220329225328.396209-1-jmeurin@google.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 30 Mar 2022 03:53:19 -0400
+X-Greylist: delayed 969 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Mar 2022 00:51:32 PDT
+Received: from smtp15.bhosted.nl (smtp15.bhosted.nl [IPv6:2a02:9e0:8000::26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F1AC0D
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 00:51:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protonic.nl; s=202111;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=Uluet/jX37T1xgs3caJvnu+3kL5bR9aXLM+3qwz3Ut0=;
+        b=BGbLA8eKyyGd5yvbXSXEXi7rFMNNWKsKsVh0R5+JnpGLnT90jck/dj5i24O1TDJ8JeVRcoCykqQDq
+         d40Selw91O0Xaq+4JAhb3aRvpAiQoSy48l6Ms2l8tc0POdQ7Z+wP22m+3aby7rAHOmqUx5IZuat15S
+         d/9YpgrKjE96LFgN++FuuDhwRBPuIo2eWu5mhazvJSQ9uWCBoXN3lFFVDjHnO1DveF6EwsR9LjTACZ
+         eG+zmdPmUITUNw8QDEIcQUE/AE4Y/AnOKR5yg8CBbiXdz8LgYBk2Iql207xawxxPrHTPuuRDqg/Oq5
+         I7ARFhrv4NZzwixB76dBkEgWIDIc5wQ==
+X-MSG-ID: f2076e64-affb-11ec-b450-0050569d3a82
+From:   David Jander <david@protonic.nl>
+To:     Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, David Jander <david@protonic.nl>
+Subject: [PATCH 0/2] drivers: auxdisplay: ht16k33.c: Add option to refuse claiming primary fb
+Date:   Wed, 30 Mar 2022 09:34:38 +0200
+Message-Id: <20220330073440.3986724-1-david@protonic.nl>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,34 +48,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean-Marc,
+In the case there is also a display with a frame-buffer device, the probe
+order of the auxdisplay fb and the main fb is not predictable, possibly
+leading to the situation where the holtek auxdisplay becomes /dev/fb0.
+This is problematic because there is currently no way to automatically
+rename these devices, and too much user-space software that assumes fb0
+to be the main display.
+In such a situation, adding "holtek,refuse-primary-fb" to the DT, the
+auxdisplay driver returns -EPROBE_DEFER to wait for the primary fb device
+to get probed first.
 
-jmeurin@google.com wrote on Tue, 29 Mar 2022 15:53:28 -0700:
+David Jander (2):
+  drivers: auxdisplay: ht16k33.c: Add option to refuse claiming primary
+    fb
+  dt-bindings: auxdisplay: holtek,ht16k33.yaml: Add
+    holtek,refuse-primary-fb
 
-> Avoid a panic if the header size changes.
-> Add a timestamp to the oops header.
->=20
-> Tested:
-> Triggered panic saved correctly:
-> xxd -l 0x20 -s 0x0000 /dev/mtdblock1
-> 00000000: 0100 0000 005e 005d 935d 4117 c5bf df16  .....^.].]A.....
-> 00000010: 3c36 3e5b 2020 3133 392e 3938 3039 3533  <6>[  139.980953
+ .../devicetree/bindings/auxdisplay/holtek,ht16k33.yaml    | 3 +++
+ drivers/auxdisplay/ht16k33.c                              | 8 ++++++++
+ 2 files changed, 11 insertions(+)
 
-Your previous patchset was not applied because I requested several
-changes, yet you seem not to have taken them into account. For the
-record:
-
-	Can you please send a v2 with:
-	- Your two patches in the same series (formatted with
-	  git-format-patch to get the dependency/order right)
-	- In the other commit, drop the reference pointing to (I
-	  believe) a commit hash that is local to your tree only.
-	- Use the right prefix ("mtd: mtdoops:").
-
-If you are fixing something different then create another patch in this
-series, but please keep you changes atomic and well separated, include
-a changelog and use proper subject prefixes.
-
-Thanks,
-Miqu=C3=A8l
+-- 
+2.32.0
 

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180E14ECE87
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB954ECE7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351145AbiC3Utt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 16:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
+        id S1351155AbiC3Utw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 16:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351131AbiC3Utq (ORCPT
+        with ESMTP id S1351130AbiC3Uts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 16:49:46 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD59746B2B;
-        Wed, 30 Mar 2022 13:48:00 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id jx9so21906944pjb.5;
-        Wed, 30 Mar 2022 13:48:00 -0700 (PDT)
+        Wed, 30 Mar 2022 16:49:48 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB5E46B21;
+        Wed, 30 Mar 2022 13:48:03 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id s11so19907234pfu.13;
+        Wed, 30 Mar 2022 13:48:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=SGa5BVmzMUOjfF5fklYjMnwty8EXXy2NltxcnqNLnSI=;
-        b=DSd0Nzz9hIrhZxIZfNCcmrP6ngFJEnXjmtoQvedf5AXNAco5uLpIdKfMnlFhduseHm
-         ghdLVjUhcyu+e1ldHlAqMbqU+D/xstz3gB16jtbSryEdaXLNy44Aud1Uyr8hUDLIvxKJ
-         bKZ+rbXZt2JSjOCWFu1wfmmUopJu7uW8SicjmuK+3Z1G3CAxIwxGJiUp+EHDrmZxC8LZ
-         BFc7YfLczqNkUfPtfqyMxkf7GqmUzMt+rUYEp7+0jJ6gmOUEQuo2Ra8qRrc8eKo5Nida
-         ll7sQlqQ0Hz8mi6RrtbNn8Xdw69ESHzWNJCkWHvxeS7upUM1aD9ca9AjgLm/ZnIPlnJm
-         ydXg==
+        bh=tAkFR+6vhq0o/UUKOqeWc9uPJoN5WXdSoZFQuuhB/hI=;
+        b=FaRX1UWeh8GQfsWkMrLyB/2P+dHN9Hng7Nnbkb8Dmccr6iK2ArjJbfSlU8EPowuRWM
+         qW31UzHkCjytuoAR+WWkvmyCp3G4iMnoWx/nnxlHTLpAJUQbM6GVypBSaZwMyvLSvARW
+         ScQl1zEZXblXWWXw9Ao0riGA53h1pygszQSJnMez126k9Azct1fKBoXLyPcmzCicD4J0
+         4HwypBgxCK8bwUjzSXEeBNYCMLJBm3zt7CE+xreRbChK4sOA1MmLNzXoGnceIs57lW6H
+         LuE9H0um3vrd7lKNr9E2BPQqKoF6+bx/PIgeyCRbpWeyXfH3ZlRKF2JsOe2CV+9V9fdo
+         M55Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=SGa5BVmzMUOjfF5fklYjMnwty8EXXy2NltxcnqNLnSI=;
-        b=xUpdeIbIGeRsuw4K0oM3hZ22M6BypWE3tqdiGKxw0BV7XAiGy9erOUmvjzIiEJ9WS9
-         RgoI1j7ICvKW4mFYCKkkIBbSUZPnRDbZ0NhAeDkBCY2Q6ZKW74Nc5x1O4WKNlmVXnxhp
-         c8WqBQOuvlyStHuw+u73nqZxl0xR3IT+jG10t8wA3nxAOs+3QqfVkrCAve2ouFbHGfC2
-         Gm4hf6Z/g9esa6kary3ShsQ6rYHSFIFJFugkWAr/gNx1mOFrp96ykODC15COnz8lJKvd
-         SQevc46y60xMnG3g4RdYNUGbmmFy1XhOnfBRBWvovrKSOwmp5X8XZFkeeiOpUhV3aCK7
-         lUoA==
-X-Gm-Message-State: AOAM531cnQfr1sAlC56EO08oXjfGh+jt4lxjm8O1tjEvCMlBdIt7qrQe
-        X0H/rFiTuCm0KuKXN1M6oDU=
-X-Google-Smtp-Source: ABdhPJz4skMp1REpP6c7Chg16yU1uOCWTgymMz/5cLiay5QYtR+SyDD1L5Qm4FsQDK0GEkCXZL4plw==
-X-Received: by 2002:a17:902:d4c1:b0:153:d493:3f1 with SMTP id o1-20020a170902d4c100b00153d49303f1mr1601609plg.102.1648673280201;
-        Wed, 30 Mar 2022 13:48:00 -0700 (PDT)
+        bh=tAkFR+6vhq0o/UUKOqeWc9uPJoN5WXdSoZFQuuhB/hI=;
+        b=JOK7QZVDDJAsWhqIMNiYG6Ut4hNyeauXjLe8Q0v/MGcKDSAVr2LzpjRxKGZdVZuuOO
+         miB+gUiucgkVKVhipljRELZfIXTyNx4pyp6LjDR4bNq8BDbpXIkJSlexhyXoZlg8ZFTL
+         QvfiBB0ym08mLOYqEaTEga/X27mP1S6U+/+SRn9JP/2X11lfR6eViDDTBoJL4Ok65kb4
+         Z3yWXqzNoUFbRIfoE2pS5yEXrbDbwa9EfM3ZIPwqyzx9taBM1XOmXr1qrJHQLI+aKZXQ
+         owKTHPl4xBa1repsJiiH/MPgC/PwndsegPIs3B5VKZfpkUkAppJhs114teD3hzilm/nu
+         XIEw==
+X-Gm-Message-State: AOAM532e+Wc5eBw3MIOl4fa4gDXPaUbpWgA46SCtBKA288PXcDVWRjxC
+        /JRY8Eup4GEwy6hU+NCdAag=
+X-Google-Smtp-Source: ABdhPJzyLcWT52tc3P1GfBTk7VIU++snmA/PldvdmH9n7aHI7zf3vdwf3YMazpOjlkZVEhlMgaeJ3Q==
+X-Received: by 2002:a63:4005:0:b0:373:9ac7:fec1 with SMTP id n5-20020a634005000000b003739ac7fec1mr7699274pga.12.1648673282631;
+        Wed, 30 Mar 2022 13:48:02 -0700 (PDT)
 Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id y9-20020a056a00180900b004faa45a2230sm25216397pfa.210.2022.03.30.13.47.58
+        by smtp.gmail.com with ESMTPSA id u10-20020a63b54a000000b00380ea901cd2sm19805501pgo.6.2022.03.30.13.48.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 13:47:59 -0700 (PDT)
+        Wed, 30 Mar 2022 13:48:01 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
@@ -59,9 +59,9 @@ Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 03/10] drm/msm/gem: Convert some missed GEM_WARN_ON()s
-Date:   Wed, 30 Mar 2022 13:47:48 -0700
-Message-Id: <20220330204804.660819-4-robdclark@gmail.com>
+Subject: [PATCH v2 04/10] drm/msm/gem: Split out inuse helper
+Date:   Wed, 30 Mar 2022 13:47:49 -0700
+Message-Id: <20220330204804.660819-5-robdclark@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220330204804.660819-1-robdclark@gmail.com>
 References: <20220330204804.660819-1-robdclark@gmail.com>
@@ -79,58 +79,72 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
+Prep for a following patch, where it gets a bit more complicated.
+
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- drivers/gpu/drm/msm/msm_gem_vma.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/msm/msm_gem.c     | 2 +-
+ drivers/gpu/drm/msm/msm_gem.h     | 1 +
+ drivers/gpu/drm/msm/msm_gem_vma.c | 9 +++++++--
+ 3 files changed, 9 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
+index a4f61972667b..f96d1dc72021 100644
+--- a/drivers/gpu/drm/msm/msm_gem.c
++++ b/drivers/gpu/drm/msm/msm_gem.c
+@@ -938,7 +938,7 @@ void msm_gem_describe(struct drm_gem_object *obj, struct seq_file *m,
+ 				name, comm ? ":" : "", comm ? comm : "",
+ 				vma->aspace, vma->iova,
+ 				vma->mapped ? "mapped" : "unmapped",
+-				vma->inuse);
++				msm_gem_vma_inuse(vma));
+ 			kfree(comm);
+ 		}
+ 
+diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
+index 947ff7d9b471..1b7f0f0b88bf 100644
+--- a/drivers/gpu/drm/msm/msm_gem.h
++++ b/drivers/gpu/drm/msm/msm_gem.h
+@@ -61,6 +61,7 @@ struct msm_gem_vma {
+ int msm_gem_init_vma(struct msm_gem_address_space *aspace,
+ 		struct msm_gem_vma *vma, int npages,
+ 		u64 range_start, u64 range_end);
++bool msm_gem_vma_inuse(struct msm_gem_vma *vma);
+ void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
+ 		struct msm_gem_vma *vma);
+ void msm_gem_unmap_vma(struct msm_gem_address_space *aspace,
 diff --git a/drivers/gpu/drm/msm/msm_gem_vma.c b/drivers/gpu/drm/msm/msm_gem_vma.c
-index f914ddbaea89..64906594fc65 100644
+index 64906594fc65..dc2ae097805e 100644
 --- a/drivers/gpu/drm/msm/msm_gem_vma.c
 +++ b/drivers/gpu/drm/msm/msm_gem_vma.c
-@@ -44,7 +44,7 @@ void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
+@@ -37,6 +37,11 @@ msm_gem_address_space_get(struct msm_gem_address_space *aspace)
+ 	return aspace;
+ }
+ 
++bool msm_gem_vma_inuse(struct msm_gem_vma *vma)
++{
++	return !!vma->inuse;
++}
++
+ /* Actually unmap memory for the vma */
+ void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
+ 		struct msm_gem_vma *vma)
+@@ -44,7 +49,7 @@ void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
  	unsigned size = vma->node.size << PAGE_SHIFT;
  
  	/* Print a message if we try to purge a vma in use */
--	if (WARN_ON(vma->inuse > 0))
-+	if (GEM_WARN_ON(vma->inuse > 0))
+-	if (GEM_WARN_ON(vma->inuse > 0))
++	if (GEM_WARN_ON(msm_gem_vma_inuse(vma)))
  		return;
  
  	/* Don't do anything if the memory isn't mapped */
-@@ -61,7 +61,7 @@ void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
- void msm_gem_unmap_vma(struct msm_gem_address_space *aspace,
- 		struct msm_gem_vma *vma)
- {
--	if (!WARN_ON(!vma->iova))
-+	if (!GEM_WARN_ON(!vma->iova))
- 		vma->inuse--;
- }
- 
-@@ -73,7 +73,7 @@ msm_gem_map_vma(struct msm_gem_address_space *aspace,
- 	unsigned size = npages << PAGE_SHIFT;
- 	int ret = 0;
- 
--	if (WARN_ON(!vma->iova))
-+	if (GEM_WARN_ON(!vma->iova))
- 		return -EINVAL;
- 
- 	/* Increase the usage counter */
-@@ -100,7 +100,7 @@ msm_gem_map_vma(struct msm_gem_address_space *aspace,
+@@ -100,7 +105,7 @@ msm_gem_map_vma(struct msm_gem_address_space *aspace,
  void msm_gem_close_vma(struct msm_gem_address_space *aspace,
  		struct msm_gem_vma *vma)
  {
--	if (WARN_ON(vma->inuse > 0 || vma->mapped))
-+	if (GEM_WARN_ON(vma->inuse > 0 || vma->mapped))
+-	if (GEM_WARN_ON(vma->inuse > 0 || vma->mapped))
++	if (GEM_WARN_ON(msm_gem_vma_inuse(vma) || vma->mapped))
  		return;
- 
- 	spin_lock(&aspace->lock);
-@@ -120,7 +120,7 @@ int msm_gem_init_vma(struct msm_gem_address_space *aspace,
- {
- 	int ret;
- 
--	if (WARN_ON(vma->iova))
-+	if (GEM_WARN_ON(vma->iova))
- 		return -EBUSY;
  
  	spin_lock(&aspace->lock);
 -- 

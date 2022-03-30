@@ -2,202 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B99CC4EB9AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 06:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 397D84EB9AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 06:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242552AbiC3Ebb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 00:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52898 "EHLO
+        id S242572AbiC3EcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 00:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233751AbiC3Eb3 (ORCPT
+        with ESMTP id S242564AbiC3EcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 00:31:29 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2069.outbound.protection.outlook.com [40.107.243.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E22186CB
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 21:29:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gXBr0NwKlfbrBJ/jAzL2Cc+INCkuQa8dQ6GM/EKpRWYGdIANBbKTNUdXzvlzUM7s4W5XMU5vP0p6x04S3eOwTBpOn0wnJ881oznCix+7xb402HXUspkCgf8mMhf0RYidNX157lLQNmEnG7QbeRFLqXYfdEXHULiGycwAbqvjQdD2yplQXe3tLY+Y4+OPxqmjhXT0Ae3JwanCF2YPVl32Fl2E4m1e20vR6oFAy2ChwQkE40jNqxyL8/39yXYMLQrEqhp5bsJe0V8nodbzaiKCGi7+JtJSKAQgiW/ry5P+9YijC/Xub6K+2FVzpF33hl2Pz1rmX6uwXewW1pwiBywCyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0RruNfurWyES/3W8FL72ZJZYFwmAHkM0FpnqLlgsCEQ=;
- b=Peze90Q/88aUAF7bzOPOpp5DxcAcAhcAGPAgu5/nxMkVnAE1jt3RWE9eP75EZyoOWrO7DbOptFaWdBxecjBw8ddEu5pyGCI/lheF5/vqp3qL+3gR+xtbT2NQk+2W92l6erwR7eT/AWZufDYugC711C9otwNEuQSicvDFfsk6/vJBwuM24imgdyald6rOGOpGDKA71hCg03ktA6VmLmZj/wjGAlPR4UJMC5fJ34yLNq33hjzHM8YHEAwTmHvI0O4fdmzl4wBAJOeBDCnKU8gVa64XD67wkI8L0uWR2KVscph5eNueE+EQm/Ck2Ss0N9oHrDGSr1lx3XP+ESFWmB/2EA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0RruNfurWyES/3W8FL72ZJZYFwmAHkM0FpnqLlgsCEQ=;
- b=RtoQ3EdTetboY1vtkp9BOXUHdaL4MhjqLitoBF9Ogwx7TSnnzFpkT2XNreGS+hl5F0FalnbCoJ2bInCptUoQ8v9KQUoMpsKcyPg7nHMf1hFrnCDydpqywIEDncRjkuKuuygjERQ7e9oAEOGX5S+f97Gej2iHF0Ol+tsPxtl2NJA=
-Received: from MW4PR12MB5668.namprd12.prod.outlook.com (2603:10b6:303:16b::13)
- by BY5PR12MB4323.namprd12.prod.outlook.com (2603:10b6:a03:211::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.19; Wed, 30 Mar
- 2022 04:29:38 +0000
-Received: from MW4PR12MB5668.namprd12.prod.outlook.com
- ([fe80::5d27:53d9:5dbe:49fd]) by MW4PR12MB5668.namprd12.prod.outlook.com
- ([fe80::5d27:53d9:5dbe:49fd%3]) with mapi id 15.20.5102.022; Wed, 30 Mar 2022
- 04:29:38 +0000
-From:   "VURDIGERENATARAJ, CHANDAN" <CHANDAN.VURDIGERENATARAJ@amd.com>
-To:     "Lin, Tsung-hua (Ryan)" <Tsung-hua.Lin@amd.com>
-CC:     "David (ChunMing) Zhou" <David1.Zhou@amd.com>,
-        Drew Davenport <ddavenport@chromium.org>,
-        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
-        "Li, Leon" <Leon.Li@amd.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Sean Paul <seanpaul@chromium.org>,
-        Louis Li <ching-shih.li@amd.corp-partner.google.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        =?iso-8859-1?Q?St=E9phane_Marchesin?= <marcheu@chromium.org>,
-        "Kazlauskas, Nicholas" <Nicholas.Kazlauskas@amd.com>,
-        "Wentland, Harry" <Harry.Wentland@amd.com>,
-        "Lin, Tsung-hua (Ryan)" <Tsung-hua.Lin@amd.com>,
-        Mark Yacoub <markyacoub@google.com>
-Subject: RE: [PATCH v2] drm/amdgpu: fix that issue that the number of the crtc
- of the 3250c is not correct
-Thread-Topic: [PATCH v2] drm/amdgpu: fix that issue that the number of the
- crtc of the 3250c is not correct
-Thread-Index: AQHYQ+Hv6rbl9hCEq0aViheFKo1J4qzXTxsA
-Date:   Wed, 30 Mar 2022 04:29:38 +0000
-Message-ID: <MW4PR12MB566833076458CCAC433C4187961F9@MW4PR12MB5668.namprd12.prod.outlook.com>
-References: <20220127081237.13903-1-Tsung-Hua.Lin@amd.com>
- <20220330024643.162230-1-tsung-hua.lin@amd.com>
-In-Reply-To: <20220330024643.162230-1-tsung-hua.lin@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0580cd3b-6e72-4f79-b316-08da1205e712
-x-ms-traffictypediagnostic: BY5PR12MB4323:EE_
-x-microsoft-antispam-prvs: <BY5PR12MB432345471498FEFAE49FCF35961F9@BY5PR12MB4323.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BptSHKWzOhzaHNP7v3sMALt9dqrFbeKZ6ZUknvEYGC/srXTpHLjonn+hmEtHENuquwvg+1wDwpfvlWvc6gb6wnqwpIvOfYvdGSPuZRZczOiKHO6YF60CTT0m5uw5R0bC9PsydAb0WbDUBF34ASYKJtFUMtxwWD/P+ZaPQ50RblNairpIOCS3ARGgV5XfrxBIiGZAVRK7UL2iar4ajj55B8N/9STmndk4upYwIVvySeHdGKGWrLQTLq9ulbL9f60hIIAQJLuCce6PwhaRwM7nnnC30RlbPADhAmFewtaxaBfqdU2ww92rVsg0kbuT3Z32+Q84PVj6aR4HfJS2/nEsGWCpVZO4uIAvLk+bydBE/gs10GgDy6XM8t3x5yMZDmoG3qqx4TX1ZtPyVbeueQuQGbBKpzyi6oq7Q7CjjQJxyHja1b16Hrzz7RO16fzwa8FJPX28SMzfngxo/R8Cub9R0eT/8xiq73Ti4F4QyIav/lrkcrW0BPRrQSpM9gK3txtH2P0iGbgNn2JBZ7R4w6H9Uf6qXmcFOIegF+t1tzViN5NAD3k7B3SkwTS5dIvK0Nc/DeuFnyZW5Eakuf0sK5K2O8FRL36CBZwM162z42C6RdleAYrYufkG1XCPLzLNuCuAwgHw3BnbPmbAYbJPjLKTr8LT0kRp0ddCDM9V6MbYN+dyZOlfqzRQnx/3FS7fsIpvxjWIP4NFD+1Eb/rpR99cAQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR12MB5668.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52536014)(508600001)(122000001)(186003)(26005)(38070700005)(71200400001)(8936002)(7416002)(55016003)(2906002)(4326008)(66556008)(6862004)(86362001)(9686003)(33656002)(8676002)(7696005)(38100700002)(54906003)(316002)(76116006)(83380400001)(66946007)(66476007)(64756008)(66446008)(6506007)(6636002)(5660300002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?qchmbPmBGeiVeuuPBTdJvcsXCzRYIwxV3jLdIzTheCbVsjvIrillVvgE7u?=
- =?iso-8859-1?Q?jvHoRl6NKEUL1c2tHTS0tgUfwnv+DAdfblNiSCH6FWEWzg+YowdgzP2G4X?=
- =?iso-8859-1?Q?R+ukrV34f+RkMFNSZAoqHgj2R+gsrt1YbiBtNFpI+ytz1gM2YmaQPO0aDK?=
- =?iso-8859-1?Q?FzMRIcXZgERLxAcmnsi4S0Q64nkhlujj2YiZWgQSo3KIskQSFrL+YCQJP2?=
- =?iso-8859-1?Q?wNRI69wbrGd4ovmorL56jNcoOFu5bdMVpA0RhUAO3nvCuA/cjnlw6Qd8bN?=
- =?iso-8859-1?Q?gGBsxrAe2AlOEklR1svUJ4mB7mPAOdvq5e+sAu2L2TtyMeW9tobueMtTNO?=
- =?iso-8859-1?Q?+S3VHA/8gN2bqIC8/OYTvWMF3ZFT8O/w5BSSxEGPhFrTOluOG+MDWb8UVR?=
- =?iso-8859-1?Q?h2atpyhpP11LPQ+6d0hD2A3B2UvXCv5mH5r2RIcJfge5fIc2XfGaVFvXAq?=
- =?iso-8859-1?Q?PQQMrFLUzoFoCmMjOuqiPHqTpx/Xm4Pv2/SKDHZ8zuNbl5gr3w6mm8jMzN?=
- =?iso-8859-1?Q?p2UD/RxgmKhiUliGT6KpBiTeWCSmuywf0HZgE2PjoHgGK3J0g/KSQ63kOi?=
- =?iso-8859-1?Q?TBz7vVBvthipZDW2d349YF9jqtzCGywXFEyZcs/cd7QIeJAKUhgrWCfDFL?=
- =?iso-8859-1?Q?CPBK/31HannxOl2UPM1z0QLlFfsBq8lA4zDmzCv7NYJ1lwdVusuFG7JYKO?=
- =?iso-8859-1?Q?JU6uVbfBEVkDixrj/TTWNogtrB0xvo17wUgzNUIbDg+SwinegcADSNCpkb?=
- =?iso-8859-1?Q?Fg3KccAz9sYDp9VCfhbFPpNKUm9+RXJoJotmUUDLAl++q+wx2GUqN14BEb?=
- =?iso-8859-1?Q?0O/JIN0QJTFi+P0EHOJzMs8JwYRiqUUip+G9xnmHMww5kabpEJyUYSMaqS?=
- =?iso-8859-1?Q?PGeH+nnmQAq5NwtdpMlx2iaLo7pqRVrwXg5jQ7DfIhJcsmbPqBvoTgCSEc?=
- =?iso-8859-1?Q?JZjV70I21DmubAJe5R0ghT2qSPKX8xocB8rDyZgC6zqwvgF8xfjQue5emA?=
- =?iso-8859-1?Q?LNw5lX8sI0F/+URv0OJGSffCWBgg+LP0mJ/8uOG+aSq9Y1AWzziqo1XcUb?=
- =?iso-8859-1?Q?D/rBWFwBNxJL0v17HWC8jx1b7rgknXYoVkpjigRv7YzTElDnunwDLRHb8J?=
- =?iso-8859-1?Q?AxFsQ+Gv3uaV2ek6kZqkqo8N5/iaWjjMFh8eMyOu0Ge0JtnjEneZZ58YE5?=
- =?iso-8859-1?Q?Rytia/HJU3JxrWuuJHi2NORZ21diRjKNX1XrOGcT27lUnT3968Kl4yLJBb?=
- =?iso-8859-1?Q?SbM+Q5KeYWE9hjZH+qMEzNocOJk1KVl0xIOyTMaU2GUBpf944FbpPpw9Ua?=
- =?iso-8859-1?Q?lyXRoq8VypU8tFA4S6IBOHEruJ3W4R+mYK2A/URG6VD4kHYAzs+zZvrNPk?=
- =?iso-8859-1?Q?yh0l07cIaA043uesAGVVawo97yOlR77A64qfneRYzFGbxu7/tJk5QGLtLO?=
- =?iso-8859-1?Q?FSFBx/BdkqTKMexXEfUfPpWlSOy5KVMKdeYVVwUr9DbRjOHAphKBdBaFJz?=
- =?iso-8859-1?Q?EASvIJ2qxdHe9UcORJcz9pEmbiXmkZqdesXFDOQ343qyOsMnH91W/elJbo?=
- =?iso-8859-1?Q?Qv8td9m97+O/wu5k70MVvtTSPXvl0YrDlw8RxUoHxLxZMVLXj2ttWFWn9o?=
- =?iso-8859-1?Q?YmAk9y4FoISc76XN7BsPS4RxNm7WaRLt+z8WiksGalneDRz8gCjagZhxqF?=
- =?iso-8859-1?Q?coj7V9X1TAKr2nahrKyEptUPs6m7Gx/WtAniLBhKLPyA991IzbWHQil+qZ?=
- =?iso-8859-1?Q?jl/0ylEs0BjUTdVHchcdqt6yUKn3/ssSSWpKYw4ik8dP3juWsS7ALlt4+5?=
- =?iso-8859-1?Q?JRSjL6kSaA=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 30 Mar 2022 00:32:06 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CBF19298
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 21:30:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648614622; x=1680150622;
+  h=message-id:date:mime-version:cc:to:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=ymV54KbkzNGiX0mm/3VkYQ0yuZNW6n8dT6h/b4tupgE=;
+  b=VHcvtfKysrfck03zdqYQd/7Zy9LCgR/UT0c3S+RcieVPwMmnLJzmMPt6
+   PBwdzh/BOLHgnNgzE7A07GTpFmPb/hhrW0YAMOXNXP119r0utUws9M+yp
+   4AiroHQz1YX7NpqeXQp6+UTAPh0no4kyMr29pvkEHmy+PLWUC8lfZd+Ry
+   4qfUm/rfPPyyJpid0jMf3B85be8hwrpMzTbHA81+WBMad+yw8/Ttrjd0k
+   pDgwZpI75GfPtWvMh9pfsOf3OEiULv2Xt/gsV4LFlYUsSqTRQDOrz0r28
+   lXKkdyM/2jfUnppLcPXninBQf8kTqmOnHFpTypXaoWcMm2aZ7+TsoTBLD
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="240039504"
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="240039504"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 21:30:22 -0700
+X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
+   d="scan'208";a="565253787"
+Received: from unknown (HELO [10.249.164.87]) ([10.249.164.87])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 21:30:18 -0700
+Message-ID: <1bd9b977-500c-602b-8b55-e5f8a13f39ce@linux.intel.com>
+Date:   Wed, 30 Mar 2022 12:30:15 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR12MB5668.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0580cd3b-6e72-4f79-b316-08da1205e712
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2022 04:29:38.5058
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: eXKlIFfHmJ5UoNbv/dIhUaSEe0apWap/WfSg3T6WEHNn2q3PQKiDJMcavDCQLakvuEXIzJJffvODYU0uIvGw9w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4323
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
+Content-Language: en-US
+To:     Jacob Pan <jacob.jun.pan@intel.com>
+References: <20220329053800.3049561-1-baolu.lu@linux.intel.com>
+ <20220329053800.3049561-2-baolu.lu@linux.intel.com>
+ <20220329140015.70c073b6@jacob-builder>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH RFC v2 01/11] iommu: Add pasid_bits field in struct
+ dev_iommu
+In-Reply-To: <20220329140015.70c073b6@jacob-builder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jacob,
 
-Hi Ryan,
+On 2022/3/30 5:00, Jacob Pan wrote:
+> Hi BaoLu,
+> 
+> On Tue, 29 Mar 2022 13:37:50 +0800, Lu Baolu<baolu.lu@linux.intel.com>
+> wrote:
+> 
+>> Use this field to save the pasid/ssid bits that a device is able to
+>> support with its IOMMU hardware. It is a generic attribute of a device
+>> and lifting it into the per-device dev_iommu struct makes it possible
+>> to allocate a PASID for device without calls into the IOMMU drivers.
+>> Any iommu driver which suports PASID related features should set this
+>> field before features are enabled on the devices.
+>>
+>> Signed-off-by: Lu Baolu<baolu.lu@linux.intel.com>
+>> ---
+>>   include/linux/iommu.h                       | 1 +
+>>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 2 ++
+>>   drivers/iommu/intel/iommu.c                 | 5 ++++-
+>>   3 files changed, 7 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+>> index 6ef2df258673..36f43af0af53 100644
+>> --- a/include/linux/iommu.h
+>> +++ b/include/linux/iommu.h
+>> @@ -368,6 +368,7 @@ struct dev_iommu {
+>>   	struct iommu_fwspec		*fwspec;
+>>   	struct iommu_device		*iommu_dev;
+>>   	void				*priv;
+>> +	unsigned int			pasid_bits;
+> pasid_width?
+> PCI spec uses "Max PASID Width"
+> 
 
-Is this change applicable on a specific kernel version?
-On latest I see IP DISCOVERY based impl for CHIP_RAVEN.
+My understanding is that this field represents "the pasid bits that the
+device is able to use with its IOMMU". This field considers the
+capabilities of both device and IOMMU. This is the reason why I put it
+in the per-device iommu object and initialize it in the iommu
+probe_device() callback.
 
->[Why]
->External displays take priority over internal display when there are fewer=
- display controllers than displays.
->
-> [How]
->The root cause is because of that number of the crtc is not correct.
->The number of the crtc on the 3250c is 3, but on the 3500c is 4.
->On the source code, we can see that number of the crtc has been fixed at 4=
-.
->Needs to set the num_crtc to 3 for 3250c platform.
->
->v2:
->   - remove unnecessary comments and Id
->
->Signed-off-by: Ryan Lin <tsung-hua.lin@amd.com>
->
->---
-> drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 12 +++++++++---
-> 1 file changed, 9 insertions(+), 3 deletions(-)
->
->diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/g=
-pu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
->index 40c91b448f7da..455a2c45e8cda 100644
->--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
->+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
->@@ -2738,9 +2738,15 @@ static int dm_early_init(void *handle)
-> 		break;
-> #if defined(CONFIG_DRM_AMD_DC_DCN1_0)
-> 	case CHIP_RAVEN:
->-		adev->mode_info.num_crtc =3D 4;
->-		adev->mode_info.num_hpd =3D 4;
->-		adev->mode_info.num_dig =3D 4;
->+		if (adev->rev_id >=3D 8) {
-
-May I know what this ">=3D8" indicate? Also, should it be external_rev_id i=
-f its based on old version?
-
->+			adev->mode_info.num_crtc =3D 3;
->+			adev->mode_info.num_hpd =3D 3;
->+			adev->mode_info.num_dig =3D 3;
->+		} else {
->+			adev->mode_info.num_crtc =3D 4;
->+			adev->mode_info.num_hpd =3D 4;
->+			adev->mode_info.num_dig =3D 4;
->+		}
-> 		break;
-> #endif
-> #if defined(CONFIG_DRM_AMD_DC_DCN2_0)
->--
->2.25.1
->
-
-BR,
-Chandan V N
+Best regards,
+baolu

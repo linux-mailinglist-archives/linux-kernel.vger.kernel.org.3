@@ -2,252 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 717C44ECF02
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B42604ECF12
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351342AbiC3VtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 17:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
+        id S1351364AbiC3Vt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 17:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348397AbiC3VtS (ORCPT
+        with ESMTP id S1348397AbiC3Vtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 17:49:18 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3431314032
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:47:32 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id z128so18501762pgz.2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:47:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Lu/OaZ0ppwhDx18TN60M/FhAWhGydJGFXEfzdV2g8HY=;
-        b=RAqIT9MKFGfwgpem6ZfAgI3Lqn7WOSMQZjhERWSbGyspdBvdKxB0h7tAUgjzYtNi0H
-         P375JcY6Y7E54a2Z0VtgXklIgfkGShzR76HPNW4ZjCFYtrxWSorkwlJo7zgY58qRyK2Q
-         tdWV6jw+9ukpMq9pPmDTUvw0Z9ZWJxZW96erI92X7HCu+2kMeLr6yw1DUL0LwW1fV4t2
-         Zs+dXPMiBFRlaySqkZFNd9YiNAHBm+3yRrj/WS0nDh1+tothXFjuhhON469Xk7XKrp62
-         Srthzd0HpF4w4hZzoMbqoZHeUWHw86CvwfKluDBoFo08shza3gKMEuI/uk7j4NMWBZM2
-         Y/JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Lu/OaZ0ppwhDx18TN60M/FhAWhGydJGFXEfzdV2g8HY=;
-        b=sLr90yzbjgL44K7pieEUAvqT5Z290VLL3sgj4UgWWBqQvXaAZIFjsKu696sOybcwPO
-         C9Hg5mZKx2SdfJbJ7MiFy1XqB730lNRcMwnXASrhdOoYn6ltSdbcqY15I9nh8vSkma2j
-         U6GthWWdzQDjX/cx0PAvxT6Zs1i56ksMeC7JiE3z1vv5nlyAMvbRZ17+Vd8men4HfBD/
-         7DI1Fy0iq7f16oFhbe6Mtgsu1LlC6OnUVpfwoHLm34pzw5JVB89d9zqgbM7cY0reXwNo
-         fJQ9VKWAeZs/Cul0HgDhB5diK44YEtzvABkYTpwZxw4o7eWUuyI2GcpH/ZabEp40t8h8
-         mtaQ==
-X-Gm-Message-State: AOAM533Vf/qQqDpr5SPu3zJCJzpeVkUkB7/JICOzFrYfK9TGB/E7EcHm
-        0VXD/R5THcCBnpELyCxmDU3I7UCiRNxIRA==
-X-Google-Smtp-Source: ABdhPJwFOO8tofLZJPD3Q3rkBtJWmegX8ISXweJCIst1G5f7McVaWVLKimAT+kjzIJarl+J5cyK7VQ==
-X-Received: by 2002:a05:6a00:2402:b0:4e1:3df2:5373 with SMTP id z2-20020a056a00240200b004e13df25373mr1735242pfh.40.1648676850190;
-        Wed, 30 Mar 2022 14:47:30 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 123-20020a620681000000b004fa7c20d732sm23730995pfg.133.2022.03.30.14.47.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 14:47:29 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 21:47:26 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chenyi Qiang <chenyi.qiang@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 7/7] KVM: VMX: Enable PKS for nested VM
-Message-ID: <YkTP7uztERLwynAN@google.com>
-References: <20220221080840.7369-1-chenyi.qiang@intel.com>
- <20220221080840.7369-8-chenyi.qiang@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221080840.7369-8-chenyi.qiang@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 30 Mar 2022 17:49:52 -0400
+X-Greylist: delayed 85333 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Mar 2022 14:48:06 PDT
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57269517EF;
+        Wed, 30 Mar 2022 14:48:06 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id CE268C01F; Wed, 30 Mar 2022 23:48:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1648676884; bh=JBKLv303K90QCwUMTooNfskYmIZP7k25TQ0ASMcQRSI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZyDuY9EHxC6b3cGDP2eO51iv4iFDbwJIXPW0OiAiHDP3E8AJWLvulUcCrbd2aAagO
+         SdxLv88pAZKEi3cNsC09XHBPJguOTD36TRHJHbs6bCQlNmK0pgrREeTIaYWJEYfKon
+         n9m1EaODjoXeSmW0IO2yq4rDR4fNHV3RV6KB+ctyNuWroTw/8mdcxvQp6UXvODxLsa
+         w7UYDNoipv+bYpb9NMxEX+NNLYLlIwp1OFmF9Mm6bmYwXBbGO6wzKLG0/UMioVpeH9
+         sBN42Tq71Lvvca7RPtggzjQBSX3mTXrx3VdlAmWzbvgSImItPQX7bhmz7nDPUpmnIQ
+         QPxqovfxMjZzw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 1F6EAC009;
+        Wed, 30 Mar 2022 23:47:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1648676883; bh=JBKLv303K90QCwUMTooNfskYmIZP7k25TQ0ASMcQRSI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GIKyUZbIYuq5PoIeC4yUO63eTSwhcmASKxRBPNeHzfpNz5tN1WuQ4e3ooMhrhjpFd
+         bc+C1ya1dMT0Wp9gmjKiEsmT8lmem9rYf+hPuuRfq1HmNQ1wW1aVCfrHke2mxHYRn/
+         lutBfosOyCD1a++oHT4focbwJpEkMFVnLifT0vJrv8DxN2Tl3RGK4BXU4jXsZp01M7
+         noStU+yX+fmrzThCpFFrxLrbFdMZi2yR12iBst8eOVccrFgeweIB0O9G02nPTl2xDk
+         F6vKjNyKtX239KbthfMXLpobOTSHEIL6KvAPPN1e2OXxcoc/e9gnHwFY3Dwato5Ae7
+         jL1YX4yt5FqGQ==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id e5f1e8fa;
+        Wed, 30 Mar 2022 21:47:56 +0000 (UTC)
+Date:   Thu, 31 Mar 2022 06:47:41 +0900
+From:   asmadeus@codewreck.org
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     David Kahurani <k.kahurani@gmail.com>, davem@davemloft.net,
+        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        lucho@ionkov.net, netdev@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        David Howells <dhowells@redhat.com>, Greg Kurz <groug@kaod.org>
+Subject: Re: 9p fs-cache tests/benchmark (was: 9p fscache Duplicate cookie
+ detected)
+Message-ID: <YkTP/Talsy3KQBbf@codewreck.org>
+References: <CAAZOf26g-L2nSV-Siw6mwWQv1nv6on8c0fWqB4bKmX73QAFzow@mail.gmail.com>
+ <2582025.XdajAv7fHn@silver>
+ <Yj8WkjT+MsdFIfwr@codewreck.org>
+ <3791738.ukkqOL8KQD@silver>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3791738.ukkqOL8KQD@silver>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022, Chenyi Qiang wrote:
-> PKS MSR passes through guest directly. Configure the MSR to match the
-> L0/L1 settings so that nested VM runs PKS properly.
+Thanks Christian!
+
+Christian Schoenebeck wrote on Wed, Mar 30, 2022 at 02:21:16PM +0200:
+> Case  Linux kernel version           .config  msize    cache  duration  host cpu  errors/warnings
 > 
-> Signed-off-by: Chenyi Qiang <chenyi.qiang@intel.com>
-> ---
->  arch/x86/kvm/vmx/nested.c | 38 ++++++++++++++++++++++++++++++++++++--
->  arch/x86/kvm/vmx/vmcs12.c |  2 ++
->  arch/x86/kvm/vmx/vmcs12.h |  4 ++++
->  arch/x86/kvm/vmx/vmx.c    |  1 +
->  arch/x86/kvm/vmx/vmx.h    |  2 ++
->  5 files changed, 45 insertions(+), 2 deletions(-)
+> A)    5.17.0+[2] + msize patches[1]  debug    4186112  mmap   20m 40s   ~80%      none
+> B)    5.17.0+[2] + msize patches[1]  debug    4186112  loose  31m 28s   ~35%      several errors (compilation completed)
+> C)    5.17.0+[2] + msize patches[1]  debug    507904   mmap   20m 25s   ~84%      none
+> D)    5.17.0+[2] + msize patches[1]  debug    507904   loose  31m 2s    ~33%      several errors (compilation completed)
+> E)    5.17.0+[2]                     debug    512000   mmap   23m 45s   ~75%      none
+> F)    5.17.0+[2]                     debug    512000   loose  32m 6s    ~31%      several errors (compilation completed)
+> G)    5.17.0+[2]                     release  512000   mmap   23m 18s   ~76%      none
+> H)    5.17.0+[2]                     release  512000   loose  32m 33s   ~31%      several errors (compilation completed)
+> I)    5.17.0+[2] + msize patches[1]  release  4186112  mmap   20m 30s   ~83%      none
+> J)    5.17.0+[2] + msize patches[1]  release  4186112  loose  31m 21s   ~31%      several errors (compilation completed)
+> K)    5.10.84                        release  512000   mmap   39m 20s   ~80%      none
+> L)    5.10.84                        release  512000   loose  13m 40s   ~55%      none
+
+ow.
+
+> Disclaimer: I have not looked into the fs-cache sources yet, so I am not sure,
+> but my first impression is that probably something got broken with recent
+> fs-cache changes (see column errors, especially in comparison to case L) which
+> did not generate any errors)? And also note the huge build duration 
+> differences, especially in comparison to case L), so fs-cache (cache=loose)
+> also got significantly slower while cache=mmap OTOH became significantly
+> faster?
+
+Yes, that's a big regression; I didn't do any performance benchmark with
+the new patches as I didn't think it'd matter but I obviously should
+have.
+
+There is one thing I must check: I know new kernels will be writing in
+4k chunks and that is going to be very slow until the netfs write
+helpers are finished, but I thought the old code did the same.
+If the old code had bigger writes that performance will probably come
+back.
+Otherwise there's some other error like not reusing cached content we
+should use.
+
+
+> About the errors: I actually already see errors with cache=loose and recent
+> kernel version just when booting the guest OS. For these tests I chose some
+> sources which allowed me to complete the build to capture some benchmark as
+> well, I got some "soft" errors with those, but the build completed at least.
+> I had other sources OTOH which did not complete though and aborted with
+> certain invalid file descriptor errors, which I obviously could not use for
+> those benchmarks here.
+
+That's less surprising, the change was really huge. I'm annoyed because
+I did test part of a parallel linux kernel compilation with
+cache=fscache without noticing a problem :/
+
+I'll try to reproduce this weekend-ish.
+> > Christian Schoenebeck wrote on Sat, Mar 26, 2022 at 01:36:31PM +0100:
+> > hm, fscache code shouldn't be used for cache=mmap, I'm surprised you can
+> > hit this...
 > 
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index f235f77cbc03..c42a1df385ef 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -252,6 +252,10 @@ static void vmx_sync_vmcs_host_state(struct vcpu_vmx *vmx,
->  	dest->ds_sel = src->ds_sel;
->  	dest->es_sel = src->es_sel;
->  #endif
-> +	if (unlikely(src->pkrs != dest->pkrs)) {
-> +		vmcs_write64(HOST_IA32_PKRS, src->pkrs);
-> +		dest->pkrs = src->pkrs;
-> +	}
+> I assume that you mean that 9p driver does not explicitly ask for fs-cache
+> being used for mmap. I see that 9p uses the kernel's generalized mmap
+> implementation:
+> 
+> https://github.com/torvalds/linux/blob/d888c83fcec75194a8a48ccd283953bdba7b2550/fs/9p/vfs_file.c#L481
+> 
+> I haven't dived further into this, but the kernel has to use some kind of
+> filesystem cache anyway to provide the mmap functionality, so I guess it makes
+> sense that I got those warning messages from the FS-Cache subsystem?
 
-It's worth adding a helper for this, a la vmx_set_host_fs_gs(), though this one
-can probably be an inline in vmx.h.  E.g. to yield
+It uses the generic mmap which has vfs caching, but definitely not
+fs-cache.
+fs-cache adds more hooks for cachefilesd (writing file contents to disk
+for bigger cache) and things like that cache=loose/mmap shouldn't be
+caring about. cache=loose actually just disables some key parts so I'm
+not surprised it shares bugs with the new code, but cache=mmap is really
+independant and I need to trace where these come from...
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index bfa37c7665a5..906a2913a886 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -252,10 +252,7 @@ static void vmx_sync_vmcs_host_state(struct vcpu_vmx *vmx,
-        dest->ds_sel = src->ds_sel;
-        dest->es_sel = src->es_sel;
- #endif
--       if (unlikely(src->pkrs != dest->pkrs)) {
--               vmcs_write64(HOST_IA32_PKRS, src->pkrs);
--               dest->pkrs = src->pkrs;
--       }
-+       vmx_set_host_pkrs(dest, src->pkrs);
- }
+> With QEMU >= 5.2 you should see the following QEMU warning with your reproducer:
+> 
+> "
+> qemu-system-x86_64: warning: 9p: Multiple devices detected in same VirtFS
+> export, which might lead to file ID collisions and severe misbehaviours on
+> guest! You should either use a separate export for each device shared from
+> host or use virtfs option 'multidevs=remap'!
+> "
 
- static void vmx_switch_vmcs(struct kvm_vcpu *vcpu, struct loaded_vmcs *vmcs)
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 35fee600fae7..b6b5f1a46544 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -1157,10 +1157,7 @@ void vmx_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
-         */
-        if (vm_exit_controls_get(vmx) & VM_EXIT_LOAD_IA32_PKRS) {
-                host_pkrs = get_current_pkrs();
--               if (unlikely(host_pkrs != host_state->pkrs)) {
--                       vmcs_write64(HOST_IA32_PKRS, host_pkrs);
--                       host_state->pkrs = host_pkrs;
--               }
-+               vmx_set_host_pkrs(host_state, host_pkrs);
-        }
+oh, I wasn't aware of the new option. Good job there!
 
- #ifdef CONFIG_X86_64
+It's the easiest way to reproduce but there are also harder to fix
+collisions, file systems only guarantee unicity for (fsid,inode
+number,version) which is usually bigger than 128 bits (although version
+is often 0), but version isn't exposed to userspace easily...
+What we'd want for unicity is handle from e.g. name_to_handle_at but
+that'd add overhead, wouldn't fit in qid path and not all fs are capable
+of providing one... The 9p protocol just doesn't want bigger handles
+than qid path.
 
 
->  }
->  
->  static void vmx_switch_vmcs(struct kvm_vcpu *vcpu, struct loaded_vmcs *vmcs)
-> @@ -685,6 +689,9 @@ static inline bool nested_vmx_prepare_msr_bitmap(struct kvm_vcpu *vcpu,
->  	nested_vmx_set_intercept_for_msr(vmx, msr_bitmap_l1, msr_bitmap_l0,
->  					 MSR_IA32_PRED_CMD, MSR_TYPE_W);
->  
-> +	nested_vmx_set_intercept_for_msr(vmx, msr_bitmap_l1, msr_bitmap_l0,
-> +					 MSR_IA32_PKRS, MSR_TYPE_RW);
-> +
->  	kvm_vcpu_unmap(vcpu, &vmx->nested.msr_bitmap_map, false);
->  
->  	vmx->nested.force_msr_bitmap_recalc = false;
-> @@ -2433,6 +2440,10 @@ static void prepare_vmcs02_rare(struct vcpu_vmx *vmx, struct vmcs12 *vmcs12)
->  		if (kvm_mpx_supported() && vmx->nested.nested_run_pending &&
->  		    (vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS))
->  			vmcs_write64(GUEST_BNDCFGS, vmcs12->guest_bndcfgs);
-> +
-> +		if (vmx->nested.nested_run_pending &&
-> +		    (vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS))
-> +			vmcs_write64(GUEST_IA32_PKRS, vmcs12->guest_ia32_pkrs);
->  	}
->  
->  	if (nested_cpu_has_xsaves(vmcs12))
-> @@ -2521,6 +2532,11 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
->  	if (kvm_mpx_supported() && (!vmx->nested.nested_run_pending ||
->  	    !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS)))
->  		vmcs_write64(GUEST_BNDCFGS, vmx->nested.vmcs01_guest_bndcfgs);
-> +	if (kvm_cpu_cap_has(X86_FEATURE_PKS) &&
-> +	    (!vmx->nested.nested_run_pending ||
-> +	     !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS)))
-> +		vmcs_write64(GUEST_IA32_PKRS, vmx->nested.vmcs01_guest_pkrs);
-> +
->  	vmx_set_rflags(vcpu, vmcs12->guest_rflags);
->  
->  	/* EXCEPTION_BITMAP and CR0_GUEST_HOST_MASK should basically be the
-> @@ -2897,6 +2913,10 @@ static int nested_vmx_check_host_state(struct kvm_vcpu *vcpu,
->  					   vmcs12->host_ia32_perf_global_ctrl)))
->  		return -EINVAL;
->  
-> +	if ((vmcs12->vm_exit_controls & VM_EXIT_LOAD_IA32_PKRS) &&
-> +		CC(!kvm_pkrs_valid(vmcs12->host_ia32_pkrs)))
 
-Please align the indentation:
+And, err, looking at the qemu code
 
-	if ((vmcs12->vm_exit_controls & VM_EXIT_LOAD_IA32_PKRS) &&
-	    CC(!kvm_pkrs_valid(vmcs12->host_ia32_pkrs)))
-		return -EINVAL;
+  qidp->version = stbuf->st_mtime ^ (stbuf->st_size << 8);
 
-> +		return -EINVAL;
-> +
->  #ifdef CONFIG_X86_64
->  	ia32e = !!(vmcs12->vm_exit_controls & VM_EXIT_HOST_ADDR_SPACE_SIZE);
->  #else
-> @@ -3049,6 +3069,10 @@ static int nested_vmx_check_guest_state(struct kvm_vcpu *vcpu,
->  	if (nested_check_guest_non_reg_state(vmcs12))
->  		return -EINVAL;
->  
-> +	if ((vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS) &&
-> +	    CC(!kvm_pkrs_valid(vmcs12->guest_ia32_pkrs)))
-> +		return -EINVAL;
-> +
->  	return 0;
->  }
->  
-> @@ -3377,6 +3401,9 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
->  	if (kvm_mpx_supported() &&
->  		!(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS))
->  		vmx->nested.vmcs01_guest_bndcfgs = vmcs_read64(GUEST_BNDCFGS);
-> +	if (kvm_cpu_cap_has(X86_FEATURE_PKS) &&
-> +	    !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS))
+so the qid is treated as "data version",
+but on kernel side we've treated it as inode version (i_version, see
+include/linux/iversion.h)
 
-This needs read the current PKRS if from_vmentry == false, e.g.
+(v9fs_test_inode_dotl checks the version is the same when comparing two
+inodes) so it will incorrectly identify two identical inodes as
+different.
+That will cause problems...
+Since you'll be faster than me could you try keeping it at 0 there?
 
-	if (kvm_cpu_cap_has(X86_FEATURE_PKS) && 
-	    (!from_vmentry ||
-	     !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS)))
+I see fscache also uses the qid version as 'auxilliary data', but I'm
+not sure what this is used for -- if it's a data version like thing then
+it will also at least invalidate the cache content all the time.
 
-because in the migration case, if nested state is set after MSR state, the value
-needs to come from the current MSR value, which was propagated to vmc02 (which
-this calls vmcs01, but whatever).
 
-Note, I'm pretty sure the GUEST_BNDCFGS code is broken, surprise surprise.
+Note there also is a data_version thing in the protocol in the response
+to getattr, which the protocol side of 9p in linux digilently fills in
+st_data_version, but we never use it that I can see.
+This is probably what 9p meant to fill, and fscache should rely on to
+detect file changes if that helps.
 
-> +		vmx->nested.vmcs01_guest_pkrs = vmcs_read64(GUEST_IA32_PKRS);
->  
->  	/*
->  	 * Overwrite vmcs01.GUEST_CR3 with L1's CR3 if EPT is disabled *and*
-> @@ -4022,6 +4049,7 @@ static bool is_vmcs12_ext_field(unsigned long field)
->  	case GUEST_IDTR_BASE:
->  	case GUEST_PENDING_DBG_EXCEPTIONS:
->  	case GUEST_BNDCFGS:
-> +	case GUEST_IA32_PKRS:
->  		return true;
->  	default:
->  		break;
-> @@ -4073,6 +4101,8 @@ static void sync_vmcs02_to_vmcs12_rare(struct kvm_vcpu *vcpu,
->  		vmcs_readl(GUEST_PENDING_DBG_EXCEPTIONS);
->  	if (kvm_mpx_supported())
->  		vmcs12->guest_bndcfgs = vmcs_read64(GUEST_BNDCFGS);
-> +	if (guest_cpuid_has(vcpu, X86_FEATURE_PKS))
 
-This needs to check vmx->nested.msrs.entry_ctls_* (I can never remember if it's
-the high or low part...).  The SDM states PKRS is saved "if the processor supports
-the 1-setting of the 'load PKRS' VM-entry control", which is different than PKRS
-being supported in CPUID.  Also, guest CPUID is userspace controlled, e.g. userspace
-could induce a failed VMREAD by giving a garbage CPUID model, where vmx->nested.msrs
-can only be restricted by userspace, i.e. is trusted.
+I'm sorry I didn't see this sooner....
 
-Happyily, checking vmx->nested.msrs is also a performance win, as guest_cpuid_has()
-can require walking a large array.
+> > If you have some kind of reproducer of invalid filedescriptor or similar
+> > errors I'd be happy to dig a bit more, I don't particularly like all
+> > aspect of our cache model but it's not good if it corrupts things.
+> 
+> Maybe you can reproduce this with the root fs setup [4] described above? As I
+> said, I immediately get errors when guest OS is booting. So I don't have to
+> run something fancy to get errors with cache=loose & recent kernel.
+
+Yes, this is much worse than I had first assumed when you first brought
+it up, I'll definitely set some time aside to investigate.
+
+-- 
+Dominique

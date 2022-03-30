@@ -2,81 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D884EBF5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A4C4EBF60
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245673AbiC3LAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 07:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46362 "EHLO
+        id S245665AbiC3LA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 07:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240799AbiC3LAQ (ORCPT
+        with ESMTP id S245648AbiC3LAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:00:16 -0400
-Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70CD6DF70;
-        Wed, 30 Mar 2022 03:58:29 -0700 (PDT)
-IronPort-Data: =?us-ascii?q?A9a23=3AgNM4v69uJjWCds008lY+DrUD63+TJUtcMsCJ2f8?=
- =?us-ascii?q?bfWQNrUog1TAPymEXX2+EOv6PYjP9KNokaYqy8UwPvZHdzYIwTVdlrnsFo1Bi8?=
- =?us-ascii?q?5ScXYvDRqvT04J+FuWaFQQ/qZx2huDodKjYdVeB4Ef9WlTdhSMkj/vQHOKlULe?=
- =?us-ascii?q?s1h1ZHmeIdg9w0HqPpMZp2uaEsfDha++8kYuaT//3YTdJ6BYoWo4g0J9vnTs01?=
- =?us-ascii?q?BjEVJz0iXRlDRxDlAe2e3D4l/vzL4npR5fzatE88uJX24/+IL+FEmPxp3/BC/u?=
- =?us-ascii?q?ulPD1b08LXqXPewOJjxK6WYD72l4b+HN0if19aZLwam8O49mNt8pswdNWpNq+T?=
- =?us-ascii?q?xw1FqPRmuUBSAQeGCZ7VUFD0OadeiDu6JzNnyUqdFOpmZ2CFnoeMYQG++pfD3t?=
- =?us-ascii?q?J8PsCIjERKBuEgoqewLm7YuhqiN4qIMTiMMUYoH4I5T3QC7AkB4/CR6HL7NpD9?=
- =?us-ascii?q?DY2ms1KW/3ZYqIxZThwaxLPSx5CIFEaDNQ5hujArn3+dSBI7VeQjakp6mPQigt?=
- =?us-ascii?q?r39DFNsTZe9mPbcFUhVqD4GbH+XnpRB0XKrS3yzOD/zSnhvLnmjnyU4YfUra/8?=
- =?us-ascii?q?5ZChFyV23xWBgYaWEW2pdGnhUOkHdFSMUoZ/mwpt6da3EiqSMTtGh61uniJujY?=
- =?us-ascii?q?CVNdKVe438geAzuzT+QnxLmwFSCNRLcwor+coSjEwkFyEhdXkAXpoqrL9dJ433?=
- =?us-ascii?q?t94thvrYW5MczBEPnRCEGM4DxDYiNlbpnryohxLScZZVuHIJAw=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A7pXWoarUc0yRRXUzYrKOZWAaV5oUeYIsimQD?=
- =?us-ascii?q?101hICG9vPbo7vxG/c5rrSMc7Qx6ZJhOo6HkBEDtewK/yXcx2/hzAV7AZmjbUQ?=
- =?us-ascii?q?mTXeVfBOLZqlWKJ8S9zI5gPMxbAs9D4bPLfD5HZAXBjDVQ0exM/DBKys+VbC7l?=
- =?us-ascii?q?oUtQcQ=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
-   d="scan'208";a="123091868"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 30 Mar 2022 18:58:28 +0800
-Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
-        by cn.fujitsu.com (Postfix) with ESMTP id E2D7E4D17160;
-        Wed, 30 Mar 2022 18:58:22 +0800 (CST)
-Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
- G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Wed, 30 Mar 2022 18:58:22 +0800
-Received: from [10.167.201.8] (10.167.201.8) by
- G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Wed, 30 Mar 2022 18:58:22 +0800
-Message-ID: <4ed8baf7-7eb9-71e5-58ea-7c73b7e5bb73@fujitsu.com>
-Date:   Wed, 30 Mar 2022 18:58:21 +0800
+        Wed, 30 Mar 2022 07:00:17 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2640213EA2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 03:58:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=3qeT2jnWJKE3c4ByGF5uQGcKoZ3I
+        WXAG6HjQjmwsXH8=; b=p2SQXBmqqnEqYZwYoIAMTg5VXha6vhrbD+/4Bfrurus3
+        KqGTGW3BR00m/rdLPZ+KAbDv+ajUP4N4tB0azLUiTQMJC23MbuDcTaDlYYGDJ6iw
+        Q9NJHlaIRMkujWfRveS4o3KoTSSsk6gMwSshC9LrGhJj7r6XEvn4RRjIVTZu+Kg=
+Received: (qmail 2161148 invoked from network); 30 Mar 2022 12:58:29 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 30 Mar 2022 12:58:29 +0200
+X-UD-Smtp-Session: l3s3148p1@Ay70bG3b0qkgAQnoAFSoAOQGPeMhapNB
+Date:   Wed, 30 Mar 2022 12:58:29 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>
+Cc:     Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH v2] i2c: rcar: add SMBus block read support
+Message-ID: <YkQ31VMqj1MXqBd3@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+References: <20210922160649.28449-1-andrew_gabbasov@mentor.com>
+ <CAMuHMdVVDpBAQR+H1TAnpf65aVbAL0Mm0km7Z9L7+1JuF6n1gQ@mail.gmail.com>
+ <000001d7badd$a8512d30$f8f38790$@mentor.com>
+ <20211006182314.10585-1-andrew_gabbasov@mentor.com>
+ <Yg6ls0zyTDe7LQbK@kunai>
+ <20220323215229.GA9403@lxhi-065>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v11 1/8] dax: Introduce holder for dax_device
-To:     Christoph Hellwig <hch@infradead.org>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>, david <david@fromorbit.com>,
-        Jane Chu <jane.chu@oracle.com>
-References: <20220227120747.711169-1-ruansy.fnst@fujitsu.com>
- <20220227120747.711169-2-ruansy.fnst@fujitsu.com>
- <CAPcyv4jAqV7dZdmGcKrG=f8sYmUXaL7YCQtME6GANywncwd+zg@mail.gmail.com>
- <4fd95f0b-106f-6933-7bc6-9f0890012b53@fujitsu.com>
- <YkPtptNljNcJc1g/@infradead.org>
- <15a635d6-2069-2af5-15f8-1c0513487a2f@fujitsu.com>
- <YkQtOO/Z3SZ2Pksg@infradead.org>
-From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
-In-Reply-To: <YkQtOO/Z3SZ2Pksg@infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-yoursite-MailScanner-ID: E2D7E4D17160.A1BE2
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SU7q6hDtTecwI3kF"
+Content-Disposition: inline
+In-Reply-To: <20220323215229.GA9403@lxhi-065>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,38 +65,76 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--SU7q6hDtTecwI3kF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-在 2022/3/30 18:13, Christoph Hellwig 写道:
-> On Wed, Mar 30, 2022 at 06:03:01PM +0800, Shiyang Ruan wrote:
->>
->> Because I am not sure if the offset between each layer is page aligned.  For
->> example, when pmem dirver handles ->memory_failure(), it should subtract its
->> ->data_offset when it calls dax_holder_notify_failure().
-> 
-> If they aren't, none of the DAX machinery would work.
+Hi Eugeniu,
 
-OK. Got it.
+coming back to this topic, thanks for your patience everyone.
 
-So, use page-based function signature for ->memory_failure():
+> >=20
+> > You could wire up two R-Car I2C instances, set up one as an I2C slave
+> > handled by the I2C testunit and then use the other instance with
+> > SMBUS_BLOCK_PROC_CALL which also needs RECV_LEN. Check
+> > Documentation/i2c/slave-testunit-backend.rst for details.
+>=20
+> I am obviously not an SMBus expert, but I wonder if simply testing the
+> PCA9654 I/O Expander with SMBus support on the H3-Salvator-X target
+> could be acceptable as a test procedure? See some test results below.
 
-int (*memory_failure)(struct dev_pagemap *pgmap, unsigned long pfn,
-		      unsigned long nr_pfns, int flags);
+As long as the first read value is 8 (or lower than 32), it will work.
+But it is testing only this one value while my method above is more
+flexible and allows for arbitrary test patterns. However, your tests
+already showed that Andrew's patch seems to be not correct.
+
+> ############################################################
+> #################### ANDREW'S V2 PATCH #####################
+> ############################################################
+> root@rcar-gen3:# i2cget -y 4 0x68 0 i 8
+> 0x08 0xff 0x06 0xff 0x5f 0xff 0x11 0x08
+>=20
+> root@rcar-gen3:# i2cget -y 4 0x68 0 s
+> 0x08 0xff 0x06 0xff 0x5f 0xff 0x11 0x08
+
+This is wrong. The first byte is the length byte and should not be seen
+here. Check the i2c_smbus_read_block_data() implementation in i2c-tools.
+
+> ############################################################
+> ##################### WOLFRAM'S PATCH ######################
+> ############################################################
+> root@rcar-gen3:# i2cget -y 4 0x68 0 i 8
+> 0x08 0xff 0x06 0xff 0x5f 0xff 0x11 0x08
+>=20
+> root@rcar-gen3:# i2cget -y 4 0x68 0 s
+> 0xff 0x06 0xff 0x5f 0xff 0x11 0x08 0x08
+
+This is how it should look like IMO.
+
+Happy hacking,
+
+   Wolfram
 
 
-As the code I pasted before, pmem driver will subtract its 
-->data_offset, which is byte-based. And the filesystem who implements 
-->notify_failure() will calculate the offset in unit of byte again.
+--SU7q6hDtTecwI3kF
+Content-Type: application/pgp-signature; name="signature.asc"
 
-So, leave its function signature byte-based, to avoid repeated conversions.
+-----BEGIN PGP SIGNATURE-----
 
-int (*notify_failure)(struct dax_device *dax_dev, u64 offset,
-		      u64 len, int mf_flags);
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJEN9EACgkQFA3kzBSg
+KbaAXBAAlZZLS94v+HMkqaOzIRjX5ubPE5+ENYFHENboY9VHJ+hVy/AmAZX/pwpR
+P0cq7P2qshtcZf4zfeVxNFc+Lzt3kpwg9UU6tUshtlTGESY1UpWEv6Vf+MZqETSn
+4eHdcoRBbfIlbPI551ad71PFB0YMBCe6r2u/rqdOZWrbw8oPbm3xVd+tIEt7c6Fx
+WZWFXwc4mGAuaMUnkZOB4l+cXTCgGqaARxzykJEtFuVvhHMmkF7Uss64EF33SF2o
++u4LNxO/OkTqEIsFxDtacWggJpjm9plcH2GhL6wSC6iDw9hv8X3yCjO5wr8kneol
+YaeOIteY+QfXTbELEKfdvyrFk6Ig5G4NejYsj7QErRqeCnqE1RgC1EoPZGXGM+gI
+VDj7RO/65negbrBiKh75agH870jpYRue92qdoX1o39v+R9JrVeUKUmdUvWzEzA14
+R1zuCNAm6+qiypFGqX6WE9QC+6wJmFMCD9/Lb9iKXzsjiZcKVQnzJxy79uQArfVg
+rQQKa44/cXI7lOE8kboVEeH/O3kvFVtiTa2eJ1Q3YerVYbdsZycAKgUHu5792iGg
+n+4Ke2dl4634zU2HRymLEB2v9UH5Qe1fYVcYCzJ06dap2s5jkoTuzwOZKuNIhmkS
+eckLadbmZX5sf0clXiXwmbfO+k6X1bdMZBLMn1Fn6UxbrHnOy5E=
+=PuJK
+-----END PGP SIGNATURE-----
 
-What do you think?
-
-
---
-Thanks,
-Ruan.
-
-
+--SU7q6hDtTecwI3kF--

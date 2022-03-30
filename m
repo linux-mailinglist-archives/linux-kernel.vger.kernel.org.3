@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A8B4ECB09
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C535C4ECB01
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349600AbiC3Rty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 13:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
+        id S1349473AbiC3Rsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 13:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349585AbiC3RsS (ORCPT
+        with ESMTP id S1349601AbiC3RsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 13:48:18 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D1E2BDF
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:46:32 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id p9-20020a63f449000000b0035ec8c16f0bso2705120pgk.11
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:46:32 -0700 (PDT)
+        Wed, 30 Mar 2022 13:48:20 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6851EB
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:46:34 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2e5a3c1384cso175754127b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:46:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=qr8/F0dz26D4VyrFEBcfc0UduFOTogdCGAg4ZXDTuHI=;
-        b=aqess19ruyzDHV8OuC6zfp3yT8lHbQYPhXIGgw+CSPhZHPfOeEpYB6Dw8orb0EVbWs
-         swFdCBjdG2vKYQqEMo2ELiOqx3SxFhqKim5/isS2/n2781R81yFDTNHpQk3trXQkSqfH
-         //j6krsqHQpdnAB9OTxYXh3VGmb64vd87TpL3GDbwYI6VBzDlxfHaXobJett0RuuzRyq
-         rOCyaTAQ6u26zeFy6KOK8YvGwVQ+8R7cBIJFUc3BrJ37BmhkzsrfPAMaaQSwtPjOg8K9
-         HrjZ0HqecG4cY9Wv5yWFZ/hZ/GEoX1ytTNX4bPnnQg4AbZq5axpoJHJY0FWduC/VGb0b
-         jXTg==
+        bh=GZrknO5c1vShjCMu+HvsPnQd3jdw10n6YZ6wxsTHM84=;
+        b=BFfs2RlUHwH0BGt/rlKyUOOUArQhYGmgCeqXzizbcONMclOk1S7wJ6KLKfc+zxzQEZ
+         /sGGV5CaOh2i361PG7lVFBedEakdY0R9p2OWhgWSYBqkT0wKluEqgFd6+YZxClE/SZ6S
+         OW0kwrNgrmPm5meceO+kWloW2OfACIXv1dGbyO+gOy3URggpd8brKGVDTzDJFBa/8eBX
+         5qYWFo+URSGuwglYwfFUPHBZ4q0vZtwrQARxmBsYT2xFISOv17suFVUtywY/yQ8lE6bo
+         oyLoZzfEnk4ibHMx75lvAXpbfyU8hG6cDjMPtd6DY6Wf0bBsQY+ikAaJdItv7DjzWN+p
+         yG8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=qr8/F0dz26D4VyrFEBcfc0UduFOTogdCGAg4ZXDTuHI=;
-        b=ruVPKbst//iKGYGFtMxhc2pqFH3tuAzBf3ewDcPz9Q26cT/pyXRoI9/ofwiF0F6b4z
-         +kg7e663dKOxLrJsWvRO4ntbzm7gQoh0qyIOajgcKcAhXXUXs0f1h9y+221FwKVMDwFb
-         Jkz/rWDqoaF12CkM0r45puu+MsRfawkkK9DGwb8MI+4bjOqRAEuZuyZUlfYCYzTg/toO
-         2BFPbKt8L+JvbKmBCLKVnjigRTlZGfjBFTL3b38UCbo82UillEJt7aJGLCzWvUqk+7Ws
-         iA/iEPBpJ5bRmNVD6WeGikK5o8pTFKzvfdA9VyHYmXG2VL8ZVJ31Jy6K9/TAgd+/EmB/
-         0TfA==
-X-Gm-Message-State: AOAM532GxiYYufVN+QgebOmcARBUe/45WXNxpBAcw61wikHJU7ofh0bh
-        9Zpf0vB6g1JvOZ9gtvJhRLqIf1vbXKizlWQQiqvtc0YJavsT3wU6SHxajAqpgkY9+645kMe5RB8
-        5t887rmKqCTOvphxrYFOFfFPDIHucNaB1BO9KcabSo27kZTyOT2K2cMpEJlOSQqOtQ3taiZc0
-X-Google-Smtp-Source: ABdhPJyLerDiPdBWmtVkvQIz26SgQ6vz7rY1x5a1SKczE06jmYxsEv9sBlOsp38cc8NGdHXGAJp8gvtLiyF3
+        bh=GZrknO5c1vShjCMu+HvsPnQd3jdw10n6YZ6wxsTHM84=;
+        b=mIxHVxUUTgzlXhpGztGOeHQVZ8qhPsB3SZqP8niIEmcW02NiKCp5z2axEdJlSnDv1S
+         jNJ2GCfCcE63JIu7rooCWhjitKbIYtH52LjYMWVgSaP82Ho9hxPU5t6tv52CdQPbv/HP
+         NQUkgqeXhOShkcmmJiOcv0rGPUUQrwFpqz8gbGG5a7UCysWj7BxkWX/CSbOgeKeNQe8D
+         TaKoVhDh5SGfx9AUROErkyYbQiXr+q27/PraYTDV3enMTWVSiBUDT8bcIbhh0vOzqgoZ
+         c4JwdSKCNdF0ruUscRyIWk5WKFlfiDd23/YyI6sg5qAf0cED/ULyhY9oWOg0GoYjkVKX
+         qhYA==
+X-Gm-Message-State: AOAM532D2jpjh/OSL3pcU9kfH43ZTsgeU0WPgEaLy09LnMdShVmE8kfl
+        LWUEozoQo9/3CcUlYIM/W8lsqNWItdC7NFoCHknocfdfixE0PryF301OhQ0134gS1UylKhtXIbv
+        R6oTmqCuY6cQkUOQTNbIaFZA8zrKd84f7MPVG34SF80sYdA43AFy/v6l+KHkvUnLF/jdlE2TN
+X-Google-Smtp-Source: ABdhPJwdRnwrzh+/zJIDGQ8L6vTpBTpVc3Ey6oAQ38MtESgYK2Cz1DTmxecgrZzAkBo1MjhF/uCg2ZULD9an
 X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:7c53:ec2f:bd26:b69c])
- (user=bgardon job=sendgmr) by 2002:a17:902:c3c5:b0:154:e07:275a with SMTP id
- j5-20020a170902c3c500b001540e07275amr36396879plj.106.1648662392064; Wed, 30
- Mar 2022 10:46:32 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 10:46:13 -0700
+ (user=bgardon job=sendgmr) by 2002:a25:cb8f:0:b0:633:90ac:a90e with SMTP id
+ b137-20020a25cb8f000000b0063390aca90emr710239ybg.461.1648662393914; Wed, 30
+ Mar 2022 10:46:33 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 10:46:14 -0700
 In-Reply-To: <20220330174621.1567317-1-bgardon@google.com>
-Message-Id: <20220330174621.1567317-4-bgardon@google.com>
+Message-Id: <20220330174621.1567317-5-bgardon@google.com>
 Mime-Version: 1.0
 References: <20220330174621.1567317-1-bgardon@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v3 03/11] KVM: selftests: Test reading a single stat
+Subject: [PATCH v3 04/11] KVM: selftests: Add memslot parameter to elf_load
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
@@ -68,111 +68,136 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Retrieve the value of a single stat by name in the binary stats test to
-ensure the kvm_util library functions work.
+Currently elf_load loads code into memslot 0. Add a parameter to allow
+loading code into any memslot. This will be useful for backing code
+pages with huge pages in future commits.
 
-CC: Jing Zhang <jingzhangos@google.com>
+No functional change intended.
+
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- .../selftests/kvm/include/kvm_util_base.h     |  1 +
- .../selftests/kvm/kvm_binary_stats_test.c     |  3 ++
- tools/testing/selftests/kvm/lib/kvm_util.c    | 53 +++++++++++++++++++
- 3 files changed, 57 insertions(+)
+ .../testing/selftests/kvm/include/kvm_util_base.h  |  5 +++++
+ tools/testing/selftests/kvm/lib/elf.c              | 13 +++++++++++--
+ tools/testing/selftests/kvm/lib/kvm_util.c         | 14 ++++++++++----
+ 3 files changed, 26 insertions(+), 6 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index 4783fd1cd4cf..78c4407f36b4 100644
+index 78c4407f36b4..72163ba2f878 100644
 --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
 +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -402,6 +402,7 @@ void assert_on_unhandled_exception(struct kvm_vm *vm, uint32_t vcpuid);
- int vm_get_stats_fd(struct kvm_vm *vm);
- int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid);
- void dump_vm_stats(struct kvm_vm *vm);
-+uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name);
+@@ -122,7 +122,10 @@ uint32_t kvm_vm_reset_dirty_ring(struct kvm_vm *vm);
+ int kvm_memcmp_hva_gva(void *hva, struct kvm_vm *vm, const vm_vaddr_t gva,
+ 		       size_t len);
  
- uint32_t guest_get_vcpuid(void);
- 
-diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-index afc4701ce8dd..97bde355f105 100644
---- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-+++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-@@ -177,6 +177,9 @@ static void vm_stats_test(struct kvm_vm *vm)
- 
- 	/* Dump VM stats */
- 	dump_vm_stats(vm);
++void kvm_vm_elf_load_memslot(struct kvm_vm *vm, const char *filename,
++			     uint32_t memslot);
+ void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename);
 +
-+	/* Read a single stat. */
-+	printf("remote_tlb_flush: %lu\n", vm_get_single_stat(vm, "remote_tlb_flush"));
- }
+ int kvm_memfd_alloc(size_t size, bool hugepages);
  
- static void vcpu_stats_test(struct kvm_vm *vm, int vcpu_id)
+ void vm_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent);
+@@ -169,6 +172,8 @@ void vm_mem_region_set_flags(struct kvm_vm *vm, uint32_t slot, uint32_t flags);
+ void vm_mem_region_move(struct kvm_vm *vm, uint32_t slot, uint64_t new_gpa);
+ void vm_mem_region_delete(struct kvm_vm *vm, uint32_t slot);
+ void vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpuid);
++vm_vaddr_t vm_vaddr_alloc_memslot(struct kvm_vm *vm, size_t sz,
++				  vm_vaddr_t vaddr_min, uint32_t memslot);
+ vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
+ vm_vaddr_t vm_vaddr_alloc_pages(struct kvm_vm *vm, int nr_pages);
+ vm_vaddr_t vm_vaddr_alloc_page(struct kvm_vm *vm);
+diff --git a/tools/testing/selftests/kvm/lib/elf.c b/tools/testing/selftests/kvm/lib/elf.c
+index 13e8e3dcf984..899418e65f60 100644
+--- a/tools/testing/selftests/kvm/lib/elf.c
++++ b/tools/testing/selftests/kvm/lib/elf.c
+@@ -97,6 +97,7 @@ static void elfhdr_get(const char *filename, Elf64_Ehdr *hdrp)
+  *
+  * Input Args:
+  *   filename - Path to ELF file
++ *   memslot - the memslot into which the elf should be loaded
+  *
+  * Output Args: None
+  *
+@@ -111,7 +112,8 @@ static void elfhdr_get(const char *filename, Elf64_Ehdr *hdrp)
+  * by the image and it needs to have sufficient available physical pages, to
+  * back the virtual pages used to load the image.
+  */
+-void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
++void kvm_vm_elf_load_memslot(struct kvm_vm *vm, const char *filename,
++			     uint32_t memslot)
+ {
+ 	off_t offset, offset_rv;
+ 	Elf64_Ehdr hdr;
+@@ -162,7 +164,9 @@ void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
+ 		seg_vend |= vm->page_size - 1;
+ 		size_t seg_size = seg_vend - seg_vstart + 1;
+ 
+-		vm_vaddr_t vaddr = vm_vaddr_alloc(vm, seg_size, seg_vstart);
++		vm_vaddr_t vaddr = vm_vaddr_alloc_memslot(vm, seg_size,
++							  seg_vstart,
++							  memslot);
+ 		TEST_ASSERT(vaddr == seg_vstart, "Unable to allocate "
+ 			"virtual memory for segment at requested min addr,\n"
+ 			"  segment idx: %u\n"
+@@ -191,3 +195,8 @@ void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
+ 		}
+ 	}
+ }
++
++void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
++{
++	kvm_vm_elf_load_memslot(vm, filename, 0);
++}
 diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index f87df68b150d..9c4574381daa 100644
+index 9c4574381daa..09742a787546 100644
 --- a/tools/testing/selftests/kvm/lib/kvm_util.c
 +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -2705,3 +2705,56 @@ void dump_vm_stats(struct kvm_vm *vm)
- 	close(stats_fd);
+@@ -1336,8 +1336,7 @@ static vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz,
+  *   vm - Virtual Machine
+  *   sz - Size in bytes
+  *   vaddr_min - Minimum starting virtual address
+- *   data_memslot - Memory region slot for data pages
+- *   pgd_memslot - Memory region slot for new virtual translation tables
++ *   memslot - Memory region slot for data pages
+  *
+  * Output Args: None
+  *
+@@ -1350,13 +1349,15 @@ static vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz,
+  * a unique set of pages, with the minimum real allocation being at least
+  * a page.
+  */
+-vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min)
++vm_vaddr_t vm_vaddr_alloc_memslot(struct kvm_vm *vm, size_t sz,
++				  vm_vaddr_t vaddr_min, uint32_t memslot)
+ {
+ 	uint64_t pages = (sz >> vm->page_shift) + ((sz % vm->page_size) != 0);
+ 
+ 	virt_pgd_alloc(vm);
+ 	vm_paddr_t paddr = vm_phy_pages_alloc(vm, pages,
+-					      KVM_UTIL_MIN_PFN * vm->page_size, 0);
++					      KVM_UTIL_MIN_PFN * vm->page_size,
++					      memslot);
+ 
+ 	/*
+ 	 * Find an unused range of virtual page addresses of at least
+@@ -1377,6 +1378,11 @@ vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min)
+ 	return vaddr_start;
  }
  
-+static int vm_get_stat_data(struct kvm_vm *vm, const char *stat_name,
-+			    uint64_t **data)
++vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min)
 +{
-+	struct kvm_stats_desc *stats_desc;
-+	struct kvm_stats_header *header;
-+	struct kvm_stats_desc *desc;
-+	size_t size_desc;
-+	int stats_fd;
-+	int ret = -EINVAL;
-+	int i;
-+
-+	*data = NULL;
-+
-+	stats_fd = vm_get_stats_fd(vm);
-+
-+	header = read_vm_stats_header(stats_fd);
-+
-+	stats_desc = read_vm_stats_desc(stats_fd, header);
-+
-+	size_desc = stats_desc_size(header);
-+
-+	/* Read kvm stats data one by one */
-+	for (i = 0; i < header->num_desc; ++i) {
-+		desc = (void *)stats_desc + (i * size_desc);
-+
-+		if (strcmp(desc->name, stat_name))
-+			continue;
-+
-+		ret = read_stat_data(stats_fd, header, desc, data);
-+	}
-+
-+	free(stats_desc);
-+	free(header);
-+
-+	close(stats_fd);
-+
-+	return ret;
++	return vm_vaddr_alloc_memslot(vm, sz, vaddr_min, 0);
 +}
 +
-+uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name)
-+{
-+	uint64_t *data;
-+	uint64_t value;
-+	int ret;
-+
-+	ret = vm_get_stat_data(vm, stat_name, &data);
-+	TEST_ASSERT(ret == 1, "Stat %s expected to have 1 element, but has %d",
-+		    stat_name, ret);
-+	value = *data;
-+	free(data);
-+	return value;
-+}
-+
+ /*
+  * VM Virtual Address Allocate Pages
+  *
 -- 
 2.35.1.1021.g381101b075-goog
 

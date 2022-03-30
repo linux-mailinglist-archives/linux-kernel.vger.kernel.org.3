@@ -2,64 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB814ECB86
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:14:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B4F4ECBA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349828AbiC3SPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
+        id S1349090AbiC3SSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349883AbiC3SPX (ORCPT
+        with ESMTP id S1350072AbiC3SSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:15:23 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C4C38BFD
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:13:34 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id e12-20020a63544c000000b003985d5888a8so4924803pgm.15
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:13:34 -0700 (PDT)
+        Wed, 30 Mar 2022 14:18:06 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C26326F2;
+        Wed, 30 Mar 2022 11:16:20 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id t2so19520962pfj.10;
+        Wed, 30 Mar 2022 11:16:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=AjhARMzQL0Dz2caZ6eH2qC8gHB5UHTkecFAhF8mtRwA=;
-        b=ZljIC8cv2Svvv2yZGesXGMC+9DFWAF2YLvz0S57zqy+LDjREvs7+4A/ZvCANVBUvWV
-         Put4tkMFC7k/hwHDjyW/3LGORVs4U24tPPH9ePDKa1gx1+5Uqhp6FYpljJDo47wrMkn9
-         QdoDx3Ell9RTAZy2kvPYJta6vmRwWeSWTt9fllohNBolSU190kAoyKBXje69uv/FSnk7
-         YymVdmSk4V52dSSXnDTNpUW0wICGqQ7F5IV6jkhnUx3mQ4N+QPYBHC7+BeVT9s7exAOw
-         r05aOze5ddP8eA1/o2AGNDQq1lgZ6Mnj1AqOOeGocjxdzyrLHg7y1CYUFzaQHdO3goJL
-         aqjw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fuPK1GcMmt5419kQiNnUNFzucW8kX6MZofO7oFt75mg=;
+        b=gygBe8ITx/LBeEmghv58n7ugBhXHRJWXPOT0m0D7rgzezeung+Wwk1B2kD9VYRksOv
+         5ZEta8ZWCremZsx26iheMwP+Dj/0esyS3W9G2M+84gewLGOkgitpexvwR38q5eJFiNNz
+         LLa8td7npvNmAisiRJ7ekKaANn2eQtNkvNrHW0BAQTT3mnqsOGOvBK/tIjvWQ9cCnqG3
+         N+WRsck6jr22zD7xyA9AYVtGozhTlPsHPfSYoEzq81T3kKlXyWwj+1BcSIaqZIvgIrMb
+         kwKsokzLARuHfqUtymkLRWpfgO2/UJeMJuuw4fzqU7H40KVMTPLFhhtGwho+JB2ApxcC
+         n/aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=AjhARMzQL0Dz2caZ6eH2qC8gHB5UHTkecFAhF8mtRwA=;
-        b=G5nzELGm584T6O9tYtg1BnMpETeTkAb4kupnmIb3zQgaW+VcWLkUTRwfyeGAbXRYcv
-         VS4bjLRd6NNIJjwjQmrJTWYmlwc34iEqduNHHsHHhufwzQNgury/GRUggVLw/F6jC/Nq
-         2QXiB2vTx+2I+NOxCvQBLjX4phYfd3UrZ5oUFXSrhtdA9jgKjJW4HmKpkTeyXHjIouBd
-         xdws4KTYccA0sePT7wIzZ1usvoMC9bfxRh2oXLlHh7GCDqAEFY1jTsk3AUZIwHXftGGn
-         ER4bmIaegMQRGTxAt183KBcXnthuPIxZ9zj9qyTKKwP5wSKsXsrhhaRsTwiKkj05pO0o
-         EOyw==
-X-Gm-Message-State: AOAM533QFr/8Aqm9syEdmy6Pzf5lmJ/8dgshxdz4AlpN1zScDSuYS16L
-        pFkwbnF5mzgnREE7sGaaLj/MxVU0EZJ47Q==
-X-Google-Smtp-Source: ABdhPJxvmeFlDmbAYjOYwo8BReE8wTDosyVOpFTfeoM9IcZElYFnjr7n0JuuABxUSoc42b0yUcOO3UODFdaPJQ==
-X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
- (user=wonchung job=sendgmr) by 2002:a17:90a:858b:b0:1c6:5bc8:781a with SMTP
- id m11-20020a17090a858b00b001c65bc8781amr121147pjn.0.1648664013526; Wed, 30
- Mar 2022 11:13:33 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 18:13:30 +0000
-Message-Id: <20220330181330.2046874-1-wonchung@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH] sound/hda: Add NULL check to component match callback function
-From:   Won Chung <wonchung@google.com>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@google.com>,
-        linux-kernel@vger.kernel.org, Won Chung <wonchung@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fuPK1GcMmt5419kQiNnUNFzucW8kX6MZofO7oFt75mg=;
+        b=AKMpRf7XjQufHSPpe+KhAp1Hx3h68oqGPYe7+nhA9dXfF0Gx0thJu4sdwckQCDmZV4
+         xWT/HIBlxA7S5Jex7OSN3Ni9Bdo6ZGOId2O4WGved5mtObl3/d5f0gKG2Xw1x0hFI+xN
+         WtGVwnIGSJSJRC9ya3wqkd6RABQ7lzaJcpeN3MPmY1QtnyinF0bkAcVKn/fU8Qfd0LV5
+         AignRtQCZIbZ5xOviTZARvdU4idK7W8p2swouui8ZNTGQU7rNHxZTIj+Y1Z+tw7AAgX/
+         1VfZKigve7OY7lfc4ntC4lBnCdVvyceHaQpg6Ap2TAAoptt3TSLUMe54topw4rl3BVze
+         Qd2w==
+X-Gm-Message-State: AOAM531nT4ncdbLTneETuk3pPauK7O0/c7n2sZLQlTp5l5ufQ01elqI3
+        JRaTBDYXtJf16r3osLgPQFjOcHbIzzLMMd8Ti14=
+X-Google-Smtp-Source: ABdhPJxV86MO98SqrxuJA1T2lSIpEx5wn+VSszlBEioWWGFcq0F3/ghCLYENNf3ZzV+xh2b/6C7Lv74kau851+Lu8Fs=
+X-Received: by 2002:a05:6a00:1c9e:b0:4fa:d946:378b with SMTP id
+ y30-20020a056a001c9e00b004fad946378bmr712880pfw.46.1648664179908; Wed, 30 Mar
+ 2022 11:16:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220324234123.1608337-1-haoluo@google.com> <9cdf860d-8370-95b5-1688-af03265cc874@fb.com>
+ <CA+khW7g3hy61qnvtqUizaW+qB6wk=Y9cjivhORshOk=ZzTXJ-A@mail.gmail.com>
+ <CA+khW7iq+UKsfQxdT3QpSqPUFN8gQWWDLoQ9zxB=uWTs63AZEA@mail.gmail.com>
+ <20220329093753.26wc3noelqrwlrcj@apollo.legion> <CA+khW7jW47SALTfxMKfQoA0Qwqd22GC0z4S5juFTbxLfTSbFEQ@mail.gmail.com>
+ <20220329232956.gbsr65jdbe4lw2m6@ast-mbp> <CA+khW7jyvp4PKGu5GS8GDf=Lr4EdRUz8kraaTfiZ2oGm704Cpw@mail.gmail.com>
+In-Reply-To: <CA+khW7jyvp4PKGu5GS8GDf=Lr4EdRUz8kraaTfiZ2oGm704Cpw@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 30 Mar 2022 11:16:08 -0700
+Message-ID: <CAADnVQLTBhCTAx1a_nev7CgMZxv1Bb7ecz1AFRin8tHmjPREJA@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next 0/2] Mmapable task local storage.
+To:     Hao Luo <haoluo@google.com>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,38 +76,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Component match callback function needs to check if expected data is
-passed to it. Without this check, it can cause a NULL pointer
-dereference when another driver registers a component before i915
-drivers have their component master fully bind.
+On Wed, Mar 30, 2022 at 11:06 AM Hao Luo <haoluo@google.com> wrote:
+>
+> On Tue, Mar 29, 2022 at 4:30 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Tue, Mar 29, 2022 at 10:43:42AM -0700, Hao Luo wrote:
+> > > On Tue, Mar 29, 2022 at 2:37 AM Kumar Kartikeya Dwivedi
+> > > <memxor@gmail.com> wrote:
+> > > >
+> > > > On Mon, Mar 28, 2022 at 11:16:15PM IST, Hao Luo wrote:
+> > > > > On Mon, Mar 28, 2022 at 10:39 AM Hao Luo <haoluo@google.com> wrote:
+> > > > > >
+> > > > > > Hi Yonghong,
+> > > > > >
+> > > > > > On Fri, Mar 25, 2022 at 12:16 PM Yonghong Song <yhs@fb.com> wrote:
+> > > > > > >
+> > > > > > > On 3/24/22 4:41 PM, Hao Luo wrote:
+> > > > > > > > Some map types support mmap operation, which allows userspace to
+> > > > > > > > communicate with BPF programs directly. Currently only arraymap
+> > > > > > > > and ringbuf have mmap implemented.
+> > > > > > > >
+> > > > > > > > However, in some use cases, when multiple program instances can
+> > > > > > > > run concurrently, global mmapable memory can cause race. In that
+> > > > > > > > case, userspace needs to provide necessary synchronizations to
+> > > > > > > > coordinate the usage of mapped global data. This can be a source
+> > > > > > > > of bottleneck.
+> > > > > > >
+> > > > > > > I can see your use case here. Each calling process can get the
+> > > > > > > corresponding bpf program task local storage data through
+> > > > > > > mmap interface. As you mentioned, there is a tradeoff
+> > > > > > > between more memory vs. non-global synchronization.
+> > > > > > >
+> > > > > > > I am thinking that another bpf_iter approach can retrieve
+> > > > > > > the similar result. We could implement a bpf_iter
+> > > > > > > for task local storage map, optionally it can provide
+> > > > > > > a tid to retrieve the data for that particular tid.
+> > > > > > > This way, user space needs an explicit syscall, but
+> > > > > > > does not need to allocate more memory than necessary.
+> > > > > > >
+> > > > > > > WDYT?
+> > > > > > >
+> > > > > >
+> > > > > > Thanks for the suggestion. I have two thoughts about bpf_iter + tid and mmap:
+> > > > > >
+> > > > > > - mmap prevents the calling task from reading other task's value.
+> > > > > > Using bpf_iter, one can pass other task's tid to get their values. I
+> > > > > > assume there are two potential ways of passing tid to bpf_iter: one is
+> > > > > > to use global data in bpf prog, the other is adding tid parameterized
+> > > > > > iter_link. For the first, it's not easy for unpriv tasks to use. For
+> > > > > > the second, we need to create one iter_link object for each interested
+> > > > > > tid. It may not be easy to use either.
+> > > > > >
+> > > > > > - Regarding adding an explicit syscall. I thought about adding
+> > > > > > write/read syscalls for task local storage maps, just like reading
+> > > > > > values from iter_link. Writing or reading task local storage map
+> > > > > > updates/reads the current task's value. I think this could achieve the
+> > > > > > same effect as mmap.
+> > > > > >
+> > > > >
+> > > > > Actually, my use case of using mmap on task local storage is to allow
+> > > > > userspace to pass FDs into bpf prog. Some of the helpers I want to add
+> > > > > need to take an FD as parameter and the bpf progs can run
+> > > > > concurrently, thus using global data is racy. Mmapable task local
+> > > > > storage is the best solution I can find for this purpose.
+> > > > >
+> > > > > Song also mentioned to me offline, that mmapable task local storage
+> > > > > may be useful for his use case.
+> > > > >
+> > > > > I am actually open to other proposals.
+> > > > >
+> > > >
+> > > > You could also use a syscall prog, and use bpf_prog_test_run to update local
+> > > > storage for current. Data can be passed for that specific prog invocation using
+> > > > ctx. You might have to enable bpf_task_storage helpers in it though, since they
+> > > > are not allowed to be called right now.
+> > > >
+> > >
+> > > The loading process needs CAP_BPF to load bpf_prog_test_run. I'm
+> > > thinking of allowing any thread including unpriv ones to be able to
+> > > pass data to the prog and update their own storage.
+> >
+> > If I understand the use case correctly all of this mmap-ing is only to
+> > allow unpriv userspace to access a priv map via unpriv mmap() syscall.
+> > But the map can be accessed as unpriv already.
+> > Pin it with the world read creds and do map_lookup sys_bpf cmd on it.
+>
+> Right, but, if I understand correctly, with
+> sysctl_unprivileged_bpf_disabled, unpriv tasks are not able to make
+> use of __sys_bpf(). Is there anything I missed?
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Won Chung <wonchung@google.com>
----
- sound/hda/hdac_i915.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/sound/hda/hdac_i915.c b/sound/hda/hdac_i915.c
-index efe810af28c5..958b0975fa40 100644
---- a/sound/hda/hdac_i915.c
-+++ b/sound/hda/hdac_i915.c
-@@ -102,13 +102,13 @@ static int i915_component_master_match(struct device *dev, int subcomponent,
- 	struct pci_dev *hdac_pci, *i915_pci;
- 	struct hdac_bus *bus = data;
- 
--	if (!dev_is_pci(dev))
-+	if (!dev_is_pci(dev) || !bus)
- 		return 0;
- 
- 	hdac_pci = to_pci_dev(bus->dev);
- 	i915_pci = to_pci_dev(dev);
- 
--	if (!strcmp(dev->driver->name, "i915") &&
-+	if (dev->driver && !strcmp(dev->driver->name, "i915") &&
- 	    subcomponent == I915_COMPONENT_AUDIO &&
- 	    connectivity_check(i915_pci, hdac_pci))
- 		return 1;
--- 
-2.35.1.1021.g381101b075-goog
-
+That sysctl is a heavy hammer. Let's fix it instead.
+map lookup/update/delete can be allowed for unpriv for certain map types.
+There are permissions checks in corresponding lookup/update calls already.

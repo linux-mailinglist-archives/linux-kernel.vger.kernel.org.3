@@ -2,114 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B3C4EBAB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6E74EBAB6
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243234AbiC3GW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 02:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
+        id S243243AbiC3GXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 02:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243228AbiC3GWV (ORCPT
+        with ESMTP id S238147AbiC3GXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 02:22:21 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CAF132054
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:20:36 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id f3so16129193qvz.10
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=eY1NvClZjMu/3uc4kGek7ozzl4hMb0taRg0LWFRwfmA=;
-        b=o1wrwfYYRRM3S0c2pW3pDEIUKBPg5iHET9vaT4XFNIUhCiDGugas77WjK1imIeMn20
-         fEspPlUIB0Ka3yja89R84aSxuuJgHEBcKRN0TPfpVkHq9v7d5l6E+UpjWjJn9h2XPSqz
-         77h1R01H/vN391DIaeJ57YHZje9ppw1dmfpuxzLNqa7xk9MV7AKntmGZzHtRXqqjjPYA
-         aH0ENLsZ5+aPdQesqRetlByW0N0we0SnknHPTafP/8tDNfZfLAp/J+xjB6pNZ06wFogs
-         K3XXXvcIkLEywB1UiiXmRP+qHv0/ybpK3gNrkStlWipKbhQnkSNt5YC3nM6qcfvkFk8S
-         kxWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=eY1NvClZjMu/3uc4kGek7ozzl4hMb0taRg0LWFRwfmA=;
-        b=FkxxJ2khg2rhsK2CAHckVwe38NeE4wJnk2+gi6JMwqgr2g22fSXfS6S11FGr8ETCbl
-         qs9Tq/oSaQgUSeeXHnuaHt7IZyejcXC46QFRoMPLk40s2gW9uwOuGeql2rXnNYb4lELB
-         rMyOw+GNOu7gluvVJXvriT1nfw8hR5IELasLt16H0TsqKsFVP6yGlzAGFeZxmFAfMsfu
-         CD2rhUgeyt2zbMd94yg3kAz0miIov0wcHQhURoZCPjGsmEYoUp/DeCvOTy1+FBZJ9+FP
-         YZQCK1b3snixY5EcNEdsRacKkKrPUmm9w0W7TGOKluyCHJ10pKSpxNSJlWPlTUXCaBwE
-         EjEA==
-X-Gm-Message-State: AOAM531Nfk5r5q4z+Z+HqdE/zouulAErcTh/EtEjyv1qqmh0BQD8Chpf
-        oERSGBvydJNfiA9toiOb6/e3OAWon/lR0rMmGAQ=
-X-Google-Smtp-Source: ABdhPJwkdeWZyOOJ8EloKUXhTKoGctyT8JMYfxN11DgWo/dq4ZXuduC9u9FuBy46Pe+6rEzrioGV0UoD+TC8KZt+XJU=
-X-Received: by 2002:a05:6214:1c8f:b0:443:8505:14b3 with SMTP id
- ib15-20020a0562141c8f00b00443850514b3mr1771852qvb.7.1648621235394; Tue, 29
- Mar 2022 23:20:35 -0700 (PDT)
+        Wed, 30 Mar 2022 02:23:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3125046D;
+        Tue, 29 Mar 2022 23:21:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9D0AB81AD5;
+        Wed, 30 Mar 2022 06:21:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A357AC340EC;
+        Wed, 30 Mar 2022 06:21:17 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Ty2Q3C+n"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1648621276;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2eRrPnqhTJjokXQOdORL7R4K689Hcih8p/XLm4p+Fvc=;
+        b=Ty2Q3C+nxdjUQaGjzpqGcNWXhdezVxMLyN15NAoBzzwwlIQXJcfOnqRrOFLwMyyx2Xe2dy
+        /7xX+lea48DGH7t3FxoPzw9ydT8Vlt1HH5VdQ1cqC/Rt2unU+agicblhqnyTLLjqmN57OJ
+        WBaDiPIKKHn3Ig+J3hKmgdfa2vJo2eo=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 042fe011 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 30 Mar 2022 06:21:15 +0000 (UTC)
+Date:   Wed, 30 Mar 2022 02:21:14 -0400
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Fedor Pchelkin <aissur0002@gmail.com>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/4] file: Fix file descriptor leak in copy_fd_bitmaps()
+Message-ID: <YkP2hKKeMeFrdpBW@zx2c4.com>
+References: <20220326114009.1690-1-aissur0002@gmail.com>
+ <2698031.BEx9A2HvPv@fedor-zhuzhzhalka67>
+ <CAHk-=wh2Ao+OgnWSxHsJodXiLwtaUndXSkuhh9yKnA3iXyBLEA@mail.gmail.com>
+ <4705670.GXAFRqVoOG@fedor-zhuzhzhalka67>
+ <CAHk-=wiKhn+VsvK8CiNbC27+f+GsPWvxMVbf7QET+7PQVPadwA@mail.gmail.com>
+ <CAHk-=wjRwwUywAa9TzQUxhqNrQzZJQZvwn1JSET3h=U+3xi8Pg@mail.gmail.com>
+ <YkPo0N/CVHFDlB6v@zx2c4.com>
+ <CAHk-=wgPwyQTnSF2s7WSb+KnGn4FTM58NJ+-v-561W7xnDk2OA@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6214:21ad:0:0:0:0 with HTTP; Tue, 29 Mar 2022 23:20:34
- -0700 (PDT)
-From:   Kevin James <kj825686@gmail.com>
-Date:   Tue, 29 Mar 2022 23:20:34 -0700
-Message-ID: <CAC-84Ry=EqRfRLtHoo+Us0eF_qkSsSTptE0+7_NiVHyFCCSPZg@mail.gmail.com>
-Subject: Attn E-mail Address Owner,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,HK_SCAM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:f32 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [kj825686[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [kj825686[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  1.4 HK_SCAM No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  1.0 FREEMAIL_REPLY From and body contain different freemails
-        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgPwyQTnSF2s7WSb+KnGn4FTM58NJ+-v-561W7xnDk2OA@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
+Hi Linus,
 
-Attn E-mail Address Owner,
+On Tue, Mar 29, 2022 at 11:08:55PM -0700, Linus Torvalds wrote:
+> So does it help if you just remove that
+> 
+>         max_fds = ALIGN(max_fds, BITS_PER_LONG);
+> 
+> and instead make the final return be
+> 
+>         return ALIGN(min(count, max_fds), BITS_PER_LONG);
+> 
+> instead?
 
-Email: westernwesternunion293@gmail.com
+Yep, that works:
 
+diff --git a/fs/file.c b/fs/file.c
+index c01c29417ae6..ee9317346702 100644
+--- a/fs/file.c
++++ b/fs/file.c
+@@ -303,10 +303,9 @@ static unsigned int sane_fdtable_size(struct fdtable *fdt, unsigned int max_fds)
+ 	unsigned int count;
 
-We have concluded to effect your own payment through Western Union
-Money Transfer, $5000 daily until the total sum of your compensation
-fund is transferred to you.
+ 	count = count_open_files(fdt);
+-	max_fds = ALIGN(max_fds, BITS_PER_LONG);
+ 	if (max_fds < NR_OPEN_DEFAULT)
+ 		max_fds = NR_OPEN_DEFAULT;
+-	return min(count, max_fds);
++	return ALIGN(min(count, max_fds), BITS_PER_LONG);
+ }
 
-https://www.westernunion.com/global-service/track-transfer
+ /*
 
-MTCN#::8267439026
-
-Amount Programmed: $5000
-
-You are advised to get back to the contact person trough the email
-below for more direction on how to be receiving your payment
-
-Contact person: . . Dr. Eng. Bright Sam
-Email: westernwesternunion293@gmail.com
-
-Thanks,
+Jason

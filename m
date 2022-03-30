@@ -2,93 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1E94ECE27
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 22:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F0B4ECE7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351066AbiC3Um3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 16:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
+        id S1351075AbiC3Uns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 16:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232155AbiC3Um1 (ORCPT
+        with ESMTP id S232155AbiC3Unp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 16:42:27 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716AE1409B;
-        Wed, 30 Mar 2022 13:40:39 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 30 Mar 2022 16:43:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D964B21265;
+        Wed, 30 Mar 2022 13:41:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KTJGs1Cflz4xLb;
-        Thu, 31 Mar 2022 07:40:37 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1648672837;
-        bh=X/DC+4WoH4lqMOOV5oagJRxXJ+/7Uo6idVeEXbG3F1M=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DuthNKoHeLD2BAore1SqxccPdxWqDPrdV3VCGT/2bNKoriaGGhhyw95wWgIFMOxU5
-         HG/vUeZrn2gaMvr5jw2jC9WteaO3vxVh/q6vBOvvs15pS+b4jaFcQPZPQP/G/7vnvU
-         RwhTcjcF5wWVKrmFh6g2Rp/HszOW+133i0y6byGBKRnxT7/c+ZPbL8UUDWGB50MhAx
-         imKZYem5Ix3Bc2PLjRAOqCwfgD/d3Wb4DeJ+rwgs12onS25ONMZMcoXXwx/HKuujZt
-         ZflNk0EYqSlGlYLv74B1l97Cvm/h+yXNWaqvgUVqd4nn8oFCfFm/MXEeQ9V2pB7p6K
-         u0LSHgZiV3JgA==
-Date:   Thu, 31 Mar 2022 07:40:36 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     David Woodhouse <dwmw@amazon.co.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-bys missing for commits in the kvm tree
-Message-ID: <20220331074036.68c3dcdc@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B4FCB81E0B;
+        Wed, 30 Mar 2022 20:41:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A404AC340F0;
+        Wed, 30 Mar 2022 20:41:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648672917;
+        bh=YoLEiYr7FjK+HfANJQQoei+ci9f7JQj4Iv0FSLnVaU0=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=ViHSiG1ajt3kn0PkxITnrxY+gbQsNZmldVedxzj8ca92V/aOMjh73kziyWAlF+6VH
+         I/Amj1lssTRnjGnhRLYxmUv0QvXiXKykyOUXAE/2TwJZoDUkEGoNDeUfZpyBrj9Mgd
+         RxH0IeN30ZnBFoqUJY1+dxD1LZI9TRo/HRr42WfyErtZu2yQKytiD+XjeWeYNMtOst
+         wp6++of/YotGQ1emtvWAZmN6o0UHLca3x4KRLsJs0Wt9+KgdytHfK3HjhgbAMg95Z0
+         Q4V5sTFMr29vza6LsH0R9EI2OEFM260E2dU2pzuGNzf258gpcotcEvhqz3PeYZnc8F
+         lzjIF7t1CiKIQ==
+Message-ID: <d44b3fc7ce9f053f978645dfe19018885d372d87.camel@kernel.org>
+Subject: Re: [PATCH v2 1/2] selftests/sgx: Use rip relative addressing for
+ encl_stack
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:INTEL SGX" <linux-sgx@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Wed, 30 Mar 2022 23:40:56 +0300
+In-Reply-To: <ef991f0d-d0d2-f422-96d8-0951d593d2a5@intel.com>
+References: <20220322074313.7444-1-jarkko@kernel.org>
+         <7b7732ec-c7ff-cf92-510f-64c83ed985cd@intel.com> <YkRvFkEO8Ic1VdQ8@iki.fi>
+         <0031a4f0-75f6-3104-1825-dcc2528f61b0@intel.com>
+         <f68d472877b7136c32d8770603a3de38de59c322.camel@kernel.org>
+         <ef991f0d-d0d2-f422-96d8-0951d593d2a5@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fbGDH=nd/pGqc+Fp5DSOsaf";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/fbGDH=nd/pGqc+Fp5DSOsaf
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, 2022-03-30 at 13:05 -0700, Reinette Chatre wrote:
+>=20
+>=20
+> On 3/30/2022 12:03 PM, Jarkko Sakkinen wrote:
+> > On Wed, 2022-03-30 at 10:40 -0700, Reinette Chatre wrote:
+> > > Could you please elaborate how the compiler will fix it up?
+> >=20
+> > Sure.
+> >=20
+> > Here's the disassembly of the RBX version:
+> >=20
+> > [0x000021a9]> pi 1
+> > lea rax, [rbx + loc.encl_stack]
+> >=20
+> > Here's the same with s/RBX/RIP/:
+> >=20
+> > [0x000021a9]> pi 5
+> > lea rax, loc.encl_stack
+> >=20
+> > Compiler will substitute correct offset relative to the RIP,
+> > well, because it can and it makes sense.
+>=20
+> It does not make sense to me because, as proven with my test,
+> the two threads end up sharing the same stack memory.
 
-Hi all,
+I see, I need to correct my patch, thanks!
 
-Commit
+RBX gives correct results because of the binary organization,
+i.e. TCS's are placed to zero offset and forward, and=20
+unrelocated symbol is just compiled in as an untranslated
+offset.
 
-  0a1b5a0416dc ("KVM: x86/xen: Add self tests for KVM_XEN_HVM_CONFIG_EVTCHN=
-_SEND")
+RPI is given correct results but how the semantics work
+right now is incompatible.
 
-is missing a Signed-off-by from its author.
+Still, even for kselftest, I would consider a switch
+because that way:
 
-Commit
+1. You can layout binary however you wan and things
+   won't break.
+2. You can point to any symbol not just stack, if
+   ever need.
+  =20
+I admit it works semantically but it just super
+unrobust.
 
-  8c5649e00e00 ("KVM: x86: Support the vCPU preemption check with nopvspin =
-and realtime hint")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/fbGDH=nd/pGqc+Fp5DSOsaf
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJEwEQACgkQAVBC80lX
-0GwUgAf+O0yOOVsJIaJz1ipnJa4b0yLJo6cwUv9UxymkOVQWVghKc8mp95+SBPh1
-NsYv3HPj4AKRrdXN7AUMdb4xWbpwDE4fR8h3w+xR1+GeQ6WxhfWgv4vZ+QUxoNV5
-D2nmawzB07ka/OK7OB2/pteYMReD3Kpa7YjOx6cF70Rt0Wac4OTGADWHRGBEQUjQ
-MghyVaEFyUmUrl3KBkNx3OBtc8Mgh3HpXBmR5b8jNbEWVC78wuClt80MEZHrWzeL
-u3H/nSlFCrtnZXQ94WzjUIIPBg13GBRR4gX+meZH8OgzAKyzWIWOA5z/+eCzv/3r
-0Qd9yWjVcG7A93lxn887W8Wl7lPEWA==
-=Nchx
------END PGP SIGNATURE-----
-
---Sig_/fbGDH=nd/pGqc+Fp5DSOsaf--
+BR, Jarkko

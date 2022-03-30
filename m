@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 814AC4ECDDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 22:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15354ECDE7
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 22:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350928AbiC3USM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 16:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
+        id S1350932AbiC3UUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 16:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350967AbiC3USJ (ORCPT
+        with ESMTP id S1350901AbiC3UUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 16:18:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D424413DF8;
-        Wed, 30 Mar 2022 13:16:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B6C0615E7;
-        Wed, 30 Mar 2022 20:16:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF1EDC340EC;
-        Wed, 30 Mar 2022 20:16:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648671380;
-        bh=dFReK6G/ccqgxyvll3RmFnqr4xK5lD8zAWj5KJcsY9k=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=dEQJQG9lABs7yWkrhMxL9f9z14ZF87wT3ku3wy2CbRtmMLAIVhVqvqrRRlTev1z4s
-         POhXsVvUz9Kz1UJkHsUofSmTNFDoq8zKSZRhpxkEN+Njo7u8dWt7/2UsJDQEFlxrr4
-         SJamsoRTAklkUWzUuIdbe2pKhZZSUWlAa3K+cafOlGwrXFEJAOgmqsbV+r6DKrBb1H
-         +8N1XPu8syL3CkAkeW+5r6i+X9fAPNj5BKhFkVaMaaabUMzCBi3HV6/3DNbMpcsyvA
-         epip0Sy5+tVn22fpHk5vA3+ht1E9g7NMfeSVGGdqWERPsTpQlGsvGqiKOBOqnqwmm1
-         yIZR68TNVIFNA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 4D6895C12E4; Wed, 30 Mar 2022 13:16:20 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 13:16:20 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     frederic@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu: Put the irq work into hard interrupt context for
- execution
-Message-ID: <20220330201620.GM4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220330060012.2470054-1-qiang1.zhang@intel.com>
+        Wed, 30 Mar 2022 16:20:04 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283EC27FEB;
+        Wed, 30 Mar 2022 13:18:19 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 8343D2851B0;
+        Wed, 30 Mar 2022 16:18:18 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id liiiRE86cOBp; Wed, 30 Mar 2022 16:18:18 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 39C42285337;
+        Wed, 30 Mar 2022 16:18:18 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 39C42285337
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1648671498;
+        bh=8ediofSqJKX2Zks+4QSp0wj5eoOOq1PxGvE7lIh1nRE=;
+        h=From:To:Date:Message-Id:MIME-Version;
+        b=dplyxnZ6o/oz354M5U+6xg7KRCp8NTy/ii11u1Lb5dIYCon1NJRbtLZKD5PmO52pT
+         ijJa8MzgzLnnlr30hZwiEP/mTyEcjmSLK/oD5yUPvxrl6UD/lfKFUg3JRypw5KKWBi
+         CXv1CMGXSNHD7HXDtMnItENro/Nt7yCmy/89DHEkxVBzbvoTs2a/kXPz0c1etNFnYu
+         y6bBvO1X8Aqj+gmg8diBqXNIZamMJB9fFtZCAeau8RX+GgwQ6DNtX9B8qQwJDGXdMw
+         CXEe57VSAg9RvgHSv99G3IC+3XjHtqCVprnWrZEM9oLQL4saE+DxbQF9OyGrudrt0Y
+         NooNnapmrbGrA==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id p67GgNSbFrfO; Wed, 30 Mar 2022 16:18:18 -0400 (EDT)
+Received: from thinkos.internal.efficios.com (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by mail.efficios.com (Postfix) with ESMTPSA id 0204C284BF9;
+        Wed, 30 Mar 2022 16:18:17 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH] tracing: do not export user_events uapi
+Date:   Wed, 30 Mar 2022 16:17:55 -0400
+Message-Id: <20220330201755.29319-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330060012.2470054-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 02:00:12PM +0800, Zqiang wrote:
-> In PREEMPT_RT kernel, if irq work flags is not set, it will be
-> executed in per-CPU irq_work kthreads. set IRQ_WORK_HARD_IRQ flags
-> to irq work, put it in the context of hard interrupt execution,
-> accelerate scheduler to re-evaluate.
-> 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> ---
->  kernel/rcu/tree.c        | 2 +-
->  kernel/rcu/tree_plugin.h | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index e2ffbeceba69..a69587773a85 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -678,7 +678,7 @@ static void late_wakeup_func(struct irq_work *work)
->  }
->  
->  static DEFINE_PER_CPU(struct irq_work, late_wakeup_work) =
-> -	IRQ_WORK_INIT(late_wakeup_func);
-> +	IRQ_WORK_INIT_HARD(late_wakeup_func);
+In addition to mark the USER_EVENTS feature BROKEN until all interested
+parties figure out the user-space API, do not install the uapi header.
 
-This is used only by rcu_irq_work_resched(), which is invoked only by
-rcu_user_enter(), which is never invoked until userspace is enabled,
-by which time all of the various kthreads will have been spawned, correct?
+This prevents situations where a non-final uapi header would end up
+being installed into a distribution image and used to build user-space
+programs that would then run against newer kernels that will implement
+user events with a different ABI.
 
-Either way, please show me the exact sequence of events that lead to a
-problem with the current IRQ_WORK_INIT().
+Link: https://lore.kernel.org/all/20220330155835.5e1f6669@gandalf.local.h=
+ome
 
->  /*
->   * If either:
-> diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-> index 3037c2536e1f..cf7bd28af8ef 100644
-> --- a/kernel/rcu/tree_plugin.h
-> +++ b/kernel/rcu/tree_plugin.h
-> @@ -661,7 +661,7 @@ static void rcu_read_unlock_special(struct task_struct *t)
->  			    expboost && !rdp->defer_qs_iw_pending && cpu_online(rdp->cpu)) {
->  				// Get scheduler to re-evaluate and call hooks.
->  				// If !IRQ_WORK, FQS scan will eventually IPI.
-> -				init_irq_work(&rdp->defer_qs_iw, rcu_preempt_deferred_qs_handler);
-> +				rdp->defer_qs_iw = IRQ_WORK_INIT_HARD(rcu_preempt_deferred_qs_handler);
->  				rdp->defer_qs_iw_pending = true;
->  				irq_work_queue_on(&rdp->defer_qs_iw, rdp->cpu);
->  			}
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ include/uapi/Kbuild | 3 +++
+ 1 file changed, 3 insertions(+)
 
-OK, in theory, rcu_read_unlock() could get to this point before all of
-the various kthreads were spawned.  In practice, the next time that the
-boot CPU went idle, the end of the quiescent state would be noticed.
+diff --git a/include/uapi/Kbuild b/include/uapi/Kbuild
+index 61ee6e59c930..425ea8769ddc 100644
+--- a/include/uapi/Kbuild
++++ b/include/uapi/Kbuild
+@@ -12,3 +12,6 @@ ifeq ($(wildcard $(objtree)/arch/$(SRCARCH)/include/gen=
+erated/uapi/asm/kvm_para.
+ no-export-headers +=3D linux/kvm_para.h
+ endif
+ endif
++
++# API is not finalized
++no-export-headers +=3D linux/user_events.h
+--=20
+2.20.1
 
-Or has this been failing in some other manner?  If so, please let me
-know the exact sequence of events.
-
-							Thanx, Paul

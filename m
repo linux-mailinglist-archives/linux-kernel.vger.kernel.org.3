@@ -2,98 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B7C4EC93F
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A88D64EC944
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348602AbiC3QGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 12:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
+        id S1347246AbiC3QHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 12:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348654AbiC3QGh (ORCPT
+        with ESMTP id S234878AbiC3QHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:06:37 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C355238D18
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:04:51 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id p4-20020a17090ad30400b001c7ca87c05bso255594pju.1
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:04:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4szRwWNDvZ7XOU+Kmwti8vyES5EGiVgA3+mW2sFThKE=;
-        b=eLsot/bdo/qciErnhmm6+zfsN+rYVH36ltRx5tiW0+4htGYOYqrzreVAzgh0AWBGYQ
-         IKGw1YxmkNOWs67XoLHeuAK/Sd4CtWKwgkUqFCP28l/OeoYZ2Cw58owdUH61o9P86FmB
-         PruF+h7PwadsIiKJ1ro1vak+3ThGapcfw5xrk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4szRwWNDvZ7XOU+Kmwti8vyES5EGiVgA3+mW2sFThKE=;
-        b=hcOuX+CSTVtCwUDSRV5LSyW7ORN0OLivmueoAGOula/g3ZZprVxqkfxwYtAGcJu1he
-         +9eq2LpMNjqIKgqJBCjZtiQsbO2/5C7LKX58JWocsdEtH02FQjfccV2BTygnRBT9J9QM
-         ASJVvooutkqQ/SoqF29RchRcBiOwFy5Gc40fcHrbF5UGyVFVOBq2zlbAuXK/x95CEgA/
-         x8OlXUCNhbs/doXHj5JH+5sPH2YtlR6WyQqXClUV3fwoN2uc74BF1+kRiiyuVemspMrW
-         hLejQfbZ8fobEGZPetkG4QFSnlB1BPFCqX6NcTHjG45DXACKBuEumBuaL5UJYH4txfvk
-         X+uw==
-X-Gm-Message-State: AOAM530vpHsNeBIKwIopf+Ci/M+BM72dSXfh+o9WiLOhDwAh01f8f9wN
-        YNYRamS9+SE/wYEiqMeegYb2h0iEZRTqkQ==
-X-Google-Smtp-Source: ABdhPJz4XIzGXVOi8Xi15BEXtGOe7kw6pLeyZ+J75o/J6LblAlRFeoE/gg5n6XnfmlWXYKi/vsKYkQ==
-X-Received: by 2002:a17:903:41d0:b0:154:de5:a240 with SMTP id u16-20020a17090341d000b001540de5a240mr350568ple.32.1648656291021;
-        Wed, 30 Mar 2022 09:04:51 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:d50d:daac:acf3:cda6])
-        by smtp.gmail.com with UTF8SMTPSA id f16-20020a056a00229000b004fabe756ba6sm26268854pfe.54.2022.03.30.09.04.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 09:04:50 -0700 (PDT)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: [PATCH] drm/panel-edp: Fix AUO B133UAN01 panel id
-Date:   Wed, 30 Mar 2022 09:04:44 -0700
-Message-Id: <20220330090435.1.Id1522250dd07a6b574c1cc7826023fc6acd141b4@changeid>
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+        Wed, 30 Mar 2022 12:07:48 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEDC238D18
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 09:06:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=3stubki5WriK0gpxDbPGdlbZzpfXUF504ZVAARpq4Xw=; b=pa7ooveNE1LYWOJqeWlWQSlzJY
+        OePVUk86mmiaCrXLN8byLoR+/JFHHxXH0hyfCp8ovkv6BRo2bIlnGWqWJWPh0/LxTd3a6vGV4AQRX
+        5FqB6OQJmeHivphLyHUKImGeGksmvyr/RvSo75dMi7gv1UybgBYxQCEjgePvFBVN/+EBJ7wDgYK9U
+        tygmdUUZhAsYM8a2NZkzKRVXgsEVjfajUjVdLoPCROuaH8/nJdlswAmb0l/U8udGokc95giBPFeQO
+        9hlVU+wkTLMfcRUW6XzWcNrxHLYSjEMb3PB30D4TXlL+7VCmufoXhZbUpVPGGNrge3azVAZLAHdiU
+        yW/ynb2A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nZapG-006FCl-5g; Wed, 30 Mar 2022 16:05:38 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DDDF498695C; Wed, 30 Mar 2022 18:05:35 +0200 (CEST)
+Date:   Wed, 30 Mar 2022 18:05:35 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ingo Molnar <mingo@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        vincent.guittot@linaro.org
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        joel@joelfernandes.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com
+Subject: [PATCH] sched/core: Fix forceidle balancing
+Message-ID: <20220330160535.GN8939@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Two digits are swapped in the AUO B133UAN01 panel id (0x8495 instead
-of 0x8594). This went initially unnoticed because the panel is still
-detected, though it is set up with a conservative default timing. Fix
-the digit swap.
 
-Fixes: ec57376fba5a ("drm/panel-edp: Add AUO B133UAN01")
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+Steve reported that ChromeOS encounters the forceidle balancer being
+ran from rt_mutex_setprio()'s balance_callback() invocation and
+explodes.
+
+Now, the forceidle balancer gets queued every time the idle task gets
+selected, set_next_task(), which is strictly too often.
+rt_mutex_setprio() also uses set_next_task() in the 'change' pattern:
+
+	queued = task_on_rq_queued(p); /* p->on_rq == TASK_ON_RQ_QUEUED */
+	running = task_current(rq, p); /* rq->curr == p */
+
+	if (queued)
+		dequeue_task(...);
+	if (running)
+		put_prev_task(...);
+
+	/* change task properties */
+
+	if (queued)
+		enqueue_task(...);
+	if (running)
+		set_next_task(...);
+
+However, rt_mutex_setprio() will explicitly not run this pattern on
+the idle task (since priority boosting the idle task is quite insane).
+Most other 'change' pattern users are pidhash based and would also not
+apply to idle.
+
+Also, the change pattern doesn't contain a __balance_callback()
+invocation and hence we could have an out-of-band balance-callback,
+which *should* trigger the WARN in rq_pin_lock() (which guards against
+this exact anti-pattern).
+
+So while none of that explains how this happens, it does indicate that
+having it in set_next_task() might not be the most robust option.
+
+Instead, explicitly queue the forceidle balancer from pick_next_task()
+when it does indeed result in forceidle selection. Having it here,
+ensures it can only be triggered under the __schedule() rq->lock
+instance, and hence must be ran from that context.
+
+This also happens to clean up the code a little, so win-win.
+
+Fixes: d2dfa17bc7de ("sched: Trivial forced-newidle balancer")
+Reported-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
+ kernel/sched/core.c  |   16 +++++++++++-----
+ kernel/sched/idle.c  |    1 -
+ kernel/sched/sched.h |    6 ------
+ 3 files changed, 11 insertions(+), 12 deletions(-)
 
- drivers/gpu/drm/panel/panel-edp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-index db4eea1d7f67..1732b4f56e38 100644
---- a/drivers/gpu/drm/panel/panel-edp.c
-+++ b/drivers/gpu/drm/panel/panel-edp.c
-@@ -1847,7 +1847,7 @@ static const struct panel_delay delay_100_500_e200 = {
- static const struct edp_panel_entry edp_panels[] = {
- 	EDP_PANEL_ENTRY('A', 'U', 'O', 0x405c, &auo_b116xak01.delay, "B116XAK01"),
- 	EDP_PANEL_ENTRY('A', 'U', 'O', 0x615c, &delay_200_500_e50, "B116XAN06.1"),
--	EDP_PANEL_ENTRY('A', 'U', 'O', 0x8495, &delay_200_500_e50, "B133UAN01.0"),
-+	EDP_PANEL_ENTRY('A', 'U', 'O', 0x8594, &delay_200_500_e50, "B133UAN01.0"),
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -5752,6 +5752,8 @@ static inline struct task_struct *pick_t
  
- 	EDP_PANEL_ENTRY('B', 'O', 'E', 0x0786, &delay_200_500_p2e80, "NV116WHM-T01"),
- 	EDP_PANEL_ENTRY('B', 'O', 'E', 0x07d1, &boe_nv133fhm_n61.delay, "NV133FHM-N61"),
--- 
-2.35.1.1094.g7c7d902a7c-goog
-
+ extern void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi);
+ 
++static void queue_core_balance(struct rq *rq);
++
+ static struct task_struct *
+ pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
+ {
+@@ -5801,7 +5803,7 @@ pick_next_task(struct rq *rq, struct tas
+ 		}
+ 
+ 		rq->core_pick = NULL;
+-		return next;
++		goto out;
+ 	}
+ 
+ 	put_prev_task_balance(rq, prev, rf);
+@@ -5851,7 +5853,7 @@ pick_next_task(struct rq *rq, struct tas
+ 			 */
+ 			WARN_ON_ONCE(fi_before);
+ 			task_vruntime_update(rq, next, false);
+-			goto done;
++			goto out_set_next;
+ 		}
+ 	}
+ 
+@@ -5970,8 +5972,12 @@ pick_next_task(struct rq *rq, struct tas
+ 		resched_curr(rq_i);
+ 	}
+ 
+-done:
++out_set_next:
+ 	set_next_task(rq, next);
++out:
++	if (rq->core->core_forceidle_count && next == rq->idle)
++		queue_core_balance(rq);
++
+ 	return next;
+ }
+ 
+@@ -6066,7 +6072,7 @@ static void sched_core_balance(struct rq
+ 
+ static DEFINE_PER_CPU(struct callback_head, core_balance_head);
+ 
+-void queue_core_balance(struct rq *rq)
++static void queue_core_balance(struct rq *rq)
+ {
+ 	if (!sched_core_enabled(rq))
+ 		return;
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -434,7 +434,6 @@ static void set_next_task_idle(struct rq
+ {
+ 	update_idle_core(rq);
+ 	schedstat_inc(rq->sched_goidle);
+-	queue_core_balance(rq);
+ }
+ 
+ #ifdef CONFIG_SMP
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1232,8 +1232,6 @@ static inline bool sched_group_cookie_ma
+ 	return false;
+ }
+ 
+-extern void queue_core_balance(struct rq *rq);
+-
+ static inline bool sched_core_enqueued(struct task_struct *p)
+ {
+ 	return !RB_EMPTY_NODE(&p->core_node);
+@@ -1267,10 +1265,6 @@ static inline raw_spinlock_t *__rq_lockp
+ 	return &rq->__lock;
+ }
+ 
+-static inline void queue_core_balance(struct rq *rq)
+-{
+-}
+-
+ static inline bool sched_cpu_cookie_match(struct rq *rq, struct task_struct *p)
+ {
+ 	return true;

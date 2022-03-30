@@ -2,97 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F39E34EBBB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E41924EBBB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243581AbiC3H3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 03:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43144 "EHLO
+        id S237275AbiC3H3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 03:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237275AbiC3H3S (ORCPT
+        with ESMTP id S243820AbiC3H3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 03:29:18 -0400
-Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBA11C3902
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 00:27:32 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
- (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 30 Mar
- 2022 15:27:25 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 30 Mar
- 2022 15:27:23 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Haowen Bai <baihaowen@meizu.com>, <linux-staging@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH V2] staging: r8188eu: Fix misspelling in comment "Tranceiver" -> "Transceiver"
-Date:   Wed, 30 Mar 2022 15:27:21 +0800
-Message-ID: <1648625242-12678-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <YkP7DGP+nbo2VJ+Z@kroah.com>
-References: <YkP7DGP+nbo2VJ+Z@kroah.com>
+        Wed, 30 Mar 2022 03:29:50 -0400
+Received: from cavan.codon.org.uk (irc.codon.org.uk [IPv6:2a00:1098:84:22e::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D601C5526;
+        Wed, 30 Mar 2022 00:27:56 -0700 (PDT)
+Received: by cavan.codon.org.uk (Postfix, from userid 1000)
+        id 4449D40A71; Wed, 30 Mar 2022 08:27:55 +0100 (BST)
+Date:   Wed, 30 Mar 2022 08:27:55 +0100
+From:   Matthew Garrett <mjg59@srcf.ucam.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Daniel Kiper <daniel.kiper@oracle.com>,
+        Alec Brown <alec.r.brown@oracle.com>,
+        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        "dpsmith@apertussolutions.com" <dpsmith@apertussolutions.com>,
+        "piotr.krol@3mdeb.com" <piotr.krol@3mdeb.com>,
+        "krystian.hebel@3mdeb.com" <krystian.hebel@3mdeb.com>,
+        "persaur@gmail.com" <persaur@gmail.com>,
+        "Yoder, Stuart" <stuart.yoder@arm.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        "michal.zygowski@3mdeb.com" <michal.zygowski@3mdeb.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "lukasz@hawrylko.pl" <lukasz@hawrylko.pl>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        The development of GNU GRUB <grub-devel@gnu.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: Linux DRTM on UEFI platforms
+Message-ID: <20220330072755.GA1169@srcf.ucam.org>
+References: <20220329174057.GA17778@srcf.ucam.org>
+ <CAMj1kXE-7yPTBgQQKXRnQbdvLMv6D7=CowtQ38PdpPVa3SW-Ag@mail.gmail.com>
+ <20220330071103.GA809@srcf.ucam.org>
+ <CAMj1kXE9WrBOUG6MRQ90cMH_NvvCw_jVCar5Dsj+gkZr1AA0MQ@mail.gmail.com>
+ <20220330071859.GA992@srcf.ucam.org>
+ <CAMj1kXHfw75GphiewQzbA-swsMD3AGunyhc9HSue_xqrHt9GhQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-124.meizu.com (172.16.1.124) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHfw75GphiewQzbA-swsMD3AGunyhc9HSue_xqrHt9GhQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,KHOP_HELO_FCRDNS,SPF_HELO_NEUTRAL,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes some spelling typo in error message reported by 
-checkpatch.pl
+On Wed, Mar 30, 2022 at 09:23:17AM +0200, Ard Biesheuvel wrote:
+> On Wed, 30 Mar 2022 at 09:19, Matthew Garrett <mjg59@srcf.ucam.org> wrote:
+> > From a conceptual perspective we've thought of the EFI stub as being
+> > logically part of the bootloader rather than the early kernel, and the
+> > bootloader is a point where the line is drawn. My guy feeling is that
+> > jumping into the secure kernel environment before EBS has been called is
+> > likely to end badly.
+> 
+> If you jump back into the system firmware, sure.
+> 
+> But the point I was trying to make is that you can replace that with
+> your own minimal implementation of EFI that just exposes a memory map
+> and some protocols and nothing else, and then the secure launch kernel
+> would be entirely in charge of the execution environment.
 
-WARNING: 'Tranceiver' may be misspelled - perhaps 'Transceiver'?
-WARNING: 'Tranceiver' may be misspelled - perhaps 'Transceiver'?
-WARNING: 'Tranceiver' may be misspelled - perhaps 'Transceiver'?
-WARNING: 'Tranceiver' may be misspelled - perhaps 'Transceiver'?
-
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
-V1->V2: split one-patch-per-misspelled-word; change title;
-
- drivers/staging/r8188eu/hal/rtl8188e_phycfg.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-index ea75ff1..4864daf 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-@@ -378,10 +378,10 @@ phy_InitBBRFRegisterDefinition(
- 	/*  Tx AGC Gain Stage (same for all path. Should we remove this?) */
- 	pHalData->PHYRegDef.rfTxGainStage = rFPGA0_TxGainStage; /* Tx gain stage */
- 
--	/*  Tranceiver A~D HSSI Parameter-1 */
-+	/*  Transceiver A~D HSSI Parameter-1 */
- 	pHalData->PHYRegDef.rfHSSIPara1 = rFPGA0_XA_HSSIParameter1;  /* wire control parameter1 */
- 
--	/*  Tranceiver A~D HSSI Parameter-2 */
-+	/*  Transceiver A~D HSSI Parameter-2 */
- 	pHalData->PHYRegDef.rfHSSIPara2 = rFPGA0_XA_HSSIParameter2;  /* wire control parameter2 */
- 
- 	/*  RF switch Control */
-@@ -405,10 +405,10 @@ phy_InitBBRFRegisterDefinition(
- 	/*  Tx AFE control 2 */
- 	pHalData->PHYRegDef.rfTxAFE = rOFDM0_XATxAFE;
- 
--	/*  Tranceiver LSSI Readback SI mode */
-+	/*  Transceiver LSSI Readback SI mode */
- 	pHalData->PHYRegDef.rfLSSIReadBack = rFPGA0_XA_LSSIReadBack;
- 
--	/*  Tranceiver LSSI Readback PI mode */
-+	/*  Transceiver LSSI Readback PI mode */
- 	pHalData->PHYRegDef.rfLSSIReadBackPi = TransceiverA_HSPI_Readback;
- }
- 
--- 
-2.7.4
+We can't just replace system firmware with an imitation of the same - 
+for instance, configuring the cold boot prevention memory overwrite 
+requires us to pass a variable through to the real firmware, and that's 
+something that we do in the stub.
 

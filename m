@@ -2,266 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA494EC9B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2434EC9BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348837AbiC3Qfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 12:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
+        id S1348850AbiC3QgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 12:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348711AbiC3Qfq (ORCPT
+        with ESMTP id S1348839AbiC3QgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:35:46 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED15E2;
-        Wed, 30 Mar 2022 09:34:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1648658021;
-        bh=Aw52GudjzfV6DBA1f+n4H6s9lkEEzRPi45KdcBXLxZ0=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=LNkfa0reL5HBrPFyXfSnVY+Aw2Bl3LXKaR5hv9nJ4c1sBBUxk/ni44ICmOMbHgAQT
-         ll/vxykhy0Y2bfO9uTxDmEsuTbj9IosozgHiqKm7GmA4VTqR4PZwOJ7GiEikkc25CC
-         txrSR15lgDefdi3dsU0wV9YC8nDi5Bh4eqlI8oes=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1Mj8qd-1oCFXN3IxR-00f9s0; Wed, 30 Mar 2022 18:33:40 +0200
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     pali@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (dell-smm) Add cooling device support
-Date:   Wed, 30 Mar 2022 18:33:24 +0200
-Message-Id: <20220330163324.572437-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
+        Wed, 30 Mar 2022 12:36:04 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 870211D320;
+        Wed, 30 Mar 2022 09:34:18 -0700 (PDT)
+Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E7AF420B96D6;
+        Wed, 30 Mar 2022 09:34:17 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E7AF420B96D6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1648658058;
+        bh=NE1Gzgfcu1RVAQTBcQFmkLsZA71WWxETeZdDl0NVbGk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aPSThqM5IPvFG/nHKA0shVLzXfcjf3BuMxLCBELpv/wumVaQ/8A6ypVhJfck1YAat
+         0bd7iRH9n722EW/ZXFcqE/ULmpv1L/sqLZSiWJ9HfCB8E5L0b1Y1bICMux2PPMkDNv
+         YQZnbdhmN0xtdoPXKTDQMauOZ9yemyA8+fKPIOLs=
+Date:   Wed, 30 Mar 2022 09:34:11 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Song Liu <song@kernel.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] tracing/user_events: Add eBPF interface for user_event
+ created events
+Message-ID: <20220330163411.GA1812@kbox>
+References: <20220329181935.2183-1-beaub@linux.microsoft.com>
+ <CAADnVQ+XpoCjL-rSz2hj05L21s8NtMJuWYC14b9Mvk7XE5KT_g@mail.gmail.com>
+ <20220329201057.GA2549@kbox>
+ <CAADnVQ+gm4yU9S6y+oeR3TNj82kKX0gk4ey9gVnKXKWy1Js4-A@mail.gmail.com>
+ <20220329231137.GA3357@kbox>
+ <CAPhsuW4WH4Hn+DaQZui5au=ueG1G5zGYiOACfKm9imG2kGA+KA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:tbSqy/9T9ZBldJcHFKXCEAyFh5LU2EBIRmdONn/JNv3Z+98KbMw
- Izfpr/J+cJWyUOdsRgMG1s96WSJqu7tXUs+KJYpVBRnvfSYS+t9X9KMY+xf4UX43vJEOTWo
- BqeSxpbPmfKf0OdqDU7VQbdDNQQ0rJGM1guQ8CilLwHhd4zfnTXP5nbYuXpF+L5ghIrMT2Q
- BvjnI+P7WBuZ+sW6RI43Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TX1inUXOY+g=:Q4a1QCJ8KXVnRJYHeHMC3g
- Ykq5Na8Y+mjHCtCePKOaLFLWPpBPtB/BjW6dGXuKB9IkUS1wTinJGdy4gO4Ev6oh2PA8vbHEa
- 6Z+eWhlNNRbM2s5uVQiNafbwfjgdHS/bpxpTwN1KB70pkfJdZ6UPNbQUBCZ8C2Ydog1/ZtQAt
- vqnjml3b9Py8MmqtK9qwscRW1CjfUvGBArmi1PB5+GL+SUzmcszm5d1JIhDwgEQjJVF8khSO5
- Gp2WUEmCft0Vv5B3AFbyvapphQfEPCb3k6gkGqX8aK2qJB8qWWcjjamSKVr6svgpMoYNxjW/G
- xkTy/iXcLbFHK5jId/MLrXa6ife3tUNNIoqH0030GXABcepnjJLfXYNJaweZzLAqI1vi1dv3B
- NCPoAAvQTAZ6+JQnZf1tP51VN+0e5Qs/89tR7X20JG4rTc9fYKKh75JGNb7mjOvedLcqxM/HZ
- Y84Lj/aBZKt7+81S/UFiIAPeLsHcuYq50jXNxo+CSVHqj9zd9pTAJ67/R2nJcJLQAGxomGZqf
- XaU5GbMvtm6FKCTFs3BgU33aCMTZEvQey7Fy5wiOQoNCzeJ/VEH1So6Ge0FHu5w4mLbNHtBNB
- a4QzvIX4UqGjfiy/ZYtdzsIhYY43XMk/0D+Ok0nveJDQj6j6m/BHEdF+h0qAFFie5Qfjc44ng
- ZQjUGZ186KnI4OjGWd7iykx6ZStrWlEJAbp+hZIv/zJmojY3TNpPaxC7CrXOL+c/wYvYCu9Dk
- gERIsF2pfYkspJEqqhYL4NKNKvV/V7Q6fpKGcolEWc+YnHRa3J2v6dLUvDgEOo12QcN21NCyf
- 4b0SpR+yIgfyz7URxc0nq3VdrjTMmmhdp+85NuaKPbqWP4yFls3K8i3apqLDipXpbhimOUAfP
- F+qogR1vxdF8/EeVOOkjG/LJCbFhJw+NitOaBoUhVJiQu+YuxIx5kjCLOjvbYVKuPYNnTxh5J
- pC+jA26vYBMlGj7xyAnFwKUIyhU4Go5FUfGT20ixP+IFhXGZMb6/vpcORhDRAE12EUPyGxJWB
- TaQBYvjIYYgXxhqdwBtTM82j4+0nrE5kfCfTMyUUiPpMX7feZfdda69GD2l9ivAAF1ikBo9zw
- 27corAm0O1RiGA=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW4WH4Hn+DaQZui5au=ueG1G5zGYiOACfKm9imG2kGA+KA@mail.gmail.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Until now, only the temperature sensors where exported thru
-the thermal subsystem. Export the fans as "dell-smm-fan[1-3]" too
-to make them available as cooling devices.
-Also update Documentation.
+On Wed, Mar 30, 2022 at 09:06:24AM -0700, Song Liu wrote:
+> On Tue, Mar 29, 2022 at 4:11 PM Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> >
+> > On Tue, Mar 29, 2022 at 03:31:31PM -0700, Alexei Starovoitov wrote:
+> > > On Tue, Mar 29, 2022 at 1:11 PM Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> > > >
+> > > > On Tue, Mar 29, 2022 at 12:50:40PM -0700, Alexei Starovoitov wrote:
+> > > > > On Tue, Mar 29, 2022 at 11:19 AM Beau Belgrave
+> > > > > <beaub@linux.microsoft.com> wrote:
+> > > > > >
+> > > > > > Send user_event data to attached eBPF programs for user_event based perf
+> > > > > > events.
+> > > > > >
+> > > > > > Add BPF_ITER flag to allow user_event data to have a zero copy path into
+> > > > > > eBPF programs if required.
+> > > > > >
+> > > > > > Update documentation to describe new flags and structures for eBPF
+> > > > > > integration.
+> > > > > >
+> > > > > > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+> > > > >
+> > > > > The commit describes _what_ it does, but says nothing about _why_.
+> > > > > At present I see no use out of bpf and user_events connection.
+> > > > > The whole user_events feature looks redundant to me.
+> > > > > We have uprobes and usdt. It doesn't look to me that
+> > > > > user_events provide anything new that wasn't available earlier.
+> > > >
+> > > > A lot of the why, in general, for user_events is covered in the first
+> > > > change in the series.
+> > > > Link: https://lore.kernel.org/all/20220118204326.2169-1-beaub@linux.microsoft.com/
+> > > >
+> > > > The why was also covered in Linux Plumbers Conference 2021 within the
+> > > > tracing microconference.
+> > > >
+> > > > An example of why we want user_events:
+> > > > Managed code running that emits data out via Open Telemetry.
+> > > > Since it's managed there isn't a stub location to patch, it moves.
+> > > > We watch the Open Telemetry spans in an eBPF program, when a span takes
+> > > > too long we collect stack data and perform other actions.
+> > > > With user_events and perf we can monitor the entire system from the root
+> > > > container without having to have relay agents within each
+> > > > cgroup/namespace taking up resources.
+> > > > We do not need to enter each cgroup mnt space and determine the correct
+> > > > patch location or the right version of each binary for processes that
+> > > > use user_events.
+> > > >
+> > > > An example of why we want eBPF integration:
+> > > > We also have scenarios where we are live decoding the data quickly.
+> > > > Having user_data fed directly to eBPF lets us cast the data coming in to
+> > > > a struct and decode very very quickly to determine if something is
+> > > > wrong.
+> > > > We can take that data quickly and put it into maps to perform further
+> > > > aggregation as required.
+> > > > We have scenarios that have "skid" problems, where we need to grab
+> > > > further data exactly when the process that had the problem was running.
+> > > > eBPF lets us do all of this that we cannot easily do otherwise.
+> > > >
+> > > > Another benefit from user_events is the tracing is much faster than
+> > > > uprobes or others using int 3 traps. This is critical to us to enable on
+> > > > production systems.
+> > >
+> > > None of it makes sense to me.
+> >
+> > Sorry.
+> >
+> > > To take advantage of user_events user space has to be modified
+> > > and writev syscalls inserted.
+> >
+> > Yes, both user_events and lttng require user space modifications to do
+> > tracing correctly. The syscall overheads are real, and the cost depends
+> > on the mitigations around spectre/meltdown.
+> >
+> > > This is not cheap and I cannot see a production system using this interface.
+> >
+> > But you are fine with uprobe costs? uprobes appear to be much more costly
+> > than a syscall approach on the hardware I've run on.
+> 
+> Can we achieve the same/similar performance with sys_bpf(BPF_PROG_RUN)?
+> 
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- Documentation/hwmon/dell-smm-hwmon.rst |  7 ++
- drivers/hwmon/Kconfig                  |  1 +
- drivers/hwmon/dell-smm-hwmon.c         | 94 +++++++++++++++++++++++++-
- 3 files changed, 99 insertions(+), 3 deletions(-)
+I think so, the tough part is how do you let the user-space know which
+program is attached to run? In the current code this is done by the BPF
+program attaching to the event via perf and we run the one there if
+any when data is emitted out via write calls.
 
-diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/=
-dell-smm-hwmon.rst
-index d3323a96665d..41839b7de2c1 100644
-=2D-- a/Documentation/hwmon/dell-smm-hwmon.rst
-+++ b/Documentation/hwmon/dell-smm-hwmon.rst
-@@ -86,6 +86,13 @@ probe the BIOS on your machine and discover the appropr=
-iate codes.
+I would want to make sure that operators can decide where the user-space
+data goes (perf/ftrace/eBPF) after the code has been written. With the
+current code this is done via the tracepoint callbacks that perf/ftrace
+hook up when operators enable recording via perf, tracefs, libbpf, etc.
 
- Again, when you find new codes, we'd be happy to have your patches!
+We have managed code (C#/Java) where we cannot utilize stubs or traps
+easily due to code movement. So we are limited in how we can approach
+this problem. Having the interface be mmap/write has enabled this
+for us, since it's easy to interact with in most languages and gives us
+lifetime management of the trace objects between user-space and the
+kernel.
 
-+``thermal`` interface
-+---------------------------
-+
-+The driver also exports the fans as thermal cooling devices with
-+``type`` set to ``dell-smm-fan[1-3]``. This allows for easy fan control
-+using one of the thermal governors.
-+
- Module parameters
- -----------------
+> Thanks,
+> Song
+> 
+> >
+> > > All you did is a poor man version of lttng that doesn't rely
+> > > on such heavy instrumentation.
+> >
+> > Well I am a frugal person. :)
+> >
+> > This work has solved some critical issues we've been having, and I would
+> > appreciate a review of the code if possible.
+> >
+> > Thanks,
+> > -Beau
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 9ab4e9b3d27b..1175b8e38c45 100644
-=2D-- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -498,6 +498,7 @@ config SENSORS_DS1621
- config SENSORS_DELL_SMM
- 	tristate "Dell laptop SMM BIOS hwmon driver"
- 	depends on X86
-+	imply THERMAL
- 	help
- 	  This hwmon driver adds support for reporting temperature of different
- 	  sensors and controls the fans on Dell laptops via System Management
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
-.c
-index 84cb1ede7bc0..0c29386f4bd3 100644
-=2D-- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -21,6 +21,7 @@
- #include <linux/errno.h>
- #include <linux/hwmon.h>
- #include <linux/init.h>
-+#include <linux/kconfig.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
-@@ -29,6 +30,7 @@
- #include <linux/seq_file.h>
- #include <linux/string.h>
- #include <linux/smp.h>
-+#include <linux/thermal.h>
- #include <linux/types.h>
- #include <linux/uaccess.h>
-
-@@ -80,6 +82,11 @@ struct dell_smm_data {
- 	int *fan_nominal_speed[DELL_SMM_NO_FANS];
- };
-
-+struct dell_smm_cooling_data {
-+	u8 fan_num;
-+	struct dell_smm_data *data;
-+};
-+
- MODULE_AUTHOR("Massimo Dal Zotto (dz@debian.org)");
- MODULE_AUTHOR("Pali Roh=C3=A1r <pali@kernel.org>");
- MODULE_DESCRIPTION("Dell laptop SMM BIOS hwmon driver");
-@@ -638,9 +645,50 @@ static void __init i8k_init_procfs(struct device *dev=
-)
-
- #endif
-
--/*
-- * Hwmon interface
-- */
-+static int dell_smm_get_max_state(struct thermal_cooling_device *dev, uns=
-igned long *state)
-+{
-+	struct dell_smm_cooling_data *cdata =3D dev->devdata;
-+
-+	*state =3D cdata->data->i8k_fan_max;
-+
-+	return 0;
-+}
-+
-+static int dell_smm_get_cur_state(struct thermal_cooling_device *dev, uns=
-igned long *state)
-+{
-+	struct dell_smm_cooling_data *cdata =3D dev->devdata;
-+	int ret;
-+
-+	ret =3D i8k_get_fan_status(cdata->data, cdata->fan_num);
-+	if (ret < 0)
-+		return ret;
-+
-+	*state =3D ret;
-+
-+	return 0;
-+}
-+
-+static int dell_smm_set_cur_state(struct thermal_cooling_device *dev, uns=
-igned long state)
-+{
-+	struct dell_smm_cooling_data *cdata =3D dev->devdata;
-+	struct dell_smm_data *data =3D cdata->data;
-+	int ret;
-+
-+	if (state > data->i8k_fan_max)
-+		return -EINVAL;
-+
-+	mutex_lock(&data->i8k_mutex);
-+	ret =3D i8k_set_fan(data, cdata->fan_num, (int)state);
-+	mutex_unlock(&data->i8k_mutex);
-+
-+	return ret;
-+}
-+
-+static const struct thermal_cooling_device_ops dell_smm_cooling_ops =3D {
-+	.get_max_state =3D dell_smm_get_max_state,
-+	.get_cur_state =3D dell_smm_get_cur_state,
-+	.set_cur_state =3D dell_smm_set_cur_state,
-+};
-
- static umode_t dell_smm_is_visible(const void *drvdata, enum hwmon_sensor=
-_types type, u32 attr,
- 				   int channel)
-@@ -941,6 +989,37 @@ static const struct hwmon_chip_info dell_smm_chip_inf=
-o =3D {
- 	.info =3D dell_smm_info,
- };
-
-+static int __init dell_smm_init_cdev(struct device *dev, u8 fan_num)
-+{
-+	struct dell_smm_data *data =3D dev_get_drvdata(dev);
-+	struct thermal_cooling_device *cdev;
-+	struct dell_smm_cooling_data *cdata;
-+	int ret =3D 0;
-+	char *name;
-+
-+	name =3D kasprintf(GFP_KERNEL, "dell-smm-fan%u", fan_num + 1);
-+	if (!name)
-+		return -ENOMEM;
-+
-+	cdata =3D devm_kmalloc(dev, sizeof(*cdata), GFP_KERNEL);
-+	if (cdata) {
-+		cdata->fan_num =3D fan_num;
-+		cdata->data =3D data;
-+		cdev =3D devm_thermal_of_cooling_device_register(dev, NULL, name, cdata=
-,
-+							       &dell_smm_cooling_ops);
-+		if (IS_ERR(cdev)) {
-+			devm_kfree(dev, cdata);
-+			ret =3D PTR_ERR(cdev);
-+		}
-+	} else {
-+		ret =3D -ENOMEM;
-+	}
-+
-+	kfree(name);
-+
-+	return ret;
-+}
-+
- static int __init dell_smm_init_hwmon(struct device *dev)
- {
- 	struct dell_smm_data *data =3D dev_get_drvdata(dev);
-@@ -967,6 +1046,15 @@ static int __init dell_smm_init_hwmon(struct device =
-*dev)
- 			continue;
-
- 		data->fan[i] =3D true;
-+
-+		/* the cooling device it not critical, ignore failures */
-+		if (IS_REACHABLE(CONFIG_THERMAL)) {
-+			err =3D dell_smm_init_cdev(dev, i);
-+			if (err < 0)
-+				dev_err(dev, "Failed to register cooling device for fan %u\n",
-+					i + 1);
-+		}
-+
- 		data->fan_nominal_speed[i] =3D devm_kmalloc_array(dev, data->i8k_fan_ma=
-x + 1,
- 								sizeof(*data->fan_nominal_speed[i]),
- 								GFP_KERNEL);
-=2D-
-2.30.2
-
+Thanks,
+-Beau

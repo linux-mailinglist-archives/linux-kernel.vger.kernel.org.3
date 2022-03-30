@@ -2,140 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1897A4ECEA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E38F4ECEA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346960AbiC3VNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 17:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34768 "EHLO
+        id S1347513AbiC3VRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 17:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238534AbiC3VNF (ORCPT
+        with ESMTP id S1347216AbiC3VQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 17:13:05 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310923A181
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:11:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648674680; x=1680210680;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=keon6mJSiu6oJTFE85youukWofwphPuyQTu9o5aZfkI=;
-  b=IHlTFB+2s8niBP3np51PR7rAGkkpRpK42uzFh4VfYV63RhixM+Cmb606
-   Y9krwY35KyW1CZfZ+pPqMcLezy6+VtEmnMZllP44u8soDl+Y9wTdwWiOp
-   WaaJv2BtalAdkqspSk4Aw+CLe6dahazsGiQbiIAyIyR3VHmPyC8z+zdbm
-   Miqw1TVWxdtYE5bCEI6ui4WvSNRxX99yZ2DYhOpDGPFCAQe2kFYh1c4uo
-   WU6nyt419UiXkTdKk5hAy+qls70CJbkdvxearTpybqhlN8k5xSuXZaDP+
-   OpEXgtXf6N91NAq2FAHCn5a2FqmF95HxBMVO6zFUOcFL7MsEXsPQtwUoN
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="240241104"
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="240241104"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 14:11:19 -0700
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="639869076"
-Received: from npeper-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.16.15])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 14:11:19 -0700
-Date:   Wed, 30 Mar 2022 14:11:19 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Philip <benjamin.philip495@gmail.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Samuel =?iso-8859-1?Q?Sj=F6berg?= <info@samuelsjoberg.se>,
-        Charlie Sands <sandsch@northvilleschools.net>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH v4] staging: rts5208: Convert kmap() to kmap_local_page()
-Message-ID: <YkTHG+HSlU9u1FoV@iweiny-desk3>
-References: <20220330143331.8306-1-fmdefrancesco@gmail.com>
+        Wed, 30 Mar 2022 17:16:57 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE6C57B04
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:15:10 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id u26so25919946eda.12
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:15:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pWAvixEuLhuCRYGbQpWsXrGh9fg4phORRc02pDgp+O0=;
+        b=SFfOhwfezqFjJhpRD+zpZbMHbYbCIq16B58Fesz9fkpuiDehn2XXdASrPgcItIRMbI
+         iZig+jFeHUr5KVZBPo5La/E/ZoZ09hxPUOsEVWa2YL1qdidsEJDek4p6PE/M00DTjGg2
+         fhgWoQkJweZoZbtM7KWQZUaOqK8MeoNqtYI6Al1amHz/u/CYOvlyzJJrEoC65U+nfB4K
+         O4KoDYPCaR2RsEH/n3aAYJOsV3jtFLqVmKVwfRrUUq6lb7KDwrte9dyL68FHodMoyIoN
+         jHBB4OZJ3V+52BTOHvPQMysdkr9IicoTi2v4cXlvvOZivcOCBaPqeG/n94lnzg+FAc5u
+         S1Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pWAvixEuLhuCRYGbQpWsXrGh9fg4phORRc02pDgp+O0=;
+        b=pj+XKMBu3ysCKHRa/aU53vvR+Dn1x72rOASewA0xfj4WwVSSB5IOMxspYQtXdqcPHn
+         M1tAmB7BwGMqwn2dlmFGXUr4jH41M0Twsjt8Kw6FU6Y6fO/dyakRQX+BlqgwqeTfeBSp
+         SjNrZ62GYV+7Uy9oM8/GPvTz9k2RTVMP6zn+OVRLHgT26qBXlc7QM0u/ldlYlQt+KBej
+         3nuAP5p6vvdjceEOU52IvYy/77YjKbgBc9klTyK8Cz4G4OYKtIiE47DsC5HNx5LImIeR
+         sYJbujxK78IvV1ejUXfy2rGYVmnVOVWM7VrRfi1eupnpfiI0zll7wNsM1+J+oVIzxDXF
+         iEQw==
+X-Gm-Message-State: AOAM532VheVG5ShxsJMBCjUdJwSjn+DDskeLawjQp0yr6rN8YgxLK1/3
+        jIdgk9GcnK7Zjy99VoipiR+AvIjyA8JxB9zoIqSeNQ==
+X-Google-Smtp-Source: ABdhPJy3rMIZvcEKbv/17lOxmRiaoLHd4Sh2G4bBrWY53xs7Vn+nk3fKJzCHIv0bOML5js66Nn+fybGvPAW9Rr7x2LE=
+X-Received: by 2002:aa7:d6ca:0:b0:419:2804:d094 with SMTP id
+ x10-20020aa7d6ca000000b004192804d094mr13224533edr.388.1648674909251; Wed, 30
+ Mar 2022 14:15:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330143331.8306-1-fmdefrancesco@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220330204809.2061497-1-wonchung@google.com>
+In-Reply-To: <20220330204809.2061497-1-wonchung@google.com>
+From:   Won Chung <wonchung@google.com>
+Date:   Wed, 30 Mar 2022 14:14:57 -0700
+Message-ID: <CAOvb9yhPKe8tHWewSzYR1+HyZZNM_4SfOq53DXgGViMa9HM6yA@mail.gmail.com>
+Subject: Re: [PATCH v2] misc/mei: Add NULL check to component match callback functions
+To:     Tomas Winkler <tomas.winkler@intel.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@google.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 04:33:31PM +0200, Fabio M. De Francesco wrote:
-> The use of kmap() is being deprecated in favor of kmap_local_page()
-> where it is feasible.
-> 
-> With kmap_local_page(), the mapping is per thread, CPU local and not
-> globally visible. Therefore rtsx_stor_access_xfer_buf() is a function
-> where the use of kmap_local_page() in place of kmap() is correctly
-> suited.
-> 
-> Convert to kmap_local_page() but, instead of open coding it, use the
-> helpers memcpy_to_page() and memcpy_from_page().
-> 
-> Make a minor change to a comment related to scatter-gather.
-> 
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-
-Thanks!
-
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-
+On Wed, Mar 30, 2022 at 1:48 PM Won Chung <wonchung@google.com> wrote:
+>
+> Component match callback functions need to check if expected data is
+> passed to them. Without this check, it can cause a NULL pointer
+> dereference when another driver registers a component before i915
+> drivers have their component master fully bind.
+>
+> Fixes: 1e8d19d9b0dfc ("mei: hdcp: bind only with i915 on the same PCH")
+> Fixes: c2004ce99ed73 ("mei: pxp: export pavp client to me client bus")
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Signed-off-by: Won Chung <wonchung@google.com>
 > ---
-> 
-> v1 -> v2: Rework the commit message and use the appropriate helpers
-> instead of open coding the use of kmap_local_page()/kunmap_local_page().
-> (Thanks to Ira Weiny <ira.weiny@intel.com>).
-> 
-> v2 -> v3: Use memcpy_{to,from}_page() arguments correctly.
-> (Thanks to Dan Carpenter <dan.carpenter@oracle.com>).
-> 
-> v3 -> v4: According to a suggestion by Ira Weiny, change the test
-> of a comment related to the use of scatter-gather.
-> 
->  drivers/staging/rts5208/rtsx_transport.c | 12 +++++-------
->  1 file changed, 5 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/staging/rts5208/rtsx_transport.c b/drivers/staging/rts5208/rtsx_transport.c
-> index 805dc18fac0a..d5ad49de4c56 100644
-> --- a/drivers/staging/rts5208/rtsx_transport.c
-> +++ b/drivers/staging/rts5208/rtsx_transport.c
-> @@ -55,9 +55,9 @@ unsigned int rtsx_stor_access_xfer_buf(unsigned char *buffer,
->  		*offset += cnt;
->  
->  	/*
-> -	 * Using scatter-gather.  We have to go through the list one entry
-> -	 * at a time.  Each s-g entry contains some number of pages, and
-> -	 * each page has to be kmap()'ed separately.
-> +	 * Using scatter-gather. We have to go through the list one entry
-> +	 * at a time. Each s-g entry contains some number of pages which
-> +	 * have to be copied one at a time.
->  	 */
->  	} else {
->  		struct scatterlist *sg =
-> @@ -92,13 +92,11 @@ unsigned int rtsx_stor_access_xfer_buf(unsigned char *buffer,
->  			while (sglen > 0) {
->  				unsigned int plen = min(sglen, (unsigned int)
->  						PAGE_SIZE - poff);
-> -				unsigned char *ptr = kmap(page);
->  
->  				if (dir == TO_XFER_BUF)
-> -					memcpy(ptr + poff, buffer + cnt, plen);
-> +					memcpy_to_page(page, poff, buffer + cnt, plen);
->  				else
-> -					memcpy(buffer + cnt, ptr + poff, plen);
-> -				kunmap(page);
-> +					memcpy_from_page(buffer + cnt, page, poff, plen);
->  
->  				/* Start at the beginning of the next page */
->  				poff = 0;
-> -- 
-> 2.34.1
-> 
+> Changes from v1:
+> - Add "Fixes" tag
+> - Send to stable@vger.kernel.org
+>
+>  drivers/misc/mei/hdcp/mei_hdcp.c | 2 +-
+>  drivers/misc/mei/pxp/mei_pxp.c   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/misc/mei/hdcp/mei_hdcp.c b/drivers/misc/mei/hdcp/mei_hdcp.c
+> index ec2a4fce8581..843dbc2b21b1 100644
+> --- a/drivers/misc/mei/hdcp/mei_hdcp.c
+> +++ b/drivers/misc/mei/hdcp/mei_hdcp.c
+> @@ -784,7 +784,7 @@ static int mei_hdcp_component_match(struct device *dev, int subcomponent,
+>  {
+>         struct device *base = data;
+>
+> -       if (strcmp(dev->driver->name, "i915") ||
+> +       if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
+>             subcomponent != I915_COMPONENT_HDCP)
+>                 return 0;
+>
+> diff --git a/drivers/misc/mei/pxp/mei_pxp.c b/drivers/misc/mei/pxp/mei_pxp.c
+> index f7380d387bab..e32a81da8af6 100644
+> --- a/drivers/misc/mei/pxp/mei_pxp.c
+> +++ b/drivers/misc/mei/pxp/mei_pxp.c
+> @@ -131,7 +131,7 @@ static int mei_pxp_component_match(struct device *dev, int subcomponent,
+>  {
+>         struct device *base = data;
+>
+> -       if (strcmp(dev->driver->name, "i915") ||
+> +       if (!base || !dev->driver || strcmp(dev->driver->name, "i915") ||
+>             subcomponent != I915_COMPONENT_PXP)
+>                 return 0;
+>
+> --
+> 2.35.1.1021.g381101b075-goog
+>
+
+Hi,
+
+I am resending this patch to correct email account.
+Sorry for confusion.
+
+Thanks,
+Won

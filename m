@@ -2,101 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66AB4EBAA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F36374EBAA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243201AbiC3GNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 02:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
+        id S243211AbiC3GOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 02:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiC3GN1 (ORCPT
+        with ESMTP id S241944AbiC3GOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 02:13:27 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0D231526
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648620703; x=1680156703;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=thfGUpqhOyI6a90+qXLlcmkfmx+tYGEK4nalojXYjfM=;
-  b=UJjnrgioQy0eIHu9U2fEsrKmUfCDHv6THjkV4+nKqJl86hEdF3ZHFoJ3
-   ddNZP6/sWgNAi5PAS5qQXL1ooA5PCDpCjzYqix5CRQaYwjnG8G5SM8LVH
-   W6YO6SgReQovhHNvvRWrwMI74iTPokn7gRCADyJ/ZxLCvRMXjWMYuIwt/
-   kx85e3t1/9rurEg2gYlW7hgHbJCwVjg7EsnaLWYzK/KA8pne8pIFrAujI
-   pI7lDZk0ELiT2EoMJIoQ8fcX5Bmc4x/rrQvxwJgW/G/jyDtEWnKRRFPh7
-   WN8hN19iYkQ6BNacopLGnkR9GCmnIPGnwjtrqosO+toZZJR9jcrX4/jKv
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="241612155"
-X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="241612155"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 23:11:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,221,1643702400"; 
-   d="scan'208";a="521764732"
-Received: from lkp-server01.sh.intel.com (HELO 3965e2759b93) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 29 Mar 2022 23:11:42 -0700
-Received: from kbuild by 3965e2759b93 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nZRYT-00012x-HW; Wed, 30 Mar 2022 06:11:41 +0000
-Date:   Wed, 30 Mar 2022 14:11:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Saeed Mahameed <saeedm@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [saeed:mlx5-queue 3/6] WARNING: modpost: vmlinux.o(.text+0xa21500):
- Section mismatch in reference from the function r600_count_pipe_bits() to
- the variable .init.text:.L0
-Message-ID: <202203301425.AwwypjwY-lkp@intel.com>
+        Wed, 30 Mar 2022 02:14:15 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E42344C7;
+        Tue, 29 Mar 2022 23:12:30 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22U4uadu035415;
+        Wed, 30 Mar 2022 06:12:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=2p+VfMA5uwCNYrlHBOCjlIzvMpTMcxZ4c82raGuzbWE=;
+ b=COYcBlOBPQtNJt9mJEpxPIghjADJKZ7w4oYjykadGnc86iKz2McfzFzmrWy9brCAbJkb
+ 0VJjhwEBRF4QYni4Z2TM7KTF/BVxCOf6MNRhkXfIRdfOaN2AicyIFzkYvEvBl1glOirs
+ FTJvLf7aVnfv2AnaDi+PNtOHBNstDA+nk8bg2qLb+WQS1A45RM3UkmeND4VYYlOl13rr
+ GTtensacYaGi5N16kMe6Rv+TQyvhRilcVuCqZmE0zlQqOCRckMGnJsrfzJaey4CBJgcR
+ cLJrLdsJpg26PptyUNuoyNOgyMQsmx8/UrbBzWim+AMKvoqKt5bulqHDImE66X5oS3TL Bw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f40c8x594-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 06:12:02 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22U65l7I007664;
+        Wed, 30 Mar 2022 06:12:01 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f40c8x58v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 06:12:01 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22U69LdH032360;
+        Wed, 30 Mar 2022 06:12:00 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma05wdc.us.ibm.com with ESMTP id 3f1tfa31mh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Mar 2022 06:12:00 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22U6Bxf022741458
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Mar 2022 06:11:59 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D5220112062;
+        Wed, 30 Mar 2022 06:11:59 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 703DE112067;
+        Wed, 30 Mar 2022 06:11:55 +0000 (GMT)
+Received: from [9.160.79.229] (unknown [9.160.79.229])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 30 Mar 2022 06:11:55 +0000 (GMT)
+Message-ID: <247080bd-fef5-c892-7753-f9b7cf650166@linux.ibm.com>
+Date:   Wed, 30 Mar 2022 09:11:54 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v8 0/4] Allow guest access to EFI confidential computing
+ secret area
+Content-Language: en-US
+To:     Borislav Petkov <bp@suse.de>
+Cc:     linux-efi@vger.kernel.org, Ashish Kalra <ashish.kalra@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Andrew Scull <ascull@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Lenny Szubowicz <lszubowi@redhat.com>,
+        Peter Gonda <pgonda@google.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
+        Jim Cadden <jcadden@ibm.com>,
+        Daniele Buono <dbuono@linux.vnet.ibm.com>,
+        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>
+References: <20220228114254.1099945-1-dovmurik@linux.ibm.com>
+ <YjydSNnG6EJ1KWx0@zn.tnic>
+ <f2fb7553-0313-6393-c93c-2bb6619086dc@linux.ibm.com>
+ <YkNQNzNa02Sndu+q@zn.tnic>
+ <7696ba46-91c7-7119-bd68-b3521459cf37@linux.ibm.com>
+From:   Dov Murik <dovmurik@linux.ibm.com>
+In-Reply-To: <7696ba46-91c7-7119-bd68-b3521459cf37@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: hwm7FFhPyN3fkPL7ktrNEzWHOT8Cvb0b
+X-Proofpoint-GUID: YrtY1ADfDzcA_fuzCXaHOyAuxmCX6GwG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-30_02,2022-03-29_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ mlxscore=0 spamscore=0 malwarescore=0 impostorscore=0 lowpriorityscore=0
+ adultscore=0 phishscore=0 priorityscore=1501 mlxlogscore=999 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203300028
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git mlx5-queue
-head:   cfe89fdbec000e621d208449280a8b437b9798cc
-commit: d91cde6ff5c7d9b9b2c2a8747e51432daa4bc293 [3/6] Revert "net: openvswitch: IPv6: Add IPv6 extension header support"
-config: riscv-buildonly-randconfig-r002-20220329 (https://download.01.org/0day-ci/archive/20220330/202203301425.AwwypjwY-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git/commit/?id=d91cde6ff5c7d9b9b2c2a8747e51432daa4bc293
-        git remote add saeed https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git
-        git fetch --no-tags saeed mlx5-queue
-        git checkout d91cde6ff5c7d9b9b2c2a8747e51432daa4bc293
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+On 29/03/2022 23:28, Dov Murik wrote:
+> 
+> 
+> On 29/03/2022 21:30, Borislav Petkov wrote:
+> 
+>>
+>> So now that I think of it, it would be even nicer if the fact whether
+>> guest debugging is allowed, were available to the guest *very early*
+>> during boot. Because I think the most important cases where you'd want
+>> to singlestep a SEV* guest with the qemu gdbstub is early guest kernel
+>> boot code. So it would be cool if we'd have access to the debugging
+>> setting that early.
+>>
+>> Lemme have a look at your patches in detail to get an idea what's
+>> happening there.
+> 
 
->> WARNING: modpost: vmlinux.o(.text+0xa21500): Section mismatch in reference from the function r600_count_pipe_bits() to the variable .init.text:.L0
-The function r600_count_pipe_bits() references
-the variable __init .L0 .
-This is often because r600_count_pipe_bits lacks a __init
-annotation or the annotation of .L0 is wrong.
+After a night's sleep I figured out that an SEV guest cannot tell if a
+value it's reading was (a) encrypted by the host using
+KVM_SEV_LAUNCH_UPDATE_DATA, or (b) added using secret injection using
+KVM_SEV_LAUNCH_SECRET.
 
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text+0x1082068): Section mismatch in reference from the function i3c_generic_ibi_recycle_slot() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x10fd6cc): Section mismatch in reference from the function dev_pm_opp_get_voltage() to the variable .init.text:.LBB5464
-<< WARNING: modpost: vmlinux.o(.text+0x10fd778): Section mismatch in reference from the function dev_pm_opp_get_level() to the variable .init.text:.LVL1150
-<< WARNING: modpost: vmlinux.o(.text+0x10fd7d4): Section mismatch in reference from the function dev_pm_opp_is_turbo() to the variable .init.text:.LVL1151
-<< WARNING: modpost: vmlinux.o(.text.unlikely+0x29b9c): Section mismatch in reference from the function hwmon_device_register() to the variable .init.text:.LVL283
-<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF114
+The only difference is that if the host is using
+KVM_SEV_LAUNCH_UPDATE_DATA, then it changes the measurement.  But maybe
+for debugging scenarios we (= Guest Owner) don't care about the
+measurement being correct.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+If that's the case, we don't need a secure channel and secret injection.
+You can use a simple "sev=debug" (or whatever) in the kernel
+command-line to indicate your needs.
+
+
+Did I miss something?
+
+
+-Dov
+

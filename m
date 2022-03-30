@@ -2,122 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD114ECFE0
-	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 01:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0FC54ECFE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 31 Mar 2022 01:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351736AbiC3XBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 19:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43244 "EHLO
+        id S1351742AbiC3XE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 19:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233874AbiC3XBm (ORCPT
+        with ESMTP id S233874AbiC3XE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 19:01:42 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC872CE27;
-        Wed, 30 Mar 2022 15:59:56 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6B5461F869;
-        Wed, 30 Mar 2022 22:59:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648681195; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+bPR1PXiM6JtW/5nFEtJSuRfm0XzQvVacUXc+lVNDYY=;
-        b=RCS7Q7oolVekZNi1iDoFTZ+HMjorZbYw9NBa84hJK182buaUybVKgqLm+DnOEbBxhuvW/E
-        56epmZvOfO1rWjmJGpehf7jLvDj5ouewE7hGexMpvwvKPqJ9V3mFGaMCRR9ZNGA2drc68s
-        3ukaTuXpbjJDX1F8+QZKVLh9HPKQa8g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648681195;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+bPR1PXiM6JtW/5nFEtJSuRfm0XzQvVacUXc+lVNDYY=;
-        b=7NM59/f4Q4BvK1rBSwHDBmG3hMBLl198mDLsa+Ama1rZ3FkySLORzlwdGZVtC0Ha+uFfAG
-        g+UvUAC7e/0BT6DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8E30D13A60;
-        Wed, 30 Mar 2022 22:59:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YXMyEungRGK0LwAAMHmgww
-        (envelope-from <neilb@suse.de>); Wed, 30 Mar 2022 22:59:53 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 30 Mar 2022 19:04:26 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A40424A2
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 16:02:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=k76sQjYdwH9GEGR78t+YtjIIfK9JL2ghgf5N0o/++m8=; b=eF5BVQSbeOClgHQ9ke1fW6aWc4
+        Da3BcIzGSX+bMYaXm9LhEMGTRFAfhYlRl58JNIsrNZ0i91sWJdp29MgVerHGq7AhV3bH2r5wNwKoN
+        nZaW4PJ/QIGDcmWSGuQ5TbAbya278OPBJYCMLHKmMQuLXwGvKtPvQyN2M1e9MvwfHftRLzgig50rP
+        4bCYXA/NSHJ0FWT3cUwzGK+4tmLR5WHccGyOevdy7eM5kMgkLvMBUO0NPj4qJzVGACnkMHRAlbT+e
+        AfG+BUt1IXR+0ys0IgsnluIQLVBvwrl1qNUB5oCyf13B5/ZqYTutir5XE8Q+kTfD+b1afWEfHzsb9
+        AMKwyx5Q==;
+Received: from [165.90.126.25] (helo=killbill.home)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1nZhKf-0003nF-42; Thu, 31 Mar 2022 01:02:29 +0200
+From:   Melissa Wen <mwen@igalia.com>
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
+        Jasdeep Dhillon <jdhillon@amd.com>,
+        chandan.vurdigerenataraj@amd.com, Melissa Wen <mwen@igalia.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amd/display: protect remaining FPU-code calls on dcn3.1.x
+Date:   Wed, 30 Mar 2022 22:02:04 -0100
+Message-Id: <20220330230204.2473636-1-mwen@igalia.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "David Disseldorp" <ddiss@suse.de>
-Cc:     "Al Viro" <viro@zeniv.linux.org.uk>, linux-nfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        "LKML" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] VFS: filename_create(): fix incorrect intent.
-In-reply-to: <20220330101408.2bbb47ee@suse.de>
-References: <164842900895.6096.10753358086437966517@noble.neil.brown.name>,
- <20220330101408.2bbb47ee@suse.de>
-Date:   Thu, 31 Mar 2022 09:59:48 +1100
-Message-id: <164868118815.25542.13263176689793254608@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022, David Disseldorp wrote:
-> Hi Neil,
->=20
-> I gave this a spin and was wondering why xfstests wouldn't start with
-> this change...
->=20
-> On Mon, 28 Mar 2022 11:56:48 +1100, NeilBrown wrote:
-> ...
-> >=20
-> > diff --git a/fs/namei.c b/fs/namei.c
-> > index 3f1829b3ab5b..3ffb42e56a8e 100644
-> > --- a/fs/namei.c
-> > +++ b/fs/namei.c
-> > @@ -3676,7 +3676,6 @@ static struct dentry *filename_create(int dfd, stru=
-ct filename *name,
-> >  	int type;
-> >  	int err2;
-> >  	int error;
-> > -	bool is_dir =3D (lookup_flags & LOOKUP_DIRECTORY);
-> > =20
-> >  	/*
-> >  	 * Note that only LOOKUP_REVAL and LOOKUP_DIRECTORY matter here. Any
-> > @@ -3698,9 +3697,11 @@ static struct dentry *filename_create(int dfd, str=
-uct filename *name,
-> >  	/* don't fail immediately if it's r/o, at least try to report other err=
-ors */
-> >  	err2 =3D mnt_want_write(path->mnt);
-> >  	/*
-> > -	 * Do the final lookup.
-> > +	 * Do the final lookup.  Request 'create' only if there is no trailing
-> > +	 * '/', or if directory is requested.
-> >  	 */
-> > -	lookup_flags |=3D LOOKUP_CREATE | LOOKUP_EXCL;
-> > +	if (!last.name[last.len] || (lookup_flags & LOOKUP_DIRECTORY))
-> > +		lookup_flags |=3D LOOKUP_CREATE | LOOKUP_EXCL;
->=20
-> This doesn't look right, as any LOOKUP_DIRECTORY flag gets dropped via
-> the prior "lookup_flags &=3D LOOKUP_REVAL;".
+From [1], I realized two other calls to dcn30 code are associated with
+FPU operations and are not protected by DC_FP_* macros:
+* dcn30_populate_dml_writeback_from_context()
+* dcn30_set_mcif_arb_params()
 
-Arg.. thanks for testing - I clearly should have tested more broadly.
+So, since FPU-associated code is not fully isolated in dcn30, and
+dcn3.1.x reuses them, let's wrap their calls properly.
 
-I could leave the "is_dir" variable there I guess.
-Or maybe the masking statement should be=20
-    lookup_flags &=3D LOOKUP_REVAL | LOOKUP_DIRECTORY;
-as that is a better match for the comment.
+Note: this patch complements the fix from [1].
 
-Thanks,
-NeilBrown
+[1] https://lore.kernel.org/amd-gfx/20220329082957.1662655-1-chandan.vurdigerenataraj@amd.com/
+
+Signed-off-by: Melissa Wen <mwen@igalia.com>
+---
+ .../drm/amd/display/dc/dcn31/dcn31_resource.c | 25 +++++++++++++++++--
+ .../drm/amd/display/dc/dcn31/dcn31_resource.h |  9 +++++++
+ .../amd/display/dc/dcn315/dcn315_resource.c   |  4 +--
+ .../amd/display/dc/dcn316/dcn316_resource.c   |  4 +--
+ 4 files changed, 36 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
+index bf130b2435ab..afdfec74ed08 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
+@@ -1735,6 +1735,27 @@ void dcn31_calculate_wm_and_dlg(
+ 	DC_FP_END();
+ }
+ 
++void
++dcn31_populate_dml_writeback_from_context(struct dc *dc,
++					  struct resource_context *res_ctx,
++					  display_e2e_pipe_params_st *pipes)
++{
++	DC_FP_START();
++	dcn30_populate_dml_writeback_from_context(dc, res_ctx, pipes);
++	DC_FP_END();
++}
++
++void
++dcn31_set_mcif_arb_params(struct dc *dc,
++			  struct dc_state *context,
++			  display_e2e_pipe_params_st *pipes,
++			  int pipe_cnt)
++{
++	DC_FP_START();
++	dcn30_set_mcif_arb_params(dc, context, pipes, pipe_cnt);
++	DC_FP_END();
++}
++
+ bool dcn31_validate_bandwidth(struct dc *dc,
+ 		struct dc_state *context,
+ 		bool fast_validate)
+@@ -1806,8 +1827,8 @@ static struct resource_funcs dcn31_res_pool_funcs = {
+ 	.add_stream_to_ctx = dcn30_add_stream_to_ctx,
+ 	.add_dsc_to_stream_resource = dcn20_add_dsc_to_stream_resource,
+ 	.remove_stream_from_ctx = dcn20_remove_stream_from_ctx,
+-	.populate_dml_writeback_from_context = dcn30_populate_dml_writeback_from_context,
+-	.set_mcif_arb_params = dcn30_set_mcif_arb_params,
++	.populate_dml_writeback_from_context = dcn31_populate_dml_writeback_from_context,
++	.set_mcif_arb_params = dcn31_set_mcif_arb_params,
+ 	.find_first_free_match_stream_enc_for_link = dcn10_find_first_free_match_stream_enc_for_link,
+ 	.acquire_post_bldn_3dlut = dcn30_acquire_post_bldn_3dlut,
+ 	.release_post_bldn_3dlut = dcn30_release_post_bldn_3dlut,
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.h b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.h
+index 1ce6509c1ed1..393458015d6a 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.h
++++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.h
+@@ -50,6 +50,15 @@ int dcn31_populate_dml_pipes_from_context(
+ 	struct dc *dc, struct dc_state *context,
+ 	display_e2e_pipe_params_st *pipes,
+ 	bool fast_validate);
++void
++dcn31_populate_dml_writeback_from_context(struct dc *dc,
++					  struct resource_context *res_ctx,
++					  display_e2e_pipe_params_st *pipes);
++void
++dcn31_set_mcif_arb_params(struct dc *dc,
++			  struct dc_state *context,
++			  display_e2e_pipe_params_st *pipes,
++			  int pipe_cnt);
+ void dcn31_update_soc_for_wm_a(struct dc *dc, struct dc_state *context);
+ 
+ struct resource_pool *dcn31_create_resource_pool(
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c b/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c
+index fadb89326999..06dd064e5997 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c
+@@ -1726,8 +1726,8 @@ static struct resource_funcs dcn315_res_pool_funcs = {
+ 	.add_stream_to_ctx = dcn30_add_stream_to_ctx,
+ 	.add_dsc_to_stream_resource = dcn20_add_dsc_to_stream_resource,
+ 	.remove_stream_from_ctx = dcn20_remove_stream_from_ctx,
+-	.populate_dml_writeback_from_context = dcn30_populate_dml_writeback_from_context,
+-	.set_mcif_arb_params = dcn30_set_mcif_arb_params,
++	.populate_dml_writeback_from_context = dcn31_populate_dml_writeback_from_context,
++	.set_mcif_arb_params = dcn31_set_mcif_arb_params,
+ 	.find_first_free_match_stream_enc_for_link = dcn10_find_first_free_match_stream_enc_for_link,
+ 	.acquire_post_bldn_3dlut = dcn30_acquire_post_bldn_3dlut,
+ 	.release_post_bldn_3dlut = dcn30_release_post_bldn_3dlut,
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c b/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c
+index d73145dab173..5db96ab38dd2 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c
+@@ -1728,8 +1728,8 @@ static struct resource_funcs dcn316_res_pool_funcs = {
+ 	.add_stream_to_ctx = dcn30_add_stream_to_ctx,
+ 	.add_dsc_to_stream_resource = dcn20_add_dsc_to_stream_resource,
+ 	.remove_stream_from_ctx = dcn20_remove_stream_from_ctx,
+-	.populate_dml_writeback_from_context = dcn30_populate_dml_writeback_from_context,
+-	.set_mcif_arb_params = dcn30_set_mcif_arb_params,
++	.populate_dml_writeback_from_context = dcn31_populate_dml_writeback_from_context,
++	.set_mcif_arb_params = dcn31_set_mcif_arb_params,
+ 	.find_first_free_match_stream_enc_for_link = dcn10_find_first_free_match_stream_enc_for_link,
+ 	.acquire_post_bldn_3dlut = dcn30_acquire_post_bldn_3dlut,
+ 	.release_post_bldn_3dlut = dcn30_release_post_bldn_3dlut,
+-- 
+2.35.1
+

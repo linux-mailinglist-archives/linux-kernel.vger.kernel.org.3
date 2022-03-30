@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1524EC1FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 13:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 671604EC209
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 13:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbiC3L5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 07:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S1345001AbiC3L54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 07:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344487AbiC3LxN (ORCPT
+        with ESMTP id S1344517AbiC3LxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:53:13 -0400
+        Wed, 30 Mar 2022 07:53:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC11262410;
-        Wed, 30 Mar 2022 04:48:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB22262D63;
+        Wed, 30 Mar 2022 04:49:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C61B6137A;
-        Wed, 30 Mar 2022 11:48:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23718C340EE;
-        Wed, 30 Mar 2022 11:48:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88E6461625;
+        Wed, 30 Mar 2022 11:49:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59819C340F2;
+        Wed, 30 Mar 2022 11:49:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648640937;
-        bh=/hJvC2gf0i2zGMllIvwBp0yhdrPxL94SQLzsN5wb/G8=;
+        s=k20201202; t=1648640942;
+        bh=M5KJInYrlR+ql5Za/wReHZJT/XsYWuv2wTimrFGtLqs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TwA0NSrf3Owe2Ri+jPXP6zFCv3Y3Gkyy6T2Fe64pOjBZCmGbWuX4QsvVVI7Lh3Q0R
-         1A8S9gvSTF2jEBFuTTvpyvXs4qO9E/2konaoUkD0MrVm/Fk5Ab6LbG99jPTFLm6NLs
-         rtPsVbp5p/f8FjJdMr0S1IIn2YV6WBEIKnr/jSY0EEf6u6MJB0MsEtzOiQbWy2OyPZ
-         I+y086xjN2ZlZkRAfodnk63UhuehuKnk3CLIWdMs3/Hbuhlv/XMQZakJuKwMElgKni
-         fmpZ1+siHvY1qiXpxiUtEkmjuMIbX0WLqv5tgB9+z5uDl1RM4lM1sA6HWtSGngqYii
-         hvv/ipOhfBJLw==
+        b=miacG66plJSMHbE71w4Z3lbRnF8VtbA7pP8UWgfwFcDTOosH/eqcMr6WTT/ntvZH6
+         NmgDyKRjm3CLEhnkH5NB+Kk55hd+5EGeNRZt41Rg0PIH6PZ3sk5nzSgs0/BPZwiWul
+         x94rArq+WxjtfS6iR87Av1dTybfCIJxj8Lvf1LBF24+EqWiOZ7wr8lRoFIYRcja5eY
+         4d47BY6T/wP+98gSV3TKyD8ZwqmLx88VSPiWy8LWw9aJHdLfoHZQHszx35+eujrfyF
+         VQAXi8cwtje7NKjxl/pd1ESw2xiNsBeBKpJpragVx/Cn7UVGsqJrVzlTwc//DILMnL
+         G4mfWKxO6Z8Qw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evgeny Novikov <novikov@ispras.ru>,
-        Kirill Shilimanov <kirill.shilimanov@huawei.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>,
-        tomi.valkeinen@ti.com, linux-fbdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 15/59] video: fbdev: w100fb: Reset global state
-Date:   Wed, 30 Mar 2022 07:47:47 -0400
-Message-Id: <20220330114831.1670235-15-sashal@kernel.org>
+Cc:     David Heidelberg <david@ixit.cz>,
+        LogicalErzor <logicalerzor@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, andy.gross@linaro.org,
+        david.brown@linaro.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        linux@armlinux.org.uk, linux-arm-msm@vger.kernel.org,
+        linux-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.16 18/59] ARM: dts: qcom: fix gic_irq_domain_translate warnings for msm8960
+Date:   Wed, 30 Mar 2022 07:47:50 -0400
+Message-Id: <20220330114831.1670235-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220330114831.1670235-1-sashal@kernel.org>
 References: <20220330114831.1670235-1-sashal@kernel.org>
@@ -58,65 +62,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Evgeny Novikov <novikov@ispras.ru>
+From: David Heidelberg <david@ixit.cz>
 
-[ Upstream commit 8738ddcac644964ae128ccd3d80d48773c8d528e ]
+[ Upstream commit 6f7e221e7a5cfc3299616543fce42b36e631497b ]
 
-w100fb_probe() did not reset the global state to its initial state. This
-can result in invocation of iounmap() even when there was not the
-appropriate successful call of ioremap(). For instance, this may be the
-case if first probe fails after two successful ioremap() while second
-probe fails when first ioremap() fails. The similar issue is with
-w100fb_remove(). The patch fixes both bugs.
+IRQ types blindly copied from very similar APQ8064.
 
-Found by Linux Driver Verification project (linuxtesting.org).
+Fixes warnings as:
+WARNING: CPU: 0 PID: 1 at drivers/irqchip/irq-gic.c:1080 gic_irq_domain_translate+0x118/0x120
+...
 
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
-Co-developed-by: Kirill Shilimanov <kirill.shilimanov@huawei.com>
-Signed-off-by: Kirill Shilimanov <kirill.shilimanov@huawei.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Tested-by: LogicalErzor <logicalerzor@gmail.com> # boot-tested on Samsung S3
+Signed-off-by: David Heidelberg <david@ixit.cz>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220108174229.60384-1-david@ixit.cz
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/w100fb.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/qcom-msm8960.dtsi | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/video/fbdev/w100fb.c b/drivers/video/fbdev/w100fb.c
-index d96ab28f8ce4..4e641a780726 100644
---- a/drivers/video/fbdev/w100fb.c
-+++ b/drivers/video/fbdev/w100fb.c
-@@ -770,12 +770,18 @@ static int w100fb_probe(struct platform_device *pdev)
- 		fb_dealloc_cmap(&info->cmap);
- 		kfree(info->pseudo_palette);
- 	}
--	if (remapped_fbuf != NULL)
-+	if (remapped_fbuf != NULL) {
- 		iounmap(remapped_fbuf);
--	if (remapped_regs != NULL)
-+		remapped_fbuf = NULL;
-+	}
-+	if (remapped_regs != NULL) {
- 		iounmap(remapped_regs);
--	if (remapped_base != NULL)
-+		remapped_regs = NULL;
-+	}
-+	if (remapped_base != NULL) {
- 		iounmap(remapped_base);
-+		remapped_base = NULL;
-+	}
- 	if (info)
- 		framebuffer_release(info);
- 	return err;
-@@ -795,8 +801,11 @@ static int w100fb_remove(struct platform_device *pdev)
- 	fb_dealloc_cmap(&info->cmap);
+diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
+index 2a0ec97a264f..a0f9ab7f08f3 100644
+--- a/arch/arm/boot/dts/qcom-msm8960.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
+@@ -146,7 +146,9 @@
+ 			reg		= <0x108000 0x1000>;
+ 			qcom,ipc	= <&l2cc 0x8 2>;
  
- 	iounmap(remapped_base);
-+	remapped_base = NULL;
- 	iounmap(remapped_regs);
-+	remapped_regs = NULL;
- 	iounmap(remapped_fbuf);
-+	remapped_fbuf = NULL;
+-			interrupts	= <0 19 0>, <0 21 0>, <0 22 0>;
++			interrupts	= <GIC_SPI 19 IRQ_TYPE_EDGE_RISING>,
++					  <GIC_SPI 21 IRQ_TYPE_EDGE_RISING>,
++					  <GIC_SPI 22 IRQ_TYPE_EDGE_RISING>;
+ 			interrupt-names	= "ack", "err", "wakeup";
  
- 	framebuffer_release(info);
+ 			regulators {
+@@ -192,7 +194,7 @@
+ 				compatible = "qcom,msm-uartdm-v1.3", "qcom,msm-uartdm";
+ 				reg = <0x16440000 0x1000>,
+ 				      <0x16400000 0x1000>;
+-				interrupts = <0 154 0x0>;
++				interrupts = <GIC_SPI 154 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&gcc GSBI5_UART_CLK>, <&gcc GSBI5_H_CLK>;
+ 				clock-names = "core", "iface";
+ 				status = "disabled";
+@@ -318,7 +320,7 @@
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 				reg = <0x16080000 0x1000>;
+-				interrupts = <0 147 0>;
++				interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>;
+ 				spi-max-frequency = <24000000>;
+ 				cs-gpios = <&msmgpio 8 0>;
  
 -- 
 2.34.1

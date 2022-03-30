@@ -2,166 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743FC4EC553
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:14:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CD24EC55E
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 15:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345772AbiC3NQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 09:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
+        id S1345836AbiC3NSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 09:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344304AbiC3NQf (ORCPT
+        with ESMTP id S1345817AbiC3NSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 09:16:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACD702FFFE
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 06:14:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648646088;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ldezc9GK3QLkJKuWMQhPgYUN/ziZJCuKDduMpDPTgac=;
-        b=emGF+PUqS8xbuG/al2Chln071JwVy95OLtSyubSOvayZuICqTGvL06WXX3B+5kQ6a6e8Pv
-        tUg2t8U9rvHqwB2EeQhhuEXmtBS+xiY/aP3GdlxvojNl2vIBCpjnRI5k5lRShy780r2vCI
-        I6aSTcE0W5xRW3m7gMfFW9uJkj6Sd+Q=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-530-yPfonb3mPUuvm8Zswtt61g-1; Wed, 30 Mar 2022 09:14:47 -0400
-X-MC-Unique: yPfonb3mPUuvm8Zswtt61g-1
-Received: by mail-wm1-f70.google.com with SMTP id c126-20020a1c3584000000b00380dee8a62cso7901321wma.8
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 06:14:46 -0700 (PDT)
+        Wed, 30 Mar 2022 09:18:02 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226F62FFF8;
+        Wed, 30 Mar 2022 06:16:16 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id bg10so41457684ejb.4;
+        Wed, 30 Mar 2022 06:16:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kIZngZOjWy/J3S+b4z6+BUn/eXOxV020jVmkrkFNZpQ=;
+        b=biH0nxISIqGQSS6v7IiQeP0zNDT0PEkBjLFaq1jmJRMkJP74TqKUjH2bP7aVt9KtQp
+         TWRHFlLQ4mYWPEgAbR1NxjkfM75bZdcQu2rANl3Uo6noaZggYAYLZk9nXfn4965pQynB
+         yooB4KgRMwDuXQPgsHGc2V49mFs4YafwhRqTzklEIj0mMBufGVxwLNzzVn9ba5f1qIJs
+         iNbMX+bmavYi2ijWIwfXVxONCIlUgyCh1MGo3zg3A/nu1cVlHdB34YY5tM95G1/uym+q
+         GgajeY3vUZ4rK263Jey0gj5Y6Iuq+lL5nNYHa03Ha+SR1tpxhGHob+DPqSw+g2NHMG+F
+         34BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:organization:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ldezc9GK3QLkJKuWMQhPgYUN/ziZJCuKDduMpDPTgac=;
-        b=i1Mcz2P6epGLzPwHNRil+J5ZkRMVvIY99cWIVABaHqKnFW7CZQfpny3X0w2q/hvj4C
-         tG1FrSW8SB8zWC0aaJY25LOmS8/k2vO3gojNljZC/mcVUo7awm+VzUctbhNWF3hD8605
-         m07KbxOOsbFbIXGU+yUMAOhtgnkUKgzIxxKuw3lqOc/7veBuhW7rib7QKQkXvQafnMIc
-         HC0w4BiI5OwKb9ZpXYPUYZGUNQPjk7kJurm9Qx01WOmrqzg3znwiOyuAuLJGr95pd1P1
-         HTvTV1BrcPb5gxaBA+AshZhEjJAttfaruJdxOeJCuQWVptKvWoo8yEAHBz6JwVTXL8Pr
-         RWDQ==
-X-Gm-Message-State: AOAM531cr9ulTCAc+QWX/TxiNjqiw7WycJmIIsUyI8ACvnHp6o7IkceM
-        n0Poj9XeoX1ANoFTB45Lg+FXEU48bZjqEWOQc6RlD8BWtxbKigYlRyoIzsuOcInQt0dYKa3arfx
-        p7MfoLqIdQ/pbRMD7awcL+65P
-X-Received: by 2002:adf:ec04:0:b0:205:8537:af5c with SMTP id x4-20020adfec04000000b002058537af5cmr35250511wrn.357.1648646085674;
-        Wed, 30 Mar 2022 06:14:45 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJycL6xQGmW2GqfiTku9O+trJ1+RLopcuDW1jwFCh03mQc+leccCBpVASZhSVjleB7q+OdHkgw==
-X-Received: by 2002:adf:ec04:0:b0:205:8537:af5c with SMTP id x4-20020adfec04000000b002058537af5cmr35250495wrn.357.1648646085406;
-        Wed, 30 Mar 2022 06:14:45 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:2200:178b:7244:2a1f:b5d8? (p200300cbc7052200178b72442a1fb5d8.dip0.t-ipconnect.de. [2003:cb:c705:2200:178b:7244:2a1f:b5d8])
-        by smtp.gmail.com with ESMTPSA id j17-20020a05600c1c1100b0038e389ab62esm1998504wms.9.2022.03.30.06.14.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 06:14:44 -0700 (PDT)
-Message-ID: <57639524-b930-c31b-196b-bafae8c4e374@redhat.com>
-Date:   Wed, 30 Mar 2022 15:14:44 +0200
+        bh=kIZngZOjWy/J3S+b4z6+BUn/eXOxV020jVmkrkFNZpQ=;
+        b=klM1ZNhv2JrXjsEA20rl7rlfp10A61v1Prg8cLYaxdNQ2vGnfvowD/YBO/lqlMXbV5
+         yj+jmRLoAy3JIKJAvQ2mmeCHbPK2xGURj5MYhDRj7iuRZdqql3/eZrLdovoPqvcSOoxs
+         f0msUmj0wv+KAM/d8L9pZ/ZEO6rmTpwEVWEXOl/WmX+rms2fEDmUTTRy6mpYHqPleDdl
+         il2CDFxyA0PS8B9Z0wgbnYrMfslm0dJHMvyMagd3cDUAYWpIVZllp3xdfLZB+DsAumKv
+         KeN0vz+BBRvIh1VBypKF6O8LdFZj/INiHayGSbXxaK/BY9buOLe9G8a+4fJUEDaWrnWK
+         KmIg==
+X-Gm-Message-State: AOAM530k0FRXC7oY8cL8IKmpnrfYnKQwDNlLROBipbigHNACekovgLu4
+        zNPQogpCS6awR6zo3ygQzmk=
+X-Google-Smtp-Source: ABdhPJxS9G9VHO3IThZxz4ao9YzTgP8Wz1c0iHE9nerrkjAwT9R8JXr1OX+n2TYNV647tHhxNfQ6vg==
+X-Received: by 2002:a17:906:a4b:b0:6d0:fbdd:7cb5 with SMTP id x11-20020a1709060a4b00b006d0fbdd7cb5mr40462121ejf.152.1648646174471;
+        Wed, 30 Mar 2022 06:16:14 -0700 (PDT)
+Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id ge13-20020a170907908d00b006e09a005d73sm6603476ejb.31.2022.03.30.06.16.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 06:16:14 -0700 (PDT)
+From:   Johan Jonker <jbx6244@gmail.com>
+To:     heiko@sntech.de, zhangqing@rock-chips.com
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/3] dt-bindings: clock: convert rockchip,rv1108-cru.txt to YAML
+Date:   Wed, 30 Mar 2022 15:16:06 +0200
+Message-Id: <20220330131608.30040-1-jbx6244@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 1/2] mm: fix contiguous memmap assumptions about split
- page
-Content-Language: en-US
-To:     Chen Wandun <chenwandun@huawei.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        willy@infradead.org
-References: <20220330102534.1053240-1-chenwandun@huawei.com>
- <20220330102534.1053240-2-chenwandun@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220330102534.1053240-2-chenwandun@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.03.22 12:25, Chen Wandun wrote:
-> It isn't true for only SPARSEMEM configs to assume that a compound page
-> has virtually contiguous page structs, so use nth_page to iterate each
-> page.
+Convert rockchip,rv1108-cru.txt to YAML.
 
-Is this actually a "fix" or rather a preparation for having very large
-compound pages (>= MAX_ORDER) that we'd be able to split?
+Changes against original bindings:
+  Add clocks and clock-names because the device has to have
+  at least one input clock.
 
-Naive me would think that we'd currently only have order < MAX_ORDER,
-and consequently would always fall into a single memory section where
-the memmap is contiguous.
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
+ .../bindings/clock/rockchip,rv1108-cru.txt    | 59 ---------------
+ .../bindings/clock/rockchip,rv1108-cru.yaml   | 75 +++++++++++++++++++
+ 2 files changed, 75 insertions(+), 59 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/rockchip,rv1108-cru.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rv1108-cru.yaml
 
-> 
-> Inspired by:
-> https://lore.kernel.org/linux-mm/20220204195852.1751729-8-willy@infradead.org/
-> 
-> Signed-off-by: Chen Wandun <chenwandun@huawei.com>
-> ---
->  mm/compaction.c  | 6 +++---
->  mm/huge_memory.c | 2 +-
->  mm/page_alloc.c  | 2 +-
->  3 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index c3e37aa9ff9e..ddff13b968a2 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -87,7 +87,7 @@ static unsigned long release_freepages(struct list_head *freelist)
->  static void split_map_pages(struct list_head *list)
->  {
->  	unsigned int i, order, nr_pages;
-> -	struct page *page, *next;
-> +	struct page *page, *next, *tmp;
->  	LIST_HEAD(tmp_list);
->  
->  	list_for_each_entry_safe(page, next, list, lru) {
-> @@ -101,8 +101,8 @@ static void split_map_pages(struct list_head *list)
->  			split_page(page, order);
->  
->  		for (i = 0; i < nr_pages; i++) {
-> -			list_add(&page->lru, &tmp_list);
-> -			page++;
-> +			tmp = nth_page(page, i);
-> +			list_add(&tmp->lru, &tmp_list);
->  		}
->  	}
->  
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index 2fe38212e07c..d77fc2ad581d 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -2297,7 +2297,7 @@ static void lru_add_page_tail(struct page *head, struct page *tail,
->  static void __split_huge_page_tail(struct page *head, int tail,
->  		struct lruvec *lruvec, struct list_head *list)
->  {
-> -	struct page *page_tail = head + tail;
-> +	struct page *page_tail = nth_page(head, tail);
->  
->  	VM_BUG_ON_PAGE(atomic_read(&page_tail->_mapcount) != -1, page_tail);
->  
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index f648decfe39d..855211dea13e 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -3513,7 +3513,7 @@ void split_page(struct page *page, unsigned int order)
->  	VM_BUG_ON_PAGE(!page_count(page), page);
->  
->  	for (i = 1; i < (1 << order); i++)
-> -		set_page_refcounted(page + i);
-> +		set_page_refcounted(nth_page(page, i));
->  	split_page_owner(page, 1 << order);
->  	split_page_memcg(page, 1 << order);
->  }
-
-
+diff --git a/Documentation/devicetree/bindings/clock/rockchip,rv1108-cru.txt b/Documentation/devicetree/bindings/clock/rockchip,rv1108-cru.txt
+deleted file mode 100644
+index 161326a4f..000000000
+--- a/Documentation/devicetree/bindings/clock/rockchip,rv1108-cru.txt
++++ /dev/null
+@@ -1,59 +0,0 @@
+-* Rockchip RV1108 Clock and Reset Unit
+-
+-The RV1108 clock controller generates and supplies clock to various
+-controllers within the SoC and also implements a reset controller for SoC
+-peripherals.
+-
+-Required Properties:
+-
+-- compatible: should be "rockchip,rv1108-cru"
+-- reg: physical base address of the controller and length of memory mapped
+-  region.
+-- #clock-cells: should be 1.
+-- #reset-cells: should be 1.
+-
+-Optional Properties:
+-
+-- rockchip,grf: phandle to the syscon managing the "general register files"
+-  If missing pll rates are not changeable, due to the missing pll lock status.
+-
+-Each clock is assigned an identifier and client nodes can use this identifier
+-to specify the clock which they consume. All available clocks are defined as
+-preprocessor macros in the dt-bindings/clock/rv1108-cru.h headers and can be
+-used in device tree sources. Similar macros exist for the reset sources in
+-these files.
+-
+-External clocks:
+-
+-There are several clocks that are generated outside the SoC. It is expected
+-that they are defined using standard clock bindings with following
+-clock-output-names:
+- - "xin24m" - crystal input - required,
+- - "ext_vip" - external VIP clock - optional
+- - "ext_i2s" - external I2S clock - optional
+- - "ext_gmac" - external GMAC clock - optional
+- - "hdmiphy" - external clock input derived from HDMI PHY - optional
+- - "usbphy" - external clock input derived from USB PHY - optional
+-
+-Example: Clock controller node:
+-
+-	cru: cru@20200000 {
+-		compatible = "rockchip,rv1108-cru";
+-		reg = <0x20200000 0x1000>;
+-		rockchip,grf = <&grf>;
+-
+-		#clock-cells = <1>;
+-		#reset-cells = <1>;
+-	};
+-
+-Example: UART controller node that consumes the clock generated by the clock
+-  controller:
+-
+-	uart0: serial@10230000 {
+-		compatible = "rockchip,rv1108-uart", "snps,dw-apb-uart";
+-		reg = <0x10230000 0x100>;
+-		interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
+-		reg-shift = <2>;
+-		reg-io-width = <4>;
+-		clocks = <&cru SCLK_UART0>;
+-	};
+diff --git a/Documentation/devicetree/bindings/clock/rockchip,rv1108-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rv1108-cru.yaml
+new file mode 100644
+index 000000000..20421c22f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/rockchip,rv1108-cru.yaml
+@@ -0,0 +1,75 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/rockchip,rv1108-cru.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip RV1108 Clock and Reset Unit (CRU)
++
++maintainers:
++  - Elaine Zhang <zhangqing@rock-chips.com>
++  - Heiko Stuebner <heiko@sntech.de>
++
++description: |
++  The RV1108 clock controller generates and supplies clocks to various
++  controllers within the SoC and also implements a reset controller for SoC
++  peripherals.
++  Each clock is assigned an identifier and client nodes can use this identifier
++  to specify the clock which they consume. All available clocks are defined as
++  preprocessor macros in the dt-bindings/clock/rv1108-cru.h headers and can be
++  used in device tree sources. Similar macros exist for the reset sources in
++  these files.
++  There are several clocks that are generated outside the SoC. It is expected
++  that they are defined using standard clock bindings with following
++  clock-output-names:
++    - "xin24m"   - crystal input                              - required
++    - "ext_vip"  - external VIP clock                         - optional
++    - "ext_i2s"  - external I2S clock                         - optional
++    - "ext_gmac" - external GMAC clock                        - optional
++    - "hdmiphy"  - external clock input derived from HDMI PHY - optional
++    - "usbphy"   - external clock input derived from USB PHY  - optional
++
++properties:
++  compatible:
++    enum:
++      - rockchip,rv1108-cru
++
++  reg:
++    maxItems: 1
++
++  "#clock-cells":
++    const: 1
++
++  "#reset-cells":
++    const: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    const: xin24m
++
++  rockchip,grf:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      Phandle to the syscon managing the "general register files" (GRF),
++      if missing pll rates are not changeable, due to the missing pll
++      lock status.
++
++required:
++  - compatible
++  - reg
++  - "#clock-cells"
++  - "#reset-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    cru: clock-controller@20200000 {
++      compatible = "rockchip,rv1108-cru";
++      reg = <0x20200000 0x1000>;
++      rockchip,grf = <&grf>;
++      #clock-cells = <1>;
++      #reset-cells = <1>;
++    };
 -- 
-Thanks,
-
-David / dhildenb
+2.20.1
 

@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77864EC7D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDEA4EC7D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 17:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348018AbiC3PJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 11:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
+        id S1348031AbiC3PJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 11:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347946AbiC3PIn (ORCPT
+        with ESMTP id S1343989AbiC3PIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 11:08:43 -0400
+        Wed, 30 Mar 2022 11:08:44 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46FA4A27CA
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 08:06:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD374A27E1
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 08:06:57 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE2F823A;
-        Wed, 30 Mar 2022 08:06:55 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 82FB31477;
+        Wed, 30 Mar 2022 08:06:57 -0700 (PDT)
 Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 97A083F73B;
-        Wed, 30 Mar 2022 08:06:54 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 357633F73B;
+        Wed, 30 Mar 2022 08:06:56 -0700 (PDT)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
         Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
         etienne.carriere@linaro.org, vincent.guittot@linaro.org,
         souvik.chakravarty@arm.com, cristian.marussi@arm.com
-Subject: [PATCH 17/22] firmware: arm_scmi: Use common iterators in Voltage protocol
-Date:   Wed, 30 Mar 2022 16:05:46 +0100
-Message-Id: <20220330150551.2573938-18-cristian.marussi@arm.com>
+Subject: [PATCH 18/22] firmware: arm_scmi: Use common iterators in Perf protocol
+Date:   Wed, 30 Mar 2022 16:05:47 +0100
+Message-Id: <20220330150551.2573938-19-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220330150551.2573938-1-cristian.marussi@arm.com>
 References: <20220330150551.2573938-1-cristian.marussi@arm.com>
@@ -44,209 +44,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make SCMI Voltage protocol use the common iterator protocol helpers.
+Make SCMI Perf protocol use the common iterator protocol helpers.
 
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
- drivers/firmware/arm_scmi/voltage.c | 161 ++++++++++++++++------------
- 1 file changed, 93 insertions(+), 68 deletions(-)
+ drivers/firmware/arm_scmi/perf.c | 117 ++++++++++++++++++-------------
+ 1 file changed, 69 insertions(+), 48 deletions(-)
 
-diff --git a/drivers/firmware/arm_scmi/voltage.c b/drivers/firmware/arm_scmi/voltage.c
-index 5d58ba724eeb..e1bdce573c4f 100644
---- a/drivers/firmware/arm_scmi/voltage.c
-+++ b/drivers/firmware/arm_scmi/voltage.c
-@@ -112,14 +112,100 @@ static int scmi_init_voltage_levels(struct device *dev,
- 	return 0;
+diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
+index 9e046fd121b9..e1aa0ed67971 100644
+--- a/drivers/firmware/arm_scmi/perf.c
++++ b/drivers/firmware/arm_scmi/perf.c
+@@ -272,66 +272,87 @@ static int opp_cmp_func(const void *opp1, const void *opp2)
+ 	return t1->perf - t2->perf;
  }
  
-+struct scmi_volt_ipriv {
-+	struct device *dev;
-+	struct scmi_voltage_info *v;
+-static int
+-scmi_perf_describe_levels_get(const struct scmi_protocol_handle *ph, u32 domain,
+-			      struct perf_dom_info *perf_dom)
++struct scmi_perf_ipriv {
++	u32 domain;
++	struct perf_dom_info *perf_dom;
 +};
 +
-+static void iter_volt_levels_prepare_message(void *message,
++static void iter_perf_levels_prepare_message(void *message,
 +					     unsigned int desc_index,
 +					     const void *priv)
-+{
-+	struct scmi_msg_cmd_describe_levels *msg = message;
-+	const struct scmi_volt_ipriv *p = priv;
-+
-+	msg->domain_id = cpu_to_le32(p->v->id);
+ {
+-	int ret, cnt;
+-	u32 tot_opp_cnt = 0;
+-	u16 num_returned, num_remaining;
+-	struct scmi_xfer *t;
+-	struct scmi_opp *opp;
+-	struct scmi_msg_perf_describe_levels *dom_info;
+-	struct scmi_msg_resp_perf_describe_levels *level_info;
++	struct scmi_msg_perf_describe_levels *msg = message;
++	const struct scmi_perf_ipriv *p = priv;
+ 
+-	ret = ph->xops->xfer_get_init(ph, PERF_DESCRIBE_LEVELS,
+-				      sizeof(*dom_info), 0, &t);
+-	if (ret)
+-		return ret;
++	msg->domain = cpu_to_le32(p->domain);
++	/* Set the number of OPPs to be skipped/already read */
 +	msg->level_index = cpu_to_le32(desc_index);
 +}
-+
-+static int iter_volt_levels_update_state(struct scmi_iterator_state *st,
+ 
+-	dom_info = t->tx.buf;
+-	level_info = t->rx.buf;
++static int iter_perf_levels_update_state(struct scmi_iterator_state *st,
 +					 const void *response, void *priv)
 +{
-+	int ret = 0;
-+	u32 flags;
-+	const struct scmi_msg_resp_describe_levels *r = response;
-+	struct scmi_volt_ipriv *p = priv;
-+
-+	flags = le32_to_cpu(r->flags);
-+	st->num_returned = NUM_RETURNED_LEVELS(flags);
-+	st->num_remaining = NUM_REMAINING_LEVELS(flags);
-+
-+	/* Allocate space for num_levels if not already done */
-+	if (!p->v->num_levels) {
-+		ret = scmi_init_voltage_levels(p->dev, p->v, st->num_returned,
-+					       st->num_remaining,
-+					      SUPPORTS_SEGMENTED_LEVELS(flags));
-+		if (!ret)
-+			st->max_resources = p->v->num_levels;
-+	}
-+
-+	return ret;
++	const struct scmi_msg_resp_perf_describe_levels *r = response;
+ 
+-	do {
+-		dom_info->domain = cpu_to_le32(domain);
+-		/* Set the number of OPPs to be skipped/already read */
+-		dom_info->level_index = cpu_to_le32(tot_opp_cnt);
++	st->num_returned = le16_to_cpu(r->num_returned);
++	st->num_remaining = le16_to_cpu(r->num_remaining);
+ 
+-		ret = ph->xops->do_xfer(ph, t);
+-		if (ret)
+-			break;
++	return 0;
 +}
-+
+ 
+-		num_returned = le16_to_cpu(level_info->num_returned);
+-		num_remaining = le16_to_cpu(level_info->num_remaining);
+-		if (tot_opp_cnt + num_returned > MAX_OPPS) {
+-			dev_err(ph->dev, "No. of OPPs exceeded MAX_OPPS");
+-			break;
+-		}
 +static int
-+iter_volt_levels_process_response(const struct scmi_protocol_handle *ph,
++iter_perf_levels_process_response(const struct scmi_protocol_handle *ph,
 +				  const void *response,
 +				  struct scmi_iterator_state *st, void *priv)
 +{
-+	s32 val;
-+	const struct scmi_msg_resp_describe_levels *r = response;
-+	struct scmi_volt_ipriv *p = priv;
-+
-+	val = (s32)le32_to_cpu(r->voltage[st->loop_idx]);
-+	p->v->levels_uv[st->desc_index + st->loop_idx] = val;
-+	if (val < 0)
-+		p->v->negative_volts_allowed = true;
-+
++	struct scmi_opp *opp;
++	const struct scmi_msg_resp_perf_describe_levels *r = response;
++	struct scmi_perf_ipriv *p = priv;
+ 
+-		opp = &perf_dom->opp[tot_opp_cnt];
+-		for (cnt = 0; cnt < num_returned; cnt++, opp++) {
+-			opp->perf = le32_to_cpu(level_info->opp[cnt].perf_val);
+-			opp->power = le32_to_cpu(level_info->opp[cnt].power);
+-			opp->trans_latency_us = le16_to_cpu
+-				(level_info->opp[cnt].transition_latency_us);
++	opp = &p->perf_dom->opp[st->desc_index + st->loop_idx];
++	opp->perf = le32_to_cpu(r->opp[st->loop_idx].perf_val);
++	opp->power = le32_to_cpu(r->opp[st->loop_idx].power);
++	opp->trans_latency_us =
++		le16_to_cpu(r->opp[st->loop_idx].transition_latency_us);
++	p->perf_dom->opp_count++;
+ 
+-			dev_dbg(ph->dev, "Level %d Power %d Latency %dus\n",
+-				opp->perf, opp->power, opp->trans_latency_us);
+-		}
++	dev_dbg(ph->dev, "Level %d Power %d Latency %dus\n",
++		opp->perf, opp->power, opp->trans_latency_us);
+ 
+-		tot_opp_cnt += num_returned;
 +	return 0;
 +}
-+
-+static int scmi_voltage_levels_get(const struct scmi_protocol_handle *ph,
-+				   struct scmi_voltage_info *v)
+ 
+-		ph->xops->reset_rx_to_maxsz(ph, t);
+-		/*
+-		 * check for both returned and remaining to avoid infinite
+-		 * loop due to buggy firmware
+-		 */
+-	} while (num_returned && num_remaining);
++static int
++scmi_perf_describe_levels_get(const struct scmi_protocol_handle *ph, u32 domain,
++			      struct perf_dom_info *perf_dom)
 +{
 +	int ret;
 +	void *iter;
-+	struct scmi_msg_cmd_describe_levels *msg;
++	struct scmi_msg_perf_describe_levels *msg;
 +	struct scmi_iterator_ops ops = {
-+		.prepare_message = iter_volt_levels_prepare_message,
-+		.update_state = iter_volt_levels_update_state,
-+		.process_response = iter_volt_levels_process_response,
++		.prepare_message = iter_perf_levels_prepare_message,
++		.update_state = iter_perf_levels_update_state,
++		.process_response = iter_perf_levels_process_response,
 +	};
-+	struct scmi_volt_ipriv vpriv = {
-+		.dev = ph->dev,
-+		.v = v,
++	struct scmi_perf_ipriv ppriv = {
++		.domain = domain,
++		.perf_dom = perf_dom,
 +	};
 +
-+	iter = ph->hops->iter_response_init(ph, &ops, v->num_levels,
-+					    VOLTAGE_DESCRIBE_LEVELS,
-+					    sizeof(*msg), &vpriv);
++	iter = ph->hops->iter_response_init(ph, &ops, MAX_OPPS,
++					    PERF_DESCRIBE_LEVELS,
++					    sizeof(*msg), &ppriv);
 +	if (IS_ERR(iter))
 +		return PTR_ERR(iter);
 +
 +	ret = ph->hops->iter_response_run(iter);
-+	if (ret) {
-+		v->num_levels = 0;
-+		devm_kfree(ph->dev, v->levels_uv);
-+	}
-+
-+	return ret;
-+}
-+
- static int scmi_voltage_descriptors_get(const struct scmi_protocol_handle *ph,
- 					struct voltage_info *vinfo)
- {
- 	int ret, dom;
--	struct scmi_xfer *td, *tl;
--	struct device *dev = ph->dev;
-+	struct scmi_xfer *td;
- 	struct scmi_msg_resp_domain_attributes *resp_dom;
--	struct scmi_msg_resp_describe_levels *resp_levels;
++	if (ret)
++		return ret;
  
- 	ret = ph->xops->xfer_get_init(ph, VOLTAGE_DOMAIN_ATTRIBUTES,
- 				      sizeof(__le32), sizeof(*resp_dom), &td);
-@@ -127,16 +213,7 @@ static int scmi_voltage_descriptors_get(const struct scmi_protocol_handle *ph,
- 		return ret;
- 	resp_dom = td->rx.buf;
+-	perf_dom->opp_count = tot_opp_cnt;
+-	ph->xops->xfer_put(ph, t);
++	if (perf_dom->opp_count)
++		sort(perf_dom->opp, perf_dom->opp_count,
++		     sizeof(struct scmi_opp), opp_cmp_func, NULL);
  
--	ret = ph->xops->xfer_get_init(ph, VOLTAGE_DESCRIBE_LEVELS,
--				      sizeof(__le64), 0, &tl);
--	if (ret)
--		goto outd;
--	resp_levels = tl->rx.buf;
--
- 	for (dom = 0; dom < vinfo->num_domains; dom++) {
--		u32 desc_index = 0;
--		u16 num_returned = 0, num_remaining = 0;
--		struct scmi_msg_cmd_describe_levels *cmd;
- 		struct scmi_voltage_info *v;
- 
- 		/* Retrieve domain attributes at first ... */
-@@ -161,66 +238,14 @@ static int scmi_voltage_descriptors_get(const struct scmi_protocol_handle *ph,
- 						    v->id, v->name,
- 						    SCMI_MAX_STR_SIZE);
- 
--		cmd = tl->tx.buf;
--		/* ...then retrieve domain levels descriptions */
--		do {
--			u32 flags;
--			int cnt;
--
--			cmd->domain_id = cpu_to_le32(v->id);
--			cmd->level_index = cpu_to_le32(desc_index);
--			ret = ph->xops->do_xfer(ph, tl);
--			if (ret)
--				break;
--
--			flags = le32_to_cpu(resp_levels->flags);
--			num_returned = NUM_RETURNED_LEVELS(flags);
--			num_remaining = NUM_REMAINING_LEVELS(flags);
--
--			/* Allocate space for num_levels if not already done */
--			if (!v->num_levels) {
--				ret = scmi_init_voltage_levels(dev, v,
--							       num_returned,
--							       num_remaining,
--					      SUPPORTS_SEGMENTED_LEVELS(flags));
--				if (ret)
--					break;
--			}
--
--			if (desc_index + num_returned > v->num_levels) {
--				dev_err(ph->dev,
--					"No. of voltage levels can't exceed %d\n",
--					v->num_levels);
--				ret = -EINVAL;
--				break;
--			}
--
--			for (cnt = 0; cnt < num_returned; cnt++) {
--				s32 val;
--
--				val =
--				    (s32)le32_to_cpu(resp_levels->voltage[cnt]);
--				v->levels_uv[desc_index + cnt] = val;
--				if (val < 0)
--					v->negative_volts_allowed = true;
--			}
--
--			desc_index += num_returned;
--
--			ph->xops->reset_rx_to_maxsz(ph, tl);
--			/* check both to avoid infinite loop due to buggy fw */
--		} while (num_returned && num_remaining);
--
--		if (ret) {
--			v->num_levels = 0;
--			devm_kfree(dev, v->levels_uv);
--		}
-+		ret = scmi_voltage_levels_get(ph, v);
-+		/* Skip invalid voltage descriptors */
-+		if (ret)
-+			continue;
- 
- 		ph->xops->reset_rx_to_maxsz(ph, td);
- 	}
- 
--	ph->xops->xfer_put(ph, tl);
--outd:
- 	ph->xops->xfer_put(ph, td);
- 
+-	sort(perf_dom->opp, tot_opp_cnt, sizeof(*opp), opp_cmp_func, NULL);
  	return ret;
+ }
+ 
 -- 
 2.32.0
 

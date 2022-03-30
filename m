@@ -2,126 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58FDA4EBE44
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DFA4EBE4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245116AbiC3KE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
+        id S245124AbiC3KGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238742AbiC3KE5 (ORCPT
+        with ESMTP id S235220AbiC3KGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:04:57 -0400
-Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67C1EBABA2;
-        Wed, 30 Mar 2022 03:03:09 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
-   d="scan'208";a="123090685"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 30 Mar 2022 18:03:08 +0800
-Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
-        by cn.fujitsu.com (Postfix) with ESMTP id 70C084D16FF2;
-        Wed, 30 Mar 2022 18:03:02 +0800 (CST)
-Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
- G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Wed, 30 Mar 2022 18:03:02 +0800
-Received: from [10.167.201.8] (10.167.201.8) by
- G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Wed, 30 Mar 2022 18:03:01 +0800
-Message-ID: <15a635d6-2069-2af5-15f8-1c0513487a2f@fujitsu.com>
-Date:   Wed, 30 Mar 2022 18:03:01 +0800
+        Wed, 30 Mar 2022 06:06:18 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5336C6EE7;
+        Wed, 30 Mar 2022 03:04:32 -0700 (PDT)
+X-UUID: 141e6664f8144520a58982e68a60501a-20220330
+X-UUID: 141e6664f8144520a58982e68a60501a-20220330
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <jason-jh.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1238358222; Wed, 30 Mar 2022 18:04:29 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 30 Mar 2022 18:04:27 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 30 Mar 2022 18:04:27 +0800
+Message-ID: <97bc1358813a2449d6e62653eb7af9906dfb190e.camel@mediatek.com>
+Subject: Re: [PATCH v16 4/8] soc: mediatek: add mtk-mmsys support for mt8195
+ vdosys0
+From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <hsinyi@chromium.org>, <fshao@chromium.org>,
+        <moudy.ho@mediatek.com>, <roy-cw.yeh@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>, <nancy.lin@mediatek.com>,
+        <singo.chang@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 30 Mar 2022 18:04:27 +0800
+In-Reply-To: <b9ed8c1511ea26c070dd3fb61f4370e5f858058c.camel@mediatek.com>
+References: <20220307032859.3275-1-jason-jh.lin@mediatek.com>
+         <20220307032859.3275-5-jason-jh.lin@mediatek.com>
+         <a068f2c9b2111f3a7a20da19073ef5fdb7f4a91f.camel@mediatek.com>
+         <b9ed8c1511ea26c070dd3fb61f4370e5f858058c.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v11 1/8] dax: Introduce holder for dax_device
-To:     Christoph Hellwig <hch@infradead.org>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>, david <david@fromorbit.com>,
-        Jane Chu <jane.chu@oracle.com>
-References: <20220227120747.711169-1-ruansy.fnst@fujitsu.com>
- <20220227120747.711169-2-ruansy.fnst@fujitsu.com>
- <CAPcyv4jAqV7dZdmGcKrG=f8sYmUXaL7YCQtME6GANywncwd+zg@mail.gmail.com>
- <4fd95f0b-106f-6933-7bc6-9f0890012b53@fujitsu.com>
- <YkPtptNljNcJc1g/@infradead.org>
-From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
-In-Reply-To: <YkPtptNljNcJc1g/@infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-yoursite-MailScanner-ID: 70C084D16FF2.A0C25
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi CK,
 
+Thanks for the review.
 
-在 2022/3/30 13:41, Christoph Hellwig 写道:
-> On Wed, Mar 16, 2022 at 09:46:07PM +0800, Shiyang Ruan wrote:
->>> Forgive me if this has been discussed before, but since dax_operations
->>> are in terms of pgoff and nr pages and memory_failure() is in terms of
->>> pfns what was the rationale for making the function signature byte
->>> based?
->>
->> Maybe I didn't describe it clearly...  The @offset and @len here are
->> byte-based.  And so is ->memory_failure().
+On Mon, 2022-03-28 at 13:39 +0800, CK Hu wrote:
+> Hi, Jason:
 > 
-> Yes, but is there a good reason for that when the rest of the DAX code
-> tends to work in page chunks?
+> On Mon, 2022-03-28 at 13:03 +0800, Jason-JH Lin wrote:
+> > Hi CK,
+> > 
+> > Thanks for the reviews.
+> > 
+> > On Mon, 2022-03-07 at 11:28 +0800, jason-jh.lin wrote:
+> > > Add mt8195 vdosys0 clock driver name and routing table to
+> > > the driver data of mtk-mmsys.
+> > > 
+> > > Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
+> > > Acked-by: AngeloGioacchino Del Regno <
+> > > angelogioacchino.delregno@collabora.com>
+> > > ---
+> > > Impelmentation patch of vdosys1 can be refered to [1]
+> > > 
+> > > [1] soc: mediatek: add mtk-mmsys support for mt8195 vdosys1
+> > > ---
+> > >  drivers/soc/mediatek/mt8195-mmsys.h    | 130
+> > > +++++++++++++++++++++++++
+> > >  drivers/soc/mediatek/mtk-mmsys.c       |  11 +++
+> > >  include/linux/soc/mediatek/mtk-mmsys.h |   9 ++
+> > >  3 files changed, 150 insertions(+)
+> > >  create mode 100644 drivers/soc/mediatek/mt8195-mmsys.h
+> > > 
+> > > diff --git a/drivers/soc/mediatek/mt8195-mmsys.h
+> > > b/drivers/soc/mediatek/mt8195-mmsys.h
+> > > new file mode 100644
+> > > index 000000000000..24a3afe23bc8
+> > > --- /dev/null
+> > > +++ b/drivers/soc/mediatek/mt8195-mmsys.h
+> > > @@ -0,0 +1,130 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > > +
+> > > +#ifndef __SOC_MEDIATEK_MT8195_MMSYS_H
+> > > +#define __SOC_MEDIATEK_MT8195_MMSYS_H
+> > > +
+> > > +#define MT8195_VDO0_OVL_MOUT_EN					
+> > > 0xf14
+> > > +#define MT8195_MOUT_DISP_OVL0_TO_DISP_RDMA0			
+> > > BIT(0)
+> > > +#define MT8195_MOUT_DISP_OVL0_TO_DISP_WDMA0			
+> > > BIT(1)
+> > >  
+> > > Useless, so remove.
+> > > 
+> > > +#define MT8195_MOUT_DISP_OVL0_TO_DISP_OVL1			
+> > > BIT(2)
+> > > Ditto.Useless, so remove.
+> > > Regards,
+> > > CK
+> > 
+> > Although these definitions are not used, they represent the
+> > functionality provided by this register.
+> > 
+> > I think we can show that we have these capabilities by defining
+> > them.
+> > 
+> > Can we keep these definitions?
+> 
+> It's better that we know how to use it. Even though the symbol name
+> show some information, but I would like to add it to
+> mmsys_mt8195_routing_table[].
+> 
+> Regards,
+> CK
+> 
 
-Because I am not sure if the offset between each layer is page aligned. 
-  For example, when pmem dirver handles ->memory_failure(), it should 
-subtract its ->data_offset when it calls dax_holder_notify_failure().
+OK, I think I just remove the useless define.
+Thanks.
 
-The implementation of ->memory_failure() by pmem driver:
-+static int pmem_pagemap_memory_failure(struct dev_pagemap *pgmap,
-+		phys_addr_t addr, u64 len, int mf_flags)
-+{
-+	struct pmem_device *pmem =
-+			container_of(pgmap, struct pmem_device, pgmap);
-+	u64 offset = addr - pmem->phys_addr - pmem->data_offset;
-+
-+	return dax_holder_notify_failure(pmem->dax_dev, offset, len, mf_flags);
-+}
-
-So, I choose u64 as the type of @len.  And for consistency, the @addr is 
-using byte-based type as well.
-
- > memory_failure()
- > |* fsdax case
- > |------------
- > |pgmap->ops->memory_failure()      => pmem_pgmap_memory_failure()
- > | dax_holder_notify_failure()      =>
-
-the offset from 'pmem driver' to 'dax holder'
-
- > |  dax_device->holder_ops->notify_failure() =>
- > |                                     - xfs_dax_notify_failure()
- > |  |* xfs_dax_notify_failure()
- > |  |--------------------------
- > |  |   xfs_rmap_query_range()
- > |  |    xfs_dax_failure_fn()
- > |  |    * corrupted on metadata
- > |  |       try to recover data, call xfs_force_shutdown()
- > |  |    * corrupted on file data
- > |  |       try to recover data, call mf_dax_kill_procs()
- > |* normal case
- > |-------------
- > |mf_generic_kill_procs()
-
-
---
-Thanks,
-Ruan.
-
+Regards,
+Jason-JH.Lin
+> > 
+> > Regards,
+> > Jason-JH.Lin
+> > 
+> > > +#define MT8195_MOUT_DISP_OVL1_TO_DISP_RDMA1			
+> > > BIT(4)
+> > > +#define MT8195_MOUT_DISP_OVL1_TO_DISP_WDMA1			
+> > > BIT(5)
+> > > +#define MT8195_MOUT_DISP_OVL1_TO_DISP_OVL0			
+> > > BIT(6)
+> > 
+> > 
+> > [snip]
+> > 
+> 
+> 
+-- 
+Jason-JH Lin <jason-jh.lin@mediatek.com>
 

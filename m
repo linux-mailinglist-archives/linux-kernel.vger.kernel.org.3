@@ -2,163 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAE94EB86C
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 04:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F00034EB86F
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 04:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242087AbiC3Cpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 22:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
+        id S242097AbiC3Cqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 22:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239261AbiC3Cpk (ORCPT
+        with ESMTP id S239261AbiC3Cqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 22:45:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22716522DC
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 19:43:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648608235;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a2xX/Hy07omIgAr+hrUkEQ1I86CwFNCof15lsG56O6s=;
-        b=a1vfNXEGmpsvjPKPmWrcWStQ+eWuv/cPXvHix5HvSD7aFUdiDq9hUan499/dzh3AC7w+3i
-        ceiosyEKwv0qMn+IecvnYFO0fYGO6Gyz3Yy75IjyI/C34eouWeXV4IzH4J6sqQw+ga82It
-        pH+J/XK3RW1if/9A9tWvCY2r4zSvquc=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-531-HNluVhG7Mt25dw5GWBcMCg-1; Tue, 29 Mar 2022 22:43:53 -0400
-X-MC-Unique: HNluVhG7Mt25dw5GWBcMCg-1
-Received: by mail-lf1-f70.google.com with SMTP id w13-20020ac25d4d000000b004488cf80eb1so5956743lfd.23
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 19:43:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a2xX/Hy07omIgAr+hrUkEQ1I86CwFNCof15lsG56O6s=;
-        b=D3+/qYoQk7UnvN0VQ2BXZw9vn5Y1mQTE977usI1zRiH7Elw1i30x1oHZMj6J3plUza
-         r25soqxHD7KRo4/zBKtgOxsLME/q3DEqen9s845Pix9FnKLWUydj+VhZ/N6+5X6Z96kW
-         KtXNfZ1k6cmRFzhqhkjjGRPxpA0j/88OkAiPExUKGwAwmXiBDaQEjsr9NiQ1Oz2Iej/Q
-         zLVogt97g3Iyi07vj2UXGSfli2ejnqmSkZHop9ENKXEaFkgZb693gSiVoJU0pApoIHSk
-         kh4CVCeo9M2Us66ZfsmgrDCDl/86O6rwNwaKrmVFYN7rNhijbW3MWE3DaQMniouqAK0n
-         vXXA==
-X-Gm-Message-State: AOAM5335Qis7WRP1bI1V0r077215s8Sr8WjQEIzCsAHEKpAyUDgmEs6d
-        5xLeyPNollHlJxVR4y566er7WumIntdS8NrDHN8bby4eA9pW8bFYkgyg22c1T/4x41wnWSZviyB
-        gncmEuFUZ5m9FIvTsiKfiVNE881wmXVnbKXnxzgBB
-X-Received: by 2002:a05:651c:90a:b0:249:5d82:fe9c with SMTP id e10-20020a05651c090a00b002495d82fe9cmr5111061ljq.300.1648608232020;
-        Tue, 29 Mar 2022 19:43:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxtjq6ZqsOr/okMJ8uC4fcXsHVSCCTYX6TFrpdrvMwrrKgYd6mwnApym+8qEZl8KaGKi0bV8pFJuBiTPe/kiDg=
-X-Received: by 2002:a05:651c:90a:b0:249:5d82:fe9c with SMTP id
- e10-20020a05651c090a00b002495d82fe9cmr5111051ljq.300.1648608231806; Tue, 29
- Mar 2022 19:43:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220323140727.3499235-1-keirf@google.com>
-In-Reply-To: <20220323140727.3499235-1-keirf@google.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 30 Mar 2022 10:43:40 +0800
-Message-ID: <CACGkMEuagKHAiXKNnB22wvcRL2=Qz9u9dKiaNnbMC91_=11J6w@mail.gmail.com>
-Subject: Re: [PATCH v3] virtio: pci: check bar values read from virtio config space
-To:     Keir Fraser <keirf@google.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>, kernel-team@android.com,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 29 Mar 2022 22:46:30 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFCB522DC;
+        Tue, 29 Mar 2022 19:44:45 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0AB755C00E9;
+        Tue, 29 Mar 2022 22:44:45 -0400 (EDT)
+Received: from imap49 ([10.202.2.99])
+  by compute5.internal (MEProxy); Tue, 29 Mar 2022 22:44:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=pWGqz/nqqothglGzobmCKu7DG/1JSXSUyXe/q5
+        An9Zg=; b=QDpbEUH9w2Ecd0+KdNb9tLPfzPhaYPagfT4adhaVXXddbzLg79KxN7
+        GUa2fqs+x7His5EBPNdafnOj72BsMwx/DmxUveTtWnf7KwgVLULXu33TTgX7fKtO
+        BANpVt91XwpV4u+N5wRDzctEKp+TdI0GYVhPUoU3jrBArwYu9ZJMMsplG7xEDsAA
+        4InE2O0ulPiU1N39HhCelO2l9Oe1eDV1ZBnNXdqfAV7nipi166meViUAPORD1uw7
+        wRQ6SpurVUU2sUjtAxU9OeeZiQbVogCE/n9TfjM4lHmL1FJXQ73VMeZiZwZFkpNH
+        JtGTdPK2JgDcDH3GoYB+P2SnFO9snLRg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=pWGqz/nqqothglGzo
+        bmCKu7DG/1JSXSUyXe/q5An9Zg=; b=jW//zp40NLZ3YKumvewgmK+Vj7WIeziA7
+        sAyoGV78rGq46afqbqBeB6Xv+EtD/FAYWFWT/H+HlBNfNimq9eUGZ0TWOwPLAMsX
+        nu/yTpU7L0qZYWcpqHsMAIpz8d26uO4HMb1Kt4gBzbqI1VBsRUI3i5L3cNAr7BmU
+        w0BL/tY541uVGR2xwM9DwnGCtgxK8ZxJ4YOKZHT2cnP5LX71i6VXcy64S2Zn6NsO
+        uDezzzgcUsspl7xE+oEb7H4vOmaKED+e5Ry0zjmF3XooimU+9mCWih61M+aZSe31
+        c4k5Xwkt6qnulTKD+QoDvydEWi41pzfZPqEEL7h63JojCjo7vDH1Q==
+X-ME-Sender: <xms:HMRDYhzh0T1XezhrvifAHHQfwzdFYDhbBMKJI4WfOmpVCdeEoPFb7w>
+    <xme:HMRDYhQdYvhinWi7fGKXhohm43yBesFTCjzBefB_S-AFIvwsx4DMpm_kPSFN7XZ3z
+    uDpCqa2VpOgJIlKaw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeiuddgiedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
+    rhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecuggftrf
+    grthhtvghrnhephefhfeekgfekudevheffheeihedujeefjeevjeefudfgfeeutdeuvdeh
+    hfevueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghnughrvgifsegrjhdrihgurdgruh
+X-ME-Proxy: <xmx:HMRDYrWxtgV-KcAQ8jnfMzUeVuhbjp7xH1-qtw8YBiJkXQhfPxSHag>
+    <xmx:HMRDYji0MaBmJToABMobp0w4ra_jbrBMqEPtH7QonZM7IoH65Qni8g>
+    <xmx:HMRDYjDQ98zUNkD_m-VF7CpB0qjZ2sfNBpi_72XrSH7w790m4AFiwg>
+    <xmx:HcRDYvtSfNYU-QqciXVTT8xfpuicNJ2cHHrYDo8MiwpQmMzKzyR8zg>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 32214F6043F; Tue, 29 Mar 2022 22:44:44 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4911-g925b585eab-fm-20220323.003-g925b585e
+Mime-Version: 1.0
+Message-Id: <489d851e-be29-44a3-bf56-78be33d585f2@www.fastmail.com>
+In-Reply-To: <20220329161949.19762-1-potin.lai@quantatw.com>
+References: <20220329161949.19762-1-potin.lai@quantatw.com>
+Date:   Wed, 30 Mar 2022 13:14:22 +1030
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Potin Lai" <potin.lai@quantatw.com>,
+        "Andrew Lunn" <andrew@lunn.ch>,
+        "Heiner Kallweit" <hkallweit1@gmail.com>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "David Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>, "Joel Stanley" <joel@jms.id.au>
+Cc:     "Patrick Williams" <patrick@stwcx.xyz>,
+        netdev <netdev@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] net: mdio: aspeed: Add Clause 45 support
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 10:07 PM Keir Fraser <keirf@google.com> wrote:
->
-> virtio pci config structures may in future have non-standard bar
-> values in the bar field. We should anticipate this by skipping any
-> structures containing such a reserved value.
->
-> The bar value should never change: check for harmful modified values
-> we re-read it from the config space in vp_modern_map_capability().
->
-> Also clean up an existing check to consistently use PCI_STD_NUM_BARS.
->
-> Signed-off-by: Keir Fraser <keirf@google.com>
 
-Acked-by: Jason Wang <jasowang@redhat.com>
 
+On Wed, 30 Mar 2022, at 02:49, Potin Lai wrote:
+> Add Clause 45 support for Aspeed mdio driver.
+>
+> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
 > ---
->  drivers/virtio/virtio_pci_modern.c     | 12 +++++++++---
->  drivers/virtio/virtio_pci_modern_dev.c |  9 ++++++++-
->  2 files changed, 17 insertions(+), 4 deletions(-)
+>  drivers/net/mdio/mdio-aspeed.c | 122 ++++++++++++++++++++++++---------
+>  1 file changed, 88 insertions(+), 34 deletions(-)
 >
-> diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
-> index 5455bc041fb6..6adfcd0297a7 100644
-> --- a/drivers/virtio/virtio_pci_modern.c
-> +++ b/drivers/virtio/virtio_pci_modern.c
-> @@ -293,7 +293,7 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
->
->         for (pos = pci_find_capability(dev, PCI_CAP_ID_VNDR); pos > 0;
->              pos = pci_find_next_capability(dev, pos, PCI_CAP_ID_VNDR)) {
-> -               u8 type, cap_len, id;
-> +               u8 type, cap_len, id, res_bar;
->                 u32 tmp32;
->                 u64 res_offset, res_length;
->
-> @@ -315,9 +315,14 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
->                 if (id != required_id)
->                         continue;
->
-> -               /* Type, and ID match, looks good */
->                 pci_read_config_byte(dev, pos + offsetof(struct virtio_pci_cap,
-> -                                                        bar), bar);
-> +                                                        bar), &res_bar);
-> +               if (res_bar >= PCI_STD_NUM_BARS)
-> +                       continue;
-> +
-> +               /* Type and ID match, and the BAR value isn't reserved.
-> +                * Looks good.
-> +                */
->
->                 /* Read the lower 32bit of length and offset */
->                 pci_read_config_dword(dev, pos + offsetof(struct virtio_pci_cap,
-> @@ -337,6 +342,7 @@ static int virtio_pci_find_shm_cap(struct pci_dev *dev, u8 required_id,
->                                                      length_hi), &tmp32);
->                 res_length |= ((u64)tmp32) << 32;
->
-> +               *bar = res_bar;
->                 *offset = res_offset;
->                 *len = res_length;
->
-> diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
-> index e8b3ff2b9fbc..591738ad3d56 100644
-> --- a/drivers/virtio/virtio_pci_modern_dev.c
-> +++ b/drivers/virtio/virtio_pci_modern_dev.c
-> @@ -35,6 +35,13 @@ vp_modern_map_capability(struct virtio_pci_modern_device *mdev, int off,
->         pci_read_config_dword(dev, off + offsetof(struct virtio_pci_cap, length),
->                               &length);
->
-> +       /* Check if the BAR may have changed since we requested the region. */
-> +       if (bar >= PCI_STD_NUM_BARS || !(mdev->modern_bars & (1 << bar))) {
-> +               dev_err(&dev->dev,
-> +                       "virtio_pci: bar unexpectedly changed to %u\n", bar);
-> +               return NULL;
-> +       }
-> +
->         if (length <= start) {
->                 dev_err(&dev->dev,
->                         "virtio_pci: bad capability len %u (>%u expected)\n",
-> @@ -120,7 +127,7 @@ static inline int virtio_pci_find_capability(struct pci_dev *dev, u8 cfg_type,
->                                      &bar);
->
->                 /* Ignore structures with reserved BAR values */
-> -               if (bar > 0x5)
-> +               if (bar >= PCI_STD_NUM_BARS)
->                         continue;
->
->                 if (type == cfg_type) {
-> --
-> 2.35.1.894.gb6a874cedc-goog
->
+> diff --git a/drivers/net/mdio/mdio-aspeed.c b/drivers/net/mdio/mdio-aspeed.c
+> index e2273588c75b..aa2b678b2381 100644
+> --- a/drivers/net/mdio/mdio-aspeed.c
+> +++ b/drivers/net/mdio/mdio-aspeed.c
+> @@ -21,6 +21,10 @@
+>  #define   ASPEED_MDIO_CTRL_OP		GENMASK(27, 26)
+>  #define     MDIO_C22_OP_WRITE		0b01
+>  #define     MDIO_C22_OP_READ		0b10
+> +#define     MDIO_C45_OP_ADDR		0b00
+> +#define     MDIO_C45_OP_WRITE		0b01
+> +#define     MDIO_C45_OP_PREAD		0b10
+> +#define     MDIO_C45_OP_READ		0b11
+>  #define   ASPEED_MDIO_CTRL_PHYAD	GENMASK(25, 21)
+>  #define   ASPEED_MDIO_CTRL_REGAD	GENMASK(20, 16)
+>  #define   ASPEED_MDIO_CTRL_MIIWDATA	GENMASK(15, 0)
+> @@ -39,34 +43,35 @@ struct aspeed_mdio {
+>  	void __iomem *base;
+>  };
+> 
+> -static int aspeed_mdio_read(struct mii_bus *bus, int addr, int regnum)
+> +static int aspeed_mdio_ctrl_reg(struct mii_bus *bus, u8 st, u8 op, u8 phyad,
 
+It's a bit of a nit-pick, but this function name talks about something
+it impacts rather than something it does. What do you think of
+`aspeed_mdio_op()`?
+
+Less of a nitpick, this patch does three things:
+
+1. Distills the aspeed_mdio_ctrl_reg() function from from the
+   aspeed_mdio_{read,write}() functions
+
+2. Introduces the additional function indirection for C22 vs C45 reads
+
+3. Adds the C45 support.
+
+I think it'd be easier to review if it was broken into three separate
+patches along the lines of the above. I'm finding the hunks hard to
+concentrate on as they are.
+
+Andrew

@@ -2,152 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD444EC93B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DFA4EC953
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 18:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348619AbiC3QG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 12:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
+        id S1348641AbiC3QKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 12:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348621AbiC3QGW (ORCPT
+        with ESMTP id S230350AbiC3QKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 12:06:22 -0400
-Received: from bagheera.iewc.co.za (bagheera.iewc.co.za [IPv6:2c0f:f720:0:3:be30:5bff:feec:6f99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C7023D77F;
-        Wed, 30 Mar 2022 09:04:33 -0700 (PDT)
-Received: from [165.16.203.119] (helo=tauri.local.uls.co.za)
-        by bagheera.iewc.co.za with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <jaco@uls.co.za>)
-        id 1nZaYE-0007la-NE; Wed, 30 Mar 2022 17:48:02 +0200
-Received: from [192.168.42.207]
-        by tauri.local.uls.co.za with esmtp (Exim 4.94.2)
-        (envelope-from <jaco@uls.co.za>)
-        id 1nZZoV-00018E-Pe; Wed, 30 Mar 2022 17:00:47 +0200
-Message-ID: <e0bc0c7f-5e47-ddb7-8e24-ad5fb750e876@uls.co.za>
-Date:   Wed, 30 Mar 2022 17:00:47 +0200
+        Wed, 30 Mar 2022 12:10:30 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577DA5FD0;
+        Wed, 30 Mar 2022 09:08:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=AyXvDz2JAQhJmdGyyqbNeaM5gQrzmKCSgCcImXgLu2g=;
+        b=Wk9BDT3XmGse2M76tPAWn/OTsT37I6coFW7g+iwCg0KaVZTGF/mDAI98HC9yK0itB2wsm161s0qSK
+         Ra6Rc7RZRPQPGjwgoBxRcQ38+Lz7Cizb918JzjtQUUtEySIeNZYhpo+Y5my4IDQtfdCiJQaoynE4CA
+         ubIvSIYIMBE1Jh5pfmcOWGnppHNTNXIK8Q/DbduIgXa42BOV4pwiK4VbufjAhSkEBsqkM/iWvcXQC+
+         87mhCI7ngCtWGy4zaZbmSOvYY4vSkNR9wkQgkqCGfd/dgfyg7YJ3FU7awXFQJyp2hYlU/PkNbAGHDz
+         dPChk5WUFRvHjv9ihhiEB1pqe5QVZAA==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.2.1410, Stamp: 3], Multi: [Enabled, t: (0.000009,0.020732)], BW: [Enabled, t: (0.000022,0.000002)], RTDA: [Enabled, t: (0.070240), Hit: No, Details: v2.31.0; Id: 15.52k0vh.1fvdpbdsn.1598; mclb], total: 0(700)
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from x260 ([85.143.252.66])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Wed, 30 Mar 2022 19:08:12 +0300
+Date:   Wed, 30 Mar 2022 18:48:31 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Conor.Dooley@microchip.com
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, robh+dt@kernel.org, system@metrotek.ru,
+        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, Cyril.Jean@microchip.com
+Subject: Re: [PATCH v8 1/2] fpga: microchip-spi: add Microchip MPF FPGA
+ manager
+Message-ID: <20220330154831.kqqm7cymxa3reffk@x260>
+References: <20220322191552.13156-1-i.bornyakov@metrotek.ru>
+ <20220322191552.13156-2-i.bornyakov@metrotek.ru>
+ <7fcde9aa-c086-33e1-1619-04663bfeff85@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: linux 5.17.1 disregarding ACK values resulting in stalled TCP
- connections
-Content-Language: en-GB
-To:     Neal Cardwell <ncardwell@google.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Yuchung Cheng <ycheng@google.com>
-References: <E1nZMdl-0006nG-0J@plastiekpoot>
- <CADVnQyn=A9EuTwxe-Bd9qgD24PLQ02YQy0_b7YWZj4_rqhWRVA@mail.gmail.com>
- <eaf54cab-f852-1499-95e2-958af8be7085@uls.co.za>
- <CANn89iKHbmVYoBdo2pCQWTzB4eFBjqAMdFbqL5EKSFqgg3uAJQ@mail.gmail.com>
- <10c1e561-8f01-784f-c4f4-a7c551de0644@uls.co.za>
- <CADVnQynf8f7SUtZ8iQi-fACYLpAyLqDKQVYKN-mkEgVtFUTVXQ@mail.gmail.com>
-From:   Jaco Kroon <jaco@uls.co.za>
-Organization: Ultimate Linux Solutions (Pty) Ltd
-In-Reply-To: <CADVnQynf8f7SUtZ8iQi-fACYLpAyLqDKQVYKN-mkEgVtFUTVXQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7fcde9aa-c086-33e1-1619-04663bfeff85@microchip.com>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi, Conor!
 
-On 2022/03/30 15:56, Neal Cardwell wrote:
-> On Wed, Mar 30, 2022 at 2:22 AM Jaco Kroon <jaco@uls.co.za> wrote:
->> Hi Eric,
->>
->> On 2022/03/30 05:48, Eric Dumazet wrote:
->>> On Tue, Mar 29, 2022 at 7:58 PM Jaco Kroon <jaco@uls.co.za> wrote:
->>>
->>> I do not think this commit is related to the issue you have.
->>>
->>> I guess you could try a revert ?
->>>
->>> Then, if you think old linux versions were ok, start a bisection ?
->> That'll be interesting, will see if I can reproduce on a non-production
->> host.
->>> Thank you.
->>>
->>> (I do not see why a successful TFO would lead to a freeze after ~70 KB
->>> of data has been sent)
->> I do actually agree with this in that it makes no sense, but disabling
->> TFO definitely resolved the issue for us.
->>
->> Kind Regards,
->> Jaco
-> Thanks for the pcap trace! That's a pretty strange trace. I agree with
-> Eric's theory that this looks like one or more bugs in a firewall,
-> middlebox, or netfilter rule. From the trace it looks like the buggy
-> component is sometimes dropping packets and sometimes corrupting them
-> so that the client's TCP stack ignores them.
-The capture was taken on the client.  So the only firewall there is
-iptables, and I redirected all -j DROP statements to a L_DROP chain
-which did a -j LOG prior to -j DROP - didn't pick up any drops here.
->
-> Interestingly, in that trace the client SYN has a TFO option and
-> cookie, but no data in the SYN.
+On Wed, Mar 30, 2022 at 02:37:05PM +0000, Conor.Dooley@microchip.com wrote:
+> Hey Ivan,
+> Been testing this and generated a couple questions.
+> I've put them inline where they were relevant.
+> Thanks,
+> Conor.
+> 
+> On 22/03/2022 19:15, Ivan Bornyakov wrote:
+> > 
+> > ... snip ...
+> > 
+> > +static int mpf_ops_write_init(struct fpga_manager *mgr,
+> > +                             struct fpga_image_info *info, const char *buf,
+> > +                             size_t count)
+> > +{
+> > +       const u8 program_mode[] = { MPF_SPI_FRAME_INIT, MPF_SPI_PRG_MODE };
+> > +       const u8 isc_en_command[] = { MPF_SPI_ISC_ENABLE };
+> > +       struct mpf_priv *priv = mgr->priv;
+> > +       struct device *dev = &mgr->dev;
+> > +       struct spi_device *spi;
+> > +       u32 isc_ret;
+> > +       int ret;
+> > +
+> > +       if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
+> > +               dev_err(dev, "Partial reconfiguration is not supported\n");
+> > +               return -EOPNOTSUPP;
+> > +       }
+> > +
+> > +       spi = priv->spi;
+> > +
+> > +       ret = mpf_spi_write_then_read(spi, isc_en_command, sizeof(isc_en_command),
+> > +                                     &isc_ret, sizeof(isc_ret));
+> > +       if (ret || isc_ret) {
+> > +               dev_err(dev, "Failed to enable ISC: %d\n", ret ? : isc_ret);
+> > +               return -EFAULT;
+> > +       }
+> 
+> So, my test board for this has had a PolarFire SoC, not a standard
+> PolarFire. I ran into some problems with the ISC enable code, due to
+> a sequence error. After sending the SPI_ISC_ENABLE, you then do a
+> poll_status_not_busy to hold until you see a STATUS_READY.
+> poll_status_not_busy does a w8r8 to request and then read the status,
+> and you expect a sequence as below:
+> 
+> op:     w       w   r   w   r
+> M:	0xB	0x0	0x0
+> S:   		    0x1	    0x2
+> 
+> I could not get past this check & it would just poll until the
+> timeout. What I saw on a protocol analyser was more like so:
+> 
+> op:     w       w   r    w   r
+> M:	0xB	0x0      0x0
+> S:   		0x1 0x0  0x2 0x0
+> 
+> So the read in that w8r8 would always get a zero back and then time out.
+> Changing the poll function (just for isc) to only read gave:
+> 
+> op:     w       r       r
+> M:	0xB	0x0	0x0
+> S:   		0x1	0x2
+> 
+> For the code after the ISC enable, I reverted to your implementation
+> of the poll function & the rest of the programming sequence ran.
+> 
+> I spoke to the guys that wrote the HW about this, and they said that
+> reading the status back *as* the 0x0 the poll command is clocked in is
+> the expected behaviour.
+> They also said that MPF should work identically to an MPFS and I was unable
+> to find a documented difference between MPF and MPFS other than the envm,
+> which is an optional component anyway.
+> 
+> But I can only assume that what you were doing worked for you, so if
+> you could possibly share some waveforms of the write_init sequence
+> that'd be great. Or if there is something that you think I am
+> overlooking, please let me know.
+> 
 
-So this allows the SMTP server which in the conversation speaks first to
-identify itself to respond with data in the SYN (not sure that was
-actually happening but if I recall I did see it send data prior to
-receiving the final ACK on the handshake.
+If you replace poll_status_not_busy() function with this code:
 
->
-> The last packet that looks sane/normal is the ACK from the SMTP server
-> that looks like:
->
-> 00:00:00.000010 IP6 2a00:1450:4013:c16::1a.25 >
-> 2c0f:f720:0:3:d6ae:52ff:feb8:f27b.48590: . 6260:6260(0) ack 66263 win
-> 774 <nop,nop,TS val 1206544341 ecr 331189186>
->
-> That's the first ACK that crosses past 2^16. Maybe that is a
-> coincidence, or maybe not. Perhaps the buggy firewall/middlebox/etc is
+static int poll_status_not_busy(struct spi_device *spi, u8 mask)
+{
+	u8 status, status_command = MPF_SPI_READ_STATUS;
+	int ret, timeout = MPF_STATUS_POLL_TIMEOUT;
+	struct spi_transfer xfer = {
+		.tx_buf = &status_command,
+		.rx_buf = &status,
+		.len = 1,
+	};
 
-I believe it should be because we literally had this on every single
-connection going out to Google's SMTP ... probably 1/100 connections
-managed to deliver an email over the connection.  Then again ... 64KB
-isn't that much ...
+	while (timeout--) {
+		ret = spi_sync_transfer(spi, &xfer, 1);
+		if (ret < 0)
+			return ret;
 
-When you state sane/normal, do you mean there is fault with the other
-frames that could not be explained by packet loss in one or both of the
-directions?
+		if (!(status & MPF_STATUS_BUSY) && (!mask || (status & mask)))
+			return status;
 
-> confused by the TFO option, corrupts its state, and thereafter behaves
-> incorrectly past the first 64 KBytes of data from the client.
+		usleep_range(1000, 2000);
+	}
 
-Only firewalls we've got are netfilter based, and these packets all
-passed through the dedicated firewalls at least by the time they reach
-here.  No middleboxes on our end, and if this was Google's side there
-would be crazy noise be heard, not just me.  I think the trigger is
-packet loss between us (as indicated we know they have link congestion
-issues in JHB area, it took us the better part of two weeks to get the
-first line tech on their side to just query the internal teams and
-probably another week to get the response acknowledging this -
-mybroadband.co.za has an article about other local ISPs also complaining).
+	return -EBUSY;
+}
 
->
-> In addition to checking for checksum failures, mentioned by Eric, you
-> could look for PAWS failures, something like:
->
->   nstat -az | egrep  -i 'TcpInCsumError|PAWS'
+Will it work for you? It is still works in my case.
 
-TcpInCsumErrors                 0                  0.0
-TcpExtPAWSActive                0                  0.0
-TcpExtPAWSEstab                 90092              0.0
-TcpExtTCPACKSkippedPAWS         81317              0.0
+> > 
+> > ... snip ...
+> > 
+> > +static ssize_t parse_bitstream_size(struct sg_table *sgt)
+> > +{
+> > +       size_t component_size_byte_num, component_size_byte_off,
+> > +              i, bitstream_size = 0;
+> > +       ssize_t components_size_start;
+> > +       u16 components_num;
+> > +       u32 component_size;
+> > +       int ret;
+> > +
+> > +       ret = get_sgt_data(sgt, MPF_DATA_SIZE_OFFSET, &components_num,
+> > +                          sizeof(components_num));
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       components_num = le16_to_cpu(components_num);
+> 
+> Not expecting you to do this at all since you don't have one, but this
+> will need to be extended for polarfire soc since components_* doesn't
+> include the envm which has its own parameter.
+> 
+> > +
+> > +       components_size_start = lookup_block_start(sgt, MPF_COMPONENTS_SIZE_ID);
+> > +       if (components_size_start < 0)
+> > +               return components_size_start;
+> > +
+> > +       for (i = 0; i < components_num; i++) {
+> > +               component_size_byte_num =
+> > +                       (i * MPF_BITS_PER_COMPONENT_SIZE) / BITS_PER_BYTE;
+> > +               component_size_byte_off =
+> > +                       (i * MPF_BITS_PER_COMPONENT_SIZE) % BITS_PER_BYTE;
+> > +
+> > +               ret = get_sgt_data(sgt, components_size_start +
+> > +                                  component_size_byte_num,
+> > +                                  &component_size, sizeof(component_size));
+> > +               if (ret)
+> > +                       return ret;
+> > +
+> > +               component_size = le32_to_cpu(component_size);
+> > +               component_size >>= component_size_byte_off;
+> > +               component_size &= GENMASK(MPF_BITS_PER_COMPONENT_SIZE - 1, 0);
+> > +
+> > +               bitstream_size += component_size;
+> > +       }
+> > +
+> > +       return bitstream_size;
+> > +}
+> > 
+> > ... snip ...
+> > 
+> > +static int mpf_ops_write_complete(struct fpga_manager *mgr,
+> > +                                 struct fpga_image_info *info)
+> > +{
+> > +       const u8 isc_dis_command[] = { MPF_SPI_ISC_DISABLE };
+> > +       const u8 release_command[] = { MPF_SPI_RELEASE };
+> > +       struct mpf_priv *priv = mgr->priv;
+> > +       struct device *dev = &mgr->dev;
+> > +       struct spi_device *spi;
+> > +       int ret;
+> > +
+> > +       spi = priv->spi;
+> > +
+> > +       ret = mpf_spi_write(spi, isc_dis_command, sizeof(isc_dis_command));
+> > +       if (ret) {
+> > +               dev_err(dev, "Failed to disable ISC: %d\n", ret);
+> > +               return ret;
+> > +       }
+> > +
+> > +       usleep_range(1000, 2000);
+> > +
+> > +       ret = mpf_spi_write(spi, release_command, sizeof(release_command));
+> > +       if (ret) {
+> > +               dev_err(dev, "Failed to exit program mode: %d\n", ret);
+> > +               return ret;
+> > +       }
+> 
+> While I was debugging the sequence issue, it got to this stage of the
+> transfer several times, but hadn't actually programmed the device.
+> It seems that poll_status_not_busy covers checking ERR/VIOLATION from
+> polling the status, but again that check is avoided due to the
+> sequence issues I mentioned above.
+> 
+> It might be nice to check the device certificate, but I am not sure
+> if that fits the flow for fpga managers.
+> 
 
-Not sure what these mean, but i should probably investigate, the latter
-two are definitely incrementing.
+Noted.
 
-Appreciate the feedback and for looking at the traces.
-
-Kind Regards,
-Jaco
 

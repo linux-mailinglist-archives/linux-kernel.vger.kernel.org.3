@@ -2,45 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8CC4EBCC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37AAA4EBCFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 10:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244378AbiC3Ie6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 04:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39996 "EHLO
+        id S244478AbiC3Izq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 04:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242851AbiC3Ie4 (ORCPT
+        with ESMTP id S241961AbiC3Izo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 04:34:56 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3BC7672;
-        Wed, 30 Mar 2022 01:33:10 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KT0773HJkz1GDBr;
-        Wed, 30 Mar 2022 16:32:51 +0800 (CST)
-Received: from localhost.localdomain (10.175.104.82) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 30 Mar 2022 16:33:08 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <borisp@nvidia.com>, <john.fastabend@gmail.com>,
-        <daniel@iogearbox.net>, <kuba@kernel.org>, <davem@davemloft.net>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>
-CC:     <vakul.garg@nxp.com>, <davejwatson@fb.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net] net/tls: fix slab-out-of-bounds bug in decrypt_internal
-Date:   Wed, 30 Mar 2022 16:50:09 +0800
-Message-ID: <20220330085009.1011614-1-william.xuanziyang@huawei.com>
+        Wed, 30 Mar 2022 04:55:44 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45483C625F;
+        Wed, 30 Mar 2022 01:54:00 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id mp11-20020a17090b190b00b001c79aa8fac4so930658pjb.0;
+        Wed, 30 Mar 2022 01:54:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LxPG2mpbpgdg5W4Fei+LZxCM5WvyBZ/Qj+QMe9CK3jY=;
+        b=fb9L9eiz8qiv7DPCbCwNZpgBKumJDRNq5mAnoM7B+Q55TYiAmg9/14WbKKhOclNjDh
+         xivJd7PE/9U2zznTUtUX8hT0wq9av9saSlg8fWgFhE8WEF4cwPKrDYyQWP/DuE5b9NHP
+         l/HLBNf73anYJlBXXmpvgMPAs+RJTRDnCpo2MBFoFyYomBhZgljwD8s6QBK8VZxV2vUK
+         C8UPMRhJlJFozi1vMmjhtq07SD9pg+Nq8OZKckgoEE9qDnWQ2BPxRAzyRBxsN5MlAGdM
+         e/i4eZUb3/VebNYF/AkAt6lnLgol7sm2KT81hBQIXzvQwTpIb2zArqkRdKnnqAP8ykIA
+         SCfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LxPG2mpbpgdg5W4Fei+LZxCM5WvyBZ/Qj+QMe9CK3jY=;
+        b=CROiM9QvzXNU9Q2TKBmluY5dTCruz72c/5S32e9qm6G9qInq2l0lV5Lfvas+H9LNFN
+         m54K9MbEJ4AbCzwb1LlBNIDharYfaUO7FXtb0Z24sxyGnb+Lx+myaB4hEsAGQ9VagKUb
+         LOiHaoqK8+pOvJkY+n07Jw6l3jvbSk9ss8rzALWMh0bxa0WtdcmmjQ/BEZ07nHTvCD+8
+         Q8TdsxFXlplF2eOubcaV+rAOyuBwydqbUULHLO4rmBNGtai4ltdrGM8d5TuZs3qCgJzK
+         9++zuiOp9j22Crua7vuO/ARiiGheoz61bcwgayw8C1mxUGy39NotntuYCqOs503yEzz6
+         0BMg==
+X-Gm-Message-State: AOAM531POkB7PlS5rSJATpHiFKSD0KqEJO7bEf4udSqqyPm5TwUoQiHq
+        ONs/MuRudEjQuBEmfqBlJ2yM8LMuCXIhJg==
+X-Google-Smtp-Source: ABdhPJwMwBaLic4lwVwv7/0D/7PuCm5tTIxAiD7c7QDxF0gaX268LJTtGRFkZwClWHc8xcRCZktbcQ==
+X-Received: by 2002:a17:90a:8a05:b0:1c6:e527:c613 with SMTP id w5-20020a17090a8a0500b001c6e527c613mr3824656pjn.143.1648630439739;
+        Wed, 30 Mar 2022 01:53:59 -0700 (PDT)
+Received: from localhost.localdomain (118-166-41-36.dynamic-ip.hinet.net. [118.166.41.36])
+        by smtp.gmail.com with ESMTPSA id l2-20020a056a0016c200b004f7e3181a41sm23674796pfc.98.2022.03.30.01.53.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 01:53:59 -0700 (PDT)
+From:   Zhiguang Ni <zhiguangni01@gmail.com>
+To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhiguang Ni <zhiguangni01@gmail.com>
+Subject: [PATCH v1] d_path:fix missing include file in d_path.c
+Date:   Wed, 30 Mar 2022 16:53:35 +0800
+Message-Id: <20220330085335.350416-1-zhiguangni01@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,75 +72,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memory size of tls_ctx->rx.iv for AES128-CCM is 12 setting in
-tls_set_sw_offload(). The return value of crypto_aead_ivsize()
-for "ccm(aes)" is 16. So memcpy() require 16 bytes from 12 bytes
-memory space will trigger slab-out-of-bounds bug as following:
+Include internal.h to fix below error:
+fs/d_path.c:318:7: error: no previous prototype for ‘simple_dname’ [-Werror=missing-prototypes]
+  318 | char *simple_dname(struct dentry *dentry, char *buffer, int buflen)
+In fact, this function is declared in fs/internal.h.
 
-==================================================================
-BUG: KASAN: slab-out-of-bounds in decrypt_internal+0x385/0xc40 [tls]
-Read of size 16 at addr ffff888114e84e60 by task tls/10911
-
-Call Trace:
- <TASK>
- dump_stack_lvl+0x34/0x44
- print_report.cold+0x5e/0x5db
- ? decrypt_internal+0x385/0xc40 [tls]
- kasan_report+0xab/0x120
- ? decrypt_internal+0x385/0xc40 [tls]
- kasan_check_range+0xf9/0x1e0
- memcpy+0x20/0x60
- decrypt_internal+0x385/0xc40 [tls]
- ? tls_get_rec+0x2e0/0x2e0 [tls]
- ? process_rx_list+0x1a5/0x420 [tls]
- ? tls_setup_from_iter.constprop.0+0x2e0/0x2e0 [tls]
- decrypt_skb_update+0x9d/0x400 [tls]
- tls_sw_recvmsg+0x3c8/0xb50 [tls]
-
-Allocated by task 10911:
- kasan_save_stack+0x1e/0x40
- __kasan_kmalloc+0x81/0xa0
- tls_set_sw_offload+0x2eb/0xa20 [tls]
- tls_setsockopt+0x68c/0x700 [tls]
- __sys_setsockopt+0xfe/0x1b0
-
-Reserve MAX_IV_SIZE memory space for iv to be compatible with all
-ciphers. And do iv and salt copy like done in tls_do_encryption().
-
-Fixes: f295b3ae9f59 ("net/tls: Add support of AES128-CCM based ciphers")
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+Signed-off-by: Zhiguang Ni <zhiguangni01@gmail.com>
 ---
- net/tls/tls_sw.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ fs/d_path.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 0024a692f0f8..6b858f995b23 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -1456,7 +1456,7 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
- 	aead_size = sizeof(*aead_req) + crypto_aead_reqsize(ctx->aead_recv);
- 	mem_size = aead_size + (nsg * sizeof(struct scatterlist));
- 	mem_size = mem_size + prot->aad_size;
--	mem_size = mem_size + crypto_aead_ivsize(ctx->aead_recv);
-+	mem_size = mem_size + MAX_IV_SIZE;
+diff --git a/fs/d_path.c b/fs/d_path.c
+index e4e0ebad1f15..f9123b84f1ba 100644
+--- a/fs/d_path.c
++++ b/fs/d_path.c
+@@ -7,6 +7,7 @@
+ #include <linux/slab.h>
+ #include <linux/prefetch.h>
+ #include "mount.h"
++#include "internal.h"
  
- 	/* Allocate a single block of memory which contains
- 	 * aead_req || sgin[] || sgout[] || aad || iv.
-@@ -1493,12 +1493,8 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
- 		kfree(mem);
- 		return err;
- 	}
--	if (prot->version == TLS_1_3_VERSION ||
--	    prot->cipher_type == TLS_CIPHER_CHACHA20_POLY1305)
--		memcpy(iv + iv_offset, tls_ctx->rx.iv,
--		       crypto_aead_ivsize(ctx->aead_recv));
--	else
--		memcpy(iv + iv_offset, tls_ctx->rx.iv, prot->salt_size);
-+	memcpy(iv + iv_offset, tls_ctx->rx.iv,
-+	       prot->iv_size + prot->salt_size);
- 
- 	xor_iv_with_seq(prot, iv + iv_offset, tls_ctx->rx.rec_seq);
- 
+ struct prepend_buffer {
+ 	char *buf;
 -- 
 2.25.1
 

@@ -2,121 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3524D4EBBE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 292FE4EBBE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243820AbiC3Hl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 03:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
+        id S239565AbiC3Hlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 03:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235235AbiC3HlW (ORCPT
+        with ESMTP id S243882AbiC3Hlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 03:41:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83851AF13;
-        Wed, 30 Mar 2022 00:39:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E6B8B81B7D;
-        Wed, 30 Mar 2022 07:39:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C97EC34118;
-        Wed, 30 Mar 2022 07:39:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648625975;
-        bh=0XeYhsl1ZxDhV4sY7GOOVxgbryVcP5F+HskgMIPxod4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ExC06KErHmWeEDo4Zhv8jhhzxIMG1rqWzp0/vfcmYfr8GgJgfXb0rTaznNTAdclYy
-         k+piUt5CgH2QgNxa1be2bTf3tleGz4lc0hOvN08BW9W8xdHxqitPJYii4yGdKurXTt
-         o0diCJUcD86JGy8q4nRLORpmkkr0i1coHwvI/ZduND1fyRqqnThtp9JBq4t1KCvp5D
-         ykOCCxMMgx3Y+DOQWGc4iNnoofojEzIYGVOTPiOJaq2qf3SEENS475t/5amuAk3kib
-         gYMB1JKlv2PI4q0yPeNS8sbajJMLg3WmvQfP9XhoJbDjz6l00H41Qa/e2UMu9yxjDo
-         T3NYuemXFHnig==
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-df26ea5bfbso3687338fac.1;
-        Wed, 30 Mar 2022 00:39:35 -0700 (PDT)
-X-Gm-Message-State: AOAM532IVYWfTOxQIhJgrVm5Ln7K1HrCq+tFS1W2PPfcQZmC7KVAJMtZ
-        oPAYt6YHE0TsQyPB4uRmi6J5HKshzrzL4kPo2GA=
-X-Google-Smtp-Source: ABdhPJx225Afar3LspP5RUzbPIziwrBqv25u8nl0BGy9GSxxPrtSeWBL3rp23u5kP4NBabwsdgPEW2W657+hTk1C3Bw=
-X-Received: by 2002:a05:6870:eaa5:b0:da:b3f:2b45 with SMTP id
- s37-20020a056870eaa500b000da0b3f2b45mr1580495oap.228.1648625974238; Wed, 30
- Mar 2022 00:39:34 -0700 (PDT)
+        Wed, 30 Mar 2022 03:41:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13CED51592
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 00:39:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648625988;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bdmc0ujk/QGKxeijeYMWGwM4/XVziFQYge7M2egdNzo=;
+        b=bUOReHxYExyU7JcUzVjPEHvegpwBg7VrkBHpccUI8RVRzjkiIRhSV5niEhcTQgvebNTptv
+        kpd5qt9XqWX+3t9CahEWMCWYn7Qq/CkEne4bTqG84/DtGly6Gnz2M80SrvukEh32vTBHe9
+        doHaKYkFIBqR2F+GyICgRMd0+cA8JR8=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-465-s7iNRnFKPD2FmvYK6lx8nQ-1; Wed, 30 Mar 2022 03:39:44 -0400
+X-MC-Unique: s7iNRnFKPD2FmvYK6lx8nQ-1
+Received: by mail-wm1-f71.google.com with SMTP id c62-20020a1c3541000000b003815245c642so685430wma.6
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 00:39:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=bdmc0ujk/QGKxeijeYMWGwM4/XVziFQYge7M2egdNzo=;
+        b=FRXwRS79NlNW4FPI4D4Dq6a3vKUDnp7SlhyJUf0aIQW0A+/PTfeufD0/VKDQPKYbM6
+         w0GzYzmLdKftjMO4K8KtYo1fOJSjS0O6Xe3yDJoUcGjKvzIzoyhKhJ31Si2EnMYXNt95
+         oLH++LJ3Yvx/rFbAnov/Lm/BfTTc57MwtwUKv9V5Yb3nASvz75N5T/GM/WrxVXa0Mt2X
+         Zcow9gsKEsVpxuHthpRfx5hRC3WPMNWvXPXuCvWcy0fX9/+FMTXqgSmjcSo5T8X/bOzj
+         sjHq92pd44co7haifsDkP8QGu2S7pUc0XSpjIULiz80BWMzDYq3WceNobIqW14ndcKxg
+         nWBg==
+X-Gm-Message-State: AOAM533GJt7Dwb2vROyP1dZtyDOOQlUxKdxwBvpw2TbS1ezB5aF7qD+I
+        ASZpJcwdV0kk/oF3+wAcX+PZcQQSH8yNu3uX1wFG2WwUpci+yF7+xtu8w21ekHj2wfBpGnz72KH
+        G3Po3+JeWsP64KN1PLVNyaVGz
+X-Received: by 2002:adf:eb48:0:b0:203:f854:86cc with SMTP id u8-20020adfeb48000000b00203f85486ccmr34346332wrn.102.1648625983768;
+        Wed, 30 Mar 2022 00:39:43 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxD6/4KA9nOXr+UYw0G5RCCghSOQawlwc82iZvSTIsHhrWRBJJtIxg+6ty0ZAU8K5GX9wFrWQ==
+X-Received: by 2002:adf:eb48:0:b0:203:f854:86cc with SMTP id u8-20020adfeb48000000b00203f85486ccmr34346324wrn.102.1648625983566;
+        Wed, 30 Mar 2022 00:39:43 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:2200:178b:7244:2a1f:b5d8? (p200300cbc7052200178b72442a1fb5d8.dip0.t-ipconnect.de. [2003:cb:c705:2200:178b:7244:2a1f:b5d8])
+        by smtp.gmail.com with ESMTPSA id bg42-20020a05600c3caa00b00380deeaae72sm3818045wmb.1.2022.03.30.00.39.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 00:39:43 -0700 (PDT)
+Message-ID: <a9844884-c591-b26b-abe2-953c896b8c95@redhat.com>
+Date:   Wed, 30 Mar 2022 09:39:42 +0200
 MIME-Version: 1.0
-References: <20220329174057.GA17778@srcf.ucam.org> <CAMj1kXE-7yPTBgQQKXRnQbdvLMv6D7=CowtQ38PdpPVa3SW-Ag@mail.gmail.com>
- <20220330071103.GA809@srcf.ucam.org> <CAMj1kXE9WrBOUG6MRQ90cMH_NvvCw_jVCar5Dsj+gkZr1AA0MQ@mail.gmail.com>
- <20220330071859.GA992@srcf.ucam.org> <CAMj1kXHfw75GphiewQzbA-swsMD3AGunyhc9HSue_xqrHt9GhQ@mail.gmail.com>
- <20220330072755.GA1169@srcf.ucam.org>
-In-Reply-To: <20220330072755.GA1169@srcf.ucam.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 30 Mar 2022 09:39:23 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHJxmdLie1JE=k3O4zne8tHED7g63rj42q-sL_JQUpvNw@mail.gmail.com>
-Message-ID: <CAMj1kXHJxmdLie1JE=k3O4zne8tHED7g63rj42q-sL_JQUpvNw@mail.gmail.com>
-Subject: Re: Linux DRTM on UEFI platforms
-To:     Matthew Garrett <mjg59@srcf.ucam.org>
-Cc:     Daniel Kiper <daniel.kiper@oracle.com>,
-        Alec Brown <alec.r.brown@oracle.com>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        "dpsmith@apertussolutions.com" <dpsmith@apertussolutions.com>,
-        "piotr.krol@3mdeb.com" <piotr.krol@3mdeb.com>,
-        "krystian.hebel@3mdeb.com" <krystian.hebel@3mdeb.com>,
-        "persaur@gmail.com" <persaur@gmail.com>,
-        "Yoder, Stuart" <stuart.yoder@arm.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "michal.zygowski@3mdeb.com" <michal.zygowski@3mdeb.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "lukasz@hawrylko.pl" <lukasz@hawrylko.pl>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        The development of GNU GRUB <grub-devel@gnu.org>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [Patch v2 2/2] mm/vmscan: make sure wakeup_kswapd with managed
+ zone
+Content-Language: en-US
+To:     Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        ying.huang@intel.com, mgorman@techsingularity.net,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Oscar Salvador <osalvador@suse.de>
+References: <20220329010901.1654-1-richard.weiyang@gmail.com>
+ <20220329010901.1654-2-richard.weiyang@gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220329010901.1654-2-richard.weiyang@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 at 09:27, Matthew Garrett <mjg59@srcf.ucam.org> wrote:
->
-> On Wed, Mar 30, 2022 at 09:23:17AM +0200, Ard Biesheuvel wrote:
-> > On Wed, 30 Mar 2022 at 09:19, Matthew Garrett <mjg59@srcf.ucam.org> wrote:
-> > > From a conceptual perspective we've thought of the EFI stub as being
-> > > logically part of the bootloader rather than the early kernel, and the
-> > > bootloader is a point where the line is drawn. My guy feeling is that
-> > > jumping into the secure kernel environment before EBS has been called is
-> > > likely to end badly.
-> >
-> > If you jump back into the system firmware, sure.
-> >
-> > But the point I was trying to make is that you can replace that with
-> > your own minimal implementation of EFI that just exposes a memory map
-> > and some protocols and nothing else, and then the secure launch kernel
-> > would be entirely in charge of the execution environment.
->
-> We can't just replace system firmware with an imitation of the same -
-> for instance, configuring the cold boot prevention memory overwrite
-> requires us to pass a variable through to the real firmware, and that's
-> something that we do in the stub.
->
+On 29.03.22 03:09, Wei Yang wrote:
+> wakeup_kswapd() only wake up kswapd when the zone is managed.
+> 
+> For two callers of wakeup_kswapd(), they are node perspective.
+> 
+>   * wake_all_kswapds
+>   * numamigrate_isolate_page
+> 
+> If we picked up a !managed zone, this is not we expected.
+> 
+> This patch makes sure we pick up a managed zone for wakeup_kswapd(). And
+> it also use managed_zone in migrate_balanced_pgdat() to get the proper
+> zone.
+> 
+> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+> Cc: Miaohe Lin <linmiaohe@huawei.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: "Huang, Ying" <ying.huang@intel.com>
+> Cc: Mel Gorman <mgorman@techsingularity.net>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 
-But these are exactly the kinds of things the secure launch kernel
-wants to be made aware of, no? The secure launch kernel could just
-MITM the calls that it chooses to allow, and serve other calls itself.
+^ I'm not so sure about that SOB, actually Andrew should add that. But
+maybe there is good reason for it that I'm not aware of.
 
-But more fundamentally, I am failing to see the distinction here
-between stub code and other kernel code. Is it related to the exact
-moment the secure launch event is triggered?
 
-The way I see it, being able to marshall everything that goes on
-between the stub and the secure launch kernel allows the latter to
-make an informed decision about how the stub has manipulated the
-global system state before triggering the secure launch event at
-exitbootservices time.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-But perhaps my mental model is simply too inaccurate - it would be
-helpful to understand what exactly needs to be locked down, and what
-aspects of the system state are of interest for the DRTM measurements.
+-- 
+Thanks,
+
+David / dhildenb
+

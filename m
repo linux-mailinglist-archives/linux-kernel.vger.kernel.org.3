@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6258C4EC33B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBD64EC3A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245152AbiC3MIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
+        id S1344466AbiC3MI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344562AbiC3LxR (ORCPT
+        with ESMTP id S1344593AbiC3LxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:53:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E60D264806;
-        Wed, 30 Mar 2022 04:49:10 -0700 (PDT)
+        Wed, 30 Mar 2022 07:53:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958FB267F88;
+        Wed, 30 Mar 2022 04:49:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0EC2DB81C3C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7A5561624;
+        Wed, 30 Mar 2022 11:49:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C371C340EE;
         Wed, 30 Mar 2022 11:49:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0DF0C340F2;
-        Wed, 30 Mar 2022 11:49:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648640946;
-        bh=9kDFyJtz5aRFD1HOBnwM1kO3is+NlX0c7whwfOn5IIw=;
+        s=k20201202; t=1648640949;
+        bh=Ka5jbGX8/lg8MhfDu2So8lLl4xM7sYE+I8cl5BMDAWU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h9mWYZJBTyZkPr6nfbe1cM+4xo7ogYrgrRRAHmv/uE06SF4T75FyNLUtImi+b1M28
-         6dvbYKOv6ThPIaB/8C0pbVRlZ3EJ8xHoXMBRLnOPP2gg9i9QNIE1tzXPRHXl4NUSPV
-         QbxYUiNSGy8Ti5DouMpgCXlK8pTVIGmo5ghmEEfiSub/y5eS2f45jMJjFbVj4dpnRU
-         RHp07r2DtykDJymCQ3yWh/Aa+VEurqOWDeJcPeGaHQCiOvdVVZtlxEkRfnLG6ado56
-         fRmeMci8Kn76HUfUgFCiaYFp5bQgAoEhFhPPXgT1V4dmifbPDKya4RdfgXoTjPskB/
-         /YwX1okt34fiQ==
+        b=Eu3d28FlhTHJwasVwZ6bxctZs8vXA/Jlnkt+w8zF1mB8in9xYeFXAaBOA4pg0jvo2
+         1q1Q6aBJa4VT3o7zFF41adNcEtlukkzcMu1Ey99tkz6st1S7AjAmjsIgtT3AX8OC98
+         +miL+UZRg9kkpsnQXZXNBDT1XvYeD4EYh2NKZtRJgtIYS6pYejD1AbBGHBT6OYTPIN
+         h82+cuv4cu5rj6P62HItCQaBUwff6VmX2SZECQUSupCOrn1f/6SACk0sEGEkyW5oLF
+         A1lMuO2Y6StEU/GyLsojvaw33dJ5ZMGmYNiv1AK/ZsrUIm2rUWlGi1Yf4AxiRhwvwG
+         wFo9gIkGorwDQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org
-Subject: [PATCH AUTOSEL 5.16 21/59] media: atomisp_gmin_platform: Add DMI quirk to not turn AXP ELDO2 regulator off on some boards
-Date:   Wed, 30 Mar 2022 07:47:53 -0400
-Message-Id: <20220330114831.1670235-21-sashal@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sasha Levin <sashal@kernel.org>, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.16 23/59] ARM: ftrace: avoid redundant loads or clobbering IP
+Date:   Wed, 30 Mar 2022 07:47:55 -0400
+Message-Id: <20220330114831.1670235-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220330114831.1670235-1-sashal@kernel.org>
 References: <20220330114831.1670235-1-sashal@kernel.org>
@@ -58,65 +58,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Ard Biesheuvel <ardb@kernel.org>
 
-[ Upstream commit 2c39a01154ea57d596470afa1d278e3be3b37f6a ]
+[ Upstream commit d11967870815b5ab89843980e35aab616c97c463 ]
 
-The TrekStor SurfTab duo W1 10.1 has a hw bug where turning eldo2 back on
-after having turned it off causes the CPLM3218 ambient-light-sensor on
-the front camera sensor's I2C bus to crash, hanging the bus.
+Tweak the ftrace return paths to avoid redundant loads of SP, as well as
+unnecessary clobbering of IP.
 
-Add a DMI quirk table for systems on which to leave eldo2 on.
+This also fixes the inconsistency of using MOV to perform a function
+return, which is sub-optimal on recent micro-architectures but more
+importantly, does not perform an interworking return, unlike compiler
+generated function returns in Thumb2 builds.
 
-Note an alternative fix is to turn off the CPLM3218 ambient-light-sensor
-as long as the camera sensor is being used, this is what Windows seems
-to do as a workaround (based on analyzing the DSDT). But that is not
-easy to do cleanly under Linux.
+Let's fix this by popping PC from the stack like most ordinary code
+does.
 
-Link: https://lore.kernel.org/linux-media/20220116215204.307649-10-hdegoede@redhat.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../media/atomisp/pci/atomisp_gmin_platform.c  | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ arch/arm/kernel/entry-ftrace.S | 51 +++++++++++++++-------------------
+ 1 file changed, 22 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-index 62dc06e22476..cd0a771454da 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-@@ -729,6 +729,21 @@ static int axp_regulator_set(struct device *dev, struct gmin_subdev *gs,
- 	return 0;
- }
+diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
+index a74289ebc803..5f1b1ce10473 100644
+--- a/arch/arm/kernel/entry-ftrace.S
++++ b/arch/arm/kernel/entry-ftrace.S
+@@ -22,10 +22,7 @@
+  * mcount can be thought of as a function called in the middle of a subroutine
+  * call.  As such, it needs to be transparent for both the caller and the
+  * callee: the original lr needs to be restored when leaving mcount, and no
+- * registers should be clobbered.  (In the __gnu_mcount_nc implementation, we
+- * clobber the ip register.  This is OK because the ARM calling convention
+- * allows it to be clobbered in subroutines and doesn't use it to hold
+- * parameters.)
++ * registers should be clobbered.
+  *
+  * When using dynamic ftrace, we patch out the mcount call by a "pop {lr}"
+  * instead of the __gnu_mcount_nc call (see arch/arm/kernel/ftrace.c).
+@@ -70,26 +67,25 @@
  
-+/*
-+ * Some boards contain a hw-bug where turning eldo2 back on after having turned
-+ * it off causes the CPLM3218 ambient-light-sensor on the image-sensor's I2C bus
-+ * to crash, hanging the bus. Do not turn eldo2 off on these systems.
-+ */
-+static const struct dmi_system_id axp_leave_eldo2_on_ids[] = {
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "TrekStor"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "SurfTab duo W1 10.1 (VT4)"),
-+		},
-+	},
-+	{ }
-+};
-+
- static int axp_v1p8_on(struct device *dev, struct gmin_subdev *gs)
- {
- 	int ret;
-@@ -763,6 +778,9 @@ static int axp_v1p8_off(struct device *dev, struct gmin_subdev *gs)
- 	if (ret)
- 		return ret;
+ .macro __ftrace_regs_caller
  
-+	if (dmi_check_system(axp_leave_eldo2_on_ids))
-+		return 0;
-+
- 	ret = axp_regulator_set(dev, gs, gs->eldo2_sel_reg, gs->eldo2_1p8v,
- 				ELDO_CTRL_REG, gs->eldo2_ctrl_shift, false);
- 	return ret;
+-	sub	sp, sp, #8	@ space for PC and CPSR OLD_R0,
++	str	lr, [sp, #-8]!	@ store LR as PC and make space for CPSR/OLD_R0,
+ 				@ OLD_R0 will overwrite previous LR
+ 
+-	add 	ip, sp, #12	@ move in IP the value of SP as it was
+-				@ before the push {lr} of the mcount mechanism
++	ldr	lr, [sp, #8]    @ get previous LR
+ 
+-	str     lr, [sp, #0]    @ store LR instead of PC
++	str	r0, [sp, #8]	@ write r0 as OLD_R0 over previous LR
+ 
+-	ldr     lr, [sp, #8]    @ get previous LR
++	str	lr, [sp, #-4]!	@ store previous LR as LR
+ 
+-	str	r0, [sp, #8]	@ write r0 as OLD_R0 over previous LR
++	add 	lr, sp, #16	@ move in LR the value of SP as it was
++				@ before the push {lr} of the mcount mechanism
+ 
+-	stmdb   sp!, {ip, lr}
+-	stmdb   sp!, {r0-r11, lr}
++	push	{r0-r11, ip, lr}
+ 
+ 	@ stack content at this point:
+ 	@ 0  4          48   52       56            60   64    68       72
+-	@ R0 | R1 | ... | LR | SP + 4 | previous LR | LR | PSR | OLD_R0 |
++	@ R0 | R1 | ... | IP | SP + 4 | previous LR | LR | PSR | OLD_R0 |
+ 
+-	mov r3, sp				@ struct pt_regs*
++	mov	r3, sp				@ struct pt_regs*
+ 
+ 	ldr r2, =function_trace_op
+ 	ldr r2, [r2]				@ pointer to the current
+@@ -112,11 +108,9 @@ ftrace_graph_regs_call:
+ #endif
+ 
+ 	@ pop saved regs
+-	ldmia   sp!, {r0-r12}			@ restore r0 through r12
+-	ldr	ip, [sp, #8]			@ restore PC
+-	ldr	lr, [sp, #4]			@ restore LR
+-	ldr	sp, [sp, #0]			@ restore SP
+-	mov	pc, ip				@ return
++	pop	{r0-r11, ip, lr}		@ restore r0 through r12
++	ldr	lr, [sp], #4			@ restore LR
++	ldr	pc, [sp], #12
+ .endm
+ 
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+@@ -132,11 +126,9 @@ ftrace_graph_regs_call:
+ 	bl	prepare_ftrace_return
+ 
+ 	@ pop registers saved in ftrace_regs_caller
+-	ldmia   sp!, {r0-r12}			@ restore r0 through r12
+-	ldr	ip, [sp, #8]			@ restore PC
+-	ldr	lr, [sp, #4]			@ restore LR
+-	ldr	sp, [sp, #0]			@ restore SP
+-	mov	pc, ip				@ return
++	pop	{r0-r11, ip, lr}		@ restore r0 through r12
++	ldr	lr, [sp], #4			@ restore LR
++	ldr	pc, [sp], #12
+ 
+ .endm
+ #endif
+@@ -202,16 +194,17 @@ ftrace_graph_call\suffix:
+ .endm
+ 
+ .macro mcount_exit
+-	ldmia	sp!, {r0-r3, ip, lr}
+-	ret	ip
++	ldmia	sp!, {r0-r3}
++	ldr	lr, [sp, #4]
++	ldr	pc, [sp], #8
+ .endm
+ 
+ ENTRY(__gnu_mcount_nc)
+ UNWIND(.fnstart)
+ #ifdef CONFIG_DYNAMIC_FTRACE
+-	mov	ip, lr
+-	ldmia	sp!, {lr}
+-	ret	ip
++	push	{lr}
++	ldr	lr, [sp, #4]
++	ldr	pc, [sp], #8
+ #else
+ 	__mcount
+ #endif
 -- 
 2.34.1
 

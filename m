@@ -2,46 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C02AC4EC31B
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2607B4EC321
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345565AbiC3MVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
+        id S241491AbiC3MV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345359AbiC3MDT (ORCPT
+        with ESMTP id S1345624AbiC3MEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 08:03:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F9F288A9A
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:57:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 026AF61729
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:57:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03D86C340EE;
-        Wed, 30 Mar 2022 11:57:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648641456;
-        bh=QQWsSLY6ur47t03mOAu3XMgDUScZQZIYUq4HZYvZhxs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=T7E74smq2J23y9R7TXuqYsUGVkqrhjYE+v64dzmCUu4pdpDkBI1f5wF7M5q10xr4F
-         sQBfP3tMblvllWl1fhnz4kdJzR1h+wjrnumCkEY0f4prA1wDeUsETAjSGZrGJNC6G3
-         0TkRcJpqU+xzTjo920tdLuGcOVJiIgxq5GkILKLUgtXtVx8jOVE4NBdFp9IC2CA9On
-         M8AhlWRqGNNTWCgc5g/e+KLb9HOMsV8GfOVall0go8Pv2dshlZMYc6gF6Dm1nv4+o4
-         ViA46D3p2hAMIsgUuTLtbIxQazCiM2pb3eGDCxn9UF2hkBlmkn1HvLKB7sJPaxRTOR
-         1Aj1b6jSZAHcA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] regulator fixes for v5.18
-Date:   Wed, 30 Mar 2022 12:57:21 +0100
-Message-Id: <20220330115736.03D86C340EE@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 30 Mar 2022 08:04:05 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364D631926
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 04:58:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648641484; x=1680177484;
+  h=message-id:date:mime-version:cc:to:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=i6d3OM34X008YLrBdwkzSuCTCJAwJAXcn3nAL1SIlvQ=;
+  b=ZY8wP35zCgRuGkvMJqgM7D1h4b1tLvKI72IlqXeX+huQ96qu99prfav0
+   BrSE0dE66fvvQg5zWEWggtKhLayk8dRxDKE3sHzGtdN4/pe/NkyVWYP3u
+   IfCpkHHo5x0tENSFWQ8K7oJgO17kkCBr4IvGJ8wrAm5BQ92NohRzMdwhY
+   SCCFvQFmeMgYKntsGcvU+Cf09SEt6l1lEVm4lMrA0pwAVWPhcmKuVVnlH
+   bkjLP31gYoIC9tqDHxS4TJb5lyaxOUfvSo4Ya3U3pzegHYRh28PPniV8r
+   9VuTMfk61EIqtxdx5YYalRy7xCCmmZYJWekpizH6AUiYNq2o2hkFrcTxT
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="239453975"
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="239453975"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 04:58:03 -0700
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="565505227"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.215.120]) ([10.254.215.120])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 04:57:59 -0700
+Message-ID: <f52d0412-a88c-6c07-1b40-ff866b288641@linux.intel.com>
+Date:   Wed, 30 Mar 2022 19:57:57 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20220329053800.3049561-1-baolu.lu@linux.intel.com>
+ <20220329053800.3049561-3-baolu.lu@linux.intel.com>
+ <BN9PR11MB52760F455B3319789BAB1E0E8C1E9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20220329114259.GB1716663@nvidia.com>
+ <BN9PR11MB5276239993592FF808726EF68C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH RFC v2 02/11] iommu: Add iommu_group_singleton_lockdown()
+In-Reply-To: <BN9PR11MB5276239993592FF808726EF68C1F9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,28 +75,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 5999f85ddeb436b4007878f251a30ccc8b9c638b:
+Hi Kevin,
 
-  regulator: qcom-rpmh: Add support for SDX65 (2022-03-18 16:05:06 +0000)
+On 2022/3/30 14:50, Tian, Kevin wrote:
+>> ie if we have a singleton group that doesn't have ACS and someone
+>> hotplugs in another device on a bridge, then our SVA is completely
+>> broken and we get data corruption.
+> Can we capture that in iommu_probe_device() when identifying
+> the group which the probed device will be added to has already been
+> locked down for SVA? i.e. make iommu_group_singleton_lockdown()
+> in this patch to lock down the fact of singleton group instead of
+> the fact of singleton driver...
+> 
 
-are available in the Git repository at:
+The iommu_probe_device() is called in the bus notifier callback. It has
+no way to stop the probe of the device. Unless we could add a direct
+call in the device probe path of the driver core?
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v5.18
-
-for you to fetch changes up to aefe5fc3000a24869edbf7bb657adf28372ec158:
-
-  regulator: rt4831: Add active_discharge_on to fix discharge API (2022-03-25 16:09:31 +0000)
-
-----------------------------------------------------------------
-regulator: Fixes for v5.18
-
-A couple of fixes for the rt4831 driver which fix features that didn't
-work due to incomplete description of the register configuration.
-
-----------------------------------------------------------------
-ChiYuan Huang (2):
-      regulator: rt4831: Add bypass mask to fix set_bypass API work
-      regulator: rt4831: Add active_discharge_on to fix discharge API
-
- drivers/regulator/rt4831-regulator.c | 3 +++
- 1 file changed, 3 insertions(+)
+Best regards,
+baolu

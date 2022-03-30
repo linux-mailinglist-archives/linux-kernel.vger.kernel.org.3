@@ -2,76 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03EDD4ECAC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066A84ECACB
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbiC3RiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 13:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
+        id S1349353AbiC3RiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 13:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349378AbiC3RiF (ORCPT
+        with ESMTP id S232676AbiC3RiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 13:38:05 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECFE66625
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:36:20 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso312508wme.5
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:36:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=si9BL6chisoTSaeqo99DJ1ZOvEtq2ZLE18b5aCraSsg=;
-        b=dBTJr/GJXkcyRZzP1rEtXVt5Y4oXfOfUJqY1SbiNl9CFA5AueD//DYeDzQ4Au2Qz+W
-         CPFc5Ga24RUstM4ay5k2cvKYCvDgrjZEKJg+QApmv7CGcNvnxCt1Iuk8cUI7HMUbjIrO
-         AOkKpA8ApAfMpa/N9xH4CD/uTsVSkK/CB4Vy7vxMiNMUltQInBa/82AxemIc6YavH6ef
-         GunkgXr9VifDVb7nD0gzP5/gDmq8/OUn7OHSGbJkHHB4mixLOKXNK9/kPmDmW8/Vv0hG
-         9eZMOxQFGaOArRDGnTM0tSNopEP1VA50qqtI2SX7/Jqmt3FFqOD8SfHXGHoFaYEvsALh
-         1myA==
+        Wed, 30 Mar 2022 13:38:15 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C973B7C77
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:36:29 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id q6-20020a056e0215c600b002c2c4091914so11862481ilu.14
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:36:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=si9BL6chisoTSaeqo99DJ1ZOvEtq2ZLE18b5aCraSsg=;
-        b=mHwoQ6opiClFwcDTiEXvppWCTs7LxAjwMBHjqmMQBxQZWWTzJSvqvQL6exPThkGdr1
-         kJbQAgl6sQZAwgYuUUo+uTgtkG4V8zNbiZssSFdxYv8SxP2AytyXAen5QwKHQw4q6LQM
-         ghiPzQkiwZmjJAx58UlfDEHfxnNibIAnVp7sJ7qY3OfAoorcAG9LhhnuFCAWDBfKRjlq
-         WEdeFZVu3ydZ/IHskmH5Grq8UVDw+QagiyoZS21AnoOwcRwvbd41aRL/PcMJERR7GalT
-         1pksnMEKc5mv/fMR5PmKHb7rukvKV2F5CAl3BrXeUvs4CZlvA3xGM9rjXBNS4ljk6d3F
-         v59w==
-X-Gm-Message-State: AOAM531TFUGjADwHK6+LdgqfSHmEvoJy5GGjAINw7OmVpf1vAQc5Aqj3
-        f507gguEYWyiTjtBiUvpxQM4WUfhBCRBgg==
-X-Google-Smtp-Source: ABdhPJySbMOHLeU5/XzBjryTSJpkyIppInBQPU+ymDQ0hfmSX4UC3FGqGyZmA0Oo3LbLxLf3acxdrw==
-X-Received: by 2002:a05:600c:4296:b0:38c:1b43:1562 with SMTP id v22-20020a05600c429600b0038c1b431562mr528312wmc.122.1648661778522;
-        Wed, 30 Mar 2022 10:36:18 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id i31-20020adf90a2000000b00205ad559c87sm12823380wri.21.2022.03.30.10.36.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 10:36:16 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 18:36:14 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Felix Kuehling <felix.kuehling@amd.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 1/1] drm/amdkfd: Create file descriptor after client is
- added to smi_clients list
-Message-ID: <YkSVDnolf1jltrSR@google.com>
-References: <20220330075115.426035-1-lee.jones@linaro.org>
- <a85f7751-8e60-d8f4-a281-4fb50389ae7e@amd.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=owPYEeWJTBCRqbDZ0tZk0G5OEV4Iq10Wwzh5L/IhgJM=;
+        b=RKoNtpecQkCLsZPWwzB320BtWjGX1uwUbpSSGolGpRPd26LT3N/qgMsLF1YJ0ytvkj
+         F46Xw5pAEtJlaiWzeURyjUlhM3pBjG2x/n1o1zByIT8HDCAzT9FBM+jtD/CBt+mzQSy4
+         ioaqkrMkEuL6dm4TA0tCt6rNC31qCITKy92MrHkvbLaPEPb8TKRvwb3GA1Lu8TiV2YZt
+         kYSlQ15/TCGu/t3hr4M0TX+NlWIQ/1CNH5f3aueUNl1bmZZIuUz1e/RkL/mGPKIkZ+4x
+         OjfyUkLYlHb1IfiNbhEsudXVp70jB55kGuTNmndJf7qxaxGONLf6cccpDS9zZR2u/J61
+         alDQ==
+X-Gm-Message-State: AOAM531phsPdUuPZAEABB4qO79UK+LJxq96fLutCw4Gl4QT2OeeVR39k
+        Lm+bP1IcqdhCeAFls96mjlcAdxdF0SF027Z2qDbMgqCqdPTM
+X-Google-Smtp-Source: ABdhPJzxzW4gdT+HqtA4czEe2f4yTGaK9waqmnZ2KIFSiMvkgTO21kkBrthVfG/FwPONcKq7vIyfPD3OhGWJanY43Oz3DMV+QYgm
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a85f7751-8e60-d8f4-a281-4fb50389ae7e@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:1616:b0:31a:131c:9079 with SMTP id
+ x22-20020a056638161600b0031a131c9079mr464369jas.89.1648661788703; Wed, 30 Mar
+ 2022 10:36:28 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 10:36:28 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000453f3d05db72fc7e@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in em28xx_init_extension (2)
+From:   syzbot <syzbot+99d6c66dbbc484f50e1c@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,65 +53,241 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022, Felix Kuehling wrote:
+Hello,
 
-> 
-> Am 2022-03-30 um 03:51 schrieb Lee Jones:
-> > This ensures userspace cannot prematurely clean-up the client before
-> > it is fully initialised which has been proven to cause issues in the
-> > past.
-> > 
-> > Cc: Felix Kuehling <Felix.Kuehling@amd.com>
-> > Cc: Alex Deucher <alexander.deucher@amd.com>
-> > Cc: "Christian König" <christian.koenig@amd.com>
-> > Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-> > Cc: David Airlie <airlied@linux.ie>
-> > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > Cc: amd-gfx@lists.freedesktop.org
-> > Cc: dri-devel@lists.freedesktop.org
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > ---
-> >   drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c | 18 +++++++++---------
-> >   1 file changed, 9 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c b/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
-> > index e4beebb1c80a2..c5d5398d45cbf 100644
-> > --- a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
-> > +++ b/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
-> > @@ -247,15 +247,6 @@ int kfd_smi_event_open(struct kfd_dev *dev, uint32_t *fd)
-> >   		return ret;
-> >   	}
-> > -	ret = anon_inode_getfd(kfd_smi_name, &kfd_smi_ev_fops, (void *)client,
-> > -			       O_RDWR);
-> > -	if (ret < 0) {
-> > -		kfifo_free(&client->fifo);
-> > -		kfree(client);
-> > -		return ret;
-> > -	}
-> > -	*fd = ret;
-> > -
-> >   	init_waitqueue_head(&client->wait_queue);
-> >   	spin_lock_init(&client->lock);
-> >   	client->events = 0;
-> > @@ -265,5 +256,14 @@ int kfd_smi_event_open(struct kfd_dev *dev, uint32_t *fd)
-> >   	list_add_rcu(&client->list, &dev->smi_clients);
-> >   	spin_unlock(&dev->smi_lock);
-> > +	ret = anon_inode_getfd(kfd_smi_name, &kfd_smi_ev_fops, (void *)client,
-> > +			       O_RDWR);
-> > +	if (ret < 0) {
-> 
-> Thank you for the patch. This looks like the correct solution. But you also
-> need to remove the client from the dev->smi_clients list here before
-> kfree(client). With that fixed, the patch is
+syzbot found the following issue on:
 
-Yes, that makes perfect sense.
+HEAD commit:    52d543b5497c Merge tag 'for-linus-5.17-1' of https://githu..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17b804fb700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7094767cefc58fb9
+dashboard link: https://syzkaller.appspot.com/bug?extid=99d6c66dbbc484f50e1c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=161c4739700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16432d51700000
 
-> Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+99d6c66dbbc484f50e1c@syzkaller.appspotmail.com
 
-Thanks Felix.  I will provide a follow-up tomorrow.
+em28xx 5-1:0.130: Config register raw data: 0xfffffffb
+em28xx 5-1:0.130: AC97 chip type couldn't be determined
+em28xx 5-1:0.130: No AC97 audio processor
+==================================================================
+BUG: KASAN: use-after-free in __list_add_valid+0x93/0xa0 lib/list_debug.c:26
+Read of size 8 at addr ffff888027458250 by task kworker/1:1/40
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+CPU: 1 PID: 40 Comm: kworker/1:1 Not tainted 5.17.0-syzkaller-10752-g52d543b5497c #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xeb/0x467 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ __list_add_valid+0x93/0xa0 lib/list_debug.c:26
+ __list_add include/linux/list.h:69 [inline]
+ list_add_tail include/linux/list.h:102 [inline]
+ em28xx_init_extension+0x44/0x1f0 drivers/media/usb/em28xx/em28xx-core.c:1123
+ em28xx_init_dev.constprop.0+0xa8b/0x1746 drivers/media/usb/em28xx/em28xx-cards.c:3637
+ em28xx_usb_probe.cold+0xc29/0x258a drivers/media/usb/em28xx/em28xx-cards.c:3992
+ usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:517 [inline]
+ really_probe+0x245/0xcc0 drivers/base/dd.c:596
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:755
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:785
+ __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:902
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:973
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xb83/0x1e20 drivers/base/core.c:3405
+ usb_set_configuration+0x101e/0x1900 drivers/usb/core/message.c:2170
+ usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
+ call_driver_probe drivers/base/dd.c:517 [inline]
+ really_probe+0x245/0xcc0 drivers/base/dd.c:596
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:755
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:785
+ __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:902
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:973
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xb83/0x1e20 drivers/base/core.c:3405
+ usb_new_device.cold+0x641/0x1091 drivers/usb/core/hub.c:2566
+ hub_port_connect drivers/usb/core/hub.c:5358 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+ port_event drivers/usb/core/hub.c:5660 [inline]
+ hub_event+0x25c6/0x4680 drivers/usb/core/hub.c:5742
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ process_scheduled_works kernel/workqueue.c:2352 [inline]
+ worker_thread+0x854/0x1080 kernel/workqueue.c:2438
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+
+Allocated by task 40:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:524
+ kasan_kmalloc include/linux/kasan.h:234 [inline]
+ __do_kmalloc mm/slab.c:3709 [inline]
+ __kmalloc_track_caller+0x206/0x4d0 mm/slab.c:3724
+ kmemdup+0x23/0x50 mm/util.c:128
+ kmemdup include/linux/fortify-string.h:304 [inline]
+ em28xx_duplicate_dev drivers/media/usb/em28xx/em28xx-cards.c:3690 [inline]
+ em28xx_usb_probe.cold+0x134a/0x258a drivers/media/usb/em28xx/em28xx-cards.c:4040
+ usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:517 [inline]
+ really_probe+0x245/0xcc0 drivers/base/dd.c:596
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:755
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:785
+ __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:902
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:973
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xb83/0x1e20 drivers/base/core.c:3405
+ usb_set_configuration+0x101e/0x1900 drivers/usb/core/message.c:2170
+ usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
+ call_driver_probe drivers/base/dd.c:517 [inline]
+ really_probe+0x245/0xcc0 drivers/base/dd.c:596
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:755
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:785
+ __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:902
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:973
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xb83/0x1e20 drivers/base/core.c:3405
+ usb_new_device.cold+0x641/0x1091 drivers/usb/core/hub.c:2566
+ hub_port_connect drivers/usb/core/hub.c:5358 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+ port_event drivers/usb/core/hub.c:5660 [inline]
+ hub_event+0x25c6/0x4680 drivers/usb/core/hub.c:5742
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+
+Freed by task 40:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0x13d/0x180 mm/kasan/common.c:328
+ kasan_slab_free include/linux/kasan.h:200 [inline]
+ __cache_free mm/slab.c:3438 [inline]
+ kfree+0xfb/0x2c0 mm/slab.c:3809
+ __refcount_sub_and_test include/linux/refcount.h:282 [inline]
+ __refcount_dec_and_test include/linux/refcount.h:315 [inline]
+ refcount_dec_and_test include/linux/refcount.h:333 [inline]
+ kref_put.constprop.0.isra.0+0x3d/0x7e include/linux/kref.h:64
+ em28xx_usb_disconnect.cold+0x1c2/0x237 drivers/media/usb/em28xx/em28xx-cards.c:4158
+ usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
+ __device_release_driver+0x627/0x760 drivers/base/dd.c:1209
+ device_release_driver_internal drivers/base/dd.c:1242 [inline]
+ device_release_driver+0x26/0x40 drivers/base/dd.c:1265
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:529
+ device_del+0x4f3/0xc80 drivers/base/core.c:3592
+ usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1419
+ usb_disconnect.cold+0x278/0x6ec drivers/usb/core/hub.c:2228
+ hub_port_connect drivers/usb/core/hub.c:5202 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+ port_event drivers/usb/core/hub.c:5660 [inline]
+ hub_event+0x1e74/0x4680 drivers/usb/core/hub.c:5742
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ process_scheduled_works kernel/workqueue.c:2352 [inline]
+ worker_thread+0x854/0x1080 kernel/workqueue.c:2438
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+
+The buggy address belongs to the object at ffff888027458000
+ which belongs to the cache kmalloc-16k of size 16384
+The buggy address is located 592 bytes inside of
+ 16384-byte region [ffff888027458000, ffff88802745c000)
+
+The buggy address belongs to the physical page:
+page:ffffea00009d1600 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x27458
+head:ffffea00009d1600 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffffea00008c5808 ffffea00009bf608 ffff888010c40b00
+raw: 0000000000000000 ffff888027458000 0000000100000001 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0x2420c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_COMP|__GFP_THISNODE), pid 40, tgid 40 (kworker/1:1), ts 55959586532, free_ts 54110027164
+ prep_new_page mm/page_alloc.c:2438 [inline]
+ get_page_from_freelist+0xba2/0x3df0 mm/page_alloc.c:4179
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5405
+ __alloc_pages_node include/linux/gfp.h:589 [inline]
+ kmem_getpages mm/slab.c:1378 [inline]
+ cache_grow_begin+0x75/0x350 mm/slab.c:2584
+ cache_alloc_refill+0x27f/0x380 mm/slab.c:2957
+ ____cache_alloc mm/slab.c:3040 [inline]
+ ____cache_alloc mm/slab.c:3023 [inline]
+ __do_cache_alloc mm/slab.c:3267 [inline]
+ slab_alloc mm/slab.c:3309 [inline]
+ __do_kmalloc mm/slab.c:3707 [inline]
+ __kmalloc_track_caller+0x3b0/0x4d0 mm/slab.c:3724
+ kmemdup+0x23/0x50 mm/util.c:128
+ kmemdup include/linux/fortify-string.h:304 [inline]
+ em28xx_duplicate_dev drivers/media/usb/em28xx/em28xx-cards.c:3690 [inline]
+ em28xx_usb_probe.cold+0x134a/0x258a drivers/media/usb/em28xx/em28xx-cards.c:4040
+ usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:517 [inline]
+ really_probe+0x245/0xcc0 drivers/base/dd.c:596
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:755
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:785
+ __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:902
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:973
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xb83/0x1e20 drivers/base/core.c:3405
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1353 [inline]
+ free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1403
+ free_unref_page_prepare mm/page_alloc.c:3325 [inline]
+ free_unref_page+0x19/0x690 mm/page_alloc.c:3420
+ skb_free_frag include/linux/skbuff.h:3135 [inline]
+ skb_free_head+0x96/0x110 net/core/skbuff.c:653
+ skb_release_data+0x6bc/0x810 net/core/skbuff.c:677
+ skb_release_all net/core/skbuff.c:742 [inline]
+ __kfree_skb+0x46/0x60 net/core/skbuff.c:756
+ __sk_defer_free_flush net/ipv4/tcp.c:1601 [inline]
+ sk_defer_free_flush include/net/tcp.h:1380 [inline]
+ tcp_recvmsg+0x1ca/0x610 net/ipv4/tcp.c:2577
+ inet_recvmsg+0x11b/0x5e0 net/ipv4/af_inet.c:850
+ sock_recvmsg_nosec net/socket.c:948 [inline]
+ sock_recvmsg net/socket.c:966 [inline]
+ sock_recvmsg net/socket.c:962 [inline]
+ sock_read_iter+0x33c/0x470 net/socket.c:1039
+ call_read_iter include/linux/fs.h:2075 [inline]
+ new_sync_read+0x5c2/0x6e0 fs/read_write.c:401
+ vfs_read+0x49b/0x5e0 fs/read_write.c:482
+ ksys_read+0x1ee/0x250 fs/read_write.c:620
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Memory state around the buggy address:
+ ffff888027458100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888027458180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff888027458200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                 ^
+ ffff888027458280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888027458300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

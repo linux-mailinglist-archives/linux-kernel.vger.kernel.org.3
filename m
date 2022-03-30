@@ -2,101 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA95D4EBAA9
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B3C4EBAB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 08:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243218AbiC3GQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 02:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        id S243234AbiC3GW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 02:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241944AbiC3GQN (ORCPT
+        with ESMTP id S243228AbiC3GWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 02:16:13 -0400
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD4A42A09
-        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:14:27 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.101.196.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 1779F3F622;
-        Wed, 30 Mar 2022 06:14:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1648620865;
-        bh=NUWrxgCHzurIsqxuvbtWFPBwSW5wtoM8Kr1QQ/VeCxE=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=Y+HnX3fTIop0uCPSVesQeDxtk/RzuUTlrW74fYMDYPs55uEly6ZxXzfnhplRGO6Hl
-         x432Vp3mg/uZna4woUy74o5PLqJKUhqCGvRpaZswhds2OH1WJR4fSRRjg0pcT/4T1R
-         AjpQQhTz1rcSoOodC1YSIoF3PYCbKIOoHuJFpgncKBAnryGaRyLYSGvnqVepmf3AUz
-         yxSKKTutecfTm3Xy5cw4qnSlvwTAodqZQKidxNCO578twleVqLmYBRdA9TUx82Bf7w
-         YhSmhHPBhM4PQk9RQyyAgSNF/1HD92JxI/cBNP6ZF3H0oqLuRMTWGGCIsnhEIikFLF
-         /yGSQnuPaSC5g==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     tiwai@suse.com
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jeremy Szu <jeremy.szu@canonical.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        Hui Wang <hui.wang@canonical.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Cameron Berkenpas <cam@neo-zeon.de>,
-        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ALSA: hda/realtek: Fix audio regression on Mi Notebook Pro 2020
-Date:   Wed, 30 Mar 2022 14:13:33 +0800
-Message-Id: <20220330061335.1015533-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 30 Mar 2022 02:22:21 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CAF132054
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:20:36 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id f3so16129193qvz.10
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 23:20:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=eY1NvClZjMu/3uc4kGek7ozzl4hMb0taRg0LWFRwfmA=;
+        b=o1wrwfYYRRM3S0c2pW3pDEIUKBPg5iHET9vaT4XFNIUhCiDGugas77WjK1imIeMn20
+         fEspPlUIB0Ka3yja89R84aSxuuJgHEBcKRN0TPfpVkHq9v7d5l6E+UpjWjJn9h2XPSqz
+         77h1R01H/vN391DIaeJ57YHZje9ppw1dmfpuxzLNqa7xk9MV7AKntmGZzHtRXqqjjPYA
+         aH0ENLsZ5+aPdQesqRetlByW0N0we0SnknHPTafP/8tDNfZfLAp/J+xjB6pNZ06wFogs
+         K3XXXvcIkLEywB1UiiXmRP+qHv0/ybpK3gNrkStlWipKbhQnkSNt5YC3nM6qcfvkFk8S
+         kxWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=eY1NvClZjMu/3uc4kGek7ozzl4hMb0taRg0LWFRwfmA=;
+        b=FkxxJ2khg2rhsK2CAHckVwe38NeE4wJnk2+gi6JMwqgr2g22fSXfS6S11FGr8ETCbl
+         qs9Tq/oSaQgUSeeXHnuaHt7IZyejcXC46QFRoMPLk40s2gW9uwOuGeql2rXnNYb4lELB
+         rMyOw+GNOu7gluvVJXvriT1nfw8hR5IELasLt16H0TsqKsFVP6yGlzAGFeZxmFAfMsfu
+         CD2rhUgeyt2zbMd94yg3kAz0miIov0wcHQhURoZCPjGsmEYoUp/DeCvOTy1+FBZJ9+FP
+         YZQCK1b3snixY5EcNEdsRacKkKrPUmm9w0W7TGOKluyCHJ10pKSpxNSJlWPlTUXCaBwE
+         EjEA==
+X-Gm-Message-State: AOAM531Nfk5r5q4z+Z+HqdE/zouulAErcTh/EtEjyv1qqmh0BQD8Chpf
+        oERSGBvydJNfiA9toiOb6/e3OAWon/lR0rMmGAQ=
+X-Google-Smtp-Source: ABdhPJwkdeWZyOOJ8EloKUXhTKoGctyT8JMYfxN11DgWo/dq4ZXuduC9u9FuBy46Pe+6rEzrioGV0UoD+TC8KZt+XJU=
+X-Received: by 2002:a05:6214:1c8f:b0:443:8505:14b3 with SMTP id
+ ib15-20020a0562141c8f00b00443850514b3mr1771852qvb.7.1648621235394; Tue, 29
+ Mar 2022 23:20:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a05:6214:21ad:0:0:0:0 with HTTP; Tue, 29 Mar 2022 23:20:34
+ -0700 (PDT)
+From:   Kevin James <kj825686@gmail.com>
+Date:   Tue, 29 Mar 2022 23:20:34 -0700
+Message-ID: <CAC-84Ry=EqRfRLtHoo+Us0eF_qkSsSTptE0+7_NiVHyFCCSPZg@mail.gmail.com>
+Subject: Attn E-mail Address Owner,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,HK_SCAM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:f32 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [kj825686[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [kj825686[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  1.4 HK_SCAM No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.0 FREEMAIL_REPLY From and body contain different freemails
+        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 5aec98913095 ("ALSA: hda/realtek - ALC236 headset MIC recording
-issue") is to solve recording issue met on AL236, by matching codec
-variant ALC269_TYPE_ALC257 and ALC269_TYPE_ALC256.
-
-This match can be too broad and Mi Notebook Pro 2020 is broken by the
-patch.
-
-Instead, use codec ID to be narrow down the scope, in order to make
-ALC256 unaffected.
-
-Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215484
-Fixes: 5aec98913095 ("ALSA: hda/realtek - ALC236 headset MIC recording issue")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
-v2:
- Fix wrong comparison, || -> &&
-
- sound/pci/hda/patch_realtek.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 4c33cb57963db..aace474a899de 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -3617,8 +3617,8 @@ static void alc256_shutup(struct hda_codec *codec)
- 	/* If disable 3k pulldown control for alc257, the Mic detection will not work correctly
- 	 * when booting with headset plugged. So skip setting it for the codec alc257
- 	 */
--	if (spec->codec_variant != ALC269_TYPE_ALC257 &&
--	    spec->codec_variant != ALC269_TYPE_ALC256)
-+	if (codec->core.vendor_id != 0x10ec0236 &&
-+	    codec->core.vendor_id != 0x10ec0257)
- 		alc_update_coef_idx(codec, 0x46, 0, 3 << 12);
- 
- 	if (!spec->no_shutup_pins)
 -- 
-2.34.1
 
+Attn E-mail Address Owner,
+
+Email: westernwesternunion293@gmail.com
+
+
+We have concluded to effect your own payment through Western Union
+Money Transfer, $5000 daily until the total sum of your compensation
+fund is transferred to you.
+
+https://www.westernunion.com/global-service/track-transfer
+
+MTCN#::8267439026
+
+Amount Programmed: $5000
+
+You are advised to get back to the contact person trough the email
+below for more direction on how to be receiving your payment
+
+Contact person: . . Dr. Eng. Bright Sam
+Email: westernwesternunion293@gmail.com
+
+Thanks,

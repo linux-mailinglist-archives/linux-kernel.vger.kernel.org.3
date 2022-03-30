@@ -2,71 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AABE64EC4E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E1A4EC4E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 14:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345007AbiC3MtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 08:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40562 "EHLO
+        id S1344867AbiC3MtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 08:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345724AbiC3MsI (ORCPT
+        with ESMTP id S1345942AbiC3Msc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 08:48:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B70CBDE0BF
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 05:46:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648644381;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cY9iRrSyIjyr8eHAHOFNCcuwIKiRiHCTr2xUfjfq6G4=;
-        b=M2wFO3zOGYSa1C2zd2AKyob4Py9EfrV2gP+9GwWyFrTFdj9jx47QdAcE7DHVa6ZHlpxrV4
-        bP/nvkQWCBSQ66C+EEdZmFT6/z+nLOaw2R5S/tL0+PzcZsiwK+kU7Vj58AoKLTolJjN7kG
-        IkECnFdXilkYZHwF+WMB7OvypSvkbSg=
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
- [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-414-wf1p-OodN0aEzSgHK-KLmQ-1; Wed, 30 Mar 2022 08:46:20 -0400
-X-MC-Unique: wf1p-OodN0aEzSgHK-KLmQ-1
-Received: by mail-lj1-f198.google.com with SMTP id 20-20020a05651c009400b002462f08f8d2so8698809ljq.2
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 05:46:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cY9iRrSyIjyr8eHAHOFNCcuwIKiRiHCTr2xUfjfq6G4=;
-        b=LosZpgM3lHOXKQtIatRtsqUP5x7CA8Dav62s9jegBIdJPYrsEudxOlfWXwiJmq9ypH
-         keV4yTEsuNt1CEadd9rMHlzgNGwnTdKciKKxPS36ns+G9lTgFbRaD79oU32gPrm24hvs
-         o/Rfv4cQd2XOJ5gKLB3xs3/w9XyYsMhktf9/divSSVhmCd/tPMCXipiirYYrQhJ7iQX6
-         qvPxTjCtz6pb4J3IaiCL8gZu0rr+0l3/q4b6T+rGdcEnDttT+lHSa+RlkbqW47ahRdCH
-         iMptr3/hNG1g4ISl/QDJJj7pkU7g5+TcnSciKBx6Dsy56MXy0U37qhVY0aJTVTPukmBh
-         6X4g==
-X-Gm-Message-State: AOAM532w+N+1GtSELpQtigh099V9z3JcijRhdP279wG1eYB2A5aflAZg
-        4WyYbbuc8+DQCG93kQJpoc8t4MQQC9CluJmbpwVEhk68ZV0GTTsnpScWFSfdX/ic3mPgCncgo5d
-        W1VKNrtnl0XVY6+uZESPlKAwngajgTm4gsRvtWESK
-X-Received: by 2002:a19:3801:0:b0:444:150b:9ef5 with SMTP id f1-20020a193801000000b00444150b9ef5mr6417032lfa.523.1648644378764;
-        Wed, 30 Mar 2022 05:46:18 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxohcZvDmrCT7SVJwea3bV7ZiKnRdT3t2ScVn6wDOH/YuLWQwKIoTgNBTNByfkbi2NYVhuUrmZGN0KTa9eQDF8=
-X-Received: by 2002:a19:3801:0:b0:444:150b:9ef5 with SMTP id
- f1-20020a193801000000b00444150b9ef5mr6417016lfa.523.1648644378499; Wed, 30
- Mar 2022 05:46:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <CA+QYu4q7K-pkAbMt3br_7O-Lu2OWyieLfyiju0PNEiy5YdKYzg@mail.gmail.com>
-In-Reply-To: <CA+QYu4q7K-pkAbMt3br_7O-Lu2OWyieLfyiju0PNEiy5YdKYzg@mail.gmail.com>
-From:   Jan Stancek <jstancek@redhat.com>
-Date:   Wed, 30 Mar 2022 14:46:02 +0200
-Message-ID: <CAASaF6yhTpXcWhTyg5VSU6czPPws5+sQ3vR7AWC8xxM7Xm_BGg@mail.gmail.com>
-Subject: Re: RIP: 0010:param_get_bool.cold+0x0/0x2 - LTP read_all_sys - 5.17.0
-To:     Bruno Goncalves <bgoncalv@redhat.com>, kvm <kvm@vger.kernel.org>,
-        "Bonzini, Paolo" <pbonzini@redhat.com>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        CKI Project <cki-project@redhat.com>,
-        Li Wang <liwang@redhat.com>
+        Wed, 30 Mar 2022 08:48:32 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766ACDE0BF;
+        Wed, 30 Mar 2022 05:46:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1648644405;
+        bh=KAfrZgKEul9aSsbZ36kPU6Tj18oRXB0dM4HC3xvmmXw=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=nn8AAgM02CcbhIpBEc+LRzvcURan3/dQ3hkEigyO4ktwhNb3MknZmgEA8v2ISWf66
+         eMqota5PANQaFP/P2ctxTAmBUX9sLJc1dq/gRo/1HQUgIMF279FtC6TlvXRsw0DFby
+         WoqCIRieFcgtb4AgBtxbYQp5x+DKFfwU8NjJNOfI=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 55C651288359;
+        Wed, 30 Mar 2022 08:46:45 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id nDP9QrI8rjHM; Wed, 30 Mar 2022 08:46:45 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1648644405;
+        bh=KAfrZgKEul9aSsbZ36kPU6Tj18oRXB0dM4HC3xvmmXw=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=nn8AAgM02CcbhIpBEc+LRzvcURan3/dQ3hkEigyO4ktwhNb3MknZmgEA8v2ISWf66
+         eMqota5PANQaFP/P2ctxTAmBUX9sLJc1dq/gRo/1HQUgIMF279FtC6TlvXRsw0DFby
+         WoqCIRieFcgtb4AgBtxbYQp5x+DKFfwU8NjJNOfI=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::c14])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id A54551288358;
+        Wed, 30 Mar 2022 08:46:43 -0400 (EDT)
+Message-ID: <41521e8ecd2876327cd8dd929b32aa3b7e9daca8.camel@HansenPartnership.com>
+Subject: Re: Linux DRTM on UEFI platforms
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>
+Cc:     Daniel Kiper <daniel.kiper@oracle.com>,
+        Alec Brown <alec.r.brown@oracle.com>,
+        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        "dpsmith@apertussolutions.com" <dpsmith@apertussolutions.com>,
+        "piotr.krol@3mdeb.com" <piotr.krol@3mdeb.com>,
+        "krystian.hebel@3mdeb.com" <krystian.hebel@3mdeb.com>,
+        "persaur@gmail.com" <persaur@gmail.com>,
+        "Yoder, Stuart" <stuart.yoder@arm.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        "michal.zygowski@3mdeb.com" <michal.zygowski@3mdeb.com>,
+        "lukasz@hawrylko.pl" <lukasz@hawrylko.pl>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        The development of GNU GRUB <grub-devel@gnu.org>,
+        Kees Cook <keescook@chromium.org>
+Date:   Wed, 30 Mar 2022 08:46:41 -0400
+In-Reply-To: <CAMj1kXHJxmdLie1JE=k3O4zne8tHED7g63rj42q-sL_JQUpvNw@mail.gmail.com>
+References: <20220329174057.GA17778@srcf.ucam.org>
+         <CAMj1kXE-7yPTBgQQKXRnQbdvLMv6D7=CowtQ38PdpPVa3SW-Ag@mail.gmail.com>
+         <20220330071103.GA809@srcf.ucam.org>
+         <CAMj1kXE9WrBOUG6MRQ90cMH_NvvCw_jVCar5Dsj+gkZr1AA0MQ@mail.gmail.com>
+         <20220330071859.GA992@srcf.ucam.org>
+         <CAMj1kXHfw75GphiewQzbA-swsMD3AGunyhc9HSue_xqrHt9GhQ@mail.gmail.com>
+         <20220330072755.GA1169@srcf.ucam.org>
+         <CAMj1kXHJxmdLie1JE=k3O4zne8tHED7g63rj42q-sL_JQUpvNw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,153 +85,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+CC kvm
+On Wed, 2022-03-30 at 09:39 +0200, Ard Biesheuvel wrote:
+> On Wed, 30 Mar 2022 at 09:27, Matthew Garrett <mjg59@srcf.ucam.org>
+> wrote:
+> > On Wed, Mar 30, 2022 at 09:23:17AM +0200, Ard Biesheuvel wrote:
+> > > On Wed, 30 Mar 2022 at 09:19, Matthew Garrett <
+> > > mjg59@srcf.ucam.org> wrote:
+> > > > From a conceptual perspective we've thought of the EFI stub as
+> > > > being logically part of the bootloader rather than the early
+> > > > kernel, and the bootloader is a point where the line is drawn.
+> > > > My guy feeling is that jumping into the secure kernel
+> > > > environment before EBS has been called is likely to end badly.
+> > > 
+> > > If you jump back into the system firmware, sure.
+> > > 
+> > > But the point I was trying to make is that you can replace that
+> > > with your own minimal implementation of EFI that just exposes a
+> > > memory map and some protocols and nothing else, and then the
+> > > secure launch kernel would be entirely in charge of the execution
+> > > environment.
+> > 
+> > We can't just replace system firmware with an imitation of the same
+> > - for instance, configuring the cold boot prevention memory
+> > overwrite requires us to pass a variable through to the real
+> > firmware, and that's something that we do in the stub.
+> > 
+> 
+> But these are exactly the kinds of things the secure launch kernel
+> wants to be made aware of, no? The secure launch kernel could just
+> MITM the calls that it chooses to allow, and serve other calls
+> itself.
 
-Issue seems to be that nx_huge_pages is not initialized (-1) and
-attempted to be used as boolean when reading
-/sys/module/kvm/parameters/nx_huge_pages
+The problem would become that the MITM firmware has to be evolved in
+lockstep with the boot stub.  The problem isn't really a point in time,
+figure out what config the boot stub extracts from EFI now and measure
+it, it's an ongoing one: given an evolving kernel and UEFI subsystem
+means that over time what configuration the kernel extracts from EFI
+changes, how do we make sure it's all correctly measured before secure
+launch?
 
-CONFIG_KVM=Y,  CONFIG_UBSAN=y, but kvm_mmu_module_init() doesn't
-appear to run, since kvm detects no HW support:
-# dmesg |grep kvm
-[    0.000000] kvm-clock: Using msrs 4b564d01 and 4b564d00
-[    0.000003] kvm-clock: using sched offset of 1155425753112 cycles
-[    0.000007] clocksource: kvm-clock: mask: 0xffffffffffffffff
-max_cycles: 0x1cd42e4dffb, max_idle_ns: 881590591483 ns
-[    0.045066] kvm-guest: PV spinlocks enabled
-[    0.705370] clocksource: Switched to clocksource kvm-clock
-[    0.913593] kvm: no hardware support for 'kvm_intel'
-[    0.915574] kvm: no hardware support for 'kvm_amd'
-[    2.284925] systemd[1]: Detected virtualization kvm.
-[    4.158909] Stack Depot allocating hash table with kvmalloc
-[    8.120446] systemd[1]: Detected virtualization kvm.
+If the MITM doesn't support a capability a newer kernel acquires, that
+MITM must fail secure launch ... which becomes a nightmare for the
+user.
 
-Initializing 'nx_huge_pages' to 0 (in out branch) or write to
-/sys/module/kvm/parameters/nx_huge_pages before read makes it go away
-too:
+One possibility might be that the MITM actually does nothing at all
+except record Boot Service requests and responses up to exit boot
+services (EBS).  We could call that record the boot configuration and
+measure it, plus we could then intercept EBS, and do the DRTM secure
+launch to the return point.  It's conceptually similar Matthew's idea
+of a callback except it won't require modification of the boot
+parameters.
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 02cf0a7e1d14..b3b8b9a22e20 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -8921,6 +8921,7 @@ int kvm_arch_init(void *opaque)
- out_free_x86_emulator_cache:
-        kmem_cache_destroy(x86_emulator_cache);
- out:
-+       nx_huge_pages = 0;
-        return r;
- }
+James
 
-On Mon, Mar 28, 2022 at 4:10 PM Bruno Goncalves <bgoncalv@redhat.com> wrote:
->
-> Hello,
->
-> We've observed the panic below when testing mainline kernel. More logs
-> can be found on [1] and CKI tracker [2].
->
-> [12057.972471] LTP: starting read_all_sys (read_all -d /sys -q -r 3)
-> [12062.975732] zram: Added device: zram1
-> [12062.980426] zram: Added device: zram2
-> [12062.983235] zram: Added device: zram3
-> [12063.510331] WARNING! power/level is deprecated; use power/control instead
-> [12064.466740] bdi 1:2: the stable_pages_required attribute has been
-> removed. Use the stable_writes queue attribute instead.
-> [12066.625736] invalid opcode: 0000 [#1] PREEMPT SMP PTI
-> [12066.626556] CPU: 0 PID: 128980 Comm: read_all Tainted: G
-> OE     5.17.0 #1
-> [12066.627745] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
-> [12066.628608] RIP: 0010:param_get_bool.cold+0x0/0x2
-> [12066.629356] Code: 3b ff e9 55 f8 3d ff 48 8b 75 00 8d 51 ff 48 c7
-> c7 60 47 84 af e8 2a 69 00 00 b8 e4 ff ff ff e9 89 fb 3d ff 0f 0b 0f
-> 0b 0f 0b <0f> 0b 0f 0b 48 8b 33 48 c7 c7 88 47 84 af e8 07 69 00 00 b8
-> e4 ff
-> [12066.632133] RSP: 0018:ffffa97d4114fd18 EFLAGS: 00010282
-> [12066.632929] RAX: ffffffffb04806ec RBX: ffff98d640277eb8 RCX: 0000000000000000
-> [12066.634051] RDX: 0000000000000000 RSI: ffffffffafa11810 RDI: ffff98d67b1df000
-> [12066.635108] RBP: ffff98d6403e6d80 R08: ffff98d668d48e50 R09: 00000000473bf681
-> [12066.636188] R10: ffffa97d4114fd20 R11: 000000001473bf68 R12: ffff98d67b1df000
-> [12066.637229] R13: ffffffffb008b5e0 R14: 0000000000000001 R15: 0000000000000001
-> [12066.638296] FS:  00007f26a5fcb740(0000) GS:ffff98d67bc00000(0000)
-> knlGS:0000000000000000
-> [12066.639533] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [12066.640371] CR2: 0000000002290008 CR3: 0000000103a46005 CR4: 00000000003706f0
-> [12066.641403] DR0: 000000000042c9f0 DR1: 0000000000000000 DR2: 0000000000000000
-> [12066.642467] DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000600
-> [12066.643712] Call Trace:
-> [12066.644114]  <TASK>
-> [12066.644433]  param_attr_show+0x57/0x90
-> [12066.645036]  module_attr_show+0x1c/0x30
-> [12066.645599]  sysfs_kf_seq_show+0xac/0xf0
-> [12066.646221]  seq_read_iter+0x126/0x460
-> [12066.646819]  new_sync_read+0x112/0x1a0
-> [12066.647418]  vfs_read+0x169/0x1c0
-> [12066.647951]  ksys_read+0x6c/0xf0
-> [12066.648460]  do_syscall_64+0x5b/0x80
-> [12066.649055]  ? do_syscall_64+0x67/0x80
-> [12066.649605]  ? do_syscall_64+0x67/0x80
-> [12066.650190]  ? do_syscall_64+0x67/0x80
-> [12066.650777]  ? lockdep_hardirqs_on+0x7d/0x100
-> [12066.651453]  ? do_syscall_64+0x67/0x80
-> [12066.652041]  ? asm_sysvec_apic_timer_interrupt+0x12/0x20
-> [12066.652852]  ? asm_sysvec_apic_timer_interrupt+0xa/0x20
-> [12066.653640]  ? lockdep_hardirqs_on+0x7d/0x100
-> [12066.654315]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [12066.655088] RIP: 0033:0x7f26a5d05742
-> [12066.655828] Code: c0 e9 b2 fe ff ff 50 48 8d 3d 1a cf 0b 00 e8 f5
-> f5 01 00 0f 1f 44 00 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75
-> 10 0f 05 <48> 3d 00 f0 ff ff 77 56 c3 0f 1f 44 00 00 48 83 ec 28 48 89
-> 54 24
-> [12066.658663] RSP: 002b:00007ffc0c869f08 EFLAGS: 00000246 ORIG_RAX:
-> 0000000000000000
-> [12066.662974] RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f26a5d05742
-> [12066.664041] RDX: 00000000000003ff RSI: 00007ffc0c86a3b0 RDI: 0000000000000003
-> [12066.665101] RBP: 00007f26a5fd3000 R08: 0000000000000000 R09: 00007ffc0c8696a0
-> [12066.666167] R10: 0000000000000000 R11: 0000000000000246 R12: 000000000042d790
-> [12066.667208] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> [12066.668278]  </TASK>
-> [12066.668611] Modules linked in: vfio_iommu_type1 vfio vhost_net tap
-> vhost_vsock vhost vhost_iotlb snd_seq_dummy minix binfmt_misc vcan
-> can_raw nfsv3 nfs_acl nfs lockd grace fscache netfs rds btrfs raid6_pq
-> zstd_compress tun brd exfat vfat fat vsock_loopback
-> vmw_vsock_virtio_transport_common vmw_vsock_vmci_transport vsock
-> vmw_vmci can_bcm can n_gsm pps_ldisc ppp_synctty mkiss ax25 ppp_async
-> ppp_generic serport slcan slip slhc snd_hrtimer snd_seq snd_seq_device
-> sctp pcrypt crypto_user algif_hash n_hdlc tls rfkill intel_rapl_msr
-> sunrpc snd_hda_codec_generic ledtrig_audio intel_rapl_common
-> snd_hda_intel snd_intel_dspcfg snd_intel_sdw_acpi snd_hda_codec
-> snd_hda_core 8139too snd_hwdep snd_pcm joydev virtio_balloon pcspkr
-> snd_timer snd 8139cp soundcore mii i2c_piix4 fuse zram xfs
-> crct10dif_pclmul crc32_pclmul crc32c_intel qxl drm_ttm_helper
-> ghash_clmulni_intel ttm drm_kms_helper drm virtio_console virtio_blk
-> serio_raw ata_generic pata_acpi floppy qemu_fw_cfg [last unloaded:
-> ltp_insmod01]
-> [12066.681725] ---[ end trace 0000000000000000 ]---
-> [12066.682447] RIP: 0010:param_get_bool.cold+0x0/0x2
-> [12066.683197] Code: 3b ff e9 55 f8 3d ff 48 8b 75 00 8d 51 ff 48 c7
-> c7 60 47 84 af e8 2a 69 00 00 b8 e4 ff ff ff e9 89 fb 3d ff 0f 0b 0f
-> 0b 0f 0b <0f> 0b 0f 0b 48 8b 33 48 c7 c7 88 47 84 af e8 07 69 00 00 b8
-> e4 ff
-> [12066.685965] RSP: 0018:ffffa97d4114fd18 EFLAGS: 00010282
-> [12066.686804] RAX: ffffffffb04806ec RBX: ffff98d640277eb8 RCX: 0000000000000000
-> [12066.687885] RDX: 0000000000000000 RSI: ffffffffafa11810 RDI: ffff98d67b1df000
-> [12066.688958] RBP: ffff98d6403e6d80 R08: ffff98d668d48e50 R09: 00000000473bf681
-> [12066.690037] R10: ffffa97d4114fd20 R11: 000000001473bf68 R12: ffff98d67b1df000
-> [12066.691165] R13: ffffffffb008b5e0 R14: 0000000000000001 R15: 0000000000000001
-> [12066.692288] FS:  00007f26a5fcb740(0000) GS:ffff98d67bc00000(0000)
-> knlGS:0000000000000000
-> [12066.693506] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [12066.694349] CR2: 0000000002290008 CR3: 0000000103a46005 CR4: 00000000003706f0
-> [12066.695417] DR0: 000000000042c9f0 DR1: 0000000000000000 DR2: 0000000000000000
-> [12066.696486] DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000600
-> [12066.697557] Kernel panic - not syncing: Fatal exception
-> [12066.699020] Kernel Offset: 0x2d000000 from 0xffffffff81000000
-> (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
-> [12066.700938] ---[ end Kernel panic - not syncing: Fatal exception ]---
->
-> [1] https://datawarehouse.cki-project.org/kcidb/tests/2924662
-> [2] https://datawarehouse.cki-project.org/issue/1078
->
-> Thanks,
-> Bruno Goncalves
->
 

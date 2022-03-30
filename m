@@ -2,353 +2,339 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707414ECAE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1B04ECAE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 19:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349409AbiC3RmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 13:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
+        id S1349414AbiC3Rmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 13:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349343AbiC3RmN (ORCPT
+        with ESMTP id S1349416AbiC3Rmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 13:42:13 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08305F4613;
-        Wed, 30 Mar 2022 10:40:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648662028; x=1680198028;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=9vowUBdRyVK5SAGLwF7bPrw0qm9UZ5a+X9Ovn8p3gE8=;
-  b=NgEX86bJUtgaba3bjvaFIQ9zrX1th/8nJ8l8FPXaJrwTlG893QT+eVJh
-   jfA3/izJkzhsXJ2Ry8k42z3kIJa0F5aDXr/U4KPpqYp64W4y7vL0SSV0f
-   hOwN7VHojjJcKlFR9U5XDQfoJrU4JoHSs891ND3v5pi5+DfnrLMQVNkDu
-   Kbl8v4G749un92S8Fd2ujdDMF1MxVft2Th8k7gKSuD7moWJ3jfU6jG646
-   ube8F8Wo8+YQ9kkqRDJVnk4sYLnJn/x81D866oaS6e9vFYMWBW2orM+6q
-   BlT3LAINd6RudssK7qB8JotRYkGCSl2CfRgeilnqnez+qnlaMjiVgBBhB
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="258433998"
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="258433998"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 10:40:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="649951769"
-Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
-  by fmsmga002.fm.intel.com with ESMTP; 30 Mar 2022 10:40:27 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 30 Mar 2022 10:40:27 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 30 Mar 2022 10:40:26 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Wed, 30 Mar 2022 10:40:26 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.105)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Wed, 30 Mar 2022 10:40:25 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cWKwuAj+OULQHj5mvjfM/olGqSMPMQsxv6xD5pcSwCx0dLY0tC2Jh3Jkb8XdmAlQa3/HA73XgwMc4ZrA6GoO1awqNMc9G/jVtWJ4XQqwXRkhK20Xb8lF8RYs0rWO5i43FIZMhgGo64fMZkvE1Zy7kE0+QO8CnevTbbkvjTV4GPbjDPK5n05GasOuu5XduziUtaUfhoO7k/B2FUGAnvv9mr09ETTQ6+AIKjMPj2jFhC7nT9kpue7lIb+GbZxHZdlGkU6RcGF0NuJMlCB+KPDLRgpkzsRUDxOPrLD8F8/+9fyrhfUSxh0xbos5bpycvDNIdUhreh37vK9exd5OS7GOXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NzYGMK1s6YFkzlhUhnx93nDiqQYseloFz417R5lGlxU=;
- b=Fz4/LmuiLUwJubTQfGCULab0DUvClcrCb5GTtyK63/WgW/4hD6/beE7PCHDCI85hdjMVFhIfVJtxf3F5NGO/JxynuOkURRYKtrYQuC+pi9eNx1puNzQK+ec1MIgqkpDVhSwBPln845Qaqe1Mn16n/X/bgTT389l2LRxxGDZ5tyH2a08Q81f4gfChNEApgQWPvZlzu+oCsE5Cfxa42s8CqN7KiWbSWJHTiycOPQU1gvV95evlgtnt6sMtJ1xutjn8pGpqz7a1GWhmqruRmvng5Rw4ozoUk5YNQKdnJkadIzrIgaRH8R724hoNop5Mu1GCiJQXFqWEPgsBK+WpJ5UwvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CH0PR11MB5740.namprd11.prod.outlook.com (2603:10b6:610:101::7)
- by DM6PR11MB4756.namprd11.prod.outlook.com (2603:10b6:5:2a7::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.19; Wed, 30 Mar
- 2022 17:40:23 +0000
-Received: from CH0PR11MB5740.namprd11.prod.outlook.com
- ([fe80::5ca:aece:f36:c53f]) by CH0PR11MB5740.namprd11.prod.outlook.com
- ([fe80::5ca:aece:f36:c53f%3]) with mapi id 15.20.5123.019; Wed, 30 Mar 2022
- 17:40:23 +0000
-Message-ID: <0031a4f0-75f6-3104-1825-dcc2528f61b0@intel.com>
-Date:   Wed, 30 Mar 2022 10:40:19 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] selftests/sgx: Use rip relative addressing for
- encl_stack
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-CC:     Shuah Khan <skhan@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:INTEL SGX" <linux-sgx@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220322074313.7444-1-jarkko@kernel.org>
- <7b7732ec-c7ff-cf92-510f-64c83ed985cd@intel.com> <YkRvFkEO8Ic1VdQ8@iki.fi>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <YkRvFkEO8Ic1VdQ8@iki.fi>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR03CA0312.namprd03.prod.outlook.com
- (2603:10b6:303:dd::17) To CH0PR11MB5740.namprd11.prod.outlook.com
- (2603:10b6:610:101::7)
+        Wed, 30 Mar 2022 13:42:32 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE731F47CF
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:40:36 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id x34so25292016ede.8
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 10:40:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YGgEuO2+JFPK80wetBysVATEfSSmmFQ7dKqnJvZ/yF0=;
+        b=C7EjKku7df+a8GqKhOPDfYj3kb3TEpo3DG3jdawgzS//JNHlN1EDttotGPuPwtZJqM
+         13D87HXLQB1i5Zu593BdRvAHvXU2KZCBghKr5ZLWbUc7+SnOCwc7yxNTP8xQIkWECbwj
+         x3r/HJ2H/u+PriS72aSR3Sf0AHoqNESldgoSj3jfUU6xdgfLQNatOWx4Dk2HIwMKZG/t
+         ru4+bBvbX1eqRI6dJS/5SpPN7MQ78ioWLTa1Nz4k4fHbBJb5Gby0TFttUbzYcSaLKJ94
+         GF23IZVQM50w9cL6RAnZA1kWRyAhc9QLJWfy1QFRG4lo6DIv/M5nk7ILGeU+nNs2QPjm
+         9qZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YGgEuO2+JFPK80wetBysVATEfSSmmFQ7dKqnJvZ/yF0=;
+        b=kVI4vyFfe7ZKBy98vGxX5/V7Sm2WyHlxCdVK2nKHe6uZShGd9CucAixFcw2IVXaJYR
+         zF8lVgHHurGkDrIYMMon+L4tpfx3sctvaeyUp/xaVsKGJHDDSkiXmAR1/I+fkUlu8MP9
+         uiyzLp90pgrtqX0NCONVG4NHNFFa6lJnV4XUlb5hCgKTYdzAh+7w2FC3x/TDml7QMd1n
+         /jyyGozUpmv7HzN6GX24DNUj7PW0mMLr7T2BRue7EJ6LtFszxBmcXxcNiAs2HcSKmpD5
+         wtqeGplau0bTMWfat5BUT6XrZa1vad/PpOZLypwu3N5ThJdETWTFh5PYsAtnIAuE0huW
+         2E9g==
+X-Gm-Message-State: AOAM531CHWSbRfWgcRZ9KxxvMm8dY5VrWtoLP06uuGyviU1/5DFsrq3c
+        l7/aruBW5qvUckD6C22m6G4Iag==
+X-Google-Smtp-Source: ABdhPJxFwTarbPZKAhjXkXZlx0EdUDAVJlJ4obq31ATerLLtSuoVnaN+CJoSs2qJYnnkd0lo+8HTEg==
+X-Received: by 2002:a50:fd04:0:b0:419:9c4a:7d79 with SMTP id i4-20020a50fd04000000b004199c4a7d79mr12268837eds.99.1648662035149;
+        Wed, 30 Mar 2022 10:40:35 -0700 (PDT)
+Received: from [192.168.0.164] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id dk21-20020a0564021d9500b0041b501eab8csm2718953edb.57.2022.03.30.10.40.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 10:40:34 -0700 (PDT)
+Message-ID: <a784ed61-965a-5c68-c2dd-3340cf18c7b5@linaro.org>
+Date:   Wed, 30 Mar 2022 19:40:33 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5c1f924c-7755-4718-45ce-08da12745e0f
-X-MS-TrafficTypeDiagnostic: DM6PR11MB4756:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR11MB4756F8FEC39CA06137058192F81F9@DM6PR11MB4756.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +j1oMOECPBRnzFAin+sa1igRW/kOhzusf9SJA+a2Z/s9m7mbY36PsfGHT5RdWTUHMJVis3vyUmL1UlMqrdYwF4pzdzzRBK7T/h4INEWFXE4ufx3AWYVVNG4CkSo2GY5KuX5ieDEdHcn4oawD/VgBAMgESbztKlgxAKEPpeRZHa3SWao3sZx75Qab7bbHNv1LIjk6QhzOj38sxLp/1CtEWonJs6imrMAUk5Ehb6z3Mp4o/gg8Ms8iwD0RO/8p8vWAIsP7rK0wBV2dE9utgE0ZD4Rc9DNq/vt9P5kA/bgSunx3yTlJGE7ZI7IhXAOYavwhA/fS6+WvwCZ8KnRGxs89t9sbE5gEqzaSCQUOLiwPsqpIPM4DGWBX7rKxwJn4F1DEZV/chgWJzqoPzCJ+axuYk2XX8mvPC2Vzg7lMme+2kTWxYF9QwW5W5Oj9Jxc60TLxGj0IM+oGf4H57QwQ8+7lXmCzfpJYLyQ02HPtNZWJrNGeLHMrGSn+pMje2q2eYwf0Qn1TMPkR5G6gOElFm/uLWh1a4QfLagYr7WGWDq/1+VA/+c/TzMLxFxr0C43mi+M8mYTKAjMK/saQrIdnvmtpX2c+BmE4gIctyRsMdb/Qsaq8Ac8bLX/yunL+KNmnGyU7DMdx8jAFODkTXr+5fi5VF9+hbIeNTmSeRMGS9vUwbxY2frmy6NKXR/Ml+5s+D6NUcLrsaDcz1unMWWtacLDGiSFvkWcGM8W4+/Gazd0o7MBB1cWuAkGeFsGxAfn5brKVJLhAA8mxRU8g0mEEirhdkzY9iUeFIDqRjzmbfz8B2mN2KcmGu+fYNepkejTc30UD
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR11MB5740.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(5660300002)(316002)(82960400001)(66476007)(54906003)(86362001)(6916009)(6666004)(36756003)(31686004)(31696002)(44832011)(8676002)(4326008)(508600001)(66946007)(966005)(66556008)(8936002)(6486002)(83380400001)(26005)(2616005)(186003)(53546011)(6506007)(2906002)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?djJuZ0FES1JLMDE3amE5L1hMUlJqMXJTK1k1ZzdYMFg5Y2ozbkY2UkhkQktp?=
- =?utf-8?B?b2pmYnFMYjF3NjZmR2srL0NXYW1IdHV2Ull5UHVobTZ2TUFMVi9CWXFOUFlD?=
- =?utf-8?B?Rm9MVkxNSGxOdytJVXB4N2JvQnAxdEYvekFXYi9YMGlPcGRFMkc2MS9raU5v?=
- =?utf-8?B?b3BQMFUzOGRpT0FxN2ZIR0lUVHNkZmJaV2paREQrSytSdWZodXJ5d2lZR2J1?=
- =?utf-8?B?OE1EVFVBWXUwODlRdkxBbUV3RWpGL3lQeit6VHNhUW5qWE0vbWl1Z3J0NmNY?=
- =?utf-8?B?S0VMd1ZhV00xeFhDYjQ2dlVCeVY4MFhJTmpOTnlzaDI3R1VUTzBjdFo3eFJX?=
- =?utf-8?B?aWVLZjFoUTQ0QWo0UGk3RUlmV1p1Mzc2THVhU3RsRVlDYXZIZlZsQzVnSW5M?=
- =?utf-8?B?b0ZsY2JxY1lHek45RGRKWWZwRHo4S1B2UHludVVwWjVTYkptWHgxREpoZ2tt?=
- =?utf-8?B?VVNPWUhBdlNuMXVhUk9DbW5KejJIaEVrT3VWeC9yalJVaGl1SUVEdGxpbUhG?=
- =?utf-8?B?V2dYbFFpeG9aTG4rUVlTdXFUeGs3ZDFwenZyWUQ5ZC94bXBPZHFvUjN5RTh2?=
- =?utf-8?B?Y29yMlZoQlR6N2tpQ2xQazVvYnlKTThrdjBJYW9zOHhZOFdhdFRlTzZTdzVw?=
- =?utf-8?B?UCs0MG5kalJkWjRSMjJ3c3U2emZhVDM3SHhGTDc0VXRNR3IyNUYvOW5VVGU5?=
- =?utf-8?B?V1dua09nMXNCa2o1RGFqYjlTVWhrYTJ6WVRmaERuSEpVa3owd1Fpc1J2MTFM?=
- =?utf-8?B?SWRydWFsN1BzTFo1OVBLclc2NGRCeUtiSU90WFhOYXhucGJtYWRBdzUvT0s1?=
- =?utf-8?B?dHhlYkNYc1ZQSGx6RDhiYTgzS2Y5SW42SGFXc3lIUDR6bGcrU1JOZEF2TkdB?=
- =?utf-8?B?Q3dpTG51TkZ0ZTQzSUFDOWVudnY2MHEvdFh1Zk1wNnFHTkJmQVlFaHNGNGpZ?=
- =?utf-8?B?czhJZGYvUitSN1VCTVhqNFgyNU9UWXFDM3prYlhrRnhWaEhuU1ZwOCtwRGlZ?=
- =?utf-8?B?TWx3VDVjSEdocFJVb0RRa0FraHgweHgrZURkNmVFNFd1YVlHRHFEL3hDMFY1?=
- =?utf-8?B?ak5SZDJlTUw4ZnNQNGdVZ002TGlOZitwbWUyRkFvV3dWb3lDYXVrUTZQMmJ1?=
- =?utf-8?B?ZmdsVzdVNk4zc1l3UmJlZnFXSFh6bEpJY3FzYlZVZ3hKRlEyaGhjelJDZER6?=
- =?utf-8?B?NC9IOUxlM0RUNHoxYVQ0VzJRTXZwNC9XU0FWYUUyY2NucHBMVzg3WUFmR1cy?=
- =?utf-8?B?SEk4UUpWYjNKdHloNE13MFNVUnNYK2UzMHBMNVNTeDMrQkFhUFJ2UmZFQkQw?=
- =?utf-8?B?MDZnK1NDNUd4YlpuUld5RENoOWlFSFoxbzVJWEhJZm1XaklXSHp6Q3U0L2gv?=
- =?utf-8?B?aS9wd3czOGx6Nk40aXpvRkVtM3VibkF0clBSSSthMlZJZ2M2dnI4WUU5TzFR?=
- =?utf-8?B?MER6alN2NHFFM0o3RXAwZExFU3FhNG0rbFg5dXBzMVlySFZ4Qk5Zbm95NS94?=
- =?utf-8?B?TlZ4RmhKZzIraFoxcEQwQmtma0gyRENHMHhmMDlwR0dHQU9xNEVsZFdCUm5I?=
- =?utf-8?B?Q1ZUMXd3TTJKR1ZHMkVnbTE0TTVlbHVidDRLbkdFVExuNlhFUC9GNUREWHhw?=
- =?utf-8?B?WXg3Q0dTdDVUSUNtNy9DcG5sVVVlYXFRdHptZ2l2SlBYR2hPcVk0emI5Q3JI?=
- =?utf-8?B?VlNXUUxIUlVyNlIrTWJSR2FjeU0xb2hLWWV0MEVHa0xEaWdTV2N3bUlVZ2lv?=
- =?utf-8?B?VEh1dlQydklwY3hxYmwrZktZeW5HNmhTbXl1K1VSaEQvRWsrQ3UwcEV1QmNJ?=
- =?utf-8?B?aWNEWVBZQ0RNSUI4eEdnRzBySWxOL1YrRXY5RFZqcE83RWJHUXNzbDRHMGlh?=
- =?utf-8?B?MXZGZFJTN0VkemNlWFdFMEZqdFRsTUZYU0dMRW9HM0NkUTk4QXdUYTJ2bUxK?=
- =?utf-8?B?b0J2MFlqV3JndStTTElHN2lKR1ZROStYNExIcVhwLy9oVnNIR0l0b2ZRTWdR?=
- =?utf-8?B?Q2hXWC8ya2FYc1NFL3FqRWp0R3ROSSt6V1F4ZUcrNHJHRXB5VUlYeFZwQTFu?=
- =?utf-8?B?dS9YNFRjZkZuUGhmVU0wQm5FM1dFL2pkcHE3TGxSak93TzlnUGRoclNyZFMz?=
- =?utf-8?B?TjJuK3UyQllROTkwRFBhaUhYSHBVZTJTdWdTa29IVkFlWHJmS3VLNzFDbWdj?=
- =?utf-8?B?VTk0OXRad1dGYlJJaTNGQ1ZxZWwvVFFkZFl3Tk4ySndTSCt6VUhoSXljcDFE?=
- =?utf-8?B?bHZiT25UcHNHb2QrUW83SUNBeUtrTGFhM256Uk53YisyZHRicWRVUUJ0NVVi?=
- =?utf-8?B?dlRtbHduaU1lMVB0MXNRUHJuc0ovRFE1YzY1bEFKMWpaVGhaQnMwczNHdml1?=
- =?utf-8?Q?YrRbbCkIAK2oDDSE=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c1f924c-7755-4718-45ce-08da12745e0f
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR11MB5740.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2022 17:40:23.4755
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 80ION2YnLod4vmipuoob1k4vP3Z8QEkgEH9blz2Yjwf0loasCjQHTF7h5mA/fMkaQJwnGLrQ3rTqIleKdmbfVruYgaYNx1AJPMnFmqvTzuc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4756
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 5/5] dt-bindings: phy: uniphier: Clean up clocks,
+ resets, and their names using compatible string
+Content-Language: en-US
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <1648637715-19262-1-git-send-email-hayashi.kunihiko@socionext.com>
+ <1648637715-19262-6-git-send-email-hayashi.kunihiko@socionext.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1648637715-19262-6-git-send-email-hayashi.kunihiko@socionext.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jarkko,
-
-On 3/30/2022 7:54 AM, Jarkko Sakkinen wrote:
-> On Mon, Mar 28, 2022 at 02:49:04PM -0700, Reinette Chatre wrote:
->> Hi Jarkko,
->>
->> On 3/22/2022 12:43 AM, Jarkko Sakkinen wrote:
->>> Simplify the test_encl_bootstrap.S flow by using rip-relative addressing.
->>> Compiler does the right thing here, and this removes dependency on where
->>> TCS entries need to be located in the binary, i.e. allows the binary layout
->>> changed freely in the future.
->>>
->>> Cc: Reinette Chatre <reinette.chatre@intel.com>
->>> Cc: Dave Hansen <dave.hansen@linux.intel.com>
->>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
->>> ---
->>>  tools/testing/selftests/sgx/test_encl_bootstrap.S | 6 +-----
->>>  1 file changed, 1 insertion(+), 5 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/sgx/test_encl_bootstrap.S b/tools/testing/selftests/sgx/test_encl_bootstrap.S
->>> index 82fb0dfcbd23..1c1b5c6c4ffe 100644
->>> --- a/tools/testing/selftests/sgx/test_encl_bootstrap.S
->>> +++ b/tools/testing/selftests/sgx/test_encl_bootstrap.S
->>> @@ -40,11 +40,7 @@
->>>  	.text
->>>  
->>>  encl_entry:
->>> -	# RBX contains the base address for TCS, which is the first address
->>> -	# inside the enclave for TCS #1 and one page into the enclave for
->>> -	# TCS #2. By adding the value of encl_stack to it, we get
->>> -	# the absolute address for the stack.
->>> -	lea	(encl_stack)(%rbx), %rax
->>> +	lea	(encl_stack)(%rip), %rax
->>>  	xchg	%rsp, %rax
->>>  	push	%rax
->>>  
->>
->> The goal of the above snippet is to set RSP to ensure that each thread has its own stack.
->>
->> Since EENTER computes RIP as EnclaveBase + TCS.OENTRY, by using offset from RIP this
->> would result in all TCS with OENTRY of encl_entry to use the same stack, no?
->>
->> Could you please consider the following as an alternative:
->> https://lore.kernel.org/lkml/65c137c875bd4da675eaba35316ff43d7cfd52f8.1644274683.git.reinette.chatre@intel.com/
->>
->> The idea in that patch is that a new TCS would always need to be accompanied by a
->> dedicated stack so, at least for testing purposes, the TCS and stack can be dynamically
->> allocated together with the TCS page following its stack.  This seems much simpler
->> to me and also makes the following patch unnecessary.
+On 30/03/2022 12:55, Kunihiko Hayashi wrote:
+> Instead of "oneOf:" choices, use "allOf:" and "if:" to define clocks,
+> clock-names, resets, and reset-names that can be taken by the compatible
+> string.
 > 
-> There's no better alternative than use rip. Compiler will fix it up.
-
-Could you please elaborate how the compiler will fix it up?
-
+> The order of clock-names and reset-names doesn't change here.
 > 
-> So, no, I won't consider that. This a dead obvious change.
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> ---
+>  .../phy/socionext,uniphier-ahci-phy.yaml      | 90 +++++++++++++-----
+>  .../phy/socionext,uniphier-pcie-phy.yaml      | 47 ++++++---
+>  .../phy/socionext,uniphier-usb3hs-phy.yaml    | 93 ++++++++++++++----
+>  .../phy/socionext,uniphier-usb3ss-phy.yaml    | 95 +++++++++++++++----
+>  4 files changed, 251 insertions(+), 74 deletions(-)
+> 
 
-It is not obvious to me so I attempted to make it obvious by writing a test program that
-prints RSP from the two different threads.
+(...)
 
-test_encl_bootstrap.S gives each thread, TCS #1 and TCS #2, a page of stack.
-Before your patch, with the test below printing RSP, this is clear ... the stack used by the
-two threads are one page apart:
-#  RUN           enclave.tcs_entry ...
-rsp TCS #1 = 0X7FD997D97F68
-rsp TCS #2 = 0X7FD997D98F68
-#            OK  enclave.tcs_entry
+> diff --git a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
+> index 1bbd164f2527..21e4414eea60 100644
+> --- a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
+> @@ -34,30 +34,12 @@ properties:
+>      minItems: 2
+>      maxItems: 3
+>  
+> -  clock-names:
+> -    oneOf:
+> -      - items:               # for Pro5
+> -          - const: gio
+> -          - const: link
+> -      - items:               # for PXs3 with phy-ext
+> -          - const: link
+> -          - const: phy
+> -          - const: phy-ext
+> -      - items:               # for others
+> -          - const: link
+> -          - const: phy
+> +  clock-names: true
+>  
+>    resets:
+>      maxItems: 2
+>  
+> -  reset-names:
+> -    oneOf:
+> -      - items:               # for Pro5
+> -          - const: gio
+> -          - const: link
+> -      - items:               # for others
+> -          - const: link
+> -          - const: phy
+> +  reset-names: true
+>  
+>    vbus-supply:
+>      description: A phandle to the regulator for USB VBUS
+> @@ -80,6 +62,77 @@ properties:
+>        required for each port, if any one is omitted, the trimming data
+>        of the port will not be set at all.
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: socionext,uniphier-pro5-usb3-hsphy
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 2
+> +          maxItems: 2
+> +        clock-names:
+> +          items:
+> +            - const: gio
+> +            - const: link
+> +        resets:
+> +          minItems: 2
+> +          maxItems: 2
+> +        reset-names:
+> +          items:
+> +            - const: gio
+> +            - const: link
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - socionext,uniphier-pxs2-usb3-hsphy
+> +              - socionext,uniphier-ld20-usb3-hsphy
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 2
+> +          maxItems: 2
+> +        clock-names:
+> +          items:
+> +            - const: link
+> +            - const: phy
+> +        resets:
+> +          minItems: 2
+> +          maxItems: 2
+> +        reset-names:
+> +          items:
+> +            - const: link
+> +            - const: phy
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - socionext,uniphier-pxs3-usb3-hsphy
+> +              - socionext,uniphier-nx1-usb3-hsphy
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 2
 
-After applying this patch both threads use the same stack memory:
-#  RUN           enclave.tcs_entry ...
-rsp TCS #1 = 0X7FCF778B7F68
-rsp TCS #2 = 0X7FCF778B7F68
-#            OK  enclave.tcs_entry
+Why minItems:2? Is the last phy-ext clock optional?
 
-Here is the test I used:
+> +          maxItems: 3
+> +        clock-names:
+> +          minItems: 2
+> +          items:
+> +            - const: link
+> +            - const: phy
+> +            - const: phy-ext
+> +        resets:
+> +          minItems: 2
+> +          maxItems: 2
+> +        reset-names:
+> +          items:
+> +            - const: link
+> +            - const: phy
+> +
+>  required:
+>    - compatible
+>    - reg
+> diff --git a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3ss-phy.yaml b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3ss-phy.yaml
+> index 06c957d52d23..4c26d2d2303d 100644
+> --- a/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3ss-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/socionext,uniphier-usb3ss-phy.yaml
+> @@ -35,34 +35,89 @@ properties:
+>      minItems: 2
+>      maxItems: 3
+>  
+> -  clock-names:
+> -    oneOf:
+> -      - items:             # for Pro4, Pro5
+> -          - const: gio
+> -          - const: link
+> -      - items:             # for PXs3 with phy-ext
+> -          - const: link
+> -          - const: phy
+> -          - const: phy-ext
+> -      - items:             # for others
+> -          - const: link
+> -          - const: phy
+> +  clock-names: true
+>  
+>    resets:
+>      maxItems: 2
+>  
+> -  reset-names:
+> -    oneOf:
+> -      - items:              # for Pro4,Pro5
+> -          - const: gio
+> -          - const: link
+> -      - items:              # for others
+> -          - const: link
+> -          - const: phy
+> +  reset-names: true
+>  
+>    vbus-supply:
+>      description: A phandle to the regulator for USB VBUS, only for USB host
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - socionext,uniphier-pro4-usb3-ssphy
+> +              - socionext,uniphier-pro5-usb3-ssphy
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 2
+> +          maxItems: 2
+> +        clock-names:
+> +          items:
+> +            - const: gio
+> +            - const: link
+> +        resets:
+> +          minItems: 2
+> +          maxItems: 2
+> +        reset-names:
+> +          items:
+> +            - const: gio
+> +            - const: link
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - socionext,uniphier-pxs2-usb3-ssphy
+> +              - socionext,uniphier-ld20-usb3-ssphy
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 2
+> +          maxItems: 2
+> +        clock-names:
+> +          items:
+> +            - const: link
+> +            - const: phy
+> +        resets:
+> +          minItems: 2
+> +          maxItems: 2
+> +        reset-names:
+> +          items:
+> +            - const: link
+> +            - const: phy
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - socionext,uniphier-pxs3-usb3-ssphy
+> +              - socionext,uniphier-nx1-usb3-ssphy
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 2
 
-diff --git a/tools/testing/selftests/sgx/defines.h b/tools/testing/selftests/sgx/defines.h
-index d8587c971941..08b2765dc2f4 100644
---- a/tools/testing/selftests/sgx/defines.h
-+++ b/tools/testing/selftests/sgx/defines.h
-@@ -27,6 +27,7 @@ enum encl_op_type {
- 	ENCL_OP_EACCEPT,
- 	ENCL_OP_EMODPE,
- 	ENCL_OP_INIT_TCS_PAGE,
-+	ENCL_OP_GET_RSP,
- 	ENCL_OP_MAX,
- };
- 
-@@ -76,4 +77,10 @@ struct encl_op_init_tcs_page {
- 	uint64_t entry;
- };
- 
-+struct encl_op_rsp {
-+	struct encl_op_header header;
-+	uint64_t ret;
-+};
-+
-+
- #endif /* DEFINES_H */
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index a7543e5561a9..2380944dce71 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -570,12 +573,14 @@ TEST_F(enclave, clobbered_vdso_and_user_function)
- /*
-  * Sanity check that it is possible to enter either of the two hardcoded TCS
-  */
- TEST_F(enclave, tcs_entry)
- {
- 	struct encl_op_header op;
-+	struct encl_op_rsp rsp_op;
- 
- 	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
- 
-@@ -591,6 +596,17 @@ TEST_F(enclave, tcs_entry)
- 	EXPECT_EQ(self->run.exception_error_code, 0);
- 	EXPECT_EQ(self->run.exception_addr, 0);
- 
-+	rsp_op.ret = 0;
-+	rsp_op.header.type = ENCL_OP_GET_RSP;
-+
-+	EXPECT_EQ(ENCL_CALL(&rsp_op, &self->run, true), 0);
-+
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.exception_vector, 0);
-+	EXPECT_EQ(self->run.exception_error_code, 0);
-+	EXPECT_EQ(self->run.exception_addr, 0);
-+	printf("rsp TCS #1 = 0X%lX \n", rsp_op.ret);
-+
- 	/* Move to the next TCS. */
- 	self->run.tcs = self->encl.encl_base + PAGE_SIZE;
- 
-@@ -600,6 +616,17 @@ TEST_F(enclave, tcs_entry)
- 	EXPECT_EQ(self->run.exception_vector, 0);
- 	EXPECT_EQ(self->run.exception_error_code, 0);
- 	EXPECT_EQ(self->run.exception_addr, 0);
-+	rsp_op.ret = 0;
-+	rsp_op.header.type = ENCL_OP_GET_RSP;
-+
-+	EXPECT_EQ(ENCL_CALL(&rsp_op, &self->run, true), 0);
-+
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.exception_vector, 0);
-+	EXPECT_EQ(self->run.exception_error_code, 0);
-+	EXPECT_EQ(self->run.exception_addr, 0);
-+	printf("rsp TCS #2 = 0X%lX \n", rsp_op.ret);
-+
- }
- 
- /*
-diff --git a/tools/testing/selftests/sgx/test_encl.c b/tools/testing/selftests/sgx/test_encl.c
-index c0d6397295e3..b2a94a6d754e 100644
---- a/tools/testing/selftests/sgx/test_encl.c
-+++ b/tools/testing/selftests/sgx/test_encl.c
-@@ -119,6 +119,17 @@ static void do_encl_op_nop(void *_op)
- 
- }
- 
-+static void do_get_rsp(void *_op)
-+{
-+	struct encl_op_rsp *op = _op;
-+	uint64_t rsp;
-+
-+	asm volatile("mov %%rsp, %0 \n": "=r"(rsp) ::);
-+
-+	op->ret = rsp;
-+
-+}
-+
- void encl_body(void *rdi,  void *rsi)
- {
- 	const void (*encl_op_array[ENCL_OP_MAX])(void *) = {
-@@ -130,6 +141,7 @@ void encl_body(void *rdi,  void *rsi)
- 		do_encl_eaccept,
- 		do_encl_emodpe,
- 		do_encl_init_tcs_page,
-+		do_get_rsp,
- 	};
- 
- 	struct encl_op_header *op = (struct encl_op_header *)rdi;
+Same question as above.
 
+> +          maxItems: 3
+> +        clock-names:
+> +          minItems: 2
+> +          items:
+> +            - const: link
+> +            - const: phy
+> +            - const: phy-ext
+> +        resets:
+> +          minItems: 2
+> +          maxItems: 2
+> +        reset-names:
+> +          items:
+> +            - const: link
+> +            - const: phy
+> +
+>  required:
+>    - compatible
+>    - reg
+
+
+Best regards,
+Krzysztof

@@ -2,104 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C284ECC6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009F34ECC8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347858AbiC3Sj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53330 "EHLO
+        id S1350056AbiC3SmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350979AbiC3SiW (ORCPT
+        with ESMTP id S1350353AbiC3Sl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:38:22 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D7E5BE54
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:36:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648665388; x=1680201388;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dsZkV85VOjyfqJhpnTC+Fd4cW3CGBcgeUV/g0lbKhuI=;
-  b=Xg3s9wHp5Xb95fX3qCfU/xTCBTfJAm4+tC5zjn54QqTPiWsPe3R9HYnD
-   ayBtWBdNI1KHdY8peupPTsyDibuOqV2f6Cmb8PWXDTBnT1QKcDgc0jZ/G
-   A/XQRvzmFG8BlPSIy8Km824Vi1bVZIXm2gbIf/2YVwpjfneZrJivzEgN3
-   +K5q5Z4aW2DxQXhlJbRiuRoIlX3aAXSaY4M/LlUwbNle5ce+nyo1rPRSK
-   OmnJOVuGHPqfS9EJuE4a00PKa3h0GsCgbpbY5A86Gs8dAVW4LvhqUuDW5
-   wtFonJBBWuFnc1GM6t0EIJLbWeOq9ll+ilLVqEYwPaDigh1EUb69xP97a
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10302"; a="322799161"
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="322799161"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 11:36:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,223,1643702400"; 
-   d="scan'208";a="654007180"
-Received: from lkp-server02.sh.intel.com (HELO 56431612eabd) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 30 Mar 2022 11:36:26 -0700
-Received: from kbuild by 56431612eabd with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nZdBB-0000JK-Nf;
-        Wed, 30 Mar 2022 18:36:25 +0000
-Date:   Thu, 31 Mar 2022 02:36:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/arm/kernel/irq.c:51:12: sparse: sparse: symbol
- '__pcpu_scope_irq_stack_ptr' was not declared. Should it be static?
-Message-ID: <202203310200.MFNPVX0L-lkp@intel.com>
+        Wed, 30 Mar 2022 14:41:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE176CA4D
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:37:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1FB0BB81E21
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 18:37:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 428F5C340EC;
+        Wed, 30 Mar 2022 18:37:50 +0000 (UTC)
+Date:   Wed, 30 Mar 2022 14:37:48 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
+        Frederic Weisbecker <fweisbec@gmail.com>
+Subject: Re: [External] Re: [PATCH] sched/fair: fix broken bandwidth control
+ with nohz_full
+Message-ID: <20220330143748.37f4804c@gandalf.local.home>
+In-Reply-To: <20220330182327.GO8939@worktop.programming.kicks-ass.net>
+References: <20220328110751.39987-1-zhouchengming@bytedance.com>
+        <20220328132047.GD8939@worktop.programming.kicks-ass.net>
+        <c0465b27-328a-1288-fb50-d4c6321c8b4d@bytedance.com>
+        <YkHRmv/OcABIB0wP@hirez.programming.kicks-ass.net>
+        <6fc49cff-f8a1-8b09-5a25-a64e5d07d258@bytedance.com>
+        <YkHal1m3pnxGoQ1Y@hirez.programming.kicks-ass.net>
+        <20220328124454.08ab6126@gandalf.local.home>
+        <20220330182327.GO8939@worktop.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d888c83fcec75194a8a48ccd283953bdba7b2550
-commit: cafc0eab168917ec9c0cd47d530a40cd40eb2928 ARM: v7m: enable support for IRQ stacks
-date:   4 months ago
-config: arm-randconfig-s031-20220327 (https://download.01.org/0day-ci/archive/20220331/202203310200.MFNPVX0L-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cafc0eab168917ec9c0cd47d530a40cd40eb2928
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout cafc0eab168917ec9c0cd47d530a40cd40eb2928
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/
+On Wed, 30 Mar 2022 20:23:27 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> > Chengming brought up VMs. That's a case to want to control the bandwidth,
+> > but also not interrupt them with timer interrupts when they are running as
+> > the top priority task on a CPU.  
+> 
+> It's CFS, there is nothing top priority about that.
 
+If there's only one task running on a CPU, even with CFS, why do we need a
+tick?
 
-sparse warnings: (new ones prefixed by >>)
->> arch/arm/kernel/irq.c:51:12: sparse: sparse: symbol '__pcpu_scope_irq_stack_ptr' was not declared. Should it be static?
+Look, we have a host that is doing nothing but running VMs. Could be a
+single VM. The host doesn't even have disk, it just runs on from initrd,
+and the user is actually just logging into a guest.
 
-vim +/__pcpu_scope_irq_stack_ptr +51 arch/arm/kernel/irq.c
+Why should the host be triggering a tick when running this VM, which is the
+only thing that is running on the host? Yeah, it's CFS, or does CFS have to
+have a tick? even when there's nothing else on the CPU?
 
-d4664b6c987f803 Ard Biesheuvel 2021-10-05  50  
-d4664b6c987f803 Ard Biesheuvel 2021-10-05 @51  asmlinkage DEFINE_PER_CPU_READ_MOSTLY(u8 *, irq_stack_ptr);
-d4664b6c987f803 Ard Biesheuvel 2021-10-05  52  
-
-:::::: The code at line 51 was first introduced by commit
-:::::: d4664b6c987f80338407889c1e3f3abe7e16be94 ARM: implement IRQ stacks
-
-:::::: TO: Ard Biesheuvel <ardb@kernel.org>
-:::::: CC: Ard Biesheuvel <ardb@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+-- Steve

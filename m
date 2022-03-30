@@ -2,88 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B79C4ECECC
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4514ECEC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 23:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351227AbiC3V3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 17:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40520 "EHLO
+        id S1351219AbiC3V3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 17:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232691AbiC3V3A (ORCPT
+        with ESMTP id S232691AbiC3V3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 17:29:00 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419C644747;
-        Wed, 30 Mar 2022 14:27:14 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id x31so13450773pfh.9;
-        Wed, 30 Mar 2022 14:27:14 -0700 (PDT)
+        Wed, 30 Mar 2022 17:29:47 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706C950B0A
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:28:01 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso1451093pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 14:28:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=tNpJ5Wp3g9qLmfmWDDWFXCwZdVqr76NxjlK+EkTDsUE=;
-        b=lEisIQQ8NkZDjFI04IeUbqVRNXz8mEJXiM2w5qCn/v6isXda0A5o3rtlMaFs8BXBrj
-         /9SItqnxfdDoCsj5EoAthdhMEZH6wLOOxBvvXLaJIRMVSlPieRUYR+gol+wuXLk6Rmow
-         1WOhELGOOq5tpn3aRPeqSH0T4W3tPd+IZdHxtFWKRE2D1LQSZOKfLVXAg6skFtYZAegW
-         B3mScsxteen1R1X0teejTHJWWlAkt26FmZbQ7CzKeDolm0L/J3ch5uROhedUT4q1hL8S
-         WOPZu2sP0hWWXIZ3r4//biHsv4admaAFtudDtQGD+vaGsyNHOtKG4lpNDRtmlOVKMsC7
-         RC9w==
+        bh=vN9uvU8bkhJgYN2OitlbKPDgRCZok2QbVcUF878z/wM=;
+        b=IQx0L5aQf66UczNgN+LhtlzuJS+bkdz06vFPIbaVx2DkCEsgyaiqgwWD12MNZnV/Yq
+         xOnU8wHckgHeP/bGT8Q2CJ04mfHIN2Kze6HWqGKcrCfR0U1ajWKW40gEylNf8Bj0L5Lc
+         6RyiZMmFWgZ/8qJ1QiQLjmUcxcApOgbZWj3eT1Dnue1RCjw6nki5rmx1M3/dgOPLLsCE
+         hC6JbHVF0KV9EuwXX7+5Y0Mr7b/CmQBnoe7+rkZqgR9gQI6f2dO3ovALr0wVtch1bvnY
+         t9iWYq/WS2stSleglwtuhLXr1uteXlTMXBhv1ZHGhvp4CmoGj27HnP0xzsvE6pP7Lsp6
+         8gCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=tNpJ5Wp3g9qLmfmWDDWFXCwZdVqr76NxjlK+EkTDsUE=;
-        b=Eyd4ZhTJRmqurUI1SECUNC5LH99GJ6T4io1HP++QXKO81xeW8Omk53Sgw4N+AwJof2
-         oQDvKj6Qd4nvRD+YFFy49IoVEhRvESh6P70dgCs7/8LtpXe97JXyKp+RcAPf74b46LPZ
-         S2gXWDV5c/TqFiCWYf7lwbh5Wtf+x+hmGj/msXK7u3gG4o21gdXUfyiGq9TvrtmVGxXB
-         k97EDgQrunU3L5dkxpSINm0thOLBUZrK/7h7p0BnEsAbWzp6mkWy2DnGdsjHVhy6u3hg
-         0nn8WrCJWF5CF3ItjZxWfI2vC7CrzlPkWEkJ84HEs9wOr90T23k/XV3JTQ7GJh0/aviq
-         pv3g==
-X-Gm-Message-State: AOAM531eUNijaVVd9aEQ4zqbTjcp3vMTrf5oGtqFBgWBULMlyVkChCpb
-        AYWB7O4rPvcye67ClGd9nP8=
-X-Google-Smtp-Source: ABdhPJzXZipcBVSePl6qxrEsG59gZGosBgV2kvbFHEVhGP6w5ADkZKG8xwDNoANpsMDxot0qnQVqWQ==
-X-Received: by 2002:a63:290:0:b0:386:5374:b8b5 with SMTP id 138-20020a630290000000b003865374b8b5mr7682497pgc.528.1648675633648;
-        Wed, 30 Mar 2022 14:27:13 -0700 (PDT)
-Received: from MBP-98dd607d3435.dhcp.thefacebook.com ([2620:10d:c090:500::1:e77])
-        by smtp.gmail.com with ESMTPSA id s3-20020a056a00194300b004f6da3a1a3bsm25273090pfk.8.2022.03.30.14.27.10
+        bh=vN9uvU8bkhJgYN2OitlbKPDgRCZok2QbVcUF878z/wM=;
+        b=vAlHzuOaGq5aJC09CtUbpUpyShke4SolLakVU15WIJ6edorECfMFPPCopPt6Vgfnnf
+         aVUnO17uYoEEXy4YKTjadUfDJY434gqnSK4neT21FAkptd9FmtqjkJHoMMNCePfCloN7
+         P595LOVBxfHDyI/LqPomTuw6xuRBczXGyDndGe8Jpyu2zTtbStwgBslmFtUIdv3p8t1z
+         raVawIZ0wmQhuWVU85SPBmqSxp1uXX0CG0AxLsPyXJE/nyoyBn7A911QjZl4+ks03r8u
+         QxVGwoY9ZmDGp1HaYrtwNTuDkAD4DspsvBD92VWK2LhKHjEI58+vzDBoVJJK8rvVgbrb
+         RmOg==
+X-Gm-Message-State: AOAM530WXETXxAwmPn9mTemZ9vqd+yK43ipSUHZdTq1UouyQ7DYaM0YX
+        UgXeXd+b1S5dEk0IIRxo1j0r6Q==
+X-Google-Smtp-Source: ABdhPJzPeMqomGyqG5K2JJ7uvrWHjl5jOr+EIfR8eIBr6A/CxG+NwQt7TKETjTc2mUy8h1bL4A+Y7A==
+X-Received: by 2002:a17:90a:380d:b0:1c9:d9bb:7602 with SMTP id w13-20020a17090a380d00b001c9d9bb7602mr1770709pjb.216.1648675680717;
+        Wed, 30 Mar 2022 14:28:00 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id u10-20020a63b54a000000b00380ea901cd2sm19845176pgo.6.2022.03.30.14.27.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 14:27:13 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 14:27:09 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v3 06/17] HID: allow to change the report
- descriptor from an eBPF program
-Message-ID: <20220330212709.6bpfhnmvon4dd7xc@MBP-98dd607d3435.dhcp.thefacebook.com>
-References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
- <20220318161528.1531164-7-benjamin.tissoires@redhat.com>
- <CAADnVQLvhWxEtHETg0tasJ7Fp5JHNRYWdjhnxi1y1gBpXS=bvQ@mail.gmail.com>
- <CAO-hwJJXR3jtAvLF1phUa5pKZzVkDxAAHO5+7R50hL-fVhDYyA@mail.gmail.com>
+        Wed, 30 Mar 2022 14:28:00 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 21:27:56 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chenyi Qiang <chenyi.qiang@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 5/7] KVM: MMU: Add support for PKS emulation
+Message-ID: <YkTLXGdu2I9i44ti@google.com>
+References: <20220221080840.7369-1-chenyi.qiang@intel.com>
+ <20220221080840.7369-6-chenyi.qiang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAO-hwJJXR3jtAvLF1phUa5pKZzVkDxAAHO5+7R50hL-fVhDYyA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220221080840.7369-6-chenyi.qiang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,246 +77,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 05:08:25PM +0100, Benjamin Tissoires wrote:
-> Hi Alexei,
-> 
-> On Tue, Mar 22, 2022 at 11:51 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Fri, Mar 18, 2022 at 9:16 AM Benjamin Tissoires
-> > <benjamin.tissoires@redhat.com> wrote:
-> > >
-> > > +u8 *hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size)
-> > > +{
-> > > +       int ret;
-> > > +       struct hid_bpf_ctx_kern ctx = {
-> > > +               .type = HID_BPF_RDESC_FIXUP,
-> > > +               .hdev = hdev,
-> > > +               .size = *size,
-> > > +       };
-> > > +
-> > > +       if (bpf_hid_link_empty(&hdev->bpf, BPF_HID_ATTACH_RDESC_FIXUP))
-> > > +               goto ignore_bpf;
-> > > +
-> > > +       ctx.data = kmemdup(rdesc, HID_MAX_DESCRIPTOR_SIZE, GFP_KERNEL);
-> > > +       if (!ctx.data)
-> > > +               goto ignore_bpf;
-> > > +
-> > > +       ctx.allocated_size = HID_MAX_DESCRIPTOR_SIZE;
-> > > +
-> > > +       ret = hid_bpf_run_progs(hdev, &ctx);
-> > > +       if (ret)
-> > > +               goto ignore_bpf;
-> > > +
-> > > +       if (ctx.size > ctx.allocated_size)
-> > > +               goto ignore_bpf;
-> > > +
-> > > +       *size = ctx.size;
-> > > +
-> > > +       if (*size) {
-> > > +               rdesc = krealloc(ctx.data, *size, GFP_KERNEL);
-> > > +       } else {
-> > > +               rdesc = NULL;
-> > > +               kfree(ctx.data);
-> > > +       }
-> > > +
-> > > +       return rdesc;
-> > > +
-> > > + ignore_bpf:
-> > > +       kfree(ctx.data);
-> > > +       return kmemdup(rdesc, *size, GFP_KERNEL);
-> > > +}
-> > > +
-> > >  int __init hid_bpf_module_init(void)
-> > >  {
-> > >         struct bpf_hid_hooks hooks = {
-> > >                 .hdev_from_fd = hid_bpf_fd_to_hdev,
-> > >                 .pre_link_attach = hid_bpf_pre_link_attach,
-> > > +               .post_link_attach = hid_bpf_post_link_attach,
-> > >                 .array_detach = hid_bpf_array_detach,
-> > >         };
-> > >
-> > > diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> > > index 937fab7eb9c6..3182c39db006 100644
-> > > --- a/drivers/hid/hid-core.c
-> > > +++ b/drivers/hid/hid-core.c
-> > > @@ -1213,7 +1213,8 @@ int hid_open_report(struct hid_device *device)
-> > >                 return -ENODEV;
-> > >         size = device->dev_rsize;
-> > >
-> > > -       buf = kmemdup(start, size, GFP_KERNEL);
-> > > +       /* hid_bpf_report_fixup() ensures we work on a copy of rdesc */
-> > > +       buf = hid_bpf_report_fixup(device, start, &size);
-> >
-> > Looking at this patch and the majority of other patches...
-> > the code is doing a lot of work to connect HID side with bpf.
-> > At the same time the evolution of the patch series suggests
-> > that these hook points are not quite stable. More hooks and
-> > helpers are being added.
-> > It tells us that it's way too early to introduce a stable
-> > interface between HID and bpf.
-> 
-> I understand that you might be under the impression that the interface
-> is changing a lot, but this is mostly due to my poor knowledge of all
-> the arcanes of eBPF.
-> The overall way HID-BPF works is to work on a single array, and we
-> should pretty much be sorted out. There are a couple of helpers to be
-> able to communicate with the device, but the API has been stable in
-> the kernel for those for quite some time now.
-> 
-> The variations in the hooks is mostly because I don't know what is the
-> best representation we can use in eBPF for those, and the review
-> process is changing that.
-> 
-> > We suggest to use __weak global functions and unstable kfunc helpers
-> > to achieve the same goal.
-> > This way HID side and bpf side can evolve without introducing
-> > stable uapi burden.
-> > For example this particular patch can be compressed to:
-> > __weak int hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc,
-> > unsigned int *size)
-> > {
-> >    return 0;
-> > }
-> > ALLOW_ERROR_INJECTION(ALLOW_ERROR_INJECTION, ERRNO);
-> >
-> > - buf = kmemdup(start, size, GFP_KERNEL);
-> > + if (!hid_bpf_report_fixup(device, start, &size))
-> > +   buf = kmemdup(start, size, GFP_KERNEL);
-> >
-> > Then bpf program can replace hid_bpf_report_fixup function and adjust its
-> > return value while reading args.
-> 
-> I appreciate the suggestion and gave it a try, but AFAICT this doesn't
-> work for HID (please correct me if I am wrong):
-> 
-> - I tried to use __weak to replace the ugly struct bpf_hid_hooks
-> 
-> This struct is in place simply because the HID module can be compiled
-> in as a kernel module and we might not have the symbols available from
-> kernel/bpf when it is a separate module.
+On Mon, Feb 21, 2022, Chenyi Qiang wrote:
+> @@ -277,14 +278,18 @@ static inline u8 permission_fault(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+>  	WARN_ON(pfec & (PFERR_PK_MASK | PFERR_RSVD_MASK));
+>  	if (unlikely(mmu->pkr_mask)) {
+>  		u32 pkr_bits, offset;
+> +		u32 pkr;
+>  
+>  		/*
+> -		* PKRU defines 32 bits, there are 16 domains and 2
+> -		* attribute bits per domain in pkru.  pte_pkey is the
+> -		* index of the protection domain, so pte_pkey * 2 is
+> -		* is the index of the first bit for the domain.
+> +		* PKRU and PKRS both define 32 bits. There are 16 domains
+> +		* and 2 attribute bits per domain in them. pte_key is the
+> +		* index of the protection domain, so pte_pkey * 2 is the
+> +		* index of the first bit for the domain. The use of PKRU
+> +		* versus PKRS is selected by the address type, as determined
+> +		* by the U/S bit in the paging-structure entries.
+>  		*/
+> -		pkr_bits = (vcpu->arch.pkru >> (pte_pkey * 2)) & 3;
+> +		pkr = pte_access & PT_USER_MASK ? vcpu->arch.pkru : kvm_read_pkrs(vcpu);
 
-why is that? The kernel modules should be compiled with BTF and
-bpf infra can attach to those functions the same way.
-__weak suggestion in the above is not to override it by the module.
-It's there to prevent compiler from inlining it.
-__weak int hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc,
-   unsigned int *size) {...}
-Will be only one.
-Either in kernel proper or in kernel module. It's up to HID subsystem.
+Blindly reading PKRU/PKRS is wrong.  I think this magic insanity will be functionally
+correct due to update_pkr_bitmask() clearing the appropriate bits in pkr_mask based
+on CR4.PK*, but the read should never happen.  PKRU is benign, but I believe reading
+PKRS will result in VMREAD to an invalid field if PKRU is supported and enabled, but
+PKRS is not supported.
 
-> Either I did something wrong, but it seems that when we load the
-> module in the kernel, there is no magic that overrides the weak
-> symbols from the ones from the modules.
-> 
-> - for hid_bpf_report_fixup(), this would mean that a BPF program could
-> overwrite the function
-> 
-> This is great, but I need to have one program per device, not one
-> globally defined function.
-> I can not have a generic report_fixup in the system, simply because
-> you might need 2 different functions for 2 different devices.
+I belive the easiest solution is:
 
-That's fine. Take a look at how libxdp is doing the chaining.
-One bpf prog is attached to a main entry point and it does
-demux (or call other progs sequentially) based on its own logic.
-For example you have bpf prog that does:
-SEC("fentry/hid_bpf_report_fixup")
-int main_hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc,
-   unsigned int *size)
-{
-  if (hdev->id == ..)
-    another_bpf_prog();
-}
+		if (pte_access & PT_USER_MASK)
+			pkr = is_cr4_pke(mmu) ? vcpu->arch.pkru : 0;
+		else
+			pkr = is_cr4_pks(mmu) ? kvm_read_pkrs(vcpu) : 0;
 
-Or call another bpf prog via bpf_tail_call.
+The is_cr4_pk*() helpers are restricted to mmu.c, but this presents a good
+opportunity to extra the PKR stuff to a separate, non-inline helper (as a prep
+patch).  E.g.
 
-There are lots of option to connect them.
 
-You can also have N bpf progs. All look like:
-SEC("fentry/hid_bpf_report_fixup")
-int first_hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc,
-   unsigned int *size)
-{
-  if (hdev->id != mine_id)
-    return 0;
-  // do work;
-}
+	WARN_ON(pfec & (PFERR_PK_MASK | PFERR_RSVD_MASK));
+	if (unlikely(mmu->pkr_mask))
+		u32 pkr_bits = kvm_mmu_pkr_bits(vcpu, mmu, pte_access, pte_pkey);
 
-And attach them all as fmod_ret type bpf prog to the same
-kernel hid_bpf_report_fixup() function.
-The bpf trampoline will call them sequentially.
+		errcode |= -pkr_bits & PFERR_PK_MASK;
+		fault |= (pkr_bits != 0);
+	}
 
-> 
-> We could solve that by auto-generating the bpf program based on which
-> devices are available, but that would mean that users will see a
-> reconnect of all of their input devices when they plug in a new one,
-> and will also require them to have LLVM installed, which I do not
-> want.
+	return -(u32)fault & errcode;
 
-Of course. No need to regenrated them with LLVM on the fly.
-
-> - for stuff like hid_bpf_raw_event(), I want to have multiple programs
-> attached to the various devices, and not necessarily the same across
-> devices.
-> 
-> This is basically the same as above, except that I need to chain programs.
-
-Chaining is already available for fentry/fexit/fmod_ret programs.
- 
-> For instance, we could have a program that "fixes" one device, but I
-> also want to attach a tracing program on top of it to monitor what is
-> happening.
-
-That's also possible.
-You can have a main bpf prog as entry point that calls global functions
-of this bpf program. Later you can install another bpf prog that
-will replace one of the previously loaded global bpf functions.
-So fully programmable and arbitrary chaining is available.
-
-> >
-> > Similar approach can be done with all other hooks.
-> >
-> > Once api between HID and bpf stabilizes we can replace nop functions
-> > with writeable tracepoints to make things a bit more stable
-> > while still allowing for change of the interface in the future.
-> >
-> > The amount of bpf specific code in HID core will be close to zero
-> > while bpf can be used to flexibly tweak it.
-> 
-> Again, I like the idea, but I clearly don't see where you want to go.
-> From what I see, this is incompatible with the use cases I have.
-> 
-> >
-> > kfunc is a corresponding mechanism to introduce unstable api
-> > from bpf into the kernel instead of stable helpers.
-> > Just whitelist some functions as unstable kfunc helpers and call them
-> > from bpf progs.
-> > See net/bpf/test_run.c and bpf_kfunc_call* for inspiration.
-> >
-> 
-> I also like this idea.
-> 
-> However, for hid_hw_raw_request() I can not blindly enable that
-> function in all program types. This function makes the kernel sleep,
-> and so we can not use it while in IRQ context.
-> I think I can detect if we are in IRQ or not, but is it really worth
-> enabling it across all BPF program types when we know that only
-> SEC("hid/user_event") will use it?
-
-There are sleepable and non-sleepable fmod_ret/fentry/fexit programs.
-The hid subsystem would need to white list all ALLOW_ERROR_INJECTION
-kernel functions approriately.
-So that sleepable bpf prog won't attach to a hook where IRQs are disabled.
-
-> Also, I am not sure how we can make bpf_hid_get_data() work with that.
-> We need to teach the verifier how much memory is provided, and I do
-> not see how you can do that with kfunc.
-
-If there is anything missing in the verifier let's extend that.
-Everyone will benefit.
-
-PS
-Sorry for delay. Looks like your emails are going into some sort
-of queue in my gmail and receive them later. Or some other odd
-filtering is going on. Maybe it's related to giant cc list in your patches.
+permission_fault() is inline because it's heavily used for shadow paging, but
+when using TDP, it's far less performance critical.  PKR is TDP-only, so moving
+it out-of-line should be totally ok (this is also why this patch is "unlikely").

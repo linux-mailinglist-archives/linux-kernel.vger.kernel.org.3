@@ -2,149 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C71434EBB7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C26F4EBB7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 09:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243682AbiC3HLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 03:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
+        id S243683AbiC3HM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 03:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243648AbiC3HLC (ORCPT
+        with ESMTP id S233747AbiC3HMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 03:11:02 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7CE14964D;
-        Wed, 30 Mar 2022 00:09:17 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id k124-20020a1ca182000000b0038c9cf6e2a6so2864035wme.0;
-        Wed, 30 Mar 2022 00:09:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qiED4Qk72kYFMwtbD+Q9ldYh5qrdjiXwvR6z6T0AKC8=;
-        b=LmMJKbmCwNNNOzUWk8XjIntZSWTp/GKc8Ib8H5z9XdbR3WfbB5BYB2ZdSk+BW6JkC2
-         BmQJ4nBnu0nbARR63z3NR6U5aGfkiKPt3UGF10RvJycq6fgxJfOlbOWO4WPZyp0wgP2D
-         JkiAGNFvUgFOQ3tMjObQTeD727Gv+ruD98anTYAzyiv2L+VKxSVbByX3iD4yUFZsZ5xP
-         ii85ryFTK5GvUTetjlWqJnS6LP6OsoEHsLaxyqLPdr7iD8bIql7fgkWLkw4V2/NrpyZR
-         38qBXG9o9QjHvYFHU+fy9ZXNbDPlGNhHDqcejSTlgs8oKPb4fv0ti1jL6AQLMY8vXtgr
-         5i/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qiED4Qk72kYFMwtbD+Q9ldYh5qrdjiXwvR6z6T0AKC8=;
-        b=OLi+Q7IYMjZXnS24KDyt0KZ12iXteSMZ2CpfU9PVn7JOvV8MwkLL68EGJ5808W8Bju
-         zwN0061FxzIrANxnWCEPXYYJSu33wGVkM6JNpHBUAWkNXR3SbwoAMOjw2xbSc9kaxY+F
-         ihl9PQhcW0LJaBNO5x+7DjA+RcPKws1wSs6He5XkEqNXnunDKv8bUl/F/0BPkO6C/Y5V
-         8TVY0Rnb7q7KIxMbCPkAbAcRc38h02j0SeONzGFpSDFTAtWiyv3zaaatntcSmaecNU3P
-         V/Y/3dpQKNiIMgL8wUdBNdb8aWOwm8vhcQxj86ABX0Xu9zFZBJz1vJme7dvOntKUQasE
-         aTmA==
-X-Gm-Message-State: AOAM5304tS1lLBNSg8tRbsX6Sy0TdWAKXH8NSiezbkvgujWYIvVc4V73
-        Ezzp71c8torzjWSieY7Ui68=
-X-Google-Smtp-Source: ABdhPJz5BEoqm+tnf5aMdPY22Psk9PtsaVfU4xJO3OsNPxofrQR0V6Ti0M/ctJ5lcktmKtXzRBTSxw==
-X-Received: by 2002:a05:600c:5023:b0:38d:1261:aac6 with SMTP id n35-20020a05600c502300b0038d1261aac6mr3033337wmr.180.1648624156241;
-        Wed, 30 Mar 2022 00:09:16 -0700 (PDT)
-Received: from [192.168.178.21] (p5b0eab60.dip0.t-ipconnect.de. [91.14.171.96])
-        by smtp.gmail.com with ESMTPSA id z18-20020adfec92000000b00203f04ed4a8sm16144206wrn.13.2022.03.30.00.09.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 00:09:15 -0700 (PDT)
-Message-ID: <8af3d213-6cb7-a021-c198-e1bd37c47e7c@gmail.com>
-Date:   Wed, 30 Mar 2022 09:09:14 +0200
+        Wed, 30 Mar 2022 03:12:17 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16DC1017DF;
+        Wed, 30 Mar 2022 00:10:31 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a02:3030:d:7e3f:91e1:4be5:4001:fd80])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 5C4D41F4393C;
+        Wed, 30 Mar 2022 08:10:30 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648624230;
+        bh=Ky14EMhLs84Jm426CqymN8f+VXlw/yhjhgyFuJMtXJY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bzXlUh00yEYU8wd0Fa2fSi6DNHm+PmbZkl5f3xI/8xqCu7zzqJvGO8dfLkSvS48Fb
+         Uwf/ieTRLCJVwDe8lbyOdp1NNpGfqkZ3wORV5EygTmoW5n8HCAngZwbEoPQ1mXctzP
+         /Z3QmivNgnE5S6fml5qxX+6WcCbV9FImKpuaYadjbgWCu7e3xvDkDoqazIijNsn20C
+         CSBcu0XamQ7zECoRJyTsLoA93ZtzLIYlvjS2VXosRlPKFDVjvLTpNKuYYN5pMrkdIh
+         6LJhQslq3kfnl7k64YBS9vPEURRlpI5R99ndGOx2g/Oo9Ri/tbLNthuL2uvEhJn91n
+         xg0t91PK8UeKg==
+Date:   Wed, 30 Mar 2022 09:10:27 +0200
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@collabora.com, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 19/24] media: rkvdec-h264: Add field decoding support
+Message-ID: <20220330071027.kp6ryruntpysmjau@basti-XPS-13-9310>
+References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
+ <20220328195936.82552-20-nicolas.dufresne@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [Linaro-mm-sig] [PATCH next] dma-buf/sync-file: do not allow zero
- size allocations
-Content-Language: en-US
-To:     Pavel Skripkin <paskripkin@gmail.com>, sumit.semwal@linaro.org,
-        gustavo@padovan.org, christian.koenig@amd.com,
-        daniel.vetter@ffwll.ch
-Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        syzbot+5c943fe38e86d615cac2@syzkaller.appspotmail.com
-References: <20220329221425.22691-1-paskripkin@gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <20220329221425.22691-1-paskripkin@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220328195936.82552-20-nicolas.dufresne@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-That problem is already fixed with patch 21d139d73f77 dma-buf/sync-file: 
-fix logic error in new fence merge code.
+Hey Nicolas,
 
-Am 30.03.22 um 00:14 schrieb Pavel Skripkin:
-> syzbot reported GPF in dma_fence_array_first(), which is caused by
-> dereferencing ZERO_PTR in dma-buf internals.
->
-> ZERO_PTR was generated in sync_file_merge(). This functuion tries to
-> reduce allocation size, but does not check if it reducing to 0.
+On 28.03.2022 15:59, Nicolas Dufresne wrote:
+>This makes use of the new feature in the reference builder to program
+>up to 32 references when doing field decoding. It also signals the
+>parity (top of bottom) of the field to the hardware.
 
-This is actually perfectly ok. The code above should have prevented the 
-size to become 0.
-
-Regards,
-Christian.
+s/top of bottom/top or bottom/
 
 >
-> Fix reported bug by validating `index` value before passing it to
-> krealloc_array().
->
-> Fail log:
->
-> general protection fault, probably for non-canonical address 0xdffffc0000000002: 0000 [#1] PREEMPT SMP KASAN
-> KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
-> CPU: 1 PID: 3595 Comm: syz-executor814 Not tainted 5.17.0-next-20220328-syzkaller #0
-> ...
-> RIP: 0010:dma_fence_array_first+0x78/0xb0 drivers/dma-buf/dma-fence-array.c:234
-> ...
-> Call Trace:
->   <TASK>
->   __dma_fence_unwrap_array include/linux/dma-fence-unwrap.h:42 [inline]
->   dma_fence_unwrap_first include/linux/dma-fence-unwrap.h:57 [inline]
->   sync_file_ioctl_fence_info drivers/dma-buf/sync_file.c:414 [inline]
->   sync_file_ioctl+0x248/0x22c0 drivers/dma-buf/sync_file.c:477
->   vfs_ioctl fs/ioctl.c:51 [inline]
->   __do_sys_ioctl fs/ioctl.c:870 [inline]
->
-> There was same problem with initial kcalloc() allocation in same
-> function, so it's fixed as well.
->
-> Reported-and-tested-by: syzbot+5c943fe38e86d615cac2@syzkaller.appspotmail.com
-> Fixes: 519f490db07e ("dma-buf/sync-file: fix warning about fence containers")
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-> ---
->   drivers/dma-buf/sync_file.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
-> index b8dea4ec123b..aa744f017008 100644
-> --- a/drivers/dma-buf/sync_file.c
-> +++ b/drivers/dma-buf/sync_file.c
-> @@ -212,7 +212,7 @@ static struct sync_file *sync_file_merge(const char *name, struct sync_file *a,
->   	dma_fence_unwrap_for_each(b_fence, &b_iter, b->fence)
->   		++num_fences;
->   
-> -	if (num_fences > INT_MAX)
-> +	if (num_fences > INT_MAX || !num_fences)
->   		goto err_free_sync_file;
->   
->   	fences = kcalloc(num_fences, sizeof(*fences), GFP_KERNEL);
-> @@ -264,7 +264,7 @@ static struct sync_file *sync_file_merge(const char *name, struct sync_file *a,
->   	if (index == 0)
->   		add_fence(fences, &index, dma_fence_get_stub());
->   
-> -	if (num_fences > index) {
-> +	if (index && num_fences > index) {
->   		struct dma_fence **tmp;
->   
->   		/* Keep going even when reducing the size failed */
+>Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 
+Greetings,
+Sebastian
+
+>---
+> drivers/staging/media/rkvdec/rkvdec-h264.c | 48 ++++++++++------------
+> 1 file changed, 21 insertions(+), 27 deletions(-)
+>
+>diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
+>index ec52b195bbd7..891c48bf6a51 100644
+>--- a/drivers/staging/media/rkvdec/rkvdec-h264.c
+>+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+>@@ -97,13 +97,10 @@ struct rkvdec_h264_priv_tbl {
+> 	u8 err_info[RKV_ERROR_INFO_SIZE];
+> };
+>
+>-#define RKVDEC_H264_DPB_SIZE 16
+>-
+> struct rkvdec_h264_reflists {
+> 	struct v4l2_h264_reference p[V4L2_H264_REF_LIST_LEN];
+> 	struct v4l2_h264_reference b0[V4L2_H264_REF_LIST_LEN];
+> 	struct v4l2_h264_reference b1[V4L2_H264_REF_LIST_LEN];
+>-	u8 num_valid;
+> };
+>
+> struct rkvdec_h264_run {
+>@@ -738,23 +735,26 @@ static void lookup_ref_buf_idx(struct rkvdec_ctx *ctx,
+> 		struct vb2_queue *cap_q = &m2m_ctx->cap_q_ctx.q;
+> 		int buf_idx = -1;
+>
+>-		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
+>+		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE) {
+> 			buf_idx = vb2_find_timestamp(cap_q,
+> 						     dpb[i].reference_ts, 0);
+>+			if (buf_idx < 0)
+>+				pr_debug("No buffer for reference_ts %llu",
+>+					 dpb[i].reference_ts);
+>+		}
+>
+> 		run->ref_buf_idx[i] = buf_idx;
+> 	}
+> }
+>
+> static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+>+			    struct v4l2_h264_reflist_builder *builder,
+> 			    struct rkvdec_h264_run *run)
+> {
+> 	const struct v4l2_ctrl_h264_decode_params *dec_params = run->decode_params;
+> 	const struct v4l2_h264_dpb_entry *dpb = dec_params->dpb;
+> 	struct rkvdec_h264_ctx *h264_ctx = ctx->priv;
+>-	const struct v4l2_ctrl_h264_sps *sps = run->sps;
+> 	struct rkvdec_h264_priv_tbl *priv_tbl = h264_ctx->priv_tbl.cpu;
+>-	u32 max_frame_num = 1 << (sps->log2_max_frame_num_minus4 + 4);
+>
+> 	u32 *hw_rps = priv_tbl->rps;
+> 	u32 i, j;
+>@@ -772,37 +772,36 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+> 		if (!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
+> 			continue;
+>
+>-		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM ||
+>-		    dpb[i].frame_num <= dec_params->frame_num) {
+>-			p[i] = dpb[i].frame_num;
+>-			continue;
+>-		}
+>-
+>-		p[i] = dpb[i].frame_num - max_frame_num;
+>+		p[i] = builder->refs[i].frame_num;
+> 	}
+>
+> 	for (j = 0; j < RKVDEC_NUM_REFLIST; j++) {
+>-		for (i = 0; i < h264_ctx->reflists.num_valid; i++) {
+>-			u8 dpb_valid = run->ref_buf_idx[i] >= 0;
+>-			u8 idx = 0;
+>+		for (i = 0; i < builder->num_valid; i++) {
+>+			struct v4l2_h264_reference *ref;
+>+			u8 dpb_valid;
+>+			u8 bottom;
+>
+> 			switch (j) {
+> 			case 0:
+>-				idx = h264_ctx->reflists.p[i].index;
+>+				ref = &h264_ctx->reflists.p[i];
+> 				break;
+> 			case 1:
+>-				idx = h264_ctx->reflists.b0[i].index;
+>+				ref = &h264_ctx->reflists.b0[i];
+> 				break;
+> 			case 2:
+>-				idx = h264_ctx->reflists.b1[i].index;
+>+				ref = &h264_ctx->reflists.b1[i];
+> 				break;
+> 			}
+>
+>-			if (idx >= ARRAY_SIZE(dec_params->dpb))
+>+			if (WARN_ON(ref->index >= ARRAY_SIZE(dec_params->dpb)))
+> 				continue;
+>
+>+			dpb_valid = run->ref_buf_idx[ref->index] >= 0;
+>+			bottom = ref->fields == V4L2_H264_BOTTOM_FIELD_REF;
+>+
+> 			set_ps_field(hw_rps, DPB_INFO(i, j),
+>-				     idx | dpb_valid << 4);
+>+				     ref->index | dpb_valid << 4);
+>+			set_ps_field(hw_rps, BOTTOM_FLAG(i, j), bottom);
+> 		}
+> 	}
+> }
+>@@ -990,10 +989,6 @@ static void config_registers(struct rkvdec_ctx *ctx,
+> 				       rkvdec->regs + RKVDEC_REG_H264_BASE_REFER15);
+> 	}
+>
+>-	/*
+>-	 * Since support frame mode only
+>-	 * top_field_order_cnt is the same as bottom_field_order_cnt
+>-	 */
+> 	reg = RKVDEC_CUR_POC(dec_params->top_field_order_cnt);
+> 	writel_relaxed(reg, rkvdec->regs + RKVDEC_REG_CUR_POC0);
+>
+>@@ -1109,7 +1104,6 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
+> 	/* Build the P/B{0,1} ref lists. */
+> 	v4l2_h264_init_reflist_builder(&reflist_builder, run.decode_params,
+> 				       run.sps, run.decode_params->dpb);
+>-	h264_ctx->reflists.num_valid = reflist_builder.num_valid;
+> 	v4l2_h264_build_p_ref_list(&reflist_builder, h264_ctx->reflists.p);
+> 	v4l2_h264_build_b_ref_lists(&reflist_builder, h264_ctx->reflists.b0,
+> 				    h264_ctx->reflists.b1);
+>@@ -1117,7 +1111,7 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
+> 	assemble_hw_scaling_list(ctx, &run);
+> 	assemble_hw_pps(ctx, &run);
+> 	lookup_ref_buf_idx(ctx, &run);
+>-	assemble_hw_rps(ctx, &run);
+>+	assemble_hw_rps(ctx, &reflist_builder, &run);
+> 	config_registers(ctx, &run);
+>
+> 	rkvdec_run_postamble(ctx, &run.base);
+>-- 
+>2.34.1
+>

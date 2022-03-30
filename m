@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B7C4EBE34
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FB34EBE3B
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 12:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245076AbiC3KCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 06:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53578 "EHLO
+        id S245083AbiC3KC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 06:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238630AbiC3KC2 (ORCPT
+        with ESMTP id S238630AbiC3KCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:02:28 -0400
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBFABAB9A;
-        Wed, 30 Mar 2022 03:00:42 -0700 (PDT)
-Received: by mail-qt1-f177.google.com with SMTP id 10so17584228qtz.11;
-        Wed, 30 Mar 2022 03:00:42 -0700 (PDT)
+        Wed, 30 Mar 2022 06:02:54 -0400
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D77ABAB9E;
+        Wed, 30 Mar 2022 03:01:10 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id t19so17607294qtc.4;
+        Wed, 30 Mar 2022 03:01:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hBxbmNoSIF+gD71y4kkXlaJNmYHsVeI/sGoRnpdFxrc=;
-        b=Tw/T7hD/xqazoecxtGArtYWbJK0bKqlAqYOq07ZxlLFHGD7nZtcVh1A92GXdyxOL/o
-         2IpfjjBu13ZQ5e+O8LnEhEeix1ay6ZAClDj3XICpdl80LEw732DN7IL9aO5KSAAZUrqt
-         OUwcoV8r+fUysn0A1e0gqRr82rS+1FNkndEVcLb190Ym/kuWRhirxws4KR41CgHx33DD
-         WhofpQg0wJIcyVOgTrhjX9iEqYE5itOaB+UgUPKNpm4nXPvDMucKuQ2cpz3WvrtDyY+y
-         0m6DVpucN0urbVGfQGqvO1DHDIinFn70TAIq4xlkvjVqGDd1KgwxajUN+lbOZOJxbFSo
-         iwYQ==
-X-Gm-Message-State: AOAM532x4Yaxfwksyr4aW7JU6zGSqGwtByPhqZcjuRmSQROvtYQ0aSyW
-        xBpU0f9WWVCxUSz+SNfaZyG8sXf4Y6tq3A==
-X-Google-Smtp-Source: ABdhPJykkKwS1AM+4JmK68uzouh1cZZ4tz9/SBFM42vfU6NeX+KAeJ3On0LSR4dJOTi+UR47bCm3kA==
-X-Received: by 2002:a05:622a:110:b0:2e1:f084:d855 with SMTP id u16-20020a05622a011000b002e1f084d855mr32019303qtw.198.1648634440904;
-        Wed, 30 Mar 2022 03:00:40 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id a9-20020ac85b89000000b002e2072c9dedsm17938796qta.67.2022.03.30.03.00.38
+        bh=eWVEyP8xb0gTFVWSPikhwxNAnBSVX8r5lpCe0its8eQ=;
+        b=XBDxFUybSvvC1Okm5OVt9T10EOLnylyF9AIL+6sVVbVgcKiwFNiNc8HlYQpfCYM3Xg
+         OeMR9Hh7WZFiY4U8Zb9QJTCpzAidLpSYQGe5/oP+xwGePLI+ZMcXh5iIpJk6lIElMXlg
+         AEuMhs0X5NSui6VETZ1fjnmlFcxHPsgsgF2YvAPqFwB8jisJZvOH4WyIY34Peew7u08y
+         DCUi/hBu5LT96833QqdHPmD/8i7txHPPvqar/1/QotUijT/MrnPuk8HGkaR6UFbjT6zs
+         N9lHMjaElE7B2Lsm4117xKqrnhLW0rXh6ilafI/yuV60wwcsWZlNqQZhzJmfxYSH/BfD
+         5cnA==
+X-Gm-Message-State: AOAM531CKSlhy83d2UeOkpcPD5d63IYJ7MFtJCYHT1K9Vf5DyY3r6NEx
+        T2AzeSdYH8BDE6HboJE3td7gfdiR1hVaEw==
+X-Google-Smtp-Source: ABdhPJyggRKEAKdza6eL+xsqfl3Lbe2LC+bU1LHjQKBDxw9ljm7XGvdQnctaM7WhblVR7NEv7uhMAw==
+X-Received: by 2002:a05:622a:48e:b0:2e0:706f:1d4 with SMTP id p14-20020a05622a048e00b002e0706f01d4mr31845297qtx.326.1648634468538;
+        Wed, 30 Mar 2022 03:01:08 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id s13-20020a05620a0bcd00b0067afe7dd3ffsm11279652qki.49.2022.03.30.03.01.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 03:00:39 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2e6ceb45174so172514517b3.8;
-        Wed, 30 Mar 2022 03:00:38 -0700 (PDT)
-X-Received: by 2002:a25:45:0:b0:633:96e2:2179 with SMTP id 66-20020a250045000000b0063396e22179mr32596280yba.393.1648634438344;
- Wed, 30 Mar 2022 03:00:38 -0700 (PDT)
+        Wed, 30 Mar 2022 03:01:07 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2e5757b57caso212260577b3.4;
+        Wed, 30 Mar 2022 03:01:06 -0700 (PDT)
+X-Received: by 2002:a25:aa0e:0:b0:633:7c3b:94a0 with SMTP id
+ s14-20020a25aa0e000000b006337c3b94a0mr33028380ybi.546.1648634466403; Wed, 30
+ Mar 2022 03:01:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220329152926.50958-1-andriy.shevchenko@linux.intel.com> <20220329152926.50958-8-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220329152926.50958-8-andriy.shevchenko@linux.intel.com>
+References: <20220329152926.50958-1-andriy.shevchenko@linux.intel.com> <20220329152926.50958-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220329152926.50958-2-andriy.shevchenko@linux.intel.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 30 Mar 2022 12:00:27 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWs+OuxV0cO=XGYvOOJ0Mctwu6fKV5HnkdRBXNKkLE3uQ@mail.gmail.com>
-Message-ID: <CAMuHMdWs+OuxV0cO=XGYvOOJ0Mctwu6fKV5HnkdRBXNKkLE3uQ@mail.gmail.com>
-Subject: Re: [PATCH v2 07/13] pinctrl: renesas: rza1: Switch to use
- for_each_gpiochip_node() helper
+Date:   Wed, 30 Mar 2022 12:00:55 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXhiLi8YxxG0f9hBfBkwds3LAdJNSOBSR9FYE4_z=RvcA@mail.gmail.com>
+Message-ID: <CAMuHMdXhiLi8YxxG0f9hBfBkwds3LAdJNSOBSR9FYE4_z=RvcA@mail.gmail.com>
+Subject: Re: [PATCH v2 01/13] gpiolib: Introduce for_each_gpiochip_node() loop helper
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Qianggui Song <qianggui.song@amlogic.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
@@ -96,72 +96,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
-
 On Tue, Mar 29, 2022 at 5:29 PM Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
-> Switch the code to use for_each_gpiochip_node() helper.
->
-> While at it, in order to avoid additional churn in the future,
-> switch to fwnode APIs where it makes sense.
+> Introduce for_each_gpiochip_node() loop helper which iterates over
+> the GPIO controller child nodes of a given device.
 >
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Thanks for your patch!
-
-> --- a/drivers/pinctrl/renesas/pinctrl-rza1.c
-> +++ b/drivers/pinctrl/renesas/pinctrl-rza1.c
-
-> @@ -1166,17 +1167,17 @@ static const struct pinmux_ops rza1_pinmux_ops = {
->   * @range: pin range to register to pinctrl core
->   */
->  static int rza1_parse_gpiochip(struct rza1_pinctrl *rza1_pctl,
-> -                              struct device_node *np,
-> +                              struct fwnode_handle *fwnode,
->                                struct gpio_chip *chip,
->                                struct pinctrl_gpio_range *range)
->  {
->         const char *list_name = "gpio-ranges";
-> -       struct of_phandle_args of_args;
-> +       struct fwnode_reference_args of_args;
-
-fw_args?
-
->         unsigned int gpioport;
->         u32 pinctrl_base;
->         int ret;
->
-> -       ret = of_parse_phandle_with_fixed_args(np, list_name, 3, 0, &of_args);
-> +       ret = fwnode_property_get_reference_args(fwnode, list_name, NULL, 3, 0, &of_args);
->         if (ret) {
->                 dev_err(rza1_pctl->dev, "Unable to parse %s list property\n",
->                         list_name);
-> @@ -1197,13 +1198,12 @@ static int rza1_parse_gpiochip(struct rza1_pinctrl *rza1_pctl,
->
->         *chip           = rza1_gpiochip_template;
->         chip->base      = -1;
-> -       chip->label     = devm_kasprintf(rza1_pctl->dev, GFP_KERNEL, "%pOFn",
-> -                                        np);
-> +       chip->label     = devm_kasprintf(rza1_pctl->dev, GFP_KERNEL, "%pfw", fwnode);
-
-This changes the label from e.g. "/soc/pinctrl@fcfe3000/gpio-11" to "gpio-11".
-
-%pfwP?
-
->         if (!chip->label)
->                 return -ENOMEM;
->
->         chip->ngpio     = of_args.args[2];
-> -       chip->of_node   = np;
-> +       chip->fwnode    = fwnode;
->         chip->parent    = rza1_pctl->dev;
->
->         range->id       = gpioport;
-
-With the above fixed:
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Gr{oetje,eeting}s,
 

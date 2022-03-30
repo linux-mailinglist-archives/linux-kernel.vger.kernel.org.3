@@ -2,229 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD4F4EB905
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 05:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 743894EB908
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 05:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242387AbiC3DsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 29 Mar 2022 23:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
+        id S242402AbiC3Dsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 29 Mar 2022 23:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234293AbiC3DsS (ORCPT
+        with ESMTP id S242390AbiC3Dsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 29 Mar 2022 23:48:18 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D5A24B422;
-        Tue, 29 Mar 2022 20:46:29 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:43204.462545494
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 951841002BF;
-        Wed, 30 Mar 2022 11:46:24 +0800 (CST)
-Received: from  ([172.27.8.53])
-        by gateway-151646-dep-b7fbf7d79-vjdjk with ESMTP id 61ccf52ab94342e7af9cd1074e7c91b9 for robh+dt@kernel.org;
-        Wed, 30 Mar 2022 11:46:28 CST
-X-Transaction-ID: 61ccf52ab94342e7af9cd1074e7c91b9
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 172.27.8.53
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <0a3a29af-ad2f-9ccc-3a56-3e5b7e4c7c83@189.cn>
-Date:   Wed, 30 Mar 2022 11:46:22 +0800
+        Tue, 29 Mar 2022 23:48:37 -0400
+Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.47.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF824C796
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 20:46:52 -0700 (PDT)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway22.websitewelcome.com (Postfix) with ESMTP id 9FC74B12D
+        for <linux-kernel@vger.kernel.org>; Tue, 29 Mar 2022 22:46:51 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id ZPIJnOzNHHnotZPIJnHPjp; Tue, 29 Mar 2022 22:46:51 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=D64CVYRUZxQ9kdAIABEkTcGSNTJSs+DSr+nWgsftIBM=; b=bq8i4zAOHXSwkZb1jiPeckomHP
+        hvE+k+q8kv5Djmhq6buFrE7vBmmEorlfg1oXDXe+dbtyk2TQhyzMFRMzxy1aYwz+3LRNhfS1Dk3VA
+        ELxmR2cSVY1inn3v3JkepJwpr8/1sag+orTsmTzuvVIDKxD+4bU/Cy+oaS9be2adB3vEfAQQhJANx
+        l6mUs1qZDY67NXPYk+ZxU0hmmZcD9VpK5nmmCTLIg0ES2bOrYyO9nSxkuHgLvmbh30+7oYpeIKUlD
+        SwMWy5Z9Fu4Z1f7X7csquMA4kHsT09sxhPv+Xsmy640sNUFnG4Yc9eFD+lAaA7Qv9H5oN1e3/nygo
+        PRqaRYnQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54550)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nZPII-003TiD-TC; Wed, 30 Mar 2022 03:46:50 +0000
+Message-ID: <fa1f64d2-32a1-b8f9-0929-093fbd45d219@roeck-us.net>
+Date:   Tue, 29 Mar 2022 20:46:48 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v13 3/6] dt-bindings: display: Add Loongson display
- controller
 Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Michael Walle' <michael@walle.cc>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
         "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>
-References: <20220328022835.2508587-1-15330273260@189.cn>
- <20220328022835.2508587-3-15330273260@189.cn>
- <CAL_Jsq+zO7RXzQLoPXR7Zm0mcsKCydK=8EFaNFGu-_THgJuh7Q@mail.gmail.com>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <CAL_Jsq+zO7RXzQLoPXR7Zm0mcsKCydK=8EFaNFGu-_THgJuh7Q@mail.gmail.com>
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <20220329160730.3265481-1-michael@walle.cc>
+ <20220329160730.3265481-2-michael@walle.cc>
+ <16d8b45eba7b44e78fa8205e6666f2bd@AcuMS.aculab.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 1/5] hwmon: introduce hwmon_sanitize_name()
+In-Reply-To: <16d8b45eba7b44e78fa8205e6666f2bd@AcuMS.aculab.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nZPII-003TiD-TC
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54550
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 2
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2022/3/29 21:27, Rob Herring wrote:
-> On Sun, Mar 27, 2022 at 9:29 PM Sui Jingfeng <15330273260@189.cn> wrote:
->> Add DT bindings and simple usages for Loongson display controller
->> found in LS7A1000 bridge chip and LS2k1000 SoC.
+On 3/29/22 19:57, David Laight wrote:
+> From: Michael Walle
+>> Sent: 29 March 2022 17:07
 >>
->> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->> ---
->>   .../loongson/loongson,display-controller.yaml | 321 ++++++++++++++++++
->>   1 file changed, 321 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->> new file mode 100644
->> index 000000000000..34060ed55a25
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->> @@ -0,0 +1,321 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/display/loongson/loongson,display-controller.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Loongson LS7A1000/LS2K1000/LS2K0500 Display Controller Device Tree Bindings
->> +
->> +maintainers:
->> +  - Sui Jingfeng <suijingfeng@loongson.cn>
->> +
->> +description: |+
->> +
->> +  Loongson display controllers are simple which require scanout buffers
->> +  to be physically contiguous. LS2K1000/LS2K0500 is a SOC, only system
->> +  memory is available. LS7A1000/LS7A2000 is bridge chip which is equipped
->> +  with a dedicated video RAM which is 64MB or more, precise size can be
->> +  read from the PCI BAR 2 of the GPU device(0x0014:0x7A15) in the bridge
->> +  chip.
->> +
->> +  LSDC has two display pipes, each way has a DVO interface which provide
->> +  RGB888 signals, vertical & horizontal synchronisations, data enable and
->> +  the pixel clock. LSDC has two CRTC, each CRTC is able to scanout from
->> +  1920x1080 resolution at 60Hz. Each CRTC has two FB address registers.
->> +
->> +  For LS7A1000, there are 4 dedicated GPIOs whose control register is
->> +  located at the DC register space. They are used to emulate two way i2c,
->> +  One for DVO0, another for DVO1.
->> +
->> +  LS2K1000 and LS2K0500 SoC grab i2c adapter from other module, either
->> +  general purpose GPIO emulated i2c or hardware i2c in the SoC.
->> +
->> +  LSDC's display pipeline have several components as below description,
->> +
->> +  The display controller in LS7A1000:
->> +     ___________________                                     _________
->> +    |            -------|                                   |         |
->> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
->> +    |  _   _     -------|        ^             ^            |_________|
->> +    | | | | |    -------|        |             |
->> +    | |_| |_|    | i2c0 <--------+-------------+
->> +    |            -------|
->> +    |   DC IN LS7A1000  |
->> +    |  _   _     -------|
->> +    | | | | |    | i2c1 <--------+-------------+
->> +    | |_| |_|    -------|        |             |             _________
->> +    |            -------|        |             |            |         |
->> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
->> +    |            -------|                                   |_________|
->> +    |___________________|
->> +
->> +  Simple usage of LS7A1000 with LS3A4000 CPU:
->> +
->> +    +------+            +------------------------------------+
->> +    | DDR4 |            |  +-------------------+             |
->> +    +------+            |  | PCIe Root complex |   LS7A1000  |
->> +       || MC0           |  +--++---------++----+             |
->> +  +----------+  HT 3.0  |     ||         ||                  |
->> +  | LS3A4000 |<-------->| +---++---+  +--++--+     +---------+   +------+
->> +  |   CPU    |<-------->| | GC1000 |  | LSDC |<--->| DDR3 MC |<->| VRAM |
->> +  +----------+          | +--------+  +-+--+-+     +---------+   +------+
->> +       || MC1           +---------------|--|-----------------+
->> +    +------+                            |  |
->> +    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
->> +    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
->> +                      +-------+                      +------+
->> +
->> +  The display controller in LS2K1000/LS2K0500:
->> +     ___________________                                     _________
->> +    |            -------|                                   |         |
->> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
->> +    |  _   _     -------|        ^              ^           |_________|
->> +    | | | | |           |        |              |
->> +    | |_| |_|           |     +------+          |
->> +    |                   <---->| i2c0 |<---------+
->> +    |   DC IN LS2K1000  |     +------+
->> +    |  _   _            |     +------+
->> +    | | | | |           <---->| i2c1 |----------+
->> +    | |_| |_|           |     +------+          |            _________
->> +    |            -------|        |              |           |         |
->> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
->> +    |            -------|                                   |_________|
->> +    |___________________|
->> +
->> +properties:
->> +  $nodename:
->> +    pattern: "^display-controller@[0-9a-f],[0-9a-f]$"
->> +
->> +  compatible:
->> +    oneOf:
->> +      - items:
->> +          - enum:
->> +              - loongson,ls7a1000-dc
->> +              - loongson,ls2k1000-dc
->> +              - loongson,ls2k0500-dc
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  '#address-cells':
->> +    const: 1
->> +
->> +  '#size-cells':
->> +    const: 0
->> +
->> +  i2c@6:
-> NAK on made-up bus numbers. See v11 discussion for details.
->
-> Rob
+>> More and more drivers will check for bad characters in the hwmon name
+>> and all are using the same code snippet. Consolidate that code by adding
+>> a new hwmon_sanitize_name() function.
+> 
+> I'm assuming these 'bad' hwmon names come from userspace?
+> Like ethernet interface names??
+> 
+> Is silently changing the name of the hwmon entries the right
+> thing to do at all?
+> 
+> What happens if the user tries to create both "foo_bar" and "foo-bar"?
+> I'm sure that is going to go horribly wrong somewhere.
+> 
+> It would certainly make sense to have a function to verify the name
+> is actually valid.
+> Then bad names can be rejected earlier on.
+> 
+> I'm also intrigued about the list of invalid characters:
+> 
+> +static bool hwmon_is_bad_char(const char ch)
+> +{
+> +	switch (ch) {
+> +	case '-':
+> +	case '*':
+> +	case ' ':
+> +	case '\t':
+> +	case '\n':
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> 
+> If '\t' and '\n' are invalid why are all the other control characters
+> allowed?
+> I'm guessing '*' is disallowed because it is the shell wildcard?
+> So what about '?'.
+> Then I'd expect '/' to be invalid - but that isn't checked.
+> Never mind all the values 0x80 to 0xff - they are probably worse
+> than whitespace.
+> 
+> OTOH why are any characters invalid at all - except '/'?
+> 
 
-I am worry about when this driver is loaded before the hardware i2c(on 
-the ls7a1000 bridge) driver,
+The name is supposed to reflect a driver name. Usually driver names
+are not defined by userspace but by driver authors. The name is used
+by libsensors to distinguish a driver from its instantiation.
+libsensors uses wildcards in /etc/sensors3.conf. Duplicate names
+are expected; there can be many instances of the same driver in
+the system. For example, on the system I am typing this on, I have:
 
-and when there is no DT support. in such a case, if i2c bus number is 
-dynamically assigned,
+/sys/class/hwmon/hwmon0/name:nvme
+/sys/class/hwmon/hwmon1/name:nvme
+/sys/class/hwmon/hwmon2/name:nouveau
+/sys/class/hwmon/hwmon3/name:nct6797
+/sys/class/hwmon/hwmon4/name:jc42
+/sys/class/hwmon/hwmon5/name:jc42
+/sys/class/hwmon/hwmon6/name:jc42
+/sys/class/hwmon/hwmon7/name:jc42
+/sys/class/hwmon/hwmon8/name:k10temp
 
-it may incurring troubles.  Made the bus number fixed is benefit to the 
-whole system.
+hwmon_is_bad_char() filters out characters which interfere with
+libsensor's view of driver instances and the configuration data
+in /etc/sensors3.conf. For example, again on my system, the
+"sensors" command reports the following jc42 and nvme sensors.
 
-DT  serve as a purpose to passing parameters to the kernel.  bus numbers 
-just a kind of parameters.
+jc42-i2c-0-1a
+jc42-i2c-0-18
+jc42-i2c-0-1b
+jc42-i2c-0-19
+nvme-pci-0100
+nvme-pci-2500
 
-this is my understanding toward DT. why you are so disagree about this?  
-what's the benefits of
+In /etc/sensors3.conf, there might be entries for "jc42-*" or "nvme-*".
+I don't think libsensors cares if a driver is named "this/is/my/driver".
+That driver would then, assuming it is an i2c driver, show up
+with the sensors command as "this/is/my/driver-i2c-0-25" or similar.
+If it is named "this%is%my%driver", it would be something like
+"this%is%my%driver-i2c-0-25". And so on. We can not permit "jc-42"
+because libsensors would not be able to parse something like
+"jc-42-*" or "jc-42-i2c-*".
 
-disallow put bus numbers it DT? to the whole world of developers who is 
-using DT?
+Taking your example, if driver authors implement two drivers, one
+named foo-bar and the other foo_bar, it would be the driver authors'
+responsibility to provide valid driver names to the hwmon subsystem,
+whatever those names might be. If both end up named "foo_bar" and can
+as result not be distinguished from each other by libsensors,
+or a user of the "sensors" command, that would be entirely the
+responsibility of the driver authors. The only involvement of the
+hwmon subsystem - and that is optional - would be to provide means
+to the drivers to help them ensure that the names are valid, but
+not that they are unique.
 
+If there is ever a driver with a driver name that interferes with
+libsensors' ability to distinguish the driver name from interface/port
+information, we'll be happy to add the offending character(s)
+to hwmon_is_bad_char(). Until then, being picky doesn't really
+add any value and appears pointless.
 
+Thanks,
+Guenter

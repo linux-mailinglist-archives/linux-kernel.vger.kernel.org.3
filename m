@@ -2,165 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0736F4ECB53
-	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF6BC4ECB52
+	for <lists+linux-kernel@lfdr.de>; Wed, 30 Mar 2022 20:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349786AbiC3SIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 30 Mar 2022 14:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
+        id S1349783AbiC3SIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 30 Mar 2022 14:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349674AbiC3SI0 (ORCPT
+        with ESMTP id S1349730AbiC3SIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:08:26 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D4D3E0EF
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:06:32 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id h16so12785285wmd.0
-        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pTP84B9dyVZKfwd8drRl3JKw0QWiCFZoPqYYt5GdqCE=;
-        b=AxlFincx379rRIVIadN5ztg//O5QPtJoihKSTzi1aqCGOqjTBcfglKR2zwT17QzWsN
-         aTG7BboIk2UPwEM4mpIyBd6mIKkzQK3kzpBhw2sq5BTWCEBNOCGRfwTU8IbsPqDZJUzf
-         drJ/Ho3TMY6tWgXHbxKT9BB5BpW5aNrsWRcpigV6MZue7/2e7/8LPKIJVFirQPBCJ85T
-         O34cbD0qhU6uYotQRhWN+eoutFkKNR7UcNa+df/D5wE0ZNX++iQV8t09i7TQPb77bqF3
-         swuJvtSm76VwIL9DV8PydNg8cIuqg1E56J+VV57RP0M4+S0oDgKXfXJy1sIPGwYCpyL9
-         ftUQ==
+        Wed, 30 Mar 2022 14:08:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 329823D1F1
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:06:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648663589;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uWSt8FFFTI4rhck3dPnwbJuLsSit8PUXxQiArFyosm8=;
+        b=eBKx5+f30tdjBYoCS/BQzanPjFpaoXbo+QOB3HwShKPw+ttS9ERiQ3uX60wcsS3DCfp3OF
+        1tuQu7MLZGiCmfCUTdGtkpNVxgwDFL9lHk6FnD56mmB4AcL5Vt+h+RWwAMY4XiIKELFClq
+        O8jYA7bh8MNIHi9q2S2jscPbNriTtJI=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-633-pMYzyt_6O6a3XfcsnFThnA-1; Wed, 30 Mar 2022 14:06:27 -0400
+X-MC-Unique: pMYzyt_6O6a3XfcsnFThnA-1
+Received: by mail-qt1-f198.google.com with SMTP id y23-20020ac85257000000b002e06697f2ebso17995167qtn.16
+        for <linux-kernel@vger.kernel.org>; Wed, 30 Mar 2022 11:06:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pTP84B9dyVZKfwd8drRl3JKw0QWiCFZoPqYYt5GdqCE=;
-        b=UvwA2L1VzoVIAJWxDGnDa6RA5KSl+FCW5LXCi2BAixkPl5GU3BL01vrNAALQBoJBOT
-         e70v2Yw2NLmaQLlYB3MoJZtwq5lwOCiFzsUhFocsCVswFTuwH387f1PdTck32AJGZain
-         5WORxx0dV9d5kvD/wCf7aajJNir1j1ZyawWEk0U3Pg5i+94Pq0Hi79UbeO4x+CSsxrIU
-         CvfybHAGFdfMgXSjttEvjn6Fp/0u5RWEoSWWhDFdz7kMKRcR5kMKkkHzzctXfI39TDhx
-         IPr3wpGrZDXwZmFOEQQXyLI/xVZkZKOl3K/lDoz3wn5rABdqq042iiRTZVHoXuD4PDhJ
-         vE6w==
-X-Gm-Message-State: AOAM532GFIDqYfds4MTN+irnynDjJKfJHBqEyAsxKluyxONK9RlcN6Ir
-        S3HsKBmysfNaNf0EQdexexOUmI27u/HTS7+wmCqCxw==
-X-Google-Smtp-Source: ABdhPJxG6w+8THuSQkBR1uxz7ylmfLzImaV8nRMbUG1IKFnRnhkQ9Sqsojtip3/71qEPWhpgcrn0cxaKpaQEd9fev0o=
-X-Received: by 2002:a05:600c:3b89:b0:38c:c9d6:ff0e with SMTP id
- n9-20020a05600c3b8900b0038cc9d6ff0emr652574wms.77.1648663590454; Wed, 30 Mar
- 2022 11:06:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220324234123.1608337-1-haoluo@google.com> <9cdf860d-8370-95b5-1688-af03265cc874@fb.com>
- <CA+khW7g3hy61qnvtqUizaW+qB6wk=Y9cjivhORshOk=ZzTXJ-A@mail.gmail.com>
- <CA+khW7iq+UKsfQxdT3QpSqPUFN8gQWWDLoQ9zxB=uWTs63AZEA@mail.gmail.com>
- <20220329093753.26wc3noelqrwlrcj@apollo.legion> <CA+khW7jW47SALTfxMKfQoA0Qwqd22GC0z4S5juFTbxLfTSbFEQ@mail.gmail.com>
- <20220329232956.gbsr65jdbe4lw2m6@ast-mbp>
-In-Reply-To: <20220329232956.gbsr65jdbe4lw2m6@ast-mbp>
-From:   Hao Luo <haoluo@google.com>
-Date:   Wed, 30 Mar 2022 11:06:19 -0700
-Message-ID: <CA+khW7jyvp4PKGu5GS8GDf=Lr4EdRUz8kraaTfiZ2oGm704Cpw@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next 0/2] Mmapable task local storage.
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, bpf@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uWSt8FFFTI4rhck3dPnwbJuLsSit8PUXxQiArFyosm8=;
+        b=QUUKEni+ffCkyve73yvO+yDRuLgESrBleNJdacoaIDUgD/3FUlve1gF3M8ufYjfYHS
+         lhMfAuUYzAIh4Fww50KkBGM4bGgEoTLVaFAWqlr1nRPcqB4zSh7Ro5tHtiGxloZeGm9u
+         fmOLLaAD6smoTm/YLFhqDYp35yjjRRf21eGrr0lwQivvwoxxyO1PgOYpJvlGWhg2Mrhz
+         2zxR8bXDEKLkfgIdXz3IcHlk6E9d8XuUwgeGPypeacdZ1fF0gIu/rhaQ9HBQ3A+//NyX
+         hRroZguH74NFLQgtilfY6US0RmtfKAYN8sgjh3oFcNQdos2mmmYB02E4FvVeQsA4s/Fy
+         pXkw==
+X-Gm-Message-State: AOAM530oGwuPq3/etp6RC1xaTjqCu+zJX+MT1dABgmmKDT7mIkTVpAqI
+        PBinT+KaY1RHriIlKd3ibU0YxffhWXadcnoU/SsmxUiaN2gtqvtHmFa4HXgelVmiZVQsFOJb/W5
+        /Q/vH96n6yuZHeEeRubkDj/8=
+X-Received: by 2002:ad4:5be3:0:b0:441:7bd1:29bd with SMTP id k3-20020ad45be3000000b004417bd129bdmr733375qvc.14.1648663586921;
+        Wed, 30 Mar 2022 11:06:26 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzkima55vXfIXB4/YhL8vxRAGITI8NXaa0gII7X9gZDBJaWlIZfDnbZH36cgG+Ixq8NEncA6A==
+X-Received: by 2002:ad4:5be3:0:b0:441:7bd1:29bd with SMTP id k3-20020ad45be3000000b004417bd129bdmr733356qvc.14.1648663586730;
+        Wed, 30 Mar 2022 11:06:26 -0700 (PDT)
+Received: from localhost (pool-68-160-176-52.bstnma.fios.verizon.net. [68.160.176.52])
+        by smtp.gmail.com with ESMTPSA id u20-20020a05620a455400b0067ec0628661sm12639056qkp.110.2022.03.30.11.06.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 11:06:26 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 14:06:25 -0400
+From:   Mike Snitzer <snitzer@redhat.com>
+To:     Philipp Reisner <philipp.reisner@linbit.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: state of drbd in mainline
+Message-ID: <YkScIas+/Ev0trcZ@redhat.com>
+References: <20220329070618.GA20396@lst.de>
+ <CADGDV=UgjZAbmAN-2bO1nyDvA=XCC9Lf2dxWHZ0BwxF12nnztQ@mail.gmail.com>
+ <20220329073254.GA20691@lst.de>
+ <CADGDV=U5jwe0CZ12174cMahfD_h-GsBswWaA1VOJbHaC1nsrUw@mail.gmail.com>
+ <f9d89282-3a67-ad97-149f-52325e23607c@kernel.dk>
+ <CADGDV=WN2TFR6dO7ZdiQ2ijPjs+7HSsvk0ZCHsHj6ZG5t-oEdA@mail.gmail.com>
+ <3c42b1ed-7c03-64e6-409e-e92247288cac@kernel.dk>
+ <CADGDV=WcTSSC70yG61dazo-WyoLOzp3r+nOk-Eg2x_Ncx=3nRg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADGDV=WcTSSC70yG61dazo-WyoLOzp3r+nOk-Eg2x_Ncx=3nRg@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 4:30 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Mar 29, 2022 at 10:43:42AM -0700, Hao Luo wrote:
-> > On Tue, Mar 29, 2022 at 2:37 AM Kumar Kartikeya Dwivedi
-> > <memxor@gmail.com> wrote:
-> > >
-> > > On Mon, Mar 28, 2022 at 11:16:15PM IST, Hao Luo wrote:
-> > > > On Mon, Mar 28, 2022 at 10:39 AM Hao Luo <haoluo@google.com> wrote:
-> > > > >
-> > > > > Hi Yonghong,
-> > > > >
-> > > > > On Fri, Mar 25, 2022 at 12:16 PM Yonghong Song <yhs@fb.com> wrote:
-> > > > > >
-> > > > > > On 3/24/22 4:41 PM, Hao Luo wrote:
-> > > > > > > Some map types support mmap operation, which allows userspace to
-> > > > > > > communicate with BPF programs directly. Currently only arraymap
-> > > > > > > and ringbuf have mmap implemented.
-> > > > > > >
-> > > > > > > However, in some use cases, when multiple program instances can
-> > > > > > > run concurrently, global mmapable memory can cause race. In that
-> > > > > > > case, userspace needs to provide necessary synchronizations to
-> > > > > > > coordinate the usage of mapped global data. This can be a source
-> > > > > > > of bottleneck.
-> > > > > >
-> > > > > > I can see your use case here. Each calling process can get the
-> > > > > > corresponding bpf program task local storage data through
-> > > > > > mmap interface. As you mentioned, there is a tradeoff
-> > > > > > between more memory vs. non-global synchronization.
-> > > > > >
-> > > > > > I am thinking that another bpf_iter approach can retrieve
-> > > > > > the similar result. We could implement a bpf_iter
-> > > > > > for task local storage map, optionally it can provide
-> > > > > > a tid to retrieve the data for that particular tid.
-> > > > > > This way, user space needs an explicit syscall, but
-> > > > > > does not need to allocate more memory than necessary.
-> > > > > >
-> > > > > > WDYT?
-> > > > > >
-> > > > >
-> > > > > Thanks for the suggestion. I have two thoughts about bpf_iter + tid and mmap:
-> > > > >
-> > > > > - mmap prevents the calling task from reading other task's value.
-> > > > > Using bpf_iter, one can pass other task's tid to get their values. I
-> > > > > assume there are two potential ways of passing tid to bpf_iter: one is
-> > > > > to use global data in bpf prog, the other is adding tid parameterized
-> > > > > iter_link. For the first, it's not easy for unpriv tasks to use. For
-> > > > > the second, we need to create one iter_link object for each interested
-> > > > > tid. It may not be easy to use either.
-> > > > >
-> > > > > - Regarding adding an explicit syscall. I thought about adding
-> > > > > write/read syscalls for task local storage maps, just like reading
-> > > > > values from iter_link. Writing or reading task local storage map
-> > > > > updates/reads the current task's value. I think this could achieve the
-> > > > > same effect as mmap.
-> > > > >
-> > > >
-> > > > Actually, my use case of using mmap on task local storage is to allow
-> > > > userspace to pass FDs into bpf prog. Some of the helpers I want to add
-> > > > need to take an FD as parameter and the bpf progs can run
-> > > > concurrently, thus using global data is racy. Mmapable task local
-> > > > storage is the best solution I can find for this purpose.
-> > > >
-> > > > Song also mentioned to me offline, that mmapable task local storage
-> > > > may be useful for his use case.
-> > > >
-> > > > I am actually open to other proposals.
-> > > >
-> > >
-> > > You could also use a syscall prog, and use bpf_prog_test_run to update local
-> > > storage for current. Data can be passed for that specific prog invocation using
-> > > ctx. You might have to enable bpf_task_storage helpers in it though, since they
-> > > are not allowed to be called right now.
-> > >
-> >
-> > The loading process needs CAP_BPF to load bpf_prog_test_run. I'm
-> > thinking of allowing any thread including unpriv ones to be able to
-> > pass data to the prog and update their own storage.
->
-> If I understand the use case correctly all of this mmap-ing is only to
-> allow unpriv userspace to access a priv map via unpriv mmap() syscall.
-> But the map can be accessed as unpriv already.
-> Pin it with the world read creds and do map_lookup sys_bpf cmd on it.
+On Wed, Mar 30 2022 at 11:23P -0400,
+Philipp Reisner <philipp.reisner@linbit.com> wrote:
 
-Right, but, if I understand correctly, with
-sysctl_unprivileged_bpf_disabled, unpriv tasks are not able to make
-use of __sys_bpf(). Is there anything I missed?
+> > > Jens, my intention is to keep it in-tree, and at some point update it.
+> > > Regarding your questions:
+> >
+> > That'd be great, but it's been years since there was any significant
+> > updates to the in-kernel drbd... I would strongly suggest that the
+> > in-kernel be brought closer to what people are mostly running, as it
+> > stands it's basically unmaintained.
+> 
+> The changes we worked on over many Years in the more recent drbd-9.x
+> branches are just too fundamental to do them in small chunks, we could
+> upstream bit by bit.  We need to get that reviewed in a big series.  If I
+> started to dump them on linux-block right away, nobody would look at it
+> seriously, since it would be too much.  I intend to get people from red
+> hat/suse assigned to do such a review. Then we will do that on linux-block,
+> so that everyone who cares sees what happens.
+
+Why do you think Red Hat, SUSE or any other distro vendor's engineers
+should be made to review what amounts to be a massive dump of changes
+you developed over years?
+
+Presummably you have heard of "upstream first"!?  Why do you think it
+doesn't apply to drbd?
+
+It'd be one thing if drbd never went upstream but _it did_.  As is
+your development model is completely wrong.
+
+Mike
+
